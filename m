@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3681F662940
+	by mail.lfdr.de (Postfix) with ESMTP id 816D4662941
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234826AbjAIPDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
+        id S234792AbjAIPDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233236AbjAIPCw (ORCPT
+        with ESMTP id S236112AbjAIPDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:02:52 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E39175A0;
-        Mon,  9 Jan 2023 07:02:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6o3r2EMyccew4PMHM+hL8pHG/IMPNNpv5+R12jgC6lA=; b=kRYbhsmUqtz7MJELa5DMvJ4VzI
-        6X90lrh3MAb0AIocQDosyWd6xWeVzvyuJrsUYMQztbBYwfsmPXDyS4olyKkeV4RTEuwcqO0Tv8eWe
-        XjEPn1N0fJJo10rKVG6oL/LDCcXf/PL5DEaFhFtXgh6MueLKYg8q/zPjuZBcQVUSgel55zEIY4NYP
-        lotZ+B7P0JsJ+9216Jzf6B/g0gzs+oYAoLkxUeHuwpjQDMzMlbnXhWXdt/9lvnOLcXluRjaZqa7uW
-        PdLuvYrfIhjdjaLwTYqha4g23TN/WXSruYsiK5FgblOwfcP/Ugk6QM4mVBY1WHf5p2fbRCh5fDJJ+
-        seAPhoAA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pEtft-002NKW-SN; Mon, 09 Jan 2023 15:02:57 +0000
-Date:   Mon, 9 Jan 2023 15:02:57 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jeff Layton <jlayton@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 02/11] filemap: Remove filemap_check_and_keep_errors()
-Message-ID: <Y7wsoXOZZQo5KNQp@casper.infradead.org>
-References: <20230109051823.480289-1-willy@infradead.org>
- <20230109051823.480289-3-willy@infradead.org>
- <36311b962209353333be4c8ceaf0e0823ef9f228.camel@redhat.com>
- <Y7weinAVLt0uPRa8@casper.infradead.org>
- <05df91ed071cfefa272bb8d2fb415222867bae32.camel@redhat.com>
+        Mon, 9 Jan 2023 10:03:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AA41EAC3;
+        Mon,  9 Jan 2023 07:03:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A132661158;
+        Mon,  9 Jan 2023 15:03:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4D6C433EF;
+        Mon,  9 Jan 2023 15:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673276591;
+        bh=eqspIp8DuB38ba++6GsDkOao4Lq7XrLjjTS1VgCoAsU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=D1Xg1FUruiOJO9uwnD/wJSFbhNe3jv6o6Nk+Sx/GZABLCxkb519RZiIx0lu0SjhAN
+         qs+RQXLqRo+IOFpBcfWY5pxjhfmgOIoiNxcOwiMoBt76gD8hkg/dfRxJejtyxS+a0K
+         hs57vTuyUhy+gqmf8A+41BOq67QCIYeu/CDIxTqsBVCYwfx51fTnxFkBM5WHVpDtCC
+         Z4Wur6YFje3O7WcUR9awPn01wB/btd+wR29UZIy3wwUauPLqAFfiFls8q77YqVITOH
+         bqVYQ7x4l3JvRNbHRhNyLB46kGxCfyqWjL2rOVe2UzHCx43P5Bqn+qdonLog79LygD
+         eKuJJ7qmw4GUA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20221219191125.1974879-1-robh@kernel.org>
+References: <20221219191125.1974879-1-robh@kernel.org>
+Subject: Re: [PATCH] regulator: dt-bindings: Convert Fairchild FAN53555 to DT schema
+Message-Id: <167327658893.217427.12495185483455805011.b4-ty@kernel.org>
+Date:   Mon, 09 Jan 2023 15:03:08 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05df91ed071cfefa272bb8d2fb415222867bae32.camel@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-8b3d1
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 09:31:00AM -0500, Jeff Layton wrote:
-> On Mon, 2023-01-09 at 14:02 +0000, Matthew Wilcox wrote:
-> > On Mon, Jan 09, 2023 at 08:48:49AM -0500, Jeff Layton wrote:
-> > > On Mon, 2023-01-09 at 05:18 +0000, Matthew Wilcox (Oracle) wrote:
-> > > > Convert both callers to use the "new" errseq infrastructure.
-> > > 
-> > > I looked at making this sort of change across the board alongside the
-> > > original wb_err patches, but I backed off at the time.
-> > > 
-> > > With the above patch, this function will no longer report a writeback
-> > > error that occurs before the sample. Given that writeback can happen at
-> > > any time, that seemed like it might be an undesirable change, and I
-> > > didn't follow through.
-> > > 
-> > > It is true that the existing flag-based code may miss errors too, if
-> > > multiple tasks are test_and_clear'ing the bits, but I think the above is
-> > > even more likely to happen, esp. under memory pressure.
-> > > 
-> > > To do this right, we probably need to look at these callers and have
-> > > them track a long-term errseq_t "since" value before they ever dirty the
-> > > pages, and then continually check-and-advance vs. that.
-> > > 
-> > > For instance, the main caller of the above function is jbd2. Would it be
-> > > reasonable to add in a new errseq_t value to the jnode for tracking
-> > > errors?
-> > 
-> > Doesn't b4678df184b3 address this problem?  If nobody has seen the
-> > error, we return 0 instead of the current value of wb_err, ensuring
-> > that somebody always sees the error.
-> > 
+On Mon, 19 Dec 2022 13:11:25 -0600, Rob Herring wrote:
+> Convert the Fairchild FAN53555 and compatible variants binding to DT
+> schema format.
 > 
-> I was originally thinking no, but now I think you're correct.
+> The example was missing 'reg', so add it.
 > 
-> We do initialize the "since" value to 0 if an error has never been seen,
-> so that (sort of) emulates the behavior of the existing AS_EIO/AS_ENOSPC
-> flags.
 > 
-> It's still not quite as reliable as plumbing a "since" value through all
-> of the callers (particularly in the case where there are multiple
-> waiters), but maybe it's good enough here.
 
-I actually think we may have the opposite problem; that for some of
-these scenarios, we never mark the error as seen.  ie we always end
-up calling errseq_check() and never errseq_check_and_advance().  So
-every time we write something, it'll remind us that we have an error.
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[1/1] regulator: dt-bindings: Convert Fairchild FAN53555 to DT schema
+      commit: 6cea468b680e1254c7e8f95b70f4c3798985f05a
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
