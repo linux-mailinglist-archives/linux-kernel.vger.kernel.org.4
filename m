@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885286630A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4036630B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237634AbjAITnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:43:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
+        id S237529AbjAIToB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237678AbjAITm5 (ORCPT
+        with ESMTP id S237832AbjAITnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:42:57 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4503590C
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:42:56 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id bs20so9336420wrb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:42:56 -0800 (PST)
+        Mon, 9 Jan 2023 14:43:45 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806763631F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:43:44 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id q9so6627612pgq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:43:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sm+C6Y4VHJEDtGwIvvGgY7BGxijkOAR29lDr/Tbsy3A=;
-        b=tDlDq1FkSgoi9HsSAmHq/G1pvTD21qW7XYfQnck5oYb2AhOo9kFjJMrLzYSkivk1T4
-         4BPoJn1oyAJsLYH87L+dNhESNeJXB4dkJ5TQ0Gq5UwBIuCdQEfYvPfJmGp6kowUbBj0g
-         ZOjVOa+89Z3KIgebtQN+Ug9K2zNt6viJ17kxjohRc91l1gyfcHSBGya+kQEw97VYLr77
-         DteJKaG7Pb6gW0/OgmH6lq03RZTQIqOZpYpmB7ZbU9VW1Bnp9mVIofo7kGSSBwBWglSi
-         rdV/IAq18wsDLyUVEoVIsE0ga0iIruBN10dy2evrp1LsBCBP8CleQefNS5rvS7xnkUo+
-         Ft1Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=veGfYnA4hNep9xLtDsZJq60VJSWFSJQTjdAFzULOh0A=;
+        b=Hu6TXajbV1nysO6YT0nJGUJITPTEGteUGyF+kqHQ33uo9Inl83eIp1lLHuqQpxw1m7
+         /YLSRyk0J/3FAXVmlqu1QWEhMw2acsrss0YQ/wk4Z5Kn0i1L8qEy3QzMmizE4dTTV0rJ
+         2UqVggZd2Ez+ZbiuPbAV8UkryLdH6+7EOiVAeNy3dnN0hqWrXHn9hQuFgUGdP39GeSvP
+         zlQvtvlXqFOxN/7DYRCH/UxT+FVLk74DQGr4ID7A7Mg7HCCIF67izwZn/6HrFPgx+MoG
+         8W4uSdMNZ34ickwCDsPm1otgghgLnjjzXCZDzY2Moy3nKoeggtANwCGKr2vi2Eblzz0f
+         Hr8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sm+C6Y4VHJEDtGwIvvGgY7BGxijkOAR29lDr/Tbsy3A=;
-        b=sv4NE+Nr608Dwwnt1cqdb86h6kdLypHagpMAx8uoXSD0csrl6hAyHwkD8QLUcVqjUd
-         GuHzMz8RpsStMI5HaZUxUfGZQJSZAoUS9SCOllCb5vRxq5VQfA8ZBgP+8HalV5gXyVOQ
-         nb36AYAZZPc4MFi6tbkGdSC8fwl0K0UKgn+TQ7DuxIBrI9BaMn9SZ3bobdKUSZCGbPbH
-         2SUhOOt4STaDFuluFlSC6aIMmd93XzWf4hU0tOpgs8q9CzvsfLeCbLHmxKvomPQlJGUk
-         3jVHAyE4J815MTtbR2eIy1D9A+xWXXfwVIkheFasTO1MUli1mcrkSaWttzTVYYK3+o7y
-         h0ig==
-X-Gm-Message-State: AFqh2kreNKwQo++4p5tU76fjSIvtoE7YqQQWtRYeldwYzkEBhCGfZET+
-        VPQcYJmdzgNFd233DrdUSOvhWCYY+5caHTvD7uEHlA==
-X-Google-Smtp-Source: AMrXdXvmpe85LGRAEvZEbNLRLiITVTgyGbd3Lmkkw5o1zaaUX68O/76T6yls5toHkzKVDFagcX3kdIZLT8OIDP0ag8Q=
-X-Received: by 2002:a05:6000:12cb:b0:28c:459a:d5d with SMTP id
- l11-20020a05600012cb00b0028c459a0d5dmr1401361wrx.654.1673293374842; Mon, 09
- Jan 2023 11:42:54 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=veGfYnA4hNep9xLtDsZJq60VJSWFSJQTjdAFzULOh0A=;
+        b=xSAExTCvSNZ+GQTDbD1HJu5SB8wrSCw4fEzXnYSG6JcUvWMWjspxvZb9BaCkK94bzY
+         2WMPUMXPfWVJ9nzdT60XBhLWn1Qx+RvDM9DfzMTWyaE3B+2zKpwZtlOUONlqbLxyP+cX
+         MqfY7Fq3XVQksXqIuUWf64kXCcuXd8gmsR/Cy52BKiXhmEnwcG6GcjUorCrwgNIGUj5e
+         TpyRa3oC3P0VtXth9tJUayEHSYgP0PUBf+bl7Y3k1tnveYBH2hrTjIEymfbCH8iEFmHh
+         U1rtp5aRSVAFglxIhj48PpYZ/peu8uJ60aJDvzHPgCmwXSCe9izrZqDTZf+WlGDGdc9r
+         zbnw==
+X-Gm-Message-State: AFqh2kqdusP/CNfRUlgmu8Fjnqx7tE2siRWIth5seXfTXgzu5Mq8nuVv
+        WQcgC6a4cCQbZE3HqIPLxLTlSg==
+X-Google-Smtp-Source: AMrXdXso816BpR1KCWzqOEYHfJ2/5KNvt9As0jegoVBLu2b2t6H0lav9N3d0OR41eo4tjS0JoPMDxw==
+X-Received: by 2002:aa7:9249:0:b0:576:9252:d06 with SMTP id 9-20020aa79249000000b0057692520d06mr794227pfp.0.1673293423602;
+        Mon, 09 Jan 2023 11:43:43 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:3529:30e5:d581:6e80])
+        by smtp.gmail.com with ESMTPSA id 4-20020a620404000000b00576ee69c130sm6399350pfe.4.2023.01.09.11.43.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 11:43:42 -0800 (PST)
+Date:   Mon, 9 Jan 2023 11:43:35 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        heikki.krogerus@linux.intel.com,
+        Benson Leung <bleung@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Evan Green <evgreen@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>, Lee Jones <lee@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Xiang wangx <wangxiang@cdjrlc.com>
+Subject: Re: [PATCH 04/10] platform/chrome: cros_ec_typec: Set port alt mode
+ drvdata
+Message-ID: <Y7xuZ4jvd0Cl4jKp@google.com>
+References: <20221228004648.793339-1-pmalani@chromium.org>
+ <20221228004648.793339-5-pmalani@chromium.org>
 MIME-Version: 1.0
-References: <20230105030434.255603-1-irogers@google.com> <CAP-5=fXi_9zdhTAoYApiFQoLURAvpEatFzU3uL23o3zs=z25ZQ@mail.gmail.com>
- <CAA6y9eV50Xw6tsq7dDJ61_uNM-yKdN8O+VU=6wcUFr7MGUbOaA@mail.gmail.com>
-In-Reply-To: <CAA6y9eV50Xw6tsq7dDJ61_uNM-yKdN8O+VU=6wcUFr7MGUbOaA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 9 Jan 2023 11:42:42 -0800
-Message-ID: <CAP-5=fXRr_cTYWhO4=HicrddbwVt=DpmEnvAQMY0sTsgcSx4jQ@mail.gmail.com>
-Subject: Re: [PATCH v1] perf script flamegraph: Avoid d3-flame-graph package dependency
-To:     Martin Spier <spiermar@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        996839@bugs.debian.org, Andreas Gerstmayr <agerstmayr@redhat.com>,
-        Brendan Gregg <brendan@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mGVjA2t/wX4O1RTo"
+Content-Disposition: inline
+In-Reply-To: <20221228004648.793339-5-pmalani@chromium.org>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -77,141 +89,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 7:32 AM Martin Spier <spiermar@gmail.com> wrote:
->
-> On Thu, Jan 5, 2023 at 1:25 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Wed, Jan 4, 2023 at 7:04 PM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > Currently flame graph generation requires a d3-flame-graph template to
-> > > be installed. Unfortunately this is hard to come by for things like
-> > > Debian [1]. If the template isn't installed warn and download it from
-> > > jsdelivr CDN. If downloading fails generate a minimal flame graph
-> > > again with the javascript coming from jsdelivr CDN.
-> > >
-> > > [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996839
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/perf/scripts/python/flamegraph.py | 63 ++++++++++++++++++-------
-> > >  1 file changed, 45 insertions(+), 18 deletions(-)
-> > >
-> > > diff --git a/tools/perf/scripts/python/flamegraph.py b/tools/perf/scripts/python/flamegraph.py
-> > > index b6af1dd5f816..808b0e1c9be5 100755
-> > > --- a/tools/perf/scripts/python/flamegraph.py
-> > > +++ b/tools/perf/scripts/python/flamegraph.py
-> > > @@ -25,6 +25,27 @@ import io
-> > >  import argparse
-> > >  import json
-> > >  import subprocess
-> > > +import urllib.request
-> > > +
-> > > +minimal_html = """<head>
-> > > +  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.css">
-> >
-> > (hopefully fixed Martin Spier's e-mail address)
-> >
-> > The @4.1.3 comes from the README.md:
-> > https://github.com/spiermar/d3-flame-graph/blob/master/README.md
-> > Does it make sense just to drop it or use @latest ? It'd be nice not
-> > to patch this file for every d3-flame-graph update.
-> >
-> > Thanks,
-> > Ian
->
-> Yes, that's the right email.
->
-> Using @latest is an option, but it might be better to just use @4 to
-> avoid breaking changes. Not expecting any major releases in the near
-> future.
->
-> Thanks,
-> Martin
 
-Thanks Martin! I'll leave it using @4 then. Could I trouble you for an
-Acked-by or Reviewed-by for the change? It would be nice to resolve
-the Debian bug.
+--mGVjA2t/wX4O1RTo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Ian
+On Wed, Dec 28, 2022 at 12:45:07AM +0000, Prashant Malani wrote:
+> Save the ChromeOS-specific Type-C port info in the port altmodes' driver
+> data. This makes communication with the ChromeOS EC (Embedded
+> Controller) easier when alt mode drivers need to send messages to
+> peripherals.
+>=20
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-> >
-> > > +</head>
-> > > +<body>
-> > > +  <div id="chart"></div>
-> > > +  <script type="text/javascript" src="https://d3js.org/d3.v7.js"></script>
-> > > +  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.min.js"></script>
-> > > +  <script type="text/javascript">
-> > > +  const stacks = [/** @flamegraph_json **/];
-> > > +  // Note, options is unused.
-> > > +  const options = [/** @options_json **/];
-> > > +
-> > > +  var chart = flamegraph();
-> > > +  d3.select("#chart")
-> > > +        .datum(stacks[0])
-> > > +        .call(chart);
-> > > +  </script>
-> > > +</body>
-> > > +"""
-> > >
-> > >  # pylint: disable=too-few-public-methods
-> > >  class Node:
-> > > @@ -50,15 +71,18 @@ class FlameGraphCLI:
-> > >          self.args = args
-> > >          self.stack = Node("all", "root")
-> > >
-> > > -        if self.args.format == "html" and \
-> > > -                not os.path.isfile(self.args.template):
-> > > -            print("Flame Graph template {} does not exist. Please install "
-> > > -                  "the js-d3-flame-graph (RPM) or libjs-d3-flame-graph (deb) "
-> > > -                  "package, specify an existing flame graph template "
-> > > -                  "(--template PATH) or another output format "
-> > > -                  "(--format FORMAT).".format(self.args.template),
-> > > -                  file=sys.stderr)
-> > > -            sys.exit(1)
-> > > +        if self.args.format == "html":
-> > > +            if os.path.isfile(self.args.template):
-> > > +                self.template = f"file://{self.args.template}"
-> > > +            else:
-> > > +                print(f"""
-> > > +Warning: Flame Graph template '{self.args.template}'
-> > > +does not exist, a template will be downloaded via http. To avoid this
-> > > +please install a package such as the js-d3-flame-graph or
-> > > +libjs-d3-flame-graph, specify an existing flame graph template
-> > > +(--template PATH) or another output format (--format FORMAT).
-> > > +""", file=sys.stderr)
-> > > +            self.template = "https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/templates/d3-flamegraph-base.html"
-> > >
-> > >      @staticmethod
-> > >      def get_libtype_from_dso(dso):
-> > > @@ -129,15 +153,18 @@ class FlameGraphCLI:
-> > >              options_json = json.dumps(options)
-> > >
-> > >              try:
-> > > -                with io.open(self.args.template, encoding="utf-8") as template:
-> > > -                    output_str = (
-> > > -                        template.read()
-> > > -                        .replace("/** @options_json **/", options_json)
-> > > -                        .replace("/** @flamegraph_json **/", stacks_json)
-> > > -                    )
-> > > -            except IOError as err:
-> > > -                print("Error reading template file: {}".format(err), file=sys.stderr)
-> > > -                sys.exit(1)
-> > > +                with urllib.request.urlopen(self.template) as template:
-> > > +                    output_str = '\n'.join([
-> > > +                        l.decode('utf-8') for l in template.readlines()
-> > > +                    ])
-> > > +            except Exception as err:
-> > > +                print(f"Error reading template {self.template}: {err}\n"
-> > > +                      "a minimal flame graph will be generated", file=sys.stderr)
-> > > +                output_str = minimal_html
-> > > +
-> > > +            output_str = output_str.replace("/** @options_json **/", options_json)
-> > > +            output_str = output_str.replace("/** @flamegraph_json **/", stacks_json)
-> > > +
-> > >              output_fn = self.args.output or "flamegraph.html"
-> > >          else:
-> > >              output_str = stacks_json
-> > > --
-> > > 2.39.0.314.g84b9a713c41-goog
-> > >
+Reviewed-by: Benson Leung <bleung@chromium.org>
+
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/c=
+hrome/cros_ec_typec.c
+> index bc8dc8bd90b3..05dc5a63af53 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -345,6 +345,7 @@ static int cros_typec_register_port_altmodes(struct c=
+ros_typec_data *typec,
+>  	if (IS_ERR(amode))
+>  		return PTR_ERR(amode);
+>  	port->port_altmode[CROS_EC_ALTMODE_DP] =3D amode;
+> +	typec_altmode_set_drvdata(amode, port);
+> =20
+>  	/*
+>  	 * Register TBT compatibility alt mode. The EC will not enter the mode
+> @@ -358,6 +359,7 @@ static int cros_typec_register_port_altmodes(struct c=
+ros_typec_data *typec,
+>  	if (IS_ERR(amode))
+>  		return PTR_ERR(amode);
+>  	port->port_altmode[CROS_EC_ALTMODE_TBT] =3D amode;
+> +	typec_altmode_set_drvdata(amode, port);
+> =20
+>  	port->state.alt =3D NULL;
+>  	port->state.mode =3D TYPEC_STATE_USB;
+> --=20
+> 2.39.0.314.g84b9a713c41-goog
+>=20
+>=20
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--mGVjA2t/wX4O1RTo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY7xuZwAKCRBzbaomhzOw
+wqnoAQDvv6RZ17rwqoZKO2HlhrcKp+esySgdPBXYMaj4biFnwQD9ERLrj73j0Wft
+9yVnrbKWiw6BOhyXJV7Yo6VMuspVSAI=
+=/RI6
+-----END PGP SIGNATURE-----
+
+--mGVjA2t/wX4O1RTo--
