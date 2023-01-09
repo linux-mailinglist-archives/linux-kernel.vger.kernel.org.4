@@ -2,208 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B71A662278
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71187662281
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234386AbjAIKHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 05:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
+        id S233121AbjAIKH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234306AbjAIKGs (ORCPT
+        with ESMTP id S236390AbjAIKHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 05:06:48 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE881DC7;
-        Mon,  9 Jan 2023 02:05:55 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3098mLvX012979;
-        Mon, 9 Jan 2023 10:05:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=njzyDNi5DpxoyZkQbk7rKCG2fibPz6j5fRLlrKFQ0Lw=;
- b=pDzkpTDfu4nZNM3cuYpVvewnIvdE3ddFI9CkoZXUoEOJonmgJdl74AvN83QywnlrSG+M
- KG8q+5b9/etntKMjPR6XiwPWhd7fr3CVmDO8/ID5bpeKAPi/hYgQSssaPAjKIy+R8v6D
- m1kFR3D0/OB5OLjdqA7vOOt8v6v9S98jofpVDH5DQ4oamLtIONdW79xBADEl9LSwH3Ft
- K7qRVj0FOkqNY6RqSj+jDj3mEt8ufF6WlN00puerdZKJaRBn0TTeWMQQtvHF2FC+ps8G
- n3nRbwa5junK/J9PLSIxgw+9lsPsdsx6moEflDwcyGcEkpcchhdFwKKE3EUSxVQETPgp Uw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3my0b92snr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 10:05:42 +0000
-Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 309A5fTS017793
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 9 Jan 2023 10:05:41 GMT
-Received: from [10.79.43.91] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 9 Jan 2023
- 02:05:35 -0800
-Message-ID: <7552f8a1-9503-de7c-a6d4-46452ef78ece@quicinc.com>
-Date:   Mon, 9 Jan 2023 15:35:31 +0530
+        Mon, 9 Jan 2023 05:07:41 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8EF175B0;
+        Mon,  9 Jan 2023 02:07:11 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AA65D6CF;
+        Mon,  9 Jan 2023 11:07:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673258829;
+        bh=MA3UIeIy29qHR4bO6RNUu05XnWNHU0OutnZKv3QwVwk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pjjjSCYSC8uDx+DkgNqThr6Ug7pgA+5GZd4RkvCh9ec2wiQgyWQA4/a53wez6N9ys
+         NZKrsnL6YAfGmjqIC0qDDDJDUKaPMZVratlChAJGRwSrqgoBc7/wTf5ZZGhoWRz8KH
+         xmQwm/HA9bllA23+ouY1hwQW3mw2mu1adHMqieTo=
+Date:   Mon, 9 Jan 2023 12:07:06 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link III
+ Deserializer
+Message-ID: <Y7vnSnQAh2nS9vXx@pendragon.ideasonboard.com>
+References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
+ <20230105140307.272052-6-tomi.valkeinen@ideasonboard.com>
+ <Y7o3QEq9utV8nswA@pendragon.ideasonboard.com>
+ <a3857c78-c221-176f-b862-a0435b301c67@ideasonboard.com>
+ <Y7vZzg6YyC2IaUso@pendragon.ideasonboard.com>
+ <65e3ca66-a4ba-db9b-3640-c90a7bdee61b@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V2 06/11] remoteproc: qcom_q6v5_mss: Use a carveout to
- authenticate modem headers
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-CC:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>, <robin.murphy@arm.com>, <agross@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <konrad.dybcio@somainline.org>,
-        <amit.pundir@linaro.org>, <regressions@leemhuis.info>,
-        <sumit.semwal@linaro.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>
-References: <20230109034843.23759-1-quic_sibis@quicinc.com>
- <20230109034843.23759-7-quic_sibis@quicinc.com>
- <20230109083231.GB4966@thinkpad>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <20230109083231.GB4966@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: KSN7rH8A2GjzdGeXK9enMIAbm8MxEC5j
-X-Proofpoint-ORIG-GUID: KSN7rH8A2GjzdGeXK9enMIAbm8MxEC5j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_03,2023-01-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- clxscore=1015 adultscore=0 impostorscore=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301090071
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <65e3ca66-a4ba-db9b-3640-c90a7bdee61b@ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Mani,
+On Mon, Jan 09, 2023 at 11:53:22AM +0200, Tomi Valkeinen wrote:
+> On 09/01/2023 11:09, Laurent Pinchart wrote:
+> > On Mon, Jan 09, 2023 at 10:30:13AM +0200, Tomi Valkeinen wrote:
+> >> On 08/01/2023 05:23, Laurent Pinchart wrote:
+> >>> Hi Tomi,
+> >>>
+> >>> Thank you for the patch.
+> >>>
+> >>> On Thu, Jan 05, 2023 at 04:03:04PM +0200, Tomi Valkeinen wrote:
+> >>>> Add DT bindings for TI DS90UB960 FPD-Link III Deserializer.
+> >>>>
+> >>>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> >>>> Reviewed-by: Rob Herring <robh@kernel.org>
+> >>>> ---
+> >>>>    .../bindings/media/i2c/ti,ds90ub960.yaml      | 402 ++++++++++++++++++
+> >>>>    1 file changed, 402 insertions(+)
+> >>>>    create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> >>>>
+> >>>> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> >>>> new file mode 100644
+> >>>> index 000000000000..664799ae55be
+> >>>> --- /dev/null
+> >>>> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> >>>> @@ -0,0 +1,402 @@
+> >>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>>> +%YAML 1.2
+> >>>> +---
+> >>>> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
+> >>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>>> +
+> >>>> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
+> >>>> +
+> >>>> +maintainers:
+> >>>> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> >>>> +
+> >>>> +description:
+> >>>> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
+> >>>> +  forwarding.
+> >>>> +
+> >>>> +properties:
+> >>>> +  compatible:
+> >>>> +    enum:
+> >>>> +      - ti,ds90ub960-q1
+> >>>> +      - ti,ds90ub9702-q1
+> >>>> +
+> >>>> +  reg:
+> >>>> +    maxItems: 1
+> >>>> +
+> >>>> +  clocks:
+> >>>> +    maxItems: 1
+> >>>> +    description:
+> >>>> +      Reference clock connected to the REFCLK pin.
+> >>>> +
+> >>>> +  clock-names:
+> >>>> +    items:
+> >>>> +      - const: refclk
+> >>>> +
+> >>>> +  powerdown-gpios:
+> >>>> +    maxItems: 1
+> >>>> +    description:
+> >>>> +      Specifier for the GPIO connected to the PDB pin.
+> >>>> +
+> >>>> +  i2c-alias-pool:
+> >>>> +    $ref: /schemas/types.yaml#/definitions/uint16-array
+> >>>> +    description:
+> >>>> +      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
+> >>>> +      used to access the remote peripherals on the serializer's I2C bus. The
+> >>>> +      addresses must be available, not used by any other peripheral. Each
+> >>>> +      remote peripheral is assigned an alias from the pool, and transactions to
+> >>>> +      that address will be forwarded to the remote peripheral, with the address
+> >>>> +      translated to the remote peripheral's real address. This property is not
+> >>>> +      needed if there are no I2C addressable remote peripherals.
+> >>>> +
+> >>>> +  links:
+> >>>> +    type: object
+> >>>> +    additionalProperties: false
+> >>>> +
+> >>>> +    properties:
+> >>>> +      '#address-cells':
+> >>>> +        const: 1
+> >>>> +
+> >>>> +      '#size-cells':
+> >>>> +        const: 0
+> >>>> +
+> >>>> +      ti,manual-strobe:
+> >>>> +        type: boolean
+> >>>> +        description:
+> >>>> +          Enable manual strobe position and EQ level
+> >>>> +
+> >>>> +    patternProperties:
+> >>>> +      '^link@[0-3]$':
+> >>>> +        type: object
+> >>>> +        additionalProperties: false
+> >>>> +        properties:
+> >>>> +          reg:
+> >>>> +            description: The link number
+> >>>> +            maxItems: 1
+> >>>> +
+> >>>> +          i2c-alias:
+> >>>> +            description:
+> >>>> +              The I2C address used for the serializer. Transactions to this
+> >>>> +              address on the I2C bus where the deserializer resides are
+> >>>> +              forwarded to the serializer.
+> >>>> +
+> >>>> +          ti,rx-mode:
+> >>>> +            $ref: /schemas/types.yaml#/definitions/uint32
+> >>>> +            enum:
+> >>>> +              - 0 # RAW10
+> >>>> +              - 1 # RAW12 HF
+> >>>> +              - 2 # RAW12 LF
+> >>>> +              - 3 # CSI2 SYNC
+> >>>> +              - 4 # CSI2 NON-SYNC
+> >>>> +            description:
+> >>>> +              FPD-Link Input Mode. This should reflect the hardware and the
+> >>>> +              default mode of the connected camera module.
+> >>>
+> >>> As the remote device may not be a camera, I'd write "of the connected
+> >>> device" or "of the connected serializer".
+> >>
+> >> I was trying to include the sensor also in the "camera module", as the
+> >> sensor's "normal" pixel cloud would affect RAW modes (HF/LF). Perhaps
+> >> "connected device" covers this.
+> >>
+> >>>> +
+> >>>> +          ti,cdr-mode:
+> >>>> +            $ref: /schemas/types.yaml#/definitions/uint32
+> >>>> +            enum:
+> >>>> +              - 0 # FPD-Link III
+> >>>> +              - 1 # FPD-Link IV
+> >>>> +            description:
+> >>>> +              FPD-Link CDR Mode. This should reflect the hardware and the
+> >>>> +              default mode of the connected camera module.
+> >>>> +
+> >>>> +          ti,strobe-pos:
+> >>>> +            $ref: /schemas/types.yaml#/definitions/int32
+> >>>> +            minimum: -13
+> >>>> +            maximum: 13
+> >>>> +            description: Manual strobe position
+> >>>> +
+> >>>> +          ti,eq-level:
+> >>>> +            $ref: /schemas/types.yaml#/definitions/uint32
+> >>>> +            maximum: 14
+> >>>> +            description: Manual EQ level
+> >>>> +
+> >>>> +          serializer:
+> >>>> +            type: object
+> >>>> +            description: FPD-Link Serializer node
+> >>>> +
+> >>>> +        required:
+> >>>> +          - reg
+> >>>> +          - i2c-alias
+> >>>> +          - ti,rx-mode
+> >>>> +          - serializer
+> >>>> +
+> >>>> +  ports:
+> >>>> +    $ref: /schemas/graph.yaml#/properties/ports
+> >>>> +
+> >>>> +    properties:
+> >>>> +      port@0:
+> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >>>> +        unevaluatedProperties: false
+> >>>> +        description: FPD-Link input 0
+> >>>> +
+> >>>> +        properties:
+> >>>> +          endpoint:
+> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
+> >>>> +            unevaluatedProperties: false
+> >>>> +            description:
+> >>>> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> >>>> +              hsync-active and vsync-active must be defined.
+> >>>> +
+> >>>> +      port@1:
+> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >>>> +        unevaluatedProperties: false
+> >>>> +        description: FPD-Link input 1
+> >>>> +
+> >>>> +        properties:
+> >>>> +          endpoint:
+> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
+> >>>> +            unevaluatedProperties: false
+> >>>> +            description:
+> >>>> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> >>>> +              hsync-active and vsync-active must be defined.
+> >>>> +
+> >>>> +      port@2:
+> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >>>> +        unevaluatedProperties: false
+> >>>> +        description: FPD-Link input 2
+> >>>> +
+> >>>> +        properties:
+> >>>> +          endpoint:
+> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
+> >>>> +            unevaluatedProperties: false
+> >>>> +            description:
+> >>>> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> >>>> +              hsync-active and vsync-active must be defined.
+> >>>> +
+> >>>> +      port@3:
+> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >>>> +        unevaluatedProperties: false
+> >>>> +        description: FPD-Link input 3
+> >>>> +
+> >>>> +        properties:
+> >>>> +          endpoint:
+> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
+> >>>> +            unevaluatedProperties: false
+> >>>> +            description:
+> >>>> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
+> >>>> +              hsync-active and vsync-active must be defined.
+> >>>> +
+> >>>> +      port@4:
+> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >>>> +        unevaluatedProperties: false
+> >>>> +        description: CSI-2 Output 0
+> >>>> +
+> >>>> +        properties:
+> >>>> +          endpoint:
+> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
+> >>>> +            unevaluatedProperties: false
+> >>>> +
+> >>>> +            properties:
+> >>>> +              data-lanes:
+> >>>> +                minItems: 1
+> >>>> +                maxItems: 4
+> >>>> +
+> >>>> +            required:
+> >>>> +              - data-lanes
+> >>>> +
+> >>>> +      port@5:
+> >>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> >>>> +        unevaluatedProperties: false
+> >>>> +        description: CSI-2 Output 1
+> >>>> +
+> >>>> +        properties:
+> >>>> +          endpoint:
+> >>>> +            $ref: /schemas/media/video-interfaces.yaml#
+> >>>> +            unevaluatedProperties: false
+> >>>> +
+> >>>> +            properties:
+> >>>> +              data-lanes:
+> >>>> +                minItems: 1
+> >>>> +                maxItems: 4
+> >>>> +
+> >>>> +            required:
+> >>>> +              - data-lanes
+> >>>
+> >>> I think you need
+> >>>
+> >>>       required:
+> >>>         - port@0
+> >>>         - port@1
+> >>>         - port@2
+> >>>         - port@3
+> >>>         - port@4
+> >>>         - port@5
+> >>
+> >> Is that needed? I think often some of the ports are unused (e.g. the
+> >> example in this yaml file). Is it customary to still require empty port
+> >> nodes in the DT?
+> > 
+> > Ports are an intrinsic property of a device, they don't depend on the
+> > device integration in the system. In this case, the UB960 has four
+> > FPD-Link inputs and two CSI-2 outputs, that's a property of the chip.
+> > They don't have to be connected to anything on the board, so endpooints
+> > are optional.
+> 
+> Yes, but why do they have to be required? A missing port node implies 
+> that it's not used, doesn't it? I don't mind much, it just feels a bit 
+> extra to add multiple almost empty "port@X { reg = <X>; };" style nodes 
+> to the dts file.
 
-On 1/9/23 14:02, Manivannan Sadhasivam wrote:
-> On Mon, Jan 09, 2023 at 09:18:38AM +0530, Sibi Sankar wrote:
->> Any access to the dynamically allocated metadata region by the application
->> processor after assigning it to the remote Q6 will result in a XPU
->> violation. Fix this by replacing the dynamically allocated memory region
->> with a no-map carveout and unmap the modem metadata memory region before
->> passing control to the remote Q6.
->>
->> Reported-and-tested-by: Amit Pundir <amit.pundir@linaro.org>
->> Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for mem ownership switch")
->> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
->> ---
->>
->> v2:
->>   * Revert no_kernel_mapping [Mani/Robin]
->>
->>   drivers/remoteproc/qcom_q6v5_mss.c | 48 ++++++++++++++++++++++++++----
->>   1 file changed, 42 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
->> index e2f765f87ec9..b7a158751cef 100644
->> --- a/drivers/remoteproc/qcom_q6v5_mss.c
->> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
->> @@ -215,6 +215,7 @@ struct q6v5 {
->>   	size_t mba_size;
->>   	size_t dp_size;
->>   
->> +	phys_addr_t mdata_phys;
->>   	phys_addr_t mpss_phys;
->>   	phys_addr_t mpss_reloc;
->>   	size_t mpss_size;
->> @@ -973,15 +974,29 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
->>   	if (IS_ERR(metadata))
->>   		return PTR_ERR(metadata);
->>   
->> -	ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
->> -	if (!ptr) {
->> -		kfree(metadata);
->> -		dev_err(qproc->dev, "failed to allocate mdt buffer\n");
->> -		return -ENOMEM;
->> +	if (qproc->mdata_phys) {
->> +		phys = qproc->mdata_phys;
->> +		ptr = memremap(qproc->mdata_phys, size, MEMREMAP_WC);
->> +		if (!ptr) {
->> +			dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n",
->> +				&qproc->mdata_phys, size);
->> +			ret = -EBUSY;
->> +			goto free_dma_attrs;
-> 
-> There is no memory to free at this point.
+Lots of them are in .dtsi files, so it's not that bad. The main reasons I
+push for making ports mandatory are uniformity (lots of bindings do so,
+albeit some because I wrote them or asked for changes during review
+:-)), and simplified port handling on the driver side. 
 
-we would just free the metadata in the no-map carveout scenario since
-mdata_phys wouldn't be NULL. I can do a kfree(metadata) directly from
-this branch and return as well if you think it makes things more
-readable.
+-- 
+Regards,
 
-> 
-> Thanks,
-> Mani
-> 
->> +		}
->> +	} else {
->> +		ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
->> +		if (!ptr) {
->> +			kfree(metadata);
->> +			dev_err(qproc->dev, "failed to allocate mdt buffer\n");
->> +			return -ENOMEM;
->> +		}
->>   	}
->>   
->>   	memcpy(ptr, metadata, size);
->>   
->> +	if (qproc->mdata_phys)
->> +		memunmap(ptr);
->> +
->>   	/* Hypervisor mapping to access metadata by modem */
->>   	mdata_perm = BIT(QCOM_SCM_VMID_HLOS);
->>   	ret = q6v5_xfer_mem_ownership(qproc, &mdata_perm, false, true,
->> @@ -1010,7 +1025,8 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
->>   			 "mdt buffer not reclaimed system may become unstable\n");
->>   
->>   free_dma_attrs:
->> -	dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
->> +	if (!qproc->mdata_phys)
->> +		dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
->>   	kfree(metadata);
->>   
->>   	return ret < 0 ? ret : 0;
->> @@ -1893,6 +1909,26 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
->>   	qproc->mpss_phys = qproc->mpss_reloc = r.start;
->>   	qproc->mpss_size = resource_size(&r);
->>   
->> +	if (!child) {
->> +		node = of_parse_phandle(qproc->dev->of_node, "memory-region", 2);
->> +	} else {
->> +		child = of_get_child_by_name(qproc->dev->of_node, "metadata");
->> +		node = of_parse_phandle(child, "memory-region", 0);
->> +		of_node_put(child);
->> +	}
->> +
->> +	if (!node)
->> +		return 0;
->> +
->> +	ret = of_address_to_resource(node, 0, &r);
->> +	of_node_put(node);
->> +	if (ret) {
->> +		dev_err(qproc->dev, "unable to resolve metadata region\n");
->> +		return ret;
->> +	}
->> +
->> +	qproc->mdata_phys = r.start;
->> +
->>   	return 0;
->>   }
->>   
->> -- 
->> 2.17.1
->>
-> 
+Laurent Pinchart
