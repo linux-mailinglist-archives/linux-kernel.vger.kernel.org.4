@@ -2,138 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DC06620A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D9D6620AA
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234471AbjAIIxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S234316AbjAIIyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:54:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236827AbjAIIwf (ORCPT
+        with ESMTP id S236692AbjAIIxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:52:35 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF56F13F4B;
-        Mon,  9 Jan 2023 00:45:10 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id C26E05C0105;
-        Mon,  9 Jan 2023 03:44:59 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 09 Jan 2023 03:44:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673253899; x=1673340299; bh=L1F91mJJga
-        KEg4dA8VxYJyoEo2s3t1TaV8Gb51DrVJU=; b=c+yD51YQT1KcIPDSyG+sEiRosP
-        SOi1ni3XbV0xomqi04Ch8TVCuQJ3B/QItBmlGAOAQwu5KzimWGwhc2srPMKvACX6
-        N7ax/LAtlIhf+znFdLRoiR6StDyX54QVHS6p9hH+MMk33PEmgZQIUNx5xfbIPu6H
-        /uLR6lHuxn2KTV4tz01v++x8nZm0mReVXtw1eM1dRXVQjZibM9vK7zuhzewdG9nT
-        VleYvpbxIxt3zZxc1SEd6pYjuV/JamyD0glpFtwB2F9Z+SrWW5HNitBaoCIOYUaZ
-        g3BUYm7Dlc0OPVjHXbIyjvNLY5htnPQSQqIVPJZSufXEzPkByLv+JtvMcaeg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673253899; x=1673340299; bh=L1F91mJJgaKEg4dA8VxYJyoEo2s3
-        t1TaV8Gb51DrVJU=; b=ZiKrV3MFCykUfVE8xmG3AHGV8oJHU/cBsh2dQ40lItqJ
-        AidADxCuYx0p5qzZEyIodeCHoN6lc713IUjk3jnLTGuzH1Hlm1gVsUbuMxqr/N9J
-        thttf859jCtUzYZdzmCt957Ya5B/oJbkdQ5u9QjNWEpWLpHqLwZvT4PZ+dD0YuXc
-        hfMoz8AmVz1enhCbxcbBuB4S2NbhTrblbrSp5tzDRMCanVxO0PY5fTsPC5kHc+39
-        6g1K1nhu8+Ulzx1TPPUmLaiIX+rUqTC+jLmTbsIAVsgkgR1ucXhQM+oettAmpCiG
-        rJ/ifu3rwbSR6gRf3x1FC5FuZhQg2FIFnCJLX/nobA==
-X-ME-Sender: <xms:CtS7YxoHtx6hBDXGY9xaHF_cIlwngqsvDWAsLZJJWrft_oFWFH6oyw>
-    <xme:CtS7Yzp-PeQ6HfG3PFv6SEZ73GXpK74SOS-VjsY_J9RFz59kV6XFtDFuQHlgm9QCg
-    MT35paLjK3qxb5yGdc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeehgdduvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:C9S7Y-Mybw79_IvAt8yeEtEICRMgaJCiN4CxUNL0SxccioUi9oWXZg>
-    <xmx:C9S7Y84IOBXkKL72V9YA6SAa7SSyk5TXTUeeVAtk9kFnasWxkwAgGg>
-    <xmx:C9S7Yw6Y8F7TwRXetSPyFlfjwvI57X9X7WZfhuhBfTlyKN1GvfPN9A>
-    <xmx:C9S7Y_YKS1MRRAkDIclVe8aoNSkHStLU1FA1zSPRCNJJ9zXhOux08Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E992AB60086; Mon,  9 Jan 2023 03:44:58 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <c44bd7e8-68ff-44f8-b50b-4d27b4fe29dc@app.fastmail.com>
-In-Reply-To: <ad6efc07-1706-a8e2-1478-45124838a043@kernel.org>
-References: <20220818004357.375695-1-stephen@networkplumber.org>
- <07786498-2209-3af0-8d68-c34427049947@kernel.org>
- <po9s7-9snp-9so3-n6r5-qs217ss1633o@vanv.qr>
- <ad6efc07-1706-a8e2-1478-45124838a043@kernel.org>
-Date:   Mon, 09 Jan 2023 09:44:38 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Jiri Slaby" <jirislaby@kernel.org>,
-        "Jan Engelhardt" <jengelh@inai.de>
-Cc:     "Stephen Hemminger" <stephen@networkplumber.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "David Ahern" <dsahern@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Pablo Neira Ayuso" <pablo@netfilter.org>,
-        "Jozsef Kadlecsik" <kadlec@netfilter.org>,
-        "Florian Westphal" <fw@strlen.de>, "Borislav Petkov" <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Neeraj Upadhyay" <quic_neeraju@quicinc.com>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        "Muchun Song" <songmuchun@bytedance.com>,
-        "Akhmat Karakotov" <hmukos@yandex-team.ru>,
-        "Antoine Tenart" <atenart@kernel.org>,
-        "Xin Long" <lucien.xin@gmail.com>,
-        "Juergen Gross" <jgross@suse.com>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        "Nathan Fontenot" <nathan.fontenot@amd.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Suma Hegde" <suma.hegde@amd.com>, "Chen Yu" <yu.c.chen@intel.com>,
-        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
-        "Xie Yongji" <xieyongji@bytedance.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        "Alexandre Ghiti" <alexandre.ghiti@canonical.com>,
-        "Chuck Lever" <chuck.lever@oracle.com>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "Paul Gortmaker" <paul.gortmaker@windriver.com>,
-        "Nikolay Aleksandrov" <razor@blackwall.org>,
-        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
-        "Menglong Dong" <imagedong@tencent.com>,
-        "Petr Machata" <petrm@nvidia.com>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Roopa Prabhu" <roopa@nvidia.com>,
-        "Yuwei Wang" <wangyuweihx@gmail.com>,
-        "Shakeel Butt" <shakeelb@google.com>,
-        "Kuniyuki Iwashima" <kuniyu@amazon.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Stefano Garzarella" <sgarzare@redhat.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Wang Qing" <wangqing@vivo.com>, "Yu Zhe" <yuzhe@nfschina.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
-        "open list:NETFILTER" <coreteam@netfilter.org>
-Subject: Re: [PATCH net-next] Remove DECnet support from kernel
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Mon, 9 Jan 2023 03:53:15 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E9119C23;
+        Mon,  9 Jan 2023 00:45:27 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3098dFOC016302;
+        Mon, 9 Jan 2023 08:45:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=3DGgtcvzBS3erm7QfVEqUU4i8HSjdPmckD78sbQivms=;
+ b=g6MEUvRNhASqwdG5ZSL7HeG0KyFtF8g8Ar3RWDEC20VIQe5aevtT5jHvRgjz0ui6luQh
+ dS7lk1GnVwO10hXJwxDirbAMfHJlIMDJ9A6JuV4l/bnP4AtMoB4JO/fXLYe3nIbG3ZAt
+ +fc/Esw0Dtzy9/M3+tqc8OqSQThAl6ULQSViyfFPelQcE+5zAbvDuabYTN7wW4gbKM0b
+ +T/7DRurUvFR2BFyLHfZVcz8Wexn0gLu8HDkmHpUeCDixMjqNeLK3lYAI4xnSoP/J2zD
+ UobCrEVStkOXLzxek509BVdusQw0C7gV84EjsOV4UzQx5e+yHlwX2zoOE5x9tkB6lINk NA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6j81dm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 08:45:10 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 308FR0aa000570;
+        Mon, 9 Jan 2023 08:45:08 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3my0c6jmm7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 08:45:08 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3098j4nu39518602
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 9 Jan 2023 08:45:04 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C573B20043;
+        Mon,  9 Jan 2023 08:45:04 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66A0C2004B;
+        Mon,  9 Jan 2023 08:45:04 +0000 (GMT)
+Received: from [9.171.86.101] (unknown [9.171.86.101])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  9 Jan 2023 08:45:04 +0000 (GMT)
+Message-ID: <5f6a4b1e0a5a85f6e2e9f674bc88843c5ab623c6.camel@linux.ibm.com>
+Subject: Re: [niks:has_ioport_v3] [tty] aa0652d7f1:
+ BUG:kernel_NULL_pointer_dereference,address
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        kernel test robot <yujie.liu@intel.com>
+Cc:     oe-lkp@lists.linux.dev, kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Date:   Mon, 09 Jan 2023 09:45:04 +0100
+In-Reply-To: <e211f932-77c3-427a-859a-d846598524ed@app.fastmail.com>
+References: <202301051008.a8468257-yujie.liu@intel.com>
+         <e211f932-77c3-427a-859a-d846598524ed@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hquSNgfW-DyJfvPVpS4omgMCJSc_qgmu
+X-Proofpoint-GUID: hquSNgfW-DyJfvPVpS4omgMCJSc_qgmu
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_03,2023-01-06_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 mlxlogscore=999 phishscore=0 adultscore=0 mlxscore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301090061
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -141,23 +88,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023, at 09:34, Jiri Slaby wrote:
-> On 09. 01. 23, 9:14, Jan Engelhardt wrote:
->> On Monday 2023-01-09 08:04, Jiri Slaby wrote:
->
-> Right, we used to keep providing also defines and structs in uapi 
-> headers of removed functionality. So that the above socket would 
-> compile, but fail during runtime.
->
-> I am not biased to any solution. In fact, I found out trinity was fixed 
-> already. So either path networking takes, it's fine by me. I'm not sure 
-> about the chromium users, though (and I don't care).
+On Thu, 2023-01-05 at 09:03 +0100, Arnd Bergmann wrote:
+> On Thu, Jan 5, 2023, at 06:54, kernel test robot wrote:
+> > Greeting,
+> >=20
+> > FYI, we noticed BUG:kernel_NULL_pointer_dereference,address due to=20
+> > commit (built with clang-14):
+> >=20
+> > commit: aa0652d7f1b311e55232a8153522fdaaba0f197a ("tty: serial: handle=
+=20
+> > HAS_IOPORT dependencies")
+> > https://git.kernel.org/cgit/linux/kernel/git/niks/linux.git=20
+> > has_ioport_v3
+> >=20
+> > in testcase: boot
+> >=20
+> > on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -=
+m 4G
+> >=20
+> > caused below changes (please refer to attached dmesg/kmsg for entire=20
+> > log/backtrace):
+> >=20
+> >=20
+> > [    2.166733][    T0] calling  univ8250_console_init+0x0/0x30 @ 0
+> > [    2.167555][    T0] BUG: kernel NULL pointer dereference, address:=20
+> > 00000000
+>=20
+> I think it's this bit:
+>=20
+> @@ -508,12 +523,13 @@ static void set_io_from_upio(struct uart_port *p)
+>                 up->dl_read =3D au_serial_dl_read;
+>                 up->dl_write =3D au_serial_dl_write;
+>                 break;
+> -#endif
+> -
+> +#ifdef CONFIG_HAS_IOPORT
+>         default:
+>                 p->serial_in =3D io_serial_in;
+>                 p->serial_out =3D io_serial_out;
+>                 break;
+> +#endif
+> +#endif
+>         }
+>         /* Remember loaded iotype */
+>         up->cur_iotype =3D p->iotype;
+>=20
+>=20
+> which puts the 'default' case inside of '#ifdef
+> CONFIG_SERIAL_8250_RT288X'. x86 does not use the
+> RT288x variant but relies on the default, so any
+> call to io_serial_{in,out} will cause a NULL
+> pointer dereference.
+>=20
+>        Arnd
 
-Chromium and some of the others look like automatically generated
-lists of files and the rest seem to have compile-time checks.
-
-From a brief look at all the packages in the debian codesearch
-link you provided, I don't see any that are likely to cause
-problems aside from trinity.
-
-    Arnd
+Thanks for looking into it Arnd, your reasoning makes sense to me, I'll
+try to look into this and test this case before I sent out the v3 of
+the HAS_IOPORT patches. I still also have a few nitpicks from Bjorn,
+mostly about the commit messages, to work in. Hope to do that soon but
+got a few things going on at the moment.
