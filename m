@@ -2,137 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601A56626F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534756626A1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbjAINOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
+        id S234699AbjAINOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234483AbjAINNY (ORCPT
+        with ESMTP id S236428AbjAINN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:13:24 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629D42DF6
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:13:18 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so8961447wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 05:13:18 -0800 (PST)
+        Mon, 9 Jan 2023 08:13:28 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B52F2C;
+        Mon,  9 Jan 2023 05:13:27 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso12762973pjt.0;
+        Mon, 09 Jan 2023 05:13:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jaDFDl2+tN5Hl1ZB51fHbi1FKciauyhT9UPo+kncU3I=;
-        b=gySwzbXAEvFLlHHx2GUBE1PzOsbvzm54w/4Hoe3q+0MuYeNv/IouoUwbFIcR1OlLQU
-         8HHFfwUuG5Ejs8cXpK1Rvhg2DFXq9lvaomJmlBCnW3LXOM78ITVmfg+aHNpy13jbymSo
-         7p2/7kd/0yCcDsw2eZ2Gip3LF4r3qYJHCB+iGzH8mc7B0j1JDNIdswwqnetIixd4ss9p
-         R0FNGPqDOx1eSPe3qMt/2UNDxo8PJiTHa6Ylk5JZ8qEc7N2EmZeq9sKRn4woqfLsEFBg
-         vj8g1MxAKqH9JtEh1PSwoG73zEf+4k3szGPQSQ+fkF90yFtgYD9omG93WrcAp9e/kRBK
-         +zLQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RUPWQ00I4B+FeAT4uW8sz7LlGf270FM7v3Ovcdol5eo=;
+        b=dNoYjm6G2UptA+miOjROgT/3AYYHiuu0qY1GE8xiov6fo0JV/29wYEpFRR0aspzTEM
+         Y+3lJ7m+F3vwEsCU9+WSfDH51n7JRARreaSrvHJPegJMlClrsaVkLGQFopidghxYZMAa
+         LcojnCYBZ/ndV/8vidGnxhZpjZPQUbHLyLj+raYZFdrFQ8fRIQtfoyZwLoU9fo6KzJkW
+         ASe1ES1EyB5CzD+ZdEVbiDhEaU3ktVOrJAQ5KVOyoPhEFXHfoqNBl8ebpgAxKO22jKPZ
+         5EGR3oiyYdZKnpNH5peYAVu5P+aR/dhUotlQhHP535ugn7Gm/Ys8B8L+5yjbkv3M291r
+         n1qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jaDFDl2+tN5Hl1ZB51fHbi1FKciauyhT9UPo+kncU3I=;
-        b=uU55fd3nK2MxjMODstbAY7cS1wAoRBAOggW9lRSy48rbxtE0yOr3SnwkEEhF1xgnTY
-         N/AoZAft7bs/ZqXKxOcvFgS8g+MjaFOUV0AYHo7YLgDo4Hzo0BiKMO4NWhOxKooxaCgF
-         4ihw1EATFJCr5Q2Pq+TqsRRoAS3JeANmbAC2DoJcvpkrIhpGYWUy52NU8l7sX/NHIK2g
-         rGeFxrzqvypM5sayHjIUHDHIsPN27OOw8uQs+6DDmugOOhosSslFfM2PVCk/WROeuzoa
-         HZPzNxjHXWOkzdBoggpcB/ElJrxV/WJE6HprARqQ6Mrl/Usyvg5swnWxEVxbBxZqUAXm
-         5i9g==
-X-Gm-Message-State: AFqh2kodI6JfhpSPwaJL7OxmWEf7IC5f7ICmIOGb8q+fe9GApFwAxya5
-        WNXCdiotCl3sYNPMVh3heYlEYUDRT41y/jzWN00M6A==
-X-Google-Smtp-Source: AMrXdXszznt1RWlKaQKelt5nu0PuVTLm2drhi7RWKiIHCPFAA8P0uPu4W+bkdKD8nSJe0q214pg/4m4iIx6XHR48m5s=
-X-Received: by 2002:a7b:c5d6:0:b0:3cf:70a0:f689 with SMTP id
- n22-20020a7bc5d6000000b003cf70a0f689mr3221956wmk.161.1673269997007; Mon, 09
- Jan 2023 05:13:17 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RUPWQ00I4B+FeAT4uW8sz7LlGf270FM7v3Ovcdol5eo=;
+        b=SHGvfdUYxCAnAKu1UtFZmwR6iIZ/aD8P+rBzIQehtnHqDvL4gTFoFETkoQMskO2B7k
+         qesqMBwh+r+8g3uQPNKqjMAwwfisYczZg5zmOsoR4QHrS1xkY7J1A39lw1pgXaltrDbt
+         cDwbEgIIzwfvnr5+owHYVbDCOgfLZ+OiFdCZs6Jvfij652JPRA1u4jzsoLkO/Pu2nAWO
+         E/hezRRzaDWpJWuhxVfFY+QOOgHyJHx4GFT4Fb4aNUaze1QigEGNRBMOU3nlk0j1JYfe
+         VCf1o3LYAAN5NOPv5ZNUJ/A9QuUVJOwq06Ek9XJxwhDZ0j5q3wcxgUN7UoDeqp2p/gdx
+         ZTgw==
+X-Gm-Message-State: AFqh2komwUvizQy2eBOqfHcV+6dcoB6UqIyL1AOztxedVBqqOEh4qQGr
+        XWVU+z2ocN7K0c1P6LznPh5KJjPZTx/VSFI0tw8=
+X-Google-Smtp-Source: AMrXdXuuDHkYzhUBc9S6KSEjjk9PX/agNgN+0E2m+o5wvl3vbiNBnA5cS5FiCpd9n7ObqMiEPfhDR22SERyEQ/gpZb0=
+X-Received: by 2002:a17:90a:9b17:b0:226:2a7c:9ba9 with SMTP id
+ f23-20020a17090a9b1700b002262a7c9ba9mr2509758pjp.128.1673270001870; Mon, 09
+ Jan 2023 05:13:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20230108025545.338-1-cuiyunhui@bytedance.com> <CANn89i+W__5-jDUdM=_97jzQy9Wq+n9KBEuOGjUi=Fxe_ntqbg@mail.gmail.com>
-In-Reply-To: <CANn89i+W__5-jDUdM=_97jzQy9Wq+n9KBEuOGjUi=Fxe_ntqbg@mail.gmail.com>
-From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
-Date:   Mon, 9 Jan 2023 21:13:06 +0800
-Message-ID: <CAEEQ3wnoKqN+uTmMmUDJ9pp+YVaLmKnv42RApzPbNOGg6CRmnA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v4] sock: add tracepoint for send recv length
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, kuniyu@amazon.com,
-        xiyou.wangcong@gmail.com, duanxiongchun@bytedance.com,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+References: <20221219052128.18190-1-zhouzhouyi@gmail.com> <Y7wN0TKU1jDyTZs5@lothringen>
+In-Reply-To: <Y7wN0TKU1jDyTZs5@lothringen>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Mon, 9 Jan 2023 21:13:10 +0800
+Message-ID: <CAABZP2wpc3JB8Yx7+F5jt5HTFwCrCZz4QqO-JXNypp6_7vBF9Q@mail.gmail.com>
+Subject: Re: [PATCH linux-next] mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
+        paulmck@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 5:56 PM Eric Dumazet <edumazet@google.com> wrote:
-
+On Mon, Jan 9, 2023 at 8:51 PM Frederic Weisbecker <frederic@kernel.org> wrote:
 >
-> Note: At least for CONFIG_RETPOLINE=3Dy and gcc 12.2, compiler adds many
-> additional instructions (and additional memory reads),
-> even when the trace point is not enabled.
+> On Mon, Dec 19, 2022 at 01:21:28PM +0800, Zhouyi Zhou wrote:
+> > mark access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE to fix concurrency bug
+> > reported by KCSAN.
+> >
+> > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > ---
+> > During the rcutorture test on linux-next,
+> > ./tools/testing/selftests/rcutorture/bin/torture.sh --do-kcsan  --kcsan-kmake-arg "CC=clang-12"
+> > following KCSAN BUG is reported:
+> > [   35.397089] BUG: KCSAN: data-race in tick_nohz_idle_stop_tick / tick_nohz_next_event^M
+> > [   35.400593] ^M
+> > [   35.401377] write to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 3:^M
+> > [   35.405325]  tick_nohz_idle_stop_tick+0x14c/0x3e0^M
+> > [   35.407162]  do_idle+0xf3/0x2a0^M
+> > [   35.408016]  cpu_startup_entry+0x15/0x20^M
+> > [   35.409084]  start_secondary+0x8f/0x90^M
+> > [   35.410207]  secondary_startup_64_no_verify+0xe1/0xeb^M
+> > [   35.411607] ^M
+> > [   35.412042] no locks held by swapper/3/0.^M
+> > [   35.413172] irq event stamp: 53048^M
+> > [   35.414175] hardirqs last  enabled at (53047): [<ffffffffb41f8404>] tick_nohz_idle_enter+0x104/0x140^M
+> > [   35.416681] hardirqs last disabled at (53048): [<ffffffffb41229f1>] do_idle+0x91/0x2a0^M
+> > [   35.418988] softirqs last  enabled at (53038): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
+> > [   35.421347] softirqs last disabled at (53029): [<ffffffffb40bf21e>] __irq_exit_rcu+0x6e/0xc0^M
+> > [   35.423685] ^M
+> > [   35.424119] read to 0xffffffffb64b1270 of 4 bytes by task 0 on cpu 0:^M
+> > [   35.425870]  tick_nohz_next_event+0x233/0x2b0^M
+> > [   35.427119]  tick_nohz_idle_stop_tick+0x8f/0x3e0^M
+> > [   35.428386]  do_idle+0xf3/0x2a0^M
+> > [   35.429265]  cpu_startup_entry+0x15/0x20^M
+> > [   35.430429]  rest_init+0x20c/0x210^M
+> > [   35.431382]  arch_call_rest_init+0xe/0x10^M
+> > [   35.432508]  start_kernel+0x544/0x600^M
+> > [   35.433519]  secondary_startup_64_no_verify+0xe1/0xeb^M
+> >
+> > fix above bug by marking access to tick_do_timer_cpu with READ_ONCE/WRITE_ONCE
 >
-> Contrary to some belief, adding a tracepoint is not always 'free'.
-> tail calls for example are replaced with normal calls.
+> This has been discussed before with passion:
 >
-
-
->         .popsection
+> http://archive.lwn.net:8080/linux-kernel/1C65422C-FFA4-4651-893B-300FAF9C49DE@lca.pw/T/
 >
-> # 0 "" 2
-> #NO_APP
-> .L106:
-> # net/socket.c:1008: }
->         movl    %ebx, %eax      # <retval>,
->         popq    %rbx    #
->         popq    %rbp    #
->         popq    %r12    #
->         ret
-> .L111:
-> # ./include/trace/events/sock.h:308: DEFINE_EVENT(sock_msg_length,
-> sock_recv_length,
+Thank you for your guidance, yes, the discussion is very passionate
+;-) and I learned a lot from the above thread ;-)
+> To me data_race() would be more appropriate but that would need a changelog with
+> proper analysis of the tick_do_timer_cpu state machine.
+I Agree, and also I learned to do more rigorous technology research.
 >
+> One more thing on my TODO list, but feel free to beat me at it :-)
+Thank you for your concern ;-)
 
-Hi Eric,  Thanks for your reply,  In fact, it is because the
-definition of the tracepoint function is inline,
-Not just these two tracepoints=EF=BC=8Cright?
-
-#define __DECLARE_TRACE(name, proto, args, cond, data_proto)            \
-      ...
-      static inline void trace_##name(proto)
-
-Regarding the above issue, I plan to optimize it like this:
-
-static noinline void call_trace_sock_send_length(struct sock *sk, __u16 fam=
-ily,
-                                            __u16 protocol, int ret, int fl=
-ags)
-{
-        trace_sock_send_length(sk, family, protocol, ret, 0);
-}
-
-static inline int sock_sendmsg_nosec(struct socket *sock, struct msghdr *ms=
-g)
-{
-        int ret =3D INDIRECT_CALL_INET(sock->ops->sendmsg, inet6_sendmsg,
-                                     inet_sendmsg, sock, msg,
-                                     msg_data_left(msg));
-        BUG_ON(ret =3D=3D -EIOCBQUEUED);
-
-        if (trace_sock_send_length_enabled()) {
-                call_trace_sock_send_length(sock->sk, sock->sk->sk_family,
-                                            sock->sk->sk_protocol, ret, 0);
-        }
-        return ret;
-}
-
-What do you think?
-
-Thanks,
-Yunhui
+Thanks
+Zhouyi
+>
+> Thanks.
