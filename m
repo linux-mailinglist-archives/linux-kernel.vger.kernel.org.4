@@ -2,72 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FE366269B
+	by mail.lfdr.de (Postfix) with ESMTP id E95DF66269C
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233660AbjAINMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
+        id S234392AbjAINMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237109AbjAINL1 (ORCPT
+        with ESMTP id S234483AbjAINMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:11:27 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E51F1EC74;
-        Mon,  9 Jan 2023 05:10:27 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id ud5so19960055ejc.4;
-        Mon, 09 Jan 2023 05:10:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/K/fxGXGinKRnD/4uKPoB9HqjfHISlsVt9E/se+mTeE=;
-        b=FQp8Qs+Lg64/PthSL4C+ZWqJuT4pBbR9ISEMJthxOjRM1P+28JTrjVzY9GU873zGDp
-         SE2h6SbA/Ndk7kZEGdAlCZW3HM76wWdbpKOA4qgPAcZ5/wP4CLlWpCJF3xR9pURClS17
-         ZBoeP4U72rQ9RieXNWXd09Epw8tf2VrdRPMY3OiY4j9s/dQe9pOcEAKK5b3FSu3+vlpL
-         L9wnE7a7Ln8FMqAYRHr/NyglI+GpXSef8qSZrv25yJmCNO1wz7ZD719Z1xYiEXB+vZnS
-         J2HruXq1KHY7Zz1ABZme+LZezy/WN597mfxLdunDJ05lpZb2P/Fjsh2DZxo9vKxzQ6Rd
-         1yMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/K/fxGXGinKRnD/4uKPoB9HqjfHISlsVt9E/se+mTeE=;
-        b=hSrGR06AxZeohvDgnPYENT57vO+GpM8UY0U97d+3S0l7AUKJG52DdtP0hRSNjXwSv9
-         2VxbmbDkAkIxyhP24nZekQ3wAjSAzhj4juIzQoBGnQGRgNRBPYA0pEJ6hfre5IPvz7OF
-         Xj4m6JIdBGOR8hio/qWXtpz1/q2hgrxn26TD6SGLRbyv6CJ4pBB8Ct9jnCChTYJdR2ac
-         Dxmy3oTGPxM/4Cx60CspWx1RNAUBS7HhFTvQ86JI5xizJrSSgTohjObNagpDPGf6u6W+
-         anzr2kvUWz6AVX2sEQVipmgeQ1/8YUpSpKLiIJj1Cvgw853xhhtoogSLt32zSpezY4L+
-         45/w==
-X-Gm-Message-State: AFqh2kq24i8POVl/Hg9j480CQbhlQnfLvqWzm0p5spJuQWnmSsFDuAZS
-        UGmkXLOPFWhRa06VCVXf2U4LgH1QlBk=
-X-Google-Smtp-Source: AMrXdXvkwVrHaOOJuN9MWBkAJa5IiH/3slygWa2mUptHt2G+eR002Rrd/0KnDjEHEuPzD7io1r25kw==
-X-Received: by 2002:a17:907:6e16:b0:7c1:b64:e290 with SMTP id sd22-20020a1709076e1600b007c10b64e290mr98248584ejc.45.1673269825820;
-        Mon, 09 Jan 2023 05:10:25 -0800 (PST)
-Received: from [192.168.8.100] (188.29.102.7.threembb.co.uk. [188.29.102.7])
-        by smtp.gmail.com with ESMTPSA id x11-20020a170906b08b00b0084c62b7b7d8sm3739852ejy.187.2023.01.09.05.10.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 05:10:25 -0800 (PST)
-Message-ID: <c955f0b8-f7f7-b3b7-970b-32aefc06a010@gmail.com>
-Date:   Mon, 9 Jan 2023 13:09:29 +0000
+        Mon, 9 Jan 2023 08:12:10 -0500
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2071.outbound.protection.outlook.com [40.107.247.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9E6CD6;
+        Mon,  9 Jan 2023 05:12:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JB3JzWCxlgloFNNyH7L6wLiOOcKzQliFshKW46nz8XNl375p20j1W4JDR7OfbnZxbWKRwROgrmbAuXe/IoSyfyDcszbLO+wtZ53v8/6VLiIpEzbWiOTxfhrkFgtIzLYo6fI17ifX73wccpeVJy3TlA+EH4zeutECtMgbUXb46OTPFPiHGM9ZiK7CdHiZXFQrUBC1eT7KTaj3q7Os3/2eR50MpYq796Mrd86AqrpOuwKZFqniE2wyzPJ88LkW/9sgMnflYt2xScgsvznw3JS/J0C0zg+sRWYWNLHUhZp/sVj5yDS+/nFrpNeonEu7KcoFzEB5pMN/rvrfFlq8EDLxYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LR56DzMllJI/Ux2S7RnEyg77ZM1RzFADhxp+m8xrjRs=;
+ b=VQpiO7Qmgl1ZIZhBNqHThAFsuoJF8CmZ5XgHwiE9/ABdn2WANfsTK9CVouv6y2d5p2CZjPHN3IEphin3B1gGhpaJhh/aa5Z9CmJFPa7qcKOSHmXXgd4NBGLID5R7P9H2fw8bDCHgZiGRrImfoJn+nJQvdDBECF/WHXWb8QPPDaxBx/ROaCd7f+k/XzAQ4MA76RI7KlmkxbaQM/wJcJRLenPZn4SAv15V3wm08fceSEif/4t/Lp5ggrxmrHGBz0jng4aXuVnZrq1l3EkDloBf7NaAS604D7Ltp3sazUS9RoUu3GCisYDuXNlPOgQQ4DltmfNg6gWeQjdSIVQnC/jsfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LR56DzMllJI/Ux2S7RnEyg77ZM1RzFADhxp+m8xrjRs=;
+ b=CNSBuyz+6J9hceThh1VEDi0g4GloKQ+TuF0bCEubOUQPwHx6D81N0wfiNX2hSee0k8bN9cmeY0ugjZDRsbUjHsWuaZ9KCfm3B/a5bHpc66ZZNyPa3Nb578I7NILDnS+SIC6RBNE1OWjdyCEzeU8tzk+XrMxVGKt2OUQrmQrI2ck=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PA4PR04MB9638.eurprd04.prod.outlook.com (2603:10a6:102:273::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
+ 2023 13:12:06 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
+ 13:12:06 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] asm-generic/io.h: suppress endianness warnings for readq() and writeq()
+Date:   Mon,  9 Jan 2023 15:11:52 +0200
+Message-Id: <20230109131153.991322-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BE1P281CA0120.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:7b::7) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [syzbot] memory leak in io_submit_sqes (4)
-Content-Language: en-US
-To:     syzbot <syzbot+6c95df01470a47fc3af4@syzkaller.appspotmail.com>,
-        axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <0000000000009f829805f1ce87b2@google.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <0000000000009f829805f1ce87b2@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PA4PR04MB9638:EE_
+X-MS-Office365-Filtering-Correlation-Id: 80113943-9b70-4108-674b-08daf2431b2e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UciY55pYLLfqx9A4YHAvvbJcr0XHWYwOkZQ+1xuyg2rH/xcz9wkNK2SR4VUm8L63vGOlpQDu4XJF7SfobBpUGXfuoQzANq4k0gfqK/OxI76EDRfcdIkYgp64cHhrlrkurSDETWCwCBn00R5gwO49cMwZUpaqTaxXOC5yDxvhz6alx14UzIhsrpG7r3jMgho0ggtjROkF/u4uIf5TCmIsiHyfXKad+GBdXTdtTWNPIuOj1ipnDXroOZaeqQHEN5ZIz+QcrdwaqHLuOQH3hbrSHXC2VKVhNJUjYMH9Tr7AXPxnDKdWkeVNzhb3PxuyH0GtwUCvD7ztmEHYy/nQ/+CyhVtaVhHzJNV7f5IKB4+EaE6UyPGEBNOnryoRqeDEeNYlWzA9QVsc2yTTYVqHYEiaNmWBTXp4SIsBlhE3mXjybXxiGIN0gGlVik/T7tlfG/Lsubt61k4mADiclAXKcRaYI1LfGUADChXEn3gHo6DP8AL9RJ2n5FjRt1wvQqpQbg5h2/mi3KJIB3yLd5UUmXsh/kBbLwScaR2EXjyPGDlUfohRLC6VQ3DwCuXeSQc30MCKsFaeYsQMxOEDrHiVsD0VZHAZXREPxXeOKBZPGLHwm80fux83Gd0CYgwoblqgufFRAd3S4zUMRz3A95NGkP1qW0ZRqC0LoWFsmPaARaN1J+JPZZM5JHPSBbNesVOnhBSRAxFvoxPeZ6xg1jZhtkb3IWoy38UBQf7nRbJ0sJ23cM58ekbdWJYsZlDrCQWJt8OY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(136003)(346002)(366004)(451199015)(2906002)(44832011)(83380400001)(1076003)(2616005)(66476007)(66556008)(52116002)(5660300002)(66946007)(6666004)(26005)(186003)(36756003)(8936002)(6506007)(6512007)(478600001)(38100700002)(38350700002)(8676002)(41300700001)(6486002)(86362001)(966005)(6916009)(4326008)(316002)(41533002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nFjY3OwJvPfJcOVsRF4utLy7g1nPE6jbSGyF8FsR/ksbbINJw7D/AKMVmwbq?=
+ =?us-ascii?Q?q/yBGZs/PRGLkPtWtVmqjci4Qpz4kQl7zkfutvFRYggEdHXoWRGDeqv1U2XE?=
+ =?us-ascii?Q?Ld9TuRHIBGIKOpti5p0tfvZgsLcXB9OcLq3Qce/H5jC7Dl0w9GCmOPEPug6r?=
+ =?us-ascii?Q?xmxdbCEvQ9lH3tLa1GCd8NwDeESg/RiBoFo1pWXf3ctb+/mu6DaOPQbySi4C?=
+ =?us-ascii?Q?9oj1iTHAG54utjqcVmqmlz1Db2a1iI0vjBjLlf80ghDTSsSaMC6BNRVIonzh?=
+ =?us-ascii?Q?nKlxWHeqJoUgvJPL20u3+u/jxA/XKkVtWdblBmcKK+FKNVTDAtTsVny7XssC?=
+ =?us-ascii?Q?daTiW9Hp0iSJJHY9s8l9W9Q2l6jbM0zSW7uiw1OevHLY0fTobTv8pxh1w9Dv?=
+ =?us-ascii?Q?OuaDr2akLcr1dq9o3OjHCUdfE4efRv3kz5o3jD4VSuYHjSIoJjckTWSP11o4?=
+ =?us-ascii?Q?xaWD0xhylBHBFIEyt4PRDdIvHZzd+Cw5XTaTMZ0l7RGcIZZjB76GZIgWWt9V?=
+ =?us-ascii?Q?sEin3IrNN26joJOO9qhDJoI5o/5BB8W5/lDLKMcDVu8Va29uyhmCdNebx0Rr?=
+ =?us-ascii?Q?Jq/CGQyLkUAj32XnjgOItW5aW/LkYYmUkc0nCVNPHBIAgq+mfYpIXWsVQSsX?=
+ =?us-ascii?Q?C6pkcoVyV4iHS6iNuOqek7Tt0+nHXFbYPFWo1AkrdQTQdIwZ9fIuPf6kiyvI?=
+ =?us-ascii?Q?eijQyTfR1/Ewkz6JYVoDXGFy4XX1YkIHgTxGgXZulgBKElPFAOSzumo2qShT?=
+ =?us-ascii?Q?u93uOvVpCUofUVDFt4n6gBn9wZ3XWCBuZBjnm6sJiKG2iYtpxnFvklfMy3Ds?=
+ =?us-ascii?Q?vf98smDD9aBfJmgR9SbE3EEwySuuUdy+L3NFwposRbIOC2PIMR9iYaFi3C3J?=
+ =?us-ascii?Q?TLmY4hFAlHZrn7RNLa/2hkVi05sgbN2g3N65lGUcebFSAUxHWr+Xrk3gamxL?=
+ =?us-ascii?Q?mQCuDdNFwtjgvr+rQNp8Fu/d8Z6kFXC3pYdvCz8nTvqKeuzYc25kOQQgzUmO?=
+ =?us-ascii?Q?oA3Pj+BsgFEVaf9dp1V+QHBfPME8wm9FNmSoMKq8lDI6DflziJp9qB4fR/1U?=
+ =?us-ascii?Q?upmvSxeBUuV0U/HO94+pwHhrV8GMVDt0sMb9pMbocd20drlyKkEqoGrNJIko?=
+ =?us-ascii?Q?Flp7Va0ifRVnybMUyZzmDT2slZKdoj3sduM4zLeymGwneMy1oD5dWekH8JZM?=
+ =?us-ascii?Q?/WnFVLMNa75S2CW/+tvQU4/gs+HG5dmL8c95LUyR1ZwQzrN9ynU3IZhelO/0?=
+ =?us-ascii?Q?zU6WxLEePvPkr0C+7s6Ytw7V1n+Ab3CTMSzVJmAIJdCXE3bxSKK3lOimV2ct?=
+ =?us-ascii?Q?oaIhKYlKV/RCEhO8uUTJusqYMbyZpRWouKg29SJjtI9at9XtrjZ8/ePRAw9F?=
+ =?us-ascii?Q?+bP/hB0evBXNVYVIaNuKZ1t3V1Z6y5j9xUNUezUEAfM/k9w+eK7eyusT6SQQ?=
+ =?us-ascii?Q?yoSvR4V9y6ekh9RghzR7TBMUR3JyCobFaA5MKKb3oxJSNNV0CnV8zxKzFpI6?=
+ =?us-ascii?Q?Tz+7UINi8jXye7iKOEFZvOwIcVlMb/Znr/1oI842NqF11D7hUDls7sHDkPhE?=
+ =?us-ascii?Q?f7v8NzwaV8ubDSfB9x2xvrzmaJJKxELCp52vzigCXHaiii0bIOfIfXhC0SAV?=
+ =?us-ascii?Q?Tw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80113943-9b70-4108-674b-08daf2431b2e
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2023 13:12:06.1602
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y4h+lLeacRMSeURrOk/0mcr3mm17st8Bg0d480aA5tKTkSSzHkAwgY7LHxhjr8rcFGfcSXWwK0Kv+H4HHw8QZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9638
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,117 +111,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 06:03, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
+Commit c1d55d50139b ("asm-generic/io.h: Fix sparse warnings on
+big-endian architectures") missed fixing the 64-bit accessors.
 
-#syz test: git://git.kernel.dk/linux.git syztest
+Arnd explains in the attached link why the casts are necessary, even if
+__raw_readq() and __raw_writeq() do not take endian-specific types.
 
+Link: https://lore.kernel.org/lkml/9105d6fc-880b-4734-857d-e3d30b87ccf6@app.fastmail.com/
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ include/asm-generic/io.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> HEAD commit:    0a71553536d2 Merge tag 'drm-fixes-2023-01-06' of git://ano..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=164951c2480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5ddca4921a53cff2
-> dashboard link: https://syzkaller.appspot.com/bug?extid=6c95df01470a47fc3af4
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12929d9a480000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=105ffae2480000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/ad52353dc15f/disk-0a715535.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/90927b7e9870/vmlinux-0a715535.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/553a64766dcc/bzImage-0a715535.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+6c95df01470a47fc3af4@syzkaller.appspotmail.com
-> 
-> executing program
-> executing program
-> executing program
-> executing program
-> executing program
-> BUG: memory leak
-> unreferenced object 0xffff88810de89200 (size 256):
->    comm "syz-executor286", pid 5100, jiffies 4294952261 (age 14.130s)
->    hex dump (first 32 bytes):
->      00 8f 90 0a 81 88 ff ff 00 00 00 00 00 00 00 00  ................
->      00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 00  .........@......
->    backtrace:
->      [<ffffffff84769af3>] __io_alloc_req_refill+0x55/0x193 io_uring/io_uring.c:1040
->      [<ffffffff8476b084>] io_alloc_req_refill io_uring/io_uring.h:378 [inline]
->      [<ffffffff8476b084>] io_submit_sqes.cold+0x65/0x8a io_uring/io_uring.c:2384
->      [<ffffffff823986bd>] __do_sys_io_uring_enter+0x76d/0x1490 io_uring/io_uring.c:3345
->      [<ffffffff848ef735>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->      [<ffffffff848ef735>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->      [<ffffffff84a00087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888109cac600 (size 96):
->    comm "syz-executor286", pid 5100, jiffies 4294952261 (age 14.130s)
->    hex dump (first 32 bytes):
->      00 8f 90 0a 81 88 ff ff 00 00 00 00 00 00 00 00  ................
->      7b 20 00 c0 00 00 00 00 00 00 00 00 00 00 00 00  { ..............
->    backtrace:
->      [<ffffffff814f94a0>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1062
->      [<ffffffff823a702c>] kmalloc include/linux/slab.h:580 [inline]
->      [<ffffffff823a702c>] io_req_alloc_apoll io_uring/poll.c:650 [inline]
->      [<ffffffff823a702c>] io_arm_poll_handler+0x1fc/0x470 io_uring/poll.c:694
->      [<ffffffff82395e4d>] io_queue_async+0x8d/0x2e0 io_uring/io_uring.c:2006
->      [<ffffffff82397b98>] io_queue_sqe io_uring/io_uring.c:2037 [inline]
->      [<ffffffff82397b98>] io_submit_sqe io_uring/io_uring.c:2286 [inline]
->      [<ffffffff82397b98>] io_submit_sqes+0x968/0xb70 io_uring/io_uring.c:2397
->      [<ffffffff823986bd>] __do_sys_io_uring_enter+0x76d/0x1490 io_uring/io_uring.c:3345
->      [<ffffffff848ef735>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->      [<ffffffff848ef735>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->      [<ffffffff84a00087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> BUG: memory leak
-> unreferenced object 0xffff88810a72bb00 (size 256):
->    comm "syz-executor286", pid 5100, jiffies 4294952261 (age 14.130s)
->    hex dump (first 32 bytes):
->      00 8f 90 0a 81 88 ff ff 00 00 00 00 00 00 00 00  ................
->      00 00 00 00 00 00 00 00 00 40 00 00 00 00 00 00  .........@......
->    backtrace:
->      [<ffffffff84769af3>] __io_alloc_req_refill+0x55/0x193 io_uring/io_uring.c:1040
->      [<ffffffff8476b084>] io_alloc_req_refill io_uring/io_uring.h:378 [inline]
->      [<ffffffff8476b084>] io_submit_sqes.cold+0x65/0x8a io_uring/io_uring.c:2384
->      [<ffffffff823986bd>] __do_sys_io_uring_enter+0x76d/0x1490 io_uring/io_uring.c:3345
->      [<ffffffff848ef735>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->      [<ffffffff848ef735>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->      [<ffffffff84a00087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> BUG: memory leak
-> unreferenced object 0xffff88810f18f600 (size 96):
->    comm "syz-executor286", pid 5100, jiffies 4294952261 (age 14.130s)
->    hex dump (first 32 bytes):
->      00 8f 90 0a 81 88 ff ff 00 00 00 00 00 00 00 00  ................
->      7b 20 00 c0 00 00 00 00 00 00 00 00 00 00 00 00  { ..............
->    backtrace:
->      [<ffffffff814f94a0>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1062
->      [<ffffffff823a702c>] kmalloc include/linux/slab.h:580 [inline]
->      [<ffffffff823a702c>] io_req_alloc_apoll io_uring/poll.c:650 [inline]
->      [<ffffffff823a702c>] io_arm_poll_handler+0x1fc/0x470 io_uring/poll.c:694
->      [<ffffffff82395e4d>] io_queue_async+0x8d/0x2e0 io_uring/io_uring.c:2006
->      [<ffffffff82397b98>] io_queue_sqe io_uring/io_uring.c:2037 [inline]
->      [<ffffffff82397b98>] io_submit_sqe io_uring/io_uring.c:2286 [inline]
->      [<ffffffff82397b98>] io_submit_sqes+0x968/0xb70 io_uring/io_uring.c:2397
->      [<ffffffff823986bd>] __do_sys_io_uring_enter+0x76d/0x1490 io_uring/io_uring.c:3345
->      [<ffffffff848ef735>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->      [<ffffffff848ef735>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->      [<ffffffff84a00087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
-
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index 4c44a29b5e8e..d78c3056c98f 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -236,7 +236,7 @@ static inline u64 readq(const volatile void __iomem *addr)
+ 
+ 	log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
+ 	__io_br();
+-	val = __le64_to_cpu(__raw_readq(addr));
++	val = __le64_to_cpu((__le64 __force)__raw_readq(addr));
+ 	__io_ar(val);
+ 	log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
+ 	return val;
+@@ -287,7 +287,7 @@ static inline void writeq(u64 value, volatile void __iomem *addr)
+ {
+ 	log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
+ 	__io_bw();
+-	__raw_writeq(__cpu_to_le64(value), addr);
++	__raw_writeq((u64 __force)__cpu_to_le64(value), addr);
+ 	__io_aw();
+ 	log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
+ }
 -- 
-Pavel Begunkov
+2.34.1
+
