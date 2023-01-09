@@ -2,88 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84CA66247C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9298F662480
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234878AbjAILnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 06:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        id S234093AbjAILoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 06:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237012AbjAILnC (ORCPT
+        with ESMTP id S237239AbjAILny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:43:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312FD20D;
-        Mon,  9 Jan 2023 03:43:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCCDB6102E;
-        Mon,  9 Jan 2023 11:43:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D185CC433EF;
-        Mon,  9 Jan 2023 11:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673264580;
-        bh=k4VFwDwt+3kN+Vy2Mbffh4lRQPurzk1UNIus5/rXg4I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=OQJWuHnAubh118bda8DEf94hNpg3w0eNF5RRtif1owHukw9rd0cUn3AgyQI36Xk/3
-         3GIUuSXDdGXXmC5CDcBCulDRftNEb6CXJuWqDy3dGUycik5Tbtf0jOv94JCl2xvbx0
-         TwCtP+vqyWBgI/eudylW2rAY8qnpTchD+KZ/hzFcM1KIGmWt+NiM5a82s60QWf16zf
-         pGGjPB6wIEKVvDWw+vtdiPOnXXZalE+wppcIhD/J5Ws0l8nx3jvDVKBikla4bhujHs
-         HzjGOcSXxsZapwlv/T5lRYNBnYlER6i14FVo66EiPiuKFJCDrKXV5kkSdit2ePg1j3
-         4YyIzTXrHneag==
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: vm: Enable cross-compilation
-Date:   Mon,  9 Jan 2023 12:42:51 +0100
-Message-Id: <20230109114251.3349638-1-bjorn@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        Mon, 9 Jan 2023 06:43:54 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686982DFC;
+        Mon,  9 Jan 2023 03:43:53 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id A5BC23200564;
+        Mon,  9 Jan 2023 06:43:50 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 09 Jan 2023 06:43:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673264630; x=1673351030; bh=bboapEA3vdgSLWm56a8XSVtdTYNt
+        0MFJHdjnyOsqZws=; b=Wx0NqN6ygqqa2SxoxoROtpr3/Hkbs+nwqruUtIS5aAHG
+        16wXZLBSnARXMXgHHSxdbG2ij4c9Yya9lLt1jOBREFxoQh+M3NJgjcj27pGEzhcn
+        YIJcw3o8XqWiGakmWB90s0YiZI0zZ4T9wPRsSy0A1niEpuI+uuIyViMCFnYfZ6/x
+        BYDqMF4Up7zindbrNkHZcZqD1Y+38daStRBtr7/c0VBgcoo3PEfHqcC/rXda5Fov
+        wom76CULKqAEh5HbBGGHmMuhxiEZYKaKz8kDKDE1osJPHqDf5tqP5/fgHj4K7ddA
+        AmEbhnuCFUHqqcH6a0HTR7Hk+6HvVQ3n1TezoqHh6A==
+X-ME-Sender: <xms:9f27Y-TjfLmKYEwVPyf2MPXgO0X59RDge9gbLFPDRjO20rjSuFa4Bg>
+    <xme:9f27Yzz8EUV86Udz3xr2ExsWh2Hqe8eZO3VUUh_-oKpww-S0t8oOQ6wMWKjEaChYb
+    IRkzfJle96-znI>
+X-ME-Received: <xmr:9f27Y72l9hfsrMUtSPQkmYY56zIFmOVQU3R-5fzla3puwtsjVeCZWcd6Us2u>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeeigddviecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeg
+    hfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:9f27Y6DLC8IVapo5aEDWg9K6uHY2f1iZSGQ1En9ZpFjfCWEW_X-IDA>
+    <xmx:9f27Y3g3u-t3wQGNUhzNM-ofVwQzrPHgYZFsFmYKX7mqJPC9oNxM2Q>
+    <xmx:9f27Y2oKE0bBx-1oDQdvRu-UyCRKYXdPqB2yKLu0jBQMyGGHxukX6g>
+    <xmx:9v27Y2RtKMsY481dORoYQwVAFlLZwbc9_S1Sg15uvYJgNp4tQrKP1g>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 9 Jan 2023 06:43:48 -0500 (EST)
+Date:   Mon, 9 Jan 2023 13:43:46 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+        kuba@kernel.org, Nikolay Aleksandrov <razor@blackwall.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v5 net-next 01/15] net: bridge: mst: Multiple Spanning
+ Tree (MST) mode
+Message-ID: <Y7v98s8lC1WUvsSO@shredder>
+References: <20220316150857.2442916-1-tobias@waldekranz.com>
+ <20220316150857.2442916-2-tobias@waldekranz.com>
+ <Y7vK4T18pOZ9KAKE@shredder>
+ <20230109100236.euq7iaaorqxrun7u@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109100236.euq7iaaorqxrun7u@skbuf>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Björn Töpel <bjorn@rivosinc.com>
+On Mon, Jan 09, 2023 at 12:02:36PM +0200, Vladimir Oltean wrote:
+> On Mon, Jan 09, 2023 at 10:05:53AM +0200, Ido Schimmel wrote:
+> > > +	if (on)
+> > > +		static_branch_enable(&br_mst_used);
+> > > +	else
+> > > +		static_branch_disable(&br_mst_used);
+> > 
+> > Hi,
+> > 
+> > I'm not actually using MST, but I ran into this code and was wondering
+> > if the static key usage is correct. The static key is global (not
+> > per-bridge), so what happens when two bridges have MST enabled and then
+> > it is disabled on one? I believe it would be disabled for both. If so,
+> > maybe use static_branch_inc() / static_branch_dec() instead?
+> 
+> Sounds about right. FWIW, br_switchdev_tx_fwd_offload does use
+> static_branch_inc() / static_branch_dec().
 
-Selftests vm builds break when doing cross-compilation. The Makefile
-MACHINE variable incorrectly picks upp the host machine architecture.
+OK, thanks for confirming. Will send a patch later this week if Tobias
+won't take care of it by then. First patch will probably be [1] to make
+sure we dump the correct MST state to user space. It will also make it
+easier to show the problem and validate the fix.
 
-If the CROSS_COMPILE variable is set, dig out the target host
-architecture from CROSS_COMPILE, instead of calling uname.
-
-Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
----
- tools/testing/selftests/vm/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 89c14e41bd43..1cded308dddf 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -5,7 +5,11 @@ LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
- 
- include local_config.mk
- 
-+ifeq ($(CROSS_COMPILE),)
- uname_M := $(shell uname -m 2>/dev/null || echo not)
-+else
-+uname_M := $(shell echo $(CROSS_COMPILE) | grep -o '^[a-z0-9]\+')
-+endif
- MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/ppc64/')
- 
- # Without this, failed build products remain, with up-to-date timestamps,
-
-base-commit: 1fe4fd6f5cad346e598593af36caeadc4f5d4fa9
--- 
-2.37.2
-
+[1]
+diff --git a/net/bridge/br.c b/net/bridge/br.c
+index 4f5098d33a46..f02a1ad589de 100644
+--- a/net/bridge/br.c
++++ b/net/bridge/br.c
+@@ -286,7 +286,7 @@ int br_boolopt_get(const struct net_bridge *br, enum br_boolopt_id opt)
+ 	case BR_BOOLOPT_MCAST_VLAN_SNOOPING:
+ 		return br_opt_get(br, BROPT_MCAST_VLAN_SNOOPING_ENABLED);
+ 	case BR_BOOLOPT_MST_ENABLE:
+-		return br_opt_get(br, BROPT_MST_ENABLED);
++		return br_mst_is_enabled(br);
+ 	default:
+ 		/* shouldn't be called with unsupported options */
+ 		WARN_ON(1);
+diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+index 75aff9bbf17e..7f0475f62d45 100644
+--- a/net/bridge/br_private.h
++++ b/net/bridge/br_private.h
+@@ -1827,7 +1827,7 @@ static inline bool br_vlan_state_allowed(u8 state, bool learn_allow)
+ /* br_mst.c */
+ #ifdef CONFIG_BRIDGE_VLAN_FILTERING
+ DECLARE_STATIC_KEY_FALSE(br_mst_used);
+-static inline bool br_mst_is_enabled(struct net_bridge *br)
++static inline bool br_mst_is_enabled(const struct net_bridge *br)
+ {
+ 	return static_branch_unlikely(&br_mst_used) &&
+ 		br_opt_get(br, BROPT_MST_ENABLED);
+@@ -1845,7 +1845,7 @@ int br_mst_fill_info(struct sk_buff *skb,
+ int br_mst_process(struct net_bridge_port *p, const struct nlattr *mst_attr,
+ 		   struct netlink_ext_ack *extack);
+ #else
+-static inline bool br_mst_is_enabled(struct net_bridge *br)
++static inline bool br_mst_is_enabled(const struct net_bridge *br)
+ {
+ 	return false;
+ }
