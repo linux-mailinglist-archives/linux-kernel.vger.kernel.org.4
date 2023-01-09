@@ -2,180 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C5B661F0D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A628B661F0C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjAIHO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 02:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S233751AbjAIHNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 02:13:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233576AbjAIHOW (ORCPT
+        with ESMTP id S233652AbjAIHNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 02:14:22 -0500
-Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CE61209F
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 23:14:19 -0800 (PST)
-Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-4b6255ce5baso101683367b3.11
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 23:14:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3P4KpMYHjMcRtTeC0AGN2bMbTWe/Y4tWuNNHyqRwN1E=;
-        b=V3hc4ur2h4YdudQTRZKZttR04YLioc5r5aUVh6R+g28fMuw/uplM7DDGwhHVPCeBxL
-         YbdfYJSnaFkRqUOKJBl8L0ygw5QTfvHxTRAjWkMn9CdLAf4fN1/l9yyHaF+cfeQYCMTh
-         ikLS+0HGPp3eLPFHtrc0lQGdDm62uGICct44I3vVxbegEPvCZT/ruBvHcSWmDOT5X+4l
-         QK/RCxuNKTNR9Iq1sH1iENfmz5uJpcZkuZSbUFTLyXa4EUXzyTRZ+dN/KJUzmpXtwF6M
-         g7/9uNiXfTEEVqyuUr6bB9zdHCHUs+bUcQ0d5KQQ/Mvoyft/fYItsDI85VBfKafjM49c
-         UDRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3P4KpMYHjMcRtTeC0AGN2bMbTWe/Y4tWuNNHyqRwN1E=;
-        b=2AhhNk4GeK3zCVa7xKgrHVHwac/DKHBLlXXFgIPolT9ZfKysIKvD8Jt5N5Xb7gT0Iw
-         B5bxwL8Suq9rTaEz4KJruSbgnUnPLrMYEaaWEYn4i+4UEa/8AvLDsMwU54GdEU5NrtkD
-         D4hgn7s7rjGfLft+WVRybr2Nv3FzSlQI/GVJOg87yOplD/CqLBHp3+KfVSbo8+POqtvc
-         K5YJ9T00v3fy01ns8XCKBB3Dk1AfickcBlguFOvVAEnIoyzevtaqbjCzKnRVSeCLW3ch
-         TF83sWP0drpD8bigfX1K/hrxCVTI3zwi1Dgs+Stz2THYGHkPCOphMpl+tcONriaXJb0M
-         y7/w==
-X-Gm-Message-State: AFqh2kol3Qd5jkJgStm3FwmaG8lnK2SuY2nRubRJiO431JtbJtpg/8it
-        7ZBtJgWZkQApz5voPsXRgVumPXDwqfWLgKUEpqA=
-X-Google-Smtp-Source: AMrXdXv9N2vVXMRaifK/p1uDqFHsnj5NTh/v836yUSUymb573TTsgjXtKjNPZ9wKAx5F3enzeE9vWoLbZcKzC+RB5i0=
-X-Received: by 2002:a81:c30e:0:b0:4b2:72:d8ee with SMTP id r14-20020a81c30e000000b004b20072d8eemr2946003ywk.272.1673248459052;
- Sun, 08 Jan 2023 23:14:19 -0800 (PST)
+        Mon, 9 Jan 2023 02:13:38 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2606C655A;
+        Sun,  8 Jan 2023 23:13:37 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30952lm0009418;
+        Mon, 9 Jan 2023 07:13:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : reply-to : references : mime-version :
+ content-type : in-reply-to; s=qcppdkim1;
+ bh=+T3VIEWVegWplUGukrhykwFnwriNfkJ62nVMapRgGrM=;
+ b=jXrP28WMz4c3qndcA3P40qMMezIc41FWg6h6xqFLqCWV0gmNiDnnJPSsygm5xGQUeCuh
+ g3HN4+EdBR0YF80wvBghWtE4vbAll3XQ3Uwl/Bcl9kmyP1GJlXGON2MlkQDJ2HDQJJXh
+ gIxUbE4sUlBUNnPxRvcle+Kbkknfh3TFXF3qtVS7VSm+xitmxf4VCJyh6K0wxNvJTjUa
+ 2pDyAAV3Y4MVBVt4zWC6nrNoD+Oh1WCTb76x0QGoC87NbRoB2kYEiyBLzGiUezn8UJ8A
+ gJ3Cr0ZxJIZ240O8FOQi32kIqBoXiH/dkUJseHxbJc+enveQaczSyDwzxi0EBDy/p6aJ Vg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3my21ftf7x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 07:13:21 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3097DK0e011786
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 9 Jan 2023 07:13:20 GMT
+Received: from quicinc.com (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 8 Jan 2023
+ 23:13:13 -0800
+Date:   Mon, 9 Jan 2023 12:43:09 +0530
+From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Carl van Schaik" <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v8 11/28] gunyah: rsc_mgr: Add VM lifecycle RPC
+Message-ID: <20230109071309.GA3480070@quicinc.com>
+Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
+ <20221219225850.2397345-12-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-References: <20221110082443.4069161-1-zhanggenjian@kylinos.cn> <20230106145331.GS4028633@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20230106145331.GS4028633@paulmck-ThinkPad-P17-Gen-1>
-From:   genjian zhang <zhanggenjian123@gmail.com>
-Date:   Mon, 9 Jan 2023 15:13:06 +0800
-Message-ID: <CAOd03ySSrC996R_=xxC4M7s=X-V-jC1D-5rTsixWorg_qQmTLA@mail.gmail.com>
-Subject: Re: [PATCH] context_tracking: Use arch_atomic_*() in __ct_user_enter
- and __ct_user_exit
-To:     paulmck@kernel.org
-Cc:     frederic@kernel.org, linux-kernel@vger.kernel.org,
-        Genjian Zhang <zhanggenjian@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+In-Reply-To: <20221219225850.2397345-12-quic_eberman@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: KmxXwIzcVN610P58UOSed39adOioGZLg
+X-Proofpoint-GUID: KmxXwIzcVN610P58UOSed39adOioGZLg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_02,2023-01-06_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0
+ clxscore=1015 adultscore=0 priorityscore=1501 mlxlogscore=676 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301090051
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 10:53 PM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Thu, Nov 10, 2022 at 04:24:43PM +0800, Genjian wrote:
-> > From: Genjian Zhang <zhanggenjian@kylinos.cn>
-> >
-> > vmlinux.o: warning: objtool: __ct_user_enter+0x45: call to
-> > __kasan_check_write() leaves .noinstr.text section
-> > vmlinux.o: warning: objtool: __ct_user_exit+0x3f: call to
-> > __kasan_check_write() leaves .noinstr.text section
-> >
-> > noinstr cannot have atomic_*() functions.because they have explicit
-> > instrumentation.Switch to arch_ prefixed atomic operation functions to
-> > avoid the explicit instrumentation.
-> >
-> > Reported-by: k2ci <kernel-bot@kylinos.cn>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
->
-> Apologies for the delay, but finally queued, thank you!  Frederic gave
-> his ack off-list, which I have included in the wordsmithed version below.
-> Could you please check to make sure that I did not mess anything up?
->
->                                                         Thanx, Paul
->
-> ------------------------------------------------------------------------
->
-> commit 936acd859f4a7b2b0f9900e26bc972385286df6e
-> Author: Genjian Zhang <zhanggenjian@kylinos.cn>
-> Date:   Thu Nov 10 16:24:43 2022 +0800
->
->     context_tracking: Use arch_atomic_*() in __ct_user_enter and __ct_user_exit
->
->     The following diagnostics are issued by objtool:
->
->     vmlinux.o: warning: objtool: __ct_user_enter+0x45: call to
->     __kasan_check_write() leaves .noinstr.text section
->     vmlinux.o: warning: objtool: __ct_user_exit+0x3f: call to
->     __kasan_check_write() leaves .noinstr.text section
->
->     The reason for these diagnostics is that code marked noinstr if prohibited
->     from using atomic_*() functions, which have explicit instrumentation.
->     Therefore, switch to arch_ prefixed atomic operation functions to avoid
->     the explicit instrumentation.
->
->     Reported-by: k2ci <kernel-bot@kylinos.cn>
->     Reported-by: kernel test robot <lkp@intel.com>
->     Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
->     Acked-by: Frederic Weisbecker <frederic@kernel.org>
->     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->
-> diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-> index 77978e3723771..a09f1c19336ae 100644
-> --- a/kernel/context_tracking.c
-> +++ b/kernel/context_tracking.c
-> @@ -510,7 +510,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
->                          * In this we case we don't care about any concurrency/ordering.
->                          */
->                         if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
-> -                               atomic_set(&ct->state, state);
-> +                               arch_atomic_set(&ct->state, state);
->                 } else {
->                         /*
->                          * Even if context tracking is disabled on this CPU, because it's outside
-> @@ -527,7 +527,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
->                          */
->                         if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
->                                 /* Tracking for vtime only, no concurrent RCU EQS accounting */
-> -                               atomic_set(&ct->state, state);
-> +                               arch_atomic_set(&ct->state, state);
->                         } else {
->                                 /*
->                                  * Tracking for vtime and RCU EQS. Make sure we don't race
-> @@ -535,7 +535,7 @@ void noinstr __ct_user_enter(enum ctx_state state)
->                                  * RCU only requires RCU_DYNTICKS_IDX increments to be fully
->                                  * ordered.
->                                  */
-> -                               atomic_add(state, &ct->state);
-> +                               arch_atomic_add(state, &ct->state);
->                         }
->                 }
->         }
-> @@ -630,12 +630,12 @@ void noinstr __ct_user_exit(enum ctx_state state)
->                          * In this we case we don't care about any concurrency/ordering.
->                          */
->                         if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
-> -                               atomic_set(&ct->state, CONTEXT_KERNEL);
-> +                               arch_atomic_set(&ct->state, CONTEXT_KERNEL);
->
->                 } else {
->                         if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
->                                 /* Tracking for vtime only, no concurrent RCU EQS accounting */
-> -                               atomic_set(&ct->state, CONTEXT_KERNEL);
-> +                               arch_atomic_set(&ct->state, CONTEXT_KERNEL);
->                         } else {
->                                 /*
->                                  * Tracking for vtime and RCU EQS. Make sure we don't race
-> @@ -643,7 +643,7 @@ void noinstr __ct_user_exit(enum ctx_state state)
->                                  * RCU only requires RCU_DYNTICKS_IDX increments to be fully
->                                  * ordered.
->                                  */
-> -                               atomic_sub(state, &ct->state);
-> +                               arch_atomic_sub(state, &ct->state);
->                         }
->                 }
->         }
+* Elliot Berman <quic_eberman@quicinc.com> [2022-12-19 14:58:32]:
 
-Seems good to me.
+> +/* Call: CONSOLE_OPEN, CONSOLE_CLOSE, CONSOLE_FLUSH */
 
-Thanks,
+I think this struct is used by other calls as well?
+Also CONSOLE_** functions are not yet introduced in this patch
 
-Genjian.
+> +struct gh_vm_common_vmid_req {
+> +	__le16 vmid;
+> +	__le16 reserved0;
+> +} __packed;
+
+[snip]
+
+> +int gh_rm_alloc_vmid(struct gh_rm_rpc *rm, u16 vmid)
+> +{
+> +	void *resp;
+> +	struct gh_vm_common_vmid_req req_payload = {
+> +		.vmid = cpu_to_le16(vmid),
+> +	};
+> +	struct gh_vm_common_vmid_req *resp_payload;
+> +	size_t resp_size;
+> +	int ret;
+> +
+> +	if (vmid == GH_VMID_INVAL)
+> +		vmid = 0;
+> +
+> +	ret = gh_rm_call(rm, GH_RM_RPC_VM_ALLOC_VMID, &req_payload, sizeof(req_payload), &resp,
+> +			&resp_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!vmid) {
+> +		if (resp_size != sizeof(*resp_payload)) {
+> +			ret = -EINVAL;
+> +		} else {
+> +			resp_payload = resp;
+> +			ret = resp_payload->vmid;
+
+Do we need a le_to_cpu() wrapper on the response here?
+
+> +int gh_rm_vm_stop(struct gh_rm_rpc *rm, u16 vmid)
+> +{
+> +	struct gh_vm_stop_req req_payload = {
+> +		.vmid = cpu_to_le16(vmid),
+> +	};
+> +	void *resp;
+> +	size_t resp_size;
+> +	int ret;
+> +
+> +	ret = gh_rm_call(rm, GH_RM_RPC_VM_STOP, &req_payload, sizeof(req_payload),
+> +			&resp, &resp_size);
+> +	if (ret)
+> +		return ret;
+> +	kfree(resp);
+
+Why not use gh_rm_common_vmid_call() here as well?
+
+	return gh_rm_common_vmid_call(rm, GH_RM_RPC_VM_STOP, vmid);
+
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(gh_rm_vm_stop);
+> +
+
+[snip]
+
+> +ssize_t gh_rm_get_hyp_resources(struct gh_rm_rpc *rm, u16 vmid,
+> +				struct gh_rm_hyp_resource **resources)
+> +{
+> +	struct gh_vm_get_hyp_resources_resp *resp;
+> +	size_t resp_size;
+> +	int ret;
+> +	struct gh_vm_common_vmid_req req_payload = {
+> +		.vmid = cpu_to_le16(vmid),
+> +	};
+> +
+> +	ret = gh_rm_call(rm, GH_RM_RPC_VM_GET_HYP_RESOURCES,
+> +			 &req_payload, sizeof(req_payload),
+> +			 (void **)&resp, &resp_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (resp_size < sizeof(*resp) ||
+> +		(sizeof(*resp->entries) && (resp->n_entries > U32_MAX / sizeof(*resp->entries))) ||
+> +		(resp_size != sizeof(*resp) + (resp->n_entries * sizeof(*resp->entries)))) {
+> +		ret = -EIO;
+> +		goto out;
+> +	}
+> +
+> +	*resources = kmemdup(resp->entries, (resp->n_entries * sizeof(*resp->entries)), GFP_KERNEL);
+
+Consider NULL return value from kmemdup
+
+> +	ret = resp->n_entries;
+> +
+> +out:
+> +	kfree(resp);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(gh_rm_get_hyp_resources);
+> +
+> +/**
+> + * gh_rm_get_vmid() - Retrieve VMID of this virtual machine
+> + * @vmid: Filled with the VMID of this VM
+> + */
+> +int gh_rm_get_vmid(struct gh_rm_rpc *rm, u16 *vmid)
+> +{
+> +	static u16 cached_vmid = GH_VMID_INVAL;
+> +	void *resp;
+> +	size_t resp_size;
+> +	int ret;
+> +	int payload = 0;
+> +
+> +	if (cached_vmid != GH_VMID_INVAL) {
+> +		*vmid = cached_vmid;
+> +		return 0;
+> +	}
+> +
+> +	ret = gh_rm_call(rm, GH_RM_RPC_VM_GET_VMID, &payload, sizeof(payload), &resp, &resp_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (resp_size != sizeof(*vmid))
+
+kfree(resp) in this case?
+
+> +		return -EIO;
+> +	*vmid = *(u16 *)resp;
+
+Do we need a le_to_cpu() wrapper on the response?
+Also update cached_vmid in success case.
+
+> +	kfree(resp);
+> +
+> +	return ret;
+> +}
