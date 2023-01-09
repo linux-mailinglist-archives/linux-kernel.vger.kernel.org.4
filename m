@@ -2,103 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB248662248
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC04662247
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236626AbjAIJ7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:59:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        id S236972AbjAIJ7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:59:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234342AbjAIJ6l (ORCPT
+        with ESMTP id S234714AbjAIJ6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:58:41 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9AF12A9F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:56:39 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id bn26so7590741wrb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 01:56:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ucix0OBiv7pnws0HUkHG1wRxU3nrsuX1oLuRKY4B+x8=;
-        b=fFIqJhysPZBQjF5Q2s2pLaF5ZnkjewDhWpS4zmigf8XPRMfjOu2MudpAHwc1R/ytuj
-         yKxb0hofDuESI/zYMaxqmr2mIcCFNAfaACzAbUmV8qDnXgdV03ULerRB/4GS3rgahJc3
-         EuWSBAUaNhh76M+nvmggvt809b0yYhyDXYsGJvXK5HUrSV9zOGk0MYx0Fmjmw9R67P5m
-         FG2qgob40Vy5KbQS5PJY+LurkQBx6d1LXtFvFWLSOH2IVzejg1T2TZXeypZAvU/qZeBm
-         rgTa9NInAkxDAZVkni9HCy38hMUIXFqAyxofuWX8eFFWCgTaO7SOHCxdz3k1e1gLiwEq
-         0UYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ucix0OBiv7pnws0HUkHG1wRxU3nrsuX1oLuRKY4B+x8=;
-        b=xv+w7uQ98WTNknVtzN1SnaJ5xksQ/BHEYuFEzSYosVqlXB2OHl8rejnrDUvkEUoeGk
-         VI5WP7LlH4UqU4zjnKHirJ+JJHiM2y9dln9a7gatczfcvkZz2t7CcTAuz/DcEMeZ2TEQ
-         86rdWiZNNapCVxCU7hfnMjFAJR74AcUHbIFvObaC/riDJZ076GKMkHHmeAB606ny9fXy
-         0npgZ55UAGvBEcznxwIdi40qx8vALVNeFlDHI8ICm/i8SDgX0KYSYDNJ53gHkNyhOunB
-         FBYrHGdNbYUWzGrNJSeECZR6HZr0ngNUtF7zzvu6ivr0Qw6iN0kXrAzPoZ9fZozM5NNq
-         BtaA==
-X-Gm-Message-State: AFqh2koP85aAWJNPSD6g9TIDxvROikGlgHEQEpKA0zxqYdeqo7CBdLe3
-        akFrM/ajkXsSQoI7rse7BFMU3A==
-X-Google-Smtp-Source: AMrXdXsNcAUWJK52QwJi7qaNyyv/FChrpQExKc4D+1YAq9QLd9Nd5vrN1QV6/hyGYQ+76vm3eXFt3g==
-X-Received: by 2002:adf:fc4a:0:b0:27e:315e:d279 with SMTP id e10-20020adffc4a000000b0027e315ed279mr30765596wrs.32.1673258197651;
-        Mon, 09 Jan 2023 01:56:37 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l7-20020a5d6747000000b002b57bae7174sm8178050wrw.5.2023.01.09.01.56.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 01:56:37 -0800 (PST)
-Message-ID: <e1404bf7-d793-7940-8d53-05023491991d@linaro.org>
-Date:   Mon, 9 Jan 2023 10:56:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 3/3] dt-bindings: firmware: qcom: scm: Separate VMIDs
- from header to bindings
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
+        Mon, 9 Jan 2023 04:58:44 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1A2140A0;
+        Mon,  9 Jan 2023 01:57:04 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6DA2E6CF;
+        Mon,  9 Jan 2023 10:57:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673258222;
+        bh=rfR62NKpknun6jgadtE73rwSV1lb2jWlzL1P6GLENz0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FP9wOl+4dCyIrwufbUlwlsNhx6Y8XAH0g9+JfD9ojrLdxAjPG+RSUyTw+aGPbxi9d
+         1R+jUDIAOUWnd0L48Tg1udP3CZ8S3cGdcaX8hez7FVBdx5VsRkSdMIuMdup2kT4bRj
+         F7ZIZHGVHvDK6zNhp3fUw8Yt9quCN2NQ4G3a0ztw=
+Date:   Mon, 9 Jan 2023 11:56:58 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Loic Poulain <loic.poulain@linaro.org>
-References: <20230109093947.83394-1-konrad.dybcio@linaro.org>
- <20230109093947.83394-3-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109093947.83394-3-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v6 7/8] media: i2c: add DS90UB913 driver
+Message-ID: <Y7vk6vb1vldHX4TL@pendragon.ideasonboard.com>
+References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
+ <20230105140307.272052-8-tomi.valkeinen@ideasonboard.com>
+ <Y7pBSq49dL8Fzxsc@pendragon.ideasonboard.com>
+ <bff59ee7-8491-1421-0968-ad479615246c@ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bff59ee7-8491-1421-0968-ad479615246c@ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 10:39, Konrad Dybcio wrote:
-> With changes to the rmtfs binding, secure VMIDs will become useful to
-> have in device trees. Separate them out and add to include/dt-bindings.
+Hi Tomi,
+
+On Mon, Jan 09, 2023 at 11:40:43AM +0200, Tomi Valkeinen wrote:
+> On 08/01/2023 06:06, Laurent Pinchart wrote:
+> > On Thu, Jan 05, 2023 at 04:03:06PM +0200, Tomi Valkeinen wrote:
+> >> Add driver for TI DS90UB913 FPD-Link III Serializer.
+> >>
+> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> >> ---
+> >>   drivers/media/i2c/Kconfig     |  13 +
+> >>   drivers/media/i2c/Makefile    |   2 +-
+> >>   drivers/media/i2c/ds90ub913.c | 871 ++++++++++++++++++++++++++++++++++
+> >>   3 files changed, 885 insertions(+), 1 deletion(-)
+> >>   create mode 100644 drivers/media/i2c/ds90ub913.c
+
+[snip]
+
+> >> diff --git a/drivers/media/i2c/ds90ub913.c b/drivers/media/i2c/ds90ub913.c
+> >> new file mode 100644
+> >> index 000000000000..0a60afb09cd3
+> >> --- /dev/null
+> >> +++ b/drivers/media/i2c/ds90ub913.c
+> >> @@ -0,0 +1,871 @@
+
+[snip]
+
+> >> +static int ub913_log_status(struct v4l2_subdev *sd)
+> >> +{
+> >> +	struct ub913_data *priv = sd_to_ub913(sd);
+> >> +	struct device *dev = &priv->client->dev;
+> >> +	u8 v, v1, v2;
+> >> +
+> >> +	ub913_read(priv, UB913_REG_MODE_SEL, &v);
+> >> +	dev_info(dev, "MODE_SEL %#x\n", v);
+> > 
+> > %#02x ? Same below.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> v2 -> v3:
-> New patch
+> Ok.
 > 
->  include/dt-bindings/firmware/qcom/scm.h | 16 ++++++++++++++++
+> >> +
+> >> +	ub913_read(priv, UB913_REG_CRC_ERRORS_LSB, &v1);
+> >> +	ub913_read(priv, UB913_REG_CRC_ERRORS_MSB, &v2);
+> > 
+> > Looks racy, but if it's for debugging only, I suppose it's fine.
+> 
+> Well, nothing we can do about that in SW. In any case, I think for the 
+> user the value is either "none", "just a few", "a lot", so maybe the 
+> racyness doesn't matter.
 
-Ah, and filename matching bindings file or compatible, so "qcom,scm.yaml".
+It could be improved in software:
 
->  include/linux/qcom_scm.h                |  7 ++-----
->  2 files changed, 18 insertions(+), 5 deletions(-)
-Best regards,
-Krzysztof
 
+	do {
+		ub913_read(priv, UB913_REG_CRC_ERRORS_MSB, &msb);
+		ub913_read(priv, UB913_REG_CRC_ERRORS_LSB, &lsb);
+		ub913_read(priv, UB913_REG_CRC_ERRORS_MSB, &msb2);
+	} while (msb1 != msb2);
+
+but I think it's overkill.
+
+> >> +	dev_info(dev, "CRC errors %u\n", v1 | (v2 << 8));
+> >> +
+> >> +	ub913_read(priv, UB913_REG_GENERAL_STATUS, &v);
+> >> +	dev_info(dev, "GENERAL_STATUS %#x\n", v);
+> >> +
+> >> +	ub913_read(priv, UB913_REG_PLL_OVR, &v);
+> >> +	dev_info(dev, "PLL_OVR %#x\n", v);
+> >> +
+> >> +	/* clear CRC errors */
+> >> +	ub913_read(priv, UB913_REG_GENERAL_CFG, &v);
+> >> +	ub913_write(priv, UB913_REG_GENERAL_CFG, v | UB913_REG_GENERAL_CFG_CRC_ERR_RESET);
+> > 
+> > Line wrap.
+> 
+> Ok.
+> 
+> >> +	ub913_write(priv, UB913_REG_GENERAL_CFG, v);
+> > 
+> > Move this just after reading the number of CRC errors to avoid dropping
+> > some errors.
+> 
+> Ok.
+> 
+> >> +
+> >> +	return 0;
+> >> +}
+
+[snip]
+
+> >> +static int ub913_probe(struct i2c_client *client)
+> >> +{
+> >> +	struct device *dev = &client->dev;
+> >> +	struct ub913_data *priv;
+> >> +	int ret;
+> >> +	u8 v;
+> >> +	bool mode_override;
+> >> +	u8 mode;
+> >> +
+> >> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> >> +	if (!priv)
+> >> +		return -ENOMEM;
+> >> +
+> >> +	priv->client = client;
+> >> +
+> >> +	priv->plat_data = dev_get_platdata(&client->dev);
+> >> +	if (!priv->plat_data) {
+> >> +		dev_err(dev, "Platform data missing\n");
+> >> +		return -ENODEV;
+> >> +	}
+> >> +
+> >> +	priv->regmap = devm_regmap_init_i2c(client, &ub913_regmap_config);
+> >> +	if (IS_ERR(priv->regmap)) {
+> >> +		dev_err(dev, "Failed to init regmap\n");
+> >> +		return PTR_ERR(priv->regmap);
+> >> +	}
+> >> +
+> >> +	/* ub913 can also work without ext clock, but that is not supported */
+> > 
+> > Maybe "not supported by the driver yet." to make it clear it could be
+> > added ?
+> 
+> Ok.
+> 
+> >> +	priv->clkin = devm_clk_get(dev, "clkin");
+> >> +	if (IS_ERR(priv->clkin)) {
+> >> +		ret = PTR_ERR(priv->clkin);
+> >> +		if (ret != -EPROBE_DEFER)
+> >> +			dev_err(dev, "Cannot get CLKIN (%d)", ret);
+> > 
+> > Use dev_err_probe().
+> 
+> Ok.
+> 
+> >> +		return ret;
+> >> +	}
+> >> +
+> >> +	ret = ub913_parse_dt(priv);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	ret = ub913_read(priv, UB913_REG_MODE_SEL, &v);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	if (!(v & UB913_REG_MODE_SEL_MODE_UP_TO_DATE)) {
+> >> +		dev_err(dev, "Mode value not stabilized\n");
+> >> +		return -ENODEV;
+> >> +	}
+> >> +
+> >> +	mode_override = v & UB913_REG_MODE_SEL_MODE_OVERRIDE;
+> >> +	mode = v & 0xf;
+> > 
+> > A macro for the 0xf would be nice.
+> 
+> Ok.
+> 
+> >> +
+> >> +	dev_dbg(dev, "mode from %s: %#x\n",
+> >> +		mode_override ? "reg" : "deserializer", mode);
+> >> +
+> >> +	ret = ub913_i2c_master_init(priv);
+> >> +	if (ret) {
+> >> +		dev_err(dev, "i2c master init failed: %d\n", ret);
+> >> +		return ret;
+> >> +	}
+> >> +
+> >> +	ret = ub913_gpiochip_probe(priv);
+> >> +	if (ret) {
+> >> +		dev_err(dev, "Failed to init gpiochip\n");
+> >> +		return ret;
+> >> +	}
+> >> +
+> >> +	ret = ub913_register_clkout(priv);
+> >> +	if (ret) {
+> >> +		dev_err(dev, "Failed to register clkout\n");
+> >> +		goto err_gpiochip_remove;
+> >> +	}
+> >> +
+> >> +	ub913_read(priv, UB913_REG_GENERAL_CFG, &v);
+> >> +	v &= ~UB913_REG_GENERAL_CFG_PCLK_RISING;
+> >> +	v |= priv->pclk_polarity ? UB913_REG_GENERAL_CFG_PCLK_RISING : 0;
+> >> +	ub913_write(priv, UB913_REG_GENERAL_CFG, v);
+> > 
+> > We're completely missing power management, but I suppose that can be
+> > done later.
+> 
+> Yes. I'm not sure how that would be implemented. The serializer and the 
+> whole camera module depends on the deserializer. In most cases both the 
+> power and the communication comes from the deserializer over the 
+> FPD-Link cable. I'm not sure if there's much the serializer can do alone 
+> wrt. the power management.
+> 
+> Hmm, do we need a full bus structure for the FPD-Link after all, so that 
+> we get power management features? Although that would mean also the 
+> other peripherals on the camera module should somehow be involved, as we 
+> can't turn off the deserializer and the serializer without somehow being 
+> permitted by the other peripherals (like sensor).
+
+I suppose time will tell :-)
+
+> > Should this be grouped with the UB913_REG_MODE_SEL check above, and
+> > maybe moved to a hardware init function ?
+> 
+> Yes, I can try to restructure this a bit. I guess if we add a hw init 
+> function, also the ub913_i2c_master_init() would be called from there.
+> 
+> >> +
+> >> +	v4l2_i2c_subdev_init(&priv->sd, priv->client, &ub913_subdev_ops);
+> >> +	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_STREAMS;
+> >> +	priv->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+> >> +	priv->sd.entity.ops = &ub913_entity_ops;
+> >> +
+> >> +	priv->pads[0].flags = MEDIA_PAD_FL_SINK;
+> >> +	priv->pads[1].flags = MEDIA_PAD_FL_SOURCE;
+> >> +
+> >> +	ret = media_entity_pads_init(&priv->sd.entity, 2, priv->pads);
+> >> +	if (ret) {
+> >> +		dev_err(dev, "Failed to init pads\n");
+> >> +		goto err_gpiochip_remove;
+> >> +	}
+> >> +
+> >> +	priv->tx_ep_np = of_graph_get_endpoint_by_regs(dev->of_node, 1, 0);
+> >> +	if (priv->tx_ep_np)
+> >> +		priv->sd.fwnode = of_fwnode_handle(priv->tx_ep_np);
+> > 
+> > Can we meaningfully continue with tx_ep_np is NULL, or should that be an
+> > error ?
+> 
+> The matching part of v4l2 is not quite clear to me. I believe I took 
+> this part from some other driver. The driver doesn't need the tx_ep_np, 
+> afaiu this is only to help with the subdev connection matching. Is it 
+> possible the matching could happen some other way than via fwnode?
+
+In general yes, in practice we require DT so we will never match through
+another mean.
+
+> That said... We require DT, so I think that means the tx_ep_np must be 
+> there. If it's not, something is wrong, and we'd better fail. So, I 
+> think I can handle !tx_ep_np as an error.
+
+Sounds good to me.
+
+> >> +
+> >> +	ret = v4l2_subdev_init_finalize(&priv->sd);
+> >> +	if (ret)
+> >> +		goto err_entity_cleanup;
+> >> +
+> >> +	ret = ub913_v4l2_notifier_register(priv);
+> >> +	if (ret) {
+> >> +		dev_err(dev, "v4l2 subdev notifier register failed: %d\n", ret);
+> >> +		goto err_free_state;
+> >> +	}
+> >> +
+> >> +	ret = v4l2_async_register_subdev(&priv->sd);
+> >> +	if (ret) {
+> >> +		dev_err(dev, "v4l2_async_register_subdev error: %d\n", ret);
+> >> +		goto err_unreg_notif;
+> >> +	}
+> >> +
+> >> +	ret = ub913_add_i2c_adapter(priv);
+> >> +	if (ret) {
+> >> +		dev_err(dev, "failed to add remote i2c adapter\n");
+> >> +		goto err_unreg_async_subdev;
+> >> +	}
+> >> +
+> >> +	return 0;
+> >> +
+> >> +err_unreg_async_subdev:
+> >> +	v4l2_async_unregister_subdev(&priv->sd);
+> >> +err_unreg_notif:
+> >> +	ub913_v4l2_nf_unregister(priv);
+> >> +err_free_state:
+> > 
+> > I'd name this err_subdev_cleanup.
+> 
+> Yep.
+> 
+> >> +	v4l2_subdev_cleanup(&priv->sd);
+> >> +err_entity_cleanup:
+> >> +	if (priv->tx_ep_np)
+> >> +		of_node_put(priv->tx_ep_np);
+> > 
+> > of_node_put() is a no-op when called with NULL, you can drop the check.
+> > Same below.
+> 
+> Ok.
+> 
+> >> +
+> >> +	media_entity_cleanup(&priv->sd.entity);
+> >> +err_gpiochip_remove:
+> >> +	ub913_gpiochip_remove(priv);
+> >> +
+> >> +	return ret;
+> >> +}
+> >> +
+> >> +static void ub913_remove(struct i2c_client *client)
+> >> +{
+> >> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> >> +	struct ub913_data *priv = sd_to_ub913(sd);
+> >> +
+> >> +	i2c_atr_del_adapter(priv->plat_data->atr,
+> >> +			    priv->plat_data->port);
+> >> +
+> >> +	v4l2_async_unregister_subdev(&priv->sd);
+> >> +
+> >> +	ub913_v4l2_nf_unregister(priv);
+> >> +
+> >> +	v4l2_subdev_cleanup(&priv->sd);
+> >> +
+> >> +	if (priv->tx_ep_np)
+> >> +		of_node_put(priv->tx_ep_np);
+> >> +
+> >> +	media_entity_cleanup(&priv->sd.entity);
+> >> +
+> >> +	ub913_gpiochip_remove(priv);
+> >> +}
+
+-- 
+Regards,
+
+Laurent Pinchart
