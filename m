@@ -2,105 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F39A36632D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3770B6632E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbjAIV1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:27:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
+        id S235606AbjAIV3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjAIV1l (ORCPT
+        with ESMTP id S237864AbjAIV3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:27:41 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5AFF55;
-        Mon,  9 Jan 2023 13:27:40 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D21446602D68;
-        Mon,  9 Jan 2023 21:27:38 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673299659;
-        bh=o3DMSt1Ot2XXOL0bLV4Le+gFHG5Qw9UAoA+XB/anXbE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Z2/2APEpGTaq+zXXShUb9nDM4nYcStKcnqYguBnfDgZbaFtXwo8oOBw4EWhFUgIc6
-         QiP5F7TYoUyWK6bvkqnAJYLnj70+NJuvmLfld4i/8t7IygKvVktK6U9JrCeLXPBjTs
-         n9UOELkStOaZpjHm5hIOhLMnBIpiMvoLTenYVNsRVuzpXV3Ahk330G+uJhuEXF4KI3
-         MweGdNwQaLtJfBNls6wnTyaGLZIXKMAUaPLjslHpQgnj5XTHj3hUD7ThzGdebviVx8
-         t1TrSZTeK9IwhU/dH/+SOD/nDehXUbAA4XvRmTmLstcfLVq8wHnWOH4pKUADLj35mg
-         sZHFpl7oL0K3g==
-Message-ID: <8b408632218fd0f06ec862a51822cf08e0f50a57.camel@collabora.com>
-Subject: Re: [PATCH] drivers/media/v4l2-core/v4l2-h264 : add detection of
- null pointers
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Dong Chuanjian <chuanjian@nfschina.com>, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, sebastian.fricke@collabora.com,
-        ezequiel@vanguardiasur.com.ar
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 09 Jan 2023 16:27:29 -0500
-In-Reply-To: <20221227023625.7261-1-chuanjian@nfschina.com>
-References: <20221227023625.7261-1-chuanjian@nfschina.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Mon, 9 Jan 2023 16:29:09 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49066644F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:29:08 -0800 (PST)
+Received: from dslb-188-096-147-178.188.096.pools.vodafone-ip.de ([188.96.147.178] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1pEzhX-0007iD-6X; Mon, 09 Jan 2023 22:29:03 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH v2 00/12] staging: r8188eu: some more xmit cleanups
+Date:   Mon,  9 Jan 2023 22:28:40 +0100
+Message-Id: <20230109212852.75612-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230108185738.597105-1-martin@kaiser.cx>
+References: <20230108185738.597105-1-martin@kaiser.cx>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 27 d=C3=A9cembre 2022 =C3=A0 10:36 +0800, Dong Chuanjian a =C3=A9c=
-rit=C2=A0:
-> When the pointer variable is judged to be null, null is returned
-> directly.
->=20
-> Signed-off-by: Dong Chuanjian <chuanjian@nfschina.com>
+Here's another set of xmit cleanups, based on my previous patches.
 
-Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+changes in v2:
+- drop "make rtl8188eu_inirp_init a void function" patch
+  (we should relay the return value instead of discarding it)
 
-Please add the missing Fixes tag.
+Martin Kaiser (12):
+  staging: r8188eu: beq_cnt is write-only
+  staging: r8188eu: bkq_cnt is write-only
+  staging: r8188eu: viq_cnt is write-only
+  staging: r8188eu: voq_cnt is write-only
+  staging: r8188eu: replace switch with if
+  staging: r8188eu: dir_dev is unused
+  staging: r8188eu: remove unused hal_xmit_handler define
+  staging: r8188eu: txirp_cnt is write-only
+  staging: r8188eu: remove unused QSLT defines
+  staging: r8188eu: xmit_priv's vcs_type is not used
+  staging: r8188eu: xmit_priv's vcs is not used
+  staging: r8188eu: xmit_priv's vcs_setting is not used
 
-Fixes: d3f756ad629b39 ("media: v4l2: Trace calculated p/b0/b1 initial refli=
-st")
+ drivers/staging/r8188eu/core/rtw_mlme.c       |  5 ---
+ drivers/staging/r8188eu/core/rtw_xmit.c       | 42 -------------------
+ drivers/staging/r8188eu/include/drv_types.h   |  1 -
+ .../staging/r8188eu/include/rtl8188e_xmit.h   | 11 -----
+ drivers/staging/r8188eu/include/rtw_xmit.h    | 10 -----
+ drivers/staging/r8188eu/os_dep/os_intfs.c     |  3 --
+ .../staging/r8188eu/os_dep/usb_ops_linux.c    | 23 +---------
+ 7 files changed, 1 insertion(+), 94 deletions(-)
 
-If someone have time, the pr_debug should be ported to v4l2_debug according=
- to
-some other reviews.
-
-> ---
-> v2: Directly return when pointer allocation fails.
-> v3: problems in synchronous repair format_ref_list_p
->=20
-> diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-cor=
-e/v4l2-h264.c
-> index 72bd64f65198..f6684c1d7319 100644
-> --- a/drivers/media/v4l2-core/v4l2-h264.c
-> +++ b/drivers/media/v4l2-core/v4l2-h264.c
-> @@ -305,6 +305,8 @@ static const char *format_ref_list_p(const struct v4l=
-2_h264_reflist_builder *bui
->  	int n =3D 0, i;
-> =20
->  	*out_str =3D kmalloc(tmp_str_size, GFP_KERNEL);
-> +	if (*out_str =3D=3D NULL)
-> +		return NULL;
-> =20
->  	n +=3D snprintf(*out_str + n, tmp_str_size - n, "|");
-> =20
-> @@ -343,6 +345,8 @@ static const char *format_ref_list_b(const struct v4l=
-2_h264_reflist_builder *bui
->  	int n =3D 0, i;
-> =20
->  	*out_str =3D kmalloc(tmp_str_size, GFP_KERNEL);
-> +	if (*out_str =3D=3D NULL)
-> +		return NULL;
-> =20
->  	n +=3D snprintf(*out_str + n, tmp_str_size - n, "|");
-> =20
+-- 
+2.30.2
 
