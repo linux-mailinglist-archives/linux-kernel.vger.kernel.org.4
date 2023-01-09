@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC51662708
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27F3662714
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236801AbjAIN3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:29:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
+        id S229658AbjAINbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjAIN3u (ORCPT
+        with ESMTP id S230499AbjAINb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:29:50 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D83BC0F;
-        Mon,  9 Jan 2023 05:29:48 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id u19so20008961ejm.8;
-        Mon, 09 Jan 2023 05:29:48 -0800 (PST)
+        Mon, 9 Jan 2023 08:31:28 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3898CB854
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:31:26 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4c7d35b37e2so56143007b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 05:31:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OnLgVlQcPUmhGddpJYGzFYAsfQhj3TvV2AMn1iaicV4=;
-        b=U0mU7RMxkmdrEdFGy9CJinO/If0ziVK7HzWZwo7R85GUyz6cSI7XQD1JoGsqiEp8tA
-         +QcYaPpK3zPBijaX+YJd/w6l9Y1ItyCd06CMjFrOG3WZJHK15sDrIMKJgGDnWpAbA/1n
-         X9a13cQt3BTasjrHlr+X3cWfIMcdKAKeeRp/S2sVSELPIftbUS+whnD2WERmwB6QqHe2
-         5o/V1B9CA4Ura/1X6EXDtpUbZiC2DYYTTxiIEE5cgG2PBCDJgsxrXPvN+CThUAbvucsc
-         At+7UXZq/WrTJIwbwRFHnmlfji81yAHU2tpuVQFPVo7BJKxR0pzsOzGWPXQFKSVQHdBz
-         1YMQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QVz5jWDcU5r8Y5zSAYEpynnON9GmdwxqNKoxJSpPRgU=;
+        b=JddNTzUsNLk43BliAzsUuwqayac834GiUYTfWQN9AVfnu4bh3Vx3N+O3IB7fgoDFVJ
+         XNJx00X9ZHwdAMyrqtCjwMvlrY7F6c3eb+Zg6qz/xr4XSaqMpy80M14Bipu7rvqbLbxy
+         5vH86/Bzkv8srzydJel8pnl77q8zqWXBlHgOyuom12HYQd1N2Llst09FvYXgwNwVOoNh
+         V1FrFVHZtIjDrG40piiHaLWUc51+44AhkXZ8TOY+BQNSfcmsWKkl1byuPWyko1KS3GDS
+         t7hNcm757CRdpo0qmDoQcW6wtnl+rQ+DtkEdknfcvIEjzFVK2XFGHlH+qWPtai5pwiwr
+         3u6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OnLgVlQcPUmhGddpJYGzFYAsfQhj3TvV2AMn1iaicV4=;
-        b=B6FiHHTZ8kCeizRSNORRAoeU4yPWdcQTKVfJOZMYu9yRfioSmdDv3OczcQlO2w0e98
-         RDS33V9dEcAzAKdx96BIpVPeyWP/a81pLOkgPZD/cH0b21/misSkbrTLPPhoewkBeMRN
-         WVq20zDRP2LO6cFkkmYvmryCMkkAIYcz4eo1Cb29LEwto0YD6eLMpW1bJzM+b/ihOzew
-         bN8Vx/w9Y2SeA6BE+SrHFLVYkqRrfBe8CW8XgXGfAzAwpcZW4oy4M9SoJQSZh1pI1gTX
-         e8DGvfyyBKTB50lHxauvR8WEwwQjWnxDffmilTpkfMdC0pJ267Efp++J6qhkCejDIeAI
-         kD5Q==
-X-Gm-Message-State: AFqh2koh8exg6Tn0aAobQ/7x/1yqQOvXTFYrymDCJYYJTVF/RoGFE6Sy
-        F6EWDIFPPcAYkc/Z3FoJZAw=
-X-Google-Smtp-Source: AMrXdXuk/fs7Fa0jTnCxkLCt/vvpaLyKgXMW78MxFDCX5QqZMNBLOgiPVgoxVohrUH1FftyprV4BLQ==
-X-Received: by 2002:a17:906:280d:b0:7c1:2a0f:55b1 with SMTP id r13-20020a170906280d00b007c12a0f55b1mr60218751ejc.14.1673270986856;
-        Mon, 09 Jan 2023 05:29:46 -0800 (PST)
-Received: from skbuf ([188.27.185.38])
-        by smtp.gmail.com with ESMTPSA id n12-20020a1709062bcc00b007ae38d837c5sm3761223ejg.174.2023.01.09.05.29.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 05:29:46 -0800 (PST)
-Date:   Mon, 9 Jan 2023 15:29:44 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "Hans J. Schultz" <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 net-next 2/3] net: dsa: mv88e6xxx: shorten the locked
- section in mv88e6xxx_g1_atu_prob_irq_thread_fn()
-Message-ID: <20230109132944.ipczdt3oj2kpfppn@skbuf>
-References: <20230108094849.1789162-1-netdev@kapio-technology.com>
- <20230108094849.1789162-3-netdev@kapio-technology.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QVz5jWDcU5r8Y5zSAYEpynnON9GmdwxqNKoxJSpPRgU=;
+        b=pHmJlX4cEczwRQzrEle+izn6a4hiHI6PRMO5rbTMoCGqzAFk6aZ4LVWumgT6hmZCTg
+         c508Yj6DOIrwBjplA6wLvPtWqUDVq9ceKpcv8qAjz07ic/QsRkmVuSxfoP94nY+voqpz
+         TEqpDO7AIwDR97dzpygfsOzkNx5Wh77rIu+YiavcvD1EW7WchFEE1+EU861kYUbA3THL
+         osNg3Y6lEpKlcg7aZ9t3S60sf6p20D/bsP3BcnNGktEgGYfkTZNHRpSDJdi0k+5rjCdv
+         HWufvLiWIflWBvqo/7KdKhdoi1Rnn5WvsFfqm0eG494PMpcJULPrie0I0HGcLLEbP0ze
+         O7jQ==
+X-Gm-Message-State: AFqh2kqukrr814GLiqyU053TYsXX+CzUaTxMbvuPfSrOIma1KWDwKsWp
+        xZFjT469XOG+qujGMtuJRKYnTnOnX8ijcd+MSINA+g==
+X-Google-Smtp-Source: AMrXdXvaNGoc1g/TdEQnqS7gmOb3ez9bRL6a4EmM5ogKSfb50z/OSGVmW0D4W52NCpPIXuq6uo/WAfBOsZwW7dQDSDY=
+X-Received: by 2002:a81:7784:0:b0:461:49a3:db6a with SMTP id
+ s126-20020a817784000000b0046149a3db6amr1420465ywc.185.1673271085378; Mon, 09
+ Jan 2023 05:31:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230108094849.1789162-3-netdev@kapio-technology.com>
+References: <20221222161420.172824-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221222161420.172824-1-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 9 Jan 2023 14:31:14 +0100
+Message-ID: <CACRpkdbMS7MNPhzi2Ty69TZddEsai-2tASVGJLCiiVktL34V5Q@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: pinctrl: qcom,sm8450-lpass-lpi: add
+ input-enable and bias-bus-hold
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 08, 2023 at 10:48:48AM +0100, Hans J. Schultz wrote:
-> As only the hardware access functions up til and including
-> mv88e6xxx_g1_atu_mac_read() called under the interrupt handler
-> need to take the chip lock, we release the chip lock after this call.
-> The follow up code that handles the violations can run without the
-> chip lock held.
-> In further patches, the violation handler function will even be
-> incompatible with having the chip lock held. This due to an AB/BA
-> ordering inversion with rtnl_lock().
-> 
-> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
-> ---
+On Thu, Dec 22, 2022 at 5:14 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> Allow bias-bus-hold and input-enable properties (already used in SM8450):
+>
+>   sm8450-qrd.dtb: pinctrl@3440000: dmic02-default-state: 'oneOf' conditional failed, one must be fixed:
+>     'pins' is a required property
+>     'function' is a required property
+>     'clk-pins', 'data-pins' do not match any of the regexes: 'pinctrl-[0-9]+'
+>     'input-enable' does not match any of the regexes: 'pinctrl-[0-9]+'
+>
+> Compact the properties which are just set to true for readability.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Looks good, is this something I should be applying directly or are
+you collecting some big qualcomm pull requests like last time?
+
+Yours,
+Linus Walleij
