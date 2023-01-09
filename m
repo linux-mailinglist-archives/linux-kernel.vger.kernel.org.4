@@ -2,115 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E33662919
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F146662920
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233609AbjAIOxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 09:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S234750AbjAIOyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 09:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236830AbjAIOxr (ORCPT
+        with ESMTP id S232069AbjAIOyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 09:53:47 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066C2B39
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 06:53:45 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id B6D3D5C0180;
-        Mon,  9 Jan 2023 09:53:42 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 09 Jan 2023 09:53:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1673276022; x=1673362422; bh=QciqPMt30o
-        n90W28hjb2NoTG2mZlRXSPXuQjKaOTVB4=; b=WFfRZOTcYBwENwciHWTcb4Oytr
-        5NM28Xvmbk7hvEi4DpaD81PB6RUp8KVsPah+DkRHs3DjENmbv+APFkbj1r9A5gNx
-        QjMIskTB2B2t9ANbocJWpybbsjztX87sjxvJTqFiJ/ChrRAj1W5vOs31Z850atBX
-        jarm0FBw2di5gjEoqnf9uEbV+jv7eNMdR3REufEtQsCF1NXRF8SwIV6zJbh2P9ww
-        5cQd0gj7f7KGhGMOUTXyV3FlKLY+Dj5+UJWWljECnGvkYcnv+u984FextJ7v5Mcy
-        4GcLsN8RchJjsS53fnbCXYkIMalGA4UA0W8dYjNfDXijQnLSRril23PqEBvw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673276022; x=1673362422; bh=QciqPMt30on90W28hjb2NoTG2mZl
-        RXSPXuQjKaOTVB4=; b=Q4pVF8Mzit3N5aT7pLXywXH8gR70xs1Ii6HKRN3bUifk
-        d1btHDXHCWciDNdfMEmVYGQOwx0hRBtRo1MaydaOyalOWfUC33NKGE6p/AjwR+sc
-        CeXis2J3FMdeRqEM9U5dldiDUTCVXVyObfvbCG6lAse3iCALQ2bCM32fC94pl/Ee
-        nqxihuApt0TQTLANOQrnkKhwfmOrsRj0C0zf9/2kZ1tOCNQetuyjmDCc945xYOuz
-        F2lekDjXrVJZmGqFQsW1CcBG8VH2hY5bOZdyt2gWiYGADmg4zkbApzXw1yBRq85Z
-        WlszQCGVeHu9cMG1ZZmhiK1QQR6jM3O4ixv2EeHFrg==
-X-ME-Sender: <xms:diq8Y74-23zDaE3-4ay_GJOCyi1NTy197BsH7g7YCV42rdokP9hByQ>
-    <xme:diq8Yw6H1gbc1FLY6gv1qqliPFU76t25LiNp6unltpQy9pb89Wualc3wIX17sjr67
-    -y41mj1HS-4if9B3V4>
-X-ME-Received: <xmr:diq8Yydt9kKWzYj6GPUhUj3j_cev6BmbNZU_650w2SbgZXXxKiDPa7sbpio3SzHaKbCkLNwj2XMnirz4CX6KFxcBVInTsobYD22vsaSrHG7mAg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeeigdeihecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:diq8Y8Lv1J8N1RblKkZYKrpoxZP1wg01Yw-1FdJ1HMjBqHTkjV6bpw>
-    <xmx:diq8Y_IlLtxweXvTu_wvnrJ2ikyBML9gbl2J1rojSH6lXLoS99F8Yw>
-    <xmx:diq8Y1wwvI2CdJgK_Y4rina2r0ad8sL1G9cqV-0_cBvnkE9iFxjbbA>
-    <xmx:diq8YxiIlTn2T51Mo5MmXbBGmiThoWGAil0G8qA0lV_Q4EBOmWfbHA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 9 Jan 2023 09:53:41 -0500 (EST)
-Date:   Mon, 9 Jan 2023 15:53:39 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Eric Anholt <eric@anholt.net>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Subject: Re: [PATCH 00/15] drm/vc4: Misc fixes and improvements for the HVS
- and CRTCs
-Message-ID: <20230109145339.jmfudgzeieli4dag@houat>
-References: <20221207-rpi-hvs-crtc-misc-v1-0-1f8e0770798b@cerno.tech>
+        Mon, 9 Jan 2023 09:54:52 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BCDD53
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 06:54:51 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id p188so8747199yba.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 06:54:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YIgOk2vZYUEppuqaUX7d/zLpPOAJZJ2Q2hrbqGB8Xww=;
+        b=iAttVXlqOJBUULuAIBDupT8wsqo+pj8RZgiE+4viHriW0AennRfmWsZ43ZooCRNpou
+         31Sy35//2Zb7i7wliONLBc53yLMAJId9WUGpfFQD/2wEv47+FNyJhfABkEG2TQ4vKMc+
+         ISoQNxvxAtCFNy0W+OrJ+0deXe48HbNKVpnYCdJ7ExtyPTbur0G1Jbzp5C92kh8OqYtm
+         ksKqa8uhCiXljYR//eDX0Y5UeM8Iu3wUiVK4Jz/+tZfk++nv4cK4gFuQE0dX7Fh+g3mD
+         uZvmJ4rHHHZogCyUiraugNLsPyvY16xJYz6NCBMiEdo4vZ+tZfKUTQ8ViP+mBeg668wB
+         fg6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YIgOk2vZYUEppuqaUX7d/zLpPOAJZJ2Q2hrbqGB8Xww=;
+        b=kJnaVvExkrCknYKgjZ4PZCKlQKYI5I/xPaiFo6LAMTuw+5ZKbtPufUu9+TZQ/FjpP0
+         11YVOWUFXUOYT6+ZO1c+wgezNaZtF4mOIu22+rlDGq3PjZEoYUvwbTJ/THUVxqek56Gl
+         sMKyE40aSTy9OaZtXVel8m85n+Q7l0ALby1XOoDGgxG/jlP+NpKorskY7RfcKpu/a9Ql
+         TERTuS7APpg2gBra23XVSbevkcOyOE8afl7b9k3XPSG4CIN5AK2rYx1bIMQ2ePw9Q5Zm
+         ZNeZGITnXOy4ysrMtcWqAZiMJOATF/1XXT5QJaJS+YhPHM9c1MW4tS16OaB9oDUd2ekp
+         MRWA==
+X-Gm-Message-State: AFqh2kq89tPsr3EThwicrhUFkR7G0K4tajGb36S9JJTrG4Bh3qd2Vd3G
+        U/0ljfwivuI5DjHi6qjBok3TsnbjCV3QWgyw4s/391d3enejRBwG
+X-Google-Smtp-Source: AMrXdXs1tg6BtCNjD4l/XSKxtuExUHllGzNESTqihwz7aJH4NbrzysLwBZYZ4UQ392n611o1b+kvnMIRIDw+GqPcMus=
+X-Received: by 2002:a25:8f89:0:b0:7b3:bb8:9daf with SMTP id
+ u9-20020a258f89000000b007b30bb89dafmr1083040ybl.427.1673276089915; Mon, 09
+ Jan 2023 06:54:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kcyeoxrcvr7eycnz"
-Content-Disposition: inline
-In-Reply-To: <20221207-rpi-hvs-crtc-misc-v1-0-1f8e0770798b@cerno.tech>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230108025545.338-1-cuiyunhui@bytedance.com> <CANn89i+W__5-jDUdM=_97jzQy9Wq+n9KBEuOGjUi=Fxe_ntqbg@mail.gmail.com>
+ <CAEEQ3wnoKqN+uTmMmUDJ9pp+YVaLmKnv42RApzPbNOGg6CRmnA@mail.gmail.com>
+In-Reply-To: <CAEEQ3wnoKqN+uTmMmUDJ9pp+YVaLmKnv42RApzPbNOGg6CRmnA@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 9 Jan 2023 15:54:38 +0100
+Message-ID: <CANn89iKY5gOC97NobXkhYv6d9ik=ks5ZEwVe=6H-VTwux=BwGQ@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v4] sock: add tracepoint for send recv length
+To:     =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, kuniyu@amazon.com,
+        xiyou.wangcong@gmail.com, duanxiongchun@bytedance.com,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 9, 2023 at 2:13 PM =E8=BF=90=E8=BE=89=E5=B4=94 <cuiyunhui@byted=
+ance.com> wrote:
+>
+> On Mon, Jan 9, 2023 at 5:56 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> >
+> > Note: At least for CONFIG_RETPOLINE=3Dy and gcc 12.2, compiler adds man=
+y
+> > additional instructions (and additional memory reads),
+> > even when the trace point is not enabled.
+> >
+> > Contrary to some belief, adding a tracepoint is not always 'free'.
+> > tail calls for example are replaced with normal calls.
+> >
+>
+>
+> >         .popsection
+> >
+> > # 0 "" 2
+> > #NO_APP
+> > .L106:
+> > # net/socket.c:1008: }
+> >         movl    %ebx, %eax      # <retval>,
+> >         popq    %rbx    #
+> >         popq    %rbp    #
+> >         popq    %r12    #
+> >         ret
+> > .L111:
+> > # ./include/trace/events/sock.h:308: DEFINE_EVENT(sock_msg_length,
+> > sock_recv_length,
+> >
+>
+> Hi Eric,  Thanks for your reply,  In fact, it is because the
+> definition of the tracepoint function is inline,
+> Not just these two tracepoints=EF=BC=8Cright?
+>
+> #define __DECLARE_TRACE(name, proto, args, cond, data_proto)            \
+>       ...
+>       static inline void trace_##name(proto)
+>
+> Regarding the above issue, I plan to optimize it like this:
+>
+> static noinline void call_trace_sock_send_length(struct sock *sk, __u16 f=
+amily,
+>                                             __u16 protocol, int ret, int =
+flags)
+> {
+>         trace_sock_send_length(sk, family, protocol, ret, 0);
+> }
+>
+> static inline int sock_sendmsg_nosec(struct socket *sock, struct msghdr *=
+msg)
+> {
+>         int ret =3D INDIRECT_CALL_INET(sock->ops->sendmsg, inet6_sendmsg,
+>                                      inet_sendmsg, sock, msg,
+>                                      msg_data_left(msg));
+>         BUG_ON(ret =3D=3D -EIOCBQUEUED);
+>
+>         if (trace_sock_send_length_enabled()) {
 
---kcyeoxrcvr7eycnz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+A barrier() is needed here, with the current state of affairs.
 
-Hi,
+IMO, ftrace/x86 experts should take care of this generic issue ?
 
-On Wed, Dec 07, 2022 at 12:53:11PM +0100, Maxime Ripard wrote:
-> Here's a collection of patches for the HVS and CRTCs that fix a few
-> issues (with DMA accesses and timings, mostly), and add a few minor
-> features.
 
-Applied to drm-misc-next
 
-Maxime
---kcyeoxrcvr7eycnz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY7wqcwAKCRDj7w1vZxhR
-xY+iAQCF9wOT1bkXkvMrl4/WMDrJPj+sYq7J6Kw1fnjG4UCCwwEApT3I83FEal/n
-o/LK+MaTALaegveZ12/iozZHPSbxmQg=
-=jQ6u
------END PGP SIGNATURE-----
-
---kcyeoxrcvr7eycnz--
+>                 call_trace_sock_send_length(sock->sk, sock->sk->sk_family=
+,
+>                                             sock->sk->sk_protocol, ret, 0=
+);
+>         }
+>         return ret;
+> }
+>
+> What do you think?
+>
+> Thanks,
+> Yunhui
