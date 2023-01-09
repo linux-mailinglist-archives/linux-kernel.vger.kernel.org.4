@@ -2,207 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9956633F1
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9166633F4
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237597AbjAIW1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
+        id S237236AbjAIW2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjAIW1W (ORCPT
+        with ESMTP id S237350AbjAIW2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:27:22 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDF99FC2;
-        Mon,  9 Jan 2023 14:27:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GeIE7Y0m1sNau3zTmxiluHS0Z28L1xxJWk2HAcmP8o1tqWS8NU7rVldkGavMjYLPXkTjfSDjtWbJWR71FEhyFob2xgtOfaAbXZS9uTTGA0hhBcs2UdYkW59BTylcLhbbVtDdss7V+l5QXoiBKt+ebXNFosKYuZ3EIuSZr93v4YyYv2io5HYV8BUYDfQUCY0i+bE6P8HLClZcTakOv9o6hK3t4qPU7JE809BB3o6NjU5B4bexL2f0DkSa7fhctI1dNnhZ2MrBw7n/XK8hcw2Na2lx2RaOfNvrjiManDfuMwd/57n2urvYSSNXIqmkkdfsWyuJN4a76q2NaXj02CaaFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GsF9EIfTai5Ogul357Q9HtfHXvGjdUFbGX1hlRuGx/c=;
- b=ggMMnqPLjxntNJ51beBD8/2SxocSkBOy0vQMcJja+418cghn4jQ8kKCMHT1xEaA+YRo9j/saZq3DrW4T9mK+pRnMsyl381cSvdv4p6EasYGgjsZywQ3zNL5psnVwz1zEMgEw4k2qZ9gHoq9a9I8SwhfRZa3747SkqDiqwdXRg7My/X5UVvc62qSc1JvXtY83xKswYCGL4xq5drSL6VhxVC+6hH72SKC5Er9o3RaWRhq+aC6SwGN7DOCICtYoirbizyLHgMqQexq5Qg58G9gvmNtv/5txUgAHyNdIbsOosKxJhMQNhYIIR8AtIIprM7gmotX20StToEkXS8MvfHvDpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GsF9EIfTai5Ogul357Q9HtfHXvGjdUFbGX1hlRuGx/c=;
- b=3K5h3i0TbCcmkMcwnwZTAnswgOyLXrsIF8mNe0aI1BhRVi1m+yGdnDrbILUzU4JfTLAH38vqxhl9CYtm/ZXe0OwY4O7rs1t+Q/jkL3dOCvwDJqqkpJNElRmvJNxUwwuXT1TIodGnKDdZFElFEJJxpY2EtQw+KTEtKE7SHGMray0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by IA1PR12MB8077.namprd12.prod.outlook.com (2603:10b6:208:3f4::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
- 2023 22:27:17 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::8200:4042:8db4:63d7]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::8200:4042:8db4:63d7%4]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
- 22:27:17 +0000
-Message-ID: <54ff7326-e3a4-945f-1f60-e73dd8865527@amd.com>
-Date:   Mon, 9 Jan 2023 16:27:12 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH RFC v7 62/64] x86/sev: Add KVM commands for instance certs
-Content-Language: en-US
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>
-Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, hpa@zytor.com, ardb@kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, tobin@ibm.com, bp@alien8.de, vbabka@suse.cz,
-        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
-        ashish.kalra@amd.com, harald@profian.com
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-63-michael.roth@amd.com>
- <1c02cc0d-9f0c-cf4a-b012-9932f551dd83@linux.ibm.com>
- <CAAH4kHbhFezeY3D_qoMQBLuFzWNDQF2YLQ-FW_dp5itHShKUWw@mail.gmail.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <CAAH4kHbhFezeY3D_qoMQBLuFzWNDQF2YLQ-FW_dp5itHShKUWw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR15CA0004.namprd15.prod.outlook.com
- (2603:10b6:208:1b4::17) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Mon, 9 Jan 2023 17:28:49 -0500
+Received: from sonic314-27.consmr.mail.ne1.yahoo.com (sonic314-27.consmr.mail.ne1.yahoo.com [66.163.189.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51C59FEA
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:28:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1673303327; bh=cwdWPJ+So2kLbU0cn5xgePzdjYgpj13UodhXvaaBwZ4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=CkLsiS37ZSkJCnbr8aQPSpyhvYQTwAvuKOhZUc7uKKhEyBLwOVnj2Wmn+FunNiQABuMhWnyKDiHlH9mS34s3rcChjbjqlyZhzriMeMXPSw3XOgPsv/72jd7fcnQs0MhKcgSrKDR1x/JtLeanHJWvAxSEQLZa+AEWCiYUNINO3ZA/ZfGQY8Apg8OkCLbpx2ry5ETJp8JshwdugdJgl2i7QKuhr8H4LCu4ZL08g3JoCFQm0xTVlmm5G+CwBGgUYXafXWOTiGk78Cavlg1WC+LAEHYW38m7D706X+SdDK+/FtOS7N+WuB7U8Nk2Bj9xAUN8bkJY5G2YifjoWxZ54DFIKQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1673303327; bh=wH6Nu+8bHDXsWlujPawaIA/wFeaq4z5ko+eHMiNqiUU=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=g413Sm7hVn0O/0jklOQ3Hk2bR8pafjHef2jI6LvVliE2s5NQBC29aGBd5zfd0lmAF+aetBJeYCgwgx3JhUCg35GhsrLXXUw2lbP8XOckPr5GUZO18jtMa2459ngLe7yTZdoXK9KFlq+04TnrDFd+my+TXZnfG4ST0+64BCPEUvEL5IF99s1tE6R+++fQm7laWgqMbCXe0u/abfnDvIzm4ifwT2kHeWojRp5HQKGpSr05SXHuCCwL/37eAJR9VkfZrBySXZah0jgkSXWjDoynjWU3Pn4D9SSrl0P/WLmMySiGX1byIoqNZmhOkwnUSR7bnq2UKnsbScuiizTTxFQH9w==
+X-YMail-OSG: bvGHh8UVM1nSJGS2PG2BrhS36YIUUHYTWCQZBoM1hVbk702ZHnssJzOct90uFlv
+ rjHsBUivm3a.PpIbZENndu3GX5iBUoAo91c8qmVn7.qhepIvnYKiP1nCklU8HjcK.pZie1f5O7mb
+ .uwlYkm.2gCN.AG.sau23yDqX8eObuQgYRKdIX9K.6ojfF.hU6CHKU8a7sbN0FgEQh5PgC.SBQvA
+ VEqtZ1pNDGcAomss.XNb1jKJWh7wBFzpxpNVHvFgIcqwd1bQZ0CbwcrRTqypmDFWPwc9XJSwtqFz
+ 2jeAynEtyY2BQF1_cvOcDyJYbxgxMhJlQOzCR9QZcxJt6.ckURFCDL_2_2wnbqgmZb8iCxRRTTdx
+ RoceTjLeJGSug.er_VMhHfHPc8xHVW8fTkFI9Nj9PTF2ikeunWPQ2gqJlr.qgEd105PTc4LsKEob
+ gxYf_yl9JZCf0riF_9GVw4UvcOnBperF4jn2wjhX8Ae7ZOG36HA_qSj58QxdLN9KLrTIgwSL.og2
+ d7wbt_ZKmE00whDQos6C_OLxuxhptotZl18uGvYkCNC8Vj7igYJWVlb1VnjXpoZzQh9aM8LT87Xp
+ aI7.e36jE7C9C0wTq1Qkg4Me5Vm514dqEYykMCFNXsX8lAMhqLQPVLEjKen_WIDxpWNKBkWrBfWy
+ bIippg5a2ILe1JiOXGm1y4j6BrS6tDnpFOkmOHwcSQ9f4YmZKxyiAChO7zRPdC5U3W_BvtqFg4md
+ WlCBDKuq0Vd4.kMKUB7AZG4sCARn_CrZgoGzDHm5KYgfLqIAxpmETe.QK8B3ZGZkz0fZ_nNUViUZ
+ 1AfSxd8ZCzQ6AdxFDshs.FgA2qjqOQx97.AkuqDli8AEAtUZXYVO69nZ6ocvqCQaRoDq0dl7i9ss
+ ZdCBwfq0AMjeZ0lnGSQ04G6Y0EW8bZj2EjIKEW_W8ePnwMhs1ut._dBw1A9RE2fJofdqBV_BqHrS
+ 7UWsO.kJTUsyRpqXMru8abBurhwZJAcjf80lE5abPcvXtG9U8yWDTZsFy8KpOs1pbbyHU2jfbium
+ aHbDEmy86D.UNlyYY_0EsImuOUuaxLwWr7655MTotJV_D9nGawUGCiDLLTvw3NadFPRwA76P14k7
+ Ne.ea0CwreCe5xPL8UAWVlULP9Yh3lPlxs5vVjMvU3nGrRW.4GMofqEsl5HgLkKT40rjG7XIADYO
+ H3fnWqbS7ar_BNOcBc2ooinXjuKIiPCDPUNbFgGLKv8RaHwQCulSEhzRgFa4dr0I_T4PEA6eqmEH
+ kGmAV.668Gq7mRrXTUsya2CJJCaqYzLkyvK3lWhsnf2hU04zmGS8Tb8uPQuOQBa2f24aQCxjEcNy
+ Jmfwp_1zs.atbWibTvU8Ux5.j_rcyvxRtGSP6YuqHQs5fj7M50H4Fl.wZhaltpZIzv8eUHGnUzSc
+ DL15S0oNiPd7Jb.P9xkTEhLM..d.g9HUoPbst1nGLNf.kSp2I6pBEAMHRvfecuyguL7byfYdcwV_
+ YMk4hfGqUxTw0KfTVsEjkpg5PhaaZpYgk5G5SwigT_.m3cmeNjIY2hof2J3rMXu_zBukH6LRSeaT
+ q0YCWIK9SjM9kl6cJoCpzZRfvSzwXlt772MkcmnXEjOLYp4ve9ZFDtHvZlJYPmXp82KWS1Og9pO_
+ Z4iakjHQUs_xYzyVOhN5S6ewcB2aOsoYFkXzlO0eSo.yxZdg6WT26Do9HdAyHB05P5FghJep61ho
+ ehIbEbY2acV5_aFi4ZhM9zQ9PnZF7jmecjPI0BrOeU0vYTnpqNE_.optWICaQ4yuPytXr7YFDUi6
+ 82zRe.yo.ATjJyp_yoJwf2Gfi1FudHMPpNxUCOpIrwg.sApVg7_Z7Qq2lPVB2Y3Ig8UbwHdagaRm
+ Tm8b4XwiB.OdZVi2KtQxI4__6iZ1fco9ZoST8YFRvqrrtCL2owpjN1YF0ZApSlpP0J4K2bCE2AJh
+ 9LUVJ7vdBqYqAc2f_JbWbEw_pQE_Pta_h63aFYP42rqODDXgTuVnnc2uK0LAxgvdjQBSBJgOeoUO
+ Lq1kBgoWnOBjolaW3uWqXS7vHj4RmloU_FrURRE.csdh3vDb8neCYuqcYjH21.1yvqUQZplgiqET
+ C7xX_HqKM8_r8UhfqL6JqkVDsRdxEfdKC2gkSksiYGgq6pNIbu3.rTlbaGjQtY7.ntLh6Q.9aBkk
+ nL5.D_s5f7uklLsDfCbCcWa2D.93xPjanyp_y6UFx6MmTq4iOAQvH08KcB4TKZFRJ2vJp5MKDWcT
+ Uh5dyNa61Xa5RPUAjUbPMJaWV0npRM6jbZjU87vJkmQh6B_jUeR5oJxAvl_9NMRvgt2kiP49ZPoj
+ K
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Mon, 9 Jan 2023 22:28:47 +0000
+Received: by hermes--production-bf1-5458f64d4-jvnkh (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 214a75e596c68404ad838ad70f5d24dd;
+          Mon, 09 Jan 2023 22:28:46 +0000 (UTC)
+Message-ID: <7e1610e7-c131-e162-be47-8983be7d9aec@schaufler-ca.com>
+Date:   Mon, 9 Jan 2023 14:28:42 -0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|IA1PR12MB8077:EE_
-X-MS-Office365-Filtering-Correlation-Id: cfb0569a-af58-49af-32e5-08daf290aa40
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EXzQiX7R0+OKLE3mHf6cPB3YErNNb7WwmpvOXFITLqPDX1AHsa9woe4vfLH16xjC7M3bXW6VSeeHWgyv5yZAQM7req0CwdxzFRw6Er1tfXD3ghDFg75AwV22v6/3ESuiGr67CcqJqVDML6E1kKbq6mRlSIdgcqaYoNFTCQloEZ/NyjEP6pivibltGgEZaTX/hIwJtj28HUmIqQI+jtCTJ6QCy+4IcCbsnudeK4Alklkj6kfX4gINvnkvaTKEfvMgffv9CZeE7knkDWc8aoWtfEPnqf/mkBiOHNH5eqgpk55PPcNDJHkr0+vlni1rAFLwK+7+xJiJoSg7l0ddN+9Q/1laKYE3EWqAc5fLLu2VqR1wWwqkYt5X4ogiVIfONKp2IjURIKJBHwNWkrshJ0icpuYSHvN989NGozCjlTltQMj5djo/de6P46ErJauS4ItsTDfAJmn/7pcAOQC+hxsuXHMoetMwGGSHliwNjCQYVYbm8UExqivHcs1Y+TMwW/o6p8Zvh8aZ2ObehwNNYW4oXCOSgG71PFMpRgoe2/hkDp+wZK5geC4Qgg22udsWq0xCbCagajGLfCrubuKW/dIblwlgtqzMDoXaHJAOmD+7aYyUkfQJRLNSGZTUBqKQ4cunW3cKLztExJZTnaLRawzNMD0lIbFOnhWeMj9T+8A7MwyP9jIGYiEjb6BpfGTcRuQkXWbza+XMo09eqtQ+TDLPxLqmIMhQnct+3UZdYrmo+B8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(136003)(39860400002)(396003)(376002)(451199015)(6506007)(6512007)(186003)(2616005)(6666004)(110136005)(8676002)(86362001)(66556008)(66946007)(38100700002)(66476007)(7406005)(31696002)(4326008)(5660300002)(7416002)(478600001)(36756003)(53546011)(2906002)(31686004)(26005)(316002)(8936002)(41300700001)(83380400001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NGhDcXgxWU5oRHNpSzdEZ1JzOHorWGI0UktNQzJYWE84b1g5YzFWNTg2S25E?=
- =?utf-8?B?TDR6ZnBRY2VHaERPOWQ0SVBhZFFSQ1pqQ3BaSm9CT0hwaDdicXhCU1VoT2Jx?=
- =?utf-8?B?U0o5QVFnbWU2bExsVWN3Rmt2S2dlV1RFb0tSdm9ueGZmQmtIaU4vQVphc0U4?=
- =?utf-8?B?eVdNM1R0cVBYNDRDYlpBUWgyNERLempxaEJSNndPUHVDalUwanZBSWc4TGw0?=
- =?utf-8?B?cE9nY1l5cGQwZDBYN2prNlhZOWlLTTZPVnh6d3k1MlF5bGRUQWlwZCtadWk4?=
- =?utf-8?B?N3hOaEszem5nejNiSnBFbEZ3MDk4U2VBQ01ZVXNxZS9ldkxNbFhDY1lRcnQy?=
- =?utf-8?B?SUNITDN1RHYzNGx5YWJjeTlkOXc4YmtPQVh6a0Y5cTFEcGtyMTJ4bStiTXVZ?=
- =?utf-8?B?YTUxZzRlQW1aWlErY0VvbVVRRHNybVRJT1JsM1FGTGpveTROMzl2b2paYThv?=
- =?utf-8?B?M3g2RmRtbGRqdU10ZFhManMreCt6eFc3bGlmcmt4YnhLellOTDN0Ni9QOWlo?=
- =?utf-8?B?bzZScVhaYWR2QTQvYnNOOE5Zb1NWQkhQSVJIVXZhUWJoL1JxaFlTZU50Z2dh?=
- =?utf-8?B?enFXWE1tTHJpRlBsUmVJdG1DV3RONGZpZDVIK0dTd0kwNW1XMmhDNGkwQlpJ?=
- =?utf-8?B?WlQvSHRjVXZDb0owOE5iMmZHb1ZRVGxHSy9SUm82ZUQ5NkFMSVVQbXRmeCs4?=
- =?utf-8?B?SEo3OUxucWVyWEwxMmxWclExcHE3NUdHWERpTUplcmR6NmxZb1VvMjY3UGdQ?=
- =?utf-8?B?djZwd0RWMEluUzMvbW1pZStZUmoxS0Rkazh6VHE2djBkM2h1M3FMMUxMbnVu?=
- =?utf-8?B?VzIvM1U2Z01VTjJPRkh6VlFjWFFLU2UrNjNSSlVYMCt6cFBIanJDME9yZzJu?=
- =?utf-8?B?R256WTRVUGxXUTRGTVhWUU9YYTFBdGUxMVljUzJTNm1iblozSGd5b3p5WjNK?=
- =?utf-8?B?N3UvRTByb1drUXo4Nkl0eDZua3BkQkwzSlRQSGlKZjVGWG9hU3QxWFVITDFB?=
- =?utf-8?B?TElKcndET0FiYXFmV1FyNHpvZEh4VEFabnd5Ylkxa0JuN1lsUWNWNTd4dkk3?=
- =?utf-8?B?SVFzcnZOZVYxUFhoRnd2OVBLcmlIRmFXUFJnaFYyM1diazEvR0gxbSt1K3pK?=
- =?utf-8?B?OXZMRTZsYi9CV2xhdjNRdXRwU3hOL1Y4WTVudzV6Vys5QkNRR3RIN2NrV1lR?=
- =?utf-8?B?STJudUphN05Ib2kxbWplN1NhL05OaHhhK0Ztc2I3Wm96TnduNG5jMFlZTG1h?=
- =?utf-8?B?Z3VJb002RHI3RFFMelJlT1BUdGRxTGJac3d2SzV6THppb2F3Tlh3Q0pqVWNG?=
- =?utf-8?B?Y3oxTk9xTmZjcHhaOFd2ai92WjlXVEk3TFhLdVJ5bnhieHF5NGtKak1uRFdS?=
- =?utf-8?B?NW9lVnkva3BSVTByaDVaaDh6bmtoUkI2L3FLNGFrZVR1eXhsT2hza28wNXZW?=
- =?utf-8?B?M25wa1hRcXo3VTR3bnNLb3E1cE9ydVpkK2NBc1oyMk1ITUFhNCtVTE1GdW1Y?=
- =?utf-8?B?OHJwemJvZmVMMlBiendRY1hQZFVjMVZWUkozczk4YXNPUk0zdTcwTXJHU0ZI?=
- =?utf-8?B?NGhKZFlWRkJialFiUVg5aWZOeEh5OTJWQlpEU2tvdGFWQTV5QklmL0NGdGRY?=
- =?utf-8?B?ZC9OMWtHQzE4YnhhVlMvV2I0WHUvN1haSFFHQWJWSjhEVUF0Wk5sQnhyWkxR?=
- =?utf-8?B?eFRrYUN1SEJKRElxWXcxS1BjNnJzeVpSdmw0YVpIdWRzcE5wbFhqTEZsRG54?=
- =?utf-8?B?bExxQTU0NVllTTZIU2Rvdk01SGR5dStudk5WSktDOXNrK0h6REp6UFZXcUtT?=
- =?utf-8?B?WWpOYlBEYjZZZUJLZGhQeUFnYUw1dXkzWWxUMytIcDVxK1RadzMxdDVmRzZs?=
- =?utf-8?B?SlRZa1BlRGRtV3hIYWQ1NHBlNU0wQTJvNGplQ0JUckRLK0ZLS0JiT3l0WHpF?=
- =?utf-8?B?U0luTnhTUzNOYmhhNkZoSm8wYU9XdHF5bmd5V0E5TXNQK1ZaV1VQY0t3cjBY?=
- =?utf-8?B?MjhnbkVJUUJFTGFyNXdnMFM2OE5WNWtwRnFnS3czcVhOYTNmcjNzczZPOEJQ?=
- =?utf-8?B?WS93cjdVTG1DSklGSWFTNWtEdVozb3JMM3lLQ3dzcEtjQng2QWN2MXVtd3h6?=
- =?utf-8?Q?VWJfKiTj94/839KWlbcL0Oz2n?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfb0569a-af58-49af-32e5-08daf290aa40
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2023 22:27:17.7672
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Hs7jN8hZr6IOlmILuFFaM0Zkv146Kywfo9HwWG8vwbcTTBHCGCNK6cO2PbJibjT/B8Jl52qkPJoPuVBVqzTdog==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8077
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 4/4] security: binder: Add transfer_charge SElinux hook
+Content-Language: en-US
+To:     "T.J. Mercier" <tjmercier@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Arve_Hj=c3=b8nnev=c3=a5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>
+Cc:     hannes@cmpxchg.org, daniel.vetter@ffwll.ch, android-mm@google.com,
+        jstultz@google.com, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        casey@schaufler-ca.com
+References: <20230109213809.418135-1-tjmercier@google.com>
+ <20230109213809.418135-5-tjmercier@google.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20230109213809.418135-5-tjmercier@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20982 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 10:55, Dionna Amalie Glaze wrote:
->>> +
->>> +static int snp_set_instance_certs(struct kvm *kvm, struct kvm_sev_cmd *argp)
->>> +{
->> [...]
->>
->> Here we set the length to the page-aligned value, but we copy only
->> params.cert_len bytes.  If there are two subsequent
->> snp_set_instance_certs() calls where the second one has a shorter
->> length, we might "keep" some leftover bytes from the first call.
->>
->> Consider:
->> 1. snp_set_instance_certs(certs_addr point to "AAA...", certs_len=8192)
->> 2. snp_set_instance_certs(certs_addr point to "BBB...", certs_len=4097)
->>
->> If I understand correctly, on the second call we'll copy 4097 "BBB..."
->> bytes into the to_certs buffer, but length will be (4096 + PAGE_SIZE -
->> 1) & PAGE_MASK which will be 8192.
->>
->> Later when fetching the certs (for the extended report or in
->> snp_get_instance_certs()) the user will get a buffer of 8192 bytes
->> filled with 4097 BBBs and 4095 leftover AAAs.
->>
->> Maybe zero sev->snp_certs_data entirely before writing to it?
->>
-> 
-> Yes, I agree it should be zeroed, at least if the previous length is
-> greater than the new length. Good catch.
-> 
-> 
->> Related question (not only for this patch) regarding snp_certs_data
->> (host or per-instance): why is its size page-aligned at all? why is it
->> limited by 16KB or 20KB? If I understand correctly, for SNP, this buffer
->> is never sent to the PSP.
->>
-> 
-> The buffer is meant to be copied into the guest driver following the
-> GHCB extended guest request protocol. The data to copy back are
-> expected to be in 4K page granularity.
+On 1/9/2023 1:38 PM, T.J. Mercier wrote:
+> Any process can cause a memory charge transfer to occur to any other
+> process when transmitting a file descriptor through binder. This should
+> only be possible for central allocator processes,
 
-I don't think the data has to be in 4K page granularity. Why do you think 
-it does?
+How is a "central allocator process" identified? If I have a LSM that
+is not SELinux (e.g. AppArmor, Smack) or no LSM at all, how can/should this
+be enforced? Why isn't binder enforcing this restriction itself?
 
-Thanks,
-Tom
+>  so a new SELinux
+> permission is added to restrict which processes are allowed to initiate
+> these charge transfers.
 
-> 
->> [...]
->>>
->>> -#define SEV_FW_BLOB_MAX_SIZE 0x4000  /* 16KB */
->>> +#define SEV_FW_BLOB_MAX_SIZE 0x5000  /* 20KB */
->>>
->>
->> This has effects in drivers/crypto/ccp/sev-dev.c
->>                                                                 (for
->> example in alloc_snp_host_map).  Is that OK?
->>
-> 
-> No, this was a mistake of mine because I was using a bloated data
-> encoding that needed 5 pages for the GUID table plus 4 small
-> certificates. I've since fixed that in our user space code.
-> We shouldn't change this size and instead wait for a better size
-> negotiation protocol between the guest and host to avoid this awkward
-> hard-coding.
-> 
-> 
+Which is all perfectly reasonable if you have SELinux.
+
+>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> ---
+>  drivers/android/binder.c            | 5 +++++
+>  include/linux/lsm_hook_defs.h       | 2 ++
+>  include/linux/lsm_hooks.h           | 6 ++++++
+>  include/linux/security.h            | 2 ++
+>  security/security.c                 | 6 ++++++
+>  security/selinux/hooks.c            | 9 +++++++++
+>  security/selinux/include/classmap.h | 2 +-
+>  7 files changed, 31 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index 9830848c8d25..9063db04826d 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -2279,6 +2279,11 @@ static int binder_translate_fd(u32 fd, binder_size_t fd_offset, __u32 flags,
+>  	if (IS_ENABLED(CONFIG_MEMCG) && (flags & BINDER_FD_FLAG_XFER_CHARGE)) {
+>  		struct dma_buf *dmabuf;
+>  
+> +		if (security_binder_transfer_charge(proc->cred, target_proc->cred)) {
+> +			ret = -EPERM;
+> +			goto err_security;
+> +		}
+> +
+>  		if (unlikely(!is_dma_buf_file(file))) {
+>  			binder_user_error(
+>  				"%d:%d got transaction with XFER_CHARGE for non-dmabuf fd, %d\n",
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index ed6cb2ac55fa..8db2a958557e 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -33,6 +33,8 @@ LSM_HOOK(int, 0, binder_transfer_binder, const struct cred *from,
+>  	 const struct cred *to)
+>  LSM_HOOK(int, 0, binder_transfer_file, const struct cred *from,
+>  	 const struct cred *to, struct file *file)
+> +LSM_HOOK(int, 0, binder_transfer_charge, const struct cred *from,
+> +	 const struct cred *to)
+>  LSM_HOOK(int, 0, ptrace_access_check, struct task_struct *child,
+>  	 unsigned int mode)
+>  LSM_HOOK(int, 0, ptrace_traceme, struct task_struct *parent)
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index 0a5ba81f7367..39c40c7bf519 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -1385,6 +1385,12 @@
+>   *	@file contains the struct file being transferred.
+>   *	@to contains the struct cred for the receiving process.
+>   *	Return 0 if permission is granted.
+> + * @binder_transfer_charge:
+> + *	Check whether @from is allowed to transfer the memory charge for a
+> + *	buffer out of its cgroup to @to.
+> + *	@from contains the struct cred for the sending process.
+> + *	@to contains the struct cred for the receiving process.
+> + *	Return 0 if permission is granted.
+>   *
+>   * @ptrace_access_check:
+>   *	Check permission before allowing the current process to trace the
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 5b67f208f7de..3b7472308430 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -270,6 +270,8 @@ int security_binder_transfer_binder(const struct cred *from,
+>  				    const struct cred *to);
+>  int security_binder_transfer_file(const struct cred *from,
+>  				  const struct cred *to, struct file *file);
+> +int security_binder_transfer_charge(const struct cred *from,
+> +				    const struct cred *to);
+>  int security_ptrace_access_check(struct task_struct *child, unsigned int mode);
+>  int security_ptrace_traceme(struct task_struct *parent);
+>  int security_capget(struct task_struct *target,
+> diff --git a/security/security.c b/security/security.c
+> index d1571900a8c7..97e1e74d1ff2 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -801,6 +801,12 @@ int security_binder_transfer_file(const struct cred *from,
+>  	return call_int_hook(binder_transfer_file, 0, from, to, file);
+>  }
+>  
+> +int security_binder_transfer_charge(const struct cred *from,
+> +				    const struct cred *to)
+> +{
+> +	return call_int_hook(binder_transfer_charge, 0, from, to);
+> +}
+> +
+>  int security_ptrace_access_check(struct task_struct *child, unsigned int mode)
+>  {
+>  	return call_int_hook(ptrace_access_check, 0, child, mode);
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 3c5be76a9199..823ef14924bd 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -2066,6 +2066,14 @@ static int selinux_binder_transfer_file(const struct cred *from,
+>  			    &ad);
+>  }
+>  
+> +static int selinux_binder_transfer_charge(const struct cred *from, const struct cred *to)
+> +{
+> +	return avc_has_perm(&selinux_state,
+> +			    cred_sid(from), cred_sid(to),
+> +			    SECCLASS_BINDER, BINDER__TRANSFER_CHARGE,
+> +			    NULL);
+> +}
+> +
+>  static int selinux_ptrace_access_check(struct task_struct *child,
+>  				       unsigned int mode)
+>  {
+> @@ -7052,6 +7060,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
+>  	LSM_HOOK_INIT(binder_transaction, selinux_binder_transaction),
+>  	LSM_HOOK_INIT(binder_transfer_binder, selinux_binder_transfer_binder),
+>  	LSM_HOOK_INIT(binder_transfer_file, selinux_binder_transfer_file),
+> +	LSM_HOOK_INIT(binder_transfer_charge, selinux_binder_transfer_charge),
+>  
+>  	LSM_HOOK_INIT(ptrace_access_check, selinux_ptrace_access_check),
+>  	LSM_HOOK_INIT(ptrace_traceme, selinux_ptrace_traceme),
+> diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+> index a3c380775d41..2eef180d10d7 100644
+> --- a/security/selinux/include/classmap.h
+> +++ b/security/selinux/include/classmap.h
+> @@ -172,7 +172,7 @@ const struct security_class_mapping secclass_map[] = {
+>  	{ "tun_socket",
+>  	  { COMMON_SOCK_PERMS, "attach_queue", NULL } },
+>  	{ "binder", { "impersonate", "call", "set_context_mgr", "transfer",
+> -		      NULL } },
+> +		      "transfer_charge", NULL } },
+>  	{ "cap_userns",
+>  	  { COMMON_CAP_PERMS, NULL } },
+>  	{ "cap2_userns",
