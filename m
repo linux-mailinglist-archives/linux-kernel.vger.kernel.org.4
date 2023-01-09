@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7C7662FF8
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C71A662FF6
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237542AbjAITJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S237553AbjAITJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:09:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237597AbjAITJK (ORCPT
+        with ESMTP id S237618AbjAITJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:09:10 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BE13D1FA
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:09:09 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id az20so3566323ejc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:09:09 -0800 (PST)
+        Mon, 9 Jan 2023 14:09:16 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B333B937
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:09:15 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id i15so14060709edf.2
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:09:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zjv16lVnrOe4MOuLDfPurVOd0YQaBZRZ/Lo343Vt4Hc=;
-        b=kl7J2GBCUBGug/lBcnD09rnaH4OP5/pDhZdLaR5W9i2Gmk1lOvqXlJnAa+Hj85+gyL
-         6ImsqFjdy7s3qwlVMH2el2pzx9yKvzBtryEkUKIbYKWwZ3Inm9UQlMhqHJgA6srSPubf
-         2Fn65ZtxYW+xpptShGkhydi0iAnmZzbpetZzfsIAfil/mk1ujcrN79uRHuCekWwJbInl
-         RXvGo9CKd19DWhykjhey+5TIS1wbICBnJpO0XAygpL8q0JFLGCOu4EgrExNp4MMaR1g2
-         7D4Az5wGDeXgnSktjeRefNp2zoGAAEPdgKDavpqCHHcM1vS8ucXVUyPLKYhGa7F5IxmW
-         x7Zw==
+        bh=ZI4QNYHAsoqJCIbKwCF4KbxUOqKXYFqsYQ+1I8J7L9A=;
+        b=KeuCh0wCp6/fkrCV+b7lipshXbHWdWeLJLV+uyA0HVd7egVd5zzRkZ1LUeB7lJnW5b
+         JyktUsLZClLwML0jvBrLvMhX1gdZivmQ7lCz6cZZH19klIyoU9W7qtDivZXa9n47tbpp
+         ALMjq7YQp/pPoE4jrtGIEk+N5UTTdoF/YUnvSJYWC1hlK9IM3wjiaekqU8mqsIuAcezP
+         oXdYDlHShjkWLHwKF8pXchC+8ZDADZct4XAR9na8JLiovrjknRAYkJJ7ZCK2w1qpvJK2
+         iKZ0SUzhQLT9bccYgK8cl81sAeKbRWP+EzSf4d2Nlydjof3/QNXt3ObZJGmgu6IX8XVg
+         uBQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zjv16lVnrOe4MOuLDfPurVOd0YQaBZRZ/Lo343Vt4Hc=;
-        b=medIGxt0BlvfrHbxN859TvYstgjfS9KOxElwllRGSdZWCwKQHvrBMihnUX4FY2O19O
-         iyR0hH3h/CabjQiRt1MDn3B+/464SU6DgtcTXqHvEC3mNwk36+iiRxAmjMDH6OUr921M
-         sAXA0xRQ23jjvY64ySGPBiNIjEEjc8Tu4EPruQtNXrdbdnzBrufmsDuWUEtPhu9w+YO2
-         JZ5Ro3YVOjjvZeA/sKm4uMMK7XxoYtrX+WMNNeCTHUvfRAHHMKuVRHtDK3sCLIFvE2+u
-         C2NQLTWpCuhGDE39f7fmNzfMK2K407pqic0TKaGZeC7maV1iynrxDVgChMMUxWaBIDe6
-         m7OQ==
-X-Gm-Message-State: AFqh2kpmMUfslKuDtWEwlzliTkpaWwSdceW383MwitHyz/2R1LeJccdQ
-        7SV51Sud2jOATozEmDEVQzoXMNZpkQs=
-X-Google-Smtp-Source: AMrXdXsjd0ojc6Ck3GaLPzWei6Oar8qzCxROQgcTVi2r5rxJKZ2xGCKzpkTE0GPUFjgWv1vmDdvJIg==
-X-Received: by 2002:a17:906:aec4:b0:84d:269e:7b01 with SMTP id me4-20020a170906aec400b0084d269e7b01mr2480382ejb.0.1673291347719;
-        Mon, 09 Jan 2023 11:09:07 -0800 (PST)
+        bh=ZI4QNYHAsoqJCIbKwCF4KbxUOqKXYFqsYQ+1I8J7L9A=;
+        b=kZBbmaDrtJqdMTJzxjAb2v7q1QSSLiEKv51OuDEqbdu6MEMwYohyNJI8H+NGBFiBQb
+         BiCXT3/p7NhuEHdoi38aGLv+NbYCOBUgbl5ousgwjMtjezUgOkXGEedWg9SnBUvIFonZ
+         TqkXA99BSdJOoQ5vtCSySNY2Z+t1kmQFdmSBC86pzoycl+ZzlFKOZ89TXL/eXTXdMx/x
+         8sTMvM9reXijMwfTh3Yq1pbdlRZNK3HEgHVAe0HH3EbhJGXwXYxi8tbb2SgL5Dn/9X5V
+         rQODUOCnuSWiZ79bRasOnI4L3t2aTKatR6NDuBkMH0w0EziDUlObsrMHVPJocgfEHaqb
+         XUkA==
+X-Gm-Message-State: AFqh2kqORtI2vikcTDrWQbPVLSPmC22a4H3mZy9F6NxnaHXRN0AZaNQT
+        oQtmIWZDEOC5N6jePqi5na8=
+X-Google-Smtp-Source: AMrXdXuD4MlMKwuEwJVAD+D5BX/tAz1GAS6ckQ8kHmmpf93LnSQ8Q2N6IECunQt8abziuA7mJ+Bzlw==
+X-Received: by 2002:a05:6402:207c:b0:490:ff75:7aa with SMTP id bd28-20020a056402207c00b00490ff7507aamr3522527edb.1.1673291354140;
+        Mon, 09 Jan 2023 11:09:14 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p54a07888.dip0.t-ipconnect.de. [84.160.120.136])
-        by smtp.gmail.com with ESMTPSA id uk41-20020a170907ca2900b0078d9b967962sm4065109ejc.65.2023.01.09.11.09.06
+        by smtp.gmail.com with ESMTPSA id p9-20020aa7d309000000b0046776f98d0csm4062977edq.79.2023.01.09.11.09.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 11:09:07 -0800 (PST)
-Date:   Mon, 9 Jan 2023 20:09:05 +0100
+        Mon, 09 Jan 2023 11:09:13 -0800 (PST)
+Date:   Mon, 9 Jan 2023 20:09:11 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/7] staging: rtl8192e: Rename MCSTxPowerL..,
- LegacyHTTxPowe.. and AntennaTx..
-Message-ID: <271b3a9e1c23593e9ead925eb8415a584058fb56.1673290428.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH v2 7/7] staging: rtl8192e: Rename SetRFPowerSta..,
+ RfReg0Value and bTXPowerDa..
+Message-ID: <01ff54a2c135ba6e3d06255102679d496fd2aef1.1673290428.git.philipp.g.hortmann@gmail.com>
 References: <cover.1673290428.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,163 +71,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable MCSTxPowerLevelOriginalOffset to
-mcs_tx_pwr_level_org_offset, LegacyHTTxPowerDiff to legacy_ht_tx_pwr_diff
-and AntennaTxPwDiff to antenna_tx_pwr_diff to avoid CamelCase which is not
-accepted by checkpatch.
+Rename variable SetRFPowerStateInProgress to set_rf_pwr_state_in_progress,
+RfReg0Value to rf_reg_0value and bTXPowerDataReadFromEEPORM to
+tx_pwr_data_read_from_eeprom to avoid CamelCase which is not accepted by
+checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- .../rtl8192e/rtl8192e/r8190P_rtl8256.c        |  4 +--
- .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 16 +++++-----
- .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 30 +++++++++----------
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  6 ++--
- 4 files changed, 28 insertions(+), 28 deletions(-)
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |  4 +-
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 40 +++++++++----------
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c  |  2 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  6 +--
+ 4 files changed, 26 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c b/drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c
-index 7517ec001421..1672a3fea13c 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8190P_rtl8256.c
-@@ -169,7 +169,7 @@ void rtl92e_set_ofdm_tx_power(struct net_device *dev, u8 powerlevel)
- 	u16 RegOffset[6] = {0xe00, 0xe04, 0xe10, 0xe14, 0xe18, 0xe1c};
- 	u8 byte0, byte1, byte2, byte3;
- 
--	powerBase0 = powerlevel + priv->LegacyHTTxPowerDiff;
-+	powerBase0 = powerlevel + priv->legacy_ht_tx_pwr_diff;
- 	powerBase0 = (powerBase0 << 24) | (powerBase0 << 16) |
- 		     (powerBase0 << 8) | powerBase0;
- 	powerBase1 = powerlevel;
-@@ -177,7 +177,7 @@ void rtl92e_set_ofdm_tx_power(struct net_device *dev, u8 powerlevel)
- 		     (powerBase1 << 8) | powerBase1;
- 
- 	for (index = 0; index < 6; index++) {
--		writeVal = (u32)(priv->MCSTxPowerLevelOriginalOffset[index] +
-+		writeVal = (u32)(priv->mcs_tx_pwr_level_org_offset[index] +
- 			   ((index < 2) ? powerBase0 : powerBase1));
- 		byte0 = writeVal & 0x7f;
- 		byte1 = (writeVal & 0x7f00) >> 8;
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index ab9e2265df6f..06ab02230125 100644
+index 06ab02230125..ebf1fa5ec295 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -413,12 +413,12 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 				priv->tx_pwr_level_ofdm_24g[i] =
- 					 priv->EEPROMTxPowerLevelOFDM24G[i];
- 			}
--			priv->LegacyHTTxPowerDiff =
-+			priv->legacy_ht_tx_pwr_diff =
- 					 priv->EEPROMLegacyHTTxPowerDiff;
--			priv->AntennaTxPwDiff[0] = priv->EEPROMAntPwDiff & 0xf;
--			priv->AntennaTxPwDiff[1] = (priv->EEPROMAntPwDiff &
-+			priv->antenna_tx_pwr_diff[0] = priv->EEPROMAntPwDiff & 0xf;
-+			priv->antenna_tx_pwr_diff[1] = (priv->EEPROMAntPwDiff &
- 							0xf0) >> 4;
--			priv->AntennaTxPwDiff[2] = (priv->EEPROMAntPwDiff &
-+			priv->antenna_tx_pwr_diff[2] = (priv->EEPROMAntPwDiff &
- 							0xf00) >> 8;
- 			priv->CrystalCap = priv->EEPROMCrystalCap;
- 			priv->ThermalMeter[0] = priv->EEPROMThermalMeter & 0xf;
-@@ -456,11 +456,11 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 				priv->tx_pwr_level_ofdm_24g_c[i] =
- 					 priv->EEPROMRfCOfdmChnlTxPwLevel[2];
- 			}
--			priv->LegacyHTTxPowerDiff =
-+			priv->legacy_ht_tx_pwr_diff =
- 				 priv->EEPROMLegacyHTTxPowerDiff;
--			priv->AntennaTxPwDiff[0] = 0;
--			priv->AntennaTxPwDiff[1] = 0;
--			priv->AntennaTxPwDiff[2] = 0;
-+			priv->antenna_tx_pwr_diff[0] = 0;
-+			priv->antenna_tx_pwr_diff[1] = 0;
-+			priv->antenna_tx_pwr_diff[2] = 0;
- 			priv->CrystalCap = priv->EEPROMCrystalCap;
- 			priv->ThermalMeter[0] = priv->EEPROMThermalMeter & 0xf;
- 			priv->ThermalMeter[1] = (priv->EEPROMThermalMeter &
+@@ -345,9 +345,9 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 	}
+ 
+ 	if (priv->card_8192_version > VERSION_8190_BD)
+-		priv->bTXPowerDataReadFromEEPORM = true;
++		priv->tx_pwr_data_read_from_eeprom = true;
+ 	else
+-		priv->bTXPowerDataReadFromEEPORM = false;
++		priv->tx_pwr_data_read_from_eeprom = false;
+ 
+ 	priv->rf_type = RTL819X_DEFAULT_RF_TYPE;
+ 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index 19c65aaef3f6..cc7e72f2a52c 100644
+index cc7e72f2a52c..2e9932a26382 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -535,9 +535,9 @@ static bool _rtl92e_bb_config_para_file(struct net_device *dev)
+@@ -101,17 +101,17 @@ static u32 _rtl92e_phy_rf_read(struct net_device *dev,
+ 	if (priv->rf_chip == RF_8256) {
+ 		rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter4, 0xf00, 0x0);
+ 		if (Offset >= 31) {
+-			priv->RfReg0Value[eRFPath] |= 0x140;
++			priv->rf_reg_0value[eRFPath] |= 0x140;
+ 			rtl92e_set_bb_reg(dev, pPhyReg->rf3wireOffset,
+ 					  bMaskDWord,
+-					  (priv->RfReg0Value[eRFPath]<<16));
++					  (priv->rf_reg_0value[eRFPath] << 16));
+ 			NewOffset = Offset - 30;
+ 		} else if (Offset >= 16) {
+-			priv->RfReg0Value[eRFPath] |= 0x100;
+-			priv->RfReg0Value[eRFPath] &= (~0x40);
++			priv->rf_reg_0value[eRFPath] |= 0x100;
++			priv->rf_reg_0value[eRFPath] &= (~0x40);
+ 			rtl92e_set_bb_reg(dev, pPhyReg->rf3wireOffset,
+ 					  bMaskDWord,
+-					  (priv->RfReg0Value[eRFPath]<<16));
++					  (priv->rf_reg_0value[eRFPath] << 16));
  
- 	if (priv->IC_Cut  > VERSION_8190_BD) {
- 		if (priv->rf_type == RF_2T4R)
--			dwRegValue = priv->AntennaTxPwDiff[2]<<8 |
--				      priv->AntennaTxPwDiff[1]<<4 |
--				      priv->AntennaTxPwDiff[0];
-+			dwRegValue = priv->antenna_tx_pwr_diff[2] << 8 |
-+				      priv->antenna_tx_pwr_diff[1] << 4 |
-+				      priv->antenna_tx_pwr_diff[0];
- 		else
- 			dwRegValue = 0x0;
- 		rtl92e_set_bb_reg(dev, rFPGA0_TxGainStage,
-@@ -561,17 +561,17 @@ void rtl92e_get_tx_power(struct net_device *dev)
- {
+ 			NewOffset = Offset - 15;
+ 		} else
+@@ -130,10 +130,10 @@ static u32 _rtl92e_phy_rf_read(struct net_device *dev,
+ 				bLSSIReadBackData);
+ 
+ 	if (priv->rf_chip == RF_8256) {
+-		priv->RfReg0Value[eRFPath] &= 0xebf;
++		priv->rf_reg_0value[eRFPath] &= 0xebf;
+ 
+ 		rtl92e_set_bb_reg(dev, pPhyReg->rf3wireOffset, bMaskDWord,
+-				  (priv->RfReg0Value[eRFPath] << 16));
++				  (priv->rf_reg_0value[eRFPath] << 16));
+ 
+ 		rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter4, 0x300, 0x3);
+ 	}
+@@ -156,17 +156,17 @@ static void _rtl92e_phy_rf_write(struct net_device *dev,
+ 		rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter4, 0xf00, 0x0);
+ 
+ 		if (Offset >= 31) {
+-			priv->RfReg0Value[eRFPath] |= 0x140;
++			priv->rf_reg_0value[eRFPath] |= 0x140;
+ 			rtl92e_set_bb_reg(dev, pPhyReg->rf3wireOffset,
+ 					  bMaskDWord,
+-					  (priv->RfReg0Value[eRFPath] << 16));
++					  (priv->rf_reg_0value[eRFPath] << 16));
+ 			NewOffset = Offset - 30;
+ 		} else if (Offset >= 16) {
+-			priv->RfReg0Value[eRFPath] |= 0x100;
+-			priv->RfReg0Value[eRFPath] &= (~0x40);
++			priv->rf_reg_0value[eRFPath] |= 0x100;
++			priv->rf_reg_0value[eRFPath] &= (~0x40);
+ 			rtl92e_set_bb_reg(dev, pPhyReg->rf3wireOffset,
+ 					  bMaskDWord,
+-					  (priv->RfReg0Value[eRFPath] << 16));
++					  (priv->rf_reg_0value[eRFPath] << 16));
+ 			NewOffset = Offset - 15;
+ 		} else
+ 			NewOffset = Offset;
+@@ -179,14 +179,14 @@ static void _rtl92e_phy_rf_write(struct net_device *dev,
+ 	rtl92e_set_bb_reg(dev, pPhyReg->rf3wireOffset, bMaskDWord, DataAndAddr);
+ 
+ 	if (Offset == 0x0)
+-		priv->RfReg0Value[eRFPath] = Data;
++		priv->rf_reg_0value[eRFPath] = Data;
+ 
+ 	if (priv->rf_chip == RF_8256) {
+ 		if (Offset != 0) {
+-			priv->RfReg0Value[eRFPath] &= 0xebf;
++			priv->rf_reg_0value[eRFPath] &= 0xebf;
+ 			rtl92e_set_bb_reg(dev, pPhyReg->rf3wireOffset,
+ 					  bMaskDWord,
+-					  (priv->RfReg0Value[eRFPath] << 16));
++					  (priv->rf_reg_0value[eRFPath] << 16));
+ 		}
+ 		rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter4, 0x300, 0x3);
+ 	}
+@@ -306,7 +306,7 @@ void rtl92e_config_mac(struct net_device *dev)
+ 	u32 *pdwArray = NULL;
  	struct r8192_priv *priv = rtllib_priv(dev);
  
--	priv->MCSTxPowerLevelOriginalOffset[0] =
-+	priv->mcs_tx_pwr_level_org_offset[0] =
- 		rtl92e_readl(dev, rTxAGC_Rate18_06);
--	priv->MCSTxPowerLevelOriginalOffset[1] =
-+	priv->mcs_tx_pwr_level_org_offset[1] =
- 		rtl92e_readl(dev, rTxAGC_Rate54_24);
--	priv->MCSTxPowerLevelOriginalOffset[2] =
-+	priv->mcs_tx_pwr_level_org_offset[2] =
- 		rtl92e_readl(dev, rTxAGC_Mcs03_Mcs00);
--	priv->MCSTxPowerLevelOriginalOffset[3] =
-+	priv->mcs_tx_pwr_level_org_offset[3] =
- 		rtl92e_readl(dev, rTxAGC_Mcs07_Mcs04);
--	priv->MCSTxPowerLevelOriginalOffset[4] =
-+	priv->mcs_tx_pwr_level_org_offset[4] =
- 		rtl92e_readl(dev, rTxAGC_Mcs11_Mcs08);
--	priv->MCSTxPowerLevelOriginalOffset[5] =
-+	priv->mcs_tx_pwr_level_org_offset[5] =
- 		rtl92e_readl(dev, rTxAGC_Mcs15_Mcs12);
+-	if (priv->bTXPowerDataReadFromEEPORM) {
++	if (priv->tx_pwr_data_read_from_eeprom) {
+ 		dwArrayLen = MACPHY_Array_PGLength;
+ 		pdwArray = Rtl819XMACPHY_Array_PG;
  
- 	priv->DefaultInitialGain[0] = rtl92e_readb(dev, rOFDM0_XAAGCCore1);
-@@ -609,13 +609,13 @@ void rtl92e_set_tx_power(struct net_device *dev, u8 channel)
+@@ -1309,9 +1309,9 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+ 	u8	i = 0, QueueID = 0;
+ 	struct rtl8192_tx_ring  *ring = NULL;
  
- 			ant_pwr_diff &= 0xf;
+-	if (priv->SetRFPowerStateInProgress)
++	if (priv->set_rf_pwr_state_in_progress)
+ 		return false;
+-	priv->SetRFPowerStateInProgress = true;
++	priv->set_rf_pwr_state_in_progress = true;
  
--			priv->AntennaTxPwDiff[2] = 0;
--			priv->AntennaTxPwDiff[1] = (u8)(ant_pwr_diff);
--			priv->AntennaTxPwDiff[0] = 0;
-+			priv->antenna_tx_pwr_diff[2] = 0;
-+			priv->antenna_tx_pwr_diff[1] = (u8)(ant_pwr_diff);
-+			priv->antenna_tx_pwr_diff[0] = 0;
+ 	switch (priv->rf_chip) {
+ 	case RF_8256:
+@@ -1331,7 +1331,7 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+ 					netdev_err(dev,
+ 						   "%s(): Failed to initialize Adapter.\n",
+ 						   __func__);
+-					priv->SetRFPowerStateInProgress = false;
++					priv->set_rf_pwr_state_in_progress = false;
+ 					return false;
+ 				}
  
--			u4RegValue = priv->AntennaTxPwDiff[2]<<8 |
--				      priv->AntennaTxPwDiff[1]<<4 |
--				      priv->AntennaTxPwDiff[0];
-+			u4RegValue = priv->antenna_tx_pwr_diff[2] << 8 |
-+				      priv->antenna_tx_pwr_diff[1] << 4 |
-+				      priv->antenna_tx_pwr_diff[0];
+@@ -1438,7 +1438,7 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+ 		}
+ 	}
  
- 			rtl92e_set_bb_reg(dev, rFPGA0_TxGainStage,
- 					  (bXBTxAGC|bXCTxAGC|bXDTxAGC),
+-	priv->SetRFPowerStateInProgress = false;
++	priv->set_rf_pwr_state_in_progress = false;
+ 	return bResult;
+ }
+ 
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 92260d098eaa..050f0435ab6d 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -872,7 +872,7 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
+ 	priv->rtllib->rf_off_reason = 0;
+ 	priv->rf_change_in_progress = false;
+ 	priv->hw_rf_off_action = 0;
+-	priv->SetRFPowerStateInProgress = false;
++	priv->set_rf_pwr_state_in_progress = false;
+ 	priv->rtllib->pwr_save_ctrl.bLeisurePs = true;
+ 	priv->rtllib->LPSDelayCnt = 0;
+ 	priv->rtllib->sta_sleep = LPS_IS_WAKE;
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index ca61fc60db6e..cc3e2816e657 100644
+index cc3e2816e657..ad34bef5660c 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -469,16 +469,16 @@ struct r8192_priv {
- 	s8 cck_present_attn;
- 	long undecorated_smoothed_pwdb;
+@@ -444,18 +444,18 @@ struct r8192_priv {
  
--	u32 MCSTxPowerLevelOriginalOffset[6];
-+	u32 mcs_tx_pwr_level_org_offset[6];
- 	u8 tx_pwr_level_cck[14];
- 	u8 tx_pwr_level_cck_a[14];
- 	u8 tx_pwr_level_cck_c[14];
- 	u8 tx_pwr_level_ofdm_24g[14];
- 	u8 tx_pwr_level_ofdm_24g_a[14];
- 	u8 tx_pwr_level_ofdm_24g_c[14];
--	u8		LegacyHTTxPowerDiff;
-+	u8 legacy_ht_tx_pwr_diff;
- 	s8		RF_C_TxPwDiff;
--	u8		AntennaTxPwDiff[3];
-+	u8 antenna_tx_pwr_diff[3];
+ 	u8 nCur40MhzPrimeSC;
  
- 	bool		bDynamicTxHighPower;
- 	bool		bDynamicTxLowPower;
+-	u32 RfReg0Value[4];
++	u32 rf_reg_0value[4];
+ 	u8 num_total_rf_path;
+ 	bool brfpath_rxenable[4];
+ 
+-	bool bTXPowerDataReadFromEEPORM;
++	bool tx_pwr_data_read_from_eeprom;
+ 
+ 	u16 reg_chnl_plan;
+ 	u16 chnl_plan;
+ 	u8 hw_rf_off_action;
+ 
+ 	bool rf_change_in_progress;
+-	bool SetRFPowerStateInProgress;
++	bool set_rf_pwr_state_in_progress;
+ 	bool bdisable_nic;
+ 
+ 	u8 DM_Type;
 -- 
 2.39.0
 
