@@ -2,122 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F0F662BC6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F5C662BCE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236946AbjAIQx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 11:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        id S237181AbjAIQyK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 9 Jan 2023 11:54:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237165AbjAIQx2 (ORCPT
+        with ESMTP id S237351AbjAIQxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:53:28 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EED3E0ED;
-        Mon,  9 Jan 2023 08:52:48 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id y18so5948158ljk.11;
-        Mon, 09 Jan 2023 08:52:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u/YojMvQCgjgpVq2imF+mNJMgcvG5QTIR+KQBSabztA=;
-        b=jqxs8APtMoqxBAsze64sbZIiObnKM5mcG4m+PYHo9Wbt2szmZicijlw986fvLX7UkE
-         DQlOhTnCQmlm8PysQ7YuhNW3enHFuvIXMuqQc2wGpdqTTRUSwTbgljcuVw5EzDrg/fac
-         uE5PvAP0onnTZ869icDtYJJ+LTMH2ldRt3C/+ox+BC3YkA89uGFytSbSQIGwXvllIF7H
-         dphJ84b03YY2on+6cGTLLr79cme31F1x5JeVdhFe9C5/t+lK1fREcV1LGlwfotUaCFM2
-         kaTHASMEUyF3SjhapFRpPWDN04xUsz5Zvk8ZE2OnEd/WRdhVhgKOhsB3gavsOt6nnINZ
-         mXbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u/YojMvQCgjgpVq2imF+mNJMgcvG5QTIR+KQBSabztA=;
-        b=WL4PYEV86okLqtTkFSesWZQLJyKzreuKDhh3xSEJ/GxIDHprALgDgqnkRveoPoglCY
-         GbBLuJsxS0Do0Z+Uh6BNDbuOaRGdDrb78Tl7Crrn57wuZLR6K+A3Z5Kh1hFQERVI7+ny
-         RlPbafIwSUaPE6EImm8z++1Jq9V5x8WnVmp5PUDyIOXylYqyZQIH/e6E86bvchZyt9Nq
-         ydgWiMD95BNxyr1TjG+1PYtsiXPqcG0t73EHgUi4bXDhJaQYAP7TU/OjncIzPiKCcOwK
-         2RqmgJRjCRsL4pDgd+/gUou6SZLyGTvii8DPXy+bWG0Xx3uKheQjpBsRaipVCKW5ke5m
-         J05w==
-X-Gm-Message-State: AFqh2kpra9n+GhlHJims3vIAuyJ0PJp+EJdBNW6dyn6Ej10OeyjEROfh
-        JJENSYybp2AuSBPr2Wx29nMv28BZF7Y=
-X-Google-Smtp-Source: AMrXdXt2g86Ftt4VLNWExC41rbwR4hQ4PfQKbWrM9wlrZYFbpjO+p+wF87xKRk29liFbHWLrf8FrUQ==
-X-Received: by 2002:a05:651c:1992:b0:27f:b2cf:85a0 with SMTP id bx18-20020a05651c199200b0027fb2cf85a0mr18909499ljb.43.1673283167180;
-        Mon, 09 Jan 2023 08:52:47 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id s29-20020a05651c201d00b0028000e909desm973923ljo.136.2023.01.09.08.52.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 08:52:46 -0800 (PST)
-Date:   Mon, 9 Jan 2023 19:52:44 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
-        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/15] spi: dw: update NDF while using enhanced spi
- mode
-Message-ID: <20230109165244.yck7ik26xb4zwtil@mobilestation>
-References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
- <20221212180732.79167-3-sudip.mukherjee@sifive.com>
+        Mon, 9 Jan 2023 11:53:36 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718573F137;
+        Mon,  9 Jan 2023 08:53:02 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 4206524DFFD;
+        Tue, 10 Jan 2023 00:52:59 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
+ 2023 00:52:59 +0800
+Received: from ubuntu.localdomain (202.190.108.220) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
+ 2023 00:52:53 +0800
+From:   Jia Jie Ho <jiajie.ho@starfivetech.com>
+To:     Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v3 0/3] hwrng: starfive: Add driver for TRNG module
+Date:   Tue, 10 Jan 2023 00:52:46 +0800
+Message-ID: <20230109165249.110279-1-jiajie.ho@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221212180732.79167-3-sudip.mukherjee@sifive.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [202.190.108.220]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 06:07:19PM +0000, Sudip Mukherjee wrote:
-> If the transfer of Transmit only mode is using dual/quad/octal SPI then
-> NDF needs to be updated with the number of data frames.
-> If the Transmit FIFO goes empty in-between, DWC_ssi masks the serial
-> clock and wait for rest of the data until the programmed amount of
-> frames are transferred successfully.
-> 
-> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
-> ---
->  drivers/spi/spi-dw-core.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index 77c23772bb3d9..8c47a4d14b666 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -346,7 +346,9 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
->  	dw_writel(dws, DW_SPI_CTRLR0, cr0);
->  
->  	if (cfg->tmode == DW_SPI_CTRLR0_TMOD_EPROMREAD ||
+This patch series adds kernel support for StarFive hardware random
+number generator. First 2 patches add bindings docs and device driver
+for this module. Patch 3 adds devicetree entry for VisionFive v2 SoC.
 
-> -	    cfg->tmode == DW_SPI_CTRLR0_TMOD_RO)
-> +	    cfg->tmode == DW_SPI_CTRLR0_TMOD_RO ||
-> +	    (cfg->tmode == DW_SPI_CTRLR0_TMOD_TO &&
-> +	     cfg->spi_frf != DW_SPI_CTRLR0_SPI_FRF_STD_SPI))
+Patch 3 needs to be applied on top of:
+https://patchwork.kernel.org/project/linux-riscv/patch/20221220011247.35560-7-hal.feng@starfivetech.com/
 
-First CTRLR1.NDF is meaningful for the Tx-only mode if non-zero eSPI
-mode is enabled and the clock-stretching feature is activated. Second
-the conditional statement already looks too bulky. Adding new parts
-will make it even harder to read. What about converting it to
-something like:
+Changes v2 -> v3:
+- use constant usecs and convert to jiffies in Patch 2. (Herbert)
+- remove sleep in irq handler in Patch 2. (Herbert)
+- limit wait timer to 40us if wait == 0 for trng read. (Herbert)
 
-< if (cfg->ndf)
-< 	dw_writel(dws, DW_SPI_CTRLR1, cfg->ndf - 1);
+Changes v1 -> v2:
+- updated of_match_ptr and added pm_sleep_ptr in Patch 2. (by Krzysztof)
+- drop "status" in dts as module is always on in Patch 3. (by Krzysztof)
 
-What do you think?
+Jia Jie Ho (3):
+  dt-bindings: rng: Add StarFive TRNG module
+  hwrng: starfive - Add TRNG driver for StarFive SoC
+  riscv: dts: starfive: Add TRNG node for VisionFive 2
 
--Serge(y)
+ .../bindings/rng/starfive,jh7110-trng.yaml    |  55 +++
+ MAINTAINERS                                   |   6 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  10 +
+ drivers/char/hw_random/Kconfig                |  11 +
+ drivers/char/hw_random/Makefile               |   1 +
+ drivers/char/hw_random/starfive-trng.c        | 395 ++++++++++++++++++
+ 6 files changed, 478 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rng/starfive,jh7110-trng.yaml
+ create mode 100644 drivers/char/hw_random/starfive-trng.c
 
->  		dw_writel(dws, DW_SPI_CTRLR1, cfg->ndf ? cfg->ndf - 1 : 0);
->  
->  	/* Note DW APB SSI clock divider doesn't support odd numbers */
-> -- 
-> 2.30.2
-> 
+-- 
+2.25.1
+
