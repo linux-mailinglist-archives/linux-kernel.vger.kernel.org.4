@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D30661F7C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5239661F7D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbjAIHzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 02:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53654 "EHLO
+        id S234298AbjAIHzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 02:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233713AbjAIHzD (ORCPT
+        with ESMTP id S233735AbjAIHzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 02:55:03 -0500
+        Mon, 9 Jan 2023 02:55:06 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D401413D30
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 23:55:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 153BADF3B
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 23:55:04 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 3097snud026014;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 3097sn4s026015;
         Mon, 9 Jan 2023 08:54:49 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>,
-        Warner Losh <imp@bsdimp.com>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: [PATCH 0/6] pending bug fixes for nolibc
-Date:   Mon,  9 Jan 2023 08:54:36 +0100
-Message-Id: <20230109075442.25963-1-w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        Willy Tarreau <w@1wt.eu>
+Subject: [PATCH 1/6] nolibc: fix fd_set type
+Date:   Mon,  9 Jan 2023 08:54:37 +0100
+Message-Id: <20230109075442.25963-2-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
+In-Reply-To: <20230109075442.25963-1-w@1wt.eu>
+References: <20230109075442.25963-1-w@1wt.eu>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -35,74 +36,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Paul,
+From: Sven Schnelle <svens@linux.ibm.com>
 
-please consider the current patch series for merging into your fixes queue.
-The intent is to get them before 6.2, then backported where relevant.
+The kernel uses unsigned long for the fd_set bitmap,
+but nolibc use u32. This works fine on little endian
+machines, but fails on big endian. Convert to unsigned
+long to fix this.
 
-It addresses the following bugs:
-  - fd_set was incorrectly defined as arrays of u32 instead of long,
-    which breaks BE64. Fix courtesy of Sven Schnelle.
-
-  - S_ISxxx macros were incorrectly testing the bits after applying them
-    instead of applying S_ISFMT to the value. Fix from Warner Losh.
-
-  - the mips code was randomly broken due to an unprotected "noreorder"
-    directive in the _start code that would prevent the assembler from
-    filling delayed slots, and randomly leaving other instructions there
-
-  - since the split of the single include file into multiple files, we're
-    implicitly refraining from including some which are not explicitly
-    added in the code. It causes build failures when such files contain
-    definitions for functions that may be used e.g. by libgcc, such as
-    raise() or memset(), which are often called only by a few archs at
-    certain optimization levels only.
-
-  - gcc 11.3 in ARM thumb2 mode at -O2 was able to recognize a memset()
-    construction inside the memset() definition, and it replaced it with
-    a call to... memset(). We cannot impose to userland to build with
-    -ffreestanding so the introduction of an empty asm() statement in
-    the loop was enough to stop this.
-
-  - most of the O_* macros were wrong on RISCV because their octal value
-    was used as a hexadecimal one when the platform was introduced. This
-    was revealed by the selftest breaking in getdents64().
-
-The series was tested on x86_64, i386, armv5, armv7, thumb1, thumb2,
-mips and riscv, all at -O0, -Os and -O3. This is based on the "nolibc"
-branch of your linux-rcu tree. Do not hesitate to let me know if you
-prefer that I rebase it on a different one.
-
-Thank you!
-Willy
-
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
-Sven Schnelle (1):
-  nolibc: fix fd_set type
+ tools/include/nolibc/types.h | 53 ++++++++++++++++++++----------------
+ 1 file changed, 30 insertions(+), 23 deletions(-)
 
-Warner Losh (1):
-  tools/nolibc: Fix S_ISxxx macros
-
-Willy Tarreau (4):
-  tools/nolibc: restore mips branch ordering in the _start block
-  tools/nolibc: fix missing includes causing build issues at -O0
-  tools/nolibc: prevent gcc from making memset() loop over itself
-  tools/nolibc: fix the O_* fcntl/open macro definitions for riscv
-
- tools/include/nolibc/arch-mips.h  |  2 +
- tools/include/nolibc/arch-riscv.h | 14 +++----
- tools/include/nolibc/ctype.h      |  3 ++
- tools/include/nolibc/errno.h      |  3 ++
- tools/include/nolibc/signal.h     |  3 ++
- tools/include/nolibc/stdio.h      |  3 ++
- tools/include/nolibc/stdlib.h     |  3 ++
- tools/include/nolibc/string.h     |  8 +++-
- tools/include/nolibc/sys.h        |  2 +
- tools/include/nolibc/time.h       |  3 ++
- tools/include/nolibc/types.h      | 70 ++++++++++++++++++-------------
- tools/include/nolibc/unistd.h     |  3 ++
- 12 files changed, 79 insertions(+), 38 deletions(-)
-
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index 959997034e55..300e0ff1cd58 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -89,39 +89,46 @@
+ #define EXIT_SUCCESS 0
+ #define EXIT_FAILURE 1
+ 
++#define FD_SETIDXMASK (8 * sizeof(unsigned long))
++#define FD_SETBITMASK (8 * sizeof(unsigned long)-1)
++
+ /* for select() */
+ typedef struct {
+-	uint32_t fd32[(FD_SETSIZE + 31) / 32];
++	unsigned long fds[(FD_SETSIZE + FD_SETBITMASK) / FD_SETIDXMASK];
+ } fd_set;
+ 
+-#define FD_CLR(fd, set) do {                                            \
+-		fd_set *__set = (set);                                  \
+-		int __fd = (fd);                                        \
+-		if (__fd >= 0)                                          \
+-			__set->fd32[__fd / 32] &= ~(1U << (__fd & 31)); \
++#define FD_CLR(fd, set) do {						\
++		fd_set *__set = (set);					\
++		int __fd = (fd);					\
++		if (__fd >= 0)						\
++			__set->fds[__fd / FD_SETIDXMASK] &=		\
++				~(1U << (__fd & FX_SETBITMASK));	\
+ 	} while (0)
+ 
+-#define FD_SET(fd, set) do {                                            \
+-		fd_set *__set = (set);                                  \
+-		int __fd = (fd);                                        \
+-		if (__fd >= 0)                                          \
+-			__set->fd32[__fd / 32] |= 1U << (__fd & 31);    \
++#define FD_SET(fd, set) do {						\
++		fd_set *__set = (set);					\
++		int __fd = (fd);					\
++		if (__fd >= 0)						\
++			__set->fds[__fd / FD_SETIDXMASK] |=		\
++				1 << (__fd & FD_SETBITMASK);		\
+ 	} while (0)
+ 
+-#define FD_ISSET(fd, set) ({                                                  \
+-		fd_set *__set = (set);                                        \
+-		int __fd = (fd);                                              \
+-		int __r = 0;                                                  \
+-		if (__fd >= 0)                                                \
+-			__r = !!(__set->fd32[__fd / 32] & 1U << (__fd & 31)); \
+-		__r;                                                          \
++#define FD_ISSET(fd, set) ({						\
++			fd_set *__set = (set);				\
++			int __fd = (fd);				\
++		int __r = 0;						\
++		if (__fd >= 0)						\
++			__r = !!(__set->fds[__fd / FD_SETIDXMASK] &	\
++1U << (__fd & FD_SET_BITMASK));						\
++		__r;							\
+ 	})
+ 
+-#define FD_ZERO(set) do {                                               \
+-		fd_set *__set = (set);                                  \
+-		int __idx;                                              \
+-		for (__idx = 0; __idx < (FD_SETSIZE+31) / 32; __idx ++) \
+-			__set->fd32[__idx] = 0;                         \
++#define FD_ZERO(set) do {						\
++		fd_set *__set = (set);					\
++		int __idx;						\
++		int __size = (FD_SETSIZE+FD_SETBITMASK) / FD_SETIDXMASK;\
++		for (__idx = 0; __idx < __size; __idx++)		\
++			__set->fds[__idx] = 0;				\
+ 	} while (0)
+ 
+ /* for poll() */
 -- 
 2.35.3
 
