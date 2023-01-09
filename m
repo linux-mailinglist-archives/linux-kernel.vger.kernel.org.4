@@ -2,94 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E43662C55
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC94662C5B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235031AbjAIRLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:11:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S235107AbjAIRM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237443AbjAIRKa (ORCPT
+        with ESMTP id S235272AbjAIRMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:10:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4E94D723;
-        Mon,  9 Jan 2023 09:09:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1996D61221;
-        Mon,  9 Jan 2023 17:09:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D39C433D2;
-        Mon,  9 Jan 2023 17:09:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673284158;
-        bh=2nQaI7Jt8+dS1/K4JwljCX/V5m1hrZch0m+SlDMkERA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ONxwBl0y0KWmwBNXYdpvOf7F6tca/Gadpdze7ah7QCG6Q0ErBZQgQt0ZOSa5TJOTw
-         98MChJ34JEYVFLqN2cguPCATTTMou3LdKiVoc7qdojpZKLPL5W5q6glc4o3Jbh/G7v
-         9tZFatWxspvsNMr4OQxFqHE1saNFupcqJLDjqxGSO1NwQQdcP+OASIKMiztNOaD1yU
-         FUvYUnau7AHeZt6kv2nSSGl1sWy/IvxfldGdbcwg89Wkgv7idTW1kbv1anJe5r0Qw4
-         93AaiAV7uFOfdsBc+lRVR+Kwz5i0U43rdGUeEiBUB0GT8nnh9rHmp0xXSGC3nV4IEs
-         /kgDpkAhV1FIQ==
-Date:   Mon, 9 Jan 2023 10:09:15 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Borislav Petkov <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
-        linux-toolchains ML <linux-toolchains@vger.kernel.org>,
-        Michael Matz <matz@suse.de>
-Subject: Re: [BUG Report] undefined reference to `convert_to_fxsr'
-Message-ID: <Y7xKO8IYINf9CcNI@dev-arch.thelio-3990X>
-References: <Y62vbjBzHF4rmh1V@zn.tnic>
- <e041533c-4005-b9bc-3985-02224985aa28@huawei.com>
- <Y67IlthBqaX69RwN@zn.tnic>
- <64fe1be4-954f-fe6f-44f0-59b572548663@huawei.com>
- <Y7dZwWsiUfHKxN3S@zn.tnic>
- <d312c572-f232-a4e9-2ecc-023050528a29@huawei.com>
- <Y7lSZerjPghqllWp@zn.tnic>
- <08115444-73a3-b9b0-dbeb-2a0cf374290e@huawei.com>
- <Y7v/ZVTeQCw7Hv8g@zn.tnic>
- <88dbc59d-1a33-26be-7fd3-0fcdfef33b3a@huawei.com>
+        Mon, 9 Jan 2023 12:12:02 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFB03AB24;
+        Mon,  9 Jan 2023 09:10:25 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id b17so2704313pld.7;
+        Mon, 09 Jan 2023 09:10:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v2F7MnQjWUM2mz3fa62EsZ0QXZ22HhpfAIEPFOeLt3g=;
+        b=NUhh4xIZ+AOJcgsbU0xvlzbsJbVG+9T3Se2OyuTTwY9bT6lLSXeiL/gqBhuZRqP3gk
+         DcSVyYGX4HnFUgLJH2s4TxhsSe2evRnc6dYpBgAWjfnWyvzIJcdOSYmZYjTh0z6n7dS5
+         IDPQdCNb6odXMeAbi0edwjLaLnBRrvUSSKuDZ8KHQkTzhPmCuXO4iqDYkoDJ9gECFfyX
+         ElnMf/H5FC3HCww5Zd8pZUVzLTH19cA5dXo+zTlZkxrTTwZs4Kn/yWlUz0OTbjIEi4Vd
+         Oizt0ucUcD7hftQewLu/5aC2S9piZMYt0TUDDcyv3Ix1xigSYrBMFxSXTWg8QSXqjtFa
+         zSfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v2F7MnQjWUM2mz3fa62EsZ0QXZ22HhpfAIEPFOeLt3g=;
+        b=ZeVqhYvALKllCSOmdT6L50lZb/3pa0FK68YQMIUhk/ULtL0lVxYNCOBhv1tlC4puVw
+         l6171FKPbKNUE0iY2APo13B9bHQxhba6az+leaIBMVG0pj1MrPENrnLp3XbRBuCS3mvc
+         XfblZpSDMxXws4YDS51TDvvqAA+QqQ/xoWpruFGWdsWLEKMAYl1ZZ29SFt9M0VlPW86o
+         YvdGH0cHeNHe5oNv/CG18R4jkXtsqkXi7ETaFVDaoIoCtSnYNYflo7vc0xK+xLEslb00
+         phy1zTLSzayEsNtM173dAcbnLja5SF8iXLvBVLRMdfIoaNKtXIs0d/XbJ+aTxwjXu3jG
+         NgOA==
+X-Gm-Message-State: AFqh2koB5UPlP9eYagRQyed8KaXfzhqODp8/fZgKatts/ukKHUtebufN
+        f3zkFcDoHUC+4ifhZOaUaZA=
+X-Google-Smtp-Source: AMrXdXuP4f5mFQ4/HE2YXlElOb2g+3Jrsg8Ro+CRnWQAfTXMHh/IP6Qvmy+W0FVCFR/ArXdFHluUTg==
+X-Received: by 2002:a17:90a:ead2:b0:226:f8dc:b237 with SMTP id ev18-20020a17090aead200b00226f8dcb237mr7360327pjb.31.1673284224688;
+        Mon, 09 Jan 2023 09:10:24 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id k15-20020a17090a3ccf00b002195819d541sm7612899pjd.8.2023.01.09.09.10.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 09:10:24 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 9 Jan 2023 07:10:22 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Jinke Han <hanjinke.666@bytedance.com>, josef@toxicpanda.com,
+        axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+Subject: Re: [PATCH v3] blk-throtl: Introduce sync and async queues for
+ blk-throtl
+Message-ID: <Y7xKfl7gGt+wb/I2@slm.duckdns.org>
+References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
+ <20230105161854.GA1259@blackbody.suse.cz>
+ <20230106153813.4ttyuikzaagkk2sc@quack3>
+ <Y7hTHZQYsCX6EHIN@slm.duckdns.org>
+ <20230109105916.jvnhjdseqkwejmws@quack3>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <88dbc59d-1a33-26be-7fd3-0fcdfef33b3a@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230109105916.jvnhjdseqkwejmws@quack3>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 08:32:09PM +0800, Miaohe Lin wrote:
-> On 2023/1/9 19:49, Borislav Petkov wrote:
-> > On Mon, Jan 09, 2023 at 09:48:50AM +0800, Miaohe Lin wrote:
-> >> Oh, sorry, I miss-read that. My compiler is gcc-7.3.0 which contains many
-> >> in-house codes from our company in it. That might matters. Thanks a lot for
-> >> your guidance. :)
-> > 
-> > Yah, next time, before you report something like that, try to reproduce it with
-> > an official compiler (gcc from the upstream repo, SUSE, Debian, RH-built etc).
-> > 
-> > If it doesn't reproduce, go complain to the folks who hack your in-house
-> > compiler.
+Hello, Jan.
+
+On Mon, Jan 09, 2023 at 11:59:16AM +0100, Jan Kara wrote:
+> Yeah, I agree there's no way back :). But actually I think a lot of the
+> functionality of IO schedulers is not needed (by you ;)) only because the
+> HW got performant enough and so some issues became less visible. And that
+> is all fine but if you end up in a configuration where your cgroup's IO
+> limits and IO demands are similar to how the old rotational disks were
+> underprovisioned for the amount of IO needed to be done by the system
+> (i.e., you can easily generate amount of IO that then takes minutes or tens
+> of minutes for your IO subsystem to crunch through), you hit all the same
+> problems IO schedulers were trying to solve again. And maybe these days we
+> incline more towards the answer "buy more appropriate HW / buy higher
+> limits from your infrastructure provider" but it is not like the original
+> issues in such configurations disappeared.
+
+Yeah, but I think there's a better way out as there's still a difference
+between the two situations. W/ hard disks, you're actually out of bandwidth.
+With SSDs, we know that there are capacity that we can borrow to get out of
+the tough spot. e.g. w/ iocost, you can constrain a cgroup to a point where
+its throughput gets to a simliar level of hard disks; however, that still
+doesn't (or at least shouldn't) cause noticeable priority inversions outside
+of that cgroup because issue_as_root promotes the IOs which can be waited
+upon by other cgroups to root charging the cost to the cgroup as debts and
+further slowing it down afterwards.
+
+There's a lot to be improved - e.g. the debt accounting and payback, and
+propagation to originator throttling isn't very accurate leading to usually
+over-throttling and under-utilization in some cases. The coupling between IO
+control and dirty throttling is there and kinda works but it seems like it's
+pretty easy to make it misbehave under heavy control and so on. But, even
+with all those shortcomings, at least iocost is feature complete and already
+works (not perfectly but still) in most cases - it can actually distribute
+IO bandwidth across the cgroups with arbitrary weights without causing
+noticeable priority inversions across cgroups.
+
+blk-throttle unfortunately doesn't have issue_as_root and the issuer delay
+mechanism hooked up and we found that it's near impossible to configure
+properly in any scalable manner. Raw bw and iops limits just can't capture
+application behavior variances well enough. Often, the valid parameter space
+becomes null when trying to cover varied behaviors. Given the problem is
+pretty fundamental for the control scheme, I largely gave up on it with the
+long term goal of implementing io.max on top of iocost down the line.
+
+> > Another layering problem w/ controlling from elevators is that that's after
+> > request allocation and the issuer has already moved on. We used to have
+> > per-cgroup rq pools but ripped that out, so it's pretty easy to cause severe
+> > priority inversions by depleting the shared request pool, and the fact that
+> > throttling takes place after the issuing task returned from issue path makes
+> > propagating the throttling operation upwards more challenging too.
 > 
-> Sorry, my bad! I thought my compiler is just as same as upstream one... Many thanks for your time.
+> Well, we do have .limit_depth IO scheduler callback these days so BFQ uses
+> that to solve the problem of exhaustion of shared request pool but I agree
+> it's a bit of a hack on the side.
 
-Just for the future, in case you were not aware of it, Arnd provides
-vanilla GCC toolchains, which can be really helpful for ruling out
-(or blaming) downstream compiler patches as the cause of problems:
+Ah didn't know about that. Yeah, that'd help the situation to some degree.
 
-https://mirrors.edge.kernel.org/pub/tools/crosstool/
+> > My bet is that inversion issues are a lot more severe with blk-throttle
+> > because it's not work-conserving and not doing things like issue-as-root or
+> > other measures to alleviate issues which can arise from inversions.
+> 
+> Yes, I agree these features of blk-throttle make the problems much more
+> likely to happen in practice.
 
-You might not run into this problem again but if you do, it might save
-some time :)
+As I wrote above, I largely gave up on blk-throttle and things like tweaking
+sync write priority doesn't address most of its problems (e.g. it's still
+gonna be super easy to stall the whole system with a heavily throttled
+cgroup). However, it can still be useful for some use cases and if it can be
+tweaked to become a bit better, I don't see a reason to not do that.
 
-Cheers,
-Nathan
+Thanks.
+
+-- 
+tejun
