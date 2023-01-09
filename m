@@ -2,84 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8447C66329B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FD36632AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238224AbjAIVSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:18:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S237884AbjAIVTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:19:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238213AbjAIVRl (ORCPT
+        with ESMTP id S237476AbjAIVTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:17:41 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8281A13E20
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:16:15 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id d17so9623470wrs.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:16:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J9KM35Fv2Dw9JmJ+2t7GGA9jMoE7j/7O85W6URim/jg=;
-        b=jUHKr9R1sQwJJ2bJxAnapKyyeWwjbh0ONbLgUVCE3TuUCBEiAKy24tFJxSxhrS04oE
-         1pSA3H6dh/OY00v7xUleL9fx9CNo5u1hHUFeGOdx/9GOaARQDKglqB0LosYGGysuZP2A
-         Ui7TFTmuyIvjIl3kJ0xumIr94MUKJLZb7rFkih9v2xYi0G7aIJpHzeos75blvPUOLW7w
-         da1Hu4JZdKjqM4YcqlHqV0FRsAgOc3PIVh6IGWzHxDNBexNUHnKkYIHMY/Rppd/PI6Uv
-         Uve+ynbBFDpRLFtrcLQr2ZQfruqmfREKhqmKmXL4VwdGZKl0Y/zsS7kxK3LSfTir9e+h
-         Igow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J9KM35Fv2Dw9JmJ+2t7GGA9jMoE7j/7O85W6URim/jg=;
-        b=XWc2Q1gensWLKUQx7xVEdZsImCZanZwa7MfsKgKOJY0PWxOO8DIXKUpa0DW12rvemD
-         +1DzmF6guTmh1sDZ2dZy3uIAwZQTKYCQP7/NH835LInD8fXJUlY2q67RzQh+9241P05H
-         b+LKs9YWNk/dPwbvvXkx+rHQyH88SOFmQqNNZJA0+TcApA9Ij3qEwKS8pXt5lcZWs3Pc
-         nk4ymVwYEeE8Y4fjI8AZEvm2jjmFu2THy7+bmRI/2aMfIAd/chV6uX3gTu62TlkFHq19
-         uZkWefv5m5Bcu5/+FwF9EeLnw54q2SLX/bmPH4I8locpLJMYVej0Y2SdeDnwCfZL6ZZA
-         ZghA==
-X-Gm-Message-State: AFqh2kouUKlug7+8T+f35nol756Jyj7xTGav4F6bWA5aWs8+qJ1yLtst
-        wnZlkrz7EWEWDl6rbteh8dNn+Q==
-X-Google-Smtp-Source: AMrXdXv/cm6IaIy2SIh+NbQ31mBw1A15x3wThIGG/18avpBuj1g5CAbRI4qwwLVQyj0JSlJYYytNTA==
-X-Received: by 2002:a05:6000:383:b0:242:5a80:79b8 with SMTP id u3-20020a056000038300b002425a8079b8mr43660704wrf.20.1673298974073;
-        Mon, 09 Jan 2023 13:16:14 -0800 (PST)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id t10-20020a5d534a000000b00272c0767b4asm9430012wrv.109.2023.01.09.13.16.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 13:16:13 -0800 (PST)
-Message-ID: <fd00d15c-e131-c0c5-9836-36887e12b44f@arista.com>
-Date:   Mon, 9 Jan 2023 21:16:12 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 3/5] crypto/net/tcp: Use crypto_pool for TCP-MD5
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        Mon, 9 Jan 2023 16:19:19 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F78CDFAD;
+        Mon,  9 Jan 2023 13:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673299135; x=1704835135;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=TKkAzLRq8UhrWwuqsLlEscminZrpHIe6poa2abXHEC0=;
+  b=2Q+H1kz/wFYrOKCjPi4DYbEx/tssWbOe2UF2+RU/yyb3TMXVWcGqPp2r
+   lqA1prV+tyWwdF4+MOblXBOlbXPydcuVdRs0gGHM+m37Jmys2qhg4Gd9C
+   h9LqeUGBrV4I6/6fuLMefsa1QpRoiNpvXR90NmS6LJ8VX+4QlD2OSB690
+   xwnvF27+GMya7SeBiB0wS5CjUTdG0Fyp8sL+0kpK+QsG9LO0sF9Bvn4U5
+   Lyox1ncIBl+DQa77EQBlHLTb5n8LEepgeFMraVWWP23OAzoW8wb0yNoHK
+   f2kc0lyQi1pEenBP+8/IvWmdpwMgTQybHavCb4IrYBUG/0DM2iuflI+Pi
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
+   d="scan'208";a="131543869"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2023 14:18:54 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 9 Jan 2023 14:18:53 -0700
+Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Mon, 9 Jan 2023 14:18:50 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
-References: <20230103184257.118069-1-dima@arista.com>
- <20230103184257.118069-4-dima@arista.com>
- <20230106180526.6e65b54d@kernel.org>
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <20230106180526.6e65b54d@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>, <jbe@pengutronix.de>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jerry Ray <jerry.ray@microchip.com>
+Subject: [PATCH net-next v6 0/6] dsa: lan9303: Move to PHYLINK
+Date:   Mon, 9 Jan 2023 15:18:43 -0600
+Message-ID: <20230109211849.32530-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,43 +65,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/7/23 02:05, Jakub Kicinski wrote:
-> On Tue,  3 Jan 2023 18:42:55 +0000 Dmitry Safonov wrote:
->> Use crypto_pool API that was designed with tcp_md5sig_pool in mind.
->> The conversion to use crypto_pool will allow:
->> - to reuse ahash_request(s) for different users
->> - to allocate only one per-CPU scratch buffer rather than a new one for
->>   each user
->> - to have a common API for net/ users that need ahash on RX/TX fast path
-> 
->>  config TCP_MD5SIG
->>  	bool "TCP: MD5 Signature Option support (RFC2385)"
->> -	select CRYPTO
->> +	select CRYPTO_POOL
-> 
-> Are you sure we don't need to select CRYPTO any more?
-> select does not resolve dependencies.
+This patch series moves the lan9303 driver to use the phylink
+api away from phylib.
 
-Yeah, stumbled into it when I was rebasing TCP-AO patches on the top:
-they select both and I think you're right that it still needs to select
-CRYPTO here as well (noticed only after sending v2).
+Migrating to phylink means removing the .adjust_link api. The
+functionality from the adjust_link is moved to the phylink_mac_link_up
+api.  The code being removed only affected the cpu port.  The other
+ports on the LAN9303 do not need anything from the phylink_mac_link_up
+api.
 
-> 
->>  	select CRYPTO_MD5
->>  	help
->>  	  RFC2385 specifies a method of giving MD5 protection to TCP sessions.
-> 
->> @@ -749,29 +746,27 @@ static int tcp_v6_md5_hash_skb(char *md5_hash,
->>  		daddr = &ip6h->daddr;
->>  	}
->>  
->> -	hp = tcp_get_md5sig_pool();
->> -	if (!hp)
->> +	if (crypto_pool_get(tcp_md5_crypto_pool_id, (struct crypto_pool *)&hp))
-> 
-> &hp.base ? To avoid the cast
+Patches:
+ 0001 - Whitespace only change aligning the dsa_switch_ops members.
+	No code changes.
+ 0002 - Moves the Turbo bit initialization out of the adjust_link api and
+	places it in a driver initialization execution path. It only needs
+	to be initialized once, it is never changed, and it is not a
+	per-port flag.
+ 0003 - Adds exception handling logic in the extremely unlikely event that
+	the read of the device fails.
+ 0004 - Performance optimization that skips a slow register write if there
+	is no need to perform it.
+ 0005 - Change the way we identify the xMII port as phydev will be NULL
+	when this logic is moved into phylink_mac_link_up.
+ 0006 - Removes adjust_link and begins using the phylink dsa_switch_ops
+	apis.
+---
+v5->v6:
+  - Moved to using port number to identify xMII port for the LAN9303.
+v4->v5:
+  - Created prep patches to better show how things migrate.
+  - cleaned up comments.
+v3->v4:
+  - Addressed whitespace issues as a separate patch.
+  - Removed port_max_mtu api patch as it is unrelated to phylink migration.
+  - Reworked the implementation to preserve the adjust_link functionality
+    by including it in the phylink_mac_link_up api.
+v2->v3:
+  Added back in disabling Turbo Mode on the CPU MII interface.
+  Removed the unnecessary clearing of the phyvsupported interfaces.
+v1->v2:
+  corrected the reported mtu size, removing ETH_HLEN and ETH_FCS_LEN
 
-Oh, that's nice, will do!
+ drivers/net/dsa/lan9303-core.c | xx ++++++++++++--------
+ 1 file changed
 
-Thanks,
-          Dmitry
