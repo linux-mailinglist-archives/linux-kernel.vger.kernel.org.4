@@ -2,139 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95478663089
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E131166308F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237636AbjAIThH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S237591AbjAITiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237545AbjAIThA (ORCPT
+        with ESMTP id S237526AbjAITiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:37:00 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A97377D3B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:36:53 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id fa5so3384075qtb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:36:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S2V9u4/zHDvwynUvkUMGUF0Mb9Q6LsLWGa/rAa4/738=;
-        b=DU07h7Ut9/z3T3eAl8VnSFgRQ4ZcW32LpEcx/TFFOFzd0/bxhPrrGT17SiqPhgEkTI
-         FXdtWnz9hvAqMh2CJKTz57VNpU6fruooIuEnI4TjCom3RoQHSIvPMzET9Ub/OknQe2aZ
-         MShUAwrWypvqJZGURl+4IoSIsCKuZeE8/eobBIw/0H+iSZMih7hG4WIT6KHepgZLmN0n
-         sQeh6/cj8FKVfUV5rtawN2K0mTSoq3tO3g3v9C1hnxFHDJFbJhSfIzBMUthGmS2b2CQi
-         5NdzQZdRzMk6XuGAGe1Gtj9TaquhSpWUIzF0Kwt+Bt82FDhbhsGNBnla6sYjPXMkuQt6
-         kWLA==
-X-Gm-Message-State: AFqh2kpxVfXR3juEQzOyfqgWsyrCQpJb0FGhoVsWuEM/mlPbucEJyJcg
-        AD+ZJYRn6tarJOXN+6Yitr/rUWQy1pj6tg==
-X-Google-Smtp-Source: AMrXdXtXDHPGg1eVSjkkoXV7t19mlKTGx7tMKtd21P3vzqHsdMRVk2KpoMnQewysdlgWv7Uyg9Q38A==
-X-Received: by 2002:ac8:720b:0:b0:3a8:5d1:aacb with SMTP id a11-20020ac8720b000000b003a805d1aacbmr89840822qtp.26.1673293012226;
-        Mon, 09 Jan 2023 11:36:52 -0800 (PST)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id m20-20020ac866d4000000b003a6a7a20575sm4977468qtp.73.2023.01.09.11.36.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 11:36:51 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id 194so7300573ybf.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:36:51 -0800 (PST)
-X-Received: by 2002:a25:5189:0:b0:7bf:d201:60cb with SMTP id
- f131-20020a255189000000b007bfd20160cbmr174031ybb.365.1673293011523; Mon, 09
- Jan 2023 11:36:51 -0800 (PST)
+        Mon, 9 Jan 2023 14:38:13 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14996171;
+        Mon,  9 Jan 2023 11:38:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1673293092; x=1704829092;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+nSkl3nf47aICAlHJic69nCJD7igzHmBHn2JiTZ1cJs=;
+  b=ZONG6QbuYRlWq29Ea9xnRprFFGp0CK8qBeEOdiS7FdMT+Dh7L7Evbime
+   ZyAIhTG7HupvXuWPl0YNRyRWVPkEBZlU3cigj4Y+ZlZeJ5Xlen+8lxpKl
+   azEGr7vl6uNG6VrHXaXrRgkO0zxcMRwd8k3OPNnY/3h6N4gfLYiqv3xgU
+   g=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Jan 2023 11:38:11 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 11:38:11 -0800
+Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 9 Jan 2023
+ 11:38:10 -0800
+Message-ID: <bea00abc-b137-945e-e0ad-67ba41e4d691@quicinc.com>
+Date:   Mon, 9 Jan 2023 11:38:10 -0800
 MIME-Version: 1.0
-References: <Y7nyd4hPeXsdiibH@duo.ucw.cz> <Y7pRw47hidw+s6+g@mit.edu>
- <Y7pzbnlXgv+asekg@amd.ucw.cz> <CAMuHMdVvVoEs8yjNLmK=_shmGkyz1zYc8ZMi-vmP4aee0yKoPQ@mail.gmail.com>
- <Y7sPq3Tmm6vI/RAJ@duo.ucw.cz> <Y7tjnhs77o4TL5ey@mit.edu> <CAMuHMdXP8ycxE_Sny0q+SAzLTwnaA3hks=ErW-ZfiMBw7ZMSgg@mail.gmail.com>
- <20230109143059.GB25476@1wt.eu>
-In-Reply-To: <20230109143059.GB25476@1wt.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 9 Jan 2023 20:36:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWm8Z-xkDUTjppbPT_uxFqfdOZPrPYxgBNgFRL6E=sN3w@mail.gmail.com>
-Message-ID: <CAMuHMdWm8Z-xkDUTjppbPT_uxFqfdOZPrPYxgBNgFRL6E=sN3w@mail.gmail.com>
-Subject: Re: Dhrystone -- userland version
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, Pavel Machek <pavel@ucw.cz>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@osdl.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v8 12/28] gunyah: vm_mgr: Introduce basic VM Manager
+Content-Language: en-US
+To:     Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-acpi@vger.kernel.org>
+References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
+ <20221219225850.2397345-13-quic_eberman@quicinc.com>
+ <20230109090553.GA1737564@quicinc.com>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <20230109090553.GA1737564@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy,
 
-On Mon, Jan 9, 2023 at 3:31 PM Willy Tarreau <w@1wt.eu> wrote:
-> On Mon, Jan 09, 2023 at 10:28:09AM +0100, Geert Uytterhoeven wrote:
-> > On Mon, Jan 9, 2023 at 1:45 AM Theodore Ts'o <tytso@mit.edu> wrote:
-> > > On Sun, Jan 08, 2023 at 07:47:07PM +0100, Pavel Machek wrote:
-> > > > > However, as this is not Linux-specific, how hard can it be to convince
-> > > > > your distro to include https://github.com/qris/dhrystone-deb.git?
-> > > > > Usually, when I have a full userspace available, I just clone the above,
-> > > > > and debuild it myself.
-> > > >
-> > > > Dunno. I'd not solve it if package was in Debian, but it is not.
-> > >
-> > > I would suspect the better long-term solution would be to get the
-> > > package into Debian, since that will be easier for people to use.  I
-> > > suspect the reason why most distros don't include it is because it
-> > > really is a **terrible** benchmark for most use cases.
-> >
-> > My use case is verifying the CPU core clock rate when working on
-> > the clock driver and/or cpufreq.  I can easily measure e.g. SPI or
-> > UART clock rates
-> > externally, but not CPU core clock rates.
->
-> Then maybe you'd rather use this:
->
->    https://github.com/wtarreau/mhz
 
-Thanks!
+On 1/9/2023 1:05 AM, Srivatsa Vaddagiri wrote:
+> * Elliot Berman <quic_eberman@quicinc.com> [2022-12-19 14:58:33]:
+> 
+>> +config GUNYAH_VM_MANAGER
+> 
+> Any reason why this needs to be a separate config? IOW CONFIG_GUNYAH should
+> enable VM management functionality also.
+> 
+>> @@ -550,14 +580,29 @@ static int gh_rm_drv_probe(struct platform_device *pdev)
+>>   	rsc_mgr->msgq_client.rx_callback = gh_rm_msgq_rx_data;
+>>   	rsc_mgr->msgq_client.tx_done = gh_rm_msgq_tx_done;
+>>   
+>> -	return gh_msgq_init(&pdev->dev, &rsc_mgr->msgq, &rsc_mgr->msgq_client,
+>> +	ret = gh_msgq_init(&pdev->dev, &rsc_mgr->msgq, &rsc_mgr->msgq_client,
+>>   				&rsc_mgr->tx_ghrsc, &rsc_mgr->rx_ghrsc);
+> 
+> Bail on error here.
+> 
+> [snip]
+> 
+>> +static __must_check struct gunyah_vm *gunyah_vm_alloc(struct gh_rm_rpc *rm)
+>> +{
+>> +	struct gunyah_vm *ghvm;
+>> +	int vmid;
+>> +
+>> +	vmid = gh_rm_alloc_vmid(rm, 0);
+>> +	if (vmid < 0)
+>> +		return ERR_PTR(vmid);
+>> +
+>> +	ghvm = kzalloc(sizeof(*ghvm), GFP_KERNEL);
+>> +	if (!ghvm)
+> 
+> dealloc_vmid here (as well as few other error paths)?
+> 
+>> +		return ghvm;
+>> +
+>> +	get_gh_rm(rm);
 
-> E.g.:
->
->   $ ./mhz 10
->   count=1666675 us50=20089 us250=100748 diff=80659 cpu_MHz=4132.645 tsc50=42427696 tsc250=212780620 diff=102 rdtsc_MHz=2112.014
->   count=1666675 us50=20271 us250=101282 diff=81011 cpu_MHz=4114.688 tsc50=42813060 tsc250=213905908 diff=102 rdtsc_MHz=2111.970
->   count=1666675 us50=20405 us250=100344 diff=79939 cpu_MHz=4169.867 tsc50=43094116 tsc250=211927426 diff=101 rdtsc_MHz=2112.027
->   count=1666675 us50=20239 us250=100249 diff=80010 cpu_MHz=4166.167 tsc50=42744302 tsc250=211727114 diff=101 rdtsc_MHz=2112.021
->   count=1666675 us50=20182 us250=100482 diff=80300 cpu_MHz=4151.121 tsc50=42624768 tsc250=212217884 diff=101 rdtsc_MHz=2111.994
->   count=1666675 us50=20153 us250=100151 diff=79998 cpu_MHz=4166.792 tsc50=42562818 tsc250=211519326 diff=101 rdtsc_MHz=2112.009
->   count=1666675 us50=20281 us250=99803 diff=79522 cpu_MHz=4191.733 tsc50=42832298 tsc250=210784252 diff=100 rdtsc_MHz=2112.019
->   count=1666675 us50=20104 us250=99841 diff=79737 cpu_MHz=4180.431 tsc50=42461284 tsc250=210862414 diff=101 rdtsc_MHz=2111.957
->   count=1666675 us50=20088 us250=100287 diff=80199 cpu_MHz=4156.349 tsc50=42423974 tsc250=211807066 diff=101 rdtsc_MHz=2112.035
->   count=1666675 us50=20178 us250=99913 diff=79735 cpu_MHz=4180.536 tsc50=42614718 tsc250=211016124 diff=101 rdtsc_MHz=2112.014
->
-> It's also what's used by sbc-bench to verify that CPU vendors are not
-> cheating in the embedded world. It's very simple, and not arch-dependent
-> nor compiler-dependent (at least as long as you don't build at -O0 :-)).
+Applied all of these.
 
-Seeing the rdtsc stuff, I was a bit skeptical, but it seems to work
-fine on arm32 and rv64.
-
-Unfortunately you forgot to add a LICENSE file ;-)
-
-Alternatively, I can use the C version of BogoMIPS.  Which has its
-own merits and reputation.
-
-The nice thing about Dhrystones is that people still publish numbers
-for comparison, also DMIPS/MHz and DMIPS/mW.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Elliot
