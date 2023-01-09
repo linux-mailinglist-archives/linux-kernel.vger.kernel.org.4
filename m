@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA9E661DC6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 05:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C71661DCA
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 05:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236513AbjAIEaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 23:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        id S234219AbjAIEaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 23:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236420AbjAIE3W (ORCPT
+        with ESMTP id S234101AbjAIE3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 23:29:22 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E004118E22;
-        Sun,  8 Jan 2023 20:10:32 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3094ARbq089581;
-        Sun, 8 Jan 2023 22:10:27 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673237427;
-        bh=ntNmoF6Uthq1wSzEwsTtwspB+WR4ruYKEmdBGegmSW4=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=UiLVxMpFOCjglGYLpZLf8V12FVcbW/cDcI4Nu9VHxin2bCGPFs2gDr3X238MxYuDg
-         AROK6yfSJzKNkfBWdoUzI3jE8SkbTHAtyCckbCn1yTUwvydhK9yAdJvys7NgUvxCth
-         a/iZqiipKFzB1r/Qen38XMrA/8wdZYVENaH4P3jU=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3094ARHG023944
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 8 Jan 2023 22:10:27 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 8
- Jan 2023 22:10:27 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sun, 8 Jan 2023 22:10:27 -0600
-Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3094ANG6008094;
-        Sun, 8 Jan 2023 22:10:24 -0600
-Message-ID: <5fcc14ee-2118-ec9c-f89f-25612a2d9a0a@ti.com>
-Date:   Mon, 9 Jan 2023 09:40:23 +0530
+        Sun, 8 Jan 2023 23:29:51 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A8612758;
+        Sun,  8 Jan 2023 20:11:08 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Nr0nz6yY1zJrLk;
+        Mon,  9 Jan 2023 12:09:43 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Mon, 9 Jan 2023 12:10:59 +0800
+Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
+To:     Petr Mladek <pmladek@suse.com>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, <bpf@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+ <20221230112729.351-3-thunder.leizhen@huawei.com> <Y7WoZARt37xGpjXD@alley>
+ <Y7aZMkgVgl28Jgmv@alley>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <dbb556d0-cede-63ac-4afa-2c52baef7960@huawei.com>
+Date:   Mon, 9 Jan 2023 12:10:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v7 3/8] arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support
- of OSPI
+In-Reply-To: <Y7aZMkgVgl28Jgmv@alley>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Matt Ranostay <mranostay@ti.com>, <nm@ti.com>, <afd@ti.com>,
-        <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>,
-        <r-gunasekaran@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221122101616.770050-1-mranostay@ti.com>
- <20221122101616.770050-4-mranostay@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20221122101616.770050-4-mranostay@ti.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,73 +72,132 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 22/11/22 15:46, Matt Ranostay wrote:
-> From: Aswath Govindraju <a-govindraju@ti.com>
+On 2023/1/5 17:32, Petr Mladek wrote:
+> On Wed 2023-01-04 17:25:08, Petr Mladek wrote:
+>> On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
+>>> Function __module_address() can quickly return the pointer of the module
+>>> to which an address belongs. We do not need to traverse the symbols of all
+>>> modules to check whether each address in addrs[] is the start address of
+>>> the corresponding symbol, because register_fprobe_ips() will do this check
+>>> later.
+>>>
+>>> Assuming that there are m modules, each module has n symbols on average,
+>>> and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
+>>> complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
+>>> and the time complexity of current method is O(K * (log(m) + M)), M <= m.
+>>> (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
+>>> the ratio is still greater than 1. Therefore, the new method will
+>>> generally have better performance.
+>>>
+>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>> ---
+>>>  kernel/trace/bpf_trace.c | 101 ++++++++++++++++-----------------------
+>>>  1 file changed, 40 insertions(+), 61 deletions(-)
+>>>
+>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+>>> index 5f3be4bc16403a5..0ff9037098bd241 100644
+>>> --- a/kernel/trace/bpf_trace.c
+>>> +++ b/kernel/trace/bpf_trace.c
+>>> @@ -2684,69 +2684,55 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
+>>>  	}
+>>>  }
+>>>  
+>>> -struct module_addr_args {
+>>> -	unsigned long *addrs;
+>>> -	u32 addrs_cnt;
+>>> -	struct module **mods;
+>>> -	int mods_cnt;
+>>> -	int mods_cap;
+>>> -};
+>>> -
+>>> -static int module_callback(void *data, const char *name,
+>>> -			   struct module *mod, unsigned long addr)
+>>> +static int get_modules_for_addrs(struct module ***out_mods, unsigned long *addrs, u32 addrs_cnt)
+>>>  {
+>>> -	struct module_addr_args *args = data;
+>>> -	struct module **mods;
+>>> -
+>>> -	/* We iterate all modules symbols and for each we:
+>>> -	 * - search for it in provided addresses array
+>>> -	 * - if found we check if we already have the module pointer stored
+>>> -	 *   (we iterate modules sequentially, so we can check just the last
+>>> -	 *   module pointer)
+>>> -	 * - take module reference and store it
+>>> -	 */
+>>> -	if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
+>>> -		       bpf_kprobe_multi_addrs_cmp))
+>>> -		return 0;
+>>> +	int i, j, err;
+>>> +	int mods_cnt = 0;
+>>> +	int mods_cap = 0;
+>>> +	struct module *mod;
+>>> +	struct module **mods = NULL;
+>>>  
+>>> -	if (args->mods && args->mods[args->mods_cnt - 1] == mod)
+>>> -		return 0;
+>>> +	for (i = 0; i < addrs_cnt; i++) {
+>>> +		mod = __module_address(addrs[i]);
+>>
+>> This must be called under module_mutex to make sure that the module
+>> would not disappear.
+>>
+>>> +		if (!mod)
+>>> +			continue;
+>>>  
+>>> -	if (args->mods_cnt == args->mods_cap) {
+>>> -		args->mods_cap = max(16, args->mods_cap * 3 / 2);
+>>> -		mods = krealloc_array(args->mods, args->mods_cap, sizeof(*mods), GFP_KERNEL);
+>>> -		if (!mods)
+>>> -			return -ENOMEM;
+>>> -		args->mods = mods;
+>>> -	}
+>>> +		/* check if we already have the module pointer stored */
+>>> +		for (j = 0; j < mods_cnt; j++) {
+>>> +			if (mods[j] == mod)
+>>> +				break;
+>>> +		}
+>>
+>> This might get optimized like the original code.
+>>
+>> My understanding is that the addresses are sorted in "addrs" array.
+>> So, the address is either part of the last found module or it belongs
+>> to a completely new module.
 > 
-> Add support for two instance of OSPI in J721S2 SoC.
+> I thought more about it and I think that I was wrong, see below.
 > 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> ---
->  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
+>> 	for (i = 0; i < addrs_cnt; i++) {
+>> 		/*
+>> 		 * The adresses are sorted. The adress either belongs
+>> 		 * to the last found module or a new one.
+>> 		 *
+>> 		 * This is safe because we already have reference
+>> 		 * on the found modules.
+>> 		 */
+>> 		 if (mods_cnt && within_module(addrs[i], mods[mods_cnt - 1]))
+>> 			continue;
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> index 0af242aa9816..a588ab8d867b 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> @@ -306,4 +306,44 @@ cpts@3d000 {
->  			ti,cpts-periodic-outputs = <2>;
->  		};
->  	};
-> +
-> +	fss: syscon@47000000 {
+> within_module() checks two sections (init and core). They are
+> allocated separately, see module_alloc() called in move_module().
+> 
+> There might be a section from another modules between the init
+> and core section of a module.
+> 
+> The optimization worked in the original code because
+> module_kallsyms_on_each_symbol() always iterated over all
+> symbols from a module.
+> 
+> That said, I am not sure if bpf trace might be added for
+> symbols in the module init section. But it might be
+> better to stay on the safe side.
 
-Node needs to be renamed as bus@<> as the compatible is "simple-bus"
+Yes.
 
-+/workdir/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dtb: syscon@47000000: $nodename:0: 'syscon@47000000' does not match '^([a-z][a-z0-9\\-]+-bus|bus|localbus|soc|axi|ahb|apb)(@.+)?$'
-
-
-> +		compatible = "simple-bus";
-> +		reg = <0x00 0x47000000 0x00 0x100>;
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		ospi0: spi@47040000 {
-> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-> +			reg = <0x00 0x47040000 0x00 0x100>,
-> +			      <0x5 0x0000000 0x1 0x0000000>;
-> +			interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
-> +			cdns,fifo-depth = <256>;
-> +			cdns,fifo-width = <4>;
-> +			cdns,trigger-address = <0x0>;
-> +			clocks = <&k3_clks 109 5>;
-> +			assigned-clocks = <&k3_clks 109 5>;
-> +			assigned-clock-parents = <&k3_clks 109 7>;
-> +			assigned-clock-rates = <166666666>;
-> +			power-domains = <&k3_pds 109 TI_SCI_PD_EXCLUSIVE>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +		ospi1: spi@47050000 {
-> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-> +			reg = <0x00 0x47050000 0x00 0x100>,
-> +			      <0x7 0x0000000 0x1 0x0000000>;
-> +			interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
-> +			cdns,fifo-depth = <256>;
-> +			cdns,fifo-width = <4>;
-> +			cdns,trigger-address = <0x0>;
-> +			clocks = <&k3_clks 110 5>;
-> +			power-domains = <&k3_pds 110 TI_SCI_PD_EXCLUSIVE>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +	};
->  };
+> 
+> Best Regards,
+> Petr
+> .
+> 
 
 -- 
-Regards
-Vignesh
+Regards,
+  Zhen Lei
