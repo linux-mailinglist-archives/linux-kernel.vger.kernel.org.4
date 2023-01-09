@@ -2,79 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C90661F29
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC3F661F26
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236333AbjAIHX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 02:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
+        id S236340AbjAIHXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 02:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233304AbjAIHWz (ORCPT
+        with ESMTP id S236406AbjAIHWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 02:22:55 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C6339596;
-        Sun,  8 Jan 2023 23:22:50 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.47
-        by mg.richtek.com with MailGates ESMTP Server V5.0(16481:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Mon, 09 Jan 2023 15:22:27 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex4.rt.l (192.168.10.47) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 9 Jan
- 2023 15:22:26 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Mon, 9 Jan 2023 15:22:26 +0800
-Date:   Mon, 9 Jan 2023 15:22:26 +0800
-From:   ChiYuan Huang <cy_huang@richtek.com>
-To:     ChiYuan Huang <u0084500@gmail.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>, <linux@roeck-us.net>,
-        <heikki.krogerus@linux.intel.com>, <matthias.bgg@gmail.com>,
-        <tommyyl.chen@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <gene_chen@richtek.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: typec: tcpm: Fix altmode re-registration causes
- sysfs create fail
-Message-ID: <20230109072226.GA15975@linuxcarl2.richtek.com>
-References: <1671096096-20307-1-git-send-email-u0084500@gmail.com>
- <Y5rsdo/SGHJM4UKG@kroah.com>
- <CADiBU3-iVLQf6Q5SzOB_pMCs2PGcFuWryjpDn5Qvz41WQ6C2RA@mail.gmail.com>
- <Y5sIZ3zC6o4ARDEn@kroah.com>
- <20230109014123.GA27423@linuxcarl2.richtek.com>
- <Y7u2Yi+UeqMcVhad@kroah.com>
- <CADiBU39yh9k=BWOmQ_-T3oO1nRQ6nHVjf4H+YRpjb3Mv_3tc0w@mail.gmail.com>
+        Mon, 9 Jan 2023 02:22:52 -0500
+Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:c0c:51f3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A8F12767;
+        Sun,  8 Jan 2023 23:22:48 -0800 (PST)
+Message-ID: <ca5e2372-073d-b501-dd5b-0e9d815ab9b2@manjaro.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+        t=1673248967;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qi7XWMTLxe25hXbTV7C8cWw5otw2UzqwTCA5OnSGc/o=;
+        b=IFGV2d8OYWAVr5WNLmQfhlTKLgFIGxz4gTkJePFN1wAInQBqCX0n0qLWoyzCGO4yzOhy+Y
+        bt310m//7Bo5tKdMsG8tH48MISPE55ZfXiylbrOrpVAR8mYSJi6dTwVun7B79GEOheett1
+        b9MrEel8Lj1dCDHw05JtemGD/5PzCqsyO2Sk3Ny+En9CZByKmDs2HZQhk7LXJ9fT4NfaLA
+        b771/cMsKUTylApcASC4EAlzKnOOHIqBYoWPglVciJS8RWcWP5NlTzJNRC4Of6dSehvbKl
+        z1NDFQj7pua++x2Iavqxe3zEVOL8l3oKs7TRiULzarpCWWxNzw1xWWdyxyTzwQ==
+Date:   Mon, 9 Jan 2023 08:22:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
+Subject: Re: [PATCH] serial: atmel: fix incorrect baudrate setup
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Richard Genoud <richard.genoud@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230109070200.200181-1-t.schramm@manjaro.org>
+ <Y7u9SAX++YsXvnVC@kroah.com>
+Content-Language: en-US-large
+From:   Tobias Schramm <t.schramm@manjaro.org>
+In-Reply-To: <Y7u9SAX++YsXvnVC@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADiBU39yh9k=BWOmQ_-T3oO1nRQ6nHVjf4H+YRpjb3Mv_3tc0w@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=t.schramm@manjaro.org smtp.mailfrom=t.schramm@manjaro.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 02:46:34PM +0800, ChiYuan Huang wrote:
-> Greg KH <gregkh@linuxfoundation.org> 於 2023年1月9日 週一 下午2:38寫道：
-> >
-> > On Mon, Jan 09, 2023 at 09:41:23AM +0800, ChiYuan Huang wrote:
-> > > ************* Email Confidentiality Notice ********************
-> > >
-> > > The information contained in this e-mail message (including any attachments) may be confidential, proprietary, privileged, or otherwise exempt from disclosure under applicable laws. It is intended to be conveyed only to the designated recipient(s). Any use, dissemination, distribution, printing, retaining or copying of this e-mail (including its attachments) by unintended recipient(s) is strictly prohibited and may be unlawful. If you are not an intended recipient of this e-mail, or believe that you have received this e-mail in error, please notify the sender immediately (by replying to this e-mail), delete any and all copies of this e-mail (including any attachments) from your system, and do not disclose the content of this e-mail to any other person. Thank you!
-> >
-> > Now deleted.
-> >
-> > For obvious reasons, this wording is not compatible with kernel
-> > development :(
-> 
-> I'm sorry about that. Let me check with MIS..............
-This one seems work.
 
-https://www.lkml.org/lkml/2023/1/9/73
+Am 09.01.23 um 08:07 schrieb Greg Kroah-Hartman:
+> On Mon, Jan 09, 2023 at 08:02:00AM +0100, Tobias Schramm wrote:
+>> Commit ba47f97a18f2 ("serial: core: remove baud_rates when serial console
+>> setup") changed uart_set_options to select the correct baudrate
+>> configuration based on the absolute error between requested baudrate and
+>> available standard baudrate settings.
+>> Prior to that commit the baudrate was selected based on which predefined
+>> standard baudrate did not exceed the requested baudrate.
+>> This change of selection logic was never reflected in the atmel serial
+>> driver. Thus the comment left in the atmel serial driver is no longer
+>> accurate.
+>> Additionally the manual rounding up described in that comment and applied
+>> via (quot - 1) requests an incorrect baudrate. Since uart_set_options uses
+>> tty_termios_encode_baud_rate to determine the appropriate baudrate flags
+>> this can cause baudrate selection to fail entirely because
+>> tty_termios_encode_baud_rate will only select a baudrate if relative error
+>> between requested and selected baudrate does not exceed +/-2%.
+>> Fix that by requesting actual, exact baudrate used by the serial.
+>>
+>> Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+>> ---
+> What commit id does this fix?  Please list that as a the "Fixes:" tag.
+
+Commit ba47f97a18f2 ("serial: core: remove baud_rates when serial console
+setup") is the one that breaks the assumptions made in the driver.
+I'll send a v2 and include that.
+
+>
+> Also, does this need to go to older/stable kernels?
+Yep,  this should go to older kernels as a fix, too.
+>
+> thanks,
+>
+> greg k-h
