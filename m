@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8102C6624E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8AB6624E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236382AbjAIL5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 06:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S236989AbjAIL67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 06:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237083AbjAIL5B (ORCPT
+        with ESMTP id S237068AbjAIL6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:57:01 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9172D12083;
-        Mon,  9 Jan 2023 03:56:57 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id z11so12174407ede.1;
-        Mon, 09 Jan 2023 03:56:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R/pT23tJD4oTt91rYqRLukayxZ3L3T77mmbN65HM1ng=;
-        b=Ua7tqnmz76QuyglO1osJpuYr+bgSHGx1SUhy9z7kPTzzillWXVYwuu3x4UQrgzc539
-         lBTDj1CsnpAZccHPWU6T1VGv8Wtm3df9updiX3VWX68jatXyYrcI0oB7C2B+gG8kPjYG
-         QWhGgb8Au8oa0K2db+FwCP78MGf2UiqT3DIrioBJidIYg2SpgzrKAZJn8uX04Us5DgpY
-         9SESgaRE3UwVLiqGaMQ+NcAGCq3jgvrFu5/yL1iCUp7X7cDtHQ1dlcULZQQt8V0Ox+4a
-         XbL+DUp1X8MeSKqjzXIEH8s9MT2Oodqy0uHatvzIa/P+PkXC0K4jjQnJ9lwxgPEoiPJw
-         Vamw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R/pT23tJD4oTt91rYqRLukayxZ3L3T77mmbN65HM1ng=;
-        b=lEBdbQIUAZuxXT3jPRmOFn+I+3h/UuXnyR1Jn7dTSddDeoHKGEESs1X7nynkDlzcLV
-         Qc0Ujn827i9gDwOVxDo1Sgb3l0GJTSnI2e/G7MnNyJocFZw+9XBLz6H1H8yYvRX3E6yS
-         plk7xY/+77RxIVCS3F+vqcmfrjp6GI7y1I5sHqcQjavFbL59jrQW4qg9KLYA5hzOaDnt
-         4cxmEdo8dxhwQ9LOps0Cd0Yzl7Pa8PeA6LDkXlJ3LwIlymZCBbwVkQu+q1aqZk+6lNI+
-         wEh2NDuievJWohEO7sEgIK3iFalPgbyFJFVLab+ywbEA/MUE6Q8Zy7g210Y1hRR6QW8C
-         JbkQ==
-X-Gm-Message-State: AFqh2kq41I39VKkQXgQvU4I5EGzjmrLMceSql4fhotUhttaGUWinX+sE
-        kbir/l1YTk8MF6YdapxOOmY=
-X-Google-Smtp-Source: AMrXdXupavywksOzsGvJd+G6X2+bu6gHlKAHWmcHS/M09LcC+/A+TIPVjFvCTyKAFkaLD9KNgwB6Yw==
-X-Received: by 2002:a05:6402:8cc:b0:499:8849:5fb2 with SMTP id d12-20020a05640208cc00b0049988495fb2mr3991753edz.28.1673265416050;
-        Mon, 09 Jan 2023 03:56:56 -0800 (PST)
-Received: from skbuf ([188.27.185.38])
-        by smtp.gmail.com with ESMTPSA id g11-20020a056402428b00b004722d7e8c7csm3614118edc.14.2023.01.09.03.56.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 03:56:55 -0800 (PST)
-Date:   Mon, 9 Jan 2023 13:56:53 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
-        kuba@kernel.org, Nikolay Aleksandrov <razor@blackwall.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v5 net-next 01/15] net: bridge: mst: Multiple Spanning
- Tree (MST) mode
-Message-ID: <20230109115653.6yjijaj63n2v35lw@skbuf>
-References: <20220316150857.2442916-1-tobias@waldekranz.com>
- <20220316150857.2442916-2-tobias@waldekranz.com>
- <Y7vK4T18pOZ9KAKE@shredder>
- <20230109100236.euq7iaaorqxrun7u@skbuf>
- <Y7v98s8lC1WUvsSO@shredder>
+        Mon, 9 Jan 2023 06:58:36 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2478E1A051;
+        Mon,  9 Jan 2023 03:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673265512; x=1704801512;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CVmhaM3jEhg8fncm+fzD91Uf6V70xL+ZewS2UOQLFbM=;
+  b=OnzMdzrfBIVSsyo3f02NjYE9rfhXwfyGAvJH/NJF4LSGNhWEpVMTZ0cE
+   lg3eVK4gEwqXCcXegEkOu6vFwPNmCDIUsfn4jGfQpiLBoI9a1LK4I5Khs
+   iKWnnHOJMerS7FMk9J/k+fiUy1JqMc21RumNr3aLhQq65ndpAWUPpG+vw
+   K6CtWGukLpfmEYr8PQa37cokXIfYmprZqNBE/n+70x1do87aP9xbm84fW
+   bYuHJqczz07d4CuGgRKxsaPpd1uov/PMFvMe/aosbTWGLhtvxEnK84QwW
+   KoOV1JYlyagLrWbEyg7q/sMo9h+mygE2pargC/3yiRQg0NXZmX3dVcmQL
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="asc'?scan'208";a="131447965"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jan 2023 04:58:30 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 9 Jan 2023 04:58:29 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Mon, 9 Jan 2023 04:58:27 -0700
+Date:   Mon, 9 Jan 2023 11:58:05 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     Conor Dooley <conor@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <palmer@dabbelt.com>,
+        <atishp@rivosinc.com>, <devicetree@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <apatel@ventanamicro.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>, <opensbi@lists.infradead.org>,
+        <samuel@sholland.org>
+Subject: Re: [PATCH v4] dt-bindings: riscv: add SBI PMU event mappings
+Message-ID: <Y7wBTQM7BY8P4Oc4@wendy>
+References: <20230108215047.3165032-1-conor@kernel.org>
+ <20230109092715.bwomqoeosif43lr2@orel>
+ <Y7vpxW1AeEOhcxUf@wendy>
+ <20230109104029.3cwbngqiydlpl7z2@orel>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="8XoNT0OmVvQCfAv6"
 Content-Disposition: inline
-In-Reply-To: <Y7v98s8lC1WUvsSO@shredder>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230109104029.3cwbngqiydlpl7z2@orel>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,56 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 01:43:46PM +0200, Ido Schimmel wrote:
-> OK, thanks for confirming. Will send a patch later this week if Tobias
-> won't take care of it by then. First patch will probably be [1] to make
-> sure we dump the correct MST state to user space. It will also make it
-> easier to show the problem and validate the fix.
-> 
-> [1]
-> diff --git a/net/bridge/br.c b/net/bridge/br.c
-> index 4f5098d33a46..f02a1ad589de 100644
-> --- a/net/bridge/br.c
-> +++ b/net/bridge/br.c
-> @@ -286,7 +286,7 @@ int br_boolopt_get(const struct net_bridge *br, enum br_boolopt_id opt)
->  	case BR_BOOLOPT_MCAST_VLAN_SNOOPING:
->  		return br_opt_get(br, BROPT_MCAST_VLAN_SNOOPING_ENABLED);
->  	case BR_BOOLOPT_MST_ENABLE:
-> -		return br_opt_get(br, BROPT_MST_ENABLED);
-> +		return br_mst_is_enabled(br);
+--8XoNT0OmVvQCfAv6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Well, this did report the correct MST state despite the incorrect static
-branch state, no? The users of br_mst_is_enabled(br) are broken, not
-those of br_opt_get(br, BROPT_MST_ENABLED).
+On Mon, Jan 09, 2023 at 11:40:29AM +0100, Andrew Jones wrote:
 
-Anyway, I see there's a br_mst_is_enabled() and also a br_mst_enabled()?!
-One is used in the fast path and the other in the slow path. They should
-probably be merged, I guess. They both exist probably because somebody
-thought that the "if (!netif_is_bridge_master(dev))" test is redundant
-in the fast path.
+> Maybe just replace 'platform specific hooks' with 'in a platform specific
+> way'? I'm mostly just hung up on "hooks" (pun definitely intended), as
+> this document lives in the Linux repo and there aren't any hooks.
 
->  	default:
->  		/* shouldn't be called with unsupported options */
->  		WARN_ON(1);
-> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
-> index 75aff9bbf17e..7f0475f62d45 100644
-> --- a/net/bridge/br_private.h
-> +++ b/net/bridge/br_private.h
-> @@ -1827,7 +1827,7 @@ static inline bool br_vlan_state_allowed(u8 state, bool learn_allow)
->  /* br_mst.c */
->  #ifdef CONFIG_BRIDGE_VLAN_FILTERING
->  DECLARE_STATIC_KEY_FALSE(br_mst_used);
-> -static inline bool br_mst_is_enabled(struct net_bridge *br)
-> +static inline bool br_mst_is_enabled(const struct net_bridge *br)
->  {
->  	return static_branch_unlikely(&br_mst_used) &&
->  		br_opt_get(br, BROPT_MST_ENABLED);
-> @@ -1845,7 +1845,7 @@ int br_mst_fill_info(struct sk_buff *skb,
->  int br_mst_process(struct net_bridge_port *p, const struct nlattr *mst_attr,
->  		   struct netlink_ext_ack *extack);
->  #else
-> -static inline bool br_mst_is_enabled(struct net_bridge *br)
-> +static inline bool br_mst_is_enabled(const struct net_bridge *br)
->  {
->  	return false;
->  }
+Yes Captain,
+Peter.
+
+;)
+
+--8XoNT0OmVvQCfAv6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY7wBTQAKCRB4tDGHoIJi
+0i22AQCCB18ZFTC5gZ6XV+3/PdQCzJYQyvuE7kzMeGmJc/c2QQD/c7OWy8G4QbAx
+AkwR/Nzg4U0fhRCkp3VKOyyD4bOI3Q0=
+=vhFw
+-----END PGP SIGNATURE-----
+
+--8XoNT0OmVvQCfAv6--
