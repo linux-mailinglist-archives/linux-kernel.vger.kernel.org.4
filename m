@@ -2,137 +2,556 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5919D662244
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45271662105
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236449AbjAIJ7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S234186AbjAIJJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:09:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233085AbjAIJ63 (ORCPT
+        with ESMTP id S237091AbjAIJIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:58:29 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71949FD1
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:56:10 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:c32c:cc7a:25f1:127a])
-        by michel.telenet-ops.be with bizsmtp
-        id 6Zw8290012RK3VH06Zw8WP; Mon, 09 Jan 2023 10:56:08 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pEosw-001KR9-4g
-        for linux-kernel@vger.kernel.org;
-        Mon, 09 Jan 2023 10:56:08 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pEo2W-00DZ2F-Kd
-        for linux-kernel@vger.kernel.org;
-        Mon, 09 Jan 2023 10:01:56 +0100
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v6.2-rc3-8-g1fe4fd6f5cad346e
-Date:   Mon,  9 Jan 2023 10:01:56 +0100
-Message-Id: <20230109090156.3232932-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAHk-=wjwrqFcC9-KkfboqATYwLfJHi_8Z5mTrJh=nf8KT_SjUA@mail.gmail.com>
-References: <CAHk-=wjwrqFcC9-KkfboqATYwLfJHi_8Z5mTrJh=nf8KT_SjUA@mail.gmail.com>
+        Mon, 9 Jan 2023 04:08:36 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC681261C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:03:49 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bf43so11930848lfb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 01:03:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H89GO14xdEfY7YVwPWhRh+0U4YezjqJsTydwwui9fo8=;
+        b=Hqn+NOJCTpqoYuZ3JARu/DDZs556/8NVJ2iMgexTOivPDPRR1h+Vmgii8OufXLHDQ9
+         BPZiXlvGB46tzqLBtFnszNC+i3tmwpxPN6zdHzuXpjNygV1anKyLFof0bWvLZyfGz/dj
+         U+7nvrRxdPlmXO7OKQsBkVJtewjm22NlJ9wO8B5Kv+NYuVgNrfnXRQp/9A3gE7ZC1usS
+         GFNXTnS9gGE+Ocasz0mj/2esH2INv+I8ukDi25mHg4wJPl3YjjtGjofZJ2owIzm26ezm
+         4/+QztoPWJd3/4k9cBJTCBmaZ+rG++vcVaqt153rKzdATReB6zQNtxA0Vh0Za50TTIHF
+         iSGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H89GO14xdEfY7YVwPWhRh+0U4YezjqJsTydwwui9fo8=;
+        b=HhBSrPXP7QFG3b5jUHe/HPw135LL3FWGfEpqNBgh8HhygfhQ3v4j4kUNu0s8UHIqVr
+         dhhrbERRHvTlFRIBBTH0C3RKanYd4gW72DVZEpZzNg+vZzjPNjCCDg45XeUJ9wh+quur
+         2lSUrV26+HLHpGdXg2cgxDufLqq/2p6HZI38j63U1l9nKE813TIF0UsQvLlLH9VN/cF4
+         Nvxg6E/dFwoxt8obo2sOrrRjmBijn4VVstYIfH7PJLIARBIRZ0Tbk5KBWsrXLQgmN7xJ
+         bEpXYlhTakJEZV6ZeKVqE+SOdbOY9fSXoUgbJcaM+KZ0uuOskUs+/LE/W3ekw09IvFAb
+         npvA==
+X-Gm-Message-State: AFqh2krMUlDj/a+4FPKGdCIqqhBRg6bHSVj0EGzFpd8xejBrHtGQo4/u
+        FkJWneLVGimKqCxAvGpHtAA+Vw==
+X-Google-Smtp-Source: AMrXdXtm20nbvGDsorh2qVRvuAkMdJCxFp3r4uSRTZf7Gm0h0EGnmz/7J2RRp7n1iRD+WKlGjzptIQ==
+X-Received: by 2002:a05:6512:16a8:b0:4b5:a70f:8efc with SMTP id bu40-20020a05651216a800b004b5a70f8efcmr28800304lfb.64.1673255027284;
+        Mon, 09 Jan 2023 01:03:47 -0800 (PST)
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id br35-20020a056512402300b004b5478d8222sm1502091lfb.184.2023.01.09.01.03.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 01:03:46 -0800 (PST)
+Message-ID: <80807961-1979-8f33-973d-2a6674bf742b@linaro.org>
+Date:   Mon, 9 Jan 2023 10:03:44 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: Add device tree for Samsung
+ Galaxy Tab A 9.7 (2015)
+Content-Language: en-US
+To:     Nikita Travkin <nikita@trvn.ru>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Siddharth Manthan <siddharth.manthan@gmail.com>,
+        Jasper Korten <jja2000@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Siddharth Manthan <siddharth_manthan@outlook.com>
+References: <20230107141911.47229-1-nikita@trvn.ru>
+ <20230107141911.47229-3-nikita@trvn.ru>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230107141911.47229-3-nikita@trvn.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v6.2-rc3-8-g1fe4fd6f5cad346e[1] compared to v6.1[2].
-
-Summarized:
-  - build errors: +10/-13
-  - build warnings: +13/-10
-
-JFYI, when comparing v6.2-rc3-8-g1fe4fd6f5cad346e[1] to v6.2-rc2[3], the summaries are:
-  - build errors: +0/-0
-  - build warnings: +0/-0
-
-Happy fixing! ;-)
-
-Thanks to the linux-next team for providing the build service.
-
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/1fe4fd6f5cad346e598593af36caeadc4f5d4fa9/ (all 152 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
-[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/88603b6dc419445847923fcb7fe5080067a30f98/ (all 152 configs)
 
 
-*** ERRORS ***
+On 7.01.2023 15:19, Nikita Travkin wrote:
+> From: Jasper Korten <jja2000@gmail.com>
+> 
+> The Galaxy Tab A 9.7 (2015) is a Snapdragon 410 based tablet.
+> 
+> This commit introduces basic support for the tablet including the
+> following features:
+> - SDHCI (internal and external storage)
+> - USB Device Mode
+> - UART
+> - Regulators
+> - WCNSS (WiFi/BT)
+> - GPIO keys
+> - Fuel gauge
+> - Touchscreen
+> - Accelerometer
+> 
+> Part of the DT is split out into a common dtsi since the tablet shares
+> majority of the design with another variant having a different screen
+> size.
+> 
+> Signed-off-by: Jasper Korten <jja2000@gmail.com>
+> Co-developed-by: Siddharth Manthan <siddharth_manthan@outlook.com>
+> Signed-off-by: Siddharth Manthan <siddharth_manthan@outlook.com>
+> Co-developed-by: Nikita Travkin <nikita@trvn.ru>
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-10 error regressions:
-  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7082:1
-  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7127:1
-  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
-  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
-  + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overflow' declared with attribute error: value doesn't fit into mask:  => 151:3
-  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_263' declared with attribute error: Unsupported access size for {READ,WRITE}_ONCE().:  => 358:45
-  + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memcpy' offset [0, 127] is out of the bounds [0, 0] [-Werror=array-bounds]:  => 57:33
-  + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memset' pointer overflow between offset [28, 898293814] and size [-898293787, -1] [-Werror=array-bounds]:  => 59:33
-  + /kisskb/src/kernel/kcsan/kcsan_test.c: error: the frame size of 1680 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]:  => 257:1
-  + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  => 1718
-
-13 error improvements:
-  - /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 239:34 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
-  - /kisskb/src/drivers/net/ethernet/marvell/prestera/prestera_flower.c: error: 'rule' is used uninitialized [-Werror=uninitialized]: 480:34 => 
-  - {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field: 2286 => 
-  - {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field : 2302 => 
-  - {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field : 2213 => 
-  - {standard input}: Error: pcrel too far: 2206, 2232, 2274, 2231, 2229, 2215, 2221, 2216, 2204, 2249, 2248, 2261, 2262, 2247, 2217, 2259, 2293, 2209 => 
-  - {standard input}: Error: unknown pseudo-op: `.l': 2305 => 
-
-
-*** WARNINGS ***
-
-13 warning regressions:
-  + modpost: WARNING: modpost: "__ndelay" [drivers/gpio/gpio-latch.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/max11410.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/tegra-kbc.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/mfd/axp20x.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sunplus-mmc.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/rswitch_drv.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852b.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/phy/renesas/r8a779f0-ether-serdes.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_idt82p33.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/usb/fotg210/fotg210.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [fs/xfs/xfs.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "empty_zero_page" [net/rxrpc/rxperf.ko] has no CRC!:  => N/A
-
-10 warning improvements:
-  - modpost: WARNING: modpost: "__ashldi3" [lib/zstd/zstd_compress.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/pch_can.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/fealnx.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smc911x.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/pcs/pcs-altera-tse.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/fotg210-hcd.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata): N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata): N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o: section mismatch in reference: qede_forced_speed_maps (section: .data) -> qede_forced_speed_100000 (section: .init.rodata): N/A => 
-  - modpost: WARNING: modpost: vmlinux.o: section mismatch in reference: __trace_event_discard_commit (section: .text.unlikely) -> initcall_level_names (section: .init.data): N/A => 
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+Konrad
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../dts/qcom/msm8916-samsung-gt5-common.dtsi  | 296 ++++++++++++++++++
+>  .../boot/dts/qcom/msm8916-samsung-gt510.dts   | 113 +++++++
+>  3 files changed, 410 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-gt510.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index b42362c7be1b..70e3b109aeff 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -19,6 +19,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-a5u-eur.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e5.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e7.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-grandmax.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-gt510.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
+> new file mode 100644
+> index 000000000000..d920b7247d82
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
+> @@ -0,0 +1,296 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/dts-v1/;
+> +
+> +#include "msm8916-pm8916.dtsi"
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +	aliases {
+> +		serial0 = &blsp1_uart2;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0";
+> +	};
+> +
+> +	reserved-memory {
+> +		/* Additional memory used by Samsung firmware modifications */
+> +		tz-apps@85500000 {
+> +			reg = <0x0 0x85500000 0x0 0xb00000>;
+> +			no-map;
+> +		};
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +
+> +		pinctrl-0 = <&gpio_keys_default>;
+> +		pinctrl-names = "default";
+> +
+> +		label = "GPIO Buttons";
+> +
+> +		volume-up-button {
+> +			label = "Volume Up";
+> +			gpios = <&msmgpio 107 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_VOLUMEUP>;
+> +		};
+> +
+> +		home-button {
+> +			label = "Home";
+> +			gpios = <&msmgpio 109 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_HOMEPAGE>;
+> +		};
+> +	};
+> +
+> +	gpio-hall-sensor {
+> +		compatible = "gpio-keys";
+> +
+> +		pinctrl-0 = <&gpio_hall_sensor_default>;
+> +		pinctrl-names = "default";
+> +
+> +		label = "GPIO Hall Effect Sensor";
+> +
+> +		hall-sensor-switch {
+> +			label = "Hall Effect Sensor";
+> +			gpios = <&msmgpio 52 GPIO_ACTIVE_LOW>;
+> +			linux,input-type = <EV_SW>;
+> +			linux,code = <SW_LID>;
+> +			linux,can-disable;
+> +		};
+> +	};
+> +};
+> +
+> +&blsp_i2c4 {
+> +	status = "okay";
+> +
+> +	fuelgauge@36 {
+> +		compatible = "maxim,max77849-battery";
+> +		reg = <0x36>;
+> +
+> +		maxim,rsns-microohm = <10000>;
+> +		maxim,over-heat-temp = <600>;
+> +		maxim,over-volt = <4400>;
+> +
+> +		interrupt-parent = <&msmgpio>;
+> +		interrupts = <121 IRQ_TYPE_EDGE_FALLING>;
+> +
+> +		pinctrl-0 = <&fuelgauge_int_default>;
+> +		pinctrl-names = "default";
+> +	};
+> +};
+> +
+> +&blsp_i2c2 {
+> +	status = "okay";
+> +
+> +	light-sensor@10 {
+> +		compatible = "capella,cm3323";
+> +		reg = <0x10>;
+> +	};
+> +
+> +	accelerometer@1d {
+> +		compatible = "st,lis2hh12";
+> +		reg = <0x1d>;
+> +
+> +		vdd-supply = <&pm8916_l17>;
+> +		vddio-supply = <&pm8916_l5>;
+> +
+> +		interrupt-parent = <&msmgpio>;
+> +		interrupts = <115 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-names = "INT1";
+> +
+> +		st,drdy-int-pin = <1>;
+> +		mount-matrix = "0", "1", "0",
+> +			      "-1", "0", "0",
+> +			       "0", "0", "1";
+> +
+> +		pinctrl-0 = <&accel_int_default>;
+> +		pinctrl-names = "default";
+> +	};
+> +};
+> +
+> +&blsp1_uart2 {
+> +	status = "okay";
+> +};
+> +
+> +&pm8916_resin {
+> +	linux,code = <KEY_VOLUMEDOWN>;
+> +	status = "okay";
+> +};
+> +
+> +/* FIXME: Replace with MAX77849 MUIC when driver is available */
+> +&pm8916_usbin {
+> +	status = "okay";
+> +};
+> +
+> +&pronto {
+> +	status = "okay";
+> +
+> +	iris {
+> +		compatible = "qcom,wcn3660b";
+> +	};
+> +};
+> +
+> +&sdhc_1 {
+> +	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+> +	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+> +	pinctrl-names = "default", "sleep";
+> +
+> +	status = "okay";
+> +};
+> +
+> +&sdhc_2 {
+> +	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
+> +	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
+> +	pinctrl-names = "default", "sleep";
+> +
+> +	cd-gpios = <&msmgpio 38 GPIO_ACTIVE_LOW>;
+> +
+> +	status = "okay";
+> +};
+> +
+> +&usb {
+> +	dr_mode = "peripheral";
+> +	extcon = <&pm8916_usbin>;
+> +
+> +	status = "okay";
+> +};
+> +
+> +&usb_hs_phy {
+> +	extcon = <&pm8916_usbin>;
+> +};
+> +
+> +&smd_rpm_regulators {
+> +	vdd_l1_l2_l3-supply = <&pm8916_s3>;
+> +	vdd_l4_l5_l6-supply = <&pm8916_s4>;
+> +	vdd_l7-supply = <&pm8916_s4>;
+> +
+> +	s3 {
+> +		regulator-min-microvolt = <1200000>;
+> +		regulator-max-microvolt = <1300000>;
+> +	};
+> +
+> +	s4 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <2100000>;
+> +	};
+> +
+> +	l1 {
+> +		regulator-min-microvolt = <1225000>;
+> +		regulator-max-microvolt = <1225000>;
+> +	};
+> +
+> +	l2 {
+> +		regulator-min-microvolt = <1200000>;
+> +		regulator-max-microvolt = <1200000>;
+> +	};
+> +
+> +	l4 {
+> +		regulator-min-microvolt = <2050000>;
+> +		regulator-max-microvolt = <2050000>;
+> +	};
+> +
+> +	l5 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +	};
+> +
+> +	l6 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +	};
+> +
+> +	l7 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +	};
+> +
+> +	l8 {
+> +		regulator-min-microvolt = <2850000>;
+> +		regulator-max-microvolt = <2900000>;
+> +	};
+> +
+> +	l9 {
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	l10 {
+> +		regulator-min-microvolt = <2700000>;
+> +		regulator-max-microvolt = <2800000>;
+> +	};
+> +
+> +	l11 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <2950000>;
+> +		regulator-system-load = <200000>;
+> +		regulator-allow-set-load;
+> +	};
+> +
+> +	l12 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <2950000>;
+> +	};
+> +
+> +	l13 {
+> +		regulator-min-microvolt = <3075000>;
+> +		regulator-max-microvolt = <3075000>;
+> +	};
+> +
+> +	l14 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	l15 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	l16 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	l17 {
+> +		regulator-min-microvolt = <2850000>;
+> +		regulator-max-microvolt = <2850000>;
+> +	};
+> +
+> +	l18 {
+> +		regulator-min-microvolt = <2700000>;
+> +		regulator-max-microvolt = <2700000>;
+> +	};
+> +};
+> +
+> +&msmgpio {
+> +	accel_int_default: accel-int-default-state {
+> +		pins = "gpio115";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	fuelgauge_int_default: fuelgauge-int-default-state {
+> +		pins = "gpio121";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	gpio_keys_default: gpio-keys-default-state {
+> +		pins = "gpio107", "gpio109";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	gpio_hall_sensor_default: gpio-hall-sensor-default-state {
+> +		pins = "gpio52";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt510.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt510.dts
+> new file mode 100644
+> index 000000000000..607a5dc8a534
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt510.dts
+> @@ -0,0 +1,113 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/dts-v1/;
+> +
+> +#include "msm8916-samsung-gt5-common.dtsi"
+> +
+> +/ {
+> +	model = "Samsung Galaxy Tab A 9.7 (2015)";
+> +	compatible = "samsung,gt510", "qcom,msm8916";
+> +	chassis-type = "tablet";
+> +
+> +	clk_pwm: pwm {
+> +		compatible = "clk-pwm";
+> +		#pwm-cells = <2>;
+> +
+> +		clocks = <&gcc GCC_GP2_CLK>;
+> +
+> +		pinctrl-0 = <&motor_pwm_default>;
+> +		pinctrl-names = "default";
+> +	};
+> +
+> +	reg_motor_vdd: regulator-motor-vdd {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "motor_vdd";
+> +		regulator-min-microvolt = <3000000>;
+> +		regulator-max-microvolt = <3000000>;
+> +
+> +		gpio = <&msmgpio 76 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +
+> +		pinctrl-0 = <&motor_en_default>;
+> +		pinctrl-names = "default";
+> +	};
+> +
+> +	reg_tsp_1p8v: regulator-tsp-1p8v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "tsp_1p8v";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +
+> +		gpio = <&msmgpio 73 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +
+> +		pinctrl-0 = <&tsp_en_default>;
+> +		pinctrl-names = "default";
+> +	};
+> +
+> +	reg_tsp_3p3v: regulator-tsp-3p3v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "tsp_3p3v";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +
+> +		gpio = <&msmgpio 73 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +
+> +	vibrator {
+> +		compatible = "pwm-vibrator";
+> +
+> +		pwms = <&clk_pwm 0 100000>;
+> +		pwm-names = "enable";
+> +
+> +		vcc-supply = <&reg_motor_vdd>;
+> +	};
+> +};
+> +
+> +&blsp_i2c5 {
+> +	status = "okay";
+> +
+> +	touchscreen@4a {
+> +		compatible = "atmel,maxtouch";
+> +		reg = <0x4a>;
+> +		interrupt-parent = <&msmgpio>;
+> +		interrupts = <13 IRQ_TYPE_LEVEL_LOW>;
+> +
+> +		vdd-supply = <&reg_tsp_1p8v>;
+> +		vdda-supply = <&reg_tsp_3p3v>;
+> +
+> +		reset-gpios = <&msmgpio 114 GPIO_ACTIVE_LOW>;
+> +
+> +		pinctrl-0 = <&tsp_int_rst_default>;
+> +		pinctrl-names = "default";
+> +	};
+> +};
+> +
+> +&msmgpio {
+> +	motor_en_default: motor-en-default-state {
+> +		pins = "gpio76";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	motor_pwm_default: motor-pwm-default-state {
+> +		pins = "gpio50";
+> +		function = "gcc_gp2_clk_a";
+> +	};
+> +
+> +	tsp_en_default: tsp-en-default-state {
+> +		pins = "gpio73";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	tsp_int_rst_default: tsp-int-rst-default-state {
+> +		pins = "gpio13", "gpio114";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +};
