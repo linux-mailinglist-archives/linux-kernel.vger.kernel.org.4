@@ -2,2707 +2,1320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536FB662E07
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB794662E01
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237179AbjAISEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 13:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S237172AbjAISEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 13:04:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237177AbjAISEb (ORCPT
+        with ESMTP id S237627AbjAISE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 13:04:31 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027943AA8F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 10:03:48 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id bf43so14259584lfb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 10:03:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=12Wr15TI1bJgSwJlgLUajFYfGqFDa3pXDLVO7Z8FMo4=;
-        b=lLev+5qjS+cjIg6v53ipAXDWyzmt4OjSVszwBgIBPLqo1gtsrZLiMeYaNZZ3dvCXCf
-         Rc6ZQARvnNzyjXqeWrVyIRvNZ78ZeNMy8cNSZ412jRLezNVcettoPi3JL+qE+GVVJL0i
-         lMpHa873jGTWk4fHLRdelEZvJw76a5M5a7vakzryILmuYM/ZqWxpgnQ9nodxfcNnrAdl
-         l+hwlvBiKseF2NnmG0z8xTEH1t6HzEhq95B+9AxdVO0ICuQlOkOvprEpI19O3hmZ1NbB
-         g9QvTaXlHiBXOB7QOcPTMf1sO3hYcMBcopqSQmn1JAzmiWDqK4cHjVqm6EiwO6QEv185
-         4gxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=12Wr15TI1bJgSwJlgLUajFYfGqFDa3pXDLVO7Z8FMo4=;
-        b=oBW8QBf/QweffWg/tRwu7IeJMO1tVl67r/HBfCPTGgLhJR5E+RI8BwOhx5Ns+eYLPF
-         TwQOiVt38W+8kbJumitzxsQDcoYNOdalUkeUZ8lOnLFVr0UpGjjuSqgyIaiQVa1xyUmw
-         cX4G8LFY/4bueMUxJOwf+G3SGaIJG+gsJqS8LzQTAXP0Pv/ByclkE/+ptv1FmsLuzYHk
-         vxM6wWM7qAVXlfmonsmeisO8jCPffKUwe/eEXBM6XckMetELa7fP92gyznSuRuA0hRS3
-         hYiuAUPCG4m9eF/z3kEaSUvAx/XHdMl2rrVs6hujG/CS1BBxjaQaj1WoErrmpzv+Wssk
-         bbYw==
-X-Gm-Message-State: AFqh2kr3/9HlQkg8Xf0TVDa0H78d7r35FLOV432YZG7ophmHzEONtuIy
-        9c+FbY+LTIQSdQk92ryUa1g9Dg==
-X-Google-Smtp-Source: AMrXdXtH7VP8ZBsnD0egfm4yAL47mfsDU7bvElzRZWKF0p4idluIPCo7GCfNE62127xeev6DEduc+g==
-X-Received: by 2002:a05:6512:2513:b0:4b5:7433:cfe6 with SMTP id be19-20020a056512251300b004b57433cfe6mr18125733lfb.45.1673287426976;
-        Mon, 09 Jan 2023 10:03:46 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id h10-20020ac250ca000000b004b561202ea2sm1730909lfm.182.2023.01.09.10.03.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 10:03:46 -0800 (PST)
-Message-ID: <da43e273-d0ee-f95a-92c5-15057c9cad23@linaro.org>
-Date:   Mon, 9 Jan 2023 19:03:38 +0100
+        Mon, 9 Jan 2023 13:04:29 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2084.outbound.protection.outlook.com [40.107.9.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3A543DB1;
+        Mon,  9 Jan 2023 10:03:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Wh2hKCBJzk79z3QRmXiXLla6KwQBzNJctAR2GAjvnyVtLDAmgxv88GxuXawDaw35iIRSX6dZ4UM0tlE5hWPbUz0gx0wP3IQ57Jd3kSRhJhUWPNyVx3LPcFwTkmEaX2oKNacb7BP7xRMzZw+nwJdXyne9MVTQqTxLlb/j2Gpr7ecwhmc1iUzbrrhJhc55C3Dx9vGw/4pGxXxw2O0i8D0CxcQeCN0kAXTGD3y2zCt2XiVuIvz2bkmUF9HTJSXlCX/AL0s3n66q+2z/6wd7GEeOYRLYwIu7/4henztsJZuVDyEl0AXFZjXkTTwulQpLFkRzpguvi9qD+1onVQVFkD/2qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W9HqJbx/bV3fUBrGUMq5kNmJ7jCb/m8cG6i8Erekds0=;
+ b=bP+quUI+1/5dEOR1KjsNfgPtW/trWKAOoi+BsZwzXm5Ln1TzDgQjlJIoB0C9ZpTSeLfd64AtO6od6jtx/rEllnFM3iVAtD4GUBh4nWZbH70njw4J0CVUAhBslvcmIvRYFKqOzrEYlhrL/wFfqWqLTETlcC+Q5OH4QtnMt2WtzIwM40Vy/ijvS09AP8rxqpyBqj9Gjs0dTlGgdAjaxS2D6Y3olJ5AcX2C+gHCZOLGTkEL7vSJ8PRZBBBue+BS4Ar9zypt268IpdJIOH6Q3mbLYvymhhuRN6zcE1YXxreuGktZRFQYpynZER4ssXXEZziYJgS7rwRzDgs61CMyI/D+9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W9HqJbx/bV3fUBrGUMq5kNmJ7jCb/m8cG6i8Erekds0=;
+ b=Bu4kRLS05u8mQ8LTTUT19iF2vTSj7fsKG/tdrLGTmV+YsxF16xc0tFM2U6UmawURvXGGT4oJPaQzZgKnmUOfrEDS2PNf1Hpd6rk//wVJLc1ggHZcWlvqp+LxouNYGCOFsErJqUlLLdjfsVkrPlJfC50t+plKf9vfT9reuOIkBrHuR9/LCUyg/6JlFW9CFIitmNImge5ePooc8nc9hU7Ep894eEjqBHs6QFjMJailUlkkh/aDbHI6CwHC6PSfXeXtVgMKIwalurNTtUwEbaR2GIk2UjxUa4fUzW6FhWjbICA2jSrlAYCMZx3VpqN/vi0/GMPWoNl8egQYQ41DOseqiw==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB2222.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b7::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
+ 2023 18:03:39 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097%7]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
+ 18:03:39 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Song Liu <song@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "songliubraving@fb.com" <songliubraving@fb.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
+Thread-Topic: [PATCH/RFC] module: replace module_layout with module_memory
+Thread-Index: AQHZIhvLUt8720RkIEmV5/vANaeHba6WZSyA
+Date:   Mon, 9 Jan 2023 18:03:39 +0000
+Message-ID: <83941b74-7585-235b-ee54-3b127ca70d9e@csgroup.eu>
+References: <20230106220959.3398792-1-song@kernel.org>
+In-Reply-To: <20230106220959.3398792-1-song@kernel.org>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB2222:EE_
+x-ms-office365-filtering-correlation-id: d92b6a2c-e2e0-4883-decd-08daf26bd626
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Ik96Q9VFFgVGLmbUGxQO7RynUdz5LgRYI9tM3/H8/66f1X1NwhTB+x0b72N7zB88XT5evsge1XJpCavZL0xwyOsvIaZbuel1dUSC/c4j+8Lenr9adX0hRk6o4iu3Pmdt9qvgJLeI3L0acI5ryfT8nCt/tzpXTcRdXKiIAShJTAtuTHNS7pt7EVuFkxH5IyfWrgseVsX7Q+fVnNzuyyzRrnDYrYm9nR/Zz+Z67V0RZSa+VLrQKPpbhU4vg5jBb0545j4PKZUB5EG/zDqTA7/QPNKM+DNhRtHofhLT/k8NU4iqm2j6UK7DAjBLSoHoClIHauAiEpcN1UYiah5A9Rvp1h5tbnaDOEKlSv9aYy+/7ufuNNNz9b0lqYlrM5kOOPDuslAhRxBbtDdxUsSP/+h6q/pN3iRqu35nHV4NW4YLoaAWk2eVdV9Nj7FtS++qfyPYR8wriVO2sc2jxJT7C9nI5+ajuThj//yQijTPtFGIp7yQANDMkac6VUeWmYr4vWEaSvChS1QZXOxp95XwSZ7VLC/am3tOsDvG+LHNwoOsaEm94aTSqb40mSv57XoQ30Nc1pQG6K6pNZSCI4YbuExMHU2cBqslJQPLHGCkQ6h20Ktwte4xNDFpPH227Op+JCMrv/Olsk2SwA83xUB+iokrTn2g14vk4loEA3P/MTCZoFyXpKmBFIEEbEQry+UvAzmJW2FujrxHUpxQ5w+erbmM9+oaV07p7U3uAxufomELi6gkn9YrwirtFiEjmjgOo2Hx4sYObhg+mBrIfY5TGA/apzbLtZvG5KOl8T/cOS+qOr4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(366004)(396003)(39860400002)(136003)(451199015)(2906002)(83380400001)(44832011)(66574015)(66899015)(54906003)(110136005)(2616005)(66476007)(66446008)(66556008)(64756008)(5660300002)(66946007)(26005)(186003)(122000001)(36756003)(8936002)(30864003)(6506007)(6512007)(478600001)(76116006)(38100700002)(8676002)(41300700001)(6486002)(31686004)(86362001)(38070700005)(966005)(4326008)(316002)(91956017)(31696002)(71200400001)(43740500002)(45980500001)(559001)(579004);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cTNVL3YzdWRreXI2S2FvWU9uNmZ4RnJjVzZINWJkMHFqZzF4WitjT2tUKzNu?=
+ =?utf-8?B?R0Z1bVNWc2RRR20yaUpWeXU4Ti9naHpwcGsrSE9oazV4bGVoVnNuWVhjMlo5?=
+ =?utf-8?B?T05maEpkdXlKNHJVeC8rRXEyTlljYVQvdzd5VWtXTjErcWxpcTRXOStZZlZ1?=
+ =?utf-8?B?TUZQSVlTVTNidUIvdzEzL080bE9RLzB0cit3MWJkR3JNVlFXRk5uWXliR2wz?=
+ =?utf-8?B?SWxEZGVodDE0K3JzVjV6QWJmK1FkTDQxaS8raGszZmpzSDZTbmFzdm51Tld1?=
+ =?utf-8?B?b1doa1BEdEhLUkQrbEJBUHNoWnJTYkN4VWdIUTRLQk5IaGZlOU5kdUtQWlRV?=
+ =?utf-8?B?T29mZVgyWjlBcDlzM2pCUFp2cE9rVG9kWWlPRXJnU2pDemxkU0lYbnUrNmsr?=
+ =?utf-8?B?ZjNEaXcwdEtSSTlOc09WSVdmVnYwOGpSNTJwQStEcnpJeHNVQUF2dDBMK2Vn?=
+ =?utf-8?B?S1NBdUNsMjl2dWFzL3dVcGFZdC8xNkZGQjUvb1hTVjV1eTEraFNWdUpNRS9y?=
+ =?utf-8?B?TWtuMzRETFM0NmJmVjk2emthWGx0ZUNFV0Q0VFBKZy9SeTJ0YjJPRTI5TDIv?=
+ =?utf-8?B?TExpQW9kYlFBWEwwVnlmcy9xYi9wZ3dkVEtQUTBwRjhnczJYdFN6SzVYOWRP?=
+ =?utf-8?B?eFB1VWFzRVU1YTRjaUJXcjljYnFOdU5TZmxIKzkyQTZ6Wm42NW8yWWh6QXZR?=
+ =?utf-8?B?ZzM3dWhCaExQeVZjREhjSmsxTnI1N2U0UnpwT1Iyd1RCYkQ4cVdEenBnM1dB?=
+ =?utf-8?B?dmM0akFubGNNSkQwZ3lrbEI0Nk9HZ0tvdlpZclFNZXAvZXkzdklNLzhLK1M0?=
+ =?utf-8?B?ZG5TU0dyS0dBMURJTXY5dDZELzVVbmp0Nm41c0FqTFVORlFFYXhFYVdrNjdH?=
+ =?utf-8?B?QmRpT2hJUkFFRXRiS3BjWEZZSkMrdVp6VWdGZXF0b09hcVJDNkpxWmtvSlYy?=
+ =?utf-8?B?WForN3NFTnVUM3g3b01CUVNvMjFjTm1RNjQ0NjRseXBiVkt0b3dtQkE1NTJE?=
+ =?utf-8?B?U3pWWUdIcis2SDEyQjcrQlFWaG1SZVNnZ05CUC9hSXBtcVRDblNHVlJrcHdK?=
+ =?utf-8?B?QnhkQjJpeExRQ2k5ZHA0eGlpRnJMWWc3ZktjWXdVZ25kaHhmUjZLZUNNTXYx?=
+ =?utf-8?B?TTYyUnNYdmVvaWp3bTMvS2NQWlY2RjF1Y0hQWFJ1NmFqbTMrVlZQNWRDRita?=
+ =?utf-8?B?Vi9HRHFUUmRMK2wrWEl2akVOZXMvZVZPM3lEZFdzOU1GQ0xpZG1iV1dPM09u?=
+ =?utf-8?B?ZzE5NTRSTERINUV4b1ZqdXVPYk56bmhEYUtNL2o3SnpSZDhZOUhzbnViaDBj?=
+ =?utf-8?B?c3RzeWFLZVc2MUViR05uNDg0eldHekMwWHhzT0dBOTB5Zm5VUzQzOXUrQ1J5?=
+ =?utf-8?B?SHFvT3QvNmdpZ0JxbWt1UGR0UE1KWVJadTluaitOTy8wd0tsTlo1clJVS0hP?=
+ =?utf-8?B?Qmw5Q3pKWjJMTlRCb3lOQ2FqU2FzbWVlS21BNk9SbXJhNk1Gc093OCs5cEJj?=
+ =?utf-8?B?OHlZb2dEZ3BiOE1sSGV3YWV6WkdUdTBPUVQzRW5tYVg2VHhJbVJYaGVoWlds?=
+ =?utf-8?B?QmNzbVN5Q2JwVy9OeVFPRkhObzJPZnN1QVJFTS8vZDk4YWxrc3d5T2l3bkdR?=
+ =?utf-8?B?V0J0Znp6S0c5TlZuMXZ2MUJlQTNCVGMzdnZJYUNwdmkxcm1hVDZrNlhGY2M3?=
+ =?utf-8?B?aWcxSDZlNHBzR3VBTWNWVTFUNEhSVWFIQlc3UnhSTTdtekJtMDBIVm9OeDVE?=
+ =?utf-8?B?ei9NYjJDdTRvMHRwSFcvNWgrdCt1NnZweUJOamJMQ0lYSTlpOTg3d2xzNU4r?=
+ =?utf-8?B?NDg3TEIrWXZwVndZY2RONWpBa1d0TFlPQzZRVmdEelRROGtRWmlxeDJvMEk3?=
+ =?utf-8?B?ZUZkclBaWGIvQmFHYnhNb3ZlR3pLQWpuajBxMzFTaEpRYVlGMWluSUJ2RlRM?=
+ =?utf-8?B?alZCMGEvYllOU2YwTSszQVhvcUV6UklDcDdvaHFEWk00cDR4RE9hSnU0ZHBU?=
+ =?utf-8?B?Q2NEQ2pGNlQ5azlBaWxIcHlsaEIya0lZMnpZc1IzYmRsZzF6YnVCKzcvTmZK?=
+ =?utf-8?B?WGsweVREZTRHV3JRcGxIZm9QcDRBdVNoK1BzdDFLN0puL3dEUEtObUdHRnpW?=
+ =?utf-8?B?dUE2eGJVM0JpLzlzQmN5MTZUajdITVlPUWVwc01wcjdybVRXZEZkVE93YjE5?=
+ =?utf-8?B?aHc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F179046D1145924F817D4FAA2C3F5CD1@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 07/18] interconnect: qcom: add a driver for sa8775p
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org, Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230109174511.1740856-1-brgl@bgdev.pl>
- <20230109174511.1740856-8-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230109174511.1740856-8-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: d92b6a2c-e2e0-4883-decd-08daf26bd626
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 18:03:39.4328
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mtq3sSGGVXwnrsOUOjCgp4NrbyXhY2nX8/OVF5dCdx5N68ewCFM4RkXvJ3E3WXf2w24559f4KaXMW9z9wCsJQ3NLq8h+VON6gN5DZam1sw4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2222
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9.01.2023 18:45, Bartosz Golaszewski wrote:
-> From: Shazad Hussain <quic_shazhuss@quicinc.com>
-> 
-> Introduce QTI SA8775P-specific interconnect driver.
-> 
-> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
-> [Bartosz: made the driver ready for upstream]
-> Co-developed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  drivers/interconnect/qcom/Kconfig   |    9 +
->  drivers/interconnect/qcom/Makefile  |    2 +
->  drivers/interconnect/qcom/sa8775p.c | 2542 +++++++++++++++++++++++++++
->  3 files changed, 2553 insertions(+)
->  create mode 100644 drivers/interconnect/qcom/sa8775p.c
-> 
-> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-> index 1a1c941635a2..023e42ebe365 100644
-> --- a/drivers/interconnect/qcom/Kconfig
-> +++ b/drivers/interconnect/qcom/Kconfig
-> @@ -83,6 +83,15 @@ config INTERCONNECT_QCOM_RPMH_POSSIBLE
->  config INTERCONNECT_QCOM_RPMH
->  	tristate
->  
-> +config INTERCONNECT_QCOM_SA8775P
-> +	tristate "Qualcomm SA8775P interconnect driver"
-> +	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
-> +	select INTERCONNECT_QCOM_RPMH
-> +	select INTERCONNECT_QCOM_BCM_VOTER
-> +	help
-> +	  This is a driver for the Qualcomm Network-on-Chip on sa8775p-based
-> +	  platforms.
-> +
->  config INTERCONNECT_QCOM_SC7180
->  	tristate "Qualcomm SC7180 interconnect driver"
->  	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
-> diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
-> index 8e357528185d..32d90ff7960e 100644
-> --- a/drivers/interconnect/qcom/Makefile
-> +++ b/drivers/interconnect/qcom/Makefile
-> @@ -12,6 +12,7 @@ icc-osm-l3-objs				:= osm-l3.o
->  qnoc-qcm2290-objs			:= qcm2290.o
->  qnoc-qcs404-objs			:= qcs404.o
->  icc-rpmh-obj				:= icc-rpmh.o
-> +qnoc-sa8775p-objs			:= sa8775p.o
->  qnoc-sc7180-objs			:= sc7180.o
->  qnoc-sc7280-objs                        := sc7280.o
->  qnoc-sc8180x-objs			:= sc8180x.o
-> @@ -36,6 +37,7 @@ obj-$(CONFIG_INTERCONNECT_QCOM_OSM_L3) += icc-osm-l3.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_QCM2290) += qnoc-qcm2290.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_QCS404) += qnoc-qcs404.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_RPMH) += icc-rpmh.o
-> +obj-$(CONFIG_INTERCONNECT_QCOM_SA8775P) += qnoc-sa8775p.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_SC7180) += qnoc-sc7180.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_SC7280) += qnoc-sc7280.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_SC8180X) += qnoc-sc8180x.o
-> diff --git a/drivers/interconnect/qcom/sa8775p.c b/drivers/interconnect/qcom/sa8775p.c
-> new file mode 100644
-> index 000000000000..bb23234eaad5
-> --- /dev/null
-> +++ b/drivers/interconnect/qcom/sa8775p.c
-> @@ -0,0 +1,2542 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2021-2022, Qualcomm Innovation Center, Inc. All rights reserved.
-> + * Copyright (c) 2023, Linaro Limited
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/interconnect.h>
-> +#include <linux/interconnect-provider.h>
-> +#include <linux/module.h>
-> +#include <linux/of_platform.h>
-> +#include <dt-bindings/interconnect/qcom,sa8775p.h>
-> +
-> +#include "bcm-voter.h"
-> +#include "icc-rpmh.h"
-> +
-> +#define LEMANS_MASTER_GPU_TCU				0
-s/LEMANS/SA8775P; Qualcomm codenames are not really deterministic
-and hence we use the numeric names upstream.
-
-Konrad
-> +#define LEMANS_MASTER_PCIE_TCU				1
-> +#define LEMANS_MASTER_SYS_TCU				2
-> +#define LEMANS_MASTER_APPSS_PROC			3
-> +#define LEMANS_MASTER_LLCC				4
-> +#define LEMANS_MASTER_CNOC_LPASS_AG_NOC			5
-> +#define LEMANS_MASTER_GIC_AHB				6
-> +#define LEMANS_MASTER_CDSP_NOC_CFG			7
-> +#define LEMANS_MASTER_CDSPB_NOC_CFG			8
-> +#define LEMANS_MASTER_QDSS_BAM				9
-> +#define LEMANS_MASTER_QUP_0				10
-> +#define LEMANS_MASTER_QUP_1				11
-> +#define LEMANS_MASTER_QUP_2				12
-> +#define LEMANS_MASTER_A1NOC_SNOC			13
-> +#define LEMANS_MASTER_A2NOC_SNOC			14
-> +#define LEMANS_MASTER_CAMNOC_HF				15
-> +#define LEMANS_MASTER_CAMNOC_ICP			16
-> +#define LEMANS_MASTER_CAMNOC_SF				17
-> +#define LEMANS_MASTER_COMPUTE_NOC			18
-> +#define LEMANS_MASTER_COMPUTE_NOC_1			19
-> +#define LEMANS_MASTER_CNOC_A2NOC			20
-> +#define LEMANS_MASTER_CNOC_DC_NOC			21
-> +#define LEMANS_MASTER_GEM_NOC_CFG			22
-> +#define LEMANS_MASTER_GEM_NOC_CNOC			23
-> +#define LEMANS_MASTER_GEM_NOC_PCIE_SNOC			24
-> +#define LEMANS_MASTER_GPDSP_SAIL			25
-> +#define LEMANS_MASTER_GFX3D				26
-> +#define LEMANS_MASTER_LPASS_ANOC			27
-> +#define LEMANS_MASTER_MDP0				28
-> +#define LEMANS_MASTER_MDP1				29
-> +#define LEMANS_MASTER_MDP_CORE1_0			30
-> +#define LEMANS_MASTER_MDP_CORE1_1			31
-> +#define LEMANS_MASTER_MNOC_HF_MEM_NOC			32
-> +#define LEMANS_MASTER_CNOC_MNOC_HF_CFG			33
-> +#define LEMANS_MASTER_MNOC_SF_MEM_NOC			34
-> +#define LEMANS_MASTER_CNOC_MNOC_SF_CFG			35
-> +#define LEMANS_MASTER_ANOC_PCIE_GEM_NOC			36
-> +#define LEMANS_MASTER_SNOC_CFG				37
-> +#define LEMANS_MASTER_SNOC_GC_MEM_NOC			38
-> +#define LEMANS_MASTER_SNOC_SF_MEM_NOC			39
-> +#define LEMANS_MASTER_VIDEO_P0				40
-> +#define LEMANS_MASTER_VIDEO_P1				41
-> +#define LEMANS_MASTER_VIDEO_PROC			42
-> +#define LEMANS_MASTER_VIDEO_V_PROC			43
-> +#define LEMANS_MASTER_QUP_CORE_0			44
-> +#define LEMANS_MASTER_QUP_CORE_1			45
-> +#define LEMANS_MASTER_QUP_CORE_2			46
-> +#define LEMANS_MASTER_QUP_CORE_3			47
-> +#define LEMANS_MASTER_CRYPTO_CORE0			48
-> +#define LEMANS_MASTER_CRYPTO_CORE1			49
-> +#define LEMANS_MASTER_DSP0				50
-> +#define LEMANS_MASTER_DSP1				51
-> +#define LEMANS_MASTER_IPA				52
-> +#define LEMANS_MASTER_LPASS_PROC			53
-> +#define LEMANS_MASTER_CDSP_PROC				54
-> +#define LEMANS_MASTER_CDSP_PROC_B			55
-> +#define LEMANS_MASTER_PIMEM				56
-> +#define LEMANS_MASTER_QUP_3				57
-> +#define LEMANS_MASTER_EMAC				58
-> +#define LEMANS_MASTER_EMAC_1				59
-> +#define LEMANS_MASTER_GIC				60
-> +#define LEMANS_MASTER_PCIE_0				61
-> +#define LEMANS_MASTER_PCIE_1				62
-> +#define LEMANS_MASTER_QDSS_ETR_0			63
-> +#define LEMANS_MASTER_QDSS_ETR_1			64
-> +#define LEMANS_MASTER_SDC				65
-> +#define LEMANS_MASTER_UFS_CARD				66
-> +#define LEMANS_MASTER_UFS_MEM				67
-> +#define LEMANS_MASTER_USB2				68
-> +#define LEMANS_MASTER_USB3_0				69
-> +#define LEMANS_MASTER_USB3_1				70
-> +#define LEMANS_SLAVE_EBI1				512
-> +#define LEMANS_SLAVE_AHB2PHY_0				513
-> +#define LEMANS_SLAVE_AHB2PHY_1				514
-> +#define LEMANS_SLAVE_AHB2PHY_2				515
-> +#define LEMANS_SLAVE_AHB2PHY_3				516
-> +#define LEMANS_SLAVE_ANOC_THROTTLE_CFG			517
-> +#define LEMANS_SLAVE_AOSS				518
-> +#define LEMANS_SLAVE_APPSS				519
-> +#define LEMANS_SLAVE_BOOT_ROM				520
-> +#define LEMANS_SLAVE_CAMERA_CFG				521
-> +#define LEMANS_SLAVE_CAMERA_NRT_THROTTLE_CFG		522
-> +#define LEMANS_SLAVE_CAMERA_RT_THROTTLE_CFG		523
-> +#define LEMANS_SLAVE_CLK_CTL				524
-> +#define LEMANS_SLAVE_CDSP_CFG				525
-> +#define LEMANS_SLAVE_CDSP1_CFG				526
-> +#define LEMANS_SLAVE_RBCPR_CX_CFG			527
-> +#define LEMANS_SLAVE_RBCPR_MMCX_CFG			528
-> +#define LEMANS_SLAVE_RBCPR_MX_CFG			529
-> +#define LEMANS_SLAVE_CPR_NSPCX				530
-> +#define LEMANS_SLAVE_CRYPTO_0_CFG			531
-> +#define LEMANS_SLAVE_CX_RDPM				532
-> +#define LEMANS_SLAVE_DISPLAY_CFG			533
-> +#define LEMANS_SLAVE_DISPLAY_RT_THROTTLE_CFG		534
-> +#define LEMANS_SLAVE_DISPLAY1_CFG			535
-> +#define LEMANS_SLAVE_DISPLAY1_RT_THROTTLE_CFG		536
-> +#define LEMANS_SLAVE_EMAC_CFG				537
-> +#define LEMANS_SLAVE_EMAC1_CFG				538
-> +#define LEMANS_SLAVE_GP_DSP0_CFG			539
-> +#define LEMANS_SLAVE_GP_DSP1_CFG			540
-> +#define LEMANS_SLAVE_GPDSP0_THROTTLE_CFG		541
-> +#define LEMANS_SLAVE_GPDSP1_THROTTLE_CFG		542
-> +#define LEMANS_SLAVE_GPU_TCU_THROTTLE_CFG		543
-> +#define LEMANS_SLAVE_GFX3D_CFG				544
-> +#define LEMANS_SLAVE_HWKM				545
-> +#define LEMANS_SLAVE_IMEM_CFG				546
-> +#define LEMANS_SLAVE_IPA_CFG				547
-> +#define LEMANS_SLAVE_IPC_ROUTER_CFG			548
-> +#define LEMANS_SLAVE_LLCC_CFG				549
-> +#define LEMANS_SLAVE_LPASS				550
-> +#define LEMANS_SLAVE_LPASS_CORE_CFG			551
-> +#define LEMANS_SLAVE_LPASS_LPI_CFG			552
-> +#define LEMANS_SLAVE_LPASS_MPU_CFG			553
-> +#define LEMANS_SLAVE_LPASS_THROTTLE_CFG			554
-> +#define LEMANS_SLAVE_LPASS_TOP_CFG			555
-> +#define LEMANS_SLAVE_MX_RDPM				556
-> +#define LEMANS_SLAVE_MXC_RDPM				557
-> +#define LEMANS_SLAVE_PCIE_0_CFG				558
-> +#define LEMANS_SLAVE_PCIE_1_CFG				559
-> +#define LEMANS_SLAVE_PCIE_RSC_CFG			560
-> +#define LEMANS_SLAVE_PCIE_TCU_THROTTLE_CFG		561
-> +#define LEMANS_SLAVE_PCIE_THROTTLE_CFG			562
-> +#define LEMANS_SLAVE_PDM				563
-> +#define LEMANS_SLAVE_PIMEM_CFG				564
-> +#define LEMANS_SLAVE_PKA_WRAPPER_CFG			565
-> +#define LEMANS_SLAVE_QDSS_CFG				566
-> +#define LEMANS_SLAVE_QM_CFG				567
-> +#define LEMANS_SLAVE_QM_MPU_CFG				568
-> +#define LEMANS_SLAVE_QUP_0				569
-> +#define LEMANS_SLAVE_QUP_1				570
-> +#define LEMANS_SLAVE_QUP_2				571
-> +#define LEMANS_SLAVE_QUP_3				572
-> +#define LEMANS_SLAVE_SAIL_THROTTLE_CFG			573
-> +#define LEMANS_SLAVE_SDC1				574
-> +#define LEMANS_SLAVE_SECURITY				575
-> +#define LEMANS_SLAVE_SNOC_THROTTLE_CFG			576
-> +#define LEMANS_SLAVE_TCSR				577
-> +#define LEMANS_SLAVE_TLMM				578
-> +#define LEMANS_SLAVE_TSC_CFG				579
-> +#define LEMANS_SLAVE_UFS_CARD_CFG			580
-> +#define LEMANS_SLAVE_UFS_MEM_CFG			581
-> +#define LEMANS_SLAVE_USB2				582
-> +#define LEMANS_SLAVE_USB3_0				583
-> +#define LEMANS_SLAVE_USB3_1				584
-> +#define LEMANS_SLAVE_VENUS_CFG				585
-> +#define LEMANS_SLAVE_VENUS_CVP_THROTTLE_CFG		586
-> +#define LEMANS_SLAVE_VENUS_V_CPU_THROTTLE_CFG		587
-> +#define LEMANS_SLAVE_VENUS_VCODEC_THROTTLE_CFG		588
-> +#define LEMANS_SLAVE_A1NOC_SNOC				589
-> +#define LEMANS_SLAVE_A2NOC_SNOC				590
-> +#define LEMANS_SLAVE_DDRSS_CFG				591
-> +#define LEMANS_SLAVE_GEM_NOC_CNOC			592
-> +#define LEMANS_SLAVE_GEM_NOC_CFG			593
-> +#define LEMANS_SLAVE_SNOC_GEM_NOC_GC			594
-> +#define LEMANS_SLAVE_SNOC_GEM_NOC_SF			595
-> +#define LEMANS_SLAVE_GP_DSP_SAIL_NOC			596
-> +#define LEMANS_SLAVE_GPDSP_NOC_CFG			597
-> +#define LEMANS_SLAVE_HCP_A				598
-> +#define LEMANS_SLAVE_LLCC				599
-> +#define LEMANS_SLAVE_MNOC_HF_MEM_NOC			600
-> +#define LEMANS_SLAVE_MNOC_SF_MEM_NOC			601
-> +#define LEMANS_SLAVE_CNOC_MNOC_HF_CFG			602
-> +#define LEMANS_SLAVE_CNOC_MNOC_SF_CFG			603
-> +#define LEMANS_SLAVE_CDSP_MEM_NOC			604
-> +#define LEMANS_SLAVE_CDSPB_MEM_NOC			605
-> +#define LEMANS_SLAVE_HCP_B				606
-> +#define LEMANS_SLAVE_GEM_NOC_PCIE_CNOC			607
-> +#define LEMANS_SLAVE_PCIE_ANOC_CFG			608
-> +#define LEMANS_SLAVE_ANOC_PCIE_GEM_NOC			609
-> +#define LEMANS_SLAVE_SNOC_CFG				610
-> +#define LEMANS_SLAVE_LPASS_SNOC				611
-> +#define LEMANS_SLAVE_QUP_CORE_0				612
-> +#define LEMANS_SLAVE_QUP_CORE_1				613
-> +#define LEMANS_SLAVE_QUP_CORE_2				614
-> +#define LEMANS_SLAVE_QUP_CORE_3				615
-> +#define LEMANS_SLAVE_BOOT_IMEM				616
-> +#define LEMANS_SLAVE_IMEM				617
-> +#define LEMANS_SLAVE_PIMEM				618
-> +#define LEMANS_SLAVE_SERVICE_NSP_NOC			619
-> +#define LEMANS_SLAVE_SERVICE_NSPB_NOC			620
-> +#define LEMANS_SLAVE_SERVICE_GEM_NOC_1			621
-> +#define LEMANS_SLAVE_SERVICE_MNOC_HF			622
-> +#define LEMANS_SLAVE_SERVICE_MNOC_SF			623
-> +#define LEMANS_SLAVE_SERVICES_LPASS_AML_NOC		624
-> +#define LEMANS_SLAVE_SERVICE_LPASS_AG_NOC		625
-> +#define LEMANS_SLAVE_SERVICE_GEM_NOC_2			626
-> +#define LEMANS_SLAVE_SERVICE_SNOC			627
-> +#define LEMANS_SLAVE_SERVICE_GEM_NOC			628
-> +#define LEMANS_SLAVE_SERVICE_GEM_NOC2			629
-> +#define LEMANS_SLAVE_PCIE_0				630
-> +#define LEMANS_SLAVE_PCIE_1				631
-> +#define LEMANS_SLAVE_QDSS_STM				632
-> +#define LEMANS_SLAVE_TCU				633
-> +
-> +static struct qcom_icc_node qxm_qup3 = {
-> +	.name = "qxm_qup3",
-> +	.id = LEMANS_MASTER_QUP_3,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A1NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_emac_0 = {
-> +	.name = "xm_emac_0",
-> +	.id = LEMANS_MASTER_EMAC,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A1NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_emac_1 = {
-> +	.name = "xm_emac_1",
-> +	.id = LEMANS_MASTER_EMAC_1,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A1NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_sdc1 = {
-> +	.name = "xm_sdc1",
-> +	.id = LEMANS_MASTER_SDC,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A1NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_ufs_mem = {
-> +	.name = "xm_ufs_mem",
-> +	.id = LEMANS_MASTER_UFS_MEM,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A1NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_usb2_2 = {
-> +	.name = "xm_usb2_2",
-> +	.id = LEMANS_MASTER_USB2,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A1NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_usb3_0 = {
-> +	.name = "xm_usb3_0",
-> +	.id = LEMANS_MASTER_USB3_0,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A1NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_usb3_1 = {
-> +	.name = "xm_usb3_1",
-> +	.id = LEMANS_MASTER_USB3_1,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A1NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qhm_qdss_bam = {
-> +	.name = "qhm_qdss_bam",
-> +	.id = LEMANS_MASTER_QDSS_BAM,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qhm_qup0 = {
-> +	.name = "qhm_qup0",
-> +	.id = LEMANS_MASTER_QUP_0,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qhm_qup1 = {
-> +	.name = "qhm_qup1",
-> +	.id = LEMANS_MASTER_QUP_1,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qhm_qup2 = {
-> +	.name = "qhm_qup2",
-> +	.id = LEMANS_MASTER_QUP_2,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_cnoc_datapath = {
-> +	.name = "qnm_cnoc_datapath",
-> +	.id = LEMANS_MASTER_CNOC_A2NOC,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qxm_crypto_0 = {
-> +	.name = "qxm_crypto_0",
-> +	.id = LEMANS_MASTER_CRYPTO_CORE0,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qxm_crypto_1 = {
-> +	.name = "qxm_crypto_1",
-> +	.id = LEMANS_MASTER_CRYPTO_CORE1,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qxm_ipa = {
-> +	.name = "qxm_ipa",
-> +	.id = LEMANS_MASTER_IPA,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_qdss_etr_0 = {
-> +	.name = "xm_qdss_etr_0",
-> +	.id = LEMANS_MASTER_QDSS_ETR_0,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_qdss_etr_1 = {
-> +	.name = "xm_qdss_etr_1",
-> +	.id = LEMANS_MASTER_QDSS_ETR_1,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_ufs_card = {
-> +	.name = "xm_ufs_card",
-> +	.id = LEMANS_MASTER_UFS_CARD,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qup0_core_master = {
-> +	.name = "qup0_core_master",
-> +	.id = LEMANS_MASTER_QUP_CORE_0,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_QUP_CORE_0 },
-> +};
-> +
-> +static struct qcom_icc_node qup1_core_master = {
-> +	.name = "qup1_core_master",
-> +	.id = LEMANS_MASTER_QUP_CORE_1,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_QUP_CORE_1 },
-> +};
-> +
-> +static struct qcom_icc_node qup2_core_master = {
-> +	.name = "qup2_core_master",
-> +	.id = LEMANS_MASTER_QUP_CORE_2,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_QUP_CORE_2 },
-> +};
-> +
-> +static struct qcom_icc_node qup3_core_master = {
-> +	.name = "qup3_core_master",
-> +	.id = LEMANS_MASTER_QUP_CORE_3,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_QUP_CORE_3 },
-> +};
-> +
-> +static struct qcom_icc_node qnm_gemnoc_cnoc = {
-> +	.name = "qnm_gemnoc_cnoc",
-> +	.id = LEMANS_MASTER_GEM_NOC_CNOC,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 82,
-> +	.links = { LEMANS_SLAVE_AHB2PHY_0,
-> +			   LEMANS_SLAVE_AHB2PHY_1,
-> +		       LEMANS_SLAVE_AHB2PHY_2,
-> +			   LEMANS_SLAVE_AHB2PHY_3,
-> +			   LEMANS_SLAVE_ANOC_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_AOSS,
-> +			   LEMANS_SLAVE_APPSS,
-> +			   LEMANS_SLAVE_BOOT_ROM,
-> +			   LEMANS_SLAVE_CAMERA_CFG,
-> +			   LEMANS_SLAVE_CAMERA_NRT_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_CAMERA_RT_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_CLK_CTL,
-> +			   LEMANS_SLAVE_CDSP_CFG,
-> +			   LEMANS_SLAVE_CDSP1_CFG,
-> +			   LEMANS_SLAVE_RBCPR_CX_CFG,
-> +			   LEMANS_SLAVE_RBCPR_MMCX_CFG,
-> +			   LEMANS_SLAVE_RBCPR_MX_CFG,
-> +			   LEMANS_SLAVE_CPR_NSPCX,
-> +			   LEMANS_SLAVE_CRYPTO_0_CFG,
-> +			   LEMANS_SLAVE_CX_RDPM,
-> +			   LEMANS_SLAVE_DISPLAY_CFG,
-> +			   LEMANS_SLAVE_DISPLAY_RT_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_DISPLAY1_CFG,
-> +			   LEMANS_SLAVE_DISPLAY1_RT_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_EMAC_CFG,
-> +			   LEMANS_SLAVE_EMAC1_CFG,
-> +			   LEMANS_SLAVE_GP_DSP0_CFG,
-> +			   LEMANS_SLAVE_GP_DSP1_CFG,
-> +			   LEMANS_SLAVE_GPDSP0_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_GPDSP1_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_GPU_TCU_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_GFX3D_CFG,
-> +			   LEMANS_SLAVE_HWKM,
-> +			   LEMANS_SLAVE_IMEM_CFG,
-> +			   LEMANS_SLAVE_IPA_CFG,
-> +			   LEMANS_SLAVE_IPC_ROUTER_CFG,
-> +			   LEMANS_SLAVE_LPASS,
-> +			   LEMANS_SLAVE_LPASS_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_MX_RDPM,
-> +			   LEMANS_SLAVE_MXC_RDPM,
-> +			   LEMANS_SLAVE_PCIE_0_CFG,
-> +			   LEMANS_SLAVE_PCIE_1_CFG,
-> +			   LEMANS_SLAVE_PCIE_RSC_CFG,
-> +			   LEMANS_SLAVE_PCIE_TCU_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_PCIE_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_PDM,
-> +			   LEMANS_SLAVE_PIMEM_CFG,
-> +			   LEMANS_SLAVE_PKA_WRAPPER_CFG,
-> +			   LEMANS_SLAVE_QDSS_CFG,
-> +			   LEMANS_SLAVE_QM_CFG,
-> +			   LEMANS_SLAVE_QM_MPU_CFG,
-> +			   LEMANS_SLAVE_QUP_0,
-> +			   LEMANS_SLAVE_QUP_1,
-> +			   LEMANS_SLAVE_QUP_2,
-> +			   LEMANS_SLAVE_QUP_3,
-> +			   LEMANS_SLAVE_SAIL_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_SDC1,
-> +			   LEMANS_SLAVE_SECURITY,
-> +			   LEMANS_SLAVE_SNOC_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_TCSR,
-> +			   LEMANS_SLAVE_TLMM,
-> +			   LEMANS_SLAVE_TSC_CFG,
-> +			   LEMANS_SLAVE_UFS_CARD_CFG,
-> +			   LEMANS_SLAVE_UFS_MEM_CFG,
-> +			   LEMANS_SLAVE_USB2,
-> +			   LEMANS_SLAVE_USB3_0,
-> +			   LEMANS_SLAVE_USB3_1,
-> +			   LEMANS_SLAVE_VENUS_CFG,
-> +			   LEMANS_SLAVE_VENUS_CVP_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_VENUS_V_CPU_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_VENUS_VCODEC_THROTTLE_CFG,
-> +			   LEMANS_SLAVE_DDRSS_CFG,
-> +			   LEMANS_SLAVE_GPDSP_NOC_CFG,
-> +			   LEMANS_SLAVE_CNOC_MNOC_HF_CFG,
-> +			   LEMANS_SLAVE_CNOC_MNOC_SF_CFG,
-> +			   LEMANS_SLAVE_PCIE_ANOC_CFG,
-> +			   LEMANS_SLAVE_SNOC_CFG,
-> +			   LEMANS_SLAVE_BOOT_IMEM,
-> +			   LEMANS_SLAVE_IMEM,
-> +			   LEMANS_SLAVE_PIMEM,
-> +			   LEMANS_SLAVE_QDSS_STM,
-> +			   LEMANS_SLAVE_TCU
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_gemnoc_pcie = {
-> +	.name = "qnm_gemnoc_pcie",
-> +	.id = LEMANS_MASTER_GEM_NOC_PCIE_SNOC,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_PCIE_0,
-> +		   LEMANS_SLAVE_PCIE_1
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_cnoc_dc_noc = {
-> +	.name = "qnm_cnoc_dc_noc",
-> +	.id = LEMANS_MASTER_CNOC_DC_NOC,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_LLCC_CFG,
-> +		   LEMANS_SLAVE_GEM_NOC_CFG
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node alm_gpu_tcu = {
-> +	.name = "alm_gpu_tcu",
-> +	.id = LEMANS_MASTER_GPU_TCU,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node alm_pcie_tcu = {
-> +	.name = "alm_pcie_tcu",
-> +	.id = LEMANS_MASTER_PCIE_TCU,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node alm_sys_tcu = {
-> +	.name = "alm_sys_tcu",
-> +	.id = LEMANS_MASTER_SYS_TCU,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node chm_apps = {
-> +	.name = "chm_apps",
-> +	.id = LEMANS_MASTER_APPSS_PROC,
-> +	.channels = 4,
-> +	.buswidth = 32,
-> +	.num_links = 3,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC,
-> +		   LEMANS_SLAVE_GEM_NOC_PCIE_CNOC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_cmpnoc0 = {
-> +	.name = "qnm_cmpnoc0",
-> +	.id = LEMANS_MASTER_COMPUTE_NOC,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_cmpnoc1 = {
-> +	.name = "qnm_cmpnoc1",
-> +	.id = LEMANS_MASTER_COMPUTE_NOC_1,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_gemnoc_cfg = {
-> +	.name = "qnm_gemnoc_cfg",
-> +	.id = LEMANS_MASTER_GEM_NOC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 4,
-> +	.links = { LEMANS_SLAVE_SERVICE_GEM_NOC_1,
-> +		   LEMANS_SLAVE_SERVICE_GEM_NOC_2,
-> +		   LEMANS_SLAVE_SERVICE_GEM_NOC,
-> +		   LEMANS_SLAVE_SERVICE_GEM_NOC2
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_gpdsp_sail = {
-> +	.name = "qnm_gpdsp_sail",
-> +	.id = LEMANS_MASTER_GPDSP_SAIL,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_gpu = {
-> +	.name = "qnm_gpu",
-> +	.id = LEMANS_MASTER_GFX3D,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_mnoc_hf = {
-> +	.name = "qnm_mnoc_hf",
-> +	.id = LEMANS_MASTER_MNOC_HF_MEM_NOC,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_LLCC,
-> +		   LEMANS_SLAVE_GEM_NOC_PCIE_CNOC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_mnoc_sf = {
-> +	.name = "qnm_mnoc_sf",
-> +	.id = LEMANS_MASTER_MNOC_SF_MEM_NOC,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 3,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC,
-> +		   LEMANS_SLAVE_GEM_NOC_PCIE_CNOC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_pcie = {
-> +	.name = "qnm_pcie",
-> +	.id = LEMANS_MASTER_ANOC_PCIE_GEM_NOC,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qnm_snoc_gc = {
-> +	.name = "qnm_snoc_gc",
-> +	.id = LEMANS_MASTER_SNOC_GC_MEM_NOC,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_LLCC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_snoc_sf = {
-> +	.name = "qnm_snoc_sf",
-> +	.id = LEMANS_MASTER_SNOC_SF_MEM_NOC,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 3,
-> +	.links = { LEMANS_SLAVE_GEM_NOC_CNOC,
-> +		   LEMANS_SLAVE_LLCC,
-> +		   LEMANS_SLAVE_GEM_NOC_PCIE_CNOC },
-> +};
-> +
-> +static struct qcom_icc_node qxm_dsp0 = {
-> +	.name = "qxm_dsp0",
-> +	.id = LEMANS_MASTER_DSP0,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_GP_DSP_SAIL_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qxm_dsp1 = {
-> +	.name = "qxm_dsp1",
-> +	.id = LEMANS_MASTER_DSP1,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_GP_DSP_SAIL_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qhm_config_noc = {
-> +	.name = "qhm_config_noc",
-> +	.id = LEMANS_MASTER_CNOC_LPASS_AG_NOC,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 6,
-> +	.links = { LEMANS_SLAVE_LPASS_CORE_CFG,
-> +		   LEMANS_SLAVE_LPASS_LPI_CFG,
-> +		   LEMANS_SLAVE_LPASS_MPU_CFG,
-> +		   LEMANS_SLAVE_LPASS_TOP_CFG,
-> +		   LEMANS_SLAVE_SERVICES_LPASS_AML_NOC,
-> +		   LEMANS_SLAVE_SERVICE_LPASS_AG_NOC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node qxm_lpass_dsp = {
-> +	.name = "qxm_lpass_dsp",
-> +	.id = LEMANS_MASTER_LPASS_PROC,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 4,
-> +	.links = { LEMANS_SLAVE_LPASS_TOP_CFG,
-> +		   LEMANS_SLAVE_LPASS_SNOC,
-> +		   LEMANS_SLAVE_SERVICES_LPASS_AML_NOC,
-> +		   LEMANS_SLAVE_SERVICE_LPASS_AG_NOC
-> +	},
-> +};
-> +
-> +static struct qcom_icc_node llcc_mc = {
-> +	.name = "llcc_mc",
-> +	.id = LEMANS_MASTER_LLCC,
-> +	.channels = 8,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_EBI1 },
-> +};
-> +
-> +static struct qcom_icc_node qnm_camnoc_hf = {
-> +	.name = "qnm_camnoc_hf",
-> +	.id = LEMANS_MASTER_CAMNOC_HF,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_HF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_camnoc_icp = {
-> +	.name = "qnm_camnoc_icp",
-> +	.id = LEMANS_MASTER_CAMNOC_ICP,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_SF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_camnoc_sf = {
-> +	.name = "qnm_camnoc_sf",
-> +	.id = LEMANS_MASTER_CAMNOC_SF,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_SF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_mdp0_0 = {
-> +	.name = "qnm_mdp0_0",
-> +	.id = LEMANS_MASTER_MDP0,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_HF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_mdp0_1 = {
-> +	.name = "qnm_mdp0_1",
-> +	.id = LEMANS_MASTER_MDP1,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_HF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_mdp1_0 = {
-> +	.name = "qnm_mdp1_0",
-> +	.id = LEMANS_MASTER_MDP_CORE1_0,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_HF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_mdp1_1 = {
-> +	.name = "qnm_mdp1_1",
-> +	.id = LEMANS_MASTER_MDP_CORE1_1,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_HF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_mnoc_hf_cfg = {
-> +	.name = "qnm_mnoc_hf_cfg",
-> +	.id = LEMANS_MASTER_CNOC_MNOC_HF_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SERVICE_MNOC_HF },
-> +};
-> +
-> +static struct qcom_icc_node qnm_mnoc_sf_cfg = {
-> +	.name = "qnm_mnoc_sf_cfg",
-> +	.id = LEMANS_MASTER_CNOC_MNOC_SF_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SERVICE_MNOC_SF },
-> +};
-> +
-> +static struct qcom_icc_node qnm_video0 = {
-> +	.name = "qnm_video0",
-> +	.id = LEMANS_MASTER_VIDEO_P0,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_SF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_video1 = {
-> +	.name = "qnm_video1",
-> +	.id = LEMANS_MASTER_VIDEO_P1,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_SF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_video_cvp = {
-> +	.name = "qnm_video_cvp",
-> +	.id = LEMANS_MASTER_VIDEO_PROC,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_SF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qnm_video_v_cpu = {
-> +	.name = "qnm_video_v_cpu",
-> +	.id = LEMANS_MASTER_VIDEO_V_PROC,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_MNOC_SF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qhm_nsp_noc_config = {
-> +	.name = "qhm_nsp_noc_config",
-> +	.id = LEMANS_MASTER_CDSP_NOC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SERVICE_NSP_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qxm_nsp = {
-> +	.name = "qxm_nsp",
-> +	.id = LEMANS_MASTER_CDSP_PROC,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_HCP_A, SLAVE_CDSP_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qhm_nspb_noc_config = {
-> +	.name = "qhm_nspb_noc_config",
-> +	.id = LEMANS_MASTER_CDSPB_NOC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SERVICE_NSPB_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qxm_nspb = {
-> +	.name = "qxm_nspb",
-> +	.id = LEMANS_MASTER_CDSP_PROC_B,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 2,
-> +	.links = { LEMANS_SLAVE_HCP_B, SLAVE_CDSPB_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_pcie3_0 = {
-> +	.name = "xm_pcie3_0",
-> +	.id = LEMANS_MASTER_PCIE_0,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_ANOC_PCIE_GEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node xm_pcie3_1 = {
-> +	.name = "xm_pcie3_1",
-> +	.id = LEMANS_MASTER_PCIE_1,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_ANOC_PCIE_GEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qhm_gic = {
-> +	.name = "qhm_gic",
-> +	.id = LEMANS_MASTER_GIC_AHB,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SNOC_GEM_NOC_SF },
-> +};
-> +
-> +static struct qcom_icc_node qnm_aggre1_noc = {
-> +	.name = "qnm_aggre1_noc",
-> +	.id = LEMANS_MASTER_A1NOC_SNOC,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SNOC_GEM_NOC_SF },
-> +};
-> +
-> +static struct qcom_icc_node qnm_aggre2_noc = {
-> +	.name = "qnm_aggre2_noc",
-> +	.id = LEMANS_MASTER_A2NOC_SNOC,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SNOC_GEM_NOC_SF },
-> +};
-> +
-> +static struct qcom_icc_node qnm_lpass_noc = {
-> +	.name = "qnm_lpass_noc",
-> +	.id = LEMANS_MASTER_LPASS_ANOC,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SNOC_GEM_NOC_SF },
-> +};
-> +
-> +static struct qcom_icc_node qnm_snoc_cfg = {
-> +	.name = "qnm_snoc_cfg",
-> +	.id = LEMANS_MASTER_SNOC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SERVICE_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qxm_pimem = {
-> +	.name = "qxm_pimem",
-> +	.id = LEMANS_MASTER_PIMEM,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SNOC_GEM_NOC_GC },
-> +};
-> +
-> +static struct qcom_icc_node xm_gic = {
-> +	.name = "xm_gic",
-> +	.id = LEMANS_MASTER_GIC,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_SLAVE_SNOC_GEM_NOC_GC },
-> +};
-> +
-> +static struct qcom_icc_node qns_a1noc_snoc = {
-> +	.name = "qns_a1noc_snoc",
-> +	.id = LEMANS_SLAVE_A1NOC_SNOC,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_A1NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qns_a2noc_snoc = {
-> +	.name = "qns_a2noc_snoc",
-> +	.id = LEMANS_SLAVE_A2NOC_SNOC,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_A2NOC_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node qup0_core_slave = {
-> +	.name = "qup0_core_slave",
-> +	.id = LEMANS_SLAVE_QUP_CORE_0,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qup1_core_slave = {
-> +	.name = "qup1_core_slave",
-> +	.id = LEMANS_SLAVE_QUP_CORE_1,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qup2_core_slave = {
-> +	.name = "qup2_core_slave",
-> +	.id = LEMANS_SLAVE_QUP_CORE_2,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qup3_core_slave = {
-> +	.name = "qup3_core_slave",
-> +	.id = LEMANS_SLAVE_QUP_CORE_3,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_ahb2phy0 = {
-> +	.name = "qhs_ahb2phy0",
-> +	.id = LEMANS_SLAVE_AHB2PHY_0,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_ahb2phy1 = {
-> +	.name = "qhs_ahb2phy1",
-> +	.id = LEMANS_SLAVE_AHB2PHY_1,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_ahb2phy2 = {
-> +	.name = "qhs_ahb2phy2",
-> +	.id = LEMANS_SLAVE_AHB2PHY_2,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_ahb2phy3 = {
-> +	.name = "qhs_ahb2phy3",
-> +	.id = LEMANS_SLAVE_AHB2PHY_3,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_anoc_throttle_cfg = {
-> +	.name = "qhs_anoc_throttle_cfg",
-> +	.id = LEMANS_SLAVE_ANOC_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_aoss = {
-> +	.name = "qhs_aoss",
-> +	.id = LEMANS_SLAVE_AOSS,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_apss = {
-> +	.name = "qhs_apss",
-> +	.id = LEMANS_SLAVE_APPSS,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +};
-> +
-> +static struct qcom_icc_node qhs_boot_rom = {
-> +	.name = "qhs_boot_rom",
-> +	.id = LEMANS_SLAVE_BOOT_ROM,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_camera_cfg = {
-> +	.name = "qhs_camera_cfg",
-> +	.id = LEMANS_SLAVE_CAMERA_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_camera_nrt_throttle_cfg = {
-> +	.name = "qhs_camera_nrt_throttle_cfg",
-> +	.id = LEMANS_SLAVE_CAMERA_NRT_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_camera_rt_throttle_cfg = {
-> +	.name = "qhs_camera_rt_throttle_cfg",
-> +	.id = LEMANS_SLAVE_CAMERA_RT_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_clk_ctl = {
-> +	.name = "qhs_clk_ctl",
-> +	.id = LEMANS_SLAVE_CLK_CTL,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_compute0_cfg = {
-> +	.name = "qhs_compute0_cfg",
-> +	.id = LEMANS_SLAVE_CDSP_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_CDSP_NOC_CFG },
-> +};
-> +
-> +static struct qcom_icc_node qhs_compute1_cfg = {
-> +	.name = "qhs_compute1_cfg",
-> +	.id = LEMANS_SLAVE_CDSP1_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_CDSPB_NOC_CFG },
-> +};
-> +
-> +static struct qcom_icc_node qhs_cpr_cx = {
-> +	.name = "qhs_cpr_cx",
-> +	.id = LEMANS_SLAVE_RBCPR_CX_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_cpr_mmcx = {
-> +	.name = "qhs_cpr_mmcx",
-> +	.id = LEMANS_SLAVE_RBCPR_MMCX_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_cpr_mx = {
-> +	.name = "qhs_cpr_mx",
-> +	.id = LEMANS_SLAVE_RBCPR_MX_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_cpr_nspcx = {
-> +	.name = "qhs_cpr_nspcx",
-> +	.id = LEMANS_SLAVE_CPR_NSPCX,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_crypto0_cfg = {
-> +	.name = "qhs_crypto0_cfg",
-> +	.id = LEMANS_SLAVE_CRYPTO_0_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_cx_rdpm = {
-> +	.name = "qhs_cx_rdpm",
-> +	.id = LEMANS_SLAVE_CX_RDPM,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_display0_cfg = {
-> +	.name = "qhs_display0_cfg",
-> +	.id = LEMANS_SLAVE_DISPLAY_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_display0_rt_throttle_cfg = {
-> +	.name = "qhs_display0_rt_throttle_cfg",
-> +	.id = LEMANS_SLAVE_DISPLAY_RT_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_display1_cfg = {
-> +	.name = "qhs_display1_cfg",
-> +	.id = LEMANS_SLAVE_DISPLAY1_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_display1_rt_throttle_cfg = {
-> +	.name = "qhs_display1_rt_throttle_cfg",
-> +	.id = LEMANS_SLAVE_DISPLAY1_RT_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_emac0_cfg = {
-> +	.name = "qhs_emac0_cfg",
-> +	.id = LEMANS_SLAVE_EMAC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_emac1_cfg = {
-> +	.name = "qhs_emac1_cfg",
-> +	.id = LEMANS_SLAVE_EMAC1_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_gp_dsp0_cfg = {
-> +	.name = "qhs_gp_dsp0_cfg",
-> +	.id = LEMANS_SLAVE_GP_DSP0_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_gp_dsp1_cfg = {
-> +	.name = "qhs_gp_dsp1_cfg",
-> +	.id = LEMANS_SLAVE_GP_DSP1_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_gpdsp0_throttle_cfg = {
-> +	.name = "qhs_gpdsp0_throttle_cfg",
-> +	.id = LEMANS_SLAVE_GPDSP0_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_gpdsp1_throttle_cfg = {
-> +	.name = "qhs_gpdsp1_throttle_cfg",
-> +	.id = LEMANS_SLAVE_GPDSP1_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_gpu_tcu_throttle_cfg = {
-> +	.name = "qhs_gpu_tcu_throttle_cfg",
-> +	.id = LEMANS_SLAVE_GPU_TCU_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_gpuss_cfg = {
-> +	.name = "qhs_gpuss_cfg",
-> +	.id = LEMANS_SLAVE_GFX3D_CFG,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +};
-> +
-> +static struct qcom_icc_node qhs_hwkm = {
-> +	.name = "qhs_hwkm",
-> +	.id = LEMANS_SLAVE_HWKM,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_imem_cfg = {
-> +	.name = "qhs_imem_cfg",
-> +	.id = LEMANS_SLAVE_IMEM_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_ipa = {
-> +	.name = "qhs_ipa",
-> +	.id = LEMANS_SLAVE_IPA_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_ipc_router = {
-> +	.name = "qhs_ipc_router",
-> +	.id = LEMANS_SLAVE_IPC_ROUTER_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_lpass_cfg = {
-> +	.name = "qhs_lpass_cfg",
-> +	.id = LEMANS_SLAVE_LPASS,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_CNOC_LPASS_AG_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qhs_lpass_throttle_cfg = {
-> +	.name = "qhs_lpass_throttle_cfg",
-> +	.id = LEMANS_SLAVE_LPASS_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_mx_rdpm = {
-> +	.name = "qhs_mx_rdpm",
-> +	.id = LEMANS_SLAVE_MX_RDPM,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_mxc_rdpm = {
-> +	.name = "qhs_mxc_rdpm",
-> +	.id = LEMANS_SLAVE_MXC_RDPM,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_pcie0_cfg = {
-> +	.name = "qhs_pcie0_cfg",
-> +	.id = LEMANS_SLAVE_PCIE_0_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_pcie1_cfg = {
-> +	.name = "qhs_pcie1_cfg",
-> +	.id = LEMANS_SLAVE_PCIE_1_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_pcie_rsc_cfg = {
-> +	.name = "qhs_pcie_rsc_cfg",
-> +	.id = LEMANS_SLAVE_PCIE_RSC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_pcie_tcu_throttle_cfg = {
-> +	.name = "qhs_pcie_tcu_throttle_cfg",
-> +	.id = LEMANS_SLAVE_PCIE_TCU_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_pcie_throttle_cfg = {
-> +	.name = "qhs_pcie_throttle_cfg",
-> +	.id = LEMANS_SLAVE_PCIE_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_pdm = {
-> +	.name = "qhs_pdm",
-> +	.id = LEMANS_SLAVE_PDM,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_pimem_cfg = {
-> +	.name = "qhs_pimem_cfg",
-> +	.id = LEMANS_SLAVE_PIMEM_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_pke_wrapper_cfg = {
-> +	.name = "qhs_pke_wrapper_cfg",
-> +	.id = LEMANS_SLAVE_PKA_WRAPPER_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_qdss_cfg = {
-> +	.name = "qhs_qdss_cfg",
-> +	.id = LEMANS_SLAVE_QDSS_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_qm_cfg = {
-> +	.name = "qhs_qm_cfg",
-> +	.id = LEMANS_SLAVE_QM_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_qm_mpu_cfg = {
-> +	.name = "qhs_qm_mpu_cfg",
-> +	.id = LEMANS_SLAVE_QM_MPU_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_qup0 = {
-> +	.name = "qhs_qup0",
-> +	.id = LEMANS_SLAVE_QUP_0,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_qup1 = {
-> +	.name = "qhs_qup1",
-> +	.id = LEMANS_SLAVE_QUP_1,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_qup2 = {
-> +	.name = "qhs_qup2",
-> +	.id = LEMANS_SLAVE_QUP_2,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_qup3 = {
-> +	.name = "qhs_qup3",
-> +	.id = LEMANS_SLAVE_QUP_3,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_sail_throttle_cfg = {
-> +	.name = "qhs_sail_throttle_cfg",
-> +	.id = LEMANS_SLAVE_SAIL_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_sdc1 = {
-> +	.name = "qhs_sdc1",
-> +	.id = LEMANS_SLAVE_SDC1,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_security = {
-> +	.name = "qhs_security",
-> +	.id = LEMANS_SLAVE_SECURITY,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_snoc_throttle_cfg = {
-> +	.name = "qhs_snoc_throttle_cfg",
-> +	.id = LEMANS_SLAVE_SNOC_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_tcsr = {
-> +	.name = "qhs_tcsr",
-> +	.id = LEMANS_SLAVE_TCSR,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_tlmm = {
-> +	.name = "qhs_tlmm",
-> +	.id = LEMANS_SLAVE_TLMM,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_tsc_cfg = {
-> +	.name = "qhs_tsc_cfg",
-> +	.id = LEMANS_SLAVE_TSC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_ufs_card_cfg = {
-> +	.name = "qhs_ufs_card_cfg",
-> +	.id = LEMANS_SLAVE_UFS_CARD_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_ufs_mem_cfg = {
-> +	.name = "qhs_ufs_mem_cfg",
-> +	.id = LEMANS_SLAVE_UFS_MEM_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_usb2_0 = {
-> +	.name = "qhs_usb2_0",
-> +	.id = LEMANS_SLAVE_USB2,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_usb3_0 = {
-> +	.name = "qhs_usb3_0",
-> +	.id = LEMANS_SLAVE_USB3_0,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_usb3_1 = {
-> +	.name = "qhs_usb3_1",
-> +	.id = LEMANS_SLAVE_USB3_1,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_venus_cfg = {
-> +	.name = "qhs_venus_cfg",
-> +	.id = LEMANS_SLAVE_VENUS_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_venus_cvp_throttle_cfg = {
-> +	.name = "qhs_venus_cvp_throttle_cfg",
-> +	.id = LEMANS_SLAVE_VENUS_CVP_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_venus_v_cpu_throttle_cfg = {
-> +	.name = "qhs_venus_v_cpu_throttle_cfg",
-> +	.id = LEMANS_SLAVE_VENUS_V_CPU_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_venus_vcodec_throttle_cfg = {
-> +	.name = "qhs_venus_vcodec_throttle_cfg",
-> +	.id = LEMANS_SLAVE_VENUS_VCODEC_THROTTLE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qns_ddrss_cfg = {
-> +	.name = "qns_ddrss_cfg",
-> +	.id = LEMANS_SLAVE_DDRSS_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_CNOC_DC_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qns_gpdsp_noc_cfg = {
-> +	.name = "qns_gpdsp_noc_cfg",
-> +	.id = LEMANS_SLAVE_GPDSP_NOC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qns_mnoc_hf_cfg = {
-> +	.name = "qns_mnoc_hf_cfg",
-> +	.id = LEMANS_SLAVE_CNOC_MNOC_HF_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_CNOC_MNOC_HF_CFG },
-> +};
-> +
-> +static struct qcom_icc_node qns_mnoc_sf_cfg = {
-> +	.name = "qns_mnoc_sf_cfg",
-> +	.id = LEMANS_SLAVE_CNOC_MNOC_SF_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_CNOC_MNOC_SF_CFG },
-> +};
-> +
-> +static struct qcom_icc_node qns_pcie_anoc_cfg = {
-> +	.name = "qns_pcie_anoc_cfg",
-> +	.id = LEMANS_SLAVE_PCIE_ANOC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qns_snoc_cfg = {
-> +	.name = "qns_snoc_cfg",
-> +	.id = LEMANS_SLAVE_SNOC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_SNOC_CFG },
-> +};
-> +
-> +static struct qcom_icc_node qxs_boot_imem = {
-> +	.name = "qxs_boot_imem",
-> +	.id = LEMANS_SLAVE_BOOT_IMEM,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +};
-> +
-> +static struct qcom_icc_node qxs_imem = {
-> +	.name = "qxs_imem",
-> +	.id = LEMANS_SLAVE_IMEM,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +};
-> +
-> +static struct qcom_icc_node qxs_pimem = {
-> +	.name = "qxs_pimem",
-> +	.id = LEMANS_SLAVE_PIMEM,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +};
-> +
-> +static struct qcom_icc_node xs_pcie_0 = {
-> +	.name = "xs_pcie_0",
-> +	.id = LEMANS_SLAVE_PCIE_0,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +};
-> +
-> +static struct qcom_icc_node xs_pcie_1 = {
-> +	.name = "xs_pcie_1",
-> +	.id = LEMANS_SLAVE_PCIE_1,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +};
-> +
-> +static struct qcom_icc_node xs_qdss_stm = {
-> +	.name = "xs_qdss_stm",
-> +	.id = LEMANS_SLAVE_QDSS_STM,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node xs_sys_tcu_cfg = {
-> +	.name = "xs_sys_tcu_cfg",
-> +	.id = LEMANS_SLAVE_TCU,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +};
-> +
-> +static struct qcom_icc_node qhs_llcc = {
-> +	.name = "qhs_llcc",
-> +	.id = LEMANS_SLAVE_LLCC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qns_gemnoc = {
-> +	.name = "qns_gemnoc",
-> +	.id = LEMANS_SLAVE_GEM_NOC_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_GEM_NOC_CFG },
-> +};
-> +
-> +static struct qcom_icc_node qns_gem_noc_cnoc = {
-> +	.name = "qns_gem_noc_cnoc",
-> +	.id = LEMANS_SLAVE_GEM_NOC_CNOC,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_GEM_NOC_CNOC },
-> +};
-> +
-> +static struct qcom_icc_node qns_llcc = {
-> +	.name = "qns_llcc",
-> +	.id = LEMANS_SLAVE_LLCC,
-> +	.channels = 6,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_LLCC },
-> +};
-> +
-> +static struct qcom_icc_node qns_pcie = {
-> +	.name = "qns_pcie",
-> +	.id = LEMANS_SLAVE_GEM_NOC_PCIE_CNOC,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_GEM_NOC_PCIE_SNOC },
-> +};
-> +
-> +static struct qcom_icc_node srvc_even_gemnoc = {
-> +	.name = "srvc_even_gemnoc",
-> +	.id = LEMANS_SLAVE_SERVICE_GEM_NOC_1,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node srvc_odd_gemnoc = {
-> +	.name = "srvc_odd_gemnoc",
-> +	.id = LEMANS_SLAVE_SERVICE_GEM_NOC_2,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node srvc_sys_gemnoc = {
-> +	.name = "srvc_sys_gemnoc",
-> +	.id = LEMANS_SLAVE_SERVICE_GEM_NOC,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node srvc_sys_gemnoc_2 = {
-> +	.name = "srvc_sys_gemnoc_2",
-> +	.id = LEMANS_SLAVE_SERVICE_GEM_NOC2,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qns_gp_dsp_sail_noc = {
-> +	.name = "qns_gp_dsp_sail_noc",
-> +	.id = LEMANS_SLAVE_GP_DSP_SAIL_NOC,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_GPDSP_SAIL },
-> +};
-> +
-> +static struct qcom_icc_node qhs_lpass_core = {
-> +	.name = "qhs_lpass_core",
-> +	.id = LEMANS_SLAVE_LPASS_CORE_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_lpass_lpi = {
-> +	.name = "qhs_lpass_lpi",
-> +	.id = LEMANS_SLAVE_LPASS_LPI_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_lpass_mpu = {
-> +	.name = "qhs_lpass_mpu",
-> +	.id = LEMANS_SLAVE_LPASS_MPU_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qhs_lpass_top = {
-> +	.name = "qhs_lpass_top",
-> +	.id = LEMANS_SLAVE_LPASS_TOP_CFG,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qns_sysnoc = {
-> +	.name = "qns_sysnoc",
-> +	.id = LEMANS_SLAVE_LPASS_SNOC,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_LPASS_ANOC },
-> +};
-> +
-> +static struct qcom_icc_node srvc_niu_aml_noc = {
-> +	.name = "srvc_niu_aml_noc",
-> +	.id = LEMANS_SLAVE_SERVICES_LPASS_AML_NOC,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node srvc_niu_lpass_agnoc = {
-> +	.name = "srvc_niu_lpass_agnoc",
-> +	.id = LEMANS_SLAVE_SERVICE_LPASS_AG_NOC,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node ebi = {
-> +	.name = "ebi",
-> +	.id = LEMANS_SLAVE_EBI1,
-> +	.channels = 8,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qns_mem_noc_hf = {
-> +	.name = "qns_mem_noc_hf",
-> +	.id = LEMANS_SLAVE_MNOC_HF_MEM_NOC,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_MNOC_HF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qns_mem_noc_sf = {
-> +	.name = "qns_mem_noc_sf",
-> +	.id = LEMANS_SLAVE_MNOC_SF_MEM_NOC,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_MNOC_SF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node srvc_mnoc_hf = {
-> +	.name = "srvc_mnoc_hf",
-> +	.id = LEMANS_SLAVE_SERVICE_MNOC_HF,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node srvc_mnoc_sf = {
-> +	.name = "srvc_mnoc_sf",
-> +	.id = LEMANS_SLAVE_SERVICE_MNOC_SF,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qns_hcp = {
-> +	.name = "qns_hcp",
-> +	.id = LEMANS_SLAVE_HCP_A,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +};
-> +
-> +static struct qcom_icc_node qns_nsp_gemnoc = {
-> +	.name = "qns_nsp_gemnoc",
-> +	.id = LEMANS_SLAVE_CDSP_MEM_NOC,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_COMPUTE_NOC },
-> +};
-> +
-> +static struct qcom_icc_node service_nsp_noc = {
-> +	.name = "service_nsp_noc",
-> +	.id = LEMANS_SLAVE_SERVICE_NSP_NOC,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qns_nspb_gemnoc = {
-> +	.name = "qns_nspb_gemnoc",
-> +	.id = LEMANS_SLAVE_CDSPB_MEM_NOC,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_COMPUTE_NOC_1 },
-> +};
-> +
-> +static struct qcom_icc_node qns_nspb_hcp = {
-> +	.name = "qns_nspb_hcp",
-> +	.id = LEMANS_SLAVE_HCP_B,
-> +	.channels = 2,
-> +	.buswidth = 32,
-> +};
-> +
-> +static struct qcom_icc_node service_nspb_noc = {
-> +	.name = "service_nspb_noc",
-> +	.id = LEMANS_SLAVE_SERVICE_NSPB_NOC,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_node qns_pcie_mem_noc = {
-> +	.name = "qns_pcie_mem_noc",
-> +	.id = LEMANS_SLAVE_ANOC_PCIE_GEM_NOC,
-> +	.channels = 1,
-> +	.buswidth = 32,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_ANOC_PCIE_GEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qns_gemnoc_gc = {
-> +	.name = "qns_gemnoc_gc",
-> +	.id = LEMANS_SLAVE_SNOC_GEM_NOC_GC,
-> +	.channels = 1,
-> +	.buswidth = 8,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_SNOC_GC_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node qns_gemnoc_sf = {
-> +	.name = "qns_gemnoc_sf",
-> +	.id = LEMANS_SLAVE_SNOC_GEM_NOC_SF,
-> +	.channels = 1,
-> +	.buswidth = 16,
-> +	.num_links = 1,
-> +	.links = { LEMANS_MASTER_SNOC_SF_MEM_NOC },
-> +};
-> +
-> +static struct qcom_icc_node srvc_snoc = {
-> +	.name = "srvc_snoc",
-> +	.id = LEMANS_SLAVE_SERVICE_SNOC,
-> +	.channels = 1,
-> +	.buswidth = 4,
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_acv = {
-> +	.name = "ACV",
-> +	.num_nodes = 1,
-> +	.nodes = { &ebi },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_ce0 = {
-> +	.name = "CE0",
-> +	.num_nodes = 2,
-> +	.nodes = { &qxm_crypto_0, &qxm_crypto_1 },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_cn0 = {
-> +	.name = "CN0",
-> +	.keepalive = true,
-> +	.num_nodes = 2,
-> +	.nodes = { &qnm_gemnoc_cnoc, &qnm_gemnoc_pcie },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_cn1 = {
-> +	.name = "CN1",
-> +	.num_nodes = 76,
-> +	.nodes = { &qhs_ahb2phy0, &qhs_ahb2phy1,
-> +		   &qhs_ahb2phy2, &qhs_ahb2phy3,
-> +		   &qhs_anoc_throttle_cfg, &qhs_aoss,
-> +		   &qhs_apss, &qhs_boot_rom,
-> +		   &qhs_camera_cfg, &qhs_camera_nrt_throttle_cfg,
-> +		   &qhs_camera_rt_throttle_cfg, &qhs_clk_ctl,
-> +		   &qhs_compute0_cfg, &qhs_compute1_cfg,
-> +		   &qhs_cpr_cx, &qhs_cpr_mmcx,
-> +		   &qhs_cpr_mx, &qhs_cpr_nspcx,
-> +		   &qhs_crypto0_cfg, &qhs_cx_rdpm,
-> +		   &qhs_display0_cfg, &qhs_display0_rt_throttle_cfg,
-> +		   &qhs_display1_cfg, &qhs_display1_rt_throttle_cfg,
-> +		   &qhs_emac0_cfg, &qhs_emac1_cfg,
-> +		   &qhs_gp_dsp0_cfg, &qhs_gp_dsp1_cfg,
-> +		   &qhs_gpdsp0_throttle_cfg, &qhs_gpdsp1_throttle_cfg,
-> +		   &qhs_gpu_tcu_throttle_cfg, &qhs_gpuss_cfg,
-> +		   &qhs_hwkm, &qhs_imem_cfg,
-> +		   &qhs_ipa, &qhs_ipc_router,
-> +		   &qhs_lpass_cfg, &qhs_lpass_throttle_cfg,
-> +		   &qhs_mx_rdpm, &qhs_mxc_rdpm,
-> +		   &qhs_pcie0_cfg, &qhs_pcie1_cfg,
-> +		   &qhs_pcie_rsc_cfg, &qhs_pcie_tcu_throttle_cfg,
-> +		   &qhs_pcie_throttle_cfg, &qhs_pdm,
-> +		   &qhs_pimem_cfg, &qhs_pke_wrapper_cfg,
-> +		   &qhs_qdss_cfg, &qhs_qm_cfg,
-> +		   &qhs_qm_mpu_cfg, &qhs_sail_throttle_cfg,
-> +		   &qhs_sdc1, &qhs_security,
-> +		   &qhs_snoc_throttle_cfg, &qhs_tcsr,
-> +		   &qhs_tlmm, &qhs_tsc_cfg,
-> +		   &qhs_ufs_card_cfg, &qhs_ufs_mem_cfg,
-> +		   &qhs_usb2_0, &qhs_usb3_0,
-> +		   &qhs_usb3_1, &qhs_venus_cfg,
-> +		   &qhs_venus_cvp_throttle_cfg, &qhs_venus_v_cpu_throttle_cfg,
-> +		   &qhs_venus_vcodec_throttle_cfg, &qns_ddrss_cfg,
-> +		   &qns_gpdsp_noc_cfg, &qns_mnoc_hf_cfg,
-> +		   &qns_mnoc_sf_cfg, &qns_pcie_anoc_cfg,
-> +		   &qns_snoc_cfg, &qxs_boot_imem,
-> +		   &qxs_imem, &xs_sys_tcu_cfg },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_cn2 = {
-> +	.name = "CN2",
-> +	.num_nodes = 4,
-> +	.nodes = { &qhs_qup0, &qhs_qup1,
-> +		   &qhs_qup2, &qhs_qup3 },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_cn3 = {
-> +	.name = "CN3",
-> +	.num_nodes = 2,
-> +	.nodes = { &xs_pcie_0, &xs_pcie_1 },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_gna0 = {
-> +	.name = "GNA0",
-> +	.num_nodes = 1,
-> +	.nodes = { &qxm_dsp0 },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_gnb0 = {
-> +	.name = "GNB0",
-> +	.num_nodes = 1,
-> +	.nodes = { &qxm_dsp1 },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_mc0 = {
-> +	.name = "MC0",
-> +	.keepalive = true,
-> +	.num_nodes = 1,
-> +	.nodes = { &ebi },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_mm0 = {
-> +	.name = "MM0",
-> +	.keepalive = true,
-> +	.num_nodes = 5,
-> +	.nodes = { &qnm_camnoc_hf, &qnm_mdp0_0,
-> +		   &qnm_mdp0_1, &qnm_mdp1_0,
-> +		   &qns_mem_noc_hf },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_mm1 = {
-> +	.name = "MM1",
-> +	.num_nodes = 7,
-> +	.nodes = { &qnm_camnoc_icp, &qnm_camnoc_sf,
-> +		   &qnm_video0, &qnm_video1,
-> +		   &qnm_video_cvp, &qnm_video_v_cpu,
-> +		   &qns_mem_noc_sf },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_nsa0 = {
-> +	.name = "NSA0",
-> +	.num_nodes = 2,
-> +	.nodes = { &qns_hcp, &qns_nsp_gemnoc },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_nsa1 = {
-> +	.name = "NSA1",
-> +	.num_nodes = 1,
-> +	.nodes = { &qxm_nsp },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_nsb0 = {
-> +	.name = "NSB0",
-> +	.num_nodes = 2,
-> +	.nodes = { &qns_nspb_gemnoc, &qns_nspb_hcp },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_nsb1 = {
-> +	.name = "NSB1",
-> +	.num_nodes = 1,
-> +	.nodes = { &qxm_nspb },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_pci0 = {
-> +	.name = "PCI0",
-> +	.num_nodes = 1,
-> +	.nodes = { &qns_pcie_mem_noc },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_qup0 = {
-> +	.name = "QUP0",
-> +	.vote_scale = 1,
-> +	.num_nodes = 1,
-> +	.nodes = { &qup0_core_slave },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_qup1 = {
-> +	.name = "QUP1",
-> +	.vote_scale = 1,
-> +	.num_nodes = 1,
-> +	.nodes = { &qup1_core_slave },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_qup2 = {
-> +	.name = "QUP2",
-> +	.vote_scale = 1,
-> +	.num_nodes = 2,
-> +	.nodes = { &qup2_core_slave, &qup3_core_slave },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sh0 = {
-> +	.name = "SH0",
-> +	.keepalive = true,
-> +	.num_nodes = 1,
-> +	.nodes = { &qns_llcc },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sh2 = {
-> +	.name = "SH2",
-> +	.num_nodes = 1,
-> +	.nodes = { &chm_apps },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sn0 = {
-> +	.name = "SN0",
-> +	.keepalive = true,
-> +	.num_nodes = 1,
-> +	.nodes = { &qns_gemnoc_sf },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sn1 = {
-> +	.name = "SN1",
-> +	.num_nodes = 1,
-> +	.nodes = { &qns_gemnoc_gc },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sn2 = {
-> +	.name = "SN2",
-> +	.num_nodes = 1,
-> +	.nodes = { &qxs_pimem },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sn3 = {
-> +	.name = "SN3",
-> +	.num_nodes = 2,
-> +	.nodes = { &qns_a1noc_snoc, &qnm_aggre1_noc },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sn4 = {
-> +	.name = "SN4",
-> +	.num_nodes = 2,
-> +	.nodes = { &qns_a2noc_snoc, &qnm_aggre2_noc },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sn9 = {
-> +	.name = "SN9",
-> +	.num_nodes = 2,
-> +	.nodes = { &qns_sysnoc, &qnm_lpass_noc },
-> +};
-> +
-> +static struct qcom_icc_bcm bcm_sn10 = {
-> +	.name = "SN10",
-> +	.num_nodes = 1,
-> +	.nodes = { &xs_qdss_stm },
-> +};
-> +
-> +static struct qcom_icc_bcm *aggre1_noc_bcms[] = {
-> +	&bcm_sn3,
-> +};
-> +
-> +static struct qcom_icc_node *aggre1_noc_nodes[] = {
-> +	[MASTER_QUP_3] = &qxm_qup3,
-> +	[MASTER_EMAC] = &xm_emac_0,
-> +	[MASTER_EMAC_1] = &xm_emac_1,
-> +	[MASTER_SDC] = &xm_sdc1,
-> +	[MASTER_UFS_MEM] = &xm_ufs_mem,
-> +	[MASTER_USB2] = &xm_usb2_2,
-> +	[MASTER_USB3_0] = &xm_usb3_0,
-> +	[MASTER_USB3_1] = &xm_usb3_1,
-> +	[SLAVE_A1NOC_SNOC] = &qns_a1noc_snoc,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_aggre1_noc = {
-> +	.nodes = aggre1_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
-> +	.bcms = aggre1_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(aggre1_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *aggre2_noc_bcms[] = {
-> +	&bcm_ce0,
-> +	&bcm_sn4,
-> +};
-> +
-> +static struct qcom_icc_node *aggre2_noc_nodes[] = {
-> +	[MASTER_QDSS_BAM] = &qhm_qdss_bam,
-> +	[MASTER_QUP_0] = &qhm_qup0,
-> +	[MASTER_QUP_1] = &qhm_qup1,
-> +	[MASTER_QUP_2] = &qhm_qup2,
-> +	[MASTER_CNOC_A2NOC] = &qnm_cnoc_datapath,
-> +	[MASTER_CRYPTO_CORE0] = &qxm_crypto_0,
-> +	[MASTER_CRYPTO_CORE1] = &qxm_crypto_1,
-> +	[MASTER_IPA] = &qxm_ipa,
-> +	[MASTER_QDSS_ETR_0] = &xm_qdss_etr_0,
-> +	[MASTER_QDSS_ETR_1] = &xm_qdss_etr_1,
-> +	[MASTER_UFS_CARD] = &xm_ufs_card,
-> +	[SLAVE_A2NOC_SNOC] = &qns_a2noc_snoc,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_aggre2_noc = {
-> +	.nodes = aggre2_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
-> +	.bcms = aggre2_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(aggre2_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *clk_virt_bcms[] = {
-> +	&bcm_qup0,
-> +	&bcm_qup1,
-> +	&bcm_qup2,
-> +};
-> +
-> +static struct qcom_icc_node *clk_virt_nodes[] = {
-> +	[MASTER_QUP_CORE_0] = &qup0_core_master,
-> +	[MASTER_QUP_CORE_1] = &qup1_core_master,
-> +	[MASTER_QUP_CORE_2] = &qup2_core_master,
-> +	[MASTER_QUP_CORE_3] = &qup3_core_master,
-> +	[SLAVE_QUP_CORE_0] = &qup0_core_slave,
-> +	[SLAVE_QUP_CORE_1] = &qup1_core_slave,
-> +	[SLAVE_QUP_CORE_2] = &qup2_core_slave,
-> +	[SLAVE_QUP_CORE_3] = &qup3_core_slave,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_clk_virt = {
-> +	.nodes = clk_virt_nodes,
-> +	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
-> +	.bcms = clk_virt_bcms,
-> +	.num_bcms = ARRAY_SIZE(clk_virt_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *config_noc_bcms[] = {
-> +	&bcm_cn0,
-> +	&bcm_cn1,
-> +	&bcm_cn2,
-> +	&bcm_cn3,
-> +	&bcm_sn2,
-> +	&bcm_sn10,
-> +};
-> +
-> +static struct qcom_icc_node *config_noc_nodes[] = {
-> +	[MASTER_GEM_NOC_CNOC] = &qnm_gemnoc_cnoc,
-> +	[MASTER_GEM_NOC_PCIE_SNOC] = &qnm_gemnoc_pcie,
-> +	[SLAVE_AHB2PHY_0] = &qhs_ahb2phy0,
-> +	[SLAVE_AHB2PHY_1] = &qhs_ahb2phy1,
-> +	[SLAVE_AHB2PHY_2] = &qhs_ahb2phy2,
-> +	[SLAVE_AHB2PHY_3] = &qhs_ahb2phy3,
-> +	[SLAVE_ANOC_THROTTLE_CFG] = &qhs_anoc_throttle_cfg,
-> +	[SLAVE_AOSS] = &qhs_aoss,
-> +	[SLAVE_APPSS] = &qhs_apss,
-> +	[SLAVE_BOOT_ROM] = &qhs_boot_rom,
-> +	[SLAVE_CAMERA_CFG] = &qhs_camera_cfg,
-> +	[SLAVE_CAMERA_NRT_THROTTLE_CFG] = &qhs_camera_nrt_throttle_cfg,
-> +	[SLAVE_CAMERA_RT_THROTTLE_CFG] = &qhs_camera_rt_throttle_cfg,
-> +	[SLAVE_CLK_CTL] = &qhs_clk_ctl,
-> +	[SLAVE_CDSP_CFG] = &qhs_compute0_cfg,
-> +	[SLAVE_CDSP1_CFG] = &qhs_compute1_cfg,
-> +	[SLAVE_RBCPR_CX_CFG] = &qhs_cpr_cx,
-> +	[SLAVE_RBCPR_MMCX_CFG] = &qhs_cpr_mmcx,
-> +	[SLAVE_RBCPR_MX_CFG] = &qhs_cpr_mx,
-> +	[SLAVE_CPR_NSPCX] = &qhs_cpr_nspcx,
-> +	[SLAVE_CRYPTO_0_CFG] = &qhs_crypto0_cfg,
-> +	[SLAVE_CX_RDPM] = &qhs_cx_rdpm,
-> +	[SLAVE_DISPLAY_CFG] = &qhs_display0_cfg,
-> +	[SLAVE_DISPLAY_RT_THROTTLE_CFG] = &qhs_display0_rt_throttle_cfg,
-> +	[SLAVE_DISPLAY1_CFG] = &qhs_display1_cfg,
-> +	[SLAVE_DISPLAY1_RT_THROTTLE_CFG] = &qhs_display1_rt_throttle_cfg,
-> +	[SLAVE_EMAC_CFG] = &qhs_emac0_cfg,
-> +	[SLAVE_EMAC1_CFG] = &qhs_emac1_cfg,
-> +	[SLAVE_GP_DSP0_CFG] = &qhs_gp_dsp0_cfg,
-> +	[SLAVE_GP_DSP1_CFG] = &qhs_gp_dsp1_cfg,
-> +	[SLAVE_GPDSP0_THROTTLE_CFG] = &qhs_gpdsp0_throttle_cfg,
-> +	[SLAVE_GPDSP1_THROTTLE_CFG] = &qhs_gpdsp1_throttle_cfg,
-> +	[SLAVE_GPU_TCU_THROTTLE_CFG] = &qhs_gpu_tcu_throttle_cfg,
-> +	[SLAVE_GFX3D_CFG] = &qhs_gpuss_cfg,
-> +	[SLAVE_HWKM] = &qhs_hwkm,
-> +	[SLAVE_IMEM_CFG] = &qhs_imem_cfg,
-> +	[SLAVE_IPA_CFG] = &qhs_ipa,
-> +	[SLAVE_IPC_ROUTER_CFG] = &qhs_ipc_router,
-> +	[SLAVE_LPASS] = &qhs_lpass_cfg,
-> +	[SLAVE_LPASS_THROTTLE_CFG] = &qhs_lpass_throttle_cfg,
-> +	[SLAVE_MX_RDPM] = &qhs_mx_rdpm,
-> +	[SLAVE_MXC_RDPM] = &qhs_mxc_rdpm,
-> +	[SLAVE_PCIE_0_CFG] = &qhs_pcie0_cfg,
-> +	[SLAVE_PCIE_1_CFG] = &qhs_pcie1_cfg,
-> +	[SLAVE_PCIE_RSC_CFG] = &qhs_pcie_rsc_cfg,
-> +	[SLAVE_PCIE_TCU_THROTTLE_CFG] = &qhs_pcie_tcu_throttle_cfg,
-> +	[SLAVE_PCIE_THROTTLE_CFG] = &qhs_pcie_throttle_cfg,
-> +	[SLAVE_PDM] = &qhs_pdm,
-> +	[SLAVE_PIMEM_CFG] = &qhs_pimem_cfg,
-> +	[SLAVE_PKA_WRAPPER_CFG] = &qhs_pke_wrapper_cfg,
-> +	[SLAVE_QDSS_CFG] = &qhs_qdss_cfg,
-> +	[SLAVE_QM_CFG] = &qhs_qm_cfg,
-> +	[SLAVE_QM_MPU_CFG] = &qhs_qm_mpu_cfg,
-> +	[SLAVE_QUP_0] = &qhs_qup0,
-> +	[SLAVE_QUP_1] = &qhs_qup1,
-> +	[SLAVE_QUP_2] = &qhs_qup2,
-> +	[SLAVE_QUP_3] = &qhs_qup3,
-> +	[SLAVE_SAIL_THROTTLE_CFG] = &qhs_sail_throttle_cfg,
-> +	[SLAVE_SDC1] = &qhs_sdc1,
-> +	[SLAVE_SECURITY] = &qhs_security,
-> +	[SLAVE_SNOC_THROTTLE_CFG] = &qhs_snoc_throttle_cfg,
-> +	[SLAVE_TCSR] = &qhs_tcsr,
-> +	[SLAVE_TLMM] = &qhs_tlmm,
-> +	[SLAVE_TSC_CFG] = &qhs_tsc_cfg,
-> +	[SLAVE_UFS_CARD_CFG] = &qhs_ufs_card_cfg,
-> +	[SLAVE_UFS_MEM_CFG] = &qhs_ufs_mem_cfg,
-> +	[SLAVE_USB2] = &qhs_usb2_0,
-> +	[SLAVE_USB3_0] = &qhs_usb3_0,
-> +	[SLAVE_USB3_1] = &qhs_usb3_1,
-> +	[SLAVE_VENUS_CFG] = &qhs_venus_cfg,
-> +	[SLAVE_VENUS_CVP_THROTTLE_CFG] = &qhs_venus_cvp_throttle_cfg,
-> +	[SLAVE_VENUS_V_CPU_THROTTLE_CFG] = &qhs_venus_v_cpu_throttle_cfg,
-> +	[SLAVE_VENUS_VCODEC_THROTTLE_CFG] = &qhs_venus_vcodec_throttle_cfg,
-> +	[SLAVE_DDRSS_CFG] = &qns_ddrss_cfg,
-> +	[SLAVE_GPDSP_NOC_CFG] = &qns_gpdsp_noc_cfg,
-> +	[SLAVE_CNOC_MNOC_HF_CFG] = &qns_mnoc_hf_cfg,
-> +	[SLAVE_CNOC_MNOC_SF_CFG] = &qns_mnoc_sf_cfg,
-> +	[SLAVE_PCIE_ANOC_CFG] = &qns_pcie_anoc_cfg,
-> +	[SLAVE_SNOC_CFG] = &qns_snoc_cfg,
-> +	[SLAVE_BOOT_IMEM] = &qxs_boot_imem,
-> +	[SLAVE_IMEM] = &qxs_imem,
-> +	[SLAVE_PIMEM] = &qxs_pimem,
-> +	[SLAVE_PCIE_0] = &xs_pcie_0,
-> +	[SLAVE_PCIE_1] = &xs_pcie_1,
-> +	[SLAVE_QDSS_STM] = &xs_qdss_stm,
-> +	[SLAVE_TCU] = &xs_sys_tcu_cfg,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_config_noc = {
-> +	.nodes = config_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(config_noc_nodes),
-> +	.bcms = config_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(config_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *dc_noc_bcms[] = {
-> +};
-> +
-> +static struct qcom_icc_node *dc_noc_nodes[] = {
-> +	[MASTER_CNOC_DC_NOC] = &qnm_cnoc_dc_noc,
-> +	[SLAVE_LLCC_CFG] = &qhs_llcc,
-> +	[SLAVE_GEM_NOC_CFG] = &qns_gemnoc,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_dc_noc = {
-> +	.nodes = dc_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
-> +	.bcms = dc_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(dc_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *gem_noc_bcms[] = {
-> +	&bcm_sh0,
-> +	&bcm_sh2,
-> +};
-> +
-> +static struct qcom_icc_node *gem_noc_nodes[] = {
-> +	[MASTER_GPU_TCU] = &alm_gpu_tcu,
-> +	[MASTER_PCIE_TCU] = &alm_pcie_tcu,
-> +	[MASTER_SYS_TCU] = &alm_sys_tcu,
-> +	[MASTER_APPSS_PROC] = &chm_apps,
-> +	[MASTER_COMPUTE_NOC] = &qnm_cmpnoc0,
-> +	[MASTER_COMPUTE_NOC_1] = &qnm_cmpnoc1,
-> +	[MASTER_GEM_NOC_CFG] = &qnm_gemnoc_cfg,
-> +	[MASTER_GPDSP_SAIL] = &qnm_gpdsp_sail,
-> +	[MASTER_GFX3D] = &qnm_gpu,
-> +	[MASTER_MNOC_HF_MEM_NOC] = &qnm_mnoc_hf,
-> +	[MASTER_MNOC_SF_MEM_NOC] = &qnm_mnoc_sf,
-> +	[MASTER_ANOC_PCIE_GEM_NOC] = &qnm_pcie,
-> +	[MASTER_SNOC_GC_MEM_NOC] = &qnm_snoc_gc,
-> +	[MASTER_SNOC_SF_MEM_NOC] = &qnm_snoc_sf,
-> +	[SLAVE_GEM_NOC_CNOC] = &qns_gem_noc_cnoc,
-> +	[SLAVE_LLCC] = &qns_llcc,
-> +	[SLAVE_GEM_NOC_PCIE_CNOC] = &qns_pcie,
-> +	[SLAVE_SERVICE_GEM_NOC_1] = &srvc_even_gemnoc,
-> +	[SLAVE_SERVICE_GEM_NOC_2] = &srvc_odd_gemnoc,
-> +	[SLAVE_SERVICE_GEM_NOC] = &srvc_sys_gemnoc,
-> +	[SLAVE_SERVICE_GEM_NOC2] = &srvc_sys_gemnoc_2,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_gem_noc = {
-> +	.nodes = gem_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
-> +	.bcms = gem_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(gem_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *gpdsp_anoc_bcms[] = {
-> +	&bcm_gna0,
-> +	&bcm_gnb0,
-> +};
-> +
-> +static struct qcom_icc_node *gpdsp_anoc_nodes[] = {
-> +	[MASTER_DSP0] = &qxm_dsp0,
-> +	[MASTER_DSP1] = &qxm_dsp1,
-> +	[SLAVE_GP_DSP_SAIL_NOC] = &qns_gp_dsp_sail_noc,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_gpdsp_anoc = {
-> +	.nodes = gpdsp_anoc_nodes,
-> +	.num_nodes = ARRAY_SIZE(gpdsp_anoc_nodes),
-> +	.bcms = gpdsp_anoc_bcms,
-> +	.num_bcms = ARRAY_SIZE(gpdsp_anoc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *lpass_ag_noc_bcms[] = {
-> +	&bcm_sn9,
-> +};
-> +
-> +static struct qcom_icc_node *lpass_ag_noc_nodes[] = {
-> +	[MASTER_CNOC_LPASS_AG_NOC] = &qhm_config_noc,
-> +	[MASTER_LPASS_PROC] = &qxm_lpass_dsp,
-> +	[SLAVE_LPASS_CORE_CFG] = &qhs_lpass_core,
-> +	[SLAVE_LPASS_LPI_CFG] = &qhs_lpass_lpi,
-> +	[SLAVE_LPASS_MPU_CFG] = &qhs_lpass_mpu,
-> +	[SLAVE_LPASS_TOP_CFG] = &qhs_lpass_top,
-> +	[SLAVE_LPASS_SNOC] = &qns_sysnoc,
-> +	[SLAVE_SERVICES_LPASS_AML_NOC] = &srvc_niu_aml_noc,
-> +	[SLAVE_SERVICE_LPASS_AG_NOC] = &srvc_niu_lpass_agnoc,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_lpass_ag_noc = {
-> +	.nodes = lpass_ag_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
-> +	.bcms = lpass_ag_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(lpass_ag_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *mc_virt_bcms[] = {
-> +	&bcm_acv,
-> +	&bcm_mc0,
-> +};
-> +
-> +static struct qcom_icc_node *mc_virt_nodes[] = {
-> +	[MASTER_LLCC] = &llcc_mc,
-> +	[SLAVE_EBI1] = &ebi,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_mc_virt = {
-> +	.nodes = mc_virt_nodes,
-> +	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
-> +	.bcms = mc_virt_bcms,
-> +	.num_bcms = ARRAY_SIZE(mc_virt_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *mmss_noc_bcms[] = {
-> +	&bcm_mm0,
-> +	&bcm_mm1,
-> +};
-> +
-> +static struct qcom_icc_node *mmss_noc_nodes[] = {
-> +	[MASTER_CAMNOC_HF] = &qnm_camnoc_hf,
-> +	[MASTER_CAMNOC_ICP] = &qnm_camnoc_icp,
-> +	[MASTER_CAMNOC_SF] = &qnm_camnoc_sf,
-> +	[MASTER_MDP0] = &qnm_mdp0_0,
-> +	[MASTER_MDP1] = &qnm_mdp0_1,
-> +	[MASTER_MDP_CORE1_0] = &qnm_mdp1_0,
-> +	[MASTER_MDP_CORE1_1] = &qnm_mdp1_1,
-> +	[MASTER_CNOC_MNOC_HF_CFG] = &qnm_mnoc_hf_cfg,
-> +	[MASTER_CNOC_MNOC_SF_CFG] = &qnm_mnoc_sf_cfg,
-> +	[MASTER_VIDEO_P0] = &qnm_video0,
-> +	[MASTER_VIDEO_P1] = &qnm_video1,
-> +	[MASTER_VIDEO_PROC] = &qnm_video_cvp,
-> +	[MASTER_VIDEO_V_PROC] = &qnm_video_v_cpu,
-> +	[SLAVE_MNOC_HF_MEM_NOC] = &qns_mem_noc_hf,
-> +	[SLAVE_MNOC_SF_MEM_NOC] = &qns_mem_noc_sf,
-> +	[SLAVE_SERVICE_MNOC_HF] = &srvc_mnoc_hf,
-> +	[SLAVE_SERVICE_MNOC_SF] = &srvc_mnoc_sf,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_mmss_noc = {
-> +	.nodes = mmss_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
-> +	.bcms = mmss_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(mmss_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *nspa_noc_bcms[] = {
-> +	&bcm_nsa0,
-> +	&bcm_nsa1,
-> +};
-> +
-> +static struct qcom_icc_node *nspa_noc_nodes[] = {
-> +	[MASTER_CDSP_NOC_CFG] = &qhm_nsp_noc_config,
-> +	[MASTER_CDSP_PROC] = &qxm_nsp,
-> +	[SLAVE_HCP_A] = &qns_hcp,
-> +	[SLAVE_CDSP_MEM_NOC] = &qns_nsp_gemnoc,
-> +	[SLAVE_SERVICE_NSP_NOC] = &service_nsp_noc,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_nspa_noc = {
-> +	.nodes = nspa_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(nspa_noc_nodes),
-> +	.bcms = nspa_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(nspa_noc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *nspb_noc_bcms[] = {
-> +	&bcm_nsb0,
-> +	&bcm_nsb1,
-> +};
-> +
-> +static struct qcom_icc_node *nspb_noc_nodes[] = {
-> +	[MASTER_CDSPB_NOC_CFG] = &qhm_nspb_noc_config,
-> +	[MASTER_CDSP_PROC_B] = &qxm_nspb,
-> +	[SLAVE_CDSPB_MEM_NOC] = &qns_nspb_gemnoc,
-> +	[SLAVE_HCP_B] = &qns_nspb_hcp,
-> +	[SLAVE_SERVICE_NSPB_NOC] = &service_nspb_noc,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_nspb_noc = {
-> +	.nodes = nspb_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(nspb_noc_nodes),
-> +	.bcms = nspb_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(nspb_noc_bcms),
-> +
-> +};
-> +
-> +static struct qcom_icc_bcm *pcie_anoc_bcms[] = {
-> +	&bcm_pci0,
-> +};
-> +
-> +static struct qcom_icc_node *pcie_anoc_nodes[] = {
-> +	[MASTER_PCIE_0] = &xm_pcie3_0,
-> +	[MASTER_PCIE_1] = &xm_pcie3_1,
-> +	[SLAVE_ANOC_PCIE_GEM_NOC] = &qns_pcie_mem_noc,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_pcie_anoc = {
-> +	.nodes = pcie_anoc_nodes,
-> +	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
-> +	.bcms = pcie_anoc_bcms,
-> +	.num_bcms = ARRAY_SIZE(pcie_anoc_bcms),
-> +};
-> +
-> +static struct qcom_icc_bcm *system_noc_bcms[] = {
-> +	&bcm_sn0,
-> +	&bcm_sn1,
-> +	&bcm_sn3,
-> +	&bcm_sn4,
-> +	&bcm_sn9,
-> +};
-> +
-> +static struct qcom_icc_node *system_noc_nodes[] = {
-> +	[MASTER_GIC_AHB] = &qhm_gic,
-> +	[MASTER_A1NOC_SNOC] = &qnm_aggre1_noc,
-> +	[MASTER_A2NOC_SNOC] = &qnm_aggre2_noc,
-> +	[MASTER_LPASS_ANOC] = &qnm_lpass_noc,
-> +	[MASTER_SNOC_CFG] = &qnm_snoc_cfg,
-> +	[MASTER_PIMEM] = &qxm_pimem,
-> +	[MASTER_GIC] = &xm_gic,
-> +	[SLAVE_SNOC_GEM_NOC_GC] = &qns_gemnoc_gc,
-> +	[SLAVE_SNOC_GEM_NOC_SF] = &qns_gemnoc_sf,
-> +	[SLAVE_SERVICE_SNOC] = &srvc_snoc,
-> +};
-> +
-> +static struct qcom_icc_desc sa8775p_system_noc = {
-> +	.nodes = system_noc_nodes,
-> +	.num_nodes = ARRAY_SIZE(system_noc_nodes),
-> +	.bcms = system_noc_bcms,
-> +	.num_bcms = ARRAY_SIZE(system_noc_bcms),
-> +};
-> +
-> +static const struct of_device_id qnoc_of_match[] = {
-> +	{ .compatible = "qcom,sa8775p-aggre1-noc", .data = &sa8775p_aggre1_noc, },
-> +	{ .compatible = "qcom,sa8775p-aggre2-noc", .data = &sa8775p_aggre2_noc, },
-> +	{ .compatible = "qcom,sa8775p-clk-virt", .data = &sa8775p_clk_virt, },
-> +	{ .compatible = "qcom,sa8775p-config-noc", .data = &sa8775p_config_noc, },
-> +	{ .compatible = "qcom,sa8775p-dc-noc", .data = &sa8775p_dc_noc, },
-> +	{ .compatible = "qcom,sa8775p-gem-noc", .data = &sa8775p_gem_noc, },
-> +	{ .compatible = "qcom,sa8775p-gpdsp-anoc", .data = &sa8775p_gpdsp_anoc, },
-> +	{ .compatible = "qcom,sa8775p-lpass-ag-noc", .data = &sa8775p_lpass_ag_noc, },
-> +	{ .compatible = "qcom,sa8775p-mc-virt", .data = &sa8775p_mc_virt, },
-> +	{ .compatible = "qcom,sa8775p-mmss-noc", .data = &sa8775p_mmss_noc, },
-> +	{ .compatible = "qcom,sa8775p-nspa-noc", .data = &sa8775p_nspa_noc, },
-> +	{ .compatible = "qcom,sa8775p-nspb-noc", .data = &sa8775p_nspb_noc, },
-> +	{ .compatible = "qcom,sa8775p-pcie-anoc", .data = &sa8775p_pcie_anoc, },
-> +	{ .compatible = "qcom,sa8775p-system-noc", .data = &sa8775p_system_noc, },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, qnoc_of_match);
-> +
-> +static struct platform_driver qnoc_driver = {
-> +	.probe = qcom_icc_rpmh_probe,
-> +	.remove = qcom_icc_rpmh_remove,
-> +	.driver = {
-> +		.name = "qnoc-sa8775p",
-> +		.of_match_table = qnoc_of_match,
-> +		.sync_state = icc_sync_state,
-> +	},
-> +};
-> +
-> +static int __init qnoc_driver_init(void)
-> +{
-> +	return platform_driver_register(&qnoc_driver);
-> +}
-> +core_initcall(qnoc_driver_init);
-> +
-> +static void __exit qnoc_driver_exit(void)
-> +{
-> +	platform_driver_unregister(&qnoc_driver);
-> +}
-> +module_exit(qnoc_driver_exit);
-> +
-> +MODULE_DESCRIPTION("Qualcomm Technologies, Inc. SA8775P NoC driver");
-> +MODULE_LICENSE("GPL");
+DQoNCkxlIDA2LzAxLzIwMjMgw6AgMjM6MDksIFNvbmcgTGl1IGEgw6ljcml0wqA6DQo+IG1vZHVs
+ZV9sYXlvdXQgbWFuYWdlcyBkaWZmZXJlbnQgdHlwZXMgb2YgbWVtb3J5ICh0ZXh0LCBkYXRhLCBy
+b2RhdGEsIGV0Yy4pDQo+IGluIG9uZSBhbGxvY2F0aW9uLCB3aGljaCBpcyBwcm9ibGVtYXRpYyBm
+b3Igc29tZSByZWFzb25zOg0KPiANCj4gMS4gSXQgaXMgaGFyZCB0byBlbmFibGUgQ09ORklHX1NU
+UklDVF9NT0RVTEVfUldYLg0KPiAyLiBJdCBpcyBoYXJkIHRvIHVzZSBodWdlIHBhZ2VzIGluIG1v
+ZHVsZXMgKGFuZCBub3QgYnJlYWsgc3RyaWN0IHJ3eCkuDQo+IDMuIE1hbnkgYXJjaHMgdXNlcyBt
+b2R1bGVfbGF5b3V0IGZvciBhcmNoLXNwZWNpZmljIGRhdGEsIGJ1dCBpdCBpcyBub3QNCj4gICAg
+IG9idmlvdXMgaG93IHRoZXNlIGRhdGEgYXJlIHVzZWQgKGFyZSB0aGV5IFJPLCBSWCwgb3IgUlc/
+KQ0KPiANCj4gSW1wcm92ZSB0aGUgc2NlbmFyaW8gYnkgcmVwbGFjaW5nIDIgKG9yIDMpIG1vZHVs
+ZV9sYXlvdXQgcGVyIG1vZHVsZSB3aXRoDQo+IHVwIHRvIDcgbW9kdWxlX21lbW9yeSBwZXIgbW9k
+dWxlOg0KPiANCj4gICAgICAgICAgTU9EX01FTV9UWVBFX1RFWFQsDQo+ICAgICAgICAgIE1PRF9N
+RU1fVFlQRV9EQVRBLA0KPiAgICAgICAgICBNT0RfTUVNX1RZUEVfUk9EQVRBLA0KPiAgICAgICAg
+ICBNT0RfTUVNX1RZUEVfUk9fQUZURVJfSU5JVCwNCj4gICAgICAgICAgTU9EX01FTV9UWVBFX0lO
+SVRfVEVYVCwNCj4gICAgICAgICAgTU9EX01FTV9UWVBFX0lOSVRfREFUQSwNCj4gICAgICAgICAg
+TU9EX01FTV9UWVBFX0lOSVRfUk9EQVRBLA0KPiANCj4gYW5kIGFsbG9jYXRpbmcgdGhlbSBzZXBh
+cmF0ZWx5Lg0KPiANCj4gVmFyaW91cyBhcmNocyB1c2UgbW9kdWxlX2xheW91dCBmb3IgZGlmZmVy
+ZW50IGRhdGEuIFRoZXNlIGRhdGEgYXJlIHB1dA0KPiBpbnRvIGRpZmZlcmVudCBtb2R1bGVfbWVt
+b3J5IGJhc2VkIG9uIHRoZWlyIGxvY2F0aW9uIGluIG1vZHVsZV9sYXlvdXQuDQo+IElPVywgZGF0
+YSB0aGF0IHVzZWQgdG8gZ28gd2l0aCB0ZXh0IGlzIGFsbG9jYXRlZCB3aXRoIE1PRF9NRU1fVFlQ
+RV9URVhUOw0KPiBkYXRhIHRoYXQgdXNlZCB0byBnbyB3aXRoIGRhdGEgaXMgYWxsb2NhdGVkIHdp
+dGggTU9EX01FTV9UWVBFX0RBVEEsIGV0Yy4NCg0KSSBkaXNsaWtlIGhvdyBpdCBsb29rcyB3aXRo
+IGVudW1zLCB0aGluZ3MgbGlrZSANCm1vZC0+bW9kX21lbVtNT0RfTUVNX1RZUEVfSU5JVF9URVhU
+XSBhcmUgb2RkIGFuZCBkb24ndCByZWFkIG5pY2VseS4NCkNvdWxkIHdlIGhhdmUgc29tZXRoaW5n
+IG5pY2VyIGxpa2UgbW9kLT5tb2RfbWVtX2luaXRfdGV4dCA/DQpJIGtub3cgaXQgd2lsbCBjb21w
+bGljYXRlIHlvdXIgZm9yX2VhY2hfbW9kX21lbV90eXBlKCkgYnV0IGl0IHdvdWxkIGxvb2sgDQpu
+aWNlci4NCg0KQWxzbywgY2FuIHlvdSBleHBsYWluIGhvdyB5b3Ugc3dpdGNoIGZyb20gdHdvIHRy
+ZWVzIHRvIG9ubHkgb25lID8NCkFzIGZhciBhcyBJIHJlbWVtYmVyLCB0aGUgc2FtZSBxdWVzdGlv
+biBhcmlzZWQgd2hlbiBJIGltcGxlbWVudGVkIA0KQ09ORklHX0FSQ0hfV0FOVFNfTU9EVUxFU19E
+QVRBX0lOX1ZNQUxMT0MsIGFuZCB0aGUgY29uY2x1c2lvbiB3YXMgdGhhdCANCndlIGhhZCB0byBr
+ZWVwIHR3byBpbmRlcGVuZGFudCB0cmVlcywgc28gSSdtIGEgYml0IHB1enpsZWQgdGhhdCB5b3Ug
+aGF2ZSANCm5vdyBtZXJnZWQgZXZlcnl0aGluZyBpbnRvIGEgc2luZ2xlIHRyZWUuDQoNCkNocmlz
+dG9waGUNCg0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBTb25nIExpdSA8c29uZ0BrZXJuZWwub3Jn
+Pg0KPiBDYzogTHVpcyBDaGFtYmVybGFpbiA8bWNncm9mQGtlcm5lbC5vcmc+DQo+IENjOiBUaG9t
+YXMgR2xlaXhuZXIgPHRnbHhAbGludXRyb25peC5kZT4NCj4gQ2M6IFBldGVyIFppamxzdHJhIDxw
+ZXRlcnpAaW5mcmFkZWFkLm9yZz4NCj4gDQo+IC0tLQ0KPiANCj4gVGhpcyBpcyB0aGUgcHJlcGFy
+YXRpb24gd29yayBmb3IgdGhlIHR5cGUgYXdhcmUgbW9kdWxlX2FsbG9jKCkgZGlzY3Vzc2VkDQo+
+IGluIFsxXS4gV2hpbGUgdGhpcyB3b3JrIGlzIG5vdCBjb3ZlcmVkIG11Y2ggaW4gdGhlIGRpc2N1
+c3Npb24sIGl0IGlzIGENCj4gY3JpdGljYWwgc3RlcCBvZiB0aGUgZWZmb3J0Lg0KPiANCj4gQXMg
+dGhpcyBwYXJ0IGdyb3dzIHByZXR0eSBiaWcgKH4xMDAwIGxpbmVzLCArIGFuZCAtKSwgSSB3b3Vs
+ZCBsaWtlIGdldA0KPiBzb21lIGZlZWRiYWNrIG9uIGl0LCBzbyB0aGF0IEkga25vdyBpdCBpcyBv
+biB0aGUgcmlnaHQgdHJhY2suDQo+IA0KPiBQbGVhc2Ugc2hhcmUgeW91ciBjb21tZW50cy4gVGhh
+bmtzIQ0KPiANCj4gVGVzdCBjb3ZlcmFnZTogVGVzdGVkIG9uIHg4Nl82NC4NCj4gQnVpbGQgdGVz
+dGVkIGJ5IGtlcm5lbCB0ZXN0IGJvdCBpbiBbMl0uIFRoZSBvbmx5IHJlZ3Jlc3Npb24gaW4gWzJd
+IHdhcyBhDQo+IHR5cG8gaW4gcGFyaXNjLCB3aGljaCBpcyBhbHNvIGZpeGVkLg0KPiANCj4gWzFd
+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LW1tLzIwMjIxMTA3MjIzOTIxLjM0NTE5MTMt
+MS1zb25nQGtlcm5lbC5vcmcvVC8jdQ0KPiBbMl0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGlu
+dXgtcmFpZC82M2I4ODI3ZS5jbEpRWDJ3ZytJK3RpWDdtJTI1bGtwQGludGVsLmNvbS9ULyN1DQo+
+IC0tLQ0KPiAgIGFyY2gvYWxwaGEva2VybmVsL21vZHVsZS5jICAgICAgfCAgIDMgKy0NCj4gICBh
+cmNoL2FyYy9rZXJuZWwvdW53aW5kLmMgICAgICAgIHwgICA5ICstDQo+ICAgYXJjaC9hcm0va2Vy
+bmVsL21vZHVsZS1wbHRzLmMgICB8ICAgNSArLQ0KPiAgIGFyY2gvYXJtNjQva2VybmVsL21vZHVs
+ZS1wbHRzLmMgfCAgIDUgKy0NCj4gICBhcmNoL2lhNjQva2VybmVsL21vZHVsZS5jICAgICAgIHwg
+IDMxICsrLQ0KPiAgIGFyY2gvbWlwcy9rZXJuZWwvdnBlLmMgICAgICAgICAgfCAgMTEgKy0NCj4g
+ICBhcmNoL3BhcmlzYy9rZXJuZWwvbW9kdWxlLmMgICAgIHwgIDUzICsrKy0tDQo+ICAgYXJjaC9w
+b3dlcnBjL2tlcm5lbC9tb2R1bGVfMzIuYyB8ICAxMCArLQ0KPiAgIGFyY2gvczM5MC9rZXJuZWwv
+bW9kdWxlLmMgICAgICAgfCAgMzAgKy0tDQo+ICAgaW5jbHVkZS9saW51eC9tb2R1bGUuaCAgICAg
+ICAgICB8ICA2NSArKystLS0NCj4gICBrZXJuZWwvbW9kdWxlL2ludGVybmFsLmggICAgICAgIHwg
+IDI5ICsrLQ0KPiAgIGtlcm5lbC9tb2R1bGUva2FsbHN5bXMuYyAgICAgICAgfCAgNTQgKystLS0N
+Cj4gICBrZXJuZWwvbW9kdWxlL2tkYi5jICAgICAgICAgICAgIHwgIDE3ICstDQo+ICAga2VybmVs
+L21vZHVsZS9tYWluLmMgICAgICAgICAgICB8IDM2OSArKysrKysrKysrKysrKysrKystLS0tLS0t
+LS0tLS0tLQ0KPiAgIGtlcm5lbC9tb2R1bGUvcHJvY2ZzLmMgICAgICAgICAgfCAgMTcgKy0NCj4g
+ICBrZXJuZWwvbW9kdWxlL3N0cmljdF9yd3guYyAgICAgIHwgMTEzICsrKy0tLS0tLS0NCj4gICBr
+ZXJuZWwvbW9kdWxlL3RyZWVfbG9va3VwLmMgICAgIHwgIDQzICsrLS0NCj4gICAxNyBmaWxlcyBj
+aGFuZ2VkLCA0NjIgaW5zZXJ0aW9ucygrKSwgNDAyIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAt
+LWdpdCBhL2FyY2gvYWxwaGEva2VybmVsL21vZHVsZS5jIGIvYXJjaC9hbHBoYS9rZXJuZWwvbW9k
+dWxlLmMNCj4gaW5kZXggNWI2MGMyNDhkZTllLi45MDVhZjRlOGQ4MzUgMTAwNjQ0DQo+IC0tLSBh
+L2FyY2gvYWxwaGEva2VybmVsL21vZHVsZS5jDQo+ICsrKyBiL2FyY2gvYWxwaGEva2VybmVsL21v
+ZHVsZS5jDQo+IEBAIC0xNDgsNyArMTQ4LDggQEAgYXBwbHlfcmVsb2NhdGVfYWRkKEVsZjY0X1No
+ZHIgKnNlY2hkcnMsIGNvbnN0IGNoYXIgKnN0cnRhYiwNCj4gICANCj4gICAJLyogVGhlIHNtYWxs
+IHNlY3Rpb25zIHdlcmUgc29ydGVkIHRvIHRoZSBlbmQgb2YgdGhlIHNlZ21lbnQuDQo+ICAgCSAg
+IFRoZSBmb2xsb3dpbmcgc2hvdWxkIGRlZmluaXRlbHkgY292ZXIgdGhlbS4gICovDQo+IC0JZ3Ag
+PSAodTY0KW1lLT5jb3JlX2xheW91dC5iYXNlICsgbWUtPmNvcmVfbGF5b3V0LnNpemUgLSAweDgw
+MDA7DQo+ICsJZ3AgPSAodTY0KW1lLT5tb2RfbWVtW01PRF9NRU1fVFlQRV9EQVRBXS5iYXNlICsN
+Cj4gKwkJbWUtPm1vZF9tZW1bTU9EX01FTV9UWVBFX0RBVEFdLnNpemUgLSAweDgwMDA7DQo+ICAg
+CWdvdCA9IHNlY2hkcnNbbWUtPmFyY2guZ290c2VjaW5kZXhdLnNoX2FkZHI7DQo+ICAgDQo+ICAg
+CWZvciAoaSA9IDA7IGkgPCBuOyBpKyspIHsNCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJjL2tlcm5l
+bC91bndpbmQuYyBiL2FyY2gvYXJjL2tlcm5lbC91bndpbmQuYw0KPiBpbmRleCAyMDAyNzBhOTQ1
+NTguLjJjNTVmNjIxNWY3OSAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcmMva2VybmVsL3Vud2luZC5j
+DQo+ICsrKyBiL2FyY2gvYXJjL2tlcm5lbC91bndpbmQuYw0KPiBAQCAtMzY5LDYgKzM2OSw4IEBA
+IHZvaWQgKnVud2luZF9hZGRfdGFibGUoc3RydWN0IG1vZHVsZSAqbW9kdWxlLCBjb25zdCB2b2lk
+ICp0YWJsZV9zdGFydCwNCj4gICAJCSAgICAgICB1bnNpZ25lZCBsb25nIHRhYmxlX3NpemUpDQo+
+ICAgew0KPiAgIAlzdHJ1Y3QgdW53aW5kX3RhYmxlICp0YWJsZTsNCj4gKwlzdHJ1Y3QgbW9kdWxl
+X21lbW9yeSAqbW9kX21lbV9jb3JlX3RleHQ7DQo+ICsJc3RydWN0IG1vZHVsZV9tZW1vcnkgKm1v
+ZF9tZW1faW5pdF90ZXh0Ow0KPiAgIA0KPiAgIAlpZiAodGFibGVfc2l6ZSA8PSAwKQ0KPiAgIAkJ
+cmV0dXJuIE5VTEw7DQo+IEBAIC0zNzcsOSArMzc5LDEyIEBAIHZvaWQgKnVud2luZF9hZGRfdGFi
+bGUoc3RydWN0IG1vZHVsZSAqbW9kdWxlLCBjb25zdCB2b2lkICp0YWJsZV9zdGFydCwNCj4gICAJ
+aWYgKCF0YWJsZSkNCj4gICAJCXJldHVybiBOVUxMOw0KPiAgIA0KPiArCW1vZF9tZW1fY29yZV90
+ZXh0ID0gJm1vZHVsZS0+bW9kX21lbVtNT0RfTUVNX1RZUEVfVEVYVF07DQo+ICsJbW9kX21lbV9p
+bml0X3RleHQgPSAmbW9kdWxlLT5tb2RfbWVtW01PRF9NRU1fVFlQRV9JTklUX1RFWFRdOw0KPiAr
+DQo+ICAgCWluaXRfdW53aW5kX3RhYmxlKHRhYmxlLCBtb2R1bGUtPm5hbWUsDQo+IC0JCQkgIG1v
+ZHVsZS0+Y29yZV9sYXlvdXQuYmFzZSwgbW9kdWxlLT5jb3JlX2xheW91dC5zaXplLA0KPiAtCQkJ
+ICBtb2R1bGUtPmluaXRfbGF5b3V0LmJhc2UsIG1vZHVsZS0+aW5pdF9sYXlvdXQuc2l6ZSwNCj4g
+KwkJCSAgbW9kX21lbV9jb3JlX3RleHQtPmJhc2UsIG1vZF9tZW1fY29yZV90ZXh0LT5zaXplLA0K
+PiArCQkJICBtb2RfbWVtX2luaXRfdGV4dC0+YmFzZSwgbW9kX21lbV9pbml0X3RleHQtPnNpemUs
+DQo+ICAgCQkJICB0YWJsZV9zdGFydCwgdGFibGVfc2l6ZSwNCj4gICAJCQkgIE5VTEwsIDApOw0K
+PiAgIA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0va2VybmVsL21vZHVsZS1wbHRzLmMgYi9hcmNo
+L2FybS9rZXJuZWwvbW9kdWxlLXBsdHMuYw0KPiBpbmRleCAxZmMzMDliNDFmOTQuLmU2OGExZGE0
+MTIwNiAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm0va2VybmVsL21vZHVsZS1wbHRzLmMNCj4gKysr
+IGIvYXJjaC9hcm0va2VybmVsL21vZHVsZS1wbHRzLmMNCj4gQEAgLTMwLDcgKzMwLDEwIEBAIHN0
+YXRpYyBjb25zdCB1MzIgZml4ZWRfcGx0c1tdID0gew0KPiAgIA0KPiAgIHN0YXRpYyBib29sIGlu
+X2luaXQoY29uc3Qgc3RydWN0IG1vZHVsZSAqbW9kLCB1bnNpZ25lZCBsb25nIGxvYykNCj4gICB7
+DQo+IC0JcmV0dXJuIGxvYyAtICh1MzIpbW9kLT5pbml0X2xheW91dC5iYXNlIDwgbW9kLT5pbml0
+X2xheW91dC5zaXplOw0KPiArCWNvbnN0IHN0cnVjdCBtb2R1bGVfbWVtb3J5ICptb2RfbWVtOw0K
+PiArDQo+ICsJbW9kX21lbSA9ICZtb2QtPm1vZF9tZW1bTU9EX01FTV9UWVBFX0lOSVRfVEVYVF07
+DQo+ICsJcmV0dXJuIGxvYyAtICh1MzIpbW9kX21lbS0+YmFzZSA8IG1vZF9tZW0tPnNpemU7DQo+
+ICAgfQ0KPiAgIA0KPiAgIHN0YXRpYyB2b2lkIHByZWFsbG9jX2ZpeGVkKHN0cnVjdCBtb2RfcGx0
+X3NlYyAqcGx0c2VjLCBzdHJ1Y3QgcGx0X2VudHJpZXMgKnBsdCkNCj4gZGlmZiAtLWdpdCBhL2Fy
+Y2gvYXJtNjQva2VybmVsL21vZHVsZS1wbHRzLmMgYi9hcmNoL2FybTY0L2tlcm5lbC9tb2R1bGUt
+cGx0cy5jDQo+IGluZGV4IDVhMGE4ZjU1MmE2MS4uMmYxY2E1ZTIyOTRiIDEwMDY0NA0KPiAtLS0g
+YS9hcmNoL2FybTY0L2tlcm5lbC9tb2R1bGUtcGx0cy5jDQo+ICsrKyBiL2FyY2gvYXJtNjQva2Vy
+bmVsL21vZHVsZS1wbHRzLmMNCj4gQEAgLTY3LDcgKzY3LDEwIEBAIHN0YXRpYyBib29sIHBsdF9l
+bnRyaWVzX2VxdWFsKGNvbnN0IHN0cnVjdCBwbHRfZW50cnkgKmEsDQo+ICAgDQo+ICAgc3RhdGlj
+IGJvb2wgaW5faW5pdChjb25zdCBzdHJ1Y3QgbW9kdWxlICptb2QsIHZvaWQgKmxvYykNCj4gICB7
+DQo+IC0JcmV0dXJuICh1NjQpbG9jIC0gKHU2NCltb2QtPmluaXRfbGF5b3V0LmJhc2UgPCBtb2Qt
+PmluaXRfbGF5b3V0LnNpemU7DQo+ICsJY29uc3Qgc3RydWN0IG1vZHVsZV9tZW1vcnkgKm1vZF9t
+ZW07DQo+ICsNCj4gKwltb2RfbWVtID0gJm1vZC0+bW9kX21lbVtNT0RfTUVNX1RZUEVfSU5JVF9U
+RVhUXTsNCj4gKwlyZXR1cm4gKHU2NClsb2MgLSAodTY0KW1vZF9tZW0tPmJhc2UgPCBtb2RfbWVt
+LT5zaXplOw0KPiAgIH0NCj4gICANCj4gICB1NjQgbW9kdWxlX2VtaXRfcGx0X2VudHJ5KHN0cnVj
+dCBtb2R1bGUgKm1vZCwgRWxmNjRfU2hkciAqc2VjaGRycywNCj4gZGlmZiAtLWdpdCBhL2FyY2gv
+aWE2NC9rZXJuZWwvbW9kdWxlLmMgYi9hcmNoL2lhNjQva2VybmVsL21vZHVsZS5jDQo+IGluZGV4
+IDhmNjJjZjk3ZjY5MS4uOTY2YTg5OTc0MjRkIDEwMDY0NA0KPiAtLS0gYS9hcmNoL2lhNjQva2Vy
+bmVsL21vZHVsZS5jDQo+ICsrKyBiL2FyY2gvaWE2NC9rZXJuZWwvbW9kdWxlLmMNCj4gQEAgLTQ4
+NSwxOSArNDg1LDI1IEBAIG1vZHVsZV9mcm9iX2FyY2hfc2VjdGlvbnMgKEVsZl9FaGRyICplaGRy
+LCBFbGZfU2hkciAqc2VjaGRycywgY2hhciAqc2Vjc3RyaW5ncywNCj4gICAJcmV0dXJuIDA7DQo+
+ICAgfQ0KPiAgIA0KPiAtc3RhdGljIGlubGluZSBpbnQNCj4gK3N0YXRpYyBpbmxpbmUgYm9vbA0K
+PiAgIGluX2luaXQgKGNvbnN0IHN0cnVjdCBtb2R1bGUgKm1vZCwgdWludDY0X3QgYWRkcikNCj4g
+ICB7DQo+IC0JcmV0dXJuIGFkZHIgLSAodWludDY0X3QpIG1vZC0+aW5pdF9sYXlvdXQuYmFzZSA8
+IG1vZC0+aW5pdF9sYXlvdXQuc2l6ZTsNCj4gKwljb25zdCBzdHJ1Y3QgbW9kdWxlX21lbW9yeSAq
+bW9kX21lbTsNCj4gKw0KPiArCW1vZF9tZW0gPSAmbW9kLT5tb2RfbWVtW01PRF9NRU1fVFlQRV9J
+TklUX1RFWFRdOw0KPiArCXJldHVybiBhZGRyIC0gKHVpbnQ2NF90KW1vZF9tZW0tPmJhc2UgPCBt
+b2RfbWVtLT5zaXplOw0KPiAgIH0NCj4gICANCj4gLXN0YXRpYyBpbmxpbmUgaW50DQo+ICtzdGF0
+aWMgaW5saW5lIGJvb2wNCj4gICBpbl9jb3JlIChjb25zdCBzdHJ1Y3QgbW9kdWxlICptb2QsIHVp
+bnQ2NF90IGFkZHIpDQo+ICAgew0KPiAtCXJldHVybiBhZGRyIC0gKHVpbnQ2NF90KSBtb2QtPmNv
+cmVfbGF5b3V0LmJhc2UgPCBtb2QtPmNvcmVfbGF5b3V0LnNpemU7DQo+ICsJY29uc3Qgc3RydWN0
+IG1vZHVsZV9tZW1vcnkgKm1vZF9tZW07DQo+ICsNCj4gKwltb2RfbWVtID0gJm1vZC0+bW9kX21l
+bVtNT0RfTUVNX1RZUEVfVEVYVF07DQo+ICsJcmV0dXJuIGFkZHIgLSAodWludDY0X3QpbW9kX21l
+bS0+YmFzZSA8IG1vZF9tZW0tPnNpemU7DQo+ICAgfQ0KPiAgIA0KPiAtc3RhdGljIGlubGluZSBp
+bnQNCj4gK3N0YXRpYyBpbmxpbmUgYm9vbA0KPiAgIGlzX2ludGVybmFsIChjb25zdCBzdHJ1Y3Qg
+bW9kdWxlICptb2QsIHVpbnQ2NF90IHZhbHVlKQ0KPiAgIHsNCj4gICAJcmV0dXJuIGluX2luaXQo
+bW9kLCB2YWx1ZSkgfHwgaW5fY29yZShtb2QsIHZhbHVlKTsNCj4gQEAgLTY3Nyw3ICs2ODMsOSBA
+QCBkb19yZWxvYyAoc3RydWN0IG1vZHVsZSAqbW9kLCB1aW50OF90IHJfdHlwZSwgRWxmNjRfU3lt
+ICpzeW0sIHVpbnQ2NF90IGFkZGVuZCwNCj4gICAJCWJyZWFrOw0KPiAgIA0KPiAgIAkgICAgICBj
+YXNlIFJWX0JEUkVMOg0KPiAtCQl2YWwgLT0gKHVpbnQ2NF90KSAoaW5faW5pdChtb2QsIHZhbCkg
+PyBtb2QtPmluaXRfbGF5b3V0LmJhc2UgOiBtb2QtPmNvcmVfbGF5b3V0LmJhc2UpOw0KPiArCQl2
+YWwgLT0gKHVpbnQ2NF90KSAoaW5faW5pdChtb2QsIHZhbCkgPw0KPiArCQkJCSAgIG1vZC0+bW9k
+X21lbVtNT0RfTUVNX1RZUEVfSU5JVF9URVhUXS5iYXNlIDoNCj4gKwkJCQkgICBtb2QtPm1vZF9t
+ZW1bTU9EX01FTV9UWVBFX1RFWFRdLmJhc2UpOw0KPiAgIAkJYnJlYWs7DQo+ICAgDQo+ICAgCSAg
+ICAgIGNhc2UgUlZfTFRWOg0KPiBAQCAtODEyLDE1ICs4MjAsMTggQEAgYXBwbHlfcmVsb2NhdGVf
+YWRkIChFbGY2NF9TaGRyICpzZWNoZHJzLCBjb25zdCBjaGFyICpzdHJ0YWIsIHVuc2lnbmVkIGlu
+dCBzeW1pbmQNCj4gICAJCSAqICAgICBhZGRyZXNzZXMgaGF2ZSBiZWVuIHNlbGVjdGVkLi4uDQo+
+ICAgCQkgKi8NCj4gICAJCXVpbnQ2NF90IGdwOw0KPiAtCQlpZiAobW9kLT5jb3JlX2xheW91dC5z
+aXplID4gTUFYX0xUT0ZGKQ0KPiArCQlzdHJ1Y3QgbW9kdWxlX21lbW9yeSAqbW9kX21lbTsNCj4g
+Kw0KPiArCQltb2RfbWVtID0gJm1vZC0+bW9kX21lbVtNT0RfTUVNX1RZUEVfREFUQV07DQo+ICsJ
+CWlmIChtb2RfbWVtLT5zaXplID4gTUFYX0xUT0ZGKQ0KPiAgIAkJCS8qDQo+ICAgCQkJICogVGhp
+cyB0YWtlcyBhZHZhbnRhZ2Ugb2YgZmFjdCB0aGF0IFNIRl9BUkNIX1NNQUxMIGdldHMgYWxsb2Nh
+dGVkDQo+ICAgCQkJICogYXQgdGhlIGVuZCBvZiB0aGUgbW9kdWxlLg0KPiAgIAkJCSAqLw0KPiAt
+CQkJZ3AgPSBtb2QtPmNvcmVfbGF5b3V0LnNpemUgLSBNQVhfTFRPRkYgLyAyOw0KPiArCQkJZ3Ag
+PSBtb2RfbWVtLT5zaXplIC0gTUFYX0xUT0ZGIC8gMjsNCj4gICAJCWVsc2UNCj4gLQkJCWdwID0g
+bW9kLT5jb3JlX2xheW91dC5zaXplIC8gMjsNCj4gLQkJZ3AgPSAodWludDY0X3QpIG1vZC0+Y29y
+ZV9sYXlvdXQuYmFzZSArICgoZ3AgKyA3KSAmIC04KTsNCj4gKwkJCWdwID0gbW9kX21lbS0+c2l6
+ZSAvIDI7DQo+ICsJCWdwID0gKHVpbnQ2NF90KSBtb2RfbWVtLT5iYXNlICsgKChncCArIDcpICYg
+LTgpOw0KPiAgIAkJbW9kLT5hcmNoLmdwID0gZ3A7DQo+ICAgCQlERUJVR1AoIiVzOiBwbGFjaW5n
+IGdwIGF0IDB4JWx4XG4iLCBfX2Z1bmNfXywgZ3ApOw0KPiAgIAl9DQo+IGRpZmYgLS1naXQgYS9h
+cmNoL21pcHMva2VybmVsL3ZwZS5jIGIvYXJjaC9taXBzL2tlcm5lbC92cGUuYw0KPiBpbmRleCAx
+MzI5NDk3MjcwN2IuLmIxMzM2M2ExZjZhMyAxMDA2NDQNCj4gLS0tIGEvYXJjaC9taXBzL2tlcm5l
+bC92cGUuYw0KPiArKysgYi9hcmNoL21pcHMva2VybmVsL3ZwZS5jDQo+IEBAIC0xOTksMTggKzE5
+OSwxNyBAQCBzdGF0aWMgdm9pZCBsYXlvdXRfc2VjdGlvbnMoc3RydWN0IG1vZHVsZSAqbW9kLCBj
+b25zdCBFbGZfRWhkciAqaGRyLA0KPiAgIAlmb3IgKG0gPSAwOyBtIDwgQVJSQVlfU0laRShtYXNr
+cyk7ICsrbSkgew0KPiAgIAkJZm9yIChpID0gMDsgaSA8IGhkci0+ZV9zaG51bTsgKytpKSB7DQo+
+ICAgCQkJRWxmX1NoZHIgKnMgPSAmc2VjaGRyc1tpXTsNCj4gKwkJCXN0cnVjdCBtb2R1bGVfbWVt
+b3J5ICptb2RfbWVtOw0KPiArDQo+ICsJCQltb2RfbWVtID0gJm1vZC0+bW9kX21lbVtNT0RfTUVN
+X1RZUEVfVEVYVF07DQo+ICAgDQo+ICAgCQkJaWYgKChzLT5zaF9mbGFncyAmIG1hc2tzW21dWzBd
+KSAhPSBtYXNrc1ttXVswXQ0KPiAgIAkJCSAgICB8fCAocy0+c2hfZmxhZ3MgJiBtYXNrc1ttXVsx
+XSkNCj4gICAJCQkgICAgfHwgcy0+c2hfZW50c2l6ZSAhPSB+MFVMKQ0KPiAgIAkJCQljb250aW51
+ZTsNCj4gICAJCQlzLT5zaF9lbnRzaXplID0NCj4gLQkJCQlnZXRfb2Zmc2V0KCh1bnNpZ25lZCBs
+b25nICopJm1vZC0+Y29yZV9sYXlvdXQuc2l6ZSwgcyk7DQo+ICsJCQkJZ2V0X29mZnNldCgodW5z
+aWduZWQgbG9uZyAqKSZtb2RfbWVtLT5zaXplLCBzKTsNCj4gICAJCX0NCj4gLQ0KPiAtCQlpZiAo
+bSA9PSAwKQ0KPiAtCQkJbW9kLT5jb3JlX2xheW91dC50ZXh0X3NpemUgPSBtb2QtPmNvcmVfbGF5
+b3V0LnNpemU7DQo+IC0NCj4gICAJfQ0KPiAgIH0NCj4gICANCj4gQEAgLTY0MSw3ICs2NDAsNyBA
+QCBzdGF0aWMgaW50IHZwZV9lbGZsb2FkKHN0cnVjdCB2cGUgKnYpDQo+ICAgCQlsYXlvdXRfc2Vj
+dGlvbnMoJm1vZCwgaGRyLCBzZWNoZHJzLCBzZWNzdHJpbmdzKTsNCj4gICAJfQ0KPiAgIA0KPiAt
+CXYtPmxvYWRfYWRkciA9IGFsbG9jX3Byb2dtZW0obW9kLmNvcmVfbGF5b3V0LnNpemUpOw0KPiAr
+CXYtPmxvYWRfYWRkciA9IGFsbG9jX3Byb2dtZW0obW9kLm1vZF9tZW1bTU9EX01FTV9UWVBFX1RF
+WFRdLnNpemUpOw0KPiAgIAlpZiAoIXYtPmxvYWRfYWRkcikNCj4gICAJCXJldHVybiAtRU5PTUVN
+Ow0KPiAgIA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9wYXJpc2Mva2VybmVsL21vZHVsZS5jIGIvYXJj
+aC9wYXJpc2Mva2VybmVsL21vZHVsZS5jDQo+IGluZGV4IDdkZjE0MDU0NWIyMi4uZjJhZjcyZWM0
+ZDY2IDEwMDY0NA0KPiAtLS0gYS9hcmNoL3BhcmlzYy9rZXJuZWwvbW9kdWxlLmMNCj4gKysrIGIv
+YXJjaC9wYXJpc2Mva2VybmVsL21vZHVsZS5jDQo+IEBAIC0yNyw5ICsyNywxMSBAQA0KPiAgICAq
+ICAgICAgV2UgYXJlIG5vdCBkb2luZyBTRUdSRUwzMiBoYW5kbGluZyBjb3JyZWN0bHkuIEFjY29y
+ZGluZyB0byB0aGUgQUJJLCB3ZQ0KPiAgICAqICAgICAgc2hvdWxkIGRvIGEgdmFsdWUgb2Zmc2V0
+LCBsaWtlIHRoaXM6DQo+ICAgICoJCQlpZiAoaW5faW5pdChtZSwgKHZvaWQgKil2YWwpKQ0KPiAt
+ICoJCQkJdmFsIC09ICh1aW50MzJfdCltZS0+aW5pdF9sYXlvdXQuYmFzZTsNCj4gKyAqCQkJCXZh
+bCAtPSAodWludDMyX3QpbWUtPg0KPiArICogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIG1vZF9tZW1bTU9EX01FTV9UWVBFX0lOSVRfVEVYVF0uYmFzZTsNCj4gICAgKgkJCWVs
+c2UNCj4gLSAqCQkJCXZhbCAtPSAodWludDMyX3QpbWUtPmNvcmVfbGF5b3V0LmJhc2U7DQo+ICsg
+KgkJCQl2YWwgLT0gKHVpbnQzMl90KW1lLT4NCj4gKyAqICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICBtb2RfbWVtW01PRF9NRU1fVFlQRV9URVhUXS5iYXNlOw0KPiAgICAqCUhv
+d2V2ZXIsIFNFR1JFTDMyIGlzIHVzZWQgb25seSBmb3IgUEFSSVNDIHVud2luZCBlbnRyaWVzLCBh
+bmQgd2Ugd2FudA0KPiAgICAqCXRob3NlIGVudHJpZXMgdG8gaGF2ZSBhbiBhYnNvbHV0ZSBhZGRy
+ZXNzLCBhbmQgbm90IGp1c3QgYW4gb2Zmc2V0Lg0KPiAgICAqDQo+IEBAIC03NiwyMyArNzgsMTgg
+QEANCj4gICAgKiBhbGxvd3MgdXMgdG8gYWxsb2NhdGUgdXAgdG8gNDA5NSBHT1QgZW50cmllcy4g
+Ki8NCj4gICAjZGVmaW5lIE1BWF9HT1RTCTQwOTUNCj4gICANCj4gLS8qIHRocmVlIGZ1bmN0aW9u
+cyB0byBkZXRlcm1pbmUgd2hlcmUgaW4gdGhlIG1vZHVsZSBjb3JlDQo+IC0gKiBvciBpbml0IHBp
+ZWNlcyB0aGUgbG9jYXRpb24gaXMgKi8NCj4gLXN0YXRpYyBpbmxpbmUgaW50IGluX2luaXQoc3Ry
+dWN0IG1vZHVsZSAqbWUsIHZvaWQgKmxvYykNCj4gK3N0YXRpYyBpbmxpbmUgYm9vbCBpbl9sb2Nh
+bChzdHJ1Y3QgbW9kdWxlICptZSwgdm9pZCAqbG9jKQ0KPiAgIHsNCj4gLQlyZXR1cm4gKGxvYyA+
+PSBtZS0+aW5pdF9sYXlvdXQuYmFzZSAmJg0KPiAtCQlsb2MgPD0gKG1lLT5pbml0X2xheW91dC5i
+YXNlICsgbWUtPmluaXRfbGF5b3V0LnNpemUpKTsNCj4gLX0NCj4gKwllbnVtIG1vZF9tZW1fdHlw
+ZSB0eXBlOw0KPiAgIA0KPiAtc3RhdGljIGlubGluZSBpbnQgaW5fY29yZShzdHJ1Y3QgbW9kdWxl
+ICptZSwgdm9pZCAqbG9jKQ0KPiAtew0KPiAtCXJldHVybiAobG9jID49IG1lLT5jb3JlX2xheW91
+dC5iYXNlICYmDQo+IC0JCWxvYyA8PSAobWUtPmNvcmVfbGF5b3V0LmJhc2UgKyBtZS0+Y29yZV9s
+YXlvdXQuc2l6ZSkpOw0KPiAtfQ0KPiArCWZvciAodHlwZSA9IE1PRF9NRU1fVFlQRV9URVhUOyB0
+eXBlIDwgTU9EX01FTV9OVU1fVFlQRVM7IHR5cGUrKykgew0KPiArCQlzdHJ1Y3QgbW9kdWxlX21l
+bW9yeSAqbW9kX21lbSA9ICZtZS0+bW9kX21lbVt0eXBlXTsNCj4gICANCj4gLXN0YXRpYyBpbmxp
+bmUgaW50IGluX2xvY2FsKHN0cnVjdCBtb2R1bGUgKm1lLCB2b2lkICpsb2MpDQo+IC17DQo+IC0J
+cmV0dXJuIGluX2luaXQobWUsIGxvYykgfHwgaW5fY29yZShtZSwgbG9jKTsNCj4gKwkJaWYgKGxv
+YyA+PSBtb2RfbWVtLT5iYXNlICYmDQo+ICsJCSAgICBsb2MgPD0gKG1vZF9tZW0tPmJhc2UgKyBt
+b2RfbWVtLT5zaXplKSkNCj4gKwkJCXJldHVybiB0cnVlOw0KPiArCX0NCj4gKwlyZXR1cm4gZmFs
+c2U7DQo+ICAgfQ0KPiAgIA0KPiAgICNpZm5kZWYgQ09ORklHXzY0QklUDQo+IEBAIC0zMDIsNiAr
+Mjk5LDcgQEAgaW50IG1vZHVsZV9mcm9iX2FyY2hfc2VjdGlvbnMoQ09OU1QgRWxmX0VoZHIgKmhk
+ciwNCj4gICB7DQo+ICAgCXVuc2lnbmVkIGxvbmcgZ290cyA9IDAsIGZkZXNjcyA9IDAsIGxlbjsN
+Cj4gICAJdW5zaWduZWQgaW50IGk7DQo+ICsJc3RydWN0IG1vZHVsZV9tZW1vcnkgKm1vZF9tZW07
+DQo+ICAgDQo+ICAgCWxlbiA9IGhkci0+ZV9zaG51bSAqIHNpemVvZihtZS0+YXJjaC5zZWN0aW9u
+WzBdKTsNCj4gICAJbWUtPmFyY2guc2VjdGlvbiA9IGt6YWxsb2MobGVuLCBHRlBfS0VSTkVMKTsN
+Cj4gQEAgLTM0NiwxNCArMzQ0LDE1IEBAIGludCBtb2R1bGVfZnJvYl9hcmNoX3NlY3Rpb25zKENP
+TlNUIEVsZl9FaGRyICpoZHIsDQo+ICAgCQltZS0+YXJjaC5zZWN0aW9uW3NdLnN0dWJfZW50cmll
+cyArPSBjb3VudDsNCj4gICAJfQ0KPiAgIA0KPiArCW1vZF9tZW0gPSAmbWUtPm1vZF9tZW1bTU9E
+X01FTV9UWVBFX1RFWFRdOw0KPiAgIAkvKiBhbGlnbiB0aGluZ3MgYSBiaXQgKi8NCj4gLQltZS0+
+Y29yZV9sYXlvdXQuc2l6ZSA9IEFMSUdOKG1lLT5jb3JlX2xheW91dC5zaXplLCAxNik7DQo+IC0J
+bWUtPmFyY2guZ290X29mZnNldCA9IG1lLT5jb3JlX2xheW91dC5zaXplOw0KPiAtCW1lLT5jb3Jl
+X2xheW91dC5zaXplICs9IGdvdHMgKiBzaXplb2Yoc3RydWN0IGdvdF9lbnRyeSk7DQo+ICsJbW9k
+X21lbS0+c2l6ZSA9IEFMSUdOKG1vZF9tZW0tPnNpemUsIDE2KTsNCj4gKwltZS0+YXJjaC5nb3Rf
+b2Zmc2V0ID0gbW9kX21lbS0+c2l6ZTsNCj4gKwltb2RfbWVtLT5zaXplICs9IGdvdHMgKiBzaXpl
+b2Yoc3RydWN0IGdvdF9lbnRyeSk7DQo+ICAgDQo+IC0JbWUtPmNvcmVfbGF5b3V0LnNpemUgPSBB
+TElHTihtZS0+Y29yZV9sYXlvdXQuc2l6ZSwgMTYpOw0KPiAtCW1lLT5hcmNoLmZkZXNjX29mZnNl
+dCA9IG1lLT5jb3JlX2xheW91dC5zaXplOw0KPiAtCW1lLT5jb3JlX2xheW91dC5zaXplICs9IGZk
+ZXNjcyAqIHNpemVvZihFbGZfRmRlc2MpOw0KPiArCW1vZF9tZW0tPnNpemUgPSBBTElHTihtb2Rf
+bWVtLT5zaXplLCAxNik7DQo+ICsJbWUtPmFyY2guZmRlc2Nfb2Zmc2V0ID0gbW9kX21lbS0+c2l6
+ZTsNCj4gKwltb2RfbWVtLT5zaXplICs9IGZkZXNjcyAqIHNpemVvZihFbGZfRmRlc2MpOw0KPiAg
+IA0KPiAgIAltZS0+YXJjaC5nb3RfbWF4ID0gZ290czsNCj4gICAJbWUtPmFyY2guZmRlc2NfbWF4
+ID0gZmRlc2NzOw0KPiBAQCAtMzcxLDcgKzM3MCw3IEBAIHN0YXRpYyBFbGY2NF9Xb3JkIGdldF9n
+b3Qoc3RydWN0IG1vZHVsZSAqbWUsIHVuc2lnbmVkIGxvbmcgdmFsdWUsIGxvbmcgYWRkZW5kKQ0K
+PiAgIA0KPiAgIAlCVUdfT04odmFsdWUgPT0gMCk7DQo+ICAgDQo+IC0JZ290ID0gbWUtPmNvcmVf
+bGF5b3V0LmJhc2UgKyBtZS0+YXJjaC5nb3Rfb2Zmc2V0Ow0KPiArCWdvdCA9IG1lLT5tb2RfbWVt
+W01PRF9NRU1fVFlQRV9URVhUXS5iYXNlICsgbWUtPmFyY2guZ290X29mZnNldDsNCj4gICAJZm9y
+IChpID0gMDsgZ290W2ldLmFkZHI7IGkrKykNCj4gICAJCWlmIChnb3RbaV0uYWRkciA9PSB2YWx1
+ZSkNCj4gICAJCQlnb3RvIG91dDsNCj4gQEAgLTM4OSw3ICszODgsNyBAQCBzdGF0aWMgRWxmNjRf
+V29yZCBnZXRfZ290KHN0cnVjdCBtb2R1bGUgKm1lLCB1bnNpZ25lZCBsb25nIHZhbHVlLCBsb25n
+IGFkZGVuZCkNCj4gICAjaWZkZWYgQ09ORklHXzY0QklUDQo+ICAgc3RhdGljIEVsZl9BZGRyIGdl
+dF9mZGVzYyhzdHJ1Y3QgbW9kdWxlICptZSwgdW5zaWduZWQgbG9uZyB2YWx1ZSkNCj4gICB7DQo+
+IC0JRWxmX0ZkZXNjICpmZGVzYyA9IG1lLT5jb3JlX2xheW91dC5iYXNlICsgbWUtPmFyY2guZmRl
+c2Nfb2Zmc2V0Ow0KPiArCUVsZl9GZGVzYyAqZmRlc2MgPSBtZS0+bW9kX21lbVtNT0RfTUVNX1RZ
+UEVfVEVYVF0uYmFzZSArIG1lLT5hcmNoLmZkZXNjX29mZnNldDsNCj4gICANCj4gICAJaWYgKCF2
+YWx1ZSkgew0KPiAgIAkJcHJpbnRrKEtFUk5fRVJSICIlczogemVybyBPUEQgcmVxdWVzdGVkIVxu
+IiwgbWUtPm5hbWUpOw0KPiBAQCAtNDA3LDcgKzQwNiw3IEBAIHN0YXRpYyBFbGZfQWRkciBnZXRf
+ZmRlc2Moc3RydWN0IG1vZHVsZSAqbWUsIHVuc2lnbmVkIGxvbmcgdmFsdWUpDQo+ICAgDQo+ICAg
+CS8qIENyZWF0ZSBuZXcgb25lICovDQo+ICAgCWZkZXNjLT5hZGRyID0gdmFsdWU7DQo+IC0JZmRl
+c2MtPmdwID0gKEVsZl9BZGRyKW1lLT5jb3JlX2xheW91dC5iYXNlICsgbWUtPmFyY2guZ290X29m
+ZnNldDsNCj4gKwlmZGVzYy0+Z3AgPSAoRWxmX0FkZHIpbWUtPm1vZF9tZW1bTU9EX01FTV9UWVBF
+X1RFWFRdLmJhc2UgKyBtZS0+YXJjaC5nb3Rfb2Zmc2V0Ow0KPiAgIAlyZXR1cm4gKEVsZl9BZGRy
+KWZkZXNjOw0KPiAgIH0NCj4gICAjZW5kaWYgLyogQ09ORklHXzY0QklUICovDQo+IEBAIC04Mzks
+NyArODM4LDcgQEAgcmVnaXN0ZXJfdW53aW5kX3RhYmxlKHN0cnVjdCBtb2R1bGUgKm1lLA0KPiAg
+IA0KPiAgIAl0YWJsZSA9ICh1bnNpZ25lZCBjaGFyICopc2VjaGRyc1ttZS0+YXJjaC51bndpbmRf
+c2VjdGlvbl0uc2hfYWRkcjsNCj4gICAJZW5kID0gdGFibGUgKyBzZWNoZHJzW21lLT5hcmNoLnVu
+d2luZF9zZWN0aW9uXS5zaF9zaXplOw0KPiAtCWdwID0gKEVsZl9BZGRyKW1lLT5jb3JlX2xheW91
+dC5iYXNlICsgbWUtPmFyY2guZ290X29mZnNldDsNCj4gKwlncCA9IChFbGZfQWRkciltZS0+bW9k
+X21lbVtNT0RfTUVNX1RZUEVfVEVYVF0uYmFzZSArIG1lLT5hcmNoLmdvdF9vZmZzZXQ7DQo+ICAg
+DQo+ICAgCXByX2RlYnVnKCJyZWdpc3Rlcl91bndpbmRfdGFibGUoKSwgc2VjdCA9ICVkIGF0IDB4
+JXAgLSAweCVwIChncD0weCVseClcbiIsDQo+ICAgCSAgICAgICBtZS0+YXJjaC51bndpbmRfc2Vj
+dGlvbiwgdGFibGUsIGVuZCwgZ3ApOw0KPiBAQCAtOTc3LDcgKzk3Niw3IEBAIHZvaWQgbW9kdWxl
+X2FyY2hfY2xlYW51cChzdHJ1Y3QgbW9kdWxlICptb2QpDQo+ICAgI2lmZGVmIENPTkZJR182NEJJ
+VA0KPiAgIHZvaWQgKmRlcmVmZXJlbmNlX21vZHVsZV9mdW5jdGlvbl9kZXNjcmlwdG9yKHN0cnVj
+dCBtb2R1bGUgKm1vZCwgdm9pZCAqcHRyKQ0KPiAgIHsNCj4gLQl1bnNpZ25lZCBsb25nIHN0YXJ0
+X29wZCA9IChFbGY2NF9BZGRyKW1vZC0+Y29yZV9sYXlvdXQuYmFzZSArDQo+ICsJdW5zaWduZWQg
+bG9uZyBzdGFydF9vcGQgPSAoRWxmNjRfQWRkciltb2QtPm1vZF9tZW1bTU9EX01FTV9UWVBFX1RF
+WFRdLmJhc2UgKw0KPiAgIAkJCQkgICBtb2QtPmFyY2guZmRlc2Nfb2Zmc2V0Ow0KPiAgIAl1bnNp
+Z25lZCBsb25nIGVuZF9vcGQgPSBzdGFydF9vcGQgKw0KPiAgIAkJCQltb2QtPmFyY2guZmRlc2Nf
+Y291bnQgKiBzaXplb2YoRWxmNjRfRmRlc2MpOw0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBj
+L2tlcm5lbC9tb2R1bGVfMzIuYyBiL2FyY2gvcG93ZXJwYy9rZXJuZWwvbW9kdWxlXzMyLmMNCj4g
+aW5kZXggZWE2NTM2MTcxNzc4Li4xNDk2NTUxYzllOWUgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcG93
+ZXJwYy9rZXJuZWwvbW9kdWxlXzMyLmMNCj4gKysrIGIvYXJjaC9wb3dlcnBjL2tlcm5lbC9tb2R1
+bGVfMzIuYw0KPiBAQCAtMTYwLDExICsxNjAsMTMgQEAgc3RhdGljIHVpbnQzMl90IGRvX3BsdF9j
+YWxsKHZvaWQgKmxvY2F0aW9uLA0KPiAgIAkJCSAgICBzdHJ1Y3QgbW9kdWxlICptb2QpDQo+ICAg
+ew0KPiAgIAlzdHJ1Y3QgcHBjX3BsdF9lbnRyeSAqZW50cnk7DQo+ICsJc3RydWN0IG1vZHVsZV9t
+ZW1vcnkgKm1vZF9tZW07DQo+ICAgDQo+ICAgCXByX2RlYnVnKCJEb2luZyBwbHQgZm9yIGNhbGwg
+dG8gMHgleCBhdCAweCV4XG4iLCB2YWwsICh1bnNpZ25lZCBpbnQpbG9jYXRpb24pOw0KPiArDQo+
+ICsJbW9kX21lbSA9ICZtb2QtPm1vZF9tZW1bTU9EX01FTV9UWVBFX1RFWFRdOw0KPiAgIAkvKiBJ
+bml0LCBvciBjb3JlIFBMVD8gKi8NCj4gLQlpZiAobG9jYXRpb24gPj0gbW9kLT5jb3JlX2xheW91
+dC5iYXNlDQo+IC0JICAgICYmIGxvY2F0aW9uIDwgbW9kLT5jb3JlX2xheW91dC5iYXNlICsgbW9k
+LT5jb3JlX2xheW91dC5zaXplKQ0KPiArCWlmIChsb2NhdGlvbiA+PSBtb2RfbWVtLT5iYXNlICYm
+IGxvY2F0aW9uIDwgbW9kX21lbS0+YmFzZSArIG1vZF9tZW0tPnNpemUpDQo+ICAgCQllbnRyeSA9
+ICh2b2lkICopc2VjaGRyc1ttb2QtPmFyY2guY29yZV9wbHRfc2VjdGlvbl0uc2hfYWRkcjsNCj4g
+ICAJZWxzZQ0KPiAgIAkJZW50cnkgPSAodm9pZCAqKXNlY2hkcnNbbW9kLT5hcmNoLmluaXRfcGx0
+X3NlY3Rpb25dLnNoX2FkZHI7DQo+IEBAIC0zMjIsMTQgKzMyNCwxNCBAQCBub3RyYWNlIGludCBt
+b2R1bGVfdHJhbXBvbGluZV90YXJnZXQoc3RydWN0IG1vZHVsZSAqbW9kLCB1bnNpZ25lZCBsb25n
+IGFkZHIsDQo+ICAgDQo+ICAgaW50IG1vZHVsZV9maW5hbGl6ZV9mdHJhY2Uoc3RydWN0IG1vZHVs
+ZSAqbW9kdWxlLCBjb25zdCBFbGZfU2hkciAqc2VjaGRycykNCj4gICB7DQo+IC0JbW9kdWxlLT5h
+cmNoLnRyYW1wID0gZG9fcGx0X2NhbGwobW9kdWxlLT5jb3JlX2xheW91dC5iYXNlLA0KPiArCW1v
+ZHVsZS0+YXJjaC50cmFtcCA9IGRvX3BsdF9jYWxsKG1vZHVsZS0+bW9kX21lbVtNT0RfTUVNX1RZ
+UEVfVEVYVF0uYmFzZSwNCj4gICAJCQkJCSAodW5zaWduZWQgbG9uZylmdHJhY2VfY2FsbGVyLA0K
+PiAgIAkJCQkJIHNlY2hkcnMsIG1vZHVsZSk7DQo+ICAgCWlmICghbW9kdWxlLT5hcmNoLnRyYW1w
+KQ0KPiAgIAkJcmV0dXJuIC1FTk9FTlQ7DQo+ICAgDQo+ICAgI2lmZGVmIENPTkZJR19EWU5BTUlD
+X0ZUUkFDRV9XSVRIX1JFR1MNCj4gLQltb2R1bGUtPmFyY2gudHJhbXBfcmVncyA9IGRvX3BsdF9j
+YWxsKG1vZHVsZS0+Y29yZV9sYXlvdXQuYmFzZSwNCj4gKwltb2R1bGUtPmFyY2gudHJhbXBfcmVn
+cyA9IGRvX3BsdF9jYWxsKG1vZHVsZS0+bW9kX21lbVtNT0RfTUVNX1RZUEVfVEVYVF0uYmFzZSwN
+Cj4gICAJCQkJCSAgICAgICh1bnNpZ25lZCBsb25nKWZ0cmFjZV9yZWdzX2NhbGxlciwNCj4gICAJ
+CQkJCSAgICAgIHNlY2hkcnMsIG1vZHVsZSk7DQo+ICAgCWlmICghbW9kdWxlLT5hcmNoLnRyYW1w
+X3JlZ3MpDQo+IGRpZmYgLS1naXQgYS9hcmNoL3MzOTAva2VybmVsL21vZHVsZS5jIGIvYXJjaC9z
+MzkwL2tlcm5lbC9tb2R1bGUuYw0KPiBpbmRleCAyZDE1OWIzMjg4NWIuLjVmOWM0NWZhMmZmZCAx
+MDA2NDQNCj4gLS0tIGEvYXJjaC9zMzkwL2tlcm5lbC9tb2R1bGUuYw0KPiArKysgYi9hcmNoL3Mz
+OTAva2VybmVsL21vZHVsZS5jDQo+IEBAIC0xMDgsNyArMTA4LDcgQEAgc3RhdGljIHZvaWQgY2hl
+Y2tfcmVsYShFbGZfUmVsYSAqcmVsYSwgc3RydWN0IG1vZHVsZSAqbWUpDQo+ICAgCWNhc2UgUl8z
+OTBfR0xPQl9EQVQ6DQo+ICAgCWNhc2UgUl8zOTBfSk1QX1NMT1Q6DQo+ICAgCWNhc2UgUl8zOTBf
+UkVMQVRJVkU6DQo+IC0JCS8qIE9ubHkgbmVlZGVkIGlmIHdlIHdhbnQgdG8gc3VwcG9ydCBsb2Fk
+aW5nIG9mDQo+ICsJCS8qIE9ubHkgbmVlZGVkIGlmIHdlIHdhbnQgdG8gc3VwcG9ydCBsb2FkaW5n
+IG9mDQo+ICAgCQkgICBtb2R1bGVzIGxpbmtlZCB3aXRoIC1zaGFyZWQuICovDQo+ICAgCQlicmVh
+azsNCj4gICAJfQ0KPiBAQCAtMTI2LDYgKzEyNiw3IEBAIGludCBtb2R1bGVfZnJvYl9hcmNoX3Nl
+Y3Rpb25zKEVsZl9FaGRyICpoZHIsIEVsZl9TaGRyICpzZWNoZHJzLA0KPiAgIAlFbGZfUmVsYSAq
+cmVsYTsNCj4gICAJY2hhciAqc3RyaW5nczsNCj4gICAJaW50IG5yZWxhLCBpLCBqOw0KPiArCXN0
+cnVjdCBtb2R1bGVfbWVtb3J5ICptb2RfbWVtOw0KPiAgIA0KPiAgIAkvKiBGaW5kIHN5bWJvbCB0
+YWJsZSBhbmQgc3RyaW5nIHRhYmxlLiAqLw0KPiAgIAlzeW10YWIgPSBOVUxMOw0KPiBAQCAtMTcz
+LDE0ICsxNzQsMTUgQEAgaW50IG1vZHVsZV9mcm9iX2FyY2hfc2VjdGlvbnMoRWxmX0VoZHIgKmhk
+ciwgRWxmX1NoZHIgKnNlY2hkcnMsDQo+ICAgDQo+ICAgCS8qIEluY3JlYXNlIGNvcmUgc2l6ZSBi
+eSBzaXplIG9mIGdvdCAmIHBsdCBhbmQgc2V0IHN0YXJ0DQo+ICAgCSAgIG9mZnNldHMgZm9yIGdv
+dCBhbmQgcGx0LiAqLw0KPiAtCW1lLT5jb3JlX2xheW91dC5zaXplID0gQUxJR04obWUtPmNvcmVf
+bGF5b3V0LnNpemUsIDQpOw0KPiAtCW1lLT5hcmNoLmdvdF9vZmZzZXQgPSBtZS0+Y29yZV9sYXlv
+dXQuc2l6ZTsNCj4gLQltZS0+Y29yZV9sYXlvdXQuc2l6ZSArPSBtZS0+YXJjaC5nb3Rfc2l6ZTsN
+Cj4gLQltZS0+YXJjaC5wbHRfb2Zmc2V0ID0gbWUtPmNvcmVfbGF5b3V0LnNpemU7DQo+ICsJbW9k
+X21lbSA9ICZtZS0+bW9kX21lbVtNT0RfTUVNX1RZUEVfVEVYVF07DQo+ICsJbW9kX21lbS0+c2l6
+ZSA9IEFMSUdOKG1vZF9tZW0tPnNpemUsIDQpOw0KPiArCW1lLT5hcmNoLmdvdF9vZmZzZXQgPSBt
+b2RfbWVtLT5zaXplOw0KPiArCW1vZF9tZW0tPnNpemUgKz0gbWUtPmFyY2guZ290X3NpemU7DQo+
+ICsJbWUtPmFyY2gucGx0X29mZnNldCA9IG1vZF9tZW0tPnNpemU7DQo+ICAgCWlmIChtZS0+YXJj
+aC5wbHRfc2l6ZSkgew0KPiAgIAkJaWYgKElTX0VOQUJMRUQoQ09ORklHX0VYUE9MSU5FKSAmJiAh
+bm9zcGVjX2Rpc2FibGUpDQo+ICAgCQkJbWUtPmFyY2gucGx0X3NpemUgKz0gUExUX0VOVFJZX1NJ
+WkU7DQo+IC0JCW1lLT5jb3JlX2xheW91dC5zaXplICs9IG1lLT5hcmNoLnBsdF9zaXplOw0KPiAr
+CQltb2RfbWVtLT5zaXplICs9IG1lLT5hcmNoLnBsdF9zaXplOw0KPiAgIAl9DQo+ICAgCXJldHVy
+biAwOw0KPiAgIH0NCj4gQEAgLTMwNCw3ICszMDYsNyBAQCBzdGF0aWMgaW50IGFwcGx5X3JlbGEo
+RWxmX1JlbGEgKnJlbGEsIEVsZl9BZGRyIGJhc2UsIEVsZl9TeW0gKnN5bXRhYiwNCj4gICAJY2Fz
+ZSBSXzM5MF9HT1RQTFQ2NDoJLyogNjQgYml0IG9mZnNldCB0byBqdW1wIHNsb3QuCSovDQo+ICAg
+CWNhc2UgUl8zOTBfR09UUExURU5UOgkvKiAzMiBiaXQgcmVsLiBvZmZzZXQgdG8ganVtcCBzbG90
+ID4+IDEuICovDQo+ICAgCQlpZiAoaW5mby0+Z290X2luaXRpYWxpemVkID09IDApIHsNCj4gLQkJ
+CUVsZl9BZGRyICpnb3RlbnQgPSBtZS0+Y29yZV9sYXlvdXQuYmFzZSArDQo+ICsJCQlFbGZfQWRk
+ciAqZ290ZW50ID0gbWUtPm1vZF9tZW1bTU9EX01FTV9UWVBFX1RFWFRdLmJhc2UgKw0KPiAgIAkJ
+CQkJICAgbWUtPmFyY2guZ290X29mZnNldCArDQo+ICAgCQkJCQkgICBpbmZvLT5nb3Rfb2Zmc2V0
+Ow0KPiAgIA0KPiBAQCAtMzI5LDcgKzMzMSw3IEBAIHN0YXRpYyBpbnQgYXBwbHlfcmVsYShFbGZf
+UmVsYSAqcmVsYSwgRWxmX0FkZHIgYmFzZSwgRWxmX1N5bSAqc3ltdGFiLA0KPiAgIAkJCXJjID0g
+YXBwbHlfcmVsYV9iaXRzKGxvYywgdmFsLCAwLCA2NCwgMCwgd3JpdGUpOw0KPiAgIAkJZWxzZSBp
+ZiAocl90eXBlID09IFJfMzkwX0dPVEVOVCB8fA0KPiAgIAkJCSByX3R5cGUgPT0gUl8zOTBfR09U
+UExURU5UKSB7DQo+IC0JCQl2YWwgKz0gKEVsZl9BZGRyKSBtZS0+Y29yZV9sYXlvdXQuYmFzZSAt
+IGxvYzsNCj4gKwkJCXZhbCArPSAoRWxmX0FkZHIpIG1lLT5tb2RfbWVtW01PRF9NRU1fVFlQRV9U
+RVhUXS5iYXNlIC0gbG9jOw0KPiAgIAkJCXJjID0gYXBwbHlfcmVsYV9iaXRzKGxvYywgdmFsLCAx
+LCAzMiwgMSwgd3JpdGUpOw0KPiAgIAkJfQ0KPiAgIAkJYnJlYWs7DQo+IEBAIC0zNDUsNyArMzQ3
+LDcgQEAgc3RhdGljIGludCBhcHBseV9yZWxhKEVsZl9SZWxhICpyZWxhLCBFbGZfQWRkciBiYXNl
+LCBFbGZfU3ltICpzeW10YWIsDQo+ICAgCQkJY2hhciAqcGx0X2Jhc2U7DQo+ICAgCQkJY2hhciAq
+aXA7DQo+ICAgDQo+IC0JCQlwbHRfYmFzZSA9IG1lLT5jb3JlX2xheW91dC5iYXNlICsgbWUtPmFy
+Y2gucGx0X29mZnNldDsNCj4gKwkJCXBsdF9iYXNlID0gbWUtPm1vZF9tZW1bTU9EX01FTV9UWVBF
+X1RFWFRdLmJhc2UgKyBtZS0+YXJjaC5wbHRfb2Zmc2V0Ow0KPiAgIAkJCWlwID0gcGx0X2Jhc2Ug
+KyBpbmZvLT5wbHRfb2Zmc2V0Ow0KPiAgIAkJCSooaW50ICopaW5zbiA9IDB4MGQxMGUzMTA7CS8q
+IGJhc3IgMSwwICAqLw0KPiAgIAkJCSooaW50ICopJmluc25bNF0gPSAweDEwMGMwMDA0OwkvKiBs
+ZwkxLDEyKDEpICovDQo+IEBAIC0zNzUsNyArMzc3LDcgQEAgc3RhdGljIGludCBhcHBseV9yZWxh
+KEVsZl9SZWxhICpyZWxhLCBFbGZfQWRkciBiYXNlLCBFbGZfU3ltICpzeW10YWIsDQo+ICAgCQkJ
+ICAgICAgIHZhbCAtIGxvYyArIDB4ZmZmZlVMIDwgMHgxZmZmZmVVTCkgfHwNCj4gICAJCQkgICAg
+ICAocl90eXBlID09IFJfMzkwX1BMVDMyREJMICYmDQo+ICAgCQkJICAgICAgIHZhbCAtIGxvYyAr
+IDB4ZmZmZmZmZmZVTEwgPCAweDFmZmZmZmZmZVVMTCkpKQ0KPiAtCQkJCXZhbCA9IChFbGZfQWRk
+cikgbWUtPmNvcmVfbGF5b3V0LmJhc2UgKw0KPiArCQkJCXZhbCA9IChFbGZfQWRkcikgbWUtPm1v
+ZF9tZW1bTU9EX01FTV9UWVBFX1RFWFRdLmJhc2UgKw0KPiAgIAkJCQkJbWUtPmFyY2gucGx0X29m
+ZnNldCArDQo+ICAgCQkJCQlpbmZvLT5wbHRfb2Zmc2V0Ow0KPiAgIAkJCXZhbCArPSByZWxhLT5y
+X2FkZGVuZCAtIGxvYzsNCj4gQEAgLTM5Nyw3ICszOTksNyBAQCBzdGF0aWMgaW50IGFwcGx5X3Jl
+bGEoRWxmX1JlbGEgKnJlbGEsIEVsZl9BZGRyIGJhc2UsIEVsZl9TeW0gKnN5bXRhYiwNCj4gICAJ
+Y2FzZSBSXzM5MF9HT1RPRkYzMjoJLyogMzIgYml0IG9mZnNldCB0byBHT1QuICAqLw0KPiAgIAlj
+YXNlIFJfMzkwX0dPVE9GRjY0OgkvKiA2NCBiaXQgb2Zmc2V0IHRvIEdPVC4gKi8NCj4gICAJCXZh
+bCA9IHZhbCArIHJlbGEtPnJfYWRkZW5kIC0NCj4gLQkJCSgoRWxmX0FkZHIpIG1lLT5jb3JlX2xh
+eW91dC5iYXNlICsgbWUtPmFyY2guZ290X29mZnNldCk7DQo+ICsJCQkoKEVsZl9BZGRyKSBtZS0+
+bW9kX21lbVtNT0RfTUVNX1RZUEVfVEVYVF0uYmFzZSArIG1lLT5hcmNoLmdvdF9vZmZzZXQpOw0K
+PiAgIAkJaWYgKHJfdHlwZSA9PSBSXzM5MF9HT1RPRkYxNikNCj4gICAJCQlyYyA9IGFwcGx5X3Jl
+bGFfYml0cyhsb2MsIHZhbCwgMCwgMTYsIDAsIHdyaXRlKTsNCj4gICAJCWVsc2UgaWYgKHJfdHlw
+ZSA9PSBSXzM5MF9HT1RPRkYzMikNCj4gQEAgLTQwNyw3ICs0MDksNyBAQCBzdGF0aWMgaW50IGFw
+cGx5X3JlbGEoRWxmX1JlbGEgKnJlbGEsIEVsZl9BZGRyIGJhc2UsIEVsZl9TeW0gKnN5bXRhYiwN
+Cj4gICAJCWJyZWFrOw0KPiAgIAljYXNlIFJfMzkwX0dPVFBDOgkvKiAzMiBiaXQgUEMgcmVsYXRp
+dmUgb2Zmc2V0IHRvIEdPVC4gKi8NCj4gICAJY2FzZSBSXzM5MF9HT1RQQ0RCTDoJLyogMzIgYml0
+IFBDIHJlbC4gb2ZmLiB0byBHT1Qgc2hpZnRlZCBieSAxLiAqLw0KPiAtCQl2YWwgPSAoRWxmX0Fk
+ZHIpIG1lLT5jb3JlX2xheW91dC5iYXNlICsgbWUtPmFyY2guZ290X29mZnNldCArDQo+ICsJCXZh
+bCA9IChFbGZfQWRkcikgbWUtPm1vZF9tZW1bTU9EX01FTV9UWVBFX1RFWFRdLmJhc2UgKyBtZS0+
+YXJjaC5nb3Rfb2Zmc2V0ICsNCj4gICAJCQlyZWxhLT5yX2FkZGVuZCAtIGxvYzsNCj4gICAJCWlm
+IChyX3R5cGUgPT0gUl8zOTBfR09UUEMpDQo+ICAgCQkJcmMgPSBhcHBseV9yZWxhX2JpdHMobG9j
+LCB2YWwsIDEsIDMyLCAwLCB3cml0ZSk7DQo+IEBAIC00MTgsNyArNDIwLDcgQEAgc3RhdGljIGlu
+dCBhcHBseV9yZWxhKEVsZl9SZWxhICpyZWxhLCBFbGZfQWRkciBiYXNlLCBFbGZfU3ltICpzeW10
+YWIsDQo+ICAgCWNhc2UgUl8zOTBfR0xPQl9EQVQ6CS8qIENyZWF0ZSBHT1QgZW50cnkuICAqLw0K
+PiAgIAljYXNlIFJfMzkwX0pNUF9TTE9UOgkvKiBDcmVhdGUgUExUIGVudHJ5LiAgKi8NCj4gICAJ
+Y2FzZSBSXzM5MF9SRUxBVElWRToJLyogQWRqdXN0IGJ5IHByb2dyYW0gYmFzZS4gICovDQo+IC0J
+CS8qIE9ubHkgbmVlZGVkIGlmIHdlIHdhbnQgdG8gc3VwcG9ydCBsb2FkaW5nIG9mDQo+ICsJCS8q
+IE9ubHkgbmVlZGVkIGlmIHdlIHdhbnQgdG8gc3VwcG9ydCBsb2FkaW5nIG9mDQo+ICAgCQkgICBt
+b2R1bGVzIGxpbmtlZCB3aXRoIC1zaGFyZWQuICovDQo+ICAgCQlyZXR1cm4gLUVOT0VYRUM7DQo+
+ICAgCWRlZmF1bHQ6DQo+IEBAIC01MTUsNyArNTE3LDcgQEAgaW50IG1vZHVsZV9maW5hbGl6ZShj
+b25zdCBFbGZfRWhkciAqaGRyLA0KPiAgIAkgICAgIW5vc3BlY19kaXNhYmxlICYmIG1lLT5hcmNo
+LnBsdF9zaXplKSB7DQo+ICAgCQl1bnNpZ25lZCBpbnQgKmlqOw0KPiAgIA0KPiAtCQlpaiA9IG1l
+LT5jb3JlX2xheW91dC5iYXNlICsgbWUtPmFyY2gucGx0X29mZnNldCArDQo+ICsJCWlqID0gbWUt
+Pm1vZF9tZW1bTU9EX01FTV9UWVBFX1RFWFRdLmJhc2UgKyBtZS0+YXJjaC5wbHRfb2Zmc2V0ICsN
+Cj4gICAJCQltZS0+YXJjaC5wbHRfc2l6ZSAtIFBMVF9FTlRSWV9TSVpFOw0KPiAgIAkJaWpbMF0g
+PSAweGM2MDAwMDAwOwkvKiBleHJsCSVyMCwuKzEwCSovDQo+ICAgCQlpalsxXSA9IDB4MDAwNWE3
+ZjQ7CS8qIGoJLgkJKi8NCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvbW9kdWxlLmggYi9p
+bmNsdWRlL2xpbnV4L21vZHVsZS5oDQo+IGluZGV4IGVjNjFmYjUzOTc5YS4uMzM4MGVmOGViZjU3
+IDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2xpbnV4L21vZHVsZS5oDQo+ICsrKyBiL2luY2x1ZGUv
+bGludXgvbW9kdWxlLmgNCj4gQEAgLTMyMCwxNyArMzIwLDIyIEBAIHN0cnVjdCBtb2RfdHJlZV9u
+b2RlIHsNCj4gICAJc3RydWN0IGxhdGNoX3RyZWVfbm9kZSBub2RlOw0KPiAgIH07DQo+ICAgDQo+
+IC1zdHJ1Y3QgbW9kdWxlX2xheW91dCB7DQo+IC0JLyogVGhlIGFjdHVhbCBjb2RlICsgZGF0YS4g
+Ki8NCj4gK2VudW0gbW9kX21lbV90eXBlIHsNCj4gKwlNT0RfTUVNX1RZUEVfVEVYVCwNCj4gKwlN
+T0RfTUVNX1RZUEVfREFUQSwNCj4gKwlNT0RfTUVNX1RZUEVfUk9EQVRBLA0KPiArCU1PRF9NRU1f
+VFlQRV9ST19BRlRFUl9JTklULA0KPiArCU1PRF9NRU1fVFlQRV9JTklUX1RFWFQsDQo+ICsJTU9E
+X01FTV9UWVBFX0lOSVRfREFUQSwNCj4gKwlNT0RfTUVNX1RZUEVfSU5JVF9ST0RBVEEsDQo+ICsN
+Cj4gKwlNT0RfTUVNX05VTV9UWVBFUywNCj4gKwlNT0RfTUVNX1RZUEVfSU5WQUxJRCA9IC0xLA0K
+PiArfTsNCj4gKw0KPiArc3RydWN0IG1vZHVsZV9tZW1vcnkgew0KPiAgIAl2b2lkICpiYXNlOw0K
+PiAtCS8qIFRvdGFsIHNpemUuICovDQo+ICAgCXVuc2lnbmVkIGludCBzaXplOw0KPiAtCS8qIFRo
+ZSBzaXplIG9mIHRoZSBleGVjdXRhYmxlIGNvZGUuICAqLw0KPiAtCXVuc2lnbmVkIGludCB0ZXh0
+X3NpemU7DQo+IC0JLyogU2l6ZSBvZiBSTyBzZWN0aW9uIG9mIHRoZSBtb2R1bGUgKHRleHQrcm9k
+YXRhKSAqLw0KPiAtCXVuc2lnbmVkIGludCByb19zaXplOw0KPiAtCS8qIFNpemUgb2YgUk8gYWZ0
+ZXIgaW5pdCBzZWN0aW9uICovDQo+IC0JdW5zaWduZWQgaW50IHJvX2FmdGVyX2luaXRfc2l6ZTsN
+Cj4gICANCj4gICAjaWZkZWYgQ09ORklHX01PRFVMRVNfVFJFRV9MT09LVVANCj4gICAJc3RydWN0
+IG1vZF90cmVlX25vZGUgbXRuOw0KPiBAQCAtMzM5LDkgKzM0NCw5IEBAIHN0cnVjdCBtb2R1bGVf
+bGF5b3V0IHsNCj4gICANCj4gICAjaWZkZWYgQ09ORklHX01PRFVMRVNfVFJFRV9MT09LVVANCj4g
+ICAvKiBPbmx5IHRvdWNoIG9uZSBjYWNoZWxpbmUgZm9yIGNvbW1vbiByYnRyZWUtZm9yLWNvcmUt
+bGF5b3V0IGNhc2UuICovDQo+IC0jZGVmaW5lIF9fbW9kdWxlX2xheW91dF9hbGlnbiBfX19fY2Fj
+aGVsaW5lX2FsaWduZWQNCj4gKyNkZWZpbmUgX19tb2R1bGVfbWVtb3J5X2FsaWduIF9fX19jYWNo
+ZWxpbmVfYWxpZ25lZA0KPiAgICNlbHNlDQo+IC0jZGVmaW5lIF9fbW9kdWxlX2xheW91dF9hbGln
+bg0KPiArI2RlZmluZSBfX21vZHVsZV9tZW1vcnlfYWxpZ24NCj4gICAjZW5kaWYNCj4gICANCj4g
+ICBzdHJ1Y3QgbW9kX2thbGxzeW1zIHsNCj4gQEAgLTQxOCwxMiArNDIzLDggQEAgc3RydWN0IG1v
+ZHVsZSB7DQo+ICAgCS8qIFN0YXJ0dXAgZnVuY3Rpb24uICovDQo+ICAgCWludCAoKmluaXQpKHZv
+aWQpOw0KPiAgIA0KPiAtCS8qIENvcmUgbGF5b3V0OiByYnRyZWUgaXMgYWNjZXNzZWQgZnJlcXVl
+bnRseSwgc28ga2VlcCB0b2dldGhlci4gKi8NCj4gLQlzdHJ1Y3QgbW9kdWxlX2xheW91dCBjb3Jl
+X2xheW91dCBfX21vZHVsZV9sYXlvdXRfYWxpZ247DQo+IC0Jc3RydWN0IG1vZHVsZV9sYXlvdXQg
+aW5pdF9sYXlvdXQ7DQo+IC0jaWZkZWYgQ09ORklHX0FSQ0hfV0FOVFNfTU9EVUxFU19EQVRBX0lO
+X1ZNQUxMT0MNCj4gLQlzdHJ1Y3QgbW9kdWxlX2xheW91dCBkYXRhX2xheW91dDsNCj4gLSNlbmRp
+Zg0KPiArCS8qIHJidHJlZSBpcyBhY2Nlc3NlZCBmcmVxdWVudGx5LCBzbyBrZWVwIHRvZ2V0aGVy
+LiAqLw0KPiArCXN0cnVjdCBtb2R1bGVfbWVtb3J5IG1vZF9tZW1bTU9EX01FTV9OVU1fVFlQRVNd
+IF9fbW9kdWxlX21lbW9yeV9hbGlnbjsNCj4gICANCj4gICAJLyogQXJjaC1zcGVjaWZpYyBtb2R1
+bGUgdmFsdWVzICovDQo+ICAgCXN0cnVjdCBtb2RfYXJjaF9zcGVjaWZpYyBhcmNoOw0KPiBAQCAt
+NTczLDIzICs1NzQsMzUgQEAgYm9vbCBfX2lzX21vZHVsZV9wZXJjcHVfYWRkcmVzcyh1bnNpZ25l
+ZCBsb25nIGFkZHIsIHVuc2lnbmVkIGxvbmcgKmNhbl9hZGRyKTsNCj4gICBib29sIGlzX21vZHVs
+ZV9wZXJjcHVfYWRkcmVzcyh1bnNpZ25lZCBsb25nIGFkZHIpOw0KPiAgIGJvb2wgaXNfbW9kdWxl
+X3RleHRfYWRkcmVzcyh1bnNpZ25lZCBsb25nIGFkZHIpOw0KPiAgIA0KPiArc3RhdGljIGlubGlu
+ZSBib29sIHdpdGhpbl9tb2R1bGVfbWVtX3R5cGUodW5zaWduZWQgbG9uZyBhZGRyLA0KPiArCQkJ
+CQkgIGNvbnN0IHN0cnVjdCBtb2R1bGUgKm1vZCwNCj4gKwkJCQkJICBlbnVtIG1vZF9tZW1fdHlw
+ZSB0eXBlKQ0KPiArew0KPiArCWNvbnN0IHN0cnVjdCBtb2R1bGVfbWVtb3J5ICptb2RfbWVtOw0K
+PiArDQo+ICsJaWYgKFdBUk5fT05fT05DRSh0eXBlIDwgTU9EX01FTV9UWVBFX1RFWFQgfHwgdHlw
+ZSA+PSBNT0RfTUVNX05VTV9UWVBFUykpDQo+ICsJCXJldHVybiBmYWxzZTsNCj4gKw0KPiArCW1v
+ZF9tZW0gPSAmbW9kLT5tb2RfbWVtW3R5cGVdOw0KPiArCXJldHVybiAodW5zaWduZWQgbG9uZylt
+b2RfbWVtLT5iYXNlIDw9IGFkZHIgJiYNCj4gKwkJYWRkciA8ICh1bnNpZ25lZCBsb25nKW1vZF9t
+ZW0tPmJhc2UgKyBtb2RfbWVtLT5zaXplOw0KPiArfQ0KPiArDQo+ICAgc3RhdGljIGlubGluZSBi
+b29sIHdpdGhpbl9tb2R1bGVfY29yZSh1bnNpZ25lZCBsb25nIGFkZHIsDQo+ICAgCQkJCSAgICAg
+IGNvbnN0IHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gICB7DQo+IC0jaWZkZWYgQ09ORklHX0FSQ0hf
+V0FOVFNfTU9EVUxFU19EQVRBX0lOX1ZNQUxMT0MNCj4gLQlpZiAoKHVuc2lnbmVkIGxvbmcpbW9k
+LT5kYXRhX2xheW91dC5iYXNlIDw9IGFkZHIgJiYNCj4gLQkgICAgYWRkciA8ICh1bnNpZ25lZCBs
+b25nKW1vZC0+ZGF0YV9sYXlvdXQuYmFzZSArIG1vZC0+ZGF0YV9sYXlvdXQuc2l6ZSkNCj4gLQkJ
+cmV0dXJuIHRydWU7DQo+IC0jZW5kaWYNCj4gLQlyZXR1cm4gKHVuc2lnbmVkIGxvbmcpbW9kLT5j
+b3JlX2xheW91dC5iYXNlIDw9IGFkZHIgJiYNCj4gLQkgICAgICAgYWRkciA8ICh1bnNpZ25lZCBs
+b25nKW1vZC0+Y29yZV9sYXlvdXQuYmFzZSArIG1vZC0+Y29yZV9sYXlvdXQuc2l6ZTsNCj4gKwly
+ZXR1cm4gd2l0aGluX21vZHVsZV9tZW1fdHlwZShhZGRyLCBtb2QsIE1PRF9NRU1fVFlQRV9URVhU
+KSB8fA0KPiArCQl3aXRoaW5fbW9kdWxlX21lbV90eXBlKGFkZHIsIG1vZCwgTU9EX01FTV9UWVBF
+X0RBVEEpIHx8DQo+ICsJCXdpdGhpbl9tb2R1bGVfbWVtX3R5cGUoYWRkciwgbW9kLCBNT0RfTUVN
+X1RZUEVfUk9EQVRBKSB8fA0KPiArCQl3aXRoaW5fbW9kdWxlX21lbV90eXBlKGFkZHIsIG1vZCwg
+TU9EX01FTV9UWVBFX1JPX0FGVEVSX0lOSVQpOw0KPiAgIH0NCj4gICANCj4gICBzdGF0aWMgaW5s
+aW5lIGJvb2wgd2l0aGluX21vZHVsZV9pbml0KHVuc2lnbmVkIGxvbmcgYWRkciwNCj4gICAJCQkJ
+ICAgICAgY29uc3Qgc3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAgIHsNCj4gLQlyZXR1cm4gKHVuc2ln
+bmVkIGxvbmcpbW9kLT5pbml0X2xheW91dC5iYXNlIDw9IGFkZHIgJiYNCj4gLQkgICAgICAgYWRk
+ciA8ICh1bnNpZ25lZCBsb25nKW1vZC0+aW5pdF9sYXlvdXQuYmFzZSArIG1vZC0+aW5pdF9sYXlv
+dXQuc2l6ZTsNCj4gKwlyZXR1cm4gd2l0aGluX21vZHVsZV9tZW1fdHlwZShhZGRyLCBtb2QsIE1P
+RF9NRU1fVFlQRV9JTklUX1RFWFQpIHx8DQo+ICsJCXdpdGhpbl9tb2R1bGVfbWVtX3R5cGUoYWRk
+ciwgbW9kLCBNT0RfTUVNX1RZUEVfSU5JVF9EQVRBKSB8fA0KPiArCQl3aXRoaW5fbW9kdWxlX21l
+bV90eXBlKGFkZHIsIG1vZCwgTU9EX01FTV9UWVBFX0lOSVRfUk9EQVRBKTsNCj4gICB9DQo+ICAg
+DQo+ICAgc3RhdGljIGlubGluZSBib29sIHdpdGhpbl9tb2R1bGUodW5zaWduZWQgbG9uZyBhZGRy
+LCBjb25zdCBzdHJ1Y3QgbW9kdWxlICptb2QpDQo+IGRpZmYgLS1naXQgYS9rZXJuZWwvbW9kdWxl
+L2ludGVybmFsLmggYi9rZXJuZWwvbW9kdWxlL2ludGVybmFsLmgNCj4gaW5kZXggMmUyYmYyMzZm
+NTU4Li4zOGE0ZmQ5YmViYzkgMTAwNjQ0DQo+IC0tLSBhL2tlcm5lbC9tb2R1bGUvaW50ZXJuYWwu
+aA0KPiArKysgYi9rZXJuZWwvbW9kdWxlL2ludGVybmFsLmgNCj4gQEAgLTIyLDIyICsyMiwxNyBA
+QA0KPiAgIC8qIE1heGltdW0gbnVtYmVyIG9mIGNoYXJhY3RlcnMgd3JpdHRlbiBieSBtb2R1bGVf
+ZmxhZ3MoKSAqLw0KPiAgICNkZWZpbmUgTU9EVUxFX0ZMQUdTX0JVRl9TSVpFIChUQUlOVF9GTEFH
+U19DT1VOVCArIDQpDQo+ICAgDQo+IC0jaWZuZGVmIENPTkZJR19BUkNIX1dBTlRTX01PRFVMRVNf
+REFUQV9JTl9WTUFMTE9DDQo+IC0jZGVmaW5lCWRhdGFfbGF5b3V0IGNvcmVfbGF5b3V0DQo+IC0j
+ZW5kaWYNCj4gKyNkZWZpbmUgZm9yX2VhY2hfbW9kX21lbV90eXBlKHR5cGUpCVwNCj4gKwlmb3Ig
+KCh0eXBlKSA9IE1PRF9NRU1fVFlQRV9URVhUOwlcDQo+ICsJICAgICAodHlwZSkgPCBNT0RfTUVN
+X05VTV9UWVBFUzsgKHR5cGUpKyspDQo+ICAgDQo+IC0vKg0KPiAtICogTW9kdWxlcycgc2VjdGlv
+bnMgd2lsbCBiZSBhbGlnbmVkIG9uIHBhZ2UgYm91bmRhcmllcw0KPiAtICogdG8gZW5zdXJlIGNv
+bXBsZXRlIHNlcGFyYXRpb24gb2YgY29kZSBhbmQgZGF0YSwgYnV0DQo+IC0gKiBvbmx5IHdoZW4g
+Q09ORklHX1NUUklDVF9NT0RVTEVfUldYPXkNCj4gLSAqLw0KPiAtc3RhdGljIGlubGluZSB1bnNp
+Z25lZCBpbnQgc3RyaWN0X2FsaWduKHVuc2lnbmVkIGludCBzaXplKQ0KPiAtew0KPiAtCWlmIChJ
+U19FTkFCTEVEKENPTkZJR19TVFJJQ1RfTU9EVUxFX1JXWCkpDQo+IC0JCXJldHVybiBQQUdFX0FM
+SUdOKHNpemUpOw0KPiAtCWVsc2UNCj4gLQkJcmV0dXJuIHNpemU7DQo+IC19DQo+ICsjZGVmaW5l
+IGZvcl9jb3JlX21vZF9tZW1fdHlwZSh0eXBlKQkJXA0KPiArCWZvciAoKHR5cGUpID0gTU9EX01F
+TV9UWVBFX1RFWFQ7CQlcDQo+ICsJICAgICAodHlwZSkgPCBNT0RfTUVNX1RZUEVfSU5JVF9URVhU
+OyAodHlwZSkrKykNCj4gKw0KPiArI2RlZmluZSBmb3JfaW5pdF9tb2RfbWVtX3R5cGUodHlwZSkJ
+CVwNCj4gKwlmb3IgKCh0eXBlKSA9IE1PRF9NRU1fVFlQRV9JTklUX1RFWFQ7CQlcDQo+ICsJICAg
+ICAodHlwZSkgPCBNT0RfTUVNX05VTV9UWVBFUzsgKHR5cGUpKyspDQo+ICAgDQo+ICAgZXh0ZXJu
+IHN0cnVjdCBtdXRleCBtb2R1bGVfbXV0ZXg7DQo+ICAgZXh0ZXJuIHN0cnVjdCBsaXN0X2hlYWQg
+bW9kdWxlczsNCj4gQEAgLTEwMSw4ICs5Niw4IEBAIGludCB0cnlfdG9fZm9yY2VfbG9hZChzdHJ1
+Y3QgbW9kdWxlICptb2QsIGNvbnN0IGNoYXIgKnJlYXNvbik7DQo+ICAgYm9vbCBmaW5kX3N5bWJv
+bChzdHJ1Y3QgZmluZF9zeW1ib2xfYXJnICpmc2EpOw0KPiAgIHN0cnVjdCBtb2R1bGUgKmZpbmRf
+bW9kdWxlX2FsbChjb25zdCBjaGFyICpuYW1lLCBzaXplX3QgbGVuLCBib29sIGV2ZW5fdW5mb3Jt
+ZWQpOw0KPiAgIGludCBjbXBfbmFtZShjb25zdCB2b2lkICpuYW1lLCBjb25zdCB2b2lkICpzeW0p
+Ow0KPiAtbG9uZyBtb2R1bGVfZ2V0X29mZnNldChzdHJ1Y3QgbW9kdWxlICptb2QsIHVuc2lnbmVk
+IGludCAqc2l6ZSwgRWxmX1NoZHIgKnNlY2hkciwNCj4gLQkJICAgICAgIHVuc2lnbmVkIGludCBz
+ZWN0aW9uKTsNCj4gK2xvbmcgbW9kdWxlX2dldF9vZmZzZXRfYW5kX3R5cGUoc3RydWN0IG1vZHVs
+ZSAqbW9kLCBlbnVtIG1vZF9tZW1fdHlwZSB0eXBlLA0KPiArCQkJCUVsZl9TaGRyICpzZWNoZHIs
+IHVuc2lnbmVkIGludCBzZWN0aW9uKTsNCj4gICBjaGFyICptb2R1bGVfZmxhZ3Moc3RydWN0IG1v
+ZHVsZSAqbW9kLCBjaGFyICpidWYsIGJvb2wgc2hvd19zdGF0ZSk7DQo+ICAgc2l6ZV90IG1vZHVs
+ZV9mbGFnc190YWludCh1bnNpZ25lZCBsb25nIHRhaW50cywgY2hhciAqYnVmKTsNCj4gICANCj4g
+ZGlmZiAtLWdpdCBhL2tlcm5lbC9tb2R1bGUva2FsbHN5bXMuYyBiL2tlcm5lbC9tb2R1bGUva2Fs
+bHN5bXMuYw0KPiBpbmRleCBmNWM1YzkxNzUzMzMuLmY2ODQzMWE0ZjMzMSAxMDA2NDQNCj4gLS0t
+IGEva2VybmVsL21vZHVsZS9rYWxsc3ltcy5jDQo+ICsrKyBiL2tlcm5lbC9tb2R1bGUva2FsbHN5
+bXMuYw0KPiBAQCAtMTEzLDExICsxMTMsMTMgQEAgdm9pZCBsYXlvdXRfc3ltdGFiKHN0cnVjdCBt
+b2R1bGUgKm1vZCwgc3RydWN0IGxvYWRfaW5mbyAqaW5mbykNCj4gICAJRWxmX1NoZHIgKnN0cnNl
+Y3QgPSBpbmZvLT5zZWNoZHJzICsgaW5mby0+aW5kZXguc3RyOw0KPiAgIAljb25zdCBFbGZfU3lt
+ICpzcmM7DQo+ICAgCXVuc2lnbmVkIGludCBpLCBuc3JjLCBuZHN0LCBzdHJ0YWJfc2l6ZSA9IDA7
+DQo+ICsJc3RydWN0IG1vZHVsZV9tZW1vcnkgKm1vZF9tZW1fZGF0YSA9ICZtb2QtPm1vZF9tZW1b
+TU9EX01FTV9UWVBFX0RBVEFdOw0KPiArCXN0cnVjdCBtb2R1bGVfbWVtb3J5ICptb2RfbWVtX2lu
+aXRfZGF0YSA9ICZtb2QtPm1vZF9tZW1bTU9EX01FTV9UWVBFX0lOSVRfREFUQV07DQo+ICAgDQo+
+ICAgCS8qIFB1dCBzeW1ib2wgc2VjdGlvbiBhdCBlbmQgb2YgaW5pdCBwYXJ0IG9mIG1vZHVsZS4g
+Ki8NCj4gICAJc3ltc2VjdC0+c2hfZmxhZ3MgfD0gU0hGX0FMTE9DOw0KPiAtCXN5bXNlY3QtPnNo
+X2VudHNpemUgPSBtb2R1bGVfZ2V0X29mZnNldChtb2QsICZtb2QtPmluaXRfbGF5b3V0LnNpemUs
+IHN5bXNlY3QsDQo+IC0JCQkJCQlpbmZvLT5pbmRleC5zeW0pIHwgSU5JVF9PRkZTRVRfTUFTSzsN
+Cj4gKwlzeW1zZWN0LT5zaF9lbnRzaXplID0gbW9kdWxlX2dldF9vZmZzZXRfYW5kX3R5cGUobW9k
+LCBNT0RfTUVNX1RZUEVfSU5JVF9EQVRBLA0KPiArCQkJCQkJCSBzeW1zZWN0LCBpbmZvLT5pbmRl
+eC5zeW0pOw0KPiAgIAlwcl9kZWJ1ZygiXHQlc1xuIiwgaW5mby0+c2Vjc3RyaW5ncyArIHN5bXNl
+Y3QtPnNoX25hbWUpOw0KPiAgIA0KPiAgIAlzcmMgPSAodm9pZCAqKWluZm8tPmhkciArIHN5bXNl
+Y3QtPnNoX29mZnNldDsNCj4gQEAgLTEzNCwyOCArMTM2LDI3IEBAIHZvaWQgbGF5b3V0X3N5bXRh
+YihzdHJ1Y3QgbW9kdWxlICptb2QsIHN0cnVjdCBsb2FkX2luZm8gKmluZm8pDQo+ICAgCX0NCj4g
+ICANCj4gICAJLyogQXBwZW5kIHJvb20gZm9yIGNvcmUgc3ltYm9scyBhdCBlbmQgb2YgY29yZSBw
+YXJ0LiAqLw0KPiAtCWluZm8tPnN5bW9mZnMgPSBBTElHTihtb2QtPmRhdGFfbGF5b3V0LnNpemUs
+IHN5bXNlY3QtPnNoX2FkZHJhbGlnbiA/OiAxKTsNCj4gLQlpbmZvLT5zdHJvZmZzID0gbW9kLT5k
+YXRhX2xheW91dC5zaXplID0gaW5mby0+c3ltb2ZmcyArIG5kc3QgKiBzaXplb2YoRWxmX1N5bSk7
+DQo+IC0JbW9kLT5kYXRhX2xheW91dC5zaXplICs9IHN0cnRhYl9zaXplOw0KPiArCWluZm8tPnN5
+bW9mZnMgPSBBTElHTihtb2RfbWVtX2RhdGEtPnNpemUsIHN5bXNlY3QtPnNoX2FkZHJhbGlnbiA/
+OiAxKTsNCj4gKwlpbmZvLT5zdHJvZmZzID0gbW9kX21lbV9kYXRhLT5zaXplID0gaW5mby0+c3lt
+b2ZmcyArIG5kc3QgKiBzaXplb2YoRWxmX1N5bSk7DQo+ICsJbW9kX21lbV9kYXRhLT5zaXplICs9
+IHN0cnRhYl9zaXplOw0KPiAgIAkvKiBOb3RlIGFkZF9rYWxsc3ltcygpIGNvbXB1dGVzIHN0cnRh
+Yl9zaXplIGFzIGNvcmVfdHlwZW9mZnMgLSBzdHJvZmZzICovDQo+IC0JaW5mby0+Y29yZV90eXBl
+b2ZmcyA9IG1vZC0+ZGF0YV9sYXlvdXQuc2l6ZTsNCj4gLQltb2QtPmRhdGFfbGF5b3V0LnNpemUg
+Kz0gbmRzdCAqIHNpemVvZihjaGFyKTsNCj4gLQltb2QtPmRhdGFfbGF5b3V0LnNpemUgPSBzdHJp
+Y3RfYWxpZ24obW9kLT5kYXRhX2xheW91dC5zaXplKTsNCj4gKwlpbmZvLT5jb3JlX3R5cGVvZmZz
+ID0gbW9kX21lbV9kYXRhLT5zaXplOw0KPiArCW1vZF9tZW1fZGF0YS0+c2l6ZSArPSBuZHN0ICog
+c2l6ZW9mKGNoYXIpOw0KPiAgIA0KPiAgIAkvKiBQdXQgc3RyaW5nIHRhYmxlIHNlY3Rpb24gYXQg
+ZW5kIG9mIGluaXQgcGFydCBvZiBtb2R1bGUuICovDQo+ICAgCXN0cnNlY3QtPnNoX2ZsYWdzIHw9
+IFNIRl9BTExPQzsNCj4gLQlzdHJzZWN0LT5zaF9lbnRzaXplID0gbW9kdWxlX2dldF9vZmZzZXQo
+bW9kLCAmbW9kLT5pbml0X2xheW91dC5zaXplLCBzdHJzZWN0LA0KPiAtCQkJCQkJaW5mby0+aW5k
+ZXguc3RyKSB8IElOSVRfT0ZGU0VUX01BU0s7DQo+ICsJc3Ryc2VjdC0+c2hfZW50c2l6ZSA9IG1v
+ZHVsZV9nZXRfb2Zmc2V0X2FuZF90eXBlKG1vZCwgTU9EX01FTV9UWVBFX0lOSVRfREFUQSwNCj4g
+KwkJCQkJCQkgc3Ryc2VjdCwgaW5mby0+aW5kZXguc3RyKTsNCj4gICAJcHJfZGVidWcoIlx0JXNc
+biIsIGluZm8tPnNlY3N0cmluZ3MgKyBzdHJzZWN0LT5zaF9uYW1lKTsNCj4gICANCj4gICAJLyog
+V2UnbGwgdGFjayB0ZW1wb3JhcnkgbW9kX2thbGxzeW1zIG9uIHRoZSBlbmQuICovDQo+IC0JbW9k
+LT5pbml0X2xheW91dC5zaXplID0gQUxJR04obW9kLT5pbml0X2xheW91dC5zaXplLA0KPiAtCQkJ
+CSAgICAgIF9fYWxpZ25vZl9fKHN0cnVjdCBtb2Rfa2FsbHN5bXMpKTsNCj4gLQlpbmZvLT5tb2Rf
+a2FsbHN5bXNfaW5pdF9vZmYgPSBtb2QtPmluaXRfbGF5b3V0LnNpemU7DQo+IC0JbW9kLT5pbml0
+X2xheW91dC5zaXplICs9IHNpemVvZihzdHJ1Y3QgbW9kX2thbGxzeW1zKTsNCj4gLQlpbmZvLT5p
+bml0X3R5cGVvZmZzID0gbW9kLT5pbml0X2xheW91dC5zaXplOw0KPiAtCW1vZC0+aW5pdF9sYXlv
+dXQuc2l6ZSArPSBuc3JjICogc2l6ZW9mKGNoYXIpOw0KPiAtCW1vZC0+aW5pdF9sYXlvdXQuc2l6
+ZSA9IHN0cmljdF9hbGlnbihtb2QtPmluaXRfbGF5b3V0LnNpemUpOw0KPiArCW1vZF9tZW1faW5p
+dF9kYXRhLT5zaXplID0gQUxJR04obW9kX21lbV9pbml0X2RhdGEtPnNpemUsDQo+ICsJCQkJCV9f
+YWxpZ25vZl9fKHN0cnVjdCBtb2Rfa2FsbHN5bXMpKTsNCj4gKwlpbmZvLT5tb2Rfa2FsbHN5bXNf
+aW5pdF9vZmYgPSBtb2RfbWVtX2luaXRfZGF0YS0+c2l6ZTsNCj4gKw0KPiArCW1vZF9tZW1faW5p
+dF9kYXRhLT5zaXplICs9IHNpemVvZihzdHJ1Y3QgbW9kX2thbGxzeW1zKTsNCj4gKwlpbmZvLT5p
+bml0X3R5cGVvZmZzID0gbW9kX21lbV9pbml0X2RhdGEtPnNpemU7DQo+ICsJbW9kX21lbV9pbml0
+X2RhdGEtPnNpemUgKz0gbnNyYyAqIHNpemVvZihjaGFyKTsNCj4gICB9DQo+ICAgDQo+ICAgLyoN
+Cj4gQEAgLTE3MSw5ICsxNzIsMTEgQEAgdm9pZCBhZGRfa2FsbHN5bXMoc3RydWN0IG1vZHVsZSAq
+bW9kLCBjb25zdCBzdHJ1Y3QgbG9hZF9pbmZvICppbmZvKQ0KPiAgIAljaGFyICpzOw0KPiAgIAlF
+bGZfU2hkciAqc3ltc2VjID0gJmluZm8tPnNlY2hkcnNbaW5mby0+aW5kZXguc3ltXTsNCj4gICAJ
+dW5zaWduZWQgbG9uZyBzdHJ0YWJfc2l6ZTsNCj4gKwl2b2lkICpkYXRhX2Jhc2UgPSBtb2QtPm1v
+ZF9tZW1bTU9EX01FTV9UWVBFX0RBVEFdLmJhc2U7DQo+ICsJdm9pZCAqaW5pdF9kYXRhX2Jhc2Ug
+PSBtb2QtPm1vZF9tZW1bTU9EX01FTV9UWVBFX0lOSVRfREFUQV0uYmFzZTsNCj4gICANCj4gICAJ
+LyogU2V0IHVwIHRvIHBvaW50IGludG8gaW5pdCBzZWN0aW9uLiAqLw0KPiAtCW1vZC0+a2FsbHN5
+bXMgPSAodm9pZCBfX3JjdSAqKW1vZC0+aW5pdF9sYXlvdXQuYmFzZSArDQo+ICsJbW9kLT5rYWxs
+c3ltcyA9ICh2b2lkIF9fcmN1ICopaW5pdF9kYXRhX2Jhc2UgKw0KPiAgIAkJaW5mby0+bW9kX2th
+bGxzeW1zX2luaXRfb2ZmOw0KPiAgIA0KPiAgIAlyY3VfcmVhZF9sb2NrKCk7DQo+IEBAIC0xODMs
+MTUgKzE4NiwxNSBAQCB2b2lkIGFkZF9rYWxsc3ltcyhzdHJ1Y3QgbW9kdWxlICptb2QsIGNvbnN0
+IHN0cnVjdCBsb2FkX2luZm8gKmluZm8pDQo+ICAgCS8qIE1ha2Ugc3VyZSB3ZSBnZXQgcGVybWFu
+ZW50IHN0cnRhYjogZG9uJ3QgdXNlIGluZm8tPnN0cnRhYi4gKi8NCj4gICAJcmN1X2RlcmVmZXJl
+bmNlKG1vZC0+a2FsbHN5bXMpLT5zdHJ0YWIgPQ0KPiAgIAkJKHZvaWQgKilpbmZvLT5zZWNoZHJz
+W2luZm8tPmluZGV4LnN0cl0uc2hfYWRkcjsNCj4gLQlyY3VfZGVyZWZlcmVuY2UobW9kLT5rYWxs
+c3ltcyktPnR5cGV0YWIgPSBtb2QtPmluaXRfbGF5b3V0LmJhc2UgKyBpbmZvLT5pbml0X3R5cGVv
+ZmZzOw0KPiArCXJjdV9kZXJlZmVyZW5jZShtb2QtPmthbGxzeW1zKS0+dHlwZXRhYiA9IGluaXRf
+ZGF0YV9iYXNlICsgaW5mby0+aW5pdF90eXBlb2ZmczsNCj4gICANCj4gICAJLyoNCj4gICAJICog
+Tm93IHBvcHVsYXRlIHRoZSBjdXQgZG93biBjb3JlIGthbGxzeW1zIGZvciBhZnRlciBpbml0DQo+
+ICAgCSAqIGFuZCBzZXQgdHlwZXMgdXAgd2hpbGUgd2Ugc3RpbGwgaGF2ZSBhY2Nlc3MgdG8gc2Vj
+dGlvbnMuDQo+ICAgCSAqLw0KPiAtCW1vZC0+Y29yZV9rYWxsc3ltcy5zeW10YWIgPSBkc3QgPSBt
+b2QtPmRhdGFfbGF5b3V0LmJhc2UgKyBpbmZvLT5zeW1vZmZzOw0KPiAtCW1vZC0+Y29yZV9rYWxs
+c3ltcy5zdHJ0YWIgPSBzID0gbW9kLT5kYXRhX2xheW91dC5iYXNlICsgaW5mby0+c3Ryb2ZmczsN
+Cj4gLQltb2QtPmNvcmVfa2FsbHN5bXMudHlwZXRhYiA9IG1vZC0+ZGF0YV9sYXlvdXQuYmFzZSAr
+IGluZm8tPmNvcmVfdHlwZW9mZnM7DQo+ICsJbW9kLT5jb3JlX2thbGxzeW1zLnN5bXRhYiA9IGRz
+dCA9IGRhdGFfYmFzZSArIGluZm8tPnN5bW9mZnM7DQo+ICsJbW9kLT5jb3JlX2thbGxzeW1zLnN0
+cnRhYiA9IHMgPSBkYXRhX2Jhc2UgKyBpbmZvLT5zdHJvZmZzOw0KPiArCW1vZC0+Y29yZV9rYWxs
+c3ltcy50eXBldGFiID0gZGF0YV9iYXNlICsgaW5mby0+Y29yZV90eXBlb2ZmczsNCj4gICAJc3Ry
+dGFiX3NpemUgPSBpbmZvLT5jb3JlX3R5cGVvZmZzIC0gaW5mby0+c3Ryb2ZmczsNCj4gICAJc3Jj
+ID0gcmN1X2RlcmVmZXJlbmNlKG1vZC0+a2FsbHN5bXMpLT5zeW10YWI7DQo+ICAgCWZvciAobmRz
+dCA9IGkgPSAwOyBpIDwgcmN1X2RlcmVmZXJlbmNlKG1vZC0+a2FsbHN5bXMpLT5udW1fc3ltdGFi
+OyBpKyspIHsNCj4gQEAgLTI2NywxMiArMjcwLDE1IEBAIHN0YXRpYyBjb25zdCBjaGFyICpmaW5k
+X2thbGxzeW1zX3N5bWJvbChzdHJ1Y3QgbW9kdWxlICptb2QsDQo+ICAgCXVuc2lnbmVkIGludCBp
+LCBiZXN0ID0gMDsNCj4gICAJdW5zaWduZWQgbG9uZyBuZXh0dmFsLCBiZXN0dmFsOw0KPiAgIAlz
+dHJ1Y3QgbW9kX2thbGxzeW1zICprYWxsc3ltcyA9IHJjdV9kZXJlZmVyZW5jZV9zY2hlZChtb2Qt
+PmthbGxzeW1zKTsNCj4gKwlzdHJ1Y3QgbW9kdWxlX21lbW9yeSAqbW9kX21lbTsNCj4gICANCj4g
+ICAJLyogQXQgd29yc2UsIG5leHQgdmFsdWUgaXMgYXQgZW5kIG9mIG1vZHVsZSAqLw0KPiAgIAlp
+ZiAod2l0aGluX21vZHVsZV9pbml0KGFkZHIsIG1vZCkpDQo+IC0JCW5leHR2YWwgPSAodW5zaWdu
+ZWQgbG9uZyltb2QtPmluaXRfbGF5b3V0LmJhc2UgKyBtb2QtPmluaXRfbGF5b3V0LnRleHRfc2l6
+ZTsNCj4gKwkJbW9kX21lbSA9ICZtb2QtPm1vZF9tZW1bTU9EX01FTV9UWVBFX0lOSVRfVEVYVF07
+DQo+ICAgCWVsc2UNCj4gLQkJbmV4dHZhbCA9ICh1bnNpZ25lZCBsb25nKW1vZC0+Y29yZV9sYXlv
+dXQuYmFzZSArIG1vZC0+Y29yZV9sYXlvdXQudGV4dF9zaXplOw0KPiArCQltb2RfbWVtID0gJm1v
+ZC0+bW9kX21lbVtNT0RfTUVNX1RZUEVfVEVYVF07DQo+ICsNCj4gKwluZXh0dmFsID0gKHVuc2ln
+bmVkIGxvbmcpbW9kX21lbS0+YmFzZSArIG1vZF9tZW0tPnNpemU7DQo+ICAgDQo+ICAgCWJlc3R2
+YWwgPSBrYWxsc3ltc19zeW1ib2xfdmFsdWUoJmthbGxzeW1zLT5zeW10YWJbYmVzdF0pOw0KPiAg
+IA0KPiBkaWZmIC0tZ2l0IGEva2VybmVsL21vZHVsZS9rZGIuYyBiL2tlcm5lbC9tb2R1bGUva2Ri
+LmMNCj4gaW5kZXggZjQzMTdmOTJlMTg5Li4zM2Y1OTU0NTQ0ODggMTAwNjQ0DQo+IC0tLSBhL2tl
+cm5lbC9tb2R1bGUva2RiLmMNCj4gKysrIGIva2VybmVsL21vZHVsZS9rZGIuYw0KPiBAQCAtMjYs
+MTAgKzI2LDExIEBAIGludCBrZGJfbHNtb2QoaW50IGFyZ2MsIGNvbnN0IGNoYXIgKiphcmd2KQ0K
+PiAgIAkJaWYgKG1vZC0+c3RhdGUgPT0gTU9EVUxFX1NUQVRFX1VORk9STUVEKQ0KPiAgIAkJCWNv
+bnRpbnVlOw0KPiAgIA0KPiAtCQlrZGJfcHJpbnRmKCIlLTIwcyU4dSIsIG1vZC0+bmFtZSwgbW9k
+LT5jb3JlX2xheW91dC5zaXplKTsNCj4gLSNpZmRlZiBDT05GSUdfQVJDSF9XQU5UU19NT0RVTEVT
+X0RBVEFfSU5fVk1BTExPQw0KPiAtCQlrZGJfcHJpbnRmKCIvJTh1IiwgbW9kLT5kYXRhX2xheW91
+dC5zaXplKTsNCj4gLSNlbmRpZg0KPiArCQlrZGJfcHJpbnRmKCIlLTIwcyU4dSIsIG1vZC0+bmFt
+ZSwgbW9kLT5tb2RfbWVtW01PRF9NRU1fVFlQRV9URVhUXS5zaXplKTsNCj4gKwkJa2RiX3ByaW50
+ZigiLyU4dSIsIG1vZC0+bW9kX21lbVtNT0RfTUVNX1RZUEVfUk9EQVRBXS5zaXplKTsNCj4gKwkJ
+a2RiX3ByaW50ZigiLyU4dSIsIG1vZC0+bW9kX21lbVtNT0RfTUVNX1RZUEVfUk9fQUZURVJfSU5J
+VF0uc2l6ZSk7DQo+ICsJCWtkYl9wcmludGYoIi8lOHUiLCBtb2QtPm1vZF9tZW1bTU9EX01FTV9U
+WVBFX0RBVEFdLnNpemUpOw0KPiArDQo+ICAgCQlrZGJfcHJpbnRmKCIgIDB4JXB4ICIsICh2b2lk
+ICopbW9kKTsNCj4gICAjaWZkZWYgQ09ORklHX01PRFVMRV9VTkxPQUQNCj4gICAJCWtkYl9wcmlu
+dGYoIiU0ZCAiLCBtb2R1bGVfcmVmY291bnQobW9kKSk7DQo+IEBAIC00MCwxMCArNDEsMTAgQEAg
+aW50IGtkYl9sc21vZChpbnQgYXJnYywgY29uc3QgY2hhciAqKmFyZ3YpDQo+ICAgCQkJa2RiX3By
+aW50ZigiIChMb2FkaW5nKSIpOw0KPiAgIAkJZWxzZQ0KPiAgIAkJCWtkYl9wcmludGYoIiAoTGl2
+ZSkiKTsNCj4gLQkJa2RiX3ByaW50ZigiIDB4JXB4IiwgbW9kLT5jb3JlX2xheW91dC5iYXNlKTsN
+Cj4gLSNpZmRlZiBDT05GSUdfQVJDSF9XQU5UU19NT0RVTEVTX0RBVEFfSU5fVk1BTExPQw0KPiAt
+CQlrZGJfcHJpbnRmKCIvMHglcHgiLCBtb2QtPmRhdGFfbGF5b3V0LmJhc2UpOw0KPiAtI2VuZGlm
+DQo+ICsJCWtkYl9wcmludGYoIiAweCVweCIsIG1vZC0+bW9kX21lbVtNT0RfTUVNX1RZUEVfVEVY
+VF0uYmFzZSk7DQo+ICsJCWtkYl9wcmludGYoIi8weCVweCIsIG1vZC0+bW9kX21lbVtNT0RfTUVN
+X1RZUEVfUk9EQVRBXS5iYXNlKTsNCj4gKwkJa2RiX3ByaW50ZigiLzB4JXB4IiwgbW9kLT5tb2Rf
+bWVtW01PRF9NRU1fVFlQRV9ST19BRlRFUl9JTklUXS5iYXNlKTsNCj4gKwkJa2RiX3ByaW50Zigi
+LzB4JXB4IiwgbW9kLT5tb2RfbWVtW01PRF9NRU1fVFlQRV9EQVRBXS5iYXNlKTsNCj4gICANCj4g
+ICAjaWZkZWYgQ09ORklHX01PRFVMRV9VTkxPQUQNCj4gICAJCXsNCj4gZGlmZiAtLWdpdCBhL2tl
+cm5lbC9tb2R1bGUvbWFpbi5jIGIva2VybmVsL21vZHVsZS9tYWluLmMNCj4gaW5kZXggZDAyZDM5
+YzcxNzRlLi40MDQxYzYyYTg1ZDEgMTAwNjQ0DQo+IC0tLSBhL2tlcm5lbC9tb2R1bGUvbWFpbi5j
+DQo+ICsrKyBiL2tlcm5lbC9tb2R1bGUvbWFpbi5jDQo+IEBAIC03OSwxMiArNzksNiBAQCBzdHJ1
+Y3QgbW9kX3RyZWVfcm9vdCBtb2RfdHJlZSBfX2NhY2hlbGluZV9hbGlnbmVkID0gew0KPiAgIAku
+YWRkcl9taW4gPSAtMVVMLA0KPiAgIH07DQo+ICAgDQo+IC0jaWZkZWYgQ09ORklHX0FSQ0hfV0FO
+VFNfTU9EVUxFU19EQVRBX0lOX1ZNQUxMT0MNCj4gLXN0cnVjdCBtb2RfdHJlZV9yb290IG1vZF9k
+YXRhX3RyZWUgX19jYWNoZWxpbmVfYWxpZ25lZCA9IHsNCj4gLQkuYWRkcl9taW4gPSAtMVVMLA0K
+PiAtfTsNCj4gLSNlbmRpZg0KPiAtDQo+ICAgI2RlZmluZSBtb2R1bGVfYWRkcl9taW4gbW9kX3Ry
+ZWUuYWRkcl9taW4NCj4gICAjZGVmaW5lIG1vZHVsZV9hZGRyX21heCBtb2RfdHJlZS5hZGRyX21h
+eA0KPiAgIA0KPiBAQCAtOTUsNyArODksNyBAQCBzdHJ1Y3Qgc3ltc2VhcmNoIHsNCj4gICB9Ow0K
+PiAgIA0KPiAgIC8qDQo+IC0gKiBCb3VuZHMgb2YgbW9kdWxlIHRleHQsIGZvciBzcGVlZGluZyB1
+cCBfX21vZHVsZV9hZGRyZXNzLg0KPiArICogQm91bmRzIG9mIG1vZHVsZSBtZW1vcnksIGZvciBz
+cGVlZGluZyB1cCBfX21vZHVsZV9hZGRyZXNzLg0KPiAgICAqIFByb3RlY3RlZCBieSBtb2R1bGVf
+bXV0ZXguDQo+ICAgICovDQo+ICAgc3RhdGljIHZvaWQgX19tb2RfdXBkYXRlX2JvdW5kcyh2b2lk
+ICpiYXNlLCB1bnNpZ25lZCBpbnQgc2l6ZSwgc3RydWN0IG1vZF90cmVlX3Jvb3QgKnRyZWUpDQo+
+IEBAIC0xMTEsMTIgKzEwNSwxNCBAQCBzdGF0aWMgdm9pZCBfX21vZF91cGRhdGVfYm91bmRzKHZv
+aWQgKmJhc2UsIHVuc2lnbmVkIGludCBzaXplLCBzdHJ1Y3QgbW9kX3RyZWVfcg0KPiAgIA0KPiAg
+IHN0YXRpYyB2b2lkIG1vZF91cGRhdGVfYm91bmRzKHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gICB7
+DQo+IC0JX19tb2RfdXBkYXRlX2JvdW5kcyhtb2QtPmNvcmVfbGF5b3V0LmJhc2UsIG1vZC0+Y29y
+ZV9sYXlvdXQuc2l6ZSwgJm1vZF90cmVlKTsNCj4gLQlpZiAobW9kLT5pbml0X2xheW91dC5zaXpl
+KQ0KPiAtCQlfX21vZF91cGRhdGVfYm91bmRzKG1vZC0+aW5pdF9sYXlvdXQuYmFzZSwgbW9kLT5p
+bml0X2xheW91dC5zaXplLCAmbW9kX3RyZWUpOw0KPiAtI2lmZGVmIENPTkZJR19BUkNIX1dBTlRT
+X01PRFVMRVNfREFUQV9JTl9WTUFMTE9DDQo+IC0JX19tb2RfdXBkYXRlX2JvdW5kcyhtb2QtPmRh
+dGFfbGF5b3V0LmJhc2UsIG1vZC0+ZGF0YV9sYXlvdXQuc2l6ZSwgJm1vZF9kYXRhX3RyZWUpOw0K
+PiAtI2VuZGlmDQo+ICsJZW51bSBtb2RfbWVtX3R5cGUgdHlwZTsNCj4gKw0KPiArCWZvcl9lYWNo
+X21vZF9tZW1fdHlwZSh0eXBlKSB7DQo+ICsJCXN0cnVjdCBtb2R1bGVfbWVtb3J5ICptb2RfbWVt
+ID0gJm1vZC0+bW9kX21lbVt0eXBlXTsNCj4gKw0KPiArCQlpZiAobW9kX21lbS0+c2l6ZSkNCj4g
+KwkJCV9fbW9kX3VwZGF0ZV9ib3VuZHMobW9kX21lbS0+YmFzZSwgbW9kX21lbS0+c2l6ZSwgJm1v
+ZF90cmVlKTsNCj4gKwl9DQo+ICAgfQ0KPiAgIA0KPiAgIC8qIEJsb2NrIG1vZHVsZSBsb2FkaW5n
+L3VubG9hZGluZz8gKi8NCj4gQEAgLTkyNSwxMiArOTIxLDMyIEBAIHN0YXRpYyBzc2l6ZV90IHN0
+b3JlX3VldmVudChzdHJ1Y3QgbW9kdWxlX2F0dHJpYnV0ZSAqbWF0dHIsDQo+ICAgc3RydWN0IG1v
+ZHVsZV9hdHRyaWJ1dGUgbW9kdWxlX3VldmVudCA9DQo+ICAgCV9fQVRUUih1ZXZlbnQsIDAyMDAs
+IE5VTEwsIHN0b3JlX3VldmVudCk7DQo+ICAgDQo+ICsjaWZkZWYgQ09ORklHX0FSQ0hfV0FOVFNf
+TU9EVUxFU19EQVRBX0lOX1ZNQUxMT0MNCj4gKw0KPiAgIHN0YXRpYyBzc2l6ZV90IHNob3dfY29y
+ZXNpemUoc3RydWN0IG1vZHVsZV9hdHRyaWJ1dGUgKm1hdHRyLA0KPiAgIAkJCSAgICAgc3RydWN0
+IG1vZHVsZV9rb2JqZWN0ICptaywgY2hhciAqYnVmZmVyKQ0KPiAgIHsNCj4gLQlyZXR1cm4gc3By
+aW50ZihidWZmZXIsICIldVxuIiwgbWstPm1vZC0+Y29yZV9sYXlvdXQuc2l6ZSk7DQo+ICsJZW51
+bSBtb2RfbWVtX3R5cGUgdHlwZTsNCj4gKwl1bnNpZ25lZCBpbnQgc2l6ZSA9IDA7DQo+ICsNCj4g
+KwlyZXR1cm4gc3ByaW50ZihidWZmZXIsICIldVxuIiwNCj4gKwkJICAgICAgIG1rLT5tb2QtPm1v
+ZF9tZW1bTU9EX01FTV9UWVBFX1RFWFRdLnNpemUpOw0KPiAgIH0NCj4gICANCj4gKyNlbHNlDQo+
+ICsNCj4gK3N0YXRpYyBzc2l6ZV90IHNob3dfY29yZXNpemUoc3RydWN0IG1vZHVsZV9hdHRyaWJ1
+dGUgKm1hdHRyLA0KPiArCQkJICAgICBzdHJ1Y3QgbW9kdWxlX2tvYmplY3QgKm1rLCBjaGFyICpi
+dWZmZXIpDQo+ICt7DQo+ICsJZW51bSBtb2RfbWVtX3R5cGUgdHlwZTsNCj4gKwl1bnNpZ25lZCBp
+bnQgc2l6ZSA9IDA7DQo+ICsNCj4gKwlmb3JfY29yZV9tb2RfbWVtX3R5cGUodHlwZSkNCj4gKwkJ
+c2l6ZSArPSBtay0+bW9kLT5tb2RfbWVtW3R5cGVdLnNpemU7DQo+ICsJcmV0dXJuIHNwcmludGYo
+YnVmZmVyLCAiJXVcbiIsIHNpemUpOw0KPiArfQ0KPiArI2VuZGlmDQo+ICsNCj4gICBzdGF0aWMg
+c3RydWN0IG1vZHVsZV9hdHRyaWJ1dGUgbW9kaW5mb19jb3Jlc2l6ZSA9DQo+ICAgCV9fQVRUUihj
+b3Jlc2l6ZSwgMDQ0NCwgc2hvd19jb3Jlc2l6ZSwgTlVMTCk7DQo+ICAgDQo+IEBAIC05MzgsNyAr
+OTU0LDE1IEBAIHN0YXRpYyBzdHJ1Y3QgbW9kdWxlX2F0dHJpYnV0ZSBtb2RpbmZvX2NvcmVzaXpl
+ID0NCj4gICBzdGF0aWMgc3NpemVfdCBzaG93X2RhdGFzaXplKHN0cnVjdCBtb2R1bGVfYXR0cmli
+dXRlICptYXR0ciwNCj4gICAJCQkgICAgIHN0cnVjdCBtb2R1bGVfa29iamVjdCAqbWssIGNoYXIg
+KmJ1ZmZlcikNCj4gICB7DQo+IC0JcmV0dXJuIHNwcmludGYoYnVmZmVyLCAiJXVcbiIsIG1rLT5t
+b2QtPmRhdGFfbGF5b3V0LnNpemUpOw0KPiArCWVudW0gbW9kX21lbV90eXBlIHR5cGU7DQo+ICsJ
+dW5zaWduZWQgaW50IHNpemUgPSAwOw0KPiArDQo+ICsJZm9yX2NvcmVfbW9kX21lbV90eXBlKHR5
+cGUpIHsNCj4gKwkJaWYgKHR5cGUgPT0gTU9EX01FTV9UWVBFX1RFWFQpDQo+ICsJCQljb250aW51
+ZTsNCj4gKwkJc2l6ZSArPSBtay0+bW9kLT5tb2RfbWVtW3R5cGVdLnNpemU7DQo+ICsJfQ0KPiAr
+CXJldHVybiBzcHJpbnRmKGJ1ZmZlciwgIiV1XG4iLCBzaXplKTsNCj4gICB9DQo+ICAgDQo+ICAg
+c3RhdGljIHN0cnVjdCBtb2R1bGVfYXR0cmlidXRlIG1vZGluZm9fZGF0YXNpemUgPQ0KPiBAQCAt
+OTQ4LDcgKzk3MiwxMiBAQCBzdGF0aWMgc3RydWN0IG1vZHVsZV9hdHRyaWJ1dGUgbW9kaW5mb19k
+YXRhc2l6ZSA9DQo+ICAgc3RhdGljIHNzaXplX3Qgc2hvd19pbml0c2l6ZShzdHJ1Y3QgbW9kdWxl
+X2F0dHJpYnV0ZSAqbWF0dHIsDQo+ICAgCQkJICAgICBzdHJ1Y3QgbW9kdWxlX2tvYmplY3QgKm1r
+LCBjaGFyICpidWZmZXIpDQo+ICAgew0KPiAtCXJldHVybiBzcHJpbnRmKGJ1ZmZlciwgIiV1XG4i
+LCBtay0+bW9kLT5pbml0X2xheW91dC5zaXplKTsNCj4gKwllbnVtIG1vZF9tZW1fdHlwZSB0eXBl
+Ow0KPiArCXVuc2lnbmVkIGludCBzaXplID0gMDsNCj4gKw0KPiArCWZvcl9pbml0X21vZF9tZW1f
+dHlwZSh0eXBlKQ0KPiArCQlzaXplICs9IG1rLT5tb2QtPm1vZF9tZW1bdHlwZV0uc2l6ZTsNCj4g
+KwlyZXR1cm4gc3ByaW50ZihidWZmZXIsICIldVxuIiwgc2l6ZSk7DQo+ICAgfQ0KPiAgIA0KPiAg
+IHN0YXRpYyBzdHJ1Y3QgbW9kdWxlX2F0dHJpYnV0ZSBtb2RpbmZvX2luaXRzaXplID0NCj4gQEAg
+LTExNDUsNiArMTE3NCw1NCBAQCB2b2lkIF9fd2VhayBtb2R1bGVfYXJjaF9mcmVlaW5nX2luaXQo
+c3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAgIHsNCj4gICB9DQo+ICAgDQo+ICsjaWZkZWYgQ09ORklH
+X0FSQ0hfV0FOVFNfTU9EVUxFU19EQVRBX0lOX1ZNQUxMT0MNCj4gK3N0YXRpYyBib29sIG1vZF9t
+ZW1fdXNlX3ZtYWxsb2MoZW51bSBtb2RfbWVtX3R5cGUgdHlwZSkNCj4gK3sNCj4gKwlyZXR1cm4g
+dHlwZSA9PSBNT0RfTUVNX1RZUEVfREFUQSB8fA0KPiArCQl0eXBlID09IE1PRF9NRU1fVFlQRV9S
+T0RBVEEgfHwNCj4gKwkJdHlwZSA9PSBNT0RfTUVNX1RZUEVfUk9fQUZURVJfSU5JVDsNCj4gK30N
+Cj4gKyNlbHNlDQo+ICtzdGF0aWMgYm9vbCBtb2RfbWVtX3VzZV92bWFsbG9jKGVudW0gbW9kX21l
+bV90eXBlIHR5cGUpDQo+ICt7DQo+ICsJcmV0dXJuIGZhbHNlOw0KPiArfQ0KPiArI2VuZGlmDQo+
+ICsNCj4gK3N0YXRpYyB2b2lkIGZyZWVfbW9kX21lbShzdHJ1Y3QgbW9kdWxlICptb2QpDQo+ICt7
+DQo+ICsJLyogZnJlZSB0aGUgbWVtb3J5IGluIHRoZSByaWdodCBvcmRlciB0byBhdm9pZCB1c2Ut
+YWZ0ZXItZnJlZSAqLw0KPiArCXN0YXRpYyBlbnVtIG1vZF9tZW1fdHlwZSBtb2RfbWVtX2ZyZWVf
+b3JkZXJbTU9EX01FTV9OVU1fVFlQRVNdID0gew0KPiArCQkvKiBmaXJzdCBmcmVlIGluaXQgc2Vj
+dGlvbnMgKi8NCj4gKwkJTU9EX01FTV9UWVBFX0lOSVRfVEVYVCwNCj4gKwkJTU9EX01FTV9UWVBF
+X0lOSVRfREFUQSwNCj4gKwkJTU9EX01FTV9UWVBFX0lOSVRfUk9EQVRBLA0KPiArDQo+ICsJCS8q
+IHRoZW4gY29yZSBzZWN0aW9ucywgZXhjZXB0IHJ3IGRhdGEgKi8NCj4gKwkJTU9EX01FTV9UWVBF
+X1RFWFQsDQo+ICsJCU1PRF9NRU1fVFlQRV9ST0RBVEEsDQo+ICsJCU1PRF9NRU1fVFlQRV9ST19B
+RlRFUl9JTklULA0KPiArDQo+ICsJCS8qIGxhc3QsIHJ3IGRhdGEgKi8NCj4gKwkJTU9EX01FTV9U
+WVBFX0RBVEEsDQo+ICsJfTsNCj4gKwlpbnQgaTsNCj4gKw0KPiArCWZvciAoaSA9IDA7IGkgPCBN
+T0RfTUVNX05VTV9UWVBFUzsgaSsrKSB7DQo+ICsJCWVudW0gbW9kX21lbV90eXBlIHR5cGUgPSBt
+b2RfbWVtX2ZyZWVfb3JkZXJbaV07DQo+ICsJCXN0cnVjdCBtb2R1bGVfbWVtb3J5ICptb2RfbWVt
+ID0gJm1vZC0+bW9kX21lbVt0eXBlXTsNCj4gKw0KPiArCQkvKiBGcmVlIGxvY2stY2xhc3Nlczsg
+cmVsaWVzIG9uIHRoZSBwcmVjZWRpbmcgc3luY19yY3UoKS4gKi8NCj4gKwkJbG9ja2RlcF9mcmVl
+X2tleV9yYW5nZShtb2RfbWVtLT5iYXNlLCBtb2RfbWVtLT5zaXplKTsNCj4gKwkJaWYgKG1vZF9t
+ZW0tPnNpemUpIHsNCj4gKwkJCWlmIChtb2RfbWVtX3VzZV92bWFsbG9jKHR5cGUpKQ0KPiArCQkJ
+CXZmcmVlKG1vZF9tZW0tPmJhc2UpOw0KPiArCQkJZWxzZQ0KPiArCQkJCW1vZHVsZV9tZW1mcmVl
+KG1vZF9tZW0tPmJhc2UpOw0KPiArCQl9DQo+ICsJfQ0KPiArfQ0KPiArDQo+ICAgLyogRnJlZSBh
+IG1vZHVsZSwgcmVtb3ZlIGZyb20gbGlzdHMsIGV0Yy4gKi8NCj4gICBzdGF0aWMgdm9pZCBmcmVl
+X21vZHVsZShzdHJ1Y3QgbW9kdWxlICptb2QpDQo+ICAgew0KPiBAQCAtMTE5MSwxOCArMTI2OCwx
+MCBAQCBzdGF0aWMgdm9pZCBmcmVlX21vZHVsZShzdHJ1Y3QgbW9kdWxlICptb2QpDQo+ICAgDQo+
+ICAgCS8qIFRoaXMgbWF5IGJlIGVtcHR5LCBidXQgdGhhdCdzIE9LICovDQo+ICAgCW1vZHVsZV9h
+cmNoX2ZyZWVpbmdfaW5pdChtb2QpOw0KPiAtCW1vZHVsZV9tZW1mcmVlKG1vZC0+aW5pdF9sYXlv
+dXQuYmFzZSk7DQo+ICAgCWtmcmVlKG1vZC0+YXJncyk7DQo+ICAgCXBlcmNwdV9tb2RmcmVlKG1v
+ZCk7DQo+ICAgDQo+IC0JLyogRnJlZSBsb2NrLWNsYXNzZXM7IHJlbGllcyBvbiB0aGUgcHJlY2Vk
+aW5nIHN5bmNfcmN1KCkuICovDQo+IC0JbG9ja2RlcF9mcmVlX2tleV9yYW5nZShtb2QtPmRhdGFf
+bGF5b3V0LmJhc2UsIG1vZC0+ZGF0YV9sYXlvdXQuc2l6ZSk7DQo+IC0NCj4gLQkvKiBGaW5hbGx5
+LCBmcmVlIHRoZSBjb3JlIChjb250YWluaW5nIHRoZSBtb2R1bGUgc3RydWN0dXJlKSAqLw0KPiAt
+CW1vZHVsZV9tZW1mcmVlKG1vZC0+Y29yZV9sYXlvdXQuYmFzZSk7DQo+IC0jaWZkZWYgQ09ORklH
+X0FSQ0hfV0FOVFNfTU9EVUxFU19EQVRBX0lOX1ZNQUxMT0MNCj4gLQl2ZnJlZShtb2QtPmRhdGFf
+bGF5b3V0LmJhc2UpOw0KPiAtI2VuZGlmDQo+ICsJZnJlZV9tb2RfbWVtKG1vZCk7DQo+ICAgfQ0K
+PiAgIA0KPiAgIHZvaWQgKl9fc3ltYm9sX2dldChjb25zdCBjaGFyICpzeW1ib2wpDQo+IEBAIC0x
+Mzg5LDE2ICsxNDU4LDI5IEBAIHVuc2lnbmVkIGludCBfX3dlYWsgYXJjaF9tb2Rfc2VjdGlvbl9w
+cmVwZW5kKHN0cnVjdCBtb2R1bGUgKm1vZCwNCj4gICAJcmV0dXJuIDA7DQo+ICAgfQ0KPiAgIA0K
+PiAtLyogVXBkYXRlIHNpemUgd2l0aCB0aGlzIHNlY3Rpb246IHJldHVybiBvZmZzZXQuICovDQo+
+IC1sb25nIG1vZHVsZV9nZXRfb2Zmc2V0KHN0cnVjdCBtb2R1bGUgKm1vZCwgdW5zaWduZWQgaW50
+ICpzaXplLA0KPiAtCQkgICAgICAgRWxmX1NoZHIgKnNlY2hkciwgdW5zaWduZWQgaW50IHNlY3Rp
+b24pDQo+ICsvKg0KPiArICogVXNlIGhpZ2hlc3QgNCBiaXRzIG9mIHNoX2VudHNpemUgdG8gc3Rv
+cmUgdGhlIG1vZF9tZW1fdHlwZSBvZiB0aGlzDQo+ICsgKiBzZWN0aW9uLiBUaGlzIGxlYXZlcyAy
+OCBiaXRzIGZvciBvZmZzZXQgb24gMzItYml0IHN5c3RlbXMsIHdoaWNoIGlzDQo+ICsgKiBhYm91
+dCAyNTYgTWlCIChXQVJOX09OX09OQ0UgaWYgd2UgZXhjZWVkIHRoYXQpLg0KPiArICovDQo+ICsN
+Cj4gKyNkZWZpbmUgU0hfRU5UU0laRV9UWVBFX0JJVFMJNA0KPiArI2RlZmluZSBTSF9FTlRTSVpF
+X1RZUEVfU0hJRlQJKEJJVFNfUEVSX0xPTkcgLSBTSF9FTlRTSVpFX1RZUEVfQklUUykNCj4gKyNk
+ZWZpbmUgU0hfRU5UU0laRV9UWVBFX01BU0sJKCgxVUwgPDwgU0hfRU5UU0laRV9UWVBFX0JJVFMp
+IC0gMSkNCj4gKyNkZWZpbmUgU0hfRU5UU0laRV9PRkZTRVRfTUFTSwkoKDFVTCA8PCAoQklUU19Q
+RVJfTE9ORyAtIFNIX0VOVFNJWkVfVFlQRV9CSVRTKSkgLSAxKQ0KPiArDQo+ICtsb25nIG1vZHVs
+ZV9nZXRfb2Zmc2V0X2FuZF90eXBlKHN0cnVjdCBtb2R1bGUgKm1vZCwgZW51bSBtb2RfbWVtX3R5
+cGUgdHlwZSwNCj4gKwkJCQlFbGZfU2hkciAqc2VjaGRyLCB1bnNpZ25lZCBpbnQgc2VjdGlvbikN
+Cj4gICB7DQo+IC0JbG9uZyByZXQ7DQo+ICsJbG9uZyBvZmZzZXQ7DQo+ICsJbG9uZyBtYXNrID0g
+KCh1bnNpZ25lZCBsb25nKSh0eXBlKSAmIFNIX0VOVFNJWkVfVFlQRV9NQVNLKSA8PCBTSF9FTlRT
+SVpFX1RZUEVfU0hJRlQ7DQo+ICAgDQo+IC0JKnNpemUgKz0gYXJjaF9tb2Rfc2VjdGlvbl9wcmVw
+ZW5kKG1vZCwgc2VjdGlvbik7DQo+IC0JcmV0ID0gQUxJR04oKnNpemUsIHNlY2hkci0+c2hfYWRk
+cmFsaWduID86IDEpOw0KPiAtCSpzaXplID0gcmV0ICsgc2VjaGRyLT5zaF9zaXplOw0KPiAtCXJl
+dHVybiByZXQ7DQo+ICsJbW9kLT5tb2RfbWVtW3R5cGVdLnNpemUgKz0gYXJjaF9tb2Rfc2VjdGlv
+bl9wcmVwZW5kKG1vZCwgc2VjdGlvbik7DQo+ICsJb2Zmc2V0ID0gQUxJR04obW9kLT5tb2RfbWVt
+W3R5cGVdLnNpemUsIHNlY2hkci0+c2hfYWRkcmFsaWduID86IDEpOw0KPiArCW1vZC0+bW9kX21l
+bVt0eXBlXS5zaXplID0gb2Zmc2V0ICsgc2VjaGRyLT5zaF9zaXplOw0KPiArDQo+ICsJV0FSTl9P
+Tl9PTkNFKG9mZnNldCAmIG1hc2spOw0KPiArCXJldHVybiBvZmZzZXQgfCBtYXNrOw0KPiAgIH0N
+Cj4gICANCj4gICBzdGF0aWMgYm9vbCBtb2R1bGVfaW5pdF9sYXlvdXRfc2VjdGlvbihjb25zdCBj
+aGFyICpzbmFtZSkNCj4gQEAgLTE0MzAsNiArMTUxMiwyMCBAQCBzdGF0aWMgdm9pZCBsYXlvdXRf
+c2VjdGlvbnMoc3RydWN0IG1vZHVsZSAqbW9kLCBzdHJ1Y3QgbG9hZF9pbmZvICppbmZvKQ0KPiAg
+IAkJeyBTSEZfV1JJVEUgfCBTSEZfQUxMT0MsIEFSQ0hfU0hGX1NNQUxMIH0sDQo+ICAgCQl7IEFS
+Q0hfU0hGX1NNQUxMIHwgU0hGX0FMTE9DLCAwIH0NCj4gICAJfTsNCj4gKwlzdGF0aWMgaW50IGNv
+cmVfbV90b19tZW1fdHlwZVtdID0gew0KPiArCQlNT0RfTUVNX1RZUEVfVEVYVCwNCj4gKwkJTU9E
+X01FTV9UWVBFX1JPREFUQSwNCj4gKwkJTU9EX01FTV9UWVBFX1JPX0FGVEVSX0lOSVQsDQo+ICsJ
+CU1PRF9NRU1fVFlQRV9EQVRBLA0KPiArCQlNT0RfTUVNX1RZUEVfSU5WQUxJRCwNCj4gKwl9Ow0K
+PiArCXN0YXRpYyBpbnQgaW5pdF9tX3RvX21lbV90eXBlW10gPSB7DQo+ICsJCU1PRF9NRU1fVFlQ
+RV9JTklUX1RFWFQsDQo+ICsJCU1PRF9NRU1fVFlQRV9JTklUX1JPREFUQSwNCj4gKwkJTU9EX01F
+TV9UWVBFX0lOVkFMSUQsDQo+ICsJCU1PRF9NRU1fVFlQRV9JTklUX0RBVEEsDQo+ICsJCU1PRF9N
+RU1fVFlQRV9JTlZBTElELA0KPiArCX07DQo+ICAgCXVuc2lnbmVkIGludCBtLCBpOw0KPiAgIA0K
+PiAgIAlmb3IgKGkgPSAwOyBpIDwgaW5mby0+aGRyLT5lX3NobnVtOyBpKyspDQo+IEBAIC0xNDM3
+LDQxICsxNTMzLDMwIEBAIHN0YXRpYyB2b2lkIGxheW91dF9zZWN0aW9ucyhzdHJ1Y3QgbW9kdWxl
+ICptb2QsIHN0cnVjdCBsb2FkX2luZm8gKmluZm8pDQo+ICAgDQo+ICAgCXByX2RlYnVnKCJDb3Jl
+IHNlY3Rpb24gYWxsb2NhdGlvbiBvcmRlcjpcbiIpOw0KPiAgIAlmb3IgKG0gPSAwOyBtIDwgQVJS
+QVlfU0laRShtYXNrcyk7ICsrbSkgew0KPiArCQllbnVtIG1vZF9tZW1fdHlwZSB0eXBlID0gY29y
+ZV9tX3RvX21lbV90eXBlW21dOw0KPiArDQo+ICAgCQlmb3IgKGkgPSAwOyBpIDwgaW5mby0+aGRy
+LT5lX3NobnVtOyArK2kpIHsNCj4gICAJCQlFbGZfU2hkciAqcyA9ICZpbmZvLT5zZWNoZHJzW2ld
+Ow0KPiAgIAkJCWNvbnN0IGNoYXIgKnNuYW1lID0gaW5mby0+c2Vjc3RyaW5ncyArIHMtPnNoX25h
+bWU7DQo+IC0JCQl1bnNpZ25lZCBpbnQgKnNpemVwOw0KPiAgIA0KPiAgIAkJCWlmICgocy0+c2hf
+ZmxhZ3MgJiBtYXNrc1ttXVswXSkgIT0gbWFza3NbbV1bMF0NCj4gICAJCQkgICAgfHwgKHMtPnNo
+X2ZsYWdzICYgbWFza3NbbV1bMV0pDQo+ICAgCQkJICAgIHx8IHMtPnNoX2VudHNpemUgIT0gfjBV
+TA0KPiAgIAkJCSAgICB8fCBtb2R1bGVfaW5pdF9sYXlvdXRfc2VjdGlvbihzbmFtZSkpDQo+ICAg
+CQkJCWNvbnRpbnVlOw0KPiAtCQkJc2l6ZXAgPSBtID8gJm1vZC0+ZGF0YV9sYXlvdXQuc2l6ZSA6
+ICZtb2QtPmNvcmVfbGF5b3V0LnNpemU7DQo+IC0JCQlzLT5zaF9lbnRzaXplID0gbW9kdWxlX2dl
+dF9vZmZzZXQobW9kLCBzaXplcCwgcywgaSk7DQo+ICsNCj4gKwkJCWlmIChXQVJOX09OX09OQ0Uo
+dHlwZSA9PSBNT0RfTUVNX1RZUEVfSU5WQUxJRCkpDQo+ICsJCQkJY29udGludWU7DQo+ICsNCj4g
+KwkJCXMtPnNoX2VudHNpemUgPSBtb2R1bGVfZ2V0X29mZnNldF9hbmRfdHlwZShtb2QsIHR5cGUs
+IHMsIGkpOw0KPiAgIAkJCXByX2RlYnVnKCJcdCVzXG4iLCBzbmFtZSk7DQo+ICAgCQl9DQo+IC0J
+CXN3aXRjaCAobSkgew0KPiAtCQljYXNlIDA6IC8qIGV4ZWN1dGFibGUgKi8NCj4gLQkJCW1vZC0+
+Y29yZV9sYXlvdXQuc2l6ZSA9IHN0cmljdF9hbGlnbihtb2QtPmNvcmVfbGF5b3V0LnNpemUpOw0K
+PiAtCQkJbW9kLT5jb3JlX2xheW91dC50ZXh0X3NpemUgPSBtb2QtPmNvcmVfbGF5b3V0LnNpemU7
+DQo+IC0JCQlicmVhazsNCj4gLQkJY2FzZSAxOiAvKiBSTzogdGV4dCBhbmQgcm8tZGF0YSAqLw0K
+PiAtCQkJbW9kLT5kYXRhX2xheW91dC5zaXplID0gc3RyaWN0X2FsaWduKG1vZC0+ZGF0YV9sYXlv
+dXQuc2l6ZSk7DQo+IC0JCQltb2QtPmRhdGFfbGF5b3V0LnJvX3NpemUgPSBtb2QtPmRhdGFfbGF5
+b3V0LnNpemU7DQo+IC0JCQlicmVhazsNCj4gLQkJY2FzZSAyOiAvKiBSTyBhZnRlciBpbml0ICov
+DQo+IC0JCQltb2QtPmRhdGFfbGF5b3V0LnNpemUgPSBzdHJpY3RfYWxpZ24obW9kLT5kYXRhX2xh
+eW91dC5zaXplKTsNCj4gLQkJCW1vZC0+ZGF0YV9sYXlvdXQucm9fYWZ0ZXJfaW5pdF9zaXplID0g
+bW9kLT5kYXRhX2xheW91dC5zaXplOw0KPiAtCQkJYnJlYWs7DQo+IC0JCWNhc2UgNDogLyogd2hv
+bGUgY29yZSAqLw0KPiAtCQkJbW9kLT5kYXRhX2xheW91dC5zaXplID0gc3RyaWN0X2FsaWduKG1v
+ZC0+ZGF0YV9sYXlvdXQuc2l6ZSk7DQo+IC0JCQlicmVhazsNCj4gLQkJfQ0KPiAgIAl9DQo+ICAg
+DQo+ICAgCXByX2RlYnVnKCJJbml0IHNlY3Rpb24gYWxsb2NhdGlvbiBvcmRlcjpcbiIpOw0KPiAg
+IAlmb3IgKG0gPSAwOyBtIDwgQVJSQVlfU0laRShtYXNrcyk7ICsrbSkgew0KPiArCQllbnVtIG1v
+ZF9tZW1fdHlwZSB0eXBlID0gaW5pdF9tX3RvX21lbV90eXBlW21dOw0KPiArDQo+ICAgCQlmb3Ig
+KGkgPSAwOyBpIDwgaW5mby0+aGRyLT5lX3NobnVtOyArK2kpIHsNCj4gICAJCQlFbGZfU2hkciAq
+cyA9ICZpbmZvLT5zZWNoZHJzW2ldOw0KPiAgIAkJCWNvbnN0IGNoYXIgKnNuYW1lID0gaW5mby0+
+c2Vjc3RyaW5ncyArIHMtPnNoX25hbWU7DQo+IEBAIC0xNDgxLDMwICsxNTY2LDEzIEBAIHN0YXRp
+YyB2b2lkIGxheW91dF9zZWN0aW9ucyhzdHJ1Y3QgbW9kdWxlICptb2QsIHN0cnVjdCBsb2FkX2lu
+Zm8gKmluZm8pDQo+ICAgCQkJICAgIHx8IHMtPnNoX2VudHNpemUgIT0gfjBVTA0KPiAgIAkJCSAg
+ICB8fCAhbW9kdWxlX2luaXRfbGF5b3V0X3NlY3Rpb24oc25hbWUpKQ0KPiAgIAkJCQljb250aW51
+ZTsNCj4gLQkJCXMtPnNoX2VudHNpemUgPSAobW9kdWxlX2dldF9vZmZzZXQobW9kLCAmbW9kLT5p
+bml0X2xheW91dC5zaXplLCBzLCBpKQ0KPiAtCQkJCQkgfCBJTklUX09GRlNFVF9NQVNLKTsNCj4g
+Kw0KPiArCQkJaWYgKFdBUk5fT05fT05DRSh0eXBlID09IE1PRF9NRU1fVFlQRV9JTlZBTElEKSkN
+Cj4gKwkJCQljb250aW51ZTsNCj4gKw0KPiArCQkJcy0+c2hfZW50c2l6ZSA9IG1vZHVsZV9nZXRf
+b2Zmc2V0X2FuZF90eXBlKG1vZCwgdHlwZSwgcywgaSk7DQo+ICAgCQkJcHJfZGVidWcoIlx0JXNc
+biIsIHNuYW1lKTsNCj4gICAJCX0NCj4gLQkJc3dpdGNoIChtKSB7DQo+IC0JCWNhc2UgMDogLyog
+ZXhlY3V0YWJsZSAqLw0KPiAtCQkJbW9kLT5pbml0X2xheW91dC5zaXplID0gc3RyaWN0X2FsaWdu
+KG1vZC0+aW5pdF9sYXlvdXQuc2l6ZSk7DQo+IC0JCQltb2QtPmluaXRfbGF5b3V0LnRleHRfc2l6
+ZSA9IG1vZC0+aW5pdF9sYXlvdXQuc2l6ZTsNCj4gLQkJCWJyZWFrOw0KPiAtCQljYXNlIDE6IC8q
+IFJPOiB0ZXh0IGFuZCByby1kYXRhICovDQo+IC0JCQltb2QtPmluaXRfbGF5b3V0LnNpemUgPSBz
+dHJpY3RfYWxpZ24obW9kLT5pbml0X2xheW91dC5zaXplKTsNCj4gLQkJCW1vZC0+aW5pdF9sYXlv
+dXQucm9fc2l6ZSA9IG1vZC0+aW5pdF9sYXlvdXQuc2l6ZTsNCj4gLQkJCWJyZWFrOw0KPiAtCQlj
+YXNlIDI6DQo+IC0JCQkvKg0KPiAtCQkJICogUk8gYWZ0ZXIgaW5pdCBkb2Vzbid0IGFwcGx5IHRv
+IGluaXRfbGF5b3V0IChvbmx5DQo+IC0JCQkgKiBjb3JlX2xheW91dCksIHNvIGl0IGp1c3QgdGFr
+ZXMgdGhlIHZhbHVlIG9mIHJvX3NpemUuDQo+IC0JCQkgKi8NCj4gLQkJCW1vZC0+aW5pdF9sYXlv
+dXQucm9fYWZ0ZXJfaW5pdF9zaXplID0gbW9kLT5pbml0X2xheW91dC5yb19zaXplOw0KPiAtCQkJ
+YnJlYWs7DQo+IC0JCWNhc2UgNDogLyogd2hvbGUgaW5pdCAqLw0KPiAtCQkJbW9kLT5pbml0X2xh
+eW91dC5zaXplID0gc3RyaWN0X2FsaWduKG1vZC0+aW5pdF9sYXlvdXQuc2l6ZSk7DQo+IC0JCQli
+cmVhazsNCj4gLQkJfQ0KPiAgIAl9DQo+ICAgfQ0KPiAgIA0KPiBAQCAtMjExNyw3NCArMjE4NSw0
+NSBAQCBzdGF0aWMgaW50IGZpbmRfbW9kdWxlX3NlY3Rpb25zKHN0cnVjdCBtb2R1bGUgKm1vZCwg
+c3RydWN0IGxvYWRfaW5mbyAqaW5mbykNCj4gICANCj4gICBzdGF0aWMgaW50IG1vdmVfbW9kdWxl
+KHN0cnVjdCBtb2R1bGUgKm1vZCwgc3RydWN0IGxvYWRfaW5mbyAqaW5mbykNCj4gICB7DQo+ICsJ
+ZW51bSBtb2RfbWVtX3R5cGUgdHlwZTsNCj4gICAJaW50IGk7DQo+ICAgCXZvaWQgKnB0cjsNCj4g
+ICANCj4gLQkvKiBEbyB0aGUgYWxsb2NzLiAqLw0KPiAtCXB0ciA9IG1vZHVsZV9hbGxvYyhtb2Qt
+PmNvcmVfbGF5b3V0LnNpemUpOw0KPiAtCS8qDQo+IC0JICogVGhlIHBvaW50ZXIgdG8gdGhpcyBi
+bG9jayBpcyBzdG9yZWQgaW4gdGhlIG1vZHVsZSBzdHJ1Y3R1cmUNCj4gLQkgKiB3aGljaCBpcyBp
+bnNpZGUgdGhlIGJsb2NrLiBKdXN0IG1hcmsgaXQgYXMgbm90IGJlaW5nIGENCj4gLQkgKiBsZWFr
+Lg0KPiAtCSAqLw0KPiAtCWttZW1sZWFrX25vdF9sZWFrKHB0cik7DQo+IC0JaWYgKCFwdHIpDQo+
+IC0JCXJldHVybiAtRU5PTUVNOw0KPiAtDQo+IC0JbWVtc2V0KHB0ciwgMCwgbW9kLT5jb3JlX2xh
+eW91dC5zaXplKTsNCj4gLQltb2QtPmNvcmVfbGF5b3V0LmJhc2UgPSBwdHI7DQo+ICsJZm9yX2Vh
+Y2hfbW9kX21lbV90eXBlKHR5cGUpIHsNCj4gKwkJaWYgKCFtb2QtPm1vZF9tZW1bdHlwZV0uc2l6
+ZSkgew0KPiArCQkJbW9kLT5tb2RfbWVtW3R5cGVdLmJhc2UgPSBOVUxMOw0KPiArCQkJY29udGlu
+dWU7DQo+ICsJCX0NCj4gKwkJbW9kLT5tb2RfbWVtW3R5cGVdLnNpemUgPSBQQUdFX0FMSUdOKG1v
+ZC0+bW9kX21lbVt0eXBlXS5zaXplKTsNCj4gKwkJaWYgKG1vZF9tZW1fdXNlX3ZtYWxsb2ModHlw
+ZSkpDQo+ICsJCQlwdHIgPSB2emFsbG9jKG1vZC0+bW9kX21lbVt0eXBlXS5zaXplKTsNCj4gKwkJ
+ZWxzZQ0KPiArCQkJcHRyID0gbW9kdWxlX2FsbG9jKG1vZC0+bW9kX21lbVt0eXBlXS5zaXplKTsN
+Cj4gICANCj4gLQlpZiAobW9kLT5pbml0X2xheW91dC5zaXplKSB7DQo+IC0JCXB0ciA9IG1vZHVs
+ZV9hbGxvYyhtb2QtPmluaXRfbGF5b3V0LnNpemUpOw0KPiAgIAkJLyoNCj4gICAJCSAqIFRoZSBw
+b2ludGVyIHRvIHRoaXMgYmxvY2sgaXMgc3RvcmVkIGluIHRoZSBtb2R1bGUgc3RydWN0dXJlDQo+
+IC0JCSAqIHdoaWNoIGlzIGluc2lkZSB0aGUgYmxvY2suIFRoaXMgYmxvY2sgZG9lc24ndCBuZWVk
+IHRvIGJlDQo+IC0JCSAqIHNjYW5uZWQgYXMgaXQgY29udGFpbnMgZGF0YSBhbmQgY29kZSB0aGF0
+IHdpbGwgYmUgZnJlZWQNCj4gLQkJICogYWZ0ZXIgdGhlIG1vZHVsZSBpcyBpbml0aWFsaXplZC4N
+Cj4gKwkJICogd2hpY2ggaXMgaW5zaWRlIHRoZSBibG9jay4gSnVzdCBtYXJrIGl0IGFzIG5vdCBi
+ZWluZyBhDQo+ICsJCSAqIGxlYWsuDQo+ICAgCQkgKi8NCj4gICAJCWttZW1sZWFrX2lnbm9yZShw
+dHIpOw0KPiAtCQlpZiAoIXB0cikgew0KPiAtCQkJbW9kdWxlX21lbWZyZWUobW9kLT5jb3JlX2xh
+eW91dC5iYXNlKTsNCj4gLQkJCXJldHVybiAtRU5PTUVNOw0KPiAtCQl9DQo+IC0JCW1lbXNldChw
+dHIsIDAsIG1vZC0+aW5pdF9sYXlvdXQuc2l6ZSk7DQo+IC0JCW1vZC0+aW5pdF9sYXlvdXQuYmFz
+ZSA9IHB0cjsNCj4gLQl9IGVsc2UNCj4gLQkJbW9kLT5pbml0X2xheW91dC5iYXNlID0gTlVMTDsN
+Cj4gLQ0KPiAtI2lmZGVmIENPTkZJR19BUkNIX1dBTlRTX01PRFVMRVNfREFUQV9JTl9WTUFMTE9D
+DQo+IC0JLyogRG8gdGhlIGFsbG9jcy4gKi8NCj4gLQlwdHIgPSB2emFsbG9jKG1vZC0+ZGF0YV9s
+YXlvdXQuc2l6ZSk7DQo+IC0JLyoNCj4gLQkgKiBUaGUgcG9pbnRlciB0byB0aGlzIGJsb2NrIGlz
+IHN0b3JlZCBpbiB0aGUgbW9kdWxlIHN0cnVjdHVyZQ0KPiAtCSAqIHdoaWNoIGlzIGluc2lkZSB0
+aGUgYmxvY2suIEp1c3QgbWFyayBpdCBhcyBub3QgYmVpbmcgYQ0KPiAtCSAqIGxlYWsuDQo+IC0J
+ICovDQo+IC0Ja21lbWxlYWtfbm90X2xlYWsocHRyKTsNCj4gLQlpZiAoIXB0cikgew0KPiAtCQlt
+b2R1bGVfbWVtZnJlZShtb2QtPmNvcmVfbGF5b3V0LmJhc2UpOw0KPiAtCQltb2R1bGVfbWVtZnJl
+ZShtb2QtPmluaXRfbGF5b3V0LmJhc2UpOw0KPiAtCQlyZXR1cm4gLUVOT01FTTsNCj4gKwkJaWYg
+KCFwdHIpDQo+ICsJCQlnb3RvIG91dF9lbm9tZW07DQo+ICsJCW1lbXNldChwdHIsIDAsIG1vZC0+
+bW9kX21lbVt0eXBlXS5zaXplKTsNCj4gKwkJbW9kLT5tb2RfbWVtW3R5cGVdLmJhc2UgPSBwdHI7
+DQo+ICAgCX0NCj4gICANCj4gLQltb2QtPmRhdGFfbGF5b3V0LmJhc2UgPSBwdHI7DQo+IC0jZW5k
+aWYNCj4gICAJLyogVHJhbnNmZXIgZWFjaCBzZWN0aW9uIHdoaWNoIHNwZWNpZmllcyBTSEZfQUxM
+T0MgKi8NCj4gICAJcHJfZGVidWcoImZpbmFsIHNlY3Rpb24gYWRkcmVzc2VzOlxuIik7DQo+ICAg
+CWZvciAoaSA9IDA7IGkgPCBpbmZvLT5oZHItPmVfc2hudW07IGkrKykgew0KPiAgIAkJdm9pZCAq
+ZGVzdDsNCj4gICAJCUVsZl9TaGRyICpzaGRyID0gJmluZm8tPnNlY2hkcnNbaV07DQo+ICsJCWVu
+dW0gbW9kX21lbV90eXBlIHR5cGUgPSBzaGRyLT5zaF9lbnRzaXplID4+IFNIX0VOVFNJWkVfVFlQ
+RV9TSElGVDsNCj4gICANCj4gICAJCWlmICghKHNoZHItPnNoX2ZsYWdzICYgU0hGX0FMTE9DKSkN
+Cj4gICAJCQljb250aW51ZTsNCj4gICANCj4gLQkJaWYgKHNoZHItPnNoX2VudHNpemUgJiBJTklU
+X09GRlNFVF9NQVNLKQ0KPiAtCQkJZGVzdCA9IG1vZC0+aW5pdF9sYXlvdXQuYmFzZQ0KPiAtCQkJ
+CSsgKHNoZHItPnNoX2VudHNpemUgJiB+SU5JVF9PRkZTRVRfTUFTSyk7DQo+IC0JCWVsc2UgaWYg
+KCEoc2hkci0+c2hfZmxhZ3MgJiBTSEZfRVhFQ0lOU1RSKSkNCj4gLQkJCWRlc3QgPSBtb2QtPmRh
+dGFfbGF5b3V0LmJhc2UgKyBzaGRyLT5zaF9lbnRzaXplOw0KPiAtCQllbHNlDQo+IC0JCQlkZXN0
+ID0gbW9kLT5jb3JlX2xheW91dC5iYXNlICsgc2hkci0+c2hfZW50c2l6ZTsNCj4gKwkJZGVzdCA9
+IG1vZC0+bW9kX21lbVt0eXBlXS5iYXNlICsNCj4gKwkJCShzaGRyLT5zaF9lbnRzaXplICYgU0hf
+RU5UU0laRV9PRkZTRVRfTUFTSyk7DQo+ICAgDQo+ICAgCQlpZiAoc2hkci0+c2hfdHlwZSAhPSBT
+SFRfTk9CSVRTKQ0KPiAgIAkJCW1lbWNweShkZXN0LCAodm9pZCAqKXNoZHItPnNoX2FkZHIsIHNo
+ZHItPnNoX3NpemUpOw0KPiBAQCAtMjE5NSw2ICsyMjM0LDE0IEBAIHN0YXRpYyBpbnQgbW92ZV9t
+b2R1bGUoc3RydWN0IG1vZHVsZSAqbW9kLCBzdHJ1Y3QgbG9hZF9pbmZvICppbmZvKQ0KPiAgIAl9
+DQo+ICAgDQo+ICAgCXJldHVybiAwOw0KPiArb3V0X2Vub21lbToNCj4gKwlmb3IgKHR5cGUtLTsg
+dHlwZSA+PSAwOyB0eXBlLS0pIHsNCj4gKwkJaWYgKG1vZF9tZW1fdXNlX3ZtYWxsb2ModHlwZSkp
+DQo+ICsJCQl2ZnJlZShtb2QtPm1vZF9tZW1bdHlwZV0uYmFzZSk7DQo+ICsJCWVsc2UNCj4gKwkJ
+CW1vZHVsZV9tZW1mcmVlKG1vZC0+bW9kX21lbVt0eXBlXS5iYXNlKTsNCj4gKwl9DQo+ICsJcmV0
+dXJuIC1FTk9NRU07DQo+ICAgfQ0KPiAgIA0KPiAgIHN0YXRpYyBpbnQgY2hlY2tfbW9kdWxlX2xp
+Y2Vuc2VfYW5kX3ZlcnNpb25zKHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gQEAgLTIyMzQsMTcgKzIy
+ODEsMjAgQEAgc3RhdGljIGludCBjaGVja19tb2R1bGVfbGljZW5zZV9hbmRfdmVyc2lvbnMoc3Ry
+dWN0IG1vZHVsZSAqbW9kKQ0KPiAgIA0KPiAgIHN0YXRpYyB2b2lkIGZsdXNoX21vZHVsZV9pY2Fj
+aGUoY29uc3Qgc3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAgIHsNCj4gKwllbnVtIG1vZF9tZW1fdHlw
+ZSB0eXBlOw0KPiArDQo+ICAgCS8qDQo+ICAgCSAqIEZsdXNoIHRoZSBpbnN0cnVjdGlvbiBjYWNo
+ZSwgc2luY2Ugd2UndmUgcGxheWVkIHdpdGggdGV4dC4NCj4gICAJICogRG8gaXQgYmVmb3JlIHBy
+b2Nlc3Npbmcgb2YgbW9kdWxlIHBhcmFtZXRlcnMsIHNvIHRoZSBtb2R1bGUNCj4gICAJICogY2Fu
+IHByb3ZpZGUgcGFyYW1ldGVyIGFjY2Vzc29yIGZ1bmN0aW9ucyBvZiBpdHMgb3duLg0KPiAgIAkg
+Ki8NCj4gLQlpZiAobW9kLT5pbml0X2xheW91dC5iYXNlKQ0KPiAtCQlmbHVzaF9pY2FjaGVfcmFu
+Z2UoKHVuc2lnbmVkIGxvbmcpbW9kLT5pbml0X2xheW91dC5iYXNlLA0KPiAtCQkJCSAgICh1bnNp
+Z25lZCBsb25nKW1vZC0+aW5pdF9sYXlvdXQuYmFzZQ0KPiAtCQkJCSAgICsgbW9kLT5pbml0X2xh
+eW91dC5zaXplKTsNCj4gLQlmbHVzaF9pY2FjaGVfcmFuZ2UoKHVuc2lnbmVkIGxvbmcpbW9kLT5j
+b3JlX2xheW91dC5iYXNlLA0KPiAtCQkJICAgKHVuc2lnbmVkIGxvbmcpbW9kLT5jb3JlX2xheW91
+dC5iYXNlICsgbW9kLT5jb3JlX2xheW91dC5zaXplKTsNCj4gKwlmb3JfZWFjaF9tb2RfbWVtX3R5
+cGUodHlwZSkgew0KPiArCQljb25zdCBzdHJ1Y3QgbW9kdWxlX21lbW9yeSAqbW9kX21lbSA9ICZt
+b2QtPm1vZF9tZW1bdHlwZV07DQo+ICsNCj4gKwkJaWYgKG1vZF9tZW0tPnNpemUpDQo+ICsJCQlm
+bHVzaF9pY2FjaGVfcmFuZ2UoKHVuc2lnbmVkIGxvbmcpbW9kX21lbS0+YmFzZSwNCj4gKwkJCQkJ
+ICAgKHVuc2lnbmVkIGxvbmcpbW9kX21lbS0+YmFzZSArIG1vZF9tZW0tPnNpemUpOw0KPiArCX0N
+Cj4gICB9DQo+ICAgDQo+ICAgaW50IF9fd2VhayBtb2R1bGVfZnJvYl9hcmNoX3NlY3Rpb25zKEVs
+Zl9FaGRyICpoZHIsDQo+IEBAIC0yMzQyLDExICsyMzkyLDggQEAgc3RhdGljIHZvaWQgbW9kdWxl
+X2RlYWxsb2NhdGUoc3RydWN0IG1vZHVsZSAqbW9kLCBzdHJ1Y3QgbG9hZF9pbmZvICppbmZvKQ0K
+PiAgIHsNCj4gICAJcGVyY3B1X21vZGZyZWUobW9kKTsNCj4gICAJbW9kdWxlX2FyY2hfZnJlZWlu
+Z19pbml0KG1vZCk7DQo+IC0JbW9kdWxlX21lbWZyZWUobW9kLT5pbml0X2xheW91dC5iYXNlKTsN
+Cj4gLQltb2R1bGVfbWVtZnJlZShtb2QtPmNvcmVfbGF5b3V0LmJhc2UpOw0KPiAtI2lmZGVmIENP
+TkZJR19BUkNIX1dBTlRTX01PRFVMRVNfREFUQV9JTl9WTUFMTE9DDQo+IC0JdmZyZWUobW9kLT5k
+YXRhX2xheW91dC5iYXNlKTsNCj4gLSNlbmRpZg0KPiArDQo+ICsJZnJlZV9tb2RfbWVtKG1vZCk7
+DQo+ICAgfQ0KPiAgIA0KPiAgIGludCBfX3dlYWsgbW9kdWxlX2ZpbmFsaXplKGNvbnN0IEVsZl9F
+aGRyICpoZHIsDQo+IEBAIC0yNDA2LDcgKzI0NTMsOSBAQCBzdGF0aWMgdm9pZCBkb19tb2RfY3Rv
+cnMoc3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAgIC8qIEZvciBmcmVlaW5nIG1vZHVsZV9pbml0IG9u
+IHN1Y2Nlc3MsIGluIGNhc2Uga2FsbHN5bXMgdHJhdmVyc2luZyAqLw0KPiAgIHN0cnVjdCBtb2Rf
+aW5pdGZyZWUgew0KPiAgIAlzdHJ1Y3QgbGxpc3Rfbm9kZSBub2RlOw0KPiAtCXZvaWQgKm1vZHVs
+ZV9pbml0Ow0KPiArCXZvaWQgKmluaXRfdGV4dDsNCj4gKwl2b2lkICppbml0X2RhdGE7DQo+ICsJ
+dm9pZCAqaW5pdF9yb2RhdGE7DQo+ICAgfTsNCj4gICANCj4gICBzdGF0aWMgdm9pZCBkb19mcmVl
+X2luaXQoc3RydWN0IHdvcmtfc3RydWN0ICp3KQ0KPiBAQCAtMjQyMCw3ICsyNDY5LDkgQEAgc3Rh
+dGljIHZvaWQgZG9fZnJlZV9pbml0KHN0cnVjdCB3b3JrX3N0cnVjdCAqdykNCj4gICANCj4gICAJ
+bGxpc3RfZm9yX2VhY2hfc2FmZShwb3MsIG4sIGxpc3QpIHsNCj4gICAJCWluaXRmcmVlID0gY29u
+dGFpbmVyX29mKHBvcywgc3RydWN0IG1vZF9pbml0ZnJlZSwgbm9kZSk7DQo+IC0JCW1vZHVsZV9t
+ZW1mcmVlKGluaXRmcmVlLT5tb2R1bGVfaW5pdCk7DQo+ICsJCW1vZHVsZV9tZW1mcmVlKGluaXRm
+cmVlLT5pbml0X3RleHQpOw0KPiArCQltb2R1bGVfbWVtZnJlZShpbml0ZnJlZS0+aW5pdF9kYXRh
+KTsNCj4gKwkJbW9kdWxlX21lbWZyZWUoaW5pdGZyZWUtPmluaXRfcm9kYXRhKTsNCj4gICAJCWtm
+cmVlKGluaXRmcmVlKTsNCj4gICAJfQ0KPiAgIH0NCj4gQEAgLTI0NDEsMTMgKzI0OTIsMTYgQEAg
+c3RhdGljIG5vaW5saW5lIGludCBkb19pbml0X21vZHVsZShzdHJ1Y3QgbW9kdWxlICptb2QpDQo+
+ICAgew0KPiAgIAlpbnQgcmV0ID0gMDsNCj4gICAJc3RydWN0IG1vZF9pbml0ZnJlZSAqZnJlZWlu
+aXQ7DQo+ICsJZW51bSBtb2RfbWVtX3R5cGUgdHlwZTsNCj4gICANCj4gICAJZnJlZWluaXQgPSBr
+bWFsbG9jKHNpemVvZigqZnJlZWluaXQpLCBHRlBfS0VSTkVMKTsNCj4gICAJaWYgKCFmcmVlaW5p
+dCkgew0KPiAgIAkJcmV0ID0gLUVOT01FTTsNCj4gICAJCWdvdG8gZmFpbDsNCj4gICAJfQ0KPiAt
+CWZyZWVpbml0LT5tb2R1bGVfaW5pdCA9IG1vZC0+aW5pdF9sYXlvdXQuYmFzZTsNCj4gKwlmcmVl
+aW5pdC0+aW5pdF90ZXh0ID0gbW9kLT5tb2RfbWVtW01PRF9NRU1fVFlQRV9JTklUX1RFWFRdLmJh
+c2U7DQo+ICsJZnJlZWluaXQtPmluaXRfZGF0YSA9IG1vZC0+bW9kX21lbVtNT0RfTUVNX1RZUEVf
+SU5JVF9EQVRBXS5iYXNlOw0KPiArCWZyZWVpbml0LT5pbml0X3JvZGF0YSA9IG1vZC0+bW9kX21l
+bVtNT0RfTUVNX1RZUEVfSU5JVF9ST0RBVEFdLmJhc2U7DQo+ICAgDQo+ICAgCWRvX21vZF9jdG9y
+cyhtb2QpOw0KPiAgIAkvKiBTdGFydCB0aGUgbW9kdWxlICovDQo+IEBAIC0yNDgzLDggKzI1Mzcs
+OSBAQCBzdGF0aWMgbm9pbmxpbmUgaW50IGRvX2luaXRfbW9kdWxlKHN0cnVjdCBtb2R1bGUgKm1v
+ZCkNCj4gICAJaWYgKCFtb2QtPmFzeW5jX3Byb2JlX3JlcXVlc3RlZCkNCj4gICAJCWFzeW5jX3N5
+bmNocm9uaXplX2Z1bGwoKTsNCj4gICANCj4gLQlmdHJhY2VfZnJlZV9tZW0obW9kLCBtb2QtPmlu
+aXRfbGF5b3V0LmJhc2UsIG1vZC0+aW5pdF9sYXlvdXQuYmFzZSArDQo+IC0JCQltb2QtPmluaXRf
+bGF5b3V0LnNpemUpOw0KPiArCWZ0cmFjZV9mcmVlX21lbShtb2QsIG1vZC0+bW9kX21lbVtNT0Rf
+TUVNX1RZUEVfSU5JVF9URVhUXS5iYXNlLA0KPiArCQkJbW9kLT5tb2RfbWVtW01PRF9NRU1fVFlQ
+RV9JTklUX1RFWFRdLmJhc2UgKw0KPiArCQkJbW9kLT5tb2RfbWVtW01PRF9NRU1fVFlQRV9JTklU
+X1RFWFRdLnNpemUpOw0KPiAgIAltdXRleF9sb2NrKCZtb2R1bGVfbXV0ZXgpOw0KPiAgIAkvKiBE
+cm9wIGluaXRpYWwgcmVmZXJlbmNlLiAqLw0KPiAgIAltb2R1bGVfcHV0KG1vZCk7DQo+IEBAIC0y
+NDk2LDExICsyNTUxLDEwIEBAIHN0YXRpYyBub2lubGluZSBpbnQgZG9faW5pdF9tb2R1bGUoc3Ry
+dWN0IG1vZHVsZSAqbW9kKQ0KPiAgIAltb2R1bGVfZW5hYmxlX3JvKG1vZCwgdHJ1ZSk7DQo+ICAg
+CW1vZF90cmVlX3JlbW92ZV9pbml0KG1vZCk7DQo+ICAgCW1vZHVsZV9hcmNoX2ZyZWVpbmdfaW5p
+dChtb2QpOw0KPiAtCW1vZC0+aW5pdF9sYXlvdXQuYmFzZSA9IE5VTEw7DQo+IC0JbW9kLT5pbml0
+X2xheW91dC5zaXplID0gMDsNCj4gLQltb2QtPmluaXRfbGF5b3V0LnJvX3NpemUgPSAwOw0KPiAt
+CW1vZC0+aW5pdF9sYXlvdXQucm9fYWZ0ZXJfaW5pdF9zaXplID0gMDsNCj4gLQltb2QtPmluaXRf
+bGF5b3V0LnRleHRfc2l6ZSA9IDA7DQo+ICsJZm9yX2luaXRfbW9kX21lbV90eXBlKHR5cGUpIHsN
+Cj4gKwkJbW9kLT5tb2RfbWVtW3R5cGVdLmJhc2UgPSBOVUxMOw0KPiArCQltb2QtPm1vZF9tZW1b
+dHlwZV0uc2l6ZSA9IDA7DQo+ICsJfQ0KPiAgICNpZmRlZiBDT05GSUdfREVCVUdfSU5GT19CVEZf
+TU9EVUxFUw0KPiAgIAkvKiAuQlRGIGlzIG5vdCBTSEZfQUxMT0MgYW5kIHdpbGwgZ2V0IHJlbW92
+ZWQsIHNvIHNhbml0aXplIHBvaW50ZXIgKi8NCj4gICAJbW9kLT5idGZfZGF0YSA9IE5VTEw7DQo+
+IEBAIC0yNjc0LDYgKzI3MjgsNyBAQCBzdGF0aWMgaW50IGxvYWRfbW9kdWxlKHN0cnVjdCBsb2Fk
+X2luZm8gKmluZm8sIGNvbnN0IGNoYXIgX191c2VyICp1YXJncywNCj4gICAJc3RydWN0IG1vZHVs
+ZSAqbW9kOw0KPiAgIAlsb25nIGVyciA9IDA7DQo+ICAgCWNoYXIgKmFmdGVyX2Rhc2hlczsNCj4g
+KwllbnVtIG1vZF9tZW1fdHlwZSB0eXBlOw0KPiAgIA0KPiAgIAkvKg0KPiAgIAkgKiBEbyB0aGUg
+c2lnbmF0dXJlIGNoZWNrIChpZiBhbnkpIGZpcnN0LiBBbGwgdGhhdA0KPiBAQCAtMjg4NSw3ICsy
+OTQwLDEwIEBAIHN0YXRpYyBpbnQgbG9hZF9tb2R1bGUoc3RydWN0IGxvYWRfaW5mbyAqaW5mbywg
+Y29uc3QgY2hhciBfX3VzZXIgKnVhcmdzLA0KPiAgIAltdXRleF91bmxvY2soJm1vZHVsZV9tdXRl
+eCk7DQo+ICAgIGZyZWVfbW9kdWxlOg0KPiAgIAkvKiBGcmVlIGxvY2stY2xhc3NlczsgcmVsaWVz
+IG9uIHRoZSBwcmVjZWRpbmcgc3luY19yY3UoKSAqLw0KPiAtCWxvY2tkZXBfZnJlZV9rZXlfcmFu
+Z2UobW9kLT5kYXRhX2xheW91dC5iYXNlLCBtb2QtPmRhdGFfbGF5b3V0LnNpemUpOw0KPiArCWZv
+cl9jb3JlX21vZF9tZW1fdHlwZSh0eXBlKSB7DQo+ICsJCWxvY2tkZXBfZnJlZV9rZXlfcmFuZ2Uo
+bW9kLT5tb2RfbWVtW3R5cGVdLmJhc2UsDQo+ICsJCQkJICAgICAgIG1vZC0+bW9kX21lbVt0eXBl
+XS5zaXplKTsNCj4gKwl9DQo+ICAgDQo+ICAgCW1vZHVsZV9kZWFsbG9jYXRlKG1vZCwgaW5mbyk7
+DQo+ICAgIGZyZWVfY29weToNCj4gQEAgLTMwMzYsMjAgKzMwOTQsMTMgQEAgYm9vbCBpc19tb2R1
+bGVfYWRkcmVzcyh1bnNpZ25lZCBsb25nIGFkZHIpDQo+ICAgc3RydWN0IG1vZHVsZSAqX19tb2R1
+bGVfYWRkcmVzcyh1bnNpZ25lZCBsb25nIGFkZHIpDQo+ICAgew0KPiAgIAlzdHJ1Y3QgbW9kdWxl
+ICptb2Q7DQo+IC0Jc3RydWN0IG1vZF90cmVlX3Jvb3QgKnRyZWU7DQo+ICAgDQo+IC0JaWYgKGFk
+ZHIgPj0gbW9kX3RyZWUuYWRkcl9taW4gJiYgYWRkciA8PSBtb2RfdHJlZS5hZGRyX21heCkNCj4g
+LQkJdHJlZSA9ICZtb2RfdHJlZTsNCj4gLSNpZmRlZiBDT05GSUdfQVJDSF9XQU5UU19NT0RVTEVT
+X0RBVEFfSU5fVk1BTExPQw0KPiAtCWVsc2UgaWYgKGFkZHIgPj0gbW9kX2RhdGFfdHJlZS5hZGRy
+X21pbiAmJiBhZGRyIDw9IG1vZF9kYXRhX3RyZWUuYWRkcl9tYXgpDQo+IC0JCXRyZWUgPSAmbW9k
+X2RhdGFfdHJlZTsNCj4gLSNlbmRpZg0KPiAtCWVsc2UNCj4gKwlpZiAoYWRkciA8IG1vZF90cmVl
+LmFkZHJfbWluIHx8IGFkZHIgPiBtb2RfdHJlZS5hZGRyX21heCkNCj4gICAJCXJldHVybiBOVUxM
+Ow0KPiAgIA0KPiAgIAltb2R1bGVfYXNzZXJ0X211dGV4X29yX3ByZWVtcHQoKTsNCj4gICANCj4g
+LQltb2QgPSBtb2RfZmluZChhZGRyLCB0cmVlKTsNCj4gKwltb2QgPSBtb2RfZmluZChhZGRyLCAm
+bW9kX3RyZWUpOw0KPiAgIAlpZiAobW9kKSB7DQo+ICAgCQlCVUdfT04oIXdpdGhpbl9tb2R1bGUo
+YWRkciwgbW9kKSk7DQo+ICAgCQlpZiAobW9kLT5zdGF0ZSA9PSBNT0RVTEVfU1RBVEVfVU5GT1JN
+RUQpDQo+IEBAIC0zMDg4LDkgKzMxMzksMTMgQEAgc3RydWN0IG1vZHVsZSAqX19tb2R1bGVfdGV4
+dF9hZGRyZXNzKHVuc2lnbmVkIGxvbmcgYWRkcikNCj4gICB7DQo+ICAgCXN0cnVjdCBtb2R1bGUg
+Km1vZCA9IF9fbW9kdWxlX2FkZHJlc3MoYWRkcik7DQo+ICAgCWlmIChtb2QpIHsNCj4gKwkJc3Ry
+dWN0IG1vZHVsZV9tZW1vcnkgKnRleHRfbWVtLCAqaW5pdF90ZXh0X21lbTsNCj4gKw0KPiArCQl0
+ZXh0X21lbSA9ICZtb2QtPm1vZF9tZW1bTU9EX01FTV9UWVBFX1RFWFRdOw0KPiArCQlpbml0X3Rl
+eHRfbWVtID0gJm1vZC0+bW9kX21lbVtNT0RfTUVNX1RZUEVfSU5JVF9URVhUXTsNCj4gICAJCS8q
+IE1ha2Ugc3VyZSBpdCdzIHdpdGhpbiB0aGUgdGV4dCBzZWN0aW9uLiAqLw0KPiAtCQlpZiAoIXdp
+dGhpbihhZGRyLCBtb2QtPmluaXRfbGF5b3V0LmJhc2UsIG1vZC0+aW5pdF9sYXlvdXQudGV4dF9z
+aXplKQ0KPiAtCQkgICAgJiYgIXdpdGhpbihhZGRyLCBtb2QtPmNvcmVfbGF5b3V0LmJhc2UsIG1v
+ZC0+Y29yZV9sYXlvdXQudGV4dF9zaXplKSkNCj4gKwkJaWYgKCF3aXRoaW4oYWRkciwgdGV4dF9t
+ZW0tPmJhc2UsIHRleHRfbWVtLT5zaXplKQ0KPiArCQkgICAgJiYgIXdpdGhpbihhZGRyLCBpbml0
+X3RleHRfbWVtLT5iYXNlLCBpbml0X3RleHRfbWVtLT5zaXplKSkNCj4gICAJCQltb2QgPSBOVUxM
+Ow0KPiAgIAl9DQo+ICAgCXJldHVybiBtb2Q7DQo+IGRpZmYgLS1naXQgYS9rZXJuZWwvbW9kdWxl
+L3Byb2Nmcy5jIGIva2VybmVsL21vZHVsZS9wcm9jZnMuYw0KPiBpbmRleCBjZjViOWYxZTZlYzQu
+LjFmY2U0MjA5YWViMiAxMDA2NDQNCj4gLS0tIGEva2VybmVsL21vZHVsZS9wcm9jZnMuYw0KPiAr
+KysgYi9rZXJuZWwvbW9kdWxlL3Byb2Nmcy5jDQo+IEBAIC02Miw2ICs2MiwxNiBAQCBzdGF0aWMg
+dm9pZCBtX3N0b3Aoc3RydWN0IHNlcV9maWxlICptLCB2b2lkICpwKQ0KPiAgIAltdXRleF91bmxv
+Y2soJm1vZHVsZV9tdXRleCk7DQo+ICAgfQ0KPiAgIA0KPiArc3RhdGljIHVuc2lnbmVkIGludCBt
+b2R1bGVfdG90YWxfc2l6ZShzdHJ1Y3QgbW9kdWxlICptb2QpDQo+ICt7DQo+ICsJaW50IHNpemUg
+PSAwOw0KPiArCWVudW0gbW9kX21lbV90eXBlIHR5cGU7DQo+ICsNCj4gKwlmb3JfZWFjaF9tb2Rf
+bWVtX3R5cGUodHlwZSkNCj4gKwkJc2l6ZSArPSBtb2QtPm1vZF9tZW1bdHlwZV0uc2l6ZTsNCj4g
+KwlyZXR1cm4gc2l6ZTsNCj4gK30NCj4gKw0KPiAgIHN0YXRpYyBpbnQgbV9zaG93KHN0cnVjdCBz
+ZXFfZmlsZSAqbSwgdm9pZCAqcCkNCj4gICB7DQo+ICAgCXN0cnVjdCBtb2R1bGUgKm1vZCA9IGxp
+c3RfZW50cnkocCwgc3RydWN0IG1vZHVsZSwgbGlzdCk7DQo+IEBAIC03MywxMCArODMsNyBAQCBz
+dGF0aWMgaW50IG1fc2hvdyhzdHJ1Y3Qgc2VxX2ZpbGUgKm0sIHZvaWQgKnApDQo+ICAgCWlmICht
+b2QtPnN0YXRlID09IE1PRFVMRV9TVEFURV9VTkZPUk1FRCkNCj4gICAJCXJldHVybiAwOw0KPiAg
+IA0KPiAtCXNpemUgPSBtb2QtPmluaXRfbGF5b3V0LnNpemUgKyBtb2QtPmNvcmVfbGF5b3V0LnNp
+emU7DQo+IC0jaWZkZWYgQ09ORklHX0FSQ0hfV0FOVFNfTU9EVUxFU19EQVRBX0lOX1ZNQUxMT0MN
+Cj4gLQlzaXplICs9IG1vZC0+ZGF0YV9sYXlvdXQuc2l6ZTsNCj4gLSNlbmRpZg0KPiArCXNpemUg
+PSBtb2R1bGVfdG90YWxfc2l6ZShtb2QpOw0KPiAgIAlzZXFfcHJpbnRmKG0sICIlcyAldSIsIG1v
+ZC0+bmFtZSwgc2l6ZSk7DQo+ICAgCXByaW50X3VubG9hZF9pbmZvKG0sIG1vZCk7DQo+ICAgDQo+
+IEBAIC04Niw3ICs5Myw3IEBAIHN0YXRpYyBpbnQgbV9zaG93KHN0cnVjdCBzZXFfZmlsZSAqbSwg
+dm9pZCAqcCkNCj4gICAJCSAgIG1vZC0+c3RhdGUgPT0gTU9EVUxFX1NUQVRFX0NPTUlORyA/ICJM
+b2FkaW5nIiA6DQo+ICAgCQkgICAiTGl2ZSIpOw0KPiAgIAkvKiBVc2VkIGJ5IG9wcm9maWxlIGFu
+ZCBvdGhlciBzaW1pbGFyIHRvb2xzLiAqLw0KPiAtCXZhbHVlID0gbS0+cHJpdmF0ZSA/IE5VTEwg
+OiBtb2QtPmNvcmVfbGF5b3V0LmJhc2U7DQo+ICsJdmFsdWUgPSBtLT5wcml2YXRlID8gTlVMTCA6
+IG1vZC0+bW9kX21lbVtNT0RfTUVNX1RZUEVfVEVYVF0uYmFzZTsNCj4gICAJc2VxX3ByaW50Ziht
+LCAiIDB4JXB4IiwgdmFsdWUpOw0KPiAgIA0KPiAgIAkvKiBUYWludHMgaW5mbyAqLw0KPiBkaWZm
+IC0tZ2l0IGEva2VybmVsL21vZHVsZS9zdHJpY3Rfcnd4LmMgYi9rZXJuZWwvbW9kdWxlL3N0cmlj
+dF9yd3guYw0KPiBpbmRleCAxNGZiZWE2NmYxMmYuLjFkYjg5NTY0MmFmYyAxMDA2NDQNCj4gLS0t
+IGEva2VybmVsL21vZHVsZS9zdHJpY3Rfcnd4LmMNCj4gKysrIGIva2VybmVsL21vZHVsZS9zdHJp
+Y3Rfcnd4LmMNCj4gQEAgLTExLDgyICsxMSw0MCBAQA0KPiAgICNpbmNsdWRlIDxsaW51eC9zZXRf
+bWVtb3J5Lmg+DQo+ICAgI2luY2x1ZGUgImludGVybmFsLmgiDQo+ICAgDQo+IC0vKg0KPiAtICog
+TEtNIFJPL05YIHByb3RlY3Rpb246IHByb3RlY3QgbW9kdWxlJ3MgdGV4dC9yby1kYXRhDQo+IC0g
+KiBmcm9tIG1vZGlmaWNhdGlvbiBhbmQgYW55IGRhdGEgZnJvbSBleGVjdXRpb24uDQo+IC0gKg0K
+PiAtICogR2VuZXJhbCBsYXlvdXQgb2YgbW9kdWxlIGlzOg0KPiAtICogICAgICAgICAgW3RleHRd
+IFtyZWFkLW9ubHktZGF0YV0gW3JvLWFmdGVyLWluaXRdIFt3cml0YWJsZSBkYXRhXQ0KPiAtICog
+dGV4dF9zaXplIC0tLS0tXiAgICAgICAgICAgICAgICBeICAgICAgICAgICAgICAgXiAgICAgICAg
+ICAgICAgIF4NCj4gLSAqIHJvX3NpemUgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tfCAgICAgICAg
+ICAgICAgIHwgICAgICAgICAgICAgICB8DQo+IC0gKiByb19hZnRlcl9pbml0X3NpemUgLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS18ICAgICAgICAgICAgICAgfA0KPiAtICogc2l6ZSAtLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLXwN
+Cj4gLSAqDQo+IC0gKiBUaGVzZSB2YWx1ZXMgYXJlIGFsd2F5cyBwYWdlLWFsaWduZWQgKGFzIGlz
+IGJhc2UpIHdoZW4NCj4gLSAqIENPTkZJR19TVFJJQ1RfTU9EVUxFX1JXWCBpcyBzZXQuDQo+IC0g
+Ki8NCj4gLQ0KPiAtLyoNCj4gLSAqIFNpbmNlIHNvbWUgYXJjaGVzIGFyZSBtb3ZpbmcgdG93YXJk
+cyBQQUdFX0tFUk5FTCBtb2R1bGUgYWxsb2NhdGlvbnMgaW5zdGVhZA0KPiAtICogb2YgUEFHRV9L
+RVJORUxfRVhFQywga2VlcCBmcm9iX3RleHQoKSBhbmQgbW9kdWxlX2VuYWJsZV94KCkgaW5kZXBl
+bmRlbnQgb2YNCj4gLSAqIENPTkZJR19TVFJJQ1RfTU9EVUxFX1JXWCBiZWNhdXNlIHRoZXkgYXJl
+IG5lZWRlZCByZWdhcmRsZXNzIG9mIHdoZXRoZXIgd2UNCj4gLSAqIGFyZSBzdHJpY3QuDQo+IC0g
+Ki8NCj4gLXN0YXRpYyB2b2lkIGZyb2JfdGV4dChjb25zdCBzdHJ1Y3QgbW9kdWxlX2xheW91dCAq
+bGF5b3V0LA0KPiAtCQkgICAgICBpbnQgKCpzZXRfbWVtb3J5KSh1bnNpZ25lZCBsb25nIHN0YXJ0
+LCBpbnQgbnVtX3BhZ2VzKSkNCj4gLXsNCj4gLQlzZXRfbWVtb3J5KCh1bnNpZ25lZCBsb25nKWxh
+eW91dC0+YmFzZSwNCj4gLQkJICAgUEFHRV9BTElHTihsYXlvdXQtPnRleHRfc2l6ZSkgPj4gUEFH
+RV9TSElGVCk7DQo+IC19DQo+IC0NCj4gLXN0YXRpYyB2b2lkIGZyb2Jfcm9kYXRhKGNvbnN0IHN0
+cnVjdCBtb2R1bGVfbGF5b3V0ICpsYXlvdXQsDQo+IC0JCSBpbnQgKCpzZXRfbWVtb3J5KSh1bnNp
+Z25lZCBsb25nIHN0YXJ0LCBpbnQgbnVtX3BhZ2VzKSkNCj4gLXsNCj4gLQlzZXRfbWVtb3J5KCh1
+bnNpZ25lZCBsb25nKWxheW91dC0+YmFzZSArIGxheW91dC0+dGV4dF9zaXplLA0KPiAtCQkgICAo
+bGF5b3V0LT5yb19zaXplIC0gbGF5b3V0LT50ZXh0X3NpemUpID4+IFBBR0VfU0hJRlQpOw0KPiAt
+fQ0KPiAtDQo+IC1zdGF0aWMgdm9pZCBmcm9iX3JvX2FmdGVyX2luaXQoY29uc3Qgc3RydWN0IG1v
+ZHVsZV9sYXlvdXQgKmxheW91dCwNCj4gLQkJCWludCAoKnNldF9tZW1vcnkpKHVuc2lnbmVkIGxv
+bmcgc3RhcnQsIGludCBudW1fcGFnZXMpKQ0KPiArYm9vbCBtb2R1bGVfY2hlY2tfbWlzYWxpZ25t
+ZW50KGNvbnN0IHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gICB7DQo+IC0Jc2V0X21lbW9yeSgodW5z
+aWduZWQgbG9uZylsYXlvdXQtPmJhc2UgKyBsYXlvdXQtPnJvX3NpemUsDQo+IC0JCSAgIChsYXlv
+dXQtPnJvX2FmdGVyX2luaXRfc2l6ZSAtIGxheW91dC0+cm9fc2l6ZSkgPj4gUEFHRV9TSElGVCk7
+DQo+IC19DQo+ICsJZW51bSBtb2RfbWVtX3R5cGUgdHlwZTsNCj4gICANCj4gLXN0YXRpYyB2b2lk
+IGZyb2Jfd3JpdGFibGVfZGF0YShjb25zdCBzdHJ1Y3QgbW9kdWxlX2xheW91dCAqbGF5b3V0LA0K
+PiAtCQkJaW50ICgqc2V0X21lbW9yeSkodW5zaWduZWQgbG9uZyBzdGFydCwgaW50IG51bV9wYWdl
+cykpDQo+IC17DQo+IC0Jc2V0X21lbW9yeSgodW5zaWduZWQgbG9uZylsYXlvdXQtPmJhc2UgKyBs
+YXlvdXQtPnJvX2FmdGVyX2luaXRfc2l6ZSwNCj4gLQkJICAgKGxheW91dC0+c2l6ZSAtIGxheW91
+dC0+cm9fYWZ0ZXJfaW5pdF9zaXplKSA+PiBQQUdFX1NISUZUKTsNCj4gLX0NCj4gKwlpZiAoIUlT
+X0VOQUJMRUQoQ09ORklHX1NUUklDVF9NT0RVTEVfUldYKSkNCj4gKwkJcmV0dXJuIGZhbHNlOw0K
+PiAgIA0KPiAtc3RhdGljIGJvb2wgbGF5b3V0X2NoZWNrX21pc2FsaWdubWVudChjb25zdCBzdHJ1
+Y3QgbW9kdWxlX2xheW91dCAqbGF5b3V0KQ0KPiAtew0KPiAtCXJldHVybiBXQVJOX09OKCFQQUdF
+X0FMSUdORUQobGF5b3V0LT5iYXNlKSkgfHwNCj4gLQkgICAgICAgV0FSTl9PTighUEFHRV9BTElH
+TkVEKGxheW91dC0+dGV4dF9zaXplKSkgfHwNCj4gLQkgICAgICAgV0FSTl9PTighUEFHRV9BTElH
+TkVEKGxheW91dC0+cm9fc2l6ZSkpIHx8DQo+IC0JICAgICAgIFdBUk5fT04oIVBBR0VfQUxJR05F
+RChsYXlvdXQtPnJvX2FmdGVyX2luaXRfc2l6ZSkpIHx8DQo+IC0JICAgICAgIFdBUk5fT04oIVBB
+R0VfQUxJR05FRChsYXlvdXQtPnNpemUpKTsNCj4gKwlmb3JfZWFjaF9tb2RfbWVtX3R5cGUodHlw
+ZSkgew0KPiArCQlpZiAoV0FSTl9PTighUEFHRV9BTElHTkVEKG1vZC0+bW9kX21lbVt0eXBlXS5i
+YXNlKSkpDQo+ICsJCQlyZXR1cm4gdHJ1ZTsNCj4gKwl9DQo+ICsJcmV0dXJuIGZhbHNlOw0KPiAg
+IH0NCj4gICANCj4gLWJvb2wgbW9kdWxlX2NoZWNrX21pc2FsaWdubWVudChjb25zdCBzdHJ1Y3Qg
+bW9kdWxlICptb2QpDQo+ICtzdGF0aWMgdm9pZCBtb2R1bGVfc2V0X21lbW9yeSgNCj4gKwljb25z
+dCBzdHJ1Y3QgbW9kdWxlICptb2QsIGVudW0gbW9kX21lbV90eXBlIHR5cGUsDQo+ICsJaW50ICgq
+c2V0X21lbW9yeSkodW5zaWduZWQgbG9uZyBzdGFydCwgaW50IG51bV9wYWdlcykpDQo+ICAgew0K
+PiAtCWlmICghSVNfRU5BQkxFRChDT05GSUdfU1RSSUNUX01PRFVMRV9SV1gpKQ0KPiAtCQlyZXR1
+cm4gZmFsc2U7DQo+ICsJY29uc3Qgc3RydWN0IG1vZHVsZV9tZW1vcnkgKm1vZF9tZW0gPSAmbW9k
+LT5tb2RfbWVtW3R5cGVdOw0KPiAgIA0KPiAtCXJldHVybiBsYXlvdXRfY2hlY2tfbWlzYWxpZ25t
+ZW50KCZtb2QtPmNvcmVfbGF5b3V0KSB8fA0KPiAtCSAgICAgICBsYXlvdXRfY2hlY2tfbWlzYWxp
+Z25tZW50KCZtb2QtPmRhdGFfbGF5b3V0KSB8fA0KPiAtCSAgICAgICBsYXlvdXRfY2hlY2tfbWlz
+YWxpZ25tZW50KCZtb2QtPmluaXRfbGF5b3V0KTsNCj4gKwlzZXRfdm1fZmx1c2hfcmVzZXRfcGVy
+bXMobW9kX21lbS0+YmFzZSk7DQo+ICsJc2V0X21lbW9yeSgodW5zaWduZWQgbG9uZyltb2RfbWVt
+LT5iYXNlLCBtb2RfbWVtLT5zaXplID4+IFBBR0VfU0hJRlQpOw0KPiAgIH0NCj4gICANCj4gKy8q
+DQo+ICsgKiBTaW5jZSBzb21lIGFyY2hlcyBhcmUgbW92aW5nIHRvd2FyZHMgUEFHRV9LRVJORUwg
+bW9kdWxlIGFsbG9jYXRpb25zIGluc3RlYWQNCj4gKyAqIG9mIFBBR0VfS0VSTkVMX0VYRUMsIGtl
+ZXAgbW9kdWxlX2VuYWJsZV94KCkgaW5kZXBlbmRlbnQgb2YNCj4gKyAqIENPTkZJR19TVFJJQ1Rf
+TU9EVUxFX1JXWCBiZWNhdXNlIHRoZXkgYXJlIG5lZWRlZCByZWdhcmRsZXNzIG9mIHdoZXRoZXIg
+d2UNCj4gKyAqIGFyZSBzdHJpY3QuDQo+ICsgKi8NCj4gICB2b2lkIG1vZHVsZV9lbmFibGVfeChj
+b25zdCBzdHJ1Y3QgbW9kdWxlICptb2QpDQo+ICAgew0KPiAtCWlmICghUEFHRV9BTElHTkVEKG1v
+ZC0+Y29yZV9sYXlvdXQuYmFzZSkgfHwNCj4gLQkgICAgIVBBR0VfQUxJR05FRChtb2QtPmluaXRf
+bGF5b3V0LmJhc2UpKQ0KPiAtCQlyZXR1cm47DQo+IC0NCj4gLQlmcm9iX3RleHQoJm1vZC0+Y29y
+ZV9sYXlvdXQsIHNldF9tZW1vcnlfeCk7DQo+IC0JZnJvYl90ZXh0KCZtb2QtPmluaXRfbGF5b3V0
+LCBzZXRfbWVtb3J5X3gpOw0KPiArCW1vZHVsZV9zZXRfbWVtb3J5KG1vZCwgTU9EX01FTV9UWVBF
+X1RFWFQsIHNldF9tZW1vcnlfeCk7DQo+ICsJbW9kdWxlX3NldF9tZW1vcnkobW9kLCBNT0RfTUVN
+X1RZUEVfSU5JVF9URVhULCBzZXRfbWVtb3J5X3gpOw0KPiAgIH0NCj4gICANCj4gICB2b2lkIG1v
+ZHVsZV9lbmFibGVfcm8oY29uc3Qgc3RydWN0IG1vZHVsZSAqbW9kLCBib29sIGFmdGVyX2luaXQp
+DQo+IEBAIC05OCwyOCArNTYsMjcgQEAgdm9pZCBtb2R1bGVfZW5hYmxlX3JvKGNvbnN0IHN0cnVj
+dCBtb2R1bGUgKm1vZCwgYm9vbCBhZnRlcl9pbml0KQ0KPiAgIAkJcmV0dXJuOw0KPiAgICNlbmRp
+Zg0KPiAgIA0KPiAtCXNldF92bV9mbHVzaF9yZXNldF9wZXJtcyhtb2QtPmNvcmVfbGF5b3V0LmJh
+c2UpOw0KPiAtCXNldF92bV9mbHVzaF9yZXNldF9wZXJtcyhtb2QtPmluaXRfbGF5b3V0LmJhc2Up
+Ow0KPiAtCWZyb2JfdGV4dCgmbW9kLT5jb3JlX2xheW91dCwgc2V0X21lbW9yeV9ybyk7DQo+IC0N
+Cj4gLQlmcm9iX3JvZGF0YSgmbW9kLT5kYXRhX2xheW91dCwgc2V0X21lbW9yeV9ybyk7DQo+IC0J
+ZnJvYl90ZXh0KCZtb2QtPmluaXRfbGF5b3V0LCBzZXRfbWVtb3J5X3JvKTsNCj4gLQlmcm9iX3Jv
+ZGF0YSgmbW9kLT5pbml0X2xheW91dCwgc2V0X21lbW9yeV9ybyk7DQo+ICsJbW9kdWxlX3NldF9t
+ZW1vcnkobW9kLCBNT0RfTUVNX1RZUEVfVEVYVCwgc2V0X21lbW9yeV9ybyk7DQo+ICsJbW9kdWxl
+X3NldF9tZW1vcnkobW9kLCBNT0RfTUVNX1RZUEVfSU5JVF9URVhULCBzZXRfbWVtb3J5X3JvKTsN
+Cj4gKwltb2R1bGVfc2V0X21lbW9yeShtb2QsIE1PRF9NRU1fVFlQRV9ST0RBVEEsIHNldF9tZW1v
+cnlfcm8pOw0KPiArCW1vZHVsZV9zZXRfbWVtb3J5KG1vZCwgTU9EX01FTV9UWVBFX0lOSVRfUk9E
+QVRBLCBzZXRfbWVtb3J5X3JvKTsNCj4gICANCj4gICAJaWYgKGFmdGVyX2luaXQpDQo+IC0JCWZy
+b2Jfcm9fYWZ0ZXJfaW5pdCgmbW9kLT5kYXRhX2xheW91dCwgc2V0X21lbW9yeV9ybyk7DQo+ICsJ
+CW1vZHVsZV9zZXRfbWVtb3J5KG1vZCwgTU9EX01FTV9UWVBFX1JPX0FGVEVSX0lOSVQsIHNldF9t
+ZW1vcnlfcm8pOw0KPiAgIH0NCj4gICANCj4gICB2b2lkIG1vZHVsZV9lbmFibGVfbngoY29uc3Qg
+c3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAgIHsNCj4gKwllbnVtIG1vZF9tZW1fdHlwZSB0eXBlOw0K
+PiArDQo+ICAgCWlmICghSVNfRU5BQkxFRChDT05GSUdfU1RSSUNUX01PRFVMRV9SV1gpKQ0KPiAg
+IAkJcmV0dXJuOw0KPiAgIA0KPiAtCWZyb2Jfcm9kYXRhKCZtb2QtPmRhdGFfbGF5b3V0LCBzZXRf
+bWVtb3J5X254KTsNCj4gLQlmcm9iX3JvX2FmdGVyX2luaXQoJm1vZC0+ZGF0YV9sYXlvdXQsIHNl
+dF9tZW1vcnlfbngpOw0KPiAtCWZyb2Jfd3JpdGFibGVfZGF0YSgmbW9kLT5kYXRhX2xheW91dCwg
+c2V0X21lbW9yeV9ueCk7DQo+IC0JZnJvYl9yb2RhdGEoJm1vZC0+aW5pdF9sYXlvdXQsIHNldF9t
+ZW1vcnlfbngpOw0KPiAtCWZyb2Jfd3JpdGFibGVfZGF0YSgmbW9kLT5pbml0X2xheW91dCwgc2V0
+X21lbW9yeV9ueCk7DQo+ICsJZm9yX2VhY2hfbW9kX21lbV90eXBlKHR5cGUpIHsNCj4gKwkJaWYg
+KHR5cGUgPT0gTU9EX01FTV9UWVBFX1RFWFQgfHwgdHlwZSA9PSBNT0RfTUVNX1RZUEVfSU5JVF9U
+RVhUKQ0KPiArCQkJY29udGludWU7DQo+ICsJCW1vZHVsZV9zZXRfbWVtb3J5KG1vZCwgdHlwZSwg
+c2V0X21lbW9yeV9ueCk7DQo+ICsJfQ0KPiAgIH0NCj4gICANCj4gICBpbnQgbW9kdWxlX2VuZm9y
+Y2Vfcnd4X3NlY3Rpb25zKEVsZl9FaGRyICpoZHIsIEVsZl9TaGRyICpzZWNoZHJzLA0KPiBkaWZm
+IC0tZ2l0IGEva2VybmVsL21vZHVsZS90cmVlX2xvb2t1cC5jIGIva2VybmVsL21vZHVsZS90cmVl
+X2xvb2t1cC5jDQo+IGluZGV4IDhlYzVjZmQ2MDQ5Ni4uZTk3NDRkYTZmNmFmIDEwMDY0NA0KPiAt
+LS0gYS9rZXJuZWwvbW9kdWxlL3RyZWVfbG9va3VwLmMNCj4gKysrIGIva2VybmVsL21vZHVsZS90
+cmVlX2xvb2t1cC5jDQo+IEBAIC0yMSwxNiArMjEsMTYgQEANCj4gICANCj4gICBzdGF0aWMgX19h
+bHdheXNfaW5saW5lIHVuc2lnbmVkIGxvbmcgX19tb2RfdHJlZV92YWwoc3RydWN0IGxhdGNoX3Ry
+ZWVfbm9kZSAqbikNCj4gICB7DQo+IC0Jc3RydWN0IG1vZHVsZV9sYXlvdXQgKmxheW91dCA9IGNv
+bnRhaW5lcl9vZihuLCBzdHJ1Y3QgbW9kdWxlX2xheW91dCwgbXRuLm5vZGUpOw0KPiArCXN0cnVj
+dCBtb2R1bGVfbWVtb3J5ICptb2RfbWVtID0gY29udGFpbmVyX29mKG4sIHN0cnVjdCBtb2R1bGVf
+bWVtb3J5LCBtdG4ubm9kZSk7DQo+ICAgDQo+IC0JcmV0dXJuICh1bnNpZ25lZCBsb25nKWxheW91
+dC0+YmFzZTsNCj4gKwlyZXR1cm4gKHVuc2lnbmVkIGxvbmcpbW9kX21lbS0+YmFzZTsNCj4gICB9
+DQo+ICAgDQo+ICAgc3RhdGljIF9fYWx3YXlzX2lubGluZSB1bnNpZ25lZCBsb25nIF9fbW9kX3Ry
+ZWVfc2l6ZShzdHJ1Y3QgbGF0Y2hfdHJlZV9ub2RlICpuKQ0KPiAgIHsNCj4gLQlzdHJ1Y3QgbW9k
+dWxlX2xheW91dCAqbGF5b3V0ID0gY29udGFpbmVyX29mKG4sIHN0cnVjdCBtb2R1bGVfbGF5b3V0
+LCBtdG4ubm9kZSk7DQo+ICsJc3RydWN0IG1vZHVsZV9tZW1vcnkgKm1vZF9tZW0gPSBjb250YWlu
+ZXJfb2Yobiwgc3RydWN0IG1vZHVsZV9tZW1vcnksIG10bi5ub2RlKTsNCj4gICANCj4gLQlyZXR1
+cm4gKHVuc2lnbmVkIGxvbmcpbGF5b3V0LT5zaXplOw0KPiArCXJldHVybiAodW5zaWduZWQgbG9u
+Zyltb2RfbWVtLT5zaXplOw0KPiAgIH0NCj4gICANCj4gICBzdGF0aWMgX19hbHdheXNfaW5saW5l
+IGJvb2wNCj4gQEAgLTc3LDMyICs3NywzMyBAQCBzdGF0aWMgdm9pZCBfX21vZF90cmVlX3JlbW92
+ZShzdHJ1Y3QgbW9kX3RyZWVfbm9kZSAqbm9kZSwgc3RydWN0IG1vZF90cmVlX3Jvb3QgKg0KPiAg
+ICAqLw0KPiAgIHZvaWQgbW9kX3RyZWVfaW5zZXJ0KHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gICB7
+DQo+IC0JbW9kLT5jb3JlX2xheW91dC5tdG4ubW9kID0gbW9kOw0KPiAtCW1vZC0+aW5pdF9sYXlv
+dXQubXRuLm1vZCA9IG1vZDsNCj4gKwllbnVtIG1vZF9tZW1fdHlwZSB0eXBlOw0KPiAgIA0KPiAt
+CV9fbW9kX3RyZWVfaW5zZXJ0KCZtb2QtPmNvcmVfbGF5b3V0Lm10biwgJm1vZF90cmVlKTsNCj4g
+LQlpZiAobW9kLT5pbml0X2xheW91dC5zaXplKQ0KPiAtCQlfX21vZF90cmVlX2luc2VydCgmbW9k
+LT5pbml0X2xheW91dC5tdG4sICZtb2RfdHJlZSk7DQo+IC0NCj4gLSNpZmRlZiBDT05GSUdfQVJD
+SF9XQU5UU19NT0RVTEVTX0RBVEFfSU5fVk1BTExPQw0KPiAtCW1vZC0+ZGF0YV9sYXlvdXQubXRu
+Lm1vZCA9IG1vZDsNCj4gLQlfX21vZF90cmVlX2luc2VydCgmbW9kLT5kYXRhX2xheW91dC5tdG4s
+ICZtb2RfZGF0YV90cmVlKTsNCj4gLSNlbmRpZg0KPiArCWZvcl9lYWNoX21vZF9tZW1fdHlwZSh0
+eXBlKSB7DQo+ICsJCW1vZC0+bW9kX21lbVt0eXBlXS5tdG4ubW9kID0gbW9kOw0KPiArCQlpZiAo
+bW9kLT5tb2RfbWVtW3R5cGVdLnNpemUpDQo+ICsJCQlfX21vZF90cmVlX2luc2VydCgmbW9kLT5t
+b2RfbWVtW3R5cGVdLm10biwgJm1vZF90cmVlKTsNCj4gKwl9DQo+ICAgfQ0KPiAgIA0KPiAgIHZv
+aWQgbW9kX3RyZWVfcmVtb3ZlX2luaXQoc3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAgIHsNCj4gLQlp
+ZiAobW9kLT5pbml0X2xheW91dC5zaXplKQ0KPiAtCQlfX21vZF90cmVlX3JlbW92ZSgmbW9kLT5p
+bml0X2xheW91dC5tdG4sICZtb2RfdHJlZSk7DQo+ICsJZW51bSBtb2RfbWVtX3R5cGUgdHlwZTsN
+Cj4gKw0KPiArCWZvcl9pbml0X21vZF9tZW1fdHlwZSh0eXBlKSB7DQo+ICsJCWlmIChtb2QtPm1v
+ZF9tZW1bdHlwZV0uc2l6ZSkNCj4gKwkJCV9fbW9kX3RyZWVfcmVtb3ZlKCZtb2QtPm1vZF9tZW1b
+dHlwZV0ubXRuLCAmbW9kX3RyZWUpOw0KPiArCX0NCj4gICB9DQo+ICAgDQo+ICAgdm9pZCBtb2Rf
+dHJlZV9yZW1vdmUoc3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAgIHsNCj4gLQlfX21vZF90cmVlX3Jl
+bW92ZSgmbW9kLT5jb3JlX2xheW91dC5tdG4sICZtb2RfdHJlZSk7DQo+IC0JbW9kX3RyZWVfcmVt
+b3ZlX2luaXQobW9kKTsNCj4gLSNpZmRlZiBDT05GSUdfQVJDSF9XQU5UU19NT0RVTEVTX0RBVEFf
+SU5fVk1BTExPQw0KPiAtCV9fbW9kX3RyZWVfcmVtb3ZlKCZtb2QtPmRhdGFfbGF5b3V0Lm10biwg
+Jm1vZF9kYXRhX3RyZWUpOw0KPiAtI2VuZGlmDQo+ICsJZW51bSBtb2RfbWVtX3R5cGUgdHlwZTsN
+Cj4gKw0KPiArCWZvcl9lYWNoX21vZF9tZW1fdHlwZSh0eXBlKSB7DQo+ICsJCWlmIChtb2QtPm1v
+ZF9tZW1bdHlwZV0uc2l6ZSkNCj4gKwkJCV9fbW9kX3RyZWVfcmVtb3ZlKCZtb2QtPm1vZF9tZW1b
+dHlwZV0ubXRuLCAmbW9kX3RyZWUpOw0KPiArCX0NCj4gICB9DQo+ICAgDQo+ICAgc3RydWN0IG1v
+ZHVsZSAqbW9kX2ZpbmQodW5zaWduZWQgbG9uZyBhZGRyLCBzdHJ1Y3QgbW9kX3RyZWVfcm9vdCAq
+dHJlZSkNCg==
