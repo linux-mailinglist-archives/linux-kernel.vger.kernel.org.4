@@ -2,144 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B39F661BD1
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 02:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1BD661BD5
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 02:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233690AbjAIBPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 20:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S233841AbjAIBQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 20:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjAIBPg (ORCPT
+        with ESMTP id S233703AbjAIBQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 20:15:36 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD31A9FC3;
-        Sun,  8 Jan 2023 17:15:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1673226936; x=1704762936;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Tzdk/KaJxyH01KkCF6YkesSdqVT3pEjQXiFVNSArzuQ=;
-  b=IAeNi3FjCMe5/kplEn2adbJZ407IGhaLHRlzbKuuY7ovP9kTp5KSCVXH
-   slIdVQfIHt4cJi1oCWSDLQBo7Pcpslgfbwwz+s6vxGVV00Bep/2qYcwH4
-   69N6Q8plLVtIZbZH1GFY9D5H4yuDJDMQeDihRp1deABwgqdGcISo/RN3A
-   U=;
-X-IronPort-AV: E=Sophos;i="5.96,311,1665446400"; 
-   d="scan'208";a="286283629"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-bbc6e425.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 01:15:33 +0000
-Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-m6i4x-bbc6e425.us-east-1.amazon.com (Postfix) with ESMTPS id 9506881178;
-        Mon,  9 Jan 2023 01:15:29 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Mon, 9 Jan 2023 01:15:28 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.160.120) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
- Mon, 9 Jan 2023 01:15:24 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <mirsad.todorovac@alu.hr>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <fw@strlen.de>,
-        <kuba@kernel.org>, <kuniyu@amazon.co.jp>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <mirsad.todorovac@alu.unizg.hr>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>
-Subject: Re: [PATCH net v4] af_unix: selftest: Fix the size of the parameter to connect()
-Date:   Mon, 9 Jan 2023 10:15:12 +0900
-Message-ID: <20230109011512.15267-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
-References: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
+        Sun, 8 Jan 2023 20:16:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEA4DFF;
+        Sun,  8 Jan 2023 17:16:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E78760EA5;
+        Mon,  9 Jan 2023 01:16:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB27BC433F1;
+        Mon,  9 Jan 2023 01:16:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673226969;
+        bh=I7uRhzzKfn+fJFzre0fr0A96dZ17V23thWuW3j3BOQg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pP+iQ+VXytwoQx8X5jton7J/vMtVUiABkGC0oVWf/hdfIfZWT1Bd0IS/BodfXs+gY
+         Ih0w5IwQrz5V2gLfkriGJlNcOrVcbFpLZK2HzCdqUQpR3Y20/p34wTK+TX3nkYZX0C
+         lZFfT2YjhZ6pc5yCfaN5fZRttiGfZXvHrziusCIcpC/xtVIHGgBnkpim26dRN5nbl3
+         HUhX09BfNcZnXDPoMgi38OtizqXF/dl76Dktf3zgXJgX2HmNItXgMD+brCeI9HTKE/
+         SKEwMpQcJvbeDN1HrOqeT+ewWlXJTJOmxiI1SNvcnkCBDJEpKNiDukceDmxlLzDu1k
+         t1WkQgYg2iaGA==
+Received: by mail-ua1-f48.google.com with SMTP id z23so1657446uae.7;
+        Sun, 08 Jan 2023 17:16:09 -0800 (PST)
+X-Gm-Message-State: AFqh2kp9Xd98qLKmQEXpZ93lGwnKpWRhcc59WfPTnMf++vzFTy40bDFX
+        rZv9Is4UAb1urAid68jjqNY3keO74tZJbH/9Lg==
+X-Google-Smtp-Source: AMrXdXtu1ZODwK9qx/LS3GDF1PgE1EtAbnaQtR39OMzYo0BRd36pFYWpqo21w8COL0zisKQVqz74Q2sk6UuNIqd7Ir0=
+X-Received: by 2002:a05:6130:2ac:b0:573:d2a:e6cf with SMTP id
+ q44-20020a05613002ac00b005730d2ae6cfmr3485209uac.36.1673226968780; Sun, 08
+ Jan 2023 17:16:08 -0800 (PST)
 MIME-Version: 1.0
+References: <CGME20221214044423epcas5p2920e87930665345169745002ec6993c3@epcas5p2.samsung.com>
+ <20221214044342.49766-1-sriranjani.p@samsung.com> <20221214044342.49766-2-sriranjani.p@samsung.com>
+In-Reply-To: <20221214044342.49766-2-sriranjani.p@samsung.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Sun, 8 Jan 2023 19:15:57 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLAqSoVdExrHXZ4xVaY4Ut5R54izoumOY8zsXWN2e8++w@mail.gmail.com>
+Message-ID: <CAL_JsqLAqSoVdExrHXZ4xVaY4Ut5R54izoumOY8zsXWN2e8++w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: soc: samsung: exynos-sysreg: add
+ dedicated SYSREG compatibles to Exynos850
+To:     Sriranjani P <sriranjani.p@samsung.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        alim.akhtar@samsung.com, pankaj.dubey@samsung.com,
+        ravi.patel@samsung.com, sathya@samsung.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.43.160.120]
-X-ClientProxiedBy: EX13D34UWA004.ant.amazon.com (10.43.160.177) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.hr>
-Date:   Sat, 7 Jan 2023 04:40:20 +0100 (CET)
-> From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> 
-> Adjust size parameter in connect() to match the type of the parameter, to
-> fix "No such file or directory" error in selftests/net/af_unix/
-> test_oob_unix.c:127.
-> 
-> The existing code happens to work provided that the autogenerated pathname
-> is shorter than sizeof (struct sockaddr), which is why it hasn't been
-> noticed earlier.
-> 
-> Visible from the trace excerpt:
-> 
-> bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
-> clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
-> [pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
-> 
-> BUG: The filename is trimmed to sizeof (struct sockaddr).
-> 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-> Cc: Florian Westphal <fw@strlen.de>
-> Reviewed-by: Florian Westphal <fw@strlen.de>
-> Fixes: 314001f0bf92 ("af_unix: Add OOB support")
-> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-
-You can check the current status here.
-https://patchwork.kernel.org/project/netdevbpf/patch/alpine.DEB.2.21.2301070437400.26826@domac.alu.hr/
-
-PS: you may want to check config not to send a mail as multipart next time.
-
-Thank you,
-Kuniyuki
-
-
+On Tue, Dec 13, 2022 at 10:47 PM Sriranjani P <sriranjani.p@samsung.com> wrote:
+>
+> Exynos850 has two different SYSREGs, hence add dedicated compatibles for
+> them and deprecate usage of generic Exynos850 compatible alone.
+>
+> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
 > ---
-> 
-> The patch is generated against the "vanilla" Torvalds mainline tree 6.2-rc2.
-> (Tested and applies against the net.git tree.)
-> 
-> 
->  tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-> index b57e91e1c3f2..532459a15067 100644
-> --- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
-> +++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-> @@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
->  
->  	wait_for_signal(pipefd[0]);
->  	if (connect(cfd, (struct sockaddr *)consumer_addr,
-> -		     sizeof(struct sockaddr)) != 0) {
-> +		     sizeof(*consumer_addr)) != 0) {
->  		perror("Connect failed");
->  		kill(0, SIGTERM);
->  		exit(1);
-> 
+>  .../soc/samsung/samsung,exynos-sysreg.yaml        | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> index 4954790eda6c..427df05224e5 100644
+> --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> @@ -17,7 +17,6 @@ properties:
+>                - samsung,exynos3-sysreg
+>                - samsung,exynos4-sysreg
+>                - samsung,exynos5-sysreg
+> -              - samsung,exynos850-sysreg
+>                - samsung,exynosautov9-sysreg
+>                - tesla,fsd-cam-sysreg
+>                - tesla,fsd-fsys0-sysreg
+> @@ -33,9 +32,17 @@ properties:
+>            - const: samsung,exynos5433-sysreg
+>            - const: syscon
+>        - items:
+> -          - const: samsung,exynos5433-sysreg
+> +          - enum:
+> +              - samsung,exynos5433-sysreg
+> +              - samsung,exynos850-sysreg
+> +          - const: syscon
+> +            deprecated: true
+
+This is throwing an error in linux-next now.
+
+How can 1 item in a list be deprecated? What's the not deprecated
+value for the entry? Probably this needs to move up to 'items' as the
+whole entry is deprecated.
+
+> +      - items:
+> +          - enum:
+> +              - samsung,exynos850-cmgp-sysreg
+> +              - samsung,exynos850-peri-sysreg
+> +          - const: samsung,exynos850-sysreg
+>            - const: syscon
+> -        deprecated: true
+>
+>    reg:
+>      maxItems: 1
+> @@ -53,6 +60,8 @@ allOf:
+>          compatible:
+>            contains:
+>              enum:
+> +              - samsung,exynos850-cmgp-sysreg
+> +              - samsung,exynos850-peri-sysreg
+>                - samsung,exynos850-sysreg
+>      then:
+>        required:
 > --
-> Mirsad Goran Todorovac
-> Sistem inženjer
-> Grafički fakultet | Akademija likovnih umjetnosti
-> Sveučilište u Zagrebu
-> 
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
-> The European Union
+> 2.17.1
+>
