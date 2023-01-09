@@ -2,110 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D260D661D19
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 04:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4A9661D1D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 05:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236213AbjAID4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 22:56:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        id S233096AbjAIEAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 23:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236645AbjAIDzT (ORCPT
+        with ESMTP id S233961AbjAIEAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 22:55:19 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D7F11C26
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 19:54:14 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso8079629pjf.1
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 19:54:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TpgfqkNhPqEV+WEtXe6exPW4ehifsekBo6yCYNhed1Q=;
-        b=2+Y/8pxMywf4CuY6rlA26Z8wlez6yJKwtYUVrUxQUWc4Jfip0sOQU4a6bJ379AYtE5
-         +Kb5CYmTtVwHP/5MDDCmurkG9wu8slKevWOvWTfcvRd7Ixny78Tuo+6N7diZ8GuLy/e9
-         onreXGi5DCuTn/6kdNwIHNEFbeQXZv1P+zT3hcEZvpYkMOxtqAxe1F2FumunVb2Z67Rr
-         dDiR17uCH+iunJiXUfKY6JU59DVx8qZZV1s7jU1znvDXo0u1sFsleVJsV3CK3u5uLf/g
-         sIJx+pqtlO3sFqNcA7UGUzhv29M/sLZIz6pFaC5XIsBU4bBfVDI1McQyVo7Bp6jiv+Gd
-         ACEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TpgfqkNhPqEV+WEtXe6exPW4ehifsekBo6yCYNhed1Q=;
-        b=sZnhxB3F62K9ttA+D4z/y0seWfFi1NPyfrN5WmRkwCwhY6l/kgnxIIJxx4C0BHE8yB
-         bWn16Ugw2/KOkqwD5PrKMBI/S0fT77x25qGv8f6jxQ6jvmc0MqFJOSg1oPmcNY4qnBjC
-         DctefxqxyXa8KeyZ67gohLnn/dDbpbxlqNv9B9/hf1CyipD1qgCmVIWfW+K01fR01Pa7
-         S6CUOZNU+NFuvLkyX+e2ytGqGApDSGAOAH8QvcJvCmYby7C/cGfeM+oHN9n4rnzC67id
-         C/7NisIOPxRd/LucudZcoRZe5U+/OE6qgLv43G1pMmSiZwSM0tpndQ8ypS/fZsxF/vUQ
-         f27Q==
-X-Gm-Message-State: AFqh2krtimA7Zb+8x8lHqOQFTBhqROie4B50fNCGxVF8NjMyLoAgFczs
-        laQ1aZlmptos73g1vm+TDNzGRlXPrH3ST72T
-X-Google-Smtp-Source: AMrXdXtbWiVAhvv6GGx94sLoPaPE9wd7oOx9Z+AqkblebDe83VF4n/+AvJWc6ANJaIpfj5Qq/2w6cQ==
-X-Received: by 2002:a17:902:cf91:b0:193:2d46:abe0 with SMTP id l17-20020a170902cf9100b001932d46abe0mr733811ply.6.1673236453985;
-        Sun, 08 Jan 2023 19:54:13 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id y2-20020a17090264c200b00192a3e13b39sm3546210pli.264.2023.01.08.19.54.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 19:54:13 -0800 (PST)
-Message-ID: <d86e6340-534c-c34c-ab1d-6ebacb213bb9@kernel.dk>
-Date:   Sun, 8 Jan 2023 20:54:12 -0700
+        Sun, 8 Jan 2023 23:00:44 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664C76450;
+        Sun,  8 Jan 2023 20:00:40 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pEjKe-00FRxO-1i; Mon, 09 Jan 2023 12:00:21 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 09 Jan 2023 12:00:20 +0800
+Date:   Mon, 9 Jan 2023 12:00:20 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     JiaJie Ho <jiajie.ho@starfivetech.com>
+Cc:     Olivia Mackall <olivia@selenic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v2 2/3] hwrng: starfive - Add TRNG driver for StarFive SoC
+Message-ID: <Y7uRVNvplGjrZxa4@gondor.apana.org.au>
+References: <20221228071103.91797-1-jiajie.ho@starfivetech.com>
+ <20221228071103.91797-3-jiajie.ho@starfivetech.com>
+ <Y7fePDme5E3yhPhQ@gondor.apana.org.au>
+ <7c2cc6e9cdf241318fc73162a5ec221d@EXMBX168.cuchost.com>
+ <Y7uEGxl8xJ1xxkKZ@gondor.apana.org.au>
+ <e0c9944151b24e848af55221a4388301@EXMBX168.cuchost.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4 7/7] iov_iter, block: Make bio structs pin pages rather
- than ref'ing if appropriate
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
- <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e0c9944151b24e848af55221a4388301@EXMBX168.cuchost.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/6/23 5:34 PM, David Howells wrote:
-> Convert the block layer's bio code to use iov_iter_extract_pages() instead
-> of iov_iter_get_pages().  This will pin pages or leave them unaltered
-> rather than getting a ref on them as appropriate to the source iterator.
-> 
-> A field, bi_cleanup_mode, is added to the bio struct that gets set by
-> iov_iter_extract_pages() with FOLL_* flags indicating what cleanup is
-> necessary.  FOLL_GET -> put_page(), FOLL_PIN -> unpin_user_page().  Other
-> flags could also be used in future.
-> 
-> Newly allocated bio structs have bi_cleanup_mode set to FOLL_GET to
-> indicate that attached pages are ref'd by default.  Cloning sets it to 0.
-> __bio_iov_iter_get_pages() overrides it to what iov_iter_extract_pages()
-> indicates.
+On Mon, Jan 09, 2023 at 03:41:14AM +0000, JiaJie Ho wrote:
+>
+> The average wait time is around 20 microseconds.
+> I measured from writel cmd to wait_for_completion done.
 
-What's the motivation for this change? It's growing struct bio, which we
-can have a lot of in the system. I read the cover letter too and I can
-tell what the change does, but there's no justification really for the
-change.
+Do you know of an upper bound? E.g., if we limit it to 40us how
+many requests would fail on average?
 
-So unless there's a good reason to do this, then that's a NAK in terms
-of just the addition to struct bio alone.
+Having a maximum delay of 40us would be OK with wait == 0.  So
+you could implement it in a way such that if the wait time exceeded
+40us then you return if wait == 0, otherwise you can wait longer.
 
+Cheers,
 -- 
-Jens Axboe
-
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
