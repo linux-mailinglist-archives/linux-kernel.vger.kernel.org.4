@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009276633FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC17B6633FB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237755AbjAIWcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:32:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S235148AbjAIWbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237862AbjAIWbs (ORCPT
+        with ESMTP id S237597AbjAIWbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:31:48 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1281869D
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:31:47 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id r8-20020a252b08000000b007b989d5e105so7200534ybr.11
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 14:31:47 -0800 (PST)
+        Mon, 9 Jan 2023 17:31:36 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4C86388;
+        Mon,  9 Jan 2023 14:31:35 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id vm8so23949040ejc.2;
+        Mon, 09 Jan 2023 14:31:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NFrSxVrfdRZYprem1a+EonI6bqjM3AdjO9gRlJ+kQ1E=;
-        b=ppMi4dw2Slp1jnmhvss74/eHVmvHieaVlcIWBKpzDDUUoVO74G5rN55j9D0jvTQSNw
-         8/qn1YeUHnKjir3CaOQO/bm8jZ0gQ/eVsS7i4AFdaFhZWDksJE3owdE/2ZgGM50Cwx2c
-         YTh/RZRsx/5+gvRsul6MEjRu5RY+Ij/6sH0fDJbvl9X26T4sXTRDGbyBYuX9WE4Aihd3
-         eC7M0Ll+S88ye6K27g4T7F9ZmEqqjlfH3hSoZl2eQ1OsyhSKU1zb3u+NYEyVPZlZcdG0
-         i+oV3AWmI5H5sKOdPAJxFjaFLhPOrmJl5dVOhA/5T7skkgRBuZTUfmAK+pP0tXGLq6G7
-         g1LQ==
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OZe8VJu/fGCCz+Eb3NiW7mLJBs19t4YWlgg0ulzutFw=;
+        b=GSLrukwN25auhR2Y9tG2IvbfkBqYNzBDfNQWqdjB7K51f6ZiksEJtgxejWerw/vsf2
+         HNWduMWWXpqKrNtgR6PFRro4ZZuKOB98gyrC/XFdBUmrPVrcv2jCc5s8rehfL+LPZnU8
+         MhNevobZTxfeKXIkbrB9LqAJhC1d31Q9hYmQa0UajkdpAndEzKp9/kk+VJPF37zNwxK9
+         7CIpcKX9PdMjk/cq6i4TfyNgl+KglhAwRLcAZ5vKtBOfHjgaes3vVDty0R4aPtkYxq41
+         5ccz1Ju28ipPWVxiOHMN+CyD54l+blvQ2kfCJ0seUSKRkZAfOP58voelxFXZBm6Oy9XM
+         jb3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NFrSxVrfdRZYprem1a+EonI6bqjM3AdjO9gRlJ+kQ1E=;
-        b=7zXzv4TxtHnz1Bpao6Xx/jl6DBjbdf79Ncj/acvBVefHimGXpn38C4GOh1xUU7tVQs
-         IwUdEUHAGwEvkBOEaax/NLW13okuQv2cmO71Q8Oq7bnmLTSmO7J17ej3EvSWazenSYjw
-         aqpm33SaEnjPSMycLpPx529RwozfxLrQJrVH7Ik6zqpKJPFZM60pQnOEBgN2A83Q08/s
-         3gIn6GQxS/YKStRSt+aNg3jh6kWkdyXJDlEd1Uo3RUPY4AcgIK9J5icZJbkklceVzGil
-         JJGkiLcjfx+brP36aum37MohpMV1tFMG5zkCtLaraqWnefwZCTapMHFSEy6VNo1A8hsE
-         Wo0w==
-X-Gm-Message-State: AFqh2ko/ZWmtplAQ6UAHdBKJ685zDRpEL1cRH/8rrt7GFt788XLtw3Mn
-        oxjio5XVz4x3N+A+ih3gQFhUbdRGoaef
-X-Google-Smtp-Source: AMrXdXtsHKKuj+Y4f/kjNrdLpjadnRfENPPqNrntzWMQs26Z8MyYXCB8So5l4hb0ssfgF10qhZIsYbnMLASD
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:59e7:81ad:bc43:d9dc])
- (user=irogers job=sendgmr) by 2002:a25:3055:0:b0:6fb:b4af:e56e with SMTP id
- w82-20020a253055000000b006fbb4afe56emr5643173ybw.60.1673303506855; Mon, 09
- Jan 2023 14:31:46 -0800 (PST)
-Date:   Mon,  9 Jan 2023 14:31:10 -0800
-In-Reply-To: <20230109223110.1201541-1-irogers@google.com>
-Message-Id: <20230109223110.1201541-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20230109223110.1201541-1-irogers@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v1 2/2] perf debug: Increase libtraceevent logging when verbose
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        German Gomez <german.gomez@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Stephane Eranian <eranian@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OZe8VJu/fGCCz+Eb3NiW7mLJBs19t4YWlgg0ulzutFw=;
+        b=Es1DLcczHNrBl2tL8WO+1OD/xxGHMqPMO9kUFJ/NvvLibKue+wiEn7eOnIOo5PdVZv
+         SdUA+B4uSnzNhE0GHBIDOpOjGT5NRZpHhlC/myFMZxfwWVrKwbkQzaA2/yY7IkUm16uf
+         pyWJmB3lCTiTzvDJ7N9iPB6hRZWvLnSy2Lnctq23NSkKK1NqQzWTQXk0CFZCdpfVNCbm
+         hXsFhbVNJXArf6DHufxRgIbuIcHBf43/4o1Y/PvpMYhP4Sh7McmNN0QJzR2TDQ67xAdu
+         lRYoOSUanTmuVZxXU9mSBCX9g9b03s03ef/2E4bvk1UKEx3tKXBxGcQs6l7suiBEbMuc
+         VJ6g==
+X-Gm-Message-State: AFqh2krc7u9UrN7p9Tjq3l53X1N8a6Clj9s+/7S6iwsgK6BXVwFRZ2Hy
+        ttLhFm/Q/JKry3qETdMxVt329kWwLxQ=
+X-Google-Smtp-Source: AMrXdXvpiCc8i3vWtwCmmEDeA46pFWN6Dz27By5UAtP+wRO7CW2CRYa8a71xhMAms7AZC6iBTAbe0Q==
+X-Received: by 2002:a17:906:b043:b0:7c0:d23c:ead3 with SMTP id bj3-20020a170906b04300b007c0d23cead3mr58284154ejb.27.1673303493935;
+        Mon, 09 Jan 2023 14:31:33 -0800 (PST)
+Received: from localhost.localdomain (dynamic-2a01-0c23-bcd2-ed00-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:bcd2:ed00::e63])
+        by smtp.googlemail.com with ESMTPSA id k8-20020a17090632c800b00780982d77d1sm4228235ejk.154.2023.01.09.14.31.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 14:31:33 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        ville.syrjala@linux.intel.com,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Bernard Zhao <bernard@vivo.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v1 RFC] video/hdmi: Fix HDMI_VENDOR_INFOFRAME_SIZE
+Date:   Mon,  9 Jan 2023 23:31:10 +0100
+Message-Id: <20230109223110.1165433-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,75 +74,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-libtraceevent has added more levels of debug printout and with changes
-like:
-https://lore.kernel.org/linux-trace-devel/20210507095022.1079364-3-tz.stoyanov@gmail.com
-previously generated output like "registering plugin" is no longer
-displayed. This change makes it so that if perf's verbose debug output
-is enabled then the debug and info libtraceevent messages can be
-displayed.
+When support for the HDMI vendor infoframe was introduced back with
+commit 7d27becb3532 ("video/hdmi: Introduce helpers for the HDMI vendor
+specific infoframe") it's payload size was either 5 or 6 bytes,
+depending on:
+  if (frame->s3d_struct >= HDMI_3D_STRUCTURE_SIDE_BY_SIDE_HALF)
+When true the size was 6 bytes, otherwise 5 bytes.
 
-This change was previously posted:
-https://lore.kernel.org/linux-perf-users/20210923001024.550263-4-irogers@google.com/
-and reverted:
-https://lore.kernel.org/linux-perf-users/20220109153446.160593-1-acme@kernel.org/
-The previous failure was due to -Itools/lib being on the include path
-and libtraceevent in tools/lib being version 1.1.0. This meant that
-when LIBTRACEEVENT_VERSION was 1.3.0 the #if succeeded, but the header
-file for libtraceevent (taken from tools/lib rather than the intended
-/usr/include) was for version 1.1.0 and function definitions were
-missing.
+Drivers that are using hdmi_infoframe_pack() are reserving 10 bytes (4
+bytes for the header and up to 6 bytes for the infoframe payload data)
+or more (exynos_hdmi reserves 25 bytes).
 
-Since the previous issue the -Itools/lib include path has been
-removed:
-https://lore.kernel.org/lkml/20221109184914.1357295-1-irogers@google.com/
-As well as libtraceevent 1.1.0 has been removed from tools/lib:
-https://lore.kernel.org/lkml/20221130062935.2219247-1-irogers@google.com/
+Over time the frame payload length was reduced to 4 bytes. This however
+does not match the code from hdmi_hdmi_infoframe_pack() where ptr[8] and
+ptr[9] are written, which means the infoframe has to allow up to 6 bytes
+of payload data (considering that the header takes 4 bytes).
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+Change HDMI_VENDOR_INFOFRAME_SIZE to 6 bytes so
+hdmi_vendor_infoframe_pack_only() can properly check the passed buffer
+size and avoid an out of bounds write to ptr[8] or ptr[9].
+
+Fixes: c5e69ab35c0d ("video/hdmi: Constify infoframe passed to the pack functions")
+Fixes: d43be2554b58 ("drivers: video: hdmi: cleanup coding style in video a bit")
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
- tools/perf/util/debug.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+I'm not an expert on this topic and I'm not sure if the size still
+depends on that if condition from long time ago. So please share your
+thoughts.
 
-diff --git a/tools/perf/util/debug.c b/tools/perf/util/debug.c
-index 190e818a0717..88378c4c5dd9 100644
---- a/tools/perf/util/debug.c
-+++ b/tools/perf/util/debug.c
-@@ -19,12 +19,19 @@
- #include "debug.h"
- #include "print_binary.h"
- #include "target.h"
-+#include "trace-event.h"
- #include "ui/helpline.h"
- #include "ui/ui.h"
- #include "util/parse-sublevel-options.h"
+
+ include/linux/hdmi.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/hdmi.h b/include/linux/hdmi.h
+index 2f4dcc8d060e..026c5ef5a1a5 100644
+--- a/include/linux/hdmi.h
++++ b/include/linux/hdmi.h
+@@ -57,7 +57,7 @@ enum hdmi_infoframe_type {
+ #define HDMI_SPD_INFOFRAME_SIZE    25
+ #define HDMI_AUDIO_INFOFRAME_SIZE  10
+ #define HDMI_DRM_INFOFRAME_SIZE    26
+-#define HDMI_VENDOR_INFOFRAME_SIZE  4
++#define HDMI_VENDOR_INFOFRAME_SIZE  6
  
- #include <linux/ctype.h>
- 
-+#ifdef HAVE_LIBTRACEEVENT
-+#include <traceevent/event-parse.h>
-+#else
-+#define LIBTRACEEVENT_VERSION 0
-+#endif
-+
- int verbose;
- int debug_peo_args;
- bool dump_trace = false, quiet = false;
-@@ -228,6 +235,14 @@ int perf_debug_option(const char *str)
- 	/* Allow only verbose value in range (0, 10), otherwise set 0. */
- 	verbose = (verbose < 0) || (verbose > 10) ? 0 : verbose;
- 
-+#if LIBTRACEEVENT_VERSION >= MAKE_LIBTRACEEVENT_VERSION(1, 3, 0)
-+	if (verbose == 1)
-+		tep_set_loglevel(TEP_LOG_INFO);
-+	else if (verbose == 2)
-+		tep_set_loglevel(TEP_LOG_DEBUG);
-+	else if (verbose >= 3)
-+		tep_set_loglevel(TEP_LOG_ALL);
-+#endif
- 	return 0;
- }
- 
+ #define HDMI_INFOFRAME_SIZE(type)	\
+ 	(HDMI_INFOFRAME_HEADER_SIZE + HDMI_ ## type ## _INFOFRAME_SIZE)
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.39.0
 
