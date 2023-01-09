@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B01663049
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF187663053
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237504AbjAIT0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S235112AbjAIT1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:27:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237306AbjAIT0k (ORCPT
+        with ESMTP id S236276AbjAIT1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:26:40 -0500
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CCB61463;
-        Mon,  9 Jan 2023 11:26:39 -0800 (PST)
-Received: by mail-ot1-f41.google.com with SMTP id k7-20020a056830168700b0067832816190so5742960otr.1;
-        Mon, 09 Jan 2023 11:26:39 -0800 (PST)
+        Mon, 9 Jan 2023 14:27:01 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415426C7D6;
+        Mon,  9 Jan 2023 11:26:44 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id r6-20020a056830448600b006848a91d910so2179018otv.12;
+        Mon, 09 Jan 2023 11:26:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PhyORF2P/3DyAeuNip+D3UZxHZqFcutPSwK+nSe9q5A=;
-        b=JxKB8FpTCFEXBi12kepmWUjaIOrxOeOBEI4eiQFAWaVc9zGOjGoH1oI/bPc1UR/dSb
-         xqxP73KEZ/RIhLJejWHCh/L80KVc39se93LissDlGwIeDfFmOHo9vFzxBmqH7a9JCtem
-         xdtJNfKFNUfGZgLsDNOwzMyaGXl4+oq9tvqfISliI7fRoesmlGTqALtjQuuq7EfiOF/o
-         F2aBzgGMuPFR36OEmQjH6WXkJSS6N7OTRRivdEFV6bBWb76ZhDWQr3VLYVZ6u/L4ztAy
-         7BbF4ygElQAQh/V+/FuWdUxnfNAYg97PRuaikIiVddh7DDXczmmIfNo5zOoSRoJKYUdb
-         XV2w==
-X-Gm-Message-State: AFqh2kp3JRzY+3uPmt/P9oUXqrV/WamoBJLIvei6UTk39sm+l6gwZ4cw
-        mNKQ30lAWkrqj0q4ol4mWvfABl3pIw==
-X-Google-Smtp-Source: AMrXdXtQakXq+GiEhNJNrTLT/Kt4j9QDhHq5mQPoYNysZKYYdW2im1ldV7iPGFymXGTMKxSydH+yWw==
-X-Received: by 2002:a9d:68c1:0:b0:66b:cae2:3a3f with SMTP id i1-20020a9d68c1000000b0066bcae23a3fmr32983649oto.17.1673292398563;
-        Mon, 09 Jan 2023 11:26:38 -0800 (PST)
+        bh=7oliBM7HAbSU/6yu1ELp+aWn2HSSg5QtCBvcjUEG2Hg=;
+        b=hh5RvFTZ9NpKSjfTPVHfgSkC2inLwrgTOxQyaoQxwHUTaeLGrbqUAwTNdH4xyoNt7X
+         HTG8/pLxufdmkRbCYAx9ThNcmmou0Oswzmgw5CqE8fzsiBsadIH1/4j8ti9kTGxP+EuD
+         vfT6Qj2zSuV6gZXxgkjnuzNleFRtEgoECEfMDBaV/SESrpIzQz2755okDNaF9RPB6lwA
+         ZTqkJe5N4cjb+w1jlyq0mJYlI15zQU8fsnUatdy9FyiWGXhqAsiwj5YpFi2uiYi3x2KN
+         hOSEoZVPJJplYw44LXbfKsSPJkqNep3HVx/phVACEdBnh543GRs9mDxTNUQs0jlETdi6
+         6WsQ==
+X-Gm-Message-State: AFqh2ko2J3BwDSpGR4DhaRkctpzdf17O9Hl1M/+Vt3XFQyTAvFonvmva
+        VwcGatC5LBZtIheAJdpq0s/3eKwBNA==
+X-Google-Smtp-Source: AMrXdXsyBANJdogfWegtIJfmOxYF3poHRdanayfI8mR4zu99kaRSXZW5RYFEltFYM0S4UWdISTKdeQ==
+X-Received: by 2002:a05:6830:55:b0:670:61f7:6457 with SMTP id d21-20020a056830005500b0067061f76457mr33724747otp.29.1673292403307;
+        Mon, 09 Jan 2023 11:26:43 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b19-20020a9d6b93000000b0066ca61230casm4989496otq.8.2023.01.09.11.26.37
+        by smtp.gmail.com with ESMTPSA id g99-20020a9d12ec000000b00666a5b5d20fsm4924411otg.32.2023.01.09.11.26.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 11:26:38 -0800 (PST)
-Received: (nullmailer pid 1483618 invoked by uid 1000);
+        Mon, 09 Jan 2023 11:26:42 -0800 (PST)
+Received: (nullmailer pid 1483620 invoked by uid 1000);
         Mon, 09 Jan 2023 19:26:31 -0000
 From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 09 Jan 2023 13:26:23 -0600
-Subject: [PATCH v4 7/8] perf: Add perf_event_attr::config3
+Date:   Mon, 09 Jan 2023 13:26:24 -0600
+Subject: [PATCH v4 8/8] perf: arm_spe: Add support for SPEv1.2 inverted event
+ filtering
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220825-arm-spe-v8-7-v4-7-327f860daf28@kernel.org>
+Message-Id: <20220825-arm-spe-v8-7-v4-8-327f860daf28@kernel.org>
 References: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
 In-Reply-To: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -79,49 +80,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arm SPEv1.2 adds another 64-bits of event filtering control. As the
-existing perf_event_attr::configN fields are all used up for SPE PMU, an
-additional field is needed. Add a new 'config3' field.
+Arm SPEv1.2 (Arm v8.7/v9.2) adds a new feature called Inverted Event
+Filter which excludes samples matching the event filter. The feature
+mirrors the existing event filter in PMSEVFR_EL1 adding a new register,
+PMSNEVFR_EL1, which has the same event bit assignments.
 
 Tested-by: James Clark <james.clark@arm.com>
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
-There's still an unresolved discussion about validating 'config3' with
-the options laid out here[1].
-
 v4:
  - Rebase on v6.2-rc1
 v3:
  - No change
 v2:
- - Drop tools/ side update
-
-[1] https://lore.kernel.org/all/Y49ttrv6W5k3ZNYw@FVFF77S0Q05N.cambridge.arm.com/
+ - Update for auto generated register defines
+ - Avoid accessing SYS_PMSNEVFR_EL1 on < v8.7
 ---
- include/uapi/linux/perf_event.h | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/perf/arm_spe_pmu.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index ccb7f5dad59b..37675437b768 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -374,6 +374,7 @@ enum perf_event_read_format {
- #define PERF_ATTR_SIZE_VER5	112	/* add: aux_watermark */
- #define PERF_ATTR_SIZE_VER6	120	/* add: aux_sample_size */
- #define PERF_ATTR_SIZE_VER7	128	/* add: sig_data */
-+#define PERF_ATTR_SIZE_VER8	136	/* add: config3 */
+diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+index 82f67e941bc4..573db4211acd 100644
+--- a/drivers/perf/arm_spe_pmu.c
++++ b/drivers/perf/arm_spe_pmu.c
+@@ -85,6 +85,7 @@ struct arm_spe_pmu {
+ #define SPE_PMU_FEAT_ARCH_INST			(1UL << 3)
+ #define SPE_PMU_FEAT_LDS			(1UL << 4)
+ #define SPE_PMU_FEAT_ERND			(1UL << 5)
++#define SPE_PMU_FEAT_INV_FILT_EVT		(1UL << 6)
+ #define SPE_PMU_FEAT_DEV_PROBED			(1UL << 63)
+ 	u64					features;
  
- /*
-  * Hardware event_id to monitor via a performance monitoring event:
-@@ -515,6 +516,8 @@ struct perf_event_attr {
- 	 * truncated accordingly on 32 bit architectures.
- 	 */
- 	__u64	sig_data;
+@@ -202,6 +203,10 @@ static const struct attribute_group arm_spe_pmu_cap_group = {
+ #define ATTR_CFG_FLD_min_latency_LO		0
+ #define ATTR_CFG_FLD_min_latency_HI		11
+ 
++#define ATTR_CFG_FLD_inv_event_filter_CFG	config3	/* PMSNEVFR_EL1 */
++#define ATTR_CFG_FLD_inv_event_filter_LO	0
++#define ATTR_CFG_FLD_inv_event_filter_HI	63
 +
-+	__u64	config3; /* extension of config2 */
+ /* Why does everything I do descend into this? */
+ #define __GEN_PMU_FORMAT_ATTR(cfg, lo, hi)				\
+ 	(lo) == (hi) ? #cfg ":" #lo "\n" : #cfg ":" #lo "-" #hi
+@@ -232,6 +237,7 @@ GEN_PMU_FORMAT_ATTR(branch_filter);
+ GEN_PMU_FORMAT_ATTR(load_filter);
+ GEN_PMU_FORMAT_ATTR(store_filter);
+ GEN_PMU_FORMAT_ATTR(event_filter);
++GEN_PMU_FORMAT_ATTR(inv_event_filter);
+ GEN_PMU_FORMAT_ATTR(min_latency);
+ 
+ static struct attribute *arm_spe_pmu_formats_attr[] = {
+@@ -243,12 +249,27 @@ static struct attribute *arm_spe_pmu_formats_attr[] = {
+ 	&format_attr_load_filter.attr,
+ 	&format_attr_store_filter.attr,
+ 	&format_attr_event_filter.attr,
++	&format_attr_inv_event_filter.attr,
+ 	&format_attr_min_latency.attr,
+ 	NULL,
  };
  
- /*
++static umode_t arm_spe_pmu_format_attr_is_visible(struct kobject *kobj,
++						  struct attribute *attr,
++						  int unused)
++	{
++	struct device *dev = kobj_to_dev(kobj);
++	struct arm_spe_pmu *spe_pmu = dev_get_drvdata(dev);
++
++	if (attr == &format_attr_inv_event_filter.attr && !(spe_pmu->features & SPE_PMU_FEAT_INV_FILT_EVT))
++		return 0;
++
++	return attr->mode;
++}
++
+ static const struct attribute_group arm_spe_pmu_format_group = {
+ 	.name	= "format",
++	.is_visible = arm_spe_pmu_format_attr_is_visible,
+ 	.attrs	= arm_spe_pmu_formats_attr,
+ };
+ 
+@@ -343,6 +364,9 @@ static u64 arm_spe_event_to_pmsfcr(struct perf_event *event)
+ 	if (ATTR_CFG_GET_FLD(attr, event_filter))
+ 		reg |= PMSFCR_EL1_FE;
+ 
++	if (ATTR_CFG_GET_FLD(attr, inv_event_filter))
++		reg |= PMSFCR_EL1_FnE;
++
+ 	if (ATTR_CFG_GET_FLD(attr, min_latency))
+ 		reg |= PMSFCR_EL1_FL;
+ 
+@@ -355,6 +379,12 @@ static u64 arm_spe_event_to_pmsevfr(struct perf_event *event)
+ 	return ATTR_CFG_GET_FLD(attr, event_filter);
+ }
+ 
++static u64 arm_spe_event_to_pmsnevfr(struct perf_event *event)
++{
++	struct perf_event_attr *attr = &event->attr;
++	return ATTR_CFG_GET_FLD(attr, inv_event_filter);
++}
++
+ static u64 arm_spe_event_to_pmslatfr(struct perf_event *event)
+ {
+ 	struct perf_event_attr *attr = &event->attr;
+@@ -703,6 +733,9 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+ 	if (arm_spe_event_to_pmsevfr(event) & arm_spe_pmsevfr_res0(spe_pmu->pmsver))
+ 		return -EOPNOTSUPP;
+ 
++	if (arm_spe_event_to_pmsnevfr(event) & arm_spe_pmsevfr_res0(spe_pmu->pmsver))
++		return -EOPNOTSUPP;
++
+ 	if (attr->exclude_idle)
+ 		return -EOPNOTSUPP;
+ 
+@@ -721,6 +754,10 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+ 	    !(spe_pmu->features & SPE_PMU_FEAT_FILT_EVT))
+ 		return -EOPNOTSUPP;
+ 
++	if ((FIELD_GET(PMSFCR_EL1_FnE, reg)) &&
++	    !(spe_pmu->features & SPE_PMU_FEAT_INV_FILT_EVT))
++		return -EOPNOTSUPP;
++
+ 	if ((FIELD_GET(PMSFCR_EL1_FT, reg)) &&
+ 	    !(spe_pmu->features & SPE_PMU_FEAT_FILT_TYP))
+ 		return -EOPNOTSUPP;
+@@ -756,6 +793,11 @@ static void arm_spe_pmu_start(struct perf_event *event, int flags)
+ 	reg = arm_spe_event_to_pmsevfr(event);
+ 	write_sysreg_s(reg, SYS_PMSEVFR_EL1);
+ 
++	if (spe_pmu->features & SPE_PMU_FEAT_INV_FILT_EVT) {
++		reg = arm_spe_event_to_pmsnevfr(event);
++		write_sysreg_s(reg, SYS_PMSNEVFR_EL1);
++	}
++
+ 	reg = arm_spe_event_to_pmslatfr(event);
+ 	write_sysreg_s(reg, SYS_PMSLATFR_EL1);
+ 
+@@ -990,6 +1032,9 @@ static void __arm_spe_pmu_dev_probe(void *info)
+ 	if (FIELD_GET(PMSIDR_EL1_FE, reg))
+ 		spe_pmu->features |= SPE_PMU_FEAT_FILT_EVT;
+ 
++	if (FIELD_GET(PMSIDR_EL1_FnE, reg))
++		spe_pmu->features |= SPE_PMU_FEAT_INV_FILT_EVT;
++
+ 	if (FIELD_GET(PMSIDR_EL1_FT, reg))
+ 		spe_pmu->features |= SPE_PMU_FEAT_FILT_TYP;
+ 
 
 -- 
 2.39.0
