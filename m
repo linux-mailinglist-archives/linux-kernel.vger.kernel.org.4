@@ -2,227 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C058662B72
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8720662B75
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjAIQnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 11:43:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S234538AbjAIQnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 11:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjAIQnP (ORCPT
+        with ESMTP id S234329AbjAIQnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:43:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14AFE0DC
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 08:42:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673282551;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W9uCN3VQ3btzl2FPuIbtk5ZKyJr6zz6N2a76k393fHs=;
-        b=GkJNql7uZofLDWZLQFlXKGDzy7WneGTRdfzFdMRbO0MtJwizJ8h1bsOad2zG3Tz8PQ5pzS
-        bruNT0rinbgT3Dx6uwzXCPg6SRJaSrBXTlPTlmDZ73axsrVMS3jtqGGbJAOYaSkfJYmwny
-        vxO9jOY+OiyDrPsM6pQ95AXU4IqHb3g=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-645-l8RW4Z23McWdIu0DZy3BCg-1; Mon, 09 Jan 2023 11:42:27 -0500
-X-MC-Unique: l8RW4Z23McWdIu0DZy3BCg-1
-Received: by mail-wr1-f71.google.com with SMTP id r10-20020adfa14a000000b0025ba73dff40so1418530wrr.12
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 08:42:27 -0800 (PST)
+        Mon, 9 Jan 2023 11:43:20 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903C01AA04;
+        Mon,  9 Jan 2023 08:43:19 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id m6so13870997lfj.11;
+        Mon, 09 Jan 2023 08:43:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yFMr2KsHgMM8LL+ZSBA8Rs+9+c78FfOw9aaVi/TXD0E=;
+        b=UtuUPwsQqEU70yYxUDBMt5uyoyE59X8ptix+7PR9Gc/3iU/3xq/JrCxwJpvOmC7UEH
+         DesVbm9CpgPlS26pdxjbyjOaQZpO6Ef8XGeTpSvFKFPedprL4lX+bSVKcF/R8EdRreIR
+         Aw2NbMb5m40+Q2XM0j/6igzii1m7JrgvkDYTeFszR9xRh+080eqOm7u8VxL8KXEfZpAs
+         qLa9ynhYabXMI9G6u+bCDDq+m5TVOAefulkDnpHNdlp7FeMnJjdIOEUZxEzCcA2Q6DoE
+         IkDmBOswmdbvjbSOrEv0ijgBZDTUjY3gXBBix1M70pEyslGSJnC+jzsIGiLi4jFJ/QqP
+         KZ3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W9uCN3VQ3btzl2FPuIbtk5ZKyJr6zz6N2a76k393fHs=;
-        b=1jcKt5bIJQg9Lq9eoKxX/Lemn+LZJHcYr9u67Hire8/rr3nDspm8EjuKcACM88cOHT
-         F1bbFe9elQPG/WuCpiHVjxrY7710yjYgmctHf+LBKQNNn6IzaZMzn4NvEzD7Uw1KqMAZ
-         mgHR26WwZI/6vZJ/mFEN7SpaswRXL+jOVAzXQYCfmRbwC2axGQH7D2eULXEsgpXTYtjn
-         t0FO3e2rT1NTQAUZbRsqFT1FNnGyjHlh5bdm30Owu4O8FlEm8EgCJCJM2SzjBl6oFrJx
-         UXcGEBc64qrLIMjahhK2FeIOH42WYfzRM3J5Uu0OWLqiU8rGPNGq+mykXg8HShdbl9jf
-         EtEQ==
-X-Gm-Message-State: AFqh2krujTeHgYXCwgnUDhyNKeNuP9uUH2oPSgdhPn0EZByqJnYh/qZO
-        ocWLDr+WczRk+hBOg9y6kS5xsHBP/fsEZ2D6uRwbLSH9E+nPfnphlS86Sq5xKVeMalUgOQ9gBnA
-        cINQ+yHSXACRuosObaztXAFNO
-X-Received: by 2002:adf:f402:0:b0:270:c07e:56 with SMTP id g2-20020adff402000000b00270c07e0056mr35801395wro.53.1673282546793;
-        Mon, 09 Jan 2023 08:42:26 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuDdRq6l4D7tqj25ezhGwOEQPszZc1qC6Ax7Wv4ZPTyTh7QWw6hCI6gshgkwfk7zWzwDrx/Jg==
-X-Received: by 2002:adf:f402:0:b0:270:c07e:56 with SMTP id g2-20020adff402000000b00270c07e0056mr35801381wro.53.1673282546464;
-        Mon, 09 Jan 2023 08:42:26 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:8f00:ba3:7d27:204f:8e29? (p200300cbc7038f000ba37d27204f8e29.dip0.t-ipconnect.de. [2003:cb:c703:8f00:ba3:7d27:204f:8e29])
-        by smtp.gmail.com with ESMTPSA id z2-20020a5d6402000000b00297dcfdc90fsm8954756wru.24.2023.01.09.08.42.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 08:42:26 -0800 (PST)
-Message-ID: <0ee389dc-5e47-5b7e-4db5-637eb2b3fbc9@redhat.com>
-Date:   Mon, 9 Jan 2023 17:42:25 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yFMr2KsHgMM8LL+ZSBA8Rs+9+c78FfOw9aaVi/TXD0E=;
+        b=XQFYphLZyJOJDzUweg7W+JHX3vXgz1LOKS01XWpPpMOi5NBd57DcY8UHyLTvfLzeTB
+         5XMD8MBwCgoQF/beim5xAPaC7QLfxZLesleYu5r/eTkXrxraFMg9We2PhuoTZZqA0ccP
+         Q2GHZdk6gGf/UhPF4m4LPs16UtNCPebm3n1fqcsItnispE4tl/6woEkJHSAkenR4dKeg
+         3m0lCiLWEOO2LHjUo5w2wrKrNTKHsaQ/5ZMIqd0jHeFF0Hjl2l+T6YHOO2giyQNrTeHw
+         Y/iLsa7j0PW98u1inQ7sV1FLGutxkk5UKyV05gSILsEh9o/jmaDve/10ctKuBclm5qXS
+         byxw==
+X-Gm-Message-State: AFqh2kqno5zIQWh8zWS3eteLrvHgfaZ6bYDWidFxhvhjI47XJQSd05pN
+        wOCfwdct8CRlEklm/hZ22Ps=
+X-Google-Smtp-Source: AMrXdXtys4yX5LNTFJFfHJ/IXCU4em4xorjae9DoopKXny/OkIbjdRjT2GFIwkj8+uUgVIFdnb1yQQ==
+X-Received: by 2002:ac2:5b41:0:b0:4a4:68b8:9c5b with SMTP id i1-20020ac25b41000000b004a468b89c5bmr17938324lfp.67.1673282597990;
+        Mon, 09 Jan 2023 08:43:17 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id bq32-20020a056512152000b004b5766f48d8sm1710765lfb.19.2023.01.09.08.43.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 08:43:17 -0800 (PST)
+Date:   Mon, 9 Jan 2023 19:43:15 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
+        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/15] spi: dw: Introduce spi_frf and STD_SPI
+Message-ID: <20230109164315.au3nkqny7bh3bnr7@mobilestation>
+References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
+ <20221212180732.79167-2-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: =?UTF-8?Q?Re=3a_PROBLEM=3a_selftest/vm/cow=2ec_failed_to_compile_?=
- =?UTF-8?B?KOKAmE1BRFZfUEFHRU9VVOKAmSB1bmRlY2xhcmVkKQ==?=
-Content-Language: en-US
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <0f117203-3227-cd16-61c2-2dd3de75ecc7@alu.unizg.hr>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <0f117203-3227-cd16-61c2-2dd3de75ecc7@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212180732.79167-2-sudip.mukherjee@sifive.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.01.23 11:58, Mirsad Goran Todorovac wrote:
-> Hi all,
+On Mon, Dec 12, 2022 at 06:07:18PM +0000, Sudip Mukherjee wrote:
+> The DW APB SSI controllers of v4.x and newer and DW AHB SSI controllers
+> supports enhanced SPI modes which can be defined from SPI_FRF of
+> DW_SPI_CTRLR0 register. Without enhanced mode, these controllers will
+> work in the standard spi mode.
 > 
-> During "make kselftest" there is an error in selftest/vm/cow.c compilation on
-> platform:
+> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+> ---
+>  drivers/spi/spi-dw-core.c | 13 ++++++++++++-
+>  drivers/spi/spi-dw.h      |  6 ++++++
+>  2 files changed, 18 insertions(+), 1 deletion(-)
 > 
-> - Lenovo desktop 10TX000VCR (LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB)
-> - AlmaLinux 8.7 (CentOS fork)
-> - gcc 8.5.0 20210514 (Red Hat 8.5.0-15)
-> - vanilla kernel 6.2-rc2 from the torvalds mainline tree.
-> 
-> Compilation fails to find "#define MADV_PAGEOUT":
-> 
-> [root@pc-mtodorov vm]# make
-> gcc -Wall -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../.. -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include  -isystem /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include -no-pie     cow.c vm_util.c -lrt -lpthread  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm/cow
-> cow.c: In function ‘do_run_with_base_page’:
-> cow.c:755:26: error: ‘MADV_PAGEOUT’ undeclared (first use in this function); did you mean ‘MADV_RANDOM’?
->     madvise(mem, pagesize, MADV_PAGEOUT);
->                            ^~~~~~~~~~~~
->                            MADV_RANDOM
-> cow.c:755:26: note: each undeclared identifier is reported only once for each function it appears in
-> cow.c: In function ‘do_run_with_thp’:
-> cow.c:914:22: error: ‘MADV_PAGEOUT’ undeclared (first use in this function); did you mean ‘MADV_RANDOM’?
->     madvise(mem, size, MADV_PAGEOUT);
->                        ^~~~~~~~~~~~
->                        MADV_RANDOM
-> make: *** [../lib.mk:145: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm/cow] Error 1
-> [root@pc-mtodorov vm]#
-> 
-> MADV_PAGEOUT is defined in #include <asm-generic/mman-common.h> :
-> 
-> [root@pc-mtodorov vm]# grep MADV_PAGEOUT -r /usr/include
-> /usr/include/asm-generic/mman-common.h:#define MADV_PAGEOUT     21              /* reclaim these pages */
-> [root@pc-mtodorov vm]# grep MADV_PAGEOUT -r ../../../../usr/include
-> ../../../../usr/include/asm-generic/mman-common.h:#define MADV_PAGEOUT  21              /* reclaim these pages */
-> [root@pc-mtodorov vm]#
-> 
-> However, gcc -E shows that asm-generic/mman-common.h is somehow never included:
-> 
-> ---------------------------------------------------------------------------------------------
-> [root@pc-mtodorov vm]# gcc -Wall -E -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../.. -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include  -isystem /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include -no-pie     cow.c | cat -s | less
-> # 1 "/usr/include/sys/mman.h" 1 3 4
-> # 25 "/usr/include/sys/mman.h" 3 4
-> # 1 "/usr/lib/gcc/x86_64-redhat-linux/8/include/stddef.h" 1 3 4
-> # 26 "/usr/include/sys/mman.h" 2 3 4
-> # 41 "/usr/include/sys/mman.h" 3 4
-> # 1 "/usr/include/bits/mman.h" 1 3 4
-> # 49 "/usr/include/bits/mman.h" 3 4
-> # 1 "/usr/include/bits/mman-linux.h" 1 3 4
-> # 117 "/usr/include/bits/mman-linux.h" 3 4
-> # 1 "/usr/include/bits/mman-shared.h" 1 3 4
-> # 42 "/usr/include/bits/mman-shared.h" 3 4
-> 
-> int memfd_create (const char *__name, unsigned int __flags) __attribute__ ((__nothrow__ , __leaf__));
-> int mlock2 (const void *__addr, size_t __length, unsigned int __flags) __attribute__ ((__nothrow__ , __leaf__));
-> int pkey_alloc (unsigned int __flags, unsigned int __access_rights) __attribute__ ((__nothrow__ , __leaf__));
-> int pkey_set (int __key, unsigned int __access_rights) __attribute__ ((__nothrow__ , __leaf__));
-> int pkey_get (int __key) __attribute__ ((__nothrow__ , __leaf__));
-> int pkey_free (int __key) __attribute__ ((__nothrow__ , __leaf__));
-> int pkey_mprotect (void *__addr, size_t __len, int __prot, int __pkey) __attribute__ ((__nothrow__ , __leaf__));
-> 
-> # 117 "/usr/include/bits/mman-linux.h" 2 3 4
-> # 49 "/usr/include/bits/mman.h" 2 3 4
-> # 42 "/usr/include/sys/mman.h" 2 3 4
-> 
-> # 57 "/usr/include/sys/mman.h" 3 4
-> extern void *mmap (void *__addr, size_t __len, int __prot,
->       int __flags, int __fd, __off_t __offset) __attribute__ ((__nothrow__ , __leaf__));
-> # 70 "/usr/include/sys/mman.h" 3 4
-> extern void *mmap64 (void *__addr, size_t __len, int __prot,
->         int __flags, int __fd, __off64_t __offset) __attribute__ ((__nothrow__ , __leaf__));
-> 
-> extern int munmap (void *__addr, size_t __len) __attribute__ ((__nothrow__ , __leaf__));
-> extern int mprotect (void *__addr, size_t __len, int __prot) __attribute__ ((__nothrow__ , __leaf__));
-> extern int msync (void *__addr, size_t __len, int __flags);
-> extern int madvise (void *__addr, size_t __len, int __advice) __attribute__ ((__nothrow__ , __leaf__));
-> extern int posix_madvise (void *__addr, size_t __len, int __advice) __attribute__ ((__nothrow__ , __leaf__));
-> extern int mlock (const void *__addr, size_t __len) __attribute__ ((__nothrow__ , __leaf__));
-> extern int munlock (const void *__addr, size_t __len) __attribute__ ((__nothrow__ , __leaf__));
-> extern int mlockall (int __flags) __attribute__ ((__nothrow__ , __leaf__));
-> extern int munlockall (void) __attribute__ ((__nothrow__ , __leaf__));
-> extern int mincore (void *__start, size_t __len, unsigned char *__vec)
->       __attribute__ ((__nothrow__ , __leaf__));
-> 
-> # 133 "/usr/include/sys/mman.h" 3 4
-> 
-> extern void *mremap (void *__addr, size_t __old_len, size_t __new_len,
->         int __flags, ...) __attribute__ ((__nothrow__ , __leaf__));
-> extern int remap_file_pages (void *__start, size_t __size, int __prot,
->          size_t __pgoff, int __flags) __attribute__ ((__nothrow__ , __leaf__));
-> extern int shm_open (const char *__name, int __oflag, mode_t __mode);
-> extern int shm_unlink (const char *__name);
-> -------------------------------------------------------------------------------------------------------
-> 
-> FYI:
-> 
-> On the platform:
-> 
-> - Ubuntu 22.10 kinetic kudu
-> - gcc 12.2.0
-> - same 6.2-rc2
-> 
-> , MADV_PAGEOUT is also defined in bits/mmap-linux.h, so the compile passes.
-> 
-> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm# grep MADV_PAGEOUT -r /usr/include
-> /usr/include/asm-generic/mman-common.h:#define MADV_PAGEOUT	21		/* reclaim these pages */
-> /usr/include/x86_64-linux-gnu/bits/mman-linux.h:# define MADV_PAGEOUT     21	/* Reclaim these pages.  */
-> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm# grep MADV_PAGEOUT -r ../../../../usr/include
-> ../../../../usr/include/asm-generic/mman-common.h:#define MADV_PAGEOUT	21		/* reclaim these pages */
-> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm#
-> 
-> However, mman-common.h from ../../../../usr/include/asm-generic/mman-common.h is also not included,
-> as of "gcc -E", but only bits/mman-linux.h:
-> 
-> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm# gcc -Wall -E -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../.. -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include  -isystem /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include -no-pie     cow.c | grep mman-common.h
-> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm# gcc -Wall -E -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../.. -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include  -isystem /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include -no-pie     cow.c | grep mman-linux.h
-> # 1 "/usr/include/x86_64-linux-gnu/bits/mman-linux.h" 1 3 4
-> # 119 "/usr/include/x86_64-linux-gnu/bits/mman-linux.h" 3 4
-> # 120 "/usr/include/x86_64-linux-gnu/bits/mman-linux.h" 2 3 4
-> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm#
-> 
-> I hope this is enough information for you to debug the issue.
-> 
-> I am standing by for any additional diagnostics needed.
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index 99edddf9958b9..77c23772bb3d9 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -333,6 +333,16 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
+>  		/* CTRLR0[11:10] Transfer Mode */
+>  		cr0 |= FIELD_PREP(DW_HSSI_CTRLR0_TMOD_MASK, cfg->tmode);
+>  
 
-Won't userfaultfd.c fail in a similar way?
+> +	if (dw_spi_ver_is_ge(dws, HSSI, 103A)) {
 
-Anyhow, khugepaged.c jas
+eSPI has been available most likely since 1.00a (at least 1.01a
+has that feature).
 
-#ifndef MADV_PAGEOUT
-#define MADV_PAGEOUT 21
-#endif
+> +		cr0 &= ~DW_HSSI_CTRLR0_SPI_FRF_MASK;
 
-So most probably we should do the same.
+No need in masking that field because the cr0 variable is
+pre-initialized with the device-specific value anyway.
 
--- 
-Thanks,
+> +		cr0 |= FIELD_PREP(DW_HSSI_CTRLR0_SPI_FRF_MASK,
 
-David / dhildenb
+> +				  cfg->spi_frf);
 
+The HW-manual defines that field as SPI_FRF, but the SPI_ prefix looks
+vague because it doesn't differentiate it from just "frf" field. I'd
+suggest to use the "enh_frf" name instead.
+
+> +	} else if (dw_spi_ver_is_ge(dws, PSSI, 400A)) {
+
+> +		cr0 &= ~DW_PSSI_CTRLR0_SPI_FRF_MASK;
+> +		cr0 |= FIELD_PREP(DW_PSSI_CTRLR0_SPI_FRF_MASK,
+> +				  cfg->spi_frf);
+
+The same comments as above.
+
+> +	}
+> +
+>  	dw_writel(dws, DW_SPI_CTRLR0, cr0);
+>  
+>  	if (cfg->tmode == DW_SPI_CTRLR0_TMOD_EPROMREAD ||
+> @@ -422,6 +432,7 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+                                                 <--------+
+>  		.tmode = DW_SPI_CTRLR0_TMOD_TR,           |
+>  		.dfs = transfer->bits_per_word,           |
+>  		.freq = transfer->speed_hz,               |
+                                                          |
+> +		.spi_frf = DW_SPI_CTRLR0_SPI_FRF_STD_SPI, +
+
+You also forgot to update the spi-dw-bt1.c driver.
+
+>  	};
+>  	int ret;
+>  
+> @@ -664,7 +675,7 @@ static void dw_spi_stop_mem_op(struct dw_spi *dws, struct spi_device *spi)
+>  static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
+>  {
+>  	struct dw_spi *dws = spi_controller_get_devdata(mem->spi->controller);
+
+> -	struct dw_spi_cfg cfg;
+> +	struct dw_spi_cfg cfg = {0};
+
+Please explicitly initialize the enh_frf field in the method below in
+the same way as it's done for the rest of the fields.
+
+>  	unsigned long flags;
+>  	int ret;
+>  
+> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> index 9e8eb2b52d5c7..414a415deb42a 100644
+> --- a/drivers/spi/spi-dw.h
+> +++ b/drivers/spi/spi-dw.h
+> @@ -17,6 +17,8 @@
+>  
+>  /* Synopsys DW SSI component versions (FourCC sequence) */
+                                                  <-+
+>  #define DW_HSSI_102A			0x3130322a  |
+> +#define DW_HSSI_103A			0x3130332a  |
+                                                    |
+> +#define DW_PSSI_400A			0x3430302a -+
+
+Please define the PSSI-macros above the HSSI ones.
+
+>  
+>  /* DW SSI IP-core ID and version check helpers */
+>  #define dw_spi_ip_is(_dws, _ip) \
+> @@ -94,6 +96,9 @@
+>  #define DW_HSSI_CTRLR0_TMOD_MASK		GENMASK(11, 10)
+>  #define DW_HSSI_CTRLR0_SRL			BIT(13)
+                                                       <---------+
+>  #define DW_HSSI_CTRLR0_MST			BIT(31)          |
+                                                                 |
+> +#define DW_HSSI_CTRLR0_SPI_FRF_MASK		GENMASK(23, 22) -+
+
+This macro should be placed above the DW_HSSI_CTRLR0_MST one. Also
+rename SPI_FRF to ENH_FRF.
+
+> +#define DW_PSSI_CTRLR0_SPI_FRF_MASK		GENMASK(22, 21)
+> +#define DW_SPI_CTRLR0_SPI_FRF_STD_SPI		0x0
+
+1. Move these macros to the DW APB SSI group of the CSR fields macros.
+2. Drop the SPI suffix from the DW_SPI_CTRLR0_SPI_FRF_STD_SPI macro.
+3. Replace SPI_FRF with ENH_FRF name.
+
+>  
+>  /* Bit fields in CTRLR1 */
+>  #define DW_SPI_NDF_MASK				GENMASK(15, 0)
+> @@ -135,6 +140,7 @@ struct dw_spi_cfg {
+>  	u8 dfs;
+>  	u32 ndf;
+>  	u32 freq;
+
+> +	u8 spi_frf;
+
+Please move it to the head of the structure and rename to "enh_frf".
+
+-Serge(y)
+
+>  };
+>  
+>  struct dw_spi;
+> -- 
+> 2.30.2
+> 
