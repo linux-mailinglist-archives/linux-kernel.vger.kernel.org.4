@@ -2,102 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCFE662C51
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5624F662C36
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235575AbjAIRKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33530 "EHLO
+        id S237289AbjAIRHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:07:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237402AbjAIRKY (ORCPT
+        with ESMTP id S234827AbjAIRG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:10:24 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4B738AFC
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 09:08:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673284138; x=1704820138;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FgU8Goc+WegZo2GsmgzSbtPfTgXqbY4qTIuu55vxmY4=;
-  b=QV1llBzi3VkMFCquzd6H5zqNN53YgQU+mOfTyxDdbZKrgptupkXOcv4o
-   LUOzRxPYaVJESvztoYG+mikEDTTrtQ5pIKVsxuWvNARRM6HOU4nrn2tuj
-   QrgCyIYDXTE45RlXaGTekTaGZVfMClRJ6e7dphW43LjD+SI0RftXBspOR
-   5EcXcKo3uaGBv4WDrpvyuomtclyokCbB4vY2hkqEH0kDu8jiHTN6tZ5DC
-   6J0Xun78WR2If0tmuUSY1BuatN3dqyIOOL14C6cse2BHgf1pBT+QisM84
-   n/dotp0aC3+ts7NK9RmGZKV/Xc1EHJZwdybAneEOBFQJxscOVE37w+SMx
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="310722832"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="310722832"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 09:05:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="725236435"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="725236435"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Jan 2023 09:05:14 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 309H5Be0030759;
-        Mon, 9 Jan 2023 17:05:13 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] scripts/head-object-list: remove x86 from the list
-Date:   Mon,  9 Jan 2023 18:04:03 +0100
-Message-Id: <20230109170403.4117105-3-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230109170403.4117105-1-alexandr.lobakin@intel.com>
-References: <20230109170403.4117105-1-alexandr.lobakin@intel.com>
+        Mon, 9 Jan 2023 12:06:27 -0500
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D0142E21;
+        Mon,  9 Jan 2023 09:05:44 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-4c186ff0506so121373537b3.6;
+        Mon, 09 Jan 2023 09:05:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zPVCpbi7IFUjfl+kqKF1GBf38n57/rlv+lygUdA5yNk=;
+        b=C6sdNlPKP8IVlDrgemUvnEB8JOAhcPneEchpbYmapkPi9Sv5JE4M2uEc66dXNCr3EC
+         LDulgFnacU5lW2hGmxy1S6PdSELbF4cVP26FPGm8ga3xK8B8W6V/rylU+epqi2DTNBna
+         X+Hb2DVzevjcALkHNcikM9H0X9XSzl8/1Ip8oPjwVbd/t8513U2xzq6J+Frlo3w+sw+U
+         UidYWO7Re0E+Up7/2RTfzPRCFBHL27MCYEV8Dopr5HQlUGd8vHNLWjpHINxX7jUUnrO/
+         KyCYwczlLSItwe2KhSb5IHvbEWmsdAvF3BDBIeHQBLdeaWSJS25GeCubnfVaGCIfXRwU
+         Bo6w==
+X-Gm-Message-State: AFqh2kpzl+AdAZwTtPIJD/jFToNrrRCZFviaWozWSbaiQ4n71m6o31DZ
+        HpyA9UILLFVFqs8OuIaNNdc=
+X-Google-Smtp-Source: AMrXdXtEHccPbHcS/bkAY0ElT5eoj9Zj3sZoVq6gWorCDGTH/EovylXWCHjhVoFCkYFtPY5dX4/Tvg==
+X-Received: by 2002:a05:7500:338a:b0:f0:3bdd:b78f with SMTP id cr10-20020a057500338a00b000f03bddb78fmr446307gab.4.1673283943376;
+        Mon, 09 Jan 2023 09:05:43 -0800 (PST)
+Received: from maniforge.lan ([2620:10d:c091:480::1:40cc])
+        by smtp.gmail.com with ESMTPSA id bq35-20020a05620a46a300b00704c9015e68sm5656045qkb.116.2023.01.09.09.05.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 09:05:42 -0800 (PST)
+Date:   Mon, 9 Jan 2023 11:05:42 -0600
+From:   David Vernet <void@manifault.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next 1/3] bpf: Add __bpf_kfunc tag for marking kernel
+ functions as kfuncs
+Message-ID: <Y7xJZv6Ncw1JSoJy@maniforge.lan>
+References: <20230106195130.1216841-1-void@manifault.com>
+ <20230106195130.1216841-2-void@manifault.com>
+ <CAADnVQLpK7WXTjF6GS1hcfPXf=8iERJmEeVFfvmG75mJj0DdaA@mail.gmail.com>
+ <Y7jUaDD9V556Px3b@maniforge.lan>
+ <CAADnVQJJaTXa8Y-aGctrBTjasKzsMDq4nW7Na5X3i8oobpT9NQ@mail.gmail.com>
+ <20230109120815.zx5mif4hnee6gyvc@apollo>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109120815.zx5mif4hnee6gyvc@apollo>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that x86 boot code is not hardcoded to the particular linking
-order, remove x86 files from the list and let them be placed inside
-the vmlinux according only to the linker script and linker
-preferences.
+On Mon, Jan 09, 2023 at 05:38:15PM +0530, Kumar Kartikeya Dwivedi wrote:
+> On Mon, Jan 09, 2023 at 04:47:54AM IST, Alexei Starovoitov wrote:
+> > On Fri, Jan 6, 2023 at 6:09 PM David Vernet <void@manifault.com> wrote:
+> > >
+> > > On Fri, Jan 06, 2023 at 05:04:02PM -0800, Alexei Starovoitov wrote:
+> > > > On Fri, Jan 6, 2023 at 11:51 AM David Vernet <void@manifault.com> wrote:
+> > > > >
+> > > > > kfuncs are functions defined in the kernel, which may be invoked by BPF
+> > > > > programs. They may or may not also be used as regular kernel functions,
+> > > > > implying that they may be static (in which case the compiler could e.g.
+> > > > > inline it away), or it could have external linkage, but potentially be
+> > > > > elided in an LTO build if a function is observed to never be used, and
+> > > > > is stripped from the final kernel binary.
+> > > > >
+> > > > > We therefore require some convenience macro that kfunc developers can
+> > > > > use just add to their kfuncs, and which will prevent all of the above
+> > > > > issues from happening. This is in contrast with what we have today,
+> > > > > where some kfunc definitions have "noinline", some have "__used", and
+> > > > > others are static and have neither.
+> > > > >
+> > > > > In addition to providing the obvious correctness benefits, having such a
+> > > > > macro / tag also provides the following advantages:
+> > > > >
+> > > > > - Giving an easy and intuitive thing to query for if people are looking
+> > > > >   for kfuncs, as Christoph suggested at the kernel maintainers summit
+> > > > >   (https://lwn.net/Articles/908464/). This is currently possible by
+> > > > >   grepping for BTF_ID_FLAGS(func, but having something more self
+> > > > >   describing would be useful as well.
+> > > > >
+> > > > > - In the future, the tag can be expanded with other useful things such
+> > > > >   as the ability to suppress -Wmissing-prototype for the kfuncs rather
+> > > > >   than requiring developers to surround the kfunc with __diags to
+> > > > >   suppress the warning (this requires compiler support that as far as I
+> > > > >   know currently does not exist).
+> > > >
+> > > > Have you considered doing bpf_kfunc_start/bpf_kfunc_end ?
+> > > > The former would include:
+> > > > __diag_push(); __diag_ignore_all(); __used noinline
+> > >
+> > > Yeah that's certainly an option. The downside is that all functions
+> > > within scope of the __diag_push() will be affected, and sometimes we mix
+> > > kfuncs with non-kfuncs (including e.g. static helper functions that are
+> > > used by the kfuncs themselves). -Wmissing-prototypes isn't a big deal,
+> > > but __used and noinline are kind of unfortunate. Not a big deal though,
+> > > it'll just result in a few extra __bpf_kfuncs_start() and
+> > > __bpf_kfuncs_end() sprinkled throughout to avoid them being included.
+> > > The upside is of course that we can get rid of the __diag_push()'es we
+> > > currently have to prevent -Wmissing-prototypes.
+> >
+> > I meant to use bpf_kfunc_start/bpf_kfunc_end around every kfunc.
+> > Ideally bpf_kfunc_start would be on the same line as func proto
+> > for nice grepping.
+> > Maybe it's an overkill.
+> > Maybe 3 macroses then?
+> > bpf_kfunc_start to hide __diag
+> > bpf_kfunc on the proto line
+> > bpf_kfunc_end to finish __diag_pop
 
-Tested-by: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
----
- scripts/head-object-list.txt | 6 ------
- 1 file changed, 6 deletions(-)
+Ah, I see. Hmm, I guess this is better than what we have now, but is
+still a lot of macros and boilerplate which IMO is a sign we're not
+going in quite the right direction. I don't really have a better
+suggestion at this point, though I do like Kumar's suggestion below.
 
-diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
-index b074134cfac2..b2a0e21ea8d7 100644
---- a/scripts/head-object-list.txt
-+++ b/scripts/head-object-list.txt
-@@ -42,10 +42,4 @@ arch/s390/kernel/head64.o
- arch/sh/kernel/head_32.o
- arch/sparc/kernel/head_32.o
- arch/sparc/kernel/head_64.o
--arch/x86/kernel/head_32.o
--arch/x86/kernel/head_64.o
--arch/x86/kernel/head32.o
--arch/x86/kernel/head64.o
--arch/x86/kernel/ebda.o
--arch/x86/kernel/platform-quirks.o
- arch/xtensa/kernel/head.o
--- 
-2.39.0
+> There's also the option of doing this:
+> 
+> #define BPF_KFUNC(proto) proto; __used noinline proto
+> 
+> BPF_KFUNC(void kfunc(arg1, arg2)) {
+> 	...
+> }
+> 
+> No need to disable the warning with diag push/pop, just put a declaration before
+> the definition to silence the compiler. The only awkward part is entire function
+> prototype becoming a macro argument (unlike the common case void MACRO(...)) but
+> it becomes less noisy and easy to grep as well.
 
+If nobody would come after us with pitchforks for this, IMO this is the
+most user-friendly option and what I would vote for. It doesn't seem
+like this is violating anything in [0]?
+
+[0]: https://www.kernel.org/doc/html/latest/process/coding-style.html#macros-enums-and-rtl
