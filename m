@@ -2,152 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55B9661E27
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 06:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 665AB661E2A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 06:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234386AbjAIFEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 00:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S234298AbjAIFGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 00:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233987AbjAIFEu (ORCPT
+        with ESMTP id S233865AbjAIFGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 00:04:50 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56060A448
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 21:04:49 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30954NiY054709;
-        Sun, 8 Jan 2023 23:04:23 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673240663;
-        bh=s1W2ZfWslUfpwbe+XtN7DnIFblspWS94tqfwh5Rdr/o=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Pnhssb2G991ClaVPTT5bC7Fd+UDHFtALYig+YJlVpsEGAkqfDJiS2EtFA7StLhTBh
-         MspmY6M9OeTHnAuvmz7CLdp0pj1SRcaYa8N0qDbNjxouT7WaheYnVLOghZ0YpKyknJ
-         3Ug8k6UNY3Br65wn5IxaW/GPOjeWvax7EyO7CkyA=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30954MR7082181
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 8 Jan 2023 23:04:22 -0600
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 8
- Jan 2023 23:04:22 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sun, 8 Jan 2023 23:04:22 -0600
-Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30954J2U094991;
-        Sun, 8 Jan 2023 23:04:19 -0600
-Message-ID: <dd6c7345-4635-dc26-dd25-153c87b4b336@ti.com>
-Date:   Mon, 9 Jan 2023 10:34:18 +0530
+        Mon, 9 Jan 2023 00:06:40 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7309B4B8
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 21:06:39 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3091KX6n016282;
+        Mon, 9 Jan 2023 05:05:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=sCmzyO/A+/VtN9phnvgN5fqL7RVQRlkbQx78TjSitUo=;
+ b=YdiO4igTUpV0ohUun5PfTguo4zpEXvfi1D3pmz6D/xrNyD3VCxiJcu1AhyMbUdSKDawn
+ 4CuZ59mCBOi4zwfRHS7LGC0FbMs/agXCKOvsaZzaPthFCCHA9kGANUiM9a7MhlOogqGJ
+ tScfs4xGcmYKgf9VAfyXkqsT9FUEwNASfnFRGldKhjXp+0I+iGKdyglDireel8ZPvCt2
+ dUTt63O0z4qJflaHU7nvxRmxaeOlwPHWhfrqPqIZd565EjFnIMqsGTUkwoyyfXyJ/usQ
+ BYNj1ovfxYPUzqcJeSCA7t/nfnvBE0EMpRzqBH5mJspzaVUZMoxsZu7c/ZU/0mPK0y99 cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6j4ge1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 05:05:56 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3094snke005857;
+        Mon, 9 Jan 2023 05:05:55 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6j4gd9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 05:05:55 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3084bCw1004282;
+        Mon, 9 Jan 2023 05:05:53 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3my0c69q0w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 05:05:52 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30955oeG45678886
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 9 Jan 2023 05:05:50 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6D73620040;
+        Mon,  9 Jan 2023 05:05:50 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB7492004E;
+        Mon,  9 Jan 2023 05:05:46 +0000 (GMT)
+Received: from [9.43.40.56] (unknown [9.43.40.56])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  9 Jan 2023 05:05:46 +0000 (GMT)
+Message-ID: <09567e13-c5ed-d1b9-027c-9340fce6a0a8@linux.ibm.com>
+Date:   Mon, 9 Jan 2023 10:35:46 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] mtd: spi-nor: macronix: add support for mx77l51250f
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v15 1/7] crash: move crash_prepare_elf64_headers()
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20221209153656.3284-1-eric.devolder@oracle.com>
+ <20221209153656.3284-2-eric.devolder@oracle.com>
 Content-Language: en-US
-To:     Tomas Winkler <tomas.winkler@intel.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>
-CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>,
-        Alexander Usyskin <alexander.usyskin@intel.com>
-References: <20230107214345.2524851-1-tomas.winkler@intel.com>
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20230107214345.2524851-1-tomas.winkler@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <20221209153656.3284-2-eric.devolder@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: PxamSnO6fknmEdZDFOCyAvOwlbEPEvtL
+X-Proofpoint-GUID: OgT072Px9f10qZfhXo8usZTICEM_1fef
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-08_19,2023-01-06_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 mlxlogscore=999 phishscore=0 adultscore=0 mlxscore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301090034
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Tomas,
 
-On 08/01/23 03:13, Tomas Winkler wrote:
-> Add support for mx77l51250f spi-nor chips.
-> 
-> SPI NOR sysfs:
-> 
-> $ cat /sys/bus/spi/devices/spi0.0/spi-nor/partname
-> mx77l51250f
-> $ cat /sys/bus/spi/devices/spi0.0/spi-nor/jedec_id
-> c2751a
-> $ cat /sys/bus/spi/devices/spi0.0/spi-nor/manufacturer
-> macronix
-> $ xxd -p /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
-> 53464450060103ff00060110300000ffc2000104100100ff030001020001
-> 00ff84000102c00000ffffffffffffffffffe520f3ffffffff1f44eb086b
-> 083b04bbeeffffffffff00ffffff00ff0c200f5210d800ff8341bd0082a7
-> 04db4403373830b030b0f7a9d55c009e29fff050f985ffffffffffffffff
-> ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-> ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-> ffffffffffffffffffffffff7f0ff0ff215cdcffffffffffffffffffffff
-> ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-> ffffffffffffffffffffffffffffffff3c9b96f0c5a4c2ffffffffffffff
-> ffff003600279df9c064fecfffffffffffff
-> 
-> $ md5sum /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
-> 36fb8e3e6f82c45bfabea45ec73c08a8
-> /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
-> 
-> Note: The test_qspi.sh wasn not run as this device in intel setup is used
->        for BIOS and platform firmware storage.
-Thanks for doing the testing but one small suggestion, move this below 
-the "---" lines before sending the patch email.
-> 
-> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+On 09/12/22 21:06, Eric DeVolder wrote:
+> At the outcome of this patch set, the crash_prepare_elf64_headers()
+> is utilized on both the kexec_file_load() and kexec_load() paths. As
+> such, need to move this function out of kexec_file.c and into a
+> common location crash_core.c.
+>
+> No functionality change.
+>
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> Acked-by: Baoquan He <bhe@redhat.com>
 > ---
-For the code and idea itself, pending the changes I have advised below.
-
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
-> V2:
-> 1. This chip supports SFDP, parse it instead of the manual configuration.
-
-This sounds good! Do the other flashes in macronix_nor_parts support
-this? Maybe they can be updated in some later patches as well if they do
-support SFDP Parsing.
-
-> 2. Add required output of sysfs attributes
-Yes, but I am not sure in this is the way to do it in the commit body
-itself.
-When Tudor asked you for those test logs, I think he meant for you to
-paste it in the cover letter, or below here not in the patch email. Not 
-in the commit body.
-Refer 
-https://lore.kernel.org/all/cover.1661915569.git.Takahiro.Kuwano@infineon.com/
-where Takahiro has provided the tested details for ID, SFDP, Test logs.
-> 
->   drivers/mtd/spi-nor/macronix.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-> index 6853ec9ae65d..6c3b4192a8ae 100644
-> --- a/drivers/mtd/spi-nor/macronix.c
-> +++ b/drivers/mtd/spi-nor/macronix.c
-> @@ -100,6 +100,8 @@ static const struct flash_info macronix_nor_parts[] = {
->   	{ "mx66u2g45g",	 INFO(0xc2253c, 0, 64 * 1024, 4096)
->   		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
->   		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-> +	{ "mx77l51250f", INFO(0xc2751a, 0, 64 * 1024, 4096)
-> +		PARSE_SFDP },
->   };
+>   kernel/crash_core.c | 100 ++++++++++++++++++++++++++++++++++++++++++++
+>   kernel/kexec_file.c |  99 -------------------------------------------
+>   2 files changed, 100 insertions(+), 99 deletions(-)
+>
+> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+> index a0eb4d5cf557..46c160d14045 100644
+> --- a/kernel/crash_core.c
+> +++ b/kernel/crash_core.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/utsname.h>
+>   #include <linux/vmalloc.h>
+>   #include <linux/sizes.h>
+> +#include <linux/kexec.h>
 >   
->   static void macronix_nor_default_init(struct spi_nor *nor)
+>   #include <asm/page.h>
+>   #include <asm/sections.h>
+> @@ -314,6 +315,105 @@ static int __init parse_crashkernel_dummy(char *arg)
+>   }
+>   early_param("crashkernel", parse_crashkernel_dummy);
+>   
+> +int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
+> +			  void **addr, unsigned long *sz)
+> +{
+> +	Elf64_Ehdr *ehdr;
+> +	Elf64_Phdr *phdr;
+> +	unsigned long nr_cpus = num_possible_cpus(), nr_phdr, elf_sz;
+> +	unsigned char *buf;
+> +	unsigned int cpu, i;
+> +	unsigned long long notes_addr;
+> +	unsigned long mstart, mend;
+> +
+> +	/* extra phdr for vmcoreinfo ELF note */
+> +	nr_phdr = nr_cpus + 1;
+> +	nr_phdr += mem->nr_ranges;
+> +
+> +	/*
+> +	 * kexec-tools creates an extra PT_LOAD phdr for kernel text mapping
+> +	 * area (for example, ffffffff80000000 - ffffffffa0000000 on x86_64).
+> +	 * I think this is required by tools like gdb. So same physical
+> +	 * memory will be mapped in two ELF headers. One will contain kernel
+> +	 * text virtual addresses and other will have __va(physical) addresses.
+> +	 */
+> +
+> +	nr_phdr++;
+> +	elf_sz = sizeof(Elf64_Ehdr) + nr_phdr * sizeof(Elf64_Phdr);
+> +	elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
+Seems like above function is out of CONFIG_KEXEC_FILE but some of the
+structure/attributes like crash_mem and ELF_CORE_HEADER_ALIGN are
+still defined under CONFIG_KEXEC_FILE (look for include/linux/kexec.h).
 
--- 
-Thanks and Regards,
-Dhruva Gole
+This leads to kernel build issue when CONFIG_KEXEC_FILE is disabled.
+
+Thanks,
+Sourabh Jain
