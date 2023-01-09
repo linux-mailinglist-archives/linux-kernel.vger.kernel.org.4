@@ -2,104 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833DC663057
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CCF663059
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjAIT3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
+        id S237394AbjAITaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237747AbjAIT3R (ORCPT
+        with ESMTP id S235317AbjAITaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:29:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC5E63389
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:28:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E53DBB80DAA
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 19:28:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED8BC433D2;
-        Mon,  9 Jan 2023 19:28:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673292513;
-        bh=N4nFMKavoUqojR3nB9WdTnhsDQneBJM2upN298Etx5Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OowNnYnIwRfcPN1hoyJEyTnQQOwaxsoMsmFDDxyvRL2NHuhPq6INcfewJfyy2RYmZ
-         9HELSYT3iwla32ma8gUl1IC40miQhIHuYNPESIHJciLGlGBxKcjInjZ6WMT/fCknfI
-         O622+eZE3uHdGfYj7zp5Uhwo11ou4SfFS1JnL0k/GY8i1Y/W5o2LhmrR4ssP1IaiQ+
-         fyfvgkKQtZRQMwpWRCAy6NqwyDKcABvl83g9AGLJ3aOJK0wS10hUn872DnCyjeTe3l
-         /dZtKyII/ytAREY/8Tfy8xONgv0LIAoDV6Dt7E9q0UEhlIIvIt48A4zPYaf3aBD2hX
-         mbgjaAeajIhkw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     SeongJae Park <sj@kernel.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 22/44] mmap: Pass through vmi iterator to __split_vma()
-Date:   Mon,  9 Jan 2023 19:28:31 +0000
-Message-Id: <20230109192831.61258-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230109164533.3qkorup75h3zsi7t@revolver>
-References: 
+        Mon, 9 Jan 2023 14:30:07 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1694567F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:30:04 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id r2so9296727wrv.7
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=umpn61oKPhQIWtfGabqqzgHdYHu2WDs51U35aBX8Lfo=;
+        b=H/pjvl98pNKYxrYNiyNBQhZqTFCcVg65dz8WgwQigVGPltD9a0u4cVp0FnoAh9SV+U
+         VAK7+1Aq4Lno4TvwbVeZF4NYrPJwOz2mcr7uglBe5eBAwKs1Q5+6rw6cGQQbsABBEibk
+         UhxBTMaanmmRS7z4HWxKsEQjKUvWOb77cw9z87aZjdjHBXmCGIgXSlYPWBFzX3DIg2np
+         p/3Sr7P341WXzNpYxVfP7YiUp9nojLafT+S1xuZUHxJ3o5ltrdR3C2kWT7NhcGlkvAfK
+         yw9o9OeIN3dLd9llUBm9O+q/1iky0lUHqN5R3bODqG2NVYUkmy6HZwHlHscuO8vfjuBf
+         S1Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=umpn61oKPhQIWtfGabqqzgHdYHu2WDs51U35aBX8Lfo=;
+        b=1rO8Cp0smnaKHSA77eJtXO01O2A7o/74qs7/f/c31SwPJB3PPYQobEAEJoOO2YA99F
+         oRlBqLq/ledLerPw4uwkWAw91rhkFxpQXKw8CY1ehV/FwO2Hk8+KsIoG44NRWnwRVGjH
+         lD+AH/5ySrw3ZgnaOH0hJp9ZaBW4heI3eBO0/e2QZ112FP1KkuiPXSjFv/UDR1A1TZW6
+         B7xPyw5A8kijqKmdninVttXiWmbm3VB5rr/C+Sfz19BOS5Vp4cADs9i20ZU7cY9tP0K4
+         CnnmfoB6MCOYCH8uRoEiw8zmvBhceBxFo8gcF5Wmv2fG2yJY+HRpnbveGMggq6T8NvKb
+         gP5w==
+X-Gm-Message-State: AFqh2krR2nJPUP0ohsua+/p9mphM88LTGoCcNok9KbqA3aFOiuAOcjcX
+        M4dW6Q+RbeH8w6gR9AnKx1m5sGJhwP15m60UI4pplg==
+X-Google-Smtp-Source: AMrXdXuYso3slBJ1PMuHUf3gFuJpF2juSV4x53983D7fAEr1eSH/IZCW3v93ieiblLx23iDJErX7BDAyFkwV8rhVqPc=
+X-Received: by 2002:a5d:614d:0:b0:2bc:7ed4:cd50 with SMTP id
+ y13-20020a5d614d000000b002bc7ed4cd50mr151039wrt.40.1673292603341; Mon, 09 Jan
+ 2023 11:30:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106151320.619514-1-irogers@google.com> <CAJ9a7ViGE3UJX02oA42A9TSTKsOozPzdHjyL+OSP4J-9dZFqrg@mail.gmail.com>
+ <Y7hZccgOiueB31a+@kernel.org> <Y7hgKMDGzQlankL1@kernel.org>
+ <Y7hgoVKBoulCbA4l@kernel.org> <CAP-5=fXPPSHvN6VYc=8tzBz4xtKg4Ofa17zV4pAk0ycorXje8w@mail.gmail.com>
+ <Y7wuz6EOggZ8Wysb@kernel.org> <Y7xYimp0h4YT72/N@krava> <CAP-5=fXwO5_kK=pMV09jdAVw386CB0JwArD0BZd=B=xCyWSP1g@mail.gmail.com>
+In-Reply-To: <CAP-5=fXwO5_kK=pMV09jdAVw386CB0JwArD0BZd=B=xCyWSP1g@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 9 Jan 2023 11:29:51 -0800
+Message-ID: <CAP-5=fVa51_URGsdDFVTzpyGmdDRj_Dj2EKPuDHNQ0BYgMSzUA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] perf build: Properly guard libbpf includes
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        namhyung@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 Jan 2023 16:45:46 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+On Mon, Jan 9, 2023 at 10:37 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Mon, Jan 9, 2023 at 10:10 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Mon, Jan 09, 2023 at 12:12:15PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > Em Fri, Jan 06, 2023 at 11:06:46AM -0800, Ian Rogers escreveu:
+> > > > So trying to get build-test working on my Debian derived distro is a
+> > > > PITA with broken feature detection for options I don't normally use.
+> > >
+> > > Its really difficult to have perf building with so many dependent
+> > > libraries, mowing out some should be in order.
+> > >
+> > > > I'll try to fix this.
+> > >
+> > > Thanks.
+> > >
+> > > > In any case I think I've spotted what is really happening here and it
+> > > > isn't a failure but a feature :-D The build is specifying
+> > >
+> > > I get it.
+> > >
+> > > > LIBBPF_DYNAMIC=1 which means you get the libbpf headers from
+> > > > /usr/include. I think the build is trying to do this on a system with
+> > > > an old libbpf and hence getting the failures above. Previously, even
+> > > > though we wanted the dynamic headers we still had a -I, this time for
+> > > > the install_headers version. Now you really are using the system
+> > > > version and it is broken. This means a few things:
+> > > > - the libbpf feature test should fail if code like above is going to fail,
+> > >
+> > > Agreed.
+> > >
+> > > > - we may want to contemplate supporting older libbpfs (I'd rather not),
+> > >
+> > > I'd rather require everybody to be up to the latest trends, but I really
+> > > don't think that is a reasonable expectation.
+> > >
+> > > > - does build-test have a way to skip known issues like this?
+> > >
+> > > Unsure, Jiri?
+> >
+> > I don't think so it just triggers the build, it's up to the features check
+> > to disable the feature if the library is not compatible with perf code
+> >
+> > could we add that specific libbpf call to the libbpf feature check?
+>
+> Looking at the failure closer, the failing code is code inside a
+> feature check trying to workaround the feature not being present. We
+> need to do something like:
+>
+> ```
+> diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
+> index 6e9b06cf06ee..a1c3cc230273 100644
+> --- a/tools/perf/util/bpf-loader.c
+> +++ b/tools/perf/util/bpf-loader.c
+> @@ -33,17 +33,18 @@
+> #include <internal/xyarray.h>
+>
+> #ifndef HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS
+> -int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
+> -                          struct bpf_insn *new_insns __maybe_unused,
+> size_t new_insn_cnt __maybe_un
+> used)
+> +static int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
+> +                                 struct bpf_insn *new_insns __maybe_unused,
+> +                                 size_t new_insn_cnt __maybe_unused)
+> {
+>        pr_err("%s: not support, update libbpf\n", __func__);
+>        return -ENOTSUP;
+> }
+>
+> -int libbpf_register_prog_handler(const char *sec __maybe_unused,
+> -                                 enum bpf_prog_type prog_type __maybe_unused,
+> -                                 enum bpf_attach_type exp_attach_type
+> __maybe_unused,
+> -                                 const struct
+> libbpf_prog_handler_opts *opts __maybe_unused)
+> +static int libbpf_register_prog_handler(const char *sec __maybe_unused,
+> +                                       enum bpf_prog_type prog_type
+> __maybe_unused,
+> +                                       enum bpf_attach_type
+> exp_attach_type __maybe_unused,
+> +                                       const void *opts __maybe_unused)
+> {
+>        pr_err("%s: not support, update libbpf\n", __func__);
+>        return -ENOTSUP;
+> ```
+>
+> There are some other fixes necessary too. I'll try to write the fuller
+> patch but I have no means for testing except for undefining
+> HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS.
+>
+> Thanks,
+> Ian
 
-> * SeongJae Park <sj@kernel.org> [230106 21:40]:
-> > Hello Liam,
-> > 
-> > On Sat, 7 Jan 2023 02:01:26 +0000 SeongJae Park <sj@kernel.org> wrote:
-> > 
-> > > Hello Liam,
-> > > 
-> > > 
-> > > I found 'make install' mm-unstable kernel fails from initramfs stage with
-> > > 'not a dynamic executable' message.  I confirmed the issue is not reproducible
-> > > before your patchset[1] but after the series[2].
-> > > 
-> > > I tried to bisect, but on a commit[3] middle of mm-unstable tree which this
-> > > patch is applied, I get below error while booting.  Do you have an idea?
-> > 
-> > I further bisected for the boot failure.  The first bad commit was a8e0f2e12936
-> > ("mmap: change do_mas_munmap and do_mas_aligned_munmap() to use vma
-> > iterator")[1].  The stacktrace on the commit is as below.
-> > 
-> ...
-> 
-> Thanks for your work on this.
-> 
-> I have found the issue and will send out a fix shortly.  I am not
-> handling the invalidated state correctly in the write path.
+So libbpf_prog_handler_opts is missing in the failing build, this
+points to a libbpf before 0.8. I'm somewhat concerned that to work
+around these linkage problems we're adding runtime errors - we may
+build but the functionality is totally crippled. Is it worth
+maintaining these broken builds or to just upfront fail the feature
+test?
 
-Thank you, I tested the patch and confirmed it is fixing the boot failure.  The
-'make install' issue on my system is not fixed yet, though.  While doing bisect
-of the issue again with your boot failure fix, I found below build failure on a
-commit applying a patch of this series, namely "userfaultfd: use vma iterator".
+We can also switch the feature tests for LIBBPF_MAJOR_VERSION and
+LIBBPF_MINOR_VERSION checks. This would have the property of letting
+us tie the error messages to what version of libbpf is assumed.
 
-    mm/madvise.c: In function ‘madvise_update_vma’:
-    mm/madvise.c:165:11: error: implicit declaration of function ‘__split_vma’; did you mean ‘split_vma’? [-Werror=implicit-function-declaration]
-      165 |   error = __split_vma(mm, vma, start, 1);
-          |           ^~~~~~~~~~~
-          |           split_vma
-    cc1: some warnings being treated as errors
+In this case we could have a feature test for the libbpf version and
+if the version is before libbpf 0.8 fail the feature check. A quick
+way to do this is:
+```
+diff --git a/tools/build/feature/test-libbpf.c
+b/tools/build/feature/test-libbpf.c
+index a508756cf4cc..dadd8186b71d 100644
+--- a/tools/build/feature/test-libbpf.c
++++ b/tools/build/feature/test-libbpf.c
+@@ -1,6 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0
+#include <bpf/libbpf.h>
 
-Maybe "mm: add temporary vma iterator versions of vma_merge(), split_vma(), and
-__split_vma()" caused the build failure?
-
++#if (LIBBPF_MAJOR_VERSION == 0) && (LIBBPF_MINOR_VERSION < 8)
++#error At least libbpf 0.8 is assumed for Linux tools.
++#endif
++
+int main(void)
+{
+       return bpf_object__open("test") ? 0 : -1;
+```
 
 Thanks,
-SJ
+Ian
+
+> > jirka
+> >
+> > >
+> > > But yeah, previous experiences with Andrii were that we can do not too
+> > > costly feature checks, not using .c programs that would fail if some
+> > > required feature wasn't present but instead would just do some grep on a
+> > > header and if some "smell" wasn't scent, just fail the cap query.
+> > >
+> > > - Arnaldo
