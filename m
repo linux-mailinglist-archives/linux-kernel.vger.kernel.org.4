@@ -2,190 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153656634DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309546634E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 00:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234752AbjAIXNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 18:13:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
+        id S231358AbjAIXO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 18:14:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235107AbjAIXNd (ORCPT
+        with ESMTP id S235571AbjAIXOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 18:13:33 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8862D3B92A
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:13:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673306012; x=1704842012;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LM4WQxi02oz822DzRs+F84SR/uXNs8ylwKn1OZk6d4Y=;
-  b=iWnm7D5a1URkpPCpx113H5eXorL0mgS2rrMHTz/BAGUc1ckXl1dJOeQ0
-   UiXEsem8wx+4pNQYHrxwH6W7+5Wrh7fau8EG71hEzItz36e0OaA29nqHe
-   fG9wIoX0zbmis6Dd5N6TzpJETbsiN3t+lrnZ9g6ZqPzT3iSmvNe3mTFWr
-   /jziZODJ70+6Ok7y4VtoB7BjfbEwRr4CRBgHvVOIv9F3T9FPSTHp61X53
-   H6Z25GfRnOq1/LWY3qgm3Otx+2Grs5K1mUM036UAPkimFP9yjQEeCKJMx
-   1uAKVbTTvfhZr2Adu0gmL73edpEH57rf7fnAKL8FG9+5U3NiC8jxIgflB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="387459423"
-X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
-   d="scan'208";a="387459423"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 15:13:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="634387804"
-X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
-   d="scan'208";a="634387804"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 09 Jan 2023 15:13:30 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pF1Kc-0007LD-0C;
-        Mon, 09 Jan 2023 23:13:30 +0000
-Date:   Tue, 10 Jan 2023 07:13:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/urgent] BUILD SUCCESS
- 9a5418bc48babb313d2a62df29ebe21ce8c06c59
-Message-ID: <63bc9f92.r1QIRRShhp9rDCzI%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 9 Jan 2023 18:14:20 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5B53BE81
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 15:14:19 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id r130so8600827oih.2
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 15:14:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=OnhTMq60ZlyrTxCbX5UG9A3CalsAR+Z2mhuSowyGVrA=;
+        b=F4qYwAwEjJiKT0OgPQ7GjcVMsy86D4X2IR+ZQ9RudT8dgmunwrxt4mocX1fBYQBH8y
+         GyRdPc29B8gSXqOjYXvsqnYufKLv/k3klNGBDr1HlXdeQg407nQAxDM3UtuFkYgosy2C
+         +8Kal/c7ehflkCgmn5tQvys0CYu8zFPybxuaVcd0nWHnY0zRwkpGsoTQQs+AmOKLToeT
+         NOh5Cm1o4aghPKZAWhhkghINz8EMONBboewkqsjn1doL9FOYr598W5VB7bjg3zQUufa9
+         xqqaSgfU/fqLx2vIFbxmB++PVpm3W2GC6hHw2JAweVB/KCdfnqRmut3bgerY0eYAxbRm
+         ZRaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OnhTMq60ZlyrTxCbX5UG9A3CalsAR+Z2mhuSowyGVrA=;
+        b=DaIn5J+HhsYm3kMIgsfnRoIYvrHcYBglnrbR9Kk0W4zyD0YxIOWTYJI3i3TRMb3S7r
+         6hctrKllmoHJL1CVE0BThR99tRxBmNP82aTR02yV3lYIL9no83746iD4tqy39LXZ1a6Q
+         OyyF+pQTOLNiDrNKIay75V9nwqlPWobEfJROGvjklVPLd9GDI8qRCFeTBmxiVZDqILRz
+         WuYeKb+wMzwFqnt5fD1iVQn1Pu88RuwbeyGMSH7jolh5eBrXmPU/zgLUG8QOkGa/c3OI
+         TiU9GJhZ29ZtHGL7LlH0B1KpidaG3m6rqAMmtZUMorW4a3dfDzHY2l2Os9ZhaXJKEXM2
+         8UpQ==
+X-Gm-Message-State: AFqh2kqIVyC1ycLCzas6Q9442bMIOGtG7tuQ5UdRuVNGTQ4sN6rLXCrH
+        lXga171syxWVG43/LTdccu6TfOhThfU=
+X-Google-Smtp-Source: AMrXdXutmGsgmSr6/qb/dOTYWdXv/XXym7ZoJZBFf4p1X0ltkQvWCd+WYoM4WCKkTNQA2eNv8UjmpA==
+X-Received: by 2002:a05:6808:178a:b0:363:b41b:eedd with SMTP id bg10-20020a056808178a00b00363b41beeddmr19520924oib.20.1673306058926;
+        Mon, 09 Jan 2023 15:14:18 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t13-20020a9d774d000000b00670523bf1cfsm5272071otl.47.2023.01.09.15.14.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 15:14:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2128d543-33aa-b32d-68f6-5d3edad6cb47@roeck-us.net>
+Date:   Mon, 9 Jan 2023 15:14:16 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: Linux 6.2-rc3
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <kees@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAHk-=wjwrqFcC9-KkfboqATYwLfJHi_8Z5mTrJh=nf8KT_SjUA@mail.gmail.com>
+ <20230109174742.GA1191249@roeck-us.net>
+ <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/urgent
-branch HEAD: 9a5418bc48babb313d2a62df29ebe21ce8c06c59  sched/core: Use kfree_rcu() in do_set_cpus_allowed()
+On 1/9/23 14:18, Linus Torvalds wrote:
+> On Mon, Jan 9, 2023 at 11:47 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> fs/f2fs/inline.c: In function 'f2fs_move_inline_dirents':
+>> include/linux/fortify-string.h:59:33: error: '__builtin_memset' pointer overflow between offset [28, 898293814] and size [-898293787, -1] [-Werror=array-bounds]
+> 
+> Ok, I guess we'll have to disable this gcc warning for this version
+> again. I don't think anybody figured out why it happens. We had
+> several people look at it (Kees, Vlastimil, Jaegeuk) and I think
+> everybody ended up going "tis looks like a compiler thing".
+> 
+> Does anybody remember - what was the compiler version again and what
+> do we need to disable?
+> 
 
-elapsed time: 725m
+I currently run my build tests with gcc 11.3. There is "config CC_NO_ARRAY_BOUNDS"
+which disables it for gcc 12.
 
-configs tested: 108
-configs skipped: 2
+Guenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-x86_64                            allnoconfig
-x86_64                              defconfig
-sh                               allmodconfig
-x86_64                           allyesconfig
-mips                             allyesconfig
-x86_64                               rhel-8.3
-ia64                             allmodconfig
-arm                                 defconfig
-arc                                 defconfig
-s390                             allmodconfig
-i386                                defconfig
-x86_64                    rhel-8.3-kselftests
-alpha                               defconfig
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-bpf
-s390                                defconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-powerpc                          allmodconfig
-arm64                            allyesconfig
-m68k                             allyesconfig
-i386                 randconfig-a011-20230109
-i386                 randconfig-a013-20230109
-m68k                             allmodconfig
-s390                             allyesconfig
-arm                              allyesconfig
-i386                 randconfig-a012-20230109
-x86_64               randconfig-a011-20230109
-x86_64               randconfig-a012-20230109
-arc                              allyesconfig
-i386                          randconfig-a001
-x86_64               randconfig-a014-20230109
-alpha                            allyesconfig
-x86_64               randconfig-a013-20230109
-i386                 randconfig-a014-20230109
-i386                 randconfig-a016-20230109
-i386                 randconfig-a015-20230109
-x86_64               randconfig-a016-20230109
-i386                          randconfig-a003
-x86_64               randconfig-a015-20230109
-i386                          randconfig-a005
-riscv                randconfig-r042-20230109
-s390                 randconfig-r044-20230109
-arm                  randconfig-r046-20230108
-i386                             allyesconfig
-arc                  randconfig-r043-20230108
-arc                  randconfig-r043-20230109
-sh                         apsh4a3a_defconfig
-powerpc                   motionpro_defconfig
-arc                     haps_hs_smp_defconfig
-powerpc                      makalu_defconfig
-powerpc                      mgcoge_defconfig
-arm64                            alldefconfig
-mips                         cobalt_defconfig
-mips                  maltasmvp_eva_defconfig
-i386                          randconfig-c001
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-m68k                          hp300_defconfig
-riscv             nommu_k210_sdcard_defconfig
-sh                         microdev_defconfig
-m68k                        stmark2_defconfig
-arm                             pxa_defconfig
-arc                           tb10x_defconfig
-arm                              allmodconfig
-arm                       multi_v4t_defconfig
-arc                    vdk_hs38_smp_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-
-clang tested configs:
-x86_64                          rhel-8.3-rust
-hexagon              randconfig-r045-20230109
-arm                  randconfig-r046-20230109
-hexagon              randconfig-r041-20230108
-i386                          randconfig-a002
-x86_64               randconfig-a003-20230109
-x86_64               randconfig-a002-20230109
-hexagon              randconfig-r041-20230109
-x86_64               randconfig-a004-20230109
-x86_64               randconfig-a001-20230109
-hexagon              randconfig-r045-20230108
-i386                          randconfig-a006
-s390                 randconfig-r044-20230108
-i386                          randconfig-a004
-x86_64               randconfig-a005-20230109
-x86_64               randconfig-a006-20230109
-riscv                randconfig-r042-20230108
-x86_64                        randconfig-k001
-i386                 randconfig-a005-20230109
-i386                 randconfig-a006-20230109
-i386                 randconfig-a001-20230109
-i386                 randconfig-a002-20230109
-i386                 randconfig-a003-20230109
-i386                 randconfig-a004-20230109
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-mips                     loongson1c_defconfig
-mips                      maltaaprp_defconfig
-powerpc               mpc834x_itxgp_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
