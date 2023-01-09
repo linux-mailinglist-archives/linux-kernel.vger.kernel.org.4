@@ -2,195 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0066629C7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9788D6629CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237095AbjAIPW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:22:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        id S236394AbjAIPW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:22:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237062AbjAIPWK (ORCPT
+        with ESMTP id S237060AbjAIPW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:22:10 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738051C12F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:21:11 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-4b718cab0e4so117004357b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 07:21:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5aVQsmC4CXYrfVLoZKxVbVq0RUkZDRsh5TxThuMCMmU=;
-        b=k9tk/TmHq0DhEW6Qi9fIk4cVJeag11W69L7khvrCZJ1Q2diWkv9jOy/aCGFsvPZtqp
-         waK2jBW0khYv0eb8tLpUJlMkD+iRaz8kI3US8UyGyvTBNO+YbF7BGzwT3TVMA+Htt36m
-         48rVVqvcryLQGi/BKwkRrX/+Mgyrqe06eGYD8FtCh/kBei8AqhODpoyaNwDnETAtoUga
-         PinmJmWCf9bjoweT1hXszTZ2/rx2w0U2inuOD3i9MB1gMJz3TXs3P0LLxU7UesDw2xp0
-         xMT5O6cVrl2JjRZo9d95sJtn4huV2LR9D8lBVCQDHf547PzTIQCYCueY7U/Qxa4lQ47d
-         dAxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5aVQsmC4CXYrfVLoZKxVbVq0RUkZDRsh5TxThuMCMmU=;
-        b=vxL7hr9MYYxxNkTMdJzrNJAeJ+emEp8NsRMTEobRF0TPYiXUUfVOD9iDSYwVkYNcif
-         iX0t1TxKYNDUDiZ75WD+oUQdo8w4MLH5qQZjEbjJmTpplyGf788+qv109/q3Lz6OK/H5
-         ORwOaWyWIEhgmI9QKR1xmqNo+ycicUwC4r6QVw3pjbaSPK2dnGpWopwUIeH3SBUIrhu0
-         cHSSS0uhPuPai/Vilofs3Jdlx0dRCO8v6DtYH5bisCGZCePLJ/QhCHyIQEvu620OlrrY
-         5EicYZ4/teX3zG5hOV8gTmOsxnlpywUe80pbWzjXRgMBJWllTJzW/e3PqKrkYxgclGsp
-         ncRg==
-X-Gm-Message-State: AFqh2kqWtX7TRT8ECMv5/bkfXdfVArwibnTyGI5HshqleOY38qrlyAbZ
-        kqm3z/nX/v9PVXb/RrKI+qJB4ivigL2WZfdswSvqmQ==
-X-Google-Smtp-Source: AMrXdXtCAaK/W4YJAVUXbfQF5hrS5JdhIlhoJOGJiMzb4BqXysNXeH/yn46e2nop+FonHtZvP038uB/VnpPV8dv0VHI=
-X-Received: by 2002:a81:6d85:0:b0:3f2:e8b7:a6ec with SMTP id
- i127-20020a816d85000000b003f2e8b7a6ecmr862462ywc.332.1673277670464; Mon, 09
- Jan 2023 07:21:10 -0800 (PST)
+        Mon, 9 Jan 2023 10:22:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E75937527;
+        Mon,  9 Jan 2023 07:22:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4F1061196;
+        Mon,  9 Jan 2023 15:22:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40427C433EF;
+        Mon,  9 Jan 2023 15:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673277727;
+        bh=HH3u76bj1eMiMDOuqUoDInmJot4wY57kASPDBAy7ekQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=I7yoMCVmpEUf5HcEGNkT9P+aQ1vr0b6SYK5CpGbniaqfkEFXiaRzNdmsfkHWPbgsG
+         dUw7AlUvklvRyN7TYHClnTrRX36Cg69COPnZl6JNLZvUFmAHfgVHAux080xdaX4FcJ
+         X3pUEkY7dycmzZuepi73EmDFw+w3kBbxATO6kKEtYTRPsx3VyGLDN0Tgw6zlVYLbKv
+         GFqpbpvivASMn8AgZvB/Rl8jTsANiw6XYbd+woZMJwKkiDE/sg40QkL1lS+OU+opTb
+         Tf4IbVcpCIJDxPBMRDbLDKJOSW9iTSOdazHmkBrFWE9kDS/EfwWAOfJyz3CCArrlyX
+         SuGB+WPGORYaA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id CB5435C090A; Mon,  9 Jan 2023 07:22:06 -0800 (PST)
+Date:   Mon, 9 Jan 2023 07:22:06 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Safe access to rcu_node structure's->exp_tasks
+Message-ID: <20230109152206.GP4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221224052553.263199-1-qiang1.zhang@intel.com>
+ <20230106034146.GM4028633@paulmck-ThinkPad-P17-Gen-1>
+ <Y7wUvZ/kVmpxvm14@lothringen>
 MIME-Version: 1.0
-References: <20230108025545.338-1-cuiyunhui@bytedance.com> <CANn89i+W__5-jDUdM=_97jzQy9Wq+n9KBEuOGjUi=Fxe_ntqbg@mail.gmail.com>
- <CAEEQ3wnoKqN+uTmMmUDJ9pp+YVaLmKnv42RApzPbNOGg6CRmnA@mail.gmail.com>
- <CANn89iKY5gOC97NobXkhYv6d9ik=ks5ZEwVe=6H-VTwux=BwGQ@mail.gmail.com> <20230109100833.03f4d4b1@gandalf.local.home>
-In-Reply-To: <20230109100833.03f4d4b1@gandalf.local.home>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 9 Jan 2023 16:20:58 +0100
-Message-ID: <CANn89iJwBkCsuNH9vih30xy_Ur6+0dtbfs8wmsA4s7r8=J3cBw@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v4] sock: add tracepoint for send recv length
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>,
-        mhiramat@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, kuniyu@amazon.com, xiyou.wangcong@gmail.com,
-        duanxiongchun@bytedance.com, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7wUvZ/kVmpxvm14@lothringen>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 4:08 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Mon, 9 Jan 2023 15:54:38 +0100
-> Eric Dumazet <edumazet@google.com> wrote:
->
-> > > static inline int sock_sendmsg_nosec(struct socket *sock, struct msghdr *msg)
-> > > {
-> > >         int ret = INDIRECT_CALL_INET(sock->ops->sendmsg, inet6_sendmsg,
-> > >                                      inet_sendmsg, sock, msg,
-> > >                                      msg_data_left(msg));
-> > >         BUG_ON(ret == -EIOCBQUEUED);
-> > >
-> > >         if (trace_sock_send_length_enabled()) {
-> >
-> > A barrier() is needed here, with the current state of affairs.
-> >
-> > IMO, ftrace/x86 experts should take care of this generic issue ?
->
-> trace_*_enabled() is a static_branch() (aka. jump label).
->
-> It's a nop, where the if block is in the out-of-line code and skipped. When
-> the tracepoint is enabled, it gets turned into a jump to the if block
-> (which returns back to this location).
->
+On Mon, Jan 09, 2023 at 02:21:01PM +0100, Frederic Weisbecker wrote:
+> On Thu, Jan 05, 2023 at 07:41:46PM -0800, Paul E. McKenney wrote:
+> > On Sat, Dec 24, 2022 at 01:25:53PM +0800, Zqiang wrote:
+> > > For kernels built with CONFIG_PREEMPT_RCU=y, the following scenario
+> > > can result system oops.
+> > > 
+> > >            CPU1                                           CPU2
+> > > rcu_preempt_deferred_qs_irqrestore                rcu_print_task_exp_stall
+> > >   if (special.b.blocked)                            READ_ONCE(rnp->exp_tasks) != NULL
+> > >     raw_spin_lock_rcu_node
+> > >     np = rcu_next_node_entry(t, rnp)
+> > >     if (&t->rcu_node_entry == rnp->exp_tasks)
+> > >       WRITE_ONCE(rnp->exp_tasks, np)
+> > >       ....
+> > >       raw_spin_unlock_irqrestore_rcu_node
+> > >                                                     raw_spin_lock_irqsave_rcu_node
+> > >                                                     t = list_entry(rnp->exp_tasks->prev,
+> > >                                                         struct task_struct, rcu_node_entry)
+> > >                                                     (if rnp->exp_tasks is NULL
+> > >                                                        will trigger oops)
+> > > 
+> > > This problem is that CPU2 accesses rcu_node structure's->exp_tasks
+> > > without holding the rcu_node structure's ->lock and CPU2 did not
+> > > observe CPU1's change to rcu_node structure's->exp_tasks in time,
+> > > if rcu_node structure's->exp_tasks is set null pointer by CPU1, after
+> > > that CPU2 accesses members of rcu_node structure's->exp_tasks will
+> > > trigger oops.
+> > > 
+> > > This commit therefore allows rcu_node structure's->exp_tasks to be
+> > > accessed while holding rcu_node structure's ->lock.
+> > > 
+> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > 
+> > Apologies for the delay and thank you for the reminder!
+> > 
+> > Please check the wordsmithed version below, which I have queued.
+> > 
+> > 						Thanx, Paul
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > commit 389b0eafd72829fd63548f7ff4e8d6ac90fa1f98
+> > Author: Zqiang <qiang1.zhang@intel.com>
+> > Date:   Sat Dec 24 13:25:53 2022 +0800
+> > 
+> >     rcu: Protect rcu_print_task_exp_stall() ->exp_tasks access
+> >     
+> >     For kernels built with CONFIG_PREEMPT_RCU=y, the following scenario can
+> >     result in a NULL-pointer dereference:
+> >     
+> >                CPU1                                           CPU2
+> >     rcu_preempt_deferred_qs_irqrestore                rcu_print_task_exp_stall
+> >       if (special.b.blocked)                            READ_ONCE(rnp->exp_tasks) != NULL
+> >         raw_spin_lock_rcu_node
+> >         np = rcu_next_node_entry(t, rnp)
+> >         if (&t->rcu_node_entry == rnp->exp_tasks)
+> >           WRITE_ONCE(rnp->exp_tasks, np)
+> >           ....
+> >           raw_spin_unlock_irqrestore_rcu_node
+> >                                                         raw_spin_lock_irqsave_rcu_node
+> >                                                         t = list_entry(rnp->exp_tasks->prev,
+> >                                                             struct task_struct, rcu_node_entry)
+> >                                                         (if rnp->exp_tasks is NULL, this
+> >                                                            will dereference a NULL pointer)
+> >     
+> >     The problem is that CPU2 accesses the rcu_node structure's->exp_tasks
+> >     field without holding the rcu_node structure's ->lock and CPU2 did
+> >     not observe CPU1's change to rcu_node structure's ->exp_tasks in time.
+> >     Therefore, if CPU1 sets rcu_node structure's->exp_tasks pointer to NULL,
+> >     then CPU2 might dereference that NULL pointer.
+> >     
+> >     This commit therefore holds the rcu_node structure's ->lock while
+> >     accessing that structure's->exp_tasks field.
+> >     
+> >     Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > 
+> > diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> > index 7cc4856da0817..902e7c8709c7e 100644
+> > --- a/kernel/rcu/tree_exp.h
+> > +++ b/kernel/rcu/tree_exp.h
+> > @@ -803,9 +803,11 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
+> >  	int ndetected = 0;
+> >  	struct task_struct *t;
+> >  
+> > -	if (!READ_ONCE(rnp->exp_tasks))
+> > -		return 0;
+> >  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> > +	if (!READ_ONCE(rnp->exp_tasks)) {
+> 
+> Does it have to be READ_ONCE then?
 
-This is not a nop, as shown in the generated assembly, I copied in
-this thread earlier.
+Good point, that should not be necessary.  I will drop the READ_ONCE on
+my next rebase.  (Unless someone tells me there is something subtle that
+I am missing.)
 
-Compiler does all sorts of things before the point the static branch
-is looked at.
+							Thanx, Paul
 
-Let's add the extract again with <<*>> tags on added instructions/dereferences.
-
-
-sock_recvmsg_nosec:
-        pushq   %r12    #
-        movl    %edx, %r12d     # tmp123, flags
-        pushq   %rbp    #
-# net/socket.c:999:     int ret =
-INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
-        movl    %r12d, %ecx     # flags,
-# net/socket.c:998: {
-        movq    %rdi, %rbp      # tmp121, sock
-        pushq   %rbx    #
-# net/socket.c:999:     int ret =
-INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
-        movq    32(%rdi), %rax  # sock_19(D)->ops, sock_19(D)->ops
-# ./include/linux/uio.h:270:    return i->count;
-        movq    32(%rsi), %rdx  # MEM[(const struct iov_iter
-*)msg_20(D) + 16B].count, pretmp_48
-# net/socket.c:999:     int ret =
-INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
-        movq    144(%rax), %rax # _1->recvmsg, _2
-        cmpq    $inet6_recvmsg, %rax    #, _2
-        jne     .L107   #,
-        call    inet6_recvmsg   #
- <<*>>       movl    %eax, %ebx      # tmp124, <retval>
-.L108:
-# net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
-  <<*>>      xorl    %r8d, %r8d      # tmp127
-   <<*>>     testl   %ebx, %ebx      # <retval>
-# net/socket.c:1004:                           sock->sk->sk_protocol,
- <<*>>       movq    24(%rbp), %rsi  # sock_19(D)->sk, _10
-# net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
- <<*>>       cmovle  %ebx, %r8d      # <retval>,, tmp119
-  <<*>>      testb   $2, %r12b       #, flags
-# net/socket.c:1004:                           sock->sk->sk_protocol,
-  <<*>>      movzwl  516(%rsi), %ecx # _10->sk_protocol,
-# net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
-  <<*>>      movzwl  16(%rsi), %edx  # _10->__sk_common.skc_family,
-# net/socket.c:1003:    trace_sock_recv_length(sock->sk, sock->sk->sk_family,
-  <<*>>      cmove   %ebx, %r8d      # tmp119,, <retval>, iftmp.54_16
-# ./arch/x86/include/asm/jump_label.h:27:       asm_volatile_goto("1:"
-#APP
-# 27 "./arch/x86/include/asm/jump_label.h" 1
-        1:jmp .L111 # objtool NOPs this         #
-        .pushsection __jump_table,  "aw"
-         .balign 8
-        .long 1b - .
-        .long .L111 - .         #
-         .quad __tracepoint_sock_recv_length+8 + 2 - .  #,
-        .popsection
-
-# 0 "" 2
-#NO_APP
-.L106:
-# net/socket.c:1008: }
- <<*>>       movl    %ebx, %eax      # <retval>,
-        popq    %rbx    #
-        popq    %rbp    #
-        popq    %r12    #
-        ret
-.L111:
-# ./include/trace/events/sock.h:308: DEFINE_EVENT(sock_msg_length,
-sock_recv_length,
-
-> That is, when the tracepoint in the block gets enabled so does the above
-> branch. Sure, there could be a race between the two being enabled, but I
-> don't see any issue if there is. But the process to modify the jump labels,
-> does a bunch of synchronization between the CPUs.
->
-> What barrier are you expecting?
-
-Something preventing the compiler being 'smart', forcing expression evaluations
-before TP_fast_assign() is eventually called.
-
-
-
->
-> -- Steve
->
-> >
-> >
-> >
-> > >                 call_trace_sock_send_length(sock->sk, sock->sk->sk_family,
-> > >                                             sock->sk->sk_protocol, ret, 0);
-> > >         }
-> > >         return ret;
-> > > }
-> > >
-> > > What do you think?
+> Thanks.
+> 
+> > +		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> > +		return 0;
+> > +	}
+> >  	t = list_entry(rnp->exp_tasks->prev,
+> >  		       struct task_struct, rcu_node_entry);
+> >  	list_for_each_entry_continue(t, &rnp->blkd_tasks, rcu_node_entry) {
