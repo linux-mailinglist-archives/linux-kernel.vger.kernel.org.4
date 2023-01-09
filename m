@@ -2,93 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8A6663168
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A5A66314C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 21:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbjAIUYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 15:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        id S237503AbjAIUTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 15:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjAIUY2 (ORCPT
+        with ESMTP id S237817AbjAIUS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 15:24:28 -0500
-X-Greylist: delayed 306 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 Jan 2023 12:24:24 PST
-Received: from mout.web.de (mout.web.de [212.227.15.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AE6E3A;
-        Mon,  9 Jan 2023 12:24:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-        t=1673295862; bh=OQa6MVATnom40EiZAoiknanw3c0hK9XWFEEbAcwYCZ4=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=c6a3JbeL5mFoQSEMGZmxQii7p+K/dfXytNZJg0uSuvfOrjSBu+Oaj1SaVUNYot+5+
-         A89ZCYdBlADM7WzF2TBziP+7NAFFjbLVeWXelZD8L4eAfXkboMvM06J+TZU0VoGyRA
-         oxCpLrKraBnZFFLHAL0V2aG/R/djcTOT5Yua9ZjX6UeLLem1diadA3inUC3mywujOE
-         7Pnza0mNHvMy4OGz2mvkr0tySmvIqnwVFc8VAPaqGR+E95k6aAB2fwwt6Dyvc9ASSa
-         J3Id2udIvWYbPX4Z80/QAWTzmJmRw4y4/8IYQCeQ4vHvvtWffX9AD0NOLbtPPTwANL
-         kv76yGbrssr9Q==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from artix.fritz.box ([88.72.104.165]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1M3V6E-1pFWZh16Wo-000qjM; Mon, 09
- Jan 2023 21:19:11 +0100
-From:   Lizzy Fleckenstein <eliasfleckenstein@web.de>
-To:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, ndesaulniers@google.com,
-        masahiroy@kernel.org
-Cc:     Lizzy Fleckenstein <eliasfleckenstein@web.de>
-Subject: [PATCH] kconfig: fix typo (usafe -> unsafe)
-Date:   Mon,  9 Jan 2023 21:18:37 +0100
-Message-Id: <20230109201837.23873-1-eliasfleckenstein@web.de>
-X-Mailer: git-send-email 2.39.0
+        Mon, 9 Jan 2023 15:18:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF35F34D67;
+        Mon,  9 Jan 2023 12:18:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29799B80FA3;
+        Mon,  9 Jan 2023 20:18:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A24C433F0;
+        Mon,  9 Jan 2023 20:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673295533;
+        bh=fKmzDa8xWu0AAMUhY9kDg0odlBMun7WpnzbGtGHCOBE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oDX2C9i+FDRvpquD0Tm76+Ztd1AH/yS/g3Qg7WHgxgYL29Ye/phnNYpv6xEpWwKQd
+         JFkLncU8U/jqrN9TiunGb0Sx7rtJBsQjfJUv6/3OJh1oOagbURdbzilqMRkXx05cGT
+         24r5PMAvpKBzBIKcNP6ycQLhO+AC7wPoOldLkZH/s2TmcZuCUy+nl6bew7FhvtUsP7
+         wMo43JkxcraKxsM/4ISzDPaCz++NYL2cfLYyD2xiLF8bmRIjpXGDfMcvlSDIrCmHAp
+         vIGicqV03wqm+0XB+dtNuM4qoJ+/jdj78Mp4Zn8Cn7qKSmPtFVNk0TptynUg3Awio7
+         /ZLLBqlUUNrHg==
+Received: by mail-ua1-f54.google.com with SMTP id l13so2312166uai.8;
+        Mon, 09 Jan 2023 12:18:53 -0800 (PST)
+X-Gm-Message-State: AFqh2kqyPZU5RJ8uAhWKXUAQRLKBUX0Z0lp7Ux2ppz0OtEo+T27iXfdn
+        Aq9x80pbhY3GKADzSWnY6h36QMlAc8ct6n9+Ng==
+X-Google-Smtp-Source: AMrXdXs6BTZ+8D74o0hJQvodxrknKckEnyT3FIAUEDSl4Nm2U6u2mch8LVVAz/MbaiofQWil2sRw59UL0KIBA4Gu1cs=
+X-Received: by 2002:a05:6130:2ac:b0:573:d2a:e6cf with SMTP id
+ q44-20020a05613002ac00b005730d2ae6cfmr3918699uac.36.1673295532626; Mon, 09
+ Jan 2023 12:18:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:aF+26sjVlVUZ8XhiCRy+CXUFd65Itd5PmHE7l1v0s6WIAghh2vl
- H4vppew4ZPG1Bz3Pt3ZUGgCsfgcxvHcBR/kJEIO5J5Z1kjRsw9+CawSdG7qGTOdRGOhMOzr
- xKhQ0F0KahjQLotDGuyd9x1MmrrCdzAzuWqaNPQn53rRnVYhDi61OcFN1NXD7QANZkXiZsC
- uj9SsBW6Y4tppatc8kKmw==
-UI-OutboundReport: notjunk:1;M01:P0:RPCqNCnWrrU=;y58UeZdA7KxozXY1hSgDt4Lcu9w
- wAeZ7pZC2kUPsAGb6qljCgJlWrdPCW/Gn/Ic6djBwe8rOcL4o6zaHiDJrILmFQ8fYNogFGdFo
- V8F4lShdlobbkfY83hBkOvPrl4Ykg17oL4FVXh+teqE1jbi+serHW3MkBA+K5xCfuOtejzjRn
- qlj5BNRtnm+tLnVuULKc2oNOlz7WVA1fU5E0Q95HHnAh1U9KmTW0Z0K6waffQnlo7iOv/iJDU
- AStWb5Hc38R3Z3D9wrWIGJcmDVy0ZRAyZ77XkLWr67hu0EbH5HI0gYCr0AYixxrYPfxq7qh3t
- 4yBcabrXTvX+4FnrvzvSTHirZ/BPS0/xOGFNz4zFc4KJCyz2murFLS2liIhwz193uVyMqtRFt
- HwNkVCzrcubRACQFe+FMzUVskvdtgOYGXTKD7u5gq2WK6aCyXoV9seba+wHqy6RyXqCgF5lyt
- ZQnybW3nbmWbfGD2DWBGtReDVyIwDeF+2s/U/P/GwoKqBtKve4RSi2y8pY8Oxel6IC1ovJtr4
- uzwOXipcq9G6sbW8GhW5O3UrRVVCwkfDk87vuV9RVzTI2xP29HA2qPaM5jrnIe79pw0vgwuVj
- p46TIqSKV0nzAyBE5u7RJzASTA5eNulO66UNICBahoJ5kqgdv/jTJoRtK261LQdy2GwoL8aB3
- IzgQpG7qCb9OZQn+XTZ53C705uW4nW18fTeiZMb8yX2MAwhaHbbGNMJz6qF46XJXJ7fr7gW2v
- 2w+JNVZlpjmZLJxBYRYA+S3Qq0UxWTQe7xMB5wetCVCDdWgUjxGEse+zMIWPBwQGo0+g2kj08
- lBi7h409Gi3N+DYCV5Np+Cv3x6VX4amw+14TmNwE+i93yWk2JkdZtW0aqnRr7a3rmXCdzWVTa
- JYD7OLFJJ3J9hlsdWk1+ttQwf1VfuX7UBWc0vO3APyBbnnXuuEkqxgsbBRHkCU4Pfc+1EXzx+
- xwYhbgEHhqae5G+Uv8twMKv43NE=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
+ <20220825-arm-spe-v8-7-v4-3-327f860daf28@kernel.org> <Y7xsDXFlNjiQ1AIe@sirena.org.uk>
+In-Reply-To: <Y7xsDXFlNjiQ1AIe@sirena.org.uk>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 9 Jan 2023 14:18:41 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLFSMzmTSAjtWWotzFy=JLr+rjim4F_X5thWK9ji6z22g@mail.gmail.com>
+Message-ID: <CAL_JsqLFSMzmTSAjtWWotzFy=JLr+rjim4F_X5thWK9ji6z22g@mail.gmail.com>
+Subject: Re: [PATCH v4 3/8] arm64/sysreg: Convert SPE registers to automatic generation
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        James Clark <james.clark@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the help text for the PRINTK_SAFE_LOG_BUF_SHIFT setting.
+On Mon, Jan 9, 2023 at 1:33 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Mon, Jan 09, 2023 at 01:26:19PM -0600, Rob Herring wrote:
+> > Convert all the SPE register defines to automatic generation. No
+> > functional changes.
+> >
+> > New registers and fields for SPEv1.2 are added with the conversion.
+> >
+> > Some of the PMBSR MSS field defines are kept as the automatic generation
+> > has no way to create multiple names for the same register bits. The
+> > meaning of the MSS field depends on other bits.
+> >
+> > Tested-by: James Clark <james.clark@arm.com>
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> > v4:
+> >  - Rebase on v6.2-rc1
+> > v3:
+> >  - Make some fields enums and add some missing fields
+>
+> What changed to invalidate my Reviewed-by?
+>
+>    https://lore.kernel.org/all/Y2kgC9QlBwvXTLe6@sirena.org.uk/
 
-Signed-off-by: Lizzy Fleckenstein <eliasfleckenstein@web.de>
-=2D--
- init/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ugg, sorry. Nothing changed, I just forgot to add it.
 
-diff --git a/init/Kconfig b/init/Kconfig
-index 7e5c3ddc341d..57c8d224ea4c 100644
-=2D-- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -776,7 +776,7 @@ config PRINTK_SAFE_LOG_BUF_SHIFT
- 	depends on PRINTK
- 	help
- 	  Select the size of an alternate printk per-CPU buffer where messages
--	  printed from usafe contexts are temporary stored. One example would
-+	  printed from unsafe contexts are temporary stored. One example would
- 	  be NMI messages, another one - printk recursion. The messages are
- 	  copied to the main log buffer in a safe context to avoid a deadlock.
- 	  The value defines the size as a power of 2.
-=2D-
-2.39.0
-
+Rob
