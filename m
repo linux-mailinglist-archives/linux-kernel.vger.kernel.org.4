@@ -2,148 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CF66625E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C756625E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 13:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234203AbjAIMwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 07:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        id S233264AbjAIMwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 07:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjAIMvx (ORCPT
+        with ESMTP id S233660AbjAIMw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 07:51:53 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D55B06;
-        Mon,  9 Jan 2023 04:51:51 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309BP0E7016670;
-        Mon, 9 Jan 2023 12:51:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=OacVvB18McZxLNMXZ4NRfCDUji0la1y9ALJrNWFwFLE=;
- b=h51lh38MrlTHkSBeIFmNSJfQxPpDxyFPlQwMWOCQ5yJSDP5XbETnwGe29+5J11EphkTU
- RkZ/QMuFCbJe1fFerXbN7ocRbeLHROZY7eEFP+nfJPhSu4LJPXjqjf9IVVOKXgeNVVYY
- rmkhud7aSuiI8Ta32ZluwdlZGimZjwv3Eo4WK7ZuJdCeoVViWxQ2WuXkfHf6f4sM0pyc
- FcYd2u2o9N3yCy18Vxb8jPlBfSZ6wON05TZHIYF/Mbj3Wi+Nk6bNNfyeUd3M8/1bQoIC
- vKuCBb3k7ITGIMoF6X62fhFA9//dUeqbUNYA0tjna60G8g280eW180/Ef52iPQn03BHL Ww== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6jdbsm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 12:51:50 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 309Bi1tx029590;
-        Mon, 9 Jan 2023 12:51:42 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6jdbs7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 12:51:42 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3098Vw80015062;
-        Mon, 9 Jan 2023 12:51:39 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3my00fjybq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 12:51:39 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 309CpaVX43581774
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Jan 2023 12:51:36 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 15E6A20040;
-        Mon,  9 Jan 2023 12:51:36 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C86BB20049;
-        Mon,  9 Jan 2023 12:51:35 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  9 Jan 2023 12:51:35 +0000 (GMT)
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: s390: interrupt: use READ_ONCE() before cmpxchg()
-Date:   Mon,  9 Jan 2023 13:51:35 +0100
-Message-Id: <20230109125135.393784-1-hca@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 9 Jan 2023 07:52:26 -0500
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B44CB41;
+        Mon,  9 Jan 2023 04:52:26 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id i20so7619361qtw.9;
+        Mon, 09 Jan 2023 04:52:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k3NkQ2MoGKot6GyanlF01tIJyl/D3I3FmiwM87+ZRR0=;
+        b=qt0kXDAY6EZfmz2ZMrHCYCfwwy5OLWBLtKVQ4zCBW2WTE4SXsup8uswTK04SiCzj6e
+         qNmT70nhsJCeZSsbw+3c1QWbTiBF7R1t4amlhaq5L5ZxpBI1mNMuGZlJMohz0eqk9JJI
+         7OnouTce9H7hfVZPql91zAjNkP2Qzs2fdGsyXNT39MDS3Jwx/juDqYPRnyY3F++58J1G
+         Eqf+nVxX+Y++yXn5Mas7IB2z8I0FSUWrp8GCZgEPPFd0KPOy+jiJSv7kqh0H/fqBTvTG
+         wCB7tVw54iSmKcRmx/jmRNtn0UTKRMZBl9a4DJcK2nGlFm3Kv/VqdFP+a7rnIjC/uKpH
+         g7iA==
+X-Gm-Message-State: AFqh2krvH3xXUmiK/pUTd48WjBaCumHyMwS2T53OpWJmNEbOX3QN2R6h
+        aTIwnqoGzrJz1C4PqqhNEnfv+2DtFRMFuA==
+X-Google-Smtp-Source: AMrXdXuyCnvavHh1UZDI6wcy5FdKryQlGuC+Cjj6bJoqbHcaTN5kadVo4uNlRKdNurXUYeCwTpKeVw==
+X-Received: by 2002:ac8:41d5:0:b0:3ac:b93d:84b6 with SMTP id o21-20020ac841d5000000b003acb93d84b6mr6528446qtm.4.1673268745025;
+        Mon, 09 Jan 2023 04:52:25 -0800 (PST)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id y4-20020ac87c84000000b0039a55f78792sm4509544qtv.89.2023.01.09.04.52.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 04:52:24 -0800 (PST)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-4c7d35b37e2so54760177b3.2;
+        Mon, 09 Jan 2023 04:52:23 -0800 (PST)
+X-Received: by 2002:a81:17d5:0:b0:480:fa10:459e with SMTP id
+ 204-20020a8117d5000000b00480fa10459emr3677548ywx.283.1673268743712; Mon, 09
+ Jan 2023 04:52:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: AzKIpn3LWjZZNpfB9gis_V1SVAfvtPpx
-X-Proofpoint-GUID: -aFgml4fVU3jhLtYfr56yl_d8uZadMCI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_06,2023-01-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=712 phishscore=0 adultscore=0 mlxscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301090090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221117114907.138583-1-fabrizio.castro.jz@renesas.com> <20221117114907.138583-2-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221117114907.138583-2-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 9 Jan 2023 13:52:11 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUTjem_dYf1ycbGc6TGz28Jn7m_iSUmFJvOCWYcyCeaPg@mail.gmail.com>
+Message-ID: <CAMuHMdUTjem_dYf1ycbGc6TGz28Jn7m_iSUmFJvOCWYcyCeaPg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] watchdog: rzg2l_wdt: Issue a reset before we put the
+ PM clocks
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use READ_ONCE() before cmpxchg() to prevent that the compiler generates
-code that fetches the to be compared old value several times from memory.
+On Thu, Nov 17, 2022 at 12:49 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> On RZ/Five SoC it was observed that setting timeout (to say 1 sec) wouldn't
+> reset the system.
+>
+> The procedure described in the HW manual (Procedure for Activating Modules)
+> for activating the target module states we need to start supply of the
+> clock module before applying the reset signal. This patch makes sure we
+> follow the same procedure to clear the registers of the WDT module, fixing
+> the issues seen on RZ/Five SoC.
+>
+> While at it re-used rzg2l_wdt_stop() in rzg2l_wdt_set_timeout() as it has
+> the same function calls.
+>
+> Fixes: 4055ee81009e ("watchdog: rzg2l_wdt: Add set_timeout callback")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
----
- arch/s390/kvm/interrupt.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
-index 1dae78deddf2..a3bf1b6a7962 100644
---- a/arch/s390/kvm/interrupt.c
-+++ b/arch/s390/kvm/interrupt.c
-@@ -83,8 +83,9 @@ static int sca_inject_ext_call(struct kvm_vcpu *vcpu, int src_id)
- 		struct esca_block *sca = vcpu->kvm->arch.sca;
- 		union esca_sigp_ctrl *sigp_ctrl =
- 			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
--		union esca_sigp_ctrl new_val = {0}, old_val = *sigp_ctrl;
-+		union esca_sigp_ctrl new_val = {0};
- 
-+		old_val = READ_ONCE(*sigp_ctrl);
- 		new_val.scn = src_id;
- 		new_val.c = 1;
- 		old_val.c = 0;
-@@ -95,8 +96,9 @@ static int sca_inject_ext_call(struct kvm_vcpu *vcpu, int src_id)
- 		struct bsca_block *sca = vcpu->kvm->arch.sca;
- 		union bsca_sigp_ctrl *sigp_ctrl =
- 			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
--		union bsca_sigp_ctrl new_val = {0}, old_val = *sigp_ctrl;
-+		union bsca_sigp_ctrl new_val = {0};
- 
-+		old_val = READ_ONCE(*sigp_ctrl);
- 		new_val.scn = src_id;
- 		new_val.c = 1;
- 		old_val.c = 0;
-@@ -126,16 +128,18 @@ static void sca_clear_ext_call(struct kvm_vcpu *vcpu)
- 		struct esca_block *sca = vcpu->kvm->arch.sca;
- 		union esca_sigp_ctrl *sigp_ctrl =
- 			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
--		union esca_sigp_ctrl old = *sigp_ctrl;
-+		union esca_sigp_ctrl old;
- 
-+		old = READ_ONCE(*sigp_ctrl);
- 		expect = old.value;
- 		rc = cmpxchg(&sigp_ctrl->value, old.value, 0);
- 	} else {
- 		struct bsca_block *sca = vcpu->kvm->arch.sca;
- 		union bsca_sigp_ctrl *sigp_ctrl =
- 			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
--		union bsca_sigp_ctrl old = *sigp_ctrl;
-+		union bsca_sigp_ctrl old;
- 
-+		old = READ_ONCE(*sigp_ctrl);
- 		expect = old.value;
- 		rc = cmpxchg(&sigp_ctrl->value, old.value, 0);
- 	}
--- 
-2.34.1
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
