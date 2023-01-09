@@ -2,167 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665AB661E2A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 06:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BA7661E2C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 06:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbjAIFGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 00:06:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
+        id S234275AbjAIFJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 00:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbjAIFGk (ORCPT
+        with ESMTP id S233187AbjAIFJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 00:06:40 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7309B4B8
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 21:06:39 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3091KX6n016282;
-        Mon, 9 Jan 2023 05:05:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=sCmzyO/A+/VtN9phnvgN5fqL7RVQRlkbQx78TjSitUo=;
- b=YdiO4igTUpV0ohUun5PfTguo4zpEXvfi1D3pmz6D/xrNyD3VCxiJcu1AhyMbUdSKDawn
- 4CuZ59mCBOi4zwfRHS7LGC0FbMs/agXCKOvsaZzaPthFCCHA9kGANUiM9a7MhlOogqGJ
- tScfs4xGcmYKgf9VAfyXkqsT9FUEwNASfnFRGldKhjXp+0I+iGKdyglDireel8ZPvCt2
- dUTt63O0z4qJflaHU7nvxRmxaeOlwPHWhfrqPqIZd565EjFnIMqsGTUkwoyyfXyJ/usQ
- BYNj1ovfxYPUzqcJeSCA7t/nfnvBE0EMpRzqBH5mJspzaVUZMoxsZu7c/ZU/0mPK0y99 cw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6j4ge1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 05:05:56 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3094snke005857;
-        Mon, 9 Jan 2023 05:05:55 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myj6j4gd9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 05:05:55 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3084bCw1004282;
-        Mon, 9 Jan 2023 05:05:53 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3my0c69q0w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 05:05:52 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30955oeG45678886
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Jan 2023 05:05:50 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6D73620040;
-        Mon,  9 Jan 2023 05:05:50 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB7492004E;
-        Mon,  9 Jan 2023 05:05:46 +0000 (GMT)
-Received: from [9.43.40.56] (unknown [9.43.40.56])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  9 Jan 2023 05:05:46 +0000 (GMT)
-Message-ID: <09567e13-c5ed-d1b9-027c-9340fce6a0a8@linux.ibm.com>
-Date:   Mon, 9 Jan 2023 10:35:46 +0530
+        Mon, 9 Jan 2023 00:09:24 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D049FCE
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 21:09:21 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id u9so17362102ejo.0
+        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 21:09:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gQH0IE3u0wkmAklVZoiydI5Mo0drKV3a8FmyHE+njlo=;
+        b=PD4Cr6RmtBmVMqQ+6894VSyIbUZbeFHLeFo9RwkN1TMCAJG24tQV5DCcZgfGbqzo5i
+         nORiS6uAg/fxkPBTPz6C3iw1AThEjVSzkcmKxAZcdHGEvO/ekWN+H0w7w6KnYbiK0Wax
+         KdpReo4M+zKY8/v575NE68sHQT8u4rMK2ev8eJcfkIKoUcf7ghnHu2Krok7sv45fpNo8
+         d3gBK72Vrmj7ozt7KiXXcpz9SHeprPtkHpJDc4qMdgYWZsKXSHp+Ak9he/nmLSUUi9wJ
+         yVF/ro9+aJ/+81zYpM73RHvR6O1Ddgnn3xM6uejyK0DYhgeD5Z1SFHYv7K+vTfdEMHxp
+         hOSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gQH0IE3u0wkmAklVZoiydI5Mo0drKV3a8FmyHE+njlo=;
+        b=vUun8V+Ed5MhwKO6nxRYDRuP887zdbmUac+aabn08Dmyew86Z55U2HlAiHsTDVQO1M
+         MJrPpCRCvOQBu8CFXzDK/+fHchYCUHIR5yK8iMD5dg6yjpmP3tDT1FjZ6BUHzgtdCqcu
+         70y0L5fQzuq25ErzvoguK6U0buEgY/s9rqitiCoDIu+GzBDzei8cDCcQJSgMp8vXfomj
+         1zqAT3GQIya7xkYzJYtlIk8D5u281c6UzlrtoZhYzqby3klLBEVB7WdZP/4xfMPiQCp3
+         o6kmjjFL3WoA9cdOwioOzfapdC5IEu0fvpDqNtksDnaSJDYTfhwdFVtzfOuS43J5AP43
+         HhYw==
+X-Gm-Message-State: AFqh2kpA3vjgFescnelynpipC0a5nB4WKIM3ae7YSvNOuiWBE8Vg5ZeV
+        lX+HsiBJJxBcBfUZeeY5SPKC/oV77rkoTHGQiMc53A==
+X-Google-Smtp-Source: AMrXdXsIzihfLVNWVPuUxl3yoyz/+ffKETiVEHV/Bli8Z7zApZlruzh0VgzvBFCjhfBLend9SoSdgJNERtSySPdLfD0=
+X-Received: by 2002:a17:906:1481:b0:84d:1760:3981 with SMTP id
+ x1-20020a170906148100b0084d17603981mr1189905ejc.705.1673240960233; Sun, 08
+ Jan 2023 21:09:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v15 1/7] crash: move crash_prepare_elf64_headers()
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20221209153656.3284-1-eric.devolder@oracle.com>
- <20221209153656.3284-2-eric.devolder@oracle.com>
-Content-Language: en-US
-From:   Sourabh Jain <sourabhjain@linux.ibm.com>
-In-Reply-To: <20221209153656.3284-2-eric.devolder@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: PxamSnO6fknmEdZDFOCyAvOwlbEPEvtL
-X-Proofpoint-GUID: OgT072Px9f10qZfhXo8usZTICEM_1fef
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-08_19,2023-01-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 mlxlogscore=999 phishscore=0 adultscore=0 mlxscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301090034
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230103141409.772298-1-apatel@ventanamicro.com>
+ <20230103141409.772298-2-apatel@ventanamicro.com> <Y7YGp/7ufyRPhkwg@spud>
+In-Reply-To: <Y7YGp/7ufyRPhkwg@spud>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 9 Jan 2023 10:39:08 +0530
+Message-ID: <CAAhSdy2YKJfuxhBmsx9v-OMyxKQjys+J-z_ZqoPJF7q=YrE4Zw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] RISC-V: Add AIA related CSR defines
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 09/12/22 21:06, Eric DeVolder wrote:
-> At the outcome of this patch set, the crash_prepare_elf64_headers()
-> is utilized on both the kexec_file_load() and kexec_load() paths. As
-> such, need to move this function out of kexec_file.c and into a
-> common location crash_core.c.
+On Thu, Jan 5, 2023 at 4:37 AM Conor Dooley <conor@kernel.org> wrote:
 >
-> No functionality change.
+> Hey Anup!
 >
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> Acked-by: Baoquan He <bhe@redhat.com>
-> ---
->   kernel/crash_core.c | 100 ++++++++++++++++++++++++++++++++++++++++++++
->   kernel/kexec_file.c |  99 -------------------------------------------
->   2 files changed, 100 insertions(+), 99 deletions(-)
+> On Tue, Jan 03, 2023 at 07:44:01PM +0530, Anup Patel wrote:
+> > The RISC-V AIA specification improves handling per-HART local interrupts
+> > in a backward compatible manner. This patch adds defines for new RISC-V
+> > AIA CSRs.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/csr.h | 92 ++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 92 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> > index 0e571f6483d9..4e1356bad7b2 100644
+> > --- a/arch/riscv/include/asm/csr.h
+> > +++ b/arch/riscv/include/asm/csr.h
+> > @@ -73,7 +73,10 @@
+> >  #define IRQ_S_EXT            9
+> >  #define IRQ_VS_EXT           10
+> >  #define IRQ_M_EXT            11
+> > +#define IRQ_S_GEXT           12
+> >  #define IRQ_PMU_OVF          13
+> > +#define IRQ_LOCAL_MAX                (IRQ_PMU_OVF + 1)
+> > +#define IRQ_LOCAL_MASK               ((_AC(1, UL) << IRQ_LOCAL_MAX) - 1)
+> >
+> >  /* Exception causes */
+> >  #define EXC_INST_MISALIGNED  0
+> > @@ -156,6 +159,26 @@
+> >                                (_AC(1, UL) << IRQ_S_TIMER) | \
+> >                                (_AC(1, UL) << IRQ_S_EXT))
+> >
+> > +/* AIA CSR bits */
+> > +#define TOPI_IID_SHIFT               16
+> > +#define TOPI_IID_MASK                0xfff
+> > +#define TOPI_IPRIO_MASK              0xff
+> > +#define TOPI_IPRIO_BITS              8
+> > +
+> > +#define TOPEI_ID_SHIFT               16
+> > +#define TOPEI_ID_MASK                0x7ff
+> > +#define TOPEI_PRIO_MASK              0x7ff
+> > +
+> > +#define ISELECT_IPRIO0               0x30
+> > +#define ISELECT_IPRIO15              0x3f
+> > +#define ISELECT_MASK         0x1ff
+> > +
+> > +#define HVICTL_VTI           0x40000000
+> > +#define HVICTL_IID           0x0fff0000
+> > +#define HVICTL_IID_SHIFT     16
+> > +#define HVICTL_IPRIOM                0x00000100
+> > +#define HVICTL_IPRIO         0x000000ff
 >
-> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-> index a0eb4d5cf557..46c160d14045 100644
-> --- a/kernel/crash_core.c
-> +++ b/kernel/crash_core.c
-> @@ -10,6 +10,7 @@
->   #include <linux/utsname.h>
->   #include <linux/vmalloc.h>
->   #include <linux/sizes.h>
-> +#include <linux/kexec.h>
->   
->   #include <asm/page.h>
->   #include <asm/sections.h>
-> @@ -314,6 +315,105 @@ static int __init parse_crashkernel_dummy(char *arg)
->   }
->   early_param("crashkernel", parse_crashkernel_dummy);
->   
-> +int crash_prepare_elf64_headers(struct crash_mem *mem, int need_kernel_map,
-> +			  void **addr, unsigned long *sz)
-> +{
-> +	Elf64_Ehdr *ehdr;
-> +	Elf64_Phdr *phdr;
-> +	unsigned long nr_cpus = num_possible_cpus(), nr_phdr, elf_sz;
-> +	unsigned char *buf;
-> +	unsigned int cpu, i;
-> +	unsigned long long notes_addr;
-> +	unsigned long mstart, mend;
-> +
-> +	/* extra phdr for vmcoreinfo ELF note */
-> +	nr_phdr = nr_cpus + 1;
-> +	nr_phdr += mem->nr_ranges;
-> +
-> +	/*
-> +	 * kexec-tools creates an extra PT_LOAD phdr for kernel text mapping
-> +	 * area (for example, ffffffff80000000 - ffffffffa0000000 on x86_64).
-> +	 * I think this is required by tools like gdb. So same physical
-> +	 * memory will be mapped in two ELF headers. One will contain kernel
-> +	 * text virtual addresses and other will have __va(physical) addresses.
-> +	 */
-> +
-> +	nr_phdr++;
-> +	elf_sz = sizeof(Elf64_Ehdr) + nr_phdr * sizeof(Elf64_Phdr);
-> +	elf_sz = ALIGN(elf_sz, ELF_CORE_HEADER_ALIGN);
-Seems like above function is out of CONFIG_KEXEC_FILE but some of the
-structure/attributes like crash_mem and ELF_CORE_HEADER_ALIGN are
-still defined under CONFIG_KEXEC_FILE (look for include/linux/kexec.h).
+> Why not name these as masks, like you did for the other masks?
+> Also, the mask/shift defines appear inconsistent. TOPI_IID_MASK is
+> intended to be used post-shift AFAICT, but HVICTL_IID_SHIFT is intended
+> to be used *pre*-shift.
+> Some consistency in naming and function would be great.
 
-This leads to kernel build issue when CONFIG_KEXEC_FILE is disabled.
+The following convention is being followed in asm/csr.h for defining
+MASK of any XYZ field in ABC CSR:
+1. ABC_XYZ : This name is used for MASK which is intended
+   to be used before SHIFT
+2. ABC_XYZ_MASK: This name is used for MASK which is
+   intended to be used after SHIFT
 
-Thanks,
-Sourabh Jain
+The existing defines for [M|S]STATUS, HSTATUS, SATP, and xENVCFG
+follows the above convention. The only outlier is HGATPx_VMID_MASK
+define which I will fix in my next KVM RISC-V series.
+
+I don't see how any of the AIA CSR defines are violating the above
+convention.
+
+The choice of ABC_XYZ versus ABC_XYZ_MASK name is upto
+the developer as long as the above convention is not violated.
+
+>
+>
+> > +/* Machine-Level High-Half CSRs (AIA) */
+> > +#define CSR_MIDELEGH         0x313
+>
+> I feel like I could find Midelegh in an Irish dictionary lol
+> Anyways, I went through the CSRs and they do all seem correct.
+>
+> Thanks,
+> Conor.
+>
+>
+
+Regards,
+Anup
