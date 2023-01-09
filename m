@@ -2,169 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D6A662089
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2D4662088
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236761AbjAIItn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:49:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S236653AbjAIItj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbjAIIsS (ORCPT
+        with ESMTP id S236928AbjAIIrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:48:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A9D167D3;
-        Mon,  9 Jan 2023 00:43:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDFACB80D1F;
-        Mon,  9 Jan 2023 08:43:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD15AC433F1;
-        Mon,  9 Jan 2023 08:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673253805;
-        bh=myQoVYVwu0xpFEjib9aRjzoJPSgF2dGhxXTVvYigO18=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iWxO8EK/yv7zohUYziC5XgjaW0HbP60L2g54Fsp6NPuQhygoH4HkYc+G+slCJCOVi
-         AP+HbwLsP7ARc0f3H7V4G4Ge6gXQd5NGqjL6rAUDk4qC2zsa9eH2G3NmaN+tv8ybmh
-         xq1UQX+6fJYhLVdIsVHPiqAlhkp9X3mQGI8UA5u88PuU/tLQ95NHtStPaP/UIK+v2m
-         SPukr4mIcL6vn3LfxuCRGhtHolPxGNit4n9bJ4B6ChOp3DyxNQ5ODsqP3IjljDaQqj
-         Ao9t1/KCu+VAnpAkE7Hy/XOYLgTTI7ryri9k2pIZqqb27D06GYYZv+EBQPshNZRtHJ
-         mIDkVKpVkG2gA==
-Date:   Mon, 9 Jan 2023 16:43:17 +0800
-From:   Gao Xiang <xiang@kernel.org>
-To:     lsf-pc@lists.linuxfoundation.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Subject: [LSF/MM/BPF TOPIC] Image-based read-only filesystem: further use
- cases & directions
-Message-ID: <Y7vTpeNRaw3Nlm9B@debian>
-Mail-Followup-To: lsf-pc@lists.linuxfoundation.org,
-        linux-fsdevel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
+        Mon, 9 Jan 2023 03:47:36 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2153C164A4
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:43:26 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pEnkX-0001vC-S4; Mon, 09 Jan 2023 09:43:21 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pEnkW-004oA6-Rx; Mon, 09 Jan 2023 09:43:20 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pEnkW-00BJig-4K; Mon, 09 Jan 2023 09:43:20 +0100
+Date:   Mon, 9 Jan 2023 09:43:20 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Juergen Borleis <jbe@pengutronix.de>
+Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] leds: trigger/tty: Use led_set_brightness() to support
+ all use cases
+Message-ID: <20230109084320.nj7erwh3eu4jlw7y@pengutronix.de>
+References: <20210503092542.14497-1-jbe@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gljqu4j54k7ygkjk"
 Content-Disposition: inline
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20210503092542.14497-1-jbe@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
 
-* Background *
+--gljqu4j54k7ygkjk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We've been continuously working on forming a useful read-only
-(immutable) image solution since the end of 2017 (as a part of our
-work) until now as everyone may know:  EROFS.
+Hello J=FCrgen,
 
-Currently it has already successfully landed to (about) billions of
-Android-related devices, other types of embedded devices and containers
-with many vendors involved, and we've always been seeking more use
-cases such as incremental immutable rootfs, app sandboxes or packages
-(Android apk? with many duplicated libraries), dataset packages, etc.
+On Mon, May 03, 2021 at 11:25:42AM +0200, Juergen Borleis wrote:
+> Using led_set_brightness_sync() only works for LEDs which are connected
+> via some kind of external bus like I=B2C or SPI. But it doesn't work for
+> the simple use case of directly connected LEDs via GPIOs.
+> Because this function only honors the led_classdev::brightness_set_blocki=
+ng
+> callback. But the LED-GPIO driver registers the
+> led_classdev::brightness_set member if the GPIO can be modified directly
+> and thus, TTY triggers fail silently with -ENOTSUPP.
+>=20
+> With the previously used led_set_brightness() it works for both use cases.
+> This function first checks for the simple case where the GPIO can be chan=
+ged
+> without additional overhead, and if it fails, does the modification via a
+> workqueue.
+>=20
+> Signed-off-by: Juergen Borleis <jbe@pengutronix.de>
+> ---
+>  drivers/leds/trigger/ledtrig-tty.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/leds/trigger/ledtrig-tty.c b/drivers/leds/trigger/le=
+dtrig-tty.c
+> index f62db7e..af61281 100644
+> --- a/drivers/leds/trigger/ledtrig-tty.c
+> +++ b/drivers/leds/trigger/ledtrig-tty.c
+> @@ -122,12 +122,12 @@ static void ledtrig_tty_work(struct work_struct *wo=
+rk)
+> =20
+>  	if (icount.rx !=3D trigger_data->rx ||
+>  	    icount.tx !=3D trigger_data->tx) {
+> -		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
+> +		led_set_brightness(trigger_data->led_cdev, LED_ON);
+> =20
+>  		trigger_data->rx =3D icount.rx;
+>  		trigger_data->tx =3D icount.tx;
+>  	} else {
+> -		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
+> +		led_set_brightness(trigger_data->led_cdev, LED_OFF);
+>  	}
 
-The reasons why we always do believe immutable images can benefit
-various use cases are:
+This problem still exists, right?
 
-  - much easier for all vendors to ship/distribute/keep original signing
-    (golden) images to each instance;
+I think the right thing here is to call led_set_brightness_nosleep()
+however.
 
-  - (combined with the writable layer such as overlayfs) easy to roll
-    back to the original shipped state or do incremental updates;
+Having said that, I think there are too many variants of
+led_set_brightness which makes it difficult to pick the right one.
 
-  - easy to check data corruption or do data recovery (no matter
-    whether physical device or network errors);
+(I'm aware of
+ - led_set_brightness_nosleep
+ - led_set_brightness_nopm
+ - led_set_brightness_sync
+ - led_set_brightness
 
-  - easy for real storage devices to do hardware write-protection for
-    immutable images;
+and there are a few more static variants in led-core.c
+(__led_set_brightness, __led_set_brightness_blocking,
+set_brightness_delayed).)
 
-  - can do various offline algorithms (such as reduced metadata,
-    content-defined rolling hash deduplication, compression) to minimize
-    image sizes;
+Best regards
+Uwe
 
-  - initrd with FSDAX to avoid double caching with advantages above;
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-  - and more.
+--gljqu4j54k7ygkjk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In 2019, a LSF/MM/BPF topic was put forward to show EROFS initial use
-cases [1] as the read-only Android rootfs of a single instance on
-resource-limited devices so that effective compression became quite
-important at that time.
+-----BEGIN PGP SIGNATURE-----
 
+iQEyBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmO706UACgkQwfwUeK3K
+7AkLZwf2OjQUllc8n30dbTN3s2uvDhD4b70Gd6KfUS8OLqyen8zYbLhynaKCnVi/
+sfe/ZgOzh8hI2JahMYQUyNvLmtTEzRikM2/Rrf8bkKuQ7IUNdrVs8EtiTjzjFioC
+DGdcQvI/UAVCaL/5Gy4iiB+OGK0dXExULPdwpSB8SaqezX6yiYmzR27m4EU76wOJ
+KDGL2YRnkL6BSDjINpTpHIqM1eOY0QwUzR9v16R9T4kaDLvUN/vl8iuaB+aY5c1K
+TGQGBvwf+RDqz9RfLQjQwPuSWPGazhSAjpKZdgz4rapcYvYsIkO3OKhqSTAY/tRN
+6efz0Fu2deDz9SVulj9Dm/mR9ZKu
+=4Sqz
+-----END PGP SIGNATURE-----
 
-* Problem *
-
-In addition to enhance data compression for single-instance deployment,
-as a self-contained approach (so that all use cases can share the only
-_one_ signed image), we've also focusing on multiple instances (such as
-containers or apps, each image represents a complete filesystem tree)
-all together on one device with similar data recently years so that
-effective data deduplication, on-demand lazy pulling, page cache
-sharing among such different golden images became vital as well.
-
-
-* Current progresses *
-
-In order to resolve the challenges above, we've worked out:
-
-  - (v5.15) chunk-based inodes (to form inode extents) to do data
-    deduplication among a single image;
-
-  - (v5.16) multiple shared blobs (to keep content-defined data) in
-    addition to the primary blob (to keep filesystem metadata) for wider
-    deduplication across different images:
-
-  - (v5.19) file-based distribution by introducing in-kernel local
-    caching fscache and on-demand lazy pulling feature [2];
-
-  - (v6.1) shared domain to share such multiple shared blobs in
-    fscache mode [3];
-
-  - [RFC] preliminary page cache sharing between diffenent images [4].
-
-
-* Potential topics to discuss *
-
-  - data verification of different images with thousands (or more)
-    shared blobs [5];
-
-  - encryption with per-extent keys for confidential containers [5][6];
-
-  - current page cache sharing limitation due to mm reserve mapping and
-    finer (folio or page-based) page cache sharing among images/blobs
-    [4][7];
-
-  - more effective in-kernel local caching features for fscache such as
-    failover and daemonless;
-
-  - (wild preliminary ideas, maybe) overlayfs partial copy-up with
-    fscache as the upper layer in order to form a unique caching
-    subsystem for better space saving?
-
-  - FSDAX enhancements for initial ramdisk or other use cases;
-
-  - other issues when landing.
-
-
-Finally, if our efforts (or plans) also make sense to you, we do hope
-more people could join us, Thanks!
-
-[1] https://lore.kernel.org/r/f44b1696-2f73-3637-9964-d73e3d5832b7@huawei.com
-[2] https://lore.kernel.org/r/Yoj1AcHoBPqir++H@debian
-[3] https://lore.kernel.org/r/20220918043456.147-1-zhujia.zj@bytedance.com
-[4] https://lore.kernel.org/r/20230106125330.55529-1-jefflexu@linux.alibaba.com
-[5] https://lore.kernel.org/r/Y6KqpGscDV6u5AfQ@B-P7TQMD6M-0146.local
-[6] https://lwn.net/SubscriberLink/918893/4d389217f9b8d679
-[7] https://lwn.net/Articles/895907
-
-Thanks,
-Gao Xiang
+--gljqu4j54k7ygkjk--
