@@ -2,336 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A009F66212A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1637D66212D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236540AbjAIJOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S237014AbjAIJOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbjAIJNG (ORCPT
+        with ESMTP id S237124AbjAIJN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:13:06 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4713713F7B;
-        Mon,  9 Jan 2023 01:09:41 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EF8266CF;
-        Mon,  9 Jan 2023 10:09:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673255379;
-        bh=kBHbbWIFlK/b+c+0jxoh4qEo8lk9ttGUtdE2RimROEU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O+M+6T+6Y9nD5jhcpEd0kWy2msZbHxhNWqzHCdktIp1FfkxvZzXm2MAAqOxajWS1u
-         p1Kh0Xdi52jqV8Hx0npaakXGzj5OjbLvMxghs+FM9tg4s4t1QqSAm0M29wjM0AQ+yI
-         y3989dLyrR/WEwS5+BFDGPVVSUEgS1ezIOEAw8j0=
-Date:   Mon, 9 Jan 2023 11:09:34 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v6 5/8] dt-bindings: media: add TI DS90UB960 FPD-Link III
- Deserializer
-Message-ID: <Y7vZzg6YyC2IaUso@pendragon.ideasonboard.com>
-References: <20230105140307.272052-1-tomi.valkeinen@ideasonboard.com>
- <20230105140307.272052-6-tomi.valkeinen@ideasonboard.com>
- <Y7o3QEq9utV8nswA@pendragon.ideasonboard.com>
- <a3857c78-c221-176f-b862-a0435b301c67@ideasonboard.com>
+        Mon, 9 Jan 2023 04:13:28 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE0313FB9;
+        Mon,  9 Jan 2023 01:10:25 -0800 (PST)
+Received: from [192.168.1.103] (31.173.86.218) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 9 Jan 2023
+ 12:10:15 +0300
+Subject: Re: [PATCH RFC v7 08/23] dept: Apply sdt_might_sleep_strong() to
+ PG_{locked,writeback} wait
+To:     Byungchul Park <byungchul.park@lge.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <torvalds@linux-foundation.org>,
+        <damien.lemoal@opensource.wdc.com>, <linux-ide@vger.kernel.org>,
+        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>,
+        <mingo@redhat.com>, <peterz@infradead.org>, <will@kernel.org>,
+        <tglx@linutronix.de>, <rostedt@goodmis.org>,
+        <joel@joelfernandes.org>, <sashal@kernel.org>,
+        <daniel.vetter@ffwll.ch>, <duyuyang@gmail.com>,
+        <johannes.berg@intel.com>, <tj@kernel.org>, <tytso@mit.edu>,
+        <willy@infradead.org>, <david@fromorbit.com>, <amir73il@gmail.com>,
+        <gregkh@linuxfoundation.org>, <kernel-team@lge.com>,
+        <linux-mm@kvack.org>, <akpm@linux-foundation.org>,
+        <mhocko@kernel.org>, <minchan@kernel.org>, <hannes@cmpxchg.org>,
+        <vdavydov.dev@gmail.com>, <sj@kernel.org>, <jglisse@redhat.com>,
+        <dennis@kernel.org>, <cl@linux.com>, <penberg@kernel.org>,
+        <rientjes@google.com>, <vbabka@suse.cz>, <ngupta@vflare.org>,
+        <linux-block@vger.kernel.org>, <paolo.valente@linaro.org>,
+        <josef@toxicpanda.com>, <linux-fsdevel@vger.kernel.org>,
+        <viro@zeniv.linux.org.uk>, <jack@suse.cz>, <jlayton@kernel.org>,
+        <dan.j.williams@intel.com>, <hch@infradead.org>,
+        <djwong@kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <rodrigosiqueiramelo@gmail.com>, <melissa.srw@gmail.com>,
+        <hamohammed.sa@gmail.com>, <42.hyeyoo@gmail.com>,
+        <chris.p.wilson@intel.com>, <gwan-gyeong.mun@intel.com>
+References: <1673235231-30302-1-git-send-email-byungchul.park@lge.com>
+ <1673235231-30302-9-git-send-email-byungchul.park@lge.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <e8b24129-536c-a367-1436-fe0e054259cf@omp.ru>
+Date:   Mon, 9 Jan 2023 12:10:15 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a3857c78-c221-176f-b862-a0435b301c67@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1673235231-30302-9-git-send-email-byungchul.park@lge.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.86.218]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 01/09/2023 08:47:21
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 19
+X-KSE-AntiSpam-Info: Lua profiles 174559 [Jan 09 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.86.218 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.86.218
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 19
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 01/09/2023 08:50:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 1/9/2023 6:18:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 10:30:13AM +0200, Tomi Valkeinen wrote:
-> On 08/01/2023 05:23, Laurent Pinchart wrote:
-> > Hi Tomi,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Thu, Jan 05, 2023 at 04:03:04PM +0200, Tomi Valkeinen wrote:
-> >> Add DT bindings for TI DS90UB960 FPD-Link III Deserializer.
-> >>
-> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >> Reviewed-by: Rob Herring <robh@kernel.org>
-> >> ---
-> >>   .../bindings/media/i2c/ti,ds90ub960.yaml      | 402 ++++++++++++++++++
-> >>   1 file changed, 402 insertions(+)
-> >>   create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> >> new file mode 100644
-> >> index 000000000000..664799ae55be
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
-> >> @@ -0,0 +1,402 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
-> >> +
-> >> +maintainers:
-> >> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >> +
-> >> +description:
-> >> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
-> >> +  forwarding.
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - ti,ds90ub960-q1
-> >> +      - ti,ds90ub9702-q1
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> >> +
-> >> +  clocks:
-> >> +    maxItems: 1
-> >> +    description:
-> >> +      Reference clock connected to the REFCLK pin.
-> >> +
-> >> +  clock-names:
-> >> +    items:
-> >> +      - const: refclk
-> >> +
-> >> +  powerdown-gpios:
-> >> +    maxItems: 1
-> >> +    description:
-> >> +      Specifier for the GPIO connected to the PDB pin.
-> >> +
-> >> +  i2c-alias-pool:
-> >> +    $ref: /schemas/types.yaml#/definitions/uint16-array
-> >> +    description:
-> >> +      I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
-> >> +      used to access the remote peripherals on the serializer's I2C bus. The
-> >> +      addresses must be available, not used by any other peripheral. Each
-> >> +      remote peripheral is assigned an alias from the pool, and transactions to
-> >> +      that address will be forwarded to the remote peripheral, with the address
-> >> +      translated to the remote peripheral's real address. This property is not
-> >> +      needed if there are no I2C addressable remote peripherals.
-> >> +
-> >> +  links:
-> >> +    type: object
-> >> +    additionalProperties: false
-> >> +
-> >> +    properties:
-> >> +      '#address-cells':
-> >> +        const: 1
-> >> +
-> >> +      '#size-cells':
-> >> +        const: 0
-> >> +
-> >> +      ti,manual-strobe:
-> >> +        type: boolean
-> >> +        description:
-> >> +          Enable manual strobe position and EQ level
-> >> +
-> >> +    patternProperties:
-> >> +      '^link@[0-3]$':
-> >> +        type: object
-> >> +        additionalProperties: false
-> >> +        properties:
-> >> +          reg:
-> >> +            description: The link number
-> >> +            maxItems: 1
-> >> +
-> >> +          i2c-alias:
-> >> +            description:
-> >> +              The I2C address used for the serializer. Transactions to this
-> >> +              address on the I2C bus where the deserializer resides are
-> >> +              forwarded to the serializer.
-> >> +
-> >> +          ti,rx-mode:
-> >> +            $ref: /schemas/types.yaml#/definitions/uint32
-> >> +            enum:
-> >> +              - 0 # RAW10
-> >> +              - 1 # RAW12 HF
-> >> +              - 2 # RAW12 LF
-> >> +              - 3 # CSI2 SYNC
-> >> +              - 4 # CSI2 NON-SYNC
-> >> +            description:
-> >> +              FPD-Link Input Mode. This should reflect the hardware and the
-> >> +              default mode of the connected camera module.
-> > 
-> > As the remote device may not be a camera, I'd write "of the connected
-> > device" or "of the connected serializer".
-> 
-> I was trying to include the sensor also in the "camera module", as the 
-> sensor's "normal" pixel cloud would affect RAW modes (HF/LF). Perhaps 
-> "connected device" covers this.
-> 
-> >> +
-> >> +          ti,cdr-mode:
-> >> +            $ref: /schemas/types.yaml#/definitions/uint32
-> >> +            enum:
-> >> +              - 0 # FPD-Link III
-> >> +              - 1 # FPD-Link IV
-> >> +            description:
-> >> +              FPD-Link CDR Mode. This should reflect the hardware and the
-> >> +              default mode of the connected camera module.
-> >> +
-> >> +          ti,strobe-pos:
-> >> +            $ref: /schemas/types.yaml#/definitions/int32
-> >> +            minimum: -13
-> >> +            maximum: 13
-> >> +            description: Manual strobe position
-> >> +
-> >> +          ti,eq-level:
-> >> +            $ref: /schemas/types.yaml#/definitions/uint32
-> >> +            maximum: 14
-> >> +            description: Manual EQ level
-> >> +
-> >> +          serializer:
-> >> +            type: object
-> >> +            description: FPD-Link Serializer node
-> >> +
-> >> +        required:
-> >> +          - reg
-> >> +          - i2c-alias
-> >> +          - ti,rx-mode
-> >> +          - serializer
-> >> +
-> >> +  ports:
-> >> +    $ref: /schemas/graph.yaml#/properties/ports
-> >> +
-> >> +    properties:
-> >> +      port@0:
-> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >> +        unevaluatedProperties: false
-> >> +        description: FPD-Link input 0
-> >> +
-> >> +        properties:
-> >> +          endpoint:
-> >> +            $ref: /schemas/media/video-interfaces.yaml#
-> >> +            unevaluatedProperties: false
-> >> +            description:
-> >> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> >> +              hsync-active and vsync-active must be defined.
-> >> +
-> >> +      port@1:
-> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >> +        unevaluatedProperties: false
-> >> +        description: FPD-Link input 1
-> >> +
-> >> +        properties:
-> >> +          endpoint:
-> >> +            $ref: /schemas/media/video-interfaces.yaml#
-> >> +            unevaluatedProperties: false
-> >> +            description:
-> >> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> >> +              hsync-active and vsync-active must be defined.
-> >> +
-> >> +      port@2:
-> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >> +        unevaluatedProperties: false
-> >> +        description: FPD-Link input 2
-> >> +
-> >> +        properties:
-> >> +          endpoint:
-> >> +            $ref: /schemas/media/video-interfaces.yaml#
-> >> +            unevaluatedProperties: false
-> >> +            description:
-> >> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> >> +              hsync-active and vsync-active must be defined.
-> >> +
-> >> +      port@3:
-> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >> +        unevaluatedProperties: false
-> >> +        description: FPD-Link input 3
-> >> +
-> >> +        properties:
-> >> +          endpoint:
-> >> +            $ref: /schemas/media/video-interfaces.yaml#
-> >> +            unevaluatedProperties: false
-> >> +            description:
-> >> +              Endpoint for FPD-Link port. If the RX mode for this port is RAW,
-> >> +              hsync-active and vsync-active must be defined.
-> >> +
-> >> +      port@4:
-> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >> +        unevaluatedProperties: false
-> >> +        description: CSI-2 Output 0
-> >> +
-> >> +        properties:
-> >> +          endpoint:
-> >> +            $ref: /schemas/media/video-interfaces.yaml#
-> >> +            unevaluatedProperties: false
-> >> +
-> >> +            properties:
-> >> +              data-lanes:
-> >> +                minItems: 1
-> >> +                maxItems: 4
-> >> +
-> >> +            required:
-> >> +              - data-lanes
-> >> +
-> >> +      port@5:
-> >> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> >> +        unevaluatedProperties: false
-> >> +        description: CSI-2 Output 1
-> >> +
-> >> +        properties:
-> >> +          endpoint:
-> >> +            $ref: /schemas/media/video-interfaces.yaml#
-> >> +            unevaluatedProperties: false
-> >> +
-> >> +            properties:
-> >> +              data-lanes:
-> >> +                minItems: 1
-> >> +                maxItems: 4
-> >> +
-> >> +            required:
-> >> +              - data-lanes
-> > 
-> > I think you need
-> > 
-> >      required:
-> >        - port@0
-> >        - port@1
-> >        - port@2
-> >        - port@3
-> >        - port@4
-> >        - port@5
-> 
-> Is that needed? I think often some of the ports are unused (e.g. the 
-> example in this yaml file). Is it customary to still require empty port 
-> nodes in the DT?
+On 1/9/23 6:33 AM, Byungchul Park wrote:
 
-Ports are an intrinsic property of a device, they don't depend on the
-device integration in the system. In this case, the UB960 has four
-FPD-Link inputs and two CSI-2 outputs, that's a property of the chip.
-They don't have to be connected to anything on the board, so endpooints
-are optional.
+> Makes Dept able to track dependencies by PG_{locked,writeback} waits.
+> 
+> Signed-off-by: Byungchul Park <byungchul.park@lge.com>
+> ---
+>  mm/filemap.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index c4d4ace..b013a5b 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+[...]
+> @@ -1226,6 +1230,11 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+>  	unsigned long pflags;
+>  	bool in_thrashing;
+>  
+> +	if (bit_nr == PG_locked)
+> +		sdt_might_sleep_strong(&PG_locked_map);
+> +	else if (bit_nr == PG_writeback)
+> +		sdt_might_sleep_strong(&PG_writeback_map);
 
--- 
-Regards,
+   Hm, this is asking to be a *switch* statement instead...
 
-Laurent Pinchart
+[...]
+
+MBR, Sergey
