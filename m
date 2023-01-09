@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54895662AA3
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1CE662B3C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 17:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbjAIP6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
+        id S237150AbjAIP62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:58:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbjAIP6I (ORCPT
+        with ESMTP id S235107AbjAIP6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:58:08 -0500
+        Mon, 9 Jan 2023 10:58:10 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A0636317;
-        Mon,  9 Jan 2023 07:58:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E0536317;
+        Mon,  9 Jan 2023 07:58:09 -0800 (PST)
 Received: from jupiter.universe (dyndsl-037-138-188-006.ewe-ip-backbone.de [37.138.188.6])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C65006602B2C;
-        Mon,  9 Jan 2023 15:58:05 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 40C106602D72;
+        Mon,  9 Jan 2023 15:58:08 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673279885;
-        bh=tM45dWy//AwoQ+2JT8c7y1nHkHLcYN3y0Y0kpp6ErLk=;
+        s=mail; t=1673279888;
+        bh=IwWRTRDzVqFUQkH7y8sMvxeL9xHcOboe01mHkQN4Drw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xjmj2jtXbDjf4Uw0uFYRfNJ8JmNEjTECudgd6BkwjjyWUgSsFxpwfqzciorEfwO5u
-         NXebQCRGjvxjrQSgq4PyBqdHQjiQgjrtCWIG/pB1mQt11mtgC7iX7EcZypei3vM3yK
-         xkskOFJzBIBsBVjscYT4Y1iucOk63QFbwExhtFmetLMNIbh1PJISLosgcMxgfXKBLo
-         zgfhD/nGNEjlHm2cbIylHaelnwLSNhOpe0h6I/Y72Roif8HvC38GSKAWAV95KlsST/
-         855guCmDDxXN90/AqBI1eGw2Y0c5sm2L52/m8O0xwm6emEV4W8/ZSiRLdk4qSdkAU2
-         qfV/hjNtHjrTw==
+        b=Fp7PtyC1m5yAvxNrjApvfVe0/gEQw6fwdgqhE5eBDMCzWbs3jpAy0CKqjpFexj6sg
+         jGuwQaDc4MX9/6a0xN2KOl+DOSukFcls0bJvPy+f8hRECTPImRkJj4Mj1MPFnIxhiX
+         YosZ1D4I3SEnNJv2bAsa/4zGBEeWU4aDGeCVfBiVSYDZS9hNAktycBSN19evLXwkuO
+         amjRHoB0KlKXPNTmvypvHdnD9eYdCt1YCWoaM8zdB8InYbf9uzbvii9ET7Pf26orDx
+         UXV2ETqb1z/yKCCFV/LXVLmD2X68dqxEnlPZIpWWM/ZMdaZc33EGoTsj6yMPfMfdfO
+         0dqQjP5xEf3Dw==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 8940348011C; Mon,  9 Jan 2023 16:58:03 +0100 (CET)
+        id 8B42448011D; Mon,  9 Jan 2023 16:58:03 +0100 (CET)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -44,12 +44,12 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCHv8 4/7] dt-bindings: arm: rockchip: add initial rk3588 boards
-Date:   Mon,  9 Jan 2023 16:57:58 +0100
-Message-Id: <20230109155801.51642-5-sebastian.reichel@collabora.com>
+        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCHv8 5/7] arm64: dts: rockchip: Add rk3588-evb1 board
+Date:   Mon,  9 Jan 2023 16:57:59 +0100
+Message-Id: <20230109155801.51642-6-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230109155801.51642-1-sebastian.reichel@collabora.com>
 References: <20230109155801.51642-1-sebastian.reichel@collabora.com>
@@ -64,50 +64,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT binding documentation for the Rockchip RK3588 EVB1,
-Radxa Rock 5 Model A and B.
+From: Kever Yang <kever.yang@rock-chips.com>
 
-Co-Developed-by: Christopher Obbard <chris.obbard@collabora.com>
-Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Add board file for the RK3588 evaluation board. While the hardware
+offers plenty of peripherals and connectivity this basic implementation
+just handles things required to successfully boot Linux from eMMC,
+connect via UART or Ethernet.
+
+Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+[rebase, update commit message, use EVB1 for SoC bringup]
+Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- .../devicetree/bindings/arm/rockchip.yaml         | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+ .../boot/dts/rockchip/rk3588-evb1-v10.dts     | 129 ++++++++++++++++++
+ 2 files changed, 130 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 88ff4422a8c1..0e818e309734 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -652,6 +652,16 @@ properties:
-           - const: radxa,rock3a
-           - const: rockchip,rk3568
- 
-+      - description: Radxa ROCK 5 Model A
-+        items:
-+          - const: radxa,rock-5a
-+          - const: rockchip,rk3588s
+diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+index 0a76a2ebb5f6..7452c4b8cbe6 100644
+--- a/arch/arm64/boot/dts/rockchip/Makefile
++++ b/arch/arm64/boot/dts/rockchip/Makefile
+@@ -82,3 +82,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-odroid-m1.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-rock-3a.dtb
++dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+new file mode 100644
+index 000000000000..b91af0204dbe
+--- /dev/null
++++ b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+@@ -0,0 +1,129 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
++ *
++ */
 +
-+      - description: Radxa ROCK 5 Model B
-+        items:
-+          - const: radxa,rock-5b
-+          - const: rockchip,rk3588
++/dts-v1/;
 +
-       - description: Rikomagic MK808 v1
-         items:
-           - const: rikomagic,mk808
-@@ -736,6 +746,11 @@ properties:
-           - const: rockchip,rk3399-sapphire-excavator
-           - const: rockchip,rk3399
- 
-+      - description: Rockchip RK3588 Evaluation board
-+        items:
-+          - const: rockchip,rk3588-evb1-v10
-+          - const: rockchip,rk3588
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/pinctrl/rockchip.h>
++#include "rk3588.dtsi"
 +
-       - description: Rockchip RV1108 Evaluation board
-         items:
-           - const: rockchip,rv1108-evb
++/ {
++	model = "Rockchip RK3588 EVB1 V10 Board";
++	compatible = "rockchip,rk3588-evb1-v10", "rockchip,rk3588";
++
++	aliases {
++		mmc0 = &sdhci;
++		serial2 = &uart2;
++	};
++
++	chosen {
++		stdout-path = "serial2:1500000n8";
++	};
++
++	backlight: backlight {
++		compatible = "pwm-backlight";
++		power-supply = <&vcc12v_dcin>;
++		pwms = <&pwm2 0 25000 0>;
++	};
++
++	vcc12v_dcin: vcc12v-dcin-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc12v_dcin";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++	};
++
++	vcc5v0_sys: vcc5v0-sys-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_sys";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&vcc12v_dcin>;
++	};
++};
++
++&gmac0 {
++	clock_in_out = "output";
++	phy-handle = <&rgmii_phy>;
++	phy-mode = "rgmii-rxid";
++	pinctrl-0 = <&gmac0_miim
++		     &gmac0_tx_bus2
++		     &gmac0_rx_bus2
++		     &gmac0_rgmii_clk
++		     &gmac0_rgmii_bus>;
++	pinctrl-names = "default";
++	rx_delay = <0x00>;
++	tx_delay = <0x43>;
++	status = "okay";
++};
++
++&i2c2 {
++	status = "okay";
++
++	hym8563: rtc@51 {
++		compatible = "haoyu,hym8563";
++		reg = <0x51>;
++		#clock-cells = <0>;
++		clock-output-names = "hym8563";
++		pinctrl-names = "default";
++		pinctrl-0 = <&hym8563_int>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <RK_PD4 IRQ_TYPE_LEVEL_LOW>;
++		wakeup-source;
++	};
++};
++
++&mdio0 {
++	rgmii_phy: ethernet-phy@1 {
++		/* RTL8211F */
++		compatible = "ethernet-phy-id001c.c916";
++		reg = <0x1>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&rtl8211f_rst>;
++		reset-assert-us = <20000>;
++		reset-deassert-us = <100000>;
++		reset-gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
++	};
++};
++
++&pinctrl {
++	rtl8211f {
++		rtl8211f_rst: rtl8211f-rst {
++			rockchip,pins = <4 RK_PB3 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++	};
++
++	hym8563 {
++		hym8563_int: hym8563-int {
++			rockchip,pins = <0 RK_PD4 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++};
++
++&pwm2 {
++	status = "okay";
++};
++
++&sdhci {
++	bus-width = <8>;
++	no-sdio;
++	no-sd;
++	non-removable;
++	max-frequency = <200000000>;
++	mmc-hs400-1_8v;
++	mmc-hs400-enhanced-strobe;
++	status = "okay";
++};
++
++&uart2 {
++	pinctrl-0 = <&uart2m0_xfer>;
++	status = "okay";
++};
 -- 
 2.39.0
 
