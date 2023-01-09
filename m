@@ -2,192 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E3D661ED7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFB2661ED9
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 07:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233205AbjAIGvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 01:51:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S231203AbjAIGw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 01:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjAIGvU (ORCPT
+        with ESMTP id S233151AbjAIGwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 01:51:20 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6208E12633
-        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 22:51:18 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id b3so11530751lfv.2
-        for <linux-kernel@vger.kernel.org>; Sun, 08 Jan 2023 22:51:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8fHjJ5mqa9cPGpS5KD+GC/eZ7abKkX/dkmk/DvDpfNA=;
-        b=OyMUf+5B6frZZs4hQkljDvf/Xom1i0Hqd9XJHQkHyv7eihmEw1hjihNs3D99WNWYdr
-         z9hevlf2PG4glj9VEoG+tDPk2ZYWsPeICavudYQWLYiTye6iTYirV+zuwBaHqWXWGeHQ
-         ioBbj5QAhnOumJ6vGSvi90hV9Z9Ns8tD50zqOfwwZC2qgL+8cpoQ+sNQCW6bq+wJiCEu
-         3+RHv073gwOCssDoZeVPmWmk2a4LhYJOSejGG1NRazdFDx6z6MoQuP1NFKSwnqPI93LM
-         xHGIK/3IDfUZ2L6jP8bddwAIfVCkmPe458adq7vFG6hlA/WlyRNAzQzc1JIrIZJNMPsi
-         KVIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8fHjJ5mqa9cPGpS5KD+GC/eZ7abKkX/dkmk/DvDpfNA=;
-        b=rz7IxW7Ia3jEswp2KNIncUL+rZ6RSVbERqIvcMCtCJfjPHZYlwjcdUwxI3VXy6Mgtb
-         c6GTh4cmlMSTAguJmEfhqtO3vCER+OXGIkl9Q6LvYwA8XWzfJaerdJh8oiCkDL9efRuV
-         hNnYbBc4PrTLx70ELotzpSfzfDWkXiad6Z7+9idksIwBVQ0m2Nwx7abhkL3O3jnpcePm
-         xXDEe2SHelNTM9vyX6QNkcHSCSSt/pXWuOfV9Gxwio2WsM07saMZ1I99BYALEQz8nlbV
-         Jz+TBfQEqi4z//42HtaEFRYfj95jc/nGVWzxg7GJSDi6bpSrrrhgrZ7Nw1YaJO753WPL
-         14Fw==
-X-Gm-Message-State: AFqh2krurPbWiB+uuZs/poXB2HsQRo80YTtrnjWr2YL83pCB2mxXbsxV
-        0bsNsD37DfwnDNCKozLi/h0UP6+c4Z/fjjrwRJDqWQ==
-X-Google-Smtp-Source: AMrXdXuVTKk1ETT5Fbh/qF7a1Xz+KlgI8zhmIxManlxld7viGQP54p+iATQQMAy1889O+cOC7C/yKyGSSxzC7jPT3r8=
-X-Received: by 2002:a05:6512:12c4:b0:4a2:676e:cf60 with SMTP id
- p4-20020a05651212c400b004a2676ecf60mr2640163lfg.624.1673247076285; Sun, 08
- Jan 2023 22:51:16 -0800 (PST)
+        Mon, 9 Jan 2023 01:52:55 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6C12C6;
+        Sun,  8 Jan 2023 22:52:54 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3096qQF4006380;
+        Mon, 9 Jan 2023 06:52:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=/4LTZOeHs3JtCWA0sn1Y+q63qqWVR6fK/3fO1Ovfnvw=;
+ b=esauW/ZPQ+Ne4N13Y1vNFx1x8Sy8rwaNwU6ynOLNno2BDe7FxBLv8WXK01o9YE3g2JjS
+ PJCx7JIdYp+gh+1Z3ZELCyyOFkrEhctd/FIea9zqeso36FCyRlcZe0TTZ6r0M9jgxAN3
+ epW9lshTB3xaFNy63abkIyoNvSJXJAzMitd5OMMu1uwrjSmZvP2FloKs6jAGLm80++cH
+ LY7h7nuTVg+nQBXpTn2vrEoL9+/TQ6mBIOKhon0e8JtUmuJ4VIr7ap+s14NtSVltTBVC
+ natddfiZ2eWOeLEO88Gt21J7GP95zJoPZfEWpgc+dJr7Y7/qUwPgpdFIBqcZgQ+7a1gJ lw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3my1grjevt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Jan 2023 06:52:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3096qSp0021567
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 9 Jan 2023 06:52:28 GMT
+Received: from [10.216.44.0] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 8 Jan 2023
+ 22:52:25 -0800
+Message-ID: <9aafa9d9-70f8-67de-df43-e2fb282a4a67@quicinc.com>
+Date:   Mon, 9 Jan 2023 12:22:20 +0530
 MIME-Version: 1.0
-References: <20230103075603.12294-1-Kuan-Ying.Lee@mediatek.com>
-In-Reply-To: <20230103075603.12294-1-Kuan-Ying.Lee@mediatek.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 9 Jan 2023 07:51:04 +0100
-Message-ID: <CACT4Y+b5hbCod=Gj6oGxFrq5CaFPbz5T9A0nomzhWooiXQy5aA@mail.gmail.com>
-Subject: Re: [PATCH] kasan: infer the requested size by scanning shadow memory
-To:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        chinwen.chang@mediatek.com, qun-wei.lin@mediatek.com,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: ERRATUM_858921 is broken on 5.15 kernel
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <mark.rutland@arm.com>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
+References: <ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com>
+ <86sfgpnjsg.wl-maz@kernel.org>
+From:   Yogesh Lal <quic_ylal@quicinc.com>
+In-Reply-To: <86sfgpnjsg.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 350X-AN40CTTsfrzKc2-li_M-kLguSBE
+X-Proofpoint-GUID: 350X-AN40CTTsfrzKc2-li_M-kLguSBE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-09_02,2023-01-06_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 priorityscore=1501 malwarescore=0
+ bulkscore=0 mlxscore=0 phishscore=0 clxscore=1015 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301090048
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 3 Jan 2023 at 08:56, 'Kuan-Ying Lee' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
+
+On 1/5/2023 7:52 PM, Marc Zyngier wrote:
+> On Thu, 05 Jan 2023 13:33:48 +0000,
+> Yogesh Lal <quic_ylal@quicinc.com> wrote:
+>> Hi,
+>>
+>> We are observing issue on A73 core where ERRATUM_858921 is broken.
+>>
+>> On 5.15 kernel arch_timer_enable_workaround is set by reading
+>> arm64_858921_read_cntpct_el0 and arm64_858921_read_cntvct_el0 during
+>> timer register using following path.
+> Have you checked whether the issue is still present on 6.1?
+yes, its preset there as well.
 >
-> We scan the shadow memory to infer the requested size instead of
-> printing cache->object_size directly.
+>> arch_timer_enable_workaround->atomic_set(&timer_unstable_counter_workaround_in_use,
+>> 1);
+>>
+>> [code snap]
+>> 564 static
+>> 565 void arch_timer_enable_workaround(const struct
+>> arch_timer_erratum_workaround *wa,
+>> 566                               bool local)
+>> 567 {
+>> 568     int i;
+>> 569
+>> 570     if (local) {
+>> 571 __this_cpu_write(timer_unstable_counter_workaround, wa);
+>> 572     } else {
+>> 573             for_each_possible_cpu(i)
+>> 574                     per_cpu(timer_unstable_counter_workaround, i) = wa;
+>> 575     }
+>> 576
+>> 577     if (wa->read_cntvct_el0 || wa->read_cntpct_el0)
+>> 578 atomic_set(&timer_unstable_counter_workaround_in_use, 1);
+>>
+>>
+>> and based on above workaround enablement , appropriate function to get
+>> counter is used.
+>>
+>> 1008 static void __init arch_counter_register(unsigned type)
+>> 1009 {
+>> 1010     u64 start_count;
+>> 1011
+>> 1012     /* Register the CP15 based counter if we have one */
+>> 1013     if (type & ARCH_TIMER_TYPE_CP15) {
+>> 1014         u64 (*rd)(void);
+>> 1015
+>> 1016         if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
+>> 1017             arch_timer_uses_ppi == ARCH_TIMER_VIRT_PPI) {
+>> 1018             if (arch_timer_counter_has_wa())
+>> 1019                 rd = arch_counter_get_cntvct_stable;
+>> 1020             else
+>> 1021                 rd = arch_counter_get_cntvct;
+>> 1022         } else {
+>> 1023             if (arch_timer_counter_has_wa())
+>> 1024                 rd = arch_counter_get_cntpct_stable;
+>> 1025             else
+>> 1026                 rd = arch_counter_get_cntpct;
+>> 1027         }
+>> [snap]
+>> 1043     /* 56 bits minimum, so we assume worst case rollover */
+>> 1044     sched_clock_register(arch_timer_read_counter, 56, arch_timer_rate);
+>>
+>>
+>> As our boot cores are not impacted by errata sched_clock_register()
+>> will register !arch_timer_counter_has_wa() callback.
+>>
+>> Now when errata impacted core boots up and sched_clock_register
+>> already register will !arch_timer_counter_has_wa() path.
+>> As sched_clock_register is not per_cpu bases so
+>> arch_timer_read_counter will always point to
+>> !arch_timer_counter_has_wa() function calls.
+> Please try the following hack, only compile tested as I do not have
+> access to any affected HW, and report whether this solves your issue
+> or not. Note that this is based on 6.2-rc2.
+
+tested it on affected h/w but looks like sched_clock is still pointing 
+to !arch_timer_counter_has_wa() function calls,
+may be due to sched_clock_register will register once during non errata 
+impacted core booting.
+
+1007 static void __init arch_counter_register(unsigned type)
+1008 {
+[snap]
+1043     /* 56 bits minimum, so we assume worst case rollover */
+1044     sched_clock_register(arch_timer_read_counter, 56, arch_timer_rate);
+
+
+Also update_clock_read_data will called with 
+!arch_timer_counter_has_wa() read function calls.
+
+153 void sched_clock_register(u64 (*read)(void), int bits, unsigned long 
+rate)
+[snap]
+183     cd.actual_read_sched_clock = read;
+184
+185     rd.read_sched_clock    = read;
+186     rd.sched_clock_mask    = new_mask;
+187     rd.mult            = new_mult;
+188     rd.shift        = new_shift;
+189     rd.epoch_cyc        = new_epoch;
+190     rd.epoch_ns        = ns;
+191
+192     update_clock_read_data(&rd);
+
+> Thanks,
 >
-> This patch will fix the confusing generic kasan report like below. [1]
-> Report shows "cache kmalloc-192 of size 192", but user
-> actually kmalloc(184).
+> 	M.
 >
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in _find_next_bit+0x143/0x160 lib/find_bit.c:109
-> Read of size 8 at addr ffff8880175766b8 by task kworker/1:1/26
-> ...
-> The buggy address belongs to the object at ffff888017576600
->  which belongs to the cache kmalloc-192 of size 192
-> The buggy address is located 184 bytes inside of
->  192-byte region [ffff888017576600, ffff8880175766c0)
-> ...
-> Memory state around the buggy address:
->  ffff888017576580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
->  ffff888017576600: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> >ffff888017576680: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
->                                         ^
->  ffff888017576700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff888017576780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ==================================================================
->
-> After this patch, report will show "cache kmalloc-192 of size 184".
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216457 [1]
->
-> Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-> ---
->  mm/kasan/kasan.h          |  5 +++++
->  mm/kasan/report.c         |  3 ++-
->  mm/kasan/report_generic.c | 18 ++++++++++++++++++
->  3 files changed, 25 insertions(+), 1 deletion(-)
->
-> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> index 32413f22aa82..7bb627d21580 100644
-> --- a/mm/kasan/kasan.h
-> +++ b/mm/kasan/kasan.h
-> @@ -340,8 +340,13 @@ static inline void kasan_print_address_stack_frame(const void *addr) { }
->
->  #ifdef CONFIG_KASAN_GENERIC
->  void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object);
-> +int kasan_get_alloc_size(void *object_addr, struct kmem_cache *cache);
->  #else
->  static inline void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object) { }
-> +static inline int kasan_get_alloc_size(void *object_addr, struct kmem_cache *cache)
+> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+> index e09d4427f604..a7cf0a2c86d3 100644
+> --- a/drivers/clocksource/arm_arch_timer.c
+> +++ b/drivers/clocksource/arm_arch_timer.c
+> @@ -230,6 +230,28 @@ static u64 arch_counter_read_cc(const struct cyclecounter *cc)
+>   	return arch_timer_read_counter();
+>   }
+>   
+> +static bool arch_timer_counter_has_wa(void);
+> +
+> +static u64 (*arch_counter_get_read_fn(void))(void)
 > +{
-> +       return cache->object_size;
-> +}
->  #endif
->
->  bool kasan_report(unsigned long addr, size_t size,
-> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-> index 1d02757e90a3..6de454bb2cad 100644
-> --- a/mm/kasan/report.c
-> +++ b/mm/kasan/report.c
-> @@ -236,12 +236,13 @@ static void describe_object_addr(const void *addr, struct kmem_cache *cache,
->  {
->         unsigned long access_addr = (unsigned long)addr;
->         unsigned long object_addr = (unsigned long)object;
-> +       int real_size = kasan_get_alloc_size((void *)object_addr, cache);
->         const char *rel_type;
->         int rel_bytes;
->
->         pr_err("The buggy address belongs to the object at %px\n"
->                " which belongs to the cache %s of size %d\n",
-> -               object, cache->name, cache->object_size);
-> +               object, cache->name, real_size);
->
->         if (access_addr < object_addr) {
->                 rel_type = "to the left";
-> diff --git a/mm/kasan/report_generic.c b/mm/kasan/report_generic.c
-> index 043c94b04605..01b38e459352 100644
-> --- a/mm/kasan/report_generic.c
-> +++ b/mm/kasan/report_generic.c
-> @@ -43,6 +43,24 @@ void *kasan_find_first_bad_addr(void *addr, size_t size)
->         return p;
->  }
->
-> +int kasan_get_alloc_size(void *addr, struct kmem_cache *cache)
-> +{
-> +       int size = 0;
-> +       u8 *shadow = (u8 *)kasan_mem_to_shadow(addr);
+> +	u64 (*rd)(void);
 > +
-> +       while (size < cache->object_size) {
-> +               if (*shadow == 0)
-> +                       size += KASAN_GRANULE_SIZE;
-> +               else if (*shadow >= 1 && *shadow <= KASAN_GRANULE_SIZE - 1)
-> +                       size += *shadow;
-> +               else
-> +                       return size;
-> +               shadow++;
-
-This only works for out-of-bounds reports, but I don't see any checks
-for report type. Won't this break reporting for all other report
-types?
-
-I would also print the cache name anyway. Sometimes reports are
-perplexing and/or this logic may return a wrong result for some
-reason. The total object size may be useful to understand harder
-cases.
-
-> +       }
+> +	if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
+> +	    arch_timer_uses_ppi == ARCH_TIMER_VIRT_PPI) {
+> +		if (arch_timer_counter_has_wa())
+> +			rd = arch_counter_get_cntvct_stable;
+> +		else
+> +			rd = arch_counter_get_cntvct;
+> +	} else {
+> +		if (arch_timer_counter_has_wa())
+> +			rd = arch_counter_get_cntpct_stable;
+> +		else
+> +			rd = arch_counter_get_cntpct;
+> +	}
 > +
-> +       return cache->object_size;
+> +	return rd;
 > +}
 > +
->  static const char *get_shadow_bug_type(struct kasan_report_info *info)
->  {
->         const char *bug_type = "unknown-crash";
+>   static struct clocksource clocksource_counter = {
+>   	.name	= "arch_sys_counter",
+>   	.id	= CSID_ARM_ARCH_COUNTER,
+> @@ -571,8 +593,10 @@ void arch_timer_enable_workaround(const struct arch_timer_erratum_workaround *wa
+>   			per_cpu(timer_unstable_counter_workaround, i) = wa;
+>   	}
+>   
+> -	if (wa->read_cntvct_el0 || wa->read_cntpct_el0)
+> +	if (wa->read_cntvct_el0 || wa->read_cntpct_el0) {
+>   		atomic_set(&timer_unstable_counter_workaround_in_use, 1);
+> +		arch_timer_read_counter = arch_counter_get_read_fn();
+> +	}
+>   
+>   	/*
+>   	 * Don't use the vdso fastpath if errata require using the
+> @@ -641,7 +665,7 @@ static bool arch_timer_counter_has_wa(void)
+>   #else
+>   #define arch_timer_check_ool_workaround(t,a)		do { } while(0)
+>   #define arch_timer_this_cpu_has_cntvct_wa()		({false;})
+> -#define arch_timer_counter_has_wa()			({false;})
+> +static bool arch_timer_counter_has_wa(void)		{ return false; }
+>   #endif /* CONFIG_ARM_ARCH_TIMER_OOL_WORKAROUND */
+>   
+>   static __always_inline irqreturn_t timer_handler(const int access,
+> @@ -1079,22 +1103,7 @@ static void __init arch_counter_register(unsigned type)
+>   
+>   	/* Register the CP15 based counter if we have one */
+>   	if (type & ARCH_TIMER_TYPE_CP15) {
+> -		u64 (*rd)(void);
+> -
+> -		if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
+> -		    arch_timer_uses_ppi == ARCH_TIMER_VIRT_PPI) {
+> -			if (arch_timer_counter_has_wa())
+> -				rd = arch_counter_get_cntvct_stable;
+> -			else
+> -				rd = arch_counter_get_cntvct;
+> -		} else {
+> -			if (arch_timer_counter_has_wa())
+> -				rd = arch_counter_get_cntpct_stable;
+> -			else
+> -				rd = arch_counter_get_cntpct;
+> -		}
+> -
+> -		arch_timer_read_counter = rd;
+> +		arch_timer_read_counter = arch_counter_get_read_fn();
+>   		clocksource_counter.vdso_clock_mode = vdso_default;
+>   	} else {
+>   		arch_timer_read_counter = arch_counter_get_cntvct_mem;
+>
