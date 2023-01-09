@@ -2,130 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF446633D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF616633D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237718AbjAIWSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:18:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S237913AbjAIWSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237753AbjAIWSW (ORCPT
+        with ESMTP id S237745AbjAIWSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:18:22 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787171208E
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:18:20 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id q141so2115228vkb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 14:18:20 -0800 (PST)
+        Mon, 9 Jan 2023 17:18:11 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4333F1117A
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 14:18:11 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id m12so5240045qvt.9
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 14:18:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2KmFF4MIYR1i1tDn7HkCXsIkV2zq/DOASpD61PD2PiQ=;
-        b=o9O4iMagnefvuL39/DCHp9NN7X7dAfd5489k94RQaSeNu3Qe9PpX1LHn7PZ/LN+PbQ
-         RVsgiQvejr/XomlyXBf1cUFSzBxzGYdacyaOzd7SMmecWNm9U614/aPFL5AcKuzHIbmu
-         dvR8umH3QOBwYCCAxQURO8baXqc1BXRLsrD+jb+n9r/LK6hnJvxs0UvVGgWiNjiCZPWM
-         AI5eDEMtsueo+BwAXqiMBJ/S0LncsC+rkUqYn7kr+LbcTe0u9O2o+jIxC8s7Y8CjqKgS
-         5pwXk2CUXPWNQ4b6/KCTNTHCdqfaawCe3iZSXqvfUyCGnYfkUId34ZLl/akgrplN2Jho
-         x1Xw==
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M+X+ZpbKYqD2Bos6A74tdZyKlmEuf7l47skk4YvY1R0=;
+        b=cd3hJikejBsBNDdxpGnP93DV+EufsdnbLwGAcRlytkxxPRwMvucIgCBkjyyzooCf3S
+         biNH4AHrae9DZNmGJhDS7lvsducmtTGkSXyB5JNR9Cie4dDPvWM5TIX6pnvDI1AQSirN
+         Qw+mUjwm+RBb/RZf/HAjAxpf286M05kBWcGnU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2KmFF4MIYR1i1tDn7HkCXsIkV2zq/DOASpD61PD2PiQ=;
-        b=U8lKOBT8r+2sKCk0vOXSTr0hZ8ae+h9DR3vkX1vEnwtSU7p1teXJeKcgmo6nZAQZy+
-         vTvwede2419OPbNcGxTKUFfWqgFj/CMADgST5p1Pajs1RBZQze+ep1ZRHQ2oI45Bdn5Z
-         Rnr3wSOQomiQRXfTkz9Ns/EOy3it9nQzq7xNpj7gQCYh9KR07cRRdCojCmkSkw00EdFn
-         aZM0Aj03TlxeqXfSFidCuEnaICW/JFBvo95LtZCV78H7kanrcKU8uzjhGPiW/00Avlr/
-         LzBelbkgRSIYFGL2QWYcwrhUaPV7enw4x2uhsJD6DCw89z3AkcTpM/lrpJLoAnUoZE9P
-         N5dw==
-X-Gm-Message-State: AFqh2kpaZr31WQk5pENkJTpfXr+R7w6NYh1JiPQYdglHuy8xbEeh1dno
-        4aaqZxfDmAYkd8D9rCF1hHjV2FGB2NoAIqH5nk8=
-X-Google-Smtp-Source: AMrXdXvv7mF9XZiIt7npgmZEq2JiEakZJUiZv6jkCpyOs0AGEHA8TcqpOYnAIxhbZwkFgHo27x1dr29c97ldfYsMuy8=
-X-Received: by 2002:a1f:5f90:0:b0:3d5:e6da:6d53 with SMTP id
- t138-20020a1f5f90000000b003d5e6da6d53mr3409574vkb.36.1673302699525; Mon, 09
- Jan 2023 14:18:19 -0800 (PST)
+        bh=M+X+ZpbKYqD2Bos6A74tdZyKlmEuf7l47skk4YvY1R0=;
+        b=FInyWNLQDF+P/kVjo8sYN465jNNcrVJPmjLvAUzpzJ4ycAgJ4plpjX9aQUS0/6r5+J
+         LF0gyft0zSTckIo4U+AXd1YuvBHVsLN1gs1rCb3l3Y9zouhQOZ0GTgVO2aF6W4WmcTki
+         zbNL5LstWWXFV1qprcE9RjryditpSuulHfhteO54TY/GtKqtWsRW6bzWWUhTrKGPPJMP
+         y3HSh9a/aZ0+XRZaIPpbcgJfbGLLYWDo1K7AMtMs61aaB82zb4PKuMYruhfZ5k25iG+y
+         mJPBlJZTdbqVFjaW+3t7EOfoZ8oEu2YllOqqiwBrkUXFupkdEnErEkVivJIHLIrIdRhp
+         pYbg==
+X-Gm-Message-State: AFqh2koDfeRmgc9xZmaMdCpHnQUkAX8BBr4+x/s+nvt0ErUXFHiNW+df
+        VwQWvEcqpWggisVM+inZiLKoSulJGyh0F/tL+C0=
+X-Google-Smtp-Source: AMrXdXu3odBOBhq17KXDLrZPXNfoiSNN2VPPiQYzBMli93B0LlTTd+cw93XNKhFs4MSKzrX1AaCIyA==
+X-Received: by 2002:a0c:b304:0:b0:4b8:4089:e21e with SMTP id s4-20020a0cb304000000b004b84089e21emr91664146qve.47.1673302688806;
+        Mon, 09 Jan 2023 14:18:08 -0800 (PST)
+Received: from joelboxx.c.googlers.com.com (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
+        by smtp.gmail.com with ESMTPSA id 19-20020a05620a071300b006f474e6a715sm5922171qkc.131.2023.01.09.14.18.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 14:18:06 -0800 (PST)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>, foo@bar.com
+Subject: [PATCH -rcu] rcu: Disable lazy if call_rcu() called when GPs expedited
+Date:   Mon,  9 Jan 2023 22:17:56 +0000
+Message-Id: <20230109221756.1361168-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-References: <20221205161005.222274-1-jim.cromie@gmail.com> <20221205161005.222274-3-jim.cromie@gmail.com>
- <Y7bGiLRanR3Y7tXM@phenom.ffwll.local>
-In-Reply-To: <Y7bGiLRanR3Y7tXM@phenom.ffwll.local>
-From:   jim.cromie@gmail.com
-Date:   Mon, 9 Jan 2023 15:17:52 -0700
-Message-ID: <CAJfuBxz=JQkXOYRRdbrcsZ+EjzjcSAMrd4P_NrbUAxCqYy2TMw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm_print: fix stale macro-name in comment
-To:     Jim Cromie <jim.cromie@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, jani.nikula@intel.com,
-        ville.syrjala@linux.intel.com, seanpaul@chromium.org,
-        robdclark@gmail.com
-Cc:     daniel.vetter@ffwll.ch
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 5:46 AM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Mon, Dec 05, 2022 at 09:10:05AM -0700, Jim Cromie wrote:
-> > Cited commit uses stale macro name, fix this, and explain better.
-> >
-> > When DRM_USE_DYNAMIC_DEBUG=y, DYNDBG_CLASSMAP_DEFINE() maps DRM_UT_*
-> > onto BITs in drm.debug.  This still uses enum drm_debug_category, but
-> > it is somewhat indirect, with the ordered set of DRM_UT_* enum-vals.
-> > This requires that the macro args: DRM_UT_* list must be kept in sync
-> > and in order.
-> >
-> > Fixes: f158936b60a7 ("drm: POC drm on dyndbg - use in core, 2 helpers, 3 drivers.")
-> > Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
->
-> What's the status of this series?
->
+During suspend, we see failures to suspend 1 in 300-500 suspends.
+Looking closer, it appears that we are queuing lazy callbacks even
+though rcu_gp_is_expedited(). These delays appear to not be very welcome
+by the suspend/resume code as evidenced by these occasional suspend
+failures.
 
-dead - superseded by
-https://patchwork.freedesktop.org/series/111652/
-which is still WIP, but improved since that post.
-I'll resubmit soon, with same title so patchwork calls it rev 2
+This commit therefore checks if rcu_gp_is_expedited() and ignores the
+lazy hint if so.
 
-> Greg, you landed the original entire pile that wasn't quite ready yet? Or
-> should I apply these two?
-> -Daniel
->
-> > ---
-> > . emphasize ABI non-change despite enum val change - Jani Nikula
-> > . reorder to back of patchset to follow API name changes.
-> > ---
-> >  include/drm/drm_print.h | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
-> > index a44fb7ef257f..e4c0c7e6d49d 100644
-> > --- a/include/drm/drm_print.h
-> > +++ b/include/drm/drm_print.h
-> > @@ -276,7 +276,10 @@ static inline struct drm_printer drm_err_printer(const char *prefix)
-> >   *
-> >   */
-> >  enum drm_debug_category {
-> > -     /* These names must match those in DYNAMIC_DEBUG_CLASSBITS */
-> > +     /*
-> > +      * Keep DYNDBG_CLASSMAP_DEFINE args in sync with changes here,
-> > +      * the enum-values define BIT()s in drm.debug, so are ABI.
-> > +      */
-> >       /**
-> >        * @DRM_UT_CORE: Used in the generic drm code: drm_ioctl.c, drm_mm.c,
-> >        * drm_memory.c, ...
-> > --
-> > 2.38.1
-> >
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+Ignoring the lazy hint if rcu_gp_is_expedited() makes the 3000
+suspend/resume cycles pass reliably on a 12th gen 12-core Intel CPU.
+
+Fixes: 3cb278e73be5 ("rcu: Make call_rcu() lazy to save power")
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+Paul, could we take this for 6.2 -rc cycle? Thanks.
+
+ kernel/rcu/tree.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 63545d79da51..93eb03f8ed99 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2594,12 +2594,12 @@ static void check_cb_ovld(struct rcu_data *rdp)
+ }
+ 
+ static void
+-__call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy)
++__call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy_in)
+ {
+ 	static atomic_t doublefrees;
+ 	unsigned long flags;
+ 	struct rcu_data *rdp;
+-	bool was_alldone;
++	bool was_alldone, lazy;
+ 
+ 	/* Misaligned rcu_head! */
+ 	WARN_ON_ONCE((unsigned long)head & (sizeof(void *) - 1));
+@@ -2622,6 +2622,7 @@ __call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy)
+ 	kasan_record_aux_stack_noalloc(head);
+ 	local_irq_save(flags);
+ 	rdp = this_cpu_ptr(&rcu_data);
++	lazy = lazy_in && !rcu_gp_is_expedited();
+ 
+ 	/* Add the callback to our list. */
+ 	if (unlikely(!rcu_segcblist_is_enabled(&rdp->cblist))) {
+-- 
+2.39.0.314.g84b9a713c41-goog
