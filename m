@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56376629E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DC76629EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236989AbjAIP3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S237128AbjAIPaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:30:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234329AbjAIP30 (ORCPT
+        with ESMTP id S236885AbjAIP3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:29:26 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405082A9;
-        Mon,  9 Jan 2023 07:29:25 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CE7F2473A;
-        Mon,  9 Jan 2023 15:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673278163; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 9 Jan 2023 10:29:35 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C881FB8D
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:29:34 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673278172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=PJYHHfpKQfZuhLtjjw+kUkQXCPxXzCZB8sqhX5HJNgo=;
-        b=x9pQuwXJ31ktFed7cyEQ12sm9EAV/j86D6Ujx0xF3xC+Y8ns4fo31HzV7LAXAHx3i5i1EP
-        2dRH3dUnOUb3vrOIZaaJpsCgzquh1D+KL6gsODN2a8aZH8AOTDroE+sZeO3gRnrVTFsjuU
-        oa1x0oFlUSsDvpkLpTlAuSrXltxW7WM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673278163;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=KoiFHa3OYaUadlpj4XIDCoE4VEmQuSerBU1ZGv9DnLo=;
+        b=OnNlXVI4ddvfBx/m5OTKEBQuyVb7cjlADg637Gsgi1H1U3SOck00FIi0KuikWfCERHPPcc
+        av1tt9E7/NWqr4e7brvvf1Ih5WwTrky4geNfDi2Ud8ErV+Qgfxen1WWMtmYWas9NvBpMAC
+        RK+7k9N8rLGgwA31d9LySbDfOlcD7n/LUBoKpRTVh8MaRh+JBYQJyDlzAM2Z7WhbGg/Kq9
+        xLRq5Y8n2M+eksNGgyhFSd6gKj7eqXkyqhxFTiFxQlXGpRK/C6xY7Wm57PYsaV1nppLP0G
+        OANzM0RPvvPwPGH1X8eu39HeKOQFKW+7WGoYP8NdX+WRyAaNm/4iFRLA9s3crw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673278172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=PJYHHfpKQfZuhLtjjw+kUkQXCPxXzCZB8sqhX5HJNgo=;
-        b=y/4a8+JRD2hBzINbYxlPFsJm045dGsAdcJMrmBgaPIs34D1EzQaSc1ooYXUk2znk9pBw90
-        UfOCN9HbXulg35CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BB97A134AD;
-        Mon,  9 Jan 2023 15:29:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id p3DFLdMyvGNbUQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 09 Jan 2023 15:29:23 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 33035A0749; Mon,  9 Jan 2023 16:29:23 +0100 (CET)
-Date:   Mon, 9 Jan 2023 16:29:23 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     tytso@mit.edu, jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        libaokun1@huawei.com, zhanchengbin1@huawei.com
-Subject: Re: [PATCH -next v3] jbd2: Fix data missing when reusing bh which is
- ready to be checkpointed
-Message-ID: <20230109152923.fvx57xucg2vggzp6@quack3>
-References: <20230109134545.2234414-1-chengzhihao1@huawei.com>
+        bh=KoiFHa3OYaUadlpj4XIDCoE4VEmQuSerBU1ZGv9DnLo=;
+        b=CZHFPtJPuGRR5JMiSzNZNLLnEk+jcaDXQ22Ea1ihyEmk0PJ70MkfiUR2S29JqVzSa5vTKO
+        PXwi4NtnSYnptuBg==
+To:     Guo Hui <guohui@uniontech.com>, sboyd@kernel.org
+Cc:     jstultz@google.com, wangxiaohua@uniontech.com,
+        linux-kernel@vger.kernel.org, Guo Hui <guohui@uniontech.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] timekeeping:add padding in timekeeper for Unixbench pipe
+In-Reply-To: <20230106062946.19983-1-guohui@uniontech.com>
+References: <20230106062946.19983-1-guohui@uniontech.com>
+Date:   Mon, 09 Jan 2023 16:29:32 +0100
+Message-ID: <874jszlo9v.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109134545.2234414-1-chengzhihao1@huawei.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -72,85 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 09-01-23 21:45:45, Zhihao Cheng wrote:
-> Following process will make data lost and could lead to a filesystem
-> corrupted problem:
-> 
-> 1. jh(bh) is inserted into T1->t_checkpoint_list, bh is dirty, and
->    jh->b_transaction = NULL
-> 2. T1 is added into journal->j_checkpoint_transactions.
-> 3. Get bh prepare to write while doing checkpoing:
->            PA				    PB
->    do_get_write_access             jbd2_log_do_checkpoint
->     spin_lock(&jh->b_state_lock)
->      if (buffer_dirty(bh))
->       clear_buffer_dirty(bh)   // clear buffer dirty
->        set_buffer_jbddirty(bh)
-> 				    transaction =
-> 				    journal->j_checkpoint_transactions
-> 				    jh = transaction->t_checkpoint_list
-> 				    if (!buffer_dirty(bh))
-> 		                      __jbd2_journal_remove_checkpoint(jh)
-> 				      // bh won't be flushed
-> 		                    jbd2_cleanup_journal_tail
->     __jbd2_journal_file_buffer(jh, transaction, BJ_Reserved)
-> 4. Aborting journal/Power-cut before writing latest bh on journal area.
-> 
-> In this way we get a corrupted filesystem with bh's data lost.
-> 
-> Fix it by moving the clearing of buffer_dirty bit just before the call
-> to __jbd2_journal_file_buffer(), both bit clearing and jh->b_transaction
-> assignment are under journal->j_list_lock locked, so that
-> jbd2_log_do_checkpoint() will wait until jh's new transaction fininshed
-> even bh is currently not dirty. And journal_shrink_one_cp_list() won't
-> remove jh from checkpoint list if the buffer head is reused in
-> do_get_write_access().
-> 
-> Fetch a reproducer in [Link].
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216898
-> Cc: <stable@kernel.org>
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> Signed-off-by: zhanchengbin <zhanchengbin1@huawei.com>
-> Suggested-by: Jan Kara <jack@suse.cz>
+Guo!
 
-Great, the patch looks good. Feel free to add:
+On Fri, Jan 06 2023 at 14:29, Guo Hui wrote:
+> When the LLC cache line size is 128 bytes, such as Kunpeng 920,
+> the seq attribute and xtime attribute in the structure tk_core
+> are completely in the same LLC cache line,
+> and xtime_sec is the data protected by the seq lock
+> in the function ktime_get_coarse_real_ts64,
+> so seq and xtime_sec are in the same LLC cache line
+> causing the false sharing problem.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+What exactly causes the alleged false sharing problem?
 
-Just a suggestion for rephrasing of the comment below
+> Adding padding before xtime_sec in the structure timekeeper
+> is based on the comment of the structure tk_read_base: "This
+> struct has size 56 byte on 64 bit. Together with a seqcount
+> it occupies a single 64byte cache line." Therefore,
+> seq and the structure tk_read_base
+> should be placed in the same 64-byte cacheline.
 
-> -		/*
-> -		 * In any case we need to clean the dirty flag and we must
-> -		 * do it under the buffer lock to be sure we don't race
-> -		 * with running write-out.
-> +		 * We need to clean the dirty flag and we must do it under the
-> +		 * buffer lock to be sure we don't race with running write-out.
->  		 */
->  		JBUFFER_TRACE(jh, "Journalling dirty buffer");
->  		clear_buffer_dirty(bh);
-> +		/*
-> +		 * Setting jbddirty after clearing buffer dirty is necessary.
-> +		 * Function jbd2_journal_restart() could keep buffer on
-> +		 * BJ_Reserved list until the transaction committing, then the
-> +		 * buffer won't be dirtied by jbd2_journal_refile_buffer()
-> +		 * after committing, the buffer couldn't fall on disk even
-> +		 * last checkpoint finished, which may corrupt filesystem.
-> +		 */
+How is that relevant? They _are_ in the same cacheline independent of
+your padding, no?
+                                           Offset  Size
+  seqcount_raw_spinlock_t seq;          /*     0     4 */
+  struct timekeeper       timekeeper;   /*     8   280 */
+    struct tk_read_base     tkr_mono;   /*     8    56 */
 
-As far as I understand you want to say:
-		/*
-		 * The buffer is going to be added to BJ_Reserved list now
-		 * and nothing guarantees jbd2_journal_dirty_metadata()
-		 * will be ever called for it. So we need to set jbddirty
-		 * bit here to make sure the buffer is dirtied and written
-		 * out when the journaling machinery is done with it.
-		 */
+8 + 56 = 64 which is also the case with your padding.
 
->  		set_buffer_jbddirty(bh);
->  	}
+If your false sharing thing exists then all other timekeeper read
+functions which only use
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+     tk_core.seq and tk_core.timekeeper.tkr_mono
+
+have the very same false sharing problem because seq and data are in the
+same cache line, no?
+
+Aside of that, for architectures with 64 byte cache line size, your
+change is fundamentally bad. Why?
+
+It moves xtime_sec to offset 128 which means seq and xtime_sec are not
+longer in consecutive cache lines.
+
+If you change core data structures for the benefit of your platform,
+then you have to provide proof that it does not cause any issues on
+other architectures and platforms.
+
+Thanks,
+
+        tglx
