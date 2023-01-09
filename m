@@ -2,235 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57789662891
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2A8662893
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 15:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbjAIObB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 09:31:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
+        id S233393AbjAIOb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 09:31:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbjAIOar (ORCPT
+        with ESMTP id S233309AbjAIObT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 09:30:47 -0500
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B9A1B1C9;
-        Mon,  9 Jan 2023 06:30:43 -0800 (PST)
-Received: by mail-oo1-f44.google.com with SMTP id e22-20020a4a5516000000b004a3d3028bafso2493049oob.3;
-        Mon, 09 Jan 2023 06:30:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jZs5nSO5PMtmfvhHOu/9xt+IHBAq4OcNiwoujlYPxtc=;
-        b=HjF1P9ekO+RDTyA/mGxBJeWZCttH00BjhCMM/rqDpedfcrgqx34vs+2pWRn1K5pmnn
-         3btqDKSf/QsB7N87hHBPU6GJN5/WOLzfXRmCY0EXbCRnrF8MT0ImXNItuZkd3jgn+zCH
-         h7m0TDvFswVjREdScBsQMzJHGQ17SYJz91Mte/qiTGVua5TgqYbpoQaRoihvBHlX9b+v
-         kdy/XSqKL35CTw7nhhqdVrymOCRw9K8KXghu8/wlgwUR62q1pv074aGrgUI64loy/Abk
-         1iW/F6VSv7rmKjOv6sJpJRg+fydX7P2ArVGYjBLWb6vj8e9O7Ee1e+EcEJiT/Y4zk6ul
-         W9Ew==
-X-Gm-Message-State: AFqh2kpEEniArQNPdu/PWiq6gI5djzRh/zrQhEnKUWLQCJKl78pYzhMs
-        XOSQXJDKZzkIycA4/oLHRg==
-X-Google-Smtp-Source: AMrXdXtrcAFpyRz33rIvEbgcOBaNXt9gBD46Co33QHUTb8jBNaxSiVfI0ILKOZR0/SNZTHAckYl6cA==
-X-Received: by 2002:a4a:a845:0:b0:4a3:bcce:5b56 with SMTP id p5-20020a4aa845000000b004a3bcce5b56mr32467652oom.3.1673274642647;
-        Mon, 09 Jan 2023 06:30:42 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e40-20020a056820062800b004f1c4baa96bsm4297809oow.6.2023.01.09.06.30.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 06:30:42 -0800 (PST)
-Received: (nullmailer pid 237521 invoked by uid 1000);
-        Mon, 09 Jan 2023 14:30:36 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Mon, 9 Jan 2023 09:31:19 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A44A51CFF3
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 06:31:09 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 309EUxDW029407;
+        Mon, 9 Jan 2023 15:30:59 +0100
+Date:   Mon, 9 Jan 2023 15:30:59 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, Pavel Machek <pavel@ucw.cz>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@osdl.org>
+Subject: Re: Dhrystone -- userland version
+Message-ID: <20230109143059.GB25476@1wt.eu>
+References: <Y7nyd4hPeXsdiibH@duo.ucw.cz>
+ <Y7pRw47hidw+s6+g@mit.edu>
+ <Y7pzbnlXgv+asekg@amd.ucw.cz>
+ <CAMuHMdVvVoEs8yjNLmK=_shmGkyz1zYc8ZMi-vmP4aee0yKoPQ@mail.gmail.com>
+ <Y7sPq3Tmm6vI/RAJ@duo.ucw.cz>
+ <Y7tjnhs77o4TL5ey@mit.edu>
+ <CAMuHMdXP8ycxE_Sny0q+SAzLTwnaA3hks=ErW-ZfiMBw7ZMSgg@mail.gmail.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     manivannan.sadhasivam@linaro.org, will@kernel.org,
-        robin.murphy@arm.com, sumit.semwal@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, amit.pundir@linaro.org,
-        regressions@leemhuis.info, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, krzysztof.kozlowski+dt@linaro.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        linux-arm-msm@vger.kernel.org, agross@kernel.org
-In-Reply-To: <20230109034843.23759-4-quic_sibis@quicinc.com>
-References: <20230109034843.23759-1-quic_sibis@quicinc.com>
- <20230109034843.23759-4-quic_sibis@quicinc.com>
-Message-Id: <167327380020.68049.679512287478536329.robh@kernel.org>
-Subject: Re: [PATCH V2 03/11] dt-bindings: remoteproc: qcom,sc7180-mss-pil:
- Update memory-region
-Date:   Mon, 09 Jan 2023 08:30:36 -0600
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXP8ycxE_Sny0q+SAzLTwnaA3hks=ErW-ZfiMBw7ZMSgg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Geert,
 
-On Mon, 09 Jan 2023 09:18:35 +0530, Sibi Sankar wrote:
-> The dynamic memory region used for metadata authentication would still
-> be a part of the kernel mapping and any access to this region  by the
-> application processor after assigning it to the remote Q6 will result
-> in a XPU violation. This is fixed by using a no-map carveout instead.
-> Update the bindings to reflect the addition of the new modem metadata
-> carveout on SC7180 SoC.
+On Mon, Jan 09, 2023 at 10:28:09AM +0100, Geert Uytterhoeven wrote:
+> Hi Ted,
 > 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
+> On Mon, Jan 9, 2023 at 1:45 AM Theodore Ts'o <tytso@mit.edu> wrote:
+> > On Sun, Jan 08, 2023 at 07:47:07PM +0100, Pavel Machek wrote:
+> > > > However, as this is not Linux-specific, how hard can it be to convince
+> > > > your distro to include https://github.com/qris/dhrystone-deb.git?
+> > > > Usually, when I have a full userspace available, I just clone the above,
+> > > > and debuild it myself.
+> > >
+> > > Dunno. I'd not solve it if package was in Debian, but it is not.
+> >
+> > I would suspect the better long-term solution would be to get the
+> > package into Debian, since that will be easier for people to use.  I
+> > suspect the reason why most distros don't include it is because it
+> > really is a **terrible** benchmark for most use cases.
 > 
-> v2:
->  * Pad commit message to explain bindings break [Krzysztof]
->  * Split dt/bindings per SoC  [Krzysztof]
-> 
->  .../devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml    | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
+> My use case is verifying the CPU core clock rate when working on
+> the clock driver and/or cpufreq.  I can easily measure e.g. SPI or
+> UART clock rates
+> externally, but not CPU core clock rates.
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Then maybe you'd rather use this:
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+   https://github.com/wtarreau/mhz
 
-Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230109034843.23759-4-quic_sibis@quicinc.com
+E.g.:
 
+  $ ./mhz 10
+  count=1666675 us50=20089 us250=100748 diff=80659 cpu_MHz=4132.645 tsc50=42427696 tsc250=212780620 diff=102 rdtsc_MHz=2112.014
+  count=1666675 us50=20271 us250=101282 diff=81011 cpu_MHz=4114.688 tsc50=42813060 tsc250=213905908 diff=102 rdtsc_MHz=2111.970
+  count=1666675 us50=20405 us250=100344 diff=79939 cpu_MHz=4169.867 tsc50=43094116 tsc250=211927426 diff=101 rdtsc_MHz=2112.027
+  count=1666675 us50=20239 us250=100249 diff=80010 cpu_MHz=4166.167 tsc50=42744302 tsc250=211727114 diff=101 rdtsc_MHz=2112.021
+  count=1666675 us50=20182 us250=100482 diff=80300 cpu_MHz=4151.121 tsc50=42624768 tsc250=212217884 diff=101 rdtsc_MHz=2111.994
+  count=1666675 us50=20153 us250=100151 diff=79998 cpu_MHz=4166.792 tsc50=42562818 tsc250=211519326 diff=101 rdtsc_MHz=2112.009
+  count=1666675 us50=20281 us250=99803 diff=79522 cpu_MHz=4191.733 tsc50=42832298 tsc250=210784252 diff=100 rdtsc_MHz=2112.019
+  count=1666675 us50=20104 us250=99841 diff=79737 cpu_MHz=4180.431 tsc50=42461284 tsc250=210862414 diff=101 rdtsc_MHz=2111.957
+  count=1666675 us50=20088 us250=100287 diff=80199 cpu_MHz=4156.349 tsc50=42423974 tsc250=211807066 diff=101 rdtsc_MHz=2112.035
+  count=1666675 us50=20178 us250=99913 diff=79735 cpu_MHz=4180.536 tsc50=42614718 tsc250=211016124 diff=101 rdtsc_MHz=2112.014
 
-remoteproc@4080000: memory-region: [[105], [106]] is too short
-	arch/arm64/boot/dts/qcom/sc7180-idp.dtb
+It's also what's used by sbc-bench to verify that CPU vendors are not
+cheating in the embedded world. It's very simple, and not arch-dependent
+nor compiler-dependent (at least as long as you don't build at -O0 :-)).
 
-remoteproc@4080000: memory-region: [[122], [123]] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick-r0-lte.dtb
-
-remoteproc@4080000: memory-region: [[123], [124]] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick-r0.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dtb
-
-remoteproc@4080000: memory-region: [[128], [129]] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-wifi.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dtb
-
-remoteproc@4080000: memory-region: [[129], [130]] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r3.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r3-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dtb
-
-remoteproc@4080000: memory-region: [[130], [131]] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dtb
-
-remoteproc@4080000: memory-region: [[131], [132]] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r9.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-kb.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dtb
-
-remoteproc@4080000: memory-region: [[132], [133]] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r4.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-kb.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r3.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r3-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-r1-lte.dtb
-
-remoteproc@4080000: qcom,halt-regs:0: [110] is too short
-	arch/arm64/boot/dts/qcom/sc7180-idp.dtb
-
-remoteproc@4080000: qcom,halt-regs:0: [127] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick-r0-lte.dtb
-
-remoteproc@4080000: qcom,halt-regs:0: [128] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick-r0.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dtb
-
-remoteproc@4080000: qcom,halt-regs:0: [133] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-wifi.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dtb
-
-remoteproc@4080000: qcom,halt-regs:0: [134] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r3.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r3-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dtb
-
-remoteproc@4080000: qcom,halt-regs:0: [135] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dtb
-
-remoteproc@4080000: qcom,halt-regs:0: [136] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r9.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-kb.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dtb
-
-remoteproc@4080000: qcom,halt-regs:0: [137] is too short
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r4.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-kb.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r3.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r3-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7180-trogdor-r1-lte.dtb
-
+Just my two cents,
+Willy
