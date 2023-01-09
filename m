@@ -2,309 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33921662A1D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8966629FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 16:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbjAIPdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 10:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S237320AbjAIPcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 10:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237161AbjAIPbu (ORCPT
+        with ESMTP id S236688AbjAIPbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:31:50 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3AF1EC69;
-        Mon,  9 Jan 2023 07:31:08 -0800 (PST)
-Received: from mwalle01.sab.local (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 9A08118F4;
-        Mon,  9 Jan 2023 16:30:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1673278257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6a41x9xkDddn0pKN675NFehAFfkJd5FOLk73tfVYXAs=;
-        b=Z1otKrDv2SQDrlxMVXMdZ+1hmiRsJovlAtyCffdDyrk6DoX/tSjVMtAFL8MymE2O8CdF8C
-        9Bq51R898qZ8Xo5H0OB2147Oiy6w50KIRVkhRayrgNUfNV6OA3cYkc/FyCsZUr0s516Nch
-        JvupojR10HYlL0Mr4GuXArtVFYmouFz6P3fX2BhC0rxum6JjoE+CQbbVnT5lVLiOP0z8u2
-        CmBNE5roIjSoVyAj0/jLwktY4p0PFruSq6zRF6BH+lM38TlxhwkyyhZFW37bRmFvm9F3QU
-        5Tj/ncMnsM5tuAOwRRwry/mrAZozMWSdj4QwjDprvLjFVqpmQCyCKCmPs9ZyEw==
-From:   Michael Walle <michael@walle.cc>
-Date:   Mon, 09 Jan 2023 16:30:49 +0100
-Subject: [PATCH net-next v3 09/11] net: fec: Separate C22 and C45 transactions
+        Mon, 9 Jan 2023 10:31:42 -0500
+Received: from fx304.security-mail.net (smtpout30.security-mail.net [85.31.212.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A1565C2
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 07:30:54 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx304.security-mail.net (Postfix) with ESMTP id 800539D0AC
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 16:30:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1673278252;
+        bh=2Ol4WvfIDv/pCXWodkK/JAf2l0CqXaG0EOhqPlCz5xY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=kz8ddZYg0nJtow93ucAH7WnT8Vqwhr3lvi4IHN8OoSZGNmOScb2xcOeU4ahhPcX9+
+         p9CNBdA/jH2f4K049TrCPM610wwO1NQ4J9xx87Kmzbu7GXz0K8YSAee6gE4pfS7J3i
+         nAosaoMAGS6mHOvc8xjvjf4lK/Nd1xrz4y1l10bc=
+Received: from fx304 (localhost [127.0.0.1]) by fx304.security-mail.net
+ (Postfix) with ESMTP id 520CF9D07F; Mon,  9 Jan 2023 16:30:52 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx304.security-mail.net (Postfix) with ESMTPS id 9D11C9D072; Mon,  9 Jan
+ 2023 16:30:51 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 68AED27E0402; Mon,  9 Jan 2023
+ 16:30:51 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id 38EF527E03FF; Mon,  9 Jan 2023 16:30:51 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ Ax--sd_V2azt; Mon,  9 Jan 2023 16:30:51 +0100 (CET)
+Received: from [192.168.37.161] (unknown [192.168.37.161]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 8E4D827E03FE; Mon,  9 Jan 2023
+ 16:30:50 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <b2fe.63bc332b.9bc13.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 38EF527E03FF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1673278251;
+ bh=AQRkX8OfPpkm9ao22SwrZcjsHp5YTFXu85Lp04m+1A0=;
+ h=Message-ID:Date:MIME-Version:To:From;
+ b=Nw9h4dkzOwPn5vuhGKIyNNJs3P3x4pfdYEE7ckz9lL13tSkmK4nwamwpUjampl3D6
+ LDhJg2t6qBuoBWDfEIexbrFwLh9D9VyJiOWUlwmQC+1j7iIHZ+vEfgfvPWRc9vt9zD
+ PN1+BJeuI0U91Om91ZCvoSBebX3S3D5TsBEjM/tE=
+Message-ID: <bccad498-3af2-08f1-8264-cf7b438732d3@kalray.eu>
+Date:   Mon, 9 Jan 2023 16:30:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221227-v6-2-rc1-c45-seperation-v3-9-ade1deb438da@walle.cc>
-References: <20221227-v6-2-rc1-c45-seperation-v3-0-ade1deb438da@walle.cc>
-In-Reply-To: <20221227-v6-2-rc1-c45-seperation-v3-0-ade1deb438da@walle.cc>
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wei Fang <wei.fang@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Walle <michael@walle.cc>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-X-Mailer: b4 0.11.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
+Content-Language: en-us
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
+        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-audit@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>
+References: <20230103164359.24347-1-ysionneau@kalray.eu>
+ <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
+ <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu>
+ <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
+From:   Yann Sionneau <ysionneau@kalray.eu>
+In-Reply-To: <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Lunn <andrew@lunn.ch>
+Hi Jeff,
 
-The fec MDIO bus driver can perform both C22 and C45 transfers.
-Create separate functions for each and register the C45 versions using
-the new API calls where appropriate.
+On 1/9/23 16:11, Jeff Xie wrote:
+> On Mon, Jan 9, 2023 at 9:21 PM Yann Sionneau <ysionneau@kalray.eu> wrote:
+>> Hi Jeff,
+>>
+>> On 1/7/23 07:25, Jeff Xie wrote:
+>>> Hi,
+>>>
+>>> On Wed, Jan 4, 2023 at 1:01 AM Yann Sionneau <ysionneau@kalray.eu> wrote:
+>>>> [snip]
+>>>>
+>>>> A kvx toolchain can be built using:
+>>>> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev libmpfr-dev
+>>>> $ git clone https://github.com/kalray/build-scripts
+>>>> $ cd build-scripts
+>>>> $ source last.refs
+>>>> $ ./build-kvx-xgcc.sh output
+>>> I would like to build the kvx-xgcc to compile and test the linux
+>>> kernel, but it reported a compile error.
+>>> I wonder what version of gcc you are using.
+>>>
+>>> My build environment:
+>>> VERSION="20.04.2 LTS (Focal Fossa)"
+>>> gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
+>>>
+>>>
+>>> Compile error:
+>>> $ ./build-kvx-xgcc.sh output
+>>>
+>>> ../../binutils/libiberty/fibheap.c: In function ‘fibheap_replace_key_data’:
+>>> ../../binutils/libiberty/fibheap.c:38:24: error: ‘LONG_MIN’ undeclared
+>>> (first use in this function)
+>>>      38 | #define FIBHEAPKEY_MIN LONG_MIN
+>>>         |                        ^~~~~~~~
+>>> [snip]
+>> What SHA1 of https://github.com/kalray/build-scripts are you using?
+> I have executed the "source last.refs"
 
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Wei Fang <wei.fang@nxp.com>
----
-v2:
- - [al] Fixup some indentation
-v3:
- - [mw] More concise subject
----
- drivers/net/ethernet/freescale/fec_main.c | 153 ++++++++++++++++++++----------
- 1 file changed, 103 insertions(+), 50 deletions(-)
+I was referring to the SHA1 of the repo itself (build-scripts).
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 644f3c963730..e6238e53940d 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -1987,47 +1987,74 @@ static int fec_enet_mdio_wait(struct fec_enet_private *fep)
- 	return ret;
- }
- 
--static int fec_enet_mdio_read(struct mii_bus *bus, int mii_id, int regnum)
-+static int fec_enet_mdio_read_c22(struct mii_bus *bus, int mii_id, int regnum)
- {
- 	struct fec_enet_private *fep = bus->priv;
- 	struct device *dev = &fep->pdev->dev;
- 	int ret = 0, frame_start, frame_addr, frame_op;
--	bool is_c45 = !!(regnum & MII_ADDR_C45);
- 
- 	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0)
- 		return ret;
- 
--	if (is_c45) {
--		frame_start = FEC_MMFR_ST_C45;
-+	/* C22 read */
-+	frame_op = FEC_MMFR_OP_READ;
-+	frame_start = FEC_MMFR_ST;
-+	frame_addr = regnum;
- 
--		/* write address */
--		frame_addr = (regnum >> 16);
--		writel(frame_start | FEC_MMFR_OP_ADDR_WRITE |
--		       FEC_MMFR_PA(mii_id) | FEC_MMFR_RA(frame_addr) |
--		       FEC_MMFR_TA | (regnum & 0xFFFF),
--		       fep->hwp + FEC_MII_DATA);
-+	/* start a read op */
-+	writel(frame_start | frame_op |
-+	       FEC_MMFR_PA(mii_id) | FEC_MMFR_RA(frame_addr) |
-+	       FEC_MMFR_TA, fep->hwp + FEC_MII_DATA);
- 
--		/* wait for end of transfer */
--		ret = fec_enet_mdio_wait(fep);
--		if (ret) {
--			netdev_err(fep->netdev, "MDIO address write timeout\n");
--			goto out;
--		}
-+	/* wait for end of transfer */
-+	ret = fec_enet_mdio_wait(fep);
-+	if (ret) {
-+		netdev_err(fep->netdev, "MDIO read timeout\n");
-+		goto out;
-+	}
- 
--		frame_op = FEC_MMFR_OP_READ_C45;
-+	ret = FEC_MMFR_DATA(readl(fep->hwp + FEC_MII_DATA));
- 
--	} else {
--		/* C22 read */
--		frame_op = FEC_MMFR_OP_READ;
--		frame_start = FEC_MMFR_ST;
--		frame_addr = regnum;
-+out:
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	return ret;
-+}
-+
-+static int fec_enet_mdio_read_c45(struct mii_bus *bus, int mii_id,
-+				  int devad, int regnum)
-+{
-+	struct fec_enet_private *fep = bus->priv;
-+	struct device *dev = &fep->pdev->dev;
-+	int ret = 0, frame_start, frame_op;
-+
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	frame_start = FEC_MMFR_ST_C45;
-+
-+	/* write address */
-+	writel(frame_start | FEC_MMFR_OP_ADDR_WRITE |
-+	       FEC_MMFR_PA(mii_id) | FEC_MMFR_RA(devad) |
-+	       FEC_MMFR_TA | (regnum & 0xFFFF),
-+	       fep->hwp + FEC_MII_DATA);
-+
-+	/* wait for end of transfer */
-+	ret = fec_enet_mdio_wait(fep);
-+	if (ret) {
-+		netdev_err(fep->netdev, "MDIO address write timeout\n");
-+		goto out;
- 	}
- 
-+	frame_op = FEC_MMFR_OP_READ_C45;
-+
- 	/* start a read op */
- 	writel(frame_start | frame_op |
--		FEC_MMFR_PA(mii_id) | FEC_MMFR_RA(frame_addr) |
--		FEC_MMFR_TA, fep->hwp + FEC_MII_DATA);
-+	       FEC_MMFR_PA(mii_id) | FEC_MMFR_RA(devad) |
-+	       FEC_MMFR_TA, fep->hwp + FEC_MII_DATA);
- 
- 	/* wait for end of transfer */
- 	ret = fec_enet_mdio_wait(fep);
-@@ -2045,45 +2072,69 @@ static int fec_enet_mdio_read(struct mii_bus *bus, int mii_id, int regnum)
- 	return ret;
- }
- 
--static int fec_enet_mdio_write(struct mii_bus *bus, int mii_id, int regnum,
--			   u16 value)
-+static int fec_enet_mdio_write_c22(struct mii_bus *bus, int mii_id, int regnum,
-+				   u16 value)
- {
- 	struct fec_enet_private *fep = bus->priv;
- 	struct device *dev = &fep->pdev->dev;
- 	int ret, frame_start, frame_addr;
--	bool is_c45 = !!(regnum & MII_ADDR_C45);
- 
- 	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0)
- 		return ret;
- 
--	if (is_c45) {
--		frame_start = FEC_MMFR_ST_C45;
-+	/* C22 write */
-+	frame_start = FEC_MMFR_ST;
-+	frame_addr = regnum;
- 
--		/* write address */
--		frame_addr = (regnum >> 16);
--		writel(frame_start | FEC_MMFR_OP_ADDR_WRITE |
--		       FEC_MMFR_PA(mii_id) | FEC_MMFR_RA(frame_addr) |
--		       FEC_MMFR_TA | (regnum & 0xFFFF),
--		       fep->hwp + FEC_MII_DATA);
-+	/* start a write op */
-+	writel(frame_start | FEC_MMFR_OP_WRITE |
-+	       FEC_MMFR_PA(mii_id) | FEC_MMFR_RA(frame_addr) |
-+	       FEC_MMFR_TA | FEC_MMFR_DATA(value),
-+	       fep->hwp + FEC_MII_DATA);
- 
--		/* wait for end of transfer */
--		ret = fec_enet_mdio_wait(fep);
--		if (ret) {
--			netdev_err(fep->netdev, "MDIO address write timeout\n");
--			goto out;
--		}
--	} else {
--		/* C22 write */
--		frame_start = FEC_MMFR_ST;
--		frame_addr = regnum;
-+	/* wait for end of transfer */
-+	ret = fec_enet_mdio_wait(fep);
-+	if (ret)
-+		netdev_err(fep->netdev, "MDIO write timeout\n");
-+
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	return ret;
-+}
-+
-+static int fec_enet_mdio_write_c45(struct mii_bus *bus, int mii_id,
-+				   int devad, int regnum, u16 value)
-+{
-+	struct fec_enet_private *fep = bus->priv;
-+	struct device *dev = &fep->pdev->dev;
-+	int ret, frame_start;
-+
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	frame_start = FEC_MMFR_ST_C45;
-+
-+	/* write address */
-+	writel(frame_start | FEC_MMFR_OP_ADDR_WRITE |
-+	       FEC_MMFR_PA(mii_id) | FEC_MMFR_RA(devad) |
-+	       FEC_MMFR_TA | (regnum & 0xFFFF),
-+	       fep->hwp + FEC_MII_DATA);
-+
-+	/* wait for end of transfer */
-+	ret = fec_enet_mdio_wait(fep);
-+	if (ret) {
-+		netdev_err(fep->netdev, "MDIO address write timeout\n");
-+		goto out;
- 	}
- 
- 	/* start a write op */
- 	writel(frame_start | FEC_MMFR_OP_WRITE |
--		FEC_MMFR_PA(mii_id) | FEC_MMFR_RA(frame_addr) |
--		FEC_MMFR_TA | FEC_MMFR_DATA(value),
--		fep->hwp + FEC_MII_DATA);
-+	       FEC_MMFR_PA(mii_id) | FEC_MMFR_RA(devad) |
-+	       FEC_MMFR_TA | FEC_MMFR_DATA(value),
-+	       fep->hwp + FEC_MII_DATA);
- 
- 	/* wait for end of transfer */
- 	ret = fec_enet_mdio_wait(fep);
-@@ -2381,8 +2432,10 @@ static int fec_enet_mii_init(struct platform_device *pdev)
- 	}
- 
- 	fep->mii_bus->name = "fec_enet_mii_bus";
--	fep->mii_bus->read = fec_enet_mdio_read;
--	fep->mii_bus->write = fec_enet_mdio_write;
-+	fep->mii_bus->read = fec_enet_mdio_read_c22;
-+	fep->mii_bus->write = fec_enet_mdio_write_c22;
-+	fep->mii_bus->read_c45 = fec_enet_mdio_read_c45;
-+	fep->mii_bus->write_c45 = fec_enet_mdio_write_c45;
- 	snprintf(fep->mii_bus->id, MII_BUS_ID_SIZE, "%s-%x",
- 		pdev->name, fep->dev_id + 1);
- 	fep->mii_bus->priv = fep;
+`last.refs` is a symbolic link which can point to several releases, 
+depending on "when" you did the clone.
+
+I am asking this because we recently published new toolchains.
+
+I want to make sure which one you are trying to build.
+
+>> We are building our toolchain on Ubuntu 18.04 / 20.04 and 22.04 without
+>> issues, I don't understand why it does not work for you, although indeed
+>> the error log you are having pops out on my search engine and seems to
+>> be some well known issue.
+> Yes, there are many answers on the web, but none of them solve this problem.
+>
+>> If the build-script does not work for you, you can still use the
+>> pre-built toolchains generated by the GitHub automated actions:
+>> https://github.com/kalray/build-scripts/releases/tag/v4.11.1 ("latest"
+>> means 22.04)
+> Thanks, this is the final solution ;-)
+Good to see it helped :)
+
+Regards,
 
 -- 
-2.30.2
+
+Yann
+
+
+
+
+
