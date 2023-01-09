@@ -2,167 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA6766309E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B814A6630C8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237468AbjAITmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        id S237773AbjAITne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:43:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237632AbjAITmT (ORCPT
+        with ESMTP id S237470AbjAITmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:42:19 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A178A3C3BD
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:42:16 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id jn22so10648006plb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:42:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ydmzchxyNR+IqB33c0jWFlmVpBQ7+XVQgnYYMSL8I6g=;
-        b=jJpQzHlTSQsFi3n9cFfzVW1NWhX8e/c/p0uH6A3AOU7JnJmK3r4pNZZOp5JlymTU+t
-         zaANHLXB2rmILVpmAhvASLkFD6lG9tbgZUrj+zWui1JpisYdQPaYdpevHtXqR/QRbaZY
-         KroO310n78o9aeKhYcIuJsXPyFlsJN7fevtxrC0XfFKIdaKOlvjj6tqYPRTWxboWlyki
-         5X+az/nXmpddA6BbV3sN8sqAPA5oGd3njpycrXCbAcy4l8VDZbhD2NN+SQcMS1nPFmMd
-         mYlp/9723BeNtFpHdDo2wKq+djxxfzclG5StDBEfaoBJYkYtgeuHMCRg8wpFYgm1jfAe
-         r+jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ydmzchxyNR+IqB33c0jWFlmVpBQ7+XVQgnYYMSL8I6g=;
-        b=bpoUDR3HxP9oFjorCMGU8LVuyjj+8+k00bO8oWHc5qus6yejMtyuysB3qjKSY5y6OR
-         UUZuaXIphNm+8hqKdCId+f3TaWA78PhGyktfzpjFg2bRrGaX+J7UL9fxfaYLqKXWrnxG
-         5IabuJmN3x4nzmrb8fRLJjLGV7ISWAdu98tNYVwMNumOPr+s8mtOVIqz3nT2DbmF1MD4
-         3bqCX/vC8TKjgg9z4t+u4Asf27dsw+9yde6Ny/ltV2q/Y1hQwlNs9JAVFQ8/hbSgqRRz
-         xm2IXjYXVPvV//7qf0iMsbm4s3xsC6jUv9zzweubpwaMit/Mwa+UU1b2uqGK1gg9/ixw
-         W5FQ==
-X-Gm-Message-State: AFqh2ko2LB24RXPk1YZzpHPA1Xd18MrZCRfVKVWbK441ndktnahryNh2
-        i5nyYKL7TZXh4pxaT0oMjiXHFA==
-X-Google-Smtp-Source: AMrXdXuAYx5/bXE9mxYxFY1+P8b3f3U7d1zPlfl9lusfmfAMG0NCDq+Ap03P0QfGw+CnF3IV3rY+0A==
-X-Received: by 2002:a17:902:9346:b0:192:8a1e:9bc7 with SMTP id g6-20020a170902934600b001928a1e9bc7mr678043plp.0.1673293335845;
-        Mon, 09 Jan 2023 11:42:15 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:3529:30e5:d581:6e80])
-        by smtp.gmail.com with ESMTPSA id o17-20020a170902d4d100b00189d4c666c8sm6506350plg.153.2023.01.09.11.42.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 11:42:14 -0800 (PST)
-Date:   Mon, 9 Jan 2023 11:42:08 -0800
-From:   Benson Leung <bleung@google.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        heikki.krogerus@linux.intel.com,
-        Benson Leung <bleung@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Evan Green <evgreen@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, Lee Jones <lee@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Xiang wangx <wangxiang@cdjrlc.com>
-Subject: Re: [PATCH 03/10] platform/chrome: cros_ec_typec: Stash port driver
- info
-Message-ID: <Y7xuEDPwbMQ29mDE@google.com>
-References: <20221228004648.793339-1-pmalani@chromium.org>
- <20221228004648.793339-4-pmalani@chromium.org>
+        Mon, 9 Jan 2023 14:42:40 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FCD6CFE1;
+        Mon,  9 Jan 2023 11:42:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673293359; x=1704829359;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=t0KtIDqmaJYRE1NQYpq+S3S1qQTjDdQlFxzAXzrQRYU=;
+  b=guKMXeEBx+uGo8zRBad8KdfPXBXrrs6CLSM06F+btBlUEQe1PJSWh5r8
+   TkadjJ/bsVjnfGZH5basmdM4kVeT5UXoPhcV02yrjyYfoeIbfc2tev9Pw
+   tg6CQxxAGpthrKZh2CsF9RgGk0DKzUFCPuiMAlc9J6NrflubXv8pg3PsN
+   6Dw1shNgKybzJVkm/Ogm1GkfBBjS98Z8TfoXMSkDdLYItXfU/XUU5Iwbj
+   aQliN6dmoJ4Sl517Tt3yuhMuxnrW6ttAl1i54Yn1mPnfX33BsEqx+OghH
+   5MGibWrRQAm/Qc5UrVlP2y839mlcTzox3ZMI0vdzssUdphe4cQFtsMX/S
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="385269859"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="385269859"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 11:42:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="656783487"
+X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
+   d="scan'208";a="656783487"
+Received: from cwchen-mobl.amr.corp.intel.com (HELO localhost) ([10.212.45.225])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 11:42:31 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH v6 0/8] cxl: Process event logs
+Date:   Mon, 09 Jan 2023 11:42:20 -0800
+Message-Id: <20221216-cxl-ev-log-v6-0-346583105b30@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NN1+a3FMy7XRMBpl"
-Content-Disposition: inline
-In-Reply-To: <20221228004648.793339-4-pmalani@chromium.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABxuvGMC/1WOwQ6CMBBEf8X07JJugYKe/A/jAcoCm9RiWqwaw
+ 79bSEz0+CZ5M/MWgTxTEMfdW3iKHHhyCfR+J8zYuIGAu8RCSaVQoQbztEAR7DRAL3Ve53ioygJF
+ EtomELS+cWZMirtbm8Kbp56f28L5knjkME/+tQ1GXNNvt5KV1KrKMK9UIRUgsG+yB7F7ndjNZDM
+ zXcXaEctf7+9TLEEC1tJorKkrO/xVl2X5AAHSxbvxAAAA
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
+        Bjorn Helgaas <helgaas@kernel.org>
+X-Mailer: b4 0.12-dev-cc11a
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1673293350; l=2483;
+ i=ira.weiny@intel.com; s=20221211; h=from:subject:message-id;
+ bh=t0KtIDqmaJYRE1NQYpq+S3S1qQTjDdQlFxzAXzrQRYU=;
+ b=Mo2DCQbXFcnT8uYCAtepvwGqxQOa0nqdlTARb74mU+RfuKxIJ5mIGQ2yGFB9ohKcO7QEcqZZa/Qy
+ oaftH/DyA5hvzPJ2uleeohuUaO1jInr24clsHqBFEVcCNvf1wTQ+
+X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
+ pk=noldbkG+Wp1qXRrrkfY1QJpDf7QsOEthbOT7vm0PqsE=
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I accidentally missed some comments from Dan in my V5 that I sent.[*]  Dan
+asked me to do a quick spin to pick them up.
 
---NN1+a3FMy7XRMBpl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[*] https://lore.kernel.org/all/6398dd6ed80fa_b05d1294fc@dwillia2-xfh.jf.intel.com.notmuch/
 
-On Wed, Dec 28, 2022 at 12:45:06AM +0000, Prashant Malani wrote:
-> Stash port number and a pointer to the driver-specific struct in the
-> local typec port struct.
->=20
-> These can be useful to the port driver to figure out how to communicate
-> with the Chrome EC when an altmode-driver related callback is invoked
-> from the Type-C class code.
->=20
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+This code has been tested with a newer qemu which allows for more events to be
+returned at a time as well an additional QMP event and interrupt injection.
+Those patches will follow once they have been cleaned up.
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+The series is now in 3 parts:
 
-> ---
->  drivers/platform/chrome/cros_ec_typec.c | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/c=
-hrome/cros_ec_typec.c
-> index 001b0de95a46..bc8dc8bd90b3 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -45,6 +45,7 @@ struct cros_typec_altmode_node {
->  /* Per port data. */
->  struct cros_typec_port {
->  	struct typec_port *port;
-> +	int port_num;
->  	/* Initial capabilities for the port. */
->  	struct typec_capability caps;
->  	struct typec_partner *partner;
-> @@ -78,6 +79,8 @@ struct cros_typec_port {
->  	struct usb_power_delivery *partner_pd;
->  	struct usb_power_delivery_capabilities *partner_src_caps;
->  	struct usb_power_delivery_capabilities *partner_sink_caps;
-> +
-> +	struct cros_typec_data *typec_data;
->  };
-> =20
->  /* Platform-specific data for the Chrome OS EC Type C controller. */
-> @@ -408,6 +411,8 @@ static int cros_typec_init_ports(struct cros_typec_da=
-ta *typec)
->  			goto unregister_ports;
->  		}
-> =20
-> +		cros_port->port_num =3D port_num;
-> +		cros_port->typec_data =3D typec;
->  		typec->ports[port_num] =3D cros_port;
->  		cap =3D &cros_port->caps;
-> =20
-> --=20
-> 2.39.0.314.g84b9a713c41-goog
->=20
+       1) Base functionality including interrupts
+       2) Tracing specific events (Dynamic Capacity Event Record is defered)
+       3) cxl-test infrastructure for basic tests
 
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Alison Schofield <alison.schofield@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Ben Widawsky <bwidawsk@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-pci@vger.kernel.org
+Cc: linux-acpi@vger.kernel.org
+Cc: linux-cxl@vger.kernel.org
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
---NN1+a3FMy7XRMBpl
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+Changes in v6:
+- Dan: address the missed comments on V4
+- Link to v5: https://lore.kernel.org/r/20221216-cxl-ev-log-v5-0-180c618ed5d1@intel.com
 
------BEGIN PGP SIGNATURE-----
+---
+Davidlohr Bueso (1):
+      cxl/mem: Wire up event interrupts
 
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY7xuEAAKCRBzbaomhzOw
-wj+iAQDtMZ3B1KQCAs2iQXnCSW345geepG6lz0sfCgM1KnGP5AEAq6NhnPEoJHYG
-duYb+Hur+DFRDISsE4dXY7k4gg0V/wQ=
-=OrDg
------END PGP SIGNATURE-----
+Ira Weiny (7):
+      cxl/mem: Read, trace, and clear events on driver load
+      cxl/mem: Trace General Media Event Record
+      cxl/mem: Trace DRAM Event Record
+      cxl/mem: Trace Memory Module Event Record
+      cxl/test: Add generic mock events
+      cxl/test: Add specific events
+      cxl/test: Simulate event log overflow
 
---NN1+a3FMy7XRMBpl--
+ drivers/cxl/core/mbox.c       | 187 +++++++++++++++++
+ drivers/cxl/core/trace.h      | 479 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/cxl/cxl.h             |  16 ++
+ drivers/cxl/cxlmem.h          | 173 +++++++++++++++
+ drivers/cxl/cxlpci.h          |   6 +
+ drivers/cxl/pci.c             | 241 +++++++++++++++++++++
+ tools/testing/cxl/test/Kbuild |   2 +-
+ tools/testing/cxl/test/mem.c  | 352 +++++++++++++++++++++++++++++++
+ 8 files changed, 1455 insertions(+), 1 deletion(-)
+---
+base-commit: 589c3357370a596ef7c99c00baca8ac799fce531
+change-id: 20221216-cxl-ev-log-f06383197541
+
+Best regards,
+-- 
+Ira Weiny <ira.weiny@intel.com>
