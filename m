@@ -2,167 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578E2661DE7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 05:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4AA661DEB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 05:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236836AbjAIEel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 23:34:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
+        id S236780AbjAIEgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 23:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236953AbjAIEeF (ORCPT
+        with ESMTP id S236634AbjAIEgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 23:34:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCF712AD9;
-        Sun,  8 Jan 2023 20:25:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC8D7B80C7B;
-        Mon,  9 Jan 2023 04:25:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2276CC433EF;
-        Mon,  9 Jan 2023 04:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673238302;
-        bh=/rHfHB7YL1elxIvXiI4wWi2tkWA1InJY7Cv3aYxLJPQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=apih20MSOVCkXJ6f3ZDEZ3vHFBlcPZYgTvmal2re3X7CIWnSaRGtLYos+ATskjIkI
-         STEe1+5yRGPPvTp90JmpIAxsWY1ePbyiLmmVWkr+Z4lkMAQCw1RdPmTxW28JpkHKkh
-         IYBUzY3DoSXl0f3cNsF0ovRCVne13VDtmAUWf4gTPnd2C8TP5xiTf6YfhgJKWzdxGE
-         MoLN4C9UHaUaVbOsSKoUKSA1vXmGGBCq8+wvMMfXUjYkbqfc/AhugSS+MJSPPbXdvE
-         AxsWJr1J+dPcjiZ1bHCH+X5V1/cqYoeEI+i8fjw+Ykq5DgX5vJJU00DGLtv4cCqfIV
-         Yhr8GXSF7nprA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B346F5C03F3; Sun,  8 Jan 2023 20:25:01 -0800 (PST)
-Date:   Sun, 8 Jan 2023 20:25:01 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
-        quic_neeraju@quicinc.com, urezki@gmail.com
-Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
- processing
-Message-ID: <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
- <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
- <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230108150425.426f2861e9db1152fa84508f@kernel.org>
+        Sun, 8 Jan 2023 23:36:00 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1603512ACF;
+        Sun,  8 Jan 2023 20:32:07 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3094W01E094451;
+        Sun, 8 Jan 2023 22:32:00 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673238720;
+        bh=L/YcW3E7HrdqgZ7WK3MsW8WibkW/Ei71VScJQu/w3eI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=O/fjseBdk+PTn7W03s4cXnOaRu/ME3Z6NkPtt0DWnYhlgVSRAVRM4CNfZgvHe2cYq
+         tAzrERgiMI/NVQ5rPP9P8q/u94zYkmFS5KZliG2ITIifjuRNoZy+gFa4zC/ZaovPaD
+         mtG0hMmLjM9CRuw0S7Hio7Gaoclj0h0s7otfO6wA=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3094W0TR004011
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 8 Jan 2023 22:32:00 -0600
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 8
+ Jan 2023 22:32:00 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Sun, 8 Jan 2023 22:32:00 -0600
+Received: from [172.24.145.182] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3094VvDN126682;
+        Sun, 8 Jan 2023 22:31:58 -0600
+Message-ID: <cb0b5b29-5771-4f8a-ce26-7932d0597d6d@ti.com>
+Date:   Mon, 9 Jan 2023 10:01:56 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230108150425.426f2861e9db1152fa84508f@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
+Content-Language: en-US
+To:     Bhavya Kapoor <b-kapoor@ti.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <kristo@kernel.org>, <nm@ti.com>
+References: <20221223073559.109760-1-b-kapoor@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20221223073559.109760-1-b-kapoor@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 08, 2023 at 03:04:25PM +0900, Masami Hiramatsu wrote:
-> On Sat, 7 Jan 2023 08:22:02 -0800
-> "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> 
-> > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
-> > > On Wed, 4 Jan 2023 16:58:38 -0800
-> > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > 
-> > > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
-> > > > containing kernel boot parameters to be embedded into an initrd or into
-> > > > the kernel itself.  This can be extremely useful when deploying kernels
-> > > > in cases where some of the boot parameters depend on the kernel version
-> > > > rather than on the server hardware, firmware, or workload.
-> > > > 
-> > > > Unfortunately, the "bootconfig" kernel parameter must be specified in
-> > > > order to cause the kernel to look for the embedded bootconfig file,
-> > > > and it clearly does not help to embed this "bootconfig" kernel parameter
-> > > > into that file.
-> > > > 
-> > > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
-> > > > kernel to act as if the "bootconfig" kernel parameter had been specified.
-> > > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
-> > > > for the embedded bootconfig file even when the "bootconfig" kernel
-> > > > parameter is omitted.  This permits kernel-version-dependent kernel
-> > > > boot parameters to be embedded into the kernel image without the need to
-> > > > (for example) update large numbers of boot loaders.
-> > > 
-> > > I like this because this is a simple solution. We have another option
-> > > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
-> > > bootloader. Thus, it is better to have this option so that user can
-> > > always enable bootconfig.
-> > 
-> > Glad you like it!
-> > 
-> > In addition, if the help text is accurate, another shortcoming of
-> > CONFIG_CMDLINE is that its semantics vary from one architecture to
-> > another.  Some have CONFIG_CMDLINE override the boot-loader supplied
-> > parameters, and others differ in the order in which the parameters
-> > are processed.
-> 
-> Yes, that differences confuse us...
 
-I am glad that it is not just me.  ;-)
 
-I will add words to that effect to the commit log.
+On 23/12/22 13:05, Bhavya Kapoor wrote:
+> J721s2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
+> for 8 channel ADCs for J721s2 SoC.
+> 
+> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+> ---
+> 
+> Changelog v2->v3:
+> 	- Added Newline at the end of files.
+> 
+>  .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
+>  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 42 ++++++++++++++++++-
+>  2 files changed, 55 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+> index a7aa6cf08acd..3bc4f28c809f 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+> @@ -309,3 +309,17 @@ &mcu_mcan1 {
+>  	pinctrl-0 = <&mcu_mcan1_pins_default>;
+>  	phys = <&transceiver2>;
+>  };
+> +
+> +&tscadc0 {
+> +	status = "okay";
+> +	adc {
+> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
+> +	};
+> +};
+> +
+> +&tscadc1 {
+> +	status = "okay";
+> +	adc {
+> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+> index 0af242aa9816..b99021927d2a 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+> @@ -306,4 +306,44 @@ cpts@3d000 {
+>  			ti,cpts-periodic-outputs = <2>;
+>  		};
+>  	};
+> -};
+> +
+> +	tscadc0: tscadc@40200000 {
+> +		compatible = "ti,am3359-tscadc";
+> +		reg = <0x0 0x40200000 0x0 0x1000>;
 
-> > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Thank you!
-> > 
-> > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
-> > > (or at least recommend to enable this)
-> > 
-> > Like this?
-> 
-> Yes! Thanks.
-> 
-> > 
-> > 							Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > commit d09a1505c51a70da38b34ac38062977299aef742
-> > Author: Paul E. McKenney <paulmck@kernel.org>
-> > Date:   Sat Jan 7 08:09:22 2023 -0800
-> > 
-> >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> >     
-> >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
-> >     will normally be to unconditionally provide the specified kernel-boot
-> >     arguments to the kernel, as opposed to requiring a separately provided
-> >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
-> >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
-> >     
-> >     The old semantics may be obtained by manually overriding this default.
-> >     
-> >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
-> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Following convention of the file, please use:
 
-Applied, thank you!
+		reg = <0x00 0x40200000 0x00 0x1000>;  
 
-							Thanx, Paul
 
-> Thank you!
-> 
-> > 
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 0fb19fa0edba9..97a0f14d9020d 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
-> >  config BOOT_CONFIG_FORCE
-> >  	bool "Force unconditional bootconfig processing"
-> >  	depends on BOOT_CONFIG
-> > +	default y if BOOT_CONFIG_EMBED
-> >  	help
-> >  	  With this Kconfig option set, BOOT_CONFIG processing is carried
-> >  	  out even when the "bootconfig" kernel-boot parameter is omitted.
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+> +		interrupts = <GIC_SPI 860 IRQ_TYPE_LEVEL_HIGH>;
+> +		power-domains = <&k3_pds 0 TI_SCI_PD_EXCLUSIVE>;
+> +		clocks = <&k3_clks 0 0>;
+> +		assigned-clocks = <&k3_clks 0 2>;
+> +		assigned-clock-rates = <60000000>;
+> +		clock-names = "adc_tsc_fck";
+
+Documentation/devicetree/bindings/mfd/ti,am3359-tscadc.yaml -> clock-names = "fck"
+
++/workdir/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dtb: tscadc@40200000: clock-names:0: 'fck' was expected
+
+make dtbs_check will warn you
+
+
+> +		dmas = <&main_udmap 0x7400>,
+> +			<&main_udmap 0x7401>;
+> +		dma-names = "fifo0", "fifo1";
+> +		status = "disabled";
+> +
+> +		adc {
+> +			#io-channel-cells = <1>;
+> +			compatible = "ti,am3359-adc";
+> +		};
+> +	};
+> +
+> +	tscadc1: tscadc@40210000 {
+> +		compatible = "ti,am3359-tscadc";
+> +		reg = <0x0 0x40210000 0x0 0x1000>;
+
+Same here
+
+> +		interrupts = <GIC_SPI 861 IRQ_TYPE_LEVEL_HIGH>;
+> +		power-domains = <&k3_pds 1 TI_SCI_PD_EXCLUSIVE>;
+> +		clocks = <&k3_clks 1 0>;
+> +		assigned-clocks = <&k3_clks 1 2>;
+> +		assigned-clock-rates = <60000000>;
+> +		clock-names = "adc_tsc_fck";
+
++/workdir/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dtb: tscadc@40210000: clock-names:0: 'fck' was expected
+
+> +		dmas = <&main_udmap 0x7402>,
+> +			<&main_udmap 0x7403>;
+> +		dma-names = "fifo0", "fifo1";
+> +		status = "disabled";
+> +
+> +		adc {
+> +			#io-channel-cells = <1>;
+> +			compatible = "ti,am3359-adc";
+> +		};
+> +	};
+> + };
+
+WARNING: please, no spaces at the start of a line                                                                                                                                             
+#87: FILE: arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi:349:                                                                                                                              
++ };$ 
+
+Please run ./scripts/checkpatch.pl --strict and fix all the issues
+before sending out the patches
+
+-- 
+Regards
+Vignesh
