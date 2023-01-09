@@ -2,130 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73D0662C75
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:17:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15597662C73
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 18:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237040AbjAIRQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 12:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38652 "EHLO
+        id S234781AbjAIRQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 12:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237123AbjAIRNK (ORCPT
+        with ESMTP id S237280AbjAIRNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:13:10 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA573884
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 09:12:28 -0800 (PST)
-Received: from SoMainline.org (unknown [89.205.226.190])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 422543EBA8;
-        Mon,  9 Jan 2023 18:12:25 +0100 (CET)
-Date:   Mon, 9 Jan 2023 18:12:23 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        sunliming <sunliming@kylinos.cn>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Drew Davenport <ddavenport@chromium.org>
-Subject: Re: [PATCH v2 4/8] drm/msm/dpu: Disallow unallocated resources to be
- returned
-Message-ID: <20230109171223.vjkigcj7xwfwow2a@SoMainline.org>
-References: <20221221231943.1961117-1-marijn.suijten@somainline.org>
- <20221221231943.1961117-5-marijn.suijten@somainline.org>
- <b415a91d-f804-1fec-52dd-4124d3f1e583@linaro.org>
- <1b872a47-6ffc-1fe9-f283-897dbc37d709@linaro.org>
- <20230109082357.meebk7udokdfvwle@SoMainline.org>
- <CAA8EJppqocjgTbZLhcJtmRGjE4X2u_jDEGDWS9Bsp7MEgD+Ldg@mail.gmail.com>
+        Mon, 9 Jan 2023 12:13:22 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4517B3593F;
+        Mon,  9 Jan 2023 09:12:59 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id ud5so21855669ejc.4;
+        Mon, 09 Jan 2023 09:12:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WVk2tvkPkHZ5g5LNY7Urh46Jb7AWYeyBlt2KxlDaies=;
+        b=duKNLUsYGhXRTrE9ZiLvdX3iSKSJh+lfgoJMb4IH0MnDqXFO8mY3w3PeEg12au6y+8
+         GkgZ14QeHbAlheEmWhwQJengL9nuI/IcG9XpuqqVpwcR9WPzgcoL6VMq5V4rEb2VO938
+         9/DjmIwO6obyUwEVqFVvLmsCi6lZmzXolAxPL+WMKUPO8ezPIljsbrTsBweOvGugwK9J
+         vblsWktOBq7dCPqxDzmDkEs27ElrGWQPNlDRuzvL+LbI6IRQmdQjoFDMln8SRm6YM0V1
+         VMeCJMkNjdVjFda361lCSRpwHk7Z7UmlCPIblhHLLGrbIn2E0lmgKcbGN6LGOFXFpvl6
+         eN4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WVk2tvkPkHZ5g5LNY7Urh46Jb7AWYeyBlt2KxlDaies=;
+        b=PKlN1UkG602MrBcDxnJuFWFmlNUgHbaSfrRdQUcV6gaUtfhJUg8ZH/pP9pJSqPm0pN
+         LCNEiArlbpoLG6k+UbLh9us4NDcL0bM2SK4YzM2ORQdZrM8xmafRj8noJZOhXMJ5135N
+         ALrWhS3H8VxyN2VzZKrllRCYTxi+WeZHAHTTniuyMZt4xemlbgvtFpsPH36SkkgxmfWh
+         sxuVzzNn9woOrp40alOUoqFqOFi1E6eC6R7Bs4vT03xWXj7gKvpNPEGkedX9ZxXvJ7BS
+         7IONN0PFtXEtDtGf0XWAHu0vUeR92YqpePlozuRn8QMPrtONCH64P/XkUL6xxx1EgLoi
+         QbWA==
+X-Gm-Message-State: AFqh2kqfTE16nN0u2mgBoWgzeZe3srH+7Ztfxpl1YfK1VklTzVbKEME/
+        FKVuSySyI42EloQUoUYGH2k=
+X-Google-Smtp-Source: AMrXdXv6LkBRqT1IjUHh5J3DACwxjZUP9+aHvFVN9x7nofrt1xe9gNF2AaBJRLTktMkKxjmm9FAMsA==
+X-Received: by 2002:a17:907:8dcc:b0:84d:21b2:735a with SMTP id tg12-20020a1709078dcc00b0084d21b2735amr10793393ejc.54.1673284377776;
+        Mon, 09 Jan 2023 09:12:57 -0800 (PST)
+Received: from gvm01 ([91.199.164.40])
+        by smtp.gmail.com with ESMTPSA id y9-20020a1709064b0900b0084d34979423sm3044981eju.127.2023.01.09.09.12.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 09:12:57 -0800 (PST)
+Date:   Mon, 9 Jan 2023 18:12:54 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
+        sbhatta@marvell.com, linux-doc@vger.kernel.org,
+        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
+        gal@nvidia.com, gustavoars@kernel.org
+Subject: Re: [PATCH v2 net-next 5/5] drivers/net/phy: add driver for the
+ onsemi NCN26000 10BASE-T1S PHY
+Message-ID: <Y7xLFruSoyrWye3X@gvm01>
+References: <cover.1673030528.git.piergiorgio.beruto@gmail.com>
+ <b15b3867233c7adf33870460ea442ff9a4f6ad41.1673030528.git.piergiorgio.beruto@gmail.com>
+ <Y7m4v8nLEc4bVBDf@lunn.ch>
+ <Y7tYT8lkgCugZ7kP@gvm01>
+ <Y7wXO7x7Wh7+Hw/Z@lunn.ch>
+ <Y7wi3qwG3b6i0x7T@gvm01>
+ <Y7wjmu9P2TXuNMeE@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJppqocjgTbZLhcJtmRGjE4X2u_jDEGDWS9Bsp7MEgD+Ldg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7wjmu9P2TXuNMeE@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-09 11:06:45, Dmitry Baryshkov wrote:
-> On Mon, 9 Jan 2023 at 10:24, Marijn Suijten
-> <marijn.suijten@somainline.org> wrote:
-> >
-> > On 2023-01-09 01:30:29, Dmitry Baryshkov wrote:
-> > > On 09/01/2023 01:28, Dmitry Baryshkov wrote:
-> > > > On 22/12/2022 01:19, Marijn Suijten wrote:
-> > > >> In the event that the topology requests resources that have not been
-> > > >> created by the system (because they are typically not represented in
-> > > >> dpu_mdss_cfg ^1), the resource(s) in global_state (in this case DSC
-> > > >> blocks) remain NULL but will still be returned out of
-> > > >> dpu_rm_get_assigned_resources, where the caller expects to get an array
-> > > >> containing num_blks valid pointers (but instead gets these NULLs).
-> > > >>
-> > > >> To prevent this from happening, where null-pointer dereferences
-> > > >> typically result in a hard-to-debug platform lockup, num_blks shouldn't
-> > > >> increase past NULL blocks and will print an error and break instead.
-> > > >> After all, max_blks represents the static size of the maximum number of
-> > > >> blocks whereas the actual amount varies per platform.
-> > > >>
-> > > >> ^1: which can happen after a git rebase ended up moving additions to
-> > > >> _dpu_cfg to a different struct which has the same patch context.
-> > > >>
-> > > >> Fixes: bb00a452d6f7 ("drm/msm/dpu: Refactor resource manager")
-> > > >> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > > >> ---
-> > > >>   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c | 5 +++++
-> > > >>   1 file changed, 5 insertions(+)
-> > > >
-> > > > I think the patch is not fully correct. Please check resource
-> > > > availability during allocation. I wouldn't expect an error from
-> > > > get_assigned_resources because of resource exhaustion.
-> >
-> > Theoretically patch 5/8 should take care of this, and we should never
-> > reach this failure condition.  Emphasis on /should/, this may happen
-> > again if/when another block type is added with sub-par resource
-> > allocation and assignment implementation.
+On Mon, Jan 09, 2023 at 03:24:26PM +0100, Andrew Lunn wrote:
+> On Mon, Jan 09, 2023 at 03:21:18PM +0100, Piergiorgio Beruto wrote:
+> > On Mon, Jan 09, 2023 at 02:31:39PM +0100, Andrew Lunn wrote:
+> > > Linux tends to ignore Marketing, because Marketing tends to change its
+> > > mind every 6 months. Also, Linux ignores companies being bought and
+> > > sold, changing their name. So this PHY will forever be called whatever
+> > > name you give it here. The vitesse PHY driver is an example of
+> > > this. They got bought by Microsemi, and then Microchip bought
+> > > Microsemi. The PHY driver is still called vitesse.c.
+> > > 
+> > > How about using the legal name, 'ON Semiconductor
+> > > Corporation'
+> > That's perfectly clear Andrew, I can certainly see why Linux should
+> > ignore marketing.
+> > 
+> > Sill, 'ON Semiconductor' is the old company name, the product datasheet can be
+> > found at www.onsemi.com. I would honestly feel more comfortable using
+> > the current company name. If you really want the first 'o' to be
+> > capitalized, then so be it. Hopefully people will not notice :-)
 > 
-> Yeah. Maybe swapping 4/8 and 5/8 makes sense.
+> I would prefer it was capitalised, to make it uniform with all the
+> other entries.
+I've just re-submitted the patches, fixing also a warning on a
+multi-line comment w/o newline.
 
-Ack.
-
-> > > Another option, since allocation functions (except DSC) already have
-> > > these safety checks: check error message to mention internal
-> > > inconstency: allocated resource doesn't exist.
-> >
-> > Is this a suggestion for the wording of the error message?
-> 
-> Yes. Because the current message makes one think that it is output
-> during allocation / assignment to encoder, while this is a safety net.
-
-Good.  So the patch is correct, just the wording is off, which I fully
-agree on.  This isn't allocating anything, just handing out what was
-previously allocated (and is a safety net).
-
-- Marijn
+Thanks!
+Piergiorgio
