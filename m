@@ -2,161 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE0D661C6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 03:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E28661C77
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 03:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233929AbjAICqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 21:46:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
+        id S234148AbjAICvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 21:51:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjAICqx (ORCPT
+        with ESMTP id S233771AbjAICvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 21:46:53 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED00ABC8E;
-        Sun,  8 Jan 2023 18:46:51 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NqywZ2CmPz16MgN;
-        Mon,  9 Jan 2023 10:45:18 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 9 Jan 2023 10:46:49 +0800
-Subject: Re: [PATCH v2] perf record: Fix coredump with --overwrite and
- --max-size
-To:     Namhyung Kim <namhyung@kernel.org>
-CC:     Arnaldo Carvalho de Melo <acme@kernel.org>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <jiwei.sun@windriver.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221229124728.66515-1-yangjihong1@huawei.com>
- <Y7MEWK/z19QCaNoi@kernel.org>
- <CAM9d7cjcWKBephb5p9ZPU2+wDAz04DYQJoKczORioD=es10hPw@mail.gmail.com>
- <c65f89ef-173c-b828-f3b2-266387903149@huawei.com>
- <CAM9d7chN9ecR7EgA1eN1QQXypZDwCFC-ym6BTQ0d1_XjuruLFw@mail.gmail.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <a08af34e-acf2-d370-06bb-ea43d467f89d@huawei.com>
-Date:   Mon, 9 Jan 2023 10:46:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Sun, 8 Jan 2023 21:51:42 -0500
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4219FD09;
+        Sun,  8 Jan 2023 18:51:40 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-05 (Coremail) with SMTP id zQCowAAXOM0HgbtjSqnGCw--.10661S2;
+        Mon, 09 Jan 2023 10:50:50 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     dmitry.baryshkov@linaro.org, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, marijn.suijten@somainline.org, vkoul@kernel.org,
+        dianders@chromium.org, marex@denx.de, vladimir.lypak@gmail.com
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] drm/msm/dsi: Add missing check for alloc_ordered_workqueue
+Date:   Mon,  9 Jan 2023 10:50:44 +0800
+Message-Id: <20230109025044.27766-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAM9d7chN9ecR7EgA1eN1QQXypZDwCFC-ym6BTQ0d1_XjuruLFw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAAXOM0HgbtjSqnGCw--.10661S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGw1xAw4xGrWDCw4rWryrCrg_yoW5AF18pr
+        WaqF4Dtr40yws7ArZrAF17Aw1rGF4fGa48G34ruwnrAw1ayw4DXr4q9a1FgFyrtryUWw4U
+        KFsayas8CF18tr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUoOJ5UUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add check for the return value of alloc_ordered_workqueue as it may return
+NULL pointer and cause NULL pointer dereference.
+Moreover, change the "goto fail" into "return ret" and drop the "fail"
+label since they are the same.
 
-On 2023/1/7 5:12, Namhyung Kim wrote:
-> Hello,
-> 
-> On Wed, Jan 4, 2023 at 8:09 PM Yang Jihong <yangjihong1@huawei.com> wrote:
->>
->> Hello,
->>
->> On 2023/1/4 0:50, Namhyung Kim wrote:
->>> On Mon, Jan 2, 2023 at 8:20 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->>>>
->>>> Em Thu, Dec 29, 2022 at 12:47:28PM +0000, Yang Jihong escreveu:
->>>>> When --overwrite and --max-size options of perf record are used together,
->>>>> a segmentation fault occurs. The following is an example:
->>>>>
->>>>>    # perf record -e sched:sched* --overwrite --max-size 1M -a -- sleep 1
->>>>>     [ perf record: Woken up 1 times to write data ]
->>>>>     perf: Segmentation fault
->>>>>     Obtained 1 stack frames.
->>>>>     [0xc4c67f]
->>>>>     Segmentation fault (core dumped)
->>>>>
->>>>> backtrace of the core file is as follows:
->>>>>
->>>>>     #0  0x0000000000417990 in process_locked_synthesized_event (tool=0x0, event=0x15, sample=0x1de0, machine=0xf8) at builtin-record.c:630
->>>>>     #1  0x000000000057ee53 in perf_event__synthesize_threads (nr_threads_synthesize=21, mmap_data=<optimized out>, needs_mmap=<optimized out>, machine=0x17ad9b0, process=<optimized out>, tool=0x0) at util/synthetic-events.c:1950
->>>>>     #2  __machine__synthesize_threads (nr_threads_synthesize=0, data_mmap=<optimized out>, needs_mmap=<optimized out>, process=<optimized out>, threads=0x8, target=0x8, tool=0x0, machine=0x17ad9b0) at util/synthetic-events.c:1936
->>>>>     #3  machine__synthesize_threads (machine=0x17ad9b0, target=0x8, threads=0x8, needs_mmap=<optimized out>, data_mmap=<optimized out>, nr_threads_synthesize=0) at util/synthetic-events.c:1947
->>>>>     #4  0x000000000040165d in record__synthesize (tail=<optimized out>, rec=0xbe2520 <record>) at builtin-record.c:2010
->>>>>     #5  0x0000000000403989 in __cmd_record (argc=<optimized out>, argv=<optimized out>, rec=0xbe2520 <record>) at builtin-record.c:2810
->>>>>     #6  0x00000000004196ba in record__init_thread_user_masks (rec=0xbe2520 <record>, cpus=0x17a65f0) at builtin-record.c:3837
->>>>>     #7  record__init_thread_masks (rec=0xbe2520 <record>) at builtin-record.c:3938
->>>>>     #8  cmd_record (argc=1, argv=0x7ffdd692dc60) at builtin-record.c:4241
->>>>>     #9  0x00000000004b701d in pager_command_config (var=0x0, value=0x15 <error: Cannot access memory at address 0x15>, data=0x1de0) at perf.c:117
->>>>>     #10 0x00000000004b732b in get_leaf_frame_caller_aarch64 (sample=0xfffffffb, thread=0x0, usr_idx=<optimized out>) at util/arm64-frame-pointer-unwind-support.c:56
->>>>>     #11 0x0000000000406331 in execv_dashed_external (argv=0x7ffdd692d9e8) at perf.c:410
->>>>>     #12 run_argv (argcp=<synthetic pointer>, argv=<synthetic pointer>) at perf.c:431
->>>>>     #13 main (argc=<optimized out>, argv=0x7ffdd692d9e8) at perf.c:562
->>>>>
->>>>> The reason is that record__bytes_written accesses the freed memory rec->thread_data,
->>>>> The process is as follows:
->>>>>     __cmd_record
->>>>>       -> record__free_thread_data
->>>>>         -> zfree(&rec->thread_data)         // free rec->thread_data
->>>>>       -> record__synthesize
->>>>>         -> perf_event__synthesize_id_index
->>>>>           -> process_synthesized_event
->>>>>             -> record__write
->>>>>               -> record__bytes_written     // access rec->thread_data
->>>>>
->>>>> we only need to check the value of done first.
->>>>> Also add variable check in record__bytes_written for code hardening,
->>>>> and save bytes_written separately to reduce one calculation.
->>>>>
->>>>> Fixes: 6d57581659f7 ("perf record: Add support for limit perf output file size")
->>>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->>>>> ---
->>>>>
->>>>> Changes since v1:
->>>>>    - Add variable check in record__bytes_written for code hardening.
->>>>>    - Save bytes_written separately to reduce one calculation.
->>>>>    - Remove rec->opts.tail_synthesize check.
->>>>
->>>> Namhyung, are you ok with this now?
->>>>
->>>> - Arnaldo
->>>>
->>>>>    tools/perf/builtin-record.c | 26 +++++++++++++++++---------
->>>>>    1 file changed, 17 insertions(+), 9 deletions(-)
->>>>>
->>>>> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
->>>>> index 29dcd454b8e2..acba9e43e519 100644
->>>>> --- a/tools/perf/builtin-record.c
->>>>> +++ b/tools/perf/builtin-record.c
->>>>> @@ -230,16 +230,29 @@ static u64 record__bytes_written(struct record *rec)
->>>>>         u64 bytes_written = rec->bytes_written;
->>>>>         struct record_thread *thread_data = rec->thread_data;
->>>>>
->>>>> +     if (thread_data == NULL)
->>>>> +             return bytes_written;
->>>>> +
->>>
->>> Then it won't count bytes written by threads, right?
->>> I think it needs to be saved somewhere.
->>>
->> I'm not sure here. Can you explain it more clearly, thanks :)
->> I can modify it accordingly.
->>
->> I think if thread_data == NULL, it is not thread data.
->> In this case, we just return rec->bytes_written.
-> 
-> It can be thread data but freed before tail synthesis, right?
-> In that case, I think it needs to add bytes_written by threads
-> to calculate the correct data size.
-Em... In the __cmd_record function, record__stop_threads is called 
-before record__free_thread_data, so if the thread has been freed, there 
-will be no thread data.
-I think it's okay to ignore the situation you mentioned above.
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-Thanks,
-Yang
+v1 -> v2:
+
+1. Change the "goto fail" into "return ret" and drop the "fail" label.
+---
+ drivers/gpu/drm/msm/dsi/dsi_host.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+index 89aadd3b3202..819f5be5fd77 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_host.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+@@ -1884,7 +1884,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 	msm_host = devm_kzalloc(&pdev->dev, sizeof(*msm_host), GFP_KERNEL);
+ 	if (!msm_host) {
+ 		ret = -ENOMEM;
+-		goto fail;
++		return ret;
+ 	}
+ 
+ 	msm_host->pdev = pdev;
+@@ -1893,14 +1893,14 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 	ret = dsi_host_parse_dt(msm_host);
+ 	if (ret) {
+ 		pr_err("%s: failed to parse dt\n", __func__);
+-		goto fail;
++		return ret;
+ 	}
+ 
+ 	msm_host->ctrl_base = msm_ioremap_size(pdev, "dsi_ctrl", &msm_host->ctrl_size);
+ 	if (IS_ERR(msm_host->ctrl_base)) {
+ 		pr_err("%s: unable to map Dsi ctrl base\n", __func__);
+ 		ret = PTR_ERR(msm_host->ctrl_base);
+-		goto fail;
++		return ret;
+ 	}
+ 
+ 	pm_runtime_enable(&pdev->dev);
+@@ -1909,7 +1909,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 	if (!msm_host->cfg_hnd) {
+ 		ret = -EINVAL;
+ 		pr_err("%s: get config failed\n", __func__);
+-		goto fail;
++		return ret;
+ 	}
+ 	cfg = msm_host->cfg_hnd->cfg;
+ 
+@@ -1917,7 +1917,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 	if (msm_host->id < 0) {
+ 		ret = msm_host->id;
+ 		pr_err("%s: unable to identify DSI host index\n", __func__);
+-		goto fail;
++		return ret;
+ 	}
+ 
+ 	/* fixup base address by io offset */
+@@ -1927,19 +1927,19 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 					    cfg->regulator_data,
+ 					    &msm_host->supplies);
+ 	if (ret)
+-		goto fail;
++		return ret;
+ 
+ 	ret = dsi_clk_init(msm_host);
+ 	if (ret) {
+ 		pr_err("%s: unable to initialize dsi clks\n", __func__);
+-		goto fail;
++		return ret;
+ 	}
+ 
+ 	msm_host->rx_buf = devm_kzalloc(&pdev->dev, SZ_4K, GFP_KERNEL);
+ 	if (!msm_host->rx_buf) {
+ 		ret = -ENOMEM;
+ 		pr_err("%s: alloc rx temp buf failed\n", __func__);
+-		goto fail;
++		return ret;
+ 	}
+ 
+ 	ret = devm_pm_opp_set_clkname(&pdev->dev, "byte");
+@@ -1977,15 +1977,17 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 
+ 	/* setup workqueue */
+ 	msm_host->workqueue = alloc_ordered_workqueue("dsi_drm_work", 0);
++	if (!msm_host->workqueue) {
++		ret = -ENOMEM;
++		return ret;
++	}
++
+ 	INIT_WORK(&msm_host->err_work, dsi_err_worker);
+ 
+ 	msm_dsi->id = msm_host->id;
+ 
+ 	DBG("Dsi Host %d initialized", msm_host->id);
+ 	return 0;
+-
+-fail:
+-	return ret;
+ }
+ 
+ void msm_dsi_host_destroy(struct mipi_dsi_host *host)
+-- 
+2.25.1
+
