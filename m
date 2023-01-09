@@ -2,175 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAB66633AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F5C6633AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234969AbjAIWHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S237397AbjAIWH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237669AbjAIWG6 (ORCPT
+        with ESMTP id S237683AbjAIWHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:06:58 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11795395DD;
-        Mon,  9 Jan 2023 14:06:56 -0800 (PST)
+        Mon, 9 Jan 2023 17:07:22 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510E63FA31;
+        Mon,  9 Jan 2023 14:07:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673302017; x=1704838017;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=o7ks9SzE1MgI3tFUlpmKbvyK8NXAx0DHQt6tYOQ+omM=;
-  b=k4hsSerZnwe/nPJrRXtYtXi9jUWMrAv2phF60F4GEQysqPcVDg7pibGV
-   4Qla7rjgW0vAXTE0g2ftQyOnvkCDABWkSpU+hefhq6z7XCsmH5c5SyLk/
-   YaeXSxyVP9Ld+TDIf1S86bYTnos21jaGbpiQ6U3efphWiBgnm5HiOaUEq
-   X3Mjzwx1mvjmr1OMoZ2DdWIVIqbHndUyq7ur1YxaRLLvtL9VcAutTVeAy
-   6XtrLkBBtfMN+PTGM+AzbSwe23WnvssKWSH+5WEWK14d+Zv6Ws2almGHF
-   XytMEfvoNx4RQ4nuQOsBFHz8luTkMWZgGHNlk8tMTQuS8Yc7Y9KncbqFD
+  t=1673302038; x=1704838038;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=lIj2TgXu0uNOBYx9NLJiiT4w8s70JqzyfODrisGvkTE=;
+  b=iZyxznAxltGs6FPZ7X7KV+daAo3SDKrc+pqPU8FjsPdCkvuuvS2BNwnu
+   nl6/AadJCJ1Oxqn5C/XlkVxDqSecUQrzv7X0SA2LxvRxe+qzy3PkcIWjc
+   txTP59PogqqLuXj7AyVQd8+P8/yZV9ri4iq09sPTyG3a4QA7djkqaUmo+
+   sUjA49TA2SxlxdffnLFY51+2XaEolOjgVWEuMYoYZk4zOh2MtrnzejnUH
+   y3IwBeBB5iOaEP1t57XaH9JMZNaDNIdl/C49VCA9qfSmvQMegHl4qNOGW
+   u+k9o/Fqr3VANa1pzdwx/aJjkrt+Sxdc8rXwbb3xAgTwLKbSuQl3PV4WR
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="324236777"
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="350209389"
 X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
-   d="scan'208";a="324236777"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 14:06:55 -0800
+   d="scan'208";a="350209389"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 14:07:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="687350977"
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="985544827"
 X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
-   d="scan'208";a="687350977"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga008.jf.intel.com with ESMTP; 09 Jan 2023 14:06:54 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+   d="scan'208";a="985544827"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Jan 2023 14:07:17 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 9 Jan 2023 14:06:52 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ 15.1.2507.16; Mon, 9 Jan 2023 14:07:17 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 9 Jan 2023 14:06:52 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ 15.1.2507.16 via Frontend Transport; Mon, 9 Jan 2023 14:07:17 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.45) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 9 Jan 2023 14:06:51 -0800
+ 15.1.2507.16; Mon, 9 Jan 2023 14:07:16 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KpEKu2G8BEhqLJxcGdpTE7mFjlCKDyngqZ2vvi7mUOK+A9QKd/jgBSYuUDG7hYUAXHLqpKdc07j/QQ7ge7QISmPh0S6Sd+syXdz8yayFqvt29zRwydx4YVnqBpkSYt9Xuyjjc3Q+3eSL57pEMU/ksvca+lZGSNyiP9fDCT9uMJeAQwnbVqXTAxvhYxa5qA9pzBnlZ39Xrx658rNnifwnCINItAIyS1lnwPFVyUws+/D7FtwkuNXVpaOE9VtQabna/ri82lzajWFxcAggRtoC9CqvkMKIuttUHF4+QCVBcIJFo3LQmNhiJp0i5H4deX1rj3Grk/XDim2y7KFnuvqDlw==
+ b=KBzVbVSg6fJoJQ9oqhXK3f9bRvKJa4sWt8H5sJHJz2oam+sKvcs0aw7FOsmOTSBPRHKaFOksxiMezRnXvmnJ2HKc/yAOCBNgSdPvR8w6OlZjwWFlS590meidwo3QMj18raUzwkyvJD3odld2xKJY8qSC1ROcre7nbHFFhQhnAqJas1oAtSmqVnGnCT7DK7hY9oh/m+sCeWfvHhadZVPjD0F7Yyrb8LRpb7EfL8Yu/klkqCHj4/QAZpw0ht4w5xS8MizHlhA4x4xlMYuPT7yrYhfoPgR4hLiD64DzpNpshlLYmUZECIDjoDVyl6nHU249RwpCdH7+epZ5DYXJDcEXhw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I5qpPUlp3xGS29UGVw2c54OJ5p0phbgOxb+LFXiuj4o=;
- b=J1JTeplKV3zsd1mpV6ep7Dc83QkE2tX+up5MNmRzzx1tu4uCntQrVtUUloj0rZtxrF7ttXf+tT3gV1eRyzbj4zF+tplNB7i+CQcoozMQoibpyxUB0FTAVcmJ4FRu0vyDHvT+m4G4fLJ9EOcaGhslk4GIDNvKoJldbbBIFdWX5etALanMegAClJ190Ciof1kRW2tlc9+wFewct/y3RRkW8+2bRY49DA2ZeOxZnxgKiCGmTL/yiKwB8ZGRmzmyD5ZwNDUzsFJuxqC55C6jSOW0R/PqFlSr2K13as8L6DzPzY47CIRusqrgyVB7RAr3QUdF4JkIQ15nrSCe0bailRB8yQ==
+ bh=lIj2TgXu0uNOBYx9NLJiiT4w8s70JqzyfODrisGvkTE=;
+ b=g47+TPyF6x9WgY61yTjFD0obJULxxSYgWRKzD4lNMNtr1ZvQ/NjnCUxNkAf+aQcxqqKgzXyuA2znI74WC9seQc5ch24L+OmRjZuDDdXUYJXfnNHrFaVo+j95lNkr3LDN9fBXCCfTJ9OiSo0YzPpog8o9mjZTu1rvHkDg/rycGw7Invc6GnHX0vuLlOn8EVM727y0O3/ESA8eQErwBmwklQBTORj/knisQu4+Rm/D8lYapA189+wm3VASecqBriN97jkMnLkSRnX9V4kg2ZCyREg07cxvlroHeQlewVH6rhg67/sxWAGZ9Qw77Og41+X00ZP/IZxjYaVzPH00PBjiOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by DM4PR11MB5328.namprd11.prod.outlook.com
- (2603:10b6:5:393::17) with Microsoft SMTP Server (version=TLS1_2,
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by SA0PR11MB4558.namprd11.prod.outlook.com (2603:10b6:806:9e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
- 2023 22:06:42 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::8dee:cc20:8c44:42dd]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::8dee:cc20:8c44:42dd%5]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
- 22:06:41 +0000
-Date:   Mon, 9 Jan 2023 14:06:36 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Alexander Potapenko <glider@google.com>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Marco Elver <elver@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        "Andy Lutomirski" <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Borislav Petkov <bp@alien8.de>, Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Ilya Leoshkevich" <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-Message-ID: <63bc8fec4744a_5178e29467@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20220701142310.2188015-1-glider@google.com>
- <20220701142310.2188015-11-glider@google.com>
- <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
- <CAG_fn=W2EUjS8AX1Odunq1==dV178s_-w3hQpyrFBr=Auo-Q-A@mail.gmail.com>
- <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
- <CAG_fn=WjrzaHLfgw7ByFvguHA8z0MA-ZB3Kd0d6CYwmZWVEgjA@mail.gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=WjrzaHLfgw7ByFvguHA8z0MA-ZB3Kd0d6CYwmZWVEgjA@mail.gmail.com>
-X-ClientProxiedBy: BY5PR16CA0011.namprd16.prod.outlook.com
- (2603:10b6:a03:1a0::24) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+ 2023 22:07:12 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e%8]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
+ 22:07:12 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v8 06/16] x86/virt/tdx: Get information about TDX module
+ and TDX-capable memory
+Thread-Topic: [PATCH v8 06/16] x86/virt/tdx: Get information about TDX module
+ and TDX-capable memory
+Thread-Index: AQHZC5gFuAba9tjOq0ycIRHt8DkLjK6R1lgAgAQ7+ICAAJ4/AIAAJbEA
+Date:   Mon, 9 Jan 2023 22:07:12 +0000
+Message-ID: <95de773544dfe4e13c3599a5f83f6fcad3c00e11.camel@intel.com>
+References: <cover.1670566861.git.kai.huang@intel.com>
+         <7c21a3de810397901bade0b1021912bbbf2d18bd.1670566861.git.kai.huang@intel.com>
+         <d1093b3e-cdab-b138-d488-19b9456be978@intel.com>
+         <e605ce95f1b92fae630bf6abb801774bc28d8072.camel@intel.com>
+         <bea7dbd0-f6ec-5103-9d00-9617154d6be9@intel.com>
+In-Reply-To: <bea7dbd0-f6ec-5103-9d00-9617154d6be9@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SA0PR11MB4558:EE_
+x-ms-office365-filtering-correlation-id: c08d46ee-155d-4645-843e-08daf28ddc0f
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kMg25SZVRobKK2C/rgRo5IcT9oWJua7jYHP398Jitim2vRjRPejavhpZlglVO+ml6UR0RlRulmyVkF3v7ktbyIpoGodWnb8RrRoT2bCB0T1WiItuGD1ZOCcMo7zubDSmEOGj16THVrl8y6SNhhb1Kj96yXuv1ATR4Yffz8FUsm1rDYQ+hYOB7Bq2QbHBSIvz5npggsrbBiZJtjh8ijIH7Wm97IJF+6NnQc1UCDhOH0O90WHn5dKwxYshBodkoO+Z9ePdB1FFqNWFYtq3G4IKAfn/5yTGXelA0gNHcsn3CD5QSA5K7aTNx16sxlRTGUpoofnDu2JyfrqcpeO8vinKnjTfRlpo2PDlnqmy9N7h92i/7QE4Du81A/2HkbIRFZ2f2PyY5+GYcLO4kd8C7mYVkMdld5mqXuSuZi5UAUmiwDA9luZ4WLc90LIT3WgkDrQZzrLZzVhlaYboflRNl77ViWGm1cnTYw0J6q91FtcFWvBLjCEoFPwSpnRLKf5kuD/wH8EOcT8cm9bQmUADcQPK1QSm862nYCAdEhVezUCQKWBuZ5yeRSGAb/ipHXh+Ci2CXnydOpRugKoCv42R5iHcHy8pKF+vVKBkKRBYGSDsi9W+ce0FHMU5ZdLyC+twWNkY1ZoWfYzdFzCRGFqmPLbAkfHGgQEo5mlQsjuoTgYzDaIZBA0bvrobeaH70/xvGFrN2xpX2hJpM7L5BTuLsnOlDG/2ONtwCvRX0ObZzugAzCtY7bKZo5v/f76n2HngDOqkyIr7EYKc4+fKHTbddthZrvlPnH4oFRuD9bfB+Y/aOGw0Kf6Whn5LwNs1J/X4gtkw
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(396003)(376002)(39860400002)(346002)(451199015)(38070700005)(316002)(5660300002)(7416002)(71200400001)(186003)(26005)(6512007)(6486002)(966005)(2616005)(478600001)(41300700001)(66946007)(91956017)(4326008)(66446008)(110136005)(66556008)(66476007)(64756008)(54906003)(76116006)(8676002)(83380400001)(8936002)(36756003)(86362001)(53546011)(6506007)(122000001)(82960400001)(38100700002)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eTFOZlczUndWRDZGTkhNODBxNzNwNy9nQWNnV0g3UHlyTUc5VjJDem9pUzZI?=
+ =?utf-8?B?SS9qMmhHWFgzcXhGamFCK2xHVVFDd2hMK0xTWUprckRrSUhNRUpCNlpHZFQv?=
+ =?utf-8?B?UzhhNE5JSHhscUcyM0dPdlF3NWMvNm81bGRVd3V4ckZLbzcwMGJwUTM4YnZH?=
+ =?utf-8?B?M2IwSUFFcHhHVTB4Vk5uSGtPOGRCbGxaL25Eei9FRVVEdmlvSGcyUjVjK3ky?=
+ =?utf-8?B?OXdTOEVFaW4zMWR1Wnc4bVA4SFdaaWQ2UVFzblJqeEdNVkZzRXV2VFI4MGRG?=
+ =?utf-8?B?L3ZMLytUcGY5VGEyUTNiMGFaSzdQWHI0OTBzNEYyWXpXdXRLV3N2SG5uN1g5?=
+ =?utf-8?B?a2EwK0NyODNZV0NZUlNvR3JpQlMyK0NSemtmWDZ6MjUyS1JRTjQveEFreGJW?=
+ =?utf-8?B?eW9zalJEZlJucXBRU2poaW5YMW1IZ0xpMlkvSWdnZENjL2Q3d3E0VXRjZ0dZ?=
+ =?utf-8?B?ZEZlRnJ1a0pkSFI0dno1WFo0YXQ0bm1vM09ncDRwc3NyZExycGFzdHBGT21R?=
+ =?utf-8?B?QzRiVzRTeFZNWHBsN1FKdDBHUVorSzV1S1cvQlRpMmEyeSsvY2ZFaGhla2ph?=
+ =?utf-8?B?MHYxMWVEZzVKYkpXeGt1VkVaL3o0MjFpbjM3d1ByQVhPK09LSVg2WHkrMVdP?=
+ =?utf-8?B?eDl4cmxXaW0vVE8ydVYxbFhyWitXZG1DR2ozMFdSZHR5VXNNMFUyU3RybTRC?=
+ =?utf-8?B?UHEyQUJ4UVgvTXNTQ0duQVh6ZXJ5bVRQTmtqbFI3Q01kM2JNUHNXczdTZTRs?=
+ =?utf-8?B?SUZqSFhsaFJqczZIazdhemVQcFR3Sm9qNjVUNEFNQTc5bi9mODBFb0dEcXpL?=
+ =?utf-8?B?OWE3d3VuS3lhdmNYRHdOU2tVejFIYWJrWHoyWWZSWCtJc1RDd2JCOVFKbml1?=
+ =?utf-8?B?VWI1TXZCQk1ONndjNEd2WWZJajFSdlB6ZnpEYkhFTStkaitoZVlRZTd6UFBH?=
+ =?utf-8?B?REJiejhGL1UrL0cyUlpqYWtFSzFHVm9XS1pFMnhZeWl3NVlpOHNqV293OFhG?=
+ =?utf-8?B?akZ1aHBuQzQxVTlEL3hUb3FNajRwOGZOdTAxeTF0eCsxRW9hcGhScEhmQm9L?=
+ =?utf-8?B?aTJ0OUZESHVINVp0RXdBVzJVQzQ0YTl2ZDEybVNlYkdJMXhDM2hqdTZNa0sv?=
+ =?utf-8?B?NWUweGxRZk53MjdBT0RBMzM3L3JNUXlheXRQOG9zY2lBcVptSEVvSmgzNFJl?=
+ =?utf-8?B?TnJRR3RjTDgwRHMzUDdkUFgwVkxYUUZseVA0enZiRWJxWW1YOGxNRWEyWjJL?=
+ =?utf-8?B?b1krczlBODF2b0dxeDZpcjVnZzBHYVAxM0hwcmZROXduQ2NLMDROVTNVc3oz?=
+ =?utf-8?B?NldsMnFTTU0rYzAwWitzWUVBUTRaZjJpSkkzdmJkYUFSaUM1R3hMZExvR0g2?=
+ =?utf-8?B?S214UnI4c0UzSE1Ob0ZZKzdINUhKRW5hSUkvbEppUjMvS1FmeVNtNXZvZDJZ?=
+ =?utf-8?B?MWE5cFV1eWJ1TzBhRHlmcTFXaUkzeVlyd0Z5TlNtNWZocTM5VjNWeWVGd3dW?=
+ =?utf-8?B?bkZYbUxFOTE2Sm9qYURCR0MxYlh1UlVSZkVDVDBIUE1KNXRFQWpoeVpOQUkx?=
+ =?utf-8?B?NUxURGk5OUdiZHdsU1I5NkMwaXQyR3NVQWxna2xOeFA3L0dzb3NPL0xGSllQ?=
+ =?utf-8?B?RUZSVlZaUEROZUlPTlFPSG50VmdTZjNtbXRvV3MwRVJrVXZXaU95YnFQVGJD?=
+ =?utf-8?B?VEhZZDFrZ1R6d0UyR1JiNTVKa3dZY0hWQXRlR01URUlvUDIyalpvRUd5blVt?=
+ =?utf-8?B?MWxmRHUzR0FYMnFYR0J3MG5VZW9nc0ZxQmZGNjEvZUhIc2dUL0tkNlhRcGZB?=
+ =?utf-8?B?ZWk4SzRlV3BJUkhUSkxjNGIwdTJNRzk0MTRvOU1QRWhwcnNaV3BJcDk1anFu?=
+ =?utf-8?B?MDNFOHFmVmE4QjMyU21uNjRsZGtzK1F6YW15c0xBZHIwM3ZqT3FxWjFyekx5?=
+ =?utf-8?B?alYwU3ZLVCtVdnRMMDF2VlREM2dCQXVpRlQwRHJNVE1tcXlVWmVJaVRBY1Zk?=
+ =?utf-8?B?c3Y3Qm9XTUVJM3FYbTFJOXlQRzVyYjkxdDBsMXBzVmIrVE5ockIrdy80bVB5?=
+ =?utf-8?B?RzdsZEM5OGV1S1Y5R1NzQVFGQk53SW1EeGgvUlVSSzVQdTV2Y1NFTVlzQmQy?=
+ =?utf-8?B?NlpIck1FZGVEeUNtaGZUWHRXdUhRaWRLZHJZdXFYbllLUjdKOTVkRmtRZWoz?=
+ =?utf-8?B?M3c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4CB89FE92DEB5E42B4F331BF5B624E0F@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|DM4PR11MB5328:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4365cf67-db4a-4fcb-df29-08daf28dc922
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8T93iRK9OKoHEZbrRuxIJVJquXJdcwscb7LLB6Tki6jluLPSHSFy91L7dg1lp+VddzhaYnHC/I8OVzAdOw5j/n2Ylj8ReyPq85/166AYcqKCwx05tlIT7ilPsqp3WjEHgiKWD00ZIkdII9zZiT+YuPt7s0QcZNLb4RdIK6JULUg1sABFBNLiP3cKXdCN++Um6rexGA/69bXsTwjNIv7L0DUZxUNJo2Y68XOydiOjKnov9yCsD4VHEHYAv36M3iG86LdLFU7VyY2O+QLfpJv14/6IarSniNwezBcVqfgT6Pk0KKtl3m7O9AqZC+0LySbANdf5VUg4ZfL6g0w2S4bupbuNjxqsjANlLh9oUd45IzQsl5z5/8Pz3u7+ByCBwgAv0rHBMqPpxh5WkvJDp9mq1zZ4imQISHfTtn8I7kRvnbhAfP/3tpemEXR4iTzqk3feiUW42Bj/j+osehfOrB7phMR3gxIpNbJ0+vVthibeMXoHEjef4YCu9Ovwmz87E2EsoNr30YeCJ4fuA1og4EW4DFdLAmo73vyiaJPs2792ir9sz9DFy/iFdeZw76zukqbubG1XoDB9iLIQToLjeua3A2BZh8zCCsUSH/yhQ42g0ARZSJuJtLhFsj1M71wcaxEk17TbavLv3NaNa4IpP212Qw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(39860400002)(136003)(366004)(396003)(451199015)(6506007)(38100700002)(82960400001)(6666004)(53546011)(2906002)(478600001)(6486002)(7406005)(7416002)(6512007)(26005)(9686003)(316002)(5660300002)(186003)(83380400001)(8936002)(86362001)(41300700001)(8676002)(110136005)(66476007)(54906003)(66946007)(4326008)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4aV3WEPbeKpYxaYV9qEJIfTdIXogU129CHhNgDrGl5w5l5ebGkFBMHmnOG2F?=
- =?us-ascii?Q?Zs80EuelT/giKzx70+hsXYuA7MLKRSF0Bj0FaypzHureImuPea36Mi4I9kPn?=
- =?us-ascii?Q?ET3KVcYRTFK8EcP+WDfu0VHTI59ic5BH7AZILMrkWbs0dfv6wi5pKEC5yqeR?=
- =?us-ascii?Q?yPA6Uru+J9l8HX5vpnXkZCWoIr6F65wb8Gtj+8zlu/ff5gwCqBK0uL4aNB5E?=
- =?us-ascii?Q?58oRDqyLqL22GdNzZDbVo+B1Ag/RjWF3Co+5G4D6qq99eDAr7R6SufdrD+0x?=
- =?us-ascii?Q?lDUC7FZTWh2InwrLYkZric8ODPBtj8P265hPBnyXTUjBZ7xjotuIRVGpvQfU?=
- =?us-ascii?Q?Y3p+79D6mdjs/seCj8/ojloU6P8pK/1x3DmJzum94MdxLYbsM6Zl+czi/omg?=
- =?us-ascii?Q?uy6N+FyerneRj2Tpa/iBaJK+poNxAXe4epqrOWZvUNXFEcEaYC0nKJf4LyTs?=
- =?us-ascii?Q?1dszqqIvRIGOYV0WN8NDfIcw6EU2lyQlejOzpbET/f0akr0THw7+qZ9YsrsD?=
- =?us-ascii?Q?GIViikbRCct+NRwjNbJlRG5O3wDPmGCZaUekaMzNyP5nXgypIEL+Q9TodSOE?=
- =?us-ascii?Q?BjBJgOmtyinW0XbmvJvxIqa9Qh3Hd2+HqoO6ev5qGVN7N2ELEsbYHn4k/0xD?=
- =?us-ascii?Q?BUy4OOaNZbfHvpSjCL2E7gIAn59Gx/AWVoEmSfiVnYSamEGJKYihJfVOPehv?=
- =?us-ascii?Q?sRDEXaF0KvmjztfRbo/KGAq/oUWheCFL0qkmXDTtTlL1aWg66rSoULTtHjax?=
- =?us-ascii?Q?iivHf22iix0UYdZJsoN0tX0iOnDxxMJM6BiU0PFlUV6zry3rv01Xm+g1BG+H?=
- =?us-ascii?Q?Wufz6ndSg0C9l6uA31Qm1HGq4pOzfLQpMs9/0XkY8L3AalZjgLouQQoKoYj6?=
- =?us-ascii?Q?cFvUrfcF95BdKQw97p35jLcpC4cFPgsHiG1cAXtZjVSMP+pxjJdQnW6Ou59C?=
- =?us-ascii?Q?1JfXUFAqeh316SJT4smKM8YOl74HhblQ1yqI6ctjsz7EFXqRT9CVqlu8rmEA?=
- =?us-ascii?Q?/kTxN2BPaJTBIWw5JHRRDeBphgiiXdRdaXBW8cIa+lVFyYYNV0Zc7nro0g2z?=
- =?us-ascii?Q?CZeD6SglZbRZxS6eAK1q7fiaG7vXcMcMZnz4XnOAtzjoyUvp1AwBn1wy65Id?=
- =?us-ascii?Q?ESRRAZcXbHJVlE7F+61AuTAHrVFs5XrPXKQH8VOy8AJw8NZrsry4oQ8gxh4m?=
- =?us-ascii?Q?UEtxIPRbL8+kbJKmRrEtOzL9c7SASpth5WOCurEpR52oP+3ChrWwmK/2isrJ?=
- =?us-ascii?Q?fAOnhEPTasSvtuN7nt1jNr0/Y/Cx+zajV5gMN21Zvj4SzX7YbFPXfYI6in0T?=
- =?us-ascii?Q?xPbRBaWuLiWzP4P+sJTo5PY9gcQaxQvoNbt5G2jkWg+HwO8576tlmX7pHDGc?=
- =?us-ascii?Q?D4yT/NnNgjBnaxx/J7V71LdeJ+DbebIIE586yvzHukql9n+4KfC27hyElqU2?=
- =?us-ascii?Q?qA1fBbOZnWN+LPna17Uo+iLvWDtH1yLokO2nh/uwwkWQFHSey1xTk16zOhTa?=
- =?us-ascii?Q?IuEztT6vY4fbrdqOTjaB9QBeYyrY6s+5H0JJaXAujFwrgZzykWzarZBG8nNY?=
- =?us-ascii?Q?BnN5YK59kQ2nSM2/ruY4b5Y+ltjnUJH6xydlONjoTOQ48XI/X2J1h1eqylom?=
- =?us-ascii?Q?Ww=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4365cf67-db4a-4fcb-df29-08daf28dc922
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2023 22:06:41.2193
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c08d46ee-155d-4645-843e-08daf28ddc0f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 22:07:12.2505
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bkUFJT69gW2LAVWvGX8+tTPzY129NzQumq/sMAE3sL8SVj1wvwjvdMbzhFRO1zZT972S+xCQfKUZldxTZoiN9yRnIezqomwoAeO2dgYrRb4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5328
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TPqJP33heUT7awnRpHfsTQyx0BthaENWiXzwHnliFWGZjlSokDANKUSs+fCVyzBkNowuotLHUTDCiNQo+7LKow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4558
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -182,203 +187,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexander Potapenko wrote:
-> On Thu, Jan 5, 2023 at 11:09 PM Dan Williams <dan.j.williams@intel.com> wrote:
-> >
-> > Alexander Potapenko wrote:
-> > > (+ Dan Williams)
-> > > (resending with patch context included)
-> > >
-> > > On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> wrote:
-> > > >
-> > > > On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
-> > > > >
-> > > > > KMSAN adds extra metadata fields to struct page, so it does not fit into
-> > > > > 64 bytes anymore.
-> > > >
-> > > > Does this somehow cause extra space being used in all kernel configs?
-> > > > If not, it would be good to note this in the commit message.
-> > > >
-> > > I actually couldn't verify this on QEMU, because the driver never got loaded.
-> > > Looks like this increases the amount of memory used by the nvdimm
-> > > driver in all kernel configs that enable it (including those that
-> > > don't use KMSAN), but I am not sure how much is that.
-> > >
-> > > Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be?
-> >
-> > Apologies I missed this several months ago. The answer is that this
-> > causes everyone creating PMEM namespaces on v6.1+ to lose double the
-> > capacity of their namespace even when not using KMSAN which is too
-> > wasteful to tolerate. So, I think "6e9f05dc66f9 libnvdimm/pfn_dev:
-> > increase MAX_STRUCT_PAGE_SIZE" needs to be reverted and replaced with
-> > something like:
-> >
-> > diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
-> > index 79d93126453d..5693869b720b 100644
-> > --- a/drivers/nvdimm/Kconfig
-> > +++ b/drivers/nvdimm/Kconfig
-> > @@ -63,6 +63,7 @@ config NVDIMM_PFN
-> >         bool "PFN: Map persistent (device) memory"
-> >         default LIBNVDIMM
-> >         depends on ZONE_DEVICE
-> > +       depends on !KMSAN
-> >         select ND_CLAIM
-> >         help
-> >           Map persistent memory, i.e. advertise it to the memory
-> >
-> >
-> > ...otherwise, what was the rationale for increasing this value? Were you
-> > actually trying to use KMSAN for DAX pages?
-> 
-> I was just building the kernel with nvdimm driver and KMSAN enabled.
-> Because KMSAN adds extra data to every struct page, it immediately hit
-> the following assert:
-> 
-> drivers/nvdimm/pfn_devs.c:796:3: error: call to
-> __compiletime_assert_330 declared with 'error' attribute: BUILD_BUG_ON
-> fE
->                 BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_SIZE);
-> 
-> The comment before MAX_STRUCT_PAGE_SIZE declaration says "max struct
-> page size independent of kernel config", but maybe we can afford
-> making it dependent on CONFIG_KMSAN (and possibly other config options
-> that increase struct page size)?
-> 
-> I don't mind disabling the driver under KMSAN, but having an extra
-> ifdef to keep KMSAN support sounds reasonable, WDYT?
-
-How about a module parameter to opt-in to the increased permanent
-capacity loss?
-
--- >8 --
-From 693563817dea3fd8f293f9b69ec78066ab1d96d2 Mon Sep 17 00:00:00 2001
-From: Dan Williams <dan.j.williams@intel.com>
-Date: Thu, 5 Jan 2023 13:27:34 -0800
-Subject: [PATCH] nvdimm: Support sizeof(struct page) > MAX_STRUCT_PAGE_SIZE
-
-Commit 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
-
-...updated MAX_STRUCT_PAGE_SIZE to account for sizeof(struct page)
-potentially doubling in the case of CONFIG_KMSAN=y. Unfortunately this
-doubles the amount of capacity stolen from user addressable capacity for
-everyone, regardless of whether they are using the debug option. Revert
-that change, mandate that MAX_STRUCT_PAGE_SIZE never exceed 64, but
-allow for debug scenarios to proceed with creating debug sized page maps
-with a new 'libnvdimm.page_struct_override' module parameter.
-
-Note that this only applies to cases where the page map is permanent,
-i.e. stored in a reservation of the pmem itself ("--map=dev" in "ndctl
-create-namespace" terms). For the "--map=mem" case, since the allocation
-is ephemeral for the lifespan of the namespace, there are no explicit
-restriction. However, the implicit restriction, of having enough
-available "System RAM" to store the page map for the typically large
-pmem, still applies.
-
-Fixes: 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
-Cc: <stable@vger.kernel.org>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Marco Elver <elver@google.com>
-Reported-by: Jeff Moyer <jmoyer@redhat.com>
----
- drivers/nvdimm/nd.h       |  2 +-
- drivers/nvdimm/pfn_devs.c | 45 ++++++++++++++++++++++++++-------------
- 2 files changed, 31 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
-index 85ca5b4da3cf..ec5219680092 100644
---- a/drivers/nvdimm/nd.h
-+++ b/drivers/nvdimm/nd.h
-@@ -652,7 +652,7 @@ void devm_namespace_disable(struct device *dev,
- 		struct nd_namespace_common *ndns);
- #if IS_ENABLED(CONFIG_ND_CLAIM)
- /* max struct page size independent of kernel config */
--#define MAX_STRUCT_PAGE_SIZE 128
-+#define MAX_STRUCT_PAGE_SIZE 64
- int nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgmap);
- #else
- static inline int nvdimm_setup_pfn(struct nd_pfn *nd_pfn,
-diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
-index 61af072ac98f..978d63559c0e 100644
---- a/drivers/nvdimm/pfn_devs.c
-+++ b/drivers/nvdimm/pfn_devs.c
-@@ -13,6 +13,11 @@
- #include "pfn.h"
- #include "nd.h"
- 
-+static bool page_struct_override;
-+module_param(page_struct_override, bool, 0644);
-+MODULE_PARM_DESC(page_struct_override,
-+		 "Force namespace creation in the presence of mm-debug.");
-+
- static void nd_pfn_release(struct device *dev)
- {
- 	struct nd_region *nd_region = to_nd_region(dev->parent);
-@@ -758,12 +763,6 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
- 		return -ENXIO;
- 	}
- 
--	/*
--	 * Note, we use 64 here for the standard size of struct page,
--	 * debugging options may cause it to be larger in which case the
--	 * implementation will limit the pfns advertised through
--	 * ->direct_access() to those that are included in the memmap.
--	 */
- 	start = nsio->res.start;
- 	size = resource_size(&nsio->res);
- 	npfns = PHYS_PFN(size - SZ_8K);
-@@ -782,20 +781,33 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
- 	}
- 	end_trunc = start + size - ALIGN_DOWN(start + size, align);
- 	if (nd_pfn->mode == PFN_MODE_PMEM) {
-+		unsigned long page_map_size = MAX_STRUCT_PAGE_SIZE * npfns;
-+
- 		/*
- 		 * The altmap should be padded out to the block size used
- 		 * when populating the vmemmap. This *should* be equal to
- 		 * PMD_SIZE for most architectures.
- 		 *
--		 * Also make sure size of struct page is less than 128. We
--		 * want to make sure we use large enough size here so that
--		 * we don't have a dynamic reserve space depending on
--		 * struct page size. But we also want to make sure we notice
--		 * when we end up adding new elements to struct page.
-+		 * Also make sure size of struct page is less than
-+		 * MAX_STRUCT_PAGE_SIZE. The goal here is compatibility in the
-+		 * face of production kernel configurations that reduce the
-+		 * 'struct page' size below MAX_STRUCT_PAGE_SIZE. For debug
-+		 * kernel configurations that increase the 'struct page' size
-+		 * above MAX_STRUCT_PAGE_SIZE, the page_struct_override allows
-+		 * for continuing with the capacity that will be wasted when
-+		 * reverting to a production kernel configuration. Otherwise,
-+		 * those configurations are blocked by default.
- 		 */
--		BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_SIZE);
--		offset = ALIGN(start + SZ_8K + MAX_STRUCT_PAGE_SIZE * npfns, align)
--			- start;
-+		if (sizeof(struct page) > MAX_STRUCT_PAGE_SIZE) {
-+			if (page_struct_override)
-+				page_map_size = sizeof(struct page) * npfns;
-+			else {
-+				dev_err(&nd_pfn->dev,
-+					"Memory debug options prevent using pmem for the page map\n");
-+				return -EINVAL;
-+			}
-+		}
-+		offset = ALIGN(start + SZ_8K + page_map_size, align) - start;
- 	} else if (nd_pfn->mode == PFN_MODE_RAM)
- 		offset = ALIGN(start + SZ_8K, align) - start;
- 	else
-@@ -818,7 +830,10 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
- 	pfn_sb->version_minor = cpu_to_le16(4);
- 	pfn_sb->end_trunc = cpu_to_le32(end_trunc);
- 	pfn_sb->align = cpu_to_le32(nd_pfn->align);
--	pfn_sb->page_struct_size = cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
-+	if (sizeof(struct page) > MAX_STRUCT_PAGE_SIZE && page_struct_override)
-+		pfn_sb->page_struct_size = cpu_to_le16(sizeof(struct page));
-+	else
-+		pfn_sb->page_struct_size = cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
- 	pfn_sb->page_size = cpu_to_le32(PAGE_SIZE);
- 	checksum = nd_sb_checksum((struct nd_gen_sb *) pfn_sb);
- 	pfn_sb->checksum = cpu_to_le64(checksum);
--- 
-2.38.1
+T24gTW9uLCAyMDIzLTAxLTA5IGF0IDExOjUyIC0wODAwLCBIYW5zZW4sIERhdmUgd3JvdGU6DQo+
+IE9uIDEvOS8yMyAwMjoyNSwgSHVhbmcsIEthaSB3cm90ZToNCj4gPiBPbiBGcmksIDIwMjMtMDEt
+MDYgYXQgMDk6NDYgLTA4MDAsIERhdmUgSGFuc2VuIHdyb3RlOg0KPiAuLi4NCj4gPiA+ID4gTm90
+ZSBub3QgYWxsIG1lbWJlcnMgaW4gdGhlIDEwMjQgYnl0ZXMgVERYIG1vZHVsZSBpbmZvcm1hdGlv
+biBhcmUgdXNlZA0KPiA+ID4gPiAoZXZlbiBieSB0aGUgS1ZNKS4NCj4gPiA+IA0KPiA+ID4gSSdt
+IG5vdCBzdXJlIHdoYXQgdGhpcyBoYXMgdG8gZG8gd2l0aCBhbnl0aGluZy4NCj4gPiANCj4gPiBZ
+b3UgbWVudGlvbmVkIGluIHY3IHRoYXQ6DQo+ID4gPiA+ID4gVGhpcyBpcyBhbHNvIGEgZ3JlYXQg
+cGxhY2UgdG8gbWVudGlvbiB0aGF0IHRoZSB0ZHN5c2luZm9fc3RydWN0DQo+IGNvbnRhaW5zDQo+
+ID4gPiA+IGEgKmxvdCogb2YgZ3VuayB3aGljaCB3aWxsIG5vdCBiZSB1c2VkIGZvciBhIGJpdCBv
+ciB0aGF0IG1heSBuZXZlciBnZXQNCj4gPiA+ID4gdXNlZC4NCj4gPiANCj4gPiBodHRwczovL2xv
+cmUua2VybmVsLm9yZy9saW51eC1tbS9jYzE5NWViNjQ5OWNmMDIxYjRjZTJlOTM3MjAwNTcxOTE1
+YmZlNjZmLmNhbWVsQGludGVsLmNvbS9ULyNtMTY4ZTYxOWFhYzk0NWZhNDE4Y2NiMWQ2NjUyMTEz
+MDAzMjQzZDg5NQ0KPiA+IA0KPiA+IFBlcmhhcHMgSSBtaXN1bmRlcnN0b29kIHNvbWV0aGluZyBi
+dXQgSSB3YXMgdHJ5aW5nIHRvIGFkZHJlc3MgdGhpcy4NCj4gPiANCj4gPiBTaG91bGQgSSByZW1v
+dmUgdGhpcyBzZW50ZW5jZT8NCj4gDQo+IElmIHNvbWVvbmUgZ29lcyBsb29raW5nIGF0IHRoaXMg
+cGF0Y2gsIHRoZSBzZWUgdGRzeXNpbmZvX3N0cnVjdCB3aXRoDQo+IHNvbWV0aGluZyBsaWtlIHR3
+byBkb3plbiBkZWZpbmVkIGZpZWxkcy4gIEJ1dCwgdmVyeSBmZXcgb2YgdGhlbSBnZXQgdXNlZA0K
+PiBpbiB0aGlzIHBhdGNoLiAgV2h5PyAgSnVzdCBzYXlpbmcgdGhhdCB0aGV5IGFyZSB1bnVzZWQg
+aXMgYSBiaXQgc2lsbHkuDQo+IA0KPiAJVGhlICd0ZHN5c2luZm9fc3RydWN0JyBpcyBmYWlybHkg
+bGFyZ2UgKDFrKSBhbmQgY29udGFpbnMgYSBsb3QNCj4gCW9mIGluZm8gYWJvdXQgdGhlIFRELiAg
+RnVsbHkgZGVmaW5lIHRoZSBlbnRpcmUgc3RydWN0dXJlLCBidXQNCgkJCSAgXg0KCQlzaG91bGQg
+YmU6ICJhYm91dCB0aGUgVERYIG1vZHVsZSI/DQoJCQkNCj4gCW9ubHkgdXNlIHRoZSBmaWVsZHMg
+bmVjZXNzYXJ5IHRvIGJ1aWxkIHRoZSBQQU1UIGFuZCBURE1ScyBhbmQNCj4gCXByX2luZm8oKSBz
+b21lIGJhc2ljcyBhYm91dCB0aGUgbW9kdWxlLg0KDQpBYm92ZSBsb29rcyBncmVhdCEgIFRoYW5r
+cy4NCg0KPiANCj4gCVRoZSByZXN0IG9mIHRoZSBmaWVsZHMgd2lsbCBnZXQgdXNlZC4uLiAoYnkg
+a3ZtPyAgbmV2ZXI/PykNCg0KVGhlIGN1cnJlbnQgS1ZNIFREWCBzdXBwb3J0IHNlcmllcyB1c2Vz
+IG1ham9yaXR5IG9mIHRoZSByZXN0IGZpZWxkczoNCg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
+bGttbC85OWU1ZmNmMmE3MTI3MzQ3ODE2OTgyMzU1ZmQ0MTQxZWUxMDM4YTU0LjE2NjcxMTAyNDAu
+Z2l0LmlzYWt1LnlhbWFoYXRhQGludGVsLmNvbS8NCg0KT25seSBvbmUgZmllbGQgaXNuJ3QgdXNl
+ZCwgYnV0IEkgZG9uJ3Qgd2FudCB0byBhc3N1bWUgaXQgd29uJ3QgYmUgdXNlZCBmb3JldmVyLA0K
+c28gSSB0aGluayAiVGhlIHJlc3Qgb2YgdGhlIGZpZWxkcyB3aWxsIGdldCB1c2VkIGJ5IEtWTS4i
+IGlzIGdvb2QgZW5vdWdoLg0KDQo+IA0KPiAuLi4NCj4gPiA+ID4gKwlzdHJ1Y3QgdGRzeXNpbmZv
+X3N0cnVjdCAqc3lzaW5mbyA9ICZQQURERURfU1RSVUNUKHRkc3lzaW5mbyk7DQo+ID4gPiA+ICsJ
+aW50IHJldDsNCj4gPiA+ID4gKw0KPiA+ID4gPiArCXJldCA9IHRkeF9nZXRfc3lzaW5mbyhzeXNp
+bmZvLCBjbXJfYXJyYXkpOw0KPiA+ID4gPiArCWlmIChyZXQpDQo+ID4gPiA+ICsJCWdvdG8gb3V0
+Ow0KPiA+ID4gPiArDQo+ID4gPiA+ICAJLyoNCj4gPiA+ID4gIAkgKiBUT0RPOg0KPiA+ID4gPiAg
+CSAqDQo+ID4gPiA+IC0JICogIC0gR2V0IFREWCBtb2R1bGUgaW5mb3JtYXRpb24gYW5kIFREWC1j
+YXBhYmxlIG1lbW9yeSByZWdpb25zLg0KPiA+ID4gPiAgCSAqICAtIEJ1aWxkIHRoZSBsaXN0IG9m
+IFREWC11c2FibGUgbWVtb3J5IHJlZ2lvbnMuDQo+ID4gPiA+ICAJICogIC0gQ29uc3RydWN0IGEg
+bGlzdCBvZiBURE1ScyB0byBjb3ZlciBhbGwgVERYLXVzYWJsZSBtZW1vcnkNCj4gPiA+ID4gIAkg
+KiAgICByZWdpb25zLg0KPiA+ID4gPiBAQCAtMTY2LDcgKzIzOSw5IEBAIHN0YXRpYyBpbnQgaW5p
+dF90ZHhfbW9kdWxlKHZvaWQpDQo+ID4gPiA+ICAJICoNCj4gPiA+ID4gIAkgKiAgUmV0dXJuIGVy
+cm9yIGJlZm9yZSBhbGwgc3RlcHMgYXJlIGRvbmUuDQo+ID4gPiA+ICAJICovDQo+ID4gPiA+IC0J
+cmV0dXJuIC1FSU5WQUw7DQo+ID4gPiA+ICsJcmV0ID0gLUVJTlZBTDsNCj4gPiA+ID4gK291dDoN
+Cj4gPiA+ID4gKwlyZXR1cm4gcmV0Ow0KPiA+ID4gPiAgfQ0KPiA+ID4gDQo+ID4gPiBJJ20gZ29p
+bmcgdG8gYmUgbGF6eSBhbmQgbm90IGxvb2sgaW50byB0aGUgZnV0dXJlLiAgQnV0LCB5b3UgZG9u
+J3QgbmVlZA0KPiA+ID4gdGhlICJvdXQ6IiBsYWJlbCBoZXJlLCB5ZXQuICBJdCBkb2VzbidzZXJ2
+ZSBhbnkgcHVycG9zZSBsaWtlIHRoaXMsIHNvDQo+ID4gPiB3aHkgaW50cm9kdWNlIGl0IGhlcmU/
+DQo+ID4gDQo+ID4gVGhlICdvdXQnIGxhYmVsIGlzIGhlcmUgYmVjYXVzZSBvZiBiZWxvdyBjb2Rl
+Og0KPiA+IA0KPiA+IAlyZXQgPSB0ZHhfZ2V0X3N5c2luZm8oLi4uKTsNCj4gPiAJaWYgKHJldCkN
+Cj4gPiAJCWdvdG8gb3V0Ow0KPiA+IA0KPiA+IElmIEkgZG9uJ3QgaGF2ZSAnb3V0JyBsYWJlbCBo
+ZXJlIGluIHRoaXMgcGF0Y2gsIGRvIHlvdSBtZWFuIHNvbWV0aGluZyBiZWxvdz8NCj4gPiANCj4g
+PiAJcmV0ID0gdGR4X2dldF9zeXNpbmZvKC4uLik7DQo+ID4gCWlmIChyZXQpDQo+ID4gCQlyZXR1
+cm4gcmV0Ow0KPiA+IA0KPiA+IAkvKg0KPiA+IAkgKiBUT0RPOg0KPiA+IAkgKiAuLi4NCj4gPiAJ
+ICogUmV0dXJuIGVycm9yIGJlZm9yZSBhbGwgc3RlcHMgYXJlIGRvbmUuDQo+ID4gCSAqLw0KPiA+
+IAlyZXR1cm4gLUVJTlZBTDsNCj4gDQo+IFllcywgaWYgeW91IHJlbW92ZSB0aGUgJ291dDonIGxh
+YmVsIGxpa2UgeW91J3ZlIHNob3duIGluIHlvdXIgcmVwbHksDQo+IGl0J3MgYWN0dWFsbHkgX2xl
+c3NfIGNvZGUuICBUaGUgbGFiZWxzIGFyZSByZWFsbHkgb25seSBuZWNlc3Nhcnkgd2hlbg0KPiB5
+b3UgaGF2ZSBjb21tb24gd29yayB0byAidW5kbyIgc29tZXRoaW5nIGJlZm9yZSByZXR1cm5pbmcg
+ZnJvbSB0aGUNCj4gZnVuY3Rpb24uICBIZXJlLCB5b3UgY2FuIGp1c3QgcmV0dXJuLg0KPiANCg0K
+VGhhbmtzIHdpbGwgZG8uDQoNCkkgdGhpbmsgdGhpcyBhcHBsaWVzIHRvIGNvbnN0cnVjdF90ZG1y
+cygpIHRvbyAocGF0Y2ggMDkgLSAxMSkuICBJJ2xsIGNoZWNrIHRoYXQNCnBhcnQgdG9vIGJhc2Vk
+IG9uIHlvdXIgYWJvdmUgaWRlYS4NCg==
