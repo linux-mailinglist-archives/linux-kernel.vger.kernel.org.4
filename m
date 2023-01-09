@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C763662675
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F6F66267A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236744AbjAINEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
+        id S234174AbjAINHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236552AbjAINDI (ORCPT
+        with ESMTP id S236108AbjAINHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:03:08 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E89B167D3
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:02:26 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id vm8so19894064ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 05:02:26 -0800 (PST)
+        Mon, 9 Jan 2023 08:07:14 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3959D32278
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:05:32 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id m6so12815895lfj.11
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 05:05:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=LkzjllfIyWMzDeEVD7OKUMHITseBrUR0IuEgUUno/hw=;
-        b=HVejhwClRNQ3MUtfWYs0WnCJRsAnIzlGhfP+OnefrHhLWhWhcDmk/dY2bj9CfU7+EE
-         In84VnurTtcFTxUrxWjFoLx6E60B13rANMzMHJfvaMaeCAqqA/8VB0vv7CKNiPabcFeO
-         xp007nViaZqnrqXDgI9XXZXKke4bqpEvGAP1E=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UT5KZHFU2APdX6WKtUWfM1YWxYsapsClz8r4c1DQ7os=;
+        b=u80RPEj9hQlJGcXwm1t2XIvOcnMdfARhIhM8YGRn/ro5bCNJwMRYFkRftGzRk70xFV
+         xHjH+7NMt7OSjY2vM3kXfCiDpV8DidpF2dRpJNNua/yHqSrQEXmGdeaSjQDfHu6B76JA
+         iYBCoCgeFoso5PWfy5CTLpu32kuoCSKN3Js5SCSu/qFTiuf6rABkKaXwB7mZZ5SPEd5q
+         MKFRZJGwEhXnbpcgdbIkCSBnqkMTGzVC95IuLUOWtQW6LLuu2vXPqz5/qJjKZ/xnjOhI
+         ZpoVLV739lrMjrfMKlCjZ49MvZcikTsrhTevWqFFNgNqMajTD4nOElJ3S08B61qArP9Y
+         3KZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LkzjllfIyWMzDeEVD7OKUMHITseBrUR0IuEgUUno/hw=;
-        b=lL1qY4OqGRAGx7EyMyjZtZX9AjB+7/4JsnoteXgLXafR9n9KH3EKV4sjkclrNI9AEy
-         mBrVYgupVUY9GVTk4Qmf63x4yUxH8cQ2yf387ylHHuEQl5sdQMZfgADQjQ9/Rte9js1k
-         pMGCH907jBIg6iZmxqFPT1BjvBWUSE2nGH4hu+TzDOD2402oihTY0vRuUo64P4omTpha
-         6kCrye9gW2ZUKxmAMsqKo6rttFhHv/CgCajuKWjPSD4wlhTcmZrFOeNaM3fhWJ6GFOo0
-         vKfvPyaylOki2k5ko0xjSD+tkPIJOguskGegWx0gCYmRMogH2RQi8Xa0l9cjSUncO6+C
-         OhSw==
-X-Gm-Message-State: AFqh2koZcTgjFwNrZ1+Eadsu8zoTk3bPJ15L1Q2S4x59+8zYWwJjPzCh
-        00H6loyncbMZwtR66ncX3Cf8xqVfrSUYjdjQQTeKdg==
-X-Google-Smtp-Source: AMrXdXuYd8ep0FE4rsIiKYO8EGoVrT8K6dwHvKpNV3yPBrN9VUSuX2TpZrcn2sMDaeDRWd6E4UufeUUjTqw6lUXPiPM=
-X-Received: by 2002:a17:906:4e98:b0:82d:e2a6:b04 with SMTP id
- v24-20020a1709064e9800b0082de2a60b04mr8059816eju.748.1673269345065; Mon, 09
- Jan 2023 05:02:25 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UT5KZHFU2APdX6WKtUWfM1YWxYsapsClz8r4c1DQ7os=;
+        b=ZCSI0O+TPsmjDCuiDvER/fRutCAV4fQm08T1BHVFawFA9u0MyzpjZ85JafekJzcLWh
+         3QUhcmU98jkC/uxerz30/4X53C2Pl2dcMnJLzDdiOIIQ12ebMEeQ3fUixtug6ZdABo9l
+         6aVCa4M764jOL9G+hbxv6gujg1+LQCk2StQiKmEC/TlriltWN2dgK8F+gA0h/HoYK9q7
+         6iO+Y7zg+NY94ZehXfgTZINJRwNA5SkfvtaIrsCYhsf2/iQErpExJc+7r+Cw3RGF/SBl
+         FZYoorfhuPKqV2lKo6EOCtFGo5Mxn+bzy4Ct1iYPQ5T8ntljU6eZfilCX+zmFQeFP5xy
+         ROlA==
+X-Gm-Message-State: AFqh2kppItlkmEbxMXAntcuvs48do12bQ8Q/c/z9VIFgl+ECoun6JB17
+        LDhGtPo/LkQ5hJ9Z8YaOZczNDw==
+X-Google-Smtp-Source: AMrXdXvJoElnuck7QfwspDmIPoHohcnd+GMQiWGHC3zRmuSzILKv4e7Q+X+Na6wMs1ZDWVv40BTxrQ==
+X-Received: by 2002:ac2:43a4:0:b0:4cb:3a60:65cc with SMTP id t4-20020ac243a4000000b004cb3a6065ccmr6877919lfl.5.1673269527885;
+        Mon, 09 Jan 2023 05:05:27 -0800 (PST)
+Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id f1-20020a056512360100b004cc5e97d356sm1615031lfs.148.2023.01.09.05.05.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 05:05:27 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/3] dt-bindings: reserved-memory: rmtfs: Make qcom,vmid an array
+Date:   Mon,  9 Jan 2023 14:05:21 +0100
+Message-Id: <20230109130523.298971-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Mon, 9 Jan 2023 14:02:14 +0100
-Message-ID: <CAOf5uwns3YZMY5xhM+o0rNvtTqEDwCbua5HuSy-LBwgZq_eWYg@mail.gmail.com>
-Subject: NXP imx6ull nonalignment buffer question
-To:     Bough Chen <haibo.chen@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Haibo
+Some SoCs mandate that the RMTFS is also assigned to the NAV VM, while
+others really don't want that. Since it has to be conditional, turn
+qcom,vmid into an u32 array so that we can handle the NAV case, as
+well as other similar ones if they pop up in the future.
 
-Working on imx6ulz design and found that if I send a sdio packet using
-the sdio_writesb the adma driver tries to handle it with two dma
-descriptors. The first one filled with the bytes up to 3 to cover the
-misalign and then another buffer descriptor
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+v3 -> v4:
+- Constrain the vmid array
 
-  offset = (SDHCI_ADMA2_ALIGN - (addr & SDHCI_ADMA2_MASK)) &
-                         SDHCI_ADMA2_MASK;
-                if (offset) {
-                        if (data->flags & MMC_DATA_WRITE) {
-                                buffer = sdhci_kmap_atomic(sg);
-                                memcpy(align, buffer, offset);
-                                sdhci_kunmap_atomic(buffer);
-                        }
+ .../devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-                        /* tran, valid */
-                        __sdhci_adma_write_desc(host, &desc, align_addr,
-                                                offset, ADMA2_TRAN_VALID);
+diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+index 2998f1c8f0db..08eb10c25821 100644
+--- a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
++++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+@@ -27,9 +27,11 @@ properties:
+       identifier of the client to use this region for buffers
+ 
+   qcom,vmid:
+-    $ref: /schemas/types.yaml#/definitions/uint32
++    $ref: /schemas/types.yaml#/definitions/uint32-array
+     description: >
+-      vmid of the remote processor, to set up memory protection
++      Array of vmids of the remote processors, to set up memory protection
++    minItems: 1
++    maxItems: 2
+ 
+ required:
+   - qcom,client-id
+-- 
+2.39.0
 
-                        BUG_ON(offset > 65536);
-
-                        align += SDHCI_ADMA2_ALIGN;
-                        align_addr += SDHCI_ADMA2_ALIGN;
-
-                        addr += offset;
-                        len -= offset;
-                }
-
-In 48.7.4 Data Length Setting
-For either ADMA (ADMA1 or ADMA2) transfer, the data in the data buffer must be
-word aligned, so the data length set in the descriptor must be a
-multiple of 4. I have noticed that this code does not work as
-expected.
-
-Did you have any feedback?
-
-Michael
