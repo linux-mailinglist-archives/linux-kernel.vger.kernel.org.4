@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2660F66235F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B6166235D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236885AbjAIKlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 05:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S236980AbjAIKmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:42:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237187AbjAIKlP (ORCPT
+        with ESMTP id S237181AbjAIKlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 05:41:15 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB24C2650
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:31:54 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id ja17so5906353wmb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 02:31:54 -0800 (PST)
+        Mon, 9 Jan 2023 05:41:14 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FE718686
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:32:53 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id s127so8091559vsb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 02:32:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mNNA2Bg2H8l2bLuyBCtyD6jA6l2Y0JNnaRMjS+I/nFU=;
-        b=TO2d6NkIhQliqQSVJD3GFTooA7F9YByu5IyenUJZSDaCfhy+j/FiqAY6pYVGCMHO6X
-         SwPJ30is8h5lgqke0ZpogTV1tAtyZ1+iGf9I/d+vbPmpsLWzrXdQ6fd6aThzis+/NJpY
-         x4lC3WBaH5McVsNNPvIOZPcRsdkHKrRXuxJH5X2vLpKIZ8sqVQTax+canncQxaUZ6TQ4
-         6CmpVeRySnHrIElJOLsLQeS1ew6SeJTcS0KoSwnQx4qkBioydZJ+niDRbR7G0oTsMaQk
-         wQFU7IWVqQPqemiErZKJHT9ey0VtB8f3Sq5pHeW/GwaTBOOMUmVMnoxl7pIJmuzVsOJ9
-         MR+g==
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HG1EBP5y9ccRxvLO1fx1xbReFeFjuMxeUoDDtyCUWMA=;
+        b=efGLwc3OAfzNE2E1Nz97beiexHdD/S486shc0iAWBhaaQ84dyyLYAJQxX8x94mhJ5m
+         EUE7fLQ8Pce0SYXuGrfMDkei9O7PV+O3q0BwQDy7xxo7yYvMUakcrhd/Hui9VolcfJbA
+         UNjqw6Q86j+Nl6A6ZPxln3MA6ejGdBR6TSg6wPZ+q44u+Q5WaSMej+bsDcCyrn/tslId
+         MKFEgQLi0mBfCh0CPAyU1Gt3iUr0bDdfP0jyh3t/VG1RdkPigGoRPCwr5yKC7QmQZB+P
+         d20lJ66lS0potRePakGv+HP55XFZaSyarSD7XI1sKPoUUDKkG8PiUZAv7GZ+HUPBPoDG
+         qB7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mNNA2Bg2H8l2bLuyBCtyD6jA6l2Y0JNnaRMjS+I/nFU=;
-        b=R1qsOlxTrPI4zxCH4Te8UDnHOsLn3kr0Rd9Hm2/yNdr3S6LSeMQLxn/0kB6gql/Seu
-         vJbXBDCmlujpZJFt58q6d74u3vQ6gt82u0bDsX2hr7OB6m6YUFqURpHBU49HVhymDoT2
-         05++aGuGnwNFkOEhGp80Akz2TFNz6N08pnOxFGV1lMI5/Zk3nXZvODeZpbHWwmxwj9kX
-         F1iWGxogwkr57oRWjS2myJVA+qUZMVl7vxQ5oeKYXJxVnXW+WIetquwOAYxyTff+/dp7
-         QhFJ9Ma+zLq8JyE+okVgCm3Xo29CHtulV+Inh/Ez7rDfUd/eLkVwItxOMzRPJr0po9lu
-         G2/g==
-X-Gm-Message-State: AFqh2koxTZB/G8swFB21kyTBa4PfydDfAFl3BiMmWGodierkkejHkAXy
-        2reuTLcWXS0gRMw590Wq9PwrsA==
-X-Google-Smtp-Source: AMrXdXvV7QzMMAVNSAgTaDAOXLPhGuxIfzaA3mcVl/DChX+GMVorkQShhCP/ZdD7kq9fbtT6HhhoDA==
-X-Received: by 2002:a05:600c:4fc5:b0:3d9:ecae:84f2 with SMTP id o5-20020a05600c4fc500b003d9ecae84f2mr3382175wmq.25.1673260313580;
-        Mon, 09 Jan 2023 02:31:53 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c444a00b003d998412db6sm16546190wmn.28.2023.01.09.02.31.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 02:31:53 -0800 (PST)
-Message-ID: <2e52c0a5-3578-c90f-f54e-8cc29f6699a9@linaro.org>
-Date:   Mon, 9 Jan 2023 11:31:51 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HG1EBP5y9ccRxvLO1fx1xbReFeFjuMxeUoDDtyCUWMA=;
+        b=Q0xUoSaBJCqDjgP4PBulwzzzgxfGlm0uC+atPa/yqQ/0oBQrEHH/DHALBPyBgZbgxO
+         d8WyFAuKlLgyKRegY1Ck5hbCfcKRxJ0yk60GHFe//Arnz3K8FeuxvAVtBJYEK0BFB6Sa
+         OQxH40GmIyTGHtMuV4ri32+GUr8XSuEqkMQ2SjR9s65S+BW03an1OytSa2r7PNCLZkds
+         rtGTYK6obH0xQzeiWJo5OlEnyrN3QEh5KmrmPz+YaurnuZsmTbpoCHckPNkzsjd32pSo
+         ZeHuWUmJl1eADwcmR7ek1sFqqv/9OooSKPrLN6Ao0WAJesePS7B1You0heqD7yaT8Vdn
+         wdoA==
+X-Gm-Message-State: AFqh2kqXRWelE6MxG0+n21hOrlk8c6FYiQGJUfP2dW2qVQlrN/sBgjx+
+        aDfjPb/749IJq4lcv/xZoyTwN1V76qJ4XuCBNUXdgw==
+X-Google-Smtp-Source: AMrXdXsJOVB10ql2VCnWdFa4hlkIU+1tI0ArpGkJtnno2x2SvStjRUyMtY8zRp/9COAk1Bnnxnb6YDHvZPoTSdbYJyg=
+X-Received: by 2002:a05:6102:3108:b0:3c8:e71a:61ff with SMTP id
+ e8-20020a056102310800b003c8e71a61ffmr7691861vsh.23.1673260373013; Mon, 09 Jan
+ 2023 02:32:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 01/19] dt-bindings: ARM: MediaTek: Add new document
- bindings of MT8188 clock
-Content-Language: en-US
-To:     =?UTF-8?B?R2FybWluIENoYW5nICjlvLXlrrbpipgp?= 
-        <Garmin.Chang@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20221230073357.18503-1-Garmin.Chang@mediatek.com>
- <20221230073357.18503-2-Garmin.Chang@mediatek.com>
- <33196eef-b1d5-8dd2-7c59-16a73327e8c0@linaro.org>
- <df20ff7bf661b021d5917956af08883f3b9657e0.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <df20ff7bf661b021d5917956af08883f3b9657e0.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20221207-rpi-hvs-crtc-misc-v1-0-1f8e0770798b@cerno.tech> <20221207-rpi-hvs-crtc-misc-v1-8-1f8e0770798b@cerno.tech>
+In-Reply-To: <20221207-rpi-hvs-crtc-misc-v1-8-1f8e0770798b@cerno.tech>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Mon, 9 Jan 2023 10:32:37 +0000
+Message-ID: <CAPY8ntDmSKB-u2FNALeGgh2bZwxDfPXGnP1kV4LnGT_NrZ-4Wg@mail.gmail.com>
+Subject: Re: [PATCH 08/15] drm/vc4: hvs: Ignore atomic_flush if we're disabled
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Eric Anholt <eric@anholt.net>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 11:14, Garmin Chang (張家銘) wrote:
+Hi Maxime
 
->>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8188-
->>> clock.yaml
->>
->> Clock controllers do not go to arm but to clock. It's so suprising
->> directory that I missed to notice it in v1... Why putting it in some
->> totally irrelevant directory?
->>
-> Do you mean move to the path below ?
-> Documentation\devicetree\bindings\clock
-> 
-> If yes, I will change it in v4.
+On Wed, 7 Dec 2022 at 11:55, Maxime Ripard <maxime@cerno.tech> wrote:
+>
+> atomic_flush will be called for each CRTC even if they aren't enabled.
+>
+> The whole code we have there will thus run without a properly affected
+> channel, which can then result in all sorts of weird behaviour.
+>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-Yes.
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-
-
-Best regards,
-Krzysztof
-
+> ---
+>  drivers/gpu/drm/vc4/vc4_hvs.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/vc4/vc4_hvs.c b/drivers/gpu/drm/vc4/vc4_hvs.c
+> index 3582ede1a0aa..5fadbf219542 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hvs.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hvs.c
+> @@ -579,6 +579,9 @@ void vc4_hvs_atomic_flush(struct drm_crtc *crtc,
+>                 return;
+>         }
+>
+> +       if (vc4_state->assigned_channel == VC4_HVS_CHANNEL_DISABLED)
+> +               return;
+> +
+>         if (debug_dump_regs) {
+>                 DRM_INFO("CRTC %d HVS before:\n", drm_crtc_index(crtc));
+>                 vc4_hvs_dump_state(hvs);
+>
+> --
+> 2.38.1
