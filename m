@@ -2,91 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF00661D13
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 04:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD052661D16
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 04:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236042AbjAIDy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 22:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
+        id S234391AbjAID4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 22:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236847AbjAIDxo (ORCPT
+        with ESMTP id S236629AbjAIDzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 22:53:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED47212094;
-        Sun,  8 Jan 2023 19:52:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69FD8B8085B;
-        Mon,  9 Jan 2023 03:52:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67EDEC433EF;
-        Mon,  9 Jan 2023 03:52:31 +0000 (UTC)
-Date:   Sun, 8 Jan 2023 22:52:29 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Quanfa Fu <quanfafu@gmail.com>
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tracing/eprobe: Replace snprintf with memcpy
-Message-ID: <20230108225229.1cef1a67@rorschach.local.home>
-In-Reply-To: <20230109033213.3220884-1-quanfafu@gmail.com>
-References: <20230109033213.3220884-1-quanfafu@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 8 Jan 2023 22:55:18 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B867E9FCB;
+        Sun,  8 Jan 2023 19:53:58 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3093rfgG126582;
+        Sun, 8 Jan 2023 21:53:41 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673236421;
+        bh=iTkO1kJivHhXYaPsMyNQdCqrZFAjoK4UkcZDHr5UEZo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=JXLdnjAI86CosCWwO9cdrAVnxKNW/7GMDhWEFtf4yQXg6hoj3tjuypY1Uz09Rdb1D
+         SmmaKPJYUU90/gkLfBAG6BU/nZdeB+GrKt0OrlY41MjLadOdZV7Eu0tJK5wNHSQ2py
+         qCwkFUkb0qpf18d50F+g/CDIR4IlTWC1fgCIPCvI=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3093rfQ6044902
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 8 Jan 2023 21:53:41 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 8
+ Jan 2023 21:53:41 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Sun, 8 Jan 2023 21:53:41 -0600
+Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3093rbKc023652;
+        Sun, 8 Jan 2023 21:53:38 -0600
+Message-ID: <8dc31852-3d1c-860d-7844-15205f8fd6c6@ti.com>
+Date:   Mon, 9 Jan 2023 09:23:37 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 2/2] PCI: j721e: Add support to build pci-j721e as
+ module.
+Content-Language: en-US
+To:     Achal Verma <a-verma1@ti.com>, Tom Joseph <tjoseph@cadence.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczy_ski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Milind Parab <mparab@cadence.com>
+References: <20230108155755.2614147-1-a-verma1@ti.com>
+ <20230108155755.2614147-3-a-verma1@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20230108155755.2614147-3-a-verma1@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  9 Jan 2023 11:32:13 +0800
-Quanfa Fu <quanfafu@gmail.com> wrote:
+Hi Achal,
 
-> @@ -923,17 +923,17 @@ static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const ch
+On 08/01/23 21:27, Achal Verma wrote:
+> Add support to build pci-j721e as module.
+> 
+> Signed-off-by: Achal Verma <a-verma1@ti.com>
+> ---
+>  drivers/pci/controller/cadence/Kconfig     | 10 +++++-----
+>  drivers/pci/controller/cadence/pci-j721e.c |  6 +++++-
+>  2 files changed, 10 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/cadence/Kconfig b/drivers/pci/controller/cadence/Kconfig
+> index 693c41fe32ce..51edf723586c 100644
+> --- a/drivers/pci/controller/cadence/Kconfig
+> +++ b/drivers/pci/controller/cadence/Kconfig
+> @@ -43,12 +43,13 @@ config PCIE_CADENCE_PLAT_EP
+>  	  different vendors SoCs.
 >  
->  	p = ep->filter_str;
->  	for (i = 0; i < argc; i++) {
-> -		ret = snprintf(p, len, "%s ", argv[i]);
-> -		if (ret < 0)
-> -			goto error;
-> -		if (ret > len) {
-> -			ret = -E2BIG;
-> -			goto error;
-> -		}
-> -		p += ret;
-> -		len -= ret;
-> +		arg_len = strlen(argv[i]);
-> +		memcpy((void *)p, argv[i], arg_len);
-> +
-> +		if (i == argc - 1)
-> +			p[arg_len] = '\0';
-> +		else
-> +			p[arg_len] = ' ';
-> +
-> +		p += arg_len + 1;
-> +		len -= arg_len + 1;
->  	}
-
-The above is too complex. I mentioned strncat() but you could still
-just keep snprintf() too, which adds the '\0';
-
-	for (i = 0; i < argc; i++) {
-		if (i)
-			ret = snprintf(p, len, " %s", argv[i]);
-		else
-			ret = snprintf(p, len, "%s", argv[i]);
-		p += ret;
-		len -= ret;
-	}
-
--- Steve
-
-> -	p[-1] = '\0';
+>  config PCI_J721E
+> -	bool
+> +	tristate
+> +	select PCIE_CADENCE_HOST
+> +	select PCIE_CADENCE_EP
 >  
->  	/*
->  	 * Ensure the filter string can be parsed correctly. Note, this
+
+Please don't use select when symbol being selected, depends on
+additional configs
+
+Documentation/kbuild/kconfig-language.rst::
+
+select should be used with care. select will force
+a symbol to a value without visiting the dependencies.
+By abusing select you are able to select a symbol FOO even
+if FOO depends on BAR that is not set.
+
+
+>  config PCI_J721E_HOST
+> -	bool "TI J721E PCIe platform host controller"
+> +	tristate "TI J721E PCIe platform host controller"
+>  	depends on OF
+> -	select PCIE_CADENCE_HOST
+>  	select PCI_J721E
+>  	help
+>  	  Say Y here if you want to support the TI J721E PCIe platform
+> @@ -56,10 +57,9 @@ config PCI_J721E_HOST
+>  	  core.
+>  
+>  config PCI_J721E_EP
+> -	bool "TI J721E PCIe platform endpoint controller"
+> +	tristate "TI J721E PCIe platform endpoint controller"
+>  	depends on OF
+>  	depends on PCI_ENDPOINT
+> -	select PCIE_CADENCE_EP
+>  	select PCI_J721E
+>  	help
+>  	  Say Y here if you want to support the TI J721E PCIe platform
+> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+> index cc83a8925ce0..c4017fa6ae61 100644
+> --- a/drivers/pci/controller/cadence/pci-j721e.c
+> +++ b/drivers/pci/controller/cadence/pci-j721e.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/irqchip/chained_irq.h>
+>  #include <linux/irqdomain.h>
+>  #include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+>  #include <linux/pci.h>
+> @@ -565,4 +566,7 @@ static struct platform_driver j721e_pcie_driver = {
+>  		.suppress_bind_attrs = true,
+>  	},
+>  };
+> -builtin_platform_driver(j721e_pcie_driver);
+> +module_platform_driver(j721e_pcie_driver);
+> +
+> +MODULE_AUTHOR("Kishon Vijay Abraham I <kishon@ti.com>");
+> +MODULE_LICENSE("GPL v2");
+
+-- 
+Regards
+Vignesh
