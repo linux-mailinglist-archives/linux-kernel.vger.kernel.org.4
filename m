@@ -2,70 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A324661F9A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5BE661FA1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbjAIIDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:03:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
+        id S229650AbjAIIFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbjAIIDN (ORCPT
+        with ESMTP id S233477AbjAIIFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:03:13 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D850DFCDA;
-        Mon,  9 Jan 2023 00:03:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1673251383; bh=qozjcx4hTpr3jaYdT2eKjDnLhPkqHFw+E4wFsV+KjBo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=smzHY8PNV3Owc520Tr9p8IXQNBB9KKe4GYCYgmoeCwe6bz71EZc4DA6nOyUvP8bVf
-         1nT6FchfvuH/idf4w/pYs8IYRPsRNvPTCdbsk9RdPZr164FKH5gvVOJPredv5RruCz
-         1uYcoj1ypJRVK3w3dvdktbAe6C+XMQmY87PTaG2jIvQZGpDB8R7v/3mqwsdPJLEtZU
-         B9YI4MPAm0O1F8NJYMp+FwU9rrftW/l1QQIMiUnnfykkiniFWe8dLCN2xFlKAOkdYT
-         IcPvik70XX9eKiXjk1dF0+VAJ30kRtHcZbaPXO2K1rRgRBBxXsjD13WvxRV9Evn2BE
-         4fwlcf4j0NiDQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.168.5]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MwfWU-1opqNY4Aig-00y8zI; Mon, 09
- Jan 2023 09:03:03 +0100
-Message-ID: <b1ba214d-f3e1-4f6e-5226-2ab7761c4366@gmx.de>
-Date:   Mon, 9 Jan 2023 09:03:01 +0100
+        Mon, 9 Jan 2023 03:05:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D44FCDA
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:04:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673251489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SVp8yLY7DCe2qLwsvuHHLAbl1dGoybQYwVuHEDJuma4=;
+        b=LvmhKigEhE6/zPnIieoK1raZGBmPvTAiPcGWfyRtk0yHxjfdKInAy/idXiDA25fg0+Mej+
+        hoACyeUIdXVkecP0SxvrtLW10PpuK/dUXkaiiGov0cUxjTQ7VzjKY/RA3p5nuQSAgJN0Wc
+        hNvIXiw17+mSouhgxGRrX6/G2zUfj/s=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-74-drveKNWJMZ2qd2wojFtcpw-1; Mon, 09 Jan 2023 03:04:47 -0500
+X-MC-Unique: drveKNWJMZ2qd2wojFtcpw-1
+Received: by mail-wm1-f70.google.com with SMTP id c66-20020a1c3545000000b003d355c13229so6876844wma.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 00:04:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SVp8yLY7DCe2qLwsvuHHLAbl1dGoybQYwVuHEDJuma4=;
+        b=rD69jNu2Q+7f+aGlHS5sHBMySaqC0ZAhmQ4l6ewQ0sNF7ouWRuDLefaENVTBrerjko
+         DNHhMdePlnTg1aSvTmWWk5MFdvc5lu08Im3+JIXaqp1maXxjttgndKlloWMx2hGHZEkO
+         P8YhEsru8Vy8amJizY8OT3XnX1Ttg+NNAGfL1k8HiHRmBOvIXbpJWKonB/XCovxt0+Xl
+         wvpfR481Li73v9jSgLoiF3fOIB/rkxAtMDV6rVTgsaE9yT4O45G/gh1JaQrnBI5sgB4R
+         brFi6k0PbhjojuubmFRit1VAn6xy5zWYOuN5IeOmAeYhZjmrq2pWXRKl1Un+LfUmR1h3
+         fOJg==
+X-Gm-Message-State: AFqh2kp7qjCuit9O7Xphy64GYv+GGcI4gZc6QYNY71FQG/N/QZeEtC6r
+        8zX37e9VKSgpYXKwf9PvFAKtqqb5idJuKDlHUiNwZ9mq7OXzExg4tnCa3A8zTsWqGw9EbssClgr
+        s+RhOOJ3Y5BFYLvLLsi/ZEjvi
+X-Received: by 2002:a05:600c:3ac3:b0:3d1:cfcb:7d19 with SMTP id d3-20020a05600c3ac300b003d1cfcb7d19mr54883745wms.32.1673251486357;
+        Mon, 09 Jan 2023 00:04:46 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuEIbEs0BiKh6OBaBy+pLrnxzSqTb2/JpYfXaQpIO4/gJWRJT1WYGNbmyhE0+56JxjRsJNzdg==
+X-Received: by 2002:a05:600c:3ac3:b0:3d1:cfcb:7d19 with SMTP id d3-20020a05600c3ac300b003d1cfcb7d19mr54883732wms.32.1673251486123;
+        Mon, 09 Jan 2023 00:04:46 -0800 (PST)
+Received: from [192.168.3.108] (p5b0c66da.dip0.t-ipconnect.de. [91.12.102.218])
+        by smtp.gmail.com with ESMTPSA id e18-20020a05600c4e5200b003d9876aa04asm12410490wmq.41.2023.01.09.00.04.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 00:04:45 -0800 (PST)
+Message-ID: <d77ecdac-3712-8d4b-57d5-f8c9e4569e6f@redhat.com>
+Date:   Mon, 9 Jan 2023 09:04:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH] fbdev: Replace 0-length array with flexible array
+Subject: Re: [PATCH 2/3] mm/mprotect: Use long for page accountings and retval
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20230105192034.never.249-kees@kernel.org>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230105192034.never.249-kees@kernel.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230104225207.1066932-1-peterx@redhat.com>
+ <20230104225207.1066932-3-peterx@redhat.com>
+ <aabd4bb8-560b-10b0-9837-b656e1a0a9e1@redhat.com> <Y7cjir3+MpT8XqJT@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y7cjir3+MpT8XqJT@x1n>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:9YTJmsZjsjckd6I9le8J645mr0N28l3SdIAvOuyOXzXTuxHoKTG
- qoIQNW6zyu1FP5X6N850VSLQj1Yw9UebNucTTQJta3AtHaS+teEAiFne08YoJwisaVxSDKz
- N0oYml7bDnzZQ1yhL5GdZ+k+Rw41aEnT0J2GsXeJAIU8XqYi2nstRW8BFge+4dsNu52nJl+
- EE9Lx6dmVlu166rTDsPCA==
-UI-OutboundReport: notjunk:1;M01:P0:UMFGxlVWvYY=;5AI8Fz86dVux/6X6Zo26d4ofLkC
- Mn+YuXFtnpca4uzGQr10jGyFUg4BvKVTFjgjCPtpHp+9t+TvPxS1H2Odj2prQlE/FQ3V9eEwH
- xxb+uWK5yADaZddzuMIVkgqJWW7A2oWr7pF28RTRhGpqJoRmsh6ygXWO+RcoI29/M6QLaptlv
- 8pcFmo6+6CqJZ0zD+1hf+KY/w0KMqnEMSPNq1X1ASYHssCDwwjtRtDHzfkeLkj3DFPt5LQCq3
- 0eO+7duchHK0eZVEYULvCHQIv80zsVW518lnz0nsKBKSTg8nCTINjNjV3SPsJM9qariCEB0gJ
- yDLg0G9L88CTjZqj018fr5yj5xb0UfRa/9qJ/IoeALU04WRyKVcLeggi2jPGzfkMSq38MauOs
- trLH8xBQP1+fNv8n2BBGHzpqaHPwDcmUYQmmnZyvw2mWz3RtiyzNXv41Ni7/obCPxnjrvNuSF
- OpjiBhrKaV5tWj1FmXWLhGAb7SOn+K1bioeZA7uZpDwNnL97VNxz1CujfD6OlnYbHmEYtLOIe
- j/Mm223Cvc4wFGQsQca3aV3X0ZGP5WnC/YU+euHqNvO0XVFM0YNIt+noJKjFRgET/MOB7oJdY
- D9rrUCL31P4PRPMax3YRU9pNEg8tqVj6Zijn1frN2hZ59Gwx+9FIvmoZ/XPXc+c0gQyJ2rB+F
- C90+bAPSObZ8ctryBCfK+CBe8R2lStLhnvwpPQrOjsLaus/5vRp/vHj8Y3s3A6ynDvzFgQbgQ
- Tu56CTwE4PHumDWLoIuhhJV0irXMDCtmXGuoDbb0ZWRD10A+5hldW9orqblk/fN7eeoXNm+rM
- HijCdlGagKbAYRZeAgSga65k0N470YFnFz3shIyUXLsXI185uPoTKSwu05UkMoURZCGc9xm2n
- fTuwX9wN5JthviOzrR6vHxUnFHofAx/v5LHDLzaKCOlX7SLbaJLH1KJI5FzdZfI1biLpG8jS8
- 5zHJ/A==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,51 +91,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/23 20:20, Kees Cook wrote:
-> Zero-length arrays are deprecated[1]. Replace struct aperture's "ranges"
-> 0-length array with a flexible array. (How is the size of this array
-> verified?) Detected with GCC 13, using -fstrict-flex-arrays=3D3:
->
-> samples/vfio-mdev/mdpy-fb.c: In function 'mdpy_fb_probe':
-> samples/vfio-mdev/mdpy-fb.c:169:32: warning: array subscript 0 is outsid=
-e array bounds of 'struct aperture[0]' [-Warray-bounds=3D]
->    169 |         info->apertures->ranges[0].base =3D info->fix.smem_star=
-t;
->        |         ~~~~~~~~~~~~~~~~~~~~~~~^~~
-> In file included from samples/vfio-mdev/mdpy-fb.c:21:
-> include/linux/fb.h:510:19: note: while referencing 'ranges'
->    510 |                 } ranges[0];
->        |                   ^~~~~~
->
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-=
-length-and-one-element-arrays
->
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: linux-fbdev@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On 05.01.23 20:22, Peter Xu wrote:
+> On Thu, Jan 05, 2023 at 09:44:16AM +0100, David Hildenbrand wrote:
+>> I'm wondering if we should just return the number of changed pages via a
+>> separate pointer and later using an int for returning errors -- when
+>> touching this interface already.
+>>
+>> Only who's actually interested in the number of pages would pass a pointer
+>> to an unsigned long (NUMA).
+>>
+>> And code that expects that there never ever are failures (mprotect, NUMA)
+>> could simply check for WARN_ON_ONCE(ret).
+>>
+>> I assume you evaluated that option as well, what was your conclusion?
+> 
+> Since a single long can cover both things as retval, it's better to keep it
+> simple?  Thanks,
+> 
 
-applied to the fbdev git tree.
+Fine with me.
 
-Thanks!
-Helge
+-- 
+Thanks,
 
-> ---
->   include/linux/fb.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/fb.h b/include/linux/fb.h
-> index 96b96323e9cb..bf59d6a3590f 100644
-> --- a/include/linux/fb.h
-> +++ b/include/linux/fb.h
-> @@ -507,7 +507,7 @@ struct fb_info {
->   		struct aperture {
->   			resource_size_t base;
->   			resource_size_t size;
-> -		} ranges[0];
-> +		} ranges[];
->   	} *apertures;
->
->   	bool skip_vt_switch; /* no VT switch on suspend/resume required */
+David / dhildenb
 
