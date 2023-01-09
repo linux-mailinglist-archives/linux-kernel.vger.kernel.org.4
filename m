@@ -2,214 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62766633D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08516633E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 23:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237690AbjAIWUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 17:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
+        id S235148AbjAIWYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 17:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237876AbjAIWTp (ORCPT
+        with ESMTP id S235306AbjAIWYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:19:45 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F4C37520;
-        Mon,  9 Jan 2023 14:19:43 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso11333689pjf.1;
-        Mon, 09 Jan 2023 14:19:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MdL5MN5WNJYIfvUrUuCsHRbLUJhJjLxZ28wGzjZcN0c=;
-        b=dEAS+4jL75Suk0tOEGBt08XAnjTrLvO/R8uYdTLja7mL9+iNJtFkygEsE6P5wkVONc
-         0uVPOgHvPAoQREoyYs1exlktP0aykMbT1+rF7M+5d5nmBlZTTJ8/dE6f67dx2bReEC+E
-         Jmx47lxE/gQrTmIlzGuz7jUffpC9eXXOHwrjKQnhOyOxH1PHognOCloG7aPDTBPMNsKg
-         Z7h7cFWoWdHNmXNUNsTuYBH9lY8RBFBymRBaD1DLlBHUTw2gVZQTtK0KWSK0aWU0jxCS
-         fhfLMr92X8gYlZcoWZTCH0EIel8PsvRYYz+lqUgwYesgC3yfZhggD+2DC/+wuTqreTSz
-         44dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MdL5MN5WNJYIfvUrUuCsHRbLUJhJjLxZ28wGzjZcN0c=;
-        b=I0x9VAu1bA1ZK0c0eyLLgX1FHW7PPp98/BkM7PHIyM/kJj4MKDO1RsmTUE/quVg1+F
-         5XCC/jL/ZNCNcjLRxAVHnonY79nY+ZIHB3jj+LEirotMLYKvgFm63Xo8cqujAgdSdPp6
-         0lfTXK1CTuFVckZ+AE38oqtTsT5gJdwW01cBiefFfmBvvCuiMQJH3+S68fL+I+uLYeV6
-         j0FM5Qot9Lbgw8KYQ9qRurijHgoHw3fe42l7/Qjep8H7nXvkKFyfp7OJf3J2J6JAe/8O
-         tcWpL0XFtv5P+JZoOQsMbo0185xOA/Uf5HZwnIdGEPBrgUG4K6YdY//RZD+5ae/mYO3n
-         wllA==
-X-Gm-Message-State: AFqh2kqmCsPg+BY1jLkXfiilqeucKsDxcyX1Af8LfPJamybHrXJ2AfNw
-        3LPFD+skfy1vuOpDn3deH6w=
-X-Google-Smtp-Source: AMrXdXul+yHbO/LVTHRuJtpKs3ge9LDiKlyAY9ymry/NNqYq3A3SE9wPu3cPCfJXMavzKzKVrGLa8g==
-X-Received: by 2002:a05:6a20:e686:b0:ac:b2a3:e39c with SMTP id mz6-20020a056a20e68600b000acb2a3e39cmr74662806pzb.62.1673302783039;
-        Mon, 09 Jan 2023 14:19:43 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id n6-20020a634d46000000b004351358f056sm5549135pgl.85.2023.01.09.14.19.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 14:19:42 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm: Add gpu devfreq tuning debugfs
-Date:   Mon,  9 Jan 2023 14:19:33 -0800
-Message-Id: <20230109221938.1803322-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 9 Jan 2023 17:24:08 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DF4D2D9;
+        Mon,  9 Jan 2023 14:24:07 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 309MMgc91098500
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Mon, 9 Jan 2023 14:22:42 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 309MMgc91098500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023010601; t=1673302968;
+        bh=fnGYAzEZ9G8dLu8p7poBHQBQEB9rPQ3/UMIcvkLwwzM=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=WejDa96NbA9JLXU2m0szWHfgneU/slCZk5DjNVsOfl5UknDPxUHbTkZ6sEdxf59yK
+         9U7HagGGXs01t5o3C3FlSBzlH9R65yjEnQPiI7DSfoLPQ7oJL3l8ONaBv4XrhO1aJL
+         evjamXSvHozlp6HrXLBdZOlgNXZ8Xw68aTY+YTfrGv01tZtVjdmkWPlqx2GNapF+OU
+         1XDruEvD71KM60s3EzeSPt+avCMdL8wF1t5q1SPoEzxWVG5X4JOfYhfXslqozmahes
+         Kt/+GCZIfIH/ei228BT79xoMyGyyseHDKAM3bk1zKMPGAbFM3epvVbrFUoK2p6U4pt
+         R82wWXoLceQRA==
+Date:   Mon, 09 Jan 2023 14:22:39 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     Heiko Carstens <hca@linux.ibm.com>, corbet@lwn.net,
+        will@kernel.org, boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
+        dwmw2@infradead.org, baolu.lu@linux.intel.com,
+        Arnd Bergmann <arnd@arndb.de>, penberg@kernel.org,
+        rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC][PATCH 11/12] slub: Replace cmpxchg_double()
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAHk-=whm+u8YoUaE9PKugYBxujhDL5twz6HqzqLP8OTXjKuT4g@mail.gmail.com>
+References: <20221219153525.632521981@infradead.org> <20221219154119.550996611@infradead.org> <Y7Ri+Uij1GFkI/LB@osiris> <CAHk-=wj9nK825MyHXu7zkegc7Va+ZxcperdOtRMZBCLHqGrr=g@mail.gmail.com> <Y7xAsELYo4srs/z/@hirez.programming.kicks-ass.net> <CAHk-=whm+u8YoUaE9PKugYBxujhDL5twz6HqzqLP8OTXjKuT4g@mail.gmail.com>
+Message-ID: <3C179EF2-0B8A-47F0-8FE6-3BF97A4442BA@zytor.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On January 9, 2023 2:02:33 PM PST, Linus Torvalds <torvalds@linux-foundatio=
+n=2Eorg> wrote:
+>On Mon, Jan 9, 2023 at 10:29 AM Peter Zijlstra <peterz@infradead=2Eorg> w=
+rote:
+>>
+>> I ran into a ton of casting trouble when compiling kernel/fork=2Ec whic=
+h
+>> uses this_cpu_cmpxchg() on a pointer type and the compiler hates castin=
+g
+>> pointers to an integer that is not the exact same size=2E
+>
+>Ahh=2E Yeah - not because that code needs or wants the 128-bit case, but
+>because the macro expands to all sizes in a switch statement, so the
+>compiler sees all the cases even if only one is then statically
+>picked=2E
+>
+>So the silly casts are for all the cases that never matter=2E
+>
+>Annoying=2E
+>
+>I wonder if the "this_cpu_cmpxchg()" macro could be made to use
+>_Generic() to pick out the pointer case first, and then only use
+>'sizeof()' for the integer types, so that we don't have this kind of
+>"every architecture needs to deal with the nasty situation" code=2E
+>
+>Ok, it's not actually the this_cpu_cmpxchg() macro, it's
+>__pcpu_size_call_return() and friends, but whatever=2E
+>
+>Another alternative is to try to avoid casting to "u64" as long as
+>humanly possible, and use only "typeof((*ptr))" everywhere=2E Then when
+>the type actually *is* 128-bit, it all works out fine, because it
+>won't be a pointer=2E That's the approach the uaccess macros tend to
+>take, and then they hit the reverse issue on clang, where using the
+>"byte register" constraints would cause warnings for non-byte
+>accesses, and we had to do
+>
+>                unsigned char x_u8__;
+>                __get_user_asm(x_u8__, ptr, "b", "=3Dq", label);
+>                (x) =3D x_u8__;
+>
+>because using '(x)' directly would then warn when 'x' wasn't a
+>char-sized thing - even if that asm case never actually was _used_ for
+>that case, since it was all inside a "switch (sizeof) case 1:"
+>statement=2E
+>
+>            Linus
 
-Make the handful of tuning knobs available visible via debugfs.
-
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c |  2 +-
- drivers/gpu/drm/msm/msm_debugfs.c     | 12 ++++++++++++
- drivers/gpu/drm/msm/msm_drv.h         |  9 +++++++++
- drivers/gpu/drm/msm/msm_gpu.h         |  3 ---
- drivers/gpu/drm/msm/msm_gpu_devfreq.c |  6 ++++--
- 5 files changed, 26 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 36c8fb699b56..6f7401f2acda 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -2021,7 +2021,7 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
- 	 * to cause power supply issues:
- 	 */
- 	if (adreno_is_a618(adreno_gpu) || adreno_is_7c3(adreno_gpu))
--		gpu->clamp_to_idle = true;
-+		priv->gpu_clamp_to_idle = true;
- 
- 	/* Check if there is a GMU phandle and set it up */
- 	node = of_parse_phandle(pdev->dev.of_node, "qcom,gmu", 0);
-diff --git a/drivers/gpu/drm/msm/msm_debugfs.c b/drivers/gpu/drm/msm/msm_debugfs.c
-index 95f4374ae21c..d6ecff0ab618 100644
---- a/drivers/gpu/drm/msm/msm_debugfs.c
-+++ b/drivers/gpu/drm/msm/msm_debugfs.c
-@@ -305,6 +305,7 @@ void msm_debugfs_init(struct drm_minor *minor)
- {
- 	struct drm_device *dev = minor->dev;
- 	struct msm_drm_private *priv = dev->dev_private;
-+	struct dentry *gpu_devfreq;
- 
- 	drm_debugfs_create_files(msm_debugfs_list,
- 				 ARRAY_SIZE(msm_debugfs_list),
-@@ -325,6 +326,17 @@ void msm_debugfs_init(struct drm_minor *minor)
- 	debugfs_create_file("shrink", S_IRWXU, minor->debugfs_root,
- 		dev, &shrink_fops);
- 
-+	gpu_devfreq = debugfs_create_dir("devfreq", minor->debugfs_root);
-+
-+	debugfs_create_bool("idle_clamp",0600, gpu_devfreq,
-+			    &priv->gpu_clamp_to_idle);
-+
-+	debugfs_create_u32("upthreshold",0600, gpu_devfreq,
-+			   &priv->gpu_devfreq_config.upthreshold);
-+
-+	debugfs_create_u32("downdifferential",0600, gpu_devfreq,
-+			   &priv->gpu_devfreq_config.downdifferential);
-+
- 	if (priv->kms && priv->kms->funcs->debugfs_init)
- 		priv->kms->funcs->debugfs_init(priv->kms, minor);
- 
-diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-index 876d8d5eec2f..6cb1c6d230e8 100644
---- a/drivers/gpu/drm/msm/msm_drv.h
-+++ b/drivers/gpu/drm/msm/msm_drv.h
-@@ -11,6 +11,7 @@
- #include <linux/kernel.h>
- #include <linux/clk.h>
- #include <linux/cpufreq.h>
-+#include <linux/devfreq.h>
- #include <linux/module.h>
- #include <linux/component.h>
- #include <linux/platform_device.h>
-@@ -234,6 +235,14 @@ struct msm_drm_private {
- 	 */
- 	unsigned int hangcheck_period;
- 
-+	/** gpu_devfreq_config: Devfreq tuning config for the GPU. */
-+	struct devfreq_simple_ondemand_data gpu_devfreq_config;
-+
-+	/**
-+	 * gpu_clamp_to_idle: Enable clamping to idle freq when inactive
-+	 */
-+	bool gpu_clamp_to_idle;
-+
- 	/**
- 	 * disable_err_irq:
- 	 *
-diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-index 651786bc55e5..9e36f6c9bc29 100644
---- a/drivers/gpu/drm/msm/msm_gpu.h
-+++ b/drivers/gpu/drm/msm/msm_gpu.h
-@@ -275,9 +275,6 @@ struct msm_gpu {
- 
- 	struct msm_gpu_state *crashstate;
- 
--	/* Enable clamping to idle freq when inactive: */
--	bool clamp_to_idle;
--
- 	/* True if the hardware supports expanded apriv (a650 and newer) */
- 	bool hw_apriv;
- 
-diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-index 025940eb08d1..0d7ff7ddc029 100644
---- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-+++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-@@ -183,6 +183,7 @@ static bool has_devfreq(struct msm_gpu *gpu)
- void msm_devfreq_init(struct msm_gpu *gpu)
- {
- 	struct msm_gpu_devfreq *df = &gpu->devfreq;
-+	struct msm_drm_private *priv = gpu->dev->dev_private;
- 
- 	/* We need target support to do devfreq */
- 	if (!gpu->funcs->gpu_busy)
-@@ -209,7 +210,7 @@ void msm_devfreq_init(struct msm_gpu *gpu)
- 
- 	df->devfreq = devm_devfreq_add_device(&gpu->pdev->dev,
- 			&msm_devfreq_profile, DEVFREQ_GOV_SIMPLE_ONDEMAND,
--			NULL);
-+			&priv->gpu_devfreq_config);
- 
- 	if (IS_ERR(df->devfreq)) {
- 		DRM_DEV_ERROR(&gpu->pdev->dev, "Couldn't initialize GPU devfreq\n");
-@@ -358,10 +359,11 @@ static void msm_devfreq_idle_work(struct kthread_work *work)
- 	struct msm_gpu_devfreq *df = container_of(work,
- 			struct msm_gpu_devfreq, idle_work.work);
- 	struct msm_gpu *gpu = container_of(df, struct msm_gpu, devfreq);
-+	struct msm_drm_private *priv = gpu->dev->dev_private;
- 
- 	df->idle_time = ktime_get();
- 
--	if (gpu->clamp_to_idle)
-+	if (priv->gpu_clamp_to_idle)
- 		dev_pm_qos_update_request(&df->idle_freq, 0);
- }
- 
--- 
-2.38.1
-
+I wrote a crazy macro for dealing with exactly this at one point, basicall=
+y producing the "right type" to cast to=2E It would need to have 128-bit su=
+pport added to it, but that should be trivial=2E It is called something lik=
+e int_type() =2E=2E=2E not in front of a computer right now so can't double=
+ check=2E
