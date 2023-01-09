@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595C6661F18
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEFA661F24
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234310AbjAIHUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 02:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
+        id S236307AbjAIHWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 02:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbjAIHUY (ORCPT
+        with ESMTP id S233288AbjAIHVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 02:20:24 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E806FE9;
-        Sun,  8 Jan 2023 23:20:17 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(16471:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Mon, 09 Jan 2023 15:19:51 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 9 Jan
- 2023 15:19:51 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Mon, 9 Jan 2023 15:19:51 +0800
-From:   <cy_huang@richtek.com>
-To:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
-        <matthias.bgg@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <gene_chen@richtek.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        ChiYuan Huang <cy_huang@richtek.com>, <stable@vger.kernel.org>
-Subject: [PATCH RESEND v2] usb: typec: tcpm: Fix altmode re-registration causes sysfs create fail
-Date:   Mon, 9 Jan 2023 15:19:50 +0800
-Message-ID: <1673248790-15794-1-git-send-email-cy_huang@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
+        Mon, 9 Jan 2023 02:21:55 -0500
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F917764D;
+        Sun,  8 Jan 2023 23:21:50 -0800 (PST)
+Received: from SHSend.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
+        by SHSQR01.spreadtrum.com with ESMTP id 3097LDTM092591;
+        Mon, 9 Jan 2023 15:21:13 +0800 (+08)
+        (envelope-from Chunyan.Zhang@unisoc.com)
+Received: from ubt.spreadtrum.com (10.0.74.87) by BJMBX02.spreadtrum.com
+ (10.0.64.8) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Mon, 9 Jan 2023
+ 15:21:12 +0800
+From:   Chunyan Zhang <chunyan.zhang@unisoc.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [RESEND PATCH V3 0/3] Convert Unisoc GPIO bindings to yaml and add support for UMS512
+Date:   Mon, 9 Jan 2023 15:21:03 +0800
+Message-ID: <20230109072106.2176048-1-chunyan.zhang@unisoc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.0.74.87]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX02.spreadtrum.com (10.0.64.8)
+X-MAIL: SHSQR01.spreadtrum.com 3097LDTM092591
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,68 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+V3-resend:
+- Added Reviewed-by from Rob Herring.
 
-There's the altmode re-registeration issue after data role
-swap (DR_SWAP).
+V3:
+- Removed a example from sprd,gpio-eic.yaml;
+- Added '|' at the beginning of description blocks;
+- Added Reviewed-by tags from Krzysztof Kozlowski and Linus Walleij.
 
-Comparing to USBPD 2.0, in USBPD 3.0, it loose the limit that only DFP
-can initiate the VDM command to get partner identity information.
+Changes on V2:
+* Addressed review comments:
+- Fixed typo;
+- Added description for 'reg' property and modified its maxItems;
+- Removed redundant examples;
+- Rephrased commit message.
 
-For a USBPD 3.0 UFP device, it may already get the identity information
-from its port partner before DR_SWAP. If DR_SWAP send or receive at the
-mean time, 'send_discover' flag will be raised again. It causes discover
-identify action restart while entering ready state. And after all
-discover actions are done, the 'tcpm_register_altmodes' will be called.
-If old altmode is not unregistered, this sysfs create fail can be found.
+Chunyan Zhang (3):
+  dt-bindings: gpio: Convert Unisoc GPIO controller binding to yaml
+  dt-bindings: gpio: Convert Unisoc EIC controller binding to yaml
+  dt-bindings: gpio: Add compatible string for Unisoc UMS512
 
-In 'DR_SWAP_CHANGE_DR' state case, only DFP will unregister altmodes.
-For UFP, the original altmodes keep registered.
+ .../bindings/gpio/gpio-eic-sprd.txt           |  97 --------------
+ .../devicetree/bindings/gpio/gpio-sprd.txt    |  28 ----
+ .../bindings/gpio/sprd,gpio-eic.yaml          | 124 ++++++++++++++++++
+ .../devicetree/bindings/gpio/sprd,gpio.yaml   |  75 +++++++++++
+ 4 files changed, 199 insertions(+), 125 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-sprd.txt
+ create mode 100644 Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
+ create mode 100644 Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
 
-This patch fix the logic that after DR_SWAP, 'tcpm_unregister_altmodes'
-must be called whatever the current data role is.
-
-Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together)
-Reported-by: TommyYl Chen <tommyyl.chen@mediatek.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-Since v2:
-- Correct the mail sent from Richtek.
-- Add 'Reviewed-by' tag.
-
-Hi, Greg:
-
-  Please check this one. I have strongly requested our MIS to remove the confidential string.
-
-ChiYuan Huang.
----
- drivers/usb/typec/tcpm/tcpm.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 904c7b4..59b366b 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4594,14 +4594,13 @@ static void run_state_machine(struct tcpm_port *port)
- 		tcpm_set_state(port, ready_state(port), 0);
- 		break;
- 	case DR_SWAP_CHANGE_DR:
--		if (port->data_role == TYPEC_HOST) {
--			tcpm_unregister_altmodes(port);
-+		tcpm_unregister_altmodes(port);
-+		if (port->data_role == TYPEC_HOST)
- 			tcpm_set_roles(port, true, port->pwr_role,
- 				       TYPEC_DEVICE);
--		} else {
-+		else
- 			tcpm_set_roles(port, true, port->pwr_role,
- 				       TYPEC_HOST);
--		}
- 		tcpm_ams_finish(port);
- 		tcpm_set_state(port, ready_state(port), 0);
- 		break;
 -- 
-2.7.4
+2.25.1
 
