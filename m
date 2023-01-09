@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE14662002
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0EE661FFD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbjAIIag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        id S236571AbjAII3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236715AbjAII2H (ORCPT
+        with ESMTP id S236666AbjAII2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:28:07 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55869120B4
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:27:50 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id z12so7263925qtv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 00:27:50 -0800 (PST)
+        Mon, 9 Jan 2023 03:28:12 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0313B13F2A
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:28:03 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id s9so7322816wru.13
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 00:28:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=zghMpTYsPWsR5GtgySFx7zTUJ27wHzC2IImpAwQBrMA=;
-        b=FzyO9U7wZ/tZQE4OC78DAwuTbXqpKQ9H8477Bab0Al+hu+44QFVZr/kebod9cv+8Gh
-         Im32w8jid0q0zfLJePY4Su6twvGK+YLMbQy8Ne9MPsBcV639qeErVIu3nLmJzW10L0Qb
-         Fsq0l5LkrnBFbG2gHBURWVh+NvCjfLBpHgyh0=
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xZD8nI6HmMRloYqzFGgqolre6xt24UiKp8QgiomAAV0=;
+        b=MAIAO/g3hRfcjMG2+wehmEXGkdnof3Yv0jObG/5u/FijhaqafBJacsmNtJGw5KaeBV
+         XzNK9+7mkifcNWnK5UbBUcjQNXDRyvC58ecLs++K6FbKsdz+B4Oqb6hsxtnf263qnZrG
+         QgFHpyZveCBu3BeKcASABYdsIIc7lydy/hUshLypcyUkymne8e1WJHwQhCVXHVYijaGs
+         ic+daE5T7NGDuxATPMFIGZPfvCJpHyow8YFWoEJVot+nJ98tJgoOL3AwYPsxueex5XAn
+         yo7J1HyOE4F/LK8TazR9QhBHablGnbAqOnQvGV1Wi34JgVvcjeAPutkuPNFNLc3hG9D1
+         nA5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zghMpTYsPWsR5GtgySFx7zTUJ27wHzC2IImpAwQBrMA=;
-        b=DhmfX47964t19La8Q5xqWYgB9CtjE4yiiAGP7hxvss+EY5a2e0pyME7Pio5dGBRSrd
-         pL4J4rye096nPRKny1xG4p/SKc9fCksEYKp8BKpfZzVCf952GjphBF+iuuCUp2u8nBXH
-         82+edSbDBcwGX3VlQZwoNXE6rIAfhQttF61eoviLucYvXP9EIdOulm1U/0hczybQYYbx
-         OIVfPawUWypl2DTzsWWazEN1MXnacHbg+qHpHoW8I0yq6b0oqkupJejaqsvvCuNPULTc
-         ZVD+nxCvJn3vPSU28JmF7N2GBBFPUxoPbb2yZsIX8qwhlIhQgGAqDZfKX8tCCV8B0PZk
-         RXKw==
-X-Gm-Message-State: AFqh2kr+skFC+hj+bUZr8eT905NpyPWHh548KZL3qts8vu+ALFISXRnf
-        H2WR/Q4NSBshF17do8QDci2lsk5dpx4E+KGyxIU0AeYeJAO2oCrbPsDWdvk+GE2Vqkk+/1gpQnR
-        GKX8JMh+YpDnjbEcjWcAXxqxh0y233L2UCwPU2QVDvrAOxwotEEnenWf+PJuqWC6E3sPA4eU3bp
-        kBTyS8sDSijNI=
-X-Google-Smtp-Source: AMrXdXsM3I/BIlfpWenIt1TsJk2HxNza8uJIRaClAFhEkRbhHy/dBF5XoAXSz/do1LNE379MeYNBxQ==
-X-Received: by 2002:a05:622a:5c10:b0:3ab:7d29:2f96 with SMTP id gd16-20020a05622a5c1000b003ab7d292f96mr80127489qtb.40.1673252869142;
-        Mon, 09 Jan 2023 00:27:49 -0800 (PST)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id bp43-20020a05622a1bab00b003a68f5d98c1sm4246023qtb.93.2023.01.09.00.27.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 Jan 2023 00:27:48 -0800 (PST)
-Subject: Re: [PATCH 03/16] dt-bindings: spi: Add spi peripheral specific
- property
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-4-william.zhang@broadcom.com>
- <dc23b376-6f1a-21d9-5d26-2ccde563fb34@linaro.org>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <ca63fd53-9108-5bb6-2e1f-b6fdb51218bb@broadcom.com>
-Date:   Mon, 9 Jan 2023 00:27:46 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xZD8nI6HmMRloYqzFGgqolre6xt24UiKp8QgiomAAV0=;
+        b=1rIXp29wALNKUS5lE/+gznMJnqAB9kBqZ8z+Qdclt0KpeZKCtG+j/i6f0/8cmwaDf6
+         SXz9b8KlH0hhv2Pu86rCusul6nJV2YmfaO6/5KCHSGQETyj7cufjA/+ityIXtMwD6nv1
+         MwfANfLK9WEwbxyl/NEVXNbXbMt2mFXu1EwMImWPgH2wDmZ6QMxeZO3guItLRoAlC7Z7
+         amWnLWCy6fA00GazrUWMBJ6J3jCxUTh9Vr2p0NybT/GLJoW1g0IIau3lqJyB4hMvvEZW
+         EqVXQmQxyWstu5OqJ8crdZi+89V4rzkDgI+fOKVTn3lLU54jFgtYnEamVMcFcW32mNqu
+         ZCRw==
+X-Gm-Message-State: AFqh2kqHSQAJOtFWEcsVhwj2SScMfnyy9LSMUCYV+40Lntqkd5AUqf1F
+        1IIc/XIWGrgD8kT95BCnsBf0VVRB6ic=
+X-Google-Smtp-Source: AMrXdXtxtAUjXlIqrSHiEq3e/a6f4hT44NKa7QdS3bzrMoFgY14FmgJg6dUfzzv9/b9kOiy/OIl3MA==
+X-Received: by 2002:adf:f7ca:0:b0:29b:7aed:e06a with SMTP id a10-20020adff7ca000000b0029b7aede06amr15003626wrq.51.1673252881446;
+        Mon, 09 Jan 2023 00:28:01 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id b10-20020adfe64a000000b00287da7ee033sm7856037wrn.46.2023.01.09.00.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 00:28:01 -0800 (PST)
+Date:   Mon, 9 Jan 2023 11:27:57 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
+Subject: drivers/dma/at_hdmac.c:1371 atc_prep_slave_sg() warn: possible
+ memory leak of 'desc'
+Message-ID: <202301090801.GNFV0WjT-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <dc23b376-6f1a-21d9-5d26-2ccde563fb34@linaro.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e7ecbf05f1d08aff"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,119 +70,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000e7ecbf05f1d08aff
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1fe4fd6f5cad346e598593af36caeadc4f5d4fa9
+commit: ac803b56860f6506c55a3c9330007837e3f4edda dmaengine: at_hdmac: Convert driver to use virt-dma
+config: arm-randconfig-m031-20230108
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
+smatch warnings:
+drivers/dma/at_hdmac.c:1371 atc_prep_slave_sg() warn: possible memory leak of 'desc'
 
-On 01/08/2023 06:52 AM, Krzysztof Kozlowski wrote:
-> On 06/01/2023 21:07, William Zhang wrote:
->> brcm,no-clk-gate is a Broadcom Broadband HS SPI controller specific
->> property for certain SPI device such as Broadcom ISI voice daughtercard
->> to work properly. It disables the clock gating feature when the chip
->> select is deasserted for any device that wants to keep the clock
->> running.
-> 
-> 
->> +additionalProperties: true
->> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
->> index ead2cccf658f..f85d777c7b67 100644
->> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
->> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
->> @@ -108,5 +108,6 @@ allOf:
->>     - $ref: cdns,qspi-nor-peripheral-props.yaml#
->>     - $ref: samsung,spi-peripheral-props.yaml#
->>     - $ref: nvidia,tegra210-quad-peripheral-props.yaml#
->> +  - $ref: brcm,bcm63xx-hsspi-peripheral-props.yaml#
-> 
-> Don't break the order.
-> 
-Will fix in v2
+vim +/desc +1371 drivers/dma/at_hdmac.c
 
-> Best regards,
-> Krzysztof
-> 
+808347f6a31792 Nicolas Ferre     2009-07-22  1235  static struct dma_async_tx_descriptor *
+808347f6a31792 Nicolas Ferre     2009-07-22  1236  atc_prep_slave_sg(struct dma_chan *chan, struct scatterlist *sgl,
+db8196df4bb6f1 Vinod Koul        2011-10-13  1237  		unsigned int sg_len, enum dma_transfer_direction direction,
+185ecb5f4fd439 Alexandre Bounine 2012-03-08  1238  		unsigned long flags, void *context)
+808347f6a31792 Nicolas Ferre     2009-07-22  1239  {
+ac803b56860f65 Tudor Ambarus     2022-10-25  1240  	struct at_dma		*atdma = to_at_dma(chan->device);
+808347f6a31792 Nicolas Ferre     2009-07-22  1241  	struct at_dma_chan	*atchan = to_at_dma_chan(chan);
+808347f6a31792 Nicolas Ferre     2009-07-22  1242  	struct at_dma_slave	*atslave = chan->private;
+beeaa103eecc7a Nicolas Ferre     2012-03-14  1243  	struct dma_slave_config	*sconfig = &atchan->dma_sconfig;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1244  	struct at_desc		*desc;
+808347f6a31792 Nicolas Ferre     2009-07-22  1245  	u32			ctrla;
+808347f6a31792 Nicolas Ferre     2009-07-22  1246  	u32			ctrlb;
+808347f6a31792 Nicolas Ferre     2009-07-22  1247  	dma_addr_t		reg;
+808347f6a31792 Nicolas Ferre     2009-07-22  1248  	unsigned int		reg_width;
+808347f6a31792 Nicolas Ferre     2009-07-22  1249  	unsigned int		mem_width;
+808347f6a31792 Nicolas Ferre     2009-07-22  1250  	unsigned int		i;
+808347f6a31792 Nicolas Ferre     2009-07-22  1251  	struct scatterlist	*sg;
+808347f6a31792 Nicolas Ferre     2009-07-22  1252  	size_t			total_len = 0;
+808347f6a31792 Nicolas Ferre     2009-07-22  1253  
+cc52a10a048fc1 Nicolas Ferre     2011-04-30  1254  	dev_vdbg(chan2dev(chan), "prep_slave_sg (%d): %s f0x%lx\n",
+cc52a10a048fc1 Nicolas Ferre     2011-04-30  1255  			sg_len,
+db8196df4bb6f1 Vinod Koul        2011-10-13  1256  			direction == DMA_MEM_TO_DEV ? "TO DEVICE" : "FROM DEVICE",
+808347f6a31792 Nicolas Ferre     2009-07-22  1257  			flags);
+808347f6a31792 Nicolas Ferre     2009-07-22  1258  
+808347f6a31792 Nicolas Ferre     2009-07-22  1259  	if (unlikely(!atslave || !sg_len)) {
+c618a9be0e8c0f Nicolas Ferre     2012-09-11  1260  		dev_dbg(chan2dev(chan), "prep_slave_sg: sg length is zero!\n");
+808347f6a31792 Nicolas Ferre     2009-07-22  1261  		return NULL;
+808347f6a31792 Nicolas Ferre     2009-07-22  1262  	}
+808347f6a31792 Nicolas Ferre     2009-07-22  1263  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1264  	desc = kzalloc(struct_size(desc, sg, sg_len), GFP_ATOMIC);
 
---000000000000e7ecbf05f1d08aff
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+New allocation.
 
-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
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMmmxRKQ18ZhD5bnsWLHHsOjBrrH
-XhuCVR/qFhZVhSP4MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEwOTA4Mjc0OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAmffCSKTY4B/YlqIgH/wmgLDeQNGlRqd0dJv6VNL9h1tbq
-vypcY+Iq228U4e8razXv6xmAVoYGt7PqGn3RLsHcVLBJTHNhddxE9k8unVyzN2vCRr39JBZRD4Ks
-IDaFn1KuXUnCoMuX87bkHiL/9eNSXHMoyH5jn1zBNNYvmkNHYIIs30mHpE6fEIbl3LTURRb3OllP
-+dgiyVI+bWZ04DUEko22lgVVKXAbMIjrzfXv2Ug5wbxZcSUmNusEzYx87ZWIYiEp+ODcsGUPabAB
-x7wnk0IN2gQeQiBq8DWbqDiPnKjsMVF2a19wZ69HwnIEXo39cpU4fZDSs05n882qkLHF
---000000000000e7ecbf05f1d08aff--
+ac803b56860f65 Tudor Ambarus     2022-10-25  1265  	if (!desc)
+ac803b56860f65 Tudor Ambarus     2022-10-25  1266  		return NULL;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1267  	desc->sglen = sg_len;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1268  
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1269  	ctrla = FIELD_PREP(ATC_SCSIZE, sconfig->src_maxburst) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1270  		FIELD_PREP(ATC_DCSIZE, sconfig->dst_maxburst);
+ae14d4b5e0a4eb Nicolas Ferre     2011-04-30  1271  	ctrlb = ATC_IEN;
+808347f6a31792 Nicolas Ferre     2009-07-22  1272  
+808347f6a31792 Nicolas Ferre     2009-07-22  1273  	switch (direction) {
+db8196df4bb6f1 Vinod Koul        2011-10-13  1274  	case DMA_MEM_TO_DEV:
+beeaa103eecc7a Nicolas Ferre     2012-03-14  1275  		reg_width = convert_buswidth(sconfig->dst_addr_width);
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1276  		ctrla |= FIELD_PREP(ATC_DST_WIDTH, reg_width);
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1277  		ctrlb |= FIELD_PREP(ATC_DST_ADDR_MODE,
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1278  				    ATC_DST_ADDR_MODE_FIXED) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1279  			 FIELD_PREP(ATC_SRC_ADDR_MODE, ATC_SRC_ADDR_MODE_INCR) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1280  			 FIELD_PREP(ATC_FC, ATC_FC_MEM2PER) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1281  			 FIELD_PREP(ATC_SIF, atchan->mem_if) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1282  			 FIELD_PREP(ATC_DIF, atchan->per_if);
+beeaa103eecc7a Nicolas Ferre     2012-03-14  1283  		reg = sconfig->dst_addr;
+808347f6a31792 Nicolas Ferre     2009-07-22  1284  		for_each_sg(sgl, sg, sg_len, i) {
+ac803b56860f65 Tudor Ambarus     2022-10-25  1285  			struct atdma_sg *atdma_sg = &desc->sg[i];
+ac803b56860f65 Tudor Ambarus     2022-10-25  1286  			struct at_lli *lli;
+808347f6a31792 Nicolas Ferre     2009-07-22  1287  			u32		len;
+808347f6a31792 Nicolas Ferre     2009-07-22  1288  			u32		mem;
+808347f6a31792 Nicolas Ferre     2009-07-22  1289  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1290  			atdma_sg->lli = dma_pool_alloc(atdma->lli_pool,
+ac803b56860f65 Tudor Ambarus     2022-10-25  1291  						       GFP_NOWAIT,
+ac803b56860f65 Tudor Ambarus     2022-10-25  1292  						       &atdma_sg->lli_phys);
+ac803b56860f65 Tudor Ambarus     2022-10-25  1293  			if (!atdma_sg->lli)
+808347f6a31792 Nicolas Ferre     2009-07-22  1294  				goto err_desc_get;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1295  			lli = atdma_sg->lli;
+808347f6a31792 Nicolas Ferre     2009-07-22  1296  
+0f70e8cea3ac6a Nicolas Ferre     2010-12-15  1297  			mem = sg_dma_address(sg);
+808347f6a31792 Nicolas Ferre     2009-07-22  1298  			len = sg_dma_len(sg);
+c456797681db81 Nicolas Ferre     2012-09-11  1299  			if (unlikely(!len)) {
+c456797681db81 Nicolas Ferre     2012-09-11  1300  				dev_dbg(chan2dev(chan),
+c456797681db81 Nicolas Ferre     2012-09-11  1301  					"prep_slave_sg: sg(%d) data length is zero\n", i);
+c456797681db81 Nicolas Ferre     2012-09-11  1302  				goto err;
+c456797681db81 Nicolas Ferre     2012-09-11  1303  			}
+808347f6a31792 Nicolas Ferre     2009-07-22  1304  			mem_width = 2;
+808347f6a31792 Nicolas Ferre     2009-07-22  1305  			if (unlikely(mem & 3 || len & 3))
+808347f6a31792 Nicolas Ferre     2009-07-22  1306  				mem_width = 0;
+808347f6a31792 Nicolas Ferre     2009-07-22  1307  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1308  			lli->saddr = mem;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1309  			lli->daddr = reg;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1310  			lli->ctrla = ctrla |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1311  				     FIELD_PREP(ATC_SRC_WIDTH, mem_width) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1312  				     len >> mem_width;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1313  			lli->ctrlb = ctrlb;
+808347f6a31792 Nicolas Ferre     2009-07-22  1314  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1315  			atdma_sg->len = len;
+808347f6a31792 Nicolas Ferre     2009-07-22  1316  			total_len += len;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1317  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1318  			desc->sg[i].len = len;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1319  			atdma_lli_chain(desc, i);
+808347f6a31792 Nicolas Ferre     2009-07-22  1320  		}
+808347f6a31792 Nicolas Ferre     2009-07-22  1321  		break;
+db8196df4bb6f1 Vinod Koul        2011-10-13  1322  	case DMA_DEV_TO_MEM:
+beeaa103eecc7a Nicolas Ferre     2012-03-14  1323  		reg_width = convert_buswidth(sconfig->src_addr_width);
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1324  		ctrla |= FIELD_PREP(ATC_SRC_WIDTH, reg_width);
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1325  		ctrlb |= FIELD_PREP(ATC_DST_ADDR_MODE, ATC_DST_ADDR_MODE_INCR) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1326  			 FIELD_PREP(ATC_SRC_ADDR_MODE,
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1327  				    ATC_SRC_ADDR_MODE_FIXED) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1328  			 FIELD_PREP(ATC_FC, ATC_FC_PER2MEM) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1329  			 FIELD_PREP(ATC_SIF, atchan->per_if) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1330  			 FIELD_PREP(ATC_DIF, atchan->mem_if);
+808347f6a31792 Nicolas Ferre     2009-07-22  1331  
+beeaa103eecc7a Nicolas Ferre     2012-03-14  1332  		reg = sconfig->src_addr;
+808347f6a31792 Nicolas Ferre     2009-07-22  1333  		for_each_sg(sgl, sg, sg_len, i) {
+ac803b56860f65 Tudor Ambarus     2022-10-25  1334  			struct atdma_sg *atdma_sg = &desc->sg[i];
+ac803b56860f65 Tudor Ambarus     2022-10-25  1335  			struct at_lli *lli;
+808347f6a31792 Nicolas Ferre     2009-07-22  1336  			u32		len;
+808347f6a31792 Nicolas Ferre     2009-07-22  1337  			u32		mem;
+808347f6a31792 Nicolas Ferre     2009-07-22  1338  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1339  			atdma_sg->lli = dma_pool_alloc(atdma->lli_pool,
+ac803b56860f65 Tudor Ambarus     2022-10-25  1340  						       GFP_NOWAIT,
+ac803b56860f65 Tudor Ambarus     2022-10-25  1341  						       &atdma_sg->lli_phys);
+ac803b56860f65 Tudor Ambarus     2022-10-25  1342  			if (!atdma_sg->lli)
+808347f6a31792 Nicolas Ferre     2009-07-22  1343  				goto err_desc_get;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1344  			lli = atdma_sg->lli;
+808347f6a31792 Nicolas Ferre     2009-07-22  1345  
+0f70e8cea3ac6a Nicolas Ferre     2010-12-15  1346  			mem = sg_dma_address(sg);
+808347f6a31792 Nicolas Ferre     2009-07-22  1347  			len = sg_dma_len(sg);
+c456797681db81 Nicolas Ferre     2012-09-11  1348  			if (unlikely(!len)) {
+c456797681db81 Nicolas Ferre     2012-09-11  1349  				dev_dbg(chan2dev(chan),
+c456797681db81 Nicolas Ferre     2012-09-11  1350  					"prep_slave_sg: sg(%d) data length is zero\n", i);
+c456797681db81 Nicolas Ferre     2012-09-11  1351  				goto err;
+c456797681db81 Nicolas Ferre     2012-09-11  1352  			}
+808347f6a31792 Nicolas Ferre     2009-07-22  1353  			mem_width = 2;
+808347f6a31792 Nicolas Ferre     2009-07-22  1354  			if (unlikely(mem & 3 || len & 3))
+808347f6a31792 Nicolas Ferre     2009-07-22  1355  				mem_width = 0;
+808347f6a31792 Nicolas Ferre     2009-07-22  1356  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1357  			lli->saddr = reg;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1358  			lli->daddr = mem;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1359  			lli->ctrla = ctrla |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1360  				     FIELD_PREP(ATC_DST_WIDTH, mem_width) |
+d8840a7edcf0aa Tudor Ambarus     2022-10-25  1361  				     len >> reg_width;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1362  			lli->ctrlb = ctrlb;
+808347f6a31792 Nicolas Ferre     2009-07-22  1363  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1364  			desc->sg[i].len = len;
+808347f6a31792 Nicolas Ferre     2009-07-22  1365  			total_len += len;
+ac803b56860f65 Tudor Ambarus     2022-10-25  1366  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1367  			atdma_lli_chain(desc, i);
+808347f6a31792 Nicolas Ferre     2009-07-22  1368  		}
+808347f6a31792 Nicolas Ferre     2009-07-22  1369  		break;
+808347f6a31792 Nicolas Ferre     2009-07-22  1370  	default:
+808347f6a31792 Nicolas Ferre     2009-07-22 @1371  		return NULL;
+
+kfree(desc) before returning.
+
+808347f6a31792 Nicolas Ferre     2009-07-22  1372  	}
+808347f6a31792 Nicolas Ferre     2009-07-22  1373  
+808347f6a31792 Nicolas Ferre     2009-07-22  1374  	/* set end-of-link to the last link descriptor of list*/
+ac803b56860f65 Tudor Ambarus     2022-10-25  1375  	set_lli_eol(desc, i - 1);
+808347f6a31792 Nicolas Ferre     2009-07-22  1376  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1377  	desc->total_len = total_len;
+bdf6c79278b3fb Torsten Fleischer 2015-02-23  1378  
+ac803b56860f65 Tudor Ambarus     2022-10-25  1379  	return vchan_tx_prep(&atchan->vc, &desc->vd, flags);
+808347f6a31792 Nicolas Ferre     2009-07-22  1380  
+808347f6a31792 Nicolas Ferre     2009-07-22  1381  err_desc_get:
+808347f6a31792 Nicolas Ferre     2009-07-22  1382  	dev_err(chan2dev(chan), "not enough descriptors available\n");
+c456797681db81 Nicolas Ferre     2012-09-11  1383  err:
+ac803b56860f65 Tudor Ambarus     2022-10-25  1384  	atdma_desc_free(&desc->vd);
+808347f6a31792 Nicolas Ferre     2009-07-22  1385  	return NULL;
+808347f6a31792 Nicolas Ferre     2009-07-22  1386  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
