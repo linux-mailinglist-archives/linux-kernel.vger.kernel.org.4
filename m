@@ -2,270 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA60662730
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD5C66273C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 14:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237167AbjAINed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 08:34:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        id S237189AbjAINfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 08:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237204AbjAINde (ORCPT
+        with ESMTP id S237044AbjAINe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:33:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C7A3218D;
-        Mon,  9 Jan 2023 05:33:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 9 Jan 2023 08:34:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132753218C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 05:33:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673271216;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M+u4Yp6HqrGg892XXKwAhCAa+wsoXpoco+d++RmvpiA=;
+        b=FD280BBHGAD01Ohx9ihJYbPpdWYCHvoMbz5GY2UwqI+XOcgD9+zu7JpirWyehGktQ4E2Nc
+        ZD+hIVTyYlG0ih7ftlsiykq9M+Yklf8punSy7L9es1uok/7OCUdXK/rym9LeqvhJYhEQGB
+        VZte639UON3j98obZixws5vF8knyKyI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-s7fTy30bPIewYWhc49srOQ-1; Mon, 09 Jan 2023 08:33:33 -0500
+X-MC-Unique: s7fTy30bPIewYWhc49srOQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0614E6112A;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CB0EF85C6E4;
+        Mon,  9 Jan 2023 13:33:32 +0000 (UTC)
+Received: from vschneid.remote.csb (unknown [10.33.36.188])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C9A05492C14;
         Mon,  9 Jan 2023 13:33:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBDA9C433EF;
-        Mon,  9 Jan 2023 13:33:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673271210;
-        bh=0Ilxi1rMtgAs305FaWmpiguznC+wkJwOtG9vo1iisvo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iWEnEjc1iN3SVDaTHmDISxS07zcZdzOyHfMFbHBIkG28rGbuAKo7QUuGT3/uOM3Gk
-         z8c6mBdGha3cufG4JciS8Dg3dwEmEb+3QoUVh6VmtQoo7N85CeXO2nBerrGGs4uul8
-         X3lWIjeC2w8PLvXkyDD4NEVPn73yjwsdraGBzIvMPjyxn/BRqZHku6kaosRvdA1NEa
-         YliCXTwh74+axsNgb8Xo08PUlmy/OWdaT9Urik5Nig6wNPuyECA55GCNRf78UraCJg
-         +BirGO5zsowURkAi3tHC3ekgykhb9PyStZx2stU8MjSTfovHmAj5ap4jERKeWqxu2n
-         tJ18hSkGkVnoA==
-Date:   Mon, 9 Jan 2023 15:33:15 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 2/2] docs/mm: Physical Memory: add structure,
- introduction and nodes description
-Message-ID: <Y7wXm/3POivfwSHE@kernel.org>
-References: <20230101094523.1522109-1-rppt@kernel.org>
- <20230101094523.1522109-3-rppt@kernel.org>
- <Y7ihjpFaYy2QuORd@lucifer>
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>, Tejun Heo <tj@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: [PATCH v7 3/4] workqueue: Convert the idle_timer to a timer + work_struct
+Date:   Mon,  9 Jan 2023 13:33:15 +0000
+Message-Id: <20230109133316.4026472-4-vschneid@redhat.com>
+In-Reply-To: <20230109133316.4026472-1-vschneid@redhat.com>
+References: <20230109133316.4026472-1-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y7ihjpFaYy2QuORd@lucifer>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 10:32:46PM +0000, Lorenzo Stoakes wrote:
-> On Sun, Jan 01, 2023 at 11:45:23AM +0200, Mike Rapoport wrote:
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> >
-> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> > ---
-> >  Documentation/mm/physical_memory.rst | 322 +++++++++++++++++++++++++++
-> >  1 file changed, 322 insertions(+)
-> >
-> > diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
-> > index 2ab7b8c1c863..fcf52f1db16b 100644
-> > --- a/Documentation/mm/physical_memory.rst
-> > +++ b/Documentation/mm/physical_memory.rst
-> > @@ -3,3 +3,325 @@
-> >  ===============
-> >  Physical Memory
-> >  ===============
-> > +
-> > +Linux is available for a wide range of architectures so there is a need for an
-> > +architecture-independent abstraction to represent the physical memory. This
-> > +chapter describes the structures used to manage physical memory in a running
-> > +system.
-> > +
-> > +The first principal concept prevalent in the memory management is
-> > +`Non-Uniform Memory Access (NUMA)
-> > +<https://en.wikipedia.org/wiki/Non-uniform_memory_access>`_.
-> > +With multi-core and multi-socket machines, memory may be arranged into banks
-> > +that incur a different cost to access depending on the “distance” from the
-> > +processor. For example, there might be a bank of memory assigned to each CPU or
-> > +a bank of memory very suitable for DMA near peripheral devices.
-> 
-> Absolutely wonderfully written.
+A later patch will require a sleepable context in the idle worker timeout
+function. Converting worker_pool.idle_timer to a delayed_work gives us just
+that, however this would imply turning all idle_timer expiries into
+scheduler events (waking up a worker to handle the dwork).
 
-Thanks to Mel :)
+Instead, implement a "custom dwork" where the timer callback does some
+extra checks before queuing the associated work.
 
-> Perhaps put a sub-heading for NUMA here?
+No change in functionality intended.
 
-I consider all this text as an high level overview and I'd prefer to keep
-it as a single piece.
+Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+Reviewed-by: Lai Jiangshan <jiangshanlai@gmail.com>
+---
+ kernel/workqueue.c | 52 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 50 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 5e6897f0ef105..11bb657059bcd 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -169,7 +169,9 @@ struct worker_pool {
  
-> An aside, but I think it'd be a good idea to mention base pages, folios and
-> folio order pretty early on as they get touched as concepts all over the place
-> in physical memory (but perhaps can wait for other contribs!)
-
-The plan is to have "Pages" section Really Soon :)
+ 	struct list_head	idle_list;	/* L: list of idle workers */
+ 	struct timer_list	idle_timer;	/* L: worker idle timeout */
+-	struct timer_list	mayday_timer;	/* L: SOS timer for workers */
++	struct work_struct      idle_cull_work; /* L: worker idle cleanup */
++
++	struct timer_list	mayday_timer;	  /* L: SOS timer for workers */
  
-> > +
-> > +Each bank is called a node and the concept is represented under Linux by a
-> > +``struct pglist_data`` even if the architecture is UMA. This structure is
-> > +always referenced to by it's typedef ``pg_data_t``. A pg_data_t structure
-> > +for a particular node can be referenced by ``NODE_DATA(nid)`` macro where
-> > +``nid`` is the ID of that node.
-> > +
-> > +For NUMA architectures, the node structures are allocated by the architecture
-> > +specific code early during boot. Usually, these structures are allocated
-> > +locally on the memory bank they represent. For UMA architectures, only one
-> > +static pg_data_t structure called ``contig_page_data`` is used. Nodes will
-> > +be discussed further in Section :ref:`Nodes <nodes>`
-> > +
-> > +Each node may be divided up into a number of blocks called zones which
-> > +represent ranges within memory. These ranges are usually determined by
-> > +architectural constraints for accessing the physical memory. A zone is
-> > +described by a ``struct zone_struct``, typedeffed to ``zone_t`` and each zone
-> > +has one of the types described below.
-> 
-> I don't think it's quite right to say 'may' be divided up into zones, as they
-> absolutely will be so (and the entire phsyical memory allocator hinges on being
-> zoned, even if trivially in UMA/single zone cases).
-
-Not necessarily. ZONE_DMA or ZONE_NORMAL may span the entire memory.
+ 	/* a workers is either on busy_hash or idle_list, or the manager */
+ 	DECLARE_HASHTABLE(busy_hash, BUSY_WORKER_HASH_ORDER);
+@@ -2019,17 +2021,61 @@ static void destroy_worker(struct worker *worker)
+ 	wake_up_process(worker->task);
+ }
  
-> Also it's struct zone right, not zone_struct/zone_t?
-
-Right, thanks.
++/**
++ * idle_worker_timeout - check if some idle workers can now be deleted.
++ * @t: The pool's idle_timer that just expired
++ *
++ * The timer is armed in worker_enter_idle(). Note that it isn't disarmed in
++ * worker_leave_idle(), as a worker flicking between idle and active while its
++ * pool is at the too_many_workers() tipping point would cause too much timer
++ * housekeeping overhead. Since IDLE_WORKER_TIMEOUT is long enough, we just let
++ * it expire and re-evaluate things from there.
++ */
+ static void idle_worker_timeout(struct timer_list *t)
+ {
+ 	struct worker_pool *pool = from_timer(pool, t, idle_timer);
++	bool do_cull = false;
++
++	if (work_pending(&pool->idle_cull_work))
++		return;
  
-> I think it's important to clarify that a given zone does not map to a single
-> struct zone, rather that a struct zone (contained within a pg_data_t object's
-> array node_zones[]) represents only the portion of the zone that resides in this
-> node.
-> 
-> It's fiddly because when I talk about a zone like this I am referring to one of
-> the 'classifications' of zones you mention below, e.g. ZONE_DMA, ZONE_DMA32,
-> etc. but you might also want to refer to a zone as being equivalent to a struct
-> zone object.
-> 
-> I think the clearest thing however is to use the term zone to refer to each of
-> the ZONE_xxx types, e.g. 'this memory is located in ZONE_NORMAL' and to clarify
-> that one zone can span different individual struct zones (and thus nodes).
-> 
-> I know it's tricky because you and others have rightly pointed out that my own
-> explanation of this is confusing, and it is something I intend to rejig a bit
-> myself!
-
-The term 'zone' is indeed somewhat ambiguous, I'll try to come up with more
-clear version.
+ 	raw_spin_lock_irq(&pool->lock);
  
-> > +
-> > +`ZONE_DMA` and `ZONE_DMA32`
-> > +  represent memory suitable for DMA by peripheral devices that cannot
-> > +  access all of the addressable memory. Depending on the architecture,
-> > +  either of these zone types or even they both can be disabled at build
-> > +  time using ``CONFIG_ZONE_DMA`` and ``CONFIG_ZONE_DMA32`` configuration
-> > +  options. Some 64-bit platforms may need both zones as they support
-> > +  peripherals with different DMA addressing limitations.
-> 
-> It might be worth pointing out ZONE_DMA spans an incredibly little range that
-> probably won't matter for any peripherals this side of the cretaceous period,
-
-On RPi4 ZONE_DMA spans 1G, which is quite some part of the memory ;-)
-
-> > +
-> > +`ZONE_NORMAL`
-> > +  is for normal memory that can be accessed by the kernel all the time. DMA
-> > +  operations can be performed on pages in this zone if the DMA devices support
-> > +  transfers to all addressable memory. ZONE_NORMAL is always enabled.
-> > +
-> 
-> Might be worth saying 'this is where memory ends up if not otherwise in another
-> zone'.
-
-This may not be the case on !x86.
+-	while (too_many_workers(pool)) {
++	if (too_many_workers(pool)) {
+ 		struct worker *worker;
+ 		unsigned long expires;
  
-> > +`ZONE_HIGHMEM`
-> > +  is the part of the physical memory that is not covered by a permanent mapping
-> > +  in the kernel page tables. The memory in this zone is only accessible to the
-> > +  kernel using temporary mappings. This zone is available only some 32-bit
-> > +  architectures and is enabled with ``CONFIG_HIGHMEM``.
-> > +
-> 
-> I comment here only to say 'wow I am so glad I chose to only focus on 64-bit so
-> I could side-step all the awkward discussion of high pages' :)
-> 
-> > +The relation between node and zone extents is determined by the physical memory
-> > +map reported by the firmware, architectural constraints for memory addressing
-> > +and certain parameters in the kernel command line.
-> 
-> Perhaps worth mentioning device tree here? Though perhaps encapsulated in the
-> 'firmware' reference.
-
-It is :) 
-
-> > +Node structure
-> > +--------------
-> > +
-> > +The struct pglist_data is declared in `include/linux/mmzone.h
-> > +<https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/mmzone.h>`_.
-> > +Here we briefly describe fields of this structure:
-> 
-> Perhaps worth saying 'The node structure' just to reiterate.
-
-Not sure I follow, can you phrase the entire sentence?
+ 		/* idle_list is kept in LIFO order, check the last one */
++		worker = list_entry(pool->idle_list.prev, struct worker, entry);
++		expires = worker->last_active + IDLE_WORKER_TIMEOUT;
++		do_cull = !time_before(jiffies, expires);
++
++		if (!do_cull)
++			mod_timer(&pool->idle_timer, expires);
++	}
++	raw_spin_unlock_irq(&pool->lock);
++
++	if (do_cull)
++		queue_work(system_unbound_wq, &pool->idle_cull_work);
++}
++
++/**
++ * idle_cull_fn - cull workers that have been idle for too long.
++ * @work: the pool's work for handling these idle workers
++ *
++ * This goes through a pool's idle workers and gets rid of those that have been
++ * idle for at least IDLE_WORKER_TIMEOUT seconds.
++ */
++static void idle_cull_fn(struct work_struct *work)
++{
++	struct worker_pool *pool = container_of(work, struct worker_pool, idle_cull_work);
++
++	raw_spin_lock_irq(&pool->lock);
++
++	while (too_many_workers(pool)) {
++		struct worker *worker;
++		unsigned long expires;
++
+ 		worker = list_entry(pool->idle_list.prev, struct worker, entry);
+ 		expires = worker->last_active + IDLE_WORKER_TIMEOUT;
  
-> > +
-> > +General
-> > +~~~~~~~
-> > +
-> > +`node_zones`
-> > +  The zones for this node.  Not all of the zones may be populated, but it is
-> > +  the full list. It is referenced by this node's node_zonelists as well as
-> > +  other node's node_zonelists.
-> 
-> Perhaps worth describing what zonelists (and equally zonerefs) are here or
-> above, and that this is the canonical place where zones reside. Maybe reference
-> populated_zone() and for_each_populated_zone() in reference to the fact that not
-> all here may be populated?
-
-I'd prefer to start simple and than add more content on top.
+@@ -3479,6 +3525,7 @@ static int init_worker_pool(struct worker_pool *pool)
+ 	hash_init(pool->busy_hash);
  
-> > +
-> > +`node_zonelists` The list of all zones in all nodes. This list defines the
-> > +  order of zones that allocations are preferred from. The `node_zonelists` is
-> > +  set up by build_zonelists() in mm/page_alloc.c during the initialization of
-> > +  core memory management structures.
-> > +
-> > +`nr_zones`
-> > +  Number of populated zones in this node.
-> > +
-> > +`node_mem_map`
-> > +  For UMA systems that use FLATMEM memory model the 0's node (and the only)
-> > +  `node_mem_map` is array of struct pages representing each physical frame.
-> > +
-> > +`node_page_ext`
-> > +  For UMA systems that use FLATMEM memory model the 0's (and the only) node
-> > +  `node_mem_map` is array of extensions of struct pages. Available only in the
-> > +  kernels built with ``CONFIG_PAGE_EXTENTION`` enabled.
-> > +
-> > +`node_start_pfn`
-> > +  The page frame number of the starting page frame in this node.
-> > +
-> > +`node_present_pages`
-> > +  Total number of physical pages present in this node.
-> > +
-> > +`node_spanned_pages`
-> > +  Total size of physical page range, including holes.
-> > +
-> 
-> I think it'd be useful to discuss briefly the meaning of managed, spanned and
-> present pages in the context of zones.
-
-This will be a part of the Zones section.
+ 	timer_setup(&pool->idle_timer, idle_worker_timeout, TIMER_DEFERRABLE);
++	INIT_WORK(&pool->idle_cull_work, idle_cull_fn);
  
-> Cheers, Lorenzo
-
+ 	timer_setup(&pool->mayday_timer, pool_mayday_timeout, 0);
+ 
+@@ -3626,6 +3673,7 @@ static void put_unbound_pool(struct worker_pool *pool)
+ 
+ 	/* shut down the timers */
+ 	del_timer_sync(&pool->idle_timer);
++	cancel_work_sync(&pool->idle_cull_work);
+ 	del_timer_sync(&pool->mayday_timer);
+ 
+ 	/* RCU protected to allow dereferences from get_work_pool() */
 -- 
-Sincerely yours,
-Mike.
+2.31.1
+
