@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD7E661FBC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A4E661FBE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 09:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233436AbjAIINz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 03:13:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S233730AbjAIIOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 03:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjAIINx (ORCPT
+        with ESMTP id S233106AbjAIIOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:13:53 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D84721B1
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:13:52 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id b9-20020a17090a7ac900b00226ef160dcaso6854103pjl.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 00:13:52 -0800 (PST)
+        Mon, 9 Jan 2023 03:14:22 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81927EA7
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 00:14:19 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id s9so7291811wru.13
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 00:14:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=n/+kTm6b20BoT7pid+/6F2tOXS0uOA39QAnXddRvFQE=;
-        b=WtlF95Tke6ZhUGLvH9NxyenOUI4a9e69omRMVYQ+xsCRc2QMkBmobFnt53kBc7hNsd
-         +uAb1gdtsaAbh0xjAK4f8kCtF/kYW2tu0f86agnDvJcwfMKa/s1Ohd9AWjbQLC5Z/zZA
-         gaVYfz+2y8psKbPLl25hY0H4fs1W7Z+Q6pfGQ=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jr2FwX3P1iZIyqTb6rsoFPPaAUL6NdJrS167QJ230/w=;
+        b=q5yusg2aaBnoLvE8zqqsgCYfgiuoc56g8R/6j5yEJkQi341zVqAzU0hkRjqHqP+iFC
+         Fw40130ftwNQEYVmGKzjNBsZYgnhpEAcaQmfNHeIBYwopToKdSdeulO9rWKW00Ybicwk
+         sVoDRO8j1AZc4Z5i31nSgtvBAG1AjNwkmvGK8wrk5SdbrVNHdEPDeuRtMjaiMwtTse1q
+         bSmKVxGKaKYujgJOsGk33szMTMWhNZgcBF7XiKlI4f64b+rXj9aw/MeAgoN4xijvHAAN
+         jSun29i7Degpwzq0+DGNKpQK4xGBhgWQKjLkakEN/5ODBtO4YbkQzlRHofHyLcogPDMd
+         c3rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n/+kTm6b20BoT7pid+/6F2tOXS0uOA39QAnXddRvFQE=;
-        b=gJYDqKQPiXs/SU51Eh++3RcC1vjZQt6M4fK8HLN5IQbWOp+aSUVXWl9pbba9ac0yjP
-         hoX5pkGODLqPgyhtcXhvo7TCpbg/sjYLItlLz+P6jF3CxwAt5IPsmhCWPwvEjxPMdUvb
-         BzdqzL4rjeJUCoA85UEufQStUjDVaRtQgmrJWbyIm7Rdo3jhkbNW33aGDKghiWWRhLEa
-         ene5EBY8lOgzcCcnibb1gqS0inA5aoaf6ZADdipTkPqIgOGzW8Ru3Bx+mc+EvgpV3kAc
-         cxFC3Cdm6kVBD76KCSuvC2N+fG1oauxUH3K0ALA+vnml5L7wSuLnaLxinB1efNUawjsf
-         6mKQ==
-X-Gm-Message-State: AFqh2kpfd3RhCkl+enTGQM2rIJHnQligve0TIIIfa1kTxCitUVlAtJFS
-        0z4ArY8klZtMFjEqvF7J4PAK8KNcKkbLouW2SBI=
-X-Google-Smtp-Source: AMrXdXsTBnVE8hNDtWfs5/3FEounQuwhWFBoW8H1LQ8YmbqfAO09tohfCObLfe8EQ200TaL+S82MPg==
-X-Received: by 2002:a17:903:40cd:b0:180:f32c:7501 with SMTP id t13-20020a17090340cd00b00180f32c7501mr70050307pld.0.1673252031643;
-        Mon, 09 Jan 2023 00:13:51 -0800 (PST)
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com. [209.85.215.172])
-        by smtp.gmail.com with ESMTPSA id j1-20020a170902c3c100b001891ea4d133sm5502754plj.12.2023.01.09.00.13.50
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jr2FwX3P1iZIyqTb6rsoFPPaAUL6NdJrS167QJ230/w=;
+        b=FAASb6/VfqySo8jbXxKJz8G9VAms+zFrUxAI/0nOolVlTLmDalSGSmQXm+CtOXB1W5
+         ZKxahfMiUGzFG0ZVRKjsJ34VgH2cGCWHPPP5maejLxToLJa6FmS0O+dkkEa63W38XQNE
+         ZngfPY7aAgE7NqaXnMOQ4Wkyyt1/96A0M7lNgzJHERSd4h9S9FOTZOiG0Hyis3DzCQih
+         ZG7TFQmHvUnFCtnlItttz8Nn7NpxccM6vQ6rWJjwML7FswSCm0Fe0580g8Svt6g1KZbb
+         zAcDjioTEPYQP8DsFT2SAvJ0DdzyYeCyOu7aulGtwFTtqPpN8xPrfjPEZ5s/LByDK7it
+         o4FQ==
+X-Gm-Message-State: AFqh2koY1QQS0RVPG0RDIs46SrlX0sUEH5Ip/+cUChO3KHUqqigPvQnk
+        BHjAhEEZ6nBLjHxzRHnj/yXgTQ==
+X-Google-Smtp-Source: AMrXdXuBT//WvM7GCSkw/bEgSnHDiNUBAR2qEQhZ1dxgYHAS3iU3EvBb01ARoB8OicYbWn71UCJl7g==
+X-Received: by 2002:a05:6000:60d:b0:2a5:6244:329e with SMTP id bn13-20020a056000060d00b002a56244329emr13639467wrb.40.1673252058065;
+        Mon, 09 Jan 2023 00:14:18 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id v13-20020a5d678d000000b002bbe8686d6fsm3923501wru.117.2023.01.09.00.14.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 00:13:50 -0800 (PST)
-Received: by mail-pg1-f172.google.com with SMTP id d10so5309192pgm.13
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 00:13:50 -0800 (PST)
-X-Received: by 2002:a62:1501:0:b0:589:8362:c7ce with SMTP id
- 1-20020a621501000000b005898362c7cemr58561pfv.21.1673252029904; Mon, 09 Jan
- 2023 00:13:49 -0800 (PST)
+        Mon, 09 Jan 2023 00:14:17 -0800 (PST)
+Message-ID: <7ba38377-7992-7f0f-d905-cceb42510f39@linaro.org>
+Date:   Mon, 9 Jan 2023 09:14:16 +0100
 MIME-Version: 1.0
-References: <20220920-resend-hwtimestamp-v2-0-0d7978a817cc@chromium.org>
- <20220920-resend-hwtimestamp-v2-8-0d7978a817cc@chromium.org>
- <Y6761ScB9FgMC6zb@pendragon.ideasonboard.com> <CANiDSCtsk+oejXSDGo_DStocHOEsk4=oYOu6KccQdckfBXbj-g@mail.gmail.com>
- <Y7jCydc6mFvZRQof@pendragon.ideasonboard.com>
-In-Reply-To: <Y7jCydc6mFvZRQof@pendragon.ideasonboard.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 9 Jan 2023 09:13:38 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtyAbqyrE6+R16DeAqghSbu=inkYLR_4VsOCJqUO-B5jw@mail.gmail.com>
-Message-ID: <CANiDSCtyAbqyrE6+R16DeAqghSbu=inkYLR_4VsOCJqUO-B5jw@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 8/8] media: uvcvideo: Fix hw timestampt handling
- for slow FPS
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "hn.chen" <hn.chen@sunplusit.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
+ (commit 7fd461c47)
+To:     Trond Myklebust <trondmy@hammerspace.com>
+Cc:     Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
+ <82526863-d07a-0a5d-2990-1555b1387f26@linaro.org>
+ <2C5E9725-F152-4D2E-882E-CF92A35481BF@hammerspace.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2C5E9725-F152-4D2E-882E-CF92A35481BF@hammerspace.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,123 +79,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent
+On 08/01/2023 18:09, Trond Myklebust wrote:
+> Hi Krzysztof,
+> 
+>> On Jan 8, 2023, at 08:25, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> [You don't often get email from krzysztof.kozlowski@linaro.org. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification]
+>>
+>> On 07/01/2023 16:44, Krzysztof Kozlowski wrote:
+>>> Hi,
+>>>
+>>> Bisect identified commit 7fd461c47c6c ("NFSv4.2: Change the default
+>>> KConfig value for READ_PLUS") as one leading to NULL pointer exception
+>>> when mounting NFS root on NFSv4 client:
+>>>
+>>> [   25.739003] systemd[1]: Set hostname to <odroidhc1>.
+>>> [   25.771714] systemd[1]: Failed to bump fs.file-max, ignoring: Invalid
+>>> argument
+>>> [   26.199478] 8<--- cut here ---
+>>> [   26.201366] Unable to handle kernel NULL pointer dereference at
+>>> virtual address 00000004
+>>> ...
+>>> [   26.555522]  mmiocpy from xdr_inline_decode+0xec/0x16c
+>>> [   26.560628]  xdr_inline_decode from nfs4_xdr_dec_read_plus+0x178/0x358
+>>> [   26.567130]  nfs4_xdr_dec_read_plus from call_decode+0x204/0x304
+>>>
+>>> Full OOPS attached. Full log available here:
+>>> https://krzk.eu/#/builders/21/builds/3901/steps/15/logs/serial0
+>>>
+>>> Disabling NFS_V4_2_READ_PLUS fixes the issue, so obviously the commit is
+>>> not the cause, but rather making it default caused the regression.
+>>>
+>>> I did not make the bisect yet which commit introduced it, if every
+>>> config includes NFS_V4_2_READ_PLUS.
+>>
+>> When every kernel is built with NFS_V4_2_READ_PLUS, bisect pointed to:
+>> d3b00a802c84 ("NFS: Replace the READ_PLUS decoding code")
+>>
+>> commit d3b00a802c845a6021148ce2e669b5a0b5729959
+>> Author: Anna Schumaker <Anna.Schumaker@Netapp.com>
+>> Date:   Thu Jul 21 14:21:34 2022 -0400
+>>
+>>    NFS: Replace the READ_PLUS decoding code
+>>
+>>    We now take a 2-step process that allows us to place data and hole
+>>    segments directly at their final position in the xdr_stream without
+>>    needing to do a bunch of redundant copies to expand holes. Due to the
+>>    variable lengths of each segment, the xdr metadata might cross page
+>>    boundaries which I account for by setting a small scratch buffer so
+>>    xdr_inline_decode() won't fail.
+>>
+>>    Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+>>    Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+>>
+>> With a trace:
+>> [   25.898462] systemd[1]: Set hostname to <odroidhc1>.
+>> [   25.933746] systemd[1]: Failed to bump fs.file-max, ignoring: Invalid
+>> argument
+>> [   25.986237] random: crng init done
+>> [   26.264564] 8<--- cut here ---
+>> [   26.266823] Unable to handle kernel NULL pointer dereference at
+>> virtual address 00000fe8
+>> ...
+>> [   26.597263]  nfs4_xdr_dec_read_plus from call_decode+0x204/0x304
+>> [   26.603222]  call_decode from __rpc_execute+0xd0/0x890
+>> [   26.608328]  __rpc_execute from rpc_async_schedule+0x1c/0x34
+>> [   26.613960]  rpc_async_schedule from process_one_work+0x294/0x790
+>> [   26.620030]  process_one_work from worker_thread+0x54/0x518
+>> [   26.625570]  worker_thread from kthread+0xf4/0x128
+>> [   26.630336]  kthread from ret_from_fork+0x14/0x2c
+>>
+> 
+> Is this test being run against a 6.2-rc2 server, or is it an older server platform? We know there were bugs in older server implementations, so the question is whether this might be a problem with handling a bad/corrupt RPC reply from the server, or whether it is happening against code that is supposed to have been fixed?
 
-On Sat, 7 Jan 2023 at 01:54, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ricardo,
->
-> On Wed, Jan 04, 2023 at 12:34:34AM +0100, Ricardo Ribalda wrote:
-> > On Fri, 30 Dec 2022 at 15:51, Laurent Pinchart wrote:
-> > > On Fri, Dec 02, 2022 at 06:02:48PM +0100, Ricardo Ribalda wrote:
-> > > > In UVC 1.5, when working with FPS under 32, there is a chance that the
-> > > > circular buffer contains two dev_sof overflows,
-> > >
-> > > An explanation of why this is the case would be good in the commit
-> > > message. Also, by overflow, are you talking about the SOF counter
-> > > rolling over ?
-> > >
-> > > > but the clock interpolator
-> > > > is only capable of handle a single overflow.
-> > > >
-> > > > Remove all the samples from the circular buffer that are two overflows
-> > > > old.
-> > >
-> > > I would rather support multiple roll-over in the clock interpolator.
-> > > Dropping older sampls will lead to less predictable behaviour and harder
-> > > to debug issues.
-> >
-> > Multiple roll-over would not necessarily mean better data here. We are
-> > deleting data that is more than 1 second away, and our resolution is
-> > 1kHz, which means that we have enough data to provide good results, we
-> > have measured that 250msec already provides good data.
->
-> Do we ? We may get one SCR per frame only. With low frame rates (say,
-> 5fps for instance, which is fairly common, I have 2092 out of 16475
-> frame descriptors supporting that format in my database of UVC
-> descriptors), we'll have 4 to 5 data points.
+I would say that buggy server should not cause NULL pointer dereferences
+on the client. Otherwise this is a perfect recipe for a rogue server in
+the network to start crashing clients and running exploits... Imagine a
+compromised machine (through some other means) in a local company
+network running now a server with NFS share "HR salary data" or "HR
+planned layoffs", where unsuspected people in that network access it
+leading to exploit of NFS code on their side...
 
-In the current algorithm, the accuracy is not given by the number of
-samples, but the time between the first and the last sample.
-Every sample has an average error error of (1/clkrate)/2, but the
-errors do not add up.
-This is: 2 samples at 2 fps is as accurate as 4 samples at 4 fps.
+Server is Raspberry Pi 3 kernel: 5.10.92-2-rpi-legacy-ARCH
 
->
-> > From a logical point of view, this patch is fixing a bug, not adding a
-> > new feature, and it has been validated. I would rather add multi
-> > roll-over as a follow-up patch, or maybe suggest implementing it in
-> > userspace ;).
->
-> Would you give the latter a try ? :-)
+Which points that it is not latest stable, so anyway I need to update.
 
-Aren't these two orthogonal problems? The kernel today provides an API
-and that API is broken for fps < 32, which is a common fps.
-Even if we re-implement the hwtimestamp in user space we need to fix
-it in the kernel.
+Best regards,
+Krzysztof
 
-
->
-> > > > Tested-by: HungNien Chen <hn.chen@sunplusit.com>
-> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > ---
-> > > >  drivers/media/usb/uvc/uvc_video.c | 15 +++++++++++++++
-> > > >  drivers/media/usb/uvc/uvcvideo.h  |  1 +
-> > > >  2 files changed, 16 insertions(+)
-> > > >
-> > > > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> > > > index c81a8362d582..6b6bd521d6c2 100644
-> > > > --- a/drivers/media/usb/uvc/uvc_video.c
-> > > > +++ b/drivers/media/usb/uvc/uvc_video.c
-> > > > @@ -471,6 +471,20 @@ static void uvc_video_clock_add_sample(struct uvc_clock *clock,
-> > > >
-> > > >       spin_lock_irqsave(&clock->lock, flags);
-> > > >
-> > > > +     /* Delete last overflows */
-> > > > +     if (clock->head == clock->last_sof_overflow)
-> > > > +             clock->last_sof_overflow = -1;
-> > > > +
-> > > > +     /* Handle overflows */
-> > > > +     if (clock->count > 0 && clock->last_sof > sample->dev_sof) {
-> > > > +             /* Remove data from the last^2 overflows */
-> > > > +             if (clock->last_sof_overflow != -1)
-> > > > +                     clock->count = (clock->head - clock->last_sof_overflow)
-> > > > +                                                             % clock->count;
-> > > > +             clock->last_sof_overflow = clock->head;
-> > > > +     }
-> > > > +
-> > > > +     /* Add sample */
-> > > >       memcpy(&clock->samples[clock->head], sample, sizeof(*sample));
-> > > >       clock->last_sof = sample->dev_sof;
-> > > >       clock->head = (clock->head + 1) % clock->size;
-> > > > @@ -594,6 +608,7 @@ static void uvc_video_clock_reset(struct uvc_clock *clock)
-> > > >       clock->head = 0;
-> > > >       clock->count = 0;
-> > > >       clock->last_sof = -1;
-> > > > +     clock->last_sof_overflow = -1;
-> > > >       clock->sof_offset = -1;
-> > > >  }
-> > > >
-> > > > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> > > > index 14daa7111953..d8c520ce5a86 100644
-> > > > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > > > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > > > @@ -647,6 +647,7 @@ struct uvc_streaming {
-> > > >               unsigned int head;
-> > > >               unsigned int count;
-> > > >               unsigned int size;
-> > > > +             unsigned int last_sof_overflow;
-> > > >
-> > > >               u16 last_sof;
-> > > >               u16 sof_offset;
->
-> --
-> Regards,
->
-> Laurent Pinchart
-
-
-
--- 
-Ricardo Ribalda
