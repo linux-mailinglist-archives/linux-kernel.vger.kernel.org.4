@@ -2,148 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1588661CCB
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 04:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE794661CD2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 04:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbjAIDpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 22:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S233096AbjAIDpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 22:45:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbjAIDo7 (ORCPT
+        with ESMTP id S234297AbjAIDpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 22:44:59 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8436C93;
-        Sun,  8 Jan 2023 19:44:58 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4c131bede4bso98129177b3.5;
-        Sun, 08 Jan 2023 19:44:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yPfhgfBbYjtzQBCr9FbRdf6V8hXDk+MB1+uIqccKz80=;
-        b=PiiGV0orIUzNoytUmWK2Hk73V6GvrZ3mOGmdtD9JJPyyTFyqd4rbXbxD9f9lrKyWWw
-         fevi+ntk5KxbxDVOrrigfB7ckGVd/czt9oXOvvgaqNQVUCgbTpNXG0jSVXIjn/dTm2/E
-         YfcTRFjPOmk/detqDhf6DFzwhIndaROuQ3hd6qr2nEHQJLoaZSjYwXcrwCHTYTEqIXyU
-         oHHdEK9rJEhUNzEU9OVVAbsVMnCji8bsM/2TUrQ8857sQ7yIa/EGPhoINwwCB+0KicAV
-         2IF/k4mYcy1ubSd6H9jxYduRSxMyuhAVWWf9BdOpYd0Db1IsN7kFvX+nrDSy4CSjztRm
-         PI5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yPfhgfBbYjtzQBCr9FbRdf6V8hXDk+MB1+uIqccKz80=;
-        b=3bPJ7pzJLQQFPexPGE8dE1jB/bLJsT5rUncFpm4cb0aPBo4p+OIO/ubggrVUijjwpf
-         ffsxqE2ywcB4QXJNfx65PRmbUr8WujwNfMAwXQCCQqCxKPzRN3jgydDAWNNZdhxGoC7P
-         bHupryLysBu3qvBVxISKqoKZJFjSzeMzJXH+GNFWAz0pVTYPnAOj5KfvkcJi2zem6+oC
-         Qzdw74yoQ9RUPBO1WZR6toqyNXKYtzH7gib96I9q+O7Tv9oH9Ct8Zk/jL4lPWQNBkuN8
-         J9X7+RxKocazwiBvnaP/vzSeU2HCa43tYFSggrmwtwGOd1usbgAZyBICAQlj6v2Jy9kk
-         9FxA==
-X-Gm-Message-State: AFqh2krae5ZUwGgnfmA3gSmrfekGnoZNk66svavYuVIpJOT7jWx5ucLb
-        ZThhF0AncSk1ZkAP6ImphICtrqEw/50SLfKt5yM=
-X-Google-Smtp-Source: AMrXdXsDvyB+kfguSnDk3YNKre75CBBnxUmhkZfZUpHXwZlk+A/0xmrM63HVggKfy6yP7iiU9zkufkJCVZ7mtM5K6DM=
-X-Received: by 2002:a81:8942:0:b0:36f:d045:417 with SMTP id
- z63-20020a818942000000b0036fd0450417mr907888ywf.385.1673235897760; Sun, 08
- Jan 2023 19:44:57 -0800 (PST)
+        Sun, 8 Jan 2023 22:45:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CF495A0
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 19:45:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C94960EE3
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 03:45:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CC0C433EF;
+        Mon,  9 Jan 2023 03:45:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673235912;
+        bh=o0QGez8JNtfwfRegKYb2IXEmNk+VVLuwDSFz2DvJBSY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Dy6vAaYUAxbL0xhJdA/zEa4jCKnVodSGMc2y9Q4A0ow9KBjQxCrDnqHLIbsIXZa2f
+         TywH6ZfEZpyz2yPG5trS6msnAOgiPWvdRGF689/7tOTnVZXt+c73hS2ZSJj40cON5b
+         1DB/RBLilUSOMCk0SYq0HJOc45t9r67XXCiwulrNyVs9gY399xQy2a3Nge7XowtrWL
+         I0KOZxviWblfWtzlRft6Zq4ovvUOxvHeIzgJNnw/xj7DXwTuPrF63qVZoUSU5kXlng
+         viw1wNIdvG/P2pRZZ8AYfVRjnb3iad7ZJoK333Ln8ZzSQn+PauwxNNeaiohdMwcIn4
+         OLozjyTItmxKw==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH 1/5] f2fs: introduce trace_f2fs_replace_atomic_write_block
+Date:   Mon,  9 Jan 2023 11:44:49 +0800
+Message-Id: <20230109034453.490176-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230107034335.1154374-1-quanfafu@gmail.com> <20230108162222.146d136f@rorschach.local.home>
-In-Reply-To: <20230108162222.146d136f@rorschach.local.home>
-From:   Quanfa Fu <quanfafu@gmail.com>
-Date:   Mon, 9 Jan 2023 11:44:46 +0800
-Message-ID: <CAM4UoypG3c2TDKs7GDTkzP+uFVAzWSE2bdSFH5mLWud6tigCRg@mail.gmail.com>
-Subject: Re: [PATCH] tracing/eprobe: Replace kzalloc with kmalloc
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     rostedt@goodmis.or, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks a lot. Learned a lot from here.
+Commit 3db1de0e582c ("f2fs: change the current atomic write way")
+removed old tracepoints, but it missed to add new one, this patch
+fixes to introduce trace_f2fs_replace_atomic_write_block to trace
+atomic_write commit flow.
 
-I replaced snprintf with memcpy in Patchv2
+Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/segment.c           |  3 +++
+ include/trace/events/f2fs.h | 37 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
 
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 8b773f3eef3b..c6f6d0618164 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -255,6 +255,9 @@ static int __replace_atomic_write_block(struct inode *inode, pgoff_t index,
+ 	}
+ 
+ 	f2fs_put_dnode(&dn);
++
++	trace_f2fs_replace_atomic_write_block(inode, F2FS_I(inode)->cow_inode,
++					index, *old_addr, new_addr, recover);
+ 	return 0;
+ }
+ 
+diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+index 3852085198fb..fe6bcf5f917d 100644
+--- a/include/trace/events/f2fs.h
++++ b/include/trace/events/f2fs.h
+@@ -1290,6 +1290,43 @@ DEFINE_EVENT(f2fs__page, f2fs_vm_page_mkwrite,
+ 	TP_ARGS(page, type)
+ );
+ 
++TRACE_EVENT(f2fs_replace_atomic_write_block,
++
++	TP_PROTO(struct inode *inode, struct inode *cow_inode, pgoff_t index,
++			block_t old_addr, block_t new_addr, bool recovery),
++
++	TP_ARGS(inode, cow_inode, index, old_addr, new_addr, recovery),
++
++	TP_STRUCT__entry(
++		__field(dev_t,	dev)
++		__field(ino_t,	ino)
++		__field(ino_t,	cow_ino)
++		__field(pgoff_t, index)
++		__field(block_t, old_addr)
++		__field(block_t, new_addr)
++		__field(bool, recovery)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->cow_ino	= cow_inode->i_ino;
++		__entry->index		= index;
++		__entry->old_addr	= old_addr;
++		__entry->new_addr	= new_addr;
++		__entry->recovery	= recovery;
++	),
++
++	TP_printk("dev = (%d,%d), ino = %lu, cow_ino = %lu, index = %lu, "
++			"old_addr = 0x%llx, new_addr = 0x%llx, recovery = %d",
++		show_dev_ino(__entry),
++		__entry->cow_ino,
++		(unsigned long)__entry->index,
++		(unsigned long long)__entry->old_addr,
++		(unsigned long long)__entry->new_addr,
++		__entry->recovery)
++);
++
+ TRACE_EVENT(f2fs_filemap_fault,
+ 
+ 	TP_PROTO(struct inode *inode, pgoff_t index, unsigned long ret),
+-- 
+2.25.1
 
-On Mon, Jan 9, 2023 at 5:22 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Sat,  7 Jan 2023 11:43:35 +0800
-> Quanfa Fu <quanfafu@gmail.com> wrote:
->
-> > Since this memory will be filled soon below, I feel that there is
->
-> kzalloc() is also used as a safety measure to make sure nothing is
-> accidentally exposed. I rather keep it for safety. Just because it
-> doesn't need to be here doesn't mean it should be removed. There is no
-> benefit to making this kmalloc(), as this is far from a fast path.
->
-> > no need for a memory of all zeros here. 'snprintf' does not return
-> > negative num according to ISO C99, so I feel that no judgment is
-> > needed here.
->
-> Also, it's best to remove "feelings" from change logs. Code updates are
-> not made due to how one feels about something (at least it shouldn't
-> be), but about having technical reasons for doing so. I do agree
-> there's no reason to check snprintf() from returning negative, as
-> looking at its implementation, there is no negative return. Thus, the
-> change log should be:
->
->  "No need to check for negative return value from snprintf() as the
->  code does not return negative values."
->
-> >
-> > No functional change intended.
->
-> And this does have functional changes. If the output of a compiler is
-> different for a function, then that's a functional change. What we
-> consider non functional changes is if functions get moved around, or
-> possibly code in a function is moved into a helper function where the
-> compiler *should* end up with the same assembly.
->
-> Changing what malloc is called is definitely a functional change.
->
-> >
-> > Signed-off-by: Quanfa Fu <quanfafu@gmail.com>
-> > ---
-> >  kernel/trace/trace_eprobe.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> > index 352b65e2b910..cd1d271a74e7 100644
-> > --- a/kernel/trace/trace_eprobe.c
-> > +++ b/kernel/trace/trace_eprobe.c
-> > @@ -917,15 +917,13 @@ static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const ch
-> >       for (i = 0; i < argc; i++)
-> >               len += strlen(argv[i]) + 1;
-> >
-> > -     ep->filter_str = kzalloc(len, GFP_KERNEL);
-> > +     ep->filter_str = kmalloc(len, GFP_KERNEL);
-> >       if (!ep->filter_str)
-> >               return -ENOMEM;
-> >
-> >       p = ep->filter_str;
-> >       for (i = 0; i < argc; i++) {
-> >               ret = snprintf(p, len, "%s ", argv[i]);
->
-> I wonder if this should be a strncat() instead?
->
-> > -             if (ret < 0)
-> > -                     goto error;
-> >               if (ret > len) {
-> >                       ret = -E2BIG;
-> >                       goto error;
->
->         for (i = 0; i < arcc, i++)
->                 strncat(ep->filter_str, argv[i], len);
->
-> I mean, before this code we have that loop already determining what len
-> is, do we really need to check if it is going to be -E2BIG?
->
-> -- Steve
