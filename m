@@ -2,63 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6B7662F08
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D50C662F39
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 19:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237380AbjAIS20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 13:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S237472AbjAISeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 13:34:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237593AbjAIS15 (ORCPT
+        with ESMTP id S237623AbjAIS2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 13:27:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1633F76216;
-        Mon,  9 Jan 2023 10:24:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E2656131B;
-        Mon,  9 Jan 2023 18:24:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8131C433EF;
-        Mon,  9 Jan 2023 18:24:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673288684;
-        bh=Up8QqGMyFDjE0WjGpp7skXEYattOheVK7AbCVFlqypg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rh+GN8Jv3V8RZE6bwSRP+a3YMg7owuOENFwn/qlIQ8GAOqfd8eVJ4c8rJy44cBWvY
-         R+qaP+Vwburvs2eBSUDf61a/tjUXzXSSoPS8qfEmFGpf96dXl2NPsAFpk6avvBgekh
-         +ZBFW4k0l7Zs9hVY+U0YDwEnvFov+QKaLXfU82Xf0xWUG5yQ0Cv9Kmq4ZDDV3J/iBC
-         6ExjMYtcDIg/n0HNaXO7b4sbg06VHGBhoEK5ZH0+906mEtqo6vdLUU8Gn8hEETqev6
-         PJEiJxl9D4O0DaoZiHqV+SyiBoi1ApPbhOboxIT4m3MZYJHh1NzmHJ1KtTQmWxe9/p
-         wby0BveNsZonQ==
-Received: by mail-lj1-f174.google.com with SMTP id s22so9787266ljp.5;
-        Mon, 09 Jan 2023 10:24:44 -0800 (PST)
-X-Gm-Message-State: AFqh2krXbamDlV3JDxTWKWFJ4dc056roVy9pJo4AsFzEt5w2n2/lEHzB
-        3ghiEiZZ/rZd8wzOcOi7tzbJmU0d0cw25xbu2lE=
-X-Google-Smtp-Source: AMrXdXvIw6hG9gDAnoAfdI8nZINwTIra0pcoyKs3iOgDfBqzH5BLBcnZSVgRGYuLxsD9/MzBF8MT6j3QCVcK2U5fnPM=
-X-Received: by 2002:a2e:a5c5:0:b0:280:5b72:c3ce with SMTP id
- n5-20020a2ea5c5000000b002805b72c3cemr1383100ljp.203.1673288682865; Mon, 09
- Jan 2023 10:24:42 -0800 (PST)
+        Mon, 9 Jan 2023 13:28:06 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D49777F3
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 10:24:55 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id ja17so6927720wmb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 10:24:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GR/8pvxe2f4pohEZXkyoXtetxOTq5sWV3atP5vyJM74=;
+        b=a++QxVPD+vd0RqUAy+qbLCg3roHmEcf9/SFtidz6KaTCo5uuI/J9PRtxvoVfcZDFFv
+         fgdbWTJ7M8LPdEXTuc9FTs749FXA/+NXPXBi92JrHjzigG0yoxl41hRVfG2hRV1uU65F
+         NnYtLPkTcRW+IAJr19OZSJquVpxrSRTj0LzcS5BuWk/lr6/ywimKTzGI1rfZnjqad3qu
+         p/NLmUQjgdLSiJJ5Aed4uBZ9ns5kXuBKlQ2sYYbSso7F4obFnaJJRMou90y/qpjrvadl
+         HN360Mw9/TKTP+QPFQA8nEBcc8IYOBTTEyuFJQL172kuQv6hy2tJaQ65bOVL8GkMChLP
+         E8wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GR/8pvxe2f4pohEZXkyoXtetxOTq5sWV3atP5vyJM74=;
+        b=Riic9ii2eQF3qhywWDry5tWbMEsM83t8vI7BnMTs+1nrQpWJuwG2qf6pBVAjgrwaAz
+         Rw5GqOOnf7s3mzCXsqYk7TfBNkg+JL2KCyADdMHbKWOgAK+OHkybB2Eqji2IwrY3HKkW
+         jVcbe47umwZe56VB7xoTmWANRBY0V8PfmL3MNodS926ukHKMkQQBU8cw+Yz6b6n0Dwcx
+         jAlWB7iNm118pSQAK8U8J/KhxFeQfVwMwoSTtsSJRLwf/GYDebpOCIKlnjweO67j4lyX
+         9h7H62MPew3RjJaTW02n/ewCj3uw+0Ddn0rauYNhRxsM2lPPgpvLHEessjiUl2H0ic6e
+         rsvw==
+X-Gm-Message-State: AFqh2kqhSZWjPfRDzjKVqvIQS/qUVwL/R+2MvAsW3YRR0r5ahvwvmLBc
+        nQMUtWxo8PtzDGItPgWuqEsxfw==
+X-Google-Smtp-Source: AMrXdXuJCY8YyrI9RTQ0ufjgVapPWyphfUr254moXi6Kk5eoylipwpcFE2FpxXiWaZIJ9yZ2VeNS8Q==
+X-Received: by 2002:a05:600c:2318:b0:3c6:e63e:23e9 with SMTP id 24-20020a05600c231800b003c6e63e23e9mr49980736wmo.24.1673288694404;
+        Mon, 09 Jan 2023 10:24:54 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05600c00d000b003cf4eac8e80sm14642238wmm.23.2023.01.09.10.24.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 10:24:53 -0800 (PST)
+Message-ID: <95282b7b-c02c-ff1c-e306-89a7be2d7d1c@linaro.org>
+Date:   Mon, 9 Jan 2023 19:24:51 +0100
 MIME-Version: 1.0
-References: <20230106220959.3398792-1-song@kernel.org> <83941b74-7585-235b-ee54-3b127ca70d9e@csgroup.eu>
-In-Reply-To: <83941b74-7585-235b-ee54-3b127ca70d9e@csgroup.eu>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 9 Jan 2023 10:24:30 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6S8qJWFzSLpVf_4ZpyM0Cxty=-pS2_K=tgF52s95Zhag@mail.gmail.com>
-Message-ID: <CAPhsuW6S8qJWFzSLpVf_4ZpyM0Cxty=-pS2_K=tgF52s95Zhag@mail.gmail.com>
-Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 15/18] dt-bindings: arm-smmu: document the smmu on
+ Qualcomm SA8775P
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230109174511.1740856-1-brgl@bgdev.pl>
+ <20230109174511.1740856-16-brgl@bgdev.pl>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230109174511.1740856-16-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,60 +98,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 10:03 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 06/01/2023 =C3=A0 23:09, Song Liu a =C3=A9crit :
-> > module_layout manages different types of memory (text, data, rodata, et=
-c.)
-> > in one allocation, which is problematic for some reasons:
-> >
-> > 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
-> > 2. It is hard to use huge pages in modules (and not break strict rwx).
-> > 3. Many archs uses module_layout for arch-specific data, but it is not
-> >     obvious how these data are used (are they RO, RX, or RW?)
-> >
-> > Improve the scenario by replacing 2 (or 3) module_layout per module wit=
-h
-> > up to 7 module_memory per module:
-> >
-> >          MOD_MEM_TYPE_TEXT,
-> >          MOD_MEM_TYPE_DATA,
-> >          MOD_MEM_TYPE_RODATA,
-> >          MOD_MEM_TYPE_RO_AFTER_INIT,
-> >          MOD_MEM_TYPE_INIT_TEXT,
-> >          MOD_MEM_TYPE_INIT_DATA,
-> >          MOD_MEM_TYPE_INIT_RODATA,
-> >
-> > and allocating them separately.
-> >
-> > Various archs use module_layout for different data. These data are put
-> > into different module_memory based on their location in module_layout.
-> > IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT=
-;
-> > data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc=
-.
->
-> I dislike how it looks with enums, things like
-> mod->mod_mem[MOD_MEM_TYPE_INIT_TEXT] are odd and don't read nicely.
-> Could we have something nicer like mod->mod_mem_init_text ?
-> I know it will complicate your for_each_mod_mem_type() but it would look
-> nicer.
+On 09/01/2023 18:45, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Document the qcom,smmu-500 SMMU on SA8775P platforms.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-Hmm.. I am not sure whether we want 7 module_memory here. But if we
-agree that it looks better like that, I am ok with it.
+This and SM8550 ARM SMMU should be rebased on top of:
+https://lore.kernel.org/all/20221222092355.74586-1-krzysztof.kozlowski@linaro.org/
+and include relevant change as well.
 
->
-> Also, can you explain how you switch from two trees to only one ?
-> As far as I remember, the same question arised when I implemented
-> CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, and the conclusion was that
-> we had to keep two independant trees, so I'm a bit puzzled that you have
-> now merged everything into a single tree.
+Best regards,
+Krzysztof
 
-AFAICT, we only need __module_address() to work? So one tree is enough.
-Did I miss something?
-
-Thanks,
-Song
