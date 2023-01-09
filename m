@@ -2,155 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD79662268
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C088466225F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 11:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233986AbjAIKCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 05:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
+        id S234300AbjAIKCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 05:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237047AbjAIKBW (ORCPT
+        with ESMTP id S237054AbjAIKBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 Jan 2023 05:01:22 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D15810FD3
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:01:14 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id u19so18619148ejm.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 02:01:14 -0800 (PST)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B53D10FDF
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 02:01:15 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id fc4so18633846ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 02:01:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cvr86EcVYprczQ7Mp47b1jJqfLxIkymln8np11xtzkI=;
-        b=FCwhaykY5BgM/Vw2hOHnNX43Gnh3PkMvdOetmSPvTLpQwh3js+/qX/SlkVlyQ6fc73
-         mfUbVlvY7rQfMkB+ojN/fEPz1BadgZVZzsL79EPfYfM6lTA0WMeaou4XHqk1Z/fkYtGq
-         40ruNpDJNBUh1l0TdpuSp6sjKxZbkb87Jv1So=
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MX1dxoa9iuYVNRE72fLmQcr9R1KY5ieZzlTHXMPxmGU=;
+        b=Ti4ccvK3N7Xm22NUnU7Dj9Attzqf0Q+t5UgDYkdVtjVSM8frwdgoMmQZtvqPLbUsOx
+         StW6tFL6QwyBnFQg7E40gvhHb3OcJK0xQZt5rXSMvWk7x59FRe/Rr9HLwDifkwyv8pmf
+         Oq+QmzbeAOAoJO4Nd2tsBLi0DBRk7wrpVI3PI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cvr86EcVYprczQ7Mp47b1jJqfLxIkymln8np11xtzkI=;
-        b=DhyfAVjBYLdoRa51mzuEliZjj7pTo1BL8tBshtLI3vIhoHOPBCXsQqEsrzXvGuertR
-         N5V2+Zi9noaGXj4RCHfPTbs6ZgcbtgvqQvwyCr9hyU/1eMsFLy/GvzcldpOJUTOuXiiU
-         Hs6F5+RoGG9+lJ7L8fJwOUIrnBxTjmrpyXmglvkoz/l3ZK4gx212ib4nr5oPSmVvZDvo
-         uPT7KT/nM0KriHie3n/Rzpao/mYOh7iCKG0naXR9A4AT24ZNuK/aXz/ZZo8UAWjPL8rv
-         zcj/34vr+8jTW9AXe2bew5nQtwMTk7lKSFL1xGNKZ13roUNIpSGguWSwIUP+0Hqu9Sgp
-         eI5Q==
-X-Gm-Message-State: AFqh2kp5/3FkmyZPVpF848/ulnk3KcgeS7QRm52ZTGOjfRjGkpfJzJ5+
-        nbFE89OV88hzHPdDnr6ZuulUng==
-X-Google-Smtp-Source: AMrXdXvNvxEtV6UA+XKsChIrs28mvTcENXrswmEeaF1oibD0s99KRUVWg5Gq3/+ht8oX9boCGrYKXg==
-X-Received: by 2002:a17:907:9d0e:b0:7c0:c10e:1395 with SMTP id kt14-20020a1709079d0e00b007c0c10e1395mr55736385ejc.1.1673258472965;
-        Mon, 09 Jan 2023 02:01:12 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MX1dxoa9iuYVNRE72fLmQcr9R1KY5ieZzlTHXMPxmGU=;
+        b=DyJ5ErECgVNfXNq4P9bc9+a9wv6f08wRNeRY0mA4CD9I8mF/BpfOJx/Yt0y77qvCcJ
+         Whxg13ZEo7F6WPqe0HrbwtYWPBB2XrE4Hnew8w3m8qeqhUvJaGJI8CzCoMhcnPdUkkkT
+         g9W+582TObBdrOGZZcRaQqVlIhb4DeRt8v+yQB4xOCmgIKYfMHyPQQ2pWZRkvNOyK7VU
+         c3FZyhoAv5UtGM0jUB6kfFvXTTer1lCX+AijXYbwrxg5CxULVVzlnhkkk8BOAgUoqxYE
+         fnz1nA1RG1KV5E6wSp9unXNOa8BB0EMzNc8tQT4OYR6WW/3kv/b513jEhnqV+e40AGI/
+         Lw4Q==
+X-Gm-Message-State: AFqh2kp6HNNg+YZjve/SRmXfaPyWaxJv+pv0YVlAwo5N3FX7YDma0pQU
+        gNxwxY7i0SA1vQt9ceWsDJwt4A==
+X-Google-Smtp-Source: AMrXdXsF9brvXFDnyscg0lEaba7Pr/vbZ99f8sg18MQQrfOL3Yl/9Km13aZMw56VmvomnMkBTbTwUQ==
+X-Received: by 2002:a17:906:d18f:b0:7c1:80d7:55f2 with SMTP id c15-20020a170906d18f00b007c180d755f2mr63974330ejz.48.1673258473691;
+        Mon, 09 Jan 2023 02:01:13 -0800 (PST)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:cd22:9dd:6d54:8488])
-        by smtp.gmail.com with ESMTPSA id bg14-20020a170906a04e00b007c094d31f35sm3557548ejb.76.2023.01.09.02.01.12
+        by smtp.gmail.com with ESMTPSA id bg14-20020a170906a04e00b007c094d31f35sm3557548ejb.76.2023.01.09.02.01.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 02:01:12 -0800 (PST)
-Subject: [PATCH v4 0/5] uvcvideo: Fixes for hw timestamping
+        Mon, 09 Jan 2023 02:01:13 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 09 Jan 2023 11:00:48 +0100
+Subject: [PATCH v4 1/5] media: uvc: Ignore empty TS packets
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAM/lu2MC/4XNywrCMBAF0F8pWRtJprEPV/6HuMhj2gSaVJK2Iq
- X/bnQpYlfDvXDPrCRhdJjIuVhJxMUlN4YcxKEg2srQI3UmZwIMgLXAaMSEwVD7mJzHNEl/p6pEgB
- paaIQheahkQqqiDNrmaZiHIZfWpWmMz8+jhedz/WsunDKKreZCwakRTFy0jaN3sz+OsSe3LC6wr0
- BWTGNYxSulKg4/lHJfKd+KajuJWHeiNl/Ktm0vJwnDpEgBAAA=
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 09 Jan 2023 11:00:47 +0100
-Message-Id: <20220920-resend-hwtimestamp-v4-0-a8ddc1358a29@chromium.org>
+Message-Id: <20220920-resend-hwtimestamp-v4-1-a8ddc1358a29@chromium.org>
+References: <20220920-resend-hwtimestamp-v4-0-a8ddc1358a29@chromium.org>
+In-Reply-To: <20220920-resend-hwtimestamp-v4-0-a8ddc1358a29@chromium.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Ricardo Ribalda <ribalda@chromium.org>,
         "hn.chen" <hn.chen@sunplusit.com>, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2516; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=RoEgR2V3s+l2yEuznl2FsB16WAvD8+V+KuBSRItNVRQ=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBju+XZDfuTHchTYMBEBnptnUJxvpJ9QI0AVvLXL554
- rpl/fcaJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7vl2QAKCRDRN9E+zzrEiEgxD/
- 4kd48Vii2lrHcdK+sAvfCtzC4Ou1ySl1CQqVY3C1jxHSmj6aKFOX++z4N4ssUB8eoac6NFHj7Y22ow
- RgmcWkISvoamDlZFBoRRlaXOBn6xlMdcLQyG8K6YrPtnqYPek59i8prkH4y4pgZZJ3cwn3OqJpFyZD
- swFPsH0hhgDR4tAXCsJ+eHOwdlBuQmII9oex7sZ8zb7qPJd/ckwKpqXBYa5M5cYe+UFJ/5NINfiinF
- Yz6m5yQz68gX9pmd4eraOZzpsmmRwsdqXqVHelrB65x5OSKPCqiNZiRFQGPSU2AoBPGWTcMPZsjK+V
- px6+RDJA+O4x2vSGtedqW5U30INEnjT9mFTU0AWYj7M1l+COdWMKAMafSFJ8uFLpS9vUDsxM8YlbY8
- LDO6fBcT1iPy1V2il2IecqmeCAVCo2V6ywxJMXCHiY46xzMDilWAo1WwgLBHTrSxY5kVPcommvGWc0
- baBaQ3pNJMeLS7/Q8zdv0utdkPJeV9tItmv3BAqby17JIjD2o+qlH89RoeSP5e2jRwHZRF3KisFpMb
- Rgq8Ij/Ye1DzmZK1z55NHzjFHxWt9v1Lt66YzVGct4kzLj42Ho/66n3F+daIbMbTqL0p28/U2K0lrM
- pL8w5reXDLVa9SkNdjmfgFCSwubEfnkO/WUvMQ4lxNAm4rXrKDggxoN/tbbQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3550; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=/aomtSJPanXG7kRlpjiU1jzPOL/grSL16QkCbPouDCQ=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBju+XghMh2GfOrpQ6sHWLkQ2wcMZP1nMeOhm7hvyt1
+ 1DbNAOiJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY7vl4AAKCRDRN9E+zzrEiIR2EA
+ CL3oS0zc9eDP+MZo3ZBNw0MPVAkbbgpjkWGBh/lb8zKA3AZpiXCQWgjbHAQkACS7IbU23pdKmbjB3O
+ Co+k195+xwrXzTmIP8z0ly35cV9gGco/U6Yor3b5hxeWXZtRrQAkH4v1xSUXr5uG68p8/txrLlnI6z
+ lG2cVlO+c9FCuwAZejAjzTjpANKtpl4024qeuNlkoBdqyOMUNC+UDcFamlA0epd1pcE3pNgFT1P58L
+ LwfmX6vf+zQ8ridaNxj6NB5kakQkX2+5FUSFErc6HRlf6x/iXEEZGMtHUmmb2o60gorlCXFQcD3UO+
+ u4QpKPfEYmaU0t+nnmmXVQKpubuL45F9u5rKxzP7v/CI2Y7VZgHxjyk2M3o8oEJvJ4pUc+a1rh+iH9
+ huuG/Z62ISUUojosyOJQ6gXwyD8ltAtK+n+qtgoziaZdy2FWvRm6eJJ2itwufq5yCSldLK/Tq0MUhb
+ lrg/12VpPmNlqc4n+gmlpXYb7eDyzceYkx7yu5+13YIH9few85COLCsdfCQpTFlBXQ7fjd0JOZhV8z
+ Fl6pTWkB1HHJFxJSXfUrzCswrTWkGJE5mH23ySSFvMpIpqs1r0FKeO69kaMC0qDByw31Vjb2lnwOMN
+ ty786YmiutDigG/EEv3JPsZvvQtdZpY4VD0imPcEUYFrhx15pqR9Xn0COrcg==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add some fixes for fixing hw timestamp on some Logitech and SunplusIT
-cameras. The issues have been previously reported to the manufacturers.
+Some SunplusIT cameras took a borderline interpretation of the UVC 1.5
+standard, and fill the PTS and SCR fields with invalid data if the
+package does not contain data.
 
-Also include a patch to fix the current hw timestamping logic for ANY
-uvc 1.5 model running at under 16 fps.
+"STC must be captured when the first video data of a video frame is put
+on the USB bus."
 
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: hn.chen <hn.chen@sunplusit.com>
+Eg:
+
+buffer: 0xa7755c00 len 000012 header:0x8c stc 00000000 sof 0000 pts 00000000
+buffer: 0xa7755c00 len 000012 header:0x8c stc 00000000 sof 0000 pts 00000000
+buffer: 0xa7755c00 len 000668 header:0x8c stc 73779dba sof 070c pts 7376d37a
+
+This borderline/buggy interpretation has been implemented in a variety
+of devices, from directly SunplusIT and from other OEMs that rebrand
+SunplusIT products. So quirking based on VID:PID will be problematic.
+
+All the affected modules have the following extension unit:
+VideoControl Interface Descriptor:
+  guidExtensionCode         {82066163-7050-ab49-b8cc-b3855e8d221d}
+
+But the vendor plans to use that GUID in the future and fix the bug,
+this means that we should use heuristic to figure out the broken
+packets.
+
+This patch takes care of this.
+
+lsusb of one of the affected cameras:
+
+Bus 001 Device 003: ID 1bcf:2a01 Sunplus Innovation Technology Inc.
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.01
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2 ?
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x1bcf Sunplus Innovation Technology Inc.
+  idProduct          0x2a01
+  bcdDevice            0.02
+  iManufacturer           1 SunplusIT Inc
+  iProduct                2 HanChen Wise Camera
+  iSerial                 3 01.00.00
+  bNumConfigurations      1
+
 Tested-by: HungNien Chen <hn.chen@sunplusit.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
 ---
-Changes in v4 (Thanks Laurent!):
-- Rebase on top of pinchart/next/uvc
-- Use heuristic for UVC_QUIRK_IGNORE_EMPTY_TS
-- Link to v3: https://lore.kernel.org/r/20220920-resend-hwtimestamp-v3-0-db9faee7f47d@chromium.org
+ drivers/media/usb/uvc/uvc_video.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-Changes in v3 (Thanks Laurent!):
-- Rebase on top of pinchart/uvc/next
-- Fix hw timestampt handling for slow FPS
-  - Improve commit message
-- Quirk for invalid dev_sof in Logi C922
-  - Improve commit message
-- Allow hw clock updates with buffers not full
-  - Fix typo and improve messages
-- Refactor clock circular buffer
-  - Improve commit message
-- Quirk for autosuspend in Logi C910
-  - Improve commit message
-  - Add comments around the quirk
-- Create UVC_QUIRK_IGNORE_EMPTY_TS quirk
-  - Improve comments
-- Allow quirking by entity guid
-   - unsinged int
-- Extend documentation of uvc_video_clock_decode()
-   - uvcvideo on commit message
-   - Improve comment
-- Link to v2: https://lore.kernel.org/r/20220920-resend-hwtimestamp-v2-0-d8d0616bb612@chromium.org
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index d4b023d4de7c..710165502b5b 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -478,6 +478,7 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
+ 	ktime_t time;
+ 	u16 host_sof;
+ 	u16 dev_sof;
++	u32 dev_stc;
+ 
+ 	switch (data[1] & (UVC_STREAM_PTS | UVC_STREAM_SCR)) {
+ 	case UVC_STREAM_PTS | UVC_STREAM_SCR:
+@@ -526,6 +527,18 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
+ 	if (dev_sof == stream->clock.last_sof)
+ 		return;
+ 
++	dev_stc = get_unaligned_le32(&data[header_size - 6]);
++
++	/*
++	 * Some devices make a borderline interpretation of the UVC 1.5 standard
++	 * and sends packets with no data contain undefined timestamps. Ignore
++	 * such packages to avoid interfering with the clock interpolation
++	 * algorithm.
++	 */
++	if (buf->bytesused == 0 && len == header_size &&
++	    dev_stc == 0 && dev_sof == 0)
++		return;
++
+ 	stream->clock.last_sof = dev_sof;
+ 
+ 	host_sof = usb_get_current_frame_number(stream->dev->udev);
+@@ -564,7 +577,7 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
+ 	spin_lock_irqsave(&stream->clock.lock, flags);
+ 
+ 	sample = &stream->clock.samples[stream->clock.head];
+-	sample->dev_stc = get_unaligned_le32(&data[header_size - 6]);
++	sample->dev_stc = dev_stc;
+ 	sample->dev_sof = dev_sof;
+ 	sample->host_sof = host_sof;
+ 	sample->host_time = time;
 
-Changes in v2:
-- Require 1/4 sec of data before using the hw timestamps
-- Add Tested-by SunplusIT
-- Link to v1: https://lore.kernel.org/r/20220920-resend-hwtimestamp-v1-0-e9c14b258404@chromium.org
-
----
-Ricardo Ribalda (5):
-      media: uvc: Ignore empty TS packets
-      media: uvcvideo: Quirk for invalid dev_sof in Logitech C922
-      media: uvcvideo: Allow hw clock updates with buffers not full
-      media: uvcvideo: Refactor clock circular buffer
-      media: uvcvideo: Fix hw timestamp handling for slow FPS
-
- drivers/media/usb/uvc/uvc_driver.c |   9 +++
- drivers/media/usb/uvc/uvc_video.c  | 123 ++++++++++++++++++++++++-------------
- drivers/media/usb/uvc/uvcvideo.h   |   2 +
- 3 files changed, 91 insertions(+), 43 deletions(-)
----
-base-commit: 73d6709376914f577a61bb29e596fa93ec66598c
-change-id: 20220920-resend-hwtimestamp-b3e22729284d
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
