@@ -2,202 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574EF66327E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1F5663283
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 22:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238048AbjAIVOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 16:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
+        id S237998AbjAIVOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 16:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233468AbjAIVMw (ORCPT
+        with ESMTP id S235188AbjAIVMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 16:12:52 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035DA7DE00
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 13:08:42 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so8153869wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 13:08:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VjiYxol0UlpN19kTUs+sSn5eQ9eumRPyWwhTVbAm3NM=;
-        b=HENpSiMQ5wTk1q+vNHgQ1DQwXKi7pkSma3Brl7DbwYdY7K5OH7UnVwhqtSA0l4A2zk
-         zh/3fnQGvVBimNnb49dV5xtjo7zdGYiVCJEoQlQhU2dlwGgQqE69Qk/xN0ip25PMGOfo
-         tknz16N6UtKCfWusSCre/bdPkwDfwzxy3LlwS7cjSqf8HnA5v+dsTGPlEhMeaJ7ycK7T
-         OnGWm+SAgmb9tJhyAhzCQgWL50a83yDyoRAW/uofILcxiZIHVIegPSE9PhZVQQP6jR+p
-         DJA/ezngVdlcn5Jw4nLKleZYkCGhtERiYdud28rKm4WJ7i4bkEw0Vgg/wMTxvhq2kAye
-         wprA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VjiYxol0UlpN19kTUs+sSn5eQ9eumRPyWwhTVbAm3NM=;
-        b=k6+AmsGI7gpzAhayvhDjBVmzW6GaKVszoEZ78J6RkzCMO45SSEfyKTV1pBEHRH4MZH
-         +ehjPS9W4YqKruG+VvCRRBssShXrmaKKzHH0Y5LBUTvPcx5N4XnXk9XlzZusOEbYTT/s
-         yCJmSjT2r2zVIy5ELFwMfGMKaey8w9hFnmq3W/tvbUbi7N/oeYoJS368LfIiirWqTG5c
-         Z3vO1sMxm0WuldwFFYJ6Uf3E//fRd0eEqtDn4Zj4u3WDHhg20UekB0Tv0Ah7CdEHpBkm
-         Hty2bsvZJdLB8jgN0mZiNA8+7WLxekPEHbznWxzL6cqDhAmepd3NVn5ST6tuNEfNKd4Y
-         0JGg==
-X-Gm-Message-State: AFqh2krCuKMbVZC/7HxaettsJ5VTOQpOFgz29TZ5Ce4GcUAL+pM4Us3l
-        seQWsELAD7LZqQOpuI5FqJNSomaCvaAj82iJ
-X-Google-Smtp-Source: AMrXdXvq3f1yfzc7obUZ8s8GPpwYCBrPBLs811ZKIpNtqPnIGPbR3hsAhbT0ayWPMKPnVXHB7LSf2g==
-X-Received: by 2002:a05:600c:35cc:b0:3d3:3c93:af34 with SMTP id r12-20020a05600c35cc00b003d33c93af34mr57833164wmq.2.1673298520520;
-        Mon, 09 Jan 2023 13:08:40 -0800 (PST)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id iv14-20020a05600c548e00b003b47b80cec3sm19629250wmb.42.2023.01.09.13.08.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 13:08:39 -0800 (PST)
-Message-ID: <262dd341-5b6e-875c-0ded-03b5135ea9ad@arista.com>
-Date:   Mon, 9 Jan 2023 21:08:32 +0000
+        Mon, 9 Jan 2023 16:12:42 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD798293;
+        Mon,  9 Jan 2023 13:08:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=FJgMelawb+AVR/FU9zZ+45ERmeanV6JC6hl8xIQSQmY=; b=UYXeVuG1f9QXJVG/8cLqgT7sPr
+        GX7cVQ9ITa6CNmrV3hmu9/VST4acURhn2EuMCfuZfevkrdzObYXDUcBTK4/EdzKAjHdgTK8d1WDj9
+        xVW2lfnRyP+cNyaqgj2o6zLy8CrXzXGOk6lcfLZ5ih6K6PVJjGfEOhTKeqDXKz/cBX+JwgPSN5Tt/
+        tXij4tu2BO4hoiQOB7cq8icBN0hzhG9aQrOPhETusJM4Ib776rT7go5a3EgN1idhCUSU6tkdIEN/8
+        MkkuJBHF8zr7737ANe9E3ykZZsM+Shu8RN95n4piuV64jG5fDwu5Jz6w1OQKYpkvxQQrFq70JDzx3
+        6e/IRcvw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pEzNm-0046VS-P6; Mon, 09 Jan 2023 21:08:38 +0000
+Message-ID: <714cf8b2-b02d-15d4-22a7-5e0dbec3c078@infradead.org>
+Date:   Mon, 9 Jan 2023 13:08:37 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/5] crypto/pool: Add crypto_pool_reserve_scratch()
+Subject: Re: [PATCH v2] x86/retbleed: add "stuff" mode admin documentation
 Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
-References: <20230103184257.118069-1-dima@arista.com>
- <20230103184257.118069-3-dima@arista.com>
- <20230106180427.2ccbea51@kernel.org>
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <20230106180427.2ccbea51@kernel.org>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>
+References: <20230109160808.30740-1-rdunlap@infradead.org>
+ <ceec97e2-2acd-6f15-5675-6b2b143b972f@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ceec97e2-2acd-6f15-5675-6b2b143b972f@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/7/23 02:04, Jakub Kicinski wrote:
-> On Tue,  3 Jan 2023 18:42:54 +0000 Dmitry Safonov wrote:
->> Instead of having build-time hardcoded constant, reallocate scratch
->> area, if needed by user. Different algos, different users may need
->> different size of temp per-CPU buffer. Only up-sizing supported for
->> simplicity.
-> 
->> -static int crypto_pool_scratch_alloc(void)
->> +/* Slow-path */
->> +/**
->> + * crypto_pool_reserve_scratch - re-allocates scratch buffer, slow-path
->> + * @size: request size for the scratch/temp buffer
->> + */
->> +int crypto_pool_reserve_scratch(unsigned long size)
-> 
-> Does this have to be a separate call? Can't we make it part of 
-> the pool allocation? AFAICT the scratch gets freed when last
-> pool is freed, so the user needs to know to allocate the pool
-> _first_ otherwise there's a potential race:
-> 
->  CPU 1               CPU 2
-> 
->  alloc pool
->                     set scratch
->  free pool
->  [frees scratch]
->                     alloc pool
 
-Yeah, I think it will be cleaner if it was an argument for
-crypto_pool_alloc_*() and would prevent potential misuse as you
-describe. Which also means that I don't have to declare
-crypto_pool_scratch_alloc() in patch 1, will just add a new parameter in
-this patch to alloc function.
 
+On 1/9/23 09:19, Dave Hansen wrote:
+> On 1/9/23 08:08, Randy Dunlap wrote:
+>> +			stuff        - Enables "stuffing" mode mitigation,
+>> +				       which uses return thunking and call depth
+>> +				       tracking.  Only in effect if
+>> +				       CONFIG_CALL_DEPTH_TRACKING is set and
+>> +				       Spectre V2 mitigation mode is
+>> +				       "retpoline".
+>> +				       IBRS is fully secure mitigation but is
+>> +				       more costly (slower) than stuffing.
 > 
->>  {
->> -	int cpu;
->> -
->> -	lockdep_assert_held(&cpool_mutex);
->> +#define FREE_BATCH_SIZE		64
->> +	void *free_batch[FREE_BATCH_SIZE];
->> +	int cpu, err = 0;
->> +	unsigned int i = 0;
->>  
->> +	mutex_lock(&cpool_mutex);
->> +	if (size == scratch_size) {
->> +		for_each_possible_cpu(cpu) {
->> +			if (per_cpu(crypto_pool_scratch, cpu))
->> +				continue;
->> +			goto allocate_scratch;
->> +		}
->> +		mutex_unlock(&cpool_mutex);
->> +		return 0;
->> +	}
->> +allocate_scratch:
->> +	size = max(size, scratch_size);
->> +	cpus_read_lock();
->>  	for_each_possible_cpu(cpu) {
->> -		void *scratch = per_cpu(crypto_pool_scratch, cpu);
->> +		void *scratch, *old_scratch;
->>  
->> -		if (scratch)
->> +		scratch = kmalloc_node(size, GFP_KERNEL, cpu_to_node(cpu));
->> +		if (!scratch) {
->> +			err = -ENOMEM;
->> +			break;
->> +		}
->> +
->> +		old_scratch = per_cpu(crypto_pool_scratch, cpu);
->> +		/* Pairs with crypto_pool_get() */
->> +		WRITE_ONCE(*per_cpu_ptr(&crypto_pool_scratch, cpu), scratch);
+> The "fully secure" thing makes me cringe a bit.
 > 
-> You're using RCU for protection here, please use rcu accessors.
+> I'd suggest saying:
+> 
+> 	IBRS is a stronger mitigation
+> 	but is more costly than stuffing
+> 	(slower).
 
-Will do.
+OK, will do (v3).  :)
 
-> 
->> +		if (!cpu_online(cpu)) {
->> +			kfree(old_scratch);
->>  			continue;
->> +		}
->> +		free_batch[i++] = old_scratch;
->> +		if (i == FREE_BATCH_SIZE) {
->> +			cpus_read_unlock();
->> +			synchronize_rcu();
->> +			while (i > 0)
->> +				kfree(free_batch[--i]);
->> +			cpus_read_lock();
->> +		}
-> 
-> This is a memory allocation routine, can we simplify this by
-> dynamically sizing "free_batch" and using call_rcu()?
-> 
-> struct humf_blah {
-> 	struct rcu_head rcu;
-> 	unsigned int cnt;
-> 	void *data[];
-> };
-> 
-> cheezit = kmalloc(struct_size(blah, data, num_possible_cpus()));
-> 
-> for_each ..
-> 	cheezit->data[cheezit->cnt++] = old_scratch;
-> 
-> call_rcu(&cheezit->rcu, my_free_them_scratches)
-> 
-> etc.
-> 
-> Feels like that'd be much less locking, unlocking and general
-> carefully'ing.
+Thanks.
 
-Will give it a try for v3, thanks for the idea and review,
-          Dmitry
-
+-- 
+~Randy
