@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2D76621F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671DC6621F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 10:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236877AbjAIJrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 04:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S236909AbjAIJqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 04:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjAIJqG (ORCPT
+        with ESMTP id S236700AbjAIJpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 04:46:06 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190CD9FD6;
-        Mon,  9 Jan 2023 01:45:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IsQXb0coC4MH8lm3N/KTjIXu0ELkSrGyhN9jJUZYXRg=; b=UfH94avJySRuY6Ha5LtchQXvYM
-        Ostvhiogm0+IZ+7oM2akuvihUCNKugyradH2HkziZCGnV3Uxsg/duAsJX8SS6m8lciNAOYeQtwlDF
-        I8OSWvdlDxBB7jddWG6vJ88//CmrHXZPDwNJdC6N50GtwYYc7glptEkWzX1+kD04YC6viV5uZQRtZ
-        QlFEvs8g/oI073PXNs2bjCPOimhgdvy5HvGJVsp0YiO+zI+l6j1rMAauZG7547JTpTZtG3OSZL/h7
-        sB+c7I69mLwMN0OxvhSEoQ6BSCW1pQpjDPi0uK5lD7yKthGzLr4lgfew24uLkd3zsTP1Drleb4cji
-        SlmHh6DQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pEohw-002fkB-0b;
-        Mon, 09 Jan 2023 09:44:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Mon, 9 Jan 2023 04:45:46 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D0C13FB4
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 01:44:59 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2BD35300193;
-        Mon,  9 Jan 2023 10:44:50 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EA8D6201BB46C; Mon,  9 Jan 2023 10:44:49 +0100 (CET)
-Date:   Mon, 9 Jan 2023 10:44:49 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     tglx@linutronix.de, jstultz@google.com, edumazet@google.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] softirq: don't yield if only expedited handlers are
- pending
-Message-ID: <Y7viEa4BC3yJRXIS@hirez.programming.kicks-ass.net>
-References: <20221222221244.1290833-1-kuba@kernel.org>
- <20221222221244.1290833-4-kuba@kernel.org>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DB9E820377;
+        Mon,  9 Jan 2023 09:44:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673257497; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OJYJM5U3jL+mIFF8qQ6ruDQoewuVgc1v0J+GErVJ50c=;
+        b=28Gyw3upxGL0gIG6vRvsttQN5cOb36679blEPyBodvFQGYjwIyNd0G9GCWh2Fksa5HLCwl
+        3wNTEPaB472D3iPhZYLxUfO8oqYtPMT2+cqwq+Ol1d+mqmc1Hvt978r1+kwwBnhll2VIZ0
+        mJpkwbkMxKP3S6kG+aI1Adzqzergl1w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673257497;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OJYJM5U3jL+mIFF8qQ6ruDQoewuVgc1v0J+GErVJ50c=;
+        b=wi4NNeZRopDA1w1vqfDfY9rFVRdNSWoMN7AkIYXiXweMsk+2iFhzL9e73qIpPbgBl1Cvfl
+        lZNvnDRRiAS7atAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C7F3413583;
+        Mon,  9 Jan 2023 09:44:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uRXKMBniu2NvfwAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 09 Jan 2023 09:44:57 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id CD75FA074D; Mon,  9 Jan 2023 10:44:56 +0100 (CET)
+Date:   Mon, 9 Jan 2023 10:44:56 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org,
+        syzbot+8a5a459f324d510ea15a@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] udf: Fix null-ptr-deref in udf_write_fi()
+Message-ID: <20230109094456.gdiyu7gwljkjeyhx@quack3>
+References: <20230107195016.290627-1-pchelkin@ispras.ru>
+ <20230107195016.290627-2-pchelkin@ispras.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221222221244.1290833-4-kuba@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+In-Reply-To: <20230107195016.290627-2-pchelkin@ispras.ru>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 02:12:44PM -0800, Jakub Kicinski wrote:
-> In networking we try to keep Tx packet queues small, so we limit
-> how many bytes a socket may packetize and queue up. Tx completions
-> (from NAPI) notify the sockets when packets have left the system
-> (NIC Tx completion) and the socket schedules a tasklet to queue
-> the next batch of frames.
+On Sat 07-01-23 22:50:16, Fedor Pchelkin wrote:
+> udf_find_entry() can return NULL or an error pointer if it fails. So we
+> should check its return value to avoid NULL pointer dereferencing in
+> udf_write_fi() (which is called from udf_delete_entry()). Also, if
+> udf_find_entry() returns an error pointer, it is possible that ofibh and
+> ocfi structs hold invalid values which can cause additional problems in
+> udf_write_fi().
 > 
-> This leads to a situation where we go thru the softirq loop twice.
-> First round we have pending = NET (from the NIC IRQ/NAPI), and
-> the second iteration has pending = TASKLET (the socket tasklet).
-
-So to me that sounds like you want to fix the network code to not do
-this then. Why can't the NAPI thing directly queue the next batch; why
-do you have to do a softirq roundtrip like this?
-
-> On two web workloads I looked at this condition accounts for 10%
-> and 23% of all ksoftirqd wake ups respectively. We run NAPI
-> which wakes some process up, we hit need_resched() and wake up
-> ksoftirqd just to run the TSQ (TCP small queues) tasklet.
+> If udf_find_entry() returns an error pointer, udf_rename() should return
+> with an error code. If udf_find_entry() returns NULL, ofi has probably
+> already been deleted.
 > 
-> Tweak the need_resched() condition to be ignored if all pending
-> softIRQs are "non-deferred". The tasklet would run relatively
-> soon, anyway, but once ksoftirqd is woken we're risking stalls.
+> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
 > 
-> I did not see any negative impact on the latency in an RR test
-> on a loaded machine with this change applied.
+> Fixes: 231473f6ddce ("udf: Return error from udf_find_entry()")
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Reported-by: syzbot+8a5a459f324d510ea15a@syzkaller.appspotmail.com
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-Ignoring need_resched() will get you in trouble with RT people real
-fast.
+Thanks for the patch but I have already queued in my tree [1] rewrite of
+UDF directory handling code that addresses multiple issues syzbot found in
+directory handling and as far as I'm looking into the new code, this one
+should be fixed as well.
+
+[1] git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git for_next
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
