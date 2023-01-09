@@ -2,73 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783B266307B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0ED6663085
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 20:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237415AbjAITfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 14:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
+        id S237426AbjAITgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 14:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbjAITfA (ORCPT
+        with ESMTP id S235113AbjAITgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 14:35:00 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E0915FD2
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 11:34:57 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so9955457wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 11:34:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B4GAcDOHnS45dwGYt1z3etvzuHK9xKfgR9hh2p9DLcE=;
-        b=HSrwfJ5qNjtlE7TvEa9AjxfLddO2riQHjySYFqMRi6zVB1Op7NV/whHtRu2sNKo23K
-         fPvMutXlNoMr/VAB1hCS7RsnP4OmI4ZtVWXgvedzImZKTiICqCKBOqzOXJq8tL7lbHI/
-         6Ve/HgVrkzDAub3AbSkBjkz71Hduv5PzG1Jsl6TDcSJGm5g7DCirlsTJhSCvdlEbmOaL
-         wkoqtzlcmOgC8g2WKHQOoUEzAbck4CHqIS3HaEcTah92z+CxfKWBilY9z9JXMdKBLzNJ
-         oHnHS2P9vowSUYlioAU4+MPzh/DmnCe1fm96swaMvCHNTGYd9DoVZKIWBC1glX9o24hu
-         7Bkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B4GAcDOHnS45dwGYt1z3etvzuHK9xKfgR9hh2p9DLcE=;
-        b=zb9kpBtXoid38ANQOk09vo/UDWzqJZxaPk/NWljjTSbQ16S5BTsiQy1/7uMGnBax/g
-         lyCS4jTm03o7ZCra77bvH600kxDtcSVDnfGcBGIweEWxfsFP9IKwqJXWGBGsd4J4rKnx
-         oPsE0o1Rog0iylJO2CKBfZrHXdHGz211KuUk7If7VpO7jTnJL4fqkHPDkIJgJkk4ShNH
-         9qGEQCccyyViWibaewLAttouPrbFN+bVEzvTwi8LdFZKASQ+RbR/p2heRB1b550+jy22
-         GcPcT9fIT3wBYdtmV863RJlO2FUY5BV0R3LWR4xq9C1VlUwcxAMRuNLQvdWUYdGA+xCh
-         vRpA==
-X-Gm-Message-State: AFqh2kqRlujbSoRAdm8vMhWe7gI4Y3tzYGeYcDlZc5Dui2HZ6cH+5ooC
-        1pRD/fR7cQhc63iK4JhFSPOBB50XEhqeeXKj/5B+9A==
-X-Google-Smtp-Source: AMrXdXsg9qByAuW8b6iOqbTA6nkas3ajF9dUsiYXYfSAB/ysrdu8hV8Xoh7HzvelFmhg9uzCsFPrg6L7k8AAnDb7qt8=
-X-Received: by 2002:a1c:4c04:0:b0:3d9:edae:ed7 with SMTP id
- z4-20020a1c4c04000000b003d9edae0ed7mr222654wmf.182.1673292896011; Mon, 09 Jan
- 2023 11:34:56 -0800 (PST)
+        Mon, 9 Jan 2023 14:36:06 -0500
+Received: from DM5PR00CU002-vft-obe.outbound.protection.outlook.com (mail-centralusazon11021024.outbound.protection.outlook.com [52.101.62.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A40813E86;
+        Mon,  9 Jan 2023 11:36:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YOZuhrR6qwIH7Bd03aQWlIV37e1KKO0HQR6a1BndSx/JReexgCdsGDdPHDUuaz2a8W3A1qTWJb7z+M47DgsJes03faHtrNykDgnK7D+9BaFUcA18i0gjYOafjOBXNC71EUlzOCReCcuZLx+HzYSwe+AIFEQM5P84yeNyxtAs20RXHcZmDEXxba2J0tHMP3z5S9UsuxdedeHi8RsCPlHhy445ii05t+ABNj9oL+mbkmVpZNm8RvqdYG7jVA3sfSTACzOpu18TkXkFY7sUwaQtMg8T2UN6CqLReuKLPLodKBjrwziJAECKVNrPdVuzovadDNauGqwmJgsFB5tD4CK0dA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rKwGbHkpfh+kAYji03QJ6gfDgY2sCsnw9h9SxrHCnIA=;
+ b=lTfYfGGsD2oLfIaKOEyRsw8qUduw4ZXVCY+twOSJUpGzvvjcDOmkEnsaQWUFnYtilxoZ0H+oztbfJDyQzK07LJ8qfjYBg3/crEFgfA6pjaCwEaDlOGUGpF1AUNHbUQ1xHU7rirWpEFR5A7piD167y3XIJD4Ms+8kWXZWmzYRejctaWFajmSSvmIkIQelNGJNDxedCXmRTTdZDkFpv6uGqZI1OiVXO5Q6PeUObLX1lB3y5W9wqJYAjpIPr5inRkQFNLSoL6/twcEPoU6Zc2LbCzx1v78iVREpWoVph+sMU9aC/w7XjwzKmNgzDIu5J6RhGzcv6nKkaoLVhG0nKc3gCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rKwGbHkpfh+kAYji03QJ6gfDgY2sCsnw9h9SxrHCnIA=;
+ b=QM6YAbgYVUnPA1GAbeslW4xi0MiEgxmwAhJy4P1ibHtlvvekvALcqEU1WDxHv/mOV6I5OkGLD1wy/FepT3w1HnC52WeaTXNBBsEL/ia1r2mUdrTm5B+PAlo7FtmAvm4eCiwOyxIKh0fr58s281rnJShIGp/A9/JP1vxRudGJRd4=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by BL0PR2101MB1315.namprd21.prod.outlook.com (2603:10b6:208:92::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6023.3; Mon, 9 Jan
+ 2023 19:35:59 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::db1a:4e71:c688:b7b1]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::db1a:4e71:c688:b7b1%5]) with mapi id 15.20.6002.009; Mon, 9 Jan 2023
+ 19:35:59 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>
+CC:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: RE: [Patch v4 00/13] Add PCI pass-thru support to Hyper-V
+ Confidential VMs
+Thread-Topic: [Patch v4 00/13] Add PCI pass-thru support to Hyper-V
+ Confidential VMs
+Thread-Index: AQHZBf6ls2gwLvksLUmfTrf9E/uLCq6WqY8AgAAIE8A=
+Date:   Mon, 9 Jan 2023 19:35:58 +0000
+Message-ID: <BYAPR21MB16885201D61623BB10FC3781D7FE9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
+ <Y7xhLCgCq0MOsqxH@zn.tnic>
+In-Reply-To: <Y7xhLCgCq0MOsqxH@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=84513292-8bf1-459f-9556-a2b04d0fd18e;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-01-09T19:16:01Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BL0PR2101MB1315:EE_
+x-ms-office365-filtering-correlation-id: 6e1e22d7-cbeb-469e-1c52-08daf278bbf8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: spGrd7nMba52+F67MwX913ZxhAjZCOseGSDLTDjYU9SgCPhPeifTMFs3v4pPxsyDTv8Wbah6h0k7f/4IwhYzX4k9hfg3DM2kS9v1HjyvIzTK7MNUfYxB7bba7PWS6SHFkNbfJxRCgJvHgIfati5s2CjXSSoc+gJAvMLppHk8P5H8NNAZhO5QteabMW/hBG8ehq1U1gnHQYba3KxuInVortYi9JgvCsuty9rkC+cNptYOjxdAI1L2O+UPGClU91BZ6qoZXkdPSCG24uCMhBOw+33rx488HP7GoeBE0Qz2KEdmbjuvWBSfIs/zf5EwAQAFSv37RlkT7awNMBXJkqcRTkQb8e43Em77z0zQswrTwi1/0lA/FoTCQpSdCpe55+B5IWnQSedi7fO/8Z5QcbTkgLv5WoQ91PbWjpX4oCAAQuSjLa3zLq2ZnIiL/AuxB3HOsjHJj71cAHWDLXuz9ER8VK3L4kzvvw8XIFrm7eSXmp9/ggZcDJly4ehTqpZwY2mN5BL42cvdS2e8Hk+c8t8DPzwiXkI7iO5iIoItN4WH8Y8i73K8Ok2ouuZj9MQIw2FgSet/rRkanjLEqvJGLTQZ3PuL9SmuPgkAy25L/KUN/FPlBdWSQARYDIgjzQrbMcuuP0pvI5PtO/KTTldu8E3n1LBnf8eDUhDsauIxWHqGBiSB4Hy//Rd3XQN6FJt/Ci/fw48J1oyc4uQPT96STE651HIh0sftHxY1YKj72wdSVcSEmjFRCtagcHLyBVl/r3eJ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199015)(33656002)(38070700005)(2906002)(82960400001)(82950400001)(52536014)(7416002)(7406005)(8936002)(8990500004)(5660300002)(41300700001)(122000001)(86362001)(10290500003)(7696005)(71200400001)(110136005)(54906003)(26005)(186003)(55016003)(38100700002)(6506007)(478600001)(66446008)(66946007)(8676002)(64756008)(316002)(66476007)(4326008)(76116006)(66556008)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3G1XjJWyZBTpG4HUbjimPjaz2LDGr0f3nHSjCsSNRn8TvZAKOFuLPr3OZ87H?=
+ =?us-ascii?Q?Hygduoq2EuqErq+9+UsWQ9OQVMUPhfp7sGaT2NNUFKfvRvztUWb5P6095PTp?=
+ =?us-ascii?Q?bT7z2IGyxPT3YOQ41EEj6EGVujrYguLa0im0aruIZOE3ECkL4lg6E0h+D51S?=
+ =?us-ascii?Q?HbzlomrjYFe4BiFUwNr/dObzEbaCj8S0OYhPEKG3WnV8eK/lF18MBRKeThlh?=
+ =?us-ascii?Q?kaAo7BQWmx/qucayA/Rtq7A1PImjgWbULV4zcxNbgiMSV/Q4DoLcaQGCPnjI?=
+ =?us-ascii?Q?Q55EtTOlNPnOEy1CrMd1xETOYEQCJTeWyEksMaWwz5dMX8iDgEXdg1ak/PDK?=
+ =?us-ascii?Q?nEvyMt+L/uwmQtThdk+KE2wjqB+T0ILroCNFJECobt+VwG/7vH97bQCXjmv+?=
+ =?us-ascii?Q?TUovQBuk1wr1Tl6rzOFPe7EAZbuDYWp96kZIvzShNJK4t9gNtkIjb4tryL2Q?=
+ =?us-ascii?Q?OyQpB9Tvrbc7m4v7zsc+kxEQ15uYnkorIrp+lNEBW3c7ZByXVWJAbnTdaAFB?=
+ =?us-ascii?Q?mTA21BC/OQkk7skVat1LM4vdndWI8RdSkR1T/rQDHpvJDhZuq4rA/AVnwaqE?=
+ =?us-ascii?Q?V0K2KSMz9ZQx8/yTxYBoGrqY7RtPsOyDL8uKTOubr/8GrjXRbOWEUp99E9Zt?=
+ =?us-ascii?Q?arLWlKcDlv125PimErhzl8BGaq4RJwMKKeQ7Ig4Q98erpEqq8vH7yV97VKBL?=
+ =?us-ascii?Q?RhV4X7F26FzmKL7Y/v/YloXbrAbjuM1l5o5OhS2mc+3tL/7wyBANHl4vTqJB?=
+ =?us-ascii?Q?Q5EvItpAwb4XczQl4tLi/8gH+d852xxNMK65JOVEPS6Un8sDuEi9detI2gxf?=
+ =?us-ascii?Q?t/NHhrF/85WcrqeR6AFPXS0GUfTNF/FpdDqaEmvOgczTvoxhbIkSkzKPlymB?=
+ =?us-ascii?Q?EW0wtyiPIV2oIKgmPADsjmXtdTbeRWX8iAj4hAuQDswI90acswwG+0bYR/5/?=
+ =?us-ascii?Q?DPj+SUf0twLqIpoa28b1Xa0Kx13i6gK47Aez/xoqEaLOvLvHAfOvNGsX3+go?=
+ =?us-ascii?Q?TQ5sPvgnzyDwUuqzft2D7dkRiUKRw6eAvL3/enCqOYbi/1hZT5ISDFtXGLRD?=
+ =?us-ascii?Q?+edpRmHcrV3l0T494FaXwUBuYDflAYN036X8J6TEWBmg/+Y50hHMgAfRb0+j?=
+ =?us-ascii?Q?Y8povfpb8ZDeoYsZuqVkxkUT6bk4A6ftpQ/kefNv0HoPGVkQ1WynmuAsbbEy?=
+ =?us-ascii?Q?cjoxpR0XL5cMt78Dkv3BsBm0jRhtWVUqtQrADS/RBBCW0B+mFCPndjffdJmi?=
+ =?us-ascii?Q?qsjF2Dg61tP7LzXZCE65ytQZfgrm4U+5uh7eSD/R8PYunFnSQsyOJeuwlTT1?=
+ =?us-ascii?Q?Y+2RCgObnD4zjJtiuRMLDfsQMO9cUo9EWNxIUqNhg7oOHxVBj/ygEWXV6QFE?=
+ =?us-ascii?Q?Dm4V82EwMDoU5sx5gFgqAVXuo1bhxVP+dRXnNSlHU6STpTd5UDmMDlMjJkAm?=
+ =?us-ascii?Q?S0FskOpevn9lUEKGigBu5l7rx6k3mpJgIM9ppyjH7abQLMbT8xNRadao1I+E?=
+ =?us-ascii?Q?V5o4TF5fSk7xf2ZoW6pWpXZ7zork3Q6CjP2ptwq7PKN/t8rAgpi1bLKhUZ72?=
+ =?us-ascii?Q?3gFyAxdos6fbEZMiQE+HgTjCV2CDgybSWe/POPhqIXJ/dxaycJuxPw6gw+FX?=
+ =?us-ascii?Q?qw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20230106151320.619514-1-irogers@google.com> <CAJ9a7ViGE3UJX02oA42A9TSTKsOozPzdHjyL+OSP4J-9dZFqrg@mail.gmail.com>
- <Y7hZccgOiueB31a+@kernel.org> <Y7hgKMDGzQlankL1@kernel.org>
- <Y7hgoVKBoulCbA4l@kernel.org> <CAP-5=fXPPSHvN6VYc=8tzBz4xtKg4Ofa17zV4pAk0ycorXje8w@mail.gmail.com>
- <Y7wuz6EOggZ8Wysb@kernel.org> <Y7xYimp0h4YT72/N@krava> <CAP-5=fXwO5_kK=pMV09jdAVw386CB0JwArD0BZd=B=xCyWSP1g@mail.gmail.com>
- <CAP-5=fVa51_URGsdDFVTzpyGmdDRj_Dj2EKPuDHNQ0BYgMSzUA@mail.gmail.com>
-In-Reply-To: <CAP-5=fVa51_URGsdDFVTzpyGmdDRj_Dj2EKPuDHNQ0BYgMSzUA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 9 Jan 2023 11:34:44 -0800
-Message-ID: <CAP-5=fVtMEahrPMJNVOqsZGj-GoTxUnWsdzK7M+9F2+DhG_STQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] perf build: Properly guard libbpf includes
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        namhyung@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e1e22d7-cbeb-469e-1c52-08daf278bbf8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 19:35:58.9787
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ki9f1piHY3bBfGuF2kuQ0NXiH9quLpw9JSfS26Z1vtR2DXwWZWDwo82tMW2IsVtOXqFE7D2l0RyGO0BHAUMDtbW3SJASqIKVGyxZI82hITA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR2101MB1315
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,157 +158,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 11:29 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Mon, Jan 9, 2023 at 10:37 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Mon, Jan 9, 2023 at 10:10 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > >
-> > > On Mon, Jan 09, 2023 at 12:12:15PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > > Em Fri, Jan 06, 2023 at 11:06:46AM -0800, Ian Rogers escreveu:
-> > > > > So trying to get build-test working on my Debian derived distro is a
-> > > > > PITA with broken feature detection for options I don't normally use.
-> > > >
-> > > > Its really difficult to have perf building with so many dependent
-> > > > libraries, mowing out some should be in order.
-> > > >
-> > > > > I'll try to fix this.
-> > > >
-> > > > Thanks.
-> > > >
-> > > > > In any case I think I've spotted what is really happening here and it
-> > > > > isn't a failure but a feature :-D The build is specifying
-> > > >
-> > > > I get it.
-> > > >
-> > > > > LIBBPF_DYNAMIC=1 which means you get the libbpf headers from
-> > > > > /usr/include. I think the build is trying to do this on a system with
-> > > > > an old libbpf and hence getting the failures above. Previously, even
-> > > > > though we wanted the dynamic headers we still had a -I, this time for
-> > > > > the install_headers version. Now you really are using the system
-> > > > > version and it is broken. This means a few things:
-> > > > > - the libbpf feature test should fail if code like above is going to fail,
-> > > >
-> > > > Agreed.
-> > > >
-> > > > > - we may want to contemplate supporting older libbpfs (I'd rather not),
-> > > >
-> > > > I'd rather require everybody to be up to the latest trends, but I really
-> > > > don't think that is a reasonable expectation.
-> > > >
-> > > > > - does build-test have a way to skip known issues like this?
-> > > >
-> > > > Unsure, Jiri?
-> > >
-> > > I don't think so it just triggers the build, it's up to the features check
-> > > to disable the feature if the library is not compatible with perf code
-> > >
-> > > could we add that specific libbpf call to the libbpf feature check?
-> >
-> > Looking at the failure closer, the failing code is code inside a
-> > feature check trying to workaround the feature not being present. We
-> > need to do something like:
-> >
-> > ```
-> > diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-> > index 6e9b06cf06ee..a1c3cc230273 100644
-> > --- a/tools/perf/util/bpf-loader.c
-> > +++ b/tools/perf/util/bpf-loader.c
-> > @@ -33,17 +33,18 @@
-> > #include <internal/xyarray.h>
-> >
-> > #ifndef HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS
-> > -int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
-> > -                          struct bpf_insn *new_insns __maybe_unused,
-> > size_t new_insn_cnt __maybe_un
-> > used)
-> > +static int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
-> > +                                 struct bpf_insn *new_insns __maybe_unused,
-> > +                                 size_t new_insn_cnt __maybe_unused)
-> > {
-> >        pr_err("%s: not support, update libbpf\n", __func__);
-> >        return -ENOTSUP;
-> > }
-> >
-> > -int libbpf_register_prog_handler(const char *sec __maybe_unused,
-> > -                                 enum bpf_prog_type prog_type __maybe_unused,
-> > -                                 enum bpf_attach_type exp_attach_type
-> > __maybe_unused,
-> > -                                 const struct
-> > libbpf_prog_handler_opts *opts __maybe_unused)
-> > +static int libbpf_register_prog_handler(const char *sec __maybe_unused,
-> > +                                       enum bpf_prog_type prog_type
-> > __maybe_unused,
-> > +                                       enum bpf_attach_type
-> > exp_attach_type __maybe_unused,
-> > +                                       const void *opts __maybe_unused)
-> > {
-> >        pr_err("%s: not support, update libbpf\n", __func__);
-> >        return -ENOTSUP;
-> > ```
-> >
-> > There are some other fixes necessary too. I'll try to write the fuller
-> > patch but I have no means for testing except for undefining
-> > HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS.
-> >
-> > Thanks,
-> > Ian
->
-> So libbpf_prog_handler_opts is missing in the failing build, this
-> points to a libbpf before 0.8. I'm somewhat concerned that to work
-> around these linkage problems we're adding runtime errors - we may
-> build but the functionality is totally crippled. Is it worth
-> maintaining these broken builds or to just upfront fail the feature
-> test?
->
-> We can also switch the feature tests for LIBBPF_MAJOR_VERSION and
-> LIBBPF_MINOR_VERSION checks. This would have the property of letting
-> us tie the error messages to what version of libbpf is assumed.
->
-> In this case we could have a feature test for the libbpf version and
-> if the version is before libbpf 0.8 fail the feature check. A quick
-> way to do this is:
-> ```
-> diff --git a/tools/build/feature/test-libbpf.c
-> b/tools/build/feature/test-libbpf.c
-> index a508756cf4cc..dadd8186b71d 100644
-> --- a/tools/build/feature/test-libbpf.c
-> +++ b/tools/build/feature/test-libbpf.c
-> @@ -1,6 +1,10 @@
-> // SPDX-License-Identifier: GPL-2.0
-> #include <bpf/libbpf.h>
->
-> +#if (LIBBPF_MAJOR_VERSION == 0) && (LIBBPF_MINOR_VERSION < 8)
-> +#error At least libbpf 0.8 is assumed for Linux tools.
-> +#endif
-> +
-> int main(void)
-> {
->        return bpf_object__open("test") ? 0 : -1;
-> ```
->
-> Thanks,
-> Ian
+From: Borislav Petkov <bp@alien8.de> Sent: Monday, January 9, 2023 10:47 AM
+>=20
+> On Thu, Dec 01, 2022 at 07:30:18PM -0800, Michael Kelley wrote:
+> > This patch series adds support for PCI pass-thru devices to Hyper-V
+> > Confidential VMs (also called "Isolation VMs"). But in preparation, it
+> > first changes how private (encrypted) vs. shared (decrypted) memory is
+> > handled in Hyper-V SEV-SNP guest VMs. The new approach builds on the
+> > confidential computing (coco) mechanisms introduced in the 5.19 kernel
+> > for TDX support and significantly reduces the amount of Hyper-V specifi=
+c
+> > code. Furthermore, with this new approach a proposed RFC patch set for
+> > generic DMA layer functionality[1] is no longer necessary.
+>=20
+> In any case, this is starting to get ready - how do we merge this?
+>=20
+> I apply the x86 bits and give Wei an immutable branch to add the rest of =
+the
+> HyperV stuff ontop?
+>=20
+> --
+> Regards/Gruss,
+>     Boris.
+>=20
 
-Oh, just to note. While failing the feature test is disappointing for
-a libbpf that isn't very old, we have the newer libbpf to statically
-build in. Developers won't be impacted due to the static route. If you
-are a distro maintainer, you should just update your libbpf. So we
-could just bump the API assumption to 1.0 as I believe that'd have the
-advantage of removing feature tests, workarounds, untested code (like
-what broke here), etc.
+I'll let Wei respond on handling the merging.
 
-What do you think?
+I'll spin a v5 in a few days.  Changes will be:
+* Address your comments
 
-Thanks,
-Ian
+* Use PAGE_KERNEL in the arch independent Hyper-V code instead of
+   PAGE_KERNEL_NOENC.  PAGE_KERNEL_NOENC doesn't exist for ARM64, so
+   it causes compile errors when building for ARM64.  Using PAGE_KERNEL mea=
+ns
+   getting sme_me_mask when on x86, but that value will be zero for vTOM VM=
+s.
 
-> > > jirka
-> > >
-> > > >
-> > > > But yeah, previous experiences with Andrii were that we can do not too
-> > > > costly feature checks, not using .c programs that would fail if some
-> > > > required feature wasn't present but instead would just do some grep on a
-> > > > header and if some "smell" wasn't scent, just fail the cap query.
-> > > >
-> > > > - Arnaldo
+* Fix a problem with the virtual TPM device getting mapped decrypted.  Like
+   the IOAPIC, the vTPM is provided by the paravisor, and needs to be mappe=
+d
+   encrypted.   My thinking is to allow hypervisor initialization code to s=
+pecify
+   a guest physical address range to be treated as encrypted, and add a che=
+ck against
+   that range in __ioremap_check_other(), similar to what is done for EFI m=
+emory.
+   Thoughts?  I don't want to change the vTPM driver, and the devm_* interf=
+aces
+   it uses don't provide an option to map encrypted anyway.  But I'm open t=
+o
+   other ideas.
+
+Thanks for the review!
+
+Michael
