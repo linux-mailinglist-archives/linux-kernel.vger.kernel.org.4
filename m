@@ -2,192 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB41A66240F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD23F662421
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 12:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjAILUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 06:20:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
+        id S236807AbjAILWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 06:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbjAILUg (ORCPT
+        with ESMTP id S234642AbjAILW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:20:36 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A801F140EF;
-        Mon,  9 Jan 2023 03:20:34 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 523AE76AF7;
-        Mon,  9 Jan 2023 11:20:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673263233; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8l2x8IYnc4mIIGKCD2KQ71esJRmtX/fZkchd0gq1xRU=;
-        b=Vkrw9nGcuksswnHMzcFwE6rx2PlJf/GwdpKr6YX3QEmP7S905yN9mXlUGMkK6Khy2jxUOR
-        04gUqzIK1G4sgfM+AqvdiJdiVoGPrZnE7cmu7dlX8mXlTNnqO5Xfw8OIY+wf3+OvHX6QtP
-        MB+IcQsOcXWFbvkfTm5HcEmTFE5PW5k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673263233;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8l2x8IYnc4mIIGKCD2KQ71esJRmtX/fZkchd0gq1xRU=;
-        b=M2yYrBNgtQhx8MElF+7qx1epx+CkymT2k5hS1P/7+fIHiFyv5B/Gv/7ItgZCaClgrsPJXC
-        fUe8V4qhx4MQrhAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 45106134AD;
-        Mon,  9 Jan 2023 11:20:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YdDTEIH4u2PwPQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 09 Jan 2023 11:20:33 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D1A31A0749; Mon,  9 Jan 2023 12:20:32 +0100 (CET)
-Date:   Mon, 9 Jan 2023 12:20:32 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, tytso@mit.edu, jack@suse.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, libaokun1@huawei.com, zhanchengbin1@huawei.com
-Subject: Re: [PATCH v2] jbd2: Fix data missing when reusing bh which is ready
- to be checkpointed
-Message-ID: <20230109112032.z4xratnwhyri74xj@quack3>
-References: <20230106115603.2624644-1-chengzhihao1@huawei.com>
- <20230106142255.fqnzgw5tqr77mdzj@quack3>
- <09622c2f-6cf7-79c9-2624-c0c0835d125d@huawei.com>
+        Mon, 9 Jan 2023 06:22:28 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13085183AF
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 03:22:27 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id p3-20020a05600c1d8300b003d9ee5f125bso2234429wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 03:22:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gSDnx7XwWvncd7SQtw1TJ7yLjFxBlIdm/bLYPpk1EZk=;
+        b=w80RKRVtgiVEPsAp22l0W28DLBW5HopDWSqfkWy1ZKW/lYZcS+tWTzf2V6OLiwOSd6
+         xkISqVVl1RnoSfG6eetGlvMRPhbp2yEBpWury5vvOV1585DCNfFZFt9GBbW89Sa2GzGX
+         8GQbxPpmYEmI10S0YONWTrNZTZKSuCJ1TAYmLbHp21bQlpqOdjqj0Nx+rjiS+UHBlU0V
+         cD3ZWbPvOvIiSXhj3cDbc6agKrdh/OwYjy59BQ2Eo4ZDwuGelPx/fudBtMJMbepg8w24
+         jmBmEf2GXqAHd0+AWVaCWbdgLiMsTJHJ/XIcRCAuqIG1+ZWStbWfAHv3e35Sq+3PeNfV
+         0u3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gSDnx7XwWvncd7SQtw1TJ7yLjFxBlIdm/bLYPpk1EZk=;
+        b=Jmr6wCCf0D+uNj0c3xjsCSzD7XC9Muparc9nX8IYC5hyKt0XV6AfLvFyRMmU+n4CDo
+         Ci0XKeNBvELUI7Sdj2lpAn33sBVQqRFKt/+hRBCdNPfcjh679XE7AWnYBVvkzSVLkHEX
+         EtN6HdbzZ7WTGEmCeroL1WD4U8s4qxHRzI5S3iDCRgAzuINvEZey1dZPq+5ogFWemedB
+         OPomSevhyOskYzuDsgmdHG6eREXuZPb881Qm4+WMI0owICgKYUqbEqqhnJjhm/1wYu7/
+         +NMAJi++TLK3XpUrJR+SxZXXpLW9L3vZ87oG6FRo3zt+N2SsdkPa4V8dHGevHmGXbse1
+         fMTw==
+X-Gm-Message-State: AFqh2kot4fOfoK6/JECTAVZlRlh5ZNef6cFE/GJkGX4Mn/KbcTQBp4t5
+        kNtLKiOftxhrLQ7l6KNb3bEIOQ==
+X-Google-Smtp-Source: AMrXdXv5dFCXzOuPJ7DUuslkz76cxLrSMNhrbchJ8eFnG02OjsAKbLQmdbbeIXQASLbAZmX58XfrTw==
+X-Received: by 2002:a05:600c:510b:b0:3d2:392e:905f with SMTP id o11-20020a05600c510b00b003d2392e905fmr46597209wms.24.1673263345614;
+        Mon, 09 Jan 2023 03:22:25 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n14-20020a05600c3b8e00b003b49bd61b19sm17456986wms.15.2023.01.09.03.22.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 03:22:25 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/4] ARM: dts: qcom: align OPP table node name with DT schema
+Date:   Mon,  9 Jan 2023 12:22:18 +0100
+Message-Id: <20230109112221.102473-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <09622c2f-6cf7-79c9-2624-c0c0835d125d@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 07-01-23 17:16:10, Zhihao Cheng wrote:
-> 在 2023/1/6 22:22, Jan Kara 写道:
-> 
-> Hi Jan, thanks for reviewing.Some discussions below:
-> 
-> 
-> > > diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
-> > > index 6a404ac1c178..06a5e7961ef2 100644
-> > > --- a/fs/jbd2/transaction.c
-> > > +++ b/fs/jbd2/transaction.c
-> > > @@ -1010,36 +1010,37 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
-> > >   	 * ie. locked but not dirty) or tune2fs (which may actually have
-> > >   	 * the buffer dirtied, ugh.)  */
-> > > -	if (buffer_dirty(bh)) {
-> > > +	if (buffer_dirty(bh) && jh->b_transaction) {
-> > >   		/*
-> > >   		 * First question: is this buffer already part of the current
-> > >   		 * transaction or the existing committing transaction?
-> > >   		 */
-> > > -		if (jh->b_transaction) {
-> > > -			J_ASSERT_JH(jh,
-> > > -				jh->b_transaction == transaction ||
-> > > -				jh->b_transaction ==
-> > > -					journal->j_committing_transaction);
-> > > -			if (jh->b_next_transaction)
-> > > -				J_ASSERT_JH(jh, jh->b_next_transaction ==
-> > > -							transaction);
-> > > -			warn_dirty_buffer(bh);
-> > > -		}
-> > > +		J_ASSERT_JH(jh, jh->b_transaction == transaction ||
-> > > +			jh->b_transaction == journal->j_committing_transaction);
-> > > +		if (jh->b_next_transaction)
-> > > +			J_ASSERT_JH(jh, jh->b_next_transaction == transaction);
-> > > +		warn_dirty_buffer(bh);
-> > >   		/*
-> > > -		 * In any case we need to clean the dirty flag and we must
-> > > -		 * do it under the buffer lock to be sure we don't race
-> > > -		 * with running write-out.
-> > > +		 * We need to clean the dirty flag and we must do it under the
-> > > +		 * buffer lock to be sure we don't race with running write-out.
-> > >   		 */
-> > >   		JBUFFER_TRACE(jh, "Journalling dirty buffer");
-> > >   		clear_buffer_dirty(bh);
-> > > +		/*
-> > > +		 * Setting jbddirty after clearing buffer dirty is necessary.
-> > > +		 * Function jbd2_journal_restart() could keep buffer on
-> > > +		 * BJ_Reserved list until the transaction committing, then the
-> > > +		 * buffer won't be dirtied by jbd2_journal_refile_buffer()
-> > > +		 * after committing, the buffer couldn't fall on disk even
-> > > +		 * last checkpoint finished, which may corrupt filesystem.
-> > > +		 */
-> > >   		set_buffer_jbddirty(bh);
-> > >   	}
-> > 
-> > So I think the sequence:
-> > 
-> > 	if (buffer_dirty(bh)) {
-> > 		warn_dirty_buffer(bh);
-> > 		JBUFFER_TRACE(jh, "Journalling dirty buffer");
-> > 		clear_buffer_dirty(bh);
-> > 		set_buffer_jbddirty(bh);
-> > 	}
-> > 
-> > can be moved into the branch
-> > 
-> >    	if (jh->b_transaction == transaction ||
-> > 	    jh->b_next_transaction == transaction) {
-> > 
-> > below. That way you can drop the assertions as well because they happen
-> > later in do_get_write_access() again anyway.
-> 
-> 1. If we move the squence:
->  	if (buffer_dirty(bh)) {
->  		warn_dirty_buffer(bh);
->  		JBUFFER_TRACE(jh, "Journalling dirty buffer");
->  		clear_buffer_dirty(bh);
->  		set_buffer_jbddirty(bh);
->  	}
-> 
-> into the branch
-> 
->         if (jh->b_transaction == transaction ||
->  	    jh->b_next_transaction == transaction) {
-> 
-> , then we have a new situation(jh->b_transaction ==
-> journal->j_committing_transaction) to clear buffer dirty, so we need to add
-> an else-branch like(based on v2 patch):
-> --- a/fs/jbd2/transaction.c
-> +++ b/fs/jbd2/transaction.c
-> @@ -1092,6 +1092,10 @@ do_get_write_access(handle_t *handle, struct
-> journal_head *jh,
->                 spin_unlock(&journal->j_list_lock);
->                 unlock_buffer(bh);
->                 goto done;
-> +       } else if (test_clear_buffer_dirty(bh)) {
-> +               warn_dirty_buffer(bh);
-> +               JBUFFER_TRACE(jh, "Journalling dirty buffer");
-> +               set_buffer_jbddirty(bh);
->         }
->         unlock_buffer(bh);
-> 
-> I think we'd better not to move the sequence?
+Bindings expect OPP tables to start with "opp-table".
 
-Oh, you're right. So yeah, keep this sequence where it was.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-> 2. I agree that the assertions in branch 'if (jh->b_transaction)' are
-> redundant, I will remove them in v3. Thanks for pointing that.
+---
 
-OK, thanks!
+Changes since v1:
+1. Add tags.
+2. Re-order nodes
+---
+ arch/arm/boot/dts/qcom-sdx55.dtsi | 14 +++++++-------
+ arch/arm/boot/dts/qcom-sdx65.dtsi | 26 +++++++++++++-------------
+ 2 files changed, 20 insertions(+), 20 deletions(-)
 
-								Honza
+diff --git a/arch/arm/boot/dts/qcom-sdx55.dtsi b/arch/arm/boot/dts/qcom-sdx55.dtsi
+index 5408ff715fbf..a9433d1e4f54 100644
+--- a/arch/arm/boot/dts/qcom-sdx55.dtsi
++++ b/arch/arm/boot/dts/qcom-sdx55.dtsi
+@@ -62,7 +62,13 @@ cpu0: cpu@0 {
+ 		};
+ 	};
+ 
+-	cpu_opp_table: cpu-opp-table {
++	firmware {
++		scm {
++			compatible = "qcom,scm-sdx55", "qcom,scm";
++		};
++	};
++
++	cpu_opp_table: opp-table-cpu {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 
+@@ -87,12 +93,6 @@ opp-1555200000 {
+ 		};
+ 	};
+ 
+-	firmware {
+-		scm {
+-			compatible = "qcom,scm-sdx55", "qcom,scm";
+-		};
+-	};
+-
+ 	psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
+diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
+index d3c661d7650d..619cafb6d9b3 100644
+--- a/arch/arm/boot/dts/qcom-sdx65.dtsi
++++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
+@@ -61,7 +61,19 @@ cpu0: cpu@0 {
+ 		};
+ 	};
+ 
+-	cpu_opp_table: cpu-opp-table {
++	firmware {
++		scm {
++			compatible = "qcom,scm-sdx65", "qcom,scm";
++		};
++	};
++
++	mc_virt: interconnect-mc-virt {
++		compatible = "qcom,sdx65-mc-virt";
++		#interconnect-cells = <1>;
++		qcom,bcm-voters = <&apps_bcm_voter>;
++	};
++
++	cpu_opp_table: opp-table-cpu {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 
+@@ -86,18 +98,6 @@ opp-1497600000 {
+ 		};
+ 	};
+ 
+-	firmware {
+-		scm {
+-			compatible = "qcom,scm-sdx65", "qcom,scm";
+-		};
+-	};
+-
+-	mc_virt: interconnect-mc-virt {
+-		compatible = "qcom,sdx65-mc-virt";
+-		#interconnect-cells = <1>;
+-		qcom,bcm-voters = <&apps_bcm_voter>;
+-	};
+-
+ 	psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.34.1
+
