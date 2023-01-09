@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22622661DC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 05:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E115661DC1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 05:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbjAIEWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 Jan 2023 23:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S234167AbjAIEYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 Jan 2023 23:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236672AbjAIEWL (ORCPT
+        with ESMTP id S236575AbjAIEWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 Jan 2023 23:22:11 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A5213F67;
-        Sun,  8 Jan 2023 20:08:22 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30947Jvn044125;
-        Sun, 8 Jan 2023 22:07:19 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673237239;
-        bh=glU22+kV2C2hEd7YU+VdLxMJhJVm1YatbhfBo3xh9zc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=wEvSEJZimlD8tQutAdTITPzMVWvUz0DRex1yTXSV52oxHGLmdMlGXz3OPm2Hwid2q
-         1jOfLBO+Z9mlUsWWxYYR6zOttf+GM455hCXwVkq09FeggxjOcW+QCR7yy3ZMS0NYWx
-         V6pgM3peU+1qlx7YTOrCkEdCkmw88e8KruXFvu1Y=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30947Ji4108702
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 8 Jan 2023 22:07:19 -0600
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 8
- Jan 2023 22:07:18 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sun, 8 Jan 2023 22:07:18 -0600
-Received: from [172.24.145.182] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30947FBj037285;
-        Sun, 8 Jan 2023 22:07:15 -0600
-Message-ID: <52f276fb-93b3-da8f-c428-05ded94d90cb@ti.com>
-Date:   Mon, 9 Jan 2023 09:37:14 +0530
+        Sun, 8 Jan 2023 23:22:47 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B671403A;
+        Sun,  8 Jan 2023 20:08:37 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-4c186ff0506so98552227b3.6;
+        Sun, 08 Jan 2023 20:08:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lfUhAfUe0FxJ8Sp+tdCY6dlywrY7VMCs/cNi7AdgZBE=;
+        b=FWZ9Jaav4qQ3xMFoOzE5o/da//oWHKnPxg6us77lQFCo1YP3pYLcDR4Z75IO8BrD+n
+         TddMH92Kef6dWP+gU82sQFPKp6s3a6XYLsKiGhC+gZLzrr8Fhr9Msbfhvw1+SuPqVLb9
+         iIYtbv+W1g/Y08C9QDGfcRtKMzOpK1cScTQRVHhJXFxDUFa0h2AQpN9o1+GaJ0xcCM04
+         gNCnJAXJkh4Kco+3o1DmB8GFNMw37hcHmEOcqleQAU8gdcei0AQKkHQEYkvrTb56lNHP
+         GbIc5aLoNbMzWH9m9PAtiRuNX2LMwzcPt0EaHEEEFDXPk+aEpfn6BYuEpGmPjvyb2nMr
+         J35w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lfUhAfUe0FxJ8Sp+tdCY6dlywrY7VMCs/cNi7AdgZBE=;
+        b=XaUvZzYhI27vuxqh5va6vcf2b4pUJOrmWx0H0ZadfE73J9NZmVMlCa/UeSMLvC4VZL
+         X9/uLg1brPKPJ81X+03/Z+UJaWfEivZMzGhxtEafOZ0X4EUil1YrBxCFCmXqHzXN+yVF
+         iqUhUKJSpEIN/Xoq/hBe21tTwLFe8ynOuJwu5VUCfLs0MAX/iLLgZNfsCwfWcGVAlZ54
+         l0/Fus0G3ypRFMGESEheRxCHGXOx67wy+tQC0O884LS+Q8jkqGzlkg/dtSamzTwq6c6v
+         nHLYh22DONze0GiBc7tK3xfQeZSI7Onfj8LxRcvgohsjC2ZO2MfSJXg8pZFT74uh3TCn
+         /T0w==
+X-Gm-Message-State: AFqh2kpkDunGwR+l3DG6YmsBe4VoO3Z9piouwvKS4q6RRJBO/7UPdd8Q
+        DpiJGDTnrYYV4xQPzXdzU12CEYkRLp7VAPsQ7JY4PtXM
+X-Google-Smtp-Source: AMrXdXtAV3XuYW9EwESQWJEEqwtYRsWSm5opH/aqm4YBdqrG5C4OL/1TuMY6Nf2In1l9GHy+AjrI0T5h+ksji3FvR3s=
+X-Received: by 2002:a81:a53:0:b0:3b9:3977:596c with SMTP id
+ 80-20020a810a53000000b003b93977596cmr1515431ywk.271.1673237257372; Sun, 08
+ Jan 2023 20:07:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v7 1/8] arm64: dts: ti: k3-j721s2-main: Add support for
- USB
-Content-Language: en-US
-To:     Matt Ranostay <mranostay@ti.com>, <nm@ti.com>, <afd@ti.com>,
-        <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>,
-        <r-gunasekaran@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221122101616.770050-1-mranostay@ti.com>
- <20221122101616.770050-2-mranostay@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20221122101616.770050-2-mranostay@ti.com>
+References: <20230109033213.3220884-1-quanfafu@gmail.com> <20230108225229.1cef1a67@rorschach.local.home>
+In-Reply-To: <20230108225229.1cef1a67@rorschach.local.home>
+From:   Quanfa Fu <quanfafu@gmail.com>
+Date:   Mon, 9 Jan 2023 12:07:26 +0800
+Message-ID: <CAM4UoyqtOBXRD29x_M==KJtnryC87FhTs2tW65AnDxCc7XgY7g@mail.gmail.com>
+Subject: Re: [PATCH v2] tracing/eprobe: Replace snprintf with memcpy
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,53 +67,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks, I'll check it out.
+Thanks !!
 
-
-On 22/11/22 15:46, Matt Ranostay wrote:
-> From: Aswath Govindraju <a-govindraju@ti.com>
-> 
-> Add support for single instance of USB 3.0 controller in J721S2 SoC.
-> 
-> Reviewed-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> index 8915132efcc1..b4869bff4f22 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> @@ -26,6 +26,20 @@ l3cache-sram@200000 {
->  		};
->  	};
->  
-> +	scm_conf: syscon@104000 {
-> +		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
-> +		reg = <0x00 0x00104000 0x00 0x18000>;
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges = <0x00 0x00 0x00104000 0x18000>;
-> +
-> +		usb_serdes_mux: mux-controller-0 {
-
-This needs binding update :(
-
-+/workdir/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dtb: syscon@104000: 'mux-controller-0' does not match any of the regexes: '^clock-controller@[0-9a-f]+$', '^mux-controller@[0-9a-f]+$', 'phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
-
-make dtbs_check will warn here.
-
-
-> +			compatible = "mmio-mux";
-> +			#mux-control-cells = <1>;
-> +			mux-reg-masks = <0x0 0x8000000>; /* USB0 to SERDES0 lane 1/3 mux */
-> +		};
-> +	};
-> +
-
-[...]
-
--- 
-Regards
-Vignesh
+On Mon, Jan 9, 2023 at 11:52 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Mon,  9 Jan 2023 11:32:13 +0800
+> Quanfa Fu <quanfafu@gmail.com> wrote:
+>
+> > @@ -923,17 +923,17 @@ static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const ch
+> >
+> >       p = ep->filter_str;
+> >       for (i = 0; i < argc; i++) {
+> > -             ret = snprintf(p, len, "%s ", argv[i]);
+> > -             if (ret < 0)
+> > -                     goto error;
+> > -             if (ret > len) {
+> > -                     ret = -E2BIG;
+> > -                     goto error;
+> > -             }
+> > -             p += ret;
+> > -             len -= ret;
+> > +             arg_len = strlen(argv[i]);
+> > +             memcpy((void *)p, argv[i], arg_len);
+> > +
+> > +             if (i == argc - 1)
+> > +                     p[arg_len] = '\0';
+> > +             else
+> > +                     p[arg_len] = ' ';
+> > +
+> > +             p += arg_len + 1;
+> > +             len -= arg_len + 1;
+> >       }
+>
+> The above is too complex. I mentioned strncat() but you could still
+> just keep snprintf() too, which adds the '\0';
+>
+>         for (i = 0; i < argc; i++) {
+>                 if (i)
+>                         ret = snprintf(p, len, " %s", argv[i]);
+>                 else
+>                         ret = snprintf(p, len, "%s", argv[i]);
+>                 p += ret;
+>                 len -= ret;
+>         }
+>
+> -- Steve
+>
+> > -     p[-1] = '\0';
+> >
+> >       /*
+> >        * Ensure the filter string can be parsed correctly. Note, this
