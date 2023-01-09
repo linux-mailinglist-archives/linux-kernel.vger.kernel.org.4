@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5392D661F68
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C88C2661F6B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 Jan 2023 08:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjAIHon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 02:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
+        id S233399AbjAIHtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 02:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbjAIHok (ORCPT
+        with ESMTP id S230458AbjAIHtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 02:44:40 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EE265DE;
-        Sun,  8 Jan 2023 23:44:39 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso11895622pjp.4;
-        Sun, 08 Jan 2023 23:44:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mogBtQpq3BSgZsB+0TUqrFQwLuEgAFoeQ5Lo5JhgnfA=;
-        b=FOn66NlvZXQJSlGNAvprF+Q2wbIqI/1OShWs3bMDR+CC6U9QEbr0ZHcRalM+hBMJsZ
-         po1ADdGHkHMJ+3d41ky/KmgxbXMvc3YoCBi7rBGVTHRQPeZb5EdQxRRj8Wm/OxYCdicP
-         Y2DcdzCkotVyx6yKuBV4POZIlQxADH2alR5pQ6YLs6WnEa9tZE8MjoaFUvxCfdt0s/gS
-         AJ+l2+r+i6ztwdkzbstHERABRkDtF4agXzJIL1ZqmY7NnzeJHwcxBmaRMa+acnde00ZF
-         Su7DBTUVDJp5Wy38XjnxIagsB502WVEhTRPWyYKesqSDrM9wx3Wy6xe+Q5QkgrUYWtpY
-         /FSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mogBtQpq3BSgZsB+0TUqrFQwLuEgAFoeQ5Lo5JhgnfA=;
-        b=lsrnJAMJuveayltHjtZhcrdLsbli6G4N79qjnzFKn/ocLZpLadUm4A4d4mug0K0mdC
-         mAPDc49G8UiagQhZcA9X6BOMV4paO95NipYiLE9MCP8u00zKIQ4neT/mRc7vv3eYQziJ
-         J+PypSjC1m8f0iNCnGDVvV6HB+VHPJa/x1KBvmSFmEC30PkjU1jy30fX+3VkRT1fVzqr
-         zVJ2muQK1g7AjIE/O5rHVYYaiysvWFIt2FlA1fAuseDxw7ikYVA4ocPKi8Ol45Pj59we
-         UF8sQd9zal2XmysMAjn9Y8jRzHg4QcVWX4PbGvkaHeAnh0qUBmtHNGG219KPEUYOkqMN
-         Romw==
-X-Gm-Message-State: AFqh2kpl1hcQqckT5uu8gN/11GSFPBjtWRQo0VaNcV1FZhxNUWTT6qfd
-        9rkYZ8X2AmSXua6IXFb+f91H2lO8ynC1
-X-Google-Smtp-Source: AMrXdXsm3iLHOe/svbZ3KKMgd8UmcR7UNYYBas9TYD1WzYZdweqytRGb4wPVZKzqnek82LFYiUwmBg==
-X-Received: by 2002:a17:902:b782:b0:193:3540:fce5 with SMTP id e2-20020a170902b78200b001933540fce5mr2270505pls.63.1673250278384;
-        Sun, 08 Jan 2023 23:44:38 -0800 (PST)
-Received: from localhost.localdomain ([144.214.0.13])
-        by smtp.gmail.com with ESMTPSA id q18-20020a170902bd9200b00186b7443082sm5370180pls.195.2023.01.08.23.44.35
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 08 Jan 2023 23:44:38 -0800 (PST)
-From:   Hao Sun <sunhao.th@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
-Subject: WARNING in debug_mutex_unlock
-Date:   Mon,  9 Jan 2023 15:44:25 +0800
-Message-Id: <20230109074425.12556-1-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Mon, 9 Jan 2023 02:49:00 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473E313D1B
+        for <linux-kernel@vger.kernel.org>; Sun,  8 Jan 2023 23:48:54 -0800 (PST)
+X-UUID: 58e4959e74f846178f01e511ce0de840-20230109
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=bs2FSxIihXHb6oD1WWcKClwQlo62DnFY7LM0eETIU98=;
+        b=lUcvgIYMKQE/NrQVWMff4Rk5IcBS8pKK6n1hdwu4eZC4HuTA1FrL/Ou0nNyORswl9FsxB2wmKtgMQA/ygQ9wtNh+3+rCXpvJDY+bJDTPNh96q78sgq2HFXeEwXTrIWBgb02lCdECIEz42dqkNEZqvC7ZyKRZs0XPC2rpnC6YiFk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:cd83526b-aac8-453c-abd3-749a726752fb,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.17,REQID:cd83526b-aac8-453c-abd3-749a726752fb,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:543e81c,CLOUDID:6e8b1554-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:230109154849SCUYYH1B,BulkQuantity:0,Recheck:0,SF:28|17|19|48|102,TC:
+        nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,O
+        SI:0,OSA:0
+X-CID-BVR: 1,FCT
+X-UUID: 58e4959e74f846178f01e511ce0de840-20230109
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 139872415; Mon, 09 Jan 2023 15:48:47 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 9 Jan 2023 15:48:46 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 9 Jan 2023 15:48:46 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <catalin.marinas@arm.com>
+CC:     <anders.roxell@linaro.org>, <arnd@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <will@kernel.org>
+Subject: Re: [PATCH] arm64: asm: vdso: gettimeofday: export common variables
+Date:   Mon, 9 Jan 2023 15:48:46 +0800
+Message-ID: <20230109074846.23138-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <YWQ9FTJUMu9PMPpa@arm.com>
+References: <YWQ9FTJUMu9PMPpa@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,77 +67,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Catalin,
 
-The following warning can be triggered with the C reproducer in
-the link. The repro starts 32 threads, each attaches a tracepoint
-into `ext4_mark_inode_dirty`. The prog loads the following insns
-that simply sends signal to current proc, and then wait.
+>On Mon, Oct 11, 2021 at 02:47:56PM +0200, Arnd Bergmann wrote:
+>> On Mon, Oct 11, 2021 at 12:03 PM Will Deacon <will@kernel.org> wrote:
+>> > On Thu, Oct 07, 2021 at 09:57:54PM +0200, Anders Roxell wrote:
+>> > > When building the kernel with sparse enabled 'C=1' the following
+>> > > warnings can be seen:
+>> > >
+>> > > arch/arm64/kernel/vdso/vgettimeofday.c:9:5: warning: symbol '__kernel_clock_gettime' was not declared. Should it be static?
+>> > > arch/arm64/kernel/vdso/vgettimeofday.c:15:5: warning: symbol '__kernel_gettimeofday' was not declared. Should it be static?
+>> > > arch/arm64/kernel/vdso/vgettimeofday.c:21:5: warning: symbol '__kernel_clock_getres' was not declared. Should it be static?
+>> > >
+>> > > Rework so the variables are exported, since these variables are
+>> > > created and used in vdso/vgettimeofday.c, also used in vdso.lds.S.
+>> >
+>> > Hmm, these functions are part of the vDSO and shouldn't be called from the
+>> > kernel, so I don't think it makes sense to add prototypes for them to a
+>> > kernel header, to be honest.
+>> 
+>> It's a recurring problem, and I have recommended this method to Anders as
+>> I don't see any of the alternatives as better.
+>> 
+>> The thing is that both sparse (with make C=1) and gcc/clang (with make W=1)
+>> warn about missing prototypes, and this catches a lot of real bugs. I hope
+>> that we can eventually get to the point of enabling the warning by default for
+>> all files, but that means we need a declaration for each global function and
+>> variable.
+>
+>I don't think there's anything in the asm/vdso/gettimeofday.h that is
+>required by the kernel. However, it gets dragged in via the datapage.h.
+>If I got it right, something like this should avoid it and we can
+>include the prototypes:
+>
+>
 
-Seems issues in queued irq_work with `do_bpf_send_signal`, also
-I'm wondering what if the task in `send_signal_irq_work` exited,
-at the time the callback invoked.
+I tested your patch and I still got the same sparse error. So I was thinking
+that we should keep Anders' arm64/include/asm/vdso/gettimeofday.h part.
 
-This can be reproduced on:
+The following patch works for me (tested with C=1, ARCH=arm64 defconfig)
 
-HEAD commit:    6d0c4b11e743 ("libbpf: Poison strlcpy()")
-git tree:       bpf-next
-console output: https://pastebin.com/raw/ZtVM15Jx
-kernel config : https://pastebin.com/raw/nt6XW0Sz
-C reproducer  : https://pastebin.com/raw/NHqy5tR6
+diff --git a/arch/arm64/include/asm/vdso/gettimeofday.h b/arch/arm64/include/asm/vdso/gettimeofday.h
+index 764d13e2916c..d751aa6af7bf 100644
+--- a/arch/arm64/include/asm/vdso/gettimeofday.h
++++ b/arch/arm64/include/asm/vdso/gettimeofday.h
+@@ -14,6 +14,13 @@
+ 
+ #define VDSO_HAS_CLOCK_GETRES		1
+ 
++extern int __kernel_clock_gettime(clockid_t clock,
++		struct __kernel_timespec *ts);
++extern int __kernel_gettimeofday(struct __kernel_old_timeval *tv,
++		struct timezone *tz);
++extern int __kernel_clock_getres(clockid_t clock_id,
++		struct __kernel_timespec *res);
++
+ static __always_inline
+ int gettimeofday_fallback(struct __kernel_old_timeval *_tv,
+ 			  struct timezone *_tz)
+diff --git a/include/vdso/datapage.h b/include/vdso/datapage.h
+index 73eb622e7663..a8d26d7d042d 100644
+--- a/include/vdso/datapage.h
++++ b/include/vdso/datapage.h
+@@ -121,22 +121,6 @@ struct vdso_data {
+ extern struct vdso_data _vdso_data[CS_BASES] __attribute__((visibility("hidden")));
+ extern struct vdso_data _timens_data[CS_BASES] __attribute__((visibility("hidden")));
+ 
+-/*
+- * The generic vDSO implementation requires that gettimeofday.h
+- * provides:
+- * - __arch_get_vdso_data(): to get the vdso datapage.
+- * - __arch_get_hw_counter(): to get the hw counter based on the
+- *   clock_mode.
+- * - gettimeofday_fallback(): fallback for gettimeofday.
+- * - clock_gettime_fallback(): fallback for clock_gettime.
+- * - clock_getres_fallback(): fallback for clock_getres.
+- */
+-#ifdef ENABLE_COMPAT_VDSO
+-#include <asm/vdso/compat_gettimeofday.h>
+-#else
+-#include <asm/vdso/gettimeofday.h>
+-#endif /* ENABLE_COMPAT_VDSO */
+-
+ #endif /* !__ASSEMBLY__ */
+ 
+ #endif /* __VDSO_DATAPAGE_H */
+diff --git a/include/vdso/gettimeofday.h b/include/vdso/gettimeofday.h
+new file mode 100644
+index 000000000000..0270da504fe3
+--- /dev/null
++++ b/include/vdso/gettimeofday.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++/*
++ * The generic vDSO implementation requires that gettimeofday.h
++ * provides:
++ * - __arch_get_vdso_data(): to get the vdso datapage.
++ * - __arch_get_hw_counter(): to get the hw counter based on the
++ *   clock_mode.
++ * - gettimeofday_fallback(): fallback for gettimeofday.
++ * - clock_gettime_fallback(): fallback for clock_gettime.
++ * - clock_getres_fallback(): fallback for clock_getres.
++ */
++#ifdef ENABLE_COMPAT_VDSO
++#include <asm/vdso/compat_gettimeofday.h>
++#else
++#include <asm/vdso/gettimeofday.h>
++#endif /* ENABLE_COMPAT_VDSO */
+diff --git a/include/vdso/helpers.h b/include/vdso/helpers.h
+index 9a2af9fca45e..cb7a456323e3 100644
+--- a/include/vdso/helpers.h
++++ b/include/vdso/helpers.h
+@@ -6,6 +6,8 @@
+ 
+ #include <vdso/datapage.h>
+ 
++#include <asm/barrier.h>
++
+ static __always_inline u32 vdso_read_begin(const struct vdso_data *vd)
+ {
+ 	u32 seq;
+diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+index ce2f69552003..8c1786ae59d8 100644
+--- a/lib/vdso/gettimeofday.c
++++ b/lib/vdso/gettimeofday.c
+@@ -3,6 +3,7 @@
+  * Generic userspace implementations of gettimeofday() and similar.
+  */
+ #include <vdso/datapage.h>
++#include <vdso/gettimeofday.h>
+ #include <vdso/helpers.h>
+ 
+ #ifndef vdso_calc_delta
 
-func#0 @0
-0: R1=ctx(off=0,imm=0) R10=fp0
-0: (18) r0 = 0x0                      ; R0_w=0
-2: (18) r6 = 0x0                      ; R6_w=0
-4: (18) r7 = 0x0                      ; R7_w=0
-6: (18) r8 = 0x0                      ; R8_w=0
-8: (18) r9 = 0x0                      ; R9_w=0
-10: (18) r1 = 0x700000007             ; R1_w=30064771079
-12: (85) call bpf_send_signal#109     ; R0_w=scalar()
-13: (95) exit
-processed 8 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
 
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-WARNING: CPU: 3 PID: 41309 at kernel/locking/mutex-debug.c:74 debug_mutex_unlock+0x1fc/0x250 kernel/locking/mutex-debug.c:74
-Modules linked in:
-CPU: 3 PID: 41309 Comm: systemd-udevd Not tainted 6.2.0-rc2-00302-g6d0c4b11e743 #153
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-RIP: 0010:debug_mutex_unlock+0x1fc/0x250 kernel/locking/mutex-debug.c:74
-Code: 84 c0 75 59 8b 15 34 92 3a 11 85 d2 0f 84 c5 fe ff ff e9 e6 fe ff ff 48 c7 c6 a0 50 4c 8a 48 c7 c7 a0 4e 4c 8a e8 9e bb 5f 08 <0f> 0b eb b2 e8 bb 9d 6e 00 e9 be fe ff ff e8 b1 9d 6e 00 e9 8b fe
-RSP: 0018:ffffc90012b7f6f8 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff88804145a2d0 RCX: 0000000000000000
-RDX: ffff88803f468000 RSI: ffffffff81671400 RDI: fffff5200256fed1
-RBP: ffffffff929e2a00 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000001 R11: ffffffff90d3f0c3 R12: ffff88804145a2d8
-R13: fffffbfff253c540 R14: ffffffff929e2a00 R15: ffffc90012b7f798
-FS:  00007f36a937e8c0(0000) GS:ffff888135c80000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000056181882c020 CR3: 000000002a9a2000 CR4: 0000000000750ee0
-PKRU: 55555554
-Call Trace:
- <TASK>
- __mutex_unlock_slowpath+0x197/0x630 kernel/locking/mutex.c:933
- devlink_compat_running_version+0x128/0x6c0 net/devlink/leftover.c:12237
- dev_ethtool+0x55f/0x53c0 net/ethtool/ioctl.c:3091
- dev_ioctl+0x29e/0x1050 net/core/dev_ioctl.c:524
- sock_do_ioctl+0x1be/0x250 net/socket.c:1183
- sock_ioctl+0x205/0x6a0 net/socket.c:1286
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x189/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f36a94a55f7
-Code: 00 00 00 48 8b 05 99 c8 0d 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 69 c8 0d 00 f7 d8 64 89 01 48
-RSP: 002b:00007ffd663b3d98 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00005618188043f0 RCX: 00007f36a94a55f7
-RDX: 00007ffd663b3e60 RSI: 0000000000008946 RDI: 0000000000000006
-RBP: 00007ffd663b3e90 R08: 0000561818887fa0 R09: 0000000000000000
-R10: 00007f36a937e6c0 R11: 0000000000000246 R12: 0000561818887fa0
-R13: 0000561818832c70 R14: 00007ffd663b3e60 R15: 0000000000000007
- </TASK>
+thanks,
+Miles
+-- 
+2.18.0
 
