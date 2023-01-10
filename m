@@ -2,241 +2,541 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D7D66482E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97638664843
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbjAJSJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 13:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
+        id S238669AbjAJSKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238949AbjAJSHz (ORCPT
+        with ESMTP id S239043AbjAJSKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 13:07:55 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE38B89
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:05:52 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id t3-20020a6bc303000000b006f7844c6298so7490211iof.23
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:05:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DsPpQXl2ln9dsF59TAVn1ScDwWogVaNrdBMt6IAktRE=;
-        b=tHXOC5nMF8mIQhWGzrXGsby1oWFVPustv12I6APGfxP7daS41RuMspctj6R+WEaZdm
-         hkLdn4pfWyajqEjU/TqMG2tEMmxsaFnY+w2QTbJCRnE2og2oFP8GL8NYFHqYGqESaOqp
-         oeI8GTrtMgriBfmiJHt+tJxivPsbgHibfBjmKSHZkhN1iKttZMT/X5nIYI8vja7mqD8m
-         N7/pMMdIy5XeBoEaZURPzkb/b1/OjdBHyoVdcWYmUcddlCCdZrIg/LoxqEAFrhpq15Gp
-         dSVEg2LyweI4slk1+gM44X6th2y8vaCLx8Ioo7LBJUU6dZ581mrP1lTxTT5InFpeAxmj
-         2YZw==
-X-Gm-Message-State: AFqh2koMkSB7qA688yK9p53muNGjOb5N1/O7AfqnQoNT+c3FMoL3X9xt
-        8+JF//eYnhoLm/AkQHR2u3okUWG5Lhe1HcfL4EpAP3Elt+EC
-X-Google-Smtp-Source: AMrXdXtuO7PHXC/9t6BJRm3T+rtebSqZWTrTlWNeQktyg6HSJXI0bO4GfuDgaAB/0Zl8pI1IO7CMVbb2yx3YzjypDJIRv23jTEPm
+        Tue, 10 Jan 2023 13:10:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F783057D;
+        Tue, 10 Jan 2023 10:07:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FA5F6182C;
+        Tue, 10 Jan 2023 18:07:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C2EDC43396;
+        Tue, 10 Jan 2023 18:07:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673374056;
+        bh=AGOgF1ZPPrdTxyfSIZEDcb9xmWd64xbtfJ9A5hgFu1I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IgCnTH3G3FgzvQdlippRCuQFDMoxbGXlE4894GwcRj+LePdBVP/URXBtFAO2/L3rc
+         Ztd7CkRBxcdJ3DT3rKlvyCbRozcfZjC4GXYOZaYilRyYeLqjmDGdgdIBlHyN2hy3vd
+         ohSAGnpDp2glqvhKfRRusnybi8cRuNjrxcAbin9fu6OFkIZY59x8NXabzoBr4MNKbW
+         6L2xPb+J1DMh5g6qO1OawSySkwqBhz2/KNolUgKWCIHlugmyxrtB17u+6Jbumpqkb/
+         EwZExoYiOdyZTFizfEeYx2kyui2mqH5wHQPrXpO4wCHT/tSofLEm5Qcm95Sp8olUFz
+         h90UyvV2wldMQ==
+Date:   Tue, 10 Jan 2023 12:07:34 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@somainline.org, robimarko@gmail.com,
+        quic_gurus@quicinc.com
+Subject: Re: [PATCH V7 2/2] firmware: qcom: scm: Add wait-queue handling logic
+Message-ID: <20230110180734.gwjaant3sd45ljdd@builder.lan>
+References: <20230110063745.16739-1-quic_sibis@quicinc.com>
+ <20230110063745.16739-3-quic_sibis@quicinc.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:8aa:b0:30c:5f8d:886f with SMTP id
- a10-20020a056e0208aa00b0030c5f8d886fmr3413282ilt.7.1673373952169; Tue, 10 Jan
- 2023 10:05:52 -0800 (PST)
-Date:   Tue, 10 Jan 2023 10:05:52 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fee03205f1ecbb8a@google.com>
-Subject: [syzbot] WARNING: refcount bug in v9fs_vfs_lookup
-From:   syzbot <syzbot+00234de93b9131d4d7d7@syzkaller.appspotmail.com>
-To:     asmadeus@codewreck.org, ericvh@gmail.com,
-        linux-kernel@vger.kernel.org, linux_oss@crudebyte.com,
-        lucho@ionkov.net, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230110063745.16739-3-quic_sibis@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jan 10, 2023 at 12:07:45PM +0530, Sibi Sankar wrote:
+> From: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> 
+> When the firmware (FW) supports multiple requests per VM, multiple requests
+> from the same/different VM can reach the firmware at the same time. Since
+> the firmware currently being used has limited resources, it guards them
+> with a resource lock and puts requests on a wait-queue internally and
+> signals to HLOS that it is doing so. It does this by returning a new return
+> value in addition to success or error: SCM_WAITQ_SLEEP. A sleeping SCM call
+> can be woken up by an interrupt that the FW raises.
+> 
+>   1) SCM_WAITQ_SLEEP:
+> 
+>   	When an SCM call receives this return value instead of success
+>   	or error, FW has placed this call on a wait-queue and has signalled
+> 	HLOS to put it to non-interruptible sleep.
+> 
+> 	Along with this return value, FW also passes to HLOS `wq_ctx` -
+> 	a unique number (UID) identifying the wait-queue that it has put
+> 	the call on, internally. This is to help HLOS with its own
+> 	bookkeeping to wake this sleeping call later.
+> 
+> 	Additionally, FW also passes to HLOS `smc_call_ctx` - a UID
+> 	identifying the SCM call thus being put to sleep. This is also
+> 	for HLOS' bookkeeping to wake this call up later.
+> 
+> 	These two additional values are passed via the a1 and a2
+> 	registers.
+> 
+> 	N.B.: The "ctx" in the above UID names = "context".
+> 
+> The handshake mechanism that HLOS uses to talk to FW about wait-queue
+> operations involves two new SMC calls.
+> 
+>   1) get_wq_ctx():
+> 
+>     	Arguments: 	None
+>     	Returns:	wq_ctx, flags, more_pending
+> 
+>     	Get the wait-queue context, and wake up either one or all of the
+>     	sleeping SCM calls associated with that wait-queue.
+> 
+>     	Additionally, repeat this if there are more wait-queues that are
+>     	ready to have their requests woken up (`more_pending`).
+> 
+>   2) wq_resume(smc_call_ctx):
+> 
+>   	Arguments:	smc_call_ctx
+> 
+>   	HLOS needs to issue this in response to receiving an
+>   	IRQ, passing to FW the same smc_call_ctx that FW
+>   	receives from HLOS via the get_wq_ctx() call.
+> 
+> (The mechanism to wake a SMC call back up is described in detail below)
+> 
+>  VM_1                     VM_2                            Firmware
+>    │                        │                                 │
+>    │                        │                                 │
+>    │                        │                                 │
+>    │                        │                                 │
+>    │      REQUEST_1         │                                 │
+>    ├────────────────────────┼─────────────────────────────────┤
+>    │                        │                                 │
+>    │                        │                              ┌──┼──┐
+>    │                        │                              │  │  │
+>    │                        │     REQUEST_2                │  │  │
+>    │                        ├──────────────────────────────┼──┤  │
+>    │                        │                              │  │  │Resource
+>    │                        │                              │  │  │is busy
+>    │                        │       {WQ_SLEEP}             │  │  │
+>    │                        │◄─────────────────────────────┼──┤  │
+>    │                        │  wq_ctx, smc_call_ctx        │  │  │
+>    │                        │                              └──┼──┘
+>    │   REQUEST_1 COMPLETE   │                                 │
+>    │◄───────────────────────┼─────────────────────────────────┤
+>    │                        │                                 │
+>    │                        │         IRQ                     │
+>    │                        │◄─-------------------------------│
+>    │                        │                                 │
+>    │                        │      get_wq_ctx()               │
+>    │                        ├────────────────────────────────►│
+>    │                        │                                 │
+>    │                        │                                 │
+>    │                        │◄────────────────────────────────┤
+>    │                        │   wq_ctx, flags, and            │
+>    │                        │        more_pending             │
+>    │                        │                                 │
+>    │                        │                                 │
+>    │                        │ wq_resume(smc_call_ctx)         │
+>    │                        ├────────────────────────────────►│
+>    │                        │                                 │
+>    │                        │                                 │
+>    │                        │      REQUEST_2 COMPLETE         │
+>    │                        │◄────────────────────────────────┤
+>    │                        │                                 │
+>    │                        │                                 │
+> 
+> With the exception of get_wq_ctx(), the other SMC call wq_resume() can
+> return WQ_SLEEP (these nested rounds of WQ_SLEEP are not shown in the
+> above diagram for the sake of simplicity). Therefore, introduce a new
+> do-while loop to handle multiple WQ_SLEEP return values for the same
+> parent SCM call.
+> 
+> Request Completion in the above diagram refers to either a success
+> return value (zero) or error (and not SMC_WAITQ_SLEEP)
+> 
+> Also add the interrupt handler that wakes up a sleeping SCM call.
+> 
+> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> Co-developed-by: Sibi Sankar <quic_sibis@quicinc.com>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+> 
+> v7:
+> - Move lookup + wait_for_completion into a single function in qcom_scm [Bjorn]
+> - Simplify completion retrieval [Bjorn]
+> 
+> v6:
+> - Fix misc. nits in the scm driver [Krzysztof]
+> 
+> v5:
+> - Handle the wake_one/wake_all flags [Guru]
+> - Rename flag handler to qcom_scm_waitq_wakeup [Bjorn]
+> - Resume scm call can return ebusy as well handle that scenario by retrying
+>   the original smc call and not the resume call
+> 
+> v4:
+> - platform_set_drvdata will be used by __scm_smc_do_quirk_handle_waitq to
+>   get access to scm struct from device so retain it
+> - Use a single completion as it satisfies all of the current usecases [Bjorn]
+> - Inline scm_get_wq_ctx [Bjorn]
+> - Convert all pr_err to dev_err [Bjorn]
+> - Handle idr_destroy in a thread safe manner [Bjorn]
+> - Misc. Style fixes [Bjorn]
+> 
+> v3:
+> - Fixup irq handling so as not to affect SoCs without the interrupt.
+> - Fix warnings reported by kernel test-bot.
+> 
+>  drivers/firmware/qcom_scm-smc.c | 90 ++++++++++++++++++++++++++++++---
+>  drivers/firmware/qcom_scm.c     | 89 +++++++++++++++++++++++++++++++-
+>  drivers/firmware/qcom_scm.h     |  8 +++
+>  3 files changed, 179 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/firmware/qcom_scm-smc.c b/drivers/firmware/qcom_scm-smc.c
+> index d111833364ba..30999f04749c 100644
+> --- a/drivers/firmware/qcom_scm-smc.c
+> +++ b/drivers/firmware/qcom_scm-smc.c
+> @@ -52,29 +52,101 @@ static void __scm_smc_do_quirk(const struct arm_smccc_args *smc,
+>  	} while (res->a0 == QCOM_SCM_INTERRUPTED);
+>  }
+>  
+> -static void __scm_smc_do(const struct arm_smccc_args *smc,
+> -			 struct arm_smccc_res *res, bool atomic)
+> +static void fill_wq_resume_args(struct arm_smccc_args *resume, u32 smc_call_ctx)
+>  {
+> -	int retry_count = 0;
+> +	memset(resume->args, 0, sizeof(resume->args[0]) * ARRAY_SIZE(resume->args));
+> +
+> +	resume->args[0] = ARM_SMCCC_CALL_VAL(ARM_SMCCC_STD_CALL,
+> +					ARM_SMCCC_SMC_64, ARM_SMCCC_OWNER_SIP,
+> +					SCM_SMC_FNID(QCOM_SCM_SVC_WAITQ, QCOM_SCM_WAITQ_RESUME));
+> +
+> +	resume->args[1] = QCOM_SCM_ARGS(1);
+> +
+> +	resume->args[2] = smc_call_ctx;
+> +}
+> +
+> +int scm_get_wq_ctx(u32 *wq_ctx, u32 *flags, u32 *more_pending)
+> +{
+> +	int ret;
+> +	struct arm_smccc_args get_wq_ctx = {0};
+> +	struct arm_smccc_res get_wq_res;
+> +
+> +	get_wq_ctx.args[0] = ARM_SMCCC_CALL_VAL(ARM_SMCCC_STD_CALL,
+> +				ARM_SMCCC_SMC_64, ARM_SMCCC_OWNER_SIP,
+> +				SCM_SMC_FNID(QCOM_SCM_SVC_WAITQ, QCOM_SCM_WAITQ_GET_WQ_CTX));
+> +
+> +	/* Guaranteed to return only success or error, no WAITQ_* */
+> +	__scm_smc_do_quirk(&get_wq_ctx, &get_wq_res);
+> +	ret = get_wq_res.a0;
+> +	if (ret)
+> +		return ret;
+> +
+> +	*wq_ctx = get_wq_res.a1;
+> +	*flags  = get_wq_res.a2;
+> +	*more_pending = get_wq_res.a3;
+> +
+> +	return 0;
+> +}
+> +
+> +static int __scm_smc_do_quirk_handle_waitq(struct device *dev, struct arm_smccc_args *waitq,
+> +					   struct arm_smccc_res *res)
+> +{
+> +	int ret;
+> +	struct arm_smccc_args resume;
+> +	u32 wq_ctx, smc_call_ctx, flags;
+> +	struct arm_smccc_args *smc = waitq;
+> +
+> +	do {
+> +		__scm_smc_do_quirk(smc, res);
+> +
+> +		if (res->a0 == QCOM_SCM_WAITQ_SLEEP) {
+> +			wq_ctx = res->a1;
+> +			smc_call_ctx = res->a2;
+> +			flags = res->a3;
+> +
+> +			if (!dev)
+> +				return -EPROBE_DEFER;
+> +
+> +			ret = qcom_scm_lookup_completion(wq_ctx);
+> +			if (ret)
+> +				return ret;
+> +
+> +			fill_wq_resume_args(&resume, smc_call_ctx);
+> +			smc = &resume;
+> +		}
+> +	} while (res->a0 == QCOM_SCM_WAITQ_SLEEP);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __scm_smc_do(struct device *dev, struct arm_smccc_args *smc,
+> +			struct arm_smccc_res *res, bool atomic)
+> +{
+> +	int ret, retry_count = 0;
+>  
+>  	if (atomic) {
+>  		__scm_smc_do_quirk(smc, res);
+> -		return;
+> +		return 0;
+>  	}
+>  
+>  	do {
+>  		mutex_lock(&qcom_scm_lock);
+>  
+> -		__scm_smc_do_quirk(smc, res);
+> +		ret = __scm_smc_do_quirk_handle_waitq(dev, smc, res);
+>  
+>  		mutex_unlock(&qcom_scm_lock);
+>  
+> +		if (ret)
+> +			return ret;
+> +
+>  		if (res->a0 == QCOM_SCM_V2_EBUSY) {
+>  			if (retry_count++ > QCOM_SCM_EBUSY_MAX_RETRY)
+>  				break;
+>  			msleep(QCOM_SCM_EBUSY_WAIT_MS);
+>  		}
+>  	}  while (res->a0 == QCOM_SCM_V2_EBUSY);
+> +
+> +	return 0;
+>  }
+>  
+>  
+> @@ -83,7 +155,7 @@ int __scm_smc_call(struct device *dev, const struct qcom_scm_desc *desc,
+>  		   struct qcom_scm_res *res, bool atomic)
+>  {
+>  	int arglen = desc->arginfo & 0xf;
+> -	int i;
+> +	int i, ret;
+>  	dma_addr_t args_phys = 0;
+>  	void *args_virt = NULL;
+>  	size_t alloc_len;
+> @@ -135,13 +207,17 @@ int __scm_smc_call(struct device *dev, const struct qcom_scm_desc *desc,
+>  		smc.args[SCM_SMC_LAST_REG_IDX] = args_phys;
+>  	}
+>  
+> -	__scm_smc_do(&smc, &smc_res, atomic);
+> +	/* ret error check follows after args_virt cleanup*/
+> +	ret = __scm_smc_do(dev, &smc, &smc_res, atomic);
+>  
+>  	if (args_virt) {
+>  		dma_unmap_single(dev, args_phys, alloc_len, DMA_TO_DEVICE);
+>  		kfree(args_virt);
+>  	}
+>  
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (res) {
+>  		res->result[0] = smc_res.a1;
+>  		res->result[1] = smc_res.a2;
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index cdbfe54c8146..19ac506a9b1f 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -4,6 +4,7 @@
+>   */
+>  #include <linux/platform_device.h>
+>  #include <linux/init.h>
+> +#include <linux/interrupt.h>
+>  #include <linux/cpumask.h>
+>  #include <linux/export.h>
+>  #include <linux/dma-mapping.h>
+> @@ -13,6 +14,7 @@
+>  #include <linux/qcom_scm.h>
+>  #include <linux/of.h>
+>  #include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/clk.h>
+>  #include <linux/reset-controller.h>
+> @@ -33,6 +35,7 @@ struct qcom_scm {
+>  	struct clk *iface_clk;
+>  	struct clk *bus_clk;
+>  	struct icc_path *path;
+> +	struct completion waitq_comp;
+>  	struct reset_controller_dev reset;
+>  
+>  	/* control access to the interconnect path */
+> @@ -63,6 +66,9 @@ static const u8 qcom_scm_cpu_warm_bits[QCOM_SCM_BOOT_MAX_CPUS] = {
+>  	BIT(2), BIT(1), BIT(4), BIT(6)
+>  };
+>  
+> +#define QCOM_SMC_WAITQ_FLAG_WAKE_ONE	BIT(0)
+> +#define QCOM_SMC_WAITQ_FLAG_WAKE_ALL	BIT(1)
+> +
+>  static const char * const qcom_scm_convention_names[] = {
+>  	[SMC_CONVENTION_UNKNOWN] = "unknown",
+>  	[SMC_CONVENTION_ARM_32] = "smc arm 32",
+> @@ -1325,11 +1331,79 @@ bool qcom_scm_is_available(void)
+>  }
+>  EXPORT_SYMBOL(qcom_scm_is_available);
+>  
+> +static struct completion *qcom_scm_lookup_wq(struct qcom_scm *scm, u32 wq_ctx)
 
-syzbot found the following issue on:
+This could either be seen as a remnant of the older versions of this
+patch, or a signalling of "place implementation here". I dislike both...
 
-HEAD commit:    247f34f7b803 Linux 6.1-rc2
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1299c9cc480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa9bed8d6a8992a0
-dashboard link: https://syzkaller.appspot.com/bug?extid=00234de93b9131d4d7d7
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=115972c4480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b43f56480000
+Please rename it qcom_scm_assert_valid_wq_ctx() and just reference
+&scm->waitq_comp directly in the two places below.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/05f9a7fca332/disk-247f34f7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ec50c3ad7d48/vmlinux-247f34f7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1446f94b11ed/Image-247f34f7.gz.xz
+> +{
+> +	/* assert wq_ctx is zero */
+> +	if (wq_ctx != 0) {
+> +		dev_err(scm->dev, "No waitqueue found for wq_ctx %d\n", wq_ctx);
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+00234de93b9131d4d7d7@syzkaller.appspotmail.com
+I think you should be more specific here, perhaps:
 
-------------[ cut here ]------------
-refcount_t: underflow; use-after-free.
-WARNING: CPU: 0 PID: 3078 at lib/refcount.c:28 refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
-Modules linked in:
-CPU: 0 PID: 3078 Comm: syz-executor896 Not tainted 6.1.0-rc2-syzkaller-154433-g247f34f7b803 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
-lr : refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
-sp : ffff80000ff2bc10
-x29: ffff80000ff2bc10 x28: ffff0000c626b480 x27: 0000000000000000
-x26: 0000000000000000 x25: 0000000000000000 x24: ffff0000cb86ec8c
-x23: ffff0000c690a040 x22: ffff0000ccd88c00 x21: 00000000ffffffff
-x20: 0000000000000003 x19: ffff80000d95f000 x18: 000000000000005a
-x17: ffff80000c0cd83c x16: 0000000000000001 x15: 0000000000000000
-x14: 0000000000000000 x13: 205d383730335420 x12: 5b5d373634343736
-x11: ff808000081c650c x10: 0000000000000000 x9 : e7557c2201ef4a00
-x8 : e7557c2201ef4a00 x7 : 205b5d3736343437 x6 : ffff80000c0903b4
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0001fefbecc8 x1 : 0000000100000000 x0 : 0000000000000026
-Call trace:
- refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
- __refcount_sub_and_test include/linux/refcount.h:283 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- p9_fid_put include/net/9p/client.h:275 [inline]
- v9fs_vfs_lookup+0x2e8/0x37c fs/9p/vfs_inode.c:778
- __lookup_hash+0xa0/0x164 fs/namei.c:1601
- filename_create+0x108/0x218 fs/namei.c:3807
- do_mknodat+0x120/0x3e8 fs/namei.c:3951
- __do_sys_mknodat fs/namei.c:3992 [inline]
- __se_sys_mknodat fs/namei.c:3989 [inline]
- __arm64_sys_mknodat+0x4c/0x64 fs/namei.c:3989
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-irq event stamp: 0
-hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-hardirqs last disabled at (0): [<ffff8000080f30f0>] copy_process+0x928/0x16ec kernel/fork.c:2197
-softirqs last  enabled at (0): [<ffff8000080f3100>] copy_process+0x938/0x16ec kernel/fork.c:2198
-softirqs last disabled at (0): [<0000000000000000>] 0x0
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-refcount_t: saturated; leaking memory.
-WARNING: CPU: 0 PID: 3078 at lib/refcount.c:22 refcount_warn_saturate+0x160/0x1c8 lib/refcount.c:22
-Modules linked in:
-CPU: 0 PID: 3078 Comm: syz-executor896 Tainted: G        W          6.1.0-rc2-syzkaller-154433-g247f34f7b803 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : refcount_warn_saturate+0x160/0x1c8 lib/refcount.c:22
-lr : refcount_warn_saturate+0x160/0x1c8 lib/refcount.c:22
-sp : ffff80000ff2bb60
-x29: ffff80000ff2bb60 x28: ffff0000ccd88c00 x27: ffff0000c68ffe58
-x26: 00000000c0000001 x25: ffff0000cb86ec8c x24: 0000000000000000
-x23: 0000000000000000 x22: ffff0000cb86ec80 x21: 0000000000000000
-x20: 0000000000000001 x19: ffff80000d95f000 x18: 000000000000005a
-x17: ffff80000c0cd83c x16: 0000000000000002 x15: 0000000000000000
-x14: 0000000000000000 x13: 205d383730335420 x12: 5b5d383739373337
-x11: ff808000081c650c x10: 0000000000000000 x9 : e7557c2201ef4a00
-x8 : e7557c2201ef4a00 x7 : 205b5d3837393733 x6 : ffff80000c0903b4
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000026
-Call trace:
- refcount_warn_saturate+0x160/0x1c8 lib/refcount.c:22
- __refcount_inc include/linux/refcount.h:250 [inline]
- refcount_inc include/linux/refcount.h:267 [inline]
- p9_fid_get include/net/9p/client.h:262 [inline]
- v9fs_fid_find fs/9p/fid.c:115 [inline]
- v9fs_fid_lookup_with_uid+0x8a0/0xa80 fs/9p/fid.c:167
- v9fs_fid_lookup+0xc8/0xdc fs/9p/fid.c:300
- v9fs_parent_fid fs/9p/fid.h:14 [inline]
- v9fs_vfs_mknod_dotl+0x64/0x414 fs/9p/vfs_inode_dotl.c:847
- v9fs_vfs_create_dotl+0x40/0x54 fs/9p/vfs_inode_dotl.c:226
- vfs_create+0x1c8/0x270 fs/namei.c:3115
- do_mknodat+0x274/0x3e8 fs/namei.c:3964
- __do_sys_mknodat fs/namei.c:3992 [inline]
- __se_sys_mknodat fs/namei.c:3989 [inline]
- __arm64_sys_mknodat+0x4c/0x64 fs/namei.c:3989
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-irq event stamp: 0
-hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-hardirqs last disabled at (0): [<ffff8000080f30f0>] copy_process+0x928/0x16ec kernel/fork.c:2197
-softirqs last  enabled at (0): [<ffff8000080f3100>] copy_process+0x938/0x16ec kernel/fork.c:2198
-softirqs last disabled at (0): [<0000000000000000>] 0x0
----[ end trace 0000000000000000 ]---
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000048
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010743b000
-[0000000000000048] pgd=080000010b9e9003, p4d=080000010b9e9003, pud=080000010b856003, pmd=0000000000000000
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 3078 Comm: syz-executor896 Tainted: G        W          6.1.0-rc2-syzkaller-154433-g247f34f7b803 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : p9_client_rpc+0x4c/0x548 net/9p/client.c:675
-lr : p9_client_rpc+0x4c/0x548 net/9p/client.c:662
-sp : ffff80000ff2bb00
-x29: ffff80000ff2bb80 x28: 0000000000000000 x27: ffff0000c68ffea0
-x26: ffff0000c626b480 x25: ffff0000cb86ec80 x24: ffff0000c68fff10
-x23: 0000000000008000 x22: 0000000000000000 x21: ffff80000cf52863
-x20: 0000000000000012 x19: 0000000000000000 x18: 000000000000005a
-x17: ffff80000c0cd83c x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000008000 x12: ffff80000d4f0680
-x11: ff8080000be7a890 x10: 0000000000000000 x9 : ffff80000be7a890
-x8 : ffff0000c626b480 x7 : 0000000000000000 x6 : 0000000000000000
-x5 : 0000000000008000 x4 : ffff0000c68fff10 x3 : 0000000000000000
-x2 : ffff80000cf52863 x1 : 0000000000000012 x0 : 0000000000000000
-Call trace:
- p9_client_rpc+0x4c/0x548 net/9p/client.c:662
- p9_client_mknod_dotl+0x70/0x100 net/9p/client.c:2115
- v9fs_vfs_mknod_dotl+0x1b0/0x414 fs/9p/vfs_inode_dotl.c:865
- v9fs_vfs_create_dotl+0x40/0x54 fs/9p/vfs_inode_dotl.c:226
- vfs_create+0x1c8/0x270 fs/namei.c:3115
- do_mknodat+0x274/0x3e8 fs/namei.c:3964
- __do_sys_mknodat fs/namei.c:3992 [inline]
- __se_sys_mknodat fs/namei.c:3989 [inline]
- __arm64_sys_mknodat+0x4c/0x64 fs/namei.c:3989
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: a9019be5 f90017e7 f81f83a8 9710b221 (f9402668) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	a9019be5 	stp	x5, x6, [sp, #24]
-   4:	f90017e7 	str	x7, [sp, #40]
-   8:	f81f83a8 	stur	x8, [x29, #-8]
-   c:	9710b221 	bl	0xfffffffffc42c890
-* 10:	f9402668 	ldr	x8, [x19, #72] <-- trapping instruction
+	"Firmware unexpectedly passed non-zero wq_ctx\n"
 
+And then as suggested a comment stating what needs to be done when that
+happens.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> +		return ERR_PTR(-EINVAL);
+> +	}
+> +
+> +	return &scm->waitq_comp;
+> +}
+> +
+> +int qcom_scm_lookup_completion(u32 wq_ctx)
+> +{
+> +	struct completion *wq = NULL;
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+You assign it on the very next line, no need to do so here.
+
+> +
+> +	wq = qcom_scm_lookup_wq(__scm, wq_ctx);
+> +	if (IS_ERR(wq))
+> +		return PTR_ERR(wq);
+> +
+> +	wait_for_completion(wq);
+> +
+> +	return 0;
+> +}
+> +
+> +static int qcom_scm_waitq_wakeup(struct qcom_scm *scm, unsigned int wq_ctx, bool wake_all)
+> +{
+> +	struct completion *wq_to_wake;
+
+"wq" would be sufficient.
+
+Thanks,
+Bjorn
+
+> +
+> +	wq_to_wake = qcom_scm_lookup_wq(scm, wq_ctx);
+> +	if (IS_ERR(wq_to_wake))
+> +		return PTR_ERR(wq_to_wake);
+> +
+> +	if (wake_all)
+> +		complete_all(wq_to_wake);
+> +	else
+> +		complete(wq_to_wake);
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t qcom_scm_irq_handler(int irq, void *data)
+> +{
+> +	int ret;
+> +	struct qcom_scm *scm = data;
+> +	u32 wq_ctx, flags, more_pending = 0;
+> +
+> +	do {
+> +		ret = scm_get_wq_ctx(&wq_ctx, &flags, &more_pending);
+> +		if (ret) {
+> +			dev_err(scm->dev, "GET_WQ_CTX SMC call failed: %d\n", ret);
+> +			goto out;
+> +		}
+> +
+> +		if (flags != QCOM_SMC_WAITQ_FLAG_WAKE_ONE &&
+> +		    flags != QCOM_SMC_WAITQ_FLAG_WAKE_ALL) {
+> +			dev_err(scm->dev, "Invalid flags found for wq_ctx: %u\n", flags);
+> +			goto out;
+> +		}
+> +
+> +		ret = qcom_scm_waitq_wakeup(scm, wq_ctx, !!(flags & QCOM_SMC_WAITQ_FLAG_WAKE_ALL));
+> +		if (ret)
+> +			goto out;
+> +	} while (more_pending);
+> +
+> +out:
+> +	return IRQ_HANDLED;
+> +}
+> +
+>  static int qcom_scm_probe(struct platform_device *pdev)
+>  {
+>  	struct qcom_scm *scm;
+>  	unsigned long clks;
+> -	int ret;
+> +	int irq, ret;
+>  
+>  	scm = devm_kzalloc(&pdev->dev, sizeof(*scm), GFP_KERNEL);
+>  	if (!scm)
+> @@ -1402,6 +1476,19 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>  	__scm = scm;
+>  	__scm->dev = &pdev->dev;
+>  
+> +	init_completion(&__scm->waitq_comp);
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0) {
+> +		if (irq != -ENXIO)
+> +			return irq;
+> +	} else {
+> +		ret = devm_request_threaded_irq(__scm->dev, irq, NULL, qcom_scm_irq_handler,
+> +						IRQF_ONESHOT, "qcom-scm", __scm);
+> +		if (ret < 0)
+> +			return dev_err_probe(scm->dev, ret, "Failed to request qcom-scm irq\n");
+> +	}
+> +
+>  	__get_convention();
+>  
+>  	/*
+> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+> index db3d08a01209..018e9867d55a 100644
+> --- a/drivers/firmware/qcom_scm.h
+> +++ b/drivers/firmware/qcom_scm.h
+> @@ -60,6 +60,9 @@ struct qcom_scm_res {
+>  	u64 result[MAX_QCOM_SCM_RETS];
+>  };
+>  
+> +int qcom_scm_lookup_completion(u32 wq_ctx);
+> +int scm_get_wq_ctx(u32 *wq_ctx, u32 *flags, u32 *more_pending);
+> +
+>  #define SCM_SMC_FNID(s, c)	((((s) & 0xFF) << 8) | ((c) & 0xFF))
+>  extern int __scm_smc_call(struct device *dev, const struct qcom_scm_desc *desc,
+>  			  enum qcom_scm_convention qcom_convention,
+> @@ -129,6 +132,10 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+>  #define QCOM_SCM_SMMU_CONFIG_ERRATA1		0x03
+>  #define QCOM_SCM_SMMU_CONFIG_ERRATA1_CLIENT_ALL	0x02
+>  
+> +#define QCOM_SCM_SVC_WAITQ			0x24
+> +#define QCOM_SCM_WAITQ_RESUME			0x02
+> +#define QCOM_SCM_WAITQ_GET_WQ_CTX		0x03
+> +
+>  /* common error codes */
+>  #define QCOM_SCM_V2_EBUSY	-12
+>  #define QCOM_SCM_ENOMEM		-5
+> @@ -137,6 +144,7 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+>  #define QCOM_SCM_EINVAL_ARG	-2
+>  #define QCOM_SCM_ERROR		-1
+>  #define QCOM_SCM_INTERRUPTED	1
+> +#define QCOM_SCM_WAITQ_SLEEP	2
+>  
+>  static inline int qcom_scm_remap_error(int err)
+>  {
+> -- 
+> 2.17.1
+> 
