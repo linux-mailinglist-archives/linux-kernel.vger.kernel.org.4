@@ -2,150 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311CE664E77
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7220F664E81
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjAJWEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 17:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
+        id S231455AbjAJWFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 17:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbjAJWEx (ORCPT
+        with ESMTP id S233940AbjAJWFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 17:04:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7C34D711
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 14:04:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90D93618F6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 22:04:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF08C433EF;
-        Tue, 10 Jan 2023 22:04:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673388292;
-        bh=sXKQH9MHPwjOGWbA5cDyPTWbK0WzJz55SrsR2+i9tYY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j7h6E7zc8athO1Q5AWD2+pZqe1vxLYAx7h0qd8ud8mwzfeW3B0vBXGXhFbKO53NjT
-         bGTfuw7X+QD64wZtno1TYG/CcWiMKTZqKK4bJxS5ghfMloAA0b/yb+hQMRSepclgYZ
-         f1sYdryDdJCwupYZ0g37IluYQ9ubjezKdvU5zHFwuKyshnKCSB9j/IWtK9LPq2/5bG
-         F4lpcT6rqnWE2wdjp3Jc+JL1iYp2Hm7Agq9cvIA4FX9PONmBP3LoicLBiQAt/gKIe3
-         CHDydOenDqT1Cjx/s2ZT9Oc62BwmH8Rwu/BeUUFGBOXAQoFLVzYm3O64p/jn1LKtBE
-         3JX8q7vpqgbBg==
-Date:   Tue, 10 Jan 2023 22:04:46 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Vineet Gupta <vineetg@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        palmer@rivosinc.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, Guo Ren <guoren@kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>, linux@rivosinc.com,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] riscv: elf: add .riscv.attributes parsing
-Message-ID: <Y73g/nkDe7Sfp9ps@spud>
-References: <20230110201841.2069353-1-vineetg@rivosinc.com>
+        Tue, 10 Jan 2023 17:05:12 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5CF6219B;
+        Tue, 10 Jan 2023 14:05:11 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id 18so19683383edw.7;
+        Tue, 10 Jan 2023 14:05:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WrKmlWHDUV61DahQUIaVkiL3+243B01IgkXVVlGEa8Y=;
+        b=IU6f2FJsgTYlQlUxPC3SgJJ3nHFscGea08quQshVivr8hFfTaCsq0s0LtncJiE9VM6
+         3mP91XMs097IQMqGrGDeR9Q+Nn9BKmtDOAQCWiDZ2Q8eVwcQryoz9SH1KeWnpPHN45c3
+         rPkRe1EqQB8QmpZv3Xy+dztrHgOb2VFHNMCQaPsGirHXniNzQLu5bPySZcqFWzYtaPmq
+         5A2dtC34COH9kL8iMQXmAHCiJ4F7MQp47VlpgBt+vNEbw1EwcfbsX8aGYfoKUM8gt1hz
+         GDPLFshOAOL8YRSF/7Z9ozAVNX/9vQQ2R1X1DLFRvX0Cj+ub7mHHtQz157FGqOyEOaRD
+         YtfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WrKmlWHDUV61DahQUIaVkiL3+243B01IgkXVVlGEa8Y=;
+        b=QgDf5nTv+yAN18kKdiPKO8rTPLJTbBnR7UZ6YoYmVmniPdrg+g/QQYmCtoa0qAQRNX
+         lcZ7TPFtzj1wEYFwvj89tPvBTWGqdhcnG2K9zTPJwQmcpadPFEJq6rVeFBIz9N3iYo78
+         Ieb04EmGw0FpTp6j7ESrsPOcb+IF/KqAOGg8OVjICMamRTZB8VZiDBev+f++URHNwKYs
+         5NE0SjUOT3eSfqAGp2Z4YSIWrufw/k3awvHkbdEaSKfpptMUSPA3algFSREZV02N0JBI
+         NLvsQMYdLOzub805SLcRs3//S8NfkBd74fA7hN1nym17jXiJnnnnV54YbUnyJs4x1l5+
+         iLnQ==
+X-Gm-Message-State: AFqh2ko4ZfbrA2OTRBKkBHrczX3rqwFUDXPYb00Yfx8OuBcbvIGSN6mt
+        hvxn88dOZjMKLDojMs3YWw/95FOL6kayzS1t+y4=
+X-Google-Smtp-Source: AMrXdXslMt+extOJ67lNrPk/gzoVhLdRWwj56JScPZGQacLbHpwmoFzQ7g3CAvQIElO72fbF6+niQAf0El2SmKxOxfk=
+X-Received: by 2002:a05:6402:78b:b0:494:cb79:1ff3 with SMTP id
+ d11-20020a056402078b00b00494cb791ff3mr2392529edy.291.1673388309924; Tue, 10
+ Jan 2023 14:05:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="XzBgRjeUQy7ALPqW"
-Content-Disposition: inline
-In-Reply-To: <20230110201841.2069353-1-vineetg@rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v2-3-36ad050bb625@linaro.org> <5c59d432-3785-8eaa-af77-03fee09b5fd3@linaro.org>
+In-Reply-To: <5c59d432-3785-8eaa-af77-03fee09b5fd3@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 10 Jan 2023 23:04:58 +0100
+Message-ID: <CAFBinCCjDLN5owiD1x5UNcBiE7P6czkS1wrSYKn-bBPCHQxT9Q@mail.gmail.com>
+Subject: Re: [PATCH v2 03/11] dt-bindings: nvmem: convert amlogic-meson-mx-efuse.txt
+ to dt-schema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Neil, Hi Krzysztof,
 
---XzBgRjeUQy7ALPqW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hey Vineet,
-
-While you're at it with Jess' concerns, couple nitpicks for you.
-May as well say them now rather than while a v2 comes around.
-
-On Tue, Jan 10, 2023 at 12:18:41PM -0800, Vineet Gupta wrote:
-
-> Reported-by: kernel test robot <lkp@intel.com>  # code under CONFIG_COMPAT
-
-You can drop this, even if it reported against a private branch AFAIU,
-just like its complaints about patches. As Greg would say, LKP didn't
-report a feature!
-
-> diff --git a/arch/riscv/kernel/elf-attr.c b/arch/riscv/kernel/elf-attr.c
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023-24 Rivos Inc.
-
-s/-24//
+On Tue, Jan 10, 2023 at 11:15 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+[...]
+> > +  secure-monitor:
+> > +    description: phandle to the secure-monitor node
+>
+> Missing $ref
+Actually this IP does not connect to a secure-monitor. So the
+secure-monitor property can be removed.
 
 
-> +static u64
-> +decode_uleb128(unsigned char **dpp)
-
-Surely that fits inside 80?
-
-> +static int rv_parse_elf_attributes(struct file *f, const struct elf_phdr *phdr,
-> +				   struct arch_elf_state *state)
-> +{
-> +	unsigned char buf[RV_ATTR_SEC_SZ];
-> +	unsigned char *p;
-> +	ssize_t n;
-> +	int ret = 0;
-> +	loff_t pos;
-> +
-> +	pr_debug("Section .riscv.attributes found\n");
-> +
-> +	/* Assume a reasonable size for now */
-> +	if (phdr->p_filesz > sizeof(buf))
-> +		return -ENOEXEC;
-> +
-> +	memset(buf, 0, RV_ATTR_SEC_SZ);
-> +	pos = phdr->p_offset;
-> +	n = kernel_read(f, &buf, phdr->p_filesz, &pos);
-> +
-> +	if (n < 0)
-> +		return -EIO;
-> +
-> +	p = buf;
-> +	p++;				/* format-version (1B) */
-> +
-> +	while ((p - buf) < n) {
-> +
-
-While I'm already passing through, checkpatch isn't the biggest fan of
-your whitespace after open braces:
-
-https://gist.github.com/conor-pwbot/a572e395763916c7716cab9c870df4f3
-
-> +		unsigned char *vendor_start;
-> +		u32 len;
-> +
-> +		/*
-> +		 * Organized as "vendor" sub-section(s).
-> +		 * Current only 1 specified "riscv"
-
-Is it worth having a comment like this that may rapidly go out of date?
-
-Cheers,
-Conor.
-
-
---XzBgRjeUQy7ALPqW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY73g/gAKCRB4tDGHoIJi
-0qX7AP9ZTbJkjWiFBAlQ+CxEuOs0Tppz2YmYXfKW9ZHqLM2Z4gEA9K3DUGLckpu9
-mZT4QzW5RzFFFFu2FuteHImu27Nw7w4=
-=TpDw
------END PGP SIGNATURE-----
-
---XzBgRjeUQy7ALPqW--
+Best regards,
+Martin
