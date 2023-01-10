@@ -2,121 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E07E6646E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4006E6646E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbjAJRAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
+        id S232003AbjAJRBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 12:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbjAJRAA (ORCPT
+        with ESMTP id S233674AbjAJRBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:00:00 -0500
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E14A380;
-        Tue, 10 Jan 2023 08:59:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1673370000; x=1704906000;
-  h=references:from:to:cc:subject:date:in-reply-to:
-   message-id:mime-version;
-  bh=v0FHnqz++7WAyCUdZ4a39D9ZNS9Mj+/iD1X/Rx7tWI4=;
-  b=hOSplJKNcnwv7w8M77WMlrFQXDw/P49OpFHcgkmX0OiGLuoGFvCo1Q2T
-   WeEkScKgEccpX538NKE2xFObQt7EiLzl2LhmwlloPHIl+ZDRqxsY+ug62
-   qx9/LmmIaJ41fRXlofc0/ff5CQGjyZbQ9QDeVqNw0/ib0bSSuqo6tNIWt
-   s=;
-X-IronPort-AV: E=Sophos;i="5.96,315,1665446400"; 
-   d="scan'208";a="285208024"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 16:59:53 +0000
-Received: from EX13D48EUB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com (Postfix) with ESMTPS id 6920741664;
-        Tue, 10 Jan 2023 16:59:51 +0000 (UTC)
-Received: from EX19D028EUB003.ant.amazon.com (10.252.61.31) by
- EX13D48EUB001.ant.amazon.com (10.43.166.179) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Tue, 10 Jan 2023 16:59:50 +0000
-Received: from u570694869fb251.ant.amazon.com.amazon.com (10.43.160.120) by
- EX19D028EUB003.ant.amazon.com (10.252.61.31) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.7; Tue, 10 Jan 2023 16:59:40 +0000
-References: <20230108143843.2987732-1-trix@redhat.com>
- <CANn89iLFtrQm-E5BRwgKFw4xRZiOOdWg-WTFi5eZsg7ycq2szg@mail.gmail.com>
-User-agent: mu4e 1.6.10; emacs 28.0.91
-From:   Shay Agroskin <shayagr@amazon.com>
-To:     Eric Dumazet <edumazet@google.com>
-CC:     Tom Rix <trix@redhat.com>, <akiyano@amazon.com>,
-        <darinzon@amazon.com>, <ndagan@amazon.com>, <saeedb@amazon.com>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <nathan@kernel.org>, <ndesaulniers@google.com>, <khalasa@piap.pl>,
-        <wsa+renesas@sang-engineering.com>, <yuancan@huawei.com>,
-        <tglx@linutronix.de>, <42.hyeyoo@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: Re: [PATCH] net: ena: initialize dim_sample
-Date:   Tue, 10 Jan 2023 18:58:37 +0200
-In-Reply-To: <CANn89iLFtrQm-E5BRwgKFw4xRZiOOdWg-WTFi5eZsg7ycq2szg@mail.gmail.com>
-Message-ID: <pj41zlpmbmba16.fsf@u570694869fb251.ant.amazon.com>
+        Tue, 10 Jan 2023 12:01:09 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBF76302;
+        Tue, 10 Jan 2023 09:01:04 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B644C6602D2A;
+        Tue, 10 Jan 2023 17:01:02 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673370062;
+        bh=HrdE2o6CJtMLfe6kBvN/SET4X3fpGFmG4oO76QwkFQg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mQaRAIgSqCYn60wLEk2Oxjna89BtnbObavyXDy3q0iN071F/S1YMSr10SQSL1PXKH
+         vUNFSYKyPS3RbsdnIYd3Z4y2yAqQVYBr5tNiEXIW/xxh8xjy/kaYrMiA89O8aWxUrG
+         lsKlVYMPautNjM5J6yR0uPgu2xWPTMja2LrGMfsG/p7nBLaIkSfMq1qJKKNIgpilND
+         8E8JJGdfZ/TWSMULeNtJl3unGD77Hp77xGLTzzquDiGnG+AlgVVkSHRNy3LGKQiTu6
+         n8Onz+7WNfAtp9jyoHfgG/y9sETqGmgAEI7O+R4cOwNEPsFEaKB/ByBh2lApT818Wl
+         EdWZGKkUewG4w==
+Message-ID: <a440a001-e9d8-ff8a-32c0-68df328d1c89@collabora.com>
+Date:   Tue, 10 Jan 2023 18:01:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed
-X-Originating-IP: [10.43.160.120]
-X-ClientProxiedBy: EX13D45UWA002.ant.amazon.com (10.43.160.38) To
- EX19D028EUB003.ant.amazon.com (10.252.61.31)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] pr_info("I changed uvcvideo driver in the Linux
+ Kernel\n");
+Content-Language: en-US
+To:     Xiaxi Shen <shenxiaxi26@gmail.com>
+Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221230034634.7809-1-shenxiaxi26@gmail.com>
+ <49d1dece-cb90-23f3-977e-98905b1a0abc@collabora.com>
+ <CABtBSabksqweaDjhSVEaETYtCoQCVE1stPN7wwJr=eLPEU3X2w@mail.gmail.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <CABtBSabksqweaDjhSVEaETYtCoQCVE1stPN7wwJr=eLPEU3X2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Eric Dumazet <edumazet@google.com> writes:
-
-> On Sun, Jan 8, 2023 at 3:38 PM Tom Rix <trix@redhat.com> wrote:
->>
->> clang static analysis reports this problem
->> drivers/net/ethernet/amazon/ena/ena_netdev.c:1821:2: warning: 
->> Passed-by-value struct
->>   argument contains uninitialized data (e.g., field: 
->>   'comp_ctr') [core.CallAndMessage]
->>         net_dim(&ena_napi->dim, dim_sample);
->>         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> net_dim can call dim_calc_stats() which uses the comp_ctr 
->> element,
->> so it must be initialized.
->
-> This seems to be a dim_update_sample() problem really, when 
-> comp_ctr
-> has been added...
->
-> Your patch works, but we could avoid pre-initializing dim_sample 
-> in all callers,
-> then re-writing all but one field...
->
-> diff --git a/include/linux/dim.h b/include/linux/dim.h
-> index 
-> 6c5733981563eadf5f06c59c5dc97df961692b02..4604ced4517268ef8912cd8053ac8f4d2630f977
-> 100644
-> --- a/include/linux/dim.h
-> +++ b/include/linux/dim.h
-> @@ -254,6 +254,7 @@ dim_update_sample(u16 event_ctr, u64 
-> packets, u64
-> bytes, struct dim_sample *s)
->         s->pkt_ctr   = packets;
->         s->byte_ctr  = bytes;
->         s->event_ctr = event_ctr;
-> +       s->comp_ctr  = 0;
->  }
->
->  /**
-
 Hi,
 
-I'd rather go with Eric's solution to this issue than zero the 
-whole struct in ENA
+W dniu 10.01.2023 o 00:39, Xiaxi Shen pisze:
+> Hi Andrzej,
+> 
+> Thanks for your advice.
+> It is my first time to send a patch, I will definitely check my explanation 
+> according to relevant guidelines before my future submission
 
-Thanks,
-Shay
+I recommend reading:
+
+Documentation/process/*.
+
+Regards,
+
+Andrzej
+
+> 
+> Yours sincerely,
+> Xiaxi Shen
+> 
+> Andrzej Pietrasiewicz <andrzej.p@collabora.com <mailto:andrzej.p@collabora.com>> 
+> 于2023年1月9日周一 08:14写道：
+> 
+>     Hello XiaxiShen,
+> 
+>       From Documentation/process/researcher-guidelines.rst:
+> 
+>     "The Linux kernel community expects that everyone interacting with the
+>     project is participating in good faith to make Linux better."
+> 
+>     Please explain how your patch will make Linux better. "I added a pr_info()
+>     which emits information unrelated to work of the driver" is not enough of an
+>     explanation.
+> 
+>     Failing to do so and to adhere to the expectation quoted above
+>     you risk any patches to the kernel submitted by you being disregarded.
+> 
+>     Andrzej
+> 
+>     W dniu 30.12.2022 o 04:46, XiaxiShen pisze:
+>      > Signed-off-by: XiaxiShen <shenxiaxi26@gmail.com
+>     <mailto:shenxiaxi26@gmail.com>>
+>      > ---
+>      >   drivers/media/usb/uvc/uvc_driver.c | 2 ++
+>      >   1 file changed, 2 insertions(+)
+>      >
+>      > diff --git a/drivers/media/usb/uvc/uvc_driver.c
+>     b/drivers/media/usb/uvc/uvc_driver.c
+>      > index e4bcb5011360..60778a5a2b4e 100644
+>      > --- a/drivers/media/usb/uvc/uvc_driver.c
+>      > +++ b/drivers/media/usb/uvc/uvc_driver.c
+>      > @@ -2082,6 +2082,8 @@ static int uvc_probe(struct usb_interface *intf,
+>      >               (const struct uvc_device_info *)id->driver_info;
+>      >       int function;
+>      >       int ret;
+>      > +     pr_info("I changed uvcvideo driver in the Linux Kernel\n");
+>      > +
+>      >
+>      >       /* Allocate memory for the device and initialize it. */
+>      >       dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+> 
+
