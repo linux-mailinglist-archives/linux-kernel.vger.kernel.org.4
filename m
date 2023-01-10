@@ -2,144 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3B7664FFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7076A664FFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235063AbjAJXhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 18:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
+        id S234901AbjAJXhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 18:37:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjAJXhA (ORCPT
+        with ESMTP id S231230AbjAJXhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 18:37:00 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6CE58332
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:36:58 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id j7so8372358wrn.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:36:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fxOjkVkboXRnISG7GaZo9vjhTrmTTUvqEXeMahatA7M=;
-        b=WjR2YnPJqFFObwyC0JtfVB5IfTk7/pOBxZoJx3koapx+PjfwufQCb/S8O89Ts8nHej
-         Z4jpnzoSjcV5USy/jnGO9utG98Hpc4tieOC+9LfAgzr4MtWXUUSrCOEQVG0jCCiChnn+
-         C9b9i8nVxRzHe76M9+HaZLOOUfmrqJido/mTt8roLyMIk0r+MQCSyQ3DkgwlEKPKFXPu
-         Gp/66WAU1048EX7Q7TE/S/yTScJxMnNJg8rxSKNS1yXBg6xtTWrRytzZmdji3NHww8Nu
-         jA6uf31OGyfHb+k9oKakjOu7eaSAsvVZWX/+euRLQn7g5iJVIuw3VcZyH5HTLbwf4UHX
-         sTcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fxOjkVkboXRnISG7GaZo9vjhTrmTTUvqEXeMahatA7M=;
-        b=cJ6DjlTDmaIGVfRhfm7hpjzGq1a90+rG1Gf84erPHleOtLbgdmjK96ZUA+nGoN8PWh
-         P4dwnh+xzrki0iJlPnpxSnmiL2+F8ynS1W6Zu5wUIfpDb4Jkqy7KCV2Mylx0DW+dYRH8
-         rxaGxUapeJfNYjeVG8r6gPRPLbDign3JsddcUbcCwqG2O89FWebV9RZArQdeg5yoOclI
-         DA5eXJFJr6YdpUb+G3HPa1u42R+j/FDGWc5gxuLIpZOOvPiXCsCnp2IB+PYZj5hAOUzh
-         8jTNd1D/rSRUamGxVG5SS4ZNBigP5N4/66/3Eg4QVOG21BzaGNAa++5aZAKXn+lsUXtQ
-         UwXA==
-X-Gm-Message-State: AFqh2kpKu1fVaJLaMrDp42fFBpZfFtDDXhQmEaGNBFmqoMe5yEtbhqDT
-        jnmp/fyFu35Up6EAh5vSCiiReg==
-X-Google-Smtp-Source: AMrXdXv+YWValqJb6tVXeuld6jcHpgsCyBCn4r8Fp8XunPfyWjoD2u8VSVdiWKodErTXk7y5vAPqhA==
-X-Received: by 2002:adf:a4de:0:b0:2a9:89e:2b53 with SMTP id h30-20020adfa4de000000b002a9089e2b53mr15529548wrb.45.1673393817487;
-        Tue, 10 Jan 2023 15:36:57 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id t14-20020adfeb8e000000b002baa780f0fasm12191553wrn.111.2023.01.10.15.36.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 15:36:56 -0800 (PST)
-Message-ID: <49f02945-0f37-b046-dae7-417ab0148bff@linaro.org>
-Date:   Tue, 10 Jan 2023 23:36:56 +0000
+        Tue, 10 Jan 2023 18:37:32 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4383FA18
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:37:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9D2YNhHDkVVEE9exXgu2G8l0Gdzt+6c/8Zgvq7MbNk4=; b=Sjj1Q8i/5JCjKJwX2QoJ62PkLk
+        /uXUFegZaMH110XdeXPDa7Nf8mstFvH8Lokf8KJD9YfMR6z9R0HY/m00W4RFnCo3NOR1x6f7+pNBD
+        4v0Pq1DN85w7SSvxHxXKPj1PesvzdINMnk3e675/uMBzreG/Yc4J/83X+zmqWrX7fUW17vlpuvvL3
+        276abmFJQPMlXWjc85PnkFb/3VjsRz+9qdzh+CiTvq8B4pngsCZh87OpOe6ig5vOW84dzW7lusnGz
+        EaQ4VzBIkaIqeRmFxv7rzCQkaj5QNJpURnat7AbshrLDUOPBvvQcGRHIe29wwrmqNLU5hHcOBbHLh
+        HL/4pbLg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pFOBJ-003cWt-Mg; Tue, 10 Jan 2023 23:37:25 +0000
+Date:   Tue, 10 Jan 2023 23:37:25 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] mm: compaction: Remove redundant VM_BUG_ON() in
+ compact_zone()
+Message-ID: <Y732taMH+r/QGcgD@casper.infradead.org>
+References: <cover.1673342761.git.baolin.wang@linux.alibaba.com>
+ <740a2396d9b98154dba76e326cba5e798b640ead.1673342761.git.baolin.wang@linux.alibaba.com>
+ <Y71qNeLNeiBB5a/+@casper.infradead.org>
+ <20230110152532.8b2d34bf04d7b8e9a4e39130@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 03/10] interconnect: qcom: rpm: Always set QoS params
- on QNoC
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230110132202.956619-1-konrad.dybcio@linaro.org>
- <20230110132202.956619-4-konrad.dybcio@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230110132202.956619-4-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110152532.8b2d34bf04d7b8e9a4e39130@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 13:21, Konrad Dybcio wrote:
-> On newer SoCs, QoS parameters and RPM bandwidth requests are wholly
-> separate. Setting one should only depend on the description of the
-> interconnect node and not whether the other is present. If we don't
-> vote through RPM, QoS parameters should be set regardless, as we're
-> requesting additional bandwidth by setting the interconnect clock
-> rates.
+On Tue, Jan 10, 2023 at 03:25:32PM -0800, Andrew Morton wrote:
+> On Tue, 10 Jan 2023 13:37:57 +0000 Matthew Wilcox <willy@infradead.org> wrote:
 > 
-> With NoC (the old-SoC bus type), this is not the case and they are
-> mutually exclusive (so, the current upstream logic is correct).
+> > On Tue, Jan 10, 2023 at 09:36:18PM +0800, Baolin Wang wrote:
+> > > The compaction_suitable() will never return values other than COMPACT_SUCCESS,
+> > > COMPACT_SKIPPED and COMPACT_CONTINUE, so after validation of COMPACT_SUCCESS
+> > > and COMPACT_SKIPPED, we will never hit other unexpected case. Thus remove
+> > > the redundant VM_BUG_ON() validation for the return values of compaction_suitable().
+> > 
+> > I don't understand why we'd remove this check.
 > 
-> For BIMC however, newer SoCs expect QoS params to be always set
-> (like QNoC) whereas older ones (like MSM8998) hang up completely when
-> doing so, hence this will be addressed in the next commit.
+> Well, just from code inspection it serves no purpose.
 > 
-> The Fixes tag references the commit in which this logic was added, it
-> has since been shuffled around to a different file, but it's the one
-> where it originates from.
-> 
-> Fixes: f80a1d414328 ("interconnect: qcom: Add SDM660 interconnect provider driver")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/interconnect/qcom/icc-rpm.c | 20 ++++++++++++++++----
->   1 file changed, 16 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index cd1eab3d93ba..0516b74abdc7 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -246,15 +246,27 @@ static int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
->   static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
->   			  u64 sum_bw)
->   {
-> +	struct qcom_icc_provider *qp = to_qcom_provider(n->provider);
-> +	bool vote_ap, vote_rpm;
->   	int ret;
->   
-> -	if (!qn->qos.ap_owned) {
-> -		/* send bandwidth request message to the RPM processor */
-> +	if (qp->type == QCOM_ICC_QNOC) {
-> +		vote_ap = true;
-> +		vote_rpm = true;
-> +	} else {
-> +		vote_ap = qn->qos.ap_owned;
-> +		vote_rpm = !vote_ap;
-> +	}
-> +
-> +	if (vote_rpm) {
-> +		/* Send bandwidth request message to the RPM processor */
->   		ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
->   		if (ret)
->   			return ret;
-> -	} else if (qn->qos.qos_mode != -1) {
-> -		/* set bandwidth directly from the AP */
-> +	}
-> +
-> +	if (vote_ap && qn->qos.qos_mode != NOC_QOS_MODE_INVALID) {
-> +		/* Set QoS params from the AP */
->   		ret = qcom_icc_qos_set(n, sum_bw);
->   		if (ret)
->   			return ret;
+> Such an assertion might be useful during early code development, but I
+> think we can consider compaction_suitable() to adequately debugged by
+> now?
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+What if compaction_suitable() is modified to return another value?
+This seems like a relatively innocuous check.
