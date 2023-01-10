@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FFA664565
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D221A664551
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238861AbjAJPyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
+        id S238610AbjAJPvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234632AbjAJPyX (ORCPT
+        with ESMTP id S238508AbjAJPvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:54:23 -0500
-X-Greylist: delayed 196 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 Jan 2023 07:54:21 PST
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F454C72E;
-        Tue, 10 Jan 2023 07:54:20 -0800 (PST)
+        Tue, 10 Jan 2023 10:51:08 -0500
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFCC266A;
+        Tue, 10 Jan 2023 07:51:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1673366057;
-        bh=3fg3syAbmIaZWNk40gjo2tn+vj9YYWyQmPN36W7+evE=;
-        h=From:To:Cc:Subject:Date;
-        b=M6Q9HWQQjHhp5NyWsMQyO97J6Hr+HMz2XKr6RPqhDXY4BOO75UZpdgmOQxsb+5WMd
-         IuPcZ+X/ClLkzhuA4BaTZp9HQNAHhSXj7Dd7vTAmQ6EffNbVD09e8Z7YPVg8CMMsg8
-         qWNevyhu68DL/N/WzPFlUALkw/2n6cQY9T+zkKx8=
+        s=s201512; t=1673365856;
+        bh=H7P7j0DldiMjNlQt7A+LpXPyB5yVc97aFwFru494oJQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=UWtLUEj2nBijSLREco5KwmzjKbydBNDd/xq8f6GK5T0q0k00ekHUGHp2K6WFNdDuL
+         qjU/On1bPgqS/HJr5f6SIFor2gre+nkp8FqIsOn1bAgXS2wljRPsnhL6BI2IZo8HqY
+         RrVbyrY1YkxiLovjJsOTtPIk4VVULh/SO1Z5a0E0=
 Received: from localhost.localdomain ([2409:8a4c:808f:5b0:d92f:83a8:9ac7:4de5])
         by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
         id C9A3CA11; Tue, 10 Jan 2023 23:50:26 +0800
-X-QQ-mid: xmsmtpt1673365826tygdrm88h
-Message-ID: <tencent_1CF967E6E0A317C2036BA5D18D813DDCD909@qq.com>
-X-QQ-XMAILINFO: OQwUWlGGdA3tdg1KQ62p4QXK3Fc8nVzKJhAyXM2+bl41VENpqZmjzl8/RO9e8j
-         FzqwGTwpg0GCREkeYw2NoXA7qjFdMn6inhQRBAdnXcAQuxcpsfL/a0T/l6SLxPmYCQdwmD+g6Q6q
-         aBrorB0OYw65zl/OD7NVIJAnE7voHyAs/wc2gWG538tsv+RO3hhZppQIdZsK/9YeMENFeIqTAbcg
-         dZjmphTJw4KQhcAdiy7AHi8SFq3Y5oxw9TxBqLLGNnV1sESr0coWXgM9ld+yPx0NqYxSKfYDlSMz
-         yziiK1Kp0vajkpqtqTcSYU6+W3Q94FfPwJEtMBhKcvrQCyFl6Zz/s1SEPcMfbsYLIfC3fGq8deyN
-         vK+9VZKfX3KVA1pEL3xlDNzFrJku+ei1phCtsclS8NaDxXaEMCNL0IcJusefIT++K/pUwJSZpJnk
-         4jG1WVGXfKF9lxxiqpcowAKWpraeZ/vvSmwGqnj5cGGv9Ny+8jheSnpUK9t/9TTt27QxS24Evw1f
-         lXEbmVG4ZRtMeIbM1JREY5rePYFIE0u/wxh9L1Cs6bziBoQ3TJGWFhs0nt6IK5E+tvKfhgjiz8ph
-         SsMg9qqxyPIGWVfMZ0Qp1EfUy91PdQqO16T2D/zRbN5SoLOxB2j1rA+IcapfxakAkGcCAJQPtaQB
-         mINPwjky+rg29Mf3fV11N4H/tHb5kG1kRMz7ad6xs3fAsoj00gycodYUQdT0VeGrHjIxsQzmZf36
-         LoefqKEckSZsOIpVoD9+GmFJRjE6neg+au/51ddcwj+Pghsl0zz46rlljsuSo+gQtCYEn1UBbfLn
-         2xpTxzcVD1TJVGTdbVHrewf/0DbYFijIZa11jApMnNvom1/rYnH6ZfQ3OlR+zJz+5yqLqgDYqWOB
-         quYljBVMNCAOfxYZTQIDIHR2tsP6JoIv18t65/YtwgtReQ7zVvJyDsA8W24gLKKE/i+h/pfoWg4y
-         LPF0eTzhYXIl/ymaGeKrCRtmM+k2rzQB/LPDPrjgcB08ai7J+ZIAqPRhAUY6PP2o3vYjWGYC1BMR
-         Oz1GUlCA==
+X-QQ-mid: xmsmtpt1673365854tna3jf7ur
+Message-ID: <tencent_89603CF732FEF0B9A2E88CF0E45A62F42D07@qq.com>
+X-QQ-XMAILINFO: NGsJ5Fy+2UsSw0v8rXZxyCjscayR4Kbp+t6W7A5V1sMNZU33oPOSbLUlSJorSe
+         wrEHBFDThEDK+2YOvIcLOVklIk4jEIUxVo1lJqmHxTqXhwVrF5pIkP7BDRul1Jj9LR6rMUPsumGR
+         TcuZXFsdFUxOb8hGJDHkSzwSbnt1SlrIgDjunrjlDANgKCVXJa0Eo0RlymTHyKMdZuhijmx9VPsM
+         eaJ9nL9MpVC5iHDA6+SJTuL1Qlc67xWWWfqP+TSH8mBplSs/MoseADh92ZEXjJdGykj5qGpThgUL
+         /1mxBrM1pICiqgf+93mcZXFvq9KsTMFJ67M8wzPFYWzUAIVvc6Yd6YPysPuVbhK5oX/DXPjx1X39
+         pyefxkzuC7gB/PsdXbpOhh7CMjmcsTNtM1kznm5b8juRfovMuWKiUe6mK3eW0k+JZfkPEQbTG3eE
+         t97KUDPc9N2WxtXh2atiT7Vw9S/1Z+tOtKA0VPKQKTt60hd0SoiqVOHxlzi/y/sPR3JvLugmQzCW
+         l1pD+hM0Fr/VW0CLhox4dXk5vi82ZyfAHiRl3QhPQsJP31qIsS3Sc4MogvF8/gqdZ7nugaZ6xYG1
+         ewuWb8MWQfjfaQiDMZxJOjpjbyYiflbDd1CH+GhE2bZL+0LIULFJ5/8MLViS3DKjgF3D7vZjRaZY
+         D6wU/f6vwoliFIh+yR/kVZq94CE/YqaR1jGoD1z/lUAanECgbdSb+O+CA9MZzhOxQb+4yCTGuA+W
+         OJoqwTXyTJhxf16dGdmGKvnoZx3PRkea1UDgYZ71hydRWK+LwRccOI/9SmCFeAVw7ZIOZoOJdE5T
+         e2x59Itbsf7yt2QR8CdisQG6xc5et4KB613tb+q9SiHGie5RBR4vxtBg32GLqROR6r8oFXlBE+Xp
+         1BG7FX4FW+ct91GSPp5NDmeH84AS0rH8VSzpv1QAjvtBA0KofM4Lo4uT45s1QxC1ifCBIuKiKLog
+         NYAbVEmBjrJC8JCoWIm9QX9lrONHd4N6Ke90T+HJEIHFWk2p1EwFxZM5AOQqMMzuMz1lR8NlpPpg
+         tvH0zxG7vEgkf084agE+AAJk5AsBnQ0a/v8glY0A==
 From:   Yang Xiwen <forbidden405@foxmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -55,10 +54,12 @@ Cc:     Jaime Breva <jbreva@nayarsystems.com>,
         Nikita Travkin <nikita@trvn.ru>,
         ~postmarketos/upstreaming@lists.sr.ht,
         Yang Xiwen <forbidden405@foxmail.com>
-Subject: [PATCH 0/3] Support for various MSM8916-based USB sticks
-Date:   Tue, 10 Jan 2023 23:50:11 +0800
-X-OQ-MSGID: <20230110155014.31664-1-forbidden405@foxmail.com>
+Subject: [PATCH 1/3] dt-bindings: vendor-prefixes: add zhihe
+Date:   Tue, 10 Jan 2023 23:50:12 +0800
+X-OQ-MSGID: <20230110155014.31664-2-forbidden405@foxmail.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230110155014.31664-1-forbidden405@foxmail.com>
+References: <20230110155014.31664-1-forbidden405@foxmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,27 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vendor is unknown. Zhihe is a widely used name to refer to such
-sticks in some forums.
+zhihe is a placeholder for various 4G USB dongles made by unknown
+manufactures with similar design. It is widely used in China to refer to
+these dongles.
 
-Yang Xiwen (3):
-  dt-bindings: vendor-prefixes: add zhihe
-  dt-bindings: qcom: Ducument bindings for new msm8916-zhihe-uf896 and
-    msm8916-zhihe-ufi001c
-  arm64: dts: qcom: msm8916-zhihe: Add initial device tree for zhihe
-    Wifi/LTE dongle UFI-001C and uf896
+Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../devicetree/bindings/arm/qcom.yaml         |   2 +
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- arch/arm64/boot/dts/qcom/Makefile             |   2 +
- .../boot/dts/qcom/msm8916-zhihe-uf896.dts     |  41 +++
- .../boot/dts/qcom/msm8916-zhihe-ufi001c.dts   |  39 +++
- arch/arm64/boot/dts/qcom/msm8916-zhihe.dtsi   | 246 ++++++++++++++++++
- 6 files changed, 332 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-zhihe-uf896.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-zhihe-ufi001c.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-zhihe.dtsi
-
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 3893c45963a26..795627741a322 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1520,6 +1520,8 @@ patternProperties:
+     description: Zealz
+   "^zeitec,.*":
+     description: ZEITEC Semiconductor Co., LTD.
++  "^zhihe,.*":
++    description: Placeholder for various 4G USB dongles made by unknown manufactures with similar design
+   "^zidoo,.*":
+     description: Shenzhen Zidoo Technology Co., Ltd.
+   "^zii,.*":
 -- 
 2.39.0
 
