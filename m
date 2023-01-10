@@ -2,97 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8F2663C4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57506663C4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjAJJJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
+        id S235654AbjAJJIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237992AbjAJJHy (ORCPT
+        with ESMTP id S238018AbjAJJIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:07:54 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEC94EC9C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:07:53 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id g10so8263635wmo.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:07:53 -0800 (PST)
+        Tue, 10 Jan 2023 04:08:18 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90BB193CB
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:08:17 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id bn26so11019060wrb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:08:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7JbaxC7KPieHLp+g5p9tmnTTK4fIMEmiIEMJJms0GZ4=;
-        b=zQAoaBT8syYTjq/VlJv6oSVm1PPkQlXAL2RZQE0RInE74XU48Z10cR7uTFMV3tPGi2
-         B6JPTTK7nJvGTu6APUx3VIkQCfsUiCWXBkAdgb0kWyERoOrPTKZjpXPSX6WezXRsMMZy
-         uUNRpc7GaUQz6GRaIc2O1PDNyttUlwJH+zJYsLlvg1YXhSiyzf6wtZdrosT3L5R39H03
-         fl0oE7UEMnxUpqKpHoz7dk2XeVP/itmoeLA0qC580aUwBPH+RiJAZuGrO6rxccKsDoh9
-         kS9tdJBHedoVZ/Z4Rt8xJ9gSrxlY5ftL1a0Nfu7dzZnNqJnHri/G4amtVqozh3U/vJn+
-         wGcg==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WPQWPSxoU9g+tHgANim1El1aIeSrs5lAIlGeJQ/iAUo=;
+        b=baYRSU5TlZzYpwDw5/drH/W3znMW4SbvOg52qV2Sc3I6HGnQ5I7xeozyLAW5+7g/1w
+         pvzmye02CKflawpFq82kjjkZIakLJ6VGCrh+wmK4eASSHR/9f2K80I5tmxBhWW2Csg2g
+         tVhXu5QPfc6B0iPu+o9Az+uQvMvQIXNIJB3aIKP/02zOwCMlRNXXfbRqlbogHHAuRc+E
+         NeVNiH/Nm7qQvStnt9C2sxdq5GOpJAiOEBWUkP1mvjKP1Tbohh22QJYv7g2GuMvglWcz
+         AJ98jwehQW2fvz+ZdTa2c4MuJ+viE9/34dTaiqZLoGy85O2+rq/8v/cpE6KBl01xytGu
+         BoJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7JbaxC7KPieHLp+g5p9tmnTTK4fIMEmiIEMJJms0GZ4=;
-        b=M90Jl8oDQj975NmshHBz5fRZ9YoNb9H0R0I7pXKJOaS70qNs98/3jyzEToIsPuImv+
-         AJn1G0/jTgoPSevb9kbt/r8PlrA/ZN23dO6xYa2WP9qZfc2T0TdTL8fXZWZvH9t+DLJa
-         Py4HFGoZ3xceP2C0JrXYU7prU+4qnjuHf63w68EoPMWqhxskJCBxkNq3zinZUX0n5gAa
-         oNCfhdktUwP6Jfqm6PQY+7zcRUaE/Axf4rC9B7qfVBj8lKZFAZyTXxyZndBQnHQaws/i
-         YPDCLqPrTtevCW+UitMEQcvccDkSTX5cIu3glHHbugSscaiv2XhtSirB84kt/52JJMX2
-         XBgQ==
-X-Gm-Message-State: AFqh2ko18t0uP9u+kXcF+q+so5wlThe2h7Yt6IrBF9mP8pIAna2tqQl4
-        nbL76hmqwTuRT4dladuR9GNb4g==
-X-Google-Smtp-Source: AMrXdXs6ZSGkTV66Vz7LmN9fgcIN/7pcFQbA/DwdXkepR6WdHGhSJpt/3Tqxt+j9manNylw8VlkBKw==
-X-Received: by 2002:a05:600c:1da3:b0:3d0:965f:63ed with SMTP id p35-20020a05600c1da300b003d0965f63edmr49170877wms.23.1673341672120;
-        Tue, 10 Jan 2023 01:07:52 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id fc14-20020a05600c524e00b003a3442f1229sm21206674wmb.29.2023.01.10.01.07.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 01:07:51 -0800 (PST)
-Message-ID: <f2d70c17-e519-fbde-eb61-1acba70a59a0@linaro.org>
-Date:   Tue, 10 Jan 2023 10:07:49 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WPQWPSxoU9g+tHgANim1El1aIeSrs5lAIlGeJQ/iAUo=;
+        b=s6LjIeoO+zRpwQ7/JK3HCFYU27DKmb9oz9dCII8qB/hbyI1W4SmVLgvE7JWZTxMQSk
+         d6poNi/ixdvYAk0WcBey5ZTyIOq2DGMxOWlXBpOZ42t0MEeI1vOJoHYAqBHd1FVxkqRk
+         B6CefLci1rSNbRcbY9oYRce1qT3XCIjMZUk6Fw85EfrwLFsrznheZ+stL27bkwB/zOj6
+         cFgKQv8U+8So9bqxQnIqoh8/TFda9MlCX7hevYpbMjmPw6w5EUvCHWpFCtDg6+nqmoxh
+         1JpqTRo9VpiPDPd6znlFAbZVa3I8ZueKak2cWT8Zv2bJrFbdjDyjAEeAWgxVgtvGSPDM
+         N09Q==
+X-Gm-Message-State: AFqh2kqgCL04zgmbAxtc4iVwdqGkalb1ourPEkdMf3L4N/Hefhi6wxQT
+        XHP6Ny7PiSxTd1TlEY106EWd8g==
+X-Google-Smtp-Source: AMrXdXv/jicjrV3wBiaQqng88Wp6io2VWNESvO+szaZxEwhtwb3SVnTmq/1/MT6KhAFr4tB32vK46Q==
+X-Received: by 2002:adf:ec85:0:b0:291:4088:a634 with SMTP id z5-20020adfec85000000b002914088a634mr25299420wrn.40.1673341696365;
+        Tue, 10 Jan 2023 01:08:16 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id j15-20020a5d452f000000b0028f9132e9ddsm10583427wra.39.2023.01.10.01.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 01:08:15 -0800 (PST)
+Date:   Tue, 10 Jan 2023 10:08:15 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     JeeHeng Sia <jeeheng.sia@starfivetech.com>
+Cc:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: Re: [PATCH v2 3/3] RISC-V: Add arch functions to support
+ hibernation/suspend-to-disk
+Message-ID: <20230110090815.fskdrmnbaig4yelz@orel>
+References: <20230109062407.3235-1-jeeheng.sia@starfivetech.com>
+ <20230109062407.3235-4-jeeheng.sia@starfivetech.com>
+ <20230109193624.iiuguwgimpn7zbyw@orel>
+ <6638291f6a3c463994919ba0a875472c@EXMBX066.cuchost.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 1/5] dt-bindings: hwmon: adi,ltc2945: Add binding
-Content-Language: en-US
-To:     Jonathan Cormier <jcormier@criticallink.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>
-References: <20221214220727.1350784-3-jcormier@criticallink.com>
- <20230109233534.1932370-1-jcormier@criticallink.com>
- <20230109233534.1932370-2-jcormier@criticallink.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109233534.1932370-2-jcormier@criticallink.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6638291f6a3c463994919ba0a875472c@EXMBX066.cuchost.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 00:35, Jonathan Cormier wrote:
-> Create initial binding for the LTC2945 I2C power monitor.
-> Add shunt-resistor-micro-ohms parameter
+On Tue, Jan 10, 2023 at 08:37:01AM +0000, JeeHeng Sia wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Andrew Jones <ajones@ventanamicro.com>
+> > Sent: Tuesday, 10 January, 2023 3:36 AM
+> > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
+> > Cc: paul.walmsley@sifive.com; palmer@dabbelt.com;
+> > aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
+> > kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>;
+> > Mason Huo <mason.huo@starfivetech.com>
+> > Subject: Re: [PATCH v2 3/3] RISC-V: Add arch functions to support
+> > hibernation/suspend-to-disk
+> > 
+> > On Mon, Jan 09, 2023 at 02:24:07PM +0800, Sia Jee Heng wrote:
+> > > Low level Arch functions were created to support hibernation.
+> > > swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
+> > > cpu state onto the stack, then calling swsusp_save() to save the memory
+> > > image.
+> > >
+> > > arch_hibernation_header_restore() and arch_hibernation_header_save()
+> > > functions are implemented to prevent kernel crash when resume,
+> > > the kernel built version is saved into the hibernation image header
+> > > to making sure only the same kernel is restore when resume.
+> > 
+> > Why does it crash with the generic version check?
+> The kernel could have different device driver enabled and the device drivers would find itself running in a different address space if restore with different kernel version.
 
-If you want to keep that sentence, sure, but let's make it a sentence -
-missing full stop.
+That part I understood, but I was wondering why the generic check which
+compares kernel version and more wasn't sufficient. I answered my own
+question though. Extra data needs to be stored to the header (hartid,
+satp, etc.), so we need an arch-specific hibernation header. However we
+*still* need the version for the version check, so some of the generic
+check is reproduced in the arch-specific header. Please update the commit
+message with this more detailed explanation.
 
+...
+> > > +extern int in_suspend;
+> > 
+> > This declaration could be in arch/riscv/kernel/hibernate.c
+> Can't declare it to the .c file because checkpatch will report error if we do so.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Error or warning? It makes more sense to me to be where it needs to be,
+but it doesn't matter too much either way.
 
-Best regards,
-Krzysztof
+...
+> > > +	/* The below code will restore the hibernated image. */
+> > > +	ld	a1, HIBERN_PBE_ADDR(s4)
+> > > +	ld	a0, HIBERN_PBE_ORIG(s4)
+> > > +
+> > > +	lui     a4, 0x1
+> > > +	add     a4, a4, a0
+> > > +copy:	ld      a5, 0(a1)
+> > 
+> > copy label should get its own line and how about changing it,
+> ok
+> > loop, and done to local symbol names, e.g. .Lcopy?
+> I think better to use two local symbol names, i.e .Lcopy and .Ldone
 
+Two? You currently have three labels which all serve purposes.
+
+BTW, maybe unrolling the copy loop a bit as arm64 does with its copy_page
+macro would be a good idea.
+
+...
+> > > +		sleep_cpu = -EINVAL;
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +#ifdef CONFIG_SMP
+> > 
+> > The #ifdef shouldn't be necessary.
+> We need the #ifdef CONFIG_SMP is because the bringup_hibernate_cpu() is defined under the guardian of ifdef CONFIG_SMP.
+> One will face compile error if the CONFIG_SMP was disabled for a single cpu testing.
+
+Ah, you're right. It's interesting that arm64 doesn't appear to guard that
+call.
+
+Thanks,
+drew
