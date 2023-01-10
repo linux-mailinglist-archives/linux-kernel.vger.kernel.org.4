@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EC66639A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311E96639AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjAJHAv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 10 Jan 2023 02:00:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S229900AbjAJHB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 02:01:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjAJHAn (ORCPT
+        with ESMTP id S229927AbjAJHBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 02:00:43 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941BE39F9F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 23:00:40 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 1A6B724E235;
-        Tue, 10 Jan 2023 15:00:39 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
- 2023 15:00:39 +0800
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
- 2023 15:00:38 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Tue, 10 Jan 2023 15:00:38 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     Conor Dooley <conor@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>
-CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: RE: [PATCH v2 3/3] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Topic: [PATCH v2 3/3] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Index: AQHZI/MH11WdbApPuUeV8qMdKhtSOK6V9U4AgAACswCAAT6ZMA==
-Date:   Tue, 10 Jan 2023 07:00:38 +0000
-Message-ID: <d03e4bf7832f48d7aabd07dfd13a3e92@EXMBX066.cuchost.com>
-References: <20230109062407.3235-1-jeeheng.sia@starfivetech.com>
- <20230109062407.3235-4-jeeheng.sia@starfivetech.com>
- <20230109193624.iiuguwgimpn7zbyw@orel> <Y7xu/Oj07F7/e8F1@spud>
-In-Reply-To: <Y7xu/Oj07F7/e8F1@spud>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [60.49.128.133]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 10 Jan 2023 02:01:52 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C82421B6;
+        Mon,  9 Jan 2023 23:01:51 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 32C1768BFE; Tue, 10 Jan 2023 08:01:45 +0100 (CET)
+Date:   Tue, 10 Jan 2023 08:01:44 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        guoren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Christoph Hellwig <hch@lst.de>, Will Deacon <will@kernel.org>
+Subject: Re: [RFC PATCH v6 1/6] riscv: mm: dma-noncoherent: Switch using
+ function pointers for cache management
+Message-ID: <20230110070144.GG10289@lst.de>
+References: <20230106185526.260163-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230106185526.260163-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <6f7d06ef-d74d-4dfc-9b77-6ae83e0d7816@app.fastmail.com> <CA+V-a8uF1s+dwKC_+apL+CBiHN8w_J0n_G2dqsgiAUZVEibfqg@mail.gmail.com> <9017adf0-acd4-4c43-8aea-3579b214b477@app.fastmail.com> <CA+V-a8u6jvR=EDeE3mAbDr6-06NoBJ7mwmi_Y9qVyHT+aC-9rg@mail.gmail.com> <45d6eb0c-cbe3-4a83-aa12-3483638473ae@app.fastmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <45d6eb0c-cbe3-4a83-aa12-3483638473ae@app.fastmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 09, 2023 at 01:59:12PM +0100, Arnd Bergmann wrote:
+> I had another look at the arm64 side, which (like the zicbom
+> variant) uses 'clean' on dma_sync_single_for_device(DMA_FROM_DEVICE),
+> as that has changed not that long ago, see
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c50f11c6196f45c92ca48b16a5071615d4ae0572
 
+which IIRC has been reverted recently.
 
-> -----Original Message-----
-> From: Conor Dooley <conor@kernel.org>
-> Sent: Tuesday, 10 January, 2023 3:46 AM
-> To: Andrew Jones <ajones@ventanamicro.com>
-> Cc: JeeHeng Sia <jeeheng.sia@starfivetech.com>; paul.walmsley@sifive.com;
-> palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-
-> riscv@lists.infradead.org; linux-kernel@vger.kernel.org; Leyfoon Tan
-> <leyfoon.tan@starfivetech.com>; Mason Huo
-> <mason.huo@starfivetech.com>
-> Subject: Re: [PATCH v2 3/3] RISC-V: Add arch functions to support
-> hibernation/suspend-to-disk
-> 
-> On Mon, Jan 09, 2023 at 08:36:24PM +0100, Andrew Jones wrote:
-> > On Mon, Jan 09, 2023 at 02:24:07PM +0800, Sia Jee Heng wrote:
-> 
-> > > To enable hibernation/suspend to disk into RISCV, the below config
-> > > need to be enabled:
-> > > - CONFIG_ARCH_HIBERNATION_HEADER
-> > > - CONFIG_ARCH_HIBERNATION_POSSIBLE
-> > > - CONFIG_ARCH_RV64I
-> > > - CONFIG_64BIT
-> 
-> > What's blocking this for being for both 32-bit and 64-bit?
-> 
-> Just from checking with b4 diff, it's because I told them they broke the
-> rv32 build with their v1 implementation.
-> 
-> I'd rather they fixed whatever the issue was with rv32 than ignored it.
-The main reason is because I don't have a rv32 system to verify the rv32 hibernation. I can submit another patch to support rv32 hibernation once I have the system or someone who has the rv32 system can submit the patch ontop. 
-> 
-> Thanks,
-> Conor.
+> I'm still not sure what the correct set of operations has
+> to be, but nothing in that patch description sounds ISA
+> or even microarchitecture specific.
 
+Nothing is ISA specific, and the only micro architecture related thing
+is if the specific core can speculate memory accesses.  See the table
+in arch/arc/mm/dma.c for details.
+
+And as commented on the arm64 patch I really hate architectures getting
+creative here, as I'd much prefer to move the choice of primitives to
+the core DMA code and just provide helpers to invalidate/writeback/
+writeback+invalidate from the architectures eventually.
