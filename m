@@ -2,214 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0FC663691
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 02:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F4D663693
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 02:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbjAJBKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 20:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
+        id S230058AbjAJBOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 20:14:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjAJBJ6 (ORCPT
+        with ESMTP id S229853AbjAJBN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 20:09:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05508B0E;
-        Mon,  9 Jan 2023 17:09:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9845AB80883;
-        Tue, 10 Jan 2023 01:09:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33AA2C433EF;
-        Tue, 10 Jan 2023 01:09:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673312994;
-        bh=WGQHRqujxAp25OFY1BaFnKnf/OBWaVYYjw1u/l84xG8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ElgUeVqsoKXmcPyBKcGMzezri38h3StmSw3QHTXFeIVJsVD98KGFUfpK/zz/A0plF
-         Bvj9tJThV0kInRMnfL9oofLLyfTC8Tl8ldpuONgueATGdSPnrV+FB1kIXSZi60GuWA
-         cgST5fg1SCwMvb33FIPl/IuIOebWbDF4ApaOBN7xxmLoQP6f/NPr+BiH5iFId7WSen
-         W7KeNOeqGRlgv6JhWtJzzrg2BzzMIiTeb3lD55sS13ZE3YiEg96UPYkyG81HAS2lOe
-         2W82majnoXu/lZMICkg0rGm0G1Ag7ofQfJYXhxCubF/jBqvm/vKwxJXESLVKoMv0au
-         BnYWh5lu62cUg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C8D645C0623; Mon,  9 Jan 2023 17:09:53 -0800 (PST)
-Date:   Mon, 9 Jan 2023 17:09:53 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
-        quic_neeraju@quicinc.com, urezki@gmail.com
-Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
- processing
-Message-ID: <20230110010953.GF4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
- <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
- <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230108150425.426f2861e9db1152fa84508f@kernel.org>
- <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
- <20230110000732.GD4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230110095450.2cb4c875f95459e3a4e7dcf1@kernel.org>
+        Mon, 9 Jan 2023 20:13:59 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FD934764;
+        Mon,  9 Jan 2023 17:13:57 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NrXpr5JsTznTWs;
+        Tue, 10 Jan 2023 09:12:20 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 10 Jan 2023 09:13:53 +0800
+Subject: Re: [BUG Report] undefined reference to `convert_to_fxsr'
+To:     Nathan Chancellor <nathan@kernel.org>
+CC:     Borislav Petkov <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+        linux-toolchains ML <linux-toolchains@vger.kernel.org>,
+        Michael Matz <matz@suse.de>
+References: <Y62vbjBzHF4rmh1V@zn.tnic>
+ <e041533c-4005-b9bc-3985-02224985aa28@huawei.com> <Y67IlthBqaX69RwN@zn.tnic>
+ <64fe1be4-954f-fe6f-44f0-59b572548663@huawei.com> <Y7dZwWsiUfHKxN3S@zn.tnic>
+ <d312c572-f232-a4e9-2ecc-023050528a29@huawei.com> <Y7lSZerjPghqllWp@zn.tnic>
+ <08115444-73a3-b9b0-dbeb-2a0cf374290e@huawei.com> <Y7v/ZVTeQCw7Hv8g@zn.tnic>
+ <88dbc59d-1a33-26be-7fd3-0fcdfef33b3a@huawei.com>
+ <Y7xKO8IYINf9CcNI@dev-arch.thelio-3990X>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <f2b54d81-f950-0e6f-5772-dcbdffa6974e@huawei.com>
+Date:   Tue, 10 Jan 2023 09:13:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230110095450.2cb4c875f95459e3a4e7dcf1@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7xKO8IYINf9CcNI@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 09:54:50AM +0900, Masami Hiramatsu wrote:
-> On Mon, 9 Jan 2023 16:07:32 -0800
-> "Paul E. McKenney" <paulmck@kernel.org> wrote:
+On 2023/1/10 1:09, Nathan Chancellor wrote:
+> On Mon, Jan 09, 2023 at 08:32:09PM +0800, Miaohe Lin wrote:
+>> On 2023/1/9 19:49, Borislav Petkov wrote:
+>>> On Mon, Jan 09, 2023 at 09:48:50AM +0800, Miaohe Lin wrote:
+>>>> Oh, sorry, I miss-read that. My compiler is gcc-7.3.0 which contains many
+>>>> in-house codes from our company in it. That might matters. Thanks a lot for
+>>>> your guidance. :)
+>>>
+>>> Yah, next time, before you report something like that, try to reproduce it with
+>>> an official compiler (gcc from the upstream repo, SUSE, Debian, RH-built etc).
+>>>
+>>> If it doesn't reproduce, go complain to the folks who hack your in-house
+>>> compiler.
+>>
+>> Sorry, my bad! I thought my compiler is just as same as upstream one... Many thanks for your time.
 > 
-> > On Tue, Jan 10, 2023 at 08:56:36AM +0900, Masami Hiramatsu wrote:
-> > > On Sun, 8 Jan 2023 20:25:01 -0800
-> > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > 
-> > > > On Sun, Jan 08, 2023 at 03:04:25PM +0900, Masami Hiramatsu wrote:
-> > > > > On Sat, 7 Jan 2023 08:22:02 -0800
-> > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > > 
-> > > > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
-> > > > > > > On Wed, 4 Jan 2023 16:58:38 -0800
-> > > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > > > > 
-> > > > > > > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
-> > > > > > > > containing kernel boot parameters to be embedded into an initrd or into
-> > > > > > > > the kernel itself.  This can be extremely useful when deploying kernels
-> > > > > > > > in cases where some of the boot parameters depend on the kernel version
-> > > > > > > > rather than on the server hardware, firmware, or workload.
-> > > > > > > > 
-> > > > > > > > Unfortunately, the "bootconfig" kernel parameter must be specified in
-> > > > > > > > order to cause the kernel to look for the embedded bootconfig file,
-> > > > > > > > and it clearly does not help to embed this "bootconfig" kernel parameter
-> > > > > > > > into that file.
-> > > > > > > > 
-> > > > > > > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
-> > > > > > > > kernel to act as if the "bootconfig" kernel parameter had been specified.
-> > > > > > > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
-> > > > > > > > for the embedded bootconfig file even when the "bootconfig" kernel
-> > > > > > > > parameter is omitted.  This permits kernel-version-dependent kernel
-> > > > > > > > boot parameters to be embedded into the kernel image without the need to
-> > > > > > > > (for example) update large numbers of boot loaders.
-> > > > > > > 
-> > > > > > > I like this because this is a simple solution. We have another option
-> > > > > > > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
-> > > > > > > bootloader. Thus, it is better to have this option so that user can
-> > > > > > > always enable bootconfig.
-> > > > > > 
-> > > > > > Glad you like it!
-> > > > > > 
-> > > > > > In addition, if the help text is accurate, another shortcoming of
-> > > > > > CONFIG_CMDLINE is that its semantics vary from one architecture to
-> > > > > > another.  Some have CONFIG_CMDLINE override the boot-loader supplied
-> > > > > > parameters, and others differ in the order in which the parameters
-> > > > > > are processed.
-> > > > > 
-> > > > > Yes, that differences confuse us...
-> > > > 
-> > > > I am glad that it is not just me.  ;-)
-> > > > 
-> > > > I will add words to that effect to the commit log.
-> > > > 
-> > > > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > > > 
-> > > > > > Thank you!
-> > > > > > 
-> > > > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
-> > > > > > > (or at least recommend to enable this)
-> > > > > > 
-> > > > > > Like this?
-> > > > > 
-> > > > > Yes! Thanks.
-> > > > > 
-> > > > > > 
-> > > > > > 							Thanx, Paul
-> > > > > > 
-> > > > > > ------------------------------------------------------------------------
-> > > > > > 
-> > > > > > commit d09a1505c51a70da38b34ac38062977299aef742
-> > > > > > Author: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > Date:   Sat Jan 7 08:09:22 2023 -0800
-> > > > > > 
-> > > > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> > > > > >     
-> > > > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
-> > > > > >     will normally be to unconditionally provide the specified kernel-boot
-> > > > > >     arguments to the kernel, as opposed to requiring a separately provided
-> > > > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
-> > > > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
-> > > > > >     
-> > > > > >     The old semantics may be obtained by manually overriding this default.
-> > > > > >     
-> > > > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > > 
-> > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > 
-> > > > Applied, thank you!
-> > > 
-> > > Paul, just for confirmation, have you picked these patches on your tree?
-> > 
-> > I have, but if you would prefer to take them, just let me know when you
-> > have pulled them in.  It is easy for me to drop them.
-> > 
-> > Here they are in the -rcu tree:
-> > 
-> > 3d9ccc4a8b56e bootconfig: Allow forcing unconditional bootconfig processing
-> > 68b920592ff67 bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> > 
-> > git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+> Just for the future, in case you were not aware of it, Arnd provides
+> vanilla GCC toolchains, which can be really helpful for ruling out
+> (or blaming) downstream compiler patches as the cause of problems:
 > 
-> Yeah, if it's not hurry, let me pick those to linux-trace tree
-> (bootconfig/for-next). I would like to consolidate the bootconfig
-> updates on my tree.
+> https://mirrors.edge.kernel.org/pub/tools/crosstool/
+> 
+> You might not run into this problem again but if you do, it might save
+> some time :)
 
-Please go ahead and grab them.  Just out of curiosity, are they in time
-for the upcoming v6.3 merge window?
+That's really helpful! Many thanks for your offer. :)
 
-							Thanx, Paul
-
-> Thanks,
-> 
-> > 
-> > 							Thanx, Paul
-> > 
-> > > Thank you,
-> > > 
-> > > > 
-> > > > > Thank you!
-> > > > > 
-> > > > > > 
-> > > > > > diff --git a/init/Kconfig b/init/Kconfig
-> > > > > > index 0fb19fa0edba9..97a0f14d9020d 100644
-> > > > > > --- a/init/Kconfig
-> > > > > > +++ b/init/Kconfig
-> > > > > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
-> > > > > >  config BOOT_CONFIG_FORCE
-> > > > > >  	bool "Force unconditional bootconfig processing"
-> > > > > >  	depends on BOOT_CONFIG
-> > > > > > +	default y if BOOT_CONFIG_EMBED
-> > > > > >  	help
-> > > > > >  	  With this Kconfig option set, BOOT_CONFIG processing is carried
-> > > > > >  	  out even when the "bootconfig" kernel-boot parameter is omitted.
-> > > > > 
-> > > > > 
-> > > > > -- 
-> > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > 
-> > > 
-> > > -- 
-> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks,
+Miaohe Lin
