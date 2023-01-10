@@ -2,189 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B263D664396
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B420664397
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238686AbjAJOsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
+        id S238694AbjAJOsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:48:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238714AbjAJOr5 (ORCPT
+        with ESMTP id S238652AbjAJOro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:47:57 -0500
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2105.outbound.protection.outlook.com [40.107.11.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4436E4FD7F;
-        Tue, 10 Jan 2023 06:47:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OKQPH+HFWqJCVqZ2JscwU6R5HWiayzO8oE29BJALO8WCQj+GbBj9N6oZohfk3wjrqa4+0ehthaZJWtjbHIQFyDLc3r1II8gYuAQFly5bOLGCsw4k8vYE9PjxsZ0m026J/UFi+Efvxsmk5/mqp09p2CeFWmVO7GC0/EZdI9IgswCM35JFIKAstd+i7xKBEvS22Y0mn5GbyH2b4rk51EZct0pzkvbXcxBBKLOOhdsIQpJqclsZY0aT5pFsNAzUhNI8asdEYmnBUzCOHed/19g+nYMoyEj2Kn+vKCe58TLtDQdESOwzwVM6ecqf7r4SOBNOM7jJityNT6Qsrr82p3mjRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ont0KjCpcMkpToXrEPKhqsHsiHrRUgGsmldGI7N2CVM=;
- b=mfcBWkRZiTiTjKlyWmOlTxG9Bl6pJnoOtwsWOpVA2UB+g9t5RmxwKV2FV80Q8wkv6ryjz1pT65PJPmardx/En82kV2rbWowemea0X31Up0H+lu1xmQjFF2pTu5PAGQOcgwHnzrg7rI5W1Au9SmY1yesvM2Y7rsNhu02wZpLjNXQ64mib9kPojjLfUj4lCXCRvG8J57Q51BRGqZQQkDFWP04+DkXtAYOg9kXASKPkQDSPV7fsK466IUmuj+H+i96EtPdO6qQlCAwkS9a228tGhCRkh9tAQP8kVlREyuGLLeA7m78OmxFMkPM69fVL+jD1I20qVOoqGXYF+8sUAE4s2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ont0KjCpcMkpToXrEPKhqsHsiHrRUgGsmldGI7N2CVM=;
- b=e0XF/nb7RPUI3cYOQQ7uEZcq7Sxi0XS3DTfpN4DIDz8WLEWeO1wu0JclO1KxY4bh+F2d4hggFUdDboNghXmviLXcPiPJMeesFj9lYtHqCS0BL5CIyHm1lW70U0tzoD9r9A5Qd3T945tGWK/ZorFdPEK5EQbVBkRFAtuJY1LtPiw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CWLP265MB2578.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:a5::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 14:47:52 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f24:8099:5588:8ba8]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f24:8099:5588:8ba8%7]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 14:47:52 +0000
-Date:   Tue, 10 Jan 2023 14:47:25 +0000
-From:   Gary Guo <gary@garyguo.net>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev,
-        Domen Puncer Kugler <domen.puncerkugler@nccgroup.com>
-Subject: Re: [PATCH] rust: print: avoid evaluating arguments in `pr_*`
- macros in `unsafe` blocks
-Message-ID: <20230110141707.39e4fe6a.gary@garyguo.net>
-In-Reply-To: <20230109204912.539790-1-ojeda@kernel.org>
-References: <20230109204912.539790-1-ojeda@kernel.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO6P123CA0043.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:2fe::17) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+        Tue, 10 Jan 2023 09:47:44 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DD05015C
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:47:42 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id bf43so18809788lfb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:47:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oC6Slw+iKJOpkqUIFmGD5udzCvyiuBOqJH++fmsGseM=;
+        b=TDXSVSlGYEu9wx86DSCFMRENfgxdhYqL6Q00fIBGgwLukHTFJ/vBpzYK4dYfJoNOG1
+         BNVNqc6N12XZGIgMe6UOUFzyYG4DbvUzFxGtoFRRpERfU/ByIrJlunqtxsNRHWkvzeQq
+         2MG6RzdObxrfRTYX878my/nttqLdp7k39GfJRow7KX9nmMptHOjIvpwHkbWgGNr6CnoJ
+         ELQCyxcFsgtLKAa3ZiTRkJSb+sxOCNapemzYW+j6jV92fCHiZZQkjChuWm0oHPIYyx7l
+         VVBCE977YwZkM0CMWZOV15e3MniOPGAzx+ofWuAuUoYuiTdrFBSpNyhOjlMVYb6qX6mx
+         bSzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oC6Slw+iKJOpkqUIFmGD5udzCvyiuBOqJH++fmsGseM=;
+        b=kzULOQjZgZdWtCuvIgZQvWRFVFX9BFamjx/5NZTPyr4lNx35RUvaqU5WO3Sp3RZWtO
+         H3lXhBhSsUOSGJbvQIXipLca12xPg8vOW/SMRgEbEEAG3iVG6hXyLDZu6IufQP3zvXLH
+         SIs2R66WJlklhGo/Xe+U0c3uNqI6z4lXqscyQpqmh+ueVytggQ/RneUN64vyOM/qnyT8
+         vhz5il3bBnSVjlcwqcv5fq3pFJHCgQHnFee//MGBk4yI0OAqRyoIV9ep/G9WKw3jqUhp
+         30v1mwRwtAt27anmn7gf8Pa57JLNskjbjqnGG2KcR8tPdwhZAAInqkV9MM8rCKP0N32h
+         mV/A==
+X-Gm-Message-State: AFqh2krh69CvaCGkRR1mRI0ft8etyeYYwMZAC78CtQTtCYZnIef8RESo
+        3eVinwqUIx2WmS+OOw5GxVF14w==
+X-Google-Smtp-Source: AMrXdXuCUR9iaAID5nIgInaSTTilyC8KWakB4zt3ieCjtcqZn7uaPk4S7saQ2QwKzkZpUY0h+6qxtg==
+X-Received: by 2002:a05:6512:2828:b0:4b5:98ca:548 with SMTP id cf40-20020a056512282800b004b598ca0548mr23451134lfb.39.1673362060699;
+        Tue, 10 Jan 2023 06:47:40 -0800 (PST)
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id p7-20020ac24ec7000000b004b587e37265sm2206967lfr.58.2023.01.10.06.47.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 06:47:40 -0800 (PST)
+Message-ID: <5eabb9a1-d748-a9ef-e966-80eee55a74a2@linaro.org>
+Date:   Tue, 10 Jan 2023 15:47:38 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB2578:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7e259860-3f5c-42b6-0e2f-08daf319a677
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZQnA1XoKoivHY11ADYa+zahTqiz8PnKVK0RHgZzUnzphmTx4JL922/BXAvrVqemn4eYBhPMFCxunbWwqGu7pFqEsR3d0LClPDYPPsICegDUhIb5wnk4zub5m/Q8Ki14ffeM7Nekzz67OY28nWfMr+mRSo89JeJYHAlJFckTU1gkJ67XNIxdENbY67zimlonqtzyBXOagkAfJ3eFONLNSemCw9s8vYpchcTgHlF69aNt7lBNbJkXQMdWT25tzqRwbrEpWUOI5ZBrLcgqBgpSDwv7PNBa8Uqt63Ccmz1092zicSnDILT38Y9D4umXhBZPGiWeusso4ywvQUsBaW9rvFnG7FirivbHVqFiE11VxZcR651I+VXP78HZVC57clpSWJHgycJgOhnhRu+sA+OAVOD0CBmx3U6yiKWHXYbPs+NpmvMAK395cWkUjywwIxYTsDJcObJKJ3QcxxdyPvmJXLdE5oZ4u9+w0kHnUrFrODi01GXSdCIsl7MLxpCzr1dtyXiwWkIUiwipsnt+3Kafdt/00Db/BV26S3eBUeGWAvdb/fKWN9XMhasFTNHDsfTLhJ0f86D1L+U9E8LqjjWWAB1MMmBGmZWor32e3OSy8MnSOdFMoK0XInjbVyj7OtnaCxhrGvN++MH0q35JPEPRfqP3z7MA/jGo7RPhX5vD6+KKtxmGNtZFiOlhKOfgDE0AopXjfjMzdifHQ3WgU0NCgy305No4pkDRS+a3CmAfq4Zs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(396003)(39830400003)(366004)(376002)(346002)(136003)(451199015)(6506007)(26005)(478600001)(6486002)(186003)(1076003)(6916009)(6512007)(966005)(2616005)(66476007)(8676002)(66946007)(6666004)(41300700001)(4326008)(54906003)(316002)(83380400001)(86362001)(38100700002)(66556008)(2906002)(8936002)(5660300002)(36756003)(81973001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?prsVnYT8lgFXF6FzVtBKmuqZ6TFbeaL1wJsGH+UQDWlsacsgIPnqs5DXzi1U?=
- =?us-ascii?Q?8kZsd/ei70j5J9ezO+WDB7LjP0rryPv8hkKdLixpjO5K3Hv3/lG2e1bI4r21?=
- =?us-ascii?Q?rxAp+RYwS8c7SNE76hLfn3LtOofnr7fh3LlGoixfVdn89n7Ceeawh93j9vYJ?=
- =?us-ascii?Q?h87Vzhm2YcFHBnPfHeTfPiq9o194iDnG+5xuFJEqTrX7mRZGovnMawHRNl7u?=
- =?us-ascii?Q?ApQkCgIgKkJjLHhlfy+JNxji44eQDH17c/vUsBcumg7XLcGHbFBAiGzcmHcH?=
- =?us-ascii?Q?auK/5yw5HJgTN9kTCoIcTohyjepyU+gBVW+fE5PLLBO759bbLvTLOcSZjaQX?=
- =?us-ascii?Q?nNDQ9eypxGjj5BQIP3EEgQb0qZh0laGgX7NY0Ue4P1R7jdYJ2u71CvW65uw+?=
- =?us-ascii?Q?+NrmBRaaKB3o5S+2pKyUg87rO8XQDW2gwL05Bp30XAi/f6MCVLnC2OmVzNHP?=
- =?us-ascii?Q?tVd2Zq/BsAKLS8hw6aRbSbg5N8HPD181SgqQ4Eb1RtjH6Ty5FMBcxEyfNxqS?=
- =?us-ascii?Q?Jn6xmaPg5hHD6+gsuMI6egB2t79yRKqaZOOQCS2pLzCRNudSpKFnV9KTRdLt?=
- =?us-ascii?Q?cECHX9grWEFFIVhYa/UqIqzzVP0npPek6NHEKMYbee/KgU7rO9L8mKqpffqF?=
- =?us-ascii?Q?r7m1kvKmEUnbs4Hxcjcr01HoNx6T1p5uqg4GIhwpsmqYG3yep5knRdYd460x?=
- =?us-ascii?Q?Q4aWnJ1spsV5gAFR3mP3179MHTtiob/sULxFr4iSDSHUWYAk0QDIl/VJqbia?=
- =?us-ascii?Q?iCeINeEjEAVCDFm8uf2bF3Kkz/rqiKvqnzYGdsuWnKQm7CsZZHgexl9Iwarw?=
- =?us-ascii?Q?CKXQDZ83Avf+KcKy7hOPcV1F+khLYlvJskOUk6nUuMUmt7V5AiWNpt27JmG/?=
- =?us-ascii?Q?N9eNRTORclYkeBjaOzanVK6s24dl4GsnyBeWqjyREtMmtwuu+ElQmMKdXpqU?=
- =?us-ascii?Q?WXgZrnw0FTKTKlbm+7Y4YdAVc7m/U8wR+eeWlGJM2qtVdf9HC6hyluy0Z2sq?=
- =?us-ascii?Q?4B/Lzz48Qfr9A+OR4r7j8Qts0StiQ3uB+BrTl/NIOceKGeqF+4rGusAywzCO?=
- =?us-ascii?Q?Wek3+LmT3B7R/KIr2zERlZIazi7a9rjhvcBZXH8vCd9DGQEK4ufnrbLNnAHP?=
- =?us-ascii?Q?kF15Kn/bR/27S+1eW1pqBKjh/yqkemlDhCITCaS69mKpRlob6k0y5Q5ZnWpC?=
- =?us-ascii?Q?ZOO6rvkS9V12lN3OlIQ+Db6p29g7aV4cUSZYbMQHUE1QCrtquBrRuNB/RgX+?=
- =?us-ascii?Q?POkLs34BmkuA0LIxA+m87fyCgGcC0C4c8eqMnmmAvlNcDgR2DDoLx+P5pb36?=
- =?us-ascii?Q?X1l7X40rJZesEUWoWXHrUo7N7u0KS3ddGTPGTWPq9hLgiSde4bdLNFiWF8cV?=
- =?us-ascii?Q?vKkxqjmYYULh7kSqvpayuI7TZUyCfds571JxQnRP7m8DHEaQFgQgA9mDAPmt?=
- =?us-ascii?Q?4FzKu0arRUR28VUYBhthxPuqgy4ljyuAijwun1NNx3QyKJnM7z3/9qU/c2yq?=
- =?us-ascii?Q?hYy+MFw/Z4pzYDWamB8VDyZcqR0lJzNPYR+xZDQT0MWk766PZbIT/iPLeXsN?=
- =?us-ascii?Q?u8w6vF5MMEOZEUyIdN6y3Vyr7AMtpCseK4XX3ocH?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e259860-3f5c-42b6-0e2f-08daf319a677
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 14:47:52.0617
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: trLgAr7bXdmm/fntEiqmEJ23aP35sSX7EshrqPk8YcEP5uPYEtHz2XvD69N87Qkx8kPCl41OpuzaS/zHXFRHgQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB2578
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 4/7] arm64: dts: qcom: Add msm8939 SoC
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        agross@kernel.org, andersson@kernel.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230103010904.3201835-1-bryan.odonoghue@linaro.org>
+ <20230103010904.3201835-5-bryan.odonoghue@linaro.org>
+ <6e594438-843a-d03e-5276-d6316a9dc2c0@linaro.org>
+ <88d66834-ca80-888b-e56e-7694e84b6eae@linaro.org>
+ <411a1a02-568e-3695-0a24-0681fbe9f265@linaro.org>
+ <bde66389-619b-771d-1956-43059f8e4d5a@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <bde66389-619b-771d-1956-43059f8e4d5a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  9 Jan 2023 21:49:12 +0100
-Miguel Ojeda <ojeda@kernel.org> wrote:
 
-> At the moment it is possible to perform unsafe operations in
-> the arguments of `pr_*` macros since they are evaluated inside
-> an `unsafe` block:
-> 
->     let x = &10u32 as *const u32;
->     pr_info!("{}", *x);
-> 
-> In other words, this is a soundness issue.
-> 
-> Fix it so that it requires an explicit `unsafe` block.
-> 
-> Reported-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Reported-by: Domen Puncer Kugler <domen.puncerkugler@nccgroup.com>
-> Link: https://github.com/Rust-for-Linux/linux/issues/479
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
+On 10.01.2023 14:42, Bryan O'Donoghue wrote:
+> On 10/01/2023 13:24, Krzysztof Kozlowski wrote:
+>> On 10/01/2023 14:14, Bryan O'Donoghue wrote:
+>>> On 03/01/2023 09:14, Krzysztof Kozlowski wrote:
+>>>> ../arch/arm64/boot/dts/qcom/msm8939.dtsi:1825.23-1842.5: Warning
+>>>> (simple_bus_reg): /soc@0/mmc@7824000: simple-bus unit address format
+>>>> error, expected "7824900
+>>>
+>>> For the record the driver consuming this dt entry requires the host regs
+>>> to come first followed by the core
+>>>
+>>> sdhc_1: mmc@7824000 {
+>>>           compatible = "qcom,msm8916-sdhci", "qcom,sdhci-msm-v4";
+>>>           reg = <0x07824900 0x11c>, <0x07824000 0x800>;
+>>>           reg-names = "hc", "core";
+>>> }
+>>>
+>>> If I change this and the msm8916 to
+>>
+>> That's not the solution. The warning is saying that unit address does
+>> not match your reg. You need to correct unit address.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Is it not the case that the unit-address should match the first reg
+Yes
 
+ and that the first reg should also be the lowest address ?
+Depends on what the first reg is, bindings usually dictate the order.
+
+Konrad
+> 
 > ---
->  rust/kernel/print.rs | 29 ++++++++++++++++++-----------
->  1 file changed, 18 insertions(+), 11 deletions(-)
-> 
-> diff --git a/rust/kernel/print.rs b/rust/kernel/print.rs
-> index 29bf9c2e8aee..30103325696d 100644
-> --- a/rust/kernel/print.rs
-> +++ b/rust/kernel/print.rs
-> @@ -142,17 +142,24 @@ pub fn call_printk_cont(args: fmt::Arguments<'_>) {
->  macro_rules! print_macro (
->      // The non-continuation cases (most of them, e.g. `INFO`).
->      ($format_string:path, false, $($arg:tt)+) => (
-> -        // SAFETY: This hidden macro should only be called by the documented
-> -        // printing macros which ensure the format string is one of the fixed
-> -        // ones. All `__LOG_PREFIX`s are null-terminated as they are generated
-> -        // by the `module!` proc macro or fixed values defined in a kernel
-> -        // crate.
-> -        unsafe {
-> -            $crate::print::call_printk(
-> -                &$format_string,
-> -                crate::__LOG_PREFIX,
-> -                format_args!($($arg)+),
-> -            );
-> +        // To remain sound, `arg`s must be expanded outside the `unsafe` block.
-> +        // Typically one would use a `let` binding for that; however, `format_args!`
-> +        // takes borrows on the arguments, but does not extend the scope of temporaries.
-> +        // Therefore, a `match` expression is used to keep them around, since
-> +        // the scrutinee is kept until the end of the `match`.
-> +        match format_args!($($arg)+) {
-> +            // SAFETY: This hidden macro should only be called by the documented
-> +            // printing macros which ensure the format string is one of the fixed
-> +            // ones. All `__LOG_PREFIX`s are null-terminated as they are generated
-> +            // by the `module!` proc macro or fixed values defined in a kernel
-> +            // crate.
-> +            args => unsafe {
-> +                $crate::print::call_printk(
-> +                    &$format_string,
-> +                    crate::__LOG_PREFIX,
-> +                    args,
-> +                );
-> +            }
->          }
->      );
->  
-> 
-> base-commit: b7bfaa761d760e72a969d116517eaa12e404c262
-
+> bod
