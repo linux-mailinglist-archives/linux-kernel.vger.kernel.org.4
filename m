@@ -2,161 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D51663EB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3DA663EBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238211AbjAJKzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:55:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        id S238161AbjAJKz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:55:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbjAJKyq (ORCPT
+        with ESMTP id S238264AbjAJKzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:54:46 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F1B1409F;
-        Tue, 10 Jan 2023 02:54:45 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id fc4so27488415ejc.12;
-        Tue, 10 Jan 2023 02:54:45 -0800 (PST)
+        Tue, 10 Jan 2023 05:55:46 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B1C6A0C4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:55:41 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id h16so11272754wrz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:55:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wAqYvgRzLQ4rzA87QLNuurx0Mvg1Ygp2KEVQbcFxer4=;
-        b=SJ7SFb8lSmxhm2NTUJn6edKXr2E6ocnaCm828IPBngsZmWq1fx4++PuFndDgKs7qoL
-         Cyp2n6vHrRXFGBeDGFTSzfitsjvkIihjc0zpjySshruHuZQGaE4aktnpf/fPhTopvdjx
-         qoJLiT5pX5fxUblFYSWoItSQwavPoqv+8cNMN4/Z7hrRk+D8Uk+rTTfYgKqjTGFzrrJd
-         04KdQuFJqsa+VHF9irSvMGFn01TYJf06NLJZbGHj5wRcOQcvZ61+Fvk0gG02XTsjvuLx
-         upYWU7na/qKc2fHeox3X0iUXzhxEjK1xfCpQZ9pnw1Y+ZXeD8fre8eiRWY4QJIAjyZ+O
-         N+gg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=steAEzh8bEsrRFaPtR5QEO7PwY+TRudVvhGkJEjyxrM=;
+        b=nkM28h88WcckND4JJdWLKnwnMGI7HvjWyoei7BfOUVO5rbzPCJNQQT8oVhvU/hfkZ0
+         Im4Bw75GhShlHBMIsHA9UlmLR6qIGBTYNsvGeEuxhWGQ4FEzUq86bP5bxdwhzmvHIHai
+         g5hzX7u9clSMTahY9oWaa+Ly6k/sel8soNjmQxUfm8+TF/XiWUhntfKgwvYcSxodAu+L
+         Wloxjj0dlecVgpgKP8vvsXNVAcIDBPMtkYhcSQvfFGWaIcZX1ymQ2IyH9HyFmZfnKoK8
+         Zo32R8jVe05037Wt3Wi9GpCov4CLScu8d3FpfPTahyF6i5hfO24U+4bx9OMMyHhyO4dp
+         yL/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wAqYvgRzLQ4rzA87QLNuurx0Mvg1Ygp2KEVQbcFxer4=;
-        b=joMd54O3jtxH5ZYAGkG9m7o5deJdPb/MH97YGeP+HZB18ivXN3vjCuSzNx0+bNNvND
-         028Lmpxw0YAIIYfJuuzqGYVE8rSotDy3SS5WRWVL8LAKYqKDUAt5U6GjO3V4hM/16PMP
-         6gULftBwcXdQ9+50K2ArJtZL1c6bbWqgxMdkOKQk93GX7JHKkugZ4a/bW9/xeW6vQ6Yb
-         aB4xnbaJIaaJvuXif7SFpjo1DpiAoXbEzF5D6HP5M6QEO5dvcQOVT8RwsvIslc+gvcHu
-         647s+YcSUAq5A1sp8Aj1qOqpsCeL/ye6XpLKgG80zUOPLJ9FlJIUJIWwe+jiqapik0rD
-         Zr0Q==
-X-Gm-Message-State: AFqh2ko/hRiqPzeVpEHvE82OcD5d3X2Ttcyj9ZHhrqVm6iUGWpB+LTJJ
-        ElI8Fph8M0FKR+HSbKfjfwQ=
-X-Google-Smtp-Source: AMrXdXur9POe208kdUVnqB2kY9qDlv0+hMyxhP8CXXFsMHUuSjJmZ80rZEFvMyJE2kSVSIcX8Ezf1g==
-X-Received: by 2002:a17:906:5202:b0:7c1:4a3:10b6 with SMTP id g2-20020a170906520200b007c104a310b6mr56805461ejm.53.1673348083920;
-        Tue, 10 Jan 2023 02:54:43 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id s1-20020aa7c541000000b00495c3573b36sm4818199edr.32.2023.01.10.02.54.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 02:54:43 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        u-boot@lists.denx.de,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH 6/6] nvmem: u-boot-env: post process "ethaddr" env variable
-Date:   Tue, 10 Jan 2023 11:54:25 +0100
-Message-Id: <20230110105425.13188-6-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230110105425.13188-1-zajec5@gmail.com>
-References: <20230110105425.13188-1-zajec5@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=steAEzh8bEsrRFaPtR5QEO7PwY+TRudVvhGkJEjyxrM=;
+        b=4+vpYWw7CShWNtsgKIKQV1hfg0W6/Y6JAjZNUD1gOG16dI6kau6yJtRzzib1t1IqT+
+         NcNaHoZTD0IWduc5+ln0gjvrefMxa8Hi5KJU74dCYpSJo9Os/Ha7T6fUsNWSX8vc/YlU
+         mKFilywbdW7FNpgXQjyKteKa5OCH16FwRPmMgd6xnPxmOPF81CVt2PRUmQuiLTJb+DOX
+         5XvXJHOzT6pS60hghWFhWORCYRhLRv0DZR+4QlQKUodLIB8SXaHZK+niHTx+S5LZitJc
+         k6T1QBKi3lW0CFD8FjKbhdby+U/8m/q5ZRbDW/uogzwN8pakaZWtZ7bZEGRGCL6aNH7m
+         NvDA==
+X-Gm-Message-State: AFqh2kqnPn7g/nyzCJkcKknb4xE1Sj6AEGJgdLL0NRukkoCqdxrENKwE
+        Y9xKpvvmQ5gT4hV0wdLH94dykQ==
+X-Google-Smtp-Source: AMrXdXsWypeJy1KwetU1TKmnb3+brikmWgsmmvQUMmlaAG7xOOcZoLypIut/nX7oHHCRe/05wwxTeg==
+X-Received: by 2002:adf:eb09:0:b0:2aa:1121:1b79 with SMTP id s9-20020adfeb09000000b002aa11211b79mr13601321wrn.25.1673348139731;
+        Tue, 10 Jan 2023 02:55:39 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t17-20020adff611000000b00236488f62d6sm10703537wrp.79.2023.01.10.02.55.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 02:55:39 -0800 (PST)
+Message-ID: <26589373-4ed5-10c5-9b49-3edfa78c71e6@linaro.org>
+Date:   Tue, 10 Jan 2023 11:55:37 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RESEND v3 1/4] dt-bindings: clock: qcom,sc7280-lpasscc: Add
+ qcom,adsp-pil-mode property
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        swboyd@chromium.org, agross@kernel.org, andersson@kernel.org,
+        robh+dt@kernel.org, broonie@kernel.org, quic_plai@quicinc.com,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com
+References: <1672849297-3116-1-git-send-email-quic_srivasam@quicinc.com>
+ <1672849297-3116-2-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1672849297-3116-2-git-send-email-quic_srivasam@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On 04/01/2023 17:21, Srinivasa Rao Mandadapu wrote:
+> When this property is set, the remoteproc is used to boot the
+> LPASS and therefore qdsp6ss clocks would be used to bring LPASS
+> out of reset, hence they are directly controlled by the remoteproc.
+> 
+> This is a cleanup done to handle overlap of regmap of lpasscc
+> and adsp remoteproc blocks.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+> ---
 
-U-Boot environment variables are stored in ASCII format so "ethaddr"
-requires parsing into binary to make it work with Ethernet interfaces.
 
-This includes support for indexes to support #nvmem-cell-cells = <1>.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- drivers/nvmem/layouts/Kconfig      |  1 +
- drivers/nvmem/layouts/u-boot-env.c | 24 ++++++++++++++++++++++++
- 2 files changed, 25 insertions(+)
-
-diff --git a/drivers/nvmem/layouts/Kconfig b/drivers/nvmem/layouts/Kconfig
-index 8a38c514943a..566b4f25630d 100644
---- a/drivers/nvmem/layouts/Kconfig
-+++ b/drivers/nvmem/layouts/Kconfig
-@@ -23,6 +23,7 @@ config NVMEM_LAYOUT_ONIE_TLV
- config NVMEM_LAYOUT_U_BOOT_ENV
- 	bool "U-Boot environment variables support"
- 	select CRC32
-+	select GENERIC_NET_UTILS
- 	help
- 	  U-Boot stores its setup as environment variables. This driver adds
- 	  support for verifying & exporting such data. It also exposes variables
-diff --git a/drivers/nvmem/layouts/u-boot-env.c b/drivers/nvmem/layouts/u-boot-env.c
-index 95c314553952..63baeb18bd56 100644
---- a/drivers/nvmem/layouts/u-boot-env.c
-+++ b/drivers/nvmem/layouts/u-boot-env.c
-@@ -4,6 +4,8 @@
-  */
- 
- #include <linux/crc32.h>
-+#include <linux/etherdevice.h>
-+#include <linux/if_ether.h>
- #include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/nvmem-consumer.h>
-@@ -36,6 +38,26 @@ struct u_boot_env_image_broadcom {
- 	uint8_t data[];
- } __packed;
- 
-+static int u_boot_env_read_post_process_ethaddr(void *context, const char *id, int index,
-+						unsigned int offset, void *data, size_t *bytes)
-+{
-+	u8 mac[ETH_ALEN];
-+
-+	if (*bytes != 3 * ETH_ALEN - 1)
-+		return -EINVAL;
-+
-+	if (!mac_pton(data, mac))
-+		return -EINVAL;
-+
-+	if (index)
-+		eth_addr_add(mac, index);
-+
-+	ether_addr_copy(data, mac);
-+	*bytes = ETH_ALEN;
-+
-+	return 0;
-+}
-+
- static int u_boot_env_parse_data(struct device *dev, struct nvmem_device *nvmem, uint8_t *buf,
- 				 size_t data_offset, size_t data_len)
- {
-@@ -67,6 +89,8 @@ static int u_boot_env_parse_data(struct device *dev, struct nvmem_device *nvmem,
- 		info.offset = data_offset + value - data;
- 		info.bytes = strlen(value);
- 		info.np = of_get_child_by_name(np, info.name);
-+		if (!strcmp(var, "ethaddr"))
-+			info.read_post_process = u_boot_env_read_post_process_ethaddr;
- 
- 		err = nvmem_add_one_cell(nvmem, &info);
- 		if (err) {
--- 
-2.34.1
+Best regards,
+Krzysztof
 
