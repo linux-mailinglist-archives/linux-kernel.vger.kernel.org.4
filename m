@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586F76640A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D53D6640A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238558AbjAJMhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S238458AbjAJMhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238570AbjAJMgg (ORCPT
+        with ESMTP id S238482AbjAJMg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:36:36 -0500
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF304858A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:36:09 -0800 (PST)
-Received: by mail-ej1-f44.google.com with SMTP id cf18so21867735ejb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:36:09 -0800 (PST)
+        Tue, 10 Jan 2023 07:36:59 -0500
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C6358323
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:36:57 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id j16so17307040edw.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:36:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=S/6AN76mYx/Ro4svLMpQwGEXQQftkRuzPsjlJhb9mcY=;
-        b=qqwP+qj8EH8GtOwSd2m9nY6tby8qe5UAAoOv+JhtVkKhH+hSwL/JpfVJcMo/hEtFLT
-         Vu4Klduweo+iunJx/wLOv4C5v0mmjkWcAbJBIrkUgc0FL9TxezeTc7sw7rksXAE0qBGg
-         6dj2k0KRHNi93z+8LDjYyGRMXH4NjMvytC70JBl+emj+0uuBAOOcdS8nKWVraBkL5uzt
-         AA8sI9TyInEvXknCIzdNjYW+54XDidjL0n7oQhvq/cRIyw5/ZvKj51fxcMKXAFG/cdfM
-         mnyqIYc3Q7SVf9vJYb4yUCiUFQlsOIciwh0Ga7ms1QWyuFniQXWRKg64+YXCfkRJd5I7
-         nzwg==
-X-Gm-Message-State: AFqh2koPsWSI7M5QFZpHEwjW+ni+0DqZX4gNR6LCSzBPiXh2IKASdbI9
-        USakez52MrBStxYtaw+EN5Hv4aeEMugN2LIIUwerfEB0uxE=
-X-Google-Smtp-Source: AMrXdXuKmB8vAJsMmTkApX85ogvzgYl8HLV3v9RxtBvqTNSYkPW93CiFvB7PgGJuPVHHqVxUG2/63izO4yO0s5ktAy0=
-X-Received: by 2002:a17:907:8d0e:b0:7b2:7b45:2cd2 with SMTP id
- tc14-20020a1709078d0e00b007b27b452cd2mr5924377ejc.615.1673354167961; Tue, 10
- Jan 2023 04:36:07 -0800 (PST)
+        bh=Jdu1P19gxZfQlt5gE6MTJd2DGIzjOpSeua0YK3b5Xio=;
+        b=Bh5z4nXo/6NArnnukbIhOSAT5i7e5b1VoEC0sLw7oO7pqGaUraj0sCRYOZ3oZvEtwI
+         CpD1FA6LgayPT2CmNt6DFimrxLJJGwOv6j0a4cMC8wyO3m+W5qdxUEeQ/NbpeY5xifl8
+         wUbB+hqQrFL7KUmf1YDMRj9ed5jaGwrX5xeof4G62oDyAI+LhXd62xxxUmKxEk7P6xAL
+         rgbMWc2YSnP6izJVEKCvxKn+Jexni2V+811+1it44QYxL+8G8Xh+fxydwfYsy1lP3Yca
+         bGLCCcS/RdhMQK5eGUMlbmCneurTk1FaI2ukThwls/X5DgNUiMQ08wCkKkePTGfkBYJB
+         foVw==
+X-Gm-Message-State: AFqh2krtEOJXoYmGlksW87up9eLa6mA6RWU6u0mUKijDYAg/Wvzho5gl
+        DXXsFFjOonh1EraetoA3xdftuLs+J6pTE+K3yD0=
+X-Google-Smtp-Source: AMrXdXvCwkP3VeOFq2P7qpfPto6JkhbqHzjUh5GgZmWPKUm/jgFyq0MBWecokCG0szh9Ee/+vId4BM640M+TSOSmeVk=
+X-Received: by 2002:a05:6402:c44:b0:499:c651:625d with SMTP id
+ cs4-20020a0564020c4400b00499c651625dmr251194edb.413.1673354216214; Tue, 10
+ Jan 2023 04:36:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20230109175810.2965448-1-gregkh@linuxfoundation.org> <20230109175810.2965448-4-gregkh@linuxfoundation.org>
-In-Reply-To: <20230109175810.2965448-4-gregkh@linuxfoundation.org>
+References: <20230109175810.2965448-1-gregkh@linuxfoundation.org> <20230109175810.2965448-5-gregkh@linuxfoundation.org>
+In-Reply-To: <20230109175810.2965448-5-gregkh@linuxfoundation.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Jan 2023 13:35:56 +0100
-Message-ID: <CAJZ5v0ieLfMs2ytN5qRjXBtDmSYZC7XA6ACdL11uUQCun=v4OA@mail.gmail.com>
-Subject: Re: [PATCH 4/6] driver core: make subsys_dev_iter_next() static
+Date:   Tue, 10 Jan 2023 13:36:45 +0100
+Message-ID: <CAJZ5v0iELAMo9E7o4V5rjE-2v0-oNRUz=PSTO+A=91Dtb2LyYw@mail.gmail.com>
+Subject: Re: [PATCH 5/6] driver core: make subsys_dev_iter_exit() static
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>
@@ -59,8 +59,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Mon, Jan 9, 2023 at 6:58 PM Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> The function subsys_dev_iter_next() is only used in drivers/base/bus.c
-> so make it static to that file and remove the global export.
+> The function subsys_dev_iter_exit() is not used outside of
+> drivers/base/bus.c so make it static to that file and remove the global
+> export.
 >
 > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -73,38 +74,34 @@ Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
 >  2 files changed, 1 insertion(+), 3 deletions(-)
 >
 > diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-> index a375305a11dd..4be73f58d0ad 100644
+> index 4be73f58d0ad..e0fe07872a74 100644
 > --- a/drivers/base/bus.c
 > +++ b/drivers/base/bus.c
-> @@ -976,7 +976,7 @@ static void subsys_dev_iter_init(struct subsys_dev_iter *iter, struct bus_type *
->   * free to do whatever it wants to do with the device including
->   * calling back into subsys code.
+> @@ -998,11 +998,10 @@ static struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter)
+>   * Finish an iteration.  Always call this function after iteration is
+>   * complete whether the iteration ran till the end or not.
 >   */
-> -struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter)
-> +static struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter)
+> -void subsys_dev_iter_exit(struct subsys_dev_iter *iter)
+> +static void subsys_dev_iter_exit(struct subsys_dev_iter *iter)
 >  {
->         struct klist_node *knode;
->         struct device *dev;
-> @@ -990,7 +990,6 @@ struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter)
->                         return dev;
->         }
+>         klist_iter_exit(&iter->ki);
 >  }
-> -EXPORT_SYMBOL_GPL(subsys_dev_iter_next);
+> -EXPORT_SYMBOL_GPL(subsys_dev_iter_exit);
 >
->  /**
->   * subsys_dev_iter_exit - finish iteration
+>  int subsys_interface_register(struct subsys_interface *sif)
+>  {
 > diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
-> index a1da2f8647af..5a7590bc7913 100644
+> index 5a7590bc7913..ffa562f2d975 100644
 > --- a/include/linux/device/bus.h
 > +++ b/include/linux/device/bus.h
 > @@ -154,7 +154,6 @@ struct subsys_dev_iter {
 >         struct klist_iter               ki;
 >         const struct device_type        *type;
 >  };
-> -struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter);
->  void subsys_dev_iter_exit(struct subsys_dev_iter *iter);
+> -void subsys_dev_iter_exit(struct subsys_dev_iter *iter);
 >
 >  int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
+>                      int (*fn)(struct device *dev, void *data));
 > --
 > 2.39.0
 >
