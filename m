@@ -2,195 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F459663D7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D924A663D7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjAJKFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S231439AbjAJKGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:06:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbjAJKFb (ORCPT
+        with ESMTP id S231332AbjAJKG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:05:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5300850061;
-        Tue, 10 Jan 2023 02:05:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B199AB81133;
-        Tue, 10 Jan 2023 10:05:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A12C433EF;
-        Tue, 10 Jan 2023 10:05:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673345127;
-        bh=9jjmUW62X5BAqte0/4wI9dpcaebEZ8SUIffif9k/TY8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X9MPj+MQ6WMeEBx8Qp0R49zCdRaJv8S0llfLSlMrSSnzR9ko9kwbT+38huoOFjk+U
-         96wMYq7WDgmwT3SLLvDONmA+ElEHfurgIewosvml8fvxHUMNhd7WPHbrVgmSDyGrSI
-         k8oHNRMbYu0ZDD0gQkaS6u22lGY7LEgBgBejRpW5oQvNt9oU+SvkxwLSYUgmI1qBkV
-         bg3uxRhpt5nscuJq+s/LQkEv9Qla7C0s8OS885bzafwUiEwWd25KCkR8gib7h05TMZ
-         4h/t0HcAQ7GGFo9j7FnShRz8gmQTskotBNqYzD7Q+oaX8PP1QssnLhweLIKCXClBJK
-         RHvnV1AHWnKpw==
-Date:   Tue, 10 Jan 2023 10:05:20 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 01/10] mfd: intel-m10-bmc: Create m10bmc_platform_info
- for type specific info
-Message-ID: <Y704YEVolcdwY7L4@google.com>
-References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com>
- <20221226175849.13056-2-ilpo.jarvinen@linux.intel.com>
- <Y7xSQde3pzcOIu+X@google.com>
- <1ffa5844-f5ce-e56a-7ed9-9ba434904b6d@linux.intel.com>
+        Tue, 10 Jan 2023 05:06:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69D250157
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:05:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673345142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pQos0rL6v0IJhlQcBZMrcxW60aPh1eJ2JqufvK5QrGs=;
+        b=GSrgvO9ofcKnCj6ymkM+QUYyL8oyM1HdezXXINbjkj7WlTxMn9u1LezadMen15GQMHQoYl
+        Qsj2wQLtI5usO8YrUDDf0G8ignQ68/tBNsxza5loLSBOuw556SDh9JbG9yJ/+7TTRDxVF1
+        99PxFUCvqqj8nW31gcuBrTxwOp8UYIc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-425-v-yYPawzOTu1YI4m-PPqlA-1; Tue, 10 Jan 2023 05:05:41 -0500
+X-MC-Unique: v-yYPawzOTu1YI4m-PPqlA-1
+Received: by mail-wm1-f71.google.com with SMTP id bi11-20020a05600c3d8b00b003d9ebf905c9so3485041wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:05:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pQos0rL6v0IJhlQcBZMrcxW60aPh1eJ2JqufvK5QrGs=;
+        b=IXXL8t4j8FMy7OAfPFNAv4K8k29xRa857AWWbDoFVIs6Y4SFRVQ5sphX2RN6BKLm6N
+         CnJy0ZbiXbcBk1l+3VAhEqunSQHmqtxq/fUvqZzUOkzFEQaQXj7rGSSx9LgidxO1T+A2
+         4OTNP3zuUmnrl13/XcmRC5+FACC42NJ9q7CrGjhHKXNDjz2XtJBPV2GZKuc9Nx1bSGmw
+         fkF3iwkyqw0nKgrXTnMQzlCOKE0O2hfpEgIrzPLegXKPBrFT9+YJ0f+x45atoTy96Wjz
+         YbylOig/cITUsNcAQ97nRuS1DF4M8hbGf9kdFnWHmUYxzKzZeJwca7SZJGgWpZA5poLb
+         uKiA==
+X-Gm-Message-State: AFqh2kpZA7B/mSsDXI1UnO4niS9B+QcW58+ZKpapVoZaa4M8YquMNzts
+        s4JCGt0kFey0omOoiCp0xbYlEkIJvzBhAD0m8M7GGsG/nZ+4rv3r2WZiklZkqA9ackMrridn38G
+        fdl1LVqWXNvSyS0w0xrT7QCcs
+X-Received: by 2002:a05:600c:3d8a:b0:3d3:4406:8a37 with SMTP id bi10-20020a05600c3d8a00b003d344068a37mr48796535wmb.41.1673345140650;
+        Tue, 10 Jan 2023 02:05:40 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsFgWkzbQ2X01cVjAwNnoWvoKKf9DNAG5yZ3Ygp1x3LFRmRcYVTqXVI6DFXgV0rPJV/rKWJYA==
+X-Received: by 2002:a05:600c:3d8a:b0:3d3:4406:8a37 with SMTP id bi10-20020a05600c3d8a00b003d344068a37mr48796515wmb.41.1673345140308;
+        Tue, 10 Jan 2023 02:05:40 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:4200:65d9:4d0d:bb61:14c8? (p200300cbc708420065d94d0dbb6114c8.dip0.t-ipconnect.de. [2003:cb:c708:4200:65d9:4d0d:bb61:14c8])
+        by smtp.gmail.com with ESMTPSA id bg42-20020a05600c3caa00b003b4cba4ef71sm21771935wmb.41.2023.01.10.02.05.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 02:05:39 -0800 (PST)
+Message-ID: <bac3f11b-db5f-113f-9cc3-8abf0e8e6ed6@redhat.com>
+Date:   Tue, 10 Jan 2023 11:05:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1ffa5844-f5ce-e56a-7ed9-9ba434904b6d@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <0f117203-3227-cd16-61c2-2dd3de75ecc7@alu.unizg.hr>
+ <0ee389dc-5e47-5b7e-4db5-637eb2b3fbc9@redhat.com>
+ <0e692e52-0a4f-3892-ed25-f3fa12892b6f@alu.unizg.hr>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: =?UTF-8?Q?Re=3a_PROBLEM=3a_selftest/vm/cow=2ec_failed_to_compile_?=
+ =?UTF-8?B?KOKAmE1BRFZfUEFHRU9VVOKAmSB1bmRlY2xhcmVkKQ==?=
+In-Reply-To: <0e692e52-0a4f-3892-ed25-f3fa12892b6f@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 Jan 2023, Ilpo Järvinen wrote:
+On 09.01.23 22:41, Mirsad Goran Todorovac wrote:
+> On 1/9/2023 5:42 PM, David Hildenbrand wrote:
+> 
+> Hi, thank you for your reply.
+> 
+>>> I hope this is enough information for you to debug the issue.
+>>>
+>>> I am standing by for any additional diagnostics needed.
+>>
+>> Won't userfaultfd.c fail in a similar way?
+>>
+>> Anyhow, khugepaged.c jas
+>>
+>> #ifndef MADV_PAGEOUT
+>> #define MADV_PAGEOUT 21
+>> #endif
+>>
+>> So most probably we should do the same.
+> 
+> Actually, David, it turned out that userfaultfd.c compiled
+> out-of-the-box, and side-by-side comparison showed that it also included
+> "/home/marvin/linux/kernel/linux_torvalds/usr/include/asm-generic/mman-common.h"
+> 
+> The only remaining difference was including <linux/mman.h>, which fixed
+> the issue w/o #ifdef ... #endif
+> 
+> Hope this helps.
+> 
+> Please find the following diff.
+> 
+> Regards,
+> Mirsad
+> 
+> ------------------------------------------------------------------------------
+> diff --git a/tools/testing/selftests/vm/cow.c
+> b/tools/testing/selftests/vm/cow.c
+> index 26f6ea3079e2..dd8cf12c6776 100644
+> --- a/tools/testing/selftests/vm/cow.c
+> +++ b/tools/testing/selftests/vm/cow.c
+> @@ -16,6 +16,7 @@
+>    #include <fcntl.h>
+>    #include <dirent.h>
+>    #include <assert.h>
+> +#include <linux/mman.h>
+>    #include <sys/mman.h>
+>    #include <sys/ioctl.h>
+>    #include <sys/wait.h>
+>
 
-> On Mon, 9 Jan 2023, Lee Jones wrote:
-> 
-> > On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
-> > 
-> > > BMC type specific info is currently set by a switch/case block. The
-> > > size of this info is expected to grow as more dev types and features
-> > > are added which would have made the switch block bloaty.
-> > > 
-> > > Store type specific info into struct and place them into .driver_data
-> > > instead because it makes things a bit cleaner.
-> > > 
-> > > The m10bmc_type enum can be dropped as the differentiation is now
-> > > fully handled by the platform info.
-> > > 
-> > > The info member of struct intel_m10bmc that is added here is not used
-> > > yet in this change but its addition logically still belongs to this
-> > > change. The CSR map change that comes after this change needs to have
-> > > the info member.
-> > > 
-> > > Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> > > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > ---
-> > >  drivers/mfd/intel-m10-bmc.c       | 53 ++++++++++++++-----------------
-> > >  include/linux/mfd/intel-m10-bmc.h | 12 +++++++
-> > >  2 files changed, 36 insertions(+), 29 deletions(-)
-> > > 
-> > > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-> > > index 7e3319e5b22f..12c522c16d83 100644
-> > > --- a/drivers/mfd/intel-m10-bmc.c
-> > > +++ b/drivers/mfd/intel-m10-bmc.c
-> > > @@ -13,12 +13,6 @@
-> > >  #include <linux/regmap.h>
-> > >  #include <linux/spi/spi.h>
-> > >  
-> > > -enum m10bmc_type {
-> > > -	M10_N3000,
-> > > -	M10_D5005,
-> > > -	M10_N5010,
-> > > -};
-> > > -
-> > >  static struct mfd_cell m10bmc_d5005_subdevs[] = {
-> > >  	{ .name = "d5005bmc-hwmon" },
-> > >  	{ .name = "d5005bmc-sec-update" }
-> > > @@ -162,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
-> > >  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> > >  {
-> > >  	const struct spi_device_id *id = spi_get_device_id(spi);
-> > > +	const struct intel_m10bmc_platform_info *info;
-> > >  	struct device *dev = &spi->dev;
-> > > -	struct mfd_cell *cells;
-> > >  	struct intel_m10bmc *ddata;
-> > > -	int ret, n_cell;
-> > > +	int ret;
-> > >  
-> > >  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
-> > >  	if (!ddata)
-> > >  		return -ENOMEM;
-> > >  
-> > > +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
-> > > +	ddata->info = info;
-> > 
-> > Why are you keeping it?
-> 
-> There are plenty of users starting from patch 04. There will more users 
-> and members in the changes not included into this series. Thus, storing 
-> csr_map instead of info would not be forward-looking enough.
-> 
-> > >  	ddata->dev = dev;
-> > >  
-> > >  	ddata->regmap =
-> > > @@ -189,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> > >  		return ret;
-> > >  	}
-> > >  
-> > > -	switch (id->driver_data) {
-> > > -	case M10_N3000:
-> > > -		cells = m10bmc_pacn3000_subdevs;
-> > > -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
-> > > -		break;
-> > > -	case M10_D5005:
-> > > -		cells = m10bmc_d5005_subdevs;
-> > > -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
-> > > -		break;
-> > > -	case M10_N5010:
-> > > -		cells = m10bmc_n5010_subdevs;
-> > > -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
-> > > -		break;
-> > > -	default:
-> > > -		return -ENODEV;
-> > > -	}
-> > > -
-> > > -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
-> > > +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
-> > > +				   info->cells, info->n_cells,
-> > >  				   NULL, 0, NULL);
-> > >  	if (ret)
-> > >  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
-> > > @@ -214,10 +194,25 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> > >  	return ret;
-> > >  }
-> > >  
-> > > +static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
-> > > +	.cells = m10bmc_pacn3000_subdevs,
-> > > +	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
-> > > +};
-> > 
-> > Not seeing how adding a whole new structure and swapping out 4 lines to
-> > describe a device for a different 4 lines per device is better?
-> > 
-> > I'm not necessarily against it.  Just seems like a bit of a pointless
-> > exercise.
-> 
-> After the BMC core/SPI split in a later patch in this series, there will 
-> be an init func in m10bmc core that will be called from spi side and 
-> after PMCI is added, from there too. 
-> 
-> With a structure, only a pointer to that will have to be passed to the 
-> init func rather than n parameters (there will be more members added into 
-> the info structure too both by changes in this series and in the ones not 
-> included to this series).
+I already sent a different fix [1]. I suspect when including
+linux/mman.h, it would still be problematic with older kernel
+headers that lack MADV_PAGEOUT (< v5.4).
 
-Very well.  Please consider these review comments as tentative, until I
-get a chance to dig deeper into the patch-set.
+
+But yeah, I saw that userfaultfd.c was fixed that way:
+
+commit b773827e361952b3f53ac6fa4c4e39ccd632102e
+Author: Chengming Zhou <zhouchengming@bytedance.com>
+Date:   Fri Mar 4 20:29:04 2022 -0800
+
+     kselftest/vm: fix tests build with old libc
+     
+     The error message when I build vm tests on debian10 (GLIBC 2.28):
+     
+         userfaultfd.c: In function `userfaultfd_pagemap_test':
+         userfaultfd.c:1393:37: error: `MADV_PAGEOUT' undeclared (first use
+         in this function); did you mean `MADV_RANDOM'?
+           if (madvise(area_dst, test_pgsize, MADV_PAGEOUT))
+                                              ^~~~~~~~~~~~
+                                              MADV_RANDOM
+     
+     This patch includes these newer definitions from UAPI linux/mman.h, is
+     useful to fix tests build on systems without these definitions in glibc
+     sys/mman.h.
+
+
+[1] https://lkml.kernel.org/r/20230109171255.488749-1-david@redhat.com
 
 -- 
-Lee Jones [李琼斯]
+Thanks,
+
+David / dhildenb
+
