@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B749663C10
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D68663C19
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238056AbjAJJBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:01:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S238148AbjAJJBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238498AbjAJI7w (ORCPT
+        with ESMTP id S237536AbjAJJAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:59:52 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563AF4D71E;
-        Tue, 10 Jan 2023 00:58:25 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4930267AEB;
-        Tue, 10 Jan 2023 08:58:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673341100; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MQLMOsWeyfQ9OMwOEPpBfSY/zX1K5gLRGoJXs0PRFhQ=;
-        b=d0/gJhZr3338arujv292RDCpaFVCNpNRhfmbIWIBvXye7cZy8BnXDKXCy9uBlP+DXmqzhv
-        vH5AzxAF9dGjzxCxyUj1ty+EwLrjZ3mqqo1g8JsfnV+KA79R00NSzTgm9DNtTFXOX4Gf8S
-        h+jlN7NEV2XA5L/y7LnIoWd7unR8GQs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 28CB313338;
-        Tue, 10 Jan 2023 08:58:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 36wFB6wovWP/IgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 10 Jan 2023 08:58:20 +0000
-Date:   Tue, 10 Jan 2023 09:58:19 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 1/4] memcg: Track exported dma-buffers
-Message-ID: <Y70oqxejnUqkJVPx@dhcp22.suse.cz>
-References: <20230109213809.418135-1-tjmercier@google.com>
- <20230109213809.418135-2-tjmercier@google.com>
+        Tue, 10 Jan 2023 04:00:17 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50352574EF
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:58:49 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so9259429wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:58:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3+knuQydFBSdXCzPBUm1wNWUOfzUCjvanxuabDgK1gw=;
+        b=Vwsl/VitKXsjcFz1KYmcE983i6kgsxLO3q7CQ7b7PdZx3ibrn+X9o5JUrRrnrBHugy
+         pzycvCwJ02EP/7RDyNObaKSV+y+uuYoK7cW8saBFKs1pds86xYXZ9QQQTifdYFX9VWp2
+         1THyM/CrZw/izNVOqgh01Bnf04RZiZcd3ppMjfDC1B7/ppRKAJ6w13vX2qXMxZoNk75M
+         NfSzaseLCJ+j5CZfN5geOd5+sq7qQySvQoGIEJN9efn2Rlm2Y3BePe7xpmbiX1M1D127
+         KsZ2Zsk/xUp6QREU+YWGqJngQOaP9sW55fSGCDYZOfOfYN13Vw3svExxYl3TI9g+BSil
+         5rbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3+knuQydFBSdXCzPBUm1wNWUOfzUCjvanxuabDgK1gw=;
+        b=ZIqQGdR3JPGIuFytQGGpyz5sprnBa4T5GTKDSkY2mUxFXBqR45eKriIA1JYZXVnxDC
+         OVYbOQkIFctm0LomtfN1x88m6rSyn56raCVXpgshTnGuqnUdHKbaC72LE/YFreM3a2Qc
+         lJNtIJGx/YK3K0eP+oaNmsjpF88SVczOVCmGDVYlSja04F19bLR1ZZExy1BeUilZQ7wl
+         RdQj8MQ8eD5HeFvtiHezBkkgKs+LUjyNp4bXPSp2fT5x7XC85GcOzlDzNx/9dLeFMKKL
+         fR+OGWMHD4lyBBe6o4GM7qnOJqPGfwIl5yUeF720F9r9B6CeGtBrlS4e4mw8pEvFyO9b
+         mvxg==
+X-Gm-Message-State: AFqh2koa4a3Iys7K63m9JpB2abS8r7fBnqcBAF2tXYquRhnGjTStvJHn
+        SR7Bw+slkcHeZwFGaReSCaBwhBQluUuuVy8/elOwtQ==
+X-Google-Smtp-Source: AMrXdXv8OA/a7Bzm1igJ9GaWS1l61b2HMCdSBanChN+V/gF0j2WiaQrSNFuB+mtRV3KwSXUhrLK8ux5RtUDldLL24DQ=
+X-Received: by 2002:a05:600c:47cf:b0:3cf:ecdb:bcb7 with SMTP id
+ l15-20020a05600c47cf00b003cfecdbbcb7mr2935722wmo.180.1673341127770; Tue, 10
+ Jan 2023 00:58:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109213809.418135-2-tjmercier@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230108025545.338-1-cuiyunhui@bytedance.com> <CANn89i+W__5-jDUdM=_97jzQy9Wq+n9KBEuOGjUi=Fxe_ntqbg@mail.gmail.com>
+ <CAEEQ3wnoKqN+uTmMmUDJ9pp+YVaLmKnv42RApzPbNOGg6CRmnA@mail.gmail.com>
+ <CANn89iKY5gOC97NobXkhYv6d9ik=ks5ZEwVe=6H-VTwux=BwGQ@mail.gmail.com>
+ <20230109100833.03f4d4b1@gandalf.local.home> <CANn89iJwBkCsuNH9vih30xy_Ur6+0dtbfs8wmsA4s7r8=J3cBw@mail.gmail.com>
+ <20230109103922.656eb286@gandalf.local.home>
+In-Reply-To: <20230109103922.656eb286@gandalf.local.home>
+From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
+Date:   Tue, 10 Jan 2023 16:58:36 +0800
+Message-ID: <CAEEQ3w=ZyzamCKtYA76EksYiHM=-=mS5jaWwH5mk9nz-T0up4w@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v4] sock: add tracepoint for send recv length
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Eric Dumazet <edumazet@google.com>, mhiramat@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        kuniyu@amazon.com, xiyou.wangcong@gmail.com,
+        duanxiongchun@bytedance.com, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        dust.li@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 09-01-23 21:38:04, T.J. Mercier wrote:
-> When a buffer is exported to userspace, use memcg to attribute the
-> buffer to the allocating cgroup until all buffer references are
-> released.
-> 
-> Unlike the dmabuf sysfs stats implementation, this memcg accounting
-> avoids contention over the kernfs_rwsem incurred when creating or
-> removing nodes.
+On Mon, Jan 9, 2023 at 11:39 PM Steven Rostedt <rostedt@goodmis.org> wrote:
 
-I am not familiar with dmabuf infrastructure so please bear with me.
-AFAIU this patch adds a dmabuf specific counter to find out the amount
-of dmabuf memory used. But I do not see any actual charging implemented
-for that memory.
+>
+> But looking at this tracepoint again, I see a issue that can help with the
+> dereferencing.
+>
+> Why is family and protocol passed in?
+>
+> +       trace_sock_send_length(sock->sk, sock->sk->sk_family,
+> +                              sock->sk->sk_protocol, ret, 0);
+>
+>
+> Where the TP_fast_assign() is:
+>
+> +       TP_fast_assign(
+> +               __entry->sk = sk;
+> +               __entry->family = sk->sk_family;
+> +               __entry->protocol = sk->sk_protocol;
+> +               __entry->length = ret > 0 ? ret : 0;
+> +               __entry->error = ret < 0 ? ret : 0;
+> +               __entry->flags = flags;
+> +       ),
+>
+> The family and protocol is taken from the sk, and not the parameters. I bet
+> dropping those would help.
+>
+> -- Steve
+>
 
-I have looked at two random users of dma_buf_export cma_heap_allocate
-and it allocates pages to back the dmabuf (AFAIU) by cma_alloc
-which doesn't account to memcg, system_heap_allocate uses
-alloc_largest_available which relies on order_flags which doesn't seem
-to ever use __GFP_ACCOUNT.
+Many thanks to Eric and Steven for your discussions and suggestions, I
+will update on v5.
 
-This would mean that the counter doesn't represent any actual memory
-reflected in the overall memory consumption of a memcg. I believe this
-is rather unexpected and confusing behavior. While some counters
-overlap and their sum would exceed the charged memory we do not have any
-that doesn't correspond to any memory (at least not for non-root memcgs).
 
--- 
-Michal Hocko
-SUSE Labs
+Thanks,
+Yunhui
