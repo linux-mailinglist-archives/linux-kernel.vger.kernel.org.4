@@ -2,122 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D30664DED
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 22:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD4B664DEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 22:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbjAJVS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 16:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S231874AbjAJVTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 16:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjAJVSv (ORCPT
+        with ESMTP id S232021AbjAJVTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 16:18:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D486E5F917;
-        Tue, 10 Jan 2023 13:18:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C974B819B4;
-        Tue, 10 Jan 2023 21:18:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 903FAC433D2;
-        Tue, 10 Jan 2023 21:18:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673385525;
-        bh=F6Dta+lIazziPPSnOOVzVruJLelAjOop7GvSElPe+nA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rK6MYbLfSmDq9njdip0EHAajOumR21dVMB08eMlKPCjUOVj14x7bDWx7zvcGV4t9m
-         +QelqmNLbLLdDB7ZVkp9dcGPqd+d/DvaoROhWsLnFNDDg6lEQhRiiyp9YwaJicG6ao
-         CgibIN422m/secbMm5UfGTZbw8tsxb5Nk+4zAvlghendMW4IyMpZyCwFRKjyZGAi5Q
-         R/PHFyf4+7PCCZrBXRjiuzbrQkKiqRI9ZldKrjB/FlBLmpm3rDoyDw1fqr4ZG7Hmou
-         +sa1Yr1/r3Tr4xQukYyVLznJfl3OQC2Vt2y9ICZpwQq53wKA2+NfbkPit/9N9qVI4U
-         kfOvciBqusD8A==
-Date:   Tue, 10 Jan 2023 21:18:39 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
-Message-ID: <Y73WL3Gwo6w6dJJr@sirena.org.uk>
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-12-william.zhang@broadcom.com>
- <Y7iaEOBP4TRBoDYy@sirena.org.uk>
- <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
- <Y7xrhjhhY3g5DE25@sirena.org.uk>
- <04b740e0-09d1-8c39-4f0e-8f61a74eeb58@broadcom.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cAnrpT/g6G6pP9kV"
-Content-Disposition: inline
-In-Reply-To: <04b740e0-09d1-8c39-4f0e-8f61a74eeb58@broadcom.com>
-X-Cookie: Live free or die.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 16:19:01 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3AA5F91B;
+        Tue, 10 Jan 2023 13:19:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673385540; x=1704921540;
+  h=from:to:cc:subject:date:message-id;
+  bh=ulZlgG79EnzhO/at10rqu6ZjlmtW0C087vTovJIq3do=;
+  b=Mtn1QaLMM2daTEsU/U/CM8E0g7liOIXjRR2qej48x8bp7bk2RoZHJUIw
+   gnJ/K+/2k5wuCVRmiYFhD2Ai2+EgreyXVmFP0nmPB2ZiJPc8sY15Lv33b
+   z2xe3EV2O56RsmjMagsVgGBNeKNItK3z35NOlpm6sQOqMItIn87DMjdUD
+   xrf0qoA5RGJkM/Gbknf+LgYM6fDEycW6cwKWKQ3p2m9erAlwrInm26ggZ
+   LoK+Ao5d1gFG5v55pKGeHvt45zd7GNXUS4iQBHuMB8/yTyiX/ElghOG7Z
+   wEKh68HeOhPsXgH/mHAfOKcqt6TLpYuBoUk4rgJ2Dv0gowXDpkFU7IXlb
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="321963123"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="321963123"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 13:18:58 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="720485160"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="720485160"
+Received: from anupumpa-mobl3.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.91.157])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 13:18:58 -0800
+From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        rppt@kernel.org, peterz@infradead.org, luto@kernel.org
+Cc:     rick.p.edgecombe@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2] x86/hibernate: Use fixmap for saving unmapped pages
+Date:   Tue, 10 Jan 2023 13:18:39 -0800
+Message-Id: <20230110211839.19572-1-rick.p.edgecombe@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hibernate uses the direct map to read memory it saves to disk. Since
+sometimes pages are not accessible on the direct map ("not present" on
+x86), it has special case logic to temporarily make a page present. On x86
+these direct map addresses can be mapped at various page sizes, but the
+logic works ok as long as the not present pages are always mapped as
+PAGE_SIZE such that they don't require a split to map the region as
+present. If the address was mapped not present by a larger page size, the
+split may fail and hibernate would then try to read an address mapped not
+present.
 
---cAnrpT/g6G6pP9kV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Today on x86 there are no known cases of this (huge not present pages on
+the direct map), but it has come up from time to time when developing
+things that operate on the direct map. It blocked making
+VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and also
+has been a complication for various direct map protection efforts.
 
-On Mon, Jan 09, 2023 at 12:43:53PM -0800, William Zhang wrote:
-> On 01/09/2023 11:31 AM, Mark Brown wrote:
+This dependency is also pretty hidden and easily missed by people poking at
+the direct map. For this reason, there are warnings in place to complain
+but not handle this scenario.
 
-> > If this relies on software control of the chip select (which is what I
-> > *think* your dummy CS workaround thing is about, the other patch about
-> > that is really hard to understand) then I'm confused about what the
-> > advantage is?
+One way to make this more robust would be to create some new CPA
+functionality that can know to map and reset the whole huge page in the
+case of trying to map a subpage. But for simplicity and smaller code, just
+make x86 hibernate have its own fixmap PTE that it can use to point
+to 4k pages when it encounters an unmapped direct map page.
 
-> Dummy CS workaround is implemented by Jonas when he first upstream the
-> driver. It does not work on all the board designs so prepend mode is
-> introduced. I have some detail explanation on this in [PATCH 10/16] spi:
-> bcm63xx-hsspi: Make dummy cs workaround as an option.
+Move do_copy_page() to a header such that it can be used in an arch
+breakout. Rename it hib_copy_page() to be more hibernate specific since
+it could appear in other files.
 
-Yes, it is the description in patch 10 that I was having a lot of
-trouble following.
+Use __weak for the arch breakout because there is not a suitable arch
+specific header to use the #define method.
 
-> The controller only work in one mode and that's why driver code has some
-> dependency between these two modes. The advantage of the premode is it works
-> on all hw design however it does not support all types mem_ops operation.
-> That is why you see the patch 14 to disable the dual io mem op. But dummy cs
-> workaround can support this and in case there is such pattern from non mem
-> op spi transaction, dummy cs workaround can be used as long as it does not
-> have the board design limitation.   So neither one is perfect but hopefully
-> with both options available, we can cover all the cases.
+Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+---
 
-We can't switch modes per message?
+Rebase to v6.2-rc3 (original still applied) and resending per:
+https://lore.kernel.org/lkml/CAJZ5v0i6cxGD+V6G+q-Y_Lp-ov51_zmkZr8ZGpCtqWV-e=BsLg@mail.gmail.com/
 
-> You mentioned there is some existing logic to rewrite messages to match
-> driver constraints in the core driver.  I didn't see it when I did a quick
-> search on spi.c. I will take a deep look into the file. But if you can point
-> me where this logic is so I can be sure that I am looking at the right place
-> and will double check if this can be done or not in the core level.  Thanks!
+ arch/x86/include/asm/fixmap.h |  3 +++
+ arch/x86/power/hibernate.c    | 10 ++++++++++
+ include/linux/suspend.h       | 13 +++++++++++++
+ kernel/power/snapshot.c       | 21 +++++++--------------
+ 4 files changed, 33 insertions(+), 14 deletions(-)
 
-spi_replace_transfers().
+diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+index d0dcefb5cc59..0fceed9a4152 100644
+--- a/arch/x86/include/asm/fixmap.h
++++ b/arch/x86/include/asm/fixmap.h
+@@ -108,6 +108,9 @@ enum fixed_addresses {
+ #ifdef CONFIG_PARAVIRT_XXL
+ 	FIX_PARAVIRT_BOOTMAP,
+ #endif
++#ifdef CONFIG_HIBERNATION
++	FIX_HIBERNATE,
++#endif
+ 
+ #ifdef CONFIG_ACPI_APEI_GHES
+ 	/* Used for GHES mapping from assorted contexts */
+diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+index 6f955eb1e163..473b6b5f6b7e 100644
+--- a/arch/x86/power/hibernate.c
++++ b/arch/x86/power/hibernate.c
+@@ -147,6 +147,16 @@ int arch_hibernation_header_restore(void *addr)
+ 	return 0;
+ }
+ 
++void copy_unmapped_page(void *dst, struct page *page)
++{
++	WARN_ON(!preempt_count());
++
++	set_fixmap(FIX_HIBERNATE, page_to_phys(page));
++	__flush_tlb_all();
++	hib_copy_page(dst, (void *)fix_to_virt(FIX_HIBERNATE));
++	clear_fixmap(FIX_HIBERNATE);
++}
++
+ int relocate_restore_code(void)
+ {
+ 	pgd_t *pgd;
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index cfe19a028918..0b19b910526e 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -447,6 +447,19 @@ extern bool hibernation_available(void);
+ asmlinkage int swsusp_save(void);
+ extern struct pbe *restore_pblist;
+ int pfn_is_nosave(unsigned long pfn);
++void copy_unmapped_page(void *dst, struct page *page);
++
++/*
++ * This is needed, because copy_page and memcpy are not usable for copying
++ * task structs.
++ */
++static inline void hib_copy_page(long *dst, long *src)
++{
++	int n;
++
++	for (n = PAGE_SIZE / sizeof(long); n; n--)
++		*dst++ = *src++;
++}
+ 
+ int hibernate_quiet_exec(int (*func)(void *data), void *data);
+ #else /* CONFIG_HIBERNATION */
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index cd8b7b35f1e8..344c071f29d3 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -1369,16 +1369,11 @@ static unsigned int count_data_pages(void)
+ 	return n;
+ }
+ 
+-/*
+- * This is needed, because copy_page and memcpy are not usable for copying
+- * task structs.
+- */
+-static inline void do_copy_page(long *dst, long *src)
++void __weak copy_unmapped_page(void *dst, struct page *page)
+ {
+-	int n;
+-
+-	for (n = PAGE_SIZE / sizeof(long); n; n--)
+-		*dst++ = *src++;
++	hibernate_map_page(page);
++	hib_copy_page(dst, page_address(page));
++	hibernate_unmap_page(page);
+ }
+ 
+ /**
+@@ -1392,11 +1387,9 @@ static inline void do_copy_page(long *dst, long *src)
+ static void safe_copy_page(void *dst, struct page *s_page)
+ {
+ 	if (kernel_page_present(s_page)) {
+-		do_copy_page(dst, page_address(s_page));
++		hib_copy_page(dst, page_address(s_page));
+ 	} else {
+-		hibernate_map_page(s_page);
+-		do_copy_page(dst, page_address(s_page));
+-		hibernate_unmap_page(s_page);
++		copy_unmapped_page(dst, s_page);
+ 	}
+ }
+ 
+@@ -1417,7 +1410,7 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+ 	if (PageHighMem(s_page)) {
+ 		src = kmap_atomic(s_page);
+ 		dst = kmap_atomic(d_page);
+-		do_copy_page(dst, src);
++		hib_copy_page(dst, src);
+ 		kunmap_atomic(dst);
+ 		kunmap_atomic(src);
+ 	} else {
+-- 
+2.17.1
 
---cAnrpT/g6G6pP9kV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO91i4ACgkQJNaLcl1U
-h9Bp5wgAheES6BH1dlAtpV0dhgOx4KhENBN+LgjOJv7pMNzIiHCOJFjVozUAyixx
-yTTcgIaLBzZjhLp2+cyrGjcNbazsm80lsu/naCQvUEALOfBt8H34yniReRvfh9dw
-X1Fn5jNbqYf2ZNYP+y38ICv2aezsuifRHi+izwug2VnBnfxC0IAygqEWJ44kv9IB
-/Q+anI7FjpA5Dee1Av2jJLUztJqleyupTHNCUz+QgQeEvFjd9ot6FettZB/HPQY6
-EedNrPQsfLLLMTHaIfhykK1zIWodheBQjNUCo2KzAE5gRC3Sax/DFV8n/5r7j1JK
-CUMZvrmmpfDgMJElnVUNAoRrUO2dvA==
-=iexY
------END PGP SIGNATURE-----
-
---cAnrpT/g6G6pP9kV--
