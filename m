@@ -2,133 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7BF66404C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FC766404F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbjAJMTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
+        id S238401AbjAJMUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232833AbjAJMS7 (ORCPT
+        with ESMTP id S238433AbjAJMUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:18:59 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB98512AE2;
-        Tue, 10 Jan 2023 04:17:58 -0800 (PST)
-Received: from mercury (dyndsl-091-096-058-120.ewe-ip-backbone.de [91.96.58.120])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3D6F96602D70;
-        Tue, 10 Jan 2023 12:17:57 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673353077;
-        bh=HeioJvW2EDpDXIEq1ksZSMdC1zFkMJZkIFamkQAcslU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YtCCfocD0LKLyMXne6qKIrIuBAfiv/V08/5iZtF3DxLxpY3DvU+r8Owim4t0FHfGo
-         aN83JeeYKZj5CCpXCbiGtNdS9hXbFa7lPR9ZkwmPSJK8Un5cYIZQeZt+uf6sGSKcOv
-         b+DI2wsqsgfv1gR7rrA8e0FUnWEtRlWRqOt7BdbfY8aI3S8yOiZ2lP9/iSYVvtbnhr
-         NJaoMg7oz2oSMWJqZwC+ucHdZJcO4VuhxvZAkZcMO/+p4/ir3+oms09hsMR/2+Ag/y
-         zAWCxqfXARKv17bDWLdZW0v+26d0o+nkyfL8nlHqdbORUznoibbOgfBlWPuPijFY44
-         pZj7rEVHEISOQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 0F11C1060774; Tue, 10 Jan 2023 13:17:54 +0100 (CET)
-Date:   Tue, 10 Jan 2023 13:17:54 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>
-Subject: Re: [PATCHv8 3/7] arm64: dts: rockchip: Add base DT for rk3588 SoC
-Message-ID: <20230110121754.2olqdzbe7wst3u4n@mercury.elektranox.org>
-References: <20230109155801.51642-1-sebastian.reichel@collabora.com>
- <20230109155801.51642-4-sebastian.reichel@collabora.com>
- <2865022.7s5MMGUR32@diego>
+        Tue, 10 Jan 2023 07:20:13 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370053AABC;
+        Tue, 10 Jan 2023 04:18:41 -0800 (PST)
+Date:   Tue, 10 Jan 2023 12:18:39 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673353119;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fb5b5jauiae9ghxl1JxaYK6Ya2SY98lc1aCms5g0aRk=;
+        b=On1VSEdZla0Bmw/KcfSSyN8pkTX2ITn9TzKynwqr7BH9INMDG/Qy0dzlOQkKS1Jz+0CLLi
+        2XJh60gRQWkwKy+OXSwl+t9bpiIiXl4m5A4YhTLzIgdFiIZKruR5hNKOJEvp7stFXnggMz
+        VUPzB8bntoxeDC/+zIgbn9jpyXnMvM+X6CrydDevGiKpNNizylaXFArE/mYHFvBBvZQl9E
+        SxDIiK5k8npeXgF1BhA/hrqYLUzfvHEeQbCyAbLW670jnQRfN/ZwQVjnneSk1/zvNl5q4r
+        b1+vKGy/mFywNczg/lnaLIJAregEn9TSxeo45gTe9FMEsHT/sBF0PbJRXErXvA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673353119;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fb5b5jauiae9ghxl1JxaYK6Ya2SY98lc1aCms5g0aRk=;
+        b=3n/1cgJgSrNLpyQpQCpdyd1NSH5sbc6rqEbPCqJxSiRGJkQE+D3WubjpvyKylx69qrqmmq
+        pbeOtVHKrjqPJDDQ==
+From:   "tip-bot2 for Ashok Raj" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/cpu: Remove redundant extern x86_read_arch_cap_msr()
+Cc:     Ashok Raj <ashok.raj@intel.com>, Ingo Molnar <mingo@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221128172451.792595-1-ashok.raj@intel.com>
+References: <20221128172451.792595-1-ashok.raj@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="etl67xvjo66sk2qd"
-Content-Disposition: inline
-In-Reply-To: <2865022.7s5MMGUR32@diego>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167335311946.4906.3345016453890514965.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/cpu branch of tip:
 
---etl67xvjo66sk2qd
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Commit-ID:     bb5525a50601f8be7d0ffb04740e1714506e60c4
+Gitweb:        https://git.kernel.org/tip/bb5525a50601f8be7d0ffb04740e1714506e60c4
+Author:        Ashok Raj <ashok.raj@intel.com>
+AuthorDate:    Mon, 28 Nov 2022 09:24:51 -08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Tue, 10 Jan 2023 12:40:24 +01:00
 
-Hi,
+x86/cpu: Remove redundant extern x86_read_arch_cap_msr()
 
-On Tue, Jan 10, 2023 at 12:47:23PM +0100, Heiko St=FCbner wrote:
-> Hi Sebastian,
->=20
-> Am Montag, 9. Januar 2023, 16:57:57 CET schrieb Sebastian Reichel:
-> > From: Kever Yang <kever.yang@rock-chips.com>
-> >=20
-> > This initial version supports CPU, dma, interrupts, timers, UART and
-> > SDHCI (everything necessary to boot Linux on this system on chip) as
-> > well as Ethernet, I2C, PWM and SPI.
-> >=20
-> > The DT is split into rk3588 and rk3588s, which is a reduced version
-> > (i.e. with less peripherals) of the former.
-> >=20
-> > Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-> > Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> > Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
-> > Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
-> > [rebase, squash and reword commit message]
->=20
-> I guess that means the list of Rockchip Signed-off-by lines above come
-> from the squashed patches?
->=20
-> If so, I guess I should add Co-Developed-by lines for them, as right now
-> the list is incorrect (author should be first, then everyone through
-> whose hands a patch went)
->=20
-> Meaning I can add those Co-Developed-by lines, so no need to resend,
-> I'm just verifying what I assume about the lines :-)
+The prototype for the x86_read_arch_cap_msr() function has moved to
+arch/x86/include/asm/cpu.h - kill the redundant definition in arch/x86/kernel/cpu.h
+and include the header.
 
-Yes, those are SoB lines from squashed downstream commits.
+Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Reviewed-by: Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Link: https://lore.kernel.org/r/20221128172451.792595-1-ashok.raj@intel.com
+---
+ arch/x86/kernel/cpu/bugs.c | 1 +
+ arch/x86/kernel/cpu/cpu.h  | 2 --
+ arch/x86/kernel/cpu/tsx.c  | 1 +
+ 3 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-
--- Sebastian
-
---etl67xvjo66sk2qd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmO9V24ACgkQ2O7X88g7
-+poilA/+MN4W+QsHbvMNbtuiZsAWUBT6+TraHXOrSpji98es5iHLVjjGxCQakYTU
-XMQfXzNsrzhK4KEgJrAYnO2amzDgmTngdsJo1c2PsxthXsOVSb9G95dpGwJt0iSv
-+YD+cZyvdY5YkIQabTfOOIOLcnk2Lz4ViXa8r2r2+dVkA+GXmq0/l4jTwsC2LK3Z
-4iQ3N9EOn82RW/b+K/GYBHHQHz6FjXcxCDnctq6qhLbzIBTtmG6ToESzLl3SQbUI
-Up872Q/QirRm3/96QfeeFI2TedRPkDgjFLiJ8tH6lVSKhCFcrQ/R8mijyFSRDVFM
-myAIj1joNhmQEWBiqd6uSSuEptgwQd2vckTpbs+t3+0aSUZ3WEGeCTkenQepiGvG
-SC3RdX8T2YEwhmknXG8eMhg+GtJlavc/LzNUfxFtYW7w5WNWapDsDspxgUxU3O0y
-gIj6tCk/EqeCQ4u9Prb6XyQVebEbN+nM/qdbeJlnBYQ65p/EqKDK6hAoyQCnoxa9
-vKsVgl7VLZeJUPiwCRz4SanQF6rfHuTyKkaUAiIahZV+jO+9GuP2155XxjL9tEPE
-WXiot7wtu3CML7kD0RRXc4UZFy1U+6GaSr4bzD3v9gCGtSZGx+a1YuXQKP+j6asF
-6y2tPoTS5hqygztq1DOGrNOTb0ceADzdgmOgygjBKTtT74yKvMM=
-=AHuN
------END PGP SIGNATURE-----
-
---etl67xvjo66sk2qd--
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index bca0bd8..19e1ce0 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -33,6 +33,7 @@
+ #include <asm/e820/api.h>
+ #include <asm/hypervisor.h>
+ #include <asm/tlbflush.h>
++#include <asm/cpu.h>
+ 
+ #include "cpu.h"
+ 
+diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
+index 7c9b589..57a5349 100644
+--- a/arch/x86/kernel/cpu/cpu.h
++++ b/arch/x86/kernel/cpu/cpu.h
+@@ -83,6 +83,4 @@ unsigned int aperfmperf_get_khz(int cpu);
+ extern void x86_spec_ctrl_setup_ap(void);
+ extern void update_srbds_msr(void);
+ 
+-extern u64 x86_read_arch_cap_msr(void);
+-
+ #endif /* ARCH_X86_CPU_H */
+diff --git a/arch/x86/kernel/cpu/tsx.c b/arch/x86/kernel/cpu/tsx.c
+index 8009c83..b31ee4f 100644
+--- a/arch/x86/kernel/cpu/tsx.c
++++ b/arch/x86/kernel/cpu/tsx.c
+@@ -11,6 +11,7 @@
+ #include <linux/cpufeature.h>
+ 
+ #include <asm/cmdline.h>
++#include <asm/cpu.h>
+ 
+ #include "cpu.h"
+ 
