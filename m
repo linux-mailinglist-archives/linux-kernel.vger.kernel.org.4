@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872C3663603
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B6A663604
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237833AbjAJAEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 19:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
+        id S237835AbjAJAFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 19:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237777AbjAJAEt (ORCPT
+        with ESMTP id S237525AbjAJAFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 19:04:49 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7430FDFCC;
-        Mon,  9 Jan 2023 16:04:48 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-15085b8a2f7so10569509fac.2;
-        Mon, 09 Jan 2023 16:04:48 -0800 (PST)
+        Mon, 9 Jan 2023 19:05:23 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9111DDE7
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 16:05:22 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id f3so7062469pgc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 16:05:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=tU7xqlxoqQYzxNUd2tV9T0j18fTCGh8gQdqsrjiDR18=;
-        b=VCvgFgIO+G4qIlz2s3+FUcKmJ9xolwbkKBDVQd7C8z/HK6P7+HYIW/LRENO5wZ8JZT
-         K1CKRg8n5VeQK9EHzkksIIWSGUsVBG0i2tbsQwwVcBNlUDYW8ZIA+Q9aetlKBtxFRJVZ
-         eWZdh8MXnaYEl4CMDUOj00bjgg7WIGRnvrWjIa6udbhxGJfVXl8JMPF6ZbBEpjp9cWmf
-         91DjHvMfWCVFl5PFBU+6dU/fKi1IYlKEnnJi491aXEBDQEWOXYt0bf20IPpUidzzg+EQ
-         JGPegHDTVzpfuxhPYkzDqn6h9+bUgO3lTkXx2/xR2t7Q7glKfchpW8kg/mIPduwxZhKU
-         40mQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ywk5kgimgzqnnPT+XZy47dxy0OlRvssJgYFxBD/Z4aE=;
+        b=K4f/fsCYEekdsxkKz3b7M4aYBHvLignDAyYA6AqVyL50HxvhGB45l9SqOIKmd8BK2f
+         IlrSNlIpag5PruA+qorMeir3g/F+EHk1PKs0fBSj+74ZdN2IeVOF+TkMYzI4AwiHoWci
+         TMeFBaDMn1Oio3riXZu/BoqjYcLw0cPfBOo9OGYZ5VE+3AZVM/2pjsJKxaEbcdM/go/e
+         XMkAYcTLCXXvWeZsngWu9lPJFmNb6DPZyF1bhj6OHbmY2JRlqaD7Z8Tq0lAL/cCf1wGT
+         8Ttnt7CDs5ZmpN8TCM+v+ZpUSG6iwIrYVyoec7tjahfjSete7GQvRMl85kwK/EzjMSZx
+         iYiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tU7xqlxoqQYzxNUd2tV9T0j18fTCGh8gQdqsrjiDR18=;
-        b=F90B24k45x6L4NZiWj1N4OrdRaIn+VOySKBDCamgiWzDopWBc3djLk4E3+pnG1MJOf
-         hmLzA7P7kbsw1GkmotD4y/UBWBWzPAH0djetMjQjMacMHV0y2DRfOiLoCP/gFfFT1tvz
-         q6/g6R0eVPn1vCAh32ZJpvtrcRBAcGpoMfMyjyLOv+SCkDj2ebZBCvZKG5hVV9sovUV3
-         QeNXcTZi2DBN2mVWoNKoXJ2w/CYKj+6AvvVY1fmcM50g2aCY4zeX3Nfoh4CqhRRV97h5
-         j31EngvnIQ/wvbIQ7pRwWztbaMQsO5vmaJbz3zmYLGnx1esS6Hkm8Uk+ws/DWvd2P8oq
-         6HCw==
-X-Gm-Message-State: AFqh2kpIdHxWr3h6ks952bFwJm/U6va3H933KrfaRXp7wvP98WchsT4B
-        kPQWS4TWGnoheC5tgZeSmmc7Mwigji4=
-X-Google-Smtp-Source: AMrXdXsb8On+uzw3FWK3vK1VkZcaAObj4m6y3i+HKyTpeKJI6+GyvLelZK+5q8EBpined4AKIx9aVA==
-X-Received: by 2002:a05:6870:c1c2:b0:14f:9e41:7dbe with SMTP id i2-20020a056870c1c200b0014f9e417dbemr38258957oad.10.1673309087755;
-        Mon, 09 Jan 2023 16:04:47 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b0014813cc4a51sm4985686oae.29.2023.01.09.16.04.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 16:04:47 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d49d4b4c-e7ee-e0a1-56e6-7f193e0d1340@roeck-us.net>
-Date:   Mon, 9 Jan 2023 16:04:45 -0800
+        bh=Ywk5kgimgzqnnPT+XZy47dxy0OlRvssJgYFxBD/Z4aE=;
+        b=5jRl6MI2ICRXeFSjPRj0N0RYL9m5t9lBqIoQpb20BN1zd0DSt2x/6aHVYGhRBrfvf0
+         1AOiKHzvdyuulEx3jPlkewrH5Wte/3NEOHye3BBp5N2vn5zCh8nwqW8A5jrQq0RFdYY4
+         IA/BgpYgZ/rrKhtPCYjmKQBEUOknwPRj88hiJhiJ2ULa2I7GCiU7VyV9YkVU0ZIvUFaI
+         nbmSBwHqhpP+hLWK2xHPgGeyF9x9EFp00Ne9lgU30IO+ieJLs5NWQsnpwPegqNunIzpn
+         biEMPoz26hkowu+7lPxbj3fE2ywLSwIv3IxWWcTCfzi8PbKhfLrE6FSrUPRaKTAR65j8
+         5xPA==
+X-Gm-Message-State: AFqh2krWVQS6mqfrPlYKWON13hM54plhq3t+s2S8WfW4UDpyJbOO9JDw
+        y+8RMYMR93Lo0TziK795I/IYY9fseKjjlxq+rBUDfA==
+X-Google-Smtp-Source: AMrXdXtVwTLcBMamWsZkIKTNdshS3/u/EDgTWfUDOvfa4R33160dUHhm6rUdQJgg1hNJiNk3fCDNzcMdRKlWw9lh5+8=
+X-Received: by 2002:a63:4943:0:b0:478:e6cf:c24c with SMTP id
+ y3-20020a634943000000b00478e6cfc24cmr5160343pgk.365.1673309121880; Mon, 09
+ Jan 2023 16:05:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 3/5] hwmon: ltc2945: Handle error case in
- ltc2945_value_store
-Content-Language: en-US
-To:     Jonathan Cormier <jcormier@criticallink.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>
-References: <20221214220727.1350784-3-jcormier@criticallink.com>
- <20230109233534.1932370-1-jcormier@criticallink.com>
- <20230109233534.1932370-4-jcormier@criticallink.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230109233534.1932370-4-jcormier@criticallink.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+ <20230105003813.1770367-22-paulmck@kernel.org> <CAKwvOdmt7mnP_dfCMO_YUV792Zgtirk=NFqe8XH0z88-b0e23A@mail.gmail.com>
+In-Reply-To: <CAKwvOdmt7mnP_dfCMO_YUV792Zgtirk=NFqe8XH0z88-b0e23A@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 9 Jan 2023 16:05:10 -0800
+Message-ID: <CAKwvOdnQX1H9-8QnsUiXi+eK4udGdO34isHZ-PEzNDZwJbJ41w@mail.gmail.com>
+Subject: Re: [PATCH rcu 22/27] init: Remove "select SRCU"
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,114 +79,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 15:35, Jonathan Cormier wrote:
-> ltc2945_val_to_reg errors were not being handled
-> which would have resulted in register being set to
-> 0 (clamped) instead of being left alone.
-> 
-> Change reg_to_val and val_to_reg to return values
-> via parameters to make it more obvious when an
-> error case isn't handled. Also to allow
-> the regval type to be the correct sign in prep for
-> next commits.
-> 
+On Mon, Jan 9, 2023 at 4:02 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Wed, Jan 4, 2023 at 4:38 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > Now that the SRCU Kconfig option is unconditionally selected, there is
+> > no longer any point in selecting it.  Therefore, remove the "select SRCU"
+> > Kconfig statements.
+>
+> Looks like that's the case as of
+> commit 0cd7e350abc4 ("rcu: Make SRCU mandatory")
+> in v6.2-rc1.
+>
+> >
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: Johannes Weiner <hannes@cmpxchg.org>
+> > Cc: Vlastimil Babka <vbabka@suse.cz>
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Miguel Ojeda <ojeda@kernel.org>
+> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > Cc: Aaron Tomlin <atomlin@redhat.com>
+> > Cc: Tejun Heo <tj@kernel.org>
+> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+>
+> Patch LGTM
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> Note that there's quite a few more of these though. Perhaps best to
+> remove them all together? Or perhaps you already have individual
+> patches out already for all of these?
 
-Sorry, I don't see that as reason or argument for such invasive changes.
-As far as I can see, a two-liner to check the return value of val_to_reg()
-should have been sufficient. Most of the rest, such as splitting
-the return value into two elements, is POV and just adds additional code
-and complexity for zero gain.
+Ah indeed, I missed that this was part of such a series:
+https://lore.kernel.org/lkml/20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1/
 
-Guenter
 
-> Fixes: 6700ce035f83 ("hwmon: Driver for Linear Technologies LTC2945")
-> 
-> Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
-> ---
->   drivers/hwmon/ltc2945.c | 30 ++++++++++++++++++------------
->   1 file changed, 18 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-> index 9af3e3821152..c66acf8d2124 100644
-> --- a/drivers/hwmon/ltc2945.c
-> +++ b/drivers/hwmon/ltc2945.c
-> @@ -70,12 +70,12 @@ static inline bool is_power_reg(u8 reg)
->   }
->   
->   /* Return the value from the given register in uW, mV, or mA */
-> -static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> +static int ltc2945_reg_to_val(struct device *dev, u8 reg, u64 *regval)
->   {
->   	struct regmap *regmap = dev_get_drvdata(dev);
->   	unsigned int control;
->   	u8 buf[3];
-> -	long long val;
-> +	u64 val;
->   	int ret;
->   
->   	ret = regmap_bulk_read(regmap, reg, buf,
-> @@ -148,11 +148,12 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
->   	default:
->   		return -EINVAL;
->   	}
-> -	return val;
-> +	*regval = val;
-> +	return 0;
->   }
->   
->   static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> -			      unsigned long val)
-> +			      unsigned long val, unsigned long *regval)
->   {
->   	struct regmap *regmap = dev_get_drvdata(dev);
->   	unsigned int control;
-> @@ -220,19 +221,21 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
->   	default:
->   		return -EINVAL;
->   	}
-> -	return val;
-> +	*regval = val;
-> +	return 0;
->   }
->   
->   static ssize_t ltc2945_value_show(struct device *dev,
->   				  struct device_attribute *da, char *buf)
->   {
->   	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-> -	long long value;
-> +	int ret;
-> +	u64 value;
->   
-> -	value = ltc2945_reg_to_val(dev, attr->index);
-> -	if (value < 0)
-> -		return value;
-> -	return sysfs_emit(buf, "%lld\n", value);
-> +	ret = ltc2945_reg_to_val(dev, attr->index, &value);
-> +	if (ret < 0)
-> +		return ret;
-> +	return sysfs_emit(buf, "%llu\n", value);
->   }
->   
->   static ssize_t ltc2945_value_store(struct device *dev,
-> @@ -245,7 +248,7 @@ static ssize_t ltc2945_value_store(struct device *dev,
->   	unsigned long val;
->   	u8 regbuf[3];
->   	int num_regs;
-> -	int regval;
-> +	unsigned long regval;
->   	int ret;
->   
->   	ret = kstrtoul(buf, 10, &val);
-> @@ -253,7 +256,10 @@ static ssize_t ltc2945_value_store(struct device *dev,
->   		return ret;
->   
->   	/* convert to register value, then clamp and write result */
-> -	regval = ltc2945_val_to_reg(dev, reg, val);
-> +	ret = ltc2945_val_to_reg(dev, reg, val, &regval);
-> +	if (ret < 0)
-> +		return ret;
-> +
->   	if (is_power_reg(reg)) {
->   		regval = clamp_val(regval, 0, 0xffffff);
->   		regbuf[0] = regval >> 16;
+>
+> $ grep -rn 'select SRCU'
+> mm/Kconfig:670: select SRCU
+> kernel/power/Kconfig:121: select SRCU
+> arch/mips/kvm/Kconfig:29: select SRCU
+> arch/riscv/kvm/Kconfig:30: select SRCU
+> arch/s390/kvm/Kconfig:34: select SRCU
+> arch/powerpc/kvm/Kconfig:25: select SRCU
+> arch/x86/kvm/Kconfig:49: select SRCU
+> arch/x86/Kconfig:286: select SRCU
+> arch/x86/Kconfig:1941: select SRCU
+> arch/arm64/kvm/Kconfig:31: select SRCU
+> init/Kconfig:1868: select SRCU
+> security/tomoyo/Kconfig:9: select SRCU
+> fs/btrfs/Kconfig:20: select SRCU
+> fs/dlm/Kconfig:7: select SRCU
+> fs/quota/Kconfig:9: select SRCU
+> fs/notify/Kconfig:4: select SRCU
+> drivers/md/Kconfig:9: select SRCU
+> drivers/clk/Kconfig:26: select SRCU
+> drivers/dax/Kconfig:4: select SRCU
+> drivers/devfreq/Kconfig:4: select SRCU
+> drivers/net/Kconfig:337: select SRCU
+> drivers/hwtracing/stm/Kconfig:5: select SRCU
+> drivers/cpufreq/Kconfig:6: select SRCU
+> drivers/opp/Kconfig:4: select SRCU
+>
+> > ---
+> >  init/Kconfig | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index 7e5c3ddc341de..af511c726d695 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -1865,7 +1865,6 @@ config PERF_EVENTS
+> >         default y if PROFILING
+> >         depends on HAVE_PERF_EVENTS
+> >         select IRQ_WORK
+> > -       select SRCU
+> >         help
+> >           Enable kernel support for various performance events provided
+> >           by software and hardware.
+> > --
+> > 2.31.1.189.g2e36527f23
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
+
+
+-- 
+Thanks,
+~Nick Desaulniers
