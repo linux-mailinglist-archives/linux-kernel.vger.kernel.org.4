@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8907663DDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D33663DA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjAJKTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S232043AbjAJKMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238283AbjAJKMj (ORCPT
+        with ESMTP id S232461AbjAJKL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:12:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1BA11442
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:11:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673345512;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uuquTFMqRJVfYTO7+J+3i6OURVu6jEbVGPSXjBZGYVA=;
-        b=Gk5fqV8JeRgtGxjIyaH7sJ0C8iCh82FyogHhdTizqL7QFRL4/VoyskWdZxuUDI5Li31OQe
-        Wy2GrWx6ftM6m+DJua44Lb6UE3qZdMIGTuPpJKH2u7HyLw4wdlRLxen1kvBQITKoPrWY4G
-        wNwcD07OjY/GvCRnUxQrkPKr8zC5J+A=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-532-4JEn3TWDMW-cg7AbizvEcg-1; Tue, 10 Jan 2023 05:11:51 -0500
-X-MC-Unique: 4JEn3TWDMW-cg7AbizvEcg-1
-Received: by mail-wr1-f72.google.com with SMTP id v12-20020adfc5cc000000b0029910b64099so1849914wrg.23
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:11:51 -0800 (PST)
+        Tue, 10 Jan 2023 05:11:58 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A50E544F0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:11:52 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id v2so163848wrw.10
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:11:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jwoFAzmVct79bqJZEwpYCPbEy1KK9a8Xos32k6CB9ok=;
+        b=rll1yyrS+IMjOPKuwpE7YSGZemxZTB6eFOYDpBF+hnLf8pmgI92TRe2Uyf6umZaBH2
+         dTewi4vtWoQvnsco1Y0GwBjco3YRBwE9eNJfS+spQmmdTIpaRZA8SQNDa8+Um6qcEI9n
+         JzXiXLmKMuFZSvfxX+EUUFKYorZhohkXFIDMQGNmdgFsWGpqD+CbAqN6ibV0fM4yRPWo
+         MdgnfslqwGcrq7rEOA9stDMeBRwZqR6nPqorJVQ3DGSsOiILzftPzHsGjPwAFPxBpBs0
+         zMdQwV8oK5cftcPpzfopRSmC+l/dsUZvzR523Ia7oFaRmtCUdOuEc9Udn9skxNgqDANr
+         bvzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uuquTFMqRJVfYTO7+J+3i6OURVu6jEbVGPSXjBZGYVA=;
-        b=DygfxEVX1LEJQ1SPX5rHjeQ68Y+PHRVgk1Y1ZTMXqTIqN+0QbtxLyp9TPUyr3Aio/X
-         lYs4ycPVKhJ1yoWl/88niucY1hWsZ36aNulUUnO0P3nV5KVflUWH8wDaEOLl+C7w1MC0
-         n1YC48nHRg7ODeHWgc7yM6rQQnwN5ZgJA5yZBDUOSrB20vvX5GOCiMnoy3DQzcNAND9I
-         Ia2SIqVi+/8yr7Wjya3te5l6HEukqTK6v4X2MUAQEqn3MFmjJr/V1Gb4uh3oBjSNCtYS
-         O8CBzn0kPFm3t4q7ZDLxbjOegCQB2fNhcKFFJNo6YdhLHEco5nys5mana3ye/8TezfWf
-         mdBA==
-X-Gm-Message-State: AFqh2kp3hJ2uETxlHGrp9CPPjmyFihv934N+1tX+7VyeB91Pac3o0qq4
-        MzkhxA6CaFEJTQrJu1pM41lqsHabvGwn1OQiA/kVbMvVMueBbsAnuX/O27V6rgH+d+t/gElPOeM
-        N0rVPgG7MN6zYtI57CMtuIgaE
-X-Received: by 2002:a05:6000:1207:b0:2bb:d412:9866 with SMTP id e7-20020a056000120700b002bbd4129866mr7103303wrx.25.1673345510542;
-        Tue, 10 Jan 2023 02:11:50 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtfFFHhzmCucFrCTK/XNlXR0dhKPkmzqLJkR6YXyfiB0YU/92FR0QQnnJ2aakpIWDe4m/HZmQ==
-X-Received: by 2002:a05:6000:1207:b0:2bb:d412:9866 with SMTP id e7-20020a056000120700b002bbd4129866mr7103292wrx.25.1673345510382;
-        Tue, 10 Jan 2023 02:11:50 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id e1-20020adfdbc1000000b002b8fe58d6desm10831321wrj.62.2023.01.10.02.11.49
+        bh=jwoFAzmVct79bqJZEwpYCPbEy1KK9a8Xos32k6CB9ok=;
+        b=p0hjEWCfhxNZZ9daUmeK1KIL1hc945QNVt9ZLAmnRzZ/zHPtj59FlpbeZEBSCkD8Ha
+         BHuHB63DXqqBSfK9uFcTyJzJCipC7LAEPINwFbv2F5E4wTNspuKHMHm5VUF8EpHSybis
+         E+Z8+MFw91K6t8dm4HYqAFXrIzQdZTNHPVOV5kjoNXJfcrMWVmfSgur3l/t0t5UIKirw
+         J7mU/1+GR/XgIDuEuHgSRP0BNQ0D+0e18IiUnBNZ0T/T2OBEczj07jyhoAwnyY8jlh0O
+         yjBh6VY4kZCjCcTavTWQpHJe0Eq8Oxpl0W7QRqHFOmttp8y4Iu8dcKM7BcvtEV3V1fFk
+         Rkzw==
+X-Gm-Message-State: AFqh2kqtugoa0n0imsfOOhzenXnsNt67nuXtUa70uS/psNarB39WUAf+
+        08V/byqi14gjZRyM1gPQqBDBMg==
+X-Google-Smtp-Source: AMrXdXsZPpkq9cPmTR37ia51zvuv0bKJrlVZp8tgAuoG6eS7DKgEpCtJM1QJDTWTu2GwMRdxUu4i1A==
+X-Received: by 2002:adf:a3c9:0:b0:2b9:d6ba:21ef with SMTP id m9-20020adfa3c9000000b002b9d6ba21efmr13649879wrb.65.1673345511049;
+        Tue, 10 Jan 2023 02:11:51 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u24-20020adfa198000000b002bc84c55758sm2521030wru.63.2023.01.10.02.11.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 02:11:49 -0800 (PST)
-Message-ID: <d30afd16-950a-7f2a-9ee9-31a0f3493ed1@redhat.com>
+        Tue, 10 Jan 2023 02:11:50 -0800 (PST)
+Message-ID: <a81b8f5c-9d41-e612-8d77-abf280898c48@linaro.org>
 Date:   Tue, 10 Jan 2023 11:11:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 041/606] drm/i2c/tda998x: Convert to i2c's .probe_new()
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 3/3] dt-bindings: firmware: qcom: scm: Separate VMIDs
+ from header to bindings
 Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-42-uwe@kleine-koenig.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221118224540.619276-42-uwe@kleine-koenig.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230109130523.298971-1-konrad.dybcio@linaro.org>
+ <20230109130523.298971-3-konrad.dybcio@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230109130523.298971-3-konrad.dybcio@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/22 23:36, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On 09/01/2023 14:05, Konrad Dybcio wrote:
+> The SCM VMIDs represent predefined mappings that come from the
+> irreplaceable and non-omittable firmware that comes with every
+> Qualcomm SoC (unless you steal engineering samples from the factory)
+> and help clarify otherwise totally magic numbers which we are
+> required to pass to the secure world for some parts of the SoC to
+> work at all (with modem being the prime example).
 > 
-> The probe function doesn't make use of the i2c_device_id * parameter so it
-> can be trivially converted.
+> On top of that, with changes to the rmtfs binding, secure VMIDs will
+> become useful to have in device trees for readability. Separate them
+> out and add to include/dt-bindings.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
+> v3 -> v4:
 
-I've pushed this to drm-misc (dri-misc-next) now. Thanks!
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
 Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Krzysztof
 
