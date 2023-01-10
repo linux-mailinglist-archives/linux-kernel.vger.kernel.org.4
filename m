@@ -2,131 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E640663E4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D19663E4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237813AbjAJKcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:32:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
+        id S232660AbjAJKeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbjAJKcX (ORCPT
+        with ESMTP id S237591AbjAJKeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:32:23 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76594086E;
-        Tue, 10 Jan 2023 02:32:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673346741; x=1704882741;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9/kJ2xAAlDxaM8+ITKEhkvbhwMba0eMpEUpzikqaENM=;
-  b=N7Szr+QIQlZc/N+GIDc3aEzK3bWtm1U7dBj60yxo/SVACW3xnnL26ZGf
-   5KOVxLMeyl7z3JU2OSxvMx4AOz/p7UXnWdc4LnAWNdtFzcUKNt8tkiF2S
-   dULsiirsNyZPGFcggWL/VKZF4w6DIxO2lXrUtggtt0PF9oqjxqKJVKRMh
-   +tLDJ3OfixWOxxkNuDubXaX5fmsot7vWmbsUQPOem0Pft6ZCbaDZ/0zig
-   mDaQS3JCrGqskrmwjOJg5wxyoCLiP50Kfl+B508PAyUninojxY5lkERx9
-   S/t08ncGI/TuWfiak9VyPm+s6dZII3QkchF+JostfpXQ96C7484yVbXuv
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="387566158"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="387566158"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 02:32:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="902322641"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="902322641"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Jan 2023 02:32:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pFBvQ-006zAK-2s;
-        Tue, 10 Jan 2023 12:32:12 +0200
-Date:   Tue, 10 Jan 2023 12:32:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v10 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-Message-ID: <Y70+rAq1QoS4ohdG@smile.fi.intel.com>
-References: <20230110003029.806022-1-matthew.gerlach@linux.intel.com>
- <20230110003029.806022-5-matthew.gerlach@linux.intel.com>
+        Tue, 10 Jan 2023 05:34:08 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4222A4FD6F;
+        Tue, 10 Jan 2023 02:34:06 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30AAXiGI060354;
+        Tue, 10 Jan 2023 04:33:44 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673346824;
+        bh=DsTzouR69qoDyHh7VdYjjFd89D92gjs6h/qx5zUB254=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=ijZDCUzg0RCqWyFSgnCaD83/ZVrGbruguEGHXqxLDpB97yhKj9hzyLrpiRHwNSpaJ
+         uc5eOrP+KSgT4Ze1bnimOXwWpzMT1/olCCZnfvd0NwZWomc2RBNepogNpKoyDZQ9hv
+         bFaG3YK4JH9gcKEQrnLWCeyFYWlJA9M571tb405c=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30AAXi0Z019981
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 10 Jan 2023 04:33:44 -0600
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 10
+ Jan 2023 04:33:44 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 10 Jan 2023 04:33:44 -0600
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30AAXepN104976;
+        Tue, 10 Jan 2023 04:33:40 -0600
+Message-ID: <cf8c7d73-1e51-7dcd-bb32-34272a63066f@ti.com>
+Date:   Tue, 10 Jan 2023 16:03:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230110003029.806022-5-matthew.gerlach@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
+Subject: Re: [RESEND PATCH] PCI: cadence: Fix Gen2 Link Retraining process
+To:     <tjoseph@cadence.com>, <lpieralisi@kernel.org>, <robh@kernel.org>,
+        <kw@linux.com>, <bhelgaas@google.com>, <nadeem@cadence.com>
+References: <20230102075656.260333-1-s-vadapalli@ti.com>
+Content-Language: en-US
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230102075656.260333-1-s-vadapalli@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 04:30:29PM -0800, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Hello All,
+
+Can this patch please be merged in case of no feedback or issues?
+
+Regards,
+Siddharth.
+
+On 02/01/23 13:26, Siddharth Vadapalli wrote:
+> The Link Retraining process is initiated to account for the Gen2 defect in
+> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
+> is i2085, documented at:
+> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
 > 
-> Add a Device Feature List (DFL) bus driver for the Altera
-> 16550 implementation of UART.
-
-...
-
-> +static int dfh_get_u64_param_val(struct dfl_device *dfl_dev, int param_id, u64 *pval)
+> The existing workaround implemented for the errata waits for the Data Link
+> initialization to complete and assumes that the link retraining process
+> at the Physical Layer has completed. However, it is possible that the
+> Physical Layer training might be ongoing as indicated by the
+> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+> 
+> Fix the existing workaround, to ensure that the Physical Layer training
+> has also completed, in addition to the Data Link initialization.
+> 
+> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> ---
+>  .../controller/cadence/pcie-cadence-host.c    | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+> index 940c7dd701d6..5b14f7ee3c79 100644
+> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
+> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+> @@ -12,6 +12,8 @@
+>  
+>  #include "pcie-cadence.h"
+>  
+> +#define LINK_RETRAIN_TIMEOUT HZ
+> +
+>  static u64 bar_max_size[] = {
+>  	[RP_BAR0] = _ULL(128 * SZ_2G),
+>  	[RP_BAR1] = SZ_2G,
+> @@ -77,6 +79,27 @@ static struct pci_ops cdns_pcie_host_ops = {
+>  	.write		= pci_generic_config_write,
+>  };
+>  
+> +static int cdns_pcie_host_training_complete(struct cdns_pcie *pcie)
 > +{
-> +	size_t psize;
-> +	u64 *p;
+> +	u32 pcie_cap_off = CDNS_PCIE_RP_CAP_OFFSET;
+> +	unsigned long end_jiffies;
+> +	u16 lnk_stat;
 > +
-> +	p = dfh_find_param(dfl_dev, param_id, &psize);
-> +	if (IS_ERR(p))
-> +		return PTR_ERR(p);
-
-> +	if (psize != sizeof(u64))
-> +		return -EINVAL;
-
-If this code stays in the newer versions, make it more robust against changes,
-i.e. by using sizeof(*pval).
-
-> +	*pval = *p;
+> +	/* Wait for link training to complete. Exit after timeout. */
+> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
+> +	do {
+> +		lnk_stat = cdns_pcie_rp_readw(pcie, pcie_cap_off + PCI_EXP_LNKSTA);
+> +		if (!(lnk_stat & PCI_EXP_LNKSTA_LT))
+> +			break;
+> +		usleep_range(0, 1000);
+> +	} while (time_before(jiffies, end_jiffies));
 > +
-> +	return 0;
+> +	if (!(lnk_stat & PCI_EXP_LNKSTA_LT))
+> +		return 0;
+> +
+> +	return -ETIMEDOUT;
 > +}
-
-...
-
-> +config SERIAL_8250_DFL
-> +	tristate "DFL bus driver for Altera 16550 UART"
-
-5
-
-> +	depends on SERIAL_8250 && FPGA_DFL
-> +	help
-> +	  This option enables support for a Device Feature List (DFL) bus
-> +	  driver for the Altera 16650 UART. One or more Altera 16650 UARTs
-
-6
-
-Which one is correct?
-
-> +	  can be instantiated in a FPGA and then be discovered during
-> +	  enumeration of the DFL bus.
 > +
-> +	  To compile this driver as a module, chose M here: the
-> +	  module will be called 8250_dfl.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
+>  {
+>  	struct device *dev = pcie->dev;
+> @@ -118,6 +141,10 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
+>  		cdns_pcie_rp_writew(pcie, pcie_cap_off + PCI_EXP_LNKCTL,
+>  				    lnk_ctl);
+>  
+> +		ret = cdns_pcie_host_training_complete(pcie);
+> +		if (ret)
+> +			return ret;
+> +
+>  		ret = cdns_pcie_host_wait_for_link(pcie);
+>  	}
+>  	return ret;
