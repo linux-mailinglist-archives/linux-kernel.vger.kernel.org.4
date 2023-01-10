@@ -2,64 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7005E664570
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90665664572
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbjAJP6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S238936AbjAJP6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbjAJP6O (ORCPT
+        with ESMTP id S238942AbjAJP6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:58:14 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E73FC4A;
-        Tue, 10 Jan 2023 07:58:12 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9DCC2100007;
-        Tue, 10 Jan 2023 15:58:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673366291;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ls2ZHhB4etdhWoWPPLqYUa/37vhJl28tR8qb5hvwZ/s=;
-        b=Fm2cxqae7qTWtMWT0LqewzuhPawG7GgGOlqOXEaY6yzG5ygk09t/nSmIMN3jfeCOUA+Ubt
-        /zddmJrMmKoYhcjsi4azTVvtDH1YviODyTOc0szzDibgkXbgp8b2NOgVIuhh1tUg1Zz0D4
-        8cP3FU3Fi/UoxXvfB/oYdiQKYfnBlEUPVuPbLJNby5H+/l+AhxTdmz+ajjLoEuWMaFXExY
-        xTuV4jurbPXEe8o1k0nt0mS/QKPugy73i2WjyPGA31V0yla1yWL+oh3Z4JXk3fok3rlIJM
-        tMG8GMkr1VIoD2/JcH7XIBKkw8dMqnVCMnt5/IUjISFXg448Se0uPrHen3OnoA==
-Date:   Tue, 10 Jan 2023 16:58:06 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Andre Przywara <andre.przywara@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v4 07/12] riscv: dts: allwinner: Add Sipeed Lichee RV
- devicetrees
-Message-ID: <Y72LDlIOYo/I8dii@aptenodytes>
-References: <20221231233851.24923-1-samuel@sholland.org>
- <20221231233851.24923-8-samuel@sholland.org>
- <Y7bW32i3EUmGHqSK@aptenodytes>
- <05c1ee07-0750-d40e-8498-55ea07b52ab1@sholland.org>
+        Tue, 10 Jan 2023 10:58:21 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573BC4F137
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:58:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OlF+rc/YfqRl0CyPk92+lYLwbE1130/iJg8+0H1GjVbJyJtGB+hArj48OmlsbrKMNBvT80BUO11Y95/GW8eRERZlXUdFQTPYraFVafx9FIkGjs3IyU0g9bov55ARxCfCbD00uRS8ShQOgr7D1O8grHlVSD7cr9xR2rMd8I33PqRWQBGht5KN5h2ISeY4C8vOVI7gJ5byFPyi3cTf/DlBIIJiLzzJKquRKWnJhmKm1rJBtLBsyg3g5NtosLG68E1tlSFoFbYY9a3Ij4MGa8ZYDTb+02gEs86PXxk0/3ThX5qxh6ssQQC0k2SXInLFoAVl9DMe5DHvSMrFNO+rV7Eb8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4HNY/9AP4eizCHPboS/JKyoUTPkogDLpg5zBThSX91I=;
+ b=MCPnsDQVX4cuIsO6awSqx+khZFEIAYUmzt2l7s5tTT055HR3T567EhOp2Y0iJY/nVMarKSxAZR+gNwPS4arpS4gcQ+2zLRFxGjhUCzmRZD+G8jd4joWWeTEjc3vT5w4T2xoictMQRC0ZuUrYCAl70nMjjiWhgKVgJ5uM5T/BbexWjT4gAXB4g3sdxqFR17nrJ9Y7pcgcpAttBewwsL6BGn/5A7t0ONeYlUEKQ/NKZt0iJAorOfjcNnxJjKwBrJ1BtEgMVlg5Mxv+3fpdzogkjvsiUJzxfoI0Lab9cl44Y9+ArGD6HMdsFqOCXcmeWzNeWzmVIaKqHywV/f3Y+FtkYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4HNY/9AP4eizCHPboS/JKyoUTPkogDLpg5zBThSX91I=;
+ b=GepuLGfktA0BKKKenL7dn4mH7Zw8x12jgB7Mbi+T4YGFyA0cN1491mttgk50IU8beqDN8GwXUVOaV8S4Jw9RRNtExvVzNVth82PzA8X0YwdMtMmEmQ+DJG9Cf0phcRDvzZTvQaz3Z7sAozuTErr2E+BG2LOqI7kTBTHUKm/L4LI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
+ by DM4PR12MB6424.namprd12.prod.outlook.com (2603:10b6:8:be::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
+ 2023 15:58:18 +0000
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::756d:ff13:d7bd:d590]) by MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::756d:ff13:d7bd:d590%7]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
+ 15:58:18 +0000
+Message-ID: <789c2c61-4959-c3c1-0916-d1cc7f659247@amd.com>
+Date:   Tue, 10 Jan 2023 10:58:16 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] drm/amd/display: Fix set scaling doesn's work
+Content-Language: en-US
+To:     harry.wentland@amd.com, nicholas.kazlauskas@amd.com,
+        hongao <hongao@uniontech.com>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        sunpeng.li@amd.com, linux-kernel@vger.kernel.org,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        aurabindo.pillai@amd.com, roman.li@amd.com, Jerry.Zuo@amd.com
+References: <20221122112034.30080-1-hongao@uniontech.com>
+From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
+In-Reply-To: <20221122112034.30080-1-hongao@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT4P288CA0090.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d0::23) To MN2PR12MB2941.namprd12.prod.outlook.com
+ (2603:10b6:208:a9::12)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ARnt4yApiZMkzLk7"
-Content-Disposition: inline
-In-Reply-To: <05c1ee07-0750-d40e-8498-55ea07b52ab1@sholland.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|DM4PR12MB6424:EE_
+X-MS-Office365-Filtering-Correlation-Id: f9c68ea9-a115-4b98-983f-08daf3237d60
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cu+lSHC4vrh/BZahTAyllne+eg1ja4o0a0fsat9kjzqotZZ00HxtjBAcYxilyXtiHGBMtrH8Y4+BOMa1NxwVJaTC4R3Y38sVYkUU4OGoSQvpIyz+N/41IyscKZ8UXZjw9moZ2YfbYUC4XcgiOiAfTUvXfF6bmzTOK5/CRXLMIewK4INGKbxOutDGzR/kGi9MfmkU17M5/gFZEClqFqU7uf5tGCisBR8yE2eW4dhsowRxL17WfcI+SYuMoNLgbrwk+oipzO8S/3TSGumbRkLfNwvNZfQscmApAnWFaoQHgeXrz+sS3DSgYis9kFnRRva9yT3JnFebftNhu2rIWcZcsn6iqlvUAPqDQfRF/7phM04wVDoXiL7/xsBAWSXvYoQUCahqwFjc9xWb9QCoI6xCDEubIOJxAnMckyhJiOWEpuW659KCryKap+oGHidTTC2MnBq6pBqsWBv5LJONuKcAk8S7FPiJ47NPfTzoUaOAS2zO3J2QgB7/8dbaXLZ4ycd0BQugCCxH3YezV02jtMC2twKOMZ+5ic5TdHnxqcogejJv/UVTJrCwXOvL3rXy8o4LhgH/gR4alhEAejdQ3MxCuKf9x+9QLhbyQmF9jDnu8wErDQV3qq+CBANT1T6g89t/7IefSvCZsMaTs/xHNNRKk9jN4xDFbUFe4toblRmudDZ4UDm31txVKG1X2z/+OOUv4gXEx3m4AJ0Q/6Y8tWxMhh93zJ0ycUNDHz+6yyRGiXo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(396003)(346002)(136003)(39860400002)(451199015)(86362001)(83380400001)(31696002)(41300700001)(2906002)(8936002)(5660300002)(53546011)(26005)(2616005)(66556008)(8676002)(316002)(6512007)(186003)(478600001)(4326008)(66946007)(66476007)(6916009)(6506007)(6486002)(38100700002)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ny9EWStIMGY1eTdLWCtwMzBhenBrQzZkTVUxZmxBeEVNbGlkNTczOXhpcm16?=
+ =?utf-8?B?YytNc1VVTldWUzJHdldjdFVNYnZqcVF6RS81L1YzWVh5TENMaFg5RC9hV1Zv?=
+ =?utf-8?B?THB5SnEybXZaSUJUQ2F6dzI3cWMrYVcwUk5tSDRzV3Izamhya1E3UTNYa2RO?=
+ =?utf-8?B?cG5YS21TZVQzT2tzMEJlTUdJenlNbURiVnB3cFdzMUhza3M5alBEbzBWNkVy?=
+ =?utf-8?B?L0kxSXVmK0NFUklnL0s0VFZHVHRLWnVIa2ZTTHgwRkVxdjRhL3BoQ2tkOSsv?=
+ =?utf-8?B?a2NVTUxXVHVxWnhjN25aWEFZRDNBdGpHdnJOeVdTcG9rcEFzQjdrQmF2N0hF?=
+ =?utf-8?B?L2VhdXFNUmwxd1hJV1JjN2Y5S0FuT243aW1SdkFONE4xOEN1NHZoc2p6dC93?=
+ =?utf-8?B?VHJCYXRiNkNkL01tK3JvTmtvQjBENmg0aTRGVnlNV0ptMVJ4M0hDcXdFU2xH?=
+ =?utf-8?B?UE93SVlSNk14TWI2QzV5dVBvc1YrWUYrSnJqZTVMQVBZbmoyM3BQL0QvTXNl?=
+ =?utf-8?B?aE0xd0lwUGwybGEzN0tIZS94UDRmOWduRzFxd3lWT1dzNjN5dlJxbGUvWjZz?=
+ =?utf-8?B?S2JJR1RRZVVhT3VUMjByeEVQbld4TVJRODZkMlFzQ213c3lKYUZSdFhONUdS?=
+ =?utf-8?B?TTdJcHI4TkVMeUM3NmphYWRqSG0vbVlRdGJ4bUVtNnFxWHRHMGppTzkzY21N?=
+ =?utf-8?B?bTE4aXZndVNnVW1RN1phbERxeG9pT1ROc2doQ2ZUbk1wYklrakE3SXBoNms2?=
+ =?utf-8?B?SS9yZExsUlNVT0FYZlNQUFFhZ3o1cml5NjhIZnljYjJ2RUsrc2FCeVU2NlY4?=
+ =?utf-8?B?VXE1ZVU2ZkFZZGZlODVWQUhGZGJ5RytyRFlkdmY5KzZMUjlPSGdmRVdCaUM0?=
+ =?utf-8?B?U2ptMGh2ZlUway8zNisydjlkVjFHRG1sT2xUYjRNdXN6eUZITkpjVkhkMUc4?=
+ =?utf-8?B?Q2J0ekNqSzRoRUhPUlFoWkViUm01dGJ2RjV2MG5BdlRIMjJJWWRZVlp6Z3FF?=
+ =?utf-8?B?ZlFFeXoxaHF1REcvUnRhditMSWNGczdON2Y4VDVWcXF5dWdRZEc4NVNleW00?=
+ =?utf-8?B?STlNN0sxOUR6VEVmbDZWR3ozMzZNSmx3cnh2ZWFuR21IZzFPOFd0a1ZSd2pJ?=
+ =?utf-8?B?Tlh5Y2IwdFg5WXN2THNBVU5NMGtrdFo5bGE0UmI2YzVjSVZIcTR2Y2dVK3Mz?=
+ =?utf-8?B?NjVvaUN4bWx2dW0rYU1KMGdyZmN2bWNJdUdHTXMydWoybnpvdWJZNWYxeHY4?=
+ =?utf-8?B?UHlRejBPQzMvK2lBWjlvYWNuU2Ewa3k4VVNhbXVSNUY2bkgxeGxvbzRiMGNJ?=
+ =?utf-8?B?WUpoVDZTKzR2UVpMWlN4ek1uMERNUHd5Z2wxTXd4WHk0a2xBOVJhbU5wVWwv?=
+ =?utf-8?B?b0lmQk42R2tjbEVjcWlZWEJ0RXFMdXl6Y2N6Q0YyZFZTVGVxT01YNGdHc3lq?=
+ =?utf-8?B?dGprOXo1MUQ1OHdud2hLZjdjOEw3VTF0WGh0Y3BWMnpobk02cVpzcmJkRm9P?=
+ =?utf-8?B?UTU3Mk1RdWpLTmZ1VGdVeG1ma1FqU1JUY3RoNDhrMXE4ejlmb1ZNbUgxQVlL?=
+ =?utf-8?B?OTVFTWtrbmtueS9WUG4vb2V3a2xmZGlTZHl5L0dtbVlPeWJybGxrNUpWK0wz?=
+ =?utf-8?B?OGZNTUUzQUlwMVAybE1HK3REcy9ROS95R1NBMkZGcnUvZm1wbFJFN09DYXBS?=
+ =?utf-8?B?a0RBRm1QdEJVR21FbmZreTh6aWg0OWFOUGoyc1BMZFFXcWdBNHU5a0M2c2Jr?=
+ =?utf-8?B?bVlQMEg2WUZIUkgrc1IrY0lCdDV1MGN5Z3doU1N6cDJ2eTZXdEJpKzZUTWlp?=
+ =?utf-8?B?Nk8rbERZYkNTWWVpSXBjUVVwVk8rWCtBK1pqMkl3eW9sMXl2UDFCOEowRXRL?=
+ =?utf-8?B?dHJXa1c2bXl0TUd5bk5STFdSY2wwaytHcExjZytyOEp4SS9FQ2VkY09YRiti?=
+ =?utf-8?B?Q3NVK2tEMG4rM3M5U3RGMThDV05IcCtTMjFSaTlCQmk2QWJrcVlhVDViemM5?=
+ =?utf-8?B?WmxhdDhTc2hhRW1sZmF6dFcrcnZ2ZXhJekd0Zk9EWFNKR09TZjllMG1CcEZN?=
+ =?utf-8?B?OGFJS29uOElEU0NwMjVuS2VldXYwbzk4dHMyTjFjeFlJK2VBNW5DSmlWSHpv?=
+ =?utf-8?Q?uj4jlzg/vltp6BI9HAt+WcUj8?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9c68ea9-a115-4b98-983f-08daf3237d60
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 15:58:18.1264
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: snZomJUI9Lla7CTcHrgNYPnZaLN2rUrEPtNgEwye5k03gn6iihpVIG7VCM3y1JvSS2N0LWNZaj37U4eK2dO7Og==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6424
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,67 +129,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ARnt4yApiZMkzLk7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi Samuel,
+On 11/22/22 06:20, hongao wrote:
+> [Why]
+> Setting scaling does not correctly update CRTC state. As a result
+> dc stream state's src (composition area) && dest (addressable area)
+> was not calculated as expected. This causes set scaling doesn's work.
+> 
+> [How]
+> Correctly update CRTC state when setting scaling property.
+> 
+> Signed-off-by: hongao <hongao@uniontech.com>
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index 3e1ecca72430..a88a6f758748 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -9386,8 +9386,8 @@ static int amdgpu_dm_atomic_check(struct drm_device *dev,
+>   			goto fail;
+>   		}
+>   
+> -		if (dm_old_con_state->abm_level !=
+> -		    dm_new_con_state->abm_level)
+> +		if (dm_old_con_state->abm_level != dm_new_con_state->abm_level ||
+> +		    dm_old_con_state->scaling != dm_new_con_state->scaling)
+>   			new_crtc_state->connectors_changed = true;
+>   	}
+>   
 
-On Sun 08 Jan 23, 12:42, Samuel Holland wrote:
-> Hi Paul,
->=20
-> On 1/5/23 07:55, Paul Kocialkowski wrote:
-> > Hi Samuel,
-> >=20
-> > On Sat 31 Dec 22, 17:38, Samuel Holland wrote:
-> >> Sipeed manufactures a "Lichee RV" system-on-module, which provides a
-> >> minimal working system on its own, as well as a few carrier boards. The
-> >> "Dock" board provides audio, USB, and WiFi. The "86 Panel" additionally
-> >> provides 100M Ethernet and a built-in display panel.
-> >>
-> >> The 86 Panel repurposes the USB ID and VBUS detection GPIOs for its RGB
-> >> panel interface, since the USB OTG port is inaccessible inside the cas=
-e.
-> >=20
-> > Looks like the panel-enabled variants would better be described as devi=
-ce-tree
-> > overlays as they are not specific devices but are peripheral extensions.
-> >=20
-> > What do you think?
->=20
-> I don't agree. The Lichee RV 86 Panel is sold as a complete unit, with
-> the SoM+board and LCD pre-assembled inside a case. It is not possible to
-> purchase the board without a panel, so the panel-enabled variants are
-> the only variants.
+Hi,
 
-Oh my bad, I didn't go as far as actually checking what it looks like.
-So yeah if it's an individual device on its own I agree it deserves its
-own dedicated device-tree.
+This change lgtm, and I also run it in our CI, and from IGT perspective, 
+we are good.
 
-Cheers,
+Harry, do you have any comment about this change?
 
-Paul
-
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---ARnt4yApiZMkzLk7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmO9iw0ACgkQ3cLmz3+f
-v9Gixwf/bUuAN5mWXtPd6SPwUdDiuGj3HtcGDNKL8Buq00SJTlZQyMbyz3F3TYcm
-bQ0/KlisJFv5fPbJW8aRI2TqOpFDnGtAGSkQ5JgyeJhiQbYjKBtHjvesPiDMsBxV
-ri99hwxNmZuFw+AswqPtGC4mbau4lnRJFC34lvZL02vlzxHYTapOsbPR1CtWb+Ww
-xL6bPOYB1pRzRHpR5i8fxDcxbW0/l36BwJf1UivHjFtxvYZcjI79Lr/1E33ZAbGg
-VJekuVkb7+v78TVIiN7YBYuZdYEydq62ARy8WP/VnExZLpWXvv6vNMSgfCSIPu9u
-Psc6c5fjpitNLgprsqst0bobNwUoWQ==
-=/4VV
------END PGP SIGNATURE-----
-
---ARnt4yApiZMkzLk7--
+Thanks
+Siqueira
