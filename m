@@ -2,78 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5311A663F9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9D8663FF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238167AbjAJL5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 06:57:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S232391AbjAJMLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238153AbjAJL5j (ORCPT
+        with ESMTP id S238151AbjAJMLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 06:57:39 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B65193E4;
-        Tue, 10 Jan 2023 03:57:28 -0800 (PST)
-Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nrq1g3dLTzqV4X;
-        Tue, 10 Jan 2023 19:52:39 +0800 (CST)
-Received: from [10.67.103.212] (10.67.103.212) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 10 Jan 2023 19:57:25 +0800
-Subject: Re: [PATCH v10 3/3] crypto: hisilicon/qm - define the device
- isolation strategy
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-References: <20221119074817.12063-1-yekai13@huawei.com>
- <20221119074817.12063-4-yekai13@huawei.com>
- <Y5V1zaurC8TuuA6l@gondor.apana.org.au>
-CC:     <gregkh@linuxfoundation.org>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wangzhou1@hisilicon.com>,
-        <liulongfang@huawei.com>
-From:   "yekai (A)" <yekai13@huawei.com>
-Message-ID: <03da282d-7654-4469-ca33-54eaa81b23d9@huawei.com>
-Date:   Tue, 10 Jan 2023 19:57:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Tue, 10 Jan 2023 07:11:12 -0500
+Received: from gentwo.de (gentwo.de [161.97.139.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB1C848CE
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:08:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
+        t=1673351912; bh=447xrWnDqvwlUVdeSyRqpMKeorpuhhxwz0VX/chL6q4=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=OQdljGZJ7GEaR+2T0y2kTi4JRaIidDrAhbBtRiwLY1g6Tn7oFLTGivZm/lMhfr950
+         AhsWj14TGatRgkkTh68n+6T6xbMynu3m5ib4Z/waZKDvdDDqdtoEhhELYXPQap9O77
+         Fw/UGoQ+wtntKA96aBps0Un6+y7U3JRUdAcfckf4gMb3TYdUVH7oKBhDm9ljXRMe5J
+         I8Xs09inSfKfZD7hEEBapr4DpvkO1pZf5Z06hyPPNGeaZu6yd8t/iZ5zqeXzA4E/mC
+         9QSmtJNgT4hXnPRFtLuFz5jmZRyexjOGN06ifMc5SiYKs7PxgIOaEb2Nexv/Tno1Ts
+         MV+naO0HGB9Wg==
+Received: by gentwo.de (Postfix, from userid 1001)
+        id B32AAB001C8; Tue, 10 Jan 2023 12:58:32 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by gentwo.de (Postfix) with ESMTP id B1C18B00101;
+        Tue, 10 Jan 2023 12:58:32 +0100 (CET)
+Date:   Tue, 10 Jan 2023 12:58:32 +0100 (CET)
+From:   Christoph Lameter <cl@gentwo.de>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+cc:     atomlin@atomlin.com, frederic@kernel.org, tglx@linutronix.de,
+        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
+        neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v13 1/6] mm/vmstat: Add CPU-specific variable to track
+ a vmstat discrepancy
+In-Reply-To: <20230105125248.772766288@redhat.com>
+Message-ID: <e9673684-ef3-4070-18bd-2f20fbfe8d5@gentwo.de>
+References: <20230105125218.031928326@redhat.com> <20230105125248.772766288@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <Y5V1zaurC8TuuA6l@gondor.apana.org.au>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.212]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 5 Jan 2023, Marcelo Tosatti wrote:
 
+> +static inline void vmstat_mark_dirty(void)
+> +{
+> +	this_cpu_write(vmstat_dirty, true);
+> +}
 
-On 2022/12/11 14:16, Herbert Xu wrote:
-> On Sat, Nov 19, 2022 at 07:48:17AM +0000, Kai Ye wrote:
->> Define the device isolation strategy by the device driver. The
->> user configures a hardware error threshold value by uacce interface.
->> If the number of hardware errors exceeds the value of setting error
->> threshold in one hour. The device will not be available in user space.
->> The VF device use the PF device isolation strategy. All the hardware
->> errors are processed by PF driver.
->>
->> Signed-off-by: Kai Ye <yekai13@huawei.com>
->> ---
->>  drivers/crypto/hisilicon/qm.c | 169 +++++++++++++++++++++++++++++++---
->>  include/linux/hisi_acc_qm.h   |  15 +++
->>  2 files changed, 169 insertions(+), 15 deletions(-)
-> Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+this_cpu_write() is intended for an per cpu atomic context. You are not
+using it in that way. The processor may have changed before or after and
+thus vmstat_dirty for another CPU may  have been marked dirty.
 
-Hi Greg KH
+I guess this would have to be called __vmstat_mark_dirty() and be using
+__this_cpu_write(*) with a requirement that preemption be disabled before
+using this function.
 
-Could you help me to apply this patchset v10?
+> +static inline void vmstat_clear_dirty(void)
+> +{
+> +	this_cpu_write(vmstat_dirty, false);
+> +}
 
-thanks
-Kai
+Same
+
+> +static inline bool is_vmstat_dirty(void)
+> +{
+> +	return this_cpu_read(vmstat_dirty);
+> +}
+
+This function would only work correctly if preemption is disabled.
+Otherwise the processor may change.
