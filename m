@@ -2,108 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6278E66485E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7F866488D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235005AbjAJSLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 13:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
+        id S239052AbjAJSM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238959AbjAJSKS (ORCPT
+        with ESMTP id S238822AbjAJSL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 13:10:18 -0500
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A32421BC
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:08:40 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id FJ34pw6UszUTHFJ34pLghR; Tue, 10 Jan 2023 19:08:38 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 10 Jan 2023 19:08:38 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <f4aa7f0d-50a9-b5e0-e980-1e8e779b48bc@wanadoo.fr>
-Date:   Tue, 10 Jan 2023 19:08:33 +0100
+        Tue, 10 Jan 2023 13:11:57 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2909C15FC8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:10:23 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id s8so5731074plk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:10:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ADtwUNrGyLn4codYaeaierOrox8boS9Muk7qnG/LE0=;
+        b=O7PnZWc3rVvKxGBPuRO9z7r/5IprWDEFEZvj+/2CLLOzYN6qldfqU60FDxeCCkvbzh
+         HKfo/E2aAr45M0OxNMXa/xhGmNfVz3EaKDfOPIDbmn+MWn0+0RSY0+zBGsm8CTdLWQYU
+         ieihuWKlqYf2yvrkOkEWpL6N5vkterDTsJyl1TJoIfQ1KzuLFQ6Z+3YxQsIJauzT8y/0
+         CpbmiWQmthu2fbIO8NESZHHJWWFtCijlBYmQqEc4rXoF+X7tPTgjcEaHQae9FP1FbYvT
+         NDMb44c8/FxVHSP7t8u6FrLke9DS05w3Fx2nBGU42BaRl4hHR+YgvUQC3IfAHdtWCA+X
+         bMJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8ADtwUNrGyLn4codYaeaierOrox8boS9Muk7qnG/LE0=;
+        b=CU5Q+tnHBkw+jdjl0bfxQW6A58S5W+Vgj4nvdn333Np61+lAi3rnnMXerudXjlF5v1
+         SWblc8HUx1mnSf2pU3CyPeiyKNHxzB80KHeDMFy0XQp2wSfUgQn/b6kWCugMG/tcVnfx
+         15NGYWkEz+plgl4z2sWzGHL/r7tc94i1zr8HPtZAGUqeZrcfG2+osqDPtAbWZwoh/0ee
+         zougn87af2v2PzIcswRHkYEMvnzSLiHJN9SeFF+IemnPZ4xGCs8Wya5Whr6Gb9cnS5o1
+         Bl/DAEhPBlne6JXxwfzMEByHsey2KITY4oXY+A+zAKqDp8WK9kufdCl68Cp6WkdnS/OT
+         krTQ==
+X-Gm-Message-State: AFqh2krUFQrhjUc0bjclmdwF9jeZK7Xi8Fde+xoHwd4fG175Za3u8mHT
+        vzOMeuBjYusqNQdaG7cDdUQ=
+X-Google-Smtp-Source: AMrXdXv4wFQml41RC+bQapqRk3cxvR/e2fus7cV8JkzmQLAbrgod/i8QHS9z6mpRgKU12gxW1SjoCA==
+X-Received: by 2002:a17:902:e84c:b0:189:340c:20d2 with SMTP id t12-20020a170902e84c00b00189340c20d2mr105768935plg.23.1673374222652;
+        Tue, 10 Jan 2023 10:10:22 -0800 (PST)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:2952:cdb6:accd:18e7])
+        by smtp.gmail.com with ESMTPSA id m7-20020a170902db0700b00192b0a07891sm8469617plx.101.2023.01.10.10.10.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 10:10:22 -0800 (PST)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PULL 0/2] Xtensa fixes for v6.2
+Date:   Tue, 10 Jan 2023 10:09:40 -0800
+Message-Id: <20230110180940.128858-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] bit_spinlock: Include <asm/processor.h>
-To:     Vineet Gupta <vgupta@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <8b81101d59a31f4927016c17e49be96754a23380.1673204461.git.christophe.jaillet@wanadoo.fr>
- <b5e0bd90-ff29-d301-30ca-2f12028109ce@kernel.org>
-Content-Language: fr, en-GB
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <b5e0bd90-ff29-d301-30ca-2f12028109ce@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 10/01/2023 à 08:19, Vineet Gupta a écrit :
-> 
-> On 1/8/23 11:04, Christophe JAILLET wrote:
->> In an attempt to simplify some includes in <include/dcache.h>, it
->> appeared, when compiling fs/ecryptfs/dentry.c, that 
->> <linux/bit_spinlock.h>
->> was relying on other includes to get the definition of cpu_relax().
->> (see [1])
->>
->> It broke on arc.
-> 
-> It its just ARC that broke, maybe we can do something there ?
+Hi Linus,
 
-Hi,
+please pull the following fixes for the Xtensa architecture.
 
-It is all what build-bots have spotted so far :)
+The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
 
-I don't think that "fixing" it in ARC is the right approach, unless I 
-missed something.
+  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
 
-<linux/bit_spinlock.h> does use cpu_relax(), so it should include what 
-is need for that, and not rely on other black magic.
+are available in the Git repository at:
 
-CJ
+  https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20230110
 
-> 
->> Include <asm/processor.h> in <linux/bit_spinlock.h> to fix the issue.
->> This will help remove some un-needed includes from <include/dcache.h>.
->>
->> [1]: https://lore.kernel.org/all/202301082130.LXMj5qkD-lkp@intel.com/
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->> Not sure who to send this to.
->> get_maintainer.pl is of no help, and the file is untouched from a too 
->> long
->> time.
->>
->> Greg? Dan? Any pointer?
->> ---
->>   include/linux/bit_spinlock.h | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/include/linux/bit_spinlock.h b/include/linux/bit_spinlock.h
->> index bbc4730a6505..d0fd2a7afca2 100644
->> --- a/include/linux/bit_spinlock.h
->> +++ b/include/linux/bit_spinlock.h
->> @@ -2,6 +2,7 @@
->>   #ifndef __LINUX_BIT_SPINLOCK_H
->>   #define __LINUX_BIT_SPINLOCK_H
->> +#include <asm/processor.h>
->>   #include <linux/kernel.h>
->>   #include <linux/preempt.h>
->>   #include <linux/atomic.h>
-> 
-> 
+for you to fetch changes up to 4414c1f5c7a375eaa108676a56e12cc8234eb647:
 
+  xtensa: drop unused members of struct thread_struct (2023-01-06 23:33:11 -0800)
+
+----------------------------------------------------------------
+Xtensa fixes for v6.2:
+
+- fix xtensa allmodconfig build broken by the kcsan test
+- drop unused members of struct thread_struct
+
+----------------------------------------------------------------
+Max Filippov (2):
+      kcsan: test: don't put the expect array on the stack
+      xtensa: drop unused members of struct thread_struct
+
+ arch/xtensa/include/asm/processor.h | 9 ---------
+ arch/xtensa/kernel/traps.c          | 2 --
+ arch/xtensa/mm/fault.c              | 4 ----
+ kernel/kcsan/kcsan_test.c           | 7 ++++++-
+ 4 files changed, 6 insertions(+), 16 deletions(-)
+
+-- 
+Thanks.
+-- Max
