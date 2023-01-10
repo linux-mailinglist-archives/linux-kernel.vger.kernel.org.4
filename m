@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D4A664DA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94719664D97
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbjAJUsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 15:48:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S231455AbjAJUoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 15:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233026AbjAJUna (ORCPT
+        with ESMTP id S231354AbjAJUn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:43:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA7F4D72E;
-        Tue, 10 Jan 2023 12:43:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CD6DB819AA;
-        Tue, 10 Jan 2023 20:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89A5BC433D2;
-        Tue, 10 Jan 2023 20:43:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673383406;
-        bh=W4MoENF/ZOiCtEvF2sFd7AEBeWJSmcxY8vS9xvYYyAY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z0l+GfmccPc59TMwfpjWMzXm46RrWGT66OgnGrYEF1zsssiS20y8X1VXaXzfn2/t/
-         Fyj9pcyU3crMJbdwuTJOyQsdIYaT+GJPlPufw4AKNfdgG5o+ZErWBrEDsJ05He2epL
-         6VOw34eBe+4QCrvucf3Gl6tYmebkoWDycRgntnZXRiDiaRhbFrXsDaOgFMJv974Q54
-         J66tAbM0lb38UVPoCI/XNozRfBGEziaiBuaP4ei4YD0Mmu2bVn2HPlth28tvijc5a7
-         dJsQtLMBtfOWv/VibgLhTowXA1hcU52p/Irg7bCEwDpdxdNFtI1A/hFfAmvMr6NMpY
-         9ZMEJeaCnAJJQ==
-Date:   Tue, 10 Jan 2023 20:43:20 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mhiramat@kernel.org,
-        ndesaulniers@google.com, ojeda@kernel.org,
-        rafael.j.wysocki@intel.com, revest@chromium.org,
-        robert.moore@intel.com, rostedt@goodmis.org
-Subject: Re: [PATCH 3/8] arm64: Extend support for CONFIG_FUNCTION_ALIGNMENT
-Message-ID: <20230110204320.GA9739@willie-the-truck>
-References: <20230109135828.879136-1-mark.rutland@arm.com>
- <20230109135828.879136-4-mark.rutland@arm.com>
- <Y73MBswL76Hi9cay@hirez.programming.kicks-ass.net>
+        Tue, 10 Jan 2023 15:43:58 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE2E4C726
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:43:57 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id u19so31739461ejm.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:43:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tBn6a5mqROf2ux/RUqvtiPAixck8rWx7TqClj/rZ30M=;
+        b=GnJ9e51qhoXRcsPOK9yPQJirurHSYfA5N+CC3NI/ykAc2mDfNyevCeAY3UYdKP3RAl
+         xn1a1LIKVvpDRkLybGBSKcbKjFoa87tCliab4jBFMagkYQLd7gcAbO/poJh1ukB+4LgN
+         SgbQwqIfWfUlQ6igs46/dpS88Doxq4SyRTF8wHfB3aJsglWTx185wzI8oW9CkIKYMrNF
+         epNhLNUNNA76m7GGrQWpQuG0kWEMycTiK1qcQt730zVmEZM62MucUhJMfDfZI/Kq5Dp4
+         cZ6Q+s01FMHdD+/pJqiMCPYi8zC1dpevWegKY4kiD/q1AwHAWP8v/e3QygVSVmI0dpeM
+         Jxvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tBn6a5mqROf2ux/RUqvtiPAixck8rWx7TqClj/rZ30M=;
+        b=4r1/kivHYts8d2zX3msZ6IoL6+0r3ndEWf0bPCPXhMlDsIr/ZA7fEYHeRuB7nhgma1
+         KbrvveB2l3QgGOtQtNHx1PAu96IwoFBfq2nYiY8thKOcLj0XCqA4GSLMZUm87aeAUtem
+         8Mx/2I7eDfRGM2scozODtyNXs6Dr19mlh38d7gv5cOFKyn++8/gTzAAi0SifU7Nn8wev
+         ZCB1XtKp6skYYeKAxjrgjIHnN9U21cYWVHpTxgzxEld2iXyyBPOQ3x+eAoQQQeTO32NX
+         +7Q3HHnAvoVQUQqy121W0gsX+gmVwFdsKHU5TgKQjkZIkSx5E+th7mDTTwSm5RxYktsV
+         ZCEw==
+X-Gm-Message-State: AFqh2kqTb7vBGlaiVXQrutu9vPQAw/5Kc93xB/aD1RPiQzPlgwvDEZU+
+        2s7f16lzpvIebjX6IFPQVD0=
+X-Google-Smtp-Source: AMrXdXtR9++mivVh/HZDLLnDFezbpT4CJqhm6NCLX8+E443pWyNVQOb6GsBHruUCUKgIQcduR5yXnw==
+X-Received: by 2002:a17:907:c68a:b0:84c:e9c4:5751 with SMTP id ue10-20020a170907c68a00b0084ce9c45751mr26644373ejc.74.1673383436031;
+        Tue, 10 Jan 2023 12:43:56 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id lj1-20020a170906f9c100b0078d22b0bcf2sm5316479ejb.168.2023.01.10.12.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 12:43:55 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michael Walle <michael@walle.cc>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V2] nvmem: core: fix nvmem_layout_get_match_data()
+Date:   Tue, 10 Jan 2023 21:43:45 +0100
+Message-Id: <20230110204345.7266-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y73MBswL76Hi9cay@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 09:35:18PM +0100, Peter Zijlstra wrote:
-> On Mon, Jan 09, 2023 at 01:58:23PM +0000, Mark Rutland wrote:
-> 
-> > diff --git a/arch/arm64/include/asm/linkage.h b/arch/arm64/include/asm/linkage.h
-> > index 1436fa1cde24d..df18a3446ce82 100644
-> > --- a/arch/arm64/include/asm/linkage.h
-> > +++ b/arch/arm64/include/asm/linkage.h
-> > @@ -5,8 +5,14 @@
-> >  #include <asm/assembler.h>
-> >  #endif
-> >  
-> > -#define __ALIGN		.align 2
-> > -#define __ALIGN_STR	".align 2"
-> > +#if CONFIG_FUNCTION_ALIGNMENT > 0
-> > +#define ARM64_FUNCTION_ALIGNMENT	CONFIG_FUNCTION_ALIGNMENT
-> > +#else
-> > +#define ARM64_FUNCTION_ALIGNMENT	4
-> > +#endif
-> > +
-> > +#define __ALIGN		.balign ARM64_FUNCTION_ALIGNMENT
-> > +#define __ALIGN_STR	".balign " #ARM64_FUNCTION_ALIGNMENT
-> 
-> Isn't that much the same as having ARM64 select FUNCTION_ALIGNMENT_4B
-> and simply removing all these lines and relying on the default
-> behaviour?
+From: Rafał Miłecki <rafal@milecki.pl>
 
-There's a proposal (with some rough performance claims) to select
-FUNCTION_ALIGNMENT_16B over at:
+This function was trying to match wrong OF node (parent device's)
+against an of_match_table. It was always returning NULL.
 
-https://lore.kernel.org/r/20221208053649.540891-1-almasrymina@google.com
+Make it match layout's OF node against layout's of_match_table.
 
-so we could just go with that?
+Note: __maybe_unused is needed to avoid:
+warning: variable 'layout_np' set but not used [-Wunused-but-set-variable]
+(of_match_node() is no-op without CONFIG_OF).
 
-Will
+Fixes: f5709a684a0a ("nvmem: core: introduce NVMEM layouts")
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Reviewed-by: Michael Walle <michael@walle.cc>
+---
+ drivers/nvmem/core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index d112bb1328c1..d3be50ed2d0b 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -824,9 +824,11 @@ EXPORT_SYMBOL_GPL(of_nvmem_layout_get_container);
+ const void *nvmem_layout_get_match_data(struct nvmem_device *nvmem,
+ 					struct nvmem_layout *layout)
+ {
++	struct device_node __maybe_unused *layout_np;
+ 	const struct of_device_id *match;
+ 
+-	match = of_match_node(layout->of_match_table, nvmem->dev.of_node);
++	layout_np = of_nvmem_layout_get_container(nvmem);
++	match = of_match_node(layout->of_match_table, layout_np);
+ 
+ 	return match ? match->data : NULL;
+ }
+-- 
+2.34.1
+
