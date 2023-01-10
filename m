@@ -2,151 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03BB8663622
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A91663623
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237060AbjAJAS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 19:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S237576AbjAJATR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 19:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235593AbjAJASZ (ORCPT
+        with ESMTP id S235205AbjAJASr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 19:18:25 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC48414D24
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 16:18:24 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-4c15c4fc8ccso135051947b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 16:18:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sgQCt0va7Fj5/9fGcldqaAxXWYK8cBxGZmP9xyPfdn4=;
-        b=CjxZ1mdpIhqu8VGPVCMoqsbsDlIhqCjEmsPqq5qkb1qszkge1Jm7eoOuPAcP/ZV3bk
-         wPP+sf8id+ynxeTBPKOWQaibXFQF9VkirxIevCIzpGAQ21ueiyMyljdoDpqBwv6iADhp
-         JWDpspg8gxuUz/g8o8f3Q/TpOZXD4wUkStfMnP3bNMTdaoT8E8PrN4XpF0W1y5T9lIyj
-         m9H9otSUCpmNvNlNujrmOWTRlgks+Pwp+EXc1GX8tr1KUVIqmZXacuPH98ZfnNVZNFn8
-         /a3FCftCVuu8stwkCKaAOtd2Rf8qgv7JUkOT3SOOPfRdmX4H3QpcqFd3fI60DVZdrWVr
-         exyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sgQCt0va7Fj5/9fGcldqaAxXWYK8cBxGZmP9xyPfdn4=;
-        b=ruseLA4Ny1jYyFmg3lg347mjfAntR2DWermibui18wmaABgCBb6MR93nTtHcHCrUpY
-         qrKWNWXy/a1DVfoXS0HGmCiotSZEAPXPY1iu6TV74TCrhWx2Jmmc7WyporFHcyhjF04/
-         HVBvlt98Bc7o1t8RXjAeEojKLB4MkqxSc3g/Tku1yPRhnFyvdVW3JdpANeDLLEyKQgOw
-         xzfHP9vpzVLWhslv4weo4Il8H7yzRMho3rC3kbdq7jIPFFchweZ9mUiVjuIcZfWOOSbz
-         l75EN2xw/LUhVZ2rePgywDbDNlld/dA8/K5pcQiCoezd6+lbVJGsD64p2tqS1ueL2LKG
-         n6lA==
-X-Gm-Message-State: AFqh2kpGNDL1wcGzihChgBxveEjRW9XueZB5ACKVZs2ByxBBi6uKyRRd
-        6y/wml8ZtQwP2+k1WjKW+05j1yaCwu4Cn10Hu0Kodw==
-X-Google-Smtp-Source: AMrXdXvykUOk6Aq29zKPFweeZ5QLOqVr0VtGabuLWKsdUabDXPvAWtUyFW1w97fkSV+2AQTk/rtQ4CJ6GNWf2U6U44A=
-X-Received: by 2002:a81:7386:0:b0:391:c415:f872 with SMTP id
- o128-20020a817386000000b00391c415f872mr1094430ywc.318.1673309903890; Mon, 09
- Jan 2023 16:18:23 -0800 (PST)
+        Mon, 9 Jan 2023 19:18:47 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00BF39F8A;
+        Mon,  9 Jan 2023 16:18:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=q6oHe/j+6vLeePfXFv4xS7Z32hbURnqBf9KpHLJfp0I=; b=J/3vo4IGkbIp54KIjaHpCJrLMG
+        2r3mrLF1u4pmFwO6FDizj1mVHJ+1gAwl+hl78CpKOSzdJ/Nc+ttGXHmpW3ncrirv6Zds4fnsEFMs0
+        ZgxbvP/MCQyeHwKRV+ziZdZ6bWt5Tbg6cuQW8oB5Z567Ds6sBJf1yoBbUKNSkg9Ifqdlm9rLdo/W9
+        I0kOV/ENwHCdM4a+BIEJu6A6grih5V6y0eaQW9dP04KguX9X/3EcGWkGw4pN74kV7Jlr2beDKo1HE
+        T2zivJhqMbra7K2wQdNbGvGPj6UShMKdTxeTCWF56NJNx213Gzzms8l8K4sYnzVwZM3MgcNzlhgdX
+        fsuOWQ/Q==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pF2Lh-004jc2-9B; Tue, 10 Jan 2023 00:18:41 +0000
+Message-ID: <8adb51b2-b571-332c-33d3-cd092a289dd0@infradead.org>
+Date:   Mon, 9 Jan 2023 16:18:39 -0800
 MIME-Version: 1.0
-References: <20230109213809.418135-1-tjmercier@google.com>
-In-Reply-To: <20230109213809.418135-1-tjmercier@google.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Mon, 9 Jan 2023 16:18:12 -0800
-Message-ID: <CALvZod4ru7F38tAO-gM9ZFKaEhS0w3KqFbPwhwcTvgJs4xMUow@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Track exported dma-buffers with memcg
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 0/8] kvx documentation improv (was: Re: [RFC PATCH 01/25]
+ Documentation: kvx: Add basic documentation)
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, daniel.vetter@ffwll.ch,
-        android-mm@google.com, jstultz@google.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Yann Sionneau <ysionneau@kalray.eu>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>
+References: <874jt7fqxt.fsf@meer.lwn.net>
+ <20230109095108.21229-1-bagasdotme@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230109095108.21229-1-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi T.J.,
+Hi Bagas,
 
-On Mon, Jan 9, 2023 at 1:38 PM T.J. Mercier <tjmercier@google.com> wrote:
->
-> Based on discussions at LPC, this series adds a memory.stat counter for
-> exported dmabufs. This counter allows us to continue tracking
-> system-wide total exported buffer sizes which there is no longer any
-> way to get without DMABUF_SYSFS_STATS, and adds a new capability to
-> track per-cgroup exported buffer sizes. The total (root counter) is
-> helpful for accounting in-kernel dmabuf use (by comparing with the sum
-> of child nodes or with the sum of sizes of mapped buffers or FD
-> references in procfs) in addition to helping identify driver memory
-> leaks when in-kernel use continually increases over time. With
-> per-application cgroups, the per-cgroup counter allows us to quickly
-> see how much dma-buf memory an application has caused to be allocated.
-> This avoids the need to read through all of procfs which can be a
-> lengthy process, and causes the charge to "stick" to the allocating
-> process/cgroup as long as the buffer is alive, regardless of how the
-> buffer is shared (unless the charge is transferred).
->
-> The first patch adds the counter to memcg. The next two patches allow
-> the charge for a buffer to be transferred across cgroups which is
-> necessary because of the way most dmabufs are allocated from a central
-> process on Android. The fourth patch adds a SELinux hook to binder in
-> order to control who is allowed to transfer buffer charges.
->
-> [1] https://lore.kernel.org/all/20220617085702.4298-1-christian.koenig@amd.com/
->
+On 1/9/23 01:51, Bagas Sanjaya wrote:
+> Jonathan Corbet <corbet@lwn.net> writes:
+>>> Add some documentation for kvx arch and its Linux port.
+>>>
+...
+>>
+>> Please write this documentation in the RST format (you're 95% of the way
+>> there now) and incorporate into the kernel docs build.
+> 
+> Here is the polished documentation in reST format. Yann, can you please
+> squash this series into your documentation patch?
 
-I am a bit confused by the term "charge" used in this patch series.
-From the patches, it seems like only a memcg stat is added and nothing
-is charged to the memcg.
+JFYI, to me "improv" applies mostly to jazz (music) or comedy. :)
 
-This leads me to the question: Why add this stat in memcg if the
-underlying memory is not charged to the memcg and if we don't really
-want to limit the usage?
+https://www.merriam-webster.com/dictionary/improv
+https://en.wikipedia.org/wiki/Improv
 
-I see two ways forward:
+Thanks for the patches.
 
-1. Instead of memcg, use bpf-rstat [1] infra to implement the
-per-cgroup stat for dmabuf. (You may need an additional hook for the
-stat transfer).
-
-2. Charge the actual memory to the memcg. Since the size of dmabuf is
-immutable across its lifetime, you will not need to do accounting at
-page level and instead use something similar to the network memory
-accounting interface/mechanism (or even more simple). However you
-would need to handle the reclaim, OOM and charge context and failure
-cases. However if you are not looking to limit the usage of dmabuf
-then this option is an overkill.
-
-Please let me know if I misunderstood something.
-
-[1] https://lore.kernel.org/all/20220824233117.1312810-1-haoluo@google.com/
-
-thanks,
-Shakeel
+-- 
+~Randy
