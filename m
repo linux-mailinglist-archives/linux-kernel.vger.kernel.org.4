@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8374664D7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F04EA664D7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjAJUbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 15:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
+        id S233586AbjAJUdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 15:33:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234837AbjAJUak (ORCPT
+        with ESMTP id S235288AbjAJUcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:30:40 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701D7671A4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:28:55 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id v14so11986685qtq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:28:55 -0800 (PST)
+        Tue, 10 Jan 2023 15:32:19 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775945D683
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:30:12 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id m15so7005981ilq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:30:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R08w5XqdPb225+ka82cm3H33ws9MRuWk8Mi6FerW9rA=;
-        b=Swn9VeUzG1O4qUI5wxMakq3OMk72jn8ZQUSLPwIMHa2O6UPRR10VwCQpPg47u7hVPc
-         +/S0rIGqSBE/9zsmp3y+iaXxH91E4hTPaXkpy0oY4mZXGDX7Ud+A7RUmXwMp+CSc9nq/
-         22ndPRdiPkIHG/LhZqzkz3L/eC797lVgozUQA=
+        bh=w0Ug/ql1k2yCindQKTRR7rZIRzQnKNrHLeSqG8fryRU=;
+        b=lLxUx/bMoyOfuYe2X/8VFsQ+pLZ38ds+Rz4HDvDSmzx62mxYFzBIdYtTKovwsZi9i+
+         la0f9V3xZrTk6WFUBU8WLFd90V5NdTf63r04MkaXO3bOPatguw9Avrkcmgr7dFcHJh0L
+         s3mA0o5rahMqaSVak4BdlT0j7sTgadkvT1Xu8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R08w5XqdPb225+ka82cm3H33ws9MRuWk8Mi6FerW9rA=;
-        b=G9CEHF5nFlgOlQXifzcjtLKPUnyAg9/NEbm1EfbnpcG9KW1IYSJlLPnzqpdULwXhm0
-         FRE3n3SQfO4VSmXEaXhGg9mocXQ1juvtxVoT9MZRZoNpr54nZqIryjWQNFwFw1OCQgKZ
-         wAstz8PHiJvJW1dbbaN/vKGwzAq+BqySvIbWqVAQJefMSWystTGkoS218pA59awmbOch
-         FxT6Zi8QZYH7WLwJxgBZVjdg2da+gijG9dugHJ8j06YMrs4/pVjyM0sFt3CdvgjNk4qs
-         bEWf098UO3GdmuhCY+LmNLGs6Fy/OKkAq280H4fkkcorBURyy1VqRqVKZL1vbdUNMzZS
-         OEtQ==
-X-Gm-Message-State: AFqh2kqYi5kFxjmQFD+ujJatov3bQofgHS5FGw6yGzn+4NKeTHdM5OFw
-        mEuuGcj+dixy1S/u0u7rv+zL3w==
-X-Google-Smtp-Source: AMrXdXv8L9EFRvqX69qajD1gwqJ4bKpb4Wuz/gNhZY5D2epX934SjRuVVKihv1/0ZGubHDfvj1ixAQ==
-X-Received: by 2002:a05:622a:1e13:b0:3ab:b012:f173 with SMTP id br19-20020a05622a1e1300b003abb012f173mr50540326qtb.28.1673382529091;
-        Tue, 10 Jan 2023 12:28:49 -0800 (PST)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-7.dsl.bell.ca. [209.226.106.7])
-        by smtp.gmail.com with ESMTPSA id em8-20020a05622a438800b003a82ca4e81csm364853qtb.80.2023.01.10.12.28.48
+        bh=w0Ug/ql1k2yCindQKTRR7rZIRzQnKNrHLeSqG8fryRU=;
+        b=Z8evAbtrvbF4HB2ZOfMJdc0n6gaF178H/ejT5bNcpIUw9SY4CdcdHOZOOfgPqJ7zSM
+         KtkmLdduSIwVBnPWTOYUlxJZAgrSPfsx3d/ddInfUSXNQtN5tE9lkv2JrUR9PBf8E7eV
+         4imkYH3JyfBtZsQQyXP2gODW+Mhp2VAsFvGeIKR+6jOaW1gmWnp0edtT+4oYbyB/Li+u
+         /5RLA+vXemt02Vj4oko5fbm5AxmoIKFhqHij8IjV/ezFnXiEFWPp5wZs9qniS1Y57Mo4
+         tfjH7CPFFu9pQDqgDMsiql0fZjEHHtDbCUOQI0m54bv9h3ISG8zoHfa0Weqf/zU3sFne
+         ad+g==
+X-Gm-Message-State: AFqh2kqvdOGnIFpehPKb3juggAT+7AT2kmEom/rT6ZuNwvwh1o3/2xRt
+        LQNRKVqU0MZ6mOYI8cpBm8hNBJGIlaBS/xtI
+X-Google-Smtp-Source: AMrXdXuYEbx64HsIkwIR1X0fW6/MkoxznuZHCX2SRdTFXE879B3OEgvIbygmt0TOAFMmFnqN+0lsCg==
+X-Received: by 2002:a92:1e08:0:b0:30d:7ce3:448b with SMTP id e8-20020a921e08000000b0030d7ce3448bmr15581670ile.14.1673382611793;
+        Tue, 10 Jan 2023 12:30:11 -0800 (PST)
+Received: from chromium.org ([2620:15c:183:200:d1f8:2b5e:3e1d:2620])
+        by smtp.gmail.com with ESMTPSA id t13-20020a92d14d000000b003039a19a927sm3913441ilg.7.2023.01.10.12.30.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 12:28:48 -0800 (PST)
-Date:   Tue, 10 Jan 2023 15:28:46 -0500
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, helpdesk@kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: Please, clear statement to what is next LTS linux-kernel
-Message-ID: <20230110202846.hs7ksjylj5gcczyw@meerkat.local>
-References: <CA+icZUUYrasObBwMQWae=+eAfUzvxc1Pk39QFz9=NXedWO41Vg@mail.gmail.com>
+        Tue, 10 Jan 2023 12:30:11 -0800 (PST)
+Date:   Tue, 10 Jan 2023 13:30:09 -0700
+From:   Drew Davenport <ddavenport@chromium.org>
+To:     Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Jos=E9?= Roberto de Souza 
+        <jose.souza@intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Juha-Pekka =?iso-8859-1?Q?Heikkil=E4?= 
+        <juha-pekka.heikkila@intel.com>
+Subject: Re: [PATCH] drm/i915/display: Check source height is > 0
+Message-ID: <Y73K0T+tQD1wj8Xp@chromium.org>
+References: <20221226225246.1.I15dff7bb5a0e485c862eae61a69096caf12ef29f@changeid>
+ <8b4448d0-d9ea-95a6-83ee-513fe73c793f@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+icZUUYrasObBwMQWae=+eAfUzvxc1Pk39QFz9=NXedWO41Vg@mail.gmail.com>
+In-Reply-To: <8b4448d0-d9ea-95a6-83ee-513fe73c793f@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,11 +74,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 09:22:48PM +0100, Sedat Dilek wrote:
-> ( It dropped 4.9 from LTS list recently from [1] - guess Konstantin or
-> someone from helpdesk did - so [1] is actively maintained. )
+On Tue, Jan 03, 2023 at 12:42:43PM +0200, Juha-Pekka Heikkila wrote:
+> Hi Drew,
 
-Greg makes these changes himself:
-https://git.kernel.org/pub/scm/docs/kernel/website.git/
+Hi Juha-Pekka, sorry for the late response since I was on vacation.
 
--K
+> 
+> this is good find. I went looking where the problem is in and saw what you
+> probably also saw earlier.
+> 
+> I was wondering if diff below would be better fix? I assume this would end
+> up with einval or erange in your case but code flow otherwise would stay as
+> is while fixing all future callers for same issue:
+
+Yes, the function you identify below is where I encountered
+divide-by-zero errors. If width/height less than 1 is a legitimate use
+case, then your proposed solution looks like it would be better. It
+should have no risk of regression in userspace either, which is nice.
+
+I tested your patch, and as expected I did not hit the divide-by-zero
+error, though the test commit was rejected due to a check further along
+inside skl_update_scaler. Perhaps there is some other configuration
+which would pass the test commit with a width/height less than 1, but I
+didn't dig much further.
+
+> 
+> diff --git a/drivers/gpu/drm/i915/display/intel_atomic_plane.c
+> b/drivers/gpu/drm/i915/display/intel_atomic_plane.c
+> index 10e1fc9d0698..a9948e8d3543 100644
+> --- a/drivers/gpu/drm/i915/display/intel_atomic_plane.c
+> +++ b/drivers/gpu/drm/i915/display/intel_atomic_plane.c
+> @@ -144,7 +144,7 @@ unsigned int intel_adjusted_rate(const struct drm_rect
+> *src,
+>                                  const struct drm_rect *dst,
+>                                  unsigned int rate)
+>  {
+> -       unsigned int src_w, src_h, dst_w, dst_h;
+> +       unsigned int src_w, src_h, dst_w, dst_h, dst_wh;
+> 
+>         src_w = drm_rect_width(src) >> 16;
+>         src_h = drm_rect_height(src) >> 16;
+> @@ -155,8 +155,10 @@ unsigned int intel_adjusted_rate(const struct drm_rect
+> *src,
+>         dst_w = min(src_w, dst_w);
+>         dst_h = min(src_h, dst_h);
+> 
+> -       return DIV_ROUND_UP_ULL(mul_u32_u32(rate, src_w * src_h),
+> -                               dst_w * dst_h);
+> +       /* in case src contained only fractional part */
+> +       dst_wh = max(dst_w * dst_h, (unsigned) 1);
+> +
+> +       return DIV_ROUND_UP_ULL(mul_u32_u32(rate, src_w * src_h), dst_wh);
+>  }
+> 
+>  unsigned int intel_plane_pixel_rate(const struct intel_crtc_state
+> *crtc_state,
+> 
+> 
+> What do you think? I'll in any case come up with some test for this in igt.
+
+I see that you've posted your fix to the list already. Adding a
+test to cover this in IGT also sounds great. Thanks!
+
+Breadcrumbs to Juha-Pekka's patch for anyone following this
+thread: https://patchwork.freedesktop.org/series/112396/
+
+> 
+> /Juha-Pekka
+> 
+> On 27.12.2022 7.53, Drew Davenport wrote:
+> > The error message suggests that the height of the src rect must be at
+> > least 1. Reject source with height of 0.
+> > 
+> > Signed-off-by: Drew Davenport <ddavenport@chromium.org>
+> > 
+> > ---
+> > I was investigating some divide-by-zero crash reports on ChromeOS which
+> > pointed to the intel_adjusted_rate function. Further prodding showed
+> > that I could reproduce this in a simple test program if I made src_h
+> > some value less than 1 but greater than 0.
+> > 
+> > This seemed to be a sensible place to check that the source height is at
+> > least 1. I tried to repro this issue on an amd device I had on hand, and
+> > the configuration was rejected.
+> > 
+> > Would it make sense to add a check that source dimensions are at least 1
+> > somewhere in core, like in drm_atomic_plane_check? Or is that a valid
+> > use case on some devices, and thus any such check should be done on a
+> > per-driver basis?
+> > 
+> > Thanks.
+> > 
+> >   drivers/gpu/drm/i915/display/skl_universal_plane.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/i915/display/skl_universal_plane.c b/drivers/gpu/drm/i915/display/skl_universal_plane.c
+> > index 4b79c2d2d6177..9b172a1e90deb 100644
+> > --- a/drivers/gpu/drm/i915/display/skl_universal_plane.c
+> > +++ b/drivers/gpu/drm/i915/display/skl_universal_plane.c
+> > @@ -1627,7 +1627,7 @@ static int skl_check_main_surface(struct intel_plane_state *plane_state)
+> >   	u32 offset;
+> >   	int ret;
+> > -	if (w > max_width || w < min_width || h > max_height) {
+> > +	if (w > max_width || w < min_width || h > max_height || h < 1) {
+> >   		drm_dbg_kms(&dev_priv->drm,
+> >   			    "requested Y/RGB source size %dx%d outside limits (min: %dx1 max: %dx%d)\n",
+> >   			    w, h, min_width, max_width, max_height);
+> 
