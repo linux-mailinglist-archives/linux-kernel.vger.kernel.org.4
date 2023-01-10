@@ -2,209 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBEC664084
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BE6664085
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbjAJMcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
+        id S238317AbjAJMcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbjAJMcC (ORCPT
+        with ESMTP id S238263AbjAJMcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:32:02 -0500
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216FD17040;
-        Tue, 10 Jan 2023 04:32:01 -0800 (PST)
-Received: by mail-ej1-f43.google.com with SMTP id u19so28110135ejm.8;
-        Tue, 10 Jan 2023 04:32:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w0Tu1ANer9+ofM7n91wNWxKquZURFG5C2aog/NU/x0c=;
-        b=k3p8mNaQjB8sknQS3guObFuXuzhXFcNJ7TB1IdjYjNxuNmLZXxblcEyUq/0LpENO1B
-         KAO/BbQxBmqa1tHzq8Ys88U/+5EL9IdG5oG8I6LM87ubr9U5ddFnERG2ll2Nt4nnq95B
-         YhzpcTWKyBdnl4MUkmwLw+83kgxq3FyUK9KoZ0nDVvQMt3hiX0kzcl0/6Z41w6Oa4+XP
-         7NeS8QyI4IC22RkVIAi2sIkCB8VM6kE9DbJHxEaiTqFzY+6DmZEdIlkAMADbPqIwKZr6
-         Qy47WZdLBTGwlGXYQCWJJvFxOh3qOkpWz7AFQicS4EhhfmRL+Ffk5tXLuqgDVqlA8NYb
-         vACw==
-X-Gm-Message-State: AFqh2kpKh0QIYUTIrdU65QvZPRt3rhkRjfBefaPEKY/CoBOWwPIbVOhQ
-        0k6XBkyqnyqP5hy3itcDu9GB8MM+EISP/eXpSEWPeUk8tg4=
-X-Google-Smtp-Source: AMrXdXvO+DfyUVxCrQI9tVc8Y8QR3m/uEr9cKAd5cWk6OikdGrtEAsxVA8UgZ6wI6mwMNMraAdPd4W6D7qTePbqL/Rs=
-X-Received: by 2002:a17:907:98ee:b0:7c1:5ff0:6cc2 with SMTP id
- ke14-20020a17090798ee00b007c15ff06cc2mr4913389ejc.246.1673353919580; Tue, 10
- Jan 2023 04:31:59 -0800 (PST)
+        Tue, 10 Jan 2023 07:32:13 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A531F15FE8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:32:11 -0800 (PST)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NrqsQ6gm4znVBr;
+        Tue, 10 Jan 2023 20:30:34 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 10 Jan 2023 20:32:07 +0800
+Message-ID: <684a2472-f388-b2e1-4a7a-7bc9a07650b4@huawei.com>
+Date:   Tue, 10 Jan 2023 20:32:07 +0800
 MIME-Version: 1.0
-References: <72fcddd3-0429-4e23-ab68-2a502f451966@linaro.org> <CAJZ5v0iSsg63KdfY79DHSeR+DnaQF2c7GoFZaUw3eHh4XNkWRA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iSsg63KdfY79DHSeR+DnaQF2c7GoFZaUw3eHh4XNkWRA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Jan 2023 13:31:48 +0100
-Message-ID: <CAJZ5v0gX0KttHGFWAJU5urTfTQVqZeXjFOBrrovygQamwYs_4A@mail.gmail.com>
-Subject: Re: [GIT PULL] generic trip points for the thermal framework
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Xu Panda <xu.panda@zte.com.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH -v2] x86/boot/compressed: Register dummy NMI handler in
+ EFI boot loader, to avoid kdump crashes
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>
+CC:     <michael.roth@amd.com>, <hpa@zytor.com>, <tglx@linutronix.de>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <kirill.shutemov@linux.intel.com>, <jroedel@suse.de>,
+        <keescook@chromium.org>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <brijesh.singh@amd.com>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        <liwei391@huawei.com>
+References: <20230110102745.2514694-1-zengheng4@huawei.com>
+ <Y71FJ+G0NGQe3Ppq@gmail.com> <Y71TglxSLJKO17SY@gmail.com>
+ <Y71V8SRLxZ/Uqkfs@zn.tnic>
+From:   Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <Y71V8SRLxZ/Uqkfs@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 9:17 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+
+On 2023/1/10 20:11, Borislav Petkov wrote:
+> On Tue, Jan 10, 2023 at 01:01:06PM +0100, Ingo Molnar wrote:
+>> From: Zeng Heng <zengheng4@huawei.com>
+>> Date: Tue, 10 Jan 2023 18:27:45 +0800
+>> Subject: [PATCH] x86/boot/compressed: Register dummy NMI handler in EFI boot loader, to avoid kdump crashes
+>>
+>> If kdump is enabled, when using mce_inject to inject errors, EFI
+> Why does "EFI" matter here? Any boot loader would do...
 >
-> On Sun, Jan 8, 2023 at 9:22 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >
-> >
-> > Hi Rafael,
-> >
-> > here are the changes for the generic trip points which were postponed
-> > during the last release. They have been in the linux-next branch since
-> > November.
-> >
-> > The following changes since commit b878d3ba9bb41cddb73ba4b56e5552f0a638daca:
-> >
-> >    thermal: int340x: Add missing attribute for data rate base
-> > (2022-12-30 19:48:37 +0100)
-> >
-> > are available in the Git repository at:
-> >
-> >
-> > ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> > tags/generic-trip-point
-> >
-> > for you to fetch changes up to 3a151494dc04c76add577ae66e8a04f900638aaf:
-> >
-> >    thermal/drivers/armada: Use strscpy() to instead of strncpy()
-> > (2023-01-06 14:14:48 +0100)
-> >
-> > ----------------------------------------------------------------
-> > - Rework a large bunch of drivers to use the generic thermal trip
-> >    structure and the opportunity to do more cleanups by removing unused
-> >    functions in the OF code (Daniel Lezcano)
-> >
-> > - Fix some locking issues related to the generic thermal trip rework
-> >    (Johan Hovold)
-> >
-> > - Fix a crash when requesting the critical temperature on tegra, this
-> >    fix is related to the generic trip point (Jon Hunter)
-> >
-> > - Use strscpy() to instead of strncpy() (Xu Panda)
-> >
-> > ----------------------------------------------------------------
-> > Daniel Lezcano (32):
-> >        thermal/core: Add a generic thermal_zone_get_trip() function
-> >        thermal/sysfs: Always expose hysteresis attributes
-> >        thermal/core: Add a generic thermal_zone_set_trip() function
-> >        thermal/core/governors: Use thermal_zone_get_trip() instead of
-> > ops functions
-> >        thermal/of: Use generic thermal_zone_get_trip() function
-> >        thermal/of: Remove unused functions
-> >        thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/exynos: of_thermal_get_ntrips()
-> >        thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by
-> > thermal_zone_get_trip()
-> >        thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/uniphier: Use generic thermal_zone_get_trip()
-> > function
-> >        thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/armada: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/rcar_gen3: Use the generic function to get the
-> > number of trips
-> >        thermal/of: Remove of_thermal_get_ntrips()
-> >        thermal/of: Remove of_thermal_is_trip_valid()
-> >        thermal/of: Remove of_thermal_set_trip_hyst()
-> >        thermal/of: Remove of_thermal_get_crit_temp()
-> >        thermal/drivers/st: Use generic trip points
-> >        thermal/drivers/imx: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/broadcom: Use generic thermal_zone_get_trip()
-> > function
-> >        thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/ti: Remove unused macros
-> > ti_thermal_get_trip_value() / ti_thermal_trip_is_valid()
-> >        thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
-> >        thermal/intel/int340x: Replace parameter to simplify
-> >        thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/exynos: Fix NULL pointer dereference when getting
-> > the critical temp
-> >        wifi: iwlwifi: Use generic thermal_zone_get_trip() function
-> >        thermal/drivers/mellanox: Use generic thermal_zone_get_trip()
-> > function
-> >
-> > Johan Hovold (3):
-> >        thermal/drivers/qcom: Fix set_trip_temp() deadlock
-> >        thermal/drivers/tegra: Fix set_trip_temp() deadlock
-> >        thermal/drivers/qcom: Fix lock inversion
-> >
-> > Jon Hunter (1):
-> >        thermal/drivers/tegra: Fix crash when getting critical temp
-> >
-> > Xu Panda (1):
-> >        thermal/drivers/armada: Use strscpy() to instead of strncpy()
-> >
-> >   drivers/net/ethernet/chelsio/cxgb4/cxgb4.h         |   2 -
-> >   drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c |  39 +---
-> >   drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 209
-> > +++++----------------
-> >   drivers/net/wireless/intel/iwlwifi/mvm/mvm.h       |   2 +-
-> >   drivers/net/wireless/intel/iwlwifi/mvm/tt.c        |  71 ++-----
-> >   drivers/platform/x86/acerhdf.c                     |  73 +++----
-> >   drivers/thermal/armada_thermal.c                   |  40 ++--
-> >   drivers/thermal/broadcom/bcm2835_thermal.c         |   8 +-
-> >   drivers/thermal/da9062-thermal.c                   |  52 +----
-> >   drivers/thermal/gov_bang_bang.c                    |  37 ++--
-> >   drivers/thermal/gov_fair_share.c                   |  18 +-
-> >   drivers/thermal/gov_power_allocator.c              |  51 +++--
-> >   drivers/thermal/gov_step_wise.c                    |  22 +--
-> >   drivers/thermal/hisi_thermal.c                     |  11 +-
-> >   drivers/thermal/imx_thermal.c                      |  72 +++----
-> >   .../intel/int340x_thermal/int340x_thermal_zone.c   |  33 ++--
-> >   .../intel/int340x_thermal/int340x_thermal_zone.h   |   4 +-
-> >   .../int340x_thermal/processor_thermal_device.c     |  10 +-
-> >   drivers/thermal/intel/x86_pkg_temp_thermal.c       | 120 ++++++------
-> >   drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |  44 ++---
-> >   drivers/thermal/rcar_gen3_thermal.c                |   2 +-
-> >   drivers/thermal/rcar_thermal.c                     |  53 +-----
-> >   drivers/thermal/samsung/exynos_tmu.c               |  62 +++---
-> >   drivers/thermal/st/st_thermal.c                    |  47 +----
-> >   drivers/thermal/tegra/soctherm.c                   |  35 ++--
-> >   drivers/thermal/tegra/tegra30-tsensor.c            |  17 +-
-> >   drivers/thermal/thermal_core.c                     | 154 ++++++++++++---
-> >   drivers/thermal/thermal_core.h                     |  24 +--
-> >   drivers/thermal/thermal_helpers.c                  |  28 +--
-> >   drivers/thermal/thermal_netlink.c                  |  19 +-
-> >   drivers/thermal/thermal_of.c                       | 116 ------------
-> >   drivers/thermal/thermal_sysfs.c                    | 135 +++++--------
-> >   drivers/thermal/ti-soc-thermal/ti-thermal.h        |  15 --
-> >   drivers/thermal/uniphier_thermal.c                 |  27 ++-
-> >   include/linux/thermal.h                            |  12 ++
-> >   35 files changed, 618 insertions(+), 1046 deletions(-)
-> >
-> > --
+>> boot loader would decompress & load second kernel for saving the
+> s/&/and/
 >
-> Pulled and pushed out, thanks!
+>> vmcore file.
+>>
+>> For normal errors that is fine.
+> Useless sentence.
 >
-> I've merged my thermal-intel branch on top of this and pushed out the
-> result into the bleeding-edge branch.  Please check my merge conflict
-> resolution there.
+>> However, in the MCE case, the panic
+>> CPU that firstly enters into mce_panic() is running within NMI
+>> interrupt context,
+> "#MC context" it is non-maskable but that's not "NMI interrupt context"
 
-It would not build due to tj_max being undefined in
-pkg_temp_thermal_device_add().
+mce is registered on NMI handler by inject_init().
 
-Should be fixed in bleeding-edge now.
+And here is the context of mce-inject:
 
-Rui, please have a look at that too.
+#0  relocate_kernel () at arch/x86/kernel/relocate_kernel_64.S:55
+#1  0xffffffff81a57fc2 in machine_kexec (image=0xffff888101ef8400)
+     at arch/x86/kernel/machine_kexec_64.c:391
+#2  0xffffffff811a9573 in __crash_kexec (regs=regs@entry=0x0 
+<fixed_percpu_data>)
+     at kernel/kexec_core.c:1057
+#3  0xffffffff81a5b4e4 in panic (fmt=fmt@entry=0xffffffff823211c8 "Fatal 
+machine check")
+     at kernel/panic.c:393
+#4  0xffffffff81aa65f5 in mce_panic (
+     msg=msg@entry=0xffffffff823211c8 "Fatal machine check",
+     final=final@entry=0xffff88813ac9eec0, exp=<optimized out>)
+     at arch/x86/kernel/cpu/mce/core.c:380
+#5  0xffffffff8103863b in mce_reign () at 
+arch/x86/kernel/cpu/mce/core.c:1042
+#6  0xffffffff81aa682f in mce_end (order=order@entry=1)
+     at arch/x86/kernel/cpu/mce/core.c:1175
+#7  0xffffffff81aa6d57 in do_machine_check (regs=0xfffffe00000beef8)
+     at arch/x86/kernel/cpu/mce/core.c:1567
+#8  0xffffffffc0495167 in raise_exception (m=m@entry=0xffff88813ad9ef40,
+     pregs=<optimized out>) at arch/x86/kernel/cpu/mce/inject.c:152
+#9  0xffffffffc0495e7f in mce_raise_notify (cmd=<optimized out>, 
+regs=<optimized out>)
+     at arch/x86/kernel/cpu/mce/inject.c:168
+#10 0xffffffff810204b8 in nmi_handle ()
+#11 0xffffffff81aa5e62 in default_do_nmi 
+(regs=regs@entry=0xfffffe00000beef8)
+     at arch/x86/kernel/nmi.c:335
+#12 0xffffffff81aa608d in exc_nmi (regs=0xfffffe00000beef8) at 
+arch/x86/kernel/nmi.c:517
+#13 0xffffffff81c014e8 in asm_exc_nmi () at arch/x86/entry/entry_64.S:1440
 
-Thanks!
+
+>
+>> and the processor blocks delivery of subsequent
+>> NMIs until the next execution of the IRET instruction.
+>>
+>> When the panic CPU takes long time in the panic processing route,
+> I'm still unclear on the order of events here. It sounds like
+>
+> 1. MCE injected
+> 2. panic
+> 3. kdump gets loaded
+>
+> If that is the case, then I presume the flow is:
+>
+> mce_panic -> panic -> __crash_kexec()
+>
+> Yes?
+
+Yes, exactly. The following procedure is like:
+
+panic() -> relocate_kernel() -> identity_mapped() -> x86 purgatory image 
+-> EFI loader -> secondary kernel
+
+>
+> If so, then we should make sure we have *exited* #MC context before calling
+> panic() and not have to add hacks like this one of adding an empty NMI handler.
+>
+> But I'm only speculating as it is hard to make sense of all this text.
+>
+> Thx.
+>
