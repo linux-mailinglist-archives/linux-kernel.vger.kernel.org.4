@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740BC6642A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8937C6642A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbjAJOB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:01:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        id S234232AbjAJOBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbjAJOAz (ORCPT
+        with ESMTP id S234267AbjAJOBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:00:55 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CD32EF
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:00:51 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id g10so8863346wmo.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:00:51 -0800 (PST)
+        Tue, 10 Jan 2023 09:01:04 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D949B1BEB1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:01:01 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4b718cab0e4so154600237b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:01:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CCLXjJDBA/yZy5Qm5n4xkawhrlKWWq87IS+X7t/wE4c=;
-        b=h0+DYlL0hvt4o0qrTP2PPem00/rHncpdOTcyHrcNiwxFBkvex3AQwp+6jf/jxw8gND
-         MUm6aOk1+5x7BlDbNZvS2g74ShAcmMSFAeJyO1gRoYNgf7jO9toL9VrFSVg88mNenkzB
-         2oRZQ/LRp0EoAzsm1ThudPb/AzQuel+2CaN2gZP3j/tkkKx+I1br5nZB56ovh1aoyXYH
-         b+cVRKeeXzWtCe6YboaJinc8KI2AJh49Ny3YQBpFjASNTeONRKLDhfI6LHxYd8ukUAUW
-         Gc8lXMoCBjKMtgRsuKu6RCTlhr+rEfucOnvO4K1Q6NSHgaC+lg9AxJ2/MQ+MLMySR2Vt
-         6A6g==
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cTd66jKz4KsZyqN8B/YkkUACqAiuZizBOAJvACAkBxg=;
+        b=aIFk15a4imSPftRnezXf4PjAty+9YfBMqX3ux2KWPtiYYx9gc2hnvHkZtVuh/u/NTu
+         f67DP8xH02iLAliBfHs5+7grh2oqRe6IbWj471ytYWDj8dlznC3FzOnRdiAKNji1PD+B
+         IsWjDVgrF4HoH9da9KLqI5fPO2B0T5sGAD5ihCLfJVej0Et+tWm6oQOLrO4MlCKy+iu7
+         O/VULzjRav5t5R19YzpL7rlLXwerFK4fGHnOg1aRD267Amrwe/CjAet7nOsUSY/+P3wG
+         U1YOMTSb2w6ZHlC0Oj7DWr3RHftFcALIltj8AgjcSEO7qxaFkoNPknyVoxjO1Cnlij++
+         4JTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CCLXjJDBA/yZy5Qm5n4xkawhrlKWWq87IS+X7t/wE4c=;
-        b=DhqkU1go1tekm6oJdJUnPVTubANHzCHDXViLAh5fydxrj5uWgEvcmV8MC2srREUahn
-         /A5sjBR+061+x7tzQezxQkAkBnyQVN+opYkAUs68MeEYQZIXYcvHbA/iw2u9aO3znpAM
-         Z1Xr9EyaO/Gkk8DzuxhPYy4y9Kgq6G/3NjUbCdukzLy8N1x/GGvRgk34MxWvDExVKMRW
-         KIsxFLaOCH676SPbLDTJdN5zgfcjlH8DrNIbkEHVJQb02roBpa2zcY0VGRcA15m+HWgf
-         wm2jIvpjSRBdTu4yq4b6GXcIaG9ym2QRqGege9CAzkK96CSSwwK5E8tm4uFELWE2+6W8
-         5G4g==
-X-Gm-Message-State: AFqh2ko5C6hkgxQZg4651LGVlSep2pobJPuRx4OJF94Z3Sv0S9YLcbOr
-        sBBwz1EiAxBJnuCLd1Pb3ILpsA==
-X-Google-Smtp-Source: AMrXdXsbiKywPF473CvF1IBQ+bK5a5EhlEOeqR2xogfHTZsWs5E078h8X5YKuT5zvdsiV1tuFghF3A==
-X-Received: by 2002:a05:600c:348b:b0:3d2:2a72:2577 with SMTP id a11-20020a05600c348b00b003d22a722577mr48383078wmq.27.1673359249302;
-        Tue, 10 Jan 2023 06:00:49 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id p21-20020a7bcc95000000b003c65c9a36dfsm14631018wma.48.2023.01.10.06.00.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 06:00:48 -0800 (PST)
-Message-ID: <1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org>
-Date:   Tue, 10 Jan 2023 14:00:47 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cTd66jKz4KsZyqN8B/YkkUACqAiuZizBOAJvACAkBxg=;
+        b=RKrwYdk4N0KJO3Cbjl/+Ryvx4XoBQqhofNgh+HaLAt0kEIxmDy1pLqCw8CpHxziTnh
+         1k53Sk2Q7EpCHede5tFnThHrIyAVz8Aig/leq21/Fxr7a0e5cE361Bmb135yHJO6KUDH
+         ePGKKhj7Sw5gXkuMT096Qf2K7Fj3FlSBMh2gW1EE3QxnkTptQUtRuAKTyS80DoWI4Qsc
+         xxvcj1uwgFP/j6NYjIsN79BI5nHinpg5v0rcNhaMwkHxXXYlTQx56T+ZQZ2QoL/yWXvF
+         6iX3ygwL/Jh32SiOU0ZnDyHO9TmTfy+0Cq0iiYIzhKPFyz2drkhMwpxxiZ+thipg+Jpk
+         SdkQ==
+X-Gm-Message-State: AFqh2kpOMr6beRvNQTD/XymlRW7Vpxxxyv5a0tnUek9kA2z7erL8bp3p
+        IjKJ4j9dvRMvh5pcE6+QU6LRAmxnzRme6c/BkBMYfA==
+X-Google-Smtp-Source: AMrXdXte7/yVmWym4kBD4FeqBuwxA2OpS1LIITSRjqcaj7G0ZDI7m0a7+72sliLh2TY5Jg5OumbH6emc5Qy5i0kdbuI=
+X-Received: by 2002:a81:7585:0:b0:358:36cc:b6cf with SMTP id
+ q127-20020a817585000000b0035836ccb6cfmr2398180ywc.505.1673359261105; Tue, 10
+ Jan 2023 06:01:01 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 01/10] interconnect: qcom: rpm: Don't set QoS params
- before non-zero bw is requested
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230110132202.956619-1-konrad.dybcio@linaro.org>
- <20230110132202.956619-2-konrad.dybcio@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230110132202.956619-2-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230109155801.51642-1-sebastian.reichel@collabora.com> <20230109155801.51642-8-sebastian.reichel@collabora.com>
+In-Reply-To: <20230109155801.51642-8-sebastian.reichel@collabora.com>
+From:   Jagan Teki <jagan@edgeble.ai>
+Date:   Tue, 10 Jan 2023 19:30:50 +0530
+Message-ID: <CA+VMnFxb1P4tP5sef5ME3jCcCq2Y3rD-0bpv1B0TsUZ3RXXuqg@mail.gmail.com>
+Subject: Re: [PATCHv8 7/7] arm64: dts: rockchip: Add rock-5b board
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 13:21, Konrad Dybcio wrote:
-> Until now, the icc-rpm driver unconditionally set QoS params, even on
-> empty requests. This is superfluous and the downstream counterpart does
-> not do it. Follow it by doing the same.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Mon, 9 Jan 2023 at 21:28, Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> From: Christopher Obbard <chris.obbard@collabora.com>
+>
+> Add board file for the RK3588 Rock 5B board. This is a basic
+> implementation which just brings up the eMMC and UART which is
+> enough to successfully boot Linux.
+>
+> The ethernet controller is connected via PCIe so support will
+> come in a follow-up patch.
+>
+> Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
+> Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
->   drivers/interconnect/qcom/icc-rpm.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index df3196f72536..361dcbf3386f 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -191,6 +191,12 @@ static int qcom_icc_qos_set(struct icc_node *node, u64 sum_bw)
->   	struct qcom_icc_provider *qp = to_qcom_provider(node->provider);
->   	struct qcom_icc_node *qn = node->data;
->   
-> +	/* Defer setting QoS until the first non-zero bandwidth request. */
-> +	if (!(node->avg_bw || node->peak_bw)) {
-> +		dev_dbg(node->provider->dev, "NOT Setting QoS for %s\n", qn->name);
-> +		return 0;
-> +	}
+>  arch/arm64/boot/dts/rockchip/Makefile         |  1 +
+>  .../boot/dts/rockchip/rk3588-rock-5b.dts      | 44 +++++++++++++++++++
+>  2 files changed, 45 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> index 87a853435142..c5bdd0176ce0 100644
+> --- a/arch/arm64/boot/dts/rockchip/Makefile
+> +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> @@ -83,4 +83,5 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-odroid-m1.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-rock-3a.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
+> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-rock-5b.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-rock-5a.dtb
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> new file mode 100644
+> index 000000000000..d2f1e963ce06
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> @@ -0,0 +1,44 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 > +
->   	dev_dbg(node->provider->dev, "Setting QoS for %s\n", qn->name);
->   
->   	switch (qp->type) {
+> +/dts-v1/;
+> +
+> +#include "rk3588.dtsi"
+> +
+> +/ {
+> +       model = "Radxa ROCK 5 Model B";
+> +       compatible = "radxa,rock-5b", "rockchip,rk3588";
+> +
+> +       aliases {
+> +               mmc1 = &sdhci;
 
-I still think you should include the original logic on the else, for the 
-minimum case of silicon that predates the 5.4 kernel release.
+I think sdhci - emmc has to be mmc0 due to boot priority.
 
-/* Clear bandwidth registers */
-set_qos_bw_regs(base, mas_index, 0, 0, 0, 0, 0);
-
-Either that or get the relevant silicon engineers at qcom to say the 
-host side port write is redundant.
-
----
-bod
+Jagan.
