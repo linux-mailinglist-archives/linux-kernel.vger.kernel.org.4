@@ -2,166 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6922664C19
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEB3664C18
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239247AbjAJTMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:12:40 -0500
+        id S239704AbjAJTMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:12:35 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239782AbjAJTMX (ORCPT
+        with ESMTP id S239820AbjAJTMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:12:23 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C143FCA9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:12:09 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id q2so13586044ljp.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=profian-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xNobJ3nZuiPugokCLRX+KyNGtVaPTaaSHxMzrfuXSEY=;
-        b=ryoN2Ny7+WEqwOGkcq3nQtUedHAY/AszZB5WJ/FnTnKmcyBDM4mICEt89JOQaOacz8
-         AOToZKFCF+mcCxveuXZOzQfOKHBkVGHfCagCBpEAy2LSQ5ZPL3NOwlArm/rZ2SVEE9lq
-         iasDg1Nvn452wt1VY7sf7TGNPiZ/QpDhJA58MS15N/YaclN1naQZ9THYswTJkCG5iMjA
-         gkfGXDIIW171QalbKg7cdjAozyeX8rC660TJfelo+WaXhcS2JlPYvuJOqVkTP4BOGkIZ
-         Ik2Nl3VOu+Fb30bUqSh5UWx1QofgjLoU+ZtyeyTOpT4b4qBIiLYnHl4muKCByCF3Eo+o
-         XW2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xNobJ3nZuiPugokCLRX+KyNGtVaPTaaSHxMzrfuXSEY=;
-        b=tN5WQsHxE9HXompfHctPFdwUkHjgCkZ4ASa5GE8zuWQhGo25NkvS1ceQ35Wwd69pm1
-         QUYUhknqcQs2Frq4J6ZbrIWsR68Q5W3spsSw1PP6d3DacZQSRbCUcDX9NQOghgufuNvn
-         KdLZXVQJqegIArCwp+nG1uIOgFJW4GveKKyasOSowlGNEPFL9LwbPKkzAJNiqrS2Ykm6
-         XV/6EQFgBTra96e8kGuKmM2t33Y7xFN1BXSXi8pROtDimM5CobIuhWcm3WaaPgvRiIl4
-         e3ScJ6Tu/n7hcrmGNF8BOwBAWvrp/IDvpnI/dzdN7e39ztpEERmOxIKAAOBr8V0bb770
-         /ihQ==
-X-Gm-Message-State: AFqh2kqPd2Ty/kkDV6a+HHlnaSts9m8pF0YDmIMrF7bc4YpIUfHh4zJf
-        pT5+rKkcSn/MHAazBDGKD8o1Rw==
-X-Google-Smtp-Source: AMrXdXvewDrfCChQeiomO+ak4GXBow58Itln9BReZmgOMoOnBWpnJ2N2qYWnn9eQfyaibvH1LaovWQ==
-X-Received: by 2002:a05:651c:2006:b0:284:53cd:74d0 with SMTP id s6-20020a05651c200600b0028453cd74d0mr2381041ljo.14.1673377927735;
-        Tue, 10 Jan 2023 11:12:07 -0800 (PST)
-Received: from localhost (83-245-197-49.elisa-laajakaista.fi. [83.245.197.49])
-        by smtp.gmail.com with ESMTPSA id bj36-20020a2eaaa4000000b0027ff2fabcb5sm1381573ljb.104.2023.01.10.11.12.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 11:12:07 -0800 (PST)
-From:   Jarkko Sakkinen <jarkko@profian.com>
-To:     Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Jarkko Sakkinen <jarkko@profian.com>,
-        linux-crypto@vger.kernel.org (open list:AMD CRYPTOGRAPHIC COPROCESSOR
-        (CCP) DRIVER - SE...), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v5] crypto: ccp: Sanitize sev_platform_init() error messages
-Date:   Tue, 10 Jan 2023 19:12:00 +0000
-Message-Id: <20230110191201.29666-1-jarkko@profian.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 10 Jan 2023 14:12:25 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296364F103;
+        Tue, 10 Jan 2023 11:12:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673377936; x=1704913936;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=idaSyTc/ks4CE89dkqypMQwFMcAUjyVafAw9EG5/p1Y=;
+  b=SPHSRtPLj9bckQDAopi8zfmjK/c9fRfTq/9QBKhgv5Nj/8vEJJ3vOMA6
+   Dtd/IbuMDHfo2avI92Vf0Dmdla/FrqeejBhTDr+7ByjzkrRWh3PfcmM6v
+   0dA1eOf4utWkLgGd50JRMOiJUhkAJmDHbYvEoA0+Dk3f3NlPjxmP5njvf
+   G9koVM5i9dUgPfGx+SfwwJRCg92lwXNNNZ7Rldu2jT4uXXE0EgKwJwAJa
+   y1TkOP4IbVZOBGyhkKeKoh/lfz+rJoOxm+ZHjV79z2+P3IFzJ7Dqcwd43
+   09in4hRLWEKwTMe11Jx2InohKllfz5Arj7Tn4+mvKA5D9awKkY+fKUP93
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350458233"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="350458233"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 11:12:14 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607086563"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="607086563"
+Received: from svenka7-mobl1.amr.corp.intel.com (HELO [10.209.63.27]) ([10.209.63.27])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 11:12:13 -0800
+Message-ID: <56cdb6e6-e25c-aba9-7bb3-323281e65249@intel.com>
+Date:   Tue, 10 Jan 2023 11:12:13 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 08/16] x86/virt/tdx: Add placeholder to construct TDMRs
+ to cover all TDX memory regions
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1670566861.git.kai.huang@intel.com>
+ <ef6fe9247007ee8e15272de01ded1e0a9152be02.1670566861.git.kai.huang@intel.com>
+ <c70c30fb-073f-4355-c6a6-052d013a99da@intel.com>
+ <81b814f096513e69e3099ab2b54034deadf8d7fd.camel@intel.com>
+ <92aba287-c839-8841-a9f7-28a2c0b3097a@intel.com>
+ <cba4c7295b157dc5d0d88b73f335899f0aa5a21c.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <cba4c7295b157dc5d0d88b73f335899f0aa5a21c.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following functions end up calling sev_platform_init() or
-__sev_platform_init_locked():
+On 1/9/23 18:23, Huang, Kai wrote:
+> On Mon, 2023-01-09 at 16:47 -0800, Dave Hansen wrote:
+>> On 1/9/23 16:40, Huang, Kai wrote:
+>>> On Fri, 2023-01-06 at 11:24 -0800, Dave Hansen wrote:
+>> ...
+>>>> Also, tdmr_sz and max_tdmrs can both be derived from 'sysinfo'.  Do they
+>>>> really need to be stored here?
+>>>
+>>> It's not mandatory to keep them here.  I did it mainly because I want to avoid
+>>> passing 'sysinfo' as argument for almost all functions related to constructing
+>>> TDMRs.
+>>
+>> I don't think it hurts readability that much.  On the contrary, it makes
+>> it more clear what data is needed for initialization.
+> 
+> Sorry one thing I forgot to mention is if we keep 'tdmr_sz' in 'struct
+> tdmr_info_list', it only needs to be calculated at once when allocating the
+> buffer.  Otherwise, we need to calculate it based on sysinfo-
+> max_reserved_per_tdmr each time we want to get a TDMR at a given index.
 
-* sev_guest_init()
-* sev_ioctl_do_pek_csr
-* sev_ioctl_do_pdh_export()
-* sev_ioctl_do_pek_import()
-* sev_ioctl_do_pek_pdh_gen()
-* sev_pci_init()
+What's the problem with recalculating it?  It is calculated like this:
 
-However, only sev_pci_init() prints out the failed command error code, and
-even there, the error message does not specify which SEV command failed.
+	tdmr_sz = ALIGN(constant1 + constant2 * variable);
 
-Address this by printing out the SEV command errors inside
-__sev_platform_init_locked(), and differentiate between DF_FLUSH, INIT and
-INIT_EX commands.  As a side-effect, @error can be removed from the
-parameter list.
+So, what's the problem?  You're concerned about too many multiplications?
 
-This extra information is particularly useful if firmware loading and/or
-initialization is going to be made more robust, e.g. by allowing firmware
-loading to be postponed.
+> To me putting relevant fields (tdmrs, tdmr_sz, max_tdmrs, nr_consumed_tdmrs)
+> together makes how the TDMR list is organized more clear.  But please let me
+> know if you prefer removing 'tdmr_sz' and 'max_tdmrs'.
+> 
+> Btw, if we remove 'tdmr_sz' and 'max_tdmrs', even nr_consumed_tdmrs is not
+> absolutely necessary here.  It can be a local variable of init_tdx_module() (as
+> shown in v7), and the 'struct tdmr_info_list' will only have the 'tdmrs' member
+> (as you commented in v7):
+> 
+> https://lore.kernel.org/linux-mm/cc195eb6499cf021b4ce2e937200571915bfe66f.camel@intel.com/T/#mb9826e2bcf8bf6399c13cc5f95a948fe4b3a46d9
+> 
+> Please let me know what's your preference?
 
-Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
----
-v5:
-* Address Tom's feedback:
-  https://lore.kernel.org/all/ddbb4b2f-3eb8-64da-bce9-3cfd66d7729a@amd.com/
-* "failed error" -> "error"
-* "SEV_CMD_" -> ""
-
-v4:
-* Sorry, v3 was malformed. Here's a proper patch.
-
-v3:
-* Address Tom Lendacky's feedback:
-  https://lore.kernel.org/kvm/8bf6f179-eee7-fd86-7892-cdcd76e0762a@amd.com/
-
-v2:
-* Address David Rientjes's feedback:
-  https://lore.kernel.org/all/6a16bbe4-4281-fb28-78c4-4ec44c8aa679@google.com/
-* Remove @error.
-* Remove "SEV_" prefix: it is obvious from context so no need to make klog
-  line longer.
----
- drivers/crypto/ccp/sev-dev.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 06fc7156c04f..3f80cd39cbdf 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -478,17 +478,23 @@ static int __sev_platform_init_locked(int *error)
- 	}
- 	if (error)
- 		*error = psp_ret;
--
--	if (rc)
-+	if (rc) {
-+		dev_err(sev->dev, "SEV: %s error %#x",
-+			sev_init_ex_buffer ? "INIT_EX" : "INIT", psp_ret);
- 		return rc;
-+	}
- 
- 	sev->state = SEV_STATE_INIT;
- 
- 	/* Prepare for first SEV guest launch after INIT */
- 	wbinvd_on_all_cpus();
--	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, error);
--	if (rc)
-+	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, &psp_ret);
-+	if (error)
-+		*error = psp_ret;
-+	if (rc) {
-+		dev_err(sev->dev, "SEV: DF_FLUSH error %#x", psp_ret);
- 		return rc;
-+	}
- 
- 	dev_dbg(sev->dev, "SEV firmware initialized\n");
- 
-@@ -1337,8 +1343,7 @@ void sev_pci_init(void)
- 	/* Initialize the platform */
- 	rc = sev_platform_init(&error);
- 	if (rc)
--		dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
--			error, rc);
-+		dev_err(sev->dev, "SEV: failed to INIT rc %d\n", rc);
- 
- 	return;
- 
--- 
-2.38.1
+I dunno.  My gut says that passing sysinfo around and just deriving the
+sizes values from that with helpers is the best way.  'struct
+tdmr_info_list' isn't a horrible idea in and of itself, but I think it's
+a confusing structure because it's not clear how the pieces fit together
+when half of it is *required* and the other half is just for some kind
+of perceived convenience.
 
