@@ -2,104 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592ED664090
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D62664093
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238363AbjAJMeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S238380AbjAJMem convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 10 Jan 2023 07:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232462AbjAJMeC (ORCPT
+        with ESMTP id S238263AbjAJMei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:34:02 -0500
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAAC17061
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:34:00 -0800 (PST)
-Received: by mail-ej1-f54.google.com with SMTP id jo4so28211176ejb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:34:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p11xjHDGcN1z2sNc7CIMkepZaYOPFjolrt2Rg/QUmPA=;
-        b=yJohtjZ4NnrIDQsNDLVJg2qFKBWmzga9rnTIKY2jp6BOwofx/PEmcgNhzhPh/XexVD
-         kDBa4Xy9/m/q6J5APPqQlC9tS2Wkjib3pxyq9wtRLr0QxX38uhgYmsIX3mWDY85rocZG
-         C+FNhd0QcAqDBjRdtXEk9SufcI8+oDjq38M8J0fdIcSFQtY52YGZV1yI0LlWBydXzziZ
-         icsfC3hxzlvHFQpVHT8+ITjhe4DTMymwd6h7Qry4BqzAX5YqiSeK5FC5aR0zzb4QWVSA
-         ujpXQStNCnpiNC17sX9eQjWzvR0hhV6pfbiLrT3HHgydqJ+znrLUZq1Jg5XKgrQuQ9g0
-         1YUA==
-X-Gm-Message-State: AFqh2kq3owwQqvi4NC5pN5cGfMwErIbPjff68KdhYr6/pNTaE+BrqTRJ
-        +1d+eEMtIEzMg54vXWnPEgYnETiN1iwPz0J+gQt6JML3KO0=
-X-Google-Smtp-Source: AMrXdXtXZAnjkd7wBaLkBHED7txQL4kfj50yErDYeDq2U6bK7nREfhKQzkmxcWdKx3bcIzOEE5WRvh00j8++WPKgOdo=
-X-Received: by 2002:a17:906:9484:b0:84d:3c6a:4c55 with SMTP id
- t4-20020a170906948400b0084d3c6a4c55mr1264636ejx.509.1673354039092; Tue, 10
- Jan 2023 04:33:59 -0800 (PST)
+        Tue, 10 Jan 2023 07:34:38 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AB519036
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:34:35 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-319-CqCJCDyUO0CLmH1_J02gWQ-1; Tue, 10 Jan 2023 12:34:32 +0000
+X-MC-Unique: CqCJCDyUO0CLmH1_J02gWQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
+ 2023 12:34:31 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Tue, 10 Jan 2023 12:34:31 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kalle Valo' <kvalo@kernel.org>
+CC:     'Martin Blumenstingl' <martin.blumenstingl@googlemail.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "tehuang@realtek.com" <tehuang@realtek.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
+Thread-Topic: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
+Thread-Index: AQHZJOt8b7TA8qgUUEi14rUuSBslva6Xj6GQ
+Date:   Tue, 10 Jan 2023 12:34:31 +0000
+Message-ID: <7f75a99604394c47bd646c6a024cb27a@AcuMS.aculab.com>
+References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
+        <20221228133547.633797-2-martin.blumenstingl@googlemail.com>
+        <92eb7dfa8b7d447e966a2751e174b642@realtek.com>
+        <87da8c82dec749dc826b5a1b4c4238aa@AcuMS.aculab.com>
+        <eee17e2f4e44a2f38021a839dc39fedc1c1a4141.camel@realtek.com>
+        <a86893f11fe64930897473a38226a9a8@AcuMS.aculab.com>
+        <5c0c77240e7ddfdffbd771ee7e50d36ef3af9c84.camel@realtek.com>
+        <CAFBinCC+1jGJx1McnBY+kr3RTQ-UpxW6JYNpHzStUTredDuCug@mail.gmail.com>
+        <ec6a0988f3f943128e0122d50959185a@AcuMS.aculab.com>
+ <87r0w2fvgz.fsf@kernel.org>
+In-Reply-To: <87r0w2fvgz.fsf@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20230109175810.2965448-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20230109175810.2965448-1-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Jan 2023 13:33:48 +0100
-Message-ID: <CAJZ5v0j7mbvcRWy=Ek00rbfNpsaRb6oGKqC3OaZ+OcASRZt8bg@mail.gmail.com>
-Subject: Re: [PATCH 1/6] driver core: make bus_get_device_klist() static
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 6:58 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> No one calls this function outside of drivers/base/bus.c so make it
-> static so it does not need to be exported anymore.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Kalle Valo
+> Sent: 10 January 2023 12:03
+...
+> > Most hardware definitions align everything.
+> >
+> > What you may want to do is add compile-time asserts for the
+> > sizes of the structures.
+> >
+> > Remember that if you have 16/32 bit fields in packed structures
+> > on some architectures the compile has to generate code that does
+> > byte loads and shifts.
+> >
+> > The 'misaligned' property is lost when you take the address - so
+> > you can easily generate a fault.
+> >
+> > Adding __packed to a struct is a sledgehammer you really shouldn't need.
+> 
+> Avoiding use of __packed is news to me, but is this really a safe rule?
+> Most of the wireless engineers are no compiler experts (myself included)
+> so I'm worried. For example, in ath10k and ath11k I try to use __packed
+> for all structs which are accessing hardware or firmware just to make
+> sure that the compiler is not changing anything.
 
-Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+What may wish to do is get the compiler to generate an error if
+it would add any padding - but that isn't what __packed is for
+or what it does.
 
-> ---
->  drivers/base/bus.c         | 3 +--
->  include/linux/device/bus.h | 1 -
->  2 files changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-> index e1bf741063e0..4e6fdb65a157 100644
-> --- a/drivers/base/bus.c
-> +++ b/drivers/base/bus.c
-> @@ -927,11 +927,10 @@ struct kset *bus_get_kset(struct bus_type *bus)
->  }
->  EXPORT_SYMBOL_GPL(bus_get_kset);
->
-> -struct klist *bus_get_device_klist(struct bus_type *bus)
-> +static struct klist *bus_get_device_klist(struct bus_type *bus)
->  {
->         return &bus->p->klist_devices;
->  }
-> -EXPORT_SYMBOL_GPL(bus_get_device_klist);
->
->  /*
->   * Yes, this forcibly breaks the klist abstraction temporarily.  It
-> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
-> index f2cf7c4ddd20..0699b3970344 100644
-> --- a/include/linux/device/bus.h
-> +++ b/include/linux/device/bus.h
-> @@ -287,6 +287,5 @@ extern int bus_unregister_notifier(struct bus_type *bus,
->  #define BUS_NOTIFY_DRIVER_NOT_BOUND    0x00000008 /* driver fails to be bound */
->
->  extern struct kset *bus_get_kset(struct bus_type *bus);
-> -extern struct klist *bus_get_device_klist(struct bus_type *bus);
->
->  #endif
-> --
-> 2.39.0
->
+The compiler will only ever add padding to ensure that fields
+are correctly aligned (usually a multiple of their size).
+There can also be padding at the end of a structure so that arrays
+are aligned.
+There are some unusual ABI that align all structures on 4 byte
+boundaries - but i don't think Linux has any of them.
+In any case this rarely matters.
+
+All structures that hardware/firmware access are very likely
+to have everything on its natural alignment unless you have a very
+old structure hat might have a 16bit aligned 32bit value that
+was assumed to be two words.
+
+Now if you have:
+struct {
+	char	a[4];
+	int	b;
+} __packed foo;
+whenever you access foo.b the compiler might have to generate
+4 separate byte memory accesses and a load of shift/and/or
+instructions in order to avoid a misaligned address trap.
+So you don't want to use __packed unless the field is actually
+expected to be misaligned.
+For most hardware/firmware structures this isn't true.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
