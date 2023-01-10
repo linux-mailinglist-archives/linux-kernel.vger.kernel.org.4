@@ -2,91 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6E366369A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 02:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C3166369F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 02:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjAJBRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 20:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S235056AbjAJBTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 20:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232803AbjAJBRo (ORCPT
+        with ESMTP id S229607AbjAJBTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 20:17:44 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5828E0BC;
-        Mon,  9 Jan 2023 17:17:42 -0800 (PST)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NrXvC4v4jz16MZd;
-        Tue, 10 Jan 2023 09:16:07 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 10 Jan 2023 09:17:39 +0800
-Subject: Re: [PATCH -next v3] jbd2: Fix data missing when reusing bh which is
- ready to be checkpointed
-To:     Jan Kara <jack@suse.cz>
-CC:     <tytso@mit.edu>, <jack@suse.com>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <libaokun1@huawei.com>, <zhanchengbin1@huawei.com>
-References: <20230109134545.2234414-1-chengzhihao1@huawei.com>
- <20230109152923.fvx57xucg2vggzp6@quack3>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <30b40bab-770d-3f77-2b9c-88984ae129e1@huawei.com>
-Date:   Tue, 10 Jan 2023 09:17:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Mon, 9 Jan 2023 20:19:14 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA05CE0
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 17:19:13 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id s8so3237929plk.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 17:19:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JRJYNk03xPF7I0f3RiiUNSrwj7K0SCkYwCDphRZWj3c=;
+        b=LYUy8d956TFa4i0X/jINb9cLqY6o2DO8RoacHNTbbqpl8LHI2/Qg246QCSQgHVA+nH
+         HJSdqiBTvghIgiNFKN+RnWDfVLcTTn1WiBk2hYjjliNu1Hb2C6+1JXHTA8Yqa0uUud+P
+         UdwMdphpyLdOm8qn7t1kn+/887P41sckwQAH0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JRJYNk03xPF7I0f3RiiUNSrwj7K0SCkYwCDphRZWj3c=;
+        b=4tzwxU5Bh6Kl4jfKiOpPvpzLy1zOs5fbMehPGYcMEzs21oFu5uhKlQejG5W5+YIxfA
+         gB7+3NTSptBv76H7sxA3hvLbExn8AeyuzsrvzU/Ta2mhwG/o0CJrEPoO3TqVi0fUWtiI
+         D1RBw8ASyZg9VgPdm1epe1ZYv9epyPGDHf4bGkdJ4GMbgvHj1PduMu2GD/kLpMRYAF4F
+         XXudjTbzF9qXro5lUinKiWltO/BmnZDQReNxHDbAw76qPff7zvyujDZjl1NPnDLc/7GV
+         rmIOTmoM0TfnMlbglXRxYV/6lcz9cOfb4IfClu2yFtW85hw5E4RjYDomMlfjUJGbmr4l
+         oBBw==
+X-Gm-Message-State: AFqh2kpxtHva2UmAw/w9JkmHK3U9BQ6XL3zY1A+xDM1nOmKw9t1y/lsm
+        VoqRQ/gjxR7N2WtfpJYhcw2AxA==
+X-Google-Smtp-Source: AMrXdXt7E/WtGBXtZLOsFB0eXRM7CAxST+jXno99j/6BC6C7198kPAZn7z/EVahK9YCxBH+9/0JnBQ==
+X-Received: by 2002:a17:902:e951:b0:193:2ed4:561a with SMTP id b17-20020a170902e95100b001932ed4561amr5989384pll.38.1673313552926;
+        Mon, 09 Jan 2023 17:19:12 -0800 (PST)
+Received: from localhost ([2620:15c:9d:2:99d8:feca:9efd:a216])
+        by smtp.gmail.com with UTF8SMTPSA id u1-20020a170902714100b001933355456esm17519plm.215.2023.01.09.17.19.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 17:19:12 -0800 (PST)
+From:   Brian Norris <briannorris@chromium.org>
+To:     =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?q?Michel=20D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
+        Brian Norris <briannorris@chromium.org>, stable@vger.kernel.org
+Subject: [PATCH v3 1/2] drm/atomic: Allow vblank-enabled + self-refresh "disable"
+Date:   Mon,  9 Jan 2023 17:18:16 -0800
+Message-Id: <20230109171809.v3.1.I3904f697863649eb1be540ecca147a66e42bfad7@changeid>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-In-Reply-To: <20230109152923.fvx57xucg2vggzp6@quack3>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Mon 09-01-23 21:45:45, Zhihao Cheng wrote >> Following process will make data lost and could lead to a 
-filesystem>> corrupted problem:>>
-[...]
+The self-refresh helper framework overloads "disable" to sometimes mean
+"go into self-refresh mode," and this mode activates automatically
+(e.g., after some period of unchanging display output). In such cases,
+the display pipe is still considered "on", and user-space is not aware
+that we went into self-refresh mode. Thus, users may expect that
+vblank-related features (such as DRM_IOCTL_WAIT_VBLANK) still work
+properly.
 
-> Just a suggestion for rephrasing of the comment below
-> 
->> -		/*
->> -		 * In any case we need to clean the dirty flag and we must
->> -		 * do it under the buffer lock to be sure we don't race
->> -		 * with running write-out.
->> +		 * We need to clean the dirty flag and we must do it under the
->> +		 * buffer lock to be sure we don't race with running write-out.
->>   		 */
->>   		JBUFFER_TRACE(jh, "Journalling dirty buffer");
->>   		clear_buffer_dirty(bh);
->> +		/*
->> +		 * Setting jbddirty after clearing buffer dirty is necessary.
->> +		 * Function jbd2_journal_restart() could keep buffer on
->> +		 * BJ_Reserved list until the transaction committing, then the
->> +		 * buffer won't be dirtied by jbd2_journal_refile_buffer()
->> +		 * after committing, the buffer couldn't fall on disk even
->> +		 * last checkpoint finished, which may corrupt filesystem.
->> +		 */
-> 
-> As far as I understand you want to say:
-> 		/*
-> 		 * The buffer is going to be added to BJ_Reserved list now
-> 		 * and nothing guarantees jbd2_journal_dirty_metadata()
-> 		 * will be ever called for it. So we need to set jbddirty
-> 		 * bit here to make sure the buffer is dirtied and written
-> 		 * out when the journaling machinery is done with it.
-> 		 */
-> 
->>   		set_buffer_jbddirty(bh);
->>   	}
-> 
+However, we trigger the WARN_ONCE() here if a CRTC driver tries to leave
+vblank enabled.
 
-Yes. The comment looks better than v3.
+Add a different expectation: that CRTCs *should* leave vblank enabled
+when going into self-refresh.
+
+This patch is preparation for another patch -- "drm/rockchip: vop: Leave
+vblank enabled in self-refresh" -- which resolves conflicts between the
+above self-refresh behavior and the API tests in IGT's kms_vblank test
+module.
+
+== Some alternatives discussed: ==
+
+It's likely that on many display controllers, vblank interrupts will
+turn off when the CRTC is disabled, and so in some cases, self-refresh
+may not support vblank. To support such cases, we might consider
+additions to the generic helpers such that we fire vblank events based
+on a timer.
+
+However, there is currently only one driver using the common
+self-refresh helpers (i.e., rockchip), and at least as of commit
+bed030a49f3e ("drm/rockchip: Don't fully disable vop on self refresh"),
+the CRTC hardware is powered enough to continue to generate vblank
+interrupts.
+
+So we chose the simpler option of leaving vblank interrupts enabled. We
+can reevaluate this decision and perhaps augment the helpers if/when we
+gain a second driver that has different requirements.
+
+v3:
+ * include discussion summary
+
+v2:
+ * add 'ret != 0' warning case for self-refresh
+ * describe failing test case and relation to drm/rockchip patch better
+
+Cc: <stable@vger.kernel.org> # dependency for "drm/rockchip: vop: Leave
+                             # vblank enabled in self-refresh"
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
+ drivers/gpu/drm/drm_atomic_helper.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
+index d579fd8f7cb8..a22485e3e924 100644
+--- a/drivers/gpu/drm/drm_atomic_helper.c
++++ b/drivers/gpu/drm/drm_atomic_helper.c
+@@ -1209,7 +1209,16 @@ disable_outputs(struct drm_device *dev, struct drm_atomic_state *old_state)
+ 			continue;
+ 
+ 		ret = drm_crtc_vblank_get(crtc);
+-		WARN_ONCE(ret != -EINVAL, "driver forgot to call drm_crtc_vblank_off()\n");
++		/*
++		 * Self-refresh is not a true "disable"; ensure vblank remains
++		 * enabled.
++		 */
++		if (new_crtc_state->self_refresh_active)
++			WARN_ONCE(ret != 0,
++				  "driver disabled vblank in self-refresh\n");
++		else
++			WARN_ONCE(ret != -EINVAL,
++				  "driver forgot to call drm_crtc_vblank_off()\n");
+ 		if (ret == 0)
+ 			drm_crtc_vblank_put(crtc);
+ 	}
+-- 
+2.39.0.314.g84b9a713c41-goog
+
