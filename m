@@ -2,233 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70571663C26
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6221663C22
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238025AbjAJJEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:04:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
+        id S231515AbjAJJEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238393AbjAJI7T (ORCPT
+        with ESMTP id S238430AbjAJI70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:59:19 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0199B5274D;
-        Tue, 10 Jan 2023 00:56:56 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nrkxx5WFmz9v7gM;
-        Tue, 10 Jan 2023 16:49:09 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAH3GIwKL1jw9uDAA--.1874S2;
-        Tue, 10 Jan 2023 09:56:27 +0100 (CET)
-Message-ID: <6905166125130c22c244ebf234723d1587a01ae8.camel@huaweicloud.com>
-Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 10 Jan 2023 09:55:50 +0100
-In-Reply-To: <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 10 Jan 2023 03:59:26 -0500
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2050.outbound.protection.outlook.com [40.92.103.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B3B4FD71;
+        Tue, 10 Jan 2023 00:57:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aUl8Sn0Yb2JiSiXSvvcnWxGJuhMATG2BsBjRITUf4udE32iYCDH8F2v7gPC3vEPRD9+h8Cabi6mms9nOf2PVERSr5mr3LUiBR6GYQVu0Si+Judq6ht9L6eT27SOzy5WCGsFs1BPHvWP5HByarrjZfPF+mu3U0iQvH70M4VUa+uVPj2L0J1/nAFmYd8MJ6kwGRabxJrDgtdGFdrjjCBfKpFyg+Z/B2XevhzzgInhF/MTlyAXoJkS3DPtS6UQvHFndcBjUFqKSN/O4XY0eIapkEpbKMvrNko6//Caincq6USmhsIDZ+tXw5O/udz+7QbIXvmFcnmR/Nc/XPHld8AlVlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DJ+JSh8VdcdlVdhK3YrfTF+0PHYj5uvFL/qOQS5mtrs=;
+ b=lz0aUG0LqwdlGwbNNqDDxz1DD2LE0E3J/Ekryr06CXavSwlLaGlv3uda8pKIGbOuY+23mEOqU62tclzdzoN1Hb/MiR0GVXGbtcD1elZiJuBxmgh3N3zPYT+ajqI43v0SZZOYIhTX9o2ZtmrvSXxij+6+zj3RYvV/fwhwJyl86Sta9nmAqAiEknPSoyupp8okuLvKH2jVcg0b/5mnqwivN5RUF9IAGMbT2sm1sJ1kUcTMiBiMC2E5JlAKYTtXMybPGDlk7jUGG0BhnqlqtKxQWto8wT387kNtCP2cX2ImM6AXTuCaDL09FvhZTjscbi8/Rv2T6t3QMWQDCmQnkpgF3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DJ+JSh8VdcdlVdhK3YrfTF+0PHYj5uvFL/qOQS5mtrs=;
+ b=LqyW5NSYk0BGAdUlc0RxmgYjgC7R/ryzsm2/MoXcdvgmImQCUhpw37KbE8mhHD+vVtaqBMCpFOV8Ee+bH/oOKBYMCYRvr0yGdpRSCKfRduR4vBQtUWbVKOvfBHICMqb0nZcyo34Wd7S/PJPxvRJHyR+86SNsbBPO80njapGO8emdVYTrIIUKLMrTF0lIq8poSl0/PZYBfVAN0vKl+xhhyxq3grh9LwJ9J808LuCqRYChUlvcKFTVoHOw0KOHIffg4zSIsLuvrG5FxP5Ng+vzwZSbrSG6vEEeyvIL9M6fDMhNIRLZ5WPCPIc2Af54Iw/t1InHsjFeniFxZLqpuWD43A==
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
+ PN0PR01MB7672.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:c9::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.11; Tue, 10 Jan 2023 08:57:28 +0000
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::f2f0:34b5:eb58:bb5a]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::f2f0:34b5:eb58:bb5a%6]) with mapi id 15.20.6002.010; Tue, 10 Jan 2023
+ 08:57:28 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        "jkosina@suse.cz" <jkosina@suse.cz>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+CC:     "orlandoch.dev@gmail.com" <orlandoch.dev@gmail.com>,
+        "ronald@innovation.ch" <ronald@innovation.ch>
+Subject: [PATCH v2] HID: Recognize sensors with application collections too.
+Thread-Topic: [PATCH v2] HID: Recognize sensors with application collections
+ too.
+Thread-Index: AQHZJNGQHGy5pxaqk0SG23+WPMWSag==
+Date:   Tue, 10 Jan 2023 08:57:27 +0000
+Message-ID: <EFCEA45A-C6F4-477A-B011-9C9E6E61E488@live.com>
+References: <8DA00FF4-DB08-4CEC-A5B4-47A71DC09C13@live.com>
+ <01D620E2-18CA-40F6-A330-454CBC20C542@live.com>
+In-Reply-To: <01D620E2-18CA-40F6-A330-454CBC20C542@live.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [WeZSo3tYEJvTUKOztUz6yf0QA9WnC7MiCNF8inqwknGZnGTodRx0I9r3ydfJQU69]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PN0PR01MB7672:EE_
+x-ms-office365-filtering-correlation-id: e50cf2a9-faf7-41b8-2906-08daf2e8b33a
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TqRz5Ris94fW5yyFS0Wx7m4rZboQpi8E3Li9eK5jWXtsk4vwMe1q9mjuU7Z8kZpq1vcWGx01FowYPJXsR7KlMyZ5hEg+6MHTuDLHi5JZPFlPTcUVomiwqunEQInEyHvD+4ZN8N4/6c3KQq9lN8v4IMkv6RLD6yFghWg8OGT9lrCrvf8GfwZsnV4wMvVmTt3QBnNXkzy6WWibtUG93Z4KSRCN+WvA0ctYfGb7mV1JllcLttXBGmwthK056J4dTEARYAJUe8pwbt8U+jWLMFt52d0SGvBewmL0lMnXfR/r36wnzdHdDgTvaBAJrNBgtHY2DbTwdi/EHJydv2m2MZwX7KkjDyeRcaaL0ztLWJEOaLxwbd/urKz45XeytbBox6TGXBFjk+Xk5eIejNNswdJMj5HvkjHhhJwd0osU4+hc8RrC9dbKe5cUsysM99dP2RvuS8wnRe34E6eWE6BPC9GXMfAo40y+rvx5KecFTwFUrdB84Mc5bGG9tp2HMxY9MkjpHL2trI1wn3BkWSviKqL8ZoWj3eOXosf4Sx8fkDpnAMqrQgOCkIascXRAXBXTv1XUNXjzXqATT7jao2zWA3d+fvw8P/+TJ9DQaiii1lbWAho=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MkNTY0p6R1ZMVkQzVDBxTTlMbHZnbEtzMzN1VWVzMFEwaGl3Sk0vTy9zSWRN?=
+ =?utf-8?B?WlBXVzYwd1JQOXY0a2hqaVlyeFFMNkFwamxYZ2ozQ0tMaUxQNUczSHEyVjN6?=
+ =?utf-8?B?bDN5UDBuTXlleDFsOVBIN3AyQ0ozU0pqNWtyRTZyaUwzT2dNSHdJdWVaN3My?=
+ =?utf-8?B?cGVaR0I2RlBXM1ZXZVN0TXB2Z3VEMldBeEtjTXBzMFpHV1RNVGhqZ1N6bi83?=
+ =?utf-8?B?Y2NEQjZyN2IyU1J4Sno4d1lycGh4NndTck9vOXgxSHNsbzBNTzZUUXVVOXRB?=
+ =?utf-8?B?Y1VHT3B1SnN4ckhjdnIyUUswNTd2LzRmbWtBYVlMUWhSYldlWEd1YnFsTjg3?=
+ =?utf-8?B?ckE3NlhHcWxSbjRiY3ZYWWhRd3EycHZjcHFMMS9MYjNtaWJGZUlXZ1RuN0Ux?=
+ =?utf-8?B?cG50bUVpT0kzOGRETjlYSWxhUXVVb3owSlB0YzE1anBMUjl5UGoyeHVZVnBv?=
+ =?utf-8?B?Tm1pemttQXc4a3B5OXJ0VGI5azM3ejZBQ2FWZU1kSkhWTnQvcm5sNGVFdkxU?=
+ =?utf-8?B?cEp6TWlCYml3ZFd0K1FaNnpKSXFuY1U1NkZsUVcybmoycVVyclExTG4rcThk?=
+ =?utf-8?B?eGhVNEdBRnlKbTczc0JUamxYWWMxaDI3L0RLVEx1V1RLZmhCcjQ5NnJYb2Zo?=
+ =?utf-8?B?NTk4YlJzUEV3OG5XN1hPVjBEWk5nRk5EM3pVYWNHdk1UYUowQWIrZUtnSHNz?=
+ =?utf-8?B?SGZaSnROTHJiYXFieExQU1NjcUpiOWdIa3hYa2syYTZDaGFMNVozZng2S0xq?=
+ =?utf-8?B?SkJmbU84RE1OK3ZORFNDWGdBTEZKZDBwaEVjdlpSYTk5SkxOOTdtQUxrK0Fs?=
+ =?utf-8?B?dkcwUkx6dmdhTWZzOHNKUGFsNHlUZUUxbnNxWnA5NG1zUk0xZXpndTFvWG5o?=
+ =?utf-8?B?ZFNnQzByMmk1R1ZXdHl3VWh6NW5aWitqVWM3U0VPNUd0aG1Mdmp0OUtJUUVF?=
+ =?utf-8?B?Wm80aUtoM1NqQkVvblhKZkRPVE5GT2dJYWZFckYvRXArWTBkaXRIcmVaQk1i?=
+ =?utf-8?B?Mm5pSE1FdzVWeWFHNXJlVGRMTWw1YU5FUHA3eGM1R3FpWURFR0FyWkxETDR4?=
+ =?utf-8?B?TjNtS0pSZWpzYy9Ydm1ndGhiaGtoakVnWDNmQWhnZFYrcTh1b0ozVlg4blJN?=
+ =?utf-8?B?RGJHNS82dzJQWDI1dlQvc2tNV2wyYk03TU1rYTV5SWt2UGlYT09sWGo4UFFy?=
+ =?utf-8?B?dlZybWVnRWVsTjBHYUlyMjJhRlZGV2oyZkUxQ2NjN3ExT295OGhaOGFLdXRH?=
+ =?utf-8?B?eWdUS3lub082YTBZZ1Fwbk9McmE3Vkl2bzVzSnhDMmlDMWYrNGdwU3ZPZWF2?=
+ =?utf-8?B?RlV0aE84dk1IMnFyVjRKeGJYNEQxeEJrRExvM2xxbTRJVG9IYkhMakxiNnRp?=
+ =?utf-8?B?cDNEOVgxY2hPcHZhbjRPNlp2UEpxQjBSRlhIVlFqZm54NUhFQlVDaENEcjIr?=
+ =?utf-8?B?SGljRFF1VG9GV2lvRVZXL00rMTE2UnJnK1NXY3dxRFVRUlZjeThpWGxmWGhy?=
+ =?utf-8?B?THlMT1BLUmRveDRIaTRwNTZMdlB3Vm1mdjdaZUtzMHZ0ZXlTVm5vaXpnTGtV?=
+ =?utf-8?B?NkJzeUt6blVWZmtkbEZKNFRweWZqb1ZSUlp5Z253SUxnczR6eXFuaTBGZ1Mw?=
+ =?utf-8?B?WUw1QytWTnFxVElyMTdmcDd2bFVvM3lEWnZQZFZYQUtLd01TUnlnbitqcTRz?=
+ =?utf-8?B?and6WWpVcllBNjl6b2wzK2haR0I1WWpvUmdIZEFqRCtQYU12R0FMR2V1aGJt?=
+ =?utf-8?B?ZDhiY0hreXc2UVc2TXowWjVxc2NkdjZWdExkRTV2Yk5zUUYwcjFjbmhZeVB4?=
+ =?utf-8?B?TDhnbzNBZ0lyQUR1OVlpZz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F265BE6504826B43B101FBC69F150427@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAH3GIwKL1jw9uDAA--.1874S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxKr1UGFWUKw43CFyruw18Grg_yoW7Zw4fpa
-        yftFnxKr1rJFyUuryftw45ua1I9rWrGrZrGrs3K34UZF1DGr1ftryrAr15ua45XrWDJa97
-        tr4Yyrsxuan8J37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgANBF1jj4Nm3gAAsB
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: e50cf2a9-faf7-41b8-2906-08daf2e8b33a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2023 08:57:27.8989
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0PR01MB7672
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> In preparation for removing security_old_inode_init_security(), switch to
-> security_inode_init_security().
-> 
-> Extend the existing ocfs2_initxattrs() to take the
-> ocfs2_security_xattr_info structure from fs_info, and populate the
-> name/value/len triple with the first xattr provided by LSMs.
-
-Hi Mark, Joel, Joseph
-
-some time ago I sent this patch set to switch to the newer
-function security_inode_init_security(). Almost all the other parts of
-this patch set have been reviewed, and the patch set itself should be
-ready to be merged.
-
-I kindly ask if you could have a look at this patch and give your
-Reviewed-by, so that Paul could take the patch set.
-
-Thanks a lot!
-
-Roberto
-
-> As fs_info was not used before, ocfs2_initxattrs() can now handle the case
-> of replicating the behavior of security_old_inode_init_security(), i.e.
-> just obtaining the xattr, in addition to setting all xattrs provided by
-> LSMs.
-> 
-> Supporting multiple xattrs is not currently supported where
-> security_old_inode_init_security() was called (mknod, symlink), as it
-> requires non-trivial changes that can be done at a later time. Like for
-> reiserfs, even if EVM is invoked, it will not provide an xattr (if it is
-> not the first to set it, its xattr will be discarded; if it is the first,
-> it does not have xattrs to calculate the HMAC on).
-> 
-> Finally, modify the handling of the return value from
-> ocfs2_init_security_get(). As security_inode_init_security() does not
-> return -EOPNOTSUPP, remove this case and directly handle the error if the
-> return value is not zero.
-> 
-> However, the previous case of receiving -EOPNOTSUPP should be still
-> taken into account, as security_inode_init_security() could return zero
-> without setting xattrs and ocfs2 would consider it as if the xattr was set.
-> 
-> Instead, if security_inode_init_security() returned zero, look at the xattr
-> if it was set, and behave accordingly, i.e. set si->enable to zero to
-> notify to the functions following ocfs2_init_security_get() that the xattr
-> is not available (same as if security_old_inode_init_security() returned
-> -EOPNOTSUPP).
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> ---
->  fs/ocfs2/namei.c | 18 ++++++------------
->  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
->  2 files changed, 32 insertions(+), 16 deletions(-)
-> 
-> diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
-> index 05f32989bad6..55fba81cd2d1 100644
-> --- a/fs/ocfs2/namei.c
-> +++ b/fs/ocfs2/namei.c
-> @@ -242,6 +242,7 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
->  	int want_meta = 0;
->  	int xattr_credits = 0;
->  	struct ocfs2_security_xattr_info si = {
-> +		.name = NULL,
->  		.enable = 1,
->  	};
->  	int did_quota_inode = 0;
-> @@ -315,12 +316,8 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
->  	/* get security xattr */
->  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
->  	if (status) {
-> -		if (status == -EOPNOTSUPP)
-> -			si.enable = 0;
-> -		else {
-> -			mlog_errno(status);
-> -			goto leave;
-> -		}
-> +		mlog_errno(status);
-> +		goto leave;
->  	}
->  
->  	/* calculate meta data/clusters for setting security and acl xattr */
-> @@ -1805,6 +1802,7 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
->  	int want_clusters = 0;
->  	int xattr_credits = 0;
->  	struct ocfs2_security_xattr_info si = {
-> +		.name = NULL,
->  		.enable = 1,
->  	};
->  	int did_quota = 0, did_quota_inode = 0;
-> @@ -1875,12 +1873,8 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
->  	/* get security xattr */
->  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
->  	if (status) {
-> -		if (status == -EOPNOTSUPP)
-> -			si.enable = 0;
-> -		else {
-> -			mlog_errno(status);
-> -			goto bail;
-> -		}
-> +		mlog_errno(status);
-> +		goto bail;
->  	}
->  
->  	/* calculate meta data/clusters for setting security xattr */
-> diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
-> index 95d0611c5fc7..55699c573541 100644
-> --- a/fs/ocfs2/xattr.c
-> +++ b/fs/ocfs2/xattr.c
-> @@ -7259,9 +7259,21 @@ static int ocfs2_xattr_security_set(const struct xattr_handler *handler,
->  static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array,
->  		     void *fs_info)
->  {
-> +	struct ocfs2_security_xattr_info *si = fs_info;
->  	const struct xattr *xattr;
->  	int err = 0;
->  
-> +	if (si) {
-> +		si->value = kmemdup(xattr_array->value, xattr_array->value_len,
-> +				    GFP_KERNEL);
-> +		if (!si->value)
-> +			return -ENOMEM;
-> +
-> +		si->name = xattr_array->name;
-> +		si->value_len = xattr_array->value_len;
-> +		return 0;
-> +	}
-> +
->  	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
->  		err = ocfs2_xattr_set(inode, OCFS2_XATTR_INDEX_SECURITY,
->  				      xattr->name, xattr->value,
-> @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
->  			    const struct qstr *qstr,
->  			    struct ocfs2_security_xattr_info *si)
->  {
-> +	int ret;
-> +
->  	/* check whether ocfs2 support feature xattr */
->  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
->  		return -EOPNOTSUPP;
-> -	if (si)
-> -		return security_old_inode_init_security(inode, dir, qstr,
-> -							&si->name, &si->value,
-> -							&si->value_len);
-> +	if (si) {
-> +		ret = security_inode_init_security(inode, dir, qstr,
-> +						   &ocfs2_initxattrs, si);
-> +		/*
-> +		 * security_inode_init_security() does not return -EOPNOTSUPP,
-> +		 * we have to check the xattr ourselves.
-> +		 */
-> +		if (!ret && !si->name)
-> +			si->enable = 0;
-> +
-> +		return ret;
-> +	}
->  
->  	return security_inode_init_security(inode, dir, qstr,
->  					    &ocfs2_initxattrs, NULL);
-
+RnJvbTogUm9uYWxkIFRzY2hhbMOkciA8cm9uYWxkQGlubm92YXRpb24uY2g+DQoNCkFjY29yZGlu
+ZyB0byBIVVRSUjM5IGxvZ2ljYWwgc2Vuc29yIGRldmljZXMgbWF5IGJlIG5lc3RlZCBpbnNpZGUN
+CnBoeXNpY2FsIGNvbGxlY3Rpb25zIG9yIG1heSBiZSBzcGVjaWZpZWQgaW4gbXVsdGlwbGUgdG9w
+LWxldmVsDQphcHBsaWNhdGlvbiBjb2xsZWN0aW9ucyAoc2VlIHBhZ2UgNTksIHN0cmF0ZWdpZXMg
+MSBhbmQgMikuIEhvd2V2ZXIsDQp0aGUgY3VycmVudCBjb2RlIHdhcyBvbmx5IHJlY29nbml6aW5n
+IHRob3NlIHdpdGggcGh5c2ljYWwgY29sbGVjdGlvbnMuDQoNClRoaXMgaXNzdWUgdHVybmVkIHVw
+IGluIHRoZSBUMiBNYWNCb29rIFBybydzIHdoaWNoIGRlZmluZSB0aGUgQUxTIGluDQphIHRvcC1s
+ZXZlbCBhcHBsaWNhdGlvbiBjb2xsZWN0aW9uLg0KDQpTaWduZWQtb2ZmLWJ5OiBSb25hbGQgVHNj
+aGFsw6RyIDxyb25hbGRAaW5ub3ZhdGlvbi5jaD4NClNpZ25lZC1vZmYtYnk6IEFkaXR5YSBHYXJn
+IDxnYXJnYWRpdHlhMDhAbGl2ZS5jb20+DQrigJQNClYyIDotIEFkZCBtaXNzaW5nIHNpZ25lZC1v
+ZmYtYnkNCiBkcml2ZXJzL2hpZC9oaWQtY29yZS5jICAgICAgIHwgMyArKy0NCiBkcml2ZXJzL2hp
+ZC9oaWQtc2Vuc29yLWh1Yi5jIHwgNiArKysrLS0NCiAyIGZpbGVzIGNoYW5nZWQsIDYgaW5zZXJ0
+aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvaGlkL2hpZC1j
+b3JlLmMgYi9kcml2ZXJzL2hpZC9oaWQtY29yZS5jDQppbmRleCBiN2Y1NTY2ZTMzOGQuLjhmY2Q2
+NjNiMTBlMiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvaGlkL2hpZC1jb3JlLmMNCisrKyBiL2RyaXZl
+cnMvaGlkL2hpZC1jb3JlLmMNCkBAIC04MDQsNyArODA0LDggQEAgc3RhdGljIHZvaWQgaGlkX3Nj
+YW5fY29sbGVjdGlvbihzdHJ1Y3QgaGlkX3BhcnNlciAqcGFyc2VyLCB1bnNpZ25lZCB0eXBlKQ0K
+IAlpbnQgaTsNCiANCiAJaWYgKCgocGFyc2VyLT5nbG9iYWwudXNhZ2VfcGFnZSA8PCAxNikgPT0g
+SElEX1VQX1NFTlNPUikgJiYNCi0JICAgIHR5cGUgPT0gSElEX0NPTExFQ1RJT05fUEhZU0lDQUwp
+DQorCSAgICAodHlwZSA9PSBISURfQ09MTEVDVElPTl9QSFlTSUNBTCB8fA0KKwkgICAgIHR5cGUg
+PT0gSElEX0NPTExFQ1RJT05fQVBQTElDQVRJT04pKQ0KIAkJaGlkLT5ncm91cCA9IEhJRF9HUk9V
+UF9TRU5TT1JfSFVCOw0KIA0KIAlpZiAoaGlkLT52ZW5kb3IgPT0gVVNCX1ZFTkRPUl9JRF9NSUNS
+T1NPRlQgJiYNCmRpZmYgLS1naXQgYS9kcml2ZXJzL2hpZC9oaWQtc2Vuc29yLWh1Yi5jIGIvZHJp
+dmVycy9oaWQvaGlkLXNlbnNvci1odWIuYw0KaW5kZXggNmFiZDNlMmE5MDk0Li5kMDNkYzRjYTA5
+NWYgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2hpZC9oaWQtc2Vuc29yLWh1Yi5jDQorKysgYi9kcml2
+ZXJzL2hpZC9oaWQtc2Vuc29yLWh1Yi5jDQpAQCAtMzk3LDcgKzM5Nyw4IEBAIGludCBzZW5zb3Jf
+aHViX2lucHV0X2dldF9hdHRyaWJ1dGVfaW5mbyhzdHJ1Y3QgaGlkX3NlbnNvcl9odWJfZGV2aWNl
+ICpoc2RldiwNCiAJCWZvciAoaSA9IDA7IGkgPCByZXBvcnQtPm1heGZpZWxkOyArK2kpIHsNCiAJ
+CQlmaWVsZCA9IHJlcG9ydC0+ZmllbGRbaV07DQogCQkJaWYgKGZpZWxkLT5tYXh1c2FnZSkgew0K
+LQkJCQlpZiAoZmllbGQtPnBoeXNpY2FsID09IHVzYWdlX2lkICYmDQorCQkJCWlmICgoZmllbGQt
+PnBoeXNpY2FsID09IHVzYWdlX2lkIHx8DQorCQkJCSAgICAgZmllbGQtPmFwcGxpY2F0aW9uID09
+IHVzYWdlX2lkKSAmJg0KIAkJCQkJKGZpZWxkLT5sb2dpY2FsID09IGF0dHJfdXNhZ2VfaWQgfHwN
+CiAJCQkJCWZpZWxkLT51c2FnZVswXS5oaWQgPT0NCiAJCQkJCQkJYXR0cl91c2FnZV9pZCkgJiYN
+CkBAIC01MDYsNyArNTA3LDggQEAgc3RhdGljIGludCBzZW5zb3JfaHViX3Jhd19ldmVudChzdHJ1
+Y3QgaGlkX2RldmljZSAqaGRldiwNCiAJCQkJCWNvbGxlY3Rpb24tPnVzYWdlKTsNCiANCiAJCWNh
+bGxiYWNrID0gc2Vuc29yX2h1Yl9nZXRfY2FsbGJhY2soaGRldiwNCi0JCQkJcmVwb3J0LT5maWVs
+ZFtpXS0+cGh5c2ljYWwsDQorCQkJCXJlcG9ydC0+ZmllbGRbaV0tPnBoeXNpY2FsID86DQorCQkJ
+CQlyZXBvcnQtPmZpZWxkW2ldLT5hcHBsaWNhdGlvbiwNCiAJCQkJcmVwb3J0LT5maWVsZFtpXS0+
+dXNhZ2VbMF0uY29sbGVjdGlvbl9pbmRleCwNCiAJCQkJJmhzZGV2LCAmcHJpdik7DQogCQlpZiAo
+IWNhbGxiYWNrKSB7DQotLSANCjIuMzguMQ0KDQo=
