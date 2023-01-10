@@ -2,145 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18342664F36
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650D2664F3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjAJW5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 17:57:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S235059AbjAJW5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 17:57:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235250AbjAJW4c (ORCPT
+        with ESMTP id S233110AbjAJW5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 17:56:32 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C72E6338D;
-        Tue, 10 Jan 2023 14:55:26 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AMqhbI021237;
-        Tue, 10 Jan 2023 22:55:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=FnslzAltcK2Vf4x7yLy3vGWrYsR9oG+TmGbt1RNiTbA=;
- b=dDvCjD/0jz4NdH1/+fs0mlqd1EWGJtv9dGoEMl4Mv/kQqLFVX8h7WfNEDghYudNNDmD8
- gQpeVHO8jkIwE0NugYZwLGnIgT04I9Jb2XF+AKUZBML5K2IZmULc/o8pjAc3GrP+c9lF
- fiLEGUJMs81yS7PsfkgH7ekKHI+jhF/bbWfQlvh+8L69JxXunV8flEpLWh1eHwsaz8ry
- nnZ1R38n1uA55JE41oF4pmJCSSWy9h/E+cYfdbFVtpaSwKxMDUb5pO/3ScyIuLUhIX2N
- bUTPugpT0EFXJumEMdBEsd9axhvYdfg7gqv3pV6qtEH5+EVcGjPdjCi40GF0/78gJu+6 fA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1dbg8gt2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 22:55:10 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30AMt9bK020238
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 22:55:09 GMT
-Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 10 Jan
- 2023 14:55:09 -0800
-Message-ID: <560526fe-cd7b-575a-96c9-fe4f8d349e89@quicinc.com>
-Date:   Tue, 10 Jan 2023 14:55:08 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v8 04/28] arm64: smccc: Include alternative-macros.h
+        Tue, 10 Jan 2023 17:57:11 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7DFFF4;
+        Tue, 10 Jan 2023 14:57:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673391430; x=1704927430;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=3vxuoJy+yKQ/ZdtTEwH1hD1eTV3cH23zSf7mgJWbKQk=;
+  b=R7nbMstyxqL5hFCc05HixycO8EPZNRlE143e2mkWi8RnOODp4KAkXDGi
+   Xr1zkiZ8E+xZYDZVGf7ICjpevlgxPxqmBC9qDGr2GB5bfcR/lLWoCjJ7W
+   sh4ybOXlT0Lhr5dYwN80MiBWnrqzp0BS57OwvgsexoTVcuuBsmACoGdEk
+   da09yQwZmc0VRjf9b+p9SJxNGAQv44LB4YFt1eJCdK4+oqqFyDGt8+VJJ
+   PQyYWhAv3F2AYfkyTjBTxLPE3mvoCROL9s07XxOyqKutZ7xPANmzkprUk
+   /e1p0n7efXjuG61oM2OMJCvo9GXOwR++Nt+qHeRTUjsRITlOVHKheHzsp
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303649106"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="303649106"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 14:57:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="687720268"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="687720268"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga008.jf.intel.com with ESMTP; 10 Jan 2023 14:57:08 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 10 Jan 2023 14:57:08 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 10 Jan 2023 14:57:08 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 10 Jan 2023 14:57:08 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.171)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 10 Jan 2023 14:57:07 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XcR4DEOAzmPxfyxb75bIoAjpYzNsioJYw66fX1TlZf4TpXQpOnL4xnt1vz+zJT6uxor8hD/WL8TI073LtTdoCXEZFdzSqkCDT6PXKo3FY0X+gtzVR0i7fL5czwlypsJD40Ooje5fxqUWFbmy1yrUf8Hou7GlGrFstrbdCZaMbT9M8j+53N7g25PMaLVTvVC9yY0lOI6xv4fRIDtb4SWq561GgbcZmEiLhI6TtAf0L6xB/GqiFTPdU0hVyaHdwYvJLRbi7ZW2rE2KzaBIMCkK8agOBO9W54h9E69ZNRfgNZAmQCbSCZjrDaDQE9WeoP6b9dxvTGd5+QUPN5vtnkZVxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3vxuoJy+yKQ/ZdtTEwH1hD1eTV3cH23zSf7mgJWbKQk=;
+ b=KcjAW0IKzB4JdyO9D8Agm7/+fiCxwHmcDk1j5hN+HhtVZy9/luWHEdG8Nf71i9K4WWG/NoOro4R/53cVkiCJgg2DtR7YZ6on0UkrgM9LInlabT47UUzKg2xNX5gzPpmclGcniBYT4maQNHGQ9IIPUloFpHM+bhMussJI10U08QlK2BQvHXVz+TXmlrawOASOni4Ygcyj/+qqKVgu0tBo6aEP3IbMfKkQar1xds+Wyrj22hTMEfYan3US2ij4wVFo7DryCyyuU+MzZDE6Jc7hHplNTtiqm+c5zAa/dwnRV6NCDLt352xb4wn/yf0KxQhxab7Bg2uDaTCSPlnttPuHLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by CY8PR11MB6889.namprd11.prod.outlook.com (2603:10b6:930:5e::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
+ 2023 22:57:06 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::3c14:aeca:37e2:c679]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::3c14:aeca:37e2:c679%6]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
+ 22:57:06 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+CC:     "Williams, Dan J" <dan.j.williams@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        "Box, David E" <david.e.box@intel.com>,
+        "Sun, Yunying" <yunying.sun@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Mika Westerberg" <mika.westerberg@linux.intel.com>,
+        "Cabiddu, Giovanni" <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Hans de Goede" <hdegoede@redhat.com>,
+        Florent DELAHAYE <linuxkernelml@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        =?iso-8859-1?Q?Benoit_Gr=E9goire?= <benoitg@coeus.ca>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: RE: [PATCH 0/2] PCI: Fix extended config space regression
+Thread-Topic: [PATCH 0/2] PCI: Fix extended config space regression
+Thread-Index: AQHZJR3XoVhUUFpFbk23r8VU7FyOQq6YQz8g
+Date:   Tue, 10 Jan 2023 22:57:06 +0000
+Message-ID: <SJ1PR11MB60836158A54C9F24F83AC4F9FCFF9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <20230110180243.1590045-1-helgaas@kernel.org>
+In-Reply-To: <20230110180243.1590045-1-helgaas@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Alex Elder <elder@linaro.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-acpi@vger.kernel.org>
-References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
- <20221219225850.2397345-5-quic_eberman@quicinc.com>
- <f6bf5577-9a3a-e949-62b8-53f5fcdd3fa4@linaro.org>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <f6bf5577-9a3a-e949-62b8-53f5fcdd3fa4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qyhHMAiFyocYQdMtuahXfi9enDBktio1
-X-Proofpoint-ORIG-GUID: qyhHMAiFyocYQdMtuahXfi9enDBktio1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_09,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- spamscore=0 mlxscore=0 priorityscore=1501 impostorscore=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=843 suspectscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301100152
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|CY8PR11MB6889:EE_
+x-ms-office365-filtering-correlation-id: 91a5d991-da5a-4bf4-004a-08daf35dfeea
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4qegIIPMO3pNbnZPy1TmXKET+lD44xhunE9r0xn5kAKuGmgRsTGYQCbfREacM/ztGcNF5bYSQpuLZq1S6DavPFBOXlIPFLcV10Cs9zHvxBehxQbJnfIC4CUtf7k/xgImkAQw9r4BmirscJdme3e26eObVCgVaIk1ZGLt9SWLoKWkAa/eizxLWvlz44amceykafw9PMkXN/EuGha8Sp0591xHiuJbg/2gJIeXMcLBGeklyyn5a8mHYllaQeR7ixVTxSCiFxrFLDzq1LNOLiu5ccnT5iOTFw/CfRfHJliX4m8ULMQjuFlafniPxMHdIf14UEzaELMyEE+tufk8S5vrnDX5z1kOsgbfNMQRjAQ01Mj8S/n+NER0QkMYGHCjVvxWQgUh3nV/oCUs50XqbgxQ3D2Lv7F0LdkGh0JtswAJS/FzcKJGYVQYH1l9v1SH4Igr70tlkjdMLeTbDguxFIZ77JVd+U7VmCodjxiCGsBj7YxosMHGCbiTkkkjjg2cJCjarEugKPki3EWZ383UUZ14ZCRf38MdSfG/5lISFM5/MtjoezC0ru7Rl4Ugd2n7ArTWyohdFrlR01GRIYDt8sY3oc5kbm8INSvFpGakPUeRk+1zNdZvUXev6oEh7GKx74S2JVQUoKoy43oljg3vRORjzT37mWyhxZXyardWX86XCFoBGJrvPRCBnHkAmSEsPAAZ6P3Y8l+fa5TAoRKwNuhvkQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(136003)(396003)(39860400002)(376002)(451199015)(66556008)(52536014)(7416002)(2906002)(5660300002)(8936002)(41300700001)(66446008)(66946007)(64756008)(8676002)(66476007)(76116006)(71200400001)(316002)(7696005)(4326008)(54906003)(110136005)(6506007)(558084003)(478600001)(26005)(186003)(9686003)(33656002)(55016003)(86362001)(82960400001)(122000001)(38100700002)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Hj/TAlT+58RX8J7Q+T/T6nZDpPc4kr1Cn1S5kTlf3mQKKXQFn8wiSR1jWj?=
+ =?iso-8859-1?Q?jp5HqSwEVZJbzFA5QIMk2CiI9pZN02HCtZ6lW6goXTIs0S46qivlEwPPqA?=
+ =?iso-8859-1?Q?5qLF1LPfLmerzHxky1YofOXJmO8pk5z8Cgd6XQBeEHcovy7tNpZ4dYOobo?=
+ =?iso-8859-1?Q?ve2kLLIUrFXkT9E2zC8bei5z8VtX9bhTVimz2TGsy6xaZDInwt3o0z/TO3?=
+ =?iso-8859-1?Q?lm+7M19xDRhDnbv/GVbpBc6jHfuBGe09tX9Y0Q+E3j7h3K99owFPDTXbNJ?=
+ =?iso-8859-1?Q?9jtz0h+HndUWgaNowgifa/8LaTKmEvE/g6EkwojTtanhNQ2+by97ZRLki/?=
+ =?iso-8859-1?Q?OCOCcfsbuNGktX12CtWChXDXQyLdD+ssF2NyoZ1TsRx+vUxHfFnMDx4rzR?=
+ =?iso-8859-1?Q?DmcYomV8fnEU93pFc9Zf9pcpFln0RaasSPq/u2IltbCZfnh4vTIqbzJ+dN?=
+ =?iso-8859-1?Q?2wJ7GulDfgr7/BCh6L3cJGTw8lY58zQnt1JV03bxMC/J3LxsLm8pOXf/K/?=
+ =?iso-8859-1?Q?mvNOrwdwnbhWKk5oeoiwEO7frQ4TtJ4SJ1aNuqlotL8gt5ODt7oegblVi4?=
+ =?iso-8859-1?Q?ekquW9OvmwI3OZ5HdT5Eu+TXBv8CqotVt8s+S3bQv7+CBWbCK4fIOz5u8k?=
+ =?iso-8859-1?Q?4TBpFwp9tVn2WNqqu5jyC5JWdWJsqEQBH21wmqHBYkjWQRSqnQha/X0elj?=
+ =?iso-8859-1?Q?/lMavOSLXJ4yuahQSggz7jYMIo9Kw5DNppkJFwHxL01DmUoYdEjput0+NM?=
+ =?iso-8859-1?Q?INEOnQ94eZZTwAjrd7FTTyUzW35qZo1B+JHHxgegJi9chgAZM64HsexL2x?=
+ =?iso-8859-1?Q?ULvAT1BRrI+xEvC2RIavTiCDWmTTkR3V/by+2In1031Yt/XJuB9r3fEfCG?=
+ =?iso-8859-1?Q?CWNqvkBAS24qYVrGkoygq4uXK3GxKCJlbiTLdLmpPTPIR6vz4GGl93gmoh?=
+ =?iso-8859-1?Q?25LN2pWwVfsFhZocXeC9FMlNYQmDguyfJmTPiSA7n1qlAZFSJ+HUrMU9Wz?=
+ =?iso-8859-1?Q?Ctqj7DqmqNasRKoPcCGh0u9mEjKEOxBxNfj0Akb1iWYU5IwfDL24eN66lu?=
+ =?iso-8859-1?Q?baOpW5DCCA4/S27Xtb5isPagv41W5ewYlg9G1JmSM9k+eI8ADW9SKLTOE2?=
+ =?iso-8859-1?Q?VrLZcyN1rVQcR/Dkppuh+qvv1F5JP4U3DNEpCze3cta52DTYWn5ZH8w7BV?=
+ =?iso-8859-1?Q?FRli3RQ33FToOoAq4sFtqNK/8OdPVqjo0UASoWobLInsqvgeibeGEqXd/b?=
+ =?iso-8859-1?Q?h/95wXP1/Fa0ta8xgGABMNZqlXgRGOHhYFSPhbjLqCKb4tf+z+5dWqCs/p?=
+ =?iso-8859-1?Q?vMpcxDlmzXF1TV8OqAJyv5q1KJaPgdoOOD2pXd6CXSnYU6JesHNG1qcpHn?=
+ =?iso-8859-1?Q?AW35kva8EY47fgoUVHg2B4t6OuG9Y8WgPBEM41md4wTQTL3ysrnbcT8Kfd?=
+ =?iso-8859-1?Q?7bfWt0SPXxOb/JEn27Ut1f4+j7P89JmcAG/m2VOnCl2FIbbRgbZPt1i7Ob?=
+ =?iso-8859-1?Q?5XoeK+Hg0WwFj8yjtH/vhzf08wHaPX2Cjm5rHLFvkmhZ10MZ789wxM7m5S?=
+ =?iso-8859-1?Q?GpY1bJgst6PTPkr4XqeYXrmret9wP3qk7kUozQdDywI4NYe3q9Xt9i2KEe?=
+ =?iso-8859-1?Q?uYy4QejdTmFysCGKfvyWv6dxW7QuAO+Oqw?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91a5d991-da5a-4bf4-004a-08daf35dfeea
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2023 22:57:06.0446
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0X16szy07eh7lXFUrHPSBeKUrFlKosts4nwncHzabXouJ/nji7fTLJUyLN9a8vtchhHkSSV0QuNdr1HAhtdblg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB6889
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> This broke drivers that use things in extended config space, e.g., perf,
+> VSEC telemetry, EDAC, QAT, etc.
 
+For the EDAC on Broadwell case I reported:
 
-On 1/9/2023 1:34 PM, Alex Elder wrote:
-> On 12/19/22 4:58 PM, Elliot Berman wrote:
->> Fix build error when CONFIG_ARM64_SVE is selected and
->> asm/alternative-macros.h wasn't implicitly included by another header.
->>
->> In file included from arch/arm64/gunyah/gunyah_hypercall.c:6:
->> arch/arm64/gunyah/gunyah_hypercall.c: In function 
->> `gh_hypercall_msgq_send':
->> ./include/linux/arm-smccc.h:387:25: error: expected string literal 
->> before `ALTERNATIVE'
->>    387 | #define SMCCC_SVE_CHECK ALTERNATIVE("nop \n",  "bl 
->> __arm_smccc_sve_check \n", \
->>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> 
-> If this is correct (and I presume it is), I think this patch should
-> be posted separate from (and before) the rest of the series.
-> 
+Tested-by: Tony Luck <tony.luck@intel.com>
 
-Ack, will send this separately.
-
->                      -Alex
-> 
->> ---
->>   include/linux/arm-smccc.h | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
->> index 220c8c60e021..6a627cdbbdec 100644
->> --- a/include/linux/arm-smccc.h
->> +++ b/include/linux/arm-smccc.h
->> @@ -383,6 +383,7 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, 
->> unsigned long a1,
->>   /* nVHE hypervisor doesn't have a current thread so needs separate 
->> checks */
->>   #if defined(CONFIG_ARM64_SVE) && !defined(__KVM_NVHE_HYPERVISOR__)
->> +#include <asm/alternative-macros.h>
->>   #define SMCCC_SVE_CHECK ALTERNATIVE("nop \n",  "bl 
->> __arm_smccc_sve_check \n", \
->>                       ARM64_SVE)
-> 
