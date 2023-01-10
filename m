@@ -2,151 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA4B663F01
+	by mail.lfdr.de (Postfix) with ESMTP id D5672663F02
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjAJLI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 06:08:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        id S232813AbjAJLJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 06:09:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238064AbjAJLHx (ORCPT
+        with ESMTP id S238169AbjAJLHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 06:07:53 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA601EEFB;
-        Tue, 10 Jan 2023 03:07:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673348836; x=1704884836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rVhJmEIPGip77/doSmIyFH6N4wuSe2EOVqkHy4zJTJM=;
-  b=MIKStdG8ONY+3CPdc0beg1TZuGsXBoparQGrNjpOC/DIEvZ2wbfj/m3T
-   NrxQmt3ovC6Liifr9aYKzx9xYUDHagztjo+dR6j+fHjkdr5bH0bncoi47
-   1Uwdw8U2YbewknyAjW6ZkVNKaN6gWshLneuLVdIb1KlsZ2lkAfKEG2Ur3
-   hPlaiBHKz0C31tA3R/Z0XnmZ9kmOuyi8BD2xdZxXJG1Kn0MqoZ3bV+IdV
-   Y65lzN3mS1Ov/60lE+0H03e+Y67E2zmFG1Wmjl7IOiSOvU8rat7T4Rj/P
-   p5Wxo7oYECXP1TBc0vucjhadvlKHJTEZ1KRCgezXj3lDTc85mM8++iVpi
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="325123958"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="325123958"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 03:07:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="745739146"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="745739146"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Jan 2023 03:07:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pFCT8-006ztV-3A;
-        Tue, 10 Jan 2023 13:07:02 +0200
-Date:   Tue, 10 Jan 2023 13:07:02 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Arnd Bergmann <arnd@arndb.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [RFC DO NOT MERGE] treewide: use __xchg in most obvious places
-Message-ID: <Y71G1tkmUzM4BLxn@smile.fi.intel.com>
-References: <Y7b6/7coJEVlTVxK@phenom.ffwll.local>
- <20230110105306.3973122-1-andrzej.hajda@intel.com>
+        Tue, 10 Jan 2023 06:07:54 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613013C71C
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:07:17 -0800 (PST)
+Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 30AB79JR069112;
+        Tue, 10 Jan 2023 20:07:09 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
+ Tue, 10 Jan 2023 20:07:09 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
+Received: from [192.168.1.20] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 30AB79hJ069109
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 10 Jan 2023 20:07:09 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <bc4f8b87-101b-381e-debf-6ed87bfec9f3@I-love.SAKURA.ne.jp>
+Date:   Tue, 10 Jan 2023 20:07:07 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230110105306.3973122-1-andrzej.hajda@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [GIT PULL] tomoyo update and hung task update for v6.2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 11:53:06AM +0100, Andrzej Hajda wrote:
-> This patch tries to show usability of __xchg helper.
-> It is not intended to be merged, but I can convert
-> it to proper patchset if necessary.
-> 
-> There are many more places where __xchg can be used.
-> This demo shows the most spectacular cases IMHO:
-> - previous value is returned from function,
-> - temporary variables are in use.
-> 
-> As a result readability is much better and diffstat is quite
-> nice, less local vars to look at.
-> In many cases whole body of functions is replaced
-> with __xchg(ptr, val), so as further refactoring the whole
-> function can be removed and __xchg can be called directly.
+The following changes since commit cf3b3d6e3a0bb6dddc06f1b548b459a3f2e3fc16:
 
-...
+  locking/lockdep: add debug_show_all_lock_holders() (2023-01-09 21:47:11 +0900)
 
->  arch_uretprobe_hijack_return_addr(unsigned long trampoline_vaddr,
->  				  struct pt_regs *regs)
->  {
-> -	unsigned long orig_ret_vaddr;
-> -
-> -	orig_ret_vaddr = regs->ARM_lr;
-> -	/* Replace the return addr with trampoline addr */
-> -	regs->ARM_lr = trampoline_vaddr;
-> -	return orig_ret_vaddr;
-> +	return __xchg(&regs->ARM_lr, trampoline_vaddr);
->  }
+are available in the git repository at:
 
-If it's not a callback, the entire function can be killed.
-And this is a good example of the function usage.
-OTOH, these places might have a side effect (if it's in deep CPU
-handlers), means we need to do this carefully.
+  git://git.osdn.net/gitroot/tomoyo/tomoyo-test1.git tags/tomoyo-pr-20230110
 
-...
+for you to fetch changes up to cf3b3d6e3a0bb6dddc06f1b548b459a3f2e3fc16:
 
->  static inline void *qed_chain_produce(struct qed_chain *p_chain)
->  {
-> -	void *p_ret = NULL, *p_prod_idx, *p_prod_page_idx;
-> +	void *p_prod_idx, *p_prod_page_idx;
->  
->  	if (is_chain_u16(p_chain)) {
->  		if ((p_chain->u.chain16.prod_idx &
-> @@ -390,11 +391,8 @@ static inline void *qed_chain_produce(struct qed_chain *p_chain)
->  		p_chain->u.chain32.prod_idx++;
->  	}
->  
-> -	p_ret = p_chain->p_prod_elem;
-> -	p_chain->p_prod_elem = (void *)(((u8 *)p_chain->p_prod_elem) +
-> -					p_chain->elem_size);
-> -
-> -	return p_ret;
-> +	return __xchg(&p_chain->p_prod_elem,
-> +		      (void *)(((u8 *)p_chain->p_prod_elem) + p_chain->elem_size));
+  locking/lockdep: add debug_show_all_lock_holders() (2023-01-09 21:47:11 +0900)
 
-Wondering if you still need a (void *) casting after the change. Ditto for the
-rest of similar cases.
+----------------------------------------------------------------
+A Makefile update for making it possible to remove scripts/bin2c program, and
+an improvement for making it easier to understand syzbot's hung task reports.
 
->  }
+ include/linux/debug_locks.h |   17 ++++++++++++++++-
+ kernel/hung_task.c          |    2 +-
+ kernel/locking/lockdep.c    |   14 +++++++++++---
+ security/tomoyo/Kconfig     |    1 -
+ security/tomoyo/Makefile    |   19 +++++++++++--------
+ 5 files changed, 39 insertions(+), 14 deletions(-)
 
-...
-
-Btw, is it done by coccinelle? If no, why not providing the script?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+----------------------------------------------------------------
