@@ -2,161 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12CE664D1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34DC664D22
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbjAJUO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 15:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S231939AbjAJUSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 15:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbjAJUOR (ORCPT
+        with ESMTP id S231596AbjAJUSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:14:17 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF02213DF1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:14:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673381656; x=1704917656;
-  h=message-id:date:subject:to:references:from:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=h+05CkOpPuaMDJQzzLZjWgwZpp/WjJPrnVYzuwghIGY=;
-  b=dN2TFLFs61VcYTGFW+ilB+Zdg4YhsVCPGSG8TLg1/Xu2Bu4EwX/B9ZBO
-   F8/uFHq039e5Cy4l2T7jGJC3VQ5w2rRcQXBlVwL2alRCxYE1uqp7llTmP
-   k0XckaVtQ216b5Gd21X8noJY3m8OMKTVKMkeHgovIto/cmyohlQ5EfeKW
-   DeMaLkHGNbO6kq14pX1n6AHuv9NrkoDWSCsEBzIx6DuDJg/8zFiCYm7J2
-   O9yGco0rgAhBhsmICebSU2BM6a4dEH2rLSNzXxR2o+5fYH9E4ndyxykCR
-   3JAOjSO5bb0ta5olXI1QDAknDrDv32uj17vaBbfUcGF04Fw6HDj5P7Yub
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="323310713"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="323310713"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 12:14:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="657181994"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="657181994"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga002.jf.intel.com with ESMTP; 10 Jan 2023 12:14:16 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 10 Jan 2023 12:14:16 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 10 Jan 2023 12:14:15 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 10 Jan 2023 12:14:15 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 10 Jan 2023 12:14:15 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ex3keqArXppPYpK+0s7NcW+5cs8Lowgvg0lzYv6k64/twJ4fkQ7AuxfF2Z2l2a42crKX85huHmGP5IuUNm1J53zDZekVJVjuQVBBK66sMRblBELEgY9JbPEHnXKEXag04QYAB+7aJl7n04TAQTGRmEaSP2ZzVKgQCvEp9UGxNUnAAjv3b8aFjANLMxs6mY8M8VZyyVfBUibtjm5dByaR9Wr+xC82Vy7efS6Zkvm1zu1vEtcJjw0KLy7J8gq7irPfVhCfC8OzJURAuSTdjhStp3I3mP6U9iwXI9G8o+odbpUAB282JW4AHPDcWuThOlogGg9j9XsdKad4c6Mwok1lag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ytk83W8dWNYv4NlvacA8+uNLhZRllN0DYG+9N5MiA2s=;
- b=Och3NHUlC5vdURaKfGRux1SPPe31E5TlYPegwERt6SiguGijG+uyVD4LDB7RaHUm0SckeN1x1t0dc90PO2AOAXi6cwcIBBT3ZgOEhbWhNGMFnXTgsHEjaK3VS4qG9dAKvE05HeCiBYmVD+JG6czi+hvesWcjXcTArX6GVG8CcimGRS0dWgg+35UFiRLvv/jZWNPSjK4r29UvHRZizAiaKDU0FdxDldWAkuPn3fhANC9HooRm3u9lKh6Vq9SX7CTi0HX6m2FR/Rm8MMCXsyJUUJXiRi58kp5HQL++Qd2oPgk916uqZNkg2yWP4m+RJlQw5a2P92pfNhYcr2iz+MNLNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by SA2PR11MB5019.namprd11.prod.outlook.com (2603:10b6:806:f8::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 20:14:13 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::6566:25b5:89ba:e209]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::6566:25b5:89ba:e209%4]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 20:14:13 +0000
-Message-ID: <9d935618-8f84-2d6e-4f4c-9d38eec2ba67@intel.com>
-Date:   Tue, 10 Jan 2023 12:14:10 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/7] x86/cpu: Enumerate LASS CPUID and CR4 bits
-Content-Language: en-US
-To:     Yian Chen <yian.chen@intel.com>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ravi Shankar <ravi.v.shankar@intel.com>,
-        "Tony Luck" <tony.luck@intel.com>, Paul Lai <paul.c.lai@intel.com>
-References: <20230110055204.3227669-1-yian.chen@intel.com>
- <20230110055204.3227669-2-yian.chen@intel.com>
-From:   Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <20230110055204.3227669-2-yian.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BY3PR04CA0001.namprd04.prod.outlook.com
- (2603:10b6:a03:217::6) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+        Tue, 10 Jan 2023 15:18:49 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF3D5A8AB
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:18:47 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id a184so9745016pfa.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:18:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fmZY1OG3vNe332Ldn6SBLXuV8Uze5QRsR/60UtVCPJw=;
+        b=ttjElWMwOaUBMpTvifsVi6ycU8gvbU6MTiHvMC392d1gVaNVg+44gVRdyqzuioNEca
+         ZmgcKQuhpeDVBw3jidvnWcZGQP6Rkk/eA+jGG3/e5K+Tjop3FxBUqwzBgxKQ6olxphbH
+         DLNQdx1wAkhGAwY+U1K8+9OePHIpLDsWZPuFeiVh/9GHwCptRUwR0FaUMVvRr2ugiy2H
+         XlI23+BFo1GnV4uJDFFySfN5iFzS6Ge1+KXuylxIfPAJXKmtFNgul8EUXcQ0+Cn3Yqzf
+         VRpb0viT6jSA0dffFAOO2ef4ueYDDwxKgWOK6DEroFPUyFPquQY3tw8XWOyRMatAJZ6U
+         H4DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fmZY1OG3vNe332Ldn6SBLXuV8Uze5QRsR/60UtVCPJw=;
+        b=K7ZjRynCfxHq6IhKzJfyQnjLshvBACBpPYon2EiFU2FHLX/ZgHGoBoeyNIKMX5Um/g
+         oP2DXtcWoK+sj0kFhJeMzLR7KqS6JSkLm9aVADnwDZ8/INzChZAJ9axqv+Hakq3WxUd7
+         oV1FUj+Y7ZObug3pT5Q0g5A7ysRySOG7EqTakMr+MzmrmbjKpoP2cGastjV79UHKEUsk
+         hzPw0tWdMloFf2DJ8LUAdpgQ6Bnzc5v/YpzJsGlPk8haqWw9zYegpt7821Ho7oXxz95c
+         EO13DZpE/u3pbVUjrduqcoXgqx/GTLA6hija+qNcdO2lJjqNL91Pc0t0yNyMhBMVbYFl
+         cllQ==
+X-Gm-Message-State: AFqh2kowtfaf1vgviryQ16J8CfiFB7OXcC2PsE+2k0C0Q+7IKZxK2LXv
+        ZJRCJBbHl0aBbq2H6rcXp2NTnw==
+X-Google-Smtp-Source: AMrXdXvjO4PLt837d3MdSE38CVPdAv2/VufYEH3Pz9/Z6W2P2LN5VuNgmI/fW6IHumEr5sMHcoUgFA==
+X-Received: by 2002:aa7:84d1:0:b0:58a:9619:9b30 with SMTP id x17-20020aa784d1000000b0058a96199b30mr3503750pfn.10.1673381927403;
+        Tue, 10 Jan 2023 12:18:47 -0800 (PST)
+Received: from vineet-framework.ba.rivosinc.com (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
+        by smtp.gmail.com with ESMTPSA id d3-20020aa797a3000000b005811c4245c7sm8477802pfq.126.2023.01.10.12.18.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 12:18:46 -0800 (PST)
+From:   Vineet Gupta <vineetg@rivosinc.com>
+To:     linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, palmer@rivosinc.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, Guo Ren <guoren@kernel.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>, linux@rivosinc.com,
+        Vineet Gupta <vineetg@rivosinc.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] riscv: elf: add .riscv.attributes parsing
+Date:   Tue, 10 Jan 2023 12:18:41 -0800
+Message-Id: <20230110201841.2069353-1-vineetg@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|SA2PR11MB5019:EE_
-X-MS-Office365-Filtering-Correlation-Id: e8c26233-eea5-4184-125f-08daf3473da8
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gdVNJADf/1x5ZdOPX4Qy8nWhth4ZM7Zb2gzUzqt6PHEtfMJ1ki5rEgQL+Iwkqw5tWqtc6XRJRPUgZlP0lwypeQjARDnLlCF7vEEOaDPVAY40hR+NkDfdCsdWx9JaN7+bdBykDlTZ28YduoaUm57l0TQk5dCDJT9kh2xB/r1u5rz8/FMts3K6xbHPe8IQ6LevtIpEjQCp0I5rHSqctjq4QBaTci4daJjdYqiUouKXkEoGfHxGpe6ZEM3APki2952IZ4vdyCXudar1McJrGeNemWWXgA05+KwHBCs7sMWqbCutyJ9zFAqxkpkdvhR9jhryYiyq4Q5KfQYmVl1jq4Qk93b2louMbu0N1YPt9Pwd2M4t0QXY2nECBhPk77S+o4ryZs6ikPvMDxqP/asAJENoQM6JASKZTfJZ/VRSCSxTPn3iOMUxl7Odlmqm3SDnCWhgYPqoTzvWV1Cp/B4xbSMT37iJtFhjC8JyNvlxBAEEJVEH2hhc3ws6gciCDhmpAmbKtFibZz+7zgXR9skWGeauNSOe146yrc4oauAk6K73v6MJzv0vMXi8aO3o2VNP9FJ23Fhm1qQae1JsuqhzbX+Sz4fxr5fXKX9dkOxsf9ITIf3YJyyXrJQArrcV2DzGTRUlAlNuzJ7RLKDz6Ix5LPgrzos0NbyDqBOBImSeogXiAI5EOqcDnShAakyZ1yKNMTAP9NYtV6Cs0v5vdp4ANCKlpRL4Y8O1pI/npGePJKqcfV4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(346002)(396003)(136003)(39860400002)(451199015)(6506007)(6486002)(53546011)(478600001)(2616005)(26005)(186003)(6512007)(66556008)(316002)(8676002)(66476007)(6636002)(110136005)(86362001)(38100700002)(82960400001)(83380400001)(31696002)(41300700001)(66946007)(31686004)(5660300002)(36756003)(2906002)(8936002)(44832011)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djI5cktEQWs4R1JUaTcweDRZQXFvSWxwTFRiR3YxcnlzQ3BWbGx6aHg1NWZR?=
- =?utf-8?B?YldzZFdSRkdlb09STGptV2hBT0tKU29RdTJISk0rZGptVlMvUWxYbDBmajRq?=
- =?utf-8?B?OW81TDR4Y245bk1oSnFqQU91YUltSnF5NS9yTU03bGpPS0phK3VNUWJMQmhJ?=
- =?utf-8?B?SXcwcXpOOTBobTFiOFQwcmlMbmhsWkxmLzJjMkVjRTN4RFBFYUNtYVkrWUVO?=
- =?utf-8?B?dWNIWjZWOE9xclkvcS91ZnpFbW40RWhXbCt3WjlRUkkwaTRmWWNMdkw5TFR2?=
- =?utf-8?B?ZzQzcEtnMFdqU1psSUNYelpCSEE1cDJvTk14dk14cWl0Ty91NktvemNqbFNN?=
- =?utf-8?B?b2xKNThJS2ZWbzdXWkhiUStrTFBYanVqQXFhdk9ITkZncU50NGZEbFdNTUF2?=
- =?utf-8?B?WnpIR0UzVENaMENZUnZzbU5CTUdITEQzVHZWOE15VkNyaEtlVEd5ZXU0T1Nx?=
- =?utf-8?B?ZU1NUkZwdmJaTkFISE9XK0xvQjk2TFE2b2NPS2owR1N2dEtOV21UNEZBbFMw?=
- =?utf-8?B?c082b1c2alFZRjRua2hqMG9PRzhBMzR5b0dIMlBMOXpEaVlOMkR6ZFRnWG9a?=
- =?utf-8?B?VkdlN0t2MTllVFpvUTVmSFlrZ3hEQ0dRcEpnSGhZOHUwZ2k4SzVnNG1EZmFZ?=
- =?utf-8?B?WURxaXBWcm5PNFFZQmtJbjhIdHpYTXhTZlRXMVB2dHhLTTNUdmNhb3VnMmI3?=
- =?utf-8?B?dTNMV0d3M0U5bEtxYUg4MGFkWXFoSmVnYlFEbVY5a1Zjank5VEplZ3E3eWxT?=
- =?utf-8?B?bDZNekloRjc4RkxvVHNJVWxUeXI4M3ljdkN3ZlQwd05rMlYrUUQ1RDJJd0VF?=
- =?utf-8?B?aW0zSVFDOW4vVCtuamJJdGFzVStrSzF2Tk9oS3VnS2IxbE5zT0NFemVBZ3dQ?=
- =?utf-8?B?R1FDM1JsUVNvS1pRekRRQklSNFZicUhWVDg2aWVNVlJES3hOUmdLUEt6Tjla?=
- =?utf-8?B?c1YvbERVL2FBdnFJZEJFN0pSV0xyRjhvM2lwOUNlMGtQZS9PbW9OY200aUEv?=
- =?utf-8?B?bHE0RU80SFJVQVhRL1M0dHg1U2U3Um5lcWFNbFFBMDU2cWdnQWtBOTZvRTJh?=
- =?utf-8?B?aGVnbEYyNE4wZSsyZkM5NXdHMGpjMHkrSGhvNERuaWtrekZFQVBIamNaNmJJ?=
- =?utf-8?B?RUVVV3FwK1NtL3daaGJuZGh0azEvTFgzRi9VV1VDUGxLdHRsMmVRcWNETmRW?=
- =?utf-8?B?Y1RDTkxCT3hkbkNBb1hmY1dyL0toY2NOZHBuWkk3WTc5R1FrckhtbmlzVU5x?=
- =?utf-8?B?cUt3SlFqR1p6bGgwc3NlamhuYjlxZW9XWHFPa2tnRTM0QklPMi9RRXhqWUFp?=
- =?utf-8?B?VkpxWEE2N1UrYnhXVGh2aWVQcmt3YUpES3VnSXo5NW5vNW5MbWkrUWxSNXZ6?=
- =?utf-8?B?TXJMc29zQ1dUU1l4cGExRHJIalZXZ0U2QVJyem53eGNqRlROZkloWlhPeHRL?=
- =?utf-8?B?aWJjMmpEK2c3ZnVZa0g5QTBnL1pUdlZRVnhYMVNqYkNmeGVVNmpUOVJ6clh3?=
- =?utf-8?B?Mlg1Nmk1TkRncnNtczlNMXg3aGpnN1FJYk1IUzd0T3ZGMEs5T3pyWFl1Z2o3?=
- =?utf-8?B?aXFTRlNpSmVVZkpQdjlPb3ZqQkNxTW13SmFYUy9kdHJuQ1QvMm5OeTk0QkVY?=
- =?utf-8?B?SkF6QnR0ZGwvd05QMXFENjhwbDAwdGtrR3MwU0ZuRTZJRVdWZ3h0eE1sNUVx?=
- =?utf-8?B?ck5uN3NpTkRsZkJNSEF6UC9ONWVpcVV5REJCSGEzODlaZXpEdndaU1ZBdkVB?=
- =?utf-8?B?MEJDZzlvaUJOa3IvNkExY3B4d21zb1FJVGVQRnJwTHFQRitFa29VTWZiS1Bq?=
- =?utf-8?B?bnRvd2FIS1F2eWNqVU5CdHR5VVcvSlE0WDc4RVU5YUNvK1N1Tk5zU0pITmpV?=
- =?utf-8?B?YXZQdWlLU0NHeHR1aHcrbDhLdDh1NSs3aDllb0R4ZmRZMEJVaXFYSmFJd2hP?=
- =?utf-8?B?cWl3TUcyQjZoUXczV3pJTS9XVVBKS2pwYmlYQmdKNzRlVkNhNGxrZko2Unc5?=
- =?utf-8?B?dkx4ekJFb3NuQUNUZjJpeHRvZFMyVDFmRzhTTDg1NGxOSHI3YnRnZHVxVzh3?=
- =?utf-8?B?ZmZZRXlmWG1uQjJoWHlWVW16aW9nRlk0ZTFUdDJpZGwrUGt4VHZpa0xmMFJ4?=
- =?utf-8?Q?B56Wt3VrhgxE14QLmkaqHV8Lh?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8c26233-eea5-4184-125f-08daf3473da8
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 20:14:13.0405
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Whvb4oVMcqH8zmVA6yrkSOu3IPsrXcgRaQanZiIQZJ2TDdwLBOfsz4g3YtCNcv9nWyYrhiMZbgO/r7Lnkt8dqQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5019
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -164,53 +75,229 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/2023 9:51 PM, Yian Chen wrote:
-> LASS (Linear Address Space Separation) is a CPU feature to
-> prevent speculative address access in user/kernel mode.
-> 
+This implements the elf loader hook to parse RV specific
+.riscv.attributes section. This section is inserted by compilers
+(gcc/llvm) with build related information such as -march organized as
+tag/value attribute pairs.
 
-Would it be better to say?
+It identifies the various attribute tags (and corresponding values) as
+currently specified in the psABI specification.
 
-LASS (Linear Address Space Separation) is a security feature that 
-intends to prevent unintentional speculative address access across 
-user/kernel mode.
+This patch only implements the elf parsing mechanics, leaving out the
+recording/usage of the attributes to subsequent patches.
 
+Reported-by: kernel test robot <lkp@intel.com>  # code under CONFIG_COMPAT
+Signed-off-by: Vineet Gupta <vineetg@rivosinc.com>
+---
+ arch/riscv/Kconfig           |   1 +
+ arch/riscv/include/asm/elf.h |  11 +++
+ arch/riscv/kernel/Makefile   |   1 +
+ arch/riscv/kernel/elf-attr.c | 150 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 163 insertions(+)
+ create mode 100644 arch/riscv/kernel/elf-attr.c
 
-> LASS partitions 64-bit virtual address space into two
-> halves, lower address (LA[63]=0) and upper address
-> (LA[63]=1). It stops any data access or code execution
->      1. from upper half address space to any lower half address
->      2, from lower half address space to any upper half address
-> and generates #GP fault for a violation.
-> 
-
-I am not sure if this is the best way to say it. The kernel already 
-partitions the address space this way. LASS takes what is already the 
-typical OS implementation and bakes it into the hardware architecture.
-
-> In Linux, this means LASS does not allow both kernel code
-> to access any user space address and user code to access
-> any kernel space address.
-> 
-
-There is clearly an overlap between the protections provided by paging 
-and with SMAP and SMEP. It would be useful to paraphrase some of the 
-information mentioned in the spec regarding how LASS differs from them.
-
-"With these mode-based protections, paging can prevent malicious 
-software from directly reading or writing memory inappropriately. To 
-enforce these protections, the processor must traverse the hierarchy of 
-paging structures in memory. Unprivileged software can use timing 
-information resulting from this traversal to determine details about the 
-paging structures, and these details may be used to determine the layout 
-of supervisor memory.
-
-Linear-address space separation (LASS) is an independent mechanism that 
-enforces the same mode-based protections as paging but without 
-traversing the paging structures. Because the protections enforced by 
-LASS are applied before paging, “probes” by malicious software will 
-provide no paging-based timing information."
-
-> Signed-off-by: Yian Chen <yian.chen@intel.com>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index e2b656043abf..f7e0ab05a2d2 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -12,6 +12,7 @@ config 32BIT
+ 
+ config RISCV
+ 	def_bool y
++	select ARCH_BINFMT_ELF_STATE
+ 	select ARCH_CLOCKSOURCE_INIT
+ 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if HUGETLB_PAGE && MIGRATION
+ 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
+diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+index e7acffdf21d2..7ab8bd0ec330 100644
+--- a/arch/riscv/include/asm/elf.h
++++ b/arch/riscv/include/asm/elf.h
+@@ -116,6 +116,17 @@ do {							\
+ 		*(struct user_regs_struct *)regs;	\
+ } while (0);
+ 
++struct arch_elf_state {
++};
++
++#define INIT_ARCH_ELF_STATE {}
++
++extern int arch_elf_pt_proc(void *ehdr, void *phdr, struct file *elf,
++			    bool is_interp, struct arch_elf_state *state);
++
++extern int arch_check_elf(void *ehdr, bool has_interpreter, void *interp_ehdr,
++			  struct arch_elf_state *state);
++
+ #ifdef CONFIG_COMPAT
+ 
+ #define SET_PERSONALITY(ex)					\
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 4cf303a779ab..eff6d845ac9d 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -50,6 +50,7 @@ obj-y	+= riscv_ksyms.o
+ obj-y	+= stacktrace.o
+ obj-y	+= cacheinfo.o
+ obj-y	+= patch.o
++obj-y	+= elf-attr.o
+ obj-y	+= probes/
+ obj-$(CONFIG_MMU) += vdso.o vdso/
+ 
+diff --git a/arch/riscv/kernel/elf-attr.c b/arch/riscv/kernel/elf-attr.c
+new file mode 100644
+index 000000000000..148d720f97de
+--- /dev/null
++++ b/arch/riscv/kernel/elf-attr.c
+@@ -0,0 +1,150 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2023-24 Rivos Inc.
++ */
++
++#include <linux/binfmts.h>
++#include <linux/elf.h>
++
++#undef pr_fmt
++#define pr_fmt(fmt) "rv-elf-attr: " fmt
++
++#define PT_RISCV_ATTRIBUTES		0x70000003
++
++#define RV_ATTR_TAG_stack_align		4
++#define RV_ATTR_TAG_arch		5
++#define RV_ATTR_TAG_unaligned_access	6
++
++#define RV_ATTR_SEC_SZ			SZ_1K
++
++static void rv_elf_attr_int(u64 tag, u64 val)
++{
++}
++
++static void rv_elf_attr_str(u64 tag, const char *str)
++{
++}
++
++static u64
++decode_uleb128(unsigned char **dpp)
++{
++	unsigned char *bp = *dpp;
++	unsigned char byte;
++	unsigned int shift = 0;
++	u64 result = 0;
++
++	while (1) {
++		byte = *bp++;
++		result |= (byte & 0x7f) << shift;
++		if ((byte & 0x80) == 0)
++			break;
++		shift += 7;
++	}
++	*dpp = bp;
++	return result;
++}
++
++/*
++ * Parse .riscv.attributes elf section to get the various compile time
++ * attributes such as -march, unaligned access and so no.
++ */
++static int rv_parse_elf_attributes(struct file *f, const struct elf_phdr *phdr,
++				   struct arch_elf_state *state)
++{
++	unsigned char buf[RV_ATTR_SEC_SZ];
++	unsigned char *p;
++	ssize_t n;
++	int ret = 0;
++	loff_t pos;
++
++	pr_debug("Section .riscv.attributes found\n");
++
++	/* Assume a reasonable size for now */
++	if (phdr->p_filesz > sizeof(buf))
++		return -ENOEXEC;
++
++	memset(buf, 0, RV_ATTR_SEC_SZ);
++	pos = phdr->p_offset;
++	n = kernel_read(f, &buf, phdr->p_filesz, &pos);
++
++	if (n < 0)
++		return -EIO;
++
++	p = buf;
++	p++;				/* format-version (1B) */
++
++	while ((p - buf) < n) {
++
++		unsigned char *vendor_start;
++		u32 len;
++
++		/*
++		 * Organized as "vendor" sub-section(s).
++		 * Current only 1 specified "riscv"
++		 */
++
++		p += 4;			/* sub-section length (4B) */
++		while (*p++ != '\0')	/* vendor name string */
++			;
++		p++;			/* Tag_File (1B) */
++		len = *(u32 *)p;	/* data length (4B) */
++		p += 4;
++
++		len -= 5;		/* data length includes Tag and self length */
++		vendor_start = p;
++		while ((p - vendor_start) < len) {
++
++			u64 tag = decode_uleb128(&p);
++			unsigned char *val_str;
++			u64 val_n;
++
++			switch (tag) {
++			case RV_ATTR_TAG_stack_align:
++				val_n = decode_uleb128(&p);
++				break;
++
++			case RV_ATTR_TAG_unaligned_access:
++				val_n = decode_uleb128(&p);
++				pr_debug("Tag_RISCV_unaligned_access =%llu\n", val_n);
++				rv_elf_attr_int(tag, val_n);
++				break;
++
++			case RV_ATTR_TAG_arch:
++				val_str = p;
++				while (*p++ != '\0')
++					;
++				pr_debug("Tag_RISCV_arch =[%s]\n", val_str);
++				rv_elf_attr_str(tag, val_str);
++				break;
++
++			default:
++				val_n = decode_uleb128(&p);
++				pr_debug("skipping Unrecognized Tag [%llu]=%llu\n", tag, val_n);
++				break;
++			}
++		}
++	}
++
++	return ret;
++}
++
++/*
++ * Hook invoked from common elf loader to parse any arch specific elf segments
++ */
++int arch_elf_pt_proc(void *_ehdr, void *_phdr, struct file *elf,
++		     bool is_interp, struct arch_elf_state *state)
++{
++	struct elf_phdr *phdr = _phdr;
++	int ret = 0;
++
++	if (phdr->p_type == PT_RISCV_ATTRIBUTES && !is_interp)
++		ret = rv_parse_elf_attributes(elf, phdr, state);
++
++	return ret;
++}
++
++int arch_check_elf(void *_ehdr, bool has_interpreter, void *_interp_ehdr,
++		   struct arch_elf_state *state)
++{
++	return 0;
++}
+-- 
+2.34.1
 
