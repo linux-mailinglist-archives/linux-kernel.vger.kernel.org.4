@@ -2,98 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3016647F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7686647F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234716AbjAJR7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:59:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
+        id S232845AbjAJR7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 12:59:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238843AbjAJR6R (ORCPT
+        with ESMTP id S234985AbjAJR60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:58:17 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B907A44E;
-        Tue, 10 Jan 2023 09:58:09 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 322c10ed6f9fbde9; Tue, 10 Jan 2023 18:58:07 +0100
-Received: from kreacher.localnet (unknown [213.134.183.108])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 9B0452625407;
-        Tue, 10 Jan 2023 18:58:06 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Chen Yu <yu.c.chen@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v1] ACPI: PNP: Introduce list of known non-PNP devices
-Date:   Tue, 10 Jan 2023 18:58:05 +0100
-Message-ID: <12149290.O9o76ZdvQC@kreacher>
+        Tue, 10 Jan 2023 12:58:26 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717352F4;
+        Tue, 10 Jan 2023 09:58:25 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id az20so11690165ejc.1;
+        Tue, 10 Jan 2023 09:58:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p9Zu5tLDoswvPcS8TjPw+hiLhOqYPhHzrH0Ze+KXTHE=;
+        b=ir+hPtJWqNvJg2azZcfdTpTdLMft4EfLi3D/YJMTBZL5dZj6uSAAnjTI/UC1p/lVpn
+         0uuzXG1rb5PuEslf7UTLdXldfkmVAXQNA0aHEvNfGSh39+xjEhLWHnfzkpZsdfLdqehv
+         qIfD8BHfElgRDMH4VD3ufGRJid7On/aXea0FbqW2M5xwSin2epMZ3oan9qaGZ9ir9JW2
+         2l3u2NDZpSdf1mY/izm+gj+Z7uqt4ZRaIRuUY0BfO9Qba5bvlOEeWmrSIrLiHM1qhr3S
+         l0hqSNtZbrSEusMxw0AyXNjqt8wMf1+9XdYb7cohGUnU6KjDr1dUp3GOItzBGpTxnpz1
+         AwnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p9Zu5tLDoswvPcS8TjPw+hiLhOqYPhHzrH0Ze+KXTHE=;
+        b=xpdIPCu5LY09hgqm+1CbImqa9yuBcjIXqPzO+3nLSYWLKZJr+KkVPKSc2Yk1XvESXG
+         IqW6LNMomfkb0AsTazyNJfR45s1a7qBdi3LM6eB/kHHVoEmbwW7LuR7C3z9ESgR/+pnt
+         c3yL1lVuHWXhtIVQBiVlui6UfJP9HrOmulpv+YyevgGUiEEr12Ol+h8yhavsDhhXqBI+
+         kmafj9dUJ25D7Fc+0FkHITL2SMtsMOB5PbZelWtJcAZnzZ8jztSUD1nSAgS+9pWg5BR5
+         0OGPnFJX6KbDCytFy2K3JfNiDAgXTQn/O8U2qr1KrFsfQ8F3dVrtTpMw89M58uKWVqM7
+         J0Yw==
+X-Gm-Message-State: AFqh2ko112437ruonv3rfJBACXPwEubffxsHMCsp5en/QOpFVtykg/qV
+        dCd2TP54BxCNPIQ/mT437g==
+X-Google-Smtp-Source: AMrXdXsnzetjBs5dJe3By+UOQeym9Cl+cBzo98QZrZgsFypNtlZmuXpN2HWRBBU9rD5ylAqPLsA3yw==
+X-Received: by 2002:a17:906:1414:b0:78d:f455:b5dd with SMTP id p20-20020a170906141400b0078df455b5ddmr54306349ejc.29.1673373503966;
+        Tue, 10 Jan 2023 09:58:23 -0800 (PST)
+Received: from p183 ([46.53.249.174])
+        by smtp.gmail.com with ESMTPSA id s10-20020a17090699ca00b0084d43100f19sm3223324ejn.89.2023.01.10.09.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 09:58:23 -0800 (PST)
+Date:   Tue, 10 Jan 2023 20:58:21 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Chao Yu <chao@kernel.org>
+Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] proc: introduce proc_statfs()
+Message-ID: <Y72nPcDDC/+10lYK@p183>
+References: <20230110152003.1118777-1-chao@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.183.108
-X-CLIENT-HOSTNAME: 213.134.183.108
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrledvgdeghecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudekfedruddtkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeefrddutdekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephihurdgtrdgthhgvnhesihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230110152003.1118777-1-chao@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Jan 10, 2023 at 11:20:03PM +0800, Chao Yu wrote:
+> Introduce proc_statfs() to replace simple_statfs(), so that
+> f_bsize queried from statfs() can be consistent w/ the value we
+> set in s_blocksize.
+> 
+> stat -f /proc/
+> 
+> Before:
+>     ID: 0        Namelen: 255     Type: proc
+> Block size: 4096       Fundamental block size: 4096
+> Blocks: Total: 0          Free: 0          Available: 0
+> Inodes: Total: 0          Free: 0
+> 
+> After:
+>     ID: 0        Namelen: 255     Type: proc
+> Block size: 1024       Fundamental block size: 1024
+> Blocks: Total: 0          Free: 0          Available: 0
+> Inodes: Total: 0          Free: 0
 
-In some cases, PNP device IDs from acpi_pnp_device_ids[] are returned by
-_CID for devices for which matching platform drivers are present in the
-kernel and should be bound to them.  However, the IDs coming from _CID
-cause the PNP scan handler to attach to those devices which prevents
-platform device objects from being created for them.
+4096 is better value is in fact.
 
-Address this by introducing a list of known non-PNP device IDs into
-acpi_pnp.c such that if a device ID is there in that list, it cannot be
-attached to by the PNP scan handler and add the platform runtime update
-and telemetry device IDs to that list to start with.
+seq_files allocate 1 page and fill it, therefore reading less than
+PAGE_SIZE from /proc is mostly waste of syscalls.
 
-Reported-by: Chen Yu <yu.c.chen@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/acpi_pnp.c |   14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+I doubt anything uses f_bsize.
 
-Index: linux-pm/drivers/acpi/acpi_pnp.c
-===================================================================
---- linux-pm.orig/drivers/acpi/acpi_pnp.c
-+++ linux-pm/drivers/acpi/acpi_pnp.c
-@@ -348,10 +348,22 @@ static bool acpi_pnp_match(const char *i
- 	return false;
- }
- 
-+/*
-+ * If one of the device IDs below is present in the list of device IDs of a
-+ * given ACPI device object, the PNP scan handler will not attach to that
-+ * object, because there is a proper non-PNP driver in the kernel for the
-+ * device represented by it.
-+ */
-+static const struct acpi_device_id acpi_nonpnp_device_ids[] = {
-+	{"INTC1080"},
-+	{"INTC1081"},
-+	{""},
-+};
-+
- static int acpi_pnp_attach(struct acpi_device *adev,
- 			   const struct acpi_device_id *id)
- {
--	return 1;
-+	return !!acpi_match_device_ids(adev, acpi_nonpnp_device_ids);
- }
- 
- static struct acpi_scan_handler acpi_pnp_handler = {
-
-
-
+BTW this patch is not self contained.
