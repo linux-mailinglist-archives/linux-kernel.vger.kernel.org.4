@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4DE6637D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 04:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 081F86637D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 04:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjAJDTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 22:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        id S229805AbjAJD3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 22:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjAJDSp (ORCPT
+        with ESMTP id S229493AbjAJD3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 22:18:45 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A9641D59
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 19:18:41 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 200so1596337pfx.7
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 19:18:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v2vMuRifEflR0rqW4sVbUmQc1/LuBQa1QT5vJMZvjAc=;
-        b=X2TklK6j3bpjXI8F9pl0dTcLZeEW9rmtOm9P6qKtQjrt7FgcPXyioe0lNefGzeViIB
-         +pLK38NB74PfUxiGi2RvEBwD89DoJW+RQzzFMVsfcq5Y8Q6GYw/KyUmJVJ2L4TBqWj/E
-         UwMzHyubCpYuuV3dZPMsMJNpzrYn+kcIoaeSE+0pkejMvaBH5+VSjAFhjU5RchZwPh9I
-         yY6NthoZvdF4wrGoCc70PbufBEVRq+AwbYzI5L8EaiZAzfFUkAK+xhEuRUHYebPxGvIE
-         DxBweGNr4e1HnPUV1SPYBQ1QGD6FSbqYhH/tMf2f7nMpxZOWbIb0mwF0MQkBqcnKBhkE
-         0O8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v2vMuRifEflR0rqW4sVbUmQc1/LuBQa1QT5vJMZvjAc=;
-        b=0IIVSYb6ZNX9za2np3mBJl2NKBQU0uY1SXnJNB2taXK3ix+3R9OHIoXlXFaAOCBkDB
-         0G97QIFSwBJLlr4o2LWuEtwL0Ywf/KkcR7CqdttHlwCrvIMQ8PQww5Yc8ehcG9Pbk004
-         +2jAo72ARduaid8EERZHpSbb1FJ27jrkcuNDUkSqjRmU08gAb0+0wfZNv+PGYSVWmJJi
-         l/6JFnUyb0nATYePBRIJidHZYWBOwUn6kaRhqtQ/I7d7zMIpthmT3DGqbmypWB+9dK30
-         eRksuKLmkjqpK3UUHpq54yAZ74UKBP+HB0gTP48Kn4DIdqmxe1fiJJ03LoEPaMntTnuO
-         7hPw==
-X-Gm-Message-State: AFqh2koe76mbFmyv31aMrqeWDQhQZmjzkr1N9C+7yzV5D7MCcz5DyiPO
-        GxnMzbeuwr7RMjTJZXqe12pvcA==
-X-Google-Smtp-Source: AMrXdXvBg0uBp69ddXdGZcOkOEPW1BK7ZjQr2Kd9Z1AjIxSSnX02TnQVanCB2HrHkQ+GP/UBL3z07Q==
-X-Received: by 2002:a05:6a00:2a0b:b0:585:4ca7:5c4b with SMTP id ce11-20020a056a002a0b00b005854ca75c4bmr2754545pfb.2.1673320721376;
-        Mon, 09 Jan 2023 19:18:41 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id u64-20020a627943000000b00581816425f3sm6480835pfc.112.2023.01.09.19.18.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 19:18:41 -0800 (PST)
-Message-ID: <f37f8e60-d580-0b7c-0fa5-a26ab49c9781@kernel.dk>
-Date:   Mon, 9 Jan 2023 20:18:39 -0700
+        Mon, 9 Jan 2023 22:29:11 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CDC1EEF9;
+        Mon,  9 Jan 2023 19:29:09 -0800 (PST)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nrbps3lCnznVBX;
+        Tue, 10 Jan 2023 11:27:33 +0800 (CST)
+Received: from [10.174.176.117] (10.174.176.117) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 10 Jan 2023 11:29:06 +0800
+Subject: Re: [PATCH] perf lock contention: Do not use BPF task local storage
+To:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>
+CC:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        <linux-perf-users@vger.kernel.org>, Song Liu <song@kernel.org>,
+        <bpf@vger.kernel.org>, Blake Jones <blakejones@google.com>,
+        Chris Li <chriscli@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+References: <20221118190109.1512674-1-namhyung@kernel.org>
+ <dea8c3c5-0739-58c1-9a88-b989878a9b8f@linux.dev>
+ <CAM9d7cjk_7-ALzW1kT961TRLpO9Wt8gNX7+rH4ay4N92g1TYkg@mail.gmail.com>
+ <7ec772fb-2108-5945-a308-4bb46fcf0090@linux.dev>
+From:   Hou Tao <houtao1@huawei.com>
+Message-ID: <6e4ec7a4-9ac9-417c-c11a-de59e72a6e42@huawei.com>
+Date:   Tue, 10 Jan 2023 11:29:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] lib/scatterlist: Fix to calculate the last_pg properly
-Content-Language: en-US
-To:     Yishai Hadas <yishaih@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-mm@kvack.org, jgg@nvidia.com,
-        logang@deltatee.com, Andrew Morton <akpm@linux-foundation.org>
-Cc:     hch@lst.de, alex.williamson@redhat.com, leonro@nvidia.com,
-        maorg@nvidia.com
-References: <20230109144701.83021-1-yishaih@nvidia.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230109144701.83021-1-yishaih@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <7ec772fb-2108-5945-a308-4bb46fcf0090@linux.dev>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Language: en-US
+X-Originating-IP: [10.174.176.117]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 7:47 AM, Yishai Hadas wrote:
-> The last_pg is wrong, it is actually the first page of the last
-> scatterlist element. To get the last page of the last scatterlist
-> element we have to add prv->length. So it is checking mergability
-> against the wrong page, Further, a SG element is not guaranteed to end
-> on a page boundary, so we have to check the sub page location also for
-> merge eligibility.
-> 
-> Fix the above by checking physical contiguity, compute the actual last
-> page and then call pages_are_mergable().
+Hi Martin,
 
-Reviewed-by: Jens Axboe <axboe@kernel.dk>
+On 1/10/2023 5:22 AM, Martin KaFai Lau wrote:
+> On 1/9/23 12:56 PM, Namhyung Kim wrote:
+>> Hello,
+>>
+>> On Mon, Nov 21, 2022 at 9:33 AM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+>>>
+>>> On 11/18/22 11:01 AM, Namhyung Kim wrote:
+>>>> We could fix the task local storage to use the safe BPF allocator,
+>>>> but it takes time so let's change this until it happens actually.
+>>>
+>>> I also got another report on the kfree_rcu path.  I am also looking into this
+>>> direction on using the BPF allocator.
+>>
+>> Any progress on this?  Are there any concerns about the change?
+>
+> Yep, I am working on it. It is not a direct replacement from kzalloc to
+> bpf_mem_cache_alloc. eg. Some changes in the bpf mem allocator is needed to
+> ensure the free list cannot be reused before the rcu grace period. There is a
+> similar RFC patchset going into this direction that I am trying with.
+>
+> .
+Do you mean "[RFC PATCH bpf-next 0/6] bpf: Handle reuse in bpf memory alloc"
+[0], right ? The main concern [1] for the proposal is the possibility of OOM
+will increase when RCU tasks trace grace period is slow, because the immediate
+reuse is disabled and the reuse is only possible after one RCU tasks trace grace
+period. Using a memory cgroup and setting a hard-limit on the cgroup may reduce
+the influence of the OOM problem, but it is not good enough. So do you have
+other ways to mitigate the potential OOM problem ?
 
-Andrew, can you pick this one up?
-
--- 
-Jens Axboe
-
-
+[0]: https://lore.kernel.org/bpf/20221230041151.1231169-1-houtao@huaweicloud.com/
+[1]:
+https://lore.kernel.org/bpf/CAADnVQ+z-Y6Yv2i-icAUy=Uyh9yiN4S1AOrLd=K8mu32TXORkw@mail.gmail.com/
