@@ -2,182 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04EA664D7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A47F664D8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233586AbjAJUdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 15:33:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
+        id S232908AbjAJUf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 15:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbjAJUcT (ORCPT
+        with ESMTP id S231738AbjAJUfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:32:19 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775945D683
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:30:12 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id m15so7005981ilq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:30:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w0Ug/ql1k2yCindQKTRR7rZIRzQnKNrHLeSqG8fryRU=;
-        b=lLxUx/bMoyOfuYe2X/8VFsQ+pLZ38ds+Rz4HDvDSmzx62mxYFzBIdYtTKovwsZi9i+
-         la0f9V3xZrTk6WFUBU8WLFd90V5NdTf63r04MkaXO3bOPatguw9Avrkcmgr7dFcHJh0L
-         s3mA0o5rahMqaSVak4BdlT0j7sTgadkvT1Xu8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w0Ug/ql1k2yCindQKTRR7rZIRzQnKNrHLeSqG8fryRU=;
-        b=Z8evAbtrvbF4HB2ZOfMJdc0n6gaF178H/ejT5bNcpIUw9SY4CdcdHOZOOfgPqJ7zSM
-         KtkmLdduSIwVBnPWTOYUlxJZAgrSPfsx3d/ddInfUSXNQtN5tE9lkv2JrUR9PBf8E7eV
-         4imkYH3JyfBtZsQQyXP2gODW+Mhp2VAsFvGeIKR+6jOaW1gmWnp0edtT+4oYbyB/Li+u
-         /5RLA+vXemt02Vj4oko5fbm5AxmoIKFhqHij8IjV/ezFnXiEFWPp5wZs9qniS1Y57Mo4
-         tfjH7CPFFu9pQDqgDMsiql0fZjEHHtDbCUOQI0m54bv9h3ISG8zoHfa0Weqf/zU3sFne
-         ad+g==
-X-Gm-Message-State: AFqh2kqvdOGnIFpehPKb3juggAT+7AT2kmEom/rT6ZuNwvwh1o3/2xRt
-        LQNRKVqU0MZ6mOYI8cpBm8hNBJGIlaBS/xtI
-X-Google-Smtp-Source: AMrXdXuYEbx64HsIkwIR1X0fW6/MkoxznuZHCX2SRdTFXE879B3OEgvIbygmt0TOAFMmFnqN+0lsCg==
-X-Received: by 2002:a92:1e08:0:b0:30d:7ce3:448b with SMTP id e8-20020a921e08000000b0030d7ce3448bmr15581670ile.14.1673382611793;
-        Tue, 10 Jan 2023 12:30:11 -0800 (PST)
-Received: from chromium.org ([2620:15c:183:200:d1f8:2b5e:3e1d:2620])
-        by smtp.gmail.com with ESMTPSA id t13-20020a92d14d000000b003039a19a927sm3913441ilg.7.2023.01.10.12.30.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 12:30:11 -0800 (PST)
-Date:   Tue, 10 Jan 2023 13:30:09 -0700
-From:   Drew Davenport <ddavenport@chromium.org>
-To:     Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Jos=E9?= Roberto de Souza 
-        <jose.souza@intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Juha-Pekka =?iso-8859-1?Q?Heikkil=E4?= 
-        <juha-pekka.heikkila@intel.com>
-Subject: Re: [PATCH] drm/i915/display: Check source height is > 0
-Message-ID: <Y73K0T+tQD1wj8Xp@chromium.org>
-References: <20221226225246.1.I15dff7bb5a0e485c862eae61a69096caf12ef29f@changeid>
- <8b4448d0-d9ea-95a6-83ee-513fe73c793f@gmail.com>
+        Tue, 10 Jan 2023 15:35:39 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA37A196;
+        Tue, 10 Jan 2023 12:35:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rcZ4SPFKYx+tqc2REErmG5c3gwzYReVP3gYzWilP+RU=; b=BCylYdxJPNoZITKoQl6b6S7eIE
+        y52arEeOIcDrAX+2lFYuERUvbyzLduxy61mENUE3K8fiF6bHsTiP4i2UpwfkLpFEFtcC9gxO7XtM/
+        GuFdBgusmdVWfRsXnc1CFdgKwhVd7Mtf0UevkS8DpHeKRmq0qaio8/NfhJ+iX9nUZLrgcUGJ6QN5S
+        9C3ZeXYGqoIMLl5LQTOm6EYoHaPuMDle/wAksygQSdod+FeSUViDVH2TDG7g7ARo/dNWV08URgAIp
+        Vx9Hwbt1mYhhk0wO7t32Rw6JRBEjfLkWYCeP35gHVUzgZAbU8IT10YrvePF6F6hJcjOoYcwwPgKio
+        xOf1pK0w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pFLKy-003Pwn-0g;
+        Tue, 10 Jan 2023 20:35:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7FBBC300129;
+        Tue, 10 Jan 2023 21:35:18 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3768E2C4CAB7F; Tue, 10 Jan 2023 21:35:18 +0100 (CET)
+Date:   Tue, 10 Jan 2023 21:35:18 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mhiramat@kernel.org,
+        ndesaulniers@google.com, ojeda@kernel.org,
+        rafael.j.wysocki@intel.com, revest@chromium.org,
+        robert.moore@intel.com, rostedt@goodmis.org, will@kernel.org
+Subject: Re: [PATCH 3/8] arm64: Extend support for CONFIG_FUNCTION_ALIGNMENT
+Message-ID: <Y73MBswL76Hi9cay@hirez.programming.kicks-ass.net>
+References: <20230109135828.879136-1-mark.rutland@arm.com>
+ <20230109135828.879136-4-mark.rutland@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8b4448d0-d9ea-95a6-83ee-513fe73c793f@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230109135828.879136-4-mark.rutland@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 12:42:43PM +0200, Juha-Pekka Heikkila wrote:
-> Hi Drew,
+On Mon, Jan 09, 2023 at 01:58:23PM +0000, Mark Rutland wrote:
 
-Hi Juha-Pekka, sorry for the late response since I was on vacation.
-
-> 
-> this is good find. I went looking where the problem is in and saw what you
-> probably also saw earlier.
-> 
-> I was wondering if diff below would be better fix? I assume this would end
-> up with einval or erange in your case but code flow otherwise would stay as
-> is while fixing all future callers for same issue:
-
-Yes, the function you identify below is where I encountered
-divide-by-zero errors. If width/height less than 1 is a legitimate use
-case, then your proposed solution looks like it would be better. It
-should have no risk of regression in userspace either, which is nice.
-
-I tested your patch, and as expected I did not hit the divide-by-zero
-error, though the test commit was rejected due to a check further along
-inside skl_update_scaler. Perhaps there is some other configuration
-which would pass the test commit with a width/height less than 1, but I
-didn't dig much further.
-
-> 
-> diff --git a/drivers/gpu/drm/i915/display/intel_atomic_plane.c
-> b/drivers/gpu/drm/i915/display/intel_atomic_plane.c
-> index 10e1fc9d0698..a9948e8d3543 100644
-> --- a/drivers/gpu/drm/i915/display/intel_atomic_plane.c
-> +++ b/drivers/gpu/drm/i915/display/intel_atomic_plane.c
-> @@ -144,7 +144,7 @@ unsigned int intel_adjusted_rate(const struct drm_rect
-> *src,
->                                  const struct drm_rect *dst,
->                                  unsigned int rate)
->  {
-> -       unsigned int src_w, src_h, dst_w, dst_h;
-> +       unsigned int src_w, src_h, dst_w, dst_h, dst_wh;
-> 
->         src_w = drm_rect_width(src) >> 16;
->         src_h = drm_rect_height(src) >> 16;
-> @@ -155,8 +155,10 @@ unsigned int intel_adjusted_rate(const struct drm_rect
-> *src,
->         dst_w = min(src_w, dst_w);
->         dst_h = min(src_h, dst_h);
-> 
-> -       return DIV_ROUND_UP_ULL(mul_u32_u32(rate, src_w * src_h),
-> -                               dst_w * dst_h);
-> +       /* in case src contained only fractional part */
-> +       dst_wh = max(dst_w * dst_h, (unsigned) 1);
+> diff --git a/arch/arm64/include/asm/linkage.h b/arch/arm64/include/asm/linkage.h
+> index 1436fa1cde24d..df18a3446ce82 100644
+> --- a/arch/arm64/include/asm/linkage.h
+> +++ b/arch/arm64/include/asm/linkage.h
+> @@ -5,8 +5,14 @@
+>  #include <asm/assembler.h>
+>  #endif
+>  
+> -#define __ALIGN		.align 2
+> -#define __ALIGN_STR	".align 2"
+> +#if CONFIG_FUNCTION_ALIGNMENT > 0
+> +#define ARM64_FUNCTION_ALIGNMENT	CONFIG_FUNCTION_ALIGNMENT
+> +#else
+> +#define ARM64_FUNCTION_ALIGNMENT	4
+> +#endif
 > +
-> +       return DIV_ROUND_UP_ULL(mul_u32_u32(rate, src_w * src_h), dst_wh);
->  }
-> 
->  unsigned int intel_plane_pixel_rate(const struct intel_crtc_state
-> *crtc_state,
-> 
-> 
-> What do you think? I'll in any case come up with some test for this in igt.
+> +#define __ALIGN		.balign ARM64_FUNCTION_ALIGNMENT
+> +#define __ALIGN_STR	".balign " #ARM64_FUNCTION_ALIGNMENT
 
-I see that you've posted your fix to the list already. Adding a
-test to cover this in IGT also sounds great. Thanks!
+Isn't that much the same as having ARM64 select FUNCTION_ALIGNMENT_4B
+and simply removing all these lines and relying on the default
+behaviour?
 
-Breadcrumbs to Juha-Pekka's patch for anyone following this
-thread: https://patchwork.freedesktop.org/series/112396/
-
-> 
-> /Juha-Pekka
-> 
-> On 27.12.2022 7.53, Drew Davenport wrote:
-> > The error message suggests that the height of the src rect must be at
-> > least 1. Reject source with height of 0.
-> > 
-> > Signed-off-by: Drew Davenport <ddavenport@chromium.org>
-> > 
-> > ---
-> > I was investigating some divide-by-zero crash reports on ChromeOS which
-> > pointed to the intel_adjusted_rate function. Further prodding showed
-> > that I could reproduce this in a simple test program if I made src_h
-> > some value less than 1 but greater than 0.
-> > 
-> > This seemed to be a sensible place to check that the source height is at
-> > least 1. I tried to repro this issue on an amd device I had on hand, and
-> > the configuration was rejected.
-> > 
-> > Would it make sense to add a check that source dimensions are at least 1
-> > somewhere in core, like in drm_atomic_plane_check? Or is that a valid
-> > use case on some devices, and thus any such check should be done on a
-> > per-driver basis?
-> > 
-> > Thanks.
-> > 
-> >   drivers/gpu/drm/i915/display/skl_universal_plane.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/display/skl_universal_plane.c b/drivers/gpu/drm/i915/display/skl_universal_plane.c
-> > index 4b79c2d2d6177..9b172a1e90deb 100644
-> > --- a/drivers/gpu/drm/i915/display/skl_universal_plane.c
-> > +++ b/drivers/gpu/drm/i915/display/skl_universal_plane.c
-> > @@ -1627,7 +1627,7 @@ static int skl_check_main_surface(struct intel_plane_state *plane_state)
-> >   	u32 offset;
-> >   	int ret;
-> > -	if (w > max_width || w < min_width || h > max_height) {
-> > +	if (w > max_width || w < min_width || h > max_height || h < 1) {
-> >   		drm_dbg_kms(&dev_priv->drm,
-> >   			    "requested Y/RGB source size %dx%d outside limits (min: %dx1 max: %dx%d)\n",
-> >   			    w, h, min_width, max_width, max_height);
-> 
