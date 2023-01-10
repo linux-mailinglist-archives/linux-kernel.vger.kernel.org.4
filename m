@@ -2,104 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1C2663BAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E680663BB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237536AbjAJItj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
+        id S230380AbjAJIvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjAJItU (ORCPT
+        with ESMTP id S238117AbjAJIum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:49:20 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA1C265F
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:49:18 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-4d19b2686a9so18293947b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:49:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WnOeOYalhwEQCO6UPq5gBGy6Ta3zdz6VrIAftglxGYY=;
-        b=ATTDuPohVmROjY4u4qmAQpgs6sZIex3xwKpA858iVRKBU+0MvcQvCrmaWOS6f7meST
-         IPDQ1mu7t4Cp6iAmZig04HjPlwbPXdO3o97hMinWqTGjP+LCXqnHigQap0MyVaI6ehdU
-         F7DPPudQGLshVzcYqNtgmVzDQ4TR4/UyH+fbJgDE2Z4RtMqlvTSMtnEFt7VzF1b+Gjph
-         Iz1x+NqA67ArBVMoEhPzRHhnoAR6YPxLdjalgNaM1gluHn1657DeIXlVDsoLKIqi/p+u
-         NVuz849RT7dCgcMfN89RUDWZpQLeoSFL9QI9lCK0UYNxE4GVgDgzz8rH8V0tdgby3nKa
-         amQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WnOeOYalhwEQCO6UPq5gBGy6Ta3zdz6VrIAftglxGYY=;
-        b=wigvHAIq8q1bm9Poc8rEn79WFH1gIC94J5QRjUMNWXxxiqkxKCiGnJJaulbXff0RU2
-         3I9SH7ra1CYF1O+9Xs0vTE1pQcpWl7U8fqsod6m9UVI7mubv1lhNAdAjb59NPtxItMTy
-         e3pNGnGFuDT4TkKJx1Vi51lBnYcdxSZogeLpHQBAIDYaJ7RNvR/SlKeX0nSduwxeDMgP
-         c2+z0FIf3wc0ZvMwzAcL48LdS67aKgGt2eM7GI1bpG4eXYo7jea6rrvttDAw2/FuPGdw
-         9AIAXc7FVrMiH7skvOjXnj0OiL3BHdWjfOLyOpe+GRx2je/V5mZ82Ild23uRgc6ax0lI
-         0NWg==
-X-Gm-Message-State: AFqh2ko41EDoUmqzxy3VfyC5eVAoaQ2YNgVZubtr6FxRFMP1G2NJuTg0
-        Ba5LkELC7yUD5179I28/daJyirN4griEszQA3bldXw==
-X-Google-Smtp-Source: AMrXdXsdUYZ6cu4gDblOMyPCrFA0Tcv5/xj2o0qI3OtbW5FpPIKKWdcbtBQ+BinIqOgR0WHVn8bgYm5zgNhAgvcE4Ng=
-X-Received: by 2002:a81:c313:0:b0:3e5:4d1a:e506 with SMTP id
- r19-20020a81c313000000b003e54d1ae506mr2190904ywk.299.1673340557796; Tue, 10
- Jan 2023 00:49:17 -0800 (PST)
+        Tue, 10 Jan 2023 03:50:42 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAF25371C;
+        Tue, 10 Jan 2023 00:49:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673340599; x=1704876599;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BBdovsgplLEsmsAL8RTzVlMLITE3Mi+IAqk/wcVY71U=;
+  b=WA8ryBbq/Qhg7ldvvjSXs0Y1FbIY9hc/HeZ/PuzTYh56VbllCSIhOstZ
+   JvPU58sCEXnlwZJnQE9j6I63fIPaaRy4silb4KRrbh/lDK7wIdwJcIafz
+   kizHozdijpaQ4+uvz3BXcMQM/QPZb05GHSAu/0I4UfffMtFjKKHf+m5hn
+   gd0B+AJYIqFl0WaayrR3CIxiZzpSEY2cbgRdCGTSHXPlEyyIuddmlSGTM
+   /Gh5tPuKnV/hHHYZvNUT4meD42OwO3/HmleBZscmYZH+2X+GIaimLKnU5
+   2AmEQZ5NZ1xtku8FECkrAaXqcbaWWtWDdqe4t78TqbqdIO2ow92cNNU5z
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
+   d="scan'208";a="131614317"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Jan 2023 01:49:57 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 10 Jan 2023 01:49:55 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Tue, 10 Jan 2023 01:49:48 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
+        <richardcochran@gmail.com>, <ceggers@arri.de>
+Subject: [Patch net-next v8 00/13] net: dsa: microchip: add PTP support for KSZ9563/KSZ8563 and LAN937x
+Date:   Tue, 10 Jan 2023 14:19:17 +0530
+Message-ID: <20230110084930.16049-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-11-glider@google.com>
- <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
- <CAG_fn=W2EUjS8AX1Odunq1==dV178s_-w3hQpyrFBr=Auo-Q-A@mail.gmail.com>
- <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
- <CAG_fn=WjrzaHLfgw7ByFvguHA8z0MA-ZB3Kd0d6CYwmZWVEgjA@mail.gmail.com>
- <63bc8fec4744a_5178e29467@dwillia2-xfh.jf.intel.com.notmuch>
- <Y7z99mf1M5edxV4A@kroah.com> <63bd0be8945a0_5178e29414@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <63bd0be8945a0_5178e29414@dwillia2-xfh.jf.intel.com.notmuch>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 10 Jan 2023 09:48:31 +0100
-Message-ID: <CAG_fn=X9jBwAvz9gph-02WcLhv3MQkBpvkZAsZRMwEYyT8zVeQ@mail.gmail.com>
-Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marco Elver <elver@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,249 +64,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 7:55 AM Dan Williams <dan.j.williams@intel.com> wro=
-te:
->
-> Greg Kroah-Hartman wrote:
-> > On Mon, Jan 09, 2023 at 02:06:36PM -0800, Dan Williams wrote:
-> > > Alexander Potapenko wrote:
-> > > > On Thu, Jan 5, 2023 at 11:09 PM Dan Williams <dan.j.williams@intel.=
-com> wrote:
-> > > > >
-> > > > > Alexander Potapenko wrote:
-> > > > > > (+ Dan Williams)
-> > > > > > (resending with patch context included)
-> > > > > >
-> > > > > > On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> =
-wrote:
-> > > > > > >
-> > > > > > > On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@goog=
-le.com> wrote:
-> > > > > > > >
-> > > > > > > > KMSAN adds extra metadata fields to struct page, so it does=
- not fit into
-> > > > > > > > 64 bytes anymore.
-> > > > > > >
-> > > > > > > Does this somehow cause extra space being used in all kernel =
-configs?
-> > > > > > > If not, it would be good to note this in the commit message.
-> > > > > > >
-> > > > > > I actually couldn't verify this on QEMU, because the driver nev=
-er got loaded.
-> > > > > > Looks like this increases the amount of memory used by the nvdi=
-mm
-> > > > > > driver in all kernel configs that enable it (including those th=
-at
-> > > > > > don't use KMSAN), but I am not sure how much is that.
-> > > > > >
-> > > > > > Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be=
-?
-> > > > >
-> > > > > Apologies I missed this several months ago. The answer is that th=
-is
-> > > > > causes everyone creating PMEM namespaces on v6.1+ to lose double =
-the
-> > > > > capacity of their namespace even when not using KMSAN which is to=
-o
-> > > > > wasteful to tolerate. So, I think "6e9f05dc66f9 libnvdimm/pfn_dev=
-:
-> > > > > increase MAX_STRUCT_PAGE_SIZE" needs to be reverted and replaced =
-with
-> > > > > something like:
-> > > > >
-> > > > > diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
-> > > > > index 79d93126453d..5693869b720b 100644
-> > > > > --- a/drivers/nvdimm/Kconfig
-> > > > > +++ b/drivers/nvdimm/Kconfig
-> > > > > @@ -63,6 +63,7 @@ config NVDIMM_PFN
-> > > > >         bool "PFN: Map persistent (device) memory"
-> > > > >         default LIBNVDIMM
-> > > > >         depends on ZONE_DEVICE
-> > > > > +       depends on !KMSAN
-> > > > >         select ND_CLAIM
-> > > > >         help
-> > > > >           Map persistent memory, i.e. advertise it to the memory
-> > > > >
-> > > > >
-> > > > > ...otherwise, what was the rationale for increasing this value? W=
-ere you
-> > > > > actually trying to use KMSAN for DAX pages?
-> > > >
-> > > > I was just building the kernel with nvdimm driver and KMSAN enabled=
-.
-> > > > Because KMSAN adds extra data to every struct page, it immediately =
-hit
-> > > > the following assert:
-> > > >
-> > > > drivers/nvdimm/pfn_devs.c:796:3: error: call to
-> > > > __compiletime_assert_330 declared with 'error' attribute: BUILD_BUG=
-_ON
-> > > > fE
-> > > >                 BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_=
-SIZE);
-> > > >
-> > > > The comment before MAX_STRUCT_PAGE_SIZE declaration says "max struc=
-t
-> > > > page size independent of kernel config", but maybe we can afford
-> > > > making it dependent on CONFIG_KMSAN (and possibly other config opti=
-ons
-> > > > that increase struct page size)?
-> > > >
-> > > > I don't mind disabling the driver under KMSAN, but having an extra
-> > > > ifdef to keep KMSAN support sounds reasonable, WDYT?
-> > >
-> > > How about a module parameter to opt-in to the increased permanent
-> > > capacity loss?
-> >
-> > Please no, this isn't the 1990's, we should never force users to keep
-> > track of new module parameters that you then have to support for
-> > forever.
->
-> Fair enough, premature enabling. If someone really wants this they can
-> find this thread in the archives and ask for another solution like
-> compile time override.
->
-> >
-> >
-> > >
-> > > -- >8 --
-> > > >From 693563817dea3fd8f293f9b69ec78066ab1d96d2 Mon Sep 17 00:00:00 20=
-01
-> > > From: Dan Williams <dan.j.williams@intel.com>
-> > > Date: Thu, 5 Jan 2023 13:27:34 -0800
-> > > Subject: [PATCH] nvdimm: Support sizeof(struct page) > MAX_STRUCT_PAG=
-E_SIZE
-> > >
-> > > Commit 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZ=
-E")
-> > >
-> > > ...updated MAX_STRUCT_PAGE_SIZE to account for sizeof(struct page)
-> > > potentially doubling in the case of CONFIG_KMSAN=3Dy. Unfortunately t=
-his
-> > > doubles the amount of capacity stolen from user addressable capacity =
-for
-> > > everyone, regardless of whether they are using the debug option. Reve=
-rt
-> > > that change, mandate that MAX_STRUCT_PAGE_SIZE never exceed 64, but
-> > > allow for debug scenarios to proceed with creating debug sized page m=
-aps
-> > > with a new 'libnvdimm.page_struct_override' module parameter.
-> > >
-> > > Note that this only applies to cases where the page map is permanent,
-> > > i.e. stored in a reservation of the pmem itself ("--map=3Ddev" in "nd=
-ctl
-> > > create-namespace" terms). For the "--map=3Dmem" case, since the alloc=
-ation
-> > > is ephemeral for the lifespan of the namespace, there are no explicit
-> > > restriction. However, the implicit restriction, of having enough
-> > > available "System RAM" to store the page map for the typically large
-> > > pmem, still applies.
-> > >
-> > > Fixes: 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZ=
-E")
-> > > Cc: <stable@vger.kernel.org>
-> > > Cc: Alexander Potapenko <glider@google.com>
-> > > Cc: Marco Elver <elver@google.com>
-> > > Reported-by: Jeff Moyer <jmoyer@redhat.com>
-> > > ---
-> > >  drivers/nvdimm/nd.h       |  2 +-
-> > >  drivers/nvdimm/pfn_devs.c | 45 ++++++++++++++++++++++++++-----------=
---
-> > >  2 files changed, 31 insertions(+), 16 deletions(-)
-> > >
-> > > diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
-> > > index 85ca5b4da3cf..ec5219680092 100644
-> > > --- a/drivers/nvdimm/nd.h
-> > > +++ b/drivers/nvdimm/nd.h
-> > > @@ -652,7 +652,7 @@ void devm_namespace_disable(struct device *dev,
-> > >             struct nd_namespace_common *ndns);
-> > >  #if IS_ENABLED(CONFIG_ND_CLAIM)
-> > >  /* max struct page size independent of kernel config */
-> > > -#define MAX_STRUCT_PAGE_SIZE 128
-> > > +#define MAX_STRUCT_PAGE_SIZE 64
-> > >  int nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgma=
-p);
-> > >  #else
-> > >  static inline int nvdimm_setup_pfn(struct nd_pfn *nd_pfn,
-> > > diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
-> > > index 61af072ac98f..978d63559c0e 100644
-> > > --- a/drivers/nvdimm/pfn_devs.c
-> > > +++ b/drivers/nvdimm/pfn_devs.c
-> > > @@ -13,6 +13,11 @@
-> > >  #include "pfn.h"
-> > >  #include "nd.h"
-> > >
-> > > +static bool page_struct_override;
-> > > +module_param(page_struct_override, bool, 0644);
-> > > +MODULE_PARM_DESC(page_struct_override,
-> > > +            "Force namespace creation in the presence of mm-debug.")=
-;
-> >
-> > I can't figure out from this description what this is for so perhaps it
-> > should be either removed and made dynamic (if you know you want to debu=
-g
-> > the mm core, why not turn it on then?) or made more obvious what is
-> > happening?
->
-> I'll kill it and update the KMSAN Documentation that KMSAN has
-> interactions with the NVDIMM subsystem that may cause some namespaces to
-> fail to enable. That Documentation needs to be a part of this patch
-> regardless as that would be the default behavior of this module
-> parameter.
->
-> Unfortunately, it can not be dynamically enabled because the size of
-> 'struct page' is unfortunately recorded in the metadata of the device.
-> Recall this is for supporting platform configurations where the capacity
-> of the persistent memory exceeds or consumes too much of System RAM.
-> Consider 4TB of PMEM consumes 64GB of space just for 'struct page'. So,
-> NVDIMM subsystem has a mode to store that page array in a reservation on
-> the PMEM device itself.
+KSZ9563/KSZ8563 and  LAN937x switch are capable for supporting IEEE 1588 PTP
+protocol.  LAN937x has the same PTP register set similar to KSZ9563, hence the
+implementation has been made common for the KSZ switches.  KSZ9563 does not
+support two step timestamping but LAN937x supports both.  Tested the 1step &
+2step p2p timestamping in LAN937x and p2p1step timestamping in KSZ9563.
 
-Sorry, I might be missing something, but why cannot we have
+This patch series is based on the Christian Eggers PTP support for KSZ9563.
+Applied the Christian patch and updated as per the latest refactoring of KSZ
+series code. The features added on top are PTP packet Interrupt
+implementation based on nested handler, LAN937x two step timestamping and
+programmable per_out pins.
 
-#ifdef CONFIG_KMSAN
-#define MAX_STRUCT_PAGE_SIZE 128
-#else
-#define MAX_STRUCT_PAGE_SIZE 64
-#endif
+Link: https://www.spinics.net/lists/netdev/msg705531.html
 
-?
+Patch v7 -> v8
+- set skb->ip_summed = CHECKSUM_NONE after updating the checksum
 
-KMSAN is a debug-only tool, it already consumes more than two thirds
-of the system memory, so you don't want to enable it in any production
-environment anyway.
+Patch v6 -> v7
+- Corrected the misplaced spaces and tabs
+- Added mutex lock in do_aux_work
+- Replaced 0/1 with false/true for ts_en
+- SKB_TX_INPROGRESS flag is set before dsa_enqueue_skb
+- Removed the fallthrough keyword
+- pdelay_resp header correction is performed based on
+  KSZ_SKB_CB(skb)->update_correction instead of clone
 
-> KMSAN mandates either that all namespaces all the time reserve the extra
-> capacity, or that those namespace cannot be mapped while KMSAN is
-> enabled.
+Patch v5 -> v6
+- Rebased to latest net-next and renamed from RFC to patch net-next.
 
-Struct page depends on a couple of config options that affect its
-size, and has already been approaching the 64 byte boundary.
-It is unfortunate that the introduction of KMSAN was the last straw,
-but it could've been any other debug config that needs to store data
-in the struct page.
-Keeping the struct within cacheline size sounds reasonable for the
-default configuration, but having a build-time assert that prevents us
-from building debug configs sounds excessive.
+Patch v4 -> v5
+- Replaced irq_domain_add_simple with irq_doamin_add_linear
+- Used the helper diff_by_scaled_ppm() for adjfine.
 
-> --
-> You received this message because you are subscribed to the Google Groups=
- "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kasan-dev/63bd0be8945a0_5178e29414%40dwillia2-xfh.jf.intel.com.notmuch.
+Patch v3 -> v4
+- removed IRQF_TRIGGER_FALLING from the request_threaded_irq of ptp msg
+- addressed review comments on patch 10 periodic output
+- added sign off in patch 6 & 9
+- reverted to set PTP_1STEP bit for lan937x which is missed during v3 regression
+
+Patch v2-> v3
+- used port_rxtstamp for reconstructing the absolute timestamp instead of
+tagger function pointer.
+- Reverted to setting of 802.1As bit.
+
+Patch v1 -> v2
+- GPIO perout enable bit is different for LAN937x and KSZ9x. Added new patch
+for configuring LAN937x programmable pins.
+- PTP enabled in hardware based on both tx and rx timestamping of all the user
+ports.
+- Replaced setting of 802.1AS bit with P2P bit in PTP_MSG_CONF1 register.
+
+RFC v2 -> Patch v1
+- Changed the patch author based on past patch submission
+- Changed the commit message prefix as net: dsa: microchip: ptp
+Individual patch changes are listed in correspondig commits.
+
+RFC v1 -> v2
+- Added the p2p1step timestamping and conditional execution of 2 step for
+  LAN937x only.
+- Added the periodic output support
+
+Arun Ramadoss (5):
+  net: dsa: microchip: ptp: add 4 bytes in tail tag when ptp enabled
+  net: dsa: microchip: ptp: enable interrupt for timestamping
+  net: dsa: microchip: ptp: add support for perout programmable pins
+  net: dsa: microchip: ptp: lan937x: add 2 step timestamping
+  net: dsa: microchip: ptp: lan937x: Enable periodic output in LED pins
+
+Christian Eggers (8):
+  net: dsa: microchip: ptp: add the posix clock support
+  net: dsa: microchip: ptp: Initial hardware time stamping support
+  net: dsa: microchip: ptp: manipulating absolute time using ptp hw
+    clock
+  net: ptp: add helper for one-step P2P clocks
+  net: dsa: microchip: ptp: add packet reception timestamping
+  net: dsa: microchip: ptp: add packet transmission timestamping
+  net: dsa: microchip: ptp: move pdelay_rsp correction field to tail tag
+  net: dsa: microchip: ptp: add periodic output signal
+
+ MAINTAINERS                             |    1 +
+ drivers/net/dsa/microchip/Kconfig       |   11 +
+ drivers/net/dsa/microchip/Makefile      |    5 +
+ drivers/net/dsa/microchip/ksz_common.c  |   44 +-
+ drivers/net/dsa/microchip/ksz_common.h  |   48 +
+ drivers/net/dsa/microchip/ksz_ptp.c     | 1199 +++++++++++++++++++++++
+ drivers/net/dsa/microchip/ksz_ptp.h     |   86 ++
+ drivers/net/dsa/microchip/ksz_ptp_reg.h |  142 +++
+ include/linux/dsa/ksz_common.h          |   53 +
+ include/linux/ptp_classify.h            |   73 ++
+ net/dsa/tag_ksz.c                       |  201 +++-
+ 11 files changed, 1845 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp.c
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp.h
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp_reg.h
+ create mode 100644 include/linux/dsa/ksz_common.h
 
 
+base-commit: cbdbb58b6c796e48ad6346e07bf3ae65cf4dc69b
+-- 
+2.36.1
 
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
