@@ -2,201 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8203D66407E
+	by mail.lfdr.de (Postfix) with ESMTP id CDC2366407F
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbjAJMaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
+        id S238408AbjAJMab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233075AbjAJMaH (ORCPT
+        with ESMTP id S231910AbjAJMaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:30:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C23D17585
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:29:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673353760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zj7O7BsTwrlQivuxli/b/DVop3RoAUc26KLutE6aqJA=;
-        b=FEO6LfoLnF5pquvPFLQmsjSJEzvlSYe85l9L9vo3tl1rR+6PQ8sdtb3A2yE5KCbKURUAFA
-        0//DYJg/baz4zQ7MxktzfB4zPEkRkglM7GUTf8xLAFenqF1cash2Jwsy4mube+hh1pDxU1
-        PJzwgSsX9b6vMCwGJByLjSPLVLO4NbU=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-160-ySesbhmsPyyINUOn-vMYyA-1; Tue, 10 Jan 2023 07:29:19 -0500
-X-MC-Unique: ySesbhmsPyyINUOn-vMYyA-1
-Received: by mail-wr1-f71.google.com with SMTP id v12-20020adfc5cc000000b0029910b64099so1947777wrg.23
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:29:18 -0800 (PST)
+        Tue, 10 Jan 2023 07:30:14 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D865F98
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:30:13 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id e21so11623210ybb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:30:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IkuSAVZKOMsJ1gBdMEqLNegz0l4XsEs9PuRldm+SHM8=;
+        b=U09OCe5+MuYI8K/ycZrcs7CYd3trN9s+7ymZIPZ0kBsWgNeufoNdJlYaNMpvS89KDC
+         gm3ZGksFLNVdTjYoQxW3pntyPPCywQaGSiiviTEz6sMN1vBeZUC2J55e0vRp8+tEQLWn
+         7J9tstD1zFKR7m95JI+6sKmRdmt81tSyz4EVea8wE41cK2v3K04gGsEo8S5wkopCQupc
+         vcAJTYeuN/hoZ9vYthwJdrESEuXOafq66E/tBFOUWkU9Qwp71NYucLSoCUWFAA3gO2qf
+         yWORl4B/9OUjDbVkhgHiCqHiJ/TIFUHg/mp9zUik6oDEg4XTLmsreqPYAo7Wx+cdPLpU
+         YCGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zj7O7BsTwrlQivuxli/b/DVop3RoAUc26KLutE6aqJA=;
-        b=p/IbLeLn9ma1GYQlR3oUAzz4iP29Ss0pVGcHDHAEYDMsjDlpaDQxzD6da6FOIfJlDo
-         gXDrHdjZBDeQtSXFld+pJ5zGhxq2x885+61QAQvWhDYk0f4RZHcBx0hLJeiwyY/W5Jfv
-         GxDkFIH8uzB+LsZF+bkf+L+iPQ7rWnT8zi4KHL8y2HQIebjTYcpdMfGb3CEBzQA+5OsQ
-         vcxKitw/oHV3WPXimSSd0K2tZh6FMzfAUnbz4ZIfR/EMlnl7Nz8cg83oGnqJ1x6vTJ6l
-         MU4xY75E9BoeO+EyDk88NTD2+c2XQc//xKn17HSN1CTfmuwG5djWkSG7fYRzz8Oh6Gse
-         lKgQ==
-X-Gm-Message-State: AFqh2kr1rRXiHJ2IOnnDr+OJVJQ49R+Ua1gtkx/mK3tdjlK1l092SR0H
-        zxnlZBj9KpjKjFkZRdERCzLHH/Ri8fKqbWa/NupL9FtuEy/CcbUr3aZoJkOVxijtbrYmOgU0Tdg
-        VSEXcJD1aiUPsOJDQgKU4Dbdo
-X-Received: by 2002:a05:600c:a51:b0:3cf:6f4d:c259 with SMTP id c17-20020a05600c0a5100b003cf6f4dc259mr47849225wmq.39.1673353757901;
-        Tue, 10 Jan 2023 04:29:17 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXt74bXfj7jrQJ4WS8z+NMklJ4YVza2YaN6bDMjEL1Hh4N7QrP6Tx6DHyCHQc6eNCWGeQcwsrQ==
-X-Received: by 2002:a05:600c:a51:b0:3cf:6f4d:c259 with SMTP id c17-20020a05600c0a5100b003cf6f4dc259mr47849214wmq.39.1673353757618;
-        Tue, 10 Jan 2023 04:29:17 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:4200:65d9:4d0d:bb61:14c8? (p200300cbc708420065d94d0dbb6114c8.dip0.t-ipconnect.de. [2003:cb:c708:4200:65d9:4d0d:bb61:14c8])
-        by smtp.gmail.com with ESMTPSA id o19-20020a05600c511300b003d9862ec435sm2609591wms.20.2023.01.10.04.29.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 04:29:17 -0800 (PST)
-Message-ID: <a0985987-384a-d44f-c365-b0b2b935d417@redhat.com>
-Date:   Tue, 10 Jan 2023 13:29:16 +0100
+        bh=IkuSAVZKOMsJ1gBdMEqLNegz0l4XsEs9PuRldm+SHM8=;
+        b=UW7zdakQWMt4h3AV0DYgDZGVLiMviRYGDua+xnwYk1zqKRLy+xQgVvmXT/7a6JS27a
+         VVqBKExBm74yOI7K8K67U/cWYeym69IHNX7gSoqWCAJns5spoFP8PDfOnDJz5N9nkwc0
+         obQo90uTfEx63FRKk6imRKMmbionULi1AO9HNPgRH9tTt9BiPxSO4dXz17rHLpAA05n/
+         ymSKIdt1EE1YKfyVe43MU8ip80ys1wLVxqXexM//GF5ANIRZSkZSAEy2EGhy9JG+xvhl
+         8Ju13cvf8pEXrED7bvRIVx2P1ZAC1fyH00/DGJQbpuW+wKyu7KpZEdl+6+czHwqvpRig
+         oQ+w==
+X-Gm-Message-State: AFqh2kp7owHwE2pP0HW9IGPXlWUtk9cYVfEalVtA3ecbuA4XdHqpqZ9+
+        T8gBPwlwyex2+DflZCUzEx5QGoSfYRC+z6QhyP7Q5g==
+X-Google-Smtp-Source: AMrXdXuazqX69BR7RE1uv30pTTanD5lHxZjQvOynOcbPo0qKA4l4TamAC0py24Ol3McuVecCEHZpbSDl/p9n8AwmalI=
+X-Received: by 2002:a25:6982:0:b0:700:e0f1:6335 with SMTP id
+ e124-20020a256982000000b00700e0f16335mr6074124ybc.520.1673353812884; Tue, 10
+ Jan 2023 04:30:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: =?UTF-8?Q?Re=3a_PROBLEM=3a_selftest/vm/cow=2ec_failed_to_compile_?=
- =?UTF-8?B?KOKAmE1BRFZfUEFHRU9VVOKAmSB1bmRlY2xhcmVkKQ==?=
-Content-Language: en-US
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <0f117203-3227-cd16-61c2-2dd3de75ecc7@alu.unizg.hr>
- <0ee389dc-5e47-5b7e-4db5-637eb2b3fbc9@redhat.com>
- <0e692e52-0a4f-3892-ed25-f3fa12892b6f@alu.unizg.hr>
- <bac3f11b-db5f-113f-9cc3-8abf0e8e6ed6@redhat.com>
- <dda726db-6276-f312-be12-cee05228161d@alu.unizg.hr>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <dda726db-6276-f312-be12-cee05228161d@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230102230733.3506624-1-javierm@redhat.com>
+In-Reply-To: <20230102230733.3506624-1-javierm@redhat.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 10 Jan 2023 13:30:02 +0100
+Message-ID: <CACRpkdadwiG=OMMHFUKYHyr1zRpeZzVR9pkmsBEBxqZzN2H53g@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] Add PinePhone Pro display support
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Mader <robert.mader@posteo.de>,
+        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
+        Neal Gompa <ngompa13@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Martijn Braam <martijn@brixit.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Ondrej Jirman <megi@xff.cz>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        =?UTF-8?Q?Kamil_Trzci=C5=84ski?= <ayufan@ayufan.eu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Robinson <pbrobinson@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.01.23 13:25, Mirsad Todorovac wrote:
-> On 1/10/23 11:05, David Hildenbrand wrote:
->> On 09.01.23 22:41, Mirsad Goran Todorovac wrote:
->>> On 1/9/2023 5:42 PM, David Hildenbrand wrote:
->>>
->>> Hi, thank you for your reply.
->>>
->>>>> I hope this is enough information for you to debug the issue.
->>>>>
->>>>> I am standing by for any additional diagnostics needed.
->>>>
->>>> Won't userfaultfd.c fail in a similar way?
->>>>
->>>> Anyhow, khugepaged.c jas
->>>>
->>>> #ifndef MADV_PAGEOUT
->>>> #define MADV_PAGEOUT 21
->>>> #endif
->>>>
->>>> So most probably we should do the same.
->>>
->>> Actually, David, it turned out that userfaultfd.c compiled
->>> out-of-the-box, and side-by-side comparison showed that it also included
->>> "/home/marvin/linux/kernel/linux_torvalds/usr/include/asm-generic/mman-common.h"
->>>
->>> The only remaining difference was including <linux/mman.h>, which fixed
->>> the issue w/o #ifdef ... #endif
->>>
->>> Hope this helps.
->>>
->>> Please find the following diff.
->>>
->>> Regards,
->>> Mirsad
->>>
->>> ------------------------------------------------------------------------------
->>> diff --git a/tools/testing/selftests/vm/cow.c
->>> b/tools/testing/selftests/vm/cow.c
->>> index 26f6ea3079e2..dd8cf12c6776 100644
->>> --- a/tools/testing/selftests/vm/cow.c
->>> +++ b/tools/testing/selftests/vm/cow.c
->>> @@ -16,6 +16,7 @@
->>>     #include <fcntl.h>
->>>     #include <dirent.h>
->>>     #include <assert.h>
->>> +#include <linux/mman.h>
->>>     #include <sys/mman.h>
->>>     #include <sys/ioctl.h>
->>>     #include <sys/wait.h>
->>>
->>
->> I already sent a different fix [1]. I suspect when including
->> linux/mman.h, it would still be problematic with older kernel
->> headers that lack MADV_PAGEOUT (< v5.4).
-> 
-> I see your point.
-> 
->> But yeah, I saw that userfaultfd.c was fixed that way:
->>
->> commit b773827e361952b3f53ac6fa4c4e39ccd632102e
->> Author: Chengming Zhou <zhouchengming@bytedance.com>
->> Date:   Fri Mar 4 20:29:04 2022 -0800
->>
->>       kselftest/vm: fix tests build with old libc
->>       The error message when I build vm tests on debian10 (GLIBC 2.28):
->>           userfaultfd.c: In function `userfaultfd_pagemap_test':
->>           userfaultfd.c:1393:37: error: `MADV_PAGEOUT' undeclared (first use
->>           in this function); did you mean `MADV_RANDOM'?
->>             if (madvise(area_dst, test_pgsize, MADV_PAGEOUT))
->>                                                ^~~~~~~~~~~~
->>                                                MADV_RANDOM
->>       This patch includes these newer definitions from UAPI linux/mman.h, is
->>       useful to fix tests build on systems without these definitions in
->> glibc
->>       sys/mman.h.
->>
->>
->> [1] https://lkml.kernel.org/r/20230109171255.488749-1-david@redhat.com
-> 
-> You're the boss :)
+On Tue, Jan 3, 2023 at 12:07 AM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
 
-Heh, no I'm not :) I'm just raising that this turned out to be 
-problematic unfortunately.
+> This series adds support for the display present in the PinePhone Pro.
+>
+> Patch #1 adds a devicetree binding schema for panels based on the Himax
+> HX8394 controller, such as the HSD060BHW4 720x1440 TFT LCD panel present
+> in the PinePhone Pro. Patch #2 adds the panel driver for this controller
+> and finally patch #3 adds an entry for the driver in MAINTAINERS file.
+>
+> This version doesn't include the DTS changes, since Ondrej mentioned that
+> there are still things to sort out before enabling it. The DTS bits will
+> be proposed as a follow-up patch series.
+>
+> This allows for example the Fedora distro to support the PinePhone Pro with
+> a DTB provided by the firmware.
+>
+> This is a v5 of the patch-set that addresses issues pointed out in v4:
 
-> 
-> However, IMHO, having MADV_PAGEOUT defined in three or four places could
-> make like miserable. OK, it is unlikely to change value, but something
-> tells me that the right way to do it is to guarantee that the macro
-> definition is unique.
-> 
-> I don't know what would be the right thing to do in pre-5.4 kernels
-> w/o MADV_PAGEOUT defined.
-> 
-> Probably then the "(madvise(area_dst, test_pgsize, MADV_PAGEOUT)" gives
-> EINVAL or is undefined?
+I looked over the patches a last time. This driver looks great.
+Acks by Krzysztof and Sam are in place.
+Patches applied to drm-misc-next!
 
-Yes. The expectation is that it fails with ENOSYS or EINVAL if the 
-kernel doesn't support it. The kernel might be different to the 
-installed kernel headers.
-
-In an ideal world, we'd be using the in-tree headers -- they are 
-guaranteed to define what we need. So far, I failed to make it work (I 
-thought it would work as expected before I had to do above mentioned 
-fix). Maybe that can be made working?
-
--- 
-Thanks,
-
-David / dhildenb
-
+Yours,
+Linus Walleij
