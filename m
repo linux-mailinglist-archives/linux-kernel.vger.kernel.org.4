@@ -2,146 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38106641D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D38F6641D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238399AbjAJN3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S238467AbjAJN3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:29:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233351AbjAJN3d (ORCPT
+        with ESMTP id S238281AbjAJN3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:29:33 -0500
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423E910B3;
-        Tue, 10 Jan 2023 05:29:32 -0800 (PST)
-Received: by mail-ot1-f48.google.com with SMTP id r2-20020a9d7cc2000000b006718a7f7fbaso6958890otn.2;
-        Tue, 10 Jan 2023 05:29:32 -0800 (PST)
+        Tue, 10 Jan 2023 08:29:40 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DADDB1C9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:29:39 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id bs20so11748112wrb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:29:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tk4ngejoateTOnuRvuEbZaowxEstl1Mpo6A89AJMiP4=;
+        b=UT/elzAIsCF6Nf/bHS3Igb/5WnLu1BNKrS+zRE6zVnSagHAAKSUlquO5ALKSOfdUzI
+         L8/0pODUMjEgYAd44wZ5XDpEBDNgNE03QWnrzGAQcQ/CAmov3MsiS3KfnnDSPGAxdLFq
+         Oe1vM1mgN5sGsMsj4ONmDFrF0f3WGzNMcnEgzlH1Q3xrfytSzf9iX/lr2Q7IJkUtO7DU
+         ZyeWuFLodK5jio/TKuq4Nu90bXWOoJ7jTtKwV9DVJKz4EwaR3hWBMNViX05K3QNIcPQy
+         IT4emey/0akvvg+iYXNaK826XqDbDMCAryYfLXSaqZ8/ZaBOu7QR0ohaAfZqvo0vMCJV
+         Py9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zKAe0OFUWm2XvE8TtB0lP81U5fBp4FRhR/a1eftM+Ek=;
-        b=VigkJQ0EWzxGefJCeXaPUHMOiF3cw51+Cb+X5iE55xu099UYvTfpA0yDQRII5pYi/r
-         RzMVrb6Il9j4y4QVuLFSz711nPVSfhiN01TVaNcASuBU4bOtUHU46zTcw2t8f5vMlNLI
-         5PavAFoiaGSQtBDYaq0xVmoY6nDV82iqPFloJEgbSY3nAeHz7DsbgKbh1NMEdENHee0k
-         +XUZh+mKl+7g58e7/W6yAmdJ5N7JS5nRYiQtpioWbjh26vUtDRd8mWeq6LvMzHbk6fGp
-         zo3noD+4QlCLRW9ZcuF3jLYmkDWfhOLOqlxtGjMd3d18MVJWfZxUqi/hL+N0MIBx17h4
-         w9fQ==
-X-Gm-Message-State: AFqh2kr7v21c1b1Gm816OwsTj4e5bklaDrxg5X+6qV8xTGv30YkdbFgT
-        8f5FT6zjJ4/R+wmhx1MnLuUH9sQUqA==
-X-Google-Smtp-Source: AMrXdXsD1u2a+0P2EAP8UF4IZ31u4JKrWLup4jFFntlInWFYKtWuEjk3NnGkodmas2ONEijs/l13jg==
-X-Received: by 2002:a05:6830:20c4:b0:66c:4f82:b83c with SMTP id z4-20020a05683020c400b0066c4f82b83cmr38750946otq.7.1673357371404;
-        Tue, 10 Jan 2023 05:29:31 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y18-20020a0568302a1200b0066f7e1188f0sm6053005otu.68.2023.01.10.05.29.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 05:29:31 -0800 (PST)
-Received: (nullmailer pid 1984996 invoked by uid 1000);
-        Tue, 10 Jan 2023 13:29:30 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tk4ngejoateTOnuRvuEbZaowxEstl1Mpo6A89AJMiP4=;
+        b=J3V55aFoXJze5X5B77bvyW+YQLVGRxMADHCf+Eo335J5GBSkg52UOo5BfHujB4RUiP
+         mlTkTh+zX0yLHXaDtRxpyGa5WL2TAWFYRIpmakhrm3WRsEV4bAOAmQbjKp8LNUoaz8/I
+         c+DbntHY1Fj2Sm8a1PY+VxbC4Vx/76E8ivN9xTXhshR6OzPSnH8/HOz4onqKYhTt6POa
+         vawWH9hEFr9ajuxpgqbgKa6gkW0r5Tm1ec56oA0xu9v7tnDbl3bJVL7ROrAxpSIHZkK+
+         Y02HFYmbN5ICvROZydhNeeS743mm8hzHLXH7zHNt/vUcHWbMFiramjXMrT+NZuXy2e3+
+         JXOQ==
+X-Gm-Message-State: AFqh2krJAZxgd2BvbtinJ+wJSGo7YFrzFINcpTosQld70Q8KEbBT36nW
+        7opaezlk4JyJkp4TqNLIW5V8Pw==
+X-Google-Smtp-Source: AMrXdXve7gJlNkmy3N9h3WlImuuYFTrNoWz1rN1hGwiWIFHPVweWebtb5wlP/OLlvUBb5uE/CouA0A==
+X-Received: by 2002:a5d:4304:0:b0:2a1:328f:23aa with SMTP id h4-20020a5d4304000000b002a1328f23aamr14647892wrq.6.1673357377847;
+        Tue, 10 Jan 2023 05:29:37 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l6-20020a5d6686000000b002bb3229a03csm10166325wru.34.2023.01.10.05.29.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 05:29:37 -0800 (PST)
+Message-ID: <9ede1521-1f2f-90ae-73a3-d81a926fe8b3@linaro.org>
+Date:   Tue, 10 Jan 2023 14:29:35 +0100
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Jim Liu <jim.t90615@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, JJLIU0@nuvoton.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, KWLIU@nuvoton.com,
-        openbmc@lists.ozlabs.org, brgl@bgdev.pl,
-        linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org
-In-Reply-To: <20230110083238.19230-4-jim.t90615@gmail.com>
-References: <20230110083238.19230-1-jim.t90615@gmail.com>
- <20230110083238.19230-4-jim.t90615@gmail.com>
-Message-Id: <167335661623.1967925.9927691364268671668.robh@kernel.org>
-Subject: Re: [PATCH v4 3/3] dt-bindings: gpio: add NPCM sgpio driver bindings
-Date:   Tue, 10 Jan 2023 07:29:30 -0600
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V1 0/1] soc: qcom: dcc: Add QAD, Cti-trigger and
+ Bootconfig support for Data Capture and Compare(DCC)
+Content-Language: en-US
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Alex Elder <elder@ieee.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, vkoul@kernel.org
+References: <cover.1673270769.git.quic_schowdhu@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <cover.1673270769.git.quic_schowdhu@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Tue, 10 Jan 2023 16:32:38 +0800, Jim Liu wrote:
-> Add dt-bindings document for the Nuvoton NPCM7xx and NPCM8xx sgpio driver
-> 
-> Signed-off-by: Jim Liu <jim.t90615@gmail.com>
-> ---
-> Changes for v4:
->    - modify in/out property
->    - modify bus-frequency property
-> Changes for v3:
->    - modify description
->    - modify in/out property name
-> Changes for v2:
->    - modify description
-> ---
->  .../bindings/gpio/nuvoton,sgpio.yaml          | 92 +++++++++++++++++++
->  1 file changed, 92 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml
+On 09/01/2023 15:02, Souradeep Chowdhury wrote:
+> This patch adds the Bootconfig, QAD and CTI-Trigger support for DCC.
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-yamllint warnings/errors:
+(...)
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,input-ngpios: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,input-ngpios: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,input-ngpios: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,output-ngpios: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,output-ngpios: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,output-ngpios: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+> Souradeep Chowdhury (1):
+>   soc: qcom: dcc: Add QAD, Ctitrigger and Bootconfig support for DCC
+> 
+>  Documentation/ABI/testing/debugfs-driver-dcc |  24 +++
+>  drivers/soc/qcom/dcc.c                       | 284 ++++++++++++++++++++++++++-
 
-doc reference errors (make refcheckdocs):
+No need to send the patch to unrelated people. Be sure to rebase it on
+latest kernel and then use scripts/get_maintainers.pl to get folks and
+lists necessary to CC.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230110083238.19230-4-jim.t90615@gmail.com
+Unless your code adds here DT properties, but then you miss bindings, so
+would have to be fixed.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Best regards,
+Krzysztof
 
