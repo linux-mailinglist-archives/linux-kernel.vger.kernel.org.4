@@ -2,75 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FDD663F54
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4046D663F5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235189AbjAJLgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 06:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S235154AbjAJLko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 06:40:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237998AbjAJLgh (ORCPT
+        with ESMTP id S229765AbjAJLkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 06:36:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7C051322;
-        Tue, 10 Jan 2023 03:36:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F4CD6160D;
-        Tue, 10 Jan 2023 11:36:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B1F0AC433EF;
-        Tue, 10 Jan 2023 11:36:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673350595;
-        bh=zRWVFsaYAu+MFZGYLMxUYwKWyxja897JN2VGkHVIaZw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=uXGpUEZpZvQxpdaFvyFKfDmUEtLMUhrRYNGr3frGmVU3V+Bn5hCECEfQsUFi2XMX7
-         pEKeOUG83Ne8vB7AsqFReJ5eHTB8As0KpOxG+fXpC+hZL8FMmnDJ0GeJvghMGRonQS
-         YDERkKYMse8+Ky1PZbyGaClnER43ZQYpgQmC42Vy0R5f2dDINT/lfdlQHT5BV/G87H
-         EdZOBQujmZzsemhl9TKW41+orX21pxD2RUlkqU6ULw5PBYhLFfAELd6baHoH/MXba8
-         EC8lzwAqq/xBkYQ7NR7iRR4dFocaCHt97w4ST9NAvRm8Je6qjQ7+okA5bjCzQdp+M6
-         iiIjv+svAgl1g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F5F0E21EE8;
-        Tue, 10 Jan 2023 11:36:35 +0000 (UTC)
-Subject: Re: [GIT PULL] ksmbd server fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5msyEy20e=FBx6wPWWc3kXzNR4b+zHshSqidRdFKVf_7Jg@mail.gmail.com>
-References: <CAH2r5msyEy20e=FBx6wPWWc3kXzNR4b+zHshSqidRdFKVf_7Jg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5msyEy20e=FBx6wPWWc3kXzNR4b+zHshSqidRdFKVf_7Jg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/6.2-rc3-ksmbd-server-fixes
-X-PR-Tracked-Commit-Id: 83dcedd5540d4ac61376ddff5362f7d9f866a6ec
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 40c18f363a0806d4f566e8a9a9bd2d7766a72cf5
-Message-Id: <167335059564.31233.54465897927371082.pr-tracker-bot@kernel.org>
-Date:   Tue, 10 Jan 2023 11:36:35 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 06:40:35 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91D615FC6;
+        Tue, 10 Jan 2023 03:40:34 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id j17so17962964lfr.3;
+        Tue, 10 Jan 2023 03:40:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k8qIHMNO2s1UBLosBalnkXRDkilmbPNHsObMEKK0n7I=;
+        b=bg0lxmUdGEI7jbzLJkVcT7QTNyzIGfCKVN9kCtEWnYtmWtxXDIJr+SGpqR+Y3oXyOh
+         o52zHSRr3wl1Mm2VzjX2viW390JajcGoIMyebxQjpG79RGS9ir2j2W898mtqorEQtuuo
+         9CL0C07wCX5qC6yMZpO+qA/Wgmj6XDDw0aaEJHZA9hK3x6NCGPEH11TMMp+pv9+kSYD8
+         /IqIW7dpa+lavlm/CJ88qV1Ggzrrvx9lcHVpC/6/TjISZVwVWVAhKyne5bRs4rIlQ0bm
+         O0P3LPKFXqNy/SrGeEyurCSsgQbvDwA6pMYr4EBvhDUPWmabBgkLL665O7U6hImH9KU2
+         d93A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k8qIHMNO2s1UBLosBalnkXRDkilmbPNHsObMEKK0n7I=;
+        b=QLJ3eD7+SEzGj2gExzXwd5xKw8+t4EdIwFt4b75UCUfn1LK5ZXCflUgYKBeC1RRbiQ
+         m8FGFBbY6MuPXvJXOYrmmK+z5XkW+sxceUUnTtJettr2bwqAfBxO9YIQ4YSlvf/Y0BVd
+         Q2JRe5J4/G6GbLbB24yuPVfzzXTBsQO37ddVy+erYx+iI5eP7C7svkXk+TWBN/n9aV3V
+         9F4wj4an48hVFFRGERkRVTyel4WUuLeKgQoHlJMGRfPmoa4PSpLENwrx2q9nmG8EwXzC
+         tTZk97TRFOiPTiSCPcvF8wzvuyB7nzbfm0E8ro8Ybs6Ob0qRleFj6ddujbMTAnyy0q25
+         LW+Q==
+X-Gm-Message-State: AFqh2kq6jEcy3aDDn3P+hjZDpE0fN6PLBzXkZzaWvOUwCPv84ECzOam7
+        HrZc900LmZeRRwheGNQtzXU=
+X-Google-Smtp-Source: AMrXdXtuH+xA3IMA2Oj1CQEJ3XtMeuSO3tj6Mv1uTxbMVCwbTvZ0a/Xo0G7JeTnVjGBAj4jFCHRcQw==
+X-Received: by 2002:ac2:5bc5:0:b0:4ad:5fbb:a594 with SMTP id u5-20020ac25bc5000000b004ad5fbba594mr19772858lfn.58.1673350832790;
+        Tue, 10 Jan 2023 03:40:32 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id z3-20020a0565120c0300b004cb03999979sm2139849lfu.40.2023.01.10.03.40.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 03:40:32 -0800 (PST)
+Date:   Tue, 10 Jan 2023 14:40:30 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
+        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 06/15] spi: dw: Introduce dual/quad/octal spi
+Message-ID: <20230110114030.hz3hkou5owxaeopc@mobilestation>
+References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
+ <20221212180732.79167-7-sudip.mukherjee@sifive.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212180732.79167-7-sudip.mukherjee@sifive.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 9 Jan 2023 21:13:09 -0600:
+On Mon, Dec 12, 2022 at 06:07:23PM +0000, Sudip Mukherjee wrote:
+> If the spi transfer is using dual/quad/octal spi mode, then we need to
+> update the SPI_CTRLR0 register. The SPI_CTRLR0 register will be updated
+> in dw_spi_update_config() via the values in dw_spi_cfg.
+> 
+> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+> ---
+> 
+> Note: DW_SPI_SPI_CTRLR0_INST_L_INST_L16 will not work yet as
+> spi_mem_default_supports_op() checks for op->cmd.nbytes != 1.
+> 
+>  drivers/spi/spi-dw-core.c | 46 +++++++++++++++++++++++++++++++++++++++
+>  drivers/spi/spi-dw.h      |  9 ++++++++
+>  2 files changed, 55 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index 89438ae2df17d..06169aa3f37bf 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -836,10 +836,56 @@ static int dw_spi_exec_enh_mem_op(struct spi_mem *mem, const struct spi_mem_op *
+>  {
+>  	struct spi_controller *ctlr = mem->spi->controller;
+>  	struct dw_spi *dws = spi_controller_get_devdata(ctlr);
+> +	struct dw_spi_cfg cfg;
+> +
 
-> git://git.samba.org/ksmbd.git tags/6.2-rc3-ksmbd-server-fixes
+> +	switch (op->data.buswidth) {
+> +	case 2:
+> +		cfg.spi_frf = DW_SPI_CTRLR0_SPI_FRF_DUAL_SPI;
+> +		break;
+> +	case 4:
+> +		cfg.spi_frf = DW_SPI_CTRLR0_SPI_FRF_QUAD_SPI;
+> +		break;
+> +	case 8:
+> +		cfg.spi_frf = DW_SPI_CTRLR0_SPI_FRF_OCT_SPI;
+> +		break;
+> +	default:
+> +		return dw_spi_exec_mem_op(mem, op);
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/40c18f363a0806d4f566e8a9a9bd2d7766a72cf5
+case 1:
+	return dw_spi_exec_mem_op(mem, op);
+case 2:
+	cfg.enh_frf = DW_SPI_CTRLR0_SPI_FRF_DUAL_SPI;
+	break;
+...
+default:
+	return -EINVAL;
 
-Thank you!
+> +	}
+>  
+>  	/* Collect cmd and addr into a single buffer */
+>  	dw_spi_init_enh_mem_buf(dws, op);
+>  
+> +	cfg.dfs = 8;
+> +	cfg.freq = clamp(mem->spi->max_speed_hz, 0U, dws->max_mem_freq);
+> +	cfg.ndf = op->data.nbytes;
+> +	if (op->data.dir == SPI_MEM_DATA_IN)
+> +		cfg.tmode = DW_SPI_CTRLR0_TMOD_RO;
+> +	else
+> +		cfg.tmode = DW_SPI_CTRLR0_TMOD_TO;
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Newline, please.
+
+> +	if (op->data.buswidth == op->addr.buswidth &&
+> +	    op->data.buswidth == op->cmd.buswidth)
+> +		cfg.trans_t = DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT2;
+> +	else if (op->data.buswidth == op->addr.buswidth)
+> +		cfg.trans_t = DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT1;
+> +	else
+> +		cfg.trans_t = DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT0;
+> +
+
+> +	cfg.addr_l = clamp(op->addr.nbytes * 2, 0, 0xf);
+
+First the address length should be checked in the
+spi_controller_mem_ops.supports_op method. Thus the clamping procedure
+would be redundant. Second instead of using the multiplication
+operator I would suggest to have the bitwise left-shift op utilized
+here, (cfg.addr_l = op->addr.nbytes << 2). This shall look a bit more
+coherent.
+
+
+> +	if (op->cmd.nbytes > 1)
+> +		cfg.inst_l = DW_SPI_SPI_CTRLR0_INST_L_INST_L16;
+
+No. Firstly INST_L16 means 2-bytes length. Using greater-than op here
+is incorrect. Secondly the command part length should be
+checked in the spi_controller_mem_ops.supports_op callback.
+
+> +	else if (op->cmd.nbytes == 1)
+> +		cfg.inst_l = DW_SPI_SPI_CTRLR0_INST_L_INST_L8;
+> +	else
+> +		cfg.inst_l = DW_SPI_SPI_CTRLR0_INST_L_INST_L0;
+> +
+
+> +	cfg.wait_c = (op->dummy.nbytes * (BITS_PER_BYTE / op->dummy.buswidth));
+
+Hm, what if buswidth is zero?
+
+> +
+> +	dw_spi_enable_chip(dws, 0);
+> +
+> +	dw_spi_update_config(dws, mem->spi, &cfg);
+> +
+> +	dw_spi_enable_chip(dws, 1);
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> index 327d037bdb10e..494b830ad1026 100644
+> --- a/drivers/spi/spi-dw.h
+> +++ b/drivers/spi/spi-dw.h
+> @@ -101,6 +101,9 @@
+>  #define DW_HSSI_CTRLR0_SPI_FRF_MASK		GENMASK(23, 22)
+>  #define DW_PSSI_CTRLR0_SPI_FRF_MASK		GENMASK(22, 21)
+
+>  #define DW_SPI_CTRLR0_SPI_FRF_STD_SPI		0x0
+> +#define DW_SPI_CTRLR0_SPI_FRF_DUAL_SPI		0x1
+> +#define DW_SPI_CTRLR0_SPI_FRF_QUAD_SPI		0x2
+> +#define DW_SPI_CTRLR0_SPI_FRF_OCT_SPI		0x3
+
+Please replace SPI_FRF with ENH_FRF and drop _SPI suffix from the
+macros.
+
+>  
+>  /* Bit fields in CTRLR1 */
+>  #define DW_SPI_NDF_MASK				GENMASK(15, 0)
+> @@ -132,7 +135,13 @@
+>  #define DW_SPI_SPI_CTRLR0_CLK_STRETCH_EN	BIT(30)
+>  #define DW_SPI_SPI_CTRLR0_WAIT_CYCLE_MASK	GENMASK(15, 11)
+>  #define DW_SPI_SPI_CTRLR0_INST_L_MASK		GENMASK(9, 8)
+
+> +#define DW_SPI_SPI_CTRLR0_INST_L_INST_L0	0x0
+> +#define DW_SPI_SPI_CTRLR0_INST_L_INST_L8	0x2
+> +#define DW_SPI_SPI_CTRLR0_INST_L_INST_L16	0x3
+>  #define DW_SPI_SPI_CTRLR0_ADDR_L_MASK		GENMASK(5, 2)
+> +#define DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT0	0x0
+> +#define DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT1	0x1
+> +#define DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT2	0x2
+
+Please replace SPI_CTRLR0 with ENH_CTRLR0.
+
+-Serge(y)
+
+>  
+>  /* Mem/DMA operations helpers */
+>  #define DW_SPI_WAIT_RETRIES			5
+> -- 
+> 2.30.2
+> 
