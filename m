@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF8A663CB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 126BB663CEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238053AbjAJJXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S232005AbjAJJcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237813AbjAJJWv (ORCPT
+        with ESMTP id S238179AbjAJJcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:22:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AF2CEB
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:22:48 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E34A56602D72;
-        Tue, 10 Jan 2023 09:22:46 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673342567;
-        bh=I2gJPlcF+jyW1J551Fuqu3z1Wg3HeLzZXwOmprSzWkg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Srm7lmvX2lAUDnh8Y6LXq9YXq72EXOwU5zwlPc90QrJuH51Pko1MOj2SWwvFd/wwJ
-         KPygbI+Pu4+s27nftvJetY7YDydh8fmzzizysqDvnB9TFEtOSJn0zOMclRbaTB9sfV
-         d5Q4/YdrOr1JWMY+ZQhbdIJGCc4RRiqahOGeMTCxelyYPAZB1skcJoE9CdhBCbJ6Vl
-         11MeGdnX4vD48PVqs3mbZxE658TP5exOrYFVajotf9tfLX7zdT/SaBuRQR+tpjjDvg
-         jB0jXC+O8s9UtnsrqVs635Sam1mlO1W0Vyf4csB/23bQVClPkSp6JgR+pa1LlInjXF
-         sJWTIh0RRVh0A==
-Message-ID: <21efdb3e-3c4d-0bc9-bbde-34ec3e04bfad@collabora.com>
-Date:   Tue, 10 Jan 2023 10:22:44 +0100
+        Tue, 10 Jan 2023 04:32:02 -0500
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C53F1741D;
+        Tue, 10 Jan 2023 01:32:01 -0800 (PST)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id B9B3B2003FB8;
+        Tue, 10 Jan 2023 18:23:34 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.17.1.9/8.17.1.9/Debian-1) with ESMTPS id 30A9NXf3104299
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 18:23:34 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.17.1.9/8.17.1.9/Debian-1) with ESMTPS id 30A9NXKF371088
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 18:23:33 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.17.1.9/8.17.1.9/Submit) id 30A9NXwt371087;
+        Tue, 10 Jan 2023 18:23:33 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [RFC PATCH 3/3] nls: Replace default nls table by correct
+ iso8859-1 table
+In-Reply-To: <20221226144301.16382-4-pali@kernel.org> ("Pali
+ =?iso-8859-1?Q?Roh=E1r=22's?= message
+        of "Mon, 26 Dec 2022 15:43:01 +0100")
+References: <20221226144301.16382-1-pali@kernel.org>
+        <20221226144301.16382-4-pali@kernel.org>
+Date:   Tue, 10 Jan 2023 18:23:33 +0900
+Message-ID: <87v8leu4iy.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 3/3] drm/panel: boe-tv101wum-nl6: Fine tune the panel
- power sequence
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        matthias.bgg@gmail.com, jitao.shi@mediatek.com,
-        thierry.reding@gmail.com, sam@ravnborg.org
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <1673330093-6771-1-git-send-email-xinlei.lee@mediatek.com>
- <1673330093-6771-4-git-send-email-xinlei.lee@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1673330093-6771-4-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/01/23 06:54, xinlei.lee@mediatek.com ha scritto:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> For "boe,tv105wum-nw0" this special panel, it is stipulated in the
-> panel spec that MIPI needs to keep the LP11 state before the
-> lcm_reset pin is pulled high.
-> 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
->   drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-> index f0093035f1ff..67df61de64ae 100644
-> --- a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-> +++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-> @@ -36,6 +36,7 @@ struct panel_desc {
->   	const struct panel_init_cmd *init_cmds;
->   	unsigned int lanes;
->   	bool discharge_on_disable;
-> +	bool lp11_before_reset;
->   };
->   
->   struct boe_panel {
-> @@ -1261,6 +1262,10 @@ static int boe_panel_prepare(struct drm_panel *panel)
->   
->   	usleep_range(10000, 11000);
->   
-> +	if (boe->desc->lp11_before_reset) {
-> +		mipi_dsi_dcs_nop(boe->dsi);
+Pali Rohár <pali@kernel.org> writes:
 
-NOP will never reach the driveric if it is in reset, which should apparently be
-the state of it at that point in code.
+[...]
 
-I guess that you wanted to do that after LCM reset and before sending init cmds.
+> -static struct nls_table default_table = {
+> -	.charset	= "default",
+> +static struct nls_table iso8859_1_table = {
+> +	.charset	= "iso8859-1",
+>  	.uni2char	= uni2char,
+>  	.char2uni	= char2uni,
+>  	.charset2lower	= charset2lower,
+>  	.charset2upper	= charset2upper,
+>  };
 
-Regards,
-Angelo
+iocharset=default was gone with this (user visible) change? (nobody
+notice it though)
 
+> -/* Returns a simple default translation table */
+> +/* Returns a default translation table */
+>  struct nls_table *load_nls_default(void)
+>  {
+>  	struct nls_table *default_nls;
+> @@ -537,9 +419,22 @@ struct nls_table *load_nls_default(void)
+>  	if (default_nls != NULL)
+>  		return default_nls;
+>  	else
+> -		return &default_table;
+> +		return &iso8859_1_table;
+> +}
+> +
+> +static int __init init_nls(void)
+> +{
+> +	return register_nls(&iso8859_1_table);
+>  }
+>  
+> +static void __exit exit_nls(void)
+> +{
+> +	unregister_nls(&iso8859_1_table);
+> +}
+> +
+> +module_init(init_nls)
+> +module_exit(exit_nls)
+
+[...]
+
+Do we need to merge nls_iso8859-1.c to nls_base.c?
+
+	obj-$(CONFIG_NLS)		+= nls_iso8859-1.o nls_base.o
+
+Something like this (untested), maybe cleaner.
+
+Thanks.
+-- 
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
