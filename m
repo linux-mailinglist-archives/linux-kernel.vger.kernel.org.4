@@ -2,117 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE996664920
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8FF664925
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239159AbjAJSSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 13:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S239165AbjAJSSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239186AbjAJSR1 (ORCPT
+        with ESMTP id S239185AbjAJSR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 Jan 2023 13:17:27 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ABEE24
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:15:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1673374545; bh=NHddBNPO1QQ18FfEaBnCUlI5s+jWgOFNwyia4D6sg7w=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=fhuaQCNU4aqkNy8IvltfXYHiKjXNKab7xJ4GdhjO5+iK14gR0KqP8Lb15yJLmdn+4
-         ZJPUg6ubjpIcioPbFwtvTeeVEKQI/+l+vSc6NPF9fWrQI9NG1KG6oFMyGJn3UQ0wPY
-         Xwf9rHBTzF7IVXITo1NYk6FebqOz7Y1cy/ekDxpI=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue, 10 Jan 2023 19:15:45 +0100 (CET)
-X-EA-Auth: olbET+3pqyTe5pOhLU+kvrYYyDCkdw4Wa79wEbKz/tcHFusbfa3ow6jp8G+CJQgiZHyJbUyq314xdB46+SS0S6uUb8XWeoFS
-Date:   Tue, 10 Jan 2023 23:45:40 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: [PATCH v2 2/2] drm/i915/fbc: Avoid full proxy f_ops for FBC debug
- attributes
-Message-ID: <a4200ae1de7324fcddac201009a43571d0a72104.1673343994.git.drv@mailo.com>
-References: <cover.1673343994.git.drv@mailo.com>
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59D6DEF;
+        Tue, 10 Jan 2023 10:15:54 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id f305e4161af3989d; Tue, 10 Jan 2023 19:15:52 +0100
+Received: from kreacher.localnet (unknown [213.134.183.108])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 113FD262495C;
+        Tue, 10 Jan 2023 19:15:51 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Dan J Williams <dan.j.williams@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        David E Box <david.e.box@intel.com>,
+        Yunying Sun <yunying.sun@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Florent DELAHAYE <linuxkernelml@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Benoit =?ISO-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 2/2] x86/pci: Treat EfiMemoryMappedIO as reservation of ECAM space
+Date:   Tue, 10 Jan 2023 19:15:50 +0100
+Message-ID: <1860250.tdWV9SEqCh@kreacher>
+In-Reply-To: <20230110180243.1590045-3-helgaas@kernel.org>
+References: <20230110180243.1590045-1-helgaas@kernel.org> <20230110180243.1590045-3-helgaas@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1673343994.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.183.108
+X-CLIENT-HOSTNAME: 213.134.183.108
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrledvgdeglecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeefudduuedtuefgleffudeigeeitdeufeelvdejgefftdethffhhfethfeljefgteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeefrddutdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekfedruddtkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepvddupdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnrdhjrdifihhllhhirghmshesihhnthgvlhdrtghomhdprhgtphhtthhopehkrghnrdhlihgrnhhgsehlihhnuhigrdhi
+ nhhtvghlrdgtohhmpdhrtghpthhtohepthhonhihrdhluhgtkhesihhnthgvlhdrtghomhdprhgtphhtthhopegurghvihgurdgvrdgsohigsehinhhtvghlrdgtohhmpdhrtghpthhtohephihunhihihhnghdrshhunhesihhnthgvlhdrtghomhdprhgtphhtthhopegurghvvgdrjhhirghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepghhiohhvrghnnhhirdgtrggsihguughusehinhhtvghlrdgtohhmpdhrtghpthhtohephhgvrhgsvghrthesghhonhguohhrrdgrphgrnhgrrdhorhhgrdgruhdprhgtphhtthhopehhuggvghhovgguvgesrhgvughhrghtrdgtohhmpdhrtghpthhtoheplhhinhhugihkvghrnhgvlhhmlhesuhhnuggvrggurdhfrhdprhgtphhtthhopehkjhhhrghmsghrihgtkhesghhmrghilhdrtghomhdprhgtphhtthhopedvlhhprhgsvgejkeesughutghkrdgtohhmpdhrtghpthhtohepnhhitghhohhlrghsrdhjohhhnhhsohhnqdhophgvnhhsohhurhgtvgesohhuthhlohhokhdrtghomhdrrghupdhrtghpthhtohepsggvnhhoihhtghestghovghushdrtggrpdhrtghpthhtohepfihsvgesthhugigvughotghomhhpuhhtvghrshdrtghomhdprhgtphhtthhopehmuhhmsghlihhnghgurhhunhhkrghrugesphhrohhtohhnmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqk
+ hgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=21 Fuz1=21 Fuz2=21
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using DEFINE_SIMPLE_ATTRIBUTE macro with the debugfs_create_file()
-function adds the overhead of introducing a proxy file operation
-functions to wrap the original read/write inside file removal protection
-functions. This adds significant overhead in terms of introducing and
-managing the proxy factory file operations structure and function
-wrapping at runtime.
-As a replacement, a combination of DEFINE_DEBUGFS_ATTRIBUTE macro paired
-with debugfs_create_file_unsafe() is suggested to be used instead.  The
-DEFINE_DEBUGFS_ATTRIBUTE utilises debugfs_file_get() and
-debugfs_file_put() wrappers to protect the original read and write
-function calls for the debug attributes. There is no need for any
-runtime proxy file operations to be managed by the debugfs core.
-Following coccicheck make command helped identify this change:
+On Tuesday, January 10, 2023 7:02:43 PM CET Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Normally we reject ECAM space unless it is reported as reserved in the E820
+> table or via a PNP0C02 _CRS method (PCI Firmware, r3.3, sec 4.1.2).  This
+> means PCI extended config space (offsets 0x100-0xfff) may not be accessible.
+> 
+> Some firmware doesn't report ECAM space via PNP0C02 _CRS methods, but does
+> mention it as an EfiMemoryMappedIO region via EFI GetMemoryMap(), which is
+> normally converted to an E820 entry by a bootloader or EFI stub.
+> 
+> 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map"), removes
+> E820 entries that correspond to EfiMemoryMappedIO regions because some
+> other firmware uses EfiMemoryMappedIO for PCI host bridge windows, and the
+> E820 entries prevent Linux from allocating BAR space for hot-added devices.
+> 
+> Allow use of ECAM for extended config space when the region is covered by
+> an EfiMemoryMappedIO region, even if it's not included in E820 or PNP0C02
+> _CRS.
+> 
+> Reported by Kan Liang, Tony Luck, and Giovanni Cabiddu.
+> 
+> Fixes: 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map")
+> Link: https://lore.kernel.org/r/ac2693d8-8ba3-72e0-5b66-b3ae008d539d@linux.intel.com
+> Reported-by: Kan Liang <kan.liang@linux.intel.com>
+> Reported-by: Tony Luck <tony.luck@intel.com>
+> Reported-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
-make coccicheck M=drivers/gpu/drm/i915/ MODE=patch COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
+Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Changes in v2:
-   - Include coccicheck make command in the patch log message for clarity.
-     Suggested by Rodrigo Vivi <rodrigo.vivi@intel.com>
+> ---
+>  arch/x86/pci/mmconfig-shared.c | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/arch/x86/pci/mmconfig-shared.c b/arch/x86/pci/mmconfig-shared.c
+> index cd16bef5f2d9..da4b6e8e9df0 100644
+> --- a/arch/x86/pci/mmconfig-shared.c
+> +++ b/arch/x86/pci/mmconfig-shared.c
+> @@ -12,6 +12,7 @@
+>   */
+>  
+>  #include <linux/acpi.h>
+> +#include <linux/efi.h>
+>  #include <linux/pci.h>
+>  #include <linux/init.h>
+>  #include <linux/bitmap.h>
+> @@ -442,6 +443,32 @@ static bool is_acpi_reserved(u64 start, u64 end, enum e820_type not_used)
+>  	return mcfg_res.flags;
+>  }
+>  
+> +static bool is_efi_mmio(u64 start, u64 end, enum e820_type not_used)
+> +{
+> +#ifdef CONFIG_EFI
+> +	efi_memory_desc_t *md;
+> +	u64 size, mmio_start, mmio_end;
+> +
+> +	for_each_efi_memory_desc(md) {
+> +		if (md->type == EFI_MEMORY_MAPPED_IO) {
+> +			size = md->num_pages << EFI_PAGE_SHIFT;
+> +			mmio_start = md->phys_addr;
+> +			mmio_end = mmio_start + size;
+> +
+> +			/*
+> +			 * N.B. Caller supplies (start, start + size),
+> +			 * so to match, mmio_end is the first address
+> +			 * *past* the EFI_MEMORY_MAPPED_IO area.
+> +			 */
+> +			if (mmio_start <= start && end <= mmio_end)
+> +				return true;
+> +		}
+> +	}
+> +#endif
+> +
+> +	return false;
+> +}
+> +
+>  typedef bool (*check_reserved_t)(u64 start, u64 end, enum e820_type type);
+>  
+>  static bool __ref is_mmconf_reserved(check_reserved_t is_reserved,
+> @@ -513,6 +540,10 @@ pci_mmcfg_check_reserved(struct device *dev, struct pci_mmcfg_region *cfg, int e
+>  			       "MMCONFIG at %pR not reserved in "
+>  			       "ACPI motherboard resources\n",
+>  			       &cfg->res);
+> +
+> +		if (is_mmconf_reserved(is_efi_mmio, cfg, dev,
+> +				       "EfiMemoryMappedIO"))
+> +			return true;
+>  	}
+>  
+>  	/*
+> 
 
-
- drivers/gpu/drm/i915/display/intel_fbc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/display/intel_fbc.c b/drivers/gpu/drm/i915/display/intel_fbc.c
-index 5e69d3c11d21..c508dcf415b4 100644
---- a/drivers/gpu/drm/i915/display/intel_fbc.c
-+++ b/drivers/gpu/drm/i915/display/intel_fbc.c
-@@ -1807,10 +1807,10 @@ static int intel_fbc_debugfs_false_color_set(void *data, u64 val)
- 	return 0;
- }
- 
--DEFINE_SIMPLE_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
--			intel_fbc_debugfs_false_color_get,
--			intel_fbc_debugfs_false_color_set,
--			"%llu\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
-+			 intel_fbc_debugfs_false_color_get,
-+			 intel_fbc_debugfs_false_color_set,
-+			 "%llu\n");
- 
- static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
- 				  struct dentry *parent)
-@@ -1819,8 +1819,8 @@ static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
- 			    fbc, &intel_fbc_debugfs_status_fops);
- 
- 	if (fbc->funcs->set_false_color)
--		debugfs_create_file("i915_fbc_false_color", 0644, parent,
--				    fbc, &intel_fbc_debugfs_false_color_fops);
-+		debugfs_create_file_unsafe("i915_fbc_false_color", 0644, parent,
-+					   fbc, &intel_fbc_debugfs_false_color_fops);
- }
- 
- void intel_fbc_crtc_debugfs_add(struct intel_crtc *crtc)
--- 
-2.34.1
 
 
 
