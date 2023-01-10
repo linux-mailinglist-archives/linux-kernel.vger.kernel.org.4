@@ -2,84 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7EE6642C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0267664121
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbjAJOHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:07:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
+        id S238349AbjAJNDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233613AbjAJOHK (ORCPT
+        with ESMTP id S238648AbjAJNDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:07:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8EC11C24
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:06:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673359561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L9zi9RalXX+v8RXF5p/DtEGhu0ZZ+UvkcK+8i6aWfa4=;
-        b=fumOUau6JT311WxypR11sZh3mN3HK8S88p14u+TYsc3gxtUfkGBx0f7z74jcLljzCt2UTo
-        uU57YiqP+uo0VfTwZiq/C6a/9LAOz3VC0v64c0oN188X/3+EQIhCJ7+qZKSLlCLDfRRKxO
-        zf8v9d+e2f5zuph4hzNojevgHbRE3Y4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-6KuOp-ugNeuH5PpnU3dh4g-1; Tue, 10 Jan 2023 09:05:56 -0500
-X-MC-Unique: 6KuOp-ugNeuH5PpnU3dh4g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 10 Jan 2023 08:03:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0648E517FD;
+        Tue, 10 Jan 2023 05:03:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 31C121C0040E;
-        Tue, 10 Jan 2023 14:05:56 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B931E492C14;
-        Tue, 10 Jan 2023 14:05:55 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 44EDF4052FE9B; Tue, 10 Jan 2023 08:50:28 -0300 (-03)
-Date:   Tue, 10 Jan 2023 08:50:28 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     atomlin@atomlin.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v13 3/6] mm/vmstat: manage per-CPU stats from CPU context
- when NOHZ full
-Message-ID: <Y71RBDZqV1Ad+GVr@tpad>
-References: <20230105125218.031928326@redhat.com>
- <20230106001244.4463-1-hdanton@sina.com>
- <20230106150154.4560-1-hdanton@sina.com>
- <20230107001529.4617-1-hdanton@sina.com>
- <20230110024356.336-1-hdanton@sina.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 964E4616DE;
+        Tue, 10 Jan 2023 13:03:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF22C433EF;
+        Tue, 10 Jan 2023 13:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673355812;
+        bh=tMAJplNMu5w1rrrs8QfI2RyE5frRVobjXl2ItdE9iRE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FB3evCvKqzN4h1XROqvItFBBPt9ZEZinl3EhlU3lwXvLVvz4lhBLOIGiSLWSIFzPQ
+         jwanItiorJhY84gT+v8DFLFJJEwi9JcP1VhVPEqIEpzHpfl/zuXsVBjSvfOBkqPS2k
+         Z31ReAMDPMpBK6t4k2HwA9W3WffW3gEGzRNxtTxNbjBaexfW+sMVGhW08R613aLOHs
+         nRaSTYlVVrqEqcnl3hriHSy6myQkYv+t2xpOV0kV+FO2UJSQ490sOJdjvTe5beJpBQ
+         DUr+b1Yt0j8yq1o3xDg47uwMZbgOD8CshEOfxdrZH6+o47ZgWF04MIzcai5+2ILRB2
+         jlHDN85X6H1LA==
+Date:   Tue, 10 Jan 2023 13:03:25 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Wenjie Li <wenjieli@qti.qualcomm.com>,
+        David Wang =?utf-8?B?546L5qCH?= <wangbiao3@xiaomi.com>,
+        Quentin Perret <qperret@google.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] sched: Fix use-after-free bug in
+ dup_user_cpus_ptr()
+Message-ID: <20230110130324.GA9180@willie-the-truck>
+References: <20221231041120.440785-1-longman@redhat.com>
+ <20221231041120.440785-2-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230110024356.336-1-hdanton@sina.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221231041120.440785-2-longman@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 10:43:56AM +0800, Hillf Danton wrote:
-> On 9 Jan 2023 11:12:49 -0300 Marcelo Tosatti <mtosatti@redhat.com>
-> > 
-> > Yes, but if you do not return to userspace, then the per-CPU vm
-> > statistics can be dirty indefinitely.
+On Fri, Dec 30, 2022 at 11:11:19PM -0500, Waiman Long wrote:
+> Since commit 07ec77a1d4e8 ("sched: Allow task CPU affinity to be
+> restricted on asymmetric systems"), the setting and clearing of
+> user_cpus_ptr are done under pi_lock for arm64 architecture. However,
+> dup_user_cpus_ptr() accesses user_cpus_ptr without any lock
+> protection. Since sched_setaffinity() can be invoked from another
+> process, the process being modified may be undergoing fork() at
+> the same time.  When racing with the clearing of user_cpus_ptr in
+> __set_cpus_allowed_ptr_locked(), it can lead to user-after-free and
+> possibly double-free in arm64 kernel.
 > 
-> Could you specify the reasons for failing to return to userspace,
-> given it is undesired intereference for the shepherd to queue work
-> on the isolated CPUs.
+> Commit 8f9ea86fdf99 ("sched: Always preserve the user requested
+> cpumask") fixes this problem as user_cpus_ptr, once set, will never
+> be cleared in a task's lifetime. However, this bug was re-introduced
+> in commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
+> do_set_cpus_allowed()") which allows the clearing of user_cpus_ptr in
+> do_set_cpus_allowed(). This time, it will affect all arches.
+> 
+> Fix this bug by always clearing the user_cpus_ptr of the newly
+> cloned/forked task before the copying process starts and check the
+> user_cpus_ptr state of the source task under pi_lock.
+> 
+> Note to stable, this patch won't be applicable to stable releases.
+> Just copy the new dup_user_cpus_ptr() function over.
+> 
+> Fixes: 07ec77a1d4e8 ("sched: Allow task CPU affinity to be restricted on asymmetric systems")
+> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
+> CC: stable@vger.kernel.org
+> Reported-by: David Wang 王标 <wangbiao3@xiaomi.com>
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/sched/core.c | 34 +++++++++++++++++++++++++++++-----
+>  1 file changed, 29 insertions(+), 5 deletions(-)
 
-Any system call that takes longer than the threshold to sync vmstats.
+Acked-by: Will Deacon <will@kernel.org>
 
-Or a long running kernel thread, for example:
-
-https://stackoverflow.com/questions/65111483/long-running-kthread-and-synchronize-net
-
+Will
