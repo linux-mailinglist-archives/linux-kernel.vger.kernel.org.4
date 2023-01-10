@@ -2,363 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EBA664517
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD16664522
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234667AbjAJPmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S238711AbjAJPoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:44:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233797AbjAJPmU (ORCPT
+        with ESMTP id S238372AbjAJPn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:42:20 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A337F288;
-        Tue, 10 Jan 2023 07:42:18 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id z4-20020a17090a170400b00226d331390cso13866908pjd.5;
-        Tue, 10 Jan 2023 07:42:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TxJ1orvwaIz49UY3V+bZ+vpeGDcaph8FOsuYxslmG6M=;
-        b=aYW+aq0ycwUP/MkfEZa4WVXk6q+pe/WbNH20icmeFkCU7s6wAYfifl6BVXgjKyhTJU
-         tXoVrFDaocyCtWUp3jHAdSE6xwWPPi/+Vtd89vo7OWFy1UzKumtt2/5wh/lvVmcsE3Nk
-         dan8tSm8O/KzuBDFEfYbAUBIQE/stKkAJ0/9LT79YlMXb2XM2B+jUWGa8nYkHzaYtL6C
-         JJrN898RS437sCvyUHahiE5cNiWAGZ1xU6Pe5vsU2k7fJTZSHuMmQGfqr6FUwsktCvL6
-         U2XpshkVH0CTOcZZ0wp2NtqT74TgY9Ty7k7+FqSJbwAjBNgsyHgKdUy8qYcP2tRDq4d/
-         odjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TxJ1orvwaIz49UY3V+bZ+vpeGDcaph8FOsuYxslmG6M=;
-        b=sAmJJuXHASw73yCg4z5M2hJvjWHAq2g1S478ygiPhvOsmzN2366VLy9wD0G3N06i+F
-         J2omWhgu7dbk83h6sXK7+euziZjwkcJ1tv3VDQ2YSIZZp38zURA5bhcEeKoYBIKAScAW
-         /7Z0h5xwxZ0RKlw93jsLPpc/bQUXjJ6b/xbEBkZrZsizoGR1ofVECSGDsD0qXK5ChW1Y
-         FzIa+vQtebAaIUfG+P+lrdlFoX/p8MI2TbZA8T/hMobIrKG5t9GVMQ0uGgRJWru/dKns
-         YdzA9F0XNAwzUatJA9RWyWGGc/5w8H4DMz1bSAXVY3JLzaPtZ7X+ykf1rGKaaf5PfvxH
-         KMsw==
-X-Gm-Message-State: AFqh2krVS2e/KEalAguS/K3fWHOiUN52egiTWeCK1U9HauX3NvofP3M3
-        GL5NIX/vtsC7v0L+ZwvcYPm9JQCVhLtl3Q==
-X-Google-Smtp-Source: AMrXdXtpMAmNJns+vLc4olq8Qo31U/Mm1zW464AZ1MkOq6Wj9ba++76jyQmXfnSlitXbkqn6VaG1rw==
-X-Received: by 2002:a17:903:2411:b0:192:d9dd:167d with SMTP id e17-20020a170903241100b00192d9dd167dmr28330586plo.43.1673365338141;
-        Tue, 10 Jan 2023 07:42:18 -0800 (PST)
-Received: from vernon-pc.. ([49.67.3.29])
-        by smtp.gmail.com with ESMTPSA id h10-20020a170902680a00b001708c4ebbaesm8102660plk.309.2023.01.10.07.42.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 07:42:17 -0800 (PST)
-From:   Vernon Yang <vernon2gm@gmail.com>
-To:     Liam.Howlett@oracle.com, akpm@linux-foundation.org,
-        willy@infradead.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Vernon Yang <vernon2gm@gmail.com>
-Subject: [PATCH] maple_tree: remove the parameter entry of mas_preallocate
-Date:   Tue, 10 Jan 2023 23:42:11 +0800
-Message-Id: <20230110154211.1758562-1-vernon2gm@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 10 Jan 2023 10:43:29 -0500
+Received: from ns2.wdyn.eu (ns2.wdyn.eu [5.252.227.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4B7DE010;
+        Tue, 10 Jan 2023 07:43:28 -0800 (PST)
+Message-ID: <53b23ee9-a333-120e-8b58-cfa3a9bdaefc@wetzel-home.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wetzel-home.de;
+        s=wetzel-home; t=1673365407;
+        bh=joeZ0isSpFWCfJo9bP7lRZdTrlAemheFG8yfUEmmw0s=;
+        h=Date:Subject:From:To:References:In-Reply-To;
+        b=oBfHQ7QJtk5sWEMyXs1jUUCKUM6vy9bmoUBwseZQqoOK64dyvDGQpalE18Lze85HU
+         O3zZ2NDPT4JWbsFu0S/zYsjJKHaNdL1lcjq/5NZcsMJOB/MKuWC6F+aXbM6XEYX79/
+         MNaJ350fvM8rvdfGcW86uzJUkUbDRnoMansGYTzg=
+Date:   Tue, 10 Jan 2023 16:43:27 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: ieee80211_handle_wake_tx_queue and dynamic ps regression
+Content-Language: en-US
+From:   Alexander Wetzel <alexander@wetzel-home.de>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-kernel@vger.kernel.org, johannes.berg@intel.com,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org
+References: <19015168-c747-17b7-f0ae-9d2ee27d221c@linaro.org>
+ <06f76774-1b2e-f563-7128-7d5b9547dfe9@linaro.org>
+ <cf5e9339-2511-1135-71da-a8342b264414@linaro.org>
+ <205fb221-f7ad-8f03-2c16-54dcbf5ecaf9@wetzel-home.de>
+In-Reply-To: <205fb221-f7ad-8f03-2c16-54dcbf5ecaf9@wetzel-home.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The parameter entry of mas_preallocate is not used, so drop it.
+On 10.01.23 16:23, Alexander Wetzel wrote:
+> On 10.01.23 15:47, Bryan O'Donoghue wrote:
+>> On 10/01/2023 12:44, Bryan O'Donoghue wrote:
+>>> + linux-wireless
+>>> On 10/01/2023 12:35, Bryan O'Donoghue wrote:
+>>>> commit a790cc3a4fad75048295571a350b95b87e022a5a 
+>>>> (wake_tx_queue-broken-23-08-01)
+>>>> Author: Alexander Wetzel <alexander@wetzel-home.de>
+>>>> Date:   Sun Oct 9 18:30:39 2022 +0200
+>>>>
+>>>>      wifi: mac80211: add wake_tx_queue callback to drivers
+>>>>
+>>>> is causing a regression with
+>>>>
+>>>> - CONF_PS = 1
+>>>> - CONF_DYNAMIC_PS = 0
+>>>> - ieee80211_handle_wake_tx_queue
+>>>>
+>>>> In this case we get stuck in a loop similar to this
+>>>>
+>>>> // IEEE80211_CONF_CHANGE_PS
+>>>> [   17.255480] wcn36xx: wcn36xx_change_ps/312 enable
+>>>> [   18.088835] ieee80211_tx_h_dynamic_ps/263 setting 
+>>>> IEEE80211_QUEUE_STOP_REASON_PS
+>>>> [   18.088906] ieee80211_handle_wake_tx_queue/334 entry
+>>>> [   18.091505] ieee80211_dynamic_ps_disable_work/2250 calling 
+>>>> ieee80211_hw_config()
+>>>> [   18.095370] ieee80211_handle_wake_tx_queue/338 wake_tx_push_queue
+>>>>
+>>>> // IEEE80211_CONF_CHANGE_PS
+>>>> [   18.102625] wcn36xx: wcn36xx_change_ps/312 disable
+>>>> [   18.107643] wake_tx_push_queue/303 entry
+>>>>
+>>>> // txq is stopped here reason == IEEE80211_QUEUE_STOP_REASON_PS
+>>>> [   18.107654] wake_tx_push_queue/311 q_stopped bitmask 0x00000002 
+>>>> IEEE80211_QUEUE_STOP_REASON_PS true
+>>>> [   18.107661] wake_tx_push_queue/324 exit
+>>>> [   18.107667] ieee80211_handle_wake_tx_queue/342 exit
+>>>> [   18.115560] ieee80211_handle_wake_tx_queue/334 entry
+>>>> [   18.139937] ieee80211_handle_wake_tx_queue/338 wake_tx_push_queue
+>>>> [   18.145163] wake_tx_push_queue/303 entry
+>>>> [   18.150016] ieee80211_dynamic_ps_disable_work/2252 completed 
+>>>> ieee80211_hw_config()
+>>>>
+>>>> // now we unset IEEE80211_QUEUE_STOP_REASON_PS but too late
+>>>> [   18.151145] wake_tx_push_queue/311 q_stopped bitmask 0x00000002 
+>>>> IEEE80211_QUEUE_STOP_REASON_PS true
+>>>> [   18.155263] ieee80211_dynamic_ps_disable_work/2254 clearing 
+>>>> IEEE80211_QUEUE_STOP_REASON_PS
+>>>> [   18.162531] wake_tx_push_queue/324 exit
+>>>> [   18.162548] ieee80211_handle_wake_tx_queue/342 exit
+>>>> [   18.183639] ieee80211_dynamic_ps_disable_work/2259 cleared 
+>>>> IEEE80211_QUEUE_STOP_REASON_PS
+>>>>
+>>>> // IEEE80211_CONF_CHANGE_PS runs again
+>>>> [   18.215487] wcn36xx: wcn36xx_change_ps/312 enable
+>>>>
+>>>> We get stuck in that loop. Packets getting transmitted is a rare 
+>>>> event, most are dropped.
+>>
+> 
+> I'll need some time digest that... I report back once I get it.
 
-Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
----
- include/linux/maple_tree.h       |  2 +-
- lib/maple_tree.c                 |  3 +--
- mm/mmap.c                        | 16 ++++++++--------
- mm/nommu.c                       |  8 ++++----
- tools/testing/radix-tree/maple.c | 32 ++++++++++++++++----------------
- 5 files changed, 30 insertions(+), 31 deletions(-)
+Looks like the the commit 
+https://patchwork.kernel.org/project/linux-wireless/patch/20221230121850.218810-1-alexander@wetzel-home.de/
+has a good chance to solve the issue:
 
-diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-index e594db58a0f1..a0d43087f27a 100644
---- a/include/linux/maple_tree.h
-+++ b/include/linux/maple_tree.h
-@@ -456,7 +456,7 @@ int mas_store_gfp(struct ma_state *mas, void *entry, gfp_t gfp);
- void mas_store_prealloc(struct ma_state *mas, void *entry);
- void *mas_find(struct ma_state *mas, unsigned long max);
- void *mas_find_rev(struct ma_state *mas, unsigned long min);
--int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp);
-+int mas_preallocate(struct ma_state *mas, gfp_t gfp);
- bool mas_is_err(struct ma_state *mas);
- 
- bool mas_nomem(struct ma_state *mas, gfp_t gfp);
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 69be9d3db0c8..96fb4b416697 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -5712,12 +5712,11 @@ EXPORT_SYMBOL_GPL(mas_store_prealloc);
- /**
-  * mas_preallocate() - Preallocate enough nodes for a store operation
-  * @mas: The maple state
-- * @entry: The entry that will be stored
-  * @gfp: The GFP_FLAGS to use for allocations.
-  *
-  * Return: 0 on success, -ENOMEM if memory could not be allocated.
-  */
--int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
-+int mas_preallocate(struct ma_state *mas, gfp_t gfp)
- {
- 	int ret;
- 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index e06f9ae34ff8..64bdd38e8d8e 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -472,7 +472,7 @@ static int vma_link(struct mm_struct *mm, struct vm_area_struct *vma)
- 	MA_STATE(mas, &mm->mm_mt, 0, 0);
- 	struct address_space *mapping = NULL;
- 
--	if (mas_preallocate(&mas, vma, GFP_KERNEL))
-+	if (mas_preallocate(&mas, GFP_KERNEL))
- 		return -ENOMEM;
- 
- 	if (vma->vm_file) {
-@@ -538,7 +538,7 @@ inline int vma_expand(struct ma_state *mas, struct vm_area_struct *vma,
- 	/* Only handles expanding */
- 	VM_BUG_ON(vma->vm_start < start || vma->vm_end > end);
- 
--	if (mas_preallocate(mas, vma, GFP_KERNEL))
-+	if (mas_preallocate(mas, GFP_KERNEL))
- 		goto nomem;
- 
- 	vma_adjust_trans_huge(vma, start, end, 0);
-@@ -712,7 +712,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
- 		}
- 	}
- 
--	if (mas_preallocate(&mas, vma, GFP_KERNEL))
-+	if (mas_preallocate(&mas, GFP_KERNEL))
- 		return -ENOMEM;
- 
- 	vma_adjust_trans_huge(orig_vma, start, end, adjust_next);
-@@ -1934,7 +1934,7 @@ int expand_upwards(struct vm_area_struct *vma, unsigned long address)
- 		/* Check that both stack segments have the same anon_vma? */
- 	}
- 
--	if (mas_preallocate(&mas, vma, GFP_KERNEL))
-+	if (mas_preallocate(&mas, GFP_KERNEL))
- 		return -ENOMEM;
- 
- 	/* We must make sure the anon_vma is allocated. */
-@@ -2015,7 +2015,7 @@ int expand_downwards(struct vm_area_struct *vma, unsigned long address)
- 			return -ENOMEM;
- 	}
- 
--	if (mas_preallocate(&mas, vma, GFP_KERNEL))
-+	if (mas_preallocate(&mas, GFP_KERNEL))
- 		return -ENOMEM;
- 
- 	/* We must make sure the anon_vma is allocated. */
-@@ -2307,7 +2307,7 @@ do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
- 	mt_init_flags(&mt_detach, MT_FLAGS_LOCK_EXTERN);
- 	mt_set_external_lock(&mt_detach, &mm->mmap_lock);
- 
--	if (mas_preallocate(mas, vma, GFP_KERNEL))
-+	if (mas_preallocate(mas, GFP_KERNEL))
- 		return -ENOMEM;
- 
- 	mas->last = end - 1;
-@@ -2676,7 +2676,7 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 			goto free_vma;
- 	}
- 
--	if (mas_preallocate(&mas, vma, GFP_KERNEL)) {
-+	if (mas_preallocate(&mas, GFP_KERNEL)) {
- 		error = -ENOMEM;
- 		if (file)
- 			goto close_and_free_vma;
-@@ -2949,7 +2949,7 @@ static int do_brk_flags(struct ma_state *mas, struct vm_area_struct *vma,
- 	    can_vma_merge_after(vma, flags, NULL, NULL,
- 				addr >> PAGE_SHIFT, NULL_VM_UFFD_CTX, NULL)) {
- 		mas_set_range(mas, vma->vm_start, addr + len - 1);
--		if (mas_preallocate(mas, vma, GFP_KERNEL))
-+		if (mas_preallocate(mas, GFP_KERNEL))
- 			goto unacct_fail;
- 
- 		vma_adjust_trans_huge(vma, vma->vm_start, addr + len, 0);
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 214c70e1d059..0befa4060aea 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -602,7 +602,7 @@ static int add_vma_to_mm(struct mm_struct *mm, struct vm_area_struct *vma)
- {
- 	MA_STATE(mas, &mm->mm_mt, vma->vm_start, vma->vm_end);
- 
--	if (mas_preallocate(&mas, vma, GFP_KERNEL)) {
-+	if (mas_preallocate(&mas, GFP_KERNEL)) {
- 		pr_warn("Allocation of vma tree for process %d failed\n",
- 		       current->pid);
- 		return -ENOMEM;
-@@ -633,7 +633,7 @@ static int delete_vma_from_mm(struct vm_area_struct *vma)
- {
- 	MA_STATE(mas, &vma->vm_mm->mm_mt, 0, 0);
- 
--	if (mas_preallocate(&mas, vma, GFP_KERNEL)) {
-+	if (mas_preallocate(&mas, GFP_KERNEL)) {
- 		pr_warn("Allocation of vma tree for process %d failed\n",
- 		       current->pid);
- 		return -ENOMEM;
-@@ -1081,7 +1081,7 @@ unsigned long do_mmap(struct file *file,
- 	if (!vma)
- 		goto error_getting_vma;
- 
--	if (mas_preallocate(&mas, vma, GFP_KERNEL))
-+	if (mas_preallocate(&mas, GFP_KERNEL))
- 		goto error_maple_preallocate;
- 
- 	region->vm_usage = 1;
-@@ -1358,7 +1358,7 @@ int split_vma(struct mm_struct *mm, struct vm_area_struct *vma,
- 	if (!new)
- 		goto err_vma_dup;
- 
--	if (mas_preallocate(&mas, vma, GFP_KERNEL)) {
-+	if (mas_preallocate(&mas, GFP_KERNEL)) {
- 		pr_warn("Allocation of vma tree for process %d failed\n",
- 			current->pid);
- 		goto err_mas_preallocate;
-diff --git a/tools/testing/radix-tree/maple.c b/tools/testing/radix-tree/maple.c
-index 81fa7ec2e66a..8170ef39d8c4 100644
---- a/tools/testing/radix-tree/maple.c
-+++ b/tools/testing/radix-tree/maple.c
-@@ -35342,7 +35342,7 @@ static noinline void check_prealloc(struct maple_tree *mt)
- 	for (i = 0; i <= max; i++)
- 		mtree_test_store_range(mt, i * 10, i * 10 + 5, &i);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35351,18 +35351,18 @@ static noinline void check_prealloc(struct maple_tree *mt)
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
- 	MT_BUG_ON(mt, allocated != 1 + height * 3);
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	mas_destroy(&mas);
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35370,25 +35370,25 @@ static noinline void check_prealloc(struct maple_tree *mt)
- 	mn = mas_pop_node(&mas);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != allocated - 1);
- 	ma_free_rcu(mn);
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	mas_destroy(&mas);
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
- 	MT_BUG_ON(mt, allocated != 1 + height * 3);
- 	mn = mas_pop_node(&mas);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != allocated - 1);
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	mas_destroy(&mas);
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 	ma_free_rcu(mn);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35397,12 +35397,12 @@ static noinline void check_prealloc(struct maple_tree *mt)
- 	MT_BUG_ON(mt, mas_allocated(&mas) != allocated - 1);
- 	mas_push_node(&mas, mn);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != allocated);
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	mas_destroy(&mas);
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35410,21 +35410,21 @@ static noinline void check_prealloc(struct maple_tree *mt)
- 	mas_store_prealloc(&mas, ptr);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != 0);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
- 	MT_BUG_ON(mt, allocated != 1 + height * 3);
- 	mas_store_prealloc(&mas, ptr);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != 0);
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
- 	MT_BUG_ON(mt, allocated != 1 + height * 3);
- 	mas_store_prealloc(&mas, ptr);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35432,14 +35432,14 @@ static noinline void check_prealloc(struct maple_tree *mt)
- 	mas_store_prealloc(&mas, ptr);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != 0);
- 	mt_set_non_kernel(1);
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL & GFP_NOWAIT) == 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL & GFP_NOWAIT) == 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 	mas_destroy(&mas);
- 
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35447,7 +35447,7 @@ static noinline void check_prealloc(struct maple_tree *mt)
- 	mas_store_prealloc(&mas, ptr);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != 0);
- 	mt_set_non_kernel(1);
--	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL & GFP_NOWAIT) == 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL & GFP_NOWAIT) == 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
--- 
-2.34.1
+1) Queues are stopped due to PS
+2) Then there is a TX attempt. But due to the (PS) queue stop
+    wake_tx_push_queue() aborts the queue run
+3) Then we hit the bug the patch fixes: The queue is not marked to
+    have pending packets and thus packets on it are not transmitted.
+
+Packets get only send when you happen to try tx when the queue is 
+operational. (And then you will get all the packets sitting in the queue.)
+
+Does that make sense? And more crucial, is the patch fixing that for you?
+
+> 
+>> BTW I considered implementing a wcn36xx specific wake_tx callback - 
+>> which maybe should be done anyway.
+>>
+>> I _don't_ see other drivers checking for q_stopped & 
+>> IEEE80211_QUEUE_STOP_REASON_PS
+>>
+>> Should they be ?
+>>
+> 
+> No, they should not.
+> 
+> My take is, that this is a bug in mac80211. I submitted patches to 
+> fixing that, they have just been accepted:
+> 
+> https://patchwork.kernel.org/project/linux-wireless/patch/20221230121850.218810-1-alexander@wetzel-home.de/
+> 
+> and
+> 
+> https://patchwork.kernel.org/project/linux-wireless/patch/20230106223141.98696-1-alexander@wetzel-home.de/
+> 
+> 
+> Can you test if these also help here?
+> 
+> 
+> 
+>> If they should check IEEE80211_QUEUE_STOP_REASON_PS, then right now, 
+>> they don't. If they shouldn't check IEEE80211_QUEUE_STOP_REASON_PS 
+>> then neither should the generic replacement 
+>> ieee80211_handle_wake_tx_queue()
+>>
+>> ---
+>> bod
+> 
 
