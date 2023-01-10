@@ -2,192 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB73866360D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 145B6663611
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237882AbjAJAHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 19:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        id S236723AbjAJALg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 19:11:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237809AbjAJAHf (ORCPT
+        with ESMTP id S234576AbjAJALd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 19:07:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D6C14022;
-        Mon,  9 Jan 2023 16:07:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFA64614A4;
-        Tue, 10 Jan 2023 00:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07EBFC433EF;
-        Tue, 10 Jan 2023 00:07:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673309253;
-        bh=b7z/GEoaSAs07gYIgpLH0FOBcGLslOf21DIds1Km9ko=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=tXlKz/pYW/wubdNWsuOj25dpyV8uFONvrVGyTLE7E7buTyxpvSI2dR/AFfnGyQPS2
-         19gvxprXaa+p9YqNGzLJKhxyiL0lDco+KAGzHRgYkHseukV41arEcLxGH0enUmPG8T
-         tDen0udRRyEZLJG4R1NTx4qgDW5LMMZ9oGRq8szR6m+awkmOpg7waRjgGUrM7kaIpT
-         4pAR4ExzYkbrmfhCtJCWX933sN1oygPgWs9dziHZ0kSW7GgXIL8qiVl5gG5DYMvkjC
-         Z/8L6eP2lUaBrdMcMFkSU1ZPgj1HeBmRf1ATBwLegviu3k1VtCKms9XKWMA/LznqSf
-         f200zt9LpkxgA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A60E95C0623; Mon,  9 Jan 2023 16:07:32 -0800 (PST)
-Date:   Mon, 9 Jan 2023 16:07:32 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
-        quic_neeraju@quicinc.com, urezki@gmail.com
-Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
- processing
-Message-ID: <20230110000732.GD4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
- <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
- <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230108150425.426f2861e9db1152fa84508f@kernel.org>
- <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
+        Mon, 9 Jan 2023 19:11:33 -0500
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE81714005;
+        Mon,  9 Jan 2023 16:11:32 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id 187-20020a4a09c4000000b004d8f3cb09f5so2843303ooa.6;
+        Mon, 09 Jan 2023 16:11:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=02bsn0yiJNUpWqqLqFldR8saSUfX8/r+gUypjApx5FM=;
+        b=dPbg0lHhxnePHWXXo3mDLoQvlVa8AI0mAdMIGM61iCPZ86eDP/OuD2I4E24+XQoGdp
+         UuN+kyJYdGD+Cuhy0I5vHVJZOoANKzOIWLBXG1TB3FH+idwxTOnoenrM1IXUNjB4AxvA
+         cWYWtgKysJ5cuSKOI52kOwifEb9aZvTWuqIt/tsV9J3ettT+3KMcmULjT5GZyxKBovr7
+         nQ/CdV0vmFCo/muH1MWluEUrN4OG5aIkph5+FFKX2BFhfDYQJVhX23nPaXNHNMngAcxx
+         XDuTMvLiDIV0dCk8Uc3ypsBS+VnCqSqHbsxHGRjkATrdsmTRhwo7f8aqG33Bf4gyUEU7
+         K4Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=02bsn0yiJNUpWqqLqFldR8saSUfX8/r+gUypjApx5FM=;
+        b=aOt5m7cdCbguik4ujfFshWzkbL4WybNpTblKDVxmWrkFJRIs1pn3nHfridUdNxCNri
+         vy9AMbTSE3elBkQRq2ys5c2SXzYGb2w4cSNWt8pVEuSzX9jsHioeC/zPXA7b6HQcR27p
+         CNWDJUzksTrH/xENPcrOGeRNYY60kt5e+CCEo/Sm5johtHuRvVxQheDaOP2lbNbXwjw9
+         A8+RJruQDdqrBeF0wMacEytzK1yKZEsx7m3cmufTLM+SdL+uegpIIKNSqavTRIhmR8iX
+         uAe9zD8Qltz2F+NdSwNDHRWQBvwmVAL2dZxeg3Ca+STYg7jVBnMmsbQLynyh+095u8wW
+         x5Ww==
+X-Gm-Message-State: AFqh2krLNzE2u1Q0LXv8tNq9cVsffCHowhX5bWY98uAjeBNM+A7L8OKd
+        dLy1uNpNRMiiE4sETnoCmCU=
+X-Google-Smtp-Source: AMrXdXttlORN8VsN1vA3l8X+yGGBv6K4wXDrmkq1nmEsWrx5rJe6hLhXXTTzrbgOMZZwSH3enk24Jw==
+X-Received: by 2002:a05:6820:823:b0:4f1:f375:c240 with SMTP id bg35-20020a056820082300b004f1f375c240mr4690785oob.6.1673309492270;
+        Mon, 09 Jan 2023 16:11:32 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o78-20020a4a2c51000000b004a0b424f99dsm4928789ooo.43.2023.01.09.16.11.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 16:11:31 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 9 Jan 2023 16:11:30 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-hardening@vger.kernel.org, David Gow <davidgow@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kunit: memcpy: Split slow memcpy tests into
+ MEMCPY_SLOW_KUNIT_TEST
+Message-ID: <20230110001130.GA1808090@roeck-us.net>
+References: <20230107040203.never.112-kees@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230107040203.never.112-kees@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 08:56:36AM +0900, Masami Hiramatsu wrote:
-> On Sun, 8 Jan 2023 20:25:01 -0800
-> "Paul E. McKenney" <paulmck@kernel.org> wrote:
+On Fri, Jan 06, 2023 at 08:02:07PM -0800, Kees Cook wrote:
+> Since the long memcpy tests may stall a system for tens of seconds
+> in virtualized architecture environments, split those tests off under
+> CONFIG_MEMCPY_SLOW_KUNIT_TEST so they can be separately disabled.
 > 
-> > On Sun, Jan 08, 2023 at 03:04:25PM +0900, Masami Hiramatsu wrote:
-> > > On Sat, 7 Jan 2023 08:22:02 -0800
-> > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > 
-> > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
-> > > > > On Wed, 4 Jan 2023 16:58:38 -0800
-> > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > > 
-> > > > > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
-> > > > > > containing kernel boot parameters to be embedded into an initrd or into
-> > > > > > the kernel itself.  This can be extremely useful when deploying kernels
-> > > > > > in cases where some of the boot parameters depend on the kernel version
-> > > > > > rather than on the server hardware, firmware, or workload.
-> > > > > > 
-> > > > > > Unfortunately, the "bootconfig" kernel parameter must be specified in
-> > > > > > order to cause the kernel to look for the embedded bootconfig file,
-> > > > > > and it clearly does not help to embed this "bootconfig" kernel parameter
-> > > > > > into that file.
-> > > > > > 
-> > > > > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
-> > > > > > kernel to act as if the "bootconfig" kernel parameter had been specified.
-> > > > > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
-> > > > > > for the embedded bootconfig file even when the "bootconfig" kernel
-> > > > > > parameter is omitted.  This permits kernel-version-dependent kernel
-> > > > > > boot parameters to be embedded into the kernel image without the need to
-> > > > > > (for example) update large numbers of boot loaders.
-> > > > > 
-> > > > > I like this because this is a simple solution. We have another option
-> > > > > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
-> > > > > bootloader. Thus, it is better to have this option so that user can
-> > > > > always enable bootconfig.
-> > > > 
-> > > > Glad you like it!
-> > > > 
-> > > > In addition, if the help text is accurate, another shortcoming of
-> > > > CONFIG_CMDLINE is that its semantics vary from one architecture to
-> > > > another.  Some have CONFIG_CMDLINE override the boot-loader supplied
-> > > > parameters, and others differ in the order in which the parameters
-> > > > are processed.
-> > > 
-> > > Yes, that differences confuse us...
-> > 
-> > I am glad that it is not just me.  ;-)
-> > 
-> > I will add words to that effect to the commit log.
-> > 
-> > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > 
-> > > > Thank you!
-> > > > 
-> > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
-> > > > > (or at least recommend to enable this)
-> > > > 
-> > > > Like this?
-> > > 
-> > > Yes! Thanks.
-> > > 
-> > > > 
-> > > > 							Thanx, Paul
-> > > > 
-> > > > ------------------------------------------------------------------------
-> > > > 
-> > > > commit d09a1505c51a70da38b34ac38062977299aef742
-> > > > Author: Paul E. McKenney <paulmck@kernel.org>
-> > > > Date:   Sat Jan 7 08:09:22 2023 -0800
-> > > > 
-> > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> > > >     
-> > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
-> > > >     will normally be to unconditionally provide the specified kernel-boot
-> > > >     arguments to the kernel, as opposed to requiring a separately provided
-> > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
-> > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
-> > > >     
-> > > >     The old semantics may be obtained by manually overriding this default.
-> > > >     
-> > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > 
-> > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Applied, thank you!
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Link: https://lore.kernel.org/lkml/20221226195206.GA2626419@roeck-us.net
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> Guenter, does this give you the needed flexibility to turn on the memcpy
+> kunit tests again in your slower environments?
+
+Yes, it does, and it works.
+
+Reviewed-and-tested-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  lib/Kconfig.debug  |  9 +++++++++
+>  lib/memcpy_kunit.c | 17 +++++++++++++----
+>  2 files changed, 22 insertions(+), 4 deletions(-)
 > 
-> Paul, just for confirmation, have you picked these patches on your tree?
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index c2c78d0e761c..b5e94807f41c 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2621,6 +2621,15 @@ config MEMCPY_KUNIT_TEST
+>  
+>  	  If unsure, say N.
+>  
+> +config MEMCPY_SLOW_KUNIT_TEST
+> +	tristate "Include exhaustive memcpy tests" if !KUNIT_ALL_TESTS
 
-I have, but if you would prefer to take them, just let me know when you
-have pulled them in.  It is easy for me to drop them.
+As Geert noticed, bool should be sufficient here since this is not a
+separate test.
 
-Here they are in the -rcu tree:
+Thanks,
+Guenter
 
-3d9ccc4a8b56e bootconfig: Allow forcing unconditional bootconfig processing
-68b920592ff67 bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-
-git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-
-							Thanx, Paul
-
-> Thank you,
-> 
-> > 
-> > > Thank you!
-> > > 
-> > > > 
-> > > > diff --git a/init/Kconfig b/init/Kconfig
-> > > > index 0fb19fa0edba9..97a0f14d9020d 100644
-> > > > --- a/init/Kconfig
-> > > > +++ b/init/Kconfig
-> > > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
-> > > >  config BOOT_CONFIG_FORCE
-> > > >  	bool "Force unconditional bootconfig processing"
-> > > >  	depends on BOOT_CONFIG
-> > > > +	default y if BOOT_CONFIG_EMBED
-> > > >  	help
-> > > >  	  With this Kconfig option set, BOOT_CONFIG processing is carried
-> > > >  	  out even when the "bootconfig" kernel-boot parameter is omitted.
-> > > 
-> > > 
-> > > -- 
-> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> 
+> +	depends on MEMCPY_KUNIT_TEST
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  Some memcpy tests are quite exhaustive in checking for overlaps
+> +	  and bit ranges. These can be very slow, so they are split out
+> +	  as a separate config.
+> +
+>  config IS_SIGNED_TYPE_KUNIT_TEST
+>  	tristate "Test is_signed_type() macro" if !KUNIT_ALL_TESTS
+>  	depends on KUNIT
+> diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
+> index 89128551448d..cc1f36335a9b 100644
+> --- a/lib/memcpy_kunit.c
+> +++ b/lib/memcpy_kunit.c
+> @@ -307,8 +307,12 @@ static void set_random_nonzero(struct kunit *test, u8 *byte)
+>  	}
+>  }
+>  
+> -static void init_large(struct kunit *test)
+> +static int init_large(struct kunit *test)
+>  {
+> +	if (!IS_ENABLED(CONFIG_MEMCPY_SLOW_KUNIT_TEST)) {
+> +		kunit_skip(test, "Slow test skipped. Enable with CONFIG_MEMCPY_SLOW_KUNIT_TEST=y");
+> +		return -EBUSY;
+> +	}
+>  
+>  	/* Get many bit patterns. */
+>  	get_random_bytes(large_src, ARRAY_SIZE(large_src));
+> @@ -319,6 +323,8 @@ static void init_large(struct kunit *test)
+>  
+>  	/* Explicitly zero the entire destination. */
+>  	memset(large_dst, 0, ARRAY_SIZE(large_dst));
+> +
+> +	return 0;
+>  }
+>  
+>  /*
+> @@ -327,7 +333,9 @@ static void init_large(struct kunit *test)
+>   */
+>  static void copy_large_test(struct kunit *test, bool use_memmove)
+>  {
+> -	init_large(test);
+> +
+> +	if (init_large(test))
+> +		return;
+>  
+>  	/* Copy a growing number of non-overlapping bytes ... */
+>  	for (int bytes = 1; bytes <= ARRAY_SIZE(large_src); bytes++) {
+> @@ -472,7 +480,8 @@ static void memmove_overlap_test(struct kunit *test)
+>  	static const int bytes_start = 1;
+>  	static const int bytes_end = ARRAY_SIZE(large_src) + 1;
+>  
+> -	init_large(test);
+> +	if (init_large(test))
+> +		return;
+>  
+>  	/* Copy a growing number of overlapping bytes ... */
+>  	for (int bytes = bytes_start; bytes < bytes_end;
+> @@ -549,8 +558,8 @@ static void strtomem_test(struct kunit *test)
+>  static struct kunit_case memcpy_test_cases[] = {
+>  	KUNIT_CASE(memset_test),
+>  	KUNIT_CASE(memcpy_test),
+> -	KUNIT_CASE(memcpy_large_test),
+>  	KUNIT_CASE(memmove_test),
+> +	KUNIT_CASE(memcpy_large_test),
+>  	KUNIT_CASE(memmove_large_test),
+>  	KUNIT_CASE(memmove_overlap_test),
+>  	KUNIT_CASE(strtomem_test),
 > -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 2.34.1
+> 
