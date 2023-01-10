@@ -2,101 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2029F6637DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 04:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A076F6637DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 04:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234939AbjAJDeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 22:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
+        id S229805AbjAJDfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 22:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjAJDes (ORCPT
+        with ESMTP id S229559AbjAJDfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 22:34:48 -0500
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B099E1DDFD
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 19:34:46 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 36B4D2C04E4;
-        Tue, 10 Jan 2023 16:34:43 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1673321683;
-        bh=JXK9XcuU5BtTAG6zrZjes9Fz+CEerOh/HuxsN544Y3g=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=qKd8w3gLakPOod4mevoFnSmDLtoVk/yC5opyZE/Kh2iNpVccHfNVUeg7o0Rqx/Z2m
-         lPkBFRDO2DOUgMme3kaRoPpCeJ4iVMV4zhojBjF05134M/dH7QbLw0zlVOl4ImV65S
-         BwCvWklC4A0DUfXKwqVcb2Y1ur7Wzks+LHhGHCPoU3euI+1X6w/ANymF7eUO1KFIA1
-         pv7lkJH7vEktoFzgn2w9EQZLkMW5290pLEhZs5+nHOKqEkZoNznrScC92TIhrAf8W8
-         LJ0XChQSKVPcboa45K8SBDodAaLkeYkw528GBhu4heae23nNHeruRTtCfDR26bG6NQ
-         a1THDI7I++kJw==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B63bcdcd30001>; Tue, 10 Jan 2023 16:34:43 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan 2023 16:34:42 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.044; Tue, 10 Jan 2023 16:34:42 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "pierre.gondois@arm.com" <pierre.gondois@arm.com>,
-        "vadym.kochan@plvision.eu" <vadym.kochan@plvision.eu>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: marvell: AC5/AC5X: Fix address for UART1
-Thread-Topic: [PATCH] arm64: dts: marvell: AC5/AC5X: Fix address for UART1
-Thread-Index: AQHZEDB9qsL6lsHyh06bePZmPJfPRK6WTqQA
-Date:   Tue, 10 Jan 2023 03:34:42 +0000
-Message-ID: <70fb6048-848e-e558-a1b9-3d74aca8ec01@alliedtelesis.co.nz>
-References: <20221215025402.1733132-1-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20221215025402.1733132-1-chris.packham@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C83D4EE8769D514F99C9FE9176FDAE15@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Mon, 9 Jan 2023 22:35:30 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7547035926
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 19:35:27 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id y25so16272253lfa.9
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 19:35:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=profian-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UosNqGA9C/XIdHT1k8S2LsPXYWx8A3sEk/zWC7bC67s=;
+        b=xwwEbEXD12KZoQtAd4yCi07zYXy9XoxjKp5yUWCQlIjjdY5yqyduY7kzQVOSxNQ5B3
+         Z6WaC1d+4GyseI5Eu3f9HSqSXLAc4CDM8eV4sATmPaChxQ9/7R2bCxyUFSoxu9nNzOcn
+         bRHdD8sQs6M5SeNmJfSH9N9ou4QggFa1IN5anjzTsWots1ygtD9CU+VmN2PTtAYPcajB
+         fFSxIawiHTNgaV30nLANYlJAIJVHg2pFfRLs2rW2aZ++zI87Ld4xH/q74sOw0eufikq8
+         AiPlKm57Ecbtcc08gMqOeeWQVsuWaPwea53fvRi7EisQ5egBdEtvcKOdhCTLcNRUecc3
+         XJaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UosNqGA9C/XIdHT1k8S2LsPXYWx8A3sEk/zWC7bC67s=;
+        b=4O3ykvGkHfJ3F+Y4ydLFPJjDZlJ/ClSyyhHqgwARCwelPCTlGcjdZXNUv73o2xDLX3
+         lM/TtKgzrGU4FS1g0zHqN4/Tda1iDjke/JxnblSwARi5p2cIcnyjtHZ4BGfORm3BA1P4
+         JcweILYTU1SDljNmT0PTfiem/GmpxgdEIxE8XeXRC6Vj4KGe28vCx5vVFXWuW9KAos5p
+         2e7Phc8yq686pYyTE8IyY3bgzJcvZAviJRHQ26rx1DF78QkBu/Z87K53sVk8bMGEPcie
+         GvvRi2pIj4HNEfZoOyPBz0F5f8CZmDQ4B6anvpmUAdLcNjlvbIIN2q+5ct3zpNV+DdyI
+         CSeQ==
+X-Gm-Message-State: AFqh2krsRCQlG+0jse6H2xdDUiRR/xjWqdz5OiexRBnSabejDkCrfb1U
+        bhR+KX4Srk6DuSH4/Qt7ZdxVbg==
+X-Google-Smtp-Source: AMrXdXsd0exkiXSWIxI6iXBfC1lzwBbDYhmrGgcgZfUVpJdIRiQnA8sbXQ63dUcWRs9pClckNjlGng==
+X-Received: by 2002:a05:6512:b22:b0:4cb:154d:2175 with SMTP id w34-20020a0565120b2200b004cb154d2175mr14399098lfu.30.1673321725738;
+        Mon, 09 Jan 2023 19:35:25 -0800 (PST)
+Received: from localhost (83-245-197-49.elisa-laajakaista.fi. [83.245.197.49])
+        by smtp.gmail.com with ESMTPSA id c14-20020a056512074e00b004cb3a55feacsm1941490lfs.100.2023.01.09.19.35.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 19:35:25 -0800 (PST)
+From:   Jarkko Sakkinen <jarkko@profian.com>
+To:     Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Jarkko Sakkinen <jarkko@profian.com>,
+        linux-crypto@vger.kernel.org (open list:AMD CRYPTOGRAPHIC COPROCESSOR
+        (CCP) DRIVER - SE...), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4] crypto: ccp: Sanitize sev_platform_init() error messages
+Date:   Tue, 10 Jan 2023 03:35:20 +0000
+Message-Id: <20230110033520.66560-1-jarkko@profian.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=X/cs11be c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=RvmDmJFTN0MA:10 a=D_AEATpMilPvRHeLKy4A:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQWxsLA0KDQpPbiAxNS8xMi8yMiAxNTo1NCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4gVGhl
-IGNvcnJlY3QgYWRkcmVzcyBvZmZzZXQgaXMgMHgxMjEwMC4NCj4NCj4gRml4ZXM6IDMxYmU3OTFl
-MjZjZiAoImFybTY0OiBkdHM6IG1hcnZlbGw6IEFkZCBVQVJUMS0zIGZvciBBQzUvQUM1WCIpDQo+
-IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNp
-cy5jby5uej4NCj4gLS0tDQo+IE5vdCBzdXJlIGhvdyB0aGlzIGhhcHBlbmVkLiBJIG9ubHkgbm90
-aWNlZCB3aGVuIEkgaGFkIGEgY29uZmxpY3QgaW4gc29tZQ0KPiBsb2NhbCBwYXRjaGVzIEkgd2Fz
-IHJlYmFzaW5nIGFnYWluc3QgdXBzdHJlYW0uIFNvIEkgb2J2aW91c2x5IGhhZCBpdA0KPiByaWdo
-dCBhdCBvbmUgcG9pbnQgYnV0IHRoZW4gbWFuYWdlZCB0byBicmVhayBpdCBpbiB0aGUgcHJvY2Vz
-cyBvZg0KPiBjbGVhbmluZyB0aGluZ3MgdXAgZm9yIHN1Ym1pc3Npb24uDQoNCkkga25vdyBwZW9w
-bGUgaGF2ZSBwcm9iYWJseSBiZWVuIGF3YXkgd2l0aCB2YXJpb3VzIGhvbGlkYXlzIGJ1dCBJIHRo
-aW5rIA0KaXQncyBiZWVuIGxvbmcgZW5vdWdoIHNvLi4uLg0KDQpwaW5nPw0KDQo+DQo+ICAgYXJj
-aC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FjNS05OGR4MjV4eC5kdHNpIHwgMiArLQ0KPiAgIDEg
-ZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPg0KPiBkaWZmIC0t
-Z2l0IGEvYXJjaC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FjNS05OGR4MjV4eC5kdHNpIGIvYXJj
-aC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FjNS05OGR4MjV4eC5kdHNpDQo+IGluZGV4IDczMDhm
-N2I2YjIyYy4uOGJjZTY0MDY5MTM4IDEwMDY0NA0KPiAtLS0gYS9hcmNoL2FybTY0L2Jvb3QvZHRz
-L21hcnZlbGwvYWM1LTk4ZHgyNXh4LmR0c2kNCj4gKysrIGIvYXJjaC9hcm02NC9ib290L2R0cy9t
-YXJ2ZWxsL2FjNS05OGR4MjV4eC5kdHNpDQo+IEBAIC05OCw3ICs5OCw3IEBAIHVhcnQwOiBzZXJp
-YWxAMTIwMDAgew0KPiAgIA0KPiAgIAkJCXVhcnQxOiBzZXJpYWxAMTIxMDAgew0KPiAgIAkJCQlj
-b21wYXRpYmxlID0gInNucHMsZHctYXBiLXVhcnQiOw0KPiAtCQkJCXJlZyA9IDwweDExMDAwIDB4
-MTAwPjsNCj4gKwkJCQlyZWcgPSA8MHgxMjEwMCAweDEwMD47DQo+ICAgCQkJCXJlZy1zaGlmdCA9
-IDwyPjsNCj4gICAJCQkJaW50ZXJydXB0cyA9IDxHSUNfU1BJIDg0IElSUV9UWVBFX0xFVkVMX0hJ
-R0g+Ow0KPiAgIAkJCQlyZWctaW8td2lkdGggPSA8MT47
+The following functions end up calling sev_platform_init() or
+__sev_platform_init_locked():
+
+* sev_guest_init()
+* sev_ioctl_do_pek_csr
+* sev_ioctl_do_pdh_export()
+* sev_ioctl_do_pek_import()
+* sev_ioctl_do_pek_pdh_gen()
+* sev_pci_init()
+
+However, only sev_pci_init() prints out the failed command error code, and
+even there, the error message does not specify which SEV command failed.
+
+Address this by printing out the SEV command errors inside
+__sev_platform_init_locked(), and differentiate between DF_FLUSH, INIT and
+INIT_EX commands.  As a side-effect, @error can be removed from the
+parameter list.
+
+This extra information is particularly useful if firmware loading and/or
+initialization is going to be made more robust, e.g. by allowing firmware
+loading to be postponed.
+---
+v4:
+* Sorry, v3 was malformed. Here's a proper patch.
+
+v3:
+* Address Tom Lendacky's feedback:
+  https://lore.kernel.org/kvm/8bf6f179-eee7-fd86-7892-cdcd76e0762a@amd.com/
+
+v2:
+* Address David Rientjes's feedback:
+  https://lore.kernel.org/all/6a16bbe4-4281-fb28-78c4-4ec44c8aa679@google.com/
+* Remove @error.
+* Remove "SEV_" prefix: it is obvious from context so no need to make klog
+  line longer.
+
+Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
+---
+ drivers/crypto/ccp/sev-dev.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 06fc7156c04f..bdc43e75c78b 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -476,19 +476,23 @@ static int __sev_platform_init_locked(int *error)
+ 		dev_err(sev->dev, "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
+ 		rc = init_function(&psp_ret);
+ 	}
+-	if (error)
++	if (rc) {
++		dev_err(sev->dev, "SEV: %s failed error %#x",
++			sev_init_ex_buffer ? "CMD_INIT_EX" : "CMD_INIT", psp_ret);
+ 		*error = psp_ret;
+-
+-	if (rc)
+ 		return rc;
++	}
+ 
+ 	sev->state = SEV_STATE_INIT;
+ 
+ 	/* Prepare for first SEV guest launch after INIT */
+ 	wbinvd_on_all_cpus();
+-	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, error);
+-	if (rc)
++	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, &psp_ret);
++	if (rc) {
++		dev_err(sev->dev, "SEV: CMD_DF_FLUSH failed error %#x", psp_ret);
++		*error = psp_ret;
+ 		return rc;
++	}
+ 
+ 	dev_dbg(sev->dev, "SEV firmware initialized\n");
+ 
+@@ -1337,8 +1341,7 @@ void sev_pci_init(void)
+ 	/* Initialize the platform */
+ 	rc = sev_platform_init(&error);
+ 	if (rc)
+-		dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
+-			error, rc);
++		dev_err(sev->dev, "SEV: failed to INIT rc %d\n", rc);
+ 
+ 	return;
+ 
+-- 
+2.38.1
+
