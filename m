@@ -2,155 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0F5664757
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D92664753
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbjAJRWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
+        id S232868AbjAJRWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 12:22:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238360AbjAJRVv (ORCPT
+        with ESMTP id S233797AbjAJRVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:21:51 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9961DDC2;
-        Tue, 10 Jan 2023 09:21:40 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 00A604D7C5;
-        Tue, 10 Jan 2023 17:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673371299; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vei1DaE8uRB41yRSAQ17aS0iN4+zXK6p5LrdkYiuYxg=;
-        b=wvN0azli41yMAHd9srw3ORxqNblSGyo9JARChP9gUggYeK9bhuSBt6t8vAt0+OxW2HbY62
-        wx0b5ZKcr7/UM4xDAJ3dCUwZ+jjS8bqOP5FdCw+dxKfIR7aTJMeJJm9UBXitwBaVSCj2G+
-        mMqXk7QtBLcfxWECBuyRohRPvRjhthA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673371299;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vei1DaE8uRB41yRSAQ17aS0iN4+zXK6p5LrdkYiuYxg=;
-        b=k+M/vQfzO4ApPTp4qGb+Ff+OSNq5+frWvkA+9bImmzz6lLX3tkzF7ChaA5oGAL2AFgBp12
-        Ek7XXMgf2yRDbnCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A7B431358A;
-        Tue, 10 Jan 2023 17:21:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PbD2J6KevWOCPgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 10 Jan 2023 17:21:38 +0000
-Message-ID: <58d7a42c-9e6b-ab2a-617f-d5e373bf63cb@suse.cz>
-Date:   Tue, 10 Jan 2023 18:19:48 +0100
+        Tue, 10 Jan 2023 12:21:39 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653272F7A7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:21:04 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id m6so19526430lfj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:21:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BiD9HDtY677v73zD/DAwV3gxXKXHJJtF5vodMznouXI=;
+        b=LtCcapEfaq7jnw+0fGg77tKfZIsc0Ia1/E/mVPvdvIeEfaUDocpq2qs66q6GPOw+JK
+         Pxve+JFGST72umFROmdvgPrsqTgozMzdSDcaFCaoI1HgN98eGnYmPwCErho77OzrCd0l
+         DLNCw3XmItwejeHB5US7WEj8eASOgmF6/aqG0U7Ua0YD0Moww9aHxy4rjyUyEuGrLljV
+         HW2zTdvTCyJ57N8jf8aGm4sEhw5g2bqc3PYf41lorsBz2Vn69tLFRehGj5nuHhYxNFGF
+         dfwiulkdAaoKjGof+vEdw0VtFxBzi3L3diD4231k+0gVkLoVA8PLU6bBwlDNdQGnujjB
+         vMUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BiD9HDtY677v73zD/DAwV3gxXKXHJJtF5vodMznouXI=;
+        b=YhFFySa2JQYbgpFbp+hOvCZMl/Ce+qpPa5HzQ3wzv6aXvsdYX/4oJLeNMxghT0p45J
+         StwF0MWu4W55OrIJk0IlPDGFoarTYlcK9viMyHhmqo7If3XPQFLhKeoaifWcuRxZM/Cf
+         smcrnb6+91e9VuNOAKrgyatjN8lSgaaTiyK2DVm7w0veyy4LRtUAwq/3mX8R39laA5xh
+         a4GjNruzDzLfh3f1re+YCl/Qn8rk+/OBBiat1uPDgBnOSzqVuI8Z9Mcvceg5dJGJ9fZc
+         D367KAC6aJf5Yz/0Ne3qBsIywOHIvRXXFe2/qEq1lgm+I/RE987X+DzFT8ig+iiQqtpA
+         BM+Q==
+X-Gm-Message-State: AFqh2kpJwDVoCqeyBGdGQxqc60xYz/jrwISeo9zp1HbwpA9Yj39blNLe
+        RpObu1knyVS91ZCx+zCh7GkQPaQQF6jvk0cB/SI8qQ==
+X-Google-Smtp-Source: AMrXdXvlEhCNddUYn/gUScAlB9NgzJOTwBVEkk8vjb8E2yu2dOexlTIBWM5iNW3SRH+747A4nRXGVYTTy+jvR2TDsAU=
+X-Received: by 2002:a05:6512:22d6:b0:4cb:3ff7:f24a with SMTP id
+ g22-20020a05651222d600b004cb3ff7f24amr1538148lfu.409.1673371262485; Tue, 10
+ Jan 2023 09:21:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Altmanninger <aclopte@gmail.com>
-References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
- <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
- <Y60RoP77HnwaukEA@zx2c4.com>
- <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
- <Y7w74EBYP3+FHlkw@zx2c4.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Y7w74EBYP3+FHlkw@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230109160808.3618132-1-pgonda@google.com> <74745684-785e-71b2-288e-91fbcf1b555b@amd.com>
+ <CAMkAt6q_E-+VV=KOs9LbDzawirWR7M4xL2pCF9fR2kMuBuFM-A@mail.gmail.com> <d6c2455c-aff5-a135-2610-53dd6b586b59@amd.com>
+In-Reply-To: <d6c2455c-aff5-a135-2610-53dd6b586b59@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 10 Jan 2023 10:20:50 -0700
+Message-ID: <CAMkAt6orqOCrOiy=kjBq=5jnP1CyM=cbaYYaVAZLDnqbRpgUCw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: sev: Fix int overflow in send|recieve_update_data ioctls
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     kvm@vger.kernel.org, Andy Nguyen <theflow@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 17:08, Jason A. Donenfeld wrote:
-> Hi Thorsten,
-> 
-> On Thu, Jan 05, 2023 at 02:59:15PM +0100, Thorsten Leemhuis wrote:
->> On 29.12.22 05:03, Jason A. Donenfeld wrote:
->>> On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
->>>> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
->>>>> Ugh, while the problem [1] was fixed in 6.1, it's now happening again
->>>>> on the T460 with 6.2-rc1. Except I didn't see any oops message or
->>>>> "tpm_try_transmit" error this time. The first indication of a problem
->>>>> is this during a resume from suspend to ram:
->>>>>
->>>>> tpm tpm0: A TPM error (28) occurred continue selftest
->>>>>
->>>>> and then periodically 
->>>>>
->>>>> tpm tpm0: A TPM error (28) occurred attempting get random
->>>>
->>>> That's a TPM 1.2 error which means the TPM failed the selftest.  The
->>>> original problem was reported against TPM 2.0  because of a missing
->>>> try_get_ops().
->>>
->>> No, I'm pretty sure the original bug, which was fixed by "char: tpm:
->>> Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
->>> considering it's the same hardware from Vlastimil causing this. I also
->>> recall seeing this in 1.2 when I ran this with the TPM emulator. So
->>> that's not correct.
->>
->> James, are you or some other TPM developer looking into this? Or is this
->> deadlocked now? And if so: how can we get this unstuck to get this
->> regression solved?
->>
->> Side note: I wonder if the problem that Johannes reported yesterday in
->> this thread (
->> https://lore.kernel.org/all/Y7VCcgHUC6JtnO2b@gmail.com/
->> ) is related or something else, as it seems his issue happens with 6.1,
->> while Vlastimil's problems should be fixed there. Or am I missing something?
-> 
-> So, this is now in rc3:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1382999aa0548a171a272ca817f6c38e797c458c
-> 
-> That should help avoid the worst of the issue -- laptop not sleeping.
-> But the race or whatever it is still does exist. So you might want to
-> keep this in your tracker to periodically nudge the TPM folks about it.
+On Tue, Jan 10, 2023 at 10:16 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+>
+> On 1/10/23 10:44, Peter Gonda wrote:
+> >>>
+> >>> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> >>> index 273cba809328..9451de72f917 100644
+> >>> --- a/arch/x86/kvm/svm/sev.c
+> >>> +++ b/arch/x86/kvm/svm/sev.c
+> >>> @@ -1294,7 +1294,7 @@ static int sev_send_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> >>>
+> >>>        /* Check if we are crossing the page boundary */
+> >>>        offset = params.guest_uaddr & (PAGE_SIZE - 1);
+> >>> -     if ((params.guest_len + offset > PAGE_SIZE))
+> >>> +     if (params.guest_len > PAGE_SIZE || (params.guest_len + offset > PAGE_SIZE))
+> >>
+> >> I see the original if statement had double parentheses, which looks
+> >> strange. Should this if (and the one below) be:
+> >>
+> >>          if (params.guest_len > PAGE_SIZE || (params.guest_len + offset) > PAGE_SIZE)
+> >
+> > Isn't the order of operations here: '+' and then '>'. So is the patch
+> > correct and matches the old conditional? I am fine adding additional
+>
+> But what was the purpose of them in the old conditional? They weren't
+> necessary.
+>
+> But, yes, that order of operations is correct and those are both before
+> '||'. So the extra parentheses around the second condition check are still
+> strange then, right?
+>
+> Given that, then:
+>
+>         if (params.guest_len > PAGE_SIZE || params.guest_len + offset > PAGE_SIZE)
+>
+> > () for clarity though.
+>
+> I do like the look and clarity of the parentheses around the addition.
 
-Heh, booted rc3 and managed to hit it on very first suspend to ram attempt:
+Sounds good to me. I'll update the V2 in a couple days to wait for any
+other comments.
 
-tpm tpm0: A TPM error (28) occurred continue selftest
-
-But thanks to the patch, the next suspend worked:
-
-[  236.598900] tpm tpm0: Error (28) sending savestate before suspend
-[  236.598915] tpm_tis 00:08: Ignoring error 28 while suspending
-
-and on resume again:
-
-[  238.196645] tpm tpm0: A TPM error (28) occurred continue selftest
-
-and indeed now I keep getting (as expected)
-
-[  399.671077] tpm tpm0: A TPM error (28) occurred attempting get random
-
-So hopefully somebody will look into the root cause at some point.
-
-> Jason
-> 
-> 
-
+>
+> Thanks,
+> Tom
