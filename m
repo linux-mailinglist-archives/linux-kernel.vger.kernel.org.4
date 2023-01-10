@@ -2,99 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AD9663F2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:18:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E846663F2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238180AbjAJLSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 06:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S230161AbjAJLUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 06:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232761AbjAJLRx (ORCPT
+        with ESMTP id S231772AbjAJLT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 06:17:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B595F6E
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:17:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673349426;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7R6k4XeSSfrouTet4Pl7FYt1MDO+biHA3LgQPUZKzOM=;
-        b=c2uS+JooQAbLZMtzL6pOeJ7FDpMbaTd6WDJzYG/AsdaWjFvJL7TvgEwlmTSWxFbNtbJNXI
-        bl1MLteORMcfQzY+GSyHGyimBWxRcxyFhk3uumiRrs3bAxH0jwqRrgvhuhx4uoaK80ln3e
-        9vOtSDNq/oFJDS3tsJ5BRJNMeDG5OyA=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-57-5V-BIPyjM9WtzyO8snj4YA-1; Tue, 10 Jan 2023 06:17:00 -0500
-X-MC-Unique: 5V-BIPyjM9WtzyO8snj4YA-1
-Received: by mail-qk1-f197.google.com with SMTP id y6-20020a05620a44c600b00704d482d3a0so8612169qkp.21
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:17:00 -0800 (PST)
+        Tue, 10 Jan 2023 06:19:59 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C6C12602;
+        Tue, 10 Jan 2023 03:19:58 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso5239327wms.0;
+        Tue, 10 Jan 2023 03:19:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oxQkDdVDafHcjUoOF3EQnmddqLP5rPkgih0jPFZvU2E=;
+        b=oSJ8PVtgQcRGxfsFCxheDVMBtkmXR2RB3yi6lBOwAjKC6KZiGU5lWMLNyjABxMqsxb
+         mCdj37EWlNQMiajkDUGQR+qYTlwEuu3SPS88i/Xlwqx8bh7h0UQ9gsOd+fty/nba4RUi
+         geRWvLBnOYqPYhl1VOpo8vGc45wKqT6fXtQChyOwgqyf8X6/NZ451ea25vdiA9tKlvQN
+         9JJlYI3au4aBpWDaqxN9l2G2YRIrIOCWPNoF23CE698VVQHk6U0np8JrdZYVr9iGnK8w
+         gUjnpSMwS5jLX8w0nFVEVn4GzSxgP/ngP88zMuHp2P7bj3z+jvm97VtUbhDhh4tqN0mh
+         vm8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7R6k4XeSSfrouTet4Pl7FYt1MDO+biHA3LgQPUZKzOM=;
-        b=g4Hb6tCExon9QOl1IWWgSyumdEx+qduql2+3oeyQpOu9bA+HL7g1M6ffYbdeGe9rK0
-         W9AfmuDNtnoajBi3rEByEkvicjctAsglUJZYixPHkSBCw8Hc8uAVbW/5pGKFCh7eC0RO
-         xzipY22mXAsJ+K6+JZ3dEJv9UCtEMHUijKqqp/JTqgeKQTi01K+V/Ci/6VeIKudsXhXP
-         QdYLZxfGxaoeXvusC/J9Pg90kCpPaQKKUvIA1WyNouJyEiyOnpyrzPVTqHm7KWSZwzqu
-         TdEyZDbZGQfd2R9Nm6NR2ye401tFztjJK0iccAYiEKrGneCs1VqpWpLYz/2eX3+sErL6
-         tedQ==
-X-Gm-Message-State: AFqh2kpsVHWmqTfkBIlJP8JwCZhbPxjRWjx45ENRW0DJYlZtoBhQYACH
-        bkyG1PD5fVg9fhqwpLym+4zjrn1353WgEMU6y+RKWpy+8De2Le0zRiI7W4qzFqEBI45K4CWOL3w
-        V2mFTjzRRnBmqlLXAMWFWRJN9
-X-Received: by 2002:ac8:520c:0:b0:3a8:1079:b844 with SMTP id r12-20020ac8520c000000b003a81079b844mr89443423qtn.46.1673349419766;
-        Tue, 10 Jan 2023 03:16:59 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXt7LAw0VjeSUK8wkVXMaLsnRFvPYmNquEuKr7XZHAByB6NkEWLdJSItXvzP6gLV6c7Tmr1r8Q==
-X-Received: by 2002:ac8:520c:0:b0:3a8:1079:b844 with SMTP id r12-20020ac8520c000000b003a81079b844mr89443387qtn.46.1673349419493;
-        Tue, 10 Jan 2023 03:16:59 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-128.dyn.eolo.it. [146.241.120.128])
-        by smtp.gmail.com with ESMTPSA id k8-20020ac80748000000b0038b684a1642sm5839964qth.32.2023.01.10.03.16.55
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oxQkDdVDafHcjUoOF3EQnmddqLP5rPkgih0jPFZvU2E=;
+        b=yb8Y1E5zKt8yED6xAXY5lWyqHZL8uyiheNIx2JPTXuCAgt/muxlwKRSm8+q3cWMm1G
+         BLLZuKdMTF8TeoXo5S4iGTv6SQ2MAohQ6coxw45ipMFOo5qTwHCF3AvXVeYSKrUuOiw5
+         MFQs8ZOctBMVzQWdCWJt/S7Dy6+64ezAC+hlt3U7i2fsrUZoFiGp3VCvt/nNM9yr9XNR
+         dI2qqVWdHuMJgzydLG02zVBXEZis3DiP3lXgDDpWAyD6u9+FxonfCXzDfPYD2vcdvi+L
+         V8eI8u9Al+9XF6hKROUpAQO1ldOnG6GCbJGS6+Sfz9Q58pLuJsi60XqFEBW5aq6YpA4H
+         Rm/Q==
+X-Gm-Message-State: AFqh2kqYdzQ+NkWuzLPzIct0p00hFoFIRR3WuwyCrBNX+63hRHofmpG8
+        JicCn3oChsipe8u5GflgJ3Sp0cszqlA/CBC9
+X-Google-Smtp-Source: AMrXdXvZ75opWZTbfYPfpgM6I0lIFfRpx9gkSf25WUweD/6H0BELiuV1MCXQnbGxE3NfTzMZnGi0uw==
+X-Received: by 2002:a05:600c:48a8:b0:3cf:7197:e68a with SMTP id j40-20020a05600c48a800b003cf7197e68amr49737298wmp.18.1673349596531;
+        Tue, 10 Jan 2023 03:19:56 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id l36-20020a05600c1d2400b003d9fb59c16fsm997071wms.11.2023.01.10.03.19.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 03:16:58 -0800 (PST)
-Message-ID: <5bd7ee34ead313785951defbf3069b64d4338a45.camel@redhat.com>
-Subject: Re: [PATCH net-next v3 01/11] net: mdio: Add dedicated C45 API to
- MDIO bus drivers
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Michael Walle <michael@walle.cc>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wei Fang <wei.fang@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Date:   Tue, 10 Jan 2023 12:16:53 +0100
-In-Reply-To: <20221227-v6-2-rc1-c45-seperation-v3-1-ade1deb438da@walle.cc>
-References: <20221227-v6-2-rc1-c45-seperation-v3-0-ade1deb438da@walle.cc>
-         <20221227-v6-2-rc1-c45-seperation-v3-1-ade1deb438da@walle.cc>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 10 Jan 2023 03:19:56 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 10 Jan 2023 12:19:53 +0100
+To:     Ian Rogers <irogers@google.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        namhyung@kernel.org
+Subject: Re: [PATCH v3 1/2] perf build: Properly guard libbpf includes
+Message-ID: <Y71J2WpaMtked02+@krava>
+References: <CAJ9a7ViGE3UJX02oA42A9TSTKsOozPzdHjyL+OSP4J-9dZFqrg@mail.gmail.com>
+ <Y7hZccgOiueB31a+@kernel.org>
+ <Y7hgKMDGzQlankL1@kernel.org>
+ <Y7hgoVKBoulCbA4l@kernel.org>
+ <CAP-5=fXPPSHvN6VYc=8tzBz4xtKg4Ofa17zV4pAk0ycorXje8w@mail.gmail.com>
+ <Y7wuz6EOggZ8Wysb@kernel.org>
+ <Y7xYimp0h4YT72/N@krava>
+ <CAP-5=fXwO5_kK=pMV09jdAVw386CB0JwArD0BZd=B=xCyWSP1g@mail.gmail.com>
+ <CAP-5=fVa51_URGsdDFVTzpyGmdDRj_Dj2EKPuDHNQ0BYgMSzUA@mail.gmail.com>
+ <CAP-5=fVtMEahrPMJNVOqsZGj-GoTxUnWsdzK7M+9F2+DhG_STQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fVtMEahrPMJNVOqsZGj-GoTxUnWsdzK7M+9F2+DhG_STQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,25 +86,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-09 at 16:30 +0100, Michael Walle wrote:
-> diff --git a/include/linux/phy.h b/include/linux/phy.h
-> index 6378c997ded5..65844f0a7fb3 100644
-> --- a/include/linux/phy.h
-> +++ b/include/linux/phy.h
-> @@ -364,6 +364,11 @@ struct mii_bus {
->  	int (*read)(struct mii_bus *bus, int addr, int regnum);
->  	/** @write: Perform a write transfer on the bus */
->  	int (*write)(struct mii_bus *bus, int addr, int regnum, u16 val);
-> +	/** @read: Perform a C45 read transfer on the bus */
+On Mon, Jan 09, 2023 at 11:34:44AM -0800, Ian Rogers wrote:
+> On Mon, Jan 9, 2023 at 11:29 AM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Mon, Jan 9, 2023 at 10:37 AM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > On Mon, Jan 9, 2023 at 10:10 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > >
+> > > > On Mon, Jan 09, 2023 at 12:12:15PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > > > Em Fri, Jan 06, 2023 at 11:06:46AM -0800, Ian Rogers escreveu:
+> > > > > > So trying to get build-test working on my Debian derived distro is a
+> > > > > > PITA with broken feature detection for options I don't normally use.
+> > > > >
+> > > > > Its really difficult to have perf building with so many dependent
+> > > > > libraries, mowing out some should be in order.
+> > > > >
+> > > > > > I'll try to fix this.
+> > > > >
+> > > > > Thanks.
+> > > > >
+> > > > > > In any case I think I've spotted what is really happening here and it
+> > > > > > isn't a failure but a feature :-D The build is specifying
+> > > > >
+> > > > > I get it.
+> > > > >
+> > > > > > LIBBPF_DYNAMIC=1 which means you get the libbpf headers from
+> > > > > > /usr/include. I think the build is trying to do this on a system with
+> > > > > > an old libbpf and hence getting the failures above. Previously, even
+> > > > > > though we wanted the dynamic headers we still had a -I, this time for
+> > > > > > the install_headers version. Now you really are using the system
+> > > > > > version and it is broken. This means a few things:
+> > > > > > - the libbpf feature test should fail if code like above is going to fail,
+> > > > >
+> > > > > Agreed.
+> > > > >
+> > > > > > - we may want to contemplate supporting older libbpfs (I'd rather not),
+> > > > >
+> > > > > I'd rather require everybody to be up to the latest trends, but I really
+> > > > > don't think that is a reasonable expectation.
+> > > > >
+> > > > > > - does build-test have a way to skip known issues like this?
+> > > > >
+> > > > > Unsure, Jiri?
+> > > >
+> > > > I don't think so it just triggers the build, it's up to the features check
+> > > > to disable the feature if the library is not compatible with perf code
+> > > >
+> > > > could we add that specific libbpf call to the libbpf feature check?
+> > >
+> > > Looking at the failure closer, the failing code is code inside a
+> > > feature check trying to workaround the feature not being present. We
+> > > need to do something like:
+> > >
+> > > ```
+> > > diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
+> > > index 6e9b06cf06ee..a1c3cc230273 100644
+> > > --- a/tools/perf/util/bpf-loader.c
+> > > +++ b/tools/perf/util/bpf-loader.c
+> > > @@ -33,17 +33,18 @@
+> > > #include <internal/xyarray.h>
+> > >
+> > > #ifndef HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS
+> > > -int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
+> > > -                          struct bpf_insn *new_insns __maybe_unused,
+> > > size_t new_insn_cnt __maybe_un
+> > > used)
+> > > +static int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
+> > > +                                 struct bpf_insn *new_insns __maybe_unused,
+> > > +                                 size_t new_insn_cnt __maybe_unused)
+> > > {
+> > >        pr_err("%s: not support, update libbpf\n", __func__);
+> > >        return -ENOTSUP;
+> > > }
+> > >
+> > > -int libbpf_register_prog_handler(const char *sec __maybe_unused,
+> > > -                                 enum bpf_prog_type prog_type __maybe_unused,
+> > > -                                 enum bpf_attach_type exp_attach_type
+> > > __maybe_unused,
+> > > -                                 const struct
+> > > libbpf_prog_handler_opts *opts __maybe_unused)
+> > > +static int libbpf_register_prog_handler(const char *sec __maybe_unused,
+> > > +                                       enum bpf_prog_type prog_type
+> > > __maybe_unused,
+> > > +                                       enum bpf_attach_type
+> > > exp_attach_type __maybe_unused,
+> > > +                                       const void *opts __maybe_unused)
+> > > {
+> > >        pr_err("%s: not support, update libbpf\n", __func__);
+> > >        return -ENOTSUP;
+> > > ```
+> > >
+> > > There are some other fixes necessary too. I'll try to write the fuller
+> > > patch but I have no means for testing except for undefining
+> > > HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS.
+> > >
+> > > Thanks,
+> > > Ian
+> >
+> > So libbpf_prog_handler_opts is missing in the failing build, this
+> > points to a libbpf before 0.8. I'm somewhat concerned that to work
+> > around these linkage problems we're adding runtime errors - we may
+> > build but the functionality is totally crippled. Is it worth
+> > maintaining these broken builds or to just upfront fail the feature
+> > test?
+> >
+> > We can also switch the feature tests for LIBBPF_MAJOR_VERSION and
+> > LIBBPF_MINOR_VERSION checks. This would have the property of letting
+> > us tie the error messages to what version of libbpf is assumed.
+> >
+> > In this case we could have a feature test for the libbpf version and
+> > if the version is before libbpf 0.8 fail the feature check. A quick
+> > way to do this is:
+> > ```
+> > diff --git a/tools/build/feature/test-libbpf.c
+> > b/tools/build/feature/test-libbpf.c
+> > index a508756cf4cc..dadd8186b71d 100644
+> > --- a/tools/build/feature/test-libbpf.c
+> > +++ b/tools/build/feature/test-libbpf.c
+> > @@ -1,6 +1,10 @@
+> > // SPDX-License-Identifier: GPL-2.0
+> > #include <bpf/libbpf.h>
+> >
+> > +#if (LIBBPF_MAJOR_VERSION == 0) && (LIBBPF_MINOR_VERSION < 8)
+> > +#error At least libbpf 0.8 is assumed for Linux tools.
+> > +#endif
+> > +
+> > int main(void)
+> > {
+> >        return bpf_object__open("test") ? 0 : -1;
+> > ```
+> >
+> > Thanks,
+> > Ian
+> 
+> Oh, just to note. While failing the feature test is disappointing for
+> a libbpf that isn't very old, we have the newer libbpf to statically
+> build in. Developers won't be impacted due to the static route. If you
+> are a distro maintainer, you should just update your libbpf. So we
+> could just bump the API assumption to 1.0 as I believe that'd have the
+> advantage of removing feature tests, workarounds, untested code (like
+> what broke here), etc.
+> 
+> What do you think?
 
-Minor nit: s/@read/@read_c45/ 
+yes, seems good.. fedora has libbpf 1.0 already so should not be problem
+there at least ;-)
 
-> +	int (*read_c45)(struct mii_bus *bus, int addr, int devnum, int regnum);
-> +	/** @write: Perform a C45 write transfer on the bus */
-
-Mutatis mutandis, same thing here.
-
-Thanks!
-
-Paolo
-
+thanks,
+jirka
