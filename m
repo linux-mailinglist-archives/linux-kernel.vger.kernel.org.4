@@ -2,99 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF222665327
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215876656C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235908AbjAKFFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 00:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
+        id S232778AbjAKI7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 03:59:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235399AbjAKFDj (ORCPT
+        with ESMTP id S236462AbjAKI6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 00:03:39 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB2BDFE4;
-        Tue, 10 Jan 2023 21:03:38 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NsFv71FKVz4f3v71;
-        Wed, 11 Jan 2023 13:03:31 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP1 (Coremail) with SMTP id cCh0CgDX9S8fQ75jGl2gBQ--.10280S16;
-        Wed, 11 Jan 2023 13:03:33 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     hch@lst.de, axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
-        ming.lei@redhat.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     john.garry@huawei.com, jack@suse.cz
-Subject: [PATCH v3 14/14] blk-mq: correct stale comment of .get_budget
-Date:   Wed, 11 Jan 2023 21:01:59 +0800
-Message-Id: <20230111130159.3741753-15-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20230111130159.3741753-1-shikemeng@huaweicloud.com>
-References: <20230111130159.3741753-1-shikemeng@huaweicloud.com>
+        Wed, 11 Jan 2023 03:58:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD6E11C05
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 00:58:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C170161AF8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:58:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE5BCC433EF;
+        Wed, 11 Jan 2023 08:58:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673427492;
+        bh=JPRSYFyEg5h2qZKN+L6vUHL8dBDH2z4OMH2CXAsIkI4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vx9LTGzKTSSRAnYVLCCG+mCfUkpNf2vRPjj0lSBah5lznIrnOKuZtQ7yLP3fMS6aI
+         RysEXadKlFzf3q1xoRHvugyA5pTv7ip+AK1Eh7UtEYc0hjJF3vK7sbvPy/7gGlPEz0
+         nfcpWqn36e1d2wNXXlC13AE8JpmYgk4XxFUcoN8Q=
+Date:   Tue, 10 Jan 2023 19:09:11 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 1/2] driver core: bus.h: document bus notifiers better
+Message-ID: <Y72px6jhwCC1TiQF@kroah.com>
+References: <20230110145303.2087563-1-gregkh@linuxfoundation.org>
+ <968101fe-2306-dbef-81f1-6b5864778b7a@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgDX9S8fQ75jGl2gBQ--.10280S16
-X-Coremail-Antispam: 1UD129KBjvJXoW7CryrWr47uF1kXw43Jr45trb_yoW8Ar1xpr
-        ZxKrWYkr4jqryDXFyfAa17JanakanFqF9xJr1ftw1Fy3W3CrZ7Xr48K345Ca18AFZaka9x
-        ZrsF9r90qws3u37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
-        8IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAv
-        FVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3w
-        A2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE
-        3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr2
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
-        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUxD7aUUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <968101fe-2306-dbef-81f1-6b5864778b7a@infradead.org>
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 88022d7201e96 ("blk-mq: don't handle failure in .get_budget")
-remove BLK_STS_RESOURCE return value and we only check if we can get
-the budget from .get_budget() now.
-Correct stale comment that ".get_budget() returns BLK_STS_NO_RESOURCE"
-to ".get_budget() fails to get the budget".
+On Tue, Jan 10, 2023 at 09:03:52AM -0800, Randy Dunlap wrote:
+> Hi Greg,
+> 
+> On 1/10/23 06:53, Greg Kroah-Hartman wrote:
+> > The bus notifier values are not documented all that well, so clean this
+> > up and make a real enumerated type for them and document them much
+> > better.  Also change the values from being in hex to just decimal as it
+> > didn't make any sense to have them in hex.
+> > 
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> > v2: move the values to decimal from hex as pointed out by Rafael.
+> > 
+> >  include/linux/device/bus.h | 43 +++++++++++++++++++++++++-------------
+> >  1 file changed, 29 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+> > index d529f644e92b..fbec1c7c34c0 100644
+> > --- a/include/linux/device/bus.h
+> > +++ b/include/linux/device/bus.h
+> > @@ -257,21 +257,36 @@ extern int bus_register_notifier(struct bus_type *bus,
+> >  extern int bus_unregister_notifier(struct bus_type *bus,
+> >  				   struct notifier_block *nb);
+> >  
+> > -/* All 4 notifers below get called with the target struct device *
+> > - * as an argument. Note that those functions are likely to be called
+> > - * with the device lock held in the core, so be careful.
+> 
+> If you want this to be kernel-doc format with no warnings,
+> (a) all of the " * BUS_NOTIFY_..." lines should be " * @BUS_NOTIFY_...";
+> (b) all of the " * @BUS_NOTIFY_..." lines should be immediately after the
+> second ("enum") line. (at [1])
+> (c) In the heading "enum" line, s/: / - /, but that's just for consistency
+> and to follow kernel-doc documented format; it seems that kernel-doc takes
+> that separator either way.
+> 
+> The patch below (on top of this one) makes all of these changes.
 
-Fixes: 88022d7201e9 ("blk-mq: don't handle failure in .get_budget")
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
----
- block/blk-mq-sched.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Ah, thank you so much for that, I'll merge your changes into here, and
+also drop the explicit values for the enums as that really does not
+matter at all.
 
-diff --git a/block/blk-mq-sched.c b/block/blk-mq-sched.c
-index ae40cdb7a383..06b312c69114 100644
---- a/block/blk-mq-sched.c
-+++ b/block/blk-mq-sched.c
-@@ -81,7 +81,7 @@ static bool blk_mq_dispatch_hctx_list(struct list_head *rq_list)
- /*
-  * Only SCSI implements .get_budget and .put_budget, and SCSI restarts
-  * its queue by itself in its completion handler, so we don't need to
-- * restart queue if .get_budget() returns BLK_STS_NO_RESOURCE.
-+ * restart queue if .get_budget() fails to get the budget.
-  *
-  * Returns -EAGAIN if hctx->dispatch was found non-empty and run_work has to
-  * be run again.  This is necessary to avoid starving flushes.
-@@ -209,7 +209,7 @@ static struct blk_mq_ctx *blk_mq_next_ctx(struct blk_mq_hw_ctx *hctx,
- /*
-  * Only SCSI implements .get_budget and .put_budget, and SCSI restarts
-  * its queue by itself in its completion handler, so we don't need to
-- * restart queue if .get_budget() returns BLK_STS_NO_RESOURCE.
-+ * restart queue if .get_budget() fails to get the budget.
-  *
-  * Returns -EAGAIN if hctx->dispatch was found non-empty and run_work has to
-  * be run again.  This is necessary to avoid starving flushes.
--- 
-2.30.0
+thanks,
 
+greg k-h
