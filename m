@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3316664161
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7D2664162
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233593AbjAJNOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:14:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
+        id S234010AbjAJNOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbjAJNO0 (ORCPT
+        with ESMTP id S233837AbjAJNOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:14:26 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332CB3FA1F
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:14:25 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id h16so11677549wrz.12
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:14:25 -0800 (PST)
+        Tue, 10 Jan 2023 08:14:30 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE0D382
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:14:29 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id o7-20020a17090a0a0700b00226c9b82c3aso13376786pjo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:14:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RnE4fpLbcTktxDgKOw5o5AykRDw1ELTBr8AeZCuOMxk=;
-        b=RYF+dwJScInqtksjXi7CaKi6U0QmKWIc1MT/7tNys0Mdjiz7BVq58Zac4iiBwdWnAH
-         ZQRMVsQQkYsqH3fiNe+xKk90MtFLKybMVy1YMoEx9/myhqNsztTMmn/lLTkCZa0JOn/y
-         8UGgzUH34CxT4ZFc4xlcxoFTFf75Yh7qjjBcgw18NzIOM3nwKfQ4UID7jZC+0+jCmkFf
-         t1zy+B1we1oOq98ybkJGRSDg6XlzQDyEgNZiJG1fLR/fWY0+6cKYuERbnAbVYJiBzIbo
-         KS7USHehvufu0YKmfxmkMqDO7r4GZw3HlkrVmeAIYOld93vNVB15Rcla38USWTCvMf0D
-         pWjA==
+        bh=TqolwS2i9Vzx5E9jrKgCxuzRWSZRqxSvHs+d5JJ759s=;
+        b=DVarO2Y6TWzflIQwftuuQY+Qp8rsIzGWwSyZ+gbPjBsdscRgGSo9Hws8D/V4H8TrQj
+         e+gqzvcipir15fpkNgqE5bN2Lrlup2ffrQTf4R9/A0tDCi79MOdovib0rYzmOMyDxLTa
+         K+UHD4h1h0e3QYi8d/MtV2GCrcDYZD0qMDtNly5++1WgcxOdOk3ia7mOEZ9CQ9AD3gaz
+         ya+n5QjjkqPZv9hO824RACEYcpUPYFsbwqQXoa23x4plAsmPk/tlUjGOKsSP7LyhRE00
+         2pp3gfYveJJNsH3S3Nv0kgOJll8WWzgNgjOAVQbEpVKh0V7UIaxwYXP0g025Dp7ph+ay
+         dxRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RnE4fpLbcTktxDgKOw5o5AykRDw1ELTBr8AeZCuOMxk=;
-        b=KIZFEbg/J8oqU0DeyB0/gOe7aiK3U7coK8kdkFKvUIysgZgBXbi4WfWdVkvmTKC+yb
-         pE73eTKiN0jj1WEqWIbcfUCQbMDZ7Enz8WeVUOozW0Hf+mXSTRF5aEd7oLvPkp+vVHS7
-         kv6b/xXE3ArqHLtPnkbWUFVjM3LowSKAcX1vTxTxISRVaWtRvCxVNoROdPlSWWe05lF5
-         iH54BsSZADr564bGhKegDzlAUg+uGx55eeuYhgpYPDPZQoCBQ9NXlglqI6DjVV8F0pmE
-         tmu9a/YMhNRXXXLblxUcTWKa5ehbt2t/1UdGEVV+X8gAx9vRYjE+Akxq9NtwN+R8BVsr
-         vuiw==
-X-Gm-Message-State: AFqh2kqBDVXOxJltBjH2JJzlmRZOnEagKZ+h5HIoD0xfCGEFQ0fLDjrD
-        vwRkpSq+KwKT4N8qxsil9+zZlQ==
-X-Google-Smtp-Source: AMrXdXs1T/XUz7ymawsRiuhyR7G7qFEF1Qq8385DQZCBDY5NH/B6jOZoZ2m4dktR4rh+wJKR0xos5w==
-X-Received: by 2002:a05:6000:12c2:b0:2bc:5e1:6ff1 with SMTP id l2-20020a05600012c200b002bc05e16ff1mr4842047wrx.10.1673356463750;
-        Tue, 10 Jan 2023 05:14:23 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id f3-20020adfdb43000000b00236883f2f5csm11400187wrj.94.2023.01.10.05.14.22
+        bh=TqolwS2i9Vzx5E9jrKgCxuzRWSZRqxSvHs+d5JJ759s=;
+        b=nVoEAOGl97cXgWGbZXQFdxjcdje3aVDuH/o82SSJfoeprwKBJ+TY70kQ90tNvNS9N7
+         nRqDc/50baRHE7bX0XXr1qTFcDT1MOGQhQxAEVROcjFLgQiDLQ/9TT1vX1daiyL9/W6i
+         pgZVGhJNS5K6rsKr+5oOu/S+0K4+R2gJj6H4wOHew8alVzlsR3axlDYoGttDRhg0vY9T
+         2+ZhSMjVCk1CIJt4OS3Lc9imFvis06n0eW7UuA1vHG6Nfn8fIWuLBcvoftNG12IX3Q+D
+         Jua6Di0X/Xd23SO0PSVuOTFFf3ALvsQmFGXsIkDQWaXGaHG0BHN8wnE74FC+LWU3IkOR
+         gk1g==
+X-Gm-Message-State: AFqh2kobGt18rv9yV8ZZ8p4Fc+b47w9ZGE4WDKLS7H5yGrXg8OQRqPtX
+        ZhnGv5KuTguNfddFNba6pdr0ey8zpZchFw==
+X-Google-Smtp-Source: AMrXdXuUa/ukpIFK2Mxbu9LqL/r/JQgg0+RlG6jjSuu0d+zrKbX8MtWa2LTdy0j9v/D5HLMraBImpw==
+X-Received: by 2002:a17:902:ef93:b0:193:2bed:3325 with SMTP id iz19-20020a170902ef9300b001932bed3325mr8766929plb.15.1673356469003;
+        Tue, 10 Jan 2023 05:14:29 -0800 (PST)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170902b40b00b001931c37da2dsm6724580plr.20.2023.01.10.05.14.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 05:14:23 -0800 (PST)
-Message-ID: <88d66834-ca80-888b-e56e-7694e84b6eae@linaro.org>
-Date:   Tue, 10 Jan 2023 13:14:22 +0000
+        Tue, 10 Jan 2023 05:14:28 -0800 (PST)
+Message-ID: <50adbdd5-7d2d-ad3f-ce91-5b322ae7691b@gmail.com>
+Date:   Tue, 10 Jan 2023 22:14:24 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 4/7] arm64: dts: qcom: Add msm8939 SoC
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 1/1] extcon: axp288: Replace open coded acpi_dev_put()
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
-        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
-        Jun Nie <jun.nie@linaro.org>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-References: <20230103010904.3201835-1-bryan.odonoghue@linaro.org>
- <20230103010904.3201835-5-bryan.odonoghue@linaro.org>
- <6e594438-843a-d03e-5276-d6316a9dc2c0@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <6e594438-843a-d03e-5276-d6316a9dc2c0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Chen-Yu Tsai <wens@csie.org>
+References: <20230102202919.15925-1-andriy.shevchenko@linux.intel.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230102202919.15925-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2023 09:14, Krzysztof Kozlowski wrote:
-> ../arch/arm64/boot/dts/qcom/msm8939.dtsi:1825.23-1842.5: Warning
-> (simple_bus_reg): /soc@0/mmc@7824000: simple-bus unit address format
-> error, expected "7824900
+On 23. 1. 3. 05:29, Andy Shevchenko wrote:
+> Instead of calling put_device(&adev->dev) where adev is a pointer
+> to an ACPI device, use specific call, i.e. acpi_dev_put().
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/extcon/extcon-axp288.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/extcon/extcon-axp288.c b/drivers/extcon/extcon-axp288.c
+> index 180be768c215..a703a8315634 100644
+> --- a/drivers/extcon/extcon-axp288.c
+> +++ b/drivers/extcon/extcon-axp288.c
+> @@ -393,7 +393,7 @@ static int axp288_extcon_probe(struct platform_device *pdev)
+>  		adev = acpi_dev_get_first_match_dev("INT3496", NULL, -1);
+>  		if (adev) {
+>  			info->id_extcon = extcon_get_extcon_dev(acpi_dev_name(adev));
+> -			put_device(&adev->dev);
+> +			acpi_dev_put(adev);
+>  			if (IS_ERR(info->id_extcon))
+>  				return PTR_ERR(info->id_extcon);
+>  
 
-For the record the driver consuming this dt entry requires the host regs 
-to come first followed by the core
+Applied it. Thanks.
 
-sdhc_1: mmc@7824000 {
-         compatible = "qcom,msm8916-sdhci", "qcom,sdhci-msm-v4";
-         reg = <0x07824900 0x11c>, <0x07824000 0x800>;
-         reg-names = "hc", "core";
-}
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
-If I change this and the msm8916 to
-
-sdhc_1: mmc@7824000 {
-         compatible = "qcom,msm8916-sdhci", "qcom,sdhci-msm-v4";
-         reg = <0x07824000 0x800>, <0x07824900 0x11c>;
-         reg-names = "core", "hc";
-}
-
-the warning goes away but then this code won't work as intended anymore.
-
-drivers/mmc/host/sdhci-msm.c:		msm_host->core_mem = 
-devm_platform_ioremap_resource(pdev, 1);
-
-Weirdly when I change the ordering of the registers in the dts the SD 
-seems to work just fine, which is at variance to my reading of the code.
-
-Converting the sdhci driver to use the register name, instead of a 
-static ordering of the regs feels like something to be done in a 
-separate series.
-
----
-bod
