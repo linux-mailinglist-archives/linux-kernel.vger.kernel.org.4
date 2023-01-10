@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58261664545
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FFA664565
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234109AbjAJPtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S238861AbjAJPyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238599AbjAJPtg (ORCPT
+        with ESMTP id S234632AbjAJPyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:49:36 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088D944C4E;
-        Tue, 10 Jan 2023 07:49:35 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id z11so18231306ede.1;
-        Tue, 10 Jan 2023 07:49:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RlwouCi8H0VvCFHHOlIlDVE1aSi+HO1S7gDSu150N9o=;
-        b=Ls9jEEVeVOogdOhnGSIKAnC3MFbZ5Ol/YRfgadxXtNM6zGPapxkKjsK2nwhmOxs+xj
-         vjeT9QnhVSm8r6ZrSlEooK2iIN3/KBHR/gLW8AipjjvOaN8m1BTOzovjHPqk6xjU1DEw
-         CxjVypf7mDTyHnXhjxSxvcstWNTsevS8dN9xg402H/4Y32c98tpjmRhJT1Yl81fPQBTL
-         D28TWLVKJ5KY+LQNjhN8V9/y8zNW+otaBkrWDyqtvy5xzLNFBFyitc6boUnL+lNUWC/2
-         OnJolzF15hCUJhZpZ0NsGDJeHOP9ls2uJEk740kElNA4I3MMh0YOT34s1wNaH+OS+jb0
-         qtmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RlwouCi8H0VvCFHHOlIlDVE1aSi+HO1S7gDSu150N9o=;
-        b=KTdX5hvz12cZON13oS8NctfK+kS9p3B/mFmKLWtDLLbfQ1AeDGokMmZ3k7+n0mvhJd
-         A1Y1CL9QYLRyWv6eQP1aJgjViu/0ZuE9LkRBP7WZtbpRzUYqkbSu+UezfWwkvKWVz5go
-         Mu036yl4EhEe7XLZ/pVDW7jOkLXK2dcgE18XMPIvj1o/AHI+QLZXDgVltUTvBATWFHyT
-         VSrG13PG9lZxAh+xr8ir26hHMeenYqL7+t9poSpoy9noHX2V5wUXd8IFUFpe62QBqWly
-         3PRHWdIUn9+N7g4BzD1JPl6yO1ZjrerXq0ErOChXIVtmEb6ZqlNIJzebExwjwKKIhGSo
-         MupA==
-X-Gm-Message-State: AFqh2krgzBZNnV3ZZw2UxdTbtWxB4H0Q3mchsElLCOcWaUGrZAPd8JtY
-        rk6FmtnrsH4m9z9M/nT45NI=
-X-Google-Smtp-Source: AMrXdXs5bidUFyY7RUUCR9qvNSDcJGtq434/qMc8FWLJuxLNi9j9NSppDNXbg7cLU3itdPPD4+pVfA==
-X-Received: by 2002:aa7:d789:0:b0:497:4f53:ee8f with SMTP id s9-20020aa7d789000000b004974f53ee8fmr12917106edq.39.1673365773324;
-        Tue, 10 Jan 2023 07:49:33 -0800 (PST)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:1402:f4b6:2bd4:8c31])
-        by smtp.gmail.com with ESMTPSA id cx26-20020a05640222ba00b0048ec121a52fsm5063572edb.46.2023.01.10.07.49.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 07:49:32 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH RESEND] MAINTAINERS: repair pattern in DIALOG SEMICONDUCTOR DRIVERS
-Date:   Tue, 10 Jan 2023 16:49:01 +0100
-Message-Id: <20230110154901.20223-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 10:54:23 -0500
+X-Greylist: delayed 196 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 Jan 2023 07:54:21 PST
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F454C72E;
+        Tue, 10 Jan 2023 07:54:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1673366057;
+        bh=3fg3syAbmIaZWNk40gjo2tn+vj9YYWyQmPN36W7+evE=;
+        h=From:To:Cc:Subject:Date;
+        b=M6Q9HWQQjHhp5NyWsMQyO97J6Hr+HMz2XKr6RPqhDXY4BOO75UZpdgmOQxsb+5WMd
+         IuPcZ+X/ClLkzhuA4BaTZp9HQNAHhSXj7Dd7vTAmQ6EffNbVD09e8Z7YPVg8CMMsg8
+         qWNevyhu68DL/N/WzPFlUALkw/2n6cQY9T+zkKx8=
+Received: from localhost.localdomain ([2409:8a4c:808f:5b0:d92f:83a8:9ac7:4de5])
+        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+        id C9A3CA11; Tue, 10 Jan 2023 23:50:26 +0800
+X-QQ-mid: xmsmtpt1673365826tygdrm88h
+Message-ID: <tencent_1CF967E6E0A317C2036BA5D18D813DDCD909@qq.com>
+X-QQ-XMAILINFO: OQwUWlGGdA3tdg1KQ62p4QXK3Fc8nVzKJhAyXM2+bl41VENpqZmjzl8/RO9e8j
+         FzqwGTwpg0GCREkeYw2NoXA7qjFdMn6inhQRBAdnXcAQuxcpsfL/a0T/l6SLxPmYCQdwmD+g6Q6q
+         aBrorB0OYw65zl/OD7NVIJAnE7voHyAs/wc2gWG538tsv+RO3hhZppQIdZsK/9YeMENFeIqTAbcg
+         dZjmphTJw4KQhcAdiy7AHi8SFq3Y5oxw9TxBqLLGNnV1sESr0coWXgM9ld+yPx0NqYxSKfYDlSMz
+         yziiK1Kp0vajkpqtqTcSYU6+W3Q94FfPwJEtMBhKcvrQCyFl6Zz/s1SEPcMfbsYLIfC3fGq8deyN
+         vK+9VZKfX3KVA1pEL3xlDNzFrJku+ei1phCtsclS8NaDxXaEMCNL0IcJusefIT++K/pUwJSZpJnk
+         4jG1WVGXfKF9lxxiqpcowAKWpraeZ/vvSmwGqnj5cGGv9Ny+8jheSnpUK9t/9TTt27QxS24Evw1f
+         lXEbmVG4ZRtMeIbM1JREY5rePYFIE0u/wxh9L1Cs6bziBoQ3TJGWFhs0nt6IK5E+tvKfhgjiz8ph
+         SsMg9qqxyPIGWVfMZ0Qp1EfUy91PdQqO16T2D/zRbN5SoLOxB2j1rA+IcapfxakAkGcCAJQPtaQB
+         mINPwjky+rg29Mf3fV11N4H/tHb5kG1kRMz7ad6xs3fAsoj00gycodYUQdT0VeGrHjIxsQzmZf36
+         LoefqKEckSZsOIpVoD9+GmFJRjE6neg+au/51ddcwj+Pghsl0zz46rlljsuSo+gQtCYEn1UBbfLn
+         2xpTxzcVD1TJVGTdbVHrewf/0DbYFijIZa11jApMnNvom1/rYnH6ZfQ3OlR+zJz+5yqLqgDYqWOB
+         quYljBVMNCAOfxYZTQIDIHR2tsP6JoIv18t65/YtwgtReQ7zVvJyDsA8W24gLKKE/i+h/pfoWg4y
+         LPF0eTzhYXIl/ymaGeKrCRtmM+k2rzQB/LPDPrjgcB08ai7J+ZIAqPRhAUY6PP2o3vYjWGYC1BMR
+         Oz1GUlCA==
+From:   Yang Xiwen <forbidden405@foxmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jaime Breva <jbreva@nayarsystems.com>,
+        Nikita Travkin <nikita@trvn.ru>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Yang Xiwen <forbidden405@foxmail.com>
+Subject: [PATCH 0/3] Support for various MSM8916-based USB sticks
+Date:   Tue, 10 Jan 2023 23:50:11 +0800
+X-OQ-MSGID: <20230110155014.31664-1-forbidden405@foxmail.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 441613662db7 ("dt-bindings: mfd: Convert da9063 to yaml") converts
-da9063.txt to dlg,da9063.yaml and adds a new file pattern in MAINTAINERS.
-Unfortunately, the file pattern matches da90*.yaml, but the yaml file is
-prefixed with dlg,da90.
+The vendor is unknown. Zhihe is a widely used name to refer to such
+sticks in some forums.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken file pattern.
+Yang Xiwen (3):
+  dt-bindings: vendor-prefixes: add zhihe
+  dt-bindings: qcom: Ducument bindings for new msm8916-zhihe-uf896 and
+    msm8916-zhihe-ufi001c
+  arm64: dts: qcom: msm8916-zhihe: Add initial device tree for zhihe
+    Wifi/LTE dongle UFI-001C and uf896
 
-Repair this file pattern in DIALOG SEMICONDUCTOR DRIVERS.
+ .../devicetree/bindings/arm/qcom.yaml         |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ arch/arm64/boot/dts/qcom/Makefile             |   2 +
+ .../boot/dts/qcom/msm8916-zhihe-uf896.dts     |  41 +++
+ .../boot/dts/qcom/msm8916-zhihe-ufi001c.dts   |  39 +++
+ arch/arm64/boot/dts/qcom/msm8916-zhihe.dtsi   | 246 ++++++++++++++++++
+ 6 files changed, 332 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-zhihe-uf896.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-zhihe-ufi001c.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-zhihe.dtsi
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-v1: https://lore.kernel.org/all/20220623104456.27144-1-lukas.bulwahn@gmail.com/
-
-v1 to resend:
- - added the Acked-by from Conor Dooley.
-
-Lee, please pick this minor non-urgent clean-up patch.
-
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2a1368722c45..a0cd07e968ae 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5971,7 +5971,7 @@ W:	http://www.dialog-semiconductor.com/products
- F:	Documentation/devicetree/bindings/input/da90??-onkey.txt
- F:	Documentation/devicetree/bindings/input/dlg,da72??.txt
- F:	Documentation/devicetree/bindings/mfd/da90*.txt
--F:	Documentation/devicetree/bindings/mfd/da90*.yaml
-+F:	Documentation/devicetree/bindings/mfd/dlg,da90*.yaml
- F:	Documentation/devicetree/bindings/regulator/dlg,da9*.yaml
- F:	Documentation/devicetree/bindings/regulator/da92*.txt
- F:	Documentation/devicetree/bindings/regulator/slg51000.txt
 -- 
-2.17.1
+2.39.0
 
