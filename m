@@ -2,243 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39D1663AF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7A5663AF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237639AbjAJIZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
+        id S237777AbjAJI1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237979AbjAJIZE (ORCPT
+        with ESMTP id S237851AbjAJI0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:25:04 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B59B43A1B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:25:02 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so6345032wma.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:25:02 -0800 (PST)
+        Tue, 10 Jan 2023 03:26:54 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881DC634B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:26:53 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id ja17so8173898wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:26:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KMoqZy8lL6lKnv3mK+SHjAH6f5V4KXyJJY9vMCQj/VM=;
-        b=TV/zP38nT/DV77mwIwJKMtCilXcLYKNqFaSt4ttTXejVQPETGHaTze/gAgtQUETvZh
-         x8MuR/5XO92gVTfPK4sbIgmeJ1giXD0x8jCqPRETWfHCEpPfi2VxeU+Jkw37+IgzYzNJ
-         aDaD8rJzgn0485gyM4LgU0Ityeo5tL8MVyZ7lj1FZkCTZ4rH6Xf1lPaR3u6rKtqQfgGs
-         EDGjisRz/4hvrQDBOkWvyIQMnAw+KRLExidd/YoMBJhrX8LTX8Yx5WFWLnE8QcW4UqS3
-         P1XQq9wx/lbuw+k9lbrnrWglair+kGIjSphEoBBUrsPUIQdtXyWN09igCGzqQz7OcHoR
-         w46Q==
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=wawoO53rvJlk1mkrEk3Mn7XLvK6KEeT6tqX3/48e1U8=;
+        b=Pr9agmqsqknAJz4q08X2fSpPXl8kZ8Z5uKdN4Vv71jNwgsf/nNe86VXEyygxPjlS1+
+         gh/phTG0PdLsHhZdshqlb5kYaQvTDXCXFwOhBsnXxIcWteCMcYoy5Qfs3SsrxkWLLx3W
+         hugOFc5Hcu3lEo7HJkKfdm+xi9R4ToC5ofhUwt8yR7aTMtheBUy8nXzk+YeSc4/MIGmj
+         iD/UurKfMlWmDuUgf0tfMLblapSoqUpYumCISSHxfU0vA0+iib6EPvbgXmkBVX5aLl6K
+         b+wkefGVbEhaGjydfCcfx2NBpZjUVLA14rAOF6IeuLZdbqp88gk3Nlm2m5/UhHvPAel0
+         I72Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KMoqZy8lL6lKnv3mK+SHjAH6f5V4KXyJJY9vMCQj/VM=;
-        b=3+ST4g+r7zAI4OZQvbn58gEmsB/bVfPnLp+HPq6le3/dK0c5bS9QhsFVdTr9dx1PEv
-         x3ug8pzvusXr0pb+dNyef18QO5ENMztRqmC1nC6hhEmG/hcuwYYRGKLZClgCXHt5uUff
-         8oeYt5OY7H7YemuBR4OHs68wdXqBLw05YN7x6zSVGv562A4ZrawS0tQTGGY31KkvaJTM
-         viqPbA4I0/e+e8BagzV3zkdHl2Gc7lx0LczRb50SzTMymp5yi5ycPvXxMvNXZ4q7D39A
-         +PHX6hjKjS3kbDdcmRgvatj2AiNBotWrzS8rdErjMXIIdyy6fmvTzTDCN1qN7YbYfpS/
-         XIyw==
-X-Gm-Message-State: AFqh2kqkE/TR4S8FLOYM8zhXLqsoiyv7fyGfOieyaNftoPklhdzfSolT
-        wPp3TYZqezounlNDpeFoj8uuCg==
-X-Google-Smtp-Source: AMrXdXs5LDxIeadvFOYauvtpjU/gcobZo9BXdvfHf5RlHyauK1UfZsK3bydJnx2PQECskqIfaSL1Ig==
-X-Received: by 2002:a05:600c:1f18:b0:3cf:5583:8b3f with SMTP id bd24-20020a05600c1f1800b003cf55838b3fmr47116237wmb.20.1673339100837;
-        Tue, 10 Jan 2023 00:25:00 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m18-20020a05600c4f5200b003c6b70a4d69sm15783317wmq.42.2023.01.10.00.24.59
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wawoO53rvJlk1mkrEk3Mn7XLvK6KEeT6tqX3/48e1U8=;
+        b=o5Pss3dwV+whbaScNgWLL0qi0cgSi7TKrcEB2JWx5zW8Ft+ai7hU0vmJCaO6G7UtYy
+         fanBRGOhX7MlwNp4fWEvs6XeXoTybRMr9sNOO5tL6g8RrR22u6ZEZCCTqqsZbVdUhY8X
+         1OLHmssmb7LxgoLk1jKzaV6/qT/8bt8DDhsT7+aXzhTf0XY/oaiejytCTcdJe5xn00Gr
+         64wcbaEz6mo8MozrGxMzYbugie952YFV1U01adj7fPYVP+Au3JFxCNffg4/T0NXeoVeF
+         lnFsMGu9696wFe7RG97uOY5hBj8rSea6kXz8F+87lpE2LyzoSbBlj9nOuRr2R4mldfWX
+         4cIA==
+X-Gm-Message-State: AFqh2krJmd9zmtiIX9bmJHTlzKyVDQyoUTDt4mm85Fp81DyVScodaQBm
+        w9k2YCSrGg0V9nOUdaNQ+FNs1w==
+X-Google-Smtp-Source: AMrXdXt2gDqizNUTxd+mOomuKh6q+bSdCe2n3FEqcVtnbcChDYNm1xQohVp5HnaiBOhdC0GfD1EAIQ==
+X-Received: by 2002:a05:600c:1d23:b0:3d9:fb59:c16b with SMTP id l35-20020a05600c1d2300b003d9fb59c16bmr190317wms.36.1673339212077;
+        Tue, 10 Jan 2023 00:26:52 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:26cc:e5e1:3044:b226? ([2a01:e0a:982:cbb0:26cc:e5e1:3044:b226])
+        by smtp.gmail.com with ESMTPSA id v10-20020a05600c444a00b003d998412db6sm19917256wmn.28.2023.01.10.00.26.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 00:25:00 -0800 (PST)
-Message-ID: <6f1c38fc-9586-8ed5-8403-947ed6863b03@linaro.org>
-Date:   Tue, 10 Jan 2023 09:24:58 +0100
+        Tue, 10 Jan 2023 00:26:51 -0800 (PST)
+Message-ID: <71924012-8955-92f2-5fcc-4632a01bba29@linaro.org>
+Date:   Tue, 10 Jan 2023 09:26:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1 1/3] dt-bindings: timer: Add timer for StarFive JH7110
- SoC
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-References: <20221223094801.181315-1-xingyu.wu@starfivetech.com>
- <20221223094801.181315-2-xingyu.wu@starfivetech.com>
- <179e66a8-c6c0-6d3e-4f4a-6b884f532572@linaro.org>
- <4febeef1-a42a-7d6f-d1af-d8fe19582822@starfivetech.com>
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] firmware: meson_sm: stop using 0 as NULL pointer
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4febeef1-a42a-7d6f-d1af-d8fe19582822@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Miles Chen <miles.chen@mediatek.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230110031242.4917-1-miles.chen@mediatek.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230110031242.4917-1-miles.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 03:14, Xingyu Wu wrote:
-> On 2022/12/23 18:25, Krzysztof Kozlowski wrote:
->> On 23/12/2022 10:47, Xingyu Wu wrote:
->>> Add bindings for the timer on the JH7110
->>> RISC-V SoC by StarFive Technology Ltd.
->>
->> Please wrap commit message according to Linux coding style / submission
->> process (neither too early nor over the limit):
->> https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
->>
->>
->>>
->>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->>> ---
->>>  .../timer/starfive,jh7110-timers.yaml         | 105 ++++++++++++++++++
->>>  1 file changed, 105 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml b/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
->>> new file mode 100644
->>> index 000000000000..fe58dc056313
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
->>> @@ -0,0 +1,105 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/timer/starfive,jh7110-timers.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: StarFive Timers
->>
->>
->> Not enough, really not enough. Describe the hardware.
+On 10/01/2023 04:12, Miles Chen wrote:
+> Use NULL for NULL pointer to fix the following sparse warning:
+> drivers/firmware/meson/meson_sm.c:85:24: sparse: warning: Using plain integer as NULL pointer
 > 
-> Will add. Thanks.
+> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+> ---
+>   drivers/firmware/meson/meson_sm.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->>
->>> +
->>> +maintainers:
->>> +  - Samin Guo <samin.guo@starfivetech.com>
->>> +  - Xingyu Wu <xingyu.wu@starfivetech.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: starfive,jh7110-timers
->>
->> Why plural "timers", not "timer"? The module is usually called timer -
->> see other hardware that type.
->>
-> 
-> Will fix. Thanks.
-> 
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    items:
->>> +      - description: timer channel 0 interrupt
->>> +      - description: timer channel 1 interrupt
->>> +      - description: timer channel 2 interrupt
->>> +      - description: timer channel 3 interrupt
->>> +
->>> +  interrupt-names:
->>> +    items:
->>> +      - const: timer0
->>> +      - const: timer1
->>> +      - const: timer2
->>> +      - const: timer3
->>
->> I would just drop the names, not really useful. Unless you plan to add
->> here some generic interrupt (like you did for clock-names)?
-> 
-> Will drop. Thanks.
-> 
->>
->>> +
->>> +  clocks:
->>> +    items:
->>> +      - description: timer channel 0 clock
->>> +      - description: timer channel 1 clock
->>> +      - description: timer channel 2 clock
->>> +      - description: timer channel 3 clock
->>> +      - description: APB clock
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: timer0
->>> +      - const: timer1
->>> +      - const: timer2
->>> +      - const: timer3
->>> +      - const: apb
->>> +
->>> +  resets:
->>> +    items:
->>> +      - description: timer channel 0 reset
->>> +      - description: timer channel 1 reset
->>> +      - description: timer channel 2 reset
->>> +      - description: timer channel 3 reset
->>> +      - description: APB reset
->>> +
->>> +  reset-names:
->>> +    items:
->>> +      - const: timer0
->>> +      - const: timer1
->>> +      - const: timer2
->>> +      - const: timer3
->>> +      - const: apb
->>> +
->>> +  clock-frequency:
->>> +    description: The frequency of the clock that drives the counter, in Hz.
->>
->> Why do you need it? Use common clk framework to get that frequency.
-> 
-> Because normally this timer driver is loaded earlier than the clock tree driver, it won't get
-> that frequency by clk framework and this 'clock-frequency' node is used instead.
+> diff --git a/drivers/firmware/meson/meson_sm.c b/drivers/firmware/meson/meson_sm.c
+> index 77aa5c6398aa..3f5ff9ed668e 100644
+> --- a/drivers/firmware/meson/meson_sm.c
+> +++ b/drivers/firmware/meson/meson_sm.c
+> @@ -82,7 +82,7 @@ static void __iomem *meson_sm_map_shmem(u32 cmd_shmem, unsigned int size)
+>   
+>   	sm_phy_base = __meson_sm_call(cmd_shmem, 0, 0, 0, 0, 0);
+>   	if (!sm_phy_base)
+> -		return 0;
+> +		return NULL;
+>   
+>   	return ioremap_cache(sm_phy_base, size);
+>   }
 
-I don't think that clk framework or fixed clocks are not available at
-this time... of_clk_init is before timer.
 
-> 
->>
->> Also, sort the nodes somehow, e.g.
->> compatible/reg/clocks/clock-frequency/interrupts/resets.
-> 
-> Will reorder. Thanks.
-> 
->>
->>
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - interrupts
->>> +  - interrupt-names
->>> +  - clocks
->>> +  - clock-names
->>> +  - resets
->>> +  - reset-names
->>> +  - clock-frequency
->>> +
->>> +unevaluatedProperties: false
->>
->> Did you test the binding?
-> 
-> Yes, I had tested by 'dt_binding_check'. Do you mean the 'unevaluatedProperties' is wrong
-> and use 'additionalProperties'?
-
-Yes, previously it was generating a warning but I do not see Rob's bot
-answer so maybe something changed.
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
