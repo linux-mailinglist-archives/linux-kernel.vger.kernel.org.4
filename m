@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C72664BF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3AF664BF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239766AbjAJTE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
+        id S239798AbjAJTFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239227AbjAJTEJ (ORCPT
+        with ESMTP id S239663AbjAJTEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:04:09 -0500
+        Tue, 10 Jan 2023 14:04:11 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02ACC4D;
-        Tue, 10 Jan 2023 11:04:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDCD48CF3;
+        Tue, 10 Jan 2023 11:04:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7ED63B8190F;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44716B81978;
+        Tue, 10 Jan 2023 19:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65048C433EF;
         Tue, 10 Jan 2023 19:04:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BFFFC433F0;
-        Tue, 10 Jan 2023 19:04:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1673377447;
-        bh=z4OiBFIdAY53y3j04vvpLGBRlRRZlDz1MLs91H9dWgM=;
+        bh=/ftDYRYihjGl5PEz5Dv1FCnL2ESZwAkvBGHkxClfATA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RLd4J3G76wYwVxSsaSIQPTKHrZbFVa3HMM1Gckqux+XKZcOj5l6ii9Jr0d5ojGaYb
-         OaFXjgnAYAadqc1LQMKbr/wchU1RcH/S5srEO9WUXaQJQPM+kREfCpLLSMiLMLYf3H
-         gDzFMCliEdHfnyVRMgNQz+xK5d0pqnAsKfUIEaT+Oexsy/K2x/qwH49JiW/wPCMoxr
-         9g8XpPSA1eSKwJO0CRhxv0rQ6oyzoFAibgVTGMFfGM+PwtytiJ2AY9IwPuYNlmbuFX
-         2fNEHHLpNzidac6lxcf3Yjhk5+923fksLblXxOfMoVoZtpzL1pk4Nnk8j+L3HhS2GP
-         J9X688D+f9i7Q==
+        b=dWdbcT4V6ti0Ll/sRjROvWkvtNQCTLv7+0IA+XG0QqOdhMMLgUnm9HgZ6MnDDqEOl
+         dngadbkAJrq2Vcj6erIyqDlcg0E31UlwF/+Id7rxgO3NvcGdeYMCONmYVP+oAiH7x4
+         TO1md/05eBEiK10d48YhUKg5Gx6E2K0Y9B6FaQ2yhy4EBLYZVq1+ecmxQqpzpN3X/B
+         AH9Ox0o/TVtIAvmzC8VLqBZ6zpmGCH3dWfk+S1l4i//UegMvXlBHbyTu5F5LbItnIS
+         XrTV3fqkCIvSfQUTlspFp8isWnSa3kugYmoPy5NFx4NNsWlxZaI+EA28ngOGYVYwZ/
+         v7ZC9g9RiHveA==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         damon@lists.linux.dev, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/8] Docs/admin-guide/mm/damon/usage: update DAMOS actions/filters supports of each DAMON operations set
-Date:   Tue, 10 Jan 2023 19:03:56 +0000
-Message-Id: <20230110190400.119388-5-sj@kernel.org>
+Subject: [PATCH 5/8] Docs/mm/damon: add a maintainer-profile for DAMON
+Date:   Tue, 10 Jan 2023 19:03:57 +0000
+Message-Id: <20230110190400.119388-6-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230110190400.119388-1-sj@kernel.org>
 References: <20230110190400.119388-1-sj@kernel.org>
@@ -54,83 +54,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Supports of each DAMOS action and filters are up to DAMON operations set
-implementation, but it's not mentioned in detail on the documentation.
-Update the information on the usage document.
+Document the basic policies and expectations for DAMON development.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- Documentation/admin-guide/mm/damon/usage.rst | 41 +++++++++++++-------
- 1 file changed, 28 insertions(+), 13 deletions(-)
+ Documentation/mm/damon/index.rst              |  1 +
+ Documentation/mm/damon/maintainer-profile.rst | 62 +++++++++++++++++++
+ 2 files changed, 63 insertions(+)
+ create mode 100644 Documentation/mm/damon/maintainer-profile.rst
 
-diff --git a/Documentation/admin-guide/mm/damon/usage.rst b/Documentation/admin-guide/mm/damon/usage.rst
-index 3d82ca6a17ff..9237d6a25897 100644
---- a/Documentation/admin-guide/mm/damon/usage.rst
-+++ b/Documentation/admin-guide/mm/damon/usage.rst
-@@ -279,14 +279,25 @@ The ``action`` file is for setting and getting what action you want to apply to
- memory regions having specific access pattern of the interest.  The keywords
- that can be written to and read from the file and their meaning are as below.
- 
-- - ``willneed``: Call ``madvise()`` for the region with ``MADV_WILLNEED``
-- - ``cold``: Call ``madvise()`` for the region with ``MADV_COLD``
-- - ``pageout``: Call ``madvise()`` for the region with ``MADV_PAGEOUT``
-- - ``hugepage``: Call ``madvise()`` for the region with ``MADV_HUGEPAGE``
-- - ``nohugepage``: Call ``madvise()`` for the region with ``MADV_NOHUGEPAGE``
-+Note that support of each action depends on the running DAMON operations set
-+`implementation <sysfs_contexts>`.
+diff --git a/Documentation/mm/damon/index.rst b/Documentation/mm/damon/index.rst
+index 2983699c12ea..5e0a50583500 100644
+--- a/Documentation/mm/damon/index.rst
++++ b/Documentation/mm/damon/index.rst
+@@ -32,3 +32,4 @@ operations with no code but simple configurations.
+    faq
+    design
+    api
++   maintainer-profile
+diff --git a/Documentation/mm/damon/maintainer-profile.rst b/Documentation/mm/damon/maintainer-profile.rst
+new file mode 100644
+index 000000000000..24a202f03de8
+--- /dev/null
++++ b/Documentation/mm/damon/maintainer-profile.rst
+@@ -0,0 +1,62 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+ - ``willneed``: Call ``madvise()`` for the region with ``MADV_WILLNEED``.
-+   Supported by ``vaddr`` and ``fvaddr`` operations set.
-+ - ``cold``: Call ``madvise()`` for the region with ``MADV_COLD``.
-+   Supported by ``vaddr`` and ``fvaddr`` operations set.
-+ - ``pageout``: Call ``madvise()`` for the region with ``MADV_PAGEOUT``.
-+   Supported by ``vaddr``, ``fvaddr`` and ``paddr`` operations set.
-+ - ``hugepage``: Call ``madvise()`` for the region with ``MADV_HUGEPAGE``.
-+   Supported by ``vaddr`` and ``fvaddr`` operations set.
-+ - ``nohugepage``: Call ``madvise()`` for the region with ``MADV_NOHUGEPAGE``.
-+   Supported by ``vaddr`` and ``fvaddr`` operations set.
-  - ``lru_prio``: Prioritize the region on its LRU lists.
-+   Supported by ``paddr`` operations set.
-  - ``lru_deprio``: Deprioritize the region on its LRU lists.
-- - ``stat``: Do nothing but count the statistics
-+   Supported by ``paddr`` operations set.
-+ - ``stat``: Do nothing but count the statistics.
-+   Supported by all operations sets.
- 
- schemes/<N>/access_pattern/
- ---------------------------
-@@ -388,8 +399,8 @@ pages of all memory cgroups except ``/having_care_already``.::
-     echo /having_care_already > 1/memcg_path
-     echo N > 1/matching
- 
--Note that filters could be ignored depend on the running DAMON operations set
--`implementation <sysfs_contexts>`.
-+Note that filters are currently supported only when ``paddr``
-+`implementation <sysfs_contexts>` is being used.
- 
- .. _sysfs_schemes_stats:
- 
-@@ -618,11 +629,15 @@ The ``<action>`` is a predefined integer for memory management actions, which
- DAMON will apply to the regions having the target access pattern.  The
- supported numbers and their meanings are as below.
- 
-- - 0: Call ``madvise()`` for the region with ``MADV_WILLNEED``
-- - 1: Call ``madvise()`` for the region with ``MADV_COLD``
-- - 2: Call ``madvise()`` for the region with ``MADV_PAGEOUT``
-- - 3: Call ``madvise()`` for the region with ``MADV_HUGEPAGE``
-- - 4: Call ``madvise()`` for the region with ``MADV_NOHUGEPAGE``
-+ - 0: Call ``madvise()`` for the region with ``MADV_WILLNEED``.  Ignored if
-+   ``target`` is ``paddr``.
-+ - 1: Call ``madvise()`` for the region with ``MADV_COLD``.  Ignored if
-+   ``target`` is ``paddr``.
-+ - 2: Call ``madvise()`` for the region with ``MADV_PAGEOUT``.
-+ - 3: Call ``madvise()`` for the region with ``MADV_HUGEPAGE``.  Ignored if
-+   ``target`` is ``paddr``.
-+ - 4: Call ``madvise()`` for the region with ``MADV_NOHUGEPAGE``.  Ignored if
-+   ``target`` is ``paddr``.
-  - 5: Do nothing but count the statistics
- 
- Quota
++DAMON Maintainer Entry Profile
++==============================
++
++The DAMON subsystem covers the files that listed in 'DATA ACCESS MONITOR'
++section of 'MAINTAINERS' file.
++
++The mailing lists for the subsystem are damon@lists.linux.dev and
++linux-mm@kvack.org.  Patches should be made against the mm-unstable tree [1]_
++whenever possible and posted to the mailing lists.
++
++SCM Trees
++---------
++
++There are multiple Linux trees for DAMON development.  Patches under
++development or testing are queued in damon/next [2]_ by the DAMON maintainer.
++Suffieicntly reviewed patches will be queued in mm-unstable [1]_ by the memory
++management subsystem maintainer.  After more sufficient tests, the patches will
++be queued in mm-stable [3]_ , and finally pull-requested to the mainline by the
++memory management subsystem maintainer.
++
++Note again the patches for review should be made against the mm-unstable
++tree[1] whenever possible.  damon/next is only for preview of others' works in
++progress.
++
++Submit checklist addendum
++-------------------------
++
++When making DAMON changes, you should do below.
++
++- Build changes related outputs including kernel and documents.
++- Ensure the builds introduce no new errors or warnings.
++- Run and ensure no new failures for DAMON selftests [4]_ and kunittests [5]_ .
++
++Further doing below and putting the results will be helpful.
++
++- Run damon-tests/corr [6]_ for normal changes.
++- Run damon-tests/perf [7]_ for performance changes.
++
++Key cycle dates
++---------------
++
++Patches can be sent anytime.  Key cycle dates of the mm-unstable[1] and
++mm-stable[3] trees depend on the memory management subsystem maintainer.
++
++Review cadence
++--------------
++
++The DAMON maintainer does the work on the usual work hour (09:00 to 17:00,
++Mon-Fri) in PST.  The response to patches will occasionally be slow.  Do not
++hesitate to send a ping if you have not heard back within a week of sending a
++patch.
++
++
++.. [1] https://git.kernel.org/akpm/mm/h/mm-unstable
++.. [2] https://git.kernel.org/sj/h/damon/next
++.. [3] https://git.kernel.org/akpm/mm/h/mm-stable
++.. [4] https://github.com/awslabs/damon-tests/blob/master/corr/run.sh#L49
++.. [5] https://github.com/awslabs/damon-tests/blob/master/corr/tests/kunit.sh
++.. [6] https://github.com/awslabs/damon-tests/tree/master/corr
++.. [7] https://github.com/awslabs/damon-tests/tree/master/perf
 -- 
 2.25.1
 
