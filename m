@@ -2,226 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5A26642FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA9B664303
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjAJORa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
+        id S232214AbjAJORv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:17:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbjAJOR2 (ORCPT
+        with ESMTP id S234434AbjAJORk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:17:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE3F392F6;
-        Tue, 10 Jan 2023 06:17:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CF7A61277;
-        Tue, 10 Jan 2023 14:17:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 238F0C433D2;
-        Tue, 10 Jan 2023 14:17:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673360246;
-        bh=VjytIIHnaswdwn9ICyjlgo1I3C2mjX0CKhAyVEDRRjs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P+myZWdKvNcEWHPhKvt/aoIKTTJ5QUhZhpqPeONWQeTv/rDx0QRVGf3CiqZhYcaSy
-         WIF5NKHl4QVlzU5iqE2rqewU1/+bH1pYE+15Xfu2BQf2hWUb5nRa6cbxsBqMkgp72V
-         XWYXJG0WOIND/cUX72sqWLfcWGiZCa0vaWb0uHHxAMdV5ApNX1QP02XG5QNvdObRKT
-         FykrHi01sD7modQCN8STiwNsJkt/NYQa8mwJ7dkqfggUOENeI0IaseKqbc55OA2xgU
-         5UDnc0f62lGeTmFMZLOFEF5asS+EoAS6it9O89tmad5KY0zP4Ie9Of1Z9Dith5HM4U
-         p59H92uxQ1s8g==
-Date:   Tue, 10 Jan 2023 23:17:21 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     paulmck@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
-        quic_neeraju@quicinc.com, urezki@gmail.com
-Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
- processing
-Message-Id: <20230110231721.ed737bcc46ee6b8572d7cdff@kernel.org>
-In-Reply-To: <20230110010953.GF4028633@paulmck-ThinkPad-P17-Gen-1>
-References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
-        <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
-        <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
-        <20230108150425.426f2861e9db1152fa84508f@kernel.org>
-        <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
-        <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
-        <20230110000732.GD4028633@paulmck-ThinkPad-P17-Gen-1>
-        <20230110095450.2cb4c875f95459e3a4e7dcf1@kernel.org>
-        <20230110010953.GF4028633@paulmck-ThinkPad-P17-Gen-1>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 10 Jan 2023 09:17:40 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C749568B1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:17:38 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id m3so8912457wmq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:17:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=eHZb7U5oDjEwOOYPDL1qKh2dxxJE4/1ANjgPMf5V1yY=;
+        b=fTRvcYCK+eENINzdvpT5NHT0wfYm1n3I5kSok/46mEYtVclqXC7smkLGa3XIEa74h8
+         pa7vm2MsAjsI/cBelw5bGsc9I2eqetFlYlumH4/lm4MrpkqG9t+Yo0qdg5Wnaa5ROnk+
+         jk5if7eruDCSwTvNARxIO86xgemjnjk0GsLpdYo148YKsCWzHsOmV0v7ExzDydbgMmjB
+         xBEDTBdANuYQT914B1YF5HhzI8DZFH0C2v3VudioXDxD6KAU63mcGUTJkptYXI3ghV99
+         jzEBpM1Oh0TlusLugEYK7urTdrOuYWsOoldXD7wFgQwqC6XBXhxwFnxQYHc85Xv7KEWj
+         Y/iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eHZb7U5oDjEwOOYPDL1qKh2dxxJE4/1ANjgPMf5V1yY=;
+        b=noomzUBn2AFeO8b90eHMc0kMKpBfxpEpxP3ikOE2yFXrfxunobKaobF0GMgTzKunAH
+         iqEL1BGZfsyRAM6jnhH80LOYnHgkcD1WaFCITYghqW++DH4UUQvbDa01tNuqDYDCTeEJ
+         uL+861yIEFPLghAvEvT+jpIOHPp/vDLdD/rDTesClrF3ACxKQsX63BoKWQ64jjLf3Jz1
+         3M0xmn2Qi84i7jQrIAe60StblHzTOIjpLvgr/lvD3YHi+eWCYoamft3X6KUV2B3MSD5u
+         3SdQImZIZu5FzGOmAKKuPN9KY0lsfOfLl3AZl+RZ45tG//H3RdcAhAliTV/4zb94k1/R
+         yXrQ==
+X-Gm-Message-State: AFqh2kqCI8v0rTFUCz5re/4/zrdRrq4udA3zt2w9Y20gdGBsbIecSSas
+        bb9ZsOlBaicISmn9rsjTJjb3AY9Yg/nySuQ5
+X-Google-Smtp-Source: AMrXdXuqOXk2/au6P9zSAZ1Xnbpze8DuH91lBlkaSOKHoQSBiUFp/tny1iYv4yZOeDxUI/obplpd0Q==
+X-Received: by 2002:a05:600c:1f12:b0:3d2:267d:64bd with SMTP id bd18-20020a05600c1f1200b003d2267d64bdmr59388593wmb.3.1673360256638;
+        Tue, 10 Jan 2023 06:17:36 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:26cc:e5e1:3044:b226? ([2a01:e0a:982:cbb0:26cc:e5e1:3044:b226])
+        by smtp.gmail.com with ESMTPSA id t12-20020a05600c198c00b003d9de0c39fasm18780848wmq.36.2023.01.10.06.17.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 06:17:36 -0800 (PST)
+Message-ID: <2037156d-5113-4b96-8f86-c8ef1c1fdf96@linaro.org>
+Date:   Tue, 10 Jan 2023 15:17:34 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 09/11] dt-bindings: mmc: convert amlogic,meson-gx.txt
+ to dt-schema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v2-9-36ad050bb625@linaro.org>
+ <e3d32fe1-9f2b-09fb-d7e0-2c8f42e5365c@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <e3d32fe1-9f2b-09fb-d7e0-2c8f42e5365c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 Jan 2023 17:09:53 -0800
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
-
-> On Tue, Jan 10, 2023 at 09:54:50AM +0900, Masami Hiramatsu wrote:
-> > On Mon, 9 Jan 2023 16:07:32 -0800
-> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > 
-> > > On Tue, Jan 10, 2023 at 08:56:36AM +0900, Masami Hiramatsu wrote:
-> > > > On Sun, 8 Jan 2023 20:25:01 -0800
-> > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > 
-> > > > > On Sun, Jan 08, 2023 at 03:04:25PM +0900, Masami Hiramatsu wrote:
-> > > > > > On Sat, 7 Jan 2023 08:22:02 -0800
-> > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > > > 
-> > > > > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
-> > > > > > > > On Wed, 4 Jan 2023 16:58:38 -0800
-> > > > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > > > > > 
-> > > > > > > > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
-> > > > > > > > > containing kernel boot parameters to be embedded into an initrd or into
-> > > > > > > > > the kernel itself.  This can be extremely useful when deploying kernels
-> > > > > > > > > in cases where some of the boot parameters depend on the kernel version
-> > > > > > > > > rather than on the server hardware, firmware, or workload.
-> > > > > > > > > 
-> > > > > > > > > Unfortunately, the "bootconfig" kernel parameter must be specified in
-> > > > > > > > > order to cause the kernel to look for the embedded bootconfig file,
-> > > > > > > > > and it clearly does not help to embed this "bootconfig" kernel parameter
-> > > > > > > > > into that file.
-> > > > > > > > > 
-> > > > > > > > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
-> > > > > > > > > kernel to act as if the "bootconfig" kernel parameter had been specified.
-> > > > > > > > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
-> > > > > > > > > for the embedded bootconfig file even when the "bootconfig" kernel
-> > > > > > > > > parameter is omitted.  This permits kernel-version-dependent kernel
-> > > > > > > > > boot parameters to be embedded into the kernel image without the need to
-> > > > > > > > > (for example) update large numbers of boot loaders.
-> > > > > > > > 
-> > > > > > > > I like this because this is a simple solution. We have another option
-> > > > > > > > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
-> > > > > > > > bootloader. Thus, it is better to have this option so that user can
-> > > > > > > > always enable bootconfig.
-> > > > > > > 
-> > > > > > > Glad you like it!
-> > > > > > > 
-> > > > > > > In addition, if the help text is accurate, another shortcoming of
-> > > > > > > CONFIG_CMDLINE is that its semantics vary from one architecture to
-> > > > > > > another.  Some have CONFIG_CMDLINE override the boot-loader supplied
-> > > > > > > parameters, and others differ in the order in which the parameters
-> > > > > > > are processed.
-> > > > > > 
-> > > > > > Yes, that differences confuse us...
-> > > > > 
-> > > > > I am glad that it is not just me.  ;-)
-> > > > > 
-> > > > > I will add words to that effect to the commit log.
-> > > > > 
-> > > > > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > > > > 
-> > > > > > > Thank you!
-> > > > > > > 
-> > > > > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
-> > > > > > > > (or at least recommend to enable this)
-> > > > > > > 
-> > > > > > > Like this?
-> > > > > > 
-> > > > > > Yes! Thanks.
-> > > > > > 
-> > > > > > > 
-> > > > > > > 							Thanx, Paul
-> > > > > > > 
-> > > > > > > ------------------------------------------------------------------------
-> > > > > > > 
-> > > > > > > commit d09a1505c51a70da38b34ac38062977299aef742
-> > > > > > > Author: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > Date:   Sat Jan 7 08:09:22 2023 -0800
-> > > > > > > 
-> > > > > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> > > > > > >     
-> > > > > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
-> > > > > > >     will normally be to unconditionally provide the specified kernel-boot
-> > > > > > >     arguments to the kernel, as opposed to requiring a separately provided
-> > > > > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
-> > > > > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
-> > > > > > >     
-> > > > > > >     The old semantics may be obtained by manually overriding this default.
-> > > > > > >     
-> > > > > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > 
-> > > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > > 
-> > > > > Applied, thank you!
-> > > > 
-> > > > Paul, just for confirmation, have you picked these patches on your tree?
-> > > 
-> > > I have, but if you would prefer to take them, just let me know when you
-> > > have pulled them in.  It is easy for me to drop them.
-> > > 
-> > > Here they are in the -rcu tree:
-> > > 
-> > > 3d9ccc4a8b56e bootconfig: Allow forcing unconditional bootconfig processing
-> > > 68b920592ff67 bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> > > 
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-> > 
-> > Yeah, if it's not hurry, let me pick those to linux-trace tree
-> > (bootconfig/for-next). I would like to consolidate the bootconfig
-> > updates on my tree.
+On 10/01/2023 11:17, Krzysztof Kozlowski wrote:
+> On 09/01/2023 13:53, Neil Armstrong wrote:
+>> Convert the Amlogic SD / eMMC controller for S905/GXBB family SoCs
+>> to dt-schema.
+>>
+>> Take in account the used variant with amlogic,meson-gx-mmc.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   .../bindings/mmc/amlogic,meson-gx-mmc.yaml         | 75 ++++++++++++++++++++++
+>>   .../devicetree/bindings/mmc/amlogic,meson-gx.txt   | 39 -----------
+>>   2 files changed, 75 insertions(+), 39 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml
+>> new file mode 100644
+>> index 000000000000..30228964fd9c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml
+>> @@ -0,0 +1,75 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mmc/amlogic,meson-gx-mmc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Amlogic SD / eMMC controller for S905/GXBB family SoCs
+>> +
+>> +description:
+>> +  The MMC 5.1 compliant host controller on Amlogic provides the
+>> +  interface for SD, eMMC and SDIO devices
+>> +
+>> +maintainers:
+>> +  - Neil Armstrong <neil.armstrong@linaro.org>
+>> +
+>> +allOf:
+>> +  - $ref: mmc-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    oneOf:
+>> +      - enum:
+>> +          - amlogic,meson-gx-mmc
+>> +          - amlogic,meson-axg-mmc
+>> +      - items:
+>> +          - const: amlogic,meson-gx-mmc
 > 
-> Please go ahead and grab them.  Just out of curiosity, are they in time
-> for the upcoming v6.3 merge window?
+> This does not look correct. Either gx is alone (not compatible with
+> gxbb) or it is compatible with gxbb. Cannot be both.
 
-Yes, I will do.
+This ishow it's used in DT:
 
-Thank you!
+arch/arm64/boot/dts/amlogic/meson-gx.dtsi:                              compatible = "amlogic,meson-gx-mmc", "amlogic,meson-gxbb-mmc";
+arch/arm64/boot/dts/amlogic/meson-axg.dtsi:                             compatible = "amlogic,meson-axg-mmc";
+arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:                      compatible = "amlogic,meson-axg-mmc";
+
+So I'll drop the amlogic,meson-gx-mmc in the first enum to have :
++properties:
++  compatible:
++    oneOf:
++      - const: amlogic,meson-axg-mmc
++      - items:
++          - const: amlogic,meson-gx-mmc
++          - const: amlogic,meson-gxbb-mmc
+
+It's right ?
+
+Neil
 
 > 
-> 							Thanx, Paul
 > 
-> > Thanks,
-> > 
-> > > 
-> > > 							Thanx, Paul
-> > > 
-> > > > Thank you,
-> > > > 
-> > > > > 
-> > > > > > Thank you!
-> > > > > > 
-> > > > > > > 
-> > > > > > > diff --git a/init/Kconfig b/init/Kconfig
-> > > > > > > index 0fb19fa0edba9..97a0f14d9020d 100644
-> > > > > > > --- a/init/Kconfig
-> > > > > > > +++ b/init/Kconfig
-> > > > > > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
-> > > > > > >  config BOOT_CONFIG_FORCE
-> > > > > > >  	bool "Force unconditional bootconfig processing"
-> > > > > > >  	depends on BOOT_CONFIG
-> > > > > > > +	default y if BOOT_CONFIG_EMBED
-> > > > > > >  	help
-> > > > > > >  	  With this Kconfig option set, BOOT_CONFIG processing is carried
-> > > > > > >  	  out even when the "bootconfig" kernel-boot parameter is omitted.
-> > > > > > 
-> > > > > > 
-> > > > > > -- 
-> > > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > 
-> > > > 
-> > > > -- 
-> > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > 
-> > -- 
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Best regards,
+> Krzysztof
+> 
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
