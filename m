@@ -2,293 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DB76647BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B32AC6647C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbjAJRvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S235092AbjAJRzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 12:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234892AbjAJRvS (ORCPT
+        with ESMTP id S235386AbjAJRyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:51:18 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE8F50062
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:51:17 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id l17-20020a170902f69100b001928d6b3efcso8806278plg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:51:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kovpab8ufZORC8OQwD/Ffe4tjc6Lhn/m/+zBtc75xtg=;
-        b=jMZkxMMsqWv4TR7GzZ0A7yhf0SNqy4OOCj6DEGOQl/IHadL2JpeOyeLieFcExLaRH+
-         nC7f/8hRRK2ZDY8aJJS7Isg8WIjwIqAAP3IDu3db0HKTcWPRoWdVX1XSuF+7WySHus97
-         UC5xJljIGHCht8YAYZgSXXAMH42IdS9I42o0QHTMnN1Of3nWaBtQixI6ZDup12CBJQnL
-         02FdR3pDScSNA4le2Wc+FdRUb3KHDY3NQb7agC5kIDo40Jh7nROKzfi/rV4ABfS00M8n
-         2bz7L5pb9uXenODU9xH+unSgUVvxe3BdcNIMWg3FcoFhvIWRhR4p+mAgEL7y8SdmAj5+
-         9P7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kovpab8ufZORC8OQwD/Ffe4tjc6Lhn/m/+zBtc75xtg=;
-        b=r0voSburJZrtutOoI7et0kNkY8NTfcDFVavuG+95GopCK5ovlDsY1EVFp1IbZyuDK2
-         S0Tc+Hd9CSMoo6PInhn4qaRc4vi0uZ+RnejQvp5LTvuJnEFT9sOmdmM47b6+NgJ4uFTp
-         UjjQUMAAlxLnsjFW2f11E6zfX0yZ/H1475pHa+dCmD03GVAUMDv/PzNAs/OtJGmkoeEp
-         A6T1ga1E0i3YdiW50LIRNLWD/4adgb2bEYrRAgJgcBPJ7HxFT3zajrsndDQab/S1KKv8
-         M10DCw9qCl5lAfhGpT4c81vS9vBp+ep+gg8cegz5T4y1zOEGYg2ndSP/unqTSk9J2jnH
-         LnPw==
-X-Gm-Message-State: AFqh2kpaBuotOFfcwsCjSUXK5FrPSSG5VmQC/sJ4lFMLVv4KBHIhw6p2
-        8VSxw9IWCtwoAqM1xHNLWKo3Dq4bhH8=
-X-Google-Smtp-Source: AMrXdXtROTaAuScbQiP5lFAmT1xtN9L9Dqm038NELJz/DOHnZMYDutBsJxvjLk/8D/IZFYJyMBlpKlEadsk=
-X-Received: from pgonda1.kir.corp.google.com ([2620:0:1008:11:8358:4c2a:eae1:4752])
- (user=pgonda job=sendgmr) by 2002:a17:90a:206:b0:226:9980:67f3 with SMTP id
- c6-20020a17090a020600b00226998067f3mr280pjc.1.1673373076771; Tue, 10 Jan 2023
- 09:51:16 -0800 (PST)
-Date:   Tue, 10 Jan 2023 09:50:57 -0800
-In-Reply-To: <20230110175057.715453-1-pgonda@google.com>
-Message-Id: <20230110175057.715453-8-pgonda@google.com>
-Mime-Version: 1.0
-References: <20230110175057.715453-1-pgonda@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH V6 7/7] KVM: selftests: Add simple sev vm testing
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Michael Roth <michael.roth@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 12:54:38 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0FE052743
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:53:55 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 30AHrloK007526;
+        Tue, 10 Jan 2023 18:53:47 +0100
+Date:   Tue, 10 Jan 2023 18:53:47 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH 0/4] nolibc: add support for the s390 platform
+Message-ID: <20230110175347.GC4649@1wt.eu>
+References: <20230109080910.26594-1-w@1wt.eu>
+ <20230109191534.GU4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230110073242.GB3229@1wt.eu>
+ <20230110092517.GA4626@1wt.eu>
+ <20230110145334.GL4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230110161249.GB4649@1wt.eu>
+ <20230110163210.GP4028633@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110163210.GP4028633@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A very simple of booting SEV guests that checks related CPUID bits. This
-is a stripped down version of "[PATCH v2 08/13] KVM: selftests: add SEV
-boot tests" from Michael but much simpler.
+On Tue, Jan 10, 2023 at 08:32:10AM -0800, Paul E. McKenney wrote:
+> On Tue, Jan 10, 2023 at 05:12:49PM +0100, Willy Tarreau wrote:
+> > On Tue, Jan 10, 2023 at 06:53:34AM -0800, Paul E. McKenney wrote:
+> > > Here is one of them, based on both the fixes and Sven's s390 support.
+> > > Please let me know if you need any other combination.
+> > 
+> > Thanks, here's the problem:
+> > 
+> > > 0 getpid = 1                             [OK]
+> > > 1 getppid = 0                            [OK]
+> > > 3 gettid = 1                             [OK]
+> > > 5 getpgid_self = 0                       [OK]
+> > > 6 getpgid_bad = -1 ESRCH                 [OK]
+> > > 7 kill_0[    1.940442] tsc: Refined TSC clocksource calibration: 2399.981 MHz
+> > > [    1.942334] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x229825a5278, max_idle_ns: 440795306804 ns
+> > >  = 0                             [OK]
+> > > 8 kill_CONT = 0           [    1.944987] clocksource: Switched to clocksource tsc
+> > >                [OK]
+> > > 9 kill_BADPID = -1 ESRCH                 [OK]
+> > (...)
+> > 
+> > It's clear that "grep -c ^[0-9].*OK" will not count all of them (2 are
+> > indeed missing).
+> > 
+> > We could probably start with "quiet" but that would be against the
+> > principle of using this to troubleshoot issues. I think we just stick
+> > to the current search of "FAIL" and that as long as a success is
+> > reported and the number of successes is within the expected range
+> > that could be OK. At least I guess :-/
+> 
+> Huh.  Would it make sense to delay the start of the nolibc testing by a
+> few seconds in order to avoid this sort of thing?  Or would that cause
+> other problems?
 
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Vishal Annapurve <vannapurve@google.com>
-Cc: Ackerley Tng <ackerleytng@google.com>
-cc: Andrew Jones <andrew.jones@linux.dev>
-Suggested-by: Michael Roth <michael.roth@amd.com>
-Signed-off-by: Peter Gonda <pgonda@google.com>
----
- tools/testing/selftests/kvm/.gitignore        | 84 +++++++++++++++++++
- tools/testing/selftests/kvm/Makefile          |  1 +
- .../selftests/kvm/x86_64/sev_all_boot_test.c  | 84 +++++++++++++++++++
- 3 files changed, 169 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+That would be quite annoying. Delaying is never long enough for some
+issues, too long for the majority of cases where there is no issue. I'd
+suggest that we just rely on the fail count for now (as it is) and that
+will allow us to collect a larger variety of discrepancies and probably
+figure a better solution at some point. For example if we find that it's
+always the TSC that does this, maybe starting x86 with notsc will be a
+good fix.
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 6d9381d60172..6d826957c6ae 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -1,7 +1,91 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+<<<<<<< HEAD
- *
- !/**/
- !*.c
- !*.h
- !*.S
- !*.sh
-+=======
-+/aarch64/aarch32_id_regs
-+/aarch64/arch_timer
-+/aarch64/debug-exceptions
-+/aarch64/get-reg-list
-+/aarch64/hypercalls
-+/aarch64/psci_test
-+/aarch64/vcpu_width_config
-+/aarch64/vgic_init
-+/aarch64/vgic_irq
-+/s390x/memop
-+/s390x/resets
-+/s390x/sync_regs_test
-+/s390x/tprot
-+/x86_64/amx_test
-+/x86_64/cpuid_test
-+/x86_64/cr4_cpuid_sync_test
-+/x86_64/debug_regs
-+/x86_64/evmcs_test
-+/x86_64/emulator_error_test
-+/x86_64/fix_hypercall_test
-+/x86_64/get_msr_index_features
-+/x86_64/kvm_clock_test
-+/x86_64/kvm_pv_test
-+/x86_64/hyperv_clock
-+/x86_64/hyperv_cpuid
-+/x86_64/hyperv_features
-+/x86_64/hyperv_svm_test
-+/x86_64/max_vcpuid_cap_test
-+/x86_64/mmio_warning_test
-+/x86_64/monitor_mwait_test
-+/x86_64/nested_exceptions_test
-+/x86_64/nx_huge_pages_test
-+/x86_64/platform_info_test
-+/x86_64/pmu_event_filter_test
-+/x86_64/set_boot_cpu_id
-+/x86_64/set_sregs_test
-+/x86_64/sev_all_boot_test
-+/x86_64/sev_migrate_tests
-+/x86_64/smm_test
-+/x86_64/state_test
-+/x86_64/svm_vmcall_test
-+/x86_64/svm_int_ctl_test
-+/x86_64/svm_nested_soft_inject_test
-+/x86_64/sync_regs_test
-+/x86_64/tsc_msrs_test
-+/x86_64/tsc_scaling_sync
-+/x86_64/ucna_injection_test
-+/x86_64/userspace_io_test
-+/x86_64/userspace_msr_exit_test
-+/x86_64/vmx_apic_access_test
-+/x86_64/vmx_close_while_nested_test
-+/x86_64/vmx_dirty_log_test
-+/x86_64/vmx_exception_with_invalid_guest_state
-+/x86_64/vmx_invalid_nested_guest_state
-+/x86_64/vmx_msrs_test
-+/x86_64/vmx_preemption_timer_test
-+/x86_64/vmx_set_nested_state_test
-+/x86_64/vmx_tsc_adjust_test
-+/x86_64/vmx_nested_tsc_scaling_test
-+/x86_64/xapic_ipi_test
-+/x86_64/xapic_state_test
-+/x86_64/xen_shinfo_test
-+/x86_64/xen_vmcall_test
-+/x86_64/xss_msr_test
-+/x86_64/vmx_pmu_caps_test
-+/x86_64/triple_fault_event_test
-+/access_tracking_perf_test
-+/demand_paging_test
-+/dirty_log_test
-+/dirty_log_perf_test
-+/hardware_disable_test
-+/kvm_create_max_vcpus
-+/kvm_page_table_test
-+/max_guest_memory_test
-+/memslot_modification_stress_test
-+/memslot_perf_test
-+/rseq_test
-+/set_memory_region_test
-+/steal_time
-+/kvm_binary_stats_test
-+/system_counter_offset_test
-+>>>>>>> KVM: selftests: Add simple sev vm testing
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index b7cfb15712d1..66d7ab3da990 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -111,6 +111,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/tsc_msrs_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_caps_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
-+TEST_GEN_PROGS_x86_64 += x86_64/sev_all_boot_test
- TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
- TEST_GEN_PROGS_x86_64 += x86_64/amx_test
- TEST_GEN_PROGS_x86_64 += x86_64/max_vcpuid_cap_test
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-new file mode 100644
-index 000000000000..e9e4d7305bc1
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Basic SEV boot tests.
-+ *
-+ */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "svm_util.h"
-+#include "linux/psp-sev.h"
-+#include "sev.h"
-+
-+#define NR_SYNCS 1
-+
-+#define MSR_AMD64_SEV_BIT  1
-+
-+static void guest_run_loop(struct kvm_vcpu *vcpu)
-+{
-+	struct ucall uc;
-+	int i;
-+
-+	for (i = 0; i <= NR_SYNCS; ++i) {
-+		vcpu_run(vcpu);
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_SYNC:
-+			continue;
-+		case UCALL_DONE:
-+			return;
-+		case UCALL_ABORT:
-+			REPORT_GUEST_ASSERT(uc);
-+		default:
-+			TEST_FAIL("Unexpected exit: %s",
-+				  exit_reason_str(vcpu->run->exit_reason));
-+		}
-+	}
-+}
-+
-+static void is_sev_enabled(void)
-+{
-+	uint64_t sev_status;
-+
-+	GUEST_ASSERT(this_cpu_has(X86_FEATURE_SEV));
-+
-+	sev_status = rdmsr(MSR_AMD64_SEV);
-+	GUEST_ASSERT(sev_status & 0x1);
-+}
-+
-+static void guest_sev_code(void)
-+{
-+	GUEST_SYNC(1);
-+
-+	is_sev_enabled();
-+
-+	GUEST_DONE();
-+}
-+
-+static void test_sev(void *guest_code, uint64_t policy)
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+
-+	vm = vm_sev_create_with_one_vcpu(policy, guest_code, &vcpu);
-+	TEST_ASSERT(vm, "vm_sev_create_with_one_vcpu() failed to create VM\n");
-+
-+	guest_run_loop(vcpu);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	TEST_REQUIRE(is_kvm_sev_supported());
-+
-+	test_sev(guest_sev_code, SEV_POLICY_NO_DBG);
-+	test_sev(guest_sev_code, 0);
-+
-+	return 0;
-+}
--- 
-2.39.0.314.g84b9a713c41-goog
-
+Regards,
+Willy
