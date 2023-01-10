@@ -2,60 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E3E6641FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC767664152
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjAJNfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
+        id S238502AbjAJNKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238748AbjAJNez (ORCPT
+        with ESMTP id S238361AbjAJNKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:34:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC19E7A39C;
-        Tue, 10 Jan 2023 05:34:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CA5D6171A;
-        Tue, 10 Jan 2023 13:34:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C67F9C433EF;
-        Tue, 10 Jan 2023 13:34:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673357685;
-        bh=428Utdh+e6F2/hWYnKzDhqLh/AHuuQMV5oFWLJ3BKqg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PifxqQiVsu2yVxl+rvItZRxvJQ4ShpBz+CyugsIA5h6Xy6eogwCrR6tFdn76H51+9
-         qwBoKfhNOJNlRtFcQ/bMGGgJu4QKQ1zCSwlKDl9DFdRWeQ/7OuSK4Hzt0+nyn6MwOP
-         LqUQ7e9EXMAJOHgoyZ7zYMsA2pTYuw+LnTwCQLOXx3ZeEZ5mMZ1ziIMRcfu+vRCPDy
-         4+1UlQ99l+q3b/OU3Uvclc+Se2K9gawsEzPhhFNB0o+HDCaGQ1eS6X9FFeFWslUut1
-         vEK5uBOSLo4urIQZBEhY5KYGic/0vEo1sVWuCPPhuuKCyWc32c58/++vHWcWbO8jWn
-         5/8lVcEXr2T9w==
-Received: by mail-yb1-f169.google.com with SMTP id c124so11737562ybb.13;
-        Tue, 10 Jan 2023 05:34:45 -0800 (PST)
-X-Gm-Message-State: AFqh2krp9A9p2LbrRsjXT4gB8vCKRU3XGqg8aUEuspH98x3bM9+LK/TQ
-        770zCGLSrEzw66xrVbDt8bLsvsCWuHP6fZbzPfo=
-X-Google-Smtp-Source: AMrXdXsS1IMMV97uhXnmSnvUUs5QH5SQPpbwkG6NWvv7XZpwjDjgZlqLaV0/nOrzgqw5QouMJjwR1058Lhg2O2R76U8=
-X-Received: by 2002:a25:bbd1:0:b0:70b:87c6:4fe with SMTP id
- c17-20020a25bbd1000000b0070b87c604femr7421709ybk.550.1673357684837; Tue, 10
- Jan 2023 05:34:44 -0800 (PST)
+        Tue, 10 Jan 2023 08:10:17 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934F6687AF;
+        Tue, 10 Jan 2023 05:10:12 -0800 (PST)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NrrjH572ZznV9y;
+        Tue, 10 Jan 2023 21:08:35 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 10 Jan
+ 2023 21:10:09 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yukuai3@huawei.com>,
+        <libaokun1@huawei.com>,
+        <syzbot+77d6fcc37bbb92f26048@syzkaller.appspotmail.com>
+Subject: [PATCH v2] ext4: fix task hung in ext4_xattr_delete_inode
+Date:   Tue, 10 Jan 2023 21:34:36 +0800
+Message-ID: <20230110133436.996350-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <Y7zB4z5cxpFkPXKV@work> <20230110104609.GA1602079@linux.intel.com>
-In-Reply-To: <20230110104609.GA1602079@linux.intel.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Tue, 10 Jan 2023 15:34:18 +0200
-X-Gmail-Original-Message-ID: <CAFCwf13yp0Sj9i9Nmq_WOU0gcwfjjWz1vgzMeD5_1YWj0aWO_g@mail.gmail.com>
-Message-ID: <CAFCwf13yp0Sj9i9Nmq_WOU0gcwfjjWz1vgzMeD5_1YWj0aWO_g@mail.gmail.com>
-Subject: Re: [PATCH][next] habanalabs: Replace zero-length arrays with
- flexible-array members
-To:     Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,24 +48,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 12:46 PM Stanislaw Gruszka
-<stanislaw.gruszka@linux.intel.com> wrote:
->
-> On Mon, Jan 09, 2023 at 07:39:47PM -0600, Gustavo A. R. Silva wrote:
-> > Zero-length arrays are deprecated[1] and we are moving towards
-> > adopting C99 flexible-array members instead. So, replace zero-length
-> > arrays in a couple of structures with flex-array members.
-> >
-> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> > routines on memcpy() and help us make progress towards globally
-> > enabling -fstrict-flex-arrays=3 [2].
-> >
-> > Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays [1]
-> > Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
-> > Link: https://github.com/KSPP/linux/issues/78
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->
-> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Thanks,
-applied to -next.
-Oded
+Syzbot reported a hung task problem:
+==================================================================
+INFO: task syz-executor232:5073 blocked for more than 143 seconds.
+      Not tainted 6.2.0-rc2-syzkaller-00024-g512dee0c00ad #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-exec232 state:D stack:21024 pid:5073 ppid:5072 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0x995/0xe20 kernel/sched/core.c:6555
+ schedule+0xcb/0x190 kernel/sched/core.c:6631
+ __wait_on_freeing_inode fs/inode.c:2196 [inline]
+ find_inode_fast+0x35a/0x4c0 fs/inode.c:950
+ iget_locked+0xb1/0x830 fs/inode.c:1273
+ __ext4_iget+0x22e/0x3ed0 fs/ext4/inode.c:4861
+ ext4_xattr_inode_iget+0x68/0x4e0 fs/ext4/xattr.c:389
+ ext4_xattr_inode_dec_ref_all+0x1a7/0xe50 fs/ext4/xattr.c:1148
+ ext4_xattr_delete_inode+0xb04/0xcd0 fs/ext4/xattr.c:2880
+ ext4_evict_inode+0xd7c/0x10b0 fs/ext4/inode.c:296
+ evict+0x2a4/0x620 fs/inode.c:664
+ ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
+ __ext4_fill_super fs/ext4/super.c:5516 [inline]
+ ext4_fill_super+0x81cd/0x8700 fs/ext4/super.c:5644
+ get_tree_bdev+0x400/0x620 fs/super.c:1282
+ vfs_get_tree+0x88/0x270 fs/super.c:1489
+ do_new_mount+0x289/0xad0 fs/namespace.c:3145
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa5406fd5ea
+RSP: 002b:00007ffc7232f968 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fa5406fd5ea
+RDX: 0000000020000440 RSI: 0000000020000000 RDI: 00007ffc7232f970
+RBP: 00007ffc7232f970 R08: 00007ffc7232f9b0 R09: 0000000000000432
+R10: 0000000000804a03 R11: 0000000000000202 R12: 0000000000000004
+R13: 0000555556a7a2c0 R14: 00007ffc7232f9b0 R15: 0000000000000000
+ </TASK>
+==================================================================
+
+The problem is that the inode contains an xattr entry with ea_inum of 15
+when cleaning up an orphan inode <15>. When evict inode <15>, the reference
+counting of the corresponding EA inode is decreased. When EA inode <15> is
+found by find_inode_fast() in __ext4_iget(), it is found that the EA inode
+holds the I_FREEING flag and waits for the EA inode to complete deletion.
+As a result, when inode <15> is being deleted, we wait for inode <15> to
+complete the deletion, resulting in an infinite loop and triggering Hung
+Task. To solve this problem, we only need to check whether the ino of EA
+inode and parent is the same before getting EA inode.
+
+Link: https://syzkaller.appspot.com/bug?extid=77d6fcc37bbb92f26048
+Reported-by: syzbot+77d6fcc37bbb92f26048@syzkaller.appspotmail.com
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+V1->V2:
+	Avoid using uninitialized variable and add comment.
+
+ fs/ext4/xattr.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
+index 7decaaf27e82..9e6a5c50276e 100644
+--- a/fs/ext4/xattr.c
++++ b/fs/ext4/xattr.c
+@@ -386,6 +386,17 @@ static int ext4_xattr_inode_iget(struct inode *parent, unsigned long ea_ino,
+ 	struct inode *inode;
+ 	int err;
+ 
++	/*
++	 * We have to check for this corruption early as otherwise
++	 * iget_locked() could wait indefinitely for the state of our
++	 * parent inode.
++	 */
++	if (parent->i_ino == ea_ino) {
++		ext4_error(parent->i_sb,
++			   "Parent and EA inode have the same ino %lu", ea_ino);
++		return -EFSCORRUPTED;
++	}
++
+ 	inode = ext4_iget(parent->i_sb, ea_ino, EXT4_IGET_NORMAL);
+ 	if (IS_ERR(inode)) {
+ 		err = PTR_ERR(inode);
+-- 
+2.31.1
+
