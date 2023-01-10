@@ -2,222 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8AD664EC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E03F664ED5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjAJW1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 17:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S232467AbjAJWeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 17:34:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234837AbjAJW1k (ORCPT
+        with ESMTP id S236030AbjAJW3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 17:27:40 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FBEE75
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 14:27:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E487DCE1896
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 22:27:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5449C433EF;
-        Tue, 10 Jan 2023 22:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673389645;
-        bh=lwktKLzBFf+UNz9qvGQwQVWp7f2PvDTtElXvlxqNAq4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=U7ThD80Z/op1Xf58Km6T4bXYTJ+BhHnm7RAbOyEZkaIN8XuoSvMUFOffDhzYHv+Ht
-         JE5QUD4LnxTkv+c3RcnPy4sAwRxCFZtjlGXH2qw2lcSUNdDjQ1RfHa0onKZDvUJQCK
-         ymSi9bx5GEms5px/byS22SsiV9lCfjCS7HP8B7+mrZIp1G1brwzA08R2wsxnzEbrap
-         ZzhrZfz0gPI0UFhXJnGx9Yi/i3UJ/viL3dkEmfc328DY6veCGAi3Q7YCAwnp1miJaf
-         ugl75rJROB7vrMBExNS84K281jatTWE0JLYJOPhVykfm6Aaec5AYIa0unmkpax7BAS
-         P4vpSeiWR/wCA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 78C5A5C0A2D; Tue, 10 Jan 2023 14:27:25 -0800 (PST)
-Date:   Tue, 10 Jan 2023 14:27:25 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "open list:SCHEDULER" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] sched/deadline: fix inactive_task_timer splat with
- CONFIG_PREEMPT_RT
-Message-ID: <20230110222725.GT4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230104181701.43224-1-wander@redhat.com>
- <20230110013333.GH4028633@paulmck-ThinkPad-P17-Gen-1>
- <CAAq0SUm+VkoM38ULJE6zuajA3Tc7KYbiH51uc9oKjGE+RhDmXg@mail.gmail.com>
+        Tue, 10 Jan 2023 17:29:04 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9442020;
+        Tue, 10 Jan 2023 14:29:03 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id g68so8163721pgc.11;
+        Tue, 10 Jan 2023 14:29:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IVyTJ4Bvb0dosRz2MzjeXlGvXv4v3QkWAgztM4d7AbQ=;
+        b=FoOd0/lpm1Ec2a6lG9I04pjIOWJqT8qMjboF6tzFvFMjGcuBE9LFy0Ej1Q3fBFtKNH
+         aWjoY4qnBiG4MrUJCmdWg8uzNOgfic6j8xOZB/eSQ/Jm6CfbPYV+9+qNnir9+rc8w+BX
+         ec6VJy4q9I28VKPqm4Kfr6w3MDor6TZoH4qnKfVbYnIsdxBhTkCAVnc9HAXARXG1ROvh
+         NC6wqDFifheIYVZSA/hFNwYZeUVFAWRjpDQUam3CtjrS5CZCcD5b4eGIswmFKKnV1vo4
+         VQcN+atJhXmqY/80BApmimSASTNjg5FmWGNq1ze986+YezbZV7GIaHrK5H50+5o3nNc1
+         X9jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IVyTJ4Bvb0dosRz2MzjeXlGvXv4v3QkWAgztM4d7AbQ=;
+        b=xXvKjgAgGCBxJ63WNWGca9H6mXNoNHqTt4OOEYkbDaHsJ0Jn0L1w8ULlwfllP+FDDu
+         6l1lxJ2ilwNVTD30MtCtZgyiKO0fVtvFYz78S7vzZoe/q/LSXU6piNmHGI+wQA/Jozpk
+         egvYTDVmE1FvD1Iw3oIqqmvdowQJHYbS3UZ7GfR2XEgG4OQnhFmnMkbV9l65mx0JO96u
+         mgzvbAZJzurQnTnyLPAjZLfilxrX8w+FOzXEbTUcm8AMCl0J24ZTHtj7JKSP9afX34f2
+         9wXkm4sKHsDiVt5umM2O830US26g+hNUZ2ib0mvsIXZn4zHHoVVCPWGGcQJPqN26SIdt
+         ADWA==
+X-Gm-Message-State: AFqh2koCyHMJG4lA8Q6z+o+BFuqkV/OYVI+HakINjGgqRhCcIGEoC63o
+        RwI1XTq6/iNbxhuTPDeeCs0q8ijSeis=
+X-Google-Smtp-Source: AMrXdXsG2OmpeP+NSU8Pdh74qwrh3KDPz0sXs1ijzvD77pu4isIYOkBb2GegiFRMyKr40gfVbJ83fw==
+X-Received: by 2002:a05:6a00:194e:b0:58b:6284:779e with SMTP id s14-20020a056a00194e00b0058b6284779emr995724pfk.11.1673389742984;
+        Tue, 10 Jan 2023 14:29:02 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id f198-20020a6238cf000000b0058b0992f2f9sm1290642pfa.101.2023.01.10.14.29.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 14:29:02 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 10 Jan 2023 12:29:01 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
+Subject: Re: [PATCH] cgroup/cpuset: fix a few kernel-doc warnings & coding
+ style
+Message-ID: <Y73mrfdnjJk2T9bj@slm.duckdns.org>
+References: <20230108021217.15491-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAq0SUm+VkoM38ULJE6zuajA3Tc7KYbiH51uc9oKjGE+RhDmXg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230108021217.15491-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 05:52:03PM -0300, Wander Lairson Costa wrote:
-> On Mon, Jan 9, 2023 at 10:40 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Wed, Jan 04, 2023 at 03:17:01PM -0300, Wander Lairson Costa wrote:
-> > > inactive_task_timer() executes in interrupt (atomic) context. It calls
-> > > put_task_struct(), which indirectly acquires sleeping locks under
-> > > PREEMPT_RT.
-> > >
-> > > Below is an example of a splat that happened in a test environment:
-> > >
-> > >  CPU: 1 PID: 2848 Comm: life Kdump: loaded Tainted: G W ---------
-> > >  Hardware name: HP ProLiant DL388p Gen8, BIOS P70 07/15/2012
-> > >  Call Trace:
-> > >  dump_stack_lvl+0x57/0x7d
-> > >  mark_lock_irq.cold+0x33/0xba
-> > >  ? stack_trace_save+0x4b/0x70
-> > >  ? save_trace+0x55/0x150
-> > >  mark_lock+0x1e7/0x400
-> > >  mark_usage+0x11d/0x140
-> > >  __lock_acquire+0x30d/0x930
-> > >  lock_acquire.part.0+0x9c/0x210
-> > >  ? refill_obj_stock+0x3d/0x3a0
-> > >  ? rcu_read_lock_sched_held+0x3f/0x70
-> > >  ? trace_lock_acquire+0x38/0x140
-> > >  ? lock_acquire+0x30/0x80
-> > >  ? refill_obj_stock+0x3d/0x3a0
-> > >  rt_spin_lock+0x27/0xe0
-> > >  ? refill_obj_stock+0x3d/0x3a0
-> > >  refill_obj_stock+0x3d/0x3a0
-> > >  ? inactive_task_timer+0x1ad/0x340
-> > >  kmem_cache_free+0x357/0x560
-> > >  inactive_task_timer+0x1ad/0x340
-> > >  ? switched_from_dl+0x2d0/0x2d0
-> > >  __run_hrtimer+0x8a/0x1a0
-> > >  __hrtimer_run_queues+0x91/0x130
-> > >  hrtimer_interrupt+0x10f/0x220
-> > >  __sysvec_apic_timer_interrupt+0x7b/0xd0
-> > >  sysvec_apic_timer_interrupt+0x4f/0xd0
-> > >  ? asm_sysvec_apic_timer_interrupt+0xa/0x20
-> > >  asm_sysvec_apic_timer_interrupt+0x12/0x20
-> > >  RIP: 0033:0x7fff196bf6f5
-> > >
-> > > Instead of calling put_task_struct() directly, we defer it using
-> > > call_rcu(). A more natural approach would use a workqueue, but since
-> > > in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
-> > > the code would become more complex because we would need to put the
-> > > work_struct instance in the task_struct and initialize it when we
-> > > allocate a new task_struct.
-> > >
-> > > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-> > > Cc: Paul McKenney <paulmck@kernel.org>
-> > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > ---
-> > >  kernel/sched/build_policy.c |  1 +
-> > >  kernel/sched/deadline.c     | 24 +++++++++++++++++++++++-
-> > >  2 files changed, 24 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
-> > > index d9dc9ab3773f..f159304ee792 100644
-> > > --- a/kernel/sched/build_policy.c
-> > > +++ b/kernel/sched/build_policy.c
-> > > @@ -28,6 +28,7 @@
-> > >  #include <linux/suspend.h>
-> > >  #include <linux/tsacct_kern.h>
-> > >  #include <linux/vtime.h>
-> > > +#include <linux/rcupdate.h>
-> > >
-> > >  #include <uapi/linux/sched/types.h>
-> > >
-> > > diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> > > index 9ae8f41e3372..ab9301d4cc24 100644
-> > > --- a/kernel/sched/deadline.c
-> > > +++ b/kernel/sched/deadline.c
-> > > @@ -1405,6 +1405,13 @@ static void update_curr_dl(struct rq *rq)
-> > >       }
-> > >  }
-> > >
-> > > +static void delayed_put_task_struct(struct rcu_head *rhp)
-> > > +{
-> > > +     struct task_struct *task = container_of(rhp, struct task_struct, rcu);
-> > > +
-> > > +     __put_task_struct(task);
-> >
-> > Please note that BH is disabled here.  Don't you therefore
-> > need to schedule a workqueue handler?  Perhaps directly from
-> > inactive_task_timer(), or maybe from this point.  If the latter, one
-> > way to skip the extra step is to use queue_rcu_work().
-> >
+On Sat, Jan 07, 2023 at 06:12:17PM -0800, Randy Dunlap wrote:
+> Fix kernel-doc notation warnings:
 > 
-> My initial work was using a workqueue [1,2]. However, I realized I
-> could reach a much simpler code with call_rcu().
-> I am afraid my ignorance doesn't allow me to get your point. Does
-> disabling softirq imply atomic context?
-
-Given that this problem occurred in PREEMPT_RT, I am assuming that the
-appropriate definition of "atomic context" is "cannot call schedule()".
-And you are in fact not permitted to call schedule() from a bh-disabled
-region.
-
-This also means that you cannot acquire a non-raw spinlock in a
-bh-disabled region of code in a PREEMPT_RT kernel, because doing
-so can invoke schedule.
-
-Of course, using a workqueue does incur needless overhead in
-non-PREEMPT_RT kernels.  So one alternative approach is to use
-the workqueue only in PREEMPT_RT kernels and to just invoke
-__put_task_struct() directly (without call_rcu() along the way)
-otherwise.
-
-Does that help, or am I missing your point?
-
-						Thanx, Paul
-
-> [1] https://gitlab.com/walac/kernel-ark/-/commit/ec8addbe38d5c318f1789b4c0fa480a9d2afdb65
-> [2] https://gitlab.com/walac/kernel-ark/-/commit/0bde233235ffed233a7466a36a4866bc48064f54
+> kernel/cgroup/cpuset.c:1309: warning: Excess function parameter 'cpuset' description in 'update_parent_subparts_cpumask'
+> kernel/cgroup/cpuset.c:3909: warning: expecting prototype for cpuset_mem_spread_node(). Prototype was for cpuset_spread_node() instead
 > 
+> Also drop a blank line before EXPORT_SYMBOL_GPL() to be consistent
+> with kernel coding style.
 > 
-> >                                                         Thanx, Paul
-> >
-> > > +}
-> > > +
-> > >  static enum hrtimer_restart inactive_task_timer(struct hrtimer *timer)
-> > >  {
-> > >       struct sched_dl_entity *dl_se = container_of(timer,
-> > > @@ -1442,7 +1449,22 @@ static enum hrtimer_restart inactive_task_timer(struct hrtimer *timer)
-> > >       dl_se->dl_non_contending = 0;
-> > >  unlock:
-> > >       task_rq_unlock(rq, p, &rf);
-> > > -     put_task_struct(p);
-> > > +
-> > > +     if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
-> > > +             /*
-> > > +              * Decrement the refcount explicitly to avoid unnecessarily
-> > > +              * calling call_rcu.
-> > > +              */
-> > > +             if (refcount_dec_and_test(&p->usage))
-> > > +                     /*
-> > > +                      * under PREEMPT_RT, we can't call put_task_struct
-> > > +                      * in atomic context because it will indirectly
-> > > +                      * acquire sleeping locks.
-> > > +                      */
-> > > +                     call_rcu(&p->rcu, delayed_put_task_struct);
-> > > +     } else {
-> > > +             put_task_struct(p);
-> > > +     }
-> > >
-> > >       return HRTIMER_NORESTART;
-> > >  }
-> > > --
-> > > 2.39.0
-> > >
-> >
-> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Zefan Li <lizefan.x@bytedance.com>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: cgroups@vger.kernel.org
+
+Applied to cgroup/for-6.2-fixes.
+
+Thanks.
+
+-- 
+tejun
