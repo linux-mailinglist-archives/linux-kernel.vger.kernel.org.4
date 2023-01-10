@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1156641C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D99A96641CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238441AbjAJN2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:28:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        id S238250AbjAJN3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238093AbjAJN2C (ORCPT
+        with ESMTP id S238616AbjAJN2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:28:02 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9A03FC88;
-        Tue, 10 Jan 2023 05:27:36 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v23so12367865pju.3;
-        Tue, 10 Jan 2023 05:27:36 -0800 (PST)
+        Tue, 10 Jan 2023 08:28:43 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3D53B3;
+        Tue, 10 Jan 2023 05:28:02 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o7-20020a17090a0a0700b00226c9b82c3aso13423153pjo.3;
+        Tue, 10 Jan 2023 05:28:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gpoceuX07Y+LzpttmqNDqMv0+/ZLcrXMqGYtxrEUkZM=;
-        b=DQWIZLFkILn4uvOhdxf40M/4PWFqEpyHTNlqIINfq1IIKmVRqaVznn+rZ1ugvgjOZJ
-         VQ+SWe6sgTokVYWSQ9i0Kk9PfVmrnCM1InSEjL9ooRl2jfYBehlyR82qfSkVVWt+TRom
-         f0B08tZE0PxnvH/OXkkruAoF2n9Yz1H0Uk7dAQqqTn2LoHJtMJ2V+OLERuHFrjfjUH7P
-         0XhHeFwqMcUcB/83XPuILzxHlZi6q5Cw7wldz0Gqg0pdWgdMcpxZqUuFEKyz8JzIqMVw
-         hWSOqdTphfdWSPsP3Y/WXs2x3NWt9TyVBqptiXW2XZbvCbiTfByBs9VsYP5L5z6ClzDi
-         DaGg==
+        bh=xw/+Ec6F2sXXn/Oy+GPA4z1yygz+zcW6yQ34bFJPVCM=;
+        b=QbaX0ANqWEwGShl5/o1FedSd5lmpoVZbDK91tpPlukRt8oiRTcW9UJN3xSakqz9mKD
+         m7q1ef6878Yjrui3KuqOJMIFWjkau8Yxyx2BiBdGCDfw6piVTK749skcZPFXBSOopE8l
+         ZbwaR5sEKaDE+J+JERUh5ndtl1c/9CoQRAZYJGaEzeH7xyhYCuCh0RydmaZ7FnpYXLP/
+         kqOzIxknol0LeWnySe5PXqiMUccvdYPx8T7ww7IdOIbF5UIlieAa5DHKyELF2bXGYZPJ
+         3ARgWRPCyrLyMdakZWSgYfmjaOf8gN43awQU71rYoRC4A5pJ+GOmNH25QkuyvhoPEG4r
+         94Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gpoceuX07Y+LzpttmqNDqMv0+/ZLcrXMqGYtxrEUkZM=;
-        b=ULrUjSiElVW+EuKTdfXSicuuGRCDUDiskkKaI48RkFzd4CYDeEYqKA5jbNDVaWwjUP
-         PsQlt8w4rFvDrc8j13HNBLw1Bu1TQt9V8+0VTf+bZKEv8hI/JC8H1nXesRdnvwCybeXl
-         VLysq8gk5H8goTCrag//7Pp3gr5is0JidFfccHjuvbimQ0G4L4xIZZHhX5QSvFlh3sJN
-         jaBU78DwfOTZ33E1IAh67K3oToWfwvorfj898Mt4bHSiEk0lIP6uCo/nRyVLi9PQ4Rd0
-         YvdOKFolSMtE8qL6iOPRRiNqMP2vqfmDHQC6j7/bGt/hlCwqYpekVNLIi8za9TLwy3Bg
-         XeEw==
-X-Gm-Message-State: AFqh2kpcC9XL0VWHrMLF71DqM1TsuNJOPjiwNUZgUNcxXDimCn0oC3bO
-        +Id92PwEHyxj6ddJbjZwuoGH8Kg/OcHelQ==
-X-Google-Smtp-Source: AMrXdXsRB9kXvSbkS8AyQTKt2I+GcpfA3y1RgJBTyB1uqxsVMTkEkg+/Orrk1IKdM8s7aD+8NeQpqw==
-X-Received: by 2002:a17:902:904b:b0:186:95c9:ddc9 with SMTP id w11-20020a170902904b00b0018695c9ddc9mr81593104plz.55.1673357256253;
-        Tue, 10 Jan 2023 05:27:36 -0800 (PST)
+        bh=xw/+Ec6F2sXXn/Oy+GPA4z1yygz+zcW6yQ34bFJPVCM=;
+        b=TVWRIa36m5VSR0LqlQdRnWcHbeb0JaTh09TLuZzl5YF8U3X/cDDHstHYH/miqq/QBs
+         k9AB+AY8Z6Ht5clmkBiZhIyNJYhc08oYK/7vSQ4bLtZOkWDotjzcghjEXRWSRPB2KNGe
+         Q9nn7n4aZT8RCLGHXIUkExAvw+4NuiWyXBKHpmgKuartS4YsIi5opMsGlf0ICfOl5dH2
+         Sq1yLvIPSIKGiT2V1vc4WIssrw5v1aGN8DM79dqd1GjACp8pavwcIgLPF7+xLpwr2wTb
+         Zi+RTDmYUX65whM0SEpYneTCcDRcV6To9IbSlfIlZtZylVXYWiW0w+AblKEacSjpHAB+
+         OIbA==
+X-Gm-Message-State: AFqh2kp4H2hLc4MufPjQVzoUP/gOEN8beguGoU2EuxgsGHHSwTcxLNxy
+        3S9GxeXP6M3/lgxhcszngZc=
+X-Google-Smtp-Source: AMrXdXuQrIZ5p/fOOAXrvQsEbH9ipOhrcmi9W6yWA45/BYFb9VORZHIuIaaUq8CJqWCLxoZemWGP/w==
+X-Received: by 2002:a05:6a20:d69a:b0:af:9538:ec5c with SMTP id it26-20020a056a20d69a00b000af9538ec5cmr104676466pzb.51.1673357281946;
+        Tue, 10 Jan 2023 05:28:01 -0800 (PST)
 Received: from [172.30.1.1] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170903230800b00189ac5a2340sm8125172plh.124.2023.01.10.05.27.32
+        by smtp.gmail.com with ESMTPSA id k13-20020aa7972d000000b00561d79f1064sm8084686pfg.57.2023.01.10.05.27.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 05:27:35 -0800 (PST)
-Message-ID: <e68cd1fd-0c15-f822-7ec7-eb7658771ce6@gmail.com>
-Date:   Tue, 10 Jan 2023 22:27:30 +0900
+        Tue, 10 Jan 2023 05:28:01 -0800 (PST)
+Message-ID: <8207ec8a-9001-e1a6-6f00-a5691bcddb91@gmail.com>
+Date:   Tue, 10 Jan 2023 22:27:57 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v4 1/2 RESEND] dt-bindings: pm8941-misc: Fix usb_id and
- usb_vbus definitions
+Subject: Re: [PATCH v4 2/2 RESEND] extcon: qcom-spmi: Switch to
+ platform_get_irq_byname_optional
 Content-Language: en-US
 To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         cw00.choi@samsung.com, myungjoo.ham@samsung.com,
@@ -65,12 +65,11 @@ To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         agross@kernel.org
 Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
         Marijn Suijten <marijn.suijten@somainline.org>
 References: <20221228133058.213886-1-bryan.odonoghue@linaro.org>
- <20221228133058.213886-2-bryan.odonoghue@linaro.org>
+ <20221228133058.213886-3-bryan.odonoghue@linaro.org>
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20221228133058.213886-2-bryan.odonoghue@linaro.org>
+In-Reply-To: <20221228133058.213886-3-bryan.odonoghue@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,50 +83,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 22. 12. 28. 22:30, Bryan O'Donoghue wrote:
-> dts validation is throwing an error for me on 8916 and 8939 with
-> extcon@1300. In that case we have usb_vbus but not usb_id.
+> Valid configurations for the extcon interrupt declarations are
 > 
-> It wasn't immediately obvious if there was a valid use-case for the
-> existing code for usb_id in isolation, however discussing further, we
-> concluded that usb_id, usb_vbus or (usb_id | usb_vbus) are valid
-> combinations as an external IC may be responsible for usb_id or usb_vbus.
+> - usb_id
+> - usb_vbus
+> - (usb_id | usb_vbus)
 > 
-> Expand the definition with anyOf to capture the three different valid
-> modes.
+> In the case of a standalone usb_id or usb_vbus failure to find one of the
+> interrupts shouldn't generate a warning message. A warning is already in
+> place if both IRQs are missing.
 > 
-> Fixes: 4fcdd677c4ea ("bindings: pm8941-misc: Add support for VBUS detection")
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Switch to using platform_get_irq_byname_optional() in order to facilitate
+> this behaviour.
+> 
+> Suggested-by: Marijn Suijten <marijn.suijten@somainline.org>
 > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->  .../devicetree/bindings/extcon/qcom,pm8941-misc.yaml | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+>  drivers/extcon/extcon-qcom-spmi-misc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml b/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
-> index 6a9c96f0352ac..1bc412a4ac5e6 100644
-> --- a/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
-> +++ b/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
-> @@ -27,10 +27,14 @@ properties:
+> diff --git a/drivers/extcon/extcon-qcom-spmi-misc.c b/drivers/extcon/extcon-qcom-spmi-misc.c
+> index eb02cb962b5e1..f72e90ceca53d 100644
+> --- a/drivers/extcon/extcon-qcom-spmi-misc.c
+> +++ b/drivers/extcon/extcon-qcom-spmi-misc.c
+> @@ -123,7 +123,7 @@ static int qcom_usb_extcon_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
 >  
->    interrupt-names:
->      minItems: 1
-> -    items:
-> -      - const: usb_id
-> -      - const: usb_vbus
-> -
-> +    anyOf:
-> +      - items:
-> +          - const: usb_id
-> +          - const: usb_vbus
-> +      - items:
-> +          - const: usb_id
-> +      - items:
-> +          - const: usb_vbus
->  required:
->    - compatible
->    - reg
+> -	info->id_irq = platform_get_irq_byname(pdev, "usb_id");
+> +	info->id_irq = platform_get_irq_byname_optional(pdev, "usb_id");
+>  	if (info->id_irq > 0) {
+>  		ret = devm_request_threaded_irq(dev, info->id_irq, NULL,
+>  					qcom_usb_irq_handler,
+> @@ -136,7 +136,7 @@ static int qcom_usb_extcon_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> -	info->vbus_irq = platform_get_irq_byname(pdev, "usb_vbus");
+> +	info->vbus_irq = platform_get_irq_byname_optional(pdev, "usb_vbus");
+>  	if (info->vbus_irq > 0) {
+>  		ret = devm_request_threaded_irq(dev, info->vbus_irq, NULL,
+>  					qcom_usb_irq_handler,
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+Applied it. Thanks.
 
 -- 
 Best Regards,
