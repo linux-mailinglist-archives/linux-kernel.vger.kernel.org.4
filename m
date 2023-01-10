@@ -2,101 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FE3663BFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B749663C10
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjAJI76 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 10 Jan 2023 03:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S238056AbjAJJBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:01:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238322AbjAJI7E (ORCPT
+        with ESMTP id S238498AbjAJI7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:59:04 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73EA5F7C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:56:02 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-170-YekVvk-BPaSzqybZP3NNRQ-1; Tue, 10 Jan 2023 08:55:59 +0000
-X-MC-Unique: YekVvk-BPaSzqybZP3NNRQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
- 2023 08:55:58 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Tue, 10 Jan 2023 08:55:58 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Mark Rutland' <mark.rutland@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-CC:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "revest@chromium.org" <revest@chromium.org>,
-        "robert.moore@intel.com" <robert.moore@intel.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "will@kernel.org" <will@kernel.org>
-Subject: RE: [PATCH 0/8] arm64/ftrace: Add support for
- DYNAMIC_FTRACE_WITH_CALL_OPS
-Thread-Topic: [PATCH 0/8] arm64/ftrace: Add support for
- DYNAMIC_FTRACE_WITH_CALL_OPS
-Thread-Index: AQHZJDKgXMrizOIIlkyvOnatOuVuDa6XWT2g
-Date:   Tue, 10 Jan 2023 08:55:58 +0000
-Message-ID: <34e0144b19e149d99719a5ffc834f228@AcuMS.aculab.com>
-References: <20230109135828.879136-1-mark.rutland@arm.com>
-In-Reply-To: <20230109135828.879136-1-mark.rutland@arm.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 10 Jan 2023 03:59:52 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563AF4D71E;
+        Tue, 10 Jan 2023 00:58:25 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4930267AEB;
+        Tue, 10 Jan 2023 08:58:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673341100; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MQLMOsWeyfQ9OMwOEPpBfSY/zX1K5gLRGoJXs0PRFhQ=;
+        b=d0/gJhZr3338arujv292RDCpaFVCNpNRhfmbIWIBvXye7cZy8BnXDKXCy9uBlP+DXmqzhv
+        vH5AzxAF9dGjzxCxyUj1ty+EwLrjZ3mqqo1g8JsfnV+KA79R00NSzTgm9DNtTFXOX4Gf8S
+        h+jlN7NEV2XA5L/y7LnIoWd7unR8GQs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 28CB313338;
+        Tue, 10 Jan 2023 08:58:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 36wFB6wovWP/IgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 10 Jan 2023 08:58:20 +0000
+Date:   Tue, 10 Jan 2023 09:58:19 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     "T.J. Mercier" <tjmercier@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 1/4] memcg: Track exported dma-buffers
+Message-ID: <Y70oqxejnUqkJVPx@dhcp22.suse.cz>
+References: <20230109213809.418135-1-tjmercier@google.com>
+ <20230109213809.418135-2-tjmercier@google.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109213809.418135-2-tjmercier@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland
-> Sent: 09 January 2023 13:58
+On Mon 09-01-23 21:38:04, T.J. Mercier wrote:
+> When a buffer is exported to userspace, use memcg to attribute the
+> buffer to the allocating cgroup until all buffer references are
+> released.
 > 
-> This series adds a new DYNAMIC_FTRACE_WITH_CALL_OPS mechanism, and
-> enables support for this on arm64. This significantly reduces the
-> overhead of tracing when a callsite/tracee has a single associated
-> tracer, avoids a number of issues that make it undesireably and
-> infeasible to use dynamically-allocated trampolines (e.g. branch range
-> limitations), and makes it possible to implement support for
-> DYNAMIC_FTRACE_WITH_DIRECT_CALLS in future.
-> 
-> The main idea is to give each ftrace callsite an associated pointer to
-> an ftrace_ops. The architecture's ftrace_caller trampoline can recover
-> the ops pointer and invoke ops->func from this without needing to use
-> ftrace_ops_list_func, which has to iterate through all registered ops.
-> 
-> To do this, we use -fpatchable-function-entry=M,N, there N NOPs are
-> placed before the function entry point...
+> Unlike the dmabuf sysfs stats implementation, this memcg accounting
+> avoids contention over the kernfs_rwsem incurred when creating or
+> removing nodes.
 
-Doesn't this bump the minimum gcc version up to something like 9.0 ?
+I am not familiar with dmabuf infrastructure so please bear with me.
+AFAIU this patch adds a dmabuf specific counter to find out the amount
+of dmabuf memory used. But I do not see any actual charging implemented
+for that memory.
 
-How does it interact with the 'CFI stuff' that also uses the same area?
+I have looked at two random users of dma_buf_export cma_heap_allocate
+and it allocates pages to back the dmabuf (AFAIU) by cma_alloc
+which doesn't account to memcg, system_heap_allocate uses
+alloc_largest_available which relies on order_flags which doesn't seem
+to ever use __GFP_ACCOUNT.
 
-	David
+This would mean that the counter doesn't represent any actual memory
+reflected in the overall memory consumption of a memcg. I believe this
+is rather unexpected and confusing behavior. While some counters
+overlap and their sum would exceed the charged memory we do not have any
+that doesn't correspond to any memory (at least not for non-root memcgs).
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+Michal Hocko
+SUSE Labs
