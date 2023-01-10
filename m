@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A378664DBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A61664DBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbjAJUzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 15:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
+        id S234103AbjAJU4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 15:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233426AbjAJUzl (ORCPT
+        with ESMTP id S233681AbjAJU4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:55:41 -0500
-Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0C91EAF9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:55:40 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id 4A71520173;
-        Tue, 10 Jan 2023 21:55:38 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AdSpmhsHG5XT; Tue, 10 Jan 2023 21:55:37 +0100 (CET)
-Received: from begin (adijon-658-1-86-31.w86-204.abo.wanadoo.fr [86.204.233.31])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 31BDD2015C;
-        Tue, 10 Jan 2023 21:55:37 +0100 (CET)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1pFLei-006YPd-2X;
-        Tue, 10 Jan 2023 21:55:36 +0100
-Date:   Tue, 10 Jan 2023 21:55:36 +0100
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kbd@lists.altlinux.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [patchv2 0/3] VT: Support >32x32 fonts for hidpi displays
-Message-ID: <20230110205536.6kiju6swwabazr6u@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kbd@lists.altlinux.org,
-        linux-kernel@vger.kernel.org
-References: <20221218003209.503539532@ens-lyon.org>
+        Tue, 10 Jan 2023 15:56:47 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FF8DEB3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:56:44 -0800 (PST)
+Received: from dslb-178-004-206-224.178.004.pools.vodafone-ip.de ([178.4.206.224] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1pFLfg-0001pw-Vx; Tue, 10 Jan 2023 21:56:37 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH 0/4] staging: r8188eu: clean up usb_write_port_complete
+Date:   Tue, 10 Jan 2023 21:56:22 +0100
+Message-Id: <20230110205626.183516-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221218003209.503539532@ens-lyon.org>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Clean up and simplify the usb_write_port_complete callback function. Yet
+again, this is based on the previous patches I submitted.
 
-Ping, is there anything to be done on this?
+Martin Kaiser (4):
+  staging: r8188eu: refactor status handling in usb_write_port_complete
+  staging: r8188eu: reformat usb_write_port_complete
+  staging: r8188eu: remove unused function parameter
+  staging: r8188eu: always process urb status
 
-Samuel
+ .../staging/r8188eu/include/usb_ops_linux.h   |  2 -
+ .../staging/r8188eu/os_dep/usb_ops_linux.c    | 46 ++++++++-----------
+ 2 files changed, 18 insertions(+), 30 deletions(-)
 
-Samuel Thibault, le dim. 18 déc. 2022 01:32:09 +0100, a ecrit:
-> Hello,
-> 
-> This patch series adds to Linux and kbd the support for fonts larger than 32x32
-> by dropping the oldish VGA constraints that don't apply to fb-based consoles.
-> 
-> Samuel
+-- 
+2.30.2
+
