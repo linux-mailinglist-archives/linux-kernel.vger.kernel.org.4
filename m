@@ -2,145 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5247665006
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 233DF665007
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234901AbjAJXok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 18:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S234966AbjAJXp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 18:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233940AbjAJXof (ORCPT
+        with ESMTP id S234326AbjAJXpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 18:44:35 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F113E846
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:44:33 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso6983367wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:44:33 -0800 (PST)
+        Tue, 10 Jan 2023 18:45:14 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE9A3E875
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:45:13 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 7so9377869pga.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:45:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FL35cw0DN4NCwEaaH0VkgM1rt8C/x8Q1esalPn3+uWA=;
-        b=fGMBUDIGdRdL9rrgUn+hQnEvQ2ypYgF+rca0EAGqJddK4v0tcV/YeTbcq0V0mhSsrU
-         ZqTTeusJwFTB5YtV07szUtdhyAUWPxfObkpZme8tbgaRdLBrtd9EzP2nlsFDDwMLZgMO
-         1wrief+e3z0SLbVD096DRJLd/9lf4/LPvhtKUWde11xzLRnDCTWLfj7QnhEScCsz5Lw+
-         0DrgQ+b+lyh2scRVILBuOb/DPN0TcOS5GCAgb2j3iv+0qW96ZFA3jAQ2gdZ2t0hs4K1K
-         YAhhB7BiXazkZK1/lmS8S54KdP/Vzd3A4WmiypQKIEr/dVK1Qj9ZUsxFTCAcUhV1pP5z
-         a3rQ==
+        bh=D57t00k03QeMUJxkWeqB58qjl0R5qo6nYcHPSFZtf2o=;
+        b=yCuhKnZBRUOZ3SYBivZpOr2OXKkUmIdRHgXeV0eTbxAWuDo4JGDjypZIPd2Gjvew5y
+         cRYZLDtyrYHHwr4qNEe74IVwMZ1wo61vRtnIY4bxctJwGLBLL7E5z5esNZ7qTMM39sG2
+         GvNJurftxlLcSB1/GZPLFXKpWlNM6BlaAXPvPDKIw6akF6W0unmgPrCmYyDssHHOeCgj
+         GK83LS77yq0uhy8otNYIvMmHxuc1KmMpKRsgwyL1N3vsToUZsZFo48VJKt2cDJ5K17nB
+         Th01JUh7jWR71yfymgMyCv5GAlczPgaBg2L7ySe7YAq7Ww8BD8lxw/UbWP4T3YEMHYCL
+         l6pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FL35cw0DN4NCwEaaH0VkgM1rt8C/x8Q1esalPn3+uWA=;
-        b=toFtUbV/kmwmry4+cUkIrWgmpb7jNvcSrdvnHj/EcNiwPJSIRGlRkAX62ifeGiNGjm
-         Ct8KpqK0zadm1+rmDaP8uzfx8yWg5+bRhrXmPSvM1TxYLah7gRlCxGVLTbpBjic1CLww
-         ++L2CXbOTR3FK/ANhrDOc3A2T/dXqi28kOFVSLnIEog+FszkZlNBeTKUVtNHohbi2bUW
-         k2jI45KDiREbeTwhkY5O1NJFja1XGiqSXVnXNUaUZeHELtS79vdtUQ0WCCOd8tOzl0Ag
-         NSiAd9n8MTmk2Wrwz3XO9gis7uKCjVGqWz8Z30kCDo6JKdaUJ3kwQAc3PcQh6ZymCjmd
-         Gb3w==
-X-Gm-Message-State: AFqh2kqyMEQmzaBIcApU9bhboOG04kzm925+EdyVwfydSzcwIS4TYRAY
-        Drdcc/ge8e9To7VYjfoVvRKsuQ==
-X-Google-Smtp-Source: AMrXdXuxG6pR2hD58eix9Jhmq9DEckiQa5rNfBj1EaeQxG/YjFH4fSfiwp1wezaEgqzoMWL2LiqOhg==
-X-Received: by 2002:a05:600c:3caa:b0:3d9:cb4c:af5a with SMTP id bg42-20020a05600c3caa00b003d9cb4caf5amr21316924wmb.33.1673394272344;
-        Tue, 10 Jan 2023 15:44:32 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003d358beab9dsm16225206wmb.47.2023.01.10.15.44.31
+        bh=D57t00k03QeMUJxkWeqB58qjl0R5qo6nYcHPSFZtf2o=;
+        b=6lKdgVeFi2lWM/T6yrKb34Jl8nKJ3Ou5xgpuQH06ANiWmSvSC0mnc5iHRA4+kkUZdp
+         1pjq+t31saos2EcbkSXs4c2Jeoh4dJR/D1d+48f+gMWgre70qPDl3l5xMs9JTCSu62Vs
+         aaSY8aXalRoolcuFj8zPZV4iF2rjLMMs7Qb6o3WtkRfSNITmKEzlFmLKxX4NYs9u2kD4
+         YvtrjjukMxFJcCVG+eRnLcEC8JFEEKH/6B/SN226IF9CJ7Vv/Iz/T3HTq28Se6VeIQ//
+         iOvSLYz0XFbU1NZOIoQOTMuXgX2W0wlmcMPvcVLiL0NvTtDv4Th3LztRAr5H/bT4eRQW
+         MOSQ==
+X-Gm-Message-State: AFqh2kqohpVj8Nujlb4sjYwhr9H/cN3Nn0KlS83PKCxbOGwezgnnM4/S
+        iJM+WmV4/+jcy+rVK+oB7yFF/Q==
+X-Google-Smtp-Source: AMrXdXvePEWyNKMCfF1uWr1aZgxVD63FQMxYzf0mZ4lZCz88XHKwgQemgZZWXUlP7JKfcudI7qBALQ==
+X-Received: by 2002:a62:32c3:0:b0:580:f1b0:2211 with SMTP id y186-20020a6232c3000000b00580f1b02211mr54504306pfy.18.1673394312982;
+        Tue, 10 Jan 2023 15:45:12 -0800 (PST)
+Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
+        by smtp.gmail.com with ESMTPSA id y29-20020aa793dd000000b0056c2e497b02sm8900222pff.173.2023.01.10.15.45.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 15:44:32 -0800 (PST)
-Message-ID: <4a30931b-ef94-df2f-2e89-1028bf9510ce@linaro.org>
-Date:   Tue, 10 Jan 2023 23:44:31 +0000
+        Tue, 10 Jan 2023 15:45:12 -0800 (PST)
+Message-ID: <3e91a775-c671-35e8-0966-3ec9d8999e14@rivosinc.com>
+Date:   Tue, 10 Jan 2023 15:45:11 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 04/10] interconnect: qcom: rpm: Add support for
- specifying channel num
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] riscv: elf: add .riscv.attributes parsing
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230110132202.956619-1-konrad.dybcio@linaro.org>
- <20230110132202.956619-5-konrad.dybcio@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230110132202.956619-5-konrad.dybcio@linaro.org>
+To:     Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, Guo Ren <guoren@kernel.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>, linux@rivosinc.com,
+        kernel test robot <lkp@intel.com>
+References: <20230110201841.2069353-1-vineetg@rivosinc.com>
+ <01AF458D-1EDC-47D1-A902-A686E2DF26AF@jrtc27.com>
+ <6dcdd143-ff1c-41f7-9f46-0c4505575669@rivosinc.com>
+ <9061941F-3221-467D-B0FC-DCA8E8FF3996@jrtc27.com>
+From:   Vineet Gupta <vineetg@rivosinc.com>
+In-Reply-To: <9061941F-3221-467D-B0FC-DCA8E8FF3996@jrtc27.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 13:21, Konrad Dybcio wrote:
-> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
-> one channel. This should be taken into account in bandwidth calcualtion,
-calculation
 
-> as we're supposed to feed msmbus with the per-channel bandwidth. Add
-> support for specifying that and use it during bandwidth aggregation.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
->   drivers/interconnect/qcom/icc-rpm.h | 2 ++
->   2 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 0516b74abdc7..3207b4c99d04 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -336,6 +336,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->   {
->   	struct icc_node *node;
->   	struct qcom_icc_node *qn;
-> +	u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->   	int i;
->   
->   	/* Initialise aggregate values */
-> @@ -353,7 +354,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->   	list_for_each_entry(node, &provider->nodes, node_list) {
->   		qn = node->data;
->   		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-> -			agg_avg[i] += qn->sum_avg[i];
-> +			if (qn->channels)
 
-when do you actually populate channels ?
+On 1/10/23 15:21, Jessica Clarke wrote:
+>>> You also should handle more than one sub-subsection even if tools don’t
+>>> emit it today.
+>> Just to be on same page, a sub-section implies the following
+>>
+>>        uint32:len, NTBS:vendor-name, uint8: Tag_file, uint32:data-len, <tag><value>....
+>>
+>> If so, the code does support multiple of these
+> That’s a sub-section, but I said sub-subsection.
 
-I had a quick scan of your series, I didn't see it..
+The psABI documentation that we reviewed yesterday only mentions 
+Tag_File = 1 and doesn't mention the term sub-subsection at all.
+We need to be consistent between code and the new documentation or just 
+add reference to ARM documentation which covers everything and write the 
+general purpose parser.
 
-> +				sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
-> +			else
-> +				sum_avg[i] = qn->sum_avg[i];
-> +			agg_avg[i] += sum_avg[i];
->   			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
->   		}
->   	}
-> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-> index 3762648f9d47..eb51680f890d 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.h
-> +++ b/drivers/interconnect/qcom/icc-rpm.h
-> @@ -66,6 +66,7 @@ struct qcom_icc_qos {
->    * @id: a unique node identifier
->    * @links: an array of nodes where we can go next while traversing
->    * @num_links: the total number of @links
-> + * @channels: number of channels at this node (e.g. DDR channels)
->    * @buswidth: width of the interconnect between a node and the bus (bytes)
->    * @sum_avg: current sum aggregate value of all avg bw requests
->    * @max_peak: current max aggregate value of all peak bw requests
-> @@ -78,6 +79,7 @@ struct qcom_icc_node {
->   	u16 id;
->   	const u16 *links;
->   	u16 num_links;
-> +	u16 channels;
->   	u16 buswidth;
->   	u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->   	u64 max_peak[QCOM_ICC_NUM_BUCKETS];
+-Vineet
+
+
 
