@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4A76639F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D326639F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237838AbjAJH0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 02:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
+        id S235498AbjAJH1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 02:27:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237835AbjAJHZr (ORCPT
+        with ESMTP id S237854AbjAJH1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 02:25:47 -0500
+        Tue, 10 Jan 2023 02:27:10 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21BF2496CA
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 23:25:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C9CCBA0
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 23:25:54 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 30A7Obh5003932;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 30A7Obfv003933;
         Tue, 10 Jan 2023 08:24:37 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH v2 05/22] tools/nolibc: make errno a weak symbol instead of a static one
-Date:   Tue, 10 Jan 2023 08:24:17 +0100
-Message-Id: <20230110072434.3863-6-w@1wt.eu>
+Subject: [PATCH v2 06/22] tools/nolibc: export environ as a weak symbol on x86_64
+Date:   Tue, 10 Jan 2023 08:24:18 +0100
+Message-Id: <20230110072434.3863-7-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20230110072434.3863-1-w@1wt.eu>
 References: <20230110072434.3863-1-w@1wt.eu>
@@ -35,54 +35,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Till now errno was declared static so that it could be eliminated if
-unused. While the goal is commendable for tiny executables as it allows
-to eliminate any data and bss segments when not used, this comes with
-some limitations, one of which being that the errno symbol seen in
-different units are not the same. Even though this has never been a
-real issue given the nature of the programs involved till now, it
-happens that referencing the same symbol from multiple units can also
-be achieved using weak symbols, with a difference being that only one
-of them will be used for all of them. Compared to weak symbols, static
-basically have no benefit for regular programs since there are always
-at least a few variables in most of these, so the bss segment cannot
-be eliminated. E.g:
-
-  $ size nolibc-test-static-errno
-     text    data     bss     dec     hex filename
-    11531       0      48   11579    2d3b nolibc-test-static-errno
-
-Furthermore, the weak symbol doesn't use bss storage at all, resulting
-in a slightly section:
-
-  $ size nolibc-test-weak-errno
-     text    data     bss     dec     hex filename
-    11531       0      40   11571    2d33 nolibc-test-weak-errno
-
-This patch thus converts errno from static to weak.
+The environ is retrieved from the _start code and is easy to store at
+this moment. Let's declare the variable weak and store the value into
+it. By not being static it will be visible to all units. By being weak,
+if some programs already declared it, they will continue to be able to
+use it. This was tested both with environ inherited from _start and
+extracted from envp.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/errno.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ tools/include/nolibc/arch-x86_64.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/include/nolibc/errno.h b/tools/include/nolibc/errno.h
-index 9dc4919c769b..a44486ff0477 100644
---- a/tools/include/nolibc/errno.h
-+++ b/tools/include/nolibc/errno.h
-@@ -9,11 +9,9 @@
+diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+index 8d482505c347..683702a16a61 100644
+--- a/tools/include/nolibc/arch-x86_64.h
++++ b/tools/include/nolibc/arch-x86_64.h
+@@ -178,6 +178,8 @@ struct sys_stat_struct {
+ 	_ret;                                                                 \
+ })
  
- #include <asm/errno.h>
- 
--/* this way it will be removed if unused */
--static int errno;
--
- #ifndef NOLIBC_IGNORE_ERRNO
- #define SET_ERRNO(v) do { errno = (v); } while (0)
-+int errno __attribute__((weak));
- #else
- #define SET_ERRNO(v) do { } while (0)
- #endif
++char **environ __attribute__((weak));
++
+ /* startup code */
+ /*
+  * x86-64 System V ABI mandates:
+@@ -191,6 +193,7 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ 		"pop %rdi\n"                // argc   (first arg, %rdi)
+ 		"mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
+ 		"lea 8(%rsi,%rdi,8),%rdx\n" // then a NULL then envp (third arg, %rdx)
++		"mov %rdx, environ\n"       // save environ
+ 		"xor %ebp, %ebp\n"          // zero the stack frame
+ 		"and $-16, %rsp\n"          // x86 ABI : esp must be 16-byte aligned before call
+ 		"call main\n"               // main() returns the status code, we'll exit with it.
 -- 
 2.17.5
 
