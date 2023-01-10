@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9996642AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FC06642B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238454AbjAJOCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
+        id S233452AbjAJODu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238433AbjAJOCF (ORCPT
+        with ESMTP id S238496AbjAJODI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:02:05 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F8F7D1CD
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:02:04 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-220-SsGC0zidN_CRdpuXUGw0TA-1; Tue, 10 Jan 2023 14:01:54 +0000
-X-MC-Unique: SsGC0zidN_CRdpuXUGw0TA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
- 2023 14:01:50 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Tue, 10 Jan 2023 14:01:50 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Borislav Petkov' <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: x86/boot: Avoid using Intel mnemonics in AT&T syntax asm
-Thread-Topic: x86/boot: Avoid using Intel mnemonics in AT&T syntax asm
-Thread-Index: AQHZJOfS2VU/2mkm2kadStyL0HeH366XrYtA
-Date:   Tue, 10 Jan 2023 14:01:50 +0000
-Message-ID: <23d1f8db268d43afa332517779b0ef95@AcuMS.aculab.com>
-References: <Y71I3Ex2pvIxMpsP@hirez.programming.kicks-ass.net>
- <Y71NwKcbVZIZyP8p@zn.tnic>
-In-Reply-To: <Y71NwKcbVZIZyP8p@zn.tnic>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 10 Jan 2023 09:03:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CE350F45;
+        Tue, 10 Jan 2023 06:03:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3032CB80DBE;
+        Tue, 10 Jan 2023 14:03:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A38EC433D2;
+        Tue, 10 Jan 2023 14:02:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673359381;
+        bh=e9t1+X+RfhH7WrNszHXC4AMmV7DcA4dWVnvqtiPupgo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rqEVRIg2eQG33muLXzDZdm/qU4hwhkf2aCLw5Dm+3YVtH9vjHLAK3zwI4h1PUOmPs
+         EU5HcseJddw6MM212c2oEjKD1UapgubXQ/N0JA5zW/TDPUA+4WxkUeyUy9EppSyuDU
+         ZS8GzMqlJ6lJA7taZ9dfv5Ej3JYY/Cs0+KF9cHwrAqYvZZI+UrPbG+Uk/2AwF3QfGf
+         yufAW3xWg7qJshGyuZIxo+WXivq+uayOd70huw4nqlvnJ88ylBVp9MAw4x97NF6rMj
+         HENX96ZYIcgeL+DxFiZkSBqdI4LMhTf5QYgksS1XM/kE+7boGuMGfdzoF820HCqoDg
+         a7dwxt0Gu9Akg==
+From:   Will Deacon <will@kernel.org>
+To:     iommu@lists.linux.dev, Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     catalin.marinas@arm.com, kernel-team@android.com,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH v2 1/2] iommu/arm-smmu: don't unregister on shutdown
+Date:   Tue, 10 Jan 2023 14:02:53 +0000
+Message-Id: <167335530178.54040.9319729864816203532.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20221215141251.3688780-1-vladimir.oltean@nxp.com>
+References: <20221215141251.3688780-1-vladimir.oltean@nxp.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,38 +61,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQm9yaXNsYXYgUGV0a292DQo+IFNlbnQ6IDEwIEphbnVhcnkgMjAyMyAxMTozNw0KPiAN
-Cj4gT24gVHVlLCBKYW4gMTAsIDIwMjMgYXQgMTI6MTU6NDBQTSArMDEwMCwgUGV0ZXIgWmlqbHN0
-cmEgd3JvdGU6DQo+ID4NCj4gPiBXaXRoICdHTlUgYXNzZW1ibGVyIChHTlUgQmludXRpbHMgZm9y
-IERlYmlhbikgMi4zOS45MC4yMDIyMTIzMScgdGhlDQo+ID4gYnVpbGQgbm93IHJlcG9ydHM6DQo+
-ID4NCj4gPiAgIGFyY2gveDg2L3JlYWxtb2RlL3JtLy4uLy4uL2Jvb3QvYmlvc2NhbGwuUzogQXNz
-ZW1ibGVyIG1lc3NhZ2VzOg0KPiA+ICAgYXJjaC94ODYvcmVhbG1vZGUvcm0vLi4vLi4vYm9vdC9i
-aW9zY2FsbC5TOjM1OiBXYXJuaW5nOiBmb3VuZCBgbW92c2QnOyBhc3N1bWluZyBgbW92c2wnIHdh
-cyBtZWFudA0KPiA+ICAgYXJjaC94ODYvcmVhbG1vZGUvcm0vLi4vLi4vYm9vdC9iaW9zY2FsbC5T
-OjcwOiBXYXJuaW5nOiBmb3VuZCBgbW92c2QnOyBhc3N1bWluZyBgbW92c2wnIHdhcyBtZWFudA0K
-PiA+DQo+ID4gICBhcmNoL3g4Ni9ib290L2Jpb3NjYWxsLlM6IEFzc2VtYmxlciBtZXNzYWdlczoN
-Cj4gPiAgIGFyY2gveDg2L2Jvb3QvYmlvc2NhbGwuUzozNTogV2FybmluZzogZm91bmQgYG1vdnNk
-JzsgYXNzdW1pbmcgYG1vdnNsJyB3YXMgbWVhbnQNCj4gPiAgIGFyY2gveDg2L2Jvb3QvYmlvc2Nh
-bGwuUzo3MDogV2FybmluZzogZm91bmQgYG1vdnNkJzsgYXNzdW1pbmcgYG1vdnNsJyB3YXMgbWVh
-bnQNCj4gPg0KPiA+IFdoaWNoIGlzIGR1ZSB0bzoNCj4gPg0KPiA+ICAgUFIgZ2FzLzI5NTI1DQo+
-ID4NCj4gPiAgIE5vdGUgdGhhdCB3aXRoIHRoZSBkcm9wcGVkIENNUFNEIGFuZCBNT1ZTRCBJbnRl
-bCBTeW50YXggc3RyaW5nIGluc24NCj4gPiAgIHRlbXBsYXRlcyB0YWtpbmcgb3BlcmFuZHMsIG1p
-eGVkIElzU3RyaW5nL25vbi1Jc1N0cmluZyB0ZW1wbGF0ZSBncm91cHMNCj4gPiAgICh3aXRoIG1l
-bW9yeSBvcGVyYW5kcykgY2Fubm90IG9jY3VyIGFueW1vcmUuIFdpdGggdGhhdA0KPiA+ICAgbWF5
-YmVfYWRqdXN0X3RlbXBsYXRlcygpIGJlY29tZXMgdW5uZWNlc3NhcnkgKGFuZCBpcyBoZW5jZSBi
-ZWluZw0KPiA+ICAgcmVtb3ZlZCkuDQo+ID4NCj4gPiBNb3JlIGRldGFpbHM6IGh0dHBzOi8vc291
-cmNld2FyZS5vcmcvYnVnemlsbGEvc2hvd19idWcuY2dpP2lkPTI5NTI1DQo+IA0KPiBSaWdodCwg
-SSdtIGJlaW5nIHRvbGQgdGhlIHBhcnRpY3VsYXIgcHJvYmxlbSBoZXJlIGlzIGlzIHRoYXQgdGhl
-ICdkJyBzdWZmaXggaXMNCj4gImNvbmZsaWN0aW5nIiBpbiB0aGUgc2Vuc2UgdGhhdCB5b3UgY2Fu
-IGhhdmUgU1NFIG1uZW1vbmljcyBsaWtlIG1vdnNEICV4bW0uLi4NCj4gYW5kIHRoZSBzYW1lIHRo
-aW5nIGFsc28gZm9yIHN0cmluZyBvcHMgKHdoaWNoIGlzIHRoZSBjYXNlIGhlcmUpIHNvIGFwcGFy
-ZW50bHkNCj4gdGhlIGFncmVlbWVudCBpbiBiaW51dGlscyBsYW5kIGlzIHRvIHVzZSB0aGUgYWx3
-YXlzIGFjY2VwdGVkIHN1ZmZpeGVzICdsJyBvciAncScNCj4gYW5kIHBoYXNlIG91dCAnZCcgc2xv
-d2x5Li4uDQo+IA0KPiBXaGljaCBpcyBiYXNpY2FsbHkgd2hhdCB0aGUgUFIgdGV4dCBzYXlzIGFi
-b3ZlIGJ1dCBtb3JlIHVuZGVyc3RhbmFibGUuIDotKQ0KPiANCj4gTWlnaHQgd2FubmEgYWRkIHRo
-YXQgdG8gdGhlIGNvbW1pdCBtZXNzYWdlLg0KDQpDYW4gdGhleSBiZSBjaGFuZ2VkIHRvIG1vdnNx
-ID8NCm1vdnNsIGhhcyBhbiBpbXBsaWVkIDMyYml0bmVzcyBhYm91dCBpdC4NCg0KCURhdmlkDQoN
-Ci0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJt
-LCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChX
-YWxlcykNCg==
+On Thu, 15 Dec 2022 16:12:50 +0200, Vladimir Oltean wrote:
+> Michael Walle says he noticed the following stack trace while performing
+> a shutdown with "reboot -f". He suggests he got "lucky" and just hit the
+> correct spot for the reboot while there was a packet transmission in
+> flight.
+> 
+> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000098
+> CPU: 0 PID: 23 Comm: kworker/0:1 Not tainted 6.1.0-rc5-00088-gf3600ff8e322 #1930
+> Hardware name: Kontron KBox A-230-LS (DT)
+> pc : iommu_get_dma_domain+0x14/0x20
+> lr : iommu_dma_map_page+0x9c/0x254
+> Call trace:
+>  iommu_get_dma_domain+0x14/0x20
+>  dma_map_page_attrs+0x1ec/0x250
+>  enetc_start_xmit+0x14c/0x10b0
+>  enetc_xmit+0x60/0xdc
+>  dev_hard_start_xmit+0xb8/0x210
+>  sch_direct_xmit+0x11c/0x420
+>  __dev_queue_xmit+0x354/0xb20
+>  ip6_finish_output2+0x280/0x5b0
+>  __ip6_finish_output+0x15c/0x270
+>  ip6_output+0x78/0x15c
+>  NF_HOOK.constprop.0+0x50/0xd0
+>  mld_sendpack+0x1bc/0x320
+>  mld_ifc_work+0x1d8/0x4dc
+>  process_one_work+0x1e8/0x460
+>  worker_thread+0x178/0x534
+>  kthread+0xe0/0xe4
+>  ret_from_fork+0x10/0x20
+> Code: d503201f f9416800 d503233f d50323bf (f9404c00)
+> ---[ end trace 0000000000000000 ]---
+> Kernel panic - not syncing: Oops: Fatal exception in interrupt
+> 
+> [...]
 
+Applied to will (for-joerg/arm-smmu/fixes), thanks!
+
+[1/2] iommu/arm-smmu: don't unregister on shutdown
+      https://git.kernel.org/will/c/42afa58a2431
+[2/2] iommu/arm-smmu-v3: don't unregister on shutdown
+      https://git.kernel.org/will/c/1dc4b4b5c5e7
+
+Cheers,
+-- 
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
