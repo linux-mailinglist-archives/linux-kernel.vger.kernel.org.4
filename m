@@ -2,107 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0267664121
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35750664128
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238349AbjAJNDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S238573AbjAJNEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238648AbjAJNDd (ORCPT
+        with ESMTP id S238592AbjAJNEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:03:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0648E517FD;
-        Tue, 10 Jan 2023 05:03:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 964E4616DE;
-        Tue, 10 Jan 2023 13:03:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF22C433EF;
-        Tue, 10 Jan 2023 13:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673355812;
-        bh=tMAJplNMu5w1rrrs8QfI2RyE5frRVobjXl2ItdE9iRE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FB3evCvKqzN4h1XROqvItFBBPt9ZEZinl3EhlU3lwXvLVvz4lhBLOIGiSLWSIFzPQ
-         jwanItiorJhY84gT+v8DFLFJJEwi9JcP1VhVPEqIEpzHpfl/zuXsVBjSvfOBkqPS2k
-         Z31ReAMDPMpBK6t4k2HwA9W3WffW3gEGzRNxtTxNbjBaexfW+sMVGhW08R613aLOHs
-         nRaSTYlVVrqEqcnl3hriHSy6myQkYv+t2xpOV0kV+FO2UJSQ490sOJdjvTe5beJpBQ
-         DUr+b1Yt0j8yq1o3xDg47uwMZbgOD8CshEOfxdrZH6+o47ZgWF04MIzcai5+2ILRB2
-         jlHDN85X6H1LA==
-Date:   Tue, 10 Jan 2023 13:03:25 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Wenjie Li <wenjieli@qti.qualcomm.com>,
-        David Wang =?utf-8?B?546L5qCH?= <wangbiao3@xiaomi.com>,
-        Quentin Perret <qperret@google.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] sched: Fix use-after-free bug in
- dup_user_cpus_ptr()
-Message-ID: <20230110130324.GA9180@willie-the-truck>
-References: <20221231041120.440785-1-longman@redhat.com>
- <20221231041120.440785-2-longman@redhat.com>
+        Tue, 10 Jan 2023 08:04:02 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B3352767;
+        Tue, 10 Jan 2023 05:04:01 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id jo4so28425786ejb.7;
+        Tue, 10 Jan 2023 05:04:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U62Sr3DmpbCpRGWuqrj+WavjeQmNeJPc3umPZoIz79Y=;
+        b=gGnyh1l6HY+Oda8WTtdaCNybRJzIn6JEVZ2H0zAtaV7khRsAz3FyZYZj2jmGLcdLmm
+         hOH/kViVULndT0gSg7ikLcEzXnlRdZosfQoSD55fMK+kqClwePOmXgSKHEWDofzcb3WT
+         KhluzslSz+Fd1uOd7wQ9HCKPbT8GXUq6ShA1tbuDV6OBMbLzJ39Zl/dDF3wyclBLG8mr
+         YA97ec6WvnuWJQqxIfW1WITG66IG/SRzL3UXq7vd/uGUFC7GxOetXeUnlGQk6/JoHHaY
+         d2TnjSbKgIOfqmflW4Lc495/Bs7iHysZYznvPxgRYjdFo6fUAbUoh04Y+I1rIPkBvW5l
+         ZHxA==
+X-Gm-Message-State: AFqh2kqCjNqDbUhQQT+kz0zGY44x7WOlk7MdQ7KSQojg6OyXlKB1jQAa
+        YIL0/P10Qzy1CR4abXYH2pLimJLXLKAkk1EpS7k=
+X-Google-Smtp-Source: AMrXdXuF4rXBNY4fahxauXG8YvbaAnO3qDtRIPNikdKA5RHQbXb4FCbep2+4Nkb1ts1OV9ptSFa0znU1aG2+R35fo1M=
+X-Received: by 2002:a17:907:29c3:b0:84d:4b8e:efc with SMTP id
+ ev3-20020a17090729c300b0084d4b8e0efcmr450215ejc.390.1673355839925; Tue, 10
+ Jan 2023 05:03:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221231041120.440785-2-longman@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230105041059.39366-1-kvijayab@amd.com> <CAJZ5v0g1Mu8ip68one_gsAR3xmyua+6m1uJqb3n92xxYWeR+FA@mail.gmail.com>
+ <Y7dNjHXJJwzCtYOY@zn.tnic>
+In-Reply-To: <Y7dNjHXJJwzCtYOY@zn.tnic>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 10 Jan 2023 14:03:48 +0100
+Message-ID: <CAJZ5v0iq1_kSOXuBcteXrCJR0NyyBVXcio_L=47oKrACT1oaZQ@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/acpi/boot: Do not register processors that cannot
+ be onlined for x2apic
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kishon Vijay Abraham I <kvijayab@amd.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Borislav Petkov <bpetkov@amd.com>,
+        Leo Duran <leo.duran@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 11:11:19PM -0500, Waiman Long wrote:
-> Since commit 07ec77a1d4e8 ("sched: Allow task CPU affinity to be
-> restricted on asymmetric systems"), the setting and clearing of
-> user_cpus_ptr are done under pi_lock for arm64 architecture. However,
-> dup_user_cpus_ptr() accesses user_cpus_ptr without any lock
-> protection. Since sched_setaffinity() can be invoked from another
-> process, the process being modified may be undergoing fork() at
-> the same time.  When racing with the clearing of user_cpus_ptr in
-> __set_cpus_allowed_ptr_locked(), it can lead to user-after-free and
-> possibly double-free in arm64 kernel.
-> 
-> Commit 8f9ea86fdf99 ("sched: Always preserve the user requested
-> cpumask") fixes this problem as user_cpus_ptr, once set, will never
-> be cleared in a task's lifetime. However, this bug was re-introduced
-> in commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
-> do_set_cpus_allowed()") which allows the clearing of user_cpus_ptr in
-> do_set_cpus_allowed(). This time, it will affect all arches.
-> 
-> Fix this bug by always clearing the user_cpus_ptr of the newly
-> cloned/forked task before the copying process starts and check the
-> user_cpus_ptr state of the source task under pi_lock.
-> 
-> Note to stable, this patch won't be applicable to stable releases.
-> Just copy the new dup_user_cpus_ptr() function over.
-> 
-> Fixes: 07ec77a1d4e8 ("sched: Allow task CPU affinity to be restricted on asymmetric systems")
-> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
-> CC: stable@vger.kernel.org
-> Reported-by: David Wang 王标 <wangbiao3@xiaomi.com>
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  kernel/sched/core.c | 34 +++++++++++++++++++++++++++++-----
->  1 file changed, 29 insertions(+), 5 deletions(-)
+On Thu, Jan 5, 2023 at 11:22 PM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Thu, Jan 05, 2023 at 06:09:59PM +0100, Rafael J. Wysocki wrote:
+> > On Thu, Jan 5, 2023 at 5:11 AM Kishon Vijay Abraham I <kvijayab@amd.com> wrote:
+> > >
+> > > Section 5.2.12.12 Processor Local x2APIC Structure in the ACPI v6.5
+> > > spec mandates that both "enabled" and "online capable" Local APIC Flags
+> > > should be used to determine if the processor is usable or not.
+> > >
+> > > However, Linux doesn't use the "online capable" flag for x2APIC to
+> > > determine if the processor is usable. As a result, cpu_possible_mask has
+> > > incorrect value and results in more memory getting allocated for per_cpu
+> > > variables than it is going to be used.
+> > >
+> > > Make sure Linux parses both "enabled" and "online capable" flags for
+> > > x2APIC to correctly determine if the processor is usable.
+> > >
+> > > Fixes: aa06e20f1be6 ("x86/ACPI: Don't add CPUs that are not online capable")
+> > > Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+> > > Reported-by: Leo Duran <leo.duran@amd.com>
+> > > Signed-off-by: Kishon Vijay Abraham I <kvijayab@amd.com>
+> >
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Are you saying, I should take it through tip?
 
-Acked-by: Will Deacon <will@kernel.org>
+Works for me either way.
 
-Will
+Just please let me know if I need to take care of it. :-)
