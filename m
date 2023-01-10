@@ -2,89 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAEA6643C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D986643D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238742AbjAJO4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:56:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37464 "EHLO
+        id S238713AbjAJO6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237888AbjAJO4o (ORCPT
+        with ESMTP id S233353AbjAJO6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:56:44 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FABB1081;
-        Tue, 10 Jan 2023 06:56:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673362603; x=1704898603;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eBfaUhZOLcHd/sdh/6tGQyQ/jHfPZIRMgOQy3o8072o=;
-  b=VWIL84QuHQwmX7QeN4Y5YVQ9jRki3fxJ4G+YwRBIYK/8A/YfHjI0SLtZ
-   oeuaFlxyK2GcAAM1a8G8OjqeJu6m//rbQs+QIoySMk4Q4D7mA7dRwk0SW
-   zeq477NrrX+cQxSTu5KsX6HXtQ7KZ0QweHtd8VOPe4k18WMIxLXATNUfO
-   /AZQqv4THNGoVITEkhtifLEWVFvwuyScYTUbiFbIEE/OWyLUGtIrXr4lc
-   1LGQXv6agaWel6t7W3KqdGcG1MPXgf4Ieea7ybOw+OP829C5Wt6i5CTWx
-   wnvT0peMJNXSszKq7AZZQ+j37QU0wF7eVTu/gGD++KdreT1Jjs7s8yiSF
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324399807"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="324399807"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 06:56:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="689421438"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="689421438"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 10 Jan 2023 06:56:41 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pFG3M-00751G-06;
-        Tue, 10 Jan 2023 16:56:40 +0200
-Date:   Tue, 10 Jan 2023 16:56:39 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] efi/earlycon: Replace open coded strnchrnul()
-Message-ID: <Y718p+yuKza/hJr7@smile.fi.intel.com>
-References: <20221208221217.56354-1-andriy.shevchenko@linux.intel.com>
- <Y71u/Hn+khg/Nuj7@smile.fi.intel.com>
- <CAMj1kXEWLcBTR5z0aC9=n1rLT=Z2yMNW8D-HpLd6e8YCz1hMJA@mail.gmail.com>
+        Tue, 10 Jan 2023 09:58:09 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F9510E0;
+        Tue, 10 Jan 2023 06:58:08 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AEoPxF010079;
+        Tue, 10 Jan 2023 14:57:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=mQ1BF6MGmenQGVNbWazNwERgAK45xTxzqhm78gV7yNA=;
+ b=PoyDwTbHGRwjMrdUCazOTBn7uqgi/+dSEuO1a9mYh7yQKoPa9NPISjEbCKHeKyT814G1
+ OmWreKV0aSCOXyUjwmmpRp0dsGSSEEtOI7KISzIhwLhjHH0gP0AP1fuM8vZGNGbc5gHC
+ 6TS5R1pcc73wYyt/Ss4vwHD7PQR/POI2vuq3qX86fn68Ezs8L3jnr03y5Sor5fPZw+u7
+ eqPxyU+lQHK/ZDFkFrwRp3ZISqLw58AqtIirhv6InS0r4FofvGZvzgH4FHI8P2IkAsbP
+ i3XPQLhypxbk5VlLLkW1EsVYtYd+v2cKv5amvlHwFOkvijfE4KLNFQ9BysEmhDFrSTZQ 0g== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n12vprx79-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 14:57:58 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30AEvviB007666
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 14:57:57 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 10 Jan 2023 06:57:56 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Johan Hovold <johan@kernel.org>
+CC:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v6 0/4] arm64: dts: qcom: sc8280xp: Enable display
+Date:   Tue, 10 Jan 2023 06:57:47 -0800
+Message-ID: <20230110145751.2654795-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXEWLcBTR5z0aC9=n1rLT=Z2yMNW8D-HpLd6e8YCz1hMJA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7Vk5jGj3RS3H5JdpqBzyLRSLEyPUxGnb
+X-Proofpoint-ORIG-GUID: 7Vk5jGj3RS3H5JdpqBzyLRSLEyPUxGnb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-10_06,2023-01-10_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 spamscore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ clxscore=1015 mlxscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=674 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301100093
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 03:15:28PM +0100, Ard Biesheuvel wrote:
-> On Tue, 10 Jan 2023 at 14:58, Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Fri, Dec 09, 2022 at 12:12:16AM +0200, Andy Shevchenko wrote:
-> > > strnchrnul() can be called in the early stages. Replace
-> > > open coded variant in the EFI early console driver.
-> >
-> > Any comments on the series?
-> 
-> Looks fine to me. Queued up in efi/next now.
+The display subsystem and display port drivers for SC8280XP has been merged, so
+they are dropped from this series.
 
-Thank you and HNY!
+The necessary defconfig update is also added to the series.
+
+Bjorn Andersson (4):
+  arm64: dts: qcom: sc8280xp: Define some of the display blocks
+  arm64: dts: qcom: sc8280xp-crd: Enable EDP
+  arm64: dts: qcom: sa8295-adp: Enable DP instances
+  arm64: defconfig: Enable SC8280XP Display Clock Controller
+
+ arch/arm64/boot/dts/qcom/sa8295p-adp.dts  | 243 ++++++-
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts |  73 +-
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi    | 836 ++++++++++++++++++++++
+ arch/arm64/configs/defconfig              |   1 +
+ 4 files changed, 1150 insertions(+), 3 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.3
 
