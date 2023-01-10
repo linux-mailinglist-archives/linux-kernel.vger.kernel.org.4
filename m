@@ -2,178 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D45663A27
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6321663A29
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjAJHsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 02:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S234939AbjAJHto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 02:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjAJHsV (ORCPT
+        with ESMTP id S231349AbjAJHtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 02:48:21 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E71F178B2;
-        Mon,  9 Jan 2023 23:48:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1673336879; bh=EiXkQ2JEZGnLUb6tfZO7vd8G6NiaZjjsaBJ1fvdxXPM=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=IZKYGpjv9ejzRTD7LR95ZrMWEH5H+A/L1ASzRI6+VMXqN1R51fca9X5f1pmzMVZaa
-         iFr9Xrqmsb3B9UeMqvRtUfqxwc4AmgOa5s4wTeQ62iZ7FTJVFcriM9Vu63oTnKGI6z
-         JRz3x6V9QArXtwOjpjl7qh5b6QeHnU4tq6G7VSC0=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue, 10 Jan 2023 08:47:59 +0100 (CET)
-X-EA-Auth: PprNwOeWQeT6qxQf+3gYvLF4aPgOloBh7REyAC3mB29FCIBf1kwszEl+TiorbYIjmmwWduBdrFTsD74Hg5HAMFy19f1+7J9e
-Date:   Tue, 10 Jan 2023 13:17:54 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     "Reshetova, Elena" <elena.reshetova@intel.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        "ishkamiel@gmail.com" <ishkamiel@gmail.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dwindsor@gmail.com" <dwindsor@gmail.com>
-Subject: Re: [PATCH v4 1/2] tty: serial: dz: convert atomic_* to refcount_*
- APIs for map_guard
-Message-ID: <Y70YKqt+Ej4kU9+h@ubun2204.myguest.virtualbox.org>
-References: <cover.1671898144.git.drv@mailo.com>
- <d85c7441b96ce387d9010142efc3469d53b6aedc.1671898144.git.drv@mailo.com>
- <e42d5d19-7ed5-468b-98cc-13d0187dc555@kernel.org>
- <Y70DbEvxDDGXDv4i@ubun2204.myguest.virtualbox.org>
- <DM8PR11MB575088A17680C124D6B9EB73E7FF9@DM8PR11MB5750.namprd11.prod.outlook.com>
+        Tue, 10 Jan 2023 02:49:42 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A728178B2
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 23:49:40 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R241e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VZIMt1I_1673336968;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VZIMt1I_1673336968)
+          by smtp.aliyun-inc.com;
+          Tue, 10 Jan 2023 15:49:37 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        syzbot+c3729cda01706a04fb98@syzkaller.appspotmail.com
+Subject: [PATCH v2] erofs: fix kvcalloc() misuse with __GFP_NOFAIL
+Date:   Tue, 10 Jan 2023 15:49:27 +0800
+Message-Id: <20230110074927.41651-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
+In-Reply-To: <20230106031937.113318-1-hsiangkao@linux.alibaba.com>
+References: <20230106031937.113318-1-hsiangkao@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="jSLdvTZAgZry9A9c"
-Content-Disposition: inline
-In-Reply-To: <DM8PR11MB575088A17680C124D6B9EB73E7FF9@DM8PR11MB5750.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As reported by syzbot [1], kvcalloc() cannot work with  __GFP_NOFAIL.
+Let's use kcalloc() instead.
 
---jSLdvTZAgZry9A9c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+[1] https://lore.kernel.org/r/0000000000007796bd05f1852ec2@google.com
+Reported-by: syzbot+c3729cda01706a04fb98@syzkaller.appspotmail.com
+Fixes: fe3e5914e6dc ("erofs: try to leave (de)compressed_pages on stack if possible")
+Fixes: 4f05687fd703 ("erofs: introduce struct z_erofs_decompress_backend")
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+changes since v1:
+ - should use kfree() instead of kvfree() as well (Chao);
+ - add Chao's r-v-b.
 
-On Tue, Jan 10, 2023 at 07:27:44AM +0000, Reshetova, Elena wrote:
->  
-> > On Tue, Jan 03, 2023 at 09:59:52AM +0100, Jiri Slaby wrote:
-> > > On 26. 12. 22, 7:21, Deepak R Varma wrote:
-> > > > The refcount_* APIs are designed to address known issues with the
-> > > > atomic_t APIs for reference counting. They provide following distinct
-> > > > advantages
-> > > >     - protect the reference counters from overflow/underflow
-> > > >     - avoid use-after-free errors
-> > > >     - provide improved memory ordering guarantee schemes
-> > > >     - neater and safer.
-> > >
-> > > Really? (see below)
-> > >
-> > > > --- a/drivers/tty/serial/dz.c
-> > > > +++ b/drivers/tty/serial/dz.c
-> > > ...
-> > > > @@ -687,23 +686,19 @@ static int dz_map_port(struct uart_port *uport)
-> > > >   static int dz_request_port(struct uart_port *uport)
-> > > >   {
-> > > >   	struct dz_mux *mux = to_dport(uport)->mux;
-> > > > -	int map_guard;
-> > > >   	int ret;
-> > > >
-> > > > -	map_guard = atomic_add_return(1, &mux->map_guard);
-> > > > -	if (map_guard == 1) {
-> > > > -		if (!request_mem_region(uport->mapbase, dec_kn_slot_size,
-> > > > -					"dz")) {
-> > > > -			atomic_add(-1, &mux->map_guard);
-> > > > -			printk(KERN_ERR
-> > > > -			       "dz: Unable to reserve MMIO resource\n");
-> > > > +	refcount_inc(&mux->map_guard);
-> > > > +	if (refcount_read(&mux->map_guard) == 1) {
-> > >
-> > > This is now racy, right?
-> > 
-> > Hello Jiri,
-> > I found this [1] commit which introduced similar transformation in a
-> > neighbouring driver. Can you please comment how is this different from the
-> > current patch proposal?
-> > 
-> > [1] commit ID: 22a33651a56f ("convert sbd_duart.map_guard from atomic_t to
-> > refcount_t")
-> > 
-> > On a side note, I have not been able to find an exact 1:1 map to the
-> > atomic_add_result API. I am wondering should we have one?
-> 
+ fs/erofs/zdata.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Hello Elena,
-
-> In past we have decided not to provide this API for refcount_t
-> because for truly correctly behaving reference counters it should not be needed
-> (vs atomics that cover a broader range of use cases). 
-
-So, there is no FAA refcount wrapper? I think this is a pretty common need.
-Please correct me if I am wrong.
-
-> Can you use !refcount_inc_not_zero in the above case?
-
-I actually did try that but was not sure if truly addresses the objection.
-Please attached and let me know if you have a feedback on the alternate
-approach.
-
-Thank you,
-./drv
-
-
-> 
-> Best Regards,
-> Elena.
-
---jSLdvTZAgZry9A9c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename=code_diff
-
-############## ORIGINAL CODE ##################################
--       map_guard = atomic_add_return(1, &mux->map_guard);
--       if (map_guard == 1) {
--               if (!request_mem_region(uport->mapbase, dec_kn_slot_size,
--                                       "dz")) {
--                       atomic_add(-1, &mux->map_guard);
--                       printk(KERN_ERR
--                              "dz: Unable to reserve MMIO resource\n");
-                        return -EBUSY;
-                }
-        }
-
-############## INITIAL APPROACH ##################################
-+       refcount_inc(&mux->map_guard);
-+       if (refcount_read(&mux->map_guard) == 1) {
-+               if (!request_mem_region(uport->mapbase, dec_kn_slot_size, "dz")) {
-+                       refcount_dec(&mux->map_guard);
-+                       printk(KERN_ERR "dz: Unable to reserve MMIO resource\n");
-                        return -EBUSY;
-                }
-        }
-
-############## ALTERNATE APPROACH ##################################
-
-+       if (!refcount_inc_not_zero(&mux->map_guard)) {
-+               refcount_inc(&mux->map_guard);
-+               if (!request_mem_region(uport->mapbase, dec_kn_slot_size, "dz")) {
-+                       refcount_dec(&mux->map_guard);
-+                       printk(KERN_ERR "dz: Unable to reserve MMIO resource\n");
-                        return -EBUSY;
-                }
-        }
-
-
---jSLdvTZAgZry9A9c--
-
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index ccf7c55d477f..5200bb86e264 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -1032,12 +1032,12 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
+ 
+ 	if (!be->decompressed_pages)
+ 		be->decompressed_pages =
+-			kvcalloc(be->nr_pages, sizeof(struct page *),
+-				 GFP_KERNEL | __GFP_NOFAIL);
++			kcalloc(be->nr_pages, sizeof(struct page *),
++				GFP_KERNEL | __GFP_NOFAIL);
+ 	if (!be->compressed_pages)
+ 		be->compressed_pages =
+-			kvcalloc(pclusterpages, sizeof(struct page *),
+-				 GFP_KERNEL | __GFP_NOFAIL);
++			kcalloc(pclusterpages, sizeof(struct page *),
++				GFP_KERNEL | __GFP_NOFAIL);
+ 
+ 	z_erofs_parse_out_bvecs(be);
+ 	err2 = z_erofs_parse_in_bvecs(be, &overlapped);
+@@ -1085,7 +1085,7 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
+ 	}
+ 	if (be->compressed_pages < be->onstack_pages ||
+ 	    be->compressed_pages >= be->onstack_pages + Z_EROFS_ONSTACK_PAGES)
+-		kvfree(be->compressed_pages);
++		kfree(be->compressed_pages);
+ 	z_erofs_fill_other_copies(be, err);
+ 
+ 	for (i = 0; i < be->nr_pages; ++i) {
+@@ -1104,7 +1104,7 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
+ 	}
+ 
+ 	if (be->decompressed_pages != be->onstack_pages)
+-		kvfree(be->decompressed_pages);
++		kfree(be->decompressed_pages);
+ 
+ 	pcl->length = 0;
+ 	pcl->partial = true;
+-- 
+2.24.4
 
