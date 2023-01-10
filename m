@@ -2,157 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A991663C97
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE93663CD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237888AbjAJJRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
+        id S238129AbjAJJ2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbjAJJRk (ORCPT
+        with ESMTP id S238163AbjAJJ1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:17:40 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0109113E;
-        Tue, 10 Jan 2023 01:17:39 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30A74j28023704;
-        Tue, 10 Jan 2023 10:17:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=7DNtAn5FSvBFs58HAuiuLotVK7ADNTWKpKT1zToNgew=;
- b=t96RqXHJl7RMV+lEgd8fVW+JeQSU6CFpaGBRP2uEBteRxbSA+7hWt126fUlPPwbfSTkz
- YAlmK+bGgFGOGGwKY7AORfVDeP/uprQi3vUjKzo4KrKRCiwFQtFWu1Rjj1beGvPjfZcv
- /67r/+sONytAe9phHk/qZAed3uu/L0I8wgsQENVLDa6RDnyLcjjx/MKREcXCgTznqyp8
- kepdcsYygkwPTTWL3B6PnuJNY4JNbd2FxwvxsFgdL3mFaTJMj3qJFTutIgBI4b0UFNX2
- blMmIYy71DT507fjUItbD5OwN95OYhAeUZgv2P3LyIG1aY9id/ctjtTpNsrfbuJEwMVm fA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3my0y6y6ud-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 10:17:24 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4CB8E10002A;
-        Tue, 10 Jan 2023 10:17:24 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 44AB920A8CB;
-        Tue, 10 Jan 2023 10:17:24 +0100 (CET)
-Received: from localhost (10.201.20.178) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Tue, 10 Jan
- 2023 10:17:24 +0100
-From:   Olivier Moysan <olivier.moysan@foss.st.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 3/3] ARM: dts: stm32: add timers support on stm32mp135f-dk
-Date:   Tue, 10 Jan 2023 10:17:12 +0100
-Message-ID: <20230110091713.444395-4-olivier.moysan@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230110091713.444395-1-olivier.moysan@foss.st.com>
-References: <20230110091713.444395-1-olivier.moysan@foss.st.com>
+        Tue, 10 Jan 2023 04:27:22 -0500
+X-Greylist: delayed 547 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 Jan 2023 01:27:01 PST
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC69FBF52
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:27:01 -0800 (PST)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id 09E382055FA0;
+        Tue, 10 Jan 2023 18:17:54 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.17.1.9/8.17.1.9/Debian-1) with ESMTPS id 30A9HqZJ104126
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 18:17:53 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.17.1.9/8.17.1.9/Debian-1) with ESMTPS id 30A9HqOf370631
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 18:17:52 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.17.1.9/8.17.1.9/Submit) id 30A9HqOn370630;
+        Tue, 10 Jan 2023 18:17:52 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fat: Fix return value of vfat_bad_char() and
+ vfat_replace_char() functions
+In-Reply-To: <20221226142512.13848-1-pali@kernel.org> ("Pali
+ =?iso-8859-1?Q?Roh=E1r=22's?= message
+        of "Mon, 26 Dec 2022 15:25:12 +0100")
+References: <20221226142512.13848-1-pali@kernel.org>
+Date:   Tue, 10 Jan 2023 18:17:52 +0900
+Message-ID: <87zgaqu4sf.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.20.178]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_02,2023-01-09_02,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure timers support on stm32mp135f-dk.
-The timers TIM3, TIM4, TIM8 & TIM14 which can be used on
-expansion GPIO connector are disabled by default.
+Pali Rohár <pali@kernel.org> writes:
 
-Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
----
- arch/arm/boot/dts/stm32mp135f-dk.dts | 58 ++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+> These functions returns boolean value not wide character.
+>
+> Signed-off-by: Pali Rohár <pali@kernel.org>
 
-diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
-index 9ff5a3eaf55b..338b4f633ee3 100644
---- a/arch/arm/boot/dts/stm32mp135f-dk.dts
-+++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
-@@ -208,6 +208,64 @@ &spi5 {
- 	status = "disabled";
- };
- 
-+&timers3 {
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "disabled";
-+	pwm {
-+		pinctrl-0 = <&pwm3_pins_a>;
-+		pinctrl-1 = <&pwm3_sleep_pins_a>;
-+		pinctrl-names = "default", "sleep";
-+		status = "okay";
-+	};
-+	timer@2 {
-+		status = "okay";
-+	};
-+};
-+
-+&timers4 {
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "disabled";
-+	pwm {
-+		pinctrl-0 = <&pwm4_pins_a>;
-+		pinctrl-1 = <&pwm4_sleep_pins_a>;
-+		pinctrl-names = "default", "sleep";
-+		status = "okay";
-+	};
-+	timer@3 {
-+		status = "okay";
-+	};
-+};
-+
-+&timers8 {
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "disabled";
-+	pwm {
-+		pinctrl-0 = <&pwm8_pins_a>;
-+		pinctrl-1 = <&pwm8_sleep_pins_a>;
-+		pinctrl-names = "default", "sleep";
-+		status = "okay";
-+	};
-+	timer@7 {
-+		status = "okay";
-+	};
-+};
-+
-+&timers14 {
-+	status = "disabled";
-+	pwm {
-+		pinctrl-0 = <&pwm14_pins_a>;
-+		pinctrl-1 = <&pwm14_sleep_pins_a>;
-+		pinctrl-names = "default", "sleep";
-+		status = "okay";
-+	};
-+	timer@13 {
-+		status = "okay";
-+	};
-+};
-+
- &uart4 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&uart4_pins_a>;
+Thanks.
+
+Acked-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+
+> ---
+>  fs/fat/namei_vfat.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/fat/namei_vfat.c b/fs/fat/namei_vfat.c
+> index 21620054e1c4..0735e4f0aeed 100644
+> --- a/fs/fat/namei_vfat.c
+> +++ b/fs/fat/namei_vfat.c
+> @@ -200,7 +200,7 @@ static const struct dentry_operations vfat_dentry_ops = {
+>  
+>  /* Characters that are undesirable in an MS-DOS file name */
+>  
+> -static inline wchar_t vfat_bad_char(wchar_t w)
+> +static inline bool vfat_bad_char(wchar_t w)
+>  {
+>  	return (w < 0x0020)
+>  	    || (w == '*') || (w == '?') || (w == '<') || (w == '>')
+> @@ -208,7 +208,7 @@ static inline wchar_t vfat_bad_char(wchar_t w)
+>  	    || (w == '\\');
+>  }
+>  
+> -static inline wchar_t vfat_replace_char(wchar_t w)
+> +static inline bool vfat_replace_char(wchar_t w)
+>  {
+>  	return (w == '[') || (w == ']') || (w == ';') || (w == ',')
+>  	    || (w == '+') || (w == '=');
+
 -- 
-2.25.1
-
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
