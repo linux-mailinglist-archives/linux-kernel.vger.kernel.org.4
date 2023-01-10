@@ -2,93 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7F5663D07
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C65663D0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238219AbjAJJgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S238215AbjAJJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:36:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237919AbjAJJg2 (ORCPT
+        with ESMTP id S238283AbjAJJgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:36:28 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809C241A40
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:36:27 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id z5so10009573wrt.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:36:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0rAvwdJTXS0es/sk6vKngkqRWeq8GVmHG+Ko5pAlr0o=;
-        b=UuzzWu2W2WTCmPP+JqELRP1ivu18UV5HPuQg6Uhqw7iTh0gHIXi5zJh5/woC13227V
-         mm8XvS2EP6QvNvBxfSQtpr/99hSEkarwOXXmdENVVOiUJNSvfm5/wDAS4i49V8oLsd4g
-         c4uRf2jrzAHNp27ud17JfFr1dwuk7IgkEtdU+fA0ZhguYww7noE4YmTgJFX8ajRhzf1F
-         gFSogVmfDu/xP7smUF73qUuWdi4j9+Ynx3DGDCagtoTGQu/rvEU6RTIF8py7d8QPQz5j
-         Cl9fb9Iozd9pyIPBPTwipRUdJQ1x8BBqd1Qt7AgI3UEvs863szlIykFfoWDjr5H1Le7O
-         pIfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0rAvwdJTXS0es/sk6vKngkqRWeq8GVmHG+Ko5pAlr0o=;
-        b=o8L1TEVMYt9n+EvLLacXS7tTNiezXDtzXIqcYVa3eU0vlPkqBQbUR5Ec/rp4DmQO8n
-         1jx20qm0k/XCwPhYunufDWCeHTSqG7anGZcJlAwIASN7h6tpk0U2WTuWn0sYrnEde5lZ
-         XUI5WsYFLM4MNin4CGpFe+vjK+b6eyzkZ/34g00yn2ndakj4Au52lykrbftxKIOIpqsX
-         dPvMFVeIK6c3utPaQG3GHOVq41mynQoYj0hu1j9YsqIhpT2LLz8NVjwmP+CKUhlM0bwo
-         MvWnhZ5cEQTJncqItxJlCjekj7pmaulq21rcxZ3A/opcLtZMITr0JP3OOHPLzrr2gS47
-         Gb/w==
-X-Gm-Message-State: AFqh2koeiZ9Lo/7TB4wltBTCkAyaOR4B+/za8JHTyd/fA0tV12QHv4SQ
-        ACQlfw7PqL1j3rP3g/iZtzJLew==
-X-Google-Smtp-Source: AMrXdXuRU0IK09HzBVc/O86XQMYlTE8GaqgeCudczqFjzdoIAkjChdn/r2YTwcAz9kjE+ivPUUfieA==
-X-Received: by 2002:a5d:5b17:0:b0:2a3:50c5:9c29 with SMTP id bx23-20020a5d5b17000000b002a350c59c29mr15882495wrb.14.1673343386093;
-        Tue, 10 Jan 2023 01:36:26 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id c10-20020a056000104a00b002238ea5750csm12459094wrx.72.2023.01.10.01.36.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 01:36:25 -0800 (PST)
-Message-ID: <21ccfc0a-df0f-66fc-58a9-f773b2cbc5b3@linaro.org>
-Date:   Tue, 10 Jan 2023 10:36:23 +0100
+        Tue, 10 Jan 2023 04:36:41 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A5048816
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:36:40 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EC0986602D6F;
+        Tue, 10 Jan 2023 09:36:38 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673343399;
+        bh=uSowM5jqFDNQiGdft8YboLtHI+wKc4mcCdsfgeYisSY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LVkIcqgcg4cglsYzP+u74GgzDzaOe8wq3tX8+hd3U8QPP+D/XCbKeHSAqyyMnCLRH
+         kTjXiq4ucJcsbm+ax/Ym+2q6LWzmZNxdCVudO4709SoRzj64KInpgPQD+JCOprzEuL
+         BlVTSb27mqnRCc5my75L49XZq3sX03RrY8QuBU4ZBVQTACqW/Bw+w1R1M6UwR0rlM8
+         7Su62ObHNChFHgVx42DFQ0chsdkaNPSIOs0Bgs3lxjQuzPk/i+Vt8bIILiU6E8FP0/
+         AcHRtiqnU5G6sNHHGYJ6UKH6p7JC2pmEX/hwdFgMmqnSbDR32sDSLmLxZ9DYupDp8B
+         uHfgBbYVP9M5w==
+Message-ID: <7cc4fe44-55b9-a80f-27a5-197070759760@collabora.com>
+Date:   Tue, 10 Jan 2023 10:36:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V2 04/11] dt-bindings: remoteproc: qcom,sc7280-mss-pil:
- Update memory-region
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] drm/mediatek: stop using 0 as NULL pointer
 Content-Language: en-US
-To:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        manivannan.sadhasivam@linaro.org, robin.murphy@arm.com
-Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, amit.pundir@linaro.org,
-        regressions@leemhuis.info, sumit.semwal@linaro.org,
-        will@kernel.org, catalin.marinas@arm.com
-References: <20230109034843.23759-1-quic_sibis@quicinc.com>
- <20230109034843.23759-5-quic_sibis@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109034843.23759-5-quic_sibis@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Miles Chen <miles.chen@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230110031223.4820-1-miles.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230110031223.4820-1-miles.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 04:48, Sibi Sankar wrote:
-> The dynamic memory region used for metadata authentication would still
-> be a part of the kernel mapping and any access to this region  by the
+Il 10/01/23 04:12, Miles Chen ha scritto:
+> Use NULL for NULL pointer to fix the following sparse warning:
+> drivers/gpu/drm/mediatek/mtk_drm_gem.c:265:27: sparse: warning: Using plain integer as NULL pointer
+> 
+> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
 
-Same problem.
+Please add the appropriate tag...
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: 3df64d7b0a4f ("drm/mediatek: Implement gem prime vmap/vunmap function")
 
-Best regards,
-Krzysztof
+after which:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 
