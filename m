@@ -2,118 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A865D663725
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 03:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D01166372D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 03:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235498AbjAJCQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 21:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
+        id S230317AbjAJCRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 21:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjAJCQF (ORCPT
+        with ESMTP id S230171AbjAJCRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 21:16:05 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838382BED
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 18:16:04 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id e11-20020a63d94b000000b0048988ed9a6cso4496901pgj.1
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 18:16:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hjXN6DlW5iWocpPXZO+YPpO8vV9IgMx2qXzGmBcXsCg=;
-        b=DEwdhVDHUdVd2gaW1yVVDmxnQhNt0LgwpdUIo/mB17X1bFsb99NQ8I4o5mUo2nr6TJ
-         TCJ2IyN5drejBzobQh9kEgnmWQ50FIhb3k16p5PcJFaS3KTF/OaKB5im/Xv/jx8LZhYs
-         ryWk3sV5hlY/BRjZV9rn9K2KnrvHiddiIvW10pzxFD+5Wl8Yvy2uwwEAbYdnXTBms4nd
-         3UZWW82Uddo38dfD5AYE9ctJ+5MLLu6QL0ze/VAod6NYtdS8vaIrfmeYELBdFVQpA3k/
-         d2WAUb4kbbsDOq2f5fBQ598+BmoHmIsxu6kLV0xdLdxcbOH13tdLH+/y1FROdDoI32Ph
-         I/7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hjXN6DlW5iWocpPXZO+YPpO8vV9IgMx2qXzGmBcXsCg=;
-        b=wOiIYYAPSByw4/FEB7WzZV5bqE3DYmorlFu4UVhXL1HGKbFRNrRRjcyFNYMiynwzyB
-         vjcr2+wotzPNX81Y3aEykXraV6WiQndMqv2vzFAWgZ21amg39ec7MWQO/Yid8JOiNuKA
-         6t+h2gcOXDkqKNjvL7OdR5p4j/H0tE+j/t3Pj5hy7bm+DEFn3U7aC75Kj6v3bm9XihQ9
-         mr/onCFTTNF2dveflO2eaDmv8Nne2L2EGFIV2PxQDb0PIhclJkZ2rKQWh4zm+8IPvZtJ
-         +LVBF/s19E6+HCm8hs0QxC8aoMguUAO2gi4RN3256X7+wJWX4YPByxloLFKAoG1cHsyY
-         9dAQ==
-X-Gm-Message-State: AFqh2kq9q6WdYxDNuExkRJU0mWPsL00HkLhLIDsnjGuoTVm00ss06bFF
-        Qzzc8JKDLoDW57HFQ+yYv0+cBDxKCo7AVvcrL3HDcQ==
-X-Google-Smtp-Source: AMrXdXtyMvyOu+BcEar/61cbq0gpLj5K4zQEguINa/upU9HngVQ77pkh44I6KjUE7AKPvMmnQx3un2VfzYQvW8nVIyInag==
-X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:3990:5e50:b0f8:bcdd])
- (user=isaacmanjarres job=sendgmr) by 2002:a62:4e97:0:b0:582:fa00:3c30 with
- SMTP id c145-20020a624e97000000b00582fa003c30mr1726478pfb.17.1673316963899;
- Mon, 09 Jan 2023 18:16:03 -0800 (PST)
-Date:   Mon,  9 Jan 2023 18:16:00 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230110021600.1347946-1-isaacmanjarres@google.com>
-Subject: [PATCH stable-5.4] driver core: Fix bus_type.match() error handling
- in __driver_attach()
-From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        stable@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 9 Jan 2023 21:17:09 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D2C1B85;
+        Mon,  9 Jan 2023 18:17:07 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowABnbZWUyrxjM5xMCw--.51216S2;
+        Tue, 10 Jan 2023 10:16:53 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     dmitry.baryshkov@linaro.org, d-gole@ti.com
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
+        airlied@gmail.com, daniel@ffwll.ch, marijn.suijten@somainline.org,
+        vkoul@kernel.org, dianders@chromium.org, marex@denx.de,
+        vladimir.lypak@gmail.com, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] drm/msm/dsi: Add missing check for alloc_ordered_workqueue
+Date:   Tue, 10 Jan 2023 10:16:51 +0800
+Message-Id: <20230110021651.12770-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABnbZWUyrxjM5xMCw--.51216S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jr18urW3GF47Gr4DWrWDCFg_yoWDWrb_uF
+        98JwnFgrW2k3ZFg3W2yr1Iyryjy3Z09F40vFZ8t3W3tFyDtr1ft3s2vrZ5Zr1DuF1xJF92
+        9asFv345JrsrGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb38FF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfU54EEUUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 27c0d217340e47ec995557f61423ef415afba987 upstream.
+Add check for the return value of alloc_ordered_workqueue as it may return
+NULL pointer and cause NULL pointer dereference.
 
-When a driver registers with a bus, it will attempt to match with every
-device on the bus through the __driver_attach() function. Currently, if
-the bus_type.match() function encounters an error that is not
--EPROBE_DEFER, __driver_attach() will return a negative error code, which
-causes the driver registration logic to stop trying to match with the
-remaining devices on the bus.
-
-This behavior is not correct; a failure while matching a driver to a
-device does not mean that the driver won't be able to match and bind
-with other devices on the bus. Update the logic in __driver_attach()
-to reflect this.
-
-Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
-Cc: stable@vger.kernel.org
-Cc: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/base/dd.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Changelog:
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 10063d8a1b7d..1abd39ed3f9f 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -1068,8 +1068,12 @@ static int __driver_attach(struct device *dev, void *data)
- 		 */
- 		return 0;
- 	} else if (ret < 0) {
--		dev_dbg(dev, "Bus failed to match device: %d", ret);
--		return ret;
-+		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
-+		/*
-+		 * Driver could not match with device, but may match with
-+		 * another device on the bus.
-+		 */
-+		return 0;
- 	} /* ret > 0 means positive match */
+v2 -> v3:
+
+1. Simply return -ENOMEM instead of using ret.
+2. No change of the "goto fail".
+
+v1 -> v2:
+
+1. Change the "goto fail" into "return ret" and drop the "fail" label.
+---
+ drivers/gpu/drm/msm/dsi/dsi_host.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+index 89aadd3b3202..f167a45f1fbd 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_host.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+@@ -1977,6 +1977,9 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
  
- 	if (driver_allows_async_probing(drv)) {
+ 	/* setup workqueue */
+ 	msm_host->workqueue = alloc_ordered_workqueue("dsi_drm_work", 0);
++	if (!msm_host->workqueue)
++		return -ENOMEM;
++
+ 	INIT_WORK(&msm_host->err_work, dsi_err_worker);
+ 
+ 	msm_dsi->id = msm_host->id;
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.25.1
 
