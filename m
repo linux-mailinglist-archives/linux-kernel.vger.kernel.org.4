@@ -2,190 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DB8663B23
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F6E663B2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbjAJIdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
+        id S237777AbjAJIeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:34:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbjAJIdD (ORCPT
+        with ESMTP id S229702AbjAJIeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:33:03 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA2B45659;
-        Tue, 10 Jan 2023 00:33:02 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 7so7732772pga.1;
-        Tue, 10 Jan 2023 00:33:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5J/eidAZ28irC4eDoeGgMFsD2kCLuCXO26buxFQLHA0=;
-        b=pMIB6ht+FhDsw5HZVqVlWGadzfORmIrx79MYwrbnQvuljPQ0TfDWwoxf5MzCw8Ja7T
-         EaJyU9MyazxKUCPevX7kfg6OcSE0hNmTry/wvBKcIytDLlWqwC8CpkN+J5thJFB24LS1
-         CQQoSSOI2TuAypXfxpA9LFk+zqaJCnAqBzbww2jw+v50jqbhXMVwrzdsjd/AvuQlpZEv
-         6ovoYQe0hGH4oWQ4nQm/Xq6g4VxVZFpnSjeHPfqbn1NoOs6AJlf0AVFKob7H7+fvm+4P
-         P/JiIVe4rvEgBLR/pXfTfMiLm2/DGVLigoS1TjVBZUZNFi+8WYuZ6nbEX1uhzl3HjJzo
-         qroA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5J/eidAZ28irC4eDoeGgMFsD2kCLuCXO26buxFQLHA0=;
-        b=B9ISXr3fPiC/bq71ogd6AYT+eS0z+JqlnJQp9V+vqeXhp6IwQpIiQ8DkEZVJeBSFC/
-         PIKPqWEVFSJZGhvZ9/B++2lUtD1MmM2ewV+ABc2O+mQ9Ku0goo38hSG4hRMA7rmVkJ4W
-         /FU5U5dA2r+ZPFDJO8X8vVY3cEaPRFF6ZDHyzrNqOkIlmrfGe4qWS9c306vFJgRZu7yk
-         rblI8CNzDP2uVrzyp/4se913jeRfD5CwHkevYoU1m9hY+Z82HLP35YiPk0HEErmu7sHJ
-         KLgU32g8wYeetn1CnvSH5cp1N9XXrdbqHtGz6mO+6WT0ox4X7UGGXVdUZO/034iuDK/S
-         MPrg==
-X-Gm-Message-State: AFqh2krE5meFEQWilH82JIhg6qPi3aglYFqhE1PP+YjT3D1/NzXd+dJ5
-        LP0lNnePjLoJ70uarPadf7E=
-X-Google-Smtp-Source: AMrXdXtCvKv+3P1+DjthaDgdsiFlMIPTBnPJ8aY4JBJs0+O28xqQXCHU6oDZt7stWSCdeG1FvS5XOA==
-X-Received: by 2002:a05:6a00:288f:b0:581:fddb:749c with SMTP id ch15-20020a056a00288f00b00581fddb749cmr40534358pfb.5.1673339582298;
-        Tue, 10 Jan 2023 00:33:02 -0800 (PST)
-Received: from localhost.localdomain ([180.217.149.10])
-        by smtp.gmail.com with ESMTPSA id z3-20020a626503000000b005871b73e27dsm5064950pfb.33.2023.01.10.00.32.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 00:33:01 -0800 (PST)
-From:   Jim Liu <jim.t90615@gmail.com>
-To:     JJLIU0@nuvoton.com, KWLIU@nuvoton.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Jim Liu <jim.t90615@gmail.com>
-Subject: [PATCH v4 3/3] dt-bindings: gpio: add NPCM sgpio driver bindings
-Date:   Tue, 10 Jan 2023 16:32:38 +0800
-Message-Id: <20230110083238.19230-4-jim.t90615@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230110083238.19230-1-jim.t90615@gmail.com>
-References: <20230110083238.19230-1-jim.t90615@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 03:34:04 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A0B49151;
+        Tue, 10 Jan 2023 00:34:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t0g8sAMw0YuigClEe8J6Of8uYBawzqc1qw15eQtTooo=; b=KEFepgJrWEeL9uBmLyGXAalt+U
+        Jm4LcNJKx5mAdHe57CNNrg4oj1j9hd1AqdvItVQRtm35W5v6TQ/B49MYBUcKX83cd2sxykixLdens
+        8jhJ8pzVNn91Rh2XPC1hSMP2uABFLZcrCe9GEh3q+8P0+2R2OqKSgyLcJbPq5hPwGINuqzl71a4mI
+        X49DYcRt1ylSGtFdZpTLwoGxLb+KGoauNXiPa7vOZzBtgrkEDDjGRG1Vi2GA2BML1dLqBevRADk+9
+        MlCuhRDzSLaHRh2zyvNm/Ijuu/qQxDjQLZ7ToLhyEqv2J3dVAwzQy5ULTGGQgSERvvbnfS0KVpfj9
+        a0WPVTmA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pFA3w-0033Qg-1y;
+        Tue, 10 Jan 2023 08:32:53 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4BE59300033;
+        Tue, 10 Jan 2023 09:32:55 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BF2782C4AA552; Tue, 10 Jan 2023 09:32:55 +0100 (CET)
+Date:   Tue, 10 Jan 2023 09:32:55 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Thomas Richter <tmricht@linux.ibm.com>,
+        torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC][PATCH 08/12] s390: Replace cmpxchg_double() with
+ cmpxchg128()
+Message-ID: <Y70it59wuvsnKJK1@hirez.programming.kicks-ass.net>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154119.352918965@infradead.org>
+ <Y70SWXHDmOc3RhMd@osiris>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y70SWXHDmOc3RhMd@osiris>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dt-bindings document for the Nuvoton NPCM7xx and NPCM8xx sgpio driver
+On Tue, Jan 10, 2023 at 08:23:05AM +0100, Heiko Carstens wrote:
 
-Signed-off-by: Jim Liu <jim.t90615@gmail.com>
----
-Changes for v4:
-   - modify in/out property
-   - modify bus-frequency property
-Changes for v3:
-   - modify description
-   - modify in/out property name
-Changes for v2:
-   - modify description
----
- .../bindings/gpio/nuvoton,sgpio.yaml          | 92 +++++++++++++++++++
- 1 file changed, 92 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml
+> So, Alexander Gordeev reported that this code was already prior to your
+> changes potentially broken with respect to missing READ_ONCE() within the
+> cmpxchg_double() loops.
 
-diff --git a/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml b/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml
-new file mode 100644
-index 000000000000..3c01ce61f8d9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml
-@@ -0,0 +1,92 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gpio/nuvoton,sgpio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Nuvoton SGPIO controller
-+
-+maintainers:
-+  - Jim LIU <JJLIU0@nuvoton.com>
-+
-+description:
-+  This SGPIO controller is for NUVOTON NPCM7xx and NPCM8xx SoC.
-+  Nuvoton NPCM7xx SGPIO module is combine serial to parallel IC (HC595)
-+  and parallel to serial IC (HC165), and use APB3 clock to control it.
-+  This interface has 4 pins  (D_out , D_in, S_CLK, LDSH).
-+  NPCM7xx/NPCM8xx have two sgpio module each module can support up
-+  to 64 output pins,and up to 64 input pin, the pin is only for gpi or gpo.
-+  GPIO pins have sequential, First half is gpo and second half is gpi.
-+  GPIO pins can be programmed to support the following options
-+  - Support interrupt option for each input port and various interrupt
-+    sensitivity option (level-high, level-low, edge-high, edge-low)
-+  - ngpios is number of nuvoton,input-ngpios GPIO lines and nuvoton,output-ngpios GPIO lines.
-+    nuvoton,input-ngpios GPIO lines is only for gpi.
-+    nuvoton,output-ngpios GPIO lines is only for gpo.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - nuvoton,npcm750-sgpio
-+      - nuvoton,npcm845-sgpio
-+
-+  reg:
-+    maxItems: 1
-+
-+  gpio-controller: true
-+
-+  '#gpio-cells':
-+    const: 2
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  nuvoton,input-ngpios:
-+    description: The numbers of GPIO's exposed.
-+      GPIO lines is only for gpi.
-+    minimum: 0
-+    maximum: 64
-+
-+  nuvoton,output-ngpios:
-+    description: The numbers of GPIO's exposed.
-+      GPIO lines is only for gpo.
-+    minimum: 0
-+    maximum: 64
-+
-+  bus-frequency:
-+    description: Directly connected to APB bus and 
-+      its shift clock is from APB bus clock divided by a programmable value.
-+    default: 8000000
-+
-+required:
-+  - compatible
-+  - reg
-+  - gpio-controller
-+  - '#gpio-cells'
-+  - interrupts
-+  - nuvoton,input-ngpios
-+  - nuvoton,output-ngpios
-+  - clocks
-+  - bus-frequency
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/nuvoton,npcm7xx-clock.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    gpio8: gpio@101000 {
-+        compatible = "nuvoton,npcm750-sgpio";
-+        reg = <0x101000 0x200>;
-+        clocks = <&clk NPCM7XX_CLK_APB3>;
-+        interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
-+        bus-frequency = <8000000>;
-+        gpio-controller;
-+        #gpio-cells = <2>;
-+        nuvoton,input-ngpios = <64>;
-+        nuvoton,output-ngpios = <64>;
-+        status = "disabled";
-+    };
--- 
-2.17.1
+Unless there's an early exit, that shouldn't matter. If you managed to
+read garbage the cmpxchg itself will simply fail and the loop retries.
 
+> @@ -1294,12 +1306,16 @@ static void hw_perf_event_update(struct perf_event *event, int flush_all)
+>  		num_sdb++;
+>  
+>  		/* Reset trailer (using compare-double-and-swap) */
+> +		/* READ_ONCE() 16 byte header */
+> +		prev.val = __cdsg(&te->header.val, 0, 0);
+>  		do {
+> +			old.val = prev.val;
+> +			new.val = prev.val;
+> +			new.f = 0;
+> +			new.a = 1;
+> +			new.overflow = 0;
+> +			prev.val = __cdsg(&te->header.val, old.val, new.val);
+> +		} while (prev.val != old.val);
+
+So this, and
+
+> +		/* READ_ONCE() 16 byte header */
+> +		prev.val = __cdsg(&te->header.val, 0, 0);
+>  		do {
+> +			old.val = prev.val;
+> +			new.val = prev.val;
+> +			orig_overflow = old.overflow;
+> +			new.f = 0;
+> +			new.overflow = 0;
+>  			if (idx == aux->alert_mark)
+> +				new.a = 1;
+>  			else
+> +				new.a = 0;
+> +			prev.val = __cdsg(&te->header.val, old.val, new.val);
+> +		} while (prev.val != old.val);
+
+this case are just silly and expensive. If that initial read is split
+and manages to read gibberish the cmpxchg will fail and we retry anyway.
+
+> +	/* READ_ONCE() 16 byte header */
+> +	prev.val = __cdsg(&te->header.val, 0, 0);
+>  	do {
+> +		old.val = prev.val;
+> +		new.val = prev.val;
+> +		*overflow = old.overflow;
+> +		if (old.f) {
+>  			/*
+>  			 * SDB is already set by hardware.
+>  			 * Abort and try to set somewhere
+> @@ -1490,10 +1509,10 @@ static bool aux_set_alert(struct aux_buffer *aux, unsigned long alert_index,
+>  			 */
+>  			return false;
+>  		}
+> +		new.a = 1;
+> +		new.overflow = 0;
+> +		prev.val = __cdsg(&te->header.val, old.val, new.val);
+> +	} while (prev.val != old.val);
+
+
+And while this case has an early exit, it only cares about a single bit
+(although you made it a full word) and so also shouldn't care. If
+aux_reset_buffer() returns false, @overflow isn't consumed.
+
+
+So I really don't see the point of this patch.
