@@ -2,84 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB52D663EBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB5E663EC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238350AbjAJK4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:56:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
+        id S238270AbjAJK4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237882AbjAJK4j (ORCPT
+        with ESMTP id S238263AbjAJK4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:56:39 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28556202;
-        Tue, 10 Jan 2023 02:55:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TogT4Ztt7q4ZysT3AFT1rk+GzjsAIPFhnae9QZmezhE=; b=M3Inx9zClV1a15sUXMSqSUMu3O
-        J1u+fjbAfKS21OB5+BUgZJHTEbcHslZOtgu8/gDjg95ya69gg6tiYKTPyuD2nOE5JO6t5UdvUgOGb
-        XqPjVQUfVFx3Cc5okP5rKUPXw/u80kOOCQGNCIYza7owNnn1n3tF0XUAa0HjQ+vWziDVlIiQBjVit
-        ketlZHqRI3IR+XItjANwuMlqlidEOzYf71uUGeU4dy0s2aVAJMXlqY27piyFDB3NP5khQq51YAiag
-        ggBDL8Y7wkV+HsDCmGjHm22DgUZMuJbFeoV3faJeGYWUKuXgMB4iYcVX3ZYWkcf05oQf8Am0UqgbO
-        UKKuIiYw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pFCI2-0036Y5-2Q;
-        Tue, 10 Jan 2023 10:55:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CC470300033;
-        Tue, 10 Jan 2023 11:55:41 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BD839201ABB68; Tue, 10 Jan 2023 11:55:41 +0100 (CET)
-Date:   Tue, 10 Jan 2023 11:55:41 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 2/3] perf/core: Set data->sample_flags in
- perf_prepare_sample()
-Message-ID: <Y71ELS9GTz0hqaUt@hirez.programming.kicks-ass.net>
-References: <20221229204101.1099430-1-namhyung@kernel.org>
- <20221229204101.1099430-2-namhyung@kernel.org>
- <Y7wFJ+NF0NwnmzLa@hirez.programming.kicks-ass.net>
- <Y7x3RUd67smv3EFQ@google.com>
+        Tue, 10 Jan 2023 05:56:40 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D582FFDF
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:55:59 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso6582637wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:55:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OK3dOcmC2316DPwk/bUPBybxOAI/IcJi2QhkVwXbWBQ=;
+        b=nZlsw+sfh6c8LjeTUYnN+a0bFqxtxwL5DIC1kOnceyEajUUdBKmOdAPp88zSPW6qdj
+         ftayDXefeigxCJcjVMr318t5v+tjJk3AJfoMXRlI7eE+j3K0LeX9j8FZ2BZccLnQcK31
+         ZACE+rsR9AN56x7XIGi0jl8eNSwHFzVCbrEde+MMSYnHW6LjR9aRwoiX5Slv2mAFW+Zz
+         5IYX42NjzePzX35hD+6v5I1tDHPFEVcbyLEhKcmj1lnDHiNgi56VLkamALYc0YRAWQmm
+         IYK9nylq+1Tgegu10hGd5HndoGaMB4xCiGEHTSNwn7CtII9QhiY91lresH5LJ5Hmv0k7
+         azkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OK3dOcmC2316DPwk/bUPBybxOAI/IcJi2QhkVwXbWBQ=;
+        b=3drl8Hxqvlrxk9AS+J7EuGivunX768Wq4/u17FdvtzOUE1WMzzkhUnuDdzLfj9geQR
+         LaQfznkz8c/fu6K+erZB+NyDdFiWeCrvJn/8nC9RsnkbrieU+yD+FcI6QS45oxCuU5yu
+         NSOK3mVOuP9vm74/SGcEbdMDvs8JySx5TH8lOthiZirXGeIkGWqZ9qNMHFfVXON+Y4HE
+         YzFnVfCXOrgtspt2eua2lRpcXmcPgOHIJ19kLds/zCap4eg07bev6utdczMrNMuQGylG
+         vMH1YB8ZPENVVqElcv4ynBYtcbOOu9sxBj7qBElsWycCFdkRjKQXoOCFXpMhAa5GqL7p
+         jagw==
+X-Gm-Message-State: AFqh2kpFdY2swQquPWqjaiDo13A7H1tw5JRdo5yVuKhbmvbUxt9JYIOD
+        Zi3hC8YrxN1c5OaLk6c9ZGphjg==
+X-Google-Smtp-Source: AMrXdXsvtDeUTfyYuTmn8t01Vc4ryVxBqJidLl7ljjVRGz8E1/5LG2Szn2MIuKI+e+NR5mw5c8WdPw==
+X-Received: by 2002:a05:600c:510b:b0:3d2:392e:905f with SMTP id o11-20020a05600c510b00b003d2392e905fmr49326298wms.24.1673348158158;
+        Tue, 10 Jan 2023 02:55:58 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c511300b003d9862ec435sm2256445wms.20.2023.01.10.02.55.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 02:55:57 -0800 (PST)
+Message-ID: <7d0f8886-4d7a-b05a-4ad3-6bcbbcddbcf3@linaro.org>
+Date:   Tue, 10 Jan 2023 11:55:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7x3RUd67smv3EFQ@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RESEND v3 2/4] dt-bindings: clock: qcom,sc7280-lpasscc: Add
+ resets for audioreach
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        swboyd@chromium.org, agross@kernel.org, andersson@kernel.org,
+        robh+dt@kernel.org, broonie@kernel.org, quic_plai@quicinc.com,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com
+References: <1672849297-3116-1-git-send-email-quic_srivasam@quicinc.com>
+ <1672849297-3116-3-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1672849297-3116-3-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 12:21:25PM -0800, Namhyung Kim wrote:
-
-> > However; inspired by your next patch; we can do something like so:
-> > 
-> > 	if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN) {
-> > 		data->callchain = perf_callchain(event, regs);
-> > 		data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
-> > 
-> > 		data->size += (1 + data->callchain->nr) * sizeof(u64);
-> > 	}
+On 04/01/2023 17:21, Srinivasa Rao Mandadapu wrote:
+> Add support for LPASS audio clock gating for RX/TX/SWA core bus clocks
+> for audioreach based SC7280 platforms.
 > 
-> This is fine as long as all other places (like in PMU drivers) set the
-> callchain update the sample data size accordingly.  If not, we can get
-> the callchain but the data size will be wrong.
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+> ---
+>  .../devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml       | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
 
-Good point, maybe add a helper there to ensure that code doesn't
-duplicate/diverge?
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
