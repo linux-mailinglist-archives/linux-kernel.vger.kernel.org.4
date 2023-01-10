@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBCA0664E68
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71335664E67
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbjAJWAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 17:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S233953AbjAJV7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 16:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234290AbjAJWAB (ORCPT
+        with ESMTP id S232908AbjAJV7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 17:00:01 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BA85E67C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 13:59:59 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id v6so19638189edd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 13:59:59 -0800 (PST)
+        Tue, 10 Jan 2023 16:59:44 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2501C633A1;
+        Tue, 10 Jan 2023 13:59:43 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id g13so20617420lfv.7;
+        Tue, 10 Jan 2023 13:59:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q0A+/pPY0W2OxmXPlRQSeFoMNoHET+WW3usLT6qwTWY=;
-        b=aIpvCIGAwOgQjufdkkd5GSNKjB+lf9wFH6o0d1WaYDrRosC5hOLLtnLqnfxO9KpnxX
-         v8An28tZ4VLFpOuwxwNrK0l3IwNEmI//2nmOP7I9fyBBOk4F4GozRBb4duQnfjqcBq6b
-         jvFuzxh4HJm5MiKcMsKWzOh9W0VZqQOk4ecAUVtHUpN92rHlGcl4ZDZCtOfOhLSxFRoO
-         Ge/4NTaCTW1Vbo4uezonVtRcnr+o+De1aMqDs4hmAS61UDC3LehNtAWnl12G73hyFjQ0
-         oviRoIDpTOWX1PmfjyBI9iZygUk+twQuHnAh1qbgjb4NVkYXQF5ms0puvfCvYtuwW+D0
-         LMsA==
+        bh=oqUVGWZ+P64IzHMaMbFTP3YtveA0quZvXbNj1geobqc=;
+        b=NGDzhEW4M0tKj1NoeA6Hd6vWts/TspUQn6sDIv8a5vLCCktMeA3GF4NBhWF+sTvYvY
+         k5iGqdfp3Khp6jhgPiBcjJ0l/rIr2qit3Zbjx3KjdTOi10Klgd953idMcXMhbBgbMYmk
+         1PYHRgSJfnY1RB7zQkulgHkf1gu7eXllHcGMRUXLrSmxw3jXVxyGMsSaUY2CJmBOm8pL
+         7YFD1pHAFzOYAPcjpNzWPp4/yRFS2r5Eeg14m5FAjN6zLt/zp+K3B4OVxVwXE4UIw/Qf
+         xsr1J+YiFji2T/PL3kDQZMwlCZaBJ1CHFxvPjQpgxn1k+Jo+LBW2aGq9S4b8MkTHFCSG
+         /NRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Q0A+/pPY0W2OxmXPlRQSeFoMNoHET+WW3usLT6qwTWY=;
-        b=GY+4lAgm0bqjNau1aNXNyNRJAkyeg9m0ypZ86290WVAizUsQhDpOW9SpoL7tD7EGbn
-         omS/CkQkFwRnqxD2e/lseImokQDPxLFLX25P4vMZH2kRMsYd6yKJKsiq9iDdpdQDLI+M
-         pHbHFQPLcvg93m33Gku1+yYENxj8M1PGFhOQw9J5yO+KC5GUUk1/B8RDoFEn/xVxFbQw
-         wfp6F9NXlbsIiKqOTw1qlhgJZyJFg+qtWN+ZLKMx4PStqBiwoaDwiPaMeGXR0VXAGNKC
-         BpyyAMg1m5ilv99ddXZk0+NXxvyJ/WS+WDkbjSaN+NMGOtcddJz9xODZndp6R2iMxzu5
-         xvlQ==
-X-Gm-Message-State: AFqh2kq6zUlsdx5/3333Brfo8YEBMh8VdQCbM4vOrWuyH02LJvSQKBZ/
-        nguHvSdwVkcyvlpHbV0LhK8=
-X-Google-Smtp-Source: AMrXdXuRHK1VxAGfGdIkJTw+9270rhsZ6x/sWQPH/c4KLwONK8PwwroGF4w0l9X3gKmACLCMDfGoaQ==
-X-Received: by 2002:a05:6402:1f89:b0:47b:16c7:492c with SMTP id c9-20020a0564021f8900b0047b16c7492cmr68452406edc.25.1673387998327;
-        Tue, 10 Jan 2023 13:59:58 -0800 (PST)
-Received: from localhost.localdomain (dynamic-2a01-0c23-7880-b900-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:7880:b900::e63])
-        by smtp.googlemail.com with ESMTPSA id cz26-20020a0564021cba00b0048ea96cb900sm5404408edb.23.2023.01.10.13.59.57
+        bh=oqUVGWZ+P64IzHMaMbFTP3YtveA0quZvXbNj1geobqc=;
+        b=ts4xCpUdQ8hSfOwuAf6Z7PnX1qBIL11Hfe7RhKmV8m495CTFfSuRWsEnapeXT/ZdU4
+         G2dudwI9OP3eE2FF4NF0zrgwMmmYFwkPXanUKggwNkoYMZGltoJaRH6AY3oq4GAX2whj
+         V97NP/rQEkTUj7xxMFzD6YS7ngF+1kzEbWVHNu55xfwuNss8IqC0Lcwdels9G6L1w7yd
+         z2yFrvZ6388feshhnTr0WABSEgWliU5c5ldJD2tw/KePpwJTEw/70JfIKjDoRjqcAHWN
+         JOwt4XU9lBIP372B8hFEpv3MgvUjhShsd2KtliAKT7I3FPT36YhPyHcGcI3JLpwVWsU/
+         oyGA==
+X-Gm-Message-State: AFqh2ko7sqpYL0lUUv2UHeANcORCRS355p4ARQ9OyOmdCQYhrx0+lR1h
+        58ThaHef8FA93ffbJ3+RnUk=
+X-Google-Smtp-Source: AMrXdXv8jyJj3Qj+E77izK5gNhB2ntWeXdV+Wt5avomU6UxOwe2zEsXP9UzV4haMnOgo/fmj6qI+/Q==
+X-Received: by 2002:a05:6512:3089:b0:4cc:586b:183d with SMTP id z9-20020a056512308900b004cc586b183dmr7311757lfd.55.1673387981381;
+        Tue, 10 Jan 2023 13:59:41 -0800 (PST)
+Received: from localhost.localdomain ([46.147.136.10])
+        by smtp.gmail.com with ESMTPSA id v4-20020ac258e4000000b004b59b43ec61sm2373015lfo.179.2023.01.10.13.59.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 13:59:57 -0800 (PST)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-amlogic@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        adeep@lexina.in, khilman@baylibre.com, neil.armstrong@linaro.org,
-        jbrunet@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH] arm64: dts: meson-gxl: jethub-j80: Fix WiFi MAC unit address
-Date:   Tue, 10 Jan 2023 22:59:26 +0100
-Message-Id: <20230110215926.1296650-1-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.39.0
+        Tue, 10 Jan 2023 13:59:40 -0800 (PST)
+From:   Alexander Pantyukhin <apantykhin@gmail.com>
+To:     jolsa@kernel.org
+Cc:     akpm@linux-foundation.org, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Pantyukhin <apantykhin@gmail.com>
+Subject: [PATCH] tools:perf:scripts:python:mem-phys-addr fix behavior
+Date:   Wed, 11 Jan 2023 02:59:36 +0500
+Message-Id: <20230110215936.4716-1-apantykhin@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,31 +72,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unit addresses should be written using lower-case hex characters. Use
-wifi_mac@c to fix a yaml schema validation error once the eFuse
-dt-bindings have been converted to a yaml schema:
-  efuse: Unevaluated properties are not allowed ('wifi_mac@C' was
-  unexpected)
+Fix the case when phys_addr belongs to the end of the range.
 
-Fixes: abfaae24ecf3 ("arm64: dts: meson-gxl: add support for JetHub H1")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Example:
+system_ram = [10, 20]
+is_system_ram(20) - returns False
+Expected: True
+
+Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
 ---
- .../boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts     | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/scripts/python/mem-phys-addr.py | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
-index 6831137c5c10..4f742e1b9301 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
-@@ -90,7 +90,7 @@ bt_mac: bt_mac@6 {
- 		reg = <0x6 0x6>;
- 	};
+diff --git a/tools/perf/scripts/python/mem-phys-addr.py b/tools/perf/scripts/python/mem-phys-addr.py
+index 1f332e72b9b0..b1daa22bd405 100644
+--- a/tools/perf/scripts/python/mem-phys-addr.py
++++ b/tools/perf/scripts/python/mem-phys-addr.py
+@@ -59,18 +59,23 @@ def trace_end():
+ 	print_memory_type()
+ 	f.close()
  
--	wifi_mac: wifi_mac@C {
-+	wifi_mac: wifi_mac@c {
- 		reg = <0xc 0x6>;
- 	};
- };
++def is_value_inside_one_of_range(memory_ranges, value):
++    position = bisect.bisect(memory_ranges, value)
++
++    if position == 0:
++        return False
++
++    if position % 2 == 0:
++        return value == memory_ranges[position - 1]
++
++    return True
++
+ def is_system_ram(phys_addr):
+ 	#/proc/iomem is sorted
+-	position = bisect.bisect(system_ram, phys_addr)
+-	if position % 2 == 0:
+-		return False
+-	return True
++	return is_value_inside_one_of_range(system_ram, phys_addr)
+ 
+ def is_persistent_mem(phys_addr):
+-	position = bisect.bisect(pmem, phys_addr)
+-	if position % 2 == 0:
+-		return False
+-	return True
++	return is_value_inside_one_of_range(pmem, phys_addr)
+ 
+ def find_memory_type(phys_addr):
+ 	if phys_addr == 0:
 -- 
-2.39.0
+2.25.1
 
