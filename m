@@ -2,175 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F080664C55
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3068664C5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238723AbjAJTW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S239533AbjAJTXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:23:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239824AbjAJTWg (ORCPT
+        with ESMTP id S235187AbjAJTWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:22:36 -0500
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FBA532A8;
-        Tue, 10 Jan 2023 11:22:07 -0800 (PST)
-Received: by mail-il1-f181.google.com with SMTP id o8so6907578ilo.1;
-        Tue, 10 Jan 2023 11:22:07 -0800 (PST)
+        Tue, 10 Jan 2023 14:22:45 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF72551EC
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:22:43 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso6546087wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:22:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EIQZzMj+NHdju0t2ECocoqq5GGkKwpX9WdATXuG5dps=;
+        b=yEc+gsDdkzGwE/FSyvNyEh1vt0FGFYMl37lXZIUPXRbd54Bz/By5Bk7TQ5m8PjY6sV
+         R/o2ewqkyU8ePtCmw1uB7uN9rjeMIgp8hoWWxERpC0+NWepPXfAvGZXqeWvyv4BLTaF8
+         c+uZy/yeUX20RjF7fGO+BmIpgfMTPiWY0647WOR5ACyhN1gVsm8s4fPRCzIAiomk3VWS
+         +Oy46WN80//y9dvbWjnnEK/pOOwlIQq+SeNrii3m5VBu9dvXd/kmSlIFhRz5qmITgczA
+         FHhXchJNP9oJLi+6bKJEwn7x42YDUUCbWBOob3kJSm1qRDZWt3H5mQzHWh4urebns+5b
+         5xVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5/BwFuyLCE0YC1VrRpwJaeR7r7nd3662buUSc8fCkUI=;
-        b=5VP5i27Uvdn9Lh3+qRCD+l4Igt+dpFynedHAR30bS3l+9Tu/Z9imYjsKS81nfFiHoq
-         orAAZefVx7WIPZ8sL3SH45JObW41zBClbe08k19sy6XxZxuCkiEFa4wi+xY95vpIn9UT
-         d1R5qk9EqtV0mIO3QmSg57ZjxbkZmqlHleWU6qpNJ1dYHibjbZjITRKvp9GSAonj8vNP
-         SdpndErkJAgXSfaI+h3Ow2Xu97omhd7+FkPaxCCM1Jrl8R+age8wK5wwDcE+m4BnxV7u
-         7JGZizUttDXLQUQasaMqGYmI/AaNfEtAv5Az2ylqdLb/LadtD4Leb/6mdubb89S+rx5c
-         NEMQ==
-X-Gm-Message-State: AFqh2kp35TsvyTDU2V0rhyLDz8sgS+L6p5FuYRVegFlhcYxNNIRc5gCZ
-        asWH+rMxvfTDWdjrqlWxgB1UNjN+gk2ADc8ZcxM=
-X-Google-Smtp-Source: AMrXdXsr7ZyRaSv3Qvyf8BTVSfrRv/hiuZCYOq0HzBRir5P+aNyn6502oWYzIRYKx7YcN572l8lpXKRoJiecVTnX9Ls=
-X-Received: by 2002:a92:ce03:0:b0:30a:d251:a313 with SMTP id
- b3-20020a92ce03000000b0030ad251a313mr7822836ilo.83.1673378526489; Tue, 10 Jan
- 2023 11:22:06 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EIQZzMj+NHdju0t2ECocoqq5GGkKwpX9WdATXuG5dps=;
+        b=PFMf/xVxSTEgxl/ievU3sngdBQQr1qHsbQxg5Dzzr0snbgmpW0uKPAoejQJCvwjdWZ
+         omR01mMxJsvWSnhqtX6tQpYCKc/laT52tEQz7dAQB0PJyS1g6cvNi6mGW+C5auzzb3tP
+         9q5tPVTsVF0aSseO2kX4OCpsiZAEpzF9JnfrXq0NKusynn6NzwvUdMVMuzwhOj1OfeLP
+         R/mXn2Vm06+t0D2tw8FCo7H7ndZV4u+1UHZ2D99y64eeLJbTsGtDAHd9RBiJgy6C8BGU
+         Vli0dChRr3e4tmMLBEB6i2gO+VMfYJLblas/QtkCGq41lfIVqpwGNp9LpQs18F0dIrWZ
+         6EaA==
+X-Gm-Message-State: AFqh2kpNg0Ae6DAtHmESr3mqdXx9g9G+3tXyYz9xLhf+7VxXsIrUATGt
+        lUHJGIVjzY1dC2I/FoMqEBauaw==
+X-Google-Smtp-Source: AMrXdXsQ3jXXQ+9/7MqQL1QO2A97thYMfY62C5s3DqLGlNpE1/eOFpvuP28NAtdEmN5G5Jivb2s+yA==
+X-Received: by 2002:a05:600c:4d20:b0:3d3:5737:3afb with SMTP id u32-20020a05600c4d2000b003d357373afbmr51067099wmp.41.1673378561804;
+        Tue, 10 Jan 2023 11:22:41 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id l14-20020a05600c4f0e00b003d96c811d6dsm22284343wmq.30.2023.01.10.11.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 11:22:41 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Tue, 10 Jan 2023 20:22:36 +0100
+Subject: [PATCH v2 1/3] arm64: dts: qcom: sm8550: add display hardware devices
 MIME-Version: 1.0
-References: <20221229124728.66515-1-yangjihong1@huawei.com>
- <Y7MEWK/z19QCaNoi@kernel.org> <CAM9d7cjcWKBephb5p9ZPU2+wDAz04DYQJoKczORioD=es10hPw@mail.gmail.com>
- <c65f89ef-173c-b828-f3b2-266387903149@huawei.com> <CAM9d7chN9ecR7EgA1eN1QQXypZDwCFC-ym6BTQ0d1_XjuruLFw@mail.gmail.com>
- <a08af34e-acf2-d370-06bb-ea43d467f89d@huawei.com>
-In-Reply-To: <a08af34e-acf2-d370-06bb-ea43d467f89d@huawei.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 10 Jan 2023 11:21:54 -0800
-Message-ID: <CAM9d7ci_TRrqBQVQNW8=GwakUr7SsZpYxaaty-S4bxF8zJWyqw@mail.gmail.com>
-Subject: Re: [PATCH v2] perf record: Fix coredump with --overwrite and --max-size
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        jiwei.sun@windriver.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230104-topic-sm8550-upstream-dts-display-v2-1-9fbb15263e0d@linaro.org>
+References: <20230104-topic-sm8550-upstream-dts-display-v2-0-9fbb15263e0d@linaro.org>
+In-Reply-To: <20230104-topic-sm8550-upstream-dts-display-v2-0-9fbb15263e0d@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 8, 2023 at 6:47 PM Yang Jihong <yangjihong1@huawei.com> wrote:
->
-> Hello,
->
-> On 2023/1/7 5:12, Namhyung Kim wrote:
-> > Hello,
-> >
-> > On Wed, Jan 4, 2023 at 8:09 PM Yang Jihong <yangjihong1@huawei.com> wrote:
-> >>
-> >> Hello,
-> >>
-> >> On 2023/1/4 0:50, Namhyung Kim wrote:
-> >>> On Mon, Jan 2, 2023 at 8:20 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >>>>
-> >>>> Em Thu, Dec 29, 2022 at 12:47:28PM +0000, Yang Jihong escreveu:
-> >>>>> When --overwrite and --max-size options of perf record are used together,
-> >>>>> a segmentation fault occurs. The following is an example:
-> >>>>>
-> >>>>>    # perf record -e sched:sched* --overwrite --max-size 1M -a -- sleep 1
-> >>>>>     [ perf record: Woken up 1 times to write data ]
-> >>>>>     perf: Segmentation fault
-> >>>>>     Obtained 1 stack frames.
-> >>>>>     [0xc4c67f]
-> >>>>>     Segmentation fault (core dumped)
-> >>>>>
-> >>>>> backtrace of the core file is as follows:
-> >>>>>
-> >>>>>     #0  0x0000000000417990 in process_locked_synthesized_event (tool=0x0, event=0x15, sample=0x1de0, machine=0xf8) at builtin-record.c:630
-> >>>>>     #1  0x000000000057ee53 in perf_event__synthesize_threads (nr_threads_synthesize=21, mmap_data=<optimized out>, needs_mmap=<optimized out>, machine=0x17ad9b0, process=<optimized out>, tool=0x0) at util/synthetic-events.c:1950
-> >>>>>     #2  __machine__synthesize_threads (nr_threads_synthesize=0, data_mmap=<optimized out>, needs_mmap=<optimized out>, process=<optimized out>, threads=0x8, target=0x8, tool=0x0, machine=0x17ad9b0) at util/synthetic-events.c:1936
-> >>>>>     #3  machine__synthesize_threads (machine=0x17ad9b0, target=0x8, threads=0x8, needs_mmap=<optimized out>, data_mmap=<optimized out>, nr_threads_synthesize=0) at util/synthetic-events.c:1947
-> >>>>>     #4  0x000000000040165d in record__synthesize (tail=<optimized out>, rec=0xbe2520 <record>) at builtin-record.c:2010
-> >>>>>     #5  0x0000000000403989 in __cmd_record (argc=<optimized out>, argv=<optimized out>, rec=0xbe2520 <record>) at builtin-record.c:2810
-> >>>>>     #6  0x00000000004196ba in record__init_thread_user_masks (rec=0xbe2520 <record>, cpus=0x17a65f0) at builtin-record.c:3837
-> >>>>>     #7  record__init_thread_masks (rec=0xbe2520 <record>) at builtin-record.c:3938
-> >>>>>     #8  cmd_record (argc=1, argv=0x7ffdd692dc60) at builtin-record.c:4241
-> >>>>>     #9  0x00000000004b701d in pager_command_config (var=0x0, value=0x15 <error: Cannot access memory at address 0x15>, data=0x1de0) at perf.c:117
-> >>>>>     #10 0x00000000004b732b in get_leaf_frame_caller_aarch64 (sample=0xfffffffb, thread=0x0, usr_idx=<optimized out>) at util/arm64-frame-pointer-unwind-support.c:56
-> >>>>>     #11 0x0000000000406331 in execv_dashed_external (argv=0x7ffdd692d9e8) at perf.c:410
-> >>>>>     #12 run_argv (argcp=<synthetic pointer>, argv=<synthetic pointer>) at perf.c:431
-> >>>>>     #13 main (argc=<optimized out>, argv=0x7ffdd692d9e8) at perf.c:562
-> >>>>>
-> >>>>> The reason is that record__bytes_written accesses the freed memory rec->thread_data,
-> >>>>> The process is as follows:
-> >>>>>     __cmd_record
-> >>>>>       -> record__free_thread_data
-> >>>>>         -> zfree(&rec->thread_data)         // free rec->thread_data
-> >>>>>       -> record__synthesize
-> >>>>>         -> perf_event__synthesize_id_index
-> >>>>>           -> process_synthesized_event
-> >>>>>             -> record__write
-> >>>>>               -> record__bytes_written     // access rec->thread_data
-> >>>>>
-> >>>>> we only need to check the value of done first.
-> >>>>> Also add variable check in record__bytes_written for code hardening,
-> >>>>> and save bytes_written separately to reduce one calculation.
-> >>>>>
-> >>>>> Fixes: 6d57581659f7 ("perf record: Add support for limit perf output file size")
-> >>>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> >>>>> ---
-> >>>>>
-> >>>>> Changes since v1:
-> >>>>>    - Add variable check in record__bytes_written for code hardening.
-> >>>>>    - Save bytes_written separately to reduce one calculation.
-> >>>>>    - Remove rec->opts.tail_synthesize check.
-> >>>>
-> >>>> Namhyung, are you ok with this now?
-> >>>>
-> >>>> - Arnaldo
-> >>>>
-> >>>>>    tools/perf/builtin-record.c | 26 +++++++++++++++++---------
-> >>>>>    1 file changed, 17 insertions(+), 9 deletions(-)
-> >>>>>
-> >>>>> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> >>>>> index 29dcd454b8e2..acba9e43e519 100644
-> >>>>> --- a/tools/perf/builtin-record.c
-> >>>>> +++ b/tools/perf/builtin-record.c
-> >>>>> @@ -230,16 +230,29 @@ static u64 record__bytes_written(struct record *rec)
-> >>>>>         u64 bytes_written = rec->bytes_written;
-> >>>>>         struct record_thread *thread_data = rec->thread_data;
-> >>>>>
-> >>>>> +     if (thread_data == NULL)
-> >>>>> +             return bytes_written;
-> >>>>> +
-> >>>
-> >>> Then it won't count bytes written by threads, right?
-> >>> I think it needs to be saved somewhere.
-> >>>
-> >> I'm not sure here. Can you explain it more clearly, thanks :)
-> >> I can modify it accordingly.
-> >>
-> >> I think if thread_data == NULL, it is not thread data.
-> >> In this case, we just return rec->bytes_written.
-> >
-> > It can be thread data but freed before tail synthesis, right?
-> > In that case, I think it needs to add bytes_written by threads
-> > to calculate the correct data size.
-> Em... In the __cmd_record function, record__stop_threads is called
-> before record__free_thread_data, so if the thread has been freed, there
-> will be no thread data.
-> I think it's okay to ignore the situation you mentioned above.
+Add devices tree nodes describing display hardware on SM8550:
+- Display Clock Controller
+- MDSS
+- MDP
+- two DSI controllers and DSI PHYs
 
-Right, the thread data is already freed, but we need the size.
+This does not provide support for DP controllers present on the SM8550.
 
-I think it didn't (and won't) update to rec->bytes_written for the data
-written by the threads (data.X file) because it's only for the main
-'data' file.  So record__bytes_written() will return a smaller number
-after the threads are gone.  But I think it should return the total
-data size.
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8550.dtsi | 299 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 299 insertions(+)
 
-Thanks,
-Namhyung
+diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+index 2d9377e01c3f..243fffa19c35 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+@@ -6,6 +6,7 @@
+ #include <dt-bindings/clock/qcom,rpmh.h>
+ #include <dt-bindings/clock/qcom,sm8550-gcc.h>
+ #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
++#include <dt-bindings/clock/qcom,sm8550-dispcc.h>
+ #include <dt-bindings/dma/qcom-gpi.h>
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+@@ -1455,6 +1456,304 @@ opp-202000000 {
+ 			};
+ 		};
+ 
++		mdss: display-subsystem@ae00000 {
++			compatible = "qcom,sm8550-mdss";
++			reg = <0 0x0ae00000 0 0x1000>;
++			reg-names = "mdss";
++
++			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
++
++			clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++				 <&gcc GCC_DISP_AHB_CLK>,
++				 <&gcc GCC_DISP_HF_AXI_CLK>,
++				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
++
++			resets = <&dispcc DISP_CC_MDSS_CORE_BCR>;
++
++			power-domains = <&dispcc MDSS_GDSC>;
++
++			interconnects = <&mmss_noc MASTER_MDP 0 &gem_noc SLAVE_LLCC 0>,
++				        <&mc_virt MASTER_LLCC 0 &mc_virt SLAVE_EBI1 0>;
++			interconnect-names = "mdp0-mem", "mdp1-mem";
++
++			iommus = <&apps_smmu 0x1c00 0x2>;
++
++			#address-cells = <2>;
++			#size-cells = <2>;
++			ranges;
++
++			status = "disabled";
++
++			mdss_mdp: display-controller@ae01000 {
++				compatible = "qcom,sm8550-dpu";
++				reg = <0 0x0ae01000 0 0x8f000>,
++				      <0 0x0aeb0000 0 0x2008>;
++				reg-names = "mdp", "vbif";
++
++				interrupt-parent = <&mdss>;
++				interrupts = <0>;
++
++				clocks = <&gcc GCC_DISP_AHB_CLK>,
++					<&gcc GCC_DISP_HF_AXI_CLK>,
++					<&dispcc DISP_CC_MDSS_AHB_CLK>,
++					<&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
++					<&dispcc DISP_CC_MDSS_MDP_CLK>,
++					<&dispcc DISP_CC_MDSS_VSYNC_CLK>;
++				clock-names = "bus",
++					      "nrt_bus",
++					      "iface",
++					      "lut",
++					      "core",
++					      "vsync";
++
++				power-domains = <&rpmhpd SM8550_MMCX>;
++
++				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
++				assigned-clock-rates = <19200000>;
++
++				operating-points-v2 = <&mdp_opp_table>;
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						dpu_intf1_out: endpoint {
++							remote-endpoint = <&mdss_dsi0_in>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						dpu_intf2_out: endpoint {
++							remote-endpoint = <&mdss_dsi1_in>;
++						};
++					};
++				};
++
++				mdp_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					opp-200000000 {
++						opp-hz = /bits/ 64 <200000000>;
++						required-opps = <&rpmhpd_opp_low_svs>;
++					};
++
++					opp-325000000 {
++						opp-hz = /bits/ 64 <325000000>;
++						required-opps = <&rpmhpd_opp_svs>;
++					};
++
++					opp-375000000 {
++						opp-hz = /bits/ 64 <375000000>;
++						required-opps = <&rpmhpd_opp_svs_l1>;
++					};
++
++					opp-514000000 {
++						opp-hz = /bits/ 64 <514000000>;
++						required-opps = <&rpmhpd_opp_nom>;
++					};
++				};
++			};
++
++			mdss_dsi0: dsi@ae94000 {
++				compatible = "qcom,mdss-dsi-ctrl";
++				reg = <0 0x0ae94000 0 0x400>;
++				reg-names = "dsi_ctrl";
++
++				interrupt-parent = <&mdss>;
++				interrupts = <4>;
++
++				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
++					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
++					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
++					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
++					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&gcc GCC_DISP_HF_AXI_CLK>;
++				clock-names = "byte",
++					      "byte_intf",
++					      "pixel",
++					      "core",
++					      "iface",
++					      "bus";
++
++				power-domains = <&rpmhpd SM8550_MMCX>;
++
++				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>, <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
++				assigned-clock-parents = <&mdss_dsi0_phy 0>, <&mdss_dsi0_phy 1>;
++
++				operating-points-v2 = <&mdss_dsi_opp_table>;
++
++				phys = <&mdss_dsi0_phy>;
++				phy-names = "dsi";
++
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						mdss_dsi0_in: endpoint {
++							remote-endpoint = <&dpu_intf1_out>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						mdss_dsi0_out: endpoint {
++						};
++					};
++				};
++
++				mdss_dsi_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					opp-187500000 {
++						opp-hz = /bits/ 64 <187500000>;
++						required-opps = <&rpmhpd_opp_low_svs>;
++					};
++
++					opp-300000000 {
++						opp-hz = /bits/ 64 <300000000>;
++						required-opps = <&rpmhpd_opp_svs>;
++					};
++
++					opp-358000000 {
++						opp-hz = /bits/ 64 <358000000>;
++						required-opps = <&rpmhpd_opp_svs_l1>;
++					};
++				};
++			};
++
++			mdss_dsi0_phy: phy@ae95000 {
++				compatible = "qcom,sm8550-dsi-phy-4nm";
++				reg = <0 0x0ae95000 0 0x200>,
++				      <0 0x0ae95200 0 0x280>,
++				      <0 0x0ae95500 0 0x400>;
++				reg-names = "dsi_phy",
++					    "dsi_phy_lane",
++					    "dsi_pll";
++
++				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&rpmhcc RPMH_CXO_CLK>;
++				clock-names = "iface", "ref";
++
++				#clock-cells = <1>;
++				#phy-cells = <0>;
++
++				status = "disabled";
++			};
++
++			mdss_dsi1: dsi@ae96000 {
++				compatible = "qcom,mdss-dsi-ctrl";
++				reg = <0 0x0ae96000 0 0x400>;
++				reg-names = "dsi_ctrl";
++
++				interrupt-parent = <&mdss>;
++				interrupts = <5>;
++
++				clocks = <&dispcc DISP_CC_MDSS_BYTE1_CLK>,
++					 <&dispcc DISP_CC_MDSS_BYTE1_INTF_CLK>,
++					 <&dispcc DISP_CC_MDSS_PCLK1_CLK>,
++					 <&dispcc DISP_CC_MDSS_ESC1_CLK>,
++					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&gcc GCC_DISP_HF_AXI_CLK>;
++				clock-names = "byte",
++					      "byte_intf",
++					      "pixel",
++					      "core",
++					      "iface",
++					      "bus";
++
++				power-domains = <&rpmhpd SM8550_MMCX>;
++
++				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE1_CLK_SRC>, <&dispcc DISP_CC_MDSS_PCLK1_CLK_SRC>;
++				assigned-clock-parents = <&mdss_dsi1_phy 0>, <&mdss_dsi1_phy 1>;
++
++				operating-points-v2 = <&mdss_dsi_opp_table>;
++
++				phys = <&mdss_dsi1_phy>;
++				phy-names = "dsi";
++
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						mdss_dsi1_in: endpoint {
++							remote-endpoint = <&dpu_intf2_out>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						mdss_dsi1_out: endpoint {
++						};
++					};
++				};
++			};
++
++			mdss_dsi1_phy: phy@ae97000 {
++				compatible = "qcom,sm8550-dsi-phy-4nm";
++				reg = <0 0x0ae97000 0 0x200>,
++				      <0 0x0ae97200 0 0x280>,
++				      <0 0x0ae97500 0 0x400>;
++				reg-names = "dsi_phy",
++					    "dsi_phy_lane",
++					    "dsi_pll";
++
++				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&rpmhcc RPMH_CXO_CLK>;
++				clock-names = "iface", "ref";
++
++				#clock-cells = <1>;
++				#phy-cells = <0>;
++
++				status = "disabled";
++			};
++		};
++
++		dispcc: clock-controller@af00000 {
++			compatible = "qcom,sm8550-dispcc";
++			reg = <0 0x0af00000 0 0x20000>;
++			clocks = <&bi_tcxo_div2>,
++				 <&bi_tcxo_ao_div2>,
++				 <&gcc GCC_DISP_AHB_CLK>,
++				 <&sleep_clk>,
++				 <&mdss_dsi0_phy 0>,
++				 <&mdss_dsi0_phy 1>,
++				 <&mdss_dsi1_phy 0>,
++				 <&mdss_dsi1_phy 1>,
++				 <0>, /* dp0 */
++				 <0>,
++				 <0>, /* dp1 */
++				 <0>,
++				 <0>, /* dp2 */
++				 <0>,
++				 <0>, /* dp3 */
++				 <0>;
++			power-domains = <&rpmhpd SM8550_MMCX>;
++			required-opps = <&rpmhpd_opp_low_svs>;
++			#clock-cells = <1>;
++			#reset-cells = <1>;
++			#power-domain-cells = <1>;
++			status = "disabled";
++		};
++
+ 		pdc: interrupt-controller@b220000 {
+ 			compatible = "qcom,sm8550-pdc", "qcom,pdc";
+ 			reg = <0 0x0b220000 0 0x30000>, <0 0x174000f0 0 0x64>;
+
+-- 
+2.34.1
