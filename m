@@ -2,86 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0E3663C7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33698663C8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjAJJPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S238056AbjAJJRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:17:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjAJJPA (ORCPT
+        with ESMTP id S231970AbjAJJQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:15:00 -0500
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2BD4EC94;
-        Tue, 10 Jan 2023 01:14:57 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id CD4821864572;
-        Tue, 10 Jan 2023 12:14:54 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id F9XLH-le2lZG; Tue, 10 Jan 2023 12:14:54 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 8241418643D6;
-        Tue, 10 Jan 2023 12:14:54 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WcjL9nXLjwvC; Tue, 10 Jan 2023 12:14:54 +0300 (MSK)
-Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.58])
-        by mail.astralinux.ru (Postfix) with ESMTPSA id AA1A91863E47;
-        Tue, 10 Jan 2023 12:14:53 +0300 (MSK)
-From:   Anastasia Belova <abelova@astralinux.ru>
-To:     Steffen Klassert <steffen.klassert@secunet.com>
-Cc:     Anastasia Belova <abelova@astralinux.ru>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] xfrm: compat: change expression for switch in xfrm_xlate64
-Date:   Tue, 10 Jan 2023 12:14:50 +0300
-Message-Id: <20230110091450.21696-1-abelova@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
+        Tue, 10 Jan 2023 04:16:56 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909945F44
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:16:53 -0800 (PST)
+X-UUID: fa10b7af4f5c49b5ae1258a0217371a9-20230110
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Z5SWkjHFUcPB57dyxsSgJTsbrRzl7x0XxIf/mFqL7yw=;
+        b=j7Pf0BJc2MoPMybzbx1S16kARn8UrWorsWxdfOR1Yl9QFMHp1yTfZio3BOWMdDjI9fP5jrzpyIccWfI79mRB3XRD+qO57mcGsRCXZUWELzTTJnaZRhiHAqTeyMflABZAcqw6MMawCKl4AqBdWdYbCfeHto8AgTcZh886JjY7eO8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:bdd86dd3-3a10-4946-8296-8c6bce57a676,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.17,REQID:bdd86dd3-3a10-4946-8296-8c6bce57a676,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:543e81c,CLOUDID:ac4d62f5-ff42-4fb0-b929-626456a83c14,B
+        ulkID:230110171651TYF6DIFR,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0
+X-CID-BVR: 0,NGT
+X-UUID: fa10b7af4f5c49b5ae1258a0217371a9-20230110
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 548763566; Tue, 10 Jan 2023 17:16:50 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 10 Jan 2023 17:16:49 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 10 Jan 2023 17:16:49 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        Miles Chen <miles.chen@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH] drm/mediatek: include missing headers
+Date:   Tue, 10 Jan 2023 17:16:46 +0800
+Message-ID: <20230110091647.13265-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compare XFRM_MSG_NEWSPDINFO (value from netlink
-configuration messages enum) with nlh_src->nlmsg_type
-instead of nlh_src->nlmsg_type - XFRM_MSG_BASE.
+Fix the follow sparse warnings by adding missing headers:
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+drivers/gpu/drm/mediatek/mtk_cec.c:251:24: sparse: warning: symbol 'mtk_cec_driver' was not declared. Should it be static?
+drivers/gpu/drm/mediatek/mtk_disp_ccorr.c:221:24: sparse: warning: symbol 'mtk_disp_ccorr_driver' was not declared. Should it be static?
+drivers/gpu/drm/mediatek/mtk_disp_rdma.c:390:24: sparse: warning: symbol 'mtk_disp_rdma_driver' was not declared. Should it be static?
+drivers/gpu/drm/mediatek/mtk_disp_gamma.c:209:24: sparse: warning: symbol 'mtk_disp_gamma_driver' was not declared. Should it be static?
+drivers/gpu/drm/mediatek/mtk_disp_ovl.c:565:24: sparse: warning: symbol 'mtk_disp_ovl_driver' was not declared. Should it be static?
+drivers/gpu/drm/mediatek/mtk_disp_color.c:164:24: sparse: warning: symbol 'mtk_disp_color_driver' was not declared. Should it be static?
+drivers/gpu/drm/mediatek/mtk_disp_aal.c:161:24: sparse: warning: symbol 'mtk_disp_aal_driver' was not declared. Should it be static?
+drivers/gpu/drm/mediatek/mtk_dpi.c:1109:24: sparse: warning: symbol 'mtk_dpi_driver' was not declared. Should it be static?
+drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c:340:24: sparse: warning: symbol 'mtk_hdmi_ddc_driver' was not declared. Should it be static?
+drivers/gpu/drm/mediatek/mtk_dsi.c:1223:24: sparse: warning: symbol 'mtk_dsi_driver' was not declared. Should it be static?
 
-Fixes: 4e9505064f58 ("net/xfrm/compat: Copy xfrm_spdattr_type_t atributes=
-")
-Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+Signed-off-by: Miles Chen <miles.chen@mediatek.com>
 ---
- net/xfrm/xfrm_compat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/mediatek/mtk_cec.c        | 2 ++
+ drivers/gpu/drm/mediatek/mtk_disp_aal.c   | 1 +
+ drivers/gpu/drm/mediatek/mtk_disp_ccorr.c | 1 +
+ drivers/gpu/drm/mediatek/mtk_disp_color.c | 1 +
+ drivers/gpu/drm/mediatek/mtk_disp_gamma.c | 1 +
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c   | 1 +
+ drivers/gpu/drm/mediatek/mtk_disp_rdma.c  | 1 +
+ drivers/gpu/drm/mediatek/mtk_dpi.c        | 1 +
+ drivers/gpu/drm/mediatek/mtk_dsi.c        | 1 +
+ drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c   | 3 +++
+ 10 files changed, 13 insertions(+)
 
-diff --git a/net/xfrm/xfrm_compat.c b/net/xfrm/xfrm_compat.c
-index a0f62fa02e06..12405aa5bce8 100644
---- a/net/xfrm/xfrm_compat.c
-+++ b/net/xfrm/xfrm_compat.c
-@@ -302,7 +302,7 @@ static int xfrm_xlate64(struct sk_buff *dst, const st=
-ruct nlmsghdr *nlh_src)
- 	nla_for_each_attr(nla, attrs, len, remaining) {
- 		int err;
-=20
--		switch (type) {
-+		switch (nlh_src->nlmsg_type) {
- 		case XFRM_MSG_NEWSPDINFO:
- 			err =3D xfrm_nla_cpy(dst, nla, nla_len(nla));
- 			break;
---=20
-2.30.2
+diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
+index cdfa648910b2..b640bc0559e7 100644
+--- a/drivers/gpu/drm/mediatek/mtk_cec.c
++++ b/drivers/gpu/drm/mediatek/mtk_cec.c
+@@ -12,6 +12,8 @@
+ #include <linux/platform_device.h>
+ 
+ #include "mtk_cec.h"
++#include "mtk_hdmi.h"
++#include "mtk_drm_drv.h"
+ 
+ #define TR_CONFIG		0x00
+ #define CLEAR_CEC_IRQ			BIT(15)
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_aal.c b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+index 0f9d7efb61d7..434e8a9ce8ab 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+@@ -14,6 +14,7 @@
+ #include "mtk_disp_drv.h"
+ #include "mtk_drm_crtc.h"
+ #include "mtk_drm_ddp_comp.h"
++#include "mtk_drm_drv.h"
+ 
+ #define DISP_AAL_EN				0x0000
+ #define AAL_EN						BIT(0)
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c b/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
+index 3a53ebc4e172..1773379b2439 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
+@@ -14,6 +14,7 @@
+ #include "mtk_disp_drv.h"
+ #include "mtk_drm_crtc.h"
+ #include "mtk_drm_ddp_comp.h"
++#include "mtk_drm_drv.h"
+ 
+ #define DISP_CCORR_EN				0x0000
+ #define CCORR_EN					BIT(0)
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_color.c b/drivers/gpu/drm/mediatek/mtk_disp_color.c
+index 473f5bb5cbad..cac9206079e7 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_color.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_color.c
+@@ -14,6 +14,7 @@
+ #include "mtk_disp_drv.h"
+ #include "mtk_drm_crtc.h"
+ #include "mtk_drm_ddp_comp.h"
++#include "mtk_drm_drv.h"
+ 
+ #define DISP_COLOR_CFG_MAIN			0x0400
+ #define DISP_COLOR_START_MT2701			0x0f00
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+index bbd558a036ec..c844942603f7 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+@@ -14,6 +14,7 @@
+ #include "mtk_disp_drv.h"
+ #include "mtk_drm_crtc.h"
+ #include "mtk_drm_ddp_comp.h"
++#include "mtk_drm_drv.h"
+ 
+ #define DISP_GAMMA_EN				0x0000
+ #define GAMMA_EN					BIT(0)
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+index 84daeaffab6a..9d8c986700ee 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+@@ -19,6 +19,7 @@
+ #include "mtk_disp_drv.h"
+ #include "mtk_drm_crtc.h"
+ #include "mtk_drm_ddp_comp.h"
++#include "mtk_drm_drv.h"
+ 
+ #define DISP_REG_OVL_INTEN			0x0004
+ #define OVL_FME_CPL_INT					BIT(1)
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+index 0ec2e4049e07..a5a0c3bac35d 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+@@ -17,6 +17,7 @@
+ #include "mtk_disp_drv.h"
+ #include "mtk_drm_crtc.h"
+ #include "mtk_drm_ddp_comp.h"
++#include "mtk_drm_drv.h"
+ 
+ #define DISP_REG_RDMA_INT_ENABLE		0x0000
+ #define DISP_REG_RDMA_INT_STATUS		0x0004
+diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+index 4317595a15d1..3158dd3896a8 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dpi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+@@ -29,6 +29,7 @@
+ #include "mtk_disp_drv.h"
+ #include "mtk_dpi_regs.h"
+ #include "mtk_drm_ddp_comp.h"
++#include "mtk_drm_drv.h"
+ 
+ enum mtk_dpi_out_bit_num {
+ 	MTK_DPI_OUT_BIT_NUM_8BITS,
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index 3b7d13028fb6..357301fa2e7d 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -28,6 +28,7 @@
+ 
+ #include "mtk_disp_drv.h"
+ #include "mtk_drm_ddp_comp.h"
++#include "mtk_drm_drv.h"
+ 
+ #define DSI_START		0x00
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c b/drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c
+index 6207eac88550..2fc9214ffa82 100644
+--- a/drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c
++++ b/drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c
+@@ -19,6 +19,9 @@
+ #include <linux/of_irq.h>
+ #include <linux/of_platform.h>
+ 
++#include "mtk_drm_drv.h"
++#include "mtk_hdmi.h"
++
+ #define SIF1_CLOK		(288)
+ #define DDC_DDCMCTL0		(0x0)
+ #define DDCM_ODRAIN			BIT(31)
+-- 
+2.18.0
 
