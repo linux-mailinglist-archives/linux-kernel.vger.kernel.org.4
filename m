@@ -2,244 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6474663D79
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F459663D7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjAJKC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S229681AbjAJKFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjAJKCw (ORCPT
+        with ESMTP id S231329AbjAJKFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:02:52 -0500
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E28413EBE
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:02:49 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VZIrv3t_1673344965;
-Received: from 30.97.48.74(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VZIrv3t_1673344965)
-          by smtp.aliyun-inc.com;
-          Tue, 10 Jan 2023 18:02:46 +0800
-Message-ID: <9d27d10c-ba9a-045d-c170-fa3c4d6ea416@linux.alibaba.com>
-Date:   Tue, 10 Jan 2023 18:03:09 +0800
+        Tue, 10 Jan 2023 05:05:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5300850061;
+        Tue, 10 Jan 2023 02:05:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B199AB81133;
+        Tue, 10 Jan 2023 10:05:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A12C433EF;
+        Tue, 10 Jan 2023 10:05:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673345127;
+        bh=9jjmUW62X5BAqte0/4wI9dpcaebEZ8SUIffif9k/TY8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X9MPj+MQ6WMeEBx8Qp0R49zCdRaJv8S0llfLSlMrSSnzR9ko9kwbT+38huoOFjk+U
+         96wMYq7WDgmwT3SLLvDONmA+ElEHfurgIewosvml8fvxHUMNhd7WPHbrVgmSDyGrSI
+         k8oHNRMbYu0ZDD0gQkaS6u22lGY7LEgBgBejRpW5oQvNt9oU+SvkxwLSYUgmI1qBkV
+         bg3uxRhpt5nscuJq+s/LQkEv9Qla7C0s8OS885bzafwUiEwWd25KCkR8gib7h05TMZ
+         4h/t0HcAQ7GGFo9j7FnShRz8gmQTskotBNqYzD7Q+oaX8PP1QssnLhweLIKCXClBJK
+         RHvnV1AHWnKpw==
+Date:   Tue, 10 Jan 2023 10:05:20 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 01/10] mfd: intel-m10-bmc: Create m10bmc_platform_info
+ for type specific info
+Message-ID: <Y704YEVolcdwY7L4@google.com>
+References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com>
+ <20221226175849.13056-2-ilpo.jarvinen@linux.intel.com>
+ <Y7xSQde3pzcOIu+X@google.com>
+ <1ffa5844-f5ce-e56a-7ed9-9ba434904b6d@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH -v2 1/9] migrate_pages: organize stats with struct
- migrate_pages_stats
-To:     Huang Ying <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Alistair Popple <apopple@nvidia.com>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Bharata B Rao <bharata@amd.com>,
-        haoxin <xhao@linux.alibaba.com>
-References: <20230110075327.590514-1-ying.huang@intel.com>
- <20230110075327.590514-2-ying.huang@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20230110075327.590514-2-ying.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1ffa5844-f5ce-e56a-7ed9-9ba434904b6d@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 09 Jan 2023, Ilpo Järvinen wrote:
 
-
-On 1/10/2023 3:53 PM, Huang Ying wrote:
-> Define struct migrate_pages_stats to organize the various statistics
-> in migrate_pages().  This makes it easier to collect and consume the
-> statistics in multiple functions.  This will be needed in the
-> following patches in the series.
+> On Mon, 9 Jan 2023, Lee Jones wrote:
 > 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Reviewed-by: Alistair Popple <apopple@nvidia.com>
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Bharata B Rao <bharata@amd.com>
-> Cc: haoxin <xhao@linux.alibaba.com>
-> ---
->   mm/migrate.c | 60 +++++++++++++++++++++++++++++-----------------------
->   1 file changed, 34 insertions(+), 26 deletions(-)
+> > On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
+> > 
+> > > BMC type specific info is currently set by a switch/case block. The
+> > > size of this info is expected to grow as more dev types and features
+> > > are added which would have made the switch block bloaty.
+> > > 
+> > > Store type specific info into struct and place them into .driver_data
+> > > instead because it makes things a bit cleaner.
+> > > 
+> > > The m10bmc_type enum can be dropped as the differentiation is now
+> > > fully handled by the platform info.
+> > > 
+> > > The info member of struct intel_m10bmc that is added here is not used
+> > > yet in this change but its addition logically still belongs to this
+> > > change. The CSR map change that comes after this change needs to have
+> > > the info member.
+> > > 
+> > > Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> > > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > ---
+> > >  drivers/mfd/intel-m10-bmc.c       | 53 ++++++++++++++-----------------
+> > >  include/linux/mfd/intel-m10-bmc.h | 12 +++++++
+> > >  2 files changed, 36 insertions(+), 29 deletions(-)
+> > > 
+> > > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> > > index 7e3319e5b22f..12c522c16d83 100644
+> > > --- a/drivers/mfd/intel-m10-bmc.c
+> > > +++ b/drivers/mfd/intel-m10-bmc.c
+> > > @@ -13,12 +13,6 @@
+> > >  #include <linux/regmap.h>
+> > >  #include <linux/spi/spi.h>
+> > >  
+> > > -enum m10bmc_type {
+> > > -	M10_N3000,
+> > > -	M10_D5005,
+> > > -	M10_N5010,
+> > > -};
+> > > -
+> > >  static struct mfd_cell m10bmc_d5005_subdevs[] = {
+> > >  	{ .name = "d5005bmc-hwmon" },
+> > >  	{ .name = "d5005bmc-sec-update" }
+> > > @@ -162,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+> > >  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  {
+> > >  	const struct spi_device_id *id = spi_get_device_id(spi);
+> > > +	const struct intel_m10bmc_platform_info *info;
+> > >  	struct device *dev = &spi->dev;
+> > > -	struct mfd_cell *cells;
+> > >  	struct intel_m10bmc *ddata;
+> > > -	int ret, n_cell;
+> > > +	int ret;
+> > >  
+> > >  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
+> > >  	if (!ddata)
+> > >  		return -ENOMEM;
+> > >  
+> > > +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+> > > +	ddata->info = info;
+> > 
+> > Why are you keeping it?
 > 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index a4d3fc65085f..d21de40861a0 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1396,6 +1396,16 @@ static inline int try_split_folio(struct folio *folio, struct list_head *split_f
->   	return rc;
->   }
->   
-> +struct migrate_pages_stats {
-> +	int nr_succeeded;	/* Normal pages and THP migrated successfully, in units
-> +				   of base pages */
-> +	int nr_failed_pages;	/* Normal pages and THP failed to be migrated, in units
-> +				   of base pages.  Untried pages aren't counted */
+> There are plenty of users starting from patch 04. There will more users 
+> and members in the changes not included into this series. Thus, storing 
+> csr_map instead of info would not be forward-looking enough.
+> 
+> > >  	ddata->dev = dev;
+> > >  
+> > >  	ddata->regmap =
+> > > @@ -189,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > -	switch (id->driver_data) {
+> > > -	case M10_N3000:
+> > > -		cells = m10bmc_pacn3000_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
+> > > -		break;
+> > > -	case M10_D5005:
+> > > -		cells = m10bmc_d5005_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> > > -		break;
+> > > -	case M10_N5010:
+> > > -		cells = m10bmc_n5010_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> > > -		break;
+> > > -	default:
+> > > -		return -ENODEV;
+> > > -	}
+> > > -
+> > > -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
+> > > +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+> > > +				   info->cells, info->n_cells,
+> > >  				   NULL, 0, NULL);
+> > >  	if (ret)
+> > >  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+> > > @@ -214,10 +194,25 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  	return ret;
+> > >  }
+> > >  
+> > > +static const struct intel_m10bmc_platform_info m10bmc_spi_n3000 = {
+> > > +	.cells = m10bmc_pacn3000_subdevs,
+> > > +	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
+> > > +};
+> > 
+> > Not seeing how adding a whole new structure and swapping out 4 lines to
+> > describe a device for a different 4 lines per device is better?
+> > 
+> > I'm not necessarily against it.  Just seems like a bit of a pointless
+> > exercise.
+> 
+> After the BMC core/SPI split in a later patch in this series, there will 
+> be an init func in m10bmc core that will be called from spi side and 
+> after PMCI is added, from there too. 
+> 
+> With a structure, only a pointer to that will have to be passed to the 
+> init func rather than n parameters (there will be more members added into 
+> the info structure too both by changes in this series and in the ones not 
+> included to this series).
 
-I think above 2 fields also contain the number of hugetlb pages. 
-Otherwise looks good to me.
+Very well.  Please consider these review comments as tentative, until I
+get a chance to dig deeper into the patch-set.
 
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
-
-> +	int nr_thp_succeeded;	/* THP migrated successfully */
-> +	int nr_thp_failed;	/* THP failed to be migrated */
-> +	int nr_thp_split;	/* THP split before migrating */
-> +};
-> +
->   /*
->    * migrate_pages - migrate the folios specified in a list, to the free folios
->    *		   supplied as the target for the page migration
-> @@ -1430,13 +1440,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   	int large_retry = 1;
->   	int thp_retry = 1;
->   	int nr_failed = 0;
-> -	int nr_failed_pages = 0;
->   	int nr_retry_pages = 0;
-> -	int nr_succeeded = 0;
-> -	int nr_thp_succeeded = 0;
->   	int nr_large_failed = 0;
-> -	int nr_thp_failed = 0;
-> -	int nr_thp_split = 0;
->   	int pass = 0;
->   	bool is_large = false;
->   	bool is_thp = false;
-> @@ -1446,9 +1451,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   	LIST_HEAD(split_folios);
->   	bool nosplit = (reason == MR_NUMA_MISPLACED);
->   	bool no_split_folio_counting = false;
-> +	struct migrate_pages_stats stats;
->   
->   	trace_mm_migrate_pages_start(mode, reason);
->   
-> +	memset(&stats, 0, sizeof(stats));
->   split_folio_migration:
->   	for (pass = 0; pass < 10 && (retry || large_retry); pass++) {
->   		retry = 0;
-> @@ -1502,9 +1509,9 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   				/* Large folio migration is unsupported */
->   				if (is_large) {
->   					nr_large_failed++;
-> -					nr_thp_failed += is_thp;
-> +					stats.nr_thp_failed += is_thp;
->   					if (!try_split_folio(folio, &split_folios)) {
-> -						nr_thp_split += is_thp;
-> +						stats.nr_thp_split += is_thp;
->   						break;
->   					}
->   				/* Hugetlb migration is unsupported */
-> @@ -1512,7 +1519,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   					nr_failed++;
->   				}
->   
-> -				nr_failed_pages += nr_pages;
-> +				stats.nr_failed_pages += nr_pages;
->   				list_move_tail(&folio->lru, &ret_folios);
->   				break;
->   			case -ENOMEM:
-> @@ -1522,13 +1529,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   				 */
->   				if (is_large) {
->   					nr_large_failed++;
-> -					nr_thp_failed += is_thp;
-> +					stats.nr_thp_failed += is_thp;
->   					/* Large folio NUMA faulting doesn't split to retry. */
->   					if (!nosplit) {
->   						int ret = try_split_folio(folio, &split_folios);
->   
->   						if (!ret) {
-> -							nr_thp_split += is_thp;
-> +							stats.nr_thp_split += is_thp;
->   							break;
->   						} else if (reason == MR_LONGTERM_PIN &&
->   							   ret == -EAGAIN) {
-> @@ -1546,7 +1553,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   					nr_failed++;
->   				}
->   
-> -				nr_failed_pages += nr_pages + nr_retry_pages;
-> +				stats.nr_failed_pages += nr_pages + nr_retry_pages;
->   				/*
->   				 * There might be some split folios of fail-to-migrate large
->   				 * folios left in split_folios list. Move them back to migration
-> @@ -1556,7 +1563,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   				list_splice_init(&split_folios, from);
->   				/* nr_failed isn't updated for not used */
->   				nr_large_failed += large_retry;
-> -				nr_thp_failed += thp_retry;
-> +				stats.nr_thp_failed += thp_retry;
->   				goto out;
->   			case -EAGAIN:
->   				if (is_large) {
-> @@ -1568,8 +1575,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   				nr_retry_pages += nr_pages;
->   				break;
->   			case MIGRATEPAGE_SUCCESS:
-> -				nr_succeeded += nr_pages;
-> -				nr_thp_succeeded += is_thp;
-> +				stats.nr_succeeded += nr_pages;
-> +				stats.nr_thp_succeeded += is_thp;
->   				break;
->   			default:
->   				/*
-> @@ -1580,20 +1587,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   				 */
->   				if (is_large) {
->   					nr_large_failed++;
-> -					nr_thp_failed += is_thp;
-> +					stats.nr_thp_failed += is_thp;
->   				} else if (!no_split_folio_counting) {
->   					nr_failed++;
->   				}
->   
-> -				nr_failed_pages += nr_pages;
-> +				stats.nr_failed_pages += nr_pages;
->   				break;
->   			}
->   		}
->   	}
->   	nr_failed += retry;
->   	nr_large_failed += large_retry;
-> -	nr_thp_failed += thp_retry;
-> -	nr_failed_pages += nr_retry_pages;
-> +	stats.nr_thp_failed += thp_retry;
-> +	stats.nr_failed_pages += nr_retry_pages;
->   	/*
->   	 * Try to migrate split folios of fail-to-migrate large folios, no
->   	 * nr_failed counting in this round, since all split folios of a
-> @@ -1626,16 +1633,17 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   	if (list_empty(from))
->   		rc = 0;
->   
-> -	count_vm_events(PGMIGRATE_SUCCESS, nr_succeeded);
-> -	count_vm_events(PGMIGRATE_FAIL, nr_failed_pages);
-> -	count_vm_events(THP_MIGRATION_SUCCESS, nr_thp_succeeded);
-> -	count_vm_events(THP_MIGRATION_FAIL, nr_thp_failed);
-> -	count_vm_events(THP_MIGRATION_SPLIT, nr_thp_split);
-> -	trace_mm_migrate_pages(nr_succeeded, nr_failed_pages, nr_thp_succeeded,
-> -			       nr_thp_failed, nr_thp_split, mode, reason);
-> +	count_vm_events(PGMIGRATE_SUCCESS, stats.nr_succeeded);
-> +	count_vm_events(PGMIGRATE_FAIL, stats.nr_failed_pages);
-> +	count_vm_events(THP_MIGRATION_SUCCESS, stats.nr_thp_succeeded);
-> +	count_vm_events(THP_MIGRATION_FAIL, stats.nr_thp_failed);
-> +	count_vm_events(THP_MIGRATION_SPLIT, stats.nr_thp_split);
-> +	trace_mm_migrate_pages(stats.nr_succeeded, stats.nr_failed_pages,
-> +			       stats.nr_thp_succeeded, stats.nr_thp_failed,
-> +			       stats.nr_thp_split, mode, reason);
->   
->   	if (ret_succeeded)
-> -		*ret_succeeded = nr_succeeded;
-> +		*ret_succeeded = stats.nr_succeeded;
->   
->   	return rc;
->   }
+-- 
+Lee Jones [李琼斯]
