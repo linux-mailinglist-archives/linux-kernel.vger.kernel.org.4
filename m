@@ -2,77 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A005663D92
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDC8663D9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjAJKKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
+        id S232098AbjAJKLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:11:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbjAJKKb (ORCPT
+        with ESMTP id S231774AbjAJKLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:10:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA7D50077;
-        Tue, 10 Jan 2023 02:10:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B02836158C;
-        Tue, 10 Jan 2023 10:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA977C433D2;
-        Tue, 10 Jan 2023 10:10:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673345430;
-        bh=WtkD3fgcT/V/aD9xZUmo9gan+NObb/SCd4K+6eNjohE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q/K58+8xpC4PBOm0KszxKhDcgrUj0+54le4B9SiLlb3VeWwx5RQ+DflzkjhIi5Vig
-         3SYCbWl/juQd0aGsxXQU1U41tJOGGtx6J9fLoSTfzYrrGd0HFH3Y2cAy87hqp4fgL6
-         xqWSo9zhmw2G1EESaVlqIuKnC7CBPBi4BcT10Rdq9BHNqhh65c1KkrRdCGbAy1x09I
-         6blx9gLYfTMkb1eln/ViPPyj6m3VpTo4pLqvMEcf8Qt0G/m0cvFTePEdu4Az6D1zFH
-         aa9Nog4WpannORRtelSUPTaF0AXxhLP235LdOZd2TCRgMObRL928cEpykEA5VbvI0Z
-         svbMDslr+rUsQ==
-Date:   Tue, 10 Jan 2023 10:10:24 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v1 1/1] leds: is31fl319x: Wrap mutex_destroy() for
- devm_add_action_or_rest()
-Message-ID: <Y705kJht03zx9yzE@google.com>
-References: <20221228093238.82713-1-andriy.shevchenko@linux.intel.com>
- <Y7xJexzNrs4c7WP/@google.com>
- <Y7xQcmYZ8/aSkA2v@smile.fi.intel.com>
+        Tue, 10 Jan 2023 05:11:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDB650076
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:10:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673345449;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uuquTFMqRJVfYTO7+J+3i6OURVu6jEbVGPSXjBZGYVA=;
+        b=IovgLdytgIredn/kizpL8IBt724jp6kJo8Lrh9uUJp4s/4qAn7lfViUq7QsHx0WpgeEfE5
+        gfh1JqtBD59qcDbd0tlYevv+Tm6Q+aGt2g0sZbdFZsYBsEtQGsp8NAMV2idxVPLVsIYN/S
+        ZcX/FDwKuQxlUHd+j/o7KMatHtHdQCU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-658-pAqLOUUZMryzfSLVbta0SA-1; Tue, 10 Jan 2023 05:10:47 -0500
+X-MC-Unique: pAqLOUUZMryzfSLVbta0SA-1
+Received: by mail-wm1-f71.google.com with SMTP id k20-20020a05600c1c9400b003d9717c8b11so6098340wms.7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:10:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uuquTFMqRJVfYTO7+J+3i6OURVu6jEbVGPSXjBZGYVA=;
+        b=tLDgvqeKKgZoZy77H2U5YZx4pUIbRAfZpX6iu9xPfkGcb5KzRk4lkq/tD4n1CpO4ig
+         y0Ot+v8mtO3etPKMhHq7g6FlCCHr8e9OWdcK8FooMZunW0X5unUK2rKak0wFVjE1Enxb
+         /9wfsBeg63rTfTtnkHRiTcyYKDCtyjPkJWoviCsrCfgPgzAdcqDnQ+9tBm2V02+rsI5W
+         2efHT/5/zWTHQmCQcdUmgt8iTOEsnihx2DNNyc6H8CpsLteEIhHxx5iZPhcIP27zD3db
+         ld23WaeKDeLvIkhad8e09cUMYfwoHoPv5Asa6mMKiTH0MIohD6lyI1aU74DJoQsAW6j5
+         rueQ==
+X-Gm-Message-State: AFqh2koQyAP+6CSvrhKmHyEXcRNSnJz3aIKoz79ZNEnHo593cIBEA3Zz
+        41mCbZWKCpq4n68AVJvEwXZEmiCh7DiRZCEkrd5aPuprEJFA0vKR7TijltOostib7OpYdFAa9tX
+        Jhk2ZQ4TqtBeYk89ptNrSTVF5
+X-Received: by 2002:a05:600c:44d4:b0:3cf:7925:7a3 with SMTP id f20-20020a05600c44d400b003cf792507a3mr48001541wmo.24.1673345446641;
+        Tue, 10 Jan 2023 02:10:46 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtCaGy649oJyyMLaGDn2H4O3O+B/V9Ndk46ypRQlhZdduR+FByER9txa5+XPtVk9k1GBxK2xw==
+X-Received: by 2002:a05:600c:44d4:b0:3cf:7925:7a3 with SMTP id f20-20020a05600c44d400b003cf792507a3mr48001519wmo.24.1673345446478;
+        Tue, 10 Jan 2023 02:10:46 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f11-20020a05600c4e8b00b003d04e4ed873sm21349198wmq.22.2023.01.10.02.10.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 02:10:46 -0800 (PST)
+Message-ID: <b5ad4a5a-50ed-4bdb-024c-e2ac76c79edd@redhat.com>
+Date:   Tue, 10 Jan 2023 11:10:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 039/606] drm/i2c/sil164: Convert to i2c's .probe_new()
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-40-uwe@kleine-koenig.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221118224540.619276-40-uwe@kleine-koenig.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y7xQcmYZ8/aSkA2v@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 Jan 2023, Andy Shevchenko wrote:
+On 11/18/22 23:36, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
 
-> On Mon, Jan 09, 2023 at 05:06:03PM +0000, Lee Jones wrote:
-> > On Wed, 28 Dec 2022, Andy Shevchenko wrote:
-> 
-> ...
-> 
-> > Applied, thanks
-> 
-> Thank you and HNY!
-
-HNYTYT!
+I've pushed this to drm-misc (dri-misc-next) now. Thanks!
 
 -- 
-Lee Jones [李琼斯]
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
