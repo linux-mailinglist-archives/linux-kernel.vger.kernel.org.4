@@ -2,231 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED2F66360C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB73866360D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbjAJAHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 19:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S237882AbjAJAHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 19:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237525AbjAJAHe (ORCPT
+        with ESMTP id S237809AbjAJAHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 19:07:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7362B488
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 16:06:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673309205;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iapCfz1rFKFdP7CVLCAke8ViE4mAB2lsuFKVxrGNfa4=;
-        b=iIEwLC4bNzdoBTIdfM4oNUfQqUsgDDi9MNrKC1FNgO4Wx2aNIAnul7sEN3b8TSMnlDoAxy
-        pz7KJ4wth23dNK7/VtYxdchE9EI9Q39IFRXqX+7xBs11bm35FMlsPYFgjzr1rMUNqDWjIX
-        PntsfUzgpcwF2nr6Rl/VXAu8LMj7H2U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-96-FsPNlyx_MfSTfNmTKXRULg-1; Mon, 09 Jan 2023 19:06:44 -0500
-X-MC-Unique: FsPNlyx_MfSTfNmTKXRULg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 9 Jan 2023 19:07:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D6C14022;
+        Mon,  9 Jan 2023 16:07:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 499108027FE;
-        Tue, 10 Jan 2023 00:06:44 +0000 (UTC)
-Received: from x2.localnet (unknown [10.22.32.102])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3F453140EBF5;
-        Tue, 10 Jan 2023 00:06:43 +0000 (UTC)
-From:   Steve Grubb <sgrubb@redhat.com>
-To:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Richard Guy Briggs <rgb@redhat.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v5 3/3] fanotify,audit: Allow audit to use the full permission
- event response
-Date:   Mon, 09 Jan 2023 19:06:42 -0500
-Message-ID: <3211441.aeNJFYEL58@x2>
-Organization: Red Hat
-In-Reply-To: <79fcf72ea442eeede53ed5e6de567f8df8ef7d83.1670606054.git.rgb@redhat.com>
-References: <cover.1670606054.git.rgb@redhat.com>
- <79fcf72ea442eeede53ed5e6de567f8df8ef7d83.1670606054.git.rgb@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFA64614A4;
+        Tue, 10 Jan 2023 00:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07EBFC433EF;
+        Tue, 10 Jan 2023 00:07:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673309253;
+        bh=b7z/GEoaSAs07gYIgpLH0FOBcGLslOf21DIds1Km9ko=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=tXlKz/pYW/wubdNWsuOj25dpyV8uFONvrVGyTLE7E7buTyxpvSI2dR/AFfnGyQPS2
+         19gvxprXaa+p9YqNGzLJKhxyiL0lDco+KAGzHRgYkHseukV41arEcLxGH0enUmPG8T
+         tDen0udRRyEZLJG4R1NTx4qgDW5LMMZ9oGRq8szR6m+awkmOpg7waRjgGUrM7kaIpT
+         4pAR4ExzYkbrmfhCtJCWX933sN1oygPgWs9dziHZ0kSW7GgXIL8qiVl5gG5DYMvkjC
+         Z/8L6eP2lUaBrdMcMFkSU1ZPgj1HeBmRf1ATBwLegviu3k1VtCKms9XKWMA/LznqSf
+         f200zt9LpkxgA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A60E95C0623; Mon,  9 Jan 2023 16:07:32 -0800 (PST)
+Date:   Mon, 9 Jan 2023 16:07:32 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
+        quic_neeraju@quicinc.com, urezki@gmail.com
+Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
+ processing
+Message-ID: <20230110000732.GD4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
+ <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
+ <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230108150425.426f2861e9db1152fa84508f@kernel.org>
+ <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-Sorry to take so long. Holidays and kernel build problems. However, I have 
-built a kernel with these patches. I only have 2 comments. When I use an 
-application that expected the old API, meaning it simply does:
-
-        response.fd = metadata->fd;
-        response.response = reply;
-        close(metadata->fd);
-        write(fd, &response, sizeof(struct fanotify_response));
-
-I get access denials. Every time. If the program is using the new API and 
-sets FAN_INFO, then it works as expected. I'll do some more testing but I 
-think there is something wrong in the compatibility path.
-
-On Monday, December 12, 2022 9:06:11 AM EST Richard Guy Briggs wrote:
-> This patch passes the full response so that the audit function can use all
-> of it. The audit function was updated to log the additional information in
-> the AUDIT_FANOTIFY record.
-
-What I'm seeing is:
-
-type=FANOTIFY msg=audit(01/09/2023 18:43:16.306:366) : resp=deny fan_type=1 
-fan_info=313300000000000000000000 subj_trust=0 obj_trust=0
-
-Where fan_info was supposed to be 13 decimal. More below...
-
-> Currently the only type of fanotify info that is defined is an audit
-> rule number, but convert it to hex encoding to future-proof the field.
-> Hex encoding suggested by Paul Moore <paul@paul-moore.com>.
+On Tue, Jan 10, 2023 at 08:56:36AM +0900, Masami Hiramatsu wrote:
+> On Sun, 8 Jan 2023 20:25:01 -0800
+> "Paul E. McKenney" <paulmck@kernel.org> wrote:
 > 
-> Sample records:
->   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1
-> fan_info=3137 subj_trust=3 obj_trust=5 type=FANOTIFY
-> msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F subj_trust=2
-> obj_trust=2
+> > On Sun, Jan 08, 2023 at 03:04:25PM +0900, Masami Hiramatsu wrote:
+> > > On Sat, 7 Jan 2023 08:22:02 -0800
+> > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > 
+> > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
+> > > > > On Wed, 4 Jan 2023 16:58:38 -0800
+> > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > > 
+> > > > > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
+> > > > > > containing kernel boot parameters to be embedded into an initrd or into
+> > > > > > the kernel itself.  This can be extremely useful when deploying kernels
+> > > > > > in cases where some of the boot parameters depend on the kernel version
+> > > > > > rather than on the server hardware, firmware, or workload.
+> > > > > > 
+> > > > > > Unfortunately, the "bootconfig" kernel parameter must be specified in
+> > > > > > order to cause the kernel to look for the embedded bootconfig file,
+> > > > > > and it clearly does not help to embed this "bootconfig" kernel parameter
+> > > > > > into that file.
+> > > > > > 
+> > > > > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
+> > > > > > kernel to act as if the "bootconfig" kernel parameter had been specified.
+> > > > > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
+> > > > > > for the embedded bootconfig file even when the "bootconfig" kernel
+> > > > > > parameter is omitted.  This permits kernel-version-dependent kernel
+> > > > > > boot parameters to be embedded into the kernel image without the need to
+> > > > > > (for example) update large numbers of boot loaders.
+> > > > > 
+> > > > > I like this because this is a simple solution. We have another option
+> > > > > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
+> > > > > bootloader. Thus, it is better to have this option so that user can
+> > > > > always enable bootconfig.
+> > > > 
+> > > > Glad you like it!
+> > > > 
+> > > > In addition, if the help text is accurate, another shortcoming of
+> > > > CONFIG_CMDLINE is that its semantics vary from one architecture to
+> > > > another.  Some have CONFIG_CMDLINE override the boot-loader supplied
+> > > > parameters, and others differ in the order in which the parameters
+> > > > are processed.
+> > > 
+> > > Yes, that differences confuse us...
+> > 
+> > I am glad that it is not just me.  ;-)
+> > 
+> > I will add words to that effect to the commit log.
+> > 
+> > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > > 
+> > > > Thank you!
+> > > > 
+> > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
+> > > > > (or at least recommend to enable this)
+> > > > 
+> > > > Like this?
+> > > 
+> > > Yes! Thanks.
+> > > 
+> > > > 
+> > > > 							Thanx, Paul
+> > > > 
+> > > > ------------------------------------------------------------------------
+> > > > 
+> > > > commit d09a1505c51a70da38b34ac38062977299aef742
+> > > > Author: Paul E. McKenney <paulmck@kernel.org>
+> > > > Date:   Sat Jan 7 08:09:22 2023 -0800
+> > > > 
+> > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
+> > > >     
+> > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
+> > > >     will normally be to unconditionally provide the specified kernel-boot
+> > > >     arguments to the kernel, as opposed to requiring a separately provided
+> > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
+> > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
+> > > >     
+> > > >     The old semantics may be obtained by manually overriding this default.
+> > > >     
+> > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > 
+> > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Applied, thank you!
 > 
-> Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
-> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> ---
->  fs/notify/fanotify/fanotify.c |  3 ++-
->  include/linux/audit.h         |  9 +++++----
->  kernel/auditsc.c              | 25 ++++++++++++++++++++++---
->  3 files changed, 29 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/notify/fanotify/fanotify.c b/fs/notify/fanotify/fanotify.c
-> index 24ec1d66d5a8..29bdd99b29fa 100644
-> --- a/fs/notify/fanotify/fanotify.c
-> +++ b/fs/notify/fanotify/fanotify.c
-> @@ -273,7 +273,8 @@ static int fanotify_get_response(struct fsnotify_group
-> *group,
-> 
->  	/* Check if the response should be audited */
->  	if (event->response & FAN_AUDIT)
-> -		audit_fanotify(event->response & ~FAN_AUDIT);
-> +		audit_fanotify(event->response & ~FAN_AUDIT,
-> +			       &event->audit_rule);
-> 
->  	pr_debug("%s: group=%p event=%p about to return ret=%d\n", __func__,
->  		 group, event, ret);
-> diff --git a/include/linux/audit.h b/include/linux/audit.h
-> index d6b7d0c7ce43..31086a72e32a 100644
-> --- a/include/linux/audit.h
-> +++ b/include/linux/audit.h
-> @@ -14,6 +14,7 @@
->  #include <linux/audit_arch.h>
->  #include <uapi/linux/audit.h>
->  #include <uapi/linux/netfilter/nf_tables.h>
-> +#include <uapi/linux/fanotify.h>
-> 
->  #define AUDIT_INO_UNSET ((unsigned long)-1)
->  #define AUDIT_DEV_UNSET ((dev_t)-1)
-> @@ -416,7 +417,7 @@ extern void __audit_log_capset(const struct cred *new,
-> const struct cred *old); extern void __audit_mmap_fd(int fd, int flags);
->  extern void __audit_openat2_how(struct open_how *how);
->  extern void __audit_log_kern_module(char *name);
-> -extern void __audit_fanotify(u32 response);
-> +extern void __audit_fanotify(u32 response, struct
-> fanotify_response_info_audit_rule *friar); extern void
-> __audit_tk_injoffset(struct timespec64 offset);
->  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
->  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int
-> nentries, @@ -523,10 +524,10 @@ static inline void
-> audit_log_kern_module(char *name) __audit_log_kern_module(name);
->  }
-> 
-> -static inline void audit_fanotify(u32 response)
-> +static inline void audit_fanotify(u32 response, struct
-> fanotify_response_info_audit_rule *friar) {
->  	if (!audit_dummy_context())
-> -		__audit_fanotify(response);
-> +		__audit_fanotify(response, friar);
->  }
-> 
->  static inline void audit_tk_injoffset(struct timespec64 offset)
-> @@ -679,7 +680,7 @@ static inline void audit_log_kern_module(char *name)
->  {
->  }
-> 
-> -static inline void audit_fanotify(u32 response)
-> +static inline void audit_fanotify(u32 response, struct
-> fanotify_response_info_audit_rule *friar) { }
-> 
->  static inline void audit_tk_injoffset(struct timespec64 offset)
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index d1fb821de104..8d523066d81f 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -64,6 +64,7 @@
->  #include <uapi/linux/limits.h>
->  #include <uapi/linux/netfilter/nf_tables.h>
->  #include <uapi/linux/openat2.h> // struct open_how
-> +#include <uapi/linux/fanotify.h>
-> 
->  #include "audit.h"
-> 
-> @@ -2877,10 +2878,28 @@ void __audit_log_kern_module(char *name)
->  	context->type = AUDIT_KERN_MODULE;
->  }
-> 
-> -void __audit_fanotify(u32 response)
-> +void __audit_fanotify(u32 response, struct
-> fanotify_response_info_audit_rule *friar) {
-> -	audit_log(audit_context(), GFP_KERNEL,
-> -		AUDIT_FANOTIFY,	"resp=%u", response);
-> +	struct audit_context *ctx = audit_context();
-> +	struct audit_buffer *ab;
-> +	char numbuf[12];
-> +
-> +	if (friar->hdr.type == FAN_RESPONSE_INFO_NONE) {
-> +		audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> +			  "resp=%u fan_type=%u fan_info=3F subj_trust=2 
-obj_trust=2",
-> +			  response, FAN_RESPONSE_INFO_NONE);
-> +		return;
-> +	}
-> +	ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
-> +	if (ab) {
-> +		audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
-> +				 response, friar->hdr.type);
-> +		snprintf(numbuf, sizeof(numbuf), "%u", friar->rule_number);
-> +		audit_log_n_hex(ab, numbuf, sizeof(numbuf));
+> Paul, just for confirmation, have you picked these patches on your tree?
 
-I don't think it needs to be converted to ascii and then hexencoded. As Paul 
-said, probably %X is all we need here.
+I have, but if you would prefer to take them, just let me know when you
+have pulled them in.  It is easy for me to drop them.
 
--Steve
+Here they are in the -rcu tree:
 
+3d9ccc4a8b56e bootconfig: Allow forcing unconditional bootconfig processing
+68b920592ff67 bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
 
-> +		audit_log_format(ab, " subj_trust=%u obj_trust=%u",
-> +				 friar->subj_trust, friar->obj_trust);
-> +		audit_log_end(ab);
-> +	}
->  }
+git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+
+							Thanx, Paul
+
+> Thank you,
 > 
->  void __audit_tk_injoffset(struct timespec64 offset)
-
-
-
-
+> > 
+> > > Thank you!
+> > > 
+> > > > 
+> > > > diff --git a/init/Kconfig b/init/Kconfig
+> > > > index 0fb19fa0edba9..97a0f14d9020d 100644
+> > > > --- a/init/Kconfig
+> > > > +++ b/init/Kconfig
+> > > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
+> > > >  config BOOT_CONFIG_FORCE
+> > > >  	bool "Force unconditional bootconfig processing"
+> > > >  	depends on BOOT_CONFIG
+> > > > +	default y if BOOT_CONFIG_EMBED
+> > > >  	help
+> > > >  	  With this Kconfig option set, BOOT_CONFIG processing is carried
+> > > >  	  out even when the "bootconfig" kernel-boot parameter is omitted.
+> > > 
+> > > 
+> > > -- 
+> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
