@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53004664498
+	by mail.lfdr.de (Postfix) with ESMTP id AA00F664499
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238838AbjAJPYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
+        id S238862AbjAJPY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:24:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238703AbjAJPYS (ORCPT
+        with ESMTP id S238866AbjAJPYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:24:18 -0500
+        Tue, 10 Jan 2023 10:24:25 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF105D404;
-        Tue, 10 Jan 2023 07:24:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD744FD71;
+        Tue, 10 Jan 2023 07:24:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D5B461786;
-        Tue, 10 Jan 2023 15:24:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23966C4339C;
-        Tue, 10 Jan 2023 15:24:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36B0E6178A;
+        Tue, 10 Jan 2023 15:24:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10292C433F2;
+        Tue, 10 Jan 2023 15:24:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673364256;
-        bh=ZLGBlhqw5hH+SxGqvaz0vux+DdR7ulM6iEJUTeGEBI0=;
+        s=k20201202; t=1673364260;
+        bh=suBBT4QVg6utHpRo+7+k3N7fLhjfiwd8/Qcn1mxXoqE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SBjImUGjno8WP5DAoRv8oKmUQ2HRvRoxhht5eznErTSUeRgRgD190YrZzytl9T8SC
-         MViEU9SwiNiYC12PNwhzGpWEdQ4RK4MCp0SZe0scyaqovFE/2Wp9Ldp1azWZKn5Syt
-         St+doOCssMm6gXVkQrhiRZsGLKdKT56J2POXSo6BiIQIFsoTVnHnTUvT4d5P+zvyyX
-         W2efLcdQJdRE0etlS67MwvQeoDM4Igx0uCQOpFf2WxsSga1iTP0ifNiEILxmPK7P5u
-         gTAbkGH0ThSzfkZba5331seGoaGaShe5agSog8CKLWfxL6FX3sVW7KRisjGqxuYRl/
-         h0+GH4afzk/wA==
+        b=NwLdOpUSza9lOALFthUGvYgz/wRuajvdTEiXcz2/QTW0HtdybYOSbrO149/gA3p9R
+         uzpM4GHB2iCJBl4qAlxX8bTC/czCQESHAt5FGw3A9TeRX2UJKYdqXX6nmUf8NRpIg9
+         Gxi+lPSjomlhO6p0IgiYmnkgbLj/0kKy5i2I2hMwTN6DRUIGw8YAb/ttfyaGdYrDJ8
+         SCwl0iBFisimjMbXbCq3ETcGah+yPRf22LIHondDb59rX7IlwWNNAoikNZl/4r4HVG
+         lzR2NU0WThjoFyKolVlhCZAzBxlKy2yL6BST1HFDgBtPbGNZm6KZiDLEiTQcJJrESB
+         vGZ8JhMtGthmw==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Jonathan Corbet <corbet@lwn.net>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -44,13 +44,14 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Mike Rapoport <rppt@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 1/2] docs/mm: Page Reclaim: add page label to allow external references
-Date:   Tue, 10 Jan 2023 17:23:57 +0200
-Message-Id: <20230110152358.2641910-2-rppt@kernel.org>
+Subject: [PATCH v2 2/2] docs/mm: Physical Memory: add structure, introduction and nodes description
+Date:   Tue, 10 Jan 2023 17:23:58 +0200
+Message-Id: <20230110152358.2641910-3-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230110152358.2641910-1-rppt@kernel.org>
 References: <20230110152358.2641910-1-rppt@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -63,23 +64,362 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
+Add structure, introduction and Nodes section to Physical Memory
+chapter.
+
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
- Documentation/mm/page_reclaim.rst | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/mm/physical_memory.rst | 340 +++++++++++++++++++++++++++
+ 1 file changed, 340 insertions(+)
 
-diff --git a/Documentation/mm/page_reclaim.rst b/Documentation/mm/page_reclaim.rst
-index 50a30b7f8ac3..3fccde066436 100644
---- a/Documentation/mm/page_reclaim.rst
-+++ b/Documentation/mm/page_reclaim.rst
-@@ -1,5 +1,7 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
-+.. _page_reclaim:
+diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
+index 2ab7b8c1c863..9ad42ff22d88 100644
+--- a/Documentation/mm/physical_memory.rst
++++ b/Documentation/mm/physical_memory.rst
+@@ -3,3 +3,343 @@
+ ===============
+ Physical Memory
+ ===============
 +
- ============
- Page Reclaim
- ============
++Linux is available for a wide range of architectures so there is a need for an
++architecture-independent abstraction to represent the physical memory. This
++chapter describes the structures used to manage physical memory in a running
++system.
++
++The first principal concept prevalent in the memory management is
++`Non-Uniform Memory Access (NUMA)
++<https://en.wikipedia.org/wiki/Non-uniform_memory_access>`_.
++With multi-core and multi-socket machines, memory may be arranged into banks
++that incur a different cost to access depending on the “distance” from the
++processor. For example, there might be a bank of memory assigned to each CPU or
++a bank of memory very suitable for DMA near peripheral devices.
++
++Each bank is called a node and the concept is represented under Linux by a
++``struct pglist_data`` even if the architecture is UMA. This structure is
++always referenced to by it's typedef ``pg_data_t``. ``A pg_data_t`` structure
++for a particular node can be referenced by ``NODE_DATA(nid)`` macro where
++``nid`` is the ID of that node.
++
++For NUMA architectures, the node structures are allocated by the architecture
++specific code early during boot. Usually, these structures are allocated
++locally on the memory bank they represent. For UMA architectures, only one
++static ``pg_data_t`` structure called ``contig_page_data`` is used. Nodes will
++be discussed further in Section :ref:`Nodes <nodes>`
++
++The entire physical address space is partitioned into one or more blocks
++called zones which represent ranges within memory. These ranges are usually
++determined by architectural constraints for accessing the physical memory.
++The memory range within a node that corresponds to a particular zone is
++described by a ``struct zone``, typedeffed to ``zone_t``. Each zone has
++one of the types described below.
++
++* ``ZONE_DMA`` and ``ZONE_DMA32`` represent memory suitable for DMA by
++  peripheral devices that cannot access all of the addressable memory.
++  Depending on the architecture, either of these zone types or even they both
++  can be disabled at build time using ``CONFIG_ZONE_DMA`` and
++  ``CONFIG_ZONE_DMA32`` configuration options. Some 64-bit platforms may need
++  both zones as they support peripherals with different DMA addressing
++  limitations.
++
++* ``ZONE_NORMAL`` is for normal memory that can be accessed by the kernel all
++  the time. DMA operations can be performed on pages in this zone if the DMA
++  devices support transfers to all addressable memory. ``ZONE_NORMAL`` is
++  always enabled.
++
++* ``ZONE_HIGHMEM`` is the part of the physical memory that is not covered by a
++  permanent mapping in the kernel page tables. The memory in this zone is only
++  accessible to the kernel using temporary mappings. This zone is available
++  only on some 32-bit architectures and is enabled with ``CONFIG_HIGHMEM``.
++
++* ``ZONE_MOVABLE`` is for normal accessible memory, just like ``ZONE_NORMAL``.
++  The difference is that most pages in ``ZONE_MOVABLE`` are movable. That means
++  that while virtual addresses of these pages do not change, their content may
++  move between different physical pages. ``ZONE_MOVABLE`` is only enabled when
++  one of ``kernelcore``, ``movablecore`` and ``movable_node`` parameters is
++  present in the kernel command line. See :ref:`Page migration
++  <page_migration>` for additional details.
++
++* ``ZONE_DEVICE`` represents memory residing on devices such as PMEM and GPU.
++  It has different characteristics than RAM zone types and it exists to provide
++  :ref:`struct page <Pages>` and memory map services for device driver
++  identified physical address ranges. ``ZONE_DEVICE`` is enabled with
++  configuration option ``CONFIG_ZONE_DEVICE``.
++
++It is important to note that many kernel operations can only take place using
++``ZONE_NORMAL`` so it is the most performance critical zone. Zones are
++discussed further in Section :ref:`Zones <zones>`.
++
++The relation between node and zone extents is determined by the physical memory
++map reported by the firmware, architectural constraints for memory addressing
++and certain parameters in the kernel command line.
++
++For example, with 32-bit kernel on an x86 UMA machine with 2 Gbytes of RAM the
++entire memory will be on node 0 and there will be three zones: ``ZONE_DMA``,
++``ZONE_NORMAL`` and ``ZONE_HIGHMEM``::
++
++  0                                                            2G
++  +-------------------------------------------------------------+
++  |                            node 0                           |
++  +-------------------------------------------------------------+
++
++  0         16M                    896M                        2G
++  +----------+-----------------------+--------------------------+
++  | ZONE_DMA |      ZONE_NORMAL      |       ZONE_HIGHMEM       |
++  +----------+-----------------------+--------------------------+
++
++
++With a kernel built with ``ZONE_DMA`` disabled and ``ZONE_DMA32`` enabled and
++booted with ``movablecore=80%`` parameter on an arm64 machine with 16 Gbytes of
++RAM equally split between two nodes, there will be ``ZONE_DMA32``,
++``ZONE_NORMAL`` and ``ZONE_MOVABLE`` on node 0, and ``ZONE_NORMAL`` and
++``ZONE_MOVABLE`` on node 1::
++
++
++  1G                                9G                         17G
++  +--------------------------------+ +--------------------------+
++  |              node 0            | |          node 1          |
++  +--------------------------------+ +--------------------------+
++
++  1G       4G        4200M          9G          9320M          17G
++  +---------+----------+-----------+ +------------+-------------+
++  |  DMA32  |  NORMAL  |  MOVABLE  | |   NORMAL   |   MOVABLE   |
++  +---------+----------+-----------+ +------------+-------------+
++
++.. _nodes:
++
++Nodes
++=====
++
++As we have mentioned, each node in memory is described by a ``pg_data_t`` which
++is a typedef for a ``struct pglist_data``. When allocating a page, by default
++Linux uses a node-local allocation policy to allocate memory from the node
++closest to the running CPU. As processes tend to run on the same CPU, it is
++likely the memory from the current node will be used. The allocation policy can
++be controlled by users as described in
++Documentation/admin-guide/mm/numa_memory_policy.rst.
++
++Most NUMA architectures maintain an array of pointers to the node
++structures. The actual structures are allocated early during boot when
++architecture specific code parses the physical memory map reported by the
++firmware. The bulk of the node initialization happens slightly later in the
++boot process by free_area_init() function, described later in Section
++:ref:`Initialization <initialization>`.
++
++
++Along with the node structures, kernel maintains an array of ``nodemask_t``
++bitmasks called ``node_states``. Each bitmask in this array represents a set of
++nodes with particular properties as defined by ``enum node_states``:
++
++``N_POSSIBLE``
++  The node could become online at some point.
++``N_ONLINE``
++  The node is online.
++``N_NORMAL_MEMORY``
++  The node has regular memory.
++``N_HIGH_MEMORY``
++  The node has regular or high memory. When ``CONFIG_HIGHMEM`` is disabled
++  aliased to ``N_NORMAL_MEMORY``.
++``N_MEMORY``
++  The node has memory(regular, high, movable)
++``N_CPU``
++  The node has one or more CPUs
++
++For each node that has a property described above, the bit corresponding to the
++node ID in the ``node_states[<property>]`` bitmask is set.
++
++For example, for node 2 with normal memory and CPUs, bit 2 will be set in ::
++
++  node_states[N_POSSIBLE]
++  node_states[N_ONLINE]
++  node_states[N_NORMAL_MEMORY]
++  node_states[N_MEMORY]
++  node_states[N_CPU]
++
++For various operations possible with nodemasks please refer to
++``include/linux/nodemask.h``.
++
++Among other things, nodemasks are used to provide macros for node traversal,
++namely ``for_each_node()`` and ``for_each_online_node()``.
++
++For instance, to call a function foo() for each online node::
++
++	for_each_online_node(nid) {
++		pg_data_t *pgdat = NODE_DATA(nid);
++
++		foo(pgdat);
++	}
++
++Node structure
++--------------
++
++The nodes structure ``struct pglist_data`` is declared in
++``include/linux/mmzone.h``. Here we briefly describe fields of this
++structure:
++
++General
++~~~~~~~
++
++``node_zones``
++  The zones for this node.  Not all of the zones may be populated, but it is
++  the full list. It is referenced by this node's node_zonelists as well as
++  other node's node_zonelists.
++
++``node_zonelists``
++  The list of all zones in all nodes. This list defines the order of zones
++  that allocations are preferred from. The ``node_zonelists`` is set up by
++  ``build_zonelists()`` in ``mm/page_alloc.c`` during the initialization of
++  core memory management structures.
++
++``nr_zones``
++  Number of populated zones in this node.
++
++``node_mem_map``
++  For UMA systems that use FLATMEM memory model the 0's node
++  ``node_mem_map`` is array of struct pages representing each physical frame.
++
++``node_page_ext``
++  For UMA systems that use FLATMEM memory model the 0's node
++  ``node_page_ext`` is array of extensions of struct pages. Available only
++  in the kernels built with ``CONFIG_PAGE_EXTENTION`` enabled.
++
++``node_start_pfn``
++  The page frame number of the starting page frame in this node.
++
++``node_present_pages``
++  Total number of physical pages present in this node.
++
++``node_spanned_pages``
++  Total size of physical page range, including holes.
++
++``node_size_lock``
++  A lock that protects the fields defining the node extents. Only defined when
++  at least one of ``CONFIG_MEMORY_HOTPLUG`` or
++  ``CONFIG_DEFERRED_STRUCT_PAGE_INIT`` configuration options are enabled.
++  ``pgdat_resize_lock()`` and ``pgdat_resize_unlock()`` are provided to
++  manipulate ``node_size_lock`` without checking for ``CONFIG_MEMORY_HOTPLUG``
++  or ``CONFIG_DEFERRED_STRUCT_PAGE_INIT``.
++
++``node_id``
++  The Node ID (NID) of the node, starts at 0.
++
++``totalreserve_pages``
++  This is a per-node reserve of pages that are not available to userspace
++  allocations.
++
++``first_deferred_pfn``
++  If memory initialization on large machines is deferred then this is the first
++  PFN that needs to be initialized. Defined only when
++  ``CONFIG_DEFERRED_STRUCT_PAGE_INIT`` is enabled
++
++``deferred_split_queue``
++  Per-node queue of huge pages that their split was deferred. Defined only when ``CONFIG_TRANSPARENT_HUGEPAGE`` is enabled.
++
++``__lruvec``
++  Per-node lruvec holding LRU lists and related parameters. Used only when
++  memory cgroups are disabled. It should not be accessed directly, use
++  ``mem_cgroup_lruvec()`` to look up lruvecs instead.
++
++Reclaim control
++~~~~~~~~~~~~~~~
++
++See also :ref:`Page Reclaim <page_reclaim>`.
++
++``kswapd``
++  Per-node instance of kswapd kernel thread.
++
++``kswapd_wait``, ``pfmemalloc_wait``, ``reclaim_wait``
++  Workqueues used to synchronize memory reclaim tasks
++
++``nr_writeback_throttled``
++  Number of tasks that are throttled waiting on dirty pages to clean.
++
++``nr_reclaim_start``
++  Number of pages written while reclaim is throttled waiting for writeback.
++
++``kswapd_order``
++  Controls the order kswapd tries to reclaim
++
++``kswapd_highest_zoneidx``
++  The highest zone index to be reclaimed by kswapd
++
++``kswapd_failures``
++  Number of runs kswapd was unable to reclaim any pages
++
++``min_unmapped_pages``
++  Minimal number of unmapped file backed pages that cannot be reclaimed.
++  Determined by ``vm.min_unmapped_ratio`` sysctl. Only defined when
++  ``CONFIG_NUMA`` is enabled.
++
++``min_slab_pages``
++  Minimal number of SLAB pages that cannot be reclaimed. Determined by
++  ``vm.min_slab_ratio sysctl``. Only defined when ``CONFIG_NUMA`` is enabled
++
++``flags``
++  Flags controlling reclaim behavior.
++
++Compaction control
++~~~~~~~~~~~~~~~~~~
++
++``kcompactd_max_order``
++  Page order that kcompactd should try to achieve.
++
++``kcompactd_highest_zoneidx``
++  The highest zone index to be compacted by kcompactd.
++
++``kcompactd_wait``
++  Workqueue used to synchronize memory compaction tasks.
++
++``kcompactd``
++  Per-node instance of kcompactd kernel thread.
++
++``proactive_compact_trigger``
++  Determines if proactive compaction is enabled. Controlled by
++  ``vm.compaction_proactiveness`` sysctl.
++
++Statistics
++~~~~~~~~~~
++
++``per_cpu_nodestats``
++  Per-CPU VM statistics for the node
++
++``vm_stat``
++  VM statistics for the node.
++
++.. _zones:
++
++Zones
++=====
++
++.. admonition:: Stub
++
++   This section is incomplete. Please list and describe the appropriate fields.
++
++.. _pages:
++
++Pages
++=====
++
++.. admonition:: Stub
++
++   This section is incomplete. Please list and describe the appropriate fields.
++
++.. _folios:
++
++Folios
++======
++
++.. admonition:: Stub
++
++   This section is incomplete. Please list and describe the appropriate fields.
++
++.. _initialization:
++
++Initialization
++==============
++
++.. admonition:: Stub
++
++   This section is incomplete. Please list and describe the appropriate fields.
 -- 
 2.35.1
 
