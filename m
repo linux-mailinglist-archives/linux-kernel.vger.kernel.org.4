@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF350664805
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D824664803
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbjAJSC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 13:02:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S233661AbjAJSCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238717AbjAJR6L (ORCPT
+        with ESMTP id S238682AbjAJR6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 Jan 2023 12:58:11 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B9196540
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:57:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0615E22
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:57:49 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05BBD4B3;
-        Tue, 10 Jan 2023 09:58:39 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A2E82F4;
+        Tue, 10 Jan 2023 09:58:31 -0800 (PST)
 Received: from [10.1.196.46] (eglon.cambridge.arm.com [10.1.196.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C01A03F67D;
-        Tue, 10 Jan 2023 09:57:50 -0800 (PST)
-Message-ID: <fac47e24-d3f0-853b-70d9-a6b25f719d24@arm.com>
-Date:   Tue, 10 Jan 2023 17:57:37 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF9C23F67D;
+        Tue, 10 Jan 2023 09:57:46 -0800 (PST)
+Message-ID: <ec5516e2-521b-084a-ce86-5c371eda2b75@arm.com>
+Date:   Tue, 10 Jan 2023 17:57:39 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH 02/18] x86/resctrl: Access per-rmid structures by index
+Subject: Re: [PATCH 03/18] x86/resctrl: Create helper for RMID allocation and
+ mondata dir creation
 Content-Language: en-GB
 To:     "Yu, Fenghua" <fenghua.yu@intel.com>,
         "x86@kernel.org" <x86@kernel.org>,
@@ -49,10 +50,10 @@ Cc:     "Chatre, Reinette" <reinette.chatre@intel.com>,
         "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
         "peternewman@google.com" <peternewman@google.com>
 References: <20221021131204.5581-1-james.morse@arm.com>
- <20221021131204.5581-3-james.morse@arm.com>
- <IA1PR11MB609782777889811A1BB773549BFB9@IA1PR11MB6097.namprd11.prod.outlook.com>
+ <20221021131204.5581-4-james.morse@arm.com>
+ <IA1PR11MB6097DBE28137579B89FD23739BFB9@IA1PR11MB6097.namprd11.prod.outlook.com>
 From:   James Morse <james.morse@arm.com>
-In-Reply-To: <IA1PR11MB609782777889811A1BB773549BFB9@IA1PR11MB6097.namprd11.prod.outlook.com>
+In-Reply-To: <IA1PR11MB6097DBE28137579B89FD23739BFB9@IA1PR11MB6097.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -66,147 +67,110 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Fenghua,
 
-On 06/01/2023 03:12, Yu, Fenghua wrote:
+On 06/01/2023 03:23, Yu, Fenghua wrote:
 >> James Morse <james.morse@arm.com> writes:
->> Because of the differences between Intel RDT/AMD QoS and Arm's MPAM
->> monitors, RMID values on arm64 are not unique unless the CLOSID is also
->> included. Bitmaps like rmid_busy_llc need to be sized by the number of unique
->> entries for this resource.
 >>
->> Add helpers to encode/decode the CLOSID and RMID to an index. The domain's
->> busy_rmid_llc and the rmid_ptrs[] array are then sized by index. On x86, this is
->> always just the RMID. This gives resctrl a unique value it can use to store
->> monitor values, and allows MPAM to decode the closid when reading the
->> hardware counters.
+>> RMID are allocated for each monitor or control group directory, because each
+>> of these needs its own RMID. For control groups,
+>> rdtgroup_mkdir_ctrl_mon() later goes on to allocate the CLOSID.
+>>
+>> MPAM's equivalent of RMID are not an independent number, so can't be
+>> allocated until the CLOSID is known. An RMID allocation for one CLOSID may fail,
+>> whereas another may succeed depending on how many monitor groups a
+>> control group has.
+>>
+>> The RMID allocation needs to move to be after the CLOSID has been allocated.
+>>
+>> To make a subsequent change that does this easier to read, move the RMID
+>> allocation and mondata dir creation to a helper.
 
->> diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.h
->> index d24b04ebf950..523eabfa3193 100644
->> --- a/arch/x86/include/asm/resctrl.h
->> +++ b/arch/x86/include/asm/resctrl.h
->> @@ -96,6 +96,23 @@ static inline void resctrl_sched_in(void)
->>  		__resctrl_sched_in();
+>> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> index 9ce4746778f4..841294ad6263 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> @@ -2868,6 +2868,30 @@ static int rdtgroup_init_alloc(struct rdtgroup *rdtgrp)
+>>  	return 0;
 >>  }
 >>
->> +static inline u32 resctrl_arch_system_num_rmid_idx(void)
->> +{
->> +	/* RMID are independent numbers for x86. num_rmid_idx==num_rmid
->> */
->> +	return boot_cpu_data.x86_cache_max_rmid + 1; }
+>> +static int mkdir_rdt_prepare_rmid_alloc(struct rdtgroup *rdtgrp) {
+>> +	int ret;
 >> +
->> +static inline void resctrl_arch_rmid_idx_decode(u32 idx, u32 *closid,
->> +u32 *rmid) {
->> +	*rmid = idx;
->> +	*closid = ~0;
-
-> Should closid be 0 or ~0 on X86? Any special reason for closid to be ~0?
-
-I picked ~0 as its not a valid CLOSID, so anything that consumes it should choke quickly.
-
-
-> Seems 0 is a natural value so that it's ignored on X86. And the value should
-> be consistent on x86 and documented.
-
-Well 0 is a valid CLOSID value, you can't ignore it based on the value - that's done at
-compile time as the helpers don't use the value. Doing nothing here would leave an
-uninitialized value on the stack, which would then get passed to the next function (which
-should ignore it). I assume this is the sort of thing future compilers will complain about
-if they can't see that the next function doesn't use the value.
-
-I'll give it a #define value to make it clear its a deliberate choice to initialise it
-with an out of range value.
+>> +	if (!rdt_mon_capable)
+>> +		return 0;
+>> +
+>> +	ret = alloc_rmid();
+>> +	if (ret < 0) {
+>> +		rdt_last_cmd_puts("Out of RMIDs\n");
+>> +		return ret;
+>> +	}
+>> +	rdtgrp->mon.rmid = ret;
+>> +
+>> +	ret = mkdir_mondata_all(rdtgrp->kn, rdtgrp, &rdtgrp-
+>>> mon.mon_data_kn);
+>> +	if (ret) {
+>> +		rdt_last_cmd_puts("kernfs subdir error\n");
 
 
-> 
+>> +		free_rmid(rdtgrp->closid, rdtgrp->mon.rmid);
+
+                ^^^^^^^^^
+
+>> +		return ret;
+>> +	}
+>> +
+>> +	return 0;
 >> +}
 >> +
->> +static inline u32 resctrl_arch_rmid_idx_encode(u32 closid, u32 rmid) {
->> +	return rmid;
->> +}
->> +
->>  void resctrl_cpu_detect(struct cpuinfo_x86 *c);
+>>  static int mkdir_rdt_prepare(struct kernfs_node *parent_kn,
+>>  			     const char *name, umode_t mode,
+>>  			     enum rdt_group_type rtype, struct rdtgroup **r)
+>> @@ -2933,20 +2957,10 @@ static int mkdir_rdt_prepare(struct kernfs_node
+>> *parent_kn,
+>>  		goto out_destroy;
+>>  	}
 >>
->>  #else
-
->> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c
->> b/arch/x86/kernel/cpu/resctrl/monitor.c
->> index f1f66c9942a5..c95d259476d4 100644
->> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
->> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
->> @@ -137,11 +137,24 @@ static inline u64 get_corrected_mbm_count(u32 rmid,
->> unsigned long val)
->>  	return val;
->>  }
+>> -	if (rdt_mon_capable) {
+>> -		ret = alloc_rmid();
+>> -		if (ret < 0) {
+>> -			rdt_last_cmd_puts("Out of RMIDs\n");
+>> -			goto out_destroy;
+>> -		}
+>> -		rdtgrp->mon.rmid = ret;
+>> +	ret = mkdir_rdt_prepare_rmid_alloc(rdtgrp);
+>> +	if (ret)
+>> +		goto out_destroy;
 >>
->> -static inline struct rmid_entry *__rmid_entry(u32 closid, u32 rmid)
->> +/*
->> + * x86 and arm64 differ in their handling of monitoring.
->> + * x86's RMID are an independent number, there is one RMID '1'.
->> + * arm64's PMG extend the PARTID/CLOSID space, there is one RMID '1'
->> +for each
->> + * CLOSID. The RMID is no longer unique.
->> + * To account for this, resctrl uses an index. On x86 this is just the
->> +RMID,
->> + * on arm64 it encodes the CLOSID and RMID. This gives a unique number.
->> + *
->> + * The domain's rmid_busy_llc and rmid_ptrs are sized by index. The
->> +arch code
->> + * must accept an attempt to read every index.
->> + */
->> +static inline struct rmid_entry *__rmid_entry(u32 idx)
->>  {
->>  	struct rmid_entry *entry;
->> +	u32 closid, rmid;
+>> -		ret = mkdir_mondata_all(kn, rdtgrp, &rdtgrp-
+>>> mon.mon_data_kn);
+>> -		if (ret) {
+>> -			rdt_last_cmd_puts("kernfs subdir error\n");
+>> -			goto out_idfree;
+>> -		}
+>> -	}
+>>  	kernfs_activate(kn);
 >>
->> -	entry = &rmid_ptrs[rmid];
->> +	entry = &rmid_ptrs[idx];
->> +	resctrl_arch_rmid_idx_decode(idx, &closid, &rmid);
->>  	WARN_ON(entry->rmid != rmid);
-
-> Will __rmid_entry() be moved to fs/?
-
-It does as its not related to accessing the hardware. I hope to move as much as possible
-to avoid duplication.
-
-
-> Should add WARN_ON(entry->closid!=rmid) here?
-
-Presumably WARN_ON(entry->closid != closid)?
-That would force everything to be initalised to the official 'unitialised value', which is
-probably not a bad thing.
-
-If I'm touching these, I 'll change it to WARN_ON_ONCE(), as if it breaks, chances are its
-going to trigger a few hundred times a second, which wouldn't help anyone trying to debug it.
-
-
->>  	return entry;
-
-
->> @@ -714,7 +737,7 @@ static int dom_data_init(struct rdt_resource *r)
->>  	 * default_rdtgroup control group, which will be setup later. See
->>  	 * rdtgroup_setup_root().
+>>  	/*
+>> @@ -2954,8 +2968,6 @@ static int mkdir_rdt_prepare(struct kernfs_node
+>> *parent_kn,
 >>  	 */
->> -	entry = __rmid_entry(0, 0);
->> +	entry = __rmid_entry(resctrl_arch_rmid_idx_encode(0, 0));
+>>  	return 0;
+>>
+>> -out_idfree:
+>> -	free_rmid(rdtgrp->closid, rdtgrp->mon.rmid);
+>>  out_destroy:
+>>  	kernfs_put(rdtgrp->kn);
+>>  	kernfs_remove(rdtgrp->kn);
 
-> Closid is 0 here on x86.
+> Why not free allocated rmid? Rmid leak without freed.
 
-It's supposed to be zero. This code is ensuring the monitors for the default control group
-will always be available, by removing it from rmid_free_lru, effectively allocating it.
+It's just moved into the helper.
 
-It needs to be 0 for architectures where the CLOSID matters to
-resctrl_arch_rmid_idx_encode(), to ensure it allocates/reserves/leaks the correct hardware
-monitor.
+This free_rmid() is here because this function used to allocate the rmid and the mondata
+as separate steps. Now a helper does that in one go - and cleans up after itself.
 
-Changing __rmid_entry() to take a struct rdtgroup might make the whole thing clearer, I
-didn't go that far as I thought it would be more churn.
-
-
-> We need to have a consistent closid value on x86.
-> Maybe even define a macro for x86 closid value e.g. #define RMID_FIELD_CLOSID_IGNORED 0.
-> So the macro value is used on X86 always.
-
-The value is ignored on encode by x86. You only need to provide a magic value for decode,
-and only because deterministic bugs and values you can grep for a good things!
+If mkdir_rdt_prepare_rmid_alloc() fails, it didn't allocate an rmid .. if it secretly did,
+it free()s it itself, see the ^-lighted code above.
 
 
 Thanks,
