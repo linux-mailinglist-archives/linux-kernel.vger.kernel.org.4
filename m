@@ -2,331 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4278B6641B1
+	by mail.lfdr.de (Postfix) with ESMTP id 984876641B2
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbjAJN1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        id S232483AbjAJN1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238603AbjAJN0K (ORCPT
+        with ESMTP id S233081AbjAJN0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:26:10 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C22125AC47
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:25:23 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C64222F4;
-        Tue, 10 Jan 2023 05:25:55 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.46.95])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6EDF33F587;
-        Tue, 10 Jan 2023 05:24:56 -0800 (PST)
-Date:   Tue, 10 Jan 2023 13:24:30 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Jules Maselbas <jmaselbas@kalray.eu>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Clement Leger <clement.leger@bootlin.com>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>
-Subject: Re: [RFC PATCH 05/25] kvx: Add atomic/locking headers
-Message-ID: <Y71nDtFHgDJoWb6s@FVFF77S0Q05N>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
- <20230103164359.24347-6-ysionneau@kalray.eu>
- <Y7VMlPKGEQwvTK4W@FVFF77S0Q05N>
- <20230106141158.GC7446@tellis.lin.mbt.kalray.eu>
-MIME-Version: 1.0
+        Tue, 10 Jan 2023 08:26:32 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE544765A;
+        Tue, 10 Jan 2023 05:26:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n5KjfCeDLmkZ2r9sPxIDKeCHm4eyBKgIY9++grzZ9IZeNUT0HJG9Ub6lRdR2OosQuSnJEs2DOY7zzhVFwvg88KdZt+i/XqLrFmDGGuqHBfKI7bLr7Jh6BgaZh0oqbbzbZsI+/PjDzddx1jASUy/pg/jBPgaBs/ReuZtUT2dkRUx3ccVgfUXGSS1RB1ZJ3boy+3pjEQFy+OBmLov91Hfau/S9KcZvSdjrBWLHbJ0NNrOto3ADjuhmsmpSsRZFVOGHcC9psgK/YhHbmaLnSBRp4k2GmS+o+FqoofU59+Bnumh1+X2nrUd/ordy8U3duU9ek97DawR9CUX929EHPF9Yaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=meZQwNlzPWxJGmSdggnEC8F+UR+wCQ/fTvqckuydb74=;
+ b=KdFzKM7TnNmDIFxkZ2drAbJNwaUyu+bwSikdb3Nsh4rqgLtvEhjIc/osH6sVsWxzXznOpdrPEv1ZQywQEHwPA6Gylwrsk536ohJ6amJPQiSYii/MLWEqQLzKAPp4XswMfOEZ3MQty57Fa3tOIm1xwkVGTNgqnqUYRNPCIEBgBwmx96fhHMauEnhWkslTqmcYbHaTYv1YNLJspK3/dZkZQrukDoZo5mavwiEs4L3d4nC+1EVcnpwP6SqiK44dRabmKvNS4iyiB+pI8SQWHU9u5iRdi9ctGzoD3D2+ZMuwHpVySugLPFmLNitAtnr1V8xsjBBuMR88nJ78sKhrJK79FQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=meZQwNlzPWxJGmSdggnEC8F+UR+wCQ/fTvqckuydb74=;
+ b=tJ+rZwHDsSynGRTxPp/qIjf2EfxDLGKDdnmWB9KQORAX8fCwHfchiMHyY8jSWrX0aUcUREaLVV2WLJL21xB8AvtqbMXPCgffllgNK9m3Kd0ygSu7bZ0gboJ6Kqh5IsfR4DW40lZoQrJgFCarsQkG4kW/Uo6BGgMLBwkVeICZKN7in1+/NQr6cuG6m2z+VNgrUfMKuQpnR+rrfDlCvUfDtfJiua+PuW40a81wGuWqzo3FGeO4ImxZTmHhq0WAyBQWsjslwLhv+rp8Nx29Gy/m9EmXeJLQo4kPzITEPBOaj26VB6k+Ti5itEEHY08YEKH3H+36XE3Qw9IcHnyjBTqBIg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH0PR12MB7009.namprd12.prod.outlook.com (2603:10b6:510:21c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
+ 2023 13:26:00 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%8]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
+ 13:26:00 +0000
+Date:   Tue, 10 Jan 2023 09:25:58 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc:     Vasant Hegde <vasant.hegde@amd.com>,
+        Matt Fagnani <matt.fagnani@bell.net>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Joerg Roedel <jroedel@suse.de>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        amd-gfx@lists.freedesktop.org
+Subject: Re: [regression, bisected, =?utf-8?Q?pci?=
+ =?utf-8?Q?=2Fiommu=5D_Bug=C2=A0216865_-_Black_screen_whe?= =?utf-8?Q?n?=
+ amdgpu started during 6.2-rc1 boot with AMD IOMMU enabled
+Message-ID: <Y71nZuF5wQp3eqmn@nvidia.com>
+References: <15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info>
+ <5aa0e698-f715-0481-36e5-46505024ebc1@bell.net>
+ <aea57c5f-2d20-c589-ad44-a63f1133a3db@linux.intel.com>
+ <157c4ca4-370a-5d7e-fe32-c64d934f6979@amd.com>
+ <223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net>
+ <6fff9d10-f77f-e55a-9020-8a1bd34cf508@amd.com>
+ <Y7gs0zYKp/VXACBi@nvidia.com>
+ <f96b1cf3-6865-663d-f1cd-466a71519b08@linux.intel.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230106141158.GC7446@tellis.lin.mbt.kalray.eu>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f96b1cf3-6865-663d-f1cd-466a71519b08@linux.intel.com>
+X-ClientProxiedBy: MN2PR08CA0021.namprd08.prod.outlook.com
+ (2603:10b6:208:239::26) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH0PR12MB7009:EE_
+X-MS-Office365-Filtering-Correlation-Id: 02bd86e2-15fa-4989-fd75-08daf30e36d0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gfw8UTz0Qf9SG4i5uhTNJPOVMndb2fN3pEyZ6TzJrVlnDUOZKnc1Bu+AZt/3R/RgBq4gGoZ/1ReVV0A5XgYJoEBcvCgRA3pbnC41ADKgo0ATzWauq0WySDGY7kgAimWqkgrJY2WK2R1ai1gDsZDbchYIpBFLNTHWBsEdUlSwxOF2w/85NEx56BOdSBLTmDzj+K8/owibozINU4VQ2A0nH7dVHUUQ1JhZG3PNMMqgh7AKyiu037X2/JmXNpO0rxL9fiA+A93HdYm7iEVWMysC2jrUTZg6oMURse3xjhaBD9xLf+jjqKe5g+aK1Ngbx24/IBKmuTRce0ZLouJHkl4QgFVN0vfVotSEGVYfrvwh/X7vIRgEaz4gX2mhcH+fXqf0wq8eWzoJpgudBf9lw1XVd7eTK1hz5px3oW7FaC7Ndm4PvjaxjnV3yrUwFyyMvRu1R3SkjBu89SQEFQWdIlXDgC1eI5bdrls6b2xbVmG1Lr62FKbtCD/hQqsrTFghUYIfhyTI9bQQ9kcJRnearia8gMmC7rI0J0uKz0TDQb5k6ls3AgjY62KDf/JaV3DgF5fOdlz1S/nacPky6ONsh/w2V15waMfVmBDH1HYYYyOULRWdu4IuXIx1QE4sGLa8txo5ACljsqzK2etwmh0dIIgT9AZYPLO+eNeiCJ4EjsV+MMPlOnCQbsEfMvQs9ljE5R+CUGTHshx0CMpxCnX6Z+fEkyReJ2feCe7Vt+XqwK4lAbS9w2pAI6d2Wso2yZ0n4AgKaMClFkhZMtA/f0/8zFWUVg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(396003)(39860400002)(376002)(136003)(451199015)(86362001)(36756003)(7416002)(8936002)(5660300002)(966005)(83380400001)(6486002)(6506007)(53546011)(478600001)(2616005)(26005)(186003)(6512007)(38100700002)(41300700001)(4326008)(66556008)(66476007)(66946007)(316002)(110136005)(54906003)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TkNrg0KyDZEtZpEcwwqUqDfNSHjPmoD+KA1ehM+8PqcByTF7FNpQApgy4x9d?=
+ =?us-ascii?Q?MXLSFAGtNMmTkvaziy3ETBk+OBJNeBf+3awJGNteiTQolbNdb26uQ75XVSk+?=
+ =?us-ascii?Q?Q+ob1GUu78y4QgxwilE131eBztffqAWBQwZsaOggrfg6b7L3dGiCLjPBzmPF?=
+ =?us-ascii?Q?rm+9SC4QjS6adPpF0Wk8NtN1cvB9GwXREwOC6db7nB1uULa2KZxz2BPzsx6E?=
+ =?us-ascii?Q?UARmDp1xQ1CX7kM9DAmlVnXpq+9d2sOrd1Y1zHgYka5iENV5R2YH0K4p+10X?=
+ =?us-ascii?Q?CMWPltc5oNrGUlQHHnOUZKv4mnA18kugbZIos9wTdDLNVt+gApWxvPOTKEK+?=
+ =?us-ascii?Q?EdXYK6itiuhOWG6L4/eIXZ3kcwT0/fVoc/Biey+611huqHb2EImx96XqFPSl?=
+ =?us-ascii?Q?nN5h0NExhOaxYdjAzIijOtIQknhPUjVpHLYWm+l1YvLNfa597jfnqjvJQE0l?=
+ =?us-ascii?Q?WV4R19HOjT1YCdXv0oRugJKtBlhd1qF78MVHD7+DW+tE1487nmzckuSrkPx+?=
+ =?us-ascii?Q?yQXion/Bs2eNCAcuRhHlkW1fn3nU96h6UBfFz4BJ2AvdyiIKo7Q4jQ41WMrc?=
+ =?us-ascii?Q?t59KlnLtHVinKQIj2Slpyz+2efAyxEeIObgULVvE6epK3ychHGTlp6AfydDW?=
+ =?us-ascii?Q?yaH3d3Hgh+1vt2jRmKX48772L3cT7tTPCJKDeGTikEK6YLPEpVi8WTfaCSF4?=
+ =?us-ascii?Q?aM+P9o2f6pUcEfxTwEK+dR45vqb0jgbVH4AkjVU/LXR4Mt5Fog6zTh2TKGU+?=
+ =?us-ascii?Q?15aqoufF5mZw7CrIZuTV1hqi3PZpSPlBhi91yXeXXumI6QDATItHwcD/FgQc?=
+ =?us-ascii?Q?JuIDTHJnPTeSjj8uPEpcJ4Ee9UXg2skmUDZyTMZJ4T2Tt7UVZokpToG0RZBF?=
+ =?us-ascii?Q?s38sH4ZUI25R8IqxCvqV3JOiSontxoUnFgZNQUNQ+OzqYCyNatp+rvvScONx?=
+ =?us-ascii?Q?lk1yI6HbW/f96FR5EHgEK5/Ux/Y0U4SAX7v84uzCi2US+RP19tp0+l5cJa59?=
+ =?us-ascii?Q?LozFgW0J8vuhh29LxHqnyghQogQui1iXWXm22iWr2hYxgsoiVkq8AhuXmPAF?=
+ =?us-ascii?Q?U69kGWxoe3ybhmR9DCA6X2KoKW/JBnPdlUsBYLPg9qt1LbDJMqRG+3XYSq1z?=
+ =?us-ascii?Q?5uWJxwWzh0cq8bhOx5coYDFSRcDEIIR8+Vgaljxe8/wNGIQzPkcq0S5PHLoW?=
+ =?us-ascii?Q?ndxBXpuUfrBaGllCv2qJD8c59/ZQ6s0d7qCoKNYTfuwdcQMKzSghPJ7JQF7w?=
+ =?us-ascii?Q?FSyQSwWbbibF3vlkSqxC65NjQHuzMSNkYustZxzBnvgHmFYi4AxGh755abxe?=
+ =?us-ascii?Q?ZhqJ7ZWmW3+BT7gqitRa9lTdrcIq6VgdIzNTf0Jy59FtmfB4XAcs7FpuQBx0?=
+ =?us-ascii?Q?bvRajU1X4D6Bk5CFMDq1k3s0QVyZEAPJnI3QoRIi4TOzdfg5vppAaqDXXg3g?=
+ =?us-ascii?Q?HWGBxUA4qiF5R4/dHaW+DV4LBxgKF0Mfhk1887p+/+YH/cmLrEA9kXwmtDoR?=
+ =?us-ascii?Q?62sJmXSiiM/ni1Xxtt7OKW0/SuyzjAN+aQ8jixzaCKUW0amMCgHDV187TT4H?=
+ =?us-ascii?Q?pY5R2Y3irSWtagudK2vupnKvTLLCYTNEmYzfPoGX?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02bd86e2-15fa-4989-fd75-08daf30e36d0
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 13:26:00.2978
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IkudYMYOFIE+ltRC4ORwJSBXzRQ2Gbhwhq320Mz0IWi8/4Im83ACiDNYG7wWiX4g
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7009
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 03:11:58PM +0100, Jules Maselbas wrote:
-> Hi Mark,
-> 
-> On Wed, Jan 04, 2023 at 09:53:24AM +0000, Mark Rutland wrote:
-> > On Tue, Jan 03, 2023 at 05:43:39PM +0100, Yann Sionneau wrote:
-> > > Add common headers (atomic, bitops, barrier and locking) for basic
-> > > kvx support.
+On Tue, Jan 10, 2023 at 01:48:39PM +0800, Baolu Lu wrote:
+> On 2023/1/6 22:14, Jason Gunthorpe wrote:
+> > On Thu, Jan 05, 2023 at 03:57:28PM +0530, Vasant Hegde wrote:
+> > > Matt,
 > > > 
-> > > CC: Will Deacon <will@kernel.org>
-> > > CC: Peter Zijlstra <peterz@infradead.org>
-> > > CC: Boqun Feng <boqun.feng@gmail.com>
-> > > CC: Mark Rutland <mark.rutland@arm.com>
-> > > CC: linux-kernel@vger.kernel.org
-> > > Co-developed-by: Clement Leger <clement.leger@bootlin.com>
-> > > Signed-off-by: Clement Leger <clement.leger@bootlin.com>
-> > > Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
-> > > Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
-> > > Co-developed-by: Julian Vetter <jvetter@kalray.eu>
-> > > Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-> > > Co-developed-by: Julien Villette <jvillette@kalray.eu>
-> > > Signed-off-by: Julien Villette <jvillette@kalray.eu>
-> > > Co-developed-by: Yann Sionneau <ysionneau@kalray.eu>
-> > > Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
-> > > ---
-> > >  arch/kvx/include/asm/atomic.h  | 104 +++++++++++++++++
-> > >  arch/kvx/include/asm/barrier.h |  15 +++
-> > >  arch/kvx/include/asm/bitops.h  | 207 +++++++++++++++++++++++++++++++++
-> > >  arch/kvx/include/asm/bitrev.h  |  32 +++++
-> > >  arch/kvx/include/asm/cmpxchg.h | 185 +++++++++++++++++++++++++++++
-> > >  5 files changed, 543 insertions(+)
-> > >  create mode 100644 arch/kvx/include/asm/atomic.h
-> > >  create mode 100644 arch/kvx/include/asm/barrier.h
-> > >  create mode 100644 arch/kvx/include/asm/bitops.h
-> > >  create mode 100644 arch/kvx/include/asm/bitrev.h
-> > >  create mode 100644 arch/kvx/include/asm/cmpxchg.h
+> > > On 1/5/2023 6:39 AM, Matt Fagnani wrote:
+> > > > I built 6.2-rc2 with the patch applied. The same black screen problem happened
+> > > > with 6.2-rc2 with the patch. I tried to use early kdump with 6.2-rc2 with the
+> > > > patch twice by panicking the kernel with sysrq+alt+c after the black screen
+> > > > happened. The system rebooted after about 10-20 seconds both times, but no kdump
+> > > > and dmesg files were saved in /var/crash. I'm attaching the lspci -vvv output as
+> > > > requested.
+> > > > 
+> > > Thanks for testing. As mentioned earlier I was not expecting this patch to fix
+> > > the black screen issue. It should fix kernel warnings and IOMMU page fault
+> > > related call traces. By any chance do you have the kernel boot logs?
 > > > 
-> > > diff --git a/arch/kvx/include/asm/atomic.h b/arch/kvx/include/asm/atomic.h
-> > > new file mode 100644
-> > > index 000000000000..eb8acbcbc70d
-> > > --- /dev/null
-> > > +++ b/arch/kvx/include/asm/atomic.h
-> > > @@ -0,0 +1,104 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > > +/*
-> > > + * Copyright (C) 2017-2023 Kalray Inc.
-> > > + * Author(s): Clement Leger
-> > > + */
-> > > +
-> > > +#ifndef _ASM_KVX_ATOMIC_H
-> > > +#define _ASM_KVX_ATOMIC_H
-> > > +
-> > > +#include <linux/types.h>
-> > > +
-> > > +#include <asm/cmpxchg.h>
-> > > +
-> > > +#define ATOMIC64_INIT(i)     { (i) }
-> > > +
-> > > +#define arch_atomic64_cmpxchg(v, old, new) (arch_cmpxchg(&((v)->counter), old, new))
-> > > +#define arch_atomic64_xchg(v, new) (arch_xchg(&((v)->counter), new))
-> > > +
-> > > +static inline long arch_atomic64_read(const atomic64_t *v)
-> > > +{
-> > > +	return v->counter;
-> > > +}
+> > > 
+> > > @Baolu,
+> > >    Looking into lspci output, it doesn't list ACS feature for Graphics card. So
+> > > with your fix it didn't enable PASID and hence it failed to boot.
+> > The ACS checks being done are feature of the path not the end point or
+> > root port.
 > > 
-> > This is a plain read, and is *not* atomic.
+> > If we are expecting ACS on the end port then it is just a bug in how
+> > the test was written.. The test should be a NOP because there are no
+> > switches in this topology.
 > > 
-> > The compiler can replay a plain read an arbitrary number of times, and is
-> > permitted to split it into smaller accesses.
+> > Looking at it, this seems to just be because pci_enable_pasid is
+> > calling pci_acs_path_enabled wrong, the only other user is here:
 > > 
-> > At minimum this needs to be
+> > 	for (bus = pdev->bus; !pci_is_root_bus(bus); bus = bus->parent) {
+> > 		if (!bus->self)
+> > 			continue;
 > > 
-> >   READ_ONCE(v->counter)
+> > 		if (pci_acs_path_enabled(bus->self, NULL, REQ_ACS_FLAGS))
+> > 			break;
 > > 
-> > ... which will prevent replay. Whether or not that's actually atomic will
-> > depend on the instructions the compiler generates, and how those instructions
-> > are defines in your architecture.
-> Good point, we are going to use {READ,WRITE}_ONCE macros
+> > 		pdev = bus->self;
+> > 
+> > 		group = iommu_group_get(&pdev->dev);
+> > 		if (group)
+> > 			return group;
+> > 	}
+> > 
+> > And notice it is calling it on pdev->bus not on pdev itself which
+> > naturally excludes the end point from the ACS validation.
+> > 
+> > So try something like:
+> > 
+> > 	if (!pci_acs_path_enabled(pdev->bus->self, NULL, PCI_ACS_RR | PCI_ACS_UF))
+> > 
+> > (and probably need to check for null ?)
 > 
-> > Do you have a single instruction that can read a 64-bit memory location, and is
-> > it guaranteed to result in a single access that cannot be split?
+> Hi Matt,
 > 
-> We do have a single instruction that can read a 64-bit memory location
-> (supported sizes are 8, 16, 32, 64, 128, 256).
-> All accesses are guaranteed to not be split, unless they are misaligned.
-> Furthermore, misaligned write accesses crossing a 32-byte boundary may
-> complete in a non-atomic way.
-
-Perfect, thanks for confirming!
-
-[...]
-
-> > > +static inline void arch_atomic64_set(atomic64_t *v, long i)
-> > > +{
-> > > +	v->counter = i;
-> > > +}
-> > 
-> > Same comments as for arch_atomic64_read(); at minimum this needs to be:
-> > 
-> >   WRITE_ONCE(v->counter, i)
-> > 
-> > ... but that may or may not actually be atomic on your architecture.
-> > 
-> > > +#define ATOMIC64_RETURN_OP(op, c_op)					\
-> > > +static inline long arch_atomic64_##op##_return(long i, atomic64_t *v)	\
-> > > +{									\
-> > > +	long new, old, ret;						\
-> > > +									\
-> > > +	do {								\
-> > > +		old = v->counter;					\
-> > > +		new = old c_op i;					\
-> > > +		ret = arch_cmpxchg(&v->counter, old, new);		\
-> > > +	} while (ret != old);						\
-> > > +									\
-> > > +	return new;							\
-> > > +}
-> > > +
-> > > +#define ATOMIC64_OP(op, c_op)						\
-> > > +static inline void arch_atomic64_##op(long i, atomic64_t *v)		\
-> > > +{									\
-> > > +	long new, old, ret;						\
-> > > +									\
-> > > +	do {								\
-> > > +		old = v->counter;					\
-> > > +		new = old c_op i;					\
-> > > +		ret = arch_cmpxchg(&v->counter, old, new);		\
-> > > +	} while (ret != old);						\
-> > > +}
-> > > +
-> > > +#define ATOMIC64_FETCH_OP(op, c_op)					\
-> > > +static inline long arch_atomic64_fetch_##op(long i, atomic64_t *v)	\
-> > > +{									\
-> > > +	long new, old, ret;						\
-> > > +									\
-> > > +	do {								\
-> > > +		old = v->counter;					\
-> > > +		new = old c_op i;					\
-> > > +		ret = arch_cmpxchg(&v->counter, old, new);		\
-> > > +	} while (ret != old);						\
-> > > +									\
-> > > +	return old;							\
-> > > +}
-> > 
-> > These look ok, but it'd be nicer if we could teach the generic atomic64 code to
-> > do this, like the generic atomic code does.
-> > 
-> > We could rename the existing asm-generic/atomic64 code to atomic64-spinlock,
-> > and add a separate atomic64-cmpxchg (and likewise for the 32-bit code) to make
-> > that clearer and consistent.
-> I am not sure what this implies and how big this change might be,
-> but I'll take a look at this.
-
-Hmm... from a quick attempt just now it looks like that will be a bit more
-churny than I thought.
-
-We can always factor this out later, so feel free to leave it as-is, thgouh if
-we could make this genric (and have it look like asm-generic/atomic.h), it'd be
-nice for consistency and maintenance.
-
-> > > +
-> > > +#define ATOMIC64_OPS(op, c_op)						\
-> > > +	ATOMIC64_OP(op, c_op)						\
-> > > +	ATOMIC64_RETURN_OP(op, c_op)					\
-> > > +	ATOMIC64_FETCH_OP(op, c_op)
-> > > +
-> > > +ATOMIC64_OPS(and, &)
-> > > +ATOMIC64_OPS(or, |)
-> > > +ATOMIC64_OPS(xor, ^)
-> > > +ATOMIC64_OPS(add, +)
-> > > +ATOMIC64_OPS(sub, -)
-> > > +
-> > > +#undef ATOMIC64_OPS
-> > > +#undef ATOMIC64_FETCH_OP
-> > > +#undef ATOMIC64_OP
-> > > +
-> > > +static inline int arch_atomic_add_return(int i, atomic_t *v)
-> > > +{
-> > > +	int new, old, ret;
-> > > +
-> > > +	do {
-> > > +		old = v->counter;
-> > > +		new = old + i;
-> > > +		ret = arch_cmpxchg(&v->counter, old, new);
-> > > +	} while (ret != old);
-> > > +
-> > > +	return new;
-> > > +}
-> > > +
-> > > +static inline int arch_atomic_sub_return(int i, atomic_t *v)
-> > > +{
-> > > +	return arch_atomic_add_return(-i, v);
-> > > +}
-> > 
-> > Likewise for these two.
-
-The 32-bit atomics should come from asm-generic/atomic.h and not be necesary,
-that has both arch_atomic_add_return() and arch_atomic_sub_return().
-
-> > > diff --git a/arch/kvx/include/asm/cmpxchg.h b/arch/kvx/include/asm/cmpxchg.h
-> > > new file mode 100644
-> > > index 000000000000..b1d128b060a2
-> > > --- /dev/null
-> > > +++ b/arch/kvx/include/asm/cmpxchg.h
-> > > @@ -0,0 +1,185 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > > +/*
-> > > + * Copyright (C) 2017-2023 Kalray Inc.
-> > > + * Author(s): Clement Leger
-> > > + *            Yann Sionneau
-> > > + */
-> > > +
-> > > +#ifndef _ASM_KVX_CMPXCHG_H
-> > > +#define _ASM_KVX_CMPXCHG_H
-> > > +
-> > > +#include <linux/bits.h>
-> > > +#include <linux/types.h>
-> > > +#include <linux/build_bug.h>
-> > > +
-> > > +/*
-> > > + * On kvx, we have a boolean compare and swap which means that the operation
-> > > + * returns only the success of operation.
-> > > + * If operation succeed, this is simple, we just need to return the provided
-> > > + * old value. However, if it fails, we need to load the value to return it for
-> > > + * the caller. If the loaded value is different from the "old" provided by the
-> > > + * caller, we can return it since it will means it failed.
-> > > + * However, if for some reason the value we read is equal to the old value
-> > > + * provided by the caller, we can't simply return it or the caller will think it
-> > > + * succeeded. So if the value we read is the same as the "old" provided by
-> > > + * the caller, we try again until either we succeed or we fail with a different
-> > > + * value than the provided one.
-> > > + */
-> > > +#define __cmpxchg(ptr, old, new, op_suffix, load_suffix)		\
-> > > +({									\
-> > > +	register unsigned long __rn asm("r62");				\
-> > > +	register unsigned long __ro asm("r63");				\
-> > 
-> > Why do you need to specify the exact registers?
-> r62 and r63 are hardcoded in the inline assembly, they are caller saved.
-> I have a C implementation that uses builtins however this is not merged
-> in our tree yet (but I want to).
+> Do you mind helping to test below change? No other change needed.
 > 
-> > e.g. does some instruction use these implicitly, or do you need two adjacent
-> > register for encoding reasons?
+> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
+> index f9cc2e10b676..48f34cc996e4 100644
+> --- a/drivers/pci/ats.c
+> +++ b/drivers/pci/ats.c
+> @@ -382,8 +382,15 @@ int pci_enable_pasid(struct pci_dev *pdev, int
+> features)
+>         if (!pasid)
+>                 return -EINVAL;
 > 
-> The atomic compare and swap (acswap) instruction needs a register "pair"
-> which can only exists with "adjacent" registers:  $r0r1, $r2r3 ect.
+> -       if (!pci_acs_path_enabled(pdev, NULL, PCI_ACS_RR | PCI_ACS_UF))
+> -               return -EINVAL;
+> +       if (pdev->multifunction) {
+> +               if (!pci_acs_path_enabled(pdev, NULL, PCI_ACS_RR |
+> PCI_ACS_UF))
+> +                       return -EINVAL;
 
-Ok; and you don't have a way to ask GCC for an arbitrary register pair, so you
-chose r62+r63 as they can be clobbered?
+The AMD device is multi-function according to the lspci, and we
+already know that 'pci_acs_path_enabled' will fail on it because that
+is the problem..
 
-It might be worth looking into using an __int128_t to give you a register pair,
-assuming your calling convention mandares adjacency of the two halves. That
-could give you the pair while giving the compiler freedom to chose any suitable
-pair (assuming you have a suitable operand modifier to extract the low/high
-registers from the asm operand.
+Actually, I remember it is supposed to be like this:
 
-> > > +	__asm__ __volatile__ (						\
-> > > +		/* Fence to guarantee previous store to be committed */	\
-> > > +		"fence\n"						\
-> > 
-> > This implies you can implement the relaxed form of cmpxchg().
-> > 
-> > What ordering do you get by default, and do you have any other barriers (e.g.
-> > for acquire/release semantics), or just "fence" ?
-> We have two barrier types:
->  - fence: ensure that all uncached memory operations are committed to
->    memory, typically used to ensure a write to memory is visible to
->    other cores.
->  - barrier: flush the core instruction pipeline and memory system
+ https://lore.kernel.org/linux-iommu/Ygpb6CxmTdUHiN50@8bytes.org/
 
-Ok.
+The GPU and sound device are considered non-isolated by the group
+code, presumably because of the missing ACS caps.
 
-In the absence of barriers do you have any ordering guarantee? e.g. weak like
-arm/power, TSO like x86, or something else entirely?
+So, if I remember the issue, PCIe says that MemWr/Rd are routed
+according to their address and ignore the PASID header.
 
-When you say "uncached memory operations", does that mean that you have cached
-memory operatins which are not affected by the barriers, or is "uncached memory
-operations" just meant to read as "oustanding/incomplete memory operations" ?
+A multifunction device is permitted to loop back DMAs one function
+issues that match a MMIO BAR of another function. eg the GPU could DMA
+to an MMIO address that overlaps the sound device and the function
+will deliver the MMIO to the sound device not the host bridge even
+though it is PASID tagged.
 
-Thanks,
-Mark.
+This is what get_pci_function_alias_group() is looking for.
+
+Multifunction devices that do not do that are supposed to set the ACS
+RR|UF bits and get_pci_function_alias_group()/etc are supposed to
+succeed.
+
+Thus - the PCI information is telling us that the AMD GPU device does
+not support PASID because it may be looping back the MMIO to the other
+functions on the device and thus creating an unacceptable hole in the
+PASID address space.
+
+So - we need AMD to comment on which of these describes their GPU device:
+
+ 1) Is the issue that the PCI Caps are incorrect on this device and
+ there is no loopback? Thus we should fix it with a quirk to correct
+ the caps which will naturally split the iommu group too.
+
+ 2) Is the device broken and loops back PASID DMAs and we are
+ legimiate and correct in blocking PASID? So far AMD just got lucky
+ that no user had a SVA that overlaps with MMIO? Seems unlikely
+
+ 3) Is the device odd in that it doesn't loop back PASID tagged DMAs,
+ but does loop untagged? I would say this is non-compliant and PCI
+ provides no way to describe this. But we should again quirk it to
+ allow the PASID to be enabled but keep the group separated.
+
+Alex/Christian/Pan - can you please find out? The HW is:
+
+00:01.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Wani [Radeon R5/R6/R7 Graphics] (rev ca) (prog-if 00 [VGA controller])
+	DeviceName: ATI EG BROADWAY
+	Subsystem: Hewlett-Packard Company Device 8332
+00:01.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI] Kabini HDMI/DP Audio
+	Subsystem: Hewlett-Packard Company Device 8332
+
+https://lore.kernel.org/all/223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net/
+
+> +       } else {
+> +               if (!pdev->bus->self ||
+> +                   !pci_acs_path_enabled(pdev->bus->self, NULL,
+> +                                         PCI_ACS_RR | PCI_ACS_UF))
+> +                       return -EINVAL;
+> +       }
+
+Why would these be exclusive? Both the path and endpoint needs to be
+checked
+
+Jason
