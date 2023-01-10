@@ -2,169 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5C36638CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 06:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280DE6638CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 06:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbjAJFuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 00:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
+        id S229919AbjAJFuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 00:50:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjAJFtC (ORCPT
+        with ESMTP id S229774AbjAJFtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 00:49:02 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD3A1EAE1
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 21:49:00 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id d30so11724488lfv.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 21:49:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wEZQCF7r/hKH3+PuKuaEzx+VX+jWeUSGLdP7kMpvbXk=;
-        b=mnMXExPNaUGbHc03oJdZNZQ6xvbloLJpihN+Im7a+alsvj7Gu1N7RgMAcEeq5kRHLz
-         XySlHGCIKONS5ikU+ebg6EAbhztICZwdEeJOYarE/aIqE9ixPEU5quxCsVmt3LimRmp+
-         nn0U1fcXeUowMEjgBRuRckP8aV6k0+mDQe4VAQ6lshQXPvrGdOKyJFqpHr19f9VvTAgi
-         2TFgxrBhYYX4oWbJfMstPdibYHJKFgydedX2dOWG39f/Nvg+k3VBfdYkvwHyqG4BPe6G
-         5COmChwVzUjBWDUR5/LiTaBjeY9vPpnEGIzquuB/2D+BB7BIPBCF2fkhWf2396IPHpkX
-         P4Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wEZQCF7r/hKH3+PuKuaEzx+VX+jWeUSGLdP7kMpvbXk=;
-        b=HYBRtxku9RZ9OY9I8EgqXG/R4zoJgAN8pXlrQq6Y70GnJXT3XlEjgJPbRQagX9D6pZ
-         vbd/tcAIjKmRf0/ywXrKw12LnpJupId4QgK+4ZafVh8eSzIDHgmmXEShOIw6KFGlb3IM
-         EExtGW5aZys1eCcDMU4T7lwUYjiGDS5AYxO86yHkTTo/dpTRgYX88YQ/dL7U8zrh1ezm
-         f0MrzFaXNh2vSy5Y4iflNcOJ/BeMzCdDfCIMwmIWZ73ynpFHgRmA9kBLh0gb41hNeqsx
-         QWaklW4JNGRHhkf84z2gugEVYRKRvqNh+MJJJrvEknmhZyuYt5ZNGYniRzO1CdWMRc3b
-         VuyQ==
-X-Gm-Message-State: AFqh2kriQZ2SbUU+7EciwcaX/BAr7fnRch8W/lK0azvxIxYqlb+HfUOt
-        94kTTgFTwlWzuqdJ1x7EX9KtOg==
-X-Google-Smtp-Source: AMrXdXtObN18+uFW0MQGD2/uG7h9Qi5wnyK0DtAuzC9YHGEtGEZhRUnE5aoLscqQo1UoyDffAU2GHA==
-X-Received: by 2002:a05:6512:64:b0:4cc:71d2:eff3 with SMTP id i4-20020a056512006400b004cc71d2eff3mr3044316lfo.21.1673329738963;
-        Mon, 09 Jan 2023 21:48:58 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id b9-20020a056512218900b004b57162edfasm1998300lft.117.2023.01.09.21.48.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 21:48:58 -0800 (PST)
-Message-ID: <913f2772-2673-4270-030c-c036984d36c6@linaro.org>
-Date:   Tue, 10 Jan 2023 07:48:57 +0200
+        Tue, 10 Jan 2023 00:49:32 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300A038B2;
+        Mon,  9 Jan 2023 21:49:30 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.186.163])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 225DA660230B;
+        Tue, 10 Jan 2023 05:49:24 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673329768;
+        bh=IzktKiuA2C+7fFsNxOT5xp2wBaUGwyAnVvBi3Idir3E=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=JpkC/d8FVY+F4TtOcy4rj+hatadaGiVeh4gQRDbUXVPWKmVHn22jbsIquJ8kYQEUn
+         bNWgZ0EijaKY2vMy4dcQdMQB/VzUd7do14SXu2oV3RTEnePYwt0wwePoOeZC1233C4
+         duOmeLsaMUo56TjPeTNtsY3VvxR7e0o3uAuEF57c4VmAx321s0x6AjPBJHx1w0z9+V
+         62gvy1zeYf3zE/XxpUheETJ/lCM4VUlP2rckcJ603iC6c3j6AvbLuaVnGjXtN6RCKe
+         xHctrMfsbXkg6rHmj9a9lg83R8iwhfpYUJBwMT0EYsvOQZvc9SIu3NO7SvK19p6DBS
+         n98N+vk+ecZkQ==
+Message-ID: <8a0ebe48-c9fd-b030-71bd-4a806c6d5f29@collabora.com>
+Date:   Tue, 10 Jan 2023 10:49:20 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH v6 04/18] dt-bindings: msm: dsi-controller-main: Add
- compatible strings for every current SoC
-Content-Language: en-GB
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
-        airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
-        dianders@chromium.org, david@ixit.cz,
-        krzysztof.kozlowski+dt@linaro.org, swboyd@chromium.org,
-        konrad.dybcio@somainline.org, agross@kernel.org,
-        andersson@kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221223021025.1646636-1-bryan.odonoghue@linaro.org>
- <20221223021025.1646636-5-bryan.odonoghue@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221223021025.1646636-5-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, kernel@collabora.com,
+        peterx@redhat.com, david@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] mm: implement granular soft-dirty vma support
+To:     Cyrill Gorcunov <gorcunov@gmail.com>
+References: <20221220162606.1595355-1-usama.anjum@collabora.com>
+ <Y7ySt0XGnbzTyY6T@grain>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y7ySt0XGnbzTyY6T@grain>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/12/2022 04:10, Bryan O'Donoghue wrote:
-> Currently we do not differentiate between the various users of the
-> qcom,mdss-dsi-ctrl. The driver is flexible enough to operate from one
-> compatible string but, the hardware does have some significant differences
-> in the number of clocks.
+On 1/10/23 3:18 AM, Cyrill Gorcunov wrote:
+> On Tue, Dec 20, 2022 at 09:26:05PM +0500, Muhammad Usama Anjum wrote:
+> ...
+>>
+>> +static inline int nsdr_adjust_new_first(struct vm_area_struct *new, struct vm_area_struct *vma)
+>> +{
+>> +	struct non_sd_reg *r, *r_tmp, *reg;
+>> +	unsigned long mid = vma->vm_start;
+>> +
+>> +	list_for_each_entry_safe(r, r_tmp, &vma->non_sd_reg, nsdr_head) {
+>> +		if (r->start < mid && r->end > mid) {
+>> +			reg = kmalloc(sizeof(struct non_sd_reg), GFP_KERNEL);
+>> +			if (!reg)
+>> +				return -ENOMEM;
+>> +			reg->start = r->start;
+>> +			reg->end = mid;
+>> +			list_add_tail(&reg->nsdr_head, &new->non_sd_reg);
+>> +
+>> +			r->start = mid;
+>> +		} else if (r->end <= mid) {
+>> +			list_move_tail(&r->nsdr_head, &new->non_sd_reg);
+>> +		}
+>> +	}
+>> +	return 0;
+>> +}
 > 
-> To facilitate documenting the clocks add the following compatible strings
-> 
-> - qcom,apq8064-dsi-ctrl
-> - qcom,msm8916-dsi-ctrl
-> - qcom,msm8953-dsi-ctrl
-> - qcom,msm8974-dsi-ctrl
-> - qcom,msm8996-dsi-ctrl
-> - qcom,msm8998-dsi-ctrl
-> - qcom,sc7180-dsi-ctrl
-> - qcom,sc7280-dsi-ctrl
-> - qcom,sdm660-dsi-ctrl
-> - qcom,sdm845-dsi-ctrl
-> - qcom,sm8250-dsi-ctrl
-> - qcom,qcm2290-dsi-ctrl
-> 
-> Deprecate qcom,dsi-ctrl-6g-qcm2290 in favour of the desired format while we
-> do so.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->   .../display/msm/dsi-controller-main.yaml      | 26 ++++++++++++++++---
->   1 file changed, 22 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> index 6e2fd6e9fa7f0..98d54a7ee28d4 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> @@ -14,9 +14,27 @@ allOf:
->   
->   properties:
->     compatible:
-> -    enum:
-> -      - qcom,mdss-dsi-ctrl
-> -      - qcom,dsi-ctrl-6g-qcm2290
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - qcom,apq8064-dsi-ctrl
-> +              - qcom,msm8916-dsi-ctrl
-> +              - qcom,msm8953-dsi-ctrl
-> +              - qcom,msm8974-dsi-ctrl
-> +              - qcom,msm8996-dsi-ctrl
-> +              - qcom,msm8998-dsi-ctrl
-> +              - qcom,qcm2290-dsi-ctrl
-> +              - qcom,sc7180-dsi-ctrl
-> +              - qcom,sc7280-dsi-ctrl
-> +              - qcom,sdm660-dsi-ctrl
-> +              - qcom,sdm845-dsi-ctrl
-> +              - qcom,sm8250-dsi-ctrl
+> Hi Muhhamad, really sorry for delay. Please enlighten me here if I get your
+No problem.
+> idea right -- every new VMA merge might create a new non_sd_seg entry, right?
+Every new VMA only has the non_sd_reg list initialized with no entries as
+the whole VMA is soft-dirty at creation time. We add entries in this list
+when the soft-dirty is cleared over the entire or the part of the VMA.
+Once soft_dirty has been cleared, there might be entries in the non_sd_reg
+lists of both VMAs which will be maintained properly if VMAs are
+split/merged or freed if removed. At this time, the soft-dirty can only be
+cleared over the entire process and hence over entire VMAs. So this list
+will have only one entry even if VMAs are merged until VMAs are split.
 
-If you would for any reason send v7, could you please also add sm8150 
-and sm8[345]50?
+> And this operation will be applied again and again until vma get freed. IOW
+> we gonna have a chain of non_sd_reg which will be hanging around until VMA
+> get freed, right?
+Correct.
 
-> +          - const: qcom,mdss-dsi-ctrl
-> +      - items:
-> +          - enum:
-> +              - dsi-ctrl-6g-qcm2290
-> +          - const: qcom,mdss-dsi-ctrl
-> +        deprecated: true
->   
->     reg:
->       maxItems: 1
-> @@ -149,7 +167,7 @@ examples:
->        #include <dt-bindings/power/qcom-rpmpd.h>
->   
->        dsi@ae94000 {
-> -           compatible = "qcom,mdss-dsi-ctrl";
-> +           compatible = "qcom,sc7180-dsi-ctrl", "qcom,mdss-dsi-ctrl";
->              reg = <0x0ae94000 0x400>;
->              reg-names = "dsi_ctrl";
->   
+I've posted the next version of PAGEMAP_SCAN ioctl [1] where soft-dirty
+support has been replaced with UFFD WP async. If that goes in, soft-dirty
+support can be left alone as people don't seem receptive of the idea that
+the soft-dirty support should be corrected.  UFFD WP async is better as it
+is PTE based. Please review it.
+
+[1]
+https://lore.kernel.org/all/20230109064519.3555250-1-usama.anjum@collabora.com
 
 -- 
-With best wishes
-Dmitry
-
+BR,
+Muhammad Usama Anjum
