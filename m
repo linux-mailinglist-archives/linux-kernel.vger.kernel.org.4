@@ -2,96 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EA6664CF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933F3664D00
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjAJUEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 15:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S232535AbjAJUGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 15:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbjAJUEh (ORCPT
+        with ESMTP id S233026AbjAJUGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:04:37 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2932C2F78A;
-        Tue, 10 Jan 2023 12:04:36 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D6CD01EC04AD;
-        Tue, 10 Jan 2023 21:04:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673381073;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=M3tBW9qCJ3Mizim533mGhH5rYMqDrEy70kptqc1M+Ac=;
-        b=b4Aa2IBjrRqDbJGbNnhz/liaC09snbvL0f09Lg7HQ+EmOsoJy/EpP+ZJKAIY9IYDZKJajF
-        ouVZKd57Km9haBznL/JK374dQMx5B21UDzrMnzEKS9i139BkBJf1WZ74vEfBoqnZZyxrZy
-        siGrxNLNeAuMPuyp7Zb20FD4ZQueAwo=
-Date:   Tue, 10 Jan 2023 21:04:33 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexey Kardashevskiy <aik@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jan Kara <jack@suse.cz>, Ingo Molnar <mingo@redhat.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH kernel v2 3/3] x86/sev: Do not handle #VC for DR7
- read/write
-Message-ID: <Y73E0aUFXkmQGDgX@zn.tnic>
-References: <20221209043804.942352-1-aik@amd.com>
- <20221209043804.942352-4-aik@amd.com>
+        Tue, 10 Jan 2023 15:06:13 -0500
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD1C11800;
+        Tue, 10 Jan 2023 12:06:12 -0800 (PST)
+Received: by mail-il1-f182.google.com with SMTP id d10so6944179ilc.12;
+        Tue, 10 Jan 2023 12:06:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lyKV/IytE5L3JlZxm80nPUoeIMqTlPyGJhm6uaeKye4=;
+        b=SO6Y3r2pEYh4JUq90D9MdojmOGskMAkXevbyi/rZei4anwaRTsdefooRlL1WkM5TR+
+         yH3zM3LTVzwXX8voBNr8NcNjfLpFV1OnBsoph1HZECxAomFdYpScDcak9SWlGdLjEb7H
+         LWXFvTdxMv5dd2OJkKOQIuK2tmkUTpMuFokUoIKCcnkbfOqInzvSn/dXVoOcGz9QvMHH
+         MaM/kkwBGUnNqNrx3sLTsTepjSFJO04ncR/cBtFFI6/m3ZNoVi+5uDA0bjmhB4/4Dk69
+         LGULGi2g3PFzSQt/fQp8mJuKQUqs0rDVgKmf1qs9P8oFOxCNVPlee4f5BoELccTv9SDD
+         u/DA==
+X-Gm-Message-State: AFqh2kpIhGvVH0GSpsSHqmVbe45UvIjEWwYZmDUiRysZ+2epOhIuyYU0
+        hCVLuYqrcvoEvx4xBiCQ06POll/XATYzeL+F7kE=
+X-Google-Smtp-Source: AMrXdXt/+/adN2gKCvNbXg4gfavl2nxb2JhYEEKLba753rvVOiBRlbf09CD51deqIAzFQcnlp35Rfu98VmNH5ckGtDI=
+X-Received: by 2002:a92:d605:0:b0:304:b8db:82d8 with SMTP id
+ w5-20020a92d605000000b00304b8db82d8mr4832855ilm.25.1673381172207; Tue, 10 Jan
+ 2023 12:06:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221209043804.942352-4-aik@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221229204101.1099430-1-namhyung@kernel.org> <20221229204101.1099430-2-namhyung@kernel.org>
+ <Y7wFJ+NF0NwnmzLa@hirez.programming.kicks-ass.net> <Y7x3RUd67smv3EFQ@google.com>
+In-Reply-To: <Y7x3RUd67smv3EFQ@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 10 Jan 2023 12:06:00 -0800
+Message-ID: <CAM9d7ciVZCHk0YqpobfR+t0FPN_-tpnLgNbN981=EygkM_riDg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] perf/core: Set data->sample_flags in perf_prepare_sample()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 03:38:04PM +1100, Alexey Kardashevskiy wrote:
-> With MSR_AMD64_SEV_DEBUG_SWAP enabled, the VM should not get #VC
-> events for DR7 read/write which it rather avoided.
-> 
-> Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
-> ---
-> Changes:
-> v2:
-> * use new bit definition
-> ---
->  arch/x86/include/asm/msr-index.h       | 1 +
->  tools/arch/x86/include/asm/msr-index.h | 1 +
->  arch/x86/kernel/sev.c                  | 6 ++++++
->  3 files changed, 8 insertions(+)
+On Mon, Jan 9, 2023 at 12:21 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> Hi Peter,
+>
+> On Mon, Jan 09, 2023 at 01:14:31PM +0100, Peter Zijlstra wrote:
+> > On Thu, Dec 29, 2022 at 12:41:00PM -0800, Namhyung Kim wrote:
+> >
+> > So I like the general idea; I just think it's turned into a bit of a
+> > mess. That is code is already overly branchy which is known to hurt
+> > performance, we should really try and not make it worse than absolutely
+> > needed.
+>
+> Agreed.
+>
+> >
+> > >  kernel/events/core.c | 86 ++++++++++++++++++++++++++++++++------------
+> > >  1 file changed, 63 insertions(+), 23 deletions(-)
+> > >
+> > > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > > index eacc3702654d..70bff8a04583 100644
+> > > --- a/kernel/events/core.c
+> > > +++ b/kernel/events/core.c
+> > > @@ -7582,14 +7582,21 @@ void perf_prepare_sample(struct perf_event_header *header,
+> > >     filtered_sample_type = sample_type & ~data->sample_flags;
+> > >     __perf_event_header__init_id(header, data, event, filtered_sample_type);
+> > >
+> > > -   if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE))
+> > > -           data->ip = perf_instruction_pointer(regs);
+> > > +   if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE)) {
+> > > +           /* attr.sample_type may not have PERF_SAMPLE_IP */
+> >
+> > Right, but that shouldn't matter, IIRC its OK to have more bits set in
+> > data->sample_flags than we have set in attr.sample_type. It just means
+> > we have data available for sample types we're (possibly) not using.
+> >
+> > That is, I think you can simply write this like:
+> >
+> > > +           if (!(data->sample_flags & PERF_SAMPLE_IP)) {
+> > > +                   data->ip = perf_instruction_pointer(regs);
+> > > +                   data->sample_flags |= PERF_SAMPLE_IP;
+> > > +           }
+> > > +   }
+> >
+> >       if (filtered_sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE)) {
+> >               data->ip = perf_instruction_pointer(regs);
+> >               data->sample_flags |= PERF_SAMPLE_IP);
+> >       }
+> >
+> >       ...
+> >
+> >       if (filtered_sample_type & PERF_SAMPLE_CODE_PAGE_SIZE) {
+> >               data->code_page_size = perf_get_page_size(data->ip);
+> >               data->sample_flags |= PERF_SAMPLE_CODE_PAGE_SIZE;
+> >       }
+> >
+> > Then after a single perf_prepare_sample() run we have:
+> >
+> >   pre                 |       post
+> >   ----------------------------------------
+> >   0                   |       0
+> >   IP                  |       IP
+> >   CODE_PAGE_SIZE      |       IP|CODE_PAGE_SIZE
+> >   IP|CODE_PAGE_SIZE   |       IP|CODE_PAGE_SIZE
+> >
+> > So while data->sample_flags will have an extra bit set in the 3rd case,
+> > that will not affect perf_sample_outout() which only looks at data->type
+> > (== attr.sample_type).
+> >
+> > And since data->sample_flags will have both bits set, a second run will
+> > filter out both and avoid the extra work (except doing that will mess up
+> > the branch predictors).
+>
+> Yeah, it'd be better to check filtered_sample_type in the first place.
+>
+> Btw, I was thinking about a hypothetical scenario that IP set by a PMU
+> driver not from the regs.  In this case, having CODE_PAGE_SIZE will
+> overwrite the IP.  I don't think we need to worry about that for now
+> since PMU drivers updates the regs (using set_linear_ip).  But it seems
+> like a possible scenario for something like PEBS or IBS.
 
-Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+Another example, but in this case it's real, is ADDR.  We cannot update
+the data->addr just because filtered_sample_type has PHYS_ADDR or
+DATA_PAGE_SIZE as it'd lose the original value.
 
--- 
-Regards/Gruss,
-    Boris.
+Other than that, I'll update the other paths to minimized the branches.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Namhyung
