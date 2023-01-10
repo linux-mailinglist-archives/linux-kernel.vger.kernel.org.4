@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C325664BE6
+	by mail.lfdr.de (Postfix) with ESMTP id C87D6664BE7
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238373AbjAJTEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:04:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
+        id S239675AbjAJTEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:04:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239663AbjAJTEG (ORCPT
+        with ESMTP id S239485AbjAJTEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:04:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB8CC2C;
-        Tue, 10 Jan 2023 11:04:05 -0800 (PST)
+        Tue, 10 Jan 2023 14:04:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90196418
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:04:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B61B61866;
-        Tue, 10 Jan 2023 19:04:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCFDBC433EF;
-        Tue, 10 Jan 2023 19:04:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5335CB8196F
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:04:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB108C433D2;
+        Tue, 10 Jan 2023 19:04:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673377444;
-        bh=cMloBfgRXcPaivDxBGV45/PyJEpmffBJWfiRdIAMdCU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fys4UPeZcW4izhx0mZgQ1PCbzZt6jepaHXFAtoLEQs89oOmk2vLAVFtddnsKwxI4t
-         +AMfSBQZk/zCA2ti229JqsdbQ3nvnXrAIuXJE8gzw9iwWEkMuI+m6EaInONFuAszm6
-         UkkEQ4P4manxdf0QPiF9htrVPPqcQ9WS4oxfrRe5SBAoqMPKkM6Qgzqs2uLhtle5T3
-         ujGNazYNSpsSiR/EAXQ25c1y25/XsmGBlEgEJ0OUmHEQpw8Pm1jcEw/BoOBGuvfpAq
-         +rkxFPkQlWCF/FiF0+M6kh4OziuHTDkfsswT8liRrUrpaJb0sdFv7On+BHtfeDcSPm
-         eDxURokTs+u1A==
+        s=k20201202; t=1673377445;
+        bh=EpuEVUL614S47vXoslv07ySnDH61IdNVsBrU1EkLty8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fCl8S7YiAsYSjVYQ6JjpL33E5Zdyh0Drih0OrdQyMBev/agRdKUdaHNWOrGbsRJsk
+         CUm9xv0Q1qyvDy/JbGUNQAH4T2SCwyC0lwrr3By+XE5/gPxPZUEJTGvN8p9MNiYoUH
+         fJNRL+cOlBex8DtmAvlIcioI4YLkXREUsKisYvBQRXNjsHzh6JIaPkyi0DG+RCkTkY
+         BEggkVrMC5MbN75tGE5AjEaBQqvdq+bYZEszEMZhwLR2sFFK/im+NdyEMMbLFCwESC
+         lsHWX7EzszK4qUGrr0DNzX1R9gXbytMa+c88X9+QFYpxaCrUt9mwFUlVLDKC/1LoiL
+         p5PeAAxRCMc9g==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/8] mm/damon: trivial fixups
-Date:   Tue, 10 Jan 2023 19:03:52 +0000
-Message-Id: <20230110190400.119388-1-sj@kernel.org>
+Cc:     SeongJae Park <sj@kernel.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/8] mm/damon/core: update kernel-doc comments for DAMOS action supports of each DAMON operations set
+Date:   Tue, 10 Jan 2023 19:03:53 +0000
+Message-Id: <20230110190400.119388-2-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230110190400.119388-1-sj@kernel.org>
+References: <20230110190400.119388-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -53,33 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset contains patches for trivial fixups of DAMON's
-documentation, MAINTAINERS section, and selftests.
+Supports of each DAMOS action are up to DAMON operations set
+implementation in use, but not well mentioned on the kernel-doc
+comments.  Add the comment.
 
-SeongJae Park (8):
-  mm/damon/core: update kernel-doc comments for DAMOS action supports of
-    each DAMON operations set
-  mm/damon/core: update kernel-doc comments for DAMOS filters supports
-    of each DAMON operations set
-  Docs/mm/damon/index: mention DAMOS on the intro
-  Docs/admin-guide/mm/damon/usage: update DAMOS actions/filters supports
-    of each DAMON operations set
-  Docs/mm/damon: add a maintainer-profile for DAMON
-  MAINTAINERS/DAMON: link maintainer profile, git trees, and website
-  selftests/damon/sysfs: hide expected write failures
-  selftests/damon/debugfs_rm_non_contexts: hide expected write error
-    messages
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ include/linux/damon.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- Documentation/admin-guide/mm/damon/usage.rst  | 41 ++++++++----
- Documentation/mm/damon/index.rst              | 22 ++++---
- Documentation/mm/damon/maintainer-profile.rst | 62 +++++++++++++++++++
- MAINTAINERS                                   |  5 ++
- include/linux/damon.h                         | 11 ++++
- .../damon/debugfs_rm_non_contexts.sh          |  2 +-
- tools/testing/selftests/damon/sysfs.sh        |  2 +-
- 7 files changed, 122 insertions(+), 23 deletions(-)
- create mode 100644 Documentation/mm/damon/maintainer-profile.rst
-
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index 7907918ad2e0..3fa96d7c9fe4 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -91,6 +91,12 @@ struct damon_target {
+  * @DAMOS_LRU_DEPRIO:	Deprioritize the region on its LRU lists.
+  * @DAMOS_STAT:		Do nothing but count the stat.
+  * @NR_DAMOS_ACTIONS:	Total number of DAMOS actions
++ *
++ * The support of each action is up to running &struct damon_operations.
++ * &enum DAMON_OPS_VADDR and &enum DAMON_OPS_FVADDR supports all actions except
++ * &enum DAMOS_LRU_PRIO and &enum DAMOS_LRU_DEPRIO.  &enum DAMON_OPS_PADDR
++ * supports only &enum DAMOS_PAGEOUT, &enum DAMOS_LRU_PRIO, &enum
++ * DAMOS_LRU_DEPRIO, and &DAMOS_STAT.
+  */
+ enum damos_action {
+ 	DAMOS_WILLNEED,
 -- 
 2.25.1
 
