@@ -2,186 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B21C664D10
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987F9664D16
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbjAJUJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 15:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S231553AbjAJUL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 15:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbjAJUIy (ORCPT
+        with ESMTP id S231939AbjAJULA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:08:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD79350169;
-        Tue, 10 Jan 2023 12:08:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 10 Jan 2023 15:11:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5184C72E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:09:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673381373;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zJ+Y7Gt+N5DuU0ItM2Y0xzY3E6CfBcAA2aVtb1Bx88Q=;
+        b=RqHep7Bxc8LUFDR1QryCBRZL2oCiqehFAdtyQPa2v4mR8USNoHqvWgiAaThJRYTY9M3SLl
+        DeAhVQKPSoq7a2yWsRfs70Hjt55o4IdQ7Fb/qlWxN+WFI2q6FWLlX0Ut/PRaeJ3ysabInA
+        HERjxQ6fGqNYtgfGUlb7g9p1uLuu3ns=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-582-KULDvi_0PEGqfoqE9wf3vA-1; Tue, 10 Jan 2023 15:09:28 -0500
+X-MC-Unique: KULDvi_0PEGqfoqE9wf3vA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7ED59B819A9;
-        Tue, 10 Jan 2023 20:08:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06A22C433D2;
-        Tue, 10 Jan 2023 20:08:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673381321;
-        bh=v5zZZVMVI19qPsrPgwPDLn3updtRS3vB1jiKuxNNESs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qMpchvtBibz68smIGUljQnvGDjbttteNaJGZzUsu6RXc2sn1QLZCUVdhV/Yyk/5TG
-         uoJq2N8iTsUmKK4U/YufKfgOhRsA+uu+jqJ22GSwVIXmU+r3CgedR56/55hetmmUT6
-         yigtKy77jkJWqLPzvRQpJkA5vNCU1YL3YBHxnXy4pRlI2BQQhnZwV/+XKfP8TKDHgr
-         ffn9kLSnrZhoQR44Hr795gurePRuuqr0Pqo/d3ET3IJ4eqSMDYHrn4pGpzvVKLs3ZQ
-         tYHdv84C6jONOEdRlC8yce4bg474VqN5w0SzDCxh/GD5vkhxgrcv4synQM/mZ6suAR
-         lPV34vq12kt3Q==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-trace-devel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] Documentation/rtla: Add hwnoise man page
-Date:   Tue, 10 Jan 2023 21:08:07 +0100
-Message-Id: <d4bdb3920693381794511068f04bf56cf221fb1f.1673380089.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <cover.1673380089.git.bristot@kernel.org>
-References: <cover.1673380089.git.bristot@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A5BFD101B42B;
+        Tue, 10 Jan 2023 20:09:27 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9734E492C14;
+        Tue, 10 Jan 2023 20:09:26 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 6BF854050D7B8; Tue, 10 Jan 2023 17:09:06 -0300 (-03)
+Date:   Tue, 10 Jan 2023 17:09:06 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Christoph Lameter <cl@gentwo.de>
+Cc:     Frederic Weisbecker <frederic@kernel.org>, atomlin@atomlin.com,
+        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
+        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v13 2/6] mm/vmstat: Use vmstat_dirty to track
+ CPU-specific vmstat discrepancies
+Message-ID: <Y73F4tbfxT6Kb9kZ@tpad>
+References: <20230105125218.031928326@redhat.com>
+ <20230105125248.813825852@redhat.com>
+ <b89a9828-d4e-9874-d482-dbb6cbe46@gentwo.de>
+ <Y71XpnJGumySL9ej@lothringen>
+ <7c2af941-42a9-a59b-6a20-b331a4934a3@gentwo.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7c2af941-42a9-a59b-6a20-b331a4934a3@gentwo.de>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a man page for the new rtla hwnoise tool, mostly based in the
-rtla osnoise top.
+On Tue, Jan 10, 2023 at 02:39:08PM +0100, Christoph Lameter wrote:
+> On Tue, 10 Jan 2023, Frederic Weisbecker wrote:
+> 
+> > Note I'm absolutely clueless with vmstat. But I was wondering about it as well
+> > while reviewing Marcelo's series, so git blame pointed me to:
+> >
+> > 7c83912062c801738d7d19acaf8f7fec25ea663c ("vmstat: User per cpu atomics to avoid
+> > interrupt disable / enable")
+> >
+> > And this seem to mention that this can race with IRQs as well, hence the local
+> > cmpxchg operation.
+> 
+> The race with irq could be an issue but I thought we avoided that and were
+> content with disabling preemption.
+> 
+> But this issue illustrates the central problem of the patchset: It makes
+> the lightweight counters not so lightweight anymore. 
 
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
----
- Documentation/tools/rtla/rtla-hwnoise.rst | 107 ++++++++++++++++++++++
- 1 file changed, 107 insertions(+)
- create mode 100644 Documentation/tools/rtla/rtla-hwnoise.rst
+https://lkml.iu.edu/hypermail/linux/kernel/0903.2/00569.html
 
-diff --git a/Documentation/tools/rtla/rtla-hwnoise.rst b/Documentation/tools/rtla/rtla-hwnoise.rst
-new file mode 100644
-index 000000000000..fb1c52bbc00b
---- /dev/null
-+++ b/Documentation/tools/rtla/rtla-hwnoise.rst
-@@ -0,0 +1,107 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+============
-+rtla-hwnoise
-+============
-+------------------------------------------
-+Detect and quantify hardware-related noise
-+------------------------------------------
-+
-+:Manual section: 1
-+
-+SYNOPSIS
-+========
-+
-+**rtla hwnoise** [*OPTIONS*]
-+
-+DESCRIPTION
-+===========
-+
-+**rtla hwnoise** collects the periodic summary from the *osnoise* tracer
-+running with *interrupts disabled*. By disabling interrupts, and the scheduling
-+of threads as a consequence, only non-maskable interrupts and hardware-related
-+noise is allowed.
-+
-+The tool also allows the configurations of the *osnoise* tracer and the
-+collection of the tracer output.
-+
-+OPTIONS
-+=======
-+.. include:: common_osnoise_options.rst
-+
-+.. include:: common_top_options.rst
-+
-+.. include:: common_options.rst
-+
-+EXAMPLE
-+=======
-+In the example below, the **rtla hwnoise** tool is set to run on CPUs *1-7*
-+on a system with 8 cores/16 threads with hyper-threading enabled.
-+
-+The tool is set to detect any noise higher than *one microsecond*,
-+to run for *ten minutes*, displaying a summary of the report at the
-+end of the session::
-+
-+  # rtla hwnoise -c 1-7 -T 1 -d 10m -q
-+                                          Hardware-related Noise
-+  duration:   0 00:10:00 | time is in us
-+  CPU Period       Runtime        Noise  % CPU Aval   Max Noise   Max Single          HW          NMI
-+    1 #599       599000000          138    99.99997           3            3           4           74
-+    2 #599       599000000           85    99.99998           3            3           4           75
-+    3 #599       599000000           86    99.99998           4            3           6           75
-+    4 #599       599000000           81    99.99998           4            4           2           75
-+    5 #599       599000000           85    99.99998           2            2           2           75
-+    6 #599       599000000           76    99.99998           2            2           0           75
-+    7 #599       599000000           77    99.99998           3            3           0           75
-+
-+
-+The first column shows the *CPU*, and the second column shows how many
-+*Periods* the tool ran during the session. The *Runtime* is the time
-+the tool effectively runs on the CPU. The *Noise* column is the sum of
-+all noise that the tool observed, and the *% CPU Aval* is the relation
-+between the *Runtime* and *Noise*.
-+
-+The *Max Noise* column is the maximum hardware noise the tool detected in a
-+single period, and the *Max Single* is the maximum single noise seen.
-+
-+The *HW* and *NMI* columns show the total number of *hardware* and *NMI* noise
-+occurrence observed by the tool.
-+
-+For example, *CPU 3* ran *599* periods of *1 second Runtime*. The CPU received
-+*86 us* of noise during the entire execution, leaving *99.99997 %* of CPU time
-+for the application. In the worst single period, the CPU caused *4 us* of
-+noise to the application, but it was certainly caused by more than one single
-+noise, as the *Max Single* noise was of *3 us*. The CPU has *HW noise,* at a
-+rate of *six occurrences*/*ten minutes*. The CPU also has *NMIs*, at a higher
-+frequency: around *seven per second*.
-+
-+The tool should report *0* hardware-related noise in the ideal situation.
-+For example, by disabling hyper-threading to remove the hardware noise,
-+and disabling the TSC watchdog to remove the NMI (it is possible to identify
-+this using tracing options of **rtla hwnoise**), it was possible to reach
-+the ideal situation in the same hardware::
-+
-+  # rtla hwnoise -c 1-7 -T 1 -d 10m -q
-+                                          Hardware-related Noise
-+  duration:   0 00:10:00 | time is in us
-+  CPU Period       Runtime        Noise  % CPU Aval   Max Noise   Max Single          HW          NMI
-+    1 #599       599000000            0   100.00000           0            0           0            0
-+    2 #599       599000000            0   100.00000           0            0           0            0
-+    3 #599       599000000            0   100.00000           0            0           0            0
-+    4 #599       599000000            0   100.00000           0            0           0            0
-+    5 #599       599000000            0   100.00000           0            0           0            0
-+    6 #599       599000000            0   100.00000           0            0           0            0
-+    7 #599       599000000            0   100.00000           0            0           0            0
-+
-+SEE ALSO
-+========
-+
-+**rtla-osnoise**\(1)
-+
-+Osnoise tracer documentation: <https://www.kernel.org/doc/html/latest/trace/osnoise-tracer.html>
-+
-+AUTHOR
-+======
-+Written by Daniel Bristot de Oliveira <bristot@kernel.org>
-+
-+.. include:: common_appendix.rst
--- 
-2.38.1
+With added
+
+static void do_test_preempt(void)
+{
+        unsigned long flags;
+        unsigned int i;
+        cycles_t time1, time2, time;
+        u32 rem;
+
+        local_irq_save(flags);
+        preempt_disable();
+        time1 = get_cycles();
+        for (i = 0; i < NR_LOOPS; i++) {
+                preempt_disable();
+                preempt_enable();
+        }
+        time2 = get_cycles();
+        local_irq_restore(flags);
+        preempt_enable();
+        time = time2 - time1;
+
+        printk(KERN_ALERT "test results: time for disabling/enabling preemption\n");
+        printk(KERN_ALERT "number of loops: %d\n", NR_LOOPS);
+        printk(KERN_ALERT "total time: %llu\n", time);
+        time = div_u64_rem(time, NR_LOOPS, &rem);
+        printk(KERN_ALERT "-> enabling/disabling preemption takes %llu cycles\n",
+time);
+        printk(KERN_ALERT "test end\n");
+}
+
+
+model name	: 11th Gen Intel(R) Core(TM) i7-11850H @ 2.50GHz
+
+[  423.676079] test init
+[  423.676249] test results: time for baseline
+[  423.676405] number of loops: 200000
+[  423.676676] total time: 104274
+[  423.676910] -> baseline takes 0 cycles
+[  423.677051] test end
+[  423.678150] test results: time for locked cmpxchg
+[  423.678353] number of loops: 200000
+[  423.678498] total time: 2473839
+[  423.678630] -> locked cmpxchg takes 12 cycles
+[  423.678810] test end
+[  423.679204] test results: time for non locked cmpxchg
+[  423.679394] number of loops: 200000
+[  423.679527] total time: 740298
+[  423.679644] -> non locked cmpxchg takes 3 cycles
+[  423.679817] test end
+[  423.680755] test results: time for locked add return
+[  423.680951] number of loops: 200000
+[  423.681089] total time: 2118185
+[  423.681229] -> locked add return takes 10 cycles
+[  423.681411] test end
+[  423.681846] test results: time for enabling interrupts (STI)
+[  423.682063] number of loops: 200000
+[  423.682209] total time: 861591
+[  423.682335] -> enabling interrupts (STI) takes 4 cycles
+[  423.682532] test end
+[  423.683606] test results: time for disabling interrupts (CLI)
+[  423.683852] number of loops: 200000
+[  423.684006] total time: 2440756
+[  423.684141] -> disabling interrupts (CLI) takes 12 cycles
+[  423.684588] test end
+[  423.686626] test results: time for disabling/enabling interrupts (STI/CLI)
+[  423.686879] number of loops: 200000
+[  423.687015] total time: 4802297
+[  423.687139] -> enabling/disabling interrupts (STI/CLI) takes 24 cycles
+[  423.687389] test end
+[  423.688025] test results: time for disabling/enabling preemption
+[  423.688258] number of loops: 200000
+[  423.688396] total time: 1341001
+[  423.688526] -> enabling/disabling preemption takes 6 cycles
+[  423.689276] test end
+
+> The basic primitives add a  lot of weight. 
+
+Can't see any alternative given the necessity to avoid interruption
+by the work to sync per-CPU vmstats to global vmstats.
+
+> And the pre cpu atomic updates operations require the modification
+> of multiple values. The operation 
+> cannot be "atomic" in that sense anymore and we need some other form of
+> synchronization that can
+> span multiple instructions.
+
+    So use this_cpu_cmpxchg() to avoid the overhead. Since we can no longer
+    count on preremption being disabled we still have some minor issues.
+    The fetching of the counter thresholds is racy.
+    A threshold from another cpu may be applied if we happen to be
+    rescheduled on another cpu.  However, the following vmstat operation
+    will then bring the counter again under the threshold limit.
+
+Those small issues are gone, OTOH.
+
+
+
+
 
