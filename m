@@ -2,149 +2,543 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE700663F93
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED120663F98
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238045AbjAJL4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 06:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S238147AbjAJL5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 06:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbjAJL4T (ORCPT
+        with ESMTP id S238064AbjAJL5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 06:56:19 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F69A15F1C;
-        Tue, 10 Jan 2023 03:56:18 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30A9stBk016840;
-        Tue, 10 Jan 2023 11:56:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=szV5uSi2lewecbhIhUNYInP6JwNl6YUB0TxKUWgBMj8=;
- b=COlt0u4omcrTXpav+cWJ8qbFQw4Fsk/b1pVIf0i7L3/x/LzrJ6wPeiz0x98SWjVb+axa
- 83gSpdG3ImWUMwowfF7ONXtVPnUEpufh6efQtWuvkPkJsdkuvPLNV0jYHLONHMRX7Yum
- nbSC3aaCL8oKTk12HQEwKZy2LrZ7dh2QgIjbajiyK+j6l9ddqNqv5osPrqqtyGV0mXc3
- NRvY0YOF7z3rgW3jbkVCxz/mQ6LkiRY5Stg79XgwrTaX0xryrEnzmZuW2dXpmDSczb7b
- MbrFUU5Z6xG3nnLlDzAHsLR5RZ7q6lkb3iUu9aD6f4Ep77aksfrCyrhpjtdVyBAiCWVP mA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n13cngk7v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 11:56:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30ABuDqL028238
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 11:56:13 GMT
-Received: from [10.50.61.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 10 Jan
- 2023 03:56:10 -0800
-Message-ID: <e2ac0fa4-28f0-f4d8-e02a-b2a5d6131a48@quicinc.com>
-Date:   Tue, 10 Jan 2023 17:26:07 +0530
+        Tue, 10 Jan 2023 06:57:06 -0500
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A45164B1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:57:02 -0800 (PST)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 26E573F2E2;
+        Tue, 10 Jan 2023 12:56:59 +0100 (CET)
+Date:   Tue, 10 Jan 2023 12:56:57 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Lux Aliaga <they@mint.lgbt>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org, keescook@chromium.org,
+        tony.luck@intel.com, gpiccoli@igalia.com,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org, martin.botka@somainline.org
+Subject: Re: [PATCH v6 6/6] arm64: dts: qcom: sm6125: Initial support for
+ xiaomi-laurel-sprout
+Message-ID: <20230110115657.zkm6yomut6tevqrz@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Lux Aliaga <they@mint.lgbt>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
+        bvanassche@acm.org, keescook@chromium.org, tony.luck@intel.com,
+        gpiccoli@igalia.com, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org, martin.botka@somainline.org
+References: <20230108195336.388349-1-they@mint.lgbt>
+ <20230108195336.388349-7-they@mint.lgbt>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V0 1/1] bootconfig: Increase max size of bootconfig from
- 32 KB to 256 KB for DCC support
-Content-Language: en-US
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1673261071.git.quic_schowdhu@quicinc.com>
- <654357bcbfd3974072a558c494a51edafaa73e1a.1673261071.git.quic_schowdhu@quicinc.com>
- <20230110001820.5ca81344286f614ed4ccec77@kernel.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <20230110001820.5ca81344286f614ed4ccec77@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: -35SDsFvE0ty9eDrUPpPm93SYwHNP34g
-X-Proofpoint-GUID: -35SDsFvE0ty9eDrUPpPm93SYwHNP34g
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_03,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 mlxscore=0 mlxlogscore=986 adultscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301100072
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230108195336.388349-7-they@mint.lgbt>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-01-08 16:53:36, Lux Aliaga wrote:
+> Add support for the Xiaomi Mi A3 (xiaomi-laurel-sprout). Here's a
+> summary on what's defined.
+> 
+> - dmesg output to bootloader preconfigured display
+> - USB
+> - UFS
+> - SD card
+> - SMD RPM regulators
+> - Volume Up, Down and Power buttons
+> - Thermistors
+> 
+> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../dts/qcom/sm6125-xiaomi-laurel-sprout.dts  | 424 ++++++++++++++++++
+>  2 files changed, 425 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 3e79496292e7..2b2a0170db14 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -157,6 +157,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm4250-oneplus-billie2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-xiaomi-laurel-sprout.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm6350-sony-xperia-lena-pdx213.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm6375-sony-xperia-murray-pdx225.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sm7225-fairphone-fp4.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts b/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts
+> new file mode 100644
+> index 000000000000..7ff18f481060
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel-sprout.dts
+> @@ -0,0 +1,424 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2022, Lux Aliaga <they@mint.lgbt>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/input/gpio-keys.h>
+> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+> +#include "sm6125.dtsi"
+> +#include "pm6125.dtsi"
+> +
+> +/ {
+> +	model = "Xiaomi Mi A3";
+> +	compatible = "xiaomi,laurel-sprout", "qcom,sm6125";
+> +	chassis-type = "handset";
+> +
+> +	/* required for bootloader to select correct board */
+> +	qcom,msm-id = <394 0>; /* sm6125 v1 */
+> +	qcom,board-id = <11 0>;
+> +
+> +	chosen {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		framebuffer0: framebuffer@5c000000 {
+> +			compatible = "simple-framebuffer";
+> +			reg = <0 0x5c000000 0 (1560 * 720 * 4)>;
+> +			width = <720>;
+> +			height = <1560>;
+> +			stride = <(720 * 4)>;
+> +			format = "a8r8g8b8";
+> +		};
+> +	};
+> +
+> +	reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +
+> +		debug_mem: debug@ffb00000 {
+> +			reg = <0x0 0xffb00000 0x0 0xc0000>;
+> +			no-map;
+> +		};
+> +
+> +		last_log_mem: lastlog@ffbc0000 {
+> +			reg = <0x0 0xffbc0000 0x0 0x80000>;
+> +			no-map;
+> +		};
+> +
+> +		pstore_mem: ramoops@ffc00000 {
+> +			compatible = "ramoops";
+> +			reg = <0x0 0xffc40000 0x0 0xc0000>;
+> +			record-size = <0x1000>;
+> +			console-size = <0x40000>;
+> +			msg-size = <0x20000 0x20000>;
+> +		};
+> +
+> +		cmdline_mem: memory@ffd00000 {
+> +			reg = <0x0 0xffd40000 0x0 0x1000>;
+> +			no-map;
+> +		};
+> +	};
+> +
+> +	extcon_usb: usb-id {
+> +		compatible = "linux,extcon-usb-gpio";
+> +		id-gpio = <&tlmm 102 GPIO_ACTIVE_HIGH>;
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +
+> +		pinctrl-0 = <&vol_up_n>;
+> +		pinctrl-names = "default";
+> +
+> +		key-volume-up {
+> +			label = "Volume Up";
+> +			gpios = <&pm6125_gpio 5 GPIO_ACTIVE_LOW>;
 
+Note that this changed to plural pm6125_gpioS in -next:
+https://lore.kernel.org/all/20221209220450.1793421-1-marijn.suijten@somainline.org/
 
-On 1/9/2023 8:48 PM, Masami Hiramatsu (Google) wrote:
-> On Mon, 9 Jan 2023 20:01:05 +0530
-> Souradeep Chowdhury <quic_schowdhu@quicinc.com> wrote:
-> 
->> Increasing the memory size of bootconfig to be able to handle a max number of
->> 8192 nodes to be fitted in memory size of 256KB.
-> 
-> Sorry, but you missed the 'xbc_node::data' stores the index of the data and
-> that is uint16_t. So the XBC_DATA_MAX is fixed limitation.
-> 
-> The number of nodes (XBC_NODE_MAX) can be expanded because I just decided it
-> to keep the pre-compiled array size ~8KB. Maybe expanding it to 64KB just
-> increase the size of kernel on init memory (and freed after boot).
-> 
-> Could you tell me why you need such a big data for your DCC?
-> 
-> Thank you,
+You'll have to fix that up before this patch can be applied to Bjorn's
+QCOM DTS tree.
 
-DCC is a debugging tool used in qcom which is needed to debug crashes
-that can happen at boot-time. For debugging purposes a large number of
-registers need to be configured in DCC driver which is to be fed via the
-bootconfig file. For that we need to expand the nodes as well as memory
-for using bootconfig.
-Can you let us know the changes that you suggest for doing the same? Is 
-it fine to just increase the XBC_NODE_MAX, do we also need to
-change the uint16_t to u32 for proper storing of index values?
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			debounce-interval = <15>;
+> +			linux,can-disable;
+> +			wakeup-source;
+> +		};
+> +	};
+> +
+> +	thermal-zones {
+> +		rf-pa0-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&pm6125_adc_tm 0>;
+> +
+> +			trips {
+> +				active-config0 {
+> +					temperature = <125000>;
+> +					hysteresis = <1000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		quiet-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <5000>;
+> +			thermal-sensors = <&pm6125_adc_tm 1>;
+> +
+> +			trips {
+> +				active-config0 {
+> +					temperature = <125000>;
+> +					hysteresis = <1000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		xo-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&pm6125_adc_tm 2>;
+> +
+> +			trips {
+> +				active-config0 {
+> +					temperature = <125000>;
+> +					hysteresis = <1000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&hsusb_phy1 {
+> +	vdd-supply = <&vreg_l7a>;
+> +	vdda-pll-supply = <&vreg_l10a>;
+> +	vdda-phy-dpdm-supply = <&vreg_l15a>;
+> +	status = "okay";
+> +};
+> +
+> +&pm6125_adc {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&camera_flash_therm &emmc_ufs_therm>;
+> +
+> +	adc-chan@4d {
+> +		reg = <ADC5_AMUX_THM1_100K_PU>;
+> +		qcom,ratiometric;
+> +		qcom,hw-settle-time = <200>;
+> +		qcom,pre-scaling = <1 1>;
+> +		label = "rf_pa0_therm";
+> +	};
+> +
+> +	adc-chan@4e {
+> +		reg = <ADC5_AMUX_THM2_100K_PU>;
+> +		qcom,ratiometric;
+> +		qcom,hw-settle-time = <200>;
+> +		qcom,pre-scaling = <1 1>;
+> +		label = "quiet_therm";
+> +	};
+> +
+> +	adc-chan@52 {
+> +		reg = <ADC5_GPIO1_100K_PU>;
+> +		qcom,ratiometric;
+> +		qcom,hw-settle-time = <200>;
+> +		qcom,pre-scaling = <1 1>;
+> +		label = "camera_flash_therm";
+> +	};
+> +
+> +	adc-chan@54 {
+> +		reg = <ADC5_GPIO3_100K_PU>;
+> +		qcom,ratiometric;
+> +		qcom,hw-settle-time = <200>;
+> +		qcom,pre-scaling = <1 1>;
+> +		label = "emmc_ufs_therm";
+> +	};
+> +};
+> +
+> +&pm6125_adc_tm {
+> +	status = "okay";
+> +
+> +	rf-pa0-therm@0 {
+> +		reg = <0>;
+> +		io-channels = <&pm6125_adc ADC5_AMUX_THM1_100K_PU>;
+> +		qcom,ratiometric;
+> +		qcom,hw-settle-time-us = <200>;
+> +	};
+> +
+> +	quiet-therm@1 {
+> +		reg = <1>;
+> +		io-channels = <&pm6125_adc ADC5_AMUX_THM2_100K_PU>;
+> +		qcom,ratiometric;
+> +		qcom,hw-settle-time-us = <200>;
+> +	};
+> +
+> +	xo-therm@2 {
+> +		reg = <2>;
+> +		io-channels = <&pm6125_adc ADC5_XO_THERM_100K_PU>;
+> +		qcom,ratiometric;
+> +		qcom,hw-settle-time-us = <200>;
+> +	};
+> +};
+> +
+> +&pm6125_gpio {
 
+Plural here too.
 
-> 
->>
->> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> ---
->>   include/linux/bootconfig.h | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
->> index 1611f9d..64d233b 100644
->> --- a/include/linux/bootconfig.h
->> +++ b/include/linux/bootconfig.h
->> @@ -55,11 +55,11 @@ struct xbc_node {
->>   } __attribute__ ((__packed__));
->>   
->>   #define XBC_KEY		0
->> -#define XBC_VALUE	(1 << 15)
->> -/* Maximum size of boot config is 32KB - 1 */
->> +#define XBC_VALUE	(1 << 18)
->> +/* Maximum size of boot config is 256KB - 1 */
->>   #define XBC_DATA_MAX	(XBC_VALUE - 1)
->>   
->> -#define XBC_NODE_MAX	1024
->> +#define XBC_NODE_MAX	8192
->>   #define XBC_KEYLEN_MAX	256
->>   #define XBC_DEPTH_MAX	16
->>   
->> -- 
->> 2.7.4
->>
-> 
+With that (and Konrad's comment) fixed:
+
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+
+- Marijn
+
+> +	camera_flash_therm: camera-flash-therm-state {
+> +		pins = "gpio3";
+> +		function = PMIC_GPIO_FUNC_NORMAL;
+> +		bias-high-impedance;
+> +	};
+> +
+> +	emmc_ufs_therm: emmc-ufs-therm-state {
+> +		pins = "gpio6";
+> +		function = PMIC_GPIO_FUNC_NORMAL;
+> +		bias-high-impedance;
+> +	};
+> +
+> +	vol_up_n: vol-up-n-state {
+> +		pins = "gpio5";
+> +		function = PMIC_GPIO_FUNC_NORMAL;
+> +		input-enable;
+> +		bias-pull-up;
+> +	};
+> +};
+> +
+> +&pon_pwrkey {
+> +	status = "okay";
+> +};
+> +
+> +&pon_resin {
+> +	status = "okay";
+> +	linux,code = <KEY_VOLUMEDOWN>;
+> +};
+> +
+> +&rpm_requests {
+> +	regulators-0 {
+> +		compatible = "qcom,rpm-pm6125-regulators";
+> +
+> +		vreg_s6a: s6 {
+> +			regulator-min-microvolt = <936000>;
+> +			regulator-max-microvolt = <1422000>;
+> +		};
+> +
+> +		vreg_l1a: l1 {
+> +			regulator-min-microvolt = <1200000>;
+> +			regulator-max-microvolt = <1256000>;
+> +		};
+> +
+> +		vreg_l2a: l2 {
+> +			regulator-min-microvolt = <1000000>;
+> +			regulator-max-microvolt = <1056000>;
+> +		};
+> +
+> +		vreg_l3a: l3 {
+> +			regulator-min-microvolt = <1000000>;
+> +			regulator-max-microvolt = <1064000>;
+> +		};
+> +
+> +		vreg_l4a: l4 {
+> +			regulator-min-microvolt = <872000>;
+> +			regulator-max-microvolt = <976000>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l5a: l5 {
+> +			regulator-min-microvolt = <1648000>;
+> +			regulator-max-microvolt = <2950000>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l6a: l6 {
+> +			regulator-min-microvolt = <576000>;
+> +			regulator-max-microvolt = <656000>;
+> +		};
+> +
+> +		vreg_l7a: l7 {
+> +			regulator-min-microvolt = <872000>;
+> +			regulator-max-microvolt = <976000>;
+> +		};
+> +
+> +		vreg_l8a: l8 {
+> +			regulator-min-microvolt = <400000>;
+> +			regulator-max-microvolt = <728000>;
+> +		};
+> +
+> +		vreg_l9a: l9 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1896000>;
+> +		};
+> +
+> +		vreg_l10a: l10 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1896000>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l11a: l11 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1952000>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l12a: l12 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1996000>;
+> +		};
+> +
+> +		vreg_l13a: l13 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1832000>;
+> +		};
+> +
+> +		vreg_l14a: l14 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1904000>;
+> +		};
+> +
+> +		vreg_l15a: l15 {
+> +			regulator-min-microvolt = <3104000>;
+> +			regulator-max-microvolt = <3232000>;
+> +		};
+> +
+> +		vreg_l16a: l16 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1904000>;
+> +		};
+> +
+> +		vreg_l17a: l17 {
+> +			regulator-min-microvolt = <1248000>;
+> +			regulator-max-microvolt = <1304000>;
+> +		};
+> +
+> +		vreg_l18a: l18 {
+> +			regulator-min-microvolt = <1200000>;
+> +			regulator-max-microvolt = <1264000>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l19a: l19 {
+> +			regulator-min-microvolt = <1648000>;
+> +			regulator-max-microvolt = <2952000>;
+> +		};
+> +
+> +		vreg_l20a: l20 {
+> +			regulator-min-microvolt = <1648000>;
+> +			regulator-max-microvolt = <2952000>;
+> +		};
+> +
+> +		vreg_l21a: l21 {
+> +			regulator-min-microvolt = <2600000>;
+> +			regulator-max-microvolt = <2856000>;
+> +		};
+> +
+> +		vreg_l22a: l22 {
+> +			regulator-min-microvolt = <2944000>;
+> +			regulator-max-microvolt = <2950000>;
+> +			regulator-allow-set-load;
+> +		};
+> +
+> +		vreg_l23a: l23 {
+> +			regulator-min-microvolt = <3000000>;
+> +			regulator-max-microvolt = <3400000>;
+> +		};
+> +
+> +		vreg_l24a: l24 {
+> +			regulator-min-microvolt = <2944000>;
+> +			regulator-max-microvolt = <2950000>;
+> +			regulator-allow-set-load;
+> +		};
+> +	};
+> +};
+> +
+> +&sdc2_off_state {
+> +	sd-cd-pins {
+> +		pins = "gpio98";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +};
+> +
+> +&sdc2_on_state {
+> +	sd-cd-pins {
+> +		pins = "gpio98";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +	};
+> +};
+> +
+> +&sdhc_2 {
+> +	cd-gpios = <&tlmm 98 GPIO_ACTIVE_HIGH>;
+> +	vmmc-supply = <&vreg_l22a>;
+> +	vqmmc-supply = <&vreg_l5a>;
+> +	no-sdio;
+> +	no-mmc;
+> +	status = "okay";
+> +};
+> +
+> +&tlmm {
+> +	gpio-reserved-ranges = <22 2>, <28 6>;
+> +};
+> +
+> +&ufs_mem_hc {
+> +	vcc-supply = <&vreg_l24a>;
+> +	vccq2-supply = <&vreg_l11a>;
+> +	vcc-max-microamp = <600000>;
+> +	vccq2-max-microamp = <600000>;
+> +	status = "okay";
+> +};
+> +
+> +&ufs_mem_phy {
+> +	vdda-phy-supply = <&vreg_l4a>;
+> +	vdda-pll-supply = <&vreg_l10a>;
+> +	vdda-phy-max-microamp = <51400>;
+> +	vdda-pll-max-microamp = <14200>;
+> +	vddp-ref-clk-supply = <&vreg_l18a>;
+> +	status = "okay";
+> +};
+> +
+> +&usb3 {
+> +	status = "okay";
+> +};
+> +
+> +&usb3_dwc3 {
+> +	extcon = <&extcon_usb>;
+> +};
+> -- 
+> 2.39.0
 > 
