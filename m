@@ -2,99 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18D5664AAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448EA664AB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231901AbjAJSeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 13:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
+        id S239376AbjAJSf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239386AbjAJSdM (ORCPT
+        with ESMTP id S239567AbjAJSeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 13:33:12 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8624D49E
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:29:29 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so12633403wmb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:29:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RA6ekNgxx7SSbas5DiR46PtYuVSS5EoWQj2eL3S79SM=;
-        b=s+BUzm1BmJTq1urhSIRTqaW/HrBWnrdjUZRyjbd8XCdtwdD4bs2wmOH7DcXZIkpj2m
-         HwBBm1nPp7qv63GG+ggt4J20Z+cWTx/fQeq4HwV0V3ejgBXGGgS+EsJDOdMB0mUu9CZY
-         4XtY/CLBSmp3iT8AmguSzVSu5KrMTVn/cZ1ENQjfjk1ly7/U9BXgFDFu8KAqM5Fjv/jW
-         7dUl1AtaSbljVGyaB5/n7F8iHGE/XT40FPKlgg5KtMeC16XYKOHRZtxvqqgi1Uyzvb+3
-         ykFUyLm98OT0HhLcNGi0GiX0QNjhpqlM8vX2amXHrnDCwi4/o9Nv/y07TUvRit5dF71h
-         /44Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RA6ekNgxx7SSbas5DiR46PtYuVSS5EoWQj2eL3S79SM=;
-        b=IZ+PmmbIbMDBzFo1FmQPidcepcFq2ilscS3BJEPRHVuznBtSoE5nDMqmYhzqggm5aw
-         pMo/vxn1Uy/xNn5cHAVyYbKICQkcqh3aQ9e7KdqkVbMnt2nlUGq0EaLtyT+xruyLz86O
-         oWk2iGAevFseiiZt5AO6E0zXNQbLsKR4gVhEYPHen1as8LsajuJ0dMgbbDrTge4ZwoLE
-         dEOnLHxqXUOaVuxNYUxj3WKPKAGWV9JRsnjsDPx4RtQHuR7JcK9rklPISUj9X9MAnSCe
-         smS6Qz6Ui1vL1w4tfcwYfiDgU8rQXitmaLbB1giKTkibc4ATatb9k+eq50JFp+LIyvI8
-         hQ7Q==
-X-Gm-Message-State: AFqh2kpmEjaHB0TlovL4OHoD3+jFJ4rM30G5AiDAtJpQhCXVH5too+gv
-        u519l80lGTLc+bP3i+MhHLNXEg==
-X-Google-Smtp-Source: AMrXdXs7ciB+o7x92JNqbgbmOg3ruP9jwcZJaZPGOdqCunhD82y4PBXQVw7FwyAl3xR0cqRr6ndrCg==
-X-Received: by 2002:a05:600c:348b:b0:3d1:f16b:30e6 with SMTP id a11-20020a05600c348b00b003d1f16b30e6mr50397222wmq.28.1673375368064;
-        Tue, 10 Jan 2023 10:29:28 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u21-20020a7bc055000000b003d9aa76dc6asm23980098wmc.0.2023.01.10.10.29.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 10:29:26 -0800 (PST)
-Message-ID: <f909c1b0-97db-cc33-fa27-c5e901f11956@linaro.org>
-Date:   Tue, 10 Jan 2023 19:29:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: msm8916-zhihe: Add initial device
- tree for zhihe Wifi/LTE dongle UFI-001C and uf896
-Content-Language: en-US
-To:     forbidden405@foxmail.com, 'Andy Gross' <agross@kernel.org>,
-        'Bjorn Andersson' <andersson@kernel.org>,
-        'Konrad Dybcio' <konrad.dybcio@linaro.org>,
-        'Rob Herring' <robh+dt@kernel.org>,
-        'Krzysztof Kozlowski' <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 10 Jan 2023 13:34:09 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5FAA2AB8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:29:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1673375390; bh=miL+U54u+zbwiY1zJpyFrSycjgOcARyuIyOdsIcqAwg=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=BYQiFU30yqi3X9Qb4kRZ8o9LFNNvhMCAUgZ/MCb1uHXjZGWjvqwhsovnaKEOyrOdk
+         4Ed8rhTJtcn6oZXKpfH81pQmyeSqcnfapPAFm/fxpI2d/D0fJN55wyPq+gTwe6pjoP
+         7nIiumflzQDbVCQGmxksKZWRJR3j1Yc+FD9iw0IQ=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Tue, 10 Jan 2023 19:29:49 +0100 (CET)
+X-EA-Auth: 2yCuNAG5h3cTxbwR5VlwuO7IDCj5y64ot8HtV0N6YfFg/GXhAXaQHiEkliEtmYzUP0x8v2nBHL0uNeYy54P+K5wul7dZ2llz
+Date:   Tue, 10 Jan 2023 23:59:44 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-References: <20230110155014.31664-1-forbidden405@foxmail.com>
- <tencent_A7FA00B086BB0EFFDC1C64744FF85DAD2B06@qq.com>
- <8530aeef-8fdb-ede7-700e-856e5cbc6a5b@linaro.org>
- <tencent_98E029F744FE85B9FD68B570A45A01743F07@qq.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <tencent_98E029F744FE85B9FD68B570A45A01743F07@qq.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: [PATCH 1/2] drm/i915/gvt: Avoid full proxy f_ops for scan_nonprivbb
+ debug attributes
+Message-ID: <f0741e940ec911fba0c1375dd2750b9db94928b2.1673375066.git.drv@mailo.com>
+References: <cover.1673375066.git.drv@mailo.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1673375066.git.drv@mailo.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 19:17, forbidden405@foxmail.com wrote:
-> Thanks for your review, but I don't know how to deal with such a 
-> device with unknown vendor. Do you have any idea and show me
-> some possible solutions? If "zhihe" is dropped, what can be a substitute?
+Using DEFINE_SIMPLE_ATTRIBUTE macro with the debugfs_create_file()
+function adds the overhead of introducing a proxy file operation
+functions to wrap the original read/write inside file removal protection
+functions. This adds significant overhead in terms of introducing and
+managing the proxy factory file operations structure and function
+wrapping at runtime.
+As a replacement, a combination of DEFINE_DEBUGFS_ATTRIBUTE macro paired
+with debugfs_create_file_unsafe() is suggested to be used instead.  The
+DEFINE_DEBUGFS_ATTRIBUTE utilises debugfs_file_get() and
+debugfs_file_put() wrappers to protect the original read and write
+function calls for the debug attributes. There is no need for any
+runtime proxy file operations to be managed by the debugfs core.
+Following coccicheck make command helped identify this change:
 
-Please do not remove the context you are replying to.
+make coccicheck M=drivers/gpu/drm/i915/ MODE=patch COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
 
-You install this kernel with DTB on some device so clearly you have such
-device in hand, right? It has then some manufacturer, some company. If
-it is USB stick as you said, then it has even vendor ID, which might be
-or might not be real.
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ drivers/gpu/drm/i915/gvt/debugfs.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/gpu/drm/i915/gvt/debugfs.c b/drivers/gpu/drm/i915/gvt/debugfs.c
+index 0616b73175f3..03f081c3d9a4 100644
+--- a/drivers/gpu/drm/i915/gvt/debugfs.c
++++ b/drivers/gpu/drm/i915/gvt/debugfs.c
+@@ -147,9 +147,9 @@ vgpu_scan_nonprivbb_set(void *data, u64 val)
+ 	return 0;
+ }
+ 
+-DEFINE_SIMPLE_ATTRIBUTE(vgpu_scan_nonprivbb_fops,
+-			vgpu_scan_nonprivbb_get, vgpu_scan_nonprivbb_set,
+-			"0x%llx\n");
++DEFINE_DEBUGFS_ATTRIBUTE(vgpu_scan_nonprivbb_fops,
++			 vgpu_scan_nonprivbb_get, vgpu_scan_nonprivbb_set,
++			 "0x%llx\n");
+ 
+ static int vgpu_status_get(void *data, u64 *val)
+ {
+@@ -180,8 +180,8 @@ void intel_gvt_debugfs_add_vgpu(struct intel_vgpu *vgpu)
+ 
+ 	debugfs_create_file("mmio_diff", 0444, vgpu->debugfs, vgpu,
+ 			    &vgpu_mmio_diff_fops);
+-	debugfs_create_file("scan_nonprivbb", 0644, vgpu->debugfs, vgpu,
+-			    &vgpu_scan_nonprivbb_fops);
++	debugfs_create_file_unsafe("scan_nonprivbb", 0644, vgpu->debugfs, vgpu,
++				   &vgpu_scan_nonprivbb_fops);
+ 	debugfs_create_file("status", 0644, vgpu->debugfs, vgpu,
+ 			    &vgpu_status_fops);
+ }
+-- 
+2.34.1
+
+
 
