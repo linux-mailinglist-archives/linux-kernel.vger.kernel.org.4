@@ -2,177 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D824664803
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB79664802
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbjAJSCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 13:02:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S238600AbjAJSCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238682AbjAJR6L (ORCPT
+        with ESMTP id S238689AbjAJR6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 Jan 2023 12:58:11 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0615E22
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:57:49 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A2E82F4;
-        Tue, 10 Jan 2023 09:58:31 -0800 (PST)
-Received: from [10.1.196.46] (eglon.cambridge.arm.com [10.1.196.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF9C23F67D;
-        Tue, 10 Jan 2023 09:57:46 -0800 (PST)
-Message-ID: <ec5516e2-521b-084a-ce86-5c371eda2b75@arm.com>
-Date:   Tue, 10 Jan 2023 17:57:39 +0000
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91684E45;
+        Tue, 10 Jan 2023 09:57:52 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AFZiON027412;
+        Tue, 10 Jan 2023 17:57:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=VSAB5O5zW1UEm3r5V4pm/Pjdzw+2Z5dVjrGb0q+FBDk=;
+ b=D7N1UAdyF9dOyccRGi/0TivY+QuGO0sx7sMhPJfh9QE4TDzkgPYl+OpKPTmjSJuoHr8a
+ kLnXuUI1Enh/qN/an8+8P65cf9+nUwYuIMfVOanbRCAbpyKmtqlklNbMh+IOSM3//VTO
+ 8TO/uHE0CLc+pkztyMFB6CdqPxrCpIO2+AcOxWepcliSGUB8fs8Qn+9xAGrBeMqc/mO9
+ m2R3usIbvaN0uq3eplndoNwy0/cW85W8SehEs/nD3w9znnWL/F+hykAo8zqLf1EFrFwy
+ mONbzri+nHH2g4i3Zq0i5edm2yOvvGUMI2VR1w6UIWdVc16sEvCVGz6PO7aSPbqz6s9M Rw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n0q28jq5b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 17:57:41 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30AHvfS3008504
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 17:57:41 GMT
+Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 10 Jan
+ 2023 09:57:40 -0800
+Message-ID: <8f47229a-2785-5f54-f7d1-a42299de64fe@quicinc.com>
+Date:   Tue, 10 Jan 2023 09:57:40 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 03/18] x86/resctrl: Create helper for RMID allocation and
- mondata dir creation
-Content-Language: en-GB
-To:     "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Chatre, Reinette" <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        "carl@os.amperecomputing.com" <carl@os.amperecomputing.com>,
-        "lcherian@marvell.com" <lcherian@marvell.com>,
-        "bobo.shaobowang@huawei.com" <bobo.shaobowang@huawei.com>,
-        "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>,
-        "xingxin.hx@openanolis.org" <xingxin.hx@openanolis.org>,
-        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
-        "peternewman@google.com" <peternewman@google.com>
-References: <20221021131204.5581-1-james.morse@arm.com>
- <20221021131204.5581-4-james.morse@arm.com>
- <IA1PR11MB6097DBE28137579B89FD23739BFB9@IA1PR11MB6097.namprd11.prod.outlook.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <IA1PR11MB6097DBE28137579B89FD23739BFB9@IA1PR11MB6097.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Elliot Berman <quic_eberman@quicinc.com>
+Subject: Re: [PATCH v8 07/28] mailbox: Allow direct registration to a channel
+To:     Alex Elder <elder@linaro.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        "Sudeep Holla" <sudeep.holla@arm.com>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-acpi@vger.kernel.org>
+References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
+ <20221219225850.2397345-8-quic_eberman@quicinc.com>
+ <942f20cc-87d3-d014-1527-8d3d3e1ae44b@linaro.org>
+Content-Language: en-US
+In-Reply-To: <942f20cc-87d3-d014-1527-8d3d3e1ae44b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: q_MOPBZQ5d9shU7caoByWgMe7_Y2jAZx
+X-Proofpoint-GUID: q_MOPBZQ5d9shU7caoByWgMe7_Y2jAZx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-10_07,2023-01-10_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
+ adultscore=0 spamscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301100115
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fenghua,
 
-On 06/01/2023 03:23, Yu, Fenghua wrote:
->> James Morse <james.morse@arm.com> writes:
+
+On 1/9/2023 1:34 PM, Alex Elder wrote:
+> On 12/19/22 4:58 PM, Elliot Berman wrote:
+>> Support virtual mailbox controllers and clients which are not platform
+>> devices or come from the devicetree by allowing them to match client to
+>> channel via some other mechanism.
+> 
+> The new function behaves very much like mbox_request_channel()
+> did before.
+> 
+> The new function differs from omap_mbox_request_channel() in that
+> it can change the if chan->txdone_method is TXDONE_BY_POLL, it
+> is changed to TXDONE_BY_ACK if the client's knows_txdone field is
+> set.  Is this OK?  Why?
+
+Both of the current drivers that use mbox_bind_client use TXDONE_BY_IRQ, 
+so this doesn't cause issue for checking whether the client has 
+txdone_method.
+
+> 
+> It also assumes chan->mbox->ops->startup us non-null (though that
+> isn't really a problem).
+> 
 >>
->> RMID are allocated for each monitor or control group directory, because each
->> of these needs its own RMID. For control groups,
->> rdtgroup_mkdir_ctrl_mon() later goes on to allocate the CLOSID.
+>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>> ---
+>>   drivers/mailbox/mailbox.c      | 96 ++++++++++++++++++++++++----------
+>>   drivers/mailbox/omap-mailbox.c | 18 ++-----
+>>   drivers/mailbox/pcc.c          | 18 ++-----
+>>   include/linux/mailbox_client.h |  1 +
+>>   4 files changed, 76 insertions(+), 57 deletions(-)
 >>
->> MPAM's equivalent of RMID are not an independent number, so can't be
->> allocated until the CLOSID is known. An RMID allocation for one CLOSID may fail,
->> whereas another may succeed depending on how many monitor groups a
->> control group has.
->>
->> The RMID allocation needs to move to be after the CLOSID has been allocated.
->>
->> To make a subsequent change that does this easier to read, move the RMID
->> allocation and mondata dir creation to a helper.
+>> diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
+>> index 4229b9b5da98..adf36c05fa43 100644
+>> --- a/drivers/mailbox/mailbox.c
+>> +++ b/drivers/mailbox/mailbox.c
+>> @@ -317,6 +317,71 @@ int mbox_flush(struct mbox_chan *chan, unsigned 
+>> long timeout)
+>>   }
+>>   EXPORT_SYMBOL_GPL(mbox_flush);
+>> +static int __mbox_bind_client(struct mbox_chan *chan, struct 
+>> mbox_client *cl)
+> 
+> There should be an unbind_client() call.  At a minimum, you are
+> calling try_module_get(), and the matching module_put() call
+> would belong there.  And even though one might just call
+> module_put() elsewhere for this, it would be cleaner to have
+> a function that similarly encapsulates the shutdown call
+> as well.
 
->> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> index 9ce4746778f4..841294ad6263 100644
->> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> @@ -2868,6 +2868,30 @@ static int rdtgroup_init_alloc(struct rdtgroup *rdtgrp)
->>  	return 0;
->>  }
->>
->> +static int mkdir_rdt_prepare_rmid_alloc(struct rdtgroup *rdtgrp) {
->> +	int ret;
->> +
->> +	if (!rdt_mon_capable)
->> +		return 0;
->> +
->> +	ret = alloc_rmid();
->> +	if (ret < 0) {
->> +		rdt_last_cmd_puts("Out of RMIDs\n");
->> +		return ret;
->> +	}
->> +	rdtgrp->mon.rmid = ret;
->> +
->> +	ret = mkdir_mondata_all(rdtgrp->kn, rdtgrp, &rdtgrp-
->>> mon.mon_data_kn);
->> +	if (ret) {
->> +		rdt_last_cmd_puts("kernfs subdir error\n");
-
-
->> +		free_rmid(rdtgrp->closid, rdtgrp->mon.rmid);
-
-                ^^^^^^^^^
-
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->>  static int mkdir_rdt_prepare(struct kernfs_node *parent_kn,
->>  			     const char *name, umode_t mode,
->>  			     enum rdt_group_type rtype, struct rdtgroup **r)
->> @@ -2933,20 +2957,10 @@ static int mkdir_rdt_prepare(struct kernfs_node
->> *parent_kn,
->>  		goto out_destroy;
->>  	}
->>
->> -	if (rdt_mon_capable) {
->> -		ret = alloc_rmid();
->> -		if (ret < 0) {
->> -			rdt_last_cmd_puts("Out of RMIDs\n");
->> -			goto out_destroy;
->> -		}
->> -		rdtgrp->mon.rmid = ret;
->> +	ret = mkdir_rdt_prepare_rmid_alloc(rdtgrp);
->> +	if (ret)
->> +		goto out_destroy;
->>
->> -		ret = mkdir_mondata_all(kn, rdtgrp, &rdtgrp-
->>> mon.mon_data_kn);
->> -		if (ret) {
->> -			rdt_last_cmd_puts("kernfs subdir error\n");
->> -			goto out_idfree;
->> -		}
->> -	}
->>  	kernfs_activate(kn);
->>
->>  	/*
->> @@ -2954,8 +2968,6 @@ static int mkdir_rdt_prepare(struct kernfs_node
->> *parent_kn,
->>  	 */
->>  	return 0;
->>
->> -out_idfree:
->> -	free_rmid(rdtgrp->closid, rdtgrp->mon.rmid);
->>  out_destroy:
->>  	kernfs_put(rdtgrp->kn);
->>  	kernfs_remove(rdtgrp->kn);
-
-> Why not free allocated rmid? Rmid leak without freed.
-
-It's just moved into the helper.
-
-This free_rmid() is here because this function used to allocate the rmid and the mondata
-as separate steps. Now a helper does that in one go - and cleans up after itself.
-
-If mkdir_rdt_prepare_rmid_alloc() fails, it didn't allocate an rmid .. if it secretly did,
-it free()s it itself, see the ^-lighted code above.
-
+The function for this is "mbox_free_channel".
 
 Thanks,
-
-James
+Elliot
