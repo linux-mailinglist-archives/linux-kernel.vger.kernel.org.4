@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8867C66400D
+	by mail.lfdr.de (Postfix) with ESMTP id 153FB66400B
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbjAJMOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:14:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S232535AbjAJMOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:14:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238177AbjAJMN0 (ORCPT
+        with ESMTP id S238356AbjAJMNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:13:26 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9F43A0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:11:35 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Tue, 10 Jan 2023 07:13:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF055689F
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:12:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F04B81EC04A9;
-        Tue, 10 Jan 2023 13:11:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673352694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ZfOt5HDc34dr/smZxobD5IUZu0DIYXCMGlcbHhVp6Uk=;
-        b=K/ZZSGYc3r17rRW2Q8WTFUmOhY/+8gSzNUfNuRa/IedMQDzOxInAxjMWGsC/6uP3VdVTpT
-        PX29LZ3Qi8l3waD95SnfzK1gUmaUws2UlDoWSlzVTcMT+1S1iRh+UEmeUjUctTQD2+aqYo
-        sU/mgVsBnjdEsR+nmj4NIk7/t7bef6g=
-Date:   Tue, 10 Jan 2023 13:11:29 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Zeng Heng <zengheng4@huawei.com>, michael.roth@amd.com,
-        hpa@zytor.com, tglx@linutronix.de,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        kirill.shutemov@linux.intel.com, jroedel@suse.de,
-        keescook@chromium.org, mingo@redhat.com,
-        dave.hansen@linux.intel.com, brijesh.singh@amd.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org, liwei391@huawei.com
-Subject: Re: [PATCH -v2] x86/boot/compressed: Register dummy NMI handler in
- EFI boot loader, to avoid kdump crashes
-Message-ID: <Y71V8SRLxZ/Uqkfs@zn.tnic>
-References: <20230110102745.2514694-1-zengheng4@huawei.com>
- <Y71FJ+G0NGQe3Ppq@gmail.com>
- <Y71TglxSLJKO17SY@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD73D6164B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:12:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB573C433D2;
+        Tue, 10 Jan 2023 12:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673352732;
+        bh=IwWkvSRf3Gwtk3/2fKB8W1LEqyUfjSb4cgN/1aunrQw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MIvNCBCQeSJAb0ufgFn2X7p6SO0YRwIfLXnoYtIe+CernyIifOQT6NpABFLGqn+xR
+         UyPXcKmi1oX7mrFO/7JBEkKgtqgfxrQ1Dxk98crXX98ZkfwpEvS+OTSpaO60+8Yu9e
+         8D6EKNs2bXFEyTWA2iZipQIb8vbHt7UXjWm2+fm3YeKeOcRSwgYdwQK0bmT8du/QFS
+         4bNqzXOTjKc2hf94w/WzSP3hZ06fCMOKgPWETpkDhoJsBz5Ntnlh8eba4KYprcw/MG
+         p78LxzkJT22wgQftVlJGdCChOy3VQ/TyJ6ChLTOw6OKODOGYZM9Tbv6NhWvmNheteq
+         Ajox8DEAuPslg==
+Date:   Tue, 10 Jan 2023 13:12:09 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Christoph Lameter <cl@gentwo.de>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>, atomlin@atomlin.com,
+        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
+        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v13 1/6] mm/vmstat: Add CPU-specific variable to track a
+ vmstat discrepancy
+Message-ID: <Y71WGeT2+6s4ewfv@lothringen>
+References: <20230105125218.031928326@redhat.com>
+ <20230105125248.772766288@redhat.com>
+ <e9673684-ef3-4070-18bd-2f20fbfe8d5@gentwo.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y71TglxSLJKO17SY@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e9673684-ef3-4070-18bd-2f20fbfe8d5@gentwo.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 01:01:06PM +0100, Ingo Molnar wrote:
-> From: Zeng Heng <zengheng4@huawei.com>
-> Date: Tue, 10 Jan 2023 18:27:45 +0800
-> Subject: [PATCH] x86/boot/compressed: Register dummy NMI handler in EFI boot loader, to avoid kdump crashes
+On Tue, Jan 10, 2023 at 12:58:32PM +0100, Christoph Lameter wrote:
+> On Thu, 5 Jan 2023, Marcelo Tosatti wrote:
 > 
-> If kdump is enabled, when using mce_inject to inject errors, EFI
-
-Why does "EFI" matter here? Any boot loader would do...
-
-> boot loader would decompress & load second kernel for saving the
-
-s/&/and/
-
-> vmcore file.
+> > +static inline void vmstat_mark_dirty(void)
+> > +{
+> > +	this_cpu_write(vmstat_dirty, true);
+> > +}
 > 
-> For normal errors that is fine.
-
-Useless sentence.
-
-> However, in the MCE case, the panic
-> CPU that firstly enters into mce_panic() is running within NMI
-> interrupt context,
-
-"#MC context" it is non-maskable but that's not "NMI interrupt context"
-
-> and the processor blocks delivery of subsequent
-> NMIs until the next execution of the IRET instruction.
+> this_cpu_write() is intended for an per cpu atomic context. You are not
+> using it in that way. The processor may have changed before or after and
+> thus vmstat_dirty for another CPU may  have been marked dirty.
 > 
-> When the panic CPU takes long time in the panic processing route,
+> I guess this would have to be called __vmstat_mark_dirty() and be using
+> __this_cpu_write(*) with a requirement that preemption be disabled before
+> using this function.
 
-I'm still unclear on the order of events here. It sounds like
+You're right. So this patchset also arranges for these vmstat functions to be
+called with preemption disabled. I'm converting the this_cpu operations
+to __this_cpu versions to make sure of that. And I believe the __this_cpu
+WARN if preemptible().
 
-1. MCE injected
-2. panic
-3. kdump gets loaded
 
-If that is the case, then I presume the flow is:
+> 
+> > +static inline void vmstat_clear_dirty(void)
+> > +{
+> > +	this_cpu_write(vmstat_dirty, false);
+> > +}
+> 
+> Same
+> 
+> > +static inline bool is_vmstat_dirty(void)
+> > +{
+> > +	return this_cpu_read(vmstat_dirty);
+> > +}
+> 
+> This function would only work correctly if preemption is disabled.
+> Otherwise the processor may change.
 
-mce_panic -> panic -> __crash_kexec()
+Indeed that should apply as __this_cpu_read() as well.
 
-Yes?
+Thanks!
 
-If so, then we should make sure we have *exited* #MC context before calling
-panic() and not have to add hacks like this one of adding an empty NMI handler.
-
-But I'm only speculating as it is hard to make sense of all this text.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
