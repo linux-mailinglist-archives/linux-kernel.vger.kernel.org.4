@@ -2,111 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0059664C99
+	by mail.lfdr.de (Postfix) with ESMTP id 6134C664C98
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232043AbjAJTfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S231948AbjAJTfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbjAJTf3 (ORCPT
+        with ESMTP id S232694AbjAJTfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:35:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C465567B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:35:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23562B81982
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:35:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83FBBC433D2;
-        Tue, 10 Jan 2023 19:35:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673379325;
-        bh=o9N3woG4Qs6mBhxJSHGOuHM5b3tLy/QKtrC0KOCKr3M=;
-        h=From:Date:Subject:To:Cc:From;
-        b=F/yBSqhYYA8BI6u8oX0BBZuvO8f0f2mC1viuKB8z9jQDFZq5DXjF7kZ6Mgk0Epj04
-         RGVhdDz26Pmvx6kVA71lZYh0L4oZhZRGAR2fC/h5TckbvxGNFYm+sta4fhikZGZClp
-         +Qc92dCZmD4CqSBQcNvPArGFwAJsG9XplD1tVQGNj5P38k5sYz4VR98CgCxin4PFQn
-         ZDJVjKLgt8XCtJRBWdWEDv36FM4w9ZAlhBBbgITTUCBVhkm0kC6ZVL1puoicKcYROc
-         CYLfT8Z5AAnsw3Eulzsnut076UWADaXvRYtG9n64pqDVv07KRYlpY5jUDcgSR1rO/c
-         jTlbyw696hREA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 10 Jan 2023 19:34:36 +0000
-Subject: [PATCH] arm64/sme: Optimise SME exit on syscall entry
+        Tue, 10 Jan 2023 14:35:25 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D501E3FD
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:35:24 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id bn26so12916837wrb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nexus-software-ie.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W24t1awpfKB6ptxeY9TlNfgzwEwkCjaMQOvWbmqbT58=;
+        b=kORZaBLpDatAoNPlGskCQ8mg+EYXm+S31KKByi2e00YCZitmdPiOHo6Kr+g8y5SN6W
+         uhJTEspGLyzuirEW5ym7lnhrb5GfQKyKWFngCvdSxZtVcw3wWdxn7GoWHIC4TeI8Joqd
+         AdMzx+2pqM5L+2ZCTP6ZR6QSDJiUskPbWHH+MDYp+bsvm0PrCx+vt+iA+BpefakcwsvM
+         +H8nY7sVgaWRnGrUh8W2BZq5JOe1tR/JIwjt2IZXDZk2XVtdZX1Ini9GonoVhPw7SMZv
+         V+od0PMF9axaqqXfH09Y84XTHbLzl5ps3dYx+/yDL5/fgraHyrFtUGnbiIpI2djQD9ag
+         taLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W24t1awpfKB6ptxeY9TlNfgzwEwkCjaMQOvWbmqbT58=;
+        b=YbPB9egj21stKgyHXD14kGzRgIxk0OMUwOMSTwNsS4ujDKBg7dBSZD8ZK9XUl1H4Pr
+         oGqiPzyjg9J+3G2cm+EziWjjxmWks8c4F3jLSp8HZMAompzMxvrbwtYGzs/lsHt9Uu57
+         G/XzAmONjqqz+tdQ/2DsjPpGOUKiQjtxIJ261tPCHSEdAHWKJOzq8EWQX/lSO8nuu+qE
+         hj+b/EtndYFiQYFZERwRL1TtyH4HSFtVyi1Wm5IzYt1rse67T6NXgsvrJrsB53VxU+3c
+         a2izVzVRPIM0SkzLUaau8l4SkOkM8h1qa02PNDICngHpiAoJMxrxFd0cORpSK0Oz6q0m
+         PSkg==
+X-Gm-Message-State: AFqh2koCs9VRo+bCaCXuj30vne7ZCsuRGAZwJPzsglDuN7qzejTjbN6u
+        DefwiBtTqr7QKJmmTkQBurfajQ==
+X-Google-Smtp-Source: AMrXdXt0ppqWzXs7iXoPKHx68lESAtM8EYIoOvNlvARbzlOQnBDHSBCcqzN0lr9nxr7oS8Igv0d6Og==
+X-Received: by 2002:adf:e6ce:0:b0:293:1089:d6a with SMTP id y14-20020adfe6ce000000b0029310890d6amr24950195wrm.39.1673379323138;
+        Tue, 10 Jan 2023 11:35:23 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id az20-20020a05600c601400b003d96bdddd3dsm16454705wmb.15.2023.01.10.11.35.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 11:35:22 -0800 (PST)
+Message-ID: <aace6523-0941-903e-6b80-399dc1cfc751@nexus-software.ie>
+Date:   Tue, 10 Jan 2023 19:35:22 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230110-arm64-sme-syscall-smstop-v1-1-ac94235fd810@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMy9vWMC/x2NSwrDMAxErxK0rsB2jCm9SunCdpRGNLGDVPoh5
- O51ups38GY2UBImhUu3gdCLlWtpYE8d5CmWOyEPjcEZ1xtrDUZZgkddCPWrOc5zy/qsK/rBut6H
- MaRwhqanqIRJYsnTMfCu8jjqVWjkz//xetv3H0QbQZGBAAAA
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12-dev-8b3d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1415; i=broonie@kernel.org;
- h=from:subject:message-id; bh=o9N3woG4Qs6mBhxJSHGOuHM5b3tLy/QKtrC0KOCKr3M=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjvb37ZoUaZ4FQvydDgtwXGdHTvjRqqA/GuyjoxYeM
- 6ihdipuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY729+wAKCRAk1otyXVSH0P+RB/
- oDRJ0uqLTp3uvung4cQ7A83NmXso2E+GOMVXh2Y69QHX0qEJ37nZlhOMXbEVPSKHlbjWMf9CkJscwA
- MAJsJCSDOVWGr5n2+FqO8MvNrjRu4wpYI+G0vrbbWDhGq207ILFN10+g+J19S0XKlte2Z1zLWfgFDd
- 825FDM3ujKxL5D0D/Ffk8/fl0xEeoguzl21RVdv5Xr+OHQNInaAkiy5qySEnUh24+FG6pMAl+DwGJg
- KFfnfeRUM5bap/S+z9JTkNxe0Zk3VHpCVI/k0YOYLzqpRYZE+CoOxL0x/SCUnp9kgXVNoApvf4ulwd
- +JzigFtiW5F7yDjHqvARHhQG+Np1CX
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: ieee80211_handle_wake_tx_queue and dynamic ps regression
+Content-Language: en-US
+To:     Alexander Wetzel <alexander@wetzel-home.de>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-kernel@vger.kernel.org, johannes.berg@intel.com,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org
+References: <19015168-c747-17b7-f0ae-9d2ee27d221c@linaro.org>
+ <06f76774-1b2e-f563-7128-7d5b9547dfe9@linaro.org>
+ <cf5e9339-2511-1135-71da-a8342b264414@linaro.org>
+ <205fb221-f7ad-8f03-2c16-54dcbf5ecaf9@wetzel-home.de>
+ <53b23ee9-a333-120e-8b58-cfa3a9bdaefc@wetzel-home.de>
+From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
+In-Reply-To: <53b23ee9-a333-120e-8b58-cfa3a9bdaefc@wetzel-home.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Our ABI says that we exit streaming mode on syscall entry. Currently we
-check if we are in streaming mode before doing this but since we have a
-SMSTOP SM instruction which will clear SVCR.SM in a single atomic operation
-we can save ourselves the read of the system register and check of the flag
-and just unconditionally do the SMSTOP SM. If we are not in streaming mode
-it results in a noop change to SVCR, if we are in streaming mode we will
-exit as desired.
+On 10/01/2023 15:43, Alexander Wetzel wrote:
+>>
+> 
+> Looks like the the commit 
+> https://patchwork.kernel.org/project/linux-wireless/patch/20221230121850.218810-1-alexander@wetzel-home.de/
+> has a good chance to solve the issue:
+> 
+> 1) Queues are stopped due to PS
+> 2) Then there is a TX attempt. But due to the (PS) queue stop
+>     wake_tx_push_queue() aborts the queue run
+> 3) Then we hit the bug the patch fixes: The queue is not marked to
+>     have pending packets and thus packets on it are not transmitted.
+> 
+> Packets get only send when you happen to try tx when the queue is 
+> operational. (And then you will get all the packets sitting in the queue.)
+> 
+> Does that make sense? And more crucial, is the patch fixing that for you?
 
-No functional change.
+Ok works for me.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/arm64/kernel/syscall.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-index a5de47e3df2b..da84cf855c44 100644
---- a/arch/arm64/kernel/syscall.c
-+++ b/arch/arm64/kernel/syscall.c
-@@ -173,12 +173,8 @@ static inline void fp_user_discard(void)
- 	 * register state to track, if this changes the KVM code will
- 	 * need updating.
- 	 */
--	if (system_supports_sme() && test_thread_flag(TIF_SME)) {
--		u64 svcr = read_sysreg_s(SYS_SVCR);
--
--		if (svcr & SVCR_SM_MASK)
--			sme_smstop_sm();
--	}
-+	if (system_supports_sme())
-+		sme_smstop_sm();
- 
- 	if (!system_supports_sve())
- 		return;
+Good job.
 
 ---
-base-commit: b7bfaa761d760e72a969d116517eaa12e404c262
-change-id: 20230110-arm64-sme-syscall-smstop-4d12346f6b68
-
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+bod
