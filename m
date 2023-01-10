@@ -2,247 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47F766501B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979F166501D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235371AbjAJX4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 18:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S233179AbjAJX5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 18:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235300AbjAJX4c (ORCPT
+        with ESMTP id S235063AbjAJX5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 18:56:32 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEE9DE2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:56:29 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id bp44so12583889qtb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:56:29 -0800 (PST)
+        Tue, 10 Jan 2023 18:57:12 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D03E6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:57:10 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id m6so20941339lfj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:57:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PQ5VzqScz6w9Ee0ucy8HcJjuj+uX9vX/90WHrjQzutM=;
-        b=oDRrtDJCK5bwkHA/25RZ1YqtKwSC+zTemlJpXX0tBnEgs/1lqi+onPbwgk7BS34ORS
-         4VJQeH+KWYpaaYXj5IUKWLJOMDqJ5TY2ObLt8Tve5B/ZAysn5ObDea1Vx9IhoXiRPzag
-         xAV1N6Q/Vq7uHYQYv3SCTzCwS5nH8BiXcUzdD/Nx7t4tOnN/9FWL5jjHyKLp3XJZK7Fq
-         gRElOsHUoAF38hHI109labephr0jWhYW7Vx1dBaooYfdRz4tqOnUhCy9D98xEzSV0B2x
-         0l3HtiWL7fOf9t8PTCvJlxfluvAoGc6hFLYM2HaXOQvGz8lqaqx1cfCEkK+xxylL+gIC
-         gB+g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IkTOuzrzX6KwlgMjt2sPQWSPFLHsLIuRAugm3KiZhdQ=;
+        b=fbvbaRwRXvgjXAdD5bkv43z4u2CyFCahI0+D+LKLgT1AFAefgLUmTfDtYQeokf0uuP
+         vmnk/5X1k53hpZxhquMQiPrDnNUQfQEE8iBZ14YmIX3JH6WoSyvBkvlep+KFawq4TcUH
+         0KKcMt+ZyO8P/f6/AFUreLVc24oJBm9aHSSXBAEB+BzMmVn9iKrZWFu+iIxz7McbFALo
+         dzURtRh6eIwOBgoscLEtlE6jlWhDD4iLqepokoYmwgxJKMJu4Bi9xoougJ7rilhWaW2M
+         ubbN5VZL/HnnGo2sm3eIDEhPkUpWLQy/yPYHCMW1Gzc2GYm/0tu89ZukiHHsClOjoLVM
+         4OcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PQ5VzqScz6w9Ee0ucy8HcJjuj+uX9vX/90WHrjQzutM=;
-        b=UVuC7BDmNdh2qM9eP0nusJs5w39WirMgfEoqGwqiCEqQn7Z0QC/Cb4ZmOhLB8ey0Jc
-         h42nC5iXIAjVxZ14cPM9RuHnB+stfOL2HQyJJIqRZQIInd8QJJWcHVT+ypdAhu72AZv8
-         XKGPJtFeNhma9CCNaRc0hpke00uzr6WGYWhNv14lbRzkMmaViBKv4C0htq6amPRp2aae
-         WpB68IxXLbviA7ngfZtSVrqRJHetF0yMLx7gUCUOZLocIJdRE5tjAiEbSNAvVEFJOD/1
-         qcx7YdM9hGiZdO+ZiXqVF1Ib9ALtDhYJYIvcH2aimxeI6MTDXfAHSk13auBKLGWK1361
-         CjQw==
-X-Gm-Message-State: AFqh2ko5rHzVKAgdN4+EfSekXGcP9kC+9+NMuCfGKJf0WS7LHeKrx5tQ
-        Njd8V4lFYOnRmb0MA/a5Sx1MadqCSCV4+CMdYwaINw==
-X-Google-Smtp-Source: AMrXdXs86mHRk/wvPfLVNPxlQhKf7hs1WZugsLCv26MQ8e4RKpJeprNIu8lxRACzIRC+2MX2+DasWzw3ZhMNic3vQdM=
-X-Received: by 2002:a05:622a:5c1a:b0:3a6:ee88:63dd with SMTP id
- gd26-20020a05622a5c1a00b003a6ee8863ddmr3319956qtb.446.1673394988250; Tue, 10
- Jan 2023 15:56:28 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IkTOuzrzX6KwlgMjt2sPQWSPFLHsLIuRAugm3KiZhdQ=;
+        b=fRxk2fOMgSYJXFzhXfS/U79a40qs9Mr1SZJsITUup5rN3Cdti/v5wkvIY3Wd8fGdpD
+         uNb+D1vqS3BA/nugYg2LPuMW5ycCmNJLcYs9au/jIME7b0WxsLROyygiMij936eS9GHU
+         z2vYe49m1SmFteWLCkT3/7uET2OTtOa9BcCn3edBuRSzQQ2WVvbWVaFotOnR1SIV7kHF
+         ihUT9MYwUHeswDNu98jE5jGSn4FF3h/JS2ED/xOc5OjGPqirhp69Xie0/9nd9khkfaNk
+         oYpAQ7m4aYbBiru4AogzUk8872cVorj67HD6/60gruz9I/jU/yLy0d3EzYNjHsU1hMjX
+         ZPKA==
+X-Gm-Message-State: AFqh2kovdP+UNOB7u5os8bD7Mhozs8lZAEbt1m8AoX1FZZrBEmZgLMyr
+        1/zMy3iyUUXZnjpQdk6liwVUxQ==
+X-Google-Smtp-Source: AMrXdXsIeaG8B3rt97xF1l+QuLOENzWEnJCNuiCDWrac82PSXsBwU2ZebqJazF8pM/gK3dyRPOYx1A==
+X-Received: by 2002:ac2:5edc:0:b0:4cc:74ac:9b6d with SMTP id d28-20020ac25edc000000b004cc74ac9b6dmr3544306lfq.12.1673395028389;
+        Tue, 10 Jan 2023 15:57:08 -0800 (PST)
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id n27-20020a05651203fb00b004cb21eaf6e6sm2430361lfq.0.2023.01.10.15.57.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 15:57:07 -0800 (PST)
+Message-ID: <d90fe8dd-fc9d-fe2c-4b5e-cd7f32d747c9@linaro.org>
+Date:   Wed, 11 Jan 2023 00:57:06 +0100
 MIME-Version: 1.0
-References: <20221228192438.2835203-1-vannapurve@google.com>
- <20221228192438.2835203-2-vannapurve@google.com> <Y7xX6hg+YTgTrAzW@google.com>
-In-Reply-To: <Y7xX6hg+YTgTrAzW@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Tue, 10 Jan 2023 15:56:17 -0800
-Message-ID: <CAGtprH_zPTOPn=wJ9W58Aw5Xbe0Rfq+dz+N+6CAQ+NHwU-Z+zw@mail.gmail.com>
-Subject: Re: [V4 PATCH 1/4] KVM: selftests: x86: use this_cpu_* helpers
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        shuah@kernel.org, bgardon@google.com, oupton@google.com,
-        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/2] arm64: defconfig: enable SM8550 DISPCC clock driver
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230110-topic-sm8550-upstream-display-defconfig-v1-0-9941c8083f10@linaro.org>
+ <20230110-topic-sm8550-upstream-display-defconfig-v1-1-9941c8083f10@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230110-topic-sm8550-upstream-display-defconfig-v1-1-9941c8083f10@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 10:07 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Wed, Dec 28, 2022, Vishal Annapurve wrote:
-> > Use this_cpu_* helpers to query the cpu vendor.
->
-> Neither the changelog nor the shortlog captures what this patch actually does,
-> or rather what I inteded it to do.  Specifically, what I suggested (or intended
-> to suggest) was:
->
->   KVM: selftests: Rename vendor string helpers to use "this_cpu" prefix
->
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> > ---
->
-> ...
->
-> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > index acfa1d01e7df..a799af572f3f 100644
-> > --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > @@ -1006,26 +1006,14 @@ void kvm_x86_state_cleanup(struct kvm_x86_state *state)
-> >       free(state);
-> >  }
-> >
-> > -static bool cpu_vendor_string_is(const char *vendor)
-> > -{
-> > -     const uint32_t *chunk = (const uint32_t *)vendor;
-> > -     uint32_t eax, ebx, ecx, edx;
-> > -
-> > -     cpuid(0, &eax, &ebx, &ecx, &edx);
-> > -     return (ebx == chunk[0] && edx == chunk[1] && ecx == chunk[2]);
-> > -}
-> > -
-> >  bool is_intel_cpu(void)
->
-> Drop the is_intel_cpu() and is_amd_cpu() wrappers.  The whole point of the rename
-> was so that it's obvious at the call site that the function is checking the "current"
-> CPU context.
->
-> That obviously means dropping the is_host_cpu_amd() and is_host_cpu_intel() wrappers
-> too.  IMO, the extra layer to jump through (more from a code reading perspective then
-> a code generation perspective) isn't worth protecting the booleans.
->
-> It's slightly more churn (in between patches, not overall), but the benefit is that
-> it allows squasing patches 2 and 3 into a single patch, e.g. "KVM: selftests: Cache
-> host CPU vendor (AMD vs. Intel)"
->
-> ---
->  tools/testing/selftests/kvm/include/x86_64/processor.h    | 3 +++
->  tools/testing/selftests/kvm/lib/x86_64/processor.c        | 8 ++++----
->  tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c   | 4 ++--
->  tools/testing/selftests/kvm/x86_64/mmio_warning_test.c    | 2 +-
->  .../testing/selftests/kvm/x86_64/pmu_event_filter_test.c  | 4 ++--
->  .../kvm/x86_64/vmx_exception_with_invalid_guest_state.c   | 2 +-
->  6 files changed, 13 insertions(+), 10 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> index fdb1af5ca611..c7885f72132a 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> @@ -19,6 +19,9 @@
->
->  #include "../kvm_util.h"
->
-> +extern bool host_cpu_is_intel;
-> +extern bool host_cpu_is_amd;
-> +
->  #define NMI_VECTOR             0x02
->
->  #define X86_EFLAGS_FIXED        (1u << 1)
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> index 0b8de34aa10e..84915bc7d689 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> @@ -19,8 +19,8 @@
->  #define MAX_NR_CPUID_ENTRIES 100
->
->  vm_vaddr_t exception_handlers;
-> -static bool host_cpu_is_amd;
-> -static bool host_cpu_is_intel;
-> +bool host_cpu_is_amd;
-> +bool host_cpu_is_intel;
->
->  static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
->  {
-> @@ -115,7 +115,7 @@ static void sregs_dump(FILE *stream, struct kvm_sregs *sregs, uint8_t indent)
->
->  bool kvm_is_tdp_enabled(void)
->  {
-> -       if (this_cpu_is_intel())
-> +       if (host_cpu_is_intel)
->                 return get_kvm_intel_param_bool("ept");
->         else
->                 return get_kvm_amd_param_bool("npt");
-> @@ -1218,7 +1218,7 @@ unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
->         max_gfn = (1ULL << (vm->pa_bits - vm->page_shift)) - 1;
->
->         /* Avoid reserved HyperTransport region on AMD processors.  */
-> -       if (!this_cpu_is_amd())
-> +       if (!host_cpu_is_amd)
->                 return max_gfn;
->
->         /* On parts with <40 physical address bits, the area is fully hidden */
-> diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-> index 5489c9836ec8..0f728f05ea82 100644
-> --- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-> @@ -48,10 +48,10 @@ static void guest_main(void)
->         const uint8_t *other_hypercall_insn;
->         uint64_t ret;
->
-> -       if (this_cpu_is_intel()) {
-> +       if (host_cpu_is_intel) {
->                 native_hypercall_insn = vmx_vmcall;
->                 other_hypercall_insn  = svm_vmmcall;
-> -       } else if (this_cpu_is_amd()) {
-> +       } else if (host_cpu_is_amd) {
->                 native_hypercall_insn = svm_vmmcall;
->                 other_hypercall_insn  = vmx_vmcall;
->         } else {
-> diff --git a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
-> index b0a2a0bae0f3..ce1ccc4c1503 100644
-> --- a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
-> @@ -93,7 +93,7 @@ int main(void)
->  {
->         int warnings_before, warnings_after;
->
-> -       TEST_REQUIRE(this_cpu_is_intel());
-> +       TEST_REQUIRE(host_cpu_is_intel);
->
->         TEST_REQUIRE(!vm_is_unrestricted_guest(NULL));
->
-> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> index c728822461b2..4dbb454e1760 100644
-> --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> @@ -363,7 +363,7 @@ static void test_pmu_config_disable(void (*guest_code)(void))
->   */
->  static bool use_intel_pmu(void)
->  {
-> -       return this_cpu_is_intel() &&
-> +       return host_cpu_is_intel &&
->                kvm_cpu_property(X86_PROPERTY_PMU_VERSION) &&
->                kvm_cpu_property(X86_PROPERTY_PMU_NR_GP_COUNTERS) &&
->                kvm_pmu_has(X86_PMU_FEATURE_BRANCH_INSNS_RETIRED);
-> @@ -397,7 +397,7 @@ static bool use_amd_pmu(void)
->         uint32_t family = kvm_cpu_family();
->         uint32_t model = kvm_cpu_model();
->
-> -       return this_cpu_is_amd() &&
-> +       return host_cpu_is_amd &&
->                 (is_zen1(family, model) ||
->                  is_zen2(family, model) ||
->                  is_zen3(family, model));
-> diff --git a/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c b/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
-> index 53e1ef2fc774..ccdfa5dc1a4d 100644
-> --- a/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
-> +++ b/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
-> @@ -111,7 +111,7 @@ int main(int argc, char *argv[])
->         struct kvm_vcpu *vcpu;
->         struct kvm_vm *vm;
->
-> -       TEST_REQUIRE(this_cpu_is_intel());
-> +       TEST_REQUIRE(host_cpu_is_intel);
->         TEST_REQUIRE(!vm_is_unrestricted_guest(NULL));
->
->         vm = vm_create_with_one_vcpu(&vcpu, guest_code);
->
-> base-commit: 04b420511919f7b78f17f5fa6dc92975a8b2d7c4
-> --
->
 
-Ack, that makes sense. Will include this suggestion in the next version.
+
+On 10.01.2023 20:34, Neil Armstrong wrote:
+> Build the Qualcomm SM8550 Display Clock Controller driver
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 851e8f9be06d..004c379eced7 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -1107,6 +1107,7 @@ CONFIG_SDM_GPUCC_845=y
+>  CONFIG_SDM_VIDEOCC_845=y
+>  CONFIG_SDM_DISPCC_845=y
+>  CONFIG_SM_DISPCC_8250=y
+> +CONFIG_SM_DISPCC_8550=y
+>  CONFIG_SM_GCC_6115=y
+>  CONFIG_SM_GCC_8350=y
+>  CONFIG_SM_GCC_8450=y
+> 
