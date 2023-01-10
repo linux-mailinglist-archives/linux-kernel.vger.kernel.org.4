@@ -2,129 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D62664093
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B342664094
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238380AbjAJMem convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 10 Jan 2023 07:34:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S238412AbjAJMer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238263AbjAJMei (ORCPT
+        with ESMTP id S232513AbjAJMel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:34:38 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AB519036
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:34:35 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-319-CqCJCDyUO0CLmH1_J02gWQ-1; Tue, 10 Jan 2023 12:34:32 +0000
-X-MC-Unique: CqCJCDyUO0CLmH1_J02gWQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
- 2023 12:34:31 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Tue, 10 Jan 2023 12:34:31 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kalle Valo' <kvalo@kernel.org>
-CC:     'Martin Blumenstingl' <martin.blumenstingl@googlemail.com>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "tehuang@realtek.com" <tehuang@realtek.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
-Thread-Topic: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
-Thread-Index: AQHZJOt8b7TA8qgUUEi14rUuSBslva6Xj6GQ
-Date:   Tue, 10 Jan 2023 12:34:31 +0000
-Message-ID: <7f75a99604394c47bd646c6a024cb27a@AcuMS.aculab.com>
-References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
-        <20221228133547.633797-2-martin.blumenstingl@googlemail.com>
-        <92eb7dfa8b7d447e966a2751e174b642@realtek.com>
-        <87da8c82dec749dc826b5a1b4c4238aa@AcuMS.aculab.com>
-        <eee17e2f4e44a2f38021a839dc39fedc1c1a4141.camel@realtek.com>
-        <a86893f11fe64930897473a38226a9a8@AcuMS.aculab.com>
-        <5c0c77240e7ddfdffbd771ee7e50d36ef3af9c84.camel@realtek.com>
-        <CAFBinCC+1jGJx1McnBY+kr3RTQ-UpxW6JYNpHzStUTredDuCug@mail.gmail.com>
-        <ec6a0988f3f943128e0122d50959185a@AcuMS.aculab.com>
- <87r0w2fvgz.fsf@kernel.org>
-In-Reply-To: <87r0w2fvgz.fsf@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 10 Jan 2023 07:34:41 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02DD3C382
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:34:39 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso6807756wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:34:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w9YImXfINgo9hv1+xP74ouf7bKnCq7vFHRFnlPk72z8=;
+        b=oopKkV6gu4Xxlu7AOuziqpF7ufNLt04abrnj5XlqgWYwsv4ixMDww75sOE1ZCH6yp8
+         gS1QvRqYfLbftJN9deSYJwF5Pkdeik2+ticfhNeMB3vRNx7PbsCo9HoRASC4+z9wmAJF
+         Fv0r39+yas0BURGzKBS6F15pvtUvdGBnGV9ABYvtOAZK+rrshqwCq1qJYToxV6qngEKa
+         A2njlD3SJn6S5Po0G8RpFAluGPhrLWrqc8j60EEqbcWDXAhWb+akt7Xh95cjkBpk3zd1
+         DQRbjZmFarkXGadPku4iCIx1QaVyl7QGt5A7xTrLANYZqLELOFiddaoTLzNmk3esJvZN
+         INnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w9YImXfINgo9hv1+xP74ouf7bKnCq7vFHRFnlPk72z8=;
+        b=hAI0p0pxwK1pobpGGDPnk4nThGMJAuDiCQwYQkr1rQ9D6ILO5fL6eJVDQ7YlwWfciS
+         zl33qipSmqRjqXcAQYhipCQTjxUcvoxdnYb8ySw9KVXDcQdJgegAZogjvuU2+KxVgvQF
+         0acrLLsHxQqxuI0HMXVxFJN6h0gyb+heTbooBG6rGUXd0LpAtDGgognVQTV4AlJ0ZHlW
+         3cTcDFOJjhmvEnFe5DLnWyR5U04VFEBM/9XMxdcU4Si/1BXsVsN4okT9rEJF151DaRdY
+         GqYo8NgbzFTYoyAMS6L0jMzwo7SmYy6BsFboV4g64e1intoa+ejufooeuLmXrWz/8HRl
+         Y+Fg==
+X-Gm-Message-State: AFqh2krFWUqP3G23c//kZqSAOASiEEdKdoNAvrr4b8vj42WM6z1xWiie
+        QNIA1Iiupg/KhLsJq9wnRvw=
+X-Google-Smtp-Source: AMrXdXsubfM1A4kZ4BqYrKVlZ0jX9ZoNhSEnTlth10dWcKbdFSC0OkL4SVr3Bu2sMcVwUvOQFB0L7Q==
+X-Received: by 2002:a05:600c:1c11:b0:3d1:e583:51a0 with SMTP id j17-20020a05600c1c1100b003d1e58351a0mr51058569wms.25.1673354078588;
+        Tue, 10 Jan 2023 04:34:38 -0800 (PST)
+Received: from gmail.com (1F2EF2EB.nat.pool.telekom.hu. [31.46.242.235])
+        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003d358beab9dsm14607472wmb.47.2023.01.10.04.34.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 04:34:37 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 10 Jan 2023 13:34:35 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Zeng Heng <zengheng4@huawei.com>, michael.roth@amd.com,
+        hpa@zytor.com, tglx@linutronix.de,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        kirill.shutemov@linux.intel.com, jroedel@suse.de,
+        keescook@chromium.org, mingo@redhat.com,
+        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
+        x86@kernel.org, liwei391@huawei.com,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH -v2] x86/boot/compressed: Register dummy NMI handler in
+ EFI boot loader, to avoid kdump crashes
+Message-ID: <Y71bW/8XZCackPLh@gmail.com>
+References: <20230110102745.2514694-1-zengheng4@huawei.com>
+ <Y71FJ+G0NGQe3Ppq@gmail.com>
+ <Y71TglxSLJKO17SY@gmail.com>
+ <Y71V8SRLxZ/Uqkfs@zn.tnic>
+ <Y71XPl8br2QU2L8E@zn.tnic>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y71XPl8br2QU2L8E@zn.tnic>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kalle Valo
-> Sent: 10 January 2023 12:03
-...
-> > Most hardware definitions align everything.
-> >
-> > What you may want to do is add compile-time asserts for the
-> > sizes of the structures.
-> >
-> > Remember that if you have 16/32 bit fields in packed structures
-> > on some architectures the compile has to generate code that does
-> > byte loads and shifts.
-> >
-> > The 'misaligned' property is lost when you take the address - so
-> > you can easily generate a fault.
-> >
-> > Adding __packed to a struct is a sledgehammer you really shouldn't need.
+
+* Borislav Petkov <bp@alien8.de> wrote:
+
+> > mce_panic -> panic -> __crash_kexec()
+> > 
+> > Yes?
+> > 
+> > If so, then we should make sure we have *exited* #MC context before calling
+> > panic() and not have to add hacks like this one of adding an empty NMI handler.
+> > 
+> > But I'm only speculating as it is hard to make sense of all this text.
 > 
-> Avoiding use of __packed is news to me, but is this really a safe rule?
-> Most of the wireless engineers are no compiler experts (myself included)
-> so I'm worried. For example, in ath10k and ath11k I try to use __packed
-> for all structs which are accessing hardware or firmware just to make
-> sure that the compiler is not changing anything.
+> IOW, does this help?
+> 
+> ---
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index 7832a69d170e..55437d8a4fad 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -287,6 +287,7 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
+>  		if (panic_timeout == 0)
+>  			panic_timeout = mca_cfg.panic_timeout;
+>  		panic(msg);
+> +		mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
 
-What may wish to do is get the compiler to generate an error if
-it would add any padding - but that isn't what __packed is for
-or what it does.
+So your suggestion was to exit MC context 'before' the panic() call - but 
+the patch calls it 'after' - was that intentional?
 
-The compiler will only ever add padding to ensure that fields
-are correctly aligned (usually a multiple of their size).
-There can also be padding at the end of a structure so that arrays
-are aligned.
-There are some unusual ABI that align all structures on 4 byte
-boundaries - but i don't think Linux has any of them.
-In any case this rarely matters.
+Thanks,
 
-All structures that hardware/firmware access are very likely
-to have everything on its natural alignment unless you have a very
-old structure hat might have a 16bit aligned 32bit value that
-was assumed to be two words.
-
-Now if you have:
-struct {
-	char	a[4];
-	int	b;
-} __packed foo;
-whenever you access foo.b the compiler might have to generate
-4 separate byte memory accesses and a load of shift/and/or
-instructions in order to avoid a misaligned address trap.
-So you don't want to use __packed unless the field is actually
-expected to be misaligned.
-For most hardware/firmware structures this isn't true.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+	Ingo
