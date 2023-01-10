@@ -2,149 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D19663E4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FEC663E53
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbjAJKeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
+        id S237865AbjAJKev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:34:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237591AbjAJKeI (ORCPT
+        with ESMTP id S231783AbjAJKer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:34:08 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4222A4FD6F;
-        Tue, 10 Jan 2023 02:34:06 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30AAXiGI060354;
-        Tue, 10 Jan 2023 04:33:44 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673346824;
-        bh=DsTzouR69qoDyHh7VdYjjFd89D92gjs6h/qx5zUB254=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=ijZDCUzg0RCqWyFSgnCaD83/ZVrGbruguEGHXqxLDpB97yhKj9hzyLrpiRHwNSpaJ
-         uc5eOrP+KSgT4Ze1bnimOXwWpzMT1/olCCZnfvd0NwZWomc2RBNepogNpKoyDZQ9hv
-         bFaG3YK4JH9gcKEQrnLWCeyFYWlJA9M571tb405c=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30AAXi0Z019981
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 10 Jan 2023 04:33:44 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 10
- Jan 2023 04:33:44 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 10 Jan 2023 04:33:44 -0600
-Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30AAXepN104976;
-        Tue, 10 Jan 2023 04:33:40 -0600
-Message-ID: <cf8c7d73-1e51-7dcd-bb32-34272a63066f@ti.com>
-Date:   Tue, 10 Jan 2023 16:03:39 +0530
+        Tue, 10 Jan 2023 05:34:47 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3757C4C718
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:34:46 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so9497000wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:34:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S8w8+O91x6kumEh4lF0ym7XFpPER6TCzGXKG5aX3JDw=;
+        b=aoBbi6sXhFzCmybRmWwEV1rhv1MxYXadF7W7dx0BjBynhzu9RQeaR9mZVwEW+ghPVx
+         puj2WM34WhsMwTPd+48dLY5tRv0UvfvbBV69pDLqz2Fb9PgGamos65X0tz+OimhWP4eX
+         3nRDEOHq3qH78eIc2MlkJGLnXu6p6wKEXVzzaeYQlr6z/me3qkQWIaVx1XqpDM2vpTxE
+         z1rsYntTDmu+ZGfxjVVJLOowBAxEkNPeL/ngswksFYGlQ17iO10frKh4dfAnBbsIR0cZ
+         dAmu2CB2EvYgvVds6/p08QU9Sjk5wSZ2HP441Y5583Q2r7j8MJI9fQx5TxmIxmVSCfjR
+         Z0CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S8w8+O91x6kumEh4lF0ym7XFpPER6TCzGXKG5aX3JDw=;
+        b=K/XUm/im/HrQnJTJ4hT0473M8z2twsNSCGqnsDAraxqkXkW0E+llIEpCA9HTf6AjwE
+         5yyAKjB/TtyYV0u6CWvC0YbmGMaR4Hzz889/huca1DqWG7qpmKrvUgPBq8n4EFRx4kVp
+         lZlfP/sgsYvNKR2HSM/ryxSiFDYntB4xPatdAXagcuxvKNJ9Y59qDb0cwqQc1ClRn0kl
+         acC+Kw96eAqSDTjgyzmWU32eBadYL+oiJ6TFg2ds2OS7mg4rigHZ1R+dv6HB8m4XQxGc
+         s4f69IrKOpcpoKKmeQQT535XDwYNdsAW6tnQD5AWlJVbTUZt1nixOAsLfGulpyGZb4eR
+         9RsA==
+X-Gm-Message-State: AFqh2kpZzL1/DM8ZKta1Iws/OZGH4r9Vz9s51FQs4NYcZLqGggSkySaS
+        /Z5NAAsRkclMQkA2UJP8BBADAA==
+X-Google-Smtp-Source: AMrXdXsKZIF89HCTLwqLnN4QPrxdRDgUZhxST1pEsKbqms4h+NEyD0x16YKN/NnlBup8oC1yWqXcAA==
+X-Received: by 2002:a05:600c:35ca:b0:3d1:f2de:195a with SMTP id r10-20020a05600c35ca00b003d1f2de195amr52230532wmq.32.1673346884631;
+        Tue, 10 Jan 2023 02:34:44 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05600c154c00b003d9fba3c7a4sm409366wmg.16.2023.01.10.02.34.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 02:34:44 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+X-Google-Original-From: Daniel Lezcano <daniel.lezcano@kernel.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org,
+        dmitry.baryshkov@linaro.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] thermal/drivers/qcom: Remove duplicate set next trip point interrupt code
+Date:   Tue, 10 Jan 2023 11:34:20 +0100
+Message-Id: <20230110103420.2430518-1-daniel.lezcano@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
-Subject: Re: [RESEND PATCH] PCI: cadence: Fix Gen2 Link Retraining process
-To:     <tjoseph@cadence.com>, <lpieralisi@kernel.org>, <robh@kernel.org>,
-        <kw@linux.com>, <bhelgaas@google.com>, <nadeem@cadence.com>
-References: <20230102075656.260333-1-s-vadapalli@ti.com>
-Content-Language: en-US
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <20230102075656.260333-1-s-vadapalli@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello All,
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Can this patch please be merged in case of no feedback or issues?
+The tsens driver reprogram the next trip points in the irq
+handler. This function then call thermal_zone_device_update().
 
-Regards,
-Siddharth.
+However, thermal_zone_device_update() calls thermal_zone_set_trips()
+and from there it calls the backend 'set_trips' ops. This one in turn
+reprogram the next trip points (low/high).
 
-On 02/01/23 13:26, Siddharth Vadapalli wrote:
-> The Link Retraining process is initiated to account for the Gen2 defect in
-> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
-> is i2085, documented at:
-> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
-> 
-> The existing workaround implemented for the errata waits for the Data Link
-> initialization to complete and assumes that the link retraining process
-> at the Physical Layer has completed. However, it is possible that the
-> Physical Layer training might be ongoing as indicated by the
-> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
-> 
-> Fix the existing workaround, to ensure that the Physical Layer training
-> has also completed, in addition to the Data Link initialization.
-> 
-> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> ---
->  .../controller/cadence/pcie-cadence-host.c    | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> index 940c7dd701d6..5b14f7ee3c79 100644
-> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> @@ -12,6 +12,8 @@
->  
->  #include "pcie-cadence.h"
->  
-> +#define LINK_RETRAIN_TIMEOUT HZ
-> +
->  static u64 bar_max_size[] = {
->  	[RP_BAR0] = _ULL(128 * SZ_2G),
->  	[RP_BAR1] = SZ_2G,
-> @@ -77,6 +79,27 @@ static struct pci_ops cdns_pcie_host_ops = {
->  	.write		= pci_generic_config_write,
->  };
->  
-> +static int cdns_pcie_host_training_complete(struct cdns_pcie *pcie)
-> +{
-> +	u32 pcie_cap_off = CDNS_PCIE_RP_CAP_OFFSET;
-> +	unsigned long end_jiffies;
-> +	u16 lnk_stat;
-> +
-> +	/* Wait for link training to complete. Exit after timeout. */
-> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
-> +	do {
-> +		lnk_stat = cdns_pcie_rp_readw(pcie, pcie_cap_off + PCI_EXP_LNKSTA);
-> +		if (!(lnk_stat & PCI_EXP_LNKSTA_LT))
-> +			break;
-> +		usleep_range(0, 1000);
-> +	} while (time_before(jiffies, end_jiffies));
-> +
-> +	if (!(lnk_stat & PCI_EXP_LNKSTA_LT))
-> +		return 0;
-> +
-> +	return -ETIMEDOUT;
-> +}
-> +
->  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
->  {
->  	struct device *dev = pcie->dev;
-> @@ -118,6 +141,10 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
->  		cdns_pcie_rp_writew(pcie, pcie_cap_off + PCI_EXP_LNKCTL,
->  				    lnk_ctl);
->  
-> +		ret = cdns_pcie_host_training_complete(pcie);
-> +		if (ret)
-> +			return ret;
-> +
->  		ret = cdns_pcie_host_wait_for_link(pcie);
->  	}
->  	return ret;
+Consequently, the code setting the next trip points interrupt in the
+interrupt handle is not needed and could be removed.
+
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
+---
+ drivers/thermal/qcom/tsens.c | 46 +-----------------------------------
+ 1 file changed, 1 insertion(+), 45 deletions(-)
+
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index b5b136ff323f..58693ee8c430 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -472,52 +472,8 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+ 			continue;
+ 		if (!tsens_threshold_violated(priv, hw_id, &d))
+ 			continue;
+-		ret = get_temp_tsens_valid(s, &temp);
+-		if (ret) {
+-			dev_err(priv->dev, "[%u] %s: error reading sensor\n",
+-				hw_id, __func__);
+-			continue;
+-		}
+ 
+-		spin_lock_irqsave(&priv->ul_lock, flags);
+-
+-		tsens_read_irq_state(priv, hw_id, s, &d);
+-
+-		if (d.up_viol &&
+-		    !masked_irq(hw_id, d.up_irq_mask, tsens_version(priv))) {
+-			tsens_set_interrupt(priv, hw_id, UPPER, disable);
+-			if (d.up_thresh > temp) {
+-				dev_dbg(priv->dev, "[%u] %s: re-arm upper\n",
+-					hw_id, __func__);
+-				tsens_set_interrupt(priv, hw_id, UPPER, enable);
+-			} else {
+-				trigger = true;
+-				/* Keep irq masked */
+-			}
+-		} else if (d.low_viol &&
+-			   !masked_irq(hw_id, d.low_irq_mask, tsens_version(priv))) {
+-			tsens_set_interrupt(priv, hw_id, LOWER, disable);
+-			if (d.low_thresh < temp) {
+-				dev_dbg(priv->dev, "[%u] %s: re-arm low\n",
+-					hw_id, __func__);
+-				tsens_set_interrupt(priv, hw_id, LOWER, enable);
+-			} else {
+-				trigger = true;
+-				/* Keep irq masked */
+-			}
+-		}
+-
+-		spin_unlock_irqrestore(&priv->ul_lock, flags);
+-
+-		if (trigger) {
+-			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+-				hw_id, __func__, temp);
+-			thermal_zone_device_update(s->tzd,
+-						   THERMAL_EVENT_UNSPECIFIED);
+-		} else {
+-			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+-				hw_id, __func__, temp);
+-		}
++		thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
+ 
+ 		if (tsens_version(priv) < VER_0_1) {
+ 			/* Constraint: There is only 1 interrupt control register for all
+-- 
+2.34.1
+
