@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0E1664541
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58261664545
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234532AbjAJPso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:48:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
+        id S234109AbjAJPtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjAJPsk (ORCPT
+        with ESMTP id S238599AbjAJPtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:48:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC65144C5B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:47:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673365675;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cSzObwxumbN+UkQGeWa1qzsda16QNp+w2Cr+vbxgJ/M=;
-        b=R12Naht8DF7q35rs0yGXK9lQYOPghs8tMrfyVdk5ZtpTzrdhbAs/gGW0kXJbbAorB7VZpA
-        ywdLWhmq3ARuOuhGXwkVvaVjwi/fr5AsVByBzz4cq9/tDlWaH2H4T13KTdtCT9vTd9qrdA
-        RTD7cYOMp0MYcEvOg+DURyNtaLHfU9Q=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-664--sgXk9JfPuOPReMWh04OUA-1; Tue, 10 Jan 2023 10:47:52 -0500
-X-MC-Unique: -sgXk9JfPuOPReMWh04OUA-1
-Received: by mail-wr1-f69.google.com with SMTP id d27-20020adfa35b000000b002bc813ba677so980195wrb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:47:52 -0800 (PST)
+        Tue, 10 Jan 2023 10:49:36 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088D944C4E;
+        Tue, 10 Jan 2023 07:49:35 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id z11so18231306ede.1;
+        Tue, 10 Jan 2023 07:49:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RlwouCi8H0VvCFHHOlIlDVE1aSi+HO1S7gDSu150N9o=;
+        b=Ls9jEEVeVOogdOhnGSIKAnC3MFbZ5Ol/YRfgadxXtNM6zGPapxkKjsK2nwhmOxs+xj
+         vjeT9QnhVSm8r6ZrSlEooK2iIN3/KBHR/gLW8AipjjvOaN8m1BTOzovjHPqk6xjU1DEw
+         CxjVypf7mDTyHnXhjxSxvcstWNTsevS8dN9xg402H/4Y32c98tpjmRhJT1Yl81fPQBTL
+         D28TWLVKJ5KY+LQNjhN8V9/y8zNW+otaBkrWDyqtvy5xzLNFBFyitc6boUnL+lNUWC/2
+         OnJolzF15hCUJhZpZ0NsGDJeHOP9ls2uJEk740kElNA4I3MMh0YOT34s1wNaH+OS+jb0
+         qtmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cSzObwxumbN+UkQGeWa1qzsda16QNp+w2Cr+vbxgJ/M=;
-        b=bkghWEnTx4XuISbZfWbUkr+OEwsHY4SX0LWdyEj/7YcuZvo0EpOhUZ39RjQue0w3gC
-         i+oRVYrn5hQ1SLtc4/x1bWrd67f3mZpOU/yWuXDlMYIARFcLaRwgUcAOYpg+Oj7Gchgy
-         gK4019Udf3x6+2QDAQW3S4XPOi3acL9oBe+weVkxIPBCA04Y1Ul/xQoqFRXuVTtVcZyR
-         qXLm2i/uji5Pc/pTSyH/kXrEaW9/pZe794fvqZ872LGZytH6nqsqbhwzm7oufvySURqN
-         IVx+kzCtoD5erZ/khTDgmpDYDFTFrAPShjs8ZikHqYDn1BLC4sN7t4UeLFNVt053ASA4
-         ZAJQ==
-X-Gm-Message-State: AFqh2kpAhA7XP/R2Gc7ceBsbZ0NEfFUqNSsCazx1lnDxtBIA4CqeV0op
-        mlNdopvtYYyzBakniz7Ux6oV4q4+k++JGj0yfvAx5AX+Ro8l0nr4OltC9ZLkEFIqokLWnV7gZCE
-        LHrJNrHfA/cNKT26OaCpe2bSs
-X-Received: by 2002:adf:e9d1:0:b0:242:5fe3:b61b with SMTP id l17-20020adfe9d1000000b002425fe3b61bmr41624823wrn.23.1673365671755;
-        Tue, 10 Jan 2023 07:47:51 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs9YnvwZN98X1f+BspYVBBXRFNES6tA+IXgOS+4rTtsIEHri7EJWOFFDrKPpECnSp4WsoK3ug==
-X-Received: by 2002:adf:e9d1:0:b0:242:5fe3:b61b with SMTP id l17-20020adfe9d1000000b002425fe3b61bmr41624811wrn.23.1673365671495;
-        Tue, 10 Jan 2023 07:47:51 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:4200:65d9:4d0d:bb61:14c8? (p200300cbc708420065d94d0dbb6114c8.dip0.t-ipconnect.de. [2003:cb:c708:4200:65d9:4d0d:bb61:14c8])
-        by smtp.gmail.com with ESMTPSA id q4-20020adfdfc4000000b002bc6c180738sm5779763wrn.90.2023.01.10.07.47.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 07:47:51 -0800 (PST)
-Message-ID: <4b52c79e-7b40-1d5e-bd92-d99224be8ba0@redhat.com>
-Date:   Tue, 10 Jan 2023 16:47:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 00/46] Based on latest mm-unstable (85b44c25cd1e).
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     James Houghton <jthoughton@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230105101844.1893104-1-jthoughton@google.com>
- <60f06008-dea5-a08e-edec-fc4aec76dfb5@redhat.com> <Y7xwoZq+WqCsyXpw@monkey>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y7xwoZq+WqCsyXpw@monkey>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RlwouCi8H0VvCFHHOlIlDVE1aSi+HO1S7gDSu150N9o=;
+        b=KTdX5hvz12cZON13oS8NctfK+kS9p3B/mFmKLWtDLLbfQ1AeDGokMmZ3k7+n0mvhJd
+         A1Y1CL9QYLRyWv6eQP1aJgjViu/0ZuE9LkRBP7WZtbpRzUYqkbSu+UezfWwkvKWVz5go
+         Mu036yl4EhEe7XLZ/pVDW7jOkLXK2dcgE18XMPIvj1o/AHI+QLZXDgVltUTvBATWFHyT
+         VSrG13PG9lZxAh+xr8ir26hHMeenYqL7+t9poSpoy9noHX2V5wUXd8IFUFpe62QBqWly
+         3PRHWdIUn9+N7g4BzD1JPl6yO1ZjrerXq0ErOChXIVtmEb6ZqlNIJzebExwjwKKIhGSo
+         MupA==
+X-Gm-Message-State: AFqh2krgzBZNnV3ZZw2UxdTbtWxB4H0Q3mchsElLCOcWaUGrZAPd8JtY
+        rk6FmtnrsH4m9z9M/nT45NI=
+X-Google-Smtp-Source: AMrXdXs5bidUFyY7RUUCR9qvNSDcJGtq434/qMc8FWLJuxLNi9j9NSppDNXbg7cLU3itdPPD4+pVfA==
+X-Received: by 2002:aa7:d789:0:b0:497:4f53:ee8f with SMTP id s9-20020aa7d789000000b004974f53ee8fmr12917106edq.39.1673365773324;
+        Tue, 10 Jan 2023 07:49:33 -0800 (PST)
+Received: from felia.fritz.box ([2a02:810d:2a40:1104:1402:f4b6:2bd4:8c31])
+        by smtp.gmail.com with ESMTPSA id cx26-20020a05640222ba00b0048ec121a52fsm5063572edb.46.2023.01.10.07.49.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 07:49:32 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH RESEND] MAINTAINERS: repair pattern in DIALOG SEMICONDUCTOR DRIVERS
+Date:   Tue, 10 Jan 2023 16:49:01 +0100
+Message-Id: <20230110154901.20223-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.01.23 20:53, Mike Kravetz wrote:
-> On 01/05/23 11:47, David Hildenbrand wrote:
->> On 05.01.23 11:17, James Houghton wrote:
->>> This series introduces the concept of HugeTLB high-granularity mapping
->>> (HGM). This series teaches HugeTLB how to map HugeTLB pages at
->>> high-granularity, similar to how THPs can be PTE-mapped.
->>>
->>> Support for HGM in this series is for MAP_SHARED VMAs on x86 only. Other
->>> architectures and (some) support for MAP_PRIVATE will come later.
->>
->> Why even care about the complexity of COW-sharable anon pages? TBH, I'd just
->> limit this to MAP_SHARED and call it a day. Sure, we can come up with use
->> cases for everything (snapshotting VMs using fork while also support
->> optimized postcopy), but I think this would need some real justification for
->> the added complexity and possible (likely!) issues.
-> 
-> I believe the primary use case driving this beyond MAP_SHARED would be
-> poisoning due to memory errors.  Extending HGM seems to be the most
-> elegant way to start providing better support for this.
+Commit 441613662db7 ("dt-bindings: mfd: Convert da9063 to yaml") converts
+da9063.txt to dlg,da9063.yaml and adds a new file pattern in MAINTAINERS.
+Unfortunately, the file pattern matches da90*.yaml, but the yaml file is
+prefixed with dlg,da90.
 
-Good point. Although I wonder if in practice, most applicable users 
-either already are, or should switch to, using MAP_SHARED hugetlb.
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken file pattern.
 
+Repair this file pattern in DIALOG SEMICONDUCTOR DRIVERS.
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+v1: https://lore.kernel.org/all/20220623104456.27144-1-lukas.bulwahn@gmail.com/
+
+v1 to resend:
+ - added the Acked-by from Conor Dooley.
+
+Lee, please pick this minor non-urgent clean-up patch.
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2a1368722c45..a0cd07e968ae 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5971,7 +5971,7 @@ W:	http://www.dialog-semiconductor.com/products
+ F:	Documentation/devicetree/bindings/input/da90??-onkey.txt
+ F:	Documentation/devicetree/bindings/input/dlg,da72??.txt
+ F:	Documentation/devicetree/bindings/mfd/da90*.txt
+-F:	Documentation/devicetree/bindings/mfd/da90*.yaml
++F:	Documentation/devicetree/bindings/mfd/dlg,da90*.yaml
+ F:	Documentation/devicetree/bindings/regulator/dlg,da9*.yaml
+ F:	Documentation/devicetree/bindings/regulator/da92*.txt
+ F:	Documentation/devicetree/bindings/regulator/slg51000.txt
 -- 
-Thanks,
-
-David / dhildenb
+2.17.1
 
