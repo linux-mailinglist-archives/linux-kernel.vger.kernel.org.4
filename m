@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55CA6641D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38106641D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238436AbjAJN3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S238399AbjAJN3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:29:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238334AbjAJN3j (ORCPT
+        with ESMTP id S233351AbjAJN3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:29:39 -0500
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75094A469;
-        Tue, 10 Jan 2023 05:29:34 -0800 (PST)
-Received: by mail-oi1-f175.google.com with SMTP id o66so10002852oia.6;
-        Tue, 10 Jan 2023 05:29:34 -0800 (PST)
+        Tue, 10 Jan 2023 08:29:33 -0500
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423E910B3;
+        Tue, 10 Jan 2023 05:29:32 -0800 (PST)
+Received: by mail-ot1-f48.google.com with SMTP id r2-20020a9d7cc2000000b006718a7f7fbaso6958890otn.2;
+        Tue, 10 Jan 2023 05:29:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=ylhyb07nBatqigygjs/qnbUzW1F5v2uWBB/vpftxr7Y=;
-        b=fOL7T1IPZD6uNIME7YD7G5MBI/0zaflTOGRlbkP2MkZwPg9Xnu7MlCKmNdieOVkZXY
-         Wjl6rsFgxoPhDWVRB5Pb8xmBZIDeMQr7DOBuTlYC2zy2rIt53+p8xAK6uOGRtUCTWlwg
-         OOY6DDvQR+0Vz21lcPNZLBZDKQz7QSFo0oi8RqkSfntJNVq+iFMlxMGfgq5bTscg6U81
-         dQ3wimX3NmR0uMLnbbuv+xuM9VhgRH27bIxh2dkG788PiXvDSIWVUdcSFCwMSoyuxs6Z
-         Zrdq6YCeXRQgPKyUjgmsUdC710iFp/Mj5ts1UyDfyW3I0yhoA2Ztmu7zOARRGtkaF7VV
-         2IgA==
-X-Gm-Message-State: AFqh2kq42NO0UGGyRTZmN6P5veuwX7aQuRz/BucLbAaUoYKf1nInZyIt
-        cGQczCzCACdbv2DeSFblTw==
-X-Google-Smtp-Source: AMrXdXtwO/PhRlomM5A6dF6OoKCHg3+XXfeF06MGvncoUKF+PZZ9GgCaWBCAqc7Lt5F6ycb44BfNfg==
-X-Received: by 2002:aca:e0d4:0:b0:363:b22c:4c7 with SMTP id x203-20020acae0d4000000b00363b22c04c7mr14883792oig.7.1673357373663;
-        Tue, 10 Jan 2023 05:29:33 -0800 (PST)
+        bh=zKAe0OFUWm2XvE8TtB0lP81U5fBp4FRhR/a1eftM+Ek=;
+        b=VigkJQ0EWzxGefJCeXaPUHMOiF3cw51+Cb+X5iE55xu099UYvTfpA0yDQRII5pYi/r
+         RzMVrb6Il9j4y4QVuLFSz711nPVSfhiN01TVaNcASuBU4bOtUHU46zTcw2t8f5vMlNLI
+         5PavAFoiaGSQtBDYaq0xVmoY6nDV82iqPFloJEgbSY3nAeHz7DsbgKbh1NMEdENHee0k
+         +XUZh+mKl+7g58e7/W6yAmdJ5N7JS5nRYiQtpioWbjh26vUtDRd8mWeq6LvMzHbk6fGp
+         zo3noD+4QlCLRW9ZcuF3jLYmkDWfhOLOqlxtGjMd3d18MVJWfZxUqi/hL+N0MIBx17h4
+         w9fQ==
+X-Gm-Message-State: AFqh2kr7v21c1b1Gm816OwsTj4e5bklaDrxg5X+6qV8xTGv30YkdbFgT
+        8f5FT6zjJ4/R+wmhx1MnLuUH9sQUqA==
+X-Google-Smtp-Source: AMrXdXsD1u2a+0P2EAP8UF4IZ31u4JKrWLup4jFFntlInWFYKtWuEjk3NnGkodmas2ONEijs/l13jg==
+X-Received: by 2002:a05:6830:20c4:b0:66c:4f82:b83c with SMTP id z4-20020a05683020c400b0066c4f82b83cmr38750946otq.7.1673357371404;
+        Tue, 10 Jan 2023 05:29:31 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u23-20020a056808001700b0035e7c48d08esm5257608oic.15.2023.01.10.05.29.31
+        by smtp.gmail.com with ESMTPSA id y18-20020a0568302a1200b0066f7e1188f0sm6053005otu.68.2023.01.10.05.29.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 05:29:32 -0800 (PST)
-Received: (nullmailer pid 1984999 invoked by uid 1000);
+        Tue, 10 Jan 2023 05:29:31 -0800 (PST)
+Received: (nullmailer pid 1984996 invoked by uid 1000);
         Tue, 10 Jan 2023 13:29:30 -0000
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     devi priya <quic_devipriy@quicinc.com>
-Cc:     tdas@codeaurora.org, quic_kathirav@quicinc.com,
-        dmitry.baryshkov@linaro.org, quic_gokulsri@quicinc.com,
-        nfraprado@collabora.com, linux-arm-msm@vger.kernel.org,
-        quic_poovendh@quicinc.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        andersson@kernel.org, arnd@arndb.de, sboyd@kernel.org,
-        broonie@kernel.org, will@kernel.org, quic_sjaganat@quicinc.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
-        quic_srichara@quicinc.com, linux-gpio@vger.kernel.org,
-        p.zabel@pengutronix.de, catalin.marinas@arm.com,
-        marcel.ziswiler@toradex.com, linus.walleij@linaro.org,
-        konrad.dybcio@linaro.org, mturquette@baylibre.com,
-        shawnguo@kernel.org, linux-arm-kernel@lists.infradead.org,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        agross@kernel.org
-In-Reply-To: <20230110121316.24892-2-quic_devipriy@quicinc.com>
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-2-quic_devipriy@quicinc.com>
-Message-Id: <167335661700.1967953.6789968437095688240.robh@kernel.org>
-Subject: Re: [PATCH 1/7] dt-bindings: arm64: ipq9574: Add binding descriptions
- for clock and reset
+To:     Jim Liu <jim.t90615@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, JJLIU0@nuvoton.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, KWLIU@nuvoton.com,
+        openbmc@lists.ozlabs.org, brgl@bgdev.pl,
+        linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org
+In-Reply-To: <20230110083238.19230-4-jim.t90615@gmail.com>
+References: <20230110083238.19230-1-jim.t90615@gmail.com>
+ <20230110083238.19230-4-jim.t90615@gmail.com>
+Message-Id: <167335661623.1967925.9927691364268671668.robh@kernel.org>
+Subject: Re: [PATCH v4 3/3] dt-bindings: gpio: add NPCM sgpio driver bindings
 Date:   Tue, 10 Jan 2023 07:29:30 -0600
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,21 +68,23 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 10 Jan 2023 17:43:10 +0530, devi priya wrote:
-> Adding support for the global clock controller found on
-> IPQ9574 based devices
+On Tue, 10 Jan 2023 16:32:38 +0800, Jim Liu wrote:
+> Add dt-bindings document for the Nuvoton NPCM7xx and NPCM8xx sgpio driver
 > 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+> Signed-off-by: Jim Liu <jim.t90615@gmail.com>
 > ---
->  .../bindings/clock/qcom,gcc-other.yaml        |   4 +
->  .../devicetree/bindings/clock/qcom,gcc.yaml   |   9 +-
->  include/dt-bindings/clock/qcom,gcc-ipq9574.h  | 226 ++++++++++++++++++
->  include/dt-bindings/reset/qcom,gcc-ipq9574.h  | 164 +++++++++++++
->  4 files changed, 402 insertions(+), 1 deletion(-)
->  create mode 100644 include/dt-bindings/clock/qcom,gcc-ipq9574.h
->  create mode 100644 include/dt-bindings/reset/qcom,gcc-ipq9574.h
+> Changes for v4:
+>    - modify in/out property
+>    - modify bus-frequency property
+> Changes for v3:
+>    - modify description
+>    - modify in/out property name
+> Changes for v2:
+>    - modify description
+> ---
+>  .../bindings/gpio/nuvoton,sgpio.yaml          | 92 +++++++++++++++++++
+>  1 file changed, 92 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -101,24 +93,44 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.example.dtb: clock-controller@100000: clocks: [[4294967295, 0], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295, 0], [4294967295, 1], [4294967295, 2], [4294967295]] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.example.dtb: clock-controller@100000: Unevaluated properties are not allowed ('#clock-cells', '#power-domain-cells', '#reset-cells', 'reg' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.example.dtb: clock-controller@100000: clocks: [[4294967295, 0], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295]] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.example.dtb: clock-controller@100000: Unevaluated properties are not allowed ('#clock-cells', '#power-domain-cells', '#reset-cells', 'reg' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.example.dtb: clock-controller@100000: clocks: [[4294967295, 0], [4294967295, 1], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295]] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.example.dtb: clock-controller@100000: clock-names: ['bi_tcxo', 'bi_tcxo_ao', 'sleep_clk', 'pcie_0_pipe_clk', 'pcie_1_pipe_clk', 'ufs_phy_rx_symbol_0_clk', 'ufs_phy_rx_symbol_1_clk', 'ufs_phy_tx_symbol_0_clk', 'usb3_phy_wrapper_gcc_usb30_pipe_clk'] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.example.dtb: clock-controller@100000: Unevaluated properties are not allowed ('#clock-cells', '#power-domain-cells', '#reset-cells', 'reg' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,input-ngpios: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,input-ngpios: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,input-ngpios: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,output-ngpios: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('maximum', 'minimum' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,output-ngpios: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml: properties:nuvoton,output-ngpios: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230110121316.24892-2-quic_devipriy@quicinc.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230110083238.19230-4-jim.t90615@gmail.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
