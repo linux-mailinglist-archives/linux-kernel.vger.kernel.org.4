@@ -2,119 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE03664C0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0E1664C0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239763AbjAJTJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
+        id S239764AbjAJTJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:09:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239878AbjAJTId (ORCPT
+        with ESMTP id S239834AbjAJTJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:08:33 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8079913DCF
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:08:16 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-4c15c4fc8ccso166796837b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:08:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eB6zDLr3jptFznjCY+cJ6LV+lGxSv6mlgWXUb4GRVLE=;
-        b=kNneCXnUbGtaezFZly8EELiFvrMI8uCxra4hUNp5F8h55KzRcraX6HTcL/eoX2slxU
-         5eIut2BW8V2KxE4ECFGrtM+afRxG/KTeduZVHs5S8WSaTnrTAKUpQ9LGjuGWxJrrW+Rb
-         HL3W/mk5/ZWXlu153IFY6bWd5ku/c5DQ1P/WEPBZYa8NWqLe/FC6eZ+nVcj+NfNmapAJ
-         hhVfZ0STKoz+rrAswTAQZmVDSFu+39MDK4KoXl6hbj290qVSa10/hwUiXT3+ysS6+4M+
-         Fn8gtLHQRlRNe7nlS5w5XbzHPW/6rq2M3KUaxPGuT+9WamrHs6La624Sedcyvl8v1GSa
-         pxXw==
+        Tue, 10 Jan 2023 14:09:10 -0500
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EE710CD;
+        Tue, 10 Jan 2023 11:09:09 -0800 (PST)
+Received: by mail-io1-f45.google.com with SMTP id 3so6548470iou.12;
+        Tue, 10 Jan 2023 11:09:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eB6zDLr3jptFznjCY+cJ6LV+lGxSv6mlgWXUb4GRVLE=;
-        b=0gQR4QHVmV7F1601I5wvj9/6ioEQ8Lgj9drDWfAabT2WXfzKBTOjRYsSUVZMEUWmuH
-         bwUT18xZoqFRNInmNAWXGgJdSyJo9X+71bVDZXxhfxwsjSg2rotrs/LWG4R5UPy6O+AV
-         xTdNZFXlsQwXuc+AEDLvMVPoxrEZmM5NtLETtSB2CgOsBe9q6CM/AXQmIaKhrkF5HkRS
-         99OGrndLge0OnZ5bXWBGk5w8jzWKcjSu7cXQAZd3HGVDKuo5fjOBdQdyz9YBWPnzAbNP
-         VC6FVj1KJ6m1h92d3MWOCUOMZKrLVl6hdz31cWCHlxclN+GZf7dfjrdrgWWd/mq7+VtV
-         6T5w==
-X-Gm-Message-State: AFqh2kqSufOzuC7CXIy4zAyecsEM5xETstySLKImI287nISkbeZ93xC5
-        PqBZXZgt6a3zVjcw3PHSTyb2wYxjqQJjEHVbNabSgQ==
-X-Google-Smtp-Source: AMrXdXuWt8GL2cvwM/11siCYrRBKZLbeyNUoNJAwEvUjJQicN0t0jFrxPGHJ56q+FKvR1iOeW+XS0IBv7xTbyCMXxzs=
-X-Received: by 2002:a05:690c:b88:b0:3e3:866c:a51b with SMTP id
- ck8-20020a05690c0b8800b003e3866ca51bmr218703ywb.439.1673377695560; Tue, 10
- Jan 2023 11:08:15 -0800 (PST)
+        bh=2m0o8gK2yZq30Jsm83JbSXnacP4P7Zm5m6HyGFlXqoA=;
+        b=GbIwcWtqwM5Os3LqwcO+RJn5z6G3zxT2KshwF9RIqbuigGXXxRAFvUqCnCq6p32pGi
+         WimPEefyGSyMJu18J8hvRwagVIqgHZV9GczkJErnagR7vT9TRRrWTwNDdDZTVUL2VNuf
+         b4vocT1U8Yc2iMajvarEn1B8uFtqgKBsEiGGSb80XoXAhNUWUwPYLzM64N/PuDmbDCrA
+         wtY7wvrFQhK7L327/cLqRauWNEFs1af3KwAI5g/G2QS0htQ0dX6gYqy6sVfavNNGVbQx
+         vRH4UZxL7KXdfcA2ruseDb00jcgZ9zSVbji3FVPjZEB61053F3+xfT6neGl3ylPt7ANL
+         KUDA==
+X-Gm-Message-State: AFqh2krXFLoHZrE3MdcLtSNTRXbrCjSrpksq2vESd9LNxwtdvP9cE+f8
+        xPihenIUVi9DaQ9vE9DwAj467B7n8gyffmOvdfs=
+X-Google-Smtp-Source: AMrXdXuYsOyiDGutknMl1DcSOlA0HW9h91IYk6ptlwofXqJ5GoWoPHpif/AfJsVRLgKnT5MVfY7lxUVGfZUuB9nA0e8=
+X-Received: by 2002:a02:ccb7:0:b0:38a:cbda:14b7 with SMTP id
+ t23-20020a02ccb7000000b0038acbda14b7mr6467761jap.202.1673377748867; Tue, 10
+ Jan 2023 11:09:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20230109213809.418135-1-tjmercier@google.com> <20230109213809.418135-2-tjmercier@google.com>
- <Y70oqxejnUqkJVPx@dhcp22.suse.cz>
-In-Reply-To: <Y70oqxejnUqkJVPx@dhcp22.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 10 Jan 2023 11:08:04 -0800
-Message-ID: <CABdmKX3hBX1O8fJ2Zz0ajL=f+tROqWe-Kzr7oPjs46qBYBXV1g@mail.gmail.com>
-Subject: Re: [PATCH 1/4] memcg: Track exported dma-buffers
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-mm@kvack.org
+References: <20230109223110.1201541-1-irogers@google.com> <CAM9d7cgGq=+MC+qwRNxO=0Bn_ZMOucEzh_WWH95Lq8fsYHMb4A@mail.gmail.com>
+ <CAP-5=fXniy80Jpc2Hu=-GF7yDNUNHjs0=B2iqkUkMb6zArPukg@mail.gmail.com>
+In-Reply-To: <CAP-5=fXniy80Jpc2Hu=-GF7yDNUNHjs0=B2iqkUkMb6zArPukg@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 10 Jan 2023 11:08:57 -0800
+Message-ID: <CAM9d7chS+91Nep8FtsJsOdTvMJ0HhkSD1_Fn70=hWPi7a1JpfQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] perf tools: Remove HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        German Gomez <german.gomez@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Stephane Eranian <eranian@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 12:58 AM Michal Hocko <mhocko@suse.com> wrote:
+On Mon, Jan 9, 2023 at 3:38 PM Ian Rogers <irogers@google.com> wrote:
 >
-> On Mon 09-01-23 21:38:04, T.J. Mercier wrote:
-> > When a buffer is exported to userspace, use memcg to attribute the
-> > buffer to the allocating cgroup until all buffer references are
-> > released.
+> On Mon, Jan 9, 2023 at 2:57 PM Namhyung Kim <namhyung@kernel.org> wrote:
 > >
-> > Unlike the dmabuf sysfs stats implementation, this memcg accounting
-> > avoids contention over the kernfs_rwsem incurred when creating or
-> > removing nodes.
+> > Hi Ian,
+> >
+> > On Mon, Jan 9, 2023 at 2:31 PM Ian Rogers <irogers@google.com> wrote:
+> > > diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
+> > > index e188f74698dd..cfcc253239f0 100644
+> > > --- a/tools/perf/util/sort.c
+> > > +++ b/tools/perf/util/sort.c
+> > > @@ -28,6 +28,7 @@
+> > >  #include "time-utils.h"
+> > >  #include "cgroup.h"
+> > >  #include "machine.h"
+> > > +#include "trace-event.h"
+> > >  #include <linux/kernel.h>
+> > >  #include <linux/string.h>
+> > >
+> > > @@ -2667,7 +2668,7 @@ static int64_t __sort__hde_cmp(struct perf_hpp_fmt *fmt,
+> > >                 tep_read_number_field(field, a->raw_data, &dyn);
+> > >                 offset = dyn & 0xffff;
+> > >                 size = (dyn >> 16) & 0xffff;
+> > > -#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
+> > > +#if LIBTRACEEVENT_VERSION >= MAKE_LIBTRACEEVENT_VERSION(1, 5, 0)
+> > >                 if (field->flags & TEP_FIELD_IS_RELATIVE)
+> > >                         offset += field->offset + field->size;
+> >
+> > Maybe I missed the previous discussion.
+> >
+> > As it's only used in the bit test, can we have something like this
+> > in the header file?
+> >
+> > #if LIBTRACE_EVENT_VERSION < ...(1, 5, 0)
+> > # define TEP_FIELD_IS_RELATIVE  0
+> > #endif
+> >
+> > Thanks,
+> > Namhyung
 >
-> I am not familiar with dmabuf infrastructure so please bear with me.
-> AFAIU this patch adds a dmabuf specific counter to find out the amount
-> of dmabuf memory used. But I do not see any actual charging implemented
-> for that memory.
->
-> I have looked at two random users of dma_buf_export cma_heap_allocate
-> and it allocates pages to back the dmabuf (AFAIU) by cma_alloc
-> which doesn't account to memcg, system_heap_allocate uses
-> alloc_largest_available which relies on order_flags which doesn't seem
-> to ever use __GFP_ACCOUNT.
->
-> This would mean that the counter doesn't represent any actual memory
-> reflected in the overall memory consumption of a memcg. I believe this
-> is rather unexpected and confusing behavior. While some counters
-> overlap and their sum would exceed the charged memory we do not have any
-> that doesn't correspond to any memory (at least not for non-root memcgs).
->
-> --
-> Michal Hocko
-> SUSE Labs
+> We could but I think we lose some of the intention revealing-ness that
+> TEP_FIELD_IS_RELATIVE is only present with libtraceevent 1.5.0 or
+> newer.
 
-Thank you, that behavior is not intentional. I'm not looking at the
-overall memcg charge yet otherwise I would have noticed this. I think
-I understand what's needed for the charging part, but Shakeel
-mentioned some additional work for "reclaim, OOM and charge context
-and failure cases" on the cover letter which I need to look into.
+I'm not sure how important it is to reveal the intention.
+I think we wanted to minimize #ifdef-ery in the .c file and
+moved the conditionals to the header.  Maybe we can add
+a wrapper like this.
+
+#if LIBTRACEEVENT_VERSION >= ...(1, 5, 0)
+static inline bool is_relative_field(field)
+{
+    return field->flags & TEP_FIELD_IS_RELATIVE;
+}
+#else
+static inline bool is_relative_field(field)
+{
+    return false;
+}
+#endif
+
+Thanks,
+Namhyung
