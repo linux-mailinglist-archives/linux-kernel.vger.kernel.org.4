@@ -2,127 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9296C663E76
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 661BE663E7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbjAJKoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
+        id S238018AbjAJKpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:45:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjAJKoU (ORCPT
+        with ESMTP id S232009AbjAJKp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:44:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17403C778
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:43:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673347414;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fZBKvQMceZgcl0dsKrtIvBjnZJTQHen6mKpSsPs1Jyw=;
-        b=MrWM3dKcpWnyqRgrIytCBON7tT6whM6I0CbVtOpkSzVYXdU8m7HZ2KhHuQ8aAeRyJ57h7E
-        17XpfcD1AsEdxhjhheugKJP9de4LjhCNXDR+/MoL/YhyzTx1XqzT8lUv5FlhHUYvX91fUk
-        SrtTlbM8LlS9uGE2kW9XViUPwKqGDrQ=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-327-Hf6YCI0xP6q5E1_ljPViBA-1; Tue, 10 Jan 2023 05:43:33 -0500
-X-MC-Unique: Hf6YCI0xP6q5E1_ljPViBA-1
-Received: by mail-qk1-f198.google.com with SMTP id br6-20020a05620a460600b007021e1a5c48so8414445qkb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:43:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fZBKvQMceZgcl0dsKrtIvBjnZJTQHen6mKpSsPs1Jyw=;
-        b=Wb7m7MnlgEhbdajT3l/saakhAOlBZ5yS+UtWls8+ju4jSsTNxJ9B2YrwLCoOgGyew2
-         KdzegMw1Pi16cNC4ku3Yip7tsE4EMV8c4jwqt2/ogLIUSpSet3TBRlMnwokokqe68C7u
-         UKZeVlFRjKGLcuGZ6fA4LOPOQ7ghtO1SCPatJ45ZnhQBqQkNFC3IFkG1XTntxtKYyxEs
-         ghPCHoTdMQ7DMFDBWYZe+twZUewV+kLmSyQtucwqdOo1B52H8rVXjcOfpmHJnJ3eddhb
-         ShV9x+G0ub1yvaaCjSjb+1NInVxxX7Yx38GodioK1VmZu9/YI7lheK5ZxQmKik3BS03g
-         AiEQ==
-X-Gm-Message-State: AFqh2kqqO/TdRO6penMUykMmHkH/EA98e1ufsjaZaLUDN3NTHUmQj/Ia
-        Rboxr7RLxuXl3D3n2I48PcC2/vjBpykWkjh3D1Mtf0fETbUyYfin1NJOh/T+uawl/Lt2CYd6yPS
-        j9UisdvlGtBEEViTKo2vek+Nq
-X-Received: by 2002:ac8:1249:0:b0:3a8:270:c0b8 with SMTP id g9-20020ac81249000000b003a80270c0b8mr2982702qtj.15.1673347412589;
-        Tue, 10 Jan 2023 02:43:32 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv00NOahDtg8Y9/N2J83JwBSjdxkH/YXNcyXRvFHAxWKvlH5MFlX0naAaYvKaG/tVYx9GXE0w==
-X-Received: by 2002:ac8:1249:0:b0:3a8:270:c0b8 with SMTP id g9-20020ac81249000000b003a80270c0b8mr2982690qtj.15.1673347412360;
-        Tue, 10 Jan 2023 02:43:32 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-128.dyn.eolo.it. [146.241.120.128])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05620a2a0500b006fcc437c2e8sm7011883qkp.44.2023.01.10.02.43.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 02:43:31 -0800 (PST)
-Message-ID: <79108835e679706d138afc33a19a96ed4a1f71ea.camel@redhat.com>
-Subject: Re: [net PATCH] octeontx2-pf: Fix resource leakage in VF driver
- unbind
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Hariprasad Kelam <hkelam@marvell.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
-        edumazet@google.com, sgoutham@marvell.com, gakula@marvell.com,
-        sbhatta@marvell.com
-Date:   Tue, 10 Jan 2023 11:43:28 +0100
-In-Reply-To: <Y7098K4iMjPyAWww@unreal>
-References: <20230109061325.21395-1-hkelam@marvell.com>
-         <167334601536.23804.3249818012090319433.git-patchwork-notify@kernel.org>
-         <Y7098K4iMjPyAWww@unreal>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 10 Jan 2023 05:45:26 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0B45BA21
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:45:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TjVHre6LdoOndqEHjLrK+qihKkTdcFZKI6AZWZ34mR0=; b=k3tQygqvCUDVb84gJ2I/HrprVN
+        GtRPlitqskloTVHL5lN97qTdP97uLBJNUmfJboWY2Ag5HEeOrL7x/5CGKTLavMSNMjc8VcCOMjXWV
+        kk8aCyzoYLMfBZvUwFKBh1LewDPDKRmzVyRFSKAFMD+dcQ82IbsyYxNQcuodQydenSEnNR6YJNtdj
+        rTMCas91d83njpKrYB+wYmDBi1dCby+Fz6EpgmZOPF1y/MXEW/0wgSC+aDoNOee75lGfA1sdUhznb
+        yneM8SbXQqQJ+WFw034bEw23F+E519M900fJmKsMV9OztgV5H/iTiUZeDAuCOSgy5Nk1hKwq4ITyB
+        fv7wFctQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pFC7u-0038SO-9d; Tue, 10 Jan 2023 10:45:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B1D19300327;
+        Tue, 10 Jan 2023 11:44:51 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9293B201ABB61; Tue, 10 Jan 2023 11:44:51 +0100 (CET)
+Date:   Tue, 10 Jan 2023 11:44:51 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Marco Elver <elver@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <kees@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dalias@libc.org
+Subject: Re: Linux 6.2-rc3
+Message-ID: <Y71Bo3yKcLJhe/om@hirez.programming.kicks-ass.net>
+References: <CAHk-=wjwrqFcC9-KkfboqATYwLfJHi_8Z5mTrJh=nf8KT_SjUA@mail.gmail.com>
+ <20230109174742.GA1191249@roeck-us.net>
+ <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Jan 09, 2023 at 04:18:02PM -0600, Linus Torvalds wrote:
 
-On Tue, 2023-01-10 at 12:29 +0200, Leon Romanovsky wrote:
-> On Tue, Jan 10, 2023 at 10:20:15AM +0000, patchwork-bot+netdevbpf@kernel.org wrote:
-> > Hello:
-> > 
-> > This patch was applied to netdev/net.git (master)
-> > by Paolo Abeni <pabeni@redhat.com>:
-> > 
-> > On Mon, 9 Jan 2023 11:43:25 +0530 you wrote:
-> > > resources allocated like mcam entries to support the Ntuple feature
-> > > and hash tables for the tc feature are not getting freed in driver
-> > > unbind. This patch fixes the issue.
-> > > 
-> > > Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
-> > > Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-> > > Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
-> > > 
-> > > [...]
-> > 
-> > Here is the summary with links:
-> >   - [net] octeontx2-pf: Fix resource leakage in VF driver unbind
-> >     https://git.kernel.org/netdev/net/c/53da7aec3298
+> > In file included from <command-line>:
+> > In function 'follow_pmd_mask',
+> >     inlined from 'follow_pud_mask' at mm/gup.c:735:9,
+> >     inlined from 'follow_p4d_mask' at mm/gup.c:752:9,
+> >     inlined from 'follow_page_mask' at mm/gup.c:809:9:
+> > include/linux/compiler_types.h:358:45: error: call to '__compiletime_assert_263' declared with attribute error: Unsupported access size for {READ,WRITE}_ONCE().
+> >   358 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> >
+> > Bisect points to commit 0862ff059c9e ("sh/mm: Make pmd_t similar to pte_t").
+> > This commit introduces
+> >
+> > -typedef struct { unsigned long long pmd; } pmd_t;
+> > +typedef struct {
+> > +       struct {
+> > +               unsigned long pmd_low;
+> > +               unsigned long pmd_high;
+> > +       };
+> > +       unsigned long long pmd;
+> > +} pmd_t;
+> >
+> > That should probably be "typedef union", not "typedef struct".
 > 
-> I don't think that this patch should be applied.
-> 
-> It looks like wrong Fixes to me and I don't see clearly how structures
-> were allocated on VF which were cleared in this patch.
+> Ok, PeterZ has been off due to the holidays, but seems back. I agree,
 
-My understanding is that the resource allocation happens via:
+Yup, nearly 2 weeks of no email what so ever.. glorious!
 
-otx2_dl_mcam_count_set()
+> that outer 'struct' should obviously be 'union', but let's make the
+> guilty party (ie Peter) fix it up.
 
-which is registered as the devlink parameter write operation on the vf
-by the fixes commit - the patch looks legit to me.
+Urgh.. yes. How did the robots not yell at me before.
 
-Did I miss something?
+So the original patch came in through x86/mm, but this is very much a SH
+only fix how do we route this? Linus you want to take this directly or
+Rich do you have an urgent queue for the next -rc somewhere?
 
-Thanks!
+---
+Subject: sh/mm: Fix pmd_t for real
 
-Paolo
+Because typing is hard...
 
+Fixes: 0862ff059c9e ("sh/mm: Make pmd_t similar to pte_t")
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+diff --git a/arch/sh/include/asm/pgtable-3level.h b/arch/sh/include/asm/pgtable-3level.h
+index a889a3a938ba..d1ce73f3bd85 100644
+--- a/arch/sh/include/asm/pgtable-3level.h
++++ b/arch/sh/include/asm/pgtable-3level.h
+@@ -28,7 +28,7 @@
+ #define pmd_ERROR(e) \
+ 	printk("%s:%d: bad pmd %016llx.\n", __FILE__, __LINE__, pmd_val(e))
+ 
+-typedef struct {
++typedef union {
+ 	struct {
+ 		unsigned long pmd_low;
+ 		unsigned long pmd_high;
