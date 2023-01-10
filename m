@@ -2,93 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1410A664F1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D927664F27
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbjAJWwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 17:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
+        id S234830AbjAJWyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 17:54:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236083AbjAJWwB (ORCPT
+        with ESMTP id S235928AbjAJWxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 17:52:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F08671A2;
-        Tue, 10 Jan 2023 14:50:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84108B81A00;
-        Tue, 10 Jan 2023 22:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1B247C433F0;
-        Tue, 10 Jan 2023 22:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673391016;
-        bh=DmMuyWhMTg0J1NdZwCFfQoKhQYQFxAiKWqSxSoll1x0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=uRZ3G+h1AaNdw4ODj6yv86kUWrOC2ujxKksv3KEByAwCzpy6GpXW3znPp07VTUDXi
-         iSnG53XmoTe2XiDdw7WxbfGcpMxrrLZVFRDaIlGL6fjnf72Ek+e/IaIJaGqAZAsWKW
-         0HAvc+jf/MwK9gLd+lb2ehPiV6E3/FRNB0M1g8wefCnq7WoRJ+sXMklD8EiZLef8zx
-         8KslucT4696OXef7lrC2DIA81MWpPq5nzBGQMJfg4P+I2RofPr/M2xhiBa664GXpCo
-         HbXdjhsHdZpZmBx6v2Qsh+6WubYVga2Q/wQNzQbLIEHEiKaOhyt/pX9AlKcQ4uVSvt
-         fldXHbtt/zsVQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 00533E21EE8;
-        Tue, 10 Jan 2023 22:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 Jan 2023 17:53:34 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C610276ECF
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 14:51:47 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id j15so6869889qtv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 14:51:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nj+/7ufbi+mzc9WLMV9MhKIZ+vKN2tVNdm/p4PveWiw=;
+        b=Z+LHP8EFN813rSHrstCkLabK4IngHI+cKeRWcxWaVpq6IuYGolxjNslezLPrqVjGqV
+         q49LhzsEKIYTJGC5ECSyLgvYu9H6+d3+MoSEXFRuBNZkhp/bFYsGHLQVlAUclwstgUl/
+         HA4F75LkF1TDyFZhI9t2f3OaD8uDIFSGgQkDwmVvJv1HJfjnrob4MIuu2lTVJTGD2K5s
+         FR5lWKSZN3r86ua09Ari4/MY00ieOSSs2Nxy9skABpdMmfZbUcY4CQ2ZJ0yT0Fd/fH8u
+         ay9FGbUCFo1jWFIKVNRkSTNDVKrkth2p5YEk7hVBNMXL4/rfsK5UKUx7+zHk/wkSssr/
+         8Vfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nj+/7ufbi+mzc9WLMV9MhKIZ+vKN2tVNdm/p4PveWiw=;
+        b=k0Zr53sydpCqM0UHmPOkUN6649Wwl267Ma+nFwYhS5He6++XeuvieFIclCuxXJOhE0
+         F8oFmoEzxcjFHSPvr0IXvSFG2oylVcbm/JtBHFNntULuT/KdfO1qA6y6H9jA3Lqaemho
+         0CSKonN6+ufp/diY0Jm0THjZh3IDDmSaC/oe0bGFxcLteUFaVpLUpZzyRWHVYrbR6+wS
+         qtFr8tXR8sUlsG1xItqeAxfs3k/mZJqmJcnVc5kwuTfKasiisJM20GRoN+eXuHde6I2Z
+         H4EJjrxgE0k70zhxRISCOSyYHJjkTbkhK08p9czbZ8Od7u1s4DBdLHS3G8Kjhp48TT8E
+         0KOA==
+X-Gm-Message-State: AFqh2koRgkLJlTLz413At/itx8qd1Lc+hYlvxRPEES9fE4XkSanX4WVV
+        6wMv7rXN6HRiqdYX15Dtp4SyIbI+GTO0IQ4Nx0qlIw==
+X-Google-Smtp-Source: AMrXdXtCmgtL7XJA1AjxTGWmxlUVgcif515aqBGzxNtC4EL5mTP/V3O8hTigwzRJaQTQTj8cDIyP79kG4mIF4ZDOg8Y=
+X-Received: by 2002:a05:622a:5c1a:b0:3a6:ee88:63dd with SMTP id
+ gd26-20020a05622a5c1a00b003a6ee8863ddmr3310643qtb.446.1673391106667; Tue, 10
+ Jan 2023 14:51:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: Replace 0-length arrays with flexible arrays
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167339101599.28902.5327791124067545987.git-patchwork-notify@kernel.org>
-Date:   Tue, 10 Jan 2023 22:50:15 +0000
-References: <20230105192646.never.154-kees@kernel.org>
-In-Reply-To: <20230105192646.never.154-kees@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, gustavoars@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-4-chao.p.peng@linux.intel.com> <Y7azFdnnGAdGPqmv@kernel.org>
+ <20230106094000.GA2297836@chaop.bj.intel.com> <Y7xrtf9FCuYRYm1q@google.com> <20230110091432.GA2441264@chaop.bj.intel.com>
+In-Reply-To: <20230110091432.GA2441264@chaop.bj.intel.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Tue, 10 Jan 2023 14:51:35 -0800
+Message-ID: <CAGtprH_V84eSDE1ohRBd24k=MuL+Y0zF1YVbKBjK4ROEHPJEpA@mail.gmail.com>
+Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
+ private memory
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, Jan 10, 2023 at 1:19 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> >
+> > Regarding the userspace side of things, please include Vishal's selftests in v11,
+> > it's impossible to properly review the uAPI changes without seeing the userspace
+> > side of things.  I'm in the process of reviewing Vishal's v2[*], I'll try to
+> > massage it into a set of patches that you can incorporate into your series.
+>
+> Previously I included Vishal's selftests in the github repo, but not
+> include them in this patch series. It's OK for me to incorporate them
+> directly into this series and review together if Vishal is fine.
+>
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Yeah, I am ok with incorporating selftest patches into this series and
+reviewing them together.
 
-On Thu,  5 Jan 2023 11:26:47 -0800 you wrote:
-> Zero-length arrays are deprecated[1]. Replace struct bpf_array's
-> union of 0-length arrays with flexible arrays. (How are the
-> sizes of these arrays verified?) Detected with GCC 13, using
-> -fstrict-flex-arrays=3:
-> 
-> arch/x86/net/bpf_jit_comp.c: In function 'bpf_tail_call_direct_fixup':
-> arch/x86/net/bpf_jit_comp.c:606:37: warning: array subscript <unknown> is outside array bounds of 'void *[0]' [-Warray-bounds=]
->   606 |                 target = array->ptrs[poke->tail_call.key];
->       |                          ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
-> In file included from include/linux/filter.h:9,
->                  from arch/x86/net/bpf_jit_comp.c:9:
-> include/linux/bpf.h:1527:23: note: while referencing 'ptrs'
->  1527 |                 void *ptrs[0] __aligned(8);
->       |                       ^~~~
-> 
-> [...]
+Regards,
+Vishal
 
-Here is the summary with links:
-  - bpf: Replace 0-length arrays with flexible arrays
-    https://git.kernel.org/bpf/bpf-next/c/129d868ede1e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> Chao
+> >
+> > [*] https://lore.kernel.org/all/20221205232341.4131240-1-vannapurve@google.com
