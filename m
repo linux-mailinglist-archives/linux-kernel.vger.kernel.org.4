@@ -2,140 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A06664C21
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E12664C27
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239828AbjAJTOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        id S233314AbjAJTQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:16:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239882AbjAJTOR (ORCPT
+        with ESMTP id S235260AbjAJTQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:14:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4325005F
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:14:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C317EB81919
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:14:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9449DC433F0;
-        Tue, 10 Jan 2023 19:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673378047;
-        bh=8VMuRmtRqaT8lihotNAGlk0VuE/uM8wsvkJVXbs+qyc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SxX7gxrmfhhNSyGrUh6MgcHXLhiGruyrglGCL5nlkEZ0FSvBTx824IxrIxDLEsja9
-         Uv/KaAy9BvUmsDUK9+uP0vOpt69qmT+Ka9vRTK3TJGuNMjWUMO6e/TJhlMgcCTapaE
-         yM6FA2PP9twC/+a8FQoMc667Nt6CchI7/JuKjK+HLOudy7TLvYb4qBDXklbYi4AHAU
-         z8ykaCtl3XnFl5uaecBM9TBAIbDFp9y52iwY8AxVaRbvI2lo+5bjL5hkDhuw52CEdL
-         UQ6dkui5hxMEG/HJswZZ48/Up9kbwQzqVQu8dySbmdU5yI6l9XbSty8FPTU61SDQf2
-         OOL8mDv4JoxbQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     SeongJae Park <sj@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: Linux 6.2-rc2
-Date:   Tue, 10 Jan 2023 19:14:04 +0000
-Message-Id: <20230110191404.132594-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAK7LNAR7dfv=---C15S3ohTEWsoyRNTrasY9ysD1ahZxLZAXow@mail.gmail.com>
-References: 
+        Tue, 10 Jan 2023 14:16:04 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9747F08;
+        Tue, 10 Jan 2023 11:15:57 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AIi4fT025981;
+        Tue, 10 Jan 2023 19:15:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=8qLRSieZJKfiFTp09cd3lxTGmbf7d8GkKTXy8vOVObs=;
+ b=rjuuulTF635OLwG5dI3ZK9jbc2+wAoyiPmARf3DNRQSvKfEVyP1vxbZqqWoS7okGsGxA
+ 7Zp93N8mag8gPTVTKvwfmiUG0ACmmQQD2pVC7tyX90QlWBfcb9TVQtX1+GUJhJVe8doO
+ F/EAr/uARa0hLC5qLq+OEYcK4lZPkgxeqMIJw7w9riNT1KIvGe1RKEfgog2zwbkeUDNf
+ xGz7ln8/x13s00gUQLMUfGsQhF8qCNj2fNPhGiDMetDARmcTCVtsDSfTsRfTu9RqBSDh
+ pxG6BCf9/VUu6mkINwCGdSofc5x44Klqr3z1M8OF7DpZaeqgosHLMXjj9Fv2tpEgF5C4 bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1dj9gqwa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 19:15:56 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30AIoYMI017576;
+        Tue, 10 Jan 2023 19:15:56 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1dj9gqvd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 19:15:56 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30AIeVnD024687;
+        Tue, 10 Jan 2023 19:15:54 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3my0c6nb3p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 19:15:54 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30AJFo0t25035302
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 Jan 2023 19:15:51 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D2AFE20040;
+        Tue, 10 Jan 2023 19:15:50 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6CF7E2004D;
+        Tue, 10 Jan 2023 19:15:50 +0000 (GMT)
+Received: from [9.171.9.121] (unknown [9.171.9.121])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 10 Jan 2023 19:15:50 +0000 (GMT)
+Message-ID: <f4203dea-93a9-6903-d635-c36ff47337c9@linux.ibm.com>
+Date:   Tue, 10 Jan 2023 20:15:50 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] KVM: s390: interrupt: use READ_ONCE() before cmpxchg()
+Content-Language: en-US
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230109145456.2895385-1-hca@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20230109145456.2895385-1-hca@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: W9Jlib-x6Ip48vHTvV5S9c5z7zPigdX7
+X-Proofpoint-ORIG-GUID: jqIG8YIw-bxIsQrSNz78ZG2_QqzRyp7y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-10_07,2023-01-10_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=888
+ malwarescore=0 suspectscore=0 spamscore=0 priorityscore=1501 adultscore=0
+ phishscore=0 clxscore=1011 bulkscore=0 lowpriorityscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301100124
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
-
-On Wed, 11 Jan 2023 03:39:58 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
-
-> On Tue, Jan 10, 2023 at 9:32 AM SeongJae Park <sj@kernel.org> wrote:
-> >
-> > On Tue, 3 Jan 2023 11:58:48 +0100 Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > > On Tue, 3 Jan 2023 at 03:13, Linus Torvalds
-> > > <torvalds@linux-foundation.org> wrote:
-> > > >
-> > > > On Mon, Jan 2, 2023 at 5:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > >
-> > [...]
-> > > --- a/include/asm-generic/vmlinux.lds.h
-> > > +++ b/include/asm-generic/vmlinux.lds.h
-> > > @@ -896,7 +896,7 @@
-> > >   * Otherwise, the type of .notes section would become PROGBITS
-> > > instead of NOTES.
-> > >   */
-> > >  #define NOTES                                                          \
-> > > -       /DISCARD/ : { *(.note.GNU-stack) }                              \
-> > > +       .note.GNU-stack : { *(.note.GNU-stack) }                        \
-> > >         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {                       \
-> > >                 BOUNDED_SECTION_BY(.note.*, _notes)                     \
-> > >         } NOTES_HEADERS                                                 \
-> > >
-> > > The .note.GNU-stack has zero size, so the result should be the same.
-> > >
-> >
-> > This also fixes ARCH=um build error on my system.
-> >
-> > Tested-by: SeongJae Park <sj@kernel.org>
-> 
-> 
-> 
-> I am able to build ARCH=um defconfig at least.
-> 
-> Can you provide the steps to reproduce the build error?
-
-I do the build for kunit test, like below.
-
-    mkdir ../kunit.out
-    echo "
-    	CONFIG_KUNIT=y
-    
-    	CONFIG_DAMON=y
-    	CONFIG_DAMON_KUNIT_TEST=y
-    
-    	CONFIG_DAMON_VADDR=y
-    	CONFIG_DAMON_VADDR_KUNIT_TEST=y
-    
-    	CONFIG_DEBUG_FS=y
-    	CONFIG_DAMON_DBGFS=y
-    	CONFIG_DAMON_DBGFS_KUNIT_TEST=y
-    CONFIG_DAMON_PADDR=y" > ../kunit.out/.kunitconfig
-    ./tools/testsing/kunit/kunit.py run --build_dir ../kunit.out
-    [19:12:37] Configuring KUnit Kernel ...
-    [19:12:37] Building KUnit Kernel ...
-    Populating config with:
-    $ make ARCH=um O=../kunit.out/ olddefconfig
-    Building with:
-    $ make ARCH=um O=../kunit.out/ --jobs=36
-    ERROR:root:`.exit.text' referenced in section `.uml.exitcall.exit' of arch/um/drivers/virtio_uml.o: defined in discarded section `.exit.text' of arch/um/drivers/virtio_uml.o
-    collect2: error: ld returned 1 exit status
-    make[2]: *** [/home/sjpark/linux/scripts/Makefile.vmlinux:34: vmlinux] Error 1
-    make[1]: *** [/home/sjpark/linux/Makefile:1252: vmlinux] Error 2
-    make: *** [Makefile:242: __sub-make] Error 2
 
 
-Thanks,
-SJ
+Am 09.01.23 um 15:54 schrieb Heiko Carstens:
+> Use READ_ONCE() before cmpxchg() to prevent that the compiler generates
+> code that fetches the to be compared old value several times from memory.
+> 
+> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 
+Looks sane.
+
+Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+
+In case you want to take it via the s390 tree:
+Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+
+> ---
 > 
+> v2: make it compile
 > 
+> arch/s390/kvm/interrupt.c | 12 ++++++++----
+>   1 file changed, 8 insertions(+), 4 deletions(-)
 > 
-> 
-> --
-> Best Regards
-> Masahiro Yamada
+> diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
+> index 1dae78deddf2..ab26aa53ee37 100644
+> --- a/arch/s390/kvm/interrupt.c
+> +++ b/arch/s390/kvm/interrupt.c
+> @@ -83,8 +83,9 @@ static int sca_inject_ext_call(struct kvm_vcpu *vcpu, int src_id)
+>   		struct esca_block *sca = vcpu->kvm->arch.sca;
+>   		union esca_sigp_ctrl *sigp_ctrl =
+>   			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+> -		union esca_sigp_ctrl new_val = {0}, old_val = *sigp_ctrl;
+> +		union esca_sigp_ctrl new_val = {0}, old_val;
+>   
+> +		old_val = READ_ONCE(*sigp_ctrl);
+>   		new_val.scn = src_id;
+>   		new_val.c = 1;
+>   		old_val.c = 0;
+> @@ -95,8 +96,9 @@ static int sca_inject_ext_call(struct kvm_vcpu *vcpu, int src_id)
+>   		struct bsca_block *sca = vcpu->kvm->arch.sca;
+>   		union bsca_sigp_ctrl *sigp_ctrl =
+>   			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+> -		union bsca_sigp_ctrl new_val = {0}, old_val = *sigp_ctrl;
+> +		union bsca_sigp_ctrl new_val = {0}, old_val;
+>   
+> +		old_val = READ_ONCE(*sigp_ctrl);
+>   		new_val.scn = src_id;
+>   		new_val.c = 1;
+>   		old_val.c = 0;
+> @@ -126,16 +128,18 @@ static void sca_clear_ext_call(struct kvm_vcpu *vcpu)
+>   		struct esca_block *sca = vcpu->kvm->arch.sca;
+>   		union esca_sigp_ctrl *sigp_ctrl =
+>   			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+> -		union esca_sigp_ctrl old = *sigp_ctrl;
+> +		union esca_sigp_ctrl old;
+>   
+> +		old = READ_ONCE(*sigp_ctrl);
+>   		expect = old.value;
+>   		rc = cmpxchg(&sigp_ctrl->value, old.value, 0);
+>   	} else {
+>   		struct bsca_block *sca = vcpu->kvm->arch.sca;
+>   		union bsca_sigp_ctrl *sigp_ctrl =
+>   			&(sca->cpu[vcpu->vcpu_id].sigp_ctrl);
+> -		union bsca_sigp_ctrl old = *sigp_ctrl;
+> +		union bsca_sigp_ctrl old;
+>   
+> +		old = READ_ONCE(*sigp_ctrl);
+>   		expect = old.value;
+>   		rc = cmpxchg(&sigp_ctrl->value, old.value, 0);
+>   	}
