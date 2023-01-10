@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD736646FB
+	by mail.lfdr.de (Postfix) with ESMTP id 206B66646FA
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbjAJRFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:05:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
+        id S238433AbjAJRFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 12:05:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233545AbjAJRFk (ORCPT
+        with ESMTP id S238948AbjAJRFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:05:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7E749164;
-        Tue, 10 Jan 2023 09:05:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C8D2B817C2;
-        Tue, 10 Jan 2023 17:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47779C433EF;
-        Tue, 10 Jan 2023 17:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673370332;
-        bh=428SHNtP/aK3b0mFyPSZRcW3HGKYcmwE0kS9Px1yAD8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aJx68YRZ6BeWB3nO82v/0hCpESKKIxyP0EfGWvoNb+ImickZnAhnm1r+5dLUtSqqi
-         tJOphYFUdmNe0a/afhtQhFWaxK90K8/bsGBPManrR+DyyMGINjk4MLcSDGLBNDewIR
-         VOemJ7fTqpaZwx6jNO59RLyRLzdhBdP/J0mqzXnlRaf1t3oSy28qbz71MD9L6Q5yz9
-         iKLvwmwFsVV2/iGJWsEDUT4Pq1nLPaR+iISDm32aT8D1OZ2GPjs0JLlUpZDRpza0ND
-         0I3RxyNjoV70rKLyan0756EvYmXl9/K9f6cqKOeXVD/RwkcPSpqYdAz2vgdpsFoHvr
-         JMLePj5KLENaQ==
-Date:   Tue, 10 Jan 2023 17:05:25 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 06/10] mfd: intel-m10-bmc: Downscope SPI defines &
- prefix with M10BMC_N3000
-Message-ID: <Y72a1feFIAMyrVpQ@google.com>
-References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com>
- <20221226175849.13056-7-ilpo.jarvinen@linux.intel.com>
+        Tue, 10 Jan 2023 12:05:37 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D79C4FCD9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:05:34 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id cf42so19505562lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:05:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ViSKVOVdYXza1X58HUisghrY6PNtu3jUgQJxDurpmbU=;
+        b=MsX48sRoyYXUqcmOlftJJM8++0/Mj4qf6uQu5f9hQ8r3FQGKLatvW1xBcP0tDyY3jP
+         79fcWRyi+v8JI5qOTNtuu5R+eKUHS5VJSyKa06eN694zKdDcGNxoGZ7yOTWHY4FnjQ14
+         JUIuwTapO+8FuiZVPkdE0T0yCEtBt3WAmkIKsdeDqJgVH8O7ri3eTxkA4QMysiZCcDcM
+         yI4ijywlYzLyJXYHnUdMrVZAlSc26zgszQpOs1iA1f7VbDKOADFW1j04jGppGafLv0Ps
+         o8vY4SOjIn22EK0RtpohxR8F47OA6alVPg7e+GqQ/69AKEeC7RTEc5bRthhXf169+xvA
+         8xMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ViSKVOVdYXza1X58HUisghrY6PNtu3jUgQJxDurpmbU=;
+        b=eVWdCyZZJPEABV+xtTctCLCXeMiynA+Azf7qyhlCQ9iOTvVUEzdOHup6LmF4jJaWIS
+         UEwgFXv+o1znSjdegQ9nO5vs0vCeN7UheXrAJUw7TnecRUS/HRlcxu2bx8wUYEFjVGcz
+         TxF8vq2a2aWEMzOEybKmwLH87bz6XpSDNCxxdrCS8PcBLsz7lYSbo99qNjWS1+YN8Twx
+         TYijAVt+r2dKtJ6BxJrY2mIJt2JC8xWX19gClUe5frKgbBQxCjZXUXLN4upzOw/vCfTx
+         a3yUE1N/9cwewvXKh0mLmDS9+ZiErGya1mb9aVJe3xcRQZYgvpEIjUQdwrsDCX12NXWR
+         /sjA==
+X-Gm-Message-State: AFqh2kpyMerZ7zB+VT/bwf3Z1ZYzvtzdPKe6MFLuA4vqfmcGSd8rSeY1
+        tCXW0kJoTyzcOkva6cdHlGugaw==
+X-Google-Smtp-Source: AMrXdXs52CyJbbjNnpCT3mB8KFDRxubwKTeuPu+s4xCVtpc/QoaxCbT68eLjBaRnniX0fw+UdKUeuA==
+X-Received: by 2002:ac2:46f8:0:b0:4b5:9ec5:dbed with SMTP id q24-20020ac246f8000000b004b59ec5dbedmr21895758lfo.40.1673370332442;
+        Tue, 10 Jan 2023 09:05:32 -0800 (PST)
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id s10-20020a056512202a00b004cb291bcd2csm2257930lfs.246.2023.01.10.09.05.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 09:05:31 -0800 (PST)
+Message-ID: <593e555b-d9fb-83ab-dabe-33d6690210f8@linaro.org>
+Date:   Tue, 10 Jan 2023 18:05:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 01/10] interconnect: qcom: rpm: Don't set QoS params
+ before non-zero bw is requested
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230110132202.956619-1-konrad.dybcio@linaro.org>
+ <20230110132202.956619-2-konrad.dybcio@linaro.org>
+ <1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221226175849.13056-7-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,95 +79,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
 
-> Move SPI based board definitions to per interface file from the global
-> header. This makes it harder to use them accidently in the
-> generic/interface agnostic code. Prefix the defines with M10BMC_N3000
-> to make it more obvious these are related to some board type. All
-> current non-N3000 board types have the same layout so they'll be
-> reused.
+
+On 10.01.2023 15:00, Bryan O'Donoghue wrote:
+> On 10/01/2023 13:21, Konrad Dybcio wrote:
+>> Until now, the icc-rpm driver unconditionally set QoS params, even on
+>> empty requests. This is superfluous and the downstream counterpart does
+>> not do it. Follow it by doing the same.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   drivers/interconnect/qcom/icc-rpm.c | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>> index df3196f72536..361dcbf3386f 100644
+>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>> @@ -191,6 +191,12 @@ static int qcom_icc_qos_set(struct icc_node *node, u64 sum_bw)
+>>       struct qcom_icc_provider *qp = to_qcom_provider(node->provider);
+>>       struct qcom_icc_node *qn = node->data;
+>>   +    /* Defer setting QoS until the first non-zero bandwidth request. */
+>> +    if (!(node->avg_bw || node->peak_bw)) {
+>> +        dev_dbg(node->provider->dev, "NOT Setting QoS for %s\n", qn->name);
+>> +        return 0;
+>> +    }
+>> +
+>>       dev_dbg(node->provider->dev, "Setting QoS for %s\n", qn->name);
+>>         switch (qp->type) {
 > 
-> Some bitfield defs are also moved to intel-m10-bmc-core which seems
-> more appropriate for them.
+> I still think you should include the original logic on the else, for the minimum case of silicon that predates the 5.4 kernel release.
 > 
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> /* Clear bandwidth registers */
+> set_qos_bw_regs(base, mas_index, 0, 0, 0, 0, 0);
+> 
+> Either that or get the relevant silicon engineers at qcom to say the host side port write is redundant.
+After some conversations in private, it was concluded that this patch
+should most likely not be applied, as there's not enough reasoning
+beyond "downstream does this, let's copy it".
+
+The other 9 should be still reviewed.
+
+Konrad
+> 
 > ---
->  drivers/mfd/intel-m10-bmc-core.c  | 11 ++++
->  drivers/mfd/intel-m10-bmc-spi.c   | 89 ++++++++++++++++++++++---------
->  include/linux/mfd/intel-m10-bmc.h | 46 ----------------
->  3 files changed, 74 insertions(+), 72 deletions(-)
-> 
-> diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
-> index 51b78b868235..50a4ec758bdb 100644
-> --- a/drivers/mfd/intel-m10-bmc-core.c
-> +++ b/drivers/mfd/intel-m10-bmc-core.c
-> @@ -12,6 +12,17 @@
->  #include <linux/mfd/intel-m10-bmc.h>
->  #include <linux/module.h>
->  
-> +/* Register fields of system registers */
-> +#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
-> +#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
-> +#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
-> +#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
-> +#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
-> +#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
-> +#define M10BMC_MAC_COUNT		GENMASK(23, 16)
-> +#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
-> +#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
-> +
->  static ssize_t bmc_version_show(struct device *dev,
->  				struct device_attribute *attr, char *buf)
->  {
-> diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
-> index e8986154e965..04c83f9c6492 100644
-> --- a/drivers/mfd/intel-m10-bmc-spi.c
-> +++ b/drivers/mfd/intel-m10-bmc-spi.c
-> @@ -13,10 +13,47 @@
->  #include <linux/regmap.h>
->  #include <linux/spi/spi.h>
->  
-> +#define M10BMC_N3000_LEGACY_BUILD_VER	0x300468
-> +#define M10BMC_N3000_SYS_BASE		0x300800
-> +#define M10BMC_N3000_SYS_END		0x300fff
-> +#define M10BMC_N3000_FLASH_BASE		0x10000000
-> +#define M10BMC_N3000_FLASH_END		0x1fffffff
-> +#define M10BMC_N3000_MEM_END		M10BMC_N3000_FLASH_END
-> +
-> +/* Register offset of system registers */
-> +#define NIOS2_FW_VERSION		0x0
-> +#define M10BMC_N3000_MAC_LOW		0x10
-> +#define M10BMC_N3000_MAC_HIGH		0x14
-> +#define M10BMC_N3000_TEST_REG		0x3c
-> +#define M10BMC_N3000_BUILD_VER		0x68
-> +#define M10BMC_N3000_VER_LEGACY_INVALID	0xffffffff
-> +
-> +/* Secure update doorbell register, in system register region */
-> +#define M10BMC_N3000_DOORBELL		0x400
-> +
-> +/* Authorization Result register, in system register region */
-> +#define M10BMC_N3000_AUTH_RESULT		0x404
-> +
-> +/* Addresses for security related data in FLASH */
-> +#define M10BMC_N3000_BMC_REH_ADDR	0x17ffc004
-> +#define M10BMC_N3000_BMC_PROG_ADDR	0x17ffc000
-> +#define M10BMC_N3000_BMC_PROG_MAGIC	0x5746
-> +
-> +#define M10BMC_N3000_SR_REH_ADDR	0x17ffd004
-> +#define M10BMC_N3000_SR_PROG_ADDR	0x17ffd000
-> +#define M10BMC_N3000_SR_PROG_MAGIC	0x5253
-> +
-> +#define M10BMC_N3000_PR_REH_ADDR	0x17ffe004
-> +#define M10BMC_N3000_PR_PROG_ADDR	0x17ffe000
-> +#define M10BMC_N3000_PR_PROG_MAGIC	0x5250
-
-My preference would definitely be to keep these blocks of defines tucked
-away inside a header file somewhere.
-
-Premise of the change looks fine, however.
-
--- 
-Lee Jones [李琼斯]
+> bod
