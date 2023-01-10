@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E4B664CA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEED9664CA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbjAJTiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
+        id S232209AbjAJTiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbjAJTiT (ORCPT
+        with ESMTP id S233058AbjAJTiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:38:19 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C545A8BD
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:38:09 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id g10so9577535wmo.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:38:09 -0800 (PST)
+        Tue, 10 Jan 2023 14:38:22 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02C95BA2B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:38:14 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id o15so9560531wmr.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:38:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y+6ojRSTKPFeCe6Qwmp9K84vaHxDFNyRTeBBcQ3RV5M=;
-        b=xsH+Op9cD+IQLfl4OEz2QpMEIRTas5J7avpoUB1pCD+UzHbyqzE9QSnaMbvka6BGXE
-         LEGdVoUjCheOj9NSEA57Q0z0LK9+8ouhM2CcYLoxpq6HyH2qOFMaWOJ7PbHMRRFK2RNm
-         v5R7sDTYeZYXKKjitJprDhfP6oH0pqygv+I+SFipI6KHoWPjC2CEHJJ+XAYM1uUsJ4ph
-         omLEc9R01uy9xsGF8EwwdOa9lWqGly1ajy/erZZnMbdaE7/JG7Q3ETbE16lTyT1AOVYl
-         loxxADvQyO5BZoolaBT7Qmt0+VqMGny2lvfhAyZMSJXdOBdwMi1agFGeAyWq7U2VOZUd
-         oVTA==
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eGDhxuNjiAxiZ7fsWZIBfqbUjy1+OKYg09NQ2t+65mA=;
+        b=LMg8CmtfWfe8Y9I6CGh5ZeRy5OlI6jPlE6i+w+BE3Zo0DOoklPHxkKVtILrZnxR2Sy
+         Kmp2KRdqCGvCFtak4b4DXBOgH4OizSHtQ338flLLYaUIQ0/y9N/5IFAlcgwGnkmR3iee
+         dKfFJzCXoa6n/N1pNkh3V4HRsUqL9Q7qc+qRH0y+5FeOHrTdRF9OpELK1iVlQ8oZROm+
+         rTwX3oAQjtbele1bd11biI0B8VIvOkr/cT1MEBkemJgfku0DJseebexfB1YQqcY+enDZ
+         yiywcsgoVOkYQjJ+RZAWHtV3gOmLp8EKOoqX/QsZK9b4xE9nreBaQzHGv7m2jtozXa6e
+         Zbhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y+6ojRSTKPFeCe6Qwmp9K84vaHxDFNyRTeBBcQ3RV5M=;
-        b=J/B/nmHEY+O6hcLbi+G8T+qlim+V1mWJsDC3RN78nDh2/WqyJg6dFvQ3pPqcZBGAOc
-         8iS76GElq8V8yUVG0l1sE52IeFblulO4ffszArQ8T7VzFsKoN31L8u8qVnYVOgd1uR1A
-         aOCNS0VI5WE12iQ7Jucu5r0V3/WifrVXVWZoXy3AJemowBNpIADP4pHAogi1YZEX33WJ
-         E6JXX41MdlHj7IfvIY2xxQq+mIhSM7c+ekJ0rbQKdDj1yqD5VcDTaRz7lY+jm3b4Hxlf
-         7ULg5tWZjrZ2sQ/67HEUSt4RdfCKP/Cbnyy4EMhlfrvHM4KCBGMzTwkUZS711l7WepP7
-         NbzQ==
-X-Gm-Message-State: AFqh2krU5nNh1SH3bZtC3jE/V4NN55UxAkBEePLDAdszSrAueKlsHtKx
-        qif/KSesVn+2bzmyTEuQsrrbzw==
-X-Google-Smtp-Source: AMrXdXvxzJ/8+am6/NrozsHmhrMVkKG8mJ/6egL59X2oPK88ZlWj/W/lo3nGHnVbtgkiBctpTVii3A==
-X-Received: by 2002:a05:600c:3b26:b0:3d7:fa4a:681b with SMTP id m38-20020a05600c3b2600b003d7fa4a681bmr52517306wms.0.1673379488053;
-        Tue, 10 Jan 2023 11:38:08 -0800 (PST)
+        bh=eGDhxuNjiAxiZ7fsWZIBfqbUjy1+OKYg09NQ2t+65mA=;
+        b=ZPTGT5fFjMhytLzLvdcDQz+XduxYyA8Bn4JAGOAQl7vq3wZNYyP2J+EVmw3jioGsLx
+         atLWKisrk1Qk3FqX8odG8hoHwJtp/dzxofrUqtTY8vnCrVWHbqXIDcqe/Qp7VH5isFlX
+         +cT6j6ueadgpflXq6FCPqfLwamCsEF8fi5hLdOA+R9+dpVsnlDdlr0mYEAQJMYqqMQRx
+         cPTkyXohMF6smRYwZ/lO49cmWsYEloi7hmx6rSCIwLllJ6Vpal9wQK+04jbXa6ODfP/2
+         NjPrOREkGOUsIZiuxSCPX3urT0rWD7TZaYMa2PIAmG23XJvi89PunHEZiApKSIN2v3lK
+         +cLQ==
+X-Gm-Message-State: AFqh2kqIE6rJTIyxM43KDOJHo0hwrGTiCp89UoyWt5z/HVyO5JSd53iP
+        Jml5b+cXFCWb8XCEohM3z2IpMQ==
+X-Google-Smtp-Source: AMrXdXsQ8RMu5nCq/z3RWX49T85kJl7kDS1NdrPdjzIxxghwrbVuytN5J9NMfQOIxGz4R8Y/8GAOhQ==
+X-Received: by 2002:a05:600c:3552:b0:3d9:f801:bb6 with SMTP id i18-20020a05600c355200b003d9f8010bb6mr3114168wmq.10.1673379493435;
+        Tue, 10 Jan 2023 11:38:13 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q6-20020a05600c46c600b003cfd4e6400csm17253043wmo.19.2023.01.10.11.38.05
+        by smtp.gmail.com with ESMTPSA id q6-20020a05600c46c600b003cfd4e6400csm17253043wmo.19.2023.01.10.11.38.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 11:38:07 -0800 (PST)
+        Tue, 10 Jan 2023 11:38:12 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
+To:     Sriranjani P <sriranjani.p@samsung.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-samsung-soc@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: exynos: drop unsupported I2C properties in Espresso
-Date:   Tue, 10 Jan 2023 20:37:58 +0100
-Message-Id: <167337945584.1430972.13331082393080125830.b4-ty@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: soc: samsung: exynos-sysreg: correct indentation for deprecated
+Date:   Tue, 10 Jan 2023 20:37:59 +0100
+Message-Id: <167337945583.1430972.706879196207710844.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221204190543.143986-1-krzysztof.kozlowski@linaro.org>
-References: <20221204190543.143986-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230109083948.77462-1-krzysztof.kozlowski@linaro.org>
+References: <20230109083948.77462-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -76,20 +79,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 4 Dec 2022 20:05:42 +0100, Krzysztof Kozlowski wrote:
-> The Samsung HSI2C (High Speed I2C) bindings do not allow
-> samsung,i2c-sda-delay (present in older S3C24xx I2C bindings):
-> 
->   exynos7-espresso.dtb: i2c@13660000: Unevaluated properties are not allowed ('samsung,i2c-sda-delay', 'samsung,i2c-max-bus-freq' were unexpected)
+On Mon, 9 Jan 2023 09:39:48 +0100, Krzysztof Kozlowski wrote:
+> "deprecated" keyword was indentend wrong - entire list of compatibles
+> starting with generic Exynos SoC compatible is deprecated.
 > 
 > 
 
 Applied, thanks!
 
-[1/2] arm64: dts: exynos: drop unsupported I2C properties in Espresso
-      https://git.kernel.org/krzk/linux/c/91d89306579b7a2963e39e4711b893634ace23d6
-[2/2] ARM: dts: exynos: drop unused pinctrl-names from Galaxy Tab
-      https://git.kernel.org/krzk/linux/c/5d1ab51463d6c609e65861625512f912eb1d7cb2
+[1/1] dt-bindings: soc: samsung: exynos-sysreg: correct indentation for deprecated
+      https://git.kernel.org/krzk/linux/c/c14f161c1feda6f654978025fb64efd7280c3223
 
 Best regards,
 -- 
