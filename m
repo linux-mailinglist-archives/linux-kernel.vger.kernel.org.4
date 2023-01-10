@@ -2,230 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15726647D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A72646647E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233545AbjAJR4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
+        id S234149AbjAJR56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 12:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbjAJRzr (ORCPT
+        with ESMTP id S232670AbjAJR5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:55:47 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5907CDD2;
-        Tue, 10 Jan 2023 09:55:25 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ACiPdM011158;
-        Tue, 10 Jan 2023 17:55:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : from : subject : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=bsupJ31BTXkeH2VYmXxsRvepy5ZeRJ9/IKO65yE7UpE=;
- b=HXoVjoNbBfKDiDR9WeJswAlmV/IfVjBCUpWk5PeVrOCLPTjtNb3pprUWnMqwVbsYbdta
- eSaipPBEMniEd1OEoFhDPD8LA6P7sB834rAUk/lwgRvGgWS8V0q2RcsvceZkR3arGPvV
- wE5FBfjcsjYWisgvZu3cYACHPCALhD2dWk5xZ1Nab7APP8qsIf/8qA+GHjkDky/Y2ofY
- J1aMXevyjWCl3+mCbxSAPlk7PGc97cFLgrSuoH+tECAOtaUsBZniyIRG2k1n2zYm5Xkg
- GBiDjJ2paJPAaJiT8gn8Fn1CyJfqxR3L3WI6OkIB3Rhu6gkCR6XMtyC9gnxJUlxN9Cyp qA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n0q28jpye-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 17:55:12 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30AHtBvN027679
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 17:55:11 GMT
-Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 10 Jan
- 2023 09:55:10 -0800
-Message-ID: <29dc78ee-1eaa-7e3d-f28c-07a6b60ed2b2@quicinc.com>
-Date:   Tue, 10 Jan 2023 09:55:10 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Elliot Berman <quic_eberman@quicinc.com>
-Subject: Re: [PATCH v8 03/28] gunyah: Common types and error codes for Gunyah
- hypercalls
-To:     Alex Elder <elder@linaro.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>
-CC:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tue, 10 Jan 2023 12:57:25 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7210140C2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:56:14 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b3so19717577lfv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:56:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V2dTan/Kw4znHZMy+taD1K9hv7WX3VWk+z9jh04BKaU=;
+        b=KJs3o86FAQHUCWODom2ShunZ4d54eR2HZqG+loTlcfBCWNUD7adM51iO2tsu5bBbBg
+         KhNkEVlTMdn85Zu9CIDafIT4j7ZOPHrVZR3ULuXECcP7uTYIfDlYs7OX8g0I7tYHoXiC
+         rkweUfq0WONZwg5LANvsUYh3QFITidK0Ev9f7OT1Ai5NGohX9zdKSYC/yLPF24wFNE/G
+         5aenIqbHwhFxE7QgHvFG4poZdpHy5a3PwzdituJoI8Pin74c4mTpJncleLzIUkzqG7NA
+         7rEVOwKADODqC3P6DDiXzs74VJ1XHx97MP+l9Zsd9Gqz9UdAy2xbSnCoFSv7kzvQE3wJ
+         1MsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V2dTan/Kw4znHZMy+taD1K9hv7WX3VWk+z9jh04BKaU=;
+        b=Z8he77ZNZsrmPN1MtpAWCYc1vWlNd3o7XDS0dKOheNyYrmh1RaE8ngekhyUEsbeUrI
+         sNZHv7Ogg9ecbRU++77NeYsxlgFBdXDeps1YNq01woq2MyVpGfwtA2aXibNWNHAYej51
+         YbvtMT5dVhAicWyskEhK92XNBqDMIdzPD25bQPtuNF2WgRExGaSkgpbl+XpT8G3+LIEo
+         VPP2f2MZ/QoAU0fcSMYWoFiVH27/vEalKgJyb74kxgco1EjSe87kst9/ujfX0xlziTKK
+         lEgInhnyxWgOR+XQ0IQLxUC/9KEW6fyJFeEoyKr20nhrsB8nzjaiyWjPpusQzAtBvwi1
+         z/MA==
+X-Gm-Message-State: AFqh2kqYv55zvPjJ9mGoEfiwrhA18qfwlsI+tHdDd5QCx8c3Fg+bDXPV
+        NlTgFwYEkpMC7wB22gHhAJnwYw==
+X-Google-Smtp-Source: AMrXdXslXMJbDYX0HzQL+JLarynNBVCpT0VT1nPeDZuFVwH4OHScH/Bl72AezVX4fCsTNtf1yvcGlQ==
+X-Received: by 2002:a05:6512:ea2:b0:4b5:5bcc:cbcd with SMTP id bi34-20020a0565120ea200b004b55bcccbcdmr20427226lfb.0.1673373372907;
+        Tue, 10 Jan 2023 09:56:12 -0800 (PST)
+Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id x9-20020a0565123f8900b004a1e104b269sm2275056lfa.34.2023.01.10.09.56.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 09:56:12 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        angelogioacchino.delregno@collabora.com,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Rob Herring <robh@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Bagas Sanjaya" <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        "Sudeep Holla" <sudeep.holla@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-acpi@vger.kernel.org>
-References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
- <20221219225850.2397345-4-quic_eberman@quicinc.com>
- <14eba2db-6f35-8b29-2b5e-6f1937b4e318@linaro.org>
-Content-Language: en-US
-In-Reply-To: <14eba2db-6f35-8b29-2b5e-6f1937b4e318@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v8 1/5] dt-bindings: soc: qcom: cpr3: Add bindings for CPR3 driver
+Date:   Tue, 10 Jan 2023 18:56:01 +0100
+Message-Id: <20230110175605.1240188-2-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230110175605.1240188-1-konrad.dybcio@linaro.org>
+References: <20230110175605.1240188-1-konrad.dybcio@linaro.org>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gUZNVjMhzUxr0FbWf7flWmBnOhmDvJWQ
-X-Proofpoint-GUID: gUZNVjMhzUxr0FbWf7flWmBnOhmDvJWQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_07,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 mlxlogscore=921 malwarescore=0 suspectscore=0
- adultscore=0 spamscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301100115
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
+Add the bindings for the CPR3 driver to the documentation.
 
-On 1/9/2023 1:34 PM, Alex Elder wrote:
-> On 12/19/22 4:58 PM, Elliot Berman wrote:
->> Add architecture-independent standard error codes, types, and macros for
->> Gunyah hypercalls.
->>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->> ---
->>   MAINTAINERS            |  1 +
->>   include/linux/gunyah.h | 74 ++++++++++++++++++++++++++++++++++++++++++
->>   2 files changed, 75 insertions(+)
->>   create mode 100644 include/linux/gunyah.h
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index f32320a9efa4..74e76e0ab14d 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -8941,6 +8941,7 @@ L:    linux-arm-msm@vger.kernel.org
->>   S:    Supported
->>   F:    Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
->>   F:    Documentation/virt/gunyah/
->> +F:    include/linux/gunyah.h
->>   HABANALABS PCI DRIVER
->>   M:    Oded Gabbay <ogabbay@kernel.org>
->> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
->> new file mode 100644
->> index 000000000000..824e20a11d27
->> --- /dev/null
->> +++ b/include/linux/gunyah.h
->> @@ -0,0 +1,74 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights 
->> reserved.
->> + */
->> +
->> +#ifndef _GUNYAH_H
-> 
-> Maybe use _LINUX_GUNYAH_H?
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+[Konrad: Add type reference to acc-syscon; update AGdR's email]
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ .../bindings/soc/qcom/qcom,cpr3.yaml          | 242 ++++++++++++++++++
+ 1 file changed, 242 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
 
-Ack.
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+new file mode 100644
+index 000000000000..52e87061a04b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+@@ -0,0 +1,242 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/soc/qcom/qcom,cpr3.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Qualcomm Core Power Reduction v3/v4/Hardened (CPR3, CPR4, CPRh)
++
++description: |
++  CPR (Core Power Reduction) is a technology to reduce core power on a CPU
++  or other device. Each OPP of a device corresponds to a "corner" that has
++  a range of valid voltages for a particular frequency. While the device is
++  running at a particular frequency, CPR monitors dynamic factors such as
++  temperature, etc. and suggests or, in the CPR-Hardened case performs,
++  adjustments to the voltage to save power and meet silicon characteristic
++  requirements.
++
++maintainers:
++  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
++
++properties:
++  compatible:
++    oneOf:
++      - description: CPRv3 controller
++        items:
++          - const: qcom,cpr3
++      - description: CPRv4 controller
++        items:
++          - const: qcom,cpr4
++      - description: CPRv4-Hardened controller
++        items:
++          - enum:
++              - qcom,msm8998-cprh
++              - qcom,sdm630-cprh
++          - const: qcom,cprh
++
++  reg:
++    description: Base address and size of the CPR controller(s)
++    minItems: 1
++    maxItems: 2
++
++  interrupts:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: "ref"
++
++  clocks:
++    items:
++      - description: CPR reference clock
++
++  vdd-supply:
++    description: Autonomous Phase Control (APC) or other power supply
++
++  '#power-domain-cells':
++    const: 1
++
++  acc-syscon:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: phandle to syscon for writing ACC settings
++
++  nvmem-cells:
++    description: Cells containing the fuse corners and revision data
++    minItems: 10
++    maxItems: 32
++
++  nvmem-cell-names:
++    minItems: 10
++    maxItems: 32
++
++  operating-points-v2: true
++
++required:
++  - compatible
++  - reg
++  - clock-names
++  - clocks
++  - "#power-domain-cells"
++  - nvmem-cells
++  - nvmem-cell-names
++  - operating-points-v2
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,gcc-msm8998.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    cpus {
++        #address-cells = <2>;
++        #size-cells = <0>;
++
++        cpu@0 {
++            compatible = "qcom,kryo280";
++            device_type = "cpu";
++            reg = <0x0 0x0>;
++            operating-points-v2 = <&cpu_gold_opp_table>;
++            power-domains = <&apc_cprh 0>;
++            power-domain-names = "cprh";
++        };
++
++        cpu@100 {
++            compatible = "qcom,kryo280";
++            device_type = "cpu";
++            reg = <0x0 0x0>;
++            operating-points-v2 = <&cpu_silver_opp_table>;
++            power-domains = <&apc_cprh 1>;
++            power-domain-names = "cprh";
++        };
++    };
++
++    cpu_gold_opp_table: opp-table-gold {
++        compatible = "operating-points-v2";
++        opp-shared;
++
++        opp-2208000000 {
++            opp-hz = /bits/ 64 <2208000000>;
++            required-opps = <&cprh_opp3>;
++        };
++        opp-1113600000 {
++            opp-hz = /bits/ 64 <1113600000>;
++            required-opps = <&cprh_opp2>;
++        };
++        opp-300000000 {
++            opp-hz = /bits/ 64 <300000000>;
++            required-opps = <&cprh_opp1>;
++        };
++    };
++
++    cpu_silver_opp_table: opp-table-silver {
++        compatible = "operating-points-v2";
++        opp-shared;
++
++        opp-1843200000 {
++            opp-hz = /bits/ 64 <1843200000>;
++            required-opps = <&cprh_opp3>;
++        };
++        opp-1094400000 {
++            opp-hz = /bits/ 64 <1094400000>;
++            required-opps = <&cprh_opp2>;
++        };
++        opp-300000000 {
++            opp-hz = /bits/ 64 <300000000>;
++            required-opps = <&cprh_opp1>;
++        };
++    };
++
++    cprh_opp_table: opp-table-cprh {
++        compatible = "operating-points-v2-qcom-level";
++
++        cprh_opp1: opp1 {
++            opp-level = <1>;
++            qcom,opp-fuse-level = <1>;
++        };
++        cprh_opp2: opp2 {
++            opp-level = <2>;
++            qcom,opp-fuse-level = <2>;
++        };
++        cprh_opp3: opp3 {
++            opp-level = <3>;
++            qcom,opp-fuse-level = <2 3>;
++        };
++    };
++
++    apc_cprh: power-controller@179c8000 {
++        compatible = "qcom,msm8998-cprh", "qcom,cprh";
++        reg = <0x0179c8000 0x4000>, <0x0179c4000 0x4000>;
++        clocks = <&gcc GCC_HMSS_RBCPR_CLK>;
++        clock-names = "ref";
++
++        #power-domain-cells = <1>;
++        operating-points-v2 = <&cprh_opp_table>;
++
++        nvmem-cells = <&cpr_efuse_speedbin>,
++                      <&cpr_fuse_revision>,
++                      <&cpr_quot0_pwrcl>,
++                      <&cpr_quot1_pwrcl>,
++                      <&cpr_quot2_pwrcl>,
++                      <&cpr_quot3_pwrcl>,
++                      <&cpr_quot_offset1_pwrcl>,
++                      <&cpr_quot_offset2_pwrcl>,
++                      <&cpr_quot_offset3_pwrcl>,
++                      <&cpr_init_voltage0_pwrcl>,
++                      <&cpr_init_voltage1_pwrcl>,
++                      <&cpr_init_voltage2_pwrcl>,
++                      <&cpr_init_voltage3_pwrcl>,
++                      <&cpr_ro_sel0_pwrcl>,
++                      <&cpr_ro_sel1_pwrcl>,
++                      <&cpr_ro_sel2_pwrcl>,
++                      <&cpr_ro_sel3_pwrcl>,
++                      <&cpr_quot0_perfcl>,
++                      <&cpr_quot1_perfcl>,
++                      <&cpr_quot2_perfcl>,
++                      <&cpr_quot3_perfcl>,
++                      <&cpr_quot_offset1_perfcl>,
++                      <&cpr_quot_offset2_perfcl>,
++                      <&cpr_quot_offset3_perfcl>,
++                      <&cpr_init_voltage0_perfcl>,
++                      <&cpr_init_voltage1_perfcl>,
++                      <&cpr_init_voltage2_perfcl>,
++                      <&cpr_init_voltage3_perfcl>,
++                      <&cpr_ro_sel0_perfcl>,
++                      <&cpr_ro_sel1_perfcl>,
++                      <&cpr_ro_sel2_perfcl>,
++                      <&cpr_ro_sel3_perfcl>;
++
++        nvmem-cell-names = "cpr_speed_bin",
++                           "cpr_fuse_revision",
++                           "cpr0_quotient1",
++                           "cpr0_quotient2",
++                           "cpr0_quotient3",
++                           "cpr0_quotient4",
++                           "cpr0_quotient_offset2",
++                           "cpr0_quotient_offset3",
++                           "cpr0_quotient_offset4",
++                           "cpr0_init_voltage1",
++                           "cpr0_init_voltage2",
++                           "cpr0_init_voltage3",
++                           "cpr0_init_voltage4",
++                           "cpr0_ring_osc1",
++                           "cpr0_ring_osc2",
++                           "cpr0_ring_osc3",
++                           "cpr0_ring_osc4",
++                           "cpr1_quotient1",
++                           "cpr1_quotient2",
++                           "cpr1_quotient3",
++                           "cpr1_quotient4",
++                           "cpr1_quotient_offset2",
++                           "cpr1_quotient_offset3",
++                           "cpr1_quotient_offset4",
++                           "cpr1_init_voltage1",
++                           "cpr1_init_voltage2",
++                           "cpr1_init_voltage3",
++                           "cpr1_init_voltage4",
++                           "cpr1_ring_osc1",
++                           "cpr1_ring_osc2",
++                           "cpr1_ring_osc3",
++                           "cpr1_ring_osc4";
++    };
++...
+-- 
+2.39.0
 
->> +#define _GUNYAH_H
->> +
->> +#include <linux/types.h>
-> 
-> Why is types.h included?
-> 
-> U64_MAX is defined in <linux/limits.h> (in case that's why).
-
-Ack.
-
-> 
-> Otherwise this just defines a fixed API exposed by Gunyah
-> so there's not much more for me to comment on.
-> 
->                      -Alex
-> 
->> +#include <linux/errno.h>
->> +
->> +/* Common Gunyah macros */
->> +#define GH_CAPID_INVAL    U64_MAX
->> +#define GH_VMID_ROOT_VM    0xff
->> +
->> +#define GH_ERROR_OK            0
->> +
->> +#define GH_ERROR_UNIMPLEMENTED        -1
->> +#define GH_ERROR_RETRY            -2
->> +
->> +#define GH_ERROR_ARG_INVAL        1
->> +#define GH_ERROR_ARG_SIZE        2
->> +#define GH_ERROR_ARG_ALIGN        3
->> +
->> +#define GH_ERROR_NOMEM            10
->> +
->> +#define GH_ERROR_ADDR_OVFL        20
->> +#define GH_ERROR_ADDR_UNFL        21
->> +#define GH_ERROR_ADDR_INVAL        22
->> +
->> +#define GH_ERROR_DENIED            30
->> +#define GH_ERROR_BUSY            31
->> +#define GH_ERROR_IDLE            32
->> +
->> +#define GH_ERROR_IRQ_BOUND        40
->> +#define GH_ERROR_IRQ_UNBOUND        41
->> +
->> +#define GH_ERROR_CSPACE_CAP_NULL    50
->> +#define GH_ERROR_CSPACE_CAP_REVOKED    51
->> +#define GH_ERROR_CSPACE_WRONG_OBJ_TYPE    52
->> +#define GH_ERROR_CSPACE_INSUF_RIGHTS    53
->> +#define GH_ERROR_CSPACE_FULL        54
->> +
->> +#define GH_ERROR_MSGQUEUE_EMPTY        60
->> +#define GH_ERROR_MSGQUEUE_FULL        61
->> +
->> +static inline int gh_remap_error(int gh_error)
->> +{
->> +    switch (gh_error) {
->> +    case GH_ERROR_OK:
->> +        return 0;
->> +    case GH_ERROR_NOMEM:
->> +        return -ENOMEM;
->> +    case GH_ERROR_DENIED:
->> +    case GH_ERROR_CSPACE_CAP_NULL:
->> +    case GH_ERROR_CSPACE_CAP_REVOKED:
->> +    case GH_ERROR_CSPACE_WRONG_OBJ_TYPE:
->> +    case GH_ERROR_CSPACE_INSUF_RIGHTS:
->> +    case GH_ERROR_CSPACE_FULL:
->> +        return -EACCES;
->> +    case GH_ERROR_BUSY:
->> +    case GH_ERROR_IDLE:
->> +        return -EBUSY;
->> +    case GH_ERROR_IRQ_BOUND:
->> +    case GH_ERROR_IRQ_UNBOUND:
->> +    case GH_ERROR_MSGQUEUE_FULL:
->> +    case GH_ERROR_MSGQUEUE_EMPTY:
->> +        return -EPERM;
->> +    default:
->> +        return -EINVAL;
->> +    }
->> +}
->> +
->> +#endif
-> 
