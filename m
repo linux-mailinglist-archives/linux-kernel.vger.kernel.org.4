@@ -2,87 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6BA664BDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FBB664BEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239573AbjAJTCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S239684AbjAJTEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239485AbjAJTBz (ORCPT
+        with ESMTP id S239688AbjAJS6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:01:55 -0500
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491E4C2C;
-        Tue, 10 Jan 2023 11:01:54 -0800 (PST)
-Received: by mail-io1-f53.google.com with SMTP id p66so6616043iof.1;
-        Tue, 10 Jan 2023 11:01:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KO5oCqwQNxlo3PsacBQG8HGR8FuKe5qev8tcfYySGtc=;
-        b=SCejT9Jjziz1Rw5zHs25T3KqwBUTVHiojTOmhUxJxXUUexaaylCR/Qxsy1vYy/fCPn
-         RaOr0MPoXLhMX5Cd0sxyPYk7Q+yLW3w2lwUo2otHaA94Bt4ZRWzRcZfaiAuDn0IF6pFQ
-         XGo7Z47rLzblCeI0MIVn0NYCisJdPEFagXbO4HGLAwZeVWLJ2lThnED6SjITcHs+uxh3
-         up8Ycg3/dSW+WduNGg6caKgyUOO+LHeY6TZtR0yoRLgU/sDPbZOqHfwg+LdRMq5yxHTl
-         aizw1dfxzuXBro3ScRF5q6dNViQDpKWZbT9M23LFtWYo/TGzz+waeUxokX6KF2yZ3Cki
-         3gZw==
-X-Gm-Message-State: AFqh2kp00gKn549GFzstF7bwEbyqK8V8hR3m4sKlGyz4VIxqu6WTZAXB
-        JnMRc1313dPn28t/LrYRTa3KnUDaEWo4dshsqMw=
-X-Google-Smtp-Source: AMrXdXuaJ7As5yPR1zWPfLnl4dJ9RWgCNhmLDgmnaAW40Z8gylAKpaILAOPb5ewyT02ueudEyohZd1qiY8AId1+ll44=
-X-Received: by 2002:a6b:a16:0:b0:6e3:28c5:e8ee with SMTP id
- z22-20020a6b0a16000000b006e328c5e8eemr6555797ioi.140.1673377313445; Tue, 10
- Jan 2023 11:01:53 -0800 (PST)
+        Tue, 10 Jan 2023 13:58:09 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0995532A5;
+        Tue, 10 Jan 2023 10:56:42 -0800 (PST)
+Date:   Tue, 10 Jan 2023 18:56:40 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673377001;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/L4DwXMWgDWmNSzdNDeoSpHKvUZyzRWaGNLUdb3sukE=;
+        b=jb7ZHHsGCZEh5FRUXYvm2PJVcQgQIGVPAs778bkFqgo+5zH5qGtk+FuxMN2Mm9JB3rTyF0
+        9YsWcerNQCMoxbko2xpDto9GkdQCb8bvhl9B8rGX0L/qnFZpiJn3wa/7D+t7wtL65MGTPs
+        QHsCZe8s1Tm4NRxxhBvtS/tCIZ3BSnRnyZffCDmkWBlKmgREe2B969XtpX6txNcd2S5OmF
+        6wKuWdsleaILw1oGt1IRdbd6OkR+vIiA1UtjHcZIt8BjPJX5wM5LVePcbw6DJYKnPx5BK4
+        2nt9KIUTbjf74PDfVjQjxWCCZ8eWNeACmhpTTTuTvfHkusgkIBQxndpCIf/PWg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673377001;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/L4DwXMWgDWmNSzdNDeoSpHKvUZyzRWaGNLUdb3sukE=;
+        b=3MAeEoWlzVwVe4bnCPK3ZHwXAexa1EGVrqKTPQ7Lr5DAMKkCgBuBMZrwfm80iZsMlrSk5S
+        le9KqhNU6+4Wo7BA==
+From:   "tip-bot2 for Peter Newman" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/resctrl: Fix task CLOSID/RMID update race
+Cc:     Peter Newman <peternewman@google.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Babu Moger <babu.moger@amd.com>, <stable@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221220161123.432120-1-peternewman@google.com>
+References: <20221220161123.432120-1-peternewman@google.com>
 MIME-Version: 1.0
-References: <20221229204101.1099430-1-namhyung@kernel.org> <20221229204101.1099430-2-namhyung@kernel.org>
- <Y7wFJ+NF0NwnmzLa@hirez.programming.kicks-ass.net> <Y7x3RUd67smv3EFQ@google.com>
- <Y71ELS9GTz0hqaUt@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y71ELS9GTz0hqaUt@hirez.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 10 Jan 2023 11:01:42 -0800
-Message-ID: <CAM9d7cheB9_nVQoeai2_LkoofhWN7J7ejbXwjpgqTB30JpeASQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] perf/core: Set data->sample_flags in perf_prepare_sample()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <167337700055.4906.13745071797567132460.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 2:55 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Jan 09, 2023 at 12:21:25PM -0800, Namhyung Kim wrote:
->
-> > > However; inspired by your next patch; we can do something like so:
-> > >
-> > >     if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN) {
-> > >             data->callchain = perf_callchain(event, regs);
-> > >             data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
-> > >
-> > >             data->size += (1 + data->callchain->nr) * sizeof(u64);
-> > >     }
-> >
-> > This is fine as long as all other places (like in PMU drivers) set the
-> > callchain update the sample data size accordingly.  If not, we can get
-> > the callchain but the data size will be wrong.
->
-> Good point, maybe add a helper there to ensure that code doesn't
-> duplicate/diverge?
+The following commit has been merged into the x86/urgent branch of tip:
 
-Sure, will do.
+Commit-ID:     fe1f0714385fbcf76b0cbceb02b7277d842014fc
+Gitweb:        https://git.kernel.org/tip/fe1f0714385fbcf76b0cbceb02b7277d842014fc
+Author:        Peter Newman <peternewman@google.com>
+AuthorDate:    Tue, 20 Dec 2022 17:11:23 +01:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Tue, 10 Jan 2023 19:47:30 +01:00
 
-Thanks,
-Namhyung
+x86/resctrl: Fix task CLOSID/RMID update race
+
+When the user moves a running task to a new rdtgroup using the task's
+file interface or by deleting its rdtgroup, the resulting change in
+CLOSID/RMID must be immediately propagated to the PQR_ASSOC MSR on the
+task(s) CPUs.
+
+x86 allows reordering loads with prior stores, so if the task starts
+running between a task_curr() check that the CPU hoisted before the
+stores in the CLOSID/RMID update then it can start running with the old
+CLOSID/RMID until it is switched again because __rdtgroup_move_task()
+failed to determine that it needs to be interrupted to obtain the new
+CLOSID/RMID.
+
+Refer to the diagram below:
+
+CPU 0                                   CPU 1
+-----                                   -----
+__rdtgroup_move_task():
+  curr <- t1->cpu->rq->curr
+                                        __schedule():
+                                          rq->curr <- t1
+                                        resctrl_sched_in():
+                                          t1->{closid,rmid} -> {1,1}
+  t1->{closid,rmid} <- {2,2}
+  if (curr == t1) // false
+   IPI(t1->cpu)
+
+A similar race impacts rdt_move_group_tasks(), which updates tasks in a
+deleted rdtgroup.
+
+In both cases, use smp_mb() to order the task_struct::{closid,rmid}
+stores before the loads in task_curr().  In particular, in the
+rdt_move_group_tasks() case, simply execute an smp_mb() on every
+iteration with a matching task.
+
+It is possible to use a single smp_mb() in rdt_move_group_tasks(), but
+this would require two passes and a means of remembering which
+task_structs were updated in the first loop. However, benchmarking
+results below showed too little performance impact in the simple
+approach to justify implementing the two-pass approach.
+
+Times below were collected using `perf stat` to measure the time to
+remove a group containing a 1600-task, parallel workload.
+
+CPU: Intel(R) Xeon(R) Platinum P-8136 CPU @ 2.00GHz (112 threads)
+
+  # mkdir /sys/fs/resctrl/test
+  # echo $$ > /sys/fs/resctrl/test/tasks
+  # perf bench sched messaging -g 40 -l 100000
+
+task-clock time ranges collected using:
+
+  # perf stat rmdir /sys/fs/resctrl/test
+
+Baseline:                     1.54 - 1.60 ms
+smp_mb() every matching task: 1.57 - 1.67 ms
+
+  [ bp: Massage commit message. ]
+
+Fixes: ae28d1aae48a ("x86/resctrl: Use an IPI instead of task_work_add() to update PQR_ASSOC MSR")
+Fixes: 0efc89be9471 ("x86/intel_rdt: Update task closid immediately on CPU in rmdir and unmount")
+Signed-off-by: Peter Newman <peternewman@google.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+Reviewed-by: Babu Moger <babu.moger@amd.com>
+Cc: <stable@kernel.org>
+Link: https://lore.kernel.org/r/20221220161123.432120-1-peternewman@google.com
+---
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index e5a48f0..5993da2 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -580,8 +580,10 @@ static int __rdtgroup_move_task(struct task_struct *tsk,
+ 	/*
+ 	 * Ensure the task's closid and rmid are written before determining if
+ 	 * the task is current that will decide if it will be interrupted.
++	 * This pairs with the full barrier between the rq->curr update and
++	 * resctrl_sched_in() during context switch.
+ 	 */
+-	barrier();
++	smp_mb();
+ 
+ 	/*
+ 	 * By now, the task's closid and rmid are set. If the task is current
+@@ -2402,6 +2404,14 @@ static void rdt_move_group_tasks(struct rdtgroup *from, struct rdtgroup *to,
+ 			WRITE_ONCE(t->rmid, to->mon.rmid);
+ 
+ 			/*
++			 * Order the closid/rmid stores above before the loads
++			 * in task_curr(). This pairs with the full barrier
++			 * between the rq->curr update and resctrl_sched_in()
++			 * during context switch.
++			 */
++			smp_mb();
++
++			/*
+ 			 * If the task is on a CPU, set the CPU in the mask.
+ 			 * The detection is inaccurate as tasks might move or
+ 			 * schedule before the smp function call takes place.
