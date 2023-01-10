@@ -2,177 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2FC664CC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD093664CC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbjAJTqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
+        id S232845AbjAJTs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbjAJTqf (ORCPT
+        with ESMTP id S232813AbjAJTs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:46:35 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C343D9EC;
-        Tue, 10 Jan 2023 11:46:34 -0800 (PST)
+        Tue, 10 Jan 2023 14:48:56 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A4B5CF80;
+        Tue, 10 Jan 2023 11:48:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673379994; x=1704915994;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=KqQe3X8R2+M4ca8Y3nt3MFKKLU33LTTi3NG9IoqqMpY=;
-  b=YCLK7wPX/YybJccre6Tdprp7RuVNpQyGfDG4+VCqNbXt7nRG0Kn/Wqxn
-   9rwB2tCceIueG7xZ1K8CJ5HyEOOUlkkfyteVxvIz/0c6BhtN8oCdCT/Ro
-   AB7HcVFsVlbGm/YLyiPH9oVDhxXN0eutnTwsyhGZZ+im668hwS4Arrzn+
-   k2wcO2KVxcxtnmNWaz6T681WGEqJhSwgVtxMSB4JfVi6eO4H6O0mhDlMS
-   tC4kDCJfWu7geKlR/5rvBy5O3qtj27NoTIPqILcA/cEqXHXf2XGIawrLa
-   7N3aMVTgJd2g231Xxo2rbkqmPGkQSon4cvKLa4f5MhoNw88uYcHyPMbR4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="385550319"
+  t=1673380134; x=1704916134;
+  h=message-id:date:subject:to:references:from:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=FaMWxsiSCtg1+ytIef/isrEbEszKNR5t55HP135BSXg=;
+  b=mAnYXWDv3mXS18Eb08cj7mr7xcX8KdoeWn5y96wDm+btlzS5ovx0iBVM
+   pnnJEHvm1JyXaiMeYBYwI62UL6dHSLRrd3KYoF2/Yk3+Ws0dTijOZoqFQ
+   0szQZ7F7OmZ/wa2RFL7xvlFxpTgDPn16tBSDCy+M6wFL+YTMUf+TxMufM
+   z4nIBdn765pGDclYkLCJJYIk0AVeMpuNJXECEKO/Sc+vEB4Q/8jDnB+Fh
+   nRayHdorUM0hpotfdPB/6PKyBGqpnSdzBs8wcLY20/K5xdaLmymB05HJ6
+   zGf9Chnz+GyZAKa8lYNDdYN3RG6q15o10oyj/wN5TdLiyhNdbYpI40Nqs
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="409479570"
 X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="385550319"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 11:46:33 -0800
+   d="scan'208";a="409479570"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 11:48:53 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="831113342"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="725658284"
 X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="831113342"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga005.jf.intel.com with ESMTP; 10 Jan 2023 11:46:28 -0800
-Message-ID: <cefcc5c6-6a91-c737-252a-edf596f77473@linux.intel.com>
-Date:   Tue, 10 Jan 2023 21:47:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
+   d="scan'208";a="725658284"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Jan 2023 11:48:53 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 10 Jan 2023 11:48:52 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 10 Jan 2023 11:48:52 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 10 Jan 2023 11:48:52 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 10 Jan 2023 11:48:52 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z7GGmxcFRG8vcsO4nfcZ/tdBsDvEA0pAkr9quj1lCJYjdKYK8htY7h0I4HriZIpsWBUUPE/VDQ0CFFewu80OT8xkWTgREW00lzaM74LwQS2gM/xtAKo3ZPs4TO6xcJB6rmAt8k4QXq+mem+4u5PU1fcD80NrxuvwpZmKoLvoCl2yJSwVQaVRjNBQlCSVzbwYJ2AUiWzj4Md3YkWFSJHVWWoUNmIUpHJ7TiyWBGlQtQeztBJEGyxkXQUF53kyl/0s8+Jlnh6f5vqPvq/2GzY7FAm8aeui8oCObFCMLa3EWhwZI37rsma5CveE7NqeULDSfA91Grjz2fIhmDPtGFJhkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S6+tGMmN8WJKGtquW/bv2Uj/VqP3de05qL+LDhPa5iM=;
+ b=DyDS275Q8YXY0h9bv4/3gYm2FMfn3vMqaCF3hA5+SpDqGUgeo71eW00IapogQFBCttUyRVHYY3EeSs6DadNU9wyLhQv4gCFbC+XOEihbVfVhMLSMdXy6RyPLcLrK7JspQ4Cc5GkgDu6r7E+tbpClNPPkEdWfSkdRFcmSol2jzkCpe6XuFhSHP9KxOdMzFHtOtjnxb9asgmxeGhuqTYOkxkgZ1z+lHCGfk4YJE3TqNWGIuhP/SehE/6Ad7IhJICrXcqtYCR9NxWZ/cfaBCZ890k3pXLYGKTl9WnmMBSh744rnCKJztMz7rqq4liFwRDSHzcXTMbcucXyWdhaA5LVQGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
+ by SN7PR11MB7566.namprd11.prod.outlook.com (2603:10b6:806:34d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
+ 2023 19:48:43 +0000
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::6566:25b5:89ba:e209]) by BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::6566:25b5:89ba:e209%4]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
+ 19:48:43 +0000
+Message-ID: <66857084-fbed-3e9a-ed2c-7167010cbad9@intel.com>
+Date:   Tue, 10 Jan 2023 11:48:41 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 0/7] Enable LASS (Linear Address space Separation)
 Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-8-quic_wcheng@quicinc.com>
- <7dfe215b-4cc7-f95f-17c3-563c0120151a@linux.intel.com>
- <f7f80320-02bb-a573-dd95-b6d58c260624@quicinc.com>
- <5f54c5a3-caf0-2920-e90f-68124ed2e06c@linux.intel.com>
- <d1334e58-1126-c068-d211-8fd3b7dcbf17@quicinc.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC PATCH 07/14] usb: host: xhci: Add XHCI secondary interrupter
- support
-In-Reply-To: <d1334e58-1126-c068-d211-8fd3b7dcbf17@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Yian Chen <yian.chen@intel.com>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ravi Shankar <ravi.v.shankar@intel.com>,
+        "Tony Luck" <tony.luck@intel.com>, Paul Lai <paul.c.lai@intel.com>,
+        <kvm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-mm@kvack.org>
+References: <20230110055204.3227669-1-yian.chen@intel.com>
+From:   Sohil Mehta <sohil.mehta@intel.com>
+In-Reply-To: <20230110055204.3227669-1-yian.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BY3PR04CA0006.namprd04.prod.outlook.com
+ (2603:10b6:a03:217::11) To BYAPR11MB3320.namprd11.prod.outlook.com
+ (2603:10b6:a03:18::25)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|SN7PR11MB7566:EE_
+X-MS-Office365-Filtering-Correlation-Id: c30c53f9-bd1f-4448-d5a5-08daf343addd
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SY40N4ZH+O1l3CjurabkqXQ22yatZvdOdzcQdRCztCclowxxI8ZD6EwiwheDzrq2+oMi5Jv1uQdN0htewwx2cRFJCB1xGNIHqnD/bMxG9huYFCwvXTdLQwziqV7+XrCeQMaJlSLs4WinVrXnzkOpENY17tGCtKspDYzlZKh7B2e9XrGrTI4MU+Sap9UP8HhRtChOZACNELZBwwMTXdjc1+ZXt3bzoWGtdjOBT+rIcRzhviddHS63hQ7k1gzZVE1z7MRu8SfudmDNUqDh+stH8r5b5MwnC5lB1O/PRhLBJc84Cc0Ky+0paH08ndgcQ+QM4qe/tgyTVjNX+4iekWV7jrOjrSfx3gdf9hh8PZdpmr3vB6AqfKNry4p/gyJY7a7Pp5eeRdvw2NSzTL7zfxq3zAHgBADLPjzz5FPB8yGAPowf8v0YoGQ7cH8GwNM1kTHdzmtp6FHUhqqNfs03CDdPtNocm2PT+x4TXvN5V55v5fj9rs8hvneIxRyDECgvsDIZe9CjDOKJ6eEE5gaGgfTWpAOWugkju9+EhwIczwS2ls0HDS9kdW9jAuTTd91fskxFs2m4gPjifEn6FLa1MhpnQ72PWqldqOIkgDFEc5/mTj3wLQHuxPk0K57xJNzxHO3O/ARDw+7avz9IlNqKfhErfNt/4QMMBiQHJq3NB1mz/p2GHepKPoF5jRbvDED5NWOPv0kthiNUO/6Pd+FWQoFcTEEFFjCNR1rNqCDgCeqWqr/jzQKYS+13xRyyI47YcNFYnMb5NlN8yUEYlFUMYwXIOA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199015)(6512007)(6506007)(186003)(2616005)(82960400001)(110136005)(8676002)(86362001)(66946007)(38100700002)(66476007)(31696002)(5660300002)(66556008)(478600001)(36756003)(44832011)(53546011)(31686004)(2906002)(26005)(316002)(921005)(8936002)(41300700001)(966005)(83380400001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ankzV0FuWXJoWGxqa2FVa3ZRTFg2WHhLMER0cDlLb0dmQ0RkVUIyZkVBa2k4?=
+ =?utf-8?B?bFNES2xhQjJaYnZBT0tkODBRSXhvWlJIdFVGUk5NeXZ1NjJZUlVSamkwQ3NM?=
+ =?utf-8?B?WStjdnk4NTF5TllKNi9SS25jNXIzdjlxcnR5QVFFbXA3dFdIbmkxR1pMenIw?=
+ =?utf-8?B?bjVmdFRWVHgzb3hIYWVHUVNTV1N0VGhubU9HMWpNN1RCbmErVFFTRUE0RkJP?=
+ =?utf-8?B?UENHTlowcXJOdmxhc2t2TWYvaXBVWE55QmIvdiswN0RLS3hBYk5BeGM5amVa?=
+ =?utf-8?B?azBnd3R6KzJEWHlFTmdIUTE1Tk1wa1hmMC9aN2oyT01mNnY4Y1NyYUIzQkdv?=
+ =?utf-8?B?bEFpanpTVWo3dEthaU9VU1U2SkNkc3VQMU9PeDZPc3JwL3lNeHpBRmpwMDk4?=
+ =?utf-8?B?UXVQUzh5ejJldkk0ZVgxaHY0MHZ0NnpjVzAvd1RSSW1VdHdra3VsTlhZZjZU?=
+ =?utf-8?B?YlhHWHlveXJxMEEwQ3hPUWJVaGNQWWcrc3lzMlUxVkhyUWl4Qy9iTE1TTzNh?=
+ =?utf-8?B?VEJwSnp6L3JkZnlsMzNHZFBaU01CYmx6NXJVMkg4K0hlcGtsb2o1RWcyZDc0?=
+ =?utf-8?B?RmRTS2pUUW1PblhqNEphMkNHam1oWnFSeXRSZDVBaHpneWNxaytBTDhsVlA3?=
+ =?utf-8?B?M01EdEhmeGxMampZL3JhYUNkTDdheVJqQXplV0tiWlEweTI4Vk14dGlqME94?=
+ =?utf-8?B?MWluVEhOMnVvelhWMU9pVm0xVEpTNjYyT3dlcmoxOG1Vby95cUF0Vk5jL01F?=
+ =?utf-8?B?RnRqMEF5V04zaWZwUFpqa1ZxNTBoOU0weFRIWUtvVzFtVnZYRUU5aE12VmRW?=
+ =?utf-8?B?dGRmaG5yc3ZxMUNZQkNIdlVvQW1KWjlYRkFTaWgvazRFajY5aEgzWjNpQkMx?=
+ =?utf-8?B?M0dkbGZIUHdPTlExWUxNN0NOWFYrcmNmNzNzTE1xUzhqa0Z1VVRHM29sWEJn?=
+ =?utf-8?B?dE1yajVMOFJEMUt0WmhlQ1djR21SUXpJZzl3WmdHYkNBZ1h5R2dacWg0enBp?=
+ =?utf-8?B?dnlzejlGanZVZlZORVVqZ2VTamZtMjlKSnJHM2l5RVdJL0VEUFdiUWxIVFFT?=
+ =?utf-8?B?VUxRZzl6M0ppcTZYaFFOeXd2T1AyZzRkRzFsb1pHM05VcHYyWVJaajBETXRr?=
+ =?utf-8?B?aERTT1RRNWw3aHFtNllEU1ZmQ25hanluRlVOOC84elVYc1BHbXVRNkJna1RW?=
+ =?utf-8?B?TnNzNGwwSURocUZnNmhCSUt6WHlERG0wYVhWS1RUTUtmRmthYUl4Rlk1TWxr?=
+ =?utf-8?B?bkFEcUNFTWdEb3pkUkJ4QXBWZEt1UGgzNmxhVTQxRGhNNFVETnVqaXl3THFR?=
+ =?utf-8?B?TExpWWwwUGJqR1NuNWN2UlAwNEJrRXZFeEh0OVJTMko2OHZHT2ZpRXdjbmFR?=
+ =?utf-8?B?WUhHdlBpT2tUSUFZOUpla1lBdFp6Y2RvaVBKYmJlYTBWbFRuWFU0MXJkaUs1?=
+ =?utf-8?B?VnllLzczOURNRXJmRlJZMnpXMFV5MmZoMDZXVVBEdlViZDVEZnlHU3F0bjVT?=
+ =?utf-8?B?WWFlVzkycDRGczZmdFpPclh1MkgzM0xqb1g2eGpua0dSd2dPazcyNUYzaWZj?=
+ =?utf-8?B?YkxKc0N0VUZQTERESVRnL2pHK3dNeHNRM3F4TWxjK3kreUNJNGk0eWdoamJ5?=
+ =?utf-8?B?KytmVkM5NXRuWnBZUUhIVlBSWmxnbS9Jd1VuUCtuV3JaT0doNEM2SzlOU2M4?=
+ =?utf-8?B?K1ZRMHRsc2YvRkNJUDhDRDhlaGRjZHByYVFVUU9uSGN1YURGeE55ejhiYjVk?=
+ =?utf-8?B?VUJhQUZsWW5Qb2cxMU9KNGp3ZjBNc3hGUHF6cEFyQkREZXRqbzNqUHFMMHlH?=
+ =?utf-8?B?d2l3QmtMVWowNlVoMWFxTzVtV2pLSHhvSkcwL1lEazgwejhPM09ESUZuMjVE?=
+ =?utf-8?B?bTJnOE0yaUd6Qmp3L2RWbmk2R3JubWYzRCs0Q0kxM2RUWFExRWNwbEF2alpu?=
+ =?utf-8?B?MlRMenpqL3FGMmtKaFRxamJiTWZ4RUFjV2VUVWJzaVpmajdlUGZSNnFhK2Jt?=
+ =?utf-8?B?UkZ0Nk1uQkUzVFJ3TldKdzBkdUM1NVpCOHdGMitBTFdac1ZnTCtIeDk4cEdr?=
+ =?utf-8?B?Nko3ZytCK1FnbmRwOTJ5cXBqWmNOSys1NTJXZDFraWUrT3pObTE5d2o5NnhU?=
+ =?utf-8?Q?kmKwiP55qpxuKtHEYhjvz01BZ?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c30c53f9-bd1f-4448-d5a5-08daf343addd
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 19:48:43.4357
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JJ/n1ck2JB7ZUYEg/lVUmojXJt6SEYRRd5NHUxx7lGgY58IXFl0M8d/wfi1u1AbaJ1qQt87WJd7cYxgkiBdaDg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7566
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9.1.2023 22.24, Wesley Cheng wrote:
-> Hi Mathias,
+Yian,
+
+I added a few missing lists pertaining to KVM, MM and documentation 
+since these patches impact them.
+
+In future, scripts/get_maintainer.pl can help you with generating the 
+relevant maintainers and lists.
+
+On 1/9/2023 9:51 PM, Yian Chen wrote:
+> LASS (Linear Address Space Separation) is a security
+> extension that prevents speculative address accesses across
+> user/kernel mode. The LASS details have been published in
+> Chapter 11 in
+> https://cdrdv2.intel.com/v1/dl/getContent/671368
 > 
-> On 1/2/2023 8:38 AM, Mathias Nyman wrote:
->> On 29.12.2022 23.14, Wesley Cheng wrote:
->>> Hi Mathias,
->>>
->>> On 12/28/2022 7:47 AM, Mathias Nyman wrote:
->>>> On 24.12.2022 1.31, Wesley Cheng wrote:
->>>>> Implement the XHCI operations for allocating and requesting for a secondary
->>>>> interrupter.  The secondary interrupter can allow for events for a
->>>>> particular endpoint to be routed to a separate event ring.  The event
->>>>> routing is defined when submitting a transfer descriptor to the USB HW.
->>>>> There is a specific field which denotes which interrupter ring to route the
->>>>> event to when the transfer is completed.
->>>>>
->>>>> An example use case, such as audio packet offloading can utilize a separate
->>>>> event ring, so that these events can be routed to a different processor
->>>>> within the system.  The processor would be able to independently submit
->>>>> transfers and handle its completions without intervention from the main
->>>>> processor.
->>>>>
->>>>
->>>> Adding support for more xHCI interrupters than just the primary one make sense for
->>>> both the offloading and virtualization cases.
->>>>
->>>> xHCI support for several interrupters was probably added to support virtualization,
->>>> to hand over usb devices to virtual machines and give them their own event ring and
->>>> MSI/MSI-X vector.
->>>>
->>>> In this offloading case you probably want to avoid xHC interrupts from this device
->>>> completely, making sure it doesn't wake up the main CPU unnecessarily.
->>>>
->>>> So is the idea here to let xhci driver set up the new interrupter, its event ring,
->>>> and the endpoint transfer rings. Then pass the address of the endpoint transfer rings
->>>> and the new event ring to the separate processor.
->>>>
->>>> This separate processor then both polls the event ring for new events, sets its dequeue
->>>> pointer, clears EHB bit, and queues new TRBs on the transfer ring.
->>>>
->>>> so xhci driver does not handle any events for the audio part, and no audio data URBs
->>>> are sent to usb core?
->>>
->>> Your entire description is correct.  To clarify, the interfaces which are non-audio will still be handled by the main processor.  For example, a USB headset can have a HID interface as well for volume control.  The HID interface will still be handled by the main processor, and events routed to the main event ring.
->>>
->>>>
->>>> How about the control part?
->>>> Is the control endpoint for this device still handled normally by usb core/xhci?
->>>>
->>>
->>> Control transfers are always handled on the main processor.  Only audio interface's endpoints.
->>
->> Good to know, that means interrupter should be chosen per endpoint, not per device.
->>
->>>
->>>> For the xhci parts I think we should start start by adding generic support for several
->>>> interrupters, then add parts needed for offloading.
->>>
->> I can split up the patchsets to add interrupters first, then adding the offloading APIs in a separate patch.
->>
->>
->> I started looking at supporting secondary interrupters myself.
->> Let me work on that part a bit first. We have a bit different end goals.
->> I want to handle interrupts from a secondary interrupter, while this audio offload
->> really just wants to mask some interrupts.
->>
+> LASS works in 64-bit mode only and partitions the 64-bit
+> virtual address space into two halves:
+>      1. Lower half (LA[63]=0) --> user space
+>      2. Upper half (LA[63]=1) --> kernel space
+> When LASS is enabled, a general protection #GP(0) fault will
+> be generated if software accesses the address from the half in
+> which it resides to another half, e.g., either from user space
+> to upper half, or from kernel space to lower half. This
+> protection applies to data access, code execution, cache line
+> flushing instructions.
 > 
-> I was looking at how we could possibly split up the XHCI secondary interrupter, and offloading parts.  Since the XHCI secondary interrupter is a feature that is defined in the XHCI spec (and we aren't doing anything outside of what is defined), I was thinking of having a separate XHCI driver (ie xhci-sec.c/h) that can be used to define all APIs related to setting up the event ring and ring management. (interrupt support can be added here)  This aligns a bit with what Alan suggested, and removing the APIs in the USB HCD, since this is XHCI specific stuff. ( https://lore.kernel.org/linux-usb/Y6zwZOquZOTZfnvP@rowland.harvard.edu/ )
-
-Already started working on the interrupter, that part fits well into current driver.
-
-Code (untested, will be randomly rebased etc) can be found in my feature_interrupters branch:
-git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git feature_interrupters
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
-
-First step turns current event ring into a primary interrupter.
-last patch is a test implementation for creating and freeing new secondary interrupters.
-
+> Almost all kernel accesses are to the upper half of the virtual
+> address space. However, there are valid reasons for kernel to
+> access the lower half. For these cases,  kernel can temporarily
+> suspend the enforcement of LASS by disabling SMAP (Supervisor
+> Mode Access Prevention).
 > 
-> For the offloading part, I think this is a bit more dependent on how different platforms implement it.  To use more of a generic approach like how Albert suggested here:
+> Kernel access to copy data to/from user addresses already
+> disables SMAP using the stac()/clac() functions. New functions
+> low_addr_access_begin()/low_addr_access_end() are added to
+> also disable/enable SMAP around other code that legitimately
+> needs to access the lower half of the virtual address space.
 > 
-> https://patchwork.kernel.org/project/linux-usb/list/?series=704174
+> User space cannot use any kernel address while LASS is
+> enabled. Less fortunately, legacy vsyscall functions used
+> by old version of glibc are located in the address range
+> 0xffffffffff600000-0xffffffffff601000 and emulated in kernel.
+> Therefore, to comply with LASS policy, the legacy vsyscall is
+> disabled by default. I am looking for input from Andy and
+> others if this approach is acceptable.
 > 
-> Basically to give vendors the ability to define their own sequences/callbacks, and from which the XHCI driver will call into. (if needed)  These would need to be a separate set of XHCI drivers as well.
+> This patch set by default enforces LASS when the platform
+> supports it. It can be disabled via the command line parameter
+> "clearcpuid" or by setting "vsyscall=emulate/xonly".
 > 
-> Do you think this is a proper model for us to go with, so that we can allow for vendors to easily add functionality?  Appreciate the inputs.
+> As of now there is no publicly available CPU supporting LASS.
+> The first one to support LASS is Sierra Forest line. The Intel
+> Simics® Simulator was used as software development and testing
+> vehicle for this patch set.
+> 
+> Paul Lai (1):
+>    x86/kvm: Expose LASS feature to VM guest
+> 
+> Yian Chen (6):
+>    x86/cpu: Enumerate LASS CPUID and CR4 bits
+>    x86: Add CONFIG option X86_LASS
+>    x86/cpu: Disable kernel LASS when patching kernel alternatives
+>    x86/vsyscall: Setup vsyscall to compromise LASS protection
+>    x86/cpu: Enable LASS (Linear Address Space Separation)
+>    x86/cpu: Set LASS as pinning sensitive CR4 bit
+> 
 
-I'm not convinced that overriding different xhci memory allocation functions is the best solution.
-I think xhci driver will need to know which endpoints are offloaded.
-maybe usb class driver could register an "offloader" with xhci for a usb device.
+It's usually good practice to include a base-commit to make it easier to 
+apply these patches.
 
-Trying to figure out what this xhci offload API would look like.
-The dsp needs at least dma address of an event ring, and offloaded endpoint rings.
-Is there anything else that the dsp would directly need to take care of, or can
-we just export some xhci functions for starting/stopping endpoints, and update event deq?
-
-Thanks
--Mathias
+>   .../admin-guide/kernel-parameters.txt         | 12 +++++++----
+>   arch/x86/Kconfig                              | 10 +++++++++
+>   arch/x86/entry/vsyscall/vsyscall_64.c         | 14 +++++++++++++
+>   arch/x86/include/asm/cpufeatures.h            |  1 +
+>   arch/x86/include/asm/disabled-features.h      |  8 ++++++-
+>   arch/x86/include/asm/kvm_host.h               |  3 ++-
+>   arch/x86/include/asm/smap.h                   | 13 ++++++++++++
+>   arch/x86/include/uapi/asm/processor-flags.h   |  2 ++
+>   arch/x86/kernel/Makefile                      |  2 ++
+>   arch/x86/kernel/alternative.c                 | 21 +++++++++++++++++--
+>   arch/x86/kernel/cpu/common.c                  | 20 +++++++++++++++++-
+>   arch/x86/kvm/cpuid.c                          |  2 +-
+>   tools/arch/x86/include/asm/cpufeatures.h      |  1 +
+>   .../arch/x86/include/asm/disabled-features.h  |  8 ++++++-
+>   tools/objtool/arch/x86/special.c              |  2 ++
+>   15 files changed, 108 insertions(+), 11 deletions(-)
+> 
 
