@@ -2,75 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947E6664214
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86801664216
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbjAJNji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:39:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S237709AbjAJNjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238599AbjAJNjL (ORCPT
+        with ESMTP id S238640AbjAJNjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:39:11 -0500
-Received: from gentwo.de (gentwo.de [161.97.139.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C6A7D1C2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:39:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
-        t=1673357948; bh=v5N8p01gdRXd9HDoez1M3dRvvrduawOYO6ixbE1M6R8=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=DkxZm0T763oFY9qq45rG5QwyK3tN+7FmSsKQ5zw4f9nFmD+CqLjds31MCpG707Y+Z
-         KuOIP/7a7vki9E5B76CFl2yHKj9gRHwCIqxpv7ws5FX4jdapX9UTOmW1LrFZ+VcL7i
-         7mztigY8lC23ZkQoRMYAz17cEInna4r7lVOazJOlFxApdnY7qTuqnb1MEMGe2QIpxL
-         sGCHWbwtweUc0JWx42us41cgQn1L79grbd5aM8QUWa6tbBZEys3+yqTvM71rAXIiRU
-         CxVxq4eJuNwT5lXTA0fuFYXFZ51rXOv3sU9RDMnNEVmwiXULMdl6vCYkGSS+i3hld4
-         I/snm5pBud8+g==
-Received: by gentwo.de (Postfix, from userid 1001)
-        id 9E14DB0017C; Tue, 10 Jan 2023 14:39:08 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by gentwo.de (Postfix) with ESMTP id 95146B00169;
-        Tue, 10 Jan 2023 14:39:08 +0100 (CET)
-Date:   Tue, 10 Jan 2023 14:39:08 +0100 (CET)
-From:   Christoph Lameter <cl@gentwo.de>
-To:     Frederic Weisbecker <frederic@kernel.org>
-cc:     Marcelo Tosatti <mtosatti@redhat.com>, atomlin@atomlin.com,
-        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
-        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v13 2/6] mm/vmstat: Use vmstat_dirty to track CPU-specific
- vmstat discrepancies
-In-Reply-To: <Y71XpnJGumySL9ej@lothringen>
-Message-ID: <7c2af941-42a9-a59b-6a20-b331a4934a3@gentwo.de>
-References: <20230105125218.031928326@redhat.com> <20230105125248.813825852@redhat.com> <b89a9828-d4e-9874-d482-dbb6cbe46@gentwo.de> <Y71XpnJGumySL9ej@lothringen>
+        Tue, 10 Jan 2023 08:39:16 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8147D9F5;
+        Tue, 10 Jan 2023 05:39:13 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id w1so11776207wrt.8;
+        Tue, 10 Jan 2023 05:39:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eVIO+JvYs740qnGHN0LmIx/dtTVP82NXXYc0r6pcMqU=;
+        b=gvlB5Fp+jjyI37k1TEYFeIvwqw1/aeB6VM/UNQUJcaTEapGc1BZvNRoV9JhQ9fC4Ql
+         Jf151ALTmdNoLzdRzA+TFhBd1GyrL7txJNpEwEC3pz8oLq3zUpEFDtGd9RW5/6SLVfzy
+         CeP/epbAGzhBd5hp/Ct57/r0ptTlaWTrLhBFp9KEJ+I/K7S2gzFnOEsDO/gTpwCXKLoc
+         Qj9LaxTC5X0Ot0fMQtuP4VeIPJ5vW0qYsobQdAIj1tbNjneqRSOzQ4npqmN6JBUuxOhD
+         IFELKHUrNIOI29eGnWiCOTQ2a0mGajGkzYPqvy00Sn/gQWTvA5DYptEYxw49LhRc0f3p
+         +cKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eVIO+JvYs740qnGHN0LmIx/dtTVP82NXXYc0r6pcMqU=;
+        b=Di7n2aHavGuHHpCydVRnCxkqgnDQCQYSNwTgCvMU82Lrsg1qv9hJi1s+jVy+NeVVvu
+         9PsKrFEVZS9Z/8gBM7CN1dFWEs++qiDTOuNktKwEVB5Ff8U0ZbhqFQZUjkbxc5sUUYcI
+         ilYKl6/B7oJqYcy6P24FWiV195hdn4BDjQBHzzxoc5e1RKFIAV2NICeF5UIs56zABwZe
+         eRpSoUrj106/6NHWJNksERnQdLDNUMbdGKnm+YZOGN5lSQfrGIhv97WL+L72wBAKwlTl
+         hu0Su778DeajC+LZzgmrYpaTnMZMb6l3ZS6qpgijbtvGrNbs+H7X2ACSB8y57rZs+Twl
+         XW/w==
+X-Gm-Message-State: AFqh2ko7CLUKOz2iFBsUJwFDBQ74RNAqQgUp5Sx7EroiNcS2uzlzIbDB
+        R2Yh6ZAo3Ya2I04S5BUBxJ8=
+X-Google-Smtp-Source: AMrXdXsheiNUTquT8VC/SJbdWmWI5pTpQqzPw2h5ioIB8OoB6RglXeph8VftbKXAzMpF5AFBp5sTkQ==
+X-Received: by 2002:a05:6000:1e11:b0:2bb:366b:d5e1 with SMTP id bj17-20020a0560001e1100b002bb366bd5e1mr11594485wrb.30.1673357951477;
+        Tue, 10 Jan 2023 05:39:11 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id o7-20020a5d62c7000000b002bbeda3809csm5729430wrv.11.2023.01.10.05.39.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 05:39:11 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 10 Jan 2023 14:39:08 +0100
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Ian Rogers <irogers@google.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        namhyung@kernel.org
+Subject: Re: [PATCH v3 1/2] perf build: Properly guard libbpf includes
+Message-ID: <Y71qfFoQp6AR8K6D@krava>
+References: <Y7hgKMDGzQlankL1@kernel.org>
+ <Y7hgoVKBoulCbA4l@kernel.org>
+ <CAP-5=fXPPSHvN6VYc=8tzBz4xtKg4Ofa17zV4pAk0ycorXje8w@mail.gmail.com>
+ <Y7wuz6EOggZ8Wysb@kernel.org>
+ <Y7xYimp0h4YT72/N@krava>
+ <CAP-5=fXwO5_kK=pMV09jdAVw386CB0JwArD0BZd=B=xCyWSP1g@mail.gmail.com>
+ <CAP-5=fVa51_URGsdDFVTzpyGmdDRj_Dj2EKPuDHNQ0BYgMSzUA@mail.gmail.com>
+ <CAP-5=fVtMEahrPMJNVOqsZGj-GoTxUnWsdzK7M+9F2+DhG_STQ@mail.gmail.com>
+ <Y71J2WpaMtked02+@krava>
+ <Y71pl/6yrhIWjYOe@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y71pl/6yrhIWjYOe@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 Jan 2023, Frederic Weisbecker wrote:
+On Tue, Jan 10, 2023 at 10:35:19AM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Tue, Jan 10, 2023 at 12:19:53PM +0100, Jiri Olsa escreveu:
+> > On Mon, Jan 09, 2023 at 11:34:44AM -0800, Ian Rogers wrote:
+> > > Oh, just to note. While failing the feature test is disappointing for
+> > > a libbpf that isn't very old, we have the newer libbpf to statically
+> > > build in. Developers won't be impacted due to the static route. If you
+> > > are a distro maintainer, you should just update your libbpf. So we
+> > > could just bump the API assumption to 1.0 as I believe that'd have the
+> > > advantage of removing feature tests, workarounds, untested code (like
+> > > what broke here), etc.
+> 
+> > > What do you think?
+>  
+> > yes, seems good.. fedora has libbpf 1.0 already so should not be problem
+> > there at least ;-)
+> 
+> So, I already pushed 1/2 to perf/urgent, can I stick an Acked-by: jolsa
+> to the second?
 
-> Note I'm absolutely clueless with vmstat. But I was wondering about it as well
-> while reviewing Marcelo's series, so git blame pointed me to:
->
-> 7c83912062c801738d7d19acaf8f7fec25ea663c ("vmstat: User per cpu atomics to avoid
-> interrupt disable / enable")
->
-> And this seem to mention that this can race with IRQs as well, hence the local
-> cmpxchg operation.
+yes
 
-The race with irq could be an issue but I thought we avoided that and were
-content with disabling preemption.
-
-But this issue illustrates the central problem of the patchset: It makes
-the lightweight counters not so lightweight anymore. The basic primitives
-add a  lot of weight. And the pre cpu atomic updates operations require
-the modification of multiple values. The operation cannot be "atomic" in
-that sense anymore and we need some other form of synchronization that can
-span multiple instructions.
-
-
+jirka
