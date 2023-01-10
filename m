@@ -2,158 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A6B664C34
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AE0664C4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjAJTSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S233214AbjAJTT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbjAJTSp (ORCPT
+        with ESMTP id S239773AbjAJTTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:18:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78924BD49
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:17:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673378277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jZ+feJ2m4yA2ArXeG0OVBpYB1BtZroDRB1kQQe7pS8k=;
-        b=jFbsPqEzDFyMDnt/PzhOtazi/ABRUfy4U8HtaLLAEqf6i4wjrKFxQjNVu0qQrMQ67y/eWz
-        vHxt5iixHi4c8fF3RWLVsoYcQ4P1eMTZ9Virrus4DwbSZGQwtAq3RC+oN9rs2xYbBhqArY
-        cNpfnYNZ10eR81B49cAQfIhUd7nPOSw=
-Received: from mail-vs1-f71.google.com (mail-vs1-f71.google.com
- [209.85.217.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-32-oVecO06kPhCycvbITSDLnw-1; Tue, 10 Jan 2023 14:17:56 -0500
-X-MC-Unique: oVecO06kPhCycvbITSDLnw-1
-Received: by mail-vs1-f71.google.com with SMTP id i189-20020a6722c6000000b003c51e0f417bso3068818vsi.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:17:56 -0800 (PST)
+        Tue, 10 Jan 2023 14:19:38 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6655C532A2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:19:36 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id bq39so20073299lfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:19:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ts8pg88W1SqtrgDHeZ4rSJsGAKw1h4BEAKukVwN8v3k=;
+        b=SYtpocZKmQuNT/cicSsVXpir68fDa2z7z+EAUU6wwuQugpXbj7qS/eV7elXgrOdXzG
+         y2VDDM9KRO4d3cg9VSYhTGYCBTmkB0SIUuTkQ85SjoBCBP08s9xPRvg4+KEHhPMlPAWi
+         09WVmjPlfr4Q7yQ+yQYW1C0IoLAdSVC7XaxnLf17RM4UBOtBVS5ZR+ne5KYMWMVrEo1o
+         oM8pQ4aZQS5lSKzCixfby8C6vO2POe8cGqKOExqjnJfV8IxeOD7t0R7WC+Hw6PKtyHhi
+         LPT4U0q3q+F5Hd7xt8yfC/Ox7MIQvd4PX3BWBqId7XMaOl1aTjQPuBiDo1+kZQ1MgALY
+         WjgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jZ+feJ2m4yA2ArXeG0OVBpYB1BtZroDRB1kQQe7pS8k=;
-        b=Lr6+gCyKIJaULZvsYnH51Ti70LAKLMLaMHX7RVJxov/epPU3sFOMl5pe7Vh0s/cgwB
-         iDYslsr1a2+15DRzvXTkbOVFOc8leSsMDxEIxQD8SchWIfg38Mekd8yCfYzJZd8+v1Kl
-         nTmuquMuA1JKO9wHoURUGz6DZM12glPLQ5lRGS56WvkFVWucqfBRXvmnVv6l7ltkuWHO
-         GRofME2xQ6PhRXoKoY5ZxrEPoDsqS8NHCE/A9TbFNNCN1cG+Is24CHJvfEIEjfgA7uJd
-         XmbcRi1yuhdPn3YtUn7IV9m+eqXILTiUnkcyxz7kxpBopvZ6uTtJEzp5BKbgHgh6eziC
-         wtjw==
-X-Gm-Message-State: AFqh2kpzw4OOaOGcE/ColLfo+alBnwFlXcWRgTcnhtU2AIYgVUHb+BhT
-        I6XzHtxA5Rt/Fb0kiERTdTK5MMOBbnSEDc2fooedrEgO4lwJOdUwkhMWlKy37yWabvaBTGjFuLV
-        CSej2PPe68hYtXGRST7o2Dby/
-X-Received: by 2002:a05:6102:3e14:b0:3ce:c94b:6d51 with SMTP id j20-20020a0561023e1400b003cec94b6d51mr12742931vsv.12.1673378275958;
-        Tue, 10 Jan 2023 11:17:55 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsbo2og8gbo8Ze9movt1n1dfsAP51A0XmFQmYuL+E/Gs7Loks7hc/RhXnvxBkHi6FGu6wrPZQ==
-X-Received: by 2002:a05:6102:3e14:b0:3ce:c94b:6d51 with SMTP id j20-20020a0561023e1400b003cec94b6d51mr12742903vsv.12.1673378275703;
-        Tue, 10 Jan 2023 11:17:55 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b006fca1691425sm7672197qko.63.2023.01.10.11.17.52
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ts8pg88W1SqtrgDHeZ4rSJsGAKw1h4BEAKukVwN8v3k=;
+        b=jLPWCkrA5nF0DL5H5zFp6nOGLTWXChvNYBvLWy2HgPciQlkw+I8OVr6yenKtrFTooV
+         FEhNC9Akkbn4I6j3e+invVvk5NO+MS9Uf673caQz78faofX6HEoIZ0ITX2mpp3i8bmV3
+         PhUBl+h+4Gntu3RhQB70BjiHiPEzZenNoL19Hg2nmJ/PwxWFBqolbCSyQxu1au/tJTTE
+         UOH2ENBOAqNzxAQs+lJKxk7uY/whpTee5PvXGdv/BgXLXlC2co64FTHAcfQl9FGUzv/z
+         Fw9sPGnQCzV/zFU+XlysK/V0/+9ym2uwTDKMISeV+lYjlyqlFRACmlI3XcY6Jxb3LLig
+         awNg==
+X-Gm-Message-State: AFqh2kpyaSo7bX1X32eZ3mc2EGaX65mV/Kh7CcVCOIPEL6CuD/xm/Upm
+        SzF6fOMSqilnd2Qg/1pVAZfEiA==
+X-Google-Smtp-Source: AMrXdXsu5gKMcq/XNjBnXZSELLg6daB3YeKbqTWkcPPos88PhXSEz+HeSC+wiccc3koNOZ1lhkQngw==
+X-Received: by 2002:a05:6512:e9f:b0:4cb:3b24:8390 with SMTP id bi31-20020a0565120e9f00b004cb3b248390mr10706584lfb.59.1673378374793;
+        Tue, 10 Jan 2023 11:19:34 -0800 (PST)
+Received: from Fecusia.local (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
+        by smtp.gmail.com with ESMTPSA id x28-20020a056512131c00b004b549ad99adsm2297725lfu.304.2023.01.10.11.19.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 11:17:55 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 5/7] x86/sched: Remove SD_ASYM_PACKING from the "SMT"
- domain
-In-Reply-To: <20221229190249.GA14462@ranerica-svr.sc.intel.com>
-References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-6-ricardo.neri-calderon@linux.intel.com>
- <Y5IKuJTjE6Pjrw9I@arm.com>
- <20221214165900.GA972@ranerica-svr.sc.intel.com>
- <xhsmhwn6s62b5.mognet@vschneid.remote.csb>
- <20221220004238.GB23844@ranerica-svr.sc.intel.com>
- <xhsmhr0wre5rg.mognet@vschneid.remote.csb>
- <20221229190249.GA14462@ranerica-svr.sc.intel.com>
-Date:   Tue, 10 Jan 2023 19:17:51 +0000
-Message-ID: <xhsmh1qo2dwrk.mognet@vschneid.remote.csb>
+        Tue, 10 Jan 2023 11:19:34 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 10 Jan 2023 20:19:12 +0100
+Subject: [PATCH v2 1/6] dt-bindings: crypto: Let STM32 define Ux500 HASH
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221227-ux500-stm32-hash-v2-1-bc443bc44ca4@linaro.org>
+References: <20221227-ux500-stm32-hash-v2-0-bc443bc44ca4@linaro.org>
+In-Reply-To: <20221227-ux500-stm32-hash-v2-0-bc443bc44ca4@linaro.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Lionel Debieve <lionel.debieve@foss.st.com>
+Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/12/22 11:02, Ricardo Neri wrote:
-> On Thu, Dec 22, 2022 at 04:56:51PM +0000, Valentin Schneider wrote:
->> diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
->> index 57bde66d95f7a..8dc16942135b4 100644
->> --- a/include/linux/sched/sd_flags.h
->> +++ b/include/linux/sched/sd_flags.h
->> @@ -132,12 +132,12 @@ SD_FLAG(SD_SERIALIZE, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
->>  /*
->>   * Place busy tasks earlier in the domain
->>   *
->> - * SHARED_CHILD: Usually set on the SMT level. Technically could be set further
->> - *               up, but currently assumed to be set from the base domain
->> - *               upwards (see update_top_cache_domain()).
->> + * SHARED_PARENT: Usually set on the SMT level. Can be set further up if all
->> + *                siblings of an SMT core are identical, but SMT cores themselves
->> + *                have different priorites.
->>   * NEEDS_GROUPS: Load balancing flag.
->>   */
->> -SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
->> +SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
->
-> But this would not work for Power7. It only has SD_ASYM_PACKING in the SMT
-> sched domain. Must it have either of these flags?
->
+This adds device tree bindings for the Ux500 HASH block
+as a compatible in the STM32 HASH bindings.
 
-It's not mandatory, but making sure SD flags conform to either of them
-means the topology debugging infra can help spot misshapen topologies...
+The Ux500 HASH binding has been used for ages in the kernel
+device tree for Ux500 but was never documented, so fill in
+the gap by making it a sibling of the STM32 HASH block,
+which is what it is.
 
-> In Power7 SMT siblings have the different priority but, IIUC, physical
-> cores are identical.
->
+The relationship to the existing STM32 HASH block is pretty
+obvious when looking at the register map, and I have written
+patches to reuse the STM32 HASH driver on the Ux500.
 
+The main difference from the outside is that the Ux500 HASH
+lacks the interrupt line, so some special if-clauses are
+needed to accomodate this in the binding.
 
-...But you're right, this doesn't work with Power7 as it would need
-SD_ASYM_PACKING all the way up the topology to conform with
-SDF_SHARED_PARENT, which clearly doesn't work with how Power7 uses
-asym_packing.
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v1->v2:
+- Use an else construction instead of if/if not.
+---
+ .../devicetree/bindings/crypto/st,stm32-hash.yaml  | 23 +++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-> It seems to me that asym_packing is specific to a domain.
->
+diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+index 4ccb335e8063..b767ec72a999 100644
+--- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
++++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+@@ -6,12 +6,18 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: STMicroelectronics STM32 HASH
+ 
++description: The STM32 HASH block is built on the HASH block found in
++  the STn8820 SoC introduced in 2007, and subsequently used in the U8500
++  SoC in 2010.
++
+ maintainers:
+   - Lionel Debieve <lionel.debieve@foss.st.com>
+ 
+ properties:
+   compatible:
+     enum:
++      - st,stn8820-hash
++      - stericsson,ux500-hash
+       - st,stm32f456-hash
+       - st,stm32f756-hash
+ 
+@@ -41,11 +47,26 @@ properties:
+     maximum: 2
+     default: 0
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+   - clocks
+-  - interrupts
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          items:
++            const: stericsson,ux500-hash
++    then:
++      properties:
++        interrupts: false
++    else:
++      required:
++        - interrupts
+ 
+ additionalProperties: false
+ 
 
-For Power7 it is, since the asymmetry is only between siblings of a given
-core. For other systems where the asymmetry is between cores, that could
-theoretically affect several levels. Consider:
-
-  DIE [                      ]
-  MC  [          ][          ]
-  SMT [    ][    ][    ][    ]
-  CPU  0  1  2  3  4  5  6  7
-  prio 3  3  2  2  1  1  0  0
-
-As done in your patch, here asym_packing doesn't make sense for SMT, but it
-does for MC and DIE.
-
-Anywho, I think what this means if we should drop the SDF_SHARED_* metaflag
-for SD_ASYM_PACKING, unless we can think of a nice way to programmatically
-describe how SD_ASYM_PACKING should be set.
-
-> Thanks and BR,
-> Ricardo
-
+-- 
+2.39.0
