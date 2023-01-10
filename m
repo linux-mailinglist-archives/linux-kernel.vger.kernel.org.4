@@ -2,129 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9596637FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 05:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CB8663858
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 05:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjAJEC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 23:02:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S229674AbjAJExp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 23:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjAJECv (ORCPT
+        with ESMTP id S229548AbjAJExj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 23:02:51 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDCD1AD84;
-        Mon,  9 Jan 2023 20:02:48 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NrcYy2G2nzJqpR;
-        Tue, 10 Jan 2023 12:01:26 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 10 Jan
- 2023 12:02:42 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yukuai3@huawei.com>,
-        <libaokun1@huawei.com>,
-        <syzbot+77d6fcc37bbb92f26048@syzkaller.appspotmail.com>
-Subject: [PATCH] ext4: fix task hung in ext4_xattr_delete_inode
-Date:   Tue, 10 Jan 2023 12:27:09 +0800
-Message-ID: <20230110042709.2136336-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 9 Jan 2023 23:53:39 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557763FCA8
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 20:53:38 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id w12-20020a5e970c000000b0070450f33abbso1440970ioj.14
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 20:53:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HYT5ZbF2o1QUR84Jk6KZ8n+w9iIKKy5jZcxTavcpj1w=;
+        b=SWT51jkHx8a+ead/0GC482OUUzbPT1qGLUW4AEvkW91m6RG/tDUZ7Uoylh0kAohgxu
+         JPf8JkK1rpbDYShc6LDcd220gIiUzCJznSX/T7yvqcCI0XlcMyYhmKZsqGc3HPpkkzAr
+         CGmwwcMPJbfFx0/iN/xtDJdkaGfTQUKzEklbyiLT7qiKtO+/Lb8bbvMPy8YjJP+wyRs+
+         UkXECcJaW3N8294v2bekNTlBBugc9/DFA6q4Zeb8WJXeBsyuQ3OaxQIvVapX97hz3JlW
+         4F6fS743W7CKmxs0JH3w9o6a+q7twxvG9Kn0V9F5CGqPsIG2xbsl9ZUPfVI49kFR5vuD
+         +qIQ==
+X-Gm-Message-State: AFqh2kpsjY6JS8Gg3WDjgU/l+/5NSGWusp84UT41frjPs99hiu7zFmgo
+        YYotCqPW1qsFNyWCbywJX2tfDvOaShh9GJB1uoxJlw40LyCj
+X-Google-Smtp-Source: AMrXdXsBp5JaM3gTALsiqCGdGFTWPnsowpVxtCgj9OHdzrZIPCOJlMi2Kbvqda4s+2ACZX6OQE9BTmGG1K6wcwAkrHgN1wpqmPkl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:870b:0:b0:6bf:e736:22a with SMTP id
+ u11-20020a5d870b000000b006bfe736022amr5615604iom.94.1673326416927; Mon, 09
+ Jan 2023 20:53:36 -0800 (PST)
+Date:   Mon, 09 Jan 2023 20:53:36 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000aca1bb05f1e1aac1@google.com>
+Subject: [syzbot] linux-next boot error: WARNING in __drm_atomic_helper_set_config
+From:   syzbot <syzbot+0bf79afd497528c0df0d@syzkaller.appspotmail.com>
+To:     airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        melissa.srw@gmail.com, rodrigosiqueiramelo@gmail.com,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reported a hung task problem:
-==================================================================
-INFO: task syz-executor232:5073 blocked for more than 143 seconds.
-      Not tainted 6.2.0-rc2-syzkaller-00024-g512dee0c00ad #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-exec232 state:D stack:21024 pid:5073 ppid:5072 flags:0x00004004
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    469a89fd3bb7 Add linux-next specific files for 20230106
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=121d2432480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a94f9b6b8eb07a36
+dashboard link: https://syzkaller.appspot.com/bug?extid=0bf79afd497528c0df0d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2df1b88ce6c4/disk-469a89fd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ea2517e6b476/vmlinux-469a89fd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7539708cb8ba/bzImage-469a89fd.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0bf79afd497528c0df0d@syzkaller.appspotmail.com
+
+qnx6: QNX6 filesystem 1.0.0 registered.
+fuse: init (API version 7.38)
+orangefs_debugfs_init: called with debug mask: :none: :0:
+orangefs_init: module version upstream loaded
+JFS: nTxBlock = 8192, nTxLock = 65536
+SGI XFS with ACLs, security attributes, realtime, quota, no debug enabled
+9p: Installing v9fs 9p2000 file system support
+NILFS version 2 loaded
+befs: version: 0.9.3
+ocfs2: Registered cluster interface o2cb
+ocfs2: Registered cluster interface user
+OCFS2 User DLM kernel interface loaded
+gfs2: GFS2 installed
+ceph: loaded (mds proto 32)
+NET: Registered PF_ALG protocol family
+xor: automatically using best checksumming function   avx       
+async_tx: api initialized (async)
+Key type asymmetric registered
+Asymmetric key parser 'x509' registered
+Asymmetric key parser 'pkcs8' registered
+Key type pkcs7_test registered
+Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
+io scheduler mq-deadline registered
+io scheduler kyber registered
+io scheduler bfq registered
+input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+ACPI: button: Power Button [PWRF]
+input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
+ACPI: button: Sleep Button [SLPF]
+ACPI: \_SB_.LNKC: Enabled at IRQ 11
+virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKD: Enabled at IRQ 10
+virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKB: Enabled at IRQ 10
+virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+N_HDLC line discipline registered with maxframe=4096
+Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+Non-volatile memory driver v1.3
+Linux agpgart interface v0.103
+ACPI: bus type drm_connector registered
+[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
+[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
+platform vkms: [drm] bpp/depth value of 32/0 not supported
+platform vkms: [drm] No compatible format found
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 1 at drivers/gpu/drm/drm_atomic.c:1604 __drm_atomic_helper_set_config+0xa2d/0xe80 drivers/gpu/drm/drm_atomic.c:1604
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.2.0-rc2-next-20230106-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:__drm_atomic_helper_set_config+0xa2d/0xe80 drivers/gpu/drm/drm_atomic.c:1604
+Code: b6 04 02 84 c0 74 09 3c 03 7f 05 e8 dd cb 48 fd 45 89 75 38 e9 0f fb ff ff e8 6f e4 fa fc 0f 0b e9 a5 f7 ff ff e8 63 e4 fa fc <0f> 0b e9 4f f7 ff ff e8 57 e4 fa fc 48 8d 7d 08 48 b8 00 00 00 00
+RSP: 0000:ffffc90000067808 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888146916380 RCX: 0000000000000000
+RDX: ffff888140190000 RSI: ffffffff8486c8fd RDI: 0000000000000007
+RBP: ffff888146917500 R08: 0000000000000007 R09: fffffffffffff000
+R10: ffff888146985000 R11: 0000000000000005 R12: ffff88814691b700
+R13: ffff888146985000 R14: ffff888146985800 R15: ffff88801deccdc0
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000c48e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- context_switch kernel/sched/core.c:5244 [inline]
- __schedule+0x995/0xe20 kernel/sched/core.c:6555
- schedule+0xcb/0x190 kernel/sched/core.c:6631
- __wait_on_freeing_inode fs/inode.c:2196 [inline]
- find_inode_fast+0x35a/0x4c0 fs/inode.c:950
- iget_locked+0xb1/0x830 fs/inode.c:1273
- __ext4_iget+0x22e/0x3ed0 fs/ext4/inode.c:4861
- ext4_xattr_inode_iget+0x68/0x4e0 fs/ext4/xattr.c:389
- ext4_xattr_inode_dec_ref_all+0x1a7/0xe50 fs/ext4/xattr.c:1148
- ext4_xattr_delete_inode+0xb04/0xcd0 fs/ext4/xattr.c:2880
- ext4_evict_inode+0xd7c/0x10b0 fs/ext4/inode.c:296
- evict+0x2a4/0x620 fs/inode.c:664
- ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
- __ext4_fill_super fs/ext4/super.c:5516 [inline]
- ext4_fill_super+0x81cd/0x8700 fs/ext4/super.c:5644
- get_tree_bdev+0x400/0x620 fs/super.c:1282
- vfs_get_tree+0x88/0x270 fs/super.c:1489
- do_new_mount+0x289/0xad0 fs/namespace.c:3145
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa5406fd5ea
-RSP: 002b:00007ffc7232f968 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fa5406fd5ea
-RDX: 0000000020000440 RSI: 0000000020000000 RDI: 00007ffc7232f970
-RBP: 00007ffc7232f970 R08: 00007ffc7232f9b0 R09: 0000000000000432
-R10: 0000000000804a03 R11: 0000000000000202 R12: 0000000000000004
-R13: 0000555556a7a2c0 R14: 00007ffc7232f9b0 R15: 0000000000000000
+ drm_client_modeset_commit_atomic+0x535/0x7e0 drivers/gpu/drm/drm_client_modeset.c:1026
+ drm_client_modeset_commit_locked+0x149/0x580 drivers/gpu/drm/drm_client_modeset.c:1148
+ drm_client_modeset_commit+0x51/0x80 drivers/gpu/drm/drm_client_modeset.c:1174
+ drm_fb_helper_single_fb_probe drivers/gpu/drm/drm_fb_helper.c:1944 [inline]
+ __drm_fb_helper_initial_config_and_unlock.cold+0x2ef/0x386 drivers/gpu/drm/drm_fb_helper.c:2130
+ drm_fb_helper_initial_config drivers/gpu/drm/drm_fb_helper.c:2225 [inline]
+ drm_fb_helper_initial_config+0x4a/0x60 drivers/gpu/drm/drm_fb_helper.c:2217
+ drm_fbdev_client_hotplug+0x2b4/0x3d0 drivers/gpu/drm/drm_fbdev_generic.c:406
+ drm_fbdev_generic_setup+0x166/0x400 drivers/gpu/drm/drm_fbdev_generic.c:491
+ vkms_create drivers/gpu/drm/vkms/vkms_drv.c:204 [inline]
+ vkms_init+0x587/0x62f drivers/gpu/drm/vkms/vkms_drv.c:230
+ do_one_initcall+0x141/0x7d0 init/main.c:1306
+ do_initcall_level init/main.c:1379 [inline]
+ do_initcalls init/main.c:1395 [inline]
+ do_basic_setup init/main.c:1414 [inline]
+ kernel_init_freeable+0x6f9/0x782 init/main.c:1634
+ kernel_init+0x1e/0x1d0 init/main.c:1522
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
  </TASK>
-==================================================================
 
-The problem is that the inode contains an xattr entry with ea_inum of 15
-when cleaning up an orphan inode <15>. When evict inode <15>, the reference
-counting of the corresponding EA inode is decreased. When EA inode <15> is
-found by find_inode_fast() in __ext4_iget(), it is found that the EA inode
-holds the I_FREEING flag and waits for the EA inode to complete deletion.
-As a result, when inode <15> is being deleted, we wait for inode <15> to
-complete the deletion, resulting in an infinite loop and triggering Hung
-Task. To solve this problem, we only need to check whether the ino of EA
-inode and parent is the same before getting EA inode.
 
-Link: https://syzkaller.appspot.com/bug?extid=77d6fcc37bbb92f26048
-Reported-by: syzbot+77d6fcc37bbb92f26048@syzkaller.appspotmail.com
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
 ---
- fs/ext4/xattr.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-index 7decaaf27e82..9ff8fcf78bb8 100644
---- a/fs/ext4/xattr.c
-+++ b/fs/ext4/xattr.c
-@@ -386,6 +386,13 @@ static int ext4_xattr_inode_iget(struct inode *parent, unsigned long ea_ino,
- 	struct inode *inode;
- 	int err;
- 
-+	if (parent->i_ino == ea_ino) {
-+		ext4_error(parent->i_sb,
-+			   "Parent and EA inode have the same ino %lu", ea_ino);
-+		err = -EUCLEAN;
-+		goto error;
-+	}
-+
- 	inode = ext4_iget(parent->i_sb, ea_ino, EXT4_IGET_NORMAL);
- 	if (IS_ERR(inode)) {
- 		err = PTR_ERR(inode);
--- 
-2.31.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
