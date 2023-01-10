@@ -2,68 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35E3663DD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E04663DD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237809AbjAJKRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
+        id S232024AbjAJKQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:16:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238378AbjAJKQi (ORCPT
+        with ESMTP id S238094AbjAJKQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:16:38 -0500
-Received: from mail.nfschina.com (unknown [42.101.60.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC684551EC
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:16:33 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 1CA0C1A009FB;
-        Tue, 10 Jan 2023 18:16:47 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id JOAek9nwWfFb; Tue, 10 Jan 2023 18:16:46 +0800 (CST)
-Received: from localhost.localdomain.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: xupengfei@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 22E141A0090A;
-        Tue, 10 Jan 2023 18:16:46 +0800 (CST)
-From:   XU pengfei <xupengfei@nfschina.com>
-To:     siglesias@igalia.com, jens.taprogge@taprogge.org,
-        gregkh@linuxfoundation.org, andy.shevchenko@gmail.com,
-        ilpo.jarvinen@linux.intel.com
-Cc:     industrypack-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, XU pengfei <xupengfei@nfschina.com>
-Subject: [PATCH 1/1] ipack: ipoctal: remove unnecessary (void*) conversions
-Date:   Tue, 10 Jan 2023 18:16:14 +0800
-Message-Id: <20230110101613.4519-1-xupengfei@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 05:16:25 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3353A5471D
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:16:23 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id ay12-20020a05600c1e0c00b003d9ea12bafcso6011238wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:16:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3L27Tq0zbzDL8sJQqF4D7IRFPQYRZAeU4qqoSPa895w=;
+        b=u+x71yWS7I4oEXf8ozRcyFMecHvQvUknvdG2mG0PJAu04pG9XXthULtoY1W0q94kCT
+         d7DlnxcZ3zXHjz3tCvR+V7R0vGgabFih7QQ0ZICKmNK25Xx2KCBWdHBglGa2TtcHvYCw
+         i1PHi3FscBHvdfF7v25N/FENMcx3/FGjIcJPuxqpp59Gwq+y/MyNXqKi9sWENqwmpXxK
+         3BgfTBvTCcEcYxPkKgaNIsrgcjekdnRmViT/flYASi8HCn7wPiReR5wTM6Y4C1n9IE+9
+         Lo/Ham7HrbuO9nRWnGB1VygmYL7yBAlKmKoLq0hm1fTGQcolWwK9CMshzO2w8/ekD6g2
+         shmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3L27Tq0zbzDL8sJQqF4D7IRFPQYRZAeU4qqoSPa895w=;
+        b=0uPmutr4/kLfKDkAtL/p89NtZrnzxZfQiJilg33+KBbcyfxWWwIKGvc32ixSNeFnuC
+         imW7lCmDARSNjluYX+vyNTODs8qsHSj0CamE7x+pTOV1lVFPpXoZrHzIq3mWiAxHtsoj
+         MmyaMS6Mzem/+Oigopr9TqPedP0WiU/VEKrrVXIn30Svagsn6JMELq3nIAUbhvFXqs8y
+         4wqbOfonuYKn5oFIluDtRz6ijYlfl0JYY+jMeyzApKUvRk84qggnar9nokK3gXDg9UMv
+         xZPsJlqxnJhpS4/NHqzgM6ITVOMCMUozPS+HXrBGV3Alse4bC9667agIsPCWloKcv8lu
+         VxyA==
+X-Gm-Message-State: AFqh2koK0EHWkx/WcsaqnDBFVb3fF7Tj3vhKg0ENMQVWLWNpeHcHuHgC
+        /obBDNTt0JeCVYuYBwyoS2yJIg==
+X-Google-Smtp-Source: AMrXdXuMfssSJSDgb250kz9/lLtQ3vu6O7DHG+aAwgcWVuQ1GLx8a400gxZwi0nru+BFE3w6dTyBEQ==
+X-Received: by 2002:a1c:4c0e:0:b0:3d9:f836:3728 with SMTP id z14-20020a1c4c0e000000b003d9f8363728mr1386982wmf.11.1673345781647;
+        Tue, 10 Jan 2023 02:16:21 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l14-20020a05600c4f0e00b003d96c811d6dsm20468474wmq.30.2023.01.10.02.16.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 02:16:21 -0800 (PST)
+Message-ID: <39bf0a6f-6e43-c7e1-07c2-c5c5113c1e50@linaro.org>
+Date:   Tue, 10 Jan 2023 11:16:17 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 06/11] dt-bindings: power: amlogic,meson-gx-pwrc: mark
+ bindings as deprecated
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v2-6-36ad050bb625@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-6-36ad050bb625@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arg is a void * type and does not require a cast.
+On 09/01/2023 13:53, Neil Armstrong wrote:
+> The amlogic,meson-gx-pwrc-vpu compatible isn't used anymore since [1]
+> was merged in v5.8-rc1 and amlogic,meson-g12a-pwrc-vpu either since [2]
+> was merged in v5.3-rc1.
+> 
+> [1] commit 5273d6cacc06 ("arm64: dts: meson-gx: Switch to the meson-ee-pwrc bindings")
+> [2] commit f4f1c8d9ace7 ("arm64: dts: meson-g12: add Everything-Else power domain controller")
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/power/amlogic,meson-gx-pwrc.txt | 4 ++--
 
-Signed-off-by: XU pengfei <xupengfei@nfschina.com>
----
- drivers/ipack/devices/ipoctal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/ipack/devices/ipoctal.c b/drivers/ipack/devices/ipoctal.c
-index fc00274070b6..39f0852e5ca7 100644
---- a/drivers/ipack/devices/ipoctal.c
-+++ b/drivers/ipack/devices/ipoctal.c
-@@ -253,7 +253,7 @@ static void ipoctal_irq_channel(struct ipoctal_channel *channel)
- static irqreturn_t ipoctal_irq_handler(void *arg)
- {
- 	unsigned int i;
--	struct ipoctal *ipoctal = (struct ipoctal *) arg;
-+	struct ipoctal *ipoctal = arg;
- 
- 	/* Clear the IPack device interrupt */
- 	readw(ipoctal->int_space + ACK_INT_REQ0);
--- 
-2.18.2
+Best regards,
+Krzysztof
 
