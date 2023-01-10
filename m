@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF11664CD5
+	by mail.lfdr.de (Postfix) with ESMTP id 1519F664CD4
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbjAJTye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
+        id S233058AbjAJTyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbjAJTyE (ORCPT
+        with ESMTP id S232977AbjAJTyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:54:04 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25295BA32;
+        Tue, 10 Jan 2023 14:54:03 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277E712D06;
         Tue, 10 Jan 2023 11:53:59 -0800 (PST)
 Received: from obbardc-t14.home (unknown [IPv6:2a00:23c7:6883:e501:329c:8425:8e97:eae9])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: obbardc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 98A3F6602D8F;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D21096602D93;
         Tue, 10 Jan 2023 19:53:57 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673380437;
-        bh=NifcOS43y+N68BurrSuB+JMF2pV8C2qpP/aWsRXSUKk=;
+        s=mail; t=1673380438;
+        bh=DQ1lSSmLlKw1V2qE5V5/GrXF6T+Z9D5U9iRwAWX3sco=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N0fRjUzXMP3KKEK371KCiEY6xzuepwB3W220WKNzyE8Cl+fA2WBxL98pvTueApZV2
-         2UwtBaIFvF+beMw7bgIChN0ZL9GIJkjovDsoRv+odSa80yhywUJCLqZlHRCQ9nLNU/
-         bJBgfFgd0a1FNselkgwfbN5D6cUIF/RMdhcpWYypgqoO2Y68he8LfcBG4rtqO0uGDx
-         q0Bq0woKucT6tSEny8LypHxCldBJvhtIt/b7y4u7sYrbuMTsNwas5FVFgqjOKlO+sK
-         whLu5tV7MpD+SZooXqNWEq0X7wk0FyZ1HfW/ZoG9UQiR716POq0q1bdpUTtGzqGb9v
-         /iU3fmYCFlHfQ==
+        b=PaxMQglptCncEgUmVaIoHY/w5I4emzip73uVg5J1MPZrLZfODx5o+wDyrhIy21VIq
+         QyrZ70GRR9Q5vgsRbVgdYF2mlNRuu20K2M2mShwqizAZ6Xlq6Yzeps5sRTW4HuvKeS
+         kOUhusrp3QVh+XbEIUhhO5tmxLKjALq0Md3Pj8ZNUK3cxFZr7H6jstBiIFtDTG+46x
+         zwMlFOVuCJFALG5iQCFLTOlESvPvgYZEmpQdhKFqhCLJsfuGD7geBOOmNIREwI1sWi
+         1WTFDv+9yNC+RN53e9mx+xY43tAocU6KkXsd6OU6TXstjz28VNggwI1b8U0ER7U8Fw
+         4A6AdS5FgL9HA==
 From:   Christopher Obbard <chris.obbard@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>,
         linux-rockchip@lists.infradead.org
@@ -42,9 +42,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Christopher Obbard <chris.obbard@collabora.com>
-Subject: [PATCH v2 2/3] arm64: dts: rockchip: Remove empty line from rock-5a
-Date:   Tue, 10 Jan 2023 19:53:51 +0000
-Message-Id: <20230110195352.272360-3-chris.obbard@collabora.com>
+Subject: [PATCH v2 3/3] arm64: dts: rockchip: Update sdhci alias for rock-5b
+Date:   Tue, 10 Jan 2023 19:53:52 +0000
+Message-Id: <20230110195352.272360-4-chris.obbard@collabora.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230110195352.272360-1-chris.obbard@collabora.com>
 References: <20230110195352.272360-1-chris.obbard@collabora.com>
@@ -59,25 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a line which is empty. Remove it.
+In the previous version, the sdhci alias was set to mmc1: an artifact
+leftover from the port from vendor kernel. Update the alias to mmc0 to
+match the device's boot order.
 
-Fixes: a4a8f1afb360 ("arm64: dts: rockchip: Add rock-5a board")
+Fixes: 6fb2d1549786 ("arm64: dts: rockchip: Add rock-5b board")
 Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
-index c85af1334c05..6432b586bf5a 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
-@@ -52,7 +52,6 @@ rtl8211f {
- 		rtl8211f_rst: rtl8211f-rst {
- 			rockchip,pins = <3 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>;
- 		};
--
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+index d2f1e963ce06..95805cb0adfa 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+@@ -9,7 +9,7 @@ / {
+ 	compatible = "radxa,rock-5b", "rockchip,rk3588";
+ 
+ 	aliases {
+-		mmc1 = &sdhci;
++		mmc0 = &sdhci;
+ 		serial2 = &uart2;
  	};
- };
  
 -- 
 2.39.0
