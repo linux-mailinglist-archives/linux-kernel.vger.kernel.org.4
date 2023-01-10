@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A706647E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950966647F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238169AbjAJR6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S234892AbjAJR7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 12:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238675AbjAJR5S (ORCPT
+        with ESMTP id S235339AbjAJR6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:57:18 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0361B9FB;
-        Tue, 10 Jan 2023 09:56:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1673373373; x=1704909373;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=c69QDQ8jJjhQ1kZ5R4VbVRTklNvsikDqLG37OrYt+nE=;
-  b=Hnw7Gd2Z/Jyv31nf+CL7nZ4nHzpm0HLBw3w6eaiUxaviiTVX7mmOJK3V
-   cnt+GHe5OrtddnsWxIrAuUZ+3dZCzr4TdxCjFTzSCAu7jdeTbKX2z9Mqy
-   XdUfV8d2iiOHJtlGwrPdRA2x/ebxR/iC13WRMyoPhZz1Oi1zQzOptJOAJ
-   8=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 10 Jan 2023 09:56:12 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 09:56:12 -0800
+        Tue, 10 Jan 2023 12:58:01 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2B5848F6;
+        Tue, 10 Jan 2023 09:56:58 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AEg6J1028558;
+        Tue, 10 Jan 2023 17:56:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=iorMp17q7wINe0N4cPm7TTA02s+Ru0Iit7bFiFuy9t8=;
+ b=nijQqr1253SUqmBCmtqGaV2nKwD8lst/prEqeSVKalINyarTEcZircZ7d4HEA10m5Sa3
+ WZGXfWGqgb5a+b8K2WS2ujiqCpTqro1XVs7ONiyV1R6P5e5dhdAqW5C/4GoQ9M//d6L5
+ BcHpVtgW72w0xfIRUYTVkEoK2/CvGjO8skYFYLT6aAdcU3QeeuDk5KCBZKvnHXNRD5/m
+ QIokAWi9UYBkyGScJmSJRsJzbCLCsoWUJecxIDfFZvQGz+uJ8XnpqlT9sdx6vvXSXVsS
+ 3rYPJXpb7LbkU35pBHSqGI2h3N+KKcvMU3LcL9YBGqLCD1lacMaMvf5J5NUiNZUvTRi9 xw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n0sshabn3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 17:56:43 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30AHufhv029190
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 17:56:41 GMT
 Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
  (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 10 Jan
- 2023 09:56:11 -0800
-Message-ID: <4e8a7fdf-8c91-cf2f-d369-c67b7584f580@quicinc.com>
-Date:   Tue, 10 Jan 2023 09:56:11 -0800
+ 2023 09:56:41 -0800
+Message-ID: <7e64039a-55ce-d79d-8501-10de09269afb@quicinc.com>
+Date:   Tue, 10 Jan 2023 09:56:40 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
 From:   Elliot Berman <quic_eberman@quicinc.com>
-Subject: Re: [PATCH v8 05/28] virt: gunyah: Add hypercalls to identify Gunyah
+Subject: Re: [PATCH v8 06/28] virt: gunyah: Identify hypervisor version
 To:     Alex Elder <elder@linaro.org>,
         Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
         Murali Nalajala <quic_mnalajal@quicinc.com>
 CC:     Trilok Soni <quic_tsoni@quicinc.com>,
         Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
@@ -56,6 +59,8 @@ CC:     Trilok Soni <quic_tsoni@quicinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
         "Bagas Sanjaya" <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Jassi Brar <jassisinghbrar@gmail.com>,
         "Sudeep Holla" <sudeep.holla@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -66,18 +71,30 @@ CC:     Trilok Soni <quic_tsoni@quicinc.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-acpi@vger.kernel.org>
 References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
- <20221219225850.2397345-6-quic_eberman@quicinc.com>
- <63bbc640-9b0c-95af-3d35-291da0323db3@linaro.org>
+ <20221219225850.2397345-7-quic_eberman@quicinc.com>
+ <51c36831-19c1-dd67-9e31-87733c190a9c@linaro.org>
 Content-Language: en-US
-In-Reply-To: <63bbc640-9b0c-95af-3d35-291da0323db3@linaro.org>
+In-Reply-To: <51c36831-19c1-dd67-9e31-87733c190a9c@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: e2wEreoohIgL8SWgbG9PdENHo8Q5EPFS
+X-Proofpoint-ORIG-GUID: e2wEreoohIgL8SWgbG9PdENHo8Q5EPFS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-10_07,2023-01-10_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 phishscore=0 spamscore=0 clxscore=1015 suspectscore=0
+ adultscore=0 impostorscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301100115
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,297 +105,131 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 1/9/2023 1:34 PM, Alex Elder wrote:
 > On 12/19/22 4:58 PM, Elliot Berman wrote:
->> Add hypercalls to identify when Linux is running a virtual machine under
->> Gunyah.
+>> Export the version of Gunyah which is reported via the hyp_identify
+>> hypercall. Increments of the major API version indicate possibly
+>> backwards incompatible changes.
 >>
->> There are two calls to help identify Gunyah:
->>
->> 1. gh_hypercall_get_uid() returns a UID when running under a Gunyah
->>     hypervisor.
->> 2. gh_hypercall_hyp_identify() returns build information and a set of
->>     feature flags that are supported by Gunyah.
-> 
-> The first is a "service", while the second is a "hypercall".
-> Can you explain the distinction?  The sentence at the top
-> refers to both as "hypercalls".
-> 
-
-I learned more details about this to answer your question. "get_uid()" 
-is a standardized call that is ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID 
-defined in include/arm-smccc.h. I'll use that.
-
+>> Export the hypervisor identity so that Gunyah drivers can act according
+>> to the major API version.
 >>
 >> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 >> ---
->>   MAINTAINERS                          |  2 +
->>   arch/arm64/Kbuild                    |  1 +
->>   arch/arm64/gunyah/Makefile           |  1 +
->>   arch/arm64/gunyah/gunyah_hypercall.c | 69 ++++++++++++++++++++++++++++
->>   drivers/virt/Kconfig                 |  1 +
->>   drivers/virt/gunyah/Kconfig          | 12 +++++
->>   include/linux/gunyah.h               | 25 ++++++++++
->>   7 files changed, 111 insertions(+)
->>   create mode 100644 arch/arm64/gunyah/Makefile
->>   create mode 100644 arch/arm64/gunyah/gunyah_hypercall.c
->>   create mode 100644 drivers/virt/gunyah/Kconfig
+>>   drivers/virt/Makefile        |  1 +
+>>   drivers/virt/gunyah/Makefile |  1 +
+>>   drivers/virt/gunyah/gunyah.c | 46 ++++++++++++++++++++++++++++++++++++
+>>   include/linux/gunyah.h       |  6 +++++
+>>   4 files changed, 54 insertions(+)
+>>   create mode 100644 drivers/virt/gunyah/Makefile
+>>   create mode 100644 drivers/virt/gunyah/gunyah.c
 >>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 74e76e0ab14d..36698df6b0e5 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -8941,6 +8941,8 @@ L:    linux-arm-msm@vger.kernel.org
->>   S:    Supported
->>   F:    Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
->>   F:    Documentation/virt/gunyah/
->> +F:    arch/arm64/gunyah/
->> +F:    drivers/virt/gunyah/
->>   F:    include/linux/gunyah.h
->>   HABANALABS PCI DRIVER
->> diff --git a/arch/arm64/Kbuild b/arch/arm64/Kbuild
->> index 5bfbf7d79c99..e4847ba0e3c9 100644
->> --- a/arch/arm64/Kbuild
->> +++ b/arch/arm64/Kbuild
->> @@ -3,6 +3,7 @@ obj-y            += kernel/ mm/ net/
->>   obj-$(CONFIG_KVM)    += kvm/
->>   obj-$(CONFIG_XEN)    += xen/
->>   obj-$(subst m,y,$(CONFIG_HYPERV))    += hyperv/
->> +obj-$(CONFIG_GUNYAH)    += gunyah/
->>   obj-$(CONFIG_CRYPTO)    += crypto/
->>   # for cleaning
->> diff --git a/arch/arm64/gunyah/Makefile b/arch/arm64/gunyah/Makefile
+>> diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
+>> index 093674e05c40..92b7e5311548 100644
+>> --- a/drivers/virt/Makefile
+>> +++ b/drivers/virt/Makefile
+>> @@ -11,3 +11,4 @@ obj-$(CONFIG_NITRO_ENCLAVES)    += nitro_enclaves/
+>>   obj-$(CONFIG_ACRN_HSM)        += acrn/
+>>   obj-$(CONFIG_EFI_SECRET)    += coco/efi_secret/
+>>   obj-$(CONFIG_SEV_GUEST)       += coco/sev-guest/
+>> +obj-y                += gunyah/
+>> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
 >> new file mode 100644
->> index 000000000000..9fbc720b6fb6
+>> index 000000000000..2ac4ee64b89d
 >> --- /dev/null
->> +++ b/arch/arm64/gunyah/Makefile
+>> +++ b/drivers/virt/gunyah/Makefile
 >> @@ -0,0 +1 @@
->> +obj-$(CONFIG_GUNYAH) += gunyah_hypercall.o
->> diff --git a/arch/arm64/gunyah/gunyah_hypercall.c 
->> b/arch/arm64/gunyah/gunyah_hypercall.c
+>> +obj-$(CONFIG_GUNYAH) += gunyah.o
+>> diff --git a/drivers/virt/gunyah/gunyah.c b/drivers/virt/gunyah/gunyah.c
 >> new file mode 100644
->> index 000000000000..0beb3123d650
+>> index 000000000000..c34c9046fc08
 >> --- /dev/null
->> +++ b/arch/arm64/gunyah/gunyah_hypercall.c
->> @@ -0,0 +1,69 @@
+>> +++ b/drivers/virt/gunyah/gunyah.c
+>> @@ -0,0 +1,46 @@
 >> +// SPDX-License-Identifier: GPL-2.0-only
 >> +/*
 >> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights 
 >> reserved.
 >> + */
 >> +
->> +#include <linux/arm-smccc.h>
->> +#include <linux/module.h>
+>> +#define pr_fmt(fmt) "gunyah: " fmt
+>> +
 >> +#include <linux/gunyah.h>
+>> +#include <linux/init.h>
+>> +#include <linux/module.h>
+>> +#include <linux/printk.h>
 >> +
->> +#define GH_CALL_TYPE_PLATFORM_CALL        0
->> +#define GH_CALL_TYPE_HYPERCALL            2
->> +#define GH_CALL_TYPE_SERVICE            3
->> +#define GH_CALL_TYPE_SHIFT            14
->> +#define GH_CALL_FUNCTION_NUM_MASK        0x3fff
-> 
-> A FN_ID is a 32-bit value.  Are all 18 high-order bits considered
-> part of the call type?  It might be good to specify that explicitly
-> by defining a mask for it.
-> 
-
-With above in mind, I decided to simplify the macros and drop the TYPE 
-field.
-
+>> +struct gh_hypercall_hyp_identify_resp gunyah_api;
+>> +EXPORT_SYMBOL_GPL(gunyah_api);
 >> +
->> +#define GH_FN_ID(type, num)    ((type) << GH_CALL_TYPE_SHIFT | ((num) 
->> & GH_CALL_FUNCTION_NUM_MASK))
+>> +static const uint32_t gunyah_known_uuids[][4] = {
+>> +    {0x19bd54bd, 0x0b37571b, 0x946f609b, 0x54539de6}, /*QC_HYP 
+>> (Qualcomm's build) */
+>> +    {0x673d5f14, 0x9265ce36, 0xa4535fdb, 0xc1d58fcd}, /*GUNYAH (open 
+>> source build) */
+>> +};
 >> +
-> 
-> Is there any need for the endianness of these values to be specified?
-> Does Gunyah operate with a well-defined endianness?  Is there any
-> chance a VM can run with an endianness different from Gunyah?  I
-> see that the arm_smcc_* structures are defined without endianness.
-> (Sorry if these are dumb questions.)
-> 
-
-All of the data transfers for hypercalls happen via registers, so 
-endianness doesn't have impact here (there is no "low address" in a 
-register).
-
->> +#define GH_SERVICE(fn)        ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, 
->> ARM_SMCCC_SMC_32, \
->> +                           ARM_SMCCC_OWNER_VENDOR_HYP, \
->> +                           GH_FN_ID(GH_CALL_TYPE_SERVICE, fn))
->> +
->> +#define GH_HYPERCALL_CALL_UID            GH_SERVICE(0x3f01)
-> 
-> Perhaps 0x3f01 could be defined symbolically.
-> 
-> However if this is the only place it's ever used, doing so
-> doesn't add much value (meaning, just do it the way you did).
-> 
->> +
->> +#define GH_HYPERCALL(fn)    ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, 
->> ARM_SMCCC_SMC_64, \
->> +                           ARM_SMCCC_OWNER_VENDOR_HYP, \
->> +                           GH_FN_ID(GH_CALL_TYPE_HYPERCALL, fn))
->> +
->> +#define GH_HYPERCALL_HYP_IDENTIFY        GH_HYPERCALL(0x0000)
-> 
-> Will there be a growing set of well-known hypervisor call functions?
-> Perhaps 0x0000 should be defined symbolically.  (Or not if it's only
-> used here.)
-> 
-
-Yes, we would add growing set of well-known hypercalls. 0x0000 would 
-only be used here.
-
->> +
->> +/**
->> + * gh_hypercall_get_uid() - Returns a UID when running under a Gunyah 
->> hypervisor
->> + * @uid: An array of 4 u32's (u32 uid[4];)
->> + *
->> + * Caller should compare the resulting UID to a list of known Gunyah 
->> UIDs to
->> + * confirm that Linux is running as a guest of Gunyah.
-> 
-> I presume that, if the returned UID isn't well-known, then no other
-> Gunyah-related calls are meaningful.  Is that correct?
-> 
-
-That's correct.
-
->> + */
->> +void gh_hypercall_get_uid(u32 uid[4])
+>> +static int __init gunyah_init(void)
 >> +{
->> +    struct arm_smccc_res res;
+>> +    u32 uid[4];
+>> +    int i;
 >> +
->> +    arm_smccc_1_1_hvc(GH_HYPERCALL_CALL_UID, &res);
+>> +    gh_hypercall_get_uid(uid);
 >> +
->> +    uid[0] = res.a0;
->> +    uid[1] = res.a1;
->> +    uid[2] = res.a2;
->> +    uid[3] = res.a3;
-> 
-> I see in the definition of struct arm_smccc_res that the four
-> fields are unsigned long values.  That differs from the u32
-> array passed as argument.  Are the resource IDs guaranteed to
-> be four 32-bit values?  I personally prefer being explicit
-> about the upper 32-bits being discarded (though some don't
-> agree with that convention).
-> 
-
-Done.
-
+>> +    for (i = 0; i < ARRAY_SIZE(gunyah_known_uuids); i++)
+>> +        if (!memcmp(uid, gunyah_known_uuids[i], sizeof(uid)))
+>> +            break;
+>> +
+>> +    if (i == ARRAY_SIZE(gunyah_known_uuids))
+>> +        return -ENODEV;
+>> +
+>> +    gh_hypercall_hyp_identify(&gunyah_api);
+>> +
+>> +    pr_info("Running under Gunyah hypervisor %llx/v%u\n",
+>> +        FIELD_GET(GH_API_INFO_VARIANT_MASK, gunyah_api.api_info),
+>> +        gh_api_version());
+>> +
+>> +    return 0;
 >> +}
->> +EXPORT_SYMBOL_GPL(gh_hypercall_get_uid);
->> +
->> +/**
->> + * gh_hypercall_hyp_identify() - Returns build information and 
->> feature flags
->> + *                               supported by Gunyah.
->> + * @hyp_identity: filled by the hypercall with the API info and 
->> feature flags.
->> + */
->> +void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp 
->> *hyp_identity)
->> +{
->> +    struct arm_smccc_res res;
->> +
->> +    arm_smccc_1_1_hvc(GH_HYPERCALL_HYP_IDENTIFY, &res);
->> +
->> +    hyp_identity->api_info = res.a0;
->> +    hyp_identity->flags[0] = res.a1;
->> +    hyp_identity->flags[1] = res.a2;
->> +    hyp_identity->flags[2] = res.a3;
->> +}
->> +EXPORT_SYMBOL_GPL(gh_hypercall_hyp_identify);
+>> +arch_initcall(gunyah_init);
 >> +
 >> +MODULE_LICENSE("GPL");
->> +MODULE_DESCRIPTION("Gunyah Hypervisor Hypercalls");
->> diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
->> index 87ef258cec64..259dc2be6cad 100644
->> --- a/drivers/virt/Kconfig
->> +++ b/drivers/virt/Kconfig
->> @@ -52,4 +52,5 @@ source "drivers/virt/coco/efi_secret/Kconfig"
->>   source "drivers/virt/coco/sev-guest/Kconfig"
->> +source "drivers/virt/gunyah/Kconfig"
->>   endif
->> diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
->> new file mode 100644
->> index 000000000000..127156a678a6
->> --- /dev/null
->> +++ b/drivers/virt/gunyah/Kconfig
->> @@ -0,0 +1,12 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +
->> +config GUNYAH
-> 
-> Maybe config QCOM_GUNYAH?  Will this ever run on hardware
-> other than Qualcomm's?
-> 
-
-Yes, Gunyah can run on other hardware. We have support for QEMU and 
-other hardware support is anticipated.
-
->> +    tristate "Gunyah Virtualization drivers"
->> +    depends on ARM64
->> +    help
->> +      The Gunyah drivers are the helper interfaces that runs in a 
->> guest VM
-> 
-> s/runs/run/
-> 
->> +      such as basic inter-VM IPC and signalingmechanisms, and higher 
->> level
->> +      services such as memory/device sharing, IRQ sharing, and so on.
->> +
->> +      Say Y/M here to enable the drivers needed to interact in a Gunyah
->> +      virtual environment.
+>> +MODULE_DESCRIPTION("Gunyah Hypervisor Driver");
 >> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
->> index 824e20a11d27..2765d2b40198 100644
+>> index 2765d2b40198..166156f69df9 100644
 >> --- a/include/linux/gunyah.h
 >> +++ b/include/linux/gunyah.h
->> @@ -6,6 +6,7 @@
->>   #ifndef _GUNYAH_H
->>   #define _GUNYAH_H
->> +#include <linux/bitfield.h>
->>   #include <linux/types.h>
->>   #include <linux/errno.h>
->> @@ -71,4 +72,28 @@ static inline int gh_remap_error(int gh_error)
->>       }
->>   }
->> +#define GUNYAH_API_V1            1
->> +
->> +#define GH_API_INFO_API_VERSION_MASK    GENMASK_ULL(13, 0)
->> +#define GH_API_INFO_BIG_ENDIAN        BIT_ULL(14)
->> +#define GH_API_INFO_IS_64BIT        BIT_ULL(15)
->> +#define GH_API_INFO_VARIANT_MASK    GENMASK_ULL(63, 56)
->> +
+>> @@ -92,6 +92,12 @@ struct gh_hypercall_hyp_identify_resp {
+>>       u64 api_info;
+>>       u64 flags[3];
+>>   };
+>> +extern struct gh_hypercall_hyp_identify_resp gunyah_api;
 > 
-> How are the GH_IDENTIFY bits below used?  Are they encoded
-> in the three 64-bit flags fields in the response structure?
-> Does that mean only the first of those three is (currently)
-> used?
+> Must this global variable be exposed?  Can't you hide it--as
+> well as its interpretation--inside "gunyah.c"?
+>  >> +
+>> +static inline u16 gh_api_version(void)
+>> +{
+>> +    return FIELD_GET(GH_API_INFO_API_VERSION_MASK, gunyah_api.api_info);
+>> +}
+> 
+> If you don't make the above function inline, can you hide the
+> definition of gunyah_api?
 > 
 
-That's correct.
+This seems like a good idea to me. I'm thinking to have the following 
+functions:
 
->> +#define GH_IDENTIFY_PARTITION_CSPACE        BIT_ULL(0)
->> +#define GH_IDENTIFY_DOORBELL            BIT_ULL(1)
->> +#define GH_IDENTIFY_MSGQUEUE            BIT_ULL(2)
->> +#define GH_IDENTIFY_VIC                BIT_ULL(3)
->> +#define GH_IDENTIFY_VPM                BIT_ULL(4)
->> +#define GH_IDENTIFY_VCPU            BIT_ULL(5)
->> +#define GH_IDENTIFY_MEMEXTENT            BIT_ULL(6)
->> +#define GH_IDENTIFY_TRACE_CTRL            BIT_ULL(7)
->> +
->> +struct gh_hypercall_hyp_identify_resp {
->> +    u64 api_info;
->> +    u64 flags[3];
->> +};
-> 
-> Again I'll ask about endianness.  This is a response coming *from*
-> Gunyah.  Is it guaranteed to use the same byte order convention as
-> the running operating system (Linux) guest?
-> 
+enum gh_api_feature {
+	GH_API_FEATURE_DOORBELL,
+	GH_API_FEATURE_MSGQUEUE,
+	GH_API_FEATURE_VIC,
+	GH_API_FEATURE_VPM,
+	GH_API_FEATURE_VCPU,
+	GH_API_FEATURE_MEMEXTENT,
+	GH_API_FEATURE_TRACE_CTRL,
+};
 
-Yes, that guarantee is there.
+u16 gh_api_version(void);
+bool gh_api_has_feature(enum gh_api_feature feature);
 
 Thanks,
 Elliot
