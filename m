@@ -2,152 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E04664CAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 039B1664CB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbjAJTj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:39:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
+        id S231502AbjAJTm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbjAJTjU (ORCPT
+        with ESMTP id S231144AbjAJTmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:39:20 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B8759D08;
-        Tue, 10 Jan 2023 11:39:19 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id c85so6392108pfc.8;
-        Tue, 10 Jan 2023 11:39:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ytahM6TFxHypZxetqkfCVkmffXauXXQEJdKgL56HxD8=;
-        b=cLQVTlSTOs39qtQ0dnDnsMGOF2nWqvYy0tBAWrDodUfcO2hYGHXR6Rls1NWfsiWiaJ
-         xWBx2Pen6pk7Eyi1dmP1oPexDEe3bC5TvwmE60+XlzJp1FZBgTRmkxtfWI0vVBNS9bZr
-         5czwEFxIzO2N96iCcd65u7Nakz+jyX3vBVAXZSFX0zh3Q+c3dk55R8YZJm7QDwp3gv98
-         HFzvbWpC2xC2+is963zwUaHaxcVIKB6gze0MT8Xzs0QVcLRPTUdI/Buvukyr25nsZZ71
-         qnnwnH8D6xb6rp4eyI/0uUaqi3YEh6QHXrq1DjOmyEBD8JyHcApnVXWaDXl0+lT9LjBU
-         1AQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ytahM6TFxHypZxetqkfCVkmffXauXXQEJdKgL56HxD8=;
-        b=Fv5Yu2FOO0/7QhhAYmJIxAi9RkTfX4fH5hst8tXOABjVX025Jd6tesaBmYwkr+MRa1
-         6ujNiSRUwsRsaGRd6NGcorW82e15LSWk4PyLxcFrnQxpwLB5Uas7PwOAMcK6uxWACw8F
-         5Y1bBhCxDPR5WzUk05vRWhX5AYX8ggv8RZ342CXaKWxhDNsXZuc3bJ5iZBNl8SLzrTHB
-         3kQZPwOpI+td6xhf8GHG/m+GfFpmryZC5RaWQKH5wEHT8g3VGMKFp37qSJ5VskpiC4QV
-         9QMZdTnOgF0dJcSIaxfKtJXHR+icnWl34+JLw1k8dDg1vo0NrXjSi1hyIozOafuofETP
-         Zhng==
-X-Gm-Message-State: AFqh2koa3qpJDFluu2gLfjwIH//rf60L03NsQ99jSAKmbA/e61qGBtYs
-        /E9rN9/C9usXbxMrSHyDcJg=
-X-Google-Smtp-Source: AMrXdXt1oOoeLlqdvX3/g8ylTfFh+uA1SzU8WaZTxdBuoR5ZfNp6simBasPTzyxGkApbzqHk9W3CpQ==
-X-Received: by 2002:aa7:9683:0:b0:581:a8dc:8f94 with SMTP id f3-20020aa79683000000b00581a8dc8f94mr46012963pfk.27.1673379559143;
-        Tue, 10 Jan 2023 11:39:19 -0800 (PST)
-Received: from [192.168.0.128] ([98.97.37.136])
-        by smtp.googlemail.com with ESMTPSA id u5-20020a626005000000b005815017d348sm1757469pfb.179.2023.01.10.11.39.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 11:39:18 -0800 (PST)
-Message-ID: <ece5f6a7fad9eb55d0fbf97c6227571e887c2c33.camel@gmail.com>
-Subject: Re: [PATCH] rndis_wlan: Prevent buffer overflow in rndis_query_oid
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>, kvalo@kernel.org,
-        jussi.kivilinna@iki.fi, davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 10 Jan 2023 11:39:17 -0800
-In-Reply-To: <20230110173007.57110-1-szymon.heidrich@gmail.com>
-References: <20230110173007.57110-1-szymon.heidrich@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 10 Jan 2023 14:42:55 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AD2DEB3;
+        Tue, 10 Jan 2023 11:42:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5D939CE1915;
+        Tue, 10 Jan 2023 19:42:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67763C433D2;
+        Tue, 10 Jan 2023 19:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673379770;
+        bh=hGtaGIPAXue2SWqrVUKOJb5N9f2BU0xBHFp1IOuqWE8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ab5EgdBuKEEuwRCfz7B1iDNjIcdEu4Zn4ZrEGqSl41+Eo3pbVP6SDtNc8JptefZs/
+         RzMh9K9kshc+8Y7J5yoeBtrOltCq+gumFXAqwYuGsAwflbJ1N8ki/Scd9byMpNNDLI
+         ivuEhIGaCKP3W8AqqUXCdgvMysPb+PGqw/FrZg9gIxvlZMTlmHzJMIad3p+hLbUM8I
+         6lBAnRcGbzNOwauCoWHRX73YxMz1n8KuprKgmDRnD6d99p60pPCz1G1U2gDm8sCzyL
+         ILAi6zjfn7pllsLnCBLdAWoEQ9ukdXXAWLjUxJ2UmZxdRB7VzQez9HxvkiOzFYMQd6
+         X6BCYTT3qcULA==
+Date:   Tue, 10 Jan 2023 13:42:57 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH][next] drm/i915/guc: Replace zero-length arrays with
+ flexible-array members
+Message-ID: <Y72/wTm7eIIylTqf@work>
+References: <Y72WBTUmh9r1lvKN@work>
+ <Y728SwYZeThQzohb@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y728SwYZeThQzohb@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-10 at 18:30 +0100, Szymon Heidrich wrote:
-> Since resplen and respoffs are signed integers sufficiently
-> large values of unsigned int len and offset members of RNDIS
-> response will result in negative values of prior variables.
-> This may be utilized to bypass implemented security checks
-> to either extract memory contents by manipulating offset or
-> overflow the data buffer via memcpy by manipulating both
-> offset and len.
->=20
-> Additionally assure that sum of resplen and respoffs does not
-> overflow so buffer boundaries are kept.
->=20
-> Fixes: 80f8c5b434f9 ("rndis_wlan: copy only useful data from rndis_comman=
-d respond")
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-> ---
->  drivers/net/wireless/rndis_wlan.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/net/wireless/rndis_wlan.c b/drivers/net/wireless/rnd=
-is_wlan.c
-> index 82a7458e0..d7fc05328 100644
-> --- a/drivers/net/wireless/rndis_wlan.c
-> +++ b/drivers/net/wireless/rndis_wlan.c
-> @@ -697,7 +697,7 @@ static int rndis_query_oid(struct usbnet *dev, u32 oi=
-d, void *data, int *len)
->  		struct rndis_query_c	*get_c;
->  	} u;
->  	int ret, buflen;
-> -	int resplen, respoffs, copylen;
-> +	u32 resplen, respoffs, copylen;
+On Tue, Jan 10, 2023 at 02:28:11PM -0500, Rodrigo Vivi wrote:
+> 
+> On Tue, Jan 10, 2023 at 10:44:53AM -0600, Gustavo A. R. Silva wrote:
+> > Zero-length arrays are deprecated[1] and we are moving towards
+> > adopting C99 flexible-array members, instead. So, replace zero-length
+> > arrays in a couple of structures (three, actually) with flex-array
+> > members.
+> > 
+> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> > routines on memcpy() and help us make progress towards globally
+> > enabling -fstrict-flex-arrays=3 [2].
+> > 
+> > Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays [1]
+> > Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
+> > Link: https://github.com/KSPP/linux/issues/78
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> 
+> > ---
+> >  drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h b/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
+> > index 3624abfd22d1..9d589c28f40f 100644
+> > --- a/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
+> > +++ b/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
+> > @@ -73,7 +73,7 @@ struct guc_debug_capture_list_header {
+> >  
+> >  struct guc_debug_capture_list {
+> >  	struct guc_debug_capture_list_header header;
+> > -	struct guc_mmio_reg regs[0];
+> > +	struct guc_mmio_reg regs[];
+> >  } __packed;
+> >  
+> >  /**
+> > @@ -125,7 +125,7 @@ struct guc_state_capture_header_t {
+> >  
+> >  struct guc_state_capture_t {
+> >  	struct guc_state_capture_header_t header;
+> > -	struct guc_mmio_reg mmio_entries[0];
+> > +	struct guc_mmio_reg mmio_entries[];
+> >  } __packed;
+> >  
+> >  enum guc_capture_group_types {
+> > @@ -145,7 +145,7 @@ struct guc_state_capture_group_header_t {
+> >  /* this is the top level structure where an error-capture dump starts */
+> >  struct guc_state_capture_group_t {
+> >  	struct guc_state_capture_group_header_t grp_header;
+> > -	struct guc_state_capture_t capture_entries[0];
+> > +	struct guc_state_capture_t capture_entries[];
+> 
+> Please notice we are currently using sizeof(struct ...).
 
-Rather than a u32 why not just make it an size_t? The advantage is that
-is the native type for all the memory allocation and copying that takes
-place in the function so it would avoid having to cast between u32 and
-size_t.
+Yep; I noticed that. :)
 
-Also why not move buflen over to the unsigned integer category with the
-other values you stated were at risk of overflow?
+> Along with your proposed changes, shouldn't we also start using
+> the struct_size() which already take the flexible array into account?
 
-> =20
->  	buflen =3D *len + sizeof(*u.get);
->  	if (buflen < CONTROL_BUFFER_SIZE)
+Not necessarily. In recent times, we don't include the struct_size
+changes in the same patch as the flex-array transformation. That's
+usually a follow-up patch.
 
-For example, this line here is comparing buflen to a fixed constant. If
-we are concerned about overflows this could be triggering an integer
-overflow resulting in truncation assuming *len is close to the roll-
-over threshold.
-
-By converting to a size_t we would most likely end up blowing up on the
-kmalloc and instead returning an -ENOMEM.
-
-> @@ -740,7 +740,7 @@ static int rndis_query_oid(struct usbnet *dev, u32 oi=
-d, void *data, int *len)
-
-Also with any type change such as this I believe you would also need to
-update the netdev_dbg statement that displays respoffs and the like to
-account for the fact that you are now using an unsigned value.
-Otherwise I believe %d will display the value as a signed integer
-value.
-
->  			goto exit_unlock;
->  		}
-> =20
-> -		if ((resplen + respoffs) > buflen) {
-> +		if (resplen > (buflen - respoffs)) {
->  			/* Device would have returned more data if buffer would
->  			 * have been big enough. Copy just the bits that we got.
->  			 */
-
-Actually you should be able to simplfy this further. Assuming resplen,
-buflen and respoffs all the same type this entire if statement could be
-broken down into:
-		copylen =3D min(resplen, buflen - respoffs);
-
-
+--
+Gustavo
