@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512B4664C93
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7C6664C94
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjAJTeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:34:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S231852AbjAJTes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:34:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbjAJTem (ORCPT
+        with ESMTP id S231672AbjAJTem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 Jan 2023 14:34:42 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA05555660
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:34:39 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id z5so11827825wrt.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:34:39 -0800 (PST)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871B155857
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:34:41 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id co23so12893359wrb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:34:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hEimIxxtRk92ThJhA07pU4yUBVT2KnfnDiAUWU+EuHA=;
-        b=GTOm629YBnb7Gs/j+7JxLE+aXaGt2snAT0xa78h5nabBxPon2FR8SNFrk9z3z165iW
-         gvlUs48v7xXUH6aRy+GZbSfsSgt47DgHFhXHbFveziBQwNvRRT1/vwF0algtmNvpbcpi
-         0sgAW2SHGoa+ppaS34w1TR5CyL1L7Xrm2VKn0NchOnE/nNcNJ+RWtE+JjHWiiEVcbXw8
-         6d18tk+rFme+Fgkx7vIcp7oBHK9hqAMbFZmu1AWpTvQ9/F1Z3FmlHh7tgmRoCgS0/bwc
-         ifBMV1UjORgTup9HNyUXG626Qz/+8hjyPbAd3fHoX8rX5bRz2VHO8Cscqx+qy7PJri5K
-         ymmA==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wQFwvZLb3JKcBMwC1kA+HNwWIggAXnvVftqTF3gT/sk=;
+        b=jWv6LNzEqD8dL3dqbiODzZSTw1Q9LP7SQf2YbtGfdTDv6M1pzPRUdBC2HyxURoOXk9
+         Hpa7gaf9qNDHMU0lt6WBVBfEVN2YBIBHOmOWsrwgM/GAR+xklslRG9lEXb1a+zn8U2/l
+         Jkw4eOiO1HsbpBnA8bLjvEjQZFqP6HLBJVlndlZjF2koCwERfOjLc/D6J75oatQWqN5u
+         QtgJrXdhGR9YznH/LKZGJEaop/Bq649BM04n2fsP09Wqbv5B5p7QYbPG95C53NVu/o7I
+         Yr1zu3fvoyJSNT5BKWgn48/GqLIhV1KVf0jB+eQ0I6gNYDfXcs7PbFK5qay+/qQxgYQW
+         lMwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hEimIxxtRk92ThJhA07pU4yUBVT2KnfnDiAUWU+EuHA=;
-        b=kzHsbx3YNAsKbpWWiHJinivnkfeIJ46ZmxZZmb/8QbtW7/9qDJfEmMMVIuBx3Ucf3V
-         mI8yYwZlrvlKO8FECv6CjO+CShu67X4yTvTAE4pqonCT5S4EIrJTZfnBu/P9zChhfdhu
-         Op2pBhX2gw1JIHPt1QugwgjF+WSjA+5iyduScxKEaiF9UCgnvcaMpjty0H7GiW7DCzOV
-         4jX+cskmXNtEzIr8k8T6XmhmEgGXDbVqBjqZbZoib+sP0NLh8Bvu1OliQoVKbao5rUIo
-         5MC2p4EwT1xRX+fUOncxy914+O1MBy0IXhLlUnJAuHX1+VS2ZAQpuqQV9a42yljzOebK
-         A9zw==
-X-Gm-Message-State: AFqh2krNdNtyLxDuBy+PvrxOPC4Mxu7WyEMnD+pO6AAVIju5mIeWxTTt
-        MFi0P/gHE5U5yP20cLFdxQHkhQJ+rBMT33Yf
-X-Google-Smtp-Source: AMrXdXuyxYuOGzdwjc8zGLX3TkHkghlrj7tB06afTv1wsfTAUqfhF4bW2zvj6P9d29tI0feyRPwOdg==
-X-Received: by 2002:a5d:5405:0:b0:284:8a24:59e6 with SMTP id g5-20020a5d5405000000b002848a2459e6mr31298207wrv.3.1673379278558;
-        Tue, 10 Jan 2023 11:34:38 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wQFwvZLb3JKcBMwC1kA+HNwWIggAXnvVftqTF3gT/sk=;
+        b=18YsAvRy0LlEVG5cr9CR2EJkn9PQnSpgwnesMwzRsS6Mdn8QlmJ76hv5bX8utPlW2Q
+         iMVpm3Bau0MeTBz/nLCsrWtn9OBe1K+642GAhIer/H8vV8xzzbafdiF9I5qVHlccaeee
+         XkrOMW2+//5tne3Zgy4wqQxha6GJvg61+iSKPqS4w+bGxMcvA07J+WodvV+qKUI/L1nQ
+         qHNiPyxP560re0U0DOFR9rd7MfVe9V7nqAeySoOL8ri++VX3p2IZaoMVAmIc5FfYXEtm
+         jxWMUFjZc9sXBkitoevTCmeNHl1Fw8o4WJ3g2AtghFlkZp0hXr/PwU8ASPTVG9DfRY8/
+         ChIg==
+X-Gm-Message-State: AFqh2kqSVDNLh/+zFbYZ7EWX18VIaB5rj4s3O5ttzm5gWPem1nZuJOCe
+        VQ7fa4Zq5x68/Ruk/a5Ek49KkyQAKsysvQLq
+X-Google-Smtp-Source: AMrXdXudo2op9o2PQ0tPW7qQ/24be1foK2g8YUuiqO7i5c1+L/Fa+cXdA+sYCunBnPZJA3ocDVxhxg==
+X-Received: by 2002:a5d:514c:0:b0:2bc:7ec3:8b2 with SMTP id u12-20020a5d514c000000b002bc7ec308b2mr4627175wrt.68.1673379280006;
+        Tue, 10 Jan 2023 11:34:40 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id f3-20020adfdb43000000b00236883f2f5csm12222271wrj.94.2023.01.10.11.34.37
+        by smtp.gmail.com with ESMTPSA id f3-20020adfdb43000000b00236883f2f5csm12222271wrj.94.2023.01.10.11.34.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 11:34:38 -0800 (PST)
+        Tue, 10 Jan 2023 11:34:39 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH 0/2] arm64: defconfig: enable modules for Qualcomm SM8550-MTP display
-Date:   Tue, 10 Jan 2023 20:34:33 +0100
-Message-Id: <20230110-topic-sm8550-upstream-display-defconfig-v1-0-9941c8083f10@linaro.org>
+Date:   Tue, 10 Jan 2023 20:34:34 +0100
+Subject: [PATCH 2/2] arm64: defconfig: enable Visionox VTDR6130 DSI Panel driver
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMm9vWMC/x2NwQqDMBBEf0X23IXEEpD+SukhJhtdiEnIqrSI/
- 97onObN4c0BQpVJ4NUdUGln4Zwa6EcHbrZpImTfGHrVP5XWCtdc2KEsgzEKtyJrJbugZynR/tBT
- cDkFnq4W6IoyGppttEI4Vpvc3Hxpi7GNpVLg733//pznH7Meo7yOAAAA
+Message-Id: <20230110-topic-sm8550-upstream-display-defconfig-v1-2-9941c8083f10@linaro.org>
+References: =?utf-8?q?=3C20230110-topic-sm8550-upstream-display-defconfig-v1?=
+ =?utf-8?q?-0-9941c8083f10=40linaro=2Eorg=3E?=
+In-Reply-To: =?utf-8?q?=3C20230110-topic-sm8550-upstream-display-defconfig-v?=
+ =?utf-8?q?1-0-9941c8083f10=40linaro=2Eorg=3E?=
 To:     Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org,
@@ -67,34 +69,33 @@ Cc:     linux-arm-msm@vger.kernel.org,
 X-Mailer: b4 0.11.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the SM8550 DISPCC and Visionox VTDR6130 panel drivers as module
-to enable display on the SM8550 MTP device.
+Build the Visionox VTDR6130 DSI Panel driver as module
 
-To: Bjorn Andersson <andersson@kernel.org>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-
 ---
-Neil Armstrong (2):
-      arm64: defconfig: enable SM8550 DISPCC clock driver
-      arm64: defconfig: enable Visionox VTDR6130 DSI Panel driver
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20230110-topic-sm8550-upstream-display-defconfig-deffeeeee051
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 004c379eced7..a538a0ebb0f6 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -765,6 +765,7 @@ CONFIG_DRM_PANEL_MANTIX_MLAF057WE51=m
+ CONFIG_DRM_PANEL_RAYDIUM_RM67191=m
+ CONFIG_DRM_PANEL_SITRONIX_ST7703=m
+ CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA=m
++CONFIG_DRM_PANEL_VISIONOX_VTDR6130=m
+ CONFIG_DRM_LONTIUM_LT8912B=m
+ CONFIG_DRM_LONTIUM_LT9611=m
+ CONFIG_DRM_LONTIUM_LT9611UXC=m
 
-Best regards,
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+2.34.1
