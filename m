@@ -2,227 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4046D663F5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0419F663F62
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbjAJLko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 06:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S231441AbjAJLmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 06:42:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjAJLkf (ORCPT
+        with ESMTP id S229765AbjAJLl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 06:40:35 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91D615FC6;
-        Tue, 10 Jan 2023 03:40:34 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id j17so17962964lfr.3;
-        Tue, 10 Jan 2023 03:40:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k8qIHMNO2s1UBLosBalnkXRDkilmbPNHsObMEKK0n7I=;
-        b=bg0lxmUdGEI7jbzLJkVcT7QTNyzIGfCKVN9kCtEWnYtmWtxXDIJr+SGpqR+Y3oXyOh
-         o52zHSRr3wl1Mm2VzjX2viW390JajcGoIMyebxQjpG79RGS9ir2j2W898mtqorEQtuuo
-         9CL0C07wCX5qC6yMZpO+qA/Wgmj6XDDw0aaEJHZA9hK3x6NCGPEH11TMMp+pv9+kSYD8
-         /IqIW7dpa+lavlm/CJ88qV1Ggzrrvx9lcHVpC/6/TjISZVwVWVAhKyne5bRs4rIlQ0bm
-         O0P3LPKFXqNy/SrGeEyurCSsgQbvDwA6pMYr4EBvhDUPWmabBgkLL665O7U6hImH9KU2
-         d93A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k8qIHMNO2s1UBLosBalnkXRDkilmbPNHsObMEKK0n7I=;
-        b=QLJ3eD7+SEzGj2gExzXwd5xKw8+t4EdIwFt4b75UCUfn1LK5ZXCflUgYKBeC1RRbiQ
-         m8FGFBbY6MuPXvJXOYrmmK+z5XkW+sxceUUnTtJettr2bwqAfBxO9YIQ4YSlvf/Y0BVd
-         Q2JRe5J4/G6GbLbB24yuPVfzzXTBsQO37ddVy+erYx+iI5eP7C7svkXk+TWBN/n9aV3V
-         9F4wj4an48hVFFRGERkRVTyel4WUuLeKgQoHlJMGRfPmoa4PSpLENwrx2q9nmG8EwXzC
-         tTZk97TRFOiPTiSCPcvF8wzvuyB7nzbfm0E8ro8Ybs6Ob0qRleFj6ddujbMTAnyy0q25
-         LW+Q==
-X-Gm-Message-State: AFqh2kq6jEcy3aDDn3P+hjZDpE0fN6PLBzXkZzaWvOUwCPv84ECzOam7
-        HrZc900LmZeRRwheGNQtzXU=
-X-Google-Smtp-Source: AMrXdXtuH+xA3IMA2Oj1CQEJ3XtMeuSO3tj6Mv1uTxbMVCwbTvZ0a/Xo0G7JeTnVjGBAj4jFCHRcQw==
-X-Received: by 2002:ac2:5bc5:0:b0:4ad:5fbb:a594 with SMTP id u5-20020ac25bc5000000b004ad5fbba594mr19772858lfn.58.1673350832790;
-        Tue, 10 Jan 2023 03:40:32 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id z3-20020a0565120c0300b004cb03999979sm2139849lfu.40.2023.01.10.03.40.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 03:40:32 -0800 (PST)
-Date:   Tue, 10 Jan 2023 14:40:30 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        jude.onyenegecha@sifive.com, ben.dooks@sifive.com,
-        jeegar.lakhani@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 06/15] spi: dw: Introduce dual/quad/octal spi
-Message-ID: <20230110114030.hz3hkou5owxaeopc@mobilestation>
-References: <20221212180732.79167-1-sudip.mukherjee@sifive.com>
- <20221212180732.79167-7-sudip.mukherjee@sifive.com>
+        Tue, 10 Jan 2023 06:41:58 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D734880D;
+        Tue, 10 Jan 2023 03:41:56 -0800 (PST)
+Date:   Tue, 10 Jan 2023 11:41:53 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673350914;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sedPqbI5HVM+u7FgQ4xK9nbtiPEU0rs7b5ZXfBwhtog=;
+        b=xYVZTiT4f6PqGLPqqrejnLR1jfecWsp7VncqysTjefAbkoAIpD3sQt7Ro6WcoFroALzVKx
+        0TFbHJ96uMDEZ0pPwJnVg/9Sg5ZM/6UrBC7Py52YzXbZ6qO37NJAlJENh2H7IgSBKJ85YF
+        zDaIyqpnG5j0No+rc7xj7EezJum122IauXOsOHIL8AFFB94BCYUac4t2qG+Vkhjh4RUqZv
+        hwOBmjEB+8beFu7jTV1CdbgH7bbXklnVfaGxMQpWC1v+G0ZPQtidxP9JHyZhoD4WlJBKsp
+        X5/oQEqTQSYRwOxoWHk8SYogdfmt84oOr/b8M1XFYDrEVAaEDFEpuBXAk6ogaw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673350914;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sedPqbI5HVM+u7FgQ4xK9nbtiPEU0rs7b5ZXfBwhtog=;
+        b=xHhtfhY+j8PnZMXkT9/nKQk9d/89mfEwBVGCKUDJgCEczh9T84SEgYGxBUL6TA9oWE5Sg6
+        WqOi9nY3BUVY3mBA==
+From:   "tip-bot2 for Zeng Heng" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/boot] x86/boot/compressed: Register dummy NMI handler in
+ EFI boot loader, to avoid kdump crashes
+Cc:     Zeng Heng <zengheng4@huawei.com>, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230110102745.2514694-1-zengheng4@huawei.com>
+References: <20230110102745.2514694-1-zengheng4@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221212180732.79167-7-sudip.mukherjee@sifive.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <167335091340.4906.11748242170478099845.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 06:07:23PM +0000, Sudip Mukherjee wrote:
-> If the spi transfer is using dual/quad/octal spi mode, then we need to
-> update the SPI_CTRLR0 register. The SPI_CTRLR0 register will be updated
-> in dw_spi_update_config() via the values in dw_spi_cfg.
-> 
-> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
-> ---
-> 
-> Note: DW_SPI_SPI_CTRLR0_INST_L_INST_L16 will not work yet as
-> spi_mem_default_supports_op() checks for op->cmd.nbytes != 1.
-> 
->  drivers/spi/spi-dw-core.c | 46 +++++++++++++++++++++++++++++++++++++++
->  drivers/spi/spi-dw.h      |  9 ++++++++
->  2 files changed, 55 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index 89438ae2df17d..06169aa3f37bf 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -836,10 +836,56 @@ static int dw_spi_exec_enh_mem_op(struct spi_mem *mem, const struct spi_mem_op *
->  {
->  	struct spi_controller *ctlr = mem->spi->controller;
->  	struct dw_spi *dws = spi_controller_get_devdata(ctlr);
-> +	struct dw_spi_cfg cfg;
-> +
+The following commit has been merged into the x86/boot branch of tip:
 
-> +	switch (op->data.buswidth) {
-> +	case 2:
-> +		cfg.spi_frf = DW_SPI_CTRLR0_SPI_FRF_DUAL_SPI;
-> +		break;
-> +	case 4:
-> +		cfg.spi_frf = DW_SPI_CTRLR0_SPI_FRF_QUAD_SPI;
-> +		break;
-> +	case 8:
-> +		cfg.spi_frf = DW_SPI_CTRLR0_SPI_FRF_OCT_SPI;
-> +		break;
-> +	default:
-> +		return dw_spi_exec_mem_op(mem, op);
+Commit-ID:     f919e902ac2371ec46b5582a42c50544dcb097f6
+Gitweb:        https://git.kernel.org/tip/f919e902ac2371ec46b5582a42c50544dcb097f6
+Author:        Zeng Heng <zengheng4@huawei.com>
+AuthorDate:    Tue, 10 Jan 2023 18:27:45 +08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Tue, 10 Jan 2023 11:56:55 +01:00
 
-case 1:
-	return dw_spi_exec_mem_op(mem, op);
-case 2:
-	cfg.enh_frf = DW_SPI_CTRLR0_SPI_FRF_DUAL_SPI;
-	break;
-...
-default:
-	return -EINVAL;
+x86/boot/compressed: Register dummy NMI handler in EFI boot loader, to avoid kdump crashes
 
-> +	}
->  
->  	/* Collect cmd and addr into a single buffer */
->  	dw_spi_init_enh_mem_buf(dws, op);
->  
-> +	cfg.dfs = 8;
-> +	cfg.freq = clamp(mem->spi->max_speed_hz, 0U, dws->max_mem_freq);
-> +	cfg.ndf = op->data.nbytes;
-> +	if (op->data.dir == SPI_MEM_DATA_IN)
-> +		cfg.tmode = DW_SPI_CTRLR0_TMOD_RO;
-> +	else
-> +		cfg.tmode = DW_SPI_CTRLR0_TMOD_TO;
+If kdump is enabled, when using mce_inject to inject errors, EFI
+boot loader would decompressed & load second kernel for saving
+vmcore file.
 
-Newline, please.
+For normal errors that is fine. However, in MCEs cases, the panic
+CPU that firstly enters into mce_panic(), is running within nmi
+interrupt context, and the processor blocks delivery of subsequent
+NMIs until the next execution of the IRET instruction.
 
-> +	if (op->data.buswidth == op->addr.buswidth &&
-> +	    op->data.buswidth == op->cmd.buswidth)
-> +		cfg.trans_t = DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT2;
-> +	else if (op->data.buswidth == op->addr.buswidth)
-> +		cfg.trans_t = DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT1;
-> +	else
-> +		cfg.trans_t = DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT0;
-> +
+When the panic CPU takes long time in the panic processing route,
+and causes the watchdog timeout, at this moment, the processor
+already receives NMI interrupt in the background.
 
-> +	cfg.addr_l = clamp(op->addr.nbytes * 2, 0, 0xf);
+In the following processure, panic CPU would run into EFI loader
+and raise page fault exception (like visiting `vidmem` variable
+when attempts to call debug_putstr()), the CPU would execute IRET
+instruction when exits from page fault handler.
 
-First the address length should be checked in the
-spi_controller_mem_ops.supports_op method. Thus the clamping procedure
-would be redundant. Second instead of using the multiplication
-operator I would suggest to have the bitwise left-shift op utilized
-here, (cfg.addr_l = op->addr.nbytes << 2). This shall look a bit more
-coherent.
+But the loader never registers handler for NMI vector in IDT,
+lack of vector handler would cause reboot, which interrupts
+kdump processure and fails to save vmcore file.
 
+Here is steps to reproduce the above issue (Have a certain probability):
 
-> +	if (op->cmd.nbytes > 1)
-> +		cfg.inst_l = DW_SPI_SPI_CTRLR0_INST_L_INST_L16;
+	1. # cat uncorrected
+	CPU 1 BANK 4
+	STATUS uncorrected 0xc0
+	MCGSTATUS  EIPV MCIP
+	ADDR 0x1234
+	RIP 0xdeadbabe
+	RAISINGCPU 0
+	MCGCAP SER CMCI TES 0x6
+	2. # modprobe mce_inject
+	3. # mce-inject uncorrected
 
-No. Firstly INST_L16 means 2-bytes length. Using greater-than op here
-is incorrect. Secondly the command part length should be
-checked in the spi_controller_mem_ops.supports_op callback.
+For increasing probability of reproduction of this issue, there is two ways of
+modification to select:
 
-> +	else if (op->cmd.nbytes == 1)
-> +		cfg.inst_l = DW_SPI_SPI_CTRLR0_INST_L_INST_L8;
-> +	else
-> +		cfg.inst_l = DW_SPI_SPI_CTRLR0_INST_L_INST_L0;
-> +
+  1. modify the threshold value of watchdog;
+  2. add delays before panic() in mce_panic() and modify PANIC_TIMEOUT macro;
 
-> +	cfg.wait_c = (op->dummy.nbytes * (BITS_PER_BYTE / op->dummy.buswidth));
+Fixes: ca0e22d4f011 ("x86/boot/compressed/64: Always switch to own page table")
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20230110102745.2514694-1-zengheng4@huawei.com
+---
+ arch/x86/boot/compressed/ident_map_64.c    | 5 +++++
+ arch/x86/boot/compressed/idt_64.c          | 1 +
+ arch/x86/boot/compressed/idt_handlers_64.S | 1 +
+ arch/x86/boot/compressed/misc.h            | 1 +
+ 4 files changed, 8 insertions(+)
 
-Hm, what if buswidth is zero?
-
-> +
-> +	dw_spi_enable_chip(dws, 0);
-> +
-> +	dw_spi_update_config(dws, mem->spi, &cfg);
-> +
-> +	dw_spi_enable_chip(dws, 1);
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> index 327d037bdb10e..494b830ad1026 100644
-> --- a/drivers/spi/spi-dw.h
-> +++ b/drivers/spi/spi-dw.h
-> @@ -101,6 +101,9 @@
->  #define DW_HSSI_CTRLR0_SPI_FRF_MASK		GENMASK(23, 22)
->  #define DW_PSSI_CTRLR0_SPI_FRF_MASK		GENMASK(22, 21)
-
->  #define DW_SPI_CTRLR0_SPI_FRF_STD_SPI		0x0
-> +#define DW_SPI_CTRLR0_SPI_FRF_DUAL_SPI		0x1
-> +#define DW_SPI_CTRLR0_SPI_FRF_QUAD_SPI		0x2
-> +#define DW_SPI_CTRLR0_SPI_FRF_OCT_SPI		0x3
-
-Please replace SPI_FRF with ENH_FRF and drop _SPI suffix from the
-macros.
-
->  
->  /* Bit fields in CTRLR1 */
->  #define DW_SPI_NDF_MASK				GENMASK(15, 0)
-> @@ -132,7 +135,13 @@
->  #define DW_SPI_SPI_CTRLR0_CLK_STRETCH_EN	BIT(30)
->  #define DW_SPI_SPI_CTRLR0_WAIT_CYCLE_MASK	GENMASK(15, 11)
->  #define DW_SPI_SPI_CTRLR0_INST_L_MASK		GENMASK(9, 8)
-
-> +#define DW_SPI_SPI_CTRLR0_INST_L_INST_L0	0x0
-> +#define DW_SPI_SPI_CTRLR0_INST_L_INST_L8	0x2
-> +#define DW_SPI_SPI_CTRLR0_INST_L_INST_L16	0x3
->  #define DW_SPI_SPI_CTRLR0_ADDR_L_MASK		GENMASK(5, 2)
-> +#define DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT0	0x0
-> +#define DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT1	0x1
-> +#define DW_SPI_SPI_CTRLR0_TRANS_TYPE_TT2	0x2
-
-Please replace SPI_CTRLR0 with ENH_CTRLR0.
-
--Serge(y)
-
->  
->  /* Mem/DMA operations helpers */
->  #define DW_SPI_WAIT_RETRIES			5
-> -- 
-> 2.30.2
-> 
+diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
+index d4a314c..6893127 100644
+--- a/arch/x86/boot/compressed/ident_map_64.c
++++ b/arch/x86/boot/compressed/ident_map_64.c
+@@ -379,3 +379,8 @@ void do_boot_page_fault(struct pt_regs *regs, unsigned long error_code)
+ 	 */
+ 	kernel_add_identity_map(address, end);
+ }
++
++void do_boot_nmi_fault(struct pt_regs *regs, unsigned long error_code)
++{
++	/* ignore */
++}
+diff --git a/arch/x86/boot/compressed/idt_64.c b/arch/x86/boot/compressed/idt_64.c
+index 6debb81..b169c97 100644
+--- a/arch/x86/boot/compressed/idt_64.c
++++ b/arch/x86/boot/compressed/idt_64.c
+@@ -60,6 +60,7 @@ void load_stage2_idt(void)
+ {
+ 	boot_idt_desc.address = (unsigned long)boot_idt;
+ 
++	set_idt_entry(X86_TRAP_NMI, boot_nmi_fault);
+ 	set_idt_entry(X86_TRAP_PF, boot_page_fault);
+ 
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+diff --git a/arch/x86/boot/compressed/idt_handlers_64.S b/arch/x86/boot/compressed/idt_handlers_64.S
+index 22890e1..2aef8e1 100644
+--- a/arch/x86/boot/compressed/idt_handlers_64.S
++++ b/arch/x86/boot/compressed/idt_handlers_64.S
+@@ -69,6 +69,7 @@ SYM_FUNC_END(\name)
+ 	.text
+ 	.code64
+ 
++EXCEPTION_HANDLER	boot_nmi_fault do_boot_nmi_fault error_code=0
+ EXCEPTION_HANDLER	boot_page_fault do_boot_page_fault error_code=1
+ 
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+index 62208ec..d89d3f8 100644
+--- a/arch/x86/boot/compressed/misc.h
++++ b/arch/x86/boot/compressed/misc.h
+@@ -187,6 +187,7 @@ static inline void cleanup_exception_handling(void) { }
+ #endif
+ 
+ /* IDT Entry Points */
++void boot_nmi_fault(void);
+ void boot_page_fault(void);
+ void boot_stage1_vc(void);
+ void boot_stage2_vc(void);
