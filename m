@@ -2,96 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA2A66478E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B882664797
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234564AbjAJRk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S233222AbjAJRmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 12:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbjAJRkT (ORCPT
+        with ESMTP id S234739AbjAJRmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:40:19 -0500
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5438950F68;
-        Tue, 10 Jan 2023 09:40:17 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id ss4so23360950ejb.11;
-        Tue, 10 Jan 2023 09:40:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m+QsUiSxK3PLQXBjHmmKYMGPtd8ek6iATd0MJHA3O+w=;
-        b=L5VZ0uWZosvaS4VIW4JEoSYgva5ei5PNNjSlbKWiz2O2NiRvCj4J8lJbWR5c5e3IGl
-         Jo6tlCAI/m2bxTszvWZWSADiMj9anGwh9ODgxaOhTGHXXWGfYnwwlzFvxbmlBSrHBbGE
-         v/MnNd5SlZnhUImg2Vcgep8VykYQzVbF3t+CkR0/tv8ApR+oyiESzaLgej9ZXk15mBq5
-         QnW3bn2AwcpcC+3vDYBBDXWJIqpZB8RHh9Jqb1K8jslN7IkeXk0J+v3HSLpG4mbhiq1W
-         lX07WKf71nbX69ESb1dLJ/0eEWnkvG3d67GQMZro3wDsOCGTSdkhGVk0lXMl0RhNkmij
-         9nOw==
-X-Gm-Message-State: AFqh2kqlz5vtvIYYNn70NS4/+jO0v5eJuM58Ob8mA6XnMCO+juQ0f5As
-        8zBqa/rurCJviB3v/7F5g6Ktb3GekA1KRBhK0Uo=
-X-Google-Smtp-Source: AMrXdXtqBaV/vMqS7oyXPfqzceQpEq4DKugP8ej8FBQsfaZhqFW5vaiELvY6lEgz3Sv6YxYml+sqjI7k8TOXhqelCeU=
-X-Received: by 2002:a17:907:6d2a:b0:7c0:efba:b39c with SMTP id
- sa42-20020a1709076d2a00b007c0efbab39cmr7548518ejc.209.1673372416425; Tue, 10
- Jan 2023 09:40:16 -0800 (PST)
+        Tue, 10 Jan 2023 12:42:06 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B325C92F;
+        Tue, 10 Jan 2023 09:42:05 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DA6351EC05F1;
+        Tue, 10 Jan 2023 18:42:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1673372523;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ABuTDHg0NguCKXd89inqacuZFbF9lzPecsSSp6y9P8E=;
+        b=bAgUd+kQQH7GLQIcI9aazPXDqkFiXb8e6L10PJERhxThj4+0701Ezr9uFSa6wlSSgOQh4g
+        H1V10KGNPawbshpk5shqI+ZzpDT/nnu8pKTqHzvmUaSzF7RHNJrg0R6sOU7fy78jGs8RxD
+        vqjwD7gIq3yEvjByqluPWtsHde9Gan4=
+Date:   Tue, 10 Jan 2023 18:41:58 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Alexey Kardashevskiy <aik@amd.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        Venu Busireddy <venu.busireddy@oracle.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jan Kara <jack@suse.cz>, Ingo Molnar <mingo@redhat.com>,
+        Huang Rui <ray.huang@amd.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH kernel v2 0/3] KVM: SEV: Enable AMD SEV-ES DebugSwap
+Message-ID: <Y72jZsukhCC/b+6A@zn.tnic>
+References: <20221209043804.942352-1-aik@amd.com>
 MIME-Version: 1.0
-References: <20221205002804.21225-1-rick.p.edgecombe@intel.com>
- <CAJZ5v0iZ8QdCMca1F+z2NJ8+a-jUkGMSNp2KRovCB-aMjHF7qg@mail.gmail.com>
- <c4c95945df72fda7b7d6f333a4aea7e19d7e684c.camel@intel.com>
- <CAJZ5v0j6qd930BKWWf-e+_Vod0Wv16LZChCOa0yf0_uLC=UMyw@mail.gmail.com> <8f73fdf9d1c9b94cbe1587bf8f5271ca65f17caa.camel@intel.com>
-In-Reply-To: <8f73fdf9d1c9b94cbe1587bf8f5271ca65f17caa.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Jan 2023 18:40:05 +0100
-Message-ID: <CAJZ5v0i6cxGD+V6G+q-Y_Lp-ov51_zmkZr8ZGpCtqWV-e=BsLg@mail.gmail.com>
-Subject: Re: [PATCH] x86/hibernate: Use fixmap for saving unmapped pages
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "Brown, Len" <len.brown@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221209043804.942352-1-aik@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 6:37 PM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
->
-> On Tue, 2023-01-03 at 18:55 +0100, Rafael J. Wysocki wrote:
-> > > > OK, so I don't feel like it is 6.2 material at this point.
-> > > >
-> > > > Please resend it when 6.2-rc1 is out so it gets some more
-> > > > significant
-> > > > linux-next coverage before going into the mainline.
-> > > >
-> > > > Thanks!
-> > >
-> > > Hi,
-> > >
-> > > This still applies fine on both tip and Linus' tree. Is it a good
-> > > time?
-> >
-> > Sure.
-> >
-> > Thanks!
->
-> I didn't see this picked up anywhere. Not sure if I'm missing it, or
-> this exchange was just ambiguous. I thought you could just apply this
-> send of it. Do you need anything from me?
+On Fri, Dec 09, 2022 at 03:38:01PM +1100, Alexey Kardashevskiy wrote:
+> This is to use another AMD SEV-ES hardware assisted register swap,
+> more detail in 2/3. The patches are fairly independend but required in
+> this order.
+> 
+> This is based on sha1 0d1409e4ff08 and requires something like this
+> for X86_FEATURE_NO_NESTED_DATA_BP:
+> https://lkml.org/lkml/2022/11/29/1229
 
-Technically I could, but it takes less time if I get a fresh copy of it.
+Please use
+
+lore.kernel.org/r/<Message-ID>
+
+when you want to refer to a mail on a public ML.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
