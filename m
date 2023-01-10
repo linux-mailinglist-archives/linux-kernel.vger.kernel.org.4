@@ -2,89 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32AC6647C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2625C6647C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235092AbjAJRzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:55:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S235427AbjAJRzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 12:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235386AbjAJRyi (ORCPT
+        with ESMTP id S234218AbjAJRyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:54:38 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0FE052743
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:53:55 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 30AHrloK007526;
-        Tue, 10 Jan 2023 18:53:47 +0100
-Date:   Tue, 10 Jan 2023 18:53:47 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH 0/4] nolibc: add support for the s390 platform
-Message-ID: <20230110175347.GC4649@1wt.eu>
-References: <20230109080910.26594-1-w@1wt.eu>
- <20230109191534.GU4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230110073242.GB3229@1wt.eu>
- <20230110092517.GA4626@1wt.eu>
- <20230110145334.GL4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230110161249.GB4649@1wt.eu>
- <20230110163210.GP4028633@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 10 Jan 2023 12:54:43 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3937E59D20;
+        Tue, 10 Jan 2023 09:54:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1673373257; x=1704909257;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=7AXhqOp1gtecOre6oRBlKXRLRxGw3ArZm7GFJzcZVEk=;
+  b=Fcx6xxCDO20S62posT7jSSj7cRKBl1Ks/+o6aHk99eQXzyi+/vkgz3Dr
+   KZvszjHAlgXVPA+9/KxT4qYjKpG+ZufXqa2QL3wXLpsN40nCYa3tiuKji
+   KMxmATm7lAleoGf1pMrtYiQA7gyzX4YRi1E+u7VXfPdSrGEJflV740nFv
+   Y=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 Jan 2023 09:54:15 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 09:54:15 -0800
+Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 10 Jan
+ 2023 09:54:14 -0800
+Message-ID: <26c0895b-9d69-d355-5b55-19e6ea69bae3@quicinc.com>
+Date:   Tue, 10 Jan 2023 09:54:14 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230110163210.GP4028633@paulmck-ThinkPad-P17-Gen-1>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Elliot Berman <quic_eberman@quicinc.com>
+Subject: Re: [PATCH v8 00/28] Drivers for gunyah hypervisor
+To:     Alex Elder <elder@linaro.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-acpi@vger.kernel.org>
+References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
+ <83b6dbc2-01da-04b6-64ec-9a69fd5c4c89@linaro.org>
+Content-Language: en-US
+In-Reply-To: <83b6dbc2-01da-04b6-64ec-9a69fd5c4c89@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 08:32:10AM -0800, Paul E. McKenney wrote:
-> On Tue, Jan 10, 2023 at 05:12:49PM +0100, Willy Tarreau wrote:
-> > On Tue, Jan 10, 2023 at 06:53:34AM -0800, Paul E. McKenney wrote:
-> > > Here is one of them, based on both the fixes and Sven's s390 support.
-> > > Please let me know if you need any other combination.
-> > 
-> > Thanks, here's the problem:
-> > 
-> > > 0 getpid = 1                             [OK]
-> > > 1 getppid = 0                            [OK]
-> > > 3 gettid = 1                             [OK]
-> > > 5 getpgid_self = 0                       [OK]
-> > > 6 getpgid_bad = -1 ESRCH                 [OK]
-> > > 7 kill_0[    1.940442] tsc: Refined TSC clocksource calibration: 2399.981 MHz
-> > > [    1.942334] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x229825a5278, max_idle_ns: 440795306804 ns
-> > >  = 0                             [OK]
-> > > 8 kill_CONT = 0           [    1.944987] clocksource: Switched to clocksource tsc
-> > >                [OK]
-> > > 9 kill_BADPID = -1 ESRCH                 [OK]
-> > (...)
-> > 
-> > It's clear that "grep -c ^[0-9].*OK" will not count all of them (2 are
-> > indeed missing).
-> > 
-> > We could probably start with "quiet" but that would be against the
-> > principle of using this to troubleshoot issues. I think we just stick
-> > to the current search of "FAIL" and that as long as a success is
-> > reported and the number of successes is within the expected range
-> > that could be OK. At least I guess :-/
+
+
+On 1/9/2023 1:34 PM, Alex Elder wrote:
+> On 12/19/22 4:58 PM, Elliot Berman wrote:
+>> Gunyah is a Type-1 hypervisor independent of any
+>> high-level OS kernel, and runs in a higher CPU privilege level. It does
+>> not depend on any lower-privileged OS kernel/code for its core
+>> functionality. This increases its security and can support a much smaller
+>> trusted computing base than a Type-2 hypervisor.
+>>
+>> Gunyah is an open source hypervisor. The source repo is available at
+>> https://github.com/quic/gunyah-hypervisor.
 > 
-> Huh.  Would it make sense to delay the start of the nolibc testing by a
-> few seconds in order to avoid this sort of thing?  Or would that cause
-> other problems?
+> Can you provide any history about the hypervisor code itself?
+> Was it publicly reviewed?  Has it been reviewed by anyone in
+> the Linux kernel community, who might have some useful input
+> on it?
+> 
 
-That would be quite annoying. Delaying is never long enough for some
-issues, too long for the majority of cases where there is no issue. I'd
-suggest that we just rely on the fail count for now (as it is) and that
-will allow us to collect a larger variety of discrepancies and probably
-figure a better solution at some point. For example if we find that it's
-always the TSC that does this, maybe starting x86 with notsc will be a
-good fix.
+This is Gunyah's first interaction with wider public community. Gunyah 
+has been deployed in devices for past few generation of Qualcomm 
+Technolgoies, Inc. (mobile) chipsets.
 
-Regards,
-Willy
+Thanks,
+Elliot
