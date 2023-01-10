@@ -2,89 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3634E663FF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6658663FFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbjAJMKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S231455AbjAJMLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbjAJMJr (ORCPT
+        with ESMTP id S232513AbjAJMKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:09:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AECB574D2;
-        Tue, 10 Jan 2023 04:06:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8EB66164B;
-        Tue, 10 Jan 2023 12:06:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7945EC433D2;
-        Tue, 10 Jan 2023 12:06:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673352393;
-        bh=PCr+ItjIWLngLBbPeZX8+8sOTCxq64Car1y5b7ocqJo=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=ex3+RbONy69XfJ/gWQa9P4jo52DVDkaa8gpKx1Z6cCi154ZWH70Z/S8qyOiSTLyws
-         jUA8EfLi8i/5DlXTEKTHJD0RnrnbjOckKbVvX7z4Gy4Hj3YVJc8sdfUR85aqLtwdBx
-         cjitLi+bMeNJkTZfULvB4NJN0asd237ipZfb0+bmfTT7OW3edIQHJLPw3Ov+A+fAB9
-         Qye6ALjNM5DY0pZ9Ngj6kD+j6HYMvtta5eNycfttculbBgNc1mKYPP0HLA8qy2/Y8J
-         zkjrGH9UIxZMNNgSMDiGP/Sa3vM6LjHH5Vd4QYXQlmRHkvSNrD58jLcCHChDNNyRTv
-         eaajaWF7GDZUg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Ping-Ke Shih <pkshih@realtek.com>,
-        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "tony0620emma\@gmail.com" <tony0620emma@gmail.com>,
-        "tehuang\@realtek.com" <tehuang@realtek.com>,
-        "s.hauer\@pengutronix.de" <s.hauer@pengutronix.de>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/4] rtw88: Four fixes found while working on SDIO support
-References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
-        <84e2f2289e964834b1eaf60d4f9f5255@realtek.com>
-        <CAFBinCAvSYgnamMCEBGg5+vt6Uvz+AKapJ+dSfSPBbmtERYsBw@mail.gmail.com>
-Date:   Tue, 10 Jan 2023 14:06:26 +0200
-In-Reply-To: <CAFBinCAvSYgnamMCEBGg5+vt6Uvz+AKapJ+dSfSPBbmtERYsBw@mail.gmail.com>
-        (Martin Blumenstingl's message of "Thu, 29 Dec 2022 11:40:38 +0100")
-Message-ID: <87mt6qfvb1.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Tue, 10 Jan 2023 07:10:48 -0500
+X-Greylist: delayed 484 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 Jan 2023 04:07:08 PST
+Received: from gentwo.de (gentwo.de [161.97.139.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E045C77AC4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:07:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
+        t=1673352397; bh=1lAq3hxMorwKertNBHt6kodNs2aKb8MmxSA/uvyQtjI=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=Q2xOroI33ZBTvLTbLZwgBXoIRIs84is0yynUPd9GoLmqA6ebjP/UR0zYS08ftSNrW
+         XOnKoF5DzEnL23E+hVNwl9Vs53uU52aTtB0uMYdSP9hEGSon47b0JoRAsTz5/aaB0r
+         tTIcK880hwzSR5/kxQeocCubyGDh4EtOsaav3CniPZBwWmr3c+uUqk75Xavl/8go0R
+         fzN9eM+3w28PUVXRErsJHdTSiCegBrzoDYVcei18VIVh6rvT5QW+VyxGxDsXmg9tDL
+         SO1uE+yGzu5YoPSmHq7NVvhUC4oh9+bO6DYBrtY0kCsmD8h37xK3QQpGlbipmV/jmy
+         F1gXNMICSffMw==
+Received: by gentwo.de (Postfix, from userid 1001)
+        id 438A9B0021D; Tue, 10 Jan 2023 13:06:37 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by gentwo.de (Postfix) with ESMTP id 41B09B00136;
+        Tue, 10 Jan 2023 13:06:37 +0100 (CET)
+Date:   Tue, 10 Jan 2023 13:06:37 +0100 (CET)
+From:   Christoph Lameter <cl@gentwo.de>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+cc:     atomlin@atomlin.com, frederic@kernel.org, tglx@linutronix.de,
+        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
+        neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v13 2/6] mm/vmstat: Use vmstat_dirty to track CPU-specific
+ vmstat discrepancies
+In-Reply-To: <20230105125248.813825852@redhat.com>
+Message-ID: <b89a9828-d4e-9874-d482-dbb6cbe46@gentwo.de>
+References: <20230105125218.031928326@redhat.com> <20230105125248.813825852@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Martin Blumenstingl <martin.blumenstingl@googlemail.com> writes:
+On Thu, 5 Jan 2023, Marcelo Tosatti wrote:
 
-> Hi Ping-Ke,
+> --- linux-2.6.orig/mm/vmstat.c
+> +++ linux-2.6/mm/vmstat.c
+> @@ -381,6 +381,7 @@ void __mod_zone_page_state(struct zone *
+>  		x = 0;
+>  	}
+>  	__this_cpu_write(*p, x);
+> +	vmstat_mark_dirty();
+
+__vmstat_mark_dirty()? See earlier patch
+
 >
-> On Thu, Dec 29, 2022 at 10:26 AM Ping-Ke Shih <pkshih@realtek.com> wrote:
-> [...]
->> > Martin Blumenstingl (4):
->> >   rtw88: Add packed attribute to the eFuse structs
->>
->> I think this patch depends on another patchset or oppositely.
->> Please point that out for reviewers.
+>  	preempt_enable_nested();
+>  }
+> @@ -417,6 +418,7 @@ void __mod_node_page_state(struct pglist
+>  		x = 0;
+>  	}
+>  	__this_cpu_write(*p, x);
+> +	vmstat_mark_dirty();
+
+Ditto.
+
 >
-> There are no dependencies for this smaller individual series other
-> than Linux 6.2-rc1 (as this has USB support). I made sure to not
-> include any of the SDIO changes in this series.
-> The idea is that it can be applied individually and make it either
-> into 6.2-rc2 (or newer) or -next (6.3).
+>  	preempt_enable_nested();
+>  }
+> @@ -577,6 +579,9 @@ static inline void mod_zone_state(struct
+>  	s8 __percpu *p = pcp->vm_stat_diff + item;
+>  	long o, n, t, z;
+>
+> +	/* cmpxchg and vmstat_mark_dirty should happen on the same CPU */
+> +	preempt_disable();
 
-BTW wireless-next or wireless-testing are the preferred baselines for
-wireless patches. Of course you can use other trees if you really want,
-but please try to make sure they apply to wireless-next. Conflicts are
-always extra churn I would prefer to avoid.
+If you are disabling preemption then why do we still need cmpxchg?
+Same again below.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
