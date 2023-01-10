@@ -2,79 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C65663D0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF99663D0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238215AbjAJJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S238222AbjAJJh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238283AbjAJJgl (ORCPT
+        with ESMTP id S238265AbjAJJhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:36:41 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A5048816
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:36:40 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EC0986602D6F;
-        Tue, 10 Jan 2023 09:36:38 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673343399;
-        bh=uSowM5jqFDNQiGdft8YboLtHI+wKc4mcCdsfgeYisSY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LVkIcqgcg4cglsYzP+u74GgzDzaOe8wq3tX8+hd3U8QPP+D/XCbKeHSAqyyMnCLRH
-         kTjXiq4ucJcsbm+ax/Ym+2q6LWzmZNxdCVudO4709SoRzj64KInpgPQD+JCOprzEuL
-         BlVTSb27mqnRCc5my75L49XZq3sX03RrY8QuBU4ZBVQTACqW/Bw+w1R1M6UwR0rlM8
-         7Su62ObHNChFHgVx42DFQ0chsdkaNPSIOs0Bgs3lxjQuzPk/i+Vt8bIILiU6E8FP0/
-         AcHRtiqnU5G6sNHHGYJ6UKH6p7JC2pmEX/hwdFgMmqnSbDR32sDSLmLxZ9DYupDp8B
-         uHfgBbYVP9M5w==
-Message-ID: <7cc4fe44-55b9-a80f-27a5-197070759760@collabora.com>
-Date:   Tue, 10 Jan 2023 10:36:36 +0100
+        Tue, 10 Jan 2023 04:37:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3913E431A0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:37:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673343424;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3IoltaMTP/SoP1SsfQmBngAKvER3lkKce2svsoNj6DA=;
+        b=Bp8NhIqfz73pT/03p684KQt+KC+aY27Q22aj9Kp/HwC5/rgz23R4FeHFlceznSYCapLiFY
+        Zn+ljdRmJgwezJ2QzlIkIaGUEKeDZ+S2HMIjuwegt9HNcAOuZpitU0pbXUr8tkVV0CWUty
+        8fp7sIGEBM4f8sKl2VHapyiqVNAznYc=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-261-42eJO8OoMHqm10LEUlIT1A-1; Tue, 10 Jan 2023 04:37:02 -0500
+X-MC-Unique: 42eJO8OoMHqm10LEUlIT1A-1
+Received: by mail-qv1-f71.google.com with SMTP id ng1-20020a0562143bc100b004bb706b3a27so6674430qvb.20
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:37:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3IoltaMTP/SoP1SsfQmBngAKvER3lkKce2svsoNj6DA=;
+        b=i2/ojPBGwccOHfs9x47bibTooNm5fWql4a6aCrrk+AAvplPLVWT5L9FsDfGucWNNUa
+         eEIEw1watJQ/X5supNcMdmyy7XZSn8lyVPHbA8jL8JyXgt1IHw0bngVywUZZ/79cTgHw
+         eedPf5rQJjMj4pAKYvvt83mkw+Iqw8Zj1s/5Wt+Y25hyRp8DpDaqdRSBGMOGp8uae/0O
+         tP2bJMvE92/RVKBkWH31QgBqM9hrfuSviJZpExjEqp0+G6vmv2yBXXvgfJ/QpVjH7sIz
+         bBU3r8QcB8ondUUlz4w0gMBqD3p6WqPCjTAqV7JttyMrFAHhP/Lbi0byxHjhRCRHB9Sh
+         3laA==
+X-Gm-Message-State: AFqh2krCfxwTt9HR6BEe0tUT9lJMfgt5EESbPxLUyN4W9xO3paB0hL5V
+        bFMzYqsM1OR3okUq3KR6LArw/1XCke9ZRh/OfwYLzqXSO2FK0HOVVGP20d3LeBtqx/5tIvsHm89
+        7FowerJrs+XhQh9UI3vpQNvag
+X-Received: by 2002:ac8:541a:0:b0:3a7:e809:1fe3 with SMTP id b26-20020ac8541a000000b003a7e8091fe3mr93226486qtq.49.1673343421732;
+        Tue, 10 Jan 2023 01:37:01 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsR1BdhvAmGlOEi2PUL/5w7kE1LT1nDkO0+hG84MErLiDislP8Se/e0fBns75Zu9jlSfYhxjg==
+X-Received: by 2002:ac8:541a:0:b0:3a7:e809:1fe3 with SMTP id b26-20020ac8541a000000b003a7e8091fe3mr93226466qtq.49.1673343421423;
+        Tue, 10 Jan 2023 01:37:01 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-128.dyn.eolo.it. [146.241.120.128])
+        by smtp.gmail.com with ESMTPSA id d13-20020ac8668d000000b003a6a4744432sm5830178qtp.87.2023.01.10.01.36.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 01:37:00 -0800 (PST)
+Message-ID: <5c8b538bcc9ac75027f41c21e810d3707a2e1ec7.camel@redhat.com>
+Subject: Re: [PATCH net-next v6 4/4] test/vsock: vsock_perf utility
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        kernel <kernel@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+Date:   Tue, 10 Jan 2023 10:36:58 +0100
+In-Reply-To: <eaf9598f-27eb-8df0-1dea-b4c5623adba1@sberdevices.ru>
+References: <eaf9598f-27eb-8df0-1dea-b4c5623adba1@sberdevices.ru>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm/mediatek: stop using 0 as NULL pointer
-Content-Language: en-US
-To:     Miles Chen <miles.chen@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230110031223.4820-1-miles.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230110031223.4820-1-miles.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/01/23 04:12, Miles Chen ha scritto:
-> Use NULL for NULL pointer to fix the following sparse warning:
-> drivers/gpu/drm/mediatek/mtk_drm_gem.c:265:27: sparse: warning: Using plain integer as NULL pointer
+Hi,
+
+sorry for the late feedback, a couple of notes below...
+
+On Sun, 2023-01-08 at 20:43 +0000, Arseniy Krasnov wrote:
+> This adds utility to check vsock rx/tx performance.
 > 
-> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+> Usage as sender:
+> ./vsock_perf --sender <cid> --port <port> --bytes <bytes to send>
+> Usage as receiver:
+> ./vsock_perf --port <port> --rcvlowat <SO_RCVLOWAT>
+> 
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> ---
+>  tools/testing/vsock/Makefile     |   3 +-
+>  tools/testing/vsock/README       |  34 +++
+>  tools/testing/vsock/vsock_perf.c | 441 +++++++++++++++++++++++++++++++
+>  3 files changed, 477 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/vsock/vsock_perf.c
+> 
+> diff --git a/tools/testing/vsock/Makefile b/tools/testing/vsock/Makefile
+> index f8293c6910c9..43a254f0e14d 100644
+> --- a/tools/testing/vsock/Makefile
+> +++ b/tools/testing/vsock/Makefile
+> @@ -1,8 +1,9 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> -all: test
+> +all: test vsock_perf
+>  test: vsock_test vsock_diag_test
+>  vsock_test: vsock_test.o timeout.o control.o util.o
+>  vsock_diag_test: vsock_diag_test.o timeout.o control.o util.o
+> +vsock_perf: vsock_perf.o
+>  
+>  CFLAGS += -g -O2 -Werror -Wall -I. -I../../include -I../../../usr/include -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -D_GNU_SOURCE
+>  .PHONY: all test clean
+> diff --git a/tools/testing/vsock/README b/tools/testing/vsock/README
+> index 4d5045e7d2c3..84ee217ba8ee 100644
+> --- a/tools/testing/vsock/README
+> +++ b/tools/testing/vsock/README
+> @@ -35,3 +35,37 @@ Invoke test binaries in both directions as follows:
+>                         --control-port=$GUEST_IP \
+>                         --control-port=1234 \
+>                         --peer-cid=3
+> +
+> +vsock_perf utility
+> +-------------------
+> +'vsock_perf' is a simple tool to measure vsock performance. It works in
+> +sender/receiver modes: sender connect to peer at the specified port and
+> +starts data transmission to the receiver. After data processing is done,
+> +it prints several metrics(see below).
+> +
+> +Usage:
+> +# run as sender
+> +# connect to CID 2, port 1234, send 1G of data, tx buf size is 1M
+> +./vsock_perf --sender 2 --port 1234 --bytes 1G --buf-size 1M
+> +
+> +Output:
+> +tx performance: A Gbits/s
+> +
+> +Output explanation:
+> +A is calculated as "number of bits to send" / "time in tx loop"
+> +
+> +# run as receiver
+> +# listen port 1234, rx buf size is 1M, socket buf size is 1G, SO_RCVLOWAT is 64K
+> +./vsock_perf --port 1234 --buf-size 1M --vsk-size 1G --rcvlowat 64K
+> +
+> +Output:
+> +rx performance: A Gbits/s
+> +total in 'read()': B sec
+> +POLLIN wakeups: C
+> +average in 'read()': D ns
+> +
+> +Output explanation:
+> +A is calculated as "number of received bits" / "time in rx loop".
+> +B is time, spent in 'read()' system call(excluding 'poll()')
+> +C is number of 'poll()' wake ups with POLLIN bit set.
+> +D is B / C, e.g. average amount of time, spent in single 'read()'.
+> diff --git a/tools/testing/vsock/vsock_perf.c b/tools/testing/vsock/vsock_perf.c
+> new file mode 100644
+> index 000000000000..ccd595462b40
+> --- /dev/null
+> +++ b/tools/testing/vsock/vsock_perf.c
+> @@ -0,0 +1,441 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * vsock_perf - benchmark utility for vsock.
+> + *
+> + * Copyright (C) 2022 SberDevices.
+> + *
+> + * Author: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> + */
+> +#include <getopt.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <stdbool.h>
+> +#include <string.h>
+> +#include <errno.h>
+> +#include <unistd.h>
+> +#include <time.h>
+> +#include <stdint.h>
+> +#include <poll.h>
+> +#include <sys/socket.h>
+> +#include <linux/vm_sockets.h>
+> +
+> +#define DEFAULT_BUF_SIZE_BYTES	(128 * 1024)
+> +#define DEFAULT_TO_SEND_BYTES	(64 * 1024)
+> +#define DEFAULT_VSOCK_BUF_BYTES (256 * 1024)
+> +#define DEFAULT_RCVLOWAT_BYTES	1
+> +#define DEFAULT_PORT		1234
+> +
+> +#define BYTES_PER_GB		(1024 * 1024 * 1024ULL)
+> +#define NSEC_PER_SEC		(1000000000ULL)
+> +
+> +static unsigned int port = DEFAULT_PORT;
+> +static unsigned long buf_size_bytes = DEFAULT_BUF_SIZE_BYTES;
+> +static unsigned long vsock_buf_bytes = DEFAULT_VSOCK_BUF_BYTES;
+> +
+> +static inline time_t current_nsec(void)
 
-Please add the appropriate tag...
+Minor nit: you should avoid 'static inline' functions in c files,
+'static' would suffice and will allow the compiler to do a better job.
 
-Fixes: 3df64d7b0a4f ("drm/mediatek: Implement gem prime vmap/vunmap function")
+> +{
+> +	struct timespec ts;
+> +
+> +	if (clock_gettime(CLOCK_REALTIME, &ts)) {
+> +		perror("clock_gettime");
+> +		exit(EXIT_FAILURE);
+> +	}
+> +
+> +	return (ts.tv_sec * NSEC_PER_SEC) + ts.tv_nsec;
+> +}
+> +
+> +/* From lib/cmdline.c. */
+> +static unsigned long memparse(const char *ptr)
+> +{
+> +	char *endptr;
+> +
+> +	unsigned long long ret = strtoull(ptr, &endptr, 0);
+> +
+> +	switch (*endptr) {
+> +	case 'E':
+> +	case 'e':
+> +		ret <<= 10;
+> +	case 'P':
+> +	case 'p':
+> +		ret <<= 10;
+> +	case 'T':
+> +	case 't':
+> +		ret <<= 10;
+> +	case 'G':
+> +	case 'g':
+> +		ret <<= 10;
+> +	case 'M':
+> +	case 'm':
+> +		ret <<= 10;
+> +	case 'K':
+> +	case 'k':
+> +		ret <<= 10;
+> +		endptr++;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void vsock_increase_buf_size(int fd)
+> +{
+> +	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_MAX_SIZE,
+> +		       &vsock_buf_bytes, sizeof(vsock_buf_bytes))) {
+> +		perror("setsockopt(SO_VM_SOCKETS_BUFFER_MAX_SIZE)");
+> +		exit(EXIT_FAILURE);
+> +	}
+> +
+> +	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_SIZE,
+> +		       &vsock_buf_bytes, sizeof(vsock_buf_bytes))) {
+> +		perror("setsockopt(SO_VM_SOCKETS_BUFFER_SIZE)");
+> +		exit(EXIT_FAILURE);
 
-after which:
+You use the above pattern frequently, but you could replace both
+libcall with a single error() call.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Thanks,
 
+Paolo
 
