@@ -2,114 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E3F664E32
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 22:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B5B664E38
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 22:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbjAJVmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 16:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S231596AbjAJVqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 16:46:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbjAJVly (ORCPT
+        with ESMTP id S232851AbjAJVnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 16:41:54 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48383E0F3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 13:41:49 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id d15so14628855pls.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 13:41:49 -0800 (PST)
+        Tue, 10 Jan 2023 16:43:31 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BDA10C9;
+        Tue, 10 Jan 2023 13:43:30 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id o17so9418044qvn.4;
+        Tue, 10 Jan 2023 13:43:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D6WnFAop7d5E0yhy9sgHCW9UOo46MAfDHRFM7/8uo+E=;
-        b=KJo+O1YHeWC2lzofGztS9Z6uTDMmVlWLB0oOwFB4cWH+JefTudLQrBvQ9KR/wES1DH
-         s55YeZOuEP51yOAAqSkmWZNTq1yKCPsvdtJbtEoqrzV32YyGUkTOQfx8EHFErLRp0TIF
-         dbA0iy0r1v6/0akvMtV1mZ9eZ1Xm+KDuKznSApxUXkTJepJ/gIxqYdmukpDLEO/yhv6O
-         4jSkBBYbPKepc1xYtHutIvS2acl7WeWD5vnG8IrzesVNneu25TSYWCJVCXpv/mTi1Kf5
-         5MejEMdYxX8VvvuKXVwll3PIyn7LXsrSSFRHPyho/vfnYzF+Vgscw9ESWteLVqat2eMM
-         ZnGQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s/miYmsKl1wbs3ZV+fNSe/W+Bse5by10Na33oXSlTsc=;
+        b=P4wN8iNI2XuWaJhJTLNQIjda2Rt87NSa6r+mKovgU6G2YgjKEPP+X5FXlPa8JIjQBX
+         pQIzmiO1fKAY5+PZjG9G0MEssO2qnmV2jJiJ9rWeoNslCO5ojO6CWcybcY3lulnLGc0U
+         c9dzMgfhOpMBkEBsUHfB+iJ7082Y7cQ2F8PxPRX0Kmcc3tkFNOR1paYC0h2ONK38y+v7
+         vIDpTDT9kqNdHjiOU3sCrpq8QmvB/q19XP4RvfO0JUBKCUagbOSyb1QGVh+LpfwTfWYH
+         wzVAQJkxfX04wcDvPrO71Ip5vctw5jWfzFqoCeQox5SYfb1Infcx6y8NkB5otFIqBUNL
+         yEAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D6WnFAop7d5E0yhy9sgHCW9UOo46MAfDHRFM7/8uo+E=;
-        b=aFji+RhawzCpKvM1d4OLZHNxGlqsCkyed585PSCvpb0wmZG+69ecxzGcvAyOkois7J
-         T1GSznqDih0cImlKtc4md9el+e67azY93gGaViQgLHqYq5E9pOoU45tmIALueQ+jVd2I
-         OPU594bLFszb0DGW0fTO6hTDrxZOmxxUmC2wMUjel+7pRqaVW8lfeaXPp8SqMjTs4mWd
-         f9kMCXP6ODuSblGpBXq0EkHsJ8sPsrZ/Rf4+moepQt4XKMwWn2CvfsNBh1ZVmSs1swdp
-         H+s5EFeA88ibjkLk9VLCCrjoEk9O5AnHvj8kIOoXjUWLj5iNlyD+MJvhPseNgGAcEGc4
-         zmXA==
-X-Gm-Message-State: AFqh2krxAfgSDlDj6JE4s2xBAH1008Nqnugl6b0F+ewyrGx66bGSXmgM
-        lpfxFWJrb/J1Dq6ez4VD61H0Ew==
-X-Google-Smtp-Source: AMrXdXs7FzdBhI0TXB5I4AqPO5fCt1v60GEvPvH/08IGgK0xUVt2vA/ipEy6fEEt1A6vaejEUraLhg==
-X-Received: by 2002:a05:6a20:54a1:b0:a5:170:9acf with SMTP id i33-20020a056a2054a100b000a501709acfmr25000775pzk.3.1673386908975;
-        Tue, 10 Jan 2023 13:41:48 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d16-20020a63ed10000000b00476799699e4sm7310757pgi.30.2023.01.10.13.41.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 13:41:48 -0800 (PST)
-Message-ID: <2c01e100-852d-d082-02b5-0b481fc72477@kernel.dk>
-Date:   Tue, 10 Jan 2023 14:41:46 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4 7/7] iov_iter, block: Make bio structs pin pages rather
- than ref'ing if appropriate
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s/miYmsKl1wbs3ZV+fNSe/W+Bse5by10Na33oXSlTsc=;
+        b=OIRXohGAmdKpTRMguBNVjTt7Gfs+4JWmNXVDXrBSoJrETX61A6bds9qMrSFM+iG8Ey
+         GgLDRuwjIi1QVZvRt7uFBYt5Jp2wCrKQHTRh1LPn+fAXI+PxDnikRl/g+c5q0AAeCkIQ
+         AvDx4YpgSd3G0KMwrLRC2c2QQvxpuTOUdwEi+xCV8ogKezjZddzAI/7riEDXxAqtXaBN
+         t47wSdSloId679oFl3vFi3fSR8fCjgH3ldHRcbcvwCThMN6thqW3Nzm8Hsx3o/cLqPc/
+         EKJKLWBviIYPfKekymJh2igLgJcuu/Nla/QbIh/vkKm4ChunbDb8CCYlgwyeiw+EutFW
+         DV8Q==
+X-Gm-Message-State: AFqh2kpK87d4+RnRHOYyiCRFhg7TDhLOsaZVHCtjFeZvxZxTYUBcWVMu
+        CObHXIsg7OD8Vhpyduwy5n8=
+X-Google-Smtp-Source: AMrXdXuBwC4MqmRqF1lDmUuSaQ7zyxcfOUYzg+rcURTZuAZEUcH9w00aHKR4QMJuY3a3LROIWP4Xfg==
+X-Received: by 2002:a0c:b41e:0:b0:532:3b1b:12f5 with SMTP id u30-20020a0cb41e000000b005323b1b12f5mr7129425qve.38.1673387009379;
+        Tue, 10 Jan 2023 13:43:29 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id bs15-20020a05620a470f00b006b61b2cb1d2sm7962926qkb.46.2023.01.10.13.43.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 13:43:28 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <bbd9cde3-7cbb-f3e4-a2a4-7b1b5ae392e0@kernel.dk>
- <d0bb04e7-7e58-d494-0e39-6e98f3368a7b@kernel.dk>
- <20230109173513.htfqbkrtqm52pnye@quack3>
- <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
- <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk>
- <2008444.1673300255@warthog.procyon.org.uk>
- <2084839.1673303046@warthog.procyon.org.uk>
- <2155741.1673361430@warthog.procyon.org.uk>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <2155741.1673361430@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH] arm64: dts: broadcom: align SMMU node names with DT schema
+Date:   Tue, 10 Jan 2023 13:43:26 -0800
+Message-Id: <20230110214326.1006022-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221222092456.79203-1-krzysztof.kozlowski@linaro.org>
+References: <20221222092456.79203-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/23 7:37 AM, David Howells wrote:
-> Jens Axboe <axboe@kernel.dk> wrote:
+On Thu, 22 Dec 2022 10:24:56 +0100, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> DT schema expects certain pattern for IOMMU/SMMU nodes:
 > 
->> I think it makes more sense to have NO_REF check, to be honest, as that
->> means the general path doesn't have to set that flag. But I don't feel
->> too strongly about that part.
+>   northstar2/ns2-svk.dtb: mmu@64000000: $nodename:0: 'mmu@64000000' does not match '^iommu@[0-9a-f]*'
 > 
-> It's just that the logic seems weird with BIO_NO_PAGE_REF and BIO_PAGE_PINNED
-> being kind of opposite polarity.
-> 
-> Anyway, see attached.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-Yeah, I guess I'll have to agree with you. So let's go with that approach
-instead, but then please:
-
-1) Change that flag as a prep patch so you don't mix up the two
-2) Incorporate the feedback from the previous patch
-
-Any chance we can get that cleanup_mode thing cleaned up as well?
-
--- 
-Jens Axboe
-
-
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
+--
+Florian
