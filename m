@@ -2,110 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126BB663CEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48550663CBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbjAJJcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
+        id S238025AbjAJJZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238179AbjAJJcC (ORCPT
+        with ESMTP id S238072AbjAJJYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:32:02 -0500
-Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C53F1741D;
-        Tue, 10 Jan 2023 01:32:01 -0800 (PST)
-Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
-        by mail.parknet.co.jp (Postfix) with ESMTPSA id B9B3B2003FB8;
-        Tue, 10 Jan 2023 18:23:34 +0900 (JST)
-Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
-        by ibmpc.myhome.or.jp (8.17.1.9/8.17.1.9/Debian-1) with ESMTPS id 30A9NXf3104299
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 18:23:34 +0900
-Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
-        by devron.myhome.or.jp (8.17.1.9/8.17.1.9/Debian-1) with ESMTPS id 30A9NXKF371088
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 18:23:33 +0900
-Received: (from hirofumi@localhost)
-        by devron.myhome.or.jp (8.17.1.9/8.17.1.9/Submit) id 30A9NXwt371087;
-        Tue, 10 Jan 2023 18:23:33 +0900
-From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [RFC PATCH 3/3] nls: Replace default nls table by correct
- iso8859-1 table
-In-Reply-To: <20221226144301.16382-4-pali@kernel.org> ("Pali
- =?iso-8859-1?Q?Roh=E1r=22's?= message
-        of "Mon, 26 Dec 2022 15:43:01 +0100")
-References: <20221226144301.16382-1-pali@kernel.org>
-        <20221226144301.16382-4-pali@kernel.org>
-Date:   Tue, 10 Jan 2023 18:23:33 +0900
-Message-ID: <87v8leu4iy.fsf@mail.parknet.co.jp>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+        Tue, 10 Jan 2023 04:24:52 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2530E544F4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:24:49 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id ay40so8295355wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:24:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mind.be; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G0xm6pZSYV0zy2S2dPvMPd0PXu+EXkyVu00ABlXhNhM=;
+        b=GhFAGk8Qhy6npRJLnhhVVchYynDfMMeynYBikUtnElIrZ7fzo6UmMkEimVxhfaZ4VS
+         PYPbmgmvK7AsKMoGo5a4XQVuiTH76g6pkC0oi2wStHtmSMFojHJDNVPZRS4UAuYZArMl
+         8p1VOgBMpUptJuc7g7BHwI8EaKt6Nety8rfbVg74gzYqpoNIgNwgABiBgpkllz0ej7/H
+         LrM2naxA7W5AqqrHbO8xBCD30Fy33PXY3NVp3TjVopp5ma8NDWYdpcX9O9py4uKs5Hlq
+         GbFQINXuHXXetZxmhb+DedqAEmGmKxg8+N7LVhJ1TgPHTbCVOoSziQuARaPYkLhQngZ1
+         57Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G0xm6pZSYV0zy2S2dPvMPd0PXu+EXkyVu00ABlXhNhM=;
+        b=Q72cQK7BWKuARnKNEneWh+fUcij3CSplMMdBTFYpo5utIM9nBADg1Gs35Vzh4DVD8i
+         0qFXLzGKR7PsgmFVFAdD9yjeP4Kd9MQC40QfW0FiPPcI7GS+0LSaDuvbzTXQT4mir+ow
+         SJOtzj1bs6qU7a7yU2l2oLsH61w1r/O7uKXEMEzr1YH6V26cIRpHld2mr2FXZSn324oT
+         w8ZKgd3a5el7+1CH8h3s8bHHsbY+ntJAh5XzkvNuGXXZhRDsqPyN+tpy7IFFljW6fT/i
+         1ojYYDREQ26j+D+tybg4NksfZdbyBzhAHeWJNII1O2fOoidGi/VGqvOztqbmbf7/2hIF
+         RRHg==
+X-Gm-Message-State: AFqh2kruaON1+EbKRntX+jUtpeH7oS2BKsOSddhv+T2A0l82/wk+VgFn
+        RqjTfCN1XoOv/ODny/GtqF9uvw==
+X-Google-Smtp-Source: AMrXdXvL2t9HNG1GcpNq4bX2Pj7GSFT7llm2xR0X1hP/KpAAPgfICHOtFhAEd1pv8L4Lts7vKP4Gqg==
+X-Received: by 2002:a05:600c:4f54:b0:3d9:f04c:f58f with SMTP id m20-20020a05600c4f5400b003d9f04cf58fmr4872024wmq.40.1673342687626;
+        Tue, 10 Jan 2023 01:24:47 -0800 (PST)
+Received: from dtpc.zanders.be (78-22-137-109.access.telenet.be. [78.22.137.109])
+        by smtp.gmail.com with ESMTPSA id q22-20020a05600c331600b003d9dd62deedsm13149433wmp.30.2023.01.10.01.24.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 01:24:47 -0800 (PST)
+From:   Maarten Zanders <maarten.zanders@mind.be>
+Cc:     krzysztof.kozlowski@linaro.org,
+        Maarten Zanders <maarten.zanders@mind.be>,
+        devicetree@vger.kernel.org,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>
+Subject: [PATCH v2 0/2] leds: lp55xx: configure internal charge pump
+Date:   Tue, 10 Jan 2023 10:23:38 +0100
+Message-Id: <20230110092342.24132-1-maarten.zanders@mind.be>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Rohár <pali@kernel.org> writes:
+A new option in the devicetree "ti,charge-pump-mode" allows the user to
+configure the charge pump in a certain mode. Previously it was defaulting
+to automatic mode.
 
-[...]
+v1 of the patch implemented a bool to disable the charge pump and had some
+issues in the yaml binding. To avoid future modifications, implement all
+possible configurations of the charge pump.
 
-> -static struct nls_table default_table = {
-> -	.charset	= "default",
-> +static struct nls_table iso8859_1_table = {
-> +	.charset	= "iso8859-1",
->  	.uni2char	= uni2char,
->  	.char2uni	= char2uni,
->  	.charset2lower	= charset2lower,
->  	.charset2upper	= charset2upper,
->  };
+Maarten Zanders (2):
+  dt-bindings: leds-lp55xx: add ti,charge-pump-mode
+  leds: lp55xx: configure internal charge pump
 
-iocharset=default was gone with this (user visible) change? (nobody
-notice it though)
+ .../devicetree/bindings/leds/leds-lp55xx.yaml |  8 +++++++
+ drivers/leds/leds-lp5521.c                    | 12 +++++-----
+ drivers/leds/leds-lp5523.c                    | 18 ++++++++++-----
+ drivers/leds/leds-lp55xx-common.c             | 22 +++++++++++++++++++
+ drivers/leds/leds-lp8501.c                    |  8 +++++--
+ include/linux/platform_data/leds-lp55xx.h     |  9 ++++++++
+ 6 files changed, 64 insertions(+), 13 deletions(-)
 
-> -/* Returns a simple default translation table */
-> +/* Returns a default translation table */
->  struct nls_table *load_nls_default(void)
->  {
->  	struct nls_table *default_nls;
-> @@ -537,9 +419,22 @@ struct nls_table *load_nls_default(void)
->  	if (default_nls != NULL)
->  		return default_nls;
->  	else
-> -		return &default_table;
-> +		return &iso8859_1_table;
-> +}
-> +
-> +static int __init init_nls(void)
-> +{
-> +	return register_nls(&iso8859_1_table);
->  }
->  
-> +static void __exit exit_nls(void)
-> +{
-> +	unregister_nls(&iso8859_1_table);
-> +}
-> +
-> +module_init(init_nls)
-> +module_exit(exit_nls)
-
-[...]
-
-Do we need to merge nls_iso8859-1.c to nls_base.c?
-
-	obj-$(CONFIG_NLS)		+= nls_iso8859-1.o nls_base.o
-
-Something like this (untested), maybe cleaner.
-
-Thanks.
 -- 
-OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+2.37.3
+
