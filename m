@@ -2,196 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EDA664FDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A912F664FDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjAJXVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 18:21:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
+        id S233981AbjAJXWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 18:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234954AbjAJXVS (ORCPT
+        with ESMTP id S231481AbjAJXWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 18:21:18 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41B363F5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:21:14 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AMem1d020056
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:21:13 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-id :
- content-type : mime-version; s=s2048-2021-q4;
- bh=ElBnPNoTxbyBPN6mGb41NhgvcpxMujWOMh5vjRpw13o=;
- b=OfNSaScnOm+mZrKU1nVA8TjZI4myjNlpWN5L2Nwf25Vsh2duskqeM2mxzZV3KYBls0AB
- dt4LET9WRYdYQTI1MgJggD0CQ1t/nbXifNVcWtLJ3F39zUAJQoeCDOZOFXnmSGmLLQto
- ODrfjKbw8RpY0YwGzZlFoTy87HypqRCR5/iNn4O4GlJr/QUB5L5aalV5MOlhOEtbMxX2
- fXAXb3xMY/46pXyxS9+q3czDjf7nHmDk8BHDprlpbAK33pes8TnxsVKgqZqRBo9OWfe9
- l6Wc85f+FnA+xhALYEWnXK3mjXrksuw1t6OwXRgzNP29pVwkjUyhBXvy/4Pb9hil/1FU 5w== 
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3n1b0q2pt2-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:21:13 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lQCbvqU+NS4HS23FcNo+jBesgECQZJALeb9awGKWiDwmA4HhRaY0a4QSo1xCRCZ5mnGuri8EFV31GydsV5Hr94SEnqWRU8zqhfPLYk+uhQ4gT+tlyY/k5+ZSTFvi3id9SgoVHMmrQyzKX9qp0IqCbHoN2y3vKUndH5YXBqKREVb/6ZjkJ30mKG0WuK9m0b8DpsQdFV+Io9tCrGfghILVAoy/6A7Ygsf7tkfTKWe+o0CKZfsyu3NaGpwuG5+w4eGgKeB/XBUKsfDf4uBFij0mAd9wbDqaAqA7ooAkhI5Knn5AcNTBVATMT6S7WekQNID1Nb0coV2BBLsF7c6/+KGx+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fJKEITeuYH74lP6fZejgFKEuUQ/ShJfBPYSFykQ0v2c=;
- b=EyGt5gyV899PfPpZlwA3bbmPN9OnJMHRZioRbfM9WF4/kxk3DYjns5rANfvOL0A2hWxUrT41huw8BM/w4S1KbwGzfbPEjogykLTrIDhVgHzph8QQ5ACmX+W29Mt5BlP0fh/5DXBpj3azaiZfHr81NfwUwFjZCNB4KX1xclRMITgwcl3Wa4jgVDI/U40K8wX4sAW3a/3MYrPyRCsTfp9FCK4dEJ+Ejt1xw+0Wkgorn1sArDyUa2GHVARLwclaqeLgxHYI/VPBzzWsdxYx7gU+TIWcr2yRAH9mNJulAVeJr62vk2bdXVM1xM05VSkC9d40OTGT3vm1aGv1NHeHoi2www==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from BY5PR15MB3667.namprd15.prod.outlook.com (2603:10b6:a03:1f9::18)
- by MW4PR15MB4507.namprd15.prod.outlook.com (2603:10b6:303:108::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 23:21:11 +0000
-Received: from BY5PR15MB3667.namprd15.prod.outlook.com
- ([fe80::9136:21da:ed88:da96]) by BY5PR15MB3667.namprd15.prod.outlook.com
- ([fe80::9136:21da:ed88:da96%7]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 23:21:11 +0000
-From:   Nick Terrell <terrelln@meta.com>
-To:     Dan Carpenter <error27@gmail.com>
-CC:     "oe-kbuild@lists.linux.dev" <oe-kbuild@lists.linux.dev>,
-        kernel test robot <lkp@intel.com>,
-        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the
- 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
-Thread-Topic: lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the
- 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
-Thread-Index: AQHZF87ejzbFHyM1/Ui4ZjVt0fvk1q6YZNQA
-Date:   Tue, 10 Jan 2023 23:21:10 +0000
-Message-ID: <B251F283-9183-4BE8-9790-7E1F605F1185@fb.com>
-References: <202212241900.qp4rtcCs-lkp@intel.com>
-In-Reply-To: <202212241900.qp4rtcCs-lkp@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY5PR15MB3667:EE_|MW4PR15MB4507:EE_
-x-ms-office365-filtering-correlation-id: 8df56b58-c519-4238-ee82-08daf3615c2b
-x-proofpoint-id: b222f61d-39ce-4c00-bf68-b051945dbb5a
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ETvojewx34EwgU3y6dkGlMsuxQj/eFoq8sfBSygH/RPA62cPhwW6iS0IL9Q/Y+6hfluHH4FEoy4RTPXNPolH731qqdu+ZfYBXerR1GB0HIiwGplSGbWnCQrlUJGGqk9BoRCXyqw5or1r5uAClnzhLjI8hoxFqRzDNHXbgaShL+WjAfNWNixrrPZ0FQa+TCjlc0seN40gvFOuIQekH0t3J2F1TuByaxKhu+17vHOVN7UaK4zWdy74A6Ex7Szzu6GyEQXk1XzzSt1p0QSCALunwqGUvoygDeqWzqdM1U3UDmJ4DNAa+Ob60M24hdU0GdLt5uqJvSGnkur0nzyhLjcuF4ldI7dKa76cwxYDBNvujZ8HYtplt/Xrp8bex+4OQ4sReuz77vIFk1H8X2t7TLsVJmNUBJKem5jWSvQa+qiC6nxwrCDvx8pdDDR0EdRFe4mYR44zOaYuybu1BJoPkuM4St9xzkRR+WfAca2Gv0lub26aReNAAoAdxfwHC+f4y8+gxc+LUOLB2XzSjlJ37tru6HQVq/ljv7k7PP5ypHh2N0CZvuHFjom0N96QRj9aBgz894+SoaoJT0HppGWbWCJIf7f87xu6O7vbMGXPTF1teUwXI8fx+kNok9jsopF7haGl9uLCJLAGAge4ss1A0q35Dr9on1HKW/Xs2LQPpypT7mm6LfhLaowD3ih2cHpLyTKFA15EWnNtmIF01kymXCD4udu5Wq40SiY2/yISRz799Cg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3667.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(39860400002)(366004)(136003)(346002)(451199015)(33656002)(6486002)(53546011)(6506007)(478600001)(966005)(4326008)(26005)(186003)(9686003)(64756008)(6512007)(66556008)(316002)(8676002)(66476007)(6916009)(66446008)(76116006)(71200400001)(54906003)(86362001)(38070700005)(122000001)(38100700002)(83380400001)(41300700001)(66946007)(5660300002)(36756003)(4001150100001)(2906002)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZtsC9E37BjoHCsezeBjZ41KZi3NcWhPk+Sww4y/HEqzlr1pqubLm2wgZga1V?=
- =?us-ascii?Q?lgkTyRvq7reDpjWH6D2lCVE/R1qNBossyrNw0tKseRwahBktTSWoCYZhdVif?=
- =?us-ascii?Q?OADJtZvw9B+oDpWqvkmyW9wW/hm1QxfvsIlzTXMISCGnXbV+XpPcjk76bA1a?=
- =?us-ascii?Q?ekl0Tu27bZAs5wQ8sU8tK0M4KRMS1zSnvLXFEQx/h4ULHlZmicbhvl6Wwkou?=
- =?us-ascii?Q?nERgHUbEmI/JOw+h7E1oUMkrSXs8dp3iv220WIRqZOv2vTF2+yseQL2mVG6r?=
- =?us-ascii?Q?6v4L6GwjVajbeOWICK+JrKp3JcL+U0Bp3Hz4fXt10IawR7ze751biXeYX5vU?=
- =?us-ascii?Q?t4CMktayp1vG5KFQYAsn/yXOr4zf18HsSY9MKIZgaQ/3pUQllEacGDSnLzk4?=
- =?us-ascii?Q?knX4lwl9jSvq8/cjcsB0Zivb/8kS8yFlKu621ATbn1I62uIQXtlnO9cf2H4Z?=
- =?us-ascii?Q?JrS1vYxG9y5VT01zDSTN25T80Dh2YNltpBnMb0fbTxjpzH2YSQAhXngqnSTo?=
- =?us-ascii?Q?DSxIhx/fcZvmDKTK7UPGL8dn8HFECL7AnPFzgfd1rTegQys1iEcrsEGmsPYM?=
- =?us-ascii?Q?jVTSOaptln4eclszWMdZ0wUkgdA4TXtBJl2uoQxMU2YIt1Vbk3zxsYZBhRfx?=
- =?us-ascii?Q?KXTNe1gvnu2YYO6UWs+JDrLHs47hC48s0vh6xsXvadUNvfVwZPNdt036GFBg?=
- =?us-ascii?Q?z/57rLqZrj0A4JJPSJBDs+ngFH/gkcWfD649TXZu/ExgdMtGsdE9bvSkGnOx?=
- =?us-ascii?Q?VVCWYP7eW13JXwCHYgbdk8YuOzYvag9v5JyYQ4VBqX5Q33ErRHMw20sVhsRw?=
- =?us-ascii?Q?PPc5/UQCt3qQ2qCaErgSAE5CWZfz5BlsBKxizTI9U4trCxe51Xufaii7vTFu?=
- =?us-ascii?Q?B5rRTRkz6sSAokSWidFfoDxGa+T1W+PvtVXoscS3qrZQumPcXURcdAWvlN13?=
- =?us-ascii?Q?HSWapm4cUFqZvOQ1/FkrNEVXjdTlnTu/cLQ7B2JQfTPZMoXHG8EgDsDnwLBd?=
- =?us-ascii?Q?ME6FnQ4rcZP/gb1s5j+qUHwe6zb6JgDRd5jbZm6ZBW4Db/BuTeZT0Y8IbuD8?=
- =?us-ascii?Q?f1GrWVocbEsvuXb77jW3xcPkPPsPEBfNfsxD6KNdwTJSAjP2aAm0uMxb7xof?=
- =?us-ascii?Q?eNjIJ5Cv8AfwfbwWLTt4jfWAHbST7ZwXySsIhkMJRwvcNmcHHjVvRztH/JVd?=
- =?us-ascii?Q?NhI3bmexmV+6RqXOEi2Pw8Y48QV2apu55By4NaI9+Z8ko0mjjsAZC4XyeGJM?=
- =?us-ascii?Q?P/8TfVShGi+ngux7kw/MEwc397Ko80V0O9TP/tjF+gscAurt1PYJ2Lbw8jsY?=
- =?us-ascii?Q?+3gPmfIzHCdmX+QMtd/U3n2cqB6k32B3MyRXnHO3NON62xeKwDtCZdkCCldk?=
- =?us-ascii?Q?7RIlNt4cfoSsYJYw6tk7yXJCRCrv3XI5J8z3GBqCms3qjKSF1B++XQQrcNer?=
- =?us-ascii?Q?xxGsdqO56Ws8ba1SjDeZ1gA7DkZyq1zwpy0qzKjiHbEAh50fMTafP1R5l5hE?=
- =?us-ascii?Q?6dTCVqiWEeu0lEJSYMpf7ogwUTP+tpGAouX1Lb1kQWZnsN0V9pfWOLLpJG1Z?=
- =?us-ascii?Q?PK7LoHfQqBQyRxlYYHi3hZorimAwXKHDHAN2yg/H?=
-Content-ID: <3320C04CCAA05A4D969A80146ED771D0@namprd15.prod.outlook.com>
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3667.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8df56b58-c519-4238-ee82-08daf3615c2b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2023 23:21:10.9481
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oMSf2QhPBbAIVnN1mI6QD7+GV9l1QywG+425tmjVFK+DcrQgqN1JwvGJE55ocyRLGeyOeaHEzimC9EQoirxD+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR15MB4507
-X-Proofpoint-ORIG-GUID: kv4ltXY-yBtesCS8q5GGSQopUhgs2kIA
-X-Proofpoint-GUID: kv4ltXY-yBtesCS8q5GGSQopUhgs2kIA
-Content-Type: text/plain; charset="us-ascii"
-X-Proofpoint-UnRewURL: 1 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_09,2023-01-10_03,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 18:22:03 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4BB4ECBC
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:22:02 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id co23so13368993wrb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:22:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RmGS/5cqJeFoACOJHc4BZzYIiIrGMVykwhdR9XF4jmk=;
+        b=c9g60mip6DpvqJLy5dqRJjsW9pGnhDft8wTL2uY8ndZFa5w6WYCaP0WJwePVMeaSJ0
+         t9h2CoV7gylh95IMSaormiIQc3G2EZCrEX+EQUHRe2KDvDhc76MEv0KE+vgy4xE1Jmpp
+         PDV1NAP9Xxw5nErDe0nKNAK29nrD9pU7mZfdrVUAl+FEm5S/w1ML7vfEgTAZkUJvSlsK
+         jc0C/VDjQqn2ZfnvCbv2Uf/PIl6dXAJtnKrn1SCsPy5wH1l1kojpHDE/BgVWarRWUPJt
+         ik1P+2NgbNAnx1J2YAPvMZ9BeFT3wBkUeUxrzk+cS6ZIeKO4OHj3P4tJPh3sqK9Mzb0j
+         rTVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RmGS/5cqJeFoACOJHc4BZzYIiIrGMVykwhdR9XF4jmk=;
+        b=leo22Y7IgTg+K3kl1Wr3Jr6Uc89wtlH65c2w45fbafLAHmaCgWk0Hbi7Cac7nIQwKl
+         OxMqn1Un8tGjGZnp4yZBFfuHBDvQN7xyIU5/fvlWW11I3zs8r0qJiaOrhmdRWm+/cIlZ
+         nhz66LfLmuBF9sLZ/z2ar7PaBU8WOUtnKibAUMxFURifTYF/5pRlz2dAHYlHEsJqEOig
+         5+UKoXtWVBZwze6xnUm5fat41kk+3MA11TW9DoJ899Ryd0YvMwGKT2qJyt4LHU8J1c2h
+         z/AGK4RmROTQXT3g52hp/WalCKjqLw0ZYXxJPhJrNaoxSdOlKGn7yAnT0aG3q5uwNNjK
+         JjFA==
+X-Gm-Message-State: AFqh2krDzqCsfXDdX4v3geWOvZkd7EIaPwh7GRrNw1oaXd3QodQogdA2
+        ywq21kqaW3SD3I958Ns1KQ46Rg==
+X-Google-Smtp-Source: AMrXdXuPV2x7LUIyKJ2bgEVRoXBdmp8FuAYdkb702LTqrQdwWYBCkc8H47LxWuVyUOVifyalSD3xIQ==
+X-Received: by 2002:adf:de88:0:b0:2bb:e864:7a30 with SMTP id w8-20020adfde88000000b002bbe8647a30mr7331280wrl.32.1673392920931;
+        Tue, 10 Jan 2023 15:22:00 -0800 (PST)
+Received: from smtpclient.apple (global-5-143.n-2.net.cam.ac.uk. [131.111.5.143])
+        by smtp.gmail.com with ESMTPSA id o17-20020a5d4091000000b0028965dc7c6bsm12192345wrp.73.2023.01.10.15.22.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 10 Jan 2023 15:22:00 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] riscv: elf: add .riscv.attributes parsing
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <6dcdd143-ff1c-41f7-9f46-0c4505575669@rivosinc.com>
+Date:   Tue, 10 Jan 2023 23:21:59 +0000
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, Guo Ren <guoren@kernel.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>, linux@rivosinc.com,
+        kernel test robot <lkp@intel.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <9061941F-3221-467D-B0FC-DCA8E8FF3996@jrtc27.com>
+References: <20230110201841.2069353-1-vineetg@rivosinc.com>
+ <01AF458D-1EDC-47D1-A902-A686E2DF26AF@jrtc27.com>
+ <6dcdd143-ff1c-41f7-9f46-0c4505575669@rivosinc.com>
+To:     Vineet Gupta <vineetg@rivosinc.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10 Jan 2023, at 21:50, Vineet Gupta <vineetg@rivosinc.com> wrote:
+> On 1/10/23 12:48, Jessica Clarke wrote:
+>> On 10 Jan 2023, at 20:18, Vineet Gupta <vineetg@rivosinc.com> wrote:
+>>> This implements the elf loader hook to parse RV specific
+>>> .riscv.attributes section. This section is inserted by compilers
+>>> (gcc/llvm) with build related information such as -march organized =
+as
+>>> tag/value attribute pairs.
+>>>=20
+>>> It identifies the various attribute tags (and corresponding values) =
+as
+>>> currently specified in the psABI specification.
+>>>=20
+>>> This patch only implements the elf parsing mechanics, leaving out =
+the
+>>> recording/usage of the attributes to subsequent patches.
+>>>=20
+>>> Reported-by: kernel test robot <lkp@intel.com>  # code under =
+CONFIG_COMPAT
+>>> Signed-off-by: Vineet Gupta <vineetg@rivosinc.com>
+>> This code is full of buffer overruns and uninitialised reads in the
+>> presence of malicious files,
+>=20
+> While the outer loop is bound, indeed the internal pointer increments =
+could get oob.
+> I don't recall seeing existing explicit "safe" pointer, so thinking of =
+cooking something up.
+> The conceptual idea is to replace
+>=20
+>     p +=3D 4
+>=20
+> with
+>=20
+>    PTR_INC(p, 4, p_max)
+>=20
+> And similarly replace
+>=20
+>     while (*p++ !=3D '\0')
+>=20
+> with
+>=20
+>     while (*p !=3D '\0')
+>           PTR_INC(p, 1, p_max)
+>=20
+> Is that sufficient or you had something else in mind.
 
+I=E2=80=99d be very careful about obfuscating control flow but how you
+implement it is between you and other kernel developers, which I don=E2=80=
+=99t
+count myself as.
 
-> On Dec 24, 2022, at 11:35 AM, Dan Carpenter <error27@gmail.com> wrote:
-> 
-> !-------------------------------------------------------------------|
->  This Message Is From an External Sender
-> 
-> |-------------------------------------------------------------------!
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   72a85e2b0a1e1e6fb4ee51ae902730212b2de25c
-> commit: 2aa14b1ab2c41a4fe41efae80d58bb77da91f19f zstd: import usptream v1.5.2
-> config: parisc-randconfig-m041-20221219
-> compiler: hppa-linux-gcc (GCC) 12.1.0
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <error27@gmail.com>
-> 
-> smatch warnings:
-> lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
-> lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
-> lib/zstd/decompress/zstd_decompress_internal.h:206 ZSTD_DCtx_get_bmi2() warn: inconsistent indenting
-> lib/zstd/decompress/zstd_decompress_block.c:894 ZSTD_execSequenceEnd() warn: inconsistent indenting
-> lib/zstd/decompress/zstd_decompress_block.c:942 ZSTD_execSequenceEndSplitLitBuffer() warn: inconsistent indenting
-> lib/zstd/decompress/zstd_decompress_block.c:1009 ZSTD_execSequence() warn: inconsistent indenting
-> 
-> vim +/RANK_POSITION_LOG_BUCKETS_BEGIN +460 lib/zstd/compress/huf_compress.c
-> 
-> 2aa14b1ab2c41a Nick Terrell 2022-10-17  457  static U32 HUF_getIndex(U32 const count) {
-> 2aa14b1ab2c41a Nick Terrell 2022-10-17  458      return (count < RANK_POSITION_DISTINCT_COUNT_CUTOFF)
-> 2aa14b1ab2c41a Nick Terrell 2022-10-17  459          ? count
-> 2aa14b1ab2c41a Nick Terrell 2022-10-17 @460          : BIT_highbit32(count) + RANK_POSITION_LOG_BUCKETS_BEGIN;
-> 
-> This define looks like:
-> 
-> #define RANK_POSITION_LOG_BUCKETS_BEGIN (RANK_POSITION_TABLE_SIZE - 1) - RANK_POSITION_MAX_COUNT_LOG - 1 /* == 158 */
-> 
-> So it's a macro expansion issue but harmless.
-> 
-> 2aa14b1ab2c41a Nick Terrell 2022-10-17  461  }
+>> and fails to check the version, vendor and sub-subsection tag.
+>=20
+> That is now added.
+>=20
+>> You also should handle more than one sub-subsection even if tools =
+don=E2=80=99t
+>> emit it today.
+>=20
+> Just to be on same page, a sub-section implies the following
+>=20
+>       uint32:len, NTBS:vendor-name, uint8: Tag_file, uint32:data-len, =
+<tag><value>....
+>=20
+> If so, the code does support multiple of these
 
-Ah thanks again for the report, this is already fixed upstream in commit ee6475cb [0], but that
-isn't in the v1.5.2 release which we merged into the kernel.
+That=E2=80=99s a sub-section, but I said sub-subsection.
 
-I'll go ahead and backport that commit, and fix the indentation issues upstream and backport
-them as well.
+Jess
 
-Best,
-Nick Terrell
-
-[0] https://github.com/facebook/zstd/commit/ee6475cbbd04408e721c4daa87d993faf3b3c1cf
-
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp 
-> 
+>> You also have an unaligned access for reading the sub-subsection=E2=80=99=
+s data
+>> length (maybe that=E2=80=99s ok in kernel land, but worth making =
+sure).
+>=20
+> True, I've added get_unaligned_le32 for those now
+>=20
+> Thx,
+> -Vineet
 
