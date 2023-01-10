@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6256637AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 04:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3016637AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 04:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjAJDHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 22:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S235410AbjAJDIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 22:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjAJDHu (ORCPT
+        with ESMTP id S230373AbjAJDIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 22:07:50 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE964273D
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 19:07:49 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id cf42so16220699lfb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 19:07:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=profian-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+DYi2+asV9W6N9KEmtknSVW797VmqVxg4xyqnnLbro8=;
-        b=ZSzIo4TSeC5i24/bmwt9RMswJONFNFKPWuuz9o96lxdGALrVYzixbiq7JsZk62mGbt
-         W4tmYyPXfUFwQrPbv0OOHNX/ayxiQyVyHfuMAE6yc3j53SRFRS29oqd2Y0CVs2JwtTe0
-         auw3L1BE/ZgjicwhrajRBS3ERKmNWYKSk3eaT+whcqv42kEN7DyFJpbwkUkB5x1hnXXT
-         3KD/Hat+f3fb2P1gyrUjku0fOP7vCm3pwbiNhUo6XMmeZjPskrcg692iaRz5GjyZkF9q
-         DomRQBG3y/rg9ZZdz1Hurr26EwM7+O9wbEPP1DNnqYctyCspLaG9Vikjd4rKu5lP9JJK
-         ufQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+DYi2+asV9W6N9KEmtknSVW797VmqVxg4xyqnnLbro8=;
-        b=n9CdVfOCPkEQyVO8hncC7mrDV/3v45Rsl5ZiOl/CGaDc6x4PjHuAkzrVzz7lVrsaRy
-         WoTmhkiTj3pEHKJOggOMCtdnbC7TRLqU13kOxE1lwfks73V5BxDsxosOrH7KEcuHYu+9
-         zpx0v8HL3dOGamWPaUdGTnQ8DvjZ7gtPhXqN1TocwwmTmZ3kr/x8X0gH6IGSZm6JKmZ3
-         OgZYWDMDyvAdKvy8FLeAGnlE3FQTTveJYuQZOequNafIc8WkayFafs0vJogB8Sm+VtVX
-         fOg/SU5WIW8YUz2y09gtXgSlUXL9pLwC2U+7orJAuFV2Gqj/kCf9WxmyA/vRKILhpwbZ
-         p6jg==
-X-Gm-Message-State: AFqh2kqQHfFj5Ijw0P/01I5i+p1PJ1+dfRSyi8o45TBm7JgoXMG2wcZ3
-        i7jdAJHfxpMJ74piSzjPuGyGew==
-X-Google-Smtp-Source: AMrXdXvwHoiFWvixpG1kLAAFeyCcetxpUgg4MK9HwvHEHcxOlp9VPr9fVt6XSfAgzBU1V/2AMm2e0w==
-X-Received: by 2002:ac2:51a5:0:b0:4cc:8017:dee9 with SMTP id f5-20020ac251a5000000b004cc8017dee9mr2197200lfk.8.1673320068152;
-        Mon, 09 Jan 2023 19:07:48 -0800 (PST)
-Received: from localhost (83-245-197-49.elisa-laajakaista.fi. [83.245.197.49])
-        by smtp.gmail.com with ESMTPSA id x22-20020a0565123f9600b004b52aed44besm1935752lfa.25.2023.01.09.19.07.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 19:07:47 -0800 (PST)
-From:   Jarkko Sakkinen <jarkko@profian.com>
-To:     Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Jarkko Sakkinen <jarkko@profian.com>,
-        linux-crypto@vger.kernel.org (open list:AMD CRYPTOGRAPHIC COPROCESSOR
-        (CCP) DRIVER - SE...), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3] crypto: ccp: Sanitize sev_platform_init() error messages
-Date:   Tue, 10 Jan 2023 03:07:45 +0000
-Message-Id: <20230110030745.34831-1-jarkko@profian.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 9 Jan 2023 22:08:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA4862D3
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 19:08:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673320091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zUXSaju3UPzIvAC6Of9JSQqq9SpOu4cYG4J3V6EbO2k=;
+        b=W6UAK8v0CJ8ORjHAaq8Du16Me7TCAijxCwF+LOF8s9Ufe0ASv3XBASt71mCGQViMGhisMM
+        Dx+Ny4uUtxqp9Gu6zcJ++zjDcSEsUy0ZPoEP8JRz+vW9KXzx2S1Ud/0p07qSjsuNnDd8aZ
+        FR1UV5swMP3dMzCISyGhBeg0eM2C4UI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-fMQdw4GlOKeewiKddYad9w-1; Mon, 09 Jan 2023 22:08:08 -0500
+X-MC-Unique: fMQdw4GlOKeewiKddYad9w-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E22F810C29;
+        Tue, 10 Jan 2023 03:08:08 +0000 (UTC)
+Received: from madcap2.tricolour.ca (ovpn-0-3.rdu2.redhat.com [10.22.0.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A6DCB492B00;
+        Tue, 10 Jan 2023 03:08:06 +0000 (UTC)
+Date:   Mon, 9 Jan 2023 22:08:04 -0500
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Steve Grubb <sgrubb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v5 3/3] fanotify,audit: Allow audit to use the full
+ permission event response
+Message-ID: <Y7zWlFbrrNcfGauJ@madcap2.tricolour.ca>
+References: <cover.1670606054.git.rgb@redhat.com>
+ <79fcf72ea442eeede53ed5e6de567f8df8ef7d83.1670606054.git.rgb@redhat.com>
+ <3211441.aeNJFYEL58@x2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3211441.aeNJFYEL58@x2>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,86 +67,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following functions end up calling sev_platform_init() or
-__sev_platform_init_locked():
+On 2023-01-09 19:06, Steve Grubb wrote:
+> Hello,
+> 
+> Sorry to take so long. Holidays and kernel build problems. However, I have 
+> built a kernel with these patches. I only have 2 comments. When I use an 
+> application that expected the old API, meaning it simply does:
+> 
+>         response.fd = metadata->fd;
+>         response.response = reply;
+>         close(metadata->fd);
+>         write(fd, &response, sizeof(struct fanotify_response));
+> 
+> I get access denials. Every time. If the program is using the new API and 
+> sets FAN_INFO, then it works as expected. I'll do some more testing but I 
+> think there is something wrong in the compatibility path.
 
-* sev_guest_init()
-* sev_ioctl_do_pek_csr
-* sev_ioctl_do_pdh_export()
-* sev_ioctl_do_pek_import()
-* sev_ioctl_do_pek_pdh_gen()
-* sev_pci_init()
+I'll have a closer look, because this wasn't the intended behaviour.
 
-However, only sev_pci_init() prints out the failed command error code, and
-even there, the error message does not specify which SEV command failed.
+> On Monday, December 12, 2022 9:06:11 AM EST Richard Guy Briggs wrote:
+> > This patch passes the full response so that the audit function can use all
+> > of it. The audit function was updated to log the additional information in
+> > the AUDIT_FANOTIFY record.
+> 
+> What I'm seeing is:
+> 
+> type=FANOTIFY msg=audit(01/09/2023 18:43:16.306:366) : resp=deny fan_type=1 
+> fan_info=313300000000000000000000 subj_trust=0 obj_trust=0
+> 
+> Where fan_info was supposed to be 13 decimal. More below...
 
-Address this by printing out the SEV command errors inside
-__sev_platform_init_locked(), and differentiate between DF_FLUSH, INIT and
-INIT_EX commands.  As a side-effect, @error can be removed from the
-parameter list.
+Well, it *is* 13 decimal, expressed as a hex-encoded string as was
+requested for future-proofing, albeit longer than necessary...
 
-This extra information is particularly useful if firmware loading and/or
-initialization is going to be made more robust, e.g. by allowing firmware
-loading to be postponed.
+> > Currently the only type of fanotify info that is defined is an audit
+> > rule number, but convert it to hex encoding to future-proof the field.
+> > Hex encoding suggested by Paul Moore <paul@paul-moore.com>.
+> > 
+> > Sample records:
+> >   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1
+> > fan_info=3137 subj_trust=3 obj_trust=5 type=FANOTIFY
+> > msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F subj_trust=2
+> > obj_trust=2
+> > 
+> > Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> > Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > ---
+> >  fs/notify/fanotify/fanotify.c |  3 ++-
+> >  include/linux/audit.h         |  9 +++++----
+> >  kernel/auditsc.c              | 25 ++++++++++++++++++++++---
+> >  3 files changed, 29 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/fs/notify/fanotify/fanotify.c b/fs/notify/fanotify/fanotify.c
+> > index 24ec1d66d5a8..29bdd99b29fa 100644
+> > --- a/fs/notify/fanotify/fanotify.c
+> > +++ b/fs/notify/fanotify/fanotify.c
+> > @@ -273,7 +273,8 @@ static int fanotify_get_response(struct fsnotify_group
+> > *group,
+> > 
+> >  	/* Check if the response should be audited */
+> >  	if (event->response & FAN_AUDIT)
+> > -		audit_fanotify(event->response & ~FAN_AUDIT);
+> > +		audit_fanotify(event->response & ~FAN_AUDIT,
+> > +			       &event->audit_rule);
+> > 
+> >  	pr_debug("%s: group=%p event=%p about to return ret=%d\n", __func__,
+> >  		 group, event, ret);
+> > diff --git a/include/linux/audit.h b/include/linux/audit.h
+> > index d6b7d0c7ce43..31086a72e32a 100644
+> > --- a/include/linux/audit.h
+> > +++ b/include/linux/audit.h
+> > @@ -14,6 +14,7 @@
+> >  #include <linux/audit_arch.h>
+> >  #include <uapi/linux/audit.h>
+> >  #include <uapi/linux/netfilter/nf_tables.h>
+> > +#include <uapi/linux/fanotify.h>
+> > 
+> >  #define AUDIT_INO_UNSET ((unsigned long)-1)
+> >  #define AUDIT_DEV_UNSET ((dev_t)-1)
+> > @@ -416,7 +417,7 @@ extern void __audit_log_capset(const struct cred *new,
+> > const struct cred *old); extern void __audit_mmap_fd(int fd, int flags);
+> >  extern void __audit_openat2_how(struct open_how *how);
+> >  extern void __audit_log_kern_module(char *name);
+> > -extern void __audit_fanotify(u32 response);
+> > +extern void __audit_fanotify(u32 response, struct
+> > fanotify_response_info_audit_rule *friar); extern void
+> > __audit_tk_injoffset(struct timespec64 offset);
+> >  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+> >  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int
+> > nentries, @@ -523,10 +524,10 @@ static inline void
+> > audit_log_kern_module(char *name) __audit_log_kern_module(name);
+> >  }
+> > 
+> > -static inline void audit_fanotify(u32 response)
+> > +static inline void audit_fanotify(u32 response, struct
+> > fanotify_response_info_audit_rule *friar) {
+> >  	if (!audit_dummy_context())
+> > -		__audit_fanotify(response);
+> > +		__audit_fanotify(response, friar);
+> >  }
+> > 
+> >  static inline void audit_tk_injoffset(struct timespec64 offset)
+> > @@ -679,7 +680,7 @@ static inline void audit_log_kern_module(char *name)
+> >  {
+> >  }
+> > 
+> > -static inline void audit_fanotify(u32 response)
+> > +static inline void audit_fanotify(u32 response, struct
+> > fanotify_response_info_audit_rule *friar) { }
+> > 
+> >  static inline void audit_tk_injoffset(struct timespec64 offset)
+> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> > index d1fb821de104..8d523066d81f 100644
+> > --- a/kernel/auditsc.c
+> > +++ b/kernel/auditsc.c
+> > @@ -64,6 +64,7 @@
+> >  #include <uapi/linux/limits.h>
+> >  #include <uapi/linux/netfilter/nf_tables.h>
+> >  #include <uapi/linux/openat2.h> // struct open_how
+> > +#include <uapi/linux/fanotify.h>
+> > 
+> >  #include "audit.h"
+> > 
+> > @@ -2877,10 +2878,28 @@ void __audit_log_kern_module(char *name)
+> >  	context->type = AUDIT_KERN_MODULE;
+> >  }
+> > 
+> > -void __audit_fanotify(u32 response)
+> > +void __audit_fanotify(u32 response, struct
+> > fanotify_response_info_audit_rule *friar) {
+> > -	audit_log(audit_context(), GFP_KERNEL,
+> > -		AUDIT_FANOTIFY,	"resp=%u", response);
+> > +	struct audit_context *ctx = audit_context();
+> > +	struct audit_buffer *ab;
+> > +	char numbuf[12];
+> > +
+> > +	if (friar->hdr.type == FAN_RESPONSE_INFO_NONE) {
+> > +		audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> > +			  "resp=%u fan_type=%u fan_info=3F subj_trust=2 
+> obj_trust=2",
+> > +			  response, FAN_RESPONSE_INFO_NONE);
+> > +		return;
+> > +	}
+> > +	ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
+> > +	if (ab) {
+> > +		audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
+> > +				 response, friar->hdr.type);
+> > +		snprintf(numbuf, sizeof(numbuf), "%u", friar->rule_number);
+> > +		audit_log_n_hex(ab, numbuf, sizeof(numbuf));
+> 
+> I don't think it needs to be converted to ascii and then hexencoded. As Paul 
+> said, probably %X is all we need here.
+> 
+> -Steve
+> 
+> 
+> > +		audit_log_format(ab, " subj_trust=%u obj_trust=%u",
+> > +				 friar->subj_trust, friar->obj_trust);
+> > +		audit_log_end(ab);
+> > +	}
+> >  }
+> > 
+> >  void __audit_tk_injoffset(struct timespec64 offset)
+> 
+> 
+> 
+> 
 
-Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
----
-v3:
-* Address Tom Lendacky's feedback:
-  https://lore.kernel.org/kvm/8bf6f179-eee7-fd86-7892-cdcd76e0762a@amd.com/
+- RGB
 
-v2:
-* Address David Rientjes's feedback:
-  https://lore.kernel.org/all/6a16bbe4-4281-fb28-78c4-4ec44c8aa679@google.com/
-* Remove @error.
-* Remove "SEV_" prefix: it is obvious from context so no need to make klog
-  line longer.
----
- drivers/crypto/ccp/sev-dev.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 06fc7156c04f..a231418a5f13 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -476,19 +476,21 @@ static int __sev_platform_init_locked(int *error)
- 		dev_err(sev->dev, "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
- 		rc = init_function(&psp_ret);
- 	}
--	if (error)
--		*error = psp_ret;
--
--	if (rc)
-+	if (rc) {
-+		dev_err(sev->dev, "SEV: %s failed error %#x",
-+			sev_init_ex_buffer ? "CMD_INIT_EX" : "CMD_INIT", psp_ret);
- 		return rc;
-+	}
- 
- 	sev->state = SEV_STATE_INIT;
- 
- 	/* Prepare for first SEV guest launch after INIT */
- 	wbinvd_on_all_cpus();
--	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, error);
--	if (rc)
-+	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, &psp_ret);
-+	if (rc) {
-+		dev_err(sev->dev, "SEV: CMD_DF_FLUSH failed error %#x", psp_ret);
- 		return rc;
-+	}
- 
- 	dev_dbg(sev->dev, "SEV firmware initialized\n");
- 
-@@ -1337,8 +1339,7 @@ void sev_pci_init(void)
- 	/* Initialize the platform */
- 	rc = sev_platform_init(&error);
- 	if (rc)
--		dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
--			error, rc);
-+		dev_err(sev->dev, "SEV: failed to INIT rc %d\n", rc);
- 
- 	return;
- 
--- 
-2.38.1
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
 
