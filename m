@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00067664628
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B4166462E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238942AbjAJQc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 11:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S234367AbjAJQet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 11:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238925AbjAJQci (ORCPT
+        with ESMTP id S239045AbjAJQd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 11:32:38 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D912F85C89
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:32:35 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id bn26so12419965wrb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:32:35 -0800 (PST)
+        Tue, 10 Jan 2023 11:33:56 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B195C8B50A
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:33:29 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id h16so12379068wrz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:33:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:to:from
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QuzbVCChpPx+rGaPIq8dHHS4EuNxVBGmVWr4Va3xo74=;
-        b=s7U+y5Oz7tIRvD972353bs+//bJkzJOJy8dEyT3V0seHT8faP05kCBKRkOOfLC/3Q2
-         khsrE/uvDOaL1cxhP4Nb2OEMNygi9QroDRkVeDbsKSn2hnXlvbMGwHOXBAzsVy38sJAO
-         QsAGB3T1fS8mjPzdfooRgf27bCITsXgW76dgMzTfZFOtq51YQjQfDdtbDd6XPBkNF2Dw
-         jGdXYRHZZmLVEM8FDcb+JhA2YzqNwfKbpGDpn8AYXltNZ/VtadTafumdA3uJX4vaxsiy
-         rrsTTMwfuQ/KFMX+32Za1yeKAJzX58yzI1ntgUO0uGrW1oDuN3PABfoGVoxSef+fdZBQ
-         nGRw==
+        bh=ym/eJ5fz8Y4p1LUjtTeaH5cHFxFkmqxEFY4SImHkXcU=;
+        b=rHL3utTJrZKGfZS+Yh+XnSQKpAJIVH7PQybEto1200q/cWSFzzpdsJA5VCNd5jWfPd
+         Z2LmF0vMgQMrPmsPt2hohdQdShqMHZsM2alOgbrmFbTu4nv3rQWGIVVe6Fo9e5lf7f4g
+         uwHWsIKCMX/rvnWo6aNDDbXoV/2TJ7Djq+PCaoGoyQNRbZX3NBtOtCi6wWj74Vg3LwpC
+         vif4+KykyMKfc7BW1KuKpmKSnsrrcjYKjaoLED9kcYZ8Vx1TnCWx0yGW1u2a2NL3X43L
+         fuqnmd3+cGc2r7cghg/nheSVcuBiU7+VMe8zV7LUNvd7l7kFEYPt9jFYAsdfVTmJYmrz
+         d8Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=mime-version:message-id:date:references:in-reply-to:subject:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QuzbVCChpPx+rGaPIq8dHHS4EuNxVBGmVWr4Va3xo74=;
-        b=NvCXzf/9SB/4L3uypxhKbf0nLEKpd1ziO7I/js8pnxRj76WKINZfLpqZlB9mydgkVr
-         9uOrXCu8Pk32ueY3yj8SA3te3FELQyHpEsd+6TRZqnoQWTK22wjCWRwgFGhmjXXMgE2D
-         +LZ1TwSD1OE9Isr+6BecOFPu637T/CYgAJ24EqcikVvU9RlM0yDIXZkPLC5h7NPXzyWQ
-         1ZJj9gFPlahlvM/w/u/i0hrRA2cfBb+ivRsq/i0qcnWe0qp5qdFwPbrbSbOe4BXRQxe6
-         3IjRyG0adX0w+kwBsZ39vgONSzlw/uGb6BZUCte/UpQ5QPd6i1t9KzRAeMCiN6Y1MAqj
-         qhFQ==
-X-Gm-Message-State: AFqh2koLmvllSr9wnrAsDvKLmXtg8/YJ6FgKXUfEIBHcnwmaesPpf5ax
-        q097YE4UD85EDJJxuHaSlRwtUA==
-X-Google-Smtp-Source: AMrXdXtSCGNwFYMKfMVzHWvbvChN4XjFuVYEwrUFK0U4mbHjX4GIFKntuwa8PQWIutEaY8g9EcHY3Q==
-X-Received: by 2002:a05:6000:910:b0:242:733b:af28 with SMTP id bz16-20020a056000091000b00242733baf28mr58796163wrb.5.1673368354494;
-        Tue, 10 Jan 2023 08:32:34 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l6-20020a5d6686000000b002bb3229a03csm10562820wru.34.2023.01.10.08.32.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 08:32:33 -0800 (PST)
-Message-ID: <9849e94a-abd6-37f2-8c49-e923bb554dee@linaro.org>
-Date:   Tue, 10 Jan 2023 17:32:32 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/3] dt-bindings: vendor-prefixes: add zhihe
-Content-Language: en-US
-To:     Yang Xiwen <forbidden405@foxmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        bh=ym/eJ5fz8Y4p1LUjtTeaH5cHFxFkmqxEFY4SImHkXcU=;
+        b=aFyyBBfpKX81AnoJfO0Vuh940Nt9iYceEhEugQOD9zwogg6o9zs4Es4d/fgTFCZ/9t
+         hmKgTAqFDzshUHsZQpsUbPC/mVDVCCU8yiJPYCFmkxsc0frD/otjGTh7eiaQXNm7bQ5r
+         0BffGnZbluHeV+lNkxOU5yzOincSU88l5PKg8RYgERaEvwsZ66TwGvYGIg+7Wdsec6BE
+         AiXc0ag4L2ps3ZT+k9stN9+hly57nGg1Rp4e2Z9Yr3FFO1SV6etRGZ6Qv3859PCgiqgy
+         dbwQku2It6SinqrjgOcova5oya4yH323et/nQF7xj3RBE1RfvScc4EsHB4qux628qByq
+         epqw==
+X-Gm-Message-State: AFqh2krSDbqfoan2LzObqOJIeyA005C7Y/P87Dhl6KGr/k3OU96aNCo1
+        pKG57DiDWhia8ZqDffPIyq+BRA==
+X-Google-Smtp-Source: AMrXdXtrx3/IptYlgrqDn6WDHI4/OcQNOgoMg0mpPzFL//dT9ibsQKHPGHOgfIQl0PSEJI2Rjj3YEA==
+X-Received: by 2002:a5d:6e0a:0:b0:242:10ac:ac42 with SMTP id h10-20020a5d6e0a000000b0024210acac42mr43977833wrz.55.1673368390734;
+        Tue, 10 Jan 2023 08:33:10 -0800 (PST)
+Received: from localhost ([2a01:cb19:85e6:1900:2bf7:7388:731d:c4e1])
+        by smtp.gmail.com with ESMTPSA id j14-20020adff00e000000b0024cb961b6aesm11492743wro.104.2023.01.10.08.33.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 08:33:10 -0800 (PST)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Werner Sembach <wse@tuxedocomputers.com>,
+        dmitry.torokhov@gmail.com, hdegoede@redhat.com,
+        wse@tuxedocomputers.com, chenhuacai@kernel.org, tiwai@suse.de,
+        wsa+renesas@sang-engineering.com, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Jaime Breva <jbreva@nayarsystems.com>,
-        Nikita Travkin <nikita@trvn.ru>,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230110155014.31664-1-forbidden405@foxmail.com>
- <tencent_89603CF732FEF0B9A2E88CF0E45A62F42D07@qq.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <tencent_89603CF732FEF0B9A2E88CF0E45A62F42D07@qq.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] Input: i8042 - add Clevo PCX0DX to i8042 quirk table
+In-Reply-To: <20230110134524.553620-1-wse@tuxedocomputers.com>
+References: <20230110134524.553620-1-wse@tuxedocomputers.com>
+Date:   Tue, 10 Jan 2023 17:32:55 +0100
+Message-ID: <87zgaq73k8.fsf@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 16:50, Yang Xiwen wrote:
-> zhihe is a placeholder for various 4G USB dongles made by unknown
-> manufactures with similar design. It is widely used in China to refer to
-> these dongles.
+On Tue, Jan 10, 2023 at 14:45, Werner Sembach <wse@tuxedocomputers.com> wrote:
 
-No, it's not descriptive enough. If you bring support for specific
-device, this device is already known to you.
+> The Clevo PCX0DX/TUXEDO XP1511, need quirks for the keyboard to not be
+> occasionally unresponsive after resume.
+>
+> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+> Cc: stable@vger.kernel.org
 
-Best regards,
-Krzysztof
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
+> ---
+>  drivers/input/serio/i8042-acpipnpio.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/serio/i8042-acpipnpio.h
+> index 46f8a694291ed..efc61736099b9 100644
+> --- a/drivers/input/serio/i8042-acpipnpio.h
+> +++ b/drivers/input/serio/i8042-acpipnpio.h
+> @@ -1238,6 +1238,13 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+>  		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+>  					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+>  	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_BOARD_NAME, "PCX0DX"),
+> +		},
+> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+> +					SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+> +	},
+>  	{
+>  		.matches = {
+>  			DMI_MATCH(DMI_BOARD_NAME, "X170SM"),
+> -- 
+> 2.34.1
