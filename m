@@ -2,120 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280DE6638CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 06:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC876638ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 06:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjAJFuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 00:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S230099AbjAJF5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 00:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjAJFtc (ORCPT
+        with ESMTP id S230167AbjAJF4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 00:49:32 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300A038B2;
-        Mon,  9 Jan 2023 21:49:30 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.186.163])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 225DA660230B;
-        Tue, 10 Jan 2023 05:49:24 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673329768;
-        bh=IzktKiuA2C+7fFsNxOT5xp2wBaUGwyAnVvBi3Idir3E=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=JpkC/d8FVY+F4TtOcy4rj+hatadaGiVeh4gQRDbUXVPWKmVHn22jbsIquJ8kYQEUn
-         bNWgZ0EijaKY2vMy4dcQdMQB/VzUd7do14SXu2oV3RTEnePYwt0wwePoOeZC1233C4
-         duOmeLsaMUo56TjPeTNtsY3VvxR7e0o3uAuEF57c4VmAx321s0x6AjPBJHx1w0z9+V
-         62gvy1zeYf3zE/XxpUheETJ/lCM4VUlP2rckcJ603iC6c3j6AvbLuaVnGjXtN6RCKe
-         xHctrMfsbXkg6rHmj9a9lg83R8iwhfpYUJBwMT0EYsvOQZvc9SIu3NO7SvK19p6DBS
-         n98N+vk+ecZkQ==
-Message-ID: <8a0ebe48-c9fd-b030-71bd-4a806c6d5f29@collabora.com>
-Date:   Tue, 10 Jan 2023 10:49:20 +0500
+        Tue, 10 Jan 2023 00:56:05 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2639D3FC83
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 21:55:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673330139; x=1704866139;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DgV1AXfsERPzBUNSWsN/EI6A0q7Rm64Lv3PZr/gyKts=;
+  b=Z/CvEcCdhxuees7dhQphJZPv29Yyv7heb/P36vHQPYp4Iv4Ng3KcgMAT
+   5VcibQqRkKhgoFwNbdLedOppd8rh4jbRgbm14Dn07u5blufHLCswOP3Ov
+   4K2qJG7nFGYPYvn1/gkfLkLU8Skgd2XtdUSr45AM1D7uTLqM1o8XG5I1h
+   w/ht3B+vOi2ajCPAOi2HxDFKYPSLx/cvd+aR20bXgUfSQL1vnGT/o+e0I
+   OmdtU3us4to8sbMa+7xdLHeUbVYOin00yrNx3T0yXE8/T77uq5cYvRurR
+   SWZFGrLf9V8Iemfyg+o4ezzxPwbGhfwyv6LrQVAAJg3JTX82QUGU3/zcz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="350289952"
+X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
+   d="scan'208";a="350289952"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 21:55:38 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="634483730"
+X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
+   d="scan'208";a="634483730"
+Received: from oux.sc.intel.com ([10.3.52.57])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 21:55:38 -0800
+From:   Yian Chen <yian.chen@intel.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ravi Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Sohil Mehta <sohil.mehta@intel.com>,
+        Paul Lai <paul.c.lai@intel.com>,
+        Yian Chen <yian.chen@intel.com>
+Subject: [PATCH 0/7]  Enable LASS (Linear Address space Separation)
+Date:   Mon,  9 Jan 2023 21:51:57 -0800
+Message-Id: <20230110055204.3227669-1-yian.chen@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, kernel@collabora.com,
-        peterx@redhat.com, david@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] mm: implement granular soft-dirty vma support
-To:     Cyrill Gorcunov <gorcunov@gmail.com>
-References: <20221220162606.1595355-1-usama.anjum@collabora.com>
- <Y7ySt0XGnbzTyY6T@grain>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y7ySt0XGnbzTyY6T@grain>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/23 3:18 AM, Cyrill Gorcunov wrote:
-> On Tue, Dec 20, 2022 at 09:26:05PM +0500, Muhammad Usama Anjum wrote:
-> ...
->>
->> +static inline int nsdr_adjust_new_first(struct vm_area_struct *new, struct vm_area_struct *vma)
->> +{
->> +	struct non_sd_reg *r, *r_tmp, *reg;
->> +	unsigned long mid = vma->vm_start;
->> +
->> +	list_for_each_entry_safe(r, r_tmp, &vma->non_sd_reg, nsdr_head) {
->> +		if (r->start < mid && r->end > mid) {
->> +			reg = kmalloc(sizeof(struct non_sd_reg), GFP_KERNEL);
->> +			if (!reg)
->> +				return -ENOMEM;
->> +			reg->start = r->start;
->> +			reg->end = mid;
->> +			list_add_tail(&reg->nsdr_head, &new->non_sd_reg);
->> +
->> +			r->start = mid;
->> +		} else if (r->end <= mid) {
->> +			list_move_tail(&r->nsdr_head, &new->non_sd_reg);
->> +		}
->> +	}
->> +	return 0;
->> +}
-> 
-> Hi Muhhamad, really sorry for delay. Please enlighten me here if I get your
-No problem.
-> idea right -- every new VMA merge might create a new non_sd_seg entry, right?
-Every new VMA only has the non_sd_reg list initialized with no entries as
-the whole VMA is soft-dirty at creation time. We add entries in this list
-when the soft-dirty is cleared over the entire or the part of the VMA.
-Once soft_dirty has been cleared, there might be entries in the non_sd_reg
-lists of both VMAs which will be maintained properly if VMAs are
-split/merged or freed if removed. At this time, the soft-dirty can only be
-cleared over the entire process and hence over entire VMAs. So this list
-will have only one entry even if VMAs are merged until VMAs are split.
+LASS (Linear Address Space Separation) is a security
+extension that prevents speculative address accesses across 
+user/kernel mode. The LASS details have been published in
+Chapter 11 in 
+https://cdrdv2.intel.com/v1/dl/getContent/671368
 
-> And this operation will be applied again and again until vma get freed. IOW
-> we gonna have a chain of non_sd_reg which will be hanging around until VMA
-> get freed, right?
-Correct.
+LASS works in 64-bit mode only and partitions the 64-bit
+virtual address space into two halves:
+    1. Lower half (LA[63]=0) --> user space
+    2. Upper half (LA[63]=1) --> kernel space
+When LASS is enabled, a general protection #GP(0) fault will
+be generated if software accesses the address from the half in
+which it resides to another half, e.g., either from user space
+to upper half, or from kernel space to lower half. This
+protection applies to data access, code execution, cache line
+flushing instructions.
 
-I've posted the next version of PAGEMAP_SCAN ioctl [1] where soft-dirty
-support has been replaced with UFFD WP async. If that goes in, soft-dirty
-support can be left alone as people don't seem receptive of the idea that
-the soft-dirty support should be corrected.  UFFD WP async is better as it
-is PTE based. Please review it.
+Almost all kernel accesses are to the upper half of the virtual
+address space. However, there are valid reasons for kernel to
+access the lower half. For these cases,  kernel can temporarily
+suspend the enforcement of LASS by disabling SMAP (Supervisor
+Mode Access Prevention).
 
-[1]
-https://lore.kernel.org/all/20230109064519.3555250-1-usama.anjum@collabora.com
+Kernel access to copy data to/from user addresses already
+disables SMAP using the stac()/clac() functions. New functions
+low_addr_access_begin()/low_addr_access_end() are added to
+also disable/enable SMAP around other code that legitimately
+needs to access the lower half of the virtual address space.
+
+User space cannot use any kernel address while LASS is
+enabled. Less fortunately, legacy vsyscall functions used
+by old version of glibc are located in the address range
+0xffffffffff600000-0xffffffffff601000 and emulated in kernel.
+Therefore, to comply with LASS policy, the legacy vsyscall is
+disabled by default. I am looking for input from Andy and
+others if this approach is acceptable.
+
+This patch set by default enforces LASS when the platform
+supports it. It can be disabled via the command line parameter
+"clearcpuid" or by setting "vsyscall=emulate/xonly".
+
+As of now there is no publicly available CPU supporting LASS.
+The first one to support LASS is Sierra Forest line. The Intel
+Simics® Simulator was used as software development and testing
+vehicle for this patch set.
+
+Paul Lai (1):
+  x86/kvm: Expose LASS feature to VM guest
+
+Yian Chen (6):
+  x86/cpu: Enumerate LASS CPUID and CR4 bits
+  x86: Add CONFIG option X86_LASS
+  x86/cpu: Disable kernel LASS when patching kernel alternatives
+  x86/vsyscall: Setup vsyscall to compromise LASS protection
+  x86/cpu: Enable LASS (Linear Address Space Separation)
+  x86/cpu: Set LASS as pinning sensitive CR4 bit
+
+ .../admin-guide/kernel-parameters.txt         | 12 +++++++----
+ arch/x86/Kconfig                              | 10 +++++++++
+ arch/x86/entry/vsyscall/vsyscall_64.c         | 14 +++++++++++++
+ arch/x86/include/asm/cpufeatures.h            |  1 +
+ arch/x86/include/asm/disabled-features.h      |  8 ++++++-
+ arch/x86/include/asm/kvm_host.h               |  3 ++-
+ arch/x86/include/asm/smap.h                   | 13 ++++++++++++
+ arch/x86/include/uapi/asm/processor-flags.h   |  2 ++
+ arch/x86/kernel/Makefile                      |  2 ++
+ arch/x86/kernel/alternative.c                 | 21 +++++++++++++++++--
+ arch/x86/kernel/cpu/common.c                  | 20 +++++++++++++++++-
+ arch/x86/kvm/cpuid.c                          |  2 +-
+ tools/arch/x86/include/asm/cpufeatures.h      |  1 +
+ .../arch/x86/include/asm/disabled-features.h  |  8 ++++++-
+ tools/objtool/arch/x86/special.c              |  2 ++
+ 15 files changed, 108 insertions(+), 11 deletions(-)
 
 -- 
-BR,
-Muhammad Usama Anjum
+2.34.1
+
