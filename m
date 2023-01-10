@@ -2,139 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C9A663CF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCD0663CF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237824AbjAJJd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
+        id S238161AbjAJJdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:33:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238189AbjAJJdZ (ORCPT
+        with ESMTP id S238234AbjAJJdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:33:25 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58F038AF9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:33:23 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id k26-20020a05600c1c9a00b003d972646a7dso11300937wms.5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:33:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2jfj9Vw3D8ZX4MdEbwgBQxtSlmIa3nYu0UGzCjpPfxE=;
-        b=oYX4A1yjy32A+H/doqG67qiVsZlLEdPONvs+SBSRCVWx5cSUjtFK/8rgmiuyjae6sk
-         nJuhXagDzHtelrZ9iB3JBVg6iTD0m+9b+ll+jCBacuXBr/BBmXGUshCa0kagL6bmpGbF
-         /vIWgucZBBok+dDcQNcb7acBY7S85Lp9BTgocflK/vSYRP/BT2iPqwHQiRYj6ozE41f3
-         99sOlBngfXghj9WfccyNzOl10FqhQbDYTDpxeCXIEWFL6yAdlQx2xUK+QfHzz+kGwi45
-         0ty3TCrXAToPvkEz7V+dOdDROJ0luLB8HFwP6Ob81Mvz3ePR63nCaYlIwdc2bwhFDh0G
-         2Wkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2jfj9Vw3D8ZX4MdEbwgBQxtSlmIa3nYu0UGzCjpPfxE=;
-        b=EZJgjO6m68yWOvN2fN12V+ovye0KhDzIeI+EA0CF12VmDAIPKvaJ3btCjFGeFk5n3V
-         TleYAz4XcTh91DrvlLg7pye2i0VtuQOyAe3gie8oYqzEJe4yvaJRowq1s7v0JFhsn9mn
-         KPQHw9q2/sBHTTG8qm29sOQ6vsHVyGe0Bk3Omo4EPHJiaQY9SYn5PVAiMmMqFQtnhwhc
-         viU333GsOzOOzqyTZKu5uyNjAhMZ5SaPxvDGnUjpvNEcD77l6D6yKZkMwoNLI6tbdPFv
-         MPpbvHunbLEl/QevmL+E31UTz7xjQ8VkLBCe+3TsgmCUh9FZU0OunxCcEybtKrQHBXZF
-         Nxuw==
-X-Gm-Message-State: AFqh2kpyPFVtDwlzKe+7BabhhkUACi+2Py/jlWpQWJr3wLuu78YZLSGX
-        t8o7/f0NxwQBWDSriA2DDMxoaA==
-X-Google-Smtp-Source: AMrXdXsrih7nnKIOBXnnr50hxUBa1SIexlUteXct6oa/s4ma2nSLWJeKhPczJLVjIZL0WjLZRjh+yw==
-X-Received: by 2002:a05:600c:3b1c:b0:3d9:f0da:542c with SMTP id m28-20020a05600c3b1c00b003d9f0da542cmr4660166wms.28.1673343201715;
-        Tue, 10 Jan 2023 01:33:21 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j30-20020a05600c1c1e00b003cfa80443a0sm16052527wms.35.2023.01.10.01.33.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 01:33:21 -0800 (PST)
-Message-ID: <a6dc4cd9-7008-7de3-f27d-7b82e5f51fbb@linaro.org>
-Date:   Tue, 10 Jan 2023 10:33:18 +0100
+        Tue, 10 Jan 2023 04:33:39 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4277713D72
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:33:37 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pFB0e-0002ya-EF; Tue, 10 Jan 2023 10:33:32 +0100
+Message-ID: <169efa7b-917f-34b8-9edf-1b8c6345c277@leemhuis.info>
+Date:   Tue, 10 Jan 2023 10:33:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V2 01/11] dt-bindings: remoteproc: qcom,q6v5: Move MSM8996
- to schema
-Content-Language: en-US
-To:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        manivannan.sadhasivam@linaro.org, robin.murphy@arm.com
-Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, amit.pundir@linaro.org,
-        regressions@leemhuis.info, sumit.semwal@linaro.org,
-        will@kernel.org, catalin.marinas@arm.com
-References: <20230109034843.23759-1-quic_sibis@quicinc.com>
- <20230109034843.23759-2-quic_sibis@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109034843.23759-2-quic_sibis@quicinc.com>
+ Thunderbird/102.6.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: =?UTF-8?Q?Re=3a_=5bregression=5d_Bug=c2=a0216818_-_The_microphone_m?=
+ =?UTF-8?Q?ute_led_not_working_after_linux_6?=
+Content-Language: en-US, de-DE
+To:     Jaroslav Kysela <perex@perex.cz>,
+        Pierre-louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     sonic82003@gmail.com, plum <plumerlis@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        alsa-devel@alsa-project.org, LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Takashi Iwai <tiwai@suse.com>
+References: <bf52f4c5-5cca-26d7-7fb2-ac8ecb5b24c5@leemhuis.info>
+ <572159b3-a1a4-8735-d435-ea574c07851f@redhat.com>
+ <9f0e95d1-5057-93f0-ad9e-985eaeed0226@leemhuis.info>
+ <7ab2be50-11c6-f79f-e3f5-a5dc5ec41708@perex.cz>
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <7ab2be50-11c6-f79f-e3f5-a5dc5ec41708@perex.cz>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673343217;47d452a4;
+X-HE-SMSGID: 1pFB0e-0002ya-EF
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 04:48, Sibi Sankar wrote:
-> Convert MSM8996 and similar (MSM8998/SDM845) MSS PIL bindings to schema.
+[now that the holiday season is over I'd like to get this rolling again]
+
+On 19.12.22 18:01, Jaroslav Kysela wrote:
+> On 19. 12. 22 11:27, Thorsten Leemhuis wrote:
+>> On 19.12.22 11:00, Hans de Goede wrote:
+>>> On 12/19/22 10:17, Thorsten Leemhuis wrote:
+>>>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+>>>> kernel developer don't keep an eye on it, I decided to forward it by
+>>>> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216818 :
+>>>>
+>>>>>   sonic82003@gmail.com 2022-12-18 08:52:32 UTC
+>>>>>
+>>>>> The mic mute led of my ThinkPad X1 Carbon Gen 9 doesn't work
+>>>>> anymore after updating linux to version 6.
+>>>>> I can still turn it on by  running
+>>>>>
+>>>>> echo 1 > /sys/class/leds/platform::micmute/brightness
+>>>>>
+>>>>> With linux-lts it still works fine.
+>>>>
+>>>> See the ticket for more details.
+>>>>
+>>>> Note, I found a similar report that (despite my attempts to prevent
+>>>> things like this from happening) fell through the cracks here:
+>>>> https://bugzilla.kernel.org/show_bug.cgi?id=216355
+>>>>
+>>>>>   plum 2022-08-13 02:11:01 UTC
+>>>>>
+>>>>> I upgrade to kernel 5.19.1 but found my thinkpad x1 carbon 2021's
+>>>>> mute led stop working.
+>>>>>
+>>>>> Function is okay but LED won't light up.
+>>>>>
+>>>>> Back to kernel 5.18 and it's normal and working again.
+>>>>>
+>>>>> Fedora 36 64 bit
+>>>>> Gnome-shell 42
+>>>>
+>>>>  From a quick research it looks to me like this is an issue for the
+>>>> sounds maintainers, as the LED itself apparently works. If that is
+>>>> something for the platform people instead please speak up.
+>>>
+>>> Thanks for bringing this up, we recently hit this in Fedora too
+>>> and we have a fix/workaround there. Let me copy and paste what
+>>> I just added to bko216355 :
+>>
+>> Many thx for sharing these details, really helpful.
+>>
+>>> This is caused by a behavior change of the kernel code controlling
+>>> the LED to only turn on the LED when all inputs, including e.g. the
+>>> jack mic input are turned off in the alsa-mixer settings.
+>>>
+>>> But most userspace code only turns the mic which it is actually using
+>>> on/off when you hit the mic-mute hotkey.
+>>>
+>>> Also see: https://bugzilla.redhat.com/show_bug.cgi?id=2134824
+>>
+>> Ahh, lot's of helpful information and even a bisect there. :-D
+>>
+>> #regzbot introduced: 9b014266ef8ad0159
 > 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
->  .../remoteproc/qcom,msm8996-mss-pil.yaml      | 370 ++++++++++++++++++
->  .../bindings/remoteproc/qcom,q6v5.txt         | 137 +------
->  2 files changed, 375 insertions(+), 132 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
+> It's not a regression from my view.
+
+Please elaborate. Afaics it is one, as something that used to work
+stopped working with a newer kernel version; it doesn't matter it worked
+by accident beforehand or can be fixed by updating userland, as Linus
+explained multiple times in the past:
+
+https://docs.kernel.org/process/handling-regressions.html#quotes-from-linus-about-regression
+
+But maybe I'm missing something.
+
+>>> Which is the same bug.
+>>>
+>>> There is a set of fixes available in the form of an alsa-ucm update
+>>> which tells the kernel to ignore the state of the jack mic input
+>>> restoring the old behavior:
+>>>
+>>> https://git.alsa-project.org/?p=alsa-ucm-conf.git;a=commitdiff;h=79a8ec44d3dcf097f4a4492c506cbcf338324175
+>>> https://git.alsa-project.org/?p=alsa-ucm-conf.git;a=commitdiff;h=9ce9ddb4a84fb467602b716575ea1d8f2bab0c39
+>>
+>> Hmmm, that's nice, but well, by Linux' "no regressions rule" the issue
+>> is caused by kernel change and thus must be fixed in the kernel, e.g.
+>> without forcing users to update anything in userspace.
+>>
+>> Jaroslav, are there any plans to do that?
 > 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
-> new file mode 100644
-> index 000000000000..d3d3fb2fe91d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
-> @@ -0,0 +1,370 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/qcom,msm8996-mss-pil.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm MSM8996 MSS Peripheral Image Loader (and similar)
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +  - Sibi Sankar <quic_sibis@quicinc.com>
-> +
-> +description:
-> +  This document describes the hardware for a component that loads and boots firmware
-> +  on the Qualcomm Technology Inc. MSM8996 Modem Hexagon Core (and similar).
+> I wrote all relevant information to
+> https://bugzilla.redhat.com/show_bug.cgi?id=2134824 . The problem exists
+> from the initial microphone LED support in the SOF HDA driver, because
+> two drivers control the microphone LED simultaneously (sof-hda-dsp +
+> hda-intel). My recent update just made this thing more visible - the LED
+> state may be updated wrongly in all previous kernels. Original behavior:
+> last write wins. New behavior: all off = LED ON. The UCM fix (update the
+> default kernel runtime configuration from the user space) is sufficient
+> in my eyes for now because even the use case when the microphone LED
+> follows the state when all internal inputs are turned off makes sense.
+> 
+> I think that the sof-hda-dsp driver maintainer may decide to change the
+> default settings in the HDA driver when the digital microphone is
+> detected. Adding Pierre-Louis to the chain.
 
-MSS Peripheral Image Loader loads and boots firmware
-on the Qualcomm Technology Inc. MSM8996 Modem Hexagon Core (and similar).
+Pierre-Louis?
 
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-It's not oneOf. Just enum.
-
-
-> +      - enum:
-> +          - qcom,msm8996-mss-pil
-> +          - qcom,msm8998-mss-pil
-> +          - qcom,sdm845-mss-pil
-> +
-
-With both above:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+#regzbot poke
