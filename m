@@ -2,68 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDCA66437F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8877266438D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbjAJOnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54524 "EHLO
+        id S238549AbjAJOqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238390AbjAJOm4 (ORCPT
+        with ESMTP id S233483AbjAJOq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:42:56 -0500
+        Tue, 10 Jan 2023 09:46:26 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD3C42606
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:42:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD041CB2B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:45:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673361730;
+        s=mimecast20190719; t=1673361939;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=q7HvhAaAWNKOBG0AiE5jaW5da5KSq68kVSGiHSUvN0c=;
-        b=FrkOMt1ZZM4mAWLvbjWclq/9WyvXYaQM7hXt+l4hE7Gj8ifLe6uBerZkiaGpS9ktRJ87wq
-        IRaA/NSbbv9ai21KvgSAAuugiQf8At/xnATXNqnDgRx6obycyqf8nsuK2CQ1zHGjdhUvVq
-        UyFL/8KlbqPN7yZemEFo6Ty57NsaHFA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-519-WbUP3gRIOfqrYIs8gRKVrg-1; Tue, 10 Jan 2023 09:42:07 -0500
-X-MC-Unique: WbUP3gRIOfqrYIs8gRKVrg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 62CF31C08790;
-        Tue, 10 Jan 2023 14:42:06 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 14E3B422FE;
-        Tue, 10 Jan 2023 14:42:04 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230109172500.bd4z2incticapm7x@quack3>
-References: <20230109172500.bd4z2incticapm7x@quack3> <d86e6340-534c-c34c-ab1d-6ebacb213bb9@kernel.dk> <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk> <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk> <1880793.1673257404@warthog.procyon.org.uk>
-To:     Jan Kara <jack@suse.cz>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        bh=HEPL9QhdiHtl81dbBjJ+8ZxqD3DaFE7xqIq6L14Xhs8=;
+        b=QgnCGkEs5ucCYd8LW5qI115aXXUfNNh4On5Vml4R2f+QFAKU0LDVeNvt4ZLMi/JBBe0kbm
+        XZhLeS0bdU7CnXd8+DkTWWnhSXnZ7emvyjDDfeI4uNl85vT0rqY/HPlAmFUaEpW3y6nTJS
+        lI4U7z5SAJCyT3T9Y3EkyPv6VHIUdDg=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-389-71yyHcUlOUmuPvDDWigC-Q-1; Tue, 10 Jan 2023 09:45:37 -0500
+X-MC-Unique: 71yyHcUlOUmuPvDDWigC-Q-1
+Received: by mail-qk1-f200.google.com with SMTP id ay34-20020a05620a17a200b00704bd9922c4so8847250qkb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:45:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HEPL9QhdiHtl81dbBjJ+8ZxqD3DaFE7xqIq6L14Xhs8=;
+        b=RopnJMs5TbLKs7ZCrLXT4qrShfP7ILo+cWtKiw21mTFvcr7V6ViO/bp8jrirX10BYL
+         Qrx5Tdwevi7J5MnK7+jzyVxih8tECuYbez2uNihgt9YKCz2VGuhRkvwqSJVhjAYOU7vN
+         PbiamRZMKPQ08uSdRA4TVehwnp8IFXLGYFciHLZt61lN19wcYBoslbvlTa1Ik11VaczQ
+         T5unnP9LHZWJepoeZA/vKgAFM7XXmkLMdax0ZLITgnigB5HD8quwIrOmZR/4beq1l5oR
+         IUUBGpFTEtkahwOr58fExzlAf+BPak0hdTH7J/AKi4mySCLj8nFbUbymQq7eHOcXj/eI
+         /ZMA==
+X-Gm-Message-State: AFqh2krUIMnITEbxj9E9FP/seadKbEC7xC6G5bOsWXuoc5VKiCGtoa34
+        UkP5ygFUW8blIYXV4iuzeA666gduFprlf1U81MJCK2pNziUpm/Rx9pinhnWtnKrku+Lb+XlTcGv
+        DA+oKm67c0bq3LTRlU6lzBl7f
+X-Received: by 2002:ac8:6ec2:0:b0:3ad:8c10:593b with SMTP id f2-20020ac86ec2000000b003ad8c10593bmr9867759qtv.24.1673361937200;
+        Tue, 10 Jan 2023 06:45:37 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvc9OrhHN3k+CZGP5U3fDQ1GYsd6lcDLuDFqR7M320N5BIicIHK21UGYcRCxL800iX3rtAQ+w==
+X-Received: by 2002:ac8:6ec2:0:b0:3ad:8c10:593b with SMTP id f2-20020ac86ec2000000b003ad8c10593bmr9867721qtv.24.1673361936919;
+        Tue, 10 Jan 2023 06:45:36 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-128.dyn.eolo.it. [146.241.120.128])
+        by smtp.gmail.com with ESMTPSA id z13-20020ac875cd000000b003aef9d97465sm1259788qtq.43.2023.01.10.06.45.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 06:45:36 -0800 (PST)
+Message-ID: <5042e5c6e57a3f99895616c891512e482bf6ed28.camel@redhat.com>
+Subject: Re: [PATCH net-next v9] virtio/vsock: replace virtio_vsock_pkt with
+ sk_buff
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 7/7] iov_iter, block: Make bio structs pin pages rather than ref'ing if appropriate
+Date:   Tue, 10 Jan 2023 15:45:32 +0100
+In-Reply-To: <91593e9c8a475a26a465369f6caff86ac5d662e3.camel@redhat.com>
+References: <20230107002937.899605-1-bobby.eshleman@bytedance.com>
+         <91593e9c8a475a26a465369f6caff86ac5d662e3.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2155892.1673361724.1@warthog.procyon.org.uk>
-Date:   Tue, 10 Jan 2023 14:42:04 +0000
-Message-ID: <2155893.1673361724@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,18 +90,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jan Kara <jack@suse.cz> wrote:
+On Tue, 2023-01-10 at 09:36 +0100, Paolo Abeni wrote:
+> On Sat, 2023-01-07 at 00:29 +0000, Bobby Eshleman wrote:
+> > This commit changes virtio/vsock to use sk_buff instead of
+> > virtio_vsock_pkt. Beyond better conforming to other net code, using
+> > sk_buff allows vsock to use sk_buff-dependent features in the future
+> > (such as sockmap) and improves throughput.
+> > 
+> > This patch introduces the following performance changes:
+> > 
+> > Tool/Config: uperf w/ 64 threads, SOCK_STREAM
+> > Test Runs: 5, mean of results
+> > Before: commit 95ec6bce2a0b ("Merge branch 'net-ipa-more-endpoints'")
+> > 
+> > Test: 64KB, g2h
+> > Before: 21.63 Gb/s
+> > After: 25.59 Gb/s (+18%)
+> > 
+> > Test: 16B, g2h
+> > Before: 11.86 Mb/s
+> > After: 17.41 Mb/s (+46%)
+> > 
+> > Test: 64KB, h2g
+> > Before: 2.15 Gb/s
+> > After: 3.6 Gb/s (+67%)
+> > 
+> > Test: 16B, h2g
+> > Before: 14.38 Mb/s
+> > After: 18.43 Mb/s (+28%)
+> > 
+> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> > Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> > Acked-by: Paolo Abeni <pabeni@redhat.com>
+> > ---
+> > 
+> > Tested using vsock_test g2h and h2g.  I'm not sure if it is standard
+> > practice here to carry Acks and Reviews forward to future versions, but
+> > I'm doing that here to hopefully make life easier for maintainers.
+> > Please let me know if it is not standard practice.
+> 
+> As Jakub noted, there is no clear rule for tag passing across different
+> patch revisions.
+> 
+> Here, given the complexity of the patch and the not trivial list of
+> changes, I would have preferred you would have dropped my tag.
+> 
+> > Changes in v9:
+> > - check length in rx header
+> > - guard alloactor from small requests
+> > - squashed fix for v8 bug reported by syzbot:
+> >     syzbot+30b72abaa17c07fe39dd@syzkaller.appspotmail.com
+> 
+> It's not clear to me what/where is the fix exactly, could you please
+> clarify?
 
-> ... So filesystems really need DIO reads to use FOLL_PIN instead of FOLL_GET
-> and consequently we need to pass information to bio completion function how
-> page references should be dropped.
+Reading the syzkaller report, it looks like iov_length() in
+vhost_vsock_alloc_pkt() can not be trusted to carry a reasonable value.
 
-That information would be available in the bio struct with this patch if
-necessary, though transcribed into a combination of BIO_* flags instead off
-FOLL_* flags.
+As such, don't you additionally need to ensure/check that iov_length()
+is greater or equal to sizeof(virtio_vsock_hdr) ?
 
-I wonder if there's the possibility of the filesystem that generated the bio
-nicking the pages out of the bio and putting them itself.
+Thanks.
 
-David
+Paolo
 
