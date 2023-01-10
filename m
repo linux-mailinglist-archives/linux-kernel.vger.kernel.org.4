@@ -2,231 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9ABE6638F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 06:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF116638FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 07:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235803AbjAJF6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 00:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
+        id S229778AbjAJGCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 01:02:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjAJF4o (ORCPT
+        with ESMTP id S230191AbjAJGCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 00:56:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725EA34752;
-        Mon,  9 Jan 2023 21:56:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EA76B81104;
-        Tue, 10 Jan 2023 05:56:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AD6C433EF;
-        Tue, 10 Jan 2023 05:56:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673330169;
-        bh=1oB4sDoRZa+XX472HDJnAMRcAUiZvaW++oq7wJF7Uog=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FbAmOZqB1yPX+AUbM/yAbQ04gBVVQevbEDUaje8m95IudMdNMBXujS1NNjesKTE8g
-         sPYFHKpSATTuDXmuRIh4xTsgZu2hqtb8j2vZgytNs1YOU7B/1V5ZK8vgTQH4fjQNi9
-         /X/QKhyktLVv2+UPu8g00l1TbVaX/TD/k+YDf9fs=
-Date:   Tue, 10 Jan 2023 06:56:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-Message-ID: <Y7z99mf1M5edxV4A@kroah.com>
-References: <20220701142310.2188015-1-glider@google.com>
- <20220701142310.2188015-11-glider@google.com>
- <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
- <CAG_fn=W2EUjS8AX1Odunq1==dV178s_-w3hQpyrFBr=Auo-Q-A@mail.gmail.com>
- <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
- <CAG_fn=WjrzaHLfgw7ByFvguHA8z0MA-ZB3Kd0d6CYwmZWVEgjA@mail.gmail.com>
- <63bc8fec4744a_5178e29467@dwillia2-xfh.jf.intel.com.notmuch>
+        Tue, 10 Jan 2023 01:02:35 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060.outbound.protection.outlook.com [40.107.92.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB7F43E56;
+        Mon,  9 Jan 2023 21:59:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S9l70IklQyHrlLwpun3e64ufVIPyDY+DtZEtzW7l4ATgqaVV7LMPoeZbMOcYuNPzbL4P8wUCK2qWSpyxaZ0o4AD06MWL0gkF4rTiSnUHXVR4qTungLEY98gMVPkQy0pf8/qknrvDKMCJ6ZMbci2zqLGd9CevOjEITKLCmDD2rLA0XFnvk9F8c2MwUiTALRolU9RDghCNXK56B9Qk+NrlzHnchLxIwC5WsxBwaJJER+WpKxsUsMb2Fnx2DlXSeyBQNlpGWEk3EijOhQJqJRCzX+hsSV6HJm3U1nb0h5XCchU0kv241lCG4He4AxACQgE5zVJK/fYbr2iZ0xwXUPvuCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+8+zKGvbmZHU4PKluH79T6J0il3vX65DwXfkFTkVmhs=;
+ b=fxhMiIupkOAoO2qDUfQdXlcu04wifWaUX1M4GNdrabfsiI9VGFYBSAYHQf6BU/ygzl2JlMFyCl9G+YEm/amOBO4WZP4+OvtIcvyV+QFhkEHKruPOygMJYHl7Y+IvnYvzsMwCSofMM87u8Y/uARavdjkhUbR/cve9jKxWcTI/ap8YVEkvqfF9qDCIw+KkswxJBgxbkqb+TZ9wronuc4p8JRrqYpaWJCk9gmtn5HkQRzBWbyngsTVyq1m0CMUYtmZaJttaJgwOdAOhYtKo/kN9QBtzJWh1KrzoQImp+R8OzXersJNfkZgYQidHsP9RkWJPDC0YzuWa0IKgQeBh3BU0HA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+8+zKGvbmZHU4PKluH79T6J0il3vX65DwXfkFTkVmhs=;
+ b=4N9CNyOZLc/U77xfV+59MWkYQQxwbSH4Bmv4yPTAVeIUs+7euBEOOR6BgWKXJZ7taIEK+gxlJslOubE3x8JYkfFgb1IlHVKXa1VxEeQr0dDKPFL68Zm0My278qfLmZDdwJoVwxmB6JX7mjiT232uLGPYUZwUk/PBPtBN/LuBBPI=
+Received: from MW4PR04CA0384.namprd04.prod.outlook.com (2603:10b6:303:81::29)
+ by SA3PR12MB7782.namprd12.prod.outlook.com (2603:10b6:806:31c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
+ 2023 05:59:27 +0000
+Received: from CO1NAM11FT082.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:81:cafe::28) by MW4PR04CA0384.outlook.office365.com
+ (2603:10b6:303:81::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18 via Frontend
+ Transport; Tue, 10 Jan 2023 05:59:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT082.mail.protection.outlook.com (10.13.175.224) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5986.18 via Frontend Transport; Tue, 10 Jan 2023 05:59:26 +0000
+Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 9 Jan
+ 2023 23:59:20 -0600
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+To:     <acme@kernel.org>
+CC:     <ravi.bangoria@amd.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <irogers@google.com>, <kan.liang@linux.intel.com>,
+        <peterz@infradead.org>, <mark.rutland@arm.com>, <mingo@redhat.com>,
+        <alexander.shishkin@linux.intel.com>, <james.clark@arm.com>,
+        <german.gomez@arm.com>, <leo.yan@linaro.org>,
+        <adrian.hunter@intel.com>, <alexey.v.bayduraev@linux.intel.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
+        <santosh.shukla@amd.com>
+Subject: [RFC 0/4] perf tool: Fix non-".text" symbol resolution for kernel modules
+Date:   Tue, 10 Jan 2023 11:28:55 +0530
+Message-ID: <20230110055859.685-1-ravi.bangoria@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63bc8fec4744a_5178e29467@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT082:EE_|SA3PR12MB7782:EE_
+X-MS-Office365-Filtering-Correlation-Id: e70abc6c-1eb7-43c8-ad39-08daf2cfd4e8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lur1cdgLW87xbz1HfTUJskJhSLKbznk4ewtp8CSAdgg1tlevNGIHZBqC1FRY5H/Ep9CC0CukTQcObcwSmC8NRgSn+sXpe8XR8nOsVb600deXEho2FRXyYkELkpYXQOVWkodUu7VQbMjqLEgQGeYIb0K+5gzMGnWsrElCHIv/PDdPvJwqZtIA26w3BfzBlVIae7tKFdJvDyLpEOBDUVizXs9j6AxMLVrx1JtxnPbS8GZ8lFryyAq8uHDnEz5cGl+8tPSdRiYdC8qZ1DIoHjJ/CW2j1JYv+7R6W7mEz/GCuMShwI4xCUnGTMIheivdUxl5mQxCYfN+YIE7XcR5JQWNB4xHR5nH67XYLgI0y1TrKbWpGN191NBIu5SGpsxvzlcuI7kevvzxVYX5VYD3wGQhOVybAIrzhCyqF06oM709hqXJ22ilE+f5Bb53GatropKcPI0Lj4lC3vKOdBEXWBeB8UXLWCaCPTMOuOwie3WZz0OiENsGNmFlZaxucgA98pmUt1v3jDWtMqpc+qIidvdB1vvrftcRnZwCpPdABKpydtR89cxmVcuE02VJjqWvkJ+0oJxOrUDGKqNDw7bmdYmjjHJYLEFIBZKejRR0lC9C1reqyaGqgBnVIkfc1VnNsxj36DRum1s//ZMfI5b/gxz/AyXUUSSwvbfOmFMp3QIVTZF57pHBXuo21JMMxaTV5edzZMqpmn1wc1GGRgiF16TzfwOKVfhtJtC8+KE5Det8Zu8=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(39860400002)(376002)(451199015)(36840700001)(40470700004)(46966006)(8676002)(70586007)(6916009)(316002)(4326008)(7696005)(70206006)(54906003)(356005)(44832011)(2906002)(5660300002)(40460700003)(8936002)(47076005)(81166007)(7416002)(426003)(41300700001)(36756003)(83380400001)(36860700001)(6666004)(478600001)(1076003)(40480700001)(336012)(2616005)(16526019)(82740400003)(26005)(86362001)(186003)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 05:59:26.9110
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e70abc6c-1eb7-43c8-ad39-08daf2cfd4e8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT082.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7782
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 02:06:36PM -0800, Dan Williams wrote:
-> Alexander Potapenko wrote:
-> > On Thu, Jan 5, 2023 at 11:09 PM Dan Williams <dan.j.williams@intel.com> wrote:
-> > >
-> > > Alexander Potapenko wrote:
-> > > > (+ Dan Williams)
-> > > > (resending with patch context included)
-> > > >
-> > > > On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> wrote:
-> > > > >
-> > > > > On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
-> > > > > >
-> > > > > > KMSAN adds extra metadata fields to struct page, so it does not fit into
-> > > > > > 64 bytes anymore.
-> > > > >
-> > > > > Does this somehow cause extra space being used in all kernel configs?
-> > > > > If not, it would be good to note this in the commit message.
-> > > > >
-> > > > I actually couldn't verify this on QEMU, because the driver never got loaded.
-> > > > Looks like this increases the amount of memory used by the nvdimm
-> > > > driver in all kernel configs that enable it (including those that
-> > > > don't use KMSAN), but I am not sure how much is that.
-> > > >
-> > > > Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be?
-> > >
-> > > Apologies I missed this several months ago. The answer is that this
-> > > causes everyone creating PMEM namespaces on v6.1+ to lose double the
-> > > capacity of their namespace even when not using KMSAN which is too
-> > > wasteful to tolerate. So, I think "6e9f05dc66f9 libnvdimm/pfn_dev:
-> > > increase MAX_STRUCT_PAGE_SIZE" needs to be reverted and replaced with
-> > > something like:
-> > >
-> > > diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
-> > > index 79d93126453d..5693869b720b 100644
-> > > --- a/drivers/nvdimm/Kconfig
-> > > +++ b/drivers/nvdimm/Kconfig
-> > > @@ -63,6 +63,7 @@ config NVDIMM_PFN
-> > >         bool "PFN: Map persistent (device) memory"
-> > >         default LIBNVDIMM
-> > >         depends on ZONE_DEVICE
-> > > +       depends on !KMSAN
-> > >         select ND_CLAIM
-> > >         help
-> > >           Map persistent memory, i.e. advertise it to the memory
-> > >
-> > >
-> > > ...otherwise, what was the rationale for increasing this value? Were you
-> > > actually trying to use KMSAN for DAX pages?
-> > 
-> > I was just building the kernel with nvdimm driver and KMSAN enabled.
-> > Because KMSAN adds extra data to every struct page, it immediately hit
-> > the following assert:
-> > 
-> > drivers/nvdimm/pfn_devs.c:796:3: error: call to
-> > __compiletime_assert_330 declared with 'error' attribute: BUILD_BUG_ON
-> > fE
-> >                 BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_SIZE);
-> > 
-> > The comment before MAX_STRUCT_PAGE_SIZE declaration says "max struct
-> > page size independent of kernel config", but maybe we can afford
-> > making it dependent on CONFIG_KMSAN (and possibly other config options
-> > that increase struct page size)?
-> > 
-> > I don't mind disabling the driver under KMSAN, but having an extra
-> > ifdef to keep KMSAN support sounds reasonable, WDYT?
-> 
-> How about a module parameter to opt-in to the increased permanent
-> capacity loss?
+Kernel module elf contains executable code in non-".text" sections as
+well, for ex: ".noinstr.text". Plus, kernel module's memory layout
+differs from it's binary layout because .ko elf does not contain
+program header table.
 
-Please no, this isn't the 1990's, we should never force users to keep
-track of new module parameters that you then have to support for
-forever.
+Perf tries to solve it by creating special maps for allocated (SHF_ALLOC)
+elf sections, but perf uses elf addresses for map address range and thus
+these special maps remains unused because no real ip falls into their
+address range.
 
+Solve this by preparing section specific special maps using addresses
+provided by sysfs /sys/module/.../sections/. Also save these details in
+PERF_RECORD_KMOD_SEC_MAP format in perf.data which can be consumed at
+perf-report time.
 
-> 
-> -- >8 --
-> >From 693563817dea3fd8f293f9b69ec78066ab1d96d2 Mon Sep 17 00:00:00 2001
-> From: Dan Williams <dan.j.williams@intel.com>
-> Date: Thu, 5 Jan 2023 13:27:34 -0800
-> Subject: [PATCH] nvdimm: Support sizeof(struct page) > MAX_STRUCT_PAGE_SIZE
-> 
-> Commit 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
-> 
-> ...updated MAX_STRUCT_PAGE_SIZE to account for sizeof(struct page)
-> potentially doubling in the case of CONFIG_KMSAN=y. Unfortunately this
-> doubles the amount of capacity stolen from user addressable capacity for
-> everyone, regardless of whether they are using the debug option. Revert
-> that change, mandate that MAX_STRUCT_PAGE_SIZE never exceed 64, but
-> allow for debug scenarios to proceed with creating debug sized page maps
-> with a new 'libnvdimm.page_struct_override' module parameter.
-> 
-> Note that this only applies to cases where the page map is permanent,
-> i.e. stored in a reservation of the pmem itself ("--map=dev" in "ndctl
-> create-namespace" terms). For the "--map=mem" case, since the allocation
-> is ephemeral for the lifespan of the namespace, there are no explicit
-> restriction. However, the implicit restriction, of having enough
-> available "System RAM" to store the page map for the typically large
-> pmem, still applies.
-> 
-> Fixes: 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
-> Cc: <stable@vger.kernel.org>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Marco Elver <elver@google.com>
-> Reported-by: Jeff Moyer <jmoyer@redhat.com>
-> ---
->  drivers/nvdimm/nd.h       |  2 +-
->  drivers/nvdimm/pfn_devs.c | 45 ++++++++++++++++++++++++++-------------
->  2 files changed, 31 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
-> index 85ca5b4da3cf..ec5219680092 100644
-> --- a/drivers/nvdimm/nd.h
-> +++ b/drivers/nvdimm/nd.h
-> @@ -652,7 +652,7 @@ void devm_namespace_disable(struct device *dev,
->  		struct nd_namespace_common *ndns);
->  #if IS_ENABLED(CONFIG_ND_CLAIM)
->  /* max struct page size independent of kernel config */
-> -#define MAX_STRUCT_PAGE_SIZE 128
-> +#define MAX_STRUCT_PAGE_SIZE 64
->  int nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgmap);
->  #else
->  static inline int nvdimm_setup_pfn(struct nd_pfn *nd_pfn,
-> diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
-> index 61af072ac98f..978d63559c0e 100644
-> --- a/drivers/nvdimm/pfn_devs.c
-> +++ b/drivers/nvdimm/pfn_devs.c
-> @@ -13,6 +13,11 @@
->  #include "pfn.h"
->  #include "nd.h"
->  
-> +static bool page_struct_override;
-> +module_param(page_struct_override, bool, 0644);
-> +MODULE_PARM_DESC(page_struct_override,
-> +		 "Force namespace creation in the presence of mm-debug.");
+Without patchset:
 
-I can't figure out from this description what this is for so perhaps it
-should be either removed and made dynamic (if you know you want to debug
-the mm core, why not turn it on then?) or made more obvious what is
-happening?
+  # perf record -a -c 5000000
+  # perf report
+  Overhead  Command          Shared Object           Symbol
+    13.20%  qemu-system-x86  [unknown]               [.] 0x00005557527b1973
+     6.58%  qemu-system-x86  [kvm_amd]               [k] 0x00000000000151e6
+     6.36%  qemu-system-x86  [kernel.vmlinux]        [k] native_load_gdt
+     6.21%  qemu-system-x86  [kernel.vmlinux]        [k] native_load_tr_desc
+     4.71%  qemu-system-x86  [kvm]                   [k] vcpu_run
+     4.52%  qemu-system-x86  [kvm_amd]               [k] svm_vcpu_run
+     3.50%  qemu-system-x86  [kvm]                   [k] kvm_cpuid
+     2.09%  qemu-system-x86  [kvm]                   [k] kvm_pmu_trigger_event
+     1.98%  qemu-system-x86  [kvm_amd]               [k] 0x0000000000015171
+     1.05%  qemu-system-x86  [kvm_amd]               [k] svm_handle_exit
+     1.04%  qemu-system-x86  [kvm_amd]               [k] 0x00000000000151e2
+     0.94%  qemu-system-x86  [kvm_amd]               [k] 0x0000000000015174
 
-thanks,
+  Same perf.data with kallsyms:
 
-greg k-h
+  # perf report --kallsyms=/proc/kallsyms
+  Overhead  Command          Shared Object           Symbol
+    14.22%  qemu-system-x86  [kvm_amd]               [k] __svm_vcpu_run
+    13.20%  qemu-system-x86  [unknown]               [.] 0x00005557527b1973
+     6.36%  qemu-system-x86  [kernel.vmlinux]        [k] native_load_gdt
+     6.21%  qemu-system-x86  [kernel.vmlinux]        [k] native_load_tr_desc
+     4.71%  qemu-system-x86  [kvm]                   [k] vcpu_run
+     4.52%  qemu-system-x86  [kvm_amd]               [k] svm_vcpu_run
+     3.50%  qemu-system-x86  [kvm]                   [k] kvm_cpuid
+     2.09%  qemu-system-x86  [kvm]                   [k] kvm_pmu_trigger_event
+     1.05%  qemu-system-x86  [kvm_amd]               [k] svm_handle_exit
+
+With patchset:
+
+  # perf record -a -c 5000000
+  # perf report
+  Overhead  Command          Shared Object           Symbol
+    13.44%  qemu-system-x86  [kvm-amd].noinstr.text  [k] __svm_vcpu_run
+    13.25%  qemu-system-x86  [unknown]               [.] 0x000055f4c6563973
+     7.13%  qemu-system-x86  [kernel.vmlinux]        [k] native_load_gdt
+     6.00%  qemu-system-x86  [kernel.vmlinux]        [k] native_load_tr_desc
+     5.13%  qemu-system-x86  [kvm_amd]               [k] svm_vcpu_run
+     4.83%  qemu-system-x86  [kvm]                   [k] vcpu_run
+     3.65%  qemu-system-x86  [kvm]                   [k] kvm_cpuid
+
+  Same perf.data with kallsyms:
+
+  # perf report --kallsyms=/proc/kallsyms
+  Overhead  Command          Shared Object       Symbol
+    13.44%  qemu-system-x86  [kernel.vmlinux]    [k] __svm_vcpu_run
+    13.25%  qemu-system-x86  [unknown]           [.] 0x000055f4c6563973
+     7.13%  qemu-system-x86  [kernel.vmlinux]    [k] native_load_gdt
+     6.00%  qemu-system-x86  [kernel.vmlinux]    [k] native_load_tr_desc
+     5.13%  qemu-system-x86  [kernel.vmlinux]    [k] svm_vcpu_run
+     4.83%  qemu-system-x86  [kernel.vmlinux]    [k] vcpu_run
+     3.65%  qemu-system-x86  [kernel.vmlinux]    [k] kvm_cpuid
+
+This is an RFC only series. TODOs:
+ - I'm just recording module path in PERF_RECORD_KMOD_SEC_MAP. It's very
+   much possible that, at perf report time, a module file exists at the
+   same path but it's internal layout is different. I think I need to add
+   some buildid check. Any ideas?
+ - I've enabled host perf-record/report only. It doesn't work for guest
+   modules because host does not have access to guest sysfs. I'm yet to
+   figure out how to fix it. May be we can add --guest-mod-sysfs option.
+   Any ideas?
+ - Also, I'm currently assuming that module files are not compressed.
+ - I've seen perf build failures when compiling with NO_LIBELF=1.
+ - I've seen perf report not honoring --kallsyms in certain conditions.
+
+Prepared on top of acme/perf/core (69b41ac87e4a6)
+
+Ravi Bangoria (4):
+  perf tool: Simplify machine__create_modules() a bit
+  perf tool: Refactor perf_event__synthesize_modules()
+  perf tool: Introduce PERF_RECORD_KMOD_SEC_MAP
+  perf tool: Fix non-".text" symbol resolution for kernel modules
+
+ tools/lib/perf/Documentation/libperf.txt |   1 +
+ tools/lib/perf/include/perf/event.h      |  25 +++
+ tools/perf/builtin-annotate.c            |   1 +
+ tools/perf/builtin-c2c.c                 |   1 +
+ tools/perf/builtin-diff.c                |   1 +
+ tools/perf/builtin-inject.c              |   1 +
+ tools/perf/builtin-kmem.c                |   1 +
+ tools/perf/builtin-mem.c                 |   1 +
+ tools/perf/builtin-record.c              |  14 ++
+ tools/perf/builtin-report.c              |   1 +
+ tools/perf/builtin-script.c              |  13 ++
+ tools/perf/builtin-trace.c               |   1 +
+ tools/perf/util/build-id.c               |   1 +
+ tools/perf/util/data-convert-bt.c        |   1 +
+ tools/perf/util/data-convert-json.c      |   1 +
+ tools/perf/util/event.c                  |  22 ++
+ tools/perf/util/event.h                  |   5 +
+ tools/perf/util/machine.c                | 268 ++++++++++++++++++++++-
+ tools/perf/util/machine.h                |   2 +
+ tools/perf/util/map.c                    |   1 +
+ tools/perf/util/map.h                    |   4 +
+ tools/perf/util/session.c                |  17 ++
+ tools/perf/util/symbol-elf.c             |   9 +-
+ tools/perf/util/symbol.c                 |   2 +-
+ tools/perf/util/synthetic-events.c       | 136 +++++++++---
+ tools/perf/util/tool.h                   |   3 +-
+ 26 files changed, 494 insertions(+), 39 deletions(-)
+
+-- 
+2.39.0
+
