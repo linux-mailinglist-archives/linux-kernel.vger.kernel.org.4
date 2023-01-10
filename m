@@ -2,106 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F926644DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71496644F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238839AbjAJPbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        id S238487AbjAJPd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:33:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233014AbjAJPaZ (ORCPT
+        with ESMTP id S239114AbjAJPdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:30:25 -0500
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C8123E87C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:30:24 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowAC32M2GhL1jH78NDA--.21443S2;
-        Tue, 10 Jan 2023 23:30:14 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@gmail.com, daniel@ffwll.ch, ville.syrjala@linux.intel.com,
-        manasi.d.navare@intel.com, stanislav.lisovskiy@intel.com,
-        lucas.demarchi@intel.com
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH 2/2] drm/i915: Replace alloc*workqueue with DRM helpers
-Date:   Tue, 10 Jan 2023 23:30:13 +0800
-Message-Id: <20230110153013.5702-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 10 Jan 2023 10:33:10 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DC3187;
+        Tue, 10 Jan 2023 07:33:09 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pFGcX-0005bB-I3; Tue, 10 Jan 2023 16:33:01 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Chukun Pan <amadeus@jmu.edu.cn>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: rockchip: remove unsupported property from sdmmc2 for rock-3a
+Date:   Tue, 10 Jan 2023 16:32:58 +0100
+Message-Id: <167336477675.2640328.2287361282584419337.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221219101052.7899-1-amadeus@jmu.edu.cn>
+References: <20221219101052.7899-1-amadeus@jmu.edu.cn>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAC32M2GhL1jH78NDA--.21443S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zry5Zr45tFWUGF15AFy7Jrb_yoW8Cr45pF
-        43CFyYyrW5JFsYgay5Aa1vvFy7C3y8t3WfCF17u3ZrZ3WYyrn8Aw1qy3Z8WFyDGF43XF4r
-        AF97tFW29F1qyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE14v_XrWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfU0CJmUUUUU
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace alloc*workqueue with DRM helpers in order to avoid memory leak.
-Moreover, check the return value since the workqueue may be NULL and
-cause NULL pointer dereference.
+On Mon, 19 Dec 2022 18:10:52 +0800, Chukun Pan wrote:
+> 'supports-sdio' is not part of the DT binding
+> and not supported by the Linux driver.
+> 
+> 
 
-Fixes: c26a058680dc ("drm/i915: Use a high priority wq for nonblocking plane updates")
-Fixes: 757fffcfdffb ("drm/i915: Put all non-blocking modesets onto an ordered wq")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/gpu/drm/i915/display/intel_display.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+Applied, thanks!
 
-diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
-index 6c2686ecb62a..8acef38ca985 100644
---- a/drivers/gpu/drm/i915/display/intel_display.c
-+++ b/drivers/gpu/drm/i915/display/intel_display.c
-@@ -41,6 +41,7 @@
- #include <drm/drm_damage_helper.h>
- #include <drm/drm_edid.h>
- #include <drm/drm_fourcc.h>
-+#include <drm/drm_managed.h>
- #include <drm/drm_privacy_screen_consumer.h>
- #include <drm/drm_probe_helper.h>
- #include <drm/drm_rect.h>
-@@ -8654,9 +8655,16 @@ int intel_modeset_init_noirq(struct drm_i915_private *i915)
- 
- 	intel_dmc_ucode_init(i915);
- 
--	i915->display.wq.modeset = alloc_ordered_workqueue("i915_modeset", 0);
--	i915->display.wq.flip = alloc_workqueue("i915_flip", WQ_HIGHPRI |
--						WQ_UNBOUND, WQ_UNBOUND_MAX_ACTIVE);
-+	ret = drmm_alloc_ordered_workqueue(&i915->drm,
-+					   i915->display.wq.modeset, "i915_modeset", 0);
-+	if (ret)
-+		goto cleanup_vga_client_pw_domain_dmc;
-+
-+	ret = drmm_alloc_workqueue(&i915->drm, i915->display.wq.flip,
-+				   "i915_flip", WQ_HIGHPRI | WQ_UNBOUND,
-+				   WQ_UNBOUND_MAX_ACTIVE);
-+	if (ret)
-+		goto cleanup_vga_client_pw_domain_dmc;
- 
- 	intel_mode_config_init(i915);
- 
+[1/1] arm64: dts: rockchip: remove unsupported property from sdmmc2 for rock-3a
+      commit: 0b693c8f8b88d50114caaa4d2337932d4d172631
+
+Best regards,
 -- 
-2.25.1
-
+Heiko Stuebner <heiko@sntech.de>
