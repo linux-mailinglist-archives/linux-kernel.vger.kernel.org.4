@@ -2,116 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D24766446F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6C7664471
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238624AbjAJPTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S238792AbjAJPUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238428AbjAJPTs (ORCPT
+        with ESMTP id S233871AbjAJPTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:19:48 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433585BA34;
-        Tue, 10 Jan 2023 07:19:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673363988; x=1704899988;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=19LiZ+HqQL5Doh9UbMQEiLpyHqyJB3yalB7IXIegZGI=;
-  b=gjX7z5yBGt34xq4qz63go6fFcIC9psG+T/ZWHTieHmV7wu3qS4LmbYf2
-   pzoLb1+TazcwoprG4zrNMSxzQjBNzuzmb1/X8TrMojUfA6sT6o/Yy2Ucn
-   6dpGM+36Un1qiDgPqF/RtSXwU5aSHH2/Kc3tITomvfGBEqqw7aIiuauXk
-   hPd0+22l9a+FMQt91o5lr6hA08hPHmvNFSueWStEKF0dXBzWPKQO4sK96
-   683RX7V5/kXqXPTYUCFz2J4Q8QUs8IoKjVX/dmf6gRIQmfdKBh9OGEZGc
-   rJiuEvYUyxFUQq4zCJzr8zPDpoSlXk525l7U0dlum9qEbdMKfEpTKP8Ib
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="310969213"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="310969213"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 07:19:47 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="657088890"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="657088890"
-Received: from svenka7-mobl1.amr.corp.intel.com (HELO [10.209.63.27]) ([10.209.63.27])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 07:19:47 -0800
-Message-ID: <3bfe283e-6a90-54cb-1ba2-45ce6d022206@intel.com>
-Date:   Tue, 10 Jan 2023 07:19:46 -0800
+        Tue, 10 Jan 2023 10:19:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2992D5C1EF;
+        Tue, 10 Jan 2023 07:19:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB760B81731;
+        Tue, 10 Jan 2023 15:19:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BAA2C433F0;
+        Tue, 10 Jan 2023 15:19:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673363991;
+        bh=eo9TFkkF19HVlM3o4QpdLSsi0wJXq0jNn4MmAXxKsPE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XCbb2JpewK0YgB59TKO+QL7EUH6xCmoLRrtU0YpOeBwPX3RmV5rWR4XVpP6i2nfhL
+         Ew6wMSRnOIbtUK3wOut1ugWrGxgis4ghq7B3MkrvT7wwPdy2uABE87UYiNDdrTuIMj
+         Uu12qYYRill++Cfup9uVGbpf2RWcwJ+uchuOr1ZY=
+Date:   Tue, 10 Jan 2023 16:19:47 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Dan Carpenter <error27@gmail.com>,
+        Darren Kenny <darren.kenny@oracle.com>
+Subject: Re: [PATCH 5.15 514/530] io_uring/rw: fix errored retry return values
+Message-ID: <Y72CE2SkKR4CHW9G@kroah.com>
+References: <20221024113044.976326639@linuxfoundation.org>
+ <20221024113108.274007846@linuxfoundation.org>
+ <9ae29224-beff-66b1-cfcd-881bd5351e1c@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v8 11/16] x86/virt/tdx: Designate reserved areas for all
- TDMRs
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1670566861.git.kai.huang@intel.com>
- <27dcd2781a450b3f77a2aec833de6a3669bc0fb8.1670566861.git.kai.huang@intel.com>
- <2d7d2824-7aa7-5f96-d79b-b44ff7fe2ef9@intel.com>
- <b971cd8b4e6ce9e96c6b4c6192adb74cc6722d54.camel@intel.com>
- <778a6c80-a955-620d-a82a-c2ca82f26363@intel.com>
- <24ea02aa4db7d470adeb7a64b7692d8bd5a428ca.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <24ea02aa4db7d470adeb7a64b7692d8bd5a428ca.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9ae29224-beff-66b1-cfcd-881bd5351e1c@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/23 03:01, Huang, Kai wrote:
-> On Mon, 2023-01-09 at 17:22 -0800, Dave Hansen wrote:
->> On 1/9/23 17:19, Huang, Kai wrote:
->>>> It's probably also worth noting *somewhere* that there's a balance to be
->>>> had between TDMRs and reserved areas.  A system that is running out of
->>>> reserved areas in a TDMR could split a TDMR to get more reserved areas.
->>>> A system that has run out of TDMRs could relatively easily coalesce two
->>>> adjacent TDMRs (before the PAMTs are allocated) and use a reserved area
->>>> if there was a gap between them.
->>> We can add above to the changelog of this patch, or the patch 09 ("x86/virt/tdx:
->>> Fill out TDMRs to cover all TDX memory regions").  The latter perhaps is better
->>> since that patch is the first place where the balance of TDMRs and reserved
->>> areas is related.
->>>
->>> What is your suggestion?
->> Just put it close to the code that actually hits the problem so the
->> potential solution is close at hand to whoever hits the problem.
->>
-> Sorry to double check: the code which hits the problem is the 'if (idx >=
-> max_reserved_per_tdmr)' check in tdmr_add_rsvd_area(), so I think I can add
-> right before this check?
+On Tue, Jan 10, 2023 at 08:36:00PM +0530, Harshit Mogalapalli wrote:
+> 
+> Hi Greg,
+> 
+> On 24/10/22 5:04 pm, Greg Kroah-Hartman wrote:
+> > From: Pavel Begunkov <asml.silence@gmail.com>
+> > 
+> > [ upstream commit 62bb0647b14646fa6c9aa25ecdf67ad18f13523c ]
+> > 
+> 
+> This commit 62bb0647b14646fa6c9aa25ecdf67ad18f13523 also changes second
+> argument from unsigned to long.
+> 
+> > Kernel test robot reports that we test negativity of an unsigned in
+> > io_fixup_rw_res() after a recent change, which masks error codes and
+> > messes up the return value in case I/O is re-retried and failed with
+> > an error.
+> > 
+> > Fixes: 4d9cb92ca41dd ("io_uring/rw: fix short rw error handling")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> > Link: https://lore.kernel.org/r/9754a0970af1861e7865f9014f735c70dc60bf79.1663071587.git.asml.silence@gmail.com
+> > Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >   fs/io_uring.c |    2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > --- a/fs/io_uring.c
+> > +++ b/fs/io_uring.c
+> > @@ -2701,7 +2701,7 @@ static bool __io_complete_rw_common(stru
+> >   	return false;
+> >   }
+> > -static inline unsigned io_fixup_rw_res(struct io_kiocb *req, unsigned res)
+> > +static inline int io_fixup_rw_res(struct io_kiocb *req, unsigned res)
+> >   {
+> 
+> I think the res should be of type 'long'.
+> I noticed this when I ran smatch on 5.10.y io_uring backport from 5.15.y
+> patch.
+> 
+> Smatch warning: io_fixup_rw_res() warn: unsigned 'res' is never less than
+> zero.
+> 
+> static inline int io_fixup_rw_res(struct io_kiocb *req, unsigned res)
+> {
+>         struct io_async_rw *io = req->async_data;
+> 
+>         /* add previously done IO, if any */
+>         if (io && io->bytes_done > 0) {
+>                 if (res < 0) //// unsigned comparison with zero.
+>                         res = io->bytes_done;
+>                 else
+>                         res += io->bytes_done;
+>         }
+>         return res;
+> }
+> 
+> We don't have upstream commit to backport in this case. Should we fix this
+> with no-upstream reference commit?
 
-Please just hack together how you think it should look and either reply
-with an updated patch, or paste the relevant code snippet in your reply.
- That'll keep me from having to go chase this code back down.
+Just reference the commit that this fixes properly and that should be
+fine, thanks for the review and catching this!
 
+greg k-h
