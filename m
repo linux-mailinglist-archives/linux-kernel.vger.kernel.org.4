@@ -2,82 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A83663E08
+	by mail.lfdr.de (Postfix) with ESMTP id 67E0D663E09
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238152AbjAJKW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:22:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S238224AbjAJKXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjAJKWb (ORCPT
+        with ESMTP id S231210AbjAJKWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:22:31 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BF3517EF
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:21:37 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 51678E000E;
-        Tue, 10 Jan 2023 10:21:32 +0000 (UTC)
-Message-ID: <49fe95c8-031e-5f4b-3c37-8bc78a7210d8@ghiti.fr>
-Date:   Tue, 10 Jan 2023 10:21:32 +0000
+        Tue, 10 Jan 2023 05:22:34 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0AD5AC55;
+        Tue, 10 Jan 2023 02:21:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673346104; x=1704882104;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PkKqqmBLchSYZl+hz18MXJzVs0JIqEvfTbNCyQox3Kg=;
+  b=l4HmJekwWMewq0ZaT40iKFit+vY69pAYZGQUfo76PO0kBnsdAevlGBB3
+   iuK/xwp0rqnvleewzfGuX5eY3/KvR63An3HH1o5QseCY3CZM/NEXfsAan
+   pYZ4ICv273K7o1aUk0nDpXazU8U5T/U4SF9bB1Y3hmW4KM2//sSSDmq2h
+   NxotBgCkKS17VF/WnApKL2OnayQ+hP/b943auGlcNFQPRODlF6vYOX7zl
+   1Mtv0OwiBk9UsfIbxJc8xS1U/6DGhdyscPtm2jcKSRJK3bemBKFIbKAta
+   DveKSMaxBVKd08KmTF4+g8JLxINE3MD0RFPb7mn6SxzGXrGXowp2ZuntN
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="306625517"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="306625517"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 02:21:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="658937444"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="658937444"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Jan 2023 02:21:38 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pFBlA-006yvn-04;
+        Tue, 10 Jan 2023 12:21:36 +0200
+Date:   Tue, 10 Jan 2023 12:21:35 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v10 3/4] fpga: dfl: add basic support for DFHv1
+Message-ID: <Y708L2rRc1RDVkui@smile.fi.intel.com>
+References: <20230110003029.806022-1-matthew.gerlach@linux.intel.com>
+ <20230110003029.806022-4-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] riscv: pgtable: Fixup comment for KERN_VIRT_SIZE
-To:     guoren@kernel.org, alexandre.ghiti@canonical.com,
-        palmer@dabbelt.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-References: <20230110080419.931185-1-guoren@kernel.org>
-Content-Language: en-US
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230110080419.931185-1-guoren@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110003029.806022-4-matthew.gerlach@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guo,
+On Mon, Jan 09, 2023 at 04:30:28PM -0800, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> 
+> Version 1 of the Device Feature Header (DFH) definition adds
+> functionality to the Device Feature List (DFL) bus.
+> 
+> A DFHv1 header may have one or more parameter blocks that
+> further describes the HW to SW. Add support to the DFL bus
+> to parse the MSI-X parameter.
+> 
+> The location of a feature's register set is explicitly
+> described in DFHv1 and can be relative to the base of the DFHv1
+> or an absolute address. Parse the location and pass the information
+> to DFL driver.
 
-On 1/10/23 09:04, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> KERN_VIRT_SIZE is 1/4 of the entries of the page global directory,
-> not half.
->
-> Fixes: f7ae02333d13 ("riscv: Move KASAN mapping next to the kernel mapping")
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> ---
->   arch/riscv/include/asm/pgtable.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 4eba9a98d0e3..2a88362dffa5 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -31,7 +31,7 @@
->   #define PTRS_PER_PTE    (PAGE_SIZE / sizeof(pte_t))
->   
->   /*
-> - * Half of the kernel address space (half of the entries of the page global
-> + * Half of the kernel address space (1/4 of the entries of the page global
+...
 
+> v10: change dfh_find_param to return size of parameter data in bytes
 
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+The problem that might occur with this approach is byte ordering.
+When we have u64 items, we know that they all are placed in CPU
+ordering by the bottom layer. What's the contract now? Can it be
+a problematic? Please double check this (always keep in mind BE32
+as most interesting case for u64/unsigned long representation and
+other possible byte ordering outcomes).
 
-Thanks,
-
-Alex
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
->    * directory) is for the direct mapping.
->    */
->   #define KERN_VIRT_SIZE          ((PTRS_PER_PGD / 2 * PGDIR_SIZE) / 2)
