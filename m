@@ -2,174 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CB8663858
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 05:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDA966386D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 06:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjAJExp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 23:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
+        id S229727AbjAJFDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 00:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjAJExj (ORCPT
+        with ESMTP id S229861AbjAJFDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 23:53:39 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557763FCA8
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 20:53:38 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id w12-20020a5e970c000000b0070450f33abbso1440970ioj.14
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 20:53:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HYT5ZbF2o1QUR84Jk6KZ8n+w9iIKKy5jZcxTavcpj1w=;
-        b=SWT51jkHx8a+ead/0GC482OUUzbPT1qGLUW4AEvkW91m6RG/tDUZ7Uoylh0kAohgxu
-         JPf8JkK1rpbDYShc6LDcd220gIiUzCJznSX/T7yvqcCI0XlcMyYhmKZsqGc3HPpkkzAr
-         CGmwwcMPJbfFx0/iN/xtDJdkaGfTQUKzEklbyiLT7qiKtO+/Lb8bbvMPy8YjJP+wyRs+
-         UkXECcJaW3N8294v2bekNTlBBugc9/DFA6q4Zeb8WJXeBsyuQ3OaxQIvVapX97hz3JlW
-         4F6fS743W7CKmxs0JH3w9o6a+q7twxvG9Kn0V9F5CGqPsIG2xbsl9ZUPfVI49kFR5vuD
-         +qIQ==
-X-Gm-Message-State: AFqh2kpsjY6JS8Gg3WDjgU/l+/5NSGWusp84UT41frjPs99hiu7zFmgo
-        YYotCqPW1qsFNyWCbywJX2tfDvOaShh9GJB1uoxJlw40LyCj
-X-Google-Smtp-Source: AMrXdXsBp5JaM3gTALsiqCGdGFTWPnsowpVxtCgj9OHdzrZIPCOJlMi2Kbvqda4s+2ACZX6OQE9BTmGG1K6wcwAkrHgN1wpqmPkl
+        Tue, 10 Jan 2023 00:03:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D64C41A59;
+        Mon,  9 Jan 2023 21:02:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0083E6147A;
+        Tue, 10 Jan 2023 05:02:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 383FEC433EF;
+        Tue, 10 Jan 2023 05:02:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673326974;
+        bh=CfqP6C+1zm3vTwLIb7TUuSEyH6Zrafjq1dDxaIx2qX4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=hfDjR2qYT34whMPxcsgaO6+YL9GI9wb9yrqrAd6lO6dSJxpN3AMwyQlePsxm3cnH4
+         9RY3FVQOO1TCQvpl7xdwn1z1Q2VSCTbvXhdaRTVPkUFelKUnKDk8OiTWG0PWgrj/tR
+         RY1w14hDy3dZepWuDq3Hy4KUzA3WuKZ58NA0DCUDEh4ZgR3BbGFs7kDJji4DoUnYVr
+         kYWXu/mYiNYzJk73uMnDf+9qTLRxY3w1OZmNpsDd9s2wLUX1QHj87/N8lpPByX1084
+         NwpMeKaf2uH/KTS5cNfMBHYEwwINiu47y5f1XvRl07FKMFXro/WgfVAO5FiuQFtHlE
+         Fn8yggtRPkZMg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id CEFA65C0A1A; Mon,  9 Jan 2023 21:02:53 -0800 (PST)
+Date:   Mon, 9 Jan 2023 21:02:53 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "Liu, Yujie" <yujie.liu@intel.com>,
+        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
+        lkp <lkp@intel.com>, "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] rcu-tasks: Make rude RCU-Tasks work well with CPU
+ hotplug
+Message-ID: <20230110050253.GA3798705@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221130234533.1983769-1-qiang1.zhang@intel.com>
+ <202212181914.f5a305f3-yujie.liu@intel.com>
+ <PH0PR11MB5880EB31D9AFD82EFA3073A6DAE59@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20221221193325.GE4001@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB588092AB6A014F30420D697CDAE89@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20230105182220.GF4028633@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB5880273B1F5A6FF2CB782051DAFB9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20230110021012.GI4028633@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:870b:0:b0:6bf:e736:22a with SMTP id
- u11-20020a5d870b000000b006bfe736022amr5615604iom.94.1673326416927; Mon, 09
- Jan 2023 20:53:36 -0800 (PST)
-Date:   Mon, 09 Jan 2023 20:53:36 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000aca1bb05f1e1aac1@google.com>
-Subject: [syzbot] linux-next boot error: WARNING in __drm_atomic_helper_set_config
-From:   syzbot <syzbot+0bf79afd497528c0df0d@syzkaller.appspotmail.com>
-To:     airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        melissa.srw@gmail.com, rodrigosiqueiramelo@gmail.com,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110021012.GI4028633@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Jan 09, 2023 at 06:10:12PM -0800, Paul E. McKenney wrote:
+> On Fri, Jan 06, 2023 at 02:48:56AM +0000, Zhang, Qiang1 wrote:
+> > 
+> > On Thu, Dec 22, 2022 at 09:35:06AM +0000, Zhang, Qiang1 wrote:
+> > > >On Mon, Dec 19, 2022 at 02:21:01AM +0000, Zhang, Qiang1 wrote:
+> > > > >Greeting,
+> > > > >FYI, we noticed WARNING:at_kernel/rcu/rcutorture.c:#rcu_torture_fwd_prog_cr[rcutorture] due to commit (built with gcc-11):
+> > > > >
+> > > > >commit: 572a17843591d3c03ad891492939a06833fdd17d ("[PATCH v4] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug")
+> > > > >url: https://github.com/intel-lab-lkp/linux/commits/Zqiang/rcu-tasks-Make-rude-RCU-Tasks-work-well-with-CPU-hotplug/20221201-074127
+> > > > >base: https://git.kernel.org/cgit/linux/kernel/git/paulmck/linux-rcu.git dev
+> > > > >patch link: https://lore.kernel.org/all/20221130234533.1983769-1-qiang1.zhang@intel.com/
+> > > > >patch subject: [PATCH v4] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
+> > > > >
+> > > > >in testcase: rcutorture
+> > > > >version: 
+> > > > >with following parameters:
+> > > > >
+> > > > >	runtime: 300s
+> > > > >	test: cpuhotplug
+> > > > >	torture_type: tasks-rude
+> > > > >
+> > > > >test-description: rcutorture is rcutorture kernel module load/unload test.
+> > > > >test-url: https://www.kernel.org/doc/Documentation/RCU/torture.txt
+> > > > >
+> > > > >on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 8G
+> > > > >
+> > > > >caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> > > > >
+> > > > >
+> > > > >[  106.051532][  T583] rcu_torture_fwd_prog: Starting forward-progress test 0
+> > > > >[  106.052085][  T583] rcu_torture_fwd_prog_cr: Starting forward-progress test 0
+> > > > >[  133.611262][  T583] rcu_torture_fwd_prog_cr: Waiting for CBs: rcu_barrier_tasks_rude+0x0/0x10() 0
+> > > > >[  146.800051][  T583] ------------[ cut here ]------------
+> > > > >[  146.800411][  T583] WARNING: CPU: 1 PID: 583 at kernel/rcu/rcutorture.c:2806 rcu_torture_fwd_prog_cr+0x22c/0x2a7 [rcutorture]
+> > > > >[  146.801075][  T583] Modules linked in: rcutorture torture ipmi_msghandler crc32c_intel serio_raw processor fuse
+> > > > >[  146.801894][  T583] CPU: 1 PID: 583 Comm: rcu_torture_fwd Not tainted 6.1.0-rc1-00180-g572a17843591 #1 0cc09f902db70bae111a0c12c137296733dde4a9
+> > > > >[  146.802916][  T583] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+> > > > >[  146.803693][  T583] EIP: rcu_torture_fwd_prog_cr+0x22c/0x2a7 [rcutorture]
+> > > > >[  146.804177][  T583] Code: 89 d8 e8 fc c5 ff ff e8 67 49 03 00 83 c4 10 84 c0 75 79 a0 96 c6 10 ef 84 c0 75 70 e8 c8 ee ff ff 84 c0 75 67 83 fe 63 7f 02 <0f> 0b 8b 45 f0 8b 15 40 25 8a c2 ff 75 e8 ff 75 e0 01 f8 2b 45 dc
+> > > > >[  146.805599][  T583] EAX: 00000000 EBX: ecee3800 ECX: 00000000 EDX: 00000000
+> > > > >[  146.805992][  T583] ESI: 00000000 EDI: 0000c350 EBP: ed9d5f64 ESP: ed9d5f40
+> > > > >[  146.806491][  T583] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010293
+> > > > >[  146.807010][  T583] CR0: 80050033 CR2: 08082ff0 CR3: 2daaf000 CR4: 000406d0
+> > > > >[  146.807484][  T583] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+> > > > >[  146.808031][  T583] DR6: fffe0ff0 DR7: 00000400
+> > > > >[  146.808384][  T583] Call Trace:
+> > > > >[  146.808634][  T583]  rcu_torture_fwd_prog.cold+0x3b/0xee [rcutorture 6754ed9afe4685f50ef7fade6309181c73794538]
+> > > > >[  146.809348][  T583]  kthread+0xc8/0xf0
+> > > > >[  146.809635][  T583]  ? rcu_torture_fwd_prog_cbfree+0x80/0x80 [rcutorture 6754ed9afe4685f50ef7fade6309181c73794538]
+> > > > >[  146.810347][  T583]  ? kthread_complete_and_exit+0x20/0x20
+> > > > >[  146.810734][  T583]  ret_from_fork+0x1c/0x28
+> > > > >[  146.811075][  T583] irq event stamp: 205883
+> > > > >[  146.811400][  T583] hardirqs last  enabled at (205891): [<c114bb06>] __up_console_sem+0x66/0x80
+> > > > >[  146.811960][  T583] hardirqs last disabled at (205898): [<c114baed>] __up_console_sem+0x4d/0x80
+> > > > >[  146.812583][  T583] softirqs last  enabled at (205880): [<c1ecb40b>] __do_softirq+0x2bb/0x440
+> > > > >[  146.813079][  T583] softirqs last disabled at (205871): [<c10845f0>] call_on_stack+0x40/0x50
+> > > > >[  146.813567][  T583] ---[ end trace 0000000000000000 ]---
+> > > > >[  146.813926][  T583] rcu_torture_fwd_prog_cr Duration 2411 barrier: 3960 pending 50000 n_launders: 0 n_launders_sa: 0 n_max_gps: 0 n_max_cbs: 50000 cver 1 gps 0
+> > > > >[  147.914266][  T583] rcu_torture_fwd_cb_hist: Callback-invocation histogram 0 (duration 6702 jiffies): 1s/10: 0:0 2s/10: 
+> > > > >[  149.453780][  T557] ------------[ cut here ]------------
+> > > > >[  149.454322][  T557] rcu_torture_writer: rtort_pipe_count: 4
+> > > > >[  149.454817][  T557] WARNING: CPU: 1 PID: 557 at kernel/rcu/rcutorture.c:1583 rcu_torture_writer+0x71d/0xc80 [rcutorture]
+> > > > 
+> > > > 
+> > > > This is not a bug.  this is caused by grace period taking too long time, the previous callback
+> > > > has not been completed.  from the dmesg, can be found that the cpuhotplug test is being
+> > > > performed periodically, this may cause the rude RCU-Tasks  grace period to take more time,
+> > > > due to we need to acquire the cpus_read_lock, and the CPU0 always bootup failed, that is to
+> > > > say, only one CPU of your system is online at this time.
+> > > >
+> > > >Onlining of a CPU failing with EIO is a new one on me.  Especially
+> > > >persistent failure.
+> > > 
+> > > I use the kernel configuration file in the attachment and  base on:
+> > > https://git.kernel.org/cgit/linux/kernel/git/paulmck/linux-rcu.git dev
+> > > 
+> > > use "echo 1 > /sys/devices/system/cpu/cpu0/online" can reproduce this problem,
+> > > the CPU0 always fails to go online.  
+> > > 
+> > > Debug found CPU0 is always not set in cpu_initialized_mask.
+> > > causes the do_boot_cpu() to return -1.
+> > > 
+> > > do_boot_cpu()
+> > >      wakeup_cpu_via_init_nmi();
+> > >      if (!boot_error) {
+> > >                 /*
+> > >                  * Wait 10s total for first sign of life from AP
+> > >                  */
+> > >                 boot_error = -1;
+> > >                 timeout = jiffies + 10*HZ;
+> > >                 while (time_before(jiffies, timeout)) {
+> > >                         if (cpumask_test_cpu(cpu, cpu_initialized_mask)) {
+> > >                                 /*
+> > >                                  * Tell AP to proceed with initialization
+> > >                                  */
+> > >                                 cpumask_set_cpu(cpu, cpu_callout_mask);
+> > >                                 boot_error = 0;
+> > >                                 break;
+> > >                         }
+> > >                         schedule();
+> > >                 }
+> > >         }
+> > > 
+> > > This looks related to this modification e1c467e69040c("x86, hotplug: 
+> > > Wake up CPU0 via NMI instead of INIT, SIPI, SIPI ").
+> > > 
+> > > 
+> > > The following modification can make CPU0 go online successfully(This
+> > > is just a test, not sure if there are other effects).
+> > >
+> > >
+> > >Thank you for tracking this down!!!
+> > >
+> > >Huh.  CPU 0 is normally the boot CPU.  Back in the day, it could not
+> > >be offlined.  Given that your testing indicates that CPU 0 can now be
+> > >taken offline, maybe this "if" statement is a holdover that someone
+> > >forgot to remove?
+> > >
+> > >But I must defer to those who know a lot more about this level of
+> > >x86 code than I do.
+> > 
+> > I found relevant modification information, maybe it will be of some help
+> > 
+> > commit e1c467e69040c3be68959332959c07fb3d818e87
+> > Author: Fenghua Yu <fenghua.yu@intel.com>
+> > Date:   Wed Nov 14 04:36:53 2012 -0800
+> > 
+> >     x86, hotplug: Wake up CPU0 via NMI instead of INIT, SIPI, SIPI
+> > 
+> >     Instead of waiting for STARTUP after INITs, BSP will execute the BIOS boot-strap
+> >     code which is not a desired behavior for waking up BSP. To avoid the boot-strap
+> >     code, wake up CPU0 by NMI instead.
+> > 
+> >     This works to wake up soft offlined CPU0 only. If CPU0 is hard offlined (i.e.
+> >     physically hot removed and then hot added), NMI won't wake it up. We'll change
+> >     this code in the future to wake up hard offlined CPU0 if real platform and
+> >     request are available.
+> > 
+> >     AP is still waken up as before by INIT, SIPI, SIPI sequence.
+> > 
+> >     Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+> >     Link: http://lkml.kernel.org/r/1352896613-25957-1-git-send-email-fenghua.yu@intel.com
+> >     Signed-off-by: H. Peter Anvin <hpa@linux.intel.com>
+> 
+> Interesting!
+> 
+> When I run rcutorture on x86 (under qemu/KVM), it refuses to attempt to
+> offline CPU 0.  The reason is that cpu_is_hotpluggable(0) returns false.
+> 
+> If I comment out that check, I get this:
+> 
+> 	rcu-torture:torture_onoff task: offline 0 failed: errno -1
+> 
+> A bit of digging turned up the CONFIG_BOOTPARAM_HOTPLUG_CPU0 Kconfig
+> option.  Setting that causes CPU 0 to be offlined.
+> 
+> I clearly need to add this to one of the scenarios.  I arbitrarily
+> chose TREE01, but please let me know if some other scenario or
+> group of scenarios would be better.
 
-syzbot found the following issue on:
+For example, like this.
 
-HEAD commit:    469a89fd3bb7 Add linux-next specific files for 20230106
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=121d2432480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a94f9b6b8eb07a36
-dashboard link: https://syzkaller.appspot.com/bug?extid=0bf79afd497528c0df0d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+						Thanx, Paul
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2df1b88ce6c4/disk-469a89fd.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ea2517e6b476/vmlinux-469a89fd.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7539708cb8ba/bzImage-469a89fd.xz
+------------------------------------------------------------------------
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0bf79afd497528c0df0d@syzkaller.appspotmail.com
+commit 6c11be38a0363b61db36352555e6746920711a1f
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Mon Jan 9 21:01:12 2023 -0800
 
-qnx6: QNX6 filesystem 1.0.0 registered.
-fuse: init (API version 7.38)
-orangefs_debugfs_init: called with debug mask: :none: :0:
-orangefs_init: module version upstream loaded
-JFS: nTxBlock = 8192, nTxLock = 65536
-SGI XFS with ACLs, security attributes, realtime, quota, no debug enabled
-9p: Installing v9fs 9p2000 file system support
-NILFS version 2 loaded
-befs: version: 0.9.3
-ocfs2: Registered cluster interface o2cb
-ocfs2: Registered cluster interface user
-OCFS2 User DLM kernel interface loaded
-gfs2: GFS2 installed
-ceph: loaded (mds proto 32)
-NET: Registered PF_ALG protocol family
-xor: automatically using best checksumming function   avx       
-async_tx: api initialized (async)
-Key type asymmetric registered
-Asymmetric key parser 'x509' registered
-Asymmetric key parser 'pkcs8' registered
-Key type pkcs7_test registered
-Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
-io scheduler mq-deadline registered
-io scheduler kyber registered
-io scheduler bfq registered
-input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-ACPI: button: Power Button [PWRF]
-input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-ACPI: button: Sleep Button [SLPF]
-ACPI: \_SB_.LNKC: Enabled at IRQ 11
-virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKD: Enabled at IRQ 10
-virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKB: Enabled at IRQ 10
-virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-N_HDLC line discipline registered with maxframe=4096
-Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-Linux agpgart interface v0.103
-ACPI: bus type drm_connector registered
-[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
-[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
-platform vkms: [drm] bpp/depth value of 32/0 not supported
-platform vkms: [drm] No compatible format found
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at drivers/gpu/drm/drm_atomic.c:1604 __drm_atomic_helper_set_config+0xa2d/0xe80 drivers/gpu/drm/drm_atomic.c:1604
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.2.0-rc2-next-20230106-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__drm_atomic_helper_set_config+0xa2d/0xe80 drivers/gpu/drm/drm_atomic.c:1604
-Code: b6 04 02 84 c0 74 09 3c 03 7f 05 e8 dd cb 48 fd 45 89 75 38 e9 0f fb ff ff e8 6f e4 fa fc 0f 0b e9 a5 f7 ff ff e8 63 e4 fa fc <0f> 0b e9 4f f7 ff ff e8 57 e4 fa fc 48 8d 7d 08 48 b8 00 00 00 00
-RSP: 0000:ffffc90000067808 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888146916380 RCX: 0000000000000000
-RDX: ffff888140190000 RSI: ffffffff8486c8fd RDI: 0000000000000007
-RBP: ffff888146917500 R08: 0000000000000007 R09: fffffffffffff000
-R10: ffff888146985000 R11: 0000000000000005 R12: ffff88814691b700
-R13: ffff888146985000 R14: ffff888146985800 R15: ffff88801deccdc0
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000c48e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- drm_client_modeset_commit_atomic+0x535/0x7e0 drivers/gpu/drm/drm_client_modeset.c:1026
- drm_client_modeset_commit_locked+0x149/0x580 drivers/gpu/drm/drm_client_modeset.c:1148
- drm_client_modeset_commit+0x51/0x80 drivers/gpu/drm/drm_client_modeset.c:1174
- drm_fb_helper_single_fb_probe drivers/gpu/drm/drm_fb_helper.c:1944 [inline]
- __drm_fb_helper_initial_config_and_unlock.cold+0x2ef/0x386 drivers/gpu/drm/drm_fb_helper.c:2130
- drm_fb_helper_initial_config drivers/gpu/drm/drm_fb_helper.c:2225 [inline]
- drm_fb_helper_initial_config+0x4a/0x60 drivers/gpu/drm/drm_fb_helper.c:2217
- drm_fbdev_client_hotplug+0x2b4/0x3d0 drivers/gpu/drm/drm_fbdev_generic.c:406
- drm_fbdev_generic_setup+0x166/0x400 drivers/gpu/drm/drm_fbdev_generic.c:491
- vkms_create drivers/gpu/drm/vkms/vkms_drv.c:204 [inline]
- vkms_init+0x587/0x62f drivers/gpu/drm/vkms/vkms_drv.c:230
- do_one_initcall+0x141/0x7d0 init/main.c:1306
- do_initcall_level init/main.c:1379 [inline]
- do_initcalls init/main.c:1395 [inline]
- do_basic_setup init/main.c:1414 [inline]
- kernel_init_freeable+0x6f9/0x782 init/main.c:1634
- kernel_init+0x1e/0x1d0 init/main.c:1522
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+    rcutorture: Set CONFIG_BOOTPARAM_HOTPLUG_CPU0 to offline CPU 0
+    
+    There is now a BOOTPARAM_HOTPLUG_CPU0 Kconfig option that allows CPU 0
+    to be offlined on x86 systems.  This commit therefore sets this option in
+    the TREE01 rcutorture scenario in order to regularly test this capability.
+    
+    Reported-by: "Zhang, Qiang1" <qiang1.zhang@intel.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE01 b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+index 8ae41d5f81a3e..04831ef1f9b55 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TREE01
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+@@ -15,3 +15,4 @@ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
++CONFIG_BOOTPARAM_HOTPLUG_CPU0=y
