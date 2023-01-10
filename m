@@ -2,135 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709166636AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 02:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F94B6636B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 02:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234939AbjAJB2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 20:28:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
+        id S229560AbjAJBdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 20:33:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjAJB2F (ORCPT
+        with ESMTP id S229849AbjAJBdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 20:28:05 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF70A395E3
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 17:28:04 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 14E6F320025E;
-        Mon,  9 Jan 2023 20:28:02 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 09 Jan 2023 20:28:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=russell.cc; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1673314081; x=
-        1673400481; bh=zeB8Rjm8Q9ysFSyGBjwVWVghqqA5Z8exrt+ZdLm1v4Y=; b=A
-        F+CTNwF1+397YVLctQ8UFjga/E+HypkOFOFohjDGazzBZo6IktXplX+dStCLuwkJ
-        1Kd37/WpFE7Fg1BgstK13saN1ryE8pZUNF89A3xRzrBubuRY5u3DvOx7F4FBKxMZ
-        zXXJgF8NeHkjw7JrwlYy2lbUeKPGE0SvxzkqNhdu7DeyMGnrYb+91NMZbsbZFZ9M
-        XWp0WTuILTBaVvNpY4ZUG3zkA2tBSKI+J/g79Ye8YPYNYWGzY1D5bU8pqnsanbIz
-        BagjdMbkWdcC7qkc9a7FCAyFLW1DvBh/wyPtFkMnhitPrCp7g+UrGok9Tu9pSlBD
-        TGo2is2u4Sv7Meuoo94IQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673314081; x=
-        1673400481; bh=zeB8Rjm8Q9ysFSyGBjwVWVghqqA5Z8exrt+ZdLm1v4Y=; b=m
-        SL813OJ+ORX8ZjF+wmA02IBhtdPBLxgwU9KPPRU8IeddBFY74dk5CUxss7t/lQ6F
-        DS+SA5SpPxrZavPEMLALfnXyV5rNetdw/yEXLrp0tAw6HrTYbQSrQg74JIKKlYLE
-        fhcAQr8SIgEWMI9ee75Qlk9Vm0q6Hv42IOnPHKI8uxuAYiGCuRe+S6/NzBy22O3O
-        AZjOJ58y3NKKEbDOjMYj0odYr++SzkicksQzlJ/Fs0jwFvP/ad+2Y5jvhSKXLkl2
-        6H7XK7nvH9PVBdpWA6rP6AbOj1kjBAIsHJYEjq+B4QlAq2WIVbFqHEClK3JtrCng
-        D+WEJtw9uGxh7l3dcQ3eQ==
-X-ME-Sender: <xms:Ib-8Y1HWi2MqOspulEpkfTEKwXpqswdoD_qHkL8WkhKOiwcldfWCjw>
-    <xme:Ib-8Y6UiuR1OTrTZXV7jJThZ7Hb3gLojaIOX0ZlWvHxgS9c3hkC5PFLia6XJ4WPNV
-    stwkfwtBkydCoTnGA>
-X-ME-Received: <xmr:Ib-8Y3JWcPp3fEEf7kvoN8IIzqCuSAE07za3_HoXMw5fq9-WmlvBPMYeKaFS8kA0OE0jK3ptLYyMyqfko2xoQCiHhgs8aRYkzpHTS-V4fUM_bw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeejgdefhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdeftddmnecujfgurhepkffuhf
-    fvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpeftuhhsshgvlhhlucevuhhr
-    rhgvhicuoehruhhstghurhesrhhushhsvghllhdrtggtqeenucggtffrrghtthgvrhhnpe
-    etgfeilefhueefvedvkeehieefjefgfeegheetudekiefguddutdeukeetveelleenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehruhhstghurh
-    esrhhushhsvghllhdrtggt
-X-ME-Proxy: <xmx:Ib-8Y7GmemFyzfbC4lEY0hQ7juWFKMY8bkgzIHK0VJhzfmJuna3SOQ>
-    <xmx:Ib-8Y7XDaxiIQi1cjWl7_Zj-C_6zp0OGwvxHtNu_i9czjQZr3U0w0g>
-    <xmx:Ib-8Y2OOeRl2vRI7R3EBKDWKWa86JhUsEoDJDx5N0-uWd_3384K_3Q>
-    <xmx:Ib-8Y9JxT4YKDsrBOkZ3Q6vUDyJh6G_Az6xIRJskvyTotX_6gVzq8g>
-Feedback-ID: i4421424f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 9 Jan 2023 20:27:58 -0500 (EST)
-Message-ID: <a2a8d8daac892e2d7eb8cffecfa1a20cdc9b0faa.camel@russell.cc>
-Subject: Re: [PATCH v2 7/7] powerpc/pseries: Implement secvars for dynamic
- secure boot
-From:   Russell Currey <ruscur@russell.cc>
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
-        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
-        zohar@linux.ibm.com
-Date:   Tue, 10 Jan 2023 12:27:55 +1100
-In-Reply-To: <cca49d1e5da01e9ccdee50d710045fd09005459c.camel@linux.ibm.com>
-References: <20221230042014.154483-1-ruscur@russell.cc>
-         <20221230042014.154483-8-ruscur@russell.cc>
-         <87zgawgcpa.fsf@mpe.ellerman.id.au>
-         <b4b23fb8a56fdcfffe28c38ac3f4f89e0c488486.camel@russell.cc>
-         <cca49d1e5da01e9ccdee50d710045fd09005459c.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Mon, 9 Jan 2023 20:33:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA939395E7
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 17:33:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63E20614A7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:33:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D62C433EF;
+        Tue, 10 Jan 2023 01:33:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673314413;
+        bh=oNXL4UymTMf6PobHRHY8tHla4MS5GdmqeyeP4IlsvgA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=EJUf6o/bv1CJU1m0W8z9ewPchFhlwB5oII5mrJiNvk/4q9UKskcMRiwbvf3ba0QyX
+         d9wMQD5r54OqUXAF0En7ye+tlEstpDN/lD1ohuKDkGtgMrS9ls+QHnOttktdJKcU1i
+         0gNasug9jn8YH/tvidOmpHN00oY2CZBDiXgPo/39K5YRG1fm6QfcWvGBNpz7n3/gP9
+         14TYtTC/GoOa/kcy0Z6Ky9KVJgRUE9hW1IPS5yw+irmaUWOq95JEs9S9GnpSaq2ITf
+         xAb4zsZdvG03ZGOM81YhZooV83as5AJjx8U/8f0WrQO9YDVGVpW96/amf1a6wXLL5R
+         l4Vi+AJ2p1BEg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2F3A95C0623; Mon,  9 Jan 2023 17:33:33 -0800 (PST)
+Date:   Mon, 9 Jan 2023 17:33:33 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "open list:SCHEDULER" <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] sched/deadline: fix inactive_task_timer splat with
+ CONFIG_PREEMPT_RT
+Message-ID: <20230110013333.GH4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230104181701.43224-1-wander@redhat.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104181701.43224-1-wander@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-09 at 16:20 +1100, Andrew Donnellan wrote:
-> On Mon, 2023-01-09 at 14:34 +1100, Russell Currey wrote:
-> >=20
-> > > > +static int plpks_secvar_init(void)
-> > > > +{
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!plpks_is_available(=
-))
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return -ENODEV;
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0set_secvar_ops(&plpks_se=
-cvar_ops);
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0set_secvar_config_attrs(=
-config_attrs);
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> > > > +}
-> > > > +device_initcall(plpks_secvar_init);
-> > >=20
-> > > That must be a machine_device_initcall(pseries, ...), otherwise
-> > > we
-> > > will
-> > > blow up doing a hcall on powernv in plpks_is_available().
-> >=20
-> > OK, can do.=C2=A0 I don't understand your case of how powernv could hit
-> > this, but I think I to have to move plpks_is_available() into
-> > include/,
-> > so it's going to be even more possible anyway.
->=20
-> Kernels can be compiled with both pseries and powernv support, in
-> which
-> case plpks_secvar_init() will be called unconditionally even when
-> booting on a powernv machine.
->=20
-> I can confirm that as it is, booting this on powernv qemu causes a
-> panic.
+On Wed, Jan 04, 2023 at 03:17:01PM -0300, Wander Lairson Costa wrote:
+> inactive_task_timer() executes in interrupt (atomic) context. It calls
+> put_task_struct(), which indirectly acquires sleeping locks under
+> PREEMPT_RT.
+> 
+> Below is an example of a splat that happened in a test environment:
+> 
+>  CPU: 1 PID: 2848 Comm: life Kdump: loaded Tainted: G W ---------
+>  Hardware name: HP ProLiant DL388p Gen8, BIOS P70 07/15/2012
+>  Call Trace:
+>  dump_stack_lvl+0x57/0x7d
+>  mark_lock_irq.cold+0x33/0xba
+>  ? stack_trace_save+0x4b/0x70
+>  ? save_trace+0x55/0x150
+>  mark_lock+0x1e7/0x400
+>  mark_usage+0x11d/0x140
+>  __lock_acquire+0x30d/0x930
+>  lock_acquire.part.0+0x9c/0x210
+>  ? refill_obj_stock+0x3d/0x3a0
+>  ? rcu_read_lock_sched_held+0x3f/0x70
+>  ? trace_lock_acquire+0x38/0x140
+>  ? lock_acquire+0x30/0x80
+>  ? refill_obj_stock+0x3d/0x3a0
+>  rt_spin_lock+0x27/0xe0
+>  ? refill_obj_stock+0x3d/0x3a0
+>  refill_obj_stock+0x3d/0x3a0
+>  ? inactive_task_timer+0x1ad/0x340
+>  kmem_cache_free+0x357/0x560
+>  inactive_task_timer+0x1ad/0x340
+>  ? switched_from_dl+0x2d0/0x2d0
+>  __run_hrtimer+0x8a/0x1a0
+>  __hrtimer_run_queues+0x91/0x130
+>  hrtimer_interrupt+0x10f/0x220
+>  __sysvec_apic_timer_interrupt+0x7b/0xd0
+>  sysvec_apic_timer_interrupt+0x4f/0xd0
+>  ? asm_sysvec_apic_timer_interrupt+0xa/0x20
+>  asm_sysvec_apic_timer_interrupt+0x12/0x20
+>  RIP: 0033:0x7fff196bf6f5
+> 
+> Instead of calling put_task_struct() directly, we defer it using
+> call_rcu(). A more natural approach would use a workqueue, but since
+> in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
+> the code would become more complex because we would need to put the
+> work_struct instance in the task_struct and initialize it when we
+> allocate a new task_struct.
+> 
+> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> Cc: Paul McKenney <paulmck@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  kernel/sched/build_policy.c |  1 +
+>  kernel/sched/deadline.c     | 24 +++++++++++++++++++++++-
+>  2 files changed, 24 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
+> index d9dc9ab3773f..f159304ee792 100644
+> --- a/kernel/sched/build_policy.c
+> +++ b/kernel/sched/build_policy.c
+> @@ -28,6 +28,7 @@
+>  #include <linux/suspend.h>
+>  #include <linux/tsacct_kern.h>
+>  #include <linux/vtime.h>
+> +#include <linux/rcupdate.h>
+>  
+>  #include <uapi/linux/sched/types.h>
+>  
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index 9ae8f41e3372..ab9301d4cc24 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -1405,6 +1405,13 @@ static void update_curr_dl(struct rq *rq)
+>  	}
+>  }
+>  
+> +static void delayed_put_task_struct(struct rcu_head *rhp)
+> +{
+> +	struct task_struct *task = container_of(rhp, struct task_struct, rcu);
+> +
+> +	__put_task_struct(task);
 
-Of course, I'm not sure why I thought an initcall in a platform that
-wasn't active would magically not run on other platforms.
+Please note that BH is disabled here.  Don't you therefore
+need to schedule a workqueue handler?  Perhaps directly from
+inactive_task_timer(), or maybe from this point.  If the latter, one
+way to skip the extra step is to use queue_rcu_work().
 
->=20
+							Thanx, Paul
 
+> +}
+> +
+>  static enum hrtimer_restart inactive_task_timer(struct hrtimer *timer)
+>  {
+>  	struct sched_dl_entity *dl_se = container_of(timer,
+> @@ -1442,7 +1449,22 @@ static enum hrtimer_restart inactive_task_timer(struct hrtimer *timer)
+>  	dl_se->dl_non_contending = 0;
+>  unlock:
+>  	task_rq_unlock(rq, p, &rf);
+> -	put_task_struct(p);
+> +
+> +	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
+> +		/*
+> +		 * Decrement the refcount explicitly to avoid unnecessarily
+> +		 * calling call_rcu.
+> +		 */
+> +		if (refcount_dec_and_test(&p->usage))
+> +			/*
+> +			 * under PREEMPT_RT, we can't call put_task_struct
+> +			 * in atomic context because it will indirectly
+> +			 * acquire sleeping locks.
+> +			 */
+> +			call_rcu(&p->rcu, delayed_put_task_struct);
+> +	} else {
+> +		put_task_struct(p);
+> +	}
+>  
+>  	return HRTIMER_NORESTART;
+>  }
+> -- 
+> 2.39.0
+> 
