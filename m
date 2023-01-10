@@ -2,109 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61DC663AC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69697663ACF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237209AbjAJISs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48502 "EHLO
+        id S231254AbjAJIUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237888AbjAJISn (ORCPT
+        with ESMTP id S229749AbjAJIUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:18:43 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE4A4262F
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:18:41 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id p188so11045726yba.5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:18:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rq6kbFa9Q6XePoTGZMyOqndZFFNOA4hEyY3g6DmupTM=;
-        b=peSqu6O2atn6rcoXsO2zx056ilEHN6U4fJ0NwepwoB9a03kpyGWlsG8S+S4f44GhvU
-         EomHOSgabfexEYSUmzfCosXXWVBOZsuiRslBuuSRgU+keh/2x8TA7MvepwuS9VPu2Ddm
-         UMY6JOeug81X3/FaWz3EYU5q9ZlZk3OJ1VZxDOiXhY93tvHjU1I49Gwcfz0axXtEBboV
-         pZo8S18ayW+eMwynh8wWT62o1Hek5swzQJ6xzAndMyPYLWDYNNY6fZdY8tgklzfYDv4B
-         jkAjhJb47GCRwwXXEIrK/nZ2njMYdMh/YiWPKWmOKCOpiBT+/kwie4t/xc4BiR8JhLGi
-         1ocA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Rq6kbFa9Q6XePoTGZMyOqndZFFNOA4hEyY3g6DmupTM=;
-        b=DDs7qLIO9JvMykRiVdSDYKYsZfxcot1kW8cb7nN4CGnNPIPXqY6Yggiz7WCYcBPA8q
-         DpvY4XkoMKuTWN1Et8P+dHD+6dNwRTnrGcgiOYGysbFWMEf6mz70s4SNqECCblEhA/tN
-         mqU4aGD9URIvZSVyXVRsC9APOwJ66NhXfywIQjKUSUfJmjo8b17xIIDMwAbhrPqneZx/
-         UU0bb4QrqGAIhZZoNWi6TaY/mUb1P1E9kobesvrzHEgi7YO227SeS1nrnQB3zXeOqbdP
-         ikvwxgl9QPPGSAcWJapnb2IENG9AVrjKJAgEwuaNtKZc/nJ8yf07iU5tVe7FEjYs6eKT
-         2iIQ==
-X-Gm-Message-State: AFqh2kpeMMz2wo79ACFRSMcnIqQoqTR6hVWiErYUBMOLfKcayMPGGiko
-        Pc24C8bKF/abPru+rZUHskz0lZLuD25CtAgePWmVWQ==
-X-Google-Smtp-Source: AMrXdXuRBov6hoRRwKns5OAP09txTff/z7ySQGBUSEs6TNAFQ9Usf4qJbJA5b0gLCb3g8S1mE0oGzUkYOtYbbFCRf1I=
-X-Received: by 2002:a25:4903:0:b0:770:d766:b5e8 with SMTP id
- w3-20020a254903000000b00770d766b5e8mr4722239yba.24.1673338720651; Tue, 10 Jan
- 2023 00:18:40 -0800 (PST)
+        Tue, 10 Jan 2023 03:20:05 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF51B42E04;
+        Tue, 10 Jan 2023 00:19:59 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.14])
+        by gateway (Coremail) with SMTP id _____8AxW+qsH71jprEAAA--.2135S3;
+        Tue, 10 Jan 2023 16:19:56 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.14])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxTuSiH71jGUoXAA--.5900S2;
+        Tue, 10 Jan 2023 16:19:54 +0800 (CST)
+From:   yangyinglu <yangyinglu@loongson.cn>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        yangyinglu <yangyinglu@loongson.cn>
+Subject: [PATCH v1] usb: handle warm-reset port requests on hub_init
+Date:   Tue, 10 Jan 2023 16:19:38 +0800
+Message-Id: <20230110081938.30308-1-yangyinglu@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20230109174511.1740856-1-brgl@bgdev.pl> <20230109174511.1740856-11-brgl@bgdev.pl>
-In-Reply-To: <20230109174511.1740856-11-brgl@bgdev.pl>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 10 Jan 2023 09:18:29 +0100
-Message-ID: <CACRpkdb7C763xYvZKc=6-oZtGGtqSwdNK5j_aA16f6j7bR1yqw@mail.gmail.com>
-Subject: Re: [PATCH 10/18] pinctrl: qcom: sa8775p: add the pinctrl driver for
- the sa8775p platform
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org, Yadu MG <quic_ymg@quicinc.com>,
-        Prasad Sodagudi <quic_psodagud@quicinc.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxTuSiH71jGUoXAA--.5900S2
+X-CM-SenderInfo: 51dqw5xlqjz3o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Gw47GryxZFy3GF1xJr43Wrg_yoW3Arg_Ca
+        4UWayxur1SyF17uryqv34FvFW0ka9IvFykZFZxtwsxXr4j9rs2yryxZr9Yvw17ZrWUur9x
+        Aa1DWry5uF48ujkaLaAFLSUrUUUUYb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        C7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
+        w2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
+        kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        CVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
+        YxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 6:45 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+USB-C storage device not detected on USB 3.0 host when
+plugged in after boot, so need to warm-reset port
 
-> From: Yadu MG <quic_ymg@quicinc.com>
->
-> Add support for Lemans TLMM configuration and control via the pinctrl
-> framework.
->
-> Signed-off-by: Yadu MG <quic_ymg@quicinc.com>
-> Signed-off-by: Prasad Sodagudi <quic_psodagud@quicinc.com>
-> [Bartosz: made the driver ready for upstream]
-> Co-developed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Signed-off-by: yangyinglu <yangyinglu@loongson.cn>
+---
+ drivers/usb/core/hub.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Overall looks good, Konrad has some comments to be addressed.
-Is this something I can just apply in the next iteration?
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 77e73fc8d673..bd4496b80c2d 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -1159,7 +1159,7 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ 		}
+ 
+ 		/* Make sure a warm-reset request is handled by port_event */
+-		if (type == HUB_RESUME &&
++		if ((type == HUB_RESUME || type == HUB_INIT2) &&
+ 		    hub_port_warm_reset_required(hub, port1, portstatus))
+ 			set_bit(port1, hub->event_bits);
+ 
+-- 
+2.20.1
 
-Yours,
-Linus Walleij
