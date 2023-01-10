@@ -2,96 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A309666450A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E59D664509
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238556AbjAJPiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:38:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
+        id S233956AbjAJPiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbjAJPiN (ORCPT
+        with ESMTP id S232997AbjAJPiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:38:13 -0500
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C34F01F5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:38:11 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowADH6M1chr1juvoNDA--.26915S2;
-        Tue, 10 Jan 2023 23:38:04 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     daniel@ffwll.ch
-Cc:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@gmail.com, ville.syrjala@linux.intel.com,
-        manasi.d.navare@intel.com, stanislav.lisovskiy@intel.com,
-        lucas.demarchi@intel.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH] drm/i915: Add missing check and destroy for alloc_workqueue
-Date:   Tue, 10 Jan 2023 23:38:03 +0800
-Message-Id: <20230110153803.5755-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 10 Jan 2023 10:38:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5D0AE70;
+        Tue, 10 Jan 2023 07:38:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0417B81731;
+        Tue, 10 Jan 2023 15:38:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50CCCC433EF;
+        Tue, 10 Jan 2023 15:38:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673365087;
+        bh=Ae0S8Vw/l+xGMbOvlfmhz4OmrcFgB5X+e/tuUD64qhI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=LAWqU2ypxGwCgqobnWL36+/jv/dCMhLsYAZUHxhpU110wHlVuN2EUk7Vvz4RC6X/E
+         xff/aw4iDInfuL3EQZFPF4bs+vnYhRE91JbuGx3spYd4ZeybMLbTfmYBnXZ9ttamZz
+         EBFMnKR8DXo9vOEZ3xvmKBPXnc/doVhI7SSeJ3CmSuhz/QItKad0x4TkR3hPrvHPBM
+         7crUXpv96kb6eqgL4UyOkoYbj4UF+4ApTdaf9wDnLXRcoPcchW7SB/YV39AY6IHiWn
+         2Uc7SWjQwWCTRfQBhPtTw0y/LMAH8l79DjKdRw4/sTWEjbFXpFnT5oZrBF2CcO67S7
+         HaKhi4i/GF4dg==
+Date:   Tue, 10 Jan 2023 09:38:05 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Achal Verma <a-verma1@ti.com>, Tom Joseph <tjoseph@cadence.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczy_ski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Milind Parab <mparab@cadence.com>
+Subject: Re: [PATCH v2 2/2] PCI: j721e: Add support to build pci-j721e as
+ module.
+Message-ID: <20230110153805.GA1505901@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADH6M1chr1juvoNDA--.26915S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw1xWF43WF1fArWfKr1xKrg_yoW8Ww1fpF
-        43XFyjkrZ5GayUGa9Fyw48tFyfA3yUGa4rGrykWryqv3W5Arn3C3sYkFy5uFyxAFZxXF1j
-        yFZ0939ruF1qy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE14v_XrWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfU8eOJUUUUU
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <db93c472-f617-3207-af57-55b14de8e236@ti.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 07, 2023 at 02:29:22AM +0800, Daniel Vetter wrote:
->On Fri, Jan 06, 2023 at 05:09:34PM +0800, Jiasheng Jiang wrote:
->> Add checks for the return value of alloc_workqueue and
->> alloc_ordered_workqueue as they may return NULL pointer and cause NULL
->> pointer dereference.
->> Moreover, destroy them when fails later in order to avoid memory leak.
->> Because in `drivers/gpu/drm/i915/i915_driver.c`, if
->> intel_modeset_init_noirq fails, its workqueues will not be destroyed.
->> 
->> Fixes: c26a058680dc ("drm/i915: Use a high priority wq for nonblocking plane updates")
->> Fixes: 757fffcfdffb ("drm/i915: Put all non-blocking modesets onto an ordered wq")
->> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+On Mon, Jan 09, 2023 at 09:06:14PM +0530, Vignesh Raghavendra wrote:
+> On 09/01/23 6:05 pm, Achal Verma wrote:
+> > Discussed with Vignesh the current config dependency of pcie-cadence and pci-j721e modules,
+> > it seems like for now to modularize these drivers with minimal changes is to use "select"
+> > as they were used before in PCI_J721E_HOST and PCI_J721E_EP config options.
 > 
-> So you have an entire pile of these, and I think that's a really good
-> excuse to
-> - create a drmm_alloc_workqueue helper for these (and
->   drmm_alloc_ordered_workqueue) using the drmm_add_action_or_reset()
->   function for automatic drm_device cleanup
-> - use that instead in all drivers, which means you do not have to make any
->   error handling mor complex
+> With this patch its now impossible to build PCI_J721E_HOST without
+> pcie endpoint support (as PCI_ENDPOINT is now a dependency). I don't
+> know a way to achieve this via Kconfig magic w/o splitting pci-j721e.c
+> into EP/RC (like pcie-rcar* or pcie-rockchip*)
 > 
-> Up for that? In that case please also convert any existing alloc*workqueue
-> callsites in drm, and make this all a patch series (since then there would
-> be dependencies).
+> > Will push updated version with "depends on PCI_ENDPOINT" in PCI_J721E config to check
+> > dependency on PCI_ENDPOINT before selecting PCIE_CADENCE_EP.
+> > 
+> 
+> Please don't top post and respond inline:
+> https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
 
-Fine, I have submitted two patches. The first one create the
-drmm_alloc_workqueue and drmm_alloc_ordered_workqueue helpers. And the
-second one replace the alloc*workqueue with DRM helpers in
-`drivers/gpu/drm/i915/display/intel_display.c`.
-If there is no problem in these two, I will submitted the other patches
-that replace the alloc*workqueue in other DRM files.
+Apparently there was also email from Achal to Vignesh that didn't make
+it to the archives, probably because it was HTML or other "fancy"
+email.  See the thread overview here, which is missing something:
+https://lore.kernel.org/all/20230108155755.2614147-1-a-verma1@ti.com/
 
-Thanks,
-Jiang
+It's best to use plain text email when possible.  See
+http://vger.kernel.org/majordomo-info.html for details.
 
+Bjorn
