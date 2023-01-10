@@ -2,215 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9749664C82
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F587664C83
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbjAJT27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
+        id S231332AbjAJT3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:29:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbjAJT2h (ORCPT
+        with ESMTP id S232598AbjAJT2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:28:37 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED23BC87;
-        Tue, 10 Jan 2023 11:28:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673378916; x=1704914916;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=lOdKiAA7Ift7v3DrOfWTz539CdQJXhPjjnhivEV9RKE=;
-  b=BmtiN+y9/EA6+PkO9FpO89QLj4ETZlX1ZAIqZO5xIp9oLHzvaZxo53oG
-   i8hn43IPXwyKBcnKFO3Nz7pRWaheQQJ+0Y0iwOKW2N82h1XMIlS7BNsel
-   tUr6cldNk5W6J4iqi7Xu8kP293jJ4UAi4vQtbyT57noHnvm+icdszrd9Z
-   AMigAXm5OTPD43orx4I6QV1PIqNUG8caheq/kBQ42El3/72i017KQhH/M
-   kO/Zch1GWgOMhgjLwy1BUUmTct02KR/gEXA5cYMr75sdCN/3gXFSauUyU
-   NdRhAB5A4ArSew9OMpXpJfMMhmhOfAesj1L7w9W64IHbMRy8KhNgouQ4J
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="320925749"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="320925749"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 11:28:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="745893468"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="745893468"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Jan 2023 11:28:20 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 10 Jan 2023 11:28:20 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 10 Jan 2023 11:28:19 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 10 Jan 2023 11:28:19 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.171)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 10 Jan 2023 11:28:19 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZGebx1QwKnp+CIealjF4hI0WtNfSX+xtE2tqZ/OaPOWxHgc/cuHHeX+5UHMBtRYDJAAqNZWgI6ONFx9pCCG0tiphQ7rHjNWor3sVHjEYJmrZ3DLY/+lBqWIQzf8vYtkKodFDAajrm3a/0CHWiP4n1MKalfenYZwxMLSnRWaEfdePHNyz7Mg4N5OyhVmwaGdUWFjmJl7cGOJH7AUNWxVaUwppN2qjSNggzyJftpmVZ27pr5m83WPpg1QF157E7PoX2oRAI1MFyVO9QSdzmtPgHPPuxQWHZ8Or9g+mp0qWFuRtTdKPEakAPpykeo8mxCKfZWQVBaR216eAD1v6ap+Mdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1F1H1kf9+qNh/uWypsjQ21jMyQlrW0E7q0d0Tz2txi0=;
- b=SfujPt7t0qx4qF/tiaeEsSKcI4LBtaYLoVrUvE02QXEJkIvnBgNmbX/c1AOURqHb3u6jvf7wxGuPJkueYiFBMkkJhAtk5VF31e+Xc/efq34s2OH91cN2eUWKv5JhtMuolc20ijnbpgDDj9VUdw4R6yubozlNCGri6+H+0eS6clwVgoDxCqrtjmzgpKmDGEdjUyO9hCnPuk2LM6Ymy1FB3D8wcaOzflO2L96kgHjPBuRt2BiJf/gYuwCVlaylVFDIrfdLXhhNG1HdyVlEnjNksSOsmFVRAd9C4vpfdBWAAJxoDNeuhCmFlBxiCU9Prl/0KucBbKO1JMPmqk4O1gmUCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by SJ0PR11MB4894.namprd11.prod.outlook.com (2603:10b6:a03:2d4::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 19:28:18 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::1818:e39d:454d:a930]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::1818:e39d:454d:a930%4]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 19:28:17 +0000
-Date:   Tue, 10 Jan 2023 14:28:11 -0500
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-CC:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        <intel-gfx@lists.freedesktop.org>,
-        <linux-hardening@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH][next] drm/i915/guc: Replace zero-length arrays with
- flexible-array members
-Message-ID: <Y728SwYZeThQzohb@intel.com>
-References: <Y72WBTUmh9r1lvKN@work>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y72WBTUmh9r1lvKN@work>
-X-ClientProxiedBy: BY5PR04CA0012.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::22) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+        Tue, 10 Jan 2023 14:28:46 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F776BC9E;
+        Tue, 10 Jan 2023 11:28:45 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id o15so9545630wmr.4;
+        Tue, 10 Jan 2023 11:28:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:from:references:to:content-language:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ogQqGa/zMUkiqlJzpPnC47rh7tkOePjRpIkhCuzSQnI=;
+        b=VimGyA3dksUeUGnm7ZYC72V9xTe/3xKF/dq/Kllo61wWHxfL9ewxTR/21UpzDOnMIr
+         QUueIp2EppH5lDVoKJS+XJWjJS0htgJntIpyKV78gG0mM94NW/kwC/yoh9oYuR73L0Rc
+         liwfiJ8VeMQRAjkwBfZZhYAavtrvkOQOFQC/twL5WI3F74aVOYuuudf6BLeGJy2iz6xz
+         5/vDxBdCWJM3QFMKmBgJnHVaQWr0oa8CtUDg78qRBXmiC8EfBpP8v8U7oHOKDZeEq8G3
+         U7iVePDEdKPCaa769bpRfkJWpbmsT1t1d2VdsMZdpCe0UrDxzQw1oWsxSWMvvLUUnmTU
+         D6Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:from:references:to:content-language:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ogQqGa/zMUkiqlJzpPnC47rh7tkOePjRpIkhCuzSQnI=;
+        b=3qhBYm4pkNlgJDs8JDah+wCVPK2anJ4tVmeb50h1IeL96I0wvHMstgjQ3w7E2NPuwy
+         uF9imCYGceLLFPcKkCwrX9uTBFFpbp7fTRSoIsv8HdP4zkqoLfm5vOLrwc7D1HbZA/1l
+         iTcT49npNSJsFbEplraU2WPP05/UdIUTuSmcIaYVaBBgQj8EguBLletOs6FYSuyfl+VW
+         itAwlwJc7WvHyY8aDABZ2NLB/+ah7O1GbM/u+HjHoZZ1VTqAcOXg2oLjMDFgOg4RIit3
+         u0ToKzwWqmnKMM8gqLKdJn6DttLmTy3z2J+COhSXTqwU7S8OISHi8vr1777EVP7+P/Ny
+         hP1Q==
+X-Gm-Message-State: AFqh2krOIxJ+Pk66W7nspBDRif8qU7JMfJFIS49GzLpJEnvltJJNgyhz
+        fLG36trGXLiPntLwyLSH2je8hK507fA=
+X-Google-Smtp-Source: AMrXdXvMplOU9MpVP7lRR0EZxqgcd3QqJWJECOML1r44flvhTILRLXEdsUqX/eIt092W1b2GdzICQg==
+X-Received: by 2002:a05:600c:3502:b0:3d9:e75c:756c with SMTP id h2-20020a05600c350200b003d9e75c756cmr10112577wmq.12.1673378923602;
+        Tue, 10 Jan 2023 11:28:43 -0800 (PST)
+Received: from [192.168.0.160] ([170.253.36.171])
+        by smtp.gmail.com with ESMTPSA id c18-20020a05600c0ad200b003d9c97d82f2sm15717741wmr.8.2023.01.10.11.28.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 11:28:43 -0800 (PST)
+Message-ID: <71ea2fa3-e593-e1ae-7abd-377bdf302d24@gmail.com>
+Date:   Tue, 10 Jan 2023 20:28:35 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|SJ0PR11MB4894:EE_
-X-MS-Office365-Filtering-Correlation-Id: cfaab432-7eac-4584-01c9-08daf340d30e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EcLvdXSOdWXiHXwgYxLu7TE1OoPhxZ1hVt5gntoAZH3OEkMaY1dQ8uSyKIpufbbPxT2cgh3WJNr8yRvIXrELjdeOBfb0cZpVjweDREmuGkwMjW5sXuVLzYsMQ270O+q3p/r0sXnWHINuWmJqX/izjMHstleF83mAYruhKs6DJHhvg9pd6oBnNjLNyKcZbKE2Bmy8s2TEFcnXWua4Hv9lgYYE1A15NKYLZfXat8aGqgQ/22KWU92/eZRdQ0YKdQG3yoqhJc7p0nZ/N4Qog1+F3hSzzUvN5FQ/1YFX7DtHpc2OmvIv6TjfNP9lRronep2yvNnkDEc3GIHpkw/svG+BWU02QGSYnosEEXBLzOk8lrX5V7QXc7ES6Ct7HlC8+phq1ne7HZYDGe1/XwJga3Y3dTobqOyM9tARxPcC/vN1SRaDsv28ZBwDfK3233+hKqqTaRlov4bWLay/hH7cLnz3C3XNpjoWfxkPy2E9J6/pEb48s9SUIb2ZJVHnm+T+kPBKp/0sULxbuoJQTsgCv5ZwWIfAlrfb+h/1mT31rw5LexiBQ+COjw69HvPUxL9Umm/krNB6TfRKM7tMRUrn9ZEsCf9GOJx/6gjsKNbZ+qvtlw3ofA4iWPr7wkx2Tldtx6KXqsj4m57I9oNhLpgF1Pro+rFcJI/gN+SdxlO5QIGUwdcKeGwvBrhPfQDH032mIXgSlMBd0OOngag4//Fg8Is6gQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(346002)(396003)(136003)(39860400002)(451199015)(6506007)(6486002)(6666004)(478600001)(966005)(2616005)(4326008)(26005)(186003)(6512007)(66556008)(316002)(8676002)(6916009)(66476007)(54906003)(86362001)(38100700002)(82960400001)(83380400001)(41300700001)(66946007)(7416002)(5660300002)(36756003)(2906002)(8936002)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jQ4ZzYowF6pAbt7L2GtBAUnqH4KjAj2J5kXqDq7JvFU9Q2fSp3tsebKamebV?=
- =?us-ascii?Q?KsEdRlDhayk6Ta3rKjxnkE+y/Bsvhfs42Cmiw+DPlSN1EsnysAMTh2T8J5t5?=
- =?us-ascii?Q?CAhC7+sSdYTWjmtGaBiX4b8ngOW2xzbBcXTwHyxRHigAeGuBiK69WZoNGcBl?=
- =?us-ascii?Q?HP/7DjBy7HH8e3kgGXoTTvlRLKP6yV0HdWo24XeN2XiYQYcDkulzRSdT6cSt?=
- =?us-ascii?Q?iEWg611gPaUdGZZGtOSw+kYS2oG0nLSO6SqBb2nQZObFfrpKzqy4WhjfEpvk?=
- =?us-ascii?Q?6Ort6PqB8KM4Nl/zfpRlnwEe/KVb0ZYzvh3rSIy24VRe/+qkuioU9znR6y7f?=
- =?us-ascii?Q?1vv1BfcO0MyDQL9l6L9SCOwE04Ksda5ryKZ7XfasjCIf0ykrbfZUEDYNGCI7?=
- =?us-ascii?Q?YCNEuAkIboacfAfzDkjApqxRtDw0GPPiYWIeLPtxUHdKD6mSAU4erdcWuXg+?=
- =?us-ascii?Q?ZESXSrC+dJJx2lDWD8A7WTOLpKBcmaq9/CSx38htVJ7VeEAmVLZUY+/tigc1?=
- =?us-ascii?Q?sieIx3c77/18EntYR7Xh5pyN2+NGByt4hGZ8AV3hVXCuK6uG/J2x/BL5NW+P?=
- =?us-ascii?Q?6Q574yWE22KrDQyspHw/2z/IJd+jZuKAgsCi3osCFaxwsd4s+HyNk+CUUgae?=
- =?us-ascii?Q?qbzYVUIg60lC97JlUzNuj4O8p36awxdwNBp4GzO+A1sQnpSkKqIBFKul15WU?=
- =?us-ascii?Q?kqAsKYKcLPjP/y6skDMoPeqfBxDV9Msn2er508FPyuNEIIwA8bfcLrEjnnoX?=
- =?us-ascii?Q?/xiF1BSTvZie3SzQ6Eij0r3iEWwxR0LXmOtxHc18B/YFUoMVzM5dVx9X3Ctx?=
- =?us-ascii?Q?+6QIcVJOuMZ8lcv1Fch9nmWcbibiqA/mp8fPm0M0miRyACyWhzq0HKyY+JWX?=
- =?us-ascii?Q?V5ctuNiwDmPKThVJhswvjJw6Nt00CCkAhS0bjxzOhNJwfhoh6hqNinZpMnnC?=
- =?us-ascii?Q?ME+hYBR7rR1Kv3ADXLBAAegx2XIDbip1HbYodj6iokhyJEkaaO/gIFTnbKD0?=
- =?us-ascii?Q?Kp13fAimCjGkxATLAjVnCS4MY3+bLLbip+h0ZZiqTclpOoNVhTzVtcvxqAs/?=
- =?us-ascii?Q?ChqCPFvbh2trbVc9tQPcwhK9w/Vrb4gw1VZESE/BkMmwgfaKb0Q3+GtTzm17?=
- =?us-ascii?Q?E9Cijw5v/TVilFbKTZ0cd/nVabBpr4iko4XVx1PBJ+ae0LcRZoMyiZN9rhAA?=
- =?us-ascii?Q?tgOYJRK7Rq+8k9O7jUBMsmOoqvC+lo6PawRjLQjmFbzGT8+nzybZ6HRqILKu?=
- =?us-ascii?Q?/iY/fYNlL8LlY9Ew1hMLf+AwlpNDP7u9WjK+MH1TDMQ7gXwsRKy+YObIGLBI?=
- =?us-ascii?Q?AVu/IFPMP1cUWZYCRHxi4d89aDRHDwZh9SKJmblhngJZqHV1tkGsMRlqw1dB?=
- =?us-ascii?Q?iz6hnqkxEZ4RUqf3YlKI6aB/pyYU/E/M8NHj8/4TZhO3ZafmlbZq2Cbu9pVC?=
- =?us-ascii?Q?eQFUsQy71WQv+jp3pmM5yuK/iNFf0PUz7nOuIGN8kJ3ugFOHjD9ESLxk6Co2?=
- =?us-ascii?Q?K0NIYBBul8H50DYr/R+RkDhlgH/w5mwd7rUhXyn55OmOVFDPOjd10jkai3NU?=
- =?us-ascii?Q?zQ9aQgkNKoxxbzZxjjs1m2rXcfFMON6FOHfmtAk43AaNXRulyNgsWxS5/PdP?=
- =?us-ascii?Q?Sw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfaab432-7eac-4584-01c9-08daf340d30e
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 19:28:17.3056
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3zbprlyQm30O2gAVhoirqufQmMYUg7nNElvUd2Cx5l7OY6of/dh8e1X7QJu6trkW/AgpDNuNfPyF3SQHKZPMkA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4894
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: rseq(2) man page
+Content-Language: en-US
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-man@vger.kernel.org, Alejandro Colomar <alx@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>, paulmck <paulmck@kernel.org>
+References: <095c479b-baed-9d11-08a1-e698f59763d9@efficios.com>
+ <425ddf00-24a1-bf02-29f1-937ba1545020@gmail.com>
+ <71b43f20-5d6d-f3f8-b3cd-786dfbc8d34d@gmail.com>
+ <c8cb6136-6924-4fae-f4bb-981dec2e1952@efficios.com>
+ <71e6728d-c2a8-e646-5c6c-2de8dfa982cc@gmail.com>
+ <c21ca3d7-9095-5613-5953-7870d9a6c23f@efficios.com>
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+In-Reply-To: <c21ca3d7-9095-5613-5953-7870d9a6c23f@efficios.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------jlE2rgOjTHkdEuS4D8a1Nx0Y"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------jlE2rgOjTHkdEuS4D8a1Nx0Y
+Content-Type: multipart/mixed; boundary="------------C5hnTBVRBRN3VuETDc00N05b";
+ protected-headers="v1"
+From: Alejandro Colomar <alx.manpages@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-man@vger.kernel.org, Alejandro Colomar <alx@kernel.org>,
+ linux-kernel <linux-kernel@vger.kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
+ paulmck <paulmck@kernel.org>
+Message-ID: <71ea2fa3-e593-e1ae-7abd-377bdf302d24@gmail.com>
+Subject: Re: rseq(2) man page
+References: <095c479b-baed-9d11-08a1-e698f59763d9@efficios.com>
+ <425ddf00-24a1-bf02-29f1-937ba1545020@gmail.com>
+ <71b43f20-5d6d-f3f8-b3cd-786dfbc8d34d@gmail.com>
+ <c8cb6136-6924-4fae-f4bb-981dec2e1952@efficios.com>
+ <71e6728d-c2a8-e646-5c6c-2de8dfa982cc@gmail.com>
+ <c21ca3d7-9095-5613-5953-7870d9a6c23f@efficios.com>
+In-Reply-To: <c21ca3d7-9095-5613-5953-7870d9a6c23f@efficios.com>
 
-On Tue, Jan 10, 2023 at 10:44:53AM -0600, Gustavo A. R. Silva wrote:
-> Zero-length arrays are deprecated[1] and we are moving towards
-> adopting C99 flexible-array members, instead. So, replace zero-length
-> arrays in a couple of structures (three, actually) with flex-array
-> members.
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [2].
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays [1]
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
-> Link: https://github.com/KSPP/linux/issues/78
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+--------------C5hnTBVRBRN3VuETDc00N05b
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> ---
->  drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h b/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
-> index 3624abfd22d1..9d589c28f40f 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
-> @@ -73,7 +73,7 @@ struct guc_debug_capture_list_header {
->  
->  struct guc_debug_capture_list {
->  	struct guc_debug_capture_list_header header;
-> -	struct guc_mmio_reg regs[0];
-> +	struct guc_mmio_reg regs[];
->  } __packed;
->  
->  /**
-> @@ -125,7 +125,7 @@ struct guc_state_capture_header_t {
->  
->  struct guc_state_capture_t {
->  	struct guc_state_capture_header_t header;
-> -	struct guc_mmio_reg mmio_entries[0];
-> +	struct guc_mmio_reg mmio_entries[];
->  } __packed;
->  
->  enum guc_capture_group_types {
-> @@ -145,7 +145,7 @@ struct guc_state_capture_group_header_t {
->  /* this is the top level structure where an error-capture dump starts */
->  struct guc_state_capture_group_t {
->  	struct guc_state_capture_group_header_t grp_header;
-> -	struct guc_state_capture_t capture_entries[0];
-> +	struct guc_state_capture_t capture_entries[];
+DQoNCk9uIDEvMTAvMjMgMTc6NTQsIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOg0KDQpbLi4u
+XQ0KDQpbRUZBVUxUIC8gU0VHVl0NCg0KPiANCj4gT0ssIGxldCdzIGtlZXAgdGhpcyBmb3Ig
+YSBzZXBhcmF0ZSBkaXNjdXNzaW9uLg0KDQpTdXJlLg0KDQpbLi4uXQ0KDQo+PiBJIGZvcmdv
+dDsgdGhlcmUncyBhIG5ldyBzZWN0aW9uOiBMSUJSQVJZLg0KPj4NCj4+IEl0IHNwZWNpZmll
+cyB0aGUgbGlicmFyeSBpbiB3aGljaCB0aGUgZnVuY3Rpb24gaXMgZGVmaW5lZCwgb3IgaW4g
+dGhlIGNhc2Ugb2YgDQo+PiBzeXNjYWxscywgdGhlIHdyYXBwZXIgKHNpbmNlIHdlIGNhbGwg
+aXQgdGhyb3VnaCBzeXNjYWxsKDIpLCBpdCB3b3VsZCBiZSBsaWJjKS4NCj4gDQo+IE9LLiBT
+aW1pbGFyIHRvIGZ1dGV4KDIpLg0KDQpZZXAuDQoNCj4gDQo+Pg0KPj4gQlRXLCBJIHdvbmRl
+ciB3aGF0IGxpYnJzZXEgaXMuwqAgSXMgbGlicnNlcSBzb21ldGhpbmcgdGhhdCB1c2VycyBz
+aG91bGQgY2FyZSANCj4+IGFib3V0Pw0KPiANCj4gVXNlcnMgYXJlIG5vdCByZXF1aXJlZCB0
+byB1c2UgbGlicnNlcSB0byB1c2UgdGhlIHJzZXEgc3lzdGVtIGNhbGwsDQo+IGJ1dCBpdCdz
+IHZlcnkgY29udmVuaWVudCB0byB1c2UgdGhpcyBDLWxldmVsIEFQSSByYXRoZXIgdGhhbiBo
+YXZlDQo+IGVhY2ggdXNlciByZWltcGxlbWVudCB0aGUgcGVyLWFyY2hpdGVjdHVyZSBhc3Nl
+bWJseSBjb2RlIHJlcXVpcmVkIHRvDQo+IGNyZWF0ZSB0aGUgUlNFUSBjcml0aWNhbCBzZWN0
+aW9ucy4NCj4gDQo+IGxpYnJzZXEgZGlkIG5vdCBoYXZlIGFuIG9mZmljaWFsIHJlbGVhc2Ug
+eWV0LCBzbyB0aGF0J3MgbWFpbmx5IHdoeSBJDQo+IHRoaW5rIGl0IHRvbyBlYXJseSB0byBy
+ZWZlciB0byBpdCBpbiBtYW51YWwgcGFnZXMuDQoNCk9rYXk7IHdoZW4geW91IGZlZWwgaXQn
+cyByZWFkeSwgeW91IGNvdWxkIGRvY3VtZW50IGl0IGxpa2UgbGlia2V5dXRpbHMgaW4ga2V5
+Y3RsKDIpLg0KDQo+IA0KPj4NCj4+PiAuU0ggU1lOT1BTSVMNCj4+PiAubmYNCj4+PiAuUFAN
+Cj4+PiAuQlIgIiNpbmNsdWRlIDxsaW51eC9yc2VxLmg+IiBcDQo+Pj4gIiAvKiBEZWZpbml0
+aW9uIG9mICIgUlNFUV8qICIgY29uc3RhbnRzIGFuZCByc2VxIHR5cGVzICovIg0KPj4NCj4+
+IFRoZSBsaW5lIGFib3ZlIGdvZXMgYmV5b25kIGNvbHVtbiA4MCBpbiBmb3JtYXR0ZWQgb3V0
+cHV0LsKgIFRoYXQncyBhIGhhcmQgbGltaXQgDQo+PiBmb3IgbWFudWFsIHBhZ2VzLsKgIElm
+IHlvdSBhZGQgdGhpcyBwYWdlIHRvIHRoZSBsaW51eCBtYW4tcGFnZXMgcmVwbywgYW5kIHJ1
+biANCj4+IHRoZSBsaW50ZXJzLCB5b3UnbGwgc2VlIGEgd2FybmluZyBhYm91dCB0aGF0LsKg
+IEluIGNhc2UgeW91J3JlIGludGVyZXN0ZWQgaW4gDQo+PiBsaW50aW5nIG1hbnVhbCBwYWdl
+cyBpbiB0aGUgZnV0dXJlLCB5b3UgY2FuIGRvIHNvbWV0aGluZyBzaW1pbGFyIHRvIHdoYXQg
+SSBkbyANCj4+IGluIHRoZSBtYW4tcGFnZXNbMl0NCj4gDQo+IE9LLiBJJ3ZlIHVzZWQgaXQs
+IGl0J3MgcXVpdGUgdXNlZnVsISBJIGhhdmUgZml4ZWQgYWxsIHdhcm5pbmdzIGV4Y2VwdCBm
+b3INCj4gIm1hbmRvYzogbWFuMi9yc2VxLjI6NToxMjogV0FSTklORzogY2Fubm90IHBhcnNl
+IGRhdGUsIHVzaW5nIGl0IHZlcmJhdGltOiAoZGF0ZSkiDQo+IHdoaWNoIEkgc3VzcGVjdCBp
+cyBleHBlY3RlZC4NCg0KVWhoLCBJIGhhZCB0aGF0IG9uZSBleHBsaWNpdGx5IHNpbGVuY2Vk
+Og0KDQokIG1ha2UgbGludC1tYW4tbWFuZG9jIFY9MQ0KTElOVCAobWFuZG9jKQl0bXAvbGlu
+dC9tYW4yL3BlcmZfZXZlbnRfb3Blbi4yLmxpbnQtbWFuLm1hbmRvYy50b3VjaA0KISAobWFu
+ZG9jIC1tYW4gLVRsaW50ICBtYW4yL3BlcmZfZXZlbnRfb3Blbi4yIDI+JjEgXA0KICAgIHwg
+Z3JlcCAtdiAnU1RZTEU6IGxvd2VyIGNhc2UgY2hhcmFjdGVyIGluIGRvY3VtZW50IHRpdGxl
+OicgXA0KICAgIHwgZ3JlcCAtdiAnVU5TVVBQOiBpZ25vcmluZyBtYWNybyBpbiB0YWJsZTon
+IFwNCiAgICB8IGdyZXAgLXYgJ1dBUk5JTkc6IGNhbm5vdCBwYXJzZSBkYXRlLCB1c2luZyBp
+dCB2ZXJiYXRpbTogVEggKGRhdGUpJyBcDQogICAgfCBncmVwIC12ICdXQVJOSU5HOiBlbXB0
+eSBibG9jazogVVInIFwNCiAgICB8fDo7IFwNCikgXA0KfCBncmVwICcuJyA+JjINCnRvdWNo
+IHRtcC9saW50L21hbjIvcGVyZl9ldmVudF9vcGVuLjIubGludC1tYW4ubWFuZG9jLnRvdWNo
+DQoNCg0KRm9yIHNvbWUgcmVhc29uIHlvdSBkaWRuJ3QgaGF2ZSAiVEgiIGluIHRoZSBlcnJv
+ciBtZXNzYWdlLCB3aGljaCBpcyB3aHkgbXkgZ3JlcCANCmRpZG4ndCBkaXNjYXJkIGl0Lg0K
+DQpbLi4uXQ0KDQo+Pj4gLkJJICJpbnQgc3lzY2FsbChTWVNfcnNlcSwgc3RydWN0IHJzZXEg
+Kl9OdWxsYWJsZSAiIHJzZXEgIiwgdWludDMyX3QgIiANCj4+PiByc2VxX2xlbiBcDQo+Pg0K
+Pj4gV2hhdCdzIHRoZSBtZWFuaW5nIGZvciBOVUxMP8KgIERvZXMgaXQgaGF2ZSBhIHZhbGlk
+IHNlbnRpbmVsIG1lYW5pbmcsIG9yIGlzIGl0IA0KPj4gYW4gaW52YWxpZCBhZGRyZXNzP8Kg
+IElmIGl0J3MganVzdCBpbnRlcnByZXRlZCBhcyBhbiBpbnZhbGlkIGFkZHJlc3MgKGZvciB3
+aGljaCANCj4+IGZyb20gYSB1c2VyLXNwYWNlIHBlcnNwZWN0aXZlIGEgY3Jhc2ggd291bGQg
+YmUgbGVnaXRpbWF0ZSksIHRoZW4gSSdkIHJlbW92ZSANCj4+IF9OdWxsYWJsZS4NCj4gDQo+
+IFdpdGggdGhlIGZsYWdzIHRoYXQgYXJlIGN1cnJlbnRseSBpbXBsZW1lbnRlZCAoMCBvciBS
+U0VRX0ZMQUdfVU5SRUdJU1RFUiksDQo+IHRoZSByc2VxIGFyZ3VtZW50IGlzIG5vdCBleHBl
+Y3RlZCB0byBiZSBsZWdpdGltYXRlbHkgTlVMTCAoaXQgd291bGQgcmV0dXJuDQo+IC0xLCBl
+cnJubz1FRkFVTFQgb24gcmVnaXN0cmF0aW9uLCBvciAtMSwgZXJybm89RUlOVkFMIG9uIHVu
+cmVnaXN0ZXIgYXR0ZW1wdCkuDQo+IA0KPiBXZSBtYXkgYWRkIG5ldyBmbGFncyBpbiB0aGUg
+ZnV0dXJlIHdoaWNoIHdvdWxkIG5vdCBjYXJlIGFib3V0IHRoZSByc2VxIGFkZHJlc3MNCj4g
+KGl0IGNvdWxkIHZlcnkgd2VsbCBiZSBudWxsIHRoZW4pLiBEbyB5b3UgcmVjb21tZW5kIHRo
+YXQgd2Ugb25seSBhZGQgdGhlDQo+IF9OdWxsYWJsZSB0YWcgd2hlbiB0aGlzIG9jY3VycyA/
+DQoNClllczsgc2luY2UgaXQncyB3aGF0IHRoZSB1c2VyIGNhbiBwYXNzLCBpdCBtYWtlcyBz
+ZW5zZSB0byBiZSBhcyBjb25zdHJhaW5lZCBhcyANCnBvc3NpYmxlLiAgSWYgaXQgd2VyZSBz
+b21lIHJldHVybiB0aGF0IHRoZSB1c2VyIHdvdWxkIGhhdmUgdG8gaW5zcGVjdCwgaXQgd291
+bGQgDQptYWtlIHNlbnNlIHRvIGJlIGNhdXRpb3VzIG9uIHRoZSBOVUxMIHNpZGUgb2YgdGhp
+bmdzIGFuIHVzZSBfTnVsbGFibGUgDQpwcmV2ZW50aXZlbHksIGJ1dCBmb3IgYW4gaW5wdXQs
+IG5vbi1udWxsIGlzIHByZWZlcnJlZCBmb3Igbm93Lg0KDQoNClsuLi5dDQoNCj4gDQo+IFVw
+ZGF0ZWQgdmVyc2lvbiBiYXNlZCBvbiB5b3VyIGNvbW1lbnRzIHB1c2hlZCBpbnRvIG15IHJl
+cG8sIHRoYW5rcyENCg0KQ29vbCEgSSdsbCBoYXZlIGEgbG9vay4NCg0KQ2hlZXJzLA0KDQpB
+bGV4DQoNCj4gDQo+IE1hdGhpZXUNCj4gDQo+IA0KDQotLSANCjxodHRwOi8vd3d3LmFsZWph
+bmRyby1jb2xvbWFyLmVzLz4NCg==
 
-Please notice we are currently using sizeof(struct ...).
-Along with your proposed changes, shouldn't we also start using
-the struct_size() which already take the flexible array into account?
+--------------C5hnTBVRBRN3VuETDc00N05b--
 
->  } __packed;
->  
->  /**
-> -- 
-> 2.34.1
-> 
+--------------jlE2rgOjTHkdEuS4D8a1Nx0Y
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmO9vGMACgkQnowa+77/
+2zIvNw//Xw6eBXLFD7+qaoR0K5puVaZDT/UjvFU326JHvlk4OsnL6R32r2XRrj3C
+ooqVxxHyfs3rbDZQEErapJe5jh0skr58M0FiFal98pozAdpPnyzIknYzpWFXMKHr
+Mb6/4+GBamPjgNQcVAu0EOIvyqIaME7VXFcFVK/5JN7PbpSoTtod/uGaY3RfEo8F
+Bdx4KcFToxFnvOK76vXA0NXqgh/56NUM1FqYhDCFOOSLZlLgQFGMZLOPMpmLpNSZ
+Yk0bqwMPWZS0aw1hhVp11Z6bVVvWZMwhPdl5GDUvMTRZjNXkAMS1WLiiRYT88JXd
+XV+FkT9ljB0w62P3ci5hAJHydZigi/iqpz5Ugaj7J0YTgKrNrj5BdpZc6DrTSDpn
+GzavOccU8ObncCsbEE6qBBkGszXNhzgP/vXPL7gSw9x4VAmG6Ktgh3Y/+f7b89t0
+kDWngiBQD+4Cxg+YKsdjo0pShAVZdNhiOp/OpIQ/l942cQKtXbmLFNs8R/t+kz6F
+eHKGsMcUdMnrqhozPaYRGxRzCDSN00B9YZbWOx+0ea0Cg+9UGZ71QWznW/tsBarO
+wpxpsg/W6zcWVuExmV9t5xZl+zpp56voAWM9nK/9Pevm6jU1yuXdt9we/C/WtWV5
+zLDrQoQYl0DFMRtww+yF1B2Qm9386i4axGGM4krCJuEJFmNoG6Y=
+=taSY
+-----END PGP SIGNATURE-----
+
+--------------jlE2rgOjTHkdEuS4D8a1Nx0Y--
