@@ -2,146 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A88664D8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 381AF664D92
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjAJUi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 15:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S233581AbjAJUis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 15:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232123AbjAJUiZ (ORCPT
+        with ESMTP id S233276AbjAJUid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:38:25 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F47485BE
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:38:23 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id bj3so10429111pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:38:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=adAxM/tdxethfCc9kWsVP4uZeaLxTRj54+QnNFBkUNY=;
-        b=q6L5OgUTT+UTRnL01un1afM9agRNUadY7z3gcTMkTail3+Qhky05OYeoYhqXQYg/2V
-         oNM0bJF76X8c1a11DiRZwcxUUHYL3WCdBjquE+qsCek2XUUM0gXKs5jgYWAsvJKFOq3s
-         2lnuRusHfIRnNbb9jdGjYhKOTOw50LK1/BLu87Zi/Mpo+hASVtgSMMzyjjmxYUTFskob
-         p27WyREJ+flNoKcGO2HMB4eNUNOHlrLrKCJ+wJHvQBcRyydwzjIxEbXRXn1ARZZEyQGa
-         CjT+HPcFde0Kq8RXE0OBr1Oysi/okt8jgq4il6jxujPqUwEvyhWt1lPGGK2sbFlYhhn8
-         ZxZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=adAxM/tdxethfCc9kWsVP4uZeaLxTRj54+QnNFBkUNY=;
-        b=rMq9c+p8c7RjcURioH69BA8k8/mk9XBKTbUEyaLMvskQRrVbqiynQkirrIHN0ATTzk
-         PtRtoIsENsmx8HMZSuyneGiSEzUYs/qGkYq551rJmsXjOP77/SRbeHWeUXaTKxGfHyqO
-         wEPGPCCma02pAVp/Hm8p2xBzDCoXTzYOczLbEll2iE40Q/5PRVqja7aPVRG30rRh94iG
-         EJR32IMx/f99cJAYWecTmH1Wtj30amQA+Iasv9jzbK+dRKxjLVcbhrU5rw8JqeFDLY96
-         E7pylT8p0bT0gpLnr75uyJcUWFEWSxe0x6nRjQUXfo2ivsKG2A8dEDycdJmC6BAi+A+8
-         dLXg==
-X-Gm-Message-State: AFqh2kqXy9gdzrEn8rzKZ6l1dB3OtOL6H++ChmeFau02reI5y/meCI+g
-        dAvoErJ5ym7ek8sSLaDKtM9OJPVPMstrTXHXgdn7+Q==
-X-Google-Smtp-Source: AMrXdXsEsCNJ48Atas4Y6eD6ioPdCdz81nx9K6hMDwJwBy/FjZKLO3qICbX1P4jlmpWAughD783FHgYsDQpRu2d1nFw=
-X-Received: by 2002:a17:90b:4b4c:b0:219:6be1:7ff2 with SMTP id
- mi12-20020a17090b4b4c00b002196be17ff2mr6404270pjb.79.1673383103232; Tue, 10
- Jan 2023 12:38:23 -0800 (PST)
+        Tue, 10 Jan 2023 15:38:33 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A42A4BD5E;
+        Tue, 10 Jan 2023 12:38:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673383112; x=1704919112;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Y0yZaBVtQ38aeZIo8Y56O5/1QglVHbW63SlAqR8deB8=;
+  b=GA3gTg8bdQDw8A6L3W+N3ozKhnzHz1peYHxvcY4PsuG/JbnveKmuAPvS
+   /uuXthTLRUQPzDwruNxZAZXVD9J8jtRkxYguY9+Y2RJsXlAZxha8tNuOz
+   Q88s98az+07u5ssY8SiXN1TkM7xavP8fzs4m2irs78dJPEvHRs5f/37qy
+   +85lnjcCEYFJt7lUeZyFDgY2MIIyEFDQcnAZUecEDR72773YgL1yrV6y7
+   877DWhuQ320FhjhiseVREhPEpLhAYzfJaTnK8VlMDhquo7dtBGfrt0icd
+   YjzPThc/4YY+nUFDrwjs4AuBpLIA4ST0oBlxhq0vQuAMqsqnxvpOTkGNY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="385560827"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="385560827"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 12:38:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="745915514"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="745915514"
+Received: from linux.intel.com ([10.54.29.200])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Jan 2023 12:38:31 -0800
+Received: from [10.252.208.27] (kliang2-mobl1.ccr.corp.intel.com [10.252.208.27])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 676F6580377;
+        Tue, 10 Jan 2023 12:38:28 -0800 (PST)
+Message-ID: <0f25f140-2fad-09ff-f4c8-1231836b86f4@linux.intel.com>
+Date:   Tue, 10 Jan 2023 15:38:27 -0500
 MIME-Version: 1.0
-References: <20230107040203.never.112-kees@kernel.org> <CAMuHMdURtDNzzaoBM4DpEHKiDsgnA-7Yc9QO=5gsmwz9PHWK5w@mail.gmail.com>
- <ae952aa5-f113-8786-6fe4-60e5fa0ced2b@suse.cz>
-In-Reply-To: <ae952aa5-f113-8786-6fe4-60e5fa0ced2b@suse.cz>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 10 Jan 2023 12:38:11 -0800
-Message-ID: <CAGS_qxrOVhXQaxqKknS2CJpHeCWHaMshvdJNdzeN6+KxQmY_uA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: memcpy: Split slow memcpy tests into MEMCPY_SLOW_KUNIT_TEST
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-hardening@vger.kernel.org, David Gow <davidgow@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 0/2] PCI: Fix extended config space regression
+To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
+Cc:     Dan J Williams <dan.j.williams@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        David E Box <david.e.box@intel.com>,
+        Yunying Sun <yunying.sun@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Florent DELAHAYE <linuxkernelml@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20230110180243.1590045-1-helgaas@kernel.org>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230110180243.1590045-1-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 11:51 PM Vlastimil Babka <vbabka@suse.cz> wrote:
+
+
+On 2023-01-10 1:02 p.m., Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map") appeared
+> in v6.2-rc1 and broke extended config space on several machines.
+> 
+> This broke drivers that use things in extended config space, e.g., perf,
+> VSEC telemetry, EDAC, QAT, etc.
+> 
+> This happened because mmconfig-shared.c checks to see that ECAM space is
+> reserved in E820 or ACPI motherboard resources.  If it's not, it assumes
+> ECAM doesn't work.  07eab0901ede removed some E820 entries, so it looked
+> like ECAM was no longer reserved, so we stopped using it.
+> 
+> The machines where this broke don't reserve the ECAM in ACPI PNP0C02
+> devices (which seems to be what the PCI Firmware spec requires), but they
+> do mention it in the EFI memory map as EfiMemoryMappedIO.
+> 
+> Bjorn Helgaas (2):
+>   x86/pci: Simplify is_mmconf_reserved() messages
+>   x86/pci: Treat EfiMemoryMappedIO as reservation of ECAM space
 >
-> +Cc rest of kunit from MAINTAINERS
->
-> On 1/7/23 11:55, Geert Uytterhoeven wrote:
-> > Hi Kees,
-> >
-> > On Sat, Jan 7, 2023 at 5:02 AM Kees Cook <keescook@chromium.org> wrote:
-> >> Since the long memcpy tests may stall a system for tens of seconds
-> >> in virtualized architecture environments, split those tests off under
-> >> CONFIG_MEMCPY_SLOW_KUNIT_TEST so they can be separately disabled.
 
-<snip>
+This patch series fixes the issue on my machine.
 
-> >>
-> >> -static void init_large(struct kunit *test)
-> >> +static int init_large(struct kunit *test)
-> >>  {
-> >> +       if (!IS_ENABLED(CONFIG_MEMCPY_SLOW_KUNIT_TEST)) {
-> >> +               kunit_skip(test, "Slow test skipped. Enable with CONFIG_MEMCPY_SLOW_KUNIT_TEST=y");
-> >
-> > So I can't make the slower tests available for when I need them,
-> > but not run them by default?
->
-> Indeed it seems weird to tie this to a config option without runtime override.
->
-> > I guess that's why you made MEMCPY_SLOW_KUNIT_TEST tristate originally,
-> > to have a separate module with the slow tests?
->
-> On the other hand I can imagine requiring a separate module for slow tests
-> would lead to more churn - IIUC there would need to be two files instead of
-> memcpy_kunit.c, possibly a duplicated boilerplate code (or another shared .c
-> file).
->
-> So the idea is to have a generic way to mark some tests as slow and a way to
-> opt-in/opt-out for those when running the tests. Maybe KUnit folks already
-> have such mechanism or have an idea how to implement that.
+Tested-by: Kan Liang <kan.liang@linux.intel.com>
 
-There is no mechanism atm, and we'd still need to figure it out so
-it'll be a while.
-So I think a patch like this makes sense in the short-term.
+Thanks,
+Kan
 
-This is definitely something we've always thought would be useful eventually.
-See this TODO which has been there since day 1 ;)
-https://elixir.bootlin.com/linux/latest/source/lib/kunit/try-catch.c#L36
-
-It just felt like it would be premature to come up with something when
-basically all the tests up until now ran ~instantly.
-
-Throwing out some rough implementation ideas:
-I was thinking the granularity for these timeout annotations would be
-at the suite-level.
-If we go with that, then I guess the intended flow is to group slow
-tests into their own suite and mark them as such.
-
-Then maybe we'd have some runtime way of disabling/enabling "long"
-tests, like a cmdline opt.
-E.g. you'd pass `kunit.max_test_size=30` to exclude tests longer than
-30 seconds.
-
-Daniel
+>  arch/x86/pci/mmconfig-shared.c | 44 +++++++++++++++++++++++++++++-----
+>  1 file changed, 38 insertions(+), 6 deletions(-)
+> 
