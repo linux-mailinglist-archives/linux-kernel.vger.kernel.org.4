@@ -2,174 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E9C664682
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A0666468B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:51:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238525AbjAJQtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 11:49:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
+        id S238714AbjAJQv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 11:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238664AbjAJQtM (ORCPT
+        with ESMTP id S238717AbjAJQvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 11:49:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26422FD
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:48:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673369320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lJePnZsKXnubDcGA3DYzaayBveLdWQPssGSlTfWc4l8=;
-        b=TVodgAXQv+xTQHZdt2rKYeMfVOTOBMl1yTTiaHRGOz6fGYmsBvN0F8bCjlzvrEB4USFwEU
-        iCWjVXInJFw+mSOzqBOoaa3uF64nNHPwXuqma9NQHeEXIKXrAEwaUSN2sF5P0RfhGyeX+m
-        a0U5pCHXOPwICIhj2DrwEtF3ttPy1hk=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-260-psxe9C5YNsqL2FzB9oGVIw-1; Tue, 10 Jan 2023 11:48:39 -0500
-X-MC-Unique: psxe9C5YNsqL2FzB9oGVIw-1
-Received: by mail-pf1-f200.google.com with SMTP id x28-20020a056a000bdc00b005826732edb6so5497929pfu.22
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:48:39 -0800 (PST)
+        Tue, 10 Jan 2023 11:51:14 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18FBE00F
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:51:13 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id s5so6949506qtx.6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:51:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nD2L+nouQmYkYUXiElXuWDWGgbRqZvOgB6YtZyQAtHQ=;
+        b=AN8zcHl7ntfjRnJWS+1I6Gb2ig79s8638IrmdTtJOsAsVMB8UbvoEfyouuGxS4Ez0I
+         H+sCGjun+6oIGTuzZurJUdkwXK550WAon7TZx66V8f1fkRoDQDqSrao9NJ15Ubmmwa54
+         br8mBPdwhRm1n1FiUa25ctcJYzgzFsA5OMAWNmg6lSEjQmQX0xa9R94QsBNnSbR8R8uE
+         ra0lhLPiYyKyuxXXn8EqhUkfIYGzdkf5ws6prCnPyt6BydG9BnuWQy6b87D1gOd2YSNB
+         mdKb2MtCN47ruH5M/7TI82RPLg65wfruJPS4S8nNHOjJ612Dkkt9LmY8Pq146CtyMJrl
+         UKFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lJePnZsKXnubDcGA3DYzaayBveLdWQPssGSlTfWc4l8=;
-        b=H+Srb42Ed+Bf1N7FW2NckZ1h2fBPo3rgcjaIw/+nlQTDlReZ7tqRELKtygRyZSzV1r
-         9m2i5lSJez3nRBY4EggF4fedbzSRxLU/PS3XupZVRzaAuqZ5szeiwpmiGBTb9qXjy9tS
-         rougmlDBNTcjVL0psFgoHhXxMHkae+VOnHfQ6zXbUuEbOFuHM7wwpwNs9qP3UNmBGPF2
-         ny++peSrUpWXCU37t4lgMvm4MWIjbglUGrK2mygXcwZEYDt1IDPbHk7NogwWOvtgPCCr
-         Vg46YBM+ZwnSgQFwMSMesnJPkdRvjduA5VQEVDFVN6iEFQWWVw1a6UKEcmDIQXcqCgci
-         aj7A==
-X-Gm-Message-State: AFqh2kqAcJirRsCxE6gyNZ7u42xAm/VTK4x+Bf038pM3NRZ2olacUzu8
-        mCVBBVfJ76Lp4uKYwD2BOlBirMADwyeDr+ZEY6Zcul64g9AUadaj5b7e+na023O1jKD28Tnqi0i
-        6m0hau+6FHjJCIyZvaMTAoTFm
-X-Received: by 2002:a17:902:8c90:b0:192:a470:2c0b with SMTP id t16-20020a1709028c9000b00192a4702c0bmr36292908plo.49.1673369318520;
-        Tue, 10 Jan 2023 08:48:38 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuNUHJUABqba3WYraNADndH3NP90X++/rRyazKN7bjjjbrXyT/4JMDE35Fof+hR07vv+79c1g==
-X-Received: by 2002:a17:902:8c90:b0:192:a470:2c0b with SMTP id t16-20020a1709028c9000b00192a4702c0bmr36292883plo.49.1673369318177;
-        Tue, 10 Jan 2023 08:48:38 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id l7-20020a655607000000b00477bdc1d5d5sm7061400pgs.6.2023.01.10.08.48.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 08:48:37 -0800 (PST)
-Subject: Re: [PATCH] crypto: initialize error
-To:     Peter Gonda <pgonda@google.com>
-Cc:     brijesh.singh@amd.com, thomas.lendacky@amd.com, john.allen@amd.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        nathan@kernel.org, ndesaulniers@google.com, rientjes@google.com,
-        marcorr@google.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230110161831.2625821-1-trix@redhat.com>
- <CAMkAt6oqBH35=moST5nO_BXwc8k0M4h_8TvT9H6outR9vOw5qg@mail.gmail.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <ecd0c7f2-f82c-845f-b1fe-a7d3bf495bb1@redhat.com>
-Date:   Tue, 10 Jan 2023 08:48:33 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nD2L+nouQmYkYUXiElXuWDWGgbRqZvOgB6YtZyQAtHQ=;
+        b=e12a+aedRlwSXjE59HwYWtLxvyf6NfqBE2qZo/fPJ1XQhicljIZYa/MBSj0xwbaUZo
+         GsBTdZd1uNZamX/ucmS7qEg236NJc/kTqIAX6DlukzmefZ4vGSiscuM6ur8woTAisPEr
+         yC+a8b70oH9nSDws/xxaB3y3d9oUK5rOVfzGgDh+u5RN/8BoNccv7UZEnyICAc+yHe1d
+         4oPH4zidublTxFXULKqDNBKtWEed5PCPYLfcqXQpjd1GYOLVTUDdV0TBhfK4zJOLXb87
+         Dgj9zDv/1cCU3VaNdYI9XZ5tIE0mumP1r3ibLv/t9cokEMUi6dKXGqCLb8cgf88ikqmc
+         D4xA==
+X-Gm-Message-State: AFqh2koON/L2gDtbej3pjto5QbWnlkuYHlZLoxcBCykqTsOdC6DuBJpn
+        ey3MXTnEjnwrtQZknKMLwQwsMQ==
+X-Google-Smtp-Source: AMrXdXvBzw2T1NVzHMnn9YSgyUplc8voY4BFvMnwrodQwtlWtdIt2VQe6jIFScX+wXR34rqdOr0mvg==
+X-Received: by 2002:a05:622a:4d06:b0:3a9:9217:9e6c with SMTP id fd6-20020a05622a4d0600b003a992179e6cmr109805668qtb.55.1673369472890;
+        Tue, 10 Jan 2023 08:51:12 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-68-50-193.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.50.193])
+        by smtp.gmail.com with ESMTPSA id v24-20020ac87498000000b003abf6eb5a51sm2987520qtq.88.2023.01.10.08.51.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 08:51:12 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1pFHqB-008R3X-S0;
+        Tue, 10 Jan 2023 12:51:11 -0400
+Date:   Tue, 10 Jan 2023 12:51:11 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Christian =?utf-8?Q?Borntr=C3=A4ger?= <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH v3 1/1] vfio/type1: Respect IOMMU reserved regions in
+ vfio_test_domain_fgsp()
+Message-ID: <Y72Xf878jBYrigHI@ziepe.ca>
+References: <20230110164427.4051938-1-schnelle@linux.ibm.com>
+ <20230110164427.4051938-2-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMkAt6oqBH35=moST5nO_BXwc8k0M4h_8TvT9H6outR9vOw5qg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110164427.4051938-2-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 10, 2023 at 05:44:27PM +0100, Niklas Schnelle wrote:
+> Since commit cbf7827bc5dc ("iommu/s390: Fix potential s390_domain
+> aperture shrinking") the s390 IOMMU driver uses reserved regions for the
+> system provided DMA ranges of PCI devices. Previously it reduced the
+> size of the IOMMU aperture and checked it on each mapping operation.
+> On current machines the system denies use of DMA addresses below 2^32 for
+> all PCI devices.
+> 
+> Usually mapping IOVAs in a reserved regions is harmless until a DMA
+> actually tries to utilize the mapping. However on s390 there is
+> a virtual PCI device called ISM which is implemented in firmware and
+> used for cross LPAR communication. Unlike real PCI devices this device
+> does not use the hardware IOMMU but inspects IOMMU translation tables
+> directly on IOTLB flush (s390 RPCIT instruction). If it detects IOVA
+> mappings outside the allowed ranges it goes into an error state. This
+> error state then causes the device to be unavailable to the KVM guest.
+> 
+> Analysing this we found that vfio_test_domain_fgsp() maps 2 pages at DMA
+> address 0 irrespective of the IOMMUs reserved regions. Even if usually
+> harmless this seems wrong in the general case so instead go through the
+> freshly updated IOVA list and try to find a range that isn't reserved,
+> and fits 2 pages, is PAGE_SIZE * 2 aligned. If found use that for
+> testing for fine grained super pages.
+> 
+> Fixes: af029169b8fd ("vfio/type1: Check reserved region conflict and update iova list")
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+> v2 -> v3:
+> - Don't require region->start to be aligned but instead just that we can fit an
+>   aligned allocation (Alex)
+> - Use Fixes tag for the introduction of reserved regions as that came
+>   after the fine grained super pages test (Alex)
+> v1 -> v2:
+> - Reworded commit message to hopefully explain things a bit better and
+>   highlight that usually just mapping but not issuing DMAs for IOVAs in
+>   a resverved region is harmless but still breaks things with ISM devices.
+> - Added a check for PAGE_SIZE * 2 alignment (Jason)
+> 
+>  drivers/vfio/vfio_iommu_type1.c | 31 ++++++++++++++++++++-----------
+>  1 file changed, 20 insertions(+), 11 deletions(-)
 
-On 1/10/23 8:27 AM, Peter Gonda wrote:
-> On Tue, Jan 10, 2023 at 9:18 AM Tom Rix <trix@redhat.com> wrote:
->> clang static analysis reports this problem
->> drivers/crypto/ccp/sev-dev.c:1347:3: warning: 3rd function call
->>    argument is an uninitialized value [core.CallAndMessage]
->>      dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
->>      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> __sev_platform_init_locked() can return without setting the
->> error parameter, causing the dev_err() to report a gargage
-> garbage
-ok
->
->> value.
->>
->> Fixes: 3d725965f836 ("crypto: ccp - Add SEV_INIT_EX support")
-> Should this be: 'Fixes: 200664d5237f ("crypto: ccp: Add Secure
-> Encrypted Virtualization (SEV) command support")'
->
-> Since in that patch an uninitialized error can be printed?
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-It was a bit of a toss up on who is at fault. This is fine, i'll change 
-this as well.
-
-Thanks
-
-Tom
-
-
-> +void psp_pci_init(void)
-> +{
-> +       struct sev_user_data_status *status;
-> +       struct sp_device *sp;
-> +       int error, rc;
-> +
-> +       sp = sp_get_psp_master_device();
-> +       if (!sp)
-> +               return;
-> +
-> +       psp_master = sp->psp_data;
-> +
-> +       /* Initialize the platform */
-> +       rc = sev_platform_init(&error);
-> +       if (rc) {
-> +               dev_err(sp->dev, "SEV: failed to INIT error %#x\n", error);
-> +               goto err;
-> +       }
->
->
-> ...
->
-> +static int __sev_platform_init_locked(int *error)
-> +{
-> +       struct psp_device *psp = psp_master;
-> +       int rc = 0;
-> +
-> +       if (!psp)
-> +               return -ENODEV;
-> +
-> +       if (psp->sev_state == SEV_STATE_INIT)
-> +               return 0;
->
->
-> So if !psp an uninitialized error is printed?
->
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>   drivers/crypto/ccp/sev-dev.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
->> index 56998bc579d6..643cccc06a0b 100644
->> --- a/drivers/crypto/ccp/sev-dev.c
->> +++ b/drivers/crypto/ccp/sev-dev.c
->> @@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_GPL(sev_issue_cmd_external_user);
->>   void sev_pci_init(void)
->>   {
->>          struct sev_device *sev = psp_master->sev_data;
->> -       int error, rc;
->> +       int error = 0, rc;
->>
->>          if (!sev)
->>                  return;
->> --
->> 2.27.0
->>
-
+Jason
