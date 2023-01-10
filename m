@@ -2,210 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D589F6647A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794EC6647AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbjAJRtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:49:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S234358AbjAJRvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 12:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234709AbjAJRs5 (ORCPT
+        with ESMTP id S233017AbjAJRvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:48:57 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E1C5F4B4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:48:53 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id a30so9439731pfr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:48:53 -0800 (PST)
+        Tue, 10 Jan 2023 12:51:05 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9334232EAD
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:51:04 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id k20-20020aa792d4000000b0058347d2f5e3so5533205pfa.15
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:51:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R/ahT8jL6pUDznjA96n6U20XBVFpZZ4PTuJ1gDNTLdQ=;
-        b=UGF9ErWxyig1aP3LUCTwEnhdhMlR0A3zJG/xQfpBmvPfmY/df0BQWvYR9X5HRqgfpz
-         1VHIkfySYGPadBb7+iiN7rh4NsicY+WBplNflFPGsvv784fmagtTEaD/8g83GGx3IbLd
-         hqLHhO0Fpp5JkFaxosdoto6/zpfThaObLuWUmyVO1gV+8thJT2a5uTzq8rkgqlUT1rMh
-         8RLIl5qxJn4jdhesJnlBDjynHEW2rJx/H8dsHepTjhBu3GzfLpqu+SyI4BM7yrCI3+IC
-         NF+/7STJMEfXFDfB7cSwHd8MmV6a8Q4lSNY+pQqGpkoWfHq893PhpUCSMarzFlvrYq2X
-         aEdw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hICen6oMGDQkBaOVpNtEPss3TFZW17o9hNwTIHD4XGI=;
+        b=WpvpBPEkoeRepVIhMXcWbpDTls42db3NlhJOX2Xa2fI5tCL+RRSnDNv0d1YyHoB/xL
+         88vtalk4biVmwYUAr3u/epHuOQPGXZWtc65NpaPUqXDxdhfB2niD80YQ6/pZ+kCsKHj4
+         RyUX1weIOE9Uqq6pL1AUuC89a/fkgQtde8WIkwVf4ld3RFW+NEXyPOseRzBHiqixNTQB
+         fSzGt0mP4920wARoIPfEbVEEY36C1eBCXu1ezZlaOF/bR/2vuyKDyXSJxfSzKUXgzbCv
+         ypF0kYOcvp6/BhOVuExlLyPfBWbtjKAVMg6yjAdNmFyRSVG/xdc5rpuTpt4ev8iCTyS9
+         jgmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R/ahT8jL6pUDznjA96n6U20XBVFpZZ4PTuJ1gDNTLdQ=;
-        b=MaS6zBLnAiUgvZLM5O4k5knXsGkfYpjqJJzGsFcYY3yuKvPgpeiCJPoUc67FSED6zU
-         ZOCJx72Ia/SAEhD4wo8aBwTYdnLedP8+J24JiWBsj9l4pSJdLh7K+AhmXhqxGP6n4Ggb
-         Ofza0QzembAuVa/exdyOV5+Jr0+A9dSmmsHHpT3yb3AzF4QPnKvNv8nY81Mj6C8ifacL
-         IOr/NdOvZ4/Vdqrbn6KN88eH3NVRYsXHWCFujz3lBZH2i1l1L9iDdTSVk5VnrIH+Lw3w
-         DGrejz6aKHVCJsPRmaCKai637fNBv9mHn9H6Gmtdq11U5IQIZl9TKWUoAVsqnDjgCxyV
-         HRBg==
-X-Gm-Message-State: AFqh2kp3DQwMQM1LVhUA9IHlrxVTjAOlyL5cBpuXBaWMBNOTG30SB8hu
-        ExeWvqduIbX+MTCZ4a292U4dgP0h11vqsZYK+l28Xg==
-X-Google-Smtp-Source: AMrXdXuukF/mMIyHR4JfTmmOFL4YeClJPnfio9V16X/fD718Zg0gELWx3lHxmcRaW89/EAbT/RM4+B08HXWMBjCWwbE=
-X-Received: by 2002:aa7:9a5d:0:b0:580:984e:6e3f with SMTP id
- x29-20020aa79a5d000000b00580984e6e3fmr5273650pfj.66.1673372933368; Tue, 10
- Jan 2023 09:48:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20230109234312.2870846-1-yabinc@google.com> <a7edcb0a-5f12-f6ab-8897-479fefe54c2f@arm.com>
-In-Reply-To: <a7edcb0a-5f12-f6ab-8897-479fefe54c2f@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 10 Jan 2023 17:48:42 +0000
-Message-ID: <CAJ9a7Vj=e6rSbD9ONKDY1vyuxms161f-vp0Y4mxkQgpm1oz6uA@mail.gmail.com>
-Subject: Re: [PATCH] coresight: tmc-etr: Don't enable ETR when it's not ready
-To:     James Clark <james.clark@arm.com>
-Cc:     Yabin Cui <yabinc@google.com>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hICen6oMGDQkBaOVpNtEPss3TFZW17o9hNwTIHD4XGI=;
+        b=aCn6EBCgBgCNJIqMpUWn/+l8G2jZ6E6+nAipm9cuZMfYNwAFFVbMZ4+W81E73GZmR4
+         nzsNk9NJNG+gdGyIfzZid92+HsB0P0kx8ziLZrQdEUcVD7ZLI4SKaFyZfskajrcPUoYp
+         ldKulRbBSVAB0IeaErHwTiEiIPpuDrz4oXQ2kAlQ08Dpi/MQk8njAcgzwe2UaMpsqIPZ
+         2NZDLDwIPxNWqUEsVJgdQHPwNjEf8DSjI2auMaev/eoq53gfUI5jw/w0WEBw/gGSjeKM
+         1kGbQQQe09mmHEci19JYzCZib81tNzm64Eg8hC6L1MnYWBEgvdxolPoH8XbgafBOpxHH
+         +KQQ==
+X-Gm-Message-State: AFqh2ko3Cm0vfFqswfnO77C2LcZWlkjSO+z2Pq5kY6j6CgdfFmytPTPx
+        JIbs1PdQ+QyLLI2yivYenfwcAv8mbqQ=
+X-Google-Smtp-Source: AMrXdXtJj5IrfLfILiyHExkrE+IYgF2DxdiF4dI2bA7KWmJBpPzQvYYC44TxLRx+0lqL2HDHiUtIFtg+c40=
+X-Received: from pgonda1.kir.corp.google.com ([2620:0:1008:11:8358:4c2a:eae1:4752])
+ (user=pgonda job=sendgmr) by 2002:a62:e512:0:b0:580:c2fb:7ed7 with SMTP id
+ n18-20020a62e512000000b00580c2fb7ed7mr4521991pff.61.1673373064121; Tue, 10
+ Jan 2023 09:51:04 -0800 (PST)
+Date:   Tue, 10 Jan 2023 09:50:50 -0800
+Message-Id: <20230110175057.715453-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Subject: [PATCH V6 0/7] KVM: selftests: Add simple SEV test
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>, marcorr@google.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com, joro@8bytes.org,
+        pbonzini@redhat.com, andrew.jones@linux.dev, vannapurve@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Ackerley Tng <ackerleytng@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This patch series continues the work Michael Roth has done in supporting
+SEV guests in selftests. It continues on top of the work Sean
+Christopherson has sent to support ucalls from SEV guests. Along with a
+very simple version of the SEV selftests Michael originally proposed.
 
-On Tue, 10 Jan 2023 at 09:30, James Clark <james.clark@arm.com> wrote:
->
->
->
-> On 09/01/2023 23:43, Yabin Cui wrote:
-> > Otherwise, it may cause error in AXI bus and result in a kernel panic.
->
-> Hi Yabin,
->
-> Thanks for the fix. Do you have a reproducer for this or some more info?
-> For example is it a regression or has it always been there? And on which
-> platform.
->
-> Thanks
-> James
->
-> >
-> > Signed-off-by: Yabin Cui <yabinc@google.com>
-> > ---
-> >  .../hwtracing/coresight/coresight-tmc-core.c   |  4 +++-
-> >  .../hwtracing/coresight/coresight-tmc-etr.c    | 18 +++++++++++++++---
-> >  drivers/hwtracing/coresight/coresight-tmc.h    |  2 +-
-> >  3 files changed, 19 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/hwtracing/coresight/coresight-tmc-core.c b/drivers/hwtracing/coresight/coresight-tmc-core.c
-> > index 07abf28ad725..c106d142e632 100644
-> > --- a/drivers/hwtracing/coresight/coresight-tmc-core.c
-> > +++ b/drivers/hwtracing/coresight/coresight-tmc-core.c
-> > @@ -31,7 +31,7 @@ DEFINE_CORESIGHT_DEVLIST(etb_devs, "tmc_etb");
-> >  DEFINE_CORESIGHT_DEVLIST(etf_devs, "tmc_etf");
-> >  DEFINE_CORESIGHT_DEVLIST(etr_devs, "tmc_etr");
-> >
-> > -void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
-> > +int tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
-> >  {
-> >       struct coresight_device *csdev = drvdata->csdev;
-> >       struct csdev_access *csa = &csdev->access;
-> > @@ -40,7 +40,9 @@ void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
-> >       if (coresight_timeout(csa, TMC_STS, TMC_STS_TMCREADY_BIT, 1)) {
-> >               dev_err(&csdev->dev,
-> >                       "timeout while waiting for TMC to be Ready\n");
-> > +             return -EBUSY;
-> >       }
-> > +     return 0;
-> >  }
-> >
-> >  void tmc_flush_and_stop(struct tmc_drvdata *drvdata)
-> > diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> > index 867ad8bb9b0c..2da99dd41ed6 100644
-> > --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> > +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> > @@ -983,15 +983,21 @@ static void tmc_sync_etr_buf(struct tmc_drvdata *drvdata)
-> >       etr_buf->ops->sync(etr_buf, rrp, rwp);
-> >  }
-> >
-> > -static void __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
-> > +static int __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
-> >  {
-> >       u32 axictl, sts;
-> >       struct etr_buf *etr_buf = drvdata->etr_buf;
-> > +     int rc = 0;
-> >
-> >       CS_UNLOCK(drvdata->base);
-> >
-> >       /* Wait for TMCSReady bit to be set */
-> > -     tmc_wait_for_tmcready(drvdata);
-> > +     rc = tmc_wait_for_tmcready(drvdata);
-> > +     if (rc) {
-> > +             dev_err(&drvdata->csdev->dev, "not ready ETR isn't enabled\n");
-> > +             CS_LOCK(drvdata->base);
-> > +             return rc;
-> > +     }
-> >
-> >       writel_relaxed(etr_buf->size / 4, drvdata->base + TMC_RSZ);
-> >       writel_relaxed(TMC_MODE_CIRCULAR_BUFFER, drvdata->base + TMC_MODE);
-> > @@ -1032,6 +1038,7 @@ static void __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
-> >       tmc_enable_hw(drvdata);
-> >
-> >       CS_LOCK(drvdata->base);
-> > +     return rc;
-> >  }
-> >
-> >  static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
-> > @@ -1060,7 +1067,12 @@ static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
-> >       rc = coresight_claim_device(drvdata->csdev);
-> >       if (!rc) {
-> >               drvdata->etr_buf = etr_buf;
-> > -             __tmc_etr_enable_hw(drvdata);
-> > +             rc = __tmc_etr_enable_hw(drvdata);
-> > +             if (rc) {
-> > +                     drvdata->etr_buf = NULL;
-> > +                     coresight_disclaim_device(drvdata->csdev);
-> > +                     tmc_etr_disable_catu(drvdata);
-> > +             }
-> >       }
-> >
-> >       return rc;
-> > diff --git a/drivers/hwtracing/coresight/coresight-tmc.h b/drivers/hwtracing/coresight/coresight-tmc.h
-> > index 66959557cf39..01c0382a29c0 100644
-> > --- a/drivers/hwtracing/coresight/coresight-tmc.h
-> > +++ b/drivers/hwtracing/coresight/coresight-tmc.h
-> > @@ -255,7 +255,7 @@ struct tmc_sg_table {
-> >  };
-> >
-> >  /* Generic functions */
-> > -void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata);
-> > +int tmc_wait_for_tmcready(struct tmc_drvdata *drvdata);
-> >  void tmc_flush_and_stop(struct tmc_drvdata *drvdata);
-> >  void tmc_enable_hw(struct tmc_drvdata *drvdata);
-> >  void tmc_disable_hw(struct tmc_drvdata *drvdata);
+V6
+ * Updated SEV VM create function based on Seanjc's feedback and new
+   changes to VM creation functions.
+ * Removed pte_me_mask based on feedback.
+ * Fixed s_bit usage based on TDX
+ * Fixed bugs and took Ackerly's code for enc_region setup code.
 
-There is no point in waiting for a timeout, and then carrying on even
-when it is exceeded. As such this patch seems reasonable.
-We should also apply the same principle to the ETF and ETB devices
-which use the same tmc_wait_for_tmcready() function.
+V5
+ * Rebase onto seanjc@'s latest ucall pool series.
+ * More review changes based on seanjc:
+ ** use protected instead of encrypted outside of SEV specific files
+ ** Swap memcrypt struct for kvm_vm_arch arch specific struct
+ ** Make protected page table data agnostic of address bit stealing specifics
+    of SEV
+ ** Further clean up for SEV library to just vm_sev_create_one_vcpu()
+ * Due to large changes moved more authorships from mroth@ to pgonda@. Gave
+   originally-by tags to mroth@ as suggested by Seanjc for this.
 
-However - the concern is that this appears to be happening on starting
-the ETR - there should be no outstanding AXI operations that cause the
-system to not be ready - as we will either be using this the first
-time after reset, or we should have successfully stopped and flushed
-the ETR from the previous operation. This warrants further
-investigation - should we be extending the timeout - which is already
-at a rather generous 100uS, and do we also need to check the MemErr
-bit in the status register?
+V4
+ * Rebase ontop of seanjc@'s latest Ucall Pool series:
+   https://lore.kernel.org/linux-arm-kernel/20220825232522.3997340-8-seanjc@google.com/
+ * Fix up review comments from seanjc
+ * Switch authorship on 2 patches because of significant changes, added
+ * Michael as suggested-by or originally-by.
 
-As James says, we need details of when and how the problem occurs  -
-as far as I know it has not been seen on any systems we currently use
-(though could have been missed given the current code)
+V3
+ * Addressed more of andrew.jones@ in ucall patches.
+ * Fix build in non-x86 archs.
 
-Regards
+V2
+ * Dropped RFC tag
+ * Correctly separated Sean's ucall patches into 2 as originally
+   intended.
+ * Addressed andrew.jones@ in ucall patches.
+ * Fixed ucall pool usage to work for other archs
 
-Mike
+V1
+ * https://lore.kernel.org/all/20220715192956.1873315-1-pgonda@google.com/
 
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: marcorr@google.com
+Cc: michael.roth@amd.com
+Cc: thomas.lendacky@amd.com
+Cc: joro@8bytes.org
+Cc: pbonzini@redhat.com
+Cc: andrew.jones@linux.dev
+Cc: vannapurve@google.com
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Ackerley Tng <ackerleytng@google.com>
 
---
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+Michael Roth (2):
+  KVM: selftests: sparsebit: add const where appropriate
+  KVM: selftests: add support for protected vm_vaddr_* allocations
+
+Peter Gonda (5):
+  KVM: selftests: add hooks for managing protected guest memory
+  KVM: selftests: handle protected bits in page tables
+  KVM: selftests: add library for creating/interacting with SEV guests
+  KVM: selftests: Update ucall pool to allocate from shared memory
+  KVM: selftests: Add simple sev vm testing
+
+ tools/arch/arm64/include/asm/kvm_host.h       |   7 +
+ tools/arch/riscv/include/asm/kvm_host.h       |   7 +
+ tools/arch/s390/include/asm/kvm_host.h        |   7 +
+ tools/arch/x86/include/asm/kvm_host.h         |  14 +
+ tools/testing/selftests/kvm/.gitignore        |  84 ++++++
+ tools/testing/selftests/kvm/Makefile          |   4 +-
+ .../selftests/kvm/include/kvm_util_base.h     |  49 +++-
+ .../testing/selftests/kvm/include/sparsebit.h |  36 +--
+ .../selftests/kvm/include/x86_64/processor.h  |   1 +
+ .../selftests/kvm/include/x86_64/sev.h        |  27 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  66 ++++-
+ tools/testing/selftests/kvm/lib/sparsebit.c   |  48 ++--
+ .../testing/selftests/kvm/lib/ucall_common.c  |   2 +-
+ .../selftests/kvm/lib/x86_64/processor.c      |  62 ++++-
+ tools/testing/selftests/kvm/lib/x86_64/sev.c  | 254 ++++++++++++++++++
+ .../selftests/kvm/x86_64/sev_all_boot_test.c  |  84 ++++++
+ 16 files changed, 685 insertions(+), 67 deletions(-)
+ create mode 100644 tools/arch/arm64/include/asm/kvm_host.h
+ create mode 100644 tools/arch/riscv/include/asm/kvm_host.h
+ create mode 100644 tools/arch/s390/include/asm/kvm_host.h
+ create mode 100644 tools/arch/x86/include/asm/kvm_host.h
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/sev.h
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/sev.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+
+-- 
+2.39.0.314.g84b9a713c41-goog
+
