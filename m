@@ -2,445 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8CF663A6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD90C663A70
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234513AbjAJIFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S230161AbjAJIGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjAJIE7 (ORCPT
+        with ESMTP id S230304AbjAJIF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:04:59 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0501B3C736;
-        Tue, 10 Jan 2023 00:04:54 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B0355240002;
-        Tue, 10 Jan 2023 08:04:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673337893;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ld//437bDkASopb9h7+9poDloE57liYuwe18eXbKN8w=;
-        b=ov0pvxlHlJUeYGpbOxfh3TlbG/6hyno/7b2AXf0AjpdSSuzkiap+N5k0H2PaOicUlgstfi
-        PnIyO5WTKv+yhKA0Bc9xlkuKHckPcDQ+Df02Yqae7X8QO3DgiDahUe1TRLKHUCAGzqmaPR
-        7Q4MxMrdYq1UoDOvZOywXHjr8g/Iw+sZZd4VjUTATlRBX6IQScWT87sydVl3axe3BtXyfK
-        704goO65ZlkADey+Oe9wu+yQEBuJlJz5iGPO41bFpshj2KrTjwcblrZJMDVYLTrpEHu/6T
-        sh218R49M4FEe4qLow6/+PHeb+00midD9UpiXNTK7VLMHZ2q6Ql01BrNjHsolg==
-Date:   Tue, 10 Jan 2023 09:04:45 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 01/10] dt-bindings: soc: fsl: cpm_qe: Add TSA
- controller
-Message-ID: <20230110090445.2dc61b51@bootlin.com>
-In-Reply-To: <427e0775-c576-e293-f590-b9840b936884@linaro.org>
-References: <20230106163746.439717-1-herve.codina@bootlin.com>
- <20230106163746.439717-2-herve.codina@bootlin.com>
- <427e0775-c576-e293-f590-b9840b936884@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Tue, 10 Jan 2023 03:05:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E04B42625;
+        Tue, 10 Jan 2023 00:05:55 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9AF50AD7;
+        Tue, 10 Jan 2023 00:06:37 -0800 (PST)
+Received: from [10.162.42.6] (unknown [10.162.42.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 26F9A3F67D;
+        Tue, 10 Jan 2023 00:05:48 -0800 (PST)
+Message-ID: <1c555737-b2a6-cde0-8690-0278a75aa572@arm.com>
+Date:   Tue, 10 Jan 2023 13:35:46 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 3/8] arm64/sysreg: Convert SPE registers to automatic
+ generation
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        James Clark <james.clark@arm.com>
+References: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
+ <20220825-arm-spe-v8-7-v4-3-327f860daf28@kernel.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220825-arm-spe-v8-7-v4-3-327f860daf28@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Sun, 8 Jan 2023 16:10:38 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-
-[...]
-
-> > +  '#size-cells':
-> > +    const: 0
-> > +
-> > +patternProperties:
-> > +  "^tdm@[0-1]$": =20
->=20
-> Use consistent quotes - either ' or "
-
-Ok, I will change on v3.
-I will also change them on the other bindings present in the
-series.
-
->=20
-> > +    description:
-> > +      The TDM managed by this controller
-> > +    type: object
-> > +
-> > +    properties:
-> > +      reg:
-> > +        minimum: 0
-> > +        maximum: 1
-> > +        description:
-> > +          The TDM number for this TDM, 0 for TDMa and 1 for TDMb
-> > +
-> > +      fsl,common-rxtx-pins:
-> > +        $ref: /schemas/types.yaml#/definitions/flag
-> > +        description:
-> > +          Use common pins for both transmit and receive =20
->=20
-> What are the "common" pins? Without this property device is using
-> uncommon pins? This does not make sense...
-
-Common in the "shared" sense.
-The hardware can use dedicated pins for Tx clock, Tx sync,
-Rx clock and Rx sync or use only 2 pins, Tx/Rx clock and
-Rx/Rx sync.
-
-Without the property, we use the 4 pins and with the property,
-we use 2 pins.
-
->=20
-> > +
-> > +      clocks: true
-> > +      clock-names: true =20
->=20
-> Both need constraints.
-
-The constraints are present later in the file as the number
-of clocks depends on the 'fsl,common-rxtx-pins' property.
-
-I will remove these two lines in the v3 series as they are
-not needed. 'clocks' and 'clock-names' are handled in the
-conditional part.
-
->=20
-[...]
-> > +
-> > +      fsl,rx-frame-sync-delay:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > +        enum: [0, 1, 2, 3]
-> > +        default: 0
-> > +        description: |
-> > +          Receive frame sync delay. =20
->=20
-> Delay in what units?
-
-The unit is a number of bits.
-I will rename to fsl,rx-frame-sync-delay-bits and change the description
-to 'Receive frame sync delay in number of bits'
-
-I will do also the same for fsl,tx-frame-sync-delay property.
-
->=20
-> > +          Indicates the delay between the Rx sync and the first bit of=
- the
-> > +          Rx frame. 0 for no bit delay. 1, 2 or 3 for 1, 2 or 3 bits d=
-elay.
-> > +
-> > +      fsl,tx-frame-sync-delay:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > +        enum: [0, 1, 2, 3]
-> > +        default: 0
-> > +        description: |
-> > +          Transmit frame sync delay.
-> > +          Indicates the delay between the Tx sync and the first bit of=
- the
-> > +          Tx frame. 0 for no bit delay. 1, 2 or 3 for 1, 2 or 3 bits d=
-elay.
-> > +
-> > +      fsl,clock-falling-edge:
-> > +        $ref: /schemas/types.yaml#/definitions/flag
-> > +        description: |
-> > +          Data is sent on falling edge of the clock (and received on t=
-he
-> > +          rising edge).
-> > +          If 'clock-falling-edge' is not present, data is sent on the
-> > +          rising edge (and received on the falling edge).
-> > +
-> > +      fsl,fsync-rising-edge:
-> > +        $ref: /schemas/types.yaml#/definitions/flag
-> > +        description:
-> > +          Frame sync pulses are sampled with the rising edge of the ch=
-annel
-> > +          clock. If 'fsync-rising-edge' is not present, pulses are sam=
-ple
-> > +          with e falling edge.
-> > +
-> > +      fsl,double-speed-clock:
-> > +        $ref: /schemas/types.yaml#/definitions/flag
-> > +        description:
-> > +          The channel clock is twice the data rate.
-> > +
-> > +      fsl,grant-mode:
-> > +        $ref: /schemas/types.yaml#/definitions/flag
-> > +        description:
-> > +          Grant mode enabled. =20
->=20
-> This we know from property name. You need to describe what it is and
-> what it does.
-
-Instead of describing it, I will simply remove the property (I should
-have done already).
-I cannot test the 'grant mode' enabled with my hardware and so
-I prefer keeping it disabled.
-This property, if needed, could be add later setting it optional
-with default to 'disabled'.
-
->=20
-> > +
-> > +      tx_ts_routes: =20
->=20
-> No underscores, missing vendor prefix.
-
-Indeed, will be change to fsl,tx-ts-routes (idem for rx_ts_routes).
-
->=20
-> > +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > +        description: |
-> > +          A list of tupple that indicates the Tx time-slots routes.
-> > +            tx_ts_routes =3D
-> > +               < 2 0 0>, /* The first 2 time slots are not used */
-> > +               < 3 1 0>, /* The next 3 ones are route to SCC2 */
-> > +               < 4 0 0>, /* The next 4 ones are not used */
-> > +               < 2 2 0>; /* The nest 2 ones are route to SCC3 */
-> > +        items:
-> > +          items:
-> > +            - description:
-> > +                The number of time-slots
-> > +              minimum: 1
-> > +              maximum: 64
-> > +            - description: |
-> > +                The source serial interface (dt-bindings/soc/fsl-tsa.h
-> > +                defines these values)
-> > +                 - 0: No destination
-> > +                 - 1: SCC2
-> > +                 - 2: SCC3
-> > +                 - 3: SCC4
-> > +                 - 4: SMC1
-> > +                 - 5: SMC2
-> > +              enum: [0, 1, 2, 3, 4, 5]
-> > +            - description:
-> > +                The route flags (reserved) =20
->=20
-> Why part of binding is reserved?
-
-The 'reserved' part will be removed in v3.
-Same for the rx route table.
-
->=20
-> > +              const: 0
-> > +        minItems: 1
-> > +        maxItems: 64
-> > +
-> > +      rx_ts_routes:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > +        description: |
-> > +          A list of tupple that indicates the Rx time-slots routes.
-> > +            tx_ts_routes =3D
-> > +               < 2 0 0>, /* The first 2 time slots are not used */
-> > +               < 3 1 0>, /* The next 3 ones are route from SCC2 */
-> > +               < 4 0 0>, /* The next 4 ones are not used */
-> > +               < 2 2 0>; /* The nest 2 ones are route from SCC3 */
-> > +        items:
-> > +          items:
-> > +            - description:
-> > +                The number of time-slots
-> > +              minimum: 1
-> > +              maximum: 64
-> > +            - description: |
-> > +                The destination serial interface (dt-bindings/soc/fsl-=
-tsa.h
-> > +                defines these values)
-> > +                 - 0: No destination
-> > +                 - 1: SCC2
-> > +                 - 2: SCC3
-> > +                 - 3: SCC4
-> > +                 - 4: SMC1
-> > +                 - 5: SMC2
-> > +              enum: [0, 1, 2, 3, 4, 5]
-> > +            - description:
-> > +                The route flags (reserved)
-> > +              const: 0
-> > +        minItems: 1
-> > +        maxItems: 64
-> > +
-> > +    allOf:
-> > +      - if:
-> > +          properties:
-> > +            fsl,common-rxtx-pins:
-> > +              type: 'null' =20
->=20
-> What is this exactly? If check for property present, it's wrong. Should
-> be test if it is in required.
-
-Yes, it was a check for the property presence.
-
-If we not use the 'fsl,common-rxtx-pins', we need 4 clocks.
-If we use the 'fsl,common-rxtx-pins', we need 2 clocks (Rx part and Tx
-part use the same CLK and SYNC clocks).
-
-How can I describe this ?
-Is the check for the property presence incorrect ?
-
-Should I always describe 4 clocks even if only 2 are used ?
-
->=20
-> > +        then:
-> > +          properties:
-> > +            clocks:
-> > +              items:
-> > +                - description: External clock connected to L1RSYNC pin
-> > +                - description: External clock connected to L1RCLK pin
-> > +                - description: External clock connected to L1TSYNC pin
-> > +                - description: External clock connected to L1TCLK pin
-> > +            clock-names:
-> > +              items:
-> > +                - const: l1rsync
-> > +                - const: l1rclk
-> > +                - const: l1tsync
-> > +                - const: l1tclk
-> > +        else:
-> > +          properties:
-> > +            clocks:
-> > +              items:
-> > +                - description: External clock connected to L1RSYNC pin
-> > +                - description: External clock connected to L1RCLK pin
-> > +            clock-names:
-> > +              items:
-> > +                - const: l1rsync
-> > +                - const: l1rclk
-> > +
-> > +    required:
-> > +      - reg
-> > +      - clocks
-> > +      - clock-names
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reg-names
-> > +  - '#address-cells'
-> > +  - '#size-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/soc/fsl-tsa.h>
-> > +
-> > +    tsa@ae0 {
-> > +        compatible =3D "fsl,mpc885-tsa", "fsl,cpm1-tsa";
-> > +        reg =3D <0xae0 0x10>,
-> > +              <0xc00 0x200>;
-> > +        reg-names =3D "si_regs", "si_ram";
-> > +
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        tdm@0 {
-> > +            /* TDMa */
-> > +            reg =3D <0>;
-> > +
-> > +            clocks =3D <&clk_l1rsynca>, <&clk_l1rclka>;
-> > +            clock-names =3D "l1rsync", "l1rclk";
-> > +
-> > +            fsl,common-rxtx-pins;
-> > +            fsl,fsync-rising-edge;
-> > +
-> > +            tx_ts_routes =3D < 2 0 0>,                 /* TS 0..1 */
-> > +                           < 24 FSL_CPM_TSA_SCC4 0>, /* TS 2..25 */
-> > +                           < 1 0 0>,                 /* TS 26 */
-> > +                           < 5 FSL_CPM_TSA_SCC3 0>;  /* TS 27..31 */
-> > +
-> > +            rx_ts_routes =3D < 2 0 0>,                 /* TS 0..1 */
-> > +                           < 24 FSL_CPM_TSA_SCC4 0>, /* 2..25 */
-> > +                           < 1 0 0>,                 /* TS 26 */
-> > +                           < 5 FSL_CPM_TSA_SCC3 0>;  /* TS 27..31 */
-> > +        };
-> > +    };
-> > diff --git a/include/dt-bindings/soc/fsl-tsa.h b/include/dt-bindings/so=
-c/fsl-tsa.h
-> > new file mode 100644
-> > index 000000000000..9d09468694a2
-> > --- /dev/null
-> > +++ b/include/dt-bindings/soc/fsl-tsa.h =20
->=20
-> Filename should match binding filename.
-
-Right, I will rename to fsl,tsa.h
-
->=20
-> > @@ -0,0 +1,15 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-or-later OR MIT */ =20
->=20
-> A bit weird license... cannot be the same as binding?
-
-Yes, will be change to GPL-2.0-only OR BSD-2-Clause
-
->=20
-> > +
-> > +#ifndef __DT_BINDINGS_SOC_FSL_TSA_H
-> > +#define __DT_BINDINGS_SOC_FSL_TSA_H
-> > +
-> > +#define FSL_CPM_TSA_NU		0	/* Pseuso Cell Id for not used item */ =20
->=20
-> Why defining unused IDs in binding header? These are IDs, not some
-> hardware/register values.
-
-It is the binding value for 'No destination' in the tx and rx route table.
-This binding value means 'not used' or 'discard' the time-slot.
-The data related to an item in the routing table with this value
-will be discarded and not used.
-
->=20
-> > +#define FSL_CPM_TSA_SCC2	1
-> > +#define FSL_CPM_TSA_SCC3	2
-> > +#define FSL_CPM_TSA_SCC4	3
-> > +#define FSL_CPM_TSA_SMC1	4
-> > +#define FSL_CPM_TSA_SMC2	5
-> > +
-> > +#define FSL_CPM_TSA_NBCELL	6 =20
->=20
-> Drop.
-
-Ok, will be removed in v3.
-
->=20
-> > +
-> > +#endif =20
->=20
-> Best regards,
-> Krzysztof
->=20
-
-Thanks for your review.
-
-Best regards,
-Herv=C3=A9
 
 
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On 1/10/23 00:56, Rob Herring wrote:
+> Convert all the SPE register defines to automatic generation. No
+> functional changes.
+> 
+> New registers and fields for SPEv1.2 are added with the conversion.
+> 
+> Some of the PMBSR MSS field defines are kept as the automatic generation
+> has no way to create multiple names for the same register bits. The
+> meaning of the MSS field depends on other bits.
+> 
+> Tested-by: James Clark <james.clark@arm.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+
+> ---
+> v4:
+>  - Rebase on v6.2-rc1
+> v3:
+>  - Make some fields enums and add some missing fields
+> v2:
+>  - New patch
+> ---
+>  arch/arm64/include/asm/sysreg.h |  91 ++------------------------
+>  arch/arm64/tools/sysreg         | 139 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 144 insertions(+), 86 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index dbb0e8e22cf4..db269eda7c1c 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -216,99 +216,18 @@
+>  #define SYS_PAR_EL1_FST			GENMASK(6, 1)
+>  
+>  /*** Statistical Profiling Extension ***/
+> -/* ID registers */
+> -#define SYS_PMSIDR_EL1			sys_reg(3, 0, 9, 9, 7)
+> -#define PMSIDR_EL1_FE_SHIFT		0
+> -#define PMSIDR_EL1_FT_SHIFT		1
+> -#define PMSIDR_EL1_FL_SHIFT		2
+> -#define PMSIDR_EL1_ARCHINST_SHIFT	3
+> -#define PMSIDR_EL1_LDS_SHIFT	4
+> -#define PMSIDR_EL1_ERND_SHIFT	5
+> -#define PMSIDR_EL1_INTERVAL_SHIFT	8
+> -#define PMSIDR_EL1_INTERVAL_MASK	GENMASK_ULL(11, 8)
+> -#define PMSIDR_EL1_MAXSIZE_SHIFT	12
+> -#define PMSIDR_EL1_MAXSIZE_MASK		GENMASK_ULL(15, 12)
+> -#define PMSIDR_EL1_COUNTSIZE_SHIFT	16
+> -#define PMSIDR_EL1_COUNTSIZE_MASK	GENMASK_ULL(19, 16)
+> -
+> -#define SYS_PMBIDR_EL1			sys_reg(3, 0, 9, 10, 7)
+> -#define PMBIDR_EL1_ALIGN_SHIFT		0
+> -#define PMBIDR_EL1_ALIGN_MASK		0xfU
+> -#define PMBIDR_EL1_P_SHIFT		4
+> -#define PMBIDR_EL1_F_SHIFT		5
+> -
+> -/* Sampling controls */
+> -#define SYS_PMSCR_EL1			sys_reg(3, 0, 9, 9, 0)
+> -#define PMSCR_EL1_E0SPE_SHIFT		0
+> -#define PMSCR_EL1_E1SPE_SHIFT		1
+> -#define PMSCR_EL1_CX_SHIFT		3
+> -#define PMSCR_EL1_PA_SHIFT		4
+> -#define PMSCR_EL1_TS_SHIFT		5
+> -#define PMSCR_EL1_PCT_SHIFT		6
+> -
+> -#define SYS_PMSCR_EL2			sys_reg(3, 4, 9, 9, 0)
+> -#define PMSCR_EL2_E0HSPE_SHIFT		0
+> -#define PMSCR_EL2_E2SPE_SHIFT		1
+> -#define PMSCR_EL2_CX_SHIFT		3
+> -#define PMSCR_EL2_PA_SHIFT		4
+> -#define PMSCR_EL2_TS_SHIFT		5
+> -#define PMSCR_EL2_PCT_SHIFT		6
+> -
+> -#define SYS_PMSICR_EL1			sys_reg(3, 0, 9, 9, 2)
+> -
+> -#define SYS_PMSIRR_EL1			sys_reg(3, 0, 9, 9, 3)
+> -#define PMSIRR_EL1_RND_SHIFT		0
+> -#define PMSIRR_EL1_INTERVAL_SHIFT	8
+> -#define PMSIRR_EL1_INTERVAL_MASK	GENMASK_ULL(31, 8)
+> -
+> -/* Filtering controls */
+> -#define SYS_PMSNEVFR_EL1		sys_reg(3, 0, 9, 9, 1)
+> -
+> -#define SYS_PMSFCR_EL1			sys_reg(3, 0, 9, 9, 4)
+> -#define PMSFCR_EL1_FE_SHIFT		0
+> -#define PMSFCR_EL1_FT_SHIFT		1
+> -#define PMSFCR_EL1_FL_SHIFT		2
+> -#define PMSFCR_EL1_B_SHIFT		16
+> -#define PMSFCR_EL1_LD_SHIFT		17
+> -#define PMSFCR_EL1_ST_SHIFT		18
+> -
+> -#define SYS_PMSEVFR_EL1			sys_reg(3, 0, 9, 9, 5)
+>  #define PMSEVFR_EL1_RES0_IMP	\
+>  	(GENMASK_ULL(47, 32) | GENMASK_ULL(23, 16) | GENMASK_ULL(11, 8) |\
+>  	 BIT_ULL(6) | BIT_ULL(4) | BIT_ULL(2) | BIT_ULL(0))
+>  #define PMSEVFR_EL1_RES0_V1P1	\
+>  	(PMSEVFR_EL1_RES0_IMP & ~(BIT_ULL(18) | BIT_ULL(17) | BIT_ULL(11)))
+>  
+> -#define SYS_PMSLATFR_EL1		sys_reg(3, 0, 9, 9, 6)
+> -#define PMSLATFR_EL1_MINLAT_SHIFT	0
+> -
+> -/* Buffer controls */
+> -#define SYS_PMBLIMITR_EL1		sys_reg(3, 0, 9, 10, 0)
+> -#define PMBLIMITR_EL1_E_SHIFT		0
+> -#define PMBLIMITR_EL1_FM_SHIFT		1
+> -#define PMBLIMITR_EL1_FM_MASK	GENMASK_ULL(2, 1)
+> -#define PMBLIMITR_EL1_FM_STOP_IRQ	0
+> -
+> -#define SYS_PMBPTR_EL1			sys_reg(3, 0, 9, 10, 1)
+> -
+>  /* Buffer error reporting */
+> -#define SYS_PMBSR_EL1			sys_reg(3, 0, 9, 10, 3)
+> -#define PMBSR_EL1_COLL_SHIFT		16
+> -#define PMBSR_EL1_S_SHIFT		17
+> -#define PMBSR_EL1_EA_SHIFT		18
+> -#define PMBSR_EL1_DL_SHIFT		19
+> -#define PMBSR_EL1_EC_SHIFT		26
+> -#define PMBSR_EL1_EC_MASK		GENMASK_ULL(31, 26)
+> -
+> -#define PMBSR_EL1_EC_BUF		0x0UL
+> -#define PMBSR_EL1_EC_FAULT_S1		0x24UL
+> -#define PMBSR_EL1_EC_FAULT_S2		0x25UL
+> -
+> -#define PMBSR_EL1_FAULT_FSC_SHIFT	0
+> -#define PMBSR_EL1_FAULT_FSC_MASK	0x3fUL
+> -
+> -#define PMBSR_EL1_BUF_BSC_SHIFT		0
+> -#define PMBSR_EL1_BUF_BSC_MASK		0x3fUL
+> +#define PMBSR_EL1_FAULT_FSC_SHIFT	PMBSR_EL1_MSS_SHIFT
+> +#define PMBSR_EL1_FAULT_FSC_MASK	PMBSR_EL1_MSS_MASK
+> +
+> +#define PMBSR_EL1_BUF_BSC_SHIFT		PMBSR_EL1_MSS_SHIFT
+> +#define PMBSR_EL1_BUF_BSC_MASK		PMBSR_EL1_MSS_MASK
+>  
+>  #define PMBSR_EL1_BUF_BSC_FULL		0x1UL
+>  
+> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+> index 184e58fd5631..c323833cf235 100644
+> --- a/arch/arm64/tools/sysreg
+> +++ b/arch/arm64/tools/sysreg
+> @@ -1618,6 +1618,130 @@ Sysreg	FAR_EL1	3	0	6	0	0
+>  Field	63:0	ADDR
+>  EndSysreg
+>  
+> +Sysreg	PMSCR_EL1	3	0	9	9	0
+> +Res0	63:8
+> +Field	7:6	PCT
+> +Field	5	TS
+> +Field	4	PA
+> +Field	3	CX
+> +Res0	2
+> +Field	1	E1SPE
+> +Field	0	E0SPE
+> +EndSysreg
+> +
+> +Sysreg	PMSNEVFR_EL1	3	0	9	9	1
+> +Field	63:0	E
+> +EndSysreg
+> +
+> +Sysreg	PMSICR_EL1	3	0	9	9	2
+> +Field	63:56	ECOUNT
+> +Res0	55:32
+> +Field	31:0	COUNT
+> +EndSysreg
+> +
+> +Sysreg	PMSIRR_EL1	3	0	9	9	3
+> +Res0	63:32
+> +Field	31:8	INTERVAL
+> +Res0	7:1
+> +Field	0	RND
+> +EndSysreg
+> +
+> +Sysreg	PMSFCR_EL1	3	0	9	9	4
+> +Res0	63:19
+> +Field	18	ST
+> +Field	17	LD
+> +Field	16	B
+> +Res0	15:4
+> +Field	3	FnE
+> +Field	2	FL
+> +Field	1	FT
+> +Field	0	FE
+> +EndSysreg
+> +
+> +Sysreg	PMSEVFR_EL1	3	0	9	9	5
+> +Field	63:0	E
+> +EndSysreg
+> +
+> +Sysreg	PMSLATFR_EL1	3	0	9	9	6
+> +Res0	63:16
+> +Field	15:0	MINLAT
+> +EndSysreg
+> +
+> +Sysreg	PMSIDR_EL1	3	0	9	9	7
+> +Res0	63:25
+> +Field	24	PBT
+> +Field	23:20	FORMAT
+> +Enum	19:16	COUNTSIZE
+> +	0b0010	12_BIT_SAT
+> +	0b0011	16_BIT_SAT
+> +EndEnum
+> +Field	15:12	MAXSIZE
+> +Enum	11:8	INTERVAL
+> +	0b0000	256
+> +	0b0010	512
+> +	0b0011	768
+> +	0b0100	1024
+> +	0b0101	1536
+> +	0b0110	2048
+> +	0b0111	3072
+> +	0b1000	4096
+> +EndEnum
+> +Res0	7
+> +Field	6	FnE
+> +Field	5	ERND
+> +Field	4	LDS
+> +Field	3	ARCHINST
+> +Field	2	FL
+> +Field	1	FT
+> +Field	0	FE
+> +EndSysreg
+> +
+> +Sysreg	PMBLIMITR_EL1	3	0	9	10	0
+> +Field	63:12	LIMIT
+> +Res0	11:6
+> +Field	5	PMFZ
+> +Res0	4:3
+> +Enum	2:1	FM
+> +	0b00	FILL
+> +	0b10	DISCARD
+> +EndEnum
+> +Field	0	E
+> +EndSysreg
+> +
+> +Sysreg	PMBPTR_EL1	3	0	9	10	1
+> +Field	63:0	PTR
+> +EndSysreg
+> +
+> +Sysreg	PMBSR_EL1	3	0	9	10	3
+> +Res0	63:32
+> +Enum	31:26	EC
+> +	0b000000	BUF
+> +	0b100100	FAULT_S1
+> +	0b100101	FAULT_S2
+> +	0b011110	FAULT_GPC
+> +	0b011111	IMP_DEF
+> +EndEnum
+> +Res0	25:20
+> +Field	19	DL
+> +Field	18	EA
+> +Field	17	S
+> +Field	16	COLL
+> +Field	15:0	MSS
+> +EndSysreg
+> +
+> +Sysreg	PMBIDR_EL1	3	0	9	10	7
+> +Res0	63:12
+> +Enum	11:8	EA
+> +	0b0000	NotDescribed
+> +	0b0001	Ignored
+> +	0b0010	SError
+> +EndEnum
+> +Res0	7:6
+> +Field	5	F
+> +Field	4	P
+> +Field	3:0	ALIGN
+> +EndSysreg
+> +
+>  SysregFields	CONTEXTIDR_ELx
+>  Res0	63:32
+>  Field	31:0	PROCID
+> @@ -1772,6 +1896,21 @@ Sysreg	FAR_EL2	3	4	6	0	0
+>  Field	63:0	ADDR
+>  EndSysreg
+>  
+> +Sysreg	PMSCR_EL2	3	4	9	9	0
+> +Res0	63:8
+> +Enum	7:6	PCT
+> +	0b00	VIRT
+> +	0b01	PHYS
+> +	0b11	GUEST
+> +EndEnum
+> +Field	5	TS
+> +Field	4	PA
+> +Field	3	CX
+> +Res0	2
+> +Field	1	E2SPE
+> +Field	0	E0HSPE
+> +EndSysreg
+> +
+>  Sysreg	CONTEXTIDR_EL2	3	4	13	0	1
+>  Fields	CONTEXTIDR_ELx
+>  EndSysreg
+> 
