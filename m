@@ -2,99 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7686647F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB06E6647F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbjAJR7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S234326AbjAJSAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234985AbjAJR60 (ORCPT
+        with ESMTP id S235102AbjAJR7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:58:26 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717352F4;
-        Tue, 10 Jan 2023 09:58:25 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id az20so11690165ejc.1;
-        Tue, 10 Jan 2023 09:58:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p9Zu5tLDoswvPcS8TjPw+hiLhOqYPhHzrH0Ze+KXTHE=;
-        b=ir+hPtJWqNvJg2azZcfdTpTdLMft4EfLi3D/YJMTBZL5dZj6uSAAnjTI/UC1p/lVpn
-         0uuzXG1rb5PuEslf7UTLdXldfkmVAXQNA0aHEvNfGSh39+xjEhLWHnfzkpZsdfLdqehv
-         qIfD8BHfElgRDMH4VD3ufGRJid7On/aXea0FbqW2M5xwSin2epMZ3oan9qaGZ9ir9JW2
-         2l3u2NDZpSdf1mY/izm+gj+Z7uqt4ZRaIRuUY0BfO9Qba5bvlOEeWmrSIrLiHM1qhr3S
-         l0hqSNtZbrSEusMxw0AyXNjqt8wMf1+9XdYb7cohGUnU6KjDr1dUp3GOItzBGpTxnpz1
-         AwnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p9Zu5tLDoswvPcS8TjPw+hiLhOqYPhHzrH0Ze+KXTHE=;
-        b=xpdIPCu5LY09hgqm+1CbImqa9yuBcjIXqPzO+3nLSYWLKZJr+KkVPKSc2Yk1XvESXG
-         IqW6LNMomfkb0AsTazyNJfR45s1a7qBdi3LM6eB/kHHVoEmbwW7LuR7C3z9ESgR/+pnt
-         c3yL1lVuHWXhtIVQBiVlui6UfJP9HrOmulpv+YyevgGUiEEr12Ol+h8yhavsDhhXqBI+
-         kmafj9dUJ25D7Fc+0FkHITL2SMtsMOB5PbZelWtJcAZnzZ8jztSUD1nSAgS+9pWg5BR5
-         0OGPnFJX6KbDCytFy2K3JfNiDAgXTQn/O8U2qr1KrFsfQ8F3dVrtTpMw89M58uKWVqM7
-         J0Yw==
-X-Gm-Message-State: AFqh2ko112437ruonv3rfJBACXPwEubffxsHMCsp5en/QOpFVtykg/qV
-        dCd2TP54BxCNPIQ/mT437g==
-X-Google-Smtp-Source: AMrXdXsnzetjBs5dJe3By+UOQeym9Cl+cBzo98QZrZgsFypNtlZmuXpN2HWRBBU9rD5ylAqPLsA3yw==
-X-Received: by 2002:a17:906:1414:b0:78d:f455:b5dd with SMTP id p20-20020a170906141400b0078df455b5ddmr54306349ejc.29.1673373503966;
-        Tue, 10 Jan 2023 09:58:23 -0800 (PST)
-Received: from p183 ([46.53.249.174])
-        by smtp.gmail.com with ESMTPSA id s10-20020a17090699ca00b0084d43100f19sm3223324ejn.89.2023.01.10.09.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 09:58:23 -0800 (PST)
-Date:   Tue, 10 Jan 2023 20:58:21 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Chao Yu <chao@kernel.org>
-Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] proc: introduce proc_statfs()
-Message-ID: <Y72nPcDDC/+10lYK@p183>
-References: <20230110152003.1118777-1-chao@kernel.org>
+        Tue, 10 Jan 2023 12:59:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EAD13D58;
+        Tue, 10 Jan 2023 09:59:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43903B818FE;
+        Tue, 10 Jan 2023 17:59:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F4DC433EF;
+        Tue, 10 Jan 2023 17:59:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673373555;
+        bh=fV4tgwEHUZrqCe8pSCxTpwxja8PdnJ49yErnHxLMzZU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ux0gIXcb32eZQ+VJkQV5YzTdErZ+iLCv6Ztzdv6boC99j5YoS/U7ue1guyDP/o77m
+         6/aspDHnxPBtHxFXAx3V+Se1yvRFnheRvYP8mCOpSlEbc6vDTLk6kampkQX0MiN9tc
+         7PTGr/C3EM4r3SV6PbeCTchppQ0oU9nhxn09WwWP+KgADS5Pvbo8O6QdtxtYSPxfKV
+         n//4QriXlHuBVyzcmFALTvMjiZoGz/5IUW1bOORbe8zLyUCG4+CEwR90xM53wXRIbO
+         t7PyqOCkujfmzDWWO9avNYQeP5Rv2P7ijpHcN1qylVteFwouLLYwMk2S6KTQUOb2ev
+         k24XLRuH8Vzlg==
+Date:   Tue, 10 Jan 2023 17:59:09 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] riscv: dts: starfive: Add StarFive JH7110
+ VisionFive 2 board device tree
+Message-ID: <Y72nbfJxYdO2AojI@spud>
+References: <20221220011247.35560-1-hal.feng@starfivetech.com>
+ <20221220011247.35560-8-hal.feng@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Lvt1uqxBssUo8Paq"
 Content-Disposition: inline
-In-Reply-To: <20230110152003.1118777-1-chao@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221220011247.35560-8-hal.feng@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 11:20:03PM +0800, Chao Yu wrote:
-> Introduce proc_statfs() to replace simple_statfs(), so that
-> f_bsize queried from statfs() can be consistent w/ the value we
-> set in s_blocksize.
-> 
-> stat -f /proc/
-> 
-> Before:
->     ID: 0        Namelen: 255     Type: proc
-> Block size: 4096       Fundamental block size: 4096
-> Blocks: Total: 0          Free: 0          Available: 0
-> Inodes: Total: 0          Free: 0
-> 
-> After:
->     ID: 0        Namelen: 255     Type: proc
-> Block size: 1024       Fundamental block size: 1024
-> Blocks: Total: 0          Free: 0          Available: 0
-> Inodes: Total: 0          Free: 0
 
-4096 is better value is in fact.
+--Lvt1uqxBssUo8Paq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-seq_files allocate 1 page and fill it, therefore reading less than
-PAGE_SIZE from /proc is mostly waste of syscalls.
+On Tue, Dec 20, 2022 at 09:12:47AM +0800, Hal Feng wrote:
 
-I doubt anything uses f_bsize.
+> +	aliases {
+> +		serial0 = &uart0;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
 
-BTW this patch is not self contained.
+So I think this is wrong, and the stdout-path should be uart3 instead.
+Per the QSG [0], GPIO5/6 are the suggested UART Tx/Rx to use.
+This appears to map to uart3 rather than uart0.
+FWIW, uart3 is also the stdout-path for the v1, see:
+arch/riscv/boot/dts/starfive/jh7100-common.dtsi
+
+At least, that change is what I needed to do in order to use the
+JH7110_VisionFive2_upstream branch, AFAICT matches what you've got in
+this series.
+
+Thanks,
+Conor.
+
+0 - https://doc-en.rvspace.org/VisionFive2/PDF/VisionFive2_QSG.pdf
+
+--Lvt1uqxBssUo8Paq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY72nbQAKCRB4tDGHoIJi
+0qOpAP0XaPuoCjnjBd2DOhVJt9puz02Zx9VxaQSIpQ27IoXGygEAmbwyT809PgL7
+chpp1xSSsvRQMEhF7XLXxr6OXPz3LwQ=
+=ILQb
+-----END PGP SIGNATURE-----
+
+--Lvt1uqxBssUo8Paq--
