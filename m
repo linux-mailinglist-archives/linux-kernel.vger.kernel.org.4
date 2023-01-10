@@ -2,431 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281D6663924
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 07:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3880A66392A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 07:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjAJGOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 01:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
+        id S230099AbjAJGR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 01:17:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjAJGNW (ORCPT
+        with ESMTP id S229960AbjAJGR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 01:13:22 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FF3485AC
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 22:12:32 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id h26so10162453qtu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 22:12:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NBYes0zEiQA7Y7bWPYpE7CVG6wkXe4zIBkGmQ6rkHLs=;
-        b=Xxki9XP4m9imnL0ev7/jcski0uldHjh9QRpjaIbLajKcXa8E3xIoAKbYWRH2ckF5gS
-         dQkRv+T2etMQKQJQ8QjU8U78PAdy/C+LE0AKn+WHazvV93lfdhsJMHJJsWGUrF4WOk0y
-         MmPLaG7pK4lvlkQdVXrQr2k2qSO5Xpwoq5FGw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NBYes0zEiQA7Y7bWPYpE7CVG6wkXe4zIBkGmQ6rkHLs=;
-        b=J09YGvdsEtJvACLr62lz8uaSEeW7Nvd77MF8rI5dAAPCdnLJV7JvcSDjR9xeE+u4Ko
-         nxoU1ZwbhLO8+8/oY6SxwkLvDuG/TSDDRHqPGiYnqMe0BipBBP71CjGe418En3owmTMy
-         T3PZlT7dq00INtetViE1AYGDJjjr2XLdhhDKB1jDTM7na2a7/SZCV42Y2NA74novlyqV
-         41T6t18+xw2fIPhZW68ov/AuR8tCviyj1Kk6awkQsiRuhyQZ1GG5aKYLz8FRr2FxmnvQ
-         3XAIzvpx/EgRYFQcsjg0fHCtSfCqoc7+wnPjjyjm73jfIy13DcmDsWiYm43O0ELozzam
-         u26Q==
-X-Gm-Message-State: AFqh2kryZnBpPUPYyQfuIjNPIbXSqgSq4bVmo9PRNmw2XfexVkIz/+Sz
-        7AFEso4tCGGmeUfnKnUoDbhkHA==
-X-Google-Smtp-Source: AMrXdXu8wLgt4haXmdMpkDupddGrfBqJyTOCXn4NWOgpv6CjWbpRksuyS6CMLZUGzaesHXfUnchCwA==
-X-Received: by 2002:ac8:4705:0:b0:3ab:5a62:453b with SMTP id f5-20020ac84705000000b003ab5a62453bmr85367702qtp.53.1673331151769;
-        Mon, 09 Jan 2023 22:12:31 -0800 (PST)
-Received: from smtpclient.apple ([2600:1003:b110:1f87:f047:ffed:9f93:3fb6])
-        by smtp.gmail.com with ESMTPSA id j20-20020a05620a289400b006fed58fc1a3sm6665055qkp.119.2023.01.09.22.12.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 22:12:30 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 1/3] rcu: genericize RCU stall suppression functions
-Date:   Tue, 10 Jan 2023 01:12:20 -0500
-Message-Id: <8AE6FCC1-B8FD-492D-A8D9-4FCBEA3BC5BF@joelfernandes.org>
-References: <8105AAEA-F018-4246-AA6F-AE8ED6A65433@joelfernandes.org>
-Cc:     Robert Elliott <elliott@hpe.com>, herbert@gondor.apana.org.au,
-        davem@davemloft.net, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, linux-crypto@vger.kernel.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <8105AAEA-F018-4246-AA6F-AE8ED6A65433@joelfernandes.org>
-To:     paulmck@kernel.org
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 10 Jan 2023 01:17:27 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF621A399
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 22:17:26 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id F290A3200994;
+        Tue, 10 Jan 2023 01:17:21 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 10 Jan 2023 01:17:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1673331441; x=1673417841; bh=hY
+        lkSoI0PLF6Nkqz+NXXc2oNHQRDgQQ+vdlc/JfCbRk=; b=ZlDbZsL6BOeb+mlKoe
+        LRFnbf6UtVeuiz6uru5aYDJXbWpAAV5HxbzNGFXZZvUVVB7op9dmdWGNgBwlz0RO
+        7mzoXnsVCa+x06bYcjkmm5d5fu90+KcKjrD6UHyqVx5IMcQRgHkoLw9pfu+j8AaC
+        71bU+vlIyyhAYS0SyZnCSMXWUhKROT5zwvaefY+YFhlBBXn8qIlaZGNd5N8VWRQj
+        14caZPumJLeM7WTPGeWHUn7USScx32RVd36Eiuc+F2c3dmYWb+kiFUpYkcN69e0C
+        VEd6W6B1F2Xfbj4Mc/R47woVkgN1Gl9voyR2A3Hkzx+qzlrBATWKGjeAaeqAhhFV
+        +Tvg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673331441; x=1673417841; bh=hYlkSoI0PLF6Nkqz+NXXc2oNHQRD
+        gQQ+vdlc/JfCbRk=; b=QoYvydhjdX9cioNRmCS+exDCwvp2G5j597G/4smDqhFp
+        c4YcX0DZymKSEcPQRR1DeAp4yw+27wgwh/nzNMA9XH7nx6mFNAAA0TAD+Twv3fnP
+        PtUuJ3w74R/o0QowodK8Do9dm9VrYM6/o/l0WfY8xhXkCQgObGUNpPh05t+Y4Lh+
+        pWoOrlZIJSeYno/e2uoZq5AOQPM4q84Vl+UQI50W50JLEypaLYYYAtdxv+QUYXnE
+        LEgfZAvYfFdo5wDQfmi5hsdN+OSVdWVDxkaVE3XrRrtwBnjKhj5yZzYElWRJ/Cdr
+        5t9hjj0mbaM6utnJR7+Q/Lh+dFFdO0mW2HwUnuxhhw==
+X-ME-Sender: <xms:8AK9YyUSBsFZESOZBnPWUxRvA_pOWv1if2zm-cyvHQpmPrw7TLouzg>
+    <xme:8AK9Y-kT9btLV6Beh2HQw-Jh6Pjs-J7QS9Bvx9LxvcHbC01C9iKchfkkC4xjHh2wK
+    HM958vz4eRNgCa6MfY>
+X-ME-Received: <xmr:8AK9Y2YoaZdNgIexQlnXA0SByj-OLj_invPUuMOuz4b_md9eXDPAL_ZlqUzKAuZCHPUygg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeejgdelhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:8AK9Y5VD_eiiOFbQekMB11yaKUTc1E1qYXGqvySTd_E-JOEHo8V2SQ>
+    <xmx:8AK9Y8loLX6jkHByYKsWAo_YxfvUKy4TSPPAbbNOJsfANpR4bcb1rQ>
+    <xmx:8AK9Y-fPrO21ZePmduvUjujc4WLVQeNWa_xXguNn9mJehC0JE4VyNA>
+    <xmx:8QK9Y7ekel8EiJvSOmwsEZ_WfIxei9UI_r3cOjN1gkz9S8IcISwLow>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 10 Jan 2023 01:17:20 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id C9FFB109BD2; Tue, 10 Jan 2023 09:17:16 +0300 (+03)
+Date:   Tue, 10 Jan 2023 09:17:16 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "jacob.jun.pan@linux.intel.com" <jacob.jun.pan@linux.intel.com>,
+        "tarasmadan@google.com" <tarasmadan@google.com>,
+        "bharata@amd.com" <bharata@amd.com>,
+        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
+        "glider@google.com" <glider@google.com>
+Subject: Re: [PATCHv13 06/16] x86/mm: Provide arch_prctl() interface for LAM
+Message-ID: <20230110061716.tcy74yseydbaeqjo@box.shutemov.name>
+References: <20221227030829.12508-1-kirill.shutemov@linux.intel.com>
+ <20221227030829.12508-7-kirill.shutemov@linux.intel.com>
+ <ed28e8a56b64f1bb3855a5d2a9b40672af9d6a14.camel@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed28e8a56b64f1bb3855a5d2a9b40672af9d6a14.camel@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 04, 2023 at 07:55:45PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2022-12-27 at 06:08 +0300, Kirill A. Shutemov wrote:
+> > Add a couple of arch_prctl() handles:
+> > 
+> >  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required
+> > number
+> >    of tag bits. It is rounded up to the nearest LAM mode that can
+> >    provide it. For now only LAM_U57 is supported, with 6 tag bits.
+> > 
+> >  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
+> >    bits located in the address.
+> > 
+> >  - ARCH_GET_MAX_TAG_BITS returns the maximum tag bits user can
+> > request.
+> >    Zero if LAM is not supported.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > ---
+> >  arch/x86/include/asm/mmu.h        |  2 ++
+> >  arch/x86/include/uapi/asm/prctl.h |  4 +++
+> >  arch/x86/kernel/process.c         |  3 +++
+> >  arch/x86/kernel/process_64.c      | 44
+> > ++++++++++++++++++++++++++++++-
+> >  4 files changed, 52 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+> > index ed72fcd2292d..54e4a3e9b5c5 100644
+> > --- a/arch/x86/include/asm/mmu.h
+> > +++ b/arch/x86/include/asm/mmu.h
+> > @@ -12,6 +12,8 @@
+> >  #define MM_CONTEXT_UPROBE_IA32		0
+> >  /* vsyscall page is accessible on this MM */
+> >  #define MM_CONTEXT_HAS_VSYSCALL		1
+> > +/* Do not allow changing LAM mode */
+> > +#define MM_CONTEXT_LOCK_LAM		2
+> >  
+> >  /*
+> >   * x86 has arch-specific MMU state beyond what lives in mm_struct.
+> > diff --git a/arch/x86/include/uapi/asm/prctl.h
+> > b/arch/x86/include/uapi/asm/prctl.h
+> > index 500b96e71f18..a31e27b95b19 100644
+> > --- a/arch/x86/include/uapi/asm/prctl.h
+> > +++ b/arch/x86/include/uapi/asm/prctl.h
+> > @@ -20,4 +20,8 @@
+> >  #define ARCH_MAP_VDSO_32		0x2002
+> >  #define ARCH_MAP_VDSO_64		0x2003
+> >  
+> > +#define ARCH_GET_UNTAG_MASK		0x4001
+> > +#define ARCH_ENABLE_TAGGED_ADDR		0x4002
+> > +#define ARCH_GET_MAX_TAG_BITS		0x4003
+> > +
+> >  #endif /* _ASM_X86_PRCTL_H */
+> > diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> > index ef6bde1d40d8..cc0677f58f42 100644
+> > --- a/arch/x86/kernel/process.c
+> > +++ b/arch/x86/kernel/process.c
+> > @@ -162,6 +162,9 @@ int copy_thread(struct task_struct *p, const
+> > struct kernel_clone_args *args)
+> >  
+> >  	savesegment(es, p->thread.es);
+> >  	savesegment(ds, p->thread.ds);
+> > +
+> > +	if (p->mm && (clone_flags & (CLONE_VM | CLONE_VFORK)) ==
+> > CLONE_VM)
+> > +		set_bit(MM_CONTEXT_LOCK_LAM, &p->mm->context.flags);
+> >  #else
+> >  	p->thread.sp0 = (unsigned long) (childregs + 1);
+> >  	savesegment(gs, p->thread.gs);
+> > diff --git a/arch/x86/kernel/process_64.c
+> > b/arch/x86/kernel/process_64.c
+> > index 8b06034e8c70..fef127ed79b6 100644
+> > --- a/arch/x86/kernel/process_64.c
+> > +++ b/arch/x86/kernel/process_64.c
+> > @@ -743,6 +743,39 @@ static long prctl_map_vdso(const struct
+> > vdso_image *image, unsigned long addr)
+> >  }
+> >  #endif
+> >  
+> > +#define LAM_U57_BITS 6
+> > +
+> > +static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned
+> > long nr_bits)
+> > +{
+> > +	if (!cpu_feature_enabled(X86_FEATURE_LAM))
+> > +		return -ENODEV;
+> > +
+> > +	if (test_bit(MM_CONTEXT_LOCK_LAM, &mm->context.flags))
+> > +		return -EBUSY;
+> 
+> Since this bit doesn't get set on vfork, you might be able to work
+> around this by enabling LAM in a vforked task, then enabling it again
+> after returning to the parent.
+
+I don't think so.
+
+Yes, child can enable LAM after vfork(), but it will set the flag, so
+parent won't be able to enable it again. And there's no cuncurency between
+parent and child due to vfork() semantics.
+
+Anyway, I will move the check inside mmap lock. It may clarify situation
+for a reader.
+
+> > +
+> > +	if (mmap_write_lock_killable(mm))
+> > +		return -EINTR;
+> > +
+> > +	if (!nr_bits) {
+> > +		mmap_write_unlock(mm);
+> > +		return -EINVAL;
+> > +	} else if (nr_bits <= LAM_U57_BITS) {
+> > +		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
+> > +		mm->context.untag_mask =  ~GENMASK(62, 57);
+> > +	} else {
+> > +		mmap_write_unlock(mm);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	write_cr3(__read_cr3() | mm->context.lam_cr3_mask);
+> 
+> mm might not be from the current task if it came from
+> PTRACE_ARCH_PRCTL, so then this would write to the wrong CR3. Maybe for
+> simplicity just return an error if task != current.
+
+Oh. Forgot about PTRACE_ARCH_PRCTL. Yes, will add the check.
 
 
-> On Jan 10, 2023, at 1:07 AM, Joel Fernandes <joel@joelfernandes.org> wrote=
-:
->=20
-> =EF=BB=BF
->=20
->>> On Dec 21, 2022, at 1:56 PM, Paul E. McKenney <paulmck@kernel.org> wrote=
-:
->>>=20
->>> =EF=BB=BFOn Mon, Dec 19, 2022 at 02:29:08PM -0600, Robert Elliott wrote:=
-
->>> Convert the functions that temporarily suppress RCU CPU
->>> stall reporting:
->>>   rcu_sysrq_start()
->>>   rcu_sysrq_end()
->>>=20
->>> to more generic functions that may be called by functions
->>> other than the SysRq handler:
->>>   rcu_suppress_start()
->>>   rcu_suppress_end()
->>>=20
->>> Covert the underlying variable:
->>>   rcu_cpu_stall_suppress
->>>=20
->>> to an atomic variable so multiple threads can manipulate it at the
->>> same time, incrementing it in start() and decrementing in end().
->>>=20
->>> Expose that in sysfs in a read-only
->>>   /sys/module/rcupdate/parameters/rcu_cpu_stall_suppress_dyn
->=20
-> Robert,
->=20
-> What is the use of exposing this read-only node?
->=20
-> I find it hard to believe anyone or any tool would be reading it during a s=
-cenario where stalls are required to be dynamically suppressed.
->=20
-> Or maybe I missed the point of this patch as I am late to the party.
-
-I was hasty to not be clear =E2=80=94 I have no problem with the idea of dyn=
-amic suppression, just missing the point about the read only infomercial via=
- sysfs node. More kernel memory wasted in sysfs however small :-).
-
-Thanks,
-
- - J
-
->=20
-> Thanks,
->=20
-> - J
->=20
->=20
->>>=20
->>> Keep
->>>   /sys/module/rcupdate/parameters/rcu_cpu_stall_suppress
->>> as writeable by userspace, but OR that into the equations rather than
->>> directly manipulate the atomic value.
->>>=20
->>> Signed-off-by: Robert Elliott <elliott@hpe.com>
->>=20
->> I really like the idea of making the suppressing and unsuppressing of
->> RCU CPU stall warnings SMP-safe, thank you!  Yes, as far as I know,
->> there have been no problems due to this, but accidents waiting to happen
->> and all that.
->>=20
->> Some comments and questions below.
->>=20
->>> ---
->>> .../RCU/Design/Requirements/Requirements.rst  |  6 +++---
->>> Documentation/RCU/stallwarn.rst               | 19 +++++++++++++++----
->>> arch/parisc/kernel/process.c                  |  2 +-
->>> drivers/tty/sysrq.c                           |  4 ++--
->>> include/linux/rcupdate.h                      |  8 ++++----
->>> kernel/rcu/rcu.h                              | 11 ++++++-----
->>> kernel/rcu/tree_stall.h                       | 18 ++++++++++--------
->>> kernel/rcu/update.c                           | 11 ++++++++++-
->>> 8 files changed, 51 insertions(+), 28 deletions(-)
->>>=20
->>> diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Do=
-cumentation/RCU/Design/Requirements/Requirements.rst
->>> index 49387d823619..5083490bb6fc 100644
->>> --- a/Documentation/RCU/Design/Requirements/Requirements.rst
->>> +++ b/Documentation/RCU/Design/Requirements/Requirements.rst
->>> @@ -1639,9 +1639,9 @@ against mishaps and misuse:
->>>   ``rcupdate.rcu_cpu_stall_suppress`` to suppress the splats. This
->>>   kernel parameter may also be set via ``sysfs``. Furthermore, RCU CPU
->>>   stall warnings are counter-productive during sysrq dumps and during
->>> -   panics. RCU therefore supplies the rcu_sysrq_start() and
->>> -   rcu_sysrq_end() API members to be called before and after long
->>> -   sysrq dumps. RCU also supplies the rcu_panic() notifier that is
->>> +   panics. RCU therefore supplies the rcu_suppress_start() and
->>> +   rcu_suppress_end() API members to be called before and after long
->>> +   CPU usage. RCU also supplies the rcu_panic() notifier that is
->>>   automatically invoked at the beginning of a panic to suppress further
->>>   RCU CPU stall warnings.
->>>=20
->>> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwa=
-rn.rst
->>> index e38c587067fc..9e6fba72f56d 100644
->>> --- a/Documentation/RCU/stallwarn.rst
->>> +++ b/Documentation/RCU/stallwarn.rst
->>> @@ -135,13 +135,24 @@ see include/trace/events/rcu.h.
->>> Fine-Tuning the RCU CPU Stall Detector
->>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->>>=20
->>> -The rcuupdate.rcu_cpu_stall_suppress module parameter disables RCU's
->>> -CPU stall detector, which detects conditions that unduly delay RCU grac=
-e
->>> -periods.  This module parameter enables CPU stall detection by default,=
-
->>> -but may be overridden via boot-time parameter or at runtime via sysfs.
->>> +RCU's CPU stall detector detects conditions that unduly delay RCU grace=
-
->>> +periods.  CPU stall detection is enabled by default, but may be overrid=
-den
->>> +via boot-time parameter or at runtime via sysfs (accessible via
->>> +/sys/module/rcupdate/parameters).
->>> +
->>> +The rcupdate.rcu_cpu_stall_suppress module parameter disables RCU's
->>> +CPU stall detector.
->>> +
->>> +/sys/module/rcu_cpu_stall_suppress_dyn reports an internal semaphore
->>=20
->> Actually an atomically updated variable as opposed to a semaphore,
->> correct?  Replacing "an internal semaphore" with something like "a
->> variable" would be fine from my viewpoint.
->>=20
->>> +used by the RCU's CPU stall detector. Functions holding a CPU for a
->>> +long time (e.g., sysrq printouts) increment this value before use
->>> +and decrement it when done, so the value reports the number of
->>> +functions currently disabling stalls.
->>> +
->>> The stall detector's idea of what constitutes "unduly delayed" is
->>> controlled by a set of kernel configuration variables and cpp macros:
->>>=20
->>> +
->>> CONFIG_RCU_CPU_STALL_TIMEOUT
->>> ----------------------------
->>=20
->> And thank you for updating the documentation!
->>=20
->>> diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c=
-
->>> index c4f8374c7018..038378fe7bfa 100644
->>> --- a/arch/parisc/kernel/process.c
->>> +++ b/arch/parisc/kernel/process.c
->>> @@ -126,7 +126,7 @@ void machine_power_off(void)
->>>          "Please power this system off now.");
->>>=20
->>>   /* prevent soft lockup/stalled CPU messages for endless loop. */
->>> -    rcu_sysrq_start();
->>> +    rcu_suppress_start();
->>>   lockup_detector_soft_poweroff();
->>>   for (;;);
->>> }
->>> diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
->>> index d2b2720db6ca..81ab63a473a7 100644
->>> --- a/drivers/tty/sysrq.c
->>> +++ b/drivers/tty/sysrq.c
->>> @@ -579,7 +579,7 @@ void __handle_sysrq(int key, bool check_mask)
->>>   orig_suppress_printk =3D suppress_printk;
->>>   suppress_printk =3D 0;
->>>=20
->>> -    rcu_sysrq_start();
->>> +    rcu_suppress_start();
->>>   rcu_read_lock();
->>>   /*
->>>    * Raise the apparent loglevel to maximum so that the sysrq header
->>> @@ -623,7 +623,7 @@ void __handle_sysrq(int key, bool check_mask)
->>>       console_loglevel =3D orig_log_level;
->>>   }
->>>   rcu_read_unlock();
->>> -    rcu_sysrq_end();
->>> +    rcu_suppress_end();
->>>=20
->>>   suppress_printk =3D orig_suppress_printk;
->>> }
->>> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
->>> index 03abf883a281..c0d8a4aae7ff 100644
->>> --- a/include/linux/rcupdate.h
->>> +++ b/include/linux/rcupdate.h
->>> @@ -131,11 +131,11 @@ static inline void rcu_init_tasks_generic(void) { }=
-
->>> #endif
->>>=20
->>> #ifdef CONFIG_RCU_STALL_COMMON
->>> -void rcu_sysrq_start(void);
->>> -void rcu_sysrq_end(void);
->>> +void rcu_suppress_start(void);
->>> +void rcu_suppress_end(void);
->>> #else /* #ifdef CONFIG_RCU_STALL_COMMON */
->>> -static inline void rcu_sysrq_start(void) { }
->>> -static inline void rcu_sysrq_end(void) { }
->>> +static inline void rcu_suppress_start(void) { }
->>> +static inline void rcu_suppress_end(void) { }
->>> #endif /* #else #ifdef CONFIG_RCU_STALL_COMMON */
->>>=20
->>> #if defined(CONFIG_NO_HZ_FULL) && (!defined(CONFIG_GENERIC_ENTRY) || !de=
-fined(CONFIG_KVM_XFER_TO_GUEST_WORK))
->>> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
->>> index c5aa934de59b..a658955a1174 100644
->>> --- a/kernel/rcu/rcu.h
->>> +++ b/kernel/rcu/rcu.h
->>> @@ -224,24 +224,25 @@ extern int rcu_cpu_stall_ftrace_dump;
->>> extern int rcu_cpu_stall_suppress;
->>> extern int rcu_cpu_stall_timeout;
->>> extern int rcu_exp_cpu_stall_timeout;
->>> +extern atomic_t rcu_cpu_stall_suppress_dyn;
->>> int rcu_jiffies_till_stall_check(void);
->>> int rcu_exp_jiffies_till_stall_check(void);
->>>=20
->>> static inline bool rcu_stall_is_suppressed(void)
->>> {
->>> -    return rcu_stall_is_suppressed_at_boot() || rcu_cpu_stall_suppress;=
-
->>> +    return rcu_stall_is_suppressed_at_boot() ||
->>> +           rcu_cpu_stall_suppress ||
->>> +           atomic_read(&rcu_cpu_stall_suppress_dyn);
->>> }
->>>=20
->>> #define rcu_ftrace_dump_stall_suppress() \
->>> do { \
->>> -    if (!rcu_cpu_stall_suppress) \
->>> -        rcu_cpu_stall_suppress =3D 3; \
->>=20
->> One thing we are losing here is the ability to see what is suppressing
->> the current stall, for example, from a crash dump.  Maybe that is OK,
->> as I haven't needed to debug that sort of thing.
->>=20
->> Thoughts from those who have had this debugging experience?
->>=20
->>> +    atomic_inc(&rcu_cpu_stall_suppress_dyn); \
->>> } while (0)
->>>=20
->>> #define rcu_ftrace_dump_stall_unsuppress() \
->>> do { \
->>> -    if (rcu_cpu_stall_suppress =3D=3D 3) \
->>> -        rcu_cpu_stall_suppress =3D 0; \
->>> +    atomic_dec(&rcu_cpu_stall_suppress_dyn); \
->>> } while (0)
->>>=20
->>> #else /* #endif #ifdef CONFIG_RCU_STALL_COMMON */
->>> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
->>> index 5653560573e2..260748bc5bc8 100644
->>> --- a/kernel/rcu/tree_stall.h
->>> +++ b/kernel/rcu/tree_stall.h
->>> @@ -103,23 +103,25 @@ bool rcu_gp_might_be_stalled(void)
->>>   return !time_before(j, READ_ONCE(rcu_state.gp_start) + d);
->>> }
->>>=20
->>> -/* Don't do RCU CPU stall warnings during long sysrq printouts. */
->>> -void rcu_sysrq_start(void)
->>> +/* Don't do RCU CPU stall warnings during functions holding the CPU
->>> + * for a long period of time such as long sysrq printouts.
->>> + */
->>> +void rcu_suppress_start(void)
->>> {
->>> -    if (!rcu_cpu_stall_suppress)
->>> -        rcu_cpu_stall_suppress =3D 2;
->>=20
->> And the same point here.
->>=20
->>> +    atomic_inc(&rcu_cpu_stall_suppress_dyn);
->>> }
->>> +EXPORT_SYMBOL_GPL(rcu_suppress_start);
->>=20
->> If this is being exported to modules, the question of who suppressed
->> the CPU stalls might at some point become more urgent.
->>=20
->> If the problem was reproducible, I would simply attach a BPF program to
->> rcu_suppress_start() and rcu_suppress_end() counting the stack traces of
->> all callers to these functions.  This might or might not make everyone
->> happy, though.
->>=20
->>> -void rcu_sysrq_end(void)
->>> +void rcu_suppress_end(void)
->>> {
->>> -    if (rcu_cpu_stall_suppress =3D=3D 2)
->>> -        rcu_cpu_stall_suppress =3D 0;
->>> +    atomic_dec(&rcu_cpu_stall_suppress_dyn);
->>> }
->>> +EXPORT_SYMBOL_GPL(rcu_suppress_end);
->>>=20
->>> /* Don't print RCU CPU stall warnings during a kernel panic. */
->>> static int rcu_panic(struct notifier_block *this, unsigned long ev, void=
- *ptr)
->>> {
->>> -    rcu_cpu_stall_suppress =3D 1;
->>> +    atomic_inc(&rcu_cpu_stall_suppress_dyn);
->>>   return NOTIFY_DONE;
->>> }
->>>=20
->>> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
->>> index f5e6a2f95a2a..ceee9d777384 100644
->>> --- a/kernel/rcu/update.c
->>> +++ b/kernel/rcu/update.c
->>> @@ -501,11 +501,18 @@ EXPORT_SYMBOL_GPL(rcutorture_sched_setaffinity);
->>> #ifdef CONFIG_RCU_STALL_COMMON
->>> int rcu_cpu_stall_ftrace_dump __read_mostly;
->>> module_param(rcu_cpu_stall_ftrace_dump, int, 0644);
->>> -int rcu_cpu_stall_suppress __read_mostly; // !0 =3D suppress stall warn=
-ings.
->>> +
->>> +int rcu_cpu_stall_suppress __read_mostly; // !0 =3D suppress stall warn=
-ings from sysfs
->>> EXPORT_SYMBOL_GPL(rcu_cpu_stall_suppress);
->>> module_param(rcu_cpu_stall_suppress, int, 0644);
->>> +
->>> +atomic_t rcu_cpu_stall_suppress_dyn __read_mostly; // !0 =3D suppress s=
-tall warnings from functions
->>> +EXPORT_SYMBOL_GPL(rcu_cpu_stall_suppress_dyn);
->>> +module_param_named(rcu_cpu_stall_suppress_dyn, rcu_cpu_stall_suppress_d=
-yn.counter, int, 0444);
->>=20
->> I am not seeing a valid use case for specifying an initial
->> value on the kernel command line.  Or does this somehow prevent
->> rcupdate.rcu_cpu_stall_suppress_dyn from being specified on the kernel
->> command line?
->>=20
->> If something like rcupdate.rcu_cpu_stall_suppress_dyn=3D3 can be specifie=
-d
->> (incorrectly, in my current view) on the kernel command line, maybe
->> something as shown below would help?
->>=20
->>> +
->>> int rcu_cpu_stall_timeout __read_mostly =3D CONFIG_RCU_CPU_STALL_TIMEOUT=
-;
->>> module_param(rcu_cpu_stall_timeout, int, 0644);
->>> +
->>> int rcu_exp_cpu_stall_timeout __read_mostly =3D CONFIG_RCU_EXP_CPU_STALL=
-_TIMEOUT;
->>> module_param(rcu_exp_cpu_stall_timeout, int, 0644);
->>> #endif /* #ifdef CONFIG_RCU_STALL_COMMON */
->>> @@ -616,6 +623,8 @@ void __init rcupdate_announce_bootup_oddness(void)
->>>       pr_info("\tAll grace periods are expedited (rcu_expedited).\n");
->>>   if (rcu_cpu_stall_suppress)
->>>       pr_info("\tRCU CPU stall warnings suppressed (rcu_cpu_stall_suppre=
-ss).\n");
->>> +    if (atomic_read(&rcu_cpu_stall_suppress_dyn))
->>> +        pr_info("\tDynamic RCU CPU stall warnings suppressed (rcu_cpu_s=
-tall_suppress_dyn).\n");
->>=20
->> Should this instead be a WARN_ON() placed somewhere so that it won't
->> mess up the printing of the other parameters?
->>=20
->> Or maybe have this code set it to back to zero, with the message
->> indicating that this is being done?
->>=20
->>>   if (rcu_cpu_stall_timeout !=3D CONFIG_RCU_CPU_STALL_TIMEOUT)
->>>       pr_info("\tRCU CPU stall warnings timeout set to %d (rcu_cpu_stall=
-_timeout).\n", rcu_cpu_stall_timeout);
->>>   rcu_tasks_bootup_oddness();
->>> --=20
->>> 2.38.1
->>>=20
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
