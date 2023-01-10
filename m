@@ -2,155 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8877266438D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F98664385
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238549AbjAJOqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:46:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
+        id S233227AbjAJOpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:45:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbjAJOq0 (ORCPT
+        with ESMTP id S231996AbjAJOpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:46:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD041CB2B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:45:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673361939;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 10 Jan 2023 09:45:40 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C7E1788C;
+        Tue, 10 Jan 2023 06:45:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2746C6A7F8;
+        Tue, 10 Jan 2023 14:45:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673361937; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=HEPL9QhdiHtl81dbBjJ+8ZxqD3DaFE7xqIq6L14Xhs8=;
-        b=QgnCGkEs5ucCYd8LW5qI115aXXUfNNh4On5Vml4R2f+QFAKU0LDVeNvt4ZLMi/JBBe0kbm
-        XZhLeS0bdU7CnXd8+DkTWWnhSXnZ7emvyjDDfeI4uNl85vT0rqY/HPlAmFUaEpW3y6nTJS
-        lI4U7z5SAJCyT3T9Y3EkyPv6VHIUdDg=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-389-71yyHcUlOUmuPvDDWigC-Q-1; Tue, 10 Jan 2023 09:45:37 -0500
-X-MC-Unique: 71yyHcUlOUmuPvDDWigC-Q-1
-Received: by mail-qk1-f200.google.com with SMTP id ay34-20020a05620a17a200b00704bd9922c4so8847250qkb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:45:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HEPL9QhdiHtl81dbBjJ+8ZxqD3DaFE7xqIq6L14Xhs8=;
-        b=RopnJMs5TbLKs7ZCrLXT4qrShfP7ILo+cWtKiw21mTFvcr7V6ViO/bp8jrirX10BYL
-         Qrx5Tdwevi7J5MnK7+jzyVxih8tECuYbez2uNihgt9YKCz2VGuhRkvwqSJVhjAYOU7vN
-         PbiamRZMKPQ08uSdRA4TVehwnp8IFXLGYFciHLZt61lN19wcYBoslbvlTa1Ik11VaczQ
-         T5unnP9LHZWJepoeZA/vKgAFM7XXmkLMdax0ZLITgnigB5HD8quwIrOmZR/4beq1l5oR
-         IUUBGpFTEtkahwOr58fExzlAf+BPak0hdTH7J/AKi4mySCLj8nFbUbymQq7eHOcXj/eI
-         /ZMA==
-X-Gm-Message-State: AFqh2krUIMnITEbxj9E9FP/seadKbEC7xC6G5bOsWXuoc5VKiCGtoa34
-        UkP5ygFUW8blIYXV4iuzeA666gduFprlf1U81MJCK2pNziUpm/Rx9pinhnWtnKrku+Lb+XlTcGv
-        DA+oKm67c0bq3LTRlU6lzBl7f
-X-Received: by 2002:ac8:6ec2:0:b0:3ad:8c10:593b with SMTP id f2-20020ac86ec2000000b003ad8c10593bmr9867759qtv.24.1673361937200;
-        Tue, 10 Jan 2023 06:45:37 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvc9OrhHN3k+CZGP5U3fDQ1GYsd6lcDLuDFqR7M320N5BIicIHK21UGYcRCxL800iX3rtAQ+w==
-X-Received: by 2002:ac8:6ec2:0:b0:3ad:8c10:593b with SMTP id f2-20020ac86ec2000000b003ad8c10593bmr9867721qtv.24.1673361936919;
-        Tue, 10 Jan 2023 06:45:36 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-128.dyn.eolo.it. [146.241.120.128])
-        by smtp.gmail.com with ESMTPSA id z13-20020ac875cd000000b003aef9d97465sm1259788qtq.43.2023.01.10.06.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 06:45:36 -0800 (PST)
-Message-ID: <5042e5c6e57a3f99895616c891512e482bf6ed28.camel@redhat.com>
-Subject: Re: [PATCH net-next v9] virtio/vsock: replace virtio_vsock_pkt with
- sk_buff
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 10 Jan 2023 15:45:32 +0100
-In-Reply-To: <91593e9c8a475a26a465369f6caff86ac5d662e3.camel@redhat.com>
-References: <20230107002937.899605-1-bobby.eshleman@bytedance.com>
-         <91593e9c8a475a26a465369f6caff86ac5d662e3.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        bh=bC7TP9mQzckaGSKeAgIsfBs+hsL/F5D88B/c4h6SvvM=;
+        b=KqGglBhGbeuUm4Pf7SpeJZYqnx4pOakUzbwLfoQWOP2VwlGvhlhFsIWj65cauX1vlogGut
+        57HmdR4hLyUJ0r/1h1KkQQQM4xz+3cq3EuPHl9PHVUDSeFL6wqvWAew+7oCtv7AVRvRy2r
+        v8PlIg6XboFdKg7sF/6UlRwbLgnMeDk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673361937;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bC7TP9mQzckaGSKeAgIsfBs+hsL/F5D88B/c4h6SvvM=;
+        b=bNO/lTbjWLVmhqYQMRQVnKKymix2GV+v/0v7D9T43FMqOpUZdcuJIc9CcUm7D/fRmEqkPE
+        knBqYeGaxOzFdEBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A87F1358A;
+        Tue, 10 Jan 2023 14:45:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8hduBhF6vWPqaAAAMHmgww
+        (envelope-from <dwagner@suse.de>); Tue, 10 Jan 2023 14:45:37 +0000
+Date:   Tue, 10 Jan 2023 15:45:36 +0100
+From:   Daniel Wagner <dwagner@suse.de>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tools/rtla: Explicitly list libtraceevent dependency
+Message-ID: <20230110144536.knepnpxsp4mw67no@carbon.lan>
+References: <20230110131805.16242-1-dwagner@suse.de>
+ <42d1e999-79a6-94dc-cc88-77520ddce068@kernel.org>
+ <20230110140814.2yz4if2e2fasnu7t@carbon.lan>
+ <94fd6fb5-c87a-b02e-40bc-b2e2c99529d5@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94fd6fb5-c87a-b02e-40bc-b2e2c99529d5@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-10 at 09:36 +0100, Paolo Abeni wrote:
-> On Sat, 2023-01-07 at 00:29 +0000, Bobby Eshleman wrote:
-> > This commit changes virtio/vsock to use sk_buff instead of
-> > virtio_vsock_pkt. Beyond better conforming to other net code, using
-> > sk_buff allows vsock to use sk_buff-dependent features in the future
-> > (such as sockmap) and improves throughput.
-> > 
-> > This patch introduces the following performance changes:
-> > 
-> > Tool/Config: uperf w/ 64 threads, SOCK_STREAM
-> > Test Runs: 5, mean of results
-> > Before: commit 95ec6bce2a0b ("Merge branch 'net-ipa-more-endpoints'")
-> > 
-> > Test: 64KB, g2h
-> > Before: 21.63 Gb/s
-> > After: 25.59 Gb/s (+18%)
-> > 
-> > Test: 16B, g2h
-> > Before: 11.86 Mb/s
-> > After: 17.41 Mb/s (+46%)
-> > 
-> > Test: 64KB, h2g
-> > Before: 2.15 Gb/s
-> > After: 3.6 Gb/s (+67%)
-> > 
-> > Test: 16B, h2g
-> > Before: 14.38 Mb/s
-> > After: 18.43 Mb/s (+28%)
-> > 
-> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-> > Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-> > Acked-by: Paolo Abeni <pabeni@redhat.com>
-> > ---
-> > 
-> > Tested using vsock_test g2h and h2g.  I'm not sure if it is standard
-> > practice here to carry Acks and Reviews forward to future versions, but
-> > I'm doing that here to hopefully make life easier for maintainers.
-> > Please let me know if it is not standard practice.
+On Tue, Jan 10, 2023 at 03:19:25PM +0100, Daniel Bristot de Oliveira wrote:
+ > FWIW, this is change is also backwards compatible, meaning if you have system
+> > which has a libtracefs.pkg installed which lists libtraceevent in its Libs:
+> > section the 'pkg-config --libs libtracefs libtraceevent' command will return the
+> > identically string which is '-ltracefs -ltraceevent'.
 > 
-> As Jakub noted, there is no clear rule for tag passing across different
-> patch revisions.
-> 
-> Here, given the complexity of the patch and the not trivial list of
-> changes, I would have preferred you would have dropped my tag.
-> 
-> > Changes in v9:
-> > - check length in rx header
-> > - guard alloactor from small requests
-> > - squashed fix for v8 bug reported by syzbot:
-> >     syzbot+30b72abaa17c07fe39dd@syzkaller.appspotmail.com
-> 
-> It's not clear to me what/where is the fix exactly, could you please
-> clarify?
+> Yeah, we know it. I've added both in the initial implementation, but Steven suggested
+> using only libtracefs because it depends on libtraceevent anyways. That is why
+> I am re-checking with him.
 
-Reading the syzkaller report, it looks like iov_length() in
-vhost_vsock_alloc_pkt() can not be trusted to carry a reasonable value.
+Just to clarify, the generated pkg file by Meson is adding the libtraceevent
+dependency in the private section. So this part should be okay. I would be
+surprised if Meson would get this wrong at this point.
 
-As such, don't you additionally need to ensure/check that iov_length()
-is greater or equal to sizeof(virtio_vsock_hdr) ?
+$ cat .build/meson-private/libtracefs.pc
+prefix=/tmp/trace-cmd
+includedir=${prefix}/include
+libdir=${prefix}/lib64
 
-Thanks.
-
-Paolo
-
+Name: libtracefs
+Description: Manage trace fs
+URL: https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
+Version: 1.6.3
+Requires.private: libtraceevent >=  1.7.0
+Libs: -L${libdir} -ltracefs
+Cflags: -I${includedir}/libtracefs
