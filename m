@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987AB663723
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 03:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A865D663725
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 03:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjAJCQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 21:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S235498AbjAJCQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 21:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjAJCP4 (ORCPT
+        with ESMTP id S230199AbjAJCQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 21:15:56 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265E02198
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 18:15:53 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4c36d00c389so99656657b3.18
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 18:15:53 -0800 (PST)
+        Mon, 9 Jan 2023 21:16:05 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838382BED
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 18:16:04 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id e11-20020a63d94b000000b0048988ed9a6cso4496901pgj.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 18:16:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=IKw0nHewfyAcnobo9890ROV/gGIwiBDCIMT9U0Fts4o=;
-        b=G1xR6AKcTXCuqCe/WpkaURQUMMo9N+steh6NueDOTfgV4+XkwHWE37rgGPopDug8S5
-         soKU9yJvMTRonXsEK26iN5U8Wz2+9KvrnRp1yTSyoxBwr3xNXX1jJofOFOZRWnEeyFgT
-         rZdL+NnWcbO4czexO0OJdVbHA9ufSNhefzhqiy5d/n+Djom71HdUU9xvS5ecAMUugpwN
-         yfyJLcweGDfjgGJaYNDp7/BxrhgAu6RY2wWpDWVnR9dwQFoLgsH9GtrhGVzgj9uylt9G
-         YwCgiuS0a4jO+20aUPYE2VW/0ZCJ1S8LFHCqQDxv7iyTLsJv1GaF45UCx8zgfPOd40Zu
-         DxiQ==
+        bh=hjXN6DlW5iWocpPXZO+YPpO8vV9IgMx2qXzGmBcXsCg=;
+        b=DEwdhVDHUdVd2gaW1yVVDmxnQhNt0LgwpdUIo/mB17X1bFsb99NQ8I4o5mUo2nr6TJ
+         TCJ2IyN5drejBzobQh9kEgnmWQ50FIhb3k16p5PcJFaS3KTF/OaKB5im/Xv/jx8LZhYs
+         ryWk3sV5hlY/BRjZV9rn9K2KnrvHiddiIvW10pzxFD+5Wl8Yvy2uwwEAbYdnXTBms4nd
+         3UZWW82Uddo38dfD5AYE9ctJ+5MLLu6QL0ze/VAod6NYtdS8vaIrfmeYELBdFVQpA3k/
+         d2WAUb4kbbsDOq2f5fBQ598+BmoHmIsxu6kLV0xdLdxcbOH13tdLH+/y1FROdDoI32Ph
+         I/7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IKw0nHewfyAcnobo9890ROV/gGIwiBDCIMT9U0Fts4o=;
-        b=xecpIZcZn3VGQAWvUpe+aZqglPuXNezSIH6ers+0cWy2J8Urlq118gAAhBIjEi8Ugn
-         dtgD8yfp6d+7kh+thmJlg7VtVVXWjDs3DgsJj2ijKvRGukBsLLFyFntA8aoRyIok0/Ve
-         ybBO+qwHDN9rFELykGBGjxVKb8Z/BUlKlbxzEaaYgbJnnoqdy/oRb4qRynhAotOsiHd+
-         u8P1IljTaYSRQjOIx11niqNnTgVgWL058TAepPsmIC4oCXND+hcA5eOog9UsrV6w7kO5
-         CuO7+SAo9Yv+YZ1+h02OJJLvnR3uSs9zBT3ATPJdjPVknj18hjSNKf2XTEJUiHQwIPg7
-         Ao5A==
-X-Gm-Message-State: AFqh2kpUsGyv917qYhC9nfTOEq0suOgnZvA4nHPy6wu5U0sGfR1h4aal
-        asosvKwP+cGtAv4zlLL9yuXXjNncAedhpEFFo8lLDQ==
-X-Google-Smtp-Source: AMrXdXvJ5CoYxQIPHJG2/AxrMkA6lDe+NURxnbNJQLBjRsRkvpcw9+qJgDURkx95PNDsjMjGB+P21cJ7nryjRzfGFTz9OQ==
+        bh=hjXN6DlW5iWocpPXZO+YPpO8vV9IgMx2qXzGmBcXsCg=;
+        b=wOiIYYAPSByw4/FEB7WzZV5bqE3DYmorlFu4UVhXL1HGKbFRNrRRjcyFNYMiynwzyB
+         vjcr2+wotzPNX81Y3aEykXraV6WiQndMqv2vzFAWgZ21amg39ec7MWQO/Yid8JOiNuKA
+         6t+h2gcOXDkqKNjvL7OdR5p4j/H0tE+j/t3Pj5hy7bm+DEFn3U7aC75Kj6v3bm9XihQ9
+         mr/onCFTTNF2dveflO2eaDmv8Nne2L2EGFIV2PxQDb0PIhclJkZ2rKQWh4zm+8IPvZtJ
+         +LVBF/s19E6+HCm8hs0QxC8aoMguUAO2gi4RN3256X7+wJWX4YPByxloLFKAoG1cHsyY
+         9dAQ==
+X-Gm-Message-State: AFqh2kq9q6WdYxDNuExkRJU0mWPsL00HkLhLIDsnjGuoTVm00ss06bFF
+        Qzzc8JKDLoDW57HFQ+yYv0+cBDxKCo7AVvcrL3HDcQ==
+X-Google-Smtp-Source: AMrXdXtyMvyOu+BcEar/61cbq0gpLj5K4zQEguINa/upU9HngVQ77pkh44I6KjUE7AKPvMmnQx3un2VfzYQvW8nVIyInag==
 X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:3990:5e50:b0f8:bcdd])
- (user=isaacmanjarres job=sendgmr) by 2002:a81:1441:0:b0:4bc:6c9c:bf9a with
- SMTP id 62-20020a811441000000b004bc6c9cbf9amr2865277ywu.255.1673316952380;
- Mon, 09 Jan 2023 18:15:52 -0800 (PST)
-Date:   Mon,  9 Jan 2023 18:15:48 -0800
+ (user=isaacmanjarres job=sendgmr) by 2002:a62:4e97:0:b0:582:fa00:3c30 with
+ SMTP id c145-20020a624e97000000b00582fa003c30mr1726478pfb.17.1673316963899;
+ Mon, 09 Jan 2023 18:16:03 -0800 (PST)
+Date:   Mon,  9 Jan 2023 18:16:00 -0800
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230110021549.1347551-1-isaacmanjarres@google.com>
-Subject: [PATCH stable-4.19] driver core: Fix bus_type.match() error handling
+Message-ID: <20230110021600.1347946-1-isaacmanjarres@google.com>
+Subject: [PATCH stable-5.4] driver core: Fix bus_type.match() error handling
  in __driver_attach()
 From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
         stable@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
         kernel-team@android.com, linux-kernel@vger.kernel.org
@@ -96,10 +96,10 @@ Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 63390a416b44..2dad29292487 100644
+index 10063d8a1b7d..1abd39ed3f9f 100644
 --- a/drivers/base/dd.c
 +++ b/drivers/base/dd.c
-@@ -902,8 +902,12 @@ static int __driver_attach(struct device *dev, void *data)
+@@ -1068,8 +1068,12 @@ static int __driver_attach(struct device *dev, void *data)
  		 */
  		return 0;
  	} else if (ret < 0) {
@@ -113,7 +113,7 @@ index 63390a416b44..2dad29292487 100644
 +		return 0;
  	} /* ret > 0 means positive match */
  
- 	if (dev->parent && dev->bus->need_parent_lock)
+ 	if (driver_allows_async_probing(drv)) {
 -- 
 2.39.0.314.g84b9a713c41-goog
 
