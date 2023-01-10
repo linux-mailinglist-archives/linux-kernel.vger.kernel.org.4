@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B6F664C14
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FAB8664C1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238840AbjAJTMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:12:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
+        id S238751AbjAJTMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239762AbjAJTLi (ORCPT
+        with ESMTP id S239837AbjAJTM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:11:38 -0500
+        Tue, 10 Jan 2023 14:12:27 -0500
 Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0596DFBB;
-        Tue, 10 Jan 2023 11:11:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1673377846; cv=none; 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605EFCCA
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:12:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1673377902; cv=none; 
         d=zohomail.in; s=zohoarc; 
-        b=fgjNUnZKnlS2NO43QnBV8y7avtKZwWUTLL/kVFRJkZPOzStFvsy+AgJ+42e4C5gKAAoOOLDIlH6lio9MAeFXvI6lrewPC2gBNVckzs3iLqE8K++zC9mfQVz891uB+6WHYdLtOGMC4zra+YvjyEt/hKOQrUNAJyOb5i96nxvd3ZQ=
+        b=bF1xE5FDoH7Jt/Ak6iIGzZTLM48ugq7uBJEWLMTkfAh/eLbMYQH2RXcWFDPY+VXVHQK8kAF+/FhdKgjB8bbZyVum6BN+A/yIu6CoPXTyr4+UhxxEYc4EPb3uINQjpFIqzbc/XLvVwss3iMLgzqNzAviPNaS7KWiNB7l1+KIOVT4=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1673377846; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=94w/84cEKuVEFn2g20pluke79PDKWPNFSLBsY9v/ql8=; 
-        b=WRgOCrgiJHyBP8Je59WuVLMKYNSpD1l1zy0B1pLOt9dG5JlgkWJ1RLZ8BFnSrx9A6OtR/nGFmZcvuK0WE6jxZZCwb6y5rtyxeKepfIyBexUFI3GFXA2B22hnikIdkJCHZvi7VjsiRl944vCTLzoiIcj+krKDfm5Jslwra1DprXY=
+        t=1673377902; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=O+Xx6AH9eZ1dSlEhacGjCX8gd4rXEbBE5hUVfekqav0=; 
+        b=Hm4YuVz6EOnwfrTUcYmeUgaWlmchKiZ6H2wu6RnkFiL4SyuWxd8zgV4AFfylxaJvMZHtL52k2xRoeSzr/45E6TTN0h/Q/8h+1pCWTWwQva05AkflCCbArjEmxZCu1TFil70BavpsCvPkgAs+d147YG/qvM5VCAOO4Ya4Tws/A1c=
 ARC-Authentication-Results: i=1; mx.zohomail.in;
         dkim=pass  header.i=siddh.me;
         spf=pass  smtp.mailfrom=code@siddh.me;
         dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673377846;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673377902;
         s=zmail; d=siddh.me; i=code@siddh.me;
         h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=94w/84cEKuVEFn2g20pluke79PDKWPNFSLBsY9v/ql8=;
-        b=LsKe4OZPG0vKr3M78UgPtfxUXOmZn6E226af1nX/CH1sPXYNvt/dwivBe676PFIs
-        oY/i8i7Z390dKS9GBO5WpdB8AbUzqXBYV+ypC2ts9ziVu9cd6MX2XL5kNgdl6NSdohx
-        ndBuAxm0sEL6U0r7NSSgGLT0hkhfzRaVMmG8SzsA=
+        bh=O+Xx6AH9eZ1dSlEhacGjCX8gd4rXEbBE5hUVfekqav0=;
+        b=VkMiJ9aF2jpNeeCbOVR6li2BaHXfw523DOa5j0iCTukZ4F3RkpTG1L3rje4CdXWr
+        um5sAIKaDOJZIqVE3gpcy56KmLAU2vNnm9nmOIBCNF0judz2WXMwcLMtEuML25zsqNv
+        Lf9n1ilXnKEZIia/EQoQEeM4k6Lu+jAsTS/kqg8s=
 Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1673377834655807.4120717855777; Wed, 11 Jan 2023 00:40:34 +0530 (IST)
-Date:   Wed, 11 Jan 2023 00:40:34 +0530
+        with SMTP id 1673377890224944.9758733104535; Wed, 11 Jan 2023 00:41:30 +0530 (IST)
+Date:   Wed, 11 Jan 2023 00:41:30 +0530
 From:   Siddh Raman Pant <code@siddh.me>
-To:     "David Howells" <dhowells@redhat.com>
-Cc:     "mauro carvalho chehab" <mchehab@kernel.org>,
-        "randy dunlap" <rdunlap@infradead.org>,
-        "jonathan corbet" <corbet@lwn.net>,
-        "fabio m. de francesco" <fmdefrancesco@gmail.com>,
-        "eric dumazet" <edumazet@google.com>,
-        "christophe jaillet" <christophe.jaillet@wanadoo.fr>,
-        "eric biggers" <ebiggers@kernel.org>,
-        "keyrings" <keyrings@vger.kernel.org>,
-        "linux-security-module" <linux-security-module@vger.kernel.org>,
-        "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
+To:     "Simon Ser" <contact@emersion.fr>
+Cc:     "maarten lankhorst" <maarten.lankhorst@linux.intel.com>,
+        "maxime ripard" <mripard@kernel.org>,
+        "thomas zimmermann" <tzimmermann@suse.de>,
+        "david airlie" <airlied@gmail.com>,
+        "daniel vetter" <daniel@ffwll.ch>,
+        "jim cromie" <jim.cromie@gmail.com>,
+        "sam ravnborg" <sam@ravnborg.org>,
+        "dri-devel" <dri-devel@lists.freedesktop.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>
-Message-ID: <1859d17668d.7b9d5469421579.5464668634216421773@siddh.me>
-In-Reply-To: <2121105.1673359772@warthog.procyon.org.uk>
-References: <97ce37e2fdcfbed29d9467057f0f870359d88b89.1673173920.git.code@siddh.me> <cover.1673173920.git.code@siddh.me> <2121105.1673359772@warthog.procyon.org.uk>
-Subject: Re: [PATCH v3 1/2] include/linux/watch_queue: Improve documentation
+Message-ID: <1859d183fa6.859b5b89421607.8806421513207042042@siddh.me>
+In-Reply-To: <C6RlXueyDNu9t4z9O_S7mx1gZbmzjCcHqbarn7w6QZcNVuBLUAKwyzGZQXk2dIQSxcauzlHqtkFwPveNglu8ZDtU875E7X4pS9zQsYyfMPA=@emersion.fr>
+References: <cover.1673269059.git.code@siddh.me> <C6RlXueyDNu9t4z9O_S7mx1gZbmzjCcHqbarn7w6QZcNVuBLUAKwyzGZQXk2dIQSxcauzlHqtkFwPveNglu8ZDtU875E7X4pS9zQsYyfMPA=@emersion.fr>
+Subject: Re: [PATCH v6 00/10] drm: Remove usage of deprecated DRM_* macros
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
@@ -68,27 +66,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 Jan 2023 19:39:32 +0530, David Howells wrote:
-> Please don't.
-> 
-> The structure is documented fully here:
-> 
->       Documentation/core-api/watch_queue.rst
-> 
-> See:
-> 
->       https://docs.kernel.org/core-api/watch_queue.html#event-filtering
-> 
-> The three column approach is much more readable in the code as it doesn't
-> separate the descriptions from the things described.  Putting things in
-> columns has been around for around 6000 years.
-> 
-> David
-
-Okay. Apologies for that.
-
-But what about the second patch? Should I send that without these doc
-changes?
-
-Thanks,
-Siddh
+On Tue, 10 Jan 2023 20:45:54 +0530, Simon Ser wrote:
+> I pushed the last 3 patches to drm-misc-next.
+  
+Thank you!
