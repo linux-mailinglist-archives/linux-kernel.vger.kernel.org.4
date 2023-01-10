@@ -2,153 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC88D66422D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE723664243
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238072AbjAJNqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S232373AbjAJNt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238252AbjAJNqL (ORCPT
+        with ESMTP id S232769AbjAJNtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:46:11 -0500
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2BD1208A;
-        Tue, 10 Jan 2023 05:46:08 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id v6so17570658edd.6;
-        Tue, 10 Jan 2023 05:46:08 -0800 (PST)
+        Tue, 10 Jan 2023 08:49:23 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CA82F78D
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:49:20 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-4c15c4fc8ccso154424057b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:49:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=44n3krIm8uSmD55/HyB5R1oD+31KNdGLUS6d9tW+5uQ=;
+        b=vhotJ3I8QZ6o0V8YONaYaXj/HV/kecxNEMwtCEgE5GBsKWV9/ahydBnTXRAnAFB5vK
+         8Bv6j4jmTFkIkqGKBBPhPgRL7BRLqCJOvxbslhuuqChHh8JOOx5pLG0chTHBkMvJPeKB
+         qdOm+x5ISFro/dysaAH25bEr/7ioGKbFHDMGgXrqnyFn6KzeVadcw6Il64YiGxvXQFtN
+         /aSz/JIfdGzF8RrcGELvdreEvNm0n2meScgUq5Qq+Tpw6xHF7XZMDlmFyKjWcdJua/0r
+         2anEDx9JqN4Ia0rws2CoA8QRWKKpuHjh8Hi+8LKk54CBTcS0I0N50ZHMuD+mfOT77Gwg
+         aFpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2NZqRJmnFIorDTrRXJ2YTmVjJ4mNfBULNZqJURGRWr0=;
-        b=hz8+vzsPIFVkBm2vOhleaHvMcMnaoebdFEXW+yT5sH8FPyQr5E94+etyfrzM25TSdb
-         4Y++SsYTfu306QxlZQgLBkv23u90YD8jG+w9zSd/9mVtzI03VdP/4JS0lrhz2GBcL/PB
-         EZoyglkeUhiD/Avzmrst5LB5YbUy/oxYd41TXZv9YEqCGF1gcAx8f52U1sMAQ/nE4XBC
-         pqNRkiQ7vdAQ68OBe/mbdaxLFDDGqrvrJF27Q1m0tfx8Au8urcGAcEqB7CXOYobnakC3
-         6lNpDI63MFZBF734qiQfEhT2QiQ48lCQNoWHyAz6qO05P7TKK1QQFulV37LCBjZKWjt8
-         3v+Q==
-X-Gm-Message-State: AFqh2kro/5C1/piZG30WMbYQuhlFjlYzozd7Xf2g0PtlQfsaydRb4u9w
-        +dhOEwWdj0M3AAsjKiILWvjs1GZf17rsmelIHwKUKRQ1
-X-Google-Smtp-Source: AMrXdXsOKU/xHupfJ/bcMMWqOE/KsPdBWdUzkTeIFGcbIxnUfsBXWg1gFvncYzUxE5LqD3vOAaqhCNK6H2GtXAXJ6gc=
-X-Received: by 2002:a05:6402:298b:b0:47f:7465:6e76 with SMTP id
- eq11-20020a056402298b00b0047f74656e76mr6434814edb.181.1673358366989; Tue, 10
- Jan 2023 05:46:06 -0800 (PST)
+        bh=44n3krIm8uSmD55/HyB5R1oD+31KNdGLUS6d9tW+5uQ=;
+        b=FyZKBWQwxz1BTqqwttx4EkxwlKUiCJKlhxyXY7rXRZuEDrYcHQ9VstOrHcC4qyoq97
+         LNc1+rB9g0lTUbzRK3hA4C3wt4xsq2bgyZwSvyYKB1Pw4lXe5Y1KWYLn1+yFYdbwYG5T
+         x89vcuillLwIiTxHqOjWYSVUNd3CuFwQJejqMULt09ua96N9x6xJaqgcj3ctB0A+Jpkq
+         lO+zQUWunotYLFjEJFV/3rOQ8FBiDnnaNOwG22dFJ1YRdweo44PLi6xXyr7KjAW2hzwc
+         ca/7yPTHbeZFPJ+JZphR7IkaKSuiaVsY8mzgINyrpnmbhebha0uILID6znnXhgPjZ7JQ
+         bdtA==
+X-Gm-Message-State: AFqh2kpjUxCFJ+wzwIbvBlsrLAkAITLCDOUq+MKgPj/1rGzGw9OhxFS2
+        8FuU/DFAc+nDb1UE0qxAgU5ucq2UEQJYA1sx32d4iQ==
+X-Google-Smtp-Source: AMrXdXuYkD+ZZc5pD3tPvLUfmyEi/NTU0zo9Lq4D2HDlk7f1MnD0p57cz4H1Pn//2A9HF6YPoEBmOrcORSltK9HAqs4=
+X-Received: by 2002:a05:690c:442:b0:3e9:59f3:200c with SMTP id
+ bj2-20020a05690c044200b003e959f3200cmr1105726ywb.171.1673358560103; Tue, 10
+ Jan 2023 05:49:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20230109135828.879136-1-mark.rutland@arm.com> <20230109135828.879136-3-mark.rutland@arm.com>
-In-Reply-To: <20230109135828.879136-3-mark.rutland@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Jan 2023 14:45:55 +0100
-Message-ID: <CAJZ5v0hMLRPqMOBjbJ9AFbBQ00TJ7VyntnXwBJqtuSw6FsHaxg@mail.gmail.com>
-Subject: Re: [PATCH 2/8] ACPI: Don't build ACPICA with '-Os'
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, Len Brown <lenb@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Robert Moore <robert.moore@intel.com>, catalin.marinas@arm.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mhiramat@kernel.org, ndesaulniers@google.com, ojeda@kernel.org,
-        peterz@infradead.org, revest@chromium.org, rostedt@goodmis.org,
-        will@kernel.org
+References: <20230109155801.51642-1-sebastian.reichel@collabora.com> <20230109155801.51642-2-sebastian.reichel@collabora.com>
+In-Reply-To: <20230109155801.51642-2-sebastian.reichel@collabora.com>
+From:   Jagan Teki <jagan@edgeble.ai>
+Date:   Tue, 10 Jan 2023 19:19:09 +0530
+Message-ID: <CA+VMnFzJwrvdY4CguWyhKZwjBqdq6bfkZdjJjsh8SLu6BcN5XQ@mail.gmail.com>
+Subject: Re: [PATCHv8 1/7] dt-bindings: soc: rockchip: add initial rk3588
+ syscon compatibles
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 2:58 PM Mark Rutland <mark.rutland@arm.com> wrote:
+On Mon, 9 Jan 2023 at 21:28, Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
 >
-> The ACPICA code has been built with '-Os' since the beginning of git
-> history, though there's no explanatory comment as to why.
+> Add IOC and PHP GRF syscon compatibles for RK3588.
 >
-> This is unfortunate as building with '-Os' overrides -falign-functions,
-> which prevents CONFIG_FUNCITON_ALIGNMENT and
-> CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B from having their expected effect
-> on the ACPICA code. This is doubly unfortunate as in subsequent patches
-> arm64 will depend upon CONFIG_FUNCTION_ALIGNMENT for its ftrace
-> implementation.
->
-> Drop the '-Os' flag when building the ACPICA code. With this removed,
-> the code builds cleanly and works correctly in testing so far.
-
-Fair enough.
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-and please feel free to route this through the arch tree along with
-the rest of the series.
-
-Thanks!
-
-> I've tested this by selecting CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B=y,
-> building and booting a kernel using ACPI, and looking for misaligned
-> text symbols:
->
-> * arm64:
->
->   Before:
->     #  grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
->     908
->     #  grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | grep acpi | wc -l
->     576
->
->   After:
->     # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
->     322
->     # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | grep acpi | wc -l
->     0
->
-> * x86_64:
->
->   Before:
->     # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
->     2057
->     # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | grep acpi | wc -l
->     706
->
->   After:
->     # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
->     1351
->     # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | grep acpi | wc -l
->     0
->
-> With the patch applied, the remaining unaligned text labels are a
-> combination of static call trampolines and labels in assembly, which
-> will be dealt with in subsequent patches.
->
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Florent Revest <revest@chromium.org>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Robert Moore <robert.moore@intel.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: linux-acpi@vger.kernel.org
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
->  drivers/acpi/acpica/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/acpica/Makefile b/drivers/acpi/acpica/Makefile
-> index 9e0d95d76fff7..30f3fc13c29d1 100644
-> --- a/drivers/acpi/acpica/Makefile
-> +++ b/drivers/acpi/acpica/Makefile
-> @@ -3,7 +3,7 @@
->  # Makefile for ACPICA Core interpreter
->  #
->
-> -ccflags-y                      := -Os -D_LINUX -DBUILDING_ACPICA
-> +ccflags-y                      := -D_LINUX -DBUILDING_ACPICA
->  ccflags-$(CONFIG_ACPI_DEBUG)   += -DACPI_DEBUG_OUTPUT
->
->  # use acpi.o to put all files here into acpi.o modparam namespace
-> --
-> 2.30.2
->
+
+Reviewed-by: Jagan Teki <jagan@edgeble.ai>
