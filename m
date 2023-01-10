@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D221A664551
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05175664552
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238610AbjAJPvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
+        id S238739AbjAJPvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238508AbjAJPvI (ORCPT
+        with ESMTP id S234385AbjAJPvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 Jan 2023 10:51:08 -0500
 Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFCC266A;
-        Tue, 10 Jan 2023 07:51:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343912DDE;
+        Tue, 10 Jan 2023 07:51:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1673365856;
-        bh=H7P7j0DldiMjNlQt7A+LpXPyB5yVc97aFwFru494oJQ=;
+        s=s201512; t=1673365859;
+        bh=4/YKl/eTVRRiZDnoxzaO7yaGY3LnIpNVPZCSRuNQDJo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=UWtLUEj2nBijSLREco5KwmzjKbydBNDd/xq8f6GK5T0q0k00ekHUGHp2K6WFNdDuL
-         qjU/On1bPgqS/HJr5f6SIFor2gre+nkp8FqIsOn1bAgXS2wljRPsnhL6BI2IZo8HqY
-         RrVbyrY1YkxiLovjJsOTtPIk4VVULh/SO1Z5a0E0=
+        b=aXf8aPgh+EYU3DS/UStPulTu3+gtZAZfQkcd8W+6/vwzpEjfM9vQksAbDlgy6KRYm
+         mwLoECjsDXWnjidl62LnkBwhw909wabvQNgGUd9Lx6pAelif283YtkgYrCOtBO/OkD
+         Z7SnEguJKpuJ1b8kpA3k5Rz6FM0IKg4Gh1mI1HtM=
 Received: from localhost.localdomain ([2409:8a4c:808f:5b0:d92f:83a8:9ac7:4de5])
         by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
         id C9A3CA11; Tue, 10 Jan 2023 23:50:26 +0800
-X-QQ-mid: xmsmtpt1673365854tna3jf7ur
-Message-ID: <tencent_89603CF732FEF0B9A2E88CF0E45A62F42D07@qq.com>
-X-QQ-XMAILINFO: NGsJ5Fy+2UsSw0v8rXZxyCjscayR4Kbp+t6W7A5V1sMNZU33oPOSbLUlSJorSe
-         wrEHBFDThEDK+2YOvIcLOVklIk4jEIUxVo1lJqmHxTqXhwVrF5pIkP7BDRul1Jj9LR6rMUPsumGR
-         TcuZXFsdFUxOb8hGJDHkSzwSbnt1SlrIgDjunrjlDANgKCVXJa0Eo0RlymTHyKMdZuhijmx9VPsM
-         eaJ9nL9MpVC5iHDA6+SJTuL1Qlc67xWWWfqP+TSH8mBplSs/MoseADh92ZEXjJdGykj5qGpThgUL
-         /1mxBrM1pICiqgf+93mcZXFvq9KsTMFJ67M8wzPFYWzUAIVvc6Yd6YPysPuVbhK5oX/DXPjx1X39
-         pyefxkzuC7gB/PsdXbpOhh7CMjmcsTNtM1kznm5b8juRfovMuWKiUe6mK3eW0k+JZfkPEQbTG3eE
-         t97KUDPc9N2WxtXh2atiT7Vw9S/1Z+tOtKA0VPKQKTt60hd0SoiqVOHxlzi/y/sPR3JvLugmQzCW
-         l1pD+hM0Fr/VW0CLhox4dXk5vi82ZyfAHiRl3QhPQsJP31qIsS3Sc4MogvF8/gqdZ7nugaZ6xYG1
-         ewuWb8MWQfjfaQiDMZxJOjpjbyYiflbDd1CH+GhE2bZL+0LIULFJ5/8MLViS3DKjgF3D7vZjRaZY
-         D6wU/f6vwoliFIh+yR/kVZq94CE/YqaR1jGoD1z/lUAanECgbdSb+O+CA9MZzhOxQb+4yCTGuA+W
-         OJoqwTXyTJhxf16dGdmGKvnoZx3PRkea1UDgYZ71hydRWK+LwRccOI/9SmCFeAVw7ZIOZoOJdE5T
-         e2x59Itbsf7yt2QR8CdisQG6xc5et4KB613tb+q9SiHGie5RBR4vxtBg32GLqROR6r8oFXlBE+Xp
-         1BG7FX4FW+ct91GSPp5NDmeH84AS0rH8VSzpv1QAjvtBA0KofM4Lo4uT45s1QxC1ifCBIuKiKLog
-         NYAbVEmBjrJC8JCoWIm9QX9lrONHd4N6Ke90T+HJEIHFWk2p1EwFxZM5AOQqMMzuMz1lR8NlpPpg
-         tvH0zxG7vEgkf084agE+AAJk5AsBnQ0a/v8glY0A==
+X-QQ-mid: xmsmtpt1673365856t3phw9xgi
+Message-ID: <tencent_5AB8DBF2B3CDE947BB84B3D6D2A0D7023F0A@qq.com>
+X-QQ-XMAILINFO: NqxKgsaVX1mSYOx0oEDccgwlKomuxRCqNmupjfqnE2AnDfKKFC/qedb4HBPOTn
+         MB3FR4Cj6PmudGK6ZZhVkL6zSXvs/k5enXu++nGfl/bw2keBx+uhGpRYDDL2yPktrFbjWZJwLWsz
+         /ER0C8zuY019kFKnifHBHgdieH6+AFenoQ9884FHBdeiD2JxxZbaT/4l5qYYgdIUJAvQloE+J0ni
+         TLQW/oStqIr90ws6iPwy52Q61SsmmThO4Q7nPzmy0YZs92LsCnIW4eoeAfsxFF33uaVaSveMaPaJ
+         hzOBuYiARK62pti1TiG2gKb9jYtlZlvV9mIu2C+H+amDIu0/O9MoJ3oUMqZCPw2+VBGYruusETgl
+         /1sjXtoW5PqeY6V5ScKX2hwgJEuVDbtfOc5+X6bucvPbUJ18mFv3Upg1fbP6Te/+E1jgADlNia8+
+         Po8Se20IzCr6pdTiNrphUWL3D0mut3r83hlAGTWe66uQSseB5fi9hBgNAXynRg82A6l5sFvPWSye
+         mZ6/XfHQNnfwrS2utoDR7HrkK+yCqRw9f/EAvR59z1OVE3SpKUki9CdWFxm95JPtK7eVf3CH0/q3
+         Z3LBncnyYNiYwKuzlcp+nsqsFj0GLeP+nRtSyghaLoJniYouTZEJMcAXRsO6gZCr5KzgxV/61bn9
+         4JwzkHuFtMWiYeCV/9T+VksgbeixQ8ot+9FCDVpRWjTwVeg/n5TLeb0cBDi065Vu+DjeT38Na6xP
+         6k5QXH1BBQNeVmgfaSQS7xZL2TNdfGK7VZM8sSO9r6jHK1JYQwkOkCoBNpVXlVlZIbTnjs6V0HBj
+         C2MErhGCBbmONIO3gkfZ/FsvFYf66etQtG9hOC9U8W2rNSOGsmpH89UM0/H/nIZh3iEWAIxDK+Cn
+         NjbZpFX8oj/HMvYzFf5wTIcPTIKc4Z6ewZcLQcU6oSYayRKdze8BHgd9yeHzkMK3JBFb5O87xWks
+         M4QEuiO75qmu8aur9QieTV9MHyPzR3VKh2Q0vSnjP4EibbUdPbnXhQomHHPMmvnYv3u/1b4g/Cq+
+         wu6N/OjPml5cdfPinHSgwxw7FmKQU=
 From:   Yang Xiwen <forbidden405@foxmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -54,9 +54,9 @@ Cc:     Jaime Breva <jbreva@nayarsystems.com>,
         Nikita Travkin <nikita@trvn.ru>,
         ~postmarketos/upstreaming@lists.sr.ht,
         Yang Xiwen <forbidden405@foxmail.com>
-Subject: [PATCH 1/3] dt-bindings: vendor-prefixes: add zhihe
-Date:   Tue, 10 Jan 2023 23:50:12 +0800
-X-OQ-MSGID: <20230110155014.31664-2-forbidden405@foxmail.com>
+Subject: [PATCH 2/3] dt-bindings: qcom: Ducument bindings for new msm8916-zhihe-uf896 and msm8916-zhihe-ufi001c
+Date:   Tue, 10 Jan 2023 23:50:13 +0800
+X-OQ-MSGID: <20230110155014.31664-3-forbidden405@foxmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230110155014.31664-1-forbidden405@foxmail.com>
 References: <20230110155014.31664-1-forbidden405@foxmail.com>
@@ -74,28 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-zhihe is a placeholder for various 4G USB dongles made by unknown
-manufactures with similar design. It is widely used in China to refer to
-these dongles.
+Document the new zhihe,uf896/ufi001c device tree bindings used in
+their device trees.
 
 Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 3893c45963a26..795627741a322 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1520,6 +1520,8 @@ patternProperties:
-     description: Zealz
-   "^zeitec,.*":
-     description: ZEITEC Semiconductor Co., LTD.
-+  "^zhihe,.*":
-+    description: Placeholder for various 4G USB dongles made by unknown manufactures with similar design
-   "^zidoo,.*":
-     description: Shenzhen Zidoo Technology Co., Ltd.
-   "^zii,.*":
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 65ef7e442da0d..efe5f6c384b69 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -210,6 +210,8 @@ properties:
+               - samsung,j5
+               - samsung,serranove
+               - wingtech,wt88047
++              - zhihe,uf896
++              - zhihe,ufi001c
+           - const: qcom,msm8916
+ 
+       - items:
 -- 
 2.39.0
 
