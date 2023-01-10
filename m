@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52526663A8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 681FC663A90
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237762AbjAJIIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S237825AbjAJIIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:08:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjAJIHl (ORCPT
+        with ESMTP id S237937AbjAJIIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:07:41 -0500
+        Tue, 10 Jan 2023 03:08:02 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7803130566
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:07:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E52D2DE2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:08:01 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A68AB4D6EE;
-        Tue, 10 Jan 2023 08:07:36 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A12B03E6DB;
+        Tue, 10 Jan 2023 08:07:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673338056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1673338079; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xohioAh1kapJutPJWQnyJIvtrut+K4fCdUNvyrvvEps=;
-        b=F/1x9PdCXjPQpN04iGPzwZgJ9ewZMUL6Am2p+uO7S6oRkx1yxxHLC2OkN2nirzqHxJ/eiO
-        lkmdc9OI/RFJP8wF1UH6d3f1vS4dNjAaB2KDnNinVFybpOkVE9FUHcIiTtwx/x5UwgvwJP
-        3X8qReklSQNoZijRLpF81364vnxmPVA=
+        bh=w0R2jA+ecFgshta3vkDpZTjBNhdF5coLo4TxsrYpzyw=;
+        b=GYs+Bd0xk7tL3+jMhddK1YqdH0y8+YWKn/QW0Usjy068JSSa3m2T1TIYuNDR/J5RDDBt34
+        qPBzDL4Hj17EH6WuSyKzKJbmp/bl0a1C+YJfn7kapTvp3vGqQdbnJik8osI+6bIiYmYwP7
+        2RxpB0T9FicBnqLefEhE0gSrceVH9Os=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 374CE1358A;
-        Tue, 10 Jan 2023 08:07:36 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 58EC01358A;
+        Tue, 10 Jan 2023 08:07:59 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id LNETDMgcvWNKBgAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 10 Jan 2023 08:07:36 +0000
-Message-ID: <8a2abe27-361a-aab1-60fe-00a3cc8684ff@suse.com>
-Date:   Tue, 10 Jan 2023 09:07:35 +0100
+        id RSjlE98cvWN8BgAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 10 Jan 2023 08:07:59 +0000
+Message-ID: <b220cdf1-7d8c-e8f6-eb22-7a93b0b330ea@suse.com>
+Date:   Tue, 10 Jan 2023 09:07:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2] xen: make remove callback of xen driver void returned
+Subject: Re: [PATCH v1] xen/pvcalls: free active map buffer on
+ pvcalls_front_free_map
 Content-Language: en-US
-To:     Dawei Li <set_pte_at@outlook.com>, sstabellini@kernel.org,
-        oleksandr_tyshchenko@epam.com
-Cc:     roger.pau@citrix.com, peterhuewe@gmx.de,
-        oleksandr_andrushchenko@epam.com, airlied@gmail.com,
-        dmitry.torokhov@gmail.com, wei.liu@kernel.org, bhelgaas@google.com,
-        jejb@linux.ibm.com, gregkh@linuxfoundation.org, ericvh@gmail.com,
-        tiwai@suse.com, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org
-References: <TYCP286MB23238119AB4DF190997075C9CAE39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>
+Cc:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <6a762ee32dd655cbb09a4aa0e2307e8919761311.1671531297.git.oleksii_moisieiev@epam.com>
 From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <TYCP286MB23238119AB4DF190997075C9CAE39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <6a762ee32dd655cbb09a4aa0e2307e8919761311.1671531297.git.oleksii_moisieiev@epam.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------0lgsG4DjM2bogqj9tDjcsDeD"
+ boundary="------------8gQ0uGiBiOXOeEGU0HSLL09N"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,39 +68,39 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0lgsG4DjM2bogqj9tDjcsDeD
-Content-Type: multipart/mixed; boundary="------------r84Y64pzyXf8LsYbXQjpT04r";
+--------------8gQ0uGiBiOXOeEGU0HSLL09N
+Content-Type: multipart/mixed; boundary="------------u9z5dqxRb0ujLeyXzcx9HgSU";
  protected-headers="v1"
 From: Juergen Gross <jgross@suse.com>
-To: Dawei Li <set_pte_at@outlook.com>, sstabellini@kernel.org,
- oleksandr_tyshchenko@epam.com
-Cc: roger.pau@citrix.com, peterhuewe@gmx.de,
- oleksandr_andrushchenko@epam.com, airlied@gmail.com,
- dmitry.torokhov@gmail.com, wei.liu@kernel.org, bhelgaas@google.com,
- jejb@linux.ibm.com, gregkh@linuxfoundation.org, ericvh@gmail.com,
- tiwai@suse.com, xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Message-ID: <8a2abe27-361a-aab1-60fe-00a3cc8684ff@suse.com>
-Subject: Re: [PATCH v2] xen: make remove callback of xen driver void returned
-References: <TYCP286MB23238119AB4DF190997075C9CAE39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <TYCP286MB23238119AB4DF190997075C9CAE39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+To: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
+ "sstabellini@kernel.org" <sstabellini@kernel.org>
+Cc: Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>,
+ "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-ID: <b220cdf1-7d8c-e8f6-eb22-7a93b0b330ea@suse.com>
+Subject: Re: [PATCH v1] xen/pvcalls: free active map buffer on
+ pvcalls_front_free_map
+References: <6a762ee32dd655cbb09a4aa0e2307e8919761311.1671531297.git.oleksii_moisieiev@epam.com>
+In-Reply-To: <6a762ee32dd655cbb09a4aa0e2307e8919761311.1671531297.git.oleksii_moisieiev@epam.com>
 
---------------r84Y64pzyXf8LsYbXQjpT04r
-Content-Type: multipart/mixed; boundary="------------BJxvnO001IhyRZyK5BKNLhzp"
+--------------u9z5dqxRb0ujLeyXzcx9HgSU
+Content-Type: multipart/mixed; boundary="------------KYcv5NY9RdtDLbyPZBpgAZJU"
 
---------------BJxvnO001IhyRZyK5BKNLhzp
+--------------KYcv5NY9RdtDLbyPZBpgAZJU
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
-T24gMTMuMTIuMjIgMTY6NDYsIERhd2VpIExpIHdyb3RlOg0KPiBTaW5jZSBjb21taXQgZmM3
-YTYyMDlkNTcxICgiYnVzOiBNYWtlIHJlbW92ZSBjYWxsYmFjayByZXR1cm4gdm9pZCIpDQo+
-IGZvcmNlcyBidXNfdHlwZTo6cmVtb3ZlIGJlIHZvaWQtcmV0dXJuZWQsIGl0IGRvZXNuJ3Qg
-bWFrZSBtdWNoIHNlbnNlIGZvcg0KPiBhbnkgYnVzIGJhc2VkIGRyaXZlciBpbXBsZW1lbnRp
-bmcgcmVtb3ZlIGNhbGxiYWxrIHRvIHJldHVybiBub24tdm9pZCB0bw0KPiBpdHMgY2FsbGVy
-Lg0KPiANCj4gVGhpcyBjaGFuZ2UgaXMgZm9yIHhlbiBidXMgYmFzZWQgZHJpdmVycy4NCj4g
-DQo+IEFja2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+IFNpZ25l
-ZC1vZmYtYnk6IERhd2VpIExpIDxzZXRfcHRlX2F0QG91dGxvb2suY29tPg0KDQpQdXNoZWQg
-dG8geGVuL3RpcC5naXQgZm9yLWxpbnVzLTYuMg0KDQoNCkp1ZXJnZW4NCg0K
---------------BJxvnO001IhyRZyK5BKNLhzp
+T24gMjAuMTIuMjIgMTU6NTAsIE9sZWtzaWkgTW9pc2llaWV2IHdyb3RlOg0KPiBEYXRhIGJ1
+ZmZlciBmb3IgYWN0aXZlIG1hcCBpcyBhbGxvY2F0ZWQgaW4gYWxsb2NfYWN0aXZlX3Jpbmcg
+YW5kIGZyZWVkDQo+IGluIGZyZWVfYWN0aXZlX3JpbmcgZnVuY3Rpb24sIHdoaWNoIGlzIHVz
+ZWQgb25seSBmb3IgdGhlIGVycm9yDQo+IGNsZWFudXAuIHB2Y2FsbHNfZnJvbnRfcmVsZWFz
+ZSBpcyBjYWxsaW5nIHB2Y2FsbHNfZnJvbnRfZnJlZV9tYXAgd2hpY2gNCj4gZW5kcyBmb3Jl
+aWduIGFjY2VzcyBmb3IgdGhpcyBidWZmZXIsIGJ1dCBkb2Vzbid0IGZyZWUgYWxsb2NhdGVk
+IHBhZ2VzLg0KPiBDYWxsIGZyZWVfYWN0aXZlX3JpbmcgdG8gY2xlYW4gYWxsIGFsbG9jYXRl
+ZCByZXNvdXJjZXMuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBPbGVrc2lpIE1vaXNpZWlldiA8
+b2xla3NpaV9tb2lzaWVpZXZAZXBhbS5jb20+DQoNClB1c2hlZCB0byB4ZW4vdGlwLmdpdCBm
+b3ItbGludXMtNi4yDQoNCg0KSnVlcmdlbg0KDQo=
+--------------KYcv5NY9RdtDLbyPZBpgAZJU
 Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Description: OpenPGP public key
@@ -160,24 +158,24 @@ jR/i1DG86lem3iBDXzXsZDn8R38=3D
 =3D2wuH
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------BJxvnO001IhyRZyK5BKNLhzp--
+--------------KYcv5NY9RdtDLbyPZBpgAZJU--
 
---------------r84Y64pzyXf8LsYbXQjpT04r--
+--------------u9z5dqxRb0ujLeyXzcx9HgSU--
 
---------------0lgsG4DjM2bogqj9tDjcsDeD
+--------------8gQ0uGiBiOXOeEGU0HSLL09N
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmO9HMcFAwAAAAAACgkQsN6d1ii/Ey+f
-1wf+K+5GUrDsbaaoBFao/iA/yd9cCF6PTSRa8C28Z0Xu+s5K30n0thAK7JjyRMZJmzbemu4XZVA6
-OxCGIQdrkLTmgoGRTZjdYbFhz7C4ByTAEqkgk72umn3WZEqthOfZY1EE2Imd1beYJzeLfjM6U32h
-DuUK14cuf7PbMVfAxpMgPvk+awBFO7fjD5gdNRpAE/F1eseawanTnJSeD5AVm4MRJCwnQr9/8xWA
-M0lm0kk3xCfAu1tlqV2XXuAXF8pZCdXr6/heuDpg2UwwakevfI3rHCsGO85anJ1vWiWJR+5N3hrz
-8f7fsLu5VuBRJPVziQO8zwQUNBXYTCjlBj7/Ba8lJQ==
-=VY/4
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmO9HN4FAwAAAAAACgkQsN6d1ii/Ey+7
+5AgAhFX4FfJ6FhYGxjTFPefYV/e5GSvSZuMf+G8RGk5j6ehl8KBdnWO+m4l9T+lXGSLrxJZ8phvl
+Heo2Z6UvTHmaoYajeIDfdmdwDfJxiNHWygW2qAFkBypCd8pKeZhk9VPiEYpsCpLDEjOlth+ggViX
+wbzNwmUAslTbrWZniHPaqVdsCFV/JPdKf5/olC37FaRoVy26U4PYkUcnflMSq8jaXFfLNedOlGva
+TvYd/zyEsROKkSuzBpbxRp3lcng41lzlYZcT/ZFiXECdnU4t9iHtBraYZXySbfbuCW/E4UvHWP43
+02ip9dMJCiy8mzOYcO4OABjVJNr4JZad80XtOxqFBA==
+=BVWP
 -----END PGP SIGNATURE-----
 
---------------0lgsG4DjM2bogqj9tDjcsDeD--
+--------------8gQ0uGiBiOXOeEGU0HSLL09N--
