@@ -2,126 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90665664572
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA02766457A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238936AbjAJP6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S231965AbjAJP7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:59:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238942AbjAJP6V (ORCPT
+        with ESMTP id S233836AbjAJP7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:58:21 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573BC4F137
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:58:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OlF+rc/YfqRl0CyPk92+lYLwbE1130/iJg8+0H1GjVbJyJtGB+hArj48OmlsbrKMNBvT80BUO11Y95/GW8eRERZlXUdFQTPYraFVafx9FIkGjs3IyU0g9bov55ARxCfCbD00uRS8ShQOgr7D1O8grHlVSD7cr9xR2rMd8I33PqRWQBGht5KN5h2ISeY4C8vOVI7gJ5byFPyi3cTf/DlBIIJiLzzJKquRKWnJhmKm1rJBtLBsyg3g5NtosLG68E1tlSFoFbYY9a3Ij4MGa8ZYDTb+02gEs86PXxk0/3ThX5qxh6ssQQC0k2SXInLFoAVl9DMe5DHvSMrFNO+rV7Eb8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4HNY/9AP4eizCHPboS/JKyoUTPkogDLpg5zBThSX91I=;
- b=MCPnsDQVX4cuIsO6awSqx+khZFEIAYUmzt2l7s5tTT055HR3T567EhOp2Y0iJY/nVMarKSxAZR+gNwPS4arpS4gcQ+2zLRFxGjhUCzmRZD+G8jd4joWWeTEjc3vT5w4T2xoictMQRC0ZuUrYCAl70nMjjiWhgKVgJ5uM5T/BbexWjT4gAXB4g3sdxqFR17nrJ9Y7pcgcpAttBewwsL6BGn/5A7t0ONeYlUEKQ/NKZt0iJAorOfjcNnxJjKwBrJ1BtEgMVlg5Mxv+3fpdzogkjvsiUJzxfoI0Lab9cl44Y9+ArGD6HMdsFqOCXcmeWzNeWzmVIaKqHywV/f3Y+FtkYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4HNY/9AP4eizCHPboS/JKyoUTPkogDLpg5zBThSX91I=;
- b=GepuLGfktA0BKKKenL7dn4mH7Zw8x12jgB7Mbi+T4YGFyA0cN1491mttgk50IU8beqDN8GwXUVOaV8S4Jw9RRNtExvVzNVth82PzA8X0YwdMtMmEmQ+DJG9Cf0phcRDvzZTvQaz3Z7sAozuTErr2E+BG2LOqI7kTBTHUKm/L4LI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
- by DM4PR12MB6424.namprd12.prod.outlook.com (2603:10b6:8:be::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 15:58:18 +0000
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::756d:ff13:d7bd:d590]) by MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::756d:ff13:d7bd:d590%7]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 15:58:18 +0000
-Message-ID: <789c2c61-4959-c3c1-0916-d1cc7f659247@amd.com>
-Date:   Tue, 10 Jan 2023 10:58:16 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm/amd/display: Fix set scaling doesn's work
-Content-Language: en-US
-To:     harry.wentland@amd.com, nicholas.kazlauskas@amd.com,
-        hongao <hongao@uniontech.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        sunpeng.li@amd.com, linux-kernel@vger.kernel.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        aurabindo.pillai@amd.com, roman.li@amd.com, Jerry.Zuo@amd.com
-References: <20221122112034.30080-1-hongao@uniontech.com>
-From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-In-Reply-To: <20221122112034.30080-1-hongao@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4P288CA0090.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:b01:d0::23) To MN2PR12MB2941.namprd12.prod.outlook.com
- (2603:10b6:208:a9::12)
+        Tue, 10 Jan 2023 10:59:38 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4224FCE1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:59:15 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id v23so8729171plo.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:59:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2R/55S8jT4stsBsiIv+FPNzG31bz0/CdEe06+rGUk1k=;
+        b=61Jwo1uWFCLRsb3ILZ7lkZPW4qjqzqjsluq35w5Ij+AWN0s+nRwdMCrbrPRVqY6nN4
+         kJw2BfytRBn2Xj5nvil9XL8+SySFkSZVuinHm5JYtCQJScp6fmHnmG6IHt9qVVYSyJIl
+         oyHjT+6SxrvHACnLSAWNBfs/s7CcN3GwNIOnYbS1EQmf35tp84dIIAXZs7qNWpDSb4Jb
+         mAGGBh5GBCKZCjT8iF+nmoo1/PwiD+qN5ypq8MpGcw1BXdgExhO4T3cENLzzkT5bV1eW
+         tw1eyptt7PA5nbcLQnjfM4ALqtFktFZBHc3iI46z67WOClTyJPZx73W7zUo8eWFHq9vu
+         8IzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2R/55S8jT4stsBsiIv+FPNzG31bz0/CdEe06+rGUk1k=;
+        b=TLj9x+EmoioimZbbL8PzODMvSEM2gWHi4njMyEZAmVn5JdDXOUXDqg4USE1VCWIzLl
+         xFAMnbPalJG6Ag/Y+09m7VhvIpPTF7fqZbfdLG4my7VB+1KXS9otDcameDuFovAfjopM
+         Oz5pclo2PD7PpbNSWWqb75ugusyw5J/y7nPy9iC/ax+YPVZ2U6b6pd9APL2N3EB0/Ndu
+         gPPQsxyH++pfXq3d307KXfy644HjB5+YntRyhyiHPTD/OJzJjePv+1jAgzONWwVWYgWP
+         Trca7sXRrhUfTNqCcVQ5QgdKgJZogwCZAuSW+8FpmWqFS0T0X9Pg/Q1MSceam/zaG/m4
+         KghQ==
+X-Gm-Message-State: AFqh2kopMwxZWOy+0Jn6P3E7yYImYUMpwFQ0AeeowSvGmxHDU01m7uxf
+        Khkk/H9pP16i7gITLDGHQdo/Tw==
+X-Google-Smtp-Source: AMrXdXurVMOG3vgv5T3G0tCOwgHzJpPmQi1SFa+S16AnjjZBHiJDViS424FIrRfLpoVzzEJ+hx8mvQ==
+X-Received: by 2002:a05:6a21:3d04:b0:b6:8c6:5e6a with SMTP id bi4-20020a056a213d0400b000b608c65e6amr4256944pzc.0.1673366354682;
+        Tue, 10 Jan 2023 07:59:14 -0800 (PST)
+Received: from [10.254.85.126] ([139.177.225.248])
+        by smtp.gmail.com with ESMTPSA id h18-20020a656392000000b0046b1dabf9a8sm6948417pgv.70.2023.01.10.07.59.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 07:59:14 -0800 (PST)
+Message-ID: <b4cf040e-a9d9-8b7a-10cf-80b01d02848f@bytedance.com>
+Date:   Tue, 10 Jan 2023 23:59:09 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|DM4PR12MB6424:EE_
-X-MS-Office365-Filtering-Correlation-Id: f9c68ea9-a115-4b98-983f-08daf3237d60
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cu+lSHC4vrh/BZahTAyllne+eg1ja4o0a0fsat9kjzqotZZ00HxtjBAcYxilyXtiHGBMtrH8Y4+BOMa1NxwVJaTC4R3Y38sVYkUU4OGoSQvpIyz+N/41IyscKZ8UXZjw9moZ2YfbYUC4XcgiOiAfTUvXfF6bmzTOK5/CRXLMIewK4INGKbxOutDGzR/kGi9MfmkU17M5/gFZEClqFqU7uf5tGCisBR8yE2eW4dhsowRxL17WfcI+SYuMoNLgbrwk+oipzO8S/3TSGumbRkLfNwvNZfQscmApAnWFaoQHgeXrz+sS3DSgYis9kFnRRva9yT3JnFebftNhu2rIWcZcsn6iqlvUAPqDQfRF/7phM04wVDoXiL7/xsBAWSXvYoQUCahqwFjc9xWb9QCoI6xCDEubIOJxAnMckyhJiOWEpuW659KCryKap+oGHidTTC2MnBq6pBqsWBv5LJONuKcAk8S7FPiJ47NPfTzoUaOAS2zO3J2QgB7/8dbaXLZ4ycd0BQugCCxH3YezV02jtMC2twKOMZ+5ic5TdHnxqcogejJv/UVTJrCwXOvL3rXy8o4LhgH/gR4alhEAejdQ3MxCuKf9x+9QLhbyQmF9jDnu8wErDQV3qq+CBANT1T6g89t/7IefSvCZsMaTs/xHNNRKk9jN4xDFbUFe4toblRmudDZ4UDm31txVKG1X2z/+OOUv4gXEx3m4AJ0Q/6Y8tWxMhh93zJ0ycUNDHz+6yyRGiXo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(396003)(346002)(136003)(39860400002)(451199015)(86362001)(83380400001)(31696002)(41300700001)(2906002)(8936002)(5660300002)(53546011)(26005)(2616005)(66556008)(8676002)(316002)(6512007)(186003)(478600001)(4326008)(66946007)(66476007)(6916009)(6506007)(6486002)(38100700002)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ny9EWStIMGY1eTdLWCtwMzBhenBrQzZkTVUxZmxBeEVNbGlkNTczOXhpcm16?=
- =?utf-8?B?YytNc1VVTldWUzJHdldjdFVNYnZqcVF6RS81L1YzWVh5TENMaFg5RC9hV1Zv?=
- =?utf-8?B?THB5SnEybXZaSUJUQ2F6dzI3cWMrYVcwUk5tSDRzV3Izamhya1E3UTNYa2RO?=
- =?utf-8?B?cG5YS21TZVQzT2tzMEJlTUdJenlNbURiVnB3cFdzMUhza3M5alBEbzBWNkVy?=
- =?utf-8?B?L0kxSXVmK0NFUklnL0s0VFZHVHRLWnVIa2ZTTHgwRkVxdjRhL3BoQ2tkOSsv?=
- =?utf-8?B?a2NVTUxXVHVxWnhjN25aWEFZRDNBdGpHdnJOeVdTcG9rcEFzQjdrQmF2N0hF?=
- =?utf-8?B?L2VhdXFNUmwxd1hJV1JjN2Y5S0FuT243aW1SdkFONE4xOEN1NHZoc2p6dC93?=
- =?utf-8?B?VHJCYXRiNkNkL01tK3JvTmtvQjBENmg0aTRGVnlNV0ptMVJ4M0hDcXdFU2xH?=
- =?utf-8?B?UE93SVlSNk14TWI2QzV5dVBvc1YrWUYrSnJqZTVMQVBZbmoyM3BQL0QvTXNl?=
- =?utf-8?B?aE0xd0lwUGwybGEzN0tIZS94UDRmOWduRzFxd3lWT1dzNjN5dlJxbGUvWjZz?=
- =?utf-8?B?S2JJR1RRZVVhT3VUMjByeEVQbld4TVJRODZkMlFzQ213c3lKYUZSdFhONUdS?=
- =?utf-8?B?TTdJcHI4TkVMeUM3NmphYWRqSG0vbVlRdGJ4bUVtNnFxWHRHMGppTzkzY21N?=
- =?utf-8?B?bTE4aXZndVNnVW1RN1phbERxeG9pT1ROc2doQ2ZUbk1wYklrakE3SXBoNms2?=
- =?utf-8?B?SS9yZExsUlNVT0FYZlNQUFFhZ3o1cml5NjhIZnljYjJ2RUsrc2FCeVU2NlY4?=
- =?utf-8?B?VXE1ZVU2ZkFZZGZlODVWQUhGZGJ5RytyRFlkdmY5KzZMUjlPSGdmRVdCaUM0?=
- =?utf-8?B?U2ptMGh2ZlUway8zNisydjlkVjFHRG1sT2xUYjRNdXN6eUZITkpjVkhkMUc4?=
- =?utf-8?B?Q2J0ekNqSzRoRUhPUlFoWkViUm01dGJ2RjV2MG5BdlRIMjJJWWRZVlp6Z3FF?=
- =?utf-8?B?ZlFFeXoxaHF1REcvUnRhditMSWNGczdON2Y4VDVWcXF5dWdRZEc4NVNleW00?=
- =?utf-8?B?STlNN0sxOUR6VEVmbDZWR3ozMzZNSmx3cnh2ZWFuR21IZzFPOFd0a1ZSd2pJ?=
- =?utf-8?B?Tlh5Y2IwdFg5WXN2THNBVU5NMGtrdFo5bGE0UmI2YzVjSVZIcTR2Y2dVK3Mz?=
- =?utf-8?B?NjVvaUN4bWx2dW0rYU1KMGdyZmN2bWNJdUdHTXMydWoybnpvdWJZNWYxeHY4?=
- =?utf-8?B?UHlRejBPQzMvK2lBWjlvYWNuU2Ewa3k4VVNhbXVSNUY2bkgxeGxvbzRiMGNJ?=
- =?utf-8?B?WUpoVDZTKzR2UVpMWlN4ek1uMERNUHd5Z2wxTXd4WHk0a2xBOVJhbU5wVWwv?=
- =?utf-8?B?b0lmQk42R2tjbEVjcWlZWEJ0RXFMdXl6Y2N6Q0YyZFZTVGVxT01YNGdHc3lq?=
- =?utf-8?B?dGprOXo1MUQ1OHdud2hLZjdjOEw3VTF0WGh0Y3BWMnpobk02cVpzcmJkRm9P?=
- =?utf-8?B?UTU3Mk1RdWpLTmZ1VGdVeG1ma1FqU1JUY3RoNDhrMXE4ejlmb1ZNbUgxQVlL?=
- =?utf-8?B?OTVFTWtrbmtueS9WUG4vb2V3a2xmZGlTZHl5L0dtbVlPeWJybGxrNUpWK0wz?=
- =?utf-8?B?OGZNTUUzQUlwMVAybE1HK3REcy9ROS95R1NBMkZGcnUvZm1wbFJFN09DYXBS?=
- =?utf-8?B?a0RBRm1QdEJVR21FbmZreTh6aWg0OWFOUGoyc1BMZFFXcWdBNHU5a0M2c2Jr?=
- =?utf-8?B?bVlQMEg2WUZIUkgrc1IrY0lCdDV1MGN5Z3doU1N6cDJ2eTZXdEJpKzZUTWlp?=
- =?utf-8?B?Nk8rbERZYkNTWWVpSXBjUVVwVk8rWCtBK1pqMkl3eW9sMXl2UDFCOEowRXRL?=
- =?utf-8?B?dHJXa1c2bXl0TUd5bk5STFdSY2wwaytHcExjZytyOEp4SS9FQ2VkY09YRiti?=
- =?utf-8?B?Q3NVK2tEMG4rM3M5U3RGMThDV05IcCtTMjFSaTlCQmk2QWJrcVlhVDViemM5?=
- =?utf-8?B?WmxhdDhTc2hhRW1sZmF6dFcrcnZ2ZXhJekd0Zk9EWFNKR09TZjllMG1CcEZN?=
- =?utf-8?B?OGFJS29uOElEU0NwMjVuS2VldXYwbzk4dHMyTjFjeFlJK2VBNW5DSmlWSHpv?=
- =?utf-8?Q?uj4jlzg/vltp6BI9HAt+WcUj8?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9c68ea9-a115-4b98-983f-08daf3237d60
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 15:58:18.1264
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: snZomJUI9Lla7CTcHrgNYPnZaLN2rUrEPtNgEwye5k03gn6iihpVIG7VCM3y1JvSS2N0LWNZaj37U4eK2dO7Og==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6424
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [External] Re: [PATCH v4] blk-throtl: Introduce sync and async
+ queues for blk-throtl
+To:     Tejun Heo <tj@kernel.org>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+References: <20230107130738.75640-1-hanjinke.666@bytedance.com>
+ <Y7x7yq5YmcXhVkQf@slm.duckdns.org>
+From:   hanjinke <hanjinke.666@bytedance.com>
+In-Reply-To: <Y7x7yq5YmcXhVkQf@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -130,39 +78,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 11/22/22 06:20, hongao wrote:
-> [Why]
-> Setting scaling does not correctly update CRTC state. As a result
-> dc stream state's src (composition area) && dest (addressable area)
-> was not calculated as expected. This causes set scaling doesn's work.
+在 2023/1/10 上午4:40, Tejun Heo 写道:
+> On Sat, Jan 07, 2023 at 09:07:38PM +0800, Jinke Han wrote:
+>> + * Assumed that there were only bios queued in ASYNC queue and the SYNC
+>> + * queue was empty. The ASYNC bio was selected to dispatch and the
+>> + * disp_sync_cnt was set to 0 after each dispatching. If a ASYNC bio
+>> + * can't be dispatched because of overlimit in current slice, the process
+>> + * of dispatch should give up and the spin lock of the request queue
+>> + * may be released. A new SYNC bio may be queued in the SYNC queue then.
+>> + * When it's time to dispatch this tg, the SYNC bio was selected and pop
+>> + * to dispatch as the disp_sync_cnt is 0 and the SYNC queue is no-empty.
+>> + * If the dispatched bio is smaller than the waiting bio, the bandwidth
+>> + * may be hard to satisfied as the slice may be trimed after each dispatch.
 > 
-> [How]
-> Correctly update CRTC state when setting scaling property.
+> I still can't make a good sense of this scenario. Can you give concrete
+> example scenarios with IOs and why it would matter?
 > 
-> Signed-off-by: hongao <hongao@uniontech.com>
+> Thanks.
 > 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index 3e1ecca72430..a88a6f758748 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -9386,8 +9386,8 @@ static int amdgpu_dm_atomic_check(struct drm_device *dev,
->   			goto fail;
->   		}
->   
-> -		if (dm_old_con_state->abm_level !=
-> -		    dm_new_con_state->abm_level)
-> +		if (dm_old_con_state->abm_level != dm_new_con_state->abm_level ||
-> +		    dm_old_con_state->scaling != dm_new_con_state->scaling)
->   			new_crtc_state->connectors_changed = true;
->   	}
->   
 
-Hi,
+Assumed that there are many buffer write bios queued in ASYNC queue and 
+the SYNC queue is empty. The buffer write bios are all 1M in size and 
+the bps limit is 1M/s. The throtl_slice is 100ms.
 
-This change lgtm, and I also run it in our CI, and from IGT perspective, 
-we are good.
+Assumed that the start/end_slice is [jiffies1, jiffies1+100] and 
+bytes_disp[w] = 0. The next ASYNC bio can't dispatch because of 
+overlimit within this slice. The wait time is 900ms and the slice will 
+be extended to [jiffies1, jiffies1 + 1000] in tg_may_dispatch.
 
-Harry, do you have any comment about this change?
+During the waiting of the ASYNC bio, a SYNC 4k bio be queued in SYNC 
+queue. After 900ms, it's time to dispatch the ASYNC io, but the SYNC 4k 
+bio be selected to be dispatched. Now the slice is [jiffies1, 
+jiffies1+1000] and the byte_disp[w] = 4k. The slice may be extended to
+[jiffies1, jiffies1+1100]. In tg_dispatch_one_bio, the slice will be 
+trimed to [jiffies1+1000, jiffies1+1100], the byte_disp[w] will set 0.
+
+After the 4k SYNC bio be dispatched, the WAITING ASYNC bio still cann't
+be dispatched because of overlimit within this slice.
+
+The same thing may happen DISPACH_SYNC_FACTOR times if alway there is a 
+SYNC bio be queued in the SYNC queue when the ASYNC bio is waiting.
+
+This means that in nearly 5s, we have dispathed 4 4k SYNC bios and a 1m 
+ASYNC bio.
+
+In our test, with 100M/s bps limit setted, the bps only reach to ~80m/s
+when a fio generate buffer write ios and fsync continuous generated by 
+dbench in same cgroup.
 
 Thanks
-Siqueira
+Jinke.
+
+
+
+
+
+
