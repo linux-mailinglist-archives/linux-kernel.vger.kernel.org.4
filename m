@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F066636CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 02:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1E46636CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 02:40:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbjAJBj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 20:39:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        id S235197AbjAJBkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 20:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234778AbjAJBjz (ORCPT
+        with ESMTP id S235239AbjAJBkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 20:39:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED802027;
-        Mon,  9 Jan 2023 17:39:54 -0800 (PST)
+        Mon, 9 Jan 2023 20:40:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6483AA84;
+        Mon,  9 Jan 2023 17:40:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 106A0B810B3;
-        Tue, 10 Jan 2023 01:39:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A57BC433D2;
-        Tue, 10 Jan 2023 01:39:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9BF6B810B3;
+        Tue, 10 Jan 2023 01:40:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08390C433F0;
+        Tue, 10 Jan 2023 01:40:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673314791;
-        bh=l4l5PaltAVow68iJO8Oi3TAG2+KxK22xrLBw7Tx9pFQ=;
+        s=k20201202; t=1673314802;
+        bh=0XRaSMKMF65v6PaaPxlzlon39xDFwuy4Mex263cEfq4=;
         h=Date:From:To:Cc:Subject:From;
-        b=iZ/+XZPz9dbjlyKU/lhTX44SKa3NKJowaGZPW9gcnKeu+8R9Qk9yL9wxOZnB5fEM0
-         DW2kNwby1+c3ZTUQ4tSJLMA6fF/Frsou/ZFyxjUAptJ2remRoUSWyGb8sm08kULwer
-         I+e8k+riaNY5+QOFtKC+uk6SGNoiJecO4ombiEEfGIWyBQcdV4wbibsiA7kVKg0mlf
-         VmefWTOFg4HALaYzpIOMjLdwW/FNJifSAfpV9PFK/isJIl+PDIV4IaqXPt4l7lN02Q
-         gTCLPGr8lX9Iv8ngVbaS/kSkQS9B7GKEBaJL8IdciFu4gAJDGxpClZhLQQOE6bVOl0
-         2UjhPKDfWc7SQ==
-Date:   Mon, 9 Jan 2023 19:39:58 -0600
+        b=KwtiLhcCuBFU6WjfUQ6rJ94CB4jppcI6FBU8LY0zR9y5h79fvwT0pD7J6BLNB38Sj
+         dbTceFPZmncr0NGW9yhrQOn3ITkOD2igAiua9u5Rpe8LbCTc8JaWbKB+w7XJVMsxe5
+         gmRVI2NEZ+dTA4DEtFKOxN/COEj/NFZ6ZBU8AwLq7yo1jNcJ1HmA7+nCXf2WPVujVh
+         nCW5qttlLdjJxes2Ypq54aRbsmlN+xjeb5rQXGuB4gr78vCwDVwJfGS1wjjl8Yp4qq
+         pctcbBfSEACtXSpfYifbsWvD1NrgfpnU1+14USiscConIuEP/gNELSML0BuhqmwFbY
+         MGiQ9b/tfoHVQ==
+Date:   Mon, 9 Jan 2023 19:40:10 -0600
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         linux-hardening@vger.kernel.org
-Subject: [PATCH][next] net/mlx5e: Replace zero-length array with
+Subject: [PATCH][next] nvmem: u-boot-env: replace zero-length array with
  flexible-array member
-Message-ID: <Y7zB7shx/u1zWrbj@work>
+Message-ID: <Y7zB+s2AC6O+CRR+@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -61,7 +56,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Zero-length arrays are deprecated[1] and we are moving towards
 adopting C99 flexible-array members instead. So, replace zero-length
-array declaration in struct mlx5e_flow_meter_aso_obj with flex-array
+array declaration in struct u_boot_env_image_broadcom with flex-array
 member.
 
 This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
@@ -73,22 +68,22 @@ Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
 Link: https://github.com/KSPP/linux/issues/78
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/tc/meter.c | 2 +-
+ drivers/nvmem/u-boot-env.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/meter.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/meter.c
-index 78af8a3175bf..7758a425bfa8 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/meter.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/meter.c
-@@ -28,7 +28,7 @@ struct mlx5e_flow_meter_aso_obj {
- 	int base_id;
- 	int total_meters;
+diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
+index 29b1d87a3c51..6b48637d9e64 100644
+--- a/drivers/nvmem/u-boot-env.c
++++ b/drivers/nvmem/u-boot-env.c
+@@ -45,7 +45,7 @@ struct u_boot_env_image_broadcom {
+ 	__le32 magic;
+ 	__le32 len;
+ 	__le32 crc32;
+-	uint8_t data[0];
++	uint8_t data[];
+ } __packed;
  
--	unsigned long meters_map[0]; /* must be at the end of this struct */
-+	unsigned long meters_map[]; /* must be at the end of this struct */
- };
- 
- struct mlx5e_flow_meters {
+ static int u_boot_env_read(void *context, unsigned int offset, void *val,
 -- 
 2.34.1
 
