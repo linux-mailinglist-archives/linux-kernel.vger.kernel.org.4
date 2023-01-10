@@ -2,108 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE72664401
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:04:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D86866440A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238639AbjAJPEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
+        id S238818AbjAJPEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238828AbjAJPDd (ORCPT
+        with ESMTP id S238843AbjAJPDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:03:33 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0085C1EF
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:03:28 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id s8so5127442plk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:03:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6qhudAhZPV2iDT+KE0kLjqDPYcS33lIjDaCweDJV/Yw=;
-        b=paSOTQBfcv/CXVsX2hlndz2PQG6+9r6Y7xHwUqxNwSJmyhdEV3NhWFNJINv5wopuCk
-         bq6D18LQyZpX8zqs7Qux/I8r1v6mv4C9qKtdr4svj7ZqTrtLfycgr4Wc/LrfXp/T8EUV
-         uxH2g7kZjvoAFIf/pm3/ZX8VpuiU1J/kgtMepjGfqzVwjchgMVobHlvHb/jK7FeoqiDo
-         9340HGdZJSlDuQMNdiUChR7W70w864zqVmUsDFq26m3cZA6JUNVAd5abOHeK0TQzAqt/
-         JQSpxoLpKyh1yc6Si5Wc9LR7C2tC0jZVEybizOTVM69oAewey4y06nNVZR5WCgkJWul7
-         wjJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6qhudAhZPV2iDT+KE0kLjqDPYcS33lIjDaCweDJV/Yw=;
-        b=BgHT96H0aQeI9UBLm3eAWzqIdszxf+RQPxvRC9hNT2MzTCCQK2b03a03/urmxQaSts
-         uIuuapaUN33edABrQBfFkF2AYCcZ5+yYkc/vvdtaPj11ZYQ4oNaK+s8wA1v4sN1Edea7
-         vpKZres/A+dTk5EgrnOhfgkDT4qyB5yR9WmkHX+DpecBwIE179qiFWAG0WHE2hEGI81N
-         Qq+eQmAJZqzzSjix0qfdA+En42xB2Bzuj645rvebLQ+O594Cd5iro+Ww3SavOxl1x1xm
-         pUaAnQCrftqqwMsEhsR0jNBAPItSPqd/DWU+o4zT6MJky8U9cMXCMK2P0PP0f6qVe2Ql
-         OPZA==
-X-Gm-Message-State: AFqh2kqCpsAZyl5DtWTCbN4Ico9f4oO3Qp7rLM/j5dOAA09VDfEH4U11
-        hDuYgNsYVkU4dgNL9JTNo1U=
-X-Google-Smtp-Source: AMrXdXtEVrLHAPYBitDJrA9w0WXlvAmSp/3YBee3hkA9hVra97xsgiBYnqG+5bC0eFYM03Qoe6rXdw==
-X-Received: by 2002:a05:6a21:3942:b0:9d:efbe:2065 with SMTP id ac2-20020a056a21394200b0009defbe2065mr90520239pzc.27.1673363007601;
-        Tue, 10 Jan 2023 07:03:27 -0800 (PST)
-Received: from vernon-pc.. ([49.67.3.29])
-        by smtp.gmail.com with ESMTPSA id y14-20020a63fa0e000000b004a7e39ff1e8sm7003212pgh.49.2023.01.10.07.03.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 07:03:26 -0800 (PST)
-From:   Vernon Yang <vernon2gm@gmail.com>
-To:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Vernon Yang <vernon2gm@gmail.com>
-Subject: [PATCH] mm/mmap: fix comment of unmapped_area{_topdown}
-Date:   Tue, 10 Jan 2023 23:03:20 +0800
-Message-Id: <20230110150320.1676299-1-vernon2gm@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 10 Jan 2023 10:03:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8EA5DE67;
+        Tue, 10 Jan 2023 07:03:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9F5B61573;
+        Tue, 10 Jan 2023 15:03:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C6DC433EF;
+        Tue, 10 Jan 2023 15:03:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673363010;
+        bh=cSOjhI/rcYOBxIyxdsvudzOyCa6ADLVAW/FmFkVKg00=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ueMulu/pRqy9gq0M9ADRSVx5gNW+bOd5FqE36CY0G+MMCuSTJ2NeoJls5C6GgOz6F
+         7ecCEwKkvMNCnLAIhRAp9YUcYtJ/R3fN5KT8fH144ZhaIrOo6+plyVGdGrYo9y2V2R
+         aHHY42/bBXpJ/XM3ewJVue9v/S6D1tCSOp22Ib3EeGoqQcOriOPLXIbKdQEvOqTVC5
+         Ld1HuYHyu60RivS9pjlewHcseOPlFiVXaS8Pbto556JYjYdCnRUAtXOLsH1DglI8Ms
+         +dAhlI89nGhNO4Z/Fol3nodQ+GgPrvW9JQpvihMOUiNTyFtb6BjpSbyezKWWeMj5g4
+         ExAKB8+0nfY7g==
+Date:   Tue, 10 Jan 2023 09:03:28 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 10/11] dt-bindings: PCI: convert
+ amlogic,meson-pcie.txt to dt-schema
+Message-ID: <20230110150328.GA1502381@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-10-36ad050bb625@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The low_limit of unmapped area information is inclusive, and the
-hight_limit is not, so make the comment to correct.
+Is this the same sort of conversion done by one of these?
 
-Fixes: 3499a13168da ("mm/mmap: use maple tree for unmapped_area{_topdown}")
-Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
----
- mm/mmap.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+  e4dffb674cfd ("dt-bindings: PCI: tegra194: Convert to json-schema")
+  075a9d55932e ("dt-bindings: PCI: qcom: Convert to YAML")
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index c9da9119d7f2..e06f9ae34ff8 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1554,7 +1554,7 @@ static inline int accountable_mapping(struct file *file, vm_flags_t vm_flags)
-  * the correct alignment and offset, all from @info. Note: current->mm is used
-  * for the search.
-  *
-- * @info: The unmapped area information including the range (low_limit -
-+ * @info: The unmapped area information including the range [low_limit -
-  * hight_limit), the alignment offset and mask.
-  *
-  * Return: A memory address or -ENOMEM.
-@@ -1581,10 +1581,10 @@ static unsigned long unmapped_area(struct vm_unmapped_area_info *info)
- 
- /**
-  * unmapped_area_topdown() - Find an area between the low_limit and the
-- * high_limit with * the correct alignment and offset at the highest available
-+ * high_limit with the correct alignment and offset at the highest available
-  * address, all from @info. Note: current->mm is used for the search.
-  *
-- * @info: The unmapped area information including the range (low_limit -
-+ * @info: The unmapped area information including the range [low_limit -
-  * hight_limit), the alignment offset and mask.
-  *
-  * Return: A memory address or -ENOMEM.
--- 
-2.34.1
+It's helpful to non-experts like me if the subject lines use similar
+style (capitalized) and similar terminology ("dt-schema" vs
+"json-schema" vs "YAML").
 
+On Mon, Jan 09, 2023 at 01:53:34PM +0100, Neil Armstrong wrote:
+> Convert the Amlogic Meson AXG DWC PCIE SoC controller bindings to
+> dt-schema.
+
+Some references here and below are "PCIE" (inherited from the
+original) and others are "PCIe".  Could be made consistent here.
+
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../devicetree/bindings/pci/amlogic,axg-pcie.yaml  | 134 +++++++++++++++++++++
+>  .../devicetree/bindings/pci/amlogic,meson-pcie.txt |  70 -----------
+>  2 files changed, 134 insertions(+), 70 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml b/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml
+> new file mode 100644
+> index 000000000000..a08f15fe9a9a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml
+> @@ -0,0 +1,134 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pci/amlogic,axg-pcie.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Meson AXG DWC PCIE SoC controller
+> +
+> +maintainers:
+> +  - Neil Armstrong <neil.armstrong@linaro.org>
+> +
+> +description:
+> +  Amlogic Meson PCIe host controller is based on the Synopsys DesignWare PCI core.
+> ...
