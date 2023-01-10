@@ -2,86 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC07664C08
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE03664C0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239748AbjAJTI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
+        id S239763AbjAJTJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239767AbjAJTIQ (ORCPT
+        with ESMTP id S239878AbjAJTId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:08:16 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABC05FDA
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:07:20 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id y1so14220315plb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:07:20 -0800 (PST)
+        Tue, 10 Jan 2023 14:08:33 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8079913DCF
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:08:16 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-4c15c4fc8ccso166796837b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:08:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=P1yZ2rNXY9+OCT2MctvfeqyzaEmRMSdK9cnP/qUD3es=;
-        b=HulWpN3OqpO54u6cPuVDdQltxY/fxlzGQnBNBhw9p/WwPEBiviSDJ+JEav0A4p0BDi
-         nQClbKn2krzf5xzUUul+xfQ8+E1acsIqjE6fn5x3WvfOD+FBBySt0bobCk8SE4P1QA3v
-         3KIrMOnr1JuzERZButT5IVawEs1vynARr/7ba+m78yiqXzdckTfhlP731gneYD7nyujQ
-         paJALe1Nyup2BVE5u8lyjJ4J8N6Co38Yz/vlve8RoldnjQ2zltx+NygJ8UqCyheJkI8f
-         zVLNU/dttLt1LZsEOxDgd9Ha/N5pZTykObvqt+m8SFb27i765m8hmcimiImBfGOWVGH5
-         xzQA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eB6zDLr3jptFznjCY+cJ6LV+lGxSv6mlgWXUb4GRVLE=;
+        b=kNneCXnUbGtaezFZly8EELiFvrMI8uCxra4hUNp5F8h55KzRcraX6HTcL/eoX2slxU
+         5eIut2BW8V2KxE4ECFGrtM+afRxG/KTeduZVHs5S8WSaTnrTAKUpQ9LGjuGWxJrrW+Rb
+         HL3W/mk5/ZWXlu153IFY6bWd5ku/c5DQ1P/WEPBZYa8NWqLe/FC6eZ+nVcj+NfNmapAJ
+         hhVfZ0STKoz+rrAswTAQZmVDSFu+39MDK4KoXl6hbj290qVSa10/hwUiXT3+ysS6+4M+
+         Fn8gtLHQRlRNe7nlS5w5XbzHPW/6rq2M3KUaxPGuT+9WamrHs6La624Sedcyvl8v1GSa
+         pxXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1yZ2rNXY9+OCT2MctvfeqyzaEmRMSdK9cnP/qUD3es=;
-        b=hILoABr4Xja9Kq4fo8QWhsHlFxJPlFAWIGWsYcKkXgCSDfvZqgQOQtztNbEs4Y5ugI
-         Ic4jPB+7mXUyQa92wSSn1eTQOslktFbhhfXkWgGmNQL32kEfMuJEladIHQLADmP50F1H
-         InL+yokrdkaeIdRP3oyQHS3weVF6MEvoSM98G7eU5APGfrVT/mo6b0fxQKW03pNbDtOO
-         eLe1RSC77Lmqoi+qSPcHVRHKsvDIUP9dIf44QEbFT8XuS05xlVIkSPS3eee0ebXVXLzk
-         nEuBKhhGJqHmgydBhm5AO0oUFDdWVtwfap/Dw3blHM1cR27VZvtl3QvQMpFNV+NZCPqc
-         SDtQ==
-X-Gm-Message-State: AFqh2kqwzXmbrVOCUdI88HlJy5LjFMYplLByQwOkwuoTqPBI2EJ230Vx
-        irHOUW43Xb4nwog0d+rIK5LSwQ==
-X-Google-Smtp-Source: AMrXdXvPJCjnKjpu/C3fOnUqxkmb0rowb3o4CPE21MAZXvaWlO9x+E+NcO57ODSh2Du+60yMYtseqQ==
-X-Received: by 2002:a05:6a20:1394:b0:b5:a970:8d5a with SMTP id w20-20020a056a20139400b000b5a9708d5amr152380pzh.0.1673377639322;
-        Tue, 10 Jan 2023 11:07:19 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id r4-20020aa79624000000b0056bd1bf4243sm8484018pfg.53.2023.01.10.11.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 11:07:18 -0800 (PST)
-Date:   Tue, 10 Jan 2023 19:07:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] KVM: x86: update APIC_ID also when disabling
- x2APIC in kvm_lapic_set_baseg
-Message-ID: <Y723YwUj/0+U++jI@google.com>
-References: <20230109130605.2013555-1-eesposit@redhat.com>
- <20230109130605.2013555-2-eesposit@redhat.com>
- <c61ce1a6393a108c76e53cb99249aba5ab318e07.camel@redhat.com>
- <Y7w/bYP4VGqoVcjH@google.com>
- <5664d006-9452-2033-5605-48aa0ee77ca8@redhat.com>
- <fa0758f5-abd1-ad09-3878-adf296c7aac5@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eB6zDLr3jptFznjCY+cJ6LV+lGxSv6mlgWXUb4GRVLE=;
+        b=0gQR4QHVmV7F1601I5wvj9/6ioEQ8Lgj9drDWfAabT2WXfzKBTOjRYsSUVZMEUWmuH
+         bwUT18xZoqFRNInmNAWXGgJdSyJo9X+71bVDZXxhfxwsjSg2rotrs/LWG4R5UPy6O+AV
+         xTdNZFXlsQwXuc+AEDLvMVPoxrEZmM5NtLETtSB2CgOsBe9q6CM/AXQmIaKhrkF5HkRS
+         99OGrndLge0OnZ5bXWBGk5w8jzWKcjSu7cXQAZd3HGVDKuo5fjOBdQdyz9YBWPnzAbNP
+         VC6FVj1KJ6m1h92d3MWOCUOMZKrLVl6hdz31cWCHlxclN+GZf7dfjrdrgWWd/mq7+VtV
+         6T5w==
+X-Gm-Message-State: AFqh2kqSufOzuC7CXIy4zAyecsEM5xETstySLKImI287nISkbeZ93xC5
+        PqBZXZgt6a3zVjcw3PHSTyb2wYxjqQJjEHVbNabSgQ==
+X-Google-Smtp-Source: AMrXdXuWt8GL2cvwM/11siCYrRBKZLbeyNUoNJAwEvUjJQicN0t0jFrxPGHJ56q+FKvR1iOeW+XS0IBv7xTbyCMXxzs=
+X-Received: by 2002:a05:690c:b88:b0:3e3:866c:a51b with SMTP id
+ ck8-20020a05690c0b8800b003e3866ca51bmr218703ywb.439.1673377695560; Tue, 10
+ Jan 2023 11:08:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fa0758f5-abd1-ad09-3878-adf296c7aac5@redhat.com>
+References: <20230109213809.418135-1-tjmercier@google.com> <20230109213809.418135-2-tjmercier@google.com>
+ <Y70oqxejnUqkJVPx@dhcp22.suse.cz>
+In-Reply-To: <Y70oqxejnUqkJVPx@dhcp22.suse.cz>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Tue, 10 Jan 2023 11:08:04 -0800
+Message-ID: <CABdmKX3hBX1O8fJ2Zz0ajL=f+tROqWe-Kzr7oPjs46qBYBXV1g@mail.gmail.com>
+Subject: Re: [PATCH 1/4] memcg: Track exported dma-buffers
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,177 +81,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023, Paolo Bonzini wrote:
-> On 1/10/23 13:16, Emanuele Giuseppe Esposito wrote:
-> > I think the test in patch 2 I wrote gives a better idea on what I am
-> > trying to fix:
-
-Tests and descriptions of expected s vs. actual behavior explain what _you_ think
-should happen, but don't help explain what higher level bug is being fixed.  IIUC,
-QEMU emulates RESET and expects the xAPIC ID to be re-initialized.  That's the
-info that should be provided in the changelog since it ties KVM behavior to a
-real world userspace emulating actual hardware behavior.
-
-> > if we are transitioning from x2APIC to xAPIC (RESET I
-> > would say, even though I am not sure if userspace really does it in the
-> > way I do it in the test, ie through KVM_SET_MSRS), the APIC_ID is not
-> > updated back in the right bits, and we can see that by querying the ID
-> > with KVM_GET_LAPIC after disabling x2APIC.
-> > 
-> > Now, if the way I reproduce this issue is correct, it is indeed a bug
-> > and needs to be fixed with the fix in patch 1 or something similar.
-> > I think it won't really make any difference if instead following what
-> > the doc says (x2APIC -> disabled -> xAPIC) we directly do x2APIC -> xAPIC.
-> 
-> Yes, the default value at reset is xAPIC mode, so a reset will do a
-> KVM_SET_MSRS that clears X2APIC_ENABLE but leaves
-> MSR_IA32_APICBASE_ENABLE set.
-> 
-> So, if I understand correctly...
-> 
-> > The test in patch 2 started being developed to test ef40757743b47 ("KVM:
-> > x86: fix APICv/x2AVIC disabled when vm reboot by itself") even though I
-> > honestly didn't really understand how to replicate that bug (see cover
-> > letter) and instead I found this other possibility that still manages to
-> > screw APIC_ID.
-> 
-> ... what you're saying is that there were two different bugs, but one
-> fixing any one of them was enough to prevent the symptoms shown by
-> commit ef40757743b47?  That is:
-> 
-> - the APICv inhibit was set by KVM_GET_LAPIC because it called
-> kvm_lapic_xapic_id_updated(), and the call was unnecessary as fixed in
-> commit ef40757743b47;
-> 
-> - however, there is no reason for the vCPU ID to be mismatched.  It
-> happened because the code didn't handle the host-initiated x2APIC->xAPIC
-> case and thus lacked a call to kvm_apic_set_xapic_id().
-> 
-> If so, I think the idea of the patch is fine.
-> 
-> Just one thing: your patch also changes the APIC_ID on the
-> x2APIC->disabled transition, not just the "forbidden" (i.e. host-
-> initiated only) x2APIC->xAPIC transition.  I think  this is okay too: the
-> manual says:
+On Tue, Jan 10, 2023 at 12:58 AM Michal Hocko <mhocko@suse.com> wrote:
 >
->    10.4.3 Enabling or Disabling the Local APIC
-> 
->    When IA32_APIC_BASE[11] is set to 0, prior initialization to the APIC
->    may be lost and the APIC may return to the state described in Section
->    10.4.7.1, “Local APIC State After Power-Up or Reset.”
-> 
->    10.4.7.1 Local APIC State After Power-Up or Reset
-> 
->    ... The local APIC ID register is set to a unique APIC ID. ...
-> 
-> (which must be an xAPIC ID) and this is what your patch does.
+> On Mon 09-01-23 21:38:04, T.J. Mercier wrote:
+> > When a buffer is exported to userspace, use memcg to attribute the
+> > buffer to the allocating cgroup until all buffer references are
+> > released.
+> >
+> > Unlike the dmabuf sysfs stats implementation, this memcg accounting
+> > avoids contention over the kernfs_rwsem incurred when creating or
+> > removing nodes.
+>
+> I am not familiar with dmabuf infrastructure so please bear with me.
+> AFAIU this patch adds a dmabuf specific counter to find out the amount
+> of dmabuf memory used. But I do not see any actual charging implemented
+> for that memory.
+>
+> I have looked at two random users of dma_buf_export cma_heap_allocate
+> and it allocates pages to back the dmabuf (AFAIU) by cma_alloc
+> which doesn't account to memcg, system_heap_allocate uses
+> alloc_largest_available which relies on order_flags which doesn't seem
+> to ever use __GFP_ACCOUNT.
+>
+> This would mean that the counter doesn't represent any actual memory
+> reflected in the overall memory consumption of a memcg. I believe this
+> is rather unexpected and confusing behavior. While some counters
+> overlap and their sum would exceed the charged memory we do not have any
+> that doesn't correspond to any memory (at least not for non-root memcgs).
+>
+> --
+> Michal Hocko
+> SUSE Labs
 
-Ugh, couldn't find that yesterday.  It's actually irrelevant though, KVM already
-stuffs the APIC ID when the APIC goes from DISABLED to ENABLED (xAPIC) since commit:
-
-  49bd29ba1dbd ("KVM: x86: reset APIC ID when enabling LAPIC")
-
-For giggles, and because I misread that like 5 times, I tested on hardware.  Intel
-CPUs since at least Haswell make the APIC ID read-only, i.e. it's a moot point on
-Intel these days.  But on AMD, the APIC ID is preserved across disabling => enabling
-xAPIC.
-
-> In fact perhaps you can change the code further to invoke
-> kvm_lapic_reset() after static_branch_inc(&apic_hw_disabled.key)?  It's
-> just a bit messy that you have a call back to kvm_lapic_set_base() in
-> there, so perhaps something like this can help:
-
-I'd rather not touch kvm_lapic_reset().  KVM doesn't emulate RESET, and I don't
-want to make assumptions about why userspace is forcing x2APIC => xAPIC.  If
-userspace wants to propery emulate RESET, it can use KVM_SET_LAPIC.
-
-My preference is to do a light tweak on the original patch, with a rewritten
-shortlog and changelog.  And because I spent way, way too much time digging into
-this, I went a bit overboard...
-
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 10 Jan 2023 10:40:33 -0800
-Subject: [PATCH] KVM: x86: Reinitialize xAPIC ID when userspace forces x2APIC
- => xAPIC
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Reinitialize the xAPIC ID to the vCPU ID when userspace forces the APIC
-to transition directly from x2APIC to xAPIC mode, e.g. to emulate RESET.
-KVM already stuffs the xAPIC ID when the APIC is transitioned from
-DISABLED to xAPIC (commit 49bd29ba1dbd ("KVM: x86: reset APIC ID when
-enabling LAPIC")), i.e. userspace is conditioned to expect KVM to update
-the xAPIC ID, but KVM doesn't handle the architecturally-impossible case
-where userspace forces x2APIC=>xAPIC via KVM_SET_MSRS.
-
-On its own, the "bug" is benign, as userspace emulation of RESET will also
-stuff APIC registers via KVM_SET_LAPIC, i.e. will manually set the xAPIC
-ID.  However, commit 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on
-changes to APIC ID or APIC base") introduced a bug, fixed by commit
-commit ef40757743b4 ("KVM: x86: fix APICv/x2AVIC disabled when vm reboot
-by itself"), that caused KVM to fail to properly update the xAPIC ID when
-handling KVM_SET_LAPIC.  Refresh the xAPIC ID even though it's not
-strictly necessary so that KVM provides consistent behavior.
-
-Note, KVM follows Intel architecture with regard to handling the xAPIC ID
-and x2APIC IDs across mode transitions.  For the APIC DISABLED case
-(commit 49bd29ba1dbd), Intel's SDM says the xAPIC ID _may_ be
-reinitialized
-
-    10.4.3 Enabling or Disabling the Local APIC
-
-    When IA32_APIC_BASE[11] is set to 0, prior initialization to the APIC
-    may be lost and the APIC may return to the state described in Section
-    10.4.7.1, “Local APIC State After Power-Up or Reset.”
-
-    10.4.7.1 Local APIC State After Power-Up or Reset
-
-    ... The local APIC ID register is set to a unique APIC ID. ...
-
-i.e. KVM's behavior is legal as per Intel's architecture.   In practice,
-Intel's behavior is N/A as modern Intel CPUs (since at least Haswell) make
-the xAPIC ID fully read-only.
-
-And for xAPIC => x2APIC transitions (commit 257b9a5faab5 ("KVM: x86: use
-correct APIC ID on x2APIC transition")), Intel's SDM says:
-
-  Any APIC ID value written to the memory-mapped local APIC ID register
-  is not preserved.
-
-AMD's APM says nothing (that I could find) about the xAPIC ID when the
-APIC is DISABLED, but testing on bare metal (Rome) shows that the xAPIC ID
-is preserved when the APIC is DISABLED and re-enabled in xAPIC mode.  AMD
-also preserves the xAPIC ID when the APIC is transitioned from xAPIC to
-x2APIC, i.e. allows a backdoor write of the x2APIC ID, which is again not
-emulated by KVM.
-
-Reported-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/lapic.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 80f92cbc4029..79141d76ad49 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2485,8 +2485,12 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
- 		}
- 	}
- 
--	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE))
--		kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
-+	if ((old_value ^ value) & X2APIC_ENABLE) {
-+		if (value & X2APIC_ENABLE)
-+			kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
-+		else if (value & MSR_IA32_APICBASE_ENABLE)
-+			kvm_apic_set_xapic_id(apic, vcpu->vcpu_id);
-+	}
- 
- 	if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
- 		kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
-
-base-commit: 91dc252b0dbb6879e4067f614df1e397fec532a1
--- 
-
+Thank you, that behavior is not intentional. I'm not looking at the
+overall memcg charge yet otherwise I would have noticed this. I think
+I understand what's needed for the charging part, but Shakeel
+mentioned some additional work for "reclaim, OOM and charge context
+and failure cases" on the cover letter which I need to look into.
