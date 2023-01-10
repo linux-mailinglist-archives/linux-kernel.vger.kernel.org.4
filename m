@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5916640FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB5C664100
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237906AbjAJM5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
+        id S238557AbjAJM5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238467AbjAJM5M (ORCPT
+        with ESMTP id S238533AbjAJM5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:57:12 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB191DDE8
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:57:11 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A93A51EC04AD;
-        Tue, 10 Jan 2023 13:57:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673355429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=e3aZbrX9jsLB8Y3WAfNCVrD8tFak09w/8UN5B8tb074=;
-        b=n8stqYgbfzuFA/wxS1p8sxfshrdVy3fNeEcz5YAGqhIj5RZ6DGPqYYXqA4hvwKuXAn+Q1J
-        HKp7zcHn854pj0u/3jsMIhMAF64DiED87duiVkYKLHpZ0cjEK3AEpNiX9IDyL5x6BkXuEq
-        I+whqeZWwW1MJaD4BvXd6v3zONT4KSY=
-Date:   Tue, 10 Jan 2023 13:57:05 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     Ingo Molnar <mingo@kernel.org>, michael.roth@amd.com,
-        hpa@zytor.com, tglx@linutronix.de,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        kirill.shutemov@linux.intel.com, jroedel@suse.de,
-        keescook@chromium.org, mingo@redhat.com,
-        dave.hansen@linux.intel.com, brijesh.singh@amd.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org, liwei391@huawei.com
-Subject: Re: [PATCH -v2] x86/boot/compressed: Register dummy NMI handler in
- EFI boot loader, to avoid kdump crashes
-Message-ID: <Y71goW5qTW5dZKcv@zn.tnic>
-References: <20230110102745.2514694-1-zengheng4@huawei.com>
- <Y71FJ+G0NGQe3Ppq@gmail.com>
- <Y71TglxSLJKO17SY@gmail.com>
- <Y71V8SRLxZ/Uqkfs@zn.tnic>
- <684a2472-f388-b2e1-4a7a-7bc9a07650b4@huawei.com>
+        Tue, 10 Jan 2023 07:57:44 -0500
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F38C517C0;
+        Tue, 10 Jan 2023 04:57:43 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id x10so14505930edd.10;
+        Tue, 10 Jan 2023 04:57:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bCpIXeaT7dr+gvqh2JjBH/RM0pRf6k7P06lJN2lqs6E=;
+        b=fcOQGKVg/bSdFFx12pTay6f9COe2Xswj6mWm3tXZLLTNj1x/KA6VkeHbCA82UzFisw
+         yP8S0hyYTU8+JPeGVAy33caXhI3ivyixJ0o0LGIPueW2gYmILZ2WpQAaN0b1pIOzmpDf
+         7Pfpjkt94oTzqSy/BsTkEd5SVBO+vi5rOskGTZqaNTSCgdWKr+NrxX8hlox/mC3dP9/p
+         8C9P3WZGMCLKmdSLgp3jla2T5JTqnl5q1d1kcB8GBpxIycBvZW4EMqNgBj9d4ug18Ps8
+         vBYYsQHSb/chd1T0tTJDXXkQhkyFWd3dHSuvsIHKjT0kGm1UBBavrFEbcWHsKtDrVZcV
+         1pkQ==
+X-Gm-Message-State: AFqh2koAyIYjHLFVFEvH8s/XGHtiCi2xJkx2TtT6lkDzsphKeiXaWNYJ
+        53MM+Axa5GW5Xr1Ml0pwb9hivVPrOBDcZc5QjKg=
+X-Google-Smtp-Source: AMrXdXsypCv28KKT1wfLEIZOZUy/HBgFz+BEZs64KF3uoFbDQVVNOmfV2pGY4iz4P+2pDfVQo8nPd76XOmMvJ0/21G0=
+X-Received: by 2002:a50:eb49:0:b0:46d:731c:2baf with SMTP id
+ z9-20020a50eb49000000b0046d731c2bafmr6748706edp.280.1673355461927; Tue, 10
+ Jan 2023 04:57:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <684a2472-f388-b2e1-4a7a-7bc9a07650b4@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230110124940.1622798-1-perry.yuan@amd.com>
+In-Reply-To: <20230110124940.1622798-1-perry.yuan@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 10 Jan 2023 13:57:30 +0100
+Message-ID: <CAJZ5v0j1ioh5aSRMB8DTvtKzX22n3AmLfgmDmbKCYQMAoJx6aQ@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: amd-pstate: fix kernel hang issue while
+ amd-pstate unregistering
+To:     Perry Yuan <perry.yuan@amd.com>
+Cc:     rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
+        ray.huang@amd.com, viresh.kumar@linaro.org, Deepak.Sharma@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Shimmer.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
+        wyes.karny@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 08:32:07PM +0800, Zeng Heng wrote:
-> mce is registered on NMI handler by inject_init().
+On Tue, Jan 10, 2023 at 1:50 PM Perry Yuan <perry.yuan@amd.com> wrote:
+>
+> In the amd_pstate_adjust_perf(), there is one cpufreq_cpu_get() call to
+> increase increments the kobject reference count of policy and make it as
+> busy. Therefore, a corresponding call to cpufreq_cpu_put() is needed to
+> decrement the kobject reference count back, it will resolve the kernel
+> hang issue when unregistering the amd-pstate driver and register the
+> `amd_pstate_epp` driver instance.
+>
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> Tested-by: Wyes Karny <wyes.karny@amd.com>
+> Cc: stable@vger.kernel.org
 
-That's a handler for the NMI raised by raise_mce(). That's for the injection
-case, which is simulated. If you're fixing the injection case, then surely not
-with a bogus boot NMI handler.
+Can you provide a Fixes tag, please?
 
-> Yes, exactly. The following procedure is like:
-> 
-> panic() -> relocate_kernel() -> identity_mapped() -> x86 purgatory image ->
-> EFI loader -> secondary kernel
+Also, what's the difference between this and the previous version?
 
-I'm doubtful now as you're injecting errors so you're not really in #MC context
-but in this contrived context which is actually an NMI one. So we need to think
-about how to fix this case.
-
-Certainly not with an empty NMI handler...
-
-Regardless, we should do
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 7832a69d170e..57fe376ed049 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -286,6 +286,8 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
- 	if (!fake_panic) {
- 		if (panic_timeout == 0)
- 			panic_timeout = mca_cfg.panic_timeout;
-+
-+		mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
- 		panic(msg);
- 	} else
- 		pr_emerg(HW_ERR "Fake kernel panic: %s\n", msg);
-
-so that we not run kexec in #MC context.
-
-Hmmm.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> ---
+>  drivers/cpufreq/amd-pstate.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 204e39006dda..c17bd845f5fc 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -307,6 +307,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+>                 max_perf = min_perf;
+>
+>         amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true);
+> +       cpufreq_cpu_put(policy);
+>  }
+>
+>  static int amd_get_min_freq(struct amd_cpudata *cpudata)
+> --
+> 2.34.1
+>
