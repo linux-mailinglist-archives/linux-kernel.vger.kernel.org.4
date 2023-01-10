@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732F2664116
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1563366411C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbjAJNCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S238527AbjAJNCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233452AbjAJNCI (ORCPT
+        with ESMTP id S231633AbjAJNCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:02:08 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF584517FD
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:02:06 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id bs20so11656999wrb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:02:06 -0800 (PST)
+        Tue, 10 Jan 2023 08:02:45 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521DB5370A
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:02:45 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4c131bede4bso152711117b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:02:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bXYjCeQ9QtsFL8nXtTdmpHyzQI1y6u5sI6jbDwGL5SM=;
-        b=R1uVAm7JLu/x7Lcqhyz1YRS0ajuGV+VRK6KwnsG6kAlPe769mSDTbTeD2u9Ej0Gwz/
-         y0GdsZqdcqu/D/o38hLxTZjmvQ2WA5PeK3M0gqoEN4RhHU6IPVphbDXuroDxP768adbI
-         wfN8JY7SgaBJAqEwF7k7qNw2LARDOPORXIts9AYzGsj28IhsQ8uoKMYo6/KSCQk0lYMr
-         kTguF3dXyIqd14IU8qg5iaUV6+AipPgVUPDqyluJtIWeNbsDcg7vIVNKHPkPzH8IuaKy
-         I6uoAnibychZmN+VHdCYei2UQzkJdAOuv+DltFdeXXxLk16OaMfnyNy4p+gkvR4V8tYd
-         rFDA==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3FoRX2f/YZd1ew3w9a7uXRMrccel34cHi9ReaKIRWJg=;
+        b=ln6PR+yGe6pNxxE0brMnBfQ2YDyThfWDqmxR3la9cJiCQ2auc1WITSvS68FuwNEPw6
+         fAzKCb3YJ5lNfQoV/JBAIJyxenUcUb/JuVwRJst1tj8SuPH4k4SpKgpKz11cyu+8Or2A
+         +Q+rc0wcp7NKZyiBmcTiMpanZk7rXOO0XaUOEoLOrJPXlI8Qs5ERfz27sFRm55XsARJ4
+         ncU932PvH6sfvw4Y8BQwzbWdpQFUUb5DhUmtT6ZQw03lxynm1gzkWmjDAquYYVU/lW3X
+         tZvcsVRazBj9EYchgs6DjCP+a7E0CE/stzAm7yhwlZMhhRDylX2wLdwWGNl4eL/HaNQk
+         V4tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bXYjCeQ9QtsFL8nXtTdmpHyzQI1y6u5sI6jbDwGL5SM=;
-        b=TExuGQIhk9rfcoGFWP+YyqJl/5DtUaSq3i2wXDpA4waNijcnvCtWIN/Tt2nljZNeSe
-         dXS79is+fojxjuZCw2LClmqSN6vdhC+YORbe5XK8NUUH6AYqoC5P0lwrPD1Ku7z+J59w
-         BRrUEVNYOgyH7GhZdx/+TgXgRrVUfH4+rc/MNJmdRyzMo0qi3w8ZymgcvsAQV5IQu744
-         /o3IJ1STWOkVy/qLgX6hIFJgLnju9mRLH4ryuulArukv9XGZSmWuR4Krt2B/cAF2zj1F
-         uQMJPaqNqxbbloVExz+T+pmVjU0UuQGnwMZSF85igF8YQ0Jo7lpXR73UjhvFj6ogmlCI
-         58tg==
-X-Gm-Message-State: AFqh2kpZ0c0RbQVLEAYLtlkwzTZLkN4SyZF0F1SNI9FI/fjTjVJ+MgCT
-        YE+Mk9L0V49sRKzwJ4Y4PbfC4w==
-X-Google-Smtp-Source: AMrXdXtl75e7E+BZquNgpJ2OWcid0C63zHWVvYENd5qmfR3H73H+RWSvhij+LCTdGK5AYuCUMxeFyg==
-X-Received: by 2002:a05:6000:888:b0:2aa:438a:2165 with SMTP id ca8-20020a056000088800b002aa438a2165mr16521627wrb.24.1673355725298;
-        Tue, 10 Jan 2023 05:02:05 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm11078676wrx.21.2023.01.10.05.02.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 05:02:04 -0800 (PST)
-Message-ID: <b0189f64-59f1-6ba2-489c-383bd953cf2a@linaro.org>
-Date:   Tue, 10 Jan 2023 14:02:03 +0100
+        bh=3FoRX2f/YZd1ew3w9a7uXRMrccel34cHi9ReaKIRWJg=;
+        b=y4sNA6hEg1vrCPcntOIJPZeIP9dT/cpZZmD49wQTYze81JusSGzgoYktR12ZE2RM0p
+         h6va3P2BWHUSHmSrZZANdB9SnoRLP88dM33k0hqi8LlkMAXq232CPnSPc/ZKa4e3VsQh
+         KSi7UmYbm2T2zbnP753Z5u3TYk+n/Zl/5y12d53tO4bm/ftfwgPuMvJMZuUORKeDVF58
+         hUSUZR8kv5WcBU2vskD5aCGcX+avOeldvPWzW7EMcPK6VgNLkrVRNu++aSGlM2+Z8wYT
+         N5e37vq5BUAM9VMFWme2R1cPDb5MD2zbVImJcThVvOHpmjxqJUnTs41Pu3cNNHgeh9n9
+         xobQ==
+X-Gm-Message-State: AFqh2kqa3z3Q5vX16hWZjBUye+zQOa3wLqK5/gq9hrc47E0nPjpkdj9O
+        +pTm9kHzCnNthn3P2WYfCUuXqSkkJZerxuHsJaM=
+X-Google-Smtp-Source: AMrXdXs6oxzpnoxsBeqKHNrGCLp1jEU5Yz31Pw2+PB2uJ/Q1JQKH4Sm8jO7/fRA06U7IyUVDP7iyYc1t75KZW52bt+w=
+X-Received: by 2002:a81:6f57:0:b0:475:9f2c:899 with SMTP id
+ k84-20020a816f57000000b004759f2c0899mr842408ywc.290.1673355764537; Tue, 10
+ Jan 2023 05:02:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/3] dt-bindings: m41t80: add xtal load capacitance
-Content-Language: en-US
-To:     Dennis Lambe Jr <dennis@sparkcharge.io>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Atsushi Nemoto <anemo@mba.ocn.ne.jp>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20230104052506.575619-1-dennis@sparkcharge.io>
- <20230104052506.575619-3-dennis@sparkcharge.io>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230104052506.575619-3-dennis@sparkcharge.io>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Received: by 2002:a05:7000:c810:b0:3de:4254:e85e with HTTP; Tue, 10 Jan 2023
+ 05:02:44 -0800 (PST)
+Reply-To: ab8111977@gmail.com
+From:   MS NADAGE LASSOU <ibrahimdanzabilyaminu@gmail.com>
+Date:   Tue, 10 Jan 2023 14:02:44 +0100
+Message-ID: <CAKG2jqhDsquG8dFNZummg=yxtueZeGvMR14sTq-FPgfOap8MTQ@mail.gmail.com>
+Subject: REPLY FOR DETAILS.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1131 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [ab8111977[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ibrahimdanzabilyaminu[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2023 06:25, Dennis Lambe Jr wrote:
-> The ST m41t82 and m41t83 support programmable load capacitance from 3.5
-> pF to 17.4 pF. The hardware defaults to 12.5 pF.
-> 
-> The accuracy of the xtal can be calibrated precisely by adjusting the
-> load capacitance.
-> 
-> Add default, minimum, and maximum for the standard rtc property
-> quartz-load-femtofarads on compatible devices.
-> 
-> Signed-off-by: Dennis Lambe Jr <dennis@sparkcharge.io>
-> ---
-> 
+Greetings.
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+I am Ms Nadage lassou,I have a business for our benefit.
+Thanks, i will send you the details once i hear from you.
+Regards.
+Ms Nadage Lassou
