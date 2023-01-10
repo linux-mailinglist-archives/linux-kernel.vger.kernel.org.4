@@ -2,108 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46473663E2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E6E663E39
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjAJK2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:28:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
+        id S231790AbjAJK3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237869AbjAJK2l (ORCPT
+        with ESMTP id S231959AbjAJK3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:28:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFB31C13D
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:27:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673346474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9KIby0sHbh660F6W00pOyfjQiD0YxkgesI7WCpTcF84=;
-        b=EAL0Rq/UAEVualdmxWIfF+UqbDhyA3COr9Hu9J6aRZE5ZYe0fjeKwjKh6EwoYCtZ8hdylg
-        xCeQMKA1gl3QIiS9r5l9KMTTZzjfX25tDjJ5bRotQ1ROJO4hWK3q949mKPdH2JRLE8QqE/
-        P5n5dPp308vLWKq0hSIjQWL/1Qdovto=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-99-nCD2Wls8MlmaYjiJx-wJVA-1; Tue, 10 Jan 2023 05:27:52 -0500
-X-MC-Unique: nCD2Wls8MlmaYjiJx-wJVA-1
-Received: by mail-qt1-f199.google.com with SMTP id z16-20020ac84550000000b003a807d816b2so5253516qtn.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:27:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9KIby0sHbh660F6W00pOyfjQiD0YxkgesI7WCpTcF84=;
-        b=T0JZ2d7D0kweYSRmMvUaKn+vGsC9g+CMiaND0DdKlxxzQly24OT4BEWC55N7Uou1G1
-         R8Za2eJYpwCPow79SK5DSOtUbT5ouk5rMlIYuZ07OvOR7SM5OGYVQWrY1BcT0KFRHYRO
-         NWTIREydQoNvFqHXBVRzAhUuV6kKtC+l30pT6w5LLWOmFw6lJ4xqAiQ5ZvrCSRXtWVbt
-         KXLE4qWud5m6Z330FgF3pDVjpRE+BTtU5+FZu9Gfw4kytejtPEYCJK2q7juJ0mEfz/Sy
-         LrXcUjyHc0y+idEG9BLc0Pd8HnveNMp6Ibcii1QCk4ocaYIAkTL5niyV+zG1lVUAoWCO
-         kLnQ==
-X-Gm-Message-State: AFqh2koY0GLa3bzrvyHJOe9Z8nd06ri3VuIiLcr+VU7Gh1Qkc74pcraf
-        mwzHN5yyiZdZpmNTJBAFGHna4hY49bpaTGmoG9ZBhGYB7BHfiV3Dd37HA8j3W33ZxTUSUFff5/4
-        EKZpQEjittYr/wvfGBcOYq57P
-X-Received: by 2002:ac8:546:0:b0:3a9:9218:e110 with SMTP id c6-20020ac80546000000b003a99218e110mr96438696qth.37.1673346472295;
-        Tue, 10 Jan 2023 02:27:52 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtNbXuxMZfi5jwcdohKmvDBprOB9kZdOoqzZtAC3vlZswt2hulAE8XHX60Y529sh9eOWOGAVg==
-X-Received: by 2002:ac8:546:0:b0:3a9:9218:e110 with SMTP id c6-20020ac80546000000b003a99218e110mr96438670qth.37.1673346472039;
-        Tue, 10 Jan 2023 02:27:52 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-128.dyn.eolo.it. [146.241.120.128])
-        by smtp.gmail.com with ESMTPSA id a19-20020ac81093000000b0039a610a04b1sm5804132qtj.37.2023.01.10.02.27.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 02:27:51 -0800 (PST)
-Message-ID: <b87cdb13baab2a02be2fb3ffc54c581d097cbe7d.camel@redhat.com>
-Subject: Re: [PATCH net 1/1] net: stmmac: add aux timestamps fifo clearance
- wait
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Noor Azura Ahmad Tarmizi 
-        <noor.azura.ahmad.tarmizi@linux.intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>,
-        Looi Hong Aun <hong.aun.looi@intel.com>,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        stable@vger.kernel.org
-Date:   Tue, 10 Jan 2023 11:27:47 +0100
-In-Reply-To: <20230109151546.26247-1-noor.azura.ahmad.tarmizi@intel.com>
-References: <20230109151546.26247-1-noor.azura.ahmad.tarmizi@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 10 Jan 2023 05:29:15 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DD235933;
+        Tue, 10 Jan 2023 02:29:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/xtL8wvIQ8lp3BC23umGDk+I9OXyKwohSrU+Z23LYik=; b=o5SrilMrWER24rePTbd37D5rR3
+        03Af0s4hy0SvanC8/eRAv5X/6uAN5F/D37kGqZ1sHdmfojYayBcomClwwtQiIFFdCCrLv2yPw1dXa
+        Fm4BcZIyoq4yqYyBsk6HX5F0QzoDAo3BN9pwxePmb9sUznFBGXraNlt6dS/GRvQMhW93msvZiysCK
+        AmxX+mYNLhKneNh3AvUn/71mZlQILHCKKAGsnTeeoD8/LqzD8wXbzyIqwmRbOO9qHL22LAPgnIhSV
+        ML3sHXLLe+KBW8dBXmM/b18gTjpNlwd+/D7x+QBPyC+JYSzLsANSUHofmbbP0vuBtoYuXo3yjMRMd
+        i5JOjQnA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pFBrQ-0035qA-1F;
+        Tue, 10 Jan 2023 10:28:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D9BAF3001F7;
+        Tue, 10 Jan 2023 11:28:07 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 75EEE2C539CAD; Tue, 10 Jan 2023 11:28:07 +0100 (CET)
+Date:   Tue, 10 Jan 2023 11:28:07 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Heiko Carstens <hca@linux.ibm.com>, corbet@lwn.net,
+        will@kernel.org, boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC][PATCH 11/12] slub: Replace cmpxchg_double()
+Message-ID: <Y709txFG5QjW2qrg@hirez.programming.kicks-ass.net>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154119.550996611@infradead.org>
+ <Y7Ri+Uij1GFkI/LB@osiris>
+ <CAHk-=wj9nK825MyHXu7zkegc7Va+ZxcperdOtRMZBCLHqGrr=g@mail.gmail.com>
+ <Y7xAsELYo4srs/z/@hirez.programming.kicks-ass.net>
+ <CAHk-=whm+u8YoUaE9PKugYBxujhDL5twz6HqzqLP8OTXjKuT4g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whm+u8YoUaE9PKugYBxujhDL5twz6HqzqLP8OTXjKuT4g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-09 at 23:15 +0800, Noor Azura Ahmad Tarmizi wrote:
-> Add timeout polling wait for auxiliary timestamps snapshot FIFO clear bit
-> (ATSFC) to clear. This is to ensure no residue fifo value is being read
-> erroneously.
+On Mon, Jan 09, 2023 at 04:02:33PM -0600, Linus Torvalds wrote:
+> On Mon, Jan 9, 2023 at 10:29 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > I ran into a ton of casting trouble when compiling kernel/fork.c which
+> > uses this_cpu_cmpxchg() on a pointer type and the compiler hates casting
+> > pointers to an integer that is not the exact same size.
 > 
-> Cc: <stable@vger.kernel.org> # 5.10.x
-> Signed-off-by: Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>
+> Ahh. Yeah - not because that code needs or wants the 128-bit case, but
+> because the macro expands to all sizes in a switch statement, so the
+> compiler sees all the cases even if only one is then statically
+> picked.
+> 
+> So the silly casts are for all the cases that never matter.
+> 
+> Annoying.
 
-Please post a new revision of this patch including a suitable 'Fixes'
-tag, thanks!
+Yes, very.
 
-Paolo
+This seems to compile (and boot). Let me go update the others and push
+it out for the robots to have a go.
 
+#define percpu_cmpxchg128_op(size, qual, _var, _oval, _nval)		\
+({									\
+	union {								\
+		typeof(_var) full;					\
+		struct {						\
+			u64 low, high;					\
+		};							\
+	} old__, new__;							\
+									\
+	old__.full = _oval;						\
+	new__.full = _nval;						\
+									\
+	asm qual ("cmpxchg16b " __percpu_arg([var])			\
+		  : [var] "+m" (_var),					\
+		    "+a" (old__.low),					\
+		    "+d" (old__.high)					\
+		  : "b" (new__.low),					\
+		    "c" (new__.high)					\
+		  : "memory");						\
+									\
+	old__.full;							\
+})
