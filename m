@@ -2,72 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7076A664FFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5247665006
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234901AbjAJXhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 18:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
+        id S234901AbjAJXok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 18:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjAJXhc (ORCPT
+        with ESMTP id S233940AbjAJXof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 18:37:32 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4383FA18
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:37:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9D2YNhHDkVVEE9exXgu2G8l0Gdzt+6c/8Zgvq7MbNk4=; b=Sjj1Q8i/5JCjKJwX2QoJ62PkLk
-        /uXUFegZaMH110XdeXPDa7Nf8mstFvH8Lokf8KJD9YfMR6z9R0HY/m00W4RFnCo3NOR1x6f7+pNBD
-        4v0Pq1DN85w7SSvxHxXKPj1PesvzdINMnk3e675/uMBzreG/Yc4J/83X+zmqWrX7fUW17vlpuvvL3
-        276abmFJQPMlXWjc85PnkFb/3VjsRz+9qdzh+CiTvq8B4pngsCZh87OpOe6ig5vOW84dzW7lusnGz
-        EaQ4VzBIkaIqeRmFxv7rzCQkaj5QNJpURnat7AbshrLDUOPBvvQcGRHIe29wwrmqNLU5hHcOBbHLh
-        HL/4pbLg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pFOBJ-003cWt-Mg; Tue, 10 Jan 2023 23:37:25 +0000
-Date:   Tue, 10 Jan 2023 23:37:25 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] mm: compaction: Remove redundant VM_BUG_ON() in
- compact_zone()
-Message-ID: <Y732taMH+r/QGcgD@casper.infradead.org>
-References: <cover.1673342761.git.baolin.wang@linux.alibaba.com>
- <740a2396d9b98154dba76e326cba5e798b640ead.1673342761.git.baolin.wang@linux.alibaba.com>
- <Y71qNeLNeiBB5a/+@casper.infradead.org>
- <20230110152532.8b2d34bf04d7b8e9a4e39130@linux-foundation.org>
+        Tue, 10 Jan 2023 18:44:35 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F113E846
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:44:33 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso6983367wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:44:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FL35cw0DN4NCwEaaH0VkgM1rt8C/x8Q1esalPn3+uWA=;
+        b=fGMBUDIGdRdL9rrgUn+hQnEvQ2ypYgF+rca0EAGqJddK4v0tcV/YeTbcq0V0mhSsrU
+         ZqTTeusJwFTB5YtV07szUtdhyAUWPxfObkpZme8tbgaRdLBrtd9EzP2nlsFDDwMLZgMO
+         1wrief+e3z0SLbVD096DRJLd/9lf4/LPvhtKUWde11xzLRnDCTWLfj7QnhEScCsz5Lw+
+         0DrgQ+b+lyh2scRVILBuOb/DPN0TcOS5GCAgb2j3iv+0qW96ZFA3jAQ2gdZ2t0hs4K1K
+         YAhhB7BiXazkZK1/lmS8S54KdP/Vzd3A4WmiypQKIEr/dVK1Qj9ZUsxFTCAcUhV1pP5z
+         a3rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FL35cw0DN4NCwEaaH0VkgM1rt8C/x8Q1esalPn3+uWA=;
+        b=toFtUbV/kmwmry4+cUkIrWgmpb7jNvcSrdvnHj/EcNiwPJSIRGlRkAX62ifeGiNGjm
+         Ct8KpqK0zadm1+rmDaP8uzfx8yWg5+bRhrXmPSvM1TxYLah7gRlCxGVLTbpBjic1CLww
+         ++L2CXbOTR3FK/ANhrDOc3A2T/dXqi28kOFVSLnIEog+FszkZlNBeTKUVtNHohbi2bUW
+         k2jI45KDiREbeTwhkY5O1NJFja1XGiqSXVnXNUaUZeHELtS79vdtUQ0WCCOd8tOzl0Ag
+         NSiAd9n8MTmk2Wrwz3XO9gis7uKCjVGqWz8Z30kCDo6JKdaUJ3kwQAc3PcQh6ZymCjmd
+         Gb3w==
+X-Gm-Message-State: AFqh2kqyMEQmzaBIcApU9bhboOG04kzm925+EdyVwfydSzcwIS4TYRAY
+        Drdcc/ge8e9To7VYjfoVvRKsuQ==
+X-Google-Smtp-Source: AMrXdXuxG6pR2hD58eix9Jhmq9DEckiQa5rNfBj1EaeQxG/YjFH4fSfiwp1wezaEgqzoMWL2LiqOhg==
+X-Received: by 2002:a05:600c:3caa:b0:3d9:cb4c:af5a with SMTP id bg42-20020a05600c3caa00b003d9cb4caf5amr21316924wmb.33.1673394272344;
+        Tue, 10 Jan 2023 15:44:32 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003d358beab9dsm16225206wmb.47.2023.01.10.15.44.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 15:44:32 -0800 (PST)
+Message-ID: <4a30931b-ef94-df2f-2e89-1028bf9510ce@linaro.org>
+Date:   Tue, 10 Jan 2023 23:44:31 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230110152532.8b2d34bf04d7b8e9a4e39130@linux-foundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 04/10] interconnect: qcom: rpm: Add support for
+ specifying channel num
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230110132202.956619-1-konrad.dybcio@linaro.org>
+ <20230110132202.956619-5-konrad.dybcio@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230110132202.956619-5-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 03:25:32PM -0800, Andrew Morton wrote:
-> On Tue, 10 Jan 2023 13:37:57 +0000 Matthew Wilcox <willy@infradead.org> wrote:
-> 
-> > On Tue, Jan 10, 2023 at 09:36:18PM +0800, Baolin Wang wrote:
-> > > The compaction_suitable() will never return values other than COMPACT_SUCCESS,
-> > > COMPACT_SKIPPED and COMPACT_CONTINUE, so after validation of COMPACT_SUCCESS
-> > > and COMPACT_SKIPPED, we will never hit other unexpected case. Thus remove
-> > > the redundant VM_BUG_ON() validation for the return values of compaction_suitable().
-> > 
-> > I don't understand why we'd remove this check.
-> 
-> Well, just from code inspection it serves no purpose.
-> 
-> Such an assertion might be useful during early code development, but I
-> think we can consider compaction_suitable() to adequately debugged by
-> now?
+On 10/01/2023 13:21, Konrad Dybcio wrote:
+> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
+> one channel. This should be taken into account in bandwidth calcualtion,
+calculation
 
-What if compaction_suitable() is modified to return another value?
-This seems like a relatively innocuous check.
+> as we're supposed to feed msmbus with the per-channel bandwidth. Add
+> support for specifying that and use it during bandwidth aggregation.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
+>   drivers/interconnect/qcom/icc-rpm.h | 2 ++
+>   2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index 0516b74abdc7..3207b4c99d04 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> @@ -336,6 +336,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+>   {
+>   	struct icc_node *node;
+>   	struct qcom_icc_node *qn;
+> +	u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+>   	int i;
+>   
+>   	/* Initialise aggregate values */
+> @@ -353,7 +354,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+>   	list_for_each_entry(node, &provider->nodes, node_list) {
+>   		qn = node->data;
+>   		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+> -			agg_avg[i] += qn->sum_avg[i];
+> +			if (qn->channels)
+
+when do you actually populate channels ?
+
+I had a quick scan of your series, I didn't see it..
+
+> +				sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
+> +			else
+> +				sum_avg[i] = qn->sum_avg[i];
+> +			agg_avg[i] += sum_avg[i];
+>   			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
+>   		}
+>   	}
+> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+> index 3762648f9d47..eb51680f890d 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.h
+> +++ b/drivers/interconnect/qcom/icc-rpm.h
+> @@ -66,6 +66,7 @@ struct qcom_icc_qos {
+>    * @id: a unique node identifier
+>    * @links: an array of nodes where we can go next while traversing
+>    * @num_links: the total number of @links
+> + * @channels: number of channels at this node (e.g. DDR channels)
+>    * @buswidth: width of the interconnect between a node and the bus (bytes)
+>    * @sum_avg: current sum aggregate value of all avg bw requests
+>    * @max_peak: current max aggregate value of all peak bw requests
+> @@ -78,6 +79,7 @@ struct qcom_icc_node {
+>   	u16 id;
+>   	const u16 *links;
+>   	u16 num_links;
+> +	u16 channels;
+>   	u16 buswidth;
+>   	u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+>   	u64 max_peak[QCOM_ICC_NUM_BUCKETS];
+
