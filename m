@@ -2,259 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDA966386D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 06:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D849663877
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 06:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjAJFDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 00:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
+        id S229774AbjAJFIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 00:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjAJFDC (ORCPT
+        with ESMTP id S229635AbjAJFH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 00:03:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D64C41A59;
-        Mon,  9 Jan 2023 21:02:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0083E6147A;
-        Tue, 10 Jan 2023 05:02:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 383FEC433EF;
-        Tue, 10 Jan 2023 05:02:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673326974;
-        bh=CfqP6C+1zm3vTwLIb7TUuSEyH6Zrafjq1dDxaIx2qX4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=hfDjR2qYT34whMPxcsgaO6+YL9GI9wb9yrqrAd6lO6dSJxpN3AMwyQlePsxm3cnH4
-         9RY3FVQOO1TCQvpl7xdwn1z1Q2VSCTbvXhdaRTVPkUFelKUnKDk8OiTWG0PWgrj/tR
-         RY1w14hDy3dZepWuDq3Hy4KUzA3WuKZ58NA0DCUDEh4ZgR3BbGFs7kDJji4DoUnYVr
-         kYWXu/mYiNYzJk73uMnDf+9qTLRxY3w1OZmNpsDd9s2wLUX1QHj87/N8lpPByX1084
-         NwpMeKaf2uH/KTS5cNfMBHYEwwINiu47y5f1XvRl07FKMFXro/WgfVAO5FiuQFtHlE
-         Fn8yggtRPkZMg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CEFA65C0A1A; Mon,  9 Jan 2023 21:02:53 -0800 (PST)
-Date:   Mon, 9 Jan 2023 21:02:53 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "Liu, Yujie" <yujie.liu@intel.com>,
-        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
-        lkp <lkp@intel.com>, "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] rcu-tasks: Make rude RCU-Tasks work well with CPU
- hotplug
-Message-ID: <20230110050253.GA3798705@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221130234533.1983769-1-qiang1.zhang@intel.com>
- <202212181914.f5a305f3-yujie.liu@intel.com>
- <PH0PR11MB5880EB31D9AFD82EFA3073A6DAE59@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20221221193325.GE4001@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB588092AB6A014F30420D697CDAE89@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20230105182220.GF4028633@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880273B1F5A6FF2CB782051DAFB9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20230110021012.GI4028633@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 10 Jan 2023 00:07:57 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1CE1CB37;
+        Mon,  9 Jan 2023 21:07:49 -0800 (PST)
+Received: from leknes.fjasle.eu ([46.142.97.169]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MS3r9-1pMRH510xf-00TTj4; Tue, 10 Jan 2023 06:07:16 +0100
+Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id EB5363C0CA;
+        Tue, 10 Jan 2023 06:07:13 +0100 (CET)
+Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id B9D62311; Tue, 10 Jan 2023 06:07:11 +0100 (CET)
+Date:   Tue, 10 Jan 2023 06:07:11 +0100
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        corbet@lwn.net, cristian.ciocaltea@collabora.com,
+        gregkh@linuxfoundation.org, vipinsh@google.com,
+        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 RESEND] scripts/tags.sh: choose which directories to
+ exclude from being indexed
+Message-ID: <Y7zyf+d6JSPUsIDt@bergen.fjasle.eu>
+References: <Y7SKBqxULPofEry7@mail.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="KFxLv6UZoDjtwEPS"
 Content-Disposition: inline
-In-Reply-To: <20230110021012.GI4028633@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7SKBqxULPofEry7@mail.google.com>
+Jabber-ID: nicolas@fjasle.eu
+X-Operating-System: Debian GNU/Linux bookworm/sid
+X-Provags-ID: V03:K1:q6indz7A98W6UrJv1GbsvbIAX9Z7z1Kks6ZWm4aDpR651pFkWBo
+ o07uRYCoN/BUM9RYBbpunTMGKkHhlzAlXC7HClFP1Wef8yLTwNs9paxQ+qwnV/Ryk8RVhnZ
+ I67erprlGi9ADXlHv506UE0ECp0kAh9QA6oJr4NTD6SxdIZL0P7IObqr65YNmT6G9OZjSVC
+ vnoXGFFpTGl0R0yDkI6Qg==
+UI-OutboundReport: notjunk:1;M01:P0:+WS8Rt0i9bc=;Pd1WHsE/X+g+O5KNw+cPoKbLX4a
+ VvBB+WnLfXqx1U3UG3jjqiaBu5x2aY1rGpUYayiUyGGCPXUSqnCseQdxEOMxW8cpmOU9w15yT
+ 4qZINzJWT+zO6FmvMwAiV7BMYK6YRYUSP3sx/HhNfekQS5KMPPoWt4d+QpdwVk3ovpnBkaTqu
+ CQ2xuTZpzU77BHE0ibD6WGKJfFerejSD4uvSYy8IBslRcbV8adKUs0qSblQpCiPyUP9yJ2TWP
+ Hkwvsw9M9Ej0MZiJ2xI+uEz9A5F4hZk/RWyhGHzS55OAdBBXyArjjtLykh1m0dYeU90nATX+M
+ OcICqxDMo6xGyqTBXO1/Q0DfOQ4SzNw9Ef8FR1h06VGD7CqHLJD49I48/o1Nenp7sTRvg76NR
+ 1woIQ3pDirjGZJ+nOverPzZ+7PRpUSshodVdP1O9jt9sR4G6FcPa7r/HGtqPUdZHQPa5o/5mS
+ dAptEUWy8z0mpmvSXI+QYFOJDz977OmiXYPP4zGgCvPb+h1m9lr6kk5uzZJ870tsSIxm4zkko
+ dJ2HkN6YVF3fi5XferEprwT84FoT8ZC6zoSqbvl6GsPOa2CfJHQbfP9w3oLPZTTamj5fOvib1
+ DRTxv3hSmPUiakgoLDTFBgzPY0QKPralAQ0wLY8h/QvmAkuiisrk88CKekzHEabdinUaCtM6z
+ FRRRgg1VLO5TvwBklF6DpTJvjTPOc4unoH1SsCdAdQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 06:10:12PM -0800, Paul E. McKenney wrote:
-> On Fri, Jan 06, 2023 at 02:48:56AM +0000, Zhang, Qiang1 wrote:
-> > 
-> > On Thu, Dec 22, 2022 at 09:35:06AM +0000, Zhang, Qiang1 wrote:
-> > > >On Mon, Dec 19, 2022 at 02:21:01AM +0000, Zhang, Qiang1 wrote:
-> > > > >Greeting,
-> > > > >FYI, we noticed WARNING:at_kernel/rcu/rcutorture.c:#rcu_torture_fwd_prog_cr[rcutorture] due to commit (built with gcc-11):
-> > > > >
-> > > > >commit: 572a17843591d3c03ad891492939a06833fdd17d ("[PATCH v4] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug")
-> > > > >url: https://github.com/intel-lab-lkp/linux/commits/Zqiang/rcu-tasks-Make-rude-RCU-Tasks-work-well-with-CPU-hotplug/20221201-074127
-> > > > >base: https://git.kernel.org/cgit/linux/kernel/git/paulmck/linux-rcu.git dev
-> > > > >patch link: https://lore.kernel.org/all/20221130234533.1983769-1-qiang1.zhang@intel.com/
-> > > > >patch subject: [PATCH v4] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
-> > > > >
-> > > > >in testcase: rcutorture
-> > > > >version: 
-> > > > >with following parameters:
-> > > > >
-> > > > >	runtime: 300s
-> > > > >	test: cpuhotplug
-> > > > >	torture_type: tasks-rude
-> > > > >
-> > > > >test-description: rcutorture is rcutorture kernel module load/unload test.
-> > > > >test-url: https://www.kernel.org/doc/Documentation/RCU/torture.txt
-> > > > >
-> > > > >on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 8G
-> > > > >
-> > > > >caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> > > > >
-> > > > >
-> > > > >[  106.051532][  T583] rcu_torture_fwd_prog: Starting forward-progress test 0
-> > > > >[  106.052085][  T583] rcu_torture_fwd_prog_cr: Starting forward-progress test 0
-> > > > >[  133.611262][  T583] rcu_torture_fwd_prog_cr: Waiting for CBs: rcu_barrier_tasks_rude+0x0/0x10() 0
-> > > > >[  146.800051][  T583] ------------[ cut here ]------------
-> > > > >[  146.800411][  T583] WARNING: CPU: 1 PID: 583 at kernel/rcu/rcutorture.c:2806 rcu_torture_fwd_prog_cr+0x22c/0x2a7 [rcutorture]
-> > > > >[  146.801075][  T583] Modules linked in: rcutorture torture ipmi_msghandler crc32c_intel serio_raw processor fuse
-> > > > >[  146.801894][  T583] CPU: 1 PID: 583 Comm: rcu_torture_fwd Not tainted 6.1.0-rc1-00180-g572a17843591 #1 0cc09f902db70bae111a0c12c137296733dde4a9
-> > > > >[  146.802916][  T583] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
-> > > > >[  146.803693][  T583] EIP: rcu_torture_fwd_prog_cr+0x22c/0x2a7 [rcutorture]
-> > > > >[  146.804177][  T583] Code: 89 d8 e8 fc c5 ff ff e8 67 49 03 00 83 c4 10 84 c0 75 79 a0 96 c6 10 ef 84 c0 75 70 e8 c8 ee ff ff 84 c0 75 67 83 fe 63 7f 02 <0f> 0b 8b 45 f0 8b 15 40 25 8a c2 ff 75 e8 ff 75 e0 01 f8 2b 45 dc
-> > > > >[  146.805599][  T583] EAX: 00000000 EBX: ecee3800 ECX: 00000000 EDX: 00000000
-> > > > >[  146.805992][  T583] ESI: 00000000 EDI: 0000c350 EBP: ed9d5f64 ESP: ed9d5f40
-> > > > >[  146.806491][  T583] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010293
-> > > > >[  146.807010][  T583] CR0: 80050033 CR2: 08082ff0 CR3: 2daaf000 CR4: 000406d0
-> > > > >[  146.807484][  T583] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
-> > > > >[  146.808031][  T583] DR6: fffe0ff0 DR7: 00000400
-> > > > >[  146.808384][  T583] Call Trace:
-> > > > >[  146.808634][  T583]  rcu_torture_fwd_prog.cold+0x3b/0xee [rcutorture 6754ed9afe4685f50ef7fade6309181c73794538]
-> > > > >[  146.809348][  T583]  kthread+0xc8/0xf0
-> > > > >[  146.809635][  T583]  ? rcu_torture_fwd_prog_cbfree+0x80/0x80 [rcutorture 6754ed9afe4685f50ef7fade6309181c73794538]
-> > > > >[  146.810347][  T583]  ? kthread_complete_and_exit+0x20/0x20
-> > > > >[  146.810734][  T583]  ret_from_fork+0x1c/0x28
-> > > > >[  146.811075][  T583] irq event stamp: 205883
-> > > > >[  146.811400][  T583] hardirqs last  enabled at (205891): [<c114bb06>] __up_console_sem+0x66/0x80
-> > > > >[  146.811960][  T583] hardirqs last disabled at (205898): [<c114baed>] __up_console_sem+0x4d/0x80
-> > > > >[  146.812583][  T583] softirqs last  enabled at (205880): [<c1ecb40b>] __do_softirq+0x2bb/0x440
-> > > > >[  146.813079][  T583] softirqs last disabled at (205871): [<c10845f0>] call_on_stack+0x40/0x50
-> > > > >[  146.813567][  T583] ---[ end trace 0000000000000000 ]---
-> > > > >[  146.813926][  T583] rcu_torture_fwd_prog_cr Duration 2411 barrier: 3960 pending 50000 n_launders: 0 n_launders_sa: 0 n_max_gps: 0 n_max_cbs: 50000 cver 1 gps 0
-> > > > >[  147.914266][  T583] rcu_torture_fwd_cb_hist: Callback-invocation histogram 0 (duration 6702 jiffies): 1s/10: 0:0 2s/10: 
-> > > > >[  149.453780][  T557] ------------[ cut here ]------------
-> > > > >[  149.454322][  T557] rcu_torture_writer: rtort_pipe_count: 4
-> > > > >[  149.454817][  T557] WARNING: CPU: 1 PID: 557 at kernel/rcu/rcutorture.c:1583 rcu_torture_writer+0x71d/0xc80 [rcutorture]
-> > > > 
-> > > > 
-> > > > This is not a bug.  this is caused by grace period taking too long time, the previous callback
-> > > > has not been completed.  from the dmesg, can be found that the cpuhotplug test is being
-> > > > performed periodically, this may cause the rude RCU-Tasks  grace period to take more time,
-> > > > due to we need to acquire the cpus_read_lock, and the CPU0 always bootup failed, that is to
-> > > > say, only one CPU of your system is online at this time.
-> > > >
-> > > >Onlining of a CPU failing with EIO is a new one on me.  Especially
-> > > >persistent failure.
-> > > 
-> > > I use the kernel configuration file in the attachment and  base on:
-> > > https://git.kernel.org/cgit/linux/kernel/git/paulmck/linux-rcu.git dev
-> > > 
-> > > use "echo 1 > /sys/devices/system/cpu/cpu0/online" can reproduce this problem,
-> > > the CPU0 always fails to go online.  
-> > > 
-> > > Debug found CPU0 is always not set in cpu_initialized_mask.
-> > > causes the do_boot_cpu() to return -1.
-> > > 
-> > > do_boot_cpu()
-> > >      wakeup_cpu_via_init_nmi();
-> > >      if (!boot_error) {
-> > >                 /*
-> > >                  * Wait 10s total for first sign of life from AP
-> > >                  */
-> > >                 boot_error = -1;
-> > >                 timeout = jiffies + 10*HZ;
-> > >                 while (time_before(jiffies, timeout)) {
-> > >                         if (cpumask_test_cpu(cpu, cpu_initialized_mask)) {
-> > >                                 /*
-> > >                                  * Tell AP to proceed with initialization
-> > >                                  */
-> > >                                 cpumask_set_cpu(cpu, cpu_callout_mask);
-> > >                                 boot_error = 0;
-> > >                                 break;
-> > >                         }
-> > >                         schedule();
-> > >                 }
-> > >         }
-> > > 
-> > > This looks related to this modification e1c467e69040c("x86, hotplug: 
-> > > Wake up CPU0 via NMI instead of INIT, SIPI, SIPI ").
-> > > 
-> > > 
-> > > The following modification can make CPU0 go online successfully(This
-> > > is just a test, not sure if there are other effects).
-> > >
-> > >
-> > >Thank you for tracking this down!!!
-> > >
-> > >Huh.  CPU 0 is normally the boot CPU.  Back in the day, it could not
-> > >be offlined.  Given that your testing indicates that CPU 0 can now be
-> > >taken offline, maybe this "if" statement is a holdover that someone
-> > >forgot to remove?
-> > >
-> > >But I must defer to those who know a lot more about this level of
-> > >x86 code than I do.
-> > 
-> > I found relevant modification information, maybe it will be of some help
-> > 
-> > commit e1c467e69040c3be68959332959c07fb3d818e87
-> > Author: Fenghua Yu <fenghua.yu@intel.com>
-> > Date:   Wed Nov 14 04:36:53 2012 -0800
-> > 
-> >     x86, hotplug: Wake up CPU0 via NMI instead of INIT, SIPI, SIPI
-> > 
-> >     Instead of waiting for STARTUP after INITs, BSP will execute the BIOS boot-strap
-> >     code which is not a desired behavior for waking up BSP. To avoid the boot-strap
-> >     code, wake up CPU0 by NMI instead.
-> > 
-> >     This works to wake up soft offlined CPU0 only. If CPU0 is hard offlined (i.e.
-> >     physically hot removed and then hot added), NMI won't wake it up. We'll change
-> >     this code in the future to wake up hard offlined CPU0 if real platform and
-> >     request are available.
-> > 
-> >     AP is still waken up as before by INIT, SIPI, SIPI sequence.
-> > 
-> >     Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> >     Link: http://lkml.kernel.org/r/1352896613-25957-1-git-send-email-fenghua.yu@intel.com
-> >     Signed-off-by: H. Peter Anvin <hpa@linux.intel.com>
-> 
-> Interesting!
-> 
-> When I run rcutorture on x86 (under qemu/KVM), it refuses to attempt to
-> offline CPU 0.  The reason is that cpu_is_hotpluggable(0) returns false.
-> 
-> If I comment out that check, I get this:
-> 
-> 	rcu-torture:torture_onoff task: offline 0 failed: errno -1
-> 
-> A bit of digging turned up the CONFIG_BOOTPARAM_HOTPLUG_CPU0 Kconfig
-> option.  Setting that causes CPU 0 to be offlined.
-> 
-> I clearly need to add this to one of the scenarios.  I arbitrarily
-> chose TREE01, but please let me know if some other scenario or
-> group of scenarios would be better.
 
-For example, like this.
+--KFxLv6UZoDjtwEPS
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-						Thanx, Paul
+On Wed 04 Jan 2023 09:03:18 GMT, Paulo Miguel Almeida wrote:
+> It's common for drivers that share same physical components to also
+> duplicate source code (or at least portions of it). A good example is
+> both drivers/gpu/drm/amdgpu/* and drivers/gpu/drm/radeon/* have a header
+> file called atombios.h.
+>=20
+> While their contents aren't the same, a lot of their structs have
+> the exact same names which makes navigating through the code base a bit
+> messy as cscope will show up 'references' across drivers which aren't
+> exactly correct.
+>=20
+> Add IGNORE_DIRS variable, which specifies which directories
+> to be ignored from indexing.
+>=20
+> Example:
+>         make ARCH=3Dx86 IGNORE_DIRS=3D"drivers/gpu/drm/radeon tools" csco=
+pe
+>=20
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.c=
+om>
+> ---
+> Changelog:
+>=20
+> - v3: change commit message wording and rst syntax (Req Bagas Sanjaya)
+>       change makefile variable scope to global, use blank space
+>       separator and change variable name to IGNORE_DIRS.
+>       (Req: Vipin Sharma)
+> - v2: change approach to include everything unless specified by the=20
+>   IGNOREDIRS variable: (Req: Vipin Sharma)
+> - v1: https://lore.kernel.org/lkml/Y5OKDvbGk4Kro6MK@mail.google.com/
+>=20
+> Additional notes (if relevant):
+> - Patch v3 was reviewed-by Vipin Sharma here:
+>   https://lore.kernel.org/lkml/CAHVum0eNp5Dup_KyrS2N0zu5TfrtcCxphRnLuBFZa=
+5PxahVg7A@mail.gmail.com/
+> ---
+>  Documentation/kbuild/kbuild.rst | 7 +++++++
+>  scripts/tags.sh                 | 7 +++++++
+>  2 files changed, 14 insertions(+)
+>=20
+> diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuil=
+d.rst
+> index 08f575e6236c..5202186728b4 100644
+> --- a/Documentation/kbuild/kbuild.rst
+> +++ b/Documentation/kbuild/kbuild.rst
+> @@ -278,6 +278,13 @@ To get all available archs you can also specify all.=
+ E.g.::
+> =20
+>      $ make ALLSOURCE_ARCHS=3Dall tags
+> =20
+> +IGNORE_DIRS
+> +-----------
+> +For tags/TAGS/cscope targets, you can choose which directories won't
+> +be included in the databases, separated by blank space. E.g.::
+> +
+> +    $ make IGNORE_DIRS=3D"drivers/gpu/drm/radeon tools" cscope
+> +
 
-------------------------------------------------------------------------
+Thanks for the patch!
 
-commit 6c11be38a0363b61db36352555e6746920711a1f
-Author: Paul E. McKenney <paulmck@kernel.org>
-Date:   Mon Jan 9 21:01:12 2023 -0800
+I think it might be good to add a note about that this is not ignoring=20
+arch sources (here and in the commit message).  For kbuild.rst perhaps=20
+something like: "For filtering-out sources below arch, see=20
+ALLSOURCE_ARCHS above."
 
-    rcutorture: Set CONFIG_BOOTPARAM_HOTPLUG_CPU0 to offline CPU 0
-    
-    There is now a BOOTPARAM_HOTPLUG_CPU0 Kconfig option that allows CPU 0
-    to be offlined on x86 systems.  This commit therefore sets this option in
-    the TREE01 rcutorture scenario in order to regularly test this capability.
-    
-    Reported-by: "Zhang, Qiang1" <qiang1.zhang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE01 b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
-index 8ae41d5f81a3e..04831ef1f9b55 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/TREE01
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
-@@ -15,3 +15,4 @@ CONFIG_DEBUG_LOCK_ALLOC=n
- CONFIG_RCU_BOOST=n
- CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
- CONFIG_RCU_EXPERT=y
-+CONFIG_BOOTPARAM_HOTPLUG_CPU0=y
+--KFxLv6UZoDjtwEPS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmO88nkACgkQB1IKcBYm
+EmkXwg//W6rxak5P/dyiiBoZ5nyGyi7VIwwz5G7f+1fo7jWqb8ao9i5Y0qczgVFL
+7yhZvTWpBP5SBjEgifud+GYyCFND5rLLIPmQlBnN+Iv5yjuo7wOSfG1Mce98ANK4
+CHydVZ32NtHjMsM5svwpvyJ7uOppBXIc2uANHSK4devVl4FcwFi1PibVDto3o2+W
+IPgTbN2k9BNMyMc4CVrjjW2MyEDYIc8ckuv7voMZXUKOtIutnm0TEC95dorrDCmS
+8EvzwT7WY4cMOYnL4/+EwUNaDdBUq1PwwmNf7FjgCFNIb8YZIYMINpUSKH6kLaml
+rjen7As/hWwxMd28m06LhyDzTvkmU47WYyp/0k0aTscLWAcHN1QZzlejNQcIQt3s
+iTuTrB5drlboL1G/Zu+IEDq7aDeImT+oVEGhZ6JQO1FNAiWPUMtSBTPxb9ez5P1j
+EeuMoBicyymgWmwosJ+EfEjYgxp7MAB0zTHG9T9Osal7rcKSuG7iSRxQLChhZOj3
+RalknxFYtT/vetdu0SR96pCkdvmqiB1U0hvjo7q5P5ltN8Pf2IDzjrytMPF4OwpG
+g8CcC6OICBKPNOi1v/OziOk3pEME+fkLk6ACZW4E0L6BwO8SBs5D0PI4iH44zpql
+NGnAkHvxyFhMSwYHBag9jn3vc5s1ecjlo2EEW5f9WWBBrF04bdQ=
+=uoTl
+-----END PGP SIGNATURE-----
+
+--KFxLv6UZoDjtwEPS--
