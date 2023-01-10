@@ -2,423 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E101B6638B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 06:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7626638C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 06:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjAJFno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 00:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
+        id S229825AbjAJFta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 00:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjAJFnj (ORCPT
+        with ESMTP id S231131AbjAJFsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 00:43:39 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C2E3C3B7;
-        Mon,  9 Jan 2023 21:43:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673329417; x=1704865417;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Un44orzEdFpMKbehDrBxqFEOpZXArp4/k7FqlhGhph4=;
-  b=SQXoCOZH/9KBtq11aT8XRRK/9Zp1CnWaQS5XIajWbj9MZ0y++zO2WEc8
-   nojypdDgg1uBZnv25zy5UkNCgzKsXABEsQpeTQujN0ajiBDb5O0zzXjDt
-   4r2z7/Qzikd4ZPufx6q2M13GqfrCjp35GCVxXtguQHY0Hiv8QhGrtQqnP
-   ia578Zaj/kgjeJfDwCinxGJYpvkwqt2RbOJtDbdIcOD+rF5UExWPa2wFA
-   3l+mGj6u/GmP5Qn1wmWAzj8K2NJTU8Klij1eSQ/+JqE9/3y66G/gSgGWj
-   VLgQR/dMqISUlkaUPMQwpOU5bORybrDzXxgze/GXs3gxlyl2xZHxRom55
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="323137418"
-X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
-   d="scan'208";a="323137418"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 21:43:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="830877000"
-X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
-   d="scan'208";a="830877000"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga005.jf.intel.com with ESMTP; 09 Jan 2023 21:43:36 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 9 Jan 2023 21:43:36 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 9 Jan 2023 21:43:36 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 9 Jan 2023 21:43:36 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 9 Jan 2023 21:43:34 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PfzrhCVe91ScpttrKhcnqwCMjEZILKTCZ4fbyefip3Q47KZ2qesNElLVZOvg/zLvSd/I90r9x3zSXBwu30rgNga/ON84ys4dl9oXsSMPvl1fUQ4y+nrEkjTe6uahSB5sphW5n6UTzyfoiIY6UTYx+bRiYwZ1ReQrD1Pu0VkuRUB2vnaSGN4EcbNKltbGDmSSWME1vipxUkBPXoWGa0j+Vq1ISsmw9HMey6iLG3n6tn8KvNXoeIFPEdoMlcF3HvpRQJkp1sUVW/xFalZaRRS8hYv0U6kegrF43VOZJ9Gdgb45IXtS2Fl1YX+hVaKLqtdZDZyylmZ87kYByz2jimATug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m83idNkQEaoDXbwQ721i0Wif2YR6JRquERm98E17ILM=;
- b=AEq7NYYzL0nR+5zWUp0fT5/y8spdu5A2sN+5ZZPKwcsodv3fsUJ1yQP7B2xjzOpGz5B7orttFKuJ8pNIlrMGACEC3yL/PFB2UGANV+AeaA21xtKCg241Khh0EiVl7dEdctm/8f1Sk5N7WXIWPRY1KHHnAvQJbTjbwH6ON95/BUQW2QwL3eNAr2DFMLDM2JV+ahFtaIwPULBX8CC/meFa1r6oJJNCwpGT9i2IuUONjMHeo7NRxhsV8NS2Zjtbj1EWai43Z6N4UL/1n4r54ztRjqOelRnBjVkOaMXWiiZECMXPA6SAOb3Bto1LedkuXF0dXqpDNxOR7l1tEGyzryU+bw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB4092.namprd11.prod.outlook.com (2603:10b6:5:192::24)
- by IA0PR11MB7305.namprd11.prod.outlook.com (2603:10b6:208:439::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 05:43:31 +0000
-Received: from DM6PR11MB4092.namprd11.prod.outlook.com
- ([fe80::a2b4:899c:a82b:eb14]) by DM6PR11MB4092.namprd11.prod.outlook.com
- ([fe80::a2b4:899c:a82b:eb14%4]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 05:43:31 +0000
-From:   "Sun, Yunying" <yunying.sun@intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>
-CC:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "kernelorg@undead.fr" <kernelorg@undead.fr>,
-        "kjhambrick@gmail.com" <kjhambrick@gmail.com>,
-        "2lprbe78@duck.com" <2lprbe78@duck.com>,
-        "nicholas.johnson-opensource@outlook.com.au" 
-        <nicholas.johnson-opensource@outlook.com.au>,
-        "benoitg@coeus.ca" <benoitg@coeus.ca>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "wse@tuxedocomputers.com" <wse@tuxedocomputers.com>,
-        "mumblingdrunkard@protonmail.com" <mumblingdrunkard@protonmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Box, David E" <david.e.box@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>
-Subject: RE: Bug report: the extended PCI config space is missed with 6.2-rc2
-Thread-Topic: Bug report: the extended PCI config space is missed with 6.2-rc2
-Thread-Index: AQHZIEp5QwkO/GW1JkeMAQNxX48tXq6QaryAgAASXACAAAwngIAAByUAgAEZEICAAAhAgIAAL18AgAAMYwCAAAe+gIAFNLkw
-Date:   Tue, 10 Jan 2023 05:43:31 +0000
-Message-ID: <DM6PR11MB40921AA8D47A7E603085F496F2FF9@DM6PR11MB4092.namprd11.prod.outlook.com>
-References: <SJ1PR11MB60831BF4EB453AB0EF5A6F0CFCFB9@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <20230106220449.GA1255065@bhelgaas>
-In-Reply-To: <20230106220449.GA1255065@bhelgaas>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB4092:EE_|IA0PR11MB7305:EE_
-x-ms-office365-filtering-correlation-id: 03ea67eb-878a-4efd-06cc-08daf2cd9b6a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8cuMBKNCFeapXgG4R0BvQyCyEag6QJX6PSm02bdjRj9ptJYcwQ0CA+GawdI/kybeI1wFoSQgWrRgAqbt/lR9ILIO7wzM5SqnCdRFYfHvt9Wif/RbtRVvzA5ZSGhShj9MTDaWi3ik3GUsDcbNwlwqfdFugQX1/N3t5CV8NzNIMmQ4Tdex4JivTuxf8KImGlKK3fLfQOZqImd4tcwRV0AxxegNQKp/CMIq8+io2Zd6G77irvW0e3LXOh0/4QmOu6Rmnxl88O6ef4gSDosvNS3LWVY6NvUIxk/NsR64JdSQbfTRdvnDYxVZFgImi0Mpm983t2F01ESARfKrch+d5qgKdi8dEQtZRhM3Ouml/ufcrATlkEb9CjZbVVa8DIU3hgcqBYfoxl+dDSp51GSQwOTs58TxE/eXjgxnu3EnGqPUx7RatM14ww3RqE6aPm+3HjZTI0MlCzhFnnSENJCkctTE5N7jAzB3xcRFoeTOZHyJoL9L81quSu+DTlI3khhBr7MFVqBmGPqX9Vjh/oZfq7dfHvaergYoivmJSTATvpl5bK5Uh80a45SiU2H/a2S7xq2xYohJCS5pVs/op8KBs/4+SAjqqwg0ZYBiOvnA3sb5Xd+bS94wVEyQkV4yglOtk8LFuQWhznP1J0V5wBDyfPO6btaQRlBpJ6ywZ+YSYZ878wktLiAG3gUMDUSY7P9qEQEFeG0adAoYYNJVwKfgAClwEzZiKaBK8IEL6eGk80COLGE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4092.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(376002)(39860400002)(346002)(396003)(451199015)(7416002)(33656002)(5660300002)(71200400001)(316002)(26005)(9686003)(7696005)(186003)(478600001)(966005)(45080400002)(41300700001)(110136005)(54906003)(76116006)(64756008)(66946007)(66476007)(4326008)(66446008)(66556008)(8676002)(52536014)(8936002)(38070700005)(83380400001)(86362001)(55016003)(53546011)(6506007)(122000001)(38100700002)(82960400001)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hiaoNLU+qCaT0y4HpAqdRufJo5sKngs4e/TUjrmhiLH0IEwO2ZIArh21fElU?=
- =?us-ascii?Q?RSy8BsRCuC/W/1AOBkcMn+oeUilMiODWfYqR9XsFsFMmvvN2w5cuxtB/aINR?=
- =?us-ascii?Q?9g3d4beoXwsZN5FV5dLW96PSi5tDBBujep2ABJkXk7CsMzPQyLGK0IWfItw5?=
- =?us-ascii?Q?p+rpMmUD40aYivFUVw1EtOwnZ8YdxP7W1HFhSJogIjLHvXE7gFP4q1sFMb0q?=
- =?us-ascii?Q?jVe0LWYd2Mz9N0TZWIOJXiRxNODHXHwaZ7nhmgFygsFFzJq+MDbbZSdkv2Bq?=
- =?us-ascii?Q?R3a8jjUK5jKcBbTKKBCp9llN5mVmc/tFoSfATa7462CYqstRP1rdb16/5O8q?=
- =?us-ascii?Q?EzLIVcb85TQkiuK0+DwQZ6fUDt9b3akczBZjzA9omosp+UbEYABXrgYpxjDd?=
- =?us-ascii?Q?yvxN+qMrazrz0FXZCp1tC6dv7HlHDuLbU0nUozW+6Fg6FMjwWavEJEffayOO?=
- =?us-ascii?Q?w3CxgjJfssfNsBd4yYigibaMLaWB8TvN7V/IbnmtzqCL9xlYMZn9n74cilwT?=
- =?us-ascii?Q?5wJeCZ/1p3awjRwSfMKWF7e9spdBPO5ODw46OEYITHCRSxKtimKK6qqxW6xJ?=
- =?us-ascii?Q?KdqfTIYfPEeaw2toWTvgK9Nsyj2AO3UT5Dz1xmOsQI+d1ESfUZfqmWVLN7Un?=
- =?us-ascii?Q?jCui1a63oBB0/SSVJh83Mqeoxt4O4toW1VAVJweTP3vIPBjrpXR6PS3yfFap?=
- =?us-ascii?Q?qEQwogff2ATiJKSi+KBv1MhidGoZRHidGNTKvmwN859Z2TmVkopFqPEzOKQU?=
- =?us-ascii?Q?+0iFK9BPUdgyqLw6cX3R6528l8A/eNuAotmFU0MjsjAYtil34sY1/e2op2c7?=
- =?us-ascii?Q?IhvUmrLiqgVCx+wRG3zbYzgIdyKNTGXaLWAWtrZdFHJiWmQR9oyvnkYX14Ey?=
- =?us-ascii?Q?bH3gNaur8PiyNRdU/M9/5PmcwNhn6K/6u1iSUSKOxePRKKahEuVF/3yOvdha?=
- =?us-ascii?Q?lAd8ONSYxBK/+2TGyz07GtcoFLRC3z9Ye8cHJCOpR08aY0/PndDgfXRF8A9T?=
- =?us-ascii?Q?7Ba7YSdAvhmwOKImscm61ce66169yEcyaIgQy0KI/Jz4Q4RO83bNkUoB8+Cr?=
- =?us-ascii?Q?zGsiH1mzzBVGmvqvnZIF8FMJFHV/hTl8GyosVGvuLw7rx3jXbf4oJgV4ZVFy?=
- =?us-ascii?Q?5v9t7qP2SllUL+oT5G+7DOcYtltLieCFNmA/xH/kHVKWByzIGOKjTtab3rQ7?=
- =?us-ascii?Q?hHSA65NsWf79sxcAKglPcq/fjHYHR+VVjIZjQPPtuLSbNcYAfSvZZGTGq5Z+?=
- =?us-ascii?Q?2/KbBwYAC5+/ypbBgQHQVh07GedI5NFukpgGbHIZVIODOV8vQ28mstGVRjUr?=
- =?us-ascii?Q?y9LU7eLIyFmERp3E7NKT8h92Xl6m6s5K2ct44eBk4UhRPvZS4jvAdIrlFoDn?=
- =?us-ascii?Q?wJw1uIz84La2gD+bd0GHSPHNx89FjFBAiexpXlww0aGGwQVsxUA2UIsj7fDu?=
- =?us-ascii?Q?cfnDN5NuahIiS3YWP6Dwwsb5mGdZQjFFeeIGQ1zt/jguGG79rtYdhry74hz5?=
- =?us-ascii?Q?+WOHGHCqE2aZdpH0uqxCNraj16W1jNks8CSZv5hKErgVpTftq/zX+LCkK4Eu?=
- =?us-ascii?Q?qmdbdRIeqb6KG2xFYgeT/aK+f/4qQNAU6fNyU+3d?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 10 Jan 2023 00:48:39 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC39431AA
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 21:47:32 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bp15so16610706lfb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 21:47:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sjlcbVEgS5pgrAjtiDRiz81od9MScN0SBmwZV8y/lIs=;
+        b=SrXc9fMrzGJBPKtaDr9H/2PtiGIoWp7vzGiZa3QXIVOzdnPNHj+Gg3cJhcKmPhWPGk
+         zFF5piQbTPqBRWYVrybTXvmOygaq6XMEUqck6aapxH45bbqyIEoN15UpW4iyFXs1fJe9
+         juKrr+tPimFaqDGwJmbMHXl/vMM6U8WwtkI/iO+tsqtoYPuFKE7dvrfIZyGL6Ds9cr1T
+         WLCdsk1LfMuAZQNXx7QO315gx6CHEvWsILN9xy7iy3f4eH78fjmIjx2jVvZSQar7BF9l
+         deIcihzYmhuV+Q8My/N/kxKeCBKV84kSTuLWUIykCl8DR42FimSk8U/R/z28AhyJt5MP
+         MZQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sjlcbVEgS5pgrAjtiDRiz81od9MScN0SBmwZV8y/lIs=;
+        b=bFSRzWll/QGf/rtVmspY2VVDSx5wbozq403x32988nnguT2aloNIeFIAt7MyTl05on
+         UYR+VgnE1dBrWpuoezw1V5oJcTb7p5KhKf0NML1ubPmxfO6USLXDRd3IZG9fBq9N4fn8
+         2+TwSdOkjueyipq8pHY8xeKYVJmMZ54h9OttcLAK/SaWQQsZ92hBZenbSu5FxJzynS9x
+         MoALuKF0j2EZ/aaolRzI3RTxac2n8ei4f09B53wuS68wIGtD9poMHkwyMccH41C5wuH5
+         xnOtRNJTX+3eW/yCaSGWbD9fbnpm/qdRaCDn59yXfr3VBNdKC+l37HKgEROEL7AzfA9t
+         3wDg==
+X-Gm-Message-State: AFqh2krB3a9+wS/115fVUs5+3SgiYAs0+3BqlLOftIhcrXQ4crYPcSFM
+        pGNkEt3jjM0IznSayNVOr0Dsaw==
+X-Google-Smtp-Source: AMrXdXuwuTdxaEcEUK1aqTKbAxOoMfEtFDgOViKB9zqN6QGZvAv1BcY7LatZ/ouCEGtzFXpln7UQBw==
+X-Received: by 2002:a05:6512:6d6:b0:4a4:68b9:609b with SMTP id u22-20020a05651206d600b004a468b9609bmr22353836lff.38.1673329650416;
+        Mon, 09 Jan 2023 21:47:30 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id cf33-20020a056512282100b004a05767bc07sm2006201lfb.28.2023.01.09.21.47.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 21:47:29 -0800 (PST)
+Message-ID: <fc525e85-c271-3912-f19b-25a9e90dc2a9@linaro.org>
+Date:   Tue, 10 Jan 2023 07:47:29 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4092.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03ea67eb-878a-4efd-06cc-08daf2cd9b6a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2023 05:43:31.5668
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bL4K3sQdNeygcSdqMrNgcJMtwIHlcUdBSN5r0pjVMHx84r1nU7QTnE5bRIXE5vEJIaZB+MnmPErKc61cTnrjvw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7305
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v6 05/18] dt-bindings: msm: dsi-controller-main: Document
+ clocks on a per compatible basis
+Content-Language: en-GB
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
+        airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        dianders@chromium.org, david@ixit.cz,
+        krzysztof.kozlowski+dt@linaro.org, swboyd@chromium.org,
+        konrad.dybcio@somainline.org, agross@kernel.org,
+        andersson@kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20221223021025.1646636-1-bryan.odonoghue@linaro.org>
+ <20221223021025.1646636-6-bryan.odonoghue@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221223021025.1646636-6-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Verified this updated patch on SPR DNP and SPR MCC, it fixes the perf uncor=
-e driver not working issue.
+On 23/12/2022 04:10, Bryan O'Donoghue wrote:
+> Each compatible has a different set of clocks which are associated with it.
+> Add in the list of clocks for each compatible.
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>   .../display/msm/dsi-controller-main.yaml      | 209 ++++++++++++++++--
+>   1 file changed, 192 insertions(+), 17 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> index 98d54a7ee28d4..4b79b31123515 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> @@ -9,9 +9,6 @@ title: Qualcomm Display DSI controller
+>   maintainers:
+>     - Krishna Manikandan <quic_mkrishn@quicinc.com>
+>   
+> -allOf:
+> -  - $ref: "../dsi-controller.yaml#"
+> -
+>   properties:
+>     compatible:
+>       oneOf:
+> @@ -46,22 +43,23 @@ properties:
+>       maxItems: 1
+>   
+>     clocks:
+> -    items:
+> -      - description: Display byte clock
+> -      - description: Display byte interface clock
+> -      - description: Display pixel clock
+> -      - description: Display core clock
+> -      - description: Display AHB clock
+> -      - description: Display AXI clock
+> +    description: |
+> +      Several clocks are used, depending on the variant. Typical ones are::
+> +       - bus:: Display AHB clock.
+> +       - byte:: Display byte clock.
+> +       - byte_intf:: Display byte interface clock.
+> +       - core:: Display core clock.
+> +       - core_mss:: Core MultiMedia SubSystem clock.
+> +       - iface:: Display AXI clock.
+> +       - mdp_core:: MDP Core clock.
+> +       - mnoc:: MNOC clock
+> +       - pixel:: Display pixel clock.
+> +    minItems: 3
+> +    maxItems: 9
+>   
+>     clock-names:
+> -    items:
+> -      - const: byte
+> -      - const: byte_intf
+> -      - const: pixel
+> -      - const: core
+> -      - const: iface
+> -      - const: bus
+> +    minItems: 3
+> +    maxItems: 9
+>   
+>     phys:
+>       maxItems: 1
+> @@ -157,6 +155,183 @@ required:
+>     - assigned-clock-parents
+>     - ports
+>   
+> +allOf:
+> +  - $ref: ../dsi-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,apq8064-dsi-ctrl
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 7
+> +        clock-names:
+> +          items:
+> +            - const: iface
+> +            - const: bus
+> +            - const: core_mmss
+> +            - const: src
+> +            - const: byte
+> +            - const: pixel
+> +            - const: core
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8916-dsi-ctrl
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 6
+> +        clock-names:
+> +          items:
+> +            - const: mdp_core
+> +            - const: iface
+> +            - const: bus
+> +            - const: byte
+> +            - const: pixel
+> +            - const: core
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8953-dsi-ctrl
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 6
+> +        clock-names:
+> +          items:
+> +            - const: mdp_core
+> +            - const: iface
+> +            - const: bus
+> +            - const: byte
+> +            - const: pixel
+> +            - const: core
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8974-dsi-ctrl
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 3
+> +        clock-names:
+> +          items:
+> +            - const: iface
+> +            - const: bus
+> +            - const: vsync
 
-Tested-by: Yunying Sun <yunying.sun@intel.com>
+8974 has broader clocks list:
 
--Yunying
+@@ -244,12 +248,16 @@ allOf:
+      then:
+        properties:
+          clocks:
+-          maxItems: 3
++          maxItems: 7
+          clock-names:
+            items:
++            - const: mdp_core
+              - const: iface
+              - const: bus
+-            - const: vsync
++            - const: byte
++            - const: pixel
++            - const: core
++            - const: core_mmss
 
------Original Message-----
-From: Bjorn Helgaas <helgaas@kernel.org>=20
-Sent: Saturday, 7 January, 2023 06:05
-To: Luck, Tony <tony.luck@intel.com>
-Cc: Williams, Dan J <dan.j.williams@intel.com>; Liang, Kan <kan.liang@linux=
-.intel.com>; bhelgaas@google.com; hdegoede@redhat.com; kernelorg@undead.fr;=
- kjhambrick@gmail.com; 2lprbe78@duck.com; nicholas.johnson-opensource@outlo=
-ok.com.au; benoitg@coeus.ca; mika.westerberg@linux.intel.com; wse@tuxedocom=
-puters.com; mumblingdrunkard@protonmail.com; linux-pci@vger.kernel.org; lin=
-ux-kernel@vger.kernel.org; Box, David E <david.e.box@intel.com>; Sun, Yunyi=
-ng <yunying.sun@intel.com>; Jiang, Dave <dave.jiang@intel.com>
-Subject: Re: Bug report: the extended PCI config space is missed with 6.2-r=
-c2
 
-On Fri, Jan 06, 2023 at 09:37:06PM +0000, Luck, Tony wrote:
-> > Thanks, Tony!  Something is wrong with the EFI MMIO removal=20
-> > (obviously), but I don't see what it is.  Could you try the patch=20
-> > below (replacement for previous one, with more debug)?
->=20
-> Swapped out old patch for this new one. Booted with efi-debug
->=20
-> New dmesg attached.
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8996-dsi-ctrl
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 7
+> +        clock-names:
+> +          items:
+> +            - const: mdp_core
+> +            - const: byte
+> +            - const: iface
+> +            - const: bus
+> +            - const: core_mmss
+> +            - const: pixel
+> +            - const: core
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8998-dsi-ctrl
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 6
+> +        clock-names:
+> +          items:
+> +            - const: byte
+> +            - const: byte_intf
+> +            - const: pixel
+> +            - const: core
+> +            - const: iface
+> +            - const: bus
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sc7180-dsi-ctrl
+> +              - qcom,sc7280-dsi-ctrl
+> +              - qcom,sm8250-dsi-ctrl
 
-Thanks!  Ah, off-by-one error because e820__mapped_all() expects "[start, e=
-nd)" which means is_acpi_reserved() and is_efi_mmio() must use the same, an=
-d I was thinking "[start, end]" like a struct resource.
+Could you please also add sm8150 and sm8[345]50?
 
-The below should work better.
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 6
+> +        clock-names:
+> +          items:
+> +            - const: byte
+> +            - const: byte_intf
+> +            - const: pixel
+> +            - const: core
+> +            - const: iface
+> +            - const: bus
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sdm660-dsi-ctrl
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 9
+> +        clock-names:
+> +          items:
+> +            - const: mdp_core
+> +            - const: byte
+> +            - const: byte_intf
+> +            - const: mnoc
+> +            - const: iface
+> +            - const: bus
+> +            - const: core_mmss
+> +            - const: pixel
+> +            - const: core
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sdm845-dsi-ctrl
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 6
+> +        clock-names:
+> +          items:
+> +            - const: byte
+> +            - const: byte_intf
+> +            - const: pixel
+> +            - const: core
+> +            - const: iface
+> +            - const: bus
+> +
+>   additionalProperties: false
+>   
+>   examples:
 
-commit 696ac9286d3d ("x86/pci: Treat EfiMemoryMappedIO as reservation of EC=
-AM space") parent 1b929c02afd3
-Author: Bjorn Helgaas <bhelgaas@google.com>
-Date:   Thu Jan 5 16:02:58 2023 -0600
+-- 
+With best wishes
+Dmitry
 
-    x86/pci: Treat EfiMemoryMappedIO as reservation of ECAM space
-   =20
-    Normally we reject ECAM space unless it is reported as reserved in the =
-E820
-    table or via a PNP0C02 _CRS method (PCI Firmware, r3.3, sec 4.1.2).  Th=
-is
-    means extended config space (offsets 0x100-0xfff) may not be accessible=
-.
-   =20
-    Some firmware doesn't report ECAM space via PNP0C02 _CRS methods, but d=
-oes
-    mention it as an EfiMemoryMappedIO region via EFI GetMemoryMap(), which=
- is
-    normally converted to an E820 entry by a bootloader or EFI stub.
-   =20
-    07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map"), remov=
-es
-    E820 entries that correspond to EfiMemoryMappedIO regions because some
-    other firmware uses EfiMemoryMappedIO for PCI host bridge windows, and =
-the
-    E820 entries prevent Linux from allocating BAR space for hot-added devi=
-ces.
-   =20
-    Allow use of ECAM for extended config space when the region is covered =
-by
-    an EfiMemoryMappedIO region, even if it's not included in E820 or PNP0C=
-02
-    _CRS.
-   =20
-    Fixes: 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map")
-    Link: https://lore.kernel.org/r/ac2693d8-8ba3-72e0-5b66-b3ae008d539d@li=
-nux.intel.com
-
-diff --git a/arch/x86/pci/mmconfig-shared.c b/arch/x86/pci/mmconfig-shared.=
-c index 758cbfe55daa..5c6cadd60fef 100644
---- a/arch/x86/pci/mmconfig-shared.c
-+++ b/arch/x86/pci/mmconfig-shared.c
-@@ -12,6 +12,7 @@
-  */
-=20
- #include <linux/acpi.h>
-+#include <linux/efi.h>
- #include <linux/pci.h>
- #include <linux/init.h>
- #include <linux/bitmap.h>
-@@ -442,6 +443,34 @@ static bool is_acpi_reserved(u64 start, u64 end, enum =
-e820_type not_used)
- 	return mcfg_res.flags;
- }
-=20
-+static bool is_efi_mmio(u64 start, u64 end, enum e820_type not_used) {
-+	efi_memory_desc_t *md;
-+	u64 size, mmio_start, mmio_end;
-+
-+	end--;		/* caller supplies start, end =3D start + size */
-+	pr_info("is_efi_mmio %#lx-%#lx\n",
-+		(unsigned long) start, (unsigned long) end);
-+	for_each_efi_memory_desc(md) {
-+		if (md->type =3D=3D EFI_MEMORY_MAPPED_IO) {
-+			size =3D md->num_pages << EFI_PAGE_SHIFT;
-+			mmio_start =3D md->phys_addr;
-+			mmio_end =3D mmio_start + size - 1;
-+
-+			pr_info("  efi_mmio %#lx-%#lx\n",
-+				(unsigned long) mmio_start,
-+				(unsigned long) mmio_end);
-+			if (mmio_start <=3D start && end <=3D mmio_end) {
-+				pr_info("is_efi_mmio true\n");
-+				return true;
-+			}
-+		}
-+	}
-+
-+	pr_info("is_efi_mmio false\n");
-+	return false;
-+}
-+
- typedef bool (*check_reserved_t)(u64 start, u64 end, enum e820_type type);
-=20
- static bool __ref is_mmconf_reserved(check_reserved_t is_reserved, @@ -452=
-,23 +481,24 @@ static bool __ref is_mmconf_reserved(check_reserved_t is_res=
-erved,
- 	u64 size =3D resource_size(&cfg->res);
- 	u64 old_size =3D size;
- 	int num_buses;
--	char *method =3D with_e820 ? "E820" : "ACPI motherboard resources";
-+	char *method =3D with_e820 ? "E820" : "ACPI motherboard resources or=20
-+EFI";
-=20
-+	pr_info("is_mmconf_reserved %ps [bus %02x-%02x] %pR\n",
-+		is_reserved, cfg->start_bus, cfg->end_bus, &cfg->res);
- 	while (!is_reserved(addr, addr + size, E820_TYPE_RESERVED)) {
-+		pr_info("  %#lx-%#lx (size %#lx) not reserved\n",
-+			(unsigned long) addr, (unsigned long) (addr + size - 1),
-+			(unsigned long) size);
- 		size >>=3D 1;
-+		pr_info("  size reduced to %#lx\n", (unsigned long) size);
- 		if (size < (16UL<<20))
- 			break;
- 	}
-=20
--	if (size < (16UL<<20) && size !=3D old_size)
-+	if (size < (16UL<<20) && size !=3D old_size) {
-+		pr_info("is_mmconf_reserved %ps false\n", is_reserved);
- 		return false;
--
--	if (dev)
--		dev_info(dev, "MMCONFIG at %pR reserved in %s\n",
--			 &cfg->res, method);
--	else
--		pr_info(PREFIX "MMCONFIG at %pR reserved in %s\n",
--		       &cfg->res, method);
-+	}
-=20
- 	if (old_size !=3D size) {
- 		/* update end_bus */
-@@ -487,30 +517,42 @@ static bool __ref is_mmconf_reserved(check_reserved_t=
- is_reserved,
- 				&cfg->res, (unsigned long) cfg->address);
- 		else
- 			pr_info(PREFIX
--				"MMCONFIG for %04x [bus%02x-%02x] "
-+				"MMCONFIG for %04x [bus %02x-%02x] "
- 				"at %pR (base %#lx) (size reduced!)\n",
- 				cfg->segment, cfg->start_bus, cfg->end_bus,
- 				&cfg->res, (unsigned long) cfg->address);
- 	}
-=20
-+	if (dev)
-+		dev_info(dev, "MMCONFIG at %pR reserved in %s\n",
-+			 &cfg->res, method);
-+	else
-+		pr_info(PREFIX "MMCONFIG at %pR reserved in %s\n",
-+		       &cfg->res, method);
-+
- 	return true;
- }
-=20
- static bool __ref
- pci_mmcfg_check_reserved(struct device *dev, struct pci_mmcfg_region *cfg,=
- int early)  {
-+	pr_info("pci_mmcfg_check_reserved([bus %02x-%02x] %pR, %s)\n",
-+		cfg->start_bus, cfg->end_bus, &cfg->res,
-+		early ? "early" : "late");
- 	if (!early && !acpi_disabled) {
- 		if (is_mmconf_reserved(is_acpi_reserved, cfg, dev, 0))
- 			return true;
-+		if (is_mmconf_reserved(is_efi_mmio, cfg, dev, 0))
-+			return true;
-=20
- 		if (dev)
- 			dev_info(dev, FW_INFO
--				 "MMCONFIG at %pR not reserved in "
-+				 "MMCONFIG at %pR not reserved in EFI or "
- 				 "ACPI motherboard resources\n",
- 				 &cfg->res);
- 		else
- 			pr_info(FW_INFO PREFIX
--			       "MMCONFIG at %pR not reserved in "
-+			       "MMCONFIG at %pR not reserved in EFI or "
- 			       "ACPI motherboard resources\n",
- 			       &cfg->res);
- 	}
-@@ -536,6 +578,7 @@ static void __init pci_mmcfg_reject_broken(int early)  =
-{
- 	struct pci_mmcfg_region *cfg;
-=20
-+	pr_info("pci_mmcfg_reject_broken(%s)\n", early ? "early" : "late");
- 	list_for_each_entry(cfg, &pci_mmcfg_list, list) {
- 		if (pci_mmcfg_check_reserved(NULL, cfg, early) =3D=3D 0) {
- 			pr_info(PREFIX "not using MMCONFIG\n"); @@ -570,6 +613,7 @@ static int =
-__init pci_parse_mcfg(struct acpi_table_header *header)
- 	unsigned long i;
- 	int entries;
-=20
-+	pr_info("pci_parse_mcfg\n");
- 	if (!header)
- 		return -EINVAL;
-=20
-@@ -661,6 +705,7 @@ static int __initdata known_bridge;
-=20
- void __init pci_mmcfg_early_init(void)
- {
-+	pr_info("pci_mmcfg_early_init\n");
- 	if (pci_probe & PCI_PROBE_MMCONF) {
- 		if (pci_mmcfg_check_hostbridge())
- 			known_bridge =3D 1;
-@@ -674,6 +719,7 @@ void __init pci_mmcfg_early_init(void)
-=20
- void __init pci_mmcfg_late_init(void)
- {
-+	pr_info("pci_mmcfg_late_init\n");
- 	/* MMCONFIG disabled */
- 	if ((pci_probe & PCI_PROBE_MMCONF) =3D=3D 0)
- 		return;
-@@ -725,6 +771,8 @@ int pci_mmconfig_insert(struct device *dev, u16 seg, u8=
- start, u8 end,
- 	struct resource *tmp =3D NULL;
- 	struct pci_mmcfg_region *cfg;
-=20
-+	dev_info(dev, "pci_mmconfig_insert %02x-%02x addr %#lx\n",
-+		 start, end, (unsigned long)addr);
- 	if (!(pci_probe & PCI_PROBE_MMCONF) || pci_mmcfg_arch_init_failed)
- 		return -ENODEV;
-=20
-@@ -788,6 +836,7 @@ int pci_mmconfig_insert(struct device *dev, u16 seg, u8=
- start, u8 end,
-=20
- 	mutex_unlock(&pci_mmcfg_lock);
-=20
-+	dev_info(dev, "pci_mmconfig_insert returns %d\n", rc);
- 	return rc;
- }
-=20
