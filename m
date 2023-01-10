@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F930664C6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B31D6664C6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235238AbjAJTZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S232922AbjAJT0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:26:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239024AbjAJTZw (ORCPT
+        with ESMTP id S239139AbjAJT0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:25:52 -0500
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B1EE6C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:25:49 -0800 (PST)
-Received: by mail-vk1-xa32.google.com with SMTP id b81so6111816vkf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:25:49 -0800 (PST)
+        Tue, 10 Jan 2023 14:26:01 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B37389D
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:25:59 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id k26-20020a05600c1c9a00b003d972646a7dso12708031wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:25:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dy23pgZjHKapLKv15Vx83fv6lGT5u7B9IA06lp5hFmg=;
-        b=ERn/higlX2dFg4WpDH2b15Lk7RSWvuEqplnHDYtm5CrkvjlOxvANu5FTN2IdUuSBt9
-         zx5Sqx1SEL/1rNzaGr7wRafi7HDAAKKTpUJbt8InQwT/ryQY6zlVwt2Uur2rCH4F6RT5
-         A3fNlzRu1wj5JmcGieozvw5cxx13veOk+6qXoyW5KBmBvshr41IlIKlcyv71FE1TkVp0
-         /Z7xMd7r4oCXngTmrBNAAP6VsUyHf9Yc8G4ogaNVhsBCMrxcZY4KHSSp/6yB9vx+XKIp
-         aQ5YjRr9b6P4Ee+DNq0zW2NmANWCuB/B7K8tQLilzW4ZnVR280LCl5pASpQb4o6Bt045
-         +5cw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KG+ZRdx/AOYiB34HBS6JIzEWXifHlhhKkRS2/AG8Kls=;
+        b=aO6OOYOFAYcz+jNA7/5iAEQ/Fd7Sf7hD41vVsxVDhVJe9nut3NRqVio2PG0Qjqbwfq
+         OYzfsPoxsN/hNOJC9/zr+cXBQ7WiwZbPNCzbZpDbGHDhWpMYhhOa6q7rWixxhLchwlNg
+         pFJd28RWY1Dzh7lYHh7phTkcFJxNvLhNssZUSW9H2PH1AdRZQvJ6f2RfFuh8h5mPdM5T
+         6OaWlwfd/VCVdTcqkaSIW/dWdfamTbKXV4nYJYZib8cFZl+8FSLQoazMWWpIGCvxEDZz
+         1JFmjDr/wPUZRkz9ezlrF+5q/NR1pvZY6gI/ub+ByXmYNaAlgIWsi+GwcAOF8jZO0/8D
+         OigA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dy23pgZjHKapLKv15Vx83fv6lGT5u7B9IA06lp5hFmg=;
-        b=nnW8e3CvLPHhgPN05rlkyMZOFOCeuUbPW/bfdsSigtJ9TiaYf7SKdE4sp7wEpQ9wAy
-         ugziZc8wOEAwY+Yg7r8dWD3XP3wFTQ7qLkbo4/SgWsQC32i1eYREmIdV+UhmmzIQrKUK
-         GW9w+rZsv5S3Sf6B/mES0+uKEE5l2avCc9cPX8HkgJy9eU9wEZhJg71IXX6mLG6f0Wgm
-         VHDg9Kt4VCvXZxUm3sOkDQjYi2LIeT4sWBs/+du1UGN4pNFtROmR4QAa71S0i4CXsQMh
-         qIFNcY65hHPxDpkHJyr6nEdZTDntrvvguiKYVBICYL/P07BO5ERszr+f3zep73WRP/j2
-         onfA==
-X-Gm-Message-State: AFqh2krVGiXmQhhAgvRoLZaN6jZd/qLxrBH88OdAEagg7gNCHNDo26OA
-        iTh+Bs02Fgak99OlBjAtuCbw+8wircU8cACLn53bXQ==
-X-Google-Smtp-Source: AMrXdXte9jOvSL/EmGgpt5bvEu45qNmWyvfBgbOi2jH/VrK7IIzJmGabkCa+icpgLmCWLKqjFFs/PD9ToGZF8n0dPK4=
-X-Received: by 2002:a1f:2d08:0:b0:3d8:d753:56bb with SMTP id
- t8-20020a1f2d08000000b003d8d75356bbmr3260420vkt.39.1673378748741; Tue, 10 Jan
- 2023 11:25:48 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KG+ZRdx/AOYiB34HBS6JIzEWXifHlhhKkRS2/AG8Kls=;
+        b=Yd6yJP405IhTTzE1XHTBjoyUX8TIuI8QH3HmK3+XiceRe/Y+cgiudnqRI4Qs5k9gjA
+         V5y6idKnwQTp5x7/HxEphSi+KRq844mn13n2IDO71XWZSBNpVf1qLNS7/3bx2H/ZXH/q
+         mrwPCFfjHXkXiTmvlWQ3HdMbNxjpRVZr+HGnuKBjZ+0YZtRbLTaZQIxk+nH2/Vq09xq0
+         TI3CRq+frg4iZjJDQyCGE8iflhQ/iATQ9HcASe/qjBtQKQ+HV4G6GoCKk8Mm4WI/G70m
+         LaXpIijjWVzJnNHvXeSgtRaF7S75UeP7/P7hAIXfl7cvugYdaH9SImOC1pMB/wlu2woi
+         qjlg==
+X-Gm-Message-State: AFqh2krK7i8gsXGUG4A8Pecg751V48LxaJ7fdGbHsxJHeE9weWMrOpi5
+        OQ/srpo82nmXWdySmhQ1n0Hvzw==
+X-Google-Smtp-Source: AMrXdXuVIXPcscWYpIaTc+DxxOGWLCOMIhe4CqqanKd+UEQ5kvLOcQRNLCXuaCGlYEpO9t7/ux5wAw==
+X-Received: by 2002:a05:600c:1911:b0:3d9:8635:a916 with SMTP id j17-20020a05600c191100b003d98635a916mr47086737wmq.9.1673378757980;
+        Tue, 10 Jan 2023 11:25:57 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i8-20020a05600c354800b003cf894dbc4fsm17175575wmq.25.2023.01.10.11.25.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 11:25:56 -0800 (PST)
+Message-ID: <0453b098-91db-1918-38ae-a7db0408460c@linaro.org>
+Date:   Tue, 10 Jan 2023 20:25:54 +0100
 MIME-Version: 1.0
-References: <20221214220727.1350784-3-jcormier@criticallink.com>
- <20230109233534.1932370-1-jcormier@criticallink.com> <20230109233534.1932370-4-jcormier@criticallink.com>
- <d49d4b4c-e7ee-e0a1-56e6-7f193e0d1340@roeck-us.net> <CADL8D3YEkZaOjUY3mRLGT0M+b7MwN5zQZrbsw5W8Mn=PJ7PtcA@mail.gmail.com>
- <dd80ee77-3b71-ee47-2744-36b09e0ec372@roeck-us.net>
-In-Reply-To: <dd80ee77-3b71-ee47-2744-36b09e0ec372@roeck-us.net>
-From:   Jon Cormier <jcormier@criticallink.com>
-Date:   Tue, 10 Jan 2023 14:25:37 -0500
-Message-ID: <CADL8D3YksXnRkEgXkY86KZXM4nouJBemno=db5KgbCi3xmSa8Q@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] hwmon: ltc2945: Handle error case in ltc2945_value_store
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>,
-        Dan Vincelette <dvincelette@criticallink.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: msm8916-zhihe: Add initial device
+ tree for zhihe Wifi/LTE dongle UFI-001C and uf896
+Content-Language: en-US
+To:     forbidden405@foxmail.com, 'Andy Gross' <agross@kernel.org>,
+        'Bjorn Andersson' <andersson@kernel.org>,
+        'Konrad Dybcio' <konrad.dybcio@linaro.org>,
+        'Rob Herring' <robh+dt@kernel.org>,
+        'Krzysztof Kozlowski' <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     'Jaime Breva' <jbreva@nayarsystems.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        'Nikita Travkin' <nikita@trvn.ru>
+References: <20230110155014.31664-1-forbidden405@foxmail.com>
+ <tencent_A7FA00B086BB0EFFDC1C64744FF85DAD2B06@qq.com>
+ <8530aeef-8fdb-ede7-700e-856e5cbc6a5b@linaro.org>
+ <tencent_98E029F744FE85B9FD68B570A45A01743F07@qq.com>
+ <f909c1b0-97db-cc33-fa27-c5e901f11956@linaro.org>
+ <tencent_235CAC16001D1C38CE7D86BF7B0E365A2105@qq.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <tencent_235CAC16001D1C38CE7D86BF7B0E365A2105@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,165 +88,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 1:22 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 1/10/23 10:19, Jon Cormier wrote:
-> > On Mon, Jan 9, 2023 at 7:04 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> On 1/9/23 15:35, Jonathan Cormier wrote:
-> >>> ltc2945_val_to_reg errors were not being handled
-> >>> which would have resulted in register being set to
-> >>> 0 (clamped) instead of being left alone.
-> >>>
-> >>> Change reg_to_val and val_to_reg to return values
-> >>> via parameters to make it more obvious when an
-> >>> error case isn't handled. Also to allow
-> >>> the regval type to be the correct sign in prep for
-> >>> next commits.
-> >>>
-> >>
-> >> Sorry, I don't see that as reason or argument for such invasive changes.
-> >> As far as I can see, a two-liner to check the return value of val_to_reg()
-> >> should have been sufficient. Most of the rest, such as splitting
-> >> the return value into two elements, is POV and just adds additional code
-> >> and complexity for zero gain.
-> > I can do that. However, you had also mentioned changing the return
-> > type to match what the calling function was expecting, an unsigned
-> > long. But I can't do that since error codes are negative so it would
-> > be a signed long which would lose precision and seemingly defeat the
-> > point of matching the variable type the caller wants.  I could make it
-> > a signed long long but that still doesn't match.  So it seemed saner
-> > to just return the error and the value separately, that way the
-> > function declaration was explicit about the types it wanted/returned,
-> > and less room for error.  Would love to know your preferred solution.
-> >
->
-> That is only true if the upper bit is actually ever set in that signed long.
-> Which means I'll have to verify if "would lose precision" is actually
-> a correct statement.
-I'd like to argue that is another reason to go with this change
-instead of working out the math of just how many bits are needed in
-the worst case and having to document it. And potentially getting that
-calculation wrong.  But I can if you'd like me to.
->
-> Guenter
->
-> >>
-> >> Guenter
-> >>
-> >>> Fixes: 6700ce035f83 ("hwmon: Driver for Linear Technologies LTC2945")
-> >>>
-> >>> Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
-> >>> ---
-> >>>    drivers/hwmon/ltc2945.c | 30 ++++++++++++++++++------------
-> >>>    1 file changed, 18 insertions(+), 12 deletions(-)
-> >>>
-> >>> diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-> >>> index 9af3e3821152..c66acf8d2124 100644
-> >>> --- a/drivers/hwmon/ltc2945.c
-> >>> +++ b/drivers/hwmon/ltc2945.c
-> >>> @@ -70,12 +70,12 @@ static inline bool is_power_reg(u8 reg)
-> >>>    }
-> >>>
-> >>>    /* Return the value from the given register in uW, mV, or mA */
-> >>> -static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >>> +static int ltc2945_reg_to_val(struct device *dev, u8 reg, u64 *regval)
-> >>>    {
-> >>>        struct regmap *regmap = dev_get_drvdata(dev);
-> >>>        unsigned int control;
-> >>>        u8 buf[3];
-> >>> -     long long val;
-> >>> +     u64 val;
-> >>>        int ret;
-> >>>
-> >>>        ret = regmap_bulk_read(regmap, reg, buf,
-> >>> @@ -148,11 +148,12 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >>>        default:
-> >>>                return -EINVAL;
-> >>>        }
-> >>> -     return val;
-> >>> +     *regval = val;
-> >>> +     return 0;
-> >>>    }
-> >>>
-> >>>    static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >>> -                           unsigned long val)
-> >>> +                           unsigned long val, unsigned long *regval)
-> >>>    {
-> >>>        struct regmap *regmap = dev_get_drvdata(dev);
-> >>>        unsigned int control;
-> >>> @@ -220,19 +221,21 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >>>        default:
-> >>>                return -EINVAL;
-> >>>        }
-> >>> -     return val;
-> >>> +     *regval = val;
-> >>> +     return 0;
-> >>>    }
-> >>>
-> >>>    static ssize_t ltc2945_value_show(struct device *dev,
-> >>>                                  struct device_attribute *da, char *buf)
-> >>>    {
-> >>>        struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
-> >>> -     long long value;
-> >>> +     int ret;
-> >>> +     u64 value;
-> >>>
-> >>> -     value = ltc2945_reg_to_val(dev, attr->index);
-> >>> -     if (value < 0)
-> >>> -             return value;
-> >>> -     return sysfs_emit(buf, "%lld\n", value);
-> >>> +     ret = ltc2945_reg_to_val(dev, attr->index, &value);
-> >>> +     if (ret < 0)
-> >>> +             return ret;
-> >>> +     return sysfs_emit(buf, "%llu\n", value);
-> >>>    }
-> >>>
-> >>>    static ssize_t ltc2945_value_store(struct device *dev,
-> >>> @@ -245,7 +248,7 @@ static ssize_t ltc2945_value_store(struct device *dev,
-> >>>        unsigned long val;
-> >>>        u8 regbuf[3];
-> >>>        int num_regs;
-> >>> -     int regval;
-> >>> +     unsigned long regval;
-> >>>        int ret;
-> >>>
-> >>>        ret = kstrtoul(buf, 10, &val);
-> >>> @@ -253,7 +256,10 @@ static ssize_t ltc2945_value_store(struct device *dev,
-> >>>                return ret;
-> >>>
-> >>>        /* convert to register value, then clamp and write result */
-> >>> -     regval = ltc2945_val_to_reg(dev, reg, val);
-> >>> +     ret = ltc2945_val_to_reg(dev, reg, val, &regval);
-> >>> +     if (ret < 0)
-> >>> +             return ret;
-> >>> +
-> >>>        if (is_power_reg(reg)) {
-> >>>                regval = clamp_val(regval, 0, 0xffffff);
-> >>>                regbuf[0] = regval >> 16;
-> >>
-> >
-> >
-> > --
-> > Jonathan Cormier
-> > Software Engineer
-> >
-> > Voice:  315.425.4045 x222
-> >
-> >
-> >
-> > http://www.CriticalLink.com
-> > 6712 Brooklawn Parkway, Syracuse, NY 13211
->
+On 10/01/2023 19:58, forbidden405@foxmail.com wrote:
+> I removed Cc temporary because I had sent them the same email once. No need
+> to send the email to them again.
+> 
+>> On 10/01/2023 19:30 krzysztof.kozlowski@linaro.org wrote:
+> 
+>> You install this kernel with DTB on some device so clearly you have such
+>> device
+>> in hand, right? It has then some manufacturer, some company. If it is USB
+>> stick
+>> as you said, then it has even vendor ID, which might be or might not be
+>> real.
+> 
+> The vendor extracted from `/system/build.prop` and USB vendor ID is fake,
+> even IMEI is stolen from some other mobile phones. Seems like the vendor
+> deliberately tries to be anonymous. Some people had tried to extract info
+> from stock firmware and on the Internet. But until now, we have no clear
+> evidence to know the manufacturer.
 
+Then I am not sure if we want to support such devices mainline. It is
+not only anonymity but simply not following standards and practices.
+What's more there is no guarantee what this device is. If there is no
+known manufacturer, anytime another device from anyone can claim it is
+also uf896. IOW, what guarantees you have that other person who has
+something looking like "uf896" actually has something the same as you
+and can use your DTB?
 
--- 
-Jonathan Cormier
-Software Engineer
+I don't know how to reasonably support entirely unknown devices.
 
-Voice:  315.425.4045 x222
+Best regards,
+Krzysztof
 
-
-
-http://www.CriticalLink.com
-6712 Brooklawn Parkway, Syracuse, NY 13211
