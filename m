@@ -2,87 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C09664D2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BB7664D30
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbjAJUVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 15:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
+        id S232670AbjAJUWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 15:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbjAJUVc (ORCPT
+        with ESMTP id S231768AbjAJUWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:21:32 -0500
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CC795BB
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:21:29 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id FL7cpSMgVPNsNFL7dpVOK1; Tue, 10 Jan 2023 21:21:27 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 10 Jan 2023 21:21:27 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>
-Cc:     linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH v2] bit_spinlock: Include <linux/processor.h>
-Date:   Tue, 10 Jan 2023 21:21:13 +0100
-Message-Id: <efd8783178f9d15e6d57f10e2e5090a14d5bc923.1673381735.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Tue, 10 Jan 2023 15:22:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D244817E37
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:22:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87983B81981
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 20:22:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FF0C433D2;
+        Tue, 10 Jan 2023 20:22:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673382125;
+        bh=9EGHZOb2GDNsDgmyNNhgiMq88KY2ZtPaE3rt9uNDuaI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oYFPAW67K5ZWu8/aDzox6CkWb38sLQQeAPhNjIRNoYFt6+TEcmSoK9E6XVAnDhFe2
+         ODjw6CqXeAvScwhX9afNrRuUeL3ZcxXuChLed89nMEourriKry5QE6i/wHt8G0w5+E
+         tjbssRJn7AyFn39tlVpVGBzVUILBMwvzlRSXSz3tuFXl+XZiu8Bp7hMNHVkrownedI
+         13ZaeZb1qrUo8INIVIcNkcIaXLX5ZiWLPfEBzjMzhmQIIbHR5rGrsdtzeh55TRyA5y
+         /BB4YnJSpU/Y5/LpdJi8SuR8kTXh4WNJOYU+HpyVw2R9zBaIqQS41kdcmGxAhOLXpU
+         r1N78z1zYP7Aw==
+Date:   Tue, 10 Jan 2023 20:22:00 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     JeeHeng Sia <jeeheng.sia@starfivetech.com>
+Cc:     Andrew Jones <ajones@ventanamicro.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: Re: [PATCH v2 3/3] RISC-V: Add arch functions to support
+ hibernation/suspend-to-disk
+Message-ID: <Y73I6H+X+qswIst0@spud>
+References: <20230109062407.3235-1-jeeheng.sia@starfivetech.com>
+ <20230109062407.3235-4-jeeheng.sia@starfivetech.com>
+ <20230109193624.iiuguwgimpn7zbyw@orel>
+ <6638291f6a3c463994919ba0a875472c@EXMBX066.cuchost.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aEr+ayiT2Lg3RrOQ"
+Content-Disposition: inline
+In-Reply-To: <6638291f6a3c463994919ba0a875472c@EXMBX066.cuchost.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In an attempt to simplify some includes in <include/dcache.h>, it
-appeared, when compiling fs/ecryptfs/dentry.c, that <linux/bit_spinlock.h>
-was relying on other includes to get the definition of cpu_relax().
-(see [1])
 
-It broke on ARC.
+--aEr+ayiT2Lg3RrOQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Include <linux/processor.h> in <linux/bit_spinlock.h> to fix the issue.
-This will help to remove some un-needed includes from <include/dcache.h>.
+Hey JeeHeng,
 
-[1]: https://lore.kernel.org/all/202301082130.LXMj5qkD-lkp@intel.com/
+On Tue, Jan 10, 2023 at 08:37:01AM +0000, JeeHeng Sia wrote:
+> > From: Andrew Jones <ajones@ventanamicro.com>
+> > On Mon, Jan 09, 2023 at 02:24:07PM +0800, Sia Jee Heng wrote:
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Change in v2:
-  - include <linux/processor.h> instead of <asm/processor.h>   (Andrew Morton)
-  
-v1:
-https://lore.kernel.org/all/8b81101d59a31f4927016c17e49be96754a23380.1673204461.git.christophe.jaillet@wanadoo.fr/
----
- include/linux/bit_spinlock.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > +/* Helper parameters that help us to restore the image.
+> >=20
+> > Separate line for /*
+> ok
 
-diff --git a/include/linux/bit_spinlock.h b/include/linux/bit_spinlock.h
-index bbc4730a6505..4e3b407963f6 100644
---- a/include/linux/bit_spinlock.h
-+++ b/include/linux/bit_spinlock.h
-@@ -4,9 +4,9 @@
- 
- #include <linux/kernel.h>
- #include <linux/preempt.h>
-+#include <linux/processor.h>
- #include <linux/atomic.h>
- #include <linux/bug.h>
--
- /*
-  *  bit-based spin_lock()
-  *
--- 
-2.34.1
+I'm not sure why this one struct has an actual description that
+resembles kerneldoc, when nothing else does - but why not make it
+actually kerneldoc, as you're almost there as things stand:
+https://docs.kernel.org/doc-guide/kernel-doc.html#structure-union-and-enume=
+ration-documentation
 
+> > > + * @hartid: To make sure same boot_cpu executing the hibernate/resto=
+re
+> > code.
+> > > + * @saved_satp: Original page table used by the hibernated image.
+> > > + * @restore_cpu_addr: The kernel's image address to restore the CPU
+> > context.
+
+^^ also your mail client is doing some really odd things wrapping wise.
+
+> > > +static unsigned long temp_pgtable_map_pmd(pmd_t *pmdp, unsigned
+> > long vaddr, pgprot_t prot)
+> > > +{
+> > > +	uintptr_t pmd_idx =3D pmd_index(vaddr);
+> > > +	pte_t *ptep;
+> > > +
+> > > +	if (pmd_none(pmdp[pmd_idx])) {
+> > > +		ptep =3D (pte_t *) get_safe_page(GFP_ATOMIC);
+> >=20
+> > No space between cast and function. Same comment for following function=
+s.
+> > I thought checkpatch complained about that.
+> Ok. But it is weird that checkpatch doesn't report the issue.
+
+It does:
+20:08:17 conor /stuff/linux$ ./scripts/checkpatch.pl --strict --terse -g HE=
+AD~3..HEAD
+7481f133eb0310496742c27d15a20fdd2c499d29:97: CHECK: Alignment should match =
+open parenthesis
+[...]
+7481f133eb0310496742c27d15a20fdd2c499d29:370: CHECK: No space is necessary =
+after a cast
+[...]
+7481f133eb0310496742c27d15a20fdd2c499d29:460: CHECK: No space is necessary =
+after a cast
+7481f133eb0310496742c27d15a20fdd2c499d29:467: CHECK: No space is necessary =
+after a cast
+7481f133eb0310496742c27d15a20fdd2c499d29:475: CHECK: Blank lines aren't nec=
+essary after an open brace '{'
+7481f133eb0310496742c27d15a20fdd2c499d29:480: CHECK: No space is necessary =
+after a cast
+7481f133eb0310496742c27d15a20fdd2c499d29:487: CHECK: No space is necessary =
+after a cast
+7481f133eb0310496742c27d15a20fdd2c499d29:499: CHECK: No space is necessary =
+after a cast
+7481f133eb0310496742c27d15a20fdd2c499d29:506: CHECK: No space is necessary =
+after a cast
+7481f133eb0310496742c27d15a20fdd2c499d29:518: CHECK: No space is necessary =
+after a cast
+7481f133eb0310496742c27d15a20fdd2c499d29:525: CHECK: No space is necessary =
+after a cast
+7481f133eb0310496742c27d15a20fdd2c499d29:577: CHECK: No space is necessary =
+after a cast
+7481f133eb0310496742c27d15a20fdd2c499d29:591: CHECK: Alignment should match=
+ open parenthesis
+7481f133eb0310496742c27d15a20fdd2c499d29:596: CHECK: Alignment should match=
+ open parenthesis
+total: 0 errors, 1 warnings, 21 checks, 545 lines checked
+
+The patchwork automation seems to have ignored this patchset for some
+reason. It was stuck on a patchset for some reason and this one may
+have got skipped when I tried to sort that out.
+Ordinarily, you'd see it complaining about these sorts of things.
+
+Thanks,
+Conor.
+
+
+--aEr+ayiT2Lg3RrOQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY73I6AAKCRB4tDGHoIJi
+0uevAQD0LL1+O9o932YhX5juJyehF24SF3kLO4FCJ3sYy9aDtQEAg6ulenxst/zo
+EdNpMSk5NMwkh5uZhQU8Mk4yIIB5CQU=
+=JgxJ
+-----END PGP SIGNATURE-----
+
+--aEr+ayiT2Lg3RrOQ--
