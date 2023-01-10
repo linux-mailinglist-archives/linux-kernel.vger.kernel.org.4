@@ -2,119 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08CC664E6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E64664E74
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjAJWB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 17:01:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
+        id S234367AbjAJWCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 17:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbjAJWBV (ORCPT
+        with ESMTP id S234236AbjAJWBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 17:01:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB547183A4;
-        Tue, 10 Jan 2023 14:01:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E9C9B819B6;
-        Tue, 10 Jan 2023 22:01:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3819AC433D2;
-        Tue, 10 Jan 2023 22:01:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673388077;
-        bh=M5rts+D30gn+VWBW52xohLqDKxs2pcijUxIUeXZGA1U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PliotbDymRLYIkcaTmlGbbwKLVSGDgWxgLy8o/JeEYOU1sCncW4M1p+Y5krZKt75o
-         p5+QLMiwo9Fbp1GugcLkut7w5jhPRVNMJQkkv4TyG/krRkAPHj7StmYpT7CSDPIVxA
-         uc2FTsrW4qZCGgiw/zuJsQegcumY+oxYq5uAUiDLDcs7+1xYpPXsdwTmxL8bYDgosd
-         IsP//3x0a3THLQssrE1BqJPSw4KcyYTXoLtoORduuniDF6+YbAEq3pNRXO3MgSfmr5
-         d2Aym4psoCiVAtwFHIFldXrTkje+YZa5E6Rke65dMX58VdSm1wOayfb0NmfuYM/x9U
-         tpIOpon3+yrJA==
-Date:   Tue, 10 Jan 2023 22:01:10 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/16] dt-bindings: spi: Add spi peripheral specific
- property
-Message-ID: <Y73gJhlzHz6waIvf@sirena.org.uk>
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-4-william.zhang@broadcom.com>
- <Y7iPS48viBg0QRok@sirena.org.uk>
- <3ff9a7fa-25dd-701c-078e-03e47bd3c08b@broadcom.com>
- <CAL_JsqJ7kr-6xs53NYJufem=wXnXVRnj3-1t1rG+W6g09kJ3ew@mail.gmail.com>
- <6720e3a4-dbbb-f490-98db-511a52b9a2ab@broadcom.com>
- <Y7xosoZMJEwRi1ok@sirena.org.uk>
- <f55ab390-a784-d598-8d0e-b78040fdbb73@broadcom.com>
+        Tue, 10 Jan 2023 17:01:37 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C93183A4;
+        Tue, 10 Jan 2023 14:01:36 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id z11so19724815ede.1;
+        Tue, 10 Jan 2023 14:01:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1zojtUlTJ41SuWrZfC5EvKnzTTlRKFzqNeYYEkay3v4=;
+        b=cddZySA12Yq1swNWNYpIqK5JVInCajEv34dtVRX5iLyqxr5N3PemsxVXbnYOYIAGnr
+         gKqEW06tcOHsUR8VcFS7DQXlbibMgWFmmH7wYHUh2NL0DKearGTJxtoM93CdEr7jbMDa
+         O9ctWwjV5w20+4FuPz2Hrf6A4e+2EkHV+2R1k7gHfAtogBaDtnsVgEfWmQRtkix/YR5s
+         5XEKKjiSszvnbWScuBp9OOtkHUJmcyyUHP0ylIIYBERyQsHDrotlg+UBh5g0M8HCQsQV
+         oDCEclTpfv1WZWvEXDWC9pZsmAAQIsOWKCMhRAz34wryF5FxONHePBLWOopXe29o2SPe
+         Ybkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1zojtUlTJ41SuWrZfC5EvKnzTTlRKFzqNeYYEkay3v4=;
+        b=7dw73EJDXx730ot1K6TWeHa9Wbq0hKZ7qnUccOWXvPEQJNfyRTj4kqaKOwcADozyW3
+         WYdZWUQJZLsXsnsQPoB6/TxRCw4ipRyiF8NxMCdnNla9C25fE8Wgp7/bjPh69cTjdyGl
+         9RA/0QCxtueKbp+Skl51+qw5V/BMaq6+zmqPaLR2fj00229F4C/j0hxddFuQ/1UGxjam
+         7394Lp35Oh4sbS1jcqc2kCaerjjv5+/ECKjTa1lYcobuFNWy8ffXRaRs6/kJPOn2pQn2
+         MgnTPLqvgyBwL8rrfm6MxnHKihGQlXqCFaTAKdEfDkprHa18X28ZMcKRabo/FDJT3uQ6
+         ZVYQ==
+X-Gm-Message-State: AFqh2koy8tNQSDrKkywW4qV/S74epUpgSvYlMaGsD3uA2RfnckEp8kOn
+        mmWk1rX/fV+shNVoW2CvCLKhSrqR0xLTqGKwey8=
+X-Google-Smtp-Source: AMrXdXs/xAROFlmP1Z6gsP4nU76Fz9ohlobY7nC70UqqJ6A94oT0iQ6simlwUiEPavrP8bBYALj6XMxx0kprOzT+6D8=
+X-Received: by 2002:a05:6402:4290:b0:498:61f5:5734 with SMTP id
+ g16-20020a056402429000b0049861f55734mr1027278edc.238.1673388094576; Tue, 10
+ Jan 2023 14:01:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8k6YxWNEbCoXLS2/"
-Content-Disposition: inline
-In-Reply-To: <f55ab390-a784-d598-8d0e-b78040fdbb73@broadcom.com>
-X-Cookie: Live free or die.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v2-2-36ad050bb625@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-2-36ad050bb625@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 10 Jan 2023 23:01:23 +0100
+Message-ID: <CAFBinCCP7xyFEa9GhRQ3NBhfSkn1WSP_qyoLKfaMPpqUTe11bA@mail.gmail.com>
+Subject: Re: [PATCH v2 02/11] dt-bindings: nvmem: convert amlogic-efuse.txt to dt-schema
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 9, 2023 at 1:53 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>
+> Convert the  Amlogic Meson GX eFuse bindings to dt-schema.
+>
+> Take in account the used variant with amlogic,meson-gx-efuse.
+>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
---8k6YxWNEbCoXLS2/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Mon, Jan 09, 2023 at 12:18:09PM -0800, William Zhang wrote:
-
-> This setting is set per spi message for particular chip select of the device
-> when starting the message through bcm63xx_hsspi_set_clk function and restore
-> to default(clock gating) when message is done through
-> bcm63xx_hsspi_restore_clk_gate.
-
-In that case I am extremely confused about what the feature is supposed
-to do.  The description says:
-
-+  brcm,no-clk-gate:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      Some SPI device such as Broadcom ISI based voice daughtercard requires
-+SPI
-+      clock running even when chip select is deasserted. By default the
-+      controller turns off or gate the clock when cs is not active to save
-+      power. This flag tells the controller driver to keep the clock running
-+      when chip select is not active.
+This will cause a warning in
+arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
+though (which is an existing issue, this patch just makes it visible).
+I sent a fix for that: [0]
 
 
-which to me sounds like the clock should never be turned off and instead
-left running at all times.  Switching back to clock gating after sending
-the message doesn't seem to correspond to the above at all, the message
-being done would normally also be the point at which chip select is
-deasserted.
+Best regards,
+Martin
 
---8k6YxWNEbCoXLS2/
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO94CUACgkQJNaLcl1U
-h9CdJAf/QI6A4fWPY4QxulQZlgN08+3prwWv5cDXiANd7ma60ajOD9YwY0ajx9gb
-iM6BzxPjLHgbRvvR0WtDxt47NWLBJr2rf9B4hBTjr5EZdX2fWurcx3aJTnD+eNG2
-x7zASz234aU7ZEPr3jNsm/JAs2nJYJDiAVBSNPuplyX4fDmPUZQmrDBP3uaAhdO9
-7WzWvaPY8ZomdB4V1Onv0oz9x8xXX/c0Ngx36V4XR1zsOqbnbzValVoHDJ6y3geu
-d6ejtbA1wtuowzV3csuYVq/tkw3Az9h9idivu3UW7qaTmvjIUL374AHeSUUG+b1C
-Dr4pP7nqnpJkzBu179zn+QlTBB/j0A==
-=qE5i
------END PGP SIGNATURE-----
-
---8k6YxWNEbCoXLS2/--
+[0] https://lore.kernel.org/linux-amlogic/20230110215926.1296650-1-martin.blumenstingl@googlemail.com/T/#u
