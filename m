@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD16664522
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25CB66451B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238711AbjAJPoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:44:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
+        id S234317AbjAJPnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238372AbjAJPn3 (ORCPT
+        with ESMTP id S232148AbjAJPnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:43:29 -0500
-Received: from ns2.wdyn.eu (ns2.wdyn.eu [5.252.227.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4B7DE010;
-        Tue, 10 Jan 2023 07:43:28 -0800 (PST)
-Message-ID: <53b23ee9-a333-120e-8b58-cfa3a9bdaefc@wetzel-home.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wetzel-home.de;
-        s=wetzel-home; t=1673365407;
-        bh=joeZ0isSpFWCfJo9bP7lRZdTrlAemheFG8yfUEmmw0s=;
-        h=Date:Subject:From:To:References:In-Reply-To;
-        b=oBfHQ7QJtk5sWEMyXs1jUUCKUM6vy9bmoUBwseZQqoOK64dyvDGQpalE18Lze85HU
-         O3zZ2NDPT4JWbsFu0S/zYsjJKHaNdL1lcjq/5NZcsMJOB/MKuWC6F+aXbM6XEYX79/
-         MNaJ350fvM8rvdfGcW86uzJUkUbDRnoMansGYTzg=
-Date:   Tue, 10 Jan 2023 16:43:27 +0100
+        Tue, 10 Jan 2023 10:43:06 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA540BC27;
+        Tue, 10 Jan 2023 07:43:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1673365382;
+        bh=9DteScviYzuGDClKOO5i/bvIpmEkTcoZ7S9CiWf5duc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Owk0ak4+dXPr7yNtet96RlZ6n0eC1KJZD5diCIy5/tXAuxDatJS3hQizmvns3O4NU
+         X1aWy7G96wa1tYGyqfoZEvSs/I6WJ9f0+20jRf967PwH1r7jnfgJpiSfwed85CIbeM
+         1CAh6LwU/fUjEMq2xJXXDdXNz4qZTjRMOeEatO/7wpIRgwywrottVKwYbjE38BNDu9
+         yPdmLw8zUvCosX0pJxcOBSh8pLl+VTOxTarkApp6ZBaA+1vAuDezZn4Fg/c+3POX3R
+         KkqftKAEtZhk/1aXj8VutGiuGOQ/UJ1cVV5MZY/vL/2QCP4GhwWwAGwSniS4D9Gp1e
+         RKi1YQIZ56SSA==
+Received: from [172.16.0.101] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Nrw7V03tZzfyK;
+        Tue, 10 Jan 2023 10:43:01 -0500 (EST)
+Message-ID: <2fb8749a-2a1a-8fdc-f5ad-e0632cd53d63@efficios.com>
+Date:   Tue, 10 Jan 2023 10:43:35 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: ieee80211_handle_wake_tx_queue and dynamic ps regression
+Subject: Re: [powerpc] Boot failure kernel BUG at mm/usercopy.c:102
 Content-Language: en-US
-From:   Alexander Wetzel <alexander@wetzel-home.de>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-kernel@vger.kernel.org, johannes.berg@intel.com,
-        Kalle Valo <kvalo@codeaurora.org>,
-        linux-wireless@vger.kernel.org
-References: <19015168-c747-17b7-f0ae-9d2ee27d221c@linaro.org>
- <06f76774-1b2e-f563-7128-7d5b9547dfe9@linaro.org>
- <cf5e9339-2511-1135-71da-a8342b264414@linaro.org>
- <205fb221-f7ad-8f03-2c16-54dcbf5ecaf9@wetzel-home.de>
-In-Reply-To: <205fb221-f7ad-8f03-2c16-54dcbf5ecaf9@wetzel-home.de>
+To:     Sachin Sant <sachinp@linux.ibm.com>, linux-next@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <8C9D7E49-5A75-41BE-ACCB-44FDD8FBE4D0@linux.ibm.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <8C9D7E49-5A75-41BE-ACCB-44FDD8FBE4D0@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -50,116 +53,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.01.23 16:23, Alexander Wetzel wrote:
-> On 10.01.23 15:47, Bryan O'Donoghue wrote:
->> On 10/01/2023 12:44, Bryan O'Donoghue wrote:
->>> + linux-wireless
->>> On 10/01/2023 12:35, Bryan O'Donoghue wrote:
->>>> commit a790cc3a4fad75048295571a350b95b87e022a5a 
->>>> (wake_tx_queue-broken-23-08-01)
->>>> Author: Alexander Wetzel <alexander@wetzel-home.de>
->>>> Date:   Sun Oct 9 18:30:39 2022 +0200
->>>>
->>>>      wifi: mac80211: add wake_tx_queue callback to drivers
->>>>
->>>> is causing a regression with
->>>>
->>>> - CONF_PS = 1
->>>> - CONF_DYNAMIC_PS = 0
->>>> - ieee80211_handle_wake_tx_queue
->>>>
->>>> In this case we get stuck in a loop similar to this
->>>>
->>>> // IEEE80211_CONF_CHANGE_PS
->>>> [   17.255480] wcn36xx: wcn36xx_change_ps/312 enable
->>>> [   18.088835] ieee80211_tx_h_dynamic_ps/263 setting 
->>>> IEEE80211_QUEUE_STOP_REASON_PS
->>>> [   18.088906] ieee80211_handle_wake_tx_queue/334 entry
->>>> [   18.091505] ieee80211_dynamic_ps_disable_work/2250 calling 
->>>> ieee80211_hw_config()
->>>> [   18.095370] ieee80211_handle_wake_tx_queue/338 wake_tx_push_queue
->>>>
->>>> // IEEE80211_CONF_CHANGE_PS
->>>> [   18.102625] wcn36xx: wcn36xx_change_ps/312 disable
->>>> [   18.107643] wake_tx_push_queue/303 entry
->>>>
->>>> // txq is stopped here reason == IEEE80211_QUEUE_STOP_REASON_PS
->>>> [   18.107654] wake_tx_push_queue/311 q_stopped bitmask 0x00000002 
->>>> IEEE80211_QUEUE_STOP_REASON_PS true
->>>> [   18.107661] wake_tx_push_queue/324 exit
->>>> [   18.107667] ieee80211_handle_wake_tx_queue/342 exit
->>>> [   18.115560] ieee80211_handle_wake_tx_queue/334 entry
->>>> [   18.139937] ieee80211_handle_wake_tx_queue/338 wake_tx_push_queue
->>>> [   18.145163] wake_tx_push_queue/303 entry
->>>> [   18.150016] ieee80211_dynamic_ps_disable_work/2252 completed 
->>>> ieee80211_hw_config()
->>>>
->>>> // now we unset IEEE80211_QUEUE_STOP_REASON_PS but too late
->>>> [   18.151145] wake_tx_push_queue/311 q_stopped bitmask 0x00000002 
->>>> IEEE80211_QUEUE_STOP_REASON_PS true
->>>> [   18.155263] ieee80211_dynamic_ps_disable_work/2254 clearing 
->>>> IEEE80211_QUEUE_STOP_REASON_PS
->>>> [   18.162531] wake_tx_push_queue/324 exit
->>>> [   18.162548] ieee80211_handle_wake_tx_queue/342 exit
->>>> [   18.183639] ieee80211_dynamic_ps_disable_work/2259 cleared 
->>>> IEEE80211_QUEUE_STOP_REASON_PS
->>>>
->>>> // IEEE80211_CONF_CHANGE_PS runs again
->>>> [   18.215487] wcn36xx: wcn36xx_change_ps/312 enable
->>>>
->>>> We get stuck in that loop. Packets getting transmitted is a rare 
->>>> event, most are dropped.
->>
+On 2023-01-10 05:42, Sachin Sant wrote:
+> 6.2.0-rc3-next-20230109 fails to boot on powerpc with following:
 > 
-> I'll need some time digest that... I report back once I get it.
+> [ 0.444834] ------------[ cut here ]------------
+> [ 0.444838] kernel BUG at mm/usercopy.c:102!
+> [ 0.444842] Oops: Exception in kernel mode, sig: 5 [#1]
+> [ 0.444845] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
+> [ 0.444849] Modules linked in:
+> [ 0.444853] CPU: 23 PID: 201 Comm: modprobe Not tainted 6.2.0-rc3-next-20230109 #1
+> [ 0.444858] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006 of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
+> [ 0.444862] NIP: c00000000055a934 LR: c00000000055a930 CTR: 0000000000725d90
+> [ 0.444866] REGS: c000000007f937c0 TRAP: 0700 Not tainted (6.2.0-rc3-next-20230109)
+> [ 0.444871] MSR: 8000000000029033 <SF,EE,ME,IR,DR,RI,LE> CR: 28088822 XER: 00000007
+> [ 0.444879] CFAR: c0000000002012a8 IRQMASK: 0
+> [ 0.444879] GPR00: c00000000055a930 c000000007f93a60 c0000000013b0800 0000000000000066
+> [ 0.444879] GPR04: 00000000ffff7fff c000000007f93880 c000000007f93878 0000000000000000
+> [ 0.444879] GPR08: 00000000ffff7fff 0000000000000000 c0000000025e7150 c0000000029672b8
+> [ 0.444879] GPR12: 0000000048088824 c000000e87bf6300 c00000000017f458 c0000000034b8100
+> [ 0.444879] GPR16: 000000012f18eac0 00007fffc5c095d0 00007fffc5c095d8 000000012f140040
+> [ 0.444879] GPR20: fcffffffffffffff 00000000001fffff 5455555555555555 000ffffffffffff8
+> [ 0.444879] GPR24: c00000000723a0c0 00007fffc5c09368 0000000000000000 00007fffc5c09370
+> [ 0.444879] GPR28: 0000000000000250 0000000000000001 c000000003017000 c00000000723a0c0
+> [ 0.444922] NIP [c00000000055a934] usercopy_abort+0xa4/0xb0
+> [ 0.444928] LR [c00000000055a930] usercopy_abort+0xa0/0xb0
+> [ 0.444932] Call Trace:
+> [ 0.444933] [c000000007f93a60] [c00000000055a930] usercopy_abort+0xa0/0xb0 (unreliable)
+> [ 0.444939] [c000000007f93ad0] [c00000000050eeb8] __check_heap_object+0x198/0x1d0
+> [ 0.444945] [c000000007f93b10] [c00000000055a7e0] __check_object_size+0x290/0x340
+> [ 0.444949] [c000000007f93b50] [c00000000060eba4] create_elf_tables.isra.20+0xc04/0xc90
+> [ 0.444956] [c000000007f93c10] [c000000000610b2c] load_elf_binary+0xdac/0x1320
+> [ 0.444962] [c000000007f93d00] [c000000000571cf0] bprm_execve+0x3d0/0x7c0
+> [ 0.444966] [c000000007f93dc0] [c000000000572b9c] kernel_execve+0x1ac/0x270
+> [ 0.444971] [c000000007f93e10] [c00000000017f5cc] call_usermodehelper_exec_async+0x17c/0x250
+> [ 0.444978] [c000000007f93e50] [c00000000000e054] ret_from_kernel_thread+0x5c/0x64
+> [ 0.444983] --- interrupt: 0 at 0x0
+> [ 0.444986] NIP: 0000000000000000 LR: 0000000000000000 CTR: 0000000000000000
+> [ 0.444990] REGS: c000000007f93e80 TRAP: 0000 Not tainted (6.2.0-rc3-next-20230109)
+> [ 0.444994] MSR: 0000000000000000 <> CR: 00000000 XER: 00000000
+> [ 0.444998] CFAR: 0000000000000000 IRQMASK: 0
+> [ 0.444998] GPR00: 0000000000000000 c000000007f94000 0000000000000000 0000000000000000
+> [ 0.444998] GPR04: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [ 0.444998] GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [ 0.444998] GPR12: 0000000000000000 0000000000000000 c00000000017f458 c0000000034b8100
+> [ 0.444998] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [ 0.444998] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [ 0.444998] GPR24: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [ 0.444998] GPR28: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [ 0.445039] NIP [0000000000000000] 0x0
+> [ 0.445042] LR [0000000000000000] 0x0
+> [ 0.445044] --- interrupt: 0
+> [ 0.445046] Code: 392990f8 48000014 3d02ffe9 390827f0 7d074378 7d094378 7c661b78 3c62ffe7 f9610060 386319f0 4bca6935 60000000 <0fe00000> 00000000 00000000 7c0802a6
+> [ 0.445061] ---[ end trace 0000000000000000 ]—
+> 
+> Git bisect points to following patch:
+> 
+> commit 317c8194e6aeb8b3b573ad139fc2a0635856498e
+>       rseq: Introduce feature size and alignment ELF auxiliary vector entries
+> 
+> Reverting the patch helps boot the kernel.
 
-Looks like the the commit 
-https://patchwork.kernel.org/project/linux-wireless/patch/20221230121850.218810-1-alexander@wetzel-home.de/
-has a good chance to solve the issue:
+Can you try with the following fix ?
 
-1) Queues are stopped due to PS
-2) Then there is a TX attempt. But due to the (PS) queue stop
-    wake_tx_push_queue() aborts the queue run
-3) Then we hit the bug the patch fixes: The queue is not marked to
-    have pending packets and thus packets on it are not transmitted.
+https://lore.kernel.org/r/20230104192054.34046-1-mathieu.desnoyers@efficios.com
+"rseq: Fix: Increase AT_VECTOR_SIZE_BASE to match rseq auxvec entries"
 
-Packets get only send when you happen to try tx when the queue is 
-operational. (And then you will get all the packets sitting in the queue.)
+Peter, I suspect it would be good to merge that fix into tip/master though sched/core.
 
-Does that make sense? And more crucial, is the patch fixing that for you?
+Thanks,
+
+Mathieu
+
 
 > 
->> BTW I considered implementing a wcn36xx specific wake_tx callback - 
->> which maybe should be done anyway.
->>
->> I _don't_ see other drivers checking for q_stopped & 
->> IEEE80211_QUEUE_STOP_REASON_PS
->>
->> Should they be ?
->>
-> 
-> No, they should not.
-> 
-> My take is, that this is a bug in mac80211. I submitted patches to 
-> fixing that, they have just been accepted:
-> 
-> https://patchwork.kernel.org/project/linux-wireless/patch/20221230121850.218810-1-alexander@wetzel-home.de/
-> 
-> and
-> 
-> https://patchwork.kernel.org/project/linux-wireless/patch/20230106223141.98696-1-alexander@wetzel-home.de/
-> 
-> 
-> Can you test if these also help here?
-> 
-> 
-> 
->> If they should check IEEE80211_QUEUE_STOP_REASON_PS, then right now, 
->> they don't. If they shouldn't check IEEE80211_QUEUE_STOP_REASON_PS 
->> then neither should the generic replacement 
->> ieee80211_handle_wake_tx_queue()
->>
->> ---
->> bod
-> 
+> Thanks
+> -Sachin
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
