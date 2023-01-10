@@ -2,185 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6B8663A3D
+	by mail.lfdr.de (Postfix) with ESMTP id E82B6663A3E
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237505AbjAJHz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 02:55:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
+        id S237958AbjAJH4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 02:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237872AbjAJHzf (ORCPT
+        with ESMTP id S237972AbjAJHzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 02:55:35 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020784881B;
-        Mon,  9 Jan 2023 23:54:45 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30A2hr2Z008708;
-        Mon, 9 Jan 2023 23:54:37 -0800
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2173.outbound.protection.outlook.com [104.47.55.173])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3my94tt1x8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 23:54:36 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wowc/X5JyUB8deRy4PRK1cGNCHvInjemnHN+LJS2Gzcc+MBrORigDyuVw7B7a/vrZS7cJmky5qw0NQmy2qbfrXY5mn51q/jXeChiZTXZ4aRhEm7ucwH0dfXd+sDC0e6/r5VVFR661xV9ITE+GTb7Uz9dkr/XKQDI0pReh2xMEi/BA/gDlbOke+ngkO2M5zIUXiMOMVZeB3lvEtWGEbkPV72xSZb27N56zWko/q0E9wJcTiWESMqQyJZ58diFwzY+sJZj3a7BP8qxnu5dW0DEsm3sY5a3mJ2EMRUTirxrMKxUaGYuGv/US2Dd//DbP0kt21UBBvJ5N4kcBjyXZl/YGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kgNwFwA2XfeLe/rM9b0v5A/Ak+JljOmVx7ymmRRY4f0=;
- b=jDQAPMnRKx+LcK5rG0yYZnKgIgXhPAGrznafDzMYp/qpXE0nEubsCrKxYrNuvRzOF/NCETcbfhQY1DuvYJ3BdWi77bcMS6u86PvqVgJZKjorhdXa2yti7ORrcChkyH46odSE05zVjyr23twUmR3mnJFJl/3Q/9bLlvkI/hmdQyGceJcFe3Qiz1YwMS4gK5FtbzzjgfUmRY7AqvZAW7ZT6DZMVucW99h32JyuUnqjAZCOb8tx5LHIolM0K1oU0SYdx8VrjOrBE4rxlOrN4SAvGzV9qrfGoziVZpvIvMMFd5h/Qflj0bvtvE1Hy39w8quM9o+GrEGG93OcOI4WJwboxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kgNwFwA2XfeLe/rM9b0v5A/Ak+JljOmVx7ymmRRY4f0=;
- b=YVC2q+iB0DfiOeZF7bctrCJ51Ke3jMYYoUre6zBlAnyR6Wpp1wTfUy0S0ZF14DJEy60mfn6Q2+5ltAuFWTWbt6k4OOFU3OVxmYJehnBCdCs/i2hQ3JzyMHKHysnJwwH7besR7sl3qQG6dIbiCUEg04NBKfEFoFWsRQ2Ni5aUPIM=
-Received: from DM6PR18MB2602.namprd18.prod.outlook.com (2603:10b6:5:15d::25)
- by MW3PR18MB3610.namprd18.prod.outlook.com (2603:10b6:303:52::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 07:54:34 +0000
-Received: from DM6PR18MB2602.namprd18.prod.outlook.com
- ([fe80::3cca:ec69:9827:a746]) by DM6PR18MB2602.namprd18.prod.outlook.com
- ([fe80::3cca:ec69:9827:a746%7]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 07:54:34 +0000
-From:   Geethasowjanya Akula <gakula@marvell.com>
-To:     Leon Romanovsky <leon@kernel.org>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
-        Hariprasad Kelam <hkelam@marvell.com>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>
-Subject: Re: [net PATCH] octeontx2-pf: Use GFP_ATOMIC in atomic context
-Thread-Topic: [net PATCH] octeontx2-pf: Use GFP_ATOMIC in atomic context
-Thread-Index: AQHZJMjHQXU1h4wUiU6krrAQOSBT1g==
-Date:   Tue, 10 Jan 2023 07:54:34 +0000
-Message-ID: <DM6PR18MB26020126CE7BB48D3C2AEC26CDFF9@DM6PR18MB2602.namprd18.prod.outlook.com>
-References: <20230107044139.25787-1-gakula@marvell.com>
- <Y7rAUVXiRNFsuR8y@unreal>
- <DM6PR18MB2602C7D1546455B12340D140CDFF9@DM6PR18MB2602.namprd18.prod.outlook.com>
-In-Reply-To: <DM6PR18MB2602C7D1546455B12340D140CDFF9@DM6PR18MB2602.namprd18.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcZ2FrdWxhXGFw?=
- =?us-ascii?Q?cGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
- =?us-ascii?Q?OWUzNWJcbXNnc1xtc2ctMDJlYzI5ZGMtOTBiYy0xMWVkLTk1YzgtNDhhNDcy?=
- =?us-ascii?Q?MGFkNGE3XGFtZS10ZXN0XDAyZWMyOWRkLTkwYmMtMTFlZC05NWM4LTQ4YTQ3?=
- =?us-ascii?Q?MjBhZDRhN2JvZHkudHh0IiBzej0iMzExNyIgdD0iMTMzMTc4MTA4NzA4NjI2?=
- =?us-ascii?Q?MTM3IiBoPSJRYkdCYlRPRThXc0FaMjlURzRLZnJQcjE2Vkk9IiBpZD0iIiBi?=
- =?us-ascii?Q?bD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQUFOZ0hBQURa?=
- =?us-ascii?Q?bm0vRnlDVFpBYjY3NzB4aWFhU2V2cnZ2VEdKcHBKNE1BQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBSEFBQUFCb0J3QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?RUFBUUFCQUFBQTNUekZBQUFBQUFBQUFBQUFBQUFBQUo0QUFBQmhBR1FBWkFC?=
- =?us-ascii?Q?eUFHVUFjd0J6QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFF?=
- =?us-ascii?Q?QUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdNQWRRQnpBSFFBYndCdEFGOEFjQUJs?=
- =?us-ascii?Q?QUhJQWN3QnZBRzRBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFB?=
- =?us-ascii?Q?QUFDZUFBQUFZd0IxQUhNQWRBQnZBRzBBWHdCd0FHZ0Fid0J1QUdVQWJnQjFB?=
- =?us-ascii?Q?RzBBWWdCbEFISUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCakFIVUFj?=
- =?us-ascii?Q?d0IwQUc4QWJRQmZBSE1BY3dCdUFGOEFaQUJoQUhNQWFBQmZBSFlBTUFBeUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
-x-dg-refone: =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR01B?=
- =?us-ascii?Q?ZFFCekFIUUFid0J0QUY4QWN3QnpBRzRBWHdCckFHVUFlUUIzQUc4QWNnQmtB?=
- =?us-ascii?Q?SE1BQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFRQUFBQUFBQUFBQ0FBQUFBQUNlQUFBQVl3QjFBSE1BZEFCdkFHMEFY?=
- =?us-ascii?Q?d0J6QUhNQWJnQmZBRzRBYndCa0FHVUFiQUJwQUcwQWFRQjBBR1VBY2dCZkFI?=
- =?us-ascii?Q?WUFNQUF5QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFB?=
- =?us-ascii?Q?QUlBQUFBQUFKNEFBQUJqQUhVQWN3QjBBRzhBYlFCZkFITUFjd0J1QUY4QWN3?=
- =?us-ascii?Q?QndBR0VBWXdCbEFGOEFkZ0F3QURJQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFH?=
- =?us-ascii?Q?UUFiQUJ3QUY4QWN3QnJBSGtBY0FCbEFGOEFZd0JvQUdFQWRBQmZBRzBBWlFC?=
- =?us-ascii?Q?ekFITUFZUUJuQUdVQVh3QjJBREFBTWdBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQVFBQUFBQUFBQUFDQUFBQUFBQ2VBQUFBWkFCc0FIQUFYd0J6QUd3?=
- =?us-ascii?Q?QVlRQmpBR3NBWHdCakFHZ0FZUUIwQUY4QWJRQmxBSE1BY3dCaEFHY0FaUUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
-x-dg-reftwo: QUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUo0QUFBQmtBR3dBY0FCZkFIUUFaUUJoQUcwQWN3QmZBRzhBYmdCbEFHUUFjZ0JwQUhZQVpRQmZBR1lBYVFCc0FHVUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdVQWJRQmhBR2tBYkFCZkFHRUFaQUJrQUhJQVpRQnpBSE1BQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQURRQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFiUUJoQUhJQWRnQmxBR3dBYkFCZkFIUUFaUUJ5QUcwQWFRQnVBSFVBY3dBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBQT09Ii8+PC9tZXRhPg==
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR18MB2602:EE_|MW3PR18MB3610:EE_
-x-ms-office365-filtering-correlation-id: 4c81462f-1e3f-4ddb-1a0d-08daf2dfea0c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: eLjZ2xJDICJUAYfMVHiUhLPOX10DgQcE/SnqrNJFuW+9+bHu+rUigpCPt4JZMLvyQy16nNHA9qblFKqsDc7ftpk+M88hHNUicbbAlL82wlCha4QCJIqoscvWEhhYbRwZgJlGOoFe2SW6BT6dgkRT+szSsjPgygCzeHcDYInHE+PpFxSl7YCTswVO1ePzJZwyIGTNY0P0OXqG6OSgPX4MqA2fBXKZhZjosWlsaxmFokh3kLEa4dU+QyjzhFXij2z3hDZe8Wul9iIaEU6STDyqpZOEyYeEbwsOFaZEW5ZTgD/fO2b0R27YgkYCUm9b4KjEYhkVfffKLa3+KHf84DfQRC9RSluXkzO+TiSQ6zWjtWGMN7MfIJFg/JGInHW7Tgw+FMf5077o8UeQSGe21wV4UUAZG/kRpXyx3g3xwgAHH32fAYwdPVRUgKEocumaCLD4BB1KMXIBPQ6f3j1oO6gg1YtHezlp26yBY0Ch7+5dU/fF4X6aDOXkt9R5EkXvfmjN8XD7eRplguTCQ4Bzbv2CertCAE8dVNiuGJvha0HScVqcON47aMcQV97zMY8eaqdTa/qtOnn+7Zn5b/EFY7e9qvU5kf1f/NAKRdlFTcBDHyvpt7fx8QdxmJ37OI8cxDgWOcUXEeWFwpzBx6Ne7dZkaPpydm4hhBVA84cTHtZAgIaZfmHY9T9fqlBkdEj71p3hLVnD4BO9tYl6Ymhv9Z30ow==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR18MB2602.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(346002)(376002)(366004)(136003)(396003)(451199015)(6506007)(38100700002)(122000001)(53546011)(107886003)(2906002)(33656002)(38070700005)(26005)(186003)(2940100002)(7696005)(9686003)(478600001)(71200400001)(316002)(5660300002)(52536014)(8936002)(83380400001)(86362001)(41300700001)(55016003)(76116006)(66446008)(8676002)(4326008)(54906003)(66556008)(64756008)(66946007)(66476007)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wsBOLk7Z0y37XE132F8oMqgVpQyAj+X+HSVIdmRi0UMssxtUCernejfK955k?=
- =?us-ascii?Q?rEqNPq0zQIarFZTIKiiuOiOke8qdnA9WQov5YOgFs+uzGafEbEp1bkpAhUvA?=
- =?us-ascii?Q?GYPpKoT3tteiD4VscV6RGIKbIYYcDAx1C3aOFYPghBZXw3ssCe4/Bo2xlAKg?=
- =?us-ascii?Q?eMF+RdYmcN4qJAPAHBlXyQpuRY/UyreS/NZyAlQ/MhXSosCsryF4RiTxM5FB?=
- =?us-ascii?Q?QmkUmycTcB3eYhBm6vXxd41VbOW6BvpOlq/xhHuw0EFF/bFEqb3ursyndV2M?=
- =?us-ascii?Q?9g3f/RgYMWvhnOPd7dcSKsqLq1mOUgtgslexFjY2L19R+LK0dhMmOr+x1sJE?=
- =?us-ascii?Q?p4K8KL9jbPJ9K7nzEPW/M9Bsy43gfX3tENLAbhdlstD0owlydqCw4oNFC5Vm?=
- =?us-ascii?Q?/uZPWtjUqIh8lzTDk6w6wQN+0vhEEB21pFHqvZ+b7ozAdyh4q4VNNA1sQdEI?=
- =?us-ascii?Q?KpUmEBTcBnkQszyelhJ10c9qCZiSMubuiExQ5WJ27VczIBJslf8WQ/9ypcU1?=
- =?us-ascii?Q?WUxjoFTpJ5dRV69QnYyE35S4S0Ubf27KoFhOm6Vxx3er6cm51iWaWlJQHd9P?=
- =?us-ascii?Q?lire5WPiQBPJrcjzwcxTRiIbd7YNjnwVtpkdvPixT+5LgxAxBEHOre5OtjWT?=
- =?us-ascii?Q?a1Q3Yk8D0h/5za68MRYyTrUddi45QRbMmdT44S8knxAUKGD4mkLar7LSItdM?=
- =?us-ascii?Q?WYIGhQgUZuOIVy/19K1LyqOw9UbjSRlg75wwcRQjSUNVKRsONwsJ1xeJbPPQ?=
- =?us-ascii?Q?C3Y4kuuWIrKh3rA9Irlg7LmBjZxAiUUpYO2tXmtnZgCYlsFBeu4w9yTWUs8I?=
- =?us-ascii?Q?Xw1ZIvzXzm6fyeeD8/wNsqUI3L+2LbZVJDQ+vrZQZ5BXzJQ6fCQGS9QZsbYj?=
- =?us-ascii?Q?NQ88ot48PdzArsTPo19DjLcIUw4vkuliWoJVZg1c/FIoUwc7zvUVyayTEUNy?=
- =?us-ascii?Q?Outn8hx502twENF/uNHKfyqrH+0hFUOid3TRcFvvICLsXBNRuHTGVQWeusyD?=
- =?us-ascii?Q?y65F+PvHmxYl/+UR9z/M43mIhb/tsKZlt/xHt4pfirEIS8KgKn/vnYpmRUfg?=
- =?us-ascii?Q?di9ulYF6/0KaReZXngHFQqQ3FIItDYwK9c42c+DA5I3RTJ5AD9vbY4NyS0Gw?=
- =?us-ascii?Q?cSHuz8rtMTZ3vxzdI7Co0/a4hiZngwF9WnUBT+YJ+KUQMWSTiabMOkRDjsXu?=
- =?us-ascii?Q?Iewl5Bga/CYrTpxFg1nOzDSBRKG0Gr7PpDgiX+49Ggl2lJ1JzqneKVCDWSWv?=
- =?us-ascii?Q?0y7yUAu9tDWVabITT/jMfIEKpOTO5EUaA1ZGnGCjhNyaqi7YP5TXNoNiJxBU?=
- =?us-ascii?Q?xnRiEh+bRQfYlrGdpUuxqo16hRBnq71A+0EDUOGkwUyP/c2FG6MfLkthlIAC?=
- =?us-ascii?Q?hQTa7G2cRDTuQHflyFEGXlVg/dhDx3w238K1yn5L7aRLEEI50eWAHu8igbIk?=
- =?us-ascii?Q?o6Kz3nqr/o3cFzKRmVS8aZvMMhy27i0DGptGt1iZGKZmeToPdeQgWsnlCpii?=
- =?us-ascii?Q?/X39e/gtFGcdtIZzA17/0XbYCSju8XdEZNxu4dW67i8VDY8p8QIoYMDl9btm?=
- =?us-ascii?Q?IvLkf+Vgb/L470gSGTEZQFFXZJlm0EvQLSuIx4QB?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 10 Jan 2023 02:55:38 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CB803055A;
+        Mon,  9 Jan 2023 23:54:57 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48D15AD7;
+        Mon,  9 Jan 2023 23:55:39 -0800 (PST)
+Received: from [10.162.42.6] (unknown [10.162.42.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9F6D3F71A;
+        Mon,  9 Jan 2023 23:54:50 -0800 (PST)
+Message-ID: <58f63789-6426-b069-abf3-918cd55d98f6@arm.com>
+Date:   Tue, 10 Jan 2023 13:24:47 +0530
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR18MB2602.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c81462f-1e3f-4ddb-1a0d-08daf2dfea0c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2023 07:54:34.4324
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BUHJcbdhfRh9iXMpx56yymIxMCoqMVQmDi8FNr/rw/PleSD9u5OLrX0J1ndOaKesH3JxSNIMcVCv6wTUV/8U3A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR18MB3610
-X-Proofpoint-ORIG-GUID: pp_kBbWSUw6Ot0Ok3rJpmbYa8iR81_42
-X-Proofpoint-GUID: pp_kBbWSUw6Ot0Ok3rJpmbYa8iR81_42
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_02,2023-01-09_02,2022-06-22_01
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 2/8] arm64: Drop SYS_ from SPE register defines
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        James Clark <james.clark@arm.com>
+References: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
+ <20220825-arm-spe-v8-7-v4-2-327f860daf28@kernel.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220825-arm-spe-v8-7-v4-2-327f860daf28@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -188,84 +62,493 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+LGTM, except couple of small possible improvements.
 
+On 1/10/23 00:56, Rob Herring wrote:
+> We currently have a non-standard SYS_ prefix in the constants generated
+> for the SPE register bitfields. Drop this in preparation for automatic
+> register definition generation.
+> 
+> The SPE mask defines were unshifted, and the SPE register field
+> enumerations were shifted. The autogenerated defines are the opposite,
+> so make the necessary adjustments.
+> 
+> No functional changes.
+> 
+> Tested-by: James Clark <james.clark@arm.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> v4:
+>  - Rebase on v6.2-rc1
+> v3:
+>  - No change
+> v2:
+>  - New patch
+> ---
+>  arch/arm64/include/asm/el2_setup.h |   6 +-
+>  arch/arm64/include/asm/sysreg.h    | 112 ++++++++++++++++++-------------------
+>  arch/arm64/kvm/debug.c             |   2 +-
+>  arch/arm64/kvm/hyp/nvhe/debug-sr.c |   2 +-
+>  drivers/perf/arm_spe_pmu.c         |  85 ++++++++++++++--------------
+>  5 files changed, 103 insertions(+), 104 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+> index 668569adf4d3..f9da43e53cdb 100644
+> --- a/arch/arm64/include/asm/el2_setup.h
+> +++ b/arch/arm64/include/asm/el2_setup.h
+> @@ -53,10 +53,10 @@
+>  	cbz	x0, .Lskip_spe_\@		// Skip if SPE not present
+>  
+>  	mrs_s	x0, SYS_PMBIDR_EL1              // If SPE available at EL2,
+> -	and	x0, x0, #(1 << SYS_PMBIDR_EL1_P_SHIFT)
+> +	and	x0, x0, #(1 << PMBIDR_EL1_P_SHIFT)
+>  	cbnz	x0, .Lskip_spe_el2_\@		// then permit sampling of physical
+> -	mov	x0, #(1 << SYS_PMSCR_EL2_PCT_SHIFT | \
+> -		      1 << SYS_PMSCR_EL2_PA_SHIFT)
+> +	mov	x0, #(1 << PMSCR_EL2_PCT_SHIFT | \
+> +		      1 << PMSCR_EL2_PA_SHIFT)
+>  	msr_s	SYS_PMSCR_EL2, x0		// addresses and physical counter
+>  .Lskip_spe_el2_\@:
+>  	mov	x0, #(MDCR_EL2_E2PB_MASK << MDCR_EL2_E2PB_SHIFT)
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index c4ce16333750..dbb0e8e22cf4 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -218,59 +218,59 @@
+>  /*** Statistical Profiling Extension ***/
+>  /* ID registers */
+>  #define SYS_PMSIDR_EL1			sys_reg(3, 0, 9, 9, 7)
+> -#define SYS_PMSIDR_EL1_FE_SHIFT		0
+> -#define SYS_PMSIDR_EL1_FT_SHIFT		1
+> -#define SYS_PMSIDR_EL1_FL_SHIFT		2
+> -#define SYS_PMSIDR_EL1_ARCHINST_SHIFT	3
+> -#define SYS_PMSIDR_EL1_LDS_SHIFT	4
+> -#define SYS_PMSIDR_EL1_ERND_SHIFT	5
+> -#define SYS_PMSIDR_EL1_INTERVAL_SHIFT	8
+> -#define SYS_PMSIDR_EL1_INTERVAL_MASK	0xfUL
+> -#define SYS_PMSIDR_EL1_MAXSIZE_SHIFT	12
+> -#define SYS_PMSIDR_EL1_MAXSIZE_MASK	0xfUL
+> -#define SYS_PMSIDR_EL1_COUNTSIZE_SHIFT	16
+> -#define SYS_PMSIDR_EL1_COUNTSIZE_MASK	0xfUL
+> +#define PMSIDR_EL1_FE_SHIFT		0
+> +#define PMSIDR_EL1_FT_SHIFT		1
+> +#define PMSIDR_EL1_FL_SHIFT		2
+> +#define PMSIDR_EL1_ARCHINST_SHIFT	3
+> +#define PMSIDR_EL1_LDS_SHIFT	4
+> +#define PMSIDR_EL1_ERND_SHIFT	5
+> +#define PMSIDR_EL1_INTERVAL_SHIFT	8
+> +#define PMSIDR_EL1_INTERVAL_MASK	GENMASK_ULL(11, 8)
+> +#define PMSIDR_EL1_MAXSIZE_SHIFT	12
+> +#define PMSIDR_EL1_MAXSIZE_MASK		GENMASK_ULL(15, 12)
+> +#define PMSIDR_EL1_COUNTSIZE_SHIFT	16
+> +#define PMSIDR_EL1_COUNTSIZE_MASK	GENMASK_ULL(19, 16)
+>  
+>  #define SYS_PMBIDR_EL1			sys_reg(3, 0, 9, 10, 7)
+> -#define SYS_PMBIDR_EL1_ALIGN_SHIFT	0
+> -#define SYS_PMBIDR_EL1_ALIGN_MASK	0xfU
+> -#define SYS_PMBIDR_EL1_P_SHIFT		4
+> -#define SYS_PMBIDR_EL1_F_SHIFT		5
+> +#define PMBIDR_EL1_ALIGN_SHIFT		0
+> +#define PMBIDR_EL1_ALIGN_MASK		0xfU
 
------Original Message-----
-From: Leon Romanovsky <leon@kernel.org>
-Sent: Sunday, January 8, 2023 6:39 PM
-To: Geethasowjanya Akula <gakula@marvell.com>
-Cc: netdev@vger.kernel.org; linux-kernel@vger.kernel.org; kuba@kernel.org; =
-pabeni@redhat.com; davem@davemloft.net; edumazet@google.com; Subbaraya Sund=
-eep Bhatta <sbhatta@marvell.com>; Hariprasad Kelam <hkelam@marvell.com>; Su=
-nil Kovvuri Goutham <sgoutham@marvell.com>
-Subject: [EXT] Re: [net PATCH] octeontx2-pf: Use GFP_ATOMIC in atomic conte=
-xt
+Although functionally same, s/0xfU/GENMAS_ULL(3, 0) might make it uniform
+across other changes.
 
-External Email
+> +#define PMBIDR_EL1_P_SHIFT		4
+> +#define PMBIDR_EL1_F_SHIFT		5
+>  
+>  /* Sampling controls */
+>  #define SYS_PMSCR_EL1			sys_reg(3, 0, 9, 9, 0)
+> -#define SYS_PMSCR_EL1_E0SPE_SHIFT	0
+> -#define SYS_PMSCR_EL1_E1SPE_SHIFT	1
+> -#define SYS_PMSCR_EL1_CX_SHIFT		3
+> -#define SYS_PMSCR_EL1_PA_SHIFT		4
+> -#define SYS_PMSCR_EL1_TS_SHIFT		5
+> -#define SYS_PMSCR_EL1_PCT_SHIFT		6
+> +#define PMSCR_EL1_E0SPE_SHIFT		0
+> +#define PMSCR_EL1_E1SPE_SHIFT		1
+> +#define PMSCR_EL1_CX_SHIFT		3
+> +#define PMSCR_EL1_PA_SHIFT		4
+> +#define PMSCR_EL1_TS_SHIFT		5
+> +#define PMSCR_EL1_PCT_SHIFT		6
+>  
+>  #define SYS_PMSCR_EL2			sys_reg(3, 4, 9, 9, 0)
+> -#define SYS_PMSCR_EL2_E0HSPE_SHIFT	0
+> -#define SYS_PMSCR_EL2_E2SPE_SHIFT	1
+> -#define SYS_PMSCR_EL2_CX_SHIFT		3
+> -#define SYS_PMSCR_EL2_PA_SHIFT		4
+> -#define SYS_PMSCR_EL2_TS_SHIFT		5
+> -#define SYS_PMSCR_EL2_PCT_SHIFT		6
+> +#define PMSCR_EL2_E0HSPE_SHIFT		0
+> +#define PMSCR_EL2_E2SPE_SHIFT		1
+> +#define PMSCR_EL2_CX_SHIFT		3
+> +#define PMSCR_EL2_PA_SHIFT		4
+> +#define PMSCR_EL2_TS_SHIFT		5
+> +#define PMSCR_EL2_PCT_SHIFT		6
+>  
+>  #define SYS_PMSICR_EL1			sys_reg(3, 0, 9, 9, 2)
+>  
+>  #define SYS_PMSIRR_EL1			sys_reg(3, 0, 9, 9, 3)
+> -#define SYS_PMSIRR_EL1_RND_SHIFT	0
+> -#define SYS_PMSIRR_EL1_INTERVAL_SHIFT	8
+> -#define SYS_PMSIRR_EL1_INTERVAL_MASK	0xffffffUL
+> +#define PMSIRR_EL1_RND_SHIFT		0
+> +#define PMSIRR_EL1_INTERVAL_SHIFT	8
+> +#define PMSIRR_EL1_INTERVAL_MASK	GENMASK_ULL(31, 8)
+>  
+>  /* Filtering controls */
+>  #define SYS_PMSNEVFR_EL1		sys_reg(3, 0, 9, 9, 1)
+>  
+>  #define SYS_PMSFCR_EL1			sys_reg(3, 0, 9, 9, 4)
+> -#define SYS_PMSFCR_EL1_FE_SHIFT		0
+> -#define SYS_PMSFCR_EL1_FT_SHIFT		1
+> -#define SYS_PMSFCR_EL1_FL_SHIFT		2
+> -#define SYS_PMSFCR_EL1_B_SHIFT		16
+> -#define SYS_PMSFCR_EL1_LD_SHIFT		17
+> -#define SYS_PMSFCR_EL1_ST_SHIFT		18
+> +#define PMSFCR_EL1_FE_SHIFT		0
+> +#define PMSFCR_EL1_FT_SHIFT		1
+> +#define PMSFCR_EL1_FL_SHIFT		2
+> +#define PMSFCR_EL1_B_SHIFT		16
+> +#define PMSFCR_EL1_LD_SHIFT		17
+> +#define PMSFCR_EL1_ST_SHIFT		18
+>  
+>  #define SYS_PMSEVFR_EL1			sys_reg(3, 0, 9, 9, 5)
+>  #define PMSEVFR_EL1_RES0_IMP	\
+> @@ -280,37 +280,37 @@
+>  	(PMSEVFR_EL1_RES0_IMP & ~(BIT_ULL(18) | BIT_ULL(17) | BIT_ULL(11)))
+>  
+>  #define SYS_PMSLATFR_EL1		sys_reg(3, 0, 9, 9, 6)
+> -#define SYS_PMSLATFR_EL1_MINLAT_SHIFT	0
+> +#define PMSLATFR_EL1_MINLAT_SHIFT	0
+>  
+>  /* Buffer controls */
+>  #define SYS_PMBLIMITR_EL1		sys_reg(3, 0, 9, 10, 0)
+> -#define SYS_PMBLIMITR_EL1_E_SHIFT	0
+> -#define SYS_PMBLIMITR_EL1_FM_SHIFT	1
+> -#define SYS_PMBLIMITR_EL1_FM_MASK	0x3UL
+> -#define SYS_PMBLIMITR_EL1_FM_STOP_IRQ	(0 << SYS_PMBLIMITR_EL1_FM_SHIFT)
+> +#define PMBLIMITR_EL1_E_SHIFT		0
+> +#define PMBLIMITR_EL1_FM_SHIFT		1
+> +#define PMBLIMITR_EL1_FM_MASK	GENMASK_ULL(2, 1)
+> +#define PMBLIMITR_EL1_FM_STOP_IRQ	0
+>  
+>  #define SYS_PMBPTR_EL1			sys_reg(3, 0, 9, 10, 1)
+>  
+>  /* Buffer error reporting */
+>  #define SYS_PMBSR_EL1			sys_reg(3, 0, 9, 10, 3)
+> -#define SYS_PMBSR_EL1_COLL_SHIFT	16
+> -#define SYS_PMBSR_EL1_S_SHIFT		17
+> -#define SYS_PMBSR_EL1_EA_SHIFT		18
+> -#define SYS_PMBSR_EL1_DL_SHIFT		19
+> -#define SYS_PMBSR_EL1_EC_SHIFT		26
+> -#define SYS_PMBSR_EL1_EC_MASK		0x3fUL
+> +#define PMBSR_EL1_COLL_SHIFT		16
+> +#define PMBSR_EL1_S_SHIFT		17
+> +#define PMBSR_EL1_EA_SHIFT		18
+> +#define PMBSR_EL1_DL_SHIFT		19
+> +#define PMBSR_EL1_EC_SHIFT		26
+> +#define PMBSR_EL1_EC_MASK		GENMASK_ULL(31, 26)
+>  
+> -#define SYS_PMBSR_EL1_EC_BUF		(0x0UL << SYS_PMBSR_EL1_EC_SHIFT)
+> -#define SYS_PMBSR_EL1_EC_FAULT_S1	(0x24UL << SYS_PMBSR_EL1_EC_SHIFT)
+> -#define SYS_PMBSR_EL1_EC_FAULT_S2	(0x25UL << SYS_PMBSR_EL1_EC_SHIFT)
+> +#define PMBSR_EL1_EC_BUF		0x0UL
+> +#define PMBSR_EL1_EC_FAULT_S1		0x24UL
+> +#define PMBSR_EL1_EC_FAULT_S2		0x25UL
+>  
+> -#define SYS_PMBSR_EL1_FAULT_FSC_SHIFT	0
+> -#define SYS_PMBSR_EL1_FAULT_FSC_MASK	0x3fUL
+> +#define PMBSR_EL1_FAULT_FSC_SHIFT	0
+> +#define PMBSR_EL1_FAULT_FSC_MASK	0x3fUL
+>  
+> -#define SYS_PMBSR_EL1_BUF_BSC_SHIFT	0
+> -#define SYS_PMBSR_EL1_BUF_BSC_MASK	0x3fUL
+> +#define PMBSR_EL1_BUF_BSC_SHIFT		0
+> +#define PMBSR_EL1_BUF_BSC_MASK		0x3fUL
 
-----------------------------------------------------------------------
-On Sat, Jan 07, 2023 at 10:11:39AM +0530, Geetha sowjanya wrote:
->> Use GFP_ATOMIC flag instead of GFP_KERNEL while allocating memory in=20
->> atomic context.
+Although functionally same, s/0x3fUL/GENMAS_ULL(5, 0) might make it uniform
+across other changes.
 
->Awesome, but the changed functions don't run in atomic context.
+>  
+> -#define SYS_PMBSR_EL1_BUF_BSC_FULL	(0x1UL << SYS_PMBSR_EL1_BUF_BSC_SHIFT)
+> +#define PMBSR_EL1_BUF_BSC_FULL		0x1UL
+>  
+>  /*** End of Statistical Profiling Extension ***/
+>  
+> diff --git a/arch/arm64/kvm/debug.c b/arch/arm64/kvm/debug.c
+> index fccf9ec01813..55f80fb93925 100644
+> --- a/arch/arm64/kvm/debug.c
+> +++ b/arch/arm64/kvm/debug.c
+> @@ -328,7 +328,7 @@ void kvm_arch_vcpu_load_debug_state_flags(struct kvm_vcpu *vcpu)
+>  	 * we may need to check if the host state needs to be saved.
+>  	 */
+>  	if (cpuid_feature_extract_unsigned_field(dfr0, ID_AA64DFR0_EL1_PMSVer_SHIFT) &&
+> -	    !(read_sysreg_s(SYS_PMBIDR_EL1) & BIT(SYS_PMBIDR_EL1_P_SHIFT)))
+> +	    !(read_sysreg_s(SYS_PMBIDR_EL1) & BIT(PMBIDR_EL1_P_SHIFT)))
+>  		vcpu_set_flag(vcpu, DEBUG_STATE_SAVE_SPE);
+>  
+>  	/* Check if we have TRBE implemented and available at the host */
+> diff --git a/arch/arm64/kvm/hyp/nvhe/debug-sr.c b/arch/arm64/kvm/hyp/nvhe/debug-sr.c
+> index e17455773b98..2673bde62fad 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/debug-sr.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/debug-sr.c
+> @@ -27,7 +27,7 @@ static void __debug_save_spe(u64 *pmscr_el1)
+>  	 * Check if the host is actually using it ?
+>  	 */
+>  	reg = read_sysreg_s(SYS_PMBLIMITR_EL1);
+> -	if (!(reg & BIT(SYS_PMBLIMITR_EL1_E_SHIFT)))
+> +	if (!(reg & BIT(PMBLIMITR_EL1_E_SHIFT)))
+>  		return;
+>  
+>  	/* Yes; save the control register and disable data generation */
+> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+> index 65cf93dcc8ee..814ed18346b6 100644
+> --- a/drivers/perf/arm_spe_pmu.c
+> +++ b/drivers/perf/arm_spe_pmu.c
+> @@ -12,6 +12,7 @@
+>  #define DRVNAME					PMUNAME "_pmu"
+>  #define pr_fmt(fmt)				DRVNAME ": " fmt
+>  
+> +#include <linux/bitfield.h>
+>  #include <linux/bitops.h>
+>  #include <linux/bug.h>
+>  #include <linux/capability.h>
+> @@ -282,18 +283,18 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
+>  	struct perf_event_attr *attr = &event->attr;
+>  	u64 reg = 0;
+>  
+> -	reg |= ATTR_CFG_GET_FLD(attr, ts_enable) << SYS_PMSCR_EL1_TS_SHIFT;
+> -	reg |= ATTR_CFG_GET_FLD(attr, pa_enable) << SYS_PMSCR_EL1_PA_SHIFT;
+> -	reg |= ATTR_CFG_GET_FLD(attr, pct_enable) << SYS_PMSCR_EL1_PCT_SHIFT;
+> +	reg |= ATTR_CFG_GET_FLD(attr, ts_enable) << PMSCR_EL1_TS_SHIFT;
+> +	reg |= ATTR_CFG_GET_FLD(attr, pa_enable) << PMSCR_EL1_PA_SHIFT;
+> +	reg |= ATTR_CFG_GET_FLD(attr, pct_enable) << PMSCR_EL1_PCT_SHIFT;
+>  
+>  	if (!attr->exclude_user)
+> -		reg |= BIT(SYS_PMSCR_EL1_E0SPE_SHIFT);
+> +		reg |= BIT(PMSCR_EL1_E0SPE_SHIFT);
+>  
+>  	if (!attr->exclude_kernel)
+> -		reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
+> +		reg |= BIT(PMSCR_EL1_E1SPE_SHIFT);
+>  
+>  	if (get_spe_event_has_cx(event))
+> -		reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+> +		reg |= BIT(PMSCR_EL1_CX_SHIFT);
+>  
+>  	return reg;
+>  }
+> @@ -302,8 +303,7 @@ static void arm_spe_event_sanitise_period(struct perf_event *event)
+>  {
+>  	struct arm_spe_pmu *spe_pmu = to_spe_pmu(event->pmu);
+>  	u64 period = event->hw.sample_period;
+> -	u64 max_period = SYS_PMSIRR_EL1_INTERVAL_MASK
+> -			 << SYS_PMSIRR_EL1_INTERVAL_SHIFT;
+> +	u64 max_period = PMSIRR_EL1_INTERVAL_MASK;
+>  
+>  	if (period < spe_pmu->min_period)
+>  		period = spe_pmu->min_period;
+> @@ -322,7 +322,7 @@ static u64 arm_spe_event_to_pmsirr(struct perf_event *event)
+>  
+>  	arm_spe_event_sanitise_period(event);
+>  
+> -	reg |= ATTR_CFG_GET_FLD(attr, jitter) << SYS_PMSIRR_EL1_RND_SHIFT;
+> +	reg |= ATTR_CFG_GET_FLD(attr, jitter) << PMSIRR_EL1_RND_SHIFT;
+>  	reg |= event->hw.sample_period;
+>  
+>  	return reg;
+> @@ -333,18 +333,18 @@ static u64 arm_spe_event_to_pmsfcr(struct perf_event *event)
+>  	struct perf_event_attr *attr = &event->attr;
+>  	u64 reg = 0;
+>  
+> -	reg |= ATTR_CFG_GET_FLD(attr, load_filter) << SYS_PMSFCR_EL1_LD_SHIFT;
+> -	reg |= ATTR_CFG_GET_FLD(attr, store_filter) << SYS_PMSFCR_EL1_ST_SHIFT;
+> -	reg |= ATTR_CFG_GET_FLD(attr, branch_filter) << SYS_PMSFCR_EL1_B_SHIFT;
+> +	reg |= ATTR_CFG_GET_FLD(attr, load_filter) << PMSFCR_EL1_LD_SHIFT;
+> +	reg |= ATTR_CFG_GET_FLD(attr, store_filter) << PMSFCR_EL1_ST_SHIFT;
+> +	reg |= ATTR_CFG_GET_FLD(attr, branch_filter) << PMSFCR_EL1_B_SHIFT;
+>  
+>  	if (reg)
+> -		reg |= BIT(SYS_PMSFCR_EL1_FT_SHIFT);
+> +		reg |= BIT(PMSFCR_EL1_FT_SHIFT);
+>  
+>  	if (ATTR_CFG_GET_FLD(attr, event_filter))
+> -		reg |= BIT(SYS_PMSFCR_EL1_FE_SHIFT);
+> +		reg |= BIT(PMSFCR_EL1_FE_SHIFT);
+>  
+>  	if (ATTR_CFG_GET_FLD(attr, min_latency))
+> -		reg |= BIT(SYS_PMSFCR_EL1_FL_SHIFT);
+> +		reg |= BIT(PMSFCR_EL1_FL_SHIFT);
+>  
+>  	return reg;
+>  }
+> @@ -359,7 +359,7 @@ static u64 arm_spe_event_to_pmslatfr(struct perf_event *event)
+>  {
+>  	struct perf_event_attr *attr = &event->attr;
+>  	return ATTR_CFG_GET_FLD(attr, min_latency)
+> -	       << SYS_PMSLATFR_EL1_MINLAT_SHIFT;
+> +	       << PMSLATFR_EL1_MINLAT_SHIFT;
+>  }
+>  
+>  static void arm_spe_pmu_pad_buf(struct perf_output_handle *handle, int len)
+> @@ -511,7 +511,7 @@ static void arm_spe_perf_aux_output_begin(struct perf_output_handle *handle,
+>  	limit = buf->snapshot ? arm_spe_pmu_next_snapshot_off(handle)
+>  			      : arm_spe_pmu_next_off(handle);
+>  	if (limit)
+> -		limit |= BIT(SYS_PMBLIMITR_EL1_E_SHIFT);
+> +		limit |= BIT(PMBLIMITR_EL1_E_SHIFT);
+>  
+>  	limit += (u64)buf->base;
+>  	base = (u64)buf->base + PERF_IDX2OFF(handle->head, buf);
+> @@ -570,28 +570,28 @@ arm_spe_pmu_buf_get_fault_act(struct perf_output_handle *handle)
+>  
+>  	/* Service required? */
+>  	pmbsr = read_sysreg_s(SYS_PMBSR_EL1);
+> -	if (!(pmbsr & BIT(SYS_PMBSR_EL1_S_SHIFT)))
+> +	if (!(pmbsr & BIT(PMBSR_EL1_S_SHIFT)))
+>  		return SPE_PMU_BUF_FAULT_ACT_SPURIOUS;
+>  
+>  	/*
+>  	 * If we've lost data, disable profiling and also set the PARTIAL
+>  	 * flag to indicate that the last record is corrupted.
+>  	 */
+> -	if (pmbsr & BIT(SYS_PMBSR_EL1_DL_SHIFT))
+> +	if (pmbsr & BIT(PMBSR_EL1_DL_SHIFT))
+>  		perf_aux_output_flag(handle, PERF_AUX_FLAG_TRUNCATED |
+>  					     PERF_AUX_FLAG_PARTIAL);
+>  
+>  	/* Report collisions to userspace so that it can up the period */
+> -	if (pmbsr & BIT(SYS_PMBSR_EL1_COLL_SHIFT))
+> +	if (pmbsr & BIT(PMBSR_EL1_COLL_SHIFT))
+>  		perf_aux_output_flag(handle, PERF_AUX_FLAG_COLLISION);
+>  
+>  	/* We only expect buffer management events */
+> -	switch (pmbsr & (SYS_PMBSR_EL1_EC_MASK << SYS_PMBSR_EL1_EC_SHIFT)) {
+> -	case SYS_PMBSR_EL1_EC_BUF:
+> +	switch (FIELD_GET(PMBSR_EL1_EC_MASK, pmbsr)) {
+> +	case PMBSR_EL1_EC_BUF:
+>  		/* Handled below */
+>  		break;
+> -	case SYS_PMBSR_EL1_EC_FAULT_S1:
+> -	case SYS_PMBSR_EL1_EC_FAULT_S2:
+> +	case PMBSR_EL1_EC_FAULT_S1:
+> +	case PMBSR_EL1_EC_FAULT_S2:
+>  		err_str = "Unexpected buffer fault";
+>  		goto out_err;
+>  	default:
+> @@ -600,9 +600,8 @@ arm_spe_pmu_buf_get_fault_act(struct perf_output_handle *handle)
+>  	}
+>  
+>  	/* Buffer management event */
+> -	switch (pmbsr &
+> -		(SYS_PMBSR_EL1_BUF_BSC_MASK << SYS_PMBSR_EL1_BUF_BSC_SHIFT)) {
+> -	case SYS_PMBSR_EL1_BUF_BSC_FULL:
+> +	switch (FIELD_GET(PMBSR_EL1_BUF_BSC_MASK, pmbsr)) {
+> +	case PMBSR_EL1_BUF_BSC_FULL:
+>  		ret = SPE_PMU_BUF_FAULT_ACT_OK;
+>  		goto out_stop;
+>  	default:
+> @@ -717,23 +716,23 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+>  		return -EINVAL;
+>  
+>  	reg = arm_spe_event_to_pmsfcr(event);
+> -	if ((reg & BIT(SYS_PMSFCR_EL1_FE_SHIFT)) &&
+> +	if ((reg & BIT(PMSFCR_EL1_FE_SHIFT)) &&
+>  	    !(spe_pmu->features & SPE_PMU_FEAT_FILT_EVT))
+>  		return -EOPNOTSUPP;
+>  
+> -	if ((reg & BIT(SYS_PMSFCR_EL1_FT_SHIFT)) &&
+> +	if ((reg & BIT(PMSFCR_EL1_FT_SHIFT)) &&
+>  	    !(spe_pmu->features & SPE_PMU_FEAT_FILT_TYP))
+>  		return -EOPNOTSUPP;
+>  
+> -	if ((reg & BIT(SYS_PMSFCR_EL1_FL_SHIFT)) &&
+> +	if ((reg & BIT(PMSFCR_EL1_FL_SHIFT)) &&
+>  	    !(spe_pmu->features & SPE_PMU_FEAT_FILT_LAT))
+>  		return -EOPNOTSUPP;
+>  
+>  	set_spe_event_has_cx(event);
+>  	reg = arm_spe_event_to_pmscr(event);
+>  	if (!perfmon_capable() &&
+> -	    (reg & (BIT(SYS_PMSCR_EL1_PA_SHIFT) |
+> -		    BIT(SYS_PMSCR_EL1_PCT_SHIFT))))
+> +	    (reg & (BIT(PMSCR_EL1_PA_SHIFT) |
+> +		    BIT(PMSCR_EL1_PCT_SHIFT))))
+>  		return -EACCES;
+>  
+>  	return 0;
+> @@ -971,14 +970,14 @@ static void __arm_spe_pmu_dev_probe(void *info)
+>  
+>  	/* Read PMBIDR first to determine whether or not we have access */
+>  	reg = read_sysreg_s(SYS_PMBIDR_EL1);
+> -	if (reg & BIT(SYS_PMBIDR_EL1_P_SHIFT)) {
+> +	if (reg & BIT(PMBIDR_EL1_P_SHIFT)) {
+>  		dev_err(dev,
+>  			"profiling buffer owned by higher exception level\n");
+>  		return;
+>  	}
+>  
+>  	/* Minimum alignment. If it's out-of-range, then fail the probe */
+> -	fld = reg >> SYS_PMBIDR_EL1_ALIGN_SHIFT & SYS_PMBIDR_EL1_ALIGN_MASK;
+> +	fld = (reg & PMBIDR_EL1_ALIGN_MASK) >> PMBIDR_EL1_ALIGN_SHIFT;
+>  	spe_pmu->align = 1 << fld;
+>  	if (spe_pmu->align > SZ_2K) {
+>  		dev_err(dev, "unsupported PMBIDR.Align [%d] on CPU %d\n",
+> @@ -988,26 +987,26 @@ static void __arm_spe_pmu_dev_probe(void *info)
+>  
+>  	/* It's now safe to read PMSIDR and figure out what we've got */
+>  	reg = read_sysreg_s(SYS_PMSIDR_EL1);
+> -	if (reg & BIT(SYS_PMSIDR_EL1_FE_SHIFT))
+> +	if (reg & BIT(PMSIDR_EL1_FE_SHIFT))
+>  		spe_pmu->features |= SPE_PMU_FEAT_FILT_EVT;
+>  
+> -	if (reg & BIT(SYS_PMSIDR_EL1_FT_SHIFT))
+> +	if (reg & BIT(PMSIDR_EL1_FT_SHIFT))
+>  		spe_pmu->features |= SPE_PMU_FEAT_FILT_TYP;
+>  
+> -	if (reg & BIT(SYS_PMSIDR_EL1_FL_SHIFT))
+> +	if (reg & BIT(PMSIDR_EL1_FL_SHIFT))
+>  		spe_pmu->features |= SPE_PMU_FEAT_FILT_LAT;
+>  
+> -	if (reg & BIT(SYS_PMSIDR_EL1_ARCHINST_SHIFT))
+> +	if (reg & BIT(PMSIDR_EL1_ARCHINST_SHIFT))
+>  		spe_pmu->features |= SPE_PMU_FEAT_ARCH_INST;
+>  
+> -	if (reg & BIT(SYS_PMSIDR_EL1_LDS_SHIFT))
+> +	if (reg & BIT(PMSIDR_EL1_LDS_SHIFT))
+>  		spe_pmu->features |= SPE_PMU_FEAT_LDS;
+>  
+> -	if (reg & BIT(SYS_PMSIDR_EL1_ERND_SHIFT))
+> +	if (reg & BIT(PMSIDR_EL1_ERND_SHIFT))
+>  		spe_pmu->features |= SPE_PMU_FEAT_ERND;
+>  
+>  	/* This field has a spaced out encoding, so just use a look-up */
+> -	fld = reg >> SYS_PMSIDR_EL1_INTERVAL_SHIFT & SYS_PMSIDR_EL1_INTERVAL_MASK;
+> +	fld = (reg & PMSIDR_EL1_INTERVAL_MASK) >> PMSIDR_EL1_INTERVAL_SHIFT;
+>  	switch (fld) {
+>  	case 0:
+>  		spe_pmu->min_period = 256;
+> @@ -1039,7 +1038,7 @@ static void __arm_spe_pmu_dev_probe(void *info)
+>  	}
+>  
+>  	/* Maximum record size. If it's out-of-range, then fail the probe */
+> -	fld = reg >> SYS_PMSIDR_EL1_MAXSIZE_SHIFT & SYS_PMSIDR_EL1_MAXSIZE_MASK;
+> +	fld = (reg & PMSIDR_EL1_MAXSIZE_MASK) >> PMSIDR_EL1_MAXSIZE_SHIFT;
+>  	spe_pmu->max_record_sz = 1 << fld;
+>  	if (spe_pmu->max_record_sz > SZ_2K || spe_pmu->max_record_sz < 16) {
+>  		dev_err(dev, "unsupported PMSIDR_EL1.MaxSize [%d] on CPU %d\n",
+> @@ -1047,7 +1046,7 @@ static void __arm_spe_pmu_dev_probe(void *info)
+>  		return;
+>  	}
+>  
+> -	fld = reg >> SYS_PMSIDR_EL1_COUNTSIZE_SHIFT & SYS_PMSIDR_EL1_COUNTSIZE_MASK;
+> +	fld = (reg & PMSIDR_EL1_COUNTSIZE_MASK) >> PMSIDR_EL1_COUNTSIZE_SHIFT;
+>  	switch (fld) {
+>  	default:
+>  		dev_warn(dev, "unknown PMSIDR_EL1.CountSize [%d]; assuming 2\n",
+> 
 
-drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-    1368         /* Flush accumulated messages */
-    1369         err =3D otx2_sync_mbox_msg(&pfvf->mbox);
-    1370         if (err)
-    1371                 goto fail;
-    1372
-    1373         get_cpu();
-                 ^^^^^^^^^
-The get_cpu() disables preemption.=20
+With or without those changes
 
-    1374         /* Allocate pointers and free them to aura/pool */
-    1375         for (qidx =3D 0; qidx < hw->tot_tx_queues; qidx++) {
-    1376                 pool_id =3D otx2_get_pool_idx(pfvf, AURA_NIX_SQ, q=
-idx);
-    1377                 pool =3D &pfvf->qset.pool[pool_id];
-    1378
-    1379                 sq =3D &qset->sq[qidx];
-    1380                 sq->sqb_count =3D 0;
-    1381                 sq->sqb_ptrs =3D kcalloc(num_sqbs, sizeof(*sq->sqb=
-_ptrs), GFP_ATOMIC);
-
->> Fixes: 4af1b64f80fb ("octeontx2-pf: Fix lmtst ID used in aura free")
->> Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
->> Signed-off-by: Geetha sowjanya <gakula@marvell.com>
->> ---
->>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
->> b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
->> index 88f8772a61cd..12e4365d53df 100644
->> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
->> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
->> @@ -886,7 +886,7 @@ static int otx2_sq_init(struct otx2_nic *pfvf, u16 q=
-idx, u16 sqb_aura)
->>  	}
->> =20
->>  	sq->sqe_base =3D sq->sqe->base;
->> -	sq->sg =3D kcalloc(qset->sqe_cnt, sizeof(struct sg_list), GFP_KERNEL);
->> +	sq->sg =3D kcalloc(qset->sqe_cnt, sizeof(struct sg_list),=20
->> +GFP_ATOMIC);
->>  	if (!sq->sg)
->>  		return -ENOMEM;
->> =20
->> @@ -1378,7 +1378,7 @@ int otx2_sq_aura_pool_init(struct otx2_nic
->> *pfvf)
->> =20
->>  		sq =3D &qset->sq[qidx];
->>  		sq->sqb_count =3D 0;
->> -		sq->sqb_ptrs =3D kcalloc(num_sqbs, sizeof(*sq->sqb_ptrs), GFP_KERNEL)=
-;
->> +		sq->sqb_ptrs =3D kcalloc(num_sqbs, sizeof(*sq->sqb_ptrs),=20
->> +GFP_ATOMIC);
->>  		if (!sq->sqb_ptrs) {
->>  			err =3D -ENOMEM;
->>  			goto err_mem;
->> --
->> 2.25.1
->>=20
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
