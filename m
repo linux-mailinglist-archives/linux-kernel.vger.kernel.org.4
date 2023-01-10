@@ -2,184 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA9B664303
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EB966430C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbjAJORv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:17:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
+        id S234434AbjAJOT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234434AbjAJORk (ORCPT
+        with ESMTP id S234485AbjAJOTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:17:40 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C749568B1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:17:38 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id m3so8912457wmq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:17:38 -0800 (PST)
+        Tue, 10 Jan 2023 09:19:09 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF43C3BEAB;
+        Tue, 10 Jan 2023 06:19:06 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id g68so7223429pgc.11;
+        Tue, 10 Jan 2023 06:19:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=eHZb7U5oDjEwOOYPDL1qKh2dxxJE4/1ANjgPMf5V1yY=;
-        b=fTRvcYCK+eENINzdvpT5NHT0wfYm1n3I5kSok/46mEYtVclqXC7smkLGa3XIEa74h8
-         pa7vm2MsAjsI/cBelw5bGsc9I2eqetFlYlumH4/lm4MrpkqG9t+Yo0qdg5Wnaa5ROnk+
-         jk5if7eruDCSwTvNARxIO86xgemjnjk0GsLpdYo148YKsCWzHsOmV0v7ExzDydbgMmjB
-         xBEDTBdANuYQT914B1YF5HhzI8DZFH0C2v3VudioXDxD6KAU63mcGUTJkptYXI3ghV99
-         jzEBpM1Oh0TlusLugEYK7urTdrOuYWsOoldXD7wFgQwqC6XBXhxwFnxQYHc85Xv7KEWj
-         Y/iA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=grrwPmhSqI3qJm8bnEmnj+X9on9ASlpgUcg+JwSNOD0=;
+        b=WXKS/GBU4FZYrsiXefQU46l/2qnAzwWo3+XvukT30nxFYorfquNutSORFirhzEikkR
+         sR9V+Z4z5PA/rkiBDQ7qms8R18RLXTF3ARNEuyga/IWtnpiDFbcHcqrxguziAPerPz+R
+         YWt+CJxDBZSE+dpgD2ASXajxfXH/kt/VXgAJXtXdbX3Mtqt4u6Kou67XgTT656O6dWst
+         j52iY+jWbOTyciO3LtMXeGCrtDEMQUYc87nWLaOyw1D2onMCYNLbo7SuhqfOpbQRJkPG
+         VM+Bvhce7mADHURK5Yfw9b20X851cKwenWh8PQsSUI+hjdIZivmlPJ29vsV1yAq7Kupd
+         idkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eHZb7U5oDjEwOOYPDL1qKh2dxxJE4/1ANjgPMf5V1yY=;
-        b=noomzUBn2AFeO8b90eHMc0kMKpBfxpEpxP3ikOE2yFXrfxunobKaobF0GMgTzKunAH
-         iqEL1BGZfsyRAM6jnhH80LOYnHgkcD1WaFCITYghqW++DH4UUQvbDa01tNuqDYDCTeEJ
-         uL+861yIEFPLghAvEvT+jpIOHPp/vDLdD/rDTesClrF3ACxKQsX63BoKWQ64jjLf3Jz1
-         3M0xmn2Qi84i7jQrIAe60StblHzTOIjpLvgr/lvD3YHi+eWCYoamft3X6KUV2B3MSD5u
-         3SdQImZIZu5FzGOmAKKuPN9KY0lsfOfLl3AZl+RZ45tG//H3RdcAhAliTV/4zb94k1/R
-         yXrQ==
-X-Gm-Message-State: AFqh2kqCI8v0rTFUCz5re/4/zrdRrq4udA3zt2w9Y20gdGBsbIecSSas
-        bb9ZsOlBaicISmn9rsjTJjb3AY9Yg/nySuQ5
-X-Google-Smtp-Source: AMrXdXuqOXk2/au6P9zSAZ1Xnbpze8DuH91lBlkaSOKHoQSBiUFp/tny1iYv4yZOeDxUI/obplpd0Q==
-X-Received: by 2002:a05:600c:1f12:b0:3d2:267d:64bd with SMTP id bd18-20020a05600c1f1200b003d2267d64bdmr59388593wmb.3.1673360256638;
-        Tue, 10 Jan 2023 06:17:36 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:26cc:e5e1:3044:b226? ([2a01:e0a:982:cbb0:26cc:e5e1:3044:b226])
-        by smtp.gmail.com with ESMTPSA id t12-20020a05600c198c00b003d9de0c39fasm18780848wmq.36.2023.01.10.06.17.35
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=grrwPmhSqI3qJm8bnEmnj+X9on9ASlpgUcg+JwSNOD0=;
+        b=0vcCnoXQZHKLmWCDWidSCkVU3TeuAnMIqN81u8oQZatoN2HjN5CU/D6j7H4SqZFbe4
+         BgoUx02H0XA4ZjQVfW70REp6xuXo8dbkgifrLB8I93Jl6mAgrV57F9HZ0mIALh0vgUf3
+         /4yyTxPX78XdC/8Ddr8XfhbwbuN6UZgRvjQq4lCUqbwzPjGsUMI+j0fm0EUOcxCksxf7
+         H50bbIAfPCoVtYiLrWfNq5f/kF2gim8LUc2cdLTOMxuLGveUerATnUsf/me5cVtb4yr5
+         jI4t+6XbIFhh/velKfsn/sNH0zwzj9naVJBJCvOE+cKU9uMI7rQhS+Y9ecOjfva4weeF
+         PsZQ==
+X-Gm-Message-State: AFqh2kqzXXtyaF80aoBa6r8GtC196QN22EhxfhG3hZpYTs1u3T6ClJjc
+        TgmWBz7QK8W72N5GiV/Yj7Y=
+X-Google-Smtp-Source: AMrXdXtYE34QyxBPqv0I5pIJm03YaHmh5GUiPa+Sj72o3nmUUnjAeIX9lFdxvM02JByIyjCeLHpoNQ==
+X-Received: by 2002:a05:6a00:725:b0:581:a633:d41f with SMTP id 5-20020a056a00072500b00581a633d41fmr42563960pfm.34.1673360346114;
+        Tue, 10 Jan 2023 06:19:06 -0800 (PST)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id d3-20020aa797a3000000b005811c4245c7sm8142175pfq.126.2023.01.10.06.19.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 06:17:36 -0800 (PST)
-Message-ID: <2037156d-5113-4b96-8f86-c8ef1c1fdf96@linaro.org>
-Date:   Tue, 10 Jan 2023 15:17:34 +0100
+        Tue, 10 Jan 2023 06:19:05 -0800 (PST)
+Message-ID: <46489cf4-0ff7-faf6-3f19-dbb64acfeb29@gmail.com>
+Date:   Tue, 10 Jan 2023 23:18:54 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 09/11] dt-bindings: mmc: convert amlogic,meson-gx.txt
- to dt-schema
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] dt-bindings: pm8941-misc: rename misc node name
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     luca@z3ntu.xyz, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v2-9-36ad050bb625@linaro.org>
- <e3d32fe1-9f2b-09fb-d7e0-2c8f42e5365c@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <e3d32fe1-9f2b-09fb-d7e0-2c8f42e5365c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Das Srinagesh <gurus@codeaurora.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221228214636.6292-1-luca@z3ntu.xyz>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20221228214636.6292-1-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 11:17, Krzysztof Kozlowski wrote:
-> On 09/01/2023 13:53, Neil Armstrong wrote:
->> Convert the Amlogic SD / eMMC controller for S905/GXBB family SoCs
->> to dt-schema.
->>
->> Take in account the used variant with amlogic,meson-gx-mmc.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   .../bindings/mmc/amlogic,meson-gx-mmc.yaml         | 75 ++++++++++++++++++++++
->>   .../devicetree/bindings/mmc/amlogic,meson-gx.txt   | 39 -----------
->>   2 files changed, 75 insertions(+), 39 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml
->> new file mode 100644
->> index 000000000000..30228964fd9c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml
->> @@ -0,0 +1,75 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mmc/amlogic,meson-gx-mmc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Amlogic SD / eMMC controller for S905/GXBB family SoCs
->> +
->> +description:
->> +  The MMC 5.1 compliant host controller on Amlogic provides the
->> +  interface for SD, eMMC and SDIO devices
->> +
->> +maintainers:
->> +  - Neil Armstrong <neil.armstrong@linaro.org>
->> +
->> +allOf:
->> +  - $ref: mmc-controller.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - enum:
->> +          - amlogic,meson-gx-mmc
->> +          - amlogic,meson-axg-mmc
->> +      - items:
->> +          - const: amlogic,meson-gx-mmc
+On 22. 12. 29. 06:46, luca@z3ntu.xyz wrote:
+> From: Luca Weiss <luca@z3ntu.xyz>
 > 
-> This does not look correct. Either gx is alone (not compatible with
-> gxbb) or it is compatible with gxbb. Cannot be both.
-
-This ishow it's used in DT:
-
-arch/arm64/boot/dts/amlogic/meson-gx.dtsi:                              compatible = "amlogic,meson-gx-mmc", "amlogic,meson-gxbb-mmc";
-arch/arm64/boot/dts/amlogic/meson-axg.dtsi:                             compatible = "amlogic,meson-axg-mmc";
-arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:                      compatible = "amlogic,meson-axg-mmc";
-
-So I'll drop the amlogic,meson-gx-mmc in the first enum to have :
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: amlogic,meson-axg-mmc
-+      - items:
-+          - const: amlogic,meson-gx-mmc
-+          - const: amlogic,meson-gxbb-mmc
-
-It's right ?
-
-Neil
-
+> The spmi-pmic bindings is now using usb-detect@ for this node, so adjust
+> the example to match.
 > 
+> Acked-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 
-> Best regards,
-> Krzysztof
-> 
+> diff --git a/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml b/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
+> index 6a9c96f0352a..fbda899fd260 100644
+> --- a/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
+> +++ b/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
+> @@ -49,7 +49,7 @@ examples:
+>              interrupt-controller;
+>              #interrupt-cells = <4>;
+>  
+> -            usb_id: misc@900 {
+> +            usb_id: usb-detect@900 {
+>                      compatible = "qcom,pm8941-misc";
+>                      reg = <0x900>;
+>                      interrupts = <0x0 0x9 0 IRQ_TYPE_EDGE_BOTH>;
+
+Applied it. Thanks.
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
