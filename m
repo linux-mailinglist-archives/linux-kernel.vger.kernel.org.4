@@ -2,217 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084F0663C16
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70571663C26
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237727AbjAJJBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:01:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S238025AbjAJJEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjAJI7z (ORCPT
+        with ESMTP id S238393AbjAJI7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:59:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFE93FA0F;
-        Tue, 10 Jan 2023 00:59:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C9FCB81148;
-        Tue, 10 Jan 2023 08:59:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A75C5C433D2;
-        Tue, 10 Jan 2023 08:58:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673341139;
-        bh=ttOiocX6BCIVKKIVWyjG6/Axf9vX1vdxLyAfhZ9Xxr4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=odVBZh3mfAfG9dcYq365uirNWEgsxYczNlK2zFkmR02zqaNC+zqELFcSUkKqxCS0D
-         IWPn+moCDxEepnpc9j/He/+pdkeVIu+7EZACdVNF0p+8KHsjP9AifVv9+vXd+WLj8G
-         Yt7Tp6m/pRzSoHjLLfgnv4dzBN4AuU2PXQ7x4SsDXbcshLtHVpUY3Wua9IAy8rgncb
-         fRWB8Rm5dWGJIfiD/BUI6yB68RaD/tLKUqkQb/gzeuz9ivrRncOcHqu3QxzDdJUr4L
-         XfzQyzirQe5tXC/FYYarZJy5kdD4fDhKC7qfRt2P1N//bUK9pgLSH7+7i1xkMlbHep
-         owM3sEMlX8TJQ==
-Date:   Tue, 10 Jan 2023 00:58:58 -0800
-From:   Saeed Mahameed <saeed@kernel.org>
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Ying Hsu <yinghsu@chromium.org>, linux-bluetooth@vger.kernel.org,
-        marcel@holtmann.org, leon@kernel.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v2] Bluetooth: Fix possible deadlock in
- rfcomm_sk_state_change
-Message-ID: <Y70o0gPKZRCKS93n@x130>
-References: <20230104150642.v2.1.I1f29bb547a03e9adfe2e6754212f9d14a2e39c4b@changeid>
- <CABBYNZL9FiZjRYJE_h4n2kf9LKv_5XF3Fd=bz=cU4bTcDR-QHQ@mail.gmail.com>
- <Y7d26dhGXOij+xSO@x130>
- <CABBYNZ+0DsjdQ4z2CEj95VnyR9Nnsemq7FCWYwO=M1gz3WD+=Q@mail.gmail.com>
+        Tue, 10 Jan 2023 03:59:19 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0199B5274D;
+        Tue, 10 Jan 2023 00:56:56 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nrkxx5WFmz9v7gM;
+        Tue, 10 Jan 2023 16:49:09 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAH3GIwKL1jw9uDAA--.1874S2;
+        Tue, 10 Jan 2023 09:56:27 +0100 (CET)
+Message-ID: <6905166125130c22c244ebf234723d1587a01ae8.camel@huaweicloud.com>
+Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 10 Jan 2023 09:55:50 +0100
+In-Reply-To: <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
+References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CABBYNZ+0DsjdQ4z2CEj95VnyR9Nnsemq7FCWYwO=M1gz3WD+=Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAH3GIwKL1jw9uDAA--.1874S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKr1UGFWUKw43CFyruw18Grg_yoW7Zw4fpa
+        yftFnxKr1rJFyUuryftw45ua1I9rWrGrZrGrs3K34UZF1DGr1ftryrAr15ua45XrWDJa97
+        tr4Yyrsxuan8J37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgANBF1jj4Nm3gAAsB
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06 Jan 11:44, Luiz Augusto von Dentz wrote:
->Hi Saeed,
->
->On Thu, Jan 5, 2023 at 5:18 PM Saeed Mahameed <saeed@kernel.org> wrote:
->>
->> On 04 Jan 14:21, Luiz Augusto von Dentz wrote:
->> >Hi Ying,
->> >
->> >On Wed, Jan 4, 2023 at 7:07 AM Ying Hsu <yinghsu@chromium.org> wrote:
->> >>
->> >> There's a possible deadlock when two processes are connecting
->> >> and closing a RFCOMM socket concurrently. Here's the call trace:
->> >
->> >Are you sure it is 2 different processes? Usually that would mean 2
->> >different sockets (sk) then so they wouldn't share the same lock, so
->> >this sounds more like 2 different threads, perhaps it is worth
->> >creating a testing case in our rfcomm-tester so we are able to detect
->> >this sort of thing in the future.
->> >
->> >> -> #2 (&d->lock){+.+.}-{3:3}:
->> >>        __mutex_lock_common kernel/locking/mutex.c:603 [inline]
->> >>        __mutex_lock0x12f/0x1360 kernel/locking/mutex.c:747
->> >>        __rfcomm_dlc_close+0x15d/0x890 net/bluetooth/rfcomm/core.c:487
->> >>        rfcomm_dlc_close+1e9/0x240 net/bluetooth/rfcomm/core.c:520
->> >>        __rfcomm_sock_close+0x13c/0x250 net/bluetooth/rfcomm/sock.c:220
->> >>        rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:907
->> >>        rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:928
->> >>        __sock_release+0xcd/0x280 net/socket.c:650
->> >>        sock_close+0x1c/0x20 net/socket.c:1365
->> >>        __fput+0x27c/0xa90 fs/file_table.c:320
->> >>        task_work_run+0x16f/0x270 kernel/task_work.c:179
->> >>        exit_task_work include/linux/task_work.h:38 [inline]
->> >>        do_exit+0xaa8/0x2950 kernel/exit.c:867
->> >>        do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
->> >>        get_signal+0x21c3/0x2450 kernel/signal.c:2859
->> >>        arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
->> >>        exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
->> >>        exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
->> >>        __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->> >>        syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
->> >>        do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->> >>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> >>
->> >> -> #1 (rfcomm_mutex){+.+.}-{3:3}:
->> >>        __mutex_lock_common kernel/locking/mutex.c:603 [inline]
->> >>        __mutex_lock+0x12f/0x1360 kernel/locking/mutex.c:747
->> >>        rfcomm_dlc_open+0x93/0xa80 net/bluetooth/rfcomm/core.c:425
->> >>        rfcomm_sock_connect+0x329/0x450 net/bluetooth/rfcomm/sock.c:413
->> >>        __sys_connect_file+0x153/0x1a0 net/socket.c:1976
->> >>        __sys_connect+0x165/0x1a0 net/socket.c:1993
->> >>        __do_sys_connect net/socket.c:2003 [inline]
->> >>        __se_sys_connect net/socket.c:2000 [inline]
->> >>        __x64_sys_connect+0x73/0xb0 net/socket.c:2000
->> >>        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->> >>        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->> >>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> >>
->> >> -> #0 (sk_lock-AF_BLUETOOTH-BTPROTO_RFCOMM){+.+.}-{0:0}:
->> >>        check_prev_add kernel/locking/lockdep.c:3097 [inline]
->> >>        check_prevs_add kernel/locking/lockdep.c:3216 [inline]
->> >>        validate_chain kernel/locking/lockdep.c:3831 [inline]
->> >>        __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
->> >>        lock_acquire kernel/locking/lockdep.c:5668 [inline]
->> >>        lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
->> >>        lock_sock_nested+0x3a/0xf0 net/core/sock.c:3470
->> >>        lock_sock include/net/sock.h:1725 [inline]
->> >>        rfcomm_sk_state_change+0x6d/0x3a0 net/bluetooth/rfcomm/sock.c:73
->> >>        __rfcomm_dlc_close+0x1b1/0x890 net/bluetooth/rfcomm/core.c:489
->> >>        rfcomm_dlc_close+0x1e9/0x240 net/bluetooth/rfcomm/core.c:520
->> >>        __rfcomm_sock_close+0x13c/0x250 net/bluetooth/rfcomm/sock.c:220
->> >>        rfcomm_sock_shutdown+0xd8/0x230 net/bluetooth/rfcomm/sock.c:907
->> >>        rfcomm_sock_release+0x68/0x140 net/bluetooth/rfcomm/sock.c:928
->> >>        __sock_release+0xcd/0x280 net/socket.c:650
->> >>        sock_close+0x1c/0x20 net/socket.c:1365
->> >>        __fput+0x27c/0xa90 fs/file_table.c:320
->> >>        task_work_run+0x16f/0x270 kernel/task_work.c:179
->> >>        exit_task_work include/linux/task_work.h:38 [inline]
->> >>        do_exit+0xaa8/0x2950 kernel/exit.c:867
->> >>        do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
->> >>        get_signal+0x21c3/0x2450 kernel/signal.c:2859
->> >>        arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
->> >>        exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
->> >>        exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
->> >>        __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->> >>        syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
->> >>        do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->> >>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> >>
->> >> Signed-off-by: Ying Hsu <yinghsu@chromium.org>
->> >> ---
->> >> This commit has been tested with a C reproducer on qemu-x86_64
->> >> and a ChromeOS device.
->> >>
->> >> Changes in v2:
->> >> - Fix potential use-after-free in rfc_comm_sock_connect.
->> >>
->> >>  net/bluetooth/rfcomm/sock.c | 7 ++++++-
->> >>  1 file changed, 6 insertions(+), 1 deletion(-)
->> >>
->> >> diff --git a/net/bluetooth/rfcomm/sock.c b/net/bluetooth/rfcomm/sock.c
->> >> index 21e24da4847f..4397e14ff560 100644
->> >> --- a/net/bluetooth/rfcomm/sock.c
->> >> +++ b/net/bluetooth/rfcomm/sock.c
->> >> @@ -391,6 +391,7 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
->> >>             addr->sa_family != AF_BLUETOOTH)
->> >>                 return -EINVAL;
->> >>
->> >> +       sock_hold(sk);
->> >>         lock_sock(sk);
->> >>
->> >>         if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
->> >> @@ -410,14 +411,18 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
->> >>         d->sec_level = rfcomm_pi(sk)->sec_level;
->> >>         d->role_switch = rfcomm_pi(sk)->role_switch;
->> >>
->> >> +       /* Drop sock lock to avoid potential deadlock with the RFCOMM lock */
->> >> +       release_sock(sk);
->> >>         err = rfcomm_dlc_open(d, &rfcomm_pi(sk)->src, &sa->rc_bdaddr,
->> >>                               sa->rc_channel);
->> >> -       if (!err)
->> >> +       lock_sock(sk);
->> >> +       if (!err && !sock_flag(sk, SOCK_ZAPPED))
->> >>                 err = bt_sock_wait_state(sk, BT_CONNECTED,
->> >>                                 sock_sndtimeo(sk, flags & O_NONBLOCK));
->> >>
->> >>  done:
->> >>         release_sock(sk);
->> >> +       sock_put(sk);
->> >>         return err;
->> >>  }
->> >
->> >This sounds like a great solution to hold the reference and then
->>
->> Why do you need sock_hold/put in the same proto_ops.callback sock opts ?
->> it should be guaranteed by the caller the sk will remain valid
->> or if you are paranoid then sock_hold() on your proto_ops.bind() and put()
->> on your proto_ops.release()
->
->It doesn't looks like there is a sock_hold done in the likes of
->__sys_connect/__sys_connect_file so afaik it is possible that the sk
->is freed in the meantime if we attempt to release and lock afterward,
->and about being paranoid I guess we are past that already since with
->the likes of fuzzing testing is already paranoid in itself.
->
+On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for removing security_old_inode_init_security(), switch to
+> security_inode_init_security().
+> 
+> Extend the existing ocfs2_initxattrs() to take the
+> ocfs2_security_xattr_info structure from fs_info, and populate the
+> name/value/len triple with the first xattr provided by LSMs.
 
-My point is, if you claim that the sk can be freed from another process
-after you call release_sock(sk);  this means it also can be free by 
-another process before you call lock_sock(sk); so what makes the first
-lock_sock(sk); safe in first place ? or after you changed the code to do
-sock_hold(sk) what makes sock_hold(sk) safe if another process can free it
-before you hold it ? 
+Hi Mark, Joel, Joseph
+
+some time ago I sent this patch set to switch to the newer
+function security_inode_init_security(). Almost all the other parts of
+this patch set have been reviewed, and the patch set itself should be
+ready to be merged.
+
+I kindly ask if you could have a look at this patch and give your
+Reviewed-by, so that Paul could take the patch set.
+
+Thanks a lot!
+
+Roberto
+
+> As fs_info was not used before, ocfs2_initxattrs() can now handle the case
+> of replicating the behavior of security_old_inode_init_security(), i.e.
+> just obtaining the xattr, in addition to setting all xattrs provided by
+> LSMs.
+> 
+> Supporting multiple xattrs is not currently supported where
+> security_old_inode_init_security() was called (mknod, symlink), as it
+> requires non-trivial changes that can be done at a later time. Like for
+> reiserfs, even if EVM is invoked, it will not provide an xattr (if it is
+> not the first to set it, its xattr will be discarded; if it is the first,
+> it does not have xattrs to calculate the HMAC on).
+> 
+> Finally, modify the handling of the return value from
+> ocfs2_init_security_get(). As security_inode_init_security() does not
+> return -EOPNOTSUPP, remove this case and directly handle the error if the
+> return value is not zero.
+> 
+> However, the previous case of receiving -EOPNOTSUPP should be still
+> taken into account, as security_inode_init_security() could return zero
+> without setting xattrs and ocfs2 would consider it as if the xattr was set.
+> 
+> Instead, if security_inode_init_security() returned zero, look at the xattr
+> if it was set, and behave accordingly, i.e. set si->enable to zero to
+> notify to the functions following ocfs2_init_security_get() that the xattr
+> is not available (same as if security_old_inode_init_security() returned
+> -EOPNOTSUPP).
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> ---
+>  fs/ocfs2/namei.c | 18 ++++++------------
+>  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
+>  2 files changed, 32 insertions(+), 16 deletions(-)
+> 
+> diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
+> index 05f32989bad6..55fba81cd2d1 100644
+> --- a/fs/ocfs2/namei.c
+> +++ b/fs/ocfs2/namei.c
+> @@ -242,6 +242,7 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
+>  	int want_meta = 0;
+>  	int xattr_credits = 0;
+>  	struct ocfs2_security_xattr_info si = {
+> +		.name = NULL,
+>  		.enable = 1,
+>  	};
+>  	int did_quota_inode = 0;
+> @@ -315,12 +316,8 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
+>  	/* get security xattr */
+>  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
+>  	if (status) {
+> -		if (status == -EOPNOTSUPP)
+> -			si.enable = 0;
+> -		else {
+> -			mlog_errno(status);
+> -			goto leave;
+> -		}
+> +		mlog_errno(status);
+> +		goto leave;
+>  	}
+>  
+>  	/* calculate meta data/clusters for setting security and acl xattr */
+> @@ -1805,6 +1802,7 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
+>  	int want_clusters = 0;
+>  	int xattr_credits = 0;
+>  	struct ocfs2_security_xattr_info si = {
+> +		.name = NULL,
+>  		.enable = 1,
+>  	};
+>  	int did_quota = 0, did_quota_inode = 0;
+> @@ -1875,12 +1873,8 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
+>  	/* get security xattr */
+>  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
+>  	if (status) {
+> -		if (status == -EOPNOTSUPP)
+> -			si.enable = 0;
+> -		else {
+> -			mlog_errno(status);
+> -			goto bail;
+> -		}
+> +		mlog_errno(status);
+> +		goto bail;
+>  	}
+>  
+>  	/* calculate meta data/clusters for setting security xattr */
+> diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
+> index 95d0611c5fc7..55699c573541 100644
+> --- a/fs/ocfs2/xattr.c
+> +++ b/fs/ocfs2/xattr.c
+> @@ -7259,9 +7259,21 @@ static int ocfs2_xattr_security_set(const struct xattr_handler *handler,
+>  static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array,
+>  		     void *fs_info)
+>  {
+> +	struct ocfs2_security_xattr_info *si = fs_info;
+>  	const struct xattr *xattr;
+>  	int err = 0;
+>  
+> +	if (si) {
+> +		si->value = kmemdup(xattr_array->value, xattr_array->value_len,
+> +				    GFP_KERNEL);
+> +		if (!si->value)
+> +			return -ENOMEM;
+> +
+> +		si->name = xattr_array->name;
+> +		si->value_len = xattr_array->value_len;
+> +		return 0;
+> +	}
+> +
+>  	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
+>  		err = ocfs2_xattr_set(inode, OCFS2_XATTR_INDEX_SECURITY,
+>  				      xattr->name, xattr->value,
+> @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
+>  			    const struct qstr *qstr,
+>  			    struct ocfs2_security_xattr_info *si)
+>  {
+> +	int ret;
+> +
+>  	/* check whether ocfs2 support feature xattr */
+>  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
+>  		return -EOPNOTSUPP;
+> -	if (si)
+> -		return security_old_inode_init_security(inode, dir, qstr,
+> -							&si->name, &si->value,
+> -							&si->value_len);
+> +	if (si) {
+> +		ret = security_inode_init_security(inode, dir, qstr,
+> +						   &ocfs2_initxattrs, si);
+> +		/*
+> +		 * security_inode_init_security() does not return -EOPNOTSUPP,
+> +		 * we have to check the xattr ourselves.
+> +		 */
+> +		if (!ret && !si->name)
+> +			si->enable = 0;
+> +
+> +		return ret;
+> +	}
+>  
+>  	return security_inode_init_security(inode, dir, qstr,
+>  					    &ocfs2_initxattrs, NULL);
 
