@@ -2,138 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5344F6643A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF0E6643A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238706AbjAJOug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S238700AbjAJOvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238697AbjAJOuW (ORCPT
+        with ESMTP id S238757AbjAJOvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:50:22 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928B44FCF2;
-        Tue, 10 Jan 2023 06:50:21 -0800 (PST)
-Received: from [IPv6:2a00:23c7:6883:e501:329c:8425:8e97:eae9] (unknown [IPv6:2a00:23c7:6883:e501:329c:8425:8e97:eae9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: obbardc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 333C76602D2B;
-        Tue, 10 Jan 2023 14:50:20 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673362220;
-        bh=PuiPwo9HwFOEDukFjeBEsAsNhLoAsOISooyAzQZgE/w=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=UivahFaqCKHK7Q4kYjRZ0yMLGxV6O43ZLqbqa963ojOEkNEB00rZgasESwe0l2Yly
-         agYPc543Wp1sa0jIwBe4BxXlXGHhhD4xouGAZkfnF0uoy83jcy+UJ6QQrYPljyA8A9
-         GDt73mfiVhgocAEv/1rD30/SaT3QWBl43/pSQMXLmEOSXLsurpEw9X3tmC0kxGNMut
-         KhQ1woUZVdY9zEDahM92UaQ076g8q6MnGLwLgt16OKCyWbBuxR+hnhD1dnbbm9H8y3
-         IOjnSmv0h+2rLVVXJoSLArvVme9SsqJGkFc4cZ7SIug/VkbEkT+e6q7r6orOwlJu8X
-         Sl2MxGQHm8uEw==
-Message-ID: <996e39448350d4f6318f7ff59c6a2ca249fb30a7.camel@collabora.com>
-Subject: Re: [PATCHv8 7/7] arm64: dts: rockchip: Add rock-5b board
-From:   Christopher Obbard <chris.obbard@collabora.com>
-To:     Jagan Teki <jagan@edgeble.ai>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Date:   Tue, 10 Jan 2023 14:50:17 +0000
-In-Reply-To: <CA+VMnFxb1P4tP5sef5ME3jCcCq2Y3rD-0bpv1B0TsUZ3RXXuqg@mail.gmail.com>
-References: <20230109155801.51642-1-sebastian.reichel@collabora.com>
-         <20230109155801.51642-8-sebastian.reichel@collabora.com>
-         <CA+VMnFxb1P4tP5sef5ME3jCcCq2Y3rD-0bpv1B0TsUZ3RXXuqg@mail.gmail.com>
+        Tue, 10 Jan 2023 09:51:16 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6D632EB3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:51:13 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso5813791wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:51:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=muRPvoodtHXWL4NNIYk10Fq+4im2yIJuL90gKAD23Fo=;
+        b=mcbpw9yVFKa2pKs33yjofN8fOHvlBpdccQJAlKL7ez+aiyuIx+eugxWQ+737C90Xqk
+         94lKTbMRxUCxdgv64bmONJ8O9xzmKja9V0uQZ7tLRjJytMve2/HMj6dvV1i+F6ViaTz7
+         rwNBEIiGdGHQbGa36FvsnGv2WoCw9tu/HMLK0kArZxC2r4KE6Cp9zA+FVqr/cCgHS6/0
+         daETULbrXIXK/8K0KdcRWnkFz5t9OppacT1Ba//AQBEKZyGqkIGnedHeRto8LCeLaDpT
+         1d656DHBQxKmoaNYQ5qpVzmkt12JDCaMI5AUHvMohdzRSVRwNZVXnhAnLvUXqktVzTv7
+         9NXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=muRPvoodtHXWL4NNIYk10Fq+4im2yIJuL90gKAD23Fo=;
+        b=gLm+kmoKwh88b5cmHmq2n7qeHyYlcoOKH/glCwY33hSU7zpLRLPuOucAE7tdyaoQm8
+         5XQf2NcUsCh/kXhfKU3JmYjpGWrtqwe91isR0xOcohIF6ELqGWl41T+4RzwcTxGnAt4I
+         OcxqcnRPQKKoTCmOzUr+ADIb7dWJVU4mZMRKbLr6bCi/dfgG6j9WVY0bWYSavSTBSPfO
+         EGWhwA/B0l5XWSlvZz5rIf57x713F/+LJTckRZg/Ghl26UWSpCQG2c0g0uM3vjSAh1K9
+         59+bEddtXZQ+fehav6uK0elpdiOlw4yf+BKRF2mRCFPnbjNKuDDZBoBKwLKrhzUXXjhe
+         P7FQ==
+X-Gm-Message-State: AFqh2koXaUk7CSrmOTWd5TI4VYiPN/QoJavLVI3UI/ToV/HXXw2VJxcx
+        z3lV76PaiXXKpvvTZvwlkKf2SEeDA9umE/KPzWObIg==
+X-Google-Smtp-Source: AMrXdXs4xy9xMIlVczjqZL2d+TSIfcJDWWQwF9xsndZPEJis6d+4cFr03Ck5XyKySBDlvnKM6yEO/8ClXSEvQXEa8ZQ=
+X-Received: by 2002:a05:600c:4c22:b0:3cf:f2aa:3dc2 with SMTP id
+ d34-20020a05600c4c2200b003cff2aa3dc2mr3621686wmp.175.1673362271690; Tue, 10
+ Jan 2023 06:51:11 -0800 (PST)
+MIME-Version: 1.0
+References: <20230105101844.1893104-1-jthoughton@google.com>
+ <20230105101844.1893104-35-jthoughton@google.com> <Y7g6ihsCTIC765CO@x1n>
+In-Reply-To: <Y7g6ihsCTIC765CO@x1n>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 10 Jan 2023 09:50:59 -0500
+Message-ID: <CADrL8HXbTzX8T-S57mUQ8ggJ=DGMcQAxJapiQCFndqjPNLV=-Q@mail.gmail.com>
+Subject: Re: [PATCH 34/46] hugetlb: userfaultfd: when using MADV_SPLIT, round
+ addresses to PAGE_SIZE
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2-1 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-10 at 19:30 +0530, Jagan Teki wrote:
-> On Mon, 9 Jan 2023 at 21:28, Sebastian Reichel
-> <sebastian.reichel@collabora.com> wrote:
-> >=20
-> > From: Christopher Obbard <chris.obbard@collabora.com>
-> >=20
-> > Add board file for the RK3588 Rock 5B board. This is a basic
-> > implementation which just brings up the eMMC and UART which is
-> > enough to successfully boot Linux.
-> >=20
-> > The ethernet controller is connected via PCIe so support will
-> > come in a follow-up patch.
-> >=20
-> > Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
-> > Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+On Fri, Jan 6, 2023 at 10:13 AM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Thu, Jan 05, 2023 at 10:18:32AM +0000, James Houghton wrote:
+> > MADV_SPLIT enables HugeTLB HGM which allows for UFFDIO_CONTINUE in
+> > PAGE_SIZE chunks. If a huge-page-aligned address were to be provided,
+> > userspace would be completely unable to take advantage of HGM. That
+> > would then require userspace to know to provide
+> > UFFD_FEATURE_EXACT_ADDRESS.
+> >
+> > This patch would make it harder to make a mistake. Instead of requiring
+> > userspace to provide UFFD_FEATURE_EXACT_ADDRESS, always provide a usabl=
+e
+> > address.
+> >
+> > Signed-off-by: James Houghton <jthoughton@google.com>
 > > ---
-> > =C2=A0arch/arm64/boot/dts/rockchip/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
-> > =C2=A0.../boot/dts/rockchip/rk3588-rock-5b.dts=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 44
-> > +++++++++++++++++++
-> > =C2=A02 files changed, 45 insertions(+)
-> > =C2=A0create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dt=
-s
-> >=20
-> > diff --git a/arch/arm64/boot/dts/rockchip/Makefile
-> > b/arch/arm64/boot/dts/rockchip/Makefile
-> > index 87a853435142..c5bdd0176ce0 100644
-> > --- a/arch/arm64/boot/dts/rockchip/Makefile
-> > +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> > @@ -83,4 +83,5 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-evb1-
-> > v10.dtb
-> > =C2=A0dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-odroid-m1.dtb
-> > =C2=A0dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-rock-3a.dtb
-> > =C2=A0dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588-evb1-v10.dtb
-> > +dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588-rock-5b.dtb
-> > =C2=A0dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3588s-rock-5a.dtb
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> > b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> > new file mode 100644
-> > index 000000000000..d2f1e963ce06
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-> > @@ -0,0 +1,44 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> >  mm/hugetlb.c | 31 +++++++++++++++----------------
+> >  1 file changed, 15 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index 5af6db52f34e..5b6215e03fe1 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -5936,28 +5936,27 @@ static inline vm_fault_t hugetlb_handle_userfau=
+lt(struct vm_area_struct *vma,
+> >                                                 unsigned long addr,
+> >                                                 unsigned long reason)
+> >  {
+> > +     u32 hash;
+> > +     struct vm_fault vmf;
 > > +
-> > +/dts-v1/;
-> > +
-> > +#include "rk3588.dtsi"
-> > +
-> > +/ {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 model =3D "Radxa ROCK 5 Model B";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "radxa,rock-5b", "=
-rockchip,rk3588";
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 aliases {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 mmc1 =3D &sdhci;
->=20
-> I think sdhci - emmc has to be mmc0 due to boot priority.
+> >       /*
+> >        * Don't use the hpage-aligned address if the user has explicitly
+> >        * enabled HGM.
+> >        */
+> >       if (hugetlb_hgm_advised(vma) && reason =3D=3D VM_UFFD_MINOR)
+> > -             haddr =3D address & PAGE_MASK;
+> > -
+> > -     u32 hash;
+> > -     struct vm_fault vmf =3D {
+> > -             .vma =3D vma,
+> > -             .address =3D haddr,
+> > -             .real_address =3D addr,
+> > -             .flags =3D flags,
+> > +             haddr =3D addr & PAGE_MASK;
+> >
+> > -             /*
+> > -              * Hard to debug if it ends up being
+> > -              * used by a callee that assumes
+> > -              * something about the other
+> > -              * uninitialized fields... same as in
+> > -              * memory.c
+> > -              */
+> > -     };
+> > +     vmf.vma =3D vma;
+> > +     vmf.address =3D haddr;
+> > +     vmf.real_address =3D addr;
+> > +     vmf.flags =3D flags;
+>
+> Const fields here:
+>
+> mm/hugetlb.c: In function =E2=80=98hugetlb_handle_userfault=E2=80=99:
+> mm/hugetlb.c:5961:17: error: assignment of member =E2=80=98vma=E2=80=99 i=
+n read-only object
+>  5961 |         vmf.vma =3D vma;
+>       |                 ^
+> mm/hugetlb.c:5962:21: error: assignment of member =E2=80=98address=E2=80=
+=99 in read-only object
+>  5962 |         vmf.address =3D haddr;
+>       |                     ^
+> mm/hugetlb.c:5963:26: error: assignment of member =E2=80=98real_address=
+=E2=80=99 in read-only object
+>  5963 |         vmf.real_address =3D addr;
 
-Hi Jagan,
-
-We kept eMMC as mmc1 for both ROCK 5 Model A and B to keep
-compatibility with vendor kernel:
-https://github.com/radxa/kernel/blob/stable-5.10-rock5/arch/arm64/boot/dts/=
-rockchip/rk3588-rock-5b.dts#L31
-
-But I am happy to change the alias to mmc0, @Sebastian what do you
-think?
-
-Thanks
-Chris
+Thanks Peter for this and your other findings. Not sure why my
+compiler (clang) let me do this. :/ Will send a v2 soon with this +
+the other problems fixed.
