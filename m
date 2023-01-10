@@ -2,84 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AA3664E2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 22:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAED664E2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 22:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjAJVlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 16:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S231136AbjAJVl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 16:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjAJVkz (ORCPT
+        with ESMTP id S229842AbjAJVlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 16:40:55 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B45BEB;
-        Tue, 10 Jan 2023 13:40:53 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ns44K33Pkz4xGM;
-        Wed, 11 Jan 2023 08:40:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673386849;
-        bh=TRwYzKmUSX9HOCD2QC38VqsU44iJMBfkk1Oww7rCQF0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CnH4egbIqB4cMpLG2rqx1OSmjXFZPK8znKIXCr+vNf3Fwykp4Kll+psQKSHgPsOan
-         2LX54lP/nhFd7SHrcURNWAyR0CVTlONxCrOrc5LrXgdvORVyoWR6Z1sEtsIjNrhPPc
-         LK90pjcQEIG1v1+u0VEoBvluPGmZpZND6XnPWgDLfGb/FVQNbae1Vi9+zWFgWvUy4S
-         uHwLuqFINfUSqIsWjDaIi+dJ6D6e8JwPKNowm6Ny+J6dGNFgRaXrSJk4CSCouNsJHO
-         0OnaPXHHrolhinZmdFqGz6W99Mmzg2YbqO+d4PbbfVpuvZABBmUORiznWBauUlOxLw
-         7wEoiWID/nLOg==
-Date:   Wed, 11 Jan 2023 08:40:47 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the nvmem tree
-Message-ID: <20230111084047.42ffedbb@canb.auug.org.au>
+        Tue, 10 Jan 2023 16:41:44 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FFE392C6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 13:41:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1673386889; bh=6nop0OBRob5Z/iRPg9Z11D2mpsio5bT53ye1lNuCTMA=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=Kry3PLtBqQq7pCJENXSkf3/z+qjQZfdx4S90qzOEJLRSNewlI0yBXjCzxH+tjvZjr
+         SGs7BM6s0OXd5RPi2WQus7aREwbvcyl89Dt+YNyxucfyyWiKUY2+hU93fc4SdORjo0
+         o08JPe5zCO6kP4+6hj8BbXVJeMSclipawKJRl0Sk=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Tue, 10 Jan 2023 22:41:29 +0100 (CET)
+X-EA-Auth: knPYGnacJT0lXIppOOUrbjh7wpqS0rH5RVuWRIAqscHyipc0nXTrwwLkyUDbltSIbFUlZVR4cHWiNX0Rr5ZdGH179UidTJft
+Date:   Wed, 11 Jan 2023 03:11:24 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: [PATCH] staging: wlan-ng: Remove unused code
+Message-ID: <Y73bhE1VwQ5IfFyt@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kq.jjSJWZYRkK=VQCdb3CDk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/kq.jjSJWZYRkK=VQCdb3CDk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Several structs are defined but never used. Remove such dead code.
 
-Hi all,
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Note: Change compile tested only.
 
-Commit
+ drivers/staging/wlan-ng/hfa384x.h | 171 ------------------------------
+ 1 file changed, 171 deletions(-)
 
-  af0f8ec24990 ("nvmem: core: fix return value")
+diff --git a/drivers/staging/wlan-ng/hfa384x.h b/drivers/staging/wlan-ng/hfa384x.h
+index 0611e37df6ac..e33dd1b9c40e 100644
+--- a/drivers/staging/wlan-ng/hfa384x.h
++++ b/drivers/staging/wlan-ng/hfa384x.h
+@@ -904,40 +904,6 @@ union hfa384x_usbin {
+  *--------------------------------------------------------------------
+  */
+ 
+-struct hfa384x_pdr_pcb_partnum {
+-	u8 num[8];
+-} __packed;
+-
+-struct hfa384x_pdr_pcb_tracenum {
+-	u8 num[8];
+-} __packed;
+-
+-struct hfa384x_pdr_nic_serial {
+-	u8 num[12];
+-} __packed;
+-
+-struct hfa384x_pdr_mkk_measurements {
+-	double carrier_freq;
+-	double occupied_band;
+-	double power_density;
+-	double tx_spur_f1;
+-	double tx_spur_f2;
+-	double tx_spur_f3;
+-	double tx_spur_f4;
+-	double tx_spur_l1;
+-	double tx_spur_l2;
+-	double tx_spur_l3;
+-	double tx_spur_l4;
+-	double rx_spur_f1;
+-	double rx_spur_f2;
+-	double rx_spur_l1;
+-	double rx_spur_l2;
+-} __packed;
+-
+-struct hfa384x_pdr_nic_ramsize {
+-	u8 size[12];		/* units of KB */
+-} __packed;
+-
+ struct hfa384x_pdr_mfisuprange {
+ 	u16 id;
+ 	u16 variant;
+@@ -959,150 +925,13 @@ struct hfa384x_pdr_nicid {
+ 	u16 minor;
+ } __packed;
+ 
+-struct hfa384x_pdr_refdac_measurements {
+-	u16 value[0];
+-} __packed;
+-
+-struct hfa384x_pdr_vgdac_measurements {
+-	u16 value[0];
+-} __packed;
+-
+-struct hfa384x_pdr_level_comp_measurements {
+-	u16 value[0];
+-} __packed;
+-
+-struct hfa384x_pdr_mac_address {
+-	u8 addr[6];
+-} __packed;
+-
+-struct hfa384x_pdr_mkk_callname {
+-	u8 callname[8];
+-} __packed;
+-
+-struct hfa384x_pdr_regdomain {
+-	u16 numdomains;
+-	u16 domain[5];
+-} __packed;
+-
+-struct hfa384x_pdr_allowed_channel {
+-	u16 ch_bitmap;
+-} __packed;
+-
+-struct hfa384x_pdr_default_channel {
+-	u16 channel;
+-} __packed;
+-
+-struct hfa384x_pdr_privacy_option {
+-	u16 available;
+-} __packed;
+-
+-struct hfa384x_pdr_temptype {
+-	u16 type;
+-} __packed;
+-
+-struct hfa384x_pdr_refdac_setup {
+-	u16 ch_value[14];
+-} __packed;
+-
+-struct hfa384x_pdr_vgdac_setup {
+-	u16 ch_value[14];
+-} __packed;
+-
+-struct hfa384x_pdr_level_comp_setup {
+-	u16 ch_value[14];
+-} __packed;
+-
+-struct hfa384x_pdr_trimdac_setup {
+-	u16 trimidac;
+-	u16 trimqdac;
+-} __packed;
+-
+-struct hfa384x_pdr_ifr_setting {
+-	u16 value[3];
+-} __packed;
+-
+-struct hfa384x_pdr_rfr_setting {
+-	u16 value[3];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_baseline {
+-	u16 value[50];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_shadow {
+-	u32 value[32];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_ifrf {
+-	u32 value[20];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_chcalsp {
+-	u16 value[14];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_chcali {
+-	u16 value[17];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_nic_config {
+-	u16 config_bitmap;
+-} __packed;
+-
+-struct hfa384x_pdr_hfo_delay {
+-	u8 hfo_delay;
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_manf_testsp {
+-	u16 value[30];
+-} __packed;
+-
+-struct hfa384x_pdr_hfa3861_manf_testi {
+-	u16 value[30];
+-} __packed;
+-
+-struct hfa384x_pdr_end_of_pda {
+-	u16 crc;
+-} __packed;
+-
+ struct hfa384x_pdrec {
+ 	__le16 len;		/* in words */
+ 	__le16 code;
+ 	union pdr {
+-		struct hfa384x_pdr_pcb_partnum pcb_partnum;
+-		struct hfa384x_pdr_pcb_tracenum pcb_tracenum;
+-		struct hfa384x_pdr_nic_serial nic_serial;
+-		struct hfa384x_pdr_mkk_measurements mkk_measurements;
+-		struct hfa384x_pdr_nic_ramsize nic_ramsize;
+ 		struct hfa384x_pdr_mfisuprange mfisuprange;
+ 		struct hfa384x_pdr_cfisuprange cfisuprange;
+ 		struct hfa384x_pdr_nicid nicid;
+-		struct hfa384x_pdr_refdac_measurements refdac_measurements;
+-		struct hfa384x_pdr_vgdac_measurements vgdac_measurements;
+-		struct hfa384x_pdr_level_comp_measurements level_compc_measurements;
+-		struct hfa384x_pdr_mac_address mac_address;
+-		struct hfa384x_pdr_mkk_callname mkk_callname;
+-		struct hfa384x_pdr_regdomain regdomain;
+-		struct hfa384x_pdr_allowed_channel allowed_channel;
+-		struct hfa384x_pdr_default_channel default_channel;
+-		struct hfa384x_pdr_privacy_option privacy_option;
+-		struct hfa384x_pdr_temptype temptype;
+-		struct hfa384x_pdr_refdac_setup refdac_setup;
+-		struct hfa384x_pdr_vgdac_setup vgdac_setup;
+-		struct hfa384x_pdr_level_comp_setup level_comp_setup;
+-		struct hfa384x_pdr_trimdac_setup trimdac_setup;
+-		struct hfa384x_pdr_ifr_setting ifr_setting;
+-		struct hfa384x_pdr_rfr_setting rfr_setting;
+-		struct hfa384x_pdr_hfa3861_baseline hfa3861_baseline;
+-		struct hfa384x_pdr_hfa3861_shadow hfa3861_shadow;
+-		struct hfa384x_pdr_hfa3861_ifrf hfa3861_ifrf;
+-		struct hfa384x_pdr_hfa3861_chcalsp hfa3861_chcalsp;
+-		struct hfa384x_pdr_hfa3861_chcali hfa3861_chcali;
+-		struct hfa384x_pdr_hfa3861_nic_config nic_config;
+-		struct hfa384x_pdr_hfo_delay hfo_delay;
+-		struct hfa384x_pdr_hfa3861_manf_testsp hfa3861_manf_testsp;
+-		struct hfa384x_pdr_hfa3861_manf_testi hfa3861_manf_testi;
+-		struct hfa384x_pdr_end_of_pda end_of_pda;
+ 
+ 	} data;
+ } __packed;
+-- 
+2.34.1
 
-is missing a Signed-off-by from its committer.
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/kq.jjSJWZYRkK=VQCdb3CDk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmO9218ACgkQAVBC80lX
-0GxhzggAkyUYLidTwRfvK3+7wfjWIklQGeAKotXKhsoBQJtJVGNC2Nigzn1G8FZi
-abwdtr3pz1d0kw01cCZbxvwgGaannDqgsP6FGblZN37eFxjghDVCEofh0e+xFJGb
-nOxbZlI2LODUzoRxNIHaHCoYIeJQmz/9XQLqjub1iTGkbnxUtniwDiCzyt5YPYay
-B3cveiEXT9HiSbpWiEtJP55ezgpQ+CUJS9wnLTmwt1+BD1W52sykoAIytKOgeunk
-KOhiSWtTBZqCUcCRfL8718YE9cqoLIMIlLWNDG+rtWRV1pcQY379eopIczTmeA9m
-49Wb0Y65G/JmmnBbzGkoJpvhAKau5w==
-=fPZR
------END PGP SIGNATURE-----
-
---Sig_/kq.jjSJWZYRkK=VQCdb3CDk--
