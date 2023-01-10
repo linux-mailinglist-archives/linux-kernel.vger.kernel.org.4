@@ -2,118 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7432D664159
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3316664161
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjAJNM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
+        id S233593AbjAJNOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbjAJNME (ORCPT
+        with ESMTP id S231776AbjAJNO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:12:04 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3388224;
-        Tue, 10 Jan 2023 05:11:59 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id c6so13121310pls.4;
-        Tue, 10 Jan 2023 05:11:59 -0800 (PST)
+        Tue, 10 Jan 2023 08:14:26 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332CB3FA1F
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:14:25 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id h16so11677549wrz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:14:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nf6F824Dd4jORPczYBOw5Dqh4nvMQWoW3MEpdWdL+mk=;
-        b=QA1K91gmePVfheH6IAe+PNMRxw+jbSyWWohy9akdRN6O3EYzS4wF36V8WBLF0CQQmU
-         yP8Y2s8aWkkzxSPvofIBrU0wjeqWlRERtRwiCzqas1AQMzTvexUixsB8gxJ/skqL0k9S
-         ltfCJcnu1Hv9YcIn37YEzET1OXAKRnNNBtmFU3bjoukOEnY7NMXD7oN1AoyPAvjxVtTA
-         sqOseE3jI3Oa5TS6wJRKfSwGEmUhsG6wHambcrLRBRzT7C7ih8M3QbEv/QC7wh+j78Qz
-         8K+ia5nZk0iOt4wRRKUTRxiCJYR8wP4e2zLsrKfPzn27uqeRIoH9p+H2/lKKdDPMnKCq
-         zEng==
+        bh=RnE4fpLbcTktxDgKOw5o5AykRDw1ELTBr8AeZCuOMxk=;
+        b=RYF+dwJScInqtksjXi7CaKi6U0QmKWIc1MT/7tNys0Mdjiz7BVq58Zac4iiBwdWnAH
+         ZQRMVsQQkYsqH3fiNe+xKk90MtFLKybMVy1YMoEx9/myhqNsztTMmn/lLTkCZa0JOn/y
+         8UGgzUH34CxT4ZFc4xlcxoFTFf75Yh7qjjBcgw18NzIOM3nwKfQ4UID7jZC+0+jCmkFf
+         t1zy+B1we1oOq98ybkJGRSDg6XlzQDyEgNZiJG1fLR/fWY0+6cKYuERbnAbVYJiBzIbo
+         KS7USHehvufu0YKmfxmkMqDO7r4GZw3HlkrVmeAIYOld93vNVB15Rcla38USWTCvMf0D
+         pWjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nf6F824Dd4jORPczYBOw5Dqh4nvMQWoW3MEpdWdL+mk=;
-        b=Kot2hrbln2RRTGO3A8uvDbZMobWLYayZ+BDnNYgk6j6d6aKq9Z2/TuGpU85eUQEwct
-         e2Gfg9Z6uzbfkjRw0zhZBU3Ela8ye3pIgey4WKgVVLbHSiG5BbiVAl7zLFRzNLtC8Bj1
-         CnAqwQuMdN95YA40jCgBseSfjV9iPZsKG4yKSkrrj2lNtx/kcdaHUelHhO9bbh+Pgi5W
-         lkzKMBdqcqmEIGan3z5mHY+CwmdzbSlgFEhOoc08Gzj063HIhJ4sboNP4yXdddLyaV/E
-         F0U1CQb2tDLPmEDqguRE6d4kDnZusqphVIV+zAyckgxh0woXpmXFP2Rm4D2y2H1Lpe5E
-         nq5g==
-X-Gm-Message-State: AFqh2ko0QjmAxddphNKbLj6tkTba5a8p7idvy3JRySZi9haTZdNgU+0p
-        F21j+y3cITCumX5r8SsKMF4=
-X-Google-Smtp-Source: AMrXdXtXUWR91WwyJla3p3vmcfldIEjPuzt5tAhr2hFlBAEjHWia42ZoqdX+dlXoKW5LzZjZh4F36w==
-X-Received: by 2002:a17:90b:1046:b0:227:1cfc:f5ed with SMTP id gq6-20020a17090b104600b002271cfcf5edmr5560533pjb.39.1673356319159;
-        Tue, 10 Jan 2023 05:11:59 -0800 (PST)
-Received: from [172.30.1.1] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id h7-20020a17090a9c0700b00219cf5c3829sm7101545pjp.57.2023.01.10.05.11.55
+        bh=RnE4fpLbcTktxDgKOw5o5AykRDw1ELTBr8AeZCuOMxk=;
+        b=KIZFEbg/J8oqU0DeyB0/gOe7aiK3U7coK8kdkFKvUIysgZgBXbi4WfWdVkvmTKC+yb
+         pE73eTKiN0jj1WEqWIbcfUCQbMDZ7Enz8WeVUOozW0Hf+mXSTRF5aEd7oLvPkp+vVHS7
+         kv6b/xXE3ArqHLtPnkbWUFVjM3LowSKAcX1vTxTxISRVaWtRvCxVNoROdPlSWWe05lF5
+         iH54BsSZADr564bGhKegDzlAUg+uGx55eeuYhgpYPDPZQoCBQ9NXlglqI6DjVV8F0pmE
+         tmu9a/YMhNRXXXLblxUcTWKa5ehbt2t/1UdGEVV+X8gAx9vRYjE+Akxq9NtwN+R8BVsr
+         vuiw==
+X-Gm-Message-State: AFqh2kqBDVXOxJltBjH2JJzlmRZOnEagKZ+h5HIoD0xfCGEFQ0fLDjrD
+        vwRkpSq+KwKT4N8qxsil9+zZlQ==
+X-Google-Smtp-Source: AMrXdXs1T/XUz7ymawsRiuhyR7G7qFEF1Qq8385DQZCBDY5NH/B6jOZoZ2m4dktR4rh+wJKR0xos5w==
+X-Received: by 2002:a05:6000:12c2:b0:2bc:5e1:6ff1 with SMTP id l2-20020a05600012c200b002bc05e16ff1mr4842047wrx.10.1673356463750;
+        Tue, 10 Jan 2023 05:14:23 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id f3-20020adfdb43000000b00236883f2f5csm11400187wrj.94.2023.01.10.05.14.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 05:11:58 -0800 (PST)
-Message-ID: <b883f503-a6d6-e4a3-f505-baa2607b4e0e@gmail.com>
-Date:   Tue, 10 Jan 2023 22:11:53 +0900
+        Tue, 10 Jan 2023 05:14:23 -0800 (PST)
+Message-ID: <88d66834-ca80-888b-e56e-7694e84b6eae@linaro.org>
+Date:   Tue, 10 Jan 2023 13:14:22 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] clk: samsung: remove s3c24xx specific pll bits
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 4/7] arm64: dts: qcom: Add msm8939 SoC
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Ajay Kumar <ajaykumar.rs@samsung.com>,
-        Pankaj Dubey <pankaj.dubey@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230105141231.2006353-1-arnd@kernel.org>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20230105141231.2006353-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230103010904.3201835-1-bryan.odonoghue@linaro.org>
+ <20230103010904.3201835-5-bryan.odonoghue@linaro.org>
+ <6e594438-843a-d03e-5276-d6316a9dc2c0@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <6e594438-843a-d03e-5276-d6316a9dc2c0@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23. 1. 5. 23:12, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> With the s3c24xx clk driver gone, the portions of the pll driver
-> for it can also be removed.
-> 
-> Suggested-by: Chanwoo Choi <cwchoi00@gmail.com>
-> Cc: Chanwoo Choi <cwchoi00@gmail.com>
-> Link: https://lore.kernel.org/linux-arm-kernel/0e0eff12-d8ea-72e9-d135-4259dda9a750@gmail.com/
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> I'm trying to get the boardfile removal patches into shape for
-> 6.3, and came across the comment from Chanwoo Choi that I had
-> not addressed yet. I've added this patch to my s3c24xx series now,
-> to be merged through the soc tree unless there are objections.
-> 
->  drivers/clk/samsung/clk-pll.c | 181 ----------------------------------
->  drivers/clk/samsung/clk-pll.h |  21 ----
->  2 files changed, 202 deletions(-)
+On 03/01/2023 09:14, Krzysztof Kozlowski wrote:
+> ../arch/arm64/boot/dts/qcom/msm8939.dtsi:1825.23-1842.5: Warning
+> (simple_bus_reg): /soc@0/mmc@7824000: simple-bus unit address format
+> error, expected "7824900
 
-(snip)
+For the record the driver consuming this dt entry requires the host regs 
+to come first followed by the core
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+sdhc_1: mmc@7824000 {
+         compatible = "qcom,msm8916-sdhci", "qcom,sdhci-msm-v4";
+         reg = <0x07824900 0x11c>, <0x07824000 0x800>;
+         reg-names = "hc", "core";
+}
 
-Thanks.
+If I change this and the msm8916 to
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+sdhc_1: mmc@7824000 {
+         compatible = "qcom,msm8916-sdhci", "qcom,sdhci-msm-v4";
+         reg = <0x07824000 0x800>, <0x07824900 0x11c>;
+         reg-names = "core", "hc";
+}
 
+the warning goes away but then this code won't work as intended anymore.
+
+drivers/mmc/host/sdhci-msm.c:		msm_host->core_mem = 
+devm_platform_ioremap_resource(pdev, 1);
+
+Weirdly when I change the ordering of the registers in the dts the SD 
+seems to work just fine, which is at variance to my reading of the code.
+
+Converting the sdhci driver to use the register name, instead of a 
+static ordering of the regs feels like something to be done in a 
+separate series.
+
+---
+bod
