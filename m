@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5291E664FBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15093664FC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234716AbjAJXQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 18:16:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
+        id S235245AbjAJXRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 18:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235000AbjAJXP4 (ORCPT
+        with ESMTP id S234469AbjAJXRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 18:15:56 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58F0431A3;
-        Tue, 10 Jan 2023 15:15:50 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id h6so6870846iof.9;
-        Tue, 10 Jan 2023 15:15:50 -0800 (PST)
+        Tue, 10 Jan 2023 18:17:04 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EAB14019
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:17:03 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id jl4so14847349plb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:17:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rjAhc1C9DIu+ea6UXnqiofrEdU6FGq1Y026opPqOAwQ=;
-        b=DMrLcN0CAr/93yLxdb1rEbm80d8EEvOM+gG4f+472bBnB9qEP2bk2W+SJicbjYJ++t
-         c76pUQWC3aSQork8iExgi5iH+k0jK7hFiUvIq1Un0GfRNy/4vkEhS54FVyBcvBoxiMXI
-         y4AC+lBpk3QvW1BFR3BiUVkzK/TmlvTd0Hi8YxZP03fI7EuSZsJNumrp/jzCpXOWqrcH
-         Atb/bsClvPzwPpUs0buzezr158qC4LcunvlHeHg9MG7lcW3x++4dXcq8+LG6TCFVcjj7
-         SE1iKtYSHcPEHS/bGGUNKBYxUTtA7F9qE8HmfmxMRKeeV5936RpBgS/PFtI+Hb0A3pmv
-         o5EA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l6IgFBxFFuGxE5Qe4w1Fb+Fw3nDxISXyDLmZ4ash+sg=;
+        b=OfWsZgVGJSmY0TQ8hECx3n1wR6Uw9GYKwwwpl/5e/bLovr71E/PkxLUMemz4gTWE9Q
+         WyH90PeqvghGSbBPO7yN0YY03k+afs0+zswe8sCDkb9j9n5dK+0w+wtcrQxeubjKkL5Z
+         +Pqf1I6071XP0j2SM+7+MD/uZ/hlI8vbf8QpMbOn1aCVPLik523+jYOOjoi2yDgxDeHo
+         0ngYp26emSQZV5FT1N9xuQnUjr0nkAYK6DwaajV4wc9lpaDitEv1+yl1aMkrx5suy/aQ
+         9AX4Seib8Vj8jK3FaQ8tfpSbDY/3xkegk9UrtvySZPF1prEOEFgMyOnAPM9MKv+BWkWs
+         8/lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rjAhc1C9DIu+ea6UXnqiofrEdU6FGq1Y026opPqOAwQ=;
-        b=rZRD+TwmUp3bvmsjuuE5rGNdfxu5iBLft/28DTultsul1Wo+M0JrAVUT+uICqF+5L/
-         VVX6jGEUZss2TmSOU1QLGb1TZVHSQhKgR0aG8Zo/iKliBndPaOXw5CQql2FOkxwlghg3
-         M9R8TMLTE0czBSrF8KowCJVwZSSo9mep6Iu3Bo6oqd6N0Agwr6lU8PHrnGrYcMrYbaUD
-         zxjtVysCUjsQZ0BwZoI1ovnALVcq2PFTiTL3Z0gjgLr4r+RscolkxIo19aFS45+xIIQp
-         FqEp7lpOVt33/2x6UMgxYN03YAiDcydIcol8+Nwy+9o15fivKRVmzRvv+UHtc0+PAmx9
-         4Mqw==
-X-Gm-Message-State: AFqh2koHA986x4gjko3r87e0skLiO1kswolTKuussQiMH8nrxXQatTOC
-        AZoLJ5kkWN91IzgNJunxwHcUSj4Npoa5lv5GNWaiMGAiVX0=
-X-Google-Smtp-Source: AMrXdXtm/j/653k1ZTPIdxNqF/fcOe4lHrWilyXjVDTy59XNTDSw/DM9gXslyaqmmsZZEDvgOkLhci6PmAVXZpeQxBM=
-X-Received: by 2002:a05:6638:25b:b0:38a:31ed:7191 with SMTP id
- w27-20020a056638025b00b0038a31ed7191mr6744750jaq.21.1673392549828; Tue, 10
- Jan 2023 15:15:49 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l6IgFBxFFuGxE5Qe4w1Fb+Fw3nDxISXyDLmZ4ash+sg=;
+        b=Yed9MZC4IfO2MjgkNeQhwMo1a+tB9AuQ7Vn1f9YGZSEnjAIP//lENGuDOhZdTx9+4r
+         naGKv6x3ArM6bku8F/6jxkQofCwl1YFfuRBRc0tn71HltBjB6rkHT0drigZcnUs6iqBU
+         0WPYbmGCK3rOLqiixSyhPO+pI9Qnl/hyPnVv2PMoUs+3iwGPppK9LjpgB0OJ4HlN5UBK
+         BSl14Y2GlKY/2raz9m8s0cbVamFHr26DUpKtAFm4pvjv1KyyTvC++4v6ZggA31Ezi6Vh
+         UEqU7n2SOW0J8QgpojBCfIo9ndbaF8imXH9GKXhXaG8OVhOWFVXonASJf5WDifUXlAZW
+         jP+Q==
+X-Gm-Message-State: AFqh2kpiiPtL6Y/CBAlHWFMDj/kVNot5beWKISHyzfeekLUeUnKn+Rl8
+        3n/ZSBfo8hChm3YNdErBtnk=
+X-Google-Smtp-Source: AMrXdXvC2V+tKL06sH1MYONnA2gbl0c4IT3A2GkTWOvJa4FEh1y6U1XjycAtq9Q3mFFlAadC7w7PjA==
+X-Received: by 2002:a17:902:f1d2:b0:194:4335:5389 with SMTP id e18-20020a170902f1d200b0019443355389mr2711224plc.35.1673392622617;
+        Tue, 10 Jan 2023 15:17:02 -0800 (PST)
+Received: from localhost (fwdproxy-prn-021.fbsv.net. [2a03:2880:ff:15::face:b00c])
+        by smtp.gmail.com with ESMTPSA id k12-20020a170902c40c00b00178aaf6247bsm8667248plk.21.2023.01.10.15.17.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 15:17:02 -0800 (PST)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
+Subject: [PATCH] zsmalloc: fix a race with deferred_handles storing
+Date:   Tue, 10 Jan 2023 15:17:01 -0800
+Message-Id: <20230110231701.326724-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <Y7G797A2CIF1Ys/t@jo-einhundert> <ca67837b-ef00-b314-2050-3274db8c8fc5@collabora.com>
- <CAMUOyH2M5V7wcdz_xNHkC0LeXVLRtzBoTyA7nEGynnUqnn09mQ@mail.gmail.com> <e1c43612-3f36-8213-c515-9fac11b184ff@collabora.com>
-In-Reply-To: <e1c43612-3f36-8213-c515-9fac11b184ff@collabora.com>
-From:   =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>
-Date:   Wed, 11 Jan 2023 00:15:37 +0100
-Message-ID: <CAMUOyH3fPQHNvSRHHiphwh_ezGP-BA_v0snce9BZMZKVmVHXqQ@mail.gmail.com>
-Subject: Re: [PATCH v3] usb: gadget: add WebUSB landing page support
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,830 +71,424 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrzej,
+Currently, there is a race between zs_free() and zs_reclaim_page():
+zs_reclaim_page() finds a handle to an allocated object, but before the
+eviction happens, an independent zs_free() call to the same handle could
+come in and overwrite the object value stored at the handle with
+the last deferred handle. When zs_reclaim_page() finally gets to call
+the eviction handler, it will see an invalid object value (i.e the
+previous deferred handle instead of the original object value).
 
-On Tue, Jan 10, 2023 at 2:28 PM Andrzej Pietrasiewicz
-<andrzej.p@collabora.com> wrote:
->
-> Hi J=C3=B3,
->
-> W dniu 10.01.2023 o 00:19, J=C3=B3 =C3=81gila Bitsch pisze:
-> > Hi Andrzej,
-> >
-> >>> The specification allows USB gadgets to announce an URL to landing
-> >>> page and describes a Javascript interface for websites to interact
-> >>> with the USB gadget, if the user allows it. It is currently
-> >>> supported by Chromium-based browsers, such as Chrome, Edge and
-> >>> Opera on all major operating systems including Linux.
-> >>>
-> >>
-> >> I envision an "evil" scenario, where you don't own your USB device any=
- more.
-> >> Instead you are required to pay a subscription to keep accessing it
-> >> because its driver is somewhere on the net. I purposedly have put
-> >> evil in quotes, because such a scenario might be considered preferred
-> >> by some people. Maybe there are advantages, too, like not having to wo=
-rry
-> >> about correct drivers. Anyway, the kernel is about mechanism, not poli=
-cy,
-> >> so I'm probably in no position to judge such things.
-> >
-> > Unfortunately, the "evil" devices you envision very much already exist.
-> >
-> > When I was still working at university in the early 2010s, we were
-> > working with a mobile EEG headset (>1000USD) with a USB receiver
-> > dongle that would present itself as a USB HID device, but the
-> > transferred frames would be AES encrypted, with the key based on a
-> > proprietary transformation of the serial number of the device. At
-> > first the library that decoded it was available as a binary blob for a
-> > one-time payment, where you paid a hefty premium if you wanted access
-> > to the raw readings. Later the manufacturer changed their business
-> > model to subscription based, where the data had to flow through their
-> > cloud service - with a recurring license fee. I don't know what
-> > happened afterwards, as I left university.
-> > This all was implemented based on libusb back then before people even
-> > thought of WebUSB.
-> >
->
-> Thanks for honestly acknowledging their existence. It confirms that
-> what I expressed was not a "conspiracy theory", but a "conspiracy
-> practice" :D
->
-> > I'm sure there are other examples.
-> >
-> > So, "evil" devices are already real and don't depend on WebUSB. The
-> > motivating example "Web Drivers" from the specs
-> > (https://wicg.github.io/webusb/#app-drivers) might potentially lead to
-> > companies asking for subscription fees for their Web Driver, but as
-> > long as there is no strong encryption in place, everyone would be free
-> > to write an alternative driver. The mechanisms would not at all
-> > preclude you from writing your own kernel or userspace driver using
-> > e.g. libusb. A kernel driver would block access from the browser
-> > though, as the browser cannot detach the kernel driver. (No such
-> > command is currently defined in WebUSB.)  The JS implementation might
-> > even guide you to understand aspects of the protocol used.
-> >
-> > Citing from the motivating example in the design specs
-> > (https://wicg.github.io/webusb/#app-updates-and-diagnostics):
-> >
-> >> The landing page provides a way for the device manufacturer to direct =
-the user to the right part of their website for help with their device.
-> >
-> > The landing page mechanism in WebUSB improves discoverability for
-> > devices, as Chrome and also lsusb directly point you to a webpage,
-> > where the manufacturer or firmware producer can give more information
-> > about the device. This webpage does not necessarily need to use a
-> > WebUSB JS driver itself to access the device, but might just as well
-> > point you to some git repository, where the hardware design and
-> > firmware source are available
->
-> I'm wondering why e.g. Firefox does not implement this?
+This race happens quite infrequently. We only managed to produce it with
+out-of-tree developmental code that triggers zsmalloc writeback with a
+much higher frequency than usual.
 
-There has been an extended discussion within Firefox:
-https://github.com/mozilla/standards-positions/issues/100
-https://github.com/mozilla/standards-positions/pull/193
+This patch fixes this race by storing the deferred handle in the object
+header instead. We differentiate the deferred handle from the other two
+cases (handle for allocated object, and linkage for free object) with a
+new tag. If zspage reclamation succeeds, we will free these deferred
+handles by walking through the zspage objects. On the other hand, if
+zspage reclamation fails, we reconstruct the zspage freelist (with the
+deferred handle tag and allocated tag) before trying again with the
+reclamation.
 
-The main concerns center around (quoted from the link above):
-> * security issues related to attacks on devices that, once compromised, c=
-ould be used to attack the user's computer more generally
-> * the permissions model (whether a question can be posed to the user that=
- yields informed consent, whether there should be a CORS-like model for dev=
-ices to say that they want to interact with particular domains which may im=
-prove security but hurts openness)
+Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+---
+ mm/zsmalloc.c | 237 +++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 205 insertions(+), 32 deletions(-)
 
-and tracking users across websites by exposing static identifiers
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index 9445bee6b014..b4b40ef98703 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -113,7 +113,23 @@
+  * have room for two bit at least.
+  */
+ #define OBJ_ALLOCATED_TAG 1
+-#define OBJ_TAG_BITS 1
++
++#ifdef CONFIG_ZPOOL
++/*
++ * The second least-significant bit in the object's header identifies if the
++ * value stored at the header is a deferred handle from the last reclaim
++ * attempt.
++ *
++ * As noted above, this is valid because we have room for two bits.
++ */
++#define OBJ_DEFERRED_HANDLE_TAG	2
++#define OBJ_TAG_BITS	2
++#define OBJ_TAG_MASK	(OBJ_ALLOCATED_TAG | OBJ_DEFERRED_HANDLE_TAG)
++#else
++#define OBJ_TAG_BITS	1
++#define OBJ_TAG_MASK	OBJ_ALLOCATED_TAG
++#endif /* CONFIG_ZPOOL */
++
+ #define OBJ_INDEX_BITS	(BITS_PER_LONG - _PFN_BITS - OBJ_TAG_BITS)
+ #define OBJ_INDEX_MASK	((_AC(1, UL) << OBJ_INDEX_BITS) - 1)
+ 
+@@ -222,6 +238,12 @@ struct link_free {
+ 		 * Handle of allocated object.
+ 		 */
+ 		unsigned long handle;
++#ifdef CONFIG_ZPOOL
++		/*
++		 * Deferred handle of a reclaimed object.
++		 */
++		unsigned long deferred_handle;
++#endif
+ 	};
+ };
+ 
+@@ -272,8 +294,6 @@ struct zspage {
+ 	/* links the zspage to the lru list in the pool */
+ 	struct list_head lru;
+ 	bool under_reclaim;
+-	/* list of unfreed handles whose objects have been reclaimed */
+-	unsigned long *deferred_handles;
+ #endif
+ 
+ 	struct zs_pool *pool;
+@@ -897,7 +917,8 @@ static unsigned long handle_to_obj(unsigned long handle)
+ 	return *(unsigned long *)handle;
+ }
+ 
+-static bool obj_allocated(struct page *page, void *obj, unsigned long *phandle)
++static bool obj_tagged(struct page *page, void *obj, unsigned long *phandle,
++		int tag)
+ {
+ 	unsigned long handle;
+ 	struct zspage *zspage = get_zspage(page);
+@@ -908,13 +929,27 @@ static bool obj_allocated(struct page *page, void *obj, unsigned long *phandle)
+ 	} else
+ 		handle = *(unsigned long *)obj;
+ 
+-	if (!(handle & OBJ_ALLOCATED_TAG))
++	if (!(handle & tag))
+ 		return false;
+ 
+-	*phandle = handle & ~OBJ_ALLOCATED_TAG;
++	/* Clear all tags before returning the handle */
++	*phandle = handle & ~OBJ_TAG_MASK;
+ 	return true;
+ }
+ 
++static bool obj_allocated(struct page *page, void *obj, unsigned long *phandle)
++{
++	return obj_tagged(page, obj, phandle, OBJ_ALLOCATED_TAG);
++}
++
++#ifdef CONFIG_ZPOOL
++static bool obj_stores_deferred_handle(struct page *page, void *obj,
++		unsigned long *phandle)
++{
++	return obj_tagged(page, obj, phandle, OBJ_DEFERRED_HANDLE_TAG);
++}
++#endif
++
+ static void reset_page(struct page *page)
+ {
+ 	__ClearPageMovable(page);
+@@ -946,22 +981,36 @@ static int trylock_zspage(struct zspage *zspage)
+ }
+ 
+ #ifdef CONFIG_ZPOOL
++static unsigned long find_deferred_handle_obj(struct size_class *class,
++		struct page *page, int *obj_idx);
++
+ /*
+  * Free all the deferred handles whose objects are freed in zs_free.
+  */
+-static void free_handles(struct zs_pool *pool, struct zspage *zspage)
++static void free_handles(struct zs_pool *pool, struct size_class *class,
++		struct zspage *zspage)
+ {
+-	unsigned long handle = (unsigned long)zspage->deferred_handles;
++	int obj_idx = 0;
++	struct page *page = get_first_page(zspage);
++	unsigned long handle;
+ 
+-	while (handle) {
+-		unsigned long nxt_handle = handle_to_obj(handle);
++	while (1) {
++		handle = find_deferred_handle_obj(class, page, &obj_idx);
++		if (!handle) {
++			page = get_next_page(page);
++			if (!page)
++				break;
++			obj_idx = 0;
++			continue;
++		}
+ 
+ 		cache_free_handle(pool, handle);
+-		handle = nxt_handle;
++		obj_idx++;
+ 	}
+ }
+ #else
+-static inline void free_handles(struct zs_pool *pool, struct zspage *zspage) {}
++static inline void free_handles(struct zs_pool *pool, struct size_class *class,
++		struct zspage *zspage) {}
+ #endif
+ 
+ static void __free_zspage(struct zs_pool *pool, struct size_class *class,
+@@ -979,7 +1028,7 @@ static void __free_zspage(struct zs_pool *pool, struct size_class *class,
+ 	VM_BUG_ON(fg != ZS_EMPTY);
+ 
+ 	/* Free all deferred handles from zs_free */
+-	free_handles(pool, zspage);
++	free_handles(pool, class, zspage);
+ 
+ 	next = page = get_first_page(zspage);
+ 	do {
+@@ -1067,7 +1116,6 @@ static void init_zspage(struct size_class *class, struct zspage *zspage)
+ #ifdef CONFIG_ZPOOL
+ 	INIT_LIST_HEAD(&zspage->lru);
+ 	zspage->under_reclaim = false;
+-	zspage->deferred_handles = NULL;
+ #endif
+ 
+ 	set_freeobj(zspage, 0);
+@@ -1568,7 +1616,7 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+ }
+ EXPORT_SYMBOL_GPL(zs_malloc);
+ 
+-static void obj_free(int class_size, unsigned long obj)
++static void obj_free(int class_size, unsigned long obj, unsigned long *handle)
+ {
+ 	struct link_free *link;
+ 	struct zspage *zspage;
+@@ -1582,15 +1630,29 @@ static void obj_free(int class_size, unsigned long obj)
+ 	zspage = get_zspage(f_page);
+ 
+ 	vaddr = kmap_atomic(f_page);
+-
+-	/* Insert this object in containing zspage's freelist */
+ 	link = (struct link_free *)(vaddr + f_offset);
+-	if (likely(!ZsHugePage(zspage)))
+-		link->next = get_freeobj(zspage) << OBJ_TAG_BITS;
+-	else
+-		f_page->index = 0;
++
++	if (handle) {
++#ifdef CONFIG_ZPOOL
++		/* Stores the (deferred) handle in the object's header */
++		*handle |= OBJ_DEFERRED_HANDLE_TAG;
++		*handle &= ~OBJ_ALLOCATED_TAG;
++
++		if (likely(!ZsHugePage(zspage)))
++			link->deferred_handle = *handle;
++		else
++			f_page->index = *handle;
++#endif
++	} else {
++		/* Insert this object in containing zspage's freelist */
++		if (likely(!ZsHugePage(zspage)))
++			link->next = get_freeobj(zspage) << OBJ_TAG_BITS;
++		else
++			f_page->index = 0;
++		set_freeobj(zspage, f_objidx);
++	}
++
+ 	kunmap_atomic(vaddr);
+-	set_freeobj(zspage, f_objidx);
+ 	mod_zspage_inuse(zspage, -1);
+ }
+ 
+@@ -1615,7 +1677,6 @@ void zs_free(struct zs_pool *pool, unsigned long handle)
+ 	zspage = get_zspage(f_page);
+ 	class = zspage_class(pool, zspage);
+ 
+-	obj_free(class->size, obj);
+ 	class_stat_dec(class, OBJ_USED, 1);
+ 
+ #ifdef CONFIG_ZPOOL
+@@ -1624,15 +1685,15 @@ void zs_free(struct zs_pool *pool, unsigned long handle)
+ 		 * Reclaim needs the handles during writeback. It'll free
+ 		 * them along with the zspage when it's done with them.
+ 		 *
+-		 * Record current deferred handle at the memory location
+-		 * whose address is given by handle.
++		 * Record current deferred handle in the object's header.
+ 		 */
+-		record_obj(handle, (unsigned long)zspage->deferred_handles);
+-		zspage->deferred_handles = (unsigned long *)handle;
++		obj_free(class->size, obj, &handle);
+ 		spin_unlock(&pool->lock);
+ 		return;
+ 	}
+ #endif
++	obj_free(class->size, obj, NULL);
++
+ 	fullness = fix_fullness_group(class, zspage);
+ 	if (fullness == ZS_EMPTY)
+ 		free_zspage(pool, class, zspage);
+@@ -1713,11 +1774,11 @@ static void zs_object_copy(struct size_class *class, unsigned long dst,
+ }
+ 
+ /*
+- * Find alloced object in zspage from index object and
++ * Find object with a certain tag in zspage from index object and
+  * return handle.
+  */
+-static unsigned long find_alloced_obj(struct size_class *class,
+-					struct page *page, int *obj_idx)
++static unsigned long find_tagged_obj(struct size_class *class,
++					struct page *page, int *obj_idx, int tag)
+ {
+ 	unsigned int offset;
+ 	int index = *obj_idx;
+@@ -1728,7 +1789,7 @@ static unsigned long find_alloced_obj(struct size_class *class,
+ 	offset += class->size * index;
+ 
+ 	while (offset < PAGE_SIZE) {
+-		if (obj_allocated(page, addr + offset, &handle))
++		if (obj_tagged(page, addr + offset, &handle, tag))
+ 			break;
+ 
+ 		offset += class->size;
+@@ -1742,6 +1803,28 @@ static unsigned long find_alloced_obj(struct size_class *class,
+ 	return handle;
+ }
+ 
++/*
++ * Find alloced object in zspage from index object and
++ * return handle.
++ */
++static unsigned long find_alloced_obj(struct size_class *class,
++					struct page *page, int *obj_idx)
++{
++	return find_tagged_obj(class, page, obj_idx, OBJ_ALLOCATED_TAG);
++}
++
++#ifdef CONFIG_ZPOOL
++/*
++ * Find object storing a deferred handle in header in zspage from index object
++ * and return handle.
++ */
++static unsigned long find_deferred_handle_obj(struct size_class *class,
++		struct page *page, int *obj_idx)
++{
++	return find_tagged_obj(class, page, obj_idx, OBJ_DEFERRED_HANDLE_TAG);
++}
++#endif
++
+ struct zs_compact_control {
+ 	/* Source spage for migration which could be a subpage of zspage */
+ 	struct page *s_page;
+@@ -1784,7 +1867,7 @@ static int migrate_zspage(struct zs_pool *pool, struct size_class *class,
+ 		zs_object_copy(class, free_obj, used_obj);
+ 		obj_idx++;
+ 		record_obj(handle, free_obj);
+-		obj_free(class->size, used_obj);
++		obj_free(class->size, used_obj, NULL);
+ 	}
+ 
+ 	/* Remember last position in this iteration */
+@@ -2478,6 +2561,90 @@ void zs_destroy_pool(struct zs_pool *pool)
+ EXPORT_SYMBOL_GPL(zs_destroy_pool);
+ 
+ #ifdef CONFIG_ZPOOL
++static void restore_freelist(struct zs_pool *pool, struct size_class *class,
++		struct zspage *zspage)
++{
++	unsigned int obj_idx = 0;
++	unsigned long handle, off = 0; /* off is within-page offset */
++	struct page *page = get_first_page(zspage);
++	struct link_free *prev_free = NULL;
++	void *prev_page_vaddr = NULL;
++
++	/* in case no free object found */
++	set_freeobj(zspage, (unsigned int)(-1UL));
++
++	while (page) {
++		void *vaddr = kmap_atomic(page);
++		struct page *next_page;
++
++		while (off < PAGE_SIZE) {
++			void *obj_addr = vaddr + off;
++
++			/* skip allocated object */
++			if (obj_allocated(page, obj_addr, &handle)) {
++				obj_idx++;
++				off += class->size;
++				continue;
++			}
++
++			/* free deferred handle from reclaim attempt */
++			if (obj_stores_deferred_handle(page, obj_addr, &handle))
++				cache_free_handle(pool, handle);
++
++			if (prev_free)
++				prev_free->next = obj_idx << OBJ_TAG_BITS;
++			else /* first free object found */
++				set_freeobj(zspage, obj_idx);
++
++			prev_free = (struct link_free *)vaddr + off / sizeof(*prev_free);
++			/* if last free object in a previous page, need to unmap */
++			if (prev_page_vaddr) {
++				kunmap_atomic(prev_page_vaddr);
++				prev_page_vaddr = NULL;
++			}
++
++			obj_idx++;
++			off += class->size;
++		}
++
++		/*
++		 * Handle the last (full or partial) object on this page.
++		 */
++		next_page = get_next_page(page);
++		if (next_page) {
++			if (!prev_free || prev_page_vaddr) {
++				/*
++				 * There is no free object in this page, so we can safely
++				 * unmap it.
++				 */
++				kunmap_atomic(vaddr);
++			} else {
++				/* update prev_page_vaddr since prev_free is on this page */
++				prev_page_vaddr = vaddr;
++			}
++		} else { /* this is the last page */
++			if (prev_free) {
++				/*
++				 * Reset OBJ_TAG_BITS bit to last link to tell
++				 * whether it's allocated object or not.
++				 */
++				prev_free->next = -1UL << OBJ_TAG_BITS;
++			}
++
++			/* unmap previous page (if not done yet) */
++			if (prev_page_vaddr) {
++				kunmap_atomic(prev_page_vaddr);
++				prev_page_vaddr = NULL;
++			}
++
++			kunmap_atomic(vaddr);
++		}
++
++		page = next_page;
++		off %= PAGE_SIZE;
++	}
++}
++
+ static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
+ {
+ 	int i, obj_idx, ret = 0;
+@@ -2561,6 +2728,12 @@ static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
+ 			return 0;
+ 		}
+ 
++		/*
++		 * Eviction fails on one of the handles, so we need to restore zspage.
++		 * We need to rebuild its freelist (and free stored deferred handles),
++		 * put it back to the correct size class, and add it to the LRU list.
++		 */
++		restore_freelist(pool, class, zspage);
+ 		putback_zspage(class, zspage);
+ 		list_add(&zspage->lru, &pool->lru);
+ 		unlock_zspage(zspage);
+-- 
+2.30.2
 
-The webkit position is tracked here:
-https://github.com/WebKit/standards-positions/issues/68
-
-They are following Mozilla's position and also raising the issue of
-device-independence.
-
-However, there has been some recent discussion to reevaluate this
-position, especially in the context of extensions and users are
-repeatedly bringing up complaints that they would like to see this
-implemented.
-
-> Chicken-and-egg
-> dilemma (no OS support at kernel level, so let's refrain from using it,
-> but then there's too few users, so let's not add OS support - this
-> circular depencency can be broken by applying your patch) or something
-> else?
-
-OS support at the kernel is not actually necessary for the host side
-of the USB connection at all, as the browser would just access the
-devices via the exposed character devices in /dev/bus/usb/*/*
-
-My patch would only improve the device side of the USB connection,
-namely, that the landing page can be announced in gadget mode. So this
-would enable makers and manufacturers of USB gadgets based on embedded
-linux devices to point to a landing page for their device.
-
-The other aspects of USB communication are already well supported by
-the USB gadget subsystem and don't need any changes to work with
-WebUSB. Actually, they are already working fine with WebUSB. An
-example with a Linux based gadget side is a WebAdb library
-(https://webadb.github.io/), that allows Websites to access Android
-phones via a website.
-
-I'm imagining the use case of single board computers, such as
-raspberry pi, orange pi, or other open hardware, such as a linux based
-USB stick such as https://github.com/usbarmory/usbarmory.
-
-But it might just as well be your home router, that is connected via
-USB and points you to the configuration page directly. It knows its
-own IP address on the local network (and/or provide a USB network
-interface via RNDIS/ECM/NCM) and can dynamically point to the correct
-one. The last one could probably also work with some network based
-discovery mechanism but I want to open up the space a bit to things
-that just need the landing page and not the other parts of webusb.
-
-Actually this would combine well with what you (Andrzej) presented
-back in 2019 on
-https://www.collabora.com/news-and-blog/blog/2019/02/18/modern-usb-gadget-o=
-n-linux-and-how-to-integrate-it-with-systemd-part-1/
-
->
-> >
-> > For what it's worth, the pick-up of WebUSB I've seen has been mostly
-> > in the maker scene with arduino, micro:bit and similar embedded
-> > devices, where devices provide at least two interfaces: One for the OS
-> > to claim and one for the Browser to claim.
-> >
-> > Anyways, my biased opinion is that I would very much like a device to
-> > tell me where I can find support documentation, updates and help also
-> > when the device only implements standard interfaces that have kernel
-> > drivers. I don't think that this URL will lead to more devices you can
-> > only access with a subscription.
-> >
-> >> Please see below.
-> >
-> > Thanks for your excellent feedback. I answered inline.
-> >
-> >>> This patch adds optional support for Linux-based USB gadgets
-> >>> wishing to expose such a landing page.
-> >>>
-> >>> During device enumeration, a host recognizes that the announced
-> >>> USB version is at least 2.01, which means, that there are BOS
-> >>> descriptors available. The device than announces WebUSB support
-> >>> using a platform device capability. This includes a vendor code
-> >>> under which the landing page URL can be retrieved using a
-> >>> vendor-specific request.
-> >>>
-> >>> Previously, the BOS descriptors would unconditionally include an
-> >>> LPM related descriptor, as BOS descriptors were only ever sent
-> >>> when the device was LPM capable. As this is no longer the case,
-> >>> this patch puts this descriptor behind a lpm_capable condition.
-> >>>
-> >>> Usage is modeled after os_desc descriptors:
-> >>> echo 1 > webusb/use
-> >>> echo "https://www.kernel.org" > webusb/landingPage
-> >>>
-> >>> lsusb will report the device with the following lines:
-> >>>     Platform Device Capability:
-> >>>       bLength                24
-> >>>       bDescriptorType        16
-> >>>       bDevCapabilityType      5
-> >>>       bReserved               0
-> >>>       PlatformCapabilityUUID    {3408b638-09a9-47a0-8bfd-a0768815b665=
-}
-> >>>         WebUSB:
-> >>>           bcdVersion    1.00
-> >>>           bVendorCode      0
-> >>>           iLandingPage     1 https://www.kernel.org
-> >>>
-> >>> Signed-off-by: J=C3=B3 =C3=81gila Bitsch <jgilab@gmail.com>
-> >>> ---
-> >>> v2 -> V3: improved commit message to include additional condition in =
-desc_bos as per comment
-> >>>          by Alan Stern
-> >>> V1 -> V2: cleaned up coding style, made URL scheme comparison case in=
-sensitive, addressed review
-> >>>             comments by Alan Stern
-> >>> V0 -> V1: use sysfs_emit instead of sprintf and use lock in webusb_bc=
-dVersion_store, addressed review
-> >>>          comments by Christophe JAILLET
-> >>>
-> >>>    Documentation/ABI/testing/configfs-usb-gadget |  13 ++
-> >>>    drivers/usb/gadget/composite.c                |  95 ++++++++++--
-> >>>    drivers/usb/gadget/configfs.c                 | 145 ++++++++++++++=
-++++
-> >>>    include/linux/usb/composite.h                 |   6 +
-> >>>    include/uapi/linux/usb/ch9.h                  |  33 ++++
-> >>>    5 files changed, 282 insertions(+), 10 deletions(-)
-> >>>
-> >>> diff --git a/Documentation/ABI/testing/configfs-usb-gadget b/Document=
-ation/ABI/testing/configfs-usb-gadget
-> >>> index b7943aa7e997..8399e0f0ed1c 100644
-> >>> --- a/Documentation/ABI/testing/configfs-usb-gadget
-> >>> +++ b/Documentation/ABI/testing/configfs-usb-gadget
-> >>> @@ -143,3 +143,16 @@ Description:
-> >>>                qw_sign         an identifier to be reported as "OS St=
-ring"
-> >>>                                proper
-> >>>                =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>> +
-> >>> +What:                /config/usb-gadget/gadget/webusb
-> >>> +Date:                Dec 2022
-> >>> +KernelVersion:       6.2
-> >>> +Description:
-> >>> +             This group contains "WebUSB" extension handling attribu=
-tes.
-> >>> +
-> >>> +             =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>> +             use             flag turning "WebUSB" support on/off
-> >>> +             bcdVersion      bcd WebUSB specification version number
-> >>> +             b_vendor_code   one-byte value used for custom per-devi=
-ce
-> >>> +             landing_page    UTF-8 encoded URL of the device's landi=
-ng page
-> >>> +             =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/comp=
-osite.c
-> >>> index 403563c06477..9b209e69442d 100644
-> >>> --- a/drivers/usb/gadget/composite.c
-> >>> +++ b/drivers/usb/gadget/composite.c
-> >>> @@ -14,6 +14,7 @@
-> >>>    #include <linux/device.h>
-> >>>    #include <linux/utsname.h>
-> >>>    #include <linux/bitfield.h>
-> >>> +#include <linux/uuid.h>
-> >>>
-> >>>    #include <linux/usb/composite.h>
-> >>>    #include <linux/usb/otg.h>
-> >>> @@ -713,14 +714,16 @@ static int bos_desc(struct usb_composite_dev *c=
-dev)
-> >>>         * A SuperSpeed device shall include the USB2.0 extension desc=
-riptor
-> >>>         * and shall support LPM when operating in USB2.0 HS mode.
-> >>>         */
-> >>> -     usb_ext =3D cdev->req->buf + le16_to_cpu(bos->wTotalLength);
-> >>> -     bos->bNumDeviceCaps++;
-> >>> -     le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
-> >>> -     usb_ext->bLength =3D USB_DT_USB_EXT_CAP_SIZE;
-> >>> -     usb_ext->bDescriptorType =3D USB_DT_DEVICE_CAPABILITY;
-> >>> -     usb_ext->bDevCapabilityType =3D USB_CAP_TYPE_EXT;
-> >>> -     usb_ext->bmAttributes =3D cpu_to_le32(USB_LPM_SUPPORT |
-> >>> -                                         USB_BESL_SUPPORT | besl);
-> >>> +     if (cdev->gadget->lpm_capable) {
-> >>> +             usb_ext =3D cdev->req->buf + le16_to_cpu(bos->wTotalLen=
-gth);
-> >>> +             bos->bNumDeviceCaps++;
-> >>> +             le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZ=
-E);
-> >>> +             usb_ext->bLength =3D USB_DT_USB_EXT_CAP_SIZE;
-> >>> +             usb_ext->bDescriptorType =3D USB_DT_DEVICE_CAPABILITY;
-> >>> +             usb_ext->bDevCapabilityType =3D USB_CAP_TYPE_EXT;
-> >>> +             usb_ext->bmAttributes =3D cpu_to_le32(USB_LPM_SUPPORT |
-> >>> +                                                     USB_BESL_SUPPOR=
-T | besl);
-> >>> +     }
-> >>>
-> >>>        /*
-> >>>         * The Superspeed USB Capability descriptor shall be implement=
-ed by all
-> >>> @@ -821,6 +824,40 @@ static int bos_desc(struct usb_composite_dev *cd=
-ev)
-> >>>                }
-> >>>        }
-> >>>
-> >>> +     /*
-> >>> +      * Following the specifaction at:
-> >>> +      * https://wicg.github.io/webusb/#webusb-platform-capability-de=
-scriptor
-> >>> +      */
-> >>> +     if (cdev->use_webusb) {
-> >>> +             struct usb_webusb_cap_descriptor *webusb_cap;
-> >>> +             /*
-> >>> +              * little endian PlatformCapablityUUID for WebUSB:
-> >>> +              * 3408b638-09a9-47a0-8bfd-a0768815b665
-> >>> +              */
-> >>> +             uuid_t webusb_uuid =3D UUID_INIT(0x38b60834, 0xa909, 0x=
-a047, 0x8b, 0xfd, 0xa0, 0x76,
-> >>> +                                             0x88, 0x15, 0xb6, 0x65)=
-;
-> >>> +
-> >>> +             webusb_cap =3D cdev->req->buf + le16_to_cpu(bos->wTotal=
-Length);
-> >>> +             bos->bNumDeviceCaps++;
-> >>> +
-> >>> +             le16_add_cpu(&bos->wTotalLength, USB_DT_WEBUSB_SIZE);
-> >>> +             webusb_cap->bLength =3D USB_DT_WEBUSB_SIZE;
-> >>> +             webusb_cap->bDescriptorType =3D USB_DT_DEVICE_CAPABILIT=
-Y;
-> >>> +             webusb_cap->bDevCapabilityType =3D USB_PLAT_DEV_CAP_TYP=
-E;
-> >>> +             webusb_cap->bReserved =3D 0;
-> >>> +             export_uuid(webusb_cap->UUID, &webusb_uuid);
-> >>> +             if (cdev->bcd_webusb_version !=3D 0)
-> >>> +                     webusb_cap->bcdVersion =3D cpu_to_le16(cdev->bc=
-d_webusb_version);
-> >>> +             else
-> >>> +                     webusb_cap->bcdVersion =3D cpu_to_le16(0x0100);
-> >>> +
-> >>> +             webusb_cap->bVendorCode =3D cdev->b_webusb_vendor_code;
-> >>> +             if (strnlen(cdev->landing_page, sizeof(cdev->landing_pa=
-ge)) > 0)
-> >>> +                     webusb_cap->iLandingPage =3D 1;
-> >>> +             else
-> >>> +                     webusb_cap->iLandingPage =3D 0;
-> >>> +     }
-> >>> +
-> >>>        return le16_to_cpu(bos->wTotalLength);
-> >>>    }
-> >>>
-> >>> @@ -1744,7 +1781,7 @@ composite_setup(struct usb_gadget *gadget, cons=
-t struct usb_ctrlrequest *ctrl)
-> >>>                                        cdev->desc.bcdUSB =3D cpu_to_l=
-e16(0x0210);
-> >>>                                }
-> >>>                        } else {
-> >>> -                             if (gadget->lpm_capable)
-> >>> +                             if (gadget->lpm_capable || cdev->use_we=
-busb)
-> >>>                                        cdev->desc.bcdUSB =3D cpu_to_l=
-e16(0x0201);
-> >>>                                else
-> >>>                                        cdev->desc.bcdUSB =3D cpu_to_l=
-e16(0x0200);
-> >>> @@ -1779,7 +1816,7 @@ composite_setup(struct usb_gadget *gadget, cons=
-t struct usb_ctrlrequest *ctrl)
-> >>>                        break;
-> >>>                case USB_DT_BOS:
-> >>>                        if (gadget_is_superspeed(gadget) ||
-> >>> -                         gadget->lpm_capable) {
-> >>> +                         gadget->lpm_capable || cdev->use_webusb) {
-> >>>                                value =3D bos_desc(cdev);
-> >>>                                value =3D min(w_length, (u16) value);
-> >>>                        }
-> >>> @@ -2013,6 +2050,44 @@ composite_setup(struct usb_gadget *gadget, con=
-st struct usb_ctrlrequest *ctrl)
-> >>>                        goto check_value;
-> >>>                }
-> >>>
-> >>> +             /*
-> >>> +              * webusb descriptor handling, following:
-> >>> +              * https://wicg.github.io/webusb/#device-requests
-> >>> +              */
-> >>> +             if (cdev->use_webusb &&
-> >>> +                 (ctrl->bRequestType & USB_TYPE_VENDOR) &&
-> >>> +                 ctrl->wIndex =3D=3D /* WEBUSB_GET_URL*/ 2 &&
-> >>> +                 ctrl->bRequest =3D=3D cdev->b_webusb_vendor_code) {
-> >>> +                     /*
-> >>> +                      * specification of the url descriptor in WebUS=
-B:
-> >>> +                      * https://wicg.github.io/webusb/#webusb-descri=
-ptors
-> >>> +                      */
-> >>> +                     u8              *buf;
-> >>> +                     unsigned int    landing_page_length;
-> >>> +
-> >>> +                     buf =3D cdev->req->buf;
-> >>> +                     buf[1] =3D /* WEBUSB_URL*/ 3;
-> >>
-> >> Why not #define WEBUSB_URL?
-> >
-> > in a previous iteration, I had that exact #define in place, right
-> > above. However, another reviewer found it pointless. Maybe I should
-> > instead put the define into include/uapi/linux/usb/ch9.h
-> >
->
-> Hmm. ch9.h had been called ch9.h for a reason. It corresponded to Chapter=
- 9 of
-> the USB spec. Adding to it something that by design is outside the spec m=
-ight
-> not be what we want. But I don't know.
-
-Alan also agrees with you.
-
-I will move it to a new header file: include/uapi/linux/usb/webusb.h.
-
->
-> >>
-> >>> +
-> >>> +                     landing_page_length =3D strnlen(cdev->landing_p=
-age, 252);
-> >>> +                     if (strncasecmp("https://", cdev->landing_page,=
- 8) =3D=3D 0) {
-> >>
-> >> Maybe it's me, but it would be easier for me to understand why the "8"=
- if the
-> >> comparison was in reverse order of arguments, like this:
-> >>
-> >> strncasecmp(cdev->landing_page, "https://", 8)
-> >
-> > I agree, this makes the 8 clearer.
-> >
-> >> because we want the entirety of "https://" compared, not its substring=
-, so the
-> >> limit kind of applies to the landing_page in the first place.
-> >> Maybe the "8" (and "7" below) can be #define'd, too?
-> >
-> > depends on the name, but maybe something like
-> >
-> > #define WEBUSB_PREFIX_HTTPS "https://"
-> > #define WEBUSB_PREFIX_HTTPS_LENGTH 8
-> > #define WEBUSB_PREFIX_HTTPS_SCHEME_ID 0x01
-> >
-> > would work defined with the struct in include/uapi/linux/usb/ch9.h
-> >
-> >>
-> >>> +                             buf[2] =3D 0x01;
-> >>
-> >> What is this magic 0x01?
-> >
-> > The field is specified in
-> > https://wicg.github.io/webusb/#url-descriptor and would be the
-> > WEBUSB_PREFIX_HTTPS_SCHEME_ID from above.
-> > But yes, I should #define this.
-> >
-> >>
-> >>> +                             memcpy(buf+3, cdev->landing_page+8, lan=
-ding_page_length-8);
-> >>
-> >> spaces around arithmetic operators?
-> >
-> > will do
-> >
-> >
-> >>> +                             buf[0] =3D landing_page_length - 8 + 3;
-> >>> +                     } else if (strncasecmp("http://", cdev->landing=
-_page, 7) =3D=3D 0) {
-> >>> +                             buf[2] =3D 0x00;
-> >>
-> >> Magic 0x00?
-> >
-> > This would then be WEBUSB_PREFIX_HTTP_SCHEME_ID
-> >
-> >>
-> >>> +                             memcpy(buf+3, cdev->landing_page+7, lan=
-ding_page_length-7);
-> >>> +                             buf[0] =3D landing_page_length - 7 + 3;
-> >>> +                     } else {
-> >>> +                             buf[2] =3D 0xFF;
-> >>
-> >> Magic 0xFF? (plus I'd expect lowercase hex digits).
-> >
-> > This would then be WEBUSB_PREFIX_NONE_SCHEME_ID
-> >
-> >> There's "URL Prefixes" table in 4.3.1 URL Descriptor. Why not define
-> >> URL_PREFIX_HTTP/HTTPS/NONE?
-> >
-> > will do
-> >
-> >>> +                             memcpy(buf+3, cdev->landing_page, landi=
-ng_page_length);
-> >>> +                             buf[0] =3D landing_page_length + 3;
-> >>> +                     }
-> >>> +
-> >>> +                     value =3D buf[0];
-> >>> +
-> >>> +                     goto check_value;
-> >>> +             }
-> >>> +
-> >>>                VDBG(cdev,
-> >>>                        "non-core control req%02x.%02x v%04x i%04x l%d=
-\n",
-> >>>                        ctrl->bRequestType, ctrl->bRequest,
-> >>> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/confi=
-gfs.c
-> >>> index 96121d1c8df4..2b7f01a9efff 100644
-> >>> --- a/drivers/usb/gadget/configfs.c
-> >>> +++ b/drivers/usb/gadget/configfs.c
-> >>> @@ -39,6 +39,7 @@ struct gadget_info {
-> >>>        struct config_group configs_group;
-> >>>        struct config_group strings_group;
-> >>>        struct config_group os_desc_group;
-> >>> +     struct config_group webusb_group;
-> >>>
-> >>>        struct mutex lock;
-> >>>        struct usb_gadget_strings *gstrings[MAX_USB_STRING_LANGS + 1];
-> >>> @@ -50,6 +51,11 @@ struct gadget_info {
-> >>>        bool use_os_desc;
-> >>>        char b_vendor_code;
-> >>>        char qw_sign[OS_STRING_QW_SIGN_LEN];
-> >>> +     bool use_webusb;
-> >>> +     u16 bcd_webusb_version;
-> >>> +     u8 b_webusb_vendor_code;
-> >>> +     char landing_page[255];
-> >>
-> >> A #define for the size?
-> >
-> > will do
-> >
-> >>
-> >>> +
-> >>>        spinlock_t spinlock;
-> >>>        bool unbind;
-> >>>    };
-> >>> @@ -780,6 +786,131 @@ static void gadget_strings_attr_release(struct =
-config_item *item)
-> >>>    USB_CONFIG_STRING_RW_OPS(gadget_strings);
-> >>>    USB_CONFIG_STRINGS_LANG(gadget_strings, gadget_info);
-> >>>
-> >>> +static inline struct gadget_info *webusb_item_to_gadget_info(
-> >>> +             struct config_item *item)
-> >>> +{
-> >>> +     return container_of(to_config_group(item),
-> >>> +                     struct gadget_info, webusb_group);
-> >>> +}
-> >>> +
-> >>> +static ssize_t webusb_use_show(struct config_item *item, char *page)
-> >>> +{
-> >>> +     return sysfs_emit(page, "%d\n",
-> >>> +                     webusb_item_to_gadget_info(item)->use_webusb);
-> >>> +}
-> >>> +
-> >>> +static ssize_t webusb_use_store(struct config_item *item, const char=
- *page,
-> >>> +                              size_t len)
-> >>> +{
-> >>> +     struct gadget_info *gi =3D webusb_item_to_gadget_info(item);
-> >>> +     int ret;
-> >>> +     bool use;
-> >>> +
-> >>> +     mutex_lock(&gi->lock);
-> >>> +     ret =3D kstrtobool(page, &use);
-> >>> +     if (!ret) {
-> >>> +             gi->use_webusb =3D use;
-> >>> +             ret =3D len;
-> >>> +     }
-> >>> +     mutex_unlock(&gi->lock);
-> >>> +
-> >>> +     return ret;
-> >>> +}
-> >>> +
-> >>> +static ssize_t webusb_bcdVersion_show(struct config_item *item, char=
- *page)
-> >>> +{
-> >>> +     return sysfs_emit(page, "0x%04x\n",
-> >>> +                                     webusb_item_to_gadget_info(item=
-)->bcd_webusb_version);
-> >>> +}
-> >>> +
-> >>> +static ssize_t webusb_bcdVersion_store(struct config_item *item,
-> >>> +             const char *page, size_t len)
-> >>> +{
-> >>> +     struct gadget_info *gi =3D webusb_item_to_gadget_info(item);
-> >>> +     u16 bcdVersion;
-> >>> +     int ret;
-> >>> +
-> >>> +     mutex_lock(&gi->lock);
-> >>> +     ret =3D kstrtou16(page, 0, &bcdVersion);
-> >>> +     if (ret)
-> >>> +             goto out;
-> >>> +     ret =3D is_valid_bcd(bcdVersion);
-> >>> +     if (ret)
-> >>> +             goto out;
-> >>> +
-> >>> +     gi->bcd_webusb_version =3D bcdVersion;
-> >>> +     ret =3D len;
-> >>> +
-> >>> +out:
-> >>> +     mutex_unlock(&gi->lock);
-> >>> +
-> >>> +     return ret;
-> >>> +}
-> >>> +
-> >>> +static ssize_t webusb_bVendorCode_show(struct config_item *item, cha=
-r *page)
-> >>> +{
-> >>> +     return sysfs_emit(page, "0x%02x\n",
-> >>> +                     webusb_item_to_gadget_info(item)->b_webusb_vend=
-or_code);
-> >>> +}
-> >>> +
-> >>> +static ssize_t webusb_bVendorCode_store(struct config_item *item,
-> >>> +                                        const char *page, size_t len=
-)
-> >>> +{
-> >>> +     struct gadget_info *gi =3D webusb_item_to_gadget_info(item);
-> >>> +     int ret;
-> >>> +     u8 b_vendor_code;
-> >>> +
-> >>> +     mutex_lock(&gi->lock);
-> >>> +     ret =3D kstrtou8(page, 0, &b_vendor_code);
-> >>> +     if (!ret) {
-> >>> +             gi->b_webusb_vendor_code =3D b_vendor_code;
-> >>> +             ret =3D len;
-> >>> +     }
-> >>> +     mutex_unlock(&gi->lock);
-> >>> +
-> >>> +     return ret;
-> >>> +}
-> >>> +
-> >>> +static ssize_t webusb_landingPage_show(struct config_item *item, cha=
-r *page)
-> >>> +{
-> >>> +     return sysfs_emit(page, "%s\n", webusb_item_to_gadget_info(item=
-)->landing_page);
-> >>> +}
-> >>> +
-> >>> +static ssize_t webusb_landingPage_store(struct config_item *item, co=
-nst char *page,
-> >>> +                                  size_t len)
-> >>> +{
-> >>> +     struct gadget_info *gi =3D webusb_item_to_gadget_info(item);
-> >>> +     int l;
-> >>> +
-> >>> +     l =3D min(len, sizeof(gi->landing_page));
-> >>> +     if (page[l - 1] =3D=3D '\n')
-> >>> +             --l;
-> >>> +
-> >>> +     mutex_lock(&gi->lock);
-> >>> +     memcpy(gi->landing_page, page, l);
-> >>> +     mutex_unlock(&gi->lock);
-> >>> +
-> >>> +     return len;
-> >>> +}
-> >>> +
-> >>> +CONFIGFS_ATTR(webusb_, use);
-> >>> +CONFIGFS_ATTR(webusb_, bVendorCode);
-> >>> +CONFIGFS_ATTR(webusb_, bcdVersion);
-> >>> +CONFIGFS_ATTR(webusb_, landingPage);
-> >>> +
-> >>> +static struct configfs_attribute *webusb_attrs[] =3D {
-> >>> +     &webusb_attr_use,
-> >>> +     &webusb_attr_bcdVersion,
-> >>> +     &webusb_attr_bVendorCode,
-> >>> +     &webusb_attr_landingPage,
-> >>> +     NULL,
-> >>> +};
-> >>> +
-> >>> +static struct config_item_type webusb_type =3D {
-> >>> +     .ct_attrs       =3D webusb_attrs,
-> >>> +     .ct_owner       =3D THIS_MODULE,
-> >>> +};
-> >>> +
-> >>>    static inline struct gadget_info *os_desc_item_to_gadget_info(
-> >>>                struct config_item *item)
-> >>>    {
-> >>> @@ -1341,6 +1472,16 @@ static int configfs_composite_bind(struct usb_=
-gadget *gadget,
-> >>>                gi->cdev.desc.iSerialNumber =3D s[USB_GADGET_SERIAL_ID=
-X].id;
-> >>>        }
-> >>>
-> >>> +     if (gi->use_webusb) {
-> >>> +             cdev->use_webusb =3D true;
-> >>> +             cdev->bcd_webusb_version =3D gi->bcd_webusb_version;
-> >>> +             cdev->b_webusb_vendor_code =3D gi->b_webusb_vendor_code=
-;
-> >>> +             memcpy(cdev->landing_page, gi->landing_page,
-> >>> +                             strnlen(gi->landing_page,
-> >>> +                                             min(sizeof(cdev->landin=
-g_page),
-> >>> +                                                     sizeof(gi->land=
-ing_page))));
-> >>
-> >> checkpatch now allows 100 colums. Plus strnlen() looks indented too fa=
-r to the
-> >> right.
-> >
-> > I will check this.
-> >
-> >>
-> >> The sizeofs are both 255. Are they ever expected to be different? Mayb=
-e not?
-> >> Then a #defined constant ensures they are equal. Then there's no need =
-to find
-> >> a minimum among equal values.
-> >
-> > Technically, if the url has the empty scheme, it can only be 252 bytes
-> > long, since the maximum descriptor length is 255 because bLength is a
-> > single byte, but 3 bytes are in the header of this descriptor, leaving
-> > 252 for the string.
->
-> But you use sizeof() rather than strlen(). And the "landing_page" members
-> are defined as 255-element arrays of chars, so both sizeof() invocations
-> will yield 255, no?
-
-You are correct. I was just thinking of the exact length limitations
-when you wrote your comment. Before that I hadn't really considered
-the different lengths based on the scheme, so this version of the
-patch does not yet make this distinction.
-
-Thanks for your patience with a first-time contributor.
-
-Regards,
-J=C3=B3
-
->
-> Andrzej
->
-> >
-> > However, if the landing page scheme is "https://", the maximum length
-> > of this string could actually be 255 - 3 /*header*/ + 8 /* the length
-> > of the prefix, which is stripped */ =3D> 260 bytes.
-> >
-> > I need to rework the validation here a bit. I would like to avoid for
-> > userspace to explicitly set the scheme constants directly, as just
-> > piping in the string seems so much more ergonomic.
-> >
-> >>
-> >> Regards,
-> >>
-> >> Andrzej
-> >
-> > Thanks a lot for your review!
-> >
-> > I hope my response to your initial concerns was not too long and windy.
-> >
-> > I will post an updated version of my patch within the next few days.
-> >
-> > Regards,
-> > J=C3=B3
-> >
-> >
-> >>
-> >>> +     }
-> >>> +
-> >>>        if (gi->use_os_desc) {
-> >>>                cdev->use_os_string =3D true;
-> >>>                cdev->b_vendor_code =3D gi->b_vendor_code;
-> >>> @@ -1605,6 +1746,10 @@ static struct config_group *gadgets_make(
-> >>>                        &os_desc_type);
-> >>>        configfs_add_default_group(&gi->os_desc_group, &gi->group);
-> >>>
-> >>> +     config_group_init_type_name(&gi->webusb_group, "webusb",
-> >>> +                     &webusb_type);
-> >>> +     configfs_add_default_group(&gi->webusb_group, &gi->group);
-> >>> +
-> >>>        gi->composite.bind =3D configfs_do_nothing;
-> >>>        gi->composite.unbind =3D configfs_do_nothing;
-> >>>        gi->composite.suspend =3D NULL;
-> >>> diff --git a/include/linux/usb/composite.h b/include/linux/usb/compos=
-ite.h
-> >>> index 43ac3fa760db..eb6fac5bbcde 100644
-> >>> --- a/include/linux/usb/composite.h
-> >>> +++ b/include/linux/usb/composite.h
-> >>> @@ -474,6 +474,12 @@ struct usb_composite_dev {
-> >>>        struct usb_configuration        *os_desc_config;
-> >>>        unsigned int                    use_os_string:1;
-> >>>
-> >>> +     /* WebUSB */
-> >>> +     u16                             bcd_webusb_version;
-> >>> +     u8                              b_webusb_vendor_code;
-> >>> +     char                            landing_page[255];
-> >>> +     unsigned int                    use_webusb:1;
-> >>> +
-> >>>        /* private: */
-> >>>        /* internals */
-> >>>        unsigned int                    suspended:1;
-> >>> diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch=
-9.h
-> >>> index 31fcfa084e63..3a36550297bc 100644
-> >>> --- a/include/uapi/linux/usb/ch9.h
-> >>> +++ b/include/uapi/linux/usb/ch9.h
-> >>> @@ -947,6 +947,39 @@ struct usb_ss_container_id_descriptor {
-> >>>
-> >>>    #define USB_DT_USB_SS_CONTN_ID_SIZE 20
-> >>>
-> >>> +/*
-> >>> + * Platform Device Capability descriptor: Defines platform specific =
-device
-> >>> + * capabilities
-> >>> + */
-> >>> +#define      USB_PLAT_DEV_CAP_TYPE   5
-> >>> +struct usb_plat_dev_cap_descriptor {
-> >>> +     __u8  bLength;
-> >>> +     __u8  bDescriptorType;
-> >>> +     __u8  bDevCapabilityType;
-> >>> +     __u8  bReserved;
-> >>> +     __u8  UUID[16];
-> >>> +} __attribute__((packed));
-> >>> +
-> >>> +#define USB_DT_USB_PLAT_DEV_CAP_SIZE 20
-> >>> +
-> >>> +/*
-> >>> + * WebUSB Platform Capability descriptor: A device announces support=
- for the
-> >>> + * WebUSB command set by including the following Platform Descriptor=
- in its
-> >>> + * Binary Object Store
-> >>> + * https://wicg.github.io/webusb/#webusb-platform-capability-descrip=
-tor
-> >>> + */
-> >>> +struct usb_webusb_cap_descriptor {
-> >>> +     __u8  bLength;
-> >>> +     __u8  bDescriptorType;
-> >>> +     __u8  bDevCapabilityType;
-> >>> +     __u8  bReserved;
-> >>> +     __u8  UUID[16];
-> >>> +     __u16 bcdVersion;
-> >>> +     __u8  bVendorCode;
-> >>> +     __u8  iLandingPage;
-> >>> +} __attribute__((packed));
-> >>> +#define USB_DT_WEBUSB_SIZE   (USB_DT_USB_PLAT_DEV_CAP_SIZE + 4)
-> >>> +
-> >>>    /*
-> >>>     * SuperSpeed Plus USB Capability descriptor: Defines the set of
-> >>>     * SuperSpeed Plus USB specific device level capabilities
-> >>
->
