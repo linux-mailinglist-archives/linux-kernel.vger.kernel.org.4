@@ -2,110 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946A7664399
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D8766439B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238656AbjAJOsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:48:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S238687AbjAJOso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:48:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238697AbjAJOsS (ORCPT
+        with ESMTP id S238702AbjAJOsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:48:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C3A4FD7F;
-        Tue, 10 Jan 2023 06:48:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54A266175A;
-        Tue, 10 Jan 2023 14:48:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5491AC433D2;
-        Tue, 10 Jan 2023 14:48:16 +0000 (UTC)
-Date:   Tue, 10 Jan 2023 09:48:14 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Wagner <dwagner@suse.de>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/rtla: Explicitly list libtraceevent dependency
-Message-ID: <20230110094814.4af966a4@gandalf.local.home>
-In-Reply-To: <20230110131805.16242-1-dwagner@suse.de>
-References: <20230110131805.16242-1-dwagner@suse.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 10 Jan 2023 09:48:25 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A724FCF2;
+        Tue, 10 Jan 2023 06:48:24 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id p25so6524944ljn.12;
+        Tue, 10 Jan 2023 06:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v5WsDUKqWc4u2jJZSjpZXWIATqF3Ue62OEMi4UxyJJ0=;
+        b=oc2q/yf7Mk3QIlXAJYeunlc0xCzF2jvNa+OlXsTXr8lFDtVjeEoCiol1ouFQbJZ1B/
+         DVduttuoKizppvkqtLxYQMTN1QKiOES3NgF5UoqkbILX/9nFbBsNVPPoS/kJBTtUDqQc
+         Ik8CVMr+t/u/sRvPOc1FGAoLlVDF5BbKylVDYae3TcaZwzoGO9F8VhJUtQ5Y6X0Z36Ta
+         36QV6jghOZeBndrBoq15x2Sjvk+jMdZovO0HHTsV281PKgjZOJwrbIwxn5ocyhEI5FLU
+         8ax3oiWPUPJ9jSZ1wFRrDypucm2G1ZtJvrPVSdzNQ6o7UPBE6qtodw3i1TYsypPXfi6a
+         aqAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v5WsDUKqWc4u2jJZSjpZXWIATqF3Ue62OEMi4UxyJJ0=;
+        b=0JVdiHa+KxICLADOT3e2rcItXgVvuVGZhxd9stmLuk2GkMTHVq+WDlsm4JO/2Lc5aA
+         nc6AVzpLKEJjOSIf+IVYL3/skTExZF0+0M7QVlbVCR92mVUo1UCg5un7+VOtD6sTP5+h
+         JegD69BaSNH6nMTywo0zBdgaTpgWXpwj9Gi1iPmkByuACzJvY83v9J5D5+WBKgpZjyep
+         qIvBo0ma77YY39VG0TG7xUbmnlWHGBmekB9TqhQW0IoKIXXya+7UotGzchO7H/78Me68
+         /+7jJhnk1+7BK8JA8E73oCsz4+RJjMwuv4U/TaMXpQjh6MnssY2ltgcwknToxz6JRBoP
+         6KWQ==
+X-Gm-Message-State: AFqh2kpO0qJNKImfr4vBONVdM8EioK5MSl8V1vZxqw2UkVBl0JVY5Rvx
+        9qIItHe2wcAxNtq3w5wT5nU=
+X-Google-Smtp-Source: AMrXdXsgTVvxwQgYkltkVwEjosBkKDYfG19UHkSooATESFBmQ4jCcULgczuaRd9ZB3b5tLhmA/IqUQ==
+X-Received: by 2002:a2e:95c6:0:b0:285:74d8:fd15 with SMTP id y6-20020a2e95c6000000b0028574d8fd15mr1698704ljh.9.1673362102984;
+        Tue, 10 Jan 2023 06:48:22 -0800 (PST)
+Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id t21-20020a2e8e75000000b0027b54ff90c0sm1323531ljk.139.2023.01.10.06.48.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 06:48:21 -0800 (PST)
+Date:   Tue, 10 Jan 2023 15:48:33 +0100
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jiri Kosina <jikos@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
+Subject: Re: [RESEND PATCH 1/2] HID: Add driver for RC Simulator Controllers
+Message-ID: <Y716wUFVm+PvkMqv@gmail.com>
+References: <20220822060936.769855-1-marcus.folkesson@gmail.com>
+ <CAO-hwJ+3Yrr--cr=r5+jvs4A=A-cmDtrKQETo=YOYDC3nXTMBg@mail.gmail.com>
+ <YwTvrNuulKx0SB6H@gmail.com>
+ <CAO-hwJKiq50fWwXNUGcXeWtWcUXb65ZmJMsADfrsUTac_Xj2dw@mail.gmail.com>
+ <YwcbVJswrL1Doi4s@gmail.com>
+ <CAO-hwJJ86oAuaFD+uX7Rwv7cASO=4mchRJ1UBTxz9gYs6M1rUg@mail.gmail.com>
+ <YyLVblZkIPCvNd/2@gmail.com>
+ <CAO-hwJJ5dRrgxrae-RasYXuu7C9xjw6RmPaPfmO=YU3StMaQ3A@mail.gmail.com>
+ <d4b420a0-23da-6ab6-886a-7342f7e63651@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="CYuxnQgK2200QJ9N"
+Content-Disposition: inline
+In-Reply-To: <d4b420a0-23da-6ab6-886a-7342f7e63651@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 Jan 2023 14:18:05 +0100
-Daniel Wagner <dwagner@suse.de> wrote:
 
-> The current libtracefs.pkg file lists the dependency on
-> libtraceevent ("pkg-config --libs libtracefs" -> "-ltracefs
-> -ltraceevent").
-> 
-> Dan Nicholson's Guide to pkg-config[1] stats that "Libs: The link
-> flags specific to this package and any required libraries that don't
-> support pkg-config". Thus the current libtracefs.pkg is not correct.
-> 
-> rtla is depending on libtraceevent but it doesn't express this in
-> 'pkg-config' part to retrieve the correct build flags.
-> 
-> In order to be able to update the "Libs:" section in the libtracefs
-> project we need to list the dependency explicitly to avoid future linker
-> failures.
-> 
-> [1] https://people.freedesktop.org/~dbn/pkg-config-guide.html
+--CYuxnQgK2200QJ9N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The Libs: field in tracefs only shows the -ltracefs and not -ltraceevent.
-It follows this rule. It's the "Requires:" tag that pulls in -ltraceevent,
-correctly.
+Hi Benjamin,
 
-> 
-> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+On Mon, Sep 19, 2022 at 03:32:37PM +0200, Benjamin Tissoires wrote:
+>=20
+>=20
+
+[...]
+
+>=20
+> I am back home, and I just tested that. I had a doubt, and it is indeed
+> failing. You need the following change for this to be working (I need to
+> send it as a proper patch after assessing it hasn't side effects)
+
+Did it come up with any side effects? :-)
+
+>=20
 > ---
-> 
-> I've got this fallout with because I am using libtraceevent and libtracefs build
-> with Meson. Meson generates different pkg files which seems to align with Dan's
-> Guide.
-> 
->  tools/tracing/rtla/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-> index 22e28b76f800..0664e2db22c1 100644
-> --- a/tools/tracing/rtla/Makefile
-> +++ b/tools/tracing/rtla/Makefile
-> @@ -32,7 +32,7 @@ TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
->  
->  CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS) $(EXTRA_CFLAGS)
->  LDFLAGS	:=	-ggdb $(EXTRA_LDFLAGS)
-> -LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs)
-> +LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs libtraceevent)
+>=20
+> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+> index 13cce286247e..f37ffe2bd488 100644
+> --- a/drivers/hid/usbhid/hid-core.c
+> +++ b/drivers/hid/usbhid/hid-core.c
+> @@ -275,6 +275,7 @@ static void hid_irq_in(struct urb *urb)
+>         int                     status;
+>         switch (urb->status) {
+> +       case -EOVERFLOW:        /* happens with modified report descripto=
+rs */
+>         case 0:                 /* success */
+>                 usbhid->retry_delay =3D 0;
+>                 if (!test_bit(HID_OPENED, &usbhid->iofl))
+> ---
+>=20
+> Cheers,
+> Benjamin
+>=20
 
-I'm still confused as to why this is needed.
-
-According to Dan's document:
-
-Requires: A list of packages required by this package. The versions of these packages may be specified using the comparison operators =, <, >, <= or >=.
-Requires.private: A list of private packages required by this package but not exposed to applications. The version specific rules from the Requires field also apply here.
-
-The "Requires" is exported to other applications. It's the private that is
-not.
-
-What is this trying to fix?
-
--- Steve
+Best regards,
+Marcus Folkesson
 
 
->  
->  SRC	:=	$(wildcard src/*.c)
->  HDR	:=	$(wildcard src/*.h)
+--CYuxnQgK2200QJ9N
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmO9erwACgkQiIBOb1ld
+UjIKFA//chEo/4qumcU+/1AFw44iiyHLU7hw3sANpAQkevMeFkzQUrE25/7/Oul9
+PRzga+rowCyIFQMWqlj5qrr3ns5tOXUFZaCZmcK0az0sKIFhPnSgR8fBHEAmgUiK
+mPyMuOQ6DMTkO6wvv4tstNw2SzA4xjaxRsVKsb/B4NFjJOefLTxWKQPWcPMkJNtn
++GOsdDBwj+r1pd9xse0d6VHpZklV5tGw0nONclTisQ8WvtQS+PQVWkAFoJoj0kF6
+wLu2059i2T4sxZr8vpJiqZzM4DVAG2z3lvdp5j5SxoUDxp+TA+m8J/xMRMElhIpK
+iO8QWlvOWS9q1PKzN6rJHqffhGPeoHt11zoKeHD67mYE/s+C0SX3tiXefobRjkFf
+/bl+kve2AgJBAMBbQdUEHt1v4uoczj2oqljKQxkOwY1Uu7a1QxuWUfaVWHuklVsq
+tUffwME//mjn/liJsALqJA7k75ZmlApHJiCv0+LOq4LWdC0LIHWN5Z4/oRmClLpp
+o/mpTlUA3G+pEw0Gkv4ypMmDLoj5S7ljIdH08wmB4lhe2l38Fq5m6Y7Q/iXm1TXX
+XkTOo6a2185ExqVk+MPAkRhr/v95ZFHLnYM56oyERMW2zEgBvWSnQrL49xcOVzDb
+mE4ubjD7WygIVPc558GpEiwAGiPk1sMH+k4Exuj5fptk9kHviAU=
+=JxWA
+-----END PGP SIGNATURE-----
+
+--CYuxnQgK2200QJ9N--
