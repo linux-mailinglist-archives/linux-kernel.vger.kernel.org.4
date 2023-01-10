@@ -2,261 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4DA664636
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2DB66463E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234007AbjAJQfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 11:35:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
+        id S238703AbjAJQgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 11:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238969AbjAJQei (ORCPT
+        with ESMTP id S239162AbjAJQfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 11:34:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A6387F0E
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:33:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673368400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EMKV6nf2FFKubT9BPJN4AKDdipkI2cilqJuASvqNxbk=;
-        b=ftaTeE9aoy7MXExjbQwNZzHtPhTmcUGAVpAC2cX7pI9XadiDI5LWQLbuR4s8r0NvLs3tQU
-        10vRy3qwDXs7QUJB3YlrrHSbAIb0CFhlNjsQbsvpP1pWKXkYQ2Q5kxvzkv7LXSyFydGcjl
-        r7nHQZ+T4C8sbnkoMaOSW/Jn9WM0xCw=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-14-QiahpmRdMZmPSpb0tIsmMw-1; Tue, 10 Jan 2023 11:33:15 -0500
-X-MC-Unique: QiahpmRdMZmPSpb0tIsmMw-1
-Received: by mail-lj1-f200.google.com with SMTP id b25-20020a2e9899000000b002877a271a9dso574901ljj.20
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:33:15 -0800 (PST)
+        Tue, 10 Jan 2023 11:35:22 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F47D8B50E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:35:15 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id az7so12405915wrb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:35:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z2NxH3tSGz9WvFhZCl9Fb7nEkJ5kzb/MmPRaT/+ZbG0=;
+        b=cFjYWHmWHQL1/h62npQEdLV/ngA8ytUpeQnwiHlSeAYx7qaWtaicnfIi2n5sRIxcth
+         euG5JZbE6ktu4XnJJ3fUIQj7dGn328aBV5hKnQ0Tqq6XMj39jNKaQLIDPuZE6JMzNuB5
+         IlJJBSaCKUcDNnO4s6PQqcjPd0iSAa2LSleP2fc852ixhCEqkfJ9BLRNLLG3rF54IEaP
+         GS4ZPKSbWKXdnHTcMaPQ7JaSljUDdKnrKZxhb8IgRclft0UUccmgCzM8ezrzKttfzEtR
+         eiC4Rl6hknTSkDx9W7QeFn54Ue8Oju3wWPHs3ezufSsIoNIilC0rZUBDkskgdcUCJjTT
+         3H/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EMKV6nf2FFKubT9BPJN4AKDdipkI2cilqJuASvqNxbk=;
-        b=SM9sT7Th3P0aKjDp+VG2LgWCXL1sJCKwmbKKQEpsagwUAb5sRz/hzGrFY7Dvdw+Jjt
-         jBjrtJsrCLTV/Od6PaITZN0TtkJ+WoXMEQSVX/c4fMNd5XzJA5qMM3KxtZyq7Td10fXm
-         xdAJ0ba4na1k6yC83WAvTEt44YRCO3e3hSYi/UXaduhf8ZDA1GClpn1zrK/sR4+rZ/yn
-         jR7SoFist9JZo7OB6aCSKQq79c/n1x6wtsQET2VPlOf+VdV8SQlHioGj2qyJOFTlQIFJ
-         4sN7K3YtM2URbeGpeCJykPEwyqKn+PkdpkaL0fczcRdMj9Vqr2GyYNBKGUhAM3e3V5UA
-         DbgA==
-X-Gm-Message-State: AFqh2koCmUiHTcv7tjta0uvu+JaSJhYfcCvn3o6bgTw+IMJJP46HVmxm
-        fruvBK85raIhsHn4Ob1PGUS948wFSsi/CNbA9biDoEBjFzyXwSDGHZ9QufnMNOFMWDEq5OCJ72w
-        KwgCAl0pO30heAaVT29eCBWL4
-X-Received: by 2002:a2e:9609:0:b0:286:6ae7:5068 with SMTP id v9-20020a2e9609000000b002866ae75068mr1299106ljh.26.1673368394087;
-        Tue, 10 Jan 2023 08:33:14 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsc4Vr7VOL/Bd+eo+RY+RfRURHU0GJUp4dwwFoaFZu+5XTMPaXKMMR/spyAPXjHu6ANH3oUog==
-X-Received: by 2002:a2e:9609:0:b0:286:6ae7:5068 with SMTP id v9-20020a2e9609000000b002866ae75068mr1299102ljh.26.1673368393912;
-        Tue, 10 Jan 2023 08:33:13 -0800 (PST)
-Received: from greebo.mooo.com (c-e6a5e255.022-110-73746f36.bbcust.telenor.se. [85.226.165.230])
-        by smtp.gmail.com with ESMTPSA id p11-20020a2eb98b000000b0027fed440702sm1362364ljp.98.2023.01.10.08.33.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 08:33:13 -0800 (PST)
-Message-ID: <3e491cfe02590cf5fce49851cf8fa040e0a4c8f6.camel@redhat.com>
-Subject: Re: [PATCH 3/6] composefs: Add descriptor parsing code
-From:   Alexander Larsson <alexl@redhat.com>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gscrivan@redhat.com
-Date:   Tue, 10 Jan 2023 17:33:12 +0100
-In-Reply-To: <Y7cszNNvHHUef2qO@x1>
-References: <cover.1669631086.git.alexl@redhat.com>
-         <1c4c49fac5bb6406a8cb55ca71f8060703aa63f6.1669631086.git.alexl@redhat.com>
-         <Y7cszNNvHHUef2qO@x1>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z2NxH3tSGz9WvFhZCl9Fb7nEkJ5kzb/MmPRaT/+ZbG0=;
+        b=r2RzPBCq57jgQx2t4cUpXNhOG2JWc0EoSZv9E3alubdwobgjCXCoBFdlmjfm4Z2qG0
+         ZrGm1GZc8Nvc+0zcFSK3xBF8Z+nWmdNggwey3lrs/WIUCn2W0AW4ofFIqVIHAnsJAl/q
+         eV+HC+i08C+8KHyCK9m8BdS/8XimCTE1czDdsZg/kUB9RdKHItAS/+SP0jCnRTMjhsOz
+         DZHOxp8OBiKb7fympu3SKzS5qG3RX7ukUFwb0XifAVkkp+hZvV1YqDcKyDzOzoyfccvc
+         KY0LCLrAVI/kMO2xEAihkb32dhlcSa11XZFtf5rnvOHiymwKZePGCq2UcNPlxtr1TPB9
+         J65A==
+X-Gm-Message-State: AFqh2kpKP/7u/a2QsaKdJky5B7AQHF7Y7Hs7pFXyk56oZNQ82gJ6a7xv
+        egLs5iRLJQ/ATBP7FycpZhJhBA==
+X-Google-Smtp-Source: AMrXdXsv3NpHNRaDEDLBjfUpufgq/yn85beQYYnajrkfAYzc+rvqxoi0MR1o3zZKXzKOANIzLhnhWA==
+X-Received: by 2002:adf:fb08:0:b0:29a:375d:4c41 with SMTP id c8-20020adffb08000000b0029a375d4c41mr19992583wrr.14.1673368514084;
+        Tue, 10 Jan 2023 08:35:14 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i5-20020a5d55c5000000b002a6f329203esm11717830wrw.61.2023.01.10.08.35.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 08:35:13 -0800 (PST)
+Message-ID: <8530aeef-8fdb-ede7-700e-856e5cbc6a5b@linaro.org>
+Date:   Tue, 10 Jan 2023 17:35:11 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: msm8916-zhihe: Add initial device
+ tree for zhihe Wifi/LTE dongle UFI-001C and uf896
+Content-Language: en-US
+To:     Yang Xiwen <forbidden405@foxmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jaime Breva <jbreva@nayarsystems.com>,
+        Nikita Travkin <nikita@trvn.ru>,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230110155014.31664-1-forbidden405@foxmail.com>
+ <tencent_A7FA00B086BB0EFFDC1C64744FF85DAD2B06@qq.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <tencent_A7FA00B086BB0EFFDC1C64744FF85DAD2B06@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-01-05 at 15:02 -0500, Brian Masney wrote:
-> On Mon, Nov 28, 2022 at 12:16:59PM +0100, Alexander Larsson wrote:
-> > This adds the code to load and decode the filesystem descriptor
-> > file
-> > format.
-> >=20
-> >=20
-> > +#define CFS_N_PRELOAD_DIR_CHUNKS 4
->=20
-> From looking through the code it appears that this is actually the
-> maximum number of chunks. Should this be renamed from PRELOAD to MAX?
->=20
+On 10/01/2023 16:50, Yang Xiwen wrote:
 
-No, this is the number of directory chunks we statically pre-load while
-loading the inode. If there are more (i.e. for larger directories) we
-load chunks dynamically as needed during the directory operations.
+Subject: too long. drop redundant information. "initial device tree for"
+is kind of obvious.
 
->=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0header->magic =3D cfs_u32_fr=
-om_file(header->magic);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0header->data_offset =3D cfs_=
-u64_from_file(header-
-> > >data_offset);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0header->root_inode =3D cfs_u=
-64_from_file(header->root_inode);
->=20
-> Should the cpu to little endian conversion occur in cfs_read_data()?
+Drop "zhihe" everywhere. You just said it is non-real company, so how
+can you start using it in context of a company name?
 
-cfs_read_data() reads just a block of opaque data. It can't know which
-parts make up individual values to convert.
+> This commit adds support for the ufi-001C and uf896 WiFi/LTE dongle made by
+> unknown manufactures based on MSM8916.
+> uf896 is another variant for the zhihe usb stick. The board design
+> difers by using different gpios for the keys and leds.
 
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (header->magic !=3D CFS_M=
-AGIC ||
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 header->d=
-ata_offset > ctx.descriptor_len ||
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sizeof(st=
-ruct cfs_header_s) + header->root_inode >
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ctx.descriptor_len) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0res =3D -EINVAL;
->=20
-> Should this be -EFSCORRUPTED?
->=20
-
-I don't think so. I can see the argument for it, but at this point we
-just looked at a file based on a mount argument, and it seems
-completely wrong (not just corrupt in the middle). Reporting EINVAL in
-the mount syscall for "invalid argument" seems more right to me.
+Run spellcheck. "differs"
 
 
-> >=20
-> > +static void *cfs_get_vdata_buf(struct cfs_context_s *ctx, u64
-> > offset, u32 len,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct cfs_buf *buf)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (offset > ctx->descriptor=
-_len - ctx->header.data_offset)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return ERR_PTR(-EINVAL);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (len > ctx->descriptor_le=
-n - ctx->header.data_offset -
-> > offset)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return ERR_PTR(-EINVAL);
->=20
-> It appears that these same checks are already done in cfs_get_buf().
->=20
-
-Not quite. It is true that we check in cfs_get_buf() that the arguments
-are not completely outside the file. However, this part checks that the
-offset is specifically within the vdata part of the file. In
-particular, if we rely on the checks in cfs_get_buf() we could get
-confused if the below data_offset + offset wrapped.
-
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return cfs_get_buf(ctx, ctx-=
->header.data_offset + offset,
-> > len, buf);
-> > +}
-
-
->=20
->=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ino->flags =3D cfs_read_u32(=
-&data);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0inode_size =3D cfs_inode_enc=
-oded_size(ino->flags);
->=20
-> Should CFS_INODE_FLAGS_DIGEST_FROM_PAYLOAD also be accounted for in
-> cfs_inode_encoded_size()?
-
-No, that flag just means that the already existing payload (which
-contains the pathname for the backing data) should be used as the
-source for the digest (to avoid storing it twice). It doesn't take up
-any extra space otherwise.
-
-> Also, cfs_inode_encoded_size() is only used here so can be brought
-> into this file.
->=20
-
-I see this as sort of part of the filesystem on-disk format, so I
-rather have it in the cfs.h header with the rest of the fs definition.
-
->=20
-> > +static bool cfs_validate_filename(const char *name, size_t
-> > name_len)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (name_len =3D=3D 0)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return false;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (name_len =3D=3D 1 && nam=
-e[0] =3D=3D '.')
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return false;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (name_len =3D=3D 2 && nam=
-e[0] =3D=3D '.' && name[1] =3D=3D '.')
->=20
-> Can strcmp() be used here?
->=20
-
-name is not zero-terminated, so I don't think so. At least not in any
-natural way.
-
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0inode_data->has_digest =3D r=
-et !=3D 0;
->=20
-> Can you do 'has_digest =3D inode_data->digest !=3D NULL;' to get rid of
-> the need for return 1 in cfs_get_digest().
-
-No, because ->digest is an in-line array, not a pointer.
-
-> > +static inline int memcmp2(const void *a, const size_t a_size,
-> > const void *b,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- size_t b_size)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0size_t common_size =3D min(a=
-_size, b_size);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int res;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0res =3D memcmp(a, b, common_=
-size);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (res !=3D 0 || a_size =3D=
-=3D b_size)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return res;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return a_size < b_size ? -1 =
-: 1;
->=20
-> This function appears to be used only in one place below. It doesn't
-> seem like it matters for the common_size. Can this just be dropped
-> and use memcmp()?
-
-Not sure what you mean by this. This is used as a sort/order function,
-not just as an "is-the-same" check, so we have to report e.g. that
-"prefixXYZ" is after "prefix". In other words, this is essentially
-strcmp(), but the strings are not zero terminated.
-
---=20
-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D=
--=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
-=3D-=3D-=3D
- Alexander Larsson                                            Red Hat,
-Inc=20
-       alexl@redhat.com            alexander.larsson@gmail.com=20
-He's a deeply religious Amish hairdresser who hides his scarred face=20
-behind a mask. She's a mentally unstable gypsy bodyguard in the witness
-protection program. They fight crime!=20
+Best regards,
+Krzysztof
 
