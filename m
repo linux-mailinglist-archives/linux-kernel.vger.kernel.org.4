@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A756643FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08096643F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbjAJPDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S234267AbjAJPDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233250AbjAJPDY (ORCPT
+        with ESMTP id S233300AbjAJPDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:03:24 -0500
-X-Greylist: delayed 518 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 Jan 2023 07:03:07 PST
-Received: from w1.tutanota.de (w1.tutanota.de [81.3.6.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1574F102;
-        Tue, 10 Jan 2023 07:03:06 -0800 (PST)
-Received: from tutadb.w10.tutanota.de (unknown [192.168.1.10])
-        by w1.tutanota.de (Postfix) with ESMTP id 94710FBF999;
-        Tue, 10 Jan 2023 14:54:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673362466;
-        s=s1; d=tuta.io;
-        h=From:From:To:To:Subject:Subject:Content-Description:Content-ID:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Cc:Cc:Date:Date:In-Reply-To:MIME-Version:MIME-Version:Message-ID:Message-ID:Reply-To:References:Sender;
-        bh=4FnHMSoDG+UwWAFI0bQdg+tPEV4Pse/8h0+mQ/LOzUw=;
-        b=oC42p0+E3mdwVzXD4vM7LJqoRBTfAMDaZjHxXojVR9BKs39Zu5bBoqALQ9WRTpHZ
-        EdrgBIGxqa+7BWM/iLQFy2GQ6e/y6YkiPqib8vkqBIShWGuuNpPjxT27BEtrHRzsOae
-        jWolVarxOzc7T/K0d+43NlRAEaFWncmjSZ36T2YFtX+YRqJ/zadL6hCYYmgnJAPRGlw
-        KWiu/JOnHc6rzqf9WpF01XLExRnyJslDCBMeJOphZC54F4tUyRB5qFdZqDu4AT5TLG4
-        LnJ5CrWl08XNRJXLnWr0X+DugidK/SniT3eGpSP+yg4YTqROwTOgkX0C04PzD0SG3Ay
-        d3wkOqSAcw==
-Date:   Tue, 10 Jan 2023 15:54:26 +0100 (CET)
-From:   marco.rodolfi@tuta.io
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Linux Input <linux-input@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Cc:     Marco Rodolfi <marco.rodolfi@tuta.io>
-Message-ID: <NLR9TEh--3-9@tuta.io>
-Subject: [PATCH] HID: Ignore battery for Elan touchscreen on Asus TP420IA
+        Tue, 10 Jan 2023 10:03:04 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1155AC70;
+        Tue, 10 Jan 2023 07:02:38 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id n12so12666627pjp.1;
+        Tue, 10 Jan 2023 07:02:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hnA+uHCy6P7PsRxtJOnvckRetO3eFNxuDZZIKa1zGWA=;
+        b=dhgyhtsB5aZlrR6UFvRwSLqV6ez6fA1AQxxivKlkF5lUcN1PMBqReoL8t5AZTpqGvi
+         UCBKIzURulQig3MfXAyebDMzTRJqgUduJGsszrybT8zYH+WY0avP8ch2bufY+DmIaAaD
+         5/XO0WULz3Xlf4Cei6Eh7uviB6LxrdSI/roctxmwXUhHRPP/sKpYwDeWpY1ITsAVHCfz
+         IW5uPiM2kLC7x4c0ZlhZEAGgM9KHi3UawsugGer8SPXd796TUjOedpxdxSf6MKUgzoAz
+         ecyP2q8F5mxr3ZTq7ECE8hpY0DUbFRn0dOBkK9yCo8C95HVCoIh1MoZTWYKgZvECqc03
+         pDJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hnA+uHCy6P7PsRxtJOnvckRetO3eFNxuDZZIKa1zGWA=;
+        b=gP0x8kxkgpwZ7NN/OpDkQcsBW9e2fSsqVuTim36zMK666c59cOaciToWOOZKbB3qKx
+         p4UZD2KXH2Ep6+kzdRS3x+MRdzhM4KGT6lO8dlbvD7DmjHacXUTqohq5w3fnsUQfw08T
+         yRCVM/9yV7Duucqz6rHsCGiMPxajNxy2UiXeB0K2yDB7MCJrT0ed7Uas2O7A0Z814Gwo
+         fFm3uhy+kC4nogKV7vrhrTAcdJGDXB3xOnITVno9x60wuoS+nfeDBVJbwqcdDzvISlq0
+         PC3xSnTdJ8GKkZEYa/MnV54FaujwlpXvJXJwCfxWpBuU7E2CQNxvm/ads9PY2Rrh9soZ
+         sHMQ==
+X-Gm-Message-State: AFqh2krFAy7LzHoZu/5oldyWFfGSzzZgsT64GiUoND5I54co+KCZ8+4F
+        z99CeKcfjwWMVTTyFYZPov17lkCsbnxIFA==
+X-Google-Smtp-Source: AMrXdXt5tCuAAgKwaXBm87V1iTA5iPygkUHNDS3T7BPy7wXrUHqdHL9awf4YImc6EgBEH8F54ej01g==
+X-Received: by 2002:a17:90b:3758:b0:225:d698:69b9 with SMTP id ne24-20020a17090b375800b00225d69869b9mr61179882pjb.17.1673362958320;
+        Tue, 10 Jan 2023 07:02:38 -0800 (PST)
+Received: from localhost.localdomain ([185.216.119.110])
+        by smtp.googlemail.com with ESMTPSA id qe9-20020a17090b4f8900b001df264610c4sm2534681pjb.0.2023.01.10.07.02.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 07:02:38 -0800 (PST)
+From:   Wang Yong <yongw.kernel@gmail.com>
+To:     corbet@lwn.net, pbonzini@redhat.com, kchamart@redhat.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Wang Yong <yongw.kernel@gmail.com>
+Subject: [PATCH] Documentation: KVM: fix typos in running-nested-guests.rst
+Date:   Tue, 10 Jan 2023 15:00:46 +0000
+Message-Id: <20230110150046.549755-1-yongw.kernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+change "gues" to "guest" and remove redundant ")".
 
-This device has a touchscreen thats report a battery even if it doesn't=20
-have one.=20
-Ask Linux to ignore the battery so it will not always report it as low.=20
-=20
-Signed-off-by: Marco Rodolfi <marco.rodolfi@tuta.io>=20
----=20
- drivers/hid/hid-ids.h =C2=A0=C2=A0| 1 +=20
- drivers/hid/hid-input.c | 2 ++=20
- 2 files changed, 3 insertions(+)=20
-=20
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h=20
-index 8f58c3c1bec3..0f525b946cd1 100644=20
---- a/drivers/hid/hid-ids.h=20
-+++ b/drivers/hid/hid-ids.h=20
-@@ -413,6 +413,7 @@=20
- #define I2C_DEVICE_ID_HP_ENVY_X360_15 =C2=A00x2d05=20
- #define I2C_DEVICE_ID_HP_ENVY_X360_15T_DR100 =C2=A0=C2=A00x29CF=20
- #define I2C_DEVICE_ID_HP_SPECTRE_X360_15 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A00x2817=20
-+#define I2C_DEVICE_ID_ASUS_TP420IA_TOUCHSCREEN 0x2BC8=20
- #define USB_DEVICE_ID_ASUS_UX550VE_TOUCHSCREEN 0x2544=20
- #define USB_DEVICE_ID_ASUS_UX550_TOUCHSCREEN =C2=A0=C2=A00x2706=20
- #define I2C_DEVICE_ID_SURFACE_GO_TOUCHSCREEN =C2=A0=C2=A00x261A=20
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c=20
-index 859aeb07542e..54e2d4066d9b 100644=20
---- a/drivers/hid/hid-input.c=20
-+++ b/drivers/hid/hid-input.c=20
-@@ -369,6 +369,8 @@ static const struct hid_device_id hid_battery_quirks[] =
-=3D {=20
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ HID_BLUETOOTH_DEVICE(USB_VENDO=
-R_ID_LOGITECH,=20
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0USB_DEVICE_ID_LOGITECH_DINOVO_EDGE_KBD),=20
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0HID_BATTERY_QUIRK_IG=
-NORE },=20
-+ =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, =
-I2C_DEVICE_ID_ASUS_TP420IA_TOUCHSCREEN)
-,=20
-+ =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0HID_BATTERY_QUIRK_IGNORE =
-},=20
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ HID_USB_DEVICE(USB_VENDOR_ID_E=
-LAN, USB_DEVICE_ID_ASUS_UX550_TOUCHSCREEN),=20
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0HID_BATTERY_QUIRK_IG=
-NORE },=20
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ HID_USB_DEVICE(USB_VENDOR_ID_E=
-LAN, USB_DEVICE_ID_ASUS_UX550VE_TOUCHSCREEN)
-,=20
--- =C2=A0
-2.39.0=20
+Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
+---
+ Documentation/virt/kvm/x86/running-nested-guests.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-=20
+diff --git a/Documentation/virt/kvm/x86/running-nested-guests.rst b/Documentation/virt/kvm/x86/running-nested-guests.rst
+index a27e6768d900..71136fe1723b 100644
+--- a/Documentation/virt/kvm/x86/running-nested-guests.rst
++++ b/Documentation/virt/kvm/x86/running-nested-guests.rst
+@@ -150,7 +150,7 @@ able to start an L1 guest with::
+     $ qemu-kvm -cpu host [...]
+ 
+ The above will pass through the host CPU's capabilities as-is to the
+-gues); or for better live migration compatibility, use a named CPU
++guest, or for better live migration compatibility, use a named CPU
+ model supported by QEMU. e.g.::
+ 
+     $ qemu-kvm -cpu Haswell-noTSX-IBRS,vmx=on
+-- 
+2.25.1
+
