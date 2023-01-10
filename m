@@ -2,83 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15949663CFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E96AD663CFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238253AbjAJJe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        id S232005AbjAJJfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:35:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238245AbjAJJeb (ORCPT
+        with ESMTP id S231609AbjAJJf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:34:31 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298B813F4C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:34:26 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4AA566602D6F;
-        Tue, 10 Jan 2023 09:34:24 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673343264;
-        bh=2X++/CX/YTAfIcjlM+DL6gfRl75tPuYYPGsfmxgOiGE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OefKhWDdnqvlYAqc/ThdX441MkImgzCrRjY1+pFgFjiOCZjJ/XehLQdzQ/ZF//jzD
-         iXBkxh8mqvB/O3bJr0gpVcEnZ4CCrw/1pa59q1NrWTYhtk2PZBnise3AQrLYCpLz65
-         4GPR/9wf+MXUjIP9QZ1/QdB5VooBClY/wMD7z+enttc9fo0+oM+L14mblHmMzaTtf+
-         1Xl/TrHJxxgefbGblH3l0yjTpDvlfl92VKQba3ajbhshYj9+62IeHLXFNJ3LcGA47z
-         w4MpK7ARbvRw6/td8yfjypsT0TDzZRIuvC17+0/WIHkzX4GmdA26QRf64u4Odr4S2A
-         p0VNLfnOwsWKA==
-Message-ID: <9102d7a1-e40d-1201-f1e8-eeb12923502a@collabora.com>
-Date:   Tue, 10 Jan 2023 10:34:21 +0100
+        Tue, 10 Jan 2023 04:35:26 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2D2193E4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:35:24 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id p3-20020a05600c1d8300b003d9ee5f125bso4820135wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mrQ+JitbOECIDmgf2/u1/1zEEDmDsSRqp9Cq/AzQXQ0=;
+        b=loQjDkRBkBqAGesdAJKVwXdr1EWle0ogRikYAZFq5P406xMPLYesNPr4Up06ii/Bnt
+         OLKbWAgoQkT/oCGNlKfRLsCyC8TdDClFDct/3+MraZeDWIQl+UD2j0/n9SUHjJ4OwH9A
+         X2G9Q4+xkhzmauIh7+bb9GtdS6iLYGI92uIKTFLPP8Ie94Z+wyyVONQe7bfO9xueJnOF
+         QZGDxsyIMnT6eM/H3WSn9k27afZYsUUFFMye9EFNPjSe0FFo+Pl+GOry5AnXtwNgy4+Q
+         nxAJwP3GIJHpdADZlBglkjcJ4vs0EWrN4pFAxkFSZ+OY9SlmzrVhUcO09I+68bZYbZii
+         oVwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mrQ+JitbOECIDmgf2/u1/1zEEDmDsSRqp9Cq/AzQXQ0=;
+        b=aqiVZjit3yRHoshLVuLxsc5t7v79UzF/ulvTi2nT/OTgWKcjyCOlUrmloFr1Cx7GEm
+         gl/NuW4ulQD0HPp4DKzBwIufg5kbC3WKXIwtMf5MIpjTp1xH1hvx0IUMXbS3Pqe3uYDu
+         1U5rpf8T89b9/8MvZFHGNdgswd3AGU68N4j2BJlCsbKWY0eOLiQYmTEDWEQSsQ3OCpnA
+         rx7TQEcl2PfVAwq7fwxeB3vz3AJt4yYGgyCNfEyRpmuS1kJuy2mgX7FnxcH6nXbUSCbM
+         bpQxLdj+5x2l6Jcy+gZGa6T+S8eQ7tkfijEW9QqsaqpcjBNnq97yqTqnwwON39Lz0KYX
+         DgFg==
+X-Gm-Message-State: AFqh2koxmQr4N2UiJruOH6VBfde/FDS1SeTRNzrhi4YoX8c3ppi423U4
+        2HkGGmTDaDREVPiMTcN5yE08+w==
+X-Google-Smtp-Source: AMrXdXvQ1wW/QgFW9/7W/HyD92nstJjTjaJu9SxRjN7GNXvC97zoJ1MgYEz/Ik0g8pkZvz8vJPEB5g==
+X-Received: by 2002:a05:600c:3490:b0:3d9:ed39:8999 with SMTP id a16-20020a05600c349000b003d9ed398999mr6191599wmq.35.1673343323420;
+        Tue, 10 Jan 2023 01:35:23 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id y15-20020adffa4f000000b002bbec19c8acsm5383940wrr.64.2023.01.10.01.35.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 01:35:22 -0800 (PST)
+Message-ID: <92955e76-807f-3a8f-8cbd-3fafdd8f2054@linaro.org>
+Date:   Tue, 10 Jan 2023 10:35:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm/mediatek: include missing headers
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V2 02/11] dt-bindings: remoteproc: qcom,msm8996-mss-pil:
+ Update memory region
 Content-Language: en-US
-To:     Miles Chen <miles.chen@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230110091647.13265-1-miles.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230110091647.13265-1-miles.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        manivannan.sadhasivam@linaro.org, robin.murphy@arm.com
+Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, amit.pundir@linaro.org,
+        regressions@leemhuis.info, sumit.semwal@linaro.org,
+        will@kernel.org, catalin.marinas@arm.com
+References: <20230109034843.23759-1-quic_sibis@quicinc.com>
+ <20230109034843.23759-3-quic_sibis@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230109034843.23759-3-quic_sibis@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/01/23 10:16, Miles Chen ha scritto:
-> Fix the follow sparse warnings by adding missing headers:
-> 
-> drivers/gpu/drm/mediatek/mtk_cec.c:251:24: sparse: warning: symbol 'mtk_cec_driver' was not declared. Should it be static?
-> drivers/gpu/drm/mediatek/mtk_disp_ccorr.c:221:24: sparse: warning: symbol 'mtk_disp_ccorr_driver' was not declared. Should it be static?
-> drivers/gpu/drm/mediatek/mtk_disp_rdma.c:390:24: sparse: warning: symbol 'mtk_disp_rdma_driver' was not declared. Should it be static?
-> drivers/gpu/drm/mediatek/mtk_disp_gamma.c:209:24: sparse: warning: symbol 'mtk_disp_gamma_driver' was not declared. Should it be static?
-> drivers/gpu/drm/mediatek/mtk_disp_ovl.c:565:24: sparse: warning: symbol 'mtk_disp_ovl_driver' was not declared. Should it be static?
-> drivers/gpu/drm/mediatek/mtk_disp_color.c:164:24: sparse: warning: symbol 'mtk_disp_color_driver' was not declared. Should it be static?
-> drivers/gpu/drm/mediatek/mtk_disp_aal.c:161:24: sparse: warning: symbol 'mtk_disp_aal_driver' was not declared. Should it be static?
-> drivers/gpu/drm/mediatek/mtk_dpi.c:1109:24: sparse: warning: symbol 'mtk_dpi_driver' was not declared. Should it be static?
-> drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c:340:24: sparse: warning: symbol 'mtk_hdmi_ddc_driver' was not declared. Should it be static?
-> drivers/gpu/drm/mediatek/mtk_dsi.c:1223:24: sparse: warning: symbol 'mtk_dsi_driver' was not declared. Should it be static?
-> 
-> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+On 09/01/2023 04:48, Sibi Sankar wrote:
+> The dynamic memory region used for metadata authentication would still
+> be a part of the kernel mapping and any access to this region  by the
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Just one space before "by"
 
+> application processor after assigning it to the remote Q6 will result
+> in a XPU violation. This is fixed by using a no-map carveout instead.
+> Update the bindings to reflect the addition of the new modem metadata
+> carveout on MSM8996 (and similar) SoCs.
+> 
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+>  .../bindings/remoteproc/qcom,msm8996-mss-pil.yaml  | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
+> index d3d3fb2fe91d..ad1a51c23949 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
+> @@ -123,6 +123,7 @@ properties:
+>      items:
+>        - description: MBA reserved region
+>        - description: Modem reserved region
+> +      - description: Metadata reserved region
+>  
+>    firmware-name:
+>      $ref: /schemas/types.yaml#/definitions/string-array
+> @@ -165,6 +166,16 @@ properties:
+>        - memory-region
+>      deprecated: true
+>  
+> +  metadata:
+> +    type: object
+
+addutionalProperties: false
+
+> +    description:
+> +      Metadata reserved region
+
+Blank line
+
+> +    properties:
+> +      memory-region: true
+
+Blank line
+
+> +    required:
+> +      - memory-region
+> +    deprecated: true
+
+
+Best regards,
+Krzysztof
 
