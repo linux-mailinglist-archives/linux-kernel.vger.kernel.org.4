@@ -2,167 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A666366449E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA3A6644A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238924AbjAJPZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
+        id S239004AbjAJP0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238915AbjAJPZI (ORCPT
+        with ESMTP id S238922AbjAJP0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:25:08 -0500
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAD147CBF0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:25:06 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowADHzu5Ag71jnJENDA--.30343S2;
-        Tue, 10 Jan 2023 23:24:49 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH 1/2] drm: Add DRM-managed alloc_workqueue() and alloc_ordered_workqueue()
-Date:   Tue, 10 Jan 2023 23:24:47 +0800
-Message-Id: <20230110152447.5611-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 10 Jan 2023 10:26:21 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C575D418;
+        Tue, 10 Jan 2023 07:25:46 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pFGVO-0005YW-Jl; Tue, 10 Jan 2023 16:25:38 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Xing Zheng <zhengxing@rock-chips.com>,
+        Quentin Schulz <foss+kernel@0leil.net>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, stable@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH] clk: rockchip: rk3399: allow clk_cifout to force clk_cifout_src to reparent
+Date:   Tue, 10 Jan 2023 16:25:37 +0100
+Message-Id: <167336433299.2636594.362082360376536202.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221117-rk3399-cifout-set-rate-parent-v1-0-432548d04081@theobroma-systems.com>
+References: <20221117-rk3399-cifout-set-rate-parent-v1-0-432548d04081@theobroma-systems.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADHzu5Ag71jnJENDA--.30343S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr1fWw18ArWkGFW8JF13Arb_yoW5trWUpF
-        s5AFW5CrZ5trZFgrWayw1DuFy3Gan2gF1Iyw1Ivw1a9a15t34DZ3ZYyFyjv343GrWkJF4Y
-        yFZxtFWkuF1jyr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUym14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
-        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
-        wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUq38nUUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add drmm_alloc_workqueue() and drmm_alloc_ordered_workqueue(), the helpers
-that provide managed workqueue cleanup. The workqueue will be destroyed
-with the final reference of the DRM device.
+On Thu, 17 Nov 2022 13:04:31 +0100, Quentin Schulz wrote:
+> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> 
+> clk_cifout is derived from clk_cifout_src through an integer divider
+> limited to 32. clk_cifout_src is a child of either cpll, gpll or npll
+> without any possibility of a divider of any sort. The default clock
+> parent is cpll.
+> 
+> [...]
 
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/gpu/drm/drm_managed.c | 66 +++++++++++++++++++++++++++++++++++
- include/drm/drm_managed.h     |  8 +++++
- 2 files changed, 74 insertions(+)
+Applied, thanks!
 
-diff --git a/drivers/gpu/drm/drm_managed.c b/drivers/gpu/drm/drm_managed.c
-index 4cf214de50c4..d3bd6247eec9 100644
---- a/drivers/gpu/drm/drm_managed.c
-+++ b/drivers/gpu/drm/drm_managed.c
-@@ -271,6 +271,13 @@ static void drmm_mutex_release(struct drm_device *dev, void *res)
- 	mutex_destroy(lock);
- }
- 
-+static void drmm_destroy_workqueue(struct drm_device *dev, void *res)
-+{
-+	struct workqueue_struct *wq = res;
-+
-+	destroy_workqueue(wq);
-+}
-+
- /**
-  * drmm_mutex_init - &drm_device-managed mutex_init()
-  * @dev: DRM device
-@@ -289,3 +296,62 @@ int drmm_mutex_init(struct drm_device *dev, struct mutex *lock)
- 	return drmm_add_action_or_reset(dev, drmm_mutex_release, lock);
- }
- EXPORT_SYMBOL(drmm_mutex_init);
-+
-+/**
-+ * drmm_alloc_workqueue - &drm_device-managed alloc_workqueue()
-+ * @dev: DRM device
-+ * @wq: workqueue to be allocated
-+ *
-+ * Returns:
-+ * 0 on success, or a negative errno code otherwise.
-+ *
-+ * This is a &drm_device-managed version of alloc_workqueue().
-+ * The initialized lock is automatically destroyed on the final
-+ * drm_dev_put().
-+ */
-+int drmm_alloc_workqueue(struct drm_device *dev,
-+			  struct workqueue_struct *wq, const char *fmt,
-+			  unsigned int flags, int max_active, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, max_active);
-+	wq = alloc_workqueue(fmt, flags, max_active, args);
-+	va_end(args);
-+
-+	if (!wq)
-+		return -ENOMEM;
-+
-+	return drmm_add_action_or_reset(dev, drmm_destroy_workqueue, wq);
-+}
-+EXPORT_SYMBOL(drmm_alloc_workqueue);
-+
-+/**
-+ * drmm_alloc_ordered_workqueue - &drm_device-managed
-+ * alloc_ordered_workqueue()
-+ * @dev: DRM device
-+ * @wq: workqueue to be allocated
-+ *
-+ * Returns:
-+ * 0 on success, or a negative errno code otherwise.
-+ *
-+ * This is a &drm_device-managed version of alloc_ordered_workqueue().
-+ * The initialized lock is automatically destroyed on the final
-+ * drm_dev_put().
-+ */
-+int drmm_alloc_ordered_workqueue(struct drm_device *dev,
-+				  struct workqueue_struct *wq,
-+				  const char *fmt, unsigned int flags, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, flags);
-+	wq = alloc_ordered_workqueue(fmt, flags, args);
-+	va_end(args);
-+
-+	if (!wq)
-+		return -ENOMEM;
-+
-+	return drmm_add_action_or_reset(dev, drmm_destroy_workqueue, wq);
-+}
-+EXPORT_SYMBOL(drmm_alloc_ordered_workqueue);
-diff --git a/include/drm/drm_managed.h b/include/drm/drm_managed.h
-index 359883942612..68cecc14e1af 100644
---- a/include/drm/drm_managed.h
-+++ b/include/drm/drm_managed.h
-@@ -107,4 +107,12 @@ void drmm_kfree(struct drm_device *dev, void *data);
- 
- int drmm_mutex_init(struct drm_device *dev, struct mutex *lock);
- 
-+int drmm_alloc_workqueue(struct drm_device *dev,
-+			  struct workqueue_struct *wq, const char *fmt,
-+			  unsigned int flags, int max_active, ...);
-+
-+int drmm_alloc_ordered_workqueue(struct drm_device *dev,
-+				  struct workqueue_struct *wq,
-+				  const char *fmt, unsigned int flags, ...);
-+
- #endif
+[1/1] clk: rockchip: rk3399: allow clk_cifout to force clk_cifout_src to reparent
+      commit: 3ad07d73ae650057fe64b2d85721c644a30428c1
+
+Best regards,
 -- 
-2.25.1
-
+Heiko Stuebner <heiko@sntech.de>
