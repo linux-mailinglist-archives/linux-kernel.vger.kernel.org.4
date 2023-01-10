@@ -2,123 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0281166461C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 398E8664622
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238887AbjAJQcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 11:32:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
+        id S238827AbjAJQcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 11:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238653AbjAJQbq (ORCPT
+        with ESMTP id S238880AbjAJQcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 11:31:46 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD44281D6A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:31:42 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id ja17so9245985wmb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:31:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kgOd+VWxsnmKVu53YzWAVlTYBysrxAFnTfMj/8sDZDE=;
-        b=Kbq7XT8uNB0knbmfwL9Q1lihlhuGeO0201X31jmgqbpked5t9NliIEh8HYr21QVJuK
-         kXUdnGAEC/8oStNApzbVsOeHfgnqb3As8t9gom4QKl8qWCazPWRG2ljn2jEzfuw2auco
-         jtH0MtvSxJjzMNNl0Z7bicmkMIWCslhoGzveDOp8EmltPaiccb16fAmui1EoAFagJ6Iw
-         pNPHIJa3E9FBof9cI+5ccHxCJisJpOCZOEjWH3e7Su1LK+Qtb8WGpGlexbUVHqsRR1vi
-         xZlZUbaK1wT5u/iejFGfhQ+QQa0sCbqivEu2Ft1ktfa0T6ifjF4OxMkV+sS9XihY2F5H
-         FIXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kgOd+VWxsnmKVu53YzWAVlTYBysrxAFnTfMj/8sDZDE=;
-        b=txykX8xtrwqHhSZVaYmBL1z7Hvj/jALNoodS8L4wof0W22SLKeVx8UZXrtcEkZGUio
-         dJWXsryfsG3BYUd4gWUSpXRw2v5JUhE45TYtPWXiUkiKG27qU7IjI7W7pWXnG6xjufBO
-         Z9+urnlAY7gtkCWbLeIHWtHk0nNKJhQa/8gNvoP0e9n/bjnLm9aZ++vnPvW+yi3zHpy0
-         vDrOnpWDDicMzFJa9Xda8FBplNhUlPbz+YEob8sBoOlxIhqj5s45OzHmtAbe4BdcgvHu
-         suEm5bt+sw+CWODvb2ctW9n38DVop0fspfsR89HVMz0fYBKpKqZAhaJ6/RtFKSLsh5+q
-         y60A==
-X-Gm-Message-State: AFqh2koOSx0eeIoUa5CsHQe3J2qrphDTYsIX2y734bvLG0nJgBZYYqEK
-        l9NDETX64AlzQeGotCWQtFpbfw==
-X-Google-Smtp-Source: AMrXdXv6olYMonryRGkx+SneUVIxO8RmSw0eLwPtZ0cqKL6w6ZyJfFtjunX//Vf2e2ZrSFajZZQjtg==
-X-Received: by 2002:a05:600c:5c8:b0:3d1:4145:b3b with SMTP id p8-20020a05600c05c800b003d141450b3bmr51162153wmd.9.1673368301362;
-        Tue, 10 Jan 2023 08:31:41 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id c18-20020a05600c0ad200b003d9c97d82f2sm15278312wmr.8.2023.01.10.08.31.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 08:31:40 -0800 (PST)
-Message-ID: <439c4aa1-2769-3c66-4d15-15729643c736@linaro.org>
-Date:   Tue, 10 Jan 2023 17:31:38 +0100
+        Tue, 10 Jan 2023 11:32:03 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328ED84099;
+        Tue, 10 Jan 2023 08:32:01 -0800 (PST)
+Date:   Tue, 10 Jan 2023 16:31:58 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673368319;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ttxt13H5J51Gqr1Xn/jMJHwCS/g2F1Jlbgm/N+cRYAM=;
+        b=GziND44NHtHJpTpTJI4rkQlAVdumD7TbsumT9wqcOvkijawpUThT5zg7u9calm0ntwPLG2
+        Vs9sg/Xdr/waj3vi5xdUf6suWHFVHEYSute4Sot8/jszcw8p8cO0iqIW0GJYNpwY4yJHEv
+        x3nqSJQGTiBYbBk8LbaYf1YUQbr2ez2qmjPZ9U4ruVOVM8rlP1RotXmCeYIIFIjFYC0qvH
+        tOjPL5zkgRrPff0sxhEnNKOV8jEtIgUfJWyDfhA6G/G5SK6TJkJnJXVo6fCGx+jtYLutYa
+        3meVv/zZe5SUnkyir2aOc72Ve8izqmGWRFrleuOp+1IdP3QiFcOLql9GS/8r/w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673368319;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ttxt13H5J51Gqr1Xn/jMJHwCS/g2F1Jlbgm/N+cRYAM=;
+        b=wZF48rBvO2VBvLT70dlkh7zQyyD0v5rNFM1p8m+F6n+LZ7qD6INSMJ5MdcXD7ifVL6ztpu
+        myMdW2zdLUZtEEBA==
+From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/pat: Fix pat_x_mtrr_type() for MTRR disabled case
+Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Juergen Gross <jgross@suse.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, <stable@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230110065427.20767-1-jgross@suse.com>
+References: <20230110065427.20767-1-jgross@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/3] dt-bindings: qcom: Ducument bindings for new
- msm8916-zhihe-uf896 and msm8916-zhihe-ufi001c
-Content-Language: en-US
-To:     Yang Xiwen <forbidden405@foxmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jaime Breva <jbreva@nayarsystems.com>,
-        Nikita Travkin <nikita@trvn.ru>,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230110155014.31664-1-forbidden405@foxmail.com>
- <tencent_5AB8DBF2B3CDE947BB84B3D6D2A0D7023F0A@qq.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <tencent_5AB8DBF2B3CDE947BB84B3D6D2A0D7023F0A@qq.com>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <167336831878.4906.1036202649956155536.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 16:50, Yang Xiwen wrote:
-> Document the new zhihe,uf896/ufi001c device tree bindings used in
-> their device trees.
+The following commit has been merged into the x86/urgent branch of tip:
 
-Subject: drop second/last, redundant "bindings for". The "dt-bindings"
-prefix is already stating that these are bindings.
+Commit-ID:     90b926e68f500844dff16b5bcea178dc55cf580a
+Gitweb:        https://git.kernel.org/tip/90b926e68f500844dff16b5bcea178dc55cf580a
+Author:        Juergen Gross <jgross@suse.com>
+AuthorDate:    Tue, 10 Jan 2023 07:54:27 +01:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Tue, 10 Jan 2023 17:21:53 +01:00
 
-Subject: typo - Document
+x86/pat: Fix pat_x_mtrr_type() for MTRR disabled case
 
-Subject: shorten it, use some shorter user descriptive model name
+Since
 
-> 
-> Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 65ef7e442da0d..efe5f6c384b69 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -210,6 +210,8 @@ properties:
->                - samsung,j5
->                - samsung,serranove
->                - wingtech,wt88047
-> +              - zhihe,uf896
-> +              - zhihe,ufi001c
+  72cbc8f04fe2 ("x86/PAT: Have pat_enabled() properly reflect state when running on Xen")
 
-Real hardware, running real mainline OS cannot be called "placeholder".
+PAT can be enabled without MTRR.
 
->            - const: qcom,msm8916
->  
->        - items:
+This has resulted in problems e.g. for a SEV-SNP guest running under Hyper-V,
+when trying to establish a new mapping via memremap() with WB caching mode, as
+pat_x_mtrr_type() will call mtrr_type_lookup(), which in turn is returning
+MTRR_TYPE_INVALID due to MTRR being disabled in this configuration.
 
-Best regards,
-Krzysztof
+The result is a mapping with UC- caching, leading to severe performance
+degradation.
 
+Fix that by handling MTRR_TYPE_INVALID the same way as MTRR_TYPE_WRBACK
+in pat_x_mtrr_type() because MTRR_TYPE_INVALID means MTRRs are disabled.
+
+  [ bp: Massage commit message. ]
+
+Fixes: 72cbc8f04fe2 ("x86/PAT: Have pat_enabled() properly reflect state when running on Xen")
+Reported-by: Michael Kelley (LINUX) <mikelley@microsoft.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Tested-by: Michael Kelley <mikelley@microsoft.com>
+Cc: <stable@kernel.org>
+Link: https://lore.kernel.org/r/20230110065427.20767-1-jgross@suse.com
+---
+ arch/x86/mm/pat/memtype.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+index 46de9cf..fb4b1b5 100644
+--- a/arch/x86/mm/pat/memtype.c
++++ b/arch/x86/mm/pat/memtype.c
+@@ -387,7 +387,8 @@ static unsigned long pat_x_mtrr_type(u64 start, u64 end,
+ 		u8 mtrr_type, uniform;
+ 
+ 		mtrr_type = mtrr_type_lookup(start, end, &uniform);
+-		if (mtrr_type != MTRR_TYPE_WRBACK)
++		if (mtrr_type != MTRR_TYPE_WRBACK &&
++		    mtrr_type != MTRR_TYPE_INVALID)
+ 			return _PAGE_CACHE_MODE_UC_MINUS;
+ 
+ 		return _PAGE_CACHE_MODE_WB;
