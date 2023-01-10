@@ -2,102 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8AE663F53
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FDD663F54
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbjAJLgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 06:36:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
+        id S235189AbjAJLgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 06:36:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237985AbjAJLgh (ORCPT
+        with ESMTP id S237998AbjAJLgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 Jan 2023 06:36:37 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF4C5131F
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:36:34 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7C051322;
+        Tue, 10 Jan 2023 03:36:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 75F851EC01B7;
-        Tue, 10 Jan 2023 12:36:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673350592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=FydzkbUqhNLO3+ARGz/dT0rUfRDNk8dNGvb0boW3dFU=;
-        b=nkp/JZRPSfmTBMc8q7QgHCsa3PxwacM5F15SXtSnJrRHxp6Owdc415aKgnXPp3t3Snzwb3
-        X5osQHdWvi2S0DrCk6Nnl1rIFarMBD55Bs7xFPvt+1yn+wLqMCU5J/DjxttCEtd1lkOmGu
-        Yy1dnXGjY3zP9uaDKxo3SopLMvNMl4A=
-Date:   Tue, 10 Jan 2023 12:36:32 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: x86/boot: Avoid using Intel mnemonics in AT&T syntax asm
-Message-ID: <Y71NwKcbVZIZyP8p@zn.tnic>
-References: <Y71I3Ex2pvIxMpsP@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y71I3Ex2pvIxMpsP@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F4CD6160D;
+        Tue, 10 Jan 2023 11:36:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1F0AC433EF;
+        Tue, 10 Jan 2023 11:36:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673350595;
+        bh=zRWVFsaYAu+MFZGYLMxUYwKWyxja897JN2VGkHVIaZw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=uXGpUEZpZvQxpdaFvyFKfDmUEtLMUhrRYNGr3frGmVU3V+Bn5hCECEfQsUFi2XMX7
+         pEKeOUG83Ne8vB7AsqFReJ5eHTB8As0KpOxG+fXpC+hZL8FMmnDJ0GeJvghMGRonQS
+         YDERkKYMse8+Ky1PZbyGaClnER43ZQYpgQmC42Vy0R5f2dDINT/lfdlQHT5BV/G87H
+         EdZOBQujmZzsemhl9TKW41+orX21pxD2RUlkqU6ULw5PBYhLFfAELd6baHoH/MXba8
+         EC8lzwAqq/xBkYQ7NR7iRR4dFocaCHt97w4ST9NAvRm8Je6qjQ7+okA5bjCzQdp+M6
+         iiIjv+svAgl1g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F5F0E21EE8;
+        Tue, 10 Jan 2023 11:36:35 +0000 (UTC)
+Subject: Re: [GIT PULL] ksmbd server fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5msyEy20e=FBx6wPWWc3kXzNR4b+zHshSqidRdFKVf_7Jg@mail.gmail.com>
+References: <CAH2r5msyEy20e=FBx6wPWWc3kXzNR4b+zHshSqidRdFKVf_7Jg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5msyEy20e=FBx6wPWWc3kXzNR4b+zHshSqidRdFKVf_7Jg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/6.2-rc3-ksmbd-server-fixes
+X-PR-Tracked-Commit-Id: 83dcedd5540d4ac61376ddff5362f7d9f866a6ec
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 40c18f363a0806d4f566e8a9a9bd2d7766a72cf5
+Message-Id: <167335059564.31233.54465897927371082.pr-tracker-bot@kernel.org>
+Date:   Tue, 10 Jan 2023 11:36:35 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 12:15:40PM +0100, Peter Zijlstra wrote:
-> 
-> With 'GNU assembler (GNU Binutils for Debian) 2.39.90.20221231' the
-> build now reports:
-> 
->   arch/x86/realmode/rm/../../boot/bioscall.S: Assembler messages:
->   arch/x86/realmode/rm/../../boot/bioscall.S:35: Warning: found `movsd'; assuming `movsl' was meant
->   arch/x86/realmode/rm/../../boot/bioscall.S:70: Warning: found `movsd'; assuming `movsl' was meant
-> 
->   arch/x86/boot/bioscall.S: Assembler messages:
->   arch/x86/boot/bioscall.S:35: Warning: found `movsd'; assuming `movsl' was meant
->   arch/x86/boot/bioscall.S:70: Warning: found `movsd'; assuming `movsl' was meant
-> 
-> Which is due to:
-> 
->   PR gas/29525
-> 
->   Note that with the dropped CMPSD and MOVSD Intel Syntax string insn
->   templates taking operands, mixed IsString/non-IsString template groups
->   (with memory operands) cannot occur anymore. With that
->   maybe_adjust_templates() becomes unnecessary (and is hence being
->   removed).
-> 
-> More details: https://sourceware.org/bugzilla/show_bug.cgi?id=29525
+The pull request you sent on Mon, 9 Jan 2023 21:13:09 -0600:
 
-Right, I'm being told the particular problem here is is that the 'd' suffix is
-"conflicting" in the sense that you can have SSE mnemonics like movsD %xmm...
-and the same thing also for string ops (which is the case here) so apparently
-the agreement in binutils land is to use the always accepted suffixes 'l' or 'q'
-and phase out 'd' slowly...
+> git://git.samba.org/ksmbd.git tags/6.2-rc3-ksmbd-server-fixes
 
-Which is basically what the PR text says above but more understanable. :-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/40c18f363a0806d4f566e8a9a9bd2d7766a72cf5
 
-Might wanna add that to the commit message.
-
-> Fixes: 7a734e7dd93b ("x86, setup: "glove box" BIOS calls -- infrastructure")
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/x86/boot/bioscall.S |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-
-In any case
-
-Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
-
-Thx.
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
