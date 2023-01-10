@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E7D66434C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3AB66434F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238514AbjAJOcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
+        id S238634AbjAJOcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238611AbjAJOcH (ORCPT
+        with ESMTP id S238686AbjAJOcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:32:07 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2069.outbound.protection.outlook.com [40.107.96.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C59C37277
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:31:58 -0800 (PST)
+        Tue, 10 Jan 2023 09:32:18 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2059.outbound.protection.outlook.com [40.107.220.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000C6DFF7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:32:17 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q/JmObhkl9+jyLJKujnwUdf3A3DrtJxXhgRyq1FwgDGFiLf95IqYUwbxpuC/YJs3o6umki19gr6nzTg0GpPYVF3E94QXZoEHbP+gI2ormeEpIyRlAApTm1dbMcCss9EqCq0YuQoXBz6B3mtVA0k+9K7s98BtiD1rY5cgH32PHvCdvBZErnYSzP0L9LI/lkPenFG7Tn/NWpDULI6lgPQ/cRZwMzo+kHPVCMPau+YztjbcVjRIKzqRfrIAzrupS0MHKj4NqKN7D8HVM5NtqfClP3TvmU4diJhktIwedcl9002Ygw9jNE1S2QkZXKp5niVjfgCHPAuBhlfEWiC7nzzNTg==
+ b=bjFOBr/CrC/3iXjeKExbK4XJg5iC/fGJqcwq2OtholnDYIlQGgs5DlFR5pL6xYesMGLcvANpHbalqa+UN168YES0nfqFo5Do711QRJbIe93nvlsfXWrG+udurZPu89reuSOxqLOMfLHRf5XVb6InnrO/qoOJbX0RmjBgBuaujoRcIW/IRgTUnS2GEmOnWMgOfcqrwg/UujhbhomZ17VLSLy7DWtOarY1Ce6e1YHeSUvzzM3kjtufPcxa7FX+TJzk2Yn6wmRCIotEbpl14Qaop3n0Xc4+Us4ddyjRpASy9bzkwtYxSXHWYWoVsFld+rC2uaeuc8CpnB4m9l9nNyu2LA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rM/7rBbvFmTloP90cbfDESDHZVvtwEhdd3UXHRXpRbE=;
- b=jI5e35NZ/fbexZlrinfXUBFP5B28Kd81ND16CWii1ZrG18L/G2oJM2tdNXwapU3Qhw5TykgIiW95AjJmznHrukhXZ5MyLJm/o51v48vLY435p7n0/T12IxmemgZXk0kt2ulT2tSPRyM7YHbTe2Me2tcPJztgVRyivuBA6wxZHWujfgyqw1Ouni9FgTT25oV+6MqfCOSFEfm/uaDNeHGwR8u712v/G8/al4keF/gigJxFGQ3kOHVIHEVeV99jom9VBPDv13ActRH01Asjo65MP7VOIYCueehzvpQ3FjNNSKJCX6iPDgaT3/L1Euy9JmhIZUwoAnBo66CX03fpjNIkiQ==
+ bh=fjUmZ8NdtlWmtG6YX+A6YHtPFOZFATTgkzAlw3oUF1k=;
+ b=BSXq0Ub18jctUcaomiZOPEJuaTOG6yVrEf2p1uwSin9YznzF1i1bZmLblO/paub++HyBtYYdty89enU1g3td92DhlOc3NkYu/BH+GZhYx9VRdz9EtoDTEwz3BwhkpFRcB8nmviQnqpfX2qhqOmsjWpWwNx6Ns/4K4u3wNrWPQp3mvZByX2gvZn3SzPCSJ/8kDSOt5GRW0IkgNN3qQc1WqkYAihbntxNHVM/X/10HuC2gTWHPYqppOtGm5yvTuGGNDoafHEPSxmWynICifdbkADcvcg/B2vylwJe2PHoJf4HYsfrYgRTBRW5Fhg/xIT1L0lu7FOIPfVwQNgVLd6RzUQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rM/7rBbvFmTloP90cbfDESDHZVvtwEhdd3UXHRXpRbE=;
- b=YkaCjFPQJ9az6l+X5e2x+4Qk/WbImO2bR9CW26Vn454eRC04LOvx3cYnqm0gpiK1qb16SX1YQEi3nwZTlCiokfGkP5b9IP8WUmVS3JJy43aRrbT2XRw7ofzSECXFqJlkuExycRn9Y2YXzF6IszvAur8ngNNivz9ZPm6itVVAn90=
-Received: from BL1PR13CA0262.namprd13.prod.outlook.com (2603:10b6:208:2ba::27)
- by PH7PR12MB7892.namprd12.prod.outlook.com (2603:10b6:510:27e::19) with
+ bh=fjUmZ8NdtlWmtG6YX+A6YHtPFOZFATTgkzAlw3oUF1k=;
+ b=SlzmlgduzTZlxki7/KkCAVOTZlzAtVzSgrYsGFDorPxILs23qpt7OWeBAhkUDtLo8NZRkpE42SFMiEywMWfYycTAyI/8DB37oqHh53w9F67cenVaeW+G8UW2GAwwCTMEoW0irioCsBELmoeCGk00hC/2b+mgtYnaO4VDw3NwZfs=
+Received: from BN9PR03CA0552.namprd03.prod.outlook.com (2603:10b6:408:138::17)
+ by IA1PR12MB6601.namprd12.prod.outlook.com (2603:10b6:208:3a3::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 14:31:56 +0000
-Received: from BL02EPF0000C402.namprd05.prod.outlook.com
- (2603:10b6:208:2ba:cafe::e7) by BL1PR13CA0262.outlook.office365.com
- (2603:10b6:208:2ba::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.6 via Frontend
- Transport; Tue, 10 Jan 2023 14:31:56 +0000
+ 2023 14:32:16 +0000
+Received: from BL02EPF0000C408.namprd05.prod.outlook.com
+ (2603:10b6:408:138:cafe::a3) by BN9PR03CA0552.outlook.office365.com
+ (2603:10b6:408:138::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.15 via Frontend
+ Transport; Tue, 10 Jan 2023 14:32:15 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,9 +47,9 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0000C402.mail.protection.outlook.com (10.167.241.4) with Microsoft
+ BL02EPF0000C408.mail.protection.outlook.com (10.167.241.10) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.11 via Frontend Transport; Tue, 10 Jan 2023 14:31:56 +0000
+ 15.20.6002.11 via Frontend Transport; Tue, 10 Jan 2023 14:32:15 +0000
 Received: from sp5-759chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 10 Jan
@@ -60,9 +60,9 @@ CC:     <joro@8bytes.org>, <robin.murphy@arm.com>, <ashish.kalra@amd.com>,
         <thomas.lendacky@amd.com>, <vasant.hegde@amd.com>,
         <jon.grimm@amd.com>,
         Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: [PATCH 1/4] iommu/amd: Introduce Protection-domain flag VFIO
-Date:   Tue, 10 Jan 2023 08:31:34 -0600
-Message-ID: <20230110143137.54517-2-suravee.suthikulpanit@amd.com>
+Subject: [PATCH 2/4] iommu/amd: Introduce structure amd_iommu_svm_ops.is_snp_guest()
+Date:   Tue, 10 Jan 2023 08:31:35 -0600
+Message-ID: <20230110143137.54517-3-suravee.suthikulpanit@amd.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230110143137.54517-1-suravee.suthikulpanit@amd.com>
 References: <20230110143137.54517-1-suravee.suthikulpanit@amd.com>
@@ -74,23 +74,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000C402:EE_|PH7PR12MB7892:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6dabf742-5c42-48e0-db5f-08daf3176cf5
+X-MS-TrafficTypeDiagnostic: BL02EPF0000C408:EE_|IA1PR12MB6601:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28d072e2-52e0-4af3-adf7-08daf317787e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: co8R8f9Oktuh1gclZtNKRE7ZNXRbHfPr1Z37K1wys51wAdVc+8NxhEsO6r9/hBaB7sD9nkD6+fKEXImu4ZPE+yc7O5olhEOpBdd0gELjcvjHJDCOm1K8J4AgYkwxlY4rFODY4Bl8SZe5u4Pg01BovutQWdmb/bpx4shM0piolyD6rcw6fJHSbkacnk+HZnrKh+/2KcPMQFFTCYe8RNeECB82qI/SqVrSHLgRHK5jkihf2EFN76YMl5MSA15UVScZ4/iGhmNgvAI4xD7+FkmbTI4LAsNnOQZSWUiTIR0omvmwR+cFGFWLzP6LLyEnmVSpj7oBOOGk8WnGmCFg4ilH4w282E48sjD1Inevjwovw1whJyxN/c1AbCFkmtRQX0v1cfRiZK+K811vFe+Ej1J3FbV1reMlZaEvqYLz19mWONXzaElHUGvPkFsjQaK+dmgSPzw0Qx92J9yPDcv/arTOw9WIyTqSvOhwLKqovtgq3cpjq3gU63p5vm1Pth/neUFZ0YG/poyoT21jxqq6xvB5El81lXCQerWjzq/XGlcwj7Ndf4OkmgWLDriO4pDgxc25UESy3/zPpqn2UEflLbtNQi4B7/zUbU6sbzTSKRtDLQKafHmfbjvWFkOy2EbBa6ZTri55qF5sVx9U1pj6e4ZeYSNC3JTric/C9aOaH+8Wug5NPvOEIdFSbm71C043bpZCX7A1LF9fV756OtHZ3t0VLgVsbAgVNp+pJ4znfxHEERE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(396003)(376002)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(36756003)(316002)(54906003)(40460700003)(186003)(2906002)(110136005)(82740400003)(478600001)(356005)(81166007)(86362001)(36860700001)(44832011)(40480700001)(16526019)(2616005)(26005)(6666004)(83380400001)(70586007)(5660300002)(7696005)(41300700001)(336012)(1076003)(8676002)(426003)(8936002)(47076005)(4326008)(70206006)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: mkWHGL76rdfUP0fA6okYx/6FuaKVHEkFSH3YB5BHi0kt8+nXWITQ4hAV4c5oXnn4vJQ9kCSEp2j5KH1H03ajg3qEFt+GfxRVXgN4OLnA4ZB7KVjs2TnI+IzTfmtRmwsdTyTC0bOnNoxzfuXtnK8uJfL8GM8D5aDM+PDi/ciYUdmuoSoFOWJ9sEXtouVX/MXms0GOIxPPqG5OEQwUiM362yOkxGwPPOEoPmRcW28e9ir3cmSt38FUYqvIfVyynlpKyFzCS6cZM9QQSU6icBBxI/1mbh4SMOAEiC2S5Oq5z0r+msbJkYmxwTbsvXUXMrrD68XOo3lbpCidDGo2LLWwi2BQo6ptewkg1wa5EDNN8PRmX8stdXKwLWKAvPdRBqvOKdLl+HQMcs66jSm0ZQ1C8biYpO2m7HRD+SVSR5bFS0SfwlJOajXNuoEIV9en3D5aV52yt/B6obT14rzQ/jg2ELIYLwaKJdjCWIJeEgQ0TuUsdKiBpdcYgYyoOrY2N9ciNlOfN0BN544rE9tOVoDtAnbNU1XI1y4NCd9KwWMVmnDcOWtb2LvDKLlyndQazJNbejqFbnaWcLQXVl6lm+3Tzyc+DAXt5pcSyse14wqAEOyvuTdPpteuWA8Ydnngou1/EVEp/IjTS5j4tL7MBzUnJVBYT50N8jpl5ZBeX9MKbWZhQXySQZefs1bnGuIilOzJBfi4DgoQFXoE+FoRHU+qNIJ0FWjStpNdNoxT+v24CpA=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(39860400002)(346002)(136003)(451199015)(46966006)(40470700004)(36840700001)(82740400003)(356005)(81166007)(8676002)(54906003)(86362001)(70206006)(4326008)(83380400001)(70586007)(40460700003)(110136005)(41300700001)(426003)(5660300002)(2906002)(44832011)(316002)(8936002)(2616005)(1076003)(82310400005)(40480700001)(336012)(16526019)(186003)(26005)(47076005)(6666004)(7696005)(36860700001)(478600001)(36756003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 14:31:56.3726
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 14:32:15.7243
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6dabf742-5c42-48e0-db5f-08daf3176cf5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28d072e2-52e0-4af3-adf7-08daf317787e
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C402.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C408.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7892
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6601
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -101,70 +101,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, to detect if a domain is enabled with VFIO support, the driver
-checks if the domain has devices attached and check if the domain type is
-IOMMU_DOMAIN_UNMANAGED.
+The structure can be used to provide call-back functions, which
+are called by the AMD IOMMU driver when it needs to handle certain
+operations.
 
-To be more explicit, introduce protection-domain flag PD_VFIO_MASK
-to signify an VFIO-enabled  domain is enabled with VFIO support.
+SVM driver can define handler for each operation in the struct
+amd_iommu_svm_ops and register the structure using the
+amd_iommu_register_svm_ops() function.
+
+Initially, it contains a function pointer is_snp_guest(), which
+is used to check whether SNP is active for a KVM guest.
 
 Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 ---
- drivers/iommu/amd/amd_iommu_types.h | 1 +
- drivers/iommu/amd/iommu.c           | 7 +++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ drivers/iommu/amd/iommu.c | 10 ++++++++++
+ include/linux/amd-iommu.h |  6 ++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
-index 1d0a70c85333..ad124959a26a 100644
---- a/drivers/iommu/amd/amd_iommu_types.h
-+++ b/drivers/iommu/amd/amd_iommu_types.h
-@@ -439,6 +439,7 @@
- 					      translation */
- #define PD_IOMMUV2_MASK		(1UL << 3) /* domain has gcr3 table */
- #define PD_GIOV_MASK		(1UL << 4) /* domain enable GIOV support */
-+#define PD_VFIO_MASK		(1UL << 5) /* domain enable VFIO support */
- 
- extern bool amd_iommu_dump;
- #define DUMP_printk(format, arg...)				\
 diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 3847f3bdc568..681ab1fdb7d5 100644
+index 681ab1fdb7d5..a03723930f70 100644
 --- a/drivers/iommu/amd/iommu.c
 +++ b/drivers/iommu/amd/iommu.c
-@@ -2056,6 +2056,8 @@ static struct protection_domain *protection_domain_alloc(unsigned int type)
- 		mode = PAGE_MODE_NONE;
- 	} else if (type == IOMMU_DOMAIN_UNMANAGED) {
- 		pgtable = AMD_IOMMU_V1;
-+		/* Mark unmanaged domain for VFIO */
-+		domain->flags |= PD_VFIO_MASK;
+@@ -754,6 +754,16 @@ static void iommu_poll_ppr_log(struct amd_iommu *iommu)
  	}
+ }
  
- 	switch (pgtable) {
-@@ -2130,6 +2132,7 @@ static void amd_iommu_detach_device(struct iommu_domain *dom,
- 				    struct device *dev)
- {
- 	struct iommu_dev_data *dev_data = dev_iommu_priv_get(dev);
-+	struct protection_domain *domain = to_pdomain(dom);
- 	struct amd_iommu *iommu;
- 
- 	if (!check_device(dev))
-@@ -2144,7 +2147,7 @@ static void amd_iommu_detach_device(struct iommu_domain *dom,
- 
++static const struct amd_iommu_svm_ops *amd_iommu_svm_ops;
++
++int amd_iommu_register_svm_ops(const struct amd_iommu_svm_ops *ops)
++{
++	amd_iommu_svm_ops = ops;
++
++	return 0;
++}
++EXPORT_SYMBOL(amd_iommu_register_svm_ops);
++
  #ifdef CONFIG_IRQ_REMAP
- 	if (AMD_IOMMU_GUEST_IR_VAPIC(amd_iommu_guest_ir) &&
--	    (dom->type == IOMMU_DOMAIN_UNMANAGED))
-+	    (domain->flags & PD_VFIO_MASK))
- 		dev_data->use_vapic = 0;
- #endif
+ static int (*iommu_ga_log_notifier)(u32);
  
-@@ -2176,7 +2179,7 @@ static int amd_iommu_attach_device(struct iommu_domain *dom,
+diff --git a/include/linux/amd-iommu.h b/include/linux/amd-iommu.h
+index 953e6f12fa1c..d4837af75550 100644
+--- a/include/linux/amd-iommu.h
++++ b/include/linux/amd-iommu.h
+@@ -11,6 +11,7 @@
+ #include <linux/types.h>
  
- #ifdef CONFIG_IRQ_REMAP
- 	if (AMD_IOMMU_GUEST_IR_VAPIC(amd_iommu_guest_ir)) {
--		if (dom->type == IOMMU_DOMAIN_UNMANAGED)
-+		if (domain->flags & PD_VFIO_MASK)
- 			dev_data->use_vapic = 1;
- 		else
- 			dev_data->use_vapic = 0;
+ struct amd_iommu;
++struct kvm;
+ 
+ /*
+  * This is mainly used to communicate information back-and-forth
+@@ -26,6 +27,10 @@ struct amd_iommu_pi_data {
+ 	void *ir_data;
+ };
+ 
++struct amd_iommu_svm_ops {
++	bool (*is_snp_guest)(struct kvm *kvm);
++};
++
+ #ifdef CONFIG_AMD_IOMMU
+ 
+ struct task_struct;
+@@ -205,6 +210,7 @@ int amd_iommu_pc_set_reg(struct amd_iommu *iommu, u8 bank, u8 cntr, u8 fxn,
+ int amd_iommu_pc_get_reg(struct amd_iommu *iommu, u8 bank, u8 cntr, u8 fxn,
+ 		u64 *value);
+ struct amd_iommu *get_amd_iommu(unsigned int idx);
++int amd_iommu_register_svm_ops(const struct amd_iommu_svm_ops *ops);
+ 
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ int amd_iommu_snp_enable(void);
 -- 
 2.32.0
 
