@@ -2,215 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067A3663A8C
+	by mail.lfdr.de (Postfix) with ESMTP id 52526663A8D
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237639AbjAJIIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:08:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
+        id S237762AbjAJIIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjAJIHj (ORCPT
+        with ESMTP id S230304AbjAJIHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:07:39 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017E3140B6;
-        Tue, 10 Jan 2023 00:07:37 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E6D8C100002;
-        Tue, 10 Jan 2023 08:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673338056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 10 Jan 2023 03:07:41 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7803130566
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:07:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A68AB4D6EE;
+        Tue, 10 Jan 2023 08:07:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673338056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ZgsA3blZRkDhqGMnNA0R6u5EyqOGZtYvAT+Wv5NomZg=;
-        b=Ys6OT1+2bp2JYHo9mPYmhymzvJZTYOD3fMVHRIhU3ImPlylTaTP7MZa3uFgOrz/CvgzjQ/
-        1770lhQoUVCHCn6xm1iLySNLgGab8ZMbMBPrT0Tf7XEAWvlCyjIs7qirDks6ATZh0a9YW+
-        SnMEN1s7lQrmNRTdKOhgPXLHBVDJRmy/u5Ckqs0h+snkD02n7c/E/4kW86C7QvebMmpVRJ
-        flMpdVvpFa9DDU074ocMpMNQ8oL1KzCJCLr9FgSCoSe0oflZ0zwZ7U+NvwaPZnxhccaYnd
-        my4L007gwd/5XXRVFJlvE483mkgyDZofuuUDwZGPggBYVPuPUXQ7PzpEhXpK8w==
-Date:   Tue, 10 Jan 2023 09:07:28 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 08/10] dt-bindings: sound: Add support for QMC audio
-Message-ID: <20230110090728.2024b5eb@bootlin.com>
-In-Reply-To: <c393e532-d466-366b-a390-65de47c58b6a@linaro.org>
-References: <20230106163746.439717-1-herve.codina@bootlin.com>
- <20230106163746.439717-9-herve.codina@bootlin.com>
- <c393e532-d466-366b-a390-65de47c58b6a@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        bh=xohioAh1kapJutPJWQnyJIvtrut+K4fCdUNvyrvvEps=;
+        b=F/1x9PdCXjPQpN04iGPzwZgJ9ewZMUL6Am2p+uO7S6oRkx1yxxHLC2OkN2nirzqHxJ/eiO
+        lkmdc9OI/RFJP8wF1UH6d3f1vS4dNjAaB2KDnNinVFybpOkVE9FUHcIiTtwx/x5UwgvwJP
+        3X8qReklSQNoZijRLpF81364vnxmPVA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 374CE1358A;
+        Tue, 10 Jan 2023 08:07:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LNETDMgcvWNKBgAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 10 Jan 2023 08:07:36 +0000
+Message-ID: <8a2abe27-361a-aab1-60fe-00a3cc8684ff@suse.com>
+Date:   Tue, 10 Jan 2023 09:07:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] xen: make remove callback of xen driver void returned
+Content-Language: en-US
+To:     Dawei Li <set_pte_at@outlook.com>, sstabellini@kernel.org,
+        oleksandr_tyshchenko@epam.com
+Cc:     roger.pau@citrix.com, peterhuewe@gmx.de,
+        oleksandr_andrushchenko@epam.com, airlied@gmail.com,
+        dmitry.torokhov@gmail.com, wei.liu@kernel.org, bhelgaas@google.com,
+        jejb@linux.ibm.com, gregkh@linuxfoundation.org, ericvh@gmail.com,
+        tiwai@suse.com, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org
+References: <TYCP286MB23238119AB4DF190997075C9CAE39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <TYCP286MB23238119AB4DF190997075C9CAE39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------0lgsG4DjM2bogqj9tDjcsDeD"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------0lgsG4DjM2bogqj9tDjcsDeD
+Content-Type: multipart/mixed; boundary="------------r84Y64pzyXf8LsYbXQjpT04r";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Dawei Li <set_pte_at@outlook.com>, sstabellini@kernel.org,
+ oleksandr_tyshchenko@epam.com
+Cc: roger.pau@citrix.com, peterhuewe@gmx.de,
+ oleksandr_andrushchenko@epam.com, airlied@gmail.com,
+ dmitry.torokhov@gmail.com, wei.liu@kernel.org, bhelgaas@google.com,
+ jejb@linux.ibm.com, gregkh@linuxfoundation.org, ericvh@gmail.com,
+ tiwai@suse.com, xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Message-ID: <8a2abe27-361a-aab1-60fe-00a3cc8684ff@suse.com>
+Subject: Re: [PATCH v2] xen: make remove callback of xen driver void returned
+References: <TYCP286MB23238119AB4DF190997075C9CAE39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <TYCP286MB23238119AB4DF190997075C9CAE39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 
-On Sun, 8 Jan 2023 16:16:24 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+--------------r84Y64pzyXf8LsYbXQjpT04r
+Content-Type: multipart/mixed; boundary="------------BJxvnO001IhyRZyK5BKNLhzp"
 
-> On 06/01/2023 17:37, Herve Codina wrote:
-> > The QMC (QUICC mutichannel controller) is a controller
-> > present in some PowerQUICC SoC such as MPC885.
-> > The QMC audio is an ASoC component that uses the QMC
-> > controller to transfer the audio data.
-> >=20
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  .../bindings/sound/fsl,qmc-audio.yaml         | 110 ++++++++++++++++++
-> >  1 file changed, 110 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/sound/fsl,qmc-aud=
-io.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml=
- b/Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
-> > new file mode 100644
-> > index 000000000000..b3774be36c19
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
-> > @@ -0,0 +1,110 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/sound/fsl,qmc-audio.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: QMC audio
-> > +
-> > +maintainers:
-> > +  - Herve Codina <herve.codina@bootlin.com>
-> > +
-> > +description: |
-> > +  The QMC audio is an ASoC component which uses QMC (QUICC Multichannel
-> > +  Controller) channels to transfer the audio data.
-> > +  It provides as many DAI as the number of QMC channel used.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items: =20
->=20
-> Drop items.
+--------------BJxvnO001IhyRZyK5BKNLhzp
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Will be dropped.
+T24gMTMuMTIuMjIgMTY6NDYsIERhd2VpIExpIHdyb3RlOg0KPiBTaW5jZSBjb21taXQgZmM3
+YTYyMDlkNTcxICgiYnVzOiBNYWtlIHJlbW92ZSBjYWxsYmFjayByZXR1cm4gdm9pZCIpDQo+
+IGZvcmNlcyBidXNfdHlwZTo6cmVtb3ZlIGJlIHZvaWQtcmV0dXJuZWQsIGl0IGRvZXNuJ3Qg
+bWFrZSBtdWNoIHNlbnNlIGZvcg0KPiBhbnkgYnVzIGJhc2VkIGRyaXZlciBpbXBsZW1lbnRp
+bmcgcmVtb3ZlIGNhbGxiYWxrIHRvIHJldHVybiBub24tdm9pZCB0bw0KPiBpdHMgY2FsbGVy
+Lg0KPiANCj4gVGhpcyBjaGFuZ2UgaXMgZm9yIHhlbiBidXMgYmFzZWQgZHJpdmVycy4NCj4g
+DQo+IEFja2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+IFNpZ25l
+ZC1vZmYtYnk6IERhd2VpIExpIDxzZXRfcHRlX2F0QG91dGxvb2suY29tPg0KDQpQdXNoZWQg
+dG8geGVuL3RpcC5naXQgZm9yLWxpbnVzLTYuMg0KDQoNCkp1ZXJnZW4NCg0K
+--------------BJxvnO001IhyRZyK5BKNLhzp
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
->=20
-> > +      - const: fsl,qmc-audio
-> > +
-> > +  '#address-cells':
-> > +    const: 1
-> > +  '#size-cells':
-> > +    const: 0
-> > +  '#sound-dai-cells':
-> > +    const: 1
-> > +
-> > +patternProperties:
-> > +  "^dai@([0-9]|[1-5][0-9]|6[0-3])$":
-> > +    description:
-> > +      A DAI managed by this controller
-> > +    type: object
-> > +
-> > +    properties:
-> > +      reg:
-> > +        minimum: 0
-> > +        maximum: 63
-> > +        description:
-> > +          The DAI number
-> > +
-> > +      qmc-chan: =20
->=20
-> Missing vendor prefix.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-Will be changed to 'fsl,qmc-chan'
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
->=20
-> > +        $ref: /schemas/types.yaml#/definitions/phandle-array =20
->=20
-> Why this is not a phandle?
+--------------BJxvnO001IhyRZyK5BKNLhzp--
 
-I have try '$ref: /schemas/types.yaml#/definitions/phandle'
+--------------r84Y64pzyXf8LsYbXQjpT04r--
 
-I have an error from make dt_binding_check:=20
-  dai@16:fsl,qmc-chan:0: [4294967295, 16] is too long
+--------------0lgsG4DjM2bogqj9tDjcsDeD
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-I need a phandle with an argument ie <&qmc 16>.
-Is there an alternative to phandle-array to handle this case ?
+-----BEGIN PGP SIGNATURE-----
 
->=20
-> > +        description: phandle to the QMC channel> +        maxItems: 1
-> > +
-> > +    required:
-> > +      - reg
-> > +      - qmc-chan
-> > +
-> > +required:
-> > +  - compatible
-> > +  - '#address-cells'
-> > +  - '#size-cells'
-> > +  - '#sound-dai-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    qmc_audio: qmc_audio { =20
->=20
-> Same problem as in previous patch.
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmO9HMcFAwAAAAAACgkQsN6d1ii/Ey+f
+1wf+K+5GUrDsbaaoBFao/iA/yd9cCF6PTSRa8C28Z0Xu+s5K30n0thAK7JjyRMZJmzbemu4XZVA6
+OxCGIQdrkLTmgoGRTZjdYbFhz7C4ByTAEqkgk72umn3WZEqthOfZY1EE2Imd1beYJzeLfjM6U32h
+DuUK14cuf7PbMVfAxpMgPvk+awBFO7fjD5gdNRpAE/F1eseawanTnJSeD5AVm4MRJCwnQr9/8xWA
+M0lm0kk3xCfAu1tlqV2XXuAXF8pZCdXr6/heuDpg2UwwakevfI3rHCsGO85anJ1vWiWJR+5N3hrz
+8f7fsLu5VuBRJPVziQO8zwQUNBXYTCjlBj7/Ba8lJQ==
+=VY/4
+-----END PGP SIGNATURE-----
 
-Changed to 'audio-controller'.
-
->=20
-> > +        compatible =3D "fsl,qmc-audio";
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +        #sound-dai-cells =3D <1>;
-> > +        dai@16 {
-> > +            reg =3D <16>;
-> > +            qmc-chan =3D <&scc_qmc 16>;
-> > +        };
-> > +        dai@17 {
-> > +            reg =3D <17>;
-> > +            qmc-chan =3D <&scc_qmc 17>;
-> > +        };
-> > +    }; =20
->=20
-> Best regards,
-> Krzysztof
->=20
-
-Thanks for the review.
-
-Best regards,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--------------0lgsG4DjM2bogqj9tDjcsDeD--
