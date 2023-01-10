@@ -2,101 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF10663B92
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D74663B9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237985AbjAJIp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
+        id S238105AbjAJIqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237918AbjAJIpG (ORCPT
+        with ESMTP id S238064AbjAJIqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:45:06 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9F01A065
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:45:05 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id co23so10938136wrb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:45:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3nhalakForWLq/BpHz4s5xQNDs64Epq6wJvSqVishPM=;
-        b=uALzNialZgr8wwwci5b4iFEDY3qvdfFZaiMcOqwbtJlbsZAbvKl73tT0WSmmrnpCYw
-         2VmlXimyUZMpg5LSlN5CadKHjNCSrYUvuipdJS/M6QQHEsYHDFAVwBFwDIwNMTnekv2O
-         L8FHDJBtHzOSk2o96VGTpYroLdFENaYwZ94M9KHisZkLlZU7iowpbF9Ex4crJFtt+7KB
-         CN9niLyTHQhXgObh0khQdnnb+QUOwdyvA0EUBjb/091q8T9qcc6EbR8hKpMTpdTZNqq2
-         ra1+musbKmt2DQxT3iRP7gVyW3tUPdfxlFuu11eLXkDGHyAxh3W76CIkZ+CNsf49thy7
-         TOrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3nhalakForWLq/BpHz4s5xQNDs64Epq6wJvSqVishPM=;
-        b=pZFEW75vS77JupEf89PTx9Sp0Q28qfJJ9CRIB/aFxPS6tymW4HCWFbPsWSLFavsqfp
-         3esTVtS0XFZlpGU3xbJ0zAc8DgKn6rRKuHPCKv+LrE1kXBdyFDz0ZA/YxvkeRoSFltqt
-         IcMJn8T5qa3RvD8EUVDeuFaoruwNR8LpnxpYa1oqMFYPg9PUvghpcNvW53LCm2P8BEQI
-         pepmCHOgRO/CLJgpqw6y4vGZzgLAC3QWLgFEAQsYf6rDAMU22e8A3T7NExJDsJWfHFGd
-         nCPuSRcKq0/SM3jPcJVKO6aS0N8jrF8B2xXDoohz2ASnzXetgwbnR7ukIwWQK0R1u8Ac
-         BZlw==
-X-Gm-Message-State: AFqh2kooXXwkY1+LpK/zWopV8W4td+b6wGvcjLai93LU+PAU577/pC1o
-        XeRcp4X1CQKBJoULOPVzHDptJw==
-X-Google-Smtp-Source: AMrXdXulnkGqYk+DJ+tLAOVP3aPTbM+3YrOEXeaSdxC8EXrMCyDK3H0xlqDMHPCf0sA7EDuEPNGceg==
-X-Received: by 2002:a5d:56c1:0:b0:288:d139:3690 with SMTP id m1-20020a5d56c1000000b00288d1393690mr28887704wrw.67.1673340304041;
-        Tue, 10 Jan 2023 00:45:04 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q14-20020adff94e000000b002b065272da2sm10478381wrr.13.2023.01.10.00.45.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 00:45:03 -0800 (PST)
-Message-ID: <cf65926c-d2c1-f1bc-6e27-f07611a5cce8@linaro.org>
-Date:   Tue, 10 Jan 2023 09:45:01 +0100
+        Tue, 10 Jan 2023 03:46:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E6C726F5;
+        Tue, 10 Jan 2023 00:46:11 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA62FAD7;
+        Tue, 10 Jan 2023 00:46:52 -0800 (PST)
+Received: from [10.162.42.6] (unknown [10.162.42.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B47043F587;
+        Tue, 10 Jan 2023 00:46:04 -0800 (PST)
+Message-ID: <c6b506d6-0dc8-8cc6-7260-804e341e5103@arm.com>
+Date:   Tue, 10 Jan 2023 14:16:01 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] ASoC: dt-bindings: simple-card: Document
- simple-audio-card,plat
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 5/8] perf: arm_spe: Use new PMSIDR_EL1 register enums
 Content-Language: en-US
-To:     Mohammad Faiz Abbas Rizvi <faiz.abbas@arm.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        alsa-devel@alsa-project.org, broonie@kernel.org,
-        lgirdwood@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        kuninori.morimoto.gx@renesas.com, Anurag.Koul@arm.com,
-        Deepak.Pandey@arm.com
-References: <20230105160346.29018-1-faiz.abbas@arm.com>
- <20230108163741.GA30997-robh@kernel.org>
- <f0ad7a4e-a8af-77d4-09e4-3717041677e7@arm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f0ad7a4e-a8af-77d4-09e4-3717041677e7@arm.com>
+To:     Rob Herring <robh@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        James Clark <james.clark@arm.com>
+References: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
+ <20220825-arm-spe-v8-7-v4-5-327f860daf28@kernel.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220825-arm-spe-v8-7-v4-5-327f860daf28@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 09:23, Mohammad Faiz Abbas Rizvi wrote:
-> Hi Rob,
 
-(...)
 
+On 1/10/23 00:56, Rob Herring wrote:
+> Now that the SPE register definitions include enums for some PMSIDR_EL1
+> fields, use them in the driver in place of magic values.
 > 
-> Thanks,
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+
+> ---
+> v4:
+>  - Rebase on v6.2-rc1
+> v3: New patch
+> ---
+>  drivers/perf/arm_spe_pmu.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 > 
-> Faiz
+> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+> index 9b4bd72087ea..af6d3867c3e7 100644
+> --- a/drivers/perf/arm_spe_pmu.c
+> +++ b/drivers/perf/arm_spe_pmu.c
+> @@ -1006,32 +1006,32 @@ static void __arm_spe_pmu_dev_probe(void *info)
+>  	/* This field has a spaced out encoding, so just use a look-up */
+>  	fld = FIELD_GET(PMSIDR_EL1_INTERVAL, reg);
+>  	switch (fld) {
+> -	case 0:
+> +	case PMSIDR_EL1_INTERVAL_256:
+>  		spe_pmu->min_period = 256;
+>  		break;
+> -	case 2:
+> +	case PMSIDR_EL1_INTERVAL_512:
+>  		spe_pmu->min_period = 512;
+>  		break;
+> -	case 3:
+> +	case PMSIDR_EL1_INTERVAL_768:
+>  		spe_pmu->min_period = 768;
+>  		break;
+> -	case 4:
+> +	case PMSIDR_EL1_INTERVAL_1024:
+>  		spe_pmu->min_period = 1024;
+>  		break;
+> -	case 5:
+> +	case PMSIDR_EL1_INTERVAL_1536:
+>  		spe_pmu->min_period = 1536;
+>  		break;
+> -	case 6:
+> +	case PMSIDR_EL1_INTERVAL_2048:
+>  		spe_pmu->min_period = 2048;
+>  		break;
+> -	case 7:
+> +	case PMSIDR_EL1_INTERVAL_3072:
+>  		spe_pmu->min_period = 3072;
+>  		break;
+>  	default:
+>  		dev_warn(dev, "unknown PMSIDR_EL1.Interval [%d]; assuming 8\n",
+>  			 fld);
+>  		fallthrough;
+> -	case 8:
+> +	case PMSIDR_EL1_INTERVAL_4096:
+>  		spe_pmu->min_period = 4096;
+>  	}
+>  
+> @@ -1050,10 +1050,10 @@ static void __arm_spe_pmu_dev_probe(void *info)
+>  		dev_warn(dev, "unknown PMSIDR_EL1.CountSize [%d]; assuming 2\n",
+>  			 fld);
+>  		fallthrough;
+> -	case 2:
+> +	case PMSIDR_EL1_COUNTSIZE_12_BIT_SAT:
+>  		spe_pmu->counter_sz = 12;
+>  		break;
+> -	case 3:
+> +	case PMSIDR_EL1_COUNTSIZE_16_BIT_SAT:
+>  		spe_pmu->counter_sz = 16;
+>  	}
+>  
 > 
-> IMPORTANT NOTICE: The contents of this email and any attachments are confidential and may also be privileged. If you are not the intended recipient, please notify the sender immediately and do not disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you.
-
-Please fix your mail setup. We cannot work in upstream/LKML with
-confidential emails. Since I was not a intended recipient (I don't know
-who is), then I should start removing your emails?
-
-Best regards,
-Krzysztof
-
