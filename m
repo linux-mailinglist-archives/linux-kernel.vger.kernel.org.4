@@ -2,265 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50CA664113
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 732F2664116
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbjAJNBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S232715AbjAJNCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231727AbjAJNBl (ORCPT
+        with ESMTP id S233452AbjAJNCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:01:41 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F3543A02;
-        Tue, 10 Jan 2023 05:01:39 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NrrRh3gWzzqTsX;
-        Tue, 10 Jan 2023 20:56:48 +0800 (CST)
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 10 Jan 2023 21:01:33 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, <bpf@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v3] kallsyms: Remove the performance test from kallsyms_selftest.c
-Date:   Tue, 10 Jan 2023 21:01:21 +0800
-Message-ID: <20230110130121.1279-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
+        Tue, 10 Jan 2023 08:02:08 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF584517FD
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:02:06 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id bs20so11656999wrb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:02:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bXYjCeQ9QtsFL8nXtTdmpHyzQI1y6u5sI6jbDwGL5SM=;
+        b=R1uVAm7JLu/x7Lcqhyz1YRS0ajuGV+VRK6KwnsG6kAlPe769mSDTbTeD2u9Ej0Gwz/
+         y0GdsZqdcqu/D/o38hLxTZjmvQ2WA5PeK3M0gqoEN4RhHU6IPVphbDXuroDxP768adbI
+         wfN8JY7SgaBJAqEwF7k7qNw2LARDOPORXIts9AYzGsj28IhsQ8uoKMYo6/KSCQk0lYMr
+         kTguF3dXyIqd14IU8qg5iaUV6+AipPgVUPDqyluJtIWeNbsDcg7vIVNKHPkPzH8IuaKy
+         I6uoAnibychZmN+VHdCYei2UQzkJdAOuv+DltFdeXXxLk16OaMfnyNy4p+gkvR4V8tYd
+         rFDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bXYjCeQ9QtsFL8nXtTdmpHyzQI1y6u5sI6jbDwGL5SM=;
+        b=TExuGQIhk9rfcoGFWP+YyqJl/5DtUaSq3i2wXDpA4waNijcnvCtWIN/Tt2nljZNeSe
+         dXS79is+fojxjuZCw2LClmqSN6vdhC+YORbe5XK8NUUH6AYqoC5P0lwrPD1Ku7z+J59w
+         BRrUEVNYOgyH7GhZdx/+TgXgRrVUfH4+rc/MNJmdRyzMo0qi3w8ZymgcvsAQV5IQu744
+         /o3IJ1STWOkVy/qLgX6hIFJgLnju9mRLH4ryuulArukv9XGZSmWuR4Krt2B/cAF2zj1F
+         uQMJPaqNqxbbloVExz+T+pmVjU0UuQGnwMZSF85igF8YQ0Jo7lpXR73UjhvFj6ogmlCI
+         58tg==
+X-Gm-Message-State: AFqh2kpZ0c0RbQVLEAYLtlkwzTZLkN4SyZF0F1SNI9FI/fjTjVJ+MgCT
+        YE+Mk9L0V49sRKzwJ4Y4PbfC4w==
+X-Google-Smtp-Source: AMrXdXtl75e7E+BZquNgpJ2OWcid0C63zHWVvYENd5qmfR3H73H+RWSvhij+LCTdGK5AYuCUMxeFyg==
+X-Received: by 2002:a05:6000:888:b0:2aa:438a:2165 with SMTP id ca8-20020a056000088800b002aa438a2165mr16521627wrb.24.1673355725298;
+        Tue, 10 Jan 2023 05:02:05 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm11078676wrx.21.2023.01.10.05.02.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 05:02:04 -0800 (PST)
+Message-ID: <b0189f64-59f1-6ba2-489c-383bd953cf2a@linaro.org>
+Date:   Tue, 10 Jan 2023 14:02:03 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 2/3] dt-bindings: m41t80: add xtal load capacitance
+Content-Language: en-US
+To:     Dennis Lambe Jr <dennis@sparkcharge.io>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Atsushi Nemoto <anemo@mba.ocn.ne.jp>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+References: <20230104052506.575619-1-dennis@sparkcharge.io>
+ <20230104052506.575619-3-dennis@sparkcharge.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230104052506.575619-3-dennis@sparkcharge.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[T58] BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
-[T58] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 58, name: kallsyms_test
-[T58] preempt_count: 0, expected: 0
-[T58] RCU nest depth: 0, expected: 0
-[T58] no locks held by kallsyms_test/58.
-[T58] irq event stamp: 18899904
-[T58] hardirqs last enabled at (18899903): finish_task_switch.isra.0 (core.c:?)
-[T58] hardirqs last disabled at (18899904): test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
-[T58] softirqs last enabled at (18899886): __do_softirq (??:?)
-[T58] softirqs last disabled at (18899879): ____do_softirq (irq.c:?)
-[T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G T  6.1.0-next-20221215 #2
-[T58] Hardware name: linux,dummy-virt (DT)
-[T58] Call trace:
-[T58] dump_backtrace (??:?)
-[T58] show_stack (??:?)
-[T58] dump_stack_lvl (??:?)
-[T58] dump_stack (??:?)
-[T58] __might_resched (??:?)
-[T58] kallsyms_on_each_symbol (??:?)
-[T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
-[T58] test_entry (kallsyms_selftest.c:?)
-[T58] kthread (kthread.c:?)
-[T58] ret_from_fork (??:?)
-[T58] kallsyms_selftest: kallsyms_on_each_symbol() traverse all: 5744310840 ns
-[T58] kallsyms_selftest: kallsyms_on_each_match_symbol() traverse all: 1164580 ns
-[T58] kallsyms_selftest: finish
+On 04/01/2023 06:25, Dennis Lambe Jr wrote:
+> The ST m41t82 and m41t83 support programmable load capacitance from 3.5
+> pF to 17.4 pF. The hardware defaults to 12.5 pF.
+> 
+> The accuracy of the xtal can be calibrated precisely by adjusting the
+> load capacitance.
+> 
+> Add default, minimum, and maximum for the standard rtc property
+> quartz-load-femtofarads on compatible devices.
+> 
+> Signed-off-by: Dennis Lambe Jr <dennis@sparkcharge.io>
+> ---
+> 
 
-Functions kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
-call the user-registered hook function for each symbol that meets the
-requirements. Because it is uncertain how long that hook function will
-execute, they call cond_resched() to avoid consuming CPU resources for a
-long time. Therefore, they cannot be called with irqs disabled.
 
-Given that people don't care about the performance of kallsyms, let's
-simply remove it.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Fixes: 30f3bb09778d ("kallsyms: Add self-test facility")
-Reported-by: Anders Roxell <anders.roxell@linaro.org>
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- kernel/kallsyms_selftest.c | 88 +-------------------------------------
- 1 file changed, 1 insertion(+), 87 deletions(-)
-
-v1 --> v2:
-1. Keep calling cond_resched() when CONFIG_KALLSYMS_SELFTEST=y. Instead,
-   function kallsyms_on_each_match_symbol() and kallsyms_on_each_symbol()
-   are not protected by local_irq_save() in kallsyms_selftest.c.
-
-v2 --> v3:
-1. Remove the performance test functions.
-
-[v2] https://lkml.org/lkml/2022/12/27/762
-
-diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
-index f35d9cc1aab1544..79c42d80b8f69a1 100644
---- a/kernel/kallsyms_selftest.c
-+++ b/kernel/kallsyms_selftest.c
-@@ -12,9 +12,9 @@
- #include <linux/init.h>
- #include <linux/module.h>
- #include <linux/kallsyms.h>
-+#include <linux/kthread.h>
- #include <linux/random.h>
- #include <linux/sched/clock.h>
--#include <linux/kthread.h>
- #include <linux/vmalloc.h>
- 
- #include "kallsyms_internal.h"
-@@ -93,7 +93,6 @@ static struct test_item test_items[] = {
- #endif
- };
- 
--static char stub_name[KSYM_NAME_LEN];
- 
- static int stat_symbol_len(void *data, const char *name, struct module *mod, unsigned long addr)
- {
-@@ -109,16 +108,6 @@ static void test_kallsyms_compression_ratio(void)
- 
- 	kallsyms_on_each_symbol(stat_symbol_len, &total_len);
- 
--	/*
--	 * A symbol name cannot start with a number. This stub name helps us
--	 * traverse the entire symbol table without finding a match. It's used
--	 * for subsequent performance tests, and its length is the average
--	 * length of all symbol names.
--	 */
--	memset(stub_name, '4', sizeof(stub_name));
--	pos = total_len / kallsyms_num_syms;
--	stub_name[pos] = 0;
--
- 	pos = 0;
- 	num = 0;
- 	off = 0;
-@@ -154,43 +143,6 @@ static void test_kallsyms_compression_ratio(void)
- 	pr_info(" ---------------------------------------------------------\n");
- }
- 
--static int lookup_name(void *data, const char *name, struct module *mod, unsigned long addr)
--{
--	u64 t0, t1, t;
--	unsigned long flags;
--	struct test_stat *stat = (struct test_stat *)data;
--
--	local_irq_save(flags);
--	t0 = sched_clock();
--	(void)kallsyms_lookup_name(name);
--	t1 = sched_clock();
--	local_irq_restore(flags);
--
--	t = t1 - t0;
--	if (t < stat->min)
--		stat->min = t;
--
--	if (t > stat->max)
--		stat->max = t;
--
--	stat->real_cnt++;
--	stat->sum += t;
--
--	return 0;
--}
--
--static void test_perf_kallsyms_lookup_name(void)
--{
--	struct test_stat stat;
--
--	memset(&stat, 0, sizeof(stat));
--	stat.min = INT_MAX;
--	kallsyms_on_each_symbol(lookup_name, &stat);
--	pr_info("kallsyms_lookup_name() looked up %d symbols\n", stat.real_cnt);
--	pr_info("The time spent on each symbol is (ns): min=%d, max=%d, avg=%lld\n",
--		stat.min, stat.max, div_u64(stat.sum, stat.real_cnt));
--}
--
- static bool match_cleanup_name(const char *s, const char *name)
- {
- 	char *p;
-@@ -231,24 +183,6 @@ static int find_symbol(void *data, const char *name, struct module *mod, unsigne
- 	return 0;
- }
- 
--static void test_perf_kallsyms_on_each_symbol(void)
--{
--	u64 t0, t1;
--	unsigned long flags;
--	struct test_stat stat;
--
--	memset(&stat, 0, sizeof(stat));
--	stat.max = INT_MAX;
--	stat.name = stub_name;
--	stat.perf = 1;
--	local_irq_save(flags);
--	t0 = sched_clock();
--	kallsyms_on_each_symbol(find_symbol, &stat);
--	t1 = sched_clock();
--	local_irq_restore(flags);
--	pr_info("kallsyms_on_each_symbol() traverse all: %lld ns\n", t1 - t0);
--}
--
- static int match_symbol(void *data, unsigned long addr)
- {
- 	struct test_stat *stat = (struct test_stat *)data;
-@@ -267,23 +201,6 @@ static int match_symbol(void *data, unsigned long addr)
- 	return 0;
- }
- 
--static void test_perf_kallsyms_on_each_match_symbol(void)
--{
--	u64 t0, t1;
--	unsigned long flags;
--	struct test_stat stat;
--
--	memset(&stat, 0, sizeof(stat));
--	stat.max = INT_MAX;
--	stat.name = stub_name;
--	local_irq_save(flags);
--	t0 = sched_clock();
--	kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
--	t1 = sched_clock();
--	local_irq_restore(flags);
--	pr_info("kallsyms_on_each_match_symbol() traverse all: %lld ns\n", t1 - t0);
--}
--
- static int test_kallsyms_basic_function(void)
- {
- 	int i, j, ret;
-@@ -460,9 +377,6 @@ static int test_entry(void *p)
- 	}
- 
- 	test_kallsyms_compression_ratio();
--	test_perf_kallsyms_lookup_name();
--	test_perf_kallsyms_on_each_symbol();
--	test_perf_kallsyms_on_each_match_symbol();
- 	pr_info("finish\n");
- 
- 	return 0;
--- 
-2.25.1
+Best regards,
+Krzysztof
 
