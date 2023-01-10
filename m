@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF06664609
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7C1664614
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238620AbjAJQ1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 11:27:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S234994AbjAJQaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 11:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234089AbjAJQ1t (ORCPT
+        with ESMTP id S234473AbjAJQaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 11:27:49 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5AB69B3A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:27:48 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id m6so19287682lfj.11
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:27:48 -0800 (PST)
+        Tue, 10 Jan 2023 11:30:15 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECF9736E9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:30:13 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id jl4so13729958plb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:30:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=24b794oj7rHXD9kyGoCrHN+Vr9labBoVEJJqpRMaDe4=;
-        b=YNVqHnxtOzQXgjbziYxPO8GNC7zCx3fYhOSnkxKEkOXp1MfydHcJtE8amfV4sYE+I0
-         NcRsUKYzPLBlNrXccUbhCUhhtctYtGRko2Z4YwCqJM5WLEveWWedg15VOVBWF7ZsLRqj
-         6n7GYYKK5lEelGx+dqR8nzmW6MpOtue07HicKDX25nB/Pv24Aq6qE/Rd+ttnM0oaNpYR
-         Cr3OULPpuXwj3NW/ckiNNvY04oeCPndIgrR6Se/JV+z8naSMxQjCAc7FhAcsYqASjVks
-         Zp1U4Sd6EDVF4StNiAregq+zcabhcsezlIhO3Ry8twGUCTStdahNTKgiaSJhoAQoV6c5
-         ZOyA==
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4g3X2Drb8iDIejSiH0zFfNh5MOmbpVh8uX0CGV33Ygw=;
+        b=jie1h2bF6T0loL1kylf5SLvyS0ttCfxL/U79701D7Jc+1IkfwixBN4MpGFNc441I8n
+         rl0JBa3hUIvLS36GCdBIOkhpDcy/IDVIRWp/yuSg7PBI5ZSeQGLc7GZdZZgOKi+pYn0C
+         HTRafMDZ1/gTGXGHjLx51tT+oXyMQxAoExxDwWKMu+++bGjk/5umgA8bQERjXhqxXTRy
+         Q9uLnPmQ95UgBpIOzxuMsD6nfq/g9vJjvXaGHSOn42vQFuUVv2v8Y65qSxqIntgEXMLY
+         0eahvmjKtp0NDUvPgAIpo38znxs8UvEjKhKVEiFgKQ6tmpjKA3pplJfAAcTpVJ3Ija0e
+         kXNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=24b794oj7rHXD9kyGoCrHN+Vr9labBoVEJJqpRMaDe4=;
-        b=ME6MUedZPuFXxH8hchmXU45aiCy/iBRTyrpl69X6iqlMA8ntZdKaAq4d0+XPOiA6zz
-         oGoeBStYrfFwt5HxojEGB1P9r2CodKWw6aUxo4lfL5nniZKNmwBz2hz+Hra0t504W4nu
-         anQl05rBp8drTyaYXz0yqmNIaRZKLEzmZ93F3U8H2ywVAe5Sl4cwVH9mw4gctbklsPXa
-         VMeORdWwevuN56iChU/LQcD/X5EbfB/1Kg+ksG+EPGtNZvgQvtMAE7tR5evwnDafRS/K
-         xEqxERBr2qksoF8rpfMUKYEKZFpZsOMI6ES/fNg0f1VAveQE9sF7FTy0+2jB6DFsJ1py
-         yHXw==
-X-Gm-Message-State: AFqh2kryB7kkC2O48TnweKtIp3IPZwyM0I3EKNjBgyO8jlg5C18mSC4Y
-        2F2BULkizgPBxx9/x6LCFQd8pTj1dkDWAhLjkvZaig==
-X-Google-Smtp-Source: AMrXdXt9wWOWy5EEMwM3AwaHi7iIfQmcidQBM/gYmtegbnbkafoWpleRQ0oZbfHkxxzlcOiEEcsllu7h8Id6At6K9HY=
-X-Received: by 2002:ac2:4d90:0:b0:4b5:91c1:6f1f with SMTP id
- g16-20020ac24d90000000b004b591c16f1fmr7018844lfe.291.1673368066228; Tue, 10
- Jan 2023 08:27:46 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4g3X2Drb8iDIejSiH0zFfNh5MOmbpVh8uX0CGV33Ygw=;
+        b=qGIxEr1cmAitiCTlpNa+l+pcqq4SQBRU/K9NzS1t4ah6M/OCITONWTVL9NAn7JsjQ6
+         0SxYqRSK+HtTLcogq7FwNXNQKGt64AUBOyct/6aaHuLWTxWb9pv2LG7gaWJhTD9Sdj51
+         1HM0SsSi8qrWw55FfrresqpBzN65c+2CNOqQB+kNmonAQ4jHtXpQDpMgV3oAKdPTHP1R
+         +IdoiCHz+O+35vmfRIvzYpwbs+wss1tWivg7w9ZhI1yrZ1NFndNEwNwlAuYYgk0Y9sPd
+         Oo+YZeKNZyDeJIMAU1GntSo685Apf+H97wsU6pqjnsdnn1y9BTV6QbHswQNb7+gZYEdg
+         CM3g==
+X-Gm-Message-State: AFqh2kpQ1H0Wik3RIzLiVhvO5VLVQKEyHu7UlWeM3Q5kzRBC7uDagI5Y
+        pfOyYIjuTen2EKWgYXEgQ9Bvvw==
+X-Google-Smtp-Source: AMrXdXsXyTXOJDg2HvTe03JJzllkrApnnxWjeSXx+w/qB5rYUlhFrZp6dWVQvcOJHGx4CRPsdXmaHQ==
+X-Received: by 2002:a17:90b:3557:b0:219:bd64:8e60 with SMTP id lt23-20020a17090b355700b00219bd648e60mr73264459pjb.34.1673368213082;
+        Tue, 10 Jan 2023 08:30:13 -0800 (PST)
+Received: from localhost (thunderhill.nvidia.com. [216.228.112.22])
+        by smtp.gmail.com with ESMTPSA id y7-20020a17090a154700b002265ddfc13esm3213456pja.29.2023.01.10.08.30.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 08:30:12 -0800 (PST)
+Date:   Tue, 10 Jan 2023 17:30:09 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] net/mlx5e: Replace 0-length array with flexible array
+Message-ID: <Y72SkdnBkwxQYXoT@nanopsycho>
+References: <20230105223642.never.980-kees@kernel.org>
 MIME-Version: 1.0
-References: <20230110161831.2625821-1-trix@redhat.com>
-In-Reply-To: <20230110161831.2625821-1-trix@redhat.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Tue, 10 Jan 2023 09:27:34 -0700
-Message-ID: <CAMkAt6oqBH35=moST5nO_BXwc8k0M4h_8TvT9H6outR9vOw5qg@mail.gmail.com>
-Subject: Re: [PATCH] crypto: initialize error
-To:     Tom Rix <trix@redhat.com>
-Cc:     brijesh.singh@amd.com, thomas.lendacky@amd.com, john.allen@amd.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        nathan@kernel.org, ndesaulniers@google.com, rientjes@google.com,
-        marcorr@google.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105223642.never.980-kees@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,82 +77,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 9:18 AM Tom Rix <trix@redhat.com> wrote:
+Thu, Jan 05, 2023 at 11:36:43PM CET, keescook@chromium.org wrote:
+>Zero-length arrays are deprecated[1]. Replace struct mlx5e_rx_wqe_cyc's
+>"data" 0-length array with a flexible array. Detected with GCC 13,
+>using -fstrict-flex-arrays=3:
 >
-> clang static analysis reports this problem
-> drivers/crypto/ccp/sev-dev.c:1347:3: warning: 3rd function call
->   argument is an uninitialized value [core.CallAndMessage]
->     dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
->     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>drivers/net/ethernet/mellanox/mlx5/core/en_main.c: In function 'mlx5e_alloc_rq':
+>drivers/net/ethernet/mellanox/mlx5/core/en_main.c:827:42: warning: array subscript f is outside array bounds of 'struct mlx5_wqe_data_seg[0]' [-Warray-bounds=]
+>  827 |                                 wqe->data[f].byte_count = 0;
+>      |                                 ~~~~~~~~~^~~
+>In file included from drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.h:11,
+>                 from drivers/net/ethernet/mellanox/mlx5/core/eswitch.h:48,
+>                 from drivers/net/ethernet/mellanox/mlx5/core/en_main.c:42:
+>drivers/net/ethernet/mellanox/mlx5/core/en.h:250:39: note: while referencing 'data'
+>  250 |         struct mlx5_wqe_data_seg      data[0];
+>      |                                       ^~~~
 >
-> __sev_platform_init_locked() can return without setting the
-> error parameter, causing the dev_err() to report a gargage
-
-garbage
-
-> value.
+>[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
 >
-> Fixes: 3d725965f836 ("crypto: ccp - Add SEV_INIT_EX support")
-
-Should this be: 'Fixes: 200664d5237f ("crypto: ccp: Add Secure
-Encrypted Virtualization (SEV) command support")'
-
-Since in that patch an uninitialized error can be printed?
-
-+void psp_pci_init(void)
-+{
-+       struct sev_user_data_status *status;
-+       struct sp_device *sp;
-+       int error, rc;
-+
-+       sp = sp_get_psp_master_device();
-+       if (!sp)
-+               return;
-+
-+       psp_master = sp->psp_data;
-+
-+       /* Initialize the platform */
-+       rc = sev_platform_init(&error);
-+       if (rc) {
-+               dev_err(sp->dev, "SEV: failed to INIT error %#x\n", error);
-+               goto err;
-+       }
+>Cc: Saeed Mahameed <saeedm@nvidia.com>
+>Cc: Leon Romanovsky <leon@kernel.org>
+>Cc: "David S. Miller" <davem@davemloft.net>
+>Cc: Eric Dumazet <edumazet@google.com>
+>Cc: Jakub Kicinski <kuba@kernel.org>
+>Cc: Paolo Abeni <pabeni@redhat.com>
+>Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+>Cc: netdev@vger.kernel.org
+>Cc: linux-rdma@vger.kernel.org
+>Signed-off-by: Kees Cook <keescook@chromium.org>
 
 
-...
-
-+static int __sev_platform_init_locked(int *error)
-+{
-+       struct psp_device *psp = psp_master;
-+       int rc = 0;
-+
-+       if (!psp)
-+               return -ENODEV;
-+
-+       if (psp->sev_state == SEV_STATE_INIT)
-+               return 0;
-
-
-So if !psp an uninitialized error is printed?
-
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/crypto/ccp/sev-dev.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> index 56998bc579d6..643cccc06a0b 100644
-> --- a/drivers/crypto/ccp/sev-dev.c
-> +++ b/drivers/crypto/ccp/sev-dev.c
-> @@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_GPL(sev_issue_cmd_external_user);
->  void sev_pci_init(void)
->  {
->         struct sev_device *sev = psp_master->sev_data;
-> -       int error, rc;
-> +       int error = 0, rc;
->
->         if (!sev)
->                 return;
-> --
-> 2.27.0
->
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
