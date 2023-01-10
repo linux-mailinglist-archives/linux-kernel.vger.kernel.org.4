@@ -2,145 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11BA663F41
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD33663F46
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbjAJLbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 06:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S233001AbjAJLdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 06:33:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbjAJLaf (ORCPT
+        with ESMTP id S232392AbjAJLdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 06:30:35 -0500
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE65C48CE2;
-        Tue, 10 Jan 2023 03:30:28 -0800 (PST)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 56AB2200230;
-        Tue, 10 Jan 2023 12:30:27 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 1F6FD2001EE;
-        Tue, 10 Jan 2023 12:30:27 +0100 (CET)
-Received: from lsv03267.swis.in-blr01.nxp.com (lsv03267.swis.in-blr01.nxp.com [92.120.147.107])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 23BCB180031E;
-        Tue, 10 Jan 2023 19:30:26 +0800 (+08)
-From:   nikhil.gupta@nxp.com
-To:     linux-arm-kernel@lists.infradead.org,
-        Yangbo Lu <yangbo.lu@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     vakul.garg@nxp.com, rajan.gupta@nxp.com,
-        Nikhil Gupta <nikhil.gupta@nxp.com>
-Subject: [PATCH] ptp_qoriq: fix latency in ptp_qoriq_adjtime() operation.
-Date:   Tue, 10 Jan 2023 17:00:24 +0530
-Message-Id: <20230110113024.7558-1-nikhil.gupta@nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 06:33:13 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87AE50142
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:33:11 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id g7so10651847qts.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:33:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4NsNfiiBBjcSZ+7yRkZ7ruIkhFB6Oy8YMpgnDQruC/E=;
+        b=fdNV2qxft2Ef/Iev+PFuQscPhWLqoR85gJrHP089EUgVhf13mhoXqmubhwwZV2hmhR
+         Vx8Cmnev7T5tMPO8eSe31P4IG5aQfWkN69aboxDiJxRlCtaBOqyFD1F6QqD13ZxXM9mX
+         Ka2AzHJ3PpAN8PZllSalhApI7sGyAI7xEd34Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4NsNfiiBBjcSZ+7yRkZ7ruIkhFB6Oy8YMpgnDQruC/E=;
+        b=1rNoy4FYzmi2e8oEA0SY959ThRVxE6bKZKI8MkmrFR7qjA/ERsr+38t39t0MGCkfBD
+         I40kOMtB72yHAEBBhHyvln4Iou6SGe5s0acveB1I8Qw+EkNY4341ncoFhX4hVzQLCvhQ
+         yvBp0oILHaTM/TUtmqgb0jSynh6kUJp+YTKMOrsQ+80fsyV76un0kYCfbfjRir8a0lLR
+         Ei45Lojm522sZKEpW3ediV3rZetv4i4NuEICfsx/6EmV09piI1pZ+c6skgnEoHJaiGNV
+         I+OXka7TZfRzexLNWT8KsNGZs/+TGTJpw8YfBZzzBXlRH8HPhHwA7KioQkoFTfyomoK+
+         IsVA==
+X-Gm-Message-State: AFqh2kr1PcHTi7DPYpvvmW8LVks6R3oINE+UDxaVc/OlVO3tt6MF3GP8
+        a7RIDFo5mnCmR4vhOaqzHk9ykRAxAIt8kXN5ZIs=
+X-Google-Smtp-Source: AMrXdXszkyLJhhmw/iw6YUFlAnmhnVWwFquar/mB34m2fBzPpVISK6BT4RCvNwG+C5jLTy4x2naR3Q==
+X-Received: by 2002:ac8:45c8:0:b0:3a8:5d1:aaca with SMTP id e8-20020ac845c8000000b003a805d1aacamr3723571qto.11.1673350390659;
+        Tue, 10 Jan 2023 03:33:10 -0800 (PST)
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com. [209.85.219.42])
+        by smtp.gmail.com with ESMTPSA id m15-20020a05620a24cf00b007055dce4cecsm7050682qkn.97.2023.01.10.03.33.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 03:33:09 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id m12so6312248qvt.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:33:09 -0800 (PST)
+X-Received: by 2002:a0c:e90a:0:b0:532:31b0:b4fa with SMTP id
+ a10-20020a0ce90a000000b0053231b0b4famr515920qvo.129.1673350389357; Tue, 10
+ Jan 2023 03:33:09 -0800 (PST)
+MIME-Version: 1.0
+References: <CAHk-=wjwrqFcC9-KkfboqATYwLfJHi_8Z5mTrJh=nf8KT_SjUA@mail.gmail.com>
+ <20230109174742.GA1191249@roeck-us.net> <CAHk-=whC+YpdympyegB0Wr_0_6=LYggdabkMExRus2DtAdsv-Q@mail.gmail.com>
+ <Y71Bo3yKcLJhe/om@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y71Bo3yKcLJhe/om@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 10 Jan 2023 05:32:53 -0600
+X-Gmail-Original-Message-ID: <CAHk-=wjmhAwNk1QqaFSDvf=PAm2aMt9+dL3BXYtZeVHRd_XsAw@mail.gmail.com>
+Message-ID: <CAHk-=wjmhAwNk1QqaFSDvf=PAm2aMt9+dL3BXYtZeVHRd_XsAw@mail.gmail.com>
+Subject: Re: Linux 6.2-rc3
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Marco Elver <elver@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <kees@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dalias@libc.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikhil Gupta <nikhil.gupta@nxp.com>
+On Tue, Jan 10, 2023 at 4:45 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> So the original patch came in through x86/mm, but this is very much a SH
+> only fix how do we route this? Linus you want to take this directly or
+> Rich do you have an urgent queue for the next -rc somewhere?
 
-1588 driver loses about 1us in adjtime operation at PTP slave.
-This is because adjtime operation uses a slow non-atomic tmr_cnt_read()
-followed by tmr_cnt_write() operation.
-In the above sequence, since the timer counter operation loses about 1us.
-Instead, tmr_offset register should be programmed with the delta
-nanoseconds This won't lead to timer counter stopping and losing time
-while tmr_cnt_write() is being done.
-This Patch adds api for tmr_offset_read/write to program the
-delta nanoseconds in the Timer offset Register.
+I took it directly. Thanks,
 
-Signed-off-by: Nikhil Gupta <nikhil.gupta@nxp.com>
-Reviewed-by: Yangbo Lu <yangbo.lu@nxp.com>
----
- drivers/ptp/ptp_qoriq.c | 36 ++++++++++++++++++++++++++++++------
- 1 file changed, 30 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/ptp/ptp_qoriq.c b/drivers/ptp/ptp_qoriq.c
-index 08f4cf0ad9e3..5b6ea6d590be 100644
---- a/drivers/ptp/ptp_qoriq.c
-+++ b/drivers/ptp/ptp_qoriq.c
-@@ -48,6 +48,29 @@ static void tmr_cnt_write(struct ptp_qoriq *ptp_qoriq, u64 ns)
- 	ptp_qoriq->write(&regs->ctrl_regs->tmr_cnt_h, hi);
- }
- 
-+static void tmr_offset_write(struct ptp_qoriq *ptp_qoriq, u64 delta_ns)
-+{
-+	struct ptp_qoriq_registers *regs = &ptp_qoriq->regs;
-+	u32 hi = delta_ns >> 32;
-+	u32 lo = delta_ns & 0xffffffff;
-+
-+	ptp_qoriq->write(&regs->ctrl_regs->tmroff_l, lo);
-+	ptp_qoriq->write(&regs->ctrl_regs->tmroff_h, hi);
-+}
-+
-+static u64 tmr_offset_read(struct ptp_qoriq *ptp_qoriq)
-+{
-+	struct ptp_qoriq_registers *regs = &ptp_qoriq->regs;
-+	u64 ns;
-+	u32 lo, hi;
-+
-+	lo = ptp_qoriq->read(&regs->ctrl_regs->tmroff_l);
-+	hi = ptp_qoriq->read(&regs->ctrl_regs->tmroff_h);
-+	ns = ((u64) hi) << 32;
-+	ns |= lo;
-+	return ns;
-+}
-+
- /* Caller must hold ptp_qoriq->lock. */
- static void set_alarm(struct ptp_qoriq *ptp_qoriq)
- {
-@@ -55,7 +78,9 @@ static void set_alarm(struct ptp_qoriq *ptp_qoriq)
- 	u64 ns;
- 	u32 lo, hi;
- 
--	ns = tmr_cnt_read(ptp_qoriq) + 1500000000ULL;
-+	ns = tmr_cnt_read(ptp_qoriq) + tmr_offset_read(ptp_qoriq)
-+				     + 1500000000ULL;
-+
- 	ns = div_u64(ns, 1000000000UL) * 1000000000ULL;
- 	ns -= ptp_qoriq->tclk_period;
- 	hi = ns >> 32;
-@@ -207,15 +232,12 @@ EXPORT_SYMBOL_GPL(ptp_qoriq_adjfine);
- 
- int ptp_qoriq_adjtime(struct ptp_clock_info *ptp, s64 delta)
- {
--	s64 now;
- 	unsigned long flags;
- 	struct ptp_qoriq *ptp_qoriq = container_of(ptp, struct ptp_qoriq, caps);
- 
- 	spin_lock_irqsave(&ptp_qoriq->lock, flags);
- 
--	now = tmr_cnt_read(ptp_qoriq);
--	now += delta;
--	tmr_cnt_write(ptp_qoriq, now);
-+	tmr_offset_write(ptp_qoriq, delta);
- 	set_fipers(ptp_qoriq);
- 
- 	spin_unlock_irqrestore(&ptp_qoriq->lock, flags);
-@@ -232,7 +254,7 @@ int ptp_qoriq_gettime(struct ptp_clock_info *ptp, struct timespec64 *ts)
- 
- 	spin_lock_irqsave(&ptp_qoriq->lock, flags);
- 
--	ns = tmr_cnt_read(ptp_qoriq);
-+	ns = tmr_cnt_read(ptp_qoriq) + tmr_offset_read(ptp_qoriq);
- 
- 	spin_unlock_irqrestore(&ptp_qoriq->lock, flags);
- 
-@@ -251,6 +273,8 @@ int ptp_qoriq_settime(struct ptp_clock_info *ptp,
- 
- 	ns = timespec64_to_ns(ts);
- 
-+	tmr_offset_write(ptp_qoriq, 0);
-+
- 	spin_lock_irqsave(&ptp_qoriq->lock, flags);
- 
- 	tmr_cnt_write(ptp_qoriq, ns);
--- 
-2.17.1
-
+               Linus
