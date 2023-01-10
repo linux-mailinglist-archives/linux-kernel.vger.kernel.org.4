@@ -2,228 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A97664F18
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E77664F1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235744AbjAJWtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 17:49:36 -0500
+        id S235648AbjAJWwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 17:52:16 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235433AbjAJWsq (ORCPT
+        with ESMTP id S235989AbjAJWvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 17:48:46 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773FE392F3;
-        Tue, 10 Jan 2023 14:48:45 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id az20so13441762ejc.1;
-        Tue, 10 Jan 2023 14:48:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Apst6IinAOrM3MxKuPZyOSipnjS5xclmkwkh43NC6Q=;
-        b=jOuIvcxrEjbszfXmKVL1Ky4+ho7yOcLCtInKd7c7t40dvimDAIG6fHgceJ6v7p7YF9
-         Vfj79vpm/HjJTVOFiQTBi7G5T2e4U0n/1kmXGLyfKisPAG3aqcFu6CHPeUNa23KaPR+Q
-         +0cRqBVjvay/4Y3abctsgzURm76Qj6X+XIH9gpNVy/vYif2IP7dsUpdPISlPT6bAwDE3
-         y6YtIEMBHehGcQFR1wuIYOP5MBS1SndMPnRWXveqvlXFzAfap+PV6PkgE9hPc9D7z00o
-         pDJ85mgwCmH6aLglzzvWMzDs23/Nb/2sn05PxTF8hN59+5+n0obn7ysirK/vMMsGwNa4
-         J9HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4Apst6IinAOrM3MxKuPZyOSipnjS5xclmkwkh43NC6Q=;
-        b=o08NLTOUdZfT2luK8UuGSMCiG+1sK94nbMvtbFWF8dl0vBQKftce7p5OaPzaWCS3Y/
-         O5x4Ov+icZKJ4dfQERo6LJfUuayJ8pMmWrDKP8wIZ6D6/xoKEPKxoA5k27iIirRJn9J1
-         bne6Y8kg4Lj97vTv/Z+SLTkaIki2gCAtn7uPHkczNTSRJ/zu6MT2Owa9eK/RUhqdyVDs
-         vP4CbxSzKgygSg4zqolhL0/HAOD0Twu4kU2jzLl9m8rRAbj/P39Wj3BiweO+S5XN0HFa
-         5YYaLPUWm5naAVtl5xzI4q3FmyV2cywPuUoXBzC4brpQphvEVM1ZweFc8Bvs2V/tGVqj
-         DTxg==
-X-Gm-Message-State: AFqh2koVaauQw1oMOpOJ71d9Ph4RLkclkTUoEFqRBrUM1yYEpYOjJ0/A
-        R9FP9IDRG8bZadNnU4uK360=
-X-Google-Smtp-Source: AMrXdXs3jf+TgRBijqy92eMXzwHgP/UaVSh4JgSZXvxlRexkze3dkCJDYLUQfikenI9kVcdsSnZNHg==
-X-Received: by 2002:a17:907:80c3:b0:84d:134a:2080 with SMTP id io3-20020a17090780c300b0084d134a2080mr19307276ejc.7.1673390925075;
-        Tue, 10 Jan 2023 14:48:45 -0800 (PST)
-Received: from localhost.localdomain ([46.211.6.169])
-        by smtp.googlemail.com with ESMTPSA id d14-20020a170906304e00b0077077c62cadsm5462089ejd.31.2023.01.10.14.48.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 14:48:44 -0800 (PST)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
-        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
-        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
-        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
-        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net, me@rebtoor.com,
-        metalcaedes@gmail.com, michael@theoddone.net,
-        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
-        nephartyz@gmail.com, oleksandr@natalenko.name,
-        pauk.denis@gmail.com, pehlm@pekholm.org, renedis@hotmail.com,
-        robert@swiecki.net, sahan.h.fernando@gmail.com,
-        sebastian.arnhold@posteo.de, sst@poczta.fm, to.eivind@gmail.com,
-        torvic9@mailbox.org
-Subject: [PATCH v3 2/2] hwmon: (nct6775) B650/B660/X670 ASUS boards support
-Date:   Wed, 11 Jan 2023 00:48:23 +0200
-Message-Id: <20230110224823.14524-2-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230110224823.14524-1-pauk.denis@gmail.com>
-References: <20230110224823.14524-1-pauk.denis@gmail.com>
+        Tue, 10 Jan 2023 17:51:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6245982F7A;
+        Tue, 10 Jan 2023 14:50:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BE1561912;
+        Tue, 10 Jan 2023 22:50:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 048CDC433D2;
+        Tue, 10 Jan 2023 22:50:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673391005;
+        bh=+RkdLFz3felJy1/GEptQd9wZ3WaSQVIRl9ertAsb6Lo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uJAOUxYbEnY2lj99q3OGhbUBHfx49rU6a6bHt8u1k85iSLoRdmX22q9K/ZyZ5Hna9
+         +p+AjGai2rrmsaLbiDgS1sUvQTefVtKFkjwHWlSwP05prRqvMn3ge5GDfD37vNMFdQ
+         Ti16k4nvKTQ0Xz4LfiTYi+2OpHeGSyeulxiYO99poOHHDvz05wGc/dKxViIFJoRQIq
+         Pm7MU88zlZq8ruVmhO9JdEJ0SMuX5zs4nE2A0ftfs7nAWBi/NCaliOdJ90mmI9OA2e
+         rPd3322EwGLwsjuA+s54qi7U1iEc636nUQusvKGEBhNwH3nTcMjdsHe543uwgSpmnZ
+         0zCqO1nElAfYA==
+Date:   Tue, 10 Jan 2023 22:49:59 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/16] spi: bcm63xx-hsspi: Add polling mode support
+Message-ID: <Y73rl8feUOnChWKF@sirena.org.uk>
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-8-william.zhang@broadcom.com>
+ <Y7iW38Fsj0nIewDm@sirena.org.uk>
+ <ec84b84b-41be-32ad-2e76-afac59a621d0@broadcom.com>
+ <Y7xloRuHk5BHSOCb@sirena.org.uk>
+ <ca22c9af-34bc-e857-881c-263f70a405e8@broadcom.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dsTBb0yv/WOifVKY"
+Content-Disposition: inline
+In-Reply-To: <ca22c9af-34bc-e857-881c-263f70a405e8@broadcom.com>
+X-Cookie: Live free or die.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boards such as:
-  "EX-B660M-V5 PRO D4",
-  "PRIME B650-PLUS",
-  "PRIME B650M-A",
-  "PRIME B650M-A AX",
-  "PRIME B650M-A II",
-  "PRIME B650M-A WIFI",
-  "PRIME B650M-A WIFI II",
-  "PRIME B660M-A D4",
-  "PRIME B660M-A WIFI D4",
-  "PRIME X670-P",
-  "PRIME X670-P WIFI",
-  "PRIME X670E-PRO WIFI",
-  "Pro B660M-C-D4",
-  "ProArt B660-CREATOR D4",
-  "ProArt X670E-CREATOR WIFI",
-  "ROG CROSSHAIR X670E EXTREME",
-  "ROG CROSSHAIR X670E GENE",
-  "ROG CROSSHAIR X670E HERO",
-  "ROG MAXIMUS XIII EXTREME GLACIAL",
-  "ROG MAXIMUS Z690 EXTREME",
-  "ROG MAXIMUS Z690 EXTREME GLACIAL",
-  "ROG STRIX B650-A GAMING WIFI",
-  "ROG STRIX B650E-E GAMING WIFI",
-  "ROG STRIX B650E-F GAMING WIFI",
-  "ROG STRIX B650E-I GAMING WIFI",
-  "ROG STRIX B660-A GAMING WIFI D4",
-  "ROG STRIX B660-F GAMING WIFI",
-  "ROG STRIX B660-G GAMING WIFI",
-  "ROG STRIX B660-I GAMING WIFI",
-  "ROG STRIX X670E-A GAMING WIFI",
-  "ROG STRIX X670E-E GAMING WIFI",
-  "ROG STRIX X670E-F GAMING WIFI",
-  "ROG STRIX X670E-I GAMING WIFI",
-  "ROG STRIX Z590-A GAMING WIFI II",
-  "ROG STRIX Z690-A GAMING WIFI D4",
-  "TUF GAMING B650-PLUS",
-  "TUF GAMING B650-PLUS WIFI",
-  "TUF GAMING B650M-PLUS",
-  "TUF GAMING B650M-PLUS WIFI",
-  "TUF GAMING B660M-PLUS WIFI",
-  "TUF GAMING X670E-PLUS",
-  "TUF GAMING X670E-PLUS WIFI",
-  "TUF GAMING Z590-PLUS WIFI",
-have got a nct6775 chip, but by default there's no use of it
-because of resource conflict with WMI method.
 
-This commit adds such boards to the monitoring list with new ACPI device
-UID.
+--dsTBb0yv/WOifVKY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
-Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
-Tested-by: Jeroen Beerstra <jeroen@beerstra.org>
-Tested-by: Slawomir Stepien <sst@poczta.fm>
----
-Changes:
-v1: no changes
-v2: no changes
+On Mon, Jan 09, 2023 at 12:10:30PM -0800, William Zhang wrote:
+> On 01/09/2023 11:06 AM, Mark Brown wrote:
 
- drivers/hwmon/nct6775-platform.c | 52 ++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+> > You can put whatever logic is needed in the code - for something like
+> > this an architecture based define isn't ideal but is probably good
+> > enough if need be (though I'd not be surprised if it turned out that
+> > there was also some performance benefit for the MIPS systems too, at
+> > least for smaller transfers).
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 082f48785999..e7412ce3fab9 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -114,6 +114,7 @@ struct nct6775_sio_data {
- #define ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE
- #define ASUSWMI_DEVICE_HID		"PNP0C14"
- #define ASUSWMI_DEVICE_UID		"ASUSWMI"
-+#define ASUSMSI_DEVICE_UID		"AsusMbSwInterface"
- 
- /*
-  * ASUS boards have only one device with WMI "WMBD" method and have provided
-@@ -1106,6 +1107,52 @@ static const char * const asus_wmi_boards[] = {
- 	"TUF GAMING Z490-PLUS (WI-FI)",
- };
- 
-+static const char * const asus_msi_boards[] = {
-+	"EX-B660M-V5 PRO D4",
-+	"PRIME B650-PLUS",
-+	"PRIME B650M-A",
-+	"PRIME B650M-A AX",
-+	"PRIME B650M-A II",
-+	"PRIME B650M-A WIFI",
-+	"PRIME B650M-A WIFI II",
-+	"PRIME B660M-A D4",
-+	"PRIME B660M-A WIFI D4",
-+	"PRIME X670-P",
-+	"PRIME X670-P WIFI",
-+	"PRIME X670E-PRO WIFI",
-+	"Pro B660M-C-D4",
-+	"ProArt B660-CREATOR D4",
-+	"ProArt X670E-CREATOR WIFI",
-+	"ROG CROSSHAIR X670E EXTREME",
-+	"ROG CROSSHAIR X670E GENE",
-+	"ROG CROSSHAIR X670E HERO",
-+	"ROG MAXIMUS XIII EXTREME GLACIAL",
-+	"ROG MAXIMUS Z690 EXTREME",
-+	"ROG MAXIMUS Z690 EXTREME GLACIAL",
-+	"ROG STRIX B650-A GAMING WIFI",
-+	"ROG STRIX B650E-E GAMING WIFI",
-+	"ROG STRIX B650E-F GAMING WIFI",
-+	"ROG STRIX B650E-I GAMING WIFI",
-+	"ROG STRIX B660-A GAMING WIFI D4",
-+	"ROG STRIX B660-F GAMING WIFI",
-+	"ROG STRIX B660-G GAMING WIFI",
-+	"ROG STRIX B660-I GAMING WIFI",
-+	"ROG STRIX X670E-A GAMING WIFI",
-+	"ROG STRIX X670E-E GAMING WIFI",
-+	"ROG STRIX X670E-F GAMING WIFI",
-+	"ROG STRIX X670E-I GAMING WIFI",
-+	"ROG STRIX Z590-A GAMING WIFI II",
-+	"ROG STRIX Z690-A GAMING WIFI D4",
-+	"TUF GAMING B650-PLUS",
-+	"TUF GAMING B650-PLUS WIFI",
-+	"TUF GAMING B650M-PLUS",
-+	"TUF GAMING B650M-PLUS WIFI",
-+	"TUF GAMING B660M-PLUS WIFI",
-+	"TUF GAMING X670E-PLUS",
-+	"TUF GAMING X670E-PLUS WIFI",
-+	"TUF GAMING Z590-PLUS WIFI",
-+};
-+
- #if IS_ENABLED(CONFIG_ACPI)
- /*
-  * Callback for acpi_bus_for_each_dev() to find the right device
-@@ -1170,6 +1217,11 @@ static int __init sensors_nct6775_platform_init(void)
- 				   board_name);
- 		if (err >= 0)
- 			access = nct6775_determine_access(ASUSWMI_DEVICE_UID);
-+
-+		err = match_string(asus_msi_boards, ARRAY_SIZE(asus_msi_boards),
-+				   board_name);
-+		if (err >= 0)
-+			access = nct6775_determine_access(ASUSMSI_DEVICE_UID);
- 	}
- 
- 	/*
--- 
-2.39.0
+> I just don't know what other logic I can put in the driver to select
+> interrupt or polling mode.  Only the end user know if performance or cpu
+> usage is more important to their application.
 
+Usually you can take a reasonable guess as to what would be a good point
+to start switching, typically for short enough transfers the overhead of
+setting up DMA, waiting for interrupts and tearing things down is very
+much larger than the cost of just doing PIO - a bunch of other drivers
+have pick a number logic of some kind, often things like FIFO sizes are
+a good key for where to look.  A lot of the time this is good enough,
+and it means that users have much better facilities for making tradeoffs
+if they have a range of transfer sizes available - it's not an either/or
+thing but based on some features of the individual message/transfer.
+
+It is true that for people with heavy SPI traffic or otherwise very
+demanding requirements for a specific system and software stack
+additional tuning might produce better results, exposing some sysfs
+knobs to allow tuning of parameters at runtime would be helpful for them
+and I'd certainly be happy to see that added.
+
+--dsTBb0yv/WOifVKY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO965YACgkQJNaLcl1U
+h9BfgQf/T3FIrGTPXWBtb/Xe+nzT5F6/A5RXyCC+YpHtvFHHnqzXiD8j8sTyxYpk
+ejYT1iJsWVt5un0Fbiu9nijFuOcbdVr0e8ztt0ItyQJpde/+lQt9c6ucwf/0/hwn
+jCnjnQh5OSVmtvpRywW6HzYeEUM4xk1WcWtjgm5yj9tbMdKLx3WER6P6SB/Jtmhp
+EPdgxass3RdBTA9PnZASARpCTMPy2FZI3hUt21GvAQulYlNDWmO3cSpTI3KuCaTI
+a8HCev8ODbdHDO8FoQGjcZuq0tl6DrPuk8LkEQL5WWpd2uUkAtioK30fjM67PfjG
+qLmzXHgc1iWSVR7KYPRuodyqm8t1Kg==
+=5TDj
+-----END PGP SIGNATURE-----
+
+--dsTBb0yv/WOifVKY--
