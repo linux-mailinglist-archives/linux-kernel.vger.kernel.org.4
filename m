@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B38E6644CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAE96644CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239072AbjAJPaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
+        id S239087AbjAJPaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:30:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbjAJP3q (ORCPT
+        with ESMTP id S238978AbjAJP3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:29:46 -0500
+        Tue, 10 Jan 2023 10:29:47 -0500
 Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C8476219;
-        Tue, 10 Jan 2023 07:29:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFDA2600;
+        Tue, 10 Jan 2023 07:29:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1673364554;
-  x=1704900554;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rZK4lXaEJ4x4EqUHUPXE5HpqBwAiLoEDFrRFR6F5708=;
-  b=JhYxjwmH0Rr7Rogvhoo5OAAdVh+ObULieC1EXkOAtt/hklprYsE69a1j
-   mIjHZi+BFIifjowKK2W5Ji3SbzFGtN1BofkQyJZszvAjgpo+Cptt4v72k
-   r9I/BoKMEHgffhKs5SEKGF3wu5Iow+U9l8brRvtkT5gGLxmRhL+rcfC+q
-   aH45OvGBpRw81IJnecqPm9evVJRFoSWYx7VZWJyRdqAUKqDzVBt9fFgzG
-   +n4EAgPr4VFsNe//XTnVsxFnL8p3hLCHEf/SJJWFjigEa/x/6GFkEpxFd
-   cmFhW4tT+N1Kqqe7kR3YqXJ1XmsXbIRdXLzCu4s8sjadPWei3v1epcCmF
+  d=axis.com; q=dns/txt; s=axis-central1; t=1673364557;
+  x=1704900557;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ptV5IHOY/La7i4wUvOUdZU50lH93aT6Wu4Eh8tHnM60=;
+  b=fMOgR+Qt5xRyR1rQtWrO5MPlpvDqrWv9mUMgAN/imL85lysZ0Dh5bHDz
+   9pVsIz3KfExT/P2BLQ0vFf8p2YEAO4Y+Iv0WmM86qOR/HqMfHLImYLQYH
+   aEWthqEvTcE90DLWZXMkTfsQd4WiRCLwLfB9ZBeZ/hkbkfIUl+6cHBiIQ
+   fhyihl2slJmTUyiJ0YdsXnekodqzjGZ7uoGzyNCh53IP47qDA+GOpT7tS
+   +eeHNY71ADtT8YFFjqvwzDMnCZc+19x1f9cVHRHAwAS+BFe81nBsPXNcn
+   qQ4Iyw4PPEHhBIYrMat+3Atr+LRxMr47W9x5rj7cHL1ZD9QLbQ0msFC2v
    Q==;
 From:   Jiri Valek - 2N <jiriv@axis.com>
 To:     <linux-input@vger.kernel.org>
@@ -34,10 +34,12 @@ CC:     <devicetree@vger.kernel.org>, <dmitry.torokhov@gmail.com>,
         <krzysztof.kozlowski+dt@linaro.org>,
         <linux-kernel@vger.kernel.org>, <robh+dt@kernel.org>,
         <u.kleine-koenig@pengutronix.de>, <jiriv@axis.com>
-Subject: [PATCH v3 0/2] Input: cap11xx add support for cap1203, cap1293 and cap1298
-Date:   Tue, 10 Jan 2023 16:28:57 +0100
-Message-ID: <20230110152859.295881-1-jiriv@axis.com>
+Subject: [PATCH v3 1/2] dt-bindings: input: microchip,cap11xx: add cap1203, cap1293 and cap1298
+Date:   Tue, 10 Jan 2023 16:28:58 +0100
+Message-ID: <20230110152859.295881-2-jiriv@axis.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230110152859.295881-1-jiriv@axis.com>
+References: <20230110152859.295881-1-jiriv@axis.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -54,24 +56,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PATCH 1 - add compatible string for new models
-PATCH 2 - add support for new models into driver
+Add support for cap1203, cap1293 and cap1298.
 
-Changes in v2:
-  - Fixed if statement in PATCH 2.
+Signed-off-by: Jiri Valek - 2N <jiriv@axis.com>
+---
+No changes since v1
 
-Changes in v3:
-  - Model names sorted alphabetically in PATCH 2.
+ Documentation/devicetree/bindings/input/microchip,cap11xx.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Jiri Valek - 2N (2):
-  dt-bindings: input: microchip,cap11xx: add cap1203, cap1293 and
-    cap1298
-  Input: cap11xx - add support for cap1203, cap1293 and cap1298
-
- .../bindings/input/microchip,cap11xx.yaml     |  3 +++
- drivers/input/keyboard/cap11xx.c              | 19 +++++++++++++++++--
- 2 files changed, 20 insertions(+), 2 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml b/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
+index 67d4d8f86a2d..08ca993b94c4 100644
+--- a/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
++++ b/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
+@@ -20,6 +20,9 @@ properties:
+       - microchip,cap1126
+       - microchip,cap1188
+       - microchip,cap1206
++      - microchip,cap1203
++      - microchip,cap1293
++      - microchip,cap1298
+ 
+   reg:
+     maxItems: 1
 -- 
 2.25.1
 
