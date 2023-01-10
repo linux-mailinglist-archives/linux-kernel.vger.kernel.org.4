@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331B8664C76
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10904664C7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjAJT3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:29:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S231309AbjAJTaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:30:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjAJT3p (ORCPT
+        with ESMTP id S229707AbjAJTar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:29:45 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2325E49152
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:29:44 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id f21so9210187ljc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:29:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C0mrhoty+Ut/5gp43tpMbErT7DWwGt+4GLr6GpRkjbQ=;
-        b=i1+w0zA7s1qv8jt4zUE+emrBPpmeSdaUBPz0yCFo1nbNg9YBG5C9AAvS4RNrL0co/Y
-         dqSyexwdFchejaYEPv5Wfg4lBoPaVxUCnM4E9fys7J60ul6YlINQL+lxBN5cjLvLT7fy
-         V1Xpg8rHHMcctUni8OS7+vepJW4M0IZKby69k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C0mrhoty+Ut/5gp43tpMbErT7DWwGt+4GLr6GpRkjbQ=;
-        b=wXxf1yDcjCJxJ8CtHeX7WCJK1Xu/YAsuwDPQKydO0B1BW+Sco3q3vB6rysBdqiz9Eb
-         sJNSVELl1te/3E9C3LsQ+Dmp1XJz0dkD5npsFtqxxisWzmp8eypK67LXbA5vuBOlcwDe
-         vmBwrF4NTnRE3eFoNHtVvd4bU+RB1adfwzb/XjREQS6snMpwkqyWc6+72U/7vRcp7Bo1
-         HnKJWgj7UML+sTmwtc3eOs2Llh5pCx1KUWl6NtiYV9gRXHLjuhRnKpVMtcmJlr27h/tG
-         IqYFdfNT1Sxvw41qtg/guZvXKs3KNGCBAKtBZNzqeLu/1JMQVXxS4xY/mGCfrkfys2bQ
-         +TRw==
-X-Gm-Message-State: AFqh2koeuOovgFoUXbRU1PA14LXIz9vszaHYrKseHm7IHIfRr1AxlyLv
-        dO521U3k7LdKPcArv0/qYIZ9gK+dCjgehVpGWavP2Q==
-X-Google-Smtp-Source: AMrXdXvM2MfqylLeD7zuAdCzxczA9kWaE3YYfn4AhNYhK9aWSE+eYRCCCjZP2dMjqs5j2772EMlAYv4Eqh5jwd26EBI=
-X-Received: by 2002:a2e:2ac4:0:b0:27f:cc03:496a with SMTP id
- q187-20020a2e2ac4000000b0027fcc03496amr3837868ljq.359.1673378982518; Tue, 10
- Jan 2023 11:29:42 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 10 Jan 2023 11:29:41 -0800
+        Tue, 10 Jan 2023 14:30:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECBCBC87;
+        Tue, 10 Jan 2023 11:30:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2A1361866;
+        Tue, 10 Jan 2023 19:30:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D55A5C433D2;
+        Tue, 10 Jan 2023 19:30:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673379045;
+        bh=Z3VK4XjQQq+KEw1B3BXi5i7EA2vHGCfGtc50BK1cESg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=BvzSqmM5VG/wtFQGgC8wSJpNGj6cgw68m0jQu72oiRnFxq9RH2qpedGzdleXXD71K
+         bTBsYQxKBW9cIYMLJ5hW86luyWHFps5e033Rxv0V1np30bM6iPxMbEnOq3LZxcznoz
+         BznUmmc9p9ltWZ/lTU/zDAJRJ7hEXXij4ac700Pigklzl426hos0/SURV2s3uNu2En
+         JgVtQUOOkW+m5nkU1gJE61D6/3cQvy0UNYfSexkGczt7yic1BOCQ00rh6NRFweHxNW
+         Z9ntIpgGQrsKhbJ7xwEtjqZfnJMi3Dzjj+lEcHbFdGHXsDUCmcXKyd6OnHFsgb3UXa
+         AZBub3gX7p4lg==
+Date:   Tue, 10 Jan 2023 13:30:43 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     linux-pci@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        David E Box <david.e.box@intel.com>,
+        Yunying Sun <yunying.sun@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Florent DELAHAYE <linuxkernelml@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 2/2] x86/pci: Treat EfiMemoryMappedIO as reservation of
+ ECAM space
+Message-ID: <20230110193043.GA1603645@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <Y7nV+aeFiq5aD0xU@ravnborg.org>
-References: <20230106030108.2542081-1-swboyd@chromium.org> <Y7nV+aeFiq5aD0xU@ravnborg.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 10 Jan 2023 11:29:41 -0800
-Message-ID: <CAE-0n50QOv_+j1Pe19xKj4Cx2Y5_Ak5Kt68UBJuZt10D-jQ44g@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel: boe-tv101wum-nl6: Ensure DSI writes succeed
- during disable
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        yangcong <yangcong5@huaqin.corp-partner.google.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63bdae72740db_5178e294bd@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,53 +68,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sam Ravnborg (2023-01-07 12:28:41)
-> On Thu, Jan 05, 2023 at 07:01:08PM -0800, Stephen Boyd wrote:
-> > The unprepare sequence has started to fail after moving to panel bridge
-> > code in the msm drm driver (commit 007ac0262b0d ("drm/msm/dsi: switch to
-> > DRM_PANEL_BRIDGE")). You'll see messages like this in the kernel logs:
-> >
-> >    panel-boe-tv101wum-nl6 ae94000.dsi.0: failed to set panel off: -22
-> >
-> > This is because boe_panel_enter_sleep_mode() needs an operating DSI link
-> > to set the panel into sleep mode. Performing those writes in the
-> > unprepare phase of bridge ops is too late, because the link has already
-> > been torn down by the DSI controller in post_disable, i.e. the PHY has
-> > been disabled, etc. See dsi_mgr_bridge_post_disable() for more details
-> > on the DSI .
-> >
-> > Split the unprepare function into a disable part and an unprepare part.
-> > For now, just the DSI writes to enter sleep mode are put in the disable
-> > function. This fixes the panel off routine and keeps the panel happy.
-> >
-> > My Wormdingler has an integrated touchscreen that stops responding to
-> > touch if the panel is only half disabled too. This patch fixes it. And
-> > finally, this saves power when the screen is off because without this
-> > fix the regulators for the panel are left enabled when nothing is being
-> > displayed on the screen.
->
-> The pattern we use in several (but not all) panel drivers are that
-> errors in unprepare/disable are logged but the function do not skip
-> the remainder of the function. This is to avoid that we do not disable
-> power supplies etc.
+On Tue, Jan 10, 2023 at 10:29:06AM -0800, Dan Williams wrote:
+> Bjorn Helgaas wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> > 
+> > Normally we reject ECAM space unless it is reported as reserved in the E820
+> > table or via a PNP0C02 _CRS method (PCI Firmware, r3.3, sec 4.1.2).  This
+> > means PCI extended config space (offsets 0x100-0xfff) may not be accessible.
+> > 
+> > Some firmware doesn't report ECAM space via PNP0C02 _CRS methods, but does
+> > mention it as an EfiMemoryMappedIO region via EFI GetMemoryMap(), which is
+> > normally converted to an E820 entry by a bootloader or EFI stub.
+> > 
+> > 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map"), removes
+> > E820 entries that correspond to EfiMemoryMappedIO regions because some
+> > other firmware uses EfiMemoryMappedIO for PCI host bridge windows, and the
+> > E820 entries prevent Linux from allocating BAR space for hot-added devices.
+> > 
+> > Allow use of ECAM for extended config space when the region is covered by
+> > an EfiMemoryMappedIO region, even if it's not included in E820 or PNP0C02
+> > _CRS.
+> > 
+> > Reported by Kan Liang, Tony Luck, and Giovanni Cabiddu.
+> > 
+> > Fixes: 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map")
+> > Link: https://lore.kernel.org/r/ac2693d8-8ba3-72e0-5b66-b3ae008d539d@linux.intel.com
+> > Reported-by: Kan Liang <kan.liang@linux.intel.com>
+> > Reported-by: Tony Luck <tony.luck@intel.com>
+> > Reported-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > ---
+> >  arch/x86/pci/mmconfig-shared.c | 31 +++++++++++++++++++++++++++++++
+> >  1 file changed, 31 insertions(+)
+> > 
+> > diff --git a/arch/x86/pci/mmconfig-shared.c b/arch/x86/pci/mmconfig-shared.c
+> > index cd16bef5f2d9..da4b6e8e9df0 100644
+> > --- a/arch/x86/pci/mmconfig-shared.c
+> > +++ b/arch/x86/pci/mmconfig-shared.c
+> > @@ -12,6 +12,7 @@
+> >   */
+> >  
+> >  #include <linux/acpi.h>
+> > +#include <linux/efi.h>
+> >  #include <linux/pci.h>
+> >  #include <linux/init.h>
+> >  #include <linux/bitmap.h>
+> > @@ -442,6 +443,32 @@ static bool is_acpi_reserved(u64 start, u64 end, enum e820_type not_used)
+> >  	return mcfg_res.flags;
+> >  }
+> >  
+> > +static bool is_efi_mmio(u64 start, u64 end, enum e820_type not_used)
+> > +{
+> > +#ifdef CONFIG_EFI
+> > +	efi_memory_desc_t *md;
+> > +	u64 size, mmio_start, mmio_end;
+> > +
+> > +	for_each_efi_memory_desc(md) {
+> > +		if (md->type == EFI_MEMORY_MAPPED_IO) {
+> > +			size = md->num_pages << EFI_PAGE_SHIFT;
+> > +			mmio_start = md->phys_addr;
+> > +			mmio_end = mmio_start + size;
+> > +
+> > +			/*
+> > +			 * N.B. Caller supplies (start, start + size),
+> > +			 * so to match, mmio_end is the first address
+> > +			 * *past* the EFI_MEMORY_MAPPED_IO area.
+> > +			 */
+> > +			if (mmio_start <= start && end <= mmio_end)
+> > +				return true;
+> > +		}
+> > +	}
+> > +#endif
+> 
+> Perhaps the following trick (compile tested), but either way:
+> 
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 
-Ah that would have made it so I didn't see a problem. But I wonder if
-the panel gets borked if you don't disable it via DSI writes before
-yanking the power?
+That's a great trick, and I wish I'd thought of it.  I have some
+follow-on patches I'm considering for v6.3, so in the interest of
+streamlining the path of this one to v6.2-rc4, I think I'll wait on
+this until v6.3.
 
->
-> For this case we could ask ourself if the display needs to enter sleep
-> mode right before we disable the regulator. But if the regulator is
-> fixed, so the disable has no effect, this seems OK.
-
-What do you mean by fixed?
-
->
-> Please fix the unprepare to not jump out early, on top of or together
-> with the other fix.
-
-After this patch the unprepare only bails out early if the bool
-'prepared' flag isn't set. Are you suggesting to get rid of that flag
-and unconditionally disable the regulators? Is it possible for the
-unprepare to be called multiple times without a balanced call to
-prepare?
+> diff --git a/arch/x86/pci/mmconfig-shared.c b/arch/x86/pci/mmconfig-shared.c
+> index da4b6e8e9df0..ae95d1b073c6 100644
+> --- a/arch/x86/pci/mmconfig-shared.c
+> +++ b/arch/x86/pci/mmconfig-shared.c
+> @@ -445,7 +445,6 @@ static bool is_acpi_reserved(u64 start, u64 end, enum e820_type not_used)
+>  
+>  static bool is_efi_mmio(u64 start, u64 end, enum e820_type not_used)
+>  {
+> -#ifdef CONFIG_EFI
+>  	efi_memory_desc_t *md;
+>  	u64 size, mmio_start, mmio_end;
+>  
+> @@ -464,7 +463,6 @@ static bool is_efi_mmio(u64 start, u64 end, enum e820_type not_used)
+>  				return true;
+>  		}
+>  	}
+> -#endif
+>  
+>  	return false;
+>  }
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index 4b27519143f5..3ab0c255b791 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -790,8 +790,12 @@ extern int efi_memattr_apply_permissions(struct mm_struct *mm,
+>   *
+>   * Once the loop finishes @md must not be accessed.
+>   */
+> +#ifdef CONFIG_EFI
+>  #define for_each_efi_memory_desc(md) \
+>  	for_each_efi_memory_desc_in_map(&efi.memmap, md)
+> +#else
+> +#define for_each_efi_memory_desc(md) for (; 0;)
+> +#endif
+>  
+>  /*
+>   * Format an EFI memory descriptor's type and attributes to a user-provided
