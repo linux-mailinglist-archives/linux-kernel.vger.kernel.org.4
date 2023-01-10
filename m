@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E31664FCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993C8664FD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235585AbjAJXSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 18:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S232021AbjAJXSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 18:18:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbjAJXSB (ORCPT
+        with ESMTP id S234719AbjAJXSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 18:18:01 -0500
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607C0209;
-        Tue, 10 Jan 2023 15:18:00 -0800 (PST)
-Received: by mail-oo1-f43.google.com with SMTP id t15-20020a4a96cf000000b0049f7e18db0dso3617859ooi.10;
-        Tue, 10 Jan 2023 15:18:00 -0800 (PST)
+        Tue, 10 Jan 2023 18:18:02 -0500
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62DEE0AD;
+        Tue, 10 Jan 2023 15:18:01 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id v15-20020a9d69cf000000b006709b5a534aso7893995oto.11;
+        Tue, 10 Jan 2023 15:18:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BkffzaMKgEkAFzow+1H0ViuhO0ELE5aDY2zTJCKAxL8=;
-        b=K5qV9FXdJ54pmT0009pjFZLThUEdBJk0sYMrc2O8j3mtQ+OJJX/XVpn8zYw6/OaQvB
-         CBt6uTGIQMzx6f6jLvrn51C21V4tiAbhCAVww1rxAI7EDpXZvqQiwcU+SIirUdrAImwg
-         Y8WZpFUIfuAYSFN14Hyx9fUXYLIh4yKEEONDBGC1ckN4vAuYthNWGECJuvGpO0EuLEO2
-         pa8FYHC0xShFczL06Qer9baPtis7zc2cZknpVTO/AN0aIdVauk5n4cz6LIRxJyGEq2uV
-         A8V0o8xIeWRCE9blmP5Eixm4J8Zk+X51+DyuAYR0IRUor2ytraRv8+x1bTKsGsYXC6hm
-         7QTQ==
-X-Gm-Message-State: AFqh2krrLgJOWkYpHLyZWUb9UsnTzraVZvMl3WciDfvXpfUBIftA1pj8
-        2FNWFERZ2R5ioJyZXs5e+ZZ1+ryJkA==
-X-Google-Smtp-Source: AMrXdXsPUnlihCfZ58pdMoiErSCAf5PyyC5YskkNloNog96Pmb6ECnLgmGoZIrhTMwzUfjZO2S7H/A==
-X-Received: by 2002:a05:6820:387:b0:4f1:e2d8:47e4 with SMTP id r7-20020a056820038700b004f1e2d847e4mr75789ooj.9.1673392679634;
-        Tue, 10 Jan 2023 15:17:59 -0800 (PST)
+        bh=0PipTcdGJi3JzFB6MCvSNks1FIzBieh7o/0BWQgxG5o=;
+        b=Fecor3PEJOafFxcb1/BnKvcwdyIYmBabmXCqrECSp+j7Hd5FY/bKJFRmrnbzpzJp5h
+         bI6MJ0XPkiw5nn6lIpBH4ddXFRAcHL0l0E0sawbVEotuRcbVYQmjUMYtvyLzWMG33fpd
+         TIeCeqAE5beNPRZfUr02vKEqpB1FJPUMei+NXXYZyZUluvYqthwApwONB9cbnbrgrpVt
+         XTvWq5AqAL5Zdt+TcKX9uH/C/MqO/me5lKOxdFIoybiVGfuf1cPw7ccgC277bD/cSXOm
+         OAx2udHfECpdyab6ISXY5yHg17Fq8Sox0wwlP0MLYxKzG11Of/g520t1Fq5zDUR6CD5z
+         tqdw==
+X-Gm-Message-State: AFqh2kr/b7unuFEGD4X6f8fjFLEhmMk3Gudmqe91Ykm93fkjMBGX1pu7
+        31AXXskWmtNcZeOLHZ0trWWRg0LorQ==
+X-Google-Smtp-Source: AMrXdXvTxhp8j2XHzYR8yhUyqDawXHa82JUo3VRja1xqQmky8ZknrJFW42XywhUnepnso8RXS9rv6A==
+X-Received: by 2002:a9d:480b:0:b0:670:9c6b:e684 with SMTP id c11-20020a9d480b000000b006709c6be684mr31539339otf.22.1673392681072;
+        Tue, 10 Jan 2023 15:18:01 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q6-20020a4a9606000000b004a388af96f9sm6330128ooi.4.2023.01.10.15.17.58
+        by smtp.gmail.com with ESMTPSA id 42-20020a9d012d000000b006619295af60sm2328250otu.70.2023.01.10.15.18.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 15:17:58 -0800 (PST)
-Received: (nullmailer pid 3145662 invoked by uid 1000);
+        Tue, 10 Jan 2023 15:18:00 -0800 (PST)
+Received: (nullmailer pid 3145664 invoked by uid 1000);
         Tue, 10 Jan 2023 23:17:55 -0000
 From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 10 Jan 2023 17:17:46 -0600
-Subject: [PATCH 3/4] dt-bindings: usb: Convert Marvell Orion EHCI to DT
- schema
+Date:   Tue, 10 Jan 2023 17:17:47 -0600
+Subject: [PATCH 4/4] dt-bindings: usb: Convert Nuvoton EHCI to DT schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230110-dt-usb-v1-3-8e366e326513@kernel.org>
+Message-Id: <20230110-dt-usb-v1-4-8e366e326513@kernel.org>
 References: <20230110-dt-usb-v1-0-8e366e326513@kernel.org>
 In-Reply-To: <20230110-dt-usb-v1-0-8e366e326513@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -76,56 +75,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Marvell Orion EHCI binding is just some compatible strings, so add it
-to the generic-ehci.yaml schema.
+The Nuvoton EHCI binding is just some compatible strings, so add it to the
+generic-ehci.yaml schema.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/usb/ehci-orion.txt         | 22 ----------------------
- .../devicetree/bindings/usb/generic-ehci.yaml      |  2 ++
- 2 files changed, 2 insertions(+), 22 deletions(-)
+ .../devicetree/bindings/usb/generic-ehci.yaml        |  2 ++
+ .../devicetree/bindings/usb/npcm7xx-usb.txt          | 20 --------------------
+ 2 files changed, 2 insertions(+), 20 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/ehci-orion.txt b/Documentation/devicetree/bindings/usb/ehci-orion.txt
-deleted file mode 100644
-index 2855bae79fda..000000000000
---- a/Documentation/devicetree/bindings/usb/ehci-orion.txt
-+++ /dev/null
-@@ -1,22 +0,0 @@
--* EHCI controller, Orion Marvell variants
--
--Required properties:
--- compatible: must be one of the following
--	"marvell,orion-ehci"
--	"marvell,armada-3700-ehci"
--- reg: physical base address of the controller and length of memory mapped
--  region.
--- interrupts: The EHCI interrupt
--
--Optional properties:
--- clocks: reference to the clock
--- phys: reference to the USB PHY
--- phy-names: name of the USB PHY, should be "usb"
--
--Example:
--
--	ehci@50000 {
--		compatible = "marvell,orion-ehci";
--		reg = <0x50000 0x1000>;
--		interrupts = <19>;
--	};
 diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-index 994818cb6044..85e41609b09b 100644
+index 85e41609b09b..1687c7e9302b 100644
 --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
 +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-@@ -74,6 +74,8 @@ properties:
-           - const: usb-ehci
-       - enum:
+@@ -76,6 +76,8 @@ properties:
            - generic-ehci
-+          - marvell,armada-3700-ehci
-+          - marvell,orion-ehci
+           - marvell,armada-3700-ehci
+           - marvell,orion-ehci
++          - nuvoton,npcm750-ehci
++          - nuvoton,npcm845-ehci
            - usb-ehci
  
    reg:
+diff --git a/Documentation/devicetree/bindings/usb/npcm7xx-usb.txt b/Documentation/devicetree/bindings/usb/npcm7xx-usb.txt
+deleted file mode 100644
+index 352a0a1e2f76..000000000000
+--- a/Documentation/devicetree/bindings/usb/npcm7xx-usb.txt
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Nuvoton NPCM7XX SoC USB controllers:
+------------------------------
+-
+-EHCI:
+------
+-
+-Required properties:
+-- compatible: should be one of
+-    "nuvoton,npcm750-ehci"
+-    "nuvoton,npcm845-ehci"
+-- interrupts: Should contain the EHCI interrupt
+-- reg:        Physical address and length of the register set for the device
+-
+-Example:
+-
+-	ehci1: usb@f0806000 {
+-		compatible = "nuvoton,npcm750-ehci";
+-		reg = <0xf0806000 0x1000>;
+-		interrupts = <0 61 4>;
+-	};
 
 -- 
 2.39.0
