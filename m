@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC2B664EAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96008664EB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234892AbjAJWU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 17:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S235063AbjAJWVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 17:21:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234788AbjAJWUq (ORCPT
+        with ESMTP id S235259AbjAJWVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 17:20:46 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E87D63F48
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 14:20:45 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4c8e781bc0aso91860487b3.22
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 14:20:45 -0800 (PST)
+        Tue, 10 Jan 2023 17:21:21 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E12101D6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 14:20:57 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 11-20020a25050b000000b007b7968a6423so14250800ybf.13
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 14:20:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e+OL21tRhOI5FC8OP8rOHe4TMF297jaFfbFeRu1wlqg=;
-        b=pAopMpFhTfX0jzenqkNBx67vQjfjd9TY0dEwmq4dnUUW/5FoxhH/tVN7EA6o41wxrx
-         rsUBnMfLZxm5PQ3Gm0Z5qpVo9n/Dnw2t+GjNw3fXdMd4EbvEybnsF61808WRKPLXGEPX
-         BP/2/BT6IOMQEJFjn/Laru90RARJ4roIZIz7Einhd/Z0P1NaLFrKvEfC1eWc4LMqSZvs
-         b0T7fdriG8IC3vY8yB0wM/np9pfhaT10oOvYNSasEBMAIwRVJOVL3zjz2LA6Lhv6zmQq
-         XBNkFoUi1yjwG7YzAhVBeRgAhvFBI7sfazm/WV9x3buWT4x5HgobueNTp6jLXWkx3t0D
-         8dBQ==
+        bh=b4cDFSVYG43croOnEV27nNQKcdSJ0iRzIK+gxT25DWQ=;
+        b=oWwqPFHv+dZCSeNo+f2delVO4bkS5CysJ1Fb9cTlI9zPxRA7uKaiJ7fzrQAE/gTePN
+         yQdJfBq26Z53aSri1L4flICMFvFNUevMxBBdhNvHv8Ijb0Oku7b8R3i1GIZwAS7jcJ22
+         jMmWxbFtkBzDL/R9uaLOc+rwZEKLhEkSnycWiK+bJoz5ZUvP8k/r3gzwpyc58iJZ/qIR
+         uFv/RK4kFlujjtJHI9F8csecrHrl/8oIz/UTVfp75WDyghQbB2noKVROCgEIL9/hytzp
+         05/J55rtJDAGcO6Q4BwMKuBUc0CZ06wbMj2tK5aFbb8NTedwer0JBGvwhthbuu/kH2CO
+         qRSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e+OL21tRhOI5FC8OP8rOHe4TMF297jaFfbFeRu1wlqg=;
-        b=q7FuZWm0llHgxwGtaxK3J9j2wrYY4Ycsnn8508DEATVf9xzzStNyIMiPUXlAwFHKPQ
-         SvXiMOm4VgksSGEm0UeNUyStP1l4cogJ54/vApZyC+nFNtVWMryWeEIW5surjjTs9bOm
-         JG5TOhVg9MMdEX7ySnOQ4hLeOKWeZfmJZdEmc2i7NEeZ1TWhQqj/4g44EHgYtM/9CEii
-         /5OMeqlRxPV7HFoDgFZ+cF4LCr/MwbjxlqShOXC8zf0V3/f9J1PhslCah0hq8oY3wKen
-         oyspVRg0+qesbYWhAtLrucJHDVnIIXwsUOBC3wkCX2bB/XlLugsg3T9GPrdx7GxwCJ0H
-         Nn0Q==
-X-Gm-Message-State: AFqh2kpaOaJc9B4Q2KEvMq7xp7B19sVYUDZztvk97dRZPQ4GlkvtZUF+
-        Px+GH+JiIehVSGCKN0oJ+TiwqoqFtWOH
-X-Google-Smtp-Source: AMrXdXulQqaqr6Cu/NW8mUaEtU/19rWhPKAZID8kQpT+uofH5KiblfeW6JI4Cfz9L3ukAKsgfkHBgFGgaTTP
+        bh=b4cDFSVYG43croOnEV27nNQKcdSJ0iRzIK+gxT25DWQ=;
+        b=v8yJgBnlAbfPahz2UL5L00cZhIHn3/MtSzqdTyS01dfG8Zu+OE754HGaNNkTibOCig
+         edyzwsMNCT2573IEBuqcKz3n4VyjIv+Hk7axlR93MZQoi5HgS6ismI8usaLp4zG+ASO1
+         yYgGyDAIdSHWaZh3Ox3AqFNLtYgB5u0vKcCoKIZNZDaTRusUwZp089tE5+ybTWrOBRtJ
+         PoWDOyggX+RaJDhUtIdaxBMRMzCnFZi6NNLox9N1gGkoGZjrV2FHEVCFVdNJ9Nd8FS38
+         eZYcYE221Zv59JRXxXvIF65fjAQ4TjVxacyT7pP/rL4ZjgkkPaoJ/6iwpWILgssmpmMt
+         /VzA==
+X-Gm-Message-State: AFqh2kq6s8RJAMG3E/2HYpNRafG0Jv9WHsUKpS3M4KPYzy/cJl7FcGIP
+        cayPSUAIIgAtPLj1AO4loFLG0V1JbMPN
+X-Google-Smtp-Source: AMrXdXvI95ryIYv3mYiLaEW52Mjy6G2g6DQ8MwrTjJmJYfZaK+uEyVB7Y9YgTbG/z/1GFMv0iQnxIls+z2Xi
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:cebf:c37e:8184:56])
- (user=irogers job=sendgmr) by 2002:a25:804:0:b0:767:3057:9533 with SMTP id
- 4-20020a250804000000b0076730579533mr8371214ybi.454.1673389244250; Tue, 10 Jan
- 2023 14:20:44 -0800 (PST)
-Date:   Tue, 10 Jan 2023 14:19:59 -0800
+ (user=irogers job=sendgmr) by 2002:a25:9a02:0:b0:7ba:f028:b325 with SMTP id
+ x2-20020a259a02000000b007baf028b325mr1547877ybn.452.1673389256480; Tue, 10
+ Jan 2023 14:20:56 -0800 (PST)
+Date:   Tue, 10 Jan 2023 14:20:00 -0800
 In-Reply-To: <20230110222003.1591436-1-irogers@google.com>
-Message-Id: <20230110222003.1591436-4-irogers@google.com>
+Message-Id: <20230110222003.1591436-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20230110222003.1591436-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v1 3/7] tools lib subcmd: Add run_command_strbuf
+Subject: [PATCH v1 4/7] tools lib api: Minor strbuf_read improvements
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -90,7 +90,7 @@ Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,152 +98,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Often a command wants to be run in a shell with stdout placed in a
-string. This API mimics that of stdio's popen, running the given
-command (not argv array) with "/bin/sh -c" then appending the output
-from stdout to the buf argument.
+If a read is smaller than the remaining space, don't grow the buffer
+as it is likely we've reached the end of the file.  Make the grow
+amounts a single page rather than just over 2 once the null terminator
+is included.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/subcmd/Makefile      | 32 +++++++++++++++++++++++++++++---
- tools/lib/subcmd/run-command.c | 30 ++++++++++++++++++++++++++++++
- tools/lib/subcmd/run-command.h | 14 ++++++++++++++
- 3 files changed, 73 insertions(+), 3 deletions(-)
+ tools/lib/api/strbuf.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-index b87213263a5e..23174d013519 100644
---- a/tools/lib/subcmd/Makefile
-+++ b/tools/lib/subcmd/Makefile
-@@ -13,6 +13,7 @@ CC ?= $(CROSS_COMPILE)gcc
- LD ?= $(CROSS_COMPILE)ld
- AR ?= $(CROSS_COMPILE)ar
+diff --git a/tools/lib/api/strbuf.c b/tools/lib/api/strbuf.c
+index 4639b2d02e62..eafa2c01f46a 100644
+--- a/tools/lib/api/strbuf.c
++++ b/tools/lib/api/strbuf.c
+@@ -143,25 +143,28 @@ ssize_t strbuf_read(struct strbuf *sb, int fd, ssize_t hint)
+ 	size_t oldalloc = sb->alloc;
+ 	int ret;
  
-+MKDIR = mkdir
- RM = rm -f
+-	ret = strbuf_grow(sb, hint ? hint : 8192);
++	ret = strbuf_grow(sb, hint ? hint : 4095);
+ 	if (ret)
+ 		return ret;
  
- MAKEFLAGS += --no-print-directory
-@@ -55,6 +56,17 @@ CFLAGS += -I$(srctree)/tools/include/
+ 	for (;;) {
+-		ssize_t cnt;
++		ssize_t read_size;
++		size_t sb_remaining = sb->alloc - sb->len - 1;
  
- CFLAGS += $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
- 
-+LIBAPI_DIR      = $(srctree)/tools/lib/api/
-+ifneq ($(OUTPUT),)
-+  LIBAPI_OUTPUT = $(abspath $(OUTPUT))/libapi
-+else
-+  LIBAPI_OUTPUT = $(CURDIR)/libapi
-+endif
-+LIBAPI_DESTDIR = $(LIBAPI_OUTPUT)
-+LIBAPI_INCLUDE = $(LIBAPI_DESTDIR)/include
-+LIBAPI = $(LIBAPI_OUTPUT)/libapi.a
-+CFLAGS += -I$(LIBAPI_OUTPUT)/include
-+
- SUBCMD_IN := $(OUTPUT)libsubcmd-in.o
- 
- ifeq ($(LP64), 1)
-@@ -76,7 +88,9 @@ include $(srctree)/tools/build/Makefile.include
- 
- all: fixdep $(LIBFILE)
- 
--$(SUBCMD_IN): FORCE
-+prepare: $(LIBAPI)
-+
-+$(SUBCMD_IN): FORCE prepare
- 	@$(MAKE) $(build)=libsubcmd
- 
- $(LIBFILE): $(SUBCMD_IN)
-@@ -113,10 +127,22 @@ install_headers: $(INSTALL_HDRS)
- 
- install: install_lib install_headers
- 
--clean:
-+$(LIBAPI_OUTPUT):
-+	$(Q)$(MKDIR) -p $@
-+
-+$(LIBAPI): FORCE | $(LIBAPI_OUTPUT)
-+	$(Q)$(MAKE) -C $(LIBAPI_DIR) O=$(LIBAPI_OUTPUT) \
-+		DESTDIR=$(LIBAPI_DESTDIR) prefix= \
-+		$@ install_headers
-+
-+$(LIBAPI)-clean:
-+	$(call QUIET_CLEAN, libapi)
-+	$(Q)$(RM) -r -- $(LIBAPI_OUTPUT)
-+
-+clean: $(LIBAPI)-clean
- 	$(call QUIET_CLEAN, libsubcmd) $(RM) $(LIBFILE); \
- 	find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
- 
- FORCE:
- 
--.PHONY: clean FORCE
-+.PHONY: clean FORCE prepare
-diff --git a/tools/lib/subcmd/run-command.c b/tools/lib/subcmd/run-command.c
-index 5cdac2162532..e90b285b6720 100644
---- a/tools/lib/subcmd/run-command.c
-+++ b/tools/lib/subcmd/run-command.c
-@@ -7,6 +7,7 @@
- #include <linux/string.h>
- #include <errno.h>
- #include <sys/wait.h>
-+#include <api/strbuf.h>
- #include "subcmd-util.h"
- #include "run-command.h"
- #include "exec-cmd.h"
-@@ -227,3 +228,32 @@ int run_command_v_opt(const char **argv, int opt)
- 	prepare_run_command_v_opt(&cmd, argv, opt);
- 	return run_command(&cmd);
- }
-+
-+int run_command_strbuf(const char *cmd, struct strbuf *buf)
-+{
-+	const char *argv[4] = {
-+		"/bin/sh",
-+		"-c",
-+		cmd,
-+		NULL
-+	};
-+	struct child_process child = {
-+		.argv = argv,
-+		.out = -1,
-+	};
-+	int err;
-+	ssize_t read_sz;
-+
-+	err = start_command(&child);
-+	if (err)
-+		return err;
-+
-+	read_sz = strbuf_read(buf, child.out, 0);
-+
-+	err = finish_command(&child);
-+	close(child.out);
-+	if (read_sz < 0)
-+		return (int)read_sz;
-+
-+	return err;
-+}
-diff --git a/tools/lib/subcmd/run-command.h b/tools/lib/subcmd/run-command.h
-index 17d969c6add3..1f7a2af9248c 100644
---- a/tools/lib/subcmd/run-command.h
-+++ b/tools/lib/subcmd/run-command.h
-@@ -58,4 +58,18 @@ int run_command(struct child_process *);
- #define RUN_COMMAND_STDOUT_TO_STDERR 4
- int run_command_v_opt(const char **argv, int opt);
- 
-+struct strbuf;
-+/**
-+ * run_command_strbuf() - Run cmd using /bin/sh and place stdout in strbuf.
-+ * @cmd: The command to run by "/bin/sh -c".
-+ * @buf: The strbuf appended to by reading stdout.
-+ *
-+ * Similar to popen with fread, run the given command reading the stdout output
-+ * to buf. As with popen, stderr output goes to the current processes stderr but
-+ * may be redirected in cmd by using "2>&1".
-+ *
-+ * Return: 0 on success or a negative error code on failure.
-+ */
-+int run_command_strbuf(const char *cmd, struct strbuf *buf);
-+
- #endif /* __SUBCMD_RUN_COMMAND_H */
+-		cnt = read(fd, sb->buf + sb->len, sb->alloc - sb->len - 1);
+-		if (cnt < 0) {
++		read_size = read(fd, sb->buf + sb->len, sb_remaining);
++		if (read_size < 0) {
+ 			if (oldalloc == 0)
+ 				strbuf_release(sb);
+ 			else
+ 				strbuf_setlen(sb, oldlen);
+-			return cnt;
++			return read_size;
+ 		}
+-		if (!cnt)
++		if (read_size == 0)
+ 			break;
+-		sb->len += cnt;
+-		ret = strbuf_grow(sb, 8192);
++		sb->len += read_size;
++		if ((size_t)read_size < sb_remaining)
++			continue;
++		ret = strbuf_grow(sb, 4095);
+ 		if (ret)
+ 			return ret;
+ 	}
 -- 
 2.39.0.314.g84b9a713c41-goog
 
