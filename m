@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59097664356
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A4966436B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:36:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238611AbjAJOd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:33:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
+        id S233029AbjAJOgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbjAJOc4 (ORCPT
+        with ESMTP id S238568AbjAJOgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:32:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF451392DB;
-        Tue, 10 Jan 2023 06:32:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B7166173E;
-        Tue, 10 Jan 2023 14:32:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25F9C4339B;
-        Tue, 10 Jan 2023 14:32:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673361175;
-        bh=0U45HmZgegjPkMDOmrkm9NMlqi4zLwodMY8zNt/kRWI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dfkXfpnXa63c3D8jyq0ORhwvSloUoK8fCFgqaZvZ+wRd3qSdNsCh6m8XRWaEkXxZX
-         AsATo/OHKnIGbYKcP3wG+JIioJsbQ4dh4yuiNXo1ca/Wq/XX52ni59C1dBRQqEyF+W
-         wIgoU4t89Sf2ykDuy7/Ng4J79qKpkLlzJkNUXiEqqmuJSHolUCOQyqKk+WSjcKQDGa
-         w8PTaX4rEt1lcI/fjvFrqGC6dA8gq5q9IZhVfnYsEhQLjaM1lEBaF0OPyCskHASvwp
-         7RAcFb4OqtdS4oXS9AvPrtplbOPTPlg+2Q4HRRoYttbrsuTCpzEClNUqqKg3hBNtSe
-         NyY1JcIBXavSA==
-Received: by mail-lf1-f48.google.com with SMTP id bt23so18687262lfb.5;
-        Tue, 10 Jan 2023 06:32:54 -0800 (PST)
-X-Gm-Message-State: AFqh2kokfitk29qHGRfAy8UFxqXX9YluPhlf37OY7CmEfepqHlpWQdoz
-        p/BG1zT1OpgSxQdk9V+dT87HD3snPOWUCY6fZ+U=
-X-Google-Smtp-Source: AMrXdXu6SHV+bJRSe9pB8EUBgBNaA/0cKm1zCebRcx57RXXlXO0ObqPFLAM1XRlK5LKNxQ2L6PsNtj6NR6LXqm5KLCY=
-X-Received: by 2002:ac2:4a72:0:b0:4b6:f37c:c123 with SMTP id
- q18-20020ac24a72000000b004b6f37cc123mr4822738lfp.539.1673361172997; Tue, 10
- Jan 2023 06:32:52 -0800 (PST)
+        Tue, 10 Jan 2023 09:36:50 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2897C431AB
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:36:48 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id d30so13835106lfv.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:36:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=093HGxT6kK1QzCS2QGIbQ7fTsuo/J9nz+14qeMtObLE=;
+        b=nVdV/XoCNwttwqLoGVH7MM9i0VlTHoElwXCuFrvXPHpE8CY77kr44ETz68Mv382uSX
+         naJjTAHcnvCcGG2mOzkHWuqeN3l1tupxxWPLEpl1QOuP+jtfdyFWHdlgcyLiyVk5p51t
+         WKCeHnF+wqGFleFGXA/GgzH4rnJ1n9o5pa9vRTDuehtSqbpbuWXbPC4DsvKKhoKFbN1v
+         KIEnqMjdxKZKYqhlQ/ij/zK+JDDc3ZB1aI1JtCR+5lZMWeY7bRqvPiLbbdtUd5i/vuEp
+         i+AHeqFLpAbw6RAI2I/jfD93L63Sw9p2fTWkplQfWBPfsOZDaf8kMEA1x9NW0UfFxwl8
+         2xQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=093HGxT6kK1QzCS2QGIbQ7fTsuo/J9nz+14qeMtObLE=;
+        b=K2Dswd0KxvFtyfSN+PDYVgpZgzov2agoodrJLEazBLLV8Qm1cic5g1VdJnMoRtYEc1
+         /ZrZmJWqg1EZbbC5C/e8FBFbGjCU8g8Knxs/P0iwza/SVQ4crLBsXPmKI5lR4kq2KBxB
+         /DMQ845dVQBSQlU8FSwOxeuaUiHLDPtWU0jGWC2EtsWTTSCbq6PBUUL2LaLsLe3dTBbb
+         kAUcdMC1q0L5nWzgRiZ9ewI/zHW0ZFSt/p1GXGgxAHabwpqQaUalNT6Kd4oTY1CINSE2
+         eIaHAO9dMJgTxbmXK1ocW2qLKZWEXvuFDM8merzpMymNoZVogtjPOrfIPvLpYgf6mS3U
+         5YBA==
+X-Gm-Message-State: AFqh2krTkBBhz/Dhm7JfVkU7Sw5TO1V2LkC4LGS3xgN0cjsxbzu2wJYR
+        kXlt0vi98D09gcBc7pIIOqqppA==
+X-Google-Smtp-Source: AMrXdXsafxZsbdlOEbrmqK+20vrDozHu/BfovcYmL5qEy0vHwNVHtWEHyqO6qCRYRRzTrAW/zzMRXw==
+X-Received: by 2002:a19:f001:0:b0:4b6:e4c8:8a48 with SMTP id p1-20020a19f001000000b004b6e4c88a48mr19602485lfc.63.1673361406396;
+        Tue, 10 Jan 2023 06:36:46 -0800 (PST)
+Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id p10-20020ac24eca000000b004cc87bea877sm637912lfr.65.2023.01.10.06.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 06:36:45 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: msm8998: Use RPM XO
+Date:   Tue, 10 Jan 2023 15:36:42 +0100
+Message-Id: <20230110143642.986799-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20221221105402.6598-1-markuss.broks@gmail.com>
- <CAMj1kXGUC7dsSwVEUsAMeAoqDYtbqrM7SDOJTXbPfi-LrcSk9g@mail.gmail.com> <97639381-2558-4cf5-75b0-7f80f0393b16@gmail.com>
-In-Reply-To: <97639381-2558-4cf5-75b0-7f80f0393b16@gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 10 Jan 2023 15:32:41 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXE-GMxemfDA=CLvLUZeN7fHv6Ds2L2a2swYea8Q9U+b8g@mail.gmail.com>
-Message-ID: <CAMj1kXE-GMxemfDA=CLvLUZeN7fHv6Ds2L2a2swYea8Q9U+b8g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] Add generic framebuffer support to EFI earlycon driver
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Jami Kettunen <jami.kettunen@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Helge Deller <deller@gmx.de>, Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Kim Phillips <kim.phillips@amd.com>, linux-doc@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +72,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Dec 2022 at 15:58, Markuss Broks <markuss.broks@gmail.com> wrote:
->
-> Hi Ard,
->
-> On 12/23/22 16:42, Ard Biesheuvel wrote:
-> > (cc Andy)
-> >
-> >
-> > On Wed, 21 Dec 2022 at 11:54, Markuss Broks <markuss.broks@gmail.com> wrote:
-> >> Make the EFI earlycon driver be suitable for any linear framebuffers.
-> >> This should be helpful for early porting of boards with no other means of
-> >> output, like smartphones/tablets. There seems to be an issue with early_ioremap
-> >> function on ARM32, but I am unable to find the exact cause. It appears the mappings
-> >> returned by it are somehow incorrect, thus the driver is disabled on ARM.
-> > The reason that this driver is disabled on ARM is because the struct
-> > screen_info is not populated early enough, as it is retrieved from a
-> > UEFI configuration table.
->
-> I believe I must be hitting some other bug then, since my driver should
-> not use `struct screen_info` when the arguments are specified manually
-> (e.g. in device-tree or in kernel command line options), and it still is
-> broken on ARM when they are.
+Feed GCC and SDHC_2 with the RPM XO instead of the fixed-clock one.
 
-Define 'broken'
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/msm8998.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> I got it to work on ARM when I moved the
-> early console initialization later into the kernel booting process, but
-> that mostly defeats the purpose of early console driver, I believe. I've
-> been thinking that it could be some stuff not getting initialized early
-> enough indeed, but I've got no clue what could it be.
->
+diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+index 746f4e42a53f..4d59f4f8fc4a 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+@@ -809,7 +809,7 @@ gcc: clock-controller@100000 {
+ 			reg = <0x00100000 0xb0000>;
+ 
+ 			clock-names = "xo", "sleep_clk";
+-			clocks = <&xo>, <&sleep_clk>;
++			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>, <&sleep_clk>;
+ 
+ 			/*
+ 			 * The hypervisor typically configures the memory region where these clocks
+@@ -2310,7 +2310,7 @@ sdhc2: mmc@c0a4900 {
+ 			clock-names = "iface", "core", "xo";
+ 			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
+ 				 <&gcc GCC_SDCC2_APPS_CLK>,
+-				 <&xo>;
++				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+ 			bus-width = <4>;
+ 			status = "disabled";
+ 		};
+-- 
+2.39.0
 
-This is likely due to the fact that the ARM init code sets up the PTE
-bits for various memory types, and using them beforehand is likely to
-result in problems.
