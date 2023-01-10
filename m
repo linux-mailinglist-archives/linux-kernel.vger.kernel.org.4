@@ -2,172 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D924A663D7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 556FA663D7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjAJKGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S231354AbjAJKG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:06:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjAJKG2 (ORCPT
+        with ESMTP id S230094AbjAJKG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:06:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69D250157
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:05:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673345142;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pQos0rL6v0IJhlQcBZMrcxW60aPh1eJ2JqufvK5QrGs=;
-        b=GSrgvO9ofcKnCj6ymkM+QUYyL8oyM1HdezXXINbjkj7WlTxMn9u1LezadMen15GQMHQoYl
-        Qsj2wQLtI5usO8YrUDDf0G8ignQ68/tBNsxza5loLSBOuw556SDh9JbG9yJ/+7TTRDxVF1
-        99PxFUCvqqj8nW31gcuBrTxwOp8UYIc=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-425-v-yYPawzOTu1YI4m-PPqlA-1; Tue, 10 Jan 2023 05:05:41 -0500
-X-MC-Unique: v-yYPawzOTu1YI4m-PPqlA-1
-Received: by mail-wm1-f71.google.com with SMTP id bi11-20020a05600c3d8b00b003d9ebf905c9so3485041wmb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:05:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pQos0rL6v0IJhlQcBZMrcxW60aPh1eJ2JqufvK5QrGs=;
-        b=IXXL8t4j8FMy7OAfPFNAv4K8k29xRa857AWWbDoFVIs6Y4SFRVQ5sphX2RN6BKLm6N
-         CnJy0ZbiXbcBk1l+3VAhEqunSQHmqtxq/fUvqZzUOkzFEQaQXj7rGSSx9LgidxO1T+A2
-         4OTNP3zuUmnrl13/XcmRC5+FACC42NJ9q7CrGjhHKXNDjz2XtJBPV2GZKuc9Nx1bSGmw
-         fkF3iwkyqw0nKgrXTnMQzlCOKE0O2hfpEgIrzPLegXKPBrFT9+YJ0f+x45atoTy96Wjz
-         YbylOig/cITUsNcAQ97nRuS1DF4M8hbGf9kdFnWHmUYxzKzZeJwca7SZJGgWpZA5poLb
-         uKiA==
-X-Gm-Message-State: AFqh2kpZA7B/mSsDXI1UnO4niS9B+QcW58+ZKpapVoZaa4M8YquMNzts
-        s4JCGt0kFey0omOoiCp0xbYlEkIJvzBhAD0m8M7GGsG/nZ+4rv3r2WZiklZkqA9ackMrridn38G
-        fdl1LVqWXNvSyS0w0xrT7QCcs
-X-Received: by 2002:a05:600c:3d8a:b0:3d3:4406:8a37 with SMTP id bi10-20020a05600c3d8a00b003d344068a37mr48796535wmb.41.1673345140650;
-        Tue, 10 Jan 2023 02:05:40 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsFgWkzbQ2X01cVjAwNnoWvoKKf9DNAG5yZ3Ygp1x3LFRmRcYVTqXVI6DFXgV0rPJV/rKWJYA==
-X-Received: by 2002:a05:600c:3d8a:b0:3d3:4406:8a37 with SMTP id bi10-20020a05600c3d8a00b003d344068a37mr48796515wmb.41.1673345140308;
-        Tue, 10 Jan 2023 02:05:40 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:4200:65d9:4d0d:bb61:14c8? (p200300cbc708420065d94d0dbb6114c8.dip0.t-ipconnect.de. [2003:cb:c708:4200:65d9:4d0d:bb61:14c8])
-        by smtp.gmail.com with ESMTPSA id bg42-20020a05600c3caa00b003b4cba4ef71sm21771935wmb.41.2023.01.10.02.05.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 02:05:39 -0800 (PST)
-Message-ID: <bac3f11b-db5f-113f-9cc3-8abf0e8e6ed6@redhat.com>
-Date:   Tue, 10 Jan 2023 11:05:38 +0100
+        Tue, 10 Jan 2023 05:06:27 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CB8101DA
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:06:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=hkg2NF58mMfnZ01WouKNjrkGZFARgMHBNH8c8RZ8560=; b=FjX/cF0ZLjVsiUhRGuhCw+3beY
+        f0DwVktOUL0eaknOsBwXXT0aDE3UgkqujtLuPX5ypS5WE1el3QsrKHP0UuHdJmKwy6DFzghQS5Vns
+        8037eO26AezKY0KJYFrQ3GjZJADAZwYmbUXGdjSh2cokJyzB8UY3S5l3AL2J4sQD2XI7cEC6ajw6x
+        MWGIIh5HJwS79xaE0APWyLr2MRx5gbJF6CaY5aMIkmDXlr4GE5mTgGLQQYNfINN/OhvWZVRiJ+G68
+        XyNVkERdwsSGnHHkf9xRLpx5WTxyHY8DUZFMl5S13pg8affJ5m7P0/r6VZmXXwU1V6D11Xi1Bfmrn
+        8u3iG+8g==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pFBWA-006Gjw-Gr; Tue, 10 Jan 2023 10:06:06 +0000
+Message-ID: <a0e325d2-a9c5-ffca-b2d6-5eea60f9ad3b@infradead.org>
+Date:   Tue, 10 Jan 2023 02:06:05 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <0f117203-3227-cd16-61c2-2dd3de75ecc7@alu.unizg.hr>
- <0ee389dc-5e47-5b7e-4db5-637eb2b3fbc9@redhat.com>
- <0e692e52-0a4f-3892-ed25-f3fa12892b6f@alu.unizg.hr>
+ Thunderbird/102.6.1
+Subject: Re: usb.c:undefined reference to `qe_immr'
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: =?UTF-8?Q?Re=3a_PROBLEM=3a_selftest/vm/cow=2ec_failed_to_compile_?=
- =?UTF-8?B?KOKAmE1BRFZfUEFHRU9VVOKAmSB1bmRlY2xhcmVkKQ==?=
-In-Reply-To: <0e692e52-0a4f-3892-ed25-f3fa12892b6f@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     kernel test robot <lkp@intel.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Li Yang <leoyang.li@nxp.com>
+References: <202301101500.pillNv6R-lkp@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <202301101500.pillNv6R-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.01.23 22:41, Mirsad Goran Todorovac wrote:
-> On 1/9/2023 5:42 PM, David Hildenbrand wrote:
-> 
-> Hi, thank you for your reply.
-> 
->>> I hope this is enough information for you to debug the issue.
->>>
->>> I am standing by for any additional diagnostics needed.
->>
->> Won't userfaultfd.c fail in a similar way?
->>
->> Anyhow, khugepaged.c jas
->>
->> #ifndef MADV_PAGEOUT
->> #define MADV_PAGEOUT 21
->> #endif
->>
->> So most probably we should do the same.
-> 
-> Actually, David, it turned out that userfaultfd.c compiled
-> out-of-the-box, and side-by-side comparison showed that it also included
-> "/home/marvin/linux/kernel/linux_torvalds/usr/include/asm-generic/mman-common.h"
-> 
-> The only remaining difference was including <linux/mman.h>, which fixed
-> the issue w/o #ifdef ... #endif
-> 
-> Hope this helps.
-> 
-> Please find the following diff.
-> 
-> Regards,
-> Mirsad
-> 
-> ------------------------------------------------------------------------------
-> diff --git a/tools/testing/selftests/vm/cow.c
-> b/tools/testing/selftests/vm/cow.c
-> index 26f6ea3079e2..dd8cf12c6776 100644
-> --- a/tools/testing/selftests/vm/cow.c
-> +++ b/tools/testing/selftests/vm/cow.c
-> @@ -16,6 +16,7 @@
->    #include <fcntl.h>
->    #include <dirent.h>
->    #include <assert.h>
-> +#include <linux/mman.h>
->    #include <sys/mman.h>
->    #include <sys/ioctl.h>
->    #include <sys/wait.h>
->
-
-I already sent a different fix [1]. I suspect when including
-linux/mman.h, it would still be problematic with older kernel
-headers that lack MADV_PAGEOUT (< v5.4).
+[adding Cc's]
 
 
-But yeah, I saw that userfaultfd.c was fixed that way:
+On 1/9/23 23:59, kernel test robot wrote:
+> Hi Masahiro,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   5a41237ad1d4b62008f93163af1d9b1da90729d8
+> commit: 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+> date:   8 months ago
+> config: powerpc-randconfig-r026-20230110
+> compiler: powerpc-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    powerpc-linux-ld: powerpc-linux-ld: DWARF error: could not find abbrev number 74
+>    drivers/soc/fsl/qe/usb.o: in function `qe_usb_clock_set':
+>>> usb.c:(.text+0x1e): undefined reference to `qe_immr'
+>>> powerpc-linux-ld: usb.c:(.text+0x2a): undefined reference to `qe_immr'
+>>> powerpc-linux-ld: usb.c:(.text+0xbc): undefined reference to `qe_setbrg'
+>>> powerpc-linux-ld: usb.c:(.text+0xca): undefined reference to `cmxgcr_lock'
+>    powerpc-linux-ld: usb.c:(.text+0xce): undefined reference to `cmxgcr_lock'
+> 
 
-commit b773827e361952b3f53ac6fa4c4e39ccd632102e
-Author: Chengming Zhou <zhouchengming@bytedance.com>
-Date:   Fri Mar 4 20:29:04 2022 -0800
+.config extract:
 
-     kselftest/vm: fix tests build with old libc
-     
-     The error message when I build vm tests on debian10 (GLIBC 2.28):
-     
-         userfaultfd.c: In function `userfaultfd_pagemap_test':
-         userfaultfd.c:1393:37: error: `MADV_PAGEOUT' undeclared (first use
-         in this function); did you mean `MADV_RANDOM'?
-           if (madvise(area_dst, test_pgsize, MADV_PAGEOUT))
-                                              ^~~~~~~~~~~~
-                                              MADV_RANDOM
-     
-     This patch includes these newer definitions from UAPI linux/mman.h, is
-     useful to fix tests build on systems without these definitions in glibc
-     sys/mman.h.
+#
+# NXP/Freescale QorIQ SoC drivers
+#
+# CONFIG_QUICC_ENGINE is not set
+CONFIG_QE_USB=y
 
 
-[1] https://lkml.kernel.org/r/20230109171255.488749-1-david@redhat.com
+This is caused by (drivers/soc/fsl/qe/Kconfig):
+
+config QE_USB
+	bool
+	default y if USB_FSL_QE
+	help
+	  QE USB Controller support
+
+which does not depend on QUICC_ENGINE, where the latter build provides
+the missing symbols.
+
+drivers/usb/gadget/udc/Kconfig:
+
+config USB_FSL_QE
+	tristate "Freescale QE/CPM USB Device Controller"
+	depends on FSL_SOC && (QUICC_ENGINE || CPM)
+	depends on !64BIT || BROKEN
+
+CPM is set but QUICC_ENGINE is not set (by CONFIG_PPC_EP88XC=y).
+
+
+I don't know of a good fix for this build error.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+~Randy
