@@ -2,121 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31D6664C6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9749664C82
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbjAJT0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S233693AbjAJT27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239139AbjAJT0B (ORCPT
+        with ESMTP id S231738AbjAJT2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:26:01 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B37389D
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:25:59 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id k26-20020a05600c1c9a00b003d972646a7dso12708031wms.5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:25:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KG+ZRdx/AOYiB34HBS6JIzEWXifHlhhKkRS2/AG8Kls=;
-        b=aO6OOYOFAYcz+jNA7/5iAEQ/Fd7Sf7hD41vVsxVDhVJe9nut3NRqVio2PG0Qjqbwfq
-         OYzfsPoxsN/hNOJC9/zr+cXBQ7WiwZbPNCzbZpDbGHDhWpMYhhOa6q7rWixxhLchwlNg
-         pFJd28RWY1Dzh7lYHh7phTkcFJxNvLhNssZUSW9H2PH1AdRZQvJ6f2RfFuh8h5mPdM5T
-         6OaWlwfd/VCVdTcqkaSIW/dWdfamTbKXV4nYJYZib8cFZl+8FSLQoazMWWpIGCvxEDZz
-         1JFmjDr/wPUZRkz9ezlrF+5q/NR1pvZY6gI/ub+ByXmYNaAlgIWsi+GwcAOF8jZO0/8D
-         OigA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KG+ZRdx/AOYiB34HBS6JIzEWXifHlhhKkRS2/AG8Kls=;
-        b=Yd6yJP405IhTTzE1XHTBjoyUX8TIuI8QH3HmK3+XiceRe/Y+cgiudnqRI4Qs5k9gjA
-         V5y6idKnwQTp5x7/HxEphSi+KRq844mn13n2IDO71XWZSBNpVf1qLNS7/3bx2H/ZXH/q
-         mrwPCFfjHXkXiTmvlWQ3HdMbNxjpRVZr+HGnuKBjZ+0YZtRbLTaZQIxk+nH2/Vq09xq0
-         TI3CRq+frg4iZjJDQyCGE8iflhQ/iATQ9HcASe/qjBtQKQ+HV4G6GoCKk8Mm4WI/G70m
-         LaXpIijjWVzJnNHvXeSgtRaF7S75UeP7/P7hAIXfl7cvugYdaH9SImOC1pMB/wlu2woi
-         qjlg==
-X-Gm-Message-State: AFqh2krK7i8gsXGUG4A8Pecg751V48LxaJ7fdGbHsxJHeE9weWMrOpi5
-        OQ/srpo82nmXWdySmhQ1n0Hvzw==
-X-Google-Smtp-Source: AMrXdXuVIXPcscWYpIaTc+DxxOGWLCOMIhe4CqqanKd+UEQ5kvLOcQRNLCXuaCGlYEpO9t7/ux5wAw==
-X-Received: by 2002:a05:600c:1911:b0:3d9:8635:a916 with SMTP id j17-20020a05600c191100b003d98635a916mr47086737wmq.9.1673378757980;
-        Tue, 10 Jan 2023 11:25:57 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i8-20020a05600c354800b003cf894dbc4fsm17175575wmq.25.2023.01.10.11.25.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 11:25:56 -0800 (PST)
-Message-ID: <0453b098-91db-1918-38ae-a7db0408460c@linaro.org>
-Date:   Tue, 10 Jan 2023 20:25:54 +0100
+        Tue, 10 Jan 2023 14:28:37 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED23BC87;
+        Tue, 10 Jan 2023 11:28:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673378916; x=1704914916;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=lOdKiAA7Ift7v3DrOfWTz539CdQJXhPjjnhivEV9RKE=;
+  b=BmtiN+y9/EA6+PkO9FpO89QLj4ETZlX1ZAIqZO5xIp9oLHzvaZxo53oG
+   i8hn43IPXwyKBcnKFO3Nz7pRWaheQQJ+0Y0iwOKW2N82h1XMIlS7BNsel
+   tUr6cldNk5W6J4iqi7Xu8kP293jJ4UAi4vQtbyT57noHnvm+icdszrd9Z
+   AMigAXm5OTPD43orx4I6QV1PIqNUG8caheq/kBQ42El3/72i017KQhH/M
+   kO/Zch1GWgOMhgjLwy1BUUmTct02KR/gEXA5cYMr75sdCN/3gXFSauUyU
+   NdRhAB5A4ArSew9OMpXpJfMMhmhOfAesj1L7w9W64IHbMRy8KhNgouQ4J
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="320925749"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="320925749"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 11:28:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="745893468"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="745893468"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Jan 2023 11:28:20 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 10 Jan 2023 11:28:20 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 10 Jan 2023 11:28:19 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 10 Jan 2023 11:28:19 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.171)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 10 Jan 2023 11:28:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZGebx1QwKnp+CIealjF4hI0WtNfSX+xtE2tqZ/OaPOWxHgc/cuHHeX+5UHMBtRYDJAAqNZWgI6ONFx9pCCG0tiphQ7rHjNWor3sVHjEYJmrZ3DLY/+lBqWIQzf8vYtkKodFDAajrm3a/0CHWiP4n1MKalfenYZwxMLSnRWaEfdePHNyz7Mg4N5OyhVmwaGdUWFjmJl7cGOJH7AUNWxVaUwppN2qjSNggzyJftpmVZ27pr5m83WPpg1QF157E7PoX2oRAI1MFyVO9QSdzmtPgHPPuxQWHZ8Or9g+mp0qWFuRtTdKPEakAPpykeo8mxCKfZWQVBaR216eAD1v6ap+Mdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1F1H1kf9+qNh/uWypsjQ21jMyQlrW0E7q0d0Tz2txi0=;
+ b=SfujPt7t0qx4qF/tiaeEsSKcI4LBtaYLoVrUvE02QXEJkIvnBgNmbX/c1AOURqHb3u6jvf7wxGuPJkueYiFBMkkJhAtk5VF31e+Xc/efq34s2OH91cN2eUWKv5JhtMuolc20ijnbpgDDj9VUdw4R6yubozlNCGri6+H+0eS6clwVgoDxCqrtjmzgpKmDGEdjUyO9hCnPuk2LM6Ymy1FB3D8wcaOzflO2L96kgHjPBuRt2BiJf/gYuwCVlaylVFDIrfdLXhhNG1HdyVlEnjNksSOsmFVRAd9C4vpfdBWAAJxoDNeuhCmFlBxiCU9Prl/0KucBbKO1JMPmqk4O1gmUCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
+ by SJ0PR11MB4894.namprd11.prod.outlook.com (2603:10b6:a03:2d4::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
+ 2023 19:28:18 +0000
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::1818:e39d:454d:a930]) by MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::1818:e39d:454d:a930%4]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
+ 19:28:17 +0000
+Date:   Tue, 10 Jan 2023 14:28:11 -0500
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+CC:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        <intel-gfx@lists.freedesktop.org>,
+        <linux-hardening@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>
+Subject: Re: [PATCH][next] drm/i915/guc: Replace zero-length arrays with
+ flexible-array members
+Message-ID: <Y728SwYZeThQzohb@intel.com>
+References: <Y72WBTUmh9r1lvKN@work>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y72WBTUmh9r1lvKN@work>
+X-ClientProxiedBy: BY5PR04CA0012.namprd04.prod.outlook.com
+ (2603:10b6:a03:1d0::22) To MN0PR11MB6059.namprd11.prod.outlook.com
+ (2603:10b6:208:377::9)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: msm8916-zhihe: Add initial device
- tree for zhihe Wifi/LTE dongle UFI-001C and uf896
-Content-Language: en-US
-To:     forbidden405@foxmail.com, 'Andy Gross' <agross@kernel.org>,
-        'Bjorn Andersson' <andersson@kernel.org>,
-        'Konrad Dybcio' <konrad.dybcio@linaro.org>,
-        'Rob Herring' <robh+dt@kernel.org>,
-        'Krzysztof Kozlowski' <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     'Jaime Breva' <jbreva@nayarsystems.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        'Nikita Travkin' <nikita@trvn.ru>
-References: <20230110155014.31664-1-forbidden405@foxmail.com>
- <tencent_A7FA00B086BB0EFFDC1C64744FF85DAD2B06@qq.com>
- <8530aeef-8fdb-ede7-700e-856e5cbc6a5b@linaro.org>
- <tencent_98E029F744FE85B9FD68B570A45A01743F07@qq.com>
- <f909c1b0-97db-cc33-fa27-c5e901f11956@linaro.org>
- <tencent_235CAC16001D1C38CE7D86BF7B0E365A2105@qq.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <tencent_235CAC16001D1C38CE7D86BF7B0E365A2105@qq.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|SJ0PR11MB4894:EE_
+X-MS-Office365-Filtering-Correlation-Id: cfaab432-7eac-4584-01c9-08daf340d30e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EcLvdXSOdWXiHXwgYxLu7TE1OoPhxZ1hVt5gntoAZH3OEkMaY1dQ8uSyKIpufbbPxT2cgh3WJNr8yRvIXrELjdeOBfb0cZpVjweDREmuGkwMjW5sXuVLzYsMQ270O+q3p/r0sXnWHINuWmJqX/izjMHstleF83mAYruhKs6DJHhvg9pd6oBnNjLNyKcZbKE2Bmy8s2TEFcnXWua4Hv9lgYYE1A15NKYLZfXat8aGqgQ/22KWU92/eZRdQ0YKdQG3yoqhJc7p0nZ/N4Qog1+F3hSzzUvN5FQ/1YFX7DtHpc2OmvIv6TjfNP9lRronep2yvNnkDEc3GIHpkw/svG+BWU02QGSYnosEEXBLzOk8lrX5V7QXc7ES6Ct7HlC8+phq1ne7HZYDGe1/XwJga3Y3dTobqOyM9tARxPcC/vN1SRaDsv28ZBwDfK3233+hKqqTaRlov4bWLay/hH7cLnz3C3XNpjoWfxkPy2E9J6/pEb48s9SUIb2ZJVHnm+T+kPBKp/0sULxbuoJQTsgCv5ZwWIfAlrfb+h/1mT31rw5LexiBQ+COjw69HvPUxL9Umm/krNB6TfRKM7tMRUrn9ZEsCf9GOJx/6gjsKNbZ+qvtlw3ofA4iWPr7wkx2Tldtx6KXqsj4m57I9oNhLpgF1Pro+rFcJI/gN+SdxlO5QIGUwdcKeGwvBrhPfQDH032mIXgSlMBd0OOngag4//Fg8Is6gQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(346002)(396003)(136003)(39860400002)(451199015)(6506007)(6486002)(6666004)(478600001)(966005)(2616005)(4326008)(26005)(186003)(6512007)(66556008)(316002)(8676002)(6916009)(66476007)(54906003)(86362001)(38100700002)(82960400001)(83380400001)(41300700001)(66946007)(7416002)(5660300002)(36756003)(2906002)(8936002)(44832011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jQ4ZzYowF6pAbt7L2GtBAUnqH4KjAj2J5kXqDq7JvFU9Q2fSp3tsebKamebV?=
+ =?us-ascii?Q?KsEdRlDhayk6Ta3rKjxnkE+y/Bsvhfs42Cmiw+DPlSN1EsnysAMTh2T8J5t5?=
+ =?us-ascii?Q?CAhC7+sSdYTWjmtGaBiX4b8ngOW2xzbBcXTwHyxRHigAeGuBiK69WZoNGcBl?=
+ =?us-ascii?Q?HP/7DjBy7HH8e3kgGXoTTvlRLKP6yV0HdWo24XeN2XiYQYcDkulzRSdT6cSt?=
+ =?us-ascii?Q?iEWg611gPaUdGZZGtOSw+kYS2oG0nLSO6SqBb2nQZObFfrpKzqy4WhjfEpvk?=
+ =?us-ascii?Q?6Ort6PqB8KM4Nl/zfpRlnwEe/KVb0ZYzvh3rSIy24VRe/+qkuioU9znR6y7f?=
+ =?us-ascii?Q?1vv1BfcO0MyDQL9l6L9SCOwE04Ksda5ryKZ7XfasjCIf0ykrbfZUEDYNGCI7?=
+ =?us-ascii?Q?YCNEuAkIboacfAfzDkjApqxRtDw0GPPiYWIeLPtxUHdKD6mSAU4erdcWuXg+?=
+ =?us-ascii?Q?ZESXSrC+dJJx2lDWD8A7WTOLpKBcmaq9/CSx38htVJ7VeEAmVLZUY+/tigc1?=
+ =?us-ascii?Q?sieIx3c77/18EntYR7Xh5pyN2+NGByt4hGZ8AV3hVXCuK6uG/J2x/BL5NW+P?=
+ =?us-ascii?Q?6Q574yWE22KrDQyspHw/2z/IJd+jZuKAgsCi3osCFaxwsd4s+HyNk+CUUgae?=
+ =?us-ascii?Q?qbzYVUIg60lC97JlUzNuj4O8p36awxdwNBp4GzO+A1sQnpSkKqIBFKul15WU?=
+ =?us-ascii?Q?kqAsKYKcLPjP/y6skDMoPeqfBxDV9Msn2er508FPyuNEIIwA8bfcLrEjnnoX?=
+ =?us-ascii?Q?/xiF1BSTvZie3SzQ6Eij0r3iEWwxR0LXmOtxHc18B/YFUoMVzM5dVx9X3Ctx?=
+ =?us-ascii?Q?+6QIcVJOuMZ8lcv1Fch9nmWcbibiqA/mp8fPm0M0miRyACyWhzq0HKyY+JWX?=
+ =?us-ascii?Q?V5ctuNiwDmPKThVJhswvjJw6Nt00CCkAhS0bjxzOhNJwfhoh6hqNinZpMnnC?=
+ =?us-ascii?Q?ME+hYBR7rR1Kv3ADXLBAAegx2XIDbip1HbYodj6iokhyJEkaaO/gIFTnbKD0?=
+ =?us-ascii?Q?Kp13fAimCjGkxATLAjVnCS4MY3+bLLbip+h0ZZiqTclpOoNVhTzVtcvxqAs/?=
+ =?us-ascii?Q?ChqCPFvbh2trbVc9tQPcwhK9w/Vrb4gw1VZESE/BkMmwgfaKb0Q3+GtTzm17?=
+ =?us-ascii?Q?E9Cijw5v/TVilFbKTZ0cd/nVabBpr4iko4XVx1PBJ+ae0LcRZoMyiZN9rhAA?=
+ =?us-ascii?Q?tgOYJRK7Rq+8k9O7jUBMsmOoqvC+lo6PawRjLQjmFbzGT8+nzybZ6HRqILKu?=
+ =?us-ascii?Q?/iY/fYNlL8LlY9Ew1hMLf+AwlpNDP7u9WjK+MH1TDMQ7gXwsRKy+YObIGLBI?=
+ =?us-ascii?Q?AVu/IFPMP1cUWZYCRHxi4d89aDRHDwZh9SKJmblhngJZqHV1tkGsMRlqw1dB?=
+ =?us-ascii?Q?iz6hnqkxEZ4RUqf3YlKI6aB/pyYU/E/M8NHj8/4TZhO3ZafmlbZq2Cbu9pVC?=
+ =?us-ascii?Q?eQFUsQy71WQv+jp3pmM5yuK/iNFf0PUz7nOuIGN8kJ3ugFOHjD9ESLxk6Co2?=
+ =?us-ascii?Q?K0NIYBBul8H50DYr/R+RkDhlgH/w5mwd7rUhXyn55OmOVFDPOjd10jkai3NU?=
+ =?us-ascii?Q?zQ9aQgkNKoxxbzZxjjs1m2rXcfFMON6FOHfmtAk43AaNXRulyNgsWxS5/PdP?=
+ =?us-ascii?Q?Sw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: cfaab432-7eac-4584-01c9-08daf340d30e
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 19:28:17.3056
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3zbprlyQm30O2gAVhoirqufQmMYUg7nNElvUd2Cx5l7OY6of/dh8e1X7QJu6trkW/AgpDNuNfPyF3SQHKZPMkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4894
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 19:58, forbidden405@foxmail.com wrote:
-> I removed Cc temporary because I had sent them the same email once. No need
-> to send the email to them again.
+
+On Tue, Jan 10, 2023 at 10:44:53AM -0600, Gustavo A. R. Silva wrote:
+> Zero-length arrays are deprecated[1] and we are moving towards
+> adopting C99 flexible-array members, instead. So, replace zero-length
+> arrays in a couple of structures (three, actually) with flex-array
+> members.
 > 
->> On 10/01/2023 19:30 krzysztof.kozlowski@linaro.org wrote:
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [2].
 > 
->> You install this kernel with DTB on some device so clearly you have such
->> device
->> in hand, right? It has then some manufacturer, some company. If it is USB
->> stick
->> as you said, then it has even vendor ID, which might be or might not be
->> real.
+> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays [1]
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
+> Link: https://github.com/KSPP/linux/issues/78
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+> ---
+>  drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> The vendor extracted from `/system/build.prop` and USB vendor ID is fake,
-> even IMEI is stolen from some other mobile phones. Seems like the vendor
-> deliberately tries to be anonymous. Some people had tried to extract info
-> from stock firmware and on the Internet. But until now, we have no clear
-> evidence to know the manufacturer.
+> diff --git a/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h b/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
+> index 3624abfd22d1..9d589c28f40f 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
+> +++ b/drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
+> @@ -73,7 +73,7 @@ struct guc_debug_capture_list_header {
+>  
+>  struct guc_debug_capture_list {
+>  	struct guc_debug_capture_list_header header;
+> -	struct guc_mmio_reg regs[0];
+> +	struct guc_mmio_reg regs[];
+>  } __packed;
+>  
+>  /**
+> @@ -125,7 +125,7 @@ struct guc_state_capture_header_t {
+>  
+>  struct guc_state_capture_t {
+>  	struct guc_state_capture_header_t header;
+> -	struct guc_mmio_reg mmio_entries[0];
+> +	struct guc_mmio_reg mmio_entries[];
+>  } __packed;
+>  
+>  enum guc_capture_group_types {
+> @@ -145,7 +145,7 @@ struct guc_state_capture_group_header_t {
+>  /* this is the top level structure where an error-capture dump starts */
+>  struct guc_state_capture_group_t {
+>  	struct guc_state_capture_group_header_t grp_header;
+> -	struct guc_state_capture_t capture_entries[0];
+> +	struct guc_state_capture_t capture_entries[];
 
-Then I am not sure if we want to support such devices mainline. It is
-not only anonymity but simply not following standards and practices.
-What's more there is no guarantee what this device is. If there is no
-known manufacturer, anytime another device from anyone can claim it is
-also uf896. IOW, what guarantees you have that other person who has
-something looking like "uf896" actually has something the same as you
-and can use your DTB?
+Please notice we are currently using sizeof(struct ...).
+Along with your proposed changes, shouldn't we also start using
+the struct_size() which already take the flexible array into account?
 
-I don't know how to reasonably support entirely unknown devices.
-
-Best regards,
-Krzysztof
-
+>  } __packed;
+>  
+>  /**
+> -- 
+> 2.34.1
+> 
