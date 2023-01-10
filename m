@@ -2,156 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD9F66407B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8203D66407E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238325AbjAJM3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
+        id S233179AbjAJMaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238536AbjAJM3H (ORCPT
+        with ESMTP id S233075AbjAJMaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:29:07 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8D019031;
-        Tue, 10 Jan 2023 04:29:05 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id a30so8678610pfr.6;
-        Tue, 10 Jan 2023 04:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kb5rbtDcrrBEALxeAWsV+evBt6CmnxJaFsxwsB5MGXY=;
-        b=qNe+yfj0zfhE+SOsV+7F1HjMY4QUPQLGFeqwZbGq9UICOIj33jLbkSueaicCR7cK6S
-         YbQ0Oea7WFrB7KteIN0tX1RuMGDP9WfksjlQqUn50FcjIpq1Tt9DdrhUtxOf44A7RMQ0
-         9zB5c/wVuWDRyeCyGOnzXmtbwXtA16gHI+8+LUX/qv0VFx3I/EtrkwQCY0pjuOsn2adS
-         7I34GKNxBnSBKLwptop0HDX8KliMSPZ6uHIPeaSGd4mObTAU14I6qLPVTFooC/O/Rg+0
-         arUTUeg7WOTumYVHwr+y72r/BoVUCwW30hZCjKBeKdVMEfWYTZ3AD5Jm09w/TGUCESij
-         si+A==
+        Tue, 10 Jan 2023 07:30:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C23D17585
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:29:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673353760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zj7O7BsTwrlQivuxli/b/DVop3RoAUc26KLutE6aqJA=;
+        b=FEO6LfoLnF5pquvPFLQmsjSJEzvlSYe85l9L9vo3tl1rR+6PQ8sdtb3A2yE5KCbKURUAFA
+        0//DYJg/baz4zQ7MxktzfB4zPEkRkglM7GUTf8xLAFenqF1cash2Jwsy4mube+hh1pDxU1
+        PJzwgSsX9b6vMCwGJByLjSPLVLO4NbU=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-160-ySesbhmsPyyINUOn-vMYyA-1; Tue, 10 Jan 2023 07:29:19 -0500
+X-MC-Unique: ySesbhmsPyyINUOn-vMYyA-1
+Received: by mail-wr1-f71.google.com with SMTP id v12-20020adfc5cc000000b0029910b64099so1947777wrg.23
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:29:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kb5rbtDcrrBEALxeAWsV+evBt6CmnxJaFsxwsB5MGXY=;
-        b=cxDsWBKopv8/jzXQ7GY7xNPjUpYv8uoM+2vBEm9/A7ALcflArUK+RealF4+3z3cEIS
-         3K+O1HFAi9xaad+MnR3fBPVaTfRAhgnpmo3o89LrRfEa8wuyRE8iQMmXcj788azX8j0+
-         +QnaWwy5Yr325yTv5FZf/DoLbSaSnG49HttyR/fU+x/S57IETSvh6iiegLk0K5Kqh3Aw
-         +Owd6iVVm8mMnAc9qoFqX4XgSA69KLQdChp5qoSJ7Q7NPj/ZdfkGkpm9klnPh7jP685J
-         pL8FkJI2jfBvMmA+KbjGFTeaq0GvnhBDjucdg3MDD256MDmQ3UZq5qf9gnc2dCLWV6VO
-         zAxQ==
-X-Gm-Message-State: AFqh2kpC22nlloBhCLXW3n4TAX9tLR+ObVLhm+6ruPQ1wzzAbbsLzgzp
-        26nWGc/4Do91mpJFol7+oGNB1XNm0h/8HpUzkpU=
-X-Google-Smtp-Source: AMrXdXtNiNBjupihof2tn2nwgZV2SRXWZCQUHugr/c9LAis0qLd8182FlsbgkYu2OinBKDiY+/Z5XYdrywStKDRgfxQ=
-X-Received: by 2002:a63:531b:0:b0:457:4863:2e85 with SMTP id
- h27-20020a63531b000000b0045748632e85mr4278119pgb.6.1673353745346; Tue, 10 Jan
- 2023 04:29:05 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zj7O7BsTwrlQivuxli/b/DVop3RoAUc26KLutE6aqJA=;
+        b=p/IbLeLn9ma1GYQlR3oUAzz4iP29Ss0pVGcHDHAEYDMsjDlpaDQxzD6da6FOIfJlDo
+         gXDrHdjZBDeQtSXFld+pJ5zGhxq2x885+61QAQvWhDYk0f4RZHcBx0hLJeiwyY/W5Jfv
+         GxDkFIH8uzB+LsZF+bkf+L+iPQ7rWnT8zi4KHL8y2HQIebjTYcpdMfGb3CEBzQA+5OsQ
+         vcxKitw/oHV3WPXimSSd0K2tZh6FMzfAUnbz4ZIfR/EMlnl7Nz8cg83oGnqJ1x6vTJ6l
+         MU4xY75E9BoeO+EyDk88NTD2+c2XQc//xKn17HSN1CTfmuwG5djWkSG7fYRzz8Oh6Gse
+         lKgQ==
+X-Gm-Message-State: AFqh2kr1rRXiHJ2IOnnDr+OJVJQ49R+Ua1gtkx/mK3tdjlK1l092SR0H
+        zxnlZBj9KpjKjFkZRdERCzLHH/Ri8fKqbWa/NupL9FtuEy/CcbUr3aZoJkOVxijtbrYmOgU0Tdg
+        VSEXcJD1aiUPsOJDQgKU4Dbdo
+X-Received: by 2002:a05:600c:a51:b0:3cf:6f4d:c259 with SMTP id c17-20020a05600c0a5100b003cf6f4dc259mr47849225wmq.39.1673353757901;
+        Tue, 10 Jan 2023 04:29:17 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXt74bXfj7jrQJ4WS8z+NMklJ4YVza2YaN6bDMjEL1Hh4N7QrP6Tx6DHyCHQc6eNCWGeQcwsrQ==
+X-Received: by 2002:a05:600c:a51:b0:3cf:6f4d:c259 with SMTP id c17-20020a05600c0a5100b003cf6f4dc259mr47849214wmq.39.1673353757618;
+        Tue, 10 Jan 2023 04:29:17 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:4200:65d9:4d0d:bb61:14c8? (p200300cbc708420065d94d0dbb6114c8.dip0.t-ipconnect.de. [2003:cb:c708:4200:65d9:4d0d:bb61:14c8])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c511300b003d9862ec435sm2609591wms.20.2023.01.10.04.29.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 04:29:17 -0800 (PST)
+Message-ID: <a0985987-384a-d44f-c365-b0b2b935d417@redhat.com>
+Date:   Tue, 10 Jan 2023 13:29:16 +0100
 MIME-Version: 1.0
-References: <20221222072603.1175248-1-korantwork@gmail.com>
- <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev> <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
- <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
- <d14ac29d-027a-08a7-c5c8-848a6920d4a2@linux.dev> <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
- <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev>
-In-Reply-To: <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev>
-From:   Xinghui Li <korantwork@gmail.com>
-Date:   Tue, 10 Jan 2023 20:28:54 +0800
-Message-ID: <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
-Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0 controller
-To:     Jonathan Derrick <jonathan.derrick@linux.dev>
-Cc:     Keith Busch <kbusch@kernel.org>, nirmal.patel@linux.intel.com,
-        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: =?UTF-8?Q?Re=3a_PROBLEM=3a_selftest/vm/cow=2ec_failed_to_compile_?=
+ =?UTF-8?B?KOKAmE1BRFZfUEFHRU9VVOKAmSB1bmRlY2xhcmVkKQ==?=
+Content-Language: en-US
+To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <0f117203-3227-cd16-61c2-2dd3de75ecc7@alu.unizg.hr>
+ <0ee389dc-5e47-5b7e-4db5-637eb2b3fbc9@redhat.com>
+ <0e692e52-0a4f-3892-ed25-f3fa12892b6f@alu.unizg.hr>
+ <bac3f11b-db5f-113f-9cc3-8abf0e8e6ed6@redhat.com>
+ <dda726db-6276-f312-be12-cee05228161d@alu.unizg.hr>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <dda726db-6276-f312-be12-cee05228161d@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan Derrick <jonathan.derrick@linux.dev> =E4=BA=8E2023=E5=B9=B41=E6=9C=
-=8810=E6=97=A5=E5=91=A8=E4=BA=8C 05:00=E5=86=99=E9=81=93=EF=BC=9A
->
-> As the bypass mode seems to affect performance greatly depending on the s=
-pecific configuration,
-> it may make sense to use a moduleparam to control it
->
-We found that each pcie port can mount four drives. If we only test 2
-or 1 dirve of one pcie port,
-the performance of the drive performance will be normal. Also, we
-observed the interruptions in different modes.
-bypass:
-.....
-2022-12-28-11-39-14: 1224       181665   IR-PCI-MSI 201850948-edge      nvm=
-e0q68
-2022-12-28-11-39-14: 1179       180115   IR-PCI-MSI 201850945-edge      nvm=
-e0q65
-2022-12-28-11-39-14:  RES        26743   Rescheduling interrupts
-2022-12-28-11-39-17: irqtop - IRQ : 3029, TOTAL : 2100315228, CPU :
-192, ACTIVE CPU : 192
-disable:
-......
-2022-12-28-12-05-56: 1714       169797   IR-PCI-MSI 14155850-edge      nvme=
-1q74
-2022-12-28-12-05-56: 1701       168753   IR-PCI-MSI 14155849-edge      nvme=
-1q73
-2022-12-28-12-05-56:  LOC       163697   Local timer interrupts
-2022-12-28-12-05-56:  TLB         5465   TLB shootdowns
-2022-12-28-12-06-00: irqtop - IRQ : 3029, TOTAL : 2179022106, CPU :
-192, ACTIVE CPU : 192
-remapping:
-022-12-28-11-25-38:  283       325568   IR-PCI-MSI 24651790-edge      vmd3
-2022-12-28-11-25-38:  140       267899   IR-PCI-MSI 13117447-edge      vmd1
-2022-12-28-11-25-38:  183       265978   IR-PCI-MSI 13117490-edge      vmd1
-......
-2022-12-28-11-25-42: irqtop - IRQ : 2109, TOTAL : 2377172002, CPU :
-192, ACTIVE CPU : 192
+On 10.01.23 13:25, Mirsad Todorovac wrote:
+> On 1/10/23 11:05, David Hildenbrand wrote:
+>> On 09.01.23 22:41, Mirsad Goran Todorovac wrote:
+>>> On 1/9/2023 5:42 PM, David Hildenbrand wrote:
+>>>
+>>> Hi, thank you for your reply.
+>>>
+>>>>> I hope this is enough information for you to debug the issue.
+>>>>>
+>>>>> I am standing by for any additional diagnostics needed.
+>>>>
+>>>> Won't userfaultfd.c fail in a similar way?
+>>>>
+>>>> Anyhow, khugepaged.c jas
+>>>>
+>>>> #ifndef MADV_PAGEOUT
+>>>> #define MADV_PAGEOUT 21
+>>>> #endif
+>>>>
+>>>> So most probably we should do the same.
+>>>
+>>> Actually, David, it turned out that userfaultfd.c compiled
+>>> out-of-the-box, and side-by-side comparison showed that it also included
+>>> "/home/marvin/linux/kernel/linux_torvalds/usr/include/asm-generic/mman-common.h"
+>>>
+>>> The only remaining difference was including <linux/mman.h>, which fixed
+>>> the issue w/o #ifdef ... #endif
+>>>
+>>> Hope this helps.
+>>>
+>>> Please find the following diff.
+>>>
+>>> Regards,
+>>> Mirsad
+>>>
+>>> ------------------------------------------------------------------------------
+>>> diff --git a/tools/testing/selftests/vm/cow.c
+>>> b/tools/testing/selftests/vm/cow.c
+>>> index 26f6ea3079e2..dd8cf12c6776 100644
+>>> --- a/tools/testing/selftests/vm/cow.c
+>>> +++ b/tools/testing/selftests/vm/cow.c
+>>> @@ -16,6 +16,7 @@
+>>>     #include <fcntl.h>
+>>>     #include <dirent.h>
+>>>     #include <assert.h>
+>>> +#include <linux/mman.h>
+>>>     #include <sys/mman.h>
+>>>     #include <sys/ioctl.h>
+>>>     #include <sys/wait.h>
+>>>
+>>
+>> I already sent a different fix [1]. I suspect when including
+>> linux/mman.h, it would still be problematic with older kernel
+>> headers that lack MADV_PAGEOUT (< v5.4).
+> 
+> I see your point.
+> 
+>> But yeah, I saw that userfaultfd.c was fixed that way:
+>>
+>> commit b773827e361952b3f53ac6fa4c4e39ccd632102e
+>> Author: Chengming Zhou <zhouchengming@bytedance.com>
+>> Date:   Fri Mar 4 20:29:04 2022 -0800
+>>
+>>       kselftest/vm: fix tests build with old libc
+>>       The error message when I build vm tests on debian10 (GLIBC 2.28):
+>>           userfaultfd.c: In function `userfaultfd_pagemap_test':
+>>           userfaultfd.c:1393:37: error: `MADV_PAGEOUT' undeclared (first use
+>>           in this function); did you mean `MADV_RANDOM'?
+>>             if (madvise(area_dst, test_pgsize, MADV_PAGEOUT))
+>>                                                ^~~~~~~~~~~~
+>>                                                MADV_RANDOM
+>>       This patch includes these newer definitions from UAPI linux/mman.h, is
+>>       useful to fix tests build on systems without these definitions in
+>> glibc
+>>       sys/mman.h.
+>>
+>>
+>> [1] https://lkml.kernel.org/r/20230109171255.488749-1-david@redhat.com
+> 
+> You're the boss :)
 
-From the result it is not difficult to find, in remapping mode the
-interruptions come from vmd.
-While in other modes, interrupts come from nvme devices. Besides, we
-found the port mounting
-4 dirves total interruptions is much fewer than the port mounting 2 or 1 dr=
-ive.
-NVME 8 and 9 mount in one port, other port mount 4 dirves.
+Heh, no I'm not :) I'm just raising that this turned out to be 
+problematic unfortunately.
 
-2022-12-28-11-39-14: 2582       494635   IR-PCI-MSI 470810698-edge      nvm=
-e9q74
-2022-12-28-11-39-14: 2579       489972   IR-PCI-MSI 470810697-edge      nvm=
-e9q73
-2022-12-28-11-39-14: 2573       480024   IR-PCI-MSI 470810695-edge      nvm=
-e9q71
-2022-12-28-11-39-14: 2544       312967   IR-PCI-MSI 470286401-edge      nvm=
-e8q65
-2022-12-28-11-39-14: 2556       312229   IR-PCI-MSI 470286405-edge      nvm=
-e8q69
-2022-12-28-11-39-14: 2547       310013   IR-PCI-MSI 470286402-edge      nvm=
-e8q66
-2022-12-28-11-39-14: 2550       308993   IR-PCI-MSI 470286403-edge      nvm=
-e8q67
-2022-12-28-11-39-14: 2559       308794   IR-PCI-MSI 470286406-edge      nvm=
-e8q70
-......
-2022-12-28-11-39-14: 1296       185773   IR-PCI-MSI 202375243-edge      nvm=
-e1q75
-2022-12-28-11-39-14: 1209       185646   IR-PCI-MSI 201850947-edge      nvm=
-e0q67
-2022-12-28-11-39-14: 1831       184151   IR-PCI-MSI 203423828-edge      nvm=
-e3q84
-2022-12-28-11-39-14: 1254       182313   IR-PCI-MSI 201850950-edge      nvm=
-e0q70
-2022-12-28-11-39-14: 1224       181665   IR-PCI-MSI 201850948-edge      nvm=
-e0q68
-2022-12-28-11-39-14: 1179       180115   IR-PCI-MSI 201850945-edge      nvm=
-e0q65
-> I'd vote for it being in VMD mode (non-bypass) by default.
-I speculate that the vmd controller equalizes the interrupt load and
-acts like a buffer,
-which improves the performance of nvme. I am not sure about my
-analysis. So, I'd like
-to discuss it with the community.
+> 
+> However, IMHO, having MADV_PAGEOUT defined in three or four places could
+> make like miserable. OK, it is unlikely to change value, but something
+> tells me that the right way to do it is to guarantee that the macro
+> definition is unique.
+> 
+> I don't know what would be the right thing to do in pre-5.4 kernels
+> w/o MADV_PAGEOUT defined.
+> 
+> Probably then the "(madvise(area_dst, test_pgsize, MADV_PAGEOUT)" gives
+> EINVAL or is undefined?
+
+Yes. The expectation is that it fails with ENOSYS or EINVAL if the 
+kernel doesn't support it. The kernel might be different to the 
+installed kernel headers.
+
+In an ideal world, we'd be using the in-tree headers -- they are 
+guaranteed to define what we need. So far, I failed to make it work (I 
+thought it would work as expected before I had to do above mentioned 
+fix). Maybe that can be made working?
+
+-- 
+Thanks,
+
+David / dhildenb
+
