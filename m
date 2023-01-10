@@ -2,202 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F587664C83
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F126664C84
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 20:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjAJT3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 14:29:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S231682AbjAJTcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 14:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232598AbjAJT2q (ORCPT
+        with ESMTP id S234317AbjAJT3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:28:46 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F776BC9E;
-        Tue, 10 Jan 2023 11:28:45 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id o15so9545630wmr.4;
-        Tue, 10 Jan 2023 11:28:45 -0800 (PST)
+        Tue, 10 Jan 2023 14:29:04 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B5DFAD0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:29:02 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id m6so20041156lfj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 11:29:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:from:references:to:content-language:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ogQqGa/zMUkiqlJzpPnC47rh7tkOePjRpIkhCuzSQnI=;
-        b=VimGyA3dksUeUGnm7ZYC72V9xTe/3xKF/dq/Kllo61wWHxfL9ewxTR/21UpzDOnMIr
-         QUueIp2EppH5lDVoKJS+XJWjJS0htgJntIpyKV78gG0mM94NW/kwC/yoh9oYuR73L0Rc
-         liwfiJ8VeMQRAjkwBfZZhYAavtrvkOQOFQC/twL5WI3F74aVOYuuudf6BLeGJy2iz6xz
-         5/vDxBdCWJM3QFMKmBgJnHVaQWr0oa8CtUDg78qRBXmiC8EfBpP8v8U7oHOKDZeEq8G3
-         U7iVePDEdKPCaa769bpRfkJWpbmsT1t1d2VdsMZdpCe0UrDxzQw1oWsxSWMvvLUUnmTU
-         D6Ig==
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dvobj1X+xc4GVt39MIncU9qtTohL/6IewqIL/mqFFrs=;
+        b=Mpp1KcH5J0Nxi7XqAbnBXAkVlLLyOmTJz5SFMLKi2bA3rGcVcwV1unlabs9okurghG
+         X5s93wx5eojIsOXSj0Yw/2dY5clgbMKPGaBpc/NA9n+/SpHOgGvpMXpuOk48Gy4wH8db
+         jixdxwBiVIlIBhfxL5xmBtHAfsAy4SGXOT/ub6llc2ciy1EZOSw5U/Czs7yrOOf0Q5+U
+         eSRjkHN8RbwFk5Rd365SqyeeWfPhh8P2Zg8mSMMcNzNS2RTixqgbPDgmk1upVwL1cAgf
+         DxaedNxYgQpRRC0aIb/mPH3rMfFWNtudRzC6SlBT9dqYi0ug5f8MFB8VT1lXx6wIAcWX
+         dr9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:from:references:to:content-language:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ogQqGa/zMUkiqlJzpPnC47rh7tkOePjRpIkhCuzSQnI=;
-        b=3qhBYm4pkNlgJDs8JDah+wCVPK2anJ4tVmeb50h1IeL96I0wvHMstgjQ3w7E2NPuwy
-         uF9imCYGceLLFPcKkCwrX9uTBFFpbp7fTRSoIsv8HdP4zkqoLfm5vOLrwc7D1HbZA/1l
-         iTcT49npNSJsFbEplraU2WPP05/UdIUTuSmcIaYVaBBgQj8EguBLletOs6FYSuyfl+VW
-         itAwlwJc7WvHyY8aDABZ2NLB/+ah7O1GbM/u+HjHoZZ1VTqAcOXg2oLjMDFgOg4RIit3
-         u0ToKzwWqmnKMM8gqLKdJn6DttLmTy3z2J+COhSXTqwU7S8OISHi8vr1777EVP7+P/Ny
-         hP1Q==
-X-Gm-Message-State: AFqh2krOIxJ+Pk66W7nspBDRif8qU7JMfJFIS49GzLpJEnvltJJNgyhz
-        fLG36trGXLiPntLwyLSH2je8hK507fA=
-X-Google-Smtp-Source: AMrXdXvMplOU9MpVP7lRR0EZxqgcd3QqJWJECOML1r44flvhTILRLXEdsUqX/eIt092W1b2GdzICQg==
-X-Received: by 2002:a05:600c:3502:b0:3d9:e75c:756c with SMTP id h2-20020a05600c350200b003d9e75c756cmr10112577wmq.12.1673378923602;
-        Tue, 10 Jan 2023 11:28:43 -0800 (PST)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id c18-20020a05600c0ad200b003d9c97d82f2sm15717741wmr.8.2023.01.10.11.28.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 11:28:43 -0800 (PST)
-Message-ID: <71ea2fa3-e593-e1ae-7abd-377bdf302d24@gmail.com>
-Date:   Tue, 10 Jan 2023 20:28:35 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dvobj1X+xc4GVt39MIncU9qtTohL/6IewqIL/mqFFrs=;
+        b=MDB6PTBy4nCA7OCJXte9laGEmdeiGy363MNJFhRDOJhDRvxk03E3AyL1L8c+wpElLz
+         1t1CielB03ucvXwhBsOvV/LBpXLjXE88qcxiSP2yt3NNTm+CjUPlmU+qPDpS8VET4s36
+         lyks5wLIeBG6bl7Ou8a7kLg85aEQE/ok1IjI+B37uk9AOzE8C1zhIxi/WCmJN3yF4cR+
+         hnSXvwRS4xmgj0ffMVKM0CTS4aYB8qyDhFJhq3zBG/skWdd78oX/cl01q1YfNSbynt35
+         CSAaovcu4TRFxmcztRBmqKCXcNRXEqGbt6wTxLXoNqJhkDp0VRNKzQ1ikAuGrqVOu3Zt
+         Wo/g==
+X-Gm-Message-State: AFqh2kojLjTATS6rR9AwYBCOLCfW+n02wdUP7Ms1u9loyNaC/2sGswL8
+        46MzF3Z7Bxo1buP8jTLBE+TTDU9CF27X3VM9B52dGw==
+X-Google-Smtp-Source: AMrXdXsSKeFeC0BCPqtujs7lk4hQBPbwtEg2u9EOGL4sawIpm45u9+Y9dXGLbvOP6ylptimmsYrU4P/UqdWHXSh5hSo=
+X-Received: by 2002:a05:6512:708:b0:4ca:fab6:91db with SMTP id
+ b8-20020a056512070800b004cafab691dbmr2840792lfs.202.1673378940985; Tue, 10
+ Jan 2023 11:29:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: rseq(2) man page
-Content-Language: en-US
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-man@vger.kernel.org, Alejandro Colomar <alx@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>, paulmck <paulmck@kernel.org>
-References: <095c479b-baed-9d11-08a1-e698f59763d9@efficios.com>
- <425ddf00-24a1-bf02-29f1-937ba1545020@gmail.com>
- <71b43f20-5d6d-f3f8-b3cd-786dfbc8d34d@gmail.com>
- <c8cb6136-6924-4fae-f4bb-981dec2e1952@efficios.com>
- <71e6728d-c2a8-e646-5c6c-2de8dfa982cc@gmail.com>
- <c21ca3d7-9095-5613-5953-7870d9a6c23f@efficios.com>
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-In-Reply-To: <c21ca3d7-9095-5613-5953-7870d9a6c23f@efficios.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------jlE2rgOjTHkdEuS4D8a1Nx0Y"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230103170058.810597-1-benjamin.gaignard@collabora.com>
+ <20230103170058.810597-14-benjamin.gaignard@collabora.com>
+ <CAAEAJfBRtBSZt0B3OyQSCHhsseUn6_H+JSvAR3cOH15WUryuNw@mail.gmail.com> <852e5269-cb3d-bd56-c7fd-0a1f461623de@collabora.com>
+In-Reply-To: <852e5269-cb3d-bd56-c7fd-0a1f461623de@collabora.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Tue, 10 Jan 2023 16:28:49 -0300
+Message-ID: <CAAEAJfDgL+zvFBd2556==W2aKBrzwCMCUR7vhBszArvnQrgQTQ@mail.gmail.com>
+Subject: Re: [PATCH v2 13/13] media: verisilicon: Conditionnaly ignore native formats
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------jlE2rgOjTHkdEuS4D8a1Nx0Y
-Content-Type: multipart/mixed; boundary="------------C5hnTBVRBRN3VuETDc00N05b";
- protected-headers="v1"
-From: Alejandro Colomar <alx.manpages@gmail.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-man@vger.kernel.org, Alejandro Colomar <alx@kernel.org>,
- linux-kernel <linux-kernel@vger.kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
- paulmck <paulmck@kernel.org>
-Message-ID: <71ea2fa3-e593-e1ae-7abd-377bdf302d24@gmail.com>
-Subject: Re: rseq(2) man page
-References: <095c479b-baed-9d11-08a1-e698f59763d9@efficios.com>
- <425ddf00-24a1-bf02-29f1-937ba1545020@gmail.com>
- <71b43f20-5d6d-f3f8-b3cd-786dfbc8d34d@gmail.com>
- <c8cb6136-6924-4fae-f4bb-981dec2e1952@efficios.com>
- <71e6728d-c2a8-e646-5c6c-2de8dfa982cc@gmail.com>
- <c21ca3d7-9095-5613-5953-7870d9a6c23f@efficios.com>
-In-Reply-To: <c21ca3d7-9095-5613-5953-7870d9a6c23f@efficios.com>
+Hi Benjamin,
 
---------------C5hnTBVRBRN3VuETDc00N05b
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Mon, Jan 9, 2023 at 6:05 AM Benjamin Gaignard
+<benjamin.gaignard@collabora.com> wrote:
+>
+>
+> Le 08/01/2023 =C3=A0 22:12, Ezequiel Garcia a =C3=A9crit :
+> > On Tue, Jan 3, 2023 at 2:01 PM Benjamin Gaignard
+> > <benjamin.gaignard@collabora.com> wrote:
+> >> AV1 film grain feature requires to use the postprocessor to produce
+> >> valid frames. In such case the driver shouldn't propose native pixels
+> >> format but only post-processed pixels format.
+> >> If a codec set need_postproc field in hantro_ctx structure to true
+> >> native pixel formats will be ignored.
+> >>
+> >> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> >> ---
+> >>   drivers/media/platform/verisilicon/hantro.h   |  3 ++
+> >>   .../media/platform/verisilicon/hantro_drv.c   |  5 ++
+> >>   .../platform/verisilicon/hantro_postproc.c    |  4 ++
+> >>   .../media/platform/verisilicon/hantro_v4l2.c  | 46 +++++++++++++----=
+--
+> >>   4 files changed, 45 insertions(+), 13 deletions(-)
+> >>
+> >> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/med=
+ia/platform/verisilicon/hantro.h
+> >> index a98cb40a8d3b..7a5357e810fb 100644
+> >> --- a/drivers/media/platform/verisilicon/hantro.h
+> >> +++ b/drivers/media/platform/verisilicon/hantro.h
+> >> @@ -231,6 +231,8 @@ struct hantro_dev {
+> >>    * @ctrl_handler:      Control handler used to register controls.
+> >>    * @jpeg_quality:      User-specified JPEG compression quality.
+> >>    * @bit_depth:         Bit depth of current frame
+> >> + * @need_postproc:     Set to true if the bitstream features require =
+to
+> >> + *                     use the post-processor.
+> >>    *
+> >>    * @codec_ops:         Set of operations related to codec mode.
+> >>    * @postproc:          Post-processing context.
+> >> @@ -258,6 +260,7 @@ struct hantro_ctx {
+> >>          struct v4l2_ctrl_handler ctrl_handler;
+> >>          int jpeg_quality;
+> >>          int bit_depth;
+> >> +       bool need_postproc;
+> >>
+> >>          const struct hantro_codec_ops *codec_ops;
+> >>          struct hantro_postproc_ctx postproc;
+> >> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers=
+/media/platform/verisilicon/hantro_drv.c
+> >> index 4fc6dea16ae6..8d7055c0bf3b 100644
+> >> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> >> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> >> @@ -346,6 +346,11 @@ static int hantro_av1_s_ctrl(struct v4l2_ctrl *ct=
+rl)
+> >>                                  return -EINVAL;
+> >>
+> >>                  ctx->bit_depth =3D bit_depth;
+> >> +
+> >> +               if (ctrl->p_new.p_av1_sequence->flags
+> >> +                   & V4L2_AV1_SEQUENCE_FLAG_FILM_GRAIN_PARAMS_PRESENT=
+)
+> >> +                       ctx->need_postproc =3D true;
+> >> +
 
-DQoNCk9uIDEvMTAvMjMgMTc6NTQsIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOg0KDQpbLi4u
-XQ0KDQpbRUZBVUxUIC8gU0VHVl0NCg0KPiANCj4gT0ssIGxldCdzIGtlZXAgdGhpcyBmb3Ig
-YSBzZXBhcmF0ZSBkaXNjdXNzaW9uLg0KDQpTdXJlLg0KDQpbLi4uXQ0KDQo+PiBJIGZvcmdv
-dDsgdGhlcmUncyBhIG5ldyBzZWN0aW9uOiBMSUJSQVJZLg0KPj4NCj4+IEl0IHNwZWNpZmll
-cyB0aGUgbGlicmFyeSBpbiB3aGljaCB0aGUgZnVuY3Rpb24gaXMgZGVmaW5lZCwgb3IgaW4g
-dGhlIGNhc2Ugb2YgDQo+PiBzeXNjYWxscywgdGhlIHdyYXBwZXIgKHNpbmNlIHdlIGNhbGwg
-aXQgdGhyb3VnaCBzeXNjYWxsKDIpLCBpdCB3b3VsZCBiZSBsaWJjKS4NCj4gDQo+IE9LLiBT
-aW1pbGFyIHRvIGZ1dGV4KDIpLg0KDQpZZXAuDQoNCj4gDQo+Pg0KPj4gQlRXLCBJIHdvbmRl
-ciB3aGF0IGxpYnJzZXEgaXMuwqAgSXMgbGlicnNlcSBzb21ldGhpbmcgdGhhdCB1c2VycyBz
-aG91bGQgY2FyZSANCj4+IGFib3V0Pw0KPiANCj4gVXNlcnMgYXJlIG5vdCByZXF1aXJlZCB0
-byB1c2UgbGlicnNlcSB0byB1c2UgdGhlIHJzZXEgc3lzdGVtIGNhbGwsDQo+IGJ1dCBpdCdz
-IHZlcnkgY29udmVuaWVudCB0byB1c2UgdGhpcyBDLWxldmVsIEFQSSByYXRoZXIgdGhhbiBo
-YXZlDQo+IGVhY2ggdXNlciByZWltcGxlbWVudCB0aGUgcGVyLWFyY2hpdGVjdHVyZSBhc3Nl
-bWJseSBjb2RlIHJlcXVpcmVkIHRvDQo+IGNyZWF0ZSB0aGUgUlNFUSBjcml0aWNhbCBzZWN0
-aW9ucy4NCj4gDQo+IGxpYnJzZXEgZGlkIG5vdCBoYXZlIGFuIG9mZmljaWFsIHJlbGVhc2Ug
-eWV0LCBzbyB0aGF0J3MgbWFpbmx5IHdoeSBJDQo+IHRoaW5rIGl0IHRvbyBlYXJseSB0byBy
-ZWZlciB0byBpdCBpbiBtYW51YWwgcGFnZXMuDQoNCk9rYXk7IHdoZW4geW91IGZlZWwgaXQn
-cyByZWFkeSwgeW91IGNvdWxkIGRvY3VtZW50IGl0IGxpa2UgbGlia2V5dXRpbHMgaW4ga2V5
-Y3RsKDIpLg0KDQo+IA0KPj4NCj4+PiAuU0ggU1lOT1BTSVMNCj4+PiAubmYNCj4+PiAuUFAN
-Cj4+PiAuQlIgIiNpbmNsdWRlIDxsaW51eC9yc2VxLmg+IiBcDQo+Pj4gIiAvKiBEZWZpbml0
-aW9uIG9mICIgUlNFUV8qICIgY29uc3RhbnRzIGFuZCByc2VxIHR5cGVzICovIg0KPj4NCj4+
-IFRoZSBsaW5lIGFib3ZlIGdvZXMgYmV5b25kIGNvbHVtbiA4MCBpbiBmb3JtYXR0ZWQgb3V0
-cHV0LsKgIFRoYXQncyBhIGhhcmQgbGltaXQgDQo+PiBmb3IgbWFudWFsIHBhZ2VzLsKgIElm
-IHlvdSBhZGQgdGhpcyBwYWdlIHRvIHRoZSBsaW51eCBtYW4tcGFnZXMgcmVwbywgYW5kIHJ1
-biANCj4+IHRoZSBsaW50ZXJzLCB5b3UnbGwgc2VlIGEgd2FybmluZyBhYm91dCB0aGF0LsKg
-IEluIGNhc2UgeW91J3JlIGludGVyZXN0ZWQgaW4gDQo+PiBsaW50aW5nIG1hbnVhbCBwYWdl
-cyBpbiB0aGUgZnV0dXJlLCB5b3UgY2FuIGRvIHNvbWV0aGluZyBzaW1pbGFyIHRvIHdoYXQg
-SSBkbyANCj4+IGluIHRoZSBtYW4tcGFnZXNbMl0NCj4gDQo+IE9LLiBJJ3ZlIHVzZWQgaXQs
-IGl0J3MgcXVpdGUgdXNlZnVsISBJIGhhdmUgZml4ZWQgYWxsIHdhcm5pbmdzIGV4Y2VwdCBm
-b3INCj4gIm1hbmRvYzogbWFuMi9yc2VxLjI6NToxMjogV0FSTklORzogY2Fubm90IHBhcnNl
-IGRhdGUsIHVzaW5nIGl0IHZlcmJhdGltOiAoZGF0ZSkiDQo+IHdoaWNoIEkgc3VzcGVjdCBp
-cyBleHBlY3RlZC4NCg0KVWhoLCBJIGhhZCB0aGF0IG9uZSBleHBsaWNpdGx5IHNpbGVuY2Vk
-Og0KDQokIG1ha2UgbGludC1tYW4tbWFuZG9jIFY9MQ0KTElOVCAobWFuZG9jKQl0bXAvbGlu
-dC9tYW4yL3BlcmZfZXZlbnRfb3Blbi4yLmxpbnQtbWFuLm1hbmRvYy50b3VjaA0KISAobWFu
-ZG9jIC1tYW4gLVRsaW50ICBtYW4yL3BlcmZfZXZlbnRfb3Blbi4yIDI+JjEgXA0KICAgIHwg
-Z3JlcCAtdiAnU1RZTEU6IGxvd2VyIGNhc2UgY2hhcmFjdGVyIGluIGRvY3VtZW50IHRpdGxl
-OicgXA0KICAgIHwgZ3JlcCAtdiAnVU5TVVBQOiBpZ25vcmluZyBtYWNybyBpbiB0YWJsZTon
-IFwNCiAgICB8IGdyZXAgLXYgJ1dBUk5JTkc6IGNhbm5vdCBwYXJzZSBkYXRlLCB1c2luZyBp
-dCB2ZXJiYXRpbTogVEggKGRhdGUpJyBcDQogICAgfCBncmVwIC12ICdXQVJOSU5HOiBlbXB0
-eSBibG9jazogVVInIFwNCiAgICB8fDo7IFwNCikgXA0KfCBncmVwICcuJyA+JjINCnRvdWNo
-IHRtcC9saW50L21hbjIvcGVyZl9ldmVudF9vcGVuLjIubGludC1tYW4ubWFuZG9jLnRvdWNo
-DQoNCg0KRm9yIHNvbWUgcmVhc29uIHlvdSBkaWRuJ3QgaGF2ZSAiVEgiIGluIHRoZSBlcnJv
-ciBtZXNzYWdlLCB3aGljaCBpcyB3aHkgbXkgZ3JlcCANCmRpZG4ndCBkaXNjYXJkIGl0Lg0K
-DQpbLi4uXQ0KDQo+Pj4gLkJJICJpbnQgc3lzY2FsbChTWVNfcnNlcSwgc3RydWN0IHJzZXEg
-Kl9OdWxsYWJsZSAiIHJzZXEgIiwgdWludDMyX3QgIiANCj4+PiByc2VxX2xlbiBcDQo+Pg0K
-Pj4gV2hhdCdzIHRoZSBtZWFuaW5nIGZvciBOVUxMP8KgIERvZXMgaXQgaGF2ZSBhIHZhbGlk
-IHNlbnRpbmVsIG1lYW5pbmcsIG9yIGlzIGl0IA0KPj4gYW4gaW52YWxpZCBhZGRyZXNzP8Kg
-IElmIGl0J3MganVzdCBpbnRlcnByZXRlZCBhcyBhbiBpbnZhbGlkIGFkZHJlc3MgKGZvciB3
-aGljaCANCj4+IGZyb20gYSB1c2VyLXNwYWNlIHBlcnNwZWN0aXZlIGEgY3Jhc2ggd291bGQg
-YmUgbGVnaXRpbWF0ZSksIHRoZW4gSSdkIHJlbW92ZSANCj4+IF9OdWxsYWJsZS4NCj4gDQo+
-IFdpdGggdGhlIGZsYWdzIHRoYXQgYXJlIGN1cnJlbnRseSBpbXBsZW1lbnRlZCAoMCBvciBS
-U0VRX0ZMQUdfVU5SRUdJU1RFUiksDQo+IHRoZSByc2VxIGFyZ3VtZW50IGlzIG5vdCBleHBl
-Y3RlZCB0byBiZSBsZWdpdGltYXRlbHkgTlVMTCAoaXQgd291bGQgcmV0dXJuDQo+IC0xLCBl
-cnJubz1FRkFVTFQgb24gcmVnaXN0cmF0aW9uLCBvciAtMSwgZXJybm89RUlOVkFMIG9uIHVu
-cmVnaXN0ZXIgYXR0ZW1wdCkuDQo+IA0KPiBXZSBtYXkgYWRkIG5ldyBmbGFncyBpbiB0aGUg
-ZnV0dXJlIHdoaWNoIHdvdWxkIG5vdCBjYXJlIGFib3V0IHRoZSByc2VxIGFkZHJlc3MNCj4g
-KGl0IGNvdWxkIHZlcnkgd2VsbCBiZSBudWxsIHRoZW4pLiBEbyB5b3UgcmVjb21tZW5kIHRo
-YXQgd2Ugb25seSBhZGQgdGhlDQo+IF9OdWxsYWJsZSB0YWcgd2hlbiB0aGlzIG9jY3VycyA/
-DQoNClllczsgc2luY2UgaXQncyB3aGF0IHRoZSB1c2VyIGNhbiBwYXNzLCBpdCBtYWtlcyBz
-ZW5zZSB0byBiZSBhcyBjb25zdHJhaW5lZCBhcyANCnBvc3NpYmxlLiAgSWYgaXQgd2VyZSBz
-b21lIHJldHVybiB0aGF0IHRoZSB1c2VyIHdvdWxkIGhhdmUgdG8gaW5zcGVjdCwgaXQgd291
-bGQgDQptYWtlIHNlbnNlIHRvIGJlIGNhdXRpb3VzIG9uIHRoZSBOVUxMIHNpZGUgb2YgdGhp
-bmdzIGFuIHVzZSBfTnVsbGFibGUgDQpwcmV2ZW50aXZlbHksIGJ1dCBmb3IgYW4gaW5wdXQs
-IG5vbi1udWxsIGlzIHByZWZlcnJlZCBmb3Igbm93Lg0KDQoNClsuLi5dDQoNCj4gDQo+IFVw
-ZGF0ZWQgdmVyc2lvbiBiYXNlZCBvbiB5b3VyIGNvbW1lbnRzIHB1c2hlZCBpbnRvIG15IHJl
-cG8sIHRoYW5rcyENCg0KQ29vbCEgSSdsbCBoYXZlIGEgbG9vay4NCg0KQ2hlZXJzLA0KDQpB
-bGV4DQoNCj4gDQo+IE1hdGhpZXUNCj4gDQo+IA0KDQotLSANCjxodHRwOi8vd3d3LmFsZWph
-bmRyby1jb2xvbWFyLmVzLz4NCg==
+As discussed with Nicolas in IRC, I believe this should be handled differen=
+tly.
+This case is similar to
+https://lore.kernel.org/all/f26407dbf3efc6cc046daaabdbe75c516743a187.camel@=
+collabora.com/
+and also similar to
+https://elixir.bootlin.com/linux/latest/source/drivers/media/platform/sunxi=
+/sun8i-rotate/sun8i_rotate.c#L582.
 
---------------C5hnTBVRBRN3VuETDc00N05b--
+Setting the SPS control changes the possible pixel formats, so the S_CTRL i=
+octl
+should reset the format.
 
---------------jlE2rgOjTHkdEuS4D8a1Nx0Y
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+This means try_fmt should probably either check the (newly) SPS value
+or some context fields (ctx->bit_depth, ctx->av1_film_grain, etc.).
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Ezeqiuel
 
-iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmO9vGMACgkQnowa+77/
-2zIvNw//Xw6eBXLFD7+qaoR0K5puVaZDT/UjvFU326JHvlk4OsnL6R32r2XRrj3C
-ooqVxxHyfs3rbDZQEErapJe5jh0skr58M0FiFal98pozAdpPnyzIknYzpWFXMKHr
-Mb6/4+GBamPjgNQcVAu0EOIvyqIaME7VXFcFVK/5JN7PbpSoTtod/uGaY3RfEo8F
-Bdx4KcFToxFnvOK76vXA0NXqgh/56NUM1FqYhDCFOOSLZlLgQFGMZLOPMpmLpNSZ
-Yk0bqwMPWZS0aw1hhVp11Z6bVVvWZMwhPdl5GDUvMTRZjNXkAMS1WLiiRYT88JXd
-XV+FkT9ljB0w62P3ci5hAJHydZigi/iqpz5Ugaj7J0YTgKrNrj5BdpZc6DrTSDpn
-GzavOccU8ObncCsbEE6qBBkGszXNhzgP/vXPL7gSw9x4VAmG6Ktgh3Y/+f7b89t0
-kDWngiBQD+4Cxg+YKsdjo0pShAVZdNhiOp/OpIQ/l942cQKtXbmLFNs8R/t+kz6F
-eHKGsMcUdMnrqhozPaYRGxRzCDSN00B9YZbWOx+0ea0Cg+9UGZ71QWznW/tsBarO
-wpxpsg/W6zcWVuExmV9t5xZl+zpp56voAWM9nK/9Pevm6jU1yuXdt9we/C/WtWV5
-zLDrQoQYl0DFMRtww+yF1B2Qm9386i4axGGM4krCJuEJFmNoG6Y=
-=taSY
------END PGP SIGNATURE-----
-
---------------jlE2rgOjTHkdEuS4D8a1Nx0Y--
+> >>                  break;
+> >>          default:
+> >>                  return -EINVAL;
+> >> diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/dr=
+ivers/media/platform/verisilicon/hantro_postproc.c
+> >> index 7dc39519a2ee..293e5612e2ce 100644
+> >> --- a/drivers/media/platform/verisilicon/hantro_postproc.c
+> >> +++ b/drivers/media/platform/verisilicon/hantro_postproc.c
+> >> @@ -57,6 +57,10 @@ bool hantro_needs_postproc(const struct hantro_ctx =
+*ctx,
+> >>   {
+> >>          if (ctx->is_encoder)
+> >>                  return false;
+> >> +
+> >> +       if (ctx->need_postproc)
+> >> +               return true;
+> >> +
+> >>          return fmt->postprocessed;
+> >>   }
+> >>
+> >> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/driver=
+s/media/platform/verisilicon/hantro_v4l2.c
+> >> index bbe79dbd2cd9..5c381766cca3 100644
+> >> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> >> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> >> @@ -38,6 +38,11 @@ hantro_get_formats(const struct hantro_ctx *ctx, un=
+signed int *num_fmts)
+> >>   {
+> >>          const struct hantro_fmt *formats;
+> >>
+> >> +       if (ctx->need_postproc) {
+> >> +               *num_fmts =3D 0;
+> >> +               return NULL;
+> >> +       }
+> >> +
+> >>          if (ctx->is_encoder) {
+> >>                  formats =3D ctx->dev->variant->enc_fmts;
+> >>                  *num_fmts =3D ctx->dev->variant->num_enc_fmts;
+> >> @@ -132,6 +137,15 @@ hantro_get_default_fmt(const struct hantro_ctx *c=
+tx, bool bitstream)
+> >>                      hantro_check_depth_match(ctx, &formats[i]))
+> >>                          return &formats[i];
+> >>          }
+> >> +
+> >> +       formats =3D hantro_get_postproc_formats(ctx, &num_fmts);
+> >> +       for (i =3D 0; i < num_fmts; i++) {
+> >> +               if (bitstream =3D=3D (formats[i].codec_mode !=3D
+> >> +                                 HANTRO_MODE_NONE) &&
+> >> +                   hantro_check_depth_match(ctx, &formats[i]))
+> >> +                       return &formats[i];
+> >> +       }
+> >> +
+> >>          return NULL;
+> >>   }
+> >>
+> >> @@ -261,19 +275,6 @@ static int vidioc_g_fmt_out_mplane(struct file *f=
+ile, void *priv,
+> >>          return 0;
+> >>   }
+> >>
+> >> -static int vidioc_g_fmt_cap_mplane(struct file *file, void *priv,
+> >> -                                  struct v4l2_format *f)
+> >> -{
+> >> -       struct v4l2_pix_format_mplane *pix_mp =3D &f->fmt.pix_mp;
+> >> -       struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> >> -
+> >> -       vpu_debug(4, "f->type =3D %d\n", f->type);
+> >> -
+> >> -       *pix_mp =3D ctx->dst_fmt;
+> >> -
+> >> -       return 0;
+> >> -}
+> >> -
+> >>   static int hantro_try_fmt(const struct hantro_ctx *ctx,
+> >>                            struct v4l2_pix_format_mplane *pix_mp,
+> >>                            enum v4l2_buf_type type)
+> >> @@ -353,6 +354,25 @@ static int hantro_try_fmt(const struct hantro_ctx=
+ *ctx,
+> >>          return 0;
+> >>   }
+> >>
+> >> +static int vidioc_g_fmt_cap_mplane(struct file *file, void *priv,
+> >> +                                  struct v4l2_format *f)
+> >> +{
+> >> +       struct v4l2_pix_format_mplane *pix_mp =3D &f->fmt.pix_mp;
+> >> +       struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> >> +       int ret;
+> >> +
+> >> +       vpu_debug(4, "f->type =3D %d\n", f->type);
+> >> +
+> >> +       ret =3D hantro_try_fmt(ctx, pix_mp, f->type);
+> >> +       if (ret)
+> >> +               return ret;
+> >> +
+> >> +       ctx->vpu_dst_fmt =3D hantro_find_format(ctx, pix_mp->pixelform=
+at);
+> >> +       ctx->dst_fmt =3D *pix_mp;
+> >> +
+> > This looks like the g_fmt is setting some state in the context,
+> > this looks incorrect.
+>
+> Indeed only a call to hantro_try_fmt() is needed here.
+> I will fix that in v3.
+>
+> Benjamin
+>
+> >
+> > Thanks,
+> > Ezequiel
