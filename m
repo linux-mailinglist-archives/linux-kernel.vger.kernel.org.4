@@ -2,234 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950966647F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 18:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C68C664804
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234892AbjAJR7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 12:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        id S238638AbjAJSCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235339AbjAJR6B (ORCPT
+        with ESMTP id S238650AbjAJR6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 12:58:01 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2B5848F6;
-        Tue, 10 Jan 2023 09:56:58 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AEg6J1028558;
-        Tue, 10 Jan 2023 17:56:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : from : subject : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=iorMp17q7wINe0N4cPm7TTA02s+Ru0Iit7bFiFuy9t8=;
- b=nijQqr1253SUqmBCmtqGaV2nKwD8lst/prEqeSVKalINyarTEcZircZ7d4HEA10m5Sa3
- WZGXfWGqgb5a+b8K2WS2ujiqCpTqro1XVs7ONiyV1R6P5e5dhdAqW5C/4GoQ9M//d6L5
- BcHpVtgW72w0xfIRUYTVkEoK2/CvGjO8skYFYLT6aAdcU3QeeuDk5KCBZKvnHXNRD5/m
- QIokAWi9UYBkyGScJmSJRsJzbCLCsoWUJecxIDfFZvQGz+uJ8XnpqlT9sdx6vvXSXVsS
- 3rYPJXpb7LbkU35pBHSqGI2h3N+KKcvMU3LcL9YBGqLCD1lacMaMvf5J5NUiNZUvTRi9 xw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n0sshabn3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 17:56:43 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30AHufhv029190
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 17:56:41 GMT
-Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 10 Jan
- 2023 09:56:41 -0800
-Message-ID: <7e64039a-55ce-d79d-8501-10de09269afb@quicinc.com>
-Date:   Tue, 10 Jan 2023 09:56:40 -0800
+        Tue, 10 Jan 2023 12:58:08 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 000F22019
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:57:33 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 455722F4;
+        Tue, 10 Jan 2023 09:58:15 -0800 (PST)
+Received: from [10.1.196.46] (eglon.cambridge.arm.com [10.1.196.46])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 49B603F67D;
+        Tue, 10 Jan 2023 09:57:30 -0800 (PST)
+Message-ID: <54d14a9f-5983-0a33-9340-c0ff48cc9757@arm.com>
+Date:   Tue, 10 Jan 2023 17:57:19 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Elliot Berman <quic_eberman@quicinc.com>
-Subject: Re: [PATCH v8 06/28] virt: gunyah: Identify hypervisor version
-To:     Alex Elder <elder@linaro.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>
-CC:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Bagas Sanjaya" <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        "Sudeep Holla" <sudeep.holla@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-acpi@vger.kernel.org>
-References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
- <20221219225850.2397345-7-quic_eberman@quicinc.com>
- <51c36831-19c1-dd67-9e31-87733c190a9c@linaro.org>
-Content-Language: en-US
-In-Reply-To: <51c36831-19c1-dd67-9e31-87733c190a9c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: e2wEreoohIgL8SWgbG9PdENHo8Q5EPFS
-X-Proofpoint-ORIG-GUID: e2wEreoohIgL8SWgbG9PdENHo8Q5EPFS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_07,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 spamscore=0 clxscore=1015 suspectscore=0
- adultscore=0 impostorscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301100115
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 01/18] x86/resctrl: Track the closid with the rmid
+Content-Language: en-GB
+To:     "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Chatre, Reinette" <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        "carl@os.amperecomputing.com" <carl@os.amperecomputing.com>,
+        "lcherian@marvell.com" <lcherian@marvell.com>,
+        "bobo.shaobowang@huawei.com" <bobo.shaobowang@huawei.com>,
+        "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        "xingxin.hx@openanolis.org" <xingxin.hx@openanolis.org>,
+        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
+        "peternewman@google.com" <peternewman@google.com>
+References: <20221021131204.5581-1-james.morse@arm.com>
+ <20221021131204.5581-2-james.morse@arm.com>
+ <IA1PR11MB609724963D5C6086A98AC0479BFB9@IA1PR11MB6097.namprd11.prod.outlook.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <IA1PR11MB609724963D5C6086A98AC0479BFB9@IA1PR11MB6097.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Fenghua,
 
-
-On 1/9/2023 1:34 PM, Alex Elder wrote:
-> On 12/19/22 4:58 PM, Elliot Berman wrote:
->> Export the version of Gunyah which is reported via the hyp_identify
->> hypercall. Increments of the major API version indicate possibly
->> backwards incompatible changes.
+On 06/01/2023 02:57, Yu, Fenghua wrote:
+>> James Morse <james.morse@arm.com> writes:
 >>
->> Export the hypervisor identity so that Gunyah drivers can act according
->> to the major API version.
+>> x86's RMID are independent of the CLOSID. An RMID can be allocated, used and
+>> freed without considering the CLOSID.
 >>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->> ---
->>   drivers/virt/Makefile        |  1 +
->>   drivers/virt/gunyah/Makefile |  1 +
->>   drivers/virt/gunyah/gunyah.c | 46 ++++++++++++++++++++++++++++++++++++
->>   include/linux/gunyah.h       |  6 +++++
->>   4 files changed, 54 insertions(+)
->>   create mode 100644 drivers/virt/gunyah/Makefile
->>   create mode 100644 drivers/virt/gunyah/gunyah.c
+>> MPAM's equivalent feature is PMG, which is not an independent number, it
+>> extends the CLOSID/PARTID space. For MPAM, only PMG-bits worth of 'RMID'
+>> can be allocated for a single CLOSID.
+>> i.e. if there is 1 bit of PMG space, then each CLOSID can have two monitor
+>> groups.
 >>
->> diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
->> index 093674e05c40..92b7e5311548 100644
->> --- a/drivers/virt/Makefile
->> +++ b/drivers/virt/Makefile
->> @@ -11,3 +11,4 @@ obj-$(CONFIG_NITRO_ENCLAVES)    += nitro_enclaves/
->>   obj-$(CONFIG_ACRN_HSM)        += acrn/
->>   obj-$(CONFIG_EFI_SECRET)    += coco/efi_secret/
->>   obj-$(CONFIG_SEV_GUEST)       += coco/sev-guest/
->> +obj-y                += gunyah/
->> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
->> new file mode 100644
->> index 000000000000..2ac4ee64b89d
->> --- /dev/null
->> +++ b/drivers/virt/gunyah/Makefile
->> @@ -0,0 +1 @@
->> +obj-$(CONFIG_GUNYAH) += gunyah.o
->> diff --git a/drivers/virt/gunyah/gunyah.c b/drivers/virt/gunyah/gunyah.c
->> new file mode 100644
->> index 000000000000..c34c9046fc08
->> --- /dev/null
->> +++ b/drivers/virt/gunyah/gunyah.c
->> @@ -0,0 +1,46 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights 
->> reserved.
->> + */
->> +
->> +#define pr_fmt(fmt) "gunyah: " fmt
->> +
->> +#include <linux/gunyah.h>
->> +#include <linux/init.h>
->> +#include <linux/module.h>
->> +#include <linux/printk.h>
->> +
->> +struct gh_hypercall_hyp_identify_resp gunyah_api;
->> +EXPORT_SYMBOL_GPL(gunyah_api);
->> +
->> +static const uint32_t gunyah_known_uuids[][4] = {
->> +    {0x19bd54bd, 0x0b37571b, 0x946f609b, 0x54539de6}, /*QC_HYP 
->> (Qualcomm's build) */
->> +    {0x673d5f14, 0x9265ce36, 0xa4535fdb, 0xc1d58fcd}, /*GUNYAH (open 
->> source build) */
->> +};
->> +
->> +static int __init gunyah_init(void)
->> +{
->> +    u32 uid[4];
->> +    int i;
->> +
->> +    gh_hypercall_get_uid(uid);
->> +
->> +    for (i = 0; i < ARRAY_SIZE(gunyah_known_uuids); i++)
->> +        if (!memcmp(uid, gunyah_known_uuids[i], sizeof(uid)))
->> +            break;
->> +
->> +    if (i == ARRAY_SIZE(gunyah_known_uuids))
->> +        return -ENODEV;
->> +
->> +    gh_hypercall_hyp_identify(&gunyah_api);
->> +
->> +    pr_info("Running under Gunyah hypervisor %llx/v%u\n",
->> +        FIELD_GET(GH_API_INFO_VARIANT_MASK, gunyah_api.api_info),
->> +        gh_api_version());
->> +
->> +    return 0;
->> +}
->> +arch_initcall(gunyah_init);
->> +
->> +MODULE_LICENSE("GPL");
->> +MODULE_DESCRIPTION("Gunyah Hypervisor Driver");
->> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
->> index 2765d2b40198..166156f69df9 100644
->> --- a/include/linux/gunyah.h
->> +++ b/include/linux/gunyah.h
->> @@ -92,6 +92,12 @@ struct gh_hypercall_hyp_identify_resp {
->>       u64 api_info;
->>       u64 flags[3];
->>   };
->> +extern struct gh_hypercall_hyp_identify_resp gunyah_api;
+>> To allow rescrl to disambiguate RMID values for different CLOSID, everything in
 > 
-> Must this global variable be exposed?  Can't you hide it--as
-> well as its interpretation--inside "gunyah.c"?
->  >> +
->> +static inline u16 gh_api_version(void)
->> +{
->> +    return FIELD_GET(GH_API_INFO_API_VERSION_MASK, gunyah_api.api_info);
->> +}
+> s/rescrl/resctrl/
 > 
-> If you don't make the above function inline, can you hide the
-> definition of gunyah_api?
+>> resctrl that keeps an RMID value needs to know the CLOSID too. This will always
+>> be ignored on x86.
+
+
+>> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h
+>> b/arch/x86/kernel/cpu/resctrl/internal.h
+>> index 5f7128686cfd..4b243ba88882 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/internal.h
+>> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
+>> @@ -519,7 +519,7 @@ struct rdt_domain *get_domain_from_cpu(int cpu,
+>> struct rdt_resource *r);  int closids_supported(void);  void closid_free(int closid);
+>> int alloc_rmid(void); -void free_rmid(u32 rmid);
+>> +void free_rmid(u32 closid, u32 rmid);
+>>  int rdt_get_mon_l3_config(struct rdt_resource *r);  void mon_event_count(void
+>> *info);  int rdtgroup_mondata_show(struct seq_file *m, void *arg); diff --git
+>> a/arch/x86/kernel/cpu/resctrl/monitor.c
+>> b/arch/x86/kernel/cpu/resctrl/monitor.c
+>> index efe0c30d3a12..f1f66c9942a5 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
+>> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+>> @@ -25,6 +25,7 @@
+>>  #include "internal.h"
+>>
+>>  struct rmid_entry {
+>> +	u32				closid;
 > 
+> Could you please add a comment for this closid field? It's expected to be form x86 RMID entry.
+> So it's deserved a comment to explain a bit more on this field.
 
-This seems like a good idea to me. I'm thinking to have the following 
-functions:
+Sure ... what does it need to convey?
+I'm not sure what you mean by "expected to be form x86 RMID entry".
 
-enum gh_api_feature {
-	GH_API_FEATURE_DOORBELL,
-	GH_API_FEATURE_MSGQUEUE,
-	GH_API_FEATURE_VIC,
-	GH_API_FEATURE_VPM,
-	GH_API_FEATURE_VCPU,
-	GH_API_FEATURE_MEMEXTENT,
-	GH_API_FEATURE_TRACE_CTRL,
-};
+My medium verbosity version looks like this:
+|        /*
+|         * Some architectures's resctrl_arch_rmid_read() needs the CLOSID value
+|         * in order to access the correct monitor. This field provides the
+|         * value to list walkers like __check_limbo(). On x86 this is ignored.
+|         */
 
-u16 gh_api_version(void);
-bool gh_api_has_feature(enum gh_api_feature feature);
+
+Does this cover it?
+
 
 Thanks,
-Elliot
+
+James
+
+
+>>  	u32				rmid;
+>>  	int				busy;
+>>  	struct list_head		list;
