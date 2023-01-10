@@ -2,129 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41F2664420
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157D5664425
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238870AbjAJPHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
+        id S238377AbjAJPJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238856AbjAJPG4 (ORCPT
+        with ESMTP id S239082AbjAJPIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:06:56 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418295DE75
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:06:33 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AEHK03012649;
-        Tue, 10 Jan 2023 15:06:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=r9Ocyd6KC6+Trd8uIRQw20BN7wCdJ+8MQwsMOpaaRck=;
- b=qFSLTprkbDZl4VKQvOqWtJzq4JjGIlkCQhRaENYb5F+LP0iRa0cqb3zFAuqG5WfRRx3i
- /QnjpbaM1e5APhSXCLm1LBSk42a28olOruwxm+UKjwQcKYSMEtH8F9xHEmvH5rfDRfAB
- KV0rvMzHBpJs9rYO0RgAcxHVcplNl5QT3XHx+y2Ie1My9XfyXyq6AqRwb4L29TXHVBWa
- TKi50KquMMnJk7E3ezZ0QBnG4xRiOyCeQMaPKnF8TjH9rTlaA0uGeKRtdhHpn9+cpVcw
- AEXg340VFsUwAk+DAzrKwYRpeXqrIjHaFhWErU4Q52hx1N+cQoN//1rb3UvQZU3BWFAV KQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n188dv95m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 15:06:20 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30A8SJwX024865;
-        Tue, 10 Jan 2023 15:06:18 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3my0c6bkxb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 15:06:18 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30AF6FeS40763902
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Jan 2023 15:06:16 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E203A20049;
-        Tue, 10 Jan 2023 15:06:15 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B334620040;
-        Tue, 10 Jan 2023 15:06:15 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 10 Jan 2023 15:06:15 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        SeongJae Park <sj@kernel.org>
-Subject: Re: [PATCH] mm.h: Fix "mm: Add temporary vma iterator versions of
- vma_merge(), split_vma(), and __split_vma()
-References: <20230109205300.955019-1-Liam.Howlett@oracle.com>
-        <20230109151512.6d06b1d73895414885a698d7@linux-foundation.org>
-        <20230110141421.o23coymw44jga4z7@revolver>
-Date:   Tue, 10 Jan 2023 16:06:15 +0100
-In-Reply-To: <20230110141421.o23coymw44jga4z7@revolver> (Liam Howlett's
-        message of "Tue, 10 Jan 2023 14:14:29 +0000")
-Message-ID: <yt9dlemaa0pk.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Tue, 10 Jan 2023 10:08:49 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BED69B27;
+        Tue, 10 Jan 2023 07:07:54 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pFGE8-0005Pf-AS; Tue, 10 Jan 2023 16:07:48 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Jagan Teki <jagan@edgeble.ai>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Christopher Obbard <chris.obbard@collabora.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCHv8 7/7] arm64: dts: rockchip: Add rock-5b board
+Date:   Tue, 10 Jan 2023 16:07:46 +0100
+Message-ID: <37476486.XM6RcZxFsP@diego>
+In-Reply-To: <996e39448350d4f6318f7ff59c6a2ca249fb30a7.camel@collabora.com>
+References: <20230109155801.51642-1-sebastian.reichel@collabora.com> <CA+VMnFxb1P4tP5sef5ME3jCcCq2Y3rD-0bpv1B0TsUZ3RXXuqg@mail.gmail.com> <996e39448350d4f6318f7ff59c6a2ca249fb30a7.camel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: C7qeABTXVpAaPgCVaGDFgcR-Nk9FOh00
-X-Proofpoint-GUID: C7qeABTXVpAaPgCVaGDFgcR-Nk9FOh00
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_06,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- phishscore=0 adultscore=0 suspectscore=0 spamscore=0 priorityscore=1501
- bulkscore=0 mlxlogscore=946 mlxscore=0 lowpriorityscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301100094
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Liam Howlett <liam.howlett@oracle.com> writes:
+Am Dienstag, 10. Januar 2023, 15:50:17 CET schrieb Christopher Obbard:
+> On Tue, 2023-01-10 at 19:30 +0530, Jagan Teki wrote:
+> > On Mon, 9 Jan 2023 at 21:28, Sebastian Reichel
+> > <sebastian.reichel@collabora.com> wrote:
+> > > 
+> > > From: Christopher Obbard <chris.obbard@collabora.com>
+> > > 
+> > > Add board file for the RK3588 Rock 5B board. This is a basic
+> > > implementation which just brings up the eMMC and UART which is
+> > > enough to successfully boot Linux.
+> > > 
+> > > The ethernet controller is connected via PCIe so support will
+> > > come in a follow-up patch.
+> > > 
+> > > Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
+> > > Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
+> > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > > ---
+> > >  arch/arm64/boot/dts/rockchip/Makefile         |  1 +
+> > >  .../boot/dts/rockchip/rk3588-rock-5b.dts      | 44
+> > > +++++++++++++++++++
+> > >  2 files changed, 45 insertions(+)
+> > >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/rockchip/Makefile
+> > > b/arch/arm64/boot/dts/rockchip/Makefile
+> > > index 87a853435142..c5bdd0176ce0 100644
+> > > --- a/arch/arm64/boot/dts/rockchip/Makefile
+> > > +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> > > @@ -83,4 +83,5 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-
+> > > v10.dtb
+> > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-odroid-m1.dtb
+> > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-rock-3a.dtb
+> > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
+> > > +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-rock-5b.dtb
+> > >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-rock-5a.dtb
+> > > diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> > > b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> > > new file mode 100644
+> > > index 000000000000..d2f1e963ce06
+> > > --- /dev/null
+> > > +++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+> > > @@ -0,0 +1,44 @@
+> > > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > > +
+> > > +/dts-v1/;
+> > > +
+> > > +#include "rk3588.dtsi"
+> > > +
+> > > +/ {
+> > > +       model = "Radxa ROCK 5 Model B";
+> > > +       compatible = "radxa,rock-5b", "rockchip,rk3588";
+> > > +
+> > > +       aliases {
+> > > +               mmc1 = &sdhci;
+> > 
+> > I think sdhci - emmc has to be mmc0 due to boot priority.
+> 
+> Hi Jagan,
+> 
+> We kept eMMC as mmc1 for both ROCK 5 Model A and B to keep
+> compatibility with vendor kernel:
+> https://github.com/radxa/kernel/blob/stable-5.10-rock5/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts#L31
+> 
+> But I am happy to change the alias to mmc0, @Sebastian what do you
+> think?
 
-> * Andrew Morton <akpm@linux-foundation.org> [230109 18:15]:
->> On Mon, 9 Jan 2023 20:53:22 +0000 Liam Howlett <liam.howlett@oracle.com>=
- wrote:
->>=20
->> > The extern definition of __split_vma() was removed too early.  Re-add =
-it
->> > and remove it once the users are all converted.
->>=20
->> I think I sorted this out.
->>=20
->> __split_vma() can be made static to mmap.c?
->
-> Ah, I don't think so?  SeongJae reported an issue that I caused by
-> dropping this definition from the header before mm/madvise.c was updated
-> to use the alternative.  I think it needs to be in the header and so it
-> should just probably be there until the function is dropped entirely
-> later in the series.
+In any case, if you decide to swap things around, please just send a follow
+up patch, as I just applied this series :-)
 
-FWIW, i encountered that issue while bisecting another maple tree issue
-with next-20230110:
 
-linux/mm/madvise.c: In function =E2=80=98madvise_update_vma=E2=80=99:
-linux/mm/madvise.c:165:25: error: implicit declaration of function =E2=80=
-=98__split_vma=E2=80=99; did you mean =E2=80=98split_vma=E2=80=99? [-Werror=
-=3Dimplicit-function-declaration]
-  165 |                 error =3D __split_vma(mm, vma, start, 1);
-      |                         ^~~~~~~~~~~
-      |                         split_vma
-cc1: some warnings being treated as errors
-make[3]: *** [linux/scripts/Makefile.build:252: mm/madvise.o] Error 1
-make[2]: *** [linux/scripts/Makefile.build:504: mm] Error 2
-make[1]: *** [linux/Makefile:2008: .] Error 2
+Heiko
 
-Can we instead fix the original patch instead, so bisect works, or is
-it too late?
+
