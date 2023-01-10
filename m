@@ -2,89 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373B16636D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 02:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE31663768
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 03:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235832AbjAJBk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 20:40:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S229614AbjAJCgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 21:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233142AbjAJBke (ORCPT
+        with ESMTP id S229457AbjAJCgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 20:40:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C62200E;
-        Mon,  9 Jan 2023 17:40:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EA02B810C3;
-        Tue, 10 Jan 2023 01:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38BFAC433D2;
-        Tue, 10 Jan 2023 01:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673314831;
-        bh=ABYz4ZvvBdMvRbwp1IznTPG8KGEBT7V9tcgJKTQXuro=;
-        h=Date:From:To:Cc:Subject:From;
-        b=W3mYbBp9vkdjbVHF2zITSzwHSTgb2Sl9K6C43HXVbbn33c8I19QHvpySmLuybdyQC
-         PNYA4wIpQ3paQHUK5SVTtZTcPRiN7mPxo8QRHVLHftxmpjeEF3XHbCGmtn9tjK1uMe
-         v9kKOf+H1cuM6SUVkQFaffdHBut/81KhMo4Z2vuoxgXi7qrCwBQ9NkBDE1wbkszM3I
-         AND/wO7BTJ7/7LnehbHLx6kZy3gbJHdIc2+u28Qs1Ka8q0oqiHOFUg82JFBdeOOJwG
-         hSwz7Wu6vgUB4CCeMIQnUJwWqXkTr9XJPJs3dxbInq330EaCMRCfqd48gK/5OkcLqI
-         kMcMY3rXesqPA==
-Date:   Mon, 9 Jan 2023 19:40:38 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] x86/fpu: Replace zero-length array with flexible-array
- member
-Message-ID: <Y7zCFpa2XNs/o9YQ@work>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 9 Jan 2023 21:36:37 -0500
+Received: from mo-csw-fb.securemx.jp (mo-csw-fb1514.securemx.jp [210.130.202.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669BFB7F0;
+        Mon,  9 Jan 2023 18:36:36 -0800 (PST)
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1514) id 30A1laFX006185; Tue, 10 Jan 2023 10:47:36 +0900
+Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 30A1l23S020662; Tue, 10 Jan 2023 10:47:02 +0900
+X-Iguazu-Qid: 34tMQ0sdliXH7P6xOJ
+X-Iguazu-QSIG: v=2; s=0; t=1673315221; q=34tMQ0sdliXH7P6xOJ; m=Ip4TVbWssxt9xhY/2q7Euf5QdK6wkLNwu6yXzAHO5bc=
+Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
+        by relay.securemx.jp (mx-mr1512) id 30A1l0EA000945
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 10 Jan 2023 10:47:00 +0900
+X-SA-MID: 48793541
+From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        yuji2.ishikawa@toshiba.co.jp
+Subject: [PATCH v4 0/6] Add Toshiba Visconti Video Input Interface driver
+Date:   Tue, 10 Jan 2023 10:41:37 +0900
+X-TSB-HOP2: ON
+Message-Id: <20230110014143.18684-1-yuji2.ishikawa@toshiba.co.jp>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated[1] and we are moving towards
-adopting C99 flexible-array members instead. So, replace zero-length
-array declaration in struct xregs_state with flex-array member.
+This series is the Video Input Interface driver
+for Toshiba's ARM SoC, Visconti[0].
+This provides DT binding documentation,
+device driver, documentation and MAINTAINER files.
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [2].
+A visconti VIIF driver instance exposes
+1 media control device file and 3 video device files
+for a VIIF hardware. 
+Detailed HW/SW are described in documentation directory.
+The VIIF hardware has CSI2 receiver,
+image signal processor and DMAC inside.
+The subdevice for image signal processor provides
+vendor specific V4L2 controls.
 
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays [1]
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
-Link: https://github.com/KSPP/linux/issues/78
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- arch/x86/include/asm/fpu/types.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The device driver depends on two other drivers under development;
+clock framework driver and IOMMU driver.
+Corresponding features will be added later.
 
-diff --git a/arch/x86/include/asm/fpu/types.h b/arch/x86/include/asm/fpu/types.h
-index eb7cd1139d97..7f6d858ff47a 100644
---- a/arch/x86/include/asm/fpu/types.h
-+++ b/arch/x86/include/asm/fpu/types.h
-@@ -321,7 +321,7 @@ struct xstate_header {
- struct xregs_state {
- 	struct fxregs_state		i387;
- 	struct xstate_header		header;
--	u8				extended_state_area[0];
-+	u8				extended_state_area[];
- } __attribute__ ((packed, aligned (64)));
- 
- /*
+Best regards,
+Yuji
+
+Changelog v2:
+- Resend v1 because a patch exceeds size limit.
+
+Changelog v3:
+- Add documentation to describe SW and HW
+- Adapted to media control framework
+- Introduced ISP subdevice, capture device
+- Remove private IOCTLs and add vendor specific V4L2 controls
+- Change function name avoiding camelcase and uppercase letters
+
+Changelog v4:
+- Split patches because a patch exceeds size limit
+- fix dt-bindings document
+- stop specifying ID numbers for driver instance explicitly at device tree
+- use pm_runtime to trigger initialization of HW
+  along with open/close of device files.
+- add a entry for a header file at MAINTAINERS file
+
+
+[0]: https://toshiba.semicon-storage.com/ap-en/semiconductor/product/image-recognition-processors-visconti.html
+
+Yuji Ishikawa (6):
+  dt-bindings: media: platform: visconti: Add Toshiba Visconti Video
+    Input Interface bindings
+  media: platform: visconti: Add Toshiba Visconti Video Input Interface
+    driver
+  media: platform: visconti: Add Toshiba Visconti Video Input Interface
+    driver user interace
+  media: platform: visconti: Add Toshiba Visconti Video Input Interface
+    driver v4l2 controls handler
+  documentation: media: add documentation for Toshiba Visconti Video
+    Input Interface driver
+  MAINTAINERS: Add entries for Toshiba Visconti Video Input Interface
+
+ .../bindings/media/toshiba,visconti-viif.yaml |   98 +
+ .../driver-api/media/drivers/index.rst        |    1 +
+ .../media/drivers/visconti-viif.rst           |  455 +++
+ MAINTAINERS                                   |    4 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/visconti/Kconfig       |    9 +
+ drivers/media/platform/visconti/Makefile      |    9 +
+ drivers/media/platform/visconti/hwd_viif.c    | 1690 ++++++++++
+ drivers/media/platform/visconti/hwd_viif.h    |  710 +++++
+ .../media/platform/visconti/hwd_viif_csi2rx.c |  610 ++++
+ .../platform/visconti/hwd_viif_internal.h     |  340 ++
+ .../media/platform/visconti/hwd_viif_l1isp.c  | 2674 ++++++++++++++++
+ .../media/platform/visconti/hwd_viif_reg.h    | 2802 +++++++++++++++++
+ drivers/media/platform/visconti/viif.c        |  544 ++++
+ drivers/media/platform/visconti/viif.h        |  203 ++
+ .../media/platform/visconti/viif_capture.c    | 1201 +++++++
+ .../media/platform/visconti/viif_controls.c   | 1153 +++++++
+ drivers/media/platform/visconti/viif_isp.c    |  848 +++++
+ include/uapi/linux/visconti_viif.h            | 1724 ++++++++++
+ 20 files changed, 15077 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+ create mode 100644 Documentation/driver-api/media/drivers/visconti-viif.rst
+ create mode 100644 drivers/media/platform/visconti/Kconfig
+ create mode 100644 drivers/media/platform/visconti/Makefile
+ create mode 100644 drivers/media/platform/visconti/hwd_viif.c
+ create mode 100644 drivers/media/platform/visconti/hwd_viif.h
+ create mode 100644 drivers/media/platform/visconti/hwd_viif_csi2rx.c
+ create mode 100644 drivers/media/platform/visconti/hwd_viif_internal.h
+ create mode 100644 drivers/media/platform/visconti/hwd_viif_l1isp.c
+ create mode 100644 drivers/media/platform/visconti/hwd_viif_reg.h
+ create mode 100644 drivers/media/platform/visconti/viif.c
+ create mode 100644 drivers/media/platform/visconti/viif.h
+ create mode 100644 drivers/media/platform/visconti/viif_capture.c
+ create mode 100644 drivers/media/platform/visconti/viif_controls.c
+ create mode 100644 drivers/media/platform/visconti/viif_isp.c
+ create mode 100644 include/uapi/linux/visconti_viif.h
+
 -- 
-2.34.1
+2.25.1
+
 
