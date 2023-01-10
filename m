@@ -2,93 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC146637CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 04:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 194516637CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 04:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjAJDQu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 9 Jan 2023 22:16:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        id S229743AbjAJDR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 22:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjAJDQr (ORCPT
+        with ESMTP id S230123AbjAJDRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 22:16:47 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E0311159
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 19:16:45 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id BED8424DCA6;
-        Tue, 10 Jan 2023 11:16:37 +0800 (CST)
-Received: from EXMBX063.cuchost.com (172.16.7.63) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
- 2023 11:16:37 +0800
-Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX063.cuchost.com
- (172.16.6.63) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
- 2023 11:16:37 +0800
-Received: from EXMBX161.cuchost.com ([fe80::f152:b9a3:2243:db3c]) by
- EXMBX161.cuchost.com ([fe80::f152:b9a3:2243:db3c%15]) with mapi id
- 15.00.1497.044; Tue, 10 Jan 2023 11:16:37 +0800
-From:   Leyfoon Tan <leyfoon.tan@starfivetech.com>
-To:     Andrew Jones <ajones@ventanamicro.com>,
-        JeeHeng Sia <jeeheng.sia@starfivetech.com>
-CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: RE: [PATCH v2 3/3] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Topic: [PATCH v2 3/3] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Index: AQHZI/MH55+1R+tLE0CpUrjhzVBfuq6V9U4AgAEFXdA=
-Date:   Tue, 10 Jan 2023 03:16:37 +0000
-Message-ID: <964def29d1e146fc8ac17ab2fe813425@EXMBX161.cuchost.com>
-References: <20230109062407.3235-1-jeeheng.sia@starfivetech.com>
- <20230109062407.3235-4-jeeheng.sia@starfivetech.com>
- <20230109193624.iiuguwgimpn7zbyw@orel>
-In-Reply-To: <20230109193624.iiuguwgimpn7zbyw@orel>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [60.49.44.179]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
+        Mon, 9 Jan 2023 22:17:05 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FF939F9B;
+        Mon,  9 Jan 2023 19:17:02 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NrbZg5W8lz501SX;
+        Tue, 10 Jan 2023 11:16:59 +0800 (CST)
+Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
+        by mse-fl1.zte.com.cn with SMTP id 30A3GnXf060740;
+        Tue, 10 Jan 2023 11:16:49 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Tue, 10 Jan 2023 11:16:51 +0800 (CST)
+Date:   Tue, 10 Jan 2023 11:16:51 +0800 (CST)
+X-Zmail-TransId: 2b0363bcd8a3594a2d8f
+X-Mailer: Zmail v1.0
+Message-ID: <202301101116512112512@zte.com.cn>
+In-Reply-To: <Y7bYKgjYSG09OD0f@debian.me>
+References: 202301031002076571212@zte.com.cn,Y7P6mSuYkmP8g8Ot@osiris,Y7bYKgjYSG09OD0f@debian.me
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <bagasdotme@gmail.com>
+Cc:     <hca@linux.ibm.com>, <freude@linux.ibm.com>, <gor@linux.ibm.com>,
+        <agordeev@linux.ibm.com>, <borntraeger@linux.ibm.com>,
+        <svens@linux.ibm.com>, <linux-s390@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>
+Subject: =?UTF-8?B?UmU6IFtQQVRDSCBsaW51eC1uZXh0IHYyXSBzMzkwL3pjcnlwdDogdXNlIHN0cnNjcHkoKSB0byBpbnN0ZWFkIG9mIHN0cm5jcHkoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 30A3GnXf060740
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 63BCD8AB.000 by FangMail milter!
+X-FangMail-Envelope: 1673320619/4NrbZg5W8lz501SX/63BCD8AB.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63BCD8AB.000/4NrbZg5W8lz501SX
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
-> 
-> > +{
-> > +	hibernate_cpu_context = kcalloc(1, sizeof(struct suspend_context),
-> GFP_KERNEL);
-> > +
-> > +	if (WARN_ON(!hibernate_cpu_context))
-> > +		return -ENOMEM;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +early_initcall(riscv_hibernate__init);
-> > --
-> > 2.34.1
-> >
-> >
-> 
-> Besides some nits and a couple questions, this looks to me. I'll try to
-> find some time to experiment with it as well.
-FYI, you need use the latest OpenSBI tree. We also submitted these 2 patches below to fix the boot hartid. Resume from hibernation needs to be same hartid.
+> Specifically, the second SoB from Xu should only be included if he was> 
+> in From: mail header (that is, he should have sent the patch instead of> 
+> Yang).
 
+Thanks to your carefully reviewing! Actually this patch is made by Xu,
+and Yang help to send it. I remember this is OK by patch rules. If I am
+wrong, I will try to correct it.
 
-https://github.com/riscv-software-src/opensbi/commit/cb7e7c3325e68a9b4d5ea210b97cac693cf5814f
-https://github.com/riscv-software-src/opensbi/commit/8020df8733b060f01e35b0b2bcb2b41e6b992e9b
+Thanks.
