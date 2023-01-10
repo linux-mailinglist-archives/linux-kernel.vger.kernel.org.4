@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367E2664AE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78260664B2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239408AbjAJShc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 13:37:32 -0500
+        id S239627AbjAJSjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:39:23 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239572AbjAJShN (ORCPT
+        with ESMTP id S239465AbjAJSiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 13:37:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF55A59501;
-        Tue, 10 Jan 2023 10:32:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 10 Jan 2023 13:38:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233C05B4B5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:32:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673375566;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=isX/xl/Gk4O2RcsWO9IXu2O1CLN73hFphddfEk/12nc=;
+        b=LBAWLrNpJ1AYLWDVrsaBRYvLvZA/8oBNRIqkDV2OthGb8pcLBef+4HmpgulxcqnD6pC16m
+        MBVKPWf+mKTY8W5d6DwoKbDRH+iLj5CyNXYOwInHdHnaPIiYw5zrea6IJrjmY8443I+xbK
+        c/vtmMqfO92zYfOUgM7BXqHOM6hgIVM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-538-CeJyOlZoPEOV_EaDDCckkQ-1; Tue, 10 Jan 2023 13:32:44 -0500
+X-MC-Unique: CeJyOlZoPEOV_EaDDCckkQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D3CAB81908;
-        Tue, 10 Jan 2023 18:32:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06FAC43398;
-        Tue, 10 Jan 2023 18:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673375529;
-        bh=QUdSPSJ1dS3+KOPixtik4EX+QpdImlvJMwhGplzoJI4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CSsqhlGsZ3rRP6uogxNQuvYFRLwxQJkenVKpMsdfhh4VCenx4M2sOzB4c5cubXYVE
-         Zp6PZXsbBcAQ1md7ssc9o/pna7r9YbilGa92ctHfDXSZx4VJWwTMAxcFgNM5KkZ7OD
-         muIFhcHZ9gBcnfvZZHoYeC94JvDCuuOd+Ho1dVM7kZ3vQa4ZZEbmgB2wMP6WnqIxn/
-         Bc/ek0tDQOWVXcxYE2a23jB2+F7ZAldB1W2X5HyuShyfZRgX8aFpGEjOZnknglWsnN
-         MA6E691iXWt2TZ+Lo1D7Tjg7nP9w/IGuS5LFd79fF0HFevblP3Hv5hTeKbSiJr8pWO
-         gr9Ak3EVCOumA==
-Received: by mail-lj1-f179.google.com with SMTP id p25so7278801ljn.12;
-        Tue, 10 Jan 2023 10:32:08 -0800 (PST)
-X-Gm-Message-State: AFqh2krCEq6Gt4vXrHVsM25oXqnEvws13/+kgUBM+qAcokYmtcUSlfOh
-        3IMNJaT6dooknfrooh7ZFygSAAnPr7TihBIaMhM=
-X-Google-Smtp-Source: AMrXdXvIneVTGj9nKfDPo5Fts30vJtsod1nns86BieZcV2ZxuUxvsrycMRszgV2p/ldobc7B5DyW+h59Ev4lN5NOJGE=
-X-Received: by 2002:a2e:bd11:0:b0:280:54b:9ed5 with SMTP id
- n17-20020a2ebd11000000b00280054b9ed5mr994803ljq.414.1673375526906; Tue, 10
- Jan 2023 10:32:06 -0800 (PST)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED2F8811E9C;
+        Tue, 10 Jan 2023 18:32:43 +0000 (UTC)
+Received: from madcap2.tricolour.ca (ovpn-0-3.rdu2.redhat.com [10.22.0.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B3EF0492B00;
+        Tue, 10 Jan 2023 18:32:42 +0000 (UTC)
+Date:   Tue, 10 Jan 2023 13:32:40 -0500
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Steve Grubb <sgrubb@redhat.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-api@vger.kernel.org,
+        Amir Goldstein <amir73il@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>
+Subject: Re: [PATCH v5 3/3] fanotify, audit: Allow audit to use the full
+ permission event response
+Message-ID: <Y72vSB+dEgD4HMCN@madcap2.tricolour.ca>
+References: <cover.1670606054.git.rgb@redhat.com>
+ <3211441.aeNJFYEL58@x2>
+ <Y7zWlFbrrNcfGauJ@madcap2.tricolour.ca>
+ <4778109.GXAFRqVoOG@x2>
 MIME-Version: 1.0
-References: <20230106220959.3398792-1-song@kernel.org>
-In-Reply-To: <20230106220959.3398792-1-song@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 10 Jan 2023 10:31:54 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
-Message-ID: <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
-Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Cc:     songliubraving@fb.com, Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4778109.GXAFRqVoOG@x2>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Christoph
+On 2023-01-10 10:26, Steve Grubb wrote:
+> Hello Richard,
+> 
+> On Monday, January 9, 2023 10:08:04 PM EST Richard Guy Briggs wrote:
+> > When I use an application that expected the old API, meaning it simply
+> > does:
+> > > 
+> > > response.fd = metadata->fd;
+> > > response.response = reply;
+> > > close(metadata->fd);
+> > > write(fd, &response, sizeof(struct fanotify_response));
+> > > 
+> > > I get access denials. Every time. If the program is using the new API and
+> > > sets FAN_INFO, then it works as expected. I'll do some more testing but I
+> > > think there is something wrong in the compatibility path.
+> > 
+> > I'll have a closer look, because this wasn't the intended behaviour.
+> 
+> I have done more testing. I think what I saw might have been caused by a 
+> stale selinux label (label exists, policy is deleted). With selinux in 
+> permissive mode it's all working as expected - both old and new API.
 
-Hi folks,
+Ah good, thank you.
 
-Could you please share your comments on this work? If there isn't
-major issue with it, maybe we can ship it in 6.3? (so we don't pile
-too many changes in one big set).
+> -Steve
 
-Thanks,
-Song
+- RGB
 
-On Fri, Jan 6, 2023 at 2:10 PM Song Liu <song@kernel.org> wrote:
->
-> module_layout manages different types of memory (text, data, rodata, etc.)
-> in one allocation, which is problematic for some reasons:
->
-> 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
-> 2. It is hard to use huge pages in modules (and not break strict rwx).
-> 3. Many archs uses module_layout for arch-specific data, but it is not
->    obvious how these data are used (are they RO, RX, or RW?)
->
-> Improve the scenario by replacing 2 (or 3) module_layout per module with
-> up to 7 module_memory per module:
->
->         MOD_MEM_TYPE_TEXT,
->         MOD_MEM_TYPE_DATA,
->         MOD_MEM_TYPE_RODATA,
->         MOD_MEM_TYPE_RO_AFTER_INIT,
->         MOD_MEM_TYPE_INIT_TEXT,
->         MOD_MEM_TYPE_INIT_DATA,
->         MOD_MEM_TYPE_INIT_RODATA,
->
-> and allocating them separately.
->
-> Various archs use module_layout for different data. These data are put
-> into different module_memory based on their location in module_layout.
-> IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
-> data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
->
-> Signed-off-by: Song Liu <song@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
 
-[...]
