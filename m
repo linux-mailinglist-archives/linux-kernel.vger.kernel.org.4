@@ -2,93 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC336642DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC07A6642E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233543AbjAJOJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:09:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S232392AbjAJOLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238694AbjAJOIT (ORCPT
+        with ESMTP id S231612AbjAJOLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:08:19 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079523F44D;
-        Tue, 10 Jan 2023 06:08:16 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6B29B37475;
-        Tue, 10 Jan 2023 14:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673359695; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 10 Jan 2023 09:11:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE12D8D5D7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:09:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673359778;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Sv/PHQAJi+4R1VBVhi7QSMTp9YQ1AH/mV1OBDhctDnc=;
-        b=ltB2z9V5Tq7NOk7QDyvjB26tL1XwS8OKUhR5u1Z38uZrm4J65DBSqOHNkGCD3hMDYoQbhS
-        QGGNklV+5dzTx73xllnXjiEVoGIxZ9Vmuhb/REdfqzvKTaGMeCgWnp32htK4kWs0aXNdGb
-        WUOQ++s0MpJr0OmfnSEWCD6PYSedeEA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673359695;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sv/PHQAJi+4R1VBVhi7QSMTp9YQ1AH/mV1OBDhctDnc=;
-        b=N+n+xbFUYOZgMSvKcNytBAsdggWIF5lN73Mb/SeVEyeVVxJGEPqdwnWB5U9UX5rCqxk2w7
-        +AcXnCCKzunLaeBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=jW0MXg4kTHInb0VV64RAk02+ZJUEz3vvMCLSfMJ7bo0=;
+        b=UQccPgg6ynzrClRFjSHOKBAbPlbA0W/MKSpf2a/zDXKGDEaWnjmkNOw1W+nYsLGY4OjlLL
+        gI4TQHVmutEm1+MXuqwU5BJhFcCA0ITBzuxCwkzCXKiu3WZGx7Iww/WJEtUzKl2014tj8n
+        aNrA8XqTdmU1+pNoUwHpuXPT74l9W0w=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-665-240AZRvcP4uolfqJg_SXKg-1; Tue, 10 Jan 2023 09:09:35 -0500
+X-MC-Unique: 240AZRvcP4uolfqJg_SXKg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5DAE11358A;
-        Tue, 10 Jan 2023 14:08:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0RjYFk9xvWP6UgAAMHmgww
-        (envelope-from <dwagner@suse.de>); Tue, 10 Jan 2023 14:08:15 +0000
-Date:   Tue, 10 Jan 2023 15:08:14 +0100
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/rtla: Explicitly list libtraceevent dependency
-Message-ID: <20230110140814.2yz4if2e2fasnu7t@carbon.lan>
-References: <20230110131805.16242-1-dwagner@suse.de>
- <42d1e999-79a6-94dc-cc88-77520ddce068@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A1FE380664A;
+        Tue, 10 Jan 2023 14:09:34 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1A7A82166B26;
+        Tue, 10 Jan 2023 14:09:33 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <97ce37e2fdcfbed29d9467057f0f870359d88b89.1673173920.git.code@siddh.me>
+References: <97ce37e2fdcfbed29d9467057f0f870359d88b89.1673173920.git.code@siddh.me> <cover.1673173920.git.code@siddh.me>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     dhowells@redhat.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eric Biggers <ebiggers@kernel.org>,
+        keyrings <keyrings@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] include/linux/watch_queue: Improve documentation
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42d1e999-79a6-94dc-cc88-77520ddce068@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2121104.1673359772.1@warthog.procyon.org.uk>
+Date:   Tue, 10 Jan 2023 14:09:32 +0000
+Message-ID: <2121105.1673359772@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 02:55:03PM +0100, Daniel Bristot de Oliveira wrote:
-> On 1/10/23 14:18, Daniel Wagner wrote:
-> > The current libtracefs.pkg file lists the dependency on
-> > libtraceevent ("pkg-config --libs libtracefs" -> "-ltracefs
-> > -ltraceevent").
-> > 
-> > Dan Nicholson's Guide to pkg-config[1] stats that "Libs: The link
-> > flags specific to this package and any required libraries that don't
-> > support pkg-config". Thus the current libtracefs.pkg is not correct.
-> > 
-> > rtla is depending on libtraceevent but it doesn't express this in
-> > 'pkg-config' part to retrieve the correct build flags.
-> > 
-> > In order to be able to update the "Libs:" section in the libtracefs
-> > project we need to list the dependency explicitly to avoid future linker
-> > failures.
-> 
-> I am ok with it. Steve?
+Siddh Raman Pant <code@siddh.me> wrote:
 
-FWIW, this is change is also backwards compatible, meaning if you have system
-which has a libtracefs.pkg installed which lists libtraceevent in its Libs:
-section the 'pkg-config --libs libtracefs libtraceevent' command will return the
-identically string which is '-ltracefs -ltraceevent'.
+> +/**
+> + * struct watch_type_filter - Filter on watch type
+> + *
+> + * @type: Type of watch_notification
+> + * @subtype_filter: Bitmask of subtypes to filter on
+> + * @info_filter: Filter on watch_notification::info
+> + * @info_mask: Mask of relevant bits in info_filter
+> + */
+>  struct watch_type_filter {
+>  	enum watch_notification_type type;
+> -	__u32		subtype_filter[1];	/* Bitmask of subtypes to filter on */
+> -	__u32		info_filter;		/* Filter on watch_notification::info */
+> -	__u32		info_mask;		/* Mask of relevant bits in info_filter */
+> +	__u32		subtype_filter[1];
+> +	__u32		info_filter;
+> +	__u32		info_mask;
+>  };
+
+Please don't.
+
+The structure is documented fully here:
+
+	Documentation/core-api/watch_queue.rst
+
+See:
+
+	https://docs.kernel.org/core-api/watch_queue.html#event-filtering
+
+The three column approach is much more readable in the code as it doesn't
+separate the descriptions from the things described.  Putting things in
+columns has been around for around 6000 years.
+
+David
+
