@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3B1663F25
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B705D663F33
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 12:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbjAJLQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 06:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
+        id S231735AbjAJLVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 06:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232978AbjAJLPx (ORCPT
+        with ESMTP id S231230AbjAJLVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 06:15:53 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2DC1401D
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:15:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:Message-ID:
-        Subject:To:From:Date:Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=LE4aoLbLilXnZV5T992f4wACX7I/Nfap/jSdsHEVTyA=; b=EHa5TH8PV0WlrdxsvCA1d0mUch
-        L1TyiuJlthwlNT79BsPtO/+5wiI5GvlTHBOFfo8h8/tgYGxJO+RipKRZbpGhkkpExvuNjFTr3GQat
-        Z3am1FMzHfTBh6Vfl2uePihVv2cDJmKzSpnIr/G3un6GEz7lax7URU0O4YVVF1FULZ3H8DNu1oGt0
-        YbCkzY1Qas1Kwi65MLv+1+wAr+5QROUAJJ9ZZUMP8/9P1+BCatJ7mZa8xDlXq8ZUImvkjmLlO/LqW
-        hCByYNY8h3ieuZtvABIl4j++RZNRmYek3bUitZg0q+tYkLyFnCpSvA17jrgE+yjT5Tux4AHjdDg7u
-        x6mwh9xg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pFCbN-0036xL-2l;
-        Tue, 10 Jan 2023 11:15:34 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 761E0300033;
-        Tue, 10 Jan 2023 12:15:40 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 519EB2C539AFD; Tue, 10 Jan 2023 12:15:40 +0100 (CET)
-Date:   Tue, 10 Jan 2023 12:15:40 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: x86/boot: Avoid using Intel mnemonics in AT&T syntax asm
-Message-ID: <Y71I3Ex2pvIxMpsP@hirez.programming.kicks-ass.net>
+        Tue, 10 Jan 2023 06:21:01 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E15FE8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:20:54 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id d13so8344148qvj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 03:20:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9MPu3Wa9CUcuJv9SQo53gj4hFSOASJJs6prztLhccjc=;
+        b=W9X6Dp6Kr3cS6Nm7ToN8FkocE4ipWCmBzgM81QXmZG5cEvskylo3EpK0FBr9B+h6OU
+         8IYlnPxJsZvSHTWNrC+2RTYnb/Q3fHfdfDVs0AV18uUfTHw5wgwSsmiZMLvZ3TtAO/cW
+         quZGimYO2e7qEiXtf+OYMRZ5oXuoAnHt/EZu1o2yYoBbqsxFII6BXKNvME4EC4FsTNDc
+         GK9uI1QXGjrHDk8HwqIJ7jWityrJqaJHVNIphHN4Ofrsx19ENPHQgZDb2FAnr9P2SKrr
+         SFi+VfQB/YZnZAL3xVXI9YaYk5f3a82tfH/LgndDIVpOcPTL3Uo4HFEcr9NChcj317Ni
+         +2Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9MPu3Wa9CUcuJv9SQo53gj4hFSOASJJs6prztLhccjc=;
+        b=heHfTnltgzvEEvwjvoX8s1UxnO8GL8B/8Gr9szBh1dFRSMOhZKAEl/GFVcPVTkN2SV
+         E1EzbSKFoxxRaqqR/34NRD81dvJR4cJ1CTNcav16PB0op4GQWEOKXaL74/k15g1q8hY4
+         MajNM93+YUIoXWbkcjzWvc53CNYfiKYk0Fh7bkspchrUv5j89PLNOshCaFzIv9cVMoce
+         npiN6IImz5SpItALOhB4FIoLtil6ug+59UT9ZnLCfEcpUq08ghgv63y031Sn9fic8uZ3
+         Jt4pGJDbDXUj+2GFiRjVVkm2Ny53PePhP9tXkUecSUTDmTAFBTQnyvL8ZZYxnpkD8aMk
+         IcqA==
+X-Gm-Message-State: AFqh2krPWmp2LcPu5MamnXticn6gjfmV2ROMSf8NoypqzFlQ0xA5WdFa
+        TClyRez3Z2Yd/sl8Xu7G3r23EIda4xvpxg==
+X-Google-Smtp-Source: AMrXdXskY2zfeStg9UtuObXAR/TEZunQxkW9h1SejhGVnVtZ+SjQ/fooHg8YR8qvnarqMJV0LJg/8w==
+X-Received: by 2002:a05:6214:5a07:b0:532:1ebe:84c8 with SMTP id lu7-20020a0562145a0700b005321ebe84c8mr19710288qvb.2.1673349653242;
+        Tue, 10 Jan 2023 03:20:53 -0800 (PST)
+Received: from localhost.localdomain ([191.96.227.64])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05620a057000b006fa12a74c53sm6895644qkp.61.2023.01.10.03.20.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 03:20:52 -0800 (PST)
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     unixbhaskar@gmail.com, linux-kernel@vger.kernel.org
+Cc:     paulmck@kernel.org
+Subject: [PATCH V2] tools: rcu: Added check for argument and usage function
+Date:   Tue, 10 Jan 2023 16:46:34 +0530
+Message-Id: <20230110111634.26371-1-unixbhaskar@gmail.com>
+X-Mailer: git-send-email 2.38.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thought it would be good to have some formatted way of letting user know
+about, how to use this script properly and added some checking too for missing
+argument.
 
-With 'GNU assembler (GNU Binutils for Debian) 2.39.90.20221231' the
-build now reports:
 
-  arch/x86/realmode/rm/../../boot/bioscall.S: Assembler messages:
-  arch/x86/realmode/rm/../../boot/bioscall.S:35: Warning: found `movsd'; assuming `movsl' was meant
-  arch/x86/realmode/rm/../../boot/bioscall.S:70: Warning: found `movsd'; assuming `movsl' was meant
+cc: paulmck@kernel.org
 
-  arch/x86/boot/bioscall.S: Assembler messages:
-  arch/x86/boot/bioscall.S:35: Warning: found `movsd'; assuming `movsl' was meant
-  arch/x86/boot/bioscall.S:70: Warning: found `movsd'; assuming `movsl' was meant
-
-Which is due to:
-
-  PR gas/29525
-
-  Note that with the dropped CMPSD and MOVSD Intel Syntax string insn
-  templates taking operands, mixed IsString/non-IsString template groups
-  (with memory operands) cannot occur anymore. With that
-  maybe_adjust_templates() becomes unnecessary (and is hence being
-  removed).
-
-More details: https://sourceware.org/bugzilla/show_bug.cgi?id=29525
-
-Fixes: 7a734e7dd93b ("x86, setup: "glove box" BIOS calls -- infrastructure")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 ---
- arch/x86/boot/bioscall.S |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Changes from V1 : Flip the code blocks of function for logical evaluation
+                   and strip off the path from script when displaying help
+ tools/rcu/extract-stall.sh | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
---- a/arch/x86/boot/bioscall.S
-+++ b/arch/x86/boot/bioscall.S
-@@ -32,7 +32,7 @@
- 	movw	%dx, %si
- 	movw	%sp, %di
- 	movw	$11, %cx
--	rep; movsd
-+	rep; movsl
- 
- 	/* Pop full state from the stack */
- 	popal
-@@ -67,7 +67,7 @@
- 	jz	4f
- 	movw	%sp, %si
- 	movw	$11, %cx
--	rep; movsd
-+	rep; movsl
- 4:	addw	$44, %sp
- 
- 	/* Restore state and return */
+diff --git a/tools/rcu/extract-stall.sh b/tools/rcu/extract-stall.sh
+index e565697c9f90..6ea76230f72f 100644
+--- a/tools/rcu/extract-stall.sh
++++ b/tools/rcu/extract-stall.sh
+@@ -1,11 +1,24 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0+
+ #
+-# Extract any RCU CPU stall warnings present in specified file.
+-# Filter out clocksource lines.  Note that preceding-lines excludes the
+-# initial line of the stall warning but trailing-lines includes it.
+-#
+-# Usage: extract-stall.sh dmesg-file [ preceding-lines [ trailing-lines ] ]
++# This is a usage function to spit out information about properly use this
++# script
++
++usage() {
++
++   echo  Extract any RCU CPU stall warnings present in specified file.
++   echo  Filter out clocksource lines.  Note that preceding-lines excludes the
++   echo  initial line of the stall warning but trailing-lines includes it.
++
++   echo Usage: $(basename $0) dmesg-file [ preceding-lines [ trailing-lines ] ]
++}
++
++# Terminate the script, if the argument is missing
++
++if [ $# -eq 0 ];then
++	usage
++	exit 1
++fi
+
+ echo $1
+ preceding_lines="${2-3}"
+--
+2.38.2
+
