@@ -2,153 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E501663958
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 07:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C82663953
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 07:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbjAJG2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 01:28:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S234413AbjAJG1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 01:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234576AbjAJG2G (ORCPT
+        with ESMTP id S234661AbjAJG1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 01:28:06 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7CC395D1;
-        Mon,  9 Jan 2023 22:28:04 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30A44UGd023823;
-        Tue, 10 Jan 2023 06:27:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=p7LDM4ETC4g9nquHCDAtm666lp1vxWqVcTJq9/Y0Jgc=;
- b=RjN3bopGd2Hjh8O9TruUew0mpVSIhRQCPHxtjyy6eInPvz2LIrjAHO7wjzPHccTNqYfY
- 4GJJQoL463uTjFxR3GS+2H0/d0j4rdnlypyU9I8gQ/pO+DkKammQqvBGZBQhWlM618Jq
- uocNgSIXZ7wEgQ1g/W2EZFPLxSHfy4N2oZPP/WJIgvp+WHIs8JCQ8woUZvqn4F+hB9Ey
- TnhV/dV+LcBeXehXNgL4ICO8ExCv1kMiZ4M5HHibgn6gjmHuA77zx5x8EGSEVvvva4fR
- 7Axb6q9h80pRbRZuGCq+ptud5anKNRKAt0wYQlIhM5zIQLG6KF0GuxvwCuU1yw4A7IvV Hw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n0x0jgh3u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 06:27:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30A6RKfT017257
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 06:27:20 GMT
-Received: from [10.216.32.170] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 9 Jan 2023
- 22:27:13 -0800
-Message-ID: <1c6ce9e4-b9a4-9252-566a-f48c8e675d6b@quicinc.com>
-Date:   Tue, 10 Jan 2023 11:57:10 +0530
+        Tue, 10 Jan 2023 01:27:19 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B874163E6;
+        Mon,  9 Jan 2023 22:27:18 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id h26so10180734qtu.2;
+        Mon, 09 Jan 2023 22:27:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bu0dAR79Mb4CN2oYveZXSb6tDGeEyXga5U4Gx/6ltc0=;
+        b=mQc12BjcAc5NjZTTLv8+eBwCLCn3X5DKZpVIAXIZqqoSptGAvuSZDqiCBxstp/u5bR
+         nhfkhhFLqdv0DtUbZAHcesKl3jQhjO7n7MgeHAS4/BS3PCwCpGIpACIPaWW6lu7NVmbD
+         xLaB3s7Gp8sBWVwvabSpd3tMBmmenQFyeOBy+vYmFVKtp/Oa8Sm1qqN0n4P/OMcQwM0i
+         LHQKnPmZn470B7856OHgnQJ/SxoNMEQ2nngbzZqRlLm6zyRDYY+zR3plr9r4oT0UVjn6
+         KejxgJ2BoB+B8hyBkt9Fsro6edju5heJJkJig3pwn87UqK+ujhvmml5mXIaRba+63Y53
+         CnLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bu0dAR79Mb4CN2oYveZXSb6tDGeEyXga5U4Gx/6ltc0=;
+        b=KS8a5DmE2PTkg1E8VdA/DvoE9PtSNnWkQaMPd98YhhumftlkcUQwj9GbJw2Ay8DiX6
+         iJoFDMX9M5osHqxBarv9C3d/Q0qcnTi3ZWP5cIiFYUwNG6KlSW3DAO1P1MA7zDWEKdVm
+         avEqyUQ1rt5uEEJFFC143WP00rGQwmKLNIFjCpeiV+yjRfinkuyOirmOBnNCSQCVBtjB
+         C+WMqv7bMuHYWojiMvR/pOHBdZBHkHCpFrUO9jvnbcBZBZoJjxG78CFP1q+owHUUWGoy
+         ZIkmm5sOHfvBOpUluZME/bCuQvroM14/S3MjpNWZ4xrcMbLP9AHk2qQqH5vG7HqCU5ZH
+         XShA==
+X-Gm-Message-State: AFqh2krRvfr0ka7NV26xHiGM70UtG5bonhtcIaSI/j7IorsVMOjd7xi5
+        +ac/2cYKWuoye9a1PdfOmb8=
+X-Google-Smtp-Source: AMrXdXt0K9JVybvOn35L/t7XeK3xtEUcOik04AmZP4zqBmPC54tN64ZuscOwaYNKHGfnmJEKuZ+4Dw==
+X-Received: by 2002:ac8:4a97:0:b0:3a8:1ca1:b489 with SMTP id l23-20020ac84a97000000b003a81ca1b489mr81091464qtq.60.1673332037938;
+        Mon, 09 Jan 2023 22:27:17 -0800 (PST)
+Received: from ?IPV6:2600:1700:2442:6db0:cc93:35ee:990:f219? ([2600:1700:2442:6db0:cc93:35ee:990:f219])
+        by smtp.gmail.com with ESMTPSA id x10-20020a05620a448a00b006faa2c0100bsm6687307qkp.110.2023.01.09.22.27.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 22:27:17 -0800 (PST)
+Message-ID: <907b6b75-55bc-b38c-442b-4ccb036a3690@gmail.com>
+Date:   Tue, 10 Jan 2023 00:27:16 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] dt-bindings: remoteproc: qcom: sc7280-adsp-pil: Add
- reg-names and power-domain-names
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] of: create of_root if no dtb provided
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
-        <mathieu.poirier@linaro.org>, <corbet@lwn.net>
-References: <1672991425-898-1-git-send-email-quic_srivasam@quicinc.com>
- <c6ea3f37-fe5a-9a61-3a02-99bc036fd23e@linaro.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <c6ea3f37-fe5a-9a61-3a02-99bc036fd23e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -LDfi5XHiq2SAKxP_9qL3TafB4WSO33R
-X-Proofpoint-ORIG-GUID: -LDfi5XHiq2SAKxP_9qL3TafB4WSO33R
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_01,2023-01-09_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 clxscore=1015 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301100041
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lizhi Hou <lizhi.hou@xilinx.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220624034327.2542112-1-frowand.list@gmail.com>
+ <20220624034327.2542112-2-frowand.list@gmail.com>
+ <20220624141320.3c473605@fixe.home>
+ <6d40876c-2751-01bb-94ab-7c9ab90e636f@gmail.com>
+ <20221011092654.6c7d7ec3@fixe.home> <20230109094009.3878c30e@fixe.home>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20230109094009.3878c30e@fixe.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/8/2023 9:06 PM, Krzysztof Kozlowski wrote:
-Thanks for Your Time Krzyszto!!!
-> On 06/01/2023 08:50, Srinivasa Rao Mandadapu wrote:
->> Add reg-names and power-domain-names for remoteproc ADSP pheripheral
->> loader. This is to make compatible with remoteproc ADSP PIL driver.
-> I don't understand the reasoning. Before binding was "incompatible"?
-
-Yes. Previous bindings needs fixes. Will add fixes tag for the same. So 
-far corresponding device tree not
-
-mainlined and no user till now, hence these missing errors not found.
-
->
->> Also change power domain from LCX to CX.
-> Why? Hardware changed?
-
-No, basically it's a fix. The power domain name wrongly mentioned in 
-previous bindings.
-
-The fixes tag mentioned above will be applicable here also.
-
->
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> ---
->> Changes Since v1:
->>      -- Modify subject line to SoC specific.
+On 1/9/23 02:40, Clément Léger wrote:
+> Le Tue, 11 Oct 2022 09:26:54 +0200,
+> Clément Léger <clement.leger@bootlin.com> a écrit :
+> 
+>> Le Fri, 24 Jun 2022 11:44:07 -0500,
+>> Frank Rowand <frowand.list@gmail.com> a écrit :
 >>
->>   .../devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml  | 11 ++++++++++-
->>   1 file changed, 10 insertions(+), 1 deletion(-)
+>>> On 6/24/22 08:13, Clément Léger wrote:  
+>>>> Le Thu, 23 Jun 2022 22:43:26 -0500,
+>>>> frowand.list@gmail.com a écrit :
+>>>>     
+>>>>>  
+>>>>> +/*
+>>>>> + * __dtb_empty_root_begin[] magically created by cmd_dt_S_dtb in
+>>>>> + * scripts/Makefile.lib
+>>>>> + */
+>>>>> +extern void *__dtb_empty_root_begin;
+>>>>> +
+>>>>>  /*
+>>>>>   * of_fdt_limit_memory - limit the number of regions in the /memory node
+>>>>>   * @limit: maximum entries
+>>>>> @@ -1332,8 +1338,13 @@ bool __init early_init_dt_scan(void *params)
+>>>>>   */
+>>>>>  void __init unflatten_device_tree(void)
+>>>>>  {    
+>>>>   
 >>
->> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
->> index 94ca7a0..b5bee2c 100644
->> --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
->> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
->> @@ -23,6 +23,11 @@ properties:
->>         - description: qdsp6ss register
->>         - description: efuse q6ss register
->>   
->> +  reg-names:
->> +    items:
->> +      - const: qdsp6ss_base
->> +      - const: lpass_efuse
->> +
->>     iommus:
->>       items:
->>         - description: Phandle to apps_smmu node with sid mask
->> @@ -57,7 +62,11 @@ properties:
->>   
->>     power-domains:
->>       items:
->> -      - description: LCX power domain
->> +      - description: CX power domain
->> +
->> +  power-domain-names:
->> +    items:
->> +      - const: cx
->>   
->>     resets:
->>       items:
-> Best regards,
-> Krzysztof
->
+>>
+>> Any news on this series ?
+>>
+> 
+> Hi Frank,
+> 
+> Do you plan on resubmitting this series ? If not, could I resubmit it
+> after fixing problems that were raised in the review ?
+>> Thanks,
+> 
+
+Thanks for the prod.  I'll re-spin it.
+
+If I properly captured all the comments, I'll have to implement
+Rob's suggestion:
+
+  "either CONFIG_OF_FLATTREE or CONFIG_OF_EARLY_FLATTREE will need 
+  to become user selectable."
+
+-Frank
