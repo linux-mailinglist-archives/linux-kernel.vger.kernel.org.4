@@ -2,88 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1710B66377D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 03:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C76663783
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 03:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjAJCsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 21:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
+        id S230058AbjAJCvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 21:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjAJCsb (ORCPT
+        with ESMTP id S230016AbjAJCu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 21:48:31 -0500
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA1233D42;
-        Mon,  9 Jan 2023 18:48:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1673318910;
-  x=1704854910;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=84Qqs7Rp9uTa2WHYoGwl6hURVvefJF0UiJ4y5h0kg4I=;
-  b=i8YcfZdT7SGq1DiJiJIWcZLkEgJPDrYdffkrbQKfvRyYiLH03Oeyd0bu
-   B5jXZziLcjANmWuyntnUHknD9QzTPwVf+MK9t0DS+SG4k4hXh/0i08x+R
-   X7H8V1XHqCUXz2MAjdtf3QZW8EjKHPdMg2ein9k5AwS/ttV5KXgZZRsRY
-   ujVjPTegd+Eg30Vh/hYWX+rUnxIqdTce68o/XXUjYskIRhFWSgXfailMR
-   qMsaTpuLuQtQ0v35ckBeYhiKVG1KH7kmEBRjkeqPfbFnu46U09JMBT/OA
-   z3sKRbgPp7IkCdKGSRJytM3G6fCk0Nv2qlUrP1ZZnh6lBWKBHOgMRAFlL
-   Q==;
-From:   Hermes Zhang <chenhuiz@axis.com>
-To:     Sebastian Reichel <sre@kernel.org>
-CC:     <kernel@axis.com>, Hermes Zhang <chenhuiz@axis.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] power: supply: bq256xx: Init ichg/vbat value with chip default value
-Date:   Tue, 10 Jan 2023 10:47:46 +0800
-Message-ID: <20230110024746.2701738-1-chenhuiz@axis.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 9 Jan 2023 21:50:57 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1C94C7A;
+        Mon,  9 Jan 2023 18:50:53 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowAA3PZVf0rxjxpJNCw--.52104S2;
+        Tue, 10 Jan 2023 10:50:08 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     dmitry.baryshkov@linaro.org
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
+        airlied@gmail.com, daniel@ffwll.ch, marijn.suijten@somainline.org,
+        vkoul@kernel.org, dianders@chromium.org, marex@denx.de,
+        vladimir.lypak@gmail.com, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] drm/msm/dsi: Drop the redundant fail label
+Date:   Tue, 10 Jan 2023 10:50:06 +0800
+Message-Id: <20230110025006.10409-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowAA3PZVf0rxjxpJNCw--.52104S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr1UXFW8GFWkGFWruFWxWFg_yoW5WrW3pF
+        yaqFsrtr40yws2krW7AF17A3WrCF4fCa48G348Gwn7Aw1ayw4UXFs8ua1IgFyrt3ykuw4U
+        Kanayas8WF1jqr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fU5sjjDUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Init the ichg/vbat reg with chip default value instead of the max value
-used now. The max value set in driver will result an unsafe case (e.g.
-battery is over charging when in a hot environment) if no user space
-update the value later.
+Drop the redundant fail label and change the "goto fail" into "return ret"
+since they are the same.
 
-Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
+ drivers/gpu/drm/msm/dsi/dsi_host.c | 27 +++++++++------------------
+ 1 file changed, 9 insertions(+), 18 deletions(-)
 
-Notes:
-    V2
-
- drivers/power/supply/bq256xx_charger.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/supply/bq256xx_charger.c
-index 01ad84fd147c..6b5435bf2ed4 100644
---- a/drivers/power/supply/bq256xx_charger.c
-+++ b/drivers/power/supply/bq256xx_charger.c
-@@ -1563,7 +1563,7 @@ static int bq256xx_hw_init(struct bq256xx_device *bq)
- 		return ret;
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+index 89aadd3b3202..d2a4fefa7b76 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_host.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+@@ -1883,8 +1883,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
  
- 	ret = bq->chip_info->bq256xx_set_ichg(bq,
--				bat_info->constant_charge_current_max_ua);
-+				bq->chip_info->bq256xx_def_ichg);
+ 	msm_host = devm_kzalloc(&pdev->dev, sizeof(*msm_host), GFP_KERNEL);
+ 	if (!msm_host) {
+-		ret = -ENOMEM;
+-		goto fail;
++		return -ENOMEM;
+ 	}
+ 
+ 	msm_host->pdev = pdev;
+@@ -1893,31 +1892,28 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 	ret = dsi_host_parse_dt(msm_host);
+ 	if (ret) {
+ 		pr_err("%s: failed to parse dt\n", __func__);
+-		goto fail;
++		return ret;
+ 	}
+ 
+ 	msm_host->ctrl_base = msm_ioremap_size(pdev, "dsi_ctrl", &msm_host->ctrl_size);
+ 	if (IS_ERR(msm_host->ctrl_base)) {
+ 		pr_err("%s: unable to map Dsi ctrl base\n", __func__);
+-		ret = PTR_ERR(msm_host->ctrl_base);
+-		goto fail;
++		return PTR_ERR(msm_host->ctrl_base);
+ 	}
+ 
+ 	pm_runtime_enable(&pdev->dev);
+ 
+ 	msm_host->cfg_hnd = dsi_get_config(msm_host);
+ 	if (!msm_host->cfg_hnd) {
+-		ret = -EINVAL;
+ 		pr_err("%s: get config failed\n", __func__);
+-		goto fail;
++		return -EINVAL;
+ 	}
+ 	cfg = msm_host->cfg_hnd->cfg;
+ 
+ 	msm_host->id = dsi_host_get_id(msm_host);
+ 	if (msm_host->id < 0) {
+-		ret = msm_host->id;
+ 		pr_err("%s: unable to identify DSI host index\n", __func__);
+-		goto fail;
++		return msm_host->id;
+ 	}
+ 
+ 	/* fixup base address by io offset */
+@@ -1927,19 +1923,18 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 					    cfg->regulator_data,
+ 					    &msm_host->supplies);
  	if (ret)
- 		return ret;
+-		goto fail;
++		return ret;
  
-@@ -1573,7 +1573,7 @@ static int bq256xx_hw_init(struct bq256xx_device *bq)
- 		return ret;
+ 	ret = dsi_clk_init(msm_host);
+ 	if (ret) {
+ 		pr_err("%s: unable to initialize dsi clks\n", __func__);
+-		goto fail;
++		return ret;
+ 	}
  
- 	ret = bq->chip_info->bq256xx_set_vbatreg(bq,
--				bat_info->constant_charge_voltage_max_uv);
-+				bq->chip_info->bq256xx_def_vbatreg);
- 	if (ret)
- 		return ret;
+ 	msm_host->rx_buf = devm_kzalloc(&pdev->dev, SZ_4K, GFP_KERNEL);
+ 	if (!msm_host->rx_buf) {
+-		ret = -ENOMEM;
+ 		pr_err("%s: alloc rx temp buf failed\n", __func__);
+-		goto fail;
++		return -ENOMEM;
+ 	}
  
+ 	ret = devm_pm_opp_set_clkname(&pdev->dev, "byte");
+@@ -1954,9 +1949,8 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 
+ 	msm_host->irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
+ 	if (msm_host->irq < 0) {
+-		ret = msm_host->irq;
+ 		dev_err(&pdev->dev, "failed to get irq: %d\n", ret);
+-		return ret;
++		return msm_host->irq;
+ 	}
+ 
+ 	/* do not autoenable, will be enabled later */
+@@ -1983,9 +1977,6 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 
+ 	DBG("Dsi Host %d initialized", msm_host->id);
+ 	return 0;
+-
+-fail:
+-	return ret;
+ }
+ 
+ void msm_dsi_host_destroy(struct mipi_dsi_host *host)
 -- 
-2.30.2
+2.25.1
 
