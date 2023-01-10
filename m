@@ -2,101 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCB966366F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1BF663679
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235387AbjAJAvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 19:51:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
+        id S237639AbjAJAzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 19:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234501AbjAJAvf (ORCPT
+        with ESMTP id S237532AbjAJAy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 19:51:35 -0500
+        Mon, 9 Jan 2023 19:54:59 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E57C13CD2
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 16:51:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738241EC44;
+        Mon,  9 Jan 2023 16:54:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43E83B810A9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:51:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7739BC433F1;
-        Tue, 10 Jan 2023 00:51:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 293F3B80883;
+        Tue, 10 Jan 2023 00:54:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8459C433D2;
+        Tue, 10 Jan 2023 00:54:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673311890;
-        bh=ZkD0zLt3wxTu9MwbivHD8pT3t6f3+LNZvwgPZbqLBYM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Y9RgmVvdGN+ViiTiOtKeeaNygTZ+LsDQPcm0/ew54Q3xDbePInVwH59ia8m889q6n
-         9/UPQNU975cWluN5bdR9uNEWP7baKHQNRYeK8Kt7jlG3IjARfpyIjJ/FRooPCZIt02
-         D5gokeG4Ev8T0ci/eeY+c/TQwmjk+orVMU9RK/aCwxOjtseDdlxsFnwuy8ObDDLhnh
-         KJXQQGLTSlJrp+Z4eYiOjcFoSNDAHEVC6tZx7Y4uTXkISY7G5S5JP6BQ4kkkzABZ2N
-         68mF0HJgCtL2g5gohnewrmfJyjJOkdZLmu1Bn3cwj9hjx+W2wK0EdvSTRH659OLx+j
-         MYr582FjKWzbA==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     willy@infradead.org, vbabka@suse.cz, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH] mm/sl{a,u}b: fix wrong usages of folio_page() for getting head pages
-Date:   Tue, 10 Jan 2023 00:51:24 +0000
-Message-Id: <20230110005124.1609-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1673312094;
+        bh=ro2IJRqLA3xtpuf5zd86C++Jh2hpvGcypgP/TSFhJYg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ERBxKFyiS8Rxanr18bSVjzMuZbM4UKPEwsVVbnbGyTKum4ZBGhSB5D8rKB1Zn+J0T
+         u7ZEVtbPSlSwZE1m7zj3ptA64CTtCMgB56RVQAqAtGbpJCk49gxZeYT0XHhOS1kB8e
+         2bAwS5QjI7D647ZU7nZPnJa6FYnnlZQCA1GacwRUiOhvlCXNUqhE7bT4ZVF2yJjAK9
+         Or9ItqlGpfYpGVLOZ7VtGDnvuZRNmkbiucHYlZ96OhF2m4YnlHMipdlYLspCfifOB4
+         6vkoOiKxIHL3XYvrNHbnwRrfB5eUV55L8VBXm4ns6xX20+i9bA0LLPE+UyYE00ypYI
+         wQWYD0n+RS8iw==
+Date:   Tue, 10 Jan 2023 09:54:50 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     paulmck@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
+        quic_neeraju@quicinc.com, urezki@gmail.com
+Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
+ processing
+Message-Id: <20230110095450.2cb4c875f95459e3a4e7dcf1@kernel.org>
+In-Reply-To: <20230110000732.GD4028633@paulmck-ThinkPad-P17-Gen-1>
+References: <20230105005838.GA1772817@paulmck-ThinkPad-P17-Gen-1>
+        <20230108002215.c18df95b19acdd3207b379fa@kernel.org>
+        <20230107162202.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+        <20230108150425.426f2861e9db1152fa84508f@kernel.org>
+        <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
+        <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
+        <20230110000732.GD4028633@paulmck-ThinkPad-P17-Gen-1>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The standard idiom for getting head page of a given folio is
-'&folio->page', but some are wrongly using 'folio_page(folio, 0)' for
-the purpose.  Fix those to use the idiom.
+On Mon, 9 Jan 2023 16:07:32 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-Suggested-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- mm/slab.c | 4 ++--
- mm/slub.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> On Tue, Jan 10, 2023 at 08:56:36AM +0900, Masami Hiramatsu wrote:
+> > On Sun, 8 Jan 2023 20:25:01 -0800
+> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > 
+> > > On Sun, Jan 08, 2023 at 03:04:25PM +0900, Masami Hiramatsu wrote:
+> > > > On Sat, 7 Jan 2023 08:22:02 -0800
+> > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > 
+> > > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
+> > > > > > On Wed, 4 Jan 2023 16:58:38 -0800
+> > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > > > 
+> > > > > > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
+> > > > > > > containing kernel boot parameters to be embedded into an initrd or into
+> > > > > > > the kernel itself.  This can be extremely useful when deploying kernels
+> > > > > > > in cases where some of the boot parameters depend on the kernel version
+> > > > > > > rather than on the server hardware, firmware, or workload.
+> > > > > > > 
+> > > > > > > Unfortunately, the "bootconfig" kernel parameter must be specified in
+> > > > > > > order to cause the kernel to look for the embedded bootconfig file,
+> > > > > > > and it clearly does not help to embed this "bootconfig" kernel parameter
+> > > > > > > into that file.
+> > > > > > > 
+> > > > > > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
+> > > > > > > kernel to act as if the "bootconfig" kernel parameter had been specified.
+> > > > > > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
+> > > > > > > for the embedded bootconfig file even when the "bootconfig" kernel
+> > > > > > > parameter is omitted.  This permits kernel-version-dependent kernel
+> > > > > > > boot parameters to be embedded into the kernel image without the need to
+> > > > > > > (for example) update large numbers of boot loaders.
+> > > > > > 
+> > > > > > I like this because this is a simple solution. We have another option
+> > > > > > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
+> > > > > > bootloader. Thus, it is better to have this option so that user can
+> > > > > > always enable bootconfig.
+> > > > > 
+> > > > > Glad you like it!
+> > > > > 
+> > > > > In addition, if the help text is accurate, another shortcoming of
+> > > > > CONFIG_CMDLINE is that its semantics vary from one architecture to
+> > > > > another.  Some have CONFIG_CMDLINE override the boot-loader supplied
+> > > > > parameters, and others differ in the order in which the parameters
+> > > > > are processed.
+> > > > 
+> > > > Yes, that differences confuse us...
+> > > 
+> > > I am glad that it is not just me.  ;-)
+> > > 
+> > > I will add words to that effect to the commit log.
+> > > 
+> > > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > > > 
+> > > > > Thank you!
+> > > > > 
+> > > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
+> > > > > > (or at least recommend to enable this)
+> > > > > 
+> > > > > Like this?
+> > > > 
+> > > > Yes! Thanks.
+> > > > 
+> > > > > 
+> > > > > 							Thanx, Paul
+> > > > > 
+> > > > > ------------------------------------------------------------------------
+> > > > > 
+> > > > > commit d09a1505c51a70da38b34ac38062977299aef742
+> > > > > Author: Paul E. McKenney <paulmck@kernel.org>
+> > > > > Date:   Sat Jan 7 08:09:22 2023 -0800
+> > > > > 
+> > > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
+> > > > >     
+> > > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
+> > > > >     will normally be to unconditionally provide the specified kernel-boot
+> > > > >     arguments to the kernel, as opposed to requiring a separately provided
+> > > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
+> > > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
+> > > > >     
+> > > > >     The old semantics may be obtained by manually overriding this default.
+> > > > >     
+> > > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > 
+> > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > 
+> > > Applied, thank you!
+> > 
+> > Paul, just for confirmation, have you picked these patches on your tree?
+> 
+> I have, but if you would prefer to take them, just let me know when you
+> have pulled them in.  It is easy for me to drop them.
+> 
+> Here they are in the -rcu tree:
+> 
+> 3d9ccc4a8b56e bootconfig: Allow forcing unconditional bootconfig processing
+> 68b920592ff67 bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
 
-diff --git a/mm/slab.c b/mm/slab.c
-index b77be9c6d6b1..a5398676dc60 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -1389,7 +1389,7 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
- 
- 	BUG_ON(!folio_test_slab(folio));
- 	__slab_clear_pfmemalloc(slab);
--	page_mapcount_reset(folio_page(folio, 0));
-+	page_mapcount_reset(&folio->page);
- 	folio->mapping = NULL;
- 	/* Make the mapping reset visible before clearing the flag */
- 	smp_wmb();
-@@ -1398,7 +1398,7 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
- 	if (current->reclaim_state)
- 		current->reclaim_state->reclaimed_slab += 1 << order;
- 	unaccount_slab(slab, order, cachep);
--	__free_pages(folio_page(folio, 0), order);
-+	__free_pages(&folio->page, order);
- }
- 
- static void kmem_rcu_free(struct rcu_head *head)
-diff --git a/mm/slub.c b/mm/slub.c
-index 67020074ecb4..d5f20c062004 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -2066,7 +2066,7 @@ static void __free_slab(struct kmem_cache *s, struct slab *slab)
- 	if (current->reclaim_state)
- 		current->reclaim_state->reclaimed_slab += pages;
- 	unaccount_slab(slab, order, s);
--	__free_pages(folio_page(folio, 0), order);
-+	__free_pages(&folio->page, order);
- }
- 
- static void rcu_free_slab(struct rcu_head *h)
+Yeah, if it's not hurry, let me pick those to linux-trace tree
+(bootconfig/for-next). I would like to consolidate the bootconfig
+updates on my tree.
+
+Thanks,
+
+> 
+> 							Thanx, Paul
+> 
+> > Thank you,
+> > 
+> > > 
+> > > > Thank you!
+> > > > 
+> > > > > 
+> > > > > diff --git a/init/Kconfig b/init/Kconfig
+> > > > > index 0fb19fa0edba9..97a0f14d9020d 100644
+> > > > > --- a/init/Kconfig
+> > > > > +++ b/init/Kconfig
+> > > > > @@ -1379,6 +1379,7 @@ config BOOT_CONFIG
+> > > > >  config BOOT_CONFIG_FORCE
+> > > > >  	bool "Force unconditional bootconfig processing"
+> > > > >  	depends on BOOT_CONFIG
+> > > > > +	default y if BOOT_CONFIG_EMBED
+> > > > >  	help
+> > > > >  	  With this Kconfig option set, BOOT_CONFIG processing is carried
+> > > > >  	  out even when the "bootconfig" kernel-boot parameter is omitted.
+> > > > 
+> > > > 
+> > > > -- 
+> > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > 
+> > -- 
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+
 -- 
-2.25.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
