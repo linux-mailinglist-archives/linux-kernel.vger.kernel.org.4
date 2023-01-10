@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D8C66424F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D824466426C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238396AbjAJNvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
+        id S233303AbjAJNvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238265AbjAJNu4 (ORCPT
+        with ESMTP id S238381AbjAJNvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:50:56 -0500
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DFD64FC;
-        Tue, 10 Jan 2023 05:50:54 -0800 (PST)
+        Tue, 10 Jan 2023 08:51:04 -0500
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2661138AEC;
+        Tue, 10 Jan 2023 05:50:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1673358654;
-  x=1704894654;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1673358661;
+  x=1704894661;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=L3n+a/Akf31LqdGtqVeh15ZwJJgKE8dO8ZqotT6yTI8=;
-  b=dfT7RTJROkP2UoyzCX2YLtwK2DUf0RPeqNlUkJJj17utqsxd/cYjLild
-   /EYTajF4aPbN7cq3w7JiSapuK08qeGNkAlNFKe470CYyitTOJVRdRC4xj
-   +Th/srrLUYa74s94k+JaYE5QsuLjTh5X3dqJSbOSVAG6xSLsfi4ZSoUAz
-   h7B0SVTwowqEGlePI80+63/qkpgmBUeH8Q0BvaaWwgJJKaJIbWIBjkiIb
-   73/jRtbSAEI/2fALajg5mIyKrIaZnom1B0jnixl6SCd47t0Owk31zxcH+
-   5F+valQRPPk7dm6ci6CF7Ea1bZCu/f3WX83gpEiWRtHeA6f5aRtTl04EH
-   w==;
+  bh=0o6C4Z0fqkBE+QbzIuVUWhJF6tXZkBBn8amIrYpgsE4=;
+  b=eKXy+xQVwCBCX6t2xBW3l2KdBQ6wmn9gCPW25aAMe2t1SLCJ6kzTAOAD
+   iVd+MBXn+/oYxP2zkvpmujAE/4+37pDG82jFXVchoWEIp/xbENNOHRo8S
+   xUvK0EYLvRTGwTVX1pKyQ0wEnoxMXFSSWCtBBcx5Oy3RGLSX22Do+RePz
+   sHp+shW1c6MLddkqVL2UNYhNUOkcC80tc9xHAilqSS11UIHcLX7K4m+Za
+   +I/8CDbq66mQyrkjlJ5YTXxv++hGiVYJyu4upslD6EDIRFkLdrVS6hstx
+   yeh1OhLe5yVyd5F/k3IT5sW3nNCsLTB/axmdDcIvpKkdKH/C8jVPsWp+R
+   g==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
 To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
         <jesper.nilsson@axis.com>, <lars.persson@axis.com>
 CC:     <kernel@axis.com>,
         Vincent Whitchurch <vincent.whitchurch@axis.com>,
         <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 11/12] crypto: axis - handle zero cryptlen
-Date:   Tue, 10 Jan 2023 14:50:41 +0100
-Message-ID: <20230110135042.2940847-12-vincent.whitchurch@axis.com>
+Subject: [PATCH 12/12] crypto: axis - allow small size for AEAD
+Date:   Tue, 10 Jan 2023 14:50:42 +0100
+Message-ID: <20230110135042.2940847-13-vincent.whitchurch@axis.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230110135042.2940847-1-vincent.whitchurch@axis.com>
 References: <20230110135042.2940847-1-vincent.whitchurch@axis.com>
@@ -52,70 +52,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Succeed zero length operations to prevent hangs/failures with various
-CRYPTO_MANAGER_EXTRA_TESTS such as:
+Allow sizes smaller than the AES block size to fix this failure with
+CRYPTO_MANAGER_EXTRA_TESTS:
 
- artpec6-ecb-aes "random: len=0 klen=32" encryption random:
- inplace_two_sglists may_sleep use_finup src_divs=[100.0%@+2743]
- key_offset=93
-
-For XTS, sizes lesser than the block size need to be explicitly rejected
-to prevent errors like this:
-
- alg: skcipher: artpec6-xts-aes encryption unexpectedly succeeded on test
- vector "random: len=0 klen=64"; expected_error=-22, cfg="rando m:
- use_final nosimd src_divs=[<reimport>100.0%@+3991]
- dst_divs=[73.80%@+4003, 26.20%@+16] iv_offset=68"
+ alg: aead: artpec-gcm-aes decryption failed on test vector "random:
+ alen=0 plen=1 authsize=4 klen=32 novrfy=0"; expected_error=0,
+ actual_error=-22, cfg="random: inplace_one_sglist may_sleep use_final
+ src_divs=[<reimport>9.71%@+778, <flush>23.43%@+2818, 52.69%@+6,
+ <flush>11.98%@+1030, 2.19%@+3986] iv_offset=40 key_offset=32"
 
 Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
- drivers/crypto/axis/artpec6_crypto.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/crypto/axis/artpec6_crypto.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/crypto/axis/artpec6_crypto.c b/drivers/crypto/axis/artpec6_crypto.c
-index 5eccb5a3a52e..938faf3afa69 100644
+index 938faf3afa69..b6fa2af42cd0 100644
 --- a/drivers/crypto/axis/artpec6_crypto.c
 +++ b/drivers/crypto/axis/artpec6_crypto.c
-@@ -1097,6 +1097,9 @@ static int __artpec6_crypto_encrypt(struct skcipher_request *req)
- 	void (*complete)(struct crypto_async_request *req);
- 	int ret;
+@@ -1452,8 +1452,6 @@ static int artpec6_crypto_aead_decrypt(struct aead_request *req)
+ 	struct artpec6_crypto_aead_req_ctx *req_ctx = aead_request_ctx(req);
  
-+	if (!req->cryptlen)
-+		return 0;
-+
- 	req_ctx = skcipher_request_ctx(req);
+ 	req_ctx->decrypt = true;
+-	if (req->cryptlen < AES_BLOCK_SIZE)
+-		return -EINVAL;
  
- 	switch (ctx->crypto_type) {
-@@ -1145,6 +1148,9 @@ static int __artpec6_crypto_decrypt(struct skcipher_request *req)
- 	struct artpec6_crypto_request_context *req_ctx = NULL;
- 	void (*complete)(struct crypto_async_request *req);
- 
-+	if (!req->cryptlen)
-+		return 0;
-+
- 	req_ctx = skcipher_request_ctx(req);
- 
- 	switch (ctx->crypto_type) {
-@@ -1311,6 +1317,9 @@ static int artpec6_crypto_ctr_decrypt(struct skcipher_request *req)
- 
- static int artpec6_crypto_xts_encrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen < AES_BLOCK_SIZE)
-+		return -EINVAL;
-+
- 	/* Hardware does not implement ciphertext stealing */
- 	if (!IS_ALIGNED(req->cryptlen, AES_BLOCK_SIZE))
- 		return artpec6_crypto_crypt_fallback(req, true);
-@@ -1320,6 +1329,9 @@ static int artpec6_crypto_xts_encrypt(struct skcipher_request *req)
- 
- static int artpec6_crypto_xts_decrypt(struct skcipher_request *req)
- {
-+	if (req->cryptlen < AES_BLOCK_SIZE)
-+		return -EINVAL;
-+
- 	/* Hardware does not implement ciphertext stealing */
- 	if (!IS_ALIGNED(req->cryptlen, AES_BLOCK_SIZE))
- 		return artpec6_crypto_crypt_fallback(req, false);
+ 	ret = artpec6_crypto_common_init(&req_ctx->common,
+ 				  &req->base,
 -- 
 2.34.1
 
