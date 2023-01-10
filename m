@@ -2,380 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EC0663E79
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B67E663E7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238034AbjAJKpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
+        id S238190AbjAJKqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbjAJKpJ (ORCPT
+        with ESMTP id S237924AbjAJKqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:45:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2D2DE92;
-        Tue, 10 Jan 2023 02:45:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E802B811F3;
-        Tue, 10 Jan 2023 10:45:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D451BC433D2;
-        Tue, 10 Jan 2023 10:45:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673347503;
-        bh=YPYCeeaaXwh7aY9GYxh7P9qUFm2HxYcXT2ViDRDG18M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T4KGQDjXcLDVSRJVum2jhz/hgPOD/cd4TyAv07tJxdpHHbyNBtho4qwVB1Zl4+SWF
-         97PVTcWrb6DKoJsTIKilnOtrEU6pmOCsQb1FIWbkQACle0bYqUKd6TaiqVe120wVlh
-         u56DaxZoOcLAP+KyU5NoHADA1jKzOQuec9bKRJsbC+OoeIZnUDOIDEgDaG/nOt+OmG
-         xLN9d6h2tz3gYuieLmYsYipqXm2+ACPkvr0JdFzd+rbfxRJdIMVnzwhgqnS7hkq3+X
-         ibuYsC+oKAqmrdihk391seKGuwIng6owIXGhPjoaC0zG0oX17raRjFGR5yqECwToqm
-         DXRXERDNN851A==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     Miklos Szeredi <mszeredi@redhat.com>,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH] fs: remove locks_inode
-Date:   Tue, 10 Jan 2023 05:44:59 -0500
-Message-Id: <20230110104501.11722-1-jlayton@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Tue, 10 Jan 2023 05:46:14 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2134.outbound.protection.outlook.com [40.107.117.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422D215714;
+        Tue, 10 Jan 2023 02:46:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=csxk6BA4lcJM0nTEGoO4eeMGHDOiD56SmI4ePEJnspoZVCUOty0+IPs83GZ4tQxvU5x5Aq6CqLMv+Pi3lcR75/TLh25RbZdEWt+nBE1KvCgnN5Vu3W7alkQRs6JpNaVOn7UnCr6pkUudwoNAmdNQ/0sWqELLRFliAA99Kf1yj/523+EyGzbQe8nqJj/ZfkcO7K4ERKDBbmjCsXy7nM0KfhJVtC1NELp+8hlc798sUdzbMackQDG5nx7NIt8Sw6d6sPx8IQZKO/5pCEZtO4w24R6kOnosZxar1+Q91PnxJbrMI+cLijT74zqemdBKV2fFtDG7SPNnKbiGCXtKqxCQmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WemXPSDzP1uvfDalct+Neudc+HETSHmEb/HMgu7kVN0=;
+ b=dCGZTIXwyQ/TnxPG5S4PQT/Wkn8Zzavjyi7LxWUTZ+1W3Z4RT0de4SijC6soMI6kMbOHcU4K8+yanUlEEhVpVzT4OiGIeOJhChZaI5KvK+6LqOUAwS3R6kSvi/iPe24OiOW/5BynLKFpD/o02HIZjswv/zY0iyrBPQ0hPsUFWx7pVtA0DfoGkXcM5McqyM2dMHryj2WlJgIuOA/1deMZNZtfD1+jUhaCjFAvF/e/+j2rdt7AekT2ZXFC8tAxzHddHrL/DyRRBkG14/8OyUGWfxo9zH9+1H+QqF2AHPXKd3vuqxw8LZgr6Yd3DCYW4VMfK79eiHkifHR/64wPiyWcIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WemXPSDzP1uvfDalct+Neudc+HETSHmEb/HMgu7kVN0=;
+ b=Bttu2uRkLwrwB0vHdCNjIuFY34z45VKIHcLOmAuNROAXRwrQqpFnemjL0dG3mwq5V8PLqmzYf7oS2WxMe4prTFmTjFy1xcZwd6QRqlG6LCqf+t/r7Gn2arQmHL3o80xIeKt2Br72EJXS7jai0TjjFdrgl8gwT0Kvsd51QSc2WPoDbH8ouivgW8Ea2LE1rXYI/YqdTx/sQqma+4mBRkGFomaM9cuscNtsEcLfGw1HA2GLuc9tuyiX1o+XBeW98zBQTF/mDkVuZ+5dYOiWg/R+sGDNPF+7e7+MTXtdoOUkECnOPm6twLlD7a+QgWdoHuG4fsFrhxAtBE3dBx0QlbZ4NA==
+Received: from TY2PR06MB3213.apcprd06.prod.outlook.com (2603:1096:404:97::16)
+ by SI2PR06MB4122.apcprd06.prod.outlook.com (2603:1096:4:fc::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.11; Tue, 10 Jan 2023 10:46:03 +0000
+Received: from TY2PR06MB3213.apcprd06.prod.outlook.com
+ ([fe80::abee:6367:ef03:e60b]) by TY2PR06MB3213.apcprd06.prod.outlook.com
+ ([fe80::abee:6367:ef03:e60b%7]) with mapi id 15.20.6002.011; Tue, 10 Jan 2023
+ 10:46:03 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+CC:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: RE: [PATCH][next] crypto: aspeed - Replace zero-length array with
+ flexible-array member
+Thread-Topic: [PATCH][next] crypto: aspeed - Replace zero-length array with
+ flexible-array member
+Thread-Index: AQHZJJRaDVnvok26Y0eyz/Y/HvnX1K6XeAsw
+Date:   Tue, 10 Jan 2023 10:46:03 +0000
+Message-ID: <TY2PR06MB321351BBEA501A7BACC9802C80FF9@TY2PR06MB3213.apcprd06.prod.outlook.com>
+References: <Y7zBxbEAvcEEJRie@work>
+In-Reply-To: <Y7zBxbEAvcEEJRie@work>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY2PR06MB3213:EE_|SI2PR06MB4122:EE_
+x-ms-office365-filtering-correlation-id: e24a1b5d-f759-4404-208f-08daf2f7de97
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Je0QQb1UPdWaXJkFeTBHEYOV3F4QAJyDPZrxpqx/W90cSs8QjgXQKxYf+uGbjsxnNpTxpIwLCDA7pHYD9JQQUI63a8r/tBh5nfz3efC6OWXkSVle35Rf6bVGzSZHmR4BpYnAYV2bL4QYxh7nut+NsVkq51Wb904T7mpOGj5SIqf298dUgxajaRUp7qcLwL6MguZEw6DeuzEsIv3Yy46gsPyiaBxrAVzGlfoEtBqMPMfqVmeHIf/wfVmlLRbzhoSGXfCmUmB9q30gCZJ14UQpd/M4cibj4PFYCBRQurRKvMqtpOyfVV30YAcyWHUquC/jWkSw7uxKTP4CXFbIu17Fl3zt97o0YWE7BGTmYK8OA/m10c7AwZV7JCfJZNaJAZ904eSbe65Spz3bBVuHCIxoJJtq6X15AOYIPRnODyE4ODg/87nHQQMkmSUIViLyk8J4VJzbCkdfnPWGtC05mw6sDXM8mfPvH2/H36RE5LvBUSbv53w9Pe8mPGdcnYgtPZaxSqLfaJWM8oYwdspCdFtj+CKgeXxI7l68LjrONAkkVZsfh14aKTAQQwmG0ub0n0NasHNT9r81EgY2WPj9hguS2taHOBBchQ6Rta1bU4OtTwlF2Hk2viAGypA+VU6I6h8aF5hFhhP4a82CPGpP39NEEtZr1JwPryRGBoPpGczSNeLzyCZKItv2f/iUOfHjXaOW4TZ3f66OU/9v39/CQT6bMSityFAJhHAny9Syeju8uIM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR06MB3213.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(396003)(366004)(39850400004)(346002)(451199015)(38100700002)(122000001)(33656002)(83380400001)(38070700005)(86362001)(66946007)(41300700001)(8676002)(76116006)(66446008)(66476007)(64756008)(4326008)(66556008)(110136005)(54906003)(55016003)(8936002)(2906002)(5660300002)(316002)(7416002)(52536014)(9686003)(966005)(26005)(186003)(6506007)(71200400001)(7696005)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1JLTJ4oOpSgfGSc5cyDqGENUk5UvTYXB3V3aBrojkX0h8fqujF8SWfUcRG10?=
+ =?us-ascii?Q?75zZhjoOpKsTEYd9Fy+aNPTASKeXlJVIirEGtOcJ038UAde7xe5zP1h3niUQ?=
+ =?us-ascii?Q?hwnpj+KV/iyvaoanhIH18VcPZclbdSg6YtKIvM+yqLNYPoBpx6f+lS8pfkeh?=
+ =?us-ascii?Q?gU7l0jVMWNk1l97VS8E0uxuINab7AieFk1C4Ks7T4YTRvz1WYvtDZ+kMqQ+s?=
+ =?us-ascii?Q?zfMG5m4e/pvc0SwED9aKxXegnjIWydzfVNmagZOZ+iXhmOk/0lGreHVQuB3A?=
+ =?us-ascii?Q?gfL4AZv7A37+nPGZ6d9uoUrecyufjbUhzXjZqGCEq4wBRlSX402DrPIwaMCw?=
+ =?us-ascii?Q?961zhCHCFUfXhS6icZJl8KfCMgSH+n6DWQr48Dtqk+sGPi9Y0VyrZW2gRS1W?=
+ =?us-ascii?Q?jfkVjUxl5Aq8zK/59eFW53geQlPJzRL0dWXBfAmegghoJ+c5SWH8lFPYwuAf?=
+ =?us-ascii?Q?U/8FYucu2LKRgMc7iaBadE1CB582lrBPuli2wELBQWACK290BXMm3ZUZPaTH?=
+ =?us-ascii?Q?VtEiWarfEg/fsEFWwc0ySNbYM7cSuEJodR07csY79TV7AOr1ZS/ORsxLUJWB?=
+ =?us-ascii?Q?Hb1638HhxhOpBwPXV74mHcPkmz0T2X0EKAPWa5czu0wk5Xc16ZGOEYdtfIKS?=
+ =?us-ascii?Q?vAlH/Y2Uuu6yAzc3pBfCfW4qV8ZEnVo/rUy1sHGmGuv/HIRMBNe6qvcua34m?=
+ =?us-ascii?Q?GJNb0Rx50PljY8JCdMJP1QZTaYfnr9uaGlRn/uEkp6RUxm3P7859KRo8hi6z?=
+ =?us-ascii?Q?UrBAJbJ95afOn2SDtfjtw/22Y/wxd+iVxdCffI+cseN/CV2T35ejZoys+8bz?=
+ =?us-ascii?Q?wrzyt2ucZqyINli0lpY7vhc1j+A/N89SjgHSmPwIfk6XJcumsUE/5zNjuEQL?=
+ =?us-ascii?Q?7EjPO3Lnu+Io+LV4xnoP9RcHifBlyZBlm5j8D1obYafc/JZxjEr20vSQu95z?=
+ =?us-ascii?Q?9gYXPerdWsv0ZurNPGzWsJkwI5wfha2PH1WYOPmoOUW/IAL4wh7GyhrNNYHw?=
+ =?us-ascii?Q?5ELy5mYcwFjWgJPj6DwHctK3MA17Iln7VHIykxz+YCW47H3dCrSfFMn3tFgU?=
+ =?us-ascii?Q?6NZB3ooV98xbaOQySjfl9ZgZ4ogqywooD0yhWOCOZNmD5m1SwAdPmUNPsCxV?=
+ =?us-ascii?Q?jjFXTmtQJ4Af15b6vsPgLZRe7RknA1jCRJ9zLoNIodLeqjvNjNXBEEaVQUAX?=
+ =?us-ascii?Q?BILDE1nHFz/rNUynKsLBU90osbXqteRnlE6wp0wYpU+tVrQQxL6SWq7YQrNJ?=
+ =?us-ascii?Q?6Zh2q3j7oB63udJYW16WRefnjI3fpUiKv9AoxbYJyBrFWVZaZbQw2LClyck3?=
+ =?us-ascii?Q?Gx2MZulxSpM2hSDWBnnFf/TiJbUKoWawsIH7h3cH+XJ/8F/uOrHns8mwixvz?=
+ =?us-ascii?Q?3wYoxNkSxUEQr37R+o2AWdJQdEIFkRSG+889iDLIs0TbI/IVv740lG6kG8cg?=
+ =?us-ascii?Q?ChLHxMgP2nIEag1META7GLsmwzt9xNcvqev7Hm71nPvPHj7oI6YaanhYJnDJ?=
+ =?us-ascii?Q?/iHb5WTedgYAOt0TYqP4k0cgJieQ0jTTPToivGS9Hp81+DGn5Nw7xT17rXDv?=
+ =?us-ascii?Q?tTrw6QULaqcQ09+ZGHb468dlXDAZS6epvy9QlTJR?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR06MB3213.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e24a1b5d-f759-4404-208f-08daf2f7de97
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2023 10:46:03.1480
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 74LZMJPJgUCN36thYG4OMSfD5wFD/dA2VqxZUzOFkxI4Jl70jmFXSoVFpPK+xLmQlN31HissRwCjugFcKn1O2Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4122
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-locks_inode was turned into a wrapper around file_inode in de2a4a501e71
-(Partially revert "locks: fix file locking on overlayfs"). Finish
-replacing locks_inode invocations everywhere with file_inode.
+> Zero-length arrays are deprecated[1] and we are moving towards adopting
+> C99 flexible-array members instead. So, replace zero-length array declara=
+tion
+> in struct aspeed_sham_ctx with flex-array member.
+>=20
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routine=
+s
+> on memcpy() and help us make progress towards globally enabling
+> -fstrict-flex-arrays=3D3 [2].
+>=20
+> Link:
+> https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-lengt
+> h-and-one-element-arrays [1]
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html
+> [2]
+> Link: https://github.com/KSPP/linux/issues/78
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/crypto/aspeed/aspeed-hace.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/crypto/aspeed/aspeed-hace.h
+> b/drivers/crypto/aspeed/aspeed-hace.h
+> index f2cde23b56ae..05d0a15d546d 100644
+> --- a/drivers/crypto/aspeed/aspeed-hace.h
+> +++ b/drivers/crypto/aspeed/aspeed-hace.h
+> @@ -183,7 +183,7 @@ struct aspeed_sham_ctx {
+>  	struct aspeed_hace_dev		*hace_dev;
+>  	unsigned long			flags;	/* hmac flag */
+>=20
+> -	struct aspeed_sha_hmac_ctx	base[0];
+> +	struct aspeed_sha_hmac_ctx	base[];
+>  };
+>=20
+>  struct aspeed_sham_reqctx {
+> --
+> 2.34.1
 
-Cc: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/afs/flock.c              | 14 +++++++-------
- fs/lockd/clntlock.c         |  2 +-
- fs/lockd/clntproc.c         |  2 +-
- fs/locks.c                  | 28 ++++++++++++++--------------
- fs/nfsd/nfs4state.c         |  4 ++--
- fs/open.c                   |  2 +-
- include/linux/filelock.h    |  4 +---
- include/linux/lockd/lockd.h |  4 ++--
- 8 files changed, 29 insertions(+), 31 deletions(-)
-
-diff --git a/fs/afs/flock.c b/fs/afs/flock.c
-index bbcc5afd1576..9c6dea3139f5 100644
---- a/fs/afs/flock.c
-+++ b/fs/afs/flock.c
-@@ -451,7 +451,7 @@ static int afs_do_setlk_check(struct afs_vnode *vnode, struct key *key,
-  */
- static int afs_do_setlk(struct file *file, struct file_lock *fl)
- {
--	struct inode *inode = locks_inode(file);
-+	struct inode *inode = file_inode(file);
- 	struct afs_vnode *vnode = AFS_FS_I(inode);
- 	enum afs_flock_mode mode = AFS_FS_S(inode->i_sb)->flock_mode;
- 	afs_lock_type_t type;
-@@ -701,7 +701,7 @@ static int afs_do_setlk(struct file *file, struct file_lock *fl)
-  */
- static int afs_do_unlk(struct file *file, struct file_lock *fl)
- {
--	struct afs_vnode *vnode = AFS_FS_I(locks_inode(file));
-+	struct afs_vnode *vnode = AFS_FS_I(file_inode(file));
- 	int ret;
- 
- 	_enter("{%llx:%llu},%u", vnode->fid.vid, vnode->fid.vnode, fl->fl_type);
-@@ -721,7 +721,7 @@ static int afs_do_unlk(struct file *file, struct file_lock *fl)
-  */
- static int afs_do_getlk(struct file *file, struct file_lock *fl)
- {
--	struct afs_vnode *vnode = AFS_FS_I(locks_inode(file));
-+	struct afs_vnode *vnode = AFS_FS_I(file_inode(file));
- 	struct key *key = afs_file_key(file);
- 	int ret, lock_count;
- 
-@@ -763,7 +763,7 @@ static int afs_do_getlk(struct file *file, struct file_lock *fl)
-  */
- int afs_lock(struct file *file, int cmd, struct file_lock *fl)
- {
--	struct afs_vnode *vnode = AFS_FS_I(locks_inode(file));
-+	struct afs_vnode *vnode = AFS_FS_I(file_inode(file));
- 	enum afs_flock_operation op;
- 	int ret;
- 
-@@ -798,7 +798,7 @@ int afs_lock(struct file *file, int cmd, struct file_lock *fl)
-  */
- int afs_flock(struct file *file, int cmd, struct file_lock *fl)
- {
--	struct afs_vnode *vnode = AFS_FS_I(locks_inode(file));
-+	struct afs_vnode *vnode = AFS_FS_I(file_inode(file));
- 	enum afs_flock_operation op;
- 	int ret;
- 
-@@ -843,7 +843,7 @@ int afs_flock(struct file *file, int cmd, struct file_lock *fl)
-  */
- static void afs_fl_copy_lock(struct file_lock *new, struct file_lock *fl)
- {
--	struct afs_vnode *vnode = AFS_FS_I(locks_inode(fl->fl_file));
-+	struct afs_vnode *vnode = AFS_FS_I(file_inode(fl->fl_file));
- 
- 	_enter("");
- 
-@@ -861,7 +861,7 @@ static void afs_fl_copy_lock(struct file_lock *new, struct file_lock *fl)
-  */
- static void afs_fl_release_private(struct file_lock *fl)
- {
--	struct afs_vnode *vnode = AFS_FS_I(locks_inode(fl->fl_file));
-+	struct afs_vnode *vnode = AFS_FS_I(file_inode(fl->fl_file));
- 
- 	_enter("");
- 
-diff --git a/fs/lockd/clntlock.c b/fs/lockd/clntlock.c
-index a5bb3f721a9d..82b19a30e0f0 100644
---- a/fs/lockd/clntlock.c
-+++ b/fs/lockd/clntlock.c
-@@ -188,7 +188,7 @@ __be32 nlmclnt_grant(const struct sockaddr *addr, const struct nlm_lock *lock)
- 			continue;
- 		if (!rpc_cmp_addr(nlm_addr(block->b_host), addr))
- 			continue;
--		if (nfs_compare_fh(NFS_FH(locks_inode(fl_blocked->fl_file)), fh) != 0)
-+		if (nfs_compare_fh(NFS_FH(file_inode(fl_blocked->fl_file)), fh) != 0)
- 			continue;
- 		/* Alright, we found a lock. Set the return status
- 		 * and wake up the caller
-diff --git a/fs/lockd/clntproc.c b/fs/lockd/clntproc.c
-index e875a3571c41..16b4de868cd2 100644
---- a/fs/lockd/clntproc.c
-+++ b/fs/lockd/clntproc.c
-@@ -131,7 +131,7 @@ static void nlmclnt_setlockargs(struct nlm_rqst *req, struct file_lock *fl)
- 	char *nodename = req->a_host->h_rpcclnt->cl_nodename;
- 
- 	nlmclnt_next_cookie(&argp->cookie);
--	memcpy(&lock->fh, NFS_FH(locks_inode(fl->fl_file)), sizeof(struct nfs_fh));
-+	memcpy(&lock->fh, NFS_FH(file_inode(fl->fl_file)), sizeof(struct nfs_fh));
- 	lock->caller  = nodename;
- 	lock->oh.data = req->a_owner;
- 	lock->oh.len  = snprintf(req->a_owner, sizeof(req->a_owner), "%u@%s",
-diff --git a/fs/locks.c b/fs/locks.c
-index a5cc90c958c9..624c6ac92ede 100644
---- a/fs/locks.c
-+++ b/fs/locks.c
-@@ -234,7 +234,7 @@ locks_check_ctx_file_list(struct file *filp, struct list_head *list,
- 				char *list_type)
- {
- 	struct file_lock *fl;
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 
- 	list_for_each_entry(fl, list, fl_list)
- 		if (fl->fl_file == filp)
-@@ -888,7 +888,7 @@ posix_test_lock(struct file *filp, struct file_lock *fl)
- {
- 	struct file_lock *cfl;
- 	struct file_lock_context *ctx;
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 	void *owner;
- 	void (*func)(void);
- 
-@@ -1331,7 +1331,7 @@ static int posix_lock_inode(struct inode *inode, struct file_lock *request,
- int posix_lock_file(struct file *filp, struct file_lock *fl,
- 			struct file_lock *conflock)
- {
--	return posix_lock_inode(locks_inode(filp), fl, conflock);
-+	return posix_lock_inode(file_inode(filp), fl, conflock);
- }
- EXPORT_SYMBOL(posix_lock_file);
- 
-@@ -1630,7 +1630,7 @@ EXPORT_SYMBOL(lease_get_mtime);
- int fcntl_getlease(struct file *filp)
- {
- 	struct file_lock *fl;
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 	struct file_lock_context *ctx;
- 	int type = F_UNLCK;
- 	LIST_HEAD(dispose);
-@@ -1668,7 +1668,7 @@ int fcntl_getlease(struct file *filp)
- static int
- check_conflicting_open(struct file *filp, const long arg, int flags)
- {
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 	int self_wcount = 0, self_rcount = 0;
- 
- 	if (flags & FL_LAYOUT)
-@@ -1704,7 +1704,7 @@ static int
- generic_add_lease(struct file *filp, long arg, struct file_lock **flp, void **priv)
- {
- 	struct file_lock *fl, *my_fl = NULL, *lease;
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 	struct file_lock_context *ctx;
- 	bool is_deleg = (*flp)->fl_flags & FL_DELEG;
- 	int error;
-@@ -1820,7 +1820,7 @@ static int generic_delete_lease(struct file *filp, void *owner)
- {
- 	int error = -EAGAIN;
- 	struct file_lock *fl, *victim = NULL;
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 	struct file_lock_context *ctx;
- 	LIST_HEAD(dispose);
- 
-@@ -1862,7 +1862,7 @@ static int generic_delete_lease(struct file *filp, void *owner)
- int generic_setlease(struct file *filp, long arg, struct file_lock **flp,
- 			void **priv)
- {
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 	int error;
- 
- 	if ((!uid_eq(current_fsuid(), inode->i_uid)) && !capable(CAP_LEASE))
-@@ -2351,7 +2351,7 @@ int fcntl_setlk(unsigned int fd, struct file *filp, unsigned int cmd,
- 		struct flock *flock)
- {
- 	struct file_lock *file_lock = locks_alloc_lock();
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 	struct file *f;
- 	int error;
- 
-@@ -2555,7 +2555,7 @@ int fcntl_setlk64(unsigned int fd, struct file *filp, unsigned int cmd,
- void locks_remove_posix(struct file *filp, fl_owner_t owner)
- {
- 	int error;
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 	struct file_lock lock;
- 	struct file_lock_context *ctx;
- 
-@@ -2592,7 +2592,7 @@ static void
- locks_remove_flock(struct file *filp, struct file_lock_context *flctx)
- {
- 	struct file_lock fl;
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 
- 	if (list_empty(&flctx->flc_flock))
- 		return;
-@@ -2637,7 +2637,7 @@ void locks_remove_file(struct file *filp)
- {
- 	struct file_lock_context *ctx;
- 
--	ctx = locks_inode_context(locks_inode(filp));
-+	ctx = locks_inode_context(file_inode(filp));
- 	if (!ctx)
- 		return;
- 
-@@ -2721,7 +2721,7 @@ static void lock_get_status(struct seq_file *f, struct file_lock *fl,
- 	 */
- 
- 	if (fl->fl_file != NULL)
--		inode = locks_inode(fl->fl_file);
-+		inode = file_inode(fl->fl_file);
- 
- 	seq_printf(f, "%lld: ", id);
- 
-@@ -2862,7 +2862,7 @@ static void __show_fd_locks(struct seq_file *f,
- void show_fd_locks(struct seq_file *f,
- 		  struct file *filp, struct files_struct *files)
- {
--	struct inode *inode = locks_inode(filp);
-+	struct inode *inode = file_inode(filp);
- 	struct file_lock_context *ctx;
- 	int id = 0;
- 
-diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
-index 7b2ee535ade8..b989c72e54e4 100644
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
-@@ -5374,7 +5374,7 @@ static int nfsd4_check_conflicting_opens(struct nfs4_client *clp,
- {
- 	struct nfs4_ol_stateid *st;
- 	struct file *f = fp->fi_deleg_file->nf_file;
--	struct inode *ino = locks_inode(f);
-+	struct inode *ino = file_inode(f);
- 	int writes;
- 
- 	writes = atomic_read(&ino->i_writecount);
-@@ -7828,7 +7828,7 @@ check_for_locks(struct nfs4_file *fp, struct nfs4_lockowner *lowner)
- 		return status;
- 	}
- 
--	inode = locks_inode(nf->nf_file);
-+	inode = file_inode(nf->nf_file);
- 	flctx = locks_inode_context(inode);
- 
- 	if (flctx && !list_empty_careful(&flctx->flc_posix)) {
-diff --git a/fs/open.c b/fs/open.c
-index 9b1c08298a07..117ad27922a1 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -871,7 +871,7 @@ static int do_dentry_open(struct file *f,
- 	if (error)
- 		goto cleanup_all;
- 
--	error = break_lease(locks_inode(f), f->f_flags);
-+	error = break_lease(file_inode(f), f->f_flags);
- 	if (error)
- 		goto cleanup_all;
- 
-diff --git a/include/linux/filelock.h b/include/linux/filelock.h
-index dc5056a66e2c..efcdd1631d9b 100644
---- a/include/linux/filelock.h
-+++ b/include/linux/filelock.h
-@@ -133,8 +133,6 @@ struct file_lock_context {
- 	struct list_head	flc_lease;
- };
- 
--#define locks_inode(f) file_inode(f)
--
- #ifdef CONFIG_FILE_LOCKING
- int fcntl_getlk(struct file *, unsigned int, struct flock *);
- int fcntl_setlk(unsigned int, struct file *, unsigned int,
-@@ -345,7 +343,7 @@ locks_inode_context(const struct inode *inode)
- 
- static inline int locks_lock_file_wait(struct file *filp, struct file_lock *fl)
- {
--	return locks_lock_inode_wait(locks_inode(filp), fl);
-+	return locks_lock_inode_wait(file_inode(filp), fl);
- }
- 
- #ifdef CONFIG_FILE_LOCKING
-diff --git a/include/linux/lockd/lockd.h b/include/linux/lockd/lockd.h
-index 70ce419e2709..2b7f067af3c4 100644
---- a/include/linux/lockd/lockd.h
-+++ b/include/linux/lockd/lockd.h
-@@ -312,7 +312,7 @@ static inline struct file *nlmsvc_file_file(struct nlm_file *file)
- 
- static inline struct inode *nlmsvc_file_inode(struct nlm_file *file)
- {
--	return locks_inode(nlmsvc_file_file(file));
-+	return file_inode(nlmsvc_file_file(file));
- }
- 
- static inline int __nlm_privileged_request4(const struct sockaddr *sap)
-@@ -372,7 +372,7 @@ static inline int nlm_privileged_requester(const struct svc_rqst *rqstp)
- static inline int nlm_compare_locks(const struct file_lock *fl1,
- 				    const struct file_lock *fl2)
- {
--	return locks_inode(fl1->fl_file) == locks_inode(fl2->fl_file)
-+	return file_inode(fl1->fl_file) == file_inode(fl2->fl_file)
- 	     && fl1->fl_pid   == fl2->fl_pid
- 	     && fl1->fl_owner == fl2->fl_owner
- 	     && fl1->fl_start == fl2->fl_start
--- 
-2.39.0
+Reviewed-by: Neal Liu <neal_liu@aspeedtech.com>
 
