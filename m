@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D57663E72
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9296C663E76
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237988AbjAJKnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:43:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S231396AbjAJKoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjAJKnH (ORCPT
+        with ESMTP id S230020AbjAJKoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:43:07 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4973DE92;
-        Tue, 10 Jan 2023 02:43:04 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AAT1WR007264;
-        Tue, 10 Jan 2023 10:42:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
- content-transfer-encoding : mime-version : subject : message-id : date :
- cc : to; s=pp1; bh=+ABv3h0j8OIXwtbcwfJ0Ss5bponXeDNhMqOqcDY0Cpc=;
- b=r7CKwSFh9M/4jprYllVuH37em+g2yQWsMozrWnDpqdcXcsK/+ZQnxhRWs45GlsPE6DWf
- KpEyrf+aRtLX9de3j9G9FsSlzAPDT+2UAwcdqUbQ9+2JuW2chr947gNpsSrHDVE/a8YS
- Ms54fLgiK5VSci3T7LvdG94ljZvvWY49ThmhXI7jbwzXkBm7DvwiVF63I9B1vthPp9DU
- vW3/qkNDG0JOyNB0+PZ18rguR3SbLEjtm+Me2pc+LEXSquf6PvPGJ8ggYTWS2LvdlchY
- 2vh/wfjuCBgPMhSjakHS0xJKKbPDc7BGzov8Kbpcq80O+f3u69vOEKqvOyzUpTuFEq/d Og== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n14qx2tdr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 10:42:59 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30A83dsg000570;
-        Tue, 10 Jan 2023 10:42:57 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3my0c6mp47-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 10:42:56 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30AAgsRU50200926
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Jan 2023 10:42:54 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8183120043;
-        Tue, 10 Jan 2023 10:42:54 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BF0B920040;
-        Tue, 10 Jan 2023 10:42:53 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.109.241.16])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 10 Jan 2023 10:42:53 +0000 (GMT)
-From:   Sachin Sant <sachinp@linux.ibm.com>
-Content-Type: text/plain;
-        charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
-Subject: [powerpc] Boot failure kernel BUG at mm/usercopy.c:102
-Message-Id: <8C9D7E49-5A75-41BE-ACCB-44FDD8FBE4D0@linux.ibm.com>
-Date:   Tue, 10 Jan 2023 16:12:42 +0530
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>
-To:     linux-next@vger.kernel.org, mathieu.desnoyers@efficios.com
-X-Mailer: Apple Mail (2.3731.300.101.1.3)
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fxDUG0c3KYwm_R8k8fhqIcyimVGZ7xgr
-X-Proofpoint-GUID: fxDUG0c3KYwm_R8k8fhqIcyimVGZ7xgr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_03,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- spamscore=0 mlxscore=0 suspectscore=0 malwarescore=0 clxscore=1011
- priorityscore=1501 mlxlogscore=769 impostorscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301100063
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 10 Jan 2023 05:44:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17403C778
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:43:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673347414;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fZBKvQMceZgcl0dsKrtIvBjnZJTQHen6mKpSsPs1Jyw=;
+        b=MrWM3dKcpWnyqRgrIytCBON7tT6whM6I0CbVtOpkSzVYXdU8m7HZ2KhHuQ8aAeRyJ57h7E
+        17XpfcD1AsEdxhjhheugKJP9de4LjhCNXDR+/MoL/YhyzTx1XqzT8lUv5FlhHUYvX91fUk
+        SrtTlbM8LlS9uGE2kW9XViUPwKqGDrQ=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-327-Hf6YCI0xP6q5E1_ljPViBA-1; Tue, 10 Jan 2023 05:43:33 -0500
+X-MC-Unique: Hf6YCI0xP6q5E1_ljPViBA-1
+Received: by mail-qk1-f198.google.com with SMTP id br6-20020a05620a460600b007021e1a5c48so8414445qkb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:43:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fZBKvQMceZgcl0dsKrtIvBjnZJTQHen6mKpSsPs1Jyw=;
+        b=Wb7m7MnlgEhbdajT3l/saakhAOlBZ5yS+UtWls8+ju4jSsTNxJ9B2YrwLCoOgGyew2
+         KdzegMw1Pi16cNC4ku3Yip7tsE4EMV8c4jwqt2/ogLIUSpSet3TBRlMnwokokqe68C7u
+         UKZeVlFRjKGLcuGZ6fA4LOPOQ7ghtO1SCPatJ45ZnhQBqQkNFC3IFkG1XTntxtKYyxEs
+         ghPCHoTdMQ7DMFDBWYZe+twZUewV+kLmSyQtucwqdOo1B52H8rVXjcOfpmHJnJ3eddhb
+         ShV9x+G0ub1yvaaCjSjb+1NInVxxX7Yx38GodioK1VmZu9/YI7lheK5ZxQmKik3BS03g
+         AiEQ==
+X-Gm-Message-State: AFqh2kqqO/TdRO6penMUykMmHkH/EA98e1ufsjaZaLUDN3NTHUmQj/Ia
+        Rboxr7RLxuXl3D3n2I48PcC2/vjBpykWkjh3D1Mtf0fETbUyYfin1NJOh/T+uawl/Lt2CYd6yPS
+        j9UisdvlGtBEEViTKo2vek+Nq
+X-Received: by 2002:ac8:1249:0:b0:3a8:270:c0b8 with SMTP id g9-20020ac81249000000b003a80270c0b8mr2982702qtj.15.1673347412589;
+        Tue, 10 Jan 2023 02:43:32 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXv00NOahDtg8Y9/N2J83JwBSjdxkH/YXNcyXRvFHAxWKvlH5MFlX0naAaYvKaG/tVYx9GXE0w==
+X-Received: by 2002:ac8:1249:0:b0:3a8:270:c0b8 with SMTP id g9-20020ac81249000000b003a80270c0b8mr2982690qtj.15.1673347412360;
+        Tue, 10 Jan 2023 02:43:32 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-128.dyn.eolo.it. [146.241.120.128])
+        by smtp.gmail.com with ESMTPSA id o5-20020a05620a2a0500b006fcc437c2e8sm7011883qkp.44.2023.01.10.02.43.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 02:43:31 -0800 (PST)
+Message-ID: <79108835e679706d138afc33a19a96ed4a1f71ea.camel@redhat.com>
+Subject: Re: [net PATCH] octeontx2-pf: Fix resource leakage in VF driver
+ unbind
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Hariprasad Kelam <hkelam@marvell.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
+        edumazet@google.com, sgoutham@marvell.com, gakula@marvell.com,
+        sbhatta@marvell.com
+Date:   Tue, 10 Jan 2023 11:43:28 +0100
+In-Reply-To: <Y7098K4iMjPyAWww@unreal>
+References: <20230109061325.21395-1-hkelam@marvell.com>
+         <167334601536.23804.3249818012090319433.git-patchwork-notify@kernel.org>
+         <Y7098K4iMjPyAWww@unreal>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,100 +84,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-6.2.0-rc3-next-20230109 fails to boot on powerpc with following:
+Hello,
 
-[ 0.444834] ------------[ cut here ]------------
-[ 0.444838] kernel BUG at mm/usercopy.c:102!
-[ 0.444842] Oops: Exception in kernel mode, sig: 5 [#1]
-[ 0.444845] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA =
-pSeries
-[ 0.444849] Modules linked in:
-[ 0.444853] CPU: 23 PID: 201 Comm: modprobe Not tainted =
-6.2.0-rc3-next-20230109 #1
-[ 0.444858] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006 =
-of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
-[ 0.444862] NIP: c00000000055a934 LR: c00000000055a930 CTR: =
-0000000000725d90
-[ 0.444866] REGS: c000000007f937c0 TRAP: 0700 Not tainted =
-(6.2.0-rc3-next-20230109)
-[ 0.444871] MSR: 8000000000029033 <SF,EE,ME,IR,DR,RI,LE> CR: 28088822 =
-XER: 00000007
-[ 0.444879] CFAR: c0000000002012a8 IRQMASK: 0=20
-[ 0.444879] GPR00: c00000000055a930 c000000007f93a60 c0000000013b0800 =
-0000000000000066=20
-[ 0.444879] GPR04: 00000000ffff7fff c000000007f93880 c000000007f93878 =
-0000000000000000=20
-[ 0.444879] GPR08: 00000000ffff7fff 0000000000000000 c0000000025e7150 =
-c0000000029672b8=20
-[ 0.444879] GPR12: 0000000048088824 c000000e87bf6300 c00000000017f458 =
-c0000000034b8100=20
-[ 0.444879] GPR16: 000000012f18eac0 00007fffc5c095d0 00007fffc5c095d8 =
-000000012f140040=20
-[ 0.444879] GPR20: fcffffffffffffff 00000000001fffff 5455555555555555 =
-000ffffffffffff8=20
-[ 0.444879] GPR24: c00000000723a0c0 00007fffc5c09368 0000000000000000 =
-00007fffc5c09370=20
-[ 0.444879] GPR28: 0000000000000250 0000000000000001 c000000003017000 =
-c00000000723a0c0=20
-[ 0.444922] NIP [c00000000055a934] usercopy_abort+0xa4/0xb0
-[ 0.444928] LR [c00000000055a930] usercopy_abort+0xa0/0xb0
-[ 0.444932] Call Trace:
-[ 0.444933] [c000000007f93a60] [c00000000055a930] =
-usercopy_abort+0xa0/0xb0 (unreliable)
-[ 0.444939] [c000000007f93ad0] [c00000000050eeb8] =
-__check_heap_object+0x198/0x1d0
-[ 0.444945] [c000000007f93b10] [c00000000055a7e0] =
-__check_object_size+0x290/0x340
-[ 0.444949] [c000000007f93b50] [c00000000060eba4] =
-create_elf_tables.isra.20+0xc04/0xc90
-[ 0.444956] [c000000007f93c10] [c000000000610b2c] =
-load_elf_binary+0xdac/0x1320
-[ 0.444962] [c000000007f93d00] [c000000000571cf0] =
-bprm_execve+0x3d0/0x7c0
-[ 0.444966] [c000000007f93dc0] [c000000000572b9c] =
-kernel_execve+0x1ac/0x270
-[ 0.444971] [c000000007f93e10] [c00000000017f5cc] =
-call_usermodehelper_exec_async+0x17c/0x250
-[ 0.444978] [c000000007f93e50] [c00000000000e054] =
-ret_from_kernel_thread+0x5c/0x64
-[ 0.444983] --- interrupt: 0 at 0x0
-[ 0.444986] NIP: 0000000000000000 LR: 0000000000000000 CTR: =
-0000000000000000
-[ 0.444990] REGS: c000000007f93e80 TRAP: 0000 Not tainted =
-(6.2.0-rc3-next-20230109)
-[ 0.444994] MSR: 0000000000000000 <> CR: 00000000 XER: 00000000
-[ 0.444998] CFAR: 0000000000000000 IRQMASK: 0=20
-[ 0.444998] GPR00: 0000000000000000 c000000007f94000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR04: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR08: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR12: 0000000000000000 0000000000000000 c00000000017f458 =
-c0000000034b8100=20
-[ 0.444998] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR24: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.444998] GPR28: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 0.445039] NIP [0000000000000000] 0x0
-[ 0.445042] LR [0000000000000000] 0x0
-[ 0.445044] --- interrupt: 0
-[ 0.445046] Code: 392990f8 48000014 3d02ffe9 390827f0 7d074378 7d094378 =
-7c661b78 3c62ffe7 f9610060 386319f0 4bca6935 60000000 <0fe00000> =
-00000000 00000000 7c0802a6=20
-[ 0.445061] ---[ end trace 0000000000000000 ]=E2=80=94
+On Tue, 2023-01-10 at 12:29 +0200, Leon Romanovsky wrote:
+> On Tue, Jan 10, 2023 at 10:20:15AM +0000, patchwork-bot+netdevbpf@kernel.org wrote:
+> > Hello:
+> > 
+> > This patch was applied to netdev/net.git (master)
+> > by Paolo Abeni <pabeni@redhat.com>:
+> > 
+> > On Mon, 9 Jan 2023 11:43:25 +0530 you wrote:
+> > > resources allocated like mcam entries to support the Ntuple feature
+> > > and hash tables for the tc feature are not getting freed in driver
+> > > unbind. This patch fixes the issue.
+> > > 
+> > > Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
+> > > Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+> > > Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+> > > 
+> > > [...]
+> > 
+> > Here is the summary with links:
+> >   - [net] octeontx2-pf: Fix resource leakage in VF driver unbind
+> >     https://git.kernel.org/netdev/net/c/53da7aec3298
+> 
+> I don't think that this patch should be applied.
+> 
+> It looks like wrong Fixes to me and I don't see clearly how structures
+> were allocated on VF which were cleared in this patch.
 
-Git bisect points to following patch:
+My understanding is that the resource allocation happens via:
 
-commit 317c8194e6aeb8b3b573ad139fc2a0635856498e
-     rseq: Introduce feature size and alignment ELF auxiliary vector =
-entries
+otx2_dl_mcam_count_set()
 
-Reverting the patch helps boot the kernel.
+which is registered as the devlink parameter write operation on the vf
+by the fixes commit - the patch looks legit to me.
 
-Thanks
--Sachin=
+Did I miss something?
+
+Thanks!
+
+Paolo
+
