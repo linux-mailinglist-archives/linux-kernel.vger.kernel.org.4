@@ -2,74 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACC5664569
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA7066456A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238919AbjAJPzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:55:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
+        id S239002AbjAJPzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238942AbjAJPy4 (ORCPT
+        with ESMTP id S238961AbjAJPzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:54:56 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD74B3F120
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:54:51 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bu8so19140560lfb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:54:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=profian-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ix339kkTlpn2awHFm+SxDuLq8JxyWGFgKOqLAoyVa7Y=;
-        b=dOVMWBGzNqYUYXLR/FTKB5CsJSXGVsyIz6nmC2bcIfxOTCaUynzsUVLboUo0GVzG2i
-         6+vL7vdoZWhe44IzF3Mpf/IhwTp79uz0kwya/WXT5bVlQbrkCKe1deWtFSJB2OQDeKzw
-         WmbafcqaQYwZT76GLyQrOz7W/0ErkYaE5e3z89jOKDUTlZ3jzocoJM3CyLpwLfmRi+Kt
-         IOFEdlMp3D1kv1ZGKxJ3LEkPEqMuprF2qeYY1wlISwNhXMCtO8mHuSrN4PTnWLM3wV7Q
-         3W5vsg5cT9NcQqcqW6CpRANTcC3TS93SWoOIFdGNStHfJfA/y3hwkFmSKwRzEhAolLP0
-         dEDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ix339kkTlpn2awHFm+SxDuLq8JxyWGFgKOqLAoyVa7Y=;
-        b=fDxFW5J9ehZlPgEClxs3GSiRrmnGkEnB3u4U3u/5BJgQ+pXB/NFAQoArAmSYF3CNr0
-         jM8ZiPMHCk23GDL9whq6e2IOsxoHS/BEBDGihnbFCGifnkK522XWa/Pg2FliO9j76tEX
-         T/ilhtPc7Xb7EFdTrSunOgKKZ84A8SYMWL/deE8e9iYM86+SYH33y08UPh+rfIo7PYzx
-         TT+u8Yz4Sfad1L0i/C1uMVVKQ9N7sw/WemyxCC+HQwQzrmQlyQ/gAfISqBu5FHeWJq7T
-         3KlwTuSHkT+2ii4rCWOB195RlrTfMDDTgMOmrg8/yAlIUSS6ncy6HYoOan+Ll03IrrsJ
-         Xm1g==
-X-Gm-Message-State: AFqh2kqXpoX+dSTLfm0hMy5R16wdElcnFma6QsvFbuh345GJwUt3Veo7
-        OeGYkTGYoj8F98whuJgb4mFz1A==
-X-Google-Smtp-Source: AMrXdXvYlXs9NrFjmUAGjtIBjURoNXBjkCKL2q9ffeOwPbmUOMgEN4lMhlAjNtZ6GUXvNZW4ABPz4g==
-X-Received: by 2002:a05:6512:3ca0:b0:4b5:b7c3:8053 with SMTP id h32-20020a0565123ca000b004b5b7c38053mr22268123lfv.42.1673366090060;
-        Tue, 10 Jan 2023 07:54:50 -0800 (PST)
-Received: from localhost (83-245-197-49.elisa-laajakaista.fi. [83.245.197.49])
-        by smtp.gmail.com with ESMTPSA id u7-20020ac258c7000000b004a100c21eaesm2239256lfo.97.2023.01.10.07.54.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 07:54:49 -0800 (PST)
-Date:   Tue, 10 Jan 2023 15:54:48 +0000
-From:   Jarkko Sakkinen <jarkko@profian.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER - SE..." 
-        <linux-crypto@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] crypto: ccp: Sanitize sev_platform_init() error
- messages
-Message-ID: <Y72KSC/Dr55Qszjy@profian.com>
-References: <20230110033520.66560-1-jarkko@profian.com>
- <ddbb4b2f-3eb8-64da-bce9-3cfd66d7729a@amd.com>
+        Tue, 10 Jan 2023 10:55:11 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2076.outbound.protection.outlook.com [40.107.244.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4074D4A9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:55:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OFuafRZg9vs/CtbyiQRUVNyWUlehMrGnzjXM1J/hgcbTWKvUuRGIb1UeaQvgzKJKlJ8DOOxeETaANbBDSRWV6rKgoLaOZkEzKIMzdJTNaZojbiW/xs7Kz4IeDuTybVMFLmohnGLr6fDKF1aK9d/zi5ZKjovkKm0EF57DElrN7zGj4qt3nKotIy3haJGoK0rjBHNUcqQ8gaWuHyb8UbPa38Its1Mx7eHk1VDpqZIViVoUVfsVjH4u+f5MxefYD6mQHWMAln19Bcz4BWZeK75CJixphFFRWlhza5dNPIN5kdjaMeVqOFt/082c7/3beb+8yFU/vGTb3FGeYNvnt8JUnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=it0gokUkhnWeg8JhJ98cnJhENtTNLjA8jpw8m8Td2tY=;
+ b=Q9QdyxnNHy5VkWSkUgAaewPIfGHcsk1uqK80yzo8dne87s3tO5tI6TaDQbRk6mjpT1/dXjsahou2110AxvQCnMik4uuY80mcjuVb6+yWvglJKOmjsyrAoFhWrugoP7mX9s84XeLcg0jLyf2SSrs1lC28lPZN45L3g+UnG2u9wff1GYiywfeKWdXd+NMGWKBNrnbAgGBUIdubFsjr8ZgLRyjWIFGQi0UEjdwD3UqnWwJLS9hStzAShpZ6FDOUrym3+VaqJHvDVtFHmbo7tBCZ8fvKGmoIh6NEC8PyMuISQYpOXbEnWJT2XPfLUdhIt1/SBD53u6//L9f9H/Oiy7CGmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=it0gokUkhnWeg8JhJ98cnJhENtTNLjA8jpw8m8Td2tY=;
+ b=LceoTwO6F07w4irjBMcCi1AjbLqEmEBZtu9Iw1HcZfSWvULc2XvPXes6ivI7542xGveTS3Cu2dpYS/dTYrlw6yEIO0KxhDZGH7vfDYcO2D8Rgux+Opn0n4Adt5qaELKsb4G7kztJlCEL4ST4TFa/+pkn64t2Jpg5cGHg0Z2BQbw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
+ by PH7PR12MB8155.namprd12.prod.outlook.com (2603:10b6:510:2b2::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
+ 2023 15:55:03 +0000
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::756d:ff13:d7bd:d590]) by MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::756d:ff13:d7bd:d590%7]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
+ 15:55:03 +0000
+Message-ID: <7a16f713-b8ca-d46c-a18d-d48e6938be16@amd.com>
+Date:   Tue, 10 Jan 2023 10:54:58 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] drm/amd/display: No need for Null pointer check before
+ kfree
+To:     Deepak R Varma <drv@mailo.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+References: <Y6s7989gmBZldV/S@qemulion>
+Content-Language: en-US
+From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
+In-Reply-To: <Y6s7989gmBZldV/S@qemulion>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YTBP288CA0012.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:b01:14::25) To MN2PR12MB2941.namprd12.prod.outlook.com
+ (2603:10b6:208:a9::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ddbb4b2f-3eb8-64da-bce9-3cfd66d7729a@amd.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|PH7PR12MB8155:EE_
+X-MS-Office365-Filtering-Correlation-Id: 32d84fe3-b533-47d4-dc79-08daf3230788
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LTQEPEvoW7DWkcFIDIdSTiEq3mjeouqkwrb8ZwRJlD3TbMp/6nnJFAsdFuIshGeYaJrSEKKZ3kzXlRTWOmPkAA38eHDJOUu7Bg9S1EbSqmUOojMTZ4rKw0zoSoD0Tl2/X5YSQ4GUvPS0xzu8exlCQgdiz7SZ/O1pdN1iHiMXLSIPpkv4srrq7pXt2SyjT9cta/TtH8puMfZjHMJziJ3G3Q11HmpC7z73VFDKddAXeKYF4wgGy2pOUVRQau4YdpF/P6Woye6Nmg/im57eUfMMYpbGga69blTQafCwmKWAmCcEXVCTuMivHtRFgwCqcG+dtjrIv9iPSRTyUwvcl5otlkrOaO1yJRtjqrW5gWgt2DuJ8xsCVbBQAoRkCVzeuv+bHZGJUIDqGsVzpOY83tZEBvIntVzWFqUr5zEMfXeWT1AtVHXp9WvdpKMWgdpdjOAt90D+WHKm0+R+qcaafnDEU9OU6MwPCdJq1PMppF/7prui6/t0hVgQfpF1OrLfTzQ0SI2oeL4hpBEpjqexcXamqlnUCkZqUulGjNE2R5Vbo3xXp8E8z4yunROgQ2buvL9ksI71ZToeeRps7Nmk9E8x+DXM0TI5aTCero3S+OFHp9dyz+KPumFe5Mg+YHlPPoT5VEiGLg+M3+d9N90gsLDTk5qWqz10XRKRIh8V8VfhH/dWbKpVyksTbm+T01Jer2vuDPkgvY+4lXeM3FUdvTdMNkTW1LcHF/bTFfn7MMsRMNFRZ4sCKJKHa6XpekZMnNQQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(39860400002)(376002)(366004)(396003)(451199015)(66556008)(31686004)(2906002)(5660300002)(36756003)(8936002)(6666004)(41300700001)(66946007)(8676002)(66476007)(316002)(4326008)(54906003)(110136005)(2616005)(53546011)(6486002)(6506007)(478600001)(26005)(186003)(6512007)(31696002)(86362001)(83380400001)(38100700002)(921005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eGpldGk0VGtUdmk4SkVjQjV6MkZsSlUvL2VHd0hrZSs1cnBqUkZ2NklKUlJH?=
+ =?utf-8?B?WE9tYXRDV0ZsRXNhQTc1V01OTjlscEJ3T3FlL1BEaHIzcFFSZlJabnIyaTA1?=
+ =?utf-8?B?dzd4a3RiYzh3V3FpUEluSzJiZWE4ajZ6bE5hQmFudm1MMUZCOEJNOC9iSUE0?=
+ =?utf-8?B?dVgyOC9DYnV0V2c3ZzMwc2RNQitsbmNQcCs2L1JjRExqS1laa0NhdHR3L2xq?=
+ =?utf-8?B?aURiMGdPSUtyc0tCamxpWDFjSFBHbjdCK2JsQTRGWTRETEVmcnpKZ3E2NU9J?=
+ =?utf-8?B?VHdocE1jRFg4bTZ1c1U3Yk9YMG1ZMHpZTGZpUk56ckFHUlRBVmZrZ1RoVXp6?=
+ =?utf-8?B?aTlyS3h5WDhjeXpMUTFxRkNwdk1NQ0FOTitBaDFXTE9MN1JrRzNKbDZyeWk3?=
+ =?utf-8?B?SVFNS3R5eUhQdVNQajRXT3VsREZlMkhldG95bkFlVE1rdjNLZmF5Sjl6WGpl?=
+ =?utf-8?B?dTJNSExOQnBHSXVQOVNYL0x3MTdTbXgxVXVJMW1JVjFWdnFhMUNMaEdkdG16?=
+ =?utf-8?B?RVlSK2U1VkZGcys5QWhJZUVhZm56b0hOcDlsMWtRa1RjalY5YmRDd3ZjYVRa?=
+ =?utf-8?B?elJFemFiRWtNbGpSTG1aVW5LaGdHK2hIRW1YQm9QTExJeWd3ajBmaldOVTdu?=
+ =?utf-8?B?RWdacnRHMUdjUk9QREc2U0FwMHdMVVB2dUNWYVRsYkNTdHRBL2ZUcEVnalBw?=
+ =?utf-8?B?dUpWQ0dHYllvelBBWngyWG5abGFLNjlyejNtRDErbG4yeTdweFdmRTA2S3Ri?=
+ =?utf-8?B?djVXd0NnZWRxRFlicWxvUlBhd04vUlh2VVZrcVZXOGEvL0ZhRFdsazFxOWdO?=
+ =?utf-8?B?UG9peW9DbVkraktyQWdWNHo3VnlWVjA2UHh4Yy9wT2RaNXVHMFdodzJ5aTRr?=
+ =?utf-8?B?WjB4WEkzQzJJaGxnbVlOdkMrdWRhYS9RNmt2RjVPV29EV0hNUldXOThDRTBO?=
+ =?utf-8?B?U21DZnRjeXFJa25zcW1id0poeWRqS1pQNkVUOTFody9kckpzeXl6cy9EbWp4?=
+ =?utf-8?B?cEtDZnV0YUZnT0E3VEk0RHhybk5QNlkyRi9RMDBnc1RQU0NmZ0svZ2FNQnI2?=
+ =?utf-8?B?V1FIc0VOUkVIUkpJTFdFaGhWeDVuLzVObGxVa0FkZzJtK0ljZ2RkV0MvQjVr?=
+ =?utf-8?B?dUw1SDl4WCtyR2JHV0ZxMTdqemFEMStzaUQ2M0xHR2wxZDQ5azJITlZQSlh3?=
+ =?utf-8?B?YkI1Z3V2TDh3Mk9rOTEyWTc1UXJ5OXcvbkR1RDJzeERZMlg2T0ttYzk3S2Z2?=
+ =?utf-8?B?eTVjTG9ZeVhyK1FlRDJDUUNod1FDU3d4UksvckZWSm9OTTF1bHhUV3hOYUZK?=
+ =?utf-8?B?YkNGVklyU1dMTmY5b3BmNW1TU240SkMrUXJzc0JlcytVR0cyNnNoVDFLL3A1?=
+ =?utf-8?B?VTljbVdFZHVOR1RjbUU2RTZwUi9UeUFYRnhVbGlJM2ZGdWFVdnZGL2tQVURB?=
+ =?utf-8?B?VURKWEs1WU1BOEVnMmg2T3ZWbVp5K0N4cUxVWHJ2MjZKWC9yZkkyeG1wQjdM?=
+ =?utf-8?B?WENnS0dSQmxWNkVhMUMvNCsvRmducDZpeUVQQTdFQ3BuOFUyaWlTN0lNUFNC?=
+ =?utf-8?B?STZzc0hJTGF6ZXpCWGVIRUk5VjVTZFRpM2NNQWJLQk9hcHRDci92VHNBek9p?=
+ =?utf-8?B?R0xHWTA4bitxOTlodFR2R0RZL1F4ZDkwcWk3WExZTm9VT2taaDZKRUxIZFVu?=
+ =?utf-8?B?WWdGT3JCMGF0ZEZPU05SaG02bXFWREVFKzRKUmRPQUZzQ0pPUjJpZTJOYUN3?=
+ =?utf-8?B?NnlWeXRLRWMrUzBNUHdLMFRkZXd4cGZMbDZUQmhBWmhuOEFTK0NWZUNST2lJ?=
+ =?utf-8?B?UnVha0w2bGNvY2RreFFZdU1jbjR3L0VoWGhhd0hYaVZRU3FFdEJxazRQVUV5?=
+ =?utf-8?B?YW5nbUhZVXF0alNRNzZScmlLTjlqUlpPSmdXNEZKeEcwL3lvbERWZnFhTWNZ?=
+ =?utf-8?B?WG5lYU94OWk2OW1XS0lHcTJYMmQrWW53bjF6SDRNQisyVGh2dndrRnVGalFH?=
+ =?utf-8?B?b3hMczZrZ0RNZVhIdnNTb21TNkNoTzc4Rnhsc0dEQUFZLzNlMFl0SWFEcnhR?=
+ =?utf-8?B?emdvTjdJUnQzYmZLblpBOVRjRTlJS2tZL0JIZ1J4enQ0ZGhrcXVpQjAyajlm?=
+ =?utf-8?Q?Ngjnq58aiWv4rlf808fAtXCNI?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32d84fe3-b533-47d4-dc79-08daf3230788
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 15:55:03.2940
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kIZZFJaWclwiQyWcNSFtIJ5j+dHXUOU5A7bgmZ5VqgIJ4CZ9DOkHiX2OFDot7HO17HFQAnt4zmbxvwHfNtY10Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8155
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,97 +133,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 08:41:33AM -0600, Tom Lendacky wrote:
-> On 1/9/23 21:35, Jarkko Sakkinen wrote:
-> > The following functions end up calling sev_platform_init() or
-> > __sev_platform_init_locked():
-> > 
-> > * sev_guest_init()
-> > * sev_ioctl_do_pek_csr
-> > * sev_ioctl_do_pdh_export()
-> > * sev_ioctl_do_pek_import()
-> > * sev_ioctl_do_pek_pdh_gen()
-> > * sev_pci_init()
-> > 
-> > However, only sev_pci_init() prints out the failed command error code, and
-> > even there, the error message does not specify which SEV command failed.
-> > 
-> > Address this by printing out the SEV command errors inside
-> > __sev_platform_init_locked(), and differentiate between DF_FLUSH, INIT and
-> > INIT_EX commands.  As a side-effect, @error can be removed from the
-> > parameter list.
-> > 
-> > This extra information is particularly useful if firmware loading and/or
-> > initialization is going to be made more robust, e.g. by allowing firmware
-> > loading to be postponed.
-> > ---
-> > v4:
-> > * Sorry, v3 was malformed. Here's a proper patch.
-> > 
-> > v3:
-> > * Address Tom Lendacky's feedback:
-> >    https://lore.kernel.org/kvm/8bf6f179-eee7-fd86-7892-cdcd76e0762a@amd.com/
-> > 
-> > v2:
-> > * Address David Rientjes's feedback:
-> >    https://lore.kernel.org/all/6a16bbe4-4281-fb28-78c4-4ec44c8aa679@google.com/
-> > * Remove @error.
-> > * Remove "SEV_" prefix: it is obvious from context so no need to make klog
-> >    line longer.
-> > 
-> > Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
-> > ---
-> >   drivers/crypto/ccp/sev-dev.c | 17 ++++++++++-------
-> >   1 file changed, 10 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> > index 06fc7156c04f..bdc43e75c78b 100644
-> > --- a/drivers/crypto/ccp/sev-dev.c
-> > +++ b/drivers/crypto/ccp/sev-dev.c
-> > @@ -476,19 +476,23 @@ static int __sev_platform_init_locked(int *error)
-> >   		dev_err(sev->dev, "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
-> >   		rc = init_function(&psp_ret);
-> >   	}
-> > -	if (error)
-> > +	if (rc) {
-> > +		dev_err(sev->dev, "SEV: %s failed error %#x",
-> > +			sev_init_ex_buffer ? "CMD_INIT_EX" : "CMD_INIT", psp_ret);
-> >   		*error = psp_ret;
-> 
-> If I'm not mistaken, error can be NULL, that's why the "if (error)" was
-> present. So that should be kept and even filled in on success. So please
-> leave it the way it was and just add the message to the "if (rc)" section.
 
-Ah, right thanks, will do.
 
-> > -
-> > -	if (rc)
-> >   		return rc;
-> > +	}
-> >   	sev->state = SEV_STATE_INIT;
-> >   	/* Prepare for first SEV guest launch after INIT */
-> >   	wbinvd_on_all_cpus();
-> > -	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, error);
-> > -	if (rc)
-> > +	rc = __sev_do_cmd_locked(SEV_CMD_DF_FLUSH, NULL, &psp_ret);
+On 12/27/22 13:39, Deepak R Varma wrote:
+> kfree() & vfree() internally performs NULL check on the pointer handed
+> to it and take no action if it indeed is NULL. Hence there is no need
+> for a pre-check of the memory pointer before handing it to
+> kfree()/vfree().
 > 
-> Same here, add:
+> Issue reported by ifnullfree.cocci Coccinelle semantic patch script.
 > 
-> 	if (error)
-> 		*error = psp_ret;
-> > +	if (rc) {
-> > +		dev_err(sev->dev, "SEV: CMD_DF_FLUSH failed error %#x", psp_ret);
-> > +		*error = psp_ret;
-> >   		return rc;
-> > +	}
-> >   	dev_dbg(sev->dev, "SEV firmware initialized\n");
-> > @@ -1337,8 +1341,7 @@ void sev_pci_init(void)
-> >   	/* Initialize the platform */
-> >   	rc = sev_platform_init(&error);
-> >   	if (rc)
-> > -		dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
-> > -			error, rc);
-> > +		dev_err(sev->dev, "SEV: failed to INIT rc %d\n", rc);
-> >   	return;
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+>   drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c | 3 +--
+>   drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c | 3 +--
+>   2 files changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
+> index 3ce0ee0d012f..694a9d3d92ae 100644
+> --- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
+> +++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
+> @@ -577,8 +577,7 @@ void dcn3_clk_mgr_construct(
+> 
+>   void dcn3_clk_mgr_destroy(struct clk_mgr_internal *clk_mgr)
+>   {
+> -	if (clk_mgr->base.bw_params)
+> -		kfree(clk_mgr->base.bw_params);
+> +	kfree(clk_mgr->base.bw_params);
+> 
+>   	if (clk_mgr->wm_range_table)
+>   		dm_helpers_free_gpu_mem(clk_mgr->base.ctx, DC_MEM_ALLOC_TYPE_GART,
+> diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
+> index 200fcec19186..ba9814f88f48 100644
+> --- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
+> +++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
+> @@ -783,8 +783,7 @@ void dcn32_clk_mgr_construct(
+> 
+>   void dcn32_clk_mgr_destroy(struct clk_mgr_internal *clk_mgr)
+>   {
+> -	if (clk_mgr->base.bw_params)
+> -		kfree(clk_mgr->base.bw_params);
+> +	kfree(clk_mgr->base.bw_params);
+> 
+>   	if (clk_mgr->wm_range_table)
+>   		dm_helpers_free_gpu_mem(clk_mgr->base.ctx, DC_MEM_ALLOC_TYPE_GART,
+> --
+> 2.34.1
+> 
+> 
+> 
 
-BR, Jarkko
+Hi,
+
+Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+
+And applied to amd-staging-drm-next.
+
+Thanks
+Siqueira
+
