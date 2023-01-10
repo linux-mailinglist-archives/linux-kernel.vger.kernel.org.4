@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E26A1663D8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E63F663D89
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 11:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjAJKJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 05:09:33 -0500
+        id S231502AbjAJKJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 05:09:29 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjAJKJ1 (ORCPT
+        with ESMTP id S229758AbjAJKJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:09:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548C54D731;
-        Tue, 10 Jan 2023 02:09:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C415061589;
-        Tue, 10 Jan 2023 10:09:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB743C433D2;
-        Tue, 10 Jan 2023 10:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673345366;
-        bh=wbyd3dtAWj+DS0fcJULsfdTl+t+d2B5Uw2ZuQAp6tpM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XKJ7hEZZUPaCSNrB26CzNsDjquQbBentUhlmtWHZJjjl5ajSRsc2cY1J6TlsbuK52
-         UoeGdRXnxLZ8mTjHgbPSqEmh732Odonfjc467CustS3+5wXOJ8G7sxPOOj5OmOUNRy
-         w0kKUTLk2m70RapGM9Y4KlCXmcVOjK/OPWsBagysaySfqoZm82qlsKdYmxswDYrer+
-         TbB8sWFTiUPd3iYuGD/0RfH2xQw1GdiwwQtq6XoVkDXuGvwSpzZu+xjIKPR/5OQlxm
-         16rTc6Mfdvm4x7QdvW8p5nVL1YDBiVFkf6NsLekUIa2pYUR8HMFXdeiKexpKNRNiyO
-         ttG8j2EPjTphQ==
-Date:   Tue, 10 Jan 2023 10:09:18 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Helge Deller <deller@gmx.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Antonino Daplas <adaplas@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org, Stephen Kitt <steve@sk2.org>
-Subject: Re: [PATCH 15/15] backlight: backlight: Drop the deprecated fb_blank
- property
-Message-ID: <Y705TvBPWkHzeMrp@google.com>
-References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
- <20230107-sam-video-backlight-drop-fb_blank-v1-15-1bd9bafb351f@ravnborg.org>
- <Y7v1OxdowGdxgvUj@aspen.lan>
- <Y7xAgHgg0sfh32Ga@ravnborg.org>
+        Tue, 10 Jan 2023 05:09:25 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864DA4FCC5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:09:24 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id j7so6147030wrn.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 02:09:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4xYMRRUsS1/+nnFrFeQgPKlK9gLI7LgQiZoVUnSBgI4=;
+        b=qv97nGmxcMwyDTmIwBmhhqeVq7UvyuI6iU7kvOwVo8BBBun+sOpEaBXhRZuXzF2lwK
+         MCMbDYxMR0eOlY04P3bmwdWu7EN8bpri+p40F5B/q5+dLnMOsfb2Xsfa+Y7KdqoktCbX
+         iXg80PPWBS1Y1e+d3/jV+b17UIoDmmWLMK7VJwaAdH5/r9nlajOsaZzzwf6dGExTjAPQ
+         Qc6ST8MYR/Up7JBw21L2A83NoNKolRor6JH8DuFInuWFmPMe2tdlM7xbH9GhpUKELP9y
+         k3QkZJWdaA9SjGyBcr/MR/eo2hzOMNCo3VnhsTUM12Zzpwx7NdV0JXlLTGrk4PVXKQW4
+         wJWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4xYMRRUsS1/+nnFrFeQgPKlK9gLI7LgQiZoVUnSBgI4=;
+        b=lybR7VV4X2a9CCzyxUlL5EEgI4iRYUMFDGoyai8f89hulK6YRKXtgRFgmcP1cZDlPa
+         nsrwoS1AzXWYzyB5N0F9e2wQpNbSSnMrRL61PvokhKXHZHb4HCraWOkCWsdHgYI4jy/T
+         afqYSxDgNGXtJfUu2RL4Ea6AkngjwuBe7cKlk57Vwwmeg/LZzqvEk9FD+BAbsWbaV995
+         Dc0KefXbZw47YYC+6dl6+hdAzce3sGdZZzOmeNN0ALKqz9/Po8fYLIegY80S7lJEf3AR
+         hMFVFJGpRdfaKYmx43hg/vJWT+78A4dWe6CgPllElq7fr/nzFu7Wj+VmrEQz9jNdh4wg
+         Y23Q==
+X-Gm-Message-State: AFqh2kq4hTucrISFlBXH11xphMOOITlcg6M0TPHlCG89klx3yQc8Ebhf
+        0P4Caa5cdCD7C3LMx+eoRUKGcQ==
+X-Google-Smtp-Source: AMrXdXvgLV7H2Uc2y/x8gtRgon6k5ihb8NLU90cU65YiJ7wiU3KJIYxoeQYWyHlRrsCA7g0NdwEfAA==
+X-Received: by 2002:adf:ec85:0:b0:291:4088:a634 with SMTP id z5-20020adfec85000000b002914088a634mr25413839wrn.40.1673345363032;
+        Tue, 10 Jan 2023 02:09:23 -0800 (PST)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id u5-20020adfdb85000000b002ba2646fd30sm12631012wri.36.2023.01.10.02.09.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 02:09:22 -0800 (PST)
+Message-ID: <cf942878-c1f7-c1ce-858b-d8eec716973b@isovalent.com>
+Date:   Tue, 10 Jan 2023 10:09:21 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y7xAgHgg0sfh32Ga@ravnborg.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH bpf-next] bpftool: Add missing quotes to libbpf bootstrap
+ submake vars
+Content-Language: en-GB
+To:     James Hilliard <james.hilliard1@gmail.com>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20230110014504.3120711-1-james.hilliard1@gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20230110014504.3120711-1-james.hilliard1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 Jan 2023, Sam Ravnborg wrote:
-
-> Hi Daniel.
+2023-01-09 18:45 UTC-0700 ~ James Hilliard <james.hilliard1@gmail.com>
+> When passing compiler variables like CC=$(HOSTCC) to a submake
+> we must ensure the variable is quoted in order to handle cases
+> where $(HOSTCC) may be multiple binaries.
 > 
-> On Mon, Jan 09, 2023 at 11:06:35AM +0000, Daniel Thompson wrote:
-> > On Sat, Jan 07, 2023 at 07:26:29PM +0100, Sam Ravnborg via B4 Submission Endpoint wrote:
-> > > From: Sam Ravnborg <sam@ravnborg.org>
-> > >
-> > > With all users gone remove the deprecated fb_blank member in
-> > > backlight_properties.
-> > >
-> > > Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> > > Cc: Lee Jones <lee@kernel.org>
-> > > Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> > > Cc: Jingoo Han <jingoohan1@gmail.com>
-> > 
-> > 
-> > Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+> For example when using ccache $HOSTCC may be:
+> "/usr/bin/ccache /usr/bin/gcc"
 > 
-> Thanks for the follow-up on all the backlight related patches.
+> If we pass CC without quotes like CC=$(HOSTCC) only the first
+> "/usr/bin/ccache" part will be assigned to the CC variable which
+> will cause an error due to dropping the "/usr/bin/gcc" part of
+> the variable in the submake invocation.
 > 
-> > 
-> > 
-> > PS Please don't treat this like a maintainer Acked-by: and merge it
-> >    (Lee's not on holiday so work with Lee to figure out the merge
-> >    strategy ;-) ).
-> Nope, I am aware that the usual pattern here and wait for Lee to show
-> up.
+> This fixes errors such as:
+> /usr/bin/ccache: invalid option -- 'd'
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-It's on the list.  Only 50 more reviews in the backlog now!
 
-> For this patch there is a bug as I need to update a comment.
-> I will fix this when I resend after all the patches in flight has
-> landed. So likely after the next merge window,
+Acked-by: Quentin Monnet <quentin@isovalent.com>
 
--- 
-Lee Jones [李琼斯]
+Thanks
