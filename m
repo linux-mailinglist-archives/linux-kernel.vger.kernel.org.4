@@ -2,55 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A223D66371E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 03:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B1D66372F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 03:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237536AbjAJCMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 21:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
+        id S235309AbjAJCS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 21:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237341AbjAJCL4 (ORCPT
+        with ESMTP id S230199AbjAJCSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 21:11:56 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF8C64E4;
-        Mon,  9 Jan 2023 18:11:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=t4isnwaPds+By8w9NjXRQ7y3UOa8uxB3kQeBLXUK4fg=; b=i/HWzLSo+D2cbKhx/8SEbEizFK
-        P0TngTO1MOyuAmNe6XUl3clfb9WDJDEOCERPBUoK3qMLfPKjba7bnR3zH3V11D+coEidcj2t5CZuf
-        Td16+OsETzDN4FIR2JkMy4m8SUWJ0oizUZltCDoSHlV4XKf1coEYiBGz+S20ZVhitb+pDtCldj8kX
-        wIaRLHrHDaS+BcMNtllbBJJvEMnJvgrXnnbPf6pHc7pqivfdNVrvzJdUUKXhUHLj4zI+WreE2R8Ek
-        myuyC+5I6+Msj4+GtipPmKgRspbOrX5PBUtxJNX4f4pOYXlzlxOeTAjCjyeC86kU5tLd7IamOlPoO
-        TH0xmuYA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pF473-004wY4-Su; Tue, 10 Jan 2023 02:11:41 +0000
-Date:   Mon, 9 Jan 2023 18:11:41 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     rafael@kernel.org, gregkh@linuxfoundation.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, bvanassche@acm.org,
-        jeyu@kernel.org, ebiederm@xmission.com, mchehab@kernel.org,
-        keescook@chromium.org, linux-fsdevel@vger.kernel.org,
-        kernel@tuxforce.de, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Pankaj Raghav <p.raghav@samsung.com>
-Subject: Re: [RFC v2 6/6] fs: add automatic kernel fs freeze / thaw and
- remove kthread freezing
-Message-ID: <Y7zJXRw2w6c0fFzY@bombadil.infradead.org>
-References: <20210417001026.23858-1-mcgrof@kernel.org>
- <20210417001026.23858-7-mcgrof@kernel.org>
- <20210420125903.GC3604224@infradead.org>
- <20210420184703.GN4332@42.do-not-panic.com>
+        Mon, 9 Jan 2023 21:18:23 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BC9D5E;
+        Mon,  9 Jan 2023 18:18:20 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id CA36324E161;
+        Tue, 10 Jan 2023 10:18:18 +0800 (CST)
+Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
+ 2023 10:18:18 +0800
+Received: from [192.168.125.128] (113.72.147.215) by EXMBX161.cuchost.com
+ (172.16.6.71) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
+ 2023 10:18:17 +0800
+Message-ID: <4febeef1-a42a-7d6f-d1af-d8fe19582822@starfivetech.com>
+Date:   Tue, 10 Jan 2023 10:14:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210420184703.GN4332@42.do-not-panic.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 1/3] dt-bindings: timer: Add timer for StarFive JH7110
+ SoC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221223094801.181315-1-xingyu.wu@starfivetech.com>
+ <20221223094801.181315-2-xingyu.wu@starfivetech.com>
+ <179e66a8-c6c0-6d3e-4f4a-6b884f532572@linaro.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <179e66a8-c6c0-6d3e-4f4a-6b884f532572@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.147.215]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX161.cuchost.com
+ (172.16.6.71)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,28 +65,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 20, 2021 at 06:47:03PM +0000, Luis Chamberlain wrote:
-> On Tue, Apr 20, 2021 at 01:59:03PM +0100, Christoph Hellwig wrote:
-> > > This also removes all the superflous freezer calls on all filesystems
-> > > as they are no longer needed as the VFS now performs filesystem
-> > > freezing/thaw if the filesystem has support for it. The filesystem
-> > > therefore is in charge of properly dealing with quiescing of the
-> > > filesystem through its callbacks.
-> > 
-> > Can you split that out from the main logic change?  Maybe even into one
-> > patch per file system?
+On 2022/12/23 18:25, Krzysztof Kozlowski wrote:
+> On 23/12/2022 10:47, Xingyu Wu wrote:
+>> Add bindings for the timer on the JH7110
+>> RISC-V SoC by StarFive Technology Ltd.
 > 
-> The issue with this is that once you do the changes in pm to
-> freeze/suspend, if you leave the other changes in for the filesystems
-> freeze / resume will stall, so all this needs to be an atomic operation
-> if we want bisectable kernels.
+> Please wrap commit message according to Linux coding style / submission
+> process (neither too early nor over the limit):
+> https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+> 
+> 
+>> 
+>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>> ---
+>>  .../timer/starfive,jh7110-timers.yaml         | 105 ++++++++++++++++++
+>>  1 file changed, 105 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml b/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
+>> new file mode 100644
+>> index 000000000000..fe58dc056313
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
+>> @@ -0,0 +1,105 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/timer/starfive,jh7110-timers.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: StarFive Timers
+> 
+> 
+> Not enough, really not enough. Describe the hardware.
 
-So I'm thinking one way to split this up is to add an internal sb
-flag for *if* a fs has support for this, and if so then we use the
-generic fs freezer solution.
+Will add. Thanks.
 
-I'm not however too keen on the idea of mix and matching filesystems
-on top of each other with different solutions, *but* if this makes it
-easier for review / integration - it may be worth it. Let me know.
+> 
+>> +
+>> +maintainers:
+>> +  - Samin Guo <samin.guo@starfivetech.com>
+>> +  - Xingyu Wu <xingyu.wu@starfivetech.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: starfive,jh7110-timers
+> 
+> Why plural "timers", not "timer"? The module is usually called timer -
+> see other hardware that type.
+> 
 
-  Luis
+Will fix. Thanks.
+
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    items:
+>> +      - description: timer channel 0 interrupt
+>> +      - description: timer channel 1 interrupt
+>> +      - description: timer channel 2 interrupt
+>> +      - description: timer channel 3 interrupt
+>> +
+>> +  interrupt-names:
+>> +    items:
+>> +      - const: timer0
+>> +      - const: timer1
+>> +      - const: timer2
+>> +      - const: timer3
+> 
+> I would just drop the names, not really useful. Unless you plan to add
+> here some generic interrupt (like you did for clock-names)?
+
+Will drop. Thanks.
+
+> 
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: timer channel 0 clock
+>> +      - description: timer channel 1 clock
+>> +      - description: timer channel 2 clock
+>> +      - description: timer channel 3 clock
+>> +      - description: APB clock
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: timer0
+>> +      - const: timer1
+>> +      - const: timer2
+>> +      - const: timer3
+>> +      - const: apb
+>> +
+>> +  resets:
+>> +    items:
+>> +      - description: timer channel 0 reset
+>> +      - description: timer channel 1 reset
+>> +      - description: timer channel 2 reset
+>> +      - description: timer channel 3 reset
+>> +      - description: APB reset
+>> +
+>> +  reset-names:
+>> +    items:
+>> +      - const: timer0
+>> +      - const: timer1
+>> +      - const: timer2
+>> +      - const: timer3
+>> +      - const: apb
+>> +
+>> +  clock-frequency:
+>> +    description: The frequency of the clock that drives the counter, in Hz.
+> 
+> Why do you need it? Use common clk framework to get that frequency.
+
+Because normally this timer driver is loaded earlier than the clock tree driver, it won't get
+that frequency by clk framework and this 'clock-frequency' node is used instead.
+
+> 
+> Also, sort the nodes somehow, e.g.
+> compatible/reg/clocks/clock-frequency/interrupts/resets.
+
+Will reorder. Thanks.
+
+> 
+> 
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - interrupt-names
+>> +  - clocks
+>> +  - clock-names
+>> +  - resets
+>> +  - reset-names
+>> +  - clock-frequency
+>> +
+>> +unevaluatedProperties: false
+> 
+> Did you test the binding?
+
+Yes, I had tested by 'dt_binding_check'. Do you mean the 'unevaluatedProperties' is wrong
+and use 'additionalProperties'?
+
+Best regards,
+Xingyu Wu
+
