@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4536639E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0526639ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237476AbjAJHZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 02:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S237653AbjAJH0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 02:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237397AbjAJHZD (ORCPT
+        with ESMTP id S237687AbjAJHZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 02:25:03 -0500
+        Tue, 10 Jan 2023 02:25:31 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B95AC496CF
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 23:24:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84EA94A94C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 23:25:15 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 30A7Obee003929;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 30A7ObF1003930;
         Tue, 10 Jan 2023 08:24:37 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH v2 02/22] tools/nolibc: enable support for thumb1 mode for ARM
-Date:   Tue, 10 Jan 2023 08:24:14 +0100
-Message-Id: <20230110072434.3863-3-w@1wt.eu>
+Subject: [PATCH v2 03/22] tools/nolibc: support thumb mode with frame pointers on ARM
+Date:   Tue, 10 Jan 2023 08:24:15 +0100
+Message-Id: <20230110072434.3863-4-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20230110072434.3863-1-w@1wt.eu>
 References: <20230110072434.3863-1-w@1wt.eu>
@@ -35,45 +35,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Passing -mthumb to the kernel.org arm toolchain failed to build because it
-defaults to armv5 hence thumb1, which has a fairly limited instruction set
-compared to thumb2 enabled with armv7 that is much more complete. It's not
-very difficult to adjust the instructions to also build on thumb1, it only
-adds a total of 3 instructions, so it's worth doing it at least to ease use
-by casual testers. It was verified that the adjusted code now builds and
-works fine for armv5, thumb1, armv7 and thumb2, as long as frame pointers
-are not used.
+In Thumb mode, register r7 is normally used to store the frame pointer.
+By default when optimizing at -Os there's no frame pointer so this works
+fine. But if no optimization is set, then build errors occur, indicating
+that r7 cannot not be used. It's difficult to cheat because it's the
+compiler that is complaining, not the assembler, so it's not even possible
+to report that the register was clobbered. The solution consists in saving
+and restoring r7 around the syscall, but this slightly inflates the code.
+The syscall number is passed via r6 which is never used by syscalls.
+
+The current patch adds a few macroes which do that only in Thumb mode,
+and which continue to directly assign the syscall number to register r7
+in ARM mode. Now this always builds and works for all modes (tested on
+Arm, Thumbv1, Thumbv2 modes, at -Os, -O0, -O0 -fomit-frame-pointer).
+The code is very slightly inflated in thumb-mode without frame-pointers
+compared to previously (e.g. 7928 vs 7864 bytes for nolibc-test) but at
+least it's always operational. And it's possible to disable this mechanism
+by setting NOLIBC_OMIT_FRAME_POINTER.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/arch-arm.h | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ tools/include/nolibc/arch-arm.h | 60 ++++++++++++++++++++++++++-------
+ 1 file changed, 47 insertions(+), 13 deletions(-)
 
 diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index 875b21975137..e4ba77b0310f 100644
+index e4ba77b0310f..ef94df2d93d5 100644
 --- a/tools/include/nolibc/arch-arm.h
 +++ b/tools/include/nolibc/arch-arm.h
-@@ -180,10 +180,16 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
- 	__asm__ volatile (
- 		"pop {%r0}\n"                 // argc was in the stack
- 		"mov %r1, %sp\n"              // argv = sp
--		"add %r2, %r1, %r0, lsl #2\n" // envp = argv + 4*argc ...
--		"add %r2, %r2, $4\n"          //        ... + 4
--		"and %r3, %r1, $-8\n"         // AAPCS : sp must be 8-byte aligned in the
--		"mov %sp, %r3\n"              //         callee, an bl doesn't push (lr=pc)
+@@ -70,20 +70,44 @@ struct sys_stat_struct {
+  *     don't have to experience issues with register constraints.
+  *   - the syscall number is always specified last in order to allow to force
+  *     some registers before (gcc refuses a %-register at the last position).
++ *   - in thumb mode without -fomit-frame-pointer, r7 is also used to store the
++ *     frame pointer, and we cannot directly assign it as a register variable,
++ *     nor can we clobber it. Instead we assign the r6 register and swap it
++ *     with r7 before calling svc, and r6 is marked as clobbered.
++ *     We're just using any regular register which we assign to r7 after saving
++ *     it.
+  *
+  * Also, ARM supports the old_select syscall if newselect is not available
+  */
+ #define __ARCH_WANT_SYS_OLD_SELECT
+ 
++#if (defined(__THUMBEB__) || defined(__THUMBEL__)) && \
++    !defined(NOLIBC_OMIT_FRAME_POINTER)
++/* swap r6,r7 needed in Thumb mode since we can't use nor clobber r7 */
++#define _NOLIBC_SYSCALL_REG         "r6"
++#define _NOLIBC_THUMB_SET_R7        "eor r7, r6\neor r6, r7\neor r7, r6\n"
++#define _NOLIBC_THUMB_RESTORE_R7    "mov r7, r6\n"
 +
-+		"add %r2, %r0, $1\n"          // envp = (argc + 1) ...
-+		"lsl %r2, %r2, $2\n"          //        * 4        ...
-+		"add %r2, %r2, %r1\n"         //        + argv
++#else  /* we're in ARM mode */
++/* in Arm mode we can directly use r7 */
++#define _NOLIBC_SYSCALL_REG         "r7"
++#define _NOLIBC_THUMB_SET_R7        ""
++#define _NOLIBC_THUMB_RESTORE_R7    ""
 +
-+		"mov %r3, $8\n"               // AAPCS : sp must be 8-byte aligned in the
-+		"neg %r3, %r3\n"              //         callee, and bl doesn't push (lr=pc)
-+		"and %r3, %r3, %r1\n"         // so we do sp = r1(=sp) & r3(=-8);
-+		"mov %sp, %r3\n"              //
++#endif /* end THUMB */
 +
- 		"bl main\n"                   // main() returns the status code, we'll exit with it.
- 		"movs r7, $1\n"               // NR_exit == 1
- 		"svc $0x00\n"
+ #define my_syscall0(num)                                                      \
+ ({                                                                            \
+-	register long _num __asm__ ("r7") = (num);                            \
++	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
+ 	register long _arg1 __asm__ ("r0");                                   \
+ 	                                                                      \
+ 	__asm__  volatile (                                                   \
++		_NOLIBC_THUMB_SET_R7                                          \
+ 		"svc #0\n"                                                    \
+-		: "=r"(_arg1)                                                 \
+-		: "r"(_num)                                                   \
++		_NOLIBC_THUMB_RESTORE_R7                                      \
++		: "=r"(_arg1), "=r"(_num)                                     \
++		: "r"(_arg1),                                                 \
++		  "r"(_num)                                                   \
+ 		: "memory", "cc", "lr"                                        \
+ 	);                                                                    \
+ 	_arg1;                                                                \
+@@ -91,12 +115,14 @@ struct sys_stat_struct {
+ 
+ #define my_syscall1(num, arg1)                                                \
+ ({                                                                            \
+-	register long _num __asm__ ("r7") = (num);                            \
++	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
+ 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
+ 	                                                                      \
+ 	__asm__  volatile (                                                   \
++		_NOLIBC_THUMB_SET_R7                                          \
+ 		"svc #0\n"                                                    \
+-		: "=r"(_arg1)                                                 \
++		_NOLIBC_THUMB_RESTORE_R7                                      \
++		: "=r"(_arg1), "=r" (_num)                                    \
+ 		: "r"(_arg1),                                                 \
+ 		  "r"(_num)                                                   \
+ 		: "memory", "cc", "lr"                                        \
+@@ -106,13 +132,15 @@ struct sys_stat_struct {
+ 
+ #define my_syscall2(num, arg1, arg2)                                          \
+ ({                                                                            \
+-	register long _num __asm__ ("r7") = (num);                            \
++	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
+ 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
+ 	register long _arg2 __asm__ ("r1") = (long)(arg2);                    \
+ 	                                                                      \
+ 	__asm__  volatile (                                                   \
++		_NOLIBC_THUMB_SET_R7                                          \
+ 		"svc #0\n"                                                    \
+-		: "=r"(_arg1)                                                 \
++		_NOLIBC_THUMB_RESTORE_R7                                      \
++		: "=r"(_arg1), "=r" (_num)                                    \
+ 		: "r"(_arg1), "r"(_arg2),                                     \
+ 		  "r"(_num)                                                   \
+ 		: "memory", "cc", "lr"                                        \
+@@ -122,14 +150,16 @@ struct sys_stat_struct {
+ 
+ #define my_syscall3(num, arg1, arg2, arg3)                                    \
+ ({                                                                            \
+-	register long _num __asm__ ("r7") = (num);                            \
++	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
+ 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
+ 	register long _arg2 __asm__ ("r1") = (long)(arg2);                    \
+ 	register long _arg3 __asm__ ("r2") = (long)(arg3);                    \
+ 	                                                                      \
+ 	__asm__  volatile (                                                   \
++		_NOLIBC_THUMB_SET_R7                                          \
+ 		"svc #0\n"                                                    \
+-		: "=r"(_arg1)                                                 \
++		_NOLIBC_THUMB_RESTORE_R7                                      \
++		: "=r"(_arg1), "=r" (_num)                                    \
+ 		: "r"(_arg1), "r"(_arg2), "r"(_arg3),                         \
+ 		  "r"(_num)                                                   \
+ 		: "memory", "cc", "lr"                                        \
+@@ -139,15 +169,17 @@ struct sys_stat_struct {
+ 
+ #define my_syscall4(num, arg1, arg2, arg3, arg4)                              \
+ ({                                                                            \
+-	register long _num __asm__ ("r7") = (num);                            \
++	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
+ 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
+ 	register long _arg2 __asm__ ("r1") = (long)(arg2);                    \
+ 	register long _arg3 __asm__ ("r2") = (long)(arg3);                    \
+ 	register long _arg4 __asm__ ("r3") = (long)(arg4);                    \
+ 	                                                                      \
+ 	__asm__  volatile (                                                   \
++		_NOLIBC_THUMB_SET_R7                                          \
+ 		"svc #0\n"                                                    \
+-		: "=r"(_arg1)                                                 \
++		_NOLIBC_THUMB_RESTORE_R7                                      \
++		: "=r"(_arg1), "=r" (_num)                                    \
+ 		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4),             \
+ 		  "r"(_num)                                                   \
+ 		: "memory", "cc", "lr"                                        \
+@@ -157,7 +189,7 @@ struct sys_stat_struct {
+ 
+ #define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
+ ({                                                                            \
+-	register long _num __asm__ ("r7") = (num);                            \
++	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
+ 	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
+ 	register long _arg2 __asm__ ("r1") = (long)(arg2);                    \
+ 	register long _arg3 __asm__ ("r2") = (long)(arg3);                    \
+@@ -165,8 +197,10 @@ struct sys_stat_struct {
+ 	register long _arg5 __asm__ ("r4") = (long)(arg5);                    \
+ 	                                                                      \
+ 	__asm__  volatile (                                                   \
++		_NOLIBC_THUMB_SET_R7                                          \
+ 		"svc #0\n"                                                    \
+-		: "=r" (_arg1)                                                \
++		_NOLIBC_THUMB_RESTORE_R7                                      \
++		: "=r"(_arg1), "=r" (_num)                                    \
+ 		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
+ 		  "r"(_num)                                                   \
+ 		: "memory", "cc", "lr"                                        \
 -- 
 2.17.5
 
