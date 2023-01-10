@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9566766427D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE89664283
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjAJNxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
+        id S232031AbjAJN4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237663AbjAJNxU (ORCPT
+        with ESMTP id S238662AbjAJNzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:53:20 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF098BF38;
-        Tue, 10 Jan 2023 05:52:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673358752; x=1704894752;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tp8Z9Ay/HrlqQE0qDFK7p4Fost9+vU0ggkXvi/hfbkY=;
-  b=kO8ox8CR+uhilfo5/X2nxkaV4R1ebPsPUWkdF4QsFnqdZi0+9yMqWhfv
-   PKlzD1J/dYnz4SJUbaTjjtC0QteypDLuv9UL2ilJKOJseLb3blbbDRgKR
-   /alyOqQ4wC48vEI6zM+ZbMmNStQiJjb/yC4L96pos2WPad5aLaWdyVG4l
-   uSLI+r8CIVKKNrMjXpOdrBxFuVBLBGOGy9vjBUTE3wgpx9dSS06FYtC+A
-   FnrdBVP/dZdOHbJka0bOPO00rFLSmTMw/1SY2fd3RmEgzglcdIq9JPESj
-   +zfCtPa5XOVBH9lR3c6QkN7FDo4tDCyPTRSCV6yON/XMy6W476qcBtwWn
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="387599277"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="387599277"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 05:52:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="830995823"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="830995823"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 10 Jan 2023 05:52:23 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pFF36-0073E7-37;
-        Tue, 10 Jan 2023 15:52:20 +0200
-Date:   Tue, 10 Jan 2023 15:52:20 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-ia64@vger.kernel.org,
-        linux-sh@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
-        intel-gfx@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
-        openrisc@lists.librecores.org, loongarch@lists.linux.dev,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-alpha@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [Intel-gfx] [RFC DO NOT MERGE] treewide: use __xchg in most
- obvious places
-Message-ID: <Y71tlG23t0gH9K1t@smile.fi.intel.com>
-References: <Y7b6/7coJEVlTVxK@phenom.ffwll.local>
- <20230110105306.3973122-1-andrzej.hajda@intel.com>
- <Y71G1tkmUzM4BLxn@smile.fi.intel.com>
- <1bfae3d0-8c0b-ea83-7184-db847a4a969f@intel.com>
+        Tue, 10 Jan 2023 08:55:18 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DED191527
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:53:24 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id t15so11843015ybq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:53:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rVCMSgatdIf3t9Qq9Q8tQnF21QDdXZk3rUx62zf2uI8=;
+        b=hn9FBSlUWNgiKhcp+XGG6IP3x7ac3jxe3Q+cCwYFo6h+OfPXirEiREXUFjyi2FCoiT
+         EHntTsn+pJ3rYh5MNy2CoDWTEbucfkEIdpm+HHU0GnOpThR0jLHKXBrncMvmBYIkBzIy
+         3zKlr07MOTtQLl6sKhWWpZcIX4ZFZYveBL41ibfHkA+GcoUkpWTtoHQdyGx73QTyLUd0
+         ItXmN/H9vQQYT2b4IjVsvy6Wbd2u85kBXKBzwYKpKaUxF5wMwiqqb0TTavELWHviTupB
+         sKUk5vhOO0HoxTTSipHDF/xE6eNl1/gHQPxYE1uNfkRGUkEETWEU3iY0OLDjrrOh3Seu
+         bHpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rVCMSgatdIf3t9Qq9Q8tQnF21QDdXZk3rUx62zf2uI8=;
+        b=drH/vJQlnnsbY37G6lPLuU4rlr2PdhI4bYhfI1gTmA+l2bc1lI+4zNyO79jnDzavhT
+         FINDAdiZxKUPoA5s+MdFtQrMLsfJg0JJ2WIc8rAu1qmmOoYqrgiWsilvfwt09LEKE9gj
+         48jFvvjuQ10OUVNRFQH7+kA6DHM/w2gXgHhqMEYLIjLJau7lvvnaScKicBtJozQuIrIi
+         yYcYFOr6tzPymidIzxgfh36gzbRvxqXGlukf5ZBUo1NTsX89A7okUKYSFWm040gXZAi8
+         ixmHmBKUcJAo9UGzdJFWRw84EGbWYwi5kcBXe+kcg8kBIL29juguuZ63sU9MbFmQ+vhF
+         Mi1g==
+X-Gm-Message-State: AFqh2krG3eSS2O1zHW5XY0S2MsC5UvhEBGX1HIY0vQv4cQbA0Kpg/mmn
+        x0RA3u9JEFDeBXH0fZ/O/bxvjOikudSEOFbb0B+gjQ==
+X-Google-Smtp-Source: AMrXdXugIKCVBl9k9fZr5k8yNXAqd8M3xUejgOHtloMcYf4xIp128JO5fcHVa46s2bGC9eoKT2SVnUE9HoyhwRFH69s=
+X-Received: by 2002:a25:cf02:0:b0:7b4:fa63:5519 with SMTP id
+ f2-20020a25cf02000000b007b4fa635519mr2132063ybg.270.1673358797706; Tue, 10
+ Jan 2023 05:53:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1bfae3d0-8c0b-ea83-7184-db847a4a969f@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230109155801.51642-1-sebastian.reichel@collabora.com> <20230109155801.51642-3-sebastian.reichel@collabora.com>
+In-Reply-To: <20230109155801.51642-3-sebastian.reichel@collabora.com>
+From:   Jagan Teki <jagan@edgeble.ai>
+Date:   Tue, 10 Jan 2023 19:23:06 +0530
+Message-ID: <CA+VMnFxxx18=u7oFJZ9x9g0HA8PV+yNPUk7OdhffR7vdhz712g@mail.gmail.com>
+Subject: Re: [PATCHv8 2/7] arm64: dts: rockchip: Add rk3588 pinctrl data
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianqun Xu <jay.xu@rock-chips.com>,
+        kernel@collabora.com, Shengfei Xu <xsf@rock-chips.com>,
+        Damon Ding <damon.ding@rock-chips.com>,
+        Steven Liu <steven.liu@rock-chips.com>,
+        Jon Lin <jon.lin@rock-chips.com>,
+        Finley Xiao <finley.xiao@rock-chips.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 01:46:37PM +0100, Andrzej Hajda wrote:
-> On 10.01.2023 12:07, Andy Shevchenko wrote:
-> > On Tue, Jan 10, 2023 at 11:53:06AM +0100, Andrzej Hajda wrote:
+On Mon, 9 Jan 2023 at 21:28, Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> From: Jianqun Xu <jay.xu@rock-chips.com>
+>
+> This adds the pin controller data for rk3588 and rk3588s.
+>
+> Signed-off-by: Shengfei Xu <xsf@rock-chips.com>
+> Signed-off-by: Damon Ding <damon.ding@rock-chips.com>
+> Signed-off-by: Steven Liu <steven.liu@rock-chips.com>
+> Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
+> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+> Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
+> [port from vendor tree merging all fixes]
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
 
-...
-
-> > > +	return __xchg(&p_chain->p_prod_elem,
-> > > +		      (void *)(((u8 *)p_chain->p_prod_elem) + p_chain->elem_size));
-> > 
-> > Wondering if you still need a (void *) casting after the change. Ditto for the
-> > rest of similar cases.
-> 
-> IMHO it is not needed also before the change and IIRC gcc has an extension
-> which allows to drop (u8 *) cast as well [1].
-
-I guess you can drop at least the former one.
-
-> [1]: https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
-
-...
-
-> > Btw, is it done by coccinelle? If no, why not providing the script?
-> 
-> Yes I have used cocci. My cocci skills are far from perfect, so I did not
-> want to share my dirty code, but this is nothing secret:
-
-Thank you! It's not about secrecy, it's about automation / error proofness.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Acked-by: Jagan Teki <jagan@edgeble.ai>
+Tested-by: Jagan Teki <jagan@edgeble.ai> # edgeble-neu6a
