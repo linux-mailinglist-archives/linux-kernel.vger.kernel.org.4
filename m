@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AEA664040
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7632B664012
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238353AbjAJMSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:18:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59150 "EHLO
+        id S233354AbjAJMPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238329AbjAJMRH (ORCPT
+        with ESMTP id S233237AbjAJMPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:17:07 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE8A5F7E;
-        Tue, 10 Jan 2023 04:15:33 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30A7MsKp002636;
-        Tue, 10 Jan 2023 12:14:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=Zh8ff5SGXAi8WExp+0Dqs+4YIfe+rE8T4hBS6987tBk=;
- b=JWXKKWvtTPiLjnChZEz5tdzkCjh4nsFvtX7zw0t0ySbrl7wdiivwc9Fmi7ldY2R1Vcm5
- 2+ZZs4gX/2hE7+BQiRsfqYt9EQxgu8MJnacp7NVPMbSiJo4m8meIlfZKGlfSkcQiTiV2
- V9qzUO1/d2bkLwpXGMhS9ikw/pPOIFNKIqhbLgu7+JOiwtzCGLa9FMTks/u1lrmL4JG8
- 4IiXtOw/GWEnAUt2bQncVsav6cOd6kx6wGy2aBVi91KM6GrMUJqtq0GDsHJtbK69c1Ez
- erqV/Q1MGpZvNSBxBS9T7vRUJ6Apkngtz/bmBL3TPASkOCiTAxjJ1U+n8zkokaeHPFXj XA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n12vprnbs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 12:14:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30ACEoov012522
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 12:14:50 GMT
-Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 10 Jan 2023 04:14:42 -0800
-From:   devi priya <quic_devipriy@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <tdas@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-Subject: [PATCH 7/7] arm64: defconfig: Enable IPQ9574 SoC base configs
-Date:   Tue, 10 Jan 2023 17:43:16 +0530
-Message-ID: <20230110121316.24892-8-quic_devipriy@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230110121316.24892-1-quic_devipriy@quicinc.com>
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
+        Tue, 10 Jan 2023 07:15:23 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719432009;
+        Tue, 10 Jan 2023 04:14:02 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673352841;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X2y9vD/h9xsyVCCbYvsCOwthcc+ZcX9CU02bbo8R6CQ=;
+        b=PUOkQzoUAGGJ4BpHkJjmDf07TJY/lmgnLXhHyJAks6BCusPHr1YB6/l3Q2EglShcExeYGe
+        UjK3eXjfcy+GHfOyK26R3U+2mGvtPdTxMhuyYgQf1zSZdcxs69HIknLbq9etp+iyyTU8kF
+        bnBf1FwMnEsYGnL+bVTR54Uxky7VunE9KyN79pSn7UiFcsrumtK7IbOPzVeAf60CtpBbF/
+        FEI6ZN00/sACv8Iq/Uz+8Q/u2LxVpII/mCwzuexnbBvEtfj7s5r+GFpgYqSmwA904BBsMi
+        76BrikmeiQwTE+BzDbRxm1lQfTwE6p21SRTulzDwLDf7XQ4ZFRYLS5i6MBx5JA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673352841;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X2y9vD/h9xsyVCCbYvsCOwthcc+ZcX9CU02bbo8R6CQ=;
+        b=OMgBgUG7u5Pt/4nPkHDS1N7iBV2Aa2YurZvaMgpVFEazX91Hjqij9da/dHRwRylC9easFY
+        PFWkhWLhADrH7QCQ==
+To:     Jason Gunthorpe <jgg@nvidia.com>, Moshe Shemesh <moshe@nvidia.com>,
+        Shay Drory <shayd@nvidia.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+Subject: Re: [patch V3 13/33] x86/apic/vector: Provide MSI parent domain
+In-Reply-To: <Y7VyXNbWMdWWAC6d@nvidia.com>
+References: <20221124230505.073418677@linutronix.de>
+ <20221124232326.034672592@linutronix.de> <Y7VyXNbWMdWWAC6d@nvidia.com>
+Date:   Tue, 10 Jan 2023 13:14:00 +0100
+Message-ID: <87eds2k2nr.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DfXUNGc4rmmDEFeSQI5gN_cLvUEme2c9
-X-Proofpoint-ORIG-GUID: DfXUNGc4rmmDEFeSQI5gN_cLvUEme2c9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_03,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 spamscore=0 priorityscore=1501 impostorscore=0 adultscore=0
- clxscore=1015 mlxscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- mlxlogscore=764 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301100074
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enables clk & pinctrl related configs
+Jason,
 
-Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-Signed-off-by: devi priya <quic_devipriy@quicinc.com>
----
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+On Wed, Jan 04 2023 at 08:34, Jason Gunthorpe wrote:
+> Our test team has discovered some kmem leak complaints on rc1 and
+> bisected it to this patch.
+>
+> I don't see an obvious way that fwnode gets destroyed here. So maybe
+> it should be like this?
+>
+> diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+> index 955267bbc2be63..cbbcb7fd2bd00d 100644
+> --- a/kernel/irq/msi.c
+> +++ b/kernel/irq/msi.c
+> @@ -1000,7 +1000,7 @@ bool msi_create_device_irq_domain(struct device *dev, unsigned int domid,
+>  fail:
+>  	msi_unlock_descs(dev);
+>  free_fwnode:
+> -	kfree(fwnode);
+> +	irq_domain_free_fwnode(fwnode); // ???
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 851e8f9be06d..e0ae0996d5ad 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -545,6 +545,7 @@ CONFIG_PINCTRL_IMX93=y
- CONFIG_PINCTRL_MSM=y
- CONFIG_PINCTRL_IPQ8074=y
- CONFIG_PINCTRL_IPQ6018=y
-+CONFIG_PINCTRL_IPQ9574=y
- CONFIG_PINCTRL_MSM8916=y
- CONFIG_PINCTRL_MSM8953=y
- CONFIG_PINCTRL_MSM8976=y
-@@ -1093,6 +1094,7 @@ CONFIG_QCOM_CLK_SMD_RPM=y
- CONFIG_QCOM_CLK_RPMH=y
- CONFIG_IPQ_GCC_6018=y
- CONFIG_IPQ_GCC_8074=y
-+CONFIG_IPQ_GCC_9574=y
- CONFIG_MSM_GCC_8916=y
- CONFIG_MSM_GCC_8994=y
- CONFIG_MSM_MMCC_8996=y
--- 
-2.17.1
+That's correct. kfree(fwnode) leaks fwnode->name
 
+>  free_bundle:
+>  	kfree(bundle);
+>  	return false;
+> @@ -1013,6 +1013,7 @@ bool msi_create_device_irq_domain(struct device *dev, unsigned int domid,
+>   */
+>  void msi_remove_device_irq_domain(struct device *dev, unsigned int domid)
+>  {
+> +	struct fwnode_handle *fwnode = NULL;
+>  	struct msi_domain_info *info;
+>  	struct irq_domain *domain;
+>  
+> @@ -1025,7 +1026,10 @@ void msi_remove_device_irq_domain(struct device *dev, unsigned int domid)
+>  
+>  	dev->msi.data->__domains[domid].domain = NULL;
+>  	info = domain->host_data;
+> +	if (domain->flags & IRQ_DOMAIN_FLAG_MSI_DEVICE)
+> +		fwnode = domain->fwnode;
+
+irq_domain_is_msi_device() ?
+
+>  	irq_domain_remove(domain);
+> +	irq_domain_free_fwnode(fwnode);
+
+For some reason I thought the fwnode would be handled by
+irq_domain_remove() but fwnode_handle_put() is a NOP for the named
+fwnodes.
+
+Care to send a proper patch with changelog?
+
+Thanks,
+
+        tglx
