@@ -2,134 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9407664313
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED57B664322
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234602AbjAJOUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
+        id S230468AbjAJOVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238489AbjAJOUX (ORCPT
+        with ESMTP id S234592AbjAJOVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:20:23 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F255544FD;
-        Tue, 10 Jan 2023 06:20:22 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id d9so13290091pll.9;
-        Tue, 10 Jan 2023 06:20:22 -0800 (PST)
+        Tue, 10 Jan 2023 09:21:02 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E555CE12
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:20:59 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id bk16so11891877wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:20:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ez2mZli6D06vZpdj4fXBsrJU+DkfzTuM1pJBzBkzGOU=;
-        b=pMn1XzDI8soISX6QvuSzywsxG2OGaFx2QfNF13+6gyhTHCwY7T495EGEpEkIz5hJBz
-         K8Znv2KBwAa/InabxejBPMns29dvx95bE68Y3a/xTGEAWtZgtOsIjlH0A73QDW2Pp4g2
-         SdU6Hifk8Ln01nEPtlu4dhatfZdS6UbiwpuQazNWzX1KnqsZ26+ENjni4aQUXCUTrdAb
-         A4cEjIBZ+t/D5kB1ApdE+yfumw4phqNtbuvI1j8/7Nc3fTrY++AId5bvYgCdjiIOZ3ZA
-         YNi1BySOvJJ/ATq7GIHVBV9ZNvIVNasKicCB0Hd+52rTpzk6AwHBZF6DLczmUxCVIbdZ
-         OTMw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8wOlYhsSTVgaYdm2eFZoziUvSeaqxeeC4ypm2ZU+u8E=;
+        b=kszY69SppzG5Jtt72RWEpPxfZlA++8X+pe4zSpoGzWxZpDO7QjiSUYnre1WyViXAY7
+         1iiWRER6HTf6S2w06VNjW9Ek+hfRQxFAU+/IYMI4W4YWwDhrsDtawi7DyBoI6gmGKm1Q
+         0+M2MSORAbu8Ba6hwMxISTSe0WTxhTarMF2tgaST8lj4/7xgaDp2/UaXzPEnYNOvOUij
+         EPtqNQR2mhoWaHmxONo3dIvRyX7TdO2y6b3ggnCU0qrh6EVfI1aR/JngbZyGd/hTd9+p
+         fp43ISUfXPVH4FIk9xYvMeXzZgYFgvbb1N8ezsuiPAXvtlpEWMj2ixCYsKm1FqG4HLpU
+         Mvug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ez2mZli6D06vZpdj4fXBsrJU+DkfzTuM1pJBzBkzGOU=;
-        b=0LqZOhjj5A38TBhWpcBcKRVrsooetD320ZlbhnooPJTalDAic9b+RwCCzkYb9xn8Zx
-         VPr97lJbKxtWtE7Wr8fnEJbEBfGYaXmb7a8F8esEIRYQJ96Ibn+euDbiutxUzwvt+o9Y
-         sfNlAkuoMZbxDOy53/AJwJAokNtmYO6FFH/IkMSMkEX80N/Rj2+OUXUlAwcEV7CfJPPX
-         PDJUQG77zNbmPUmv4+jgbH3Zvi/leEF5gtHpu9ss67l/N0sBXHMsN20W9HF+8rC+a4QM
-         mGGHQhXczDCJCKsDuNfNyUFZqK5T1+rjW7pWk/UwbPenbIwPU5SSNObOKmsfm/kD9niU
-         X1kQ==
-X-Gm-Message-State: AFqh2krYGJdD6m2Q6pKqUfa53k4bzEisuYss2rdNJ+HYJdIwymEd818G
-        /QyTevXbAlz7/I8F42bEaNTr4tU4eMm11g==
-X-Google-Smtp-Source: AMrXdXufQ5z/NOYz/j0h1zB1hVSDqnexy6+Lmq+PPpj9ZQs7r720d+jioVZU5yLjJMZohmNJYtt1Ng==
-X-Received: by 2002:a05:6a20:9e05:b0:af:9391:449 with SMTP id ms5-20020a056a209e0500b000af93910449mr81224968pzb.45.1673360421678;
-        Tue, 10 Jan 2023 06:20:21 -0800 (PST)
-Received: from [172.30.1.1] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id r1-20020a654981000000b004785c24ffb4sm6933674pgs.26.2023.01.10.06.20.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 06:20:21 -0800 (PST)
-Message-ID: <034265a5-0e16-d217-ad1d-e0a83f8440a4@gmail.com>
-Date:   Tue, 10 Jan 2023 23:20:15 +0900
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8wOlYhsSTVgaYdm2eFZoziUvSeaqxeeC4ypm2ZU+u8E=;
+        b=Gjte88s98bQKY2swx8sl02g0avjNZNxr1kj4LsfhT5Mg+9e0QHCji2pQaxfBMKpdRY
+         woXl/uXQURKjrQWlKuHOr+XBxGoRfEEKgl//WNun9GzdstAMAoyGS+gIppAXrYzrIDtZ
+         QiA5zixosOcJbS4mzTQwr/glZwC4o6q2APzAplSkylpnJoMfmJbG2ouT97ndQEAuRv+s
+         QZvDGXIwKyFYhAGVqwuaNi4R+GAwQqp70e2oCyojVuvr3X9gpIgk7C+7L/TfFoZpVqmC
+         jRrGLbHYcvXcLWhPi50yNWSyHsy/z7iduJLXUumCqIzp8sc3st2hvucxxr7UJ6aYGygK
+         6GQg==
+X-Gm-Message-State: AFqh2kp903Vm7Y8xBnDrOzo6k7KCQgt0o8LteNiveQJ+oCP+y0e2q5aW
+        lxU8LsWkmTchE1TIhMQwcihG4Q==
+X-Google-Smtp-Source: AMrXdXsGPm+Lqm6jdep1fxgzxJDhDVBWyqAyOyD8u4pWy8z+Ow8K31O4z7YtMI4EBCBZ0cS02zAcVQ==
+X-Received: by 2002:a5d:4bc9:0:b0:2bb:ebaa:7ae1 with SMTP id l9-20020a5d4bc9000000b002bbebaa7ae1mr6343276wrt.50.1673360457917;
+        Tue, 10 Jan 2023 06:20:57 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id z2-20020a5d6402000000b00297dcfdc90fsm11284992wru.24.2023.01.10.06.20.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 06:20:57 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+Subject: Re: (subset) [PATCH v2 00/11] dt-bindings: first batch of dt-schema
+ conversions for Amlogic Meson bindings
+Message-Id: <167336045651.1961204.1502592666018702430.b4-ty@linaro.org>
+Date:   Tue, 10 Jan 2023 15:20:56 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 1/2 RESEND] dt-bindings: pm8941-misc: Fix usb_id and
- usb_vbus definitions
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        cw00.choi@samsung.com, myungjoo.ham@samsung.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        agross@kernel.org
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20221228133058.213886-1-bryan.odonoghue@linaro.org>
- <20221228133058.213886-2-bryan.odonoghue@linaro.org>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20221228133058.213886-2-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 12. 28. 22:30, Bryan O'Donoghue wrote:
-> dts validation is throwing an error for me on 8916 and 8939 with
-> extcon@1300. In that case we have usb_vbus but not usb_id.
-> 
-> It wasn't immediately obvious if there was a valid use-case for the
-> existing code for usb_id in isolation, however discussing further, we
-> concluded that usb_id, usb_vbus or (usb_id | usb_vbus) are valid
-> combinations as an external IC may be responsible for usb_id or usb_vbus.
-> 
-> Expand the definition with anyOf to capture the three different valid
-> modes.
-> 
-> Fixes: 4fcdd677c4ea ("bindings: pm8941-misc: Add support for VBUS detection")
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  .../devicetree/bindings/extcon/qcom,pm8941-misc.yaml | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml b/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
-> index 6a9c96f0352ac..1bc412a4ac5e6 100644
-> --- a/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
-> +++ b/Documentation/devicetree/bindings/extcon/qcom,pm8941-misc.yaml
-> @@ -27,10 +27,14 @@ properties:
->  
->    interrupt-names:
->      minItems: 1
-> -    items:
-> -      - const: usb_id
-> -      - const: usb_vbus
-> -
-> +    anyOf:
-> +      - items:
-> +          - const: usb_id
-> +          - const: usb_vbus
-> +      - items:
-> +          - const: usb_id
-> +      - items:
-> +          - const: usb_vbus
->  required:
->    - compatible
->    - reg
+Hi,
 
-Applied it. Thanks
+On Mon, 09 Jan 2023 13:53:25 +0100, Neil Armstrong wrote:
+> Batch conversion of the following bindings:
+> - meson_sm.txt
+> - amlogic-efuse.txt
+> - amlogic-meson-mx-efuse.txt
+> - meson-wdt.txt
+> - meson-ir.txt
+> - rtc-meson.txt
+> - amlogic,meson6-timer.txt
+> - meson-gxl-usb2-phy.txt
+> - amlogic,meson-gx.txt
+> - amlogic,meson-pcie.txt
+> - mdio-mux-meson-g12a.txt
+> 
+> [...]
+
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.3/drivers)
+
+[01/11] dt-bindings: firmware: convert meson_sm.txt to dt-schema
+        https://git.kernel.org/amlogic/c/658a8ef679435959f550a45f7312afaebb9e20a8
+[06/11] dt-bindings: power: amlogic,meson-gx-pwrc: mark bindings as deprecated
+        https://git.kernel.org/amlogic/c/bc5998b92b9ee8818cc0f7fe02604751389a154e
+
+These changes has been applied on the intermediate git tree [1].
+
+The v6.3/drivers branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
-
+Neil
