@@ -2,90 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6E2663D4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64338663D53
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238254AbjAJJwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:52:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
+        id S238301AbjAJJx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:53:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238331AbjAJJwD (ORCPT
+        with ESMTP id S238298AbjAJJxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:52:03 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E3150050
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:52:00 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id m3so8358253wmq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:52:00 -0800 (PST)
+        Tue, 10 Jan 2023 04:53:31 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB1A1C920;
+        Tue, 10 Jan 2023 01:53:30 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id e205so9542320oif.11;
+        Tue, 10 Jan 2023 01:53:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/mL52V0hiw5s6j6RURYRdd0rmxiZQUXrI8X6eC4ie48=;
-        b=LrbCjKFnuKo7ttwtUPe/asf9UwwYtRprFGZoK+iZhqpwGmGkG30XJY9dHAMYsJ11xx
-         qejyK+59PToQMIvBa7xXtwubyIjBkvX3qRCGMeBGsT2Eqjqo1bxOYE/fdSKx2c5HLZBU
-         UGoF/J9O5MlTCxGwzOytiGfPj0M3wznDqYJ5UC+Q6N56abtOyinWJQRG7GWKEJalhm0y
-         mTeki1m3UihKztFZt6lsj3Y8x776bpM46JsLiH6tbmTapg0WS0Lxpvk0ggpbepx4lfix
-         a2lrYiR70ZO+GPjByFHg+I7uxd1jzH+DoGUVHUfy52ABId5a8Be14IHU+FS1c3mOSy3Z
-         dRMA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nO3i/JFAZGPvFKgP2nF/h6yMDU8gV3ISOFiQVax5MVg=;
+        b=eU4uzg6gGopIIhQIug9MUu1cY/zQNs5gN/zcwR1XlKUhvlgdi/taxNDKQ21kUnvn+A
+         Qy/Cj7aqhPR+xs/6HBZPHdURoCEfdDJxrDq/C2QYnEEYr4UpAWBaSIp01MddkvnNRwNr
+         rl1R5nZtC5rurjQN3VqTx0hgONcAsN5i0agB/3LlXk9cyb20pKeZi+7gjAmUvAQhlGdE
+         azQ2PCGKUK7z+lTyJ3E4MHfZ4MJs/wdoHQAUwm0ugpgcmhegWvHNd1Ualsb3WYTcw48y
+         KVjXbW/CQLRt/n72dp+mWrGEsDLYfwfIl0PX42vkABb7lO0byHfsioch7rxftajFFLm0
+         y82A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/mL52V0hiw5s6j6RURYRdd0rmxiZQUXrI8X6eC4ie48=;
-        b=FvxtqEYj9wndbgMftERs0SUSMDfGfb61PCjk59pgQkyYoqiaMCxpAfl5skzMRYLzFa
-         6D39wC2IpPe2BlEDkUQ53f320+y01cQ+/xEWQn5uUvqxbv1m1x/gyCQqiC04ZV1xzauZ
-         tZhxFho+rkoo77Gy09l6QYKEx4vVgZX4NntBnSDOZataoNJW50/PC6tcMVZVrlCEHCx9
-         IznDIghFWGbZNmYXJcZ9JpaAUVE4PZlD35G399Fzh7GtE94Nnf8iDUk1UY9tqBKVmzKP
-         hoVK6y4fCOMHjuR7oFXV0zjC8bkY+tYmFsxN/DduQqqcHk7cmsv7mGI2V37CCUaeCZXH
-         36PA==
-X-Gm-Message-State: AFqh2kqCClkGFjv6xK41MBD3M5WCF9E1ieuu3TazMnjtU3SBsClmxHzo
-        ibfmo69xkCKKiiTwtJ/xhyIrhjCj3uDvBqc+
-X-Google-Smtp-Source: AMrXdXu3no3DhuE6ENuZRZq3ejegxmFk49fvykU744b3FH9Ql5EQKUYEFWmXG3shvtWLjIfuMsF3LQ==
-X-Received: by 2002:a05:600c:248:b0:3d3:5d47:271c with SMTP id 8-20020a05600c024800b003d35d47271cmr47807041wmj.12.1673344318932;
-        Tue, 10 Jan 2023 01:51:58 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m7-20020a05600c3b0700b003cfd4cf0761sm21094739wms.1.2023.01.10.01.51.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 01:51:58 -0800 (PST)
-Message-ID: <6d8bd401-db46-f0b6-4944-a7ede13d64e3@linaro.org>
-Date:   Tue, 10 Jan 2023 10:51:56 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nO3i/JFAZGPvFKgP2nF/h6yMDU8gV3ISOFiQVax5MVg=;
+        b=oPJWVfq8pXcN8mw28sqK3SCyP0DweggVXWpPk9FHQXFmGJxMJxQMUWd0qWDlrIDRp7
+         GcqcLALnfoddTKWoB1zhxP0IciP5C1LN0NGlJ2i40Xm6trvqTi99GmCCpnW2nODZCRg5
+         rKePKUpaIJFCHTQfjalbSbzsMlhrHqCmwuybMd6s8XapZR0F/RQTYDWV5QNRFxFproJ/
+         qRGm6s553DRS/au5VBHG9rsou4Hs64HNVORkbh05ITtzDDJpzHpbfhbBDayNjzI6+v4X
+         WR1wRXiub4J7gRwQ3zmYREUKVH/s0VBPnk5y3jT+K2rPG0ccq+5uw6s+ZKNDCEAmGu8x
+         ZZWQ==
+X-Gm-Message-State: AFqh2kp4zYFD8NJ1HgyLtgoDdh2NDBdd5wpS3Nkj/JQxSnbAQlY2p1fC
+        r1PnDX5R7hrz9p6NclQRYi0nOhP1Riv2Rjj1bx8=
+X-Google-Smtp-Source: AMrXdXtSxqsCKninILNfFmyMIYYPAGjJiUEeKoGfpR9EmJ4QOUq/Vuetkbbwf4X4jo6Mni9q9bCqFKASxptmn+ag6fo=
+X-Received: by 2002:a05:6808:1b06:b0:35b:d102:75bd with SMTP id
+ bx6-20020a0568081b0600b0035bd10275bdmr3391507oib.178.1673344409444; Tue, 10
+ Jan 2023 01:53:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 0/2] leds: lp55xx: configure internal charge pump
-Content-Language: en-US
-To:     Maarten Zanders <maarten.zanders@mind.be>
-Cc:     devicetree@vger.kernel.org,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>
-References: <20230110092342.24132-1-maarten.zanders@mind.be>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230110092342.24132-1-maarten.zanders@mind.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230109123216.4974-1-fengqi706@gmail.com>
+In-Reply-To: <20230109123216.4974-1-fengqi706@gmail.com>
+From:   qi feng <fengqi706@gmail.com>
+Date:   Tue, 10 Jan 2023 17:53:19 +0800
+Message-ID: <CACOZ=ZW5vpaPpFsQ64nSE3kinUhGDBeDey7odvnGeZFEKys32g@mail.gmail.com>
+Subject: Re: [PATCH] HID: add KEY_CAMERA_FOCUS event in HID
+To:     jikos@kernel.org
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fengqi <fengqi@xiaomi.com>, benjamin.tissoires@redhat.com,
+        rydberg@bitmath.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 10:23, Maarten Zanders wrote:
-> A new option in the devicetree "ti,charge-pump-mode" allows the user to
-> configure the charge pump in a certain mode. Previously it was defaulting
-> to automatic mode.
+loop more
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
 
-Best regards,
-Krzysztof
-
+Qi Feng <fengqi706@gmail.com> =E4=BA=8E2023=E5=B9=B41=E6=9C=889=E6=97=A5=E5=
+=91=A8=E4=B8=80 20:32=E5=86=99=E9=81=93=EF=BC=9A
+>
+> From: fengqi <fengqi@xiaomi.com>
+>
+> Our HID device need KEY_CAMERA_FOCUS event to control camera, but this
+> event is non-existent in current HID driver.
+> So we add this event in hid-input.c
+>
+> Signed-off-by: fengqi <fengqi@xiaomi.com>
+> ---
+>  drivers/hid/hid-input.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+> index 9b59e436df0a..22cca3406b5c 100644
+> --- a/drivers/hid/hid-input.c
+> +++ b/drivers/hid/hid-input.c
+> @@ -1105,6 +1105,7 @@ static void hidinput_configure_usage(struct hid_inp=
+ut *hidinput, struct hid_fiel
+>                 case 0x0e5: map_key_clear(KEY_BASSBOOST);       break;
+>                 case 0x0e9: map_key_clear(KEY_VOLUMEUP);        break;
+>                 case 0x0ea: map_key_clear(KEY_VOLUMEDOWN);      break;
+> +               case 0x0ee: map_key_clear(KEY_CAMERA_FOCUS);    break;
+>                 case 0x0f5: map_key_clear(KEY_SLOW);            break;
+>
+>                 case 0x181: map_key_clear(KEY_BUTTONCONFIG);    break;
+> --
+> 2.39.0
+>
