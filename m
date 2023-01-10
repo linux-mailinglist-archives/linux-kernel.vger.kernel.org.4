@@ -2,35 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2393663A01
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D8A663A0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237997AbjAJHbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 02:31:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
+        id S230413AbjAJHeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 02:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237958AbjAJHbT (ORCPT
+        with ESMTP id S238167AbjAJHdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 02:31:19 -0500
+        Tue, 10 Jan 2023 02:33:43 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 120CE17438
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 23:28:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1EAB1B1C9
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 23:32:47 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 30A7SS3v003972;
-        Tue, 10 Jan 2023 08:28:28 +0100
-Date:   Tue, 10 Jan 2023 08:28:28 +0100
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 30A7Wggg003996;
+        Tue, 10 Jan 2023 08:32:42 +0100
+Date:   Tue, 10 Jan 2023 08:32:42 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Warner Losh <imp@bsdimp.com>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH 0/6] pending bug fixes for nolibc
-Message-ID: <20230110072828.GA3229@1wt.eu>
-References: <20230109075442.25963-1-w@1wt.eu>
- <20230109191141.GT4028633@paulmck-ThinkPad-P17-Gen-1>
+Cc:     linux-kernel@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH 0/4] nolibc: add support for the s390 platform
+Message-ID: <20230110073242.GB3229@1wt.eu>
+References: <20230109080910.26594-1-w@1wt.eu>
+ <20230109191534.GU4028633@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230109191141.GT4028633@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20230109191534.GU4028633@paulmck-ThinkPad-P17-Gen-1>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -40,62 +39,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Paul,
-
-On Mon, Jan 09, 2023 at 11:11:41AM -0800, Paul E. McKenney wrote:
-> On Mon, Jan 09, 2023 at 08:54:36AM +0100, Willy Tarreau wrote:
+On Mon, Jan 09, 2023 at 11:15:34AM -0800, Paul E. McKenney wrote:
+> On Mon, Jan 09, 2023 at 09:09:06AM +0100, Willy Tarreau wrote:
 > > Hello Paul,
 > > 
-> > please consider the current patch series for merging into your fixes queue.
-> > The intent is to get them before 6.2, then backported where relevant.
+> > this series adds support for the s390x platform to nolibc and rcutorture,
+> > reducing the init size from ~600kB to ~1kB. The work was contributed by
+> > Sven Schnelle. It depends on the fixes series I sent previously:
 > > 
-> > It addresses the following bugs:
-> >   - fd_set was incorrectly defined as arrays of u32 instead of long,
-> >     which breaks BE64. Fix courtesy of Sven Schnelle.
+> >   https://lore.kernel.org/lkml/20230109075442.25963-1-w@1wt.eu/
 > > 
-> >   - S_ISxxx macros were incorrectly testing the bits after applying them
-> >     instead of applying S_ISFMT to the value. Fix from Warner Losh.
-> > 
-> >   - the mips code was randomly broken due to an unprotected "noreorder"
-> >     directive in the _start code that would prevent the assembler from
-> >     filling delayed slots, and randomly leaving other instructions there
-> > 
-> >   - since the split of the single include file into multiple files, we're
-> >     implicitly refraining from including some which are not explicitly
-> >     added in the code. It causes build failures when such files contain
-> >     definitions for functions that may be used e.g. by libgcc, such as
-> >     raise() or memset(), which are often called only by a few archs at
-> >     certain optimization levels only.
-> > 
-> >   - gcc 11.3 in ARM thumb2 mode at -O2 was able to recognize a memset()
-> >     construction inside the memset() definition, and it replaced it with
-> >     a call to... memset(). We cannot impose to userland to build with
-> >     -ffreestanding so the introduction of an empty asm() statement in
-> >     the loop was enough to stop this.
-> > 
-> >   - most of the O_* macros were wrong on RISCV because their octal value
-> >     was used as a hexadecimal one when the platform was introduced. This
-> >     was revealed by the selftest breaking in getdents64().
-> > 
-> > The series was tested on x86_64, i386, armv5, armv7, thumb1, thumb2,
-> > mips and riscv, all at -O0, -Os and -O3. This is based on the "nolibc"
-> > branch of your linux-rcu tree. Do not hesitate to let me know if you
-> > prefer that I rebase it on a different one.
+> > It passes the self-tests correctly and the patches are clean, please
+> > consider queuing it.
 > 
-> "81 test(s) passed", so queued at urgent-nolibc.2023.01.09a, thank you!
-> 
-> Also, thank you for the detailed cover letter, which I co-opted into the
-> signed tag.
+> "80 test(s) passed" and successful exit code.  I will assume that the
+> decrease in tests from 81 to 80 is intended.  I have these queued,
+> but it may be some hours before they are externally visible.
 
-You're welcome!
+Interesting, I didn't notice and I'm not observing this when running
+qemu-s390x (the userland version), I'm currently rebuilding the kernel
+to compare and will let you know. Thanks for checking!
 
-> But please check to make sure that my wordsmithing didn't
-> break anything.
-
-It all looks perfect to me.
-
-> If all goes well, I will send the pull request to Linus before the end
-> of this week.
-
-Great, thank you!
 Willy
