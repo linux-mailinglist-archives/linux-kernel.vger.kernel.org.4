@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C533663D60
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 082ED663D62
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjAJJ51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S238311AbjAJJ5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:57:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjAJJ5Y (ORCPT
+        with ESMTP id S238264AbjAJJ5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:57:24 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411123FA37;
-        Tue, 10 Jan 2023 01:57:23 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id CE2FE68047;
-        Tue, 10 Jan 2023 09:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673344641; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FYiFsvOd9DaUW/Bik6oFtS/5QMzJseiokzUiGsM94OQ=;
-        b=ssRLogHVhAdCHzN1aK3/yjpHN9pfoDRPdRDqYcBNW/cHkuHGUq4RsOlmWfKt+II6mvw7xF
-        nbfKBo8oRGcsFh49/QqcHt0anzLmId9TVl0Fe4ATCU3O6w3uWWztOId6asaZaWExq/ZkWL
-        7oPT5zBkzdfYKggaOM8AXpv3JbcXGq4=
-Received: from suse.cz (unknown [10.100.201.202])
+        Tue, 10 Jan 2023 04:57:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009C74F13E;
+        Tue, 10 Jan 2023 01:57:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B2E0B2C141;
-        Tue, 10 Jan 2023 09:57:21 +0000 (UTC)
-Date:   Tue, 10 Jan 2023 10:57:21 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH v2] kallsyms: Fix sleeping function called from invalid
- context when CONFIG_KALLSYMS_SELFTEST=y
-Message-ID: <Y702gW+5P5EepCkG@alley>
-References: <20221228014511.328-1-thunder.leizhen@huawei.com>
- <Y7wZSxw+Ys5MNf8g@alley>
- <Y7ythXxlzsJkFQcd@bombadil.infradead.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0B84B80FED;
+        Tue, 10 Jan 2023 09:57:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ACA6C433F0;
+        Tue, 10 Jan 2023 09:57:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673344648;
+        bh=LBzK5nBoEJR99O8wtGXtQYNy7sxo8GbARbZALPMRedE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=alOcSdHooOHjkSRa7MVR7vCKkWouHEMYcEZaVYgctLSo8NTAbtJOqY/ErgWZnKpAn
+         /MLCea1OLBJAc/aGbS08IW8htZaeTJU7nFp08YoZXLtHQDJaK02Vt6WffpuMZ8sDDy
+         mfek+6pBd15fe44oS9EBZh0Slkbjusw46D/g860Fx+YsJi+vB/4LzvjHeglGpC1H95
+         wc1Z3NPCBV2LsZuOoM+5YgEdfuZcY1vlmNF526CpzJ8WfrtYF7RWx48x5eoRHt0RmZ
+         K2ogr8PAG5rGhg0090WBsHDoSphbo2gJD5TeVIt7dRUDwZ6WbV2vTG2j2odMt8+Mkd
+         PiuVLzefFGhig==
+Date:   Tue, 10 Jan 2023 11:57:24 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Hariprasad Kelam <hkelam@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
+        edumazet@google.com, sgoutham@marvell.com, gakula@marvell.com,
+        sbhatta@marvell.com
+Subject: Re: [net PATCH] octeontx2-pf: Fix resource leakage in VF driver
+ unbind
+Message-ID: <Y702hDZk3veZzt+b@unreal>
+References: <20230109061325.21395-1-hkelam@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7ythXxlzsJkFQcd@bombadil.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230109061325.21395-1-hkelam@marvell.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2023-01-09 16:12:53, Luis Chamberlain wrote:
-> On Mon, Jan 09, 2023 at 02:40:27PM +0100, Petr Mladek wrote:
-> > Why are try hardly comparable?
-> > 
-> > 1. The speed depends on the number of loaded modules
-> >    and number of symbols. It highly depends on the configuration
-> >    that was used to build the kernel.
-> > 
-> > 2. The test runs only once. As a result it is hard to judge
-> >    how big is the noise.
-> > 
-> > 3. The noise might depend on the size and state of CPU caches.
-> > 
-> > 
-> > I personally vote for removing this selftest!
+On Mon, Jan 09, 2023 at 11:43:25AM +0530, Hariprasad Kelam wrote:
+> resources allocated like mcam entries to support the Ntuple feature
+> and hash tables for the tc feature are not getting freed in driver
+> unbind. This patch fixes the issue.
+
+It is not clear where in otx2vf_probe() these resource are allocated.
+Please add the stack trace to the commit message.
+
+Thanks
+
 > 
-> Even so, just as with testing a filesystem with different types of
-> configurations, at least testing a few configs helps and it's what
-> we do. Then, if anyone ever wanted to try to increase performance
-> on symbol lookup today they have no easy way to measure things. How
-> would they go about comparing things performance without this selftest?
-
-How many people cares about kallsyms performance, please?
-Is it worth spending time one implementing and maintaining such a
-selftest?
-
-Yes, Zhen wanted to make it faster. But how likely will anyone else
-try to make it even better? Do we need to spend time on this
-in the meantime?
-
-
-> This selftests helps generically with that *and* helps peg on to it any sanity
-> checks you may wish to add to those APIs which we just don't want to do
-> upstream.
-
-From my POV, it would be much more important to check if the API
-works as expected. I mean that it gives the right results.
-
-I am not sure that performance is that important to spend more time
-on this one.
-
-Also I am not sure if selftests are the right location for performance
-tests. My understanding is that it is a framework for functional
-testing. It is showing if the tests passed or not. But performance
-tests do not give "pass or not" results.
-
-Best Regards,
-Petr
+> Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
+> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+> ---
+>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+> index 86653bb8e403..7f8ffbf79cf7 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+> @@ -758,6 +758,8 @@ static void otx2vf_remove(struct pci_dev *pdev)
+>  	if (vf->otx2_wq)
+>  		destroy_workqueue(vf->otx2_wq);
+>  	otx2_ptp_destroy(vf);
+> +	otx2_mcam_flow_del(vf);
+> +	otx2_shutdown_tc(vf);
+>  	otx2vf_disable_mbox_intr(vf);
+>  	otx2_detach_resources(&vf->mbox);
+>  	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
+> -- 
+> 2.17.1
+> 
