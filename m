@@ -2,154 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC67663B3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 287E9663B3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjAJIgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
+        id S237721AbjAJIgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237458AbjAJIfo (ORCPT
+        with ESMTP id S237653AbjAJIfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:35:44 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB9E4D4AA
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:35:32 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id 16so11118389ybc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:35:32 -0800 (PST)
+        Tue, 10 Jan 2023 03:35:46 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306314F13E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:35:36 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso6243321wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:35:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iut40nCHyytrA7iXMWilpOeK2BSxhph4VUkz02uA4d8=;
-        b=L5eoPVPo7ZAZ7gklj8aJC5o9QP/VoFpQtXh7YLZkM40XlrlyrBY4vjBnObDmHe0ZwP
-         eaVDCUbgOC4v0ul4LF6Ff0CmJqbJ3dsYH0obFDYNf5Yi7QXQ9Bx9Pz+CMtgr4q5QyQaQ
-         Jhi0Bszh7MbQBYYprBwqdCLbABBPmfmwmtMGw2O4HJcadFKbQos9zixOWIMe0isu50Yl
-         /PmqTon95rNbIL8EPPIga3aSe4fX4g7yqIbBIfFKOCZjhaZoz1rCI83+X7WP4JXjzc75
-         VVm6SWJKiOR0Hs6wm0yD8MYD7mHVBS+3JnvwQIe4OsCsit3FUoVnbsknsMC23QsZJitg
-         yPAg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iY2kNKoTIXZn2gSTCybP9yJzCdsfQZ3WA/pnwKJAnKY=;
+        b=Uj3oQaHjeYYpzutkftegGDOi1+X0Xm8kuiYk6QJu4Z41fDjcNYu2LJ0pmpa0DtZ1mo
+         zey0AQOqYno52448CqwFWaRPqY0/tpe0uY2b4f6SagaB1myNpvcNt+HlVR5RwBcnMX1z
+         HQ33A1FRZz/lz35GAe2t29DqsmXMJM8h3BSBqbZd0Ozsi0PfHWGXus9NP8rn3szflW9w
+         Np3Ka1VHiQzVaBWP4EVqHrr87eVevHNhhHQMa/VuJJkyk4BoIFTZ9TjLxGndb174vmNV
+         HBbJzvoYI8BIULUu7Kz9wZhQQ15yMEKAjFjgN68/taR84EzOTC4rj1g4ZH9Gbb5RsU1I
+         3Rhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iut40nCHyytrA7iXMWilpOeK2BSxhph4VUkz02uA4d8=;
-        b=tEnFvLi5nJRX76ueocfPBTvgoTZfqzrep3TVfWPfKwPY8WV5OjbC4aTRHYOmqpg+7G
-         pgXGVPDm76NS0XpgZnKe6S9AD1FPNmG5JAvlFCc3fgKOUieRCu74VSYdHykEVbDHeCGr
-         z+PjA9CmDA6SRW0HELATdajidi5zf+dmZ2KegIrrCOT9nVmPLfkAlNpYg4AKr5yMq/Op
-         Xkki4Kme4hanuybJAgAfJ1+/gfsSqjM79+9FtjSp1w6SPPxDLA6pyDnn6kQp2MeiWCDg
-         jcMP6zcII3xQcYM1JwUJV15LGEopvrtFU2KejYs7cxR0zAtzCEjWV6Er2HQlzQD6Oeqy
-         jljA==
-X-Gm-Message-State: AFqh2koIdVGWBcWucbCTuiUY1UEeIsJzO2QIv/kS4opEms60tsF7Fbzy
-        ULx6rGtM/qNoW47p+2HXuEq7jaPume753+ryMDoKmQ==
-X-Google-Smtp-Source: AMrXdXuDdb3KJlPnmd94D8UeDeZ6veDTR+CCx+zoa/M+qWzUIidA8ttAG0hkIv8vuPfCfmzFYbIgOFYRWnO3foaaBzQ=
-X-Received: by 2002:a25:8f89:0:b0:7b3:bb8:9daf with SMTP id
- u9-20020a258f89000000b007b30bb89dafmr1307710ybl.427.1673339731765; Tue, 10
- Jan 2023 00:35:31 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iY2kNKoTIXZn2gSTCybP9yJzCdsfQZ3WA/pnwKJAnKY=;
+        b=pX25vIuBVJH04K4oGXkTUS3TZyQKw5TiUSRrFB4C5KsIzvIHURHWG/VzXuQ/eIAO05
+         4txykjZb0Ds05yk0qES3p6MnpnbPCUk7L7DGfY6YZxMjZTCuvhA+yyVCEwtDYhY9JjT7
+         0WQglqixY2gC95nQIYxkZ3Ej50KwBBKDf30/DEl44GH9m1+jNUGxv0wyJuQ7TuIq+0eX
+         tz3so1tMX1WWLG99/xS1Qpzq+yBb1MtjrHoBa9Qj6oZwDeFBpJI0dNOxfx2P62iyBBpC
+         e4rQmv6Ozgx760TayJvedPD1wuv2SZ08hXhz+F6pmR+gd0aLacuSunMHQ7GHS+5aN/mn
+         1X1Q==
+X-Gm-Message-State: AFqh2kqqTxiVRlZbvjWwuH7qQqnAPYNlxB4duLtahMUv25zWZ7fAGWaO
+        z9TYlFzRfW3fRyu0d++SDMkzKw==
+X-Google-Smtp-Source: AMrXdXuAbHhYKCwefQTQIpdarosnfxcUv4i7yZv1WIZFY6OiIxITGjfCUiYlmzSTmiaK+mPkvQryVQ==
+X-Received: by 2002:a05:600c:4f12:b0:3d9:f492:f25f with SMTP id l18-20020a05600c4f1200b003d9f492f25fmr3521200wmq.16.1673339734712;
+        Tue, 10 Jan 2023 00:35:34 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i13-20020adffdcd000000b002a91572638csm10334677wrs.75.2023.01.10.00.35.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 00:35:33 -0800 (PST)
+Message-ID: <ec0fae6d-4677-2299-3970-662c657eb919@linaro.org>
+Date:   Tue, 10 Jan 2023 09:35:32 +0100
 MIME-Version: 1.0
-References: <20230107044139.25787-1-gakula@marvell.com> <Y7rAUVXiRNFsuR8y@unreal>
- <DM6PR18MB2602C7D1546455B12340D140CDFF9@DM6PR18MB2602.namprd18.prod.outlook.com>
- <DM6PR18MB26020126CE7BB48D3C2AEC26CDFF9@DM6PR18MB2602.namprd18.prod.outlook.com>
-In-Reply-To: <DM6PR18MB26020126CE7BB48D3C2AEC26CDFF9@DM6PR18MB2602.namprd18.prod.outlook.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 10 Jan 2023 09:35:20 +0100
-Message-ID: <CANn89i+Sunn-C-pcG3utPQsx4qykYJ9kLvS2FVZPMELALcq0UA@mail.gmail.com>
-Subject: Re: [net PATCH] octeontx2-pf: Use GFP_ATOMIC in atomic context
-To:     Geethasowjanya Akula <gakula@marvell.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 1/6] i2c: hpe: Add GXP SoC I2C Controller
+Content-Language: en-US
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
-        Hariprasad Kelam <hkelam@marvell.com>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221216183532.78933-1-nick.hawkins@hpe.com>
+ <20221216183532.78933-2-nick.hawkins@hpe.com>
+ <832510cf-0a1d-35cb-8754-7d9c9e94b0a6@linaro.org>
+ <1F4A96B7-F90D-401D-93D8-A14CD8F4E0B7@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1F4A96B7-F90D-401D-93D8-A14CD8F4E0B7@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 8:54 AM Geethasowjanya Akula <gakula@marvell.com> w=
-rote:
->
->
->
-> -----Original Message-----
-> From: Leon Romanovsky <leon@kernel.org>
-> Sent: Sunday, January 8, 2023 6:39 PM
-> To: Geethasowjanya Akula <gakula@marvell.com>
-> Cc: netdev@vger.kernel.org; linux-kernel@vger.kernel.org; kuba@kernel.org=
-; pabeni@redhat.com; davem@davemloft.net; edumazet@google.com; Subbaraya Su=
-ndeep Bhatta <sbhatta@marvell.com>; Hariprasad Kelam <hkelam@marvell.com>; =
-Sunil Kovvuri Goutham <sgoutham@marvell.com>
-> Subject: [EXT] Re: [net PATCH] octeontx2-pf: Use GFP_ATOMIC in atomic con=
-text
->
-> External Email
->
-> ----------------------------------------------------------------------
-> On Sat, Jan 07, 2023 at 10:11:39AM +0530, Geetha sowjanya wrote:
-> >> Use GFP_ATOMIC flag instead of GFP_KERNEL while allocating memory in
-> >> atomic context.
->
-> >Awesome, but the changed functions don't run in atomic context.
->
-> drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
->     1368         /* Flush accumulated messages */
->     1369         err =3D otx2_sync_mbox_msg(&pfvf->mbox);
->     1370         if (err)
->     1371                 goto fail;
->     1372
->     1373         get_cpu();
->                  ^^^^^^^^^
-> The get_cpu() disables preemption.
+On 09/01/2023 21:23, Hawkins, Nick wrote:
+>>> + GFP_KERNEL);
+>>> + if (!drvdata)
+>>> + return -ENOMEM;
+>>> +
+>>> + platform_set_drvdata(pdev, drvdata);
+>>> + drvdata->dev = &pdev->dev;
+>>> + init_completion(&drvdata->completion);
+>>> +
+>>> + res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>> + drvdata->base = devm_ioremap_resource(&pdev->dev, res);
+> 
+>> It's one call, not two. Use the respective helper.
+> 
+> Greetings Krzysztof,
+> 
+> Thank you for the feedback. I am in the process of applying your recommended
+> changes but do have a question on this comment.
+> 
+> I can replace these two lines with:
+> drvdata->base = devm_platform_ioremap_resource(pdev, 0);
+> 
+> However, I still have a need for the resource "res" here to determine the physical
+> address of the device here: 
+> 
+>>> + if (IS_ERR(drvdata->base))
+>>> + return PTR_ERR(drvdata->base);
+>>> +
+>>> + drvdata->engine = (res->start & 0xf00) >> 8;
+>>> + pr_info("%s: i2c engine%d\n", __func__, drvdata->engine);
 
-Forcing GFP_ATOMIC in init functions is not desirable.
+Entire pr_info must be gone, so you do not need res anymore. You should
+not print any addresses. Unless drvdata->engine is used further?
 
-Please move around the get_cpu() so that we keep GFP_KERNEL whenever possib=
-le.
+In such case you have function just few lines above the one you
+mentioned, don't you?
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index 88f8772a61cd527c2ab138fb5a996470a7dfd456..2e628e12cd1ff92756f054639ab=
-d777ea185680f
-100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -1370,7 +1370,6 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
-        if (err)
-                goto fail;
+> 
+> Hence at some point I believe I will still need to call the "platform_get_resource"
+> function to accomplish this. Is this acceptable or perhaps you have another
+> suggestion?
+> 
+> One alternative I thought of was including a property in the device tree node
+> That specifies which i2c engine this is: hpe,gxp-engine = <1>.
 
--       get_cpu();
-        /* Allocate pointers and free them to aura/pool */
-        for (qidx =3D 0; qidx < hw->tot_tx_queues; qidx++) {
-                pool_id =3D otx2_get_pool_idx(pfvf, AURA_NIX_SQ, qidx);
-@@ -1388,13 +1387,17 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
-                        err =3D otx2_alloc_rbuf(pfvf, pool, &bufptr);
-                        if (err)
-                                goto err_mem;
-+                       /* __cn10k_aura_freeptr() needs to be called
-+                        * with preemption disabled.
-+                        */
-+                       get_cpu();
-                        pfvf->hw_ops->aura_freeptr(pfvf, pool_id, bufptr);
-+                       put_cpu();
-                        sq->sqb_ptrs[sq->sqb_count++] =3D (u64)bufptr;
-                }
-        }
 
- err_mem:
--       put_cpu();
-        return err ? -ENOMEM : 0;
+Best regards,
+Krzysztof
 
- fail:
