@@ -2,118 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0621766438C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C964664390
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238330AbjAJOqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
+        id S233464AbjAJOrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjAJOqT (ORCPT
+        with ESMTP id S238716AbjAJOrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:46:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946434FCED;
-        Tue, 10 Jan 2023 06:46:18 -0800 (PST)
+        Tue, 10 Jan 2023 09:47:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200E059305;
+        Tue, 10 Jan 2023 06:46:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38F5F61759;
-        Tue, 10 Jan 2023 14:46:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67327C433F0;
-        Tue, 10 Jan 2023 14:46:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4EFB0B81686;
+        Tue, 10 Jan 2023 14:46:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7740FC433D2;
+        Tue, 10 Jan 2023 14:46:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673361977;
-        bh=Jd8jGSPIFdj2DgSDZN8XQd2dUL3NZySQqoBtiIgILT8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LuPtIDLfHpPZOrBg2x3WkyoPCEG86KhTQLNGMS/w2biIGsXveRpQ61QSBHUKTzHzz
-         +L60t5aJatwFjL+IDHRug4xxIJPiywQsMMzJ3YzxUCqLsXKCdVSICZTIfb1UdmHIit
-         UqgGoqrx1Znla5Tg6S21Gc/XBHB1arP149+7Dxkv8TYmTaHiP9716uM8134lUx+DGv
-         H2eMUiVROFTeqCF/12jpAxXQyJ5cqPxhNOedYWL889dGut2vGACAWDvk+oMRZQ3qdn
-         tez0z3ZLbYL29RJaesPoFF3wW2qRt/JHC01cN6vBhmx1bV6JQfPDbEMU7LPTrsvvgl
-         npbhgKKl+r+oA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C53CC40468; Tue, 10 Jan 2023 11:46:14 -0300 (-03)
-Date:   Tue, 10 Jan 2023 11:46:14 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Mike Leach <mike.leach@linaro.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        namhyung@kernel.org
-Subject: Re: [PATCH v3 1/2] perf build: Properly guard libbpf includes
-Message-ID: <Y716Nt3c/Lc0Z4P5@kernel.org>
-References: <CAJ9a7ViGE3UJX02oA42A9TSTKsOozPzdHjyL+OSP4J-9dZFqrg@mail.gmail.com>
- <Y7hZccgOiueB31a+@kernel.org>
- <Y7hgKMDGzQlankL1@kernel.org>
- <Y7hgoVKBoulCbA4l@kernel.org>
- <CAP-5=fXPPSHvN6VYc=8tzBz4xtKg4Ofa17zV4pAk0ycorXje8w@mail.gmail.com>
- <Y7wuz6EOggZ8Wysb@kernel.org>
- <Y7xYimp0h4YT72/N@krava>
- <CAP-5=fXwO5_kK=pMV09jdAVw386CB0JwArD0BZd=B=xCyWSP1g@mail.gmail.com>
- <CAP-5=fVa51_URGsdDFVTzpyGmdDRj_Dj2EKPuDHNQ0BYgMSzUA@mail.gmail.com>
- <Y712sCnYBJobe2eY@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y712sCnYBJobe2eY@kernel.org>
-X-Url:  http://acmel.wordpress.com
+        s=k20201202; t=1673362007;
+        bh=IaikD1RTYaN6M6TGo0lVcnpxh3sUPsTrkuA870j4PL4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kPjEfiMiNWq5fLNk+oll30rgxZfthMc/ps5etPKXrknVOEBg6gzwdvidY8MKBKYP8
+         Udr030lMLCJpbUF2WteuSGJlVyArnUdZ4rkgZH+uevM6f6iSUbJNpb1CAXEvRiIAt9
+         1WBMUSqNgJM8kCfDif+8D2JUvQiBeLDHeRb79FAxTrM/gyQ1XwO46j95ODpxOyw/G+
+         pqjXPisHqhUa/O7joUHKuQLYUmSKMy0Z50Y3BHpHemxi/bTxNo8PGJd/NNj68oIMfO
+         SXxbSiMIM9PnRKaBpWHOnHlKbvp1htTr6dcR3g+OJex6hnwET3daPaLXZ6dBXMcc+4
+         JVreBycgW9dGw==
+Date:   Tue, 10 Jan 2023 23:46:43 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: Re: [PATCH V0 1/1] bootconfig: Increase max size of bootconfig from
+ 32 KB to 256 KB for DCC support
+Message-Id: <20230110234643.7bbd340ece99c28f25fe7ad7@kernel.org>
+In-Reply-To: <e2ac0fa4-28f0-f4d8-e02a-b2a5d6131a48@quicinc.com>
+References: <cover.1673261071.git.quic_schowdhu@quicinc.com>
+        <654357bcbfd3974072a558c494a51edafaa73e1a.1673261071.git.quic_schowdhu@quicinc.com>
+        <20230110001820.5ca81344286f614ed4ccec77@kernel.org>
+        <e2ac0fa4-28f0-f4d8-e02a-b2a5d6131a48@quicinc.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Jan 10, 2023 at 11:31:12AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Jan 09, 2023 at 11:29:51AM -0800, Ian Rogers escreveu:
-> > On Mon, Jan 9, 2023 at 10:37 AM Ian Rogers <irogers@google.com> wrote:
-> > > -int libbpf_register_prog_handler(const char *sec __maybe_unused,
-> > > -                                 enum bpf_prog_type prog_type __maybe_unused,
-> > > -                                 enum bpf_attach_type exp_attach_type
-> > > __maybe_unused,
-> > > -                                 const struct
-> > > libbpf_prog_handler_opts *opts __maybe_unused)
-> > > +static int libbpf_register_prog_handler(const char *sec __maybe_unused,
-> > > +                                       enum bpf_prog_type prog_type
-> > > __maybe_unused,
-> > > +                                       enum bpf_attach_type
-> > > exp_attach_type __maybe_unused,
-> > > +                                       const void *opts __maybe_unused)
-> > > {
-> > >        pr_err("%s: not support, update libbpf\n", __func__);
-> > >        return -ENOTSUP;
-> > > ```
-> > >
-> > > There are some other fixes necessary too. I'll try to write the fuller
-> > > patch but I have no means for testing except for undefining
-> > > HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS.
+On Tue, 10 Jan 2023 17:26:07 +0530
+Souradeep Chowdhury <quic_schowdhu@quicinc.com> wrote:
+
+> 
+> 
+> On 1/9/2023 8:48 PM, Masami Hiramatsu (Google) wrote:
+> > On Mon, 9 Jan 2023 20:01:05 +0530
+> > Souradeep Chowdhury <quic_schowdhu@quicinc.com> wrote:
 > > 
-> > So libbpf_prog_handler_opts is missing in the failing build, this
-> > points to a libbpf before 0.8. I'm somewhat concerned that to work
-> > around these linkage problems we're adding runtime errors - we may
-> > build but the functionality is totally crippled. Is it worth
-> > maintaining these broken builds or to just upfront fail the feature
-> > test?
- 
-> Probably better to make the feature test disable bpf support while
-> emitting a warning that features such as a, b, and c won't we available.
+> >> Increasing the memory size of bootconfig to be able to handle a max number of
+> >> 8192 nodes to be fitted in memory size of 256KB.
+> > 
+> > Sorry, but you missed the 'xbc_node::data' stores the index of the data and
+> > that is uint16_t. So the XBC_DATA_MAX is fixed limitation.
+> > 
+> > The number of nodes (XBC_NODE_MAX) can be expanded because I just decided it
+> > to keep the pre-compiled array size ~8KB. Maybe expanding it to 64KB just
+> > increase the size of kernel on init memory (and freed after boot).
+> > 
+> > Could you tell me why you need such a big data for your DCC?
+> > 
+> > Thank you,
+> 
+> DCC is a debugging tool used in qcom which is needed to debug crashes
+> that can happen at boot-time. For debugging purposes a large number of
+> registers need to be configured in DCC driver which is to be fed via the
+> bootconfig file. For that we need to expand the nodes as well as memory
+> for using bootconfig.
 
-This would be the one-liner I think is appropriate for v6.2, ok?
+Hmm, how many registers does DCC usually use? And how big the bootconfig
+file is usually? I have no idea about that.
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 9962ae23ab8c5868..5b87846759036f6f 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -589,6 +589,8 @@ ifndef NO_LIBELF
-           $(call feature_check,libbpf-bpf_program__set_insns)
-           ifeq ($(feature-libbpf-bpf_program__set_insns), 1)
-             CFLAGS += -DHAVE_LIBBPF_BPF_PROGRAM__SET_INSNS
-+          else
-+            dummy := $(error Error: libbpf devel library needs to be >= 0.8.0 to build with LIBBPF_DYNAMIC, update or build statically with the version that comes with the kernel sources);
-           endif
-           $(call feature_check,libbpf-btf__raw_data)
-           ifeq ($(feature-libbpf-btf__raw_data), 1)
+> Can you let us know the changes that you suggest for doing the same? Is 
+> it fine to just increase the XBC_NODE_MAX, do we also need to
+> change the uint16_t to u32 for proper storing of index values?
+
+Expanding the number of max nodes is easy, just increase the XBC_NODE_MAX
+(must be less than 64k). That will also increase the memory consumption
+during the boot time even if the bootconfig is small. Anyway, it will be
+freed after boot, so it maybe OK.
+
+But expanding the size of max bootconfig needs to change the type of
+the 'data' field to uint32_t (since that will be used for building 
+bootconfig tool) and you also must confirm that `tools/bootconfig/bootconfig`
+can be built and pass the test-bootconfig.sh.
+Hmm, comparing with expanding the max number of XBC node, changing the
+'data' type to uint32_t may not have much impact on memory consumption point
+of view, because it may increase only 20% of memory, but expanding the
+MAX_XBC_NODE always increases more than double.
+
+Thus, if we can accept increasing the number of node, it should be OK to
+change the 'data' type.
+
+BTW, I think now we don't need the ' __attribute__ ((__packed__))' for
+struct xbc_node. It was packed for reducing the size of array and able to
+pass 'compiled' bootconfig, but now it is just passed as a text data for
+safety.
+
+Thank you,
+
+> 
+> 
+> > 
+> >>
+> >> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> >> ---
+> >>   include/linux/bootconfig.h | 6 +++---
+> >>   1 file changed, 3 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
+> >> index 1611f9d..64d233b 100644
+> >> --- a/include/linux/bootconfig.h
+> >> +++ b/include/linux/bootconfig.h
+> >> @@ -55,11 +55,11 @@ struct xbc_node {
+> >>   } __attribute__ ((__packed__));
+> >>   
+> >>   #define XBC_KEY		0
+> >> -#define XBC_VALUE	(1 << 15)
+> >> -/* Maximum size of boot config is 32KB - 1 */
+> >> +#define XBC_VALUE	(1 << 18)
+> >> +/* Maximum size of boot config is 256KB - 1 */
+> >>   #define XBC_DATA_MAX	(XBC_VALUE - 1)
+> >>   
+> >> -#define XBC_NODE_MAX	1024
+> >> +#define XBC_NODE_MAX	8192
+> >>   #define XBC_KEYLEN_MAX	256
+> >>   #define XBC_DEPTH_MAX	16
+> >>   
+> >> -- 
+> >> 2.7.4
+> >>
+> > 
+> > 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
