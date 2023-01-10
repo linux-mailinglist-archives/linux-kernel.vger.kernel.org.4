@@ -2,156 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD069664E05
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 22:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C8E664E0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 22:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbjAJV3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 16:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
+        id S232858AbjAJVaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 16:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232833AbjAJV3Q (ORCPT
+        with ESMTP id S234892AbjAJV3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 16:29:16 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8F65CF86;
-        Tue, 10 Jan 2023 13:29:10 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id h7-20020a17090aa88700b00225f3e4c992so17902433pjq.1;
-        Tue, 10 Jan 2023 13:29:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ww/wSmvr3k1evMYET/bp6trdFG64eYICnW875bycRj8=;
-        b=CCgZWPuWSBttrXnRXZbS8iC4aN+Aau60QJBgZPiWSORv8+dEzapGDIMmiMg0TlBknL
-         Al+dyjFFmkvbQ8rgPSsDtx/Vm02bYxdsPlM9Sa9gKrP1EjLefqBa4ulX/2RObwrZW7ay
-         a+pYBnM5nAhKXuXGsELpeNXhU/mPabU2iEVAU5HzuT8TSVKmCGBW6q1sXxyCHEIP43GG
-         fAYmkmpOvzY0aL+nzYypi5k2AfVLd6vrwSADOaqncv/imIZ/Q5SCPeGkN2xCQahFE7P4
-         cq6QJfLTcvs5b/l3nglsLlXwWPDTV+r4VW5nnUqlRr7yVPoPUOQd2hexbhR2FGCAOREz
-         IZRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ww/wSmvr3k1evMYET/bp6trdFG64eYICnW875bycRj8=;
-        b=UU7b9TgLs6S5ScX0oTtzu/q0UocYtAthIUhF/HkT1DH8dNG5Yvc2s0aclggp9j8zP+
-         ClsWU1Nj3H7F3ycLrP58PSN1FXWg+53asBNlJZsR41Whv8Hp0p/dIlEXstCNsMdvrjhA
-         /wOKLK/Rc5qo3WWXbjRVGREH4dXqAA8ahz12g3delAygMQJ8ejsvEmrAmKJcR9rfvgGV
-         lyOcPslJtTEiI5V1xLi90kfQr9sPPKnJhPX/dXaRhRxxx3guRf9JuwRMjh8pKenM4PZq
-         fIp2xbSQZ5SxdqCCYyv//0ih53b4U0rAZS4z7owFpBKbzgOxdL+IS1x9USFH3w8CQq7I
-         wwfw==
-X-Gm-Message-State: AFqh2krFb+DDqKfLgVNy0/rlO0yONDeuxtTE9JWrfnPQvUegQcxDonuL
-        x43eVCq0qaBrIc8/vwaT9uU=
-X-Google-Smtp-Source: AMrXdXvkRSXydWegDtiIcTPIVygJ7XqwuvTRfFb3Q/Yts4DuDVkJxsJ0AWg0r/ZcAz2R8ccvVQ0eyQ==
-X-Received: by 2002:a17:902:8c89:b0:193:62a:80c8 with SMTP id t9-20020a1709028c8900b00193062a80c8mr17111420plo.45.1673386149390;
-        Tue, 10 Jan 2023 13:29:09 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id jd6-20020a170903260600b001897de9bae3sm8568294plb.204.2023.01.10.13.29.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 13:29:09 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>, Emma Anholt <emma@anholt.net>,
-        Dan Carpenter <error27@gmail.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm/gpu: Fix potential double-free
-Date:   Tue, 10 Jan 2023 13:28:59 -0800
-Message-Id: <20230110212903.1925878-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 10 Jan 2023 16:29:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D61A63391
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 13:29:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC5D4618FA
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 21:29:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DDF9C433EF;
+        Tue, 10 Jan 2023 21:29:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673386162;
+        bh=6+0OY8eUYpnCAeEqKfz88uzJm0W2jlnfnve5G0tlpk8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=IqoIMsAxT28m+/Q7W7S8CqmFHcUBnkOPgIullHDPKxN89TmxqFrk8/j5i0UBJjOTx
+         XBMn+rjiFSegLz9XQVEQ3k9vBxrVKn46zLedd84X2apDReTLvMiQy9cp+seT2Q0klK
+         eBcwes3wNb0uxlgN7IkwpDokOsHZNu0Rhl7YQQz9dcy0w65avlu7bhuV1ts9q9eT3/
+         A2so/43gPYtijEXUScN1ci9xUOdQqUlzDPnLFY8LUTb/8/F47HML/PzJzumspCw4Hb
+         x+M+eRAtRQVEA6qIJJTp4Wa3jzXT4m+CV92DTbYPYRSuyAzIHqwyJhZ0vcruQ7YlMg
+         icZUAAIh0woGw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D669A5C0687; Tue, 10 Jan 2023 13:29:21 -0800 (PST)
+Date:   Tue, 10 Jan 2023 13:29:21 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH 0/4] nolibc: add support for the s390 platform
+Message-ID: <20230110212921.GR4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230109080910.26594-1-w@1wt.eu>
+ <20230109191534.GU4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230110073242.GB3229@1wt.eu>
+ <20230110092517.GA4626@1wt.eu>
+ <20230110145334.GL4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230110161249.GB4649@1wt.eu>
+ <20230110163210.GP4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230110175347.GC4649@1wt.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110175347.GC4649@1wt.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Tue, Jan 10, 2023 at 06:53:47PM +0100, Willy Tarreau wrote:
+> On Tue, Jan 10, 2023 at 08:32:10AM -0800, Paul E. McKenney wrote:
+> > On Tue, Jan 10, 2023 at 05:12:49PM +0100, Willy Tarreau wrote:
+> > > On Tue, Jan 10, 2023 at 06:53:34AM -0800, Paul E. McKenney wrote:
+> > > > Here is one of them, based on both the fixes and Sven's s390 support.
+> > > > Please let me know if you need any other combination.
+> > > 
+> > > Thanks, here's the problem:
+> > > 
+> > > > 0 getpid = 1                             [OK]
+> > > > 1 getppid = 0                            [OK]
+> > > > 3 gettid = 1                             [OK]
+> > > > 5 getpgid_self = 0                       [OK]
+> > > > 6 getpgid_bad = -1 ESRCH                 [OK]
+> > > > 7 kill_0[    1.940442] tsc: Refined TSC clocksource calibration: 2399.981 MHz
+> > > > [    1.942334] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x229825a5278, max_idle_ns: 440795306804 ns
+> > > >  = 0                             [OK]
+> > > > 8 kill_CONT = 0           [    1.944987] clocksource: Switched to clocksource tsc
+> > > >                [OK]
+> > > > 9 kill_BADPID = -1 ESRCH                 [OK]
+> > > (...)
+> > > 
+> > > It's clear that "grep -c ^[0-9].*OK" will not count all of them (2 are
+> > > indeed missing).
+> > > 
+> > > We could probably start with "quiet" but that would be against the
+> > > principle of using this to troubleshoot issues. I think we just stick
+> > > to the current search of "FAIL" and that as long as a success is
+> > > reported and the number of successes is within the expected range
+> > > that could be OK. At least I guess :-/
+> > 
+> > Huh.  Would it make sense to delay the start of the nolibc testing by a
+> > few seconds in order to avoid this sort of thing?  Or would that cause
+> > other problems?
+> 
+> That would be quite annoying. Delaying is never long enough for some
+> issues, too long for the majority of cases where there is no issue. I'd
+> suggest that we just rely on the fail count for now (as it is) and that
+> will allow us to collect a larger variety of discrepancies and probably
+> figure a better solution at some point. For example if we find that it's
+> always the TSC that does this, maybe starting x86 with notsc will be a
+> good fix.
 
-If userspace was calling the MSM_SET_PARAM ioctl on multiple threads to
-set the COMM or CMDLINE param, it could trigger a race causing the
-previous value to be kfree'd multiple times.  Fix this by serializing on
-the gpu lock.
+Sounds good to me!
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/adreno/adreno_gpu.c |  4 ++++
- drivers/gpu/drm/msm/msm_gpu.c           |  2 ++
- drivers/gpu/drm/msm/msm_gpu.h           | 12 ++++++++++--
- 3 files changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-index 57586c794b84..3605f095b2de 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-@@ -352,6 +352,8 @@ int adreno_set_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
- 		/* Ensure string is null terminated: */
- 		str[len] = '\0';
- 
-+		mutex_lock(&gpu->lock);
-+
- 		if (param == MSM_PARAM_COMM) {
- 			paramp = &ctx->comm;
- 		} else {
-@@ -361,6 +363,8 @@ int adreno_set_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
- 		kfree(*paramp);
- 		*paramp = str;
- 
-+		mutex_unlock(&gpu->lock);
-+
- 		return 0;
- 	}
- 	case MSM_PARAM_SYSPROF:
-diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-index bfef659d3a5c..7537e7b3a452 100644
---- a/drivers/gpu/drm/msm/msm_gpu.c
-+++ b/drivers/gpu/drm/msm/msm_gpu.c
-@@ -336,6 +336,8 @@ static void get_comm_cmdline(struct msm_gem_submit *submit, char **comm, char **
- 	struct msm_file_private *ctx = submit->queue->ctx;
- 	struct task_struct *task;
- 
-+	WARN_ON(!mutex_is_locked(&submit->gpu->lock));
-+
- 	/* Note that kstrdup will return NULL if argument is NULL: */
- 	*comm = kstrdup(ctx->comm, GFP_KERNEL);
- 	*cmd  = kstrdup(ctx->cmdline, GFP_KERNEL);
-diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-index a771f56ed70f..fc1c0d8611a8 100644
---- a/drivers/gpu/drm/msm/msm_gpu.h
-+++ b/drivers/gpu/drm/msm/msm_gpu.h
-@@ -375,10 +375,18 @@ struct msm_file_private {
- 	 */
- 	int sysprof;
- 
--	/** comm: Overridden task comm, see MSM_PARAM_COMM */
-+	/**
-+	 * comm: Overridden task comm, see MSM_PARAM_COMM
-+	 *
-+	 * Accessed under msm_gpu::lock
-+	 */
- 	char *comm;
- 
--	/** cmdline: Overridden task cmdline, see MSM_PARAM_CMDLINE */
-+	/**
-+	 * cmdline: Overridden task cmdline, see MSM_PARAM_CMDLINE
-+	 *
-+	 * Accessed under msm_gpu::lock
-+	 */
- 	char *cmdline;
- 
- 	/**
--- 
-2.38.1
-
+							Thanx, Paul
