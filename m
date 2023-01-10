@@ -2,116 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B342664094
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA5B66409B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238412AbjAJMer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:34:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
+        id S238542AbjAJMfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbjAJMel (ORCPT
+        with ESMTP id S238465AbjAJMfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:34:41 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02DD3C382
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:34:39 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso6807756wmq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:34:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w9YImXfINgo9hv1+xP74ouf7bKnCq7vFHRFnlPk72z8=;
-        b=oopKkV6gu4Xxlu7AOuziqpF7ufNLt04abrnj5XlqgWYwsv4ixMDww75sOE1ZCH6yp8
-         gS1QvRqYfLbftJN9deSYJwF5Pkdeik2+ticfhNeMB3vRNx7PbsCo9HoRASC4+z9wmAJF
-         Fv0r39+yas0BURGzKBS6F15pvtUvdGBnGV9ABYvtOAZK+rrshqwCq1qJYToxV6qngEKa
-         A2njlD3SJn6S5Po0G8RpFAluGPhrLWrqc8j60EEqbcWDXAhWb+akt7Xh95cjkBpk3zd1
-         DQRbjZmFarkXGadPku4iCIx1QaVyl7QGt5A7xTrLANYZqLELOFiddaoTLzNmk3esJvZN
-         INnA==
+        Tue, 10 Jan 2023 07:35:16 -0500
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6983D9EC
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:35:07 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id v6so17279603edd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:35:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w9YImXfINgo9hv1+xP74ouf7bKnCq7vFHRFnlPk72z8=;
-        b=hAI0p0pxwK1pobpGGDPnk4nThGMJAuDiCQwYQkr1rQ9D6ILO5fL6eJVDQ7YlwWfciS
-         zl33qipSmqRjqXcAQYhipCQTjxUcvoxdnYb8ySw9KVXDcQdJgegAZogjvuU2+KxVgvQF
-         0acrLLsHxQqxuI0HMXVxFJN6h0gyb+heTbooBG6rGUXd0LpAtDGgognVQTV4AlJ0ZHlW
-         3cTcDFOJjhmvEnFe5DLnWyR5U04VFEBM/9XMxdcU4Si/1BXsVsN4okT9rEJF151DaRdY
-         GqYo8NgbzFTYoyAMS6L0jMzwo7SmYy6BsFboV4g64e1intoa+ejufooeuLmXrWz/8HRl
-         Y+Fg==
-X-Gm-Message-State: AFqh2krFWUqP3G23c//kZqSAOASiEEdKdoNAvrr4b8vj42WM6z1xWiie
-        QNIA1Iiupg/KhLsJq9wnRvw=
-X-Google-Smtp-Source: AMrXdXsubfM1A4kZ4BqYrKVlZ0jX9ZoNhSEnTlth10dWcKbdFSC0OkL4SVr3Bu2sMcVwUvOQFB0L7Q==
-X-Received: by 2002:a05:600c:1c11:b0:3d1:e583:51a0 with SMTP id j17-20020a05600c1c1100b003d1e58351a0mr51058569wms.25.1673354078588;
-        Tue, 10 Jan 2023 04:34:38 -0800 (PST)
-Received: from gmail.com (1F2EF2EB.nat.pool.telekom.hu. [31.46.242.235])
-        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003d358beab9dsm14607472wmb.47.2023.01.10.04.34.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 04:34:37 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 10 Jan 2023 13:34:35 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Zeng Heng <zengheng4@huawei.com>, michael.roth@amd.com,
-        hpa@zytor.com, tglx@linutronix.de,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        kirill.shutemov@linux.intel.com, jroedel@suse.de,
-        keescook@chromium.org, mingo@redhat.com,
-        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
-        x86@kernel.org, liwei391@huawei.com,
-        Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH -v2] x86/boot/compressed: Register dummy NMI handler in
- EFI boot loader, to avoid kdump crashes
-Message-ID: <Y71bW/8XZCackPLh@gmail.com>
-References: <20230110102745.2514694-1-zengheng4@huawei.com>
- <Y71FJ+G0NGQe3Ppq@gmail.com>
- <Y71TglxSLJKO17SY@gmail.com>
- <Y71V8SRLxZ/Uqkfs@zn.tnic>
- <Y71XPl8br2QU2L8E@zn.tnic>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kskJGwsWk6CSrMTpuucDbOAsrmAF8JgY2c4LCkoUG0s=;
+        b=6ivdmlU5cg+Vcc0ak5UdfZyYlSholrslnUd+6zXDrLFQ6H8NuZHuERf1Y56QDZpDzU
+         yqzRSDNMX9Gl9yIOGj9mRkjNfZr+X/VwAstpIk7HTUZZN2IsBDHyS+RdYfXoZFZuYkIT
+         omNONnhykVP73ldtD/Eq3S3s6KiW4C/IEBYiAfSbuf+xRm8aBOWIVX+AKE3khI088xog
+         3/isF/xdVvx1wA5sq13P5owk2SLN7LXnUrKleXB4Y+kSJx89u+JGeSVGnz7TfOMJItRz
+         37kYCtFn97nYMEA4bMd1BldkU1zUem8EP2LAoqLFWhNOHpa1t5nj0q+im5u7ib3a4B9C
+         nJxw==
+X-Gm-Message-State: AFqh2komHEE5Wu0+GinVTJH4DtaBqq/zrR2vNFkIcz9ioHjPUrbzEhAa
+        YdULT5aYwcawmJmPnHlcrAeSL4NK6DadZaJfAUk=
+X-Google-Smtp-Source: AMrXdXvkEZMHwhN83BWBCxWEwkkcCWqFc0c+6XU4RzrC1iiarWKnHfl8MoKN9MXuvxY4xiw+f9CL5UOD0mY3GxseTMI=
+X-Received: by 2002:a05:6402:5c5:b0:46d:53d7:d1f6 with SMTP id
+ n5-20020a05640205c500b0046d53d7d1f6mr6960519edx.211.1673354106030; Tue, 10
+ Jan 2023 04:35:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y71XPl8br2QU2L8E@zn.tnic>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230109175810.2965448-1-gregkh@linuxfoundation.org> <20230109175810.2965448-2-gregkh@linuxfoundation.org>
+In-Reply-To: <20230109175810.2965448-2-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 10 Jan 2023 13:34:54 +0100
+Message-ID: <CAJZ5v0jje=ys4uMSFJ44fyac3GcgkU8wL+wQ2pdjX-+iJjd9iQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] driver core: remove subsys_find_device_by_id()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 9, 2023 at 6:58 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This function has not been called by any code in the kernel tree in many
+> many years so remove it as it is unused.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-* Borislav Petkov <bp@alien8.de> wrote:
+Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
 
-> > mce_panic -> panic -> __crash_kexec()
-> > 
-> > Yes?
-> > 
-> > If so, then we should make sure we have *exited* #MC context before calling
-> > panic() and not have to add hacks like this one of adding an empty NMI handler.
-> > 
-> > But I'm only speculating as it is hard to make sense of all this text.
-> 
-> IOW, does this help?
-> 
 > ---
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 7832a69d170e..55437d8a4fad 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -287,6 +287,7 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
->  		if (panic_timeout == 0)
->  			panic_timeout = mca_cfg.panic_timeout;
->  		panic(msg);
-> +		mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
-
-So your suggestion was to exit MC context 'before' the panic() call - but 
-the patch calls it 'after' - was that intentional?
-
-Thanks,
-
-	Ingo
+>  drivers/base/bus.c         | 41 --------------------------------------
+>  include/linux/device/bus.h |  2 --
+>  2 files changed, 43 deletions(-)
+>
+> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+> index 4e6fdb65a157..45aa8d996f0a 100644
+> --- a/drivers/base/bus.c
+> +++ b/drivers/base/bus.c
+> @@ -363,47 +363,6 @@ struct device *bus_find_device(struct bus_type *bus,
+>  }
+>  EXPORT_SYMBOL_GPL(bus_find_device);
+>
+> -/**
+> - * subsys_find_device_by_id - find a device with a specific enumeration number
+> - * @subsys: subsystem
+> - * @id: index 'id' in struct device
+> - * @hint: device to check first
+> - *
+> - * Check the hint's next object and if it is a match return it directly,
+> - * otherwise, fall back to a full list search. Either way a reference for
+> - * the returned object is taken.
+> - */
+> -struct device *subsys_find_device_by_id(struct bus_type *subsys, unsigned int id,
+> -                                       struct device *hint)
+> -{
+> -       struct klist_iter i;
+> -       struct device *dev;
+> -
+> -       if (!subsys)
+> -               return NULL;
+> -
+> -       if (hint) {
+> -               klist_iter_init_node(&subsys->p->klist_devices, &i, &hint->p->knode_bus);
+> -               dev = next_device(&i);
+> -               if (dev && dev->id == id && get_device(dev)) {
+> -                       klist_iter_exit(&i);
+> -                       return dev;
+> -               }
+> -               klist_iter_exit(&i);
+> -       }
+> -
+> -       klist_iter_init_node(&subsys->p->klist_devices, &i, NULL);
+> -       while ((dev = next_device(&i))) {
+> -               if (dev->id == id && get_device(dev)) {
+> -                       klist_iter_exit(&i);
+> -                       return dev;
+> -               }
+> -       }
+> -       klist_iter_exit(&i);
+> -       return NULL;
+> -}
+> -EXPORT_SYMBOL_GPL(subsys_find_device_by_id);
+> -
+>  static struct device_driver *next_driver(struct klist_iter *i)
+>  {
+>         struct klist_node *n = klist_next(i);
+> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+> index 0699b3970344..d865440d8c02 100644
+> --- a/include/linux/device/bus.h
+> +++ b/include/linux/device/bus.h
+> @@ -250,8 +250,6 @@ bus_find_device_by_acpi_dev(struct bus_type *bus, const void *adev)
+>  }
+>  #endif
+>
+> -struct device *subsys_find_device_by_id(struct bus_type *bus, unsigned int id,
+> -                                       struct device *hint);
+>  int bus_for_each_drv(struct bus_type *bus, struct device_driver *start,
+>                      void *data, int (*fn)(struct device_driver *, void *));
+>  void bus_sort_breadthfirst(struct bus_type *bus,
+> --
+> 2.39.0
+>
