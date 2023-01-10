@@ -2,233 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3880A66392A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 07:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 177C566392B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 07:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjAJGR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 01:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
+        id S230447AbjAJGRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 01:17:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjAJGR1 (ORCPT
+        with ESMTP id S230305AbjAJGRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 01:17:27 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF621A399
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 22:17:26 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id F290A3200994;
-        Tue, 10 Jan 2023 01:17:21 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 10 Jan 2023 01:17:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1673331441; x=1673417841; bh=hY
-        lkSoI0PLF6Nkqz+NXXc2oNHQRDgQQ+vdlc/JfCbRk=; b=ZlDbZsL6BOeb+mlKoe
-        LRFnbf6UtVeuiz6uru5aYDJXbWpAAV5HxbzNGFXZZvUVVB7op9dmdWGNgBwlz0RO
-        7mzoXnsVCa+x06bYcjkmm5d5fu90+KcKjrD6UHyqVx5IMcQRgHkoLw9pfu+j8AaC
-        71bU+vlIyyhAYS0SyZnCSMXWUhKROT5zwvaefY+YFhlBBXn8qIlaZGNd5N8VWRQj
-        14caZPumJLeM7WTPGeWHUn7USScx32RVd36Eiuc+F2c3dmYWb+kiFUpYkcN69e0C
-        VEd6W6B1F2Xfbj4Mc/R47woVkgN1Gl9voyR2A3Hkzx+qzlrBATWKGjeAaeqAhhFV
-        +Tvg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673331441; x=1673417841; bh=hYlkSoI0PLF6Nkqz+NXXc2oNHQRD
-        gQQ+vdlc/JfCbRk=; b=QoYvydhjdX9cioNRmCS+exDCwvp2G5j597G/4smDqhFp
-        c4YcX0DZymKSEcPQRR1DeAp4yw+27wgwh/nzNMA9XH7nx6mFNAAA0TAD+Twv3fnP
-        PtUuJ3w74R/o0QowodK8Do9dm9VrYM6/o/l0WfY8xhXkCQgObGUNpPh05t+Y4Lh+
-        pWoOrlZIJSeYno/e2uoZq5AOQPM4q84Vl+UQI50W50JLEypaLYYYAtdxv+QUYXnE
-        LEgfZAvYfFdo5wDQfmi5hsdN+OSVdWVDxkaVE3XrRrtwBnjKhj5yZzYElWRJ/Cdr
-        5t9hjj0mbaM6utnJR7+Q/Lh+dFFdO0mW2HwUnuxhhw==
-X-ME-Sender: <xms:8AK9YyUSBsFZESOZBnPWUxRvA_pOWv1if2zm-cyvHQpmPrw7TLouzg>
-    <xme:8AK9Y-kT9btLV6Beh2HQw-Jh6Pjs-J7QS9Bvx9LxvcHbC01C9iKchfkkC4xjHh2wK
-    HM958vz4eRNgCa6MfY>
-X-ME-Received: <xmr:8AK9Y2YoaZdNgIexQlnXA0SByj-OLj_invPUuMOuz4b_md9eXDPAL_ZlqUzKAuZCHPUygg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeejgdelhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:8AK9Y5VD_eiiOFbQekMB11yaKUTc1E1qYXGqvySTd_E-JOEHo8V2SQ>
-    <xmx:8AK9Y8loLX6jkHByYKsWAo_YxfvUKy4TSPPAbbNOJsfANpR4bcb1rQ>
-    <xmx:8AK9Y-fPrO21ZePmduvUjujc4WLVQeNWa_xXguNn9mJehC0JE4VyNA>
-    <xmx:8QK9Y7ekel8EiJvSOmwsEZ_WfIxei9UI_r3cOjN1gkz9S8IcISwLow>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 Jan 2023 01:17:20 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id C9FFB109BD2; Tue, 10 Jan 2023 09:17:16 +0300 (+03)
-Date:   Tue, 10 Jan 2023 09:17:16 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jacob.jun.pan@linux.intel.com" <jacob.jun.pan@linux.intel.com>,
-        "tarasmadan@google.com" <tarasmadan@google.com>,
-        "bharata@amd.com" <bharata@amd.com>,
-        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "glider@google.com" <glider@google.com>
-Subject: Re: [PATCHv13 06/16] x86/mm: Provide arch_prctl() interface for LAM
-Message-ID: <20230110061716.tcy74yseydbaeqjo@box.shutemov.name>
-References: <20221227030829.12508-1-kirill.shutemov@linux.intel.com>
- <20221227030829.12508-7-kirill.shutemov@linux.intel.com>
- <ed28e8a56b64f1bb3855a5d2a9b40672af9d6a14.camel@intel.com>
+        Tue, 10 Jan 2023 01:17:44 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C586D1C921
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 22:17:41 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id l3so2032274vkk.11
+        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 22:17:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8CJjolKPlWAhG4ywZunllbYBE4Jf2JMO0vrAUHEfkjw=;
+        b=UQV89TjBxsMqYrp4HaShVHvXh2Ce0AKWRK3bLEHVKP0BIHOPTp7pbUEbgPr4oDetb4
+         KI6ji9+60LnPfZDux/u8NGhltUa2rNdtUr5nNvs+NOpOusIkyWogcQl3Qi0b5cVfk/HD
+         Gh2i9t7rior+q6Me/lCPQIn5QuyDXHM2x5ueSvLMq8tc9SKm/TYktR9hWEx+W9AiGxj5
+         QBuA6xIt4tgB+RWMMN8kJJ+9ox30KpjPsbLdlifphOkEGsHdICraWhSs5OrosNfPZgNW
+         /+CCRvggxl47aOOHG//Hb/KGERPJPyYBOH7ZVvXsoEqhIZ3U0g+gLp7sWxQhP0YGc/g6
+         GoaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8CJjolKPlWAhG4ywZunllbYBE4Jf2JMO0vrAUHEfkjw=;
+        b=IzrjvTgo1AbxH0jrLS1Ub0MxJ2/dOPTABFOD+BB0SvklfRCfsPKy7xCy0RthiGUkyn
+         QfRMQ6EEKdHIrwhZ3Dtqw/Cwx57s2N8aAF+thPsMmFOsa/L+QOQ9QXjLxrGn+53yInQs
+         AuJV3xO3JvnGOfyFDv+q2g9KmFRDmvwptEiKZXVC+v4M6sTJwIQkSYes7ESGrHqNB7Zo
+         FM4O1x14VI0NRS3Dn11LkwTAIY4GQIzKBmwqMlpftdt1qAYwIbP5QcDulWsKO2P41ASk
+         p5dfjWAkRuTZ78lgeFrLVkKFoqzljnCl5W8FLqwayOVPi7gjKcNlM0OEK4+4m9QRrr/M
+         3JgA==
+X-Gm-Message-State: AFqh2kp/4EKwodlBBW/M6VWxAr0v1fklZAkfNdel3Vyeu5kLf4SFoFxC
+        /Ruey5vnJVBb1ZmqUKgLJmbO+2U/aPyx/Uasz/KRuQ==
+X-Google-Smtp-Source: AMrXdXv+UbPcEC0JIbuEUF6JQZeNC3GXIR+0tfBx5v6uXH+RRZFfR3XkgGAYKN5vIlEIZAfTFcYl9N5U9BOeOz/MzgA=
+X-Received: by 2002:a1f:948e:0:b0:3b7:6c07:c79c with SMTP id
+ w136-20020a1f948e000000b003b76c07c79cmr8478522vkd.34.1673331460720; Mon, 09
+ Jan 2023 22:17:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ed28e8a56b64f1bb3855a5d2a9b40672af9d6a14.camel@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAOnJCUKNFNRs6WkPNWV94BuLmT3KSPWK2FYCiD4PxPCxRs76PA@mail.gmail.com>
+ <Y7wLa7I2hlz3rKw/@hirez.programming.kicks-ass.net> <CAOnJCU+qsJk9oL-2L8fJuGvpaJsyfwQ5+wFXA1L1jM6Fe=FK6A@mail.gmail.com>
+In-Reply-To: <CAOnJCU+qsJk9oL-2L8fJuGvpaJsyfwQ5+wFXA1L1jM6Fe=FK6A@mail.gmail.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Tue, 10 Jan 2023 11:47:29 +0530
+Message-ID: <CAK9=C2W+WapkbiXE+b_6Gc4rN0mfMx6NUBcXk0p=f_VzhObZiw@mail.gmail.com>
+Subject: Re: Expected rdpmc behavior during context swtich and a RISC-V conundrum
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-perf-users@vger.kernel.org,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Beeman Strong <beeman@rivosinc.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 07:55:45PM +0000, Edgecombe, Rick P wrote:
-> On Tue, 2022-12-27 at 06:08 +0300, Kirill A. Shutemov wrote:
-> > Add a couple of arch_prctl() handles:
-> > 
-> >  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required
-> > number
-> >    of tag bits. It is rounded up to the nearest LAM mode that can
-> >    provide it. For now only LAM_U57 is supported, with 6 tag bits.
-> > 
-> >  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
-> >    bits located in the address.
-> > 
-> >  - ARCH_GET_MAX_TAG_BITS returns the maximum tag bits user can
-> > request.
-> >    Zero if LAM is not supported.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > ---
-> >  arch/x86/include/asm/mmu.h        |  2 ++
-> >  arch/x86/include/uapi/asm/prctl.h |  4 +++
-> >  arch/x86/kernel/process.c         |  3 +++
-> >  arch/x86/kernel/process_64.c      | 44
-> > ++++++++++++++++++++++++++++++-
-> >  4 files changed, 52 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-> > index ed72fcd2292d..54e4a3e9b5c5 100644
-> > --- a/arch/x86/include/asm/mmu.h
-> > +++ b/arch/x86/include/asm/mmu.h
-> > @@ -12,6 +12,8 @@
-> >  #define MM_CONTEXT_UPROBE_IA32		0
-> >  /* vsyscall page is accessible on this MM */
-> >  #define MM_CONTEXT_HAS_VSYSCALL		1
-> > +/* Do not allow changing LAM mode */
-> > +#define MM_CONTEXT_LOCK_LAM		2
-> >  
-> >  /*
-> >   * x86 has arch-specific MMU state beyond what lives in mm_struct.
-> > diff --git a/arch/x86/include/uapi/asm/prctl.h
-> > b/arch/x86/include/uapi/asm/prctl.h
-> > index 500b96e71f18..a31e27b95b19 100644
-> > --- a/arch/x86/include/uapi/asm/prctl.h
-> > +++ b/arch/x86/include/uapi/asm/prctl.h
-> > @@ -20,4 +20,8 @@
-> >  #define ARCH_MAP_VDSO_32		0x2002
-> >  #define ARCH_MAP_VDSO_64		0x2003
-> >  
-> > +#define ARCH_GET_UNTAG_MASK		0x4001
-> > +#define ARCH_ENABLE_TAGGED_ADDR		0x4002
-> > +#define ARCH_GET_MAX_TAG_BITS		0x4003
-> > +
-> >  #endif /* _ASM_X86_PRCTL_H */
-> > diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-> > index ef6bde1d40d8..cc0677f58f42 100644
-> > --- a/arch/x86/kernel/process.c
-> > +++ b/arch/x86/kernel/process.c
-> > @@ -162,6 +162,9 @@ int copy_thread(struct task_struct *p, const
-> > struct kernel_clone_args *args)
-> >  
-> >  	savesegment(es, p->thread.es);
-> >  	savesegment(ds, p->thread.ds);
-> > +
-> > +	if (p->mm && (clone_flags & (CLONE_VM | CLONE_VFORK)) ==
-> > CLONE_VM)
-> > +		set_bit(MM_CONTEXT_LOCK_LAM, &p->mm->context.flags);
-> >  #else
-> >  	p->thread.sp0 = (unsigned long) (childregs + 1);
-> >  	savesegment(gs, p->thread.gs);
-> > diff --git a/arch/x86/kernel/process_64.c
-> > b/arch/x86/kernel/process_64.c
-> > index 8b06034e8c70..fef127ed79b6 100644
-> > --- a/arch/x86/kernel/process_64.c
-> > +++ b/arch/x86/kernel/process_64.c
-> > @@ -743,6 +743,39 @@ static long prctl_map_vdso(const struct
-> > vdso_image *image, unsigned long addr)
-> >  }
-> >  #endif
-> >  
-> > +#define LAM_U57_BITS 6
-> > +
-> > +static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned
-> > long nr_bits)
-> > +{
-> > +	if (!cpu_feature_enabled(X86_FEATURE_LAM))
-> > +		return -ENODEV;
-> > +
-> > +	if (test_bit(MM_CONTEXT_LOCK_LAM, &mm->context.flags))
-> > +		return -EBUSY;
-> 
-> Since this bit doesn't get set on vfork, you might be able to work
-> around this by enabling LAM in a vforked task, then enabling it again
-> after returning to the parent.
++linux-riscv +kvm-riscv
 
-I don't think so.
+On Tue, Jan 10, 2023 at 1:26 AM Atish Patra <atishp@atishpatra.org> wrote:
+>
+> On Mon, Jan 9, 2023 at 4:41 AM Peter Zijlstra <peterz@infradead.org> wrot=
+e:
+> >
+> > On Thu, Jan 05, 2023 at 11:59:24AM -0800, Atish Patra wrote:
+> > > Hi All,
+> > > There was a recent uabi update[1] for RISC-V that allows the users to
+> > > read cycle and instruction count without any checks.
+> > > We tried to restrict that behavior to address security concerns
+> > > earlier but it resulted in breakage for some user space
+> > > applications[2].
+> > > Thus, previous behavior was restored where a user on RISC-V platforms
+> > > can directly read cycle or instruction count[3].
+> > >
+> > > Comparison with other ISAs w.r.t user space access of counters:
+> > > ARM64
+> > >   -- Enabled/Disabled via (/proc/sys/kernel/perf_user_access)
+> > >   -- Only for task bound events configured via perf.
+> > >
+> > > X86
+> > >  --- rdpmc instruction
+> > >  --- Enable/Disable via =E2=80=9C/sys/devices/cpu/rdpmc=E2=80=9D
+> > > -- Before v4.0
+> > >  -- any process (even without active perf event) rdpmc
+> > > After v4.0
+> > > -- Default behavior changed to support only active events in a
+> > > process=E2=80=99s context.
+> > > -- Configured through perf similar to ARM64
+> > > -- Continue to maintain backward compatibility for unrestricted acces=
+s
+> > > by writing 2 to =E2=80=9C/sys/devices/cpu/rdpmc=E2=80=9D
+> > >
+> > > IMO, RISC-V should only enable user space access through perf similar
+> > > to ARM64 and x86 (post v4.0).
+> > > However, we do have to support the legacy behavior to avoid
+> > > application breakage.
+> > > As per my understanding a direct user space access can lead to the
+> > > following problems:
+> > >
+> > > 1) There is no context switch support, so counts from other contexts =
+are exposed
+> > > 2) If a perf user is allocated one of these counters, the counter
+> > > value will be written
+> > >
+> > > Looking at the x86 code as it continues to allow the above behavior,
+> > > rdpmc_always_available_key is enabled in the above case. However,
+> > > during the context switch (cr4_update_pce_mm)
+> > > only dirty counters are cleared. It only prevents leakage from perf
+> > > task to rdpmc task.
+> > >
+> > > How does the context switch of counters work for users who enable
+> > > unrestricted access by writing 2 to =E2=80=9C/sys/devices/cpu/rdpmc=
+=E2=80=9D ?
+> > > Otherwise, rdpmc users likely get noise from other applications. Is
+> > > that expected ?
+> > > This can be a security concern also where a rogue rdpmc user
+> > > application can monitor other critical applications to initiate side
+> > > channel attack.
+> > >
+> > > Am I missing something? Please correct my understanding of the x86
+> > > implementation if it is wrong.
+> >
+> > So on x86 we have RDTSC and RDPMC instructions. RDTSC reads the
+> > Time-Stamp-Counter which is a globally synchronized monotonic increasin=
+g
+> > counter at some 'random' rate (idealized, don't ask). This thing is use=
+d
+> > for time-keeping etc..
+> >
+> > And then there's RDPMC which (optionally) allows reading the PMU
+> > counters which are normally disabled and all 0.
+> >
+> > Even if RDPMC is unconditionally allowed from userspace (the 2 option
+> > you refer to) userspace will only be able to read these 0s unless
+> > someone also programs the PMU. Linux only supports a single means of
+> > doing so: perf (some people use /dev/msr to poke directly to the MSRs
+> > but they get to keep all pieces).
+> >
+>
+> It makes sense now. Thanks!!
+>
+> AFAIK, the /dev/msr interface is also allowed for root users only. So tha=
+t
+> covers the security concerns I was asking about.
+>
+> > RDPMC is only useful if you read counters you own on yourself -- IOW
+> > selfmonitoring, using the interface outlined in uapi/linux/perf_events.=
+h
+> > near struct perf_event_mmap_page.
+> >
+> > Any other usage -- you get to keep the pieces.
+> >
+> > Can you observe random other counters, yes, unavoidably so. The sysfs
+> > control you mention was instituted to restrict this somewhat.
+> >
+> > If the RISC-V counters are fundamentally the PMU counters that need to
+> > be reset to trigger events, then you've managed to paint yourself into =
+a
+> > tight spot :/
+> >
+> > Either you must dis-allow userspace access to these things (and break
+> > them) or limit the PMU usage -- both options suck.
+> >
+> >
+> > Now, I'm thinking that esp. something like instruction count is not
+> > synchronized between cores (seems fundamentally impossible) and can onl=
+y
+> > be reasonably be consumed (and compared) when strictly affine to a
+> > particular CPU, you can argue that applications doing this without also
+> > strictly managing their affinity mask are broken anyway and therefore
+> > your breakage is not in fact a breaking them -- you can't break
+> > something that's already broken.
+> >
+>
+> I think most broken applications were using rdcycle to measure time
+> which was wrong anyways.
+> It probably happened because there was no "time" CSR in the early
+> hardwares. Thus, the rdtime would
+> trap & emulated by the firmware which was slow. This lead to user
+> space application to use rdcycle which
+> was not correct either. So the existing applications are broken for
+> using rdcycle as well.
+>
+> Since both cycle & instret behave similarly (fixed counters), they get
+> enabled/disabled together.
+>
+> >
+> > Anyway, given RISC-V being a very young platform, I would try really
+> > *really* *REALLY* hard to stomp on these applications and get them to
+> > change in order to reclaim the PMU usage.
+>
+> Yes. Thanks for your valuable input.
 
-Yes, child can enable LAM after vfork(), but it will set the flag, so
-parent won't be able to enable it again. And there's no cuncurency between
-parent and child due to vfork() semantics.
+I agree with Peter Z. We had a similar discussion in the
+Performance Analysis SIG of RISC-V international as well.
 
-Anyway, I will move the check inside mmap lock. It may clarify situation
-for a reader.
+This also forces KVM (and other hypervisors) to save-n-restore
+CYCLE and INSTRUCTION counters so that one Guest/VM
+can't see cycle/instruction counts from another Guest/VM.
 
-> > +
-> > +	if (mmap_write_lock_killable(mm))
-> > +		return -EINTR;
-> > +
-> > +	if (!nr_bits) {
-> > +		mmap_write_unlock(mm);
-> > +		return -EINVAL;
-> > +	} else if (nr_bits <= LAM_U57_BITS) {
-> > +		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
-> > +		mm->context.untag_mask =  ~GENMASK(62, 57);
-> > +	} else {
-> > +		mmap_write_unlock(mm);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	write_cr3(__read_cr3() | mm->context.lam_cr3_mask);
-> 
-> mm might not be from the current task if it came from
-> PTRACE_ARCH_PRCTL, so then this would write to the wrong CR3. Maybe for
-> simplicity just return an error if task != current.
+Only a few applications are affected and RISC-V ecosystem
+is young so it is better to change these applications rather
+than making CYCLE and INSTRUCTION counters as part
+of uABI.
 
-Oh. Forgot about PTRACE_ARCH_PRCTL. Yes, will add the check.
-
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Regards,
+Anup
