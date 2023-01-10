@@ -2,96 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBD9664597
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7E566459C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbjAJQGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 11:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
+        id S232679AbjAJQHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 11:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238433AbjAJQG0 (ORCPT
+        with ESMTP id S234255AbjAJQHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 11:06:26 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DDA574EE
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:06:21 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so12293279wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:06:21 -0800 (PST)
+        Tue, 10 Jan 2023 11:07:21 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E7C5BA04;
+        Tue, 10 Jan 2023 08:07:19 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id i185so12752156vsc.6;
+        Tue, 10 Jan 2023 08:07:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vQ2bOfW8TwdZtJkIzZz6BgKS4zXaqYZ81vAmO4Llwmw=;
-        b=Znk5jzP/QxFgGtvfwHgZUEcMSNUToiJgmkO1P+SzqbrHB7F+0cfJfOSm8ovr9u90GX
-         VzJuBNKMaXhVoTBSvxTKflC9Frf1B5G18csiliG34mX9N0X7LfLX4dvAdwQqq+VxHHuL
-         rNmuxUQmh0DfgVJAEDRQ6rvhMZnAnl9cAQ7nLh+KYg+QMj0sdy8TwEug86ZwPHRxDkvn
-         B2z/SL4//9XQPqF3BAgO4/DcBnxav7io5FzkX1iPHOK9X48Wm1ZE3n7+1eq72ZdXukTI
-         0gW1+gPcmqVkIIQO13/urjjLESP+dKumE5OQawv6tuNR7izVOCh861z3jZOtYEAI0iak
-         +7pA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7lBJtTBxnALC6grjQqf4FSHZfr4Mitb99+GWM0e9uhs=;
+        b=Vsrprx/YTNYgXI7V82WQOnEvBW/BbUlySs6Pjd6MQNVVl8PBHfRf1SczZQlFmAgiiG
+         ptpWKqXrwxohyPm9Y89UQEaqCTV97L5ZUAoK/q+rvqf3XoozqsSP2LKJeGibSBD8vuzQ
+         HtwmOxlpQn1NafGtCH/+JIZFZVVbFwW9Mr649+7yvEcgFBgz6S9I6c9PVJuam2CqaOI9
+         moI9bujuwgSs97sWkmNZGB43muGiRQS4gUBrf+51OPk8yZx1Hu6tGkhU96TPh6vlF3sw
+         32H2CYiaVi3g/0UE7v6b7zdQq6Xzqvc7cFmXdi7N0g7x9AzlnU4cyjzJ3IQVsVex+Rm5
+         t4CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vQ2bOfW8TwdZtJkIzZz6BgKS4zXaqYZ81vAmO4Llwmw=;
-        b=PGKQOkIjPkZxX6MRcbM1H1r04U0KyDEcLI8Yo6qH/4LJySbLmmcsEKP2NW69+xw0Q+
-         pyXQP946MqHhsJkb6ZPz+H1Ri2XNqgolRLLnaxcoldEnCZ2pm0IUKjlwHMuN0/rauJu0
-         uVh6Ldg4CYFpzbpApErkKfOqr+fxKRqVBrPK1dfEFltVJep9+3rSF3N6e6L7zHqHNaWn
-         Cz6ER0kvLZy/VyC2oxs/Vb6dIq6/1glWHUTLGy/CRMcCyC3z92OyHdeo6qYy5K2/gcbI
-         eGZyP/hQKK6m9KBOAhBIYOSe9WzGkBzak2UfT8o6ViMwJapCY58vUMBLKqSA88AQ1R02
-         TfOw==
-X-Gm-Message-State: AFqh2kpN3TJPrSfyLIUgDUyTqrFVc7iSMH1lMJu0XOIM4mK5dGDYtFeK
-        5M+UDz+YFhZ986KaRFy7E268HUStdF/Bk8RvoIM=
-X-Google-Smtp-Source: AMrXdXv+sKbV7lPaPgzUWKe8koG/GX8+Lld6oWxB7p3G4xDB/NWOJevZviXrE8Xp6U/wn5x1i9sj1A==
-X-Received: by 2002:a05:600c:4f12:b0:3d9:f9ef:3d23 with SMTP id l18-20020a05600c4f1200b003d9f9ef3d23mr1864350wmq.23.1673366780530;
-        Tue, 10 Jan 2023 08:06:20 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id o21-20020a1c7515000000b003d995a704fdsm15298234wmc.33.2023.01.10.08.06.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 08:06:20 -0800 (PST)
-Message-ID: <ed326137-aa0b-6f48-01be-8e50f92a4f34@linaro.org>
-Date:   Tue, 10 Jan 2023 16:06:19 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7lBJtTBxnALC6grjQqf4FSHZfr4Mitb99+GWM0e9uhs=;
+        b=10UyVi96Pi1yNfpTvmz+PezBy/kX9kST32lDjsKyLSBDWQ0W47TOfA5ZIfo+SwgW/z
+         GQY32WFo1lWyGSgnD4c7zhHG6AYxKMFGGoErvPBlClO9eC89foSAPXoYOKigGz+M61Ao
+         kA/oqRQ5DVx5K6V2DZxW984j1u0Zml3vrI+Bqnd1CRcfTUdkUuHHFA/vR0spJ/HXRTYG
+         NCyPLV/7munjcZ7+0m/tZO8Jk/4JmZwxDhkg+IjZDZpes5YCIataUvj60zBrzl3BFvBm
+         Jp4fibRfi+HNIVR2OrnXtUNrrtuYc+RQJNH1f+IpTU+QJvSjXHG+56o1mH5bzgSzhCoD
+         j5og==
+X-Gm-Message-State: AFqh2kpoXgXfqfGOAwfLp68ARBr4FSwy2r1R0eetzPTd+jxyvtM/+NX7
+        djzXMxOrU7gQEmgJTlbytPm7h42J0DrHkyezb3lYy2eQ
+X-Google-Smtp-Source: AMrXdXt+VFH/EwMwIYRX13+37qAkug1uWDPlom227tSOY5cIPsVKnrVStSUyDp81LqjUZ7aMLi0tiVQOPKd/FnryqQ4=
+X-Received: by 2002:a05:6102:55a6:b0:3b5:35ee:814f with SMTP id
+ dc38-20020a05610255a600b003b535ee814fmr10332248vsb.21.1673366838083; Tue, 10
+ Jan 2023 08:07:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: ieee80211_handle_wake_tx_queue and dynamic ps regression
-Content-Language: en-US
-To:     Alexander Wetzel <alexander@wetzel-home.de>,
-        linux-kernel@vger.kernel.org, johannes.berg@intel.com,
-        Kalle Valo <kvalo@codeaurora.org>,
-        linux-wireless@vger.kernel.org
-References: <19015168-c747-17b7-f0ae-9d2ee27d221c@linaro.org>
- <06f76774-1b2e-f563-7128-7d5b9547dfe9@linaro.org>
- <cf5e9339-2511-1135-71da-a8342b264414@linaro.org>
- <205fb221-f7ad-8f03-2c16-54dcbf5ecaf9@wetzel-home.de>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <205fb221-f7ad-8f03-2c16-54dcbf5ecaf9@wetzel-home.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+ <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com> <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+In-Reply-To: <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+From:   William Roberts <bill.c.roberts@gmail.com>
+Date:   Tue, 10 Jan 2023 10:07:06 -0600
+Message-ID: <CAFftDdp5vqnzJEqAYOStvn2UqDE_VUOrO-_tnsUCmd7ML8X_uA@mail.gmail.com>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     Matthew Garrett <mgarrett@aurora.tech>
+Cc:     jejb@linux.ibm.com, Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 15:23, Alexander Wetzel wrote:
-> 
-> No, they should not.
-> 
-> My take is, that this is a bug in mac80211. I submitted patches to 
-> fixing that, they have just been accepted:
-> 
-> https://patchwork.kernel.org/project/linux-wireless/patch/20221230121850.218810-1-alexander@wetzel-home.de/
-> 
-> and
-> 
-> https://patchwork.kernel.org/project/linux-wireless/patch/20230106223141.98696-1-alexander@wetzel-home.de/
-> 
-> 
-> Can you test if these also help here?
+On Tue, Jan 3, 2023 at 2:43 PM Matthew Garrett <mgarrett@aurora.tech> wrote:
+>
+> On Mon, Nov 14, 2022 at 9:11 AM James Bottomley <jejb@linux.ibm.com> wrote:
+> >
+> > On Fri, 2022-11-11 at 15:16 -0800, Evan Green wrote:
+> > > Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
+> > > restricts usermode's ability to extend or reset PCR 23.
+> >
+> > Could I re ask the question here that I asked of Matthew's patch set:
+> >
+> > https://lore.kernel.org/all/b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com/
+> >
+> > Which was could we use an NVRAM index in the TPM instead of a PCR?  The
+> > reason for asking was that PCRs are rather precious and might get more
+> > so now that Lennart has some grand scheme for using more of them in his
+> > unified boot project.  Matthew promised to play with the idea but never
+> > got back to the patch set to say whether he investigated this or not.
+>
+> Is there any way to get key creation data to include NV indexes? If
+> not, no, we can't use NVRAM.
 
-np
+No theirs not, but there's room for qualifyingData. So some background
+on this is they use the PCR value to verify it's the right key.
+Since it's added by the TPM within the trust boundary its an
+unforgeable value, unlike the qdata.
+
+I think there are better ways to verify it's the right key, i.e. the
+ability to wield the key, or if you have some ability to remember
+state, you
+could verify the name which is cryptgraphically bound to the private
+key and thus TPM2_Load will fail. From what I understand they
+have no ability to remember state as their verifying and executing a
+resume kernel, but I am not well versed in that area of the kernel.
+It makes me think that they are checking against a hardcoded known
+PCR23 state and rolling it to prevent other keys from being
+generated. I would consider policy locality for controlling who can
+use the key and couple with policynv if revoking long lasting keys
+is a need. If they are ephemeral, theirs the NULL hierarchy.
+
+A lot of this is conjecture, as Matthew just stopped responding.
+Perhaps they are away or busy, but I just wanted to weigh in on this.
