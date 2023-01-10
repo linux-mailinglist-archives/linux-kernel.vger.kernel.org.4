@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8162D66465C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53CB66465D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 17:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238931AbjAJQls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 11:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S234541AbjAJQm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 11:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238871AbjAJQlf (ORCPT
+        with ESMTP id S239003AbjAJQmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 11:41:35 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8789D78E85;
-        Tue, 10 Jan 2023 08:41:32 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 246775C00C6;
-        Tue, 10 Jan 2023 11:41:30 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 10 Jan 2023 11:41:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673368890; x=1673455290; bh=BQbRuk/s7x
-        iQujbEKJZAedL9CmNeLHCNVqnm1mI9eH8=; b=MG29sti5l3eVz+M3xptJxz0NC1
-        IE/qvGYdM5ehaCmzthzjydWfuT8MzV4zLv1gLa2hfxy1VXTntIRezdknmalF797p
-        0uBvxcXVdpEyv3TroYxwgy1kion+HyYNZHRxyC/f0o1QVYqMg86ueUKXDJQbdysY
-        IalayF8dxEy1AW/PYZUGHOK05+goJmMJJsNFS2MDxrx86Z1y71ZnAP5lMZp89ia9
-        E2wEpFbszvlM/gqJ5L3Av3RvMq4VPHNI0yC/tPokJ7y7/X68B+ffporoGHBHQIej
-        +2N4aI8P+PGfvB90Oc9vhU7uFr7jo+OsiulI03gT4a1S1bwcBIGWMN6CXOkA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673368890; x=1673455290; bh=BQbRuk/s7xiQujbEKJZAedL9CmNe
-        LHCNVqnm1mI9eH8=; b=M3IrA3iSERaPm0UxD3uqwyQpI/Jph0h9b4Y52R/Ejhft
-        OiO5SfeTJOEe68m4R+PZLzR2MZ5g3xCl8xfuawkMxu2cgOh5t3R3dWV5JE0Z+3mQ
-        SlUzJ1jdTvGTDKOXEKEgjWaeIfFW8gmrrlnYka+O+GSgG7Uw1LP0xcbDJbna6/Rd
-        VwtM9RDQISi1iaFutZvuLLCgdnp5pSxnSAiYxtfxo5fQT6PPHAT/98ogsOZdNhgu
-        tjvEMnTaokq4bIaXxMKbMXqv9dx98Y8Ir2IYKgFl4Hf91GjhrPQfN6RdreZdINeg
-        mUOUWyxpya/lwNU2brNxj8NwlOniMknjrlVQFiaJzQ==
-X-ME-Sender: <xms:OZW9Y4ZZN2uh9HQUdd44CUhwKMHgtT-RIjtqotcq-AB5PdbIkWxvKQ>
-    <xme:OZW9YzaefWRFAEXS9WNxp_oMAnRW140rD8Pbp-M9eQY4ymN7Y2-vpjJ1lOyZgp7L4
-    dH4k7xJtWeSQEPoIXU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrledvgddvjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:OZW9Yy85yUoMNx2NdFuuuMqSwTVHjRhfbMow2lo-Jkt1QWlUWqNSRw>
-    <xmx:OZW9Yyr_RF8JWBINxFEen2blPMBazsmTOFkxKBmSKPApPISKVsfsiQ>
-    <xmx:OZW9YzolnHASti5KO9Lre5ghltH13idoIMxaHqT0KxGNpRJNRxO35Q>
-    <xmx:OpW9Y85NYFyJdklUl41h0kWWZ2s66aZSpBKVs0esTYxyehV_M4wpdA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CFBF0B60086; Tue, 10 Jan 2023 11:41:29 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <77342621-d67f-4d47-a33b-6f721576bf9d@app.fastmail.com>
-In-Reply-To: <CA+G9fYsns3krivbPSjQ1c1EQpVyd-bkW84MaUvqMTQr9c=iEaw@mail.gmail.com>
-References: <CA+G9fYsns3krivbPSjQ1c1EQpVyd-bkW84MaUvqMTQr9c=iEaw@mail.gmail.com>
-Date:   Tue, 10 Jan 2023 17:41:08 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev
-Cc:     "Mark Brown" <broonie@kernel.org>, "Will Deacon" <will@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Aishwarya TCV" <aishwarya.tcv@arm.com>,
-        "Anders Roxell" <anders.roxell@linaro.org>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: next-20230110: arm64: defconfig+kselftest config boot failed - Unable to
- handle kernel paging request at virtual address fffffffffffffff8
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Tue, 10 Jan 2023 11:42:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571A95133B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:41:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673368904;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H2D5nUSU+0DUNDOHAwrQcfQIiMgma8cBzDuSUmWCZsU=;
+        b=LppJnA2O87b3SLehgzZvbu3NjNXceOmeqdR0Klva99blk2TWOmvlAqfLkFD2RAz3UDCYKT
+        8J9gQjrkK0owIDdyYN+TV0GXeXsGo1ay5ini+ZD6LUcCIokw0BKU+GJOsLYQZ5SCjpynTS
+        bJwi9/fmPiuaI1BotgFsRNlL5LeDD4g=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-332-0MnBfp3XNHK-EpT7ZrVs_w-1; Tue, 10 Jan 2023 11:41:43 -0500
+X-MC-Unique: 0MnBfp3XNHK-EpT7ZrVs_w-1
+Received: by mail-lj1-f197.google.com with SMTP id y8-20020a2e9d48000000b0027f1feabc75so3015829ljj.16
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:41:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H2D5nUSU+0DUNDOHAwrQcfQIiMgma8cBzDuSUmWCZsU=;
+        b=bZrY14bQtMoSHQaEEepqBU2uIqOCfgeCadYVYH2ceDH2MCEuy++/dBLllMaZejHaNn
+         /BvJmHCU1shiDxyVrsodXUngA0GCT3EeqPPs9puSdavfiMRNTOxw9DZxKquObNtSvAXY
+         asXrV2MHCZYa+gUr8X858U58TYR5QGZJ8B/dlFM54WTDVun3dQfjtnwQv0DUejTvSo8O
+         6LmOEsKhhAAQaow+lOX2XeEiYdvaCgW/+Vg6VNwJSEYa1Kvr+zkWW4DIPgUeGX0mkxLG
+         zLJux7rdwH2rzP82ND6lEbxxhQdjcFunoChMVNvmbCAtXlQokKP8JKIM+r9fdin4Z/9L
+         hOOQ==
+X-Gm-Message-State: AFqh2krjFIM0AUYglf9hJdZtk6SZc7GG3h+0SNeWIN3Twsm5xhCCj4Xc
+        jK7inZyVl1OeTRX5rbdxmMdIJmLeunmVxB24kl7wnUgV3e4D9vVyWTdKxEOES2Z8rriMTSMiNPO
+        aIkuELsq0UpqcDOjkXFQ1IL8O
+X-Received: by 2002:a05:6512:70a:b0:4c0:4214:cd2c with SMTP id b10-20020a056512070a00b004c04214cd2cmr17074131lfs.43.1673368901806;
+        Tue, 10 Jan 2023 08:41:41 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvHIn8I95b25WPkAD939sFhwT/03iSeUqX+5B9goWI7LXaw9tTuBAWfrDMtGIz/bjML64/OJw==
+X-Received: by 2002:a05:6512:70a:b0:4c0:4214:cd2c with SMTP id b10-20020a056512070a00b004c04214cd2cmr17074128lfs.43.1673368901635;
+        Tue, 10 Jan 2023 08:41:41 -0800 (PST)
+Received: from greebo.mooo.com (c-e6a5e255.022-110-73746f36.bbcust.telenor.se. [85.226.165.230])
+        by smtp.gmail.com with ESMTPSA id a6-20020a056512200600b004caf6f0b08csm2242676lfb.107.2023.01.10.08.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 08:41:41 -0800 (PST)
+Message-ID: <b4ab67415708b67a2bd323acb69edf6dd3f3705b.camel@redhat.com>
+Subject: Re: [PATCH 4/6] composefs: Add filesystem implementation
+From:   Alexander Larsson <alexl@redhat.com>
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gscrivan@redhat.com
+Date:   Tue, 10 Jan 2023 17:41:40 +0100
+In-Reply-To: <Y7gRofheB9EaR4Mi@x1>
+References: <cover.1669631086.git.alexl@redhat.com>
+         <1f0bd3e3a0c68ee19dd96ee0d573bb113428f1b6.1669631086.git.alexl@redhat.com>
+         <Y7gRofheB9EaR4Mi@x1>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,116 +81,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023, at 17:14, Naresh Kamboju wrote:
-> [ please ignore this email if this regression already reported ]
->
-> Today's Linux next tag next-20230110 boot passes with defconfig but
-> boot fails with
-> defconfig + kselftest merge config on arm64 devices and qemu-arm64.
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> We are bisecting this problem and get back to you shortly.
->
-> GOOD: next-20230109  (defconfig + kselftests configs)
-> BAD: next-20230110 (defconfig + kselftests configs)
->
-> kernel crash log [1]:
->
-> [   15.302140] Unable to handle kernel paging request at virtual
-> address fffffffffffffff8
-> [   15.309906] Mem abort info:
-> [   15.312659]   ESR = 0x0000000096000004
-> [   15.316365]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [   15.321626]   SET = 0, FnV = 0
-> [   15.324644]   EA = 0, S1PTW = 0
-> [   15.327744]   FSC = 0x04: level 0 translation fault
-> [   15.332619] Data abort info:
-> [   15.335422]   ISV = 0, ISS = 0x00000004
-> [   15.339226]   CM = 0, WnR = 0
-> [   15.342154] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000001496c000
-> [   15.348795] [fffffffffffffff8] pgd=0000000000000000, p4d=0000000000000000
-> [   15.355524] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> [   15.361729] Modules linked in: meson_gxl dwmac_generic
-> snd_soc_meson_gx_sound_card snd_soc_meson_card_utils lima gpu_sched
-> drm_shmem_helper meson_drm drm_dma_helper crct10dif_ce meson_ir
-> rc_core meson_dw_hdmi dw_hdmi meson_canvas dwmac_meson8b
-> stmmac_platform meson_rng stmmac rng_core cec meson_gxbb_wdt
-> drm_display_helper snd_soc_meson_aiu snd_soc_meson_codec_glue pcs_xpcs
-> snd_soc_meson_t9015 amlogic_gxl_crypto crypto_engine display_connector
-> snd_soc_simple_amplifier drm_kms_helper drm nvmem_meson_efuse
-> [   15.405976] CPU: 1 PID: 9 Comm: kworker/u8:0 Not tainted
-> 6.2.0-rc3-next-20230110 #1
-> [   15.413563] Hardware name: Libre Computer AML-S905X-CC (DT)
-> [   15.419086] Workqueue: events_unbound deferred_probe_work_func
-> [   15.424863] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   15.431762] pc : of_drm_find_bridge+0x38/0x70 [drm]
-> [   15.436594] lr : of_drm_find_bridge+0x20/0x70 [drm]
+T24gRnJpLCAyMDIzLTAxLTA2IGF0IDA3OjE4IC0wNTAwLCBCcmlhbiBNYXNuZXkgd3JvdGU6Cj4g
+T24gTW9uLCBOb3YgMjgsIDIwMjIgYXQgMTI6MTc6MTJQTSArMDEwMCwgQWxleGFuZGVyIExhcnNz
+b24gd3JvdGU6Cj4gPiBUaGlzIGlzIHRoZSBiYXNpYyBpbm9kZSBhbmQgZmlsZXN5c3RlbSBpbXBs
+ZW1lbnRhdGlvbi4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogQWxleGFuZGVyIExhcnNzb24gPGFs
+ZXhsQHJlZGhhdC5jb20+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBHaXVzZXBwZSBTY3JpdmFubyA8Z3Nj
+cml2YW5AcmVkaGF0LmNvbT4KPiAKPiBOb3RlOiBJJ20gbG9va2luZyBhdCB0aGlzIGZyb20gdGhl
+IFZGUyB2aWV3cG9pbnQgc2luY2UgSSBoYXZlbid0IGRvbmUKPiBhbnl0aGluZyBpbiB0aGlzIHN1
+YnN5c3RlbS4gSnVzdCBsb29raW5nIGZvciBzb21lIGdlbmVyaWMKPiBzdWdnZXN0aW9ucy4KPiAK
+PiA+IAo+ID4gKwo+ID4gK3N0cnVjdCBjZnNfaW5vZGUgewo+ID4gK8KgwqDCoMKgwqDCoMKgLyog
+bXVzdCBiZSBmaXJzdCBmb3IgY2xlYXIgaW4gY2ZzX2FsbG9jX2lub2RlIHRvIHdvcmsgKi8KPiA+
+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBpbm9kZSB2ZnNfaW5vZGU7Cj4gCj4gWyBzbmlwIF0KPiAK
+PiA+ICtzdGF0aWMgc3RydWN0IGlub2RlICpjZnNfYWxsb2NfaW5vZGUoc3RydWN0IHN1cGVyX2Js
+b2NrICpzYikKPiA+ICt7Cj4gPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgY2ZzX2lub2RlICpjaW5v
+ID0KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBhbGxvY19pbm9kZV9zYihzYiwg
+Y2ZzX2lub2RlX2NhY2hlcCwgR0ZQX0tFUk5FTCk7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBp
+ZiAoIWNpbm8pCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIE5VTEw7
+Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBtZW1zZXQoKHU4ICopY2lubyArIHNpemVvZihzdHJ1
+Y3QgaW5vZGUpLCAwLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNpemVvZihzdHJ1
+Y3QgY2ZzX2lub2RlKSAtIHNpemVvZihzdHJ1Y3QgaW5vZGUpKTsKPiAKPiBXaHkgbm90IHVzZSBj
+b250YWluZXJfb2YoKSB0byBsb29rIHVwIHRoZSB2ZnNfaW5vZGUgYW5kIHRoZW4geW91IGNhbgo+
+IGdldAo+IHJpZCBvZiB0aGUgcmVzdHJpY3Rpb24gb2YgdGhpcyBiZWluZyBmaXJzdC4gVGhpcyBt
+YXkgYWxzbyBicmVhayB3aXRoCj4gc3RydWN0dXJlIHJhbmRvbWl6YXRpb24gdHVybmVkIG9uLgoK
+VGhpcyBpcyBub3QgY2xlYXJpbmcgdmZzX2lub2RlIHRob3VnaCwgaXQgaXMgY2xlYXJpbmcgZXZl
+cnl0aGluZyBhZnRlcgp2ZnNfaW5vZGUsIGJlY2F1c2Ugd2UncmUgdXNpbmcgYW4gYWxsb2NhdGlv
+biBjYWNoZSBmb3IgdGhlIHZmc19pbm9kZQpwYXJ0LiBJIGRvbid0IHNlZSBob3cgY29udGFpbmVy
+X29mIGNhbiBoZWxwIHVzIGhlcmU/CgpBbHNvLCBzdXJlbHkgc3RydWN0dXJlIHJhbmRvbWl6YXRp
+b24gd29uJ3QgY2hhbmdlIHRoZSBvZmZzZXQgb2YgdGhlCmZpcnN0IGVsZW1lbnQgb2YgdGhlIHN0
+cnVjdD8gVGhhdCB3aWxsIGJyZWFrIGFsbCBzb3J0cyBvZiAiZGVyaXZlZApvYmplY3QiIHVzZWNh
+c2VzLgoKPiAKPiA+ICtzdGF0aWMgaW5saW5lIHN0cnVjdCBjZnNfaW5vZGUgKkNGU19JKHN0cnVj
+dCBpbm9kZSAqaW5vZGUpCj4gCj4gQ0ZTX0kgaW4gdXBwZXIgY2FzZSBkb2Vzbid0IG1hdGNoIG5h
+bWluZyBjb252ZW50aW9ucyBpbiB0aGUgcmVzdCBvZgo+IHRoZSBrZXJuZWwuCj4gCgpJdCBpcyBz
+aW1pbGFyIHRvIFZGU19JLCBYRlNfSSwgQlRSRlNfSSwgRVhUNF9JLCBldGMKCj4gPiArc3RhdGlj
+IHVuc2lnbmVkIGludCBjZnNfc3BsaXRfYmFzZWRpcnMoY2hhciAqc3RyKQo+ID4gK3sKPiA+ICvC
+oMKgwqDCoMKgwqDCoHVuc2lnbmVkIGludCBjdHIgPSAxOwo+ID4gK8KgwqDCoMKgwqDCoMKgY2hh
+ciAqcywgKmQ7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBmb3IgKHMgPSBkID0gc3RyOzsgcysr
+LCBkKyspIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoKnMgPT0gJ1xc
+Jykgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBz
+Kys7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfSBlbHNlIGlmICgqcyA9PSAn
+OicpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+KmQgPSAnXDAnOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBjdHIrKzsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgY29udGludWU7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCpkID0gKnM7Cj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgaWYgKCEqcykKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7Cj4gPiArwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDC
+oMKgwqDCoMKgwqByZXR1cm4gY3RyOwo+ID4gK30KPiAKPiBUbyBleHBhbmQgb24gdGhlIGNvbW1l
+bnQsIHRoaXMgaXMgb3ZsX3NwbGl0X2xvd2VyZGlycyBpbgo+IGZzL292ZXJsYXlmcy9zdXBlci5j
+LiBJdCdkIGJlIG5pY2UgaWYgdGhlcmUgd2FzIGEgY29tbW9uIHBsYWNlIHdoZXJlCj4gdGhpcyBj
+b3VsZCBnby4KPiAKCkl0IHdvdWxkIGJlIG5pY2UsIGJ1dCBpdHMgbm90IGxpa2UgYSBodWdlIGFt
+b3VudCBvZiBjb2RlIGR1cGxpY2F0aW9uLAphcyBpdCBpcyByYXRoZXIgc3BlY2lhbGl6ZWQuCgo+
+IAo+IAoKLS0gCj0tPS09LT0tPS09LT0tPS09LT0tPS09LT0tPS09LT0tPS09LT0tPS09LT0tPS09
+LT0tPS09LT0tPS09LT0tPS09LT0tPS0KPS09LT0KIEFsZXhhbmRlciBMYXJzc29uICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBSZWQgSGF0LApJbmMgCiAgICAgICBh
+bGV4bEByZWRoYXQuY29tICAgICAgICAgICAgYWxleGFuZGVyLmxhcnNzb25AZ21haWwuY29tIApI
+ZSdzIGEgc3VwZXJodW1hbmx5IHN0cm9uZyBuZXVyb3RpYyBiYXJiYXJpYW4gd2l0aCBubyBuYW1l
+LiBTaGUncyBhCmJsaW5kIApjaWdhci1jaG9tcGluZyBib3VudHkgaHVudGVyIGZyb20gYSBkaWZm
+ZXJlbnQgdGltZSBhbmQgcGxhY2UuIFRoZXkKZmlnaHQgCmNyaW1lISAK
 
-The line is 
-
-drivers/gpu/drm/drm_bridge.c:1310:      if (bridge->of_node == np) {
-
-The list_head here is a NULL pointer, so ->of_node points
-to address negative 8, i.e. fffffffffffffff8
-
-This is linked list corruption, which typically happens as
-part of a use-after-free, and could be the result of a
-failed registration causing an object to be freed after
-it is added to the list.
-
-Unfortunately, there are no patches to this file between
-next-20230109 and next-20230110, so the bug probably is
-not actually in this file.
-
-> [   15.515426] Call trace:
-> [   15.517863] Insufficient stack space to handle exception!
-> [   15.517867] ESR: 0x0000000096000047 -- DABT (current EL)
-> [   15.517871] FAR: 0xffff80000a047ff0
-> [   15.517873] Task stack:     [0xffff80000a048000..0xffff80000a04c000]
-> [   15.517877] IRQ stack:      [0xffff800008008000..0xffff80000800c000]
-> [   15.517880] Overflow stack: [0xffff00007d9c1320..0xffff00007d9c2320]
-> [   15.517884] CPU: 1 PID: 9 Comm: kworker/u8:0 Not tainted
-> 6.2.0-rc3-next-20230110 #1
-> [   15.517890] Hardware name: Libre Computer AML-S905X-CC (DT)
-> [   15.517895] Workqueue: events_unbound deferred_probe_work_func
-> [   15.517915] pstate: 800003c5 (Nzcv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   15.517923] pc : el1_abort+0x4/0x5c
-> [   15.517932] lr : el1h_64_sync_handler+0x60/0xac
-> [   15.517939] sp : ffff80000a048020
-
-Not sure about the missing stack trace: I can see that the stack
-pointer is on a task stack, which is reported as having overflown,
-but I don't see why it's unable to print the stack while running
-from the overflow stack.
-
-A stack overflow is often caused by unbounded recursion, which
-can happen when a device driver binds itself to a device that it
-has just created. The log does look a bit suspicious here,
-with multiple registrations for c883a000.hdmi-tx:
-
-  986 08:02:56.487871  [   15.141218] meson-drm d0100000.vpu: Queued 2 outputs on vpu
-  987 08:02:56.493572  [   15.141615] meson8b-dwmac c9410000.ethernet: Ring mode enabled
-  988 08:02:56.504769  [   15.150744] meson-drm d0100000.vpu: bound c883a000.hdmi-tx (ops meson_dw_hdmi_ops [meson_dw_hdmi])
-  989 08:02:56.515743  [   15.154970] meson8b-dwmac c9410000.ethernet: Enable RX Mitigation via HW Watchdog Timer
-  990 08:02:56.521531  [   15.159175] lima d00c0000.gpu: pp0 - mali450 version major 0 minor 0
-  991 08:02:56.526718  [   15.161436] meson-drm d0100000.vpu: Failed to find HDMI transceiver bridge
-  992 08:02:56.532417  [   15.168933] lima d00c0000.gpu: pp1 - mali450 version major 0 minor 0
-  993 08:02:56.537747  [   15.206102] meson-drm d0100000.vpu: Queued 2 outputs on vpu
-  994 08:02:56.543435  [   15.209608] lima d00c0000.gpu: pp2 - mali450 version major 0 minor 0
-  995 08:02:56.554307  [   15.217027] meson-drm d0100000.vpu: bound c883a000.hdmi-tx (ops meson_dw_hdmi_ops [meson_dw_hdmi])
-  996 08:02:56.559929  [   15.221169] lima d00c0000.gpu: l2 cache 8K, 4-way, 64byte cache line, 128bit external bus
-  997 08:02:56.565229  [   15.231561] meson-drm d0100000.vpu: Failed to find HDMI transceiver bridge
-  998 08:02:56.576490  [   15.238133] lima d00c0000.gpu: l2 cache 64K, 4-way, 64byte cache line, 128bit external bus
-  999 08:02:56.581759  [   15.253879] lima d00c0000.gpu: bus rate = 166666667
- 1000 08:02:56.587248  [   15.257128] lima d00c0000.gpu: mod rate = 24000000
- 1001 08:02:56.593344  [   15.261862] lima d00c0000.gpu: error -ENODEV: _opp_set_regulators: no regulator (mali) found
- 1002 08:02:56.612809  [   15.286143] [drm] Initialized lima 1.1.0 20191231 for d00c0000.gpu on minor 1
- 1003 08:02:56.618428  [   15.292259] meson-drm d0100000.vpu: Queued 2 outputs on vpu
- 1004 08:02:56.623866  [   15.293715] meson-drm d0100000.vpu: bound c883a000.hdmi-tx (ops meson_dw_hdmi_ops [meson_dw_hdmi])
- 1005 08:02:56.634771  [   15.302140] Unable to handle kernel paging request at virtual address fffffffffffffff8
-
-Again, I don't see any recent changes in that driver or the
-corresponding dts file.
-
-      Arnd
