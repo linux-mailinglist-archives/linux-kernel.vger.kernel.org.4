@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8035C664212
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947E6664214
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbjAJNiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
+        id S233058AbjAJNji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:39:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238640AbjAJNiP (ORCPT
+        with ESMTP id S238599AbjAJNjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:38:15 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E03B75
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:37:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FShK9vXFfxDQ4VGD5JOqblYjjglMV5Oj0hc50k6vmGY=; b=We4DGf5kDltzbK3aK6i7Z/0oJz
-        c8anxvmA2jXtu9UH4C3LD2musClj6rfaKyX8NSiyCs716ySnSnm2ucdtBPLKDzrN7DsAYyqNJQuwB
-        oOQXGs+9p94OYohhBLyFMNpTVf1E10zPtLNuaSwwUqGPZOq4l7A03EBRFktyBKWx15kRPq8jPpqFQ
-        rgfGLUIuwh6181aUWTknoCIevc+FAI2eWgJ1IMml1LsaeUvS0gnFSk1oTdX1cOxQ8IjCbJbn/XBgb
-        fRdrY1/Q7qGPv+a4B9Bvcthi+URHKL2kuufKhzovpA7u+LktD+RsIB2lG6dsbIRcRDyWFrwgBTtqe
-        amIYcpew==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pFEpB-003FO5-KZ; Tue, 10 Jan 2023 13:37:57 +0000
-Date:   Tue, 10 Jan 2023 13:37:57 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] mm: compaction: Remove redundant VM_BUG_ON() in
- compact_zone()
-Message-ID: <Y71qNeLNeiBB5a/+@casper.infradead.org>
-References: <cover.1673342761.git.baolin.wang@linux.alibaba.com>
- <740a2396d9b98154dba76e326cba5e798b640ead.1673342761.git.baolin.wang@linux.alibaba.com>
+        Tue, 10 Jan 2023 08:39:11 -0500
+Received: from gentwo.de (gentwo.de [161.97.139.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C6A7D1C2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:39:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
+        t=1673357948; bh=v5N8p01gdRXd9HDoez1M3dRvvrduawOYO6ixbE1M6R8=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=DkxZm0T763oFY9qq45rG5QwyK3tN+7FmSsKQ5zw4f9nFmD+CqLjds31MCpG707Y+Z
+         KuOIP/7a7vki9E5B76CFl2yHKj9gRHwCIqxpv7ws5FX4jdapX9UTOmW1LrFZ+VcL7i
+         7mztigY8lC23ZkQoRMYAz17cEInna4r7lVOazJOlFxApdnY7qTuqnb1MEMGe2QIpxL
+         sGCHWbwtweUc0JWx42us41cgQn1L79grbd5aM8QUWa6tbBZEys3+yqTvM71rAXIiRU
+         CxVxq4eJuNwT5lXTA0fuFYXFZ51rXOv3sU9RDMnNEVmwiXULMdl6vCYkGSS+i3hld4
+         I/snm5pBud8+g==
+Received: by gentwo.de (Postfix, from userid 1001)
+        id 9E14DB0017C; Tue, 10 Jan 2023 14:39:08 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by gentwo.de (Postfix) with ESMTP id 95146B00169;
+        Tue, 10 Jan 2023 14:39:08 +0100 (CET)
+Date:   Tue, 10 Jan 2023 14:39:08 +0100 (CET)
+From:   Christoph Lameter <cl@gentwo.de>
+To:     Frederic Weisbecker <frederic@kernel.org>
+cc:     Marcelo Tosatti <mtosatti@redhat.com>, atomlin@atomlin.com,
+        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
+        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v13 2/6] mm/vmstat: Use vmstat_dirty to track CPU-specific
+ vmstat discrepancies
+In-Reply-To: <Y71XpnJGumySL9ej@lothringen>
+Message-ID: <7c2af941-42a9-a59b-6a20-b331a4934a3@gentwo.de>
+References: <20230105125218.031928326@redhat.com> <20230105125248.813825852@redhat.com> <b89a9828-d4e-9874-d482-dbb6cbe46@gentwo.de> <Y71XpnJGumySL9ej@lothringen>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <740a2396d9b98154dba76e326cba5e798b640ead.1673342761.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 09:36:18PM +0800, Baolin Wang wrote:
-> The compaction_suitable() will never return values other than COMPACT_SUCCESS,
-> COMPACT_SKIPPED and COMPACT_CONTINUE, so after validation of COMPACT_SUCCESS
-> and COMPACT_SKIPPED, we will never hit other unexpected case. Thus remove
-> the redundant VM_BUG_ON() validation for the return values of compaction_suitable().
+On Tue, 10 Jan 2023, Frederic Weisbecker wrote:
 
-I don't understand why we'd remove this check.
+> Note I'm absolutely clueless with vmstat. But I was wondering about it as well
+> while reviewing Marcelo's series, so git blame pointed me to:
+>
+> 7c83912062c801738d7d19acaf8f7fec25ea663c ("vmstat: User per cpu atomics to avoid
+> interrupt disable / enable")
+>
+> And this seem to mention that this can race with IRQs as well, hence the local
+> cmpxchg operation.
 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->  mm/compaction.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 62a61de44658..5e6f5e35748d 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -2313,9 +2313,6 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
->  	if (ret == COMPACT_SUCCESS || ret == COMPACT_SKIPPED)
->  		return ret;
->  
-> -	/* huh, compaction_suitable is returning something unexpected */
-> -	VM_BUG_ON(ret != COMPACT_CONTINUE);
-> -
->  	/*
->  	 * Clear pageblock skip if there were failures recently and compaction
->  	 * is about to be retried after being deferred.
-> -- 
-> 2.27.0
-> 
-> 
+The race with irq could be an issue but I thought we avoided that and were
+content with disabling preemption.
+
+But this issue illustrates the central problem of the patchset: It makes
+the lightweight counters not so lightweight anymore. The basic primitives
+add a  lot of weight. And the pre cpu atomic updates operations require
+the modification of multiple values. The operation cannot be "atomic" in
+that sense anymore and we need some other form of synchronization that can
+span multiple instructions.
+
+
