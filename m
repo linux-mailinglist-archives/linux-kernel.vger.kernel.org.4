@@ -2,99 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C48664297
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 946676642A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238368AbjAJN6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
+        id S238513AbjAJN75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238673AbjAJN5v (ORCPT
+        with ESMTP id S238663AbjAJN6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:57:51 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DD75FBE
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:57:22 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id c82so4575860ybf.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:57:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Mu/An59fONbzPRRXniVbBo2b/RYl5DOA+W3aYaQcyw=;
-        b=A+VwZe+u1nuaXMwW6Cj2PrS1qQQg+UcBPDvzx7xTvRgfxbNtZ8mz9+BYaTjmAkfAXC
-         fChq5JmsNAjOSXSJmXZRhVIBHUvkaWiCrAx/YTbAE0A+BKjkshO0d/CzrCmn9dcpmqLm
-         eqoAFNY+H8j4hmZGNLv7WWq9h/5KfDSMkZPj9/cw6UartHfIcRawTTrW5OTA1XA3DK/v
-         OUJOEO3PTF6cwSOfVc25N1vISgwimjp1vodQE3p7Po0nUm6SXBweDQ6QNTSgQvM2b4MZ
-         1jsTeGkrpFgnh7Y7cpzU5hYQioOT/hOqEPlplMT8VAimjtlexJDwcxCQ+zc39Fk3SPMK
-         qU3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4Mu/An59fONbzPRRXniVbBo2b/RYl5DOA+W3aYaQcyw=;
-        b=r2xEC6ObStl4YxbJJrErabKFgu5gJj9Scoey804UPwEEfK9qquvouKyEphcbm+Q62H
-         ttuIjohyAl0ALyH/edXxJ+H5gZf6vu/lWOFpNu+I3tKobQ21HiRVyfnIlFaRr3G3Bgje
-         XhdiAf36gbZ6CMGE9rTxiMXe7GRF6KZ2pvQrRa2BNUwpKyQj+DcpyxIRin8OXB/GnJpW
-         ET+v70zi3dv6oFfuDWzLrrnHgYxAeJm5iCHMVvvdaHI9XsX/kyVX02EZts9WucoitrDv
-         zE/G5XcW4lR/tgTjIO+9Q8oGUoNCmcAO+kdW3l9Shk6QPS2DcLebIFn2ayDWwbSvKptC
-         myoA==
-X-Gm-Message-State: AFqh2koLlyN9ieFpTuB9mgViRB4p9rstKDjEsHQ+hk1DIKkYXwCiQfMz
-        +RfXjERU63QnlKmaJ61783Rf+rOn6SUqihbezPVx4A==
-X-Google-Smtp-Source: AMrXdXvJRRkuDxhywF9so2rhvJI+tN5+UMoa9SjW3oXrwilPFR+vyfb1fDxa95qStrW3l7lP9zl+bLyQEdFDh5onnzc=
-X-Received: by 2002:a05:6902:529:b0:700:331d:69b4 with SMTP id
- y9-20020a056902052900b00700331d69b4mr4862758ybs.101.1673359041793; Tue, 10
- Jan 2023 05:57:21 -0800 (PST)
+        Tue, 10 Jan 2023 08:58:37 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6438D3B1;
+        Tue, 10 Jan 2023 05:58:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673359104; x=1704895104;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6cX28dGS0VjhPVEogbRObB8cGhlwWMZZWbw7paOa07c=;
+  b=SlsJnJ5VZ5Tc8fMtvAoGfwhaxNMHSHiYb0IY9h8EbiFOJoAu3EDuLEon
+   j7FAYAXi4leY371MaTs2H0yCUCLF1Ud5HsnyIuoFkoR0yoGveaM2nXg9A
+   sgQiAc1wpWOsQ6B2b+DCCg7QYGYtDwz4UOWGliBw1OXZtOYdYd1dTZ05J
+   jMIG6wuhLeRiLqML8UYjJX7csNW6PS1j93QwJAuA0XP+AGf7cbp77y5OA
+   XdlUGDDLfWh4YEidH3IfmAwL/eRZMDnc5vSIqR67GRGvB2Eeu378eF0wW
+   sn2RKgGgiTxmm3kz8b0l2VgzVqG5ZSKo2AiE+SuQ52j5h14NbZE1RUdsK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="306659802"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="306659802"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 05:58:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="902372212"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="902372212"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Jan 2023 05:58:22 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pFF8v-0073Mn-0o;
+        Tue, 10 Jan 2023 15:58:21 +0200
+Date:   Tue, 10 Jan 2023 15:58:20 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] efi/earlycon: Replace open coded strnchrnul()
+Message-ID: <Y71u/Hn+khg/Nuj7@smile.fi.intel.com>
+References: <20221208221217.56354-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20230109155801.51642-1-sebastian.reichel@collabora.com> <20230109155801.51642-4-sebastian.reichel@collabora.com>
-In-Reply-To: <20230109155801.51642-4-sebastian.reichel@collabora.com>
-From:   Jagan Teki <jagan@edgeble.ai>
-Date:   Tue, 10 Jan 2023 19:27:10 +0530
-Message-ID: <CA+VMnFzM66AqDJJ6Nu--SG3dAt+MUGYMP3Y9LGN3BgV0sLkwgw@mail.gmail.com>
-Subject: Re: [PATCHv8 3/7] arm64: dts: rockchip: Add base DT for rk3588 SoC
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221208221217.56354-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 Jan 2023 at 21:28, Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
->
-> From: Kever Yang <kever.yang@rock-chips.com>
->
-> This initial version supports CPU, dma, interrupts, timers, UART and
-> SDHCI (everything necessary to boot Linux on this system on chip) as
-> well as Ethernet, I2C, PWM and SPI.
->
-> The DT is split into rk3588 and rk3588s, which is a reduced version
-> (i.e. with less peripherals) of the former.
->
-> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
-> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
-> [rebase, squash and reword commit message]
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
+On Fri, Dec 09, 2022 at 12:12:16AM +0200, Andy Shevchenko wrote:
+> strnchrnul() can be called in the early stages. Replace
+> open coded variant in the EFI early console driver.
 
-Acked-by: Jagan Teki <jagan@edgeble.ai>
-Tested-by: Jagan Teki <jagan@edgeble.ai> # edgeble-neu6a
+Any comments on the series?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
