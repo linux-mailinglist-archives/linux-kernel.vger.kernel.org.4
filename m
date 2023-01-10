@@ -2,107 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81960664CF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B17C9664CF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 21:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbjAJUEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 15:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        id S232144AbjAJUEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 15:04:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbjAJUEI (ORCPT
+        with ESMTP id S232113AbjAJUE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:04:08 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15886386;
-        Tue, 10 Jan 2023 12:04:07 -0800 (PST)
+        Tue, 10 Jan 2023 15:04:28 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEDD373B8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:04:27 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso6624319wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:04:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1673381048; x=1704917048;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0CSXNulnrjqH2NRnYz9TTFqaC5stRQx/H3xu/uz5K/U=;
-  b=E071fvEMgUqO+XWpejCPDBTKGP6rn2sSfwbu6dz77buYsbP99UJhp5vn
-   ESoRWwliFlGxtTIibbiwfjaDV7f8Rtwyz0ZoBsk+b4cgbp1KWD5ZVVQ98
-   pQaA2fMOmHL3oiMphWodom4IZo63otP89FPho2kU3VgTb314zEP1IeE3u
-   k=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 Jan 2023 12:04:06 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 12:04:06 -0800
-Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 10 Jan
- 2023 12:04:05 -0800
-Date:   Tue, 10 Jan 2023 12:04:03 -0800
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     Sibi Sankar <quic_sibis@quicinc.com>, <agross@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <konrad.dybcio@somainline.org>, <robimarko@gmail.com>
-Subject: Re: [PATCH V7 2/2] firmware: qcom: scm: Add wait-queue handling logic
-Message-ID: <20230110200403.GA23567@quicinc.com>
-References: <20230110063745.16739-1-quic_sibis@quicinc.com>
- <20230110063745.16739-3-quic_sibis@quicinc.com>
- <20230110081410.GB2082@quicinc.com>
- <20230110175437.pfnhn3zdlzxnymts@builder.lan>
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MZNu5ozoSkh9uaJy1rfaWNQva2WecGGGMzIGliOy9aw=;
+        b=AtVGs7t94tt98lfoWaSqFUJM+BbUEtKQ95BgkTfG6RraLysou76hFgvezW1wb+W66Y
+         2q94GiON/1+VLFt5Ucy1xIhHpZaNf3aItEgLODdPtPcfLofEogIuIWLoYydriBuxomUJ
+         4rZR0vr1rrYMDJL+nqIrHfe6tkY+K+lGQCeyNNYGRFHMvw0RHjqOhlXWqp+KAgva7exZ
+         NfZyk4cN6XViIYwv5yCL6IKaU3nxya0qep4pct6K2MYRJjJtXmqRkg9PBetvcjLdHQN0
+         TiEySTtaP5r5ENkIecNfuudw2j/AIZmwbKvRzcHAshtfHLwFYoKnbZ00G/yelVISKxYI
+         WruQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MZNu5ozoSkh9uaJy1rfaWNQva2WecGGGMzIGliOy9aw=;
+        b=ySEjFXei/6sJKMusUUHX9qOMHwXebcDeYm/jJa8D74U4uktW+2k5QLN75l6pnb7QgV
+         MdqKz+oBFgZNS3klfRXOsnQ+AsZcH0Or2jRoSbIiDCXX+//+ktb976cEneKTImculQMt
+         MHqYgZEfk7ijG5cV6ceGHOPC9hX34YT1YabzE082s9DaITOdkIxCM4IvNrWgAMQwiy49
+         bObOPmuzsX5JUgzqtmSyF5krdEZFZS6Wx3oEbrwMnY+TMlohgU+FpgVvHI4EXM16A95A
+         PElQ2HjhDcadxepbcAmkr8xDib15zIOWxwcwb42aJC+6bnBxIFb1gi7Av7TfV5Kps6/C
+         PEAA==
+X-Gm-Message-State: AFqh2koizzCFY4O4BN9ON/vPr+0oKnYzVG2uudkhfsmHxd5WmRNmq6mC
+        UjocruEf8DeOm710FCHFYsi/ECOe+wf7q5r7NJbpsA==
+X-Google-Smtp-Source: AMrXdXutExl6Q6Pj0nBYDjwAyRPBg7aoUlg/eFqKQAK0/No8r0/Ksxekc0V+GE5rahAJnxijatuxVZzeVzWGKRbkHLA=
+X-Received: by 2002:a05:600c:434c:b0:3d0:7d89:227e with SMTP id
+ r12-20020a05600c434c00b003d07d89227emr3619525wme.166.1673381066034; Tue, 10
+ Jan 2023 12:04:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230110175437.pfnhn3zdlzxnymts@builder.lan>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230105101844.1893104-1-jthoughton@google.com> <20230105101844.1893104-36-jthoughton@google.com>
+In-Reply-To: <20230105101844.1893104-36-jthoughton@google.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 10 Jan 2023 15:04:14 -0500
+Message-ID: <CADrL8HUvugKN15=XBkELCa=rhd3vjRiwUDsY5cFKkWHO1x5Nyg@mail.gmail.com>
+Subject: Re: [PATCH 35/46] hugetlb: add MADV_COLLAPSE for hugetlb
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jan 10 2023 11:54, Bjorn Andersson wrote:
-> On Tue, Jan 10, 2023 at 12:14:11AM -0800, Guru Das Srinagesh wrote:
-> > On Jan 10 2023 12:07, Sibi Sankar wrote:
-> > 
-> > ...
-> > 
-> > > +static int __scm_smc_do_quirk_handle_waitq(struct device *dev, struct arm_smccc_args *waitq,
-> > > +					   struct arm_smccc_res *res)
-> > > +{
-> > > +	int ret;
-> > > +	struct arm_smccc_args resume;
-> > > +	u32 wq_ctx, smc_call_ctx, flags;
-> > > +	struct arm_smccc_args *smc = waitq;
-> > > +
-> > > +	do {
-> > > +		__scm_smc_do_quirk(smc, res);
-> > > +
-> > > +		if (res->a0 == QCOM_SCM_WAITQ_SLEEP) {
-> > > +			wq_ctx = res->a1;
-> > > +			smc_call_ctx = res->a2;
-> > > +			flags = res->a3;
-> > > +
-> > > +			if (!dev)
-> > > +				return -EPROBE_DEFER;
-> > > +
-> > > +			ret = qcom_scm_lookup_completion(wq_ctx);
-> > 
-> > I see that this function has been created in response to Bjorn's comment [1]
-> > about avoiding the dev_get_drvdata() call, but I would prefer to not use this
-> > function as it hides the fact that the wait_for_completion() is occurring here.
-> > 
-> 
-> My reasoning here is that I don't want the waiting for the completion
-> that happen in one part of the driver and the completion happening in a
-> completely different one.
+> +
+> +               if (curr < end) {
+> +                       /* Don't hold the VMA lock for too long. */
+> +                       hugetlb_vma_unlock_write(vma);
+> +                       cond_resched();
+> +                       hugetlb_vma_lock_write(vma);
 
-ACK.
-
-Thank you.
-
-Guru Das.
+I need to drop/reacquire the mapping lock here too (missed this when I
+added the bits to grab the mapping lock in this function).
