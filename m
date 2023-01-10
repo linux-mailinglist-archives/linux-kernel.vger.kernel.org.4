@@ -2,371 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BB066481C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D339664823
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238728AbjAJSFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 13:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        id S235215AbjAJSF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233017AbjAJSEl (ORCPT
+        with ESMTP id S235339AbjAJSF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 13:04:41 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A716C58307;
-        Tue, 10 Jan 2023 10:02:18 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 28d6bfba788c9982; Tue, 10 Jan 2023 19:02:17 +0100
-Received: from kreacher.localnet (unknown [213.134.183.108])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id C39042624FFE;
-        Tue, 10 Jan 2023 19:02:15 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power resources support D3
-Date:   Tue, 10 Jan 2023 19:02:15 +0100
-Message-ID: <5915557.lOV4Wx5bFT@kreacher>
-In-Reply-To: <1945994.PYKUYFuaPT@kreacher>
-References: <20221121221742.GA137841@bhelgaas> <8191575.T7Z3S40VBb@kreacher> <1945994.PYKUYFuaPT@kreacher>
+        Tue, 10 Jan 2023 13:05:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E1E61304
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:02:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673373751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nVC5afln46faM4kHdFQbld23Olkqu6ilJutGGzB4fnU=;
+        b=DESyaWf1XLKy0/PwS4s0iT7uh9lthMDR/6uQIhpKNJRep2UDQLYBC2wSGk5L5Hx9QzPhr5
+        S4X1mxGvp94hCiAxvh+5p2XxsT1v6ONb7uS9HIJ+F9W5DrXc3GEft35+g0dyavU+1Ltfca
+        FaKTDVUznfGqeu7XSfsBqnBCO43ir0g=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-122-3RWHrf1ONFi-be7mzwQ07g-1; Tue, 10 Jan 2023 13:02:29 -0500
+X-MC-Unique: 3RWHrf1ONFi-be7mzwQ07g-1
+Received: by mail-wr1-f69.google.com with SMTP id l18-20020adfa392000000b002bbd5c680a3so1774107wrb.14
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 10:02:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nVC5afln46faM4kHdFQbld23Olkqu6ilJutGGzB4fnU=;
+        b=24xjq+DUTUeZcSn+M111uTP9vWRvi9YQqtqgZQSRB7riRJseDdMIWSYJ2G+nV0esBP
+         8mJAiYKjwdV3EIv49a6IiiBtFOicOBTCx+CuDP6KwvmUvA7kA1o1/2HxX119SXJglUqw
+         0z4viREHc/VuXp7gyEDnisbf0KGvr8DSCOlImfnSb0syWilsNfQ4SqOYLiI4aqSK8SZ2
+         yA5hJpJ5QoKTPVHACOrmq3FoJQsse3IdtZgYkoOqb3DfRYcxiQ6VqWTCsBLBYLGojAwv
+         TLAwA/14jyrweEyearpGzYhfPXcbm5YZLtKY1jZn9RuvTyWdP9y7hlbjmovP48HhC5Pw
+         o9RA==
+X-Gm-Message-State: AFqh2krR/yKu1G8tbb7Ltw0imDwQgFyBPQWhaXNHAHgXlfMkJ3fdGFAc
+        52BxeTYetQvlt8r2RElBlfQxA0CSLWfQIiLjvWFtx0YvGlK64e4cSiCyGPQsLluOTRGT9nwM68C
+        xvPizmzEj0xFBNZp/0mScEKoC
+X-Received: by 2002:a05:600c:1f0e:b0:3cf:497c:c59e with SMTP id bd14-20020a05600c1f0e00b003cf497cc59emr51042305wmb.6.1673373748521;
+        Tue, 10 Jan 2023 10:02:28 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuoimejpOhIg4YK96wkX5m3HozxICPfW+pC6ZhtT/dAGhgJLRHQyug3apvBlMqwTbdajkpKLQ==
+X-Received: by 2002:a05:600c:1f0e:b0:3cf:497c:c59e with SMTP id bd14-20020a05600c1f0e00b003cf497cc59emr51042277wmb.6.1673373748276;
+        Tue, 10 Jan 2023 10:02:28 -0800 (PST)
+Received: from [192.168.31.129] (84-115-237-15.cable.dynamic.surfer.at. [84.115.237.15])
+        by smtp.gmail.com with ESMTPSA id i15-20020a05600011cf00b00294176c2c01sm11838518wrx.86.2023.01.10.10.02.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 10:02:27 -0800 (PST)
+Message-ID: <bd4a55a4-8e9c-82bf-92c8-1fa354289dce@redhat.com>
+Date:   Tue, 10 Jan 2023 19:02:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.183.108
-X-CLIENT-HOSTNAME: 213.134.183.108
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrledvgdegiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekfedruddtkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeefrddutdekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlvghnsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtghomhdp
- rhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepufgrnhhjuhdrofgvhhhtrgesrghmugdrtghomhdprhgtphhtthhopehluhhkrghsseifuhhnnhgvrhdruggvpdhrtghpthhtoheprhgrfhgrvghlrdhjrdifhihsohgtkhhisehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=12 Fuz1=12 Fuz2=12
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1] perf script flamegraph: Avoid d3-flame-graph package
+ dependency
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        996839@bugs.debian.org, Brendan Gregg <brendan@intel.com>,
+        spiermar@gmail.com
+References: <20230105030434.255603-1-irogers@google.com>
+ <CAP-5=fXi_9zdhTAoYApiFQoLURAvpEatFzU3uL23o3zs=z25ZQ@mail.gmail.com>
+Content-Language: en-US
+From:   Andreas Gerstmayr <agerstmayr@redhat.com>
+In-Reply-To: <CAP-5=fXi_9zdhTAoYApiFQoLURAvpEatFzU3uL23o3zs=z25ZQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday, January 2, 2023 5:59:36 PM CET Rafael J. Wysocki wrote:
-> On Monday, January 2, 2023 5:34:19 PM CET Rafael J. Wysocki wrote:
-> > On Monday, November 21, 2022 11:17:42 PM CET Bjorn Helgaas wrote:
-> > > On Mon, Nov 21, 2022 at 03:33:00PM +0100, Rafael J. Wysocki wrote:
-> > > > On Friday, November 18, 2022 10:13:39 PM CET Rafael J. Wysocki wrote:
-> > > > > On Fri, Nov 18, 2022 at 9:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > >
-> > > > > > Hi Rafael,
-> > > > > >
-> > > > > > Sorry, I'm still confused (my perpetual state :)).
-> > > > > 
-> > > > > No worries, doing my best to address that.
-> > > > > 
-> > > > > > On Fri, Nov 18, 2022 at 02:16:17PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > On Thu, Nov 17, 2022 at 11:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > > > On Thu, Nov 17, 2022 at 06:01:26PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > > > On Thu, Nov 17, 2022 at 12:28 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > > > > > On Wed, Nov 16, 2022 at 01:00:36PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > > > > > On Wed, Nov 16, 2022 at 1:37 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > > > > > > > On Mon, Nov 14, 2022 at 04:33:52PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > > > > > > > On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
-> > > > > > > > > > > > > > > On 11/11/2022 11:41, Bjorn Helgaas wrote:
-> > > > > > > > > > > > > > > > On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
-> > > > > > > > > > > > > > > > > Firmware typically advertises that ACPI devices that represent PCIe
-> > > > > > > > > > > > > > > > > devices can support D3 by a combination of the value returned by
-> > > > > > > > > > > > > > > > > _S0W as well as the HotPlugSupportInD3 _DSD [1].
-> > > > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > > > `acpi_pci_bridge_d3` looks for this combination but also contains
-> > > > > > > > > > > > > > > > > an assumption that if an ACPI device contains power resources the PCIe
-> > > > > > > > > > > > > > > > > device it's associated with can support D3.  This was introduced
-> > > > > > > > > > > > > > > > > from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
-> > > > > > > > > > > > > > > > > D3 if power managed by ACPI").
-> > > > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > > > Some firmware configurations for "AMD Pink Sardine" do not support
-> > > > > > > > > > > > > > > > > wake from D3 in _S0W for the ACPI device representing the PCIe root
-> > > > > > > > > > > > > > > > > port used for tunneling. The PCIe device will still be opted into
-> > > > > > > > > > > > > > > > > runtime PM in the kernel [2] because of the logic within
-> > > > > > > > > > > > > > > > > `acpi_pci_bridge_d3`. This currently happens because the ACPI
-> > > > > > > > > > > > > > > > > device contains power resources.
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Wait.  Is this as simple as just recognizing that:
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > >   _PS0 means the OS has a knob to put the device in D0, but it doesn't
-> > > > > > > > > > > > > >   mean the device can wake itself from a low-power state.  The OS has
-> > > > > > > > > > > > > >   to use _S0W to learn the device's ability to wake itself.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > It is.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Now I'm confused again about what "HotPlugSupportInD3" means.  The MS
-> > > > > > > > > > > > web page [1] says it identifies Root Ports capable of handling hot
-> > > > > > > > > > > > plug events while in D3.  That sounds kind of related to _S0W: If _S0W
-> > > > > > > > > > > > says "I can wake myself from D3hot and D3cold", how is that different
-> > > > > > > > > > > > from "I can handle hotplug events in D3"?
-> > > > > > > > > > >
-> > > > > > > > > > > For native PME/hot-plug signaling there is no difference.  This is the
-> > > > > > > > > > > same interrupt by the spec after all IIRC.
-> > > > > > > > > > >
-> > > > > > > > > > > For GPE-based signaling, though, there is a difference, because GPEs
-> > > > > > > > > > > can only be used directly for wake signaling (this is related to
-> > > > > > > > > > > _PRW).  In particular, the only provision in the ACPI spec for device
-> > > > > > > > > > > hot-add are the Bus Check and Device Check notification values (0 and
-> > > > > > > > > > > 1) which require AML to run and evaluate Notify() on specific AML
-> > > > > > > > > > > objects.
-> > > > > > > > > > >
-> > > > > > > > > > > Hence, there is no spec-defined way to tell the OS that "something can
-> > > > > > > > > > > be hot-added under this device while in D3 and you will get notified
-> > > > > > > > > > > about that".
-> > > > > > > > > >
-> > > > > > > > > > So I guess acpi_pci_bridge_d3() looks for:
-> > > > > > > > > >
-> > > > > > > > > >   - "wake signaling while in D3" (_S0W) and
-> > > > > > > > > >   - "notification of hotplug while in D3" ("HotPlugSupportInD3")
-> > > > > > > > > >
-> > > > > > > > > > For Root Ports with both those abilities (or bridges below such Root
-> > > > > > > > > > Ports), we allow D3, and this patch doesn't change that.
-> > > > > > > > > >
-> > > > > > > > > > What this patch *does* change is that all bridges with _PS0 or _PR0
-> > > > > > > > > > previously could use D3, but now will only be able to use D3 if they
-> > > > > > > > > > are also (or are below) a Root Port that can signal wakeup
-> > > > > > > > > > (wakeup.flags.valid) and can wakeup from D3hot or D3cold (_S0W).
-> > > > > > > > > >
-> > > > > > > > > > And this fixes the Pink Sardine because it has Root Ports that do
-> > > > > > > > > > Thunderbolt tunneling, and they have _PS0 or _PR0 but their _S0W says
-> > > > > > > > > > they cannot wake from D3.  Previously we put those in D3, but they
-> > > > > > > > > > couldn't wake up.  Now we won't put them in D3.
-> > > > > > > > > >
-> > > > > > > > > > I guess there's a possibility that this could break or cause higher
-> > > > > > > > > > power consumption on systems that were fixed by c6e331312ebf
-> > > > > > > > > > ("PCI/ACPI: Whitelist hotplug ports for D3 if power managed by ACPI").
-> > > > > > > > > > I don't know enough about that scenario.  Maybe Lukas will chime in.
-> > > > > > > > >
-> > > > > > > > > Well, it is possible that some of these systems will be affected.
-> > > > > > > > >
-> > > > > > > > > One of such cases is when the port in question has _S0W which says
-> > > > > > > > > that wakeup from D3 is not supported.  In that case I think the kernel
-> > > > > > > > > should honor the _S0W input, because there may be a good reason known
-> > > > > > > > > to the platform integrator for it.
-> > > > > > > > >
-> > > > > > > > > The other case is when wakeup.flags.valid is unset for the port's ACPI
-> > > > > > > > > companion which means that the port cannot signal wakeup through
-> > > > > > > > > ACPI-related means at all and this may be problematic, especially in
-> > > > > > > > > the system-wide suspend case in which the wakeup capability is not too
-> > > > > > > > > relevant unless there is a system wakeup device under the port.
-> > > > > > > > >
-> > > > > > > > > I don't think that the adev->wakeup.flags.valid check has any bearing
-> > > > > > > > > on the _S0W check - if there is _S0W and it says "no wakeup from D3",
-> > > > > > > > > it should still be taken into account - so that check can be moved
-> > > > > > > > > past the _S0W check.
-> > > > > > > >
-> > > > > > > > So if _S0W says it can wake from D3, but wakeup.flags is not valid,
-> > > > > > > > it's still OK to use D3?
-> > > > > > >
-> > > > > > > No, it isn't, as per the code today and I don't think that this
-> > > > > > > particular part should be changed now.
-> > > > > >
-> > > > > > But the current upstream code checks acpi_pci_power_manageable(dev)
-> > > > > > first, so if "dev" has _PR0 or _PS0, we'll use D3 even if _S0W says it
-> > > > > > can wake from D3 and wakeup.flags is not valid.
-> > > > > 
-> > > > > Yes, the current code will return 'true' if _PR0 or _PS0 is present
-> > > > > for dev regardless of anything else.
-> > > > > 
-> > > > > The proposed change is to make that conditional on whether or not _S0W
-> > > > > for the root port says that wakeup from D3 is supported (or it is not
-> > > > > present or unusable).
-> > > > > 
-> > > > > I see that I've missed one point now which is when the root port
-> > > > > doesn't have an ACPI companion, in which case we should go straight
-> > > > > for the "dev is power manageable" check.
-> > > > 
-> > > > Moreover, it is possible that the bridge passed to acpi_pci_bridge_d3() has its
-> > > > own _S0W or a wakeup GPE if it is power-manageable via ACPI.  In those cases
-> > > > it is not necessary to ask the Root Port's _S0W about wakeup from D3, so overall
-> > > > I would go for the patch like the below (not really tested).
-> > > > 
-> > > > This works in the same way as the current code (unless I have missed anything)
-> > > > except for the case when the "target" bridge is power-manageable via ACPI, but
-> > > > it cannot signal wakeup via ACPI and has no _S0W.  In that case it will consult
-> > > > the upstream Root Port's _S0W to check whether or not wakeup from D3 is
-> > > > supported.
-> > > > 
-> > > > [Note that if dev_has_acpi_pm is 'true', it is kind of pointless to look for the
-> > > > "HotPlugSupportInD3" property of the Root Port, because the function is going to
-> > > > return 'true' regardless, but I'm not sure if adding an extra if () for handling
-> > > > this particular case is worth the hassle.]
-> > > 
-> > > I think this has a lot of potential.  I haven't tried it, but I wonder
-> > > if splitting out the Root Port-specific parts to a separate function
-> > > would be helpful, if only to make it more obvious that there may be
-> > > two different devices involved.
-> > > 
-> > > If there are two devices ("dev" is a bridge below a Root Port), I
-> > > guess support in the Root Port is not necessarily required?  E.g.,
-> > > could "dev" assert a wakeup GPE that's not routed through the Root
-> > > Port?  If Root Port support *is* required, maybe it would read more
-> > > clearly to test that first, before looking at the downstream device.
-> > 
-> > Sorry for the delay.
-> > 
-> > I don't really think that Root Port support is required for a bridge below
-> > a Root Port if that bridge itself is power-manageable via ACPI.  Moreover,
-> > I don't think that the _S0W of a Root Port has any bearing on devices below
-> > it that have their own _S0W.
-> > 
-> > So what we really want appears to be to evaluate _S0W for the target bridge,
-> > regardless of whether or not it is a Root Port, and return 'false' if that
-> > produces D2 or a shallower power state.  Otherwise, we can do what we've
-> > done so far.
-> > 
-> > The patch below implements, this - please let me know what you think.
-> > 
-> 
-> And here's a v2 with somewhat less code duplication.
+On 05.01.23 10:24, Ian Rogers wrote:
+> On Wed, Jan 4, 2023 at 7:04 PM Ian Rogers <irogers@google.com> wrote:
+>>
+>> Currently flame graph generation requires a d3-flame-graph template to
+>> be installed. Unfortunately this is hard to come by for things like
+>> Debian [1]. If the template isn't installed warn and download it from
+>> jsdelivr CDN. If downloading fails generate a minimal flame graph
+>> again with the javascript coming from jsdelivr CDN.
+>>
+>> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996839
+>>
+>> Signed-off-by: Ian Rogers <irogers@google.com>
 
-I'm wondering if you have any comments on this one?
+I'm not entirely convinced that this perf script should make a network 
+request. In my opinion
 
-> ---
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH] PCI / ACPI: PM: Take _S0W of the target bridge into account in acpi_pci_bridge_d3(()
-> 
-> It is generally questionable to allow a PCI bridge to go into D3 if
-> it has _S0W returning D2 or a shallower power state, so modify
-> acpi_pci_bridge_d3(() to always take the return value of _S0W for the
-> target bridge into accout.  That is, make it return 'false' if _S0W
-> returns D2 or a shallower power state for the target bridge regardless
-> of its ancestor PCIe Root Port properties.  Of course, this also causes
-> 'false' to be returned if the PCIe Root Port itself is the target and
-> its _S0W returns D2 or a shallower power state.
-> 
-> However, still allow bridges without _S0W that are power-manageable via
-> ACPI to enter D3 to retain the current code behavior in that case.
-> 
-> Reported-by: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/acpi/device_pm.c |   16 ++++++++++++++++
->  drivers/pci/pci-acpi.c   |   34 ++++++++++++++++++++++++----------
->  include/acpi/acpi_bus.h  |    1 +
->  3 files changed, 41 insertions(+), 10 deletions(-)
-> 
-> Index: linux-pm/drivers/pci/pci-acpi.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci-acpi.c
-> +++ linux-pm/drivers/pci/pci-acpi.c
-> @@ -977,22 +977,37 @@ bool acpi_pci_bridge_d3(struct pci_dev *
->  {
->  	struct pci_dev *rpdev;
->  	struct acpi_device *adev;
-> -	acpi_status status;
-> -	unsigned long long state;
->  	const union acpi_object *obj;
->  
->  	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
->  		return false;
->  
-> -	/* Assume D3 support if the bridge is power-manageable by ACPI. */
-> -	if (acpi_pci_power_manageable(dev))
-> -		return true;
-> +	adev = ACPI_COMPANION(&dev->dev);
-> +	if (adev) {
-> +		/*
-> +		 * If the bridge has _S0W, whether or not it can go into D3
-> +		 * depends on what is returned by that object.  In particular,
-> +		 * if the power state returned by _S0W is D2 or shallower,
-> +		 * entering D3 should not be allowed.
-> +		 */
-> +		if (acpi_dev_no_wakeup_from_d3(adev))
-> +			return false;
-> +
-> +		/*
-> +		 * Otherwise, assume that the bridge can enter D3 so long as it
-> +		 * is power-manageable via ACPI.
-> +		 */
-> +		if (acpi_device_power_manageable(adev))
-> +			return true;
-> +	}
->  
->  	rpdev = pcie_find_root_port(dev);
->  	if (!rpdev)
->  		return false;
->  
-> -	adev = ACPI_COMPANION(&rpdev->dev);
-> +	if (rpdev != dev)
-> +		adev = ACPI_COMPANION(&rpdev->dev);
-> +
->  	if (!adev)
->  		return false;
->  
-> @@ -1005,11 +1020,10 @@ bool acpi_pci_bridge_d3(struct pci_dev *
->  		return false;
->  
->  	/*
-> -	 * If the Root Port cannot wake itself from D3hot or D3cold, we
-> -	 * can't use D3.
-> +	 * In the bridge-below-a-Root-Port case, evaluate _S0W for the Root Port
-> +	 * to verify whether or not it can signal wakeup from D3.
->  	 */
-> -	status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
-> -	if (ACPI_SUCCESS(status) && state < ACPI_STATE_D3_HOT)
-> +	if (rpdev != dev && acpi_dev_no_wakeup_from_d3(adev))
->  		return false;
->  
->  	/*
-> Index: linux-pm/drivers/acpi/device_pm.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/device_pm.c
-> +++ linux-pm/drivers/acpi/device_pm.c
-> @@ -484,6 +484,22 @@ void acpi_dev_power_up_children_with_adr
->  	acpi_dev_for_each_child(adev, acpi_power_up_if_adr_present, NULL);
->  }
->  
-> +/**
-> + * acpi_dev_no_wakeup_from_d3 - Check if wakeup signaling from D3 is supported
-> + * @adev: ACPI companion of the target device.
-> + *
-> + * Evaluate _S0W for @adev and return 'true' if it is successful and the power
-> + * state returned by it is D2 or shallower.
-> + */
-> +bool acpi_dev_no_wakeup_from_d3(struct acpi_device *adev)
-> +{
-> +	unsigned long long state;
-> +	acpi_status status;
-> +
-> +	status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
-> +	return ACPI_SUCCESS(status) && state < ACPI_STATE_D3_HOT;
-> +}
-> +
->  #ifdef CONFIG_PM
->  static DEFINE_MUTEX(acpi_pm_notifier_lock);
->  static DEFINE_MUTEX(acpi_pm_notifier_install_lock);
-> Index: linux-pm/include/acpi/acpi_bus.h
-> ===================================================================
-> --- linux-pm.orig/include/acpi/acpi_bus.h
-> +++ linux-pm/include/acpi/acpi_bus.h
-> @@ -533,6 +533,7 @@ int acpi_bus_update_power(acpi_handle ha
->  int acpi_device_update_power(struct acpi_device *device, int *state_p);
->  bool acpi_bus_power_manageable(acpi_handle handle);
->  void acpi_dev_power_up_children_with_adr(struct acpi_device *adev);
-> +bool acpi_dev_no_wakeup_from_d3(struct acpi_device *adev);
->  int acpi_device_power_add_dependent(struct acpi_device *adev,
->  				    struct device *dev);
->  void acpi_device_power_remove_dependent(struct acpi_device *adev,
-> 
-> 
-> 
-> 
+* best would be if this template gets packaged in Debian
+* alternatively print instructions how to install the template:
+
+     sudo mkdir /usr/share/d3-flame-graph
+     sudo wget -O /usr/share/d3-flame-graph/d3-flamegraph-base.html 
+https://cdn.jsdelivr.net/npm/d3-flame-graph@4/dist/templates/d3-flamegraph-base.html
+
+* or eventually just embed the entire template (66 KB) in the Python 
+file (not sure if this is permissible though, it's basically a minified 
+HTML/JS blob)?
+* if the above options don't work, I'd recommend asking the user before 
+making the network request, and eventually persist the template 
+somewhere so it doesn't need to be downloaded every time
+
+What do you think?
 
 
+Cheers,
+Andreas
 
+>> ---
+>>   tools/perf/scripts/python/flamegraph.py | 63 ++++++++++++++++++-------
+>>   1 file changed, 45 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/tools/perf/scripts/python/flamegraph.py b/tools/perf/scripts/python/flamegraph.py
+>> index b6af1dd5f816..808b0e1c9be5 100755
+>> --- a/tools/perf/scripts/python/flamegraph.py
+>> +++ b/tools/perf/scripts/python/flamegraph.py
+>> @@ -25,6 +25,27 @@ import io
+>>   import argparse
+>>   import json
+>>   import subprocess
+>> +import urllib.request
+>> +
+>> +minimal_html = """<head>
+>> +  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.css">
+> 
+> (hopefully fixed Martin Spier's e-mail address)
+> 
+> The @4.1.3 comes from the README.md:
+> https://github.com/spiermar/d3-flame-graph/blob/master/README.md
+> Does it make sense just to drop it or use @latest ? It'd be nice not
+> to patch this file for every d3-flame-graph update.
+> 
+> Thanks,
+> Ian
+> 
+>> +</head>
+>> +<body>
+>> +  <div id="chart"></div>
+>> +  <script type="text/javascript" src="https://d3js.org/d3.v7.js"></script>
+>> +  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.min.js"></script>
+>> +  <script type="text/javascript">
+>> +  const stacks = [/** @flamegraph_json **/];
+>> +  // Note, options is unused.
+>> +  const options = [/** @options_json **/];
+>> +
+>> +  var chart = flamegraph();
+>> +  d3.select("#chart")
+>> +        .datum(stacks[0])
+>> +        .call(chart);
+>> +  </script>
+>> +</body>
+>> +"""
+>>
+>>   # pylint: disable=too-few-public-methods
+>>   class Node:
+>> @@ -50,15 +71,18 @@ class FlameGraphCLI:
+>>           self.args = args
+>>           self.stack = Node("all", "root")
+>>
+>> -        if self.args.format == "html" and \
+>> -                not os.path.isfile(self.args.template):
+>> -            print("Flame Graph template {} does not exist. Please install "
+>> -                  "the js-d3-flame-graph (RPM) or libjs-d3-flame-graph (deb) "
+>> -                  "package, specify an existing flame graph template "
+>> -                  "(--template PATH) or another output format "
+>> -                  "(--format FORMAT).".format(self.args.template),
+>> -                  file=sys.stderr)
+>> -            sys.exit(1)
+>> +        if self.args.format == "html":
+>> +            if os.path.isfile(self.args.template):
+>> +                self.template = f"file://{self.args.template}"
+>> +            else:
+>> +                print(f"""
+>> +Warning: Flame Graph template '{self.args.template}'
+>> +does not exist, a template will be downloaded via http. To avoid this
+>> +please install a package such as the js-d3-flame-graph or
+>> +libjs-d3-flame-graph, specify an existing flame graph template
+>> +(--template PATH) or another output format (--format FORMAT).
+>> +""", file=sys.stderr)
+>> +            self.template = "https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/templates/d3-flamegraph-base.html"
+>>
+>>       @staticmethod
+>>       def get_libtype_from_dso(dso):
+>> @@ -129,15 +153,18 @@ class FlameGraphCLI:
+>>               options_json = json.dumps(options)
+>>
+>>               try:
+>> -                with io.open(self.args.template, encoding="utf-8") as template:
+>> -                    output_str = (
+>> -                        template.read()
+>> -                        .replace("/** @options_json **/", options_json)
+>> -                        .replace("/** @flamegraph_json **/", stacks_json)
+>> -                    )
+>> -            except IOError as err:
+>> -                print("Error reading template file: {}".format(err), file=sys.stderr)
+>> -                sys.exit(1)
+>> +                with urllib.request.urlopen(self.template) as template:
+>> +                    output_str = '\n'.join([
+>> +                        l.decode('utf-8') for l in template.readlines()
+>> +                    ])
+>> +            except Exception as err:
+>> +                print(f"Error reading template {self.template}: {err}\n"
+>> +                      "a minimal flame graph will be generated", file=sys.stderr)
+>> +                output_str = minimal_html
+>> +
+>> +            output_str = output_str.replace("/** @options_json **/", options_json)
+>> +            output_str = output_str.replace("/** @flamegraph_json **/", stacks_json)
+>> +
+>>               output_fn = self.args.output or "flamegraph.html"
+>>           else:
+>>               output_str = stacks_json
+>> --
+>> 2.39.0.314.g84b9a713c41-goog
+>>
+> 
+
+-- 
+Red Hat Austria GmbH, Registered seat: A-1200 Vienna, Millennium Tower, 
+26.floor, Handelskai 94-96, Austria
+Commercial register: Commercial Court Vienna, FN 479668w
 
