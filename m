@@ -2,162 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C964664390
+	by mail.lfdr.de (Postfix) with ESMTP id E2EFC664391
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 15:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjAJOrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 09:47:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
+        id S238492AbjAJOrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 09:47:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238716AbjAJOrL (ORCPT
+        with ESMTP id S238735AbjAJOr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 09:47:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200E059305;
-        Tue, 10 Jan 2023 06:46:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EFB0B81686;
-        Tue, 10 Jan 2023 14:46:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7740FC433D2;
-        Tue, 10 Jan 2023 14:46:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673362007;
-        bh=IaikD1RTYaN6M6TGo0lVcnpxh3sUPsTrkuA870j4PL4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kPjEfiMiNWq5fLNk+oll30rgxZfthMc/ps5etPKXrknVOEBg6gzwdvidY8MKBKYP8
-         Udr030lMLCJpbUF2WteuSGJlVyArnUdZ4rkgZH+uevM6f6iSUbJNpb1CAXEvRiIAt9
-         1WBMUSqNgJM8kCfDif+8D2JUvQiBeLDHeRb79FAxTrM/gyQ1XwO46j95ODpxOyw/G+
-         pqjXPisHqhUa/O7joUHKuQLYUmSKMy0Z50Y3BHpHemxi/bTxNo8PGJd/NNj68oIMfO
-         SXxbSiMIM9PnRKaBpWHOnHlKbvp1htTr6dcR3g+OJex6hnwET3daPaLXZ6dBXMcc+4
-         JVreBycgW9dGw==
-Date:   Tue, 10 Jan 2023 23:46:43 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: Re: [PATCH V0 1/1] bootconfig: Increase max size of bootconfig from
- 32 KB to 256 KB for DCC support
-Message-Id: <20230110234643.7bbd340ece99c28f25fe7ad7@kernel.org>
-In-Reply-To: <e2ac0fa4-28f0-f4d8-e02a-b2a5d6131a48@quicinc.com>
-References: <cover.1673261071.git.quic_schowdhu@quicinc.com>
-        <654357bcbfd3974072a558c494a51edafaa73e1a.1673261071.git.quic_schowdhu@quicinc.com>
-        <20230110001820.5ca81344286f614ed4ccec77@kernel.org>
-        <e2ac0fa4-28f0-f4d8-e02a-b2a5d6131a48@quicinc.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 09:47:28 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91144FCEE
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:47:27 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso7198626wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 06:47:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Na36X1GB51nJZLV+wR9SqcSDYHAa+6yCRZvq/1xVmy0=;
+        b=Z4obp+OiY1ytxl7l/l/UZ9CxhhUw2KWYuCSj702seXCShA8HtfVVZYCN7oqgQJuZ4x
+         j9nQF5T9PfjPqcUG6fADvyCZXEgkabDMGDrDG4wvDldqYexYHO/0bIogwJQXZrdTTDrY
+         oaYzz9/zA4wbvIrQVdjjdiKOMWa4mF8EiGWtVIwrDBbnT1zEbuScAhRP8EjpUDCGwAqi
+         IZ+mphlIuul1XekGoefWkgtteIG4LMck0FuXH87oNbFUQ7n6Kws6J2nv4l2kgTJLybsb
+         G5IKHyl60hg2T+rgsUpX/RGRgphC3E468/acnJJ49MI/8rbURBwFSRdGIOLCjwo2sn9y
+         b8mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Na36X1GB51nJZLV+wR9SqcSDYHAa+6yCRZvq/1xVmy0=;
+        b=IyaLjS8fhPMkSyPoG0wIBmCB5WtzZIWFiQKnloCrG8Tdla9B7xYGTcVhFgXDIyP935
+         NI987AZRwf8EozKtAxisHyr9zq8oYNZStAug/LkAqqmGoFipPnbfiX5YzOGtshObj0iG
+         aKQATrmBT4FirQjMmTgxXw7lbgBiCXOeScxQf+3+O2FYVAhi4Ive45MP9RakD2hW25nB
+         LD8ttCQ7kzBj7UZeLvH5mOu1hUnLhwcUV7aQMX/FH9iG6Iio6Vah9QD7eg8ZI0O0b9mp
+         5n28cVKMv+R9kGgQu0kgvP4FlQ2ewyeet6NriuYyimsBZ82DPwyPvp3TzqFbb8jVShLp
+         4Wcw==
+X-Gm-Message-State: AFqh2koVcPOpRuez2+41i/GPxkvnwD1qxen4xPREi6OyIlq1jw6Al2Ah
+        d5pojQWm6qza1ATG1jT1HeKIsALoXcx3dzytfqM=
+X-Google-Smtp-Source: AMrXdXtBIb2NrIIUG2tKsL4GAjOZk509zdwPumpZE1VhKtPgS0LGTLF6H/oNnS8YAvhSHX3FWGSf1w==
+X-Received: by 2002:a05:600c:3c88:b0:3d9:69fd:7707 with SMTP id bg8-20020a05600c3c8800b003d969fd7707mr47153368wmb.2.1673362045953;
+        Tue, 10 Jan 2023 06:47:25 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id r126-20020a1c2b84000000b003d35c845cbbsm19291934wmr.21.2023.01.10.06.47.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 06:47:25 -0800 (PST)
+Message-ID: <cf5e9339-2511-1135-71da-a8342b264414@linaro.org>
+Date:   Tue, 10 Jan 2023 14:47:24 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: ieee80211_handle_wake_tx_queue and dynamic ps regression
+Content-Language: en-US
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     linux-kernel@vger.kernel.org, alexander@wetzel-home.de,
+        johannes.berg@intel.com, Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org
+References: <19015168-c747-17b7-f0ae-9d2ee27d221c@linaro.org>
+ <06f76774-1b2e-f563-7128-7d5b9547dfe9@linaro.org>
+In-Reply-To: <06f76774-1b2e-f563-7128-7d5b9547dfe9@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 Jan 2023 17:26:07 +0530
-Souradeep Chowdhury <quic_schowdhu@quicinc.com> wrote:
+On 10/01/2023 12:44, Bryan O'Donoghue wrote:
+> + linux-wireless
+> On 10/01/2023 12:35, Bryan O'Donoghue wrote:
+>> commit a790cc3a4fad75048295571a350b95b87e022a5a 
+>> (wake_tx_queue-broken-23-08-01)
+>> Author: Alexander Wetzel <alexander@wetzel-home.de>
+>> Date:   Sun Oct 9 18:30:39 2022 +0200
+>>
+>>      wifi: mac80211: add wake_tx_queue callback to drivers
+>>
+>> is causing a regression with
+>>
+>> - CONF_PS = 1
+>> - CONF_DYNAMIC_PS = 0
+>> - ieee80211_handle_wake_tx_queue
+>>
+>> In this case we get stuck in a loop similar to this
+>>
+>> // IEEE80211_CONF_CHANGE_PS
+>> [   17.255480] wcn36xx: wcn36xx_change_ps/312 enable
+>> [   18.088835] ieee80211_tx_h_dynamic_ps/263 setting 
+>> IEEE80211_QUEUE_STOP_REASON_PS
+>> [   18.088906] ieee80211_handle_wake_tx_queue/334 entry
+>> [   18.091505] ieee80211_dynamic_ps_disable_work/2250 calling 
+>> ieee80211_hw_config()
+>> [   18.095370] ieee80211_handle_wake_tx_queue/338 wake_tx_push_queue
+>>
+>> // IEEE80211_CONF_CHANGE_PS
+>> [   18.102625] wcn36xx: wcn36xx_change_ps/312 disable
+>> [   18.107643] wake_tx_push_queue/303 entry
+>>
+>> // txq is stopped here reason == IEEE80211_QUEUE_STOP_REASON_PS
+>> [   18.107654] wake_tx_push_queue/311 q_stopped bitmask 0x00000002 
+>> IEEE80211_QUEUE_STOP_REASON_PS true
+>> [   18.107661] wake_tx_push_queue/324 exit
+>> [   18.107667] ieee80211_handle_wake_tx_queue/342 exit
+>> [   18.115560] ieee80211_handle_wake_tx_queue/334 entry
+>> [   18.139937] ieee80211_handle_wake_tx_queue/338 wake_tx_push_queue
+>> [   18.145163] wake_tx_push_queue/303 entry
+>> [   18.150016] ieee80211_dynamic_ps_disable_work/2252 completed 
+>> ieee80211_hw_config()
+>>
+>> // now we unset IEEE80211_QUEUE_STOP_REASON_PS but too late
+>> [   18.151145] wake_tx_push_queue/311 q_stopped bitmask 0x00000002 
+>> IEEE80211_QUEUE_STOP_REASON_PS true
+>> [   18.155263] ieee80211_dynamic_ps_disable_work/2254 clearing 
+>> IEEE80211_QUEUE_STOP_REASON_PS
+>> [   18.162531] wake_tx_push_queue/324 exit
+>> [   18.162548] ieee80211_handle_wake_tx_queue/342 exit
+>> [   18.183639] ieee80211_dynamic_ps_disable_work/2259 cleared 
+>> IEEE80211_QUEUE_STOP_REASON_PS
+>>
+>> // IEEE80211_CONF_CHANGE_PS runs again
+>> [   18.215487] wcn36xx: wcn36xx_change_ps/312 enable
+>>
+>> We get stuck in that loop. Packets getting transmitted is a rare 
+>> event, most are dropped.
 
-> 
-> 
-> On 1/9/2023 8:48 PM, Masami Hiramatsu (Google) wrote:
-> > On Mon, 9 Jan 2023 20:01:05 +0530
-> > Souradeep Chowdhury <quic_schowdhu@quicinc.com> wrote:
-> > 
-> >> Increasing the memory size of bootconfig to be able to handle a max number of
-> >> 8192 nodes to be fitted in memory size of 256KB.
-> > 
-> > Sorry, but you missed the 'xbc_node::data' stores the index of the data and
-> > that is uint16_t. So the XBC_DATA_MAX is fixed limitation.
-> > 
-> > The number of nodes (XBC_NODE_MAX) can be expanded because I just decided it
-> > to keep the pre-compiled array size ~8KB. Maybe expanding it to 64KB just
-> > increase the size of kernel on init memory (and freed after boot).
-> > 
-> > Could you tell me why you need such a big data for your DCC?
-> > 
-> > Thank you,
-> 
-> DCC is a debugging tool used in qcom which is needed to debug crashes
-> that can happen at boot-time. For debugging purposes a large number of
-> registers need to be configured in DCC driver which is to be fed via the
-> bootconfig file. For that we need to expand the nodes as well as memory
-> for using bootconfig.
+BTW I considered implementing a wcn36xx specific wake_tx callback - 
+which maybe should be done anyway.
 
-Hmm, how many registers does DCC usually use? And how big the bootconfig
-file is usually? I have no idea about that.
+I _don't_ see other drivers checking for q_stopped & 
+IEEE80211_QUEUE_STOP_REASON_PS
 
-> Can you let us know the changes that you suggest for doing the same? Is 
-> it fine to just increase the XBC_NODE_MAX, do we also need to
-> change the uint16_t to u32 for proper storing of index values?
+Should they be ?
 
-Expanding the number of max nodes is easy, just increase the XBC_NODE_MAX
-(must be less than 64k). That will also increase the memory consumption
-during the boot time even if the bootconfig is small. Anyway, it will be
-freed after boot, so it maybe OK.
+If they should check IEEE80211_QUEUE_STOP_REASON_PS, then right now, 
+they don't. If they shouldn't check IEEE80211_QUEUE_STOP_REASON_PS then 
+neither should the generic replacement ieee80211_handle_wake_tx_queue()
 
-But expanding the size of max bootconfig needs to change the type of
-the 'data' field to uint32_t (since that will be used for building 
-bootconfig tool) and you also must confirm that `tools/bootconfig/bootconfig`
-can be built and pass the test-bootconfig.sh.
-Hmm, comparing with expanding the max number of XBC node, changing the
-'data' type to uint32_t may not have much impact on memory consumption point
-of view, because it may increase only 20% of memory, but expanding the
-MAX_XBC_NODE always increases more than double.
-
-Thus, if we can accept increasing the number of node, it should be OK to
-change the 'data' type.
-
-BTW, I think now we don't need the ' __attribute__ ((__packed__))' for
-struct xbc_node. It was packed for reducing the size of array and able to
-pass 'compiled' bootconfig, but now it is just passed as a text data for
-safety.
-
-Thank you,
-
-> 
-> 
-> > 
-> >>
-> >> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> >> ---
-> >>   include/linux/bootconfig.h | 6 +++---
-> >>   1 file changed, 3 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-> >> index 1611f9d..64d233b 100644
-> >> --- a/include/linux/bootconfig.h
-> >> +++ b/include/linux/bootconfig.h
-> >> @@ -55,11 +55,11 @@ struct xbc_node {
-> >>   } __attribute__ ((__packed__));
-> >>   
-> >>   #define XBC_KEY		0
-> >> -#define XBC_VALUE	(1 << 15)
-> >> -/* Maximum size of boot config is 32KB - 1 */
-> >> +#define XBC_VALUE	(1 << 18)
-> >> +/* Maximum size of boot config is 256KB - 1 */
-> >>   #define XBC_DATA_MAX	(XBC_VALUE - 1)
-> >>   
-> >> -#define XBC_NODE_MAX	1024
-> >> +#define XBC_NODE_MAX	8192
-> >>   #define XBC_KEYLEN_MAX	256
-> >>   #define XBC_DEPTH_MAX	16
-> >>   
-> >> -- 
-> >> 2.7.4
-> >>
-> > 
-> > 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+bod
