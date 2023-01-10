@@ -2,232 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F86E663FA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16693663FA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbjAJMBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S232496AbjAJMCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbjAJMBM (ORCPT
+        with ESMTP id S232297AbjAJMCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:01:12 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC03458327
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:01:10 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d17so11473979wrs.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:01:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VolYRiSABhDndYYNEKONj1lyAiYPsl2ohB5ly0YsFTQ=;
-        b=m+YDO5LITD9TyN0U8OC2I9QvVqvhTGruhVtt8aHGC8HyOF4qKI3fZM3F1HJ/d4qX3p
-         CzqtvXpM3pBRhAF2smMu0K/qFgFr1dcv3bVhE2tp5DASWMNLVHId316rh9YBnXrLmGfc
-         7RcL+Azp35ao2sCYy/VYdLqDgHCYktElvUOkqjjR/qy8ZSXhOI1JnuVlh/zyTNFytga4
-         QMlSWzu7H+ZLn6b9g0QOSO/HFuvi7mj4VjQczmyz3w2yeImvIb68VltKLWyMDKhN2jQn
-         H5X/RpombrCVb7UkWMdFKZsR4DXQsIOMWIN96aR9nCADk/4eRd/EaNX7WvmscQxkGpzV
-         oajg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VolYRiSABhDndYYNEKONj1lyAiYPsl2ohB5ly0YsFTQ=;
-        b=iGN+bHpsLCDOlB2fOfnCYV3xfys75LjyEwhWuDfCmTiF42TpLiXQcBwXggnKq2DWDo
-         xmLdedo+wUK2myDrJ9ac2x1gE1OwTLyuu6NDq1XXORVSRsHIELCxSRnoVBdk5LwUfKUS
-         ZSVDDKiL1Ws2sLrWzWUUwJuQ15YgfVsoVbUPBdDGSIBTs4GPO5cJ9FGcSHfZgzbc3br1
-         3dYi2LUjYLbZvc4n/SARUXZJP7TZDB5y244pcIGlVubGZj0hF6IBWtHHGiNT30uBqYfn
-         1wF2Wq4FiR9qVr+eENS5b55schylo75+5F8HhPTP/F3ArAa/iJNRijXVKMEbHVpu7/k/
-         12Nw==
-X-Gm-Message-State: AFqh2kr6ufG41gyUUQROvhIs+suZzDuOM6O9BkJ6uSZfofshAxjRGnPc
-        5/TheUgrl1OyCoW85tfVoJY=
-X-Google-Smtp-Source: AMrXdXs1sMRX0sj9pn0lSFFtv7crynJU++DKQ+uMYsZnK4VJaUrKo8IXSWl4uuO7Aak1FiCgs6ivKw==
-X-Received: by 2002:adf:fa84:0:b0:28b:ca44:6458 with SMTP id h4-20020adffa84000000b0028bca446458mr27339809wrr.2.1673352069282;
-        Tue, 10 Jan 2023 04:01:09 -0800 (PST)
-Received: from gmail.com (1F2EF2EB.nat.pool.telekom.hu. [31.46.242.235])
-        by smtp.gmail.com with ESMTPSA id q4-20020adfdfc4000000b002bc6c180738sm5241873wrn.90.2023.01.10.04.01.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 04:01:08 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 10 Jan 2023 13:01:06 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     michael.roth@amd.com, bp@alien8.de, hpa@zytor.com,
-        tglx@linutronix.de, sathyanarayanan.kuppuswamy@linux.intel.com,
-        kirill.shutemov@linux.intel.com, jroedel@suse.de,
-        keescook@chromium.org, mingo@redhat.com,
-        dave.hansen@linux.intel.com, brijesh.singh@amd.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org, liwei391@huawei.com
-Subject: [PATCH -v2] x86/boot/compressed: Register dummy NMI handler in EFI
- boot loader, to avoid kdump crashes
-Message-ID: <Y71TglxSLJKO17SY@gmail.com>
-References: <20230110102745.2514694-1-zengheng4@huawei.com>
- <Y71FJ+G0NGQe3Ppq@gmail.com>
+        Tue, 10 Jan 2023 07:02:50 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB875833B;
+        Tue, 10 Jan 2023 04:02:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673352170; x=1704888170;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QZcrQpD296rETq2BwPSG/FvirBfldy66OrzZH3oanCI=;
+  b=Vb3QCIF0HGPZjc0HSu0K9rBH5fvCwAShmcWxLMgOF381+sWAyCt8/5xe
+   TupqufVWzWzmbm6bnEmk7IcEl3SoRiTuf4BFHEnNDM+vU3Kfj4U80q4yx
+   FfRC30GjZQv/zPV0R0R30Mgds6uA/pAcy+T9I2dI7OfOfuemwpmClVh5H
+   lXqJQzYLkSEeHtZsdZVGsGmChNuCfVPhpCwJGcz0fpjQuI4rtB8FjEnco
+   m5KP9WSghhMF9uJPMkRybG8q4iRraQN+Pq99ByQFuRVmjblg+kE2J2HZs
+   RHMM2N84qFjKibui+0uxo0XG1Usmacwv8inCaqY2rIlEOu6iuKLUoDETv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="350349957"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="350349957"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 04:02:50 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="799406755"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="799406755"
+Received: from gbocanex-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.115])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 04:02:47 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        =?UTF-8?q?Samuel=20Iglesias=20Gons=C3=A1lvez?= 
+        <siglesias@igalia.com>, Rodolfo Giometti <giometti@enneenne.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 00/13] tty/serial: bool conversions and cleanups
+Date:   Tue, 10 Jan 2023 14:02:13 +0200
+Message-Id: <20230110120226.14972-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y71FJ+G0NGQe3Ppq@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There are number of functions in tty/serial which have arguments or
+return types that expect/behave like bool. Likely due to them existing
+before bool was available, other types are used. Make conversions to
+bool and cleanups.
 
-* Ingo Molnar <mingo@kernel.org> wrote:
+v2:
+- Call dtr/rts parameters/variables consistently "active"
+- Don't chain one return statement with ||
+- Don't change function signatures to >80 chars ("while at it")
+- moxa: differentiated dtr and status variables
 
-> 
-> * Zeng Heng <zengheng4@huawei.com> wrote:
-> 
-> > +void do_boot_nmi_fault(struct pt_regs *regs, unsigned long error_code)
-> > +{
-> > +	/* ignore */
-> > +}
-> > diff --git a/arch/x86/boot/compressed/idt_64.c b/arch/x86/boot/compressed/idt_64.c
-> > index 6debb816e83d..b169c9728d52 100644
-> > --- a/arch/x86/boot/compressed/idt_64.c
-> > +++ b/arch/x86/boot/compressed/idt_64.c
-> > @@ -60,6 +60,7 @@ void load_stage2_idt(void)
-> >  {
-> >  	boot_idt_desc.address = (unsigned long)boot_idt;
-> >  
-> > +	set_idt_entry(X86_TRAP_NMI, boot_nmi_fault);
-> >  	set_idt_entry(X86_TRAP_PF, boot_page_fault);
-> 
-> So it's a bit sad to install a dummy handler that does nothing, while 
-> something clearly sent an NMI and expects an intelligent reaction - OTOH 
-> the unexpected NMIs from from watchdog during a kdump clearly make things 
-> worse by crashing the bootup.
-> 
-> Anyway, I cannot think of a better response here that the boot loading code 
-> could do either, so I've applied your fix to tip:x86/boot.
+Ilpo Järvinen (13):
+  tty: Cleanup tty_port_set_initialized() bool parameter
+  tty: Cleamup tty_port_set_suspended() bool parameter
+  tty: Cleanup tty_port_set_active() bool parameter
+  tty: moxa: Make local var storing tty_port_initialized() bool
+  serial: Convert uart_{,port_}startup() init_hw param to bool
+  tty: Convert ->carrier_raised() and callchains to bool
+  tty: Convert ->dtr_rts() to take bool argument
+  tty/serial: Make ->dcd_change()+uart_handle_dcd_change() status bool
+    active
+  serial: Make uart_handle_cts_change() status param bool active
+  tty: Return bool from tty_termios_hw_change()
+  tty/serial: Call ->dtr_rts() parameter active consistently
+  tty: moxa: Rename dtr/rts parameters/variables to active
+  usb/serial: Rename dtr/rts parameters/variables to active
 
-BTW., the changelog had very poor quality, and the patch added no comments 
-to explain the presence of the dummy NMI.
+ drivers/char/pcmcia/synclink_cs.c    | 18 +++----
+ drivers/ipack/devices/ipoctal.c      |  4 +-
+ drivers/mmc/core/sdio_uart.c         | 13 +++--
+ drivers/pps/clients/pps-ldisc.c      |  6 +--
+ drivers/s390/char/con3215.c          |  4 +-
+ drivers/staging/greybus/uart.c       |  4 +-
+ drivers/tty/amiserial.c              | 12 ++---
+ drivers/tty/hvc/hvc_console.c        |  4 +-
+ drivers/tty/hvc/hvc_console.h        |  2 +-
+ drivers/tty/hvc/hvc_iucv.c           |  6 +--
+ drivers/tty/moxa.c                   | 80 ++++++++++++++--------------
+ drivers/tty/mxser.c                  | 11 ++--
+ drivers/tty/n_gsm.c                  | 16 +++---
+ drivers/tty/serial/imx.c             |  2 +-
+ drivers/tty/serial/max3100.c         |  2 +-
+ drivers/tty/serial/max310x.c         |  3 +-
+ drivers/tty/serial/serial_core.c     | 65 +++++++++++-----------
+ drivers/tty/serial/sunhv.c           |  8 +--
+ drivers/tty/synclink_gt.c            | 21 ++++----
+ drivers/tty/tty_ioctl.c              |  8 +--
+ drivers/tty/tty_port.c               | 22 ++++----
+ drivers/usb/class/cdc-acm.c          |  4 +-
+ drivers/usb/serial/ch341.c           | 11 ++--
+ drivers/usb/serial/console.c         |  2 +-
+ drivers/usb/serial/cp210x.c          |  6 +--
+ drivers/usb/serial/cypress_m8.c      |  6 +--
+ drivers/usb/serial/digi_acceleport.c |  6 +--
+ drivers/usb/serial/f81232.c          | 10 ++--
+ drivers/usb/serial/f81534.c          |  4 +-
+ drivers/usb/serial/ftdi_sio.c        |  6 +--
+ drivers/usb/serial/generic.c         | 10 ++--
+ drivers/usb/serial/ipw.c             |  8 +--
+ drivers/usb/serial/keyspan.c         |  6 +--
+ drivers/usb/serial/keyspan_pda.c     |  4 +-
+ drivers/usb/serial/mct_u232.c        |  6 +--
+ drivers/usb/serial/mxuport.c         |  4 +-
+ drivers/usb/serial/pl2303.c          | 11 ++--
+ drivers/usb/serial/quatech2.c        |  6 +--
+ drivers/usb/serial/sierra.c          |  6 +--
+ drivers/usb/serial/spcp8x5.c         | 11 ++--
+ drivers/usb/serial/ssu100.c          |  6 +--
+ drivers/usb/serial/upd78f0730.c      |  8 +--
+ drivers/usb/serial/usb-serial.c      |  8 +--
+ drivers/usb/serial/usb-wwan.h        |  2 +-
+ drivers/usb/serial/usb_wwan.c        |  6 +--
+ drivers/usb/serial/xr_serial.c       |  8 +--
+ include/linux/serial_core.h          |  6 +--
+ include/linux/tty.h                  |  2 +-
+ include/linux/tty_ldisc.h            |  4 +-
+ include/linux/tty_port.h             | 10 ++--
+ include/linux/usb/serial.h           |  6 +--
+ net/bluetooth/rfcomm/tty.c           |  2 +-
+ 52 files changed, 247 insertions(+), 259 deletions(-)
 
-The -v2 version below should address most of those problems.
+-- 
+2.30.2
 
-Thanks,
-
-	Ingo
-
-=============>
-From: Zeng Heng <zengheng4@huawei.com>
-Date: Tue, 10 Jan 2023 18:27:45 +0800
-Subject: [PATCH] x86/boot/compressed: Register dummy NMI handler in EFI boot loader, to avoid kdump crashes
-
-If kdump is enabled, when using mce_inject to inject errors, EFI
-boot loader would decompress & load second kernel for saving the
-vmcore file.
-
-For normal errors that is fine. However, in the MCE case, the panic
-CPU that firstly enters into mce_panic() is running within NMI
-interrupt context, and the processor blocks delivery of subsequent
-NMIs until the next execution of the IRET instruction.
-
-When the panic CPU takes long time in the panic processing route,
-and causes the watchdog timeout, at this moment, the processor
-already receives NMI interrupt in the background.
-
-In the reproducer sequence below, panic CPU would run into EFI loader
-and raise page fault exception (like visiting `vidmem` variable
-when attempting to call debug_putstr()), the CPU would execute IRET
-instruction when it exits from the page fault handler.
-
-But the loader never registers handler for NMI vector in IDT,
-lack of vector handler would cause reboot, which interrupts
-kdump procedure and fails to save the vmcore file.
-
-Here is steps to reproduce the above issue (it's sporadic):
-
-	1. # cat uncorrected
-	CPU 1 BANK 4
-	STATUS uncorrected 0xc0
-	MCGSTATUS  EIPV MCIP
-	ADDR 0x1234
-	RIP 0xdeadbabe
-	RAISINGCPU 0
-	MCGCAP SER CMCI TES 0x6
-	2. # modprobe mce_inject
-	3. # mce-inject uncorrected
-
-For increasing the probability of reproduction of this issue, there are
-two ways to increase the probability of the bug:
-
-  1. modify the threshold value of watchdog (increase NMI frequency);
-  2. and/or add delays before panic() in mce_panic() and modify PANIC_TIMEOUT macro;
-
-Fixes: ca0e22d4f011 ("x86/boot/compressed/64: Always switch to own page table")
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-[ Tidy up changelog, add comments. ]
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230110102745.2514694-1-zengheng4@huawei.com
----
- arch/x86/boot/compressed/ident_map_64.c    | 12 ++++++++++++
- arch/x86/boot/compressed/idt_64.c          |  1 +
- arch/x86/boot/compressed/idt_handlers_64.S |  1 +
- arch/x86/boot/compressed/misc.h            |  1 +
- 4 files changed, 15 insertions(+)
-
-diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
-index d4a314cc50d6..cbfdefcf9657 100644
---- a/arch/x86/boot/compressed/ident_map_64.c
-+++ b/arch/x86/boot/compressed/ident_map_64.c
-@@ -379,3 +379,15 @@ void do_boot_page_fault(struct pt_regs *regs, unsigned long error_code)
- 	 */
- 	kernel_add_identity_map(address, end);
- }
-+
-+void do_boot_nmi_fault(struct pt_regs *regs, unsigned long error_code)
-+{
-+	/*
-+	 * Default boot loader placeholder fault handler - there's no real
-+	 * kernel running yet, so there's not much we can do - but NMIs
-+	 * can arrive in a kdump scenario, for example by the NMI watchdog.
-+	 *
-+	 * Not having any handler would cause the CPU to silently reboot,
-+	 * so we do the second-worst thing here and ignore the NMI.
-+	 */
-+}
-diff --git a/arch/x86/boot/compressed/idt_64.c b/arch/x86/boot/compressed/idt_64.c
-index 6debb816e83d..b169c9728d52 100644
---- a/arch/x86/boot/compressed/idt_64.c
-+++ b/arch/x86/boot/compressed/idt_64.c
-@@ -60,6 +60,7 @@ void load_stage2_idt(void)
- {
- 	boot_idt_desc.address = (unsigned long)boot_idt;
- 
-+	set_idt_entry(X86_TRAP_NMI, boot_nmi_fault);
- 	set_idt_entry(X86_TRAP_PF, boot_page_fault);
- 
- #ifdef CONFIG_AMD_MEM_ENCRYPT
-diff --git a/arch/x86/boot/compressed/idt_handlers_64.S b/arch/x86/boot/compressed/idt_handlers_64.S
-index 22890e199f5b..2aef8e1b515b 100644
---- a/arch/x86/boot/compressed/idt_handlers_64.S
-+++ b/arch/x86/boot/compressed/idt_handlers_64.S
-@@ -69,6 +69,7 @@ SYM_FUNC_END(\name)
- 	.text
- 	.code64
- 
-+EXCEPTION_HANDLER	boot_nmi_fault do_boot_nmi_fault error_code=0
- EXCEPTION_HANDLER	boot_page_fault do_boot_page_fault error_code=1
- 
- #ifdef CONFIG_AMD_MEM_ENCRYPT
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index 62208ec04ca4..d89d3f8417f6 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -187,6 +187,7 @@ static inline void cleanup_exception_handling(void) { }
- #endif
- 
- /* IDT Entry Points */
-+void boot_nmi_fault(void);
- void boot_page_fault(void);
- void boot_stage1_vc(void);
- void boot_stage2_vc(void);
