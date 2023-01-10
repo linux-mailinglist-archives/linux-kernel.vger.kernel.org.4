@@ -2,175 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB5A66396F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 07:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E64A663976
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 07:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234906AbjAJGjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 01:39:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S229538AbjAJGp1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 10 Jan 2023 01:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237624AbjAJGjW (ORCPT
+        with ESMTP id S229660AbjAJGpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 01:39:22 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F3049179
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 22:39:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673332742; x=1704868742;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Mgc/n+nT7sjIG3y7slEXDV7YxWPnkpN7RVad1TgVSWo=;
-  b=UbUYo8iDzSYCRwS97kL31vTMO0vkOz3iCIG4U1EGuc2ADmLmsBL4LC6p
-   N7r2f89nLI8bfOzvz6KYhz9jkSQLX8Cd649LY9ngcKRBAUdRwpUE2uig0
-   f0jowJbEBcBa2PVMLEwkoeVR5/xkiJwQYxBCscIIW12Dwt+IXrucXqz3N
-   BxYYDEN+MFtqPsqYSS/3ndv54h3Zl8X5NJjky4tJ5C9VbtgIOlq/XYwD3
-   AgGaVhhnWq0PaAQhN35dc/ysILdtw69NCT8CASiRFm9Ocjp8aZJae3KZV
-   yMnwPq2lK7lPcICEBqV7LdFJJdYOU6zHMFRV51NGZ92/MrhrBdPrh684x
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="310875112"
-X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
-   d="scan'208";a="310875112"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 22:39:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="745657848"
-X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
-   d="scan'208";a="745657848"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Jan 2023 22:39:00 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pF8Hj-0007gq-1R;
-        Tue, 10 Jan 2023 06:38:59 +0000
-Date:   Tue, 10 Jan 2023 14:38:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/core] BUILD SUCCESS
- 0ecc518e5c1a83fbfc6262d20d0df289eafc2207
-Message-ID: <63bd07e5.Vrdiywswol3MxAev%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 10 Jan 2023 01:45:24 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CED1CE26
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 22:45:21 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 8A8A224E217;
+        Tue, 10 Jan 2023 14:45:19 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
+ 2023 14:45:19 +0800
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 10 Jan
+ 2023 14:45:19 +0800
+Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
+ EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
+ 15.00.1497.044; Tue, 10 Jan 2023 14:45:19 +0800
+From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: RE: [PATCH v2 2/3] RISC-V: mm: Enable huge page support to
+ kernel_page_present() function
+Thread-Topic: [PATCH v2 2/3] RISC-V: mm: Enable huge page support to
+ kernel_page_present() function
+Thread-Index: AQHZI/MEyk4BWxsDWk+SJDmuy1TBsK6VpAGAgAGQfoA=
+Date:   Tue, 10 Jan 2023 06:45:19 +0000
+Message-ID: <62163664add9493db394c8ca45b73ce2@EXMBX066.cuchost.com>
+References: <20230109062407.3235-1-jeeheng.sia@starfivetech.com>
+ <20230109062407.3235-3-jeeheng.sia@starfivetech.com>
+ <20230109144525.4xgnpeb6zcyyvx4j@orel>
+In-Reply-To: <20230109144525.4xgnpeb6zcyyvx4j@orel>
+Accept-Language: en-US, zh-CN
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [60.49.128.133]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
-branch HEAD: 0ecc518e5c1a83fbfc6262d20d0df289eafc2207  perf/core: Save calculated sample data size
 
-elapsed time: 810m
 
-configs tested: 92
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arc                                 defconfig
-x86_64                            allnoconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-arm                                 defconfig
-arm64                            allyesconfig
-x86_64                              defconfig
-arm                              allyesconfig
-x86_64                          rhel-8.3-func
-x86_64               randconfig-a013-20230109
-ia64                             allmodconfig
-i386                 randconfig-a011-20230109
-x86_64               randconfig-a012-20230109
-i386                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-x86_64               randconfig-a014-20230109
-i386                 randconfig-a016-20230109
-alpha                            allyesconfig
-x86_64               randconfig-a011-20230109
-i386                 randconfig-a015-20230109
-x86_64                               rhel-8.3
-x86_64                    rhel-8.3-kselftests
-i386                 randconfig-a013-20230109
-x86_64               randconfig-a016-20230109
-x86_64                        randconfig-a004
-i386                 randconfig-a012-20230109
-x86_64                        randconfig-a002
-x86_64                           rhel-8.3-bpf
-x86_64               randconfig-a015-20230109
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-kvm
-i386                 randconfig-a014-20230109
-x86_64                        randconfig-a006
-sh                               allmodconfig
-riscv                randconfig-r042-20230109
-s390                 randconfig-r044-20230109
-arm                  randconfig-r046-20230108
-arc                  randconfig-r043-20230108
-arc                  randconfig-r043-20230109
-m68k                             allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-i386                             allyesconfig
-i386                          randconfig-c001
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-arm                        trizeps4_defconfig
-arm                         s3c6400_defconfig
-sh                               alldefconfig
-ia64                                defconfig
-m68k                           sun3_defconfig
-parisc                generic-32bit_defconfig
-sh                     sh7710voipgw_defconfig
-mips                            gpr_defconfig
-
-clang tested configs:
-i386                 randconfig-a004-20230109
-i386                 randconfig-a002-20230109
-i386                 randconfig-a003-20230109
-i386                 randconfig-a001-20230109
-i386                 randconfig-a005-20230109
-i386                 randconfig-a006-20230109
-x86_64                          rhel-8.3-rust
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-hexagon              randconfig-r045-20230109
-arm                  randconfig-r046-20230109
-riscv                randconfig-r042-20230108
-hexagon              randconfig-r041-20230108
-hexagon              randconfig-r041-20230109
-x86_64                        randconfig-a005
-hexagon              randconfig-r045-20230108
-s390                 randconfig-r044-20230108
-x86_64                        randconfig-k001
-x86_64               randconfig-a001-20230109
-x86_64               randconfig-a002-20230109
-x86_64               randconfig-a004-20230109
-x86_64               randconfig-a003-20230109
-x86_64               randconfig-a006-20230109
-x86_64               randconfig-a005-20230109
-arm                          pcm027_defconfig
-powerpc                       ebony_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> -----Original Message-----
+> From: Andrew Jones <ajones@ventanamicro.com>
+> Sent: Monday, 9 January, 2023 10:45 PM
+> To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
+> Cc: paul.walmsley@sifive.com; palmer@dabbelt.com;
+> aou@eecs.berkeley.edu; linux-riscv@lists.infradead.org; linux-
+> kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>;
+> Mason Huo <mason.huo@starfivetech.com>
+> Subject: Re: [PATCH v2 2/3] RISC-V: mm: Enable huge page support to
+> kernel_page_present() function
+> 
+> On Mon, Jan 09, 2023 at 02:24:06PM +0800, Sia Jee Heng wrote:
+> > Currently kernel_page_present() function doesn't support huge page
+> > detection causes the function to mistakenly return false to the
+> > hibernation core.
+> >
+> > Add huge page detection to the function to solve the problem.
+> >
+> > Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
+> > Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+> > Reviewed-by: Mason Huo <mason.huo@starfivetech.com>
+> > ---
+> >  arch/riscv/mm/pageattr.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
+> > index 86c56616e5de..73fdec8c0a72 100644
+> > --- a/arch/riscv/mm/pageattr.c
+> > +++ b/arch/riscv/mm/pageattr.c
+> > @@ -221,14 +221,20 @@ bool kernel_page_present(struct page *page)
+> >  	p4d = p4d_offset(pgd, addr);
+> >  	if (!p4d_present(*p4d))
+> >  		return false;
+> > +	if (p4d_leaf(*pud))
+>                       ^ p4d
+> 
+> I guess you got lucky with the stack garbage in your testing.
+You are right. But the reason it is added here is because kernel page table walk is checking for the p4d_leaf as well. 
+For example: walk_p4d_range() in the mm/pagewalk.c. So, I just trying to make it consistent to the Kernel page table walk mechanism.
+Should I remove it?
+> 
+> > +		return true;
+> >
+> >  	pud = pud_offset(p4d, addr);
+> >  	if (!pud_present(*pud))
+> >  		return false;
+> > +	if (pud_leaf(*pud))
+> > +		return true;
+> >
+> >  	pmd = pmd_offset(pud, addr);
+> >  	if (!pmd_present(*pmd))
+> >  		return false;
+> > +	if (pmd_leaf(*pmd))
+> > +		return true;
+> >
+> >  	pte = pte_offset_kernel(pmd, addr);
+> >  	return pte_present(*pte);
+> > --
+> > 2.34.1
+> >
+> 
+> Thanks,
+> drew
