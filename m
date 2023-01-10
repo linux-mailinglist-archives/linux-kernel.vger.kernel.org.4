@@ -2,62 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC4C663A63
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAEF663A65
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjAJIE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:04:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
+        id S231235AbjAJIE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbjAJIEG (ORCPT
+        with ESMTP id S230312AbjAJIEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:04:06 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7863FA29
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:04:04 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id 188so10977876ybi.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:04:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NJfrDMRrh3mxLMYRYmDj11BArEMMJazyj89K44ewmGM=;
-        b=IslEC4jSInr/qN2/cTn9hilIgxafvO7z0QdmnkIAJFxJBDTHJxt78dZnokubnL9w07
-         yh/OaM2vxofEM5yfRkKAJ//fEiJCVqMkFHab9vTafZZRCiczPzr95X3as1BYLveZYhPi
-         cQKyCmLr8EEASmrzeNIBiUBlZrx192WtEtvta9yXP8HjI6UjOdiwCWSVBoN3krAKKOrK
-         WWLZ32/mlaAPv/wgHWXNT0ZP3LanHZPuMNl0T1OhXZbMwgiock1Th9mGjhU7+vp1GXlE
-         8ALrlzNzaEdG5/HcNxeEVuJbbtuP9GkZIjY+kqWRpeyUafU/YWj10jx8dHmjHFwRkOOM
-         vsKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NJfrDMRrh3mxLMYRYmDj11BArEMMJazyj89K44ewmGM=;
-        b=eQPA9/sj5L8XcagHyqqLV6squUep1lllnhEMpyqwwy29qHaaTMnO99bp+y1MD8wbL5
-         9s1K2vFYZwGumd0XyyKzluGNMdmZw//3Ia4XcJCu47MjzFegwYgwkMA3R9ZKgCVPDmqw
-         2FRZtYH7JAh0mIT7dwvXsADdmBWeknW/s03FrK28ceYb++s2wrOAl9WSpRrsMqipMgn9
-         YZXkk75Pm4yuCHNCvRSx/ZeG8yd8dwEMh2DMuH0ilJs91D8tWroWyBQmfWs2WQgcc3w/
-         hsXM1Slj9BordgJgaO+R/HOisb/lLjW12QGdooeHm1zRMTGJP//v0grID8NlDlYMemGS
-         asFw==
-X-Gm-Message-State: AFqh2kqOYnPQYFtOwJAYmYCq50cgvv72LaS+zWNIIqVFqMqDwZXYezi+
-        Njc7QcFTRtbzfKgxHocjbzTqixk3yBxIJ9OiSXZ3LOVj8pfBcg==
-X-Google-Smtp-Source: AMrXdXunX8P9QCS6rxnto5US8/ieh3cvv+QmQp394LAe5pwTiO2MVsLzrYk+F6BgrkuwbZpaFYQFc7mICeex51nvTSo=
-X-Received: by 2002:a25:4903:0:b0:770:d766:b5e8 with SMTP id
- w3-20020a254903000000b00770d766b5e8mr4717308yba.24.1673337844060; Tue, 10 Jan
- 2023 00:04:04 -0800 (PST)
+        Tue, 10 Jan 2023 03:04:35 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40B2B488
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:04:34 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 558F24E0AD;
+        Tue, 10 Jan 2023 08:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673337859; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=15Ddtu/7qxw5eMSlnsFVGSlfgAQfIR6dNvo68q5wauM=;
+        b=bkMGUV5j7WHNqCvCYYj4CfuhyVWMG1FihfQs3FDQvYsD+EUttzsajuOzHDoykPY1FkCUhA
+        ciHm28fp9KLmZ4btDVFftnnuynWIkZdOLQ1pAzp6Huh4FtOmdPT6uvqYfutZvH/5z861Y4
+        HkRIdagbxSDGdwYn7B+e6o8QuWUIbzE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673337859;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=15Ddtu/7qxw5eMSlnsFVGSlfgAQfIR6dNvo68q5wauM=;
+        b=jMlUUvZiWJb4nWS1WGaBP5M4JOwo6r8wna7GswTb+c08fyvFZeLybZ0CNenHGyH7I/wqJs
+        6Y2gcmGussrmGvAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9F5251358A;
+        Tue, 10 Jan 2023 08:04:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TGk1JgIcvWOEBAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 10 Jan 2023 08:04:18 +0000
+Message-ID: <5874fea2-fc3b-5e5d-50ac-e413a11819a5@suse.cz>
+Date:   Tue, 10 Jan 2023 09:04:18 +0100
 MIME-Version: 1.0
-References: <20230109132719.86009-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230109132719.86009-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 10 Jan 2023 09:03:52 +0100
-Message-ID: <CACRpkda3K=D9OZ=3p0f9yjNat=HK07z38ExFz227us_Lgeuyuw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] pinctrl: pinmux: Drop duplicate error message in pinmux_select()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-42-surenb@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230109205336.3665937-42-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,15 +89,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 2:26 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On 1/9/23 21:53, Suren Baghdasaryan wrote:
+> rw_semaphore is a sizable structure of 40 bytes and consumes
+> considerable space for each vm_area_struct. However vma_lock has
+> two important specifics which can be used to replace rw_semaphore
+> with a simpler structure:
+> 1. Readers never wait. They try to take the vma_lock and fall back to
+> mmap_lock if that fails.
+> 2. Only one writer at a time will ever try to write-lock a vma_lock
+> because writers first take mmap_lock in write mode.
+> Because of these requirements, full rw_semaphore functionality is not
+> needed and we can replace rw_semaphore with an atomic variable.
+> When a reader takes read lock, it increments the atomic unless the
+> value is negative. If that fails read-locking is aborted and mmap_lock
+> is used instead.
+> When writer takes write lock, it resets atomic value to -1 if the
+> current value is 0 (no readers). Since all writers take mmap_lock in
+> write mode first, there can be only one writer at a time. If there
+> are readers, writer will place itself into a wait queue using new
+> mm_struct.vma_writer_wait waitqueue head. The last reader to release
+> the vma_lock will signal the writer to wake up.
+> vm_lock_seq is also moved into vma_lock and along with atomic_t they
+> are nicely packed and consume 8 bytes, bringing the overhead from
+> vma_lock from 44 to 16 bytes:
+> 
+>     slabinfo before the changes:
+>      <name>            ... <objsize> <objperslab> <pagesperslab> : ...
+>     vm_area_struct    ...    152   53    2 : ...
+> 
+>     slabinfo with vma_lock:
+>      <name>            ... <objsize> <objperslab> <pagesperslab> : ...
+>     rw_semaphore      ...      8  512    1 : ...
 
-> pinctrl_get_group_selector() prints an error message when group
-> is not found in the list. No need to repeat this in the caller.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+I guess the cache is called vma_lock, not rw_semaphore?
 
-Patch applied!
+>     vm_area_struct    ...    160   51    2 : ...
+> 
+> Assuming 40000 vm_area_structs, memory consumption would be:
+> baseline: 6040kB
+> vma_lock (vm_area_structs+vma_lock): 6280kB+316kB=6596kB
+> Total increase: 556kB
+> 
+> atomic_t might overflow if there are many competing readers, therefore
+> vma_read_trylock() implements an overflow check and if that occurs it
+> restors the previous value and exits with a failure to lock.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-Yours,
-Linus Walleij
+This patch is indeed an interesting addition indeed, but I can't help but
+think it obsoletes the previous one :) We allocate an extra 8 bytes slab
+object for the lock, and the pointer to it is also 8 bytes, and requires an
+indirection. The vma_lock cache is not cacheline aligned (otherwise it would
+be a major waste), so we have potential false sharing with up to 7 other
+vma_lock's.
+I'd expect if the vma_lock was placed with the relatively cold fields of
+vm_area_struct, it shouldn't cause much cache ping pong when working with
+that vma. Even if we don't cache align the vma to save memory (would be 192
+bytes instead of 160 when aligned) and place the vma_lock and the cold
+fields at the end of the vma, it may be false sharing the cacheline with the
+next vma in the slab. But that's a single vma, not up to 7, so it shouldn't
+be worse?
+
+
