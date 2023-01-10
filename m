@@ -2,154 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC20664138
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0D966413C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 14:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbjAJNHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 08:07:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39786 "EHLO
+        id S232091AbjAJNIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 08:08:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbjAJNHd (ORCPT
+        with ESMTP id S232045AbjAJNIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:07:33 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F9559D2B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:07:31 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id c26so4333075pfp.10
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 05:07:31 -0800 (PST)
+        Tue, 10 Jan 2023 08:08:01 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD1C58D2B;
+        Tue, 10 Jan 2023 05:08:00 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d15so13097909pls.6;
+        Tue, 10 Jan 2023 05:08:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0b3RSYe8mQauTsHJUs6ykMcTgur4za2xftvbQNqIJa0=;
-        b=RLUlg0vAPGTz4hMSALnOAbA95CQ2QhiAPu67CW1t5ndi5fYQvoHNRfl2s9mmbfxynC
-         n5Hl26i2wnPo3Po7VVrtnQueuJ9LNMFdRz54SOR0UzQpuEPMsDS42Z/bO4BEb4COnlqZ
-         Yhl/RGwxFnAkY+cH1otEhavspwfCl0FOYahc2kH+YxTr3TQTFwyb+jOHwd6AbOmhbT/k
-         UrCTqXrRr5OpYjY6+L/mYlkYPUtgEqwUoG1lp5ywtifFjrif5++oGbE8puNRSkItokP8
-         ieNDdz1XkqTFKhhlST3mTca31Q50kVpZqKIC7YfgyJEYf+TFUH4gcW9m3mBKjOdd53dv
-         s+jQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FQjxjJ8qZ3hM4//p+uSuH9Q7xJZ04eDZ+d9MlCyJuSU=;
+        b=LgUr5bj4jUS1UqenSM2ILfG6zsJOH+F0qMWYC9g1pA4QVDDuzeFyXrYB2vO1LD5xE7
+         pYVnDsyrPR5tyllBDIsqV+EWJDPt3ZQEbIscHV9MdzEWp5isSbTDjbnYoHLgOQhbq4Ez
+         DKpoozCOYQLsOTuC0ux/9SuRDmD2FU2852FhJk+YJN7ZE2vLmx4Jt1xsCx6ij5gAw31S
+         VJ8V5TbK7f04FmgOJONJnLJFjbqiN3lhtnwojTD46EZleXo43lRHqrZQIpHhSFC4WgWK
+         cb/eAE8v7Ry0vTEVLzPQ+x/xjs1AtuV97wQGFHTGUiZHawdxmx/pLBk322EIYPQs7Ikc
+         ZDgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0b3RSYe8mQauTsHJUs6ykMcTgur4za2xftvbQNqIJa0=;
-        b=xtShRCrYePs9hf5hTyGbvwX10prvFNhwQgl1WX5Ui7EsMJSiOnDCqXAIfXarNXrUA7
-         xGRWWAH2kAcc22eiU7edswZYkUsyZytl/IaAQ2iFKgQ96XdwCYjuYAR+V+gC/tR1sAty
-         caticxwNjw4HVGkkKoZ2VyROAPAuSC/6A+vFS7G7mbtReVPONhWJwWavGXLnYyer/bKo
-         UQk+9M+olrtnRO5WMCJK76cVLyhyk786PXjCNujX8/SVWZ3j2Mmy0zsDsm9pLUfZMitz
-         jaNIQ0/gHfC6NUBXlJZZbBIyQO11bO0O3i8bKDYOndnFNogC8SL7S+rQz1ElG2gV+HrG
-         cqMA==
-X-Gm-Message-State: AFqh2krFMQ7qQDrbvzIWlzApM36uCJ2k/hiTJLldftQZufKbCgI9ZuWd
-        iPYmDjOrefVBwcsn7rS2TX1JEg==
-X-Google-Smtp-Source: AMrXdXuOnsxeqzWi+BrT/XazxVd/FkhSHxizdXq9xmqS2MG3LGJFCe4KApI5JgYxg1Fm6XPKXt5zLA==
-X-Received: by 2002:aa7:85c8:0:b0:588:14ce:7e64 with SMTP id z8-20020aa785c8000000b0058814ce7e64mr7017731pfn.30.1673356051158;
-        Tue, 10 Jan 2023 05:07:31 -0800 (PST)
-Received: from [10.3.157.223] ([61.213.176.11])
-        by smtp.gmail.com with ESMTPSA id v67-20020a622f46000000b00581ad007a9fsm8004776pfv.153.2023.01.10.05.07.27
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FQjxjJ8qZ3hM4//p+uSuH9Q7xJZ04eDZ+d9MlCyJuSU=;
+        b=YvVZB+Qq+wKqyyF746wymntJW+qpOiqd7ZPPkcqw4QY9gSTac2jantVAbKF4iRXaI9
+         bEG5tOhdGwOcg2XuqcP2fVQdOuPixpEYznP8bjp4Lwdhd0C0VM+mG45oGd0Y8GVYJg2t
+         OgJYHK4Ynka06PCDWY5UREBWhsK0ItphudqoNePIx1KbZcu5KjLWrKBs63txPdXvulJE
+         BD/XuWAJc7ERzOI7VOw/id/muUouFaavzaVWkkC6awmIwAVcyz6UbJnwqqs2ewN9SXRe
+         Q0KQ9H5/TI1C7AGPsrJD+m02T8q7KOJQM71F0CWfEkheIU+4c2vyJMnSp22dcTpgcpOz
+         xlzw==
+X-Gm-Message-State: AFqh2krjs7xzDBcL8BDM4wC1PNtkB8fu9Paa++iR5FEOT3eEXPwUSmb5
+        xu5T+T+dnYu+jqEc7HJGESI=
+X-Google-Smtp-Source: AMrXdXsA7MqFTjg4QFI8+s01CITBAHUQyaihohIza1jiYEYtuLrF/4EZs97vGb6wqfSVmguVodE8bw==
+X-Received: by 2002:a17:903:31d5:b0:191:4539:d2c1 with SMTP id v21-20020a17090331d500b001914539d2c1mr67586353ple.47.1673356079207;
+        Tue, 10 Jan 2023 05:07:59 -0800 (PST)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id k12-20020a170902c40c00b00178aaf6247bsm8097869plk.21.2023.01.10.05.07.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 05:07:30 -0800 (PST)
-Message-ID: <f9b8e682-92aa-c39c-4d91-d77d104e0767@bytedance.com>
-Date:   Tue, 10 Jan 2023 21:07:25 +0800
+        Tue, 10 Jan 2023 05:07:58 -0800 (PST)
+Message-ID: <49e7326a-2813-db52-9833-dbd5092cb971@gmail.com>
+Date:   Tue, 10 Jan 2023 22:07:54 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [External] Re: [PATCH v3] blk-throtl: Introduce sync and async
- queues for blk-throtl
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jan Kara <jack@suse.cz>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com
-References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
- <20230105161854.GA1259@blackbody.suse.cz>
- <20230106153813.4ttyuikzaagkk2sc@quack3> <Y7hTHZQYsCX6EHIN@slm.duckdns.org>
- <c839ba6c-80ac-6d92-af64-5c0e1956ae93@bytedance.com>
- <Y7hlX4T1UOmQHiGf@slm.duckdns.org>
- <e499f088-8ed9-2e19-b2e5-efaa4f9738f0@bytedance.com>
- <Y7xYJfRLSMYk9tj9@slm.duckdns.org>
-From:   hanjinke <hanjinke.666@bytedance.com>
-In-Reply-To: <Y7xYJfRLSMYk9tj9@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH rcu 12/27] drivers/devfreq: Remove "select SRCU"
+To:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+ <20230105003813.1770367-12-paulmck@kernel.org>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20230105003813.1770367-12-paulmck@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 23. 1. 5. 09:37, Paul E. McKenney wrote:
+> Now that the SRCU Kconfig option is unconditionally selected, there is
+> no longer any point in selecting it.  Therefore, remove the "select SRCU"
+> Kconfig statements.
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Kyungmin Park <kyungmin.park@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: <linux-pm@vger.kernel.org>
+> ---
+>  drivers/devfreq/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> index 9754d8b316211..3c4862a752b5a 100644
+> --- a/drivers/devfreq/Kconfig
+> +++ b/drivers/devfreq/Kconfig
+> @@ -1,7 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  menuconfig PM_DEVFREQ
+>  	bool "Generic Dynamic Voltage and Frequency Scaling (DVFS) support"
+> -	select SRCU
+>  	select PM_OPP
+>  	help
+>  	  A device may have a list of frequencies and voltages available.
 
+Applied it. Thanks.
 
-在 2023/1/10 上午2:08, Tejun Heo 写道:
-> Hello,
-> 
-> On Sat, Jan 07, 2023 at 12:44:35PM +0800, hanjinke wrote:
->> For cost.model setting, We first use the tools iocost provided to test the
->> benchmark model parameters of different types of disks online, and then save
->> these benchmark parameters to a parametric Model Table. During the
->> deployment process, pull and set the corresponding model parameters
->> according to the type of disk.
->>
->> The setting of cost.qos should be considered slightly more，we need to make
->> some compromises between overall disk throughput and io latency.
->> The average disk utilization of the entire disk on a specific business and
->> the RLA（if it is io sensitive） of key businesses will be taken as
->> important input considerations. The cost.qos will be dynamically fine-tuned
->> according to the health status monitoring of key businesses.
-> 
-> Ah, I see. Do you use the latency targets and min/max ranges or just fixate
-> the vrate by setting min == max?
-
-Currently we use the former.
-
-> 
->> For cost.weight setting, high-priority services  will gain greater
->> advantages through weight settings to deal with a large number of io
->> requests in a short period of time. It works fine as work-conservation
->> of iocost works well according to our observation.
-> 
-> Glad to hear.
-> 
->> These practices can be done better and I look forward to your better
->> suggestions.
-> 
-> It's still in progress but resctl-bench's iocost-tune benchmark is what
-> we're starting to use:
-> 
->   https://github.com/facebookexperimental/resctl-demo/blob/main/resctl-bench/doc/iocost-tune.md
-> 
-> The benchmark takes like 6 hours and what it does is probing the whole vrate
-> range looking for behavior inflection points given the scenario of
-> protecting a latency sensitive workload against memory leak. On completion,
-> it provides several solutions based on the behavior observed.
-> 
-> The benchmark is destructive (to the content on the target ssd) and can be
-> tricky to set up. There's installable image to help setting up and running
-> the benchmark:
-> 
->   https://github.com/iocost-benchmark/resctl-demo-image-recipe/actions
-> 
-> The eventual goal is collecting these benchmark results in the following git
-> repo:
-> 
->   https://github.com/iocost-benchmark/iocost-benchmarks
-> 
-> which generates hwdb files describing all the found solution and make
-> systemd apply the appropriate configuration on boot automatically.
-> 
-> It's still all a work in progress but hopefully we should be able to
-> configure iocost reasonably on boot on most SSDs.
-> 
-> Thanks.
-> 
-
-These methodologies are worthy of our study and will definitely help our 
-future deployment of iocost. Thanks a lot.
-
-Thanks.
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
