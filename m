@@ -2,214 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147E26640B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC276640BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 13:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238088AbjAJMnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 07:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S238581AbjAJMoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 07:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232310AbjAJMnM (ORCPT
+        with ESMTP id S233263AbjAJMoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 07:43:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE778431B5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:43:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7684B815D7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 12:43:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B71C433D2;
-        Tue, 10 Jan 2023 12:43:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673354586;
-        bh=76mL1CWsSpBh9hXbk2sZALSlSYHpUUdAK13lAYNsT9Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VyfVLsar1ATpt+kA3YuRSnuZyg1BoRxpMvOTGLVKxsFsAv3t45+T/rgze4mmR3qCp
-         QOWGT1KoxCZ0gPfK8cz/eYSrL0GTUqud9pdfLD2fiOxJlO2PdHhnwKIZpcW0lGyCWx
-         4opBe3Iifz4MTM+eB4nvKR4PjakwuS7saxLmwrS8=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH 2/2] driver core: bus: move bus notifier logic into bus.c
-Date:   Tue, 10 Jan 2023 13:42:56 +0100
-Message-Id: <20230110124256.1663859-2-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230110124256.1663859-1-gregkh@linuxfoundation.org>
-References: <20230110124256.1663859-1-gregkh@linuxfoundation.org>
+        Tue, 10 Jan 2023 07:44:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6A04FCE3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:43:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673354597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VuDZQoNTvLCMWUBdjBX9vJZBiOLiogy0J+gwEg2h85o=;
+        b=KdmgrvoVnR7zcttSWL1XCoM76cTJXFdfWyKBPOmIcr1BTOZ43BDndMDZDoASNaxRC1LC/V
+        aFXOxaxkK7kVvHJ2+sUPLDwr1x2StJxWvQST8hCt/sVI3819WoPkELlTjt9dSB/Gn7ZobC
+        ymr9vmQ9vRJxcOeVTs9NPHRI6jDLFGI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-148--Wy6Ils1MyGeWXeJR729yg-1; Tue, 10 Jan 2023 07:43:16 -0500
+X-MC-Unique: -Wy6Ils1MyGeWXeJR729yg-1
+Received: by mail-wr1-f71.google.com with SMTP id g24-20020adfa498000000b002bbeb5fc4b7so1333234wrb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 04:43:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VuDZQoNTvLCMWUBdjBX9vJZBiOLiogy0J+gwEg2h85o=;
+        b=NyJr6lye48HnrccYXccOyZAUJOe1jT+HmRyPlFtaHBF+/rWb9STxCWqdHjGuHS6JIl
+         WjhAz5oaA9+5opWULHB0TL13aRpLxTTIXtRW7xrEkyzvkwTepcyFDKu167BecRi72p4J
+         CyjAtGOFJ3zrvDKRs+Gn6ztIALkZpgQ8tNW8vlNkp2VhsIXMq93uQktSHGFrS5WxBV5g
+         p0PXLmROh59iFYULm7AYo2+XnQ72bSmBkT9CCin+VzBnNHh7ZL8JFBtE5ibIkP7B5GGL
+         E0pZHAV0/1aZTeaE4S13es/HBc/YFA9oZ2g5lZYSKKr7DmCIra2BCEHmCZR0Sz3VL/eS
+         E9hA==
+X-Gm-Message-State: AFqh2kqgi7OQkgwGMNqFZBEd8FRwSJQUUxax8wPFsiych/HsHBtim14Z
+        858QiQQf/0LMl+QvrrEeaEcDA6udS+bZHUaIbkdCA+J1arfSswQUbOGNvXuJjZ+xcXZE102nkbJ
+        Cz7S2WUUGbgLmrF88j7L6IWZ9
+X-Received: by 2002:a7b:c4c8:0:b0:3d3:5a4a:9101 with SMTP id g8-20020a7bc4c8000000b003d35a4a9101mr53008462wmk.23.1673354595117;
+        Tue, 10 Jan 2023 04:43:15 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsUjqCcKs3belwDW02YrGwAd9dYstg2utsYF/y82Y5pSf2VIgSmVGXcb1vaHM0wcgRqsAjR+g==
+X-Received: by 2002:a7b:c4c8:0:b0:3d3:5a4a:9101 with SMTP id g8-20020a7bc4c8000000b003d35a4a9101mr53008439wmk.23.1673354594930;
+        Tue, 10 Jan 2023 04:43:14 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f15-20020a7bcd0f000000b003d9a71ee54dsm14375160wmj.36.2023.01.10.04.43.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 04:43:14 -0800 (PST)
+Message-ID: <383d4eba-9e3f-04e2-31bf-93b1f3dcdd93@redhat.com>
+Date:   Tue, 10 Jan 2023 13:43:12 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5512; i=gregkh@linuxfoundation.org; h=from:subject; bh=76mL1CWsSpBh9hXbk2sZALSlSYHpUUdAK13lAYNsT9Y=; b=owGbwMvMwCRo6H6F97bub03G02pJDMl7YwPeBc/ZW+Gmwuog/7F/cjy/oe8zvn06P5M0WbYsu7Lo sJtJRywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEwkpJhhflZklMbd7S7su59uetKUVv BKXK75HMM8Mx6ue9xmNjdmzRdb//DRja7u5muHAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 0/3] Add PinePhone Pro display support
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Mader <robert.mader@posteo.de>,
+        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
+        Neal Gompa <ngompa13@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Martijn Braam <martijn@brixit.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Ondrej Jirman <megi@xff.cz>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        =?UTF-8?Q?Kamil_Trzci=c5=84ski?= <ayufan@ayufan.eu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Robinson <pbrobinson@gmail.com>
+References: <20230102230733.3506624-1-javierm@redhat.com>
+ <CACRpkdadwiG=OMMHFUKYHyr1zRpeZzVR9pkmsBEBxqZzN2H53g@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CACRpkdadwiG=OMMHFUKYHyr1zRpeZzVR9pkmsBEBxqZzN2H53g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The logic to touch the bus notifier was open-coded in numberous places
-in the driver core.  Clean that up by creating a local bus_notify()
-function and have everyone call this function instead, making the
-reading of the caller code simpler and easier to maintain over time.
+Hello Linus,
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/base/base.h |  1 +
- drivers/base/bus.c  |  8 ++++++++
- drivers/base/core.c | 13 +++----------
- drivers/base/dd.c   | 28 +++++++---------------------
- 4 files changed, 19 insertions(+), 31 deletions(-)
+On 1/10/23 13:30, Linus Walleij wrote:
+> On Tue, Jan 3, 2023 at 12:07 AM Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
+> 
+>> This series adds support for the display present in the PinePhone Pro.
+>>
+>> Patch #1 adds a devicetree binding schema for panels based on the Himax
+>> HX8394 controller, such as the HSD060BHW4 720x1440 TFT LCD panel present
+>> in the PinePhone Pro. Patch #2 adds the panel driver for this controller
+>> and finally patch #3 adds an entry for the driver in MAINTAINERS file.
+>>
+>> This version doesn't include the DTS changes, since Ondrej mentioned that
+>> there are still things to sort out before enabling it. The DTS bits will
+>> be proposed as a follow-up patch series.
+>>
+>> This allows for example the Fedora distro to support the PinePhone Pro with
+>> a DTB provided by the firmware.
+>>
+>> This is a v5 of the patch-set that addresses issues pointed out in v4:
+> 
+> I looked over the patches a last time. This driver looks great.
+> Acks by Krzysztof and Sam are in place.
+> Patches applied to drm-misc-next!
+>
 
-diff --git a/drivers/base/base.h b/drivers/base/base.h
-index 7d4803c03d3e..2e08258ce82e 100644
---- a/drivers/base/base.h
-+++ b/drivers/base/base.h
-@@ -130,6 +130,7 @@ struct kobject *virtual_device_parent(struct device *dev);
- extern int bus_add_device(struct device *dev);
- extern void bus_probe_device(struct device *dev);
- extern void bus_remove_device(struct device *dev);
-+void bus_notify(struct device *dev, enum bus_notifier_event value);
- 
- extern int bus_add_driver(struct device_driver *drv);
- extern void bus_remove_driver(struct device_driver *drv);
-diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-index 428c26c6b615..cf1b8f00b4c0 100644
---- a/drivers/base/bus.c
-+++ b/drivers/base/bus.c
-@@ -850,6 +850,14 @@ int bus_unregister_notifier(struct bus_type *bus, struct notifier_block *nb)
- }
- EXPORT_SYMBOL_GPL(bus_unregister_notifier);
- 
-+void bus_notify(struct device *dev, enum bus_notifier_event value)
-+{
-+	struct bus_type *bus = dev->bus;
-+
-+	if (bus)
-+		blocking_notifier_call_chain(&bus->p->bus_notifier, value, dev);
-+}
-+
- struct kset *bus_get_kset(struct bus_type *bus)
- {
- 	return &bus->p->subsys;
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index a3e14143ec0c..af6a2761b31d 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3453,10 +3453,7 @@ int device_add(struct device *dev)
- 	/* Notify clients of device addition.  This call must come
- 	 * after dpm_sysfs_add() and before kobject_uevent().
- 	 */
--	if (dev->bus)
--		blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
--					     BUS_NOTIFY_ADD_DEVICE, dev);
--
-+	bus_notify(dev, BUS_NOTIFY_ADD_DEVICE);
- 	kobject_uevent(&dev->kobj, KOBJ_ADD);
- 
- 	/*
-@@ -3636,9 +3633,7 @@ void device_del(struct device *dev)
- 	 * before dpm_sysfs_remove().
- 	 */
- 	noio_flag = memalloc_noio_save();
--	if (dev->bus)
--		blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
--					     BUS_NOTIFY_DEL_DEVICE, dev);
-+	bus_notify(dev, BUS_NOTIFY_DEL_DEVICE);
- 
- 	dpm_sysfs_remove(dev);
- 	if (parent)
-@@ -3669,9 +3664,7 @@ void device_del(struct device *dev)
- 	device_platform_notify_remove(dev);
- 	device_links_purge(dev);
- 
--	if (dev->bus)
--		blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
--					     BUS_NOTIFY_REMOVED_DEVICE, dev);
-+	bus_notify(dev, BUS_NOTIFY_REMOVED_DEVICE);
- 	kobject_uevent(&dev->kobj, KOBJ_REMOVE);
- 	glue_dir = get_glue_dir(dev);
- 	kobject_del(&dev->kobj);
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index e9b2f9c25efe..a519eaf1990c 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -413,10 +413,7 @@ static void driver_bound(struct device *dev)
- 	driver_deferred_probe_del(dev);
- 	driver_deferred_probe_trigger();
- 
--	if (dev->bus)
--		blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
--					     BUS_NOTIFY_BOUND_DRIVER, dev);
--
-+	bus_notify(dev, BUS_NOTIFY_BOUND_DRIVER);
- 	kobject_uevent(&dev->kobj, KOBJ_BIND);
- }
- 
-@@ -435,9 +432,7 @@ static int driver_sysfs_add(struct device *dev)
- {
- 	int ret;
- 
--	if (dev->bus)
--		blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
--					     BUS_NOTIFY_BIND_DRIVER, dev);
-+	bus_notify(dev, BUS_NOTIFY_BIND_DRIVER);
- 
- 	ret = sysfs_create_link(&dev->driver->p->kobj, &dev->kobj,
- 				kobject_name(&dev->kobj));
-@@ -502,9 +497,8 @@ int device_bind_driver(struct device *dev)
- 		device_links_force_bind(dev);
- 		driver_bound(dev);
- 	}
--	else if (dev->bus)
--		blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
--					     BUS_NOTIFY_DRIVER_NOT_BOUND, dev);
-+	else
-+		bus_notify(dev, BUS_NOTIFY_DRIVER_NOT_BOUND);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(device_bind_driver);
-@@ -695,9 +689,7 @@ static int really_probe(struct device *dev, struct device_driver *drv)
- probe_failed:
- 	driver_sysfs_remove(dev);
- sysfs_failed:
--	if (dev->bus)
--		blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
--					     BUS_NOTIFY_DRIVER_NOT_BOUND, dev);
-+	bus_notify(dev, BUS_NOTIFY_DRIVER_NOT_BOUND);
- 	if (dev->bus && dev->bus->dma_cleanup)
- 		dev->bus->dma_cleanup(dev);
- pinctrl_bind_failed:
-@@ -1243,10 +1235,7 @@ static void __device_release_driver(struct device *dev, struct device *parent)
- 
- 		driver_sysfs_remove(dev);
- 
--		if (dev->bus)
--			blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
--						     BUS_NOTIFY_UNBIND_DRIVER,
--						     dev);
-+		bus_notify(dev, BUS_NOTIFY_UNBIND_DRIVER);
- 
- 		pm_runtime_put_sync(dev);
- 
-@@ -1260,11 +1249,8 @@ static void __device_release_driver(struct device *dev, struct device *parent)
- 
- 		klist_remove(&dev->p->knode_driver);
- 		device_pm_check_callbacks(dev);
--		if (dev->bus)
--			blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
--						     BUS_NOTIFY_UNBOUND_DRIVER,
--						     dev);
- 
-+		bus_notify(dev, BUS_NOTIFY_UNBOUND_DRIVER);
- 		kobject_uevent(&dev->kobj, KOBJ_UNBIND);
- 	}
- }
+Awesome. Thanks a lot!
+
 -- 
-2.39.0
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
