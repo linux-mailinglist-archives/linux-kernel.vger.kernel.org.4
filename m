@@ -2,205 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1185663B7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 479D6663B73
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237965AbjAJIle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        id S231642AbjAJIl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237988AbjAJIks (ORCPT
+        with ESMTP id S237970AbjAJIkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:40:48 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2081.outbound.protection.outlook.com [40.92.99.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786CDD65;
-        Tue, 10 Jan 2023 00:40:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GQJI5Rs6x9O9Ws5U3QjQBvoNI88BAyTVz0QhVJQi7E/XAiRTb6K4ol76LTeCGynTHV97oU6kmxUr3g0t8qQ67PAnzk9IIow2fDLXFRgf7R3EbFiNQ103/Fc2eVsu5+nHRSiGE0PQnInbHBYXMlC47mpI5mJobEY+5tJejuoov1TxXF6y+dNzmprPsJqNa9u+ENWNBDopBIrvKAj3A1hYDVA63kSrlv9HfbdxXopPOuQRFlstIdhSicll0mNCK4F2lEbgLjTOHskS8c+QqY5hEN+WsCYeg9i+Ix3WZ7b7K8TJM13BazrMZMBo3RmeOy9l6cx3kik0JgGtZJytpBNuaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+JZ4giDhCNyHRPtKNrOXZMb/39YsOO5Y9jO2/kky7gM=;
- b=UlglfA6tbB0+QvQjEyMCyqClNVLpoVuxgX3UMnZM4iPLM87UvVo2CkSMgb2z6JgDU6fSXZpfHAhSGjdfrsb5kH3AMOmdS1YhRP7nnm5TmQ79fxAoRaLXvmZj3gJtWwHiJCWUB8EWpxRdIsUEUF8F3+dkFbhCcto5vMsif1Keci81rPqyY6gMu3YFJLaljaCDbGQMjWgRzsa6ZxDpW8KS9Rqy991Dvx4KjdGB3RSQ9nIUnnogXjqDxSuYI0scV8zr2lCmvZBzBNT3ePqjQ+5OsOaZXPmhrRGpH6sHKBVokblJ8a9uy8+JQ9c7q075moZVEDEZ0KwHN6Ef1+rnY8Oj3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+JZ4giDhCNyHRPtKNrOXZMb/39YsOO5Y9jO2/kky7gM=;
- b=C9tv51HNivVjxmHBWsGkKpjTcNXUxim2TM/Fm3lz0B+5XkH6a/H9Z/CtmSJN74rMg6/gBVN1RFUvP9sk7ku7KoBDsu+NmSyQYHKKMqU3Hl5p3RK7qXnbPwsT2PbPKfE1c+WuWxd0mZ1f/xRlZRacXZJce/maGvhGCVqllqGUHMsTgBN9xR1h++OK+MiF6aRHIDpryI5+WIWGePEfBXAA+sa7BZK6ZMB/iQlQNdl1GXgK22qkZiWUxqNZz974s5N3Ys1dnGtEjpfx7G4DSIJGkigbCN0wpvTXOnogwt2uIB9pzXZJW3vMbuA37SFHfMtO/hHzhBDFMSBZIADCzcZcVw==
-Received: from TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:242::11)
- by OS3P286MB1733.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:162::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 08:40:44 +0000
-Received: from TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM
- ([fe80::cb1a:a539:b3e3:e496]) by TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM
- ([fe80::cb1a:a539:b3e3:e496%4]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 08:40:44 +0000
-Message-ID: <TYCP286MB2607A8F23BC707F4E4FD8859B1FF9@TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM>
-Date:   Tue, 10 Jan 2023 16:39:47 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1] i2c: i2c-core-base: Modify the maximum idr id for i2c
- adapter
-To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiongxin@kylinos.cn,
-        Riwen Lu <luriwen@kylinos.cn>
-References: <TYCP286MB26079F414019C8AC9303E412B1E69@TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM>
- <Y7wvLi2lA1bSH5By@ninjato>
-Content-Language: en-US
-From:   Riwen Lu <luriwen@hotmail.com>
-In-Reply-To: <Y7wvLi2lA1bSH5By@ninjato>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN:  [foSQThLzOTBvyKsgeTNq6VbTxcrVIaBlTkO/x9xwoZU=]
-X-ClientProxiedBy: TYCPR01CA0065.jpnprd01.prod.outlook.com
- (2603:1096:405:2::29) To TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:242::11)
-X-Microsoft-Original-Message-ID: <579faa8b-d967-7faf-d7c0-9e322cfdb39f@hotmail.com>
+        Tue, 10 Jan 2023 03:40:45 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640A2C4D
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:40:42 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id d17so10923551wrs.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:40:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tzc6hdjQTHbPCxWj+m5gERAJ10AVL3L5//b7OUxg4Es=;
+        b=KzQc8yML1zFUavhHO2vHTnfFIsHPyJzUZxKd5CQbiS4DMKLhfTVvo7CIcTsO9/05nG
+         FSVtujfArS0tXwJ+jL8+qKaiGMUBVeQZfqAUKj6xwfzxwpC3dl8j3snqS1HUc7IDtg2C
+         fv54KCUp+1QZ/q+EsUT/GWOykzl40qVIWe0x+Urmxj+1Z4sk0IiqnUS/d663Yt3YN/w1
+         4r/jbGq2D3MktMPUGDgZYtBjX2wnMhoXmVF8DymjMpy8TBVNLGWjz2IpdHqLfEMV6UZT
+         oGiLPLFJugj66swnl42/KYuNXky3ZwOtS6wezUwUWzc7nNz7fK4I2p7eidGn0YWy41nt
+         prdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tzc6hdjQTHbPCxWj+m5gERAJ10AVL3L5//b7OUxg4Es=;
+        b=mS+nRddLWHepfij6HpVb7eTC/ADWYS9owu2ljg9+R2vPq3f16O0SRgGyrPKWhoKsh3
+         ax6/qmaq3Me/9zrQqY7vWmcjUKojuYs28UfRwaVOH/KyZwyhD7DDHcrGIsTbSfMDSO3g
+         H4d04FTaMHnmRQ3vKxDWPhig6/c94qSVNej1RL038/cMSqTRU8myOiH8ozii+0PNckme
+         neGqoEeBTodACvee3QsbgDMqXNmXgEDUIl3iN/iw55TcIdcPLWyHE2+9v4J2gyblxZ9u
+         5T6ZL8EGa1EYrBxK59tN5TZqFPECrsBFP3Xb5Nm9KN9vVJiCJKxaI7TaD6HOkCA1dDM/
+         3WzQ==
+X-Gm-Message-State: AFqh2kp8QzstpjN59FO2GhaG+ObZYioyqELXh62RcmTarJq4BulPk97f
+        QJuB/zoI4vMF6trMtThvKKuiaQ==
+X-Google-Smtp-Source: AMrXdXuXvs7kmxwud6wPlxYBXc1N2FBJ4gD32d1t6nFYov+QTX3Y1AZ4JwWjs8ntIBz+Gqb4C9t5Zg==
+X-Received: by 2002:a5d:54ce:0:b0:242:8b69:cf2b with SMTP id x14-20020a5d54ce000000b002428b69cf2bmr39013216wrv.47.1673340040850;
+        Tue, 10 Jan 2023 00:40:40 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q16-20020adff950000000b002bcaa47bf78sm1230690wrr.26.2023.01.10.00.40.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 00:40:40 -0800 (PST)
+Message-ID: <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+Date:   Tue, 10 Jan 2023 09:40:37 +0100
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2607:EE_|OS3P286MB1733:EE_
-X-MS-Office365-Filtering-Correlation-Id: dd52ed9c-24a6-445a-ff42-08daf2e65cd0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r3lkc7HpafZN85fkHQrXuPNxnAAHZ6E5VZ/o5RJWnKCtyDg+oJZcP6vfFPow0VUeyCCrgWoyPQE0nBipR9XCKCEsGWX/4XVDKCVYTqqNN6aG62IaagPga+GzGdF006lx56TCWRH5VEZxNnPo/maryZdcCYn/c+aSvrz3gwszwuSjM69up5a3f4JsSJOPqDpCOW6cTQ8aeGPOxxWjQ2Lk3lXs+Ar5KDW5BY4UBbrmcmoPujeOBM16AMUXfKiFK7XM/T60ARyIenCWZpbqsECmKYnaKIXhNS8O3nOTi01G7Dx6g/w2HFAA6hmN8+rNPsf2zxC/o2orE2tpn1u6EVEhz70hq7hQvtl9pDhIFVAdK/KSID34bfyvccXRaO2koZbmJLvOKxTEO9GWT8gUkjdV4ZVpVtTHLJ/uJA0UctRyNKYcOBWCokP6vSDjdO8vTyKzOi4ehZNBtqW3fKeKlI38kP8fR54YKqNFgw4C8AAGAlaDniRvPm8Iv6eO9tgy+cfOgITA0cIc/PjW/OJiZZxUouD1olqeu2BnzZhh+sbp08YWu77IQIvZnUh1CILUMijRTOLes1G+U6+CyuyWY88dat6mBMzd/Hvd1ZsqzjYWHP//Ia2mhkgHej/DiPzNRecaH6nIHocBXpdcZCUd1z2tFw==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZmRCWVNqYzNWSFgvd2VkMUVvS05VUEs0Tmx6bmhBbzNZd2dkWkZyREExQ1RS?=
- =?utf-8?B?UllRYUpXdm9CQmp5dWhkOGNXekx6SHJVOEZzalFtVHg3cTdlMlZWcnhhUXFM?=
- =?utf-8?B?VEpaTWw4TGJ1RjdRU3AzUTVQSW5GQXo5M01oSGlQNnRZNDV3Tk4yVEVzM24z?=
- =?utf-8?B?MWYyb3lkNnh4MUFWemdmSFM0SVlLZmlIajA5QkcvY1VvZ3FTaW1zRzJ4Y3RN?=
- =?utf-8?B?blZibFlGcWdheDhCQmRpODVMTThEZmNWZ014dDVVdXFCRnoxbzd4QzByOE41?=
- =?utf-8?B?MGNCTWVlUTRPemVaanltNFJoQnk3bXFFY282TGFvblFBVEtWRTA0SWd2NW5n?=
- =?utf-8?B?c3VLRnBkVmpyeVhydFc2WjUxVFZNK1piNHZVdlByZjBTVHRBRDV5T3M1SFJG?=
- =?utf-8?B?TWtGbW1IM1BRNzhkcmNiNEV2K2pOVXFRRHh5WklmZms3WVI1MmEybC9KcEg0?=
- =?utf-8?B?MnhPUXpFdnpFSTBUZEtJemFTMUFnNS81SDQvOXBUTDlqVFNPNlpVTHV0SUNt?=
- =?utf-8?B?OXBEYmRhanl3WWpTWjIxUGt4ei9YSFRqRXRDRjhqSXFUbWJWWW1jQzYyY3Fr?=
- =?utf-8?B?OHQ4T3NVbGhhdjUwNFA4MHZiWFc4Qis1R096Nms4WTRGYzlWWkZjZnRhK0pw?=
- =?utf-8?B?SVhSYmIrdWg3TGRLVlhtODZ5cndiUUtvb1B4a0xHZTd4L3pvSGpkc3p0V1RK?=
- =?utf-8?B?VFJieWZHNVU3STM4aUsyZWx6dms1THI4RFlRbWlxWlZMWGdaZUw2bTRNN1F4?=
- =?utf-8?B?RWN4RzY0MXIvbXJPQlJZR0pYVm5HaHhpdlVlMkY5M3dUUWpIVjZLcSt5ZlNp?=
- =?utf-8?B?SzBjSmFLb3M3NXlhVGg5RmhVS0o3aFkzVHBsTWR4U2xPV2RubHJlL1dmZjBr?=
- =?utf-8?B?dmh0cmlnYXp3QWRVbWhMMGh6czRZTTJObHpJTmVZdkhSNGhxSUJJR3BlQU14?=
- =?utf-8?B?Q0loM1BmRjZ4Q0M4aEV4TDdaSU5DaVdvQWZFdERGUk5DUTNrZ1p1Z1JaL0p0?=
- =?utf-8?B?UjcyS2UxdzBwSEsveGs3OFZZVkJXMFpGM2ZhZlBSSFVYWWsxWjJRQ3NXa2JY?=
- =?utf-8?B?aCtmVk5HclRKWmhoNEtzTXZHTXZwVFFPQXcxL1VjVWRLOSsyWERWeDBsWkF6?=
- =?utf-8?B?T3owWGFVRlFzaTlWL2N5cDl5MjcydDcvKzBRMEJOY1A0LzlNMHI4V0NlY2hh?=
- =?utf-8?B?b1BLWmtzQlNOZ3Q4ajVJMTJ6djdUTk1Oa3FiRzg2WENXM3d1VkpWTHdlVE95?=
- =?utf-8?B?MGJxd1hiYXZ4cC8vbzFPdUxWZzh2aTEyY3NiODNxLzBVSUJwZ2I0bDkwTUxI?=
- =?utf-8?B?MUdpVkErYjF5YVlXUms3MVZzRm0zd0YxUUhRSVdjZGtreWM0bFM4S1VxcjZU?=
- =?utf-8?B?SER5UzM0WkxMZHk1TTlhcTl6cThiOFppZWNoSm10SXdkZCszejdnWWswUnBS?=
- =?utf-8?B?RStBQnRwdnFkbEozK3RyNnI3NkE5WDhsYnREYVA5UVZqRm94ZXkrbGI3bU5X?=
- =?utf-8?B?UFM1OXltMDhBSUNoZ1F4YnNDbFV6eFZzTTB5cnlFTXNmeTdvMUdVYnV6RmVF?=
- =?utf-8?B?WVFVRUJnU0RxMStVeUVEVURteEZDTmVmdTlZbmxLSTNNcXlzS1hObU1jeUtn?=
- =?utf-8?B?NG1rMjZrcnJZTGtoTmt3RVVnS0lRZ29jK01CRmNNQnFpMk5nUEJyaVdCaXdG?=
- =?utf-8?B?UC9FOHJaRStCSUNQa1hVb2hNM1RIaE5pUEMwUFRzMG1aTENNb2dFQ0xnPT0=?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd52ed9c-24a6-445a-ff42-08daf2e65cd0
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 08:40:44.2448
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB1733
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
+ support
+Content-Language: en-US
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-3-william.zhang@broadcom.com>
+ <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
+ <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
+ <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
+ <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/1/9 23:13, Wolfram Sang 写道:
-> On Fri, Dec 16, 2022 at 10:07:51AM +0800, Riwen Lu wrote:
->> From: Riwen Lu <luriwen@kylinos.cn>
->>
->> Change the maximum idr ID to INT_MAX for i2c adapter.
->> This fix the following adding i2c adapter error while the idr with
->> adap->nr has been allocated by other i2c driver, and find a proper ID
+On 09/01/2023 20:13, William Zhang wrote:
 > 
-> How did this happen that another i2c driver could get this? Were you
-> able to follow the code paths that lead to this situation?
 > 
-Yes, it's happened in Phytium(Arm64) platform with MWV207 GPU.
-
-1. The MWV207 GPU driver has registered I2C adapter, and allocated idr 
-id 0-6 with i2c_adapter_idr.
-
-# cd  /sys/class/i2c-adapter/i2c-0/
-# ls
-i2c-0  i2c-1  i2c-2  i2c-3  i2c-4  i2c-5  i2c-6
-# cd i2c-0/
-# ls
-delete_device  device  i2c-dev  name  new_device  power  subsystem  uevent
-# cat name
-MWV207_I2C_0
-
-2. The BIOS's ACPI DSDT has declared I2C device with _UID 0 as following:
-
-         Device (I2C0)
-         {
-             Name (_HID, "PHYT0038")  // _HID: Hardware ID
-             Name (_UID, Zero)  // _UID: Unique ID
-             Name (_CRS, ResourceTemplate ()
-             {
-                 Memory32Fixed (ReadWrite,
-                     0x28014000,
-                     0x00001000,
-                     )
-                 Interrupt (ResourceConsumer, Level, ActiveHigh, 
-Exclusive, ,, )
-                 {
-                     0x0000007C,
-                 }
-             })
-
-             ...
-         }
-
-The Phytium i2c driver would register the i2c adapter with idr id 0 by 
-calling function i2c_add_numbered_adapter(adap). Then, function 
-idr_alloc(&i2c_adapter_idr, adap, adap->nr, adap->nr + 1, GFP_KERNEL)； 
-allocate the idr failed because idr id adap->nr(It equal to _UID) has 
-been allocated by MWV207 GPU, and print the following error:
-
-couldn't get idr
-i2c-phytium-platform PHYT0038:00: fail to add adapter: -16
-
-This patch can solve the problem.
->> for it.
->> [  357.620685][ 3] [ T3655] ------------[ cut here ]------------
->> [  357.626544][ 3] [ T3655] couldn't get idr
+> On 01/09/2023 12:56 AM, Krzysztof Kozlowski wrote:
+>> On 09/01/2023 09:27, William Zhang wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On 01/08/2023 06:51 AM, Krzysztof Kozlowski wrote:
+>>>> On 06/01/2023 21:07, William Zhang wrote:
+>>>>> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
+>>>>> controller. Add a new compatible string and required fields for the new
+>>>>> driver.  Also add myself and Kursad as the maintainers.
+>>>>>
+>>>>> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+>>>>> ---
+>>>>>
+>>>>>    .../bindings/spi/brcm,bcm63xx-hsspi.yaml      | 84 +++++++++++++++++--
+>>>>>    1 file changed, 78 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>>>>> index 45f1417b1213..56e69d4a1faf 100644
+>>>>> --- a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>>>>> @@ -4,22 +4,51 @@
+>>>>>    $id: http://devicetree.org/schemas/spi/brcm,bcm63xx-hsspi.yaml#
+>>>>>    $schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>    
+>>>>> -title: Broadcom BCM6328 High Speed SPI controller
+>>>>> +title: Broadcom Broadband SoC High Speed SPI controller
+>>>>>    
+>>>>>    maintainers:
+>>>>> +
+>>>>
+>>>> Drop blank line.
+>>> will fix in  v2.
+>>>
+>>>>
+>>>>> +  - William Zhang <william.zhang@broadcom.com>
+>>>>> +  - Kursad Oney <kursad.oney@broadcom.com>
+>>>>>      - Jonas Gorski <jonas.gorski@gmail.com>
+>>>>
+>>>>>    
+>>>>> +description: |
+>>>>> +  Broadcom Broadband SoC supports High Speed SPI master controller since the
+>>>>> +  early MIPS based chips such as BCM6328 and BCM63268.  This controller was
+>>>>> +  carried over to recent ARM based chips, such as BCM63138, BCM4908 and BCM6858.
+>>>>> +
+>>>>> +  It has a limitation that can not keep the chip select line active between
+>>>>> +  the SPI transfers within the same SPI message. This can terminate the
+>>>>> +  transaction to some SPI devices prematurely. The issue can be worked around by
+>>>>> +  either the controller's prepend mode or using the dummy chip select
+>>>>> +  workaround. This controller uses the compatible string brcm,bcm6328-hsspi.
+>>>>> +
+>>>>> +  The newer SoCs such as BCM6756, BCM4912 and BCM6855 include an updated SPI
+>>>>> +  controller that add the capability to allow the driver to control chip select
+>>>>> +  explicitly. This solves the issue in the old controller. This new controller
+>>>>> +  uses the compatible string brcm,bcmbca-hsspi.
+>>>>> +
+>>>>>    properties:
+>>>>>      compatible:
+>>>>> -    const: brcm,bcm6328-hsspi
+>>>>> +    enum:
+>>>>> +      - brcm,bcm6328-hsspi
+>>>>> +      - brcm,bcmbca-hsspi
+>>>>
+>>>> bca seems quite unspecific. Your description above mentions several
+>>>> model numbers and "bca" is not listed as model. Compatibles cannot be
+>>>> generic.
+>>> "bca" is not model number, rather it is a group (broadband carrier
+>>> access) of chip that share the same spi host controller IP. Agree it is
+>>> not particularly specific but it differentiate from other broadcom spi
+>>> controller ip used by other groups.  We just don't have a specific name
+>>> for this spi host controller but can we treat bcmbca as the ip name?
 >>
->> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
->> ---
->>   drivers/i2c/i2c-core-base.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
+>> No, it is discouraged in such forms. Family or IP block compatibles
+>> should be prepended with a specific compatible. There were many issues
+>> when people insisted on generic or family compatibles...
 >>
->> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
->> index 7539b0740351..c2982861057a 100644
->> --- a/drivers/i2c/i2c-core-base.c
->> +++ b/drivers/i2c/i2c-core-base.c
->> @@ -1535,11 +1535,12 @@ static int __i2c_add_numbered_adapter(struct i2c_adapter *adap)
->>   	int id;
->>   
->>   	mutex_lock(&core_lock);
->> -	id = idr_alloc(&i2c_adapter_idr, adap, adap->nr, adap->nr + 1, GFP_KERNEL);
->> +	id = idr_alloc(&i2c_adapter_idr, adap, adap->nr, 0, GFP_KERNEL);
->>   	mutex_unlock(&core_lock);
->>   	if (WARN(id < 0, "couldn't get idr"))
->>   		return id == -ENOSPC ? -EBUSY : id;
->>   
->> +	adap->nr = id;
->>   	return i2c_register_adapter(adap);
->>   }
->>   
->> -- 
->> 2.25.1
+>>> Otherwise we will have to have a compatible string with chip model for
+>>> each SoC even they share the same IP. We already have more than ten of
+>>> SoCs and the list will increase.  I don't see this is a good solution too.
 >>
+>> You will have to do it anyway even with generic fallback, so I don't get
+>> what is here to gain... I also don't get why Broadcom should be here
+>> special, different than others. Why it is not a good solution for
+>> Broadcom SoCs but it is for others?
+>>
+> I saw a few other vendors like these qcom ones:
+>   qcom,spi-qup.yaml
+>       - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
+>       - qcom,spi-qup-v2.1.1 # for 8974 and later
+>       - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
+>   qcom,spi-qup.yaml
+>       const: qcom,geni-spi
+
+IP block version numbers are allowed when there is clear mapping between
+version and SoCs using it. This is the case for Qualcomm because there
+is such clear mapping documented and available for Qualcomm engineers
+and also some of us (although not public).
+
+> I guess when individual who only has one particular board/chip and is 
+> not aware of the IP family,  it is understandable to use the chip 
+> specific compatible string.
+
+Family of devices is not a versioned IP block.
+
+> But when company works on it, we have the 
+> visibility and access to all the chips and ip blocks in the family and 
+> IMHO it is very reasonable to use the IP family name for the same IP as 
+> these examples shows. 
+
+No, because family of devices is not a versioned IP block. I wrote
+before that families and wildcards are not allowed.
+
+> Are you saying these are not good example to 
+> follow?  
+
+It's nothing related to your case.
+
+> What are the issues with generic or family compatibles? 
+>  Could 
+> you please elaborate?
+
+They stop matching and some point and cause ABI breaks. We had several
+cases where engineer believed "I have here family of devices" and then
+later it turned out that the family is different.
+
+
+> 
+>>
+>>
+>>>
+>>>>
+>>>>>    
+>>>>>      reg:
+>>>>> -    maxItems: 1
+>>>>> +    items:
+>>>>> +      - description: main registers
+>>>>> +      - description: miscellaneous control registers
+>>>>> +    minItems: 1
+>>>>> +
+>>>>> +  reg-names:
+>>>>> +    items:
+>>>>> +      - const: hsspi
+>>>>> +      - const: spim-ctrl
+>>>>
+>>>> This does not match reg
+>>> Do you mean it does not match the description?
+>>
+>> No. reg can be 1 item but you state reg-names cannot. These are always
+>> the same. If one is 1 item, second is as well.
+>>
+> I'll drop the "minItems: 1" from the reg property then.
+
+Then it won't be correct, because it would mean two items are required
+always.
+
+> 
+>>>>
+>>>>>    
+>>>>>      clocks:
+>>>>>        items:
+>>>>> -      - description: spi master reference clock
+>>>>> -      - description: spi master pll clock
+>>>>> +      - description: SPI master reference clock
+>>>>> +      - description: SPI master pll clock
+>>>>
+>>>> Really? You just added it in previous patch, didn't you?
+>>> The previous patch was just word to word conversion of the text file.  I
+>>> will update that patch to include this change.
+>>>
+>>>>
+>>>>>    
+>>>>>      clock-names:
+>>>>>        items:
+>>>>> @@ -29,12 +58,43 @@ properties:
+>>>>>      interrupts:
+>>>>>        maxItems: 1
+>>>>>    
+>>>>> +  brcm,use-cs-workaround:
+>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+>>>>> +    description: |
+>>>>> +      Enable dummy chip select workaround for SPI transfers that can not be
+>>>>> +      supported by the default controller's prepend mode, i.e. delay or cs
+>>>>> +      change needed between SPI transfers.
+>>>>
+>>>> You need to describe what is the workaround.
+>>> Will do.
+>>>>
+>>>>> +
+>>>>>    required:
+>>>>>      - compatible
+>>>>>      - reg
+>>>>>      - clocks
+>>>>>      - clock-names
+>>>>> -  - interrupts
+>>>>> +
+>>>>> +allOf:
+>>>>> +  - $ref: "spi-controller.yaml#"
+>>>>
+>>>> No quotes. How this is related to this patch?
+>>> Will remove quote and put it in patch 1.
+>>>>
+>>>>> +  - if:
+>>>>> +      properties:
+>>>>> +        compatible:
+>>>>> +          contains:
+>>>>> +            enum:
+>>>>> +              - brcm,bcm6328-hsspi
+>>>>> +    then:
+>>>>> +      properties:
+>>>>> +        reg:
+>>>>> +          minItems: 1
+>>>>
+>>>> Drop.
+>>>>
+>>>> reg-names now do not match.
+>>> Don't quite understand your comment. What do I need to drop and what is
+>>> not matched?
+>>
+>> You need to add constraints for reg-names, same way as for reg.
+>> Disallowing the reg-names also could work, but there won't be benefit in
+>> it. Better to have uniform DTS.
+>>
+> I agree it is better to have the uniform DTS but the situation here is 
+> that the brcm,bcm6328-hsspi does not require reg name since there is 
+> only one register needed and it was already used in many chip dts for 
+> long time.  If I enforce it to have the corresponding reg name, that 
+
+No one told you to enforce to have a reg-names.
+
+> could potentially break the compatibility of those old device if the 
+> driver change to use reg name, right?
+
+How compatibility is broken by some optional, unrelated property?
+
+Best regards,
+Krzysztof
 
