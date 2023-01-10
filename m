@@ -2,213 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64440664A90
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5055D664A8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 19:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239489AbjAJSdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 13:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
+        id S239064AbjAJSdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 13:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbjAJSco (ORCPT
+        with ESMTP id S239359AbjAJScr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 13:32:44 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2C51581D;
-        Tue, 10 Jan 2023 10:29:09 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AIIBrR006581;
-        Tue, 10 Jan 2023 18:29:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=corp-2022-7-12;
- bh=ryq5ykfW8hyb5XMulMyq6cEQa+L00s9lDWKmuxRTQhg=;
- b=1GANX/Lv3yWMv3ZiyVv9R/syqYDQJ79ANd5YjntnnZw+4CoVXxyoKT4J8b1mHyc3eENH
- 0+FdU54m2eeJxZWeJhVMJ351mJXS5tIom1Y4dr58uvmbE9aKN10ZhHF4GV7plu+yyy6p
- Nc5c1wrFvg4sLDvBM16hp4aBX+QxkNp0yTN/VLC0rqWrkVdqiaL6cKhU+9L3HF4E0yoH
- gTtm2BGRx7q+NHZIPfiuurTokEqOJuyNSbCHOkTXJIFYP8lg9d+C8k+9m6i9vcF/qCSg
- zhGAD0ud7TslxfQzmeJ7grwa3Z0Cprb4MHZVOV0bY3Cfi9fx/eIT+rq17vqoRdFN73/B GQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n1cbq850u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Jan 2023 18:29:00 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30AIITOd015348;
-        Tue, 10 Jan 2023 18:28:59 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2108.outbound.protection.outlook.com [104.47.70.108])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n1d6cgdjc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Jan 2023 18:28:59 +0000
+        Tue, 10 Jan 2023 13:32:47 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F16C13E90;
+        Tue, 10 Jan 2023 10:29:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673375359; x=1704911359;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=h8aIhX/CtLQT/3BE91POk85++rpkioxT+kRisKmlkbs=;
+  b=NWjyUbYMgQRG25/F8CqW7WT8byXu+sWie8FsmoflMGyWZOB8WGaGxPW6
+   2AdAqxRb+krxaPgBJyGcxC8x1SrXDIZl93BU5yKB5sECTJE0nGcVhqd2R
+   dBGvyA1I0Wai5oGyr2Luv3mQJHYTE2QZ4ra74SoOVP796bzOexlkpUgSD
+   TOqlGkU7ntON6qTV522cWRVoUBdNsvHdi6I0vglrkdpfTZHu0gJLyCxXB
+   e8r7UckObwygeDxEdV3VRti5xUf/Lho3FMW1Wl7T5Mwf/PCbABCp8zm8S
+   eFnDALnoTl8O0GwN66qwoqV5x08F04Xn02ok7HIPk9QKqJsnOTwOxsM6m
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="385530436"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="385530436"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 10:29:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="687661372"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="687661372"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga008.jf.intel.com with ESMTP; 10 Jan 2023 10:29:18 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 10 Jan 2023 10:29:17 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 10 Jan 2023 10:29:17 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 10 Jan 2023 10:29:17 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 10 Jan 2023 10:29:16 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f8cG3WwR7jc40FWxiVxRLn0nJFf1A04WNOXD8QqB45x1GrS2rpMoNRRyF7PxlFTE/o/QbPM60CYcJHQv4PGqaedT92FvnEaASghQ40ZLfFP/2TooNy+Hvff/VNGYyWqeD0cbja1QGks6QiYSYHtwkAk2mjlCScBQGpevxmaiwQNF9NaLRnmCVA/e3zd3fRCoxZQ/CH2oJ88xhRSIavlEsBwYLulZe2SuiteWMQh47UfeRNZx4n49IiPvNYPMj16LfOQwsBbgGnNkshthha7m9hMt0Ib7zOdBjxZ13fRByvDNol/HKURm8kQ4ZiZz5A0gGa64t03Dv7BmRCrivVxwkg==
+ b=KZLsy1Xy5GUpXJdxjqzT+RgB/NPQfmxwHTtUkCgw1XQKh/oi8IR/HDtoAUx5jjGI412UqQF3iy4qOL1fCX1HQG8RQN2yipa1b0OU/vlz76O1c2MLdRru/fO671s/FlgxLw3IF3MAcOwJ4YbCfksMyeYraBeMKcYkbtGWcE3KRJ+PZvmYoi5ijmLWBlmyza/p6tdRQv72c04uHKQZ4V6B2hnzJNZsnHfa5ciQrbQuJ2L97PARHDtAbBDRVnbEXxh+hLwW2RctuUX1a+kYnbw1HtptDf6RKlfYj7zm42xj4+LFM79RXedl2Eka3FHdGQA46uxrnSTff4cAAfgrhSdksw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ryq5ykfW8hyb5XMulMyq6cEQa+L00s9lDWKmuxRTQhg=;
- b=crowLIhCJSS7+BH3I5tv5duRby8PUusfVXqyzk+eKdqBRzRtAFsGDz9b3wdnk1tq7zv5Nm1k0KRSRQ59cdBaeWESfFEw3mrRWPt1/jSkg3kNVrXv/uEhpDLMEbdIeifXK4BCknhrm7bF7QiDOCoOeMoL+I3M6INUdWOZgfJ0vu1aakm4PCljj31D7Nyu7VJz68b5danxz4AKJkyTSe9SQpMnNs0WBas3f9cKXwuj2PQLDwJcEoRvaOkenz4/iKMcrEKl8bsLMB8MEIGWV9KapjJLqPuarZke7EoB7EatmitbtLDwSyHp3PcKv5ZnvSQqGJYdJ4WJKyILakhGv9UG8w==
+ bh=VBj2t/elfQmLs9jgso9AdhzTZZsWDUaacl75HA/lOLw=;
+ b=XkoSJc1Br1Mj3z03bsC/T3StApx/DTVx21V/z/oEGybjI/ZRNYVV8Qfic/m4EPpeOgzJ6GYtdru3ymW5re6dg99UybTZ3m25ztFfDEmRA4liqT0KF1ylNiMbYEs7n/uTcAfh/hw8KmKyVABjc1GHX0KxIOYW2d4cdhSXgCZbdqhQtKL65oXkNHRQU6OlKGAX1eOFZ3Ip9X2R0NRHnnx/cyfd2BkgOgpNNEmSJU6/myeeEGs8F5GgLOTnBAxyBi97AllvbMGxmTX4LkmwIgj0bQiBNeXiJs2t7OQeyvEp6ueqmus2/5EQu6J0AASRJ3dz5RSezyTCsFoFwE+/zKAwRw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ryq5ykfW8hyb5XMulMyq6cEQa+L00s9lDWKmuxRTQhg=;
- b=0RnUC0nny+bCMn0pPaHv1XJCRl1JeSBvJWZDdVe/8O0dMqQz6IUIUcTVY81TQ4qyvOEcR0AkzRbJdD1APaVEWoNe+1bS/3KRvF4I869f4asqZhsBCbhno5GPLRpvWEMcCZ3ZS/fQDaV4qKvTrZQuX+lhvSzfkVyRk3nnaiHJk14=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by PH0PR10MB4614.namprd10.prod.outlook.com (2603:10b6:510:42::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Tue, 10 Jan
- 2023 18:28:57 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::a02:2ac8:ee3e:682]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::a02:2ac8:ee3e:682%4]) with mapi id 15.20.6002.012; Tue, 10 Jan 2023
- 18:28:57 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>
-CC:     Liam Howlett <liam.howlett@oracle.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH v2] nommu: Fix split_vma() map_count error
-Thread-Topic: [PATCH v2] nommu: Fix split_vma() map_count error
-Thread-Index: AQHZJSFm3vE8pFFbEU+0mBeoZWAv6g==
-Date:   Tue, 10 Jan 2023 18:28:57 +0000
-Message-ID: <20230110182853.1265561-1-Liam.Howlett@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.35.1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR10MB3022:EE_|PH0PR10MB4614:EE_
-x-ms-office365-filtering-correlation-id: 5fa22971-aef7-4f92-13fd-08daf3388961
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fbHGA6nTJEZE1wuIs90cla5TE9IiC96AQpgHJqqNI+/NrrVrNAnDaqunuRqJlvxU8Hc42Cx3v1H9+6fiOUDJr3xxobjN+cBXjKRKgNF5Zl8aLEaOTwVb4H61skBlnqcspfvXNtcJStyTGIsqp0V78VAZDIU+cczL6cXryodEsUWW9iewKG33+D4hvyfpOk6yPrrpukukJvn9GCkByeUdses6Q/fqG1Ss2g709W11s2VRUL2GFO1XAkVv4C+RnlI+qyTb/t5HwvjARYTmTMYrGSTg2OfxiwcHGw5n/7Kdj0Q94DG8YBHE8ZhBEfYlzBtGxrNeYWqEA/zsjuy3ncuDKKM89iLe3y+NW7IyDCKDCW2Fr1p65t45GNF1PiiYb9UerNUyZMRoJ8E57a03cRY05Iw1n/tsCiHf0G9L6eA0f3S3YJLJIKH87TZYhHy3RGUnjSaRJj3+GWMGiqex21pvCW5sC8+huZfIZyrDv5ARQsCL7I6+S5/ne3hiArDm1g3Jfmi32P3F/0MO4ZWpbDjPxS+7io9WynK9eWUN58drPQmkQHHDZ0NUAPlbEsAgqBbO402jUETP9BBWwWSWcJ3h8IEYSwMzdGofeSOnuwBYPqpTIc63T5se99PVcbL3CbSsqojOOuR3zB0ifx+ylwmvTgnahJtcNL89byTXsRenJs+cHSHcs8zHnGUdBTY23RQprgMgz5bl6rmJ0soe7p9DfA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(346002)(366004)(376002)(396003)(136003)(451199015)(2906002)(110136005)(54906003)(5660300002)(36756003)(86362001)(44832011)(8936002)(41300700001)(4326008)(38070700005)(8676002)(66946007)(64756008)(66446008)(66476007)(76116006)(66556008)(91956017)(38100700002)(122000001)(316002)(6506007)(6486002)(83380400001)(71200400001)(186003)(2616005)(26005)(6512007)(478600001)(1076003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?4nj0R8PYKDWs7CIBflsz279ZDihN7x10Y4ggjUdUMOxvfny4iwOy7qonHq?=
- =?iso-8859-1?Q?IdtqOWuA7C1Lvi9KlOcJmh1G7EQtM0tcCM6zmp1DrV39JGZJrgBFGRE5+O?=
- =?iso-8859-1?Q?m1tLcwqkV64IMNhp7iR/up7sZlz4wcyLfhasIXfPP4JkNrPtKwdyZ/7cKN?=
- =?iso-8859-1?Q?N/L/lDXqaB/Bup7Jq1R69sItmgDB1nZ19HMfq4QRCmfo0jN21Olq2C38wr?=
- =?iso-8859-1?Q?wEYqwKGKQCO8+/cmp/qr9a/F35o4znayHYlKsVyVrFxMrAuLkjTeavJDwH?=
- =?iso-8859-1?Q?GaqDdtNDXuyi5W7yxjqkGcSGSE+tNWR+XVnM0db/Deh/kr8cfWyxM8i3PK?=
- =?iso-8859-1?Q?g7RnZzTr5MHVnDuLlo5U6XmpddwuP1JoZ+79tLmr8wzVoG7I9DVQoePNSv?=
- =?iso-8859-1?Q?tP8wNDhWJ3VwAnNsJgzsqgvmwqnBbw67d2hdYqbkyxdDmIckPdl3bjCOHI?=
- =?iso-8859-1?Q?vI4JwXtcyuAi7qbFf61HkojRR1Pv4nRvsVBu85m2acYJmU9jsJM6Zq64jw?=
- =?iso-8859-1?Q?Qw0nIZB7LCAObJBsNg2JUbYKd2MlMycp4qU/wpXG5iumkrcnQZ9cge64Kv?=
- =?iso-8859-1?Q?raRS0+vefFjUhFau9+SvcWfFcT4YQ+Z8LJsQ+nW2JsEOR4P8Hlwqb6pzoH?=
- =?iso-8859-1?Q?c8W6DRar+RrAeXjW+0F6mBW41CvwhJWzs3Vx4Q+4mtwcAKNdLZyzODVqCs?=
- =?iso-8859-1?Q?1+wJXRPQBqddWJdQp7GdR3jKP7JUQtJC0LmNjh8MiLHiCBzzhhT+OjJaGm?=
- =?iso-8859-1?Q?WfeuOB1d8jRoNb/O29PjS4lmc8iYLMppUdmpI5Ki4ej99cebDHIFViVmGc?=
- =?iso-8859-1?Q?tdRU8/Ttfslk1Zr/Y0UOgcK5IziJGbOKhWhjx2LPX4H7EiW43VNpdnzq21?=
- =?iso-8859-1?Q?S2cEHh4CgL8lA7nyKHNyxtPfaaIawS/fqqyYnwbYNDAAvsD4lqJCiW+n2c?=
- =?iso-8859-1?Q?RVqj4dknAb7nHfzhnPtUaSNez+9DGQhhDM+9175EwGyQg8AA8ghv2/s2Me?=
- =?iso-8859-1?Q?01CwZWeyaH6vaaI0PDs1padWAIIk7hlimjpHyd++U3iGhmet1V2zgNpxQp?=
- =?iso-8859-1?Q?MdxScDsu8McFt0pordwpfcObOTQzzQJt5nAW1f81gOTklYbllKIRi1rW3a?=
- =?iso-8859-1?Q?9MS9JQg3KsxeatOFi+EoGFzqXEkwqsjydyG1ZKhikLxFmXuupbwMtfl2cy?=
- =?iso-8859-1?Q?oki4WzVJU+gN1ZY7j3BPo8dQbzaBGmlL0qy8i5NEVtAq0IN0WOJSATA1Ja?=
- =?iso-8859-1?Q?8GHEVL+8IzuYjKJP8UVDVnN/CDzBkpddDZT5s8WIY9oGv7q0ykBFUje+Gi?=
- =?iso-8859-1?Q?+ozgD4QOFUje8xHlXgYmn5/vHzImvSJH5gBOwC7klzDNbdqrz1I9y9qpAB?=
- =?iso-8859-1?Q?cUfvmTFcKebNBSfatyiRzcY7bre+NiOcoeB34jSwlJMwgq9J4NcQq3PkTf?=
- =?iso-8859-1?Q?JMz3mjzL3PYrbi95QBsG+4f5cbyBgL+4AGARZxXDXyPoKLP8psFQrlBkRd?=
- =?iso-8859-1?Q?1PleJMQZm4lcATEo+1QGJxprMu0VS7REFIaX0Lpqf4QdzS55v457ozGEhs?=
- =?iso-8859-1?Q?Ugs89AaMpMRChuVjRhrOp5TANvR1Nhcs1kkEuNQ6swhBoe9Nexy2tLoI/b?=
- =?iso-8859-1?Q?5QVWyn3OG4KpEnljwGYhXuR9L1n04FOPISHTvWVqripDBfn/vFYl4ufA?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by SA1PR11MB6567.namprd11.prod.outlook.com
+ (2603:10b6:806:252::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
+ 2023 18:29:09 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::8dee:cc20:8c44:42dd]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::8dee:cc20:8c44:42dd%5]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
+ 18:29:09 +0000
+Date:   Tue, 10 Jan 2023 10:29:06 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>, <linux-pci@vger.kernel.org>
+CC:     Dan J Williams <dan.j.williams@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        David E Box <david.e.box@intel.com>,
+        Yunying Sun <yunying.sun@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Florent DELAHAYE" <linuxkernelml@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        <mumblingdrunkard@protonmail.com>, <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: RE: [PATCH 2/2] x86/pci: Treat EfiMemoryMappedIO as reservation of
+ ECAM space
+Message-ID: <63bdae72740db_5178e294bd@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230110180243.1590045-1-helgaas@kernel.org>
+ <20230110180243.1590045-3-helgaas@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230110180243.1590045-3-helgaas@kernel.org>
+X-ClientProxiedBy: BYAPR11CA0039.namprd11.prod.outlook.com
+ (2603:10b6:a03:80::16) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: nc5GCj6KrNYiwb6edAU5lo+TLQGjPvE9vHjubQgTrl6KrfSOaFO9+rbYKpnQfkIzVSWcx5FtO4uuh6LSmgCVhxwvudDJBhhVHU6TroqNcvtAXZjVZlG8xReGXVH7mNwWAMzKlIDyIZbVrrsnbZ70n9Zd3W0BEj+BN04vYabKVZxEahwNX8mt47dRc8JJ7BzGVZ2cPT6km+N31vLegjYoDOt55ashVAxA9FPmGqdmQ/OSS1akBViSnDYYD5R0XuoW+azgp+K4xwSxXRxLeEoFp7IzC4BANe9Djuh2dyQYGPqEqAUjetHL3coBPk3dxViS30Vdh39qvkXP7pyLhQttAQTLUeP0LxvvXuMYPc+afpQ3Zgtxbz5BElTiwYrMatD2rpjQyiJNOzte6UyVqWYXQqJBFrjEGMfw0qqDMjB/bX8xodLp0dJ16ht04WtUYpWhAGko0qoC23BUWtscVwchdD+kSDAMPuZ81YTWkxCq8aWAM4FV98SMnwH9JTW+uVLyEsI8dgEjx1GHMhP29lxqjWo8y8Ou1dKb9tnaNm4zs4drTaYMPO+eAIfoz6Kkb0bh7qKMJotaD2Ae880mQTp3566PIlbHM0eGbNtfdxG3VA4UMb+F4qoHFquZTccCQl7NznQMqXAQihFStdZCstEYEux/vskKsM19BxyZFClVKZ9lHqdUKRmSB71KCTAcKaNU1gnGk9Jl8AAVr+xeEZ/U7l2s7OVLoMsKoeN/3Y63MhpwmlN/3i221SGr2PJGBwze2sUhjUjJvrt8GpkNa/5DRFmUBgPM2w+13SDd9gVfha7gmpw0QPwSH3vxGC6uN0m+2B80FxUpEtaxZsxrnfAuReclTrtLrg6Uj+qb4QhzbDmKuDfb/eN7ywhMfaPh9sLP4SZ5Ec7rw4tjioutmNOzZg==
-X-OriginatorOrg: oracle.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|SA1PR11MB6567:EE_
+X-MS-Office365-Filtering-Correlation-Id: d8456463-d7f9-4dda-ad00-08daf3389058
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ILlycMFXtwfi0sYYef4ZBw5zYrzhqTv3wmO50dSLSMiwczcBkyzSW9fmRM6NCF2AHXE992+SaMOB6jR0YsRAN04zVsq4xXIhZs+ORrCnXx6gJlU1dAmlAuuzoamdUkq7iWwpUJiFsC2dBpnYCyDpBDOnXTWKALza/e/R9WXnaRu45CpdvV8hAvlLZFZ9ZZETrevNI0P9dh/3TsrpVXgHH9bvryM/75vs8St2sKY7ifQkHX2nr52oF5AfbTCjmr7Czqzn4t+TxTn1L9VW9ZvTdQwdZzBv4Hy4yhPI5bIq4CciATH4ubAfoWhcqIuIJGSTrdnV5oNv+jCaps9t/+8mDMOfAy6ElfTunb/P/UNsKezjtz75UyotlnD2aqIEZHeCtIdvB+GNRVXsYzu5FNmVod8fAfBCCMiuAIc+Yj+XIzvNPuyqptaN2I6/MzKlSUKhfP9nTrJcCFpPo3n8OUN/nIbbTOb9Sk9ZEBIaWs4qsaZOeKU/ZpFYnmdo80Rs2r9HgKpDvnfy0GdoJdSFpDJFUWl4z4OaXC9NrJ4IxO1L0KonH8f1lon/d5fQ4ZXN/QSqHOUqj5zVG3axtOM7PapjDV4XXAfu1j7UJbDH4bDZ/hFBoPoXbF9sYRKQfdyW2JaYRouZzlXu8C8x+Jr+9P1JxwSKUUda+MmFiD6w0lmMf5o=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(346002)(136003)(396003)(366004)(451199015)(6506007)(38100700002)(82960400001)(6666004)(2906002)(478600001)(6486002)(966005)(7416002)(9686003)(26005)(6512007)(186003)(5660300002)(316002)(83380400001)(8936002)(86362001)(41300700001)(8676002)(54906003)(4326008)(66946007)(66556008)(66476007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bzSyPGNN7FqEGdyO+vY+0l0Fzs9wb/QFpWAHlysVAQC1TZBt0VW2s0qSFPzT?=
+ =?us-ascii?Q?iovChw3dgCWyQzMFS4Z5qoBDzdaaiijI2lHlDh9ePO3GQxBzGuA0x9FUbcYM?=
+ =?us-ascii?Q?u0Q8KZ+6XjZrnuHS7MHB8KwCrOSvfTudy+aueaTeWaqiydV2ON05elu160h+?=
+ =?us-ascii?Q?B7I2DpIHg1Y8ku8d/9AsJ0qv+md+y9neMExrm03l09LyKw+9iNbRlt5ioPlV?=
+ =?us-ascii?Q?kUW23znNHe2791tlDzObFAoj8W7VpJ0itWPPUUWaLGjGciXSdR1Zfpt1XVsQ?=
+ =?us-ascii?Q?Iigi4mbQDgHWef/8bjJScyBjER+kO4+qvBMGS3j6gBcRYIIZ3MEXEW+hWfqG?=
+ =?us-ascii?Q?dR/zO5OJzIFI2oHzVyu3/dNSIcyLQwkPlifQqpW1IYEB4PG7M+pUD/K+2USK?=
+ =?us-ascii?Q?YTlQoWGvgxS7u2edjPPz00WH7UfZBEcmm6IZimCSVvPxTsb9JybWj0yKk+yX?=
+ =?us-ascii?Q?VeFlqwRkuvqhQ/dOrQl/2NXVi6n2IbExglILwKbDLT2VF6OcXvpU4qWzgQtC?=
+ =?us-ascii?Q?XYSoahW882udz7V/mUmvvYHFX+Puc9on/+Jx3GaqG+GzFfRW+p8z5zkpQMD/?=
+ =?us-ascii?Q?LL2VQYTr6fAjPm4vEseluN+Jeuv7/2NtP4MYjwstimE5gOwiCfX22N15L8RL?=
+ =?us-ascii?Q?AUtgG+j4mC+l2U5dugcytT12ljx+7q11ITcg+2oCqeglAFiMdTQ4PJLlDZvS?=
+ =?us-ascii?Q?+qY4JFeaipSdHmbwDEHLPqFP6UGfiVfKtxiHUuEClQTGRR6qnvSKDIb8sBr4?=
+ =?us-ascii?Q?hYWnF1XU0YTfmiSstrbH+q/ij2UH5sp4mDqs6gMcVtcch4G6swFLmA1uIogA?=
+ =?us-ascii?Q?WCZULYJHak11wy7X/2wNXlXSBM+Opk56b6xljmlj5xtRP8gKeBoYVhoWg+yl?=
+ =?us-ascii?Q?6lx/s5W9W2e5SCjMXWI3JR2wn+iVBo6X9qK/pPp77UQCY1NkT19hCvgDtZKu?=
+ =?us-ascii?Q?uCrJPKWCEqPt+sPZ1D7g8Zx5vCI8F2xL6dDvrq91kKZin1xf93pmdtPj9XkV?=
+ =?us-ascii?Q?5TTiq1eaBERjdy9AO89YoFsSJcgoorsA+Bq4PQHAQ17TYTyes8x1TA8+gPCq?=
+ =?us-ascii?Q?1DJHr2hYsyoPHnR3qXVI7SvF+CN7bW3lCcK9KDSJnLmgFBk8eN9XruoTy9On?=
+ =?us-ascii?Q?jl/oz+x+tdmb2HB/dOve5Y6tvrnO9R98wOw9gySG7LK4I1Dd52NPBOLVuhJ8?=
+ =?us-ascii?Q?oYZ/C03YQ0guyTHWkhRQyyumqg7XRjoqcxhVAHurXejyNGOJA+b01fd1W0S6?=
+ =?us-ascii?Q?p2rFMt7WxbOlVCZETFUJNtAhQULgl2GCaZMjP47X1utmhT0HrCqkKN5CeGO2?=
+ =?us-ascii?Q?rLfVHZodjCe7tQkuLpDtJ5uK5fswRJlegbBXgJ+JBxM1NpLt7ex2ara9L7IR?=
+ =?us-ascii?Q?jYDwQ5a9bCXBmP4pfYjFC1QeyjHRzEly0HFYj1l1IkDmz2CkfhU5rbnDuOlV?=
+ =?us-ascii?Q?vBDxhE2rDGY54X5rjND8zfa4Eb8VRMKY4/utbbqzK+vNgFgrNW3AUILxAw9w?=
+ =?us-ascii?Q?zdEMNr8I0QZIBhNBx83rzJDDbR/RDVY+lVIQBMI89KP7NUxKI25XL9Uy3sUe?=
+ =?us-ascii?Q?QMFmU38JyvFV/kU7qGdVFiupJH7ThTrXgiWVfa/VQEfW55+BDFepvo7f0sa/?=
+ =?us-ascii?Q?Bg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8456463-d7f9-4dda-ad00-08daf3389058
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fa22971-aef7-4f92-13fd-08daf3388961
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2023 18:28:57.4436
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 18:29:09.3982
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: H55jrUWNjDDG/57xtEEcN9yqv9tYHqb03INCW81VJ7B6/LWXox6FJG4j1kkG7Wt3dUJZ4kJu/gfo5oKuqQDZLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4614
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_07,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 adultscore=0 phishscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301100119
-X-Proofpoint-ORIG-GUID: tnoGI06UnJuPFT5ZvSxI_cuQcGDzHBZL
-X-Proofpoint-GUID: tnoGI06UnJuPFT5ZvSxI_cuQcGDzHBZL
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NpDeB4B2Jrt4aHKLa07j5GZCjTGmY0o9rHULm9zrVvTM3vRokz9iyWfISfuOX4+Srlij/tmmI8MhCAA2Zudh0+b3ajtckagFhLtAHPdtSNs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6567
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the maple tree conversion of nommu, an error in counting the VMAs
-was introduced by counting the existing VMA again.  The counting used to
-be decremented by one and incremented by two, but now it only increments
-by two.  Fix the counting error by moving the increment outside the
-setup_vma_to_mm() function to the callers.
+Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Normally we reject ECAM space unless it is reported as reserved in the E820
+> table or via a PNP0C02 _CRS method (PCI Firmware, r3.3, sec 4.1.2).  This
+> means PCI extended config space (offsets 0x100-0xfff) may not be accessible.
+> 
+> Some firmware doesn't report ECAM space via PNP0C02 _CRS methods, but does
+> mention it as an EfiMemoryMappedIO region via EFI GetMemoryMap(), which is
+> normally converted to an E820 entry by a bootloader or EFI stub.
+> 
+> 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map"), removes
+> E820 entries that correspond to EfiMemoryMappedIO regions because some
+> other firmware uses EfiMemoryMappedIO for PCI host bridge windows, and the
+> E820 entries prevent Linux from allocating BAR space for hot-added devices.
+> 
+> Allow use of ECAM for extended config space when the region is covered by
+> an EfiMemoryMappedIO region, even if it's not included in E820 or PNP0C02
+> _CRS.
+> 
+> Reported by Kan Liang, Tony Luck, and Giovanni Cabiddu.
+> 
+> Fixes: 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map")
+> Link: https://lore.kernel.org/r/ac2693d8-8ba3-72e0-5b66-b3ae008d539d@linux.intel.com
+> Reported-by: Kan Liang <kan.liang@linux.intel.com>
+> Reported-by: Tony Luck <tony.luck@intel.com>
+> Reported-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  arch/x86/pci/mmconfig-shared.c | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/arch/x86/pci/mmconfig-shared.c b/arch/x86/pci/mmconfig-shared.c
+> index cd16bef5f2d9..da4b6e8e9df0 100644
+> --- a/arch/x86/pci/mmconfig-shared.c
+> +++ b/arch/x86/pci/mmconfig-shared.c
+> @@ -12,6 +12,7 @@
+>   */
+>  
+>  #include <linux/acpi.h>
+> +#include <linux/efi.h>
+>  #include <linux/pci.h>
+>  #include <linux/init.h>
+>  #include <linux/bitmap.h>
+> @@ -442,6 +443,32 @@ static bool is_acpi_reserved(u64 start, u64 end, enum e820_type not_used)
+>  	return mcfg_res.flags;
+>  }
+>  
+> +static bool is_efi_mmio(u64 start, u64 end, enum e820_type not_used)
+> +{
+> +#ifdef CONFIG_EFI
+> +	efi_memory_desc_t *md;
+> +	u64 size, mmio_start, mmio_end;
+> +
+> +	for_each_efi_memory_desc(md) {
+> +		if (md->type == EFI_MEMORY_MAPPED_IO) {
+> +			size = md->num_pages << EFI_PAGE_SHIFT;
+> +			mmio_start = md->phys_addr;
+> +			mmio_end = mmio_start + size;
+> +
+> +			/*
+> +			 * N.B. Caller supplies (start, start + size),
+> +			 * so to match, mmio_end is the first address
+> +			 * *past* the EFI_MEMORY_MAPPED_IO area.
+> +			 */
+> +			if (mmio_start <= start && end <= mmio_end)
+> +				return true;
+> +		}
+> +	}
+> +#endif
 
-Cc: stable@vger.kernel.org
-Fixes: 8220543df148 ("nommu: remove uses of VMA linked list")
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
----
+Perhaps the following trick (compile tested), but either way:
 
-Changes since v1:
- - Added 'Cc: stable@vger.kernel.org' to commit message
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 
- mm/nommu.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 844af5be7640..5b83938ecb67 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -559,7 +559,6 @@ void vma_mas_remove(struct vm_area_struct *vma, struct =
-ma_state *mas)
-=20
- static void setup_vma_to_mm(struct vm_area_struct *vma, struct mm_struct *=
-mm)
+diff --git a/arch/x86/pci/mmconfig-shared.c b/arch/x86/pci/mmconfig-shared.c
+index da4b6e8e9df0..ae95d1b073c6 100644
+--- a/arch/x86/pci/mmconfig-shared.c
++++ b/arch/x86/pci/mmconfig-shared.c
+@@ -445,7 +445,6 @@ static bool is_acpi_reserved(u64 start, u64 end, enum e820_type not_used)
+ 
+ static bool is_efi_mmio(u64 start, u64 end, enum e820_type not_used)
  {
--	mm->map_count++;
- 	vma->vm_mm =3D mm;
-=20
- 	/* add the VMA to the mapping */
-@@ -587,6 +586,7 @@ static void mas_add_vma_to_mm(struct ma_state *mas, str=
-uct mm_struct *mm,
- 	BUG_ON(!vma->vm_region);
-=20
- 	setup_vma_to_mm(vma, mm);
-+	mm->map_count++;
-=20
- 	/* add the VMA to the tree */
- 	vma_mas_store(vma, mas);
-@@ -1347,6 +1347,7 @@ int split_vma(struct mm_struct *mm, struct vm_area_st=
-ruct *vma,
- 	if (vma->vm_file)
- 		return -ENOMEM;
-=20
-+	mm =3D vma->vm_mm;
- 	if (mm->map_count >=3D sysctl_max_map_count)
- 		return -ENOMEM;
-=20
-@@ -1398,6 +1399,7 @@ int split_vma(struct mm_struct *mm, struct vm_area_st=
-ruct *vma,
- 	mas_set_range(&mas, vma->vm_start, vma->vm_end - 1);
- 	mas_store(&mas, vma);
- 	vma_mas_store(new, &mas);
-+	mm->map_count++;
- 	return 0;
-=20
- err_mas_preallocate:
---=20
-2.35.1
+-#ifdef CONFIG_EFI
+ 	efi_memory_desc_t *md;
+ 	u64 size, mmio_start, mmio_end;
+ 
+@@ -464,7 +463,6 @@ static bool is_efi_mmio(u64 start, u64 end, enum e820_type not_used)
+ 				return true;
+ 		}
+ 	}
+-#endif
+ 
+ 	return false;
+ }
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index 4b27519143f5..3ab0c255b791 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -790,8 +790,12 @@ extern int efi_memattr_apply_permissions(struct mm_struct *mm,
+  *
+  * Once the loop finishes @md must not be accessed.
+  */
++#ifdef CONFIG_EFI
+ #define for_each_efi_memory_desc(md) \
+ 	for_each_efi_memory_desc_in_map(&efi.memmap, md)
++#else
++#define for_each_efi_memory_desc(md) for (; 0;)
++#endif
+ 
+ /*
+  * Format an EFI memory descriptor's type and attributes to a user-provided
