@@ -2,169 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA731665018
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47F766501B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 00:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235245AbjAJX4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 18:56:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
+        id S235371AbjAJX4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 18:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235192AbjAJXzz (ORCPT
+        with ESMTP id S235300AbjAJX4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 18:55:55 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1DA55663
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:55:50 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id bn6so14313428ljb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:55:50 -0800 (PST)
+        Tue, 10 Jan 2023 18:56:32 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEE9DE2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:56:29 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id bp44so12583889qtb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:56:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bxJysdNIrmRjvFROtnsTQyJodAB8veehuxuxefoCP2c=;
-        b=rnirWVpiSpr6VhSQDQNoXvUVHyHeD6YL7RiNWjVUPzCzzsLSz550ShP6bkCBgPAnXE
-         wZla1NaYrRHdDwOsR4FCEL70oxKgSUwchWimZR2Zp5JkFCr8B20Pbz6aZlr0KjnB9l9E
-         t63pNJYKu02yjJDXV4Zwt5yyOP0J178b7wGbe2lf6rJSMKZL3vKHrkdvS77i/lqEyLWJ
-         xFIOIu/+qvLa7WfAjhvWYVgAcYxhX96XmjwVEptuPUhGKGf/0HL5gBRhPdxrVy/hTaAO
-         qfxScAkoWpyglZhuhCqxOA7fJmIDWWYgDWK/T6u99x8Vhc84fLWpFYq84tDeJgYEHYyI
-         h5Pw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PQ5VzqScz6w9Ee0ucy8HcJjuj+uX9vX/90WHrjQzutM=;
+        b=oDRrtDJCK5bwkHA/25RZ1YqtKwSC+zTemlJpXX0tBnEgs/1lqi+onPbwgk7BS34ORS
+         4VJQeH+KWYpaaYXj5IUKWLJOMDqJ5TY2ObLt8Tve5B/ZAysn5ObDea1Vx9IhoXiRPzag
+         xAV1N6Q/Vq7uHYQYv3SCTzCwS5nH8BiXcUzdD/Nx7t4tOnN/9FWL5jjHyKLp3XJZK7Fq
+         gRElOsHUoAF38hHI109labephr0jWhYW7Vx1dBaooYfdRz4tqOnUhCy9D98xEzSV0B2x
+         0l3HtiWL7fOf9t8PTCvJlxfluvAoGc6hFLYM2HaXOQvGz8lqaqx1cfCEkK+xxylL+gIC
+         gB+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bxJysdNIrmRjvFROtnsTQyJodAB8veehuxuxefoCP2c=;
-        b=hOQZsZ4dz2B/W9oVVvjQnBuaxYn5VThfaHVY3jzTBhc2+/m9BogclHVn5NE1mt0jNf
-         LMHo15SMgW3oWrMiqZMXysWnF931dkrTe9hMVqgcdF6DJfc0Dc+Q3cUWWW1doZf6qQoq
-         vIBNbMUn2Uxf9iqSYKSe/IOqOcc7eN5N5Lk/OvYpkKRrz3kMQVmGan4vhOmcvmmNoOfZ
-         pDFxdIAteplQ6tzlvJSFLsU9mlHU9Gca6ZLlPsO2DEnVvrdYQs5b5JYomUDg/Q/2jOj3
-         hL4rgaQIOWLVMbxWAsJhxKccEbTldtbkBSxvJMCH4MotUETauQBmtToyl+ezswMBfGcQ
-         4jBw==
-X-Gm-Message-State: AFqh2kq3isS3gNLI7HvJ0IXVEhy6wPAWeFcCKr94tYIaE6/iV3JCbX6Q
-        iJBWPjdi3ztGMHi53jKbqGj+Tw==
-X-Google-Smtp-Source: AMrXdXvWmU7sFzczcSVAcrS3tPmjKi3xby5j/0HDBfUoxMpFagyASGgQ61GU7Mn7Siaeag8qYSfcgA==
-X-Received: by 2002:a2e:3211:0:b0:27f:c428:c5ec with SMTP id y17-20020a2e3211000000b0027fc428c5ecmr18754489ljy.28.1673394949087;
-        Tue, 10 Jan 2023 15:55:49 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id a1-20020a2eb541000000b002770fb5722fsm1513208ljn.123.2023.01.10.15.55.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 15:55:48 -0800 (PST)
-Message-ID: <bdff84b5-0531-909e-43ed-5cc1eda64f17@linaro.org>
-Date:   Wed, 11 Jan 2023 00:55:47 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PQ5VzqScz6w9Ee0ucy8HcJjuj+uX9vX/90WHrjQzutM=;
+        b=UVuC7BDmNdh2qM9eP0nusJs5w39WirMgfEoqGwqiCEqQn7Z0QC/Cb4ZmOhLB8ey0Jc
+         h42nC5iXIAjVxZ14cPM9RuHnB+stfOL2HQyJJIqRZQIInd8QJJWcHVT+ypdAhu72AZv8
+         XKGPJtFeNhma9CCNaRc0hpke00uzr6WGYWhNv14lbRzkMmaViBKv4C0htq6amPRp2aae
+         WpB68IxXLbviA7ngfZtSVrqRJHetF0yMLx7gUCUOZLocIJdRE5tjAiEbSNAvVEFJOD/1
+         qcx7YdM9hGiZdO+ZiXqVF1Ib9ALtDhYJYIvcH2aimxeI6MTDXfAHSk13auBKLGWK1361
+         CjQw==
+X-Gm-Message-State: AFqh2ko5rHzVKAgdN4+EfSekXGcP9kC+9+NMuCfGKJf0WS7LHeKrx5tQ
+        Njd8V4lFYOnRmb0MA/a5Sx1MadqCSCV4+CMdYwaINw==
+X-Google-Smtp-Source: AMrXdXs86mHRk/wvPfLVNPxlQhKf7hs1WZugsLCv26MQ8e4RKpJeprNIu8lxRACzIRC+2MX2+DasWzw3ZhMNic3vQdM=
+X-Received: by 2002:a05:622a:5c1a:b0:3a6:ee88:63dd with SMTP id
+ gd26-20020a05622a5c1a00b003a6ee8863ddmr3319956qtb.446.1673394988250; Tue, 10
+ Jan 2023 15:56:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 04/10] interconnect: qcom: rpm: Add support for
- specifying channel num
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230110132202.956619-1-konrad.dybcio@linaro.org>
- <20230110132202.956619-5-konrad.dybcio@linaro.org>
- <4a30931b-ef94-df2f-2e89-1028bf9510ce@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <4a30931b-ef94-df2f-2e89-1028bf9510ce@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228192438.2835203-1-vannapurve@google.com>
+ <20221228192438.2835203-2-vannapurve@google.com> <Y7xX6hg+YTgTrAzW@google.com>
+In-Reply-To: <Y7xX6hg+YTgTrAzW@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Tue, 10 Jan 2023 15:56:17 -0800
+Message-ID: <CAGtprH_zPTOPn=wJ9W58Aw5Xbe0Rfq+dz+N+6CAQ+NHwU-Z+zw@mail.gmail.com>
+Subject: Re: [V4 PATCH 1/4] KVM: selftests: x86: use this_cpu_* helpers
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, oupton@google.com,
+        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 9, 2023 at 10:07 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Dec 28, 2022, Vishal Annapurve wrote:
+> > Use this_cpu_* helpers to query the cpu vendor.
+>
+> Neither the changelog nor the shortlog captures what this patch actually does,
+> or rather what I inteded it to do.  Specifically, what I suggested (or intended
+> to suggest) was:
+>
+>   KVM: selftests: Rename vendor string helpers to use "this_cpu" prefix
+>
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> > ---
+>
+> ...
+>
+> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > index acfa1d01e7df..a799af572f3f 100644
+> > --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > @@ -1006,26 +1006,14 @@ void kvm_x86_state_cleanup(struct kvm_x86_state *state)
+> >       free(state);
+> >  }
+> >
+> > -static bool cpu_vendor_string_is(const char *vendor)
+> > -{
+> > -     const uint32_t *chunk = (const uint32_t *)vendor;
+> > -     uint32_t eax, ebx, ecx, edx;
+> > -
+> > -     cpuid(0, &eax, &ebx, &ecx, &edx);
+> > -     return (ebx == chunk[0] && edx == chunk[1] && ecx == chunk[2]);
+> > -}
+> > -
+> >  bool is_intel_cpu(void)
+>
+> Drop the is_intel_cpu() and is_amd_cpu() wrappers.  The whole point of the rename
+> was so that it's obvious at the call site that the function is checking the "current"
+> CPU context.
+>
+> That obviously means dropping the is_host_cpu_amd() and is_host_cpu_intel() wrappers
+> too.  IMO, the extra layer to jump through (more from a code reading perspective then
+> a code generation perspective) isn't worth protecting the booleans.
+>
+> It's slightly more churn (in between patches, not overall), but the benefit is that
+> it allows squasing patches 2 and 3 into a single patch, e.g. "KVM: selftests: Cache
+> host CPU vendor (AMD vs. Intel)"
+>
+> ---
+>  tools/testing/selftests/kvm/include/x86_64/processor.h    | 3 +++
+>  tools/testing/selftests/kvm/lib/x86_64/processor.c        | 8 ++++----
+>  tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c   | 4 ++--
+>  tools/testing/selftests/kvm/x86_64/mmio_warning_test.c    | 2 +-
+>  .../testing/selftests/kvm/x86_64/pmu_event_filter_test.c  | 4 ++--
+>  .../kvm/x86_64/vmx_exception_with_invalid_guest_state.c   | 2 +-
+>  6 files changed, 13 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> index fdb1af5ca611..c7885f72132a 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> @@ -19,6 +19,9 @@
+>
+>  #include "../kvm_util.h"
+>
+> +extern bool host_cpu_is_intel;
+> +extern bool host_cpu_is_amd;
+> +
+>  #define NMI_VECTOR             0x02
+>
+>  #define X86_EFLAGS_FIXED        (1u << 1)
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 0b8de34aa10e..84915bc7d689 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -19,8 +19,8 @@
+>  #define MAX_NR_CPUID_ENTRIES 100
+>
+>  vm_vaddr_t exception_handlers;
+> -static bool host_cpu_is_amd;
+> -static bool host_cpu_is_intel;
+> +bool host_cpu_is_amd;
+> +bool host_cpu_is_intel;
+>
+>  static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
+>  {
+> @@ -115,7 +115,7 @@ static void sregs_dump(FILE *stream, struct kvm_sregs *sregs, uint8_t indent)
+>
+>  bool kvm_is_tdp_enabled(void)
+>  {
+> -       if (this_cpu_is_intel())
+> +       if (host_cpu_is_intel)
+>                 return get_kvm_intel_param_bool("ept");
+>         else
+>                 return get_kvm_amd_param_bool("npt");
+> @@ -1218,7 +1218,7 @@ unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
+>         max_gfn = (1ULL << (vm->pa_bits - vm->page_shift)) - 1;
+>
+>         /* Avoid reserved HyperTransport region on AMD processors.  */
+> -       if (!this_cpu_is_amd())
+> +       if (!host_cpu_is_amd)
+>                 return max_gfn;
+>
+>         /* On parts with <40 physical address bits, the area is fully hidden */
+> diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+> index 5489c9836ec8..0f728f05ea82 100644
+> --- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+> @@ -48,10 +48,10 @@ static void guest_main(void)
+>         const uint8_t *other_hypercall_insn;
+>         uint64_t ret;
+>
+> -       if (this_cpu_is_intel()) {
+> +       if (host_cpu_is_intel) {
+>                 native_hypercall_insn = vmx_vmcall;
+>                 other_hypercall_insn  = svm_vmmcall;
+> -       } else if (this_cpu_is_amd()) {
+> +       } else if (host_cpu_is_amd) {
+>                 native_hypercall_insn = svm_vmmcall;
+>                 other_hypercall_insn  = vmx_vmcall;
+>         } else {
+> diff --git a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+> index b0a2a0bae0f3..ce1ccc4c1503 100644
+> --- a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+> @@ -93,7 +93,7 @@ int main(void)
+>  {
+>         int warnings_before, warnings_after;
+>
+> -       TEST_REQUIRE(this_cpu_is_intel());
+> +       TEST_REQUIRE(host_cpu_is_intel);
+>
+>         TEST_REQUIRE(!vm_is_unrestricted_guest(NULL));
+>
+> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> index c728822461b2..4dbb454e1760 100644
+> --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> @@ -363,7 +363,7 @@ static void test_pmu_config_disable(void (*guest_code)(void))
+>   */
+>  static bool use_intel_pmu(void)
+>  {
+> -       return this_cpu_is_intel() &&
+> +       return host_cpu_is_intel &&
+>                kvm_cpu_property(X86_PROPERTY_PMU_VERSION) &&
+>                kvm_cpu_property(X86_PROPERTY_PMU_NR_GP_COUNTERS) &&
+>                kvm_pmu_has(X86_PMU_FEATURE_BRANCH_INSNS_RETIRED);
+> @@ -397,7 +397,7 @@ static bool use_amd_pmu(void)
+>         uint32_t family = kvm_cpu_family();
+>         uint32_t model = kvm_cpu_model();
+>
+> -       return this_cpu_is_amd() &&
+> +       return host_cpu_is_amd &&
+>                 (is_zen1(family, model) ||
+>                  is_zen2(family, model) ||
+>                  is_zen3(family, model));
+> diff --git a/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c b/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
+> index 53e1ef2fc774..ccdfa5dc1a4d 100644
+> --- a/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
+> +++ b/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
+> @@ -111,7 +111,7 @@ int main(int argc, char *argv[])
+>         struct kvm_vcpu *vcpu;
+>         struct kvm_vm *vm;
+>
+> -       TEST_REQUIRE(this_cpu_is_intel());
+> +       TEST_REQUIRE(host_cpu_is_intel);
+>         TEST_REQUIRE(!vm_is_unrestricted_guest(NULL));
+>
+>         vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+>
+> base-commit: 04b420511919f7b78f17f5fa6dc92975a8b2d7c4
+> --
+>
 
-
-On 11.01.2023 00:44, Bryan O'Donoghue wrote:
-> On 10/01/2023 13:21, Konrad Dybcio wrote:
->> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
->> one channel. This should be taken into account in bandwidth calcualtion,
-> calculation
-> 
->> as we're supposed to feed msmbus with the per-channel bandwidth. Add
->> support for specifying that and use it during bandwidth aggregation.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
->>   drivers/interconnect/qcom/icc-rpm.h | 2 ++
->>   2 files changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->> index 0516b74abdc7..3207b4c99d04 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.c
->> +++ b/drivers/interconnect/qcom/icc-rpm.c
->> @@ -336,6 +336,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->>   {
->>       struct icc_node *node;
->>       struct qcom_icc_node *qn;
->> +    u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->>       int i;
->>         /* Initialise aggregate values */
->> @@ -353,7 +354,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->>       list_for_each_entry(node, &provider->nodes, node_list) {
->>           qn = node->data;
->>           for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
->> -            agg_avg[i] += qn->sum_avg[i];
->> +            if (qn->channels)
-> 
-> when do you actually populate channels ?
-> 
-> I had a quick scan of your series, I didn't see it..
-I use this field in the upcoming MSM8998 and SM6375 drivers,
-which both require some part of this series to be merged.
-
-If I'm not mistaken, this is essentially what downstream
-calls qcom,agg-ports. 8996 should also use it, but I think
-I'll add that in a separate series.
-
-Other SoCs that I can see have a non-1 value here in various
-downstream trees I have on my PC that don't necessarily have
-interconnect drivers at the moment:
-
-msm8976
-sdm660
-mdm9607
-msm8953/sdm429
-qcs405
-msm8952
-
-and a whole bunch of RPMh SoCs that already take care of this.
-
-Konrad
-
-> 
->> +                sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
->> +            else
->> +                sum_avg[i] = qn->sum_avg[i];
->> +            agg_avg[i] += sum_avg[i];
->>               agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
->>           }
->>       }
->> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
->> index 3762648f9d47..eb51680f890d 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.h
->> +++ b/drivers/interconnect/qcom/icc-rpm.h
->> @@ -66,6 +66,7 @@ struct qcom_icc_qos {
->>    * @id: a unique node identifier
->>    * @links: an array of nodes where we can go next while traversing
->>    * @num_links: the total number of @links
->> + * @channels: number of channels at this node (e.g. DDR channels)
->>    * @buswidth: width of the interconnect between a node and the bus (bytes)
->>    * @sum_avg: current sum aggregate value of all avg bw requests
->>    * @max_peak: current max aggregate value of all peak bw requests
->> @@ -78,6 +79,7 @@ struct qcom_icc_node {
->>       u16 id;
->>       const u16 *links;
->>       u16 num_links;
->> +    u16 channels;
->>       u16 buswidth;
->>       u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->>       u64 max_peak[QCOM_ICC_NUM_BUCKETS];
-> 
+Ack, that makes sense. Will include this suggestion in the next version.
