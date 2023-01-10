@@ -2,229 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9214C664488
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9C66644F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233440AbjAJPXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S233379AbjAJPdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:33:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238968AbjAJPX2 (ORCPT
+        with ESMTP id S239025AbjAJPdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:23:28 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5905517D5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:23:15 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id d30so14074249lfv.8
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:23:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xei/D1xFFLE5WpxaBE/Tg4Sb4JRRguY1a3omXhNRdNQ=;
-        b=ksjpe3ePskHcWnV5GTQFpREDCBhu/f/GUrq/ztAX0yjA5OuQ+DutOkLZMxTHo/I+oT
-         gSOsKR2CYx0y6FaPPb135ztWWumo2ihZo6Ahtz3tgU5mTzh1iUVqE/qC696Px6TF03zB
-         HJ2wfcTzzjh0RCQoPte6n7r2FXr0+ml9tuu2hdvhnf1kixXGHUUotiiqqOagwsRCu4tH
-         IfshrT0GjPV1fvD03OZ9Iy/w/vDEEyqakIvbgzh/c02+8JdjVRht0JGh1ozXSnsYeKhF
-         ci6m6qdmPoXCnxYdZT2PubbzQgh5LkWDPkj0xHHait+gqehjaPIYZrb0xA5uQaMFqCZD
-         GQXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xei/D1xFFLE5WpxaBE/Tg4Sb4JRRguY1a3omXhNRdNQ=;
-        b=7pLid1SkqOeaq/MfKHovKfncIWvBWCMPqs/pjFa4gvFXD7wXVI1MPil1PbdD9jR71z
-         JkR0lNfzFtTgLnXU32XeoHYzEk+MTPu1oiLGmfIUkvi04IYIYT7JAICdKIojbn3+k2XO
-         yB8k9upNtfBEQtxT7hJc6nlzzYXt71WYIEP/8eenOTP0QBSKd0zxJ/TgDMJgqbMhlVgI
-         XpCZrfiuXRiP+Z+yuN61Kd5OhGknCn/AAL8qioQQkf0IWoUpwQHc13qkF3GpNZPD62uk
-         U/KUuU4qTe0jeK4QrJz73ohFc2f5quYQWoBXVsmutz2tk5+o6tiDSyDKmJU+TytBg+8q
-         lMqw==
-X-Gm-Message-State: AFqh2kq756v3OChSeScPitpTNCrsZl8+TjEbDpM8GU5mI4iE6xVptzRQ
-        FzejLRAjb4TZnzu4Mcfa9ZDg4tWLedaQZ1/QzBHesQ==
-X-Google-Smtp-Source: AMrXdXutwwZyshi7xoMMAtLcru6vJQ0zecDlsCbhc0a61fPAh5s83V9KF6oInnQ7VfNNGFDxOOjHvS4HTidsTLJf/lM=
-X-Received: by 2002:ac2:5e7c:0:b0:4c3:d803:4427 with SMTP id
- a28-20020ac25e7c000000b004c3d8034427mr2883098lfr.170.1673364193464; Tue, 10
- Jan 2023 07:23:13 -0800 (PST)
+        Tue, 10 Jan 2023 10:33:41 -0500
+X-Greylist: delayed 607 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 Jan 2023 07:33:40 PST
+Received: from ns2.wdyn.eu (ns2.wdyn.eu [5.252.227.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 245B22BC0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:33:39 -0800 (PST)
+Message-ID: <205fb221-f7ad-8f03-2c16-54dcbf5ecaf9@wetzel-home.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wetzel-home.de;
+        s=wetzel-home; t=1673364209;
+        bh=ItZbaDDVl/qbRkDKKGQ9mk0zI8jEClJ48WsBVgPasWg=;
+        h=Date:Subject:To:References:From:In-Reply-To;
+        b=QM2CqeRQkbcwBVz8TtzFHiEdCVZcyI8gse4ibuEH8WQyQ81DNNWDlFt3WSrC311Tw
+         uvOrOd7BgOP13U5wI3/4MUn7mdLdKjF1vhA2j4zYbuWmMl0g8N86KzTd86NzeomO8W
+         ATgNS48FnYpkyM3phWfHhvgn3BdhJqtVVTz0VvyE=
+Date:   Tue, 10 Jan 2023 16:23:21 +0100
 MIME-Version: 1.0
-References: <20221214194056.161492-1-michael.roth@amd.com> <20221214194056.161492-63-michael.roth@amd.com>
- <1c02cc0d-9f0c-cf4a-b012-9932f551dd83@linux.ibm.com> <CAAH4kHbhFezeY3D_qoMQBLuFzWNDQF2YLQ-FW_dp5itHShKUWw@mail.gmail.com>
- <54ff7326-e3a4-945f-1f60-e73dd8865527@amd.com> <a3ecd9fc-11f8-49b6-09a2-349df815d2cf@linux.ibm.com>
- <1047996c-309b-6839-fdd7-265fc51eb07a@amd.com>
-In-Reply-To: <1047996c-309b-6839-fdd7-265fc51eb07a@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Tue, 10 Jan 2023 08:23:01 -0700
-Message-ID: <CAMkAt6rMwiHoNWLtrdN8g8Ghv8yN8f8fZQBBkXvUdDpdtovPzg@mail.gmail.com>
-Subject: Re: [PATCH RFC v7 62/64] x86/sev: Add KVM commands for instance certs
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Dov Murik <dovmurik@linux.ibm.com>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, hpa@zytor.com, ardb@kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        tobin@ibm.com, bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        harald@profian.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: ieee80211_handle_wake_tx_queue and dynamic ps regression
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-kernel@vger.kernel.org, johannes.berg@intel.com,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org
+References: <19015168-c747-17b7-f0ae-9d2ee27d221c@linaro.org>
+ <06f76774-1b2e-f563-7128-7d5b9547dfe9@linaro.org>
+ <cf5e9339-2511-1135-71da-a8342b264414@linaro.org>
+From:   Alexander Wetzel <alexander@wetzel-home.de>
+In-Reply-To: <cf5e9339-2511-1135-71da-a8342b264414@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 8:10 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 1/10/23 01:10, Dov Murik wrote:
-> > Hi Tom,
-> >
-> > On 10/01/2023 0:27, Tom Lendacky wrote:
-> >> On 1/9/23 10:55, Dionna Amalie Glaze wrote:
-> >>>>> +
-> >>>>> +static int snp_set_instance_certs(struct kvm *kvm, struct
-> >>>>> kvm_sev_cmd *argp)
-> >>>>> +{
-> >>>> [...]
-> >>>>
-> >>>> Here we set the length to the page-aligned value, but we copy only
-> >>>> params.cert_len bytes.  If there are two subsequent
-> >>>> snp_set_instance_certs() calls where the second one has a shorter
-> >>>> length, we might "keep" some leftover bytes from the first call.
-> >>>>
-> >>>> Consider:
-> >>>> 1. snp_set_instance_certs(certs_addr point to "AAA...", certs_len=8192)
-> >>>> 2. snp_set_instance_certs(certs_addr point to "BBB...", certs_len=4097)
-> >>>>
-> >>>> If I understand correctly, on the second call we'll copy 4097 "BBB..."
-> >>>> bytes into the to_certs buffer, but length will be (4096 + PAGE_SIZE -
-> >>>> 1) & PAGE_MASK which will be 8192.
-> >>>>
-> >>>> Later when fetching the certs (for the extended report or in
-> >>>> snp_get_instance_certs()) the user will get a buffer of 8192 bytes
-> >>>> filled with 4097 BBBs and 4095 leftover AAAs.
-> >>>>
-> >>>> Maybe zero sev->snp_certs_data entirely before writing to it?
-> >>>>
-> >>>
-> >>> Yes, I agree it should be zeroed, at least if the previous length is
-> >>> greater than the new length. Good catch.
-> >>>
-> >>>
-> >>>> Related question (not only for this patch) regarding snp_certs_data
-> >>>> (host or per-instance): why is its size page-aligned at all? why is it
-> >>>> limited by 16KB or 20KB? If I understand correctly, for SNP, this buffer
-> >>>> is never sent to the PSP.
-> >>>>
-> >>>
-> >>> The buffer is meant to be copied into the guest driver following the
-> >>> GHCB extended guest request protocol. The data to copy back are
-> >>> expected to be in 4K page granularity.
-> >>
-> >> I don't think the data has to be in 4K page granularity. Why do you
-> >> think it does?
-> >>
-> >
-> > I looked at AMD publication 56421 SEV-ES Guest-Hypervisor Communication
-> > Block Standardization (July 2022), page 37.  The table says:
-> >
-> > --------------
-> >
-> > NAE Event: SNP Extended Guest Request
-> >
-> > Notes:
-> >
-> > RAX will have the guest physical address of the page(s) to hold returned
-> > data
-> >
-> > RBX
-> > State to Hypervisor: will contain the number of guest contiguous
-> > pages supplied to hold returned data
-> > State from Hypervisor: on error will contain the number of guest
-> > contiguous pages required to hold the data to be returned
-> >
-> > ...
-> >
-> > The request page, response page and data page(s) must be assigned to the
-> > hypervisor (shared).
-> >
-> > --------------
-> >
-> >
-> > According to this spec, it looks like the sizes are communicated as
-> > number of pages in RBX.  So the data should start at a 4KB alignment
-> > (this is verified in snp_handle_ext_guest_request()) and its length
-> > should be 4KB-aligned, as Dionna noted.
->
-> That only indicates how many pages are required to hold the data, but the
-> hypervisor only has to copy however much data is present. If the data is
-> 20 bytes, then you only have to copy 20 bytes. If the user supplied 0 for
-> the number of pages, then the code returns 1 in RBX to indicate that one
-> page is required to hold the 20 bytes.
->
-> >
-> > I see no reason (in the spec and in the kernel code) for the data length
-> > to be limited to 16KB (SEV_FW_BLOB_MAX_SIZE) but I might be missing some
-> > flow because Dionna ran into this limit.
->
-> Correct, there is no limit. I believe that SEV_FW_BLOB_MAX_SIZE is a way
-> to keep the memory usage controlled because data is coming from userspace
-> and it isn't expected that the data would be larger than that.
->
-> I'm not sure if that was in from the start or as a result of a review
-> comment. Not sure what is the best approach is.
+On 10.01.23 15:47, Bryan O'Donoghue wrote:
+> On 10/01/2023 12:44, Bryan O'Donoghue wrote:
+>> + linux-wireless
+>> On 10/01/2023 12:35, Bryan O'Donoghue wrote:
+>>> commit a790cc3a4fad75048295571a350b95b87e022a5a 
+>>> (wake_tx_queue-broken-23-08-01)
+>>> Author: Alexander Wetzel <alexander@wetzel-home.de>
+>>> Date:   Sun Oct 9 18:30:39 2022 +0200
+>>>
+>>>      wifi: mac80211: add wake_tx_queue callback to drivers
+>>>
+>>> is causing a regression with
+>>>
+>>> - CONF_PS = 1
+>>> - CONF_DYNAMIC_PS = 0
+>>> - ieee80211_handle_wake_tx_queue
+>>>
+>>> In this case we get stuck in a loop similar to this
+>>>
+>>> // IEEE80211_CONF_CHANGE_PS
+>>> [   17.255480] wcn36xx: wcn36xx_change_ps/312 enable
+>>> [   18.088835] ieee80211_tx_h_dynamic_ps/263 setting 
+>>> IEEE80211_QUEUE_STOP_REASON_PS
+>>> [   18.088906] ieee80211_handle_wake_tx_queue/334 entry
+>>> [   18.091505] ieee80211_dynamic_ps_disable_work/2250 calling 
+>>> ieee80211_hw_config()
+>>> [   18.095370] ieee80211_handle_wake_tx_queue/338 wake_tx_push_queue
+>>>
+>>> // IEEE80211_CONF_CHANGE_PS
+>>> [   18.102625] wcn36xx: wcn36xx_change_ps/312 disable
+>>> [   18.107643] wake_tx_push_queue/303 entry
+>>>
+>>> // txq is stopped here reason == IEEE80211_QUEUE_STOP_REASON_PS
+>>> [   18.107654] wake_tx_push_queue/311 q_stopped bitmask 0x00000002 
+>>> IEEE80211_QUEUE_STOP_REASON_PS true
+>>> [   18.107661] wake_tx_push_queue/324 exit
+>>> [   18.107667] ieee80211_handle_wake_tx_queue/342 exit
+>>> [   18.115560] ieee80211_handle_wake_tx_queue/334 entry
+>>> [   18.139937] ieee80211_handle_wake_tx_queue/338 wake_tx_push_queue
+>>> [   18.145163] wake_tx_push_queue/303 entry
+>>> [   18.150016] ieee80211_dynamic_ps_disable_work/2252 completed 
+>>> ieee80211_hw_config()
+>>>
+>>> // now we unset IEEE80211_QUEUE_STOP_REASON_PS but too late
+>>> [   18.151145] wake_tx_push_queue/311 q_stopped bitmask 0x00000002 
+>>> IEEE80211_QUEUE_STOP_REASON_PS true
+>>> [   18.155263] ieee80211_dynamic_ps_disable_work/2254 clearing 
+>>> IEEE80211_QUEUE_STOP_REASON_PS
+>>> [   18.162531] wake_tx_push_queue/324 exit
+>>> [   18.162548] ieee80211_handle_wake_tx_queue/342 exit
+>>> [   18.183639] ieee80211_dynamic_ps_disable_work/2259 cleared 
+>>> IEEE80211_QUEUE_STOP_REASON_PS
+>>>
+>>> // IEEE80211_CONF_CHANGE_PS runs again
+>>> [   18.215487] wcn36xx: wcn36xx_change_ps/312 enable
+>>>
+>>> We get stuck in that loop. Packets getting transmitted is a rare 
+>>> event, most are dropped.
+> 
 
-This was discussed a bit in the guest driver changes recently too that
-SEV_FW_BLOB_MAX_SIZE is used in the guest driver code for the max cert
-length. We discussed increasing the limit there after fixing the IV
-reuse issue.
+I'll need some time digest that... I report back once I get it.
 
-Maybe we could introduce SEV_CERT_BLOB_MAX_SIZE here to be more clear
-there is no firmware based limit? Then we could switch the guest
-driver to use that too. Dionna confirmed 4 pages is enough for our
-current usecase, Dov would you recommend something larger to start?
+> BTW I considered implementing a wcn36xx specific wake_tx callback - 
+> which maybe should be done anyway.
+> 
+> I _don't_ see other drivers checking for q_stopped & 
+> IEEE80211_QUEUE_STOP_REASON_PS
+> 
+> Should they be ?
+> 
 
->
-> Thanks,
-> Tom
->
-> >
-> >
-> > -Dov
-> >
-> >
-> >
-> >> Thanks,
-> >> Tom
-> >>
-> >>>
-> >>>> [...]
-> >>>>>
-> >>>>> -#define SEV_FW_BLOB_MAX_SIZE 0x4000  /* 16KB */
-> >>>>> +#define SEV_FW_BLOB_MAX_SIZE 0x5000  /* 20KB */
-> >>>>>
-> >>>>
-> >>>> This has effects in drivers/crypto/ccp/sev-dev.c
-> >>>>                                                                  (for
-> >>>> example in alloc_snp_host_map).  Is that OK?
-> >>>>
-> >>>
-> >>> No, this was a mistake of mine because I was using a bloated data
-> >>> encoding that needed 5 pages for the GUID table plus 4 small
-> >>> certificates. I've since fixed that in our user space code.
-> >>> We shouldn't change this size and instead wait for a better size
-> >>> negotiation protocol between the guest and host to avoid this awkward
-> >>> hard-coding.
-> >>>
-> >>>
+No, they should not.
+
+My take is, that this is a bug in mac80211. I submitted patches to 
+fixing that, they have just been accepted:
+
+https://patchwork.kernel.org/project/linux-wireless/patch/20221230121850.218810-1-alexander@wetzel-home.de/
+
+and
+
+https://patchwork.kernel.org/project/linux-wireless/patch/20230106223141.98696-1-alexander@wetzel-home.de/
+
+
+Can you test if these also help here?
+
+
+
+> If they should check IEEE80211_QUEUE_STOP_REASON_PS, then right now, 
+> they don't. If they shouldn't check IEEE80211_QUEUE_STOP_REASON_PS then 
+> neither should the generic replacement ieee80211_handle_wake_tx_queue()
+> 
+> ---
+> bod
+
