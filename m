@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED135663A5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E968663A5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 09:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjAJIB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 03:01:59 -0500
+        id S231265AbjAJIC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 03:02:27 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237949AbjAJIBS (ORCPT
+        with ESMTP id S230235AbjAJIBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 03:01:18 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0367EF01D
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:01:16 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id t15so11020430ybq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:01:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Syhe5qiaIjSBFG2Km8sQLkXZ7+IcUvywGS7mxhOdyC8=;
-        b=h8msePaVrBumKX97x2B0PSR6TvDOsWe9/8nqh5XihvwDoXTtk9FBZwWi9SGSCEBRhG
-         7/DaMnVE7Es9JE+fi/ZufWNRn3SVsefXqDFtOkwD+Ed/1n+1GkLPK41O5WZ9mPWSES2v
-         f2r7VoFC/JUpyNH/AjASUjjzFSSJJGSeDu8P0hf/uwWu23QmfIzx2XiqyQ6OJiQN9PHD
-         149PqrLlkoAPipdJCnTgOfjLXophHrfOY9gMAuDquWjeOn/L+6h+V67p9U6Kx6n30/4V
-         ejnsJ2avQhToeqCtMDJvMa1apShJXDMArCkB71Hc9pSOnNH06CBn68PiiOFiJnzo9oV8
-         AhgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Syhe5qiaIjSBFG2Km8sQLkXZ7+IcUvywGS7mxhOdyC8=;
-        b=W1nbsFiLFCsiuRmQczMEbROkRWIfmnCDvfaCCK3Tl0knYVVzFf+WSu6F68hlyRJv2E
-         J3wpo+L4gyB8s2VHPy15naLbe913+8x6wUGoyBgMwUk09qQxwKbOpjlKslCjN2/DDNCi
-         nwTLff3f7wLo+a5Y2HpYPaTsWBZxjyi0tln1wrsazBeQv77z59a+MWfZs2wRzOt9bmz7
-         KqSW6SW6VYbkX/hxjKLCoDYWJFENafoE32pd8BpLD5wbCAesH8K183MSZXpCw9yCCHMy
-         OGGG68Rmcq2JY27uNhXqK1qCorG8z1H9Xa1SkH3HHj/YjTPA/7s2BUkiwQPXjj6d6Fx3
-         SvVA==
-X-Gm-Message-State: AFqh2kpiPLixYpa86NQwSy0UqcH6s9aDNeZxiTqBS2gAqNvB61HrQTcD
-        k0eNibIxAMK22svEbKAK4W/Yq8jUz9hFLaFYAjf1Kw==
-X-Google-Smtp-Source: AMrXdXuR10boH/lNX1LwBHz0WFKJXh1kKoJB/SGPz+CUqB+rn2oNZjU4enURpt5dnuW7TPgvAxY7C8PahF6RsX7ajp4=
-X-Received: by 2002:a25:6982:0:b0:700:e0f1:6335 with SMTP id
- e124-20020a256982000000b00700e0f16335mr5998016ybc.520.1673337675188; Tue, 10
- Jan 2023 00:01:15 -0800 (PST)
+        Tue, 10 Jan 2023 03:01:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98795F7A
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 00:01:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6955AB81128
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 08:01:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F8A0C433D2;
+        Tue, 10 Jan 2023 08:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673337706;
+        bh=4DbMRmg8+IursOw5O7v8oTrvD4RrdJthfiKf942CnmE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Xc55i1JAozZNfvVNzALMMJWHv1Uxl0JM9oHzKcvUnJoHYJXjhbwSsL+QJOl3Pd3DG
+         sxbYRPnq0bO3jbW3q9rTNra3WgUCxsBvCryKKaUi82kx/bz6ShAoiXyHaQXQE9AGtA
+         KbMNoDfeQxEQMxerls1piKtp9PY/WUKP3TY0HoPl9zk8dJuCIntoClOdFTBX0/1TF9
+         YT9t2xgY9MeJoxssRT+Gg4Z9C37iqh31avxQF0G2pOGPJtp3kxuVG8WVFXgmxCvqLp
+         iOGwv3VKRQGxJKhkqYUl6VYI95gG75TDp66Uk3kmsXqacyw2Hsf7C5lbprw0JgU5Nq
+         9CskxBwxHqJjA==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     patches@armlinux.org.uk
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ben Wolsieffer <ben.wolsieffer@hefring.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] ARM: remove meaningless arch/arm/mach-rda/Makefile
+Date:   Tue, 10 Jan 2023 17:01:29 +0900
+Message-Id: <20230110080130.160528-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-511-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-511-uwe@kleine-koenig.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 10 Jan 2023 09:01:04 +0100
-Message-ID: <CACRpkdaViC8T5qFRW+=+rGST=nr9beQJqTP7d42OoYUnhPhqig@mail.gmail.com>
-Subject: Re: [PATCH 510/606] pinctrl: mcp23s08: Convert to i2c's .probe_new()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:48 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.o=
-rg> wrote:
+You do not need to put Makefile if there is nothing to compile.
 
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->
-> .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> that explicitly in the probe function.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-Patch applied!
-Thanks for driving this big project.
+KernelVersion: v6.2-rc1
 
-Yours,
-Linus Walleij
+ arch/arm/Makefile          | 1 -
+ arch/arm/mach-rda/Makefile | 2 --
+ 2 files changed, 3 deletions(-)
+ delete mode 100644 arch/arm/mach-rda/Makefile
+
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index 4067f5169144..233496bfbe19 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -213,7 +213,6 @@ machine-$(CONFIG_ARCH_OMAP2PLUS)	+= omap2
+ machine-$(CONFIG_ARCH_ORION5X)		+= orion5x
+ machine-$(CONFIG_ARCH_PXA)		+= pxa
+ machine-$(CONFIG_ARCH_QCOM)		+= qcom
+-machine-$(CONFIG_ARCH_RDA)		+= rda
+ machine-$(CONFIG_ARCH_REALTEK)		+= realtek
+ machine-$(CONFIG_ARCH_ROCKCHIP)		+= rockchip
+ machine-$(CONFIG_ARCH_RPC)		+= rpc
+diff --git a/arch/arm/mach-rda/Makefile b/arch/arm/mach-rda/Makefile
+deleted file mode 100644
+index f126d00ecd53..000000000000
+--- a/arch/arm/mach-rda/Makefile
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-obj- += dummy.o
+-- 
+2.34.1
+
