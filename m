@@ -2,114 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B22F664F16
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF00D664F0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 23:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbjAJWt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 17:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S235691AbjAJWtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 17:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235398AbjAJWsd (ORCPT
+        with ESMTP id S233314AbjAJWsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 17:48:33 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2088.outbound.protection.outlook.com [40.107.223.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAB133D64;
-        Tue, 10 Jan 2023 14:48:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f65ZZyg95mZvAVQFnN1GyUsdOAbWsS1fap847UeCf+QgdG2iALfE9K64q+L3fsd9iQ94F2yaEvx7GPIHZEeqplzsS1oYuU5oBoioHW/qowbqTC8+F6L1zct/+LRjqtVFx+DPN7M2LGB61H/joKZjfGZUwvcACKXaAFJKF/38+yMNO+FKx2B208Ikzyl2gHkmZEDi8N3500hKcBxznzepLehX8HVBoYjXMgQxcIdeD0iSh87mWofNg8O+NGbx04zo1mQinvLbnvEaw2Kf4AQjZxIIMPQUCkaSUtmTzKZ6TbNFZ7bEIWUhmSRC1Bb+LD+HDmWBnW/iStMByjPiF5Kkpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QHsr3Mgj3U5pLTvUaY9ngZWXMHARoVlnagZW4AOtvF4=;
- b=VQI1jVvtppa1S6QjWFAbTR4vyFxEPpaQTbQrSls5c9PdZWOYU6ibfliGYWcr8imEK5YOOGi9EuqX5eKE7loonfAEZmFxGWQqS5mw5ww1k9XRP8qwYYFi5v0q2Tx9i+CW8pfptrfxb/gsRXD11/E8ioSn0N3mNkbvWrpl1jWHUT6sK4hJ8GZC2ByaksBl2m9XpEY2xHJHEqXkTXYdTnplHhdEz5BYoWucOVsRe6/jUG+By1SbYSPGEqFBXfSTjmpuiXVgZJzxiMcip8x/weINmPEzwEDSNiJVINKX9hu7yatDv1t3MPyxpDwdaSBv1VlksC145sC2Xtz8VFG4juu0Zw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QHsr3Mgj3U5pLTvUaY9ngZWXMHARoVlnagZW4AOtvF4=;
- b=q90Ibx4TDyG5vzdHUnbAOExk3CauBqpE8Eavgkeokho5u+dyuG7X1kxq30sJBJ7hC1/53JdCeyVk2fKfrjC+ofgRzeqFM2DLpZPDhDwjjYI8Go1fGjfwSdaU+m1QeyrL7953jpNGunYTV4DXcundztpM/gs/v+kIMrlJRgyI4jE=
-Received: from BYAPR08CA0042.namprd08.prod.outlook.com (2603:10b6:a03:117::19)
- by IA0PR12MB8326.namprd12.prod.outlook.com (2603:10b6:208:40d::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 22:48:29 +0000
-Received: from CO1PEPF00001A60.namprd05.prod.outlook.com
- (2603:10b6:a03:117:cafe::d1) by BYAPR08CA0042.outlook.office365.com
- (2603:10b6:a03:117::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18 via Frontend
- Transport; Tue, 10 Jan 2023 22:48:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF00001A60.mail.protection.outlook.com (10.167.241.7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.11 via Frontend Transport; Tue, 10 Jan 2023 22:48:28 +0000
-Received: from fritz.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 10 Jan
- 2023 16:48:26 -0600
-From:   Kim Phillips <kim.phillips@amd.com>
-To:     <x86@kernel.org>
-CC:     Kim Phillips <kim.phillips@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Borislav Petkov <borislav.petkov@amd.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>, <kvm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 7/7] x86/cpu, kvm: Propagate the AMD Automatic IBRS feature to the guest
-Date:   Tue, 10 Jan 2023 16:46:43 -0600
-Message-ID: <20230110224643.452273-9-kim.phillips@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230110224643.452273-1-kim.phillips@amd.com>
-References: <20230110224643.452273-1-kim.phillips@amd.com>
+        Tue, 10 Jan 2023 17:48:12 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C79860CE6;
+        Tue, 10 Jan 2023 14:48:11 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id k44-20020a9d19af000000b00683e176ab01so7845295otk.13;
+        Tue, 10 Jan 2023 14:48:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=X4n23XR3NPSoUWtOFf1oEMDvlErMkPtHsfDcOuQ7A9k=;
+        b=fMOQJ3ZyIAnSU+gnVhzMnJgRoAJmu5pDBilZFPFx64gWk1kFul26sGk+r0jkVTDFCY
+         M6ZSKMQuoiH/cNBLgZkJEWSKOCiUK4wJ8xEdy825o7S0K4qEA2/9Y0QI4kgMNFnybrEC
+         XRFKfmdPk1a/j/EjF/p/gtp5+4EN8RCkl3f5wrFvitTr9n9y46PGo9yn0AnL61gEp2DB
+         VBwNHoqaBBpu+Vu2a0qcbf9S3Y9YPP6But9kWmWLkBzzxsbSge+2zjeM1SOhGP6d8V28
+         sJCvWN5SVp/C74yYUeGLo5GfhQtkhtDtfV86TD3epHBRVYjTQ3UoIw/LU3LAi2/fja6x
+         6UIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X4n23XR3NPSoUWtOFf1oEMDvlErMkPtHsfDcOuQ7A9k=;
+        b=dLMJ1Tne1vgzkpcIlWUc1ivDbc4dKH+XifinP9CVaXbZUnOU5X6ubJPuDu1vfxgDL8
+         CgrBtsE8FBC+wpL5KK7iEzsyEqsz/jFSARRYv86+NUpI/+f0wzMK/02Pf6LKG/oFB56F
+         dhN3niXsvaDEFf+M6b+nD3Q0fm+TRS1jl9RmsoUycBdmqKUuEHaZvOvgdjld3sR/4PU8
+         8BZb+tSfZJARJ15j74sfA4EZpVfGTQlJGcBqGRK/vYKAG7s3F1zRu0vTjsoj6DO1JUk3
+         Vumjqn5+CaMdBzKyrq5YzLFehOecAOERymbo2vFyFpsD3vL/bKBl8tDIyM+72IX0z/bI
+         hOtw==
+X-Gm-Message-State: AFqh2krmyFvWnHT5lYnMEgYi7YBDjwVtGCDPbJMgeOhFV2WKH7UarihC
+        u2MZsVi44DUF/vKgJKa7huGy733PjuvL1+mHw/0=
+X-Google-Smtp-Source: AMrXdXtUcrMQCTX3Y1NgJ9zb5AvrGYWjcUaXT6OIQKZSaarknxARw+DaAdEdV/jF0cjSsdeIlnHvhBlHWMubfzBFNSc=
+X-Received: by 2002:a05:6830:1052:b0:676:c98a:e8cf with SMTP id
+ b18-20020a056830105200b00676c98ae8cfmr3815629otp.376.1673390890542; Tue, 10
+ Jan 2023 14:48:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF00001A60:EE_|IA0PR12MB8326:EE_
-X-MS-Office365-Filtering-Correlation-Id: c8d88e9e-2d76-4a4a-c176-08daf35cca8b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rp0D3tvS+Qv+n4PyKGXGY80QpUs8liV1kqjBTcyj/fAX0WvFqa+QEZSRabLFHfpQOwojrw2/cK3h+7dESx3W1m3LGlmPoyP4+W1+6oDKqGYldu6/XOpVLVNDFiTPGb4S2bPU5MEec1gv/Fnnwg81IHJNBG5+oval2DmipIaPooQTwpaGU33dXeggz6hTAH/dsPO2MfBz4tpIGfN7FTOJAbxQPghPe4zyxzgtxMH8ZfpralPAfqLQEokFfCrYVSR3IW4YwWiFAzGBwMgSN+dJMw5erSHwg6RhRbHV0paNc0/AlgwkpOquNYgf57DYSIPiI3vQuuNPcEZj+hjIv3iKB40K/0J2CYUlWe3aBJht3OXNjAmz5L80TzMQlPRQedEf4xYmtyPQLVcha4s8CeLN0g+ELbOs5w3DvI/ECHaj5/ODwBJQxUvLbiE7k36jtLKNR4vXzgO5Alpf9LCOVrxAEDzHpnsufuQlWBkEDhubnbV9hWAQZtMFvBbzdocG39LMOR1Xq+cjOhjAE8XLnDFJ/bjoWAOcgYA8AFkMnCsN4zv+9jHDjJpSBtSxdesZtbCn6mMPg6G1f4ZA1MVSKSat8BFs+Xi+ofToiXBdMfxSRWS8DRz4sSFFlTJ8OcshY+eNcFFwEm4QDOSZnYrHjXCo3w2nxr2AfWSGK22ge+plX5adKfULyWFievXptNnDflCDpKap0iErmKNiqeisEAN3pIRW59IkM8QGPR27OLIxc/g=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(39860400002)(376002)(451199015)(36840700001)(46966006)(40470700004)(82740400003)(6916009)(356005)(81166007)(36860700001)(70206006)(86362001)(83380400001)(41300700001)(4326008)(70586007)(54906003)(8676002)(40460700003)(426003)(44832011)(8936002)(2906002)(5660300002)(316002)(40480700001)(7416002)(16526019)(82310400005)(1076003)(336012)(47076005)(2616005)(186003)(26005)(478600001)(7696005)(6666004)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 22:48:28.5481
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8d88e9e-2d76-4a4a-c176-08daf35cca8b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A60.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8326
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
+ <9b78783297db1ebb1a7cd922be7eef0bf33b75b9.camel@sipsolutions.net>
+ <Y342oUJu9CFHNmlW@kroah.com> <d397e09df8bfd1286ed3e652fbba37ec7fe02f32.camel@sipsolutions.net>
+In-Reply-To: <d397e09df8bfd1286ed3e652fbba37ec7fe02f32.camel@sipsolutions.net>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Tue, 10 Jan 2023 15:47:59 -0700
+Message-ID: <CADvTj4q3mMyymD1wDCFv6djJ1SGOLaikWnTsNVJJEPf7GdoUvw@mail.gmail.com>
+Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Joseph Tartaro <joseph.tartaro@ioactive.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,57 +85,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the AMD Automatic IBRS feature bit to those being
-propagated to the guest, and enable the guest EFER bit.
+On Tue, Jan 10, 2023 at 3:32 PM Johannes Berg <johannes@sipsolutions.net> wrote:
+>
+> On Wed, 2022-11-23 at 16:05 +0100, Greg Kroah-Hartman wrote:
+> > On Wed, Nov 23, 2022 at 03:20:36PM +0100, Johannes Berg wrote:
+> > > On Wed, 2022-11-23 at 13:46 +0100, Greg Kroah-Hartman wrote:
+> > > > The Microsoft RNDIS protocol is, as designed, insecure and vulnerable on
+> > > > any system that uses it with untrusted hosts or devices.  Because the
+> > > > protocol is impossible to make secure, just disable all rndis drivers to
+> > > > prevent anyone from using them again.
+> > > >
+> > >
+> > > Not that I mind disabling these, but is there any more detail available
+> > > on this pretty broad claim? :)
+> >
+> > I don't want to get into specifics in public any more than the above.
+>
+> Fair.
 
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
----
- arch/x86/kvm/cpuid.c   | 2 +-
- arch/x86/kvm/svm/svm.c | 3 +++
- arch/x86/kvm/x86.c     | 3 +++
- 3 files changed, 7 insertions(+), 1 deletion(-)
+I would guess it's related to?:
+https://github.com/torvalds/linux/commit/c7dd13805f8b8fc1ce3b6d40f6aff47e66b72ad2
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 56f00d9cc5c5..6ce0203789cc 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -743,7 +743,7 @@ void kvm_set_cpu_caps(void)
- 
- 	kvm_cpu_cap_mask(CPUID_8000_0021_EAX,
- 		F(NO_NESTED_DATA_BP) | F(LFENCE_RDTSC) | 0 /* SmmPgCfgLock */ |
--		F(NULL_SEL_CLR_BASE) | 0 /* PrefetchCtlMsr */
-+		F(NULL_SEL_CLR_BASE) | F(AUTOIBRS) | 0 /* PrefetchCtlMsr */
- 	);
- 	if (cpu_feature_enabled(X86_FEATURE_LFENCE_RDTSC))
- 		kvm_cpu_cap_set(X86_FEATURE_LFENCE_RDTSC);
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 9a194aa1a75a..60c7c880266b 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4969,6 +4969,9 @@ static __init int svm_hardware_setup(void)
- 
- 	tsc_aux_uret_slot = kvm_add_user_return_msr(MSR_TSC_AUX);
- 
-+	if (boot_cpu_has(X86_FEATURE_AUTOIBRS))
-+		kvm_enable_efer_bits(EFER_AUTOIBRS);
-+
- 	/* Check for pause filtering support */
- 	if (!boot_cpu_has(X86_FEATURE_PAUSEFILTER)) {
- 		pause_filter_count = 0;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index da4bbd043a7b..8dd0cb230ef5 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1685,6 +1685,9 @@ static int do_get_msr_feature(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
- 
- static bool __kvm_valid_efer(struct kvm_vcpu *vcpu, u64 efer)
- {
-+	if (efer & EFER_AUTOIBRS && !guest_cpuid_has(vcpu, X86_FEATURE_AUTOIBRS))
-+		return false;
-+
- 	if (efer & EFER_FFXSR && !guest_cpuid_has(vcpu, X86_FEATURE_FXSR_OPT))
- 		return false;
- 
--- 
-2.34.1
+>
+> > The protocol was never designed to be used with untrusted devices.  It
+> > was created, and we implemented support for it, when we trusted USB
+> > devices that we plugged into our systems, AND we trusted the systems we
+> > plugged our USB devices into.  So at the time, it kind of made sense to
+> > create this, and the USB protocol class support that replaced it had not
+> > yet been released.
+> >
+> > As designed, it really can not work at all if you do not trust either
+> > the host or the device, due to the way the protocol works.  And I can't
+> > see how it could be fixed if you wish to remain compliant with the
+> > protocol (i.e. still work with Windows XP systems.)
 
+Can it be fixed in a way that most RNDIS based modems devices like
+RNDIS based android tethering work with Linux based hosts still?
+
+>
+> I guess I just don't see how a USB-based protocol can be fundamentally
+> insecure (to the host), when the host is always in control over messages
+> and parses their content etc.?
+>
+> I can see this with e.g. firewire which must allow DMA access, and now
+> with Thunderbolt we have the same and ended up with boltd, but USB?
+>
+> > Today, with untrusted hosts and devices, it's time to just retire this
+> > protcol.  As I mentioned in the patch comments, Android disabled this
+> > many years ago in their devices, with no loss of functionality.
+>
+> I'm not sure Android counts that much, FWIW, at least for WiFi there
+> really is no good reason to plug in a USB WiFi dongle into an Android
+> phone, and quick googling shows that e.g. Android TV may - depending on
+> build - support/permit RNDIS Ethernet?
+>
+> Anyway, there was probably exactly one RNDIS WiFi dongle from Broadcom
+> (for some kind of console IIRC), so it's not a huge loss. Just having
+> issues with the blanket statement that a USB protocol can be designed as
+> inscure :)
+>
+> johannes
+>
