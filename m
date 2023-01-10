@@ -2,29 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2876639FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450856639E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 08:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238000AbjAJHaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 02:30:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
+        id S230038AbjAJHZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 02:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237888AbjAJH33 (ORCPT
+        with ESMTP id S237597AbjAJHZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 02:29:29 -0500
+        Tue, 10 Jan 2023 02:25:25 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCD7053725
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 23:27:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E5294915C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 23:25:08 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 30A7OcV3003939;
-        Tue, 10 Jan 2023 08:24:38 +0100
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 30A7OcxI003940;
+        Tue, 10 Jan 2023 08:24:39 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
-        Willy Tarreau <w@1wt.eu>
-Subject: [PATCH v2 12/22] tools/nolibc: export environ as a weak symbol on s390
-Date:   Tue, 10 Jan 2023 08:24:24 +0100
-Message-Id: <20230110072434.3863-13-w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
+Subject: [PATCH v2 13/22] tools/nolibc: add auxiliary vector retrieval for i386
+Date:   Tue, 10 Jan 2023 08:24:25 +0100
+Message-Id: <20230110072434.3863-14-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20230110072434.3863-1-w@1wt.eu>
 References: <20230110072434.3863-1-w@1wt.eu>
@@ -36,43 +35,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Schnelle <svens@linux.ibm.com>
+In the _start block we now iterate over envp to find the auxiliary
+vector after the NULL. The pointer is saved into an _auxv variable
+that is marked as weak so that it's accessible from multiple units.
 
-The environ is retrieved from the _start code and is easy to store at
-this moment. Let's declare the variable weak and store the value into
-it. By not being static it will be visible to all units. By being weak,
-if some programs already declared it, they will continue to be able to
-use it. This was tested on s390 both with environ inherited from
-_start and extracted from envp.
-
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/arch-s390.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/include/nolibc/arch-i386.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
-index b58f64d47b82..039b454e79f0 100644
---- a/tools/include/nolibc/arch-s390.h
-+++ b/tools/include/nolibc/arch-s390.h
-@@ -159,6 +159,8 @@ struct sys_stat_struct {
- 	_arg1;								\
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index 60b586120727..e8d0cf545bf1 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
+@@ -179,6 +179,7 @@ struct sys_stat_struct {
  })
  
-+char **environ __attribute__((weak));
-+
- /* startup code */
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
- {
-@@ -174,6 +176,8 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
- 		"la	%r4,8(%r4)\n"		/* advance pointer */
- 		"jnz	0b\n"			/* no -> test next pointer */
- 						/* yes -> r4 now contains start of envp */
-+		"larl	%r1,environ\n"
-+		"stg	%r4,0(%r1)\n"
+ char **environ __attribute__((weak));
++const unsigned long *_auxv __attribute__((weak));
  
- 		"aghi	%r15,-160\n"		/* allocate new stackframe */
- 		"xc	0(8,%r15),0(%r15)\n"	/* clear backchain */
+ /* startup code */
+ /*
+@@ -195,6 +196,12 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ 		"lea 4(%ebx,%eax,4),%ecx\n" // then a NULL then envp (third arg, %ecx)
+ 		"mov %ecx, environ\n"       // save environ
+ 		"xor %ebp, %ebp\n"          // zero the stack frame
++		"mov %ecx, %edx\n"          // search for auxv (follows NULL after last env)
++		"0:\n"
++		"add $4, %edx\n"            // search for auxv using edx, it follows the
++		"cmp -4(%edx), %ebp\n"      // ... NULL after last env (ebp is zero here)
++		"jnz 0b\n"
++		"mov %edx, _auxv\n"         // save it into _auxv
+ 		"and $-16, %esp\n"          // x86 ABI : esp must be 16-byte aligned before
+ 		"sub $4, %esp\n"            // the call instruction (args are aligned)
+ 		"push %ecx\n"               // push all registers on the stack so that we
 -- 
 2.17.5
 
