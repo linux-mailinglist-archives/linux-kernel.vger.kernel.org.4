@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE20B6644FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F14664579
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 16:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238912AbjAJPe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 10:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
+        id S233981AbjAJP7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 10:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbjAJPes (ORCPT
+        with ESMTP id S233989AbjAJP7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 10:34:48 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111F114D38;
-        Tue, 10 Jan 2023 07:34:47 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1322d768ba7so12490429fac.5;
-        Tue, 10 Jan 2023 07:34:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aALJ1+6b5A4lyvQQ5kPDXbutVahUhVTXhBlHzFelYpk=;
-        b=i6n470Ce+W8oxpPwNBChX5RaFXJ3U23JN6QGshiLXPAPCLB3Vl7bRDfWfXEGqT8Vhn
-         oG4B5kAhBbdnfMjH8a5QJB9H/4UUQ2f9dZuV8msyDrodGKrifhB64Df0ZuFKKrPIiEq1
-         OCE+K0XbyQyPzg2bAsjB6v4j567tKH6yOWOogo8W975GwHjBuBSXSam22iLhScIjOqlC
-         Dv8iP4kFVnJ6x3wdBPZesdbf7Atc2MGJuSMNBM9y+gUTwAYvxF/q3SfzKO2qSWBmmR+D
-         Q9weB6DalU7I8RZ5BbMAvFekdRBevNNzIa0BQDlAW3SOsnv+pA1Ylb4jTWAISmqwg/W2
-         /Q9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aALJ1+6b5A4lyvQQ5kPDXbutVahUhVTXhBlHzFelYpk=;
-        b=4Ga+Z1gjuJLWbXecdpdNvxiA0yGkZJ+V/3li3v5YM+vlkc7AbJnLoQfBmO89Ri6Ehx
-         LRntj5jc0Pr87i/nsSglgzawxzKeNF8FbKNBCLOK9Zx/CwH/Pn7uxBi6rohIghUy+S0j
-         ihxL3zUS6jcenBhPkjtjY+5z1rwnz/4eLi3M21MVRNeKe7FqY32EL+jdkIfwjzQXBo7V
-         zFt9/qVUICh+HcbEdDzeyDCg/mmhkytSTDsyG5DO2goleHPRFztLnqbTJDyCvIGCJ9T1
-         anmiJ+VAycTxZMfZAZ9R/6ovld2qzOGOJWcEhKDUTibZED5iyd2ZbyHeTMdv2RKQNESx
-         a+8A==
-X-Gm-Message-State: AFqh2kotkSVXTHBIzubGq08M26aCvhFvuWZ9wj6QHBRAP9ZeuQ/QHfQO
-        WJGVMSXnbIZDjLhy/nN0HpHTia8ZtQs1dFTNgJk=
-X-Google-Smtp-Source: AMrXdXvn1xRON1Kd8a0qV7Mrhm6vYwZcsKzzIkhhNKV5lkac3FN/6IpCOpNBj8E7gJ1EQBg4vrMMdWCHfSH7GIiy1oo=
-X-Received: by 2002:a05:6870:cb98:b0:15b:96b8:e2be with SMTP id
- ov24-20020a056870cb9800b0015b96b8e2bemr326656oab.38.1673364886323; Tue, 10
- Jan 2023 07:34:46 -0800 (PST)
+        Tue, 10 Jan 2023 10:59:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD3F4FCED
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 07:59:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43D2AB817F6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:59:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAAC9C433D2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 15:59:30 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Fx6dh58j";
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GrYnIo+9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1673366368;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XDH00etmdS8/BILcXpN5zPvqj8ZbmM2o4PpcSzT1ImI=;
+        b=Fx6dh58jgthbYv6kL2dbCgVnKJafml6rhbNqXHGto/5JJrahGZqx0a7vmtFVFodPp/hm20
+        OPQz7NRfIm/WBVcfCnNM+pQmDJH8kb94tcS0DMsS0Qe9T81l2dFOmPeamgh0C6ccwLb9YV
+        dnbs+ri95qZYmFM5q3OTHiXM5lWdkfE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 95741fc2 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Tue, 10 Jan 2023 15:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1673364894;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XDH00etmdS8/BILcXpN5zPvqj8ZbmM2o4PpcSzT1ImI=;
+        b=GrYnIo+9SqLJ3MTOK77uQTBueKyCj8KmmXIflSTKMvXwXgvfrG5VHkI3FIePYv2NU0AMB3
+        YGcugcvBs6iE+agfYwviK9pKj4bbNLp8xhVO+CaR676F9ddNXcJdwdWr37mgSiMi8vJbqb
+        mTQQOdaGw6F3bg13P5Sxtg/4TMaFlO0=
+Date:   Tue, 10 Jan 2023 16:34:49 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Marcel Apfelbaum <marcel.apfelbaum@gmail.com>
+Cc:     Peter Maydell <peter.maydell@linaro.org>, philmd@linaro.org,
+        pbonzini@redhat.com, ebiggers@kernel.org,
+        Mathias Krause <minipli@grsecurity.net>, qemu-devel@nongnu.org
+Subject: Re: [PATCH qemu v3] x86: don't let decompressed kernel image clobber
+ setup_data
+Message-ID: <Y72FmQlNwBsp8Ntc@zx2c4.com>
+References: <Y69fUstLKNv/RLd7@zx2c4.com>
+ <20221230220725.618763-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20230109222547.1368644-1-joel@joelfernandes.org>
-In-Reply-To: <20230109222547.1368644-1-joel@joelfernandes.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 10 Jan 2023 07:34:41 -0800
-Message-ID: <CAF6AEGsH21bb6ihE41UR-jODL0C8fVVg9=ODj-Ksd7CnZaYzDw@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND] adreno: Shutdown the GPU properly
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, Sean Paul <sean@poorly.run>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221230220725.618763-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,97 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 2:25 PM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
->
-> During kexec on ARM device, we notice that device_shutdown() only calls
-> pm_runtime_force_suspend() while shutting down the GPU. This means the GPU
-> kthread is still running and further, there maybe active submits.
->
-> This causes all kinds of issues during a kexec reboot:
->
-> Warning from shutdown path:
->
-> [  292.509662] WARNING: CPU: 0 PID: 6304 at [...] adreno_runtime_suspend+0x3c/0x44
-> [  292.509863] Hardware name: Google Lazor (rev3 - 8) with LTE (DT)
-> [  292.509872] pstate: 80400009 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [  292.509881] pc : adreno_runtime_suspend+0x3c/0x44
-> [  292.509891] lr : pm_generic_runtime_suspend+0x30/0x44
-> [  292.509905] sp : ffffffc014473bf0
-> [...]
-> [  292.510043] Call trace:
-> [  292.510051]  adreno_runtime_suspend+0x3c/0x44
-> [  292.510061]  pm_generic_runtime_suspend+0x30/0x44
-> [  292.510071]  pm_runtime_force_suspend+0x54/0xc8
-> [  292.510081]  adreno_shutdown+0x1c/0x28
-> [  292.510090]  platform_shutdown+0x2c/0x38
-> [  292.510104]  device_shutdown+0x158/0x210
-> [  292.510119]  kernel_restart_prepare+0x40/0x4c
->
-> And here from GPU kthread, an SError OOPs:
->
-> [  192.648789]  el1h_64_error+0x7c/0x80
-> [  192.648812]  el1_interrupt+0x20/0x58
-> [  192.648833]  el1h_64_irq_handler+0x18/0x24
-> [  192.648854]  el1h_64_irq+0x7c/0x80
-> [  192.648873]  local_daif_inherit+0x10/0x18
-> [  192.648900]  el1h_64_sync_handler+0x48/0xb4
-> [  192.648921]  el1h_64_sync+0x7c/0x80
-> [  192.648941]  a6xx_gmu_set_oob+0xbc/0x1fc
-> [  192.648968]  a6xx_hw_init+0x44/0xe38
-> [  192.648991]  msm_gpu_hw_init+0x48/0x80
-> [  192.649013]  msm_gpu_submit+0x5c/0x1a8
-> [  192.649034]  msm_job_run+0xb0/0x11c
-> [  192.649058]  drm_sched_main+0x170/0x434
-> [  192.649086]  kthread+0x134/0x300
-> [  192.649114]  ret_from_fork+0x10/0x20
->
-> Fix by calling adreno_system_suspend() in the device_shutdown() path.
->
-> [ Applied Rob Clark feedback on fixing adreno_unbind() similarly, also
->   tested as above. ]
->
-> Cc: Rob Clark <robdclark@chromium.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ricardo Ribalda <ribalda@chromium.org>
-> Cc: Ross Zwisler <zwisler@kernel.org>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Hi Michael,
 
-Reviewed-by: Rob Clark <robdclark@gmail.com>
+Could you queue up this patch and mark it as a fix for 7.2.1? It is a
+straight-up bug fix for a 7.2 regression that's now affected several
+users.
 
-> ---
->  drivers/gpu/drm/msm/adreno/adreno_device.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> index 628806423f7d..36f062c7582f 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> @@ -551,13 +551,14 @@ static int adreno_bind(struct device *dev, struct device *master, void *data)
->         return 0;
->  }
->
-> +static int adreno_system_suspend(struct device *dev);
->  static void adreno_unbind(struct device *dev, struct device *master,
->                 void *data)
->  {
->         struct msm_drm_private *priv = dev_get_drvdata(master);
->         struct msm_gpu *gpu = dev_to_gpu(dev);
->
-> -       pm_runtime_force_suspend(dev);
-> +       WARN_ON_ONCE(adreno_system_suspend(dev));
->         gpu->funcs->destroy(gpu);
->
->         priv->gpu_pdev = NULL;
-> @@ -609,7 +610,7 @@ static int adreno_remove(struct platform_device *pdev)
->
->  static void adreno_shutdown(struct platform_device *pdev)
->  {
-> -       pm_runtime_force_suspend(&pdev->dev);
-> +       WARN_ON_ONCE(adreno_system_suspend(&pdev->dev));
->  }
->
->  static const struct of_device_id dt_match[] = {
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+- It has two Tested-by tags on the thread.
+- hpa, the maintainer of the kernel side of this, confirmed on one of
+  the various tributary threads that this approach is a correct one.
+- It doesn't introduce any new functionality.
+
+For your convenience, you can grab this out of lore here:
+
+  https://lore.kernel.org/lkml/20221230220725.618763-1-Jason@zx2c4.com/
+
+Or if you want to yolo it:
+
+  curl https://lore.kernel.org/lkml/20221230220725.618763-1-Jason@zx2c4.com/raw | git am -s
+
+It's now sat silent on the mailing list for a while. So let's please get
+this committed and backported so that the bug reports stop coming in.
+
+Thanks,
+Jason
