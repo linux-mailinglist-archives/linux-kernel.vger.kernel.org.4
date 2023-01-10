@@ -2,169 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BF1663C37
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7AF663C3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 10:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbjAJJF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 04:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S231506AbjAJJHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 04:07:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjAJJFZ (ORCPT
+        with ESMTP id S230406AbjAJJGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 04:05:25 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33FC18E27
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:05:09 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso9264437wms.5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:05:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dmP5l4cApANJtfpxdC9HPRl/8romuUG6F1co7Oq044Y=;
-        b=gwqtez4rxprKjG5xIakhDg1DGgN1Jb2dTjGR4WpqTM3Dch/Vq4jXFj/zL5fBY76Ov9
-         BowpXv6/mevfH+hg/CahL59FgAD1YaBXrx/AcfzkA+HnMIxxicjvo1wpLh08M4bMw9uJ
-         noPCH/X4AqP4RPAgMRhVh8fQCZPVGqRfRAPOQ9Ah2no/HuV1n0+i+0FwJZAXh/unIvWH
-         il0jXX/UxLlx5k4JdWkWpl2gL9jWZaT5r2nIPfyB4zFLRj8HX8zxDbAV+T/qG8m/aagH
-         QhYD8JXTHKbmmAmlsCfqg+vdTD2giDQIMZcLh+i1h7cpWXTq9p5Ue7AJN7bNKOf6UcLh
-         gsGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dmP5l4cApANJtfpxdC9HPRl/8romuUG6F1co7Oq044Y=;
-        b=7EvIJSzP8ZLkAEgk6C58vBKTHyZgZBh8k4KAJ+/s25vQ7KZy30lyBD9TTChz9MGns9
-         mjVScvJoy2z6MR639HftQQudw2RAeHKD2hYm69WUdt+kGBM08Sgx10fpPZUSJdt9wwiB
-         w1z9lGAlBJGAOsfhQLe8m1ibheAOReUbwIYA/OVvjYskZ5X/8IiLB89pOgwuQDFpD6WG
-         29hZzCgcoI46SKsVKrKhk3g5zlleiYR9DKHiiFkxmIXocdeFHZuaXpQoyahmmz7WaoEt
-         rg7lGsFIg7rucKznA4sNuuSOOq17Sg6pRDAJkJVapc31YYl4+NcdO2ql2hdue+FFP9nV
-         KtSg==
-X-Gm-Message-State: AFqh2kqrSvPTNT23FdR52JyapoEazUT6hHNqcpY2UTYQENu9DTQ592rM
-        a9okLr3gXWsBE/xIzBEpyEnsOw==
-X-Google-Smtp-Source: AMrXdXvywMzS1L112hvFqtXe3hMIaYD4tU9pyCY3W7l8PhyXoKWDO23qepASi7CP/eVR/Ok1i44KsA==
-X-Received: by 2002:a05:600c:687:b0:3cf:e7c8:494 with SMTP id a7-20020a05600c068700b003cfe7c80494mr48563729wmn.29.1673341508279;
-        Tue, 10 Jan 2023 01:05:08 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m18-20020a05600c4f5200b003c6b70a4d69sm15941646wmq.42.2023.01.10.01.05.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 01:05:07 -0800 (PST)
-Message-ID: <65925394-13e1-e218-2f47-8c1c1d3b90d7@linaro.org>
-Date:   Tue, 10 Jan 2023 10:05:06 +0100
+        Tue, 10 Jan 2023 04:06:30 -0500
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A72D19C3E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 01:06:28 -0800 (PST)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230110090624euoutp01ac3728ee2ccf2610869e4c87457a38d5~45040BxaL2198121981euoutp01V
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 09:06:24 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230110090624euoutp01ac3728ee2ccf2610869e4c87457a38d5~45040BxaL2198121981euoutp01V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1673341584;
+        bh=3Cf+DCWYAmzSB65N/ulwd8ALWX5sTIUaVfbs/6Q9LCg=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=k1RjNnZ34QJhAESzBJQbAzM61irDC4sNH8N21bvJSisYE4GpOTFXGw8FPPn1Yy6eS
+         oZiqII7QFnA2pUELR1vmFyyzOhJZkdYUgzaWJnKgReYtVRJyro0LKVGEy7f9pG0wrD
+         /qW75OXbUs5zZlLxKbrmIdTJ6YDQksdouzCiU7po=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230110090624eucas1p1a99a687265afdabbd20f8c8d3e3aa446~4504neOvB2747527475eucas1p1w;
+        Tue, 10 Jan 2023 09:06:24 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id A3.BB.43884.09A2DB36; Tue, 10
+        Jan 2023 09:06:24 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230110090624eucas1p23074c6f9d41a5005e499906e01e58f3c~4504PejtP1569015690eucas1p2R;
+        Tue, 10 Jan 2023 09:06:24 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230110090624eusmtrp1d651397f9466392829008648dc6eae9c~4504Ou5Kq1446914469eusmtrp1Z;
+        Tue, 10 Jan 2023 09:06:24 +0000 (GMT)
+X-AuditID: cbfec7f5-25bff7000000ab6c-a6-63bd2a90b6c9
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 60.77.52424.F8A2DB36; Tue, 10
+        Jan 2023 09:06:23 +0000 (GMT)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230110090623eusmtip1acb75198ba36a03190e868d77e94b077~4504Cfj-20739907399eusmtip1K;
+        Tue, 10 Jan 2023 09:06:23 +0000 (GMT)
+Received: from [192.168.8.107] (106.210.248.241) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Tue, 10 Jan 2023 09:06:22 +0000
+Message-ID: <e8326ea7-a354-e627-195f-dcd02b13accc@samsung.com>
+Date:   Tue, 10 Jan 2023 10:06:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] dt-bindings: clock: Add SM7150 GCC clock binding
+        Thunderbird/102.4.2
+Subject: Re: [PATCH 6/7] dm-zone: use generic helpers to calculate offset
+ from zone start
 Content-Language: en-US
-To:     Danila Tikhonov <danila@jiaxyga.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Wronek <davidwronek@gmail.com>
-References: <20230109193030.42764-1-danila@jiaxyga.com>
- <20230109193030.42764-2-danila@jiaxyga.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230109193030.42764-2-danila@jiaxyga.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Christoph Hellwig <hch@lst.de>
+CC:     <axboe@kernel.dk>, <kernel@pankajraghav.com>,
+        <linux-kernel@vger.kernel.org>, <hare@suse.de>,
+        <bvanassche@acm.org>, <snitzer@kernel.org>, <dm-devel@redhat.com>,
+        <damien.lemoal@opensource.wdc.com>,
+        <linux-nvme@lists.infradead.org>, <linux-block@vger.kernel.org>,
+        <gost.dev@samsung.com>, Luis Chamberlain <mcgrof@kernel.org>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <20230110065738.GE10289@lst.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [106.210.248.241]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAKsWRmVeSWpSXmKPExsWy7djPc7oTtPYmG6y/J2ax+m4/m8W0Dz+Z
+        LX6fPc9ssffdbFaLPYsmMVmsXH2UyeJv1z0mizMvP7NY7L2lbXF51xw2i/nLnrJb3JjwlNHi
+        xC1pB16Py1e8PS6fLfXYtKqTzWPzknqP3Tcb2Dx2tt5n9Ti70tHj/b6rQOHT1R6fN8l5tB/o
+        ZgrgjuKySUnNySxLLdK3S+DK6O7+z1hwl7di+ZybrA2MG7i7GDk5JARMJHrP72bqYuTiEBJY
+        wSjx+lsrI0hCSOALo8TX30UQ9mdGiS1PuboYOcAaXl2UgKhfzijRd+84G1zNii5uiMRuRom1
+        G6YxgyR4Bewk3i5YwAJiswioSmxpv8oOEReUODnzCVhcVCBKounCTzBbWCBa4uG882C9zALi
+        EreezGcCsUUElCSevjrLCLKAWaCRWeLDj/uMIBexCWhJNHaCzeQU0JH4PeUgK0SvpkTr9t/s
+        ELa8xPa3c5ghPlaWWHzhGiOEXSux9tgZdpCZEgKXOCV27l3OBvGli8ThP+UQNcISr45vYYew
+        ZSROT+5hgbCrJZ7e+M0M0dvCKNG/cz1Ur7VE35kcCNNRYsm2cgiTT+LGW0GIa/gkJm2bzjyB
+        UXUWUkDMQvLwLCQPzELywAJGllWM4qmlxbnpqcXGeanlesWJucWleel6yfm5mxiBie70v+Nf
+        dzCuePVR7xAjEwfjIUYJDmYlEd6VnHuShXhTEiurUovy44tKc1KLDzFKc7AoifPO2Do/WUgg
+        PbEkNTs1tSC1CCbLxMEp1cC0Zronyz2ftXwzHt1oNGHrvPMtw7Zyu3HvSo2zH6o69K9wyior
+        CFhuc6urXv406UrItAnnfjoztP/sqnH9NmvRHa4954V8P6uti/lusESLx0ppptrZ7/feSzko
+        XlSYecpmJfeHOTFfOpXOB7OqK70zd14z+ZNb/NOjgjMebf3xnOHEnHd+y8V2cxx8yv8hsnfW
+        ktVP3dYfOFZXI/rVV1MiU00yWm7d6p+yZywrzUxes6dH53PcVg9IOnDHcYMDT5RlpoR6+3Td
+        /uvdNe+EWf3t/r26VmPxIOnWrmmHGxWvCP5Onj6xePfvAhOGqp5d/zLZ15toOiTvdCuuFykP
+        r1P4lMcmEPJn4sxLqtIuukeVWIozEg21mIuKEwEC6Xp64wMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkleLIzCtJLcpLzFFi42I5/e/4Xd1+rb3JBrvWWVisvtvPZjHtw09m
+        i99nzzNb7H03m9Viz6JJTBYrVx9lsvjbdY/J4szLzywWe29pW1zeNYfNYv6yp+wWNyY8ZbQ4
+        cUvagdfj8hVvj8tnSz02repk89i8pN5j980GNo+drfdZPc6udPR4v+8qUPh0tcfnTXIe7Qe6
+        mQK4o/RsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJzMstSi/TtEvQy
+        urv/Mxbc5a1YPucmawPjBu4uRg4OCQETiVcXJboYuTiEBJYyStzc8Iy1i5ETKC4j8enKR3YI
+        W1jiz7UuNoiij4wSG5e+ZIdwdjNKPLh3FayDV8BO4u2CBSwgNouAqsSW9qvsEHFBiZMzn4DF
+        RQWiJG6ef8gEYgsLREs87VnACGIzC4hL3HoyHywuIqAk8fTVWUaQBcwCjcwSH37cBysSErjL
+        KPF9SRHI2WwCWhKNnWDzOQV0JH5POcgKMUdTonX7b3YIW15i+9s5zBAfKEssvnCNEcKulXh1
+        fzfjBEbRWUjOm4XkjFlIRs1CMmoBI8sqRpHU0uLc9NxiI73ixNzi0rx0veT83E2MwDSx7djP
+        LTsYV776qHeIkYmD8RCjBAezkgjvSs49yUK8KYmVValF+fFFpTmpxYcYTYFhNJFZSjQ5H5io
+        8kriDc0MTA1NzCwNTC3NjJXEeT0LOhKFBNITS1KzU1MLUotg+pg4OKUamIqVoie/vHqSL2tD
+        sq+w+YkKvib2B6f/hel+TGe/K/39+MPIl+cEtJTt0/rOT+FNS0nstD+9YkOH3Xt9+9nu33m3
+        5rL2MMW7s/VUSiu1NTXuWqyygofth8kSfmGei0f4w1Iz5zn/cHHZMG3iF2kJa8/F/mqZ5vdY
+        smf53Gb78reuvHPCki09YaoCjH84tfMN8zPtZ/7/PCla7HDdi0mffE9eXibvKajF8Od1nUD/
+        akP7lOkBF9bcj+MyMBPnn84ZU7f33/ufjnFyH95P25fzndvWKDK2Y15T3JUPU+zOB9z4f31+
+        04Wyn44F3Md+hb83/NnAFd6sKnTtJnvD8toHKVe3HN8TlvWGMUl8a2qxEktxRqKhFnNRcSIA
+        0ga3ZZwDAAA=
+X-CMS-MailID: 20230110090624eucas1p23074c6f9d41a5005e499906e01e58f3c
+X-Msg-Generator: CA
+X-RootMTR: 20230106083322eucas1p1ce3ca7b02ca87bb2be8543291e223338
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230106083322eucas1p1ce3ca7b02ca87bb2be8543291e223338
+References: <20230106083317.93938-1-p.raghav@samsung.com>
+        <CGME20230106083322eucas1p1ce3ca7b02ca87bb2be8543291e223338@eucas1p1.samsung.com>
+        <20230106083317.93938-7-p.raghav@samsung.com>
+        <20230110065738.GE10289@lst.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 20:30, Danila Tikhonov wrote:
-> Add device tree bindings for global clock subsystem clock
-> controller for Qualcomm Technology Inc's SM7150 SoCs.
-
-Subject: drop second/last, redundant "binding". The "dt-bindings" prefix
-is already stating that these are bindings.
-
+On 2023-01-10 07:57, Christoph Hellwig wrote:
+> On Fri, Jan 06, 2023 at 09:33:16AM +0100, Pankaj Raghav wrote:
+>> Use the bdev_offset_from_zone_start() helper function to calculate
+>> the offset from zone start instead of open coding.
+>>
+>> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+>> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+>> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+>> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+>> Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+>> Reviewed-by: Mike Snitzer <snitzer@kernel.org>
+>> ---
+>>  drivers/md/dm-zone.c | 8 +++-----
+>>  1 file changed, 3 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/md/dm-zone.c b/drivers/md/dm-zone.c
+>> index 3dafc0e8b7a9..ac6fc1293d41 100644
+>> --- a/drivers/md/dm-zone.c
+>> +++ b/drivers/md/dm-zone.c
+>> @@ -390,7 +390,8 @@ static bool dm_zone_map_bio_begin(struct mapped_device *md,
+>>  	case REQ_OP_WRITE_ZEROES:
+>>  	case REQ_OP_WRITE:
+>>  		/* Writes must be aligned to the zone write pointer */
+>> -		if ((clone->bi_iter.bi_sector & (zsectors - 1)) != zwp_offset)
+>> +		if (bdev_offset_from_zone_start(md->disk->part0,
+>> +						clone->bi_iter.bi_sector) != zwp_offset)
 > 
-> Co-developed-by: David Wronek <davidwronek@gmail.com>
-> Signed-off-by: David Wronek <davidwronek@gmail.com>
-> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
-> ---
->  .../bindings/clock/qcom,sm7150-gcc.yaml       |  50 +++++
->  include/dt-bindings/clock/qcom,sm7150-gcc.h   | 193 ++++++++++++++++++
->  2 files changed, 243 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm7150-gcc.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,sm7150-gcc.h
+> I can't see how this actually cleans antyhing up, while it does add an
+> overly long line.
+>
+While I do agree with the overly long line comment, I feel it makes the
+intent more clear, as it is easy to overlook this math operation.
+
+>>  		if (clone->bi_status == BLK_STS_OK &&
+>>  		    bio_op(clone) == REQ_OP_ZONE_APPEND) {
+>>  			orig_bio->bi_iter.bi_sector +=
+>> -				clone->bi_iter.bi_sector & mask;
+>> +				bdev_offset_from_zone_start(disk->part0, clone->bi_iter.bi_sector);
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm7150-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm7150-gcc.yaml
-> new file mode 100644
-> index 000000000000..6ce7a1877b00
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,sm7150-gcc.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,sm7150-gcc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Global Clock & Reset Controller on SM7150
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-
-If you have the device and are willing to do testing/checking/reviewing,
-you can add also yourself.
-
-> +
-> +description: |
-> +  Qualcomm global clock control module provides the clocks, resets and power
-> +  domains on SM7150
-> +
-> +  See also:: include/dt-bindings/clock/qcom,sm7150-gcc.h
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,sm7150-gcc
-> +
-> +  clocks:
-> +    items:
-> +      - description: Board XO source
-> +      - description: Board XO Active-Only source
-> +      - description: Sleep clock source
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +
-> +allOf:
-> +  - $ref: qcom,gcc.yaml#
-> +
-> +additionalProperties: false
-
-I think you wanted unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,rpmh.h>
-> +    clock-controller@100000 {
-> +      compatible = "qcom,sm7150-gcc";
-> +      reg = <0x00100000 0x001f0000>;
-> +      clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +               <&rpmhcc RPMH_CXO_CLK_A>,
-> +               <&sleep_clk>;
-> +      #clock-cells = <1>;
-> +      #reset-cells = <1>;
-> +      #power-domain-cells = <1>;
-> +    };
-> +...
-> \ No newline at end of file
-
-Patch error here.
-
-
-Best regards,
-Krzysztof
-
+> Same here.
