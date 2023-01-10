@@ -2,257 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAED664E2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 22:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E3F664E32
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 22:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjAJVl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 16:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
+        id S233026AbjAJVmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 16:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjAJVlo (ORCPT
+        with ESMTP id S232836AbjAJVly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 16:41:44 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FFE392C6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 13:41:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1673386889; bh=6nop0OBRob5Z/iRPg9Z11D2mpsio5bT53ye1lNuCTMA=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=Kry3PLtBqQq7pCJENXSkf3/z+qjQZfdx4S90qzOEJLRSNewlI0yBXjCzxH+tjvZjr
-         SGs7BM6s0OXd5RPi2WQus7aREwbvcyl89Dt+YNyxucfyyWiKUY2+hU93fc4SdORjo0
-         o08JPe5zCO6kP4+6hj8BbXVJeMSclipawKJRl0Sk=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue, 10 Jan 2023 22:41:29 +0100 (CET)
-X-EA-Auth: knPYGnacJT0lXIppOOUrbjh7wpqS0rH5RVuWRIAqscHyipc0nXTrwwLkyUDbltSIbFUlZVR4cHWiNX0Rr5ZdGH179UidTJft
-Date:   Wed, 11 Jan 2023 03:11:24 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: [PATCH] staging: wlan-ng: Remove unused code
-Message-ID: <Y73bhE1VwQ5IfFyt@ubun2204.myguest.virtualbox.org>
+        Tue, 10 Jan 2023 16:41:54 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48383E0F3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 13:41:49 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id d15so14628855pls.6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 13:41:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D6WnFAop7d5E0yhy9sgHCW9UOo46MAfDHRFM7/8uo+E=;
+        b=KJo+O1YHeWC2lzofGztS9Z6uTDMmVlWLB0oOwFB4cWH+JefTudLQrBvQ9KR/wES1DH
+         s55YeZOuEP51yOAAqSkmWZNTq1yKCPsvdtJbtEoqrzV32YyGUkTOQfx8EHFErLRp0TIF
+         dbA0iy0r1v6/0akvMtV1mZ9eZ1Xm+KDuKznSApxUXkTJepJ/gIxqYdmukpDLEO/yhv6O
+         4jSkBBYbPKepc1xYtHutIvS2acl7WeWD5vnG8IrzesVNneu25TSYWCJVCXpv/mTi1Kf5
+         5MejEMdYxX8VvvuKXVwll3PIyn7LXsrSSFRHPyho/vfnYzF+Vgscw9ESWteLVqat2eMM
+         ZnGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D6WnFAop7d5E0yhy9sgHCW9UOo46MAfDHRFM7/8uo+E=;
+        b=aFji+RhawzCpKvM1d4OLZHNxGlqsCkyed585PSCvpb0wmZG+69ecxzGcvAyOkois7J
+         T1GSznqDih0cImlKtc4md9el+e67azY93gGaViQgLHqYq5E9pOoU45tmIALueQ+jVd2I
+         OPU594bLFszb0DGW0fTO6hTDrxZOmxxUmC2wMUjel+7pRqaVW8lfeaXPp8SqMjTs4mWd
+         f9kMCXP6ODuSblGpBXq0EkHsJ8sPsrZ/Rf4+moepQt4XKMwWn2CvfsNBh1ZVmSs1swdp
+         H+s5EFeA88ibjkLk9VLCCrjoEk9O5AnHvj8kIOoXjUWLj5iNlyD+MJvhPseNgGAcEGc4
+         zmXA==
+X-Gm-Message-State: AFqh2krxAfgSDlDj6JE4s2xBAH1008Nqnugl6b0F+ewyrGx66bGSXmgM
+        lpfxFWJrb/J1Dq6ez4VD61H0Ew==
+X-Google-Smtp-Source: AMrXdXs7FzdBhI0TXB5I4AqPO5fCt1v60GEvPvH/08IGgK0xUVt2vA/ipEy6fEEt1A6vaejEUraLhg==
+X-Received: by 2002:a05:6a20:54a1:b0:a5:170:9acf with SMTP id i33-20020a056a2054a100b000a501709acfmr25000775pzk.3.1673386908975;
+        Tue, 10 Jan 2023 13:41:48 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id d16-20020a63ed10000000b00476799699e4sm7310757pgi.30.2023.01.10.13.41.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 13:41:48 -0800 (PST)
+Message-ID: <2c01e100-852d-d082-02b5-0b481fc72477@kernel.dk>
+Date:   Tue, 10 Jan 2023 14:41:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 7/7] iov_iter, block: Make bio structs pin pages rather
+ than ref'ing if appropriate
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <bbd9cde3-7cbb-f3e4-a2a4-7b1b5ae392e0@kernel.dk>
+ <d0bb04e7-7e58-d494-0e39-6e98f3368a7b@kernel.dk>
+ <20230109173513.htfqbkrtqm52pnye@quack3>
+ <167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk>
+ <167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk>
+ <2008444.1673300255@warthog.procyon.org.uk>
+ <2084839.1673303046@warthog.procyon.org.uk>
+ <2155741.1673361430@warthog.procyon.org.uk>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <2155741.1673361430@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several structs are defined but never used. Remove such dead code.
+On 1/10/23 7:37 AM, David Howells wrote:
+> Jens Axboe <axboe@kernel.dk> wrote:
+> 
+>> I think it makes more sense to have NO_REF check, to be honest, as that
+>> means the general path doesn't have to set that flag. But I don't feel
+>> too strongly about that part.
+> 
+> It's just that the logic seems weird with BIO_NO_PAGE_REF and BIO_PAGE_PINNED
+> being kind of opposite polarity.
+> 
+> Anyway, see attached.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Note: Change compile tested only.
+Yeah, I guess I'll have to agree with you. So let's go with that approach
+instead, but then please:
 
- drivers/staging/wlan-ng/hfa384x.h | 171 ------------------------------
- 1 file changed, 171 deletions(-)
+1) Change that flag as a prep patch so you don't mix up the two
+2) Incorporate the feedback from the previous patch
 
-diff --git a/drivers/staging/wlan-ng/hfa384x.h b/drivers/staging/wlan-ng/hfa384x.h
-index 0611e37df6ac..e33dd1b9c40e 100644
---- a/drivers/staging/wlan-ng/hfa384x.h
-+++ b/drivers/staging/wlan-ng/hfa384x.h
-@@ -904,40 +904,6 @@ union hfa384x_usbin {
-  *--------------------------------------------------------------------
-  */
- 
--struct hfa384x_pdr_pcb_partnum {
--	u8 num[8];
--} __packed;
--
--struct hfa384x_pdr_pcb_tracenum {
--	u8 num[8];
--} __packed;
--
--struct hfa384x_pdr_nic_serial {
--	u8 num[12];
--} __packed;
--
--struct hfa384x_pdr_mkk_measurements {
--	double carrier_freq;
--	double occupied_band;
--	double power_density;
--	double tx_spur_f1;
--	double tx_spur_f2;
--	double tx_spur_f3;
--	double tx_spur_f4;
--	double tx_spur_l1;
--	double tx_spur_l2;
--	double tx_spur_l3;
--	double tx_spur_l4;
--	double rx_spur_f1;
--	double rx_spur_f2;
--	double rx_spur_l1;
--	double rx_spur_l2;
--} __packed;
--
--struct hfa384x_pdr_nic_ramsize {
--	u8 size[12];		/* units of KB */
--} __packed;
--
- struct hfa384x_pdr_mfisuprange {
- 	u16 id;
- 	u16 variant;
-@@ -959,150 +925,13 @@ struct hfa384x_pdr_nicid {
- 	u16 minor;
- } __packed;
- 
--struct hfa384x_pdr_refdac_measurements {
--	u16 value[0];
--} __packed;
--
--struct hfa384x_pdr_vgdac_measurements {
--	u16 value[0];
--} __packed;
--
--struct hfa384x_pdr_level_comp_measurements {
--	u16 value[0];
--} __packed;
--
--struct hfa384x_pdr_mac_address {
--	u8 addr[6];
--} __packed;
--
--struct hfa384x_pdr_mkk_callname {
--	u8 callname[8];
--} __packed;
--
--struct hfa384x_pdr_regdomain {
--	u16 numdomains;
--	u16 domain[5];
--} __packed;
--
--struct hfa384x_pdr_allowed_channel {
--	u16 ch_bitmap;
--} __packed;
--
--struct hfa384x_pdr_default_channel {
--	u16 channel;
--} __packed;
--
--struct hfa384x_pdr_privacy_option {
--	u16 available;
--} __packed;
--
--struct hfa384x_pdr_temptype {
--	u16 type;
--} __packed;
--
--struct hfa384x_pdr_refdac_setup {
--	u16 ch_value[14];
--} __packed;
--
--struct hfa384x_pdr_vgdac_setup {
--	u16 ch_value[14];
--} __packed;
--
--struct hfa384x_pdr_level_comp_setup {
--	u16 ch_value[14];
--} __packed;
--
--struct hfa384x_pdr_trimdac_setup {
--	u16 trimidac;
--	u16 trimqdac;
--} __packed;
--
--struct hfa384x_pdr_ifr_setting {
--	u16 value[3];
--} __packed;
--
--struct hfa384x_pdr_rfr_setting {
--	u16 value[3];
--} __packed;
--
--struct hfa384x_pdr_hfa3861_baseline {
--	u16 value[50];
--} __packed;
--
--struct hfa384x_pdr_hfa3861_shadow {
--	u32 value[32];
--} __packed;
--
--struct hfa384x_pdr_hfa3861_ifrf {
--	u32 value[20];
--} __packed;
--
--struct hfa384x_pdr_hfa3861_chcalsp {
--	u16 value[14];
--} __packed;
--
--struct hfa384x_pdr_hfa3861_chcali {
--	u16 value[17];
--} __packed;
--
--struct hfa384x_pdr_hfa3861_nic_config {
--	u16 config_bitmap;
--} __packed;
--
--struct hfa384x_pdr_hfo_delay {
--	u8 hfo_delay;
--} __packed;
--
--struct hfa384x_pdr_hfa3861_manf_testsp {
--	u16 value[30];
--} __packed;
--
--struct hfa384x_pdr_hfa3861_manf_testi {
--	u16 value[30];
--} __packed;
--
--struct hfa384x_pdr_end_of_pda {
--	u16 crc;
--} __packed;
--
- struct hfa384x_pdrec {
- 	__le16 len;		/* in words */
- 	__le16 code;
- 	union pdr {
--		struct hfa384x_pdr_pcb_partnum pcb_partnum;
--		struct hfa384x_pdr_pcb_tracenum pcb_tracenum;
--		struct hfa384x_pdr_nic_serial nic_serial;
--		struct hfa384x_pdr_mkk_measurements mkk_measurements;
--		struct hfa384x_pdr_nic_ramsize nic_ramsize;
- 		struct hfa384x_pdr_mfisuprange mfisuprange;
- 		struct hfa384x_pdr_cfisuprange cfisuprange;
- 		struct hfa384x_pdr_nicid nicid;
--		struct hfa384x_pdr_refdac_measurements refdac_measurements;
--		struct hfa384x_pdr_vgdac_measurements vgdac_measurements;
--		struct hfa384x_pdr_level_comp_measurements level_compc_measurements;
--		struct hfa384x_pdr_mac_address mac_address;
--		struct hfa384x_pdr_mkk_callname mkk_callname;
--		struct hfa384x_pdr_regdomain regdomain;
--		struct hfa384x_pdr_allowed_channel allowed_channel;
--		struct hfa384x_pdr_default_channel default_channel;
--		struct hfa384x_pdr_privacy_option privacy_option;
--		struct hfa384x_pdr_temptype temptype;
--		struct hfa384x_pdr_refdac_setup refdac_setup;
--		struct hfa384x_pdr_vgdac_setup vgdac_setup;
--		struct hfa384x_pdr_level_comp_setup level_comp_setup;
--		struct hfa384x_pdr_trimdac_setup trimdac_setup;
--		struct hfa384x_pdr_ifr_setting ifr_setting;
--		struct hfa384x_pdr_rfr_setting rfr_setting;
--		struct hfa384x_pdr_hfa3861_baseline hfa3861_baseline;
--		struct hfa384x_pdr_hfa3861_shadow hfa3861_shadow;
--		struct hfa384x_pdr_hfa3861_ifrf hfa3861_ifrf;
--		struct hfa384x_pdr_hfa3861_chcalsp hfa3861_chcalsp;
--		struct hfa384x_pdr_hfa3861_chcali hfa3861_chcali;
--		struct hfa384x_pdr_hfa3861_nic_config nic_config;
--		struct hfa384x_pdr_hfo_delay hfo_delay;
--		struct hfa384x_pdr_hfa3861_manf_testsp hfa3861_manf_testsp;
--		struct hfa384x_pdr_hfa3861_manf_testi hfa3861_manf_testi;
--		struct hfa384x_pdr_end_of_pda end_of_pda;
- 
- 	} data;
- } __packed;
+Any chance we can get that cleanup_mode thing cleaned up as well?
+
 -- 
-2.34.1
-
+Jens Axboe
 
 
