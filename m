@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B6A663604
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED2F66360C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 Jan 2023 01:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237835AbjAJAFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 Jan 2023 19:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S233468AbjAJAHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 Jan 2023 19:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237525AbjAJAFX (ORCPT
+        with ESMTP id S237525AbjAJAHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 Jan 2023 19:05:23 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9111DDE7
-        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 16:05:22 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id f3so7062469pgc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 Jan 2023 16:05:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ywk5kgimgzqnnPT+XZy47dxy0OlRvssJgYFxBD/Z4aE=;
-        b=K4f/fsCYEekdsxkKz3b7M4aYBHvLignDAyYA6AqVyL50HxvhGB45l9SqOIKmd8BK2f
-         IlrSNlIpag5PruA+qorMeir3g/F+EHk1PKs0fBSj+74ZdN2IeVOF+TkMYzI4AwiHoWci
-         TMeFBaDMn1Oio3riXZu/BoqjYcLw0cPfBOo9OGYZ5VE+3AZVM/2pjsJKxaEbcdM/go/e
-         XMkAYcTLCXXvWeZsngWu9lPJFmNb6DPZyF1bhj6OHbmY2JRlqaD7Z8Tq0lAL/cCf1wGT
-         8Ttnt7CDs5ZmpN8TCM+v+ZpUSG6iwIrYVyoec7tjahfjSete7GQvRMl85kwK/EzjMSZx
-         iYiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ywk5kgimgzqnnPT+XZy47dxy0OlRvssJgYFxBD/Z4aE=;
-        b=5jRl6MI2ICRXeFSjPRj0N0RYL9m5t9lBqIoQpb20BN1zd0DSt2x/6aHVYGhRBrfvf0
-         1AOiKHzvdyuulEx3jPlkewrH5Wte/3NEOHye3BBp5N2vn5zCh8nwqW8A5jrQq0RFdYY4
-         IA/BgpYgZ/rrKhtPCYjmKQBEUOknwPRj88hiJhiJ2ULa2I7GCiU7VyV9YkVU0ZIvUFaI
-         nbmSBwHqhpP+hLWK2xHPgGeyF9x9EFp00Ne9lgU30IO+ieJLs5NWQsnpwPegqNunIzpn
-         biEMPoz26hkowu+7lPxbj3fE2ywLSwIv3IxWWcTCfzi8PbKhfLrE6FSrUPRaKTAR65j8
-         5xPA==
-X-Gm-Message-State: AFqh2krWVQS6mqfrPlYKWON13hM54plhq3t+s2S8WfW4UDpyJbOO9JDw
-        y+8RMYMR93Lo0TziK795I/IYY9fseKjjlxq+rBUDfA==
-X-Google-Smtp-Source: AMrXdXtVwTLcBMamWsZkIKTNdshS3/u/EDgTWfUDOvfa4R33160dUHhm6rUdQJgg1hNJiNk3fCDNzcMdRKlWw9lh5+8=
-X-Received: by 2002:a63:4943:0:b0:478:e6cf:c24c with SMTP id
- y3-20020a634943000000b00478e6cfc24cmr5160343pgk.365.1673309121880; Mon, 09
- Jan 2023 16:05:21 -0800 (PST)
+        Mon, 9 Jan 2023 19:07:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7362B488
+        for <linux-kernel@vger.kernel.org>; Mon,  9 Jan 2023 16:06:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673309205;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iapCfz1rFKFdP7CVLCAke8ViE4mAB2lsuFKVxrGNfa4=;
+        b=iIEwLC4bNzdoBTIdfM4oNUfQqUsgDDi9MNrKC1FNgO4Wx2aNIAnul7sEN3b8TSMnlDoAxy
+        pz7KJ4wth23dNK7/VtYxdchE9EI9Q39IFRXqX+7xBs11bm35FMlsPYFgjzr1rMUNqDWjIX
+        PntsfUzgpcwF2nr6Rl/VXAu8LMj7H2U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-96-FsPNlyx_MfSTfNmTKXRULg-1; Mon, 09 Jan 2023 19:06:44 -0500
+X-MC-Unique: FsPNlyx_MfSTfNmTKXRULg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 499108027FE;
+        Tue, 10 Jan 2023 00:06:44 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.32.102])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3F453140EBF5;
+        Tue, 10 Jan 2023 00:06:43 +0000 (UTC)
+From:   Steve Grubb <sgrubb@redhat.com>
+To:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Richard Guy Briggs <rgb@redhat.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v5 3/3] fanotify,audit: Allow audit to use the full permission
+ event response
+Date:   Mon, 09 Jan 2023 19:06:42 -0500
+Message-ID: <3211441.aeNJFYEL58@x2>
+Organization: Red Hat
+In-Reply-To: <79fcf72ea442eeede53ed5e6de567f8df8ef7d83.1670606054.git.rgb@redhat.com>
+References: <cover.1670606054.git.rgb@redhat.com>
+ <79fcf72ea442eeede53ed5e6de567f8df8ef7d83.1670606054.git.rgb@redhat.com>
 MIME-Version: 1.0
-References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
- <20230105003813.1770367-22-paulmck@kernel.org> <CAKwvOdmt7mnP_dfCMO_YUV792Zgtirk=NFqe8XH0z88-b0e23A@mail.gmail.com>
-In-Reply-To: <CAKwvOdmt7mnP_dfCMO_YUV792Zgtirk=NFqe8XH0z88-b0e23A@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 9 Jan 2023 16:05:10 -0800
-Message-ID: <CAKwvOdnQX1H9-8QnsUiXi+eK4udGdO34isHZ-PEzNDZwJbJ41w@mail.gmail.com>
-Subject: Re: [PATCH rcu 22/27] init: Remove "select SRCU"
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,99 +69,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 4:02 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Wed, Jan 4, 2023 at 4:38 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > Now that the SRCU Kconfig option is unconditionally selected, there is
-> > no longer any point in selecting it.  Therefore, remove the "select SRCU"
-> > Kconfig statements.
->
-> Looks like that's the case as of
-> commit 0cd7e350abc4 ("rcu: Make SRCU mandatory")
-> in v6.2-rc1.
->
-> >
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: Johannes Weiner <hannes@cmpxchg.org>
-> > Cc: Vlastimil Babka <vbabka@suse.cz>
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Miguel Ojeda <ojeda@kernel.org>
-> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > Cc: Aaron Tomlin <atomlin@redhat.com>
-> > Cc: Tejun Heo <tj@kernel.org>
-> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
->
-> Patch LGTM
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> Note that there's quite a few more of these though. Perhaps best to
-> remove them all together? Or perhaps you already have individual
-> patches out already for all of these?
+Hello,
 
-Ah indeed, I missed that this was part of such a series:
-https://lore.kernel.org/lkml/20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1/
+Sorry to take so long. Holidays and kernel build problems. However, I have 
+built a kernel with these patches. I only have 2 comments. When I use an 
+application that expected the old API, meaning it simply does:
+
+        response.fd = metadata->fd;
+        response.response = reply;
+        close(metadata->fd);
+        write(fd, &response, sizeof(struct fanotify_response));
+
+I get access denials. Every time. If the program is using the new API and 
+sets FAN_INFO, then it works as expected. I'll do some more testing but I 
+think there is something wrong in the compatibility path.
+
+On Monday, December 12, 2022 9:06:11 AM EST Richard Guy Briggs wrote:
+> This patch passes the full response so that the audit function can use all
+> of it. The audit function was updated to log the additional information in
+> the AUDIT_FANOTIFY record.
+
+What I'm seeing is:
+
+type=FANOTIFY msg=audit(01/09/2023 18:43:16.306:366) : resp=deny fan_type=1 
+fan_info=313300000000000000000000 subj_trust=0 obj_trust=0
+
+Where fan_info was supposed to be 13 decimal. More below...
+
+> Currently the only type of fanotify info that is defined is an audit
+> rule number, but convert it to hex encoding to future-proof the field.
+> Hex encoding suggested by Paul Moore <paul@paul-moore.com>.
+> 
+> Sample records:
+>   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1
+> fan_info=3137 subj_trust=3 obj_trust=5 type=FANOTIFY
+> msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F subj_trust=2
+> obj_trust=2
+> 
+> Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> ---
+>  fs/notify/fanotify/fanotify.c |  3 ++-
+>  include/linux/audit.h         |  9 +++++----
+>  kernel/auditsc.c              | 25 ++++++++++++++++++++++---
+>  3 files changed, 29 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/notify/fanotify/fanotify.c b/fs/notify/fanotify/fanotify.c
+> index 24ec1d66d5a8..29bdd99b29fa 100644
+> --- a/fs/notify/fanotify/fanotify.c
+> +++ b/fs/notify/fanotify/fanotify.c
+> @@ -273,7 +273,8 @@ static int fanotify_get_response(struct fsnotify_group
+> *group,
+> 
+>  	/* Check if the response should be audited */
+>  	if (event->response & FAN_AUDIT)
+> -		audit_fanotify(event->response & ~FAN_AUDIT);
+> +		audit_fanotify(event->response & ~FAN_AUDIT,
+> +			       &event->audit_rule);
+> 
+>  	pr_debug("%s: group=%p event=%p about to return ret=%d\n", __func__,
+>  		 group, event, ret);
+> diff --git a/include/linux/audit.h b/include/linux/audit.h
+> index d6b7d0c7ce43..31086a72e32a 100644
+> --- a/include/linux/audit.h
+> +++ b/include/linux/audit.h
+> @@ -14,6 +14,7 @@
+>  #include <linux/audit_arch.h>
+>  #include <uapi/linux/audit.h>
+>  #include <uapi/linux/netfilter/nf_tables.h>
+> +#include <uapi/linux/fanotify.h>
+> 
+>  #define AUDIT_INO_UNSET ((unsigned long)-1)
+>  #define AUDIT_DEV_UNSET ((dev_t)-1)
+> @@ -416,7 +417,7 @@ extern void __audit_log_capset(const struct cred *new,
+> const struct cred *old); extern void __audit_mmap_fd(int fd, int flags);
+>  extern void __audit_openat2_how(struct open_how *how);
+>  extern void __audit_log_kern_module(char *name);
+> -extern void __audit_fanotify(u32 response);
+> +extern void __audit_fanotify(u32 response, struct
+> fanotify_response_info_audit_rule *friar); extern void
+> __audit_tk_injoffset(struct timespec64 offset);
+>  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+>  extern void __audit_log_nfcfg(const char *name, u8 af, unsigned int
+> nentries, @@ -523,10 +524,10 @@ static inline void
+> audit_log_kern_module(char *name) __audit_log_kern_module(name);
+>  }
+> 
+> -static inline void audit_fanotify(u32 response)
+> +static inline void audit_fanotify(u32 response, struct
+> fanotify_response_info_audit_rule *friar) {
+>  	if (!audit_dummy_context())
+> -		__audit_fanotify(response);
+> +		__audit_fanotify(response, friar);
+>  }
+> 
+>  static inline void audit_tk_injoffset(struct timespec64 offset)
+> @@ -679,7 +680,7 @@ static inline void audit_log_kern_module(char *name)
+>  {
+>  }
+> 
+> -static inline void audit_fanotify(u32 response)
+> +static inline void audit_fanotify(u32 response, struct
+> fanotify_response_info_audit_rule *friar) { }
+> 
+>  static inline void audit_tk_injoffset(struct timespec64 offset)
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index d1fb821de104..8d523066d81f 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -64,6 +64,7 @@
+>  #include <uapi/linux/limits.h>
+>  #include <uapi/linux/netfilter/nf_tables.h>
+>  #include <uapi/linux/openat2.h> // struct open_how
+> +#include <uapi/linux/fanotify.h>
+> 
+>  #include "audit.h"
+> 
+> @@ -2877,10 +2878,28 @@ void __audit_log_kern_module(char *name)
+>  	context->type = AUDIT_KERN_MODULE;
+>  }
+> 
+> -void __audit_fanotify(u32 response)
+> +void __audit_fanotify(u32 response, struct
+> fanotify_response_info_audit_rule *friar) {
+> -	audit_log(audit_context(), GFP_KERNEL,
+> -		AUDIT_FANOTIFY,	"resp=%u", response);
+> +	struct audit_context *ctx = audit_context();
+> +	struct audit_buffer *ab;
+> +	char numbuf[12];
+> +
+> +	if (friar->hdr.type == FAN_RESPONSE_INFO_NONE) {
+> +		audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> +			  "resp=%u fan_type=%u fan_info=3F subj_trust=2 
+obj_trust=2",
+> +			  response, FAN_RESPONSE_INFO_NONE);
+> +		return;
+> +	}
+> +	ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
+> +	if (ab) {
+> +		audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
+> +				 response, friar->hdr.type);
+> +		snprintf(numbuf, sizeof(numbuf), "%u", friar->rule_number);
+> +		audit_log_n_hex(ab, numbuf, sizeof(numbuf));
+
+I don't think it needs to be converted to ascii and then hexencoded. As Paul 
+said, probably %X is all we need here.
+
+-Steve
 
 
->
-> $ grep -rn 'select SRCU'
-> mm/Kconfig:670: select SRCU
-> kernel/power/Kconfig:121: select SRCU
-> arch/mips/kvm/Kconfig:29: select SRCU
-> arch/riscv/kvm/Kconfig:30: select SRCU
-> arch/s390/kvm/Kconfig:34: select SRCU
-> arch/powerpc/kvm/Kconfig:25: select SRCU
-> arch/x86/kvm/Kconfig:49: select SRCU
-> arch/x86/Kconfig:286: select SRCU
-> arch/x86/Kconfig:1941: select SRCU
-> arch/arm64/kvm/Kconfig:31: select SRCU
-> init/Kconfig:1868: select SRCU
-> security/tomoyo/Kconfig:9: select SRCU
-> fs/btrfs/Kconfig:20: select SRCU
-> fs/dlm/Kconfig:7: select SRCU
-> fs/quota/Kconfig:9: select SRCU
-> fs/notify/Kconfig:4: select SRCU
-> drivers/md/Kconfig:9: select SRCU
-> drivers/clk/Kconfig:26: select SRCU
-> drivers/dax/Kconfig:4: select SRCU
-> drivers/devfreq/Kconfig:4: select SRCU
-> drivers/net/Kconfig:337: select SRCU
-> drivers/hwtracing/stm/Kconfig:5: select SRCU
-> drivers/cpufreq/Kconfig:6: select SRCU
-> drivers/opp/Kconfig:4: select SRCU
->
-> > ---
-> >  init/Kconfig | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 7e5c3ddc341de..af511c726d695 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1865,7 +1865,6 @@ config PERF_EVENTS
-> >         default y if PROFILING
-> >         depends on HAVE_PERF_EVENTS
-> >         select IRQ_WORK
-> > -       select SRCU
-> >         help
-> >           Enable kernel support for various performance events provided
-> >           by software and hardware.
-> > --
-> > 2.31.1.189.g2e36527f23
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+> +		audit_log_format(ab, " subj_trust=%u obj_trust=%u",
+> +				 friar->subj_trust, friar->obj_trust);
+> +		audit_log_end(ab);
+> +	}
+>  }
+> 
+>  void __audit_tk_injoffset(struct timespec64 offset)
 
 
 
--- 
-Thanks,
-~Nick Desaulniers
+
