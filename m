@@ -2,101 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D301665A56
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A372C665A5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbjAKLjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S238502AbjAKLjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:39:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbjAKLiw (ORCPT
+        with ESMTP id S238344AbjAKLjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:38:52 -0500
+        Wed, 11 Jan 2023 06:39:08 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DFE81ADB2;
-        Wed, 11 Jan 2023 03:35:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44C0EE016;
+        Wed, 11 Jan 2023 03:36:36 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 059EEFEC;
-        Wed, 11 Jan 2023 03:35:51 -0800 (PST)
-Received: from [10.57.45.242] (unknown [10.57.45.242])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D720F3F587;
-        Wed, 11 Jan 2023 03:35:05 -0800 (PST)
-Message-ID: <4e6a0766-52d1-effa-9986-af6b3ca29f1a@arm.com>
-Date:   Wed, 11 Jan 2023 11:35:04 +0000
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A954AFEC;
+        Wed, 11 Jan 2023 03:37:18 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 543763F587;
+        Wed, 11 Jan 2023 03:36:34 -0800 (PST)
+Date:   Wed, 11 Jan 2023 11:36:19 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mhiramat@kernel.org,
+        ndesaulniers@google.com, ojeda@kernel.org,
+        rafael.j.wysocki@intel.com, revest@chromium.org,
+        robert.moore@intel.com, rostedt@goodmis.org, will@kernel.org
+Subject: Re: [PATCH 3/8] arm64: Extend support for CONFIG_FUNCTION_ALIGNMENT
+Message-ID: <Y76fM6yiRs9ydfVk@FVFF77S0Q05N>
+References: <20230109135828.879136-1-mark.rutland@arm.com>
+ <20230109135828.879136-4-mark.rutland@arm.com>
+ <Y73MBswL76Hi9cay@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 0/7] perf cs_etm: Basic support for virtual/kernel
- timestamps
-Content-Language: en-US
-To:     Tanmay Jagdale <tanmay@marvell.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "leo.yan@linaro.org" <leo.yan@linaro.org>,
-        "mike.leach@linaro.org" <mike.leach@linaro.org>
-Cc:     Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        George Cherian <gcherian@marvell.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230103162042.423694-1-james.clark@arm.com>
- <PH0PR18MB5017223066D8744D12C1F1BAD6FF9@PH0PR18MB5017.namprd18.prod.outlook.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <PH0PR18MB5017223066D8744D12C1F1BAD6FF9@PH0PR18MB5017.namprd18.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y73MBswL76Hi9cay@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/01/2023 16:42, Tanmay Jagdale wrote:
-> Hi James,
+On Tue, Jan 10, 2023 at 09:35:18PM +0100, Peter Zijlstra wrote:
+> On Mon, Jan 09, 2023 at 01:58:23PM +0000, Mark Rutland wrote:
 > 
-[...]
-
->> base-commit: 09e6f9f98370be9a9f8978139e0eb1be87d1125f
-> I have tested this patch set on our platform and able to see updated
-> timestamp values in perf script's output.
+> > diff --git a/arch/arm64/include/asm/linkage.h b/arch/arm64/include/asm/linkage.h
+> > index 1436fa1cde24d..df18a3446ce82 100644
+> > --- a/arch/arm64/include/asm/linkage.h
+> > +++ b/arch/arm64/include/asm/linkage.h
+> > @@ -5,8 +5,14 @@
+> >  #include <asm/assembler.h>
+> >  #endif
+> >  
+> > -#define __ALIGN		.align 2
+> > -#define __ALIGN_STR	".align 2"
+> > +#if CONFIG_FUNCTION_ALIGNMENT > 0
+> > +#define ARM64_FUNCTION_ALIGNMENT	CONFIG_FUNCTION_ALIGNMENT
+> > +#else
+> > +#define ARM64_FUNCTION_ALIGNMENT	4
+> > +#endif
+> > +
+> > +#define __ALIGN		.balign ARM64_FUNCTION_ALIGNMENT
+> > +#define __ALIGN_STR	".balign " #ARM64_FUNCTION_ALIGNMENT
 > 
-> $ perf record -e cs_etm/cycacc,@tmc_etr0/k -C 9 taskset -c 9 sleep 2
-> $ perf script --itrace=i1ns --ns -Fcomm,tid,pid,time,cpu,event,ip,sym,addr,symoff,flags,callindent
-> 
-> At certain points noticed that hardware emits same timestamp packets
-> but with updated cycle count (CC) values. A small snippet of the log:
-> 
-> Idx:100; ID:12; I_ADDR_S_IS0 : Address, Short, IS0.; Addr=0xFFFF8000086A761C ~[0x761C]
-> Idx:103; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x3d
-> Idx:107; ID:12; I_ATOM_F2 : Atom format 2.; EN
-> Idx:108; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x3f
-> Idx:112; ID:12; I_ATOM_F1 : Atom format 1.; N
-> Idx:113; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x45
-> Idx:116; ID:12; I_ATOM_F1 : Atom format 1.; E
-> Idx:117; ID:12; I_ADDR_S_IS0 : Address, Short, IS0.; Addr=0xFFFF8000086B52D4 ~[0x152D4]
+> Isn't that much the same as having ARM64 select FUNCTION_ALIGNMENT_4B
+> and simply removing all these lines and relying on the default
+> behaviour?
 
-Hi Tanmay,
+Yes, it is.
 
-Are you able to email or send a download link with the perf archive and
-perf.data file of this recording please?
+I was focussed on obviously retaining the existing semantic by default, and I
+missed that was possible by selecting FUNCTION_ALIGNMENT_4B.
 
-Thanks
-James
+Thanks,
+Mark.
