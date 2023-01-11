@@ -2,62 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A5F665245
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087D9665246
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235504AbjAKDTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 22:19:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S235588AbjAKDUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 22:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235482AbjAKDTK (ORCPT
+        with ESMTP id S234570AbjAKDT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 22:19:10 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88412178AB
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:18:55 -0800 (PST)
-Received: from loongson.cn (unknown [192.168.200.1])
-        by gateway (Coremail) with SMTP id _____8Cxe+qdKr5j2+EAAA--.2617S3;
-        Wed, 11 Jan 2023 11:18:53 +0800 (CST)
-Received: from [0.0.0.0] (unknown [192.168.200.1])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxzr6bKr5j0roXAA--.52803S3;
-        Wed, 11 Jan 2023 11:18:52 +0800 (CST)
-Subject: Re: [PATCH 3/4] LoongArch: Add support for kernel relocation
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Jinyang He <hejinyang@loongson.cn>
-References: <1673255274-18238-1-git-send-email-tangyouling@loongson.cn>
- <1673255274-18238-4-git-send-email-tangyouling@loongson.cn>
-Cc:     Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <3b281ec1-c432-eb7b-3131-3049a0d0ea95@loongson.cn>
-Date:   Wed, 11 Jan 2023 11:18:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 10 Jan 2023 22:19:58 -0500
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C4D1740E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:19:29 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VZLIQyt_1673407165;
+Received: from 30.97.48.51(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VZLIQyt_1673407165)
+          by smtp.aliyun-inc.com;
+          Wed, 11 Jan 2023 11:19:26 +0800
+Message-ID: <9e004bfa-3349-b96d-11ad-4f846c6744b7@linux.alibaba.com>
+Date:   Wed, 11 Jan 2023 11:19:49 +0800
 MIME-Version: 1.0
-In-Reply-To: <1673255274-18238-4-git-send-email-tangyouling@loongson.cn>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH -v2 3/9] migrate_pages: restrict number of pages to
+ migrate in batch
+To:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        haoxin <xhao@linux.alibaba.com>
+References: <20230110075327.590514-1-ying.huang@intel.com>
+ <20230110075327.590514-4-ying.huang@intel.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20230110075327.590514-4-ying.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Bxzr6bKr5j0roXAA--.52803S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3XryfGrWDWw1rKFWxZr1DWrg_yoW3tr4xpr
-        ZrZr4kJr4xGF17Jr9aqa4ruryUZws7Ww43W3ZrK34rCF1avFn5Ww4vgrnrXFW0qws5Kr40
-        qFyF9asFya1UAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bOxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
-        CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2
-        zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY20_WwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0zRVWl
-        kUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,275 +53,357 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 01/09/2023 05:07 PM, Youling Tang wrote:
-> arch/loongarch/kernel/relocate.c contains the functions necessary to
-> relocate the kernel elsewhere in memory.
->
-> The kernel makes a copy of itself at the new address. It uses the
-> relocation table inserted by the relocs tool to fix symbol references
-> within the new image.
->
-> If copy/relocation is successful then the entry point of the new kernel
-> is returned, otherwise fall back to starting the kernel in place.
->
-> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+On 1/10/2023 3:53 PM, Huang Ying wrote:
+> This is a preparation patch to batch the folio unmapping and moving
+> for non-hugetlb folios.
+> 
+> If we had batched the folio unmapping, all folios to be migrated would
+> be unmapped before copying the contents and flags of the folios.  If
+> the folios that were passed to migrate_pages() were too many in unit
+> of pages, the execution of the processes would be stopped for too long
+> time, thus too long latency.  For example, migrate_pages() syscall
+> will call migrate_pages() with all folios of a process.  To avoid this
+> possible issue, in this patch, we restrict the number of pages to be
+> migrated to be no more than HPAGE_PMD_NR.  That is, the influence is
+> at the same level of THP migration.
+> 
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Bharata B Rao <bharata@amd.com>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> Cc: haoxin <xhao@linux.alibaba.com>
 > ---
->  arch/loongarch/Kconfig              | 15 +++++
->  arch/loongarch/Makefile             |  5 ++
->  arch/loongarch/kernel/Makefile      |  2 +
->  arch/loongarch/kernel/head.S        | 18 ++++++
->  arch/loongarch/kernel/relocate.c    | 96 +++++++++++++++++++++++++++++
->  arch/loongarch/kernel/vmlinux.lds.S | 11 +++-
->  6 files changed, 145 insertions(+), 2 deletions(-)
->  create mode 100644 arch/loongarch/kernel/relocate.c
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 9cc8b84f7eb0..089a4695b1b3 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -48,6 +48,7 @@ config LOONGARCH
->  	select ARCH_SUPPORTS_ATOMIC_RMW
->  	select ARCH_SUPPORTS_HUGETLBFS
->  	select ARCH_SUPPORTS_NUMA_BALANCING
-> +	select SYS_SUPPORTS_RELOCATABLE
->  	select ARCH_USE_BUILTIN_BSWAP
->  	select ARCH_USE_CMPXCHG_LOCKREF
->  	select ARCH_USE_QUEUED_RWLOCKS
-> @@ -229,6 +230,11 @@ config SCHED_OMIT_FRAME_POINTER
->  config AS_HAS_EXPLICIT_RELOCS
->  	def_bool $(as-instr,x:pcalau12i \$t0$(comma)%pc_hi20(x))
->
-> +config SYS_SUPPORTS_RELOCATABLE
-> +	bool
-> +	help
-> +	  Selected if the platform supports relocating the kernel.
-> +
->  menu "Kernel type and options"
->
->  source "kernel/Kconfig.hz"
-> @@ -474,6 +480,15 @@ config PHYSICAL_START
->  	  specified in the "crashkernel=YM@XM" command line boot parameter
->  	  passed to the panic-ed kernel).
->
-> +config RELOCATABLE
-> +	bool "Relocatable kernel"
-> +	depends on SYS_SUPPORTS_RELOCATABLE
-> +	help
-> +	  This builds the kernel as a Position Independent Executable (PIE),
-> +	  which retains all relocation metadata required to relocate the
-> +	  kernel binary at runtime to a different virtual address than the
-> +	  address it was linked at.
-> +
->  config SECCOMP
->  	bool "Enable seccomp to safely compute untrusted bytecode"
->  	depends on PROC_FS
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> index 4402387d2755..27b5a70ff31c 100644
-> --- a/arch/loongarch/Makefile
-> +++ b/arch/loongarch/Makefile
-> @@ -71,6 +71,11 @@ KBUILD_AFLAGS_MODULE		+= -Wa,-mla-global-with-abs
->  KBUILD_CFLAGS_MODULE		+= -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
->  endif
->
-> +ifeq ($(CONFIG_RELOCATABLE),y)
-> +LDFLAGS_vmlinux			+= -static -pie --no-dynamic-linker -z notext
-> +KBUILD_CFLAGS_KERNEL		+= -fPIE
-> +endif
-> +
->  cflags-y += -ffreestanding
->  cflags-y += $(call cc-option, -mno-check-zero-division)
->
-> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-> index fcaa024a685e..33787d22e6f4 100644
-> --- a/arch/loongarch/kernel/Makefile
-> +++ b/arch/loongarch/kernel/Makefile
-> @@ -31,6 +31,8 @@ endif
->  obj-$(CONFIG_MODULES)		+= module.o module-sections.o
->  obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
->
-> +obj-$(CONFIG_RELOCATABLE)	+= relocate.o
-> +
->  obj-$(CONFIG_PROC_FS)		+= proc.o
->
->  obj-$(CONFIG_SMP)		+= smp.o
-> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-> index e8a4bf9d7599..6db1549177ad 100644
-> --- a/arch/loongarch/kernel/head.S
-> +++ b/arch/loongarch/kernel/head.S
-> @@ -88,7 +88,25 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
->  	PTR_ADD		sp, sp, tp
->  	set_saved_sp	sp, t0, t1
->
-> +#ifdef CONFIG_RELOCATABLE
-> +	/* Copy kernel and apply the relocations */
-> +	bl		relocate_kernel
-> +
-> +	/* Repoint the sp into the new kernel image */
-> +	PTR_LI		sp, (_THREAD_SIZE - 32 - PT_SIZE)
-> +	PTR_ADD		sp, sp, tp
-> +	set_saved_sp	sp, t0, t1
-> +	PTR_ADDI	sp, sp, -4 * SZREG      # init stack pointer
-PTR_ADDI	sp, sp, -4 * SZREG      # init stack pointer
-
-This line needs to be removed.
-
-> +
-> +	/*
-> +	 * relocate_kernel returns the entry point either
-> +	 * in the relocated kernel or the original if for
-> +	 * some reason relocation failed.
-> +	*/
-> +	jr		a0
+>   mm/migrate.c | 174 +++++++++++++++++++++++++++++++--------------------
+>   1 file changed, 106 insertions(+), 68 deletions(-)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 04e6802c236c..4931dc4c1215 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1396,6 +1396,11 @@ static inline int try_split_folio(struct folio *folio, struct list_head *split_f
+>   	return rc;
+>   }
+>   
+> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> +#define NR_MAX_BATCHED_MIGRATION	HPAGE_PMD_NR
 > +#else
->  	bl		start_kernel
+> +#define NR_MAX_BATCHED_MIGRATION	512
+
+We can have 64K page size on some architectures (e.g. ARM64), and I am 
+not sure the batch size (64K * 512 = 32M) is suitable on these systems. 
+I can do some measurement for the 64K page size if I find some time.
+
+Anyway, we can start from a simple way. The changes look good to me.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+
 > +#endif
->  	ASM_BUG()
->
->  SYM_CODE_END(kernel_entry)
-> diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
-> new file mode 100644
-> index 000000000000..a58551c0698d
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/relocate.c
-> @@ -0,0 +1,96 @@
-> +// SPDX-License-Identifier: GPL-2.0
+>   #define NR_MAX_MIGRATE_PAGES_RETRY	10
+>   
+>   struct migrate_pages_stats {
+> @@ -1497,40 +1502,15 @@ static int migrate_hugetlbs(struct list_head *from, new_page_t get_new_page,
+>   	return nr_failed;
+>   }
+>   
+> -/*
+> - * migrate_pages - migrate the folios specified in a list, to the free folios
+> - *		   supplied as the target for the page migration
+> - *
+> - * @from:		The list of folios to be migrated.
+> - * @get_new_page:	The function used to allocate free folios to be used
+> - *			as the target of the folio migration.
+> - * @put_new_page:	The function used to free target folios if migration
+> - *			fails, or NULL if no special handling is necessary.
+> - * @private:		Private data to be passed on to get_new_page()
+> - * @mode:		The migration mode that specifies the constraints for
+> - *			folio migration, if any.
+> - * @reason:		The reason for folio migration.
+> - * @ret_succeeded:	Set to the number of folios migrated successfully if
+> - *			the caller passes a non-NULL pointer.
+> - *
+> - * The function returns after NR_MAX_MIGRATE_PAGES_RETRY attempts or if no folios
+> - * are movable any more because the list has become empty or no retryable folios
+> - * exist any more. It is caller's responsibility to call putback_movable_pages()
+> - * to return folios to the LRU or free list only if ret != 0.
+> - *
+> - * Returns the number of {normal folio, large folio, hugetlb} that were not
+> - * migrated, or an error code. The number of large folio splits will be
+> - * considered as the number of non-migrated large folio, no matter how many
+> - * split folios of the large folio are migrated successfully.
+> - */
+> -int migrate_pages(struct list_head *from, new_page_t get_new_page,
+> +static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   		free_page_t put_new_page, unsigned long private,
+> -		enum migrate_mode mode, int reason, unsigned int *ret_succeeded)
+> +		enum migrate_mode mode, int reason, struct list_head *ret_folios,
+> +		struct migrate_pages_stats *stats)
+>   {
+>   	int retry = 1;
+>   	int large_retry = 1;
+>   	int thp_retry = 1;
+> -	int nr_failed;
+> +	int nr_failed = 0;
+>   	int nr_retry_pages = 0;
+>   	int nr_large_failed = 0;
+>   	int pass = 0;
+> @@ -1538,20 +1518,9 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   	bool is_thp = false;
+>   	struct folio *folio, *folio2;
+>   	int rc, nr_pages;
+> -	LIST_HEAD(ret_folios);
+>   	LIST_HEAD(split_folios);
+>   	bool nosplit = (reason == MR_NUMA_MISPLACED);
+>   	bool no_split_folio_counting = false;
+> -	struct migrate_pages_stats stats;
+> -
+> -	trace_mm_migrate_pages_start(mode, reason);
+> -
+> -	memset(&stats, 0, sizeof(stats));
+> -	rc = migrate_hugetlbs(from, get_new_page, put_new_page, private, mode, reason,
+> -			      &stats, &ret_folios);
+> -	if (rc < 0)
+> -		goto out;
+> -	nr_failed = rc;
+>   
+>   split_folio_migration:
+>   	for (pass = 0;
+> @@ -1563,12 +1532,6 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   		nr_retry_pages = 0;
+>   
+>   		list_for_each_entry_safe(folio, folio2, from, lru) {
+> -			/* Retried hugetlb folios will be kept in list  */
+> -			if (folio_test_hugetlb(folio)) {
+> -				list_move_tail(&folio->lru, &ret_folios);
+> -				continue;
+> -			}
+> -
+>   			/*
+>   			 * Large folio statistics is based on the source large
+>   			 * folio. Capture required information that might get
+> @@ -1582,15 +1545,14 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   
+>   			rc = unmap_and_move(get_new_page, put_new_page,
+>   					    private, folio, pass > 2, mode,
+> -					    reason, &ret_folios);
+> +					    reason, ret_folios);
+>   			/*
+>   			 * The rules are:
+>   			 *	Success: folio will be freed
+>   			 *	-EAGAIN: stay on the from list
+>   			 *	-ENOMEM: stay on the from list
+>   			 *	-ENOSYS: stay on the from list
+> -			 *	Other errno: put on ret_folios list then splice to
+> -			 *		     from list
+> +			 *	Other errno: put on ret_folios list
+>   			 */
+>   			switch(rc) {
+>   			/*
+> @@ -1607,17 +1569,17 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   				/* Large folio migration is unsupported */
+>   				if (is_large) {
+>   					nr_large_failed++;
+> -					stats.nr_thp_failed += is_thp;
+> +					stats->nr_thp_failed += is_thp;
+>   					if (!try_split_folio(folio, &split_folios)) {
+> -						stats.nr_thp_split += is_thp;
+> +						stats->nr_thp_split += is_thp;
+>   						break;
+>   					}
+>   				} else if (!no_split_folio_counting) {
+>   					nr_failed++;
+>   				}
+>   
+> -				stats.nr_failed_pages += nr_pages;
+> -				list_move_tail(&folio->lru, &ret_folios);
+> +				stats->nr_failed_pages += nr_pages;
+> +				list_move_tail(&folio->lru, ret_folios);
+>   				break;
+>   			case -ENOMEM:
+>   				/*
+> @@ -1626,13 +1588,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   				 */
+>   				if (is_large) {
+>   					nr_large_failed++;
+> -					stats.nr_thp_failed += is_thp;
+> +					stats->nr_thp_failed += is_thp;
+>   					/* Large folio NUMA faulting doesn't split to retry. */
+>   					if (!nosplit) {
+>   						int ret = try_split_folio(folio, &split_folios);
+>   
+>   						if (!ret) {
+> -							stats.nr_thp_split += is_thp;
+> +							stats->nr_thp_split += is_thp;
+>   							break;
+>   						} else if (reason == MR_LONGTERM_PIN &&
+>   							   ret == -EAGAIN) {
+> @@ -1650,17 +1612,17 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   					nr_failed++;
+>   				}
+>   
+> -				stats.nr_failed_pages += nr_pages + nr_retry_pages;
+> +				stats->nr_failed_pages += nr_pages + nr_retry_pages;
+>   				/*
+>   				 * There might be some split folios of fail-to-migrate large
+> -				 * folios left in split_folios list. Move them back to migration
+> +				 * folios left in split_folios list. Move them to ret_folios
+>   				 * list so that they could be put back to the right list by
+>   				 * the caller otherwise the folio refcnt will be leaked.
+>   				 */
+> -				list_splice_init(&split_folios, from);
+> +				list_splice_init(&split_folios, ret_folios);
+>   				/* nr_failed isn't updated for not used */
+>   				nr_large_failed += large_retry;
+> -				stats.nr_thp_failed += thp_retry;
+> +				stats->nr_thp_failed += thp_retry;
+>   				goto out;
+>   			case -EAGAIN:
+>   				if (is_large) {
+> @@ -1672,8 +1634,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   				nr_retry_pages += nr_pages;
+>   				break;
+>   			case MIGRATEPAGE_SUCCESS:
+> -				stats.nr_succeeded += nr_pages;
+> -				stats.nr_thp_succeeded += is_thp;
+> +				stats->nr_succeeded += nr_pages;
+> +				stats->nr_thp_succeeded += is_thp;
+>   				break;
+>   			default:
+>   				/*
+> @@ -1684,20 +1646,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   				 */
+>   				if (is_large) {
+>   					nr_large_failed++;
+> -					stats.nr_thp_failed += is_thp;
+> +					stats->nr_thp_failed += is_thp;
+>   				} else if (!no_split_folio_counting) {
+>   					nr_failed++;
+>   				}
+>   
+> -				stats.nr_failed_pages += nr_pages;
+> +				stats->nr_failed_pages += nr_pages;
+>   				break;
+>   			}
+>   		}
+>   	}
+>   	nr_failed += retry;
+>   	nr_large_failed += large_retry;
+> -	stats.nr_thp_failed += thp_retry;
+> -	stats.nr_failed_pages += nr_retry_pages;
+> +	stats->nr_thp_failed += thp_retry;
+> +	stats->nr_failed_pages += nr_retry_pages;
+>   	/*
+>   	 * Try to migrate split folios of fail-to-migrate large folios, no
+>   	 * nr_failed counting in this round, since all split folios of a
+> @@ -1708,7 +1670,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   		 * Move non-migrated folios (after NR_MAX_MIGRATE_PAGES_RETRY
+>   		 * retries) to ret_folios to avoid migrating them again.
+>   		 */
+> -		list_splice_init(from, &ret_folios);
+> +		list_splice_init(from, ret_folios);
+>   		list_splice_init(&split_folios, from);
+>   		no_split_folio_counting = true;
+>   		retry = 1;
+> @@ -1716,6 +1678,82 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   	}
+>   
+>   	rc = nr_failed + nr_large_failed;
+> +out:
+> +	return rc;
+> +}
+> +
 > +/*
-> + * Support for Kernel relocation at boot time
+> + * migrate_pages - migrate the folios specified in a list, to the free folios
+> + *		   supplied as the target for the page migration
 > + *
-> + * Copyright (C) 2023 Loongson Technology Corporation Limited
+> + * @from:		The list of folios to be migrated.
+> + * @get_new_page:	The function used to allocate free folios to be used
+> + *			as the target of the folio migration.
+> + * @put_new_page:	The function used to free target folios if migration
+> + *			fails, or NULL if no special handling is necessary.
+> + * @private:		Private data to be passed on to get_new_page()
+> + * @mode:		The migration mode that specifies the constraints for
+> + *			folio migration, if any.
+> + * @reason:		The reason for folio migration.
+> + * @ret_succeeded:	Set to the number of folios migrated successfully if
+> + *			the caller passes a non-NULL pointer.
+> + *
+> + * The function returns after NR_MAX_MIGRATE_PAGES_RETRY attempts or if no folios
+> + * are movable any more because the list has become empty or no retryable folios
+> + * exist any more. It is caller's responsibility to call putback_movable_pages()
+> + * to return folios to the LRU or free list only if ret != 0.
+> + *
+> + * Returns the number of {normal folio, large folio, hugetlb} that were not
+> + * migrated, or an error code. The number of large folio splits will be
+> + * considered as the number of non-migrated large folio, no matter how many
+> + * split folios of the large folio are migrated successfully.
 > + */
-> +
-> +#include <linux/elf.h>
-> +#include <linux/kernel.h>
-> +#include <linux/start_kernel.h>
-> +#include <linux/printk.h>
-> +#include <linux/panic_notifier.h>
-> +#include <asm/bootinfo.h>
-> +#include <asm/inst.h>
-> +#include <asm/sections.h>
-> +
-> +#define RELOCATED(x) ((void *)((long)x + offset))
-> +
-> +extern long __rela_dyn_start;
-> +extern long __rela_dyn_end;
-> +
-> +/*
-> + * Choose a new address for the kernel, for now we'll hard
-> + * code the destination.
-> + */
-> +static inline void __init *determine_relocation_address(void)
+> +int migrate_pages(struct list_head *from, new_page_t get_new_page,
+> +		free_page_t put_new_page, unsigned long private,
+> +		enum migrate_mode mode, int reason, unsigned int *ret_succeeded)
 > +{
-> +	return (void *)(CACHE_BASE + 0x02000000);
-> +}
+> +	int rc, rc_gather;
+> +	int nr_pages;
+> +	struct folio *folio, *folio2;
+> +	LIST_HEAD(folios);
+> +	LIST_HEAD(ret_folios);
+> +	struct migrate_pages_stats stats;
 > +
-> +static inline int __init relocation_addr_valid(void *loc_new)
-> +{
-> +	if ((unsigned long)loc_new & 0x0000ffff) {
-> +		/* Inappropriately aligned new location */
-> +		return 0;
-> +	}
-> +	if ((unsigned long)loc_new < (unsigned long)_end) {
-> +		/* New location overlaps original kernel */
-> +		return 0;
-> +	}
-> +	return 1;
-> +}
+> +	trace_mm_migrate_pages_start(mode, reason);
 > +
-> +void *__init relocate_kernel(void)
-> +{
-> +	Elf64_Rela *rela, *rela_end;
-> +	void *loc_new;
-> +	unsigned long kernel_length;
-> +	long offset = 0;
-> +	int res = 1;
-> +	/* Default to original kernel entry point */
-> +	void *kernel_entry = start_kernel;
+> +	memset(&stats, 0, sizeof(stats));
 > +
-> +	kernel_length = (long)(_end) - (long)(_text);
-> +
-> +	loc_new = determine_relocation_address();
-> +
-> +	/* Sanity check relocation address */
-> +	if (relocation_addr_valid(loc_new))
-> +		offset = (unsigned long)loc_new - (unsigned long)(_text);
-> +
-> +	if (offset) {
-> +		/* Copy the kernel to it's new location */
-> +		memcpy(loc_new, _text, kernel_length);
-> +
-> +		/* Sync the caches ready for execution of new kernel */
-> +		__asm__ __volatile__ (
-> +			"ibar 0 \t\n"
-> +			"dbar 0 \t\n");
-> +
-> +		rela = (Elf64_Rela *)RELOCATED(&__rela_dyn_start);
-> +		rela_end = (Elf64_Rela *)RELOCATED(&__rela_dyn_end);
-> +
-> +		for ( ; rela < rela_end; rela++) {
-> +			Elf64_Addr addr = rela->r_offset;
-> +			Elf64_Addr relocated_addr = rela->r_addend;
-> +
-> +			if (rela->r_info != R_LARCH_RELATIVE)
-> +				continue;
-> +
-> +			if (relocated_addr >= VMLINUX_LOAD_ADDRESS)
-> +				relocated_addr = RELOCATED(relocated_addr);
-> +
-> +			*(Elf64_Addr *)RELOCATED(addr) = relocated_addr;
-> +
+> +	rc_gather = migrate_hugetlbs(from, get_new_page, put_new_page, private,
+> +				     mode, reason, &stats, &ret_folios);
+> +	if (rc_gather < 0)
+> +		goto out;
+> +again:
+> +	nr_pages = 0;
+> +	list_for_each_entry_safe(folio, folio2, from, lru) {
+> +		/* Retried hugetlb folios will be kept in list  */
+> +		if (folio_test_hugetlb(folio)) {
+> +			list_move_tail(&folio->lru, &ret_folios);
+> +			continue;
 > +		}
 > +
-> +		/* The current thread is now within the relocated image */
-> +		__current_thread_info = RELOCATED(__current_thread_info);
-> +
-> +		/* Return the new kernel's entry point */
-> +		kernel_entry = RELOCATED(start_kernel);
+> +		nr_pages += folio_nr_pages(folio);
+> +		if (nr_pages > NR_MAX_BATCHED_MIGRATION)
+> +			break;
 > +	}
-> +out:
-> +	return kernel_entry;
-> +}
-> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-> index 733b16e8d55d..aec0b6567d24 100644
-> --- a/arch/loongarch/kernel/vmlinux.lds.S
-> +++ b/arch/loongarch/kernel/vmlinux.lds.S
-> @@ -70,6 +70,8 @@ SECTIONS
->  	.plt : ALIGN(16) { *(.plt) }
->  	.got.plt : ALIGN(16) { *(.got.plt) }
->
-> +	.data.rel : { *(.data.rel*) }
-> +
->  	. = ALIGN(PECOFF_SEGMENT_ALIGN);
->  	__init_begin = .;
->  	__inittext_begin = .;
-> @@ -93,8 +95,6 @@ SECTIONS
->  	PERCPU_SECTION(1 << CONFIG_L1_CACHE_SHIFT)
->  #endif
->
-> -	.rela.dyn : ALIGN(8) { *(.rela.dyn) *(.rela*) }
-> -
->  	.init.bss : {
->  		*(.init.bss)
->  	}
-> @@ -107,6 +107,12 @@ SECTIONS
->  	RO_DATA(4096)
->  	RW_DATA(1 << CONFIG_L1_CACHE_SHIFT, PAGE_SIZE, THREAD_SIZE)
->
-> +	.rela.dyn : ALIGN(8) {
-> +		__rela_dyn_start = .;
-> +		 *(.rela.dyn) *(.rela*)
-> +		__rela_dyn_end = .;
+> +	if (nr_pages > NR_MAX_BATCHED_MIGRATION)
+> +		list_cut_before(&folios, from, &folio->lru);
+> +	else
+> +		list_splice_init(from, &folios);
+> +	rc = migrate_pages_batch(&folios, get_new_page, put_new_page, private,
+> +				 mode, reason, &ret_folios, &stats);
+> +	list_splice_tail_init(&folios, &ret_folios);
+> +	if (rc < 0) {
+> +		rc_gather = rc;
+> +		goto out;
 > +	}
-> +
->  	.sdata : {
->  		*(.sdata)
->  	}
-> @@ -133,6 +139,7 @@ SECTIONS
->
->  	DISCARDS
->  	/DISCARD/ : {
-> +		*(.dynamic .dynsym .dynstr .hash .gnu.hash)
->  		*(.gnu.attributes)
->  		*(.options)
->  		*(.eh_frame)
->
-
+> +	rc_gather += rc;
+> +	if (!list_empty(from))
+> +		goto again;
+>   out:
+>   	/*
+>   	 * Put the permanent failure folio back to migration list, they
+> @@ -1728,7 +1766,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   	 * are migrated successfully.
+>   	 */
+>   	if (list_empty(from))
+> -		rc = 0;
+> +		rc_gather = 0;
+>   
+>   	count_vm_events(PGMIGRATE_SUCCESS, stats.nr_succeeded);
+>   	count_vm_events(PGMIGRATE_FAIL, stats.nr_failed_pages);
+> @@ -1742,7 +1780,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   	if (ret_succeeded)
+>   		*ret_succeeded = stats.nr_succeeded;
+>   
+> -	return rc;
+> +	return rc_gather;
+>   }
+>   
+>   struct page *alloc_migration_target(struct page *page, unsigned long private)
