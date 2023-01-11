@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3996660A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF835665F4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbjAKQgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
+        id S233166AbjAKPkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:40:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238469AbjAKQgH (ORCPT
+        with ESMTP id S235618AbjAKPk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:36:07 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9CE64DF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:36:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673454966; x=1704990966;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+Tf4fOTtVxxPUIU5o6FffNBYvv8T1/1+ZdmCbPKp6+w=;
-  b=lJh7vuURu7RFAZ96n10tZkKbISHDnyYoBdD+HpIpnlq/lT/wpAAcPYq8
-   9q/NIimpUR0c5+hU5CbILXglU6RmU9DjQuvftU3kRyhv8i+vozRePZtqa
-   FJOyK39J0MRWmWZundby5Z88e7bxrScIpZMhpbmxq6pC/GWhfbzOcR38r
-   VyrDa4wd9pL4WVH0NvADnCvamgIoqbhW2h1vG+4hqdlj0WfTwUTptSfG8
-   DMttZX+wieoC3VdYh4JojRBt2AzzIvARyR9YnJTh/V1u3oVNgFA3mq54v
-   eesCQDRHY3TfMjtaFspR1f9Pc02mGFBkIzD8PWw9Kkwy/3wFpHLhL1am/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324704143"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="324704143"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:32:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607408589"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="607408589"
-Received: from flobatol-mobl1.amr.corp.intel.com (HELO [10.212.110.208]) ([10.212.110.208])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:32:29 -0800
-Message-ID: <0d2ccd69-63e3-b8c5-396b-b698110cad14@linux.intel.com>
-Date:   Wed, 11 Jan 2023 09:38:30 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH 09/19] ASoC: amd: ps: add support for Soundwire DMA
- interrupts
-Content-Language: en-US
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
-        vkoul@kernel.org, alsa-devel@alsa-project.org
-Cc:     Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
-        arungopal.kondaveeti@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
+        Wed, 11 Jan 2023 10:40:27 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614CF19C3F;
+        Wed, 11 Jan 2023 07:40:25 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B16AFE0004;
+        Wed, 11 Jan 2023 15:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1673451624;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TJ80tI+n7E12DAvDikBDbLVrg9IXgTxZ252Cq+neEbQ=;
+        b=Q+o9216wXpyzH4Fmo4XE+A/19Rhli449oB8gxh74cMuVSBe7TmgTWv0NVMgETjHj7ICimI
+        2lEldE8luCvEuRzv4wncGEOGkp8+YWnj/gHNVwVIcANGc/i9KFCarw2xI7Zy7ii4mw01BP
+        3yh4Y2Qf6FLQR/pCfsBovsMC1nhClDVRgsfz9BsqGrMm8sPNTEXSy366YeN1nX8+aedw2l
+        5dU2xzoQw9jeYIRqNq8AjlA436V/DgDKdEL+uikobI8yvJhFeEtymQvw2NPhOwbDD2+MwT
+        mU28pFltJe6k53uG/R2oCKCPp6dR2f20BtbgaXKCRweyOUiSP64AKbrgZhfqEA==
+Date:   Wed, 11 Jan 2023 16:40:18 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
- <20230111090222.2016499-10-Vijendar.Mukunda@amd.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230111090222.2016499-10-Vijendar.Mukunda@amd.com>
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 06/10] soc: fsl: qe: Add support for QMC
+Message-ID: <20230111164018.676a8ca1@bootlin.com>
+In-Reply-To: <f46eb64d-ad4c-7531-60b0-68961f171ed8@csgroup.eu>
+References: <20230106163746.439717-1-herve.codina@bootlin.com>
+        <20230106163746.439717-7-herve.codina@bootlin.com>
+        <f46eb64d-ad4c-7531-60b0-68961f171ed8@csgroup.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,60 +74,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christophe,
+On Wed, 11 Jan 2023 13:58:03 +0000
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
+> Le 06/01/2023 =C3=A0 17:37, Herve Codina a =C3=A9crit=C2=A0:
+> > The QMC (QUICC Multichannel Controller) is available on some
+> > PowerQUICC SoC such as the MPC885 or MPC866. =20
+>=20
+> Same, that's QMC for CPM for the time being, should that be made clear=20
+> in the subject ?
 
+Also same answer:
+Will changing the subject be enough or do I need to move it to new
+created drivers/soc/fsl/cpm/ directory ?
 
-> @@ -167,9 +167,11 @@ struct acp63_dev_data {
->  	struct platform_device *pdev[ACP63_DEVS];
->  	struct mutex acp_lock; /* protect shared registers */
->  	struct fwnode_handle *sdw_fw_node;
-> +	struct work_struct acp_sdw_dma_work;
->  	u16 pdev_mask;
->  	u16 pdev_count;
->  	u16 pdm_dev_index;
-> +	u16 dma_intr_stat[ACP63_SDW_MAX_STREAMS];
+>=20
+> QE also has QMC and this driver might be used for QE QMC as well with=20
+> some enhancement, maybe that could be explained here ?
 
-streams and DMAs are different things in SoundWire. You can have a 1:N
-mapping.
+Yes and we plan to have it working on QE too.
 
->  	u8 sdw_master_count;
->  	u16 sdw0_dev_index;
->  	u16 sdw1_dev_index;
-> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
-> index 0fbe5e27f3fb..5b82ee8e3ad8 100644
-> --- a/sound/soc/amd/ps/pci-ps.c
-> +++ b/sound/soc/amd/ps/pci-ps.c
-> @@ -113,14 +113,37 @@ static int acp63_deinit(void __iomem *acp_base, struct device *dev)
->  	return 0;
->  }
->  
-> +static void acp63_sdw_dma_workthread(struct work_struct *work)
-> +{
-> +	struct acp63_dev_data *adata = container_of(work, struct acp63_dev_data,
-> +						    acp_sdw_dma_work);
-> +	struct sdw_dma_dev_data *sdw_dma_data;
-> +	u32 stream_index;
-> +	u16 pdev_index;
-> +
-> +	pdev_index = adata->sdw_dma_dev_index;
-> +	sdw_dma_data = dev_get_drvdata(&adata->pdev[pdev_index]->dev);
-> +
-> +	for (stream_index = 0; stream_index < ACP63_SDW_MAX_STREAMS; stream_index++) {
-> +		if (adata->dma_intr_stat[stream_index]) {
-> +			if (sdw_dma_data->sdw_stream[stream_index])
-> +				snd_pcm_period_elapsed(sdw_dma_data->sdw_stream[stream_index]);
+What do you think if I add the following:
+  The QMC is also available on some Quicc Engine SoC.
+  This current version support CPM1 SoC only. Some
+  enhancement are needed to support Quicc Engine SoC.
 
-is there a reason why you do this in a work thread?
+>=20
+> I see you are using in_be16(), out_be16() etc ....
+> That's specific to powerpc arch, maybe it is better to use ioread16be,=20
+> iowrite16be() etc ....
+> See commit 3f39f38ea91d ("soc: fsl: qe: replace qe_io{read,write}*=20
+> wrappers by generic io{read,write}*") and commit 6ac9b61786cc ("soc:=20
+> fsl: qe: introduce qe_io{read,write}* wrappers") for information.
 
-IIRC we did this in SOF because of an issue where during an xrun a stop
-IPC would be sent while we were dealing with an IPC.
+You're right.
+I will switch to io{read,write}{16,32}be.
 
-I don't quite see why it's needed for a DMA?
+I prefer avoid the use of qe_* wrappers as the driver is not
+(yet) compatible with QE.
 
-What am I missing?
+>=20
+> >=20
+> > It emulates up to 64 channels within one serial controller
+> > using the same TDM physical interface routed from the TSA.
+> >=20
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
+>=20
+> In some places, you comments use the network style, not the generic style.
 
-> +			adata->dma_intr_stat[stream_index] = 0;
-> +		}
-> +	}
-> +}
+I will fix them.
 
+>=20
+> Christophe
+
+Thanks for the review,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
