@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47106664D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 099D06664D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239295AbjAKU02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 15:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
+        id S234950AbjAKU2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 15:28:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235935AbjAKUZf (ORCPT
+        with ESMTP id S239582AbjAKU1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 15:25:35 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A001260C
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:25:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673468734; x=1705004734;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PbKbzo0ebhNuat4Mu85n5Nyk3Ge5hASt79m3RxYgmac=;
-  b=cJGBnAOLXcfKCnhZVlBMpX1MyvB71oCzPIBYYEtMgcGsv3LRaUIphrmr
-   4Haxm7WSZPqa7fkuLyzmkGZ6agVNb0p2M04NJspw19ISjxuXncSZL6iS9
-   Um/5HSrswZW5UUca0oMdp/QkX0CB+XIiWhS+UVqhoSdpA3KNimdOfD3sp
-   TEkfUJ9fhE7iKjRPUz2h7Tc5F9zSerTczhgsgZpur4lM+O8x2QfuyYlHS
-   x3cJPq8nRyo4D6jmsJsdarI1zXGoqx+b8PzXBnN8BQYccivywptou5OHw
-   k/4CUNXgplCdwt2N/oIfbhrpz8tMYOs5dF52GhKRkiapseU/wAAdNucO7
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350755011"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="350755011"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 12:25:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="781518080"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="781518080"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga004.jf.intel.com with ESMTP; 11 Jan 2023 12:25:28 -0800
-From:   kan.liang@linux.intel.com
-To:     joro@8bytes.org, will@kernel.org, baolu.lu@linux.intel.com,
-        dwmw2@infradead.org, robin.murphy@arm.com, robert.moore@intel.com,
-        rafael.j.wysocki@intel.com, lenb@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 7/7] iommu/vt-d: Enable IOMMU perfmon support
-Date:   Wed, 11 Jan 2023 12:25:04 -0800
-Message-Id: <20230111202504.378258-8-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230111202504.378258-1-kan.liang@linux.intel.com>
-References: <20230111202504.378258-1-kan.liang@linux.intel.com>
+        Wed, 11 Jan 2023 15:27:49 -0500
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1923F125;
+        Wed, 11 Jan 2023 12:26:41 -0800 (PST)
+Received: by mail-ot1-f42.google.com with SMTP id p17-20020a9d6951000000b00678306ceb94so9475690oto.5;
+        Wed, 11 Jan 2023 12:26:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GtUlkPBnTibbizf/H3Nw9CiF2dvWYJd3fBoMYMkkY6o=;
+        b=eJZXtNG9fmL2IgALzepTbFMLTTId2h7zcZC+568o4WnNFQB/oDtx8qM78sBA8vXrbs
+         DZhYBH1Fjs+Z+8cD19DDpZiAhjPdV+WIKlynHnXSMcYhrLS2p4DGt9VbtFgXSHqPaGW/
+         7zylxPZb0sZt2D9qFvkA+IbiC+tczsxS3iAF8oFSELq3hLbI86SYDetDGk0k0bNkDuYQ
+         BwbVvoYPRShaGEqNXBrHB+ITFenniAd0xDe/OlavEJXl8UYCQrmQFcp1FjUJwg3/9kgF
+         /LtUID0TMjVKdJDrw7M4hDMR2m+2dfdDIYViLdGKxNJjRpvjOCBLYnMqnbFI9oSdZogT
+         05OA==
+X-Gm-Message-State: AFqh2kqR13EbrVvKG7ZaPqNpruw5QUVkukuEskS8n0rE615yidCX8HBD
+        xqhA5mZxQo1kbV36Xc8Hlw==
+X-Google-Smtp-Source: AMrXdXvk+/Ain/i5yL9ul+PeQV5I/RK3qfqLYNdxxu4RWqGzhh535t4/xZ1jsbIuH7DIsftuVkCLfA==
+X-Received: by 2002:a9d:7e8a:0:b0:670:9684:404c with SMTP id m10-20020a9d7e8a000000b006709684404cmr42684143otp.28.1673468801076;
+        Wed, 11 Jan 2023 12:26:41 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v26-20020a9d605a000000b0066eab2ec808sm8077274otj.1.2023.01.11.12.26.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 12:26:40 -0800 (PST)
+Received: (nullmailer pid 1362478 invoked by uid 1000);
+        Wed, 11 Jan 2023 20:26:39 -0000
+Date:   Wed, 11 Jan 2023 14:26:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Xu Liang <lxu@maxlinear.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 2/4] dt-bindings: net: phy: add MaxLinear
+ GPY2xx bindings
+Message-ID: <20230111202639.GA1236027-robh@kernel.org>
+References: <20230109123013.3094144-1-michael@walle.cc>
+ <20230109123013.3094144-3-michael@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109123013.3094144-3-michael@walle.cc>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Mon, Jan 09, 2023 at 01:30:11PM +0100, Michael Walle wrote:
+> Add the device tree bindings for the MaxLinear GPY2xx PHYs, which
+> essentially adds just one flag: maxlinear,use-broken-interrupts.
+> 
+> One might argue, that if interrupts are broken, just don't use
+> the interrupt property in the first place. But it needs to be more
+> nuanced. First, this interrupt line is also used to wake up systems by
+> WoL, which has nothing to do with the (broken) PHY interrupt handling.
 
-Register and enable an IOMMU perfmon for each active IOMMU device.
+I don't understand how this is useful. If the interrupt line is asserted 
+after the 1st interrupt, how is it ever deasserted later on to be 
+useful. 
 
-The failure of IOMMU perfmon registration doesn't impact other
-functionalities of an IOMMU device.
+In any case, you could use 'wakeup-source' if that's the functionality 
+you need. Then just ignore the interrupt if 'wakeup-source' is not 
+present.
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- drivers/iommu/intel/dmar.c  | 3 +++
- drivers/iommu/intel/iommu.c | 3 +++
- 2 files changed, 6 insertions(+)
+> Second and more importantly, there are devicetrees which have this
+> property set. Thus, within the driver we have to switch off interrupt
+> handling by default as a workaround. But OTOH, a systems designer who
+> knows the hardware and knows there are no shared interrupts for example,
+> can use this new property as a hint to the driver that it can enable the
+> interrupt nonetheless.
 
-diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-index 94e314320cd9..5a33df9e19ce 100644
---- a/drivers/iommu/intel/dmar.c
-+++ b/drivers/iommu/intel/dmar.c
-@@ -1152,6 +1152,8 @@ static int alloc_iommu(struct dmar_drhd_unit *drhd)
- 		err = iommu_device_register(&iommu->iommu, &intel_iommu_ops, NULL);
- 		if (err)
- 			goto err_sysfs;
-+
-+		iommu_pmu_register(iommu);
- 	}
- 
- 	drhd->iommu = iommu;
-@@ -1174,6 +1176,7 @@ static int alloc_iommu(struct dmar_drhd_unit *drhd)
- static void free_iommu(struct intel_iommu *iommu)
- {
- 	if (intel_iommu_enabled && !iommu->drhd->ignored) {
-+		iommu_pmu_unregister(iommu);
- 		iommu_device_unregister(&iommu->iommu);
- 		iommu_device_sysfs_remove(&iommu->iommu);
- 	}
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 59df7e42fd53..c57e60c5f353 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -30,6 +30,7 @@
- #include "../iommu-sva.h"
- #include "pasid.h"
- #include "cap_audit.h"
-+#include "perfmon.h"
- 
- #define ROOT_SIZE		VTD_PAGE_SIZE
- #define CONTEXT_SIZE		VTD_PAGE_SIZE
-@@ -4013,6 +4014,8 @@ int __init intel_iommu_init(void)
- 				       intel_iommu_groups,
- 				       "%s", iommu->name);
- 		iommu_device_register(&iommu->iommu, &intel_iommu_ops, NULL);
-+
-+		iommu_pmu_register(iommu);
- 	}
- 	up_read(&dmar_global_lock);
- 
--- 
-2.35.1
+Pretty sure I said this already, but this schema has no effect. Add an 
+extra property to the example and see. No error despite your 
+'unevaluatedProperties: false'. Or drop 'interrupts-extended' and no 
+dependency error... 
 
+You won't get errors as there's no defined way to decide when to apply 
+this because it is based on node name or compatible unless you do a 
+custom select, but I don't see what you would key off of here...
+
+The real answer here is add a compatible. But I'm tired of pointing this 
+out to the networking maintainers every damn time. Ethernet PHYs are not 
+special.
+
+Rob
