@@ -2,103 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FCE665986
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3BB665988
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235918AbjAKKzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 05:55:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38550 "EHLO
+        id S235627AbjAKKzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 05:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238357AbjAKKzA (ORCPT
+        with ESMTP id S238698AbjAKKzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 05:55:00 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6CB13CCD
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 02:54:54 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id t5so10211073wrq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 02:54:54 -0800 (PST)
+        Wed, 11 Jan 2023 05:55:40 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1690814D3B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 02:55:37 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v2so3620856wrw.10
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 02:55:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qxXCKDUAt/ugcAI+DZvfbg7KmtNeD6xEZbvZei/U3jk=;
-        b=ZnyU31aea6paHgmN2eO8Gaa49x7lbvnUYI68q4UT7GGgiNscqXdTBV8BR2uqomF1kK
-         jEAkiRija+iN0XCvjX1DzxlQxidrlogU0V82kJpFdjZL4NRWtucFKjjbEt6XjUIGok0v
-         9zSS78JwELt1ODZfnOKDcTIintqN5sgxCrxxc8YHQM2ApB4DiZWCgZAf32vJIW00GTZo
-         DRVA/vzj9bNG8XAKQpj42Gn1x+/zVU2vKLfiG2wPCnWzj1BKeSRc7ThYsgBmd/GTrti3
-         pwhsijKz/J4xcT4wPYlqZkzUkOXL3BRwcoy7IEcN6xwZxXfF07nllDmq9H2kB4BZ3dWP
-         zGDw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0RJ2+vogMYyR5gnsFMlmW8P3w570KHe4FHmJ4WhU0lY=;
+        b=ebytURdaLisFy7tdkqeP9h4y5Fd8Ob225F/H01t3xyp8EwFXrw1ePzDp//JwMGYDAK
+         jn/cF61XwU6t0xtsseay7ehswcgL/CAQBuTBcyL/POuNB5TsBpZgptgrzfMwm7Z0RBfd
+         oaSgLPQcN3QR+S9Dn8Sm4KqWXCkL4YjX9kEJ787cOvyQj40PQ58Q8zGZyI9NlzhF6wUm
+         gO9sXXc4zgDoggtSUspFE9A24/puATNrldUHCdb9U2aPMnVYCN2bPxz+tGf41QPFDYwA
+         ceo04CvCszIZghdxkIsbaah4vzjxXE4dspIA9NWUMRjuxEZz4JfiwvHIj2FZzQM1XdvT
+         dYaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qxXCKDUAt/ugcAI+DZvfbg7KmtNeD6xEZbvZei/U3jk=;
-        b=x3astr9OgixYQjYjCwvEkrcJjtNAUwae9v0KW8s9knls+ZaD9rASg66PwDnZmXKoKp
-         dtrLzAkDSR0Dj/hOHvxFCSmkbM3ywhBsMshs+2k+Sn1Gx2W6Ho7ZkCd2Q2Z5l8ydjE5W
-         KTid0n4ZIm2WoYqn4yHBGS2C84qwNwe79CRa/cwN3olgZROQl6wmVC6uiJPW0glkQtHG
-         DeRC3/810/MDy6dQCBIZDPCQCr7gJRymsQzRHhI3ZLUSx75i2Qw4QHPYOzzwAclhHCIz
-         oWKTIEi2sLaxGXLmZSZj8uba2i8vYJifqVaNYNRMHjxzmwNf2B9qCZz0223YXp+jzaUm
-         7Abg==
-X-Gm-Message-State: AFqh2krlwQqe0zpWHrCTKX8Z5qzk9MCsnU6zbK0Ajrxu6fboTcn+N4mX
-        odP5CN/VqnN3oHS7J+d+tsjU6g==
-X-Google-Smtp-Source: AMrXdXutjzfc1dfaq5oIChJut1HAaxFO7LgX1Tqk7Ft2shkRwozE89CPD30ksu8qcUs5DaOGZ6o+dw==
-X-Received: by 2002:a5d:5346:0:b0:2bd:c499:8f7 with SMTP id t6-20020a5d5346000000b002bdc49908f7mr988897wrv.27.1673434493289;
-        Wed, 11 Jan 2023 02:54:53 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l13-20020adfe58d000000b00296730b5c3esm13557067wrm.102.2023.01.11.02.54.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 02:54:52 -0800 (PST)
-Message-ID: <69b95d48-381f-3443-1124-679657bc9b88@linaro.org>
-Date:   Wed, 11 Jan 2023 11:54:50 +0100
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0RJ2+vogMYyR5gnsFMlmW8P3w570KHe4FHmJ4WhU0lY=;
+        b=XP60J/3iGyH/QbwU6ef8Qxdaau7eB5zyJKgoUz27Ockc7IQz66SALenDHCqHsOsvZU
+         ryIRarRLRX3yNn7Bs4aIBjds1hCJbgIs/e2jts+SKUsYmzmAtjOhqTpOEYfZjH0Ivx6B
+         4GG/QcIH5noSNqEgYNZpSt8TjiE8zZH5fybJ8+zfqhT6B4r3qT07RpbHsIBfWXYOEemT
+         UlcmVLEhmlRY92qr5Rng7D6zKTTnX8EaNxizCvoFSkEs9xeIVMx+RN5hlCNRH8HU6d6V
+         eTb3jXvNuF6vzHsddCAJwLXSpuyQUKCCWvlwNe2I/xnGhzcn+JttA3cjGGVdSNS+8KfO
+         enUw==
+X-Gm-Message-State: AFqh2kqIDtnr1qef/O6aqgGHQvmqeVE60GiKgZguABxu6Cmq3IY0Bhji
+        F9I/kg9Z8Q81wbiPV6E3eV0J6sWRaLtQoVd979Y=
+X-Google-Smtp-Source: AMrXdXtMH9OIs2BHiguISvZu18YcEHRP7vSmCjAWLjIUATaoU6E2bS5S633k3a5/Jx+6+EaK4sNeJ09skRVEpAEYzJc=
+X-Received: by 2002:a5d:6e04:0:b0:2a3:52d2:a448 with SMTP id
+ h4-20020a5d6e04000000b002a352d2a448mr563232wrz.561.1673434536383; Wed, 11 Jan
+ 2023 02:55:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v18 2/3] dt-bindings: memory-controllers: nuvoton: Add
- NPCM memory controller
-Content-Language: en-US
-To:     Marvin Lin <milkfafa@gmail.com>, robh+dt@kernel.org, bp@alien8.de,
-        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-        rric@kernel.org, benjaminfair@google.com, yuenn@google.com,
-        venture@google.com, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        KWLIU@nuvoton.com, YSCHU@nuvoton.com, ctcchien@nuvoton.com,
-        kflin@nuvoton.com, Rob Herring <robh@kernel.org>
-References: <20230111093245.318745-1-milkfafa@gmail.com>
- <20230111093245.318745-3-milkfafa@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230111093245.318745-3-milkfafa@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6000:1866:b0:284:3108:9c92 with HTTP; Wed, 11 Jan 2023
+ 02:55:35 -0800 (PST)
+Reply-To: stefanopessia755@hotmail.com
+From:   Stefano pessina <bnymutuku770@gmail.com>
+Date:   Wed, 11 Jan 2023 13:55:35 +0300
+Message-ID: <CAEfCVcga_32=3hHvfYBxcYjO8BWRr5asFtrd-=3VdgfijLe=tQ@mail.gmail.com>
+Subject: =?UTF-8?B?ZG9uYcibaWUgw65uIG51bWVyYXI=?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2023 10:32, Marvin Lin wrote:
-> Add dt-bindings document for Nuvoton NPCM memory controller.
-> 
-> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../nuvoton,npcm-memory-controller.yaml       | 50 +++++++++++++++++++
->  1 file changed, 50 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-memory-controller.yaml
-
-I assume this can go with the driver via EDAC tree. Otherwise let me
-know if I should take it via memory-controllers:
+--=20
+Suma de 500.000,00 =E2=82=AC v-a fost donat=C4=83 de STEFANO PESSINA. V=C4=
+=83 rug=C4=83m s=C4=83
+reveni=C8=9Bi pentru mai multe informa=C8=9Bii prin stefanopessia755@hotmai=
+l.com
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
 
+
+The sum of =E2=82=AC500,000.00 has been donated to you by STEFANO PESSINA.
+Kindly get back for more info via stefanopessia755@hotmail.com
