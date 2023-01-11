@@ -2,151 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79246663C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6CC6663C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbjAKT3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 14:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
+        id S231712AbjAKTaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 14:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjAKT3Q (ORCPT
+        with ESMTP id S230197AbjAKTaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 14:29:16 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AF3D13D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:29:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=rqQeN6/Cf2+K34wArxyBVjlOUTyvbg/yFM9wo9L2e7A=; b=Q37HqO2OEhjXwom3iUv42CdBtQ
-        kT+I3ekN5ia/t9fxn3IJkksvFC2dFuelL3D3p5YJKRFAxj9xOD4V6AblrKdmIYaOpePcwnXftwPnJ
-        rV003SHib5i+QwcgHpVQlsVtqcTkApc+WBsmxLYQn4Xse3XqLNDfphxzGOFNI6Y7b6y22jiI/5NoE
-        QTd5Uq8H1wzSbX6sQJOgnhigCvHG6me7wqKoFWxlFhGztCATEYpyRoMTjy6iDfpPJKvWIQ3tjk5F9
-        C8i64nuxx9Zzc4eC4CE5u/ZpfoeWnm1I1Wqx7RwRSI83xFphFInPT4dewoNeSgzr2BRlmRFVCPqU/
-        9rd94PnQ==;
-Received: from [2601:1c2:d80:3110::9307]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pFgmf-00Cjq7-7C; Wed, 11 Jan 2023 19:29:13 +0000
-Message-ID: <baf03556-718b-ea50-db48-04819a9cb094@infradead.org>
-Date:   Wed, 11 Jan 2023 11:29:12 -0800
+        Wed, 11 Jan 2023 14:30:52 -0500
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7DFD13D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:30:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1673465447;
+        bh=P5o+X5w9OffEjvSaI+GOzWtEzWbMVtkRV9QeB10s/Uo=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=BYdzV5aGrS2mDWushzIiZHeGklmS+cyaMUOmgCWDDprghvolkS7hL3SxkQfQX0Hyj
+         9AQh1Wja5Oez71znxfEf9bgyIcJWIteRHxBFPAJ7lBAqji9a8Yt2x6UzSMaVLTCZV3
+         Y9rWPBK8qbWVQAfo3B3g2OjSGPRKLl1duFIfsFbRUJMgh7wlDtJXyVHPyTFi4FDUWW
+         XxIA8aXRWf+eSeJJrsKCw4b2NL5jGDpwFVmSuUid7L4mJoXcAdJ/4gF1+2txXhZ8d/
+         ACiXvcvbA1PVFeyOqffnZZMaRn8hpbGitZF+u+T6HGPuR4I9NEPyOmjHIdcHLPvlrA
+         jYclhyVaj2BYA==
+Received: from [172.16.0.101] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Nsd7q5WfrzgJM;
+        Wed, 11 Jan 2023 14:30:47 -0500 (EST)
+Message-ID: <ee304052-5731-4ae6-8f7b-69d0bd1e6c77@efficios.com>
+Date:   Wed, 11 Jan 2023 14:31:21 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 1/2] driver core: bus.h: document bus notifiers better
+ Thunderbird/102.6.0
+Subject: Re: rseq CPU ID not correct on 6.0 kernels for pinned threads
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        libc-alpha@sourceware.org
+References: <87lem9cnxr.fsf@oldenburg.str.redhat.com>
+ <8b52b0d6-c973-f959-b44a-1b54fb808a04@efficios.com>
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <20230111092331.3946745-1-gregkh@linuxfoundation.org>
- <CAJZ5v0hOOeGBKiOpnsQSm=CKum-JEASmygKXrU76WK7gynVdKw@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAJZ5v0hOOeGBKiOpnsQSm=CKum-JEASmygKXrU76WK7gynVdKw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8b52b0d6-c973-f959-b44a-1b54fb808a04@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/11/23 01:54, Rafael J. Wysocki wrote:
-> On Wed, Jan 11, 2023 at 10:23 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
+On 2023-01-11 09:52, Mathieu Desnoyers wrote:
+> On 2023-01-11 06:26, Florian Weimer wrote:
+>> The glibc test suite contains a test that verifies that sched_getcpu
+>> returns the expected CPU number for a thread that is pinned (via
+>> sched_setaffinity) to a specific CPU.  There are other threads running
+>> which attempt to de-schedule the pinned thread from its CPU.  I believe
+>> the test is correctly doing what it is expected to do; it is invalid
+>> only if one believes that it is okay for the kernel to disregard the
+>> affinity mask for scheduling decisions.
 >>
->> The bus notifier values are not documented all that well, so clean this
->> up and make a real enumerated type for them and document them much
->> better.  When doing this, remove the hex values and just rely on the
->> enumerated type instead as that is all that is needed.
+>> These days, we use the cpu_id rseq field as the return value of
+>> sched_getcpu if the kernel has rseq support (which it has in these
+>> cases).
 >>
->> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
->> Cc: Randy Dunlap <rdunlap@infradead.org>
+>> This test has started failing sporadically for us, some time around
+>> kernel 6.0.  I see failure occasionally on a Fedora builder, it runs:
+>>
+>> Linux buildvm-x86-26.iad2.fedoraproject.org 6.0.15-300.fc37.x86_64 #1 
+>> SMP PREEMPT_DYNAMIC Wed Dec 21 18:33:23 UTC 2022 x86_64 x86_64 x86_64 
+>> GNU/Linux
+>>
+>> I think I've seen it on the x86-64 builder only, but that might just be
+>> an accident.
+>>
+>> The failing tests log this output:
+>>
+>> =====FAIL: nptl/tst-thread-affinity-pthread.out=====
+>> info: Detected CPU set size (in bits): 64
+>> info: Maximum test CPU: 5
+>> error: Pinned thread 1 ran on impossible cpu 0
+>> error: Pinned thread 0 ran on impossible cpu 0
+>> info: Main thread ran on 4 CPU(s) of 6 available CPU(s)
+>> info: Other threads ran on 6 CPU(s)
+>> =====FAIL: nptl/tst-thread-affinity-pthread2.out=====
+>> info: Detected CPU set size (in bits): 64
+>> info: Maximum test CPU: 5
+>> error: Pinned thread 1 ran on impossible cpu 1
+>> error: Pinned thread 2 ran on impossible cpu 0
+>> error: Pinned thread 3 ran on impossible cpu 3
+>> info: Main thread ran on 5 CPU(s) of 6 available CPU(s)
+>> info: Other threads ran on 6 CPU(s)
+>>
+>> But I also encountered one local failure, but it is rare.  Maybe it's
+>> load-related.  There shouldn't be any CPU unplug or anything like that
+>> involved here.
+>>
+>> I am not entirely sure if something is changing CPU affinities from
+>> outside the process (which would be quite wrong, but not a kernel bug).
+>> But in the past, our glibc test has detected real rseq cpu_id
+>> brokenness, so I'm leaning towards that as the cause this time, too.
 > 
-> I would add a Co-developed-by for Randy along with his sign-off (which
-> was given IIRC).
-
-or
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Either way; doesn't matter.
-
-> Anyway
+> It can be caused by rseq failing to update the cpu number field on 
+> return to userspace. Tthis could be validated by printing the regular 
+> getcpu vdso value and/or the value returned by the getcpu system call 
+> when the error is triggered, and see whether it matches the rseq cpu id 
+> value.
 > 
-> Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+> It can also be caused by scheduler failure to take the affinity into
+> account.
 > 
->> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> ---
->> v3: - fix up the documentation to be proper kernel-doc format thanks to
->>       Randy.
->>     - Remove the values entirely now that this is an enumerated type,
->>       they are not needed.
+> As you also point out, it can also be caused by some other task
+> modifying the affinity of your task concurrently. You could print
+> the result of sched_getaffinity on error to get a better idea of
+> the expected vs actual mask.
+> 
+> Lastly, it could be caused by CPU hotplug which would set all bits
+> in the affinity mask as a fallback. As you mention it should not be
+> the cause there.
+> 
+> Can you share your kernel configuration ?
+
+Also, can you provide more information about the cpufreq driver and 
+governor used in your system ? e.g. output of
+
+cpupower frequency-info
+
+and also output of
+
+sysctl kernel.sched_energy_aware
+
+Is this on a physical machine or in a virtual machine ?
+
+Thanks,
+
+Mathieu
+
+> 
+> Thanks,
+> 
+> Mathieu
+> 
 >>
->> v2: - move the values to decimal from hex as pointed out by Rafael.
+>> Thanks,
+>> Florian
 >>
->>  include/linux/device/bus.h | 42 +++++++++++++++++++++++++-------------
->>  1 file changed, 28 insertions(+), 14 deletions(-)
->>
->> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
->> index d529f644e92b..7b4a48b5159b 100644
->> --- a/include/linux/device/bus.h
->> +++ b/include/linux/device/bus.h
->> @@ -257,21 +257,35 @@ extern int bus_register_notifier(struct bus_type *bus,
->>  extern int bus_unregister_notifier(struct bus_type *bus,
->>                                    struct notifier_block *nb);
->>
->> -/* All 4 notifers below get called with the target struct device *
->> - * as an argument. Note that those functions are likely to be called
->> - * with the device lock held in the core, so be careful.
->> +/**
->> + * enum bus_notifier_event - Bus Notifier events that have happened
->> + * @BUS_NOTIFY_ADD_DEVICE: device is added to this bus
->> + * @BUS_NOTIFY_DEL_DEVICE: device is about to be removed from this bus
->> + * @BUS_NOTIFY_REMOVED_DEVICE: device is successfully removed from this bus
->> + * @BUS_NOTIFY_BIND_DRIVER: a driver is about to be bound to this device on this bus
->> + * @BUS_NOTIFY_BOUND_DRIVER: a driver is successfully bound to this device on this bus
->> + * @BUS_NOTIFY_UNBIND_DRIVER: a driver is about to be unbound from this device on this bus
->> + * @BUS_NOTIFY_UNBOUND_DRIVER: a driver is successfully unbound from this device on this bus
->> + * @BUS_NOTIFY_DRIVER_NOT_BOUND: a driver failed to be bound to this device on this bus
->> + *
->> + * These are the value passed to a bus notifier when a specific event happens.
->> + *
->> + * Note that bus notifiers are likely to be called with the device lock already
->> + * held by the driver core, so be careful in any notifier callback as to what
->> + * you do with the device structure.
->> + *
->> + * All bus notifiers are called with the target struct device * as an argument.
->>   */
->> -#define BUS_NOTIFY_ADD_DEVICE          0x00000001 /* device added */
->> -#define BUS_NOTIFY_DEL_DEVICE          0x00000002 /* device to be removed */
->> -#define BUS_NOTIFY_REMOVED_DEVICE      0x00000003 /* device removed */
->> -#define BUS_NOTIFY_BIND_DRIVER         0x00000004 /* driver about to be
->> -                                                     bound */
->> -#define BUS_NOTIFY_BOUND_DRIVER                0x00000005 /* driver bound to device */
->> -#define BUS_NOTIFY_UNBIND_DRIVER       0x00000006 /* driver about to be
->> -                                                     unbound */
->> -#define BUS_NOTIFY_UNBOUND_DRIVER      0x00000007 /* driver is unbound
->> -                                                     from the device */
->> -#define BUS_NOTIFY_DRIVER_NOT_BOUND    0x00000008 /* driver fails to be bound */
->> +enum bus_notifier_event {
->> +       BUS_NOTIFY_ADD_DEVICE,
->> +       BUS_NOTIFY_DEL_DEVICE,
->> +       BUS_NOTIFY_REMOVED_DEVICE,
->> +       BUS_NOTIFY_BIND_DRIVER,
->> +       BUS_NOTIFY_BOUND_DRIVER,
->> +       BUS_NOTIFY_UNBIND_DRIVER,
->> +       BUS_NOTIFY_UNBOUND_DRIVER,
->> +       BUS_NOTIFY_DRIVER_NOT_BOUND,
->> +};
->>
->>  extern struct kset *bus_get_kset(struct bus_type *bus);
->>
->> --
->> 2.39.0
->>
+> 
 
 -- 
-~Randy
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
