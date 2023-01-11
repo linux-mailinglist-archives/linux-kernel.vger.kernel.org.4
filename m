@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4FD6661F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 009E96661F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235322AbjAKRbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:31:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        id S230477AbjAKRbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239669AbjAKR2s (ORCPT
+        with ESMTP id S239755AbjAKR25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:28:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CAB3AA9A;
-        Wed, 11 Jan 2023 09:25:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A715461DA8;
-        Wed, 11 Jan 2023 17:25:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D301C433F0;
-        Wed, 11 Jan 2023 17:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673457902;
-        bh=DVZXWm+6uZXTGUquageewQdNitAS0dZ/Rv0HUi2X+jA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DPY8nHsUYUyB1FMkKMK5P8AKgMQ9KX2B6f247PvJ+riiRDiQoqC/5OzHrzDJ/Vl1P
-         1UCrywVZq6EVIa8yMp/Du7Rec5ZCul8/WdqXUQfJm37zgP/MNHnH93azniNI3/rVXx
-         JKKKrg/yVcOa+w+hxVOEuMn84V+9VByHs+tKbf+o5cVdHYnFE0tlH2u0Ijl9t9Vj0s
-         9m7y2y55yRrNes8naqVEoTmKvUBBRJVkmIzPCN1k/cZTmMONERW9vmSYAW07lKNVS3
-         Wdg41E/mJeGERYO6QM58xc3RtY0Z4fSp909QhAK3H+x5ZZ0xLItWwz4oxSB4nDhied
-         fWU9/PViL4aPg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pFeqT-00045s-AT; Wed, 11 Jan 2023 18:25:02 +0100
-Date:   Wed, 11 Jan 2023 18:25:01 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Samuel Iglesias =?utf-8?Q?Gons=C3=A1lvez?= 
-        <siglesias@igalia.com>, Rodolfo Giometti <giometti@enneenne.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v3 06/13] tty: Convert ->carrier_raised() and callchains
- to bool
-Message-ID: <Y77w7aUX4f/f6kFV@hovoldconsulting.com>
-References: <20230111142331.34518-1-ilpo.jarvinen@linux.intel.com>
- <20230111142331.34518-7-ilpo.jarvinen@linux.intel.com>
+        Wed, 11 Jan 2023 12:28:57 -0500
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623153E869
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:25:18 -0800 (PST)
+Received: by mail-oo1-xc31.google.com with SMTP id d16-20020a4a5210000000b004f23d1aea58so436847oob.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:25:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lDHX0didgEx7NNXd2mrLuD7KLRze3bUT5PfKEBhLQbk=;
+        b=GEMbsofdELSoxX5S302sWGhE26vk8y2/1xI+xpXiA51vd2F80yKKK+QTEvts5z91n6
+         nrhMzwwNCgHN3c0dG6KJpNgDp4A558eZRvHS64j0gF6vCdtzjevCrIHOpt94/rdfCltQ
+         0dyzaHqgc57iyUC3Rpc6KJZ9ad746SsOYehZA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lDHX0didgEx7NNXd2mrLuD7KLRze3bUT5PfKEBhLQbk=;
+        b=cPvnzikWuyZC/Sz7j+rEd53XanmcUU31MUwMStwAFaTcxHSzF3QsL03eEI5MHkkWGy
+         KgQE1SAcWUd0T6IJYIxAdpEJII5JqYIiAzAKQuOaD2rDruHgKov8qOZXfAXXlQ7LNodF
+         /4JSlbvCfryCV8ZTSuQu0SWaMBfCuJ4KK4hG0WM9AzbM00Q2Rx7eEbl6OkBh9Q3/k4Ko
+         1tgh41smfYGLNGXvEQqBNrBG997z1KXZ4JbTBwoMNhSFHdgOxIvGbv8ox5+fOPeX4VC7
+         R7+Yay3yfSZMhWX/pk53oKKXJWe3qQlH5ctkpOx/AxbVSOoYkSI80X4yYW/AUco2IdMl
+         D21g==
+X-Gm-Message-State: AFqh2krHT1H7jm0eS7VKRovaE49XeZuBaTUMETOhxETBGur3/xy6Vqrl
+        yjUIY0uBLSzzj/DFuAcRwJJ//g==
+X-Google-Smtp-Source: AMrXdXsHjOAqQ65hK+eAjJM3izvsckhP1hCa26zI2DqF0gCiZsLYEJNJMw/d/RVb5QVSgXxHfpkY2w==
+X-Received: by 2002:a4a:ac88:0:b0:4a3:b889:4c21 with SMTP id b8-20020a4aac88000000b004a3b8894c21mr35113344oon.0.1673457917580;
+        Wed, 11 Jan 2023 09:25:17 -0800 (PST)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id j7-20020a4adf47000000b004a5a69c1861sm2689702oou.22.2023.01.11.09.25.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 09:25:17 -0800 (PST)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Wed, 11 Jan 2023 11:25:15 -0600
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 000/148] 6.0.19-rc1 review
+Message-ID: <Y77w+5mqOR+n5G9K@fedora64.linuxtx.org>
+References: <20230110180017.145591678@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230111142331.34518-7-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230110180017.145591678@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 04:23:24PM +0200, Ilpo Järvinen wrote:
-> Return boolean from ->carrier_raised() instead of 0 and 1. Make the
-> return type change also to tty_port_carrier_raised() that makes the
-> ->carrier_raised() call (+ cd variable in moxa into which its return
-> value is stored).
+On Tue, Jan 10, 2023 at 07:01:44PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.19 release.
+> There are 148 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Also cleans up a few unnecessary constructs related to this change:
+> NOTE, this will probably be the LAST 6.0.y release.  If there is
+> anything preventing you from moving to 6.1.y right now, please let me
+> know.
 > 
-> 	return xx ? 1 : 0;
-> 	-> return xx;
+> Responses should be made by Thu, 12 Jan 2023 17:59:42 +0000.
+> Anything received after that time might be too late.
 > 
-> 	if (xx)
-> 		return 1;
-> 	return 0;
-> 	-> return xx;
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.19-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
 > 
-> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/char/pcmcia/synclink_cs.c | 8 +++-----
->  drivers/mmc/core/sdio_uart.c      | 7 +++----
->  drivers/tty/amiserial.c           | 2 +-
->  drivers/tty/moxa.c                | 4 ++--
->  drivers/tty/mxser.c               | 5 +++--
->  drivers/tty/n_gsm.c               | 8 ++++----
->  drivers/tty/serial/serial_core.c  | 9 ++++-----
->  drivers/tty/synclink_gt.c         | 7 ++++---
->  drivers/tty/tty_port.c            | 4 ++--
->  drivers/usb/serial/ch341.c        | 7 +++----
->  drivers/usb/serial/f81232.c       | 6 ++----
->  drivers/usb/serial/pl2303.c       | 7 ++-----
->  drivers/usb/serial/spcp8x5.c      | 7 ++-----
->  drivers/usb/serial/usb-serial.c   | 4 ++--
->  include/linux/tty_port.h          | 6 +++---
->  include/linux/usb/serial.h        | 2 +-
->  net/bluetooth/rfcomm/tty.c        | 2 +-
->  17 files changed, 42 insertions(+), 53 deletions(-)
+> thanks,
+> 
+> greg k-h
 
-Same here, please split out the USB serial changes except for the
-actual tty-port op change in usb-serial.c.
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-You can submit a follow-up series for USB serial as those changes are
-otherwise unrelated to the changed tty-port interface.
-
-Johan
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
