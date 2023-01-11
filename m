@@ -2,128 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8202666069
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2E066606E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbjAKQ1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
+        id S238450AbjAKQ2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239576AbjAKQ0d (ORCPT
+        with ESMTP id S234899AbjAKQ1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:26:33 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703BF3AB14
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:23:56 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 0B25C220DC;
-        Wed, 11 Jan 2023 16:23:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673454235; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 11 Jan 2023 11:27:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424AF1DF0D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:25:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673454304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=B1LPsn+UgdaSd6bRvRcaJ0uMddyjKGSwwy0jj+RkHME=;
-        b=OpC/m2rfxOdfKE4y4JwM7fpNTjhU7kUuXTiO73um24Md9qZ32k8qAkPaufEQk7g2rH+9rT
-        4wDatTjmcaKLRYlGXrMrWkeJmzHTBw43K92JPJqNeec+/A20z3cGhuHIzYbvJPqDXE+g5F
-        4FhLEYBzFmJiohJRAZw4SWvsgd7LI2k=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        bh=KxBHdaiEAq2LsScflLkdFvYTtC4L7dZmM1H1mv+PG5k=;
+        b=e1JDZ0zvEiYtJxd2PNBpRoRX36SRgcMaaqPaNLqj1MoyTf8S8BKeIZ9rijqtDQVC2ixkA7
+        /cZ9sWFwdgXl7iEY+hGHwYjqR3ZmH8EtGGkKHaT84YOLfTw5BZU9NqTNdfF8M+z+CNQHLk
+        EDItKr2obskEdoW22cZg5bcWQQ0fxU8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-5-86uM21hhPZONYQ_5UmZHIw-1; Wed, 11 Jan 2023 11:25:03 -0500
+X-MC-Unique: 86uM21hhPZONYQ_5UmZHIw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6D86A2C142;
-        Wed, 11 Jan 2023 16:23:54 +0000 (UTC)
-Date:   Wed, 11 Jan 2023 17:23:54 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: Re: [PATCH] tty: serial: kgdboc: fix mutex locking order for
- configure_kgdboc()
-Message-ID: <Y77imoYMaZZZz28x@alley>
-References: <20230111145110.1327831-1-john.ogness@linutronix.de>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E8373C0F22C;
+        Wed, 11 Jan 2023 16:25:02 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 626DE40C1060;
+        Wed, 11 Jan 2023 16:25:00 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <2431994.1673453386@warthog.procyon.org.uk>
+References: <2431994.1673453386@warthog.procyon.org.uk> <20221226103309.953112-3-houtao@huaweicloud.com> <20221226103309.953112-1-houtao@huaweicloud.com>
+Cc:     dhowells@redhat.com, Hou Tao <houtao@huaweicloud.com>,
+        linux-cachefs@redhat.com, Jeff Layton <jlayton@kernel.org>,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Jingbo Xu <jefflexu@linux.alibaba.com>, houtao1@huawei.com
+Subject: Re: [PATCH v2 2/2] fscache: Add the missing smp_mb__after_atomic() before wake_up_bit()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111145110.1327831-1-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2432455.1673454299.1@warthog.procyon.org.uk>
+Date:   Wed, 11 Jan 2023 16:24:59 +0000
+Message-ID: <2432456.1673454299@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2023-01-11 15:57:10, John Ogness wrote:
-> Several mutexes are taken while setting up console serial ports. In
-> particular, the tty_port->mutex and @console_mutex are taken:
-> 
->   serial_pnp_probe
->     serial8250_register_8250_port
->       uart_add_one_port (locks tty_port->mutex)
->         uart_configure_port
->           register_console (locks @console_mutex)
-> 
-> In order to synchronize kgdb's tty_find_polling_driver() with
-> register_console(), commit 6193bc90849a ("tty: serial: kgdboc:
-> synchronize tty_find_polling_driver() and register_console()") takes
-> the @console_mutex. However, this leads to the following call chain
-> (with locking):
-> 
->   platform_probe
->     kgdboc_probe
->       configure_kgdboc (locks @console_mutex)
->         tty_find_polling_driver
->           uart_poll_init (locks tty_port->mutex)
->             uart_set_options
-> 
-> This is clearly deadlock potential due to the reverse lock ordering.
+David Howells <dhowells@redhat.com> wrote:
 
-Great catch!
-
-> Since uart_set_options() requires holding @console_mutex in order to
-> serialize early initialization of the serial-console lock, take the
-> @console_mutex in uart_poll_init() instead of configure_kgdboc().
+> What two values are you ordering?
 > 
-> Since configure_kgdboc() was using @console_mutex for safe traversal
-> of the console list, change it to use the SRCU iterator instead.
-> 
-> Add comments to uart_set_options() kerneldoc mentioning that it
-> requires holding @console_mutex (aka the console_list_lock).
-> 
-> Fixes: 6193bc90849a ("tty: serial: kgdboc: synchronize tty_find_polling_driver() and register_console()")
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> If we're using this to create a critical section, then yes, we would need a
+> barrier to order the changes inside the critical section before changing the
+> memory location that forms the lock - but this is not a critical section.
 
-> --- a/drivers/tty/serial/kgdboc.c
-> +++ b/drivers/tty/serial/kgdboc.c
-> @@ -189,15 +190,6 @@ static int configure_kgdboc(void)
->  	if (kgdboc_register_kbd(&cptr))
->  		goto do_register;
->  
-> -	/*
-> -	 * tty_find_polling_driver() can call uart_set_options()
-> -	 * (via poll_init) to configure the uart. Take the console_list_lock
-> -	 * in order to synchronize against register_console(), which can also
-> -	 * configure the uart via uart_set_options(). This also allows safe
-> -	 * traversal of the console list.
-> -	 */
-> -	console_list_lock();
-> -
->  	p = tty_find_polling_driver(cptr, &tty_line);
->  	if (!p) {
->  		console_list_unlock();
+Actually, that said, the ordering is probably between the bit being cleared
+and the task state.
 
-This console_list_unlock() should be removed here as well.
+David
 
-Best Regards,
-Petr
-
-PS: I still have to double check all the dependencies. I think that I need
-to do it with a fresh head tomorrow.
