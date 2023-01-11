@@ -2,139 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8D4665784
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FCD66578C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbjAKJcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        id S238167AbjAKJeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:34:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235868AbjAKJbm (ORCPT
+        with ESMTP id S238635AbjAKJdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:31:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A86D120AE;
-        Wed, 11 Jan 2023 01:30:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A73961B19;
-        Wed, 11 Jan 2023 09:30:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0ABC433EF;
-        Wed, 11 Jan 2023 09:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673429421;
-        bh=pNfMIqO9t73o1w5Ym2sYx549qBwB7dkKL+u78E64yg0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FsueOTAIOrGEA4Pg+SXHDGPjBZcoJL8km4y68X6NDgXyfStiYknAv7prSI0U7SSxH
-         T41K10gPZqOUT5aQhW8WugjDhW9FdCLYPWp62o5OPxywFlCij8WcUFU6Iz8T3YotGP
-         R17mf8Xxs+ftPHgXo3Nfirtb/VUa5ZMuDPnH6J4qTcPZxwbm9Pkv39rn8kSj6UciGD
-         Q8/V7Gbf8WPAMvb8an9EhdZdDTCg0lJn5Ta3GqsF//PWHp7Dsna+M7GvYc5QzjbxX/
-         HZyp1NqIs/ienbF+iUwPo8NypH22x24WNlPCskL95Bdt6/7CIPRGewawNZ8f3bipvM
-         GM7ydKRHCrEgA==
-Message-ID: <dccfa004-1d40-acc0-6220-9232193b648f@kernel.org>
-Date:   Wed, 11 Jan 2023 10:30:11 +0100
+        Wed, 11 Jan 2023 04:33:41 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACCA2180;
+        Wed, 11 Jan 2023 01:31:48 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NsMgh2pz9z9v7Nd;
+        Wed, 11 Jan 2023 17:24:00 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwB3AAzugb5jAlOJAA--.2952S2;
+        Wed, 11 Jan 2023 10:31:34 +0100 (CET)
+Message-ID: <4b8688ee3d533d989196004d5f9f2c7eb4093f8b.camel@huaweicloud.com>
+Subject: Re: [PATCH v2] security: Restore passing final prot to
+ ima_file_mmap()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>, zohar@linux.ibm.com
+Cc:     jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Wed, 11 Jan 2023 10:30:59 +0100
+In-Reply-To: <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
+References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
+         <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] dt-bindings: PCI: mediatek-gen3: Add support for
- controlling power and reset
-Content-Language: en-US
-To:     Jian Yang <jian.yang@mediatek.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        chuanjia.liu@mediatek.com, jieyy.yang@mediatek.com,
-        qizhong.cheng@mediatek.com, rex-bc.chen@mediatek.com,
-        david-yh.chiu@mediatek.com
-References: <20230111032830.20447-1-jian.yang@mediatek.com>
- <20230111032830.20447-3-jian.yang@mediatek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230111032830.20447-3-jian.yang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwB3AAzugb5jAlOJAA--.2952S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF18JrWUZFWxWw43uryUZFb_yoW5AFy8pF
+        s8t3WUKrs5JFySyrn7XF17CFySk3y3KFyDWa1vgryqy3Z8WF1xKr1akFW29F18ZrWkuFy0
+        qa17urZxC3WqyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj4dyAQAAsO
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2023 04:28, Jian Yang wrote:
-> From: "jian.yang" <jian.yang@mediatek.com>
+On Fri, 2023-01-06 at 16:14 -0500, Paul Moore wrote:
+> On Wed, Dec 21, 2022 at 9:10 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Commit 98de59bfe4b2f ("take calculation of final prot in
+> > security_mmap_file() into a helper") moved the code to update prot with the
+> > actual protection flags to be granted to the requestor by the kernel to a
+> > helper called mmap_prot(). However, the patch didn't update the argument
+> > passed to ima_file_mmap(), making it receive the requested prot instead of
+> > the final computed prot.
+> > 
+> > A possible consequence is that files mmapped as executable might not be
+> > measured/appraised if PROT_EXEC is not requested but subsequently added in
+> > the final prot.
+> > 
+> > Replace prot with mmap_prot(file, prot) as the second argument of
+> > ima_file_mmap() to restore the original behavior.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  security/security.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/security/security.c b/security/security.c
+> > index d1571900a8c7..0d2359d588a1 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -1666,7 +1666,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
+> >                                         mmap_prot(file, prot), flags);
+> >         if (ret)
+> >                 return ret;
+> > -       return ima_file_mmap(file, prot);
+> > +       return ima_file_mmap(file, mmap_prot(file, prot));
+> >  }
 > 
-> Add new properties to support control power supplies and reset pin of
-> a downstream component.
+> This seems like a reasonable fix, although as the original commit is
+> ~10 years old at this point I am a little concerned about the impact
+> this might have on IMA.  Mimi, what do you think?
 > 
-> Signed-off-by: jian.yang <jian.yang@mediatek.com>
+> Beyond that, my only other comment would be to only call mmap_prot()
+> once and cache the results in a local variable.  You could also fix up
+> some of the ugly indentation crimes in security_mmap_file() while you
+> are at it, e.g. something like this:
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+Hi Paul
 
-> ---
->  .../bindings/pci/mediatek-pcie-gen3.yaml      | 23 +++++++++++++++++++
->  1 file changed, 23 insertions(+)
+thanks for the comments. With the patch set to move IMA and EVM to the
+LSM infrastructure we will be back to calling mmap_prot() only once,
+but I guess we could do anyway, as the patch (if accepted) would be
+likely backported to stable kernels.
+
+Thanks
+
+Roberto
+
+> diff --git a/security/security.c b/security/security.c
+> index d1571900a8c7..2f9cad9ecac8 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -1662,11 +1662,12 @@ int security_mmap_file(struct file *file, unsigned long
+> prot,
+>                        unsigned long flags)
+> {
+>        int ret;
+> -       ret = call_int_hook(mmap_file, 0, file, prot,
+> -                                       mmap_prot(file, prot), flags);
+> +       unsigned long prot_adj = mmap_prot(file, prot);
+> +
+> +       ret = call_int_hook(mmap_file, 0, file, prot, prot_adj, flags);
+>        if (ret)
+>                return ret;
+> -       return ima_file_mmap(file, prot);
+> +       return ima_file_mmap(file, prot_adj);
+> }
 > 
-> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> index 7e8c7a2a5f9b..46149cc63989 100644
-> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> @@ -84,6 +84,29 @@ properties:
->      items:
->        enum: [ phy, mac ]
->  
-> +  pcie1v8-supply:
-> +    description:
-> +      The regulator phandle that provides 1.8V power to downstream component.
-> +
-> +  pcie3v3-supply:
-> +    description:
-> +      The regulator phandle that provides 3.3V power to downstream component.
-> +
-> +  pcie12v-supply:
-> +    description:
-> +      The regulator phandle that provides 12V power to downstream component.
-> +
-> +  dsc-reset-gpios:
-> +    description:
-> +      The reset GPIO of a downstream component.
-
-Why you cannot use standard reset-gpios property?
-
-> +    maxItems: 1
-> +
-> +  dsc-reset-msleep:
-
-Wrong property unit/suffix.
-
-> +    description:
-> +      The delay time between assertion and de-assertion of a downstream
-> +      component's reset GPIO.
-
-Why this should be a property of DT?
-
-> +    maxItems: 1
-
-maxItems of what?
-
-> +
->    clocks:
->      minItems: 4
->      maxItems: 6
-
-Best regards,
-Krzysztof
+> --
+> paul-moore.com
 
