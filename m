@@ -2,339 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC856657A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F816657A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjAKJgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        id S234722AbjAKJiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjAKJfL (ORCPT
+        with ESMTP id S234190AbjAKJhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:35:11 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D506ED98;
-        Wed, 11 Jan 2023 01:34:20 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30B7X1sn029595;
-        Wed, 11 Jan 2023 09:34:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=mvSen0YPktxZ6yY811DDXcSx4nAy7KzBUaW4BDWH8SE=;
- b=WjX12aX1Co7bHatr4Rakla7oHxjAM4fhKpkRCO/7rbiu2gImE7sP+6LHD+hqwMO8ynZ9
- 8CleY31OUMdVfmtMt6I2KH/dF1u+HSdhxrGPpVjKbcm0lpf93qH8Fgp/dLd7UYevTFCz
- e3D5zgjIxzAci8/Te3Nm1D8OqYRe6l4k/Tvbe/zs+VxpzVPY4tSNKpnBBAMiGlXGohVL
- YuWyYB0hP0lcrukRoDlaZwwl/knvGQNNpq7FOy6t6awCgxWwSwdBQVtJ/duSKP77mw5d
- nLQ1fDumH9C2d0apzKxnyuC/DBzrnJWlfrGQjE1fh7+pqQKAx2a7D1owUwI8BiGxq7Rf /g== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1kxhgtys-1
+        Wed, 11 Jan 2023 04:37:16 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684C95FB9;
+        Wed, 11 Jan 2023 01:35:59 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30B8ESKJ028778;
+        Wed, 11 Jan 2023 09:35:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=cMeLYwUHJaBzrxiVs1Yme3g+08qNmcBVEEaCE/QuFuE=;
+ b=BPhgPtd8LSHcE4dDX1aEWS9D+0j0Djq2phhfyFH+7c9hDzbDxXm/x1S9dkZdiGieGZTl
+ xxnMZGtsqpd/fIHAxvk7LUXf7csuUuABLiKzBVk/7vwsLTIDGEF1H5lGS1WDKeyByUZk
+ l3AH9Elz0Nqki/kAGQhpuIHqHHsOe6xYrJt3Bjm1aKpjI83wXRxE4ksdkz+mQoFADaAy
+ zmXZx3k1ALkx03MNkZJ8SQnugEhiTLrIR9h1qXplhuc4gSIR0O7yD9A/WmqdGghJ6XOS
+ +Zpb6jM1ZmM/vSc3CRjJaWDOB8xsunzz3rC3yuxVSD4/SQo8UtQ+k3h07esy9z+AgPBi YQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1se8spw7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 09:34:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30B9YCG0004761
+        Wed, 11 Jan 2023 09:35:55 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30B8lSZt027166;
+        Wed, 11 Jan 2023 09:35:54 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1se8spvr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 09:34:12 GMT
-Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 11 Jan
- 2023 01:34:08 -0800
-Message-ID: <8ede3a51-179d-986b-ea02-d698c8bda284@quicinc.com>
-Date:   Wed, 11 Jan 2023 15:04:05 +0530
+        Wed, 11 Jan 2023 09:35:54 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30B1cr7K001499;
+        Wed, 11 Jan 2023 09:35:52 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3n1kmrrdfh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Jan 2023 09:35:52 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30B9ZmHm44564878
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Jan 2023 09:35:48 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8172620049;
+        Wed, 11 Jan 2023 09:35:48 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC36820040;
+        Wed, 11 Jan 2023 09:35:47 +0000 (GMT)
+Received: from [9.171.7.243] (unknown [9.171.7.243])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 11 Jan 2023 09:35:47 +0000 (GMT)
+Message-ID: <02b34aa1-d71a-99cc-77db-3613f881b1a8@linux.ibm.com>
+Date:   Wed, 11 Jan 2023 10:35:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V7 2/2] firmware: qcom: scm: Add wait-queue handling logic
+ Thunderbird/102.6.0
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+References: <20230110202632.2533978-1-scgl@linux.ibm.com>
+ <20230110202632.2533978-2-scgl@linux.ibm.com>
 Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        <andersson@kernel.org>
-CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <konrad.dybcio@somainline.org>, <robimarko@gmail.com>,
-        <quic_gurus@quicinc.com>
-References: <20230110063745.16739-1-quic_sibis@quicinc.com>
- <20230110063745.16739-3-quic_sibis@quicinc.com>
- <b7470966-55f6-fee7-0014-2aae3048612e@linaro.org>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <b7470966-55f6-fee7-0014-2aae3048612e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: zehQERBPI6N38mewlHPKkysqyWt98-lR
-X-Proofpoint-ORIG-GUID: zehQERBPI6N38mewlHPKkysqyWt98-lR
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v5 01/10] KVM: s390: Extend MEM_OP ioctl by storage key
+ checked cmpxchg
+In-Reply-To: <20230110202632.2533978-2-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: R-wYDDAboRiZQoxtd8tpSPq3PipSCmYE
+X-Proofpoint-ORIG-GUID: Nn_TKUpmqH_yDJdF5Ziso0mC49lII-sd
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-11_04,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- phishscore=0 priorityscore=1501 spamscore=0 bulkscore=0 adultscore=0
- clxscore=1011 suspectscore=0 malwarescore=0 mlxlogscore=970
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301110073
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 spamscore=0 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 mlxscore=0 clxscore=1011 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301110073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Srini,
+On 1/10/23 21:26, Janis Schoetterl-Glausch wrote:
+> User space can use the MEM_OP ioctl to make storage key checked reads
+> and writes to the guest, however, it has no way of performing atomic,
+> key checked, accesses to the guest.
+> Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
+> mode. For now, support this mode for absolute accesses only.
+> 
+> This mode can be use, for example, to set the device-state-change
+> indicator and the adapter-local-summary indicator atomically.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+>   include/uapi/linux/kvm.h |   7 +++
+>   arch/s390/kvm/gaccess.h  |   3 ++
+>   arch/s390/kvm/gaccess.c  | 102 +++++++++++++++++++++++++++++++++++++++
+>   arch/s390/kvm/kvm-s390.c |  41 +++++++++++++++-
+>   4 files changed, 151 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 55155e262646..452f43c1cc34 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -583,6 +583,8 @@ struct kvm_s390_mem_op {
+>   		struct {
+>   			__u8 ar;	/* the access register number */
+>   			__u8 key;	/* access key, ignored if flag unset */
+> +			__u8 pad1[6];	/* ignored */
+> +			__u64 old_addr;	/* ignored if flag unset */
+>   		};
+>   		__u32 sida_offset; /* offset into the sida */
+>   		__u8 reserved[32]; /* ignored */
+> @@ -599,6 +601,11 @@ struct kvm_s390_mem_op {
+>   #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
+>   #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
+>   #define KVM_S390_MEMOP_F_SKEY_PROTECTION	(1ULL << 2)
+> +#define KVM_S390_MEMOP_F_CMPXCHG		(1ULL << 3)
+> +/* flags specifying extension support */
 
-Thanks for taking time to review the series.
+Would that fit behind the bit shifts without getting into the "line too 
+long" territory?
 
-On 1/10/23 17:44, Srinivas Kandagatla wrote:
-> Hi Sibi,
-> 
-> Few minor comments below,
-> 
-> On 10/01/2023 06:37, Sibi Sankar wrote:
->> From: Guru Das Srinagesh <quic_gurus@quicinc.com>
->>
->> When the firmware (FW) supports multiple requests per VM, multiple 
->> requests
->> from the same/different VM can reach the firmware at the same time. Since
->> the firmware currently being used has limited resources, it guards them
->> with a resource lock and puts requests on a wait-queue internally and
->> signals to HLOS that it is doing so. It does this by returning a new 
->> return
->> value in addition to success or error: SCM_WAITQ_SLEEP. A sleeping SCM 
->> call
->> can be woken up by an interrupt that the FW raises.
->>
-> ...
-> 
->>   drivers/firmware/qcom_scm-smc.c | 90 ++++++++++++++++++++++++++++++---
->>   drivers/firmware/qcom_scm.c     | 89 +++++++++++++++++++++++++++++++-
->>   drivers/firmware/qcom_scm.h     |  8 +++
->>   3 files changed, 179 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/firmware/qcom_scm-smc.c 
->> b/drivers/firmware/qcom_scm-smc.c
->> index d111833364ba..30999f04749c 100644
->> --- a/drivers/firmware/qcom_scm-smc.c
->> +++ b/drivers/firmware/qcom_scm-smc.c
-> ...
->> +static int __scm_smc_do_quirk_handle_waitq(struct device *dev, struct 
->> arm_smccc_args *waitq,
->> +                       struct arm_smccc_res *res)
->> +{
->> +    int ret;
->> +    struct arm_smccc_args resume;
->> +    u32 wq_ctx, smc_call_ctx, flags;
->> +    struct arm_smccc_args *smc = waitq;
->> +
->> +    do {
->> +        __scm_smc_do_quirk(smc, res);
->> +
->> +        if (res->a0 == QCOM_SCM_WAITQ_SLEEP) {
->> +            wq_ctx = res->a1;
->> +            smc_call_ctx = res->a2;
->> +            flags = res->a3;
->> +
->> +            if (!dev)
->> +                return -EPROBE_DEFER;
-> 
-> why are we checking dev pointer in the middle of the call?
-> A comment here would really help readers.
+> +#define KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG 0x2
 
-Given that we no longer use drv_data to pass around scm struct,
-the check is no longer required. I'll drop it in the next re-spin.
+\n please
 
-> 
->> +
->> +            ret = qcom_scm_lookup_completion(wq_ctx);
->> +            if (ret)
->> +                return ret;
->> +
->> +            fill_wq_resume_args(&resume, smc_call_ctx);
->> +            smc = &resume;
->> +        }
->> +    } while (res->a0 == QCOM_SCM_WAITQ_SLEEP);
->> +
->> +    return 0;
->> +}
->> +
-> ...
->> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
->> index cdbfe54c8146..19ac506a9b1f 100644
->> --- a/drivers/firmware/qcom_scm.c
->> +++ b/drivers/firmware/qcom_scm.c
->> @@ -4,6 +4,7 @@
->>    */
->>   #include <linux/platform_device.h>
->>   #include <linux/init.h>
->> +#include <linux/interrupt.h>
->>   #include <linux/cpumask.h>
->>   #include <linux/export.h>
->>   #include <linux/dma-mapping.h>
->> @@ -13,6 +14,7 @@
->>   #include <linux/qcom_scm.h>
->>   #include <linux/of.h>
->>   #include <linux/of_address.h>
->> +#include <linux/of_irq.h>
->>   #include <linux/of_platform.h>
->>   #include <linux/clk.h>
->>   #include <linux/reset-controller.h>
-> 
-> include <linux/completion.h> ??
-> 
+> +/* Non program exception return codes (pgm codes are 16 bit) */
+> +#define KVM_S390_MEMOP_R_NO_XCHG		(1 << 16)
+>   
+>   /* for KVM_INTERRUPT */
+>   struct kvm_interrupt {
+> diff --git a/arch/s390/kvm/gaccess.h b/arch/s390/kvm/gaccess.h
+> index 9408d6cc8e2c..92a3b9fb31ec 100644
+> --- a/arch/s390/kvm/gaccess.h
+> +++ b/arch/s390/kvm/gaccess.h
+> @@ -206,6 +206,9 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
+>   int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
+>   		      void *data, unsigned long len, enum gacc_mode mode);
+>   
+> +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
+> +			       __uint128_t *old, __uint128_t new, u8 access_key);
+> +
+>   /**
+>    * write_guest_with_key - copy data from kernel space to guest space
+>    * @vcpu: virtual cpu
+> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+> index 0243b6e38d36..6165e761a637 100644
+> --- a/arch/s390/kvm/gaccess.c
+> +++ b/arch/s390/kvm/gaccess.c
+> @@ -1161,6 +1161,108 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
+>   	return rc;
+>   }
+>   
+> +/**
+> + * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute address.
+> + * @kvm: Virtual machine instance.
+> + * @gpa: Absolute guest address of the location to be changed.
+> + * @len: Operand length of the cmpxchg, required: 1 <= len <= 16. Providing a
+> + *       non power of two will result in failure.
+> + * @old_addr: Pointer to old value. If the location at @gpa contains this value, the
+> + *         exchange will succeed. After calling cmpxchg_guest_abs_with_key() *@old
+> + *         contains the value at @gpa before the attempt to exchange the value.
+> + * @new: The value to place at @gpa.
+> + * @access_key: The access key to use for the guest access.
+> + *
+> + * Atomically exchange the value at @gpa by @new, if it contains *@old.
+> + * Honors storage keys.
+> + *
+> + * Return: * 0: successful exchange
+> + *         * 1: exchange unsuccessful
+> + *         * a program interruption code indicating the reason cmpxchg could
+> + *           not be attempted
 
-ack
+ > 1 Access related program interruption code indicating the reason 
+cmpxchg could not be attempted
 
-> 
->> @@ -33,6 +35,7 @@ struct qcom_scm {
->>       struct clk *iface_clk;
->>       struct clk *bus_clk;
->>       struct icc_path *path;
->> +    struct completion waitq_comp;
->>       struct reset_controller_dev reset;
->>       /* control access to the interconnect path */
->> @@ -63,6 +66,9 @@ static const u8 
->> qcom_scm_cpu_warm_bits[QCOM_SCM_BOOT_MAX_CPUS] = {
->>       BIT(2), BIT(1), BIT(4), BIT(6)
->>   };
->> +#define QCOM_SMC_WAITQ_FLAG_WAKE_ONE    BIT(0)
->> +#define QCOM_SMC_WAITQ_FLAG_WAKE_ALL    BIT(1)
->> +
->>   static const char * const qcom_scm_convention_names[] = {
->>       [SMC_CONVENTION_UNKNOWN] = "unknown",
->>       [SMC_CONVENTION_ARM_32] = "smc arm 32",
->> @@ -1325,11 +1331,79 @@ bool qcom_scm_is_available(void)
->>   }
->>   EXPORT_SYMBOL(qcom_scm_is_available);
->> +static struct completion *qcom_scm_lookup_wq(struct qcom_scm *scm, 
->> u32 wq_ctx)
->> +{
->> +    /* assert wq_ctx is zero */ > +    if (wq_ctx != 0) {
-> 
-> Is this correct? looks like zero is the only valid one.
-> 
-> I thought wq_ctx was a unique number (UID).
+< 1 Kernel / input data error codes
 
-Currently the SMC calls from the kernel scm driver are still serialized
-and firmware only supports a single wq_ctx. This is expected to change
-in the future, will document it the comments.
+> + *         * -EINVAL: address misaligned or len not power of two
+> + *         * -EAGAIN: transient failure (len 1 or 2)
+> + *         * -EOPNOTSUPP: read-only memslot (should never occur)
+
+Would PGM_PROTECTED also make sense here instead of EOPNOTSUPP?
+
+> + */
+> +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
+> +			       __uint128_t *old_addr, __uint128_t new,
+> +			       u8 access_key)
+> +{
+> +	gfn_t gfn = gpa >> PAGE_SHIFT;
+> +	struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
+> +	bool writable;
+> +	hva_t hva;
+> +	int ret;
+> +
+> +	if (!IS_ALIGNED(gpa, len))
+> +		return -EINVAL;
+> +
+> +	hva = gfn_to_hva_memslot_prot(slot, gfn, &writable);
+> +	if (kvm_is_error_hva(hva))
+> +		return PGM_ADDRESSING;
+> +	/*
+> +	 * Check if it's a read-only memslot, even though that cannot occur
+> +	 * since those are unsupported.
+> +	 * Don't try to actually handle that case.
+> +	 */
+> +	if (!writable)
+> +		return -EOPNOTSUPP;
+> +
+[...]
+>   /**
+>    * guest_translate_address_with_key - translate guest logical into guest absolute address
+>    * @vcpu: virtual cpu
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index e4890e04b210..56f4f6ddd5bb 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -584,7 +584,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_S390_VCPU_RESETS:
+>   	case KVM_CAP_SET_GUEST_DEBUG:
+>   	case KVM_CAP_S390_DIAG318:
+> -	case KVM_CAP_S390_MEM_OP_EXTENSION:
+>   		r = 1;
+>   		break;
+>   	case KVM_CAP_SET_GUEST_DEBUG2:
+> @@ -598,6 +597,14 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_S390_MEM_OP:
+>   		r = MEM_OP_MAX_SIZE;
+>   		break;
+> +	case KVM_CAP_S390_MEM_OP_EXTENSION:
+> +		/*
+> +		 * Flag bits indicating which extensions are supported.
+> +		 * The first extension doesn't use a flag, but pretend it does,
+> +		 * this way that can be changed in the future.
+> +		 */
+> +		r = KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG | 1;
+> +		break;
+>   	case KVM_CAP_NR_VCPUS:
+>   	case KVM_CAP_MAX_VCPUS:
+>   	case KVM_CAP_MAX_VCPU_ID:
+> @@ -2772,12 +2779,19 @@ static bool access_key_invalid(u8 access_key)
+>   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   {
+>   	void __user *uaddr = (void __user *)mop->buf;
+> +	void __user *old_addr = (void __user *)mop->old_addr;
+> +	union {
+> +		__uint128_t quad;
+> +		char raw[sizeof(__uint128_t)];
+> +	} old = { .quad = 0}, new = { .quad = 0 };
+> +	unsigned int off_in_quad = sizeof(new) - mop->size;
+>   	u64 supported_flags;
+>   	void *tmpbuf = NULL;
+>   	int r, srcu_idx;
+>   
+>   	supported_flags = KVM_S390_MEMOP_F_SKEY_PROTECTION
+> -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
+> +			  | KVM_S390_MEMOP_F_CHECK_ONLY
+> +			  | KVM_S390_MEMOP_F_CMPXCHG;
+>   	if (mop->flags & ~supported_flags || !mop->size)
+>   		return -EINVAL;
+>   	if (mop->size > MEM_OP_MAX_SIZE)
+> @@ -2799,6 +2813,21 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   	} else {
+>   		mop->key = 0;
+>   	}
+> +	if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
+> +		/*
+> +		 * This validates off_in_quad. Checking that size is a power
+> +		 * of two is not necessary, as cmpxchg_guest_abs_with_key
+> +		 * takes care of that
+> +		 */
+> +		if (mop->size > sizeof(new))
+> +			return -EINVAL;
+
+!mop->size || mop->size > sizeof(new)
 
 
-> 
->> +        dev_err(scm->dev, "No waitqueue found for wq_ctx %d\n", wq_ctx);
->> +        return ERR_PTR(-EINVAL);
->> +    }
->> +
->> +    return &scm->waitq_comp;
->> +}
->> +
->> +int qcom_scm_lookup_completion(u32 wq_ctx)
->> +{
->> +    struct completion *wq = NULL;
->> +
->> +    wq = qcom_scm_lookup_wq(__scm, wq_ctx);
->> +    if (IS_ERR(wq))
->> +        return PTR_ERR(wq);
->> +
->> +    wait_for_completion(wq);
-> 
-> We can potentially block here forever without a timeout.
-> 
+> +		if (mop->op != KVM_S390_MEMOP_ABSOLUTE_WRITE)
+> +			return -EINVAL;
+> +		if (copy_from_user(&new.raw[off_in_quad], uaddr, mop->size))
+> +			return -EFAULT;
+> +		if (copy_from_user(&old.raw[off_in_quad], old_addr, mop->size))
+> +			return -EFAULT;
+> +	}
+>   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
+>   		tmpbuf = vmalloc(mop->size);
+>   		if (!tmpbuf)
+> @@ -2829,6 +2858,14 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   	case KVM_S390_MEMOP_ABSOLUTE_WRITE: {
+>   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
+>   			r = check_gpa_range(kvm, mop->gaddr, mop->size, GACC_STORE, mop->key);
+> +		} else if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
+> +			r = cmpxchg_guest_abs_with_key(kvm, mop->gaddr, mop->size,
+> +						       &old.quad, new.quad, mop->key);
+> +			if (r == 1) {
+> +				r = KVM_S390_MEMOP_R_NO_XCHG;
 
-yeah potentially until a hung task timeout. This is what
-we want since we can't make additional scm calls anyway.
+Why don't we return KVM_S390_MEMOP_R_NO_XCHG from 
+cmpxchg_guest_abs_with_key instead of aliasing 1 here?
 
-> As you are reusing completion, I have not seen any reinitialization of 
-> completion, this could potentially return above line without waiting at 
-> all.
+> +				if (copy_to_user(old_addr, &old.raw[off_in_quad], mop->size))
+> +					r = -EFAULT;
+> +			}
+>   		} else {
+>   			if (copy_from_user(tmpbuf, uaddr, mop->size)) {
+>   				r = -EFAULT;
 
-A complete would paired with a single waiter, so additional
-completes would be neccessary for it to go through without
-waiting.
-
-> 
->> +
->> +    return 0;
->> +}
->> +
->> +static int qcom_scm_waitq_wakeup(struct qcom_scm *scm, unsigned int 
->> wq_ctx, bool wake_all)
->> +{
->> +    struct completion *wq_to_wake;
->> +
->> +    wq_to_wake = qcom_scm_lookup_wq(scm, wq_ctx);
->> +    if (IS_ERR(wq_to_wake))
->> +        return PTR_ERR(wq_to_wake);
->> +
->> +    if (wake_all)
->> +        complete_all(wq_to_wake);
->> +    else
->> +        complete(wq_to_wake);
-> 
->> +
->> +    return 0;
->> +}
->> +
->> +static irqreturn_t qcom_scm_irq_handler(int irq, void *data)
->> +{
->> +    int ret;
->> +    struct qcom_scm *scm = data;
->> +    u32 wq_ctx, flags, more_pending = 0;
->> +
->> +    do {
->> +        ret = scm_get_wq_ctx(&wq_ctx, &flags, &more_pending);
->> +        if (ret) {
->> +            dev_err(scm->dev, "GET_WQ_CTX SMC call failed: %d\n", ret);
->> +            goto out;
->> +        }
->> +
->> +        if (flags != QCOM_SMC_WAITQ_FLAG_WAKE_ONE &&
->> +            flags != QCOM_SMC_WAITQ_FLAG_WAKE_ALL) {
->> +            dev_err(scm->dev, "Invalid flags found for wq_ctx: %u\n", 
->> flags);
->> +            goto out;
->> +        }
->> +
->> +        ret = qcom_scm_waitq_wakeup(scm, wq_ctx, !!(flags & 
->> QCOM_SMC_WAITQ_FLAG_WAKE_ALL));
->> +        if (ret)
->> +            goto out;
->> +    } while (more_pending);
->> +
->> +out:
->> +    return IRQ_HANDLED;
->> +}
->> +
->>   static int qcom_scm_probe(struct platform_device *pdev)
->>   {
->>       struct qcom_scm *scm;
->>       unsigned long clks;
->> -    int ret;
->> +    int irq, ret;
->>       scm = devm_kzalloc(&pdev->dev, sizeof(*scm), GFP_KERNEL);
->>       if (!scm)
->> @@ -1402,6 +1476,19 @@ static int qcom_scm_probe(struct 
->> platform_device *pdev)
->>       __scm = scm;
->>       __scm->dev = &pdev->dev;
->> +    init_completion(&__scm->waitq_comp);
->> +
->> +    irq = platform_get_irq(pdev, 0);
->> +    if (irq < 0) {
->> +        if (irq != -ENXIO)
->> +            return irq;
->> +    } else {
->> +        ret = devm_request_threaded_irq(__scm->dev, irq, NULL, 
->> qcom_scm_irq_handler,
->> +                        IRQF_ONESHOT, "qcom-scm", __scm);
->> +        if (ret < 0)
->> +            return dev_err_probe(scm->dev, ret, "Failed to request 
->> qcom-scm irq\n");
->> +    }
->> +
->>       __get_convention();
->>       /*
-> 
-> --srini
