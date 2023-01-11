@@ -2,183 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3862665AEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FAD665AEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbjAKL7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        id S239094AbjAKL7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239110AbjAKL6v (ORCPT
+        with ESMTP id S229578AbjAKL7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:58:51 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86812AD6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:56:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673438190; x=1704974190;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=loE9AzJydvNNySIae8hCNuip2QKFQeq3Qh6BoErX/h4=;
-  b=ZMM7Tg1lvyg1hdqlHeib/hGEctsc8HNyflbeU6ThqthZKKMPLHWTJDAe
-   OjPOdZ8SNOOdupzJ9/8MsbPGjMk7yL17N3nhDQ4VoeK+zMmCs+ucYjoMv
-   5b3ZZHWp7VHpbrZNFZbpGxPmn53/DlBUrStkfJF4O8q5ZtA4FIzUHCqWj
-   th9DoEgh77USKMUHlWTA3FPjTXu32uy6VEs0pQN7sezG1v80mYQp96Rqv
-   fKxnmJ5qCDJjRdYRwZIlGOXMmE1mhSTKKr6GCcelMiMuaQ9UCTO+d5sD0
-   /u2JPba4Mzdk7W/iiDlwh3SeACB78v7V/mB1YbyWm0bUsiUNYronNnlnE
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="325402122"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="325402122"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 03:56:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="986135538"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="986135538"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Jan 2023 03:56:28 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pFZiV-00096u-33;
-        Wed, 11 Jan 2023 11:56:27 +0000
-Date:   Wed, 11 Jan 2023 19:56:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 19213bf117ac998698d80a777f76b947dbeb42bd
-Message-ID: <63bea3de.lxY9TtneJE1gJdfM%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 11 Jan 2023 06:59:04 -0500
+Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F35A21A5;
+        Wed, 11 Jan 2023 03:57:42 -0800 (PST)
+Received: from mx0.infotecs-nt (localhost [127.0.0.1])
+        by mx0.infotecs.ru (Postfix) with ESMTP id 04DDF13607D1;
+        Wed, 11 Jan 2023 14:57:40 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 04DDF13607D1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
+        t=1673438260; bh=49kxLRcwh3/YE3yMeeqbymVlkYlZKux8cg7gP0DQr/Q=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=G1Al9D6YFmtWwwZNG6Le3yDxDfxYTLh4lUz5oHq9RotGW56oJyPHPNM6xz7sso3mB
+         7neg5vAksZVH6fotgD0RKvB13tPugD9Rt/BvV7DNi8FPZaqpxIoZ5dh/MXVJm9szjr
+         QDLHvfUDyU+/2YKZplzfi6x5bjlX8CRy6Vokn7vM=
+Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
+        by mx0.infotecs-nt (Postfix) with ESMTP id 01618316576D;
+        Wed, 11 Jan 2023 14:57:40 +0300 (MSK)
+Received: from msk-exch-01.infotecs-nt (10.0.7.191) by msk-exch-01.infotecs-nt
+ (10.0.7.191) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Wed, 11 Jan
+ 2023 14:57:39 +0300
+Received: from msk-exch-01.infotecs-nt ([fe80::89df:c35f:46be:fd07]) by
+ msk-exch-01.infotecs-nt ([fe80::89df:c35f:46be:fd07%14]) with mapi id
+ 15.02.1118.012; Wed, 11 Jan 2023 14:57:39 +0300
+From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+To:     Simon Horman <simon.horman@corigine.com>
+CC:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
+        "coreteam@netfilter.org" <coreteam@netfilter.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: [PATCH v2] netfilter: ipset: Fix overflow before widen in the
+ bitmap_ip_create() function.
+Thread-Topic: [PATCH v2] netfilter: ipset: Fix overflow before widen in the
+ bitmap_ip_create() function.
+Thread-Index: AQHZJbPnp5vC0uHQHEOGReEeA2xCQA==
+Date:   Wed, 11 Jan 2023 11:57:39 +0000
+Message-ID: <20230111115741.3347031-1-Ilia.Gavrilov@infotecs.ru>
+References: <Y76NQ7tQVB7kE0dG@corigine.com>
+In-Reply-To: <Y76NQ7tQVB7kE0dG@corigine.com>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.17.0.10]
+x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 174635 [Jan 11 2023]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;infotecs.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2023/01/11 06:26:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/01/11 02:11:00 #20757923
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 19213bf117ac998698d80a777f76b947dbeb42bd  tools: rcu: Add usage function and check for argument
+When first_ip is 0, last_ip is 0xFFFFFFFF, and netmask is 31, the value of
+an arithmetic expression 2 << (netmask - mask_bits - 1) is subject
+to overflow due to a failure casting operands to a larger data type
+before performing the arithmetic.
 
-elapsed time: 798m
+Note that it's harmless since the value will be checked at the next step.
 
-configs tested: 101
-configs skipped: 2
+Found by InfoTeCS on behalf of Linux Verification Center
+(linuxtesting.org) with SVACE.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Fixes: b9fed748185a ("netfilter: ipset: Check and reject crazy /0 input par=
+ameters")
+Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
+---
+v2: Fix typo of the last_ip value in the description. Fix the expression fo=
+r 'hosts'.
+ net/netfilter/ipset/ip_set_bitmap_ip.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-gcc tested configs:
-arc                                 defconfig
-alpha                               defconfig
-powerpc                           allnoconfig
-x86_64                            allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-s390                             allyesconfig
-arc                  randconfig-r043-20230110
-s390                 randconfig-r044-20230110
-riscv                randconfig-r042-20230110
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-arc                              allyesconfig
-x86_64                         rhel-8.3-kunit
-ia64                             allmodconfig
-alpha                            allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-i386                             allyesconfig
-i386                                defconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-m68k                          amiga_defconfig
-riscv                            allmodconfig
-sh                   rts7751r2dplus_defconfig
-m68k                                defconfig
-sh                          rsk7201_defconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-sparc                               defconfig
-xtensa                           allyesconfig
-csky                                defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
-powerpc                     taishan_defconfig
-arm                         assabet_defconfig
-parisc                generic-64bit_defconfig
-mips                        vocore2_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-powerpc                  iss476-smp_defconfig
-sh                          r7780mp_defconfig
-mips                           gcw0_defconfig
-mips                         bigsur_defconfig
-sh                          sdk7786_defconfig
-sh                             espt_defconfig
-openrisc                         alldefconfig
-nios2                            allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-arc                           tb10x_defconfig
-csky                             alldefconfig
-arm                        keystone_defconfig
-sh                          rsk7264_defconfig
-sh                           se7722_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-loongarch                        allmodconfig
-i386                             alldefconfig
-sh                         microdev_defconfig
-sh                          urquell_defconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20230110
-arm                  randconfig-r046-20230110
-hexagon              randconfig-r045-20230110
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                          rhel-8.3-rust
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-k001
-riscv                randconfig-r042-20230111
-s390                 randconfig-r044-20230111
-hexagon              randconfig-r041-20230111
-hexagon              randconfig-r045-20230111
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/net/netfilter/ipset/ip_set_bitmap_ip.c b/net/netfilter/ipset/i=
+p_set_bitmap_ip.c
+index a8ce04a4bb72..e4fa00abde6a 100644
+--- a/net/netfilter/ipset/ip_set_bitmap_ip.c
++++ b/net/netfilter/ipset/ip_set_bitmap_ip.c
+@@ -308,8 +308,8 @@ bitmap_ip_create(struct net *net, struct ip_set *set, s=
+truct nlattr *tb[],
+ 			return -IPSET_ERR_BITMAP_RANGE;
+=20
+ 		pr_debug("mask_bits %u, netmask %u\n", mask_bits, netmask);
+-		hosts =3D 2 << (32 - netmask - 1);
+-		elements =3D 2 << (netmask - mask_bits - 1);
++		hosts =3D 2U << (32 - netmask - 1);
++		elements =3D 2UL << (netmask - mask_bits - 1);
+ 	}
+ 	if (elements > IPSET_BITMAP_MAX_RANGE + 1)
+ 		return -IPSET_ERR_BITMAP_RANGE_SIZE;
+--=20
+2.30.2
