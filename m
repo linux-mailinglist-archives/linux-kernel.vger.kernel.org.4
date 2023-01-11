@@ -2,173 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32AE665F45
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3996660A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237937AbjAKPiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:38:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
+        id S233101AbjAKQgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239124AbjAKPhs (ORCPT
+        with ESMTP id S238469AbjAKQgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:37:48 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDF81E3FC
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:37:35 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AAE3A8B896;
-        Wed, 11 Jan 2023 15:37:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673451453; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H5PrZhGxAXPih4jW/nQocRH5mJY9ZxQOPuFJC4UKqxc=;
-        b=ANOeU6imNYB3YhDQhQexlYgh0cL0lzk3Nt32U9yhMFbLO42nW6eeTkOWED21iFXAgb/SVp
-        TK2apZMAjfWHNRtFCzX2s3xRfaZFQK11gncGb5+MDWyQLpvBoBruZ+n8NKqxqNAybU+m6V
-        /Ykdr6nnso/PjaSV9/uABIpvWi1Q/Nk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8EDD61358A;
-        Wed, 11 Jan 2023 15:37:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HgAAIL3XvmM6OAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 11 Jan 2023 15:37:33 +0000
-Date:   Wed, 11 Jan 2023 16:37:32 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NeilBrown <neilb@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/7] mm/page_alloc: Explicitly define what alloc flags
- deplete min reserves
-Message-ID: <Y77XvABeJEgnyIY9@dhcp22.suse.cz>
-References: <20230109151631.24923-1-mgorman@techsingularity.net>
- <20230109151631.24923-5-mgorman@techsingularity.net>
+        Wed, 11 Jan 2023 11:36:07 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9CE64DF
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:36:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673454966; x=1704990966;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+Tf4fOTtVxxPUIU5o6FffNBYvv8T1/1+ZdmCbPKp6+w=;
+  b=lJh7vuURu7RFAZ96n10tZkKbISHDnyYoBdD+HpIpnlq/lT/wpAAcPYq8
+   9q/NIimpUR0c5+hU5CbILXglU6RmU9DjQuvftU3kRyhv8i+vozRePZtqa
+   FJOyK39J0MRWmWZundby5Z88e7bxrScIpZMhpbmxq6pC/GWhfbzOcR38r
+   VyrDa4wd9pL4WVH0NvADnCvamgIoqbhW2h1vG+4hqdlj0WfTwUTptSfG8
+   DMttZX+wieoC3VdYh4JojRBt2AzzIvARyR9YnJTh/V1u3oVNgFA3mq54v
+   eesCQDRHY3TfMjtaFspR1f9Pc02mGFBkIzD8PWw9Kkwy/3wFpHLhL1am/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324704143"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="324704143"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:32:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607408589"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="607408589"
+Received: from flobatol-mobl1.amr.corp.intel.com (HELO [10.212.110.208]) ([10.212.110.208])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:32:29 -0800
+Message-ID: <0d2ccd69-63e3-b8c5-396b-b698110cad14@linux.intel.com>
+Date:   Wed, 11 Jan 2023 09:38:30 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109151631.24923-5-mgorman@techsingularity.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH 09/19] ASoC: amd: ps: add support for Soundwire DMA
+ interrupts
+Content-Language: en-US
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
+        vkoul@kernel.org, alsa-devel@alsa-project.org
+Cc:     Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
+        arungopal.kondaveeti@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
+ <20230111090222.2016499-10-Vijendar.Mukunda@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230111090222.2016499-10-Vijendar.Mukunda@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 09-01-23 15:16:28, Mel Gorman wrote:
-> As there are more ALLOC_ flags that affect reserves, define what flags
-> affect reserves and clarify the effect of each flag.
 
-I like this! It makes the code much easier to follow.
 
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+> @@ -167,9 +167,11 @@ struct acp63_dev_data {
+>  	struct platform_device *pdev[ACP63_DEVS];
+>  	struct mutex acp_lock; /* protect shared registers */
+>  	struct fwnode_handle *sdw_fw_node;
+> +	struct work_struct acp_sdw_dma_work;
+>  	u16 pdev_mask;
+>  	u16 pdev_count;
+>  	u16 pdm_dev_index;
+> +	u16 dma_intr_stat[ACP63_SDW_MAX_STREAMS];
 
-Thanks!
+streams and DMAs are different things in SoundWire. You can have a 1:N
+mapping.
 
-> ---
->  mm/internal.h   |  3 +++
->  mm/page_alloc.c | 34 ++++++++++++++++++++++------------
->  2 files changed, 25 insertions(+), 12 deletions(-)
-> 
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 178484d9fd94..8706d46863df 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -749,6 +749,9 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
->  #define ALLOC_HIGHATOMIC	0x200 /* Allows access to MIGRATE_HIGHATOMIC */
->  #define ALLOC_KSWAPD		0x800 /* allow waking of kswapd, __GFP_KSWAPD_RECLAIM set */
+>  	u8 sdw_master_count;
+>  	u16 sdw0_dev_index;
+>  	u16 sdw1_dev_index;
+> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
+> index 0fbe5e27f3fb..5b82ee8e3ad8 100644
+> --- a/sound/soc/amd/ps/pci-ps.c
+> +++ b/sound/soc/amd/ps/pci-ps.c
+> @@ -113,14 +113,37 @@ static int acp63_deinit(void __iomem *acp_base, struct device *dev)
+>  	return 0;
+>  }
 >  
-> +/* Flags that allow allocations below the min watermark. */
-> +#define ALLOC_RESERVES (ALLOC_HARDER|ALLOC_MIN_RESERVE|ALLOC_HIGHATOMIC|ALLOC_OOM)
+> +static void acp63_sdw_dma_workthread(struct work_struct *work)
+> +{
+> +	struct acp63_dev_data *adata = container_of(work, struct acp63_dev_data,
+> +						    acp_sdw_dma_work);
+> +	struct sdw_dma_dev_data *sdw_dma_data;
+> +	u32 stream_index;
+> +	u16 pdev_index;
 > +
->  enum ttu_flags;
->  struct tlbflush_unmap_batch;
->  
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 0ef4f3236a5a..6f41b84a97ac 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -3949,15 +3949,14 @@ ALLOW_ERROR_INJECTION(should_fail_alloc_page, TRUE);
->  static inline long __zone_watermark_unusable_free(struct zone *z,
->  				unsigned int order, unsigned int alloc_flags)
->  {
-> -	const bool alloc_harder = (alloc_flags & (ALLOC_HARDER|ALLOC_OOM));
->  	long unusable_free = (1 << order) - 1;
->  
->  	/*
-> -	 * If the caller does not have rights to ALLOC_HARDER then subtract
-> -	 * the high-atomic reserves. This will over-estimate the size of the
-> -	 * atomic reserve but it avoids a search.
-> +	 * If the caller does not have rights to reserves below the min
-> +	 * watermark then subtract the high-atomic reserves. This will
-> +	 * over-estimate the size of the atomic reserve but it avoids a search.
->  	 */
-> -	if (likely(!alloc_harder))
-> +	if (likely(!(alloc_flags & ALLOC_RESERVES)))
->  		unusable_free += z->nr_reserved_highatomic;
->  
->  #ifdef CONFIG_CMA
-> @@ -3981,25 +3980,36 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
->  {
->  	long min = mark;
->  	int o;
-> -	const bool alloc_harder = (alloc_flags & (ALLOC_HARDER|ALLOC_OOM));
->  
->  	/* free_pages may go negative - that's OK */
->  	free_pages -= __zone_watermark_unusable_free(z, order, alloc_flags);
->  
-> -	if (alloc_flags & ALLOC_MIN_RESERVE)
-> -		min -= min / 2;
-> +	if (unlikely(alloc_flags & ALLOC_RESERVES)) {
-> +		/*
-> +		 * __GFP_HIGH allows access to 50% of the min reserve as well
-> +		 * as OOM.
-> +		 */
-> +		if (alloc_flags & ALLOC_MIN_RESERVE)
-> +			min -= min / 2;
->  
-> -	if (unlikely(alloc_harder)) {
->  		/*
-> -		 * OOM victims can try even harder than normal ALLOC_HARDER
-> +		 * Non-blocking allocations can access some of the reserve
-> +		 * with more access if also __GFP_HIGH. The reasoning is that
-> +		 * a non-blocking caller may incur a more severe penalty
-> +		 * if it cannot get memory quickly, particularly if it's
-> +		 * also __GFP_HIGH.
-> +		 */
-> +		if (alloc_flags & ALLOC_HARDER)
-> +			min -= min / 4;
+> +	pdev_index = adata->sdw_dma_dev_index;
+> +	sdw_dma_data = dev_get_drvdata(&adata->pdev[pdev_index]->dev);
 > +
-> +		/*
-> +		 * OOM victims can try even harder than the normal reserve
->  		 * users on the grounds that it's definitely going to be in
->  		 * the exit path shortly and free memory. Any allocation it
->  		 * makes during the free path will be small and short-lived.
->  		 */
->  		if (alloc_flags & ALLOC_OOM)
->  			min -= min / 2;
-> -		else
-> -			min -= min / 4;
->  	}
->  
->  	/*
-> -- 
-> 2.35.3
+> +	for (stream_index = 0; stream_index < ACP63_SDW_MAX_STREAMS; stream_index++) {
+> +		if (adata->dma_intr_stat[stream_index]) {
+> +			if (sdw_dma_data->sdw_stream[stream_index])
+> +				snd_pcm_period_elapsed(sdw_dma_data->sdw_stream[stream_index]);
 
--- 
-Michal Hocko
-SUSE Labs
+is there a reason why you do this in a work thread?
+
+IIRC we did this in SOF because of an issue where during an xrun a stop
+IPC would be sent while we were dealing with an IPC.
+
+I don't quite see why it's needed for a DMA?
+
+What am I missing?
+
+> +			adata->dma_intr_stat[stream_index] = 0;
+> +		}
+> +	}
+> +}
+
