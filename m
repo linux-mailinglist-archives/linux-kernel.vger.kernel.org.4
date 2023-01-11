@@ -2,126 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4C766604B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A12B66605D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239168AbjAKQWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:22:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S233945AbjAKQZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235478AbjAKQVq (ORCPT
+        with ESMTP id S239322AbjAKQYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:21:46 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD343395DC;
-        Wed, 11 Jan 2023 08:19:11 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3F6B44DEB;
-        Wed, 11 Jan 2023 16:19:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673453950; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Uo1F/S6/BtgInuYAgaI0yUjIL9CeDbM27HnRNyBOC8=;
-        b=oUm4vmx/tY5jshUMzmTMV4ujxm9WBPq7G63760MdNaeUeWGw61qJWUsBiU/ThcpJxf3YbT
-        9dnFhOb83o/uIlG01AUWYKBRHbBej41yxRsJGPGrJM6vF20xCc+ljCnJ/Ur+izcnctbDnB
-        +W6AaANj1nk+G3E8ZdNbT5nkdMWH1UE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1EC6B1358A;
-        Wed, 11 Jan 2023 16:19:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id aLOxBX7hvmPZTgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 11 Jan 2023 16:19:10 +0000
-Date:   Wed, 11 Jan 2023 17:19:09 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2 2/2] docs/mm: Physical Memory: add structure,
- introduction and nodes description
-Message-ID: <Y77hfY8+FUun1tKa@dhcp22.suse.cz>
-References: <20230110152358.2641910-1-rppt@kernel.org>
- <20230110152358.2641910-3-rppt@kernel.org>
- <Y72YMk21sSJLfUiz@dhcp22.suse.cz>
- <Y76qi7OB0gcigqZA@kernel.org>
- <Y767UIx0TQtylJPG@dhcp22.suse.cz>
- <Y77de+xRh+8NXXKn@kernel.org>
+        Wed, 11 Jan 2023 11:24:45 -0500
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A651EAE9;
+        Wed, 11 Jan 2023 08:21:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1673453996; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=KM/fWr6Ijp70rtm8BZuHp4yu61t3UXAW5rtoQ6TXGcicAfJmHGPfWLKr1gytRoSKd8RkFFo9uEWR22Bhfm+UxDGANxl6JOGr27UdMYWvtgvWRjZn0e7X72aX4eom3nwSbyezPydcXNa3LtLcjuu9FZETcZ+zXvJiBfS3gVXmwuE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1673453996; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=tiQTww6+qZYfimr4KPwcIb2tftIxWwGfB8Hm6/Cz1yE=; 
+        b=Fq+x9KElNqehQrZGMJw69xRwsNuD311UXDJ9bkbqSa49Bhruze+kkmiUVsKvwD0MYpJxcxnuZQoWSdo5pOEFSVwCOtmizn5s1NDPOCoUnWC+xVrCDz+WuttE3C+jQ8skTtcdChEr18E5eOBBt1SAy3lJj0kbdE6Wy26FyhuRUm8=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673453996;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=tiQTww6+qZYfimr4KPwcIb2tftIxWwGfB8Hm6/Cz1yE=;
+        b=pJbSoUWrTmpTUzq+rwtrHjuujzN9fCIUXl8zqM90VORnwxTSqUNH2Y8uBmVdrB6d
+        FaXexjLpbLxFRqnpKv2UdSOXAXBttTZFkOYbK9be51q77qMETJEozSPKPRivgHFS1W0
+        uTEWfkwldcnnTZE2KKgrPNhADs6Zejk/R3ut48Vs=
+Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
+        with SMTPS id 1673453995499381.7961469408317; Wed, 11 Jan 2023 21:49:55 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     keyrings <keyrings@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <20230111161934.336743-1-code@siddh.me>
+Subject: [PATCH v4] kernel/watch_queue: NULL the dangling *pipe, and use it for clear check
+Date:   Wed, 11 Jan 2023 21:49:34 +0530
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y77de+xRh+8NXXKn@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 11-01-23 18:02:03, Mike Rapoport wrote:
-> On Wed, Jan 11, 2023 at 02:36:16PM +0100, Michal Hocko wrote:
-> > On Wed 11-01-23 14:24:43, Mike Rapoport wrote:
-> > > On Tue, Jan 10, 2023 at 05:54:10PM +0100, Michal Hocko wrote:
-> > > > On Tue 10-01-23 17:23:58, Mike Rapoport wrote:
-> > > > [...]
-> > > > > +* ``ZONE_DMA`` and ``ZONE_DMA32`` represent memory suitable for DMA by
-> > > > > +  peripheral devices that cannot access all of the addressable memory.
-> > > > 
-> > > > I think it would be better to not keep the historical DMA based menaning
-> > > > and teach that future developers. You can say something like
-> > > > 
-> > > > ZONE_DMA and ZONE_DMA32 have historically been used for memory suitable
-> > > > for DMA. For many years there are better more robust interfaces to
-> > > > get memory with DMA specific requirements (Documentation/core-api/dma-api.rst).
-> > > 
-> > > But even today ZONE_DMA(32) means that the memory is suitable for DMA. This
-> > > is nicely encapsulated with dma APIs and there should be no new GFP_DMA
-> > > users, but still memory outside ZONE_DMA is not suitable for DMA.
-> > 
-> > Well, the thing is that ZONE_DMA means different thing for different
-> > architectures. For x86 it is effectivelly about ISA attached HW - which
-> > means almost nothing these days. There is plethora of other HW with
-> > different address range constrains for DMA transfer so binding the zone
-> > with DMA is more likely to cause confusion than it helps.
-> 
-> Ok, how about
-> 
-> * ``ZONE_DMA`` and ``ZONE_DMA32`` historically represented memory suitable for
->   DMA by peripheral devices that cannot access all of the addressable
->   memory. For many years there are better more and robust interfaces to get
->   memory with DMA specific requirements (:ref:`DMA API <_dma_api>`), but
->   ``ZONE_DMA`` and ``ZONE_DMA32`` still represent memory ranges that have
->   restrictions on how they can be accessed.
->   Depending on the architecture, either of these zone types or even they both
->   can be disabled at build time using ``CONFIG_ZONE_DMA`` and
->   ``CONFIG_ZONE_DMA32`` configuration options. Some 64-bit platforms may need
->   both zones as they support peripherals with different DMA addressing
->   limitations.
+NULL the dangling pipe reference while clearing watch_queue.
 
-Sounds better to me. Thanks!
-At least ZONE_DMA32 is somehow better defined as it represents 32b
-address range constrain. DMA can be really different on different
-arches. Probably good to have it here. Ideally we would have a reference
-how that range is established but architectures are not unified in that
-respect.
+If not done, a reference to a freed pipe remains in the watch_queue,
+as this function is called before freeing a pipe in free_pipe_info()
+(see line 834 of fs/pipe.c).
+
+The sole use of wqueue->defunct is for checking if the watch queue has
+been cleared, but wqueue->pipe is also NULLed while clearing.
+
+Thus, wqueue->defunct is superfluous, as wqueue->pipe can be checked
+for NULL. Hence, the former can be removed.
+
+Signed-off-by: Siddh Raman Pant <code@siddh.me>
+---
+Changes in v4:
+- Drop preceeding kerneldoc-changes patch and change appropriately.
+
+Changes in v3 (8 Jan 2023):
+- Minor rephrase of comment before NULLing in watch_queue_clear().
+
+Changes in v2 (6 Aug 2022):
+- Merged the NULLing and removing defunct patches.
+- Removed READ_ONCE barrier in lock_wqueue().
+- Better commit messages.
+
+ include/linux/watch_queue.h |  3 +--
+ kernel/watch_queue.c        | 12 ++++++------
+ 2 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/watch_queue.h b/include/linux/watch_queue.h
+index fc6bba20273b..45cd42f55d49 100644
+--- a/include/linux/watch_queue.h
++++ b/include/linux/watch_queue.h
+@@ -38,7 +38,7 @@ struct watch_filter {
+ struct watch_queue {
+ =09struct rcu_head=09=09rcu;
+ =09struct watch_filter __rcu *filter;
+-=09struct pipe_inode_info=09*pipe;=09=09/* The pipe we're using as a buffe=
+r */
++=09struct pipe_inode_info=09*pipe;=09=09/* Pipe we use as a buffer, NULL i=
+f queue closed */
+ =09struct hlist_head=09watches;=09/* Contributory watches */
+ =09struct page=09=09**notes;=09/* Preallocated notifications */
+ =09unsigned long=09=09*notes_bitmap;=09/* Allocation bitmap for notes */
+@@ -46,7 +46,6 @@ struct watch_queue {
+ =09spinlock_t=09=09lock;
+ =09unsigned int=09=09nr_notes;=09/* Number of notes */
+ =09unsigned int=09=09nr_pages;=09/* Number of pages in notes[] */
+-=09bool=09=09=09defunct;=09/* T when queues closed */
+ };
+=20
+ /*
+diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
+index a6f9bdd956c3..6ead921c15c0 100644
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -43,7 +43,7 @@ MODULE_LICENSE("GPL");
+ static inline bool lock_wqueue(struct watch_queue *wqueue)
+ {
+ =09spin_lock_bh(&wqueue->lock);
+-=09if (unlikely(wqueue->defunct)) {
++=09if (unlikely(!wqueue->pipe)) {
+ =09=09spin_unlock_bh(&wqueue->lock);
+ =09=09return false;
+ =09}
+@@ -105,9 +105,6 @@ static bool post_one_notification(struct watch_queue *w=
+queue,
+ =09unsigned int head, tail, mask, note, offset, len;
+ =09bool done =3D false;
+=20
+-=09if (!pipe)
+-=09=09return false;
+-
+ =09spin_lock_irq(&pipe->rd_wait.lock);
+=20
+ =09mask =3D pipe->ring_size - 1;
+@@ -603,8 +600,11 @@ void watch_queue_clear(struct watch_queue *wqueue)
+ =09rcu_read_lock();
+ =09spin_lock_bh(&wqueue->lock);
+=20
+-=09/* Prevent new notifications from being stored. */
+-=09wqueue->defunct =3D true;
++=09/*
++=09 * This pipe can be freed by callers like free_pipe_info().
++=09 * Removing this reference also prevents new notifications.
++=09 */
++=09wqueue->pipe =3D NULL;
+=20
+ =09while (!hlist_empty(&wqueue->watches)) {
+ =09=09watch =3D hlist_entry(wqueue->watches.first, struct watch, queue_nod=
+e);
+--=20
+2.39.0
 
 
--- 
-Michal Hocko
-SUSE Labs
