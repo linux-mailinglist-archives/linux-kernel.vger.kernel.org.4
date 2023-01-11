@@ -2,71 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31F16662CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5E76662C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbjAKSaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
+        id S234628AbjAKSaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238754AbjAKS2k (ORCPT
+        with ESMTP id S236094AbjAKS2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:28:40 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AA932E8A;
-        Wed, 11 Jan 2023 10:28:37 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673461716;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XbHz+r4gS67P31F5u+ZSysVNdDYKMiNjdT2EucbKd3E=;
-        b=lXvvoQHKqOwihWoCJuyJb72HKyLp5RP/InGDCYN8zYLAmIvUi6cu1Inbm6IMGqnsum/sng
-        MhLJhGsbPX62sryYcJ3vS+Pzfl5DkG2gyl06GVpuwE3ODaPSMmpVJ+ztuFZ0j1w89XuZpI
-        LsanNEv/7SgUUTcidB51fTnqX28nyOXlHRKNBJqjbHJxciEr9ZnRK1q1vkc66bER3fl0R0
-        Iw0j/ZI0cUggH6MH6snMiievoZ+/BfWSKtOZV1KDYIdEerva/DkVILSrId6iqm20+qOZmi
-        2vvq+My7nwEc1dLjT8uSSjvTD9BQxzPK8ZEie0xM6KXOYo0Ae0nL/7Bfpf95xg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673461716;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XbHz+r4gS67P31F5u+ZSysVNdDYKMiNjdT2EucbKd3E=;
-        b=0zLjVYnmGPMoqdCm1kV1PGYNKkXR61UrEyJJqOJ/3o4IwHpYaJJxSavLzAipZyd3eayY7b
-        D4Kdqlno/G3WH4Bw==
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 19/19] irqdomain: Switch to per-domain locking
-In-Reply-To: <878rjcbnp8.ffs@tglx>
-References: <20221209140150.1453-1-johan+linaro@kernel.org>
- <20221209140150.1453-20-johan+linaro@kernel.org> <87mt7sbtf9.ffs@tglx>
- <Y5c6z3t+sV/kIMjF@hovoldconsulting.com> <878rjcbnp8.ffs@tglx>
-Date:   Wed, 11 Jan 2023 19:28:35 +0100
-Message-ID: <871qo1hqng.ffs@tglx>
+        Wed, 11 Jan 2023 13:28:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE961BCAE;
+        Wed, 11 Jan 2023 10:28:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB26CB81BDC;
+        Wed, 11 Jan 2023 18:28:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19F09C433EF;
+        Wed, 11 Jan 2023 18:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673461729;
+        bh=SEVadaaZ7nAyP60UPoBxxqnNElyp72turpT4z9GLOgY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=m85A0ufJDBXb1Inco40yvIDQ6syjaqa2qJNvkraRufme1NPFfmkrc2yP1g8IIwYoj
+         8rz2fJymIGpMd0JU0P/YxWFMV9OU8pyOREFqkvZLywcbXyqn+tHXHGyBa3eBqHTBtl
+         Jzzr1Oa+oEE7Q+90PDiH28vBpInizMmr0UFWsZ8sxjzWxrDj3CtFXGzm5k/9qShacS
+         9XAff7LW6mN77xfgxFRb07WIdrZgMH9I1T5vKVdFbsi2HJr3rSJmuRlB7SvzUts/pJ
+         vmfa1RylFItRdURplCvZY+ftCtggDjwIQQxC5LAdqJWNSEojhB1kHaQfr34nmBY1xb
+         MY5VhmTgsnCiw==
+Date:   Wed, 11 Jan 2023 10:28:48 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Esina Ekaterina <eesina@astralinux.ru>
+Cc:     Zhao Qiang <qiang.zhao@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH v3]   net: wan: Add checks for NULL for utdm in
+ undo_uhdlc_init and unmap_si_regs
+Message-ID: <20230111102848.44863b9c@kernel.org>
+In-Reply-To: <20230111090504.66434-1-eesina@astralinux.ru>
+References: <20230110204418.79f43f45@kernel.org>
+        <20230111090504.66434-1-eesina@astralinux.ru>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12 2022 at 17:18, Thomas Gleixner wrote:
-> On Mon, Dec 12 2022 at 15:29, Johan Hovold wrote:
->> I added to irq_domain_set_mapping() and which is is called for each
->> (inner) domain in a hierarchy when allocating an IRQ.
->
-> Hmm. Indeed that should do the trick.
->
-> Some comments would be appreciated as the rules around domain->root are
-> far from obvious.
+On Wed, 11 Jan 2023 12:05:03 +0300 Esina Ekaterina wrote:
+> Subject: [PATCH v3]   net: wan: Add checks for NULL for utdm in undo_uhdlc_init and unmap_si_regs
 
-Any update on this one?
+net: wan: prevent null-deref on error path for non-tdm case
+
+>   If uhdlc_priv_tsa != 1 then utdm is not initialized.
+>   And if ret != NULL then goto undo_uhdlc_init, where
+>   utdm is dereferenced. Same if dev == NULL.
+> 
+>   Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+I did the indentation to make the content stand out in the email, 
+there should be no indentation in the actual msg, sorry.
+
+> --- a/drivers/net/wan/fsl_ucc_hdlc.c
+> +++ b/drivers/net/wan/fsl_ucc_hdlc.c
+> @@ -1243,9 +1243,11 @@ static int ucc_hdlc_probe(struct platform_device *pdev)
+>  free_dev:
+>  	free_netdev(dev);
+>  undo_uhdlc_init:
+> -	iounmap(utdm->siram);
+> +	if (utdm != NULL)
+
+and here just:
+
+	if (utdm)
+
+comparing to NULL or zero is less idiomatic in kernel C.
+
+> +		iounmap(utdm->siram);
+>  unmap_si_regs:
+> -	iounmap(utdm->si_regs);
+> +	if (utdm != NULL)
+> +		iounmap(utdm->si_regs);
