@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A9A665BEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41074665BF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbjAKM7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 07:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S231712AbjAKNAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbjAKM7L (ORCPT
+        with ESMTP id S236157AbjAKM7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 07:59:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2A81C4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 04:59:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC656B81BDF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:59:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A26C1C433EF;
-        Wed, 11 Jan 2023 12:59:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673441948;
-        bh=OAonq7L5C7h3Xoo6q19gjPkLzGp0g1x2P9DhUt1v8hI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GV3BX3Is8fihkER4CBDTPRxoH1npx49IA5MwgoZNJ/pTM2WVicgW13s5H60VOXhss
-         jO5Tu+CrP2EblZBd/nNmX0XdgIHEhn6NcArebCVLqTEzd/vdfIr4J4A+d1A9s1gc1e
-         AramKK0FpWGHVWVry5CngLVJOm1z6oj4aFQLgv1K1O+JJBLDr5GChu3F8RGtQX64Vy
-         /W4VEz/me4m5/g7OxN3SsX828F7jgWJaGJRHiLMXgXfAVUoC4mht8SZmnt1Lhz0muo
-         Hx6bUmsGdbyZg8IC+4Egeq4MPhBmYWEromzjcM70SgMg2ktJdMuTac+g/E3vpzbAgi
-         yxBNgRK5r1gwg==
-Message-ID: <25f7845d-5bf6-7948-d063-747186ff0d74@kernel.org>
-Date:   Wed, 11 Jan 2023 20:59:06 +0800
+        Wed, 11 Jan 2023 07:59:49 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB4D1A078
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 04:59:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iNG3XOZSx6tsrw4TFQy3M7kX0dahEVafq/7qDclmz/Y=; b=m/UGwURdem/v7if/S3yr8tSixD
+        i4fGmmnPbLge/2aR2/UV18xrKZ7u2GBYrrr7wRPAdbdVQxTVzWEzhJ99HaNPpJew0Fxcs7Zo4lc8g
+        gRhZNogJSEYcRdpolG0ly04F1GqqEDHeE/xn3OAkxGKqsnQDW3qWlEEUmNB3WQ+agsHNldndCLBIG
+        czp7wnmDV7u4lG5Mcc3zHcC5Sl/9z7NFFew9YaSyJJPalv1Ahp81ooogXmiI6xWRKkpQjFzdHXagw
+        uHNupZMMAsHVmgBeRI+iLwGXhhG3haVcJHq83GOjfE9uXFxmHAlqQsCkHQbWph6VO18JYGH7Rk0xa
+        c5HFhThg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pFahp-004986-3g; Wed, 11 Jan 2023 12:59:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 95B8E300472;
+        Wed, 11 Jan 2023 13:59:34 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 744C82CA101AD; Wed, 11 Jan 2023 13:59:34 +0100 (CET)
+Date:   Wed, 11 Jan 2023 13:59:34 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Joan Bruguera <joanbrugueram@gmail.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: Wake-up from suspend to RAM broken under `retbleed=stuff`
+Message-ID: <Y76ytk6GkMfeu9Ho@hirez.programming.kicks-ass.net>
+References: <20230108030748.158120-1-joanbrugueram@gmail.com>
+ <20230109040531.7888-1-joanbrugueram@gmail.com>
+ <Y76bbtJn+jIV3pOz@hirez.programming.kicks-ass.net>
+ <baa1b55b-8415-0c33-a6e5-f568c48f455f@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] MAINTAINERS: Add f2fs's patchwork
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20221216024506.77048-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221216024506.77048-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <baa1b55b-8415-0c33-a6e5-f568c48f455f@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/16 10:45, Yangtao Li wrote:
->  From now on, f2fs also has its own patchwork link, thanks to Jaegeuk
-> for starting this tool!
-> 
-> Let's update it to f2fs entry.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+On Wed, Jan 11, 2023 at 12:52:41PM +0100, Juergen Gross wrote:
+> I have verified that the suspend path when running as Xen PV guest
+> is NOT calling restore_processor_state().
 
-Reviewed-by: Chao Yu <chao@kernel.org>
-
-Thanks,
+Oh excellent, that makes things a lot simpler, thanks!
