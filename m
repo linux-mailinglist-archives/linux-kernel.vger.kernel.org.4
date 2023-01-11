@@ -2,92 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403E6665E80
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D81F665E7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbjAKOyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S234865AbjAKOyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:54:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238808AbjAKOyS (ORCPT
+        with ESMTP id S232134AbjAKOyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:54:18 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62A51A813;
-        Wed, 11 Jan 2023 06:53:56 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30BEdmiA007779;
-        Wed, 11 Jan 2023 14:53:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=W6HJd2P4mH1ga3SYEzvrplZoNqF2DZP9lcV1Wv9VNtg=;
- b=NMUV/MfLjY/3bycVbXPtXNQ7/PCCeVdciZTIz9Mw9sr5IrojRJN5dfGqzoIAAPyAzhgk
- YU9mSd0ZslAeHJZKpYKJ7g7R8c1kpZpyiOi4GEWDqzhd+W6OtrPsVP25IoWAwxrYzvc3
- dq1oxVROfGUCZcyXsuyO96tNUw5Z/4Fwr5anX3OnjNxQZbFL5FD/PRzTY/31L/cFyXR8
- b5icqV1sbq0YbJUvCn1ZnXXBuKHHg5FMo3U3wzSss/WDFui6gMj9kFadTpcPvE9Yg+af
- MXYWyXh0ST1SrM4766tRrABlOIdq6Rv+gG+QbWusRhpYHP44Md0VV2r0CoyqlDHl5a50 oA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1m6p1c2b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 14:53:08 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30BEr7k4007056
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 14:53:07 GMT
-Received: from [10.50.23.36] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 11 Jan
- 2023 06:52:55 -0800
-Message-ID: <69d67ce2-563c-984d-7eeb-8319a535d17a@quicinc.com>
-Date:   Wed, 11 Jan 2023 20:22:49 +0530
+        Wed, 11 Jan 2023 09:54:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768DA1A807;
+        Wed, 11 Jan 2023 06:53:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33B1AB81C0C;
+        Wed, 11 Jan 2023 14:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F16C433EF;
+        Wed, 11 Jan 2023 14:53:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673448821;
+        bh=l7h8mYJZuBhMPhN7LKosUL1aDMOSgDxgaeg5YFv9Bu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ktliF64bXUV/uUQ51zJ3jzem+3h4Q7TxUMIOfZb1j/6hyoNhdE2flmwqFqrmcAFkR
+         m2X3D7VNyrPbO8jrGYX9dJgElhxlK0uqRiid/TX18hBF8+mRjQkPPlWcWN1UBmYLac
+         xjLq3ckuxBLIB/0HuaB6Oq0YwrS384j7HMwXeLfAgNO6hEZrLMsvLZz0IN4Di+5Y4b
+         x7PjRUnn9q3X9Pc5ERSgidOob5M50C6l1g1J4PttZBzuMkPQRV4pDc2UDk8RvMxMAX
+         1rAet2ojt3SwUJhgQzXAW4wJ9NhjmA2GifaxYQFk5HSOXDtq8pQAA3Me3ysXo+Vjc6
+         +bFU5pLaD/ljg==
+Date:   Wed, 11 Jan 2023 14:53:35 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Aishwarya TCV <aishwarya.tcv@arm.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-amlogic@lists.infradead.org
+Subject: Re: next-20230110: arm64: defconfig+kselftest config boot failed -
+ Unable to handle kernel paging request at virtual address fffffffffffffff8
+Message-ID: <Y77Nb7SJzd6sSB5/@sirena.org.uk>
+References: <CA+G9fYsns3krivbPSjQ1c1EQpVyd-bkW84MaUvqMTQr9c=iEaw@mail.gmail.com>
+ <77342621-d67f-4d47-a33b-6f721576bf9d@app.fastmail.com>
+ <19423616-79d4-9478-c6df-4f226f87a27f@linaro.org>
+ <Y76rijHJ3KAZ6D9C@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 6/7] arm64: dts: Add ipq9574 SoC and AL02 board support
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devi priya <quic_devipriy@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>, <shawnguo@kernel.org>,
-        <arnd@arndb.de>, <marcel.ziswiler@toradex.com>,
-        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <tdas@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-7-quic_devipriy@quicinc.com>
- <f6ef1834-b629-b76c-9cde-55af56320665@linaro.org>
-From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-In-Reply-To: <f6ef1834-b629-b76c-9cde-55af56320665@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: F3MSXVqmRaVypyzQlRTfd8pfpYdd9TW2
-X-Proofpoint-GUID: F3MSXVqmRaVypyzQlRTfd8pfpYdd9TW2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-11_07,2023-01-11_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- mlxscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=999
- clxscore=1011 spamscore=0 phishscore=0 priorityscore=1501 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301110108
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NyJhWMMx1H0jFDH9"
+Content-Disposition: inline
+In-Reply-To: <Y76rijHJ3KAZ6D9C@sirena.org.uk>
+X-Cookie: I am NOMAD!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,462 +72,88 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 1/11/2023 3:14 PM, Krzysztof Kozlowski wrote:
-> On 10/01/2023 13:13, devi priya wrote:
->> From: POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
->>
->> Add initial device tree support for Qualcomm IPQ9574 SoC
->> and AL02 board
->>
->> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
->> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->> Co-developed-by: devi priya <quic_devipriy@quicinc.com>
->> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
->> Signed-off-by: POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/Makefile            |   1 +
->>   arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts |  69 ++++
->>   arch/arm64/boot/dts/qcom/ipq9574.dtsi        | 318 +++++++++++++++++++
->>   3 files changed, 388 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->>   create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>
->> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->> index 3e79496292e7..872c62028a0b 100644
->> --- a/arch/arm64/boot/dts/qcom/Makefile
->> +++ b/arch/arm64/boot/dts/qcom/Makefile
->> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
->> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-al02-c7.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-asus-z00l.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-huawei-g7.dtb
->> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->> new file mode 100644
->> index 000000000000..ae3c32f3e16a
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->> @@ -0,0 +1,69 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
-> Not dual licensed? Not BSD?
->
->> +/*
->> + * IPQ9574 AL02-C7 board device tree source
->> + *
->> + * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include "ipq9574.dtsi"
->> +
->> +/ {
->> +	model = "Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7";
->> +	compatible = "qcom,ipq9574-ap-al02-c7", "qcom,ipq9574";
->> +	interrupt-parent = <&intc>;
-Can this be droppeed? since it is already part of DTSI.
->> +
->> +	aliases {
->> +		serial0 = &blsp1_uart2;
->> +	};
->> +
->> +	chosen {
->> +		stdout-path = "serial0:115200n8";
->> +	};
->> +};
->> +
->> +&blsp1_uart2 {
->> +	pinctrl-0 = <&uart2_pins>;
->> +	pinctrl-names = "default";
->> +	status = "okay";
->> +};
->> +
->> +&sdhc_1 {
->> +	pinctrl-0 = <&emmc_pins>;
->> +	pinctrl-names = "default";
->> +	status = "okay";
->> +};
->> +
->> +&tlmm {
->> +	emmc_pins: emmc-state {
->> +		emmc-clk-pins {
->> +			pins = "gpio5";
->> +			function = "sdc_clk";
->> +			drive-strength = <8>;
->> +			bias-disable;
->> +		};
->> +		emmc-cmd-pins {
->> +			pins = "gpio4";
->> +			function = "sdc_cmd";
->> +			drive-strength = <8>;
->> +			bias-pull-up;
->> +		};
->> +		emmc-data-pins {
->> +			pins = "gpio0", "gpio1", "gpio2",
->> +			     "gpio3", "gpio6", "gpio7",
->> +			     "gpio8", "gpio9";
->> +			function = "sdc_data";
->> +			drive-strength = <8>;
->> +			bias-pull-up;
->> +		};
->> +		emmc-rclk-pins {
->> +			pins = "gpio10";
->> +			function = "sdc_rclk";
->> +			drive-strength = <8>;
->> +			bias-pull-down;
->> +		};
->> +	};
->> +
->> +};
->> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> new file mode 100644
->> index 000000000000..188d18688a77
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> @@ -0,0 +1,318 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * IPQ9574 SoC device tree source
->> + *
->> + * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->> +#include <dt-bindings/clock/qcom,gcc-ipq9574.h>
->> +#include <dt-bindings/reset/qcom,gcc-ipq9574.h>
->> +
->> +/ {
->> +	interrupt-parent = <&intc>;
->> +	#address-cells = <2>;
->> +	#size-cells = <2>;
->> +
->> +	clocks {
->> +		bias_pll_ubi_nc_clk: bias_pll_ubi_nc_clk {
-> No undercores in node names.
->
->> +			compatible = "fixed-clock";
->> +			clock-frequency = <353000000>;
->> +			#clock-cells = <0>;
->> +		};
->> +
->> +		pcie30_phy0_pipe_clk: pcie30_phy0_pipe_clk {
->> +			compatible = "fixed-clock";
->> +			clock-frequency = <250000000>;
->> +			#clock-cells = <0>;
->> +		};
->> +
->> +		pcie30_phy1_pipe_clk: pcie30_phy1_pipe_clk {
->> +			compatible = "fixed-clock";
->> +			clock-frequency = <250000000>;
->> +			#clock-cells = <0>;
->> +		};
->> +
->> +		pcie30_phy2_pipe_clk: pcie30_phy2_pipe_clk {
->> +			compatible = "fixed-clock";
->> +			clock-frequency = <250000000>;
->> +			#clock-cells = <0>;
->> +		};
->> +
->> +		pcie30_phy3_pipe_clk: pcie30_phy3_pipe_clk {
->> +			compatible = "fixed-clock";
->> +			clock-frequency = <250000000>;
->> +			#clock-cells = <0>;
->> +		};
->> +
->> +		usb3phy_0_cc_pipe_clk: usb3phy_0_cc_pipe_clk {
->> +			compatible = "fixed-clock";
->> +			clock-frequency = <125000000>;
->> +			#clock-cells = <0>;
->> +		};
->> +
->> +		sleep_clk: sleep-clk {
->> +			compatible = "fixed-clock";
->> +			clock-frequency = <32000>;
-> That's not a property of the SoC, but board. Either entire clock or at
-> least frequency to indicate that the board is providing the clock.
->
->> +			#clock-cells = <0>;> +		};
->> +
->> +		xo_board_clk: xo-board-clk {
->> +			compatible = "fixed-clock";
->> +			clock-frequency = <24000000>;
-> Ditto.
->
->> +			#clock-cells = <0>;
->> +		};
->> +	};
->> +
->> +	cpus {
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		CPU0: cpu@0 {
->> +			device_type = "cpu";
->> +			compatible = "arm,cortex-a73";
->> +			reg = <0x0>;
->> +			enable-method = "psci";
->> +			next-level-cache = <&L2_0>;
->> +		};
->> +
->> +		CPU1: cpu@1 {
->> +			device_type = "cpu";
->> +			compatible = "arm,cortex-a73";
->> +			reg = <0x1>;
->> +			enable-method = "psci";
->> +			next-level-cache = <&L2_0>;
->> +		};
->> +
->> +		CPU2: cpu@2 {
->> +			device_type = "cpu";
->> +			compatible = "arm,cortex-a73";
->> +			reg = <0x2>;
->> +			enable-method = "psci";
->> +			next-level-cache = <&L2_0>;
->> +		};
->> +
->> +		CPU3: cpu@3 {
->> +			device_type = "cpu";
->> +			compatible = "arm,cortex-a73";
->> +			reg = <0x3>;
->> +			enable-method = "psci";
->> +			next-level-cache = <&L2_0>;
->> +		};
->> +
->> +		L2_0: l2-cache {
->> +			compatible = "cache";
->> +			cache-level = <2>;
->> +		};
->> +	};
->> +
->> +	memory@40000000 {
->> +		device_type = "memory";
->> +		/* We expect the bootloader to fill in the size */
->> +		reg = <0x0 0x40000000 0x0 0x0>;
->> +	};
->> +
->> +	pmu {
->> +		compatible = "arm,cortex-a73-pmu";
->> +		interrupts = <GIC_PPI 7 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
->> +	};
->> +
->> +	psci {
->> +		compatible = "arm,psci-1.0";
->> +		method = "smc";
->> +	};
->> +
->> +	reserved-memory {
->> +		#address-cells = <2>;
->> +		#size-cells = <2>;
->> +		ranges;
->> +
->> +		tz_region: memory@4a600000 {
->> +			reg = <0x0 0x4a600000 0x0 0x400000>;
->> +			no-map;
->> +		};
->> +	};
->> +
->> +	soc: soc@0 {
->> +		#address-cells = <1>;
->> +		#size-cells = <1>;
->> +		ranges = <0 0 0 0xffffffff>;
->> +		compatible = "simple-bus";
->> +
->> +		tlmm: pinctrl@1000000 {
->> +			compatible = "qcom,ipq9574-tlmm";
->> +			reg = <0x01000000 0x300000>;
->> +			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
->> +			gpio-controller;
->> +			#gpio-cells = <2>;
->> +			gpio-ranges = <&tlmm 0 0 65>;
->> +			gpio-reserved-ranges = <59 1>;
-> Hm, why reserved ranges are in SoC?
->
->> +			interrupt-controller;
->> +			#interrupt-cells = <2>;
->> +
->> +			uart2_pins: uart2-state {
->> +				pins = "gpio34", "gpio35";
->> +				function = "blsp2_uart";
->> +				drive-strength = <8>;
->> +				bias-disable;
->> +			};
->> +		};
->> +
->> +		gcc: clock-controller@1800000 {
->> +			compatible = "qcom,gcc-ipq9574";
->> +			reg = <0x1800000 0x80000>;
-Address can be padded to 8-hex-digits. Please take care of this in all 
-nodes.
->> +			clocks = <&xo_board_clk>,
->> +				<&sleep_clk>,
->> +				<&bias_pll_ubi_nc_clk>,
->> +				<&pcie30_phy0_pipe_clk>,
->> +				<&pcie30_phy1_pipe_clk>,
->> +				<&pcie30_phy2_pipe_clk>,
->> +				<&pcie30_phy3_pipe_clk>,
->> +				<&usb3phy_0_cc_pipe_clk>;
->> +			clock-names = "xo",
->> +				"sleep_clk",
-> Misaligned. Multiple other places probably as well.
->
->> +				"bias_pll_ubi_nc_clk",
->> +				"pcie30_phy0_pipe_clk",
->> +				"pcie30_phy1_pipe_clk",
->> +				"pcie30_phy2_pipe_clk",
->> +				"pcie30_phy3_pipe_clk",
->> +				"usb3phy_0_cc_pipe_clk";
->> +			#clock-cells = <1>;
->> +			#reset-cells = <1>;
->> +		};
->> +
->> +		sdhc_1: sdhci@7804000 {
->> +			compatible = "qcom,sdhci-msm-v5";
->> +			reg = <0x7804000 0x1000>, <0x7805000 0x1000>;
->> +			reg-names = "hc_mem", "cmdq_mem";
->> +
->> +			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
->> +				   <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
-> Like here.
->
->> +			interrupt-names = "hc_irq", "pwr_irq";
->> +
->> +			clocks = <&xo_board_clk>,
->> +			       <&gcc GCC_SDCC1_AHB_CLK>,
->> +			       <&gcc GCC_SDCC1_APPS_CLK>;
-> And here
->
->> +			clock-names = "xo", "iface", "core";
-> Does not look like you tested the bindings. Please run `make
-> dt_binding_check` (see
-> Documentation/devicetree/bindings/writing-schema.rst for instructions).
->
->> +			mmc-ddr-1_8v;
->> +			mmc-hs200-1_8v;
->> +			mmc-hs400-1_8v;
->> +			mmc-hs400-enhanced-strobe;
->> +			max-frequency = <384000000>;
->> +			bus-width = <8>;
->> +			non-removable;
->> +			status = "disabled";
->> +		};
->> +
->> +		blsp1_uart2: serial@78b1000 {
->> +			compatible = "qcom,msm-uartdm-v1.4", "qcom,msm-uartdm";
->> +			reg = <0x078b1000 0x200>;
->> +			interrupts = <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>;
->> +			clocks = <&gcc GCC_BLSP1_UART3_APPS_CLK>,
->> +				 <&gcc GCC_BLSP1_AHB_CLK>;
->> +			clock-names = "core", "iface";
->> +			status = "disabled";
->> +		};
->> +
->> +		intc: interrupt-controller@b000000 {
->> +			compatible = "qcom,msm-qgic2";
->> +			reg = <0x0b000000 0x1000>,  /* GICD */
->> +			      <0x0b002000 0x1000>,  /* GICC */
->> +			      <0x0b001000 0x1000>,  /* GICH */
->> +			      <0x0b004000 0x1000>;  /* GICV */
->> +			#address-cells = <1>;
->> +			#size-cells = <1>;
->> +			interrupt-controller;
->> +			#interrupt-cells = <3>;
->> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> +			ranges = <0 0x0b00c000 0x3000>;
->> +
->> +			v2m0: v2m@0 {
->> +				compatible = "arm,gic-v2m-frame";
->> +				reg = <0x0 0xffd>;
->> +				msi-controller;
->> +			};
->> +
->> +			v2m1: v2m@1 {
->> +				compatible = "arm,gic-v2m-frame";
->> +				reg = <0x1000 0xffd>;
->> +				msi-controller;
->> +			};
->> +
->> +			v2m2: v2m@2 {
->> +				compatible = "arm,gic-v2m-frame";
->> +				reg = <0x2000 0xffd>;
->> +				msi-controller;
->> +			};
->> +		};
->> +
->> +		timer@b120000 {
->> +			compatible = "arm,armv7-timer-mem";
->> +			reg = <0xb120000 0x1000>;
->> +			#address-cells = <1>;
->> +			#size-cells = <1>;
->> +			ranges;
->> +			clock-frequency = <24000000>;
->> +
->> +			frame@b120000 {
->> +				reg = <0xb121000 0x1000>,
->> +				      <0xb122000 0x1000>;
->> +				frame-number = <0>;
->> +				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
->> +					     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
->> +			};
->> +
->> +			frame@b123000 {
->> +				reg = <0xb123000 0x1000>;
->> +				frame-number = <1>;
->> +				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> +				status = "disabled";
->> +			};
->> +
->> +			frame@b124000 {
->> +				reg = <0xb124000 0x1000>;
->> +				frame-number = <2>;
->> +				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> +				status = "disabled";
->> +			};
->> +
->> +			frame@b125000 {
->> +				reg = <0xb125000 0x1000>;
->> +				frame-number = <3>;
->> +				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
->> +				status = "disabled";
->> +			};
->> +
->> +			frame@b126000 {
->> +				reg = <0xb126000 0x1000>;
->> +				frame-number = <4>;
->> +				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
->> +				status = "disabled";
->> +			};
->> +
->> +			frame@b127000 {
->> +				reg = <0xb127000 0x1000>;
->> +				frame-number = <5>;
->> +				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
->> +				status = "disabled";
->> +			};
->> +
->> +			frame@b128000 {
->> +				reg = <0xb128000 0x1000>;
->> +				frame-number = <6>;
->> +				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
->> +				status = "disabled";
->> +			};
->> +		};
->> +	};
->> +
->> +	timer {
->> +		compatible = "arm,armv8-timer";
->> +		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
->> +			     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
->> +			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
->> +			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
->> +		clock-frequency = <24000000>;
-> Is this allowed in recent designs?
->
->> +	};
->> +};
-> Best regards,
-> Krzysztof
->
+--NyJhWMMx1H0jFDH9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Wed, Jan 11, 2023 at 12:29:04PM +0000, Mark Brown wrote:
+
+> We're seeing issues in all configs on meson-gxl-s905x-libretech-cc
+> today, not just with the kselftest fragment.  The initial failuire seems
+> to be:
+
+> [   17.337253] WARNING: CPU: 3 PID: 123 at drivers/gpu/drm/drm_bridge.c:1257 drm_bridge_hpd_enable+0x8c/0x94 [drm]
+
+> full log at:
+
+>    https://storage.kernelci.org/next/master/next-20230111/arm64/defconfig/gcc-10/lab-broonie/baseline-meson-gxl-s905x-libretech-cc.txt
+
+> and links to other logs at:
+
+>   https://linux.kernelci.org/test/job/next/branch/master/kernel/next-20230111/plan/baseline/
+
+> Today's -next does have that fix in it so it's not fixing whatever the
+> original issue was, I suspect it might even be exposing other issues.
+> We are however still seeing the stack filling up, even with a GCC 10
+> defconfig build.
+
+A bisect landed on 0e4dcffd331fa7d ("drm/panel: raspberrypi-touchscreen:
+Convert to i2c's .probe_new()") which is obviously not credible.  I
+suspect that what's happening here is that the fix you applied is making
+an issue somewhere else visible in defconfig and is as a result
+confusing the bisect.  Ard mentioned an issue with non-EFI biits
+introduced by EFI changes here:
+
+https://lore.kernel.org/linux-arm-kernel/CAMj1kXGFa=Zriyp_mS7bbQr0wiwikt0ObjOKUSNGpJtFvLmnkg@mail.gmail.com/
+
+which seems like a plausible culprit,
+
+bisect log:
+
+git bisect start
+# bad: [c9e9cdd8bdcc3e1ea330d49ea587ec71884dd0f5] Add linux-next specific files for 20230111
+git bisect bad c9e9cdd8bdcc3e1ea330d49ea587ec71884dd0f5
+# good: [7dd4b804e08041ff56c88bdd8da742d14b17ed25] Merge tag 'nfsd-6.2-3' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+git bisect good 7dd4b804e08041ff56c88bdd8da742d14b17ed25
+# good: [ecf8827ab7dd5731813f90146d9936165b170f32] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
+git bisect good ecf8827ab7dd5731813f90146d9936165b170f32
+# bad: [64208e4940ede76709f1ff5b01d1b78efc2951cf] Merge branch 'rcu/next' of git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+git bisect bad 64208e4940ede76709f1ff5b01d1b78efc2951cf
+# bad: [1077dd31ba60b39a231560beec24b97eadf8bd8f] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git
+git bisect bad 1077dd31ba60b39a231560beec24b97eadf8bd8f
+# bad: [1577a2c2aad943fbc6a5e959ae83c4ef8bc3d4de] Merge branch 'drm-next' of https://gitlab.freedesktop.org/agd5f/linux
+git bisect bad 1577a2c2aad943fbc6a5e959ae83c4ef8bc3d4de
+# good: [ec787deb2ddffc6cd6afe0e2fbbbd490ddc383ed] drm/amd: Use `amdgpu_ucode_*` helpers for GFX9
+git bisect good ec787deb2ddffc6cd6afe0e2fbbbd490ddc383ed
+# bad: [0e4dcffd331fa7d2a6ae628b51a7f418dfa90367] drm/panel: raspberrypi-touchscreen: Convert to i2c's .probe_new()
+git bisect bad 0e4dcffd331fa7d2a6ae628b51a7f418dfa90367
+# good: [c702545e19ebb6113d607f2a30ba2ee6cf881a3a] drm/gud: use new debugfs device-centered functions
+git bisect good c702545e19ebb6113d607f2a30ba2ee6cf881a3a
+# good: [977374cf481d3bea916b2775e6ecc682b9689550] drm/vc4: plane: Add 3:3:2 and 4:4:4:4 RGB/RGBX/RGBA formats
+git bisect good 977374cf481d3bea916b2775e6ecc682b9689550
+# good: [67d0a30128c9f644595dfe67ac0fb941a716a6c9] drm/meson: dw-hdmi: Fix devm_regulator_*get_enable*() conversion
+git bisect good 67d0a30128c9f644595dfe67ac0fb941a716a6c9
+# good: [29ef7605e2fd44038a70df0f46b7821464081b22] drm/i2c/sil164: Convert to i2c's .probe_new()
+git bisect good 29ef7605e2fd44038a70df0f46b7821464081b22
+# good: [307259952625798fbea89b04aebbc5106ff18c68] drm/i2c/tda998x: Convert to i2c's .probe_new()
+git bisect good 307259952625798fbea89b04aebbc5106ff18c68
+# good: [446757576a646eba6fae085396bdfbd74245ff28] drm/panel: olimex-lcd-olinuxino: Convert to i2c's .probe_new()
+git bisect good 446757576a646eba6fae085396bdfbd74245ff28
+# first bad commit: [0e4dcffd331fa7d2a6ae628b51a7f418dfa90367] drm/panel: raspberrypi-touchscreen: Convert to i2c's .probe_new()
+
+--NyJhWMMx1H0jFDH9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmO+zW4ACgkQJNaLcl1U
+h9AHxwf7BIatpjLOKRRwSZ6vH/lCXj5Af5JfwhejQkMbMaJQjABJCa1CkiRZ3sPX
+J3gj8vQg98ni2fWKtuCgQMH+9Zz342rciBN0A82EON8QDeRAlyDgnrapkvDxxEvD
+yEHbC+Uc7jer377/QGxkzbYYuoY6H74OAFjnM7wYwuy3o8e/SKZgUgxk/H9+VWzP
+f/VBTWJNmU9gFRoh/SnHgDu90V4Aa6HzkNQyaDvlK33fMpHO+4tuRKDPHWg2vQyJ
+h5CthYdC5GnTAvwh6Kjhasv7GBuqSp0Cc9Xv4DPGb8sYv6meszd2gCMb6hczoxsJ
+XNR+frbS/QAt7PFbucr+amCmHxgodA==
+=l6iC
+-----END PGP SIGNATURE-----
+
+--NyJhWMMx1H0jFDH9--
