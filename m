@@ -2,123 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE946660E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4946660EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234002AbjAKQpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:45:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
+        id S232921AbjAKQqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:46:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232233AbjAKQo4 (ORCPT
+        with ESMTP id S231972AbjAKQp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:44:56 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370671A8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:44:55 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 11 Jan 2023 11:45:58 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E26E1B;
+        Wed, 11 Jan 2023 08:45:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/zqkC0892nBvrzYj8I4E+E+GwZS3RoYTgsGXNXbQl80=; b=Lal16jcupYrWfDauUZEA3dTJOI
+        ZmMZ4GF9bkozac3T5YXCKX3pQ9m1UTNLttQI1FaYNCvIDgikYoJ8R9FwOb03EZJwSb0XrEMtK25/t
+        pw2gT4Gxr22m7l2P05qdM5xrEW11MVEhs9hX8HFSF+yVSEU1w8JzL69YKNDvV3DgKEZpoCdPrX8GM
+        v6QPUSWOatzEFLmBZ9J/l+y5Gwx7yjx2fr5NKLUw1Fr+QDrOCCJC4XMxLg0lQbFZgtsAzdQeYj3zW
+        pDFRftSobCC8nLN5jbiyjglbVy9TsRDQj2A+ATcuuCFp3eU1nA4CBHrv0qw2o+zqd7IFRKUUGCv28
+        T+wKPzIA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pFeEd-004Ip4-7M; Wed, 11 Jan 2023 16:45:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AE9C04E91;
-        Wed, 11 Jan 2023 16:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673455479; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+lGYOpDp4bNuKnxJ8tlVYLr+bl6xRPelNh0S14fBeXs=;
-        b=I7OoxYg3OlBX6EVM379TBGXUacU8S9i5T/xnB98LgJhbKPsWPa2P1VE6kAqNpctknauSk/
-        kKvWiz7MUkRa3+JWHr6fOLyEJ4gjNiAl0XViAt3U78Ut0ayY18F99tkVfpCbgeuyDaLq0U
-        2uunWKRUZusTCXL7/ZsZbinX7aMYMgw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 879B413591;
-        Wed, 11 Jan 2023 16:44:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KM+lIHfnvmNOXAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 11 Jan 2023 16:44:39 +0000
-Date:   Wed, 11 Jan 2023 17:44:38 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "michel@lespinasse.org" <michel@lespinasse.org>,
-        "joelaf@google.com" <joelaf@google.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "leewalsh@google.com" <leewalsh@google.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "jglisse@google.com" <jglisse@google.com>,
-        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
-        "arjunroy@google.com" <arjunroy@google.com>,
-        "minchan@google.com" <minchan@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "hughd@google.com" <hughd@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "gurua@google.com" <gurua@google.com>,
-        "laurent.dufour@fr.ibm.com" <laurent.dufour@fr.ibm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "axelrasmussen@google.com" <axelrasmussen@google.com>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "soheil@google.com" <soheil@google.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "jannh@google.com" <jannh@google.com>,
-        "liam.howlett@oracle.com" <liam.howlett@oracle.com>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "gthelen@google.com" <gthelen@google.com>,
-        "ldufour@linux.ibm.com" <ldufour@linux.ibm.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "posk@google.com" <posk@google.com>,
-        "lstoakes@gmail.com" <lstoakes@gmail.com>,
-        "peterjung1337@gmail.com" <peterjung1337@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
-        "hughlynch@google.com" <hughlynch@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "tatashin@google.com" <tatashin@google.com>
-Subject: Re: [PATCH 08/41] mm: introduce CONFIG_PER_VMA_LOCK
-Message-ID: <Y77ndimzUsVZwjTk@dhcp22.suse.cz>
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-9-surenb@google.com>
- <20230111001331.cxdeh52vvta6ok2p@offworld>
- <CAJuCfpEv--awCY0=R3h5Fez8x74U1EZCzNkq4_7deCYqej5sSA@mail.gmail.com>
- <Y75x5fGPcJ63pBIp@dhcp22.suse.cz>
- <Y76HTfIeEt8ZOIH3@gmail.com>
- <6be809f5554a4faaa22c287ba4224bd0@AcuMS.aculab.com>
- <CAJuCfpH_VZq99=vGQGJ+evVg5wMPKGsjyawgHnOeoKhtEiAi6w@mail.gmail.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 76F40300472;
+        Wed, 11 Jan 2023 17:45:39 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5DDF22CA25088; Wed, 11 Jan 2023 17:45:39 +0100 (CET)
+Date:   Wed, 11 Jan 2023 17:45:39 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, bpf@vger.kernel.org
+Subject: Re: [PATCH 2/3] perf/core: Set data->sample_flags in
+ perf_prepare_sample()
+Message-ID: <Y77nswJ7gMWekXTt@hirez.programming.kicks-ass.net>
+References: <20221229204101.1099430-1-namhyung@kernel.org>
+ <20221229204101.1099430-2-namhyung@kernel.org>
+ <Y7wFJ+NF0NwnmzLa@hirez.programming.kicks-ass.net>
+ <Y7x3RUd67smv3EFQ@google.com>
+ <CAM9d7ciVZCHk0YqpobfR+t0FPN_-tpnLgNbN981=EygkM_riDg@mail.gmail.com>
+ <Y76xng1U6UYpIGaW@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJuCfpH_VZq99=vGQGJ+evVg5wMPKGsjyawgHnOeoKhtEiAi6w@mail.gmail.com>
+In-Reply-To: <Y76xng1U6UYpIGaW@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 11-01-23 08:28:49, Suren Baghdasaryan wrote:
-[...]
-> Anyhow. Sounds like the overhead of the current design is small enough
-> to remove CONFIG_PER_VMA_LOCK and let it depend only on architecture
-> support?
+On Wed, Jan 11, 2023 at 01:54:54PM +0100, Peter Zijlstra wrote:
+> On Tue, Jan 10, 2023 at 12:06:00PM -0800, Namhyung Kim wrote:
+> 
+> > Another example, but in this case it's real, is ADDR.  We cannot update
+> > the data->addr just because filtered_sample_type has PHYS_ADDR or
+> > DATA_PAGE_SIZE as it'd lose the original value.
+> 
+> Hmm, how about something like so?
+> 
+> /*
+>  * if (flags & s) flags |= d; // without branches
+>  */
+> static __always_inline unsigned long
+> __cond_set(unsigned long flags, unsigned long s, unsigned long d)
+> {
+> 	return flags | (d * !!(flags & s));
+> }
+> 
+> Then:
+> 
+> 	fst = sample_type;
+> 	fst = __cond_set(fst, PERF_SAMPLE_CODE_PAGE_SIZE, PERF_SAMPLE_IP);
+> 	fst = __cond_set(fst, PERF_SAMPLE_DATA_PAGE_SIZE |
+> 			      PERF_SAMPLE_PHYS_ADDR,	  PERF_SAMPLE_ADDR);
+> 	fst = __cond_set(fst, PERF_SAMPLE_STACK_USER,     PERF_SAMPLE_REGS_USER);
+> 	fst &= ~data->sample_flags;
+> 
 
-Yes. Further optimizations can be done on top. Let's not over optimize
-at this stage.
--- 
-Michal Hocko
-SUSE Labs
+Hmm, I think it's better to write this like:
+
+static __always_inline unsigned long
+__cond_set(unsigned long flags, unsigned long s, unsigned long d)
+{
+	return d * !!(flags & s);
+}
+
+	fst = sample_type;
+	fst |= __cond_set(sample_type, PERF_SAMPLE_CODE_PAGE_SIZE, PERF_SAMPLE_IP);
+	fst |= __cond_set(sample_type, PERF_SAMPLE_DATA_PAGE_SIZE |
+			               PERF_SAMPLE_PHYS_ADDR,	   PERF_SAMPLE_ADDR);
+	fst |= __cond_set(sample_type, PERF_SAMPLE_STACK_USER,     PERF_SAMPLE_REGS_USER);
+	fst &= ~data->sample_flags;
+
+Which should be identical but has less data dependencies and thus gives
+an OoO CPU more leaway to paralleize things.
