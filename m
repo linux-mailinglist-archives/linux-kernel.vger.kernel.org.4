@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5C56651B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5DF665199
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjAKCX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 21:23:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
+        id S230111AbjAKCRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 21:17:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjAKCX5 (ORCPT
+        with ESMTP id S229660AbjAKCQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 21:23:57 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361461A4;
-        Tue, 10 Jan 2023 18:23:56 -0800 (PST)
+        Tue, 10 Jan 2023 21:16:38 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7F0CF2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:16:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673403836; x=1704939836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O6W8EEZZDpgsAPj45+hyJPC7dzxMaVkD0nu6O0WNFoY=;
-  b=f+csRMx2wpoxqtBXHluN4VTPrhg/CiLrPYUAnz2DqCp7eIR1riGtwvTv
-   ZRDwqDLG8SfD+7TioQTYw1bqqOGBDjBdlqorCyci2PjdDJLBaPlSdEljG
-   d5bvPnH7mzTsw28Fp7OZpOJnUv23ZrbKGqh8qyjpqbF2w7RjqB/+d2v6G
-   AWNFL2ymgG7QDc5CS6KB1jfimPs9+gkW70mThSXD5T2+XNS+P6R0g5Zz+
-   TU9nk6Dn+qSnjjAp3LTiV9+Z9RvbHBU9SJPg78YsLHt2MYioys2jcXVKD
-   FzGuUkorZ0Uy42z8nBuhmTTteX2Mt5uO43MrZWCU3lIeqPVPEUjGCoNHE
+  t=1673403396; x=1704939396;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=j0qLwbFlLqZ4rZRMTGUjGc7UB3n+UMvYcWq80priuAI=;
+  b=L7BTsaMq5B/tT11fqqzvTrV95+6uel53zAWYEbS+n5TofCzgsv/SDXnb
+   Js4xIjKDV9+KDl+M8bbBnmdjdkKnA5eTISBC3TER3eICu9oTrGPp+ZeOn
+   QJL4ey0twFXSfG0ALYSuv4b6AedFkCSQk89rDkrSBNaTlZg71VL1Vse/N
+   7ebck2VQEJcU/tV2DdzIQnhpCyHLDqLuJHJxHIas7qa+yuJSYNUJdZNyu
+   f4RPK54lby4bfXi45B2Xpa7QPsjJC3rlw30W2fhx0+4ZRxV6rdz1sTUTJ
+   3V//5dndNaRn2WaiHgWcuOFqsot5kBJsjE55WC1Wkb049k5T2TVF4QlA+
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324549812"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="311121293"
 X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="324549812"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 18:23:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="687766202"
+   d="scan'208";a="311121293"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 18:16:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="657270453"
 X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="687766202"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga008.jf.intel.com with ESMTP; 10 Jan 2023 18:23:50 -0800
-Date:   Wed, 11 Jan 2023 10:13:31 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v10 3/4] fpga: dfl: add basic support for DFHv1
-Message-ID: <Y74bSzUBLYH4cLDh@yilunxu-OptiPlex-7050>
-References: <20230110003029.806022-1-matthew.gerlach@linux.intel.com>
- <20230110003029.806022-4-matthew.gerlach@linux.intel.com>
- <Y708L2rRc1RDVkui@smile.fi.intel.com>
- <alpine.DEB.2.22.394.2301101310150.815911@rhweight-WRK1>
+   d="scan'208";a="657270453"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 18:16:32 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alistair Popple <apopple@nvidia.com>, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        haoxin <xhao@linux.alibaba.com>
+Subject: Re: [PATCH -v2 1/9] migrate_pages: organize stats with struct
+ migrate_pages_stats
+References: <20230110075327.590514-1-ying.huang@intel.com>
+        <20230110075327.590514-2-ying.huang@intel.com>
+        <9d27d10c-ba9a-045d-c170-fa3c4d6ea416@linux.alibaba.com>
+Date:   Wed, 11 Jan 2023 10:15:40 +0800
+In-Reply-To: <9d27d10c-ba9a-045d-c170-fa3c4d6ea416@linux.alibaba.com> (Baolin
+        Wang's message of "Tue, 10 Jan 2023 18:03:09 +0800")
+Message-ID: <87a62p4y0j.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2301101310150.815911@rhweight-WRK1>
+Content-Type: text/plain; charset=ascii
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
@@ -73,86 +70,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-10 at 14:07:16 -0800, matthew.gerlach@linux.intel.com wrote:
-> 
-> 
-> On Tue, 10 Jan 2023, Andy Shevchenko wrote:
-> 
-> > On Mon, Jan 09, 2023 at 04:30:28PM -0800, matthew.gerlach@linux.intel.com wrote:
-> > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > 
-> > > Version 1 of the Device Feature Header (DFH) definition adds
-> > > functionality to the Device Feature List (DFL) bus.
-> > > 
-> > > A DFHv1 header may have one or more parameter blocks that
-> > > further describes the HW to SW. Add support to the DFL bus
-> > > to parse the MSI-X parameter.
-> > > 
-> > > The location of a feature's register set is explicitly
-> > > described in DFHv1 and can be relative to the base of the DFHv1
-> > > or an absolute address. Parse the location and pass the information
-> > > to DFL driver.
-> > 
-> > ...
-> > 
-> > > v10: change dfh_find_param to return size of parameter data in bytes
-> > 
-> > The problem that might occur with this approach is byte ordering.
-> > When we have u64 items, we know that they all are placed in CPU
-> > ordering by the bottom layer. What's the contract now? Can it be
-> > a problematic? Please double check this (always keep in mind BE32
-> > as most interesting case for u64/unsigned long representation and
-> > other possible byte ordering outcomes).
-> 
-> A number of u64 items certainly states explicit alignment of the memory, but
-> I think byte ordering is a different issue.
-> 
-> The bottom layer, by design, is still enforcing a number u64 items under the
-> hood. So the contract has not changed. Changing units of size from u64s to
-> bytes was suggested to match the general practice of size of memory being in
-> bytes. I think the suggestion was made because the return type for
-> dfh_find_param() changed from u64* to void* in version 9, when indirectly
-> returning the size of the parameter data was introduced.  So a void * with a
-> size in bytes makes sense. On the other hand, returning a u64 * is a more
-> precise reflection of the data alignment. I think the API should be as
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
-I prefer (void *) + bytes. The properties in the parameter block are not
-guarateed to be u64 for each, e.g. the REG_LAYOUT, so (void *) could better
-indicate it is not. It is just a block of data unknown to DFL core and to
-be parsed by drivers.
+> On 1/10/2023 3:53 PM, Huang Ying wrote:
+>> Define struct migrate_pages_stats to organize the various statistics
+>> in migrate_pages().  This makes it easier to collect and consume the
+>> statistics in multiple functions.  This will be needed in the
+>> following patches in the series.
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Reviewed-by: Alistair Popple <apopple@nvidia.com>
+>> Reviewed-by: Zi Yan <ziy@nvidia.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
+>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Cc: Oscar Salvador <osalvador@suse.de>
+>> Cc: Matthew Wilcox <willy@infradead.org>
+>> Cc: Bharata B Rao <bharata@amd.com>
+>> Cc: haoxin <xhao@linux.alibaba.com>
+>> ---
+>>   mm/migrate.c | 60 +++++++++++++++++++++++++++++-----------------------
+>>   1 file changed, 34 insertions(+), 26 deletions(-)
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index a4d3fc65085f..d21de40861a0 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1396,6 +1396,16 @@ static inline int try_split_folio(struct folio *folio, struct list_head *split_f
+>>   	return rc;
+>>   }
+>>   +struct migrate_pages_stats {
+>> +	int nr_succeeded;	/* Normal pages and THP migrated successfully, in units
+>> +				   of base pages */
+>> +	int nr_failed_pages;	/* Normal pages and THP failed to be migrated, in units
+>> +				   of base pages.  Untried pages aren't counted */
+>
+> I think above 2 fields also contain the number of hugetlb
+> pages. Otherwise looks good to me.
 
-And why users/drivers need to care about the alignment of the parameter
-block?
+Yes.  Good catch, will update the patch.
 
-Thanks,
-Yilun
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
+Thanks!
 
-> follows:
-> 
-> /**
->  * dfh_find_param() - find parameter block for the given parameter id
->  * @dfl_dev: dfl device
->  * @param_id: id of dfl parameter
->  * @pcount: destination to store size of parameter data in u64 bit words
->  *
->  * Return: pointer to start of parameter data, PTR_ERR otherwise.
->  */
-> u64 *dfh_find_param(struct dfl_device *dfl_dev, int param_id, size_t
-> *pcount)
-> 
-> Regarding byte ordering, Documentation/fpga/dfl.rst does not currently
-> mention endianness. All current HW implementations of DFL are little-endian.
-> I should add a statement in Documentation/fpga/dfl.rst that fields in the
-> Device Feature Header are little-endian.
-> 
-> Thanks for the feedback,
-> Matthew Gerlach
-> 
-> > 
-> > -- 
-> > With Best Regards,
-> > Andy Shevchenko
-> > 
-> > 
-> > 
+Best Regards,
+Huang, Ying
+
+>
+>> +	int nr_thp_succeeded;	/* THP migrated successfully */
+>> +	int nr_thp_failed;	/* THP failed to be migrated */
+>> +	int nr_thp_split;	/* THP split before migrating */
+>> +};
+>> +
+>>   /*
+>>    * migrate_pages - migrate the folios specified in a list, to the free folios
+>>    *		   supplied as the target for the page migration
+>> @@ -1430,13 +1440,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   	int large_retry = 1;
+>>   	int thp_retry = 1;
+>>   	int nr_failed = 0;
+>> -	int nr_failed_pages = 0;
+>>   	int nr_retry_pages = 0;
+>> -	int nr_succeeded = 0;
+>> -	int nr_thp_succeeded = 0;
+>>   	int nr_large_failed = 0;
+>> -	int nr_thp_failed = 0;
+>> -	int nr_thp_split = 0;
+>>   	int pass = 0;
+>>   	bool is_large = false;
+>>   	bool is_thp = false;
+>> @@ -1446,9 +1451,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   	LIST_HEAD(split_folios);
+>>   	bool nosplit = (reason == MR_NUMA_MISPLACED);
+>>   	bool no_split_folio_counting = false;
+>> +	struct migrate_pages_stats stats;
+>>     	trace_mm_migrate_pages_start(mode, reason);
+>>   +	memset(&stats, 0, sizeof(stats));
+>>   split_folio_migration:
+>>   	for (pass = 0; pass < 10 && (retry || large_retry); pass++) {
+>>   		retry = 0;
+>> @@ -1502,9 +1509,9 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   				/* Large folio migration is unsupported */
+>>   				if (is_large) {
+>>   					nr_large_failed++;
+>> -					nr_thp_failed += is_thp;
+>> +					stats.nr_thp_failed += is_thp;
+>>   					if (!try_split_folio(folio, &split_folios)) {
+>> -						nr_thp_split += is_thp;
+>> +						stats.nr_thp_split += is_thp;
+>>   						break;
+>>   					}
+>>   				/* Hugetlb migration is unsupported */
+>> @@ -1512,7 +1519,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   					nr_failed++;
+>>   				}
+>>   -				nr_failed_pages += nr_pages;
+>> +				stats.nr_failed_pages += nr_pages;
+>>   				list_move_tail(&folio->lru, &ret_folios);
+>>   				break;
+>>   			case -ENOMEM:
+>> @@ -1522,13 +1529,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   				 */
+>>   				if (is_large) {
+>>   					nr_large_failed++;
+>> -					nr_thp_failed += is_thp;
+>> +					stats.nr_thp_failed += is_thp;
+>>   					/* Large folio NUMA faulting doesn't split to retry. */
+>>   					if (!nosplit) {
+>>   						int ret = try_split_folio(folio, &split_folios);
+>>     						if (!ret) {
+>> -							nr_thp_split += is_thp;
+>> +							stats.nr_thp_split += is_thp;
+>>   							break;
+>>   						} else if (reason == MR_LONGTERM_PIN &&
+>>   							   ret == -EAGAIN) {
+>> @@ -1546,7 +1553,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   					nr_failed++;
+>>   				}
+>>   -				nr_failed_pages += nr_pages +
+>> nr_retry_pages;
+>> +				stats.nr_failed_pages += nr_pages + nr_retry_pages;
+>>   				/*
+>>   				 * There might be some split folios of fail-to-migrate large
+>>   				 * folios left in split_folios list. Move them back to migration
+>> @@ -1556,7 +1563,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   				list_splice_init(&split_folios, from);
+>>   				/* nr_failed isn't updated for not used */
+>>   				nr_large_failed += large_retry;
+>> -				nr_thp_failed += thp_retry;
+>> +				stats.nr_thp_failed += thp_retry;
+>>   				goto out;
+>>   			case -EAGAIN:
+>>   				if (is_large) {
+>> @@ -1568,8 +1575,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   				nr_retry_pages += nr_pages;
+>>   				break;
+>>   			case MIGRATEPAGE_SUCCESS:
+>> -				nr_succeeded += nr_pages;
+>> -				nr_thp_succeeded += is_thp;
+>> +				stats.nr_succeeded += nr_pages;
+>> +				stats.nr_thp_succeeded += is_thp;
+>>   				break;
+>>   			default:
+>>   				/*
+>> @@ -1580,20 +1587,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   				 */
+>>   				if (is_large) {
+>>   					nr_large_failed++;
+>> -					nr_thp_failed += is_thp;
+>> +					stats.nr_thp_failed += is_thp;
+>>   				} else if (!no_split_folio_counting) {
+>>   					nr_failed++;
+>>   				}
+>>   -				nr_failed_pages += nr_pages;
+>> +				stats.nr_failed_pages += nr_pages;
+>>   				break;
+>>   			}
+>>   		}
+>>   	}
+>>   	nr_failed += retry;
+>>   	nr_large_failed += large_retry;
+>> -	nr_thp_failed += thp_retry;
+>> -	nr_failed_pages += nr_retry_pages;
+>> +	stats.nr_thp_failed += thp_retry;
+>> +	stats.nr_failed_pages += nr_retry_pages;
+>>   	/*
+>>   	 * Try to migrate split folios of fail-to-migrate large folios, no
+>>   	 * nr_failed counting in this round, since all split folios of a
+>> @@ -1626,16 +1633,17 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   	if (list_empty(from))
+>>   		rc = 0;
+>>   -	count_vm_events(PGMIGRATE_SUCCESS, nr_succeeded);
+>> -	count_vm_events(PGMIGRATE_FAIL, nr_failed_pages);
+>> -	count_vm_events(THP_MIGRATION_SUCCESS, nr_thp_succeeded);
+>> -	count_vm_events(THP_MIGRATION_FAIL, nr_thp_failed);
+>> -	count_vm_events(THP_MIGRATION_SPLIT, nr_thp_split);
+>> -	trace_mm_migrate_pages(nr_succeeded, nr_failed_pages, nr_thp_succeeded,
+>> -			       nr_thp_failed, nr_thp_split, mode, reason);
+>> +	count_vm_events(PGMIGRATE_SUCCESS, stats.nr_succeeded);
+>> +	count_vm_events(PGMIGRATE_FAIL, stats.nr_failed_pages);
+>> +	count_vm_events(THP_MIGRATION_SUCCESS, stats.nr_thp_succeeded);
+>> +	count_vm_events(THP_MIGRATION_FAIL, stats.nr_thp_failed);
+>> +	count_vm_events(THP_MIGRATION_SPLIT, stats.nr_thp_split);
+>> +	trace_mm_migrate_pages(stats.nr_succeeded, stats.nr_failed_pages,
+>> +			       stats.nr_thp_succeeded, stats.nr_thp_failed,
+>> +			       stats.nr_thp_split, mode, reason);
+>>     	if (ret_succeeded)
+>> -		*ret_succeeded = nr_succeeded;
+>> +		*ret_succeeded = stats.nr_succeeded;
+>>     	return rc;
+>>   }
