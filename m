@@ -2,139 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC0B6662D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E31F16662CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234496AbjAKSaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
+        id S233380AbjAKSaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:30:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235083AbjAKS2Z (ORCPT
+        with ESMTP id S238754AbjAKS2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:28:25 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9BF33D46;
-        Wed, 11 Jan 2023 10:28:24 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 141so11163050pgc.0;
-        Wed, 11 Jan 2023 10:28:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8rjvOq9k/F/pv9zTj8LqXw/+Mi7PQp9geFeWzmYvddk=;
-        b=FeVvk402TAjY56JdUzGjDzoU4373hWMaJ094pEdCu3oCKpaH2Q7jIhMaOkx7KoBTB6
-         27b8L0KHRC+P3y7kvNvv+/jZHMLk3Ss2omvFFs+L2gYtzj26dp6KCkcXlnGQ1EIR1FRA
-         wcrQpHKdmBjlkyF+C+3v+l9h2bIA4uXl/NtjBUM2sTKUgDIQjGMak7gahl+qp80QKpty
-         WVwri5g7DN6rkZxU6APSsLwZ5Vi6jj4B5kUg4PCDsQdE6IoVwZQnyFLvq46r5DgU/bMv
-         kVYGsKOa4VgH4XeobBlXtZFL6tI2jCzNYk1wLwrqVKd+CAzgkhro6WhyeE8eQftwJex0
-         XWMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8rjvOq9k/F/pv9zTj8LqXw/+Mi7PQp9geFeWzmYvddk=;
-        b=2qX5dxU0CyTzetdO9+sGw5R/yEsYZafJg7F4h42LO3BxaqRp41XdYf4B8As3UTkQt0
-         ILMhXCDNcigKxzLLyzPSkKmKA9nQl6QtE0oGs40sYDr+rjr0GX6bl/Pt8RLDG4nXVBjy
-         e7cnxJgPU8xc70ugIyd4D/9y7Ek3of4XkVLseBzPE4dKS2+OsWqhrlMQ4yGNP8qLOXQN
-         ctY9dRTozUJfPdnAeIxXqILSzIaPgaHyzMEgLNNEgu+A/LHp9Lr+7Gg+20NugzUhZWuB
-         f2iR2aaLgFbSP2iQrx43ClkU6CPvShxvmobSlasc7tUIVrSc7TcSkUhlOpUSUSM2eCbd
-         M8OA==
-X-Gm-Message-State: AFqh2krlQQ+Iyx4iLVA9wIqnlXXRbYTY3mvA0B4OzFQRqFhu/M/FUKnR
-        1ks/aaLBVtQCZm5yb7xx/26u8V8H1ZR42BjVXZM=
-X-Google-Smtp-Source: AMrXdXsupKyphg+l1fOb8zU8tlH21mgYWekT1TGxSqw9nNXfTa+63QlbOHLMDkDKdSYOEkFRkFpbagLx44WO597pGPQ=
-X-Received: by 2002:a62:1853:0:b0:586:2b38:4927 with SMTP id
- 80-20020a621853000000b005862b384927mr1624860pfy.53.1673461704120; Wed, 11 Jan
- 2023 10:28:24 -0800 (PST)
+        Wed, 11 Jan 2023 13:28:40 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AA932E8A;
+        Wed, 11 Jan 2023 10:28:37 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673461716;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XbHz+r4gS67P31F5u+ZSysVNdDYKMiNjdT2EucbKd3E=;
+        b=lXvvoQHKqOwihWoCJuyJb72HKyLp5RP/InGDCYN8zYLAmIvUi6cu1Inbm6IMGqnsum/sng
+        MhLJhGsbPX62sryYcJ3vS+Pzfl5DkG2gyl06GVpuwE3ODaPSMmpVJ+ztuFZ0j1w89XuZpI
+        LsanNEv/7SgUUTcidB51fTnqX28nyOXlHRKNBJqjbHJxciEr9ZnRK1q1vkc66bER3fl0R0
+        Iw0j/ZI0cUggH6MH6snMiievoZ+/BfWSKtOZV1KDYIdEerva/DkVILSrId6iqm20+qOZmi
+        2vvq+My7nwEc1dLjT8uSSjvTD9BQxzPK8ZEie0xM6KXOYo0Ae0nL/7Bfpf95xg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673461716;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XbHz+r4gS67P31F5u+ZSysVNdDYKMiNjdT2EucbKd3E=;
+        b=0zLjVYnmGPMoqdCm1kV1PGYNKkXR61UrEyJJqOJ/3o4IwHpYaJJxSavLzAipZyd3eayY7b
+        D4Kdqlno/G3WH4Bw==
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 19/19] irqdomain: Switch to per-domain locking
+In-Reply-To: <878rjcbnp8.ffs@tglx>
+References: <20221209140150.1453-1-johan+linaro@kernel.org>
+ <20221209140150.1453-20-johan+linaro@kernel.org> <87mt7sbtf9.ffs@tglx>
+ <Y5c6z3t+sV/kIMjF@hovoldconsulting.com> <878rjcbnp8.ffs@tglx>
+Date:   Wed, 11 Jan 2023 19:28:35 +0100
+Message-ID: <871qo1hqng.ffs@tglx>
 MIME-Version: 1.0
-References: <CAKgT0UePq+Gg5mpvD7ag=ern9JN5JyAFv5RPc05Zn9jSh4W+0g@mail.gmail.com>
- <20230111175031.7049-1-szymon.heidrich@gmail.com>
-In-Reply-To: <20230111175031.7049-1-szymon.heidrich@gmail.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Wed, 11 Jan 2023 10:28:12 -0800
-Message-ID: <CAKgT0UeiFGyttyQg_yWHA5L6ZPy9W8__b6DFSQe0-CNnLEvY7w@mail.gmail.com>
-Subject: Re: [PATCH v2] rndis_wlan: Prevent buffer overflow in rndis_query_oid
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc:     kvalo@kernel.org, jussi.kivilinna@iki.fi, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        greg@kroah.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 9:51 AM Szymon Heidrich
-<szymon.heidrich@gmail.com> wrote:
+On Mon, Dec 12 2022 at 17:18, Thomas Gleixner wrote:
+> On Mon, Dec 12 2022 at 15:29, Johan Hovold wrote:
+>> I added to irq_domain_set_mapping() and which is is called for each
+>> (inner) domain in a hierarchy when allocating an IRQ.
 >
-> Since resplen and respoffs are signed integers sufficiently
-> large values of unsigned int len and offset members of RNDIS
-> response will result in negative values of prior variables.
-> This may be utilized to bypass implemented security checks
-> to either extract memory contents by manipulating offset or
-> overflow the data buffer via memcpy by manipulating both
-> offset and len.
+> Hmm. Indeed that should do the trick.
 >
-> Additionally assure that sum of resplen and respoffs does not
-> overflow so buffer boundaries are kept.
->
-> Fixes: 80f8c5b434f9 ("rndis_wlan: copy only useful data from rndis_command respond")
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-> ---
-> V1 -> V2: Use size_t and min macro, fix netdev_dbg format
->
->  drivers/net/wireless/rndis_wlan.c | 19 ++++++-------------
->  1 file changed, 6 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/net/wireless/rndis_wlan.c b/drivers/net/wireless/rndis_wlan.c
-> index 82a7458e0..bf72e5fd3 100644
-> --- a/drivers/net/wireless/rndis_wlan.c
-> +++ b/drivers/net/wireless/rndis_wlan.c
-> @@ -696,8 +696,8 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
->                 struct rndis_query      *get;
->                 struct rndis_query_c    *get_c;
->         } u;
-> -       int ret, buflen;
-> -       int resplen, respoffs, copylen;
-> +       int ret;
-> +       size_t buflen, resplen, respoffs, copylen;
->
->         buflen = *len + sizeof(*u.get);
->         if (buflen < CONTROL_BUFFER_SIZE)
-> @@ -732,22 +732,15 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
->
->                 if (respoffs > buflen) {
->                         /* Device returned data offset outside buffer, error. */
-> -                       netdev_dbg(dev->net, "%s(%s): received invalid "
-> -                               "data offset: %d > %d\n", __func__,
-> -                               oid_to_string(oid), respoffs, buflen);
-> +                       netdev_dbg(dev->net,
-> +                                  "%s(%s): received invalid data offset: %zu > %zu\n",
-> +                                  __func__, oid_to_string(oid), respoffs, buflen);
->
->                         ret = -EINVAL;
->                         goto exit_unlock;
->                 }
->
-> -               if ((resplen + respoffs) > buflen) {
-> -                       /* Device would have returned more data if buffer would
-> -                        * have been big enough. Copy just the bits that we got.
-> -                        */
-> -                       copylen = buflen - respoffs;
-> -               } else {
-> -                       copylen = resplen;
-> -               }
-> +               copylen = min(resplen, buflen - respoffs);
->
->                 if (copylen > *len)
->                         copylen = *len;
+> Some comments would be appreciated as the rules around domain->root are
+> far from obvious.
 
-Looks good to me.
-
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+Any update on this one?
