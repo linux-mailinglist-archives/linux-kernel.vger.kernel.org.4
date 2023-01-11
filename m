@@ -2,102 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C28F6664E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA3F6664E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjAKUbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 15:31:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S231132AbjAKUgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 15:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjAKUbg (ORCPT
+        with ESMTP id S230047AbjAKUgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 15:31:36 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071.outbound.protection.outlook.com [40.107.243.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6169E2AC2;
-        Wed, 11 Jan 2023 12:31:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Je1L2GwZi78LbxOivJG8ikF07l+JMva0/M9wrOQJG/DPA8j/Y+vEQTGpK+5xloNq56R6FYPuc7lcN5ZRBtP2tnLP3lE29meUYzh0TdMJU7AcASik6SUVcPgI7erQGR92wCCk1k6SDKXGQQ0V0bJdzmZuRAeB2630DV2Im9Q3TbgcmfO/e7m7S6IVSRtsa/ESabDiufqrwMHqdwlNq0Mw5E5VX7ecHON6w8itfyYZCkJV4x/FLIBsfPmlwGTPjl1Jwe1AAAkx820THmRxU6AvaAWXJVDa/nJ3MaNAx1kpa0Vprcy1x/HmYgESdGUxDg8DXLlGYVvjFtdFBlojRYehrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VJfTbG/Qv88ipqQH0Jw+ZamckaKF6FdA2RU/JpQhjv4=;
- b=Yto4ky3rJeEmNUFiwHMe/bFYCeTyG/NDyRIFC7InJ8gYin21XRQWgqG9sVUtkDNWVMQz+krFwarPdWVIAeQWN83VSO7Y1Fsvf933GiXr4yTqnENBJtr1fS4OmLLO9m+hlWjXigf1JBIKcqK7m8wdCTnCQVkQ95nx/SYtokSEy1mmQWJHMB61Grc3rc97SVs6+gfzllSb5PjVQBphX8hxsPR1B3VBbdcWcH+cXycGGKdzoTMEwlm6LCbO/UH9avOig+k/G/oljlCfjxyo8LgjCVpB8mByupZztaGUmyFnuhSbDrOGe0EKl1hajKyjIMVD2ltLEeuAoDJbYQB8zhmU2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VJfTbG/Qv88ipqQH0Jw+ZamckaKF6FdA2RU/JpQhjv4=;
- b=GhcvYnTCDRUOXDR78HFk6QTXYkAi9slDiYJR8MpxAkx/4VU+x6oyrOFRb94k4MRlgonW5+g/xJcFXF/oBin5qSHzKJAuJ9Bgh7oghCi4CG8KKVQ4ZJFc+eF1gZcBkPjTfSTQuC0qt7vh1UXW7oknwtgL7rLjcsZoLn2wUzOhuamzpiNrqGFXU0yA+uNec4yK+WvbfrhOkBED6dSG1c0hN/tZ+mV9G0qR2oz9x0R7cbJXaIGylP0YySOLSz2Gqo2dSkdDBPHy74VPfLsnfrtiiEQWA1N/XkVZSAPCrag0xTMJAcDdAl/bmG+yUSO64QkWio2z3qAk5EqwYiXhh/e39g==
-Received: from BN0PR07CA0030.namprd07.prod.outlook.com (2603:10b6:408:141::13)
- by IA1PR12MB6385.namprd12.prod.outlook.com (2603:10b6:208:38b::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
- 2023 20:31:32 +0000
-Received: from BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:141:cafe::5f) by BN0PR07CA0030.outlook.office365.com
- (2603:10b6:408:141::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13 via Frontend
- Transport; Wed, 11 Jan 2023 20:31:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT025.mail.protection.outlook.com (10.13.177.136) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.13 via Frontend Transport; Wed, 11 Jan 2023 20:31:32 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 11 Jan
- 2023 12:31:22 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 11 Jan
- 2023 12:31:22 -0800
-Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Wed, 11 Jan 2023 12:31:18 -0800
-From:   Vidya Sagar <vidyas@nvidia.com>
-To:     <bhelgaas@google.com>, <ruscur@russell.cc>, <oohall@gmail.com>,
-        <treding@nvidia.com>, <jonathanh@nvidia.com>
-CC:     <linux-pci@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>, <vsethi@nvidia.com>,
-        <kthota@nvidia.com>, <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>,
-        <sagar.tv@gmail.com>
-Subject: [PATCH V1] PCI/AER: Configure ECRC only AER is native
-Date:   Thu, 12 Jan 2023 02:01:16 +0530
-Message-ID: <20230111203116.4896-1-vidyas@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
+        Wed, 11 Jan 2023 15:36:00 -0500
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5F32DE8;
+        Wed, 11 Jan 2023 12:35:59 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id z11so24131639ede.1;
+        Wed, 11 Jan 2023 12:35:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Db8+0e8WN3nsfhyiEZdHDeAdZn8HsaNM9raQcYp0IFM=;
+        b=x0i2SS2hzo4LdLOtP7vYANFVYC6PRQ4Ob6fZBYrlXLJ2XvrVCnyVXQ6GdSX+JMSQE+
+         JzNOo41iUUNVDlokPLqzEPzpvKJXKJL34+GOBvha30upXP3/f9QKbcufVghA1XUzaOQ0
+         KV2S61MTeefOOAp/+E/LSEHC/7gvzhNVw05fSqQJSkUQXmGF1ET3q1VQrzGDyyL0BYSQ
+         qTT28u3YnWKYLId4VWcaLZWSsMFmj+719Rn/rBkSLi25tF5zyvU7C9+0qekUyesXtfAI
+         AqZiieCzJqZV0Wsw3YAbuemdiBuYYpSe6yEI7zJnd449HfgJhUAOWXcAQIUY63+WuqPF
+         yjtg==
+X-Gm-Message-State: AFqh2koAd6AyvQmPBrhsG87LMe4mY+i/5ZnMwoJ2I2GT+URYfZoamLsB
+        vayTrPhAWvrBM+Wak2zgoPZoEbz6+yTv85BZJlo=
+X-Google-Smtp-Source: AMrXdXtakobtBeFRC8OLzxXWfC2gsN1fkAR9nHlymD96JEbS15FIYazXeT0GWO1w5O3IgziXcp9UT5wuJwzLUxiGMrQ=
+X-Received: by 2002:a05:6402:c44:b0:499:c651:625d with SMTP id
+ cs4-20020a0564020c4400b00499c651625dmr913357edb.413.1673469357828; Wed, 11
+ Jan 2023 12:35:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT025:EE_|IA1PR12MB6385:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c7be6e6-03a2-417a-684d-08daf412d3e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ui3JpQf3jPfI+bEj5ddrbHZoCUkNA+0ZjhmAO6vkGbUmCCSkjN8t99Q+5SlEyTCFonsNrvs45ZVnjYc14Q4PunKMlP7IWMSmt3ghKmOlMh3Vr+GgLSyywxtMGKnaeO+gYWNr9+4NVBU3oIhutzncu87kUQP+8WUbAh9hFppJKadO0BhR8k7unc1mdPEtaPsDQNxYLg7aEUrVp/6xOjk6YDuShsmGAC1ZvIFhgLmF9YlRoelbNGxxlhC8EWwOie6wjeN+2pGsHNtG06cKeD47pXMZtVEueKUP3fJLFFZe8b2Ws+bPrgTrz4uWH29VB+uW0yepWZ/UWHdYGi1R8VnFL6TZk1P2uhn+3nbHmw13Q5SXnxA+JkDn1vnKNMIcDqV6fGgSlSWtUz/BShFbOqVO2Oaj6Qq7rJTWISxavMWWkwqPP/M3DbgFAllgIvw4CNT0fh5NiKkwaQvCpre9tEMFI931ABRDopSArOahTXxN42w6ocbYU6bpDDMJ0ROqOEjziBYnUMpkZP8sghkV7Xw2a8AQ5XpXOQ3kpc2OyosuSxGTN7MfBXS8judggBHQmqlyussS8HB38giJnFweNr8KiJiw1fZXjmniIcm//kmGDh0aEzv2e4VQrVdrLlHO4glBbJkvJlfgY4XwU9kIUvAFgabdk+dliydgCtdQGGrUTF0dkydMr0z0jW7tCZjjA69U3PLFcEd0H4R8POfJvQRM2A==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(39860400002)(396003)(451199015)(40470700004)(36840700001)(46966006)(36756003)(7696005)(40480700001)(54906003)(316002)(86362001)(110136005)(6636002)(8676002)(2906002)(478600001)(70586007)(41300700001)(70206006)(4326008)(8936002)(82740400003)(356005)(5660300002)(40460700003)(4744005)(2616005)(36860700001)(1076003)(7636003)(186003)(336012)(26005)(47076005)(426003)(82310400005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 20:31:32.5865
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c7be6e6-03a2-417a-684d-08daf412d3e4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6385
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+References: <20230110211839.19572-1-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230110211839.19572-1-rick.p.edgecombe@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 11 Jan 2023 21:35:46 +0100
+Message-ID: <CAJZ5v0jnp3jLdD1wN1NjMfxrt+gYZ+im_quHdgsOrWve0XQaWg@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/hibernate: Use fixmap for saving unmapped pages
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        rppt@kernel.org, peterz@infradead.org, luto@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,28 +59,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the ECRC configuration bits are part of AER registers, configure
-ECRC only if AER is natively owned by the kernel.
+On Tue, Jan 10, 2023 at 10:19 PM Rick Edgecombe
+<rick.p.edgecombe@intel.com> wrote:
+>
+> Hibernate uses the direct map to read memory it saves to disk. Since
+> sometimes pages are not accessible on the direct map ("not present" on
+> x86), it has special case logic to temporarily make a page present. On x86
+> these direct map addresses can be mapped at various page sizes, but the
+> logic works ok as long as the not present pages are always mapped as
+> PAGE_SIZE such that they don't require a split to map the region as
+> present. If the address was mapped not present by a larger page size, the
+> split may fail and hibernate would then try to read an address mapped not
+> present.
+>
+> Today on x86 there are no known cases of this (huge not present pages on
+> the direct map), but it has come up from time to time when developing
+> things that operate on the direct map. It blocked making
+> VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and also
+> has been a complication for various direct map protection efforts.
+>
+> This dependency is also pretty hidden and easily missed by people poking at
+> the direct map. For this reason, there are warnings in place to complain
+> but not handle this scenario.
+>
+> One way to make this more robust would be to create some new CPA
+> functionality that can know to map and reset the whole huge page in the
+> case of trying to map a subpage. But for simplicity and smaller code, just
+> make x86 hibernate have its own fixmap PTE that it can use to point
+> to 4k pages when it encounters an unmapped direct map page.
+>
+> Move do_copy_page() to a header such that it can be used in an arch
+> breakout. Rename it hib_copy_page() to be more hibernate specific since
+> it could appear in other files.
+>
+> Use __weak for the arch breakout because there is not a suitable arch
+> specific header to use the #define method.
+>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> ---
+>
+> Rebase to v6.2-rc3 (original still applied) and resending per:
+> https://lore.kernel.org/lkml/CAJZ5v0i6cxGD+V6G+q-Y_Lp-ov51_zmkZr8ZGpCtqWV-e=BsLg@mail.gmail.com/
+>
+>  arch/x86/include/asm/fixmap.h |  3 +++
+>  arch/x86/power/hibernate.c    | 10 ++++++++++
+>  include/linux/suspend.h       | 13 +++++++++++++
+>  kernel/power/snapshot.c       | 21 +++++++--------------
+>  4 files changed, 33 insertions(+), 14 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+> index d0dcefb5cc59..0fceed9a4152 100644
+> --- a/arch/x86/include/asm/fixmap.h
+> +++ b/arch/x86/include/asm/fixmap.h
+> @@ -108,6 +108,9 @@ enum fixed_addresses {
+>  #ifdef CONFIG_PARAVIRT_XXL
+>         FIX_PARAVIRT_BOOTMAP,
+>  #endif
+> +#ifdef CONFIG_HIBERNATION
+> +       FIX_HIBERNATE,
+> +#endif
+>
+>  #ifdef CONFIG_ACPI_APEI_GHES
+>         /* Used for GHES mapping from assorted contexts */
+> diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+> index 6f955eb1e163..473b6b5f6b7e 100644
+> --- a/arch/x86/power/hibernate.c
+> +++ b/arch/x86/power/hibernate.c
+> @@ -147,6 +147,16 @@ int arch_hibernation_header_restore(void *addr)
+>         return 0;
+>  }
+>
+> +void copy_unmapped_page(void *dst, struct page *page)
+> +{
+> +       WARN_ON(!preempt_count());
 
-Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
----
- drivers/pci/pcie/aer.c | 3 +++
- 1 file changed, 3 insertions(+)
+I don't think the above is needed.  The code using this function
+cannot be preempted anyway AFAICS.
 
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index e2d8a74f83c3..730b47bdcdef 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -184,6 +184,9 @@ static int disable_ecrc_checking(struct pci_dev *dev)
-  */
- void pcie_set_ecrc_checking(struct pci_dev *dev)
- {
-+	if (!pcie_aer_is_native(dev))
-+		return;
-+
- 	switch (ecrc_policy) {
- 	case ECRC_POLICY_DEFAULT:
- 		return;
--- 
-2.17.1
+> +
+> +       set_fixmap(FIX_HIBERNATE, page_to_phys(page));
+> +       __flush_tlb_all();
 
+So do TLBs need to be flushed before copying every single page?
+Basically, they are all copied in one loop.
+
+> +       hib_copy_page(dst, (void *)fix_to_virt(FIX_HIBERNATE));
+> +       clear_fixmap(FIX_HIBERNATE);
+> +}
+> +
+>  int relocate_restore_code(void)
+>  {
+>         pgd_t *pgd;
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index cfe19a028918..0b19b910526e 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -447,6 +447,19 @@ extern bool hibernation_available(void);
+>  asmlinkage int swsusp_save(void);
+>  extern struct pbe *restore_pblist;
+>  int pfn_is_nosave(unsigned long pfn);
+> +void copy_unmapped_page(void *dst, struct page *page);
+> +
+> +/*
+> + * This is needed, because copy_page and memcpy are not usable for copying
+> + * task structs.
+> + */
+> +static inline void hib_copy_page(long *dst, long *src)
+> +{
+> +       int n;
+> +
+> +       for (n = PAGE_SIZE / sizeof(long); n; n--)
+> +               *dst++ = *src++;
+> +}
+>
+>  int hibernate_quiet_exec(int (*func)(void *data), void *data);
+>  #else /* CONFIG_HIBERNATION */
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index cd8b7b35f1e8..344c071f29d3 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -1369,16 +1369,11 @@ static unsigned int count_data_pages(void)
+>         return n;
+>  }
+>
+> -/*
+> - * This is needed, because copy_page and memcpy are not usable for copying
+> - * task structs.
+> - */
+> -static inline void do_copy_page(long *dst, long *src)
+> +void __weak copy_unmapped_page(void *dst, struct page *page)
+>  {
+> -       int n;
+> -
+> -       for (n = PAGE_SIZE / sizeof(long); n; n--)
+> -               *dst++ = *src++;
+> +       hibernate_map_page(page);
+> +       hib_copy_page(dst, page_address(page));
+> +       hibernate_unmap_page(page);
+>  }
+>
+>  /**
+> @@ -1392,11 +1387,9 @@ static inline void do_copy_page(long *dst, long *src)
+>  static void safe_copy_page(void *dst, struct page *s_page)
+>  {
+>         if (kernel_page_present(s_page)) {
+> -               do_copy_page(dst, page_address(s_page));
+> +               hib_copy_page(dst, page_address(s_page));
+>         } else {
+> -               hibernate_map_page(s_page);
+> -               do_copy_page(dst, page_address(s_page));
+> -               hibernate_unmap_page(s_page);
+> +               copy_unmapped_page(dst, s_page);
+>         }
+>  }
+>
+> @@ -1417,7 +1410,7 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+>         if (PageHighMem(s_page)) {
+>                 src = kmap_atomic(s_page);
+>                 dst = kmap_atomic(d_page);
+> -               do_copy_page(dst, src);
+> +               hib_copy_page(dst, src);
+>                 kunmap_atomic(dst);
+>                 kunmap_atomic(src);
+>         } else {
+> --
+> 2.17.1
+>
