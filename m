@@ -2,146 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C46D665EEF
+	by mail.lfdr.de (Postfix) with ESMTP id D86F2665EF0
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235513AbjAKPTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
+        id S235237AbjAKPS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234134AbjAKPSz (ORCPT
+        with ESMTP id S229697AbjAKPSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:18:55 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BB8167F1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:18:53 -0800 (PST)
+        Wed, 11 Jan 2023 10:18:53 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F03615F1F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:18:52 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A127A17D5A;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 07CF717D59;
         Wed, 11 Jan 2023 15:18:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1673450331; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=hwhw0xueoRQfeRsCWppft2gnEQP/FMWyCk6R1o8Asho=;
-        b=KmKPjMNWZsCwVeaDFB+fRZ5uBcKXjpMBjGXWHFq0tWO9XCW+39p8TZVLv5WdxlhMe8KXFz
-        x/LWWti9rB+G7qdqWy9bSiET+4PwJ/r5dmYLAT6eqINOZn8wpfzcFOfJ9SqA63+fLD/VX4
-        JEzqyib8FTGmYuagESKEYJp2hvN2Mb0=
+        bh=vW7EqoZN5JH9QZVEB8cp56/uppg3VKm8mRYkthii3vo=;
+        b=i+niIcAK/I4rZvR6OXmNvvtnfYWXZkNXihW3rZIlh00BhwJe0kYd2/sKVc1jqefEWeX6Ek
+        pVkxjlbu8DyZkct9pMt9/UjIUGyrXHottQlho4wcMt9mrZZJmUwPMIDtm96HIelTPWhQ2b
+        8jlkock1XDYKFQ3FBdksvK8CTEQP6Ko=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673450331;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vW7EqoZN5JH9QZVEB8cp56/uppg3VKm8mRYkthii3vo=;
+        b=D2Gz6r+QzOMFhgLtpDbeUude3MH67cHueGG1Jw4XB6y/0hW0h4vMOI0Rppqpj01/6j9TMp
+        NRzuRUa8mu+TH0Dw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FE3C13591;
-        Wed, 11 Jan 2023 15:18:51 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CD26D13591;
+        Wed, 11 Jan 2023 15:18:50 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8Y5eHFvTvmMSLgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 11 Jan 2023 15:18:51 +0000
+        id 69z9MFrTvmMKLgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 11 Jan 2023 15:18:50 +0000
+Message-ID: <31795464-8986-c2c3-74a2-3d2bc3455820@suse.de>
 Date:   Wed, 11 Jan 2023 16:18:50 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NeilBrown <neilb@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/7] mm/page_alloc: Rename ALLOC_HIGH to ALLOC_MIN_RESERVE
-Message-ID: <Y77TWhr9/dPcthiF@dhcp22.suse.cz>
-References: <20230109151631.24923-1-mgorman@techsingularity.net>
- <20230109151631.24923-2-mgorman@techsingularity.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109151631.24923-2-mgorman@techsingularity.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 9/9] drm/vc4: hdmi: Add BT.2020 Support
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
+ <20221207-rpi-hdmi-improvements-v1-9-6b15f774c13a@cerno.tech>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221207-rpi-hdmi-improvements-v1-9-6b15f774c13a@cerno.tech>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------vsTcFjBTfdwjj2Vbi0sSwubl"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 09-01-23 15:16:25, Mel Gorman wrote:
-> __GFP_HIGH aliases to ALLOC_HIGH but the name does not really hint
-> what it means. As ALLOC_HIGH is internal to the allocator, rename
-> it to ALLOC_MIN_RESERVE to document that the min reserves can
-> be depleted.
-> 
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------vsTcFjBTfdwjj2Vbi0sSwubl
+Content-Type: multipart/mixed; boundary="------------8KHrfVrzvcIYthfrV2x1AJHW";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>
+Message-ID: <31795464-8986-c2c3-74a2-3d2bc3455820@suse.de>
+Subject: Re: [PATCH 9/9] drm/vc4: hdmi: Add BT.2020 Support
+References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
+ <20221207-rpi-hdmi-improvements-v1-9-6b15f774c13a@cerno.tech>
+In-Reply-To: <20221207-rpi-hdmi-improvements-v1-9-6b15f774c13a@cerno.tech>
 
-Naming is hard but ALLOC_HIGH is definitely much more confusing as it
-can collide with high watermark. ALLOC_MIN_RESERVE says that some
-reserves are involved. ALl the reserves are below min watermark by
-defition but I cannot really come up with a better name. I do not think
-we want to encode the amount of reserves into the name.
+--------------8KHrfVrzvcIYthfrV2x1AJHW
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+DQoNCkFtIDA3LjEyLjIyIHVtIDE3OjA3IHNjaHJpZWIgTWF4aW1lIFJpcGFyZDoNCj4gRnJv
+bTogRGF2ZSBTdGV2ZW5zb24gPGRhdmUuc3RldmVuc29uQHJhc3BiZXJyeXBpLmNvbT4NCj4g
+DQo+IEV2ZW4gdGhvdWdoIHdlIHJlcG9ydCB0aGF0IHdlIHN1cHBvcnQgdGhlIEJULjIwMjAg
+Q29sb3JzcGFjZSwgd2Ugd2VyZQ0KPiBhbHdheXMgdXNpbmcgdGhlIEJULjcwOSBjb252ZXJz
+aW9uIG1hdHJpY2VzLiBMZXQncyBhZGQgdGhlIEJULjIwMjAgb25lcy4NCj4gDQo+IFNpZ25l
+ZC1vZmYtYnk6IERhdmUgU3RldmVuc29uIDxkYXZlLnN0ZXZlbnNvbkByYXNwYmVycnlwaS5j
+b20+DQo+IFNpZ25lZC1vZmYtYnk6IE1heGltZSBSaXBhcmQgPG1heGltZUBjZXJuby50ZWNo
+Pg0KDQpSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2Uu
+ZGU+DQoNCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3ZjNC92YzRfaGRtaS5jIHwgMzgg
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gICAxIGZpbGUgY2hh
+bmdlZCwgMzggaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1
+L2RybS92YzQvdmM0X2hkbWkuYyBiL2RyaXZlcnMvZ3B1L2RybS92YzQvdmM0X2hkbWkuYw0K
+PiBpbmRleCBlMzQyOGZiMmMyMmQuLjI3MzRjYWIzNDY2MCAxMDA2NDQNCj4gLS0tIGEvZHJp
+dmVycy9ncHUvZHJtL3ZjNC92YzRfaGRtaS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS92
+YzQvdmM0X2hkbWkuYw0KPiBAQCAtMTI3Nyw2ICsxMjc3LDM3IEBAIHN0YXRpYyBjb25zdCB1
+MTYgdmM1X2hkbWlfY3NjX2Z1bGxfcmdiX3RvX3l1dl9idDcwOVsyXVszXVs0XSA9IHsNCj4g
+ICAJfSwNCj4gICB9Ow0KPiAgIA0KPiArLyoNCj4gKyAqIENvbnZlcnNpb24gYmV0d2VlbiBG
+dWxsIFJhbmdlIFJHQiBhbmQgWVVWIHVzaW5nIHRoZSBCVC4yMDIwIENvbG9yc3BhY2UNCj4g
+KyAqDQo+ICsgKiBNYXRyaWNlcyBhcmUgc2lnbmVkIDJwMTMgZml4ZWQgcG9pbnQsIHdpdGgg
+c2lnbmVkIDlwNiBvZmZzZXRzDQo+ICsgKi8NCj4gK3N0YXRpYyBjb25zdCB1MTYgdmM1X2hk
+bWlfY3NjX2Z1bGxfcmdiX3RvX3l1dl9idDIwMjBbMl1bM11bNF0gPSB7DQo+ICsJew0KPiAr
+CQkvKg0KPiArCQkgKiBGdWxsIFJhbmdlDQo+ICsJCSAqDQo+ICsJCSAqIFsgIDAuMjYyNzAw
+ICAwLjY3ODAwMCAgMC4wNTkzMDAgIDAgICBdDQo+ICsJCSAqIFsgLTAuMTM5NjMwIC0wLjM2
+MDM3MCAgMC41MDAwMDAgIDEyOCBdDQo+ICsJCSAqIFsgIDAuNTAwMDAwIC0wLjQ1OTc4NiAt
+MC4wNDAyMTQgIDEyOCBdDQo+ICsJCSAqLw0KPiArCQl7IDB4MDg2OCwgMHgxNWIyLCAweDAx
+ZTYsIDB4MDAwMCB9LA0KPiArCQl7IDB4ZmI4OSwgMHhmNDc5LCAweDEwMDAsIDB4MjAwMCB9
+LA0KPiArCQl7IDB4MTAwMCwgMHhmMTRhLCAweGZlYjgsIDB4MjAwMCB9LA0KPiArCX0sDQo+
+ICsJew0KPiArCQkvKiBMaW1pdGVkIFJhbmdlDQo+ICsJCSAqDQo+ICsJCSAqIFsgIDAuMjI0
+NzMyICAwLjU4MDAwOCAgMC4wNTA3MjkgIDE2ICBdDQo+ICsJCSAqIFsgLTAuMTIyMTc2IC0w
+LjMxNTMyNCAgMC40Mzc1MDAgIDEyOCBdDQo+ICsJCSAqIFsgIDAuNDM3NTAwIC0wLjQwMjMx
+MiAtMC4wMzUxODggIDEyOCBdDQo+ICsJCSAqLw0KPiArCQl7IDB4MDgyZiwgMHgxMDEyLCAw
+eDAzMWYsIDB4MDQwMCB9LA0KPiArCQl7IDB4ZmI0OCwgMHhmNmJhLCAweDBlMDAsIDB4MjAw
+MCB9LA0KPiArCQl7IDB4MGUwMCwgMHhmNDQ4LCAweGZkYmEsIDB4MjAwMCB9LA0KPiArCX0s
+DQo+ICt9Ow0KPiArDQo+ICAgc3RhdGljIHZvaWQgdmM1X2hkbWlfc2V0X2NzY19jb2VmZnMo
+c3RydWN0IHZjNF9oZG1pICp2YzRfaGRtaSwNCj4gICAJCQkJICAgIGNvbnN0IHUxNiBjb2Vm
+ZnNbM11bNF0pDQo+ICAgew0KPiBAQCAtMTMyMiw2ICsxMzUzLDEzIEBAIHN0YXRpYyBjb25z
+dCB1MTYNCj4gICAJY2FzZSBEUk1fTU9ERV9DT0xPUklNRVRSWV9SR0JfV0lERV9GSVhFRDoN
+Cj4gICAJY2FzZSBEUk1fTU9ERV9DT0xPUklNRVRSWV9SR0JfV0lERV9GTE9BVDoNCj4gICAJ
+CXJldHVybiB2YzVfaGRtaV9jc2NfZnVsbF9yZ2JfdG9feXV2X2J0NzA5W2xpbWl0ZWRdOw0K
+PiArDQo+ICsJY2FzZSBEUk1fTU9ERV9DT0xPUklNRVRSWV9CVDIwMjBfQ1lDQzoNCj4gKwlj
+YXNlIERSTV9NT0RFX0NPTE9SSU1FVFJZX0JUMjAyMF9ZQ0M6DQo+ICsJY2FzZSBEUk1fTU9E
+RV9DT0xPUklNRVRSWV9CVDIwMjBfUkdCOg0KPiArCWNhc2UgRFJNX01PREVfQ09MT1JJTUVU
+UllfRENJX1AzX1JHQl9ENjU6DQo+ICsJY2FzZSBEUk1fTU9ERV9DT0xPUklNRVRSWV9EQ0lf
+UDNfUkdCX1RIRUFURVI6DQo+ICsJCXJldHVybiB2YzVfaGRtaV9jc2NfZnVsbF9yZ2JfdG9f
+eXV2X2J0MjAyMFtsaW1pdGVkXTsNCj4gICAJfQ0KPiAgIH0NCj4gICANCj4gDQoNCi0tIA0K
+VGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29m
+dHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8
+cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRz
+ZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Thanks!
-> ---
->  mm/internal.h   | 4 +++-
->  mm/page_alloc.c | 8 ++++----
->  2 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/internal.h b/mm/internal.h
-> index bcf75a8b032d..403e4386626d 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -736,7 +736,9 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
->  #endif
->  
->  #define ALLOC_HARDER		 0x10 /* try to alloc harder */
-> -#define ALLOC_HIGH		 0x20 /* __GFP_HIGH set */
-> +#define ALLOC_MIN_RESERVE	 0x20 /* __GFP_HIGH set. Allow access to 50%
-> +				       * of the min watermark.
-> +				       */
->  #define ALLOC_CPUSET		 0x40 /* check for correct cpuset */
->  #define ALLOC_CMA		 0x80 /* allow allocations from CMA areas */
->  #ifdef CONFIG_ZONE_DMA32
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 0745aedebb37..244c1e675dc8 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -3976,7 +3976,7 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
->  	/* free_pages may go negative - that's OK */
->  	free_pages -= __zone_watermark_unusable_free(z, order, alloc_flags);
->  
-> -	if (alloc_flags & ALLOC_HIGH)
-> +	if (alloc_flags & ALLOC_MIN_RESERVE)
->  		min -= min / 2;
->  
->  	if (unlikely(alloc_harder)) {
-> @@ -4818,18 +4818,18 @@ gfp_to_alloc_flags(gfp_t gfp_mask)
->  	unsigned int alloc_flags = ALLOC_WMARK_MIN | ALLOC_CPUSET;
->  
->  	/*
-> -	 * __GFP_HIGH is assumed to be the same as ALLOC_HIGH
-> +	 * __GFP_HIGH is assumed to be the same as ALLOC_MIN_RESERVE
->  	 * and __GFP_KSWAPD_RECLAIM is assumed to be the same as ALLOC_KSWAPD
->  	 * to save two branches.
->  	 */
-> -	BUILD_BUG_ON(__GFP_HIGH != (__force gfp_t) ALLOC_HIGH);
-> +	BUILD_BUG_ON(__GFP_HIGH != (__force gfp_t) ALLOC_MIN_RESERVE);
->  	BUILD_BUG_ON(__GFP_KSWAPD_RECLAIM != (__force gfp_t) ALLOC_KSWAPD);
->  
->  	/*
->  	 * The caller may dip into page reserves a bit more if the caller
->  	 * cannot run direct reclaim, or if the caller has realtime scheduling
->  	 * policy or is asking for __GFP_HIGH memory.  GFP_ATOMIC requests will
-> -	 * set both ALLOC_HARDER (__GFP_ATOMIC) and ALLOC_HIGH (__GFP_HIGH).
-> +	 * set both ALLOC_HARDER (__GFP_ATOMIC) and ALLOC_MIN_RESERVE(__GFP_HIGH).
->  	 */
->  	alloc_flags |= (__force int)
->  		(gfp_mask & (__GFP_HIGH | __GFP_KSWAPD_RECLAIM));
-> -- 
-> 2.35.3
+--------------8KHrfVrzvcIYthfrV2x1AJHW--
 
--- 
-Michal Hocko
-SUSE Labs
+--------------vsTcFjBTfdwjj2Vbi0sSwubl
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmO+01oFAwAAAAAACgkQlh/E3EQov+A9
+fA/+NY0NW6KpOPxP7zN5APO3KzXptPHUJDXSYkmjaMkqOSod0YbQGmplKxHLIK/4L+2HKAoCu0WN
+HbWpWkDcJQuaFNiaB35QVcVDku+xn/sWXHfvftr8Bex/t05IzVjLyq9LAtfolJnMy61Bh/OaxdY4
+Tom6Nbp/61Lq/jtZFW6FHhhtKDognLmDYo7L3tl4v84C/JrXkufRB0Nv/co5r+IjCdS9qGbBAm16
+GXOGXFjwgRVof4xo2szy9qE5S2+SYbhfIOaG+i/eDP7x7k4YJRkZ0ebg49kDk8NbOe5C9IbfW+FC
+DlVRXKPgQImlDTunZrfnKBeMCPv9nC+hlWvpVMnKxOYe06uhEGvLS9TC9SgCKICMGI+wscU21aXV
+J4byGf8twidH6+91omrFcBb07Tc95WqtV4TGonZlroRPfgYdmi+r669oqz9FG3wD4mAemBbCnW26
+ImeMetJY4gEcrFvjL5VcBus9QrR94D8JNEcftqLawjpcB9sLDL25kPx69NwNR7a8gQGwRERt7g1A
+NQEEPawPPk9cYZPGhcJKhDG6y5rotcsUSYw6OKps3d9cSu/wiUSeKgDQue/BvmQ6oSdEm15fisgK
+5/75OCO7YEAk/mLXtkWJ6nZiuBwxzN/KZaNssMSAAO23Aux+Zh7ZYe/7fbzL3yRlzlLLXbxOCSSi
+ca8=
+=xEUi
+-----END PGP SIGNATURE-----
+
+--------------vsTcFjBTfdwjj2Vbi0sSwubl--
