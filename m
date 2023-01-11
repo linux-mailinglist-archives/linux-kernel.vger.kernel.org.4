@@ -2,75 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E3F66579D
+	by mail.lfdr.de (Postfix) with ESMTP id B5D1366579E
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238436AbjAKJgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:36:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S238657AbjAKJgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238467AbjAKJew (ORCPT
+        with ESMTP id S238479AbjAKJew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 Jan 2023 04:34:52 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC825F82;
-        Wed, 11 Jan 2023 01:33:20 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so1385441pjl.0;
-        Wed, 11 Jan 2023 01:33:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=85yiqfm+Sjk5zm51MbyH9eN3BN60wR2dMPCLJCCbWMo=;
-        b=dpwwfQr6TQTgB4Xz8pWz2wG1bJPuuxUZ07MYcfJyQsflXChpr+sFHRua5IwsBAHhWZ
-         WqdX2O++0jSqxack+vbC9MIWvQojyG4AgDBwA56e/qXHK5hJM89CBd9oezOZF2jaTyUl
-         jx8eBR4kcKDjDLfeqtCCEnn6VdAKof63hJmD5p1l6WjVaPT+1eQNToXhXcCQYYV6QNEA
-         wAuQ8FGFSnjpvqmDrte8hmfOCjU1r0vpb08wkmjZKxlkPvq0HoGbqiBvPmWl25YGDttd
-         iNqPDuQ1Sq+xyR6TgN22ubALQB1Gy3hnjcr7Sp1tZ+jEOtHptlQQhrXQFtb1SoA717Yi
-         5AoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=85yiqfm+Sjk5zm51MbyH9eN3BN60wR2dMPCLJCCbWMo=;
-        b=puQVdlUV7W8A4Np0HDga8qI1Q0SgpxR4JnWIga4cmrWUMmzmy25yKBi0nn+NFMrPka
-         EUy3rhrCNBXpRJquS1e7vHkQOmhrTRS/4QofuTOe8ha2eEJiXijQr/DjlzfNyq4xOx8Z
-         /lepRlG9ODwydghDPOACRwQ1ZxS5mTigDLgdF1DwklLSw4gNa/dFDKsNynJ6p7+fByRP
-         wT72FMp+SLoxgLqMYtNEVAgTdZEVN1fjFoUnXiIi6FArkjL8Okgdmc00fa1WUFDDkD+o
-         et8RK4FLTgQTO3eNBXtbuWEVmTwPG9A2WV12v6kEqvqb3Zkrc7WMWnUy9SbQXDN3KMFF
-         ytJQ==
-X-Gm-Message-State: AFqh2kp8FClE9fjg4saiah50GA042qGcsn8u8mftYaTeSsoPhp3btAkO
-        gXQQgCyPnlbihZRccQfY2EI=
-X-Google-Smtp-Source: AMrXdXv2mJX4ZIT0SdeAny4PWpPNMzBOzG+m7SnSFG95foSUH2B9RkPRgVu9JkDRmZnSRsHOrpMWkA==
-X-Received: by 2002:a17:902:d893:b0:193:b7e:2bf8 with SMTP id b19-20020a170902d89300b001930b7e2bf8mr17638436plz.59.1673429599667;
-        Wed, 11 Jan 2023 01:33:19 -0800 (PST)
-Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id u6-20020a170902714600b001769e6d4fafsm2001341plm.57.2023.01.11.01.33.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 01:33:19 -0800 (PST)
-From:   Marvin Lin <milkfafa@gmail.com>
-To:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org, bp@alien8.de,
-        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-        rric@kernel.org, benjaminfair@google.com, yuenn@google.com,
-        venture@google.com, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        KWLIU@nuvoton.com, YSCHU@nuvoton.com, ctcchien@nuvoton.com,
-        kflin@nuvoton.com, Marvin Lin <milkfafa@gmail.com>
-Subject: [PATCH v18 3/3] EDAC/npcm: Add NPCM memory controller driver
-Date:   Wed, 11 Jan 2023 17:32:45 +0800
-Message-Id: <20230111093245.318745-4-milkfafa@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230111093245.318745-1-milkfafa@gmail.com>
-References: <20230111093245.318745-1-milkfafa@gmail.com>
-MIME-Version: 1.0
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A976311C2B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:33:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fO4ZcTulD3juFXjE+/spDnuMToC4wW8I3CWKQRJqEDtPD2/WdcFM09K6sLu0kHdvRym1Z0RN/oq+9IwuA07icT0CtzF+xGIktAK/k6xBNAgfQvbC20iiYntVmqpUSkQG8DGSjIUEfyzGJL8E2FWX6YohYdHG528n93Xrb0ITC8y/vleNiP9wJRozhKhB2tXzFNVxLgd8UFFKQhNaW8AQ3rto9rzBuLzXHmnMrW03j6BUQXfuUMKIxFQEqesDtCZgsTHvtCpf8VLyKj8KntxmYVaOXutWKGFkWy5JaIe51NRm6hBi1R8Vv0D46dcYa0m5dmJ07ItjBfe//2wZpGVDZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m6zxCaArxcBfXH1vPQa04bpbGz6jysmcicB2EtMBcQk=;
+ b=mZca1FDleQIKVFK5QVX5UrQTV/wiSEF0J85zOyApGG5wrGDjm/Vqozp+eHIXzPEpnm7KA8gLjwNumuohVOo5xiSjJZvt45cFmuuI20ZfP2XTVuGSmSEplRb+isKSVDQeov0P6ivN5R6LDhTSPCgby0XUtDYpf0OQQy3xibcbE8hnOwc+ntQwV01bJX+iN1UBhbAhKk6TvdCt+r/j2L+Y5bQKfaPEPf6KpQ1/tKvIgnbOvkxF5sq6M/wnxuKrjp8YkLf7yA8Yp1/WG5AatkC55sSX5W0IQv9jF4HewAmR0SkhxtWnQUT7yfd3dBM4xWIqb+XniLvySHRS791Q0xxnhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m6zxCaArxcBfXH1vPQa04bpbGz6jysmcicB2EtMBcQk=;
+ b=QdmQuSlLWVERSertoghZsxh2FRuRNlvVVuHB4sbdQuhNO/WbxdHEgeMmVOYING/fTqNI1ww0lco94JzavcXGuHDdzcXyRx+MpOqT4UXrF0CD7M4p3QkYFhqAgeprvsOoK7MfelZ+O7m9hd06Ql+A+51hPj7ZWClGEvVpm5cL8WU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB4171.namprd12.prod.outlook.com (2603:10b6:5:21f::18)
+ by PH0PR12MB5404.namprd12.prod.outlook.com (2603:10b6:510:d7::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
+ 2023 09:33:23 +0000
+Received: from DM6PR12MB4171.namprd12.prod.outlook.com
+ ([fe80::b828:7c21:5e7c:5416]) by DM6PR12MB4171.namprd12.prod.outlook.com
+ ([fe80::b828:7c21:5e7c:5416%8]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
+ 09:33:23 +0000
+Subject: Re: [RFC] Sound support for Huawei line of AMD laptops using ACP and
+ ES8336 codec
+To:     Marian Postevca <posteuca@mutex.one>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        syed sabakareem <Syed.SabaKareem@amd.com>
+References: <871qo7fqjp.fsf@mutex.one>
+ <598ca0a8-8aef-a030-7060-f76ba4700bbf@amd.com>
+ <8349cf5f-1e26-f605-4404-978dbef9cee3@amd.com> <871qo2bmlx.fsf@mutex.one>
+From:   "Reddy, V sujith kumar" <vsujithkumar.reddy@amd.com>
+Message-ID: <ecd0bcaa-677f-aabb-2864-9f54a510f3e7@amd.com>
+Date:   Wed, 11 Jan 2023 15:03:11 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
+In-Reply-To: <871qo2bmlx.fsf@mutex.one>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-ClientProxiedBy: PN2PR01CA0016.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::21) To DM6PR12MB4171.namprd12.prod.outlook.com
+ (2603:10b6:5:21f::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4171:EE_|PH0PR12MB5404:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca175101-b1a8-4973-561d-08daf3b6e246
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wx7NbbJaCwdLkrZRgVIy9KeOkyx4b+7UQ/Xcsf2ENh1D2oybD2NYdmec8ByLBdEQjECeTj1YZmtoTb7KwgbtXW177rQqpVALIW3bi1nupwfKsggs9oDco7uwXL/pTJa5MEgUl9b1Cqxh7TNBxz9w7biIB9Z7IviJOj3nl32+VFy6sj7MoOKGMJq/QDlMroF211a0hewHEhFq8KOw6TLq8b/eSNO00hg8EZFeAqnRRLn2YNKMgTcG1sqLJjivAsZsQ8D+pXKvrZlj4+4KYuv0MsWTcyS7evv4ygtW1ybhWM5dP20Q+MJah3A0JS7Qx4FRYZBg6+we/jAe5aQiMrNKhy/2FKIMSHJJ3424Q+IXkc+cwjRaKBFcGGLSlXkbsliAvXcTX07CSAe5K5oHTpnfwFenqP7+IO5OwnvuxXc086vyWyU+08t7gFpNltCLaTZ2avP/AxVyw27puP8J7ezM5Di9xWQG9FC1Mxf7+K1B5uwI4dXpb4gGk9/FI0faQ+fpXa/4i9QhRsScM9tfEcB9wKiQTNEckhCWp5YC9Q856+zGLkiT7qbjy7xrqEIx2+e+5aDpFCQsAck/On5HuH5XOPvSVKFbvMxmSov2Itj/YzF89W9bfMz7/BAWiR5wBqlPg9k180fMYbkq2gbLPhxqLlVAFaWZlmH/kStxcaD/EWWGzb0y9DOmPFtfOdOpgiTAUTszDhXt+hgCpxILDLIJ8jxy+DWmN9nvYcv5kg+ZZPfNK4frlTrkToFkOXaFgzfVUJZpC6hGeNV2+kq0dEC+7NvfHytN/atOzut9Dms/Djw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4171.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(451199015)(6506007)(38100700002)(6666004)(84970400001)(31686004)(53546011)(2906002)(6486002)(966005)(478600001)(2616005)(26005)(186003)(6512007)(5660300002)(316002)(8936002)(83380400001)(36756003)(86362001)(31696002)(41300700001)(110136005)(8676002)(54906003)(66556008)(4326008)(66946007)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WTJjZzZDbTNUcnVWMVphZk9xMnlTNDJyUUs3M3UvYjNXQWY1aGgvam1rTTg1?=
+ =?utf-8?B?WHRYbnkxY3lqVFFEdVJMYzBwSCtnV1R4Z1BoRG5SSlBNTFd3L1U2OWNCdEw1?=
+ =?utf-8?B?N0N6K21ISHBrYmVEUURCYlkxNS83emZjUXV5Z0VlQUxFdTd3Tm5hZXcyM3E5?=
+ =?utf-8?B?OUZIZ0ZVVmFMQkdQSGpHUEk0dmtnRVhMdXl2blJyTFZnSWFpY1pMdHllTkp6?=
+ =?utf-8?B?SmRqQmh1QWc4clFGN3AxQWdVWXhIWmZHYmxnT29GTHpJS0QxRk45WEV3eFk5?=
+ =?utf-8?B?Zk9TNGUwaG0wT3dFbytwT2xqZWc1ZGVJQ3FnZW14dmRFMmtXY1I1dUJTdyti?=
+ =?utf-8?B?VVJsUCs0OEwrKzc4b3hDQXN3SWhmYnhFaXpMN0owT0hrcXpRZzgvRG1Yckwv?=
+ =?utf-8?B?UWtrQmdOazVkMmUxRzVCMS83ODg2a1NPbUdxekpFVW8vNEJoUzdQeWhyOEZI?=
+ =?utf-8?B?TXBWWXVpS05uZE8rWXlsZjNYeE9LcXVKWU9zelNPTjJXYUQ4WisvMDhIVTE3?=
+ =?utf-8?B?YU0xaytwdUZRd2gvaFE4bzJyNnlOMmE4NkFleVp1U1FHUXhYNVFsSGRWRlk2?=
+ =?utf-8?B?UDhuVXhUWllER2s2cENSanR3OWJFeFdnVHk3UllVTlBGUjA3dHFSUUVRejJz?=
+ =?utf-8?B?L1hJdTNESUhkVUFlRTNPQTZkdlJVUHI5c3ZjLy9ibVV1b3g1VGN0V2ZTMS9Y?=
+ =?utf-8?B?akF4Y1JvN2duaHFsbWpDYW12RVdrQXYwbGc1ZEcwQUtHNE4xSW1xQm9BNjlV?=
+ =?utf-8?B?TG1kUWdXSmJ6d3BIYmxOcFZpbmpOa1Q1aTA5T01abmhWS21VUG1vQW56cjVD?=
+ =?utf-8?B?d1dldENCSTJ5N1BpL1VVcVQvUEJBQlRVd2RIWEhKY3pEK0w2L2IxTzJjUWlS?=
+ =?utf-8?B?YjNZeUdRSWJFMG1PaVBHcm9RMUpvOGN4bUJiRTV0WjlpejNsQTFuZENsdzkw?=
+ =?utf-8?B?OTYwU1o1YlhMWVFNRkJxUCtxQ0JPbG1xRXRZdlVSVC94b3VieWY5cGJiL0hE?=
+ =?utf-8?B?WXNWZ01JQmI2dXpFYVAwNTUyZXVaRGJoNEw5dzJPTjA2czBCS1BQRDBsSEUw?=
+ =?utf-8?B?Rk1MWHh5U3hwaTZmQjl6VnFKbGNVNjZOSXMvTTg3UStoaHh6VW9odlhVeENi?=
+ =?utf-8?B?Yk9QRzRXdzZqbHFQMlB0RXVTYmFCMGlFRFM0N0h6SW1yKzU4cStvY0hXSWJX?=
+ =?utf-8?B?MmpaTUdwVG54aWtmT204VktlaWtsMnVPYkVjd1pscnQydnh1eEN2QzYvY2lR?=
+ =?utf-8?B?Uy91TS96U0kxeTNsQmpuSW1YWFUzanNoTXp4QnY4ZUhuTUJvS0syK1Q2Rldt?=
+ =?utf-8?B?R25EejNVazN2UlgxdU5GSlFIWDFxTHh1R003Z1ltUHo3VjY0WHBydTNiOUVZ?=
+ =?utf-8?B?Nld3b3hWcGJocWdpdVc2UUhQM2g3Q0I5Z0J2K2ZFajFmc1dDVXFwRG9Gekx3?=
+ =?utf-8?B?VDYwcXJJVG9ZbUdYNE5JSStMejdRdjQ3QXlGbURnZVpwK1cxamxWSjIxcHVU?=
+ =?utf-8?B?MFRna0x5eG9EMjAzRWRHSXU0ZkJ2UzIrM2preDhKZWxOMEliQSt4cVVISkRY?=
+ =?utf-8?B?ZXJWV3JzbTVjSVVOcnZYOWtYeTFlbmRoek1MWmtHOXhVaDNIU1Z6ZU8rVzUw?=
+ =?utf-8?B?OHBrRDF1V1VBMU9zRnVZM2VuNXQ4dGpWcFZmd0pGSWJJd2tnU2lidWhDS3dh?=
+ =?utf-8?B?bjM1eHFpdUhESGM4enNJUzZqVnR6bUZYYk9GRzN3NXZsL1h6QUd5OU9zVnFa?=
+ =?utf-8?B?UlpnMGp4NFRRaFZDeFB4dVRabWU1UWFjM25ZZ2Zta2Q2c3RQM1FKSXppMzhu?=
+ =?utf-8?B?YkhQZmRKQ2l3MzIwUm8zQnVVWUFZcUJTMGpsOEdsWGtUR3I4bFE3TEM5bE5H?=
+ =?utf-8?B?a3NlZnBVM25WeHlMNlhNcXBEOFBhR3UydjNhWjI1bm45b1A1WlpuWXdIWnlh?=
+ =?utf-8?B?dC9UNVRZNjlKREhlQ2t6cFloMmRQVk5UY0g1V0pETDRSY3BEcXgvSlQ3TkZB?=
+ =?utf-8?B?endYQ1JjVlhXeUNSckFnZHNpbEV5MG45ckJ6QzlaQmtnNmx0OVRPZ0lIc05K?=
+ =?utf-8?B?cXBEYnpEWXFxR0pDbW0zZFhoNGVZS0FkWWpIeTNPWHNyWmZyVkI1SFN3cFlC?=
+ =?utf-8?Q?ADRwWT2tkS5nDVJfu9k/63ZDy?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca175101-b1a8-4973-561d-08daf3b6e246
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4171.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 09:33:23.3141
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aPpAlqV9pg4Zwo9ahC6mih8/mpLrpn8ujox+3Cz54GlT2niEE1xmy5KK0er7V/05
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5404
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,616 +133,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for memory controller present on Nuvoton NPCM SoCs. The
-memory controller supports single bit error correction and double bit
-error detection.
 
-Signed-off-by: Marvin Lin <milkfafa@gmail.com>
----
- MAINTAINERS              |   8 +
- drivers/edac/Kconfig     |  11 +
- drivers/edac/Makefile    |   1 +
- drivers/edac/npcm_edac.c | 543 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 563 insertions(+)
- create mode 100644 drivers/edac/npcm_edac.c
+On 1/10/2023 5:57 PM, Marian Postevca wrote:
+> Hello V sujith kumar, Mario,
+>
+> Thanks for the replies to my email.
+>
+> "Limonciello, Mario" <mario.limonciello@amd.com> writes:
+>
+>> On 1/7/2023 00:58, Reddy, V sujith kumar wrote:
+>>> Could you please send  the error, we will check and let you know what is
+>>> missing.
+>> Just a guess here without seeing the error.  Is this perhaps because the
+>> SOF F/W binary that was loaded was not signed with signature trusted by
+>> the platform and the platform required validation?
+>>
+>> SOF on AMD was first introduced for Chromebooks which don't use the same
+>> authority for firmware binary verification that general purpose UEFI
+>> notebooks would use.
+>
+> So I compiled the latest sof firmware from main branch commit
+> 90c14e56cb, and now it seems I get additional errors that I didn't get a
+> few months ago when I last tried:
+> [   38.251393] snd_sof_amd_renoir 0000:03:00.5: enabling device (0000 -> 0002)
+> [   38.252944] snd_sof_amd_renoir 0000:03:00.5: unknown sof_ext_man header type 3 size 0x30
+> [   38.252955] snd_sof_amd_renoir 0000:03:00.5: Firmware info: version 2:0:0-90c14
+> [   38.252957] snd_sof_amd_renoir 0000:03:00.5: Firmware: ABI 3:26:0 Kernel ABI 3:23:0
+> [   41.345068] snd_sof_amd_renoir 0000:03:00.5: ------------[ DSP dump start ]------------
+> [   41.345080] snd_sof_amd_renoir 0000:03:00.5: Firmware boot failure due to timeout
+> [   41.345085] snd_sof_amd_renoir 0000:03:00.5: fw_state: SOF_FW_BOOT_IN_PROGRESS (2)
+> [   41.345137] snd_sof_amd_renoir 0000:03:00.5: invalid header size 0x7f841000. FW oops is bogus
+> [   41.345142] snd_sof_amd_renoir 0000:03:00.5: unexpected fault 0x7f840000 trace 0x7f840000
+> [   41.345146] snd_sof_amd_renoir 0000:03:00.5: ------------[ DSP dump end ]------------
+> [   41.345150] snd_sof_amd_renoir 0000:03:00.5: error: failed to boot DSP firmware -5
+> [   41.345266] snd_sof_amd_renoir 0000:03:00.5: error: sof_probe_work failed err: -5
+>
+> The kernel I'm running on is based on the asoc tree from Mark Brown:
+> git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git
+>
+> commit f8778e910cab179f5835386a0a70847921a8fbec (sound/for-next)
+> Merge: cdfa92eb90f5 b11845893678
+> Author: Mark Brown <broonie@kernel.org>
+> Date:   Fri Jan 6 17:04:36 2023 +0000
+>
+>      Merge remote-tracking branch 'asoc/for-6.3' into asoc-next
+>
+> Let me know what other information you need in order to debug this.
+>
+As per the error in 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/sound/soc/sof/ipc3-loader.c?h=v6.2-rc3#n204,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7f86d02cb427..7b41be30e6b3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7557,6 +7557,14 @@ L:	linux-edac@vger.kernel.org
- S:	Maintained
- F:	drivers/edac/mpc85xx_edac.[ch]
- 
-+EDAC-NPCM
-+M:	Marvin Lin <kflin@nuvoton.com>
-+M:	Stanley Chu <yschu@nuvoton.com>
-+L:	linux-edac@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/memory-controllers/nuvoton,npcm-memory-controller.yaml
-+F:	drivers/edac/npcm_edac.c
-+
- EDAC-PASEMI
- M:	Egor Martovetsky <egor@pasemi.com>
- L:	linux-edac@vger.kernel.org
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 4cfdefbd744d..aa575f5b3125 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -542,4 +542,15 @@ config EDAC_DMC520
- 	  Support for error detection and correction on the
- 	  SoCs with ARM DMC-520 DRAM controller.
- 
-+config EDAC_NPCM
-+	tristate "Nuvoton NPCM DDR Memory Controller"
-+	depends on (ARCH_NPCM || COMPILE_TEST)
-+	help
-+	  Support for error detection and correction on the Nuvoton NPCM DDR
-+	  memory controller.
-+
-+	  The memory controller supports single bit error correction, double bit
-+	  error detection (in-line ECC in which a section 1/8th of the memory
-+	  device used to store data is used for ECC storage).
-+
- endif # EDAC
-diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-index 2d1641a27a28..db3c59d3ad84 100644
---- a/drivers/edac/Makefile
-+++ b/drivers/edac/Makefile
-@@ -84,3 +84,4 @@ obj-$(CONFIG_EDAC_QCOM)			+= qcom_edac.o
- obj-$(CONFIG_EDAC_ASPEED)		+= aspeed_edac.o
- obj-$(CONFIG_EDAC_BLUEFIELD)		+= bluefield_edac.o
- obj-$(CONFIG_EDAC_DMC520)		+= dmc520_edac.o
-+obj-$(CONFIG_EDAC_NPCM)			+= npcm_edac.o
-diff --git a/drivers/edac/npcm_edac.c b/drivers/edac/npcm_edac.c
-new file mode 100644
-index 000000000000..12b95be3e989
---- /dev/null
-+++ b/drivers/edac/npcm_edac.c
-@@ -0,0 +1,543 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2022 Nuvoton Technology Corporation
-+
-+#include <linux/debugfs.h>
-+#include <linux/iopoll.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include "edac_module.h"
-+
-+#define EDAC_MOD_NAME			"npcm-edac"
-+#define EDAC_MSG_SIZE			256
-+
-+/* chip serials */
-+#define NPCM7XX_CHIP			BIT(0)
-+#define NPCM8XX_CHIP			BIT(1)
-+
-+/* syndrome values */
-+#define UE_SYNDROME			0x03
-+
-+/* error injection */
-+#define ERROR_TYPE_CORRECTABLE		0
-+#define ERROR_TYPE_UNCORRECTABLE	1
-+#define ERROR_LOCATION_DATA		0
-+#define ERROR_LOCATION_CHECKCODE	1
-+#define ERROR_BIT_DATA_MAX		63
-+#define ERROR_BIT_CHECKCODE_MAX		7
-+
-+static char data_synd[] = {
-+	0xf4, 0xf1, 0xec, 0xea, 0xe9, 0xe6, 0xe5, 0xe3,
-+	0xdc, 0xda, 0xd9, 0xd6, 0xd5, 0xd3, 0xce, 0xcb,
-+	0xb5, 0xb0, 0xad, 0xab, 0xa8, 0xa7, 0xa4, 0xa2,
-+	0x9d, 0x9b, 0x98, 0x97, 0x94, 0x92, 0x8f, 0x8a,
-+	0x75, 0x70, 0x6d, 0x6b, 0x68, 0x67, 0x64, 0x62,
-+	0x5e, 0x5b, 0x58, 0x57, 0x54, 0x52, 0x4f, 0x4a,
-+	0x34, 0x31, 0x2c, 0x2a, 0x29, 0x26, 0x25, 0x23,
-+	0x1c, 0x1a, 0x19, 0x16, 0x15, 0x13, 0x0e, 0x0b
-+};
-+
-+static struct regmap *npcm_regmap;
-+
-+struct npcm_platform_data {
-+	/* chip serials */
-+	int chip;
-+
-+	/* memory controller registers */
-+	u32 ctl_ecc_en;
-+	u32 ctl_int_status;
-+	u32 ctl_int_ack;
-+	u32 ctl_int_mask_master;
-+	u32 ctl_int_mask_ecc;
-+	u32 ctl_ce_addr_l;
-+	u32 ctl_ce_addr_h;
-+	u32 ctl_ce_data_l;
-+	u32 ctl_ce_data_h;
-+	u32 ctl_ce_synd;
-+	u32 ctl_ue_addr_l;
-+	u32 ctl_ue_addr_h;
-+	u32 ctl_ue_data_l;
-+	u32 ctl_ue_data_h;
-+	u32 ctl_ue_synd;
-+	u32 ctl_source_id;
-+	u32 ctl_controller_busy;
-+	u32 ctl_xor_check_bits;
-+
-+	/* masks and shifts */
-+	u32 ecc_en_mask;
-+	u32 int_status_ce_mask;
-+	u32 int_status_ue_mask;
-+	u32 int_ack_ce_mask;
-+	u32 int_ack_ue_mask;
-+	u32 int_mask_master_non_ecc_mask;
-+	u32 int_mask_master_global_mask;
-+	u32 int_mask_ecc_non_event_mask;
-+	u32 ce_addr_h_mask;
-+	u32 ce_synd_mask;
-+	u32 ce_synd_shift;
-+	u32 ue_addr_h_mask;
-+	u32 ue_synd_mask;
-+	u32 ue_synd_shift;
-+	u32 source_id_ce_mask;
-+	u32 source_id_ce_shift;
-+	u32 source_id_ue_mask;
-+	u32 source_id_ue_shift;
-+	u32 controller_busy_mask;
-+	u32 xor_check_bits_mask;
-+	u32 xor_check_bits_shift;
-+	u32 writeback_en_mask;
-+	u32 fwc_mask;
-+};
-+
-+struct priv_data {
-+	void __iomem *reg;
-+	char message[EDAC_MSG_SIZE];
-+	const struct npcm_platform_data *pdata;
-+
-+	/* error injection */
-+	struct dentry *debugfs;
-+	u8 error_type;
-+	u8 location;
-+	u8 bit;
-+};
-+
-+static void handle_ce(struct mem_ctl_info *mci)
-+{
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_platform_data *pdata;
-+	u32 val_h = 0, val_l, id, synd;
-+	u64 addr = 0, data = 0;
-+
-+	pdata = priv->pdata;
-+	regmap_read(npcm_regmap, pdata->ctl_ce_addr_l, &val_l);
-+	if (pdata->chip == NPCM8XX_CHIP) {
-+		regmap_read(npcm_regmap, pdata->ctl_ce_addr_h, &val_h);
-+		val_h &= pdata->ce_addr_h_mask;
-+	}
-+	addr = ((addr | val_h) << 32) | val_l;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_ce_data_l, &val_l);
-+	if (pdata->chip == NPCM8XX_CHIP)
-+		regmap_read(npcm_regmap, pdata->ctl_ce_data_h, &val_h);
-+	data = ((data | val_h) << 32) | val_l;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_source_id, &id);
-+	id = (id & pdata->source_id_ce_mask) >> pdata->source_id_ce_shift;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_ce_synd, &synd);
-+	synd = (synd & pdata->ce_synd_mask) >> pdata->ce_synd_shift;
-+
-+	snprintf(priv->message, EDAC_MSG_SIZE,
-+		 "addr = 0x%llx, data = 0x%llx, id = 0x%x", addr, data, id);
-+
-+	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, 1, addr >> PAGE_SHIFT,
-+			     addr & ~PAGE_MASK, synd, 0, 0, -1, priv->message, "");
-+}
-+
-+static void handle_ue(struct mem_ctl_info *mci)
-+{
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_platform_data *pdata;
-+	u32 val_h = 0, val_l, id, synd;
-+	u64 addr = 0, data = 0;
-+
-+	pdata = priv->pdata;
-+	regmap_read(npcm_regmap, pdata->ctl_ue_addr_l, &val_l);
-+	if (pdata->chip == NPCM8XX_CHIP) {
-+		regmap_read(npcm_regmap, pdata->ctl_ue_addr_h, &val_h);
-+		val_h &= pdata->ue_addr_h_mask;
-+	}
-+	addr = ((addr | val_h) << 32) | val_l;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_ue_data_l, &val_l);
-+	if (pdata->chip == NPCM8XX_CHIP)
-+		regmap_read(npcm_regmap, pdata->ctl_ue_data_h, &val_h);
-+	data = ((data | val_h) << 32) | val_l;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_source_id, &id);
-+	id = (id & pdata->source_id_ue_mask) >> pdata->source_id_ue_shift;
-+
-+	regmap_read(npcm_regmap, pdata->ctl_ue_synd, &synd);
-+	synd = (synd & pdata->ue_synd_mask) >> pdata->ue_synd_shift;
-+
-+	snprintf(priv->message, EDAC_MSG_SIZE,
-+		 "addr = 0x%llx, data = 0x%llx, id = 0x%x", addr, data, id);
-+
-+	edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci, 1, addr >> PAGE_SHIFT,
-+			     addr & ~PAGE_MASK, synd, 0, 0, -1, priv->message, "");
-+}
-+
-+static irqreturn_t edac_ecc_isr(int irq, void *dev_id)
-+{
-+	const struct npcm_platform_data *pdata;
-+	struct mem_ctl_info *mci = dev_id;
-+	u32 status;
-+
-+	pdata = ((struct priv_data *)mci->pvt_info)->pdata;
-+	regmap_read(npcm_regmap, pdata->ctl_int_status, &status);
-+	if (status & pdata->int_status_ce_mask) {
-+		handle_ce(mci);
-+
-+		/* acknowledge the CE interrupt */
-+		regmap_write(npcm_regmap, pdata->ctl_int_ack,
-+			     pdata->int_ack_ce_mask);
-+		return IRQ_HANDLED;
-+	} else if (status & pdata->int_status_ue_mask) {
-+		handle_ue(mci);
-+
-+		/* acknowledge the UE interrupt */
-+		regmap_write(npcm_regmap, pdata->ctl_int_ack,
-+			     pdata->int_ack_ue_mask);
-+		return IRQ_HANDLED;
-+	}
-+
-+	WARN_ON_ONCE(1);
-+	return IRQ_NONE;
-+}
-+
-+static ssize_t force_ecc_error(struct file *file, const char __user *data,
-+			       size_t count, loff_t *ppos)
-+{
-+	struct device *dev = file->private_data;
-+	struct mem_ctl_info *mci = to_mci(dev);
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_platform_data *pdata;
-+	u32 val, syndrome;
-+	int ret;
-+
-+	pdata = priv->pdata;
-+	edac_printk(KERN_INFO, EDAC_MOD_NAME,
-+		    "force an ECC error, type = %d, location = %d, bit = %d\n",
-+		    priv->error_type, priv->location, priv->bit);
-+
-+	/* ensure no pending writes */
-+	ret = regmap_read_poll_timeout(npcm_regmap, pdata->ctl_controller_busy,
-+				       val, !(val & pdata->controller_busy_mask),
-+				       1000, 10000);
-+	if (ret) {
-+		edac_printk(KERN_INFO, EDAC_MOD_NAME,
-+			    "wait pending writes timeout\n");
-+		return count;
-+	}
-+
-+	regmap_read(npcm_regmap, pdata->ctl_xor_check_bits, &val);
-+	val &= ~pdata->xor_check_bits_mask;
-+
-+	/* write syndrome to XOR_CHECK_BITS */
-+	if (priv->error_type == ERROR_TYPE_CORRECTABLE) {
-+		if (priv->location == ERROR_LOCATION_DATA &&
-+		    priv->bit > ERROR_BIT_DATA_MAX) {
-+			edac_printk(KERN_INFO, EDAC_MOD_NAME,
-+				    "data bit should not exceed %d (%d)\n",
-+				    ERROR_BIT_DATA_MAX, priv->bit);
-+			return count;
-+		}
-+
-+		if (priv->location == ERROR_LOCATION_CHECKCODE &&
-+		    priv->bit > ERROR_BIT_CHECKCODE_MAX) {
-+			edac_printk(KERN_INFO, EDAC_MOD_NAME,
-+				    "checkcode bit should not exceed %d (%d)\n",
-+				    ERROR_BIT_CHECKCODE_MAX, priv->bit);
-+			return count;
-+		}
-+
-+		syndrome = priv->location ? 1 << priv->bit
-+					  : data_synd[priv->bit];
-+
-+		regmap_write(npcm_regmap, pdata->ctl_xor_check_bits,
-+			     val | (syndrome << pdata->xor_check_bits_shift) |
-+			     pdata->writeback_en_mask);
-+	} else if (priv->error_type == ERROR_TYPE_UNCORRECTABLE) {
-+		regmap_write(npcm_regmap, pdata->ctl_xor_check_bits,
-+			     val | (UE_SYNDROME << pdata->xor_check_bits_shift));
-+	}
-+
-+	/* force write check */
-+	regmap_update_bits(npcm_regmap, pdata->ctl_xor_check_bits,
-+			   pdata->fwc_mask, pdata->fwc_mask);
-+
-+	return count;
-+}
-+
-+static const struct file_operations force_ecc_error_fops = {
-+	.open = simple_open,
-+	.write = force_ecc_error,
-+	.llseek = generic_file_llseek,
-+};
-+
-+/*
-+ * Setup debugfs for error injection.
-+ *
-+ * Nodes:
-+ *   error_type		- 0: CE, 1: UE
-+ *   location		- 0: data, 1: checkcode
-+ *   bit		- 0 ~ 63 for data and 0 ~ 7 for checkcode
-+ *   force_ecc_error	- trigger
-+ *
-+ * Examples:
-+ *   1. Inject a correctable error (CE) at checkcode bit 7.
-+ *      ~# echo 0 > /sys/kernel/debug/edac/npcm-edac/error_type
-+ *      ~# echo 1 > /sys/kernel/debug/edac/npcm-edac/location
-+ *      ~# echo 7 > /sys/kernel/debug/edac/npcm-edac/bit
-+ *      ~# echo 1 > /sys/kernel/debug/edac/npcm-edac/force_ecc_error
-+ *
-+ *   2. Inject an uncorrectable error (UE).
-+ *      ~# echo 1 > /sys/kernel/debug/edac/npcm-edac/error_type
-+ *      ~# echo 1 > /sys/kernel/debug/edac/npcm-edac/force_ecc_error
-+ */
-+static void setup_debugfs(struct mem_ctl_info *mci)
-+{
-+	struct priv_data *priv = mci->pvt_info;
-+
-+	priv->debugfs = edac_debugfs_create_dir(mci->mod_name);
-+	if (!priv->debugfs)
-+		return;
-+
-+	edac_debugfs_create_x8("error_type", 0644, priv->debugfs, &priv->error_type);
-+	edac_debugfs_create_x8("location", 0644, priv->debugfs, &priv->location);
-+	edac_debugfs_create_x8("bit", 0644, priv->debugfs, &priv->bit);
-+	edac_debugfs_create_file("force_ecc_error", 0200, priv->debugfs,
-+				 &mci->dev, &force_ecc_error_fops);
-+}
-+
-+static int setup_irq(struct mem_ctl_info *mci, struct platform_device *pdev)
-+{
-+	const struct npcm_platform_data *pdata;
-+	int ret, irq;
-+
-+	pdata = ((struct priv_data *)mci->pvt_info)->pdata;
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0) {
-+		edac_printk(KERN_ERR, EDAC_MOD_NAME, "IRQ not defined in DTS\n");
-+		return irq;
-+	}
-+
-+	ret = devm_request_irq(&pdev->dev, irq, edac_ecc_isr, 0,
-+			       dev_name(&pdev->dev), mci);
-+	if (ret < 0) {
-+		edac_printk(KERN_ERR, EDAC_MOD_NAME, "failed to request IRQ\n");
-+		return ret;
-+	}
-+
-+	/* enable the functional group of ECC and mask the others */
-+	regmap_write(npcm_regmap, pdata->ctl_int_mask_master,
-+		     pdata->int_mask_master_non_ecc_mask);
-+
-+	if (pdata->chip == NPCM8XX_CHIP)
-+		regmap_write(npcm_regmap, pdata->ctl_int_mask_ecc,
-+			     pdata->int_mask_ecc_non_event_mask);
-+
-+	return 0;
-+}
-+
-+static const struct regmap_config npcm_regmap_cfg = {
-+	.reg_bits	= 32,
-+	.reg_stride	= 4,
-+	.val_bits	= 32,
-+};
-+
-+static int edac_probe(struct platform_device *pdev)
-+{
-+	const struct npcm_platform_data *pdata;
-+	struct device *dev = &pdev->dev;
-+	struct edac_mc_layer layers[1];
-+	struct mem_ctl_info *mci;
-+	struct priv_data *priv;
-+	void __iomem *reg;
-+	u32 val;
-+	int rc;
-+
-+	reg = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(reg))
-+		return PTR_ERR(reg);
-+
-+	npcm_regmap = devm_regmap_init_mmio(dev, reg, &npcm_regmap_cfg);
-+	if (IS_ERR(npcm_regmap))
-+		return PTR_ERR(npcm_regmap);
-+
-+	pdata = of_device_get_match_data(dev);
-+	if (!pdata)
-+		return -EINVAL;
-+
-+	/* bail out if ECC is not enabled */
-+	regmap_read(npcm_regmap, pdata->ctl_ecc_en, &val);
-+	if (!(val & pdata->ecc_en_mask)) {
-+		edac_printk(KERN_ERR, EDAC_MOD_NAME, "ECC is not enabled\n");
-+		return -EPERM;
-+	}
-+
-+	edac_op_state = EDAC_OPSTATE_INT;
-+
-+	layers[0].type = EDAC_MC_LAYER_ALL_MEM;
-+	layers[0].size = 1;
-+
-+	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
-+			    sizeof(struct priv_data));
-+	if (!mci)
-+		return -ENOMEM;
-+
-+	mci->pdev = &pdev->dev;
-+	priv = mci->pvt_info;
-+	priv->reg = reg;
-+	priv->pdata = pdata;
-+	platform_set_drvdata(pdev, mci);
-+
-+	mci->mtype_cap = MEM_FLAG_DDR4;
-+	mci->edac_ctl_cap = EDAC_FLAG_SECDED;
-+	mci->scrub_cap = SCRUB_FLAG_HW_SRC;
-+	mci->scrub_mode = SCRUB_HW_SRC;
-+	mci->edac_cap = EDAC_FLAG_SECDED;
-+	mci->ctl_name = "npcm_ddr_controller";
-+	mci->dev_name = dev_name(&pdev->dev);
-+	mci->mod_name = EDAC_MOD_NAME;
-+	mci->ctl_page_to_phys = NULL;
-+
-+	rc = setup_irq(mci, pdev);
-+	if (rc)
-+		goto free_edac_mc;
-+
-+	rc = edac_mc_add_mc(mci);
-+	if (rc)
-+		goto free_edac_mc;
-+
-+	if (IS_ENABLED(CONFIG_EDAC_DEBUG) && pdata->chip == NPCM8XX_CHIP)
-+		setup_debugfs(mci);
-+
-+	return rc;
-+
-+free_edac_mc:
-+	edac_mc_free(mci);
-+	return rc;
-+}
-+
-+static int edac_remove(struct platform_device *pdev)
-+{
-+	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-+	struct priv_data *priv = mci->pvt_info;
-+	const struct npcm_platform_data *pdata;
-+
-+	pdata = priv->pdata;
-+	if (IS_ENABLED(CONFIG_EDAC_DEBUG) && pdata->chip == NPCM8XX_CHIP)
-+		edac_debugfs_remove_recursive(priv->debugfs);
-+
-+	edac_mc_del_mc(&pdev->dev);
-+	edac_mc_free(mci);
-+
-+	regmap_write(npcm_regmap, pdata->ctl_int_mask_master,
-+		     pdata->int_mask_master_global_mask);
-+	regmap_update_bits(npcm_regmap, pdata->ctl_ecc_en, pdata->ecc_en_mask, 0);
-+
-+	return 0;
-+}
-+
-+static const struct npcm_platform_data npcm750_edac = {
-+	.chip				= NPCM7XX_CHIP,
-+
-+	/* memory controller registers */
-+	.ctl_ecc_en			= 0x174,
-+	.ctl_int_status			= 0x1d0,
-+	.ctl_int_ack			= 0x1d4,
-+	.ctl_int_mask_master		= 0x1d8,
-+	.ctl_ce_addr_l			= 0x188,
-+	.ctl_ce_data_l			= 0x190,
-+	.ctl_ce_synd			= 0x18c,
-+	.ctl_ue_addr_l			= 0x17c,
-+	.ctl_ue_data_l			= 0x184,
-+	.ctl_ue_synd			= 0x180,
-+	.ctl_source_id			= 0x194,
-+
-+	/* masks and shifts */
-+	.ecc_en_mask			= BIT(24),
-+	.int_status_ce_mask		= GENMASK(4, 3),
-+	.int_status_ue_mask		= GENMASK(6, 5),
-+	.int_ack_ce_mask		= GENMASK(4, 3),
-+	.int_ack_ue_mask		= GENMASK(6, 5),
-+	.int_mask_master_non_ecc_mask	= GENMASK(30, 7) | GENMASK(2, 0),
-+	.int_mask_master_global_mask	= BIT(31),
-+	.ce_synd_mask			= GENMASK(6, 0),
-+	.ce_synd_shift			= 0,
-+	.ue_synd_mask			= GENMASK(6, 0),
-+	.ue_synd_shift			= 0,
-+	.source_id_ce_mask		= GENMASK(29, 16),
-+	.source_id_ce_shift		= 16,
-+	.source_id_ue_mask		= GENMASK(13, 0),
-+	.source_id_ue_shift		= 0,
-+};
-+
-+static const struct npcm_platform_data npcm845_edac = {
-+	.chip =				NPCM8XX_CHIP,
-+
-+	/* memory controller registers */
-+	.ctl_ecc_en			= 0x16c,
-+	.ctl_int_status			= 0x228,
-+	.ctl_int_ack			= 0x244,
-+	.ctl_int_mask_master		= 0x220,
-+	.ctl_int_mask_ecc		= 0x260,
-+	.ctl_ce_addr_l			= 0x18c,
-+	.ctl_ce_addr_h			= 0x190,
-+	.ctl_ce_data_l			= 0x194,
-+	.ctl_ce_data_h			= 0x198,
-+	.ctl_ce_synd			= 0x190,
-+	.ctl_ue_addr_l			= 0x17c,
-+	.ctl_ue_addr_h			= 0x180,
-+	.ctl_ue_data_l			= 0x184,
-+	.ctl_ue_data_h			= 0x188,
-+	.ctl_ue_synd			= 0x180,
-+	.ctl_source_id			= 0x19c,
-+	.ctl_controller_busy		= 0x20c,
-+	.ctl_xor_check_bits		= 0x174,
-+
-+	/* masks and shifts */
-+	.ecc_en_mask			= GENMASK(17, 16),
-+	.int_status_ce_mask		= GENMASK(1, 0),
-+	.int_status_ue_mask		= GENMASK(3, 2),
-+	.int_ack_ce_mask		= GENMASK(1, 0),
-+	.int_ack_ue_mask		= GENMASK(3, 2),
-+	.int_mask_master_non_ecc_mask	= GENMASK(30, 3) | GENMASK(1, 0),
-+	.int_mask_master_global_mask	= BIT(31),
-+	.int_mask_ecc_non_event_mask	= GENMASK(8, 4),
-+	.ce_addr_h_mask			= GENMASK(1, 0),
-+	.ce_synd_mask			= GENMASK(15, 8),
-+	.ce_synd_shift			= 8,
-+	.ue_addr_h_mask			= GENMASK(1, 0),
-+	.ue_synd_mask			= GENMASK(15, 8),
-+	.ue_synd_shift			= 8,
-+	.source_id_ce_mask		= GENMASK(29, 16),
-+	.source_id_ce_shift		= 16,
-+	.source_id_ue_mask		= GENMASK(13, 0),
-+	.source_id_ue_shift		= 0,
-+	.controller_busy_mask		= BIT(0),
-+	.xor_check_bits_mask		= GENMASK(23, 16),
-+	.xor_check_bits_shift		= 16,
-+	.writeback_en_mask		= BIT(24),
-+	.fwc_mask			= BIT(8),
-+};
-+
-+static const struct of_device_id npcm_edac_of_match[] = {
-+	{
-+		.compatible = "nuvoton,npcm750-memory-controller",
-+		.data = &npcm750_edac
-+	},
-+	{
-+		.compatible = "nuvoton,npcm845-memory-controller",
-+		.data = &npcm845_edac
-+	},
-+	{},
-+};
-+
-+MODULE_DEVICE_TABLE(of, npcm_edac_of_match);
-+
-+static struct platform_driver npcm_edac_driver = {
-+	.driver = {
-+		.name = "npcm-edac",
-+		.of_match_table = npcm_edac_of_match,
-+	},
-+	.probe = edac_probe,
-+	.remove = edac_remove,
-+};
-+
-+module_platform_driver(npcm_edac_driver);
-+
-+MODULE_AUTHOR("Medad CChien <medadyoung@gmail.com>");
-+MODULE_AUTHOR("Marvin Lin <kflin@nuvoton.com>");
-+MODULE_DESCRIPTION("Nuvoton NPCM EDAC Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+the firmware header was not proper.
+
+
+Even the header parsing is done correctly, you will run into other 
+issues related to signed firmware validation error as mentioned by 
+mario.limonciello@amd.com .
+
+So please Use x86 based implementation without DSP that is recommended 2.
+
 
