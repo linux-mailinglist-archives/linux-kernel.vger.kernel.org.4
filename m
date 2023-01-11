@@ -2,120 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E343665265
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D93665267
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:31:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235647AbjAKD37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 22:29:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        id S235838AbjAKDbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 22:31:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235720AbjAKD3Y (ORCPT
+        with ESMTP id S235690AbjAKDaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 22:29:24 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2671E0EE;
-        Tue, 10 Jan 2023 19:29:23 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id i26-20020a9d68da000000b00672301a1664so8162476oto.6;
-        Tue, 10 Jan 2023 19:29:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=h0nyoR/pePv8lb7AbIl1M+zu+JOCA53u13ysae92ni0=;
-        b=DwCph2MoJfPPFXtYCrrPSHEgwMHw07NYr6kJxhPzF5aOv9rXzqT8sUdAdnOYnGFRJT
-         WNsoSRqcybv54Qc40/HMlxtgyNuA4zoxe98XefJhF3JeDI8QIGKRV5BJf0jEwchbI1BN
-         oBPft9m5Nyq3EIZ0tQGOF2RLma2Ddkwkk5e+Zgun5EfCTB7tRVkqWW6wosCikrzcAqrW
-         OJaqkkroCrFFfhcbDNxKfiSA+UkfeSP3+4kGAyyagbDN40ndBBPUYzyRbvwYgrWyzUf5
-         k0oj+jj4hER8d+e8NwSBv9gHy2sucwywS29cYOH2xMI8G+uTx5VIxMDthKKFC5sWukFb
-         ZDjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h0nyoR/pePv8lb7AbIl1M+zu+JOCA53u13ysae92ni0=;
-        b=i10QKtKxzrCeAfGv1i/L5SMUBr0nVgYO2Z8r46d4k0qWr0iZRn6Td571SW7PHMz6P9
-         LKdw7z4lkRlwfZcvbWP1FgpBS/+ZFE08AdD4eQHCm4HROCr/L0o6vw0qqNAurXTFvhU5
-         /Ag8Y6VaBuDgbyvM0LBe/kWsmk4QrFyCOH5xEH7jQI1QXGs20emMqBODo3p8mUqpYkAr
-         jXAQd/Oz2/kaXGi+GkS3GgvkpMWk0gsiBtll28sJa24W4yq3XNU3U2A5sL3ChcBwV8/h
-         ZtFJVPXyA+R/ZsX/Z6c7+B+rIbUtuiQd7IL2fKx6zUewm3PXcbxFrbylgwUP7y/GcC/w
-         niww==
-X-Gm-Message-State: AFqh2koH+nhi7MghUpyCAkPxT7xqhk/jvzdNNgSfrDFq9+Zws2VmNbYn
-        kuoTKbA6Q/t2ok99Nb19iU56APE/uRc=
-X-Google-Smtp-Source: AMrXdXvL2U3r1PK4AV7A72qmHVGCVmkhhlHmqDPmFJQyX8tRw0tYFU1C3V9tzchg11NdTvUy+Qs8ww==
-X-Received: by 2002:a9d:7a49:0:b0:670:73fc:fa3c with SMTP id z9-20020a9d7a49000000b0067073fcfa3cmr34162469otm.36.1673407763202;
-        Tue, 10 Jan 2023 19:29:23 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k13-20020a9d7dcd000000b00684a7b9ee66sm1005926otn.14.2023.01.10.19.29.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 19:29:22 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <db4276db-bbec-142a-d306-928421eb49fc@roeck-us.net>
-Date:   Tue, 10 Jan 2023 19:29:20 -0800
+        Tue, 10 Jan 2023 22:30:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F8414020
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:30:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9DEF61A28
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2208FC433F1;
+        Wed, 11 Jan 2023 03:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673407824;
+        bh=2+akQJh5tu43IC8WtSf7p9l29W9ZmKcBY9vCtmO6fYk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Bl81DboHIJ/W6KQyfn9l6tiKbuMw1CtueKwWxWcTMPK6NJHb9AT2U3LnrxWyCInlT
+         zpC6x85mzfcSR2nGgITxwVr24tQxhN2utBrzjs+nAuge8cG6tT0GcybjR2kqfzYEDp
+         UDYxjMKzstmLIKW9fvmwqhnfh/hQKfwYga6MOdCB6SHkw+nnWG9m7FBR/yqGRPYu9V
+         AvZSuUuaOVQ2Ewgk8LH6H+t77hCBHczjO7GRv+Oi4O3Zx2lIpHEeXOye2SXkQai6VH
+         QrY6hYholzpJAZd0FfnGjIIEcrBMm1MeVNp5rM82L1Afl4UfGCo4hgF6tUmCozT74y
+         Hu0WN8BxBDt3A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7E7DE21EE8;
+        Wed, 11 Jan 2023 03:30:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/1] hwmon: remove unnecessary (void*) conversions
-Content-Language: en-US
-To:     XU pengfei <xupengfei@nfschina.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230111020723.3194-1-xupengfei@nfschina.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230111020723.3194-1-xupengfei@nfschina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] platform/chrome: cros_ec: Fix panic notifier registration
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <167340782372.3713.4288973161767285013.git-patchwork-notify@kernel.org>
+Date:   Wed, 11 Jan 2023 03:30:23 +0000
+References: <20230110221033.7441-1-m.szyprowski@samsung.com>
+In-Reply-To: <20230110221033.7441-1-m.szyprowski@samsung.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
+        pmalani@chromium.org, robbarnes@google.com, dtor@chromium.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/23 18:07, XU pengfei wrote:
-> Pointer variables of void * type do not require type cast.
+Hello:
+
+This patch was applied to chrome-platform/linux.git (for-kernelci)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
+
+On Tue, 10 Jan 2023 23:10:33 +0100 you wrote:
+> Initialize panic notifier to avoid the following lockdep warning:
 > 
-
-One patch per driver, and include the driver name (ibmpex, powr1220)
-in the subject.
-
-Guenter
-
-> Signed-off-by: XU pengfei <xupengfei@nfschina.com>
-> ---
->   drivers/hwmon/ibmpex.c   | 2 +-
->   drivers/hwmon/powr1220.c | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+> --->8---
+> INFO: trying to register non-static key.
+> The code is fine but needs lockdep annotation, or maybe
+> you didn't initialize this object before use?
+> turning off the locking correctness validator.
+> CPU: 0 PID: 62 Comm: kworker/u16:1 Not tainted 6.2.0-rc3-next-20230110-00037-g7c2b0426386a #6112
+> Hardware name: Samsung Exynos (Flattened Device Tree)
+> Workqueue: events_unbound async_run_entry_fn
+>  unwind_backtrace from show_stack+0x10/0x14
+>  show_stack from dump_stack_lvl+0x58/0x70
+>  dump_stack_lvl from register_lock_class+0x998/0x9a8
+>  register_lock_class from __lock_acquire+0x6c/0x2a80
+>  __lock_acquire from lock_acquire+0x124/0x3f0
+>  lock_acquire from down_write+0x40/0xd8
+>  down_write from blocking_notifier_chain_register+0x28/0x58
+>  blocking_notifier_chain_register from cros_ec_debugfs_probe+0x324/0x3b4
+>  cros_ec_debugfs_probe from platform_probe+0x5c/0xb8
+>  platform_probe from really_probe+0xe0/0x414
+>  really_probe from __driver_probe_device+0x9c/0x200
+>  __driver_probe_device from driver_probe_device+0x30/0xc0
+>  driver_probe_device from __device_attach_driver+0xa8/0x120
+>  __device_attach_driver from bus_for_each_drv+0x7c/0xc0
+>  bus_for_each_drv from __device_attach_async_helper+0xa0/0xf4
+>  __device_attach_async_helper from async_run_entry_fn+0x40/0x154
+>  async_run_entry_fn from process_one_work+0x288/0x790
+>  process_one_work from worker_thread+0x44/0x504
+>  worker_thread from kthread+0xf0/0x124
+>  kthread from ret_from_fork+0x14/0x2c
+> Exception stack(0xf0a6dfb0 to 0xf0a6dff8)
+> ...
 > 
-> diff --git a/drivers/hwmon/ibmpex.c b/drivers/hwmon/ibmpex.c
-> index 1837cccd993c..db066b368918 100644
-> --- a/drivers/hwmon/ibmpex.c
-> +++ b/drivers/hwmon/ibmpex.c
-> @@ -546,7 +546,7 @@ static void ibmpex_bmc_gone(int iface)
->   
->   static void ibmpex_msg_handler(struct ipmi_recv_msg *msg, void *user_msg_data)
->   {
-> -	struct ibmpex_bmc_data *data = (struct ibmpex_bmc_data *)user_msg_data;
-> +	struct ibmpex_bmc_data *data = user_msg_data;
->   
->   	if (msg->msgid != data->tx_msgid) {
->   		dev_err(data->bmc_device,
-> diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
-> index f77dc6db31ac..501337ee5aa3 100644
-> --- a/drivers/hwmon/powr1220.c
-> +++ b/drivers/hwmon/powr1220.c
-> @@ -174,7 +174,7 @@ static umode_t
->   powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
->   		    attr, int channel)
->   {
-> -	struct powr1220_data *chip_data = (struct powr1220_data *)data;
-> +	struct powr1220_data *chip_data = data;
->   
->   	if (channel >= chip_data->max_channels)
->   		return 0;
+> [...]
+
+Here is the summary with links:
+  - platform/chrome: cros_ec: Fix panic notifier registration
+    https://git.kernel.org/chrome-platform/c/9e69b1b27b13
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
