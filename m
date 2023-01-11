@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D435665E96
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDEE665E98
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235948AbjAKO7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S232171AbjAKO7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239533AbjAKO6r (ORCPT
+        with ESMTP id S239512AbjAKO6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:58:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20396A44F;
-        Wed, 11 Jan 2023 06:58:46 -0800 (PST)
+        Wed, 11 Jan 2023 09:58:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7356328;
+        Wed, 11 Jan 2023 06:58:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D050DB81C0F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FC3361D4F;
         Wed, 11 Jan 2023 14:58:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 889CDC433D2;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CBCC43392;
         Wed, 11 Jan 2023 14:58:43 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pFcYs-000M7B-1e;
+        id 1pFcYs-000M7f-2A;
         Wed, 11 Jan 2023 09:58:42 -0500
-Message-ID: <20230111145842.376427803@goodmis.org>
+Message-ID: <20230111145842.534011158@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 11 Jan 2023 09:56:37 -0500
+Date:   Wed, 11 Jan 2023 09:56:38 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Ross Zwisler <zwisler@google.com>
-Subject: [PATCH 1/4] tracing: Add creation of instances at boot command line
+Subject: [PATCH 2/4] tracing: Add enabling of events to boot instances
 References: <20230111145636.450953217@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,124 +49,110 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Add kernel command line to add tracing instances. This only creates
-instances at boot but still does not enable any events to them. Later
-changes will extend this command line to add enabling of events, filters,
-and triggers. As well as possibly redirecting trace_printk()!
+Add the format of:
+
+  trace_instance=foo,sched:sched_switch,irq_handler_entry,initcall
+
+That will create the "foo" instance and enable the sched_switch event
+(here were the "sched" system is explicitly specified), the
+irq_handler_entry event, and all events under the system initcall.
 
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- .../admin-guide/kernel-parameters.txt         |  6 +++
- kernel/trace/trace.c                          | 51 +++++++++++++++++++
- 2 files changed, 57 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt | 14 ++++++++++++++
+ kernel/trace/trace.c                            |  4 ++++
+ kernel/trace/trace.h                            |  2 ++
+ kernel/trace/trace_events.c                     |  9 ++++-----
+ 4 files changed, 24 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6cfa6e3996cf..cec486217ccc 100644
+index cec486217ccc..7a7f41652719 100644
 --- a/Documentation/admin-guide/kernel-parameters.txt
 +++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6272,6 +6272,12 @@
- 			comma-separated list of trace events to enable. See
- 			also Documentation/trace/events.rst
+@@ -6278,6 +6278,20 @@
  
-+	trace_instance=[instance-info]
-+			[FTRACE] Create an ring buffer instance early in boot up.
-+			This will be listed in:
+ 				/sys/kernel/tracing/instances
+ 
++			Events can be enabled at the time the instance is created
++			via:
 +
-+				/sys/kernel/tracing/instances
++				trace_instance=<name>,<system1>:<event1>,<system2>:<event2>
++
++			Note, the "<system*>:" portion is optional if the event is
++			unique.
++
++				trace_instance=foo,sched:sched_switch,irq_handler_entry,initcall
++
++			will enable the "sched_switch" event (note, the "sched:" is optional, and
++			the same thing would happen if it was left off). The irq_handler_entry
++			event, and all events under the "initcall" system.
 +
  	trace_options=[option-list]
  			[FTRACE] Enable or disable tracer options at boot.
  			The option-list is a comma delimited list of options
 diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index a555a861b978..34ed504ffca9 100644
+index 34ed504ffca9..e8c52a8d712e 100644
 --- a/kernel/trace/trace.c
 +++ b/kernel/trace/trace.c
-@@ -48,6 +48,9 @@
- #include <linux/fsnotify.h>
- #include <linux/irq_work.h>
- #include <linux/workqueue.h>
-+#include <linux/workqueue.h>
+@@ -10189,6 +10189,10 @@ __init static void enable_instances(void)
+ 		}
+ 		/* Allow user space to delete it */
+ 		trace_array_put(tr);
 +
-+#include <asm/setup.h> /* COMMAND_LINE_SIZE */
- 
- #include "trace.h"
- #include "trace_output.h"
-@@ -186,6 +189,9 @@ static char *default_bootup_tracer;
- static bool allocate_snapshot;
- static bool snapshot_at_boot;
- 
-+static char boot_instance_info[COMMAND_LINE_SIZE] __initdata;
-+static int boot_instance_index;
-+
- static int __init set_cmdline_ftrace(char *str)
- {
- 	strlcpy(bootup_tracer_buf, str, MAX_TRACER_SIZE);
-@@ -239,6 +245,23 @@ static int __init boot_snapshot(char *str)
- __setup("ftrace_boot_snapshot", boot_snapshot);
- 
- 
-+static int __init boot_instance(char *str)
-+{
-+	char *slot = boot_instance_info + boot_instance_index;
-+	int left = COMMAND_LINE_SIZE - boot_instance_index;
-+	int ret;
-+
-+	if (strlen(str) >= left)
-+		return -1;
-+
-+	ret = snprintf(slot, left, "%s\t", str);
-+	boot_instance_index += ret;
-+
-+	return 1;
-+}
-+__setup("trace_instance=", boot_instance);
-+
-+
- static char trace_boot_options_buf[MAX_TRACER_SIZE] __initdata;
- 
- static int __init set_trace_boot_options(char *str)
-@@ -10144,6 +10167,31 @@ ssize_t trace_parse_run_command(struct file *file, const char __user *buffer,
- 	return ret;
- }
- 
-+__init static void enable_instances(void)
-+{
-+	struct trace_array *tr;
-+	char *curr_str;
-+	char *str;
-+	char *tok;
-+
-+	/* A tab is always appended */
-+	boot_instance_info[boot_instance_index - 1] = '\0';
-+	str = boot_instance_info;
-+
-+	while ((curr_str = strsep(&str, "\t"))) {
-+
-+		tok = strsep(&curr_str, ",");
-+
-+		tr = trace_array_get_by_name(tok);
-+		if (!tr) {
-+			pr_warn("Failed to create instance buffer %s\n", curr_str);
-+			continue;
++		while ((tok = strsep(&curr_str, ","))) {
++			early_enable_events(tr, tok, true);
 +		}
-+		/* Allow user space to delete it */
-+		trace_array_put(tr);
-+	}
-+}
-+
- __init static int tracer_alloc_buffers(void)
- {
- 	int ring_buf_size;
-@@ -10300,6 +10348,9 @@ void __init early_trace_init(void)
- void __init trace_init(void)
- {
- 	trace_event_init();
-+
-+	if (boot_instance_index)
-+		enable_instances();
+ 	}
  }
  
- __init static void clear_boot_tracer(void)
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index e46a49269be2..a56b0b7d23ef 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -1330,6 +1330,8 @@ DECLARE_PER_CPU(int, trace_buffered_event_cnt);
+ void trace_buffered_event_disable(void);
+ void trace_buffered_event_enable(void);
+ 
++void early_enable_events(struct trace_array *tr, char *buf, bool disable_first);
++
+ static inline void
+ __trace_event_discard_commit(struct trace_buffer *buffer,
+ 			     struct ring_buffer_event *event)
+diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+index b07931ad97de..cf3fd74fa675 100644
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -3750,10 +3750,9 @@ static __init int event_trace_memsetup(void)
+ 	return 0;
+ }
+ 
+-static __init void
+-early_enable_events(struct trace_array *tr, bool disable_first)
++__init void
++early_enable_events(struct trace_array *tr, char *buf, bool disable_first)
+ {
+-	char *buf = bootup_event_buf;
+ 	char *token;
+ 	int ret;
+ 
+@@ -3806,7 +3805,7 @@ static __init int event_trace_enable(void)
+ 	 */
+ 	__trace_early_add_events(tr);
+ 
+-	early_enable_events(tr, false);
++	early_enable_events(tr, bootup_event_buf, false);
+ 
+ 	trace_printk_start_comm();
+ 
+@@ -3834,7 +3833,7 @@ static __init int event_trace_enable_again(void)
+ 	if (!tr)
+ 		return -ENODEV;
+ 
+-	early_enable_events(tr, true);
++	early_enable_events(tr, bootup_event_buf, true);
+ 
+ 	return 0;
+ }
 -- 
 2.39.0
 
