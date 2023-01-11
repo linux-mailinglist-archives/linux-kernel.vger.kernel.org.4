@@ -2,266 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3412666575C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CD6665762
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232323AbjAKJZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        id S236274AbjAKJ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:27:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238180AbjAKJYo (ORCPT
+        with ESMTP id S238314AbjAKJ0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:24:44 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF8DB85A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:24:16 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pFXL7-0004YD-Bm; Wed, 11 Jan 2023 10:24:09 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pFXL5-005GhI-VR; Wed, 11 Jan 2023 10:24:07 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pFXL5-00Bvi4-7u; Wed, 11 Jan 2023 10:24:07 +0100
-Date:   Wed, 11 Jan 2023 10:24:07 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v13 1/2] pwm: add microchip soft ip corePWM driver
-Message-ID: <20230111092407.j45jxtukctchto3q@pengutronix.de>
-References: <20221221112912.147210-1-conor@kernel.org>
- <20221221112912.147210-2-conor@kernel.org>
- <20230110224805.3pqxd3yv4wyci2zj@pengutronix.de>
- <Y73/oUwuOwQFR0NZ@spud>
- <20230111070250.w7egzcufa4waxg2n@pengutronix.de>
+        Wed, 11 Jan 2023 04:26:31 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4853C2BE8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:26:00 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id p24so16133597plw.11
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:26:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TzG5BkJ704bsQ7RpGaEAajTvu7APvIVwu6zcOwvyvjY=;
+        b=a8fiiPxffkO2rDpYB1IE9QCNor2qXuSovnf6omjJ2AO/Bp7/WRK2Q+e+becNU2qc5n
+         ZK8uCmoa0fivGMyAet0ZTLOMR3ipbeDd9xqo1I0UW7TddY6EluKfU/GSvBZSizBb+TNQ
+         Tf3zSz2pVTNVQFABsw5EqkXPPFX2JDIb57reaVzqXLl+QgO/g5O5099dbyRPfFE+t6iE
+         nfVOX61txVuoZTKBMa07g4EGxvMBLdsdjsL8FA86hgnH/NNEcavJnNndu+ghOyQ63aIk
+         aZ8+i1BNT0WRdllcoLexygqNW7PZdw4adaC7Ib7pSz+n+xYNJhscaoRTuweHZVfQOuXV
+         REdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TzG5BkJ704bsQ7RpGaEAajTvu7APvIVwu6zcOwvyvjY=;
+        b=f2caVRXS9JGXDGlPHQHi43H5OpBWIA4JWtheD0W3LRNV+7YAe8yQ37yODxjiAQ2HUO
+         pjYLD3bZt6ouWF/TMvXyPkUDQvvupnFEHnz6cFNCFFdYCBQhAAfs+5g8qSOjwUG6QfyR
+         MDhJZabzPvaxQJ8q9qZibveYYuJA0q4z94hcSTA0kkZEj8yum3RD0kyBaO8pXDGR/Q91
+         /cQMpVRviYtJt4ZrLU9yPVknz5S3Ts+dykJDsTzBZ9KDJT04ks84neRMQuaJK/f38SYR
+         lFAnIMORqq9lfPvrvknNKfH9z0VOXwcNAHlWrNm/oqfsEw2h4uAxtfmhZAQjN88+LcMz
+         KzoQ==
+X-Gm-Message-State: AFqh2kqrt7pQMuy5EnnzXhZ+9aC77fd/fjjclgXzhclAWJ4IAWZIhDzH
+        eW3zIQdyiakGJk1CkvXT/gpcBA==
+X-Google-Smtp-Source: AMrXdXsHqLs9SaEJsWMl7CApZELV2uFvNa7CqCcxEIDVBnNXmDuJ7eCCBPfrV1RV1XYwrCzuJoRtVg==
+X-Received: by 2002:a17:90a:ac08:b0:226:3d16:43b2 with SMTP id o8-20020a17090aac0800b002263d1643b2mr1879926pjq.43.1673429159782;
+        Wed, 11 Jan 2023 01:25:59 -0800 (PST)
+Received: from localhost (thunderhill.nvidia.com. [216.228.112.22])
+        by smtp.gmail.com with ESMTPSA id cl14-20020a17090af68e00b00218a7808ec9sm8569515pjb.8.2023.01.11.01.25.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 01:25:59 -0800 (PST)
+Date:   Wed, 11 Jan 2023 10:25:56 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     syzbot <syzbot+9f0dd863b87113935acf@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, jiri@nvidia.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in devlink_free
+Message-ID: <Y76ApH3648mpePh7@nanopsycho>
+References: <000000000000076ab405f1f8134a@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mhjecy72luuqdxw2"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230111070250.w7egzcufa4waxg2n@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <000000000000076ab405f1f8134a@google.com>
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Wed, Jan 11, 2023 at 08:37:36AM CET, syzbot+9f0dd863b87113935acf@syzkaller.appspotmail.com wrote:
+>Hello,
+>
+>syzbot found the following issue on:
+>
+>HEAD commit:    6d0c4b11e743 libbpf: Poison strlcpy()
+>git tree:       bpf-next
+>console output: https://syzkaller.appspot.com/x/log.txt?x=17b1945a480000
+>kernel config:  https://syzkaller.appspot.com/x/.config?x=46221e8203c7aca6
+>dashboard link: https://syzkaller.appspot.com/bug?extid=9f0dd863b87113935acf
+>compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+>Unfortunately, I don't have any reproducer for this issue yet.
+>
+>Downloadable assets:
+>disk image: https://storage.googleapis.com/syzbot-assets/83567aa48724/disk-6d0c4b11.raw.xz
+>vmlinux: https://storage.googleapis.com/syzbot-assets/6047fdb8660e/vmlinux-6d0c4b11.xz
+>kernel image: https://storage.googleapis.com/syzbot-assets/a94d1047d7b7/bzImage-6d0c4b11.xz
+>
+>IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>Reported-by: syzbot+9f0dd863b87113935acf@syzkaller.appspotmail.com
+>
+>------------[ cut here ]------------
+>DEBUG_LOCKS_WARN_ON(mutex_is_locked(lock))
 
---mhjecy72luuqdxw2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is going to be very likely fixed by:
+https://lore.kernel.org/all/20230111042908.988199-1-kuba@kernel.org/
 
-Hello,
 
-On Wed, Jan 11, 2023 at 08:02:50AM +0100, Uwe Kleine-K=F6nig wrote:
-> On Wed, Jan 11, 2023 at 12:15:29AM +0000, Conor Dooley wrote:
-> > On Tue, Jan 10, 2023 at 11:48:05PM +0100, Uwe Kleine-K=F6nig wrote:
-> > > On Wed, Dec 21, 2022 at 11:29:12AM +0000, Conor Dooley wrote:
-> > > > From: Conor Dooley <conor.dooley@microchip.com>
-> >=20
-> > > > +		delay_us =3D DIV_ROUND_UP_ULL(remaining_ns, NSEC_PER_USEC);
-> > > > +		if ((delay_us / 1000) > MAX_UDELAY_MS)
-> > > > +			msleep(delay_us / 1000 + 1);
-> > >=20
-> > > Is this better than
-> > >=20
-> > > 	msleep(DIV_ROUND_UP(delay_us, 1000);
-> > >=20
-> > > ? Also I wonder about your usage of MAX_UDELAY_MS. This is about
-> >=20
-> > I probably started hacking on the example you gave and didn't notice
-> > the U. What I have here is ~what you suggested last time.
->=20
-> A series with (up to now) 13 revisions and long delays between the
-> review rounds (which are mostly attributed to my time schedule) is
-> difficult to handle on both sides. Some repetition isn't easy to prevent
-> in such a case. Sorry for that.=20
->=20
-> > > udelay() but you're using usleep_range()?
-> > >=20
-> > > > +		else
-> > > > +			usleep_range(delay_us, delay_us * 2);
-> > >=20
-> > > I wonder if there isn't a function that implements something like
-> > >=20
-> > > 	wait_until(mchp_core_pwm->update_timestamp);
-> > >=20
-> > > which would be a bit nicer than doing this by hand. Maybe fsleep()?
-> >=20
-> > That'd be fsleep(delay_us), but does at least clean up some of the
-> > messing.
-> >=20
-> > > > +static void mchp_core_pwm_apply_duty(struct pwm_chip *chip, struct=
- pwm_device *pwm,
-> > > > +				     const struct pwm_state *state, u64 duty_steps,
-> > > > +				     u8 period_steps)
-> > > > +{
-> > > > +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chi=
-p);
-> > > > +	u8 posedge, negedge;
-> > > > +	u8 period_steps_val =3D PREG_TO_VAL(period_steps);
-> > > > +
-> > > > +	/*
-> > > > +	 * Setting posedge =3D=3D negedge doesn't yield a constant output,
-> > > > +	 * so that's an unsuitable setting to model duty_steps =3D 0.
-> > > > +	 * In that case set the unwanted edge to a value that never
-> > > > +	 * triggers.
-> > > > +	 */
-> > > > +	if (state->polarity =3D=3D PWM_POLARITY_INVERSED) {
-> > > > +		negedge =3D !duty_steps ? period_steps_val : 0u;
-> > >=20
-> > > IMHO
-> > >=20
-> > > 		negedge =3D duty_steps ? 0 : period_steps_val;
-> > >=20
-> > > is a bit easier to parse.
-> > >=20
-> > > > +		posedge =3D duty_steps;
-> > > > +	} else {
-> > > > +		posedge =3D !duty_steps ? period_steps_val : 0u;
-> > > > +		negedge =3D duty_steps;
-> > > > +	}
-> > >=20
-> > > The following code is equivalent:
-> > >=20
-> > > 	u8 first_edge =3D 0, second_edge =3D duty_steps;
-> > >=20
-> > > 	/*
-> > > 	 * Setting posedge =3D=3D negedge doesn't yield a constant output,
-> > > 	 * so that's an unsuitable setting to model duty_steps =3D 0.
-> > > 	 * In that case set the unwanted edge to a value that never
-> > > 	 * triggers.
-> > > 	 */
-> > > 	if (duty_steps =3D=3D 0)
-> > > 		first_edge =3D period_steps_val;
-> > >=20
-> > > 	if (state->polarity =3D=3D PWM_POLARITY_INVERSED) {
-> > > 		negedge =3D first_edge;
-> > > 		posedge =3D second_edge;
-> > > 	} else {
-> > > 		posedge =3D first_edge;
-> > > 		negedge =3D second_edge;
-> > > 	}
-> > >=20
-> > > I'm not sure if it's easier to understand. What do you think?
-> >=20
-> > Despite having used them, I dislike ternary statements.
->=20
-> My variant is a bit longer and uses more variables, but has less
-> repetition. I don't expect a relevant change on the generated code. I
-> slightly prefer my variant, but I let you choose which one you prefer.
->=20
-> > > > +	writel_relaxed(posedge, mchp_core_pwm->base + MCHPCOREPWM_POSEDGE=
-(pwm->hwpwm));
-> > > > +	writel_relaxed(negedge, mchp_core_pwm->base + MCHPCOREPWM_NEGEDGE=
-(pwm->hwpwm));
-> > > > +}
-> > > > +
-> > > > +static void mchp_core_pwm_calc_period(const struct pwm_state *stat=
-e, unsigned long clk_rate,
-> > > > +				      u16 *prescale, u8 *period_steps)
-> > > > +{
-> > > > +	u64 tmp;
-> > > > +
-> > > > +	/*
-> > > > +	 * Calculate the period cycles and prescale values.
-> > > > +	 * The registers are each 8 bits wide & multiplied to compute the=
- period
-> > > > +	 * using the formula:
-> > > > +	 * (clock_period) * (prescale + 1) * (period_steps + 1)
-> > > > +	 * so the maximum period that can be generated is 0x10000 times t=
-he
-> > > > +	 * period of the input clock.
-> > > > +	 * However, due to the design of the "hardware", it is not possib=
-le to
-> > > > +	 * attain a 100% duty cycle if the full range of period_steps is =
-used.
-> > > > +	 * Therefore period_steps is restricted to 0xFE and the maximum m=
-ultiple
-> > > > +	 * of the clock period attainable is 0xFF00.
-> > > > +	 */
-> > > > +	tmp =3D mul_u64_u64_div_u64(state->period, clk_rate, NSEC_PER_SEC=
-);
-> > > > +
-> > > > +	/*
-> > > > +	 * The hardware adds one to the register value, so decrement by o=
-ne to
-> > > > +	 * account for the offset
-> > > > +	 */
-> > > > +	if (tmp >=3D MCHPCOREPWM_PERIOD_MAX) {
-> > > > +		*prescale =3D MCHPCOREPWM_PRESCALE_MAX - 1;
-> > > > +		*period_steps =3D MCHPCOREPWM_PERIOD_STEPS_MAX - 1;
-> > > > +
-> > > > +		return;
-> > > > +	}
-> > > > +
-> > > > +	*prescale =3D div_u64(tmp, MCHPCOREPWM_PERIOD_STEPS_MAX);
-> > > > +	/* PREG_TO_VAL() can produce a value larger than UINT8_MAX */
-> > > > +	*period_steps =3D div_u64(tmp, PREG_TO_VAL(*prescale)) - 1;
-> > >=20
-> > > This looks wrong, but I didn't think long about that. Did we discuss
-> > > this already and/or are you sure this is correct?
-> >=20
-> > We did discuss it previously AFAICT;
-> > https://lore.kernel.org/linux-pwm/896d73ac-05af-8673-8379-29011800be83@=
-microchip.com/
-> >=20
-> > [...]
-> > Unfortunately, I don't think I am seeing what you're seeing.
->=20
-> Well, the calculation lands in the right ballpark for sure, but if my
-> intuition is right, it's not as exact as it could be. I need some time
-> with pencil and paper ...
-
-Just a small heads up:
-
-I thought a bit about that (without pencil and paper on my way to work
-today), and the optimal solution is non-trivial. In fact you have to
-pick parameters A and B such that for a given C
-
-	(A + 1) * (B + 1) is maximal with
-
-	0 <=3D A < 0x100
-	0 <=3D B < 0xff
-	(A + 1) * (B + 1) <=3D C
-
-A consistent non-optimal choice that is easier to calculate than a
-complete search would be nice. But I think we're not there yet.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---mhjecy72luuqdxw2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmO+gDQACgkQwfwUeK3K
-7AltbQf9H1ghpi5yxykLUDlGt2l0EF3YVHc6Av8M/Wwd6egluj/tuF4Y/cVih0FN
-0YYZ1lTzqgfL+aC0r1YgCfZq+jPkndV+otUOLkH4UiFSd8fl1GCbgBf6Xx0P3Qbp
-arFtMeBjDKRsERULwqGsPqWXmFeNM3h62dLxoCfyUskVCFmePeddLR+XwJAIhpNy
-mwnrk9MJbBqtYiqzMl+lbdTYkHxLFlsaXpxRai2XaXS1AkYyZwh6nH65+Crs/pf3
-HruUmLB8ow4gZUE+XnmuQTAlJSRx3T1DgctdWKQRuW7Nxi+oDndJNg8wli1sbLmw
-WqlzIf/h3yr7/5sWbK4RZmXhXnZ1eA==
-=IZv2
------END PGP SIGNATURE-----
-
---mhjecy72luuqdxw2--
+>WARNING: CPU: 1 PID: 14225 at kernel/locking/mutex-debug.c:102 mutex_destroy+0xc1/0x100 kernel/locking/mutex-debug.c:102
+>Modules linked in:
+>CPU: 1 PID: 14225 Comm: syz-executor.5 Not tainted 6.2.0-rc2-syzkaller-00302-g6d0c4b11e743 #0
+>Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+>RIP: 0010:mutex_destroy+0xc1/0x100 kernel/locking/mutex-debug.c:102
+>Code: 03 0f b6 14 11 38 d0 7c 04 84 d2 75 3f 8b 05 ee 21 10 0d 85 c0 75 92 48 c7 c6 00 47 4c 8a 48 c7 c7 40 47 4c 8a e8 af 7f 5c 08 <0f> 0b e9 78 ff ff ff 48 c7 c7 00 8a c0 91 e8 2c 64 6c 00 e9 5d ff
+>RSP: 0018:ffffc900030efa20 EFLAGS: 00010286
+>RAX: 0000000000000000 RBX: ffff88807ca752d0 RCX: 0000000000000000
+>RDX: ffff88802749d7c0 RSI: ffffffff8166724c RDI: fffff5200061df36
+>RBP: ffff88807ca75000 R08: 0000000000000005 R09: 0000000000000000
+>R10: 0000000080000000 R11: 0000000000000001 R12: ffff88807ca73000
+>R13: ffff88807ca73078 R14: ffffffff8d7af3c0 R15: 0000000000000000
+>FS:  0000555556d5f400(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+>CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>CR2: 000055a9c409d950 CR3: 000000004f7a2000 CR4: 00000000003506e0
+>DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>Call Trace:
+> <TASK>
+> devlink_free+0x83/0x510 net/devlink/core.c:262
+> nsim_drv_remove+0x158/0x1d0 drivers/net/netdevsim/dev.c:1688
+> device_remove+0xc8/0x170 drivers/base/dd.c:548
+> __device_release_driver drivers/base/dd.c:1253 [inline]
+> device_release_driver_internal+0x4a5/0x700 drivers/base/dd.c:1279
+> bus_remove_device+0x2e7/0x5a0 drivers/base/bus.c:529
+> device_del+0x4f7/0xc80 drivers/base/core.c:3666
+> device_unregister+0x1e/0xc0 drivers/base/core.c:3698
+> nsim_bus_dev_del drivers/net/netdevsim/bus.c:310 [inline]
+> del_device_store+0x34e/0x470 drivers/net/netdevsim/bus.c:219
+> bus_attr_store+0x76/0xa0 drivers/base/bus.c:122
+> sysfs_kf_write+0x114/0x170 fs/sysfs/file.c:136
+> kernfs_fop_write_iter+0x3f1/0x600 fs/kernfs/file.c:334
+> call_write_iter include/linux/fs.h:2186 [inline]
+> new_sync_write fs/read_write.c:491 [inline]
+> vfs_write+0x9ed/0xdd0 fs/read_write.c:584
+> ksys_write+0x12b/0x250 fs/read_write.c:637
+> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>RIP: 0033:0x7fcfd903de4f
+>Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 99 fd ff ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 48 89 44 24 08 e8 cc fd ff ff 48
+>RSP: 002b:00007ffcd827a1d0 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
+>RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fcfd903de4f
+>RDX: 0000000000000001 RSI: 00007ffcd827a220 RDI: 0000000000000005
+>RBP: 0000000000000005 R08: 0000000000000000 R09: 00007ffcd827a170
+>R10: 0000000000000000 R11: 0000000000000293 R12: 00007fcfd90e76fe
+>R13: 00007ffcd827a220 R14: 0000000000000000 R15: 00007ffcd827a8f0
+> </TASK>
+>
+>
+>---
+>This report is generated by a bot. It may contain errors.
+>See https://goo.gl/tpsmEJ for more information about syzbot.
+>syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+>syzbot will keep track of this issue. See:
+>https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
