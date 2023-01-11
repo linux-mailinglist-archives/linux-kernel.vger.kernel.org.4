@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6F5666223
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3D4666239
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbjAKRjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:39:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        id S231764AbjAKRmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:42:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239286AbjAKRiW (ORCPT
+        with ESMTP id S239217AbjAKRiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 Jan 2023 12:38:22 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07BE32273;
-        Wed, 11 Jan 2023 09:37:30 -0800 (PST)
-Received: from [192.168.1.103] (178.176.77.35) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 11 Jan
- 2023 20:37:20 +0300
-Subject: Re: [PATCH 08/27] ata: remove palmld pata driver
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-CC:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <linux-ide@vger.kernel.org>
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-9-arnd@kernel.org>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <b1f1d5a3-2c9d-bfb5-5e37-38ac7917f9f6@omp.ru>
-Date:   Wed, 11 Jan 2023 20:37:20 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115FF242;
+        Wed, 11 Jan 2023 09:37:36 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id p3-20020a05600c1d8300b003d9ee5f125bso8450025wms.4;
+        Wed, 11 Jan 2023 09:37:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WPvFuSCJO0sCn8AYzxJGQmFGILt+VmPrlCSo5hCQpjk=;
+        b=aKAhPgxBPDVLLmXAOd6urG62qZN4kEA/0HglYJSoSjLSR1EzWoWYb0Sp75xgLWBvmN
+         hk/8eIqorpI1Vq2eFruoSH6AlwJxXso9rPAbWPL9nsX9ikVsh7arDFV1c4XeOM47MGUw
+         5hgxCVTimFsKDWQM8StM0Y+rygdylZS50ZeIW7cd3CTzk40SRCJ3FuCpb37B6OtQGrl+
+         6jDzQPVyzLzqNfgM7CcLmTEk3V8qWtDmjrQE+rbxiVNQp21v1tLTGcYFWJqDph8W4IfT
+         3R9lJihQMFeM80PHmIQoyXWpQj3lGqxefHMdcinfy2aViqa0l6oKJuAgrlWu5A44juaz
+         PmIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WPvFuSCJO0sCn8AYzxJGQmFGILt+VmPrlCSo5hCQpjk=;
+        b=Xr2n7VlbSQ/uXgVLWQaypdOo0n5eeMwqLEOC0/EtiMfillvm5Xujp6WszOPbOjA+JC
+         5rXj4839ZpVhaetLc2qbPUYs799DmDTudJDjYSV8hBwO2gRXI7avzWDGr7e9CyObM5w2
+         CFYInXV+dekG4qMTK0sWsSX8SL+BAZ0P3UNV93gV6ueQKFdAEgT+U7Rm79WqO910uU11
+         VJTi1x8QIiYikkKkjWTXy+53lLM2HWOlP0EbKeVJz+lD1i2APqwkdMjR4lwayQFo0Sv6
+         XYitxDNNpQjpeyAtIZz8TvHZiFtSnssAuF76pr77+ff8zRcg3djSRDhrYu0DbWrE2FcH
+         Xz7g==
+X-Gm-Message-State: AFqh2kp/yX5XXn/rXhpEjDC1tZH1QzgO0Xh8jB0h9XjWaBqgHRmmNEeQ
+        dFN7doouWCkDbaoqs7SbZ+c=
+X-Google-Smtp-Source: AMrXdXsgSKhsz6NXqmGHaqsXjJ50dGiogW5sAt2jnNIJf2cCR3W869QaTIq+VAWrozMp7IZbhiGEGw==
+X-Received: by 2002:a05:600c:1d8a:b0:3d9:ebab:ccff with SMTP id p10-20020a05600c1d8a00b003d9ebabccffmr11118361wms.33.1673458654667;
+        Wed, 11 Jan 2023 09:37:34 -0800 (PST)
+Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
+        by smtp.gmail.com with ESMTPSA id h8-20020a05600c350800b003d990372dd5sm26404485wmq.20.2023.01.11.09.37.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 09:37:34 -0800 (PST)
+Date:   Wed, 11 Jan 2023 18:37:34 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
+        sbhatta@marvell.com, linux-doc@vger.kernel.org,
+        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
+        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
+Subject: [PATCH v2 ethtool-next 0/2] add support for PLCA RS
+Message-ID: <cover.1673458497.git.piergiorgio.beruto@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230105134622.254560-9-arnd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.77.35]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 01/11/2023 17:22:07
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 174651 [Jan 11 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.77.35 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;178.176.77.35:7.7.3,7.4.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.77.35
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 01/11/2023 17:25:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 1/11/2023 2:58:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+This patch adds support for the IEEE802.3cg-2019 Clause 148 PLCA
+Reconciliation Sublayer. It adds get/set configuration and get status
+functions. Additionally, shows PLCA capabilities and status when invoked
+without arguments.
 
-On 1/5/23 4:46 PM, Arnd Bergmann wrote:
+Piergiorgio Beruto (2):
+  update UAPI header copies
+  add support for IEEE 802.3cg-2019 Clause 148
 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The PXA palmld machine was removed, so the pata driver is no
-> longer used and can be removed. There is a chance that some of
-> this code might be useful for turning some of the other PXA
-> PCMCIA host drivers into PATA drivers, but it's clear that
-> it would not work unmodified, and it seems unlikely that
-> someone would do this work.
-> 
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Marek Vasut <marek.vasut@gmail.com>
-> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Cc: Sergey Shtylyov <s.shtylyov@omp.ru>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-ide@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+ Makefile.am                  |   1 +
+ ethtool.c                    |  21 +++
+ netlink/extapi.h             |   6 +
+ netlink/plca.c               | 296 +++++++++++++++++++++++++++++++++++
+ netlink/settings.c           |  86 +++++++++-
+ uapi/linux/ethtool.h         |   5 +-
+ uapi/linux/ethtool_netlink.h |  25 +++
+ 7 files changed, 437 insertions(+), 3 deletions(-)
+ create mode 100644 netlink/plca.c
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+-- 
+2.37.4
 
-   Better late than never? :-)
-
-[...]
-
-MBR, Sergey
