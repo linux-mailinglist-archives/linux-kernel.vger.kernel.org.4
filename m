@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626706661E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A101A6661FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235621AbjAKRar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
+        id S235423AbjAKRbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239628AbjAKR2m (ORCPT
+        with ESMTP id S239644AbjAKR2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:28:42 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA6F395E2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:24:48 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id s8so9171409plk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:24:48 -0800 (PST)
+        Wed, 11 Jan 2023 12:28:44 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C853DBE4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:24:54 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so20785657pjj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:24:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jbu/rVr6n2Zk27DTmTR5ScWWLUloBxQI7RkPhtXRlII=;
-        b=yrD8dxGNg5ZO4IXiMKYPbv93TaG4TWX2OugwLUbr+siHQBJeBxpqrrOM4wt32jCbsb
-         NFLH7HvE3rPdiTGDeXEpEu4jprmbdiLqGtoLnGjNz1loktheApWuVEtB4HvLjjlOGW/k
-         3i0M1KzDEyv7koyZWtwlkUFl63j8c4Mc8xD83j86VGbXoKfMl9/P/2XGSPpiYZSPN7/f
-         Rq7WfexbuEbvPze6dLTZBZ04ACNMMWB59my82UbzsBPUqiRLaEZDzlO0sgy1G5BMnXeY
-         pDmZ4K2dJbPdITGUh8rnYBTBwc2AkWTrlMwUAQDt8CwaqQhBmGmDi+hE+qvoPYXWtgJc
-         Fz1Q==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nrnP374OLqQox6yNLama6RD8TqjNv743WGDKqrtWcqc=;
+        b=McNc+Klm8bXRlr6O1q4qWW5BwulSqCy4gqqIMn0+CQu2O0rs9oonXR0kbFItNUoUwB
+         rk2cyr7ClUoOsgzHxXoyTq+aPDLNqjA0Q878btaoEhEuVLwoIqCgBXmW3m0v3H+JNf7F
+         A7zA9W8iKnHbN5vRr7AmaSdXVyJRGga4wVOGYAtu+Pb5I4urSYHpuIP3FLbt5n0ajTJR
+         TDBEFQT+2YLvm0/hg451DYVQ8nM271lCarBGiR4LE/oKPwbhWoY5ucQLIJtuuaPCSw6M
+         t4eIRd3KJAtOkY7iHKGwYgfDBEv9xWqpcSOuhjI7T/lVWnHQ0Iw0RAWT2jLkZ53inrlq
+         raxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jbu/rVr6n2Zk27DTmTR5ScWWLUloBxQI7RkPhtXRlII=;
-        b=L0yWU8rqzXpTIM4ofNRQ5qo0OPqHilxAfPlAoEmnS7uQ4oDhjRClb/e4dVqjha/B2f
-         IMxc6ytU9VfQCZNCtVRoBfHHqrU+pAB4g/iNH+fIfQ4mCTCvta3KX0dYfnNIQR/nK1ar
-         OdiPpzf08I7FL/yTe58SqScNVtlSMKWpJhD7tmP4/umvVxCAu6ZED98ZaqODz2rr28Ci
-         tmXGBn8IhZ6bxvgfiySeNa4lORzXVe2RSguraru4p+TtE4+ihq8U/0uksavf279bgxyw
-         RKxu5mSbES90IJAMammMvd/I22VYZzLuVKOgOy90sh1ZTYK4CVdhvFAkJRnQMW9zhA+N
-         MzUg==
-X-Gm-Message-State: AFqh2kp8jt+SZ9myQIjo9AMED8TdLidFx0lZAcJgVIEGWNSebCSyrkNl
-        VqZNj9xiS8iqaqDp6QSGuCaJBA==
-X-Google-Smtp-Source: AMrXdXurfUnEXP3w5lWeGVO/1PNLOhoMBmCfXSG1xwJFS2xQEpZyInyfKEQjAm+4z8o35LQvYOtKjA==
-X-Received: by 2002:a05:6a21:e307:b0:af:7a88:f752 with SMTP id cb7-20020a056a21e30700b000af7a88f752mr90849296pzc.48.1673457887706;
-        Wed, 11 Jan 2023 09:24:47 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nrnP374OLqQox6yNLama6RD8TqjNv743WGDKqrtWcqc=;
+        b=yojmeP4VYBrcjh1Vha0u41OETnHRucT4pLK5ej9KNoI7Wtmpzk3LHOQGS+m8catvtc
+         Ncc9BOlK2nnC59jm7l65E9OrlRsk56d8RpsWe65yq9S3WN0XK4Rb98gWyFX4RDL0LkuA
+         xd9L+1eJrDE9oXbrtkSV0mhCpgG1OZ4zWrXGx72QrkgPAS8D7TqqRLEVkwdbZmqQSL/E
+         RMqVJ1TMIqag9+DPSmDzerJQi/TdrerFLc8t7oB+/A+iEpCEbTpUO8ihGjl1e45iSzL1
+         /LTFsPH1kwGU8QJb07JNkcM8wxoGMYTp385oGYSyXn5TipHEwFK28K4c78w/mijLR773
+         wqgQ==
+X-Gm-Message-State: AFqh2kq+x3qMmQ4u3nCSKDPzJ+Ns/g6iXl7i9ppyi/LPuafZibnDAyGG
+        08VtTIg/aZoMtXYfxa5kOLtE1A==
+X-Google-Smtp-Source: AMrXdXvxMAo84bW3XcTC5ybOyCCRbJnCG67wgbIbJaCywRhTaUaj42SsCQsydRtaAsDAtIRmreOzQQ==
+X-Received: by 2002:a17:90a:e02:b0:227:1017:ee71 with SMTP id v2-20020a17090a0e0200b002271017ee71mr11916866pje.33.1673457893586;
+        Wed, 11 Jan 2023 09:24:53 -0800 (PST)
 Received: from archl-hc1b.. ([45.112.3.15])
-        by smtp.gmail.com with ESMTPSA id rm14-20020a17090b3ece00b00218fa115f83sm11110722pjb.57.2023.01.11.09.24.42
+        by smtp.gmail.com with ESMTPSA id rm14-20020a17090b3ece00b00218fa115f83sm11110722pjb.57.2023.01.11.09.24.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 09:24:46 -0800 (PST)
+        Wed, 11 Jan 2023 09:24:53 -0800 (PST)
 From:   Anand Moon <anand@edgeble.ai>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        David Wu <david.wu@rock-chips.com>,
-        Anand Moon <anand@edgeble.ai>, Jagan Teki <jagan@edgeble.ai>
-Cc:     Johan Jonker <jbx6244@gmail.com>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Johan Jonker <jbx6244@gmail.com>, Anand Moon <anand@edgeble.ai>,
+        Jagan Teki <jagan@edgeble.ai>,
         linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 linux-next 1/4] dt-bindings: net: rockchip-dwmac: fix rv1126 compatible warning
-Date:   Wed, 11 Jan 2023 17:24:31 +0000
-Message-Id: <20230111172437.5295-1-anand@edgeble.ai>
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 linux-next 2/4] ARM: dts: rockchip: rv1126: Add ethernet rgmiim1 pin-control
+Date:   Wed, 11 Jan 2023 17:24:32 +0000
+Message-Id: <20230111172437.5295-2-anand@edgeble.ai>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230111172437.5295-1-anand@edgeble.ai>
+References: <20230111172437.5295-1-anand@edgeble.ai>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,47 +75,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix compatible string for RV1126 gmac, and constrain it to
-be compatible with Synopsys dwmac 4.20a.
+Add ethernet pin-control for rv1126 SoC.
 
-fix below warning
-$ make CHECK_DTBS=y rv1126-edgeble-neu2-io.dtb
-arch/arm/boot/dts/rv1126-edgeble-neu2-io.dtb: ethernet@ffc40000:
-		 compatible: 'oneOf' conditional failed, one must be fixed:
-        ['rockchip,rv1126-gmac', 'snps,dwmac-4.20a'] is too long
-        'rockchip,rv1126-gmac' is not one of ['rockchip,rk3568-gmac', 'rockchip,rk3588-gmac']
-
-Fixes: b36fe2f43662 ("dt-bindings: net: rockchip-dwmac: add rv1126 compatible")
-Reviewed-by: Jagan Teki <jagan@edgeble.ai>
-Acked-by: Rob Herring <robh@kernel.org>
+Co-Developed-by: Jagan Teki <jagan@edgeble.ai>
+Signed-off-by: Jagan Teki <jagan@edgeble.ai>
 Signed-off-by: Anand Moon <anand@edgeble.ai>
 ---
-v5: none
-v4: none
-v3: added Ack and Rev from Rob and Jagan.
-v2: drop SoB of Jagan Teki
-    added Fix tags and update the commit message of the warning.
+v5: add Cod of Jagan
+v4: drop Rev by Jagan: Both SoB and RoB of same person is incorrect.
+    update the $subject.
+v3: add Rev by and SoB Jagan Teki.
+v2: drop SoB of Jagan Teki.
 ---
- Documentation/devicetree/bindings/net/rockchip-dwmac.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/rv1126-pinctrl.dtsi | 42 +++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml b/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
-index 42fb72b6909d..04936632fcbb 100644
---- a/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
-@@ -49,11 +49,11 @@ properties:
-               - rockchip,rk3368-gmac
-               - rockchip,rk3399-gmac
-               - rockchip,rv1108-gmac
--              - rockchip,rv1126-gmac
-       - items:
-           - enum:
-               - rockchip,rk3568-gmac
-               - rockchip,rk3588-gmac
-+              - rockchip,rv1126-gmac
-           - const: snps,dwmac-4.20a
- 
-   clocks:
+diff --git a/arch/arm/boot/dts/rv1126-pinctrl.dtsi b/arch/arm/boot/dts/rv1126-pinctrl.dtsi
+index 4bc419cc1210..b77021772781 100644
+--- a/arch/arm/boot/dts/rv1126-pinctrl.dtsi
++++ b/arch/arm/boot/dts/rv1126-pinctrl.dtsi
+@@ -11,6 +11,14 @@
+  * by adding changes at end of this file.
+  */
+ &pinctrl {
++	clk_out_ethernet {
++		/omit-if-no-ref/
++		clk_out_ethernetm1_pins: clk-out-ethernetm1-pins {
++			rockchip,pins =
++				/* clk_out_ethernet_m1 */
++				<2 RK_PC5 2 &pcfg_pull_none>;
++		};
++	};
+ 	emmc {
+ 		/omit-if-no-ref/
+ 		emmc_rstnout: emmc-rstnout {
+@@ -61,6 +69,40 @@ i2c0_xfer: i2c0-xfer {
+ 				<0 RK_PB5 1 &pcfg_pull_none_drv_level_0_smt>;
+ 		};
+ 	};
++	rgmii {
++		/omit-if-no-ref/
++		rgmiim1_pins: rgmiim1-pins {
++			rockchip,pins =
++				/* rgmii_mdc_m1 */
++				<2 RK_PC2 2 &pcfg_pull_none>,
++				/* rgmii_mdio_m1 */
++				<2 RK_PC1 2 &pcfg_pull_none>,
++				/* rgmii_rxclk_m1 */
++				<2 RK_PD3 2 &pcfg_pull_none>,
++				/* rgmii_rxd0_m1 */
++				<2 RK_PB5 2 &pcfg_pull_none>,
++				/* rgmii_rxd1_m1 */
++				<2 RK_PB6 2 &pcfg_pull_none>,
++				/* rgmii_rxd2_m1 */
++				<2 RK_PC7 2 &pcfg_pull_none>,
++				/* rgmii_rxd3_m1 */
++				<2 RK_PD0 2 &pcfg_pull_none>,
++				/* rgmii_rxdv_m1 */
++				<2 RK_PB4 2 &pcfg_pull_none>,
++				/* rgmii_txclk_m1 */
++				<2 RK_PD2 2 &pcfg_pull_none_drv_level_3>,
++				/* rgmii_txd0_m1 */
++				<2 RK_PC3 2 &pcfg_pull_none_drv_level_3>,
++				/* rgmii_txd1_m1 */
++				<2 RK_PC4 2 &pcfg_pull_none_drv_level_3>,
++				/* rgmii_txd2_m1 */
++				<2 RK_PD1 2 &pcfg_pull_none_drv_level_3>,
++				/* rgmii_txd3_m1 */
++				<2 RK_PA4 2 &pcfg_pull_none_drv_level_3>,
++				/* rgmii_txen_m1 */
++				<2 RK_PC6 2 &pcfg_pull_none_drv_level_3>;
++		};
++	};
+ 	sdmmc0 {
+ 		/omit-if-no-ref/
+ 		sdmmc0_bus4: sdmmc0-bus4 {
 -- 
 2.39.0
 
