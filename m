@@ -2,217 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB20B6664A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 582D26664A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbjAKUOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 15:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
+        id S235083AbjAKUOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 15:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239513AbjAKUNr (ORCPT
+        with ESMTP id S232920AbjAKUO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 15:13:47 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7E7322
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:13:45 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id b17so10455322pld.7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:13:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Xh/mmXFWXFUU8AJb3g3nR9Dgi/zjlWA7rxJtyQLuUA=;
-        b=IqyevN9Z87kf8QIzyt/J6ZJy0afMidumuljgbdGJJuK4cU46ooxr/hj8m6dLgdqn4/
-         Rs0Kf9WHcMnm6ZB90XU0iy8ywdw/tofLbsO3JKBmYclGYTQc9j3hksQ4B/zhXSa3SU6z
-         9pjaaXTWCPOH0d0FDjLUfVakJNPtRnEawfOac=
+        Wed, 11 Jan 2023 15:14:27 -0500
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D193B26D6;
+        Wed, 11 Jan 2023 12:14:23 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id jo4so39709125ejb.7;
+        Wed, 11 Jan 2023 12:14:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Xh/mmXFWXFUU8AJb3g3nR9Dgi/zjlWA7rxJtyQLuUA=;
-        b=2htKde0SsFYi06WPWf7pLO2DM0YRe5J4HP5FVXOUrYBuE4NMkAVHhMWhAYnmtpLnhF
-         MYp3+38YjoG7XTgumiKmecNS37T6PQTeGydaSESHEGwuhjBNyXX7T0vfDen8+s/GF0kZ
-         /A8YU2VgVg5xpEAl/vAhTkw2xJsVExXkq+AqO9P8HYlxcGZ9AhlLh+fJUo7OdCoNPkWH
-         bqh1l0mcGVtaTfMFGgKNpvwVYfm5k/vdXW9b3gxrrzByTorece+zRmu3vnn12GkyNPN+
-         3laMl48ggnSQSi6vG32dhX7aCC1aKXZCgycgoG3jUnyEOF9tO3f/JW5LVUP7AngDgomi
-         Jl2g==
-X-Gm-Message-State: AFqh2kpLlC9s5gewO1ZvK8k8YtYOy2DAQRcWJFOUlUpJ3oBxadezCuaF
-        fNYzxxCP21SR79ET4f4yYAPt0FPZiqXhY3Otz/I+f+Z/L18orifcw906twVPxdcTWuVy3IpySFf
-        C/ilv3aKnw0P3L4YgcY0pfarbgfFf3UX+OzrmNfdO7suDR3FxiOWbpRCxpOQIPn1MEZSYTXjVIf
-        mMeSKFc+zaGuM=
-X-Google-Smtp-Source: AMrXdXuHwmebxx0+pYRavtEcio1mbv2jdi9jLGNu8O5FnnABJYpyTEZKMX/qIsMhodHWACvt0iESsQ==
-X-Received: by 2002:a05:6a21:998a:b0:b0:1aa9:25bb with SMTP id ve10-20020a056a21998a00b000b01aa925bbmr112485172pzb.60.1673468025045;
-        Wed, 11 Jan 2023 12:13:45 -0800 (PST)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id y14-20020a63fa0e000000b004a7e39ff1e8sm8931958pgh.49.2023.01.11.12.13.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Jan 2023 12:13:44 -0800 (PST)
-Subject: Re: [PATCH 07/16] spi: bcm63xx-hsspi: Add polling mode support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-8-william.zhang@broadcom.com>
- <Y7iW38Fsj0nIewDm@sirena.org.uk>
- <ec84b84b-41be-32ad-2e76-afac59a621d0@broadcom.com>
- <Y7xloRuHk5BHSOCb@sirena.org.uk>
- <ca22c9af-34bc-e857-881c-263f70a405e8@broadcom.com>
- <Y73rl8feUOnChWKF@sirena.org.uk>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <dee51504-ccd2-3c27-ffc8-2e392f2bd781@broadcom.com>
-Date:   Wed, 11 Jan 2023 12:13:43 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        bh=azhtcREvUE7KG7kPLSNOtB+brYZtna3TNYPfxBJ8KYs=;
+        b=JLtfjb9ZlEOBfWujPIFAACt5f/PIKNPGW6cxGn32LlFHwu4zRtkMyMvn6b2tkFe4vB
+         RDbT3cHBzJbC8N+JNkkwAeQCzUtfzL1mm71yazfUi3unwF5edmafHIKjEdqR8J0czbBF
+         X6iyqsLh7JalxuE6a+c5QTOvbD9OEYdgIH+IZUxI658V/857EL+rL1h3ydY5Wn2J8Zq2
+         0zarL8r9WGQqd3pX/uuMtb5MBAqmjT0EhKrOKR5kGbrhU27yID0sNN1eRS85vEl+qpo3
+         QOd7WvHwHgxE75Io6pjJFJQPjLuI9jzsa0kKZMx78Bgi1Tn67VCCZ4lXCZDvxrgzPJ1f
+         3Hjg==
+X-Gm-Message-State: AFqh2kqhpmpAfh8NRhhEJb7TE9k2lktpX0L0yyQVE/xzoBertl50pYra
+        Z+MJziS/MTXEAUQOi5iIoyvZfKgXEi3IuTt9BNo=
+X-Google-Smtp-Source: AMrXdXtqunNT1d7ZCF/ShS8QGcnfLpwrN/qjJhiR70gKaVR0KjHcM0TDrouu+VHu+GlD3gV2B22zSJ3+4mvaYJzQKPY=
+X-Received: by 2002:a17:907:29c3:b0:84d:4b8e:efc with SMTP id
+ ev3-20020a17090729c300b0084d4b8e0efcmr879112ejc.390.1673468062061; Wed, 11
+ Jan 2023 12:14:22 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Y73rl8feUOnChWKF@sirena.org.uk>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000342f6e05f202a34b"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221230055839.80885-1-tamim@fusetak.com>
+In-Reply-To: <20221230055839.80885-1-tamim@fusetak.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 11 Jan 2023 21:14:10 +0100
+Message-ID: <CAJZ5v0ikQN=C966p3Fm=HTRGfeWimjgCps9aqAp0UBHRQ5Xt9g@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: resource: Skip IRQ override on Asus Expertbook B2402CBA
+To:     Tamim Khan <tamim@fusetak.com>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        linux-kernel@vger.kernel.org, zelenat <zelenat@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000342f6e05f202a34b
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+On Fri, Dec 30, 2022 at 6:59 AM Tamim Khan <tamim@fusetak.com> wrote:
+>
+> Like the Asus Expertbook B2502CBA and various Asus Vivobook laptops,
+> the Asus Expertbook B2402CBA has an ACPI DSDT table that describes IRQ 1
+> as ActiveLow while the kernel overrides it to Edge_High. This prevents the
+> keyboard from working. To fix this issue, add this laptop to the
+> skip_override_table so that the kernel does not override IRQ 1.
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216864
+> Tested-by: zelenat <zelenat@gmail.com>
+> Signed-off-by: Tamim Khan <tamim@fusetak.com>
+> ---
+> This patch is very similar to 7203481fd12b1257938519efb2460ea02b9236ee
+> (ACPI: resource: Add Asus ExpertBook B2502 to Asus quirks) and just adds
+> another ExpertBook that has the same IRQ override problem to the quirks list.
+>
+>  drivers/acpi/resource.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+> index 16dcd31d124f..153e3f8b446f 100644
+> --- a/drivers/acpi/resource.c
+> +++ b/drivers/acpi/resource.c
+> @@ -432,6 +432,13 @@ static const struct dmi_system_id asus_laptop[] = {
+>                         DMI_MATCH(DMI_BOARD_NAME, "S5602ZA"),
+>                 },
+>         },
+> +       {
+> +               .ident = "Asus ExpertBook B2402CBA",
+> +               .matches = {
+> +                       DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+> +                       DMI_MATCH(DMI_BOARD_NAME, "B2402CBA"),
+> +               },
+> +       },
+>         {
+>                 .ident = "Asus ExpertBook B2502",
+>                 .matches = {
+> --
 
-
-
-On 01/10/2023 02:49 PM, Mark Brown wrote:
-> On Mon, Jan 09, 2023 at 12:10:30PM -0800, William Zhang wrote:
->> On 01/09/2023 11:06 AM, Mark Brown wrote:
-> 
->>> You can put whatever logic is needed in the code - for something like
->>> this an architecture based define isn't ideal but is probably good
->>> enough if need be (though I'd not be surprised if it turned out that
->>> there was also some performance benefit for the MIPS systems too, at
->>> least for smaller transfers).
-> 
->> I just don't know what other logic I can put in the driver to select
->> interrupt or polling mode.  Only the end user know if performance or cpu
->> usage is more important to their application.
-> 
-> Usually you can take a reasonable guess as to what would be a good point
-> to start switching, typically for short enough transfers the overhead of
-> setting up DMA, waiting for interrupts and tearing things down is very
-> much larger than the cost of just doing PIO - a bunch of other drivers
-> have pick a number logic of some kind, often things like FIFO sizes are
-> a good key for where to look.  A lot of the time this is good enough,
-> and it means that users have much better facilities for making tradeoffs
-> if they have a range of transfer sizes available - it's not an either/or
-> thing but based on some features of the individual message/transfer.
-> 
-> It is true that for people with heavy SPI traffic or otherwise very
-> demanding requirements for a specific system and software stack
-> additional tuning might produce better results, exposing some sysfs
-> knobs to allow tuning of parameters at runtime would be helpful for them
-> and I'd certainly be happy to see that added.
-> 
-Thanks for the explanation. I saw the spi-uniphier.c and spi-bcm2835.c 
-doing the trick you mentioned(thanks Kursad for pointing out).  In our 
-case, even the maximum fifo size usage(512bytes), the polling still have 
-better performance than interrupt. The MTD test result included in this 
-patch is based on maximum fifo usage. So there is no benefit to switch 
-to interrupt based on transfer size.
-
-Does the spi framework has any requirement on how much time that the 
-driver's transfer_one function can spend?  I can see the polling 
-function might take quite some time in busy loop if the clock is low, 
-for example, at 100Hz(slowest clock this controller can go), it takes 
-512x8/100Hz ~= 41ms to complete.  If this is something in concern,  I 
-can do the interrupt switch based on a time limit value if interrupt is 
-available.
-
---000000000000342f6e05f202a34b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIN8lIdnOi8ZOM95L8yp3bo3fofzT
-ZY638Ip31W1AZylyMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDExMTIwMTM0NVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBiJGKb56Hcg9H2fKVlw9sJNfauEUZq4xr6IAw2LfN76sag
-mB3pios2Tftk188pvaG7VJnLwkYlN5iaiOlASJORbXb6kD7NwPuVDJNlu6E/BnUV63p5EbEcOxej
-LCq5cu9GAbKNcjVoXnHAo/np9yCwLYCKZqjyfydtkMLeFt3oCG+b3w0+TYq7wzEmmq1DNMAvnvnc
-NguS0DoVZ4R79wBm0UEaEemRo8u8tbf/qR//C+PosJkLdBaHhe45mBSrcTi8L2jxJf6s/9IaJz/p
-DJPcB3LaZEcLGRcPUGk0qGGF28yRGFLesXXqdZju98z+roWx4iCa3bm9202FviLUiIWu
---000000000000342f6e05f202a34b--
+Applied as 6.2-rc material, thanks!
