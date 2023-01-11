@@ -2,169 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF016662B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 994786662BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235143AbjAKSW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
+        id S233882AbjAKSZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:25:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235535AbjAKSWm (ORCPT
+        with ESMTP id S231286AbjAKSZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:22:42 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36CF55AF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 10:22:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673461361; x=1704997361;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=XWWOxRS0sLD5BhIdpMJ6XbpeAVxP/C0G7NQ9fyzRUxU=;
-  b=GzvKnPcJFmVauzZJyw0dmBWD6mJyjcrCgxhmvdQzWV6ry8KJ8/ZTkDRj
-   KJDsUwaJHBc/u++TvYu4quUSymJv70zjxLZdpe0T0uSwGUyyc5cWp0iwV
-   93pM+GJo4riX85Ea9Q14VvEZGFVKqK2xFpnoBSjgmzFT+OtufoSb5ubKh
-   D8jtlyDGVh+RxNTXM9u1P5B5TSktUeiB5gclyvtnzM06NkZ2bRogXn3EC
-   SDp5+9ZoZ3j/n4lILpeKFNQmEUxQfTOccF3E7EBe0t6IPoZwoAARdQsPL
-   bxSsq/9C1+0sXzZv2gthFwHEMafgdWzXEkjW1BDwipYpUTzyz9/ReBBmc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350726139"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="350726139"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 10:22:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="720815789"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="720815789"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Jan 2023 10:22:41 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 11 Jan 2023 10:22:40 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 11 Jan 2023 10:22:40 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 11 Jan 2023 10:22:40 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 11 Jan 2023 10:22:40 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a1rTgGj9OWAE6vO8MMAJdcNdrLiAzXu2gdL+Bcg8QEmrwrC4iNrL6b2yycVlv9VN/wqpj9J71EOp5TaISowL4rdjl7IuEd8DW89NNGedeKamT2cUXrqo4VlCZt+AM7ZOroqZhtI+3raxCgNmuIA9PZ83gtb/Vez/VhayoCCEMSUZeiD3bkAfD50pn4HEKgf80itAGMAL19XuGuYYiDrNO5AS3HzS5K95Lc93OozvN3JuTohuJ89X0GI+XOJB6aKQscKm5+mUBM98DBSWjRhQNFdnasDcxbeoY/2NwTfcYnP7JMgupw0ZqoJpZQRpSnLQA7YVqnb0P0pKY94v2MiaGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XWWOxRS0sLD5BhIdpMJ6XbpeAVxP/C0G7NQ9fyzRUxU=;
- b=IztLQxpLJQnjXsIwIYdsBe2VFnkiU0fE6BxM0WNnf0RF05knFwYWwx/QlbcGem+/ZLnQTy6QcM7K5E3ROE7TCcOVgyfbrJDbVyasLIin6bImmMOiVBO16BcLFv7MCx1bungtqhyCUliERLtVZevsxkitYnQv8fFKrOD0aBPmdQQ3GHJzrfB2FW/9FShkZPMBtqQy5FL4dFrv3+8xgBhumweMXgxo78W7DXl4jWRDcDeKII/GiyimxtrehfqGV/OFtGvDWGrbCFEHbSR6aAHYfguFPr+rp3JTpne4mE5WutbdB0fes7rNk3fLq6itVG0/xhFM/ubk6vbHWExxDJBaOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
- by SJ0PR11MB5005.namprd11.prod.outlook.com (2603:10b6:a03:2d3::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
- 2023 18:22:37 +0000
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::52ef:33cf:9be9:fcb0]) by SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::52ef:33cf:9be9:fcb0%4]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 18:22:37 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "brgerst@gmail.com" <brgerst@gmail.com>,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>,
-        "Gross, Jurgen" <jgross@suse.com>
-Subject: RE: [PATCH v5 5/5] x86/gsseg: use the LKGS instruction if available
- for load_gs_index()
-Thread-Topic: [PATCH v5 5/5] x86/gsseg: use the LKGS instruction if available
- for load_gs_index()
-Thread-Index: AQHZA0vp+9PqVRslgESQoHG9Btr4Sq6Zi9wAgAA/82A=
-Date:   Wed, 11 Jan 2023 18:22:37 +0000
-Message-ID: <SA1PR11MB67342AB67CC1EA0654762488A8FC9@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <20221128164028.4570-1-xin3.li@intel.com>
- <20221128164028.4570-6-xin3.li@intel.com> <Y77H+rThnJixLEQC@zn.tnic>
-In-Reply-To: <Y77H+rThnJixLEQC@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|SJ0PR11MB5005:EE_
-x-ms-office365-filtering-correlation-id: 4486237d-d300-4ef6-ef9d-08daf400d133
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SN6LFA09uGfmxgquWEQxrEipUD1I9zrEhQyDtAZMJIZv/5P6p+JjJ+aKtVeIuiPkS9RTJqBlOvzzwc4PxrFJSEifsM+OhCXmChpcG7H94UZj8XPX/uaL0RMyb6DxVqVu3njVEwIrp+jU8WIqCeDBniYPSsRT41pOPJp+SoPQIvL9rUmzwf9zK8uw/xT+YVqymoxgcl3T7Q6VOeDnryNnNVQWrw7LCbO8V/cF5GmYFQUq1qqEXXB66VhRgv3+k8IJbIo8GKGIK+Yox+VmCXsoiTxYpwahuIOuB8ETgC7CO+/tiidk3x9z+/3UGtJ/Lt/p+dltA5JguGKMAnIVCsjT+uCcQCQQ83eFCbscx4dvyxyPMH2/CWgtJZoArMUKdpAPcBFdr8ouyE4RIfFlz3O7S6g81Cv9Byg15MXG/xZXg0HTLRmD8Q4KtIrjQyymINd0qlsDzgJNjbIge8uzJj8s+KvCwP29lO9Gf7OTJzt8FPi+AHZmPiYmFCxbP1KHqTHXaOmLgG5Onu8fsEy0gjxSUpR8l0lFzLvzSH5Tjbw1AStZkf1d+kgj8RfZXgULpDQCUW4rKmzujQMHIIUPyjaBQVnWhj3b8IaJauFSwbn7fH2VRxsNEYbTqo3eDIBV7fj9Qvbs+5UBZpnMGa60tos8GwDOqX+yohK4FcdWoa2obrW5UIFaB7XRNLW0yspIc9mnP5oPAJkjjPirWxPPK96h1xpzspmS6Bz5jHHExxLVMvY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(396003)(39860400002)(376002)(346002)(451199015)(86362001)(54906003)(8676002)(66946007)(41300700001)(66476007)(76116006)(6916009)(83380400001)(64756008)(4326008)(66446008)(38100700002)(82960400001)(122000001)(33656002)(38070700005)(7696005)(66556008)(966005)(26005)(186003)(6506007)(478600001)(8936002)(52536014)(316002)(7416002)(2906002)(55016003)(71200400001)(5660300002)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SWN3VmI0M2ZiVThvN1o5QzIvYnB6cU5lRDI0czBtUGwwTURxWGxtNTIyRlFX?=
- =?utf-8?B?MTFUL3JjRThoMmc3OUFDOU9Cdmx6dnJ4VDhZWmVXWkNaaGpQRHJ3S2gzd3p1?=
- =?utf-8?B?Yy9WMFh0d3MwcFIwdEc3RytnNm9PeHVxSUgvc2RWMHYrZHc3VksxTmZ5QlRG?=
- =?utf-8?B?aTkxM1NGUmZFY2ZkZXIrQloxVlpJSU5ac3JpN3oxTmFYR0RXaE1mNThpUWV5?=
- =?utf-8?B?ZnJDbU9TZkRZNS9QdUtYWFgyWjBaRDVhTzVXQXVjVjdIcEM2Zkxjc3hEOTJk?=
- =?utf-8?B?ZEM0L1BucGJobDBoRU8rYnA4b3c0RFptR29ieVo1MkZHUC9SN2xnZDMyK05s?=
- =?utf-8?B?WWM1ZWZGNGphdGlBVm1LOXkvbDAwaVZaUXdVd05qaVJ1M2s3TU5xKzZEcktE?=
- =?utf-8?B?ajZMZTNnQ0N3L1VFMGVMdGJZQkcxbWtLNXFqWU93RUZyemt6ZFpGazlHVVcr?=
- =?utf-8?B?c1M4RjM5cE9LNStObjNRcjEwYmFFS0dvUDNQTGJqUWJCb29DQTN3dWYvaksx?=
- =?utf-8?B?bVd2QVA2WFp3d2JEYVU1cWRBN2VUTXkvaGpCWjBOTzYxMkxvTldQMDErQWJq?=
- =?utf-8?B?UnRSTW1IckhSRlhJRExzRGIyT2F4ZEp5ZUU3dmtBZE9qRXFwYmZkUWFxbEJI?=
- =?utf-8?B?Y0xMTlhiWWdidHhVZzQrcU5QRjg2bDlXeC9Oc0swNWhoS2JsRm9IUFlTUElO?=
- =?utf-8?B?bURHSnYxR3RRbnRDelowTmJUcjlKRTJFS05MS0RkM2RVdFVuNVo0T2Y0SVpm?=
- =?utf-8?B?ekM1TkNTQ3N0L3F0WTVGZ05IYVhNTkNSZzZIdmsvWGt2TFFhb1FwSm53MTZF?=
- =?utf-8?B?YmNaYlg1elBvUXFjM2IwSkQ4aHJNYkc5NHBCdUV3bm03VWNPdzk0R0FZQ0cy?=
- =?utf-8?B?ZGtMSktGRzY3bktMQXJIWENiajNLWG40Y0o5MjU5NUZlWjVVMnRvT3JDaXdh?=
- =?utf-8?B?SDZmRzRCY3RHZEpXR2dXRkpJWEpQbnc0TEZhQldiaExxOUpFMVNwbmx6Uk1x?=
- =?utf-8?B?SDlLWkZicU1Oc01IVzB6VnpkWHB6bE9kRjR2cGJNWERyZ01HdHY0Sk5qajdr?=
- =?utf-8?B?M3NsVWVub0xma28xRzh2a0MyREorV2R4VWhBcCtXSzZMQ2Z5OUo0aFBXQ2x4?=
- =?utf-8?B?YjJUcDk4elRIaXo4USs2emZsVlZ0VzRvbDd0L0U5b0FOTTJ5cFcyWFVodVRZ?=
- =?utf-8?B?cU5FOVR3M040RFBiNU9neHE1Zk45Vko5ZWtqelhlbkR5UEUxRXd5bURDeUpa?=
- =?utf-8?B?MWxIT2VwY3V2L1JPeTRjQk9kcG9WZWxOajlNWk5QTkswdVlteU4zejJaSm8w?=
- =?utf-8?B?WDZKdlcyTW9kbEx2R2sxV2pQbDRaV2hBYmpyWXZJRGt3Qkx0SVV5SFlNZi91?=
- =?utf-8?B?bG5MZzJxQ3M3dzdUZGVWMVZ0Nk5QaXEwVTdOWDJ3OWVFMTNMRlc1c3p6MjV5?=
- =?utf-8?B?a21icUYxbVNVejJKSmpEa0FZeTBjRWxhTU5EVXlFZzAzNmtWbmpVREVodzdj?=
- =?utf-8?B?eGtTa0FjbDNPamRyYnl3RFhNMUlWaG9oNnFDMlpVR1RyUldmMXVXdkRrbW93?=
- =?utf-8?B?RzQ4TldmRVVMM1k1VGFITWszRDMvS0FYTmhDUkh3SlBKeUNTQlN4SUN0eUk4?=
- =?utf-8?B?N0xjOW9UNVJRK0xVNWZBTENENGFCL0lmQTBzUUY0MGJCaU1aVGNvRVgzRUNt?=
- =?utf-8?B?WWkyMHc2ZnlaQVRYNzc1VlZhN3FrWkZWQnBQTzUrM1FKVjNEMktPSnpYUkpa?=
- =?utf-8?B?RmhZRzYrSS83YWw1cElPaW50SmN3aktGSnpmWXZuQXBIS1ZVbm1KZEljUERa?=
- =?utf-8?B?Mk80WERNUHdyL2pXMWNiSGtMOEVxSE1SSkF0aVRTcm9DakIrdTJ2c01rR1o1?=
- =?utf-8?B?UUUvYkFKL25aNzJTRXhCZTFoSnBnanBYSnBYZGJTV1FyQVRkd2FvTzZLN3kw?=
- =?utf-8?B?NS9lbEZBanVtOGpxSjh3cGNZaThzY2IvVlZSVnE2UjdiMU1FeEVkOTFySXo5?=
- =?utf-8?B?QlNxaVJHb0U5NllVSTUyRHJQcVc5SjJRb093bWM4UDVmaHhTSldXei90TzVT?=
- =?utf-8?B?djNMRTE4VDUrVXd1QVVCNXVtWDl3TEFuYXNsNUpXUDc0VlY1eDJZRVdDSDVj?=
- =?utf-8?Q?RFnF/kle68yiBVgM8gyBiYdLK?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 11 Jan 2023 13:25:39 -0500
+Received: from out-37.mta0.migadu.com (out-37.mta0.migadu.com [91.218.175.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2182AD6
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 10:25:37 -0800 (PST)
+Date:   Wed, 11 Jan 2023 18:25:30 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1673461535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hAs7LUynKbLq5T1v0UqKm3yOvkRnDNP7tzZTR0H+taQ=;
+        b=NqZq6497DO/W7iQJ4P2g+Cej/89CLOjShG4+NPInRAducOx5h40SVY6Ov197WHklT/QLkf
+        wUNl+HcsZI6LVTdimfaZalC6esS6PEbunmMtMh/w60PMFbeWdWt5krHHDD1CJyeMrRvswK
+        mu5Y4S3E+NA6l/NWYLilEoNVTDDqS+k=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v6 7/7] KVM: arm64: Normalize cache configuration
+Message-ID: <Y77/Gi+193u+YvwX@google.com>
+References: <20230107094629.181236-1-akihiko.odaki@daynix.com>
+ <20230107094629.181236-8-akihiko.odaki@daynix.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4486237d-d300-4ef6-ef9d-08daf400d133
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2023 18:22:37.3209
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Y948UDGbKJq1utavASk/wtc0Z9XtxRrxSW/k8IWqSjBCVPB6F6I2/9jieygq/dPskyeRG8PvQDa5981TojHSog==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5005
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230107094629.181236-8-akihiko.odaki@daynix.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,38 +58,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+ID4gVGhlIExLR1MgaW5zdHJ1Y3Rpb24gYXRvbWljYWxseSBsb2FkcyBhIHNlZ21lbnQgZGVz
-Y3JpcHRvciBpbnRvIHRoZQ0KPiA+ICVncyBkZXNjcmlwdG9yIHJlZ2lzdGVycywgKmV4Y2VwdCog
-dGhhdCAlZ3MuYmFzZSBpcyB1bmNoYW5nZWQsIGFuZCB0aGUNCj4gPiBiYXNlIGlzIGluc3RlYWQg
-bG9hZGVkIGludG8gTVNSX0lBMzJfS0VSTkVMX0dTX0JBU0UsIHdoaWNoIGlzIGV4YWN0bHkNCj4g
-PiB3aGF0IHdlIHdhbnQgdGhpcyBmdW5jdGlvbiB0byBkby4NCj4gPg0KPiA+IFNpZ25lZC1vZmYt
-Ynk6IEguIFBldGVyIEFudmluIChJbnRlbCkgPGhwYUB6eXRvci5jb20+DQo+ID4gU2lnbmVkLW9m
-Zi1ieTogUGV0ZXIgWmlqbHN0cmEgKEludGVsKSA8cGV0ZXJ6QGluZnJhZGVhZC5vcmc+DQo+ID4g
-U2lnbmVkLW9mZi1ieTogQnJpYW4gR2Vyc3QgPGJyZ2Vyc3RAZ21haWwuY29tPg0KPiA+IFNpZ25l
-ZC1vZmYtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCj4gPiBTaWduZWQtb2Zm
-LWJ5OiBYaW4gTGkgPHhpbjMubGlAaW50ZWwuY29tPg0KPiANCj4gSSdtIHJlYWRpbmcgdGhpcyBT
-T0IgY2hhaW4gYXMNCj4gDQo+IGhwYSB3cm90ZSBpdCAtPiB0aGVuIGl0IHdlbnQgdG8gUGV0ZXIg
-LT4gdGhlbiB0byBCcmlhbiAtPiB0aGVuIHRvIEp1ZXJnZW4gLT4gYW5kDQo+IHlvdSdyZSBzZW5k
-aW5nIGl0Lg0KPiANCj4gSSdtIHByZXR0eSBzdXJlIHRoYXQgY2Fubm90IGJlIHJpZ2h0Lg0KPiAN
-Cj4gPiAtLS0NCj4gPg0KPiA+IENoYW5nZXMgc2luY2UgdjQ6DQo+ID4gKiBDbGVhciB0aGUgTEtH
-UyBmZWF0dXJlIGZyb20gWGVuIFBWIGd1ZXN0cyAoSnVlcmdlbiBHcm9zcykuDQo+ID4NCj4gPiBD
-aGFuZ2VzIHNpbmNlIHYzOg0KPiA+ICogV2Ugd2FudCBsZXNzIEFTTSBub3QgbW9yZSwgdGh1cyBr
-ZWVwIGxvY2FsX2lycV9zYXZlL3Jlc3RvcmUoKSBpbnNpZGUNCj4gPiAgIG5hdGl2ZV9sb2FkX2dz
-X2luZGV4KCkgKFRob21hcyBHbGVpeG5lcikuDQo+ID4gKiBGb3IgcGFyYXZpcnQgZW5hYmxlZCBr
-ZXJuZWxzLCBpbml0aWFsaXplIHB2X29wcy5jcHUubG9hZF9nc19pbmRleCB0bw0KPiA+ICAgbmF0
-aXZlX2xrZ3MgKFRob21hcyBHbGVpeG5lcikuDQo+ID4NCj4gPiBDaGFuZ2VzIHNpbmNlIHYyOg0K
-PiA+ICogTWFyayBESSBhcyBpbnB1dCBhbmQgb3V0cHV0ICgrRCkgYXMgaW4gVjEsIHNpbmNlIHRo
-ZSBleGNlcHRpb24gaGFuZGxlcg0KPiA+ICAgbW9kaWZpZXMgaXQgKEJyaWFuIEdlcnN0KS4NCj4g
-Pg0KPiA+IENoYW5nZXMgc2luY2UgdjE6DQo+ID4gKiBVc2UgRVhfVFlQRV9aRVJPX1JFRyBpbnN0
-ZWFkIG9mIGZpeHVwIGNvZGUgaW4gdGhlIG9ic29sZXRlIC5maXh1cCBjb2RlDQo+ID4gICBzZWN0
-aW9uIChQZXRlciBaaWpsc3RyYSkuDQo+ID4gKiBBZGQgYSBjb21tZW50IHRoYXQgc3RhdGVzIHRo
-ZSBMS0dTX0RJIG1hY3JvIHdpbGwgYmUgcmVwYWxjZWQgd2l0aCAibGtncw0KPiAlZGkiDQo+ID4g
-ICBvbmNlIHRoZSBiaW51dGlscyBzdXBwb3J0IHRoZSBMS0dTIGluc3RydWN0aW9uIChQZXRlciBa
-aWpsc3RyYSkuDQo+IA0KPiBJIGd1ZXNzIHRoYXQgZXhwbGFpbnMgd2hhdCB0aGUgU09CIGNoYWlu
-IGlzIHN1cHBvc2VkIHRvIG1lYW4gLSB5b3UndmUgZ290dGVuDQo+IHJldmlldyBmZWVkYmFjay4g
-QnV0IHRoYXQgZG9lc24ndCBuZWVkIHN1Y2ggYSBTT0IgY2hhaW4uIFNvdW5kcyBsaWtlIHlvdSBu
-ZWVkDQo+IHRvIHJlZnJlc2ggb24NCg0KWW91ciBndWVzcyBpcyBjb3JyZWN0LCB3aWxsIHJlbW92
-ZSB0aG9zZSBTT0JzIGluIHY2Lg0KDQo+IERvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJtaXR0aW5n
-LXBhdGNoZXMucnN0DQo+IA0KPiBUaHguDQo+IA0KPiAtLQ0KPiBSZWdhcmRzL0dydXNzLA0KPiAg
-ICAgQm9yaXMuDQo+IA0KPiBodHRwczovL3Blb3BsZS5rZXJuZWwub3JnL3RnbHgvbm90ZXMtYWJv
-dXQtbmV0aXF1ZXR0ZQ0K
+On Sat, Jan 07, 2023 at 06:46:29PM +0900, Akihiko Odaki wrote:
+> Before this change, the cache configuration of the physical CPU was
+> exposed to vcpus. This is problematic because the cache configuration a
+> vcpu sees varies when it migrates between vcpus with different cache
+> configurations.
+> 
+> Fabricate cache configuration from the sanitized value, which holds the
+> CTR_EL0 value the userspace sees regardless of which physical CPU it
+> resides on.
+> 
+> CLIDR_EL1 and CCSIDR_EL1 are now writable from the userspace so that
+> the VMM can restore the values saved with the old kernel.
+> 
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> ---
+>  arch/arm64/include/asm/cache.h    |   3 +
+>  arch/arm64/include/asm/kvm_host.h |   4 +
+>  arch/arm64/kvm/reset.c            |   1 +
+>  arch/arm64/kvm/sys_regs.c         | 252 ++++++++++++++++++------------
+>  4 files changed, 164 insertions(+), 96 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/cache.h b/arch/arm64/include/asm/cache.h
+> index ab7133654a72..a51e6e8f3171 100644
+> --- a/arch/arm64/include/asm/cache.h
+> +++ b/arch/arm64/include/asm/cache.h
+> @@ -22,6 +22,9 @@
+>  #define CLIDR_CTYPE(clidr, level)	\
+>  	(((clidr) & CLIDR_CTYPE_MASK(level)) >> CLIDR_CTYPE_SHIFT(level))
+>  
+> +/* Ttypen, bits [2(n - 1) + 34 : 2(n - 1) + 33], for n = 1 to 7 */
+> +#define CLIDR_TTYPE_SHIFT(level)	(2 * ((level) - 1) + CLIDR_EL1_Ttypen_SHIFT)
+> +
+>  /*
+>   * Memory returned by kmalloc() may be used for DMA, so we must make
+>   * sure that all such allocations are cache aligned. Otherwise,
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 374390a9212e..496602e0b299 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -252,6 +252,7 @@ struct kvm_vcpu_fault_info {
+>  enum vcpu_sysreg {
+>  	__INVALID_SYSREG__,   /* 0 is reserved as an invalid value */
+>  	MPIDR_EL1,	/* MultiProcessor Affinity Register */
+> +	CLIDR_EL1,	/* Cache Level ID Register */
+>  	CSSELR_EL1,	/* Cache Size Selection Register */
+>  	SCTLR_EL1,	/* System Control Register */
+>  	ACTLR_EL1,	/* Auxiliary Control Register */
+> @@ -501,6 +502,9 @@ struct kvm_vcpu_arch {
+>  		u64 last_steal;
+>  		gpa_t base;
+>  	} steal;
+> +
+> +	/* Per-vcpu CCSIDR override or NULL */
+> +	u32 *ccsidr;
+>  };
+>  
+>  /*
+> diff --git a/arch/arm64/kvm/reset.c b/arch/arm64/kvm/reset.c
+> index e0267f672b8a..dc235ddc6172 100644
+> --- a/arch/arm64/kvm/reset.c
+> +++ b/arch/arm64/kvm/reset.c
+> @@ -157,6 +157,7 @@ void kvm_arm_vcpu_destroy(struct kvm_vcpu *vcpu)
+>  	if (sve_state)
+>  		kvm_unshare_hyp(sve_state, sve_state + vcpu_sve_state_size(vcpu));
+>  	kfree(sve_state);
+> +	kfree(vcpu->arch.ccsidr);
+>  }
+>  
+>  static void kvm_vcpu_reset_sve(struct kvm_vcpu *vcpu)
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index 5617de916c80..e789f9dea277 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -11,6 +11,7 @@
+>  
+>  #include <linux/bitfield.h>
+>  #include <linux/bsearch.h>
+> +#include <linux/cacheinfo.h>
+>  #include <linux/kvm_host.h>
+>  #include <linux/mm.h>
+>  #include <linux/printk.h>
+> @@ -81,25 +82,85 @@ void vcpu_write_sys_reg(struct kvm_vcpu *vcpu, u64 val, int reg)
+>  	 __vcpu_sys_reg(vcpu, reg) = val;
+>  }
+>  
+> -/* 3 bits per cache level, as per CLIDR, but non-existent caches always 0 */
+> -static u32 cache_levels;
+> -
+>  /* CSSELR values; used to index KVM_REG_ARM_DEMUX_ID_CCSIDR */
+>  #define CSSELR_MAX 14
+>  
+> +static u8 get_min_cache_line_size(u32 csselr)
+> +{
+> +	u64 ctr_el0;
+> +	int field;
+> +
+> +	ctr_el0 = read_sanitised_ftr_reg(SYS_CTR_EL0);
+> +	field = csselr & CSSELR_EL1_InD ? CTR_EL0_IminLine_SHIFT : CTR_EL0_DminLine_SHIFT;
+> +
+> +	/*
+> +	 * Determine Log2(Number of bytes) - 4, which is the encoding of cache
+> +	 * line size in CCSIDR_EL0. In CTR_EL0, the cache line size is
+> +	 * represented with:
+> +	 * Log2(Number of words) = Log2((Number of bytes) / 4)
+> +	 *                       = Log2(Number of bytes) - 2
+> +	 */
+> +	return cpuid_feature_extract_unsigned_field(ctr_el0, field) - 2;
+> +}
+
+So I definitely got my math wrong when I was reading this the first
+time, apologies.
+
+Nonetheless, I still find the return value confusing here. It would be
+better to just return Log2(bytes) outright (i.e. no offset) and document
+that. I worry that the next user of this function will miss that detail.
+
+While at it we should probably convert to the new sysreg field helpers
+too.
+
+  /*
+   * Returns the minimum line size for the selected cache, expressed as
+   * Log2(bytes).
+   */
+  static u8 get_min_cache_line_size(bool icache)
+  {
+  	u64 ctr = read_sanitised_ftr_reg(SYS_CTR_EL0);
+	u8 field;
+
+	if (icache)
+		field = SYS_FIELD_GET(CTR_EL0, IminSize, ctr);
+	else
+		field = SYS_FIELD_GET(CTR_EL0, DminSize, ctr);
+
+	/*
+	 * Cache line size is represented as Log2(words) in CTR_EL0.
+	 * Log2(bytes) can be derived with the following:
+	 *
+	 * Log2(words) + 2 = Log2(bytes / 4) + 2
+	 * 		   = Log2(bytes) - 2 + 2
+	 * 		   = Log2(bytes)
+	 */
+	return field + 2;
+  }
+
+> +
+>  /* Which cache CCSIDR represents depends on CSSELR value. */
+> -static u32 get_ccsidr(u32 csselr)
+> +static u32 get_ccsidr(struct kvm_vcpu *vcpu, u32 csselr)
+>  {
+> -	u32 ccsidr;
+> +	if (vcpu->arch.ccsidr)
+> +		return vcpu->arch.ccsidr[csselr];
+>  
+> -	/* Make sure noone else changes CSSELR during this! */
+> -	local_irq_disable();
+> -	write_sysreg(csselr, csselr_el1);
+> -	isb();
+> -	ccsidr = read_sysreg(ccsidr_el1);
+> -	local_irq_enable();
+> +	/*
+> +	 * Fabricate a CCSIDR value as the overriding value does not exist.
+> +	 * The real CCSIDR value will not be used as it can vary by the
+> +	 * physical CPU which the vcpu currently resides in.
+> +	 *
+> +	 * The line size is determined with get_min_cache_line_size(), which
+> +	 * should be valid for all CPUs even if they have different cache
+> +	 * configuration.
+> +	 *
+> +	 * The associativity bits are cleared, meaning the geometry of all data
+> +	 * and unified caches (which are guaranteed to be PIPT and thus
+> +	 * non-aliasing) are 1 set and 1 way.
+> +	 * Guests should not be doing cache operations by set/way at all, and
+> +	 * for this reason, we trap them and attempt to infer the intent, so
+> +	 * that we can flush the entire guest's address space at the appropriate
+> +	 * time. The exposed geometry minimizes the number of the traps.
+> +	 * [If guests should attempt to infer aliasing properties from the
+> +	 * geometry (which is not permitted by the architecture), they would
+> +	 * only do so for virtually indexed caches.]
+> +	 *
+> +	 * We don't check if the cache level exists as it is allowed to return
+> +	 * an UNKNOWN value if not.
+> +	 */
+> +	return get_min_cache_line_size(csselr) << CCSIDR_EL1_LineSize_SHIFT;
+
+So with the above change, this would become:
+
+	u8 line_size = get_min_cache_line_size(csselr & CSSELR_EL1_InD);
+
+	return SYS_FIELD_PREP(CSSELR_EL1, LineSize, line_size - 4);
+
+Which I find slightly more readable because it moves the -4 offset to
+where the relevant field is initialized. Adding an extra bit of
+information to your comment explaining the offset is likely worthwhile
+too.
+
+--
+Thanks,
+Oliver
