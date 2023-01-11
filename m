@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11376665E8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F37C665E91
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238723AbjAKO5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
+        id S232251AbjAKO6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238870AbjAKO5P (ORCPT
+        with ESMTP id S232621AbjAKO55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:57:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E39EE04;
-        Wed, 11 Jan 2023 06:57:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C136761CFB;
-        Wed, 11 Jan 2023 14:57:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E045C43396;
-        Wed, 11 Jan 2023 14:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673449031;
-        bh=mYNw1iEQYVCp6RrmRe30DB6Teu7zpACGkO9NWFvDUyo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QaloOrONmjzv1NxnkIb/LFrLyvGzezX8IP6p+BTQwpjrgl1QKH4PNtYIph6Jnv0xy
-         UqOi2i1ffFiBdoNLDsJU/yJRjn4S75GCJFPM+APpHSv8iwblX7qs0DwIJmVqMOQ9nd
-         paa4QZw7H6L/ukm8SfqrMVRzDyuyvYwIGV5Agq7ONdhtiai7GwcH4fQa5PeL70rkYs
-         BbPdVEUoOUGJvCXQ9g+u/QUYjT+E2l+aYeGrKLT3sU1Ya/8URcBmlRWw5u4YXSUjrF
-         T4EfIVGYmI/YRxH3Asw5p1CtqiaEHckGigxorO6ARYWSTJlxmsu8+7ojwyblGxbtPD
-         b0X+2109HR02Q==
-Received: by mail-vs1-f48.google.com with SMTP id v127so11565399vsb.12;
-        Wed, 11 Jan 2023 06:57:11 -0800 (PST)
-X-Gm-Message-State: AFqh2kotW6GkwpSdr5NckfFqdfgG4Xvz2GjPkHQdb7IGNKf3p5c+tNl3
-        Kv++CunV2XRnvQ8BKhjVPO4dRxLAi4PWOutLJA==
-X-Google-Smtp-Source: AMrXdXsFn/ZNP2w63VaXh+QFHScOBYUxYSxX/aRHG1VxYtf9ib6mpqOY1EwCEur2HVupJ0D2QHWb7s3fHG7o5hrVc/k=
-X-Received: by 2002:a05:6102:3546:b0:3c8:a6ed:faa8 with SMTP id
- e6-20020a056102354600b003c8a6edfaa8mr9164668vss.85.1673449030052; Wed, 11 Jan
- 2023 06:57:10 -0800 (PST)
+        Wed, 11 Jan 2023 09:57:57 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84F4D4A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:57:53 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso9886054wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:57:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y3LJx+Nh8Xj8DEVlyljWWnwnw5ApxQN4nGKS5rYoQuE=;
+        b=m96JKu+SCNJmZ29gKAV8mtAjxXydKJ/YUgb6i2bGTW4UvE/3SJazsb4u/Eo8jVRuOQ
+         doG6HzrlrISQp+Yop+CxJQmN0aFD0VGGIu6+66/9HapTnQsbLxA7CKZRTPMtJ48/F5OV
+         cEnXRRqx6Lk8OkRV36CXHohrNVe9aPfWjXMOrKuHll/HftsgX0V1FGOwc6uCmUfpuxqP
+         fbjlU/KqTGTSlz+W4HEEjAflyJXb8N/dAFL5LeVU/NDBHzzETkX6hpT7PSi/blE96IKr
+         vgzfyEvxD6a416LdAIh4P1A5MTGR95bZK2EdDtS0zmKPz9Jo51oL7CLD9hR2ixhEwUSE
+         TFAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y3LJx+Nh8Xj8DEVlyljWWnwnw5ApxQN4nGKS5rYoQuE=;
+        b=X257YTrgnVZNtlm5H7mv9gRk6ed2nANagVsCwe82ITpooMetm8+IpIoxCPYM0NEhuP
+         mi8BAwUftQGPuLYIowOp/ZeVwzCDv5huiLKer+8J+ugT1s1n/lqqOaPDCnZMIQSmUinG
+         ZAdJcjXaDgVr3K0W/pEVlY8q/wPwvqbh3X4PZZBXGrO8ies2Wo1C/jaGXqeLuM11bodk
+         K3PQLurDnbXgTeBEafj/l97tOJskRdkZ7f6NmoSPcJEO13C1FUhVI5L94ukXefruG9D1
+         IIzmjYDTfTiTFnKkOrvz+mOSNrwFhStdP4kJadQrBkVANR2V0s48R1uMwLDBKFfxccw+
+         3UQQ==
+X-Gm-Message-State: AFqh2kocLRSMLzAdCvTQHgjN2Hga6VCzP6Ex/2D1Mc0g6E8FKM1CeijM
+        N8hWlU2csFzVNwHQnyRMFspszg==
+X-Google-Smtp-Source: AMrXdXtGdW4uPXVp3JxvxUDiP0L+DInrqSGxn+EBfesjB1hvMtndLnIA3vMlqdBAhEeAf3o6ZLRhUw==
+X-Received: by 2002:a1c:6a16:0:b0:3c6:f732:bf6f with SMTP id f22-20020a1c6a16000000b003c6f732bf6fmr52300716wmc.13.1673449072435;
+        Wed, 11 Jan 2023 06:57:52 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c511300b003d9862ec435sm7341529wms.20.2023.01.11.06.57.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 06:57:51 -0800 (PST)
+Message-ID: <2a2b2412-752a-1c64-41b7-eb256ae55f42@linaro.org>
+Date:   Wed, 11 Jan 2023 15:57:50 +0100
 MIME-Version: 1.0
-References: <20221130135807.45028-1-konrad.dybcio@linaro.org>
-In-Reply-To: <20221130135807.45028-1-konrad.dybcio@linaro.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 11 Jan 2023 08:56:58 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL4Wymiov3bgXBo+1RJeMMjJ_+iCCo7oboSmU8P+0ew4A@mail.gmail.com>
-Message-ID: <CAL_JsqL4Wymiov3bgXBo+1RJeMMjJ_+iCCo7oboSmU8P+0ew4A@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: msm/dsi: Don't require vcca-supply on 14nm PHY
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, patches@linaro.org,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] memory: omap-gpmc: fix multi-device handling on the same
+ CS
+Content-Language: en-US
+To:     INAGAKI Hiroshi <musashino.open@gmail.com>, rogerq@kernel.org,
+        tony@atomide.com
+Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230111141346.1516-1-musashino.open@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230111141346.1516-1-musashino.open@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,18 +75,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 7:58 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> On some SoCs (hello SM6115) vcca-supply is not wired to any smd-rpm
-> or rpmh regulator, but instead powered by the VDD_MX line, which is
-> voted for in the DSI ctrl node.
->
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On 11/01/2023 15:13, INAGAKI Hiroshi wrote:
+> This patch fixes the handling of multiple devices on the same CS by
+
+Do not use "This commit/patch".
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
+> replacing CS name to "name" of node instead of "full_name".
+> 
+> In c2ade654dbf7d02f09ad491f5621fc321d4af96b
+> ("memory: omap-gpmc: Use of_node_name_eq for node name comparisons"),
+
+Use syntax: commit short SHA (".....") as pointed by checkpatch.
+
+> the name for setting to CS was replaced but it doesn't fit for the
+> comparison by of_node_name_eq.
+> In of_node_name_eq, the length for strncmp will be obtained from the
+> node that trying to register and it doesn't contain the length of
+> "@<cs>,<offset>". 
+
+Skip explanation what is inside of_node_name_eq() but focus on what the
+driver is doing.
+
+> But the base name for comparison passed from
+> registered CS name contains the prefix,
+
+What is "the prefix"?
+
+>  then, that two lengths won't
+> match and false will be returned, and registration on the same CS
+> will be failed.
+
+Unfortunately, based on this, I don't get what is compare with what. I
+bet the issue is simple, but based on the description it does not look
+like that.
+
+> 
+> example (Century Systems MA-E350/N, AM3352):
+> 
+> - Device Tree
+> 
+>   /* memory mapped gpio controllers on GPMC */
+>   gpio@2,2 {
+>       reg = <2 0x2 0x1>; /* CS2, offset 0x2, IO size 0x1 */
+>       ...
+>   };
+> 
+>   gpio@2,10 {
+>       reg = <2 0x10 0x1>; /* CS2, offset 0x10, IO size 0x1 */
+>       ...
+>   };
+> 
+>   gpio@2,12 {
+>       reg = <2 0x12 0x1>; /* CS2, offset 0x12, IO size 0x1 */
+>       ...
+>   };
+> 
+>   gpio@2,14 {
+>       reg = <2 0x14 0x1>; /* CS2, offset 0x14, IO size 0x1 */
+>       ...
+>   };
+
+Trim it, two entries might be enough to illustrate it.
+
+> 
+> - dmesg
+> 
+>   [    1.596402] omap-gpmc 50000000.gpmc: cannot request GPMC CS 2
+>   [    1.596434] omap-gpmc 50000000.gpmc: failed to probe DT child 'gpio': -16
+>   [    1.596489] omap-gpmc 50000000.gpmc: cannot request GPMC CS 2
+>   [    1.596511] omap-gpmc 50000000.gpmc: failed to probe DT child 'gpio': -16
+>   [    1.596564] omap-gpmc 50000000.gpmc: cannot request GPMC CS 2
+>   [    1.596586] omap-gpmc 50000000.gpmc: failed to probe DT child 'gpio': -16
+> 
+>   ("gpio@2,2" is ok, "gpio@2,10", "gpio@2,12", "gpio@2.14" are fail)
+> 
+> Fixes: c2ade654dbf7d02f09ad491f5621fc321d4af96b
+> ("memory: omap-gpmc: Use of_node_name_eq for node name comparisons")
+
+Also not correct tag. Run checkpatch.
+
+> 
+
+No blank lines.
+
+> Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
+
+
 > ---
->  Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/memory/omap-gpmc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
+> index d78f73db37c8..3e3e84e34795 100644
+> --- a/drivers/memory/omap-gpmc.c
+> +++ b/drivers/memory/omap-gpmc.c
+> @@ -2202,7 +2202,7 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
+>  		dev_err(&pdev->dev, "cannot request GPMC CS %d\n", cs);
+>  		return ret;
+>  	}
+> -	gpmc_cs_set_name(cs, child->full_name);
+> +	gpmc_cs_set_name(cs, child->name);
+>  
+>  	gpmc_read_settings_dt(child, &gpmc_s);
+>  	gpmc_read_timings_dt(child, &gpmc_t);
+> 
+> base-commit: 13f35b3c72f4075e13a974f439b20b9e26f8f243
 
-What's the status of this patch? It is in linux-next already for some
-time, but it needs to go into v6.2.
+Best regards,
+Krzysztof
 
-Rob
