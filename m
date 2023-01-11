@@ -2,137 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A602665FD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 795B4665FDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbjAKP6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S234315AbjAKP7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233800AbjAKP6r (ORCPT
+        with ESMTP id S232923AbjAKP7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:58:47 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367CEDF3E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:58:46 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bp15so24188094lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:58:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YUP9M1dJhtlso5U1m3Rwn8hS3yu3g/oQrTNH6scnNKs=;
-        b=gBlyyO+oLZgO/cIzR0dG9h/JjwDJYaQDY7cpNfsHTef4Vji5lFZzN6uXQMV96U6/ne
-         smjkLpdoZ6nhC1cTeQT2iFPIIyWnLsZ5P7MnuQs/hLj0XvphPWLw02vFCqT+KeqX6tLy
-         WJyZGaSVLyQDjZyON5JUNA7lfCPsZvmyD+hz2T9KdWDEc5w6yOm9cfK7e2xrMXdFXZ+y
-         SbezmzF36eQN+s1YVvjCeVlbsrMoQJKqjERElv3vR7KMyvpLoG3Rji5SgZUdHkHwTmCH
-         WjjFrPBeOPYbr/a54JzKp52QKor/+peGSyP0xTkYF5kXFyOnziwAjn1EYMP2RzGsyt7j
-         v/Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YUP9M1dJhtlso5U1m3Rwn8hS3yu3g/oQrTNH6scnNKs=;
-        b=B1iIeM9K0ZojU0yFk/zTPk2u2rdxVVllob2evDf4xmSM5apNouvkSj5ikddxjmZERt
-         VM2To4YG/u7+mRlmfNuzLdNHLjZcsfF+samjbVAV3vv00AX70nFsMooaOXTzgGu/Lkfp
-         MMeQegVRFGhAhQqTcUvHY6QslCSqo9mXGGYzbXsGkCQJIw2Q7IbY7swfM50SYrblRCB0
-         qG4x4qedjW8t57k33W6Pfi78kuka2LUTxf6ptOv/Vy1PUuy0mTPM7RTofI9HmUzfRBTy
-         qmIFq6MG0UKIfxtiEU6j/e/seKH8P0SvvBIC7SJTs1IvOAtY5zQzdemNllzh2BAm8995
-         017A==
-X-Gm-Message-State: AFqh2kotpfTmiCAtXNJ8aBmyPtNfmugSX9XkB4ZLsOt2fdzK7VxW65o3
-        N805z9Gtn7Xr+3MyaqD1JputaQ==
-X-Google-Smtp-Source: AMrXdXtncrDESfrykRgJw7M5y/Nd4d6yktAIkabE6EvX+HCcoGfAvgiPKa6kREMy0dGBUCWSG0uH4A==
-X-Received: by 2002:a05:6512:1687:b0:4cb:bf8:cf0e with SMTP id bu7-20020a056512168700b004cb0bf8cf0emr18440948lfb.19.1673452724550;
-        Wed, 11 Jan 2023 07:58:44 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id l9-20020ac24a89000000b004cc99cd94basm329510lfp.113.2023.01.11.07.58.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 07:58:44 -0800 (PST)
-Message-ID: <e21f8901-2574-a4ce-32df-54f3d93841ac@linaro.org>
-Date:   Wed, 11 Jan 2023 17:58:43 +0200
+        Wed, 11 Jan 2023 10:59:33 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBA4BF42;
+        Wed, 11 Jan 2023 07:59:32 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E543B229C3;
+        Wed, 11 Jan 2023 15:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673452770; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/HTBltF58i7LUrPAUCrtSR4KiHvUGIaCssrQvyPf0Y8=;
+        b=1qWC+RAJZ+EP2Sq6vyhuO75N9X7w+srQDHNr+a78cCAzZGJ7lDbf7s3snvLe4bNBNpNZqE
+        zszpa3NB1BeZgvbqzZo1BWzet1RTuzHMgibWgwHgKeV3RdrTWjrEZJ9n05mExszMkGIXnu
+        F3md/NzOA0vX53EOiHY0DOEdbnPvsyc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673452770;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/HTBltF58i7LUrPAUCrtSR4KiHvUGIaCssrQvyPf0Y8=;
+        b=42+I24GLIBM8vA7hF6VRYCoqNyMCbqoVQkXYiS3JieqPPkCLj3WQM6rRA4LS5MayN3Y14U
+        V6K2RIUcfvMs0kDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9DE831358A;
+        Wed, 11 Jan 2023 15:59:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UFiBJOLcvmN8RAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 11 Jan 2023 15:59:30 +0000
+Message-ID: <e0c0e249-30bc-c310-0175-92ea379ef0d6@suse.de>
+Date:   Wed, 11 Jan 2023 16:59:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v8 1/5] dt-bindings: soc: qcom: cpr3: Add bindings for
- CPR3 driver
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        angelogioacchino.delregno@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Rob Herring <robh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230110175605.1240188-1-konrad.dybcio@linaro.org>
- <20230110175605.1240188-2-konrad.dybcio@linaro.org>
- <889c3bce-8b88-3a0d-5aa0-1000d3dd26cd@linaro.org>
- <eebc18be-5be7-4c1f-74dd-b1427d2c101f@linaro.org>
- <8463810e-a3bf-1303-6ca7-0945a5d6fc0d@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <8463810e-a3bf-1303-6ca7-0945a5d6fc0d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 04/11] video/aperture: use generic code to figure out the
+ vga default device
+Content-Language: en-US
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
+ <20230111154112.90575-4-daniel.vetter@ffwll.ch>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230111154112.90575-4-daniel.vetter@ffwll.ch>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------aLlWn0UCCGF9KGvwr0HJNdgi"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2023 15:30, Konrad Dybcio wrote:
-> 
-> 
-> On 11.01.2023 03:18, Dmitry Baryshkov wrote:
->> On 10/01/2023 20:54, Konrad Dybcio wrote:
->>>
->>>
->>> On 10.01.2023 18:56, Konrad Dybcio wrote:
->>>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->>>>
->>>> Add the bindings for the CPR3 driver to the documentation.
->>>>
->>>> Reviewed-by: Rob Herring <robh@kernel.org>
->>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->>>> [Konrad: Add type reference to acc-syscon; update AGdR's email]
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>> ---
->>> Need to add
->>>
->>> qcom,opp-oloop-vadj
->>> qcom,opp-cloop-vadj
->>
->> And note that at least for CPR3 they are different between fusing revisions. I see that for CPRh (esp. for 8998v2) they are the same, but this is not the case for 8996 (CPR3).
-> If we both mean the "speed bin"-dependent values, the driver
-> reads the fuse value but currently does nothing. My guess would
-> be that Angelo omitted it, as - just like you pointed out - MSM8998
-> (and SDM660 for that matter) don't really use it. I suppose I could
-> take care of that in bindings by making this an array and handle it
-> separately in a different patchset, as the per-revision values
-> aren't *that much* different, and again aren't really of concern for
-> the first round of supported SoCs.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------aLlWn0UCCGF9KGvwr0HJNdgi
+Content-Type: multipart/mixed; boundary="------------e0BQCwu0JWreKuzdprfSHEQY";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Daniel Vetter <daniel.vetter@ffwll.ch>,
+ DRI Development <dri-devel@lists.freedesktop.org>
+Cc: Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+ LKML <linux-kernel@vger.kernel.org>, Daniel Vetter
+ <daniel.vetter@intel.com>, Javier Martinez Canillas <javierm@redhat.com>,
+ Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+ Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Message-ID: <e0c0e249-30bc-c310-0175-92ea379ef0d6@suse.de>
+Subject: Re: [PATCH 04/11] video/aperture: use generic code to figure out the
+ vga default device
+References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
+ <20230111154112.90575-4-daniel.vetter@ffwll.ch>
+In-Reply-To: <20230111154112.90575-4-daniel.vetter@ffwll.ch>
 
-No, there are two dimensions there: speed-bin and then cpr fusing_rev, see:
+--------------e0BQCwu0JWreKuzdprfSHEQY
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-ret = nvmem_cell_read_variable_le_u32(dev, "cpr_fuse_revision", 
-&drv->fusing_rev);
+SGkNCg0KQW0gMTEuMDEuMjMgdW0gMTY6NDEgc2NocmllYiBEYW5pZWwgVmV0dGVyOg0KPiBT
+aW5jZSB2Z2FhcmIgaGFzIGJlZW4gcHJvbW90ZWQgdG8gYmUgYSBjb3JlIHBpZWNlIG9mIHRo
+ZSBwY2kgc3Vic3lzdGVtDQo+IHdlIGRvbid0IGhhdmUgdG8gb3BlbiBjb2RlIHJhbmRvbSBn
+dWVzc2VzIGFueW1vcmUsIHdlIGFjdHVhbGx5IGtub3cNCj4gdGhpcyBpbiBhIHBsYXRmb3Jt
+IGFnbm9zdGljIHdheSwgYW5kIHRoZXJlJ3Mgbm8gbmVlZCBmb3IgYW4geDg2DQo+IHNwZWNp
+ZmljIGhhY2suIFNlZSBhbHNvIDFkMzhmZTZlZTZhOCAoIlBDSS9WR0E6IE1vdmUgdmdhYXJi
+IHRvDQo+IGRyaXZlcnMvcGNpIikNCj4gDQo+IFRoaXMgc2hvdWxkIG5vdCByZXN1bHQgaW4g
+YW55IGZ1bmN0aW9uYWwgY2hhbmdlLCBhbmQgdGhlIG5vbi14ODYNCj4gbXVsdGktZ3B1IHBj
+aSBzeXN0ZW1zIGFyZSBwcm9iYWJseSByYXJlIGVub3VnaCB0byBub3QgbWF0dGVyIChJIGRv
+bid0DQo+IGtub3cgb2YgYW55IHRiaCkuIEJ1dCBpdCdzIGEgbmljZSBjbGVhbnVwLCBzbyBs
+ZXQncyBkbyBpdC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IERhbmllbCBWZXR0ZXIgPGRhbmll
+bC52ZXR0ZXJAaW50ZWwuY29tPg0KPiBDYzogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJt
+YW5uQHN1c2UuZGU+DQo+IENjOiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1A
+cmVkaGF0LmNvbT4NCj4gQ2M6IEhlbGdlIERlbGxlciA8ZGVsbGVyQGdteC5kZT4NCj4gQ2M6
+IGxpbnV4LWZiZGV2QHZnZXIua2VybmVsLm9yZw0KPiBDYzogQmpvcm4gSGVsZ2FhcyA8Ymhl
+bGdhYXNAZ29vZ2xlLmNvbT4NCj4gQ2M6IGxpbnV4LXBjaUB2Z2VyLmtlcm5lbC5vcmcNCj4g
+LS0tDQo+ICAgZHJpdmVycy92aWRlby9hcGVydHVyZS5jIHwgNiArKy0tLS0NCj4gICAxIGZp
+bGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvdmlkZW8vYXBlcnR1cmUuYyBiL2RyaXZlcnMvdmlkZW8vYXBl
+cnR1cmUuYw0KPiBpbmRleCA0MWU3N2RlMWVhODIuLjNkOGM5MjVjNzM2NSAxMDA2NDQNCj4g
+LS0tIGEvZHJpdmVycy92aWRlby9hcGVydHVyZS5jDQo+ICsrKyBiL2RyaXZlcnMvdmlkZW8v
+YXBlcnR1cmUuYw0KPiBAQCAtMzI0LDEzICszMjQsMTEgQEAgRVhQT1JUX1NZTUJPTChhcGVy
+dHVyZV9yZW1vdmVfY29uZmxpY3RpbmdfZGV2aWNlcyk7DQo+ICAgICovDQo+ICAgaW50IGFw
+ZXJ0dXJlX3JlbW92ZV9jb25mbGljdGluZ19wY2lfZGV2aWNlcyhzdHJ1Y3QgcGNpX2RldiAq
+cGRldiwgY29uc3QgY2hhciAqbmFtZSkNCj4gICB7DQo+IC0JYm9vbCBwcmltYXJ5ID0gZmFs
+c2U7DQo+ICsJYm9vbCBwcmltYXJ5Ow0KPiAgIAlyZXNvdXJjZV9zaXplX3QgYmFzZSwgc2l6
+ZTsNCj4gICAJaW50IGJhciwgcmV0Ow0KPiAgIA0KPiAtI2lmZGVmIENPTkZJR19YODYNCj4g
+LQlwcmltYXJ5ID0gcGRldi0+cmVzb3VyY2VbUENJX1JPTV9SRVNPVVJDRV0uZmxhZ3MgJiBJ
+T1JFU09VUkNFX1JPTV9TSEFET1c7DQo+IC0jZW5kaWYNCj4gKwlwcmltYXJ5ID0gcGRldiA9
+PSB2Z2FfZGVmYXVsdF9kZXZpY2UoKTsNCg0KdmdhX2RlZmF1bHRfZGV2aWNlKCkgaXMgcGFy
+dCBvZiB2Z2FhcmIgYW5kIGNhbiByZXR1cm4gTlVMTC4gWzFdIFRoYXQgbmV3IA0KdGVzdCBp
+cyBsaWtlbHkgdG8gYmUgaW5jb3JyZWN0IG9uIG1hbnkgc3lzdGVtcy4NCg0KSSBzdWdnZXN0
+IHRvIGltcGxlbWVudCBhIGhlbHBlciBsaWtlIGZiX2lzX3ByaW1hcnlfZGV2aWNlKCkgb24g
+eDg2OiBpdCANCnVzZXMgdGhlIGRlZmF1bHQgVkdBIGlmIHNldCwgb3IgZmFsbHMgYmFjayB0
+byB0aGUgb3JpZ2luYWwgdGVzdC4gWzJdDQoNCkl0J3Mgbm90ZXdvcnRoeSB0aGF0IG9uIG1v
+c3QgYXJjaGl0ZWN0dXJlcywgZmJfaXNfcHJpbWFyeV9kZXZpY2UoKSANCnJldHVybnMgMC4g
+QnV0IGF0IGxlYXN0IG9uIFNwYXJjIFszXSBhbmQgc29tZSBQYXJpc2MgWzRdIG1hY2hpbmVz
+LCBpdCANCmRvZXMgbm90Lg0KDQpJJ3ZlIGxvbmcgd2FudGVkIHRvIHJld29yayB0aGlzIGhl
+bHBlciBhbnl3YXkuIFNvIHRoaXMgaXMgYSBnb29kIA0Kb3Bwb3J0dW5pdHkuDQoNCkJlc3Qg
+cmVnYXJkcw0KVGhvbWFzDQoNClsxXSANCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xp
+bnV4L2xhdGVzdC9zb3VyY2UvaW5jbHVkZS9saW51eC92Z2FhcmIuaCNMNjkNClsyXSANCmh0
+dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvYXJjaC94ODYv
+dmlkZW8vZmJkZXYuYyNMMTQNClszXSANCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xp
+bnV4L2xhdGVzdC9zb3VyY2UvYXJjaC9zcGFyYy9pbmNsdWRlL2FzbS9mYi5oI0wxOA0KWzRd
+IA0KaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvbGF0ZXN0L3NvdXJjZS9kcml2
+ZXJzL3ZpZGVvL2NvbnNvbGUvc3RpY29yZS5jI0wxMTUzDQoNCg0KPiAgIA0KPiAgIAlmb3Ig
+KGJhciA9IDA7IGJhciA8IFBDSV9TVERfTlVNX0JBUlM7ICsrYmFyKSB7DQo+ICAgCQlpZiAo
+IShwY2lfcmVzb3VyY2VfZmxhZ3MocGRldiwgYmFyKSAmIElPUkVTT1VSQ0VfTUVNKSkNCg0K
+LS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VT
+RSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQw
+OSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2No
+w6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-While the speed bin determines overall SoC performance characteristics, 
-cpr_fuse_revision determines how we interpret the fuse values. E.g. on 
-msm8996 some of loop adjustment values depend on fusing_rev. I 
-interpreted this as 'the manufacturer could not decide on how to measure 
-things'. May be we can support only the latest fusing rev (like we do 
-for the SoC versions). But I can not guarantee that it would be enough.
+--------------e0BQCwu0JWreKuzdprfSHEQY--
 
--- 
-With best wishes
-Dmitry
+--------------aLlWn0UCCGF9KGvwr0HJNdgi
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmO+3OIFAwAAAAAACgkQlh/E3EQov+BP
+0A//UE6PoqEAcTqpNAgiktgdxW78OLw49B8NivQxxGx0K/I3Gpc8JgvTRo49z+BolE4gYljskS2Q
+kpLjVJRT7dNVU2v1/hNB0VcAKZaKjF90TFvbp4e1TmnMQoei/1gUrJJPIDlHWCh0mJ2UZ5/d9ZHG
+6GGtSsfrX1qyaiG55U2DgBUlQQ72UZp61UFUhIw6LKTgvJyJMlIpkDvicP2PAQNGxwNA/IAR02Tg
+BMDHjZozc/wKfyNkmT4YhJhzioitBcHUEmXS+xcdmAEn/eeAiFnRZLq/euI9kffcOEmBEabDJ5kW
+YSQmshlAxsj9yAJs0cDlOtaq2KG0ze4MCHaFoc9Izl+wZiv2rEcNxHBvCnS399YkuFL9GM6cPb/f
+nKEHwWDkmUYjqk5fqavGEGeOxx+Mj3EsdNb+M4djSJTDurtyJFAA8cbs977NZuzrA3/HndIdDgE4
+ObwLQwGhmieD9jxsU6fyLjS0frDxQE9cEuIo3MVb/8h3CPJJy68iTKhhomofDRoYZQOIxdgzv63s
+IL5BBkFt9Tjh5v8l+rnuaVCbzy5FhdAMOjM+0NAnQatDNhx+x6d23dG2BPir5ZcTYUsmQbHTNAZw
+csYYe+JEEth/cPafQNmn3XkAYCuJoQCpmdcvESHEsMKuqDbNKkZALaQERWQ0f8/Lgq6FwyiGMwX1
+m2o=
+=KYQw
+-----END PGP SIGNATURE-----
+
+--------------aLlWn0UCCGF9KGvwr0HJNdgi--
