@@ -2,82 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998DD665F50
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B76F665ED4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbjAKPko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
+        id S232457AbjAKPN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbjAKPNb (ORCPT
+        with ESMTP id S229844AbjAKPNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:13:31 -0500
+        Wed, 11 Jan 2023 10:13:55 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725EA8FD5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:12:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5FBF1F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:13:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673449964;
+        s=mimecast20190719; t=1673449987;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TIKVKM4pIPCidy3CH3fpZ9rlRwAY/u57PoiVvzmqTZw=;
-        b=CBP1fawxSoSBf7jOoiYln4wYSDqyAJ+G0r1Cne7cq3Bf9dgOmroQ5e+uJatUzNhxPbPCnA
-        irkuQ6t1zEojgfaEQLGd66cJiHWcyv6Le3Spf42DvvAqdqAC6DmOpro5V8ZVTAa7VLpkx2
-        DEbWybI0S7PqmywIUmwBVLnETq/G+pk=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-660-l5DspGYxN6eqrUXdXINS7w-1; Wed, 11 Jan 2023 10:12:43 -0500
-X-MC-Unique: l5DspGYxN6eqrUXdXINS7w-1
-Received: by mail-qk1-f199.google.com with SMTP id r6-20020a05620a298600b007025c3760d4so11129503qkp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:12:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TIKVKM4pIPCidy3CH3fpZ9rlRwAY/u57PoiVvzmqTZw=;
-        b=IL5do90sQK+ZEPWY4rO5d/K534Hq+sFZQFtTW3YuLy5HunFv7kg61BAEN1rUZCxZd4
-         AD7yVUXC+mGP46khk1i1j9m8PaKXgrGfZ9jfSScudDCc+47LqIloVhVPZWfF0Pl1A69H
-         owJzlANcx+/qUCm+QrB/KFU2iUjEivhNBwCSO7P/QVuH+Sk+JXEFERuOTBBKN3QVIoC6
-         fwrmC/yoad2GKMNgjXZo4Zln1PxW/ESHJtpk6ka8Zuncqd8bN4y+pElEgmmXLM6ghNUc
-         gnCGn6QhMEqPzVQlhO3DZVkNo5IspnbAyisZJzWLPpqEtR/dhTiZ/VyKztPLqOd+5emF
-         Z9xA==
-X-Gm-Message-State: AFqh2krc05go0s7QDNyMdFkz8vchL5GiE2Z8z5jDoCRvzgOVSDRjduif
-        8F1y/rQELvrXpB1duwWyUBe6ni0gEyB58pe+j5M4a1hs+Vh/SM2FwJKp0bjG57KVa3PP9Or0brn
-        OieV/OUmJJK1qIq9I14jQGlyp
-X-Received: by 2002:ac8:43d2:0:b0:3a8:137e:2963 with SMTP id w18-20020ac843d2000000b003a8137e2963mr9834175qtn.20.1673449962978;
-        Wed, 11 Jan 2023 07:12:42 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuwuEld4JOQo3C/4cSnLqKobKbsU8yRCRzgaWn9prK9qPOI0q9TYANO88JMgh9AzvK3NYXGvg==
-X-Received: by 2002:ac8:43d2:0:b0:3a8:137e:2963 with SMTP id w18-20020ac843d2000000b003a8137e2963mr9834153qtn.20.1673449962780;
-        Wed, 11 Jan 2023 07:12:42 -0800 (PST)
-Received: from localhost (pool-71-184-142-128.bstnma.fios.verizon.net. [71.184.142.128])
-        by smtp.gmail.com with ESMTPSA id b20-20020ac85414000000b003ac83b7f5d4sm5562621qtq.29.2023.01.11.07.12.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 07:12:42 -0800 (PST)
-Date:   Wed, 11 Jan 2023 10:12:41 -0500
-From:   Eric Chanudet <echanude@redhat.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sa8450p-pmics: rename pmic labels
-Message-ID: <20230111151241.inli6ywo3hrk5f6c@echanude>
-References: <20230111082331.20641-1-johan+linaro@kernel.org>
- <20230111082331.20641-3-johan+linaro@kernel.org>
+        bh=HVmiJOgksdOGEHQqWYEPkqHT1UjW44QExBrLaj12oP4=;
+        b=IRfTqI077L1LqVvNTDAmeRgApFeWbZ8exsYfFhrqVC5VLdD/zOkAHd72ICbwqq/7A6BzrQ
+        I8SMQaR7UiqBzExRt9vafCNYMhuctodo5vw8A6PYtMaENljbONnYRWws4sLF0sOaGmOSvd
+        jeK2s5Hrz+90+DSyifR4rB+CMyuQCaE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-298-mov-pDGJMnKN6lHpH1pOrw-1; Wed, 11 Jan 2023 10:13:03 -0500
+X-MC-Unique: mov-pDGJMnKN6lHpH1pOrw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD76A185A78B;
+        Wed, 11 Jan 2023 15:13:02 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DE49E422A4;
+        Wed, 11 Jan 2023 15:13:01 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20221229164029.3009754-1-zyytlz.wz@163.com>
+References: <20221229164029.3009754-1-zyytlz.wz@163.com>
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     dhowells@redhat.com, marc.dionne@auristor.com,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, alex000young@gmail.com,
+        security@kernel.org
+Subject: Re: [PATCH] afs: Fix poential UAF in afs_make_call
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111082331.20641-3-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2427544.1673449981.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 11 Jan 2023 15:13:01 +0000
+Message-ID: <2427545.1673449981@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,14 +68,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 09:23:31AM +0100, Johan Hovold wrote:
-> The SA8540P PMICs are named PMM8540. Rename the devicetree source labels
-> to reflect this.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Zheng Wang <zyytlz.wz@163.com> wrote:
 
-Reviewed-by: Eric Chanudet <echanude@redhat.com>
+> There is a function call : afs_fs_get_capabilities calls afs_make_call, =
+in
+> afs_make_call, if error occurs in rxrpc_kernel_send_data, it will call
+> afs_put_call twice, which will free the call. And the access of
+> call->state will trigger a use-after-free bug.
 
--- 
-Eric Chanudet
+Are you sure of that?  Did you actually trigger a UAF?
+
+> -		if (cancel_work_sync(&call->async_work))
+> -			afs_put_call(call);
+> +		cancel_work_sync(&call->async_work);
+
+The problem with this change is that it will leak a ref if the work item w=
+as
+queued but gets cancelled before being run, given to it here:
+  =
+
+  static void afs_wake_up_async_call(struct sock *sk, struct rxrpc_call *r=
+xcall,
+  				   unsigned long call_user_ID)
+  {
+  	struct afs_call *call =3D (struct afs_call *)call_user_ID;
+  	int r;
+
+  	trace_afs_notify_call(rxcall, call);
+  	call->need_attention =3D true;
+
+  	if (__refcount_inc_not_zero(&call->ref, &r)) {  <----
+  		trace_afs_call(call->debug_id, afs_call_trace_wake, r + 1,
+  			       atomic_read(&call->net->nr_outstanding_calls),
+  			       __builtin_return_address(0));
+
+  		if (!queue_work(afs_async_calls, &call->async_work))
+  			afs_put_call(call);
+  	}
+  }
+
+I *think* that cancel_work_sync() returns false if the work item is execut=
+ing,
+but hasn't been requeued.
+
+David
 
