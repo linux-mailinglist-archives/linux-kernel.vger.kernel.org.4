@@ -2,155 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6AF666721
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BBE666720
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235824AbjAKX0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 18:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S230070AbjAKXZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 18:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235934AbjAKX0H (ORCPT
+        with ESMTP id S230281AbjAKXZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 18:26:07 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9015619033
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 15:26:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673479564; x=1705015564;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iEefiBHpBl0RDM4gMl1sLCj6rNSDzjWX/nLdj1DCBAQ=;
-  b=Lr2W1o40vKJdDtceiw47TiqgSqtfl1V/TQSXdHBEGR2WYR7QD8Y0OGpi
-   fI2ABBZizwwEmpdHGQr3u0oBPbGRQjLlMF+Dnb6jEMnIUVgIlswoBr84E
-   eCEwVMF0B20zyKI9JIqFwSaO1QdDGBG7TZo1zh103huPJqRp9jhe1GeRx
-   fdxEkrkTCquStH7yN3nLtMCwW1EJKdgUvn5UU6Q/kqcXpi80TYpetvHTh
-   k1K7NkctJ5fuNwD3LFd5Yt6pit+UEu8mEVkl0AT6nvaQwwfoWlxgcKUsm
-   MKccVDFW0h+ZpePezswlJd6qV5/cVGlMYjSfXAO7xsqgrtymzz8jKV3md
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="307085759"
-X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
-   d="scan'208";a="307085759"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 15:26:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="689928929"
-X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
-   d="scan'208";a="689928929"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Jan 2023 15:25:33 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pFkTH-0009cM-1M;
-        Wed, 11 Jan 2023 23:25:27 +0000
-Date:   Thu, 12 Jan 2023 07:24:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/core] BUILD SUCCESS
- cd9f5c3d3096e26fa128ae747f66383002001398
-Message-ID: <63bf454a.rUhEDlgkeizLetWO%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Wed, 11 Jan 2023 18:25:35 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106693C71D;
+        Wed, 11 Jan 2023 15:25:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=/U5bcrGDanLKc62PA+phmWzytWx8BAc4mSGDJUe5s0E=; b=rz2FNkYl+FVT6TsC5LKkpaPIPb
+        K55zYA32f2ILfOZQdlYcdLenT1Q9fY+CCFEz3qBDZodc+Mm7hgCdUVtTMyoVyek7Js1Tcft0bMiF4
+        TPVmdUdWui+LB4KIHJX1lCppWjFkAPvYBm43Ro6g53G7aDkQbgPCWU+GidX/Njl0d3nI=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41168 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pFkTJ-00015P-Vp; Wed, 11 Jan 2023 18:25:31 -0500
+Date:   Wed, 11 Jan 2023 18:25:29 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hvilleneuve@dimonoff.com,
+        jic23@kernel.org, linux-iio@vger.kernel.org, robh+dt@kernel.org,
+        lars@metafoo.de
+Message-Id: <20230111182529.b9a40a24b23bfe0bfe933aac@hugovil.com>
+In-Reply-To: <167340066186.3433002.1362198141589296440.robh@kernel.org>
+References: <20230110160124.3853593-1-hugo@hugovil.com>
+        <20230110160124.3853593-3-hugo@hugovil.com>
+        <167340066186.3433002.1362198141589296440.robh@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 2/2] dt-bindings: iio: adc: add Texas Instruments
+ ADS7924
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-branch HEAD: cd9f5c3d3096e26fa128ae747f66383002001398  sched/cputime: Fix IA64 build error of missing arch_vtime_task_switch() prototype
+On Tue, 10 Jan 2023 19:34:56 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-elapsed time: 822m
+> 
+> On Tue, 10 Jan 2023 11:01:24 -0500, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > Add device tree bindings document for the Texas Instruments ADS7924
+> > ADC.
+> > 
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  .../bindings/iio/adc/ti,ads7924.yaml          | 104 ++++++++++++++++++
+> >  1 file changed, 104 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+> > 
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml: 'oneOf' conditional failed, one must be fixed:
+> 	'unevaluatedProperties' is a required property
+> 	'additionalProperties' is a required property
+> 	hint: Either unevaluatedProperties or additionalProperties must be present
+> 	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+> Error: Documentation/devicetree/bindings/iio/adc/ti,ads7924.example.dts:29.40-41 syntax error
+> FATAL ERROR: Unable to parse input tree
+> make[1]: *** [scripts/Makefile.lib:434: Documentation/devicetree/bindings/iio/adc/ti,ads7924.example.dtb] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1508: dt_binding_check] Error 2
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230110160124.3853593-3-hugo@hugovil.com
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
 
-configs tested: 73
-configs skipped: 3
+Hi Rob,
+I already did specify the base-commit in the first patch of the series (cover letter). Do you also want me to add an additional message in *this* commit to specify the git repos and branch that were used? Or put this comment in the cover letter?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I tried to follow the documentation here:
+    https://www.kernel.org/doc/html/v6.2-rc3/process/submitting-patches.html
+but it was not clear as to what base branch to use when no "T:" field is found in the MAINTAINERS file.
 
-gcc tested configs:
-x86_64                            allnoconfig
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-powerpc                           allnoconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a004
-x86_64                        randconfig-a011
-x86_64                        randconfig-a002
-i386                                defconfig
-x86_64                        randconfig-a015
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                        randconfig-a006
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allmodconfig
-x86_64                          rhel-8.3-func
-alpha                               defconfig
-x86_64                              defconfig
-x86_64                    rhel-8.3-kselftests
-mips                             allyesconfig
-s390                                defconfig
-arm                                 defconfig
-x86_64                               rhel-8.3
-powerpc                          allmodconfig
-i386                          randconfig-a001
-i386                             allyesconfig
-m68k                             allyesconfig
-x86_64                           allyesconfig
-arc                  randconfig-r043-20230110
-arc                              allyesconfig
-alpha                            allyesconfig
-s390                             allyesconfig
-i386                          randconfig-a003
-s390                 randconfig-r044-20230110
-arm64                            allyesconfig
-arm                              allyesconfig
-i386                          randconfig-a005
-riscv                randconfig-r042-20230110
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-ia64                             allmodconfig
-arm                          gemini_defconfig
-powerpc                     tqm8548_defconfig
-microblaze                      mmu_defconfig
-arm                           tegra_defconfig
-loongarch                 loongson3_defconfig
-parisc                           allyesconfig
-powerpc                      pasemi_defconfig
-mips                       bmips_be_defconfig
-arc                        vdk_hs38_defconfig
-sh                   sh7770_generic_defconfig
-loongarch                           defconfig
-m68k                             allmodconfig
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
 
-clang tested configs:
-x86_64                        randconfig-a012
-x86_64                        randconfig-a001
-x86_64                        randconfig-a014
-x86_64                        randconfig-a003
-x86_64                        randconfig-a016
-x86_64                        randconfig-a005
-x86_64                          rhel-8.3-rust
-hexagon              randconfig-r041-20230110
-arm                  randconfig-r046-20230110
-i386                          randconfig-a002
-hexagon              randconfig-r045-20230110
-i386                          randconfig-a006
-i386                          randconfig-a004
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
+I didn't run it for this series, my bad, I now have added it to my automated scripts to not forget it next time.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+
+Done, thank you for your suggestions.
+
+Hugo Villeneuve <hugo@hugovil.com>
