@@ -2,129 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798866657EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D3D6657E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238341AbjAKJqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:46:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
+        id S238312AbjAKJqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238950AbjAKJoB (ORCPT
+        with ESMTP id S238211AbjAKJpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:44:01 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632D01BCA6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:39:42 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so13913145wmb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:39:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8BizcVfug2KR7X95xTtR4MdSG9d3r4Rots/UtEZ7CBI=;
-        b=Of0k7HBvGkE4sMlsW/dwrcvfReK1FihY9KXg830i6h3svleqr9v2JQ5I8YeBOw/sH6
-         D1aOICoKy3EhSQX5s//nGL2NAqfQrp/xHoBZXZdbwGwUDoWFejGgmOmRi94FLXUsMs/V
-         j1nweLV9qzXCXhK6C7W0k4ecQQUnsFXDTOQ5oNcZy6Z5WPXtknGAty/3B9CGWM85Fb88
-         z4zSaogjxtiJdcrH4sdURsIUlr4WhAZuxZ1w8AEgX6TNaayJ30+daeIb4B+RVK5Va7uM
-         oknpOxu3PZNddRO0AYmVllbcoYfOKJoIlLxq/N0SRQx+gx9m87qnQMzUDH/AKcaEoSAt
-         Vs0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8BizcVfug2KR7X95xTtR4MdSG9d3r4Rots/UtEZ7CBI=;
-        b=Hy/fyvHfC/xxE7uX1oDvFMi9Fq0MlcwZcSB1Pn7c45ekVOcLXalO4KZCuK9Z+d7hiK
-         CyzDRJqeBwZaiiVUdTOHFinPbAoZ/rvCgdDC4Zc842IU2o5IkLKy1OASrNDHIZoMIMq/
-         frFu6xx/p8uF5WUSVx6Lv7hIMYPpCy31NbeQFq6dBPiM+oY5xACWAvbEie7CO2yxU8oH
-         WE5z7DoXBNFmCZDVe/AQcNXaEQCC94jWoWOI5/VPUekcsTy/yuRKzmW2oxPKu2FZ55VU
-         aMdS8bDKT1CYCP9L4Y57vyRD+xu3Phq14A641OrhPFYrKTpbAOJL92DkOa+Gaa7e+1ZL
-         ntIA==
-X-Gm-Message-State: AFqh2krNFOcmwAFhl2grSgeN7dWAhFYOnWGe3TT9SAF4uqpLuTcAR3lG
-        8IhnFigekhnOR9qrsLsbETl92g==
-X-Google-Smtp-Source: AMrXdXuqn+zAyvwszF/XjDEUSVdpODOmNL5B+AoI/aCtejqgX2WnAyTnFxvxnsJq1yKIBC8v8A0AFg==
-X-Received: by 2002:a7b:c449:0:b0:3d1:e1f4:21dc with SMTP id l9-20020a7bc449000000b003d1e1f421dcmr51769599wmi.14.1673429981034;
-        Wed, 11 Jan 2023 01:39:41 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m17-20020a05600c3b1100b003cfbbd54178sm5331233wms.2.2023.01.11.01.39.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 01:39:40 -0800 (PST)
-Message-ID: <8b1848f1-1a26-ff8b-75e9-e336af80743c@linaro.org>
-Date:   Wed, 11 Jan 2023 10:39:38 +0100
+        Wed, 11 Jan 2023 04:45:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B2529F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:42:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673430120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=23frM+Y1pnQ4OmYCY5s/xUgP5I+Ztd6+mGkHg1PGHfY=;
+        b=MbfkcNKvA+wzWt/rToZ8n0ogEI1vZKIPBUamGNDon9d1UtjF4SoF3LP6SyKLg05aHbCTTQ
+        OlxO/xiQdGUXSQbKF3lZBF7wLFD9OJtCeBvEIhuhGLbeE1L2eYuzVfxzPuyxDybOsHSd05
+        Hw27BZ+StYanCMqdkqUaBG5PLLSBCv4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-278--8z8u06zPjWsJTBnM-wspg-1; Wed, 11 Jan 2023 04:41:56 -0500
+X-MC-Unique: -8z8u06zPjWsJTBnM-wspg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 09A9D80234E;
+        Wed, 11 Jan 2023 09:41:56 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C578643FBA;
+        Wed, 11 Jan 2023 09:41:54 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <00000000000024d6fc05f1d9b858@google.com>
+References: <00000000000024d6fc05f1d9b858@google.com>
+To:     syzbot <syzbot+4bb6356bb29d6299360e@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] kernel BUG in rxrpc_put_call
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 5/7] dt-bindings: qcom: Add ipq9574 bindings
-Content-Language: en-US
-To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, tdas@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-6-quic_devipriy@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230110121316.24892-6-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2265389.1673430114.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 11 Jan 2023 09:41:54 +0000
+Message-ID: <2265390.1673430114@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 13:13, devi priya wrote:
-> Document the new ipq9574 SOC/board device tree bindings
-> 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 27063a045bd0..83102fe2d366 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -32,6 +32,7 @@ description: |
->          ipq4018
->          ipq6018
->          ipq8074
-> +        ipq9574
->          mdm9615
->          msm8226
->          msm8916
-> @@ -80,6 +81,7 @@ description: |
->          hk01
->          hk10-c1
->          hk10-c2
-> +        ap-al02-c7
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git =
+master
 
-'a' rarely goes after 'h'.
+diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
+index 3ded5a24627c..f3c9f0201c15 100644
+--- a/net/rxrpc/call_object.c
++++ b/net/rxrpc/call_object.c
+@@ -294,7 +294,7 @@ static void rxrpc_put_call_slot(struct rxrpc_call *cal=
+l)
+ static int rxrpc_connect_call(struct rxrpc_call *call, gfp_t gfp)
+ {
+ 	struct rxrpc_local *local =3D call->local;
+-	int ret =3D 0;
++	int ret =3D -ENOMEM;
+ =
 
->          idp
->          liquid
->          mtp
-> @@ -304,6 +306,11 @@ properties:
->                - qcom,ipq8074-hk10-c2
->            - const: qcom,ipq8074
+ 	_enter("{%d,%lx},", call->debug_id, call->user_call_ID);
+ =
 
-Best regards,
-Krzysztof
 
