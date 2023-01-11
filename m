@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2262665BB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C69665BB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbjAKMqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 07:46:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54112 "EHLO
+        id S229999AbjAKMq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 07:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbjAKMqW (ORCPT
+        with ESMTP id S231831AbjAKMqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 Jan 2023 07:46:22 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11AE1DE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FEBE1C;
         Wed, 11 Jan 2023 04:46:21 -0800 (PST)
 Date:   Wed, 11 Jan 2023 12:46:18 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HJRmCe2JRPrclyZDv+jxp2gCtkF0MB5rMYfHRUF55lY=;
-        b=v/08Vtu93GWOvzbL3W9z+cBDQK+TN1qqqrR66fvjzYO30IHyK9UZ51CUruPNEzWDJIGCcw
-        hYI+xS0U/nJLWRDNDJJtIeG81AQHQJGrq1S5aeNMepSOsvJ0OlCnyd/RrQ3UBsTGyjiGs1
-        XtIaTN2HpdfVaOV/n8QenwGGzVkLiBfKdXQS0qVGLMzUIa6uqsCsKvI61Tcx47g23/lsna
-        3E4Ym4Hnbo5rscWcMqPA9doOdy/ATFA7MPS++FKv1USREq04i++KKwIq0pAjoJnGwGZ98B
-        ctFU745KwIiT8QOGmZd9u9qg3wgP8FmBJ8Y6bYWZy4QFECOR6AgvonlRM8Vvkw==
+        bh=0CBoRt39skz+jx4efNlFIgS/P6kHEEX3x4nw5kpDw6Q=;
+        b=SF07QcbtcT/lnCU1V1GhDAcyJm/arq8PAFTmlRYG64FJsGMcaSTwlb+FiZDwIJvKqJ8g93
+        wZ7OPQjsh5KHQr8Fg1BhgWV9tar3NKaOtjrl34bRWLkETQmAsx9ZPgKGBrH2CCg6JISSEV
+        nhgydFw0ZVTWhfQNRDTJ5vT5FwkDR4X/gftc/7mEsE6Gy5UUZpQnix48W6GVt9hlSZsfIX
+        MJsT8mQSMXV1yu2x4WHSaY98FRSsH+DpSqj+UtMSSDl3A0YY86g8o/m85U+qZGMT2WJ4BC
+        pDJIYB74AI7mz57H2QsC0sxTHkne7E2ocf4P9js8xE3hGaojY7ql4iB7keks8Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1673441179;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HJRmCe2JRPrclyZDv+jxp2gCtkF0MB5rMYfHRUF55lY=;
-        b=OboHnC1keQvF/IqHOrgHfPYZfLgdLYCuOjFhDUjX3Axj9hqkt0NotVrgokR6gJ77EjL5st
-        b47xyQqiW+31JaDg==
-From:   "tip-bot2 for Yuntao Wang" <tip-bot2@linutronix.de>
+        bh=0CBoRt39skz+jx4efNlFIgS/P6kHEEX3x4nw5kpDw6Q=;
+        b=Xrvxo+5RFoiXCS+qNEux3IuG/Is5ZLBl9U1+za6Arlggg4L9cULESbvCODSy9smchQtlO0
+        aB3odEIEo33YKTCw==
+From:   "tip-bot2 for Wang Yong" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/setup: Move duplicate boot_cpu_data
- definition out of the ifdeffery
-Cc:     Yuntao Wang <ytcoode@gmail.com>,
+Subject: [tip: x86/cleanups] x86/boot/e820: Fix typo in e820.c comment
+Cc:     Wang Yong <yongw.kernel@gmail.com>, Ingo Molnar <mingo@kernel.org>,
         "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220601122914.820890-1-ytcoode@gmail.com>
-References: <20220601122914.820890-1-ytcoode@gmail.com>
+In-Reply-To: <20221211103849.173870-1-yongw.kernel@gmail.com>
+References: <20221211103849.173870-1-yongw.kernel@gmail.com>
 MIME-Version: 1.0
-Message-ID: <167344117807.4906.12901315064552359156.tip-bot2@tip-bot2>
+Message-ID: <167344117849.4906.7905462837632668543.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,79 +66,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cleanups branch of tip:
 
-Commit-ID:     50c66d7b049ddec095644a005bfe0b28e22c4b02
-Gitweb:        https://git.kernel.org/tip/50c66d7b049ddec095644a005bfe0b28e22c4b02
-Author:        Yuntao Wang <ytcoode@gmail.com>
-AuthorDate:    Wed, 01 Jun 2022 20:29:14 +08:00
+Commit-ID:     b7d1f15b5c274999dfe8dda60a9a516eebfbc3d0
+Gitweb:        https://git.kernel.org/tip/b7d1f15b5c274999dfe8dda60a9a516eebfbc3d0
+Author:        Wang Yong <yongw.kernel@gmail.com>
+AuthorDate:    Sun, 11 Dec 2022 10:38:49 
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Wed, 11 Jan 2023 12:45:16 +01:00
+CommitterDate: Wed, 11 Jan 2023 12:45:03 +01:00
 
-x86/setup: Move duplicate boot_cpu_data definition out of the ifdeffery
+x86/boot/e820: Fix typo in e820.c comment
 
-Both the if and else blocks define an exact same boot_cpu_data variable, move
-the duplicate variable definition out of the if/else block.
+change "itsmain" to "its main".
 
-In addition, do some other minor cleanups.
-
-  [ bp: Massage. ]
-
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+Fixes: 544a0f47e780 ("x86/boot/e820: Rename e820_table_saved to e820_table_firmware and improve the description")
+Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20220601122914.820890-1-ytcoode@gmail.com
+Link: https://lore.kernel.org/r/20221211103849.173870-1-yongw.kernel@gmail.com
 ---
- arch/x86/kernel/e820.c  |  4 ++--
- arch/x86/kernel/setup.c | 10 ++--------
- 2 files changed, 4 insertions(+), 10 deletions(-)
+ arch/x86/kernel/e820.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-index 0614a79..fb8cf95 100644
+index 9dac246..0614a79 100644
 --- a/arch/x86/kernel/e820.c
 +++ b/arch/x86/kernel/e820.c
-@@ -395,7 +395,7 @@ int __init e820__update_table(struct e820_table *table)
- 
- 		/* Continue building up new map based on this information: */
- 		if (current_type != last_type || e820_nomerge(current_type)) {
--			if (last_type != 0)	 {
-+			if (last_type) {
- 				new_entries[new_nr_entries].size = change_point[chg_idx]->addr - last_addr;
- 				/* Move forward only if the new size was non-zero: */
- 				if (new_entries[new_nr_entries].size != 0)
-@@ -403,7 +403,7 @@ int __init e820__update_table(struct e820_table *table)
- 					if (++new_nr_entries >= max_nr_entries)
- 						break;
- 			}
--			if (current_type != 0)	{
-+			if (current_type) {
- 				new_entries[new_nr_entries].addr = change_point[chg_idx]->addr;
- 				new_entries[new_nr_entries].type = current_type;
- 				last_addr = change_point[chg_idx]->addr;
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 8818854..16babff 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -114,11 +114,6 @@ static struct resource bss_resource = {
- #ifdef CONFIG_X86_32
- /* CPU data as detected by the assembly code in head_32.S */
- struct cpuinfo_x86 new_cpu_data;
--
--/* Common CPU data for all CPUs */
--struct cpuinfo_x86 boot_cpu_data __read_mostly;
--EXPORT_SYMBOL(boot_cpu_data);
--
- unsigned int def_to_bigsmp;
- 
- struct apm_info apm_info;
-@@ -132,11 +127,10 @@ EXPORT_SYMBOL(ist_info);
- struct ist_info ist_info;
- #endif
- 
--#else
--struct cpuinfo_x86 boot_cpu_data __read_mostly;
--EXPORT_SYMBOL(boot_cpu_data);
- #endif
- 
-+struct cpuinfo_x86 boot_cpu_data __read_mostly;
-+EXPORT_SYMBOL(boot_cpu_data);
- 
- #if !defined(CONFIG_X86_PAE) || defined(CONFIG_X86_64)
- __visible unsigned long mmu_cr4_features __ro_after_init;
+@@ -53,7 +53,7 @@
+  *
+  * Once the E820 map has been converted to the standard Linux memory layout
+  * information its role stops - modifying it has no effect and does not get
+- * re-propagated. So itsmain role is a temporary bootstrap storage of firmware
++ * re-propagated. So its main role is a temporary bootstrap storage of firmware
+  * specific memory layout data during early bootup.
+  */
+ static struct e820_table e820_table_init		__initdata;
