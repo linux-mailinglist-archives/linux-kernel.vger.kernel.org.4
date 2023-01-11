@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51DE666056
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C003B666060
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239000AbjAKQYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
+        id S238996AbjAKQ0A convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 11 Jan 2023 11:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238898AbjAKQYD (ORCPT
+        with ESMTP id S239115AbjAKQZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:24:03 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3E916486
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:21:06 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id h192so10875756pgc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:21:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kVHAo3awTuH7uv2ocQzd8egYHAsLyd2VFmRrNVFOoFA=;
-        b=fF8uzf8SQN53af2PoAITNN4OpUocVwqq70mltC9Gj9NXF8FAz3lqBofDb0iuhkX2hK
-         IBXmLS8qLPX5vJ/Qh/j7gRFlW7eUNRM7fIgV3HUSZpPCyG78ZyiXMadYQW+W9fc2QS+w
-         oPLX4oYy89PYaiptxoLMn0bjnDF35ioBEYvo9SzmJYn8gm+OFv5ngOxj9XpsYFaMTvUy
-         KoWL5x5GDSZZJbo5xYNeOCj0zd43CcpOpo2XhLc9G1VrBfaL0CJAxJgaucPQ5Vf+M9Zv
-         UdVCcJSAcdRj5ii8WkJoyrpX38PJ/oHXDk0Q+256EucG/3N1QuHeRdqA3LSwVtvIQ7hf
-         dD2Q==
+        Wed, 11 Jan 2023 11:25:15 -0500
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A20373B0;
+        Wed, 11 Jan 2023 08:21:55 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id u9so38206940ejo.0;
+        Wed, 11 Jan 2023 08:21:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kVHAo3awTuH7uv2ocQzd8egYHAsLyd2VFmRrNVFOoFA=;
-        b=Wsukmov19BG59hJojgGQOHbmk8rXVO+Fb1JhCu4mkTq+zhY+I8hzsqhk/LwixUql68
-         ZQRJlLnAEleB7efopwJIMPMRMyIYAtXD0gfB3igY1wjxC3fklwaaHsJEHDWzdZnQN58P
-         N5DYUJuYadJuzc5i22bQOT0UeUEgD1AiomU78viGOrwYsj49RdIoGNPyu9msdI30tR81
-         Sj254SroLF9d6Ac4rp8CKydxUVYyc+DG9ie/xcVvxNRTXNOy8SGpAkYcqrxDypgFcz3j
-         rCXad6n2/ds7vFj9R/ZAlAAp3oYm6jbTNrMw+1XpW7JRXUVT7FjhfMFIZEmhysLyn3EY
-         heRA==
-X-Gm-Message-State: AFqh2kq9Y8sQrwWX3g5M5ThlVxroY3dn4OxwafeQxEP1AuUXhE5fwvPB
-        XLBKA7J2HcwSx9qMQD7kRUBd4g==
-X-Google-Smtp-Source: AMrXdXvFBMczYC/wGAQK0mNCFOAAnHWxctMlvVeG1WVe/m4dtHbNwq+/VVcyXjLvdW/sJb9TgbcP3g==
-X-Received: by 2002:a62:55c3:0:b0:56b:dae1:e946 with SMTP id j186-20020a6255c3000000b0056bdae1e946mr69738677pfb.28.1673454043674;
-        Wed, 11 Jan 2023 08:20:43 -0800 (PST)
-Received: from localhost.localdomain ([139.177.225.248])
-        by smtp.gmail.com with ESMTPSA id s64-20020a625e43000000b0056da63c8515sm10219825pfb.91.2023.01.11.08.20.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 08:20:43 -0800 (PST)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yinxin.x@bytedance.com,
-        Jinke Han <hanjinke.666@bytedance.com>
-Subject: [PATCH v5] blk-throtl: Introduce sync and async queues for blk-throtl
-Date:   Thu, 12 Jan 2023 00:20:30 +0800
-Message-Id: <20230111162030.31094-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6DXJPy/Pk1SGO6M8vS+/vVNiY2j49Leord0f9bwih1I=;
+        b=AQODSh3jKybMUYZdF7trgotRE7C0tYH54DOA0ZPga9k/yCGKSETsf72zQJ1fEKNIHI
+         yW+i4En3XGn2TohvPQ40cB4Yi9T8/kAc7Dvlisj0thlgAkJyBfd8O3cFPF3G7vYNMcrQ
+         2g/7v1bAdqg6KxRqVjpmz9otBfGP0m/bOl1dXQpChHSiqlHKF59oYSsLzz1qICbtNSU9
+         WeYBUocNv2ESguI8RywNaH0mHlJ4z2TfefDRDfiawR2zvmXL824F5O6XMpFLNrD1TdNv
+         lw3ZkGW7J51KRH76YG9FJwhiazWMOKrYSzgPAnNAiPYx9E/HxxWi8H9tMFJsbhF+osTg
+         53Hw==
+X-Gm-Message-State: AFqh2kpKSa6RrUqNf1orA5wDX5lSmxDiOfhA358LlHEymQkqFLcU6pNh
+        Wo4Rx6bVEyM5NBVXtSGNykO7eE9Ht5T0kYVf
+X-Google-Smtp-Source: AMrXdXuk+bhhc4tFsTkvQUcsmf5aN5X/AybwvNxXd9OQ4WHhEXGVP+cMakvXsA+ubGZJB3cYNHuJ2w==
+X-Received: by 2002:a17:907:73c1:b0:7e8:cf25:4b9c with SMTP id es1-20020a17090773c100b007e8cf254b9cmr57813609ejc.59.1673454113562;
+        Wed, 11 Jan 2023 08:21:53 -0800 (PST)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090618a200b0077a8fa8ba55sm6318153ejf.210.2023.01.11.08.21.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 08:21:53 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id b4so3544974edf.0;
+        Wed, 11 Jan 2023 08:21:52 -0800 (PST)
+X-Received: by 2002:a05:6402:1d8f:b0:48c:fc4f:f837 with SMTP id
+ dk15-20020a0564021d8f00b0048cfc4ff837mr3605348edb.79.1673454112657; Wed, 11
+ Jan 2023 08:21:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE autolearn=ham
+References: <20230111152050.559334-1-yakoyoku@gmail.com> <CAEg-Je-hOFT34_TBD_YwUNsOjdJv_O=VAL7ojXmEqQ6ybOp8Jg@mail.gmail.com>
+ <CAOgh=FxuUA_-rcp-p-R-WV6zYhywztNeXOfpuO5rFo=UJ5xVJA@mail.gmail.com>
+In-Reply-To: <CAOgh=FxuUA_-rcp-p-R-WV6zYhywztNeXOfpuO5rFo=UJ5xVJA@mail.gmail.com>
+From:   Neal Gompa <neal@gompa.dev>
+Date:   Wed, 11 Jan 2023 11:21:16 -0500
+X-Gmail-Original-Message-ID: <CAEg-Je-Auc4u5OzJWL7VmFKLn3ASN1DAMFTfFkge4ddwZ7RJmg@mail.gmail.com>
+Message-ID: <CAEg-Je-Auc4u5OzJWL7VmFKLn3ASN1DAMFTfFkge4ddwZ7RJmg@mail.gmail.com>
+Subject: Re: [PATCH v3] scripts: Exclude Rust CUs with pahole
+To:     Eric Curtin <ecurtin@redhat.com>
+Cc:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,288 +75,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+On Wed, Jan 11, 2023 at 11:16 AM Eric Curtin <ecurtin@redhat.com> wrote:
+>
+> On Wed, 11 Jan 2023 at 15:34, Neal Gompa <neal@gompa.dev> wrote:
+> >
+> > On Wed, Jan 11, 2023 at 10:21 AM Martin Rodriguez Reboredo
+> > <yakoyoku@gmail.com> wrote:
+> > >
+> > > Version 1.24 of pahole has the capability to exclude compilation units
+> > > (CUs) of specific languages [1] [2]. Rust, as of writing, is not
+> > > currently supported by pahole and if it's used with a build that has
+> > > BTF debugging enabled it results in malformed kernel and module
+> > > binaries [3]. So it's better for pahole to exclude Rust CUs until
+> > > support for it arrives.
+> > >
+> > > Link: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=49358dfe2aaae4e90b072332c3e324019826783f [1]
+> > > Link: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=8ee363790b7437283c53090a85a9fec2f0b0fbc4 [2]
+> > > Link: https://github.com/Rust-for-Linux/linux/issues/735 [3]
+> > >
+> > > Co-developed-by: Eric Curtin <ecurtin@redhat.com>
+> > > Signed-off-by: Eric Curtin <ecurtin@redhat.com>
+> > > Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> > > ---
+> > > V2 -> V3: Enable pahole option upon comparing with version 1.24
+> > > V1 -> V2: Removed dependency on auto.conf
+> > >
+> > >  init/Kconfig            | 2 +-
+> > >  lib/Kconfig.debug       | 9 +++++++++
+> > >  scripts/pahole-flags.sh | 4 ++++
+> > >  3 files changed, 14 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/init/Kconfig b/init/Kconfig
+> > > index 694f7c160c9c..360aef8d7292 100644
+> > > --- a/init/Kconfig
+> > > +++ b/init/Kconfig
+> > > @@ -1913,7 +1913,7 @@ config RUST
+> > >         depends on !MODVERSIONS
+> > >         depends on !GCC_PLUGINS
+> > >         depends on !RANDSTRUCT
+> > > -       depends on !DEBUG_INFO_BTF
+> > > +       depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
+> >
+> > Does the order matter here? I'd rather it prefer a fixed pahole and
+> > disable BTF only if we can't use pahole properly.
+>
+> The order won't matter.
+>
 
-Now we don't distinguish sync write ios from normal buffer write ios
-in blk-throtl. A bio with REQ_SYNC tagged always mean it will be wait
-until write completion soon after it submit. So it's reasonable for sync
-io to complete as soon as possible.
+Then it looks good to me!
 
-In our test, fio writes a 100g file in sequential 4k blocksize in
-a container with low bps limit configured (wbps=10M). More than 1200
-ios were throttled in blk-throtl queue and the avarage throtle time
-of each io is 140s. At the same time, the operation of saving a small
-file by vim will be blocked amolst 140s. As a fsync will be send by vim,
-the sync ios of fsync will be blocked by a huge amount of buffer write
-ios ahead. This is also a priority inversion problem within one cgroup.
-In the database scene, things got really bad with blk-throtle enabled
-as fsync is called very often.
+Reviewed-by: Neal Gompa <neal@gompa.dev>
 
-This patch splits bio queue into sync and async queues for blk-throtl
-and gives a huge priority to sync write ios. Sync queue only make sense
-for write ios as we treat all read io as sync io. I think it's a nice
-respond to the semantics of REQ_SYNC. Bios with REQ_META and REQ_PRIO
-gains the same priority as they are important to fs. This may avoid
-some potential priority inversion problems.
 
-With this patch, do the same test above, the duration of the fsync sent
-by vim drops to several hundreds of milliseconds.
-
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
----
-
-Changes in v2
-- Make code more simple.
-Changes in v3
-- Fix mismatch of waiting bio and the next dispatched bio.
-- Rename dispatch_sync_cnt to disp_sync_cnt.
-- Add more comments.
-Changes in v4
-- Improve patch in code style and code comments.
-Changes in v5
-- Add more comments for next_to_disp.
-
- block/blk-throttle.c | 150 ++++++++++++++++++++++++++++++++++++++++---
- block/blk-throttle.h |  13 +++-
- 2 files changed, 154 insertions(+), 9 deletions(-)
-
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 6fb5a2f9e1ee..7f519eafa546 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -21,6 +21,13 @@
- /* Total max dispatch from all groups in one round */
- #define THROTL_QUANTUM 32
- 
-+/* For write ios, dispatch 4 sync ios and 1 normal io in one loop */
-+#define THROTL_SYNC_FACTOR 4
-+
-+/* Only make sense for write ios, all read ios are treated as SYNC */
-+#define SYNC	0
-+#define ASYNC	1
-+
- /* Throttling is performed over a slice and after that slice is renewed */
- #define DFL_THROTL_SLICE_HD (HZ / 10)
- #define DFL_THROTL_SLICE_SSD (HZ / 50)
-@@ -241,11 +248,30 @@ static inline unsigned int throtl_bio_data_size(struct bio *bio)
- 	return bio->bi_iter.bi_size;
- }
- 
--static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg)
-+static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg,
-+			      bool rw)
- {
- 	INIT_LIST_HEAD(&qn->node);
--	bio_list_init(&qn->bios);
-+	bio_list_init(&qn->bios[SYNC]);
-+	bio_list_init(&qn->bios[ASYNC]);
- 	qn->tg = tg;
-+	qn->disp_sync_cnt = rw == READ ? UINT_MAX : 0;
-+	qn->next_to_disp = NULL;
-+}
-+
-+static inline void throtl_qnode_add_bio_list(struct throtl_qnode *qn,
-+					     struct bio *bio)
-+{
-+	bool rw = bio_data_dir(bio);
-+
-+	/*
-+	 * All read bios and those write bios with REQ_SYNC, REQ_META or
-+	 * REQ_PRIO flags set are treated as SYNC io.
-+	 */
-+	if (rw == READ || bio->bi_opf & (REQ_SYNC | REQ_META | REQ_PRIO))
-+		bio_list_add(&qn->bios[SYNC], bio);
-+	else
-+		bio_list_add(&qn->bios[ASYNC], bio);
- }
- 
- /**
-@@ -261,13 +287,90 @@ static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg)
- static void throtl_qnode_add_bio(struct bio *bio, struct throtl_qnode *qn,
- 				 struct list_head *queued)
- {
--	bio_list_add(&qn->bios, bio);
-+	throtl_qnode_add_bio_list(qn, bio);
- 	if (list_empty(&qn->node)) {
- 		list_add_tail(&qn->node, queued);
- 		blkg_get(tg_to_blkg(qn->tg));
- 	}
- }
- 
-+/**
-+ * throtl_qnode_bio_list_pop: pop a bio from sync/async queue
-+ * @qn: the qnode to pop a bio from
-+ *
-+ * For writes, target SYNC or ASYNC queue based on disp_sync_cnt. If empty,
-+ * try the other queue.
-+ */
-+static struct bio *throtl_qnode_bio_list_pop(struct throtl_qnode *qn)
-+{
-+	struct bio *bio;
-+	int from = qn->disp_sync_cnt == THROTL_SYNC_FACTOR ? ASYNC : SYNC;
-+
-+	bio = bio_list_pop(&qn->bios[from]);
-+	if (!bio) {
-+		from = 1 - from;
-+		bio = bio_list_pop(&qn->bios[from]);
-+	}
-+
-+	if (qn->disp_sync_cnt < THROTL_SYNC_FACTOR && from == SYNC)
-+		qn->disp_sync_cnt++;
-+	else
-+		qn->disp_sync_cnt = 0;
-+
-+	return bio;
-+}
-+
-+/**
-+ * throtl_qnode_bio_peek - peek a bio from a qn
-+ * @qn: the qnode to peek from
-+ *
-+ * For read, always peek bio from the SYNC queue.
-+ *
-+ * For write, we always peek bio from next_to_disp. If it's NULL, a bio
-+ * will be popped from SYNC or ASYNC queue to fill it. The next_to_disp
-+ * is used to make sure that the peeked bio and the next popped bio are
-+ * always the same even in case that the spinlock of queue was released
-+ * and re-holded.
-+ *
-+ * Without the next_to_disp, consider the following situation:
-+ *
-+ * Assumed that there are only bios queued in ASYNC queue and the SYNC
-+ * queue is empty and all ASYNC bios are 1M in size and the bps limit is
-+ * 1M/s. The throtl_slice is 100ms. The current slice is [jiffies1,
-+ * jiffies1+100] and the bytes_disp[w] is 0.
-+ *
-+ * The disp_sync_cnt is 0 as it was set 0 after each dispatching of a
-+ * ASYNC bio. A ASYNC bio wil be peeked to check in tg_may_dispatch.
-+ * Obviously, it can't be dispatched in current slice and the wait time
-+ * is 900ms. The slice will be extended to [jiffies1, jiffies1+1000] in
-+ * tg_may_dispatch. The spinlock of the queue will be released after the
-+ * process of dispatch giving up. A 4k size SYNC bio was queued in and
-+ * the SYNC queue becomes no-empty. After 900ms, it's time to dispatch
-+ * the tg, the SYNC bio will be popped to dispatched as the disp_sync_cnt
-+ * is 0 and the SYNC queue is no-empty. The slice will be extended to
-+ * [jiffies1, jiffies1+1100] in tg_may_dispatch. Then the slice will be
-+ * trimed to [jiffies1+1000, jiffies1+1100] after the SYNC bio was
-+ * dispatched. Then the former 1M size ASYNC bio will be peeked to be
-+ * checked and still can't be dispatched because of overlimit within
-+ * the current slice. The same thing may happen DISPACH_SYNC_FACTOR times
-+ * if always there is a SYNC bio be queued in the SYNC queue when the
-+ * ASYNC bio is waiting. This means that in nearly 5s, we have dispathed
-+ * four 4k SYNC bios and one  1M ASYNC bio. It is hard to fill up the
-+ * bandwidth considering that the bps limit is 1M/s.
-+ */
-+static inline struct bio *throtl_qnode_bio_peek(struct throtl_qnode *qn)
-+{
-+	/* qn for read ios */
-+	if (qn->disp_sync_cnt == UINT_MAX)
-+		return bio_list_peek(&qn->bios[SYNC]);
-+
-+	/* qn for write ios */
-+	if (!qn->next_to_disp)
-+		qn->next_to_disp  = throtl_qnode_bio_list_pop(qn);
-+
-+	return qn->next_to_disp;
-+}
-+
- /**
-  * throtl_peek_queued - peek the first bio on a qnode list
-  * @queued: the qnode list to peek
-@@ -281,11 +384,42 @@ static struct bio *throtl_peek_queued(struct list_head *queued)
- 		return NULL;
- 
- 	qn = list_first_entry(queued, struct throtl_qnode, node);
--	bio = bio_list_peek(&qn->bios);
-+	bio = throtl_qnode_bio_peek(qn);
- 	WARN_ON_ONCE(!bio);
- 	return bio;
- }
- 
-+/**
-+ * throtl_qnode_bio_pop: pop a bio from a qnode
-+ * @qn: the qnode to pop a bio from
-+ */
-+static inline struct bio *throtl_qnode_bio_pop(struct throtl_qnode *qn)
-+{
-+	struct bio *bio;
-+
-+	/* qn for read ios */
-+	if (qn->disp_sync_cnt == UINT_MAX)
-+		return bio_list_pop(&qn->bios[SYNC]);
-+
-+	/* qn for write ios */
-+	if (qn->next_to_disp) {
-+		bio = qn->next_to_disp;
-+		qn->next_to_disp = NULL;
-+		return bio;
-+	}
-+
-+	return throtl_qnode_bio_list_pop(qn);
-+}
-+
-+static inline bool throtl_qnode_empty(struct throtl_qnode *qn)
-+{
-+	if (!qn->next_to_disp &&
-+	    bio_list_empty(&qn->bios[SYNC]) &&
-+			   bio_list_empty(&qn->bios[ASYNC]))
-+		return true;
-+	return false;
-+}
-+
- /**
-  * throtl_pop_queued - pop the first bio form a qnode list
-  * @queued: the qnode list to pop a bio from
-@@ -310,10 +444,10 @@ static struct bio *throtl_pop_queued(struct list_head *queued,
- 		return NULL;
- 
- 	qn = list_first_entry(queued, struct throtl_qnode, node);
--	bio = bio_list_pop(&qn->bios);
-+	bio = throtl_qnode_bio_pop(qn);
- 	WARN_ON_ONCE(!bio);
- 
--	if (bio_list_empty(&qn->bios)) {
-+	if (throtl_qnode_empty(qn)) {
- 		list_del_init(&qn->node);
- 		if (tg_to_put)
- 			*tg_to_put = qn->tg;
-@@ -355,8 +489,8 @@ static struct blkg_policy_data *throtl_pd_alloc(gfp_t gfp,
- 	throtl_service_queue_init(&tg->service_queue);
- 
- 	for (rw = READ; rw <= WRITE; rw++) {
--		throtl_qnode_init(&tg->qnode_on_self[rw], tg);
--		throtl_qnode_init(&tg->qnode_on_parent[rw], tg);
-+		throtl_qnode_init(&tg->qnode_on_self[rw], tg, rw);
-+		throtl_qnode_init(&tg->qnode_on_parent[rw], tg, rw);
- 	}
- 
- 	RB_CLEAR_NODE(&tg->rb_node);
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index ef4b7a4de987..bd4fff65b6d9 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -28,8 +28,19 @@
-  */
- struct throtl_qnode {
- 	struct list_head	node;		/* service_queue->queued[] */
--	struct bio_list		bios;		/* queued bios */
-+	struct bio_list		bios[2];	/* queued bios */
- 	struct throtl_grp	*tg;		/* tg this qnode belongs to */
-+
-+	struct bio		*next_to_disp;	/* pinned for next to dispatch */
-+	/*
-+	 * 1) for write throtl_qnode:
-+	 * [0, THROTL_SYNC_FACTOR-1]: dispatch sync io
-+	 * [THROTL_SYNC_FACTOR]: dispatch async io
-+	 *
-+	 * 2) for read throtl_qnode:
-+	 * UINT_MAX
-+	 */
-+	unsigned int disp_sync_cnt;         /* sync io dispatch counter */
- };
- 
- struct throtl_service_queue {
 -- 
-2.20.1
-
+真実はいつも一つ！/ Always, there's only one truth!
