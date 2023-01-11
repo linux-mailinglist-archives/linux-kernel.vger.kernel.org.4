@@ -2,126 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A78665E52
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DBED665E49
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234865AbjAKOtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
+        id S234495AbjAKOs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbjAKOt1 (ORCPT
+        with ESMTP id S231646AbjAKOsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:49:27 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2629F5B8;
-        Wed, 11 Jan 2023 06:49:26 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30BEmZ56027078;
-        Wed, 11 Jan 2023 14:48:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Uz3f8J9YNsaXsO2z23IyKDJUxb/Y0lz+mQRpOBG6Sf0=;
- b=gE3F5oo1bipRUsRMqvWNsr69Q1oKU6HF5J/LaiJOaxpuyL/eG4ZlkC/F4rIrBv/Phw97
- NaSGYocE6iBdQHKzHdnEjrVaMYakQ+SOS+H07ykx6aMssSQXTSQTpsFJLyffMkMVBD+N
- OqrnD+zEkhkisjI4w85FHSj9LlpxmSsAlG1vI4HVtM+fswKgoBMwIyLp2GN23O8RkfSy
- yqukhVUgvcnKmFOZAW3dWTPWrWutZEfnZDwSQUTTMCeBmstRtNw9B7wSCllAjEnxfPX5
- sePtPI95WuB3fUG28j37yIDOvl28SeaT55kb2iqrAxOQYRPQp2dMJSl34hKKCp52fSpa Ag== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1k9j1gx8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 14:48:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30BEmXNV024726
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 14:48:33 GMT
-Received: from [10.50.23.36] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 11 Jan
- 2023 06:48:20 -0800
-Message-ID: <a9dfc45a-dc7a-9e39-ccc4-a451ea165bdf@quicinc.com>
-Date:   Wed, 11 Jan 2023 20:18:15 +0530
+        Wed, 11 Jan 2023 09:48:22 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09DCE0D4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:48:19 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso8463643wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:48:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I+nGZwBomQ0rgKcoolLhiqCzaPxS+W8MlYERKRLh8fQ=;
+        b=Bn+OPgcpB2U665mWeTgjVovI39deyP4tlCFeCdsmfdrOYgr1MH+uBCIrw+vvq/wbwJ
+         D1nSEZoeScQ4eTNUgRs0h6zSTAv1UEHQ2vwHxRALbVP/aoYBdOsYApi8a3B5M6hpeiym
+         p45lJV2udTsiQXVtrx18GzJebJc/zZDK0iaHemkGlIyTykcF4dCttyV2TvAO4k5/z09+
+         dUpS9P1OHphhd687x6zArueFQgiaRY3A6YMq9p7F7sT5tJp2A1D3JF4ev3KqVLZ9B+NU
+         YT6cipnF5iSSYs2cig3c1+YgDXD2FXw8yOir42GsIVCfN2UzkrtK+jrGt3iO+IMqb/li
+         cJXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I+nGZwBomQ0rgKcoolLhiqCzaPxS+W8MlYERKRLh8fQ=;
+        b=59Nawqkih0k1AOVWT6aSIPhdeKGpU0LZPRZkCnGiFeq08Q+Te2ZBjosgQ/rjiTUoAn
+         QGe53LCGQf8bQt0aF5yHL8u7Ofrp6OTT+PTmdjAxSFFJBKOpKE0PSCQNGxkd8EZi2cBv
+         jenJk+3H74KH0rAzuCJwbTUNzmbb41PhBtU9YUU0PraUZ2v+QvS4rIYBnReV7qQxyCip
+         vh9UXdbVLAXU1D53/81xd12PibzaiCo8YqQv9O6pdIkgRpDdDfdtVuEow4dDKWezTKIK
+         JeCP4kfpslVz2taoaqcgR9n8CmMfqSw7gAnX9k8J/otDesrp6kVuqiizTXka+9U3VDl0
+         K6Dw==
+X-Gm-Message-State: AFqh2kqra0ZyCzRDxw+apbyTyOz4zlbEBLUzLMEuf1WgdDGU5j+OVLiO
+        zcw2N+S9ka5JUEggiUTEEIWvUA==
+X-Google-Smtp-Source: AMrXdXslNJ7yVj0lRuNSNs2ubbMmzgioKnG+548Pg5KlaJLSRNDjavuSrZS/Qb4sVjJ/8Jf3R1obgw==
+X-Received: by 2002:a05:600c:1f0a:b0:3d9:ed39:8998 with SMTP id bd10-20020a05600c1f0a00b003d9ed398998mr9849602wmb.32.1673448498432;
+        Wed, 11 Jan 2023 06:48:18 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i14-20020a05600c354e00b003d1d5a83b2esm25633961wmq.35.2023.01.11.06.48.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 06:48:17 -0800 (PST)
+Message-ID: <b4ad9dba-f9bd-f115-a613-4e784d703a44@linaro.org>
+Date:   Wed, 11 Jan 2023 15:48:16 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH 7/7] arm64: defconfig: Enable IPQ9574 SoC base configs
-To:     devi priya <quic_devipriy@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>, <shawnguo@kernel.org>,
-        <arnd@arndb.de>, <marcel.ziswiler@toradex.com>,
-        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <tdas@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-8-quic_devipriy@quicinc.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: vendor-prefixes: add thwc
 Content-Language: en-US
-From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-In-Reply-To: <20230110121316.24892-8-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Yang Xiwen <forbidden405@foxmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jaime Breva <jbreva@nayarsystems.com>,
+        Nikita Travkin <nikita@trvn.ru>,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230111141311.14682-1-forbidden405@foxmail.com>
+ <tencent_3880CBDD2FF871E636A391C2596AE7D11509@qq.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <tencent_3880CBDD2FF871E636A391C2596AE7D11509@qq.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uZCZL2UYKO4OyakHQC9ROqoy9dMmB43n
-X-Proofpoint-ORIG-GUID: uZCZL2UYKO4OyakHQC9ROqoy9dMmB43n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-11_07,2023-01-11_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
- impostorscore=0 mlxscore=0 malwarescore=0 phishscore=0 priorityscore=1501
- mlxlogscore=846 lowpriorityscore=0 bulkscore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301110107
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/10/2023 5:43 PM, devi priya wrote:
-> Enables clk & pinctrl related configs
->
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+On 11/01/2023 15:13, Yang Xiwen wrote:
+> Shenzhen Tong Heng Wei Chuang Technology Co., Ltd. (hereinafter referred
+> to as "Tong Heng Wei Chuang") is a focus on wireless communications
+> equipment brand manufacturers.
+> 
+> Link: http://www.szthwc.com/en/about.html
+> Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
 > ---
->   arch/arm64/configs/defconfig | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 851e8f9be06d..e0ae0996d5ad 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -545,6 +545,7 @@ CONFIG_PINCTRL_IMX93=y
->   CONFIG_PINCTRL_MSM=y
->   CONFIG_PINCTRL_IPQ8074=y
->   CONFIG_PINCTRL_IPQ6018=y
-> +CONFIG_PINCTRL_IPQ9574=y
-Please move this after IPQ8074, to keep it in ascending order. We can 
-move the IPQ6018 config before IPQ8074.
->   CONFIG_PINCTRL_MSM8916=y
->   CONFIG_PINCTRL_MSM8953=y
->   CONFIG_PINCTRL_MSM8976=y
-> @@ -1093,6 +1094,7 @@ CONFIG_QCOM_CLK_SMD_RPM=y
->   CONFIG_QCOM_CLK_RPMH=y
->   CONFIG_IPQ_GCC_6018=y
->   CONFIG_IPQ_GCC_8074=y
-> +CONFIG_IPQ_GCC_9574=y
->   CONFIG_MSM_GCC_8916=y
->   CONFIG_MSM_GCC_8994=y
->   CONFIG_MSM_MMCC_8996=y
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 3893c45963a26..8d4c1e5c0d21a 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -1335,6 +1335,8 @@ patternProperties:
+>      description: Tecon Microprocessor Technologies, LLC.
+>    "^topeet,.*":
+>      description: Topeet
+> +  "^thwc,.*":
+> +    description: Shenzhen Tong Heng Wei Chuang Technology Co., Ltd.
+
+These are ordered by prefix, so you need to move it up.
+
+Best regards,
+Krzysztof
+
