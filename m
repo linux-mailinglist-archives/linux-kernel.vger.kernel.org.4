@@ -2,54 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E278665266
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D084166526B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235704AbjAKDbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 22:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S235733AbjAKDcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 22:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbjAKDap (ORCPT
+        with ESMTP id S235716AbjAKDbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 22:30:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AD21742C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:30:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A806C61A24
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:30:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1B045C433EF;
-        Wed, 11 Jan 2023 03:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673407824;
-        bh=Gw1AmdmiVZBq3sF/ZF+37n7wMZ1O6JeczXxwErs3EQU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=g85St5edH8dqw235Go9GZYnu8g/iDrAJT+B9RMNwyoXZ4mhgrJWkbVhGlcGkH4hWH
-         MDwg4dh5FXwdHC132/W5JBp63z4ZpgxQCr1o0qccTc1VF5512hM4xDxJROOxVJLIX5
-         zeKVFfaS57d+udzJ/lg/NAC9S5OM3H1mVWNnGBhySPy9VwnBqjrde+9rENoDSXQF8+
-         7zFVYzwdcDHq9eaTf2cu0RZK/096J9K2Kh9Bz+jZ3G3L2NDIonaCa+XByznn5++kPu
-         qonn2yl8guif7Mnr/CQEG7Xc+DfDdoCHe8sbvG0L6qNNLOhHkDKYKhHtmjY72plumJ
-         RLuVnXdeVIApA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DF2DEE524EE;
-        Wed, 11 Jan 2023 03:30:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 Jan 2023 22:31:39 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D3217588
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:31:23 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id 3so7061574iou.12
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jqmRSD6VKdYWZ+SJv6ehJPDhj3p2v9Nk0+3Tds66tis=;
+        b=hYrLw3Cw5Sm66XPWhcU5vNYulWczhbyiQqdcFNuy+4k/u6bm/NzuBZNNsI/Yenxhvx
+         O6mOhYJcQFwaJmYLCeAs1cL1EB+eYs/h5RlLVFsNM/PCz9QvNfvVQpR/h+32PBrmZTW7
+         iHwR3xCpoeq+pHQ7+PHCBOkydqGoLGFgP2SAs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jqmRSD6VKdYWZ+SJv6ehJPDhj3p2v9Nk0+3Tds66tis=;
+        b=D01CweYPAI1YpPH6cuiQ82TQ2GjLlDerGkH4WW81l17gnd/eT2BVyoLkJjPzNQTG8Q
+         X2CuKL15q9pOU3QtBA2b1hlklzwaJmpRTYEBrhedF6u2DOnxLF8b0n2p5RKqbXLERJQ1
+         ehoqDdclYYHylVb8YJExxSTuTFNJNHJwUAA9NcJFfsb3XCWKsAZ0AX1Tx/6rmLTVegys
+         mD6+D+hHSPcnMLAFRUb58B9T7PMI8fiJEx4hKhzgXpbKYKj4Jw/5VEHdTvJP54TmZYC7
+         zKAPuINMGy/dY8GdoLAuPE8fKe1hQs5y7O0KdVdlVOb/b/RAoc1r0g9ZX86CERCChRz6
+         7s/Q==
+X-Gm-Message-State: AFqh2kqEkLRj12at8N48UxmWbCEOKpT9JdEx3xL37sjqD9mg5Ppvl6BZ
+        HtlDDo+BUqIBRy7NxkiW29sCvODH2GLTK8az/jwYqw==
+X-Google-Smtp-Source: AMrXdXuI8UJgsTEPz41Qko+pkxgoB7obHnvZeKTKwhlzMuJnouZnhqjW9lCoaxgssepI+1TDZhxrCHjLxmr3bkFdAmg=
+X-Received: by 2002:a5e:c00f:0:b0:6e3:38c6:e35f with SMTP id
+ u15-20020a5ec00f000000b006e338c6e35fmr6266793iol.153.1673407882942; Tue, 10
+ Jan 2023 19:31:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] platform/chrome: cros_ec_lpc: initialize the buf variable
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <167340782388.3713.8161675582261475081.git-patchwork-notify@kernel.org>
-Date:   Wed, 11 Jan 2023 03:30:23 +0000
-References: <20230110193611.3573777-1-trix@redhat.com>
-In-Reply-To: <20230110193611.3573777-1-trix@redhat.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     bleung@chromium.org, groeck@chromium.org, nathan@kernel.org,
-        ndesaulniers@google.com, chrome-platform@lists.linux.dev,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230109084101.265664-1-treapking@chromium.org>
+ <20230109084101.265664-7-treapking@chromium.org> <CAGXv+5E=-=cPGSi1eEDAkTm+RvuJNU4zeZOxunpR7r4+RgzNYA@mail.gmail.com>
+In-Reply-To: <CAGXv+5E=-=cPGSi1eEDAkTm+RvuJNU4zeZOxunpR7r4+RgzNYA@mail.gmail.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Wed, 11 Jan 2023 11:31:12 +0800
+Message-ID: <CAEXTbpeQm2+KjHDi6qW8GkF0_MCzqeBNUPz9G+23RBqfgFhWPw@mail.gmail.com>
+Subject: Re: [PATCH v9 6/9] drm/bridge: anx7625: Register Type C mode switches
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, linux-acpi@vger.kernel.org,
+        Allen Chen <allen.chen@ite.com.tw>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        chrome-platform@lists.linux.dev, Xin Ji <xji@analogixsemi.com>,
+        linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,30 +96,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Chen-Yu,
 
-This patch was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+Thanks for the review.
 
-On Tue, 10 Jan 2023 14:36:11 -0500 you wrote:
-> Clang static analysis reports this problem
-> drivers/platform/chrome/cros_ec_lpc.c:379:13: warning: The left operand
->   of '!=' is a garbage value [core.UndefinedBinaryOperatorResult]
->     if (buf[0] != 'E' || buf[1] != 'C') {
->          ~~~~~~ ^
-> 
-> The check depends on the side effect of the read.  When the read fails
-> or is short, a buf containing garbage could be mistaken as correct.
-> 
-> [...]
+On Mon, Jan 9, 2023 at 7:26 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>
+> On Mon, Jan 9, 2023 at 4:41 PM Pin-yen Lin <treapking@chromium.org> wrote:
+> >
+> > Register USB Type-C mode switches when the "mode-switch" property and
+> > relevant port are available in Device Tree. Configure the crosspoint
+>            ^ ports
+>
+Thanks for catching this. I'll fix in v10.
+> > switch based on the entered alternate mode for a specific Type-C
+> > connector.
+>
+> You should also mention that the "one mode switch" scenario is not
+> covered in this implementation, due to lack of actual hardware.
 
-Here is the summary with links:
-  - platform/chrome: cros_ec_lpc: initialize the buf variable
-    https://git.kernel.org/chrome-platform/c/2ae3c610e7d2
+If I understand correctly, we should use "orientation-switch"[1]
+instead when the crosspoint switch on anx7625 is used to support
+different orientations of the Type-C connector.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I'll add some explanations around this in the commit message in v10.
 
+[1]: https://docs.kernel.org/driver-api/usb/typec.html#multiplexer-demultiplexer-switches
+>
+> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> >
+> > ---
+> >
+> > (no changes since v7)
+> >
+> > Changes in v7:
+> > - Fixed style issues in anx7625 driver
+> > - Removed DT property validation in anx7625 driver.
+> > - Extracted common codes to another commit.
+> >
+> > Changes in v6:
+> > - Squashed to a single patch
+> >
+> >  drivers/gpu/drm/bridge/analogix/Kconfig   |  1 +
+> >  drivers/gpu/drm/bridge/analogix/anx7625.c | 88 +++++++++++++++++++++++
+> >  drivers/gpu/drm/bridge/analogix/anx7625.h | 13 ++++
+> >  3 files changed, 102 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/analogix/Kconfig b/drivers/gpu/drm/bridge/analogix/Kconfig
+> > index 173dada218ec..992b43ed1dd7 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/Kconfig
+> > +++ b/drivers/gpu/drm/bridge/analogix/Kconfig
+> > @@ -34,6 +34,7 @@ config DRM_ANALOGIX_ANX7625
+> >         tristate "Analogix Anx7625 MIPI to DP interface support"
+> >         depends on DRM
+> >         depends on OF
+> > +       depends on TYPEC || TYPEC=n
+> >         select DRM_DISPLAY_DP_HELPER
+> >         select DRM_DISPLAY_HDCP_HELPER
+> >         select DRM_DISPLAY_HELPER
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > index 1cf242130b91..2bb504a8d789 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > @@ -15,6 +15,8 @@
+> >  #include <linux/regulator/consumer.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/types.h>
+> > +#include <linux/usb/typec_dp.h>
+> > +#include <linux/usb/typec_mux.h>
+> >  #include <linux/workqueue.h>
+> >
+> >  #include <linux/of_gpio.h>
+> > @@ -2572,6 +2574,86 @@ static void anx7625_runtime_disable(void *data)
+> >         pm_runtime_disable(data);
+> >  }
+> >
+> > +static void anx7625_set_crosspoint_switch(struct anx7625_data *ctx,
+> > +                                         enum typec_orientation orientation)
+> > +{
+> > +       if (orientation == TYPEC_ORIENTATION_NORMAL) {
+> > +               anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_0,
+> > +                                 SW_SEL1_SSRX_RX1 | SW_SEL1_DPTX0_RX2);
+> > +               anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_1,
+> > +                                 SW_SEL2_SSTX_TX1 | SW_SEL2_DPTX1_TX2);
+> > +       } else if (orientation == TYPEC_ORIENTATION_REVERSE) {
+> > +               anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_0,
+> > +                                 SW_SEL1_SSRX_RX2 | SW_SEL1_DPTX0_RX1);
+> > +               anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_1,
+> > +                                 SW_SEL2_SSTX_TX2 | SW_SEL2_DPTX1_TX1);
+> > +       }
+> > +}
+> > +
+> > +static void anx7625_typec_two_ports_update(struct anx7625_data *ctx)
+> > +{
+> > +       struct drm_dp_typec_switch_desc switch_desc = ctx->switch_desc;
+> > +       /* Check if both ports available and do nothing to retain the current one */
+> > +       if (switch_desc.typec_ports[0].dp_connected && switch_desc.typec_ports[1].dp_connected)
+> > +               return;
+> > +
+> > +       if (switch_desc.typec_ports[0].dp_connected)
+> > +               anx7625_set_crosspoint_switch(ctx, TYPEC_ORIENTATION_NORMAL);
+> > +       else if (switch_desc.typec_ports[1].dp_connected)
+> > +               anx7625_set_crosspoint_switch(ctx, TYPEC_ORIENTATION_REVERSE);
+> > +}
+> > +
+> > +static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
+> > +                                struct typec_mux_state *state)
+> > +{
+> > +       struct drm_dp_typec_port_data *port_data = typec_mux_get_drvdata(mux);
+> > +       struct anx7625_data *ctx = (struct anx7625_data *) port_data->data;
+> > +       struct device *dev = &ctx->client->dev;
+> > +       struct drm_dp_typec_switch_desc switch_desc = ctx->switch_desc;
+> > +       bool new_dp_connected, old_dp_connected;
+> > +
+>
+> And place a TODO note here.
 
+I'll add it in v10.
+>
+> Otherwise this looks OK.
+>
+> Also,
+>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> on MT8192 based Hayato (ASUS Chromebook Flip CM3200).
+>
+> And this also uncovered a deadlock in the unplug & disable path.
+> I'll send a fix for that later once I figure out all the details.
+Thank you so much for this!
