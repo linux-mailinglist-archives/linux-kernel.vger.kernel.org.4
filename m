@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47E9665461
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 07:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 109A6665466
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 07:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjAKGJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 01:09:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S233973AbjAKGLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 01:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjAKGJl (ORCPT
+        with ESMTP id S230225AbjAKGLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 01:09:41 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81838DF37;
-        Tue, 10 Jan 2023 22:09:39 -0800 (PST)
-Received: from [10.7.7.5] (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id 840C87E4CF;
-        Wed, 11 Jan 2023 06:09:37 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1673417379;
-        bh=NkdpfklbguF0iKykjTEZLjjzqPuc3x168kbqCcp4VOI=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=QHROOwny6tEFS1M7PYvD89/YUY95YHQ5d4OKOzFwAnOrmH/m9BYzL7yGuV0P9SlMi
-         FZ9lzNN1WA7uSzvZBGSdvdf0YfmCdAxKy6K8Ea0p0SVJX04qF2Sts8w8te2Zoh7R80
-         +vG390AdzZRoPSY1zqODPlRe9RltD0Wsib+7AkcYHik6SevO5ViArmWAFwnKggszFG
-         oVAbN4Mw9sBD2LGjm7TA908BzA7wdz8poidxuIyJhb8XXmoYjoCrJoCc1Po0VSuNzA
-         jcXgavPdUgT8zKu12XlWx3O4MXMIJfDCMOgQj+dmo0b4TmKNHCvdn02lCjzaoJHLur
-         iMVlzPkv8fVGQ==
-Message-ID: <dada9a9c-32fd-9d8c-b692-5efb8a94c20f@gnuweeb.org>
-Date:   Wed, 11 Jan 2023 13:09:35 +0700
+        Wed, 11 Jan 2023 01:11:00 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BD5E7A;
+        Tue, 10 Jan 2023 22:10:58 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id d15so15723164pls.6;
+        Tue, 10 Jan 2023 22:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QJ8uzvHCLOvyzentypgaCiRfqdglTQRAlPy00CWz9xA=;
+        b=g/sM7zOYMeeyDiK7yprhxyxRBxRK06K18bzmQkZEmVpk1BMwzyL3ZcluVOL0zH3khe
+         8yWjrThIW8x+2iulOJsrz5FltVDaIAJA7jyrcCk46amcdvXCW5J1UBsWCf2jU1g0JVwS
+         JW7Nd+kRXxoTTqwYkou9dZ6hxtqQsGx8aG1A0hGqygCe/yO1jJ2hM9w42/ZJGyGgXF27
+         ASoEvA+9DJ06pqm5qGj0DMIxxXz5XSTPYVKmRw0sbxWRIIpPWNq8P0jmr2VbGDwEMQMW
+         o8zKZFzIfrm45iksynubmKNzySJXApg0phYpm8Zm8M64KIbhu6eVa3gCn/Wz7nlBJzR5
+         MqvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QJ8uzvHCLOvyzentypgaCiRfqdglTQRAlPy00CWz9xA=;
+        b=7PCCUcs80bwqtFgi7yKZ4JZVhbTxXHF8P2G2QXgMNKBZdP3z/8fcCGVkghxzZ+n+4r
+         oZWwNU7HE1r7cOBoCnnkxW/m8QdBYEpKP4SxpZOG3HniKmiDgjEnGjNZm8OM9wzKZuKT
+         eXEQmO5oiyTUJyNTgKL2/0CaZ0e0utJrJ/MGo2A4BZlsb68HqOFnkJV7lVWx0S00LtDN
+         eH6pvlK7tlkh0LFyNQdfxHzeb7UpyD9sW1ywjb+Bf8xznc5Da11aBp7ioXmWdNRN29aT
+         AGOMi+U/MvQ95W/nBiYCbjCJXaSNmH6guDNNQHnu+uMF5nAKPZa+mmMpHsY9v7fXO8x2
+         psgw==
+X-Gm-Message-State: AFqh2kr/BDxuf7h+259lr+yUm1gegpeGvMhuzubXygigtwJdjI8X3zlD
+        kmqo/yNStJFYsQpKC0FHSf4=
+X-Google-Smtp-Source: AMrXdXvYsWqIQBqEKtouxCmsLcgMEbysySaMzFBjF4HKpRMdkbH+QY/FrI6WTCvWi8ZpRpZi/gE91Q==
+X-Received: by 2002:a17:902:ea02:b0:191:271f:477c with SMTP id s2-20020a170902ea0200b00191271f477cmr76771989plg.32.1673417457964;
+        Tue, 10 Jan 2023 22:10:57 -0800 (PST)
+Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:863e])
+        by smtp.gmail.com with ESMTPSA id g21-20020a170902869500b001745662d568sm9131804plo.278.2023.01.10.22.10.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 22:10:57 -0800 (PST)
+Date:   Tue, 10 Jan 2023 22:10:54 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH HID for-next v1 6/9] HID: bpf: rework how programs are
+ attached and stored in the kernel
+Message-ID: <20230111061054.dqduab66plb6uzg2@macbook-pro-6.dhcp.thefacebook.com>
+References: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
+ <20230106102332.1019632-7-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/1] hwmon: remove unnecessary (void*) conversions
-Content-Language: en-US
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     XU pengfei <xupengfei@nfschina.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20230111020723.3194-1-xupengfei@nfschina.com>
- <db4276db-bbec-142a-d306-928421eb49fc@roeck-us.net>
- <423fcac8-97cc-88b7-19d8-f93baddea3cd@gnuweeb.org>
-In-Reply-To: <423fcac8-97cc-88b7-19d8-f93baddea3cd@gnuweeb.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230106102332.1019632-7-benjamin.tissoires@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/23 1:03 PM, Ammar Faizi wrote:
-> On 1/11/23 10:29 AM, Guenter Roeck wrote:
->> On 1/10/23 18:07, XU pengfei wrote:
->>> diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
->>> index f77dc6db31ac..501337ee5aa3 100644
->>> --- a/drivers/hwmon/powr1220.c
->>> +++ b/drivers/hwmon/powr1220.c
->>> @@ -174,7 +174,7 @@ static umode_t
->>>   powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
->>>               attr, int channel)
->>>   {
->>> -    struct powr1220_data *chip_data = (struct powr1220_data *)data;
->>> +    struct powr1220_data *chip_data = data;
-> 
-> This is wrong. That cast is needed to discard the "const".
-> 
->    CC [M]  drivers/hwmon/powr1220.o
-> drivers/hwmon/powr1220.c: In function ‘powr1220_is_visible’:
-> drivers/hwmon/powr1220.c:177:43: error: initialization discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
->    177 |         struct powr1220_data *chip_data = data;
->        |                                           ^~~~
-> cc1: all warnings being treated as errors
+On Fri, Jan 06, 2023 at 11:23:29AM +0100, Benjamin Tissoires wrote:
+>  
+> +static void hid_bpf_link_release(struct bpf_link *link)
+> +{
+> +	struct hid_bpf_link *hid_link =
+> +		container_of(link, struct hid_bpf_link, link);
+> +
+> +	__clear_bit(hid_link->index, jmp_table.enabled);
+> +	schedule_work(&release_work);
+> +}
 
-Anyway, powr1220_is_visible() doesn't write via that pointer, but
-the local variable needs to be a const as well.
+...
 
-diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
-index f77dc6db31ac..7cbbed5a6f5e 100644
---- a/drivers/hwmon/powr1220.c
-+++ b/drivers/hwmon/powr1220.c
-@@ -174,7 +174,7 @@ static umode_t
-  powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
-                     attr, int channel)
-  {
--       struct powr1220_data *chip_data = (struct powr1220_data *)data;
-+       const struct powr1220_data *chip_data = data;
-  
-         if (channel >= chip_data->max_channels)
-                 return 0;
+> +	link->index = prog_idx;
 
+I was super confused that you use prog_idx as a bit in jmp_table
+and had to look into your tree what hid_bpf_jmp_table.c is doing.
+Looks like it's not prog_id (which is prog->aux->id) that we know.
+It's hid specific prog idx in that jmp table.
+Maybe would be good to rename your prog_idx to something with 'hid' suffix or prefix?
+or 'table' suffix or prefix ?
+prog_table_idx ?
 
--- 
-Ammar Faizi
-
+Other than that the patch set looking great.
+I'm assuming removing call_hid_bpf_prog_put_deferred() and everything related
+comes in the next set?
