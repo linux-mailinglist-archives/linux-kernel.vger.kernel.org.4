@@ -2,232 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119746651FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9EE6651FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjAKCr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 21:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
+        id S232388AbjAKCr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 21:47:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjAKCr0 (ORCPT
+        with ESMTP id S229938AbjAKCr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 21:47:26 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080D013F6A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:47:25 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id d15so15306356pls.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:47:25 -0800 (PST)
+        Tue, 10 Jan 2023 21:47:57 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49C213F69
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:47:55 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id d30so16525745lfv.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:47:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qzr0JKU+WrNNdmNSTbtISsg/fn4Ggbon1eEakhCke7s=;
-        b=my34k4t+99yjolbLsD13HKjZiz4mbCXBtKZRvjbd1uNo6TqWY8H5Nt9Oa4qK+Bt0D/
-         TCD4Yg2iATIrTq4MpUN1tyH1Cf5tpAPkV2K8U7YoJzAzgajcd6WtnkN7Xz3ShYG6fL0B
-         GJXnSmQ5fx6kLUxyz5afXwBgl+LRZhJqJXXwo=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ocEkMtRJ8bZ/SWiwwRdpx68LT7h2+7yKYSWkWdMvGTw=;
+        b=CRt7yf14lf0nBZZVSZRFJBJ/YEmjkYS9W/Ftrg6T7dTeP6S8wr6L6rJZn2mNypA2AM
+         V45kHPS5Oac4sWjCGxD/RzPE1AC4Lwh2WCvVQgd2O60mYyGGcK3ISbe4GtCeGogCEb6G
+         qEV5qsc9JIbZbnKhWalras7vZv6JN36C5iS1TIvY6M9cSOX9fomQUjx6x8LsIcgR7ycT
+         fvEVRZv2V9e6JZsUsDLrSGVzTW7dxSfz2ta1xbUtKu+pTZgpm4jCb8zD5mvYoJV78hEk
+         MU6a8mEitzfwVeASdISoDUKUYBk3cBFeNK8/0+LGRW8A0hJwSw7oduPfidruiRdUrqRJ
+         oSjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qzr0JKU+WrNNdmNSTbtISsg/fn4Ggbon1eEakhCke7s=;
-        b=Xof6prZLd5HVD2jkSOVgvTNAgCRoKXr27/qVm5DKZalIwHXiIaqxeWGTzHk90n7LmT
-         fwjWDd8Aq3qzlQ3zYjGuJguTSpok/0JSMbwy3jR1Xrp/0x/To/antFeqTZC9fwOxU8xI
-         sZ59XI4wmPLSNoIrIBINDWNzvVwEWeebJVOcNXZO30R5q13J1vTWx1g9pDU2e2XwbuaG
-         z2HHrv4FoM+dIKceQLDs+v1aYhRKWMK/EvD++dM08p5f3GGBCclFaE0INTCyACHTNbD+
-         G6l1Nt7oCRhiV41Uf3gKQuY0J+k5zLGHxtiWw16THKHBjAdnMMSTi2uoJ3bwcf+1crS4
-         cbMQ==
-X-Gm-Message-State: AFqh2kqW0K4LT3G8ahm5Uuy9RZa9kheNOWBycVk4AncJWgIwljEsCQ2u
-        x3PJz8pAzeiCFLwXvsUqEMNpoJ//56oEAHDS
-X-Google-Smtp-Source: AMrXdXtGHAZBhJxYvt5LLbcwXUDRmIA/eYlKMycH8TioarHtdcbhq3RUtLvz2hTlhRLdWdZsW/nG2A==
-X-Received: by 2002:a05:6a20:13a6:b0:af:9c75:6699 with SMTP id w38-20020a056a2013a600b000af9c756699mr115021236pzh.1.1673405244494;
-        Tue, 10 Jan 2023 18:47:24 -0800 (PST)
-Received: from google.com (2001-b011-0003-1479-d038-ab51-d40d-2b1f.dynamic-ip6.hinet.net. [2001:b011:3:1479:d038:ab51:d40d:2b1f])
-        by smtp.gmail.com with ESMTPSA id r2-20020a634402000000b0046ffe3fea77sm7356985pga.76.2023.01.10.18.47.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 18:47:24 -0800 (PST)
-Date:   Wed, 11 Jan 2023 10:47:17 +0800
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v2 11/23] clk: mediatek: Switch to mtk_clk_simple_probe()
- where possible
-Message-ID: <Y74jNZbjpopT2rNY@google.com>
-References: <20221223094259.87373-1-angelogioacchino.delregno@collabora.com>
- <20221223094259.87373-12-angelogioacchino.delregno@collabora.com>
- <CAGXv+5GYk2wr-UnnshT3R2uDUSn7-i5KifyJ4qDDZbptSQ9G7A@mail.gmail.com>
- <cba61b03-7e54-09e2-b1bd-8352f583a81b@collabora.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ocEkMtRJ8bZ/SWiwwRdpx68LT7h2+7yKYSWkWdMvGTw=;
+        b=ECtMHfzC84sqx7MosTnlhHus904bGadelf75IXIBKTVdrck12XJ5eT8WFJSyMJ/M6h
+         cEvCAFRV1WcCe7p1Z8eMZxE2v0OKd1DE/yLbVDhi5NkBj33Nqj4jPUPTKQNB4jEgSkbp
+         USXeuGgF738mN+Y7RbJ9XGjPsb2OOB9lU7u+acO/b8xu5xbxbCdB0P5/HYenMyGylROo
+         rbXlUO/qcySL3SDofkgLQWvM/rAyV7v6a1w6TLjxyCPHSDIw5K+wQeeywEtbeYpLa6sB
+         QPAPvwaZmDr3Gz+T+jMwYz1t4Y8sOeAkRQYZNwji5w47HJ9TSjLLboE538pzPkfn1uBO
+         /BNA==
+X-Gm-Message-State: AFqh2kr9sTtrfQcnEp9neG31IvxsBDs8R8pY62WCy0n3WyEsBjJVlyTF
+        M59L0hjtOIrF7/kprqm+Kt5VNBMW/jghKL40oh6h5UJRPSA=
+X-Google-Smtp-Source: AMrXdXsrH2ZAKAxl1stn92+zRoWzo3vjL1Qc8NMyezVHHLS1v36bTeMq9g1Z7uwA5WET+fnkvfWpfYOy8Vf6UAt8feI=
+X-Received: by 2002:a05:6512:406:b0:4cb:114:ff66 with SMTP id
+ u6-20020a056512040600b004cb0114ff66mr2516067lfk.422.1673405274185; Tue, 10
+ Jan 2023 18:47:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cba61b03-7e54-09e2-b1bd-8352f583a81b@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221208050808.2448146-1-zhoudan8@xiaomi.com> <Y5OYYJYx9G2LbRmc@google.com>
+ <20221212122109.GA714122@mi-ThinkStation-K> <Y5ezpOwd8sOTTaW5@google.com>
+ <20221213022100.GA841758@mi-ThinkStation-K> <CAHDnOD7W0eo-ZMU8nXsPhXrxbpR3U+kooTVaTU8VL67QHbYH3A@mail.gmail.com>
+ <Y7TkjnSbHnDj76qd@google.com>
+In-Reply-To: <Y7TkjnSbHnDj76qd@google.com>
+From:   zhou dan <zhuqiandann@gmail.com>
+Date:   Wed, 11 Jan 2023 10:47:17 +0800
+Message-ID: <CAHDnOD4wNVc_XKBi2qyi3oNRENidf4mSYCCTYYxCofy=iqc=Zg@mail.gmail.com>
+Subject: Re: [PATCH] f2fs: don't set FI_COMPRESS_RELEASED if file is not compressed
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, zhoudan8@xiaomi.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 02:31:40PM +0100, AngeloGioacchino Del Regno wrote:
-> Il 30/12/22 06:12, Chen-Yu Tsai ha scritto:
-> > On Fri, Dec 23, 2022 at 5:43 PM AngeloGioacchino Del Regno
-> > <angelogioacchino.delregno@collabora.com> wrote:
-> > > 
-> > > mtk_clk_simple_probe() is a function that registers mtk gate clocks
-> > > and, if reset data is present, a reset controller and across all of
-> > > the MTK clock drivers, such a function is duplicated many times:
-> > > switch to the common mtk_clk_simple_probe() function for all of the
-> > > clock drivers that are registering as platform drivers.
-> > > 
-> > > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > > ---
-> > >   drivers/clk/mediatek/clk-mt2701-aud.c   | 26 +++----
-> > >   drivers/clk/mediatek/clk-mt2701-eth.c   | 34 +++------
-> > >   drivers/clk/mediatek/clk-mt2701-g3d.c   | 56 +++-----------
-> > >   drivers/clk/mediatek/clk-mt2701-hif.c   | 36 +++------
-> > >   drivers/clk/mediatek/clk-mt2712.c       | 83 ++++++++-------------
-> > >   drivers/clk/mediatek/clk-mt6779.c       | 42 ++++++-----
-> > >   drivers/clk/mediatek/clk-mt7622-aud.c   | 49 +++----------
-> > >   drivers/clk/mediatek/clk-mt7622-eth.c   | 82 ++++-----------------
-> > >   drivers/clk/mediatek/clk-mt7622-hif.c   | 85 ++++-----------------
-> > >   drivers/clk/mediatek/clk-mt7629-hif.c   | 85 ++++-----------------
-> > >   drivers/clk/mediatek/clk-mt8183-audio.c | 19 +++--
-> > >   drivers/clk/mediatek/clk-mt8183.c       | 75 ++++++++-----------
-> > >   drivers/clk/mediatek/clk-mt8192-aud.c   | 25 +++----
-> > >   drivers/clk/mediatek/clk-mt8192.c       | 98 ++++++++-----------------
-> > >   14 files changed, 236 insertions(+), 559 deletions(-)
-> > 
-> > This looks mostly good, however ...
-> > 
-> > > diff --git a/drivers/clk/mediatek/clk-mt2701-aud.c b/drivers/clk/mediatek/clk-mt2701-aud.c
-> > > index ab13ab618fb5..1fd6d96b34dc 100644
-> > > --- a/drivers/clk/mediatek/clk-mt2701-aud.c
-> > > +++ b/drivers/clk/mediatek/clk-mt2701-aud.c
-> > > @@ -76,6 +76,7 @@ static const struct mtk_gate_regs audio3_cg_regs = {
-> > >   };
-> > > 
-> > >   static const struct mtk_gate audio_clks[] = {
-> > > +       GATE_DUMMY(CLK_DUMMY, "aud_dummy"),
-> > >          /* AUDIO0 */
-> > >          GATE_AUDIO0(CLK_AUD_AFE, "audio_afe", "aud_intbus_sel", 2),
-> > >          GATE_AUDIO0(CLK_AUD_HDMI, "audio_hdmi", "audpll_sel", 20),
-> > > @@ -138,29 +139,26 @@ static const struct mtk_gate audio_clks[] = {
-> > >          GATE_AUDIO3(CLK_AUD_MEM_ASRC5, "audio_mem_asrc5", "asm_h_sel", 14),
-> > >   };
-> > > 
-> > > +static const struct mtk_clk_desc audio_desc = {
-> > > +       .clks = audio_clks,
-> > > +       .num_clks = ARRAY_SIZE(audio_clks),
-> > > +};
-> > > +
-> > >   static const struct of_device_id of_match_clk_mt2701_aud[] = {
-> > > -       { .compatible = "mediatek,mt2701-audsys", },
-> > > -       {}
-> > > +       { .compatible = "mediatek,mt2701-audsys", .data = &audio_desc },
-> > > +       { /* sentinel */ }
-> > >   };
-> > > 
-> > >   static int clk_mt2701_aud_probe(struct platform_device *pdev)
-> > >   {
-> > > -       struct clk_hw_onecell_data *clk_data;
-> > > -       struct device_node *node = pdev->dev.of_node;
-> > >          int r;
-> > > 
-> > > -       clk_data = mtk_alloc_clk_data(CLK_AUD_NR);
-> > > -
-> > > -       mtk_clk_register_gates(node, audio_clks, ARRAY_SIZE(audio_clks),
-> > > -                              clk_data, &pdev->dev);
-> > > -
-> > > -       r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
-> > > +       r = mtk_clk_simple_probe(pdev);
-> > >          if (r) {
-> > >                  dev_err(&pdev->dev,
-> > >                          "could not register clock provider: %s: %d\n",
-> > >                          pdev->name, r);
-> > > -
-> > > -               goto err_clk_provider;
-> > > +               return r;
-> > >          }
-> > > 
-> > >          r = devm_of_platform_populate(&pdev->dev);
-> > > @@ -170,13 +168,13 @@ static int clk_mt2701_aud_probe(struct platform_device *pdev)
-> > >          return 0;
-> > > 
-> > >   err_plat_populate:
-> > > -       of_clk_del_provider(node);
-> > > -err_clk_provider:
-> > > +       mtk_clk_simple_remove(pdev);
-> > >          return r;
-> > >   }
-> > > 
-> > >   static struct platform_driver clk_mt2701_aud_drv = {
-> > >          .probe = clk_mt2701_aud_probe,
-> > > +       .remove = mtk_clk_simple_remove,
-> > 
-> > I'm not a big fan of mixing devres and non-devres teardown code. Automatic
-> > devres teardown happens after the remove callback returns, so in this
-> > case you could have child devices being unregistered that touch clocks
-> > or resets that have already been unregistered and freed in the remove
-> > callback.
-> > 
-> 
-> I'll add a custom remove function that calls of_platform_depopulate() and
-> tears everything down manually in the correct order.
-> 
-> Thanks for catching this one, I didn't notice at all!
-> 
-> > >          .driver = {
-> > >                  .name = "clk-mt2701-aud",
-> > >                  .of_match_table = of_match_clk_mt2701_aud,
-> > 
-> > [...]
-> > 
-> > > --- a/drivers/clk/mediatek/clk-mt2712.c
-> > > +++ b/drivers/clk/mediatek/clk-mt2712.c
-> > 
-> > [...]
-> > 
-> > > @@ -1482,7 +1459,11 @@ static struct platform_driver clk_mt2712_drv = {
-> > > 
-> > >   static int __init clk_mt2712_init(void)
-> > >   {
-> > > -       return platform_driver_register(&clk_mt2712_drv);
-> > > +       int ret = platform_driver_register(&clk_mt2712_drv);
-> > > +
-> > > +       if (ret)
-> > > +               return ret;
-> > > +       return platform_driver_register(&clk_mt2712_simple_drv);
-> > >   }
-> > > 
-> > >   arch_initcall(clk_mt2712_init);
-> > 
-> > Would this get cleaned up even more? I.e. have just one driver left and
-> > we could have the nice *_platform_driver() macros.
-> > 
-> 
-> In the future, yes - granted that I find someone that can help with the testing,
-> as I don't have any MT2712 hardware here.
-> 
-> Not in this series though (please!).
+On Android S, after the app is installed, it will judge whether the file
+is allowed to be compressed and release it. In the case of compress_mode=3D=
+user,
+the file is not compressed at this point, causing EVNAL to be returned on
+subsequent executions to release.
+In the method 'isCompressionAllowed', there is also such a notice:"NOTE:
+The return value does not mean if the given file, or any other file on
+the same file system, is actually compressed. It merely determines whether
+not files <em>may</em> be compressed."
 
-Got it.
-
-Maybe Miles has access to some EVBs, or knows someone who does.
-
-ChenYu
+On Wed, Jan 4, 2023 at 10:29 AM Jaegeuk Kim <jaegeuk@kernel.org> wrote:
+>
+> On 12/16, zhou dan wrote:
+> > Hi, about this patch, I haven't received any reply recently.
+> > Maybe you have some new ideas to solve this problem?
+>
+> Could you please describe the exact flow that you're suffering from?
+>
+> >
+> >
+> > zhoudan <zhuqiandann@gmail.com> =E4=BA=8E2022=E5=B9=B412=E6=9C=8813=E6=
+=97=A5=E5=91=A8=E4=BA=8C 10:21=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > However, 'f2fs_compressed_file()' only determines whether the file ca=
+n
+> > > be compressed, not whether the file has been compressed. As far as I
+> > > know, when compress_mode is user, files marked FI_COMPRESSED_FILE
+> > > will be compressed only after 'f2fs_ioc_compress_file()' is called.
+> > > On Mon, Dec 12, 2022 at 03:05:08PM -0800, Jaegeuk Kim wrote:
+> > > > On 12/12, zhoudan wrote:
+> > > > > Maybe I'm not describing it clearly enough, but I think there is
+> > > > > something wrong with the logic here.The 'f2fs_release_compress_bl=
+ocks'
+> > > > > method does not determine if the file is compressed, but simply a=
+dds
+> > > > > the FI_COMPRESS_RELEASED flag.
+> > > >
+> > > > I firstly lost your point since f2fs_release_compress_blocks() chec=
+ked
+> > > > f2fs_compressed_file().
+> > > >
+> > > > > In particular, in the current Android system, when the applicatio=
+n is
+> > > > > installed, the release interface is called by default to release =
+the
+> > > > > storage marked as compressed,  without checking whether the file =
+is
+> > > > > actually compressed. In this case, when compress_mode is set to u=
+ser,
+> > > > > calling the compress interface returns ENVAL and the file cannot =
+be
+> > > > > compressed.
+> > > > > So I think the implementation of release needs to be modified, an=
+d
+> > > > > only set FI_COMPRESS_RELEASED when it's really compressed and the
+> > > > > storage is released.
+> > > > >
+> > > > > On Fri, Dec 09, 2022 at 12:19:44PM -0800, Jaegeuk Kim wrote:
+> > > > > > On 12/08, zhoudan8 wrote:
+> > > > > > > In compress_mode=3Duser, f2fs_release_compress_blocks()
+> > > > > > >  does not verify whether it has been compressed and
+> > > > > > >  sets FI_COMPRESS_RELEASED directly. which will lead to
+> > > > > > > return -EINVAL after calling compress.
+> > > > > > > To fix it,let's do not set FI_COMPRESS_RELEASED if file
+> > > > > > > is not compressed.
+> > > > > >
+> > > > > > Do you mean you want to avoid EINVAL on a file having FI_COMPRE=
+SS_RELEASED
+> > > > > > with zero i_compr_blokcs?
+> > > > > >
+> > > > > > I think the current logic is giving the error on a released fil=
+e already.
+> > > > > >
+> > > > > > >
+> > > > > > > Signed-off-by: zhoudan8 <zhoudan8@xiaomi.com>
+> > > > > > > ---
+> > > > > > >  fs/f2fs/file.c | 3 +--
+> > > > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > > > > > > index 82cda1258227..f32910077df6 100644
+> > > > > > > --- a/fs/f2fs/file.c
+> > > > > > > +++ b/fs/f2fs/file.c
+> > > > > > > @@ -3451,14 +3451,13 @@ static int f2fs_release_compress_bloc=
+ks(struct file *filp, unsigned long arg)
+> > > > > > >         ret =3D filemap_write_and_wait_range(inode->i_mapping=
+, 0, LLONG_MAX);
+> > > > > > >         if (ret)
+> > > > > > >                 goto out;
+> > > > > > > -
+> > > > > > > -       set_inode_flag(inode, FI_COMPRESS_RELEASED);
+> > > > > > >         inode->i_ctime =3D current_time(inode);
+> > > > > > >         f2fs_mark_inode_dirty_sync(inode, true);
+> > > > > > >
+> > > > > > >         if (!atomic_read(&F2FS_I(inode)->i_compr_blocks))
+> > > > > > >                 goto out;
+> > > > > > >
+> > > > > > > +       set_inode_flag(inode, FI_COMPRESS_RELEASED);
+> > > > > > >         f2fs_down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+> > > > > > >         filemap_invalidate_lock(inode->i_mapping);
+> > > > > > >
+> > > > > > > --
+> > > > > > > 2.38.1
