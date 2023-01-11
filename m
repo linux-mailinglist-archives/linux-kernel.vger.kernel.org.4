@@ -2,229 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128B766658D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C6A66658E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235212AbjAKVX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 16:23:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41346 "EHLO
+        id S235211AbjAKVYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 16:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235157AbjAKVXT (ORCPT
+        with ESMTP id S235157AbjAKVXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 16:23:19 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1DB3F12F;
-        Wed, 11 Jan 2023 13:23:14 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id i9so24295093edj.4;
-        Wed, 11 Jan 2023 13:23:14 -0800 (PST)
+        Wed, 11 Jan 2023 16:23:48 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3DD3F454
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:23:48 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4a2f8ad29d5so212520937b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:23:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aauxthsqpHaoa/2D2bGaXqvcV3u8Km9yd6EUTM6Cz64=;
-        b=B0pxx2kq/jRxxCSzYcGo4a2s2oknrtp2PsYHbB00BoY94D1SXP4+/l61vr7EnzTFUa
-         CH5LBNA2TfsCTfydNKlz6nzbHobtqpK2jPxOvMKCmEC8Y7o4DA/s2K0GPbjcWQEIBQ8D
-         UA1h9PJYyb1k6ax8wPETEgNeKxluXuB2nSuo7V5dQTEqWvgF7yIHqN0cthSdRcWroDbh
-         nlI22WO5Pz0ATQUy8qbL5Jma27a9J8sJOJ1CEZEdV73yle2ncf1LdApgnfpaCNdj+7od
-         IsfaJxuIzrPzuThQcGWHSn0B2uOmHi3oyzEf3VfDwIiFYKTdmNVwaVgJZNrlI7uQaThp
-         L+Bg==
+        d=google.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SxCfhGNrfWy89W/U+pPUVQaJLaBqtZaaZxJq5wlMRbw=;
+        b=AlFLNWR2lfiXPfEMGFqHZytcNNrUL9Uj9qeAqkeKRYgTrO2dCdhF9YPB5VkmKVyv2h
+         kfDuyeZ0c2W077izhhNcCx4PzDF+gJ2VLHARsWGsxazXli8H8VYDDOjK5W34rgwB62i6
+         iPyeCKiIhFaM471RKJFtueTSOvbG31VbMye+Z/zVohNQSHKqqi14CnP8+P7P3kEL3S5S
+         nSBSCMQRiDK55LzhXVB3FSialBZ5FiyQBR4BCpnLtN7Eq2tXD30YcBcPHELpFHw7JPAU
+         DceYtiB1wobFLb7CkOWU6Yuw9oTRkFdP/RRU8Wc5gMEB/DeAD4cvlXv4ZOBaAO+du5We
+         xOFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aauxthsqpHaoa/2D2bGaXqvcV3u8Km9yd6EUTM6Cz64=;
-        b=7+h4MEVgHK2+LUiyxPLSMxvhWgKnbJSg8xMgymTW6xIk8NPJd06YWAaiMxhxNiDp60
-         GZBIYuFz/eiD6K5tSJxzD8UbUFxScxMuZyLIc8JOv7X0X/2nini5LhLRUYeVC/jT+rAH
-         lbsVPUY9v0UBpXfuzumIz+GgTZr5An9pQk15W+ER1oQQU5rYk2T0oaXzS38UcnqcgqKw
-         Ne4OzFwaBT7U16N6+Cad/TYBtkrEX0xT7C4upAziPqbkL4OBYRN94+aVt49o5qzHR5CC
-         p3wDSh44/tycOp89/U6CWznXYIH8FrKgzC1uvM419cfGM3XbbPkOuuaafmHRX7ag95cs
-         7g/Q==
-X-Gm-Message-State: AFqh2koQ3Xl47iEPijdhA1aKNEbwnFoTe+3ofKZ+66gnLn3ishwEXQf/
-        jO8/Geb2oYTUP68yCb7/OZI=
-X-Google-Smtp-Source: AMrXdXuGxfYjY8Su9Gu034o8h1dI0UaDFB5e3m7ItCLi/4naqrIEz11VUHrNXRRJJ1/N+v0i2iq0iw==
-X-Received: by 2002:a05:6402:5505:b0:499:c332:3b50 with SMTP id fi5-20020a056402550500b00499c3323b50mr7446347edb.39.1673472192766;
-        Wed, 11 Jan 2023 13:23:12 -0800 (PST)
-Received: from localhost.localdomain ([46.211.95.50])
-        by smtp.googlemail.com with ESMTPSA id s1-20020aa7cb01000000b00463b9d47e1fsm6477588edt.71.2023.01.11.13.23.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 13:23:12 -0800 (PST)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
-        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
-        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
-        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
-        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net, me@rebtoor.com,
-        metalcaedes@gmail.com, michael@theoddone.net,
-        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
-        nephartyz@gmail.com, oleksandr@natalenko.name,
-        pauk.denis@gmail.com, pehlm@pekholm.org, renedis@hotmail.com,
-        robert@swiecki.net, sahan.h.fernando@gmail.com,
-        sebastian.arnhold@posteo.de, sst@poczta.fm, to.eivind@gmail.com,
-        torvic9@mailbox.org
-Subject: [PATCH v4 2/2] hwmon: (nct6775) B650/B660/X670 ASUS boards support
-Date:   Wed, 11 Jan 2023 23:22:41 +0200
-Message-Id: <20230111212241.7456-2-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230111212241.7456-1-pauk.denis@gmail.com>
-References: <20230111212241.7456-1-pauk.denis@gmail.com>
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SxCfhGNrfWy89W/U+pPUVQaJLaBqtZaaZxJq5wlMRbw=;
+        b=BNq9K4fdV7bzYYsowAn88cIxiW4/TcUs1YzoIluLRQ9s0korjoHhzZrRZxBXlVVb7x
+         J+oM4VQ/BQ0fI4APTsKF6S+uokE9L6JjVHAzeqUjkITr6yQxpeSUdO3B0MH26+MqmSCM
+         +0tvGXqcFU9d93tHThYwbll73vqNma+YMLKyghqre9+DY44CP/M0ld5gdD1ZymxYIIzo
+         XC8PAB3XGg113zAFZIlwbUfVhf+9cmi7dcrb9O9PvEL9yTvbvbIUyGggjNsmk88Efp82
+         8t3pF0gcrF52arO9EGrqXxqf7CYr3bUt5dH2SGop96rOtjiZGloajN6hidtv+YkWrFEz
+         XTuA==
+X-Gm-Message-State: AFqh2koPROTVD3/AF9idaOQW5FPnwpswGtINWMmc7C4jT6NaqJSw0C/W
+        tHlEFFiLGUhilcYJLTVeHbVqvw37wVa9c843a2Mj3g==
+X-Google-Smtp-Source: AMrXdXvkk9wMrdla5WxSOI7zrH4TdD8mYzSa58gnz4fRSmPZ7cdc+yy1/593wOoB6SdGGhG6a9NhgrILr9krFbI1xEA=
+X-Received: by 2002:a81:c56:0:b0:490:89c3:21b0 with SMTP id
+ 83-20020a810c56000000b0049089c321b0mr6779232ywm.132.1673472227332; Wed, 11
+ Jan 2023 13:23:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-14-surenb@google.com>
+ <20230111154726.stadwtzicabwh5u5@offworld> <CAJuCfpFmO310qoFJr2EKHRavLx87k6tVkHO3-JCE0s4q5g+TCw@mail.gmail.com>
+ <20230111195250.cj27sg4yoslbdjdp@offworld>
+In-Reply-To: <20230111195250.cj27sg4yoslbdjdp@offworld>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 11 Jan 2023 13:23:35 -0800
+Message-ID: <CAJuCfpEnJVcNXLrsu93b-Z5DkhgWfqgPxB1BNDoA1ohVV8hy5Q@mail.gmail.com>
+Subject: Re: [PATCH 13/41] mm: introduce vma->vm_flags modifier functions
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boards such as:
-  "EX-B660M-V5 PRO D4",
-  "PRIME B650-PLUS",
-  "PRIME B650M-A",
-  "PRIME B650M-A AX",
-  "PRIME B650M-A II",
-  "PRIME B650M-A WIFI",
-  "PRIME B650M-A WIFI II",
-  "PRIME B660M-A D4",
-  "PRIME B660M-A WIFI D4",
-  "PRIME X670-P",
-  "PRIME X670-P WIFI",
-  "PRIME X670E-PRO WIFI",
-  "Pro B660M-C-D4",
-  "ProArt B660-CREATOR D4",
-  "ProArt X670E-CREATOR WIFI",
-  "ROG CROSSHAIR X670E EXTREME",
-  "ROG CROSSHAIR X670E GENE",
-  "ROG CROSSHAIR X670E HERO",
-  "ROG MAXIMUS XIII EXTREME GLACIAL",
-  "ROG MAXIMUS Z690 EXTREME",
-  "ROG MAXIMUS Z690 EXTREME GLACIAL",
-  "ROG STRIX B650-A GAMING WIFI",
-  "ROG STRIX B650E-E GAMING WIFI",
-  "ROG STRIX B650E-F GAMING WIFI",
-  "ROG STRIX B650E-I GAMING WIFI",
-  "ROG STRIX B660-A GAMING WIFI D4",
-  "ROG STRIX B660-F GAMING WIFI",
-  "ROG STRIX B660-G GAMING WIFI",
-  "ROG STRIX B660-I GAMING WIFI",
-  "ROG STRIX X670E-A GAMING WIFI",
-  "ROG STRIX X670E-E GAMING WIFI",
-  "ROG STRIX X670E-F GAMING WIFI",
-  "ROG STRIX X670E-I GAMING WIFI",
-  "ROG STRIX Z590-A GAMING WIFI II",
-  "ROG STRIX Z690-A GAMING WIFI D4",
-  "TUF GAMING B650-PLUS",
-  "TUF GAMING B650-PLUS WIFI",
-  "TUF GAMING B650M-PLUS",
-  "TUF GAMING B650M-PLUS WIFI",
-  "TUF GAMING B660M-PLUS WIFI",
-  "TUF GAMING X670E-PLUS",
-  "TUF GAMING X670E-PLUS WIFI",
-  "TUF GAMING Z590-PLUS WIFI",
-have got a NCT6799D chip, but by default there's no use of it
-because of resource conflict with WMI method.
+On Wed, Jan 11, 2023 at 12:19 PM Davidlohr Bueso <dave@stgolabs.net> wrote:
+>
+> On Wed, 11 Jan 2023, Suren Baghdasaryan wrote:
+>
+> >On Wed, Jan 11, 2023 at 8:13 AM Davidlohr Bueso <dave@stgolabs.net> wrote:
+> >>
+> >> On Mon, 09 Jan 2023, Suren Baghdasaryan wrote:
+> >>
+> >> >To keep vma locking correctness when vm_flags are modified, add modifier
+> >> >functions to be used whenever flags are updated.
+> >>
+> >> How about moving this patch and the ones that follow out of this series,
+> >> into a preliminary patchset? It would reduce the amount of noise in the
+> >> per-vma lock changes, which would then only be adding the needed
+> >> vma_write_lock()ing.
+> >
+> >How about moving those prerequisite patches to the beginning of the
+> >patchset (before maple_tree RCU changes)? I feel like they do belong
+> >in the patchset because as a standalone patchset it would be unclear
+> >why I'm adding all these accessor functions and introducing this
+> >churn. Would that be acceptable?
+>
+> imo the abstraction of vm_flags handling is worth being standalone and is
+> easier to be picked up before a more complex locking scheme change. But
+> either way, it's up to you.
 
-This commit adds such boards to the monitoring list with new ACPI device
-UID.
+I see your point. Ok, if you think it makes sense as a stand-alone
+patch I can post it separately in the next version.
+Thanks,
+Suren.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
-Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
-Tested-by: Jeroen Beerstra <jeroen@beerstra.org>
-Tested-by: Slawomir Stepien <sst@poczta.fm>
----
-Changes:
-v2: no changes
-v3: no changes
-v4: no changes
-
- drivers/hwmon/nct6775-platform.c | 52 ++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
-
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index e3c3b35c8138..baac0d569a4d 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -114,6 +114,7 @@ struct nct6775_sio_data {
- #define ASUSWMI_UNSUPPORTED_METHOD	0xFFFFFFFE
- #define ASUSWMI_DEVICE_HID		"PNP0C14"
- #define ASUSWMI_DEVICE_UID		"ASUSWMI"
-+#define ASUSMSI_DEVICE_UID		"AsusMbSwInterface"
- 
- #if IS_ENABLED(CONFIG_ACPI)
- /*
-@@ -1108,6 +1109,52 @@ static const char * const asus_wmi_boards[] = {
- 	"TUF GAMING Z490-PLUS (WI-FI)",
- };
- 
-+static const char * const asus_msi_boards[] = {
-+	"EX-B660M-V5 PRO D4",
-+	"PRIME B650-PLUS",
-+	"PRIME B650M-A",
-+	"PRIME B650M-A AX",
-+	"PRIME B650M-A II",
-+	"PRIME B650M-A WIFI",
-+	"PRIME B650M-A WIFI II",
-+	"PRIME B660M-A D4",
-+	"PRIME B660M-A WIFI D4",
-+	"PRIME X670-P",
-+	"PRIME X670-P WIFI",
-+	"PRIME X670E-PRO WIFI",
-+	"Pro B660M-C-D4",
-+	"ProArt B660-CREATOR D4",
-+	"ProArt X670E-CREATOR WIFI",
-+	"ROG CROSSHAIR X670E EXTREME",
-+	"ROG CROSSHAIR X670E GENE",
-+	"ROG CROSSHAIR X670E HERO",
-+	"ROG MAXIMUS XIII EXTREME GLACIAL",
-+	"ROG MAXIMUS Z690 EXTREME",
-+	"ROG MAXIMUS Z690 EXTREME GLACIAL",
-+	"ROG STRIX B650-A GAMING WIFI",
-+	"ROG STRIX B650E-E GAMING WIFI",
-+	"ROG STRIX B650E-F GAMING WIFI",
-+	"ROG STRIX B650E-I GAMING WIFI",
-+	"ROG STRIX B660-A GAMING WIFI D4",
-+	"ROG STRIX B660-F GAMING WIFI",
-+	"ROG STRIX B660-G GAMING WIFI",
-+	"ROG STRIX B660-I GAMING WIFI",
-+	"ROG STRIX X670E-A GAMING WIFI",
-+	"ROG STRIX X670E-E GAMING WIFI",
-+	"ROG STRIX X670E-F GAMING WIFI",
-+	"ROG STRIX X670E-I GAMING WIFI",
-+	"ROG STRIX Z590-A GAMING WIFI II",
-+	"ROG STRIX Z690-A GAMING WIFI D4",
-+	"TUF GAMING B650-PLUS",
-+	"TUF GAMING B650-PLUS WIFI",
-+	"TUF GAMING B650M-PLUS",
-+	"TUF GAMING B650M-PLUS WIFI",
-+	"TUF GAMING B660M-PLUS WIFI",
-+	"TUF GAMING X670E-PLUS",
-+	"TUF GAMING X670E-PLUS WIFI",
-+	"TUF GAMING Z590-PLUS WIFI",
-+};
-+
- #if IS_ENABLED(CONFIG_ACPI)
- /*
-  * Callback for acpi_bus_for_each_dev() to find the right device
-@@ -1172,6 +1219,11 @@ static int __init sensors_nct6775_platform_init(void)
- 				   board_name);
- 		if (err >= 0)
- 			access = nct6775_determine_access(ASUSWMI_DEVICE_UID);
-+
-+		err = match_string(asus_msi_boards, ARRAY_SIZE(asus_msi_boards),
-+				   board_name);
-+		if (err >= 0)
-+			access = nct6775_determine_access(ASUSMSI_DEVICE_UID);
- 	}
- 
- 	/*
--- 
-2.39.0
-
+>
+> Thanks,
+> Davidlohr
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>
