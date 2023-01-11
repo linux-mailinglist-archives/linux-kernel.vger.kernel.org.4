@@ -2,83 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAB566659E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3B86665A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbjAKV26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 16:28:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S230070AbjAKVao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 16:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235265AbjAKV2b (ORCPT
+        with ESMTP id S230477AbjAKVal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 16:28:31 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECEFD2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:28:31 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673472509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oCjvYL67va4kbIV0y3JFubXaqggKMzUBIg/jnZYhsoQ=;
-        b=bvIz7V+QGn6ddaIIj7CbKJ6ElcEVJmyTi4frCe8CZYPQAqtqrjqsbA/tww9qQPpS/njVOb
-        taCw1h8Nuh+GTjNjkJm5p92qoH9uMioa2S18PV4DzbG6tAN9KEViw7Q6YRMQFqT+mhodFG
-        khw/iRM+4tMbygFMiaFhH8z4uC6OL8HNehelTGIgk8Ir0iXPSYSTv5KqwZSaqMXFscVzvE
-        eva6hRadr80ne8DuaEXlcnHsg+HOXSXaIL/KjH/zKA8anHSEhG9IHwEhSkIEbsiWr7jqu+
-        X6wmERFPy0rjVgdzFqT5rLyWua0S100eAcM60tkv8EVO/i3SlLZOVg0DBwZugQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673472509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oCjvYL67va4kbIV0y3JFubXaqggKMzUBIg/jnZYhsoQ=;
-        b=Y2AoSnv/brZcSmEUqAJWszqyOMru/gIc+rD/WuYFbztkpn+YS2u1RIEvL5qIoxhnggyES5
-        50RjKqSlYHZwpOBg==
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     linux-kernel@vger.kernel.org, Marco Elver <elver@google.com>
-Subject: Re: [RFC PATCH] posix-timers: Support delivery of signals to the
- current thread
-In-Reply-To: <CACT4Y+aqT=e30Rvhz233NQBqXioNE11kPWbfcdnYQPk8QMkRBQ@mail.gmail.com>
-References: <20221216171807.760147-1-dvyukov@google.com>
- <CACT4Y+aqT=e30Rvhz233NQBqXioNE11kPWbfcdnYQPk8QMkRBQ@mail.gmail.com>
-Date:   Wed, 11 Jan 2023 22:28:29 +0100
-Message-ID: <87tu0wep6q.ffs@tglx>
+        Wed, 11 Jan 2023 16:30:41 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF58ACA
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:30:38 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33A48FEC;
+        Wed, 11 Jan 2023 13:31:20 -0800 (PST)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D7843F71A;
+        Wed, 11 Jan 2023 13:30:36 -0800 (PST)
+Date:   Wed, 11 Jan 2023 21:30:34 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, wleavitt@marvell.com,
+        peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
+        tarek.el-sherbiny@arm.com, quic_kshivnan@quicinc.com
+Subject: Re: [PATCH v6 17/17] firmware: arm_scmi: Add per-channel Raw
+ injection support
+Message-ID: <Y78qa9IBKUE7MZWO@e120937-lin>
+References: <20221229182253.948175-1-cristian.marussi@arm.com>
+ <20221229182253.948175-18-cristian.marussi@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221229182253.948175-18-cristian.marussi@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11 2023 at 16:49, Dmitry Vyukov wrote:
-> On Fri, 16 Dec 2022 at 18:18, Dmitry Vyukov <dvyukov@google.com> wrote:
->> We are trying to implement sampling program analysis based on this.
->> We don't need 100% uniform sampling as a CPU profiler would need,
->> but we still need the signals to be reasonably distributed across
->> the process threads.
->>
->> Thomas, does the idea look sane to you overall?
->> Are there any existing alternatives to this?
->
-> Hi Thomas,
->
-> I guess this was lost in your inbox during the holidays period.
-> Please take a look. Should I mail this as a non-RFC patch?
+On Thu, Dec 29, 2022 at 06:22:53PM +0000, Cristian Marussi wrote:
+> On a system configured with multiple transport channels, expose a few
+> additional debugfs per-channel entries to allow a user to explicitly select
+> which transport channel to use for the SCMI message injection.
+> 
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+>  Documentation/ABI/testing/debugfs-scmi-raw |  43 +++++++
+>  drivers/firmware/arm_scmi/driver.c         |  30 ++++-
+>  drivers/firmware/arm_scmi/protocols.h      |   3 +
+>  drivers/firmware/arm_scmi/raw_mode.c       | 142 ++++++++++++++++++---
+>  drivers/firmware/arm_scmi/raw_mode.h       |   3 +-
+>  5 files changed, 201 insertions(+), 20 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/debugfs-scmi-raw b/Documentation/ABI/testing/debugfs-scmi-raw
+> index 45817d465b1f..5468ec08c084 100644
+> --- a/Documentation/ABI/testing/debugfs-scmi-raw
+> +++ b/Documentation/ABI/testing/debugfs-scmi-raw
+> @@ -64,3 +64,46 @@ Description:	SCMI Raw stack reset facility; writing a value to this entry
+>  		Can be used to reset and clean the SCMI Raw stack between to
+>  		different test-run.
+>  Users:		Debugging, any userspace test suite
+> +
+> +What:		/sys/kernel/debug/scmi/<n>/raw/channels/<m>/message
+> +Date:		March 2023
+> +KernelVersion:	6.3
+> +Contact:	cristian.marussi@arm.com
+> +Description:	SCMI Raw synchronous message injection/snooping facility; write
+> +		a complete SCMI synchronous command message (header included)
+> +		in little-endian binary format to have it sent to the configured
+> +		backend SCMI server for instance <n> through the <m> transport
+> +		channel.
+> +		Any subsequently received response can be read from this same
+> +		entry if it arrived on channel <m> within the configured
+> +		timeout.
+> +		Each write to the entry causes one command request to be built
+> +		and sent while the replies are read back one message at time
+> +		(receiving an EOF at each message boundary).
+> +		Note that these per-channel entries rooted at <..>/channels
+> +		exist only if the transport is configured to have more than
+> +		one channel.
+> +Users:		Debugging, any userspace test suite
+> +
+> +What:		/sys/kernel/debug/scmi/<n>/raw/channels/<m>/message_async
+> +Date:		March 2023
+> +KernelVersion:	6.3
+> +Contact:	cristian.marussi@arm.com
+> +Description:	SCMI Raw asynchronous message injection/snooping facility; write
+> +		a complete SCMI asynchronous command message (header included)
+> +		in little-endian binary format to have it sent to the configured
+> +		backend SCMI server for instance <n> through the <m> transport
+> +		channel.
+> +		Any subsequently received response can be read from this same
+> +		entry if it arrived on channel <m> within the configured
+> +		timeout.
+> +		Any additional delayed response received afterwards can be read
+> +		from this same entry too if it arrived within the configured
+> +		timeout.
+> +		Each write to the entry causes one command request to be built
+> +		and sent while the replies are read back one message at time
+> +		(receiving an EOF at each message boundary).
+> +		Note that these per-channel entries rooted at <..>/channels
+> +		exist only if the transport is configured to have more than
+> +		one channel.
+> +Users:		Debugging, any userspace test suite
+> diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+> index da60f218aed9..2d7e669d6dc4 100644
+> --- a/drivers/firmware/arm_scmi/driver.c
+> +++ b/drivers/firmware/arm_scmi/driver.c
+> @@ -42,6 +42,8 @@
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/scmi.h>
+>  
+> +#define SCMI_MAX_CHANNELS	256
+> +
+>  static DEFINE_IDA(scmi_id);
+>  
+>  static DEFINE_IDR(scmi_protocols);
+> @@ -127,6 +129,8 @@ struct scmi_debug_info {
+>   * @handle: Instance of SCMI handle to send to clients
+>   * @tx_minfo: Universal Transmit Message management info
+>   * @rx_minfo: Universal Receive Message management info
+> + * @channels: The list of configured channels.
+> + * @num_chans: Number of channels described in @channels
+>   * @tx_idr: IDR object to map protocol id to Tx channel info pointer
+>   * @rx_idr: IDR object to map protocol id to Rx channel info pointer
+>   * @protocols: IDR for protocols' instance descriptors initialized for
+> @@ -162,6 +166,8 @@ struct scmi_info {
+>  	struct scmi_handle handle;
+>  	struct scmi_xfers_info tx_minfo;
+>  	struct scmi_xfers_info rx_minfo;
+> +	unsigned int channels[SCMI_MAX_CHANNELS];
+> +	int num_chans;
 
-It's not lost it's just in that huge pile of backlog. I'll get to it in
-the next days.
-
-Though it would be probably good to resend and explicitely CC
-
-       Eric W. Biederman <ebiederm@xmission.com>
-       Oleg Nesterov <oleg@redhat.com>
-       Frederic Weisbecker <frederic@kernel.org>
+I have a small rework for V7 to get rid of these channels/num_chans
+additional fields that are un-needed and can be retrieved dynamically
+when raw mode is initialized.
 
 Thanks,
-
-        tglx
+Cristian
