@@ -2,152 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054606664AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E6D6664CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234950AbjAKURC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 15:17:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S231204AbjAKUZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 15:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235870AbjAKUQx (ORCPT
+        with ESMTP id S233744AbjAKUZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 15:16:53 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D02AA1A9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:16:52 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id i9so24051199edj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:16:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0s7NL4TKaIi7w5aidX/B8AlJEfhOE5GT6g2KKEIusiQ=;
-        b=FLIry7/6rG5x7cD3DYe7jdBkSStNP+8Na3dvj/OvlhhvXJx0Oq5Xh/qrEofMd2d+I5
-         EUjtvDJ2k3KdCI5hnlkwhQAUFrUeFN5RHHdK/J2MSMseZVbx3jJQ1ijYrQmRATTfcK9x
-         0zGNeiHkWB6S0ixXsDfgqvHmtlmttzD4X8qvXrregII4wtfL5Aa3TTjfRGpkbJoTaigc
-         Nhq78q72WguqenGX8MP0sZHJY3AwLwilKeME+CaylrxOElFqAaYeLrxY4zeTESwxUgtm
-         XIPE7CG3IzMrUTpCf7cKgdPVrSpfH43islA661d/YlBAVGsUjiA1dihK2GS1VDyvrI9G
-         xU7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0s7NL4TKaIi7w5aidX/B8AlJEfhOE5GT6g2KKEIusiQ=;
-        b=A3/y0p1JgAOIPFWOHols0fCJNqLT0jxnGqNEnA0j/R+qDIRVj0KXIvuag+OsxiDRtF
-         n1aceefgkgRsKSL0ejcPolbSDWFYzYoDoUDQBT6nj5w+ru0B0kxhLmCCRC/Q4FpsEm+j
-         1YXlFPIBJxO8u6+Q7QM+T9A40V57xivNCDRNYeX9E7yxYSe6pox6RWysZzYnY6zpsGM7
-         SuKvpEdOYJbfQkUfVWZ+3dh+qJ7XnMKxO+OA3KWgrlmXtztz3yKPx5z3iRfs3snJftbC
-         IvKLJe8t4wDu14ZmbqdC2KgDUL/XzWWoNYC7dDvwxTEpXfne15+6ULuN76XYZOBl7DgF
-         H1kg==
-X-Gm-Message-State: AFqh2koQvCcXo+rW7jfit/rbiwKOWstq9fL2yWiOdSc9iphNPkHVdClO
-        EgBFCT2TWJyy87lX08DsfH83frbNs5uRQg95ZS2X5Q==
-X-Google-Smtp-Source: AMrXdXta5+OHjZj4CT01QDGcQ7Upnn9OjpR4qdZBEeSHD3FhaBc69XEpNuBXrI7p1TGki6ZwuWUu1qZ1HFO/sIV6450=
-X-Received: by 2002:aa7:cd8c:0:b0:483:a754:8788 with SMTP id
- x12-20020aa7cd8c000000b00483a7548788mr7413946edv.218.1673468210511; Wed, 11
- Jan 2023 12:16:50 -0800 (PST)
+        Wed, 11 Jan 2023 15:25:31 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153F4E0D1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:25:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673468729; x=1705004729;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7MZnlEJDfzM9tFXk3t/JI8vRdaKz3XlWgX6G+VI6Vqs=;
+  b=ABb4OautgO47gZulY7k/5O8dMUpWyhoawu9MxKbDqTeQ1vtO2cbxPe4G
+   n790tfXYtg4PW2FhM+QB9WiEw0vq/Rpv5p6ulbUgNqGB4wpxSc4age5ey
+   lkn9ds+Qbnbc0sDEts4K5iWWg8Vdp/oUow2FGgqNSdOWByUCd5e/g5p1m
+   hYmbmFVThyx2v1eyFtyzTcPAXJG1B9T20ZYOeqxAuX8O4szOoFJVG72f5
+   GtbIZAvLJFiaxcG1hTM51ZkBu7mDP44r/4SEC96JbXGhdyJFeHe4va0hK
+   Mk2wmEygB8yE6M2A9Q0wAmp9iKaz3gPfgfsHcYny4I6ONcg+c2FSZ9Ffx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350754970"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="350754970"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 12:25:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="781518059"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="781518059"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by orsmga004.jf.intel.com with ESMTP; 11 Jan 2023 12:25:28 -0800
+From:   kan.liang@linux.intel.com
+To:     joro@8bytes.org, will@kernel.org, baolu.lu@linux.intel.com,
+        dwmw2@infradead.org, robin.murphy@arm.com, robert.moore@intel.com,
+        rafael.j.wysocki@intel.com, lenb@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH 0/7] iommu/vt-d: Support performance monitoring for IOMMU
+Date:   Wed, 11 Jan 2023 12:24:57 -0800
+Message-Id: <20230111202504.378258-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221104212519.538108-1-sethjenkins@google.com> <x49tu0wlv0c.fsf@segfault.boston.devel.redhat.com>
-In-Reply-To: <x49tu0wlv0c.fsf@segfault.boston.devel.redhat.com>
-From:   Seth Jenkins <sethjenkins@google.com>
-Date:   Wed, 11 Jan 2023 15:16:38 -0500
-Message-ID: <CALxfFW5d05H-nFuDdUDS4xVDKMgkV1vvEBAmw10h3-jMVb-PZw@mail.gmail.com>
-Subject: Re: [PATCH] aio: fix mremap after fork null-deref
-To:     Jeff Moyer <jmoyer@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Pavel Emelyanov <xemul@parallels.com>, stable@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I wonder if it would be better to not copy the ring mapping on fork.
-> Something like the below?  I think that would be more in line with
-> expectations (the ring isn't available in the child process).
+From: Kan Liang <kan.liang@linux.intel.com>
 
-I like this idea a lot, but would this be viewed as subtly changing
-the userland to kernel interface?
+A performance monitoring infrastructure, perfmon, is introduced with
+the VT-d Spec 4.0. The purpose of perfmon is to support collection of
+information about key events occurring during operation of the remapping
+hardware, to aid performance tuning and debug. The patch series is to
+support the perfmon for IOMMU.
 
-If we're okay with this change though, I think it makes sense.
+To facilitate the perfmon support, the patch series also supports two
+new generic features of VT-d Spec 4.0.
+- Support the 'size' field to retrieve the accurate size of the register
+  set for each dmar device from DRHD. (Patch 1) 
+- Support the new Enhanced Command Interface. (Patch 3)
 
+With the patch series, users can collect the performance data of IOMMU
+via Linux perf tool. For example,
 
-On Wed, Jan 11, 2023 at 2:37 PM Jeff Moyer <jmoyer@redhat.com> wrote:
->
-> Hi, Seth,
->
-> Seth Jenkins <sethjenkins@google.com> writes:
->
-> > Commit e4a0d3e720e7 ("aio: Make it possible to remap aio ring") introduced
-> > a null-deref if mremap is called on an old aio mapping after fork as
-> > mm->ioctx_table will be set to NULL.
-> >
-> > Fixes: e4a0d3e720e7 ("aio: Make it possible to remap aio ring")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Seth Jenkins <sethjenkins@google.com>
-> > ---
-> >  fs/aio.c | 20 +++++++++++---------
-> >  1 file changed, 11 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/fs/aio.c b/fs/aio.c
-> > index 5b2ff20ad322..74eae7de7323 100644
-> > --- a/fs/aio.c
-> > +++ b/fs/aio.c
-> > @@ -361,16 +361,18 @@ static int aio_ring_mremap(struct vm_area_struct *vma)
-> >       spin_lock(&mm->ioctx_lock);
-> >       rcu_read_lock();
-> >       table = rcu_dereference(mm->ioctx_table);
-> > -     for (i = 0; i < table->nr; i++) {
-> > -             struct kioctx *ctx;
-> > -
-> > -             ctx = rcu_dereference(table->table[i]);
-> > -             if (ctx && ctx->aio_ring_file == file) {
-> > -                     if (!atomic_read(&ctx->dead)) {
-> > -                             ctx->user_id = ctx->mmap_base = vma->vm_start;
-> > -                             res = 0;
-> > +     if (table) {
-> > +             for (i = 0; i < table->nr; i++) {
-> > +                     struct kioctx *ctx;
-> > +
-> > +                     ctx = rcu_dereference(table->table[i]);
-> > +                     if (ctx && ctx->aio_ring_file == file) {
-> > +                             if (!atomic_read(&ctx->dead)) {
-> > +                                     ctx->user_id = ctx->mmap_base = vma->vm_start;
-> > +                                     res = 0;
-> > +                             }
-> > +                             break;
-> >                       }
-> > -                     break;
-> >               }
-> >       }
->
-> I wonder if it would be better to not copy the ring mapping on fork.
-> Something like the below?  I think that would be more in line with
-> expectations (the ring isn't available in the child process).
->
-> -Jeff
->
-> diff --git a/fs/aio.c b/fs/aio.c
-> index 562916d85cba..dbf3b0749cb4 100644
-> --- a/fs/aio.c
-> +++ b/fs/aio.c
-> @@ -390,7 +390,7 @@ static const struct vm_operations_struct aio_ring_vm_ops = {
->
->  static int aio_ring_mmap(struct file *file, struct vm_area_struct *vma)
->  {
-> -       vma->vm_flags |= VM_DONTEXPAND;
-> +       vma->vm_flags |= VM_DONTEXPAND|VM_DONTCOPY;
->         vma->vm_ops = &aio_ring_vm_ops;
->         return 0;
->  }
->
+ $ perf stat -e dmar0/iommu_requests,filter_ats=0/ -a sleep 1
+
+ Performance counter stats for 'system wide':
+
+              2135      dmar0/iommu_requests,filter_ats=0/
+
+       1.001087695 seconds time elapsed
+
+The IOMMU PMUs can be found under /sys/bus/event_source/devices/dmar*
+
+The available filters and event format can be found at the format folder
+ $ ls /sys/bus/event_source/devices/dmar0/format/
+event  event_group  filter_ats  filter_page_table
+
+The supported events can be found at the events folder
+
+ $ ls /sys/bus/event_source/devices/dmar0/events/
+ats_blocked        int_cache_hit_nonposted  iommu_mrds
+pasid_cache_lookup
+ctxt_cache_hit     int_cache_hit_posted     iommu_requests
+pg_req_posted
+ctxt_cache_lookup  int_cache_lookup         iotlb_hit
+pw_occupancy
+fs_nonleaf_hit     iommu_clocks             iotlb_lookup
+ss_nonleaf_hit
+fs_nonleaf_lookup  iommu_mem_blocked        pasid_cache_hit
+ss_nonleaf_lookup
+
+Kan Liang (7):
+  iommu/vt-d: Support size of the register set in DRHD
+  iommu/vt-d: Retrieve IOMMU perfmon capability information
+  iommu/vt-d: Support Enhanced Command Interface
+  iommu/vt-d: Add IOMMU perfmon support
+  iommu/vt-d: Support cpumask for IOMMU perfmon
+  iommu/vt-d: Add IOMMU perfmon overflow handler support
+  iommu/vt-d: Enable IOMMU perfmon support
+
+ .../sysfs-bus-event_source-devices-iommu      |  32 +
+ drivers/iommu/intel/Kconfig                   |   9 +
+ drivers/iommu/intel/Makefile                  |   1 +
+ drivers/iommu/intel/dmar.c                    | 100 ++-
+ drivers/iommu/intel/iommu.c                   |   3 +
+ drivers/iommu/intel/iommu.h                   | 113 ++-
+ drivers/iommu/intel/perfmon.c                 | 836 ++++++++++++++++++
+ drivers/iommu/intel/perfmon.h                 |  65 ++
+ drivers/iommu/intel/svm.c                     |   2 +-
+ include/acpi/actbl1.h                         |   2 +-
+ include/linux/cpuhotplug.h                    |   1 +
+ include/linux/dmar.h                          |   1 +
+ 12 files changed, 1155 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-event_source-devices-iommu
+ create mode 100644 drivers/iommu/intel/perfmon.c
+ create mode 100644 drivers/iommu/intel/perfmon.h
+
+-- 
+2.35.1
+
