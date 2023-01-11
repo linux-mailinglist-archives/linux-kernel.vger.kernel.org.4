@@ -2,137 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555FE66610A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6077166610E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235843AbjAKQzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S235452AbjAKQzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:55:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235533AbjAKQyo (ORCPT
+        with ESMTP id S239063AbjAKQzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:54:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8842F175BF;
-        Wed, 11 Jan 2023 08:54:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 155F161D9C;
-        Wed, 11 Jan 2023 16:54:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC4BC433D2;
-        Wed, 11 Jan 2023 16:54:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673456082;
-        bh=mXESQehV0wt8kRi6/+LpO/EWbusEEZr0NKPtbWhQXkk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NZ2n4T9WAfM31GVkMr0U+OYQ1Le0CO4szDFcbo43kBez/1J9qnZ9YKq8esW75ezAZ
-         8JfUAS86yxHZ9RhJ0V0pNmj/VY/ORz9S6fCeFssGIrcuF1Xfq9yUTkn3I4Is0Wx2Mc
-         NFzsNx9oyDWOwe61DNPL38/EqDVkfCeFJN2jUfno83iUYhu70LDJ+1tw4eGExWbpbY
-         EOSUDeG+tMj/l65lE9dJr/seo+5C+OIm0cRJdutUZSTltGuxSufv6PYLoSM27KZI6v
-         4KVn8oRKJo1GTkXYra54pA1zq+/IHJ9a5qCkOem0Z3aiYG9t9YXNKYj154cUDU8BE7
-         E8CK13X7gSsBA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pFeN6-0003YU-Rv; Wed, 11 Jan 2023 17:54:41 +0100
-Date:   Wed, 11 Jan 2023 17:54:40 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Samuel Iglesias =?utf-8?Q?Gons=C3=A1lvez?= 
-        <siglesias@igalia.com>, Rodolfo Giometti <giometti@enneenne.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        David Lin <dtwlin@gmail.com>, Alex Elder <elder@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 11/13] tty/serial: Call ->dtr_rts() parameter active
- consistently
-Message-ID: <Y77p0P9YaCwPArxv@hovoldconsulting.com>
-References: <20230111142331.34518-1-ilpo.jarvinen@linux.intel.com>
- <20230111142331.34518-12-ilpo.jarvinen@linux.intel.com>
+        Wed, 11 Jan 2023 11:55:23 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B63192AE
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:55:22 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso8825254wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:55:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wMoQMQhB38nbcNla/KRz3O4QJ9q27t1i15WWEcz2Jmc=;
+        b=lTrSYN/ycOKVefSYiUDi6rK+4awRhhWIhuFjdWOga20RotqekO7XjOtokkqEJCvg9v
+         Xcn87Ryk2HVfq3p3V9ddCYllP50/GrSiJAeMHykifo1QFmrmYRSphjLsV644SMkKHF7S
+         V9yG3sIPpDnILXz/ROfoIYQRSz0/XXefn1bF8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wMoQMQhB38nbcNla/KRz3O4QJ9q27t1i15WWEcz2Jmc=;
+        b=EbmMoRptOVsQI4tuOFXWb4DSgFdLPLffWbYntGm9DsfnFL/eSyTUDiQ6HnGY069oSE
+         0DY7UnaoCKsbj7S4gW8vFbV2b0MabtHtp0cSmPYVpfmQ0uIjb1Ntrb5TBwtX1sBMBbVv
+         OKoEauZgBWX0e41iLtqIxArKCJllPILJNbGA/PPHysN13CFIkOq6IR7If3hVHbcPJHAt
+         17ch33u/NWoUKlioMWl8ioM5C6/UL7g4OVsDTLwN9AYHzwzPzzFQvdOpV7DgqqJyqn/M
+         nqcGlOAIo9SdkJWAfsQIWAEgIFsnowzwtu987TvI7oukmstilPn31cDejaAPP+wteaDo
+         J6QA==
+X-Gm-Message-State: AFqh2krN5NEuurUp4wLG+DK/v9gpTsa/aCiiRpCaRLUDwtCkgLBjgyXm
+        0Vml44d5xjJTCqtEYZF3mNqpZQ==
+X-Google-Smtp-Source: AMrXdXuH7F9Jvj2+GETMGkAU0b7SbfHCnmR86roP9bKzjfJPv40Q7aMZVHJzMhtfaFtf2sj6v3u0eA==
+X-Received: by 2002:a05:600c:4fcc:b0:3d9:f91c:4bfc with SMTP id o12-20020a05600c4fcc00b003d9f91c4bfcmr5276949wmq.31.1673456120900;
+        Wed, 11 Jan 2023 08:55:20 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id az28-20020a05600c601c00b003cf57329221sm23259500wmb.14.2023.01.11.08.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 08:55:19 -0800 (PST)
+Date:   Wed, 11 Jan 2023 17:55:18 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH 05/11] video/aperture: Only kick vgacon when the pdev is
+ decoding vga
+Message-ID: <Y77p9rTAX2IG6WaY@phenom.ffwll.local>
+Mail-Followup-To: Thomas Zimmermann <tzimmermann@suse.de>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Helge Deller <deller@gmx.de>
+References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
+ <20230111154112.90575-5-daniel.vetter@ffwll.ch>
+ <87119376-2813-f155-a2e1-006ffa382f12@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230111142331.34518-12-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87119376-2813-f155-a2e1-006ffa382f12@suse.de>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 04:23:29PM +0200, Ilpo JÃ¤rvinen wrote:
-> Convert various parameter names for ->dtr_rts() and related functions
-> from onoff, on, and raise to active.
+On Wed, Jan 11, 2023 at 05:03:02PM +0100, Thomas Zimmermann wrote:
+> Hi
 > 
-> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-> Signed-off-by: Ilpo JÃ¤rvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/char/pcmcia/synclink_cs.c | 6 +++---
->  drivers/mmc/core/sdio_uart.c      | 6 +++---
->  drivers/staging/greybus/uart.c    | 4 ++--
->  drivers/tty/amiserial.c           | 4 ++--
->  drivers/tty/hvc/hvc_console.h     | 2 +-
->  drivers/tty/hvc/hvc_iucv.c        | 6 +++---
->  drivers/tty/mxser.c               | 4 ++--
->  drivers/tty/n_gsm.c               | 4 ++--
->  drivers/tty/serial/serial_core.c  | 8 ++++----
->  drivers/tty/synclink_gt.c         | 4 ++--
->  include/linux/tty_port.h          | 4 ++--
->  include/linux/usb/serial.h        | 2 +-
->  12 files changed, 27 insertions(+), 27 deletions(-)
+> Am 11.01.23 um 16:41 schrieb Daniel Vetter:
+> > Otherwise it's bit silly, and we might throw out the driver for the
+> > screen the user is actually looking at. I haven't found a bug report
+> > for this case yet, but we did get bug reports for the analog case
+> > where we're throwing out the efifb driver.
+> > 
+> > References: https://bugzilla.kernel.org/show_bug.cgi?id=216303
+> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> > Cc: Javier Martinez Canillas <javierm@redhat.com>
+> > Cc: Helge Deller <deller@gmx.de>
+> > Cc: linux-fbdev@vger.kernel.org
+> > ---
+> >   drivers/video/aperture.c | 3 +++
+> >   1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/video/aperture.c b/drivers/video/aperture.c
+> > index 3d8c925c7365..6f351a58f6c6 100644
+> > --- a/drivers/video/aperture.c
+> > +++ b/drivers/video/aperture.c
+> > @@ -341,6 +341,9 @@ int aperture_remove_conflicting_pci_devices(struct pci_dev *pdev, const char *na
+> >   			return ret;
+> >   	}
+> > +	if (!primary)
+> > +		return 0;
+> > +
+> 
+> The original code from fbdev didn't do this, so this code didn't either.
+> 
+> It appears more to be a special case than an early-out branch. So can we
+> write it as
 
-> diff --git a/include/linux/tty_port.h b/include/linux/tty_port.h
-> index c44e489de0ff..edf685a24f7c 100644
-> --- a/include/linux/tty_port.h
-> +++ b/include/linux/tty_port.h
-> @@ -16,7 +16,7 @@ struct tty_struct;
->  /**
->   * struct tty_port_operations -- operations on tty_port
->   * @carrier_raised: return true if the carrier is raised on @port
-> - * @dtr_rts: raise the DTR line if @raise is true, otherwise lower DTR
-> + * @dtr_rts: raise the DTR line if @active is true, otherwise lower DTR
->   * @shutdown: called when the last close completes or a hangup finishes IFF the
->   *	port was initialized. Do not use to free resources. Turn off the device
->   *	only. Called under the port mutex to serialize against @activate and
-> @@ -32,7 +32,7 @@ struct tty_struct;
->   */
->  struct tty_port_operations {
->  	bool (*carrier_raised)(struct tty_port *port);
-> -	void (*dtr_rts)(struct tty_port *port, bool raise);
-> +	void (*dtr_rts)(struct tty_port *port, bool active);
->  	void (*shutdown)(struct tty_port *port);
->  	int (*activate)(struct tty_port *port, struct tty_struct *tty);
->  	void (*destruct)(struct tty_port *port);
-> diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
-> index bad343c5e8a7..33afd9f3ebbe 100644
-> --- a/include/linux/usb/serial.h
-> +++ b/include/linux/usb/serial.h
-> @@ -292,7 +292,7 @@ struct usb_serial_driver {
->  			struct serial_icounter_struct *icount);
->  	/* Called by the tty layer for port level work. There may or may not
->  	   be an attached tty at this point */
-> -	void (*dtr_rts)(struct usb_serial_port *port, bool on);
-> +	void (*dtr_rts)(struct usb_serial_port *port, bool active);
+Yeah I think this was a mistake going way back to when I added this to
+i915 originally. It is a real change, but also I guess the people who have
+machines without efifb or vesafb are ... really not many :-) Iirc you had
+some very funny kernels going way back when vgacon was considered the only
+safe choice to even hit this stuff.
 
-This is not a tty_port callback so this change does not belong in this
-patch.
+> if (primary) {
+>   // kick_vgacon
+> }
 
->  	bool (*carrier_raised)(struct usb_serial_port *port);
->  	/* Called by the usb serial hooks to allow the user to rework the
->  	   termios state */
+Yeah, but next patch adds the vga aperture, and then I think it makes a
+bit more sense.
+-Daniel
 
-Johan
+> 
+> ?
+> 
+> Best regards
+> Thomas
+> 
+> >   	/*
+> >   	 * WARNING: Apparently we must kick fbdev drivers before vgacon,
+> >   	 * otherwise the vga fbdev driver falls over.
+> 
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 Nürnberg, Germany
+> (HRB 36809, AG Nürnberg)
+> Geschäftsführer: Ivo Totev
+
+
+
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
