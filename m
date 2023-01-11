@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EAD666411
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AAD66641E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235709AbjAKTuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 14:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
+        id S235423AbjAKTw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 14:52:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235697AbjAKTtc (ORCPT
+        with ESMTP id S238445AbjAKTwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 14:49:32 -0500
+        Wed, 11 Jan 2023 14:52:32 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3121277C;
-        Wed, 11 Jan 2023 11:49:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0064318C;
+        Wed, 11 Jan 2023 11:50:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD7B361E11;
-        Wed, 11 Jan 2023 19:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88271C433D2;
-        Wed, 11 Jan 2023 19:49:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8EE461E06;
+        Wed, 11 Jan 2023 19:50:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54557C433EF;
+        Wed, 11 Jan 2023 19:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673466558;
-        bh=BVWgNHxiw47ZvwtJJaBc2xW7w1EmjS97P5UQfS7vOLs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lA0rRHMBcnGxdwhe3Vb77SAodnM6yXRKyWMlarD+oYoSMpxkRrachS3x5AldBqu4T
-         p6GNkOqOfVZVJ/mEqVMfpZkmG03V9KRg5+XFHP4tYYJrk3HlxAYRrwGipmfBwqzcdl
-         hocIhHzMMcef95/mS4SeSZk1YxxKJQjbtMwKla0eADTXran/Yibfz5cpSb4+JOUfDd
-         DSUoH7ctWCn1kuhdaZk6W7vKd3h/Yd53wdIv7oieWsssre36Q6bvBaaHTgdiN9eLKY
-         XfQQnmYWUnFUhSvHCgTNNxaxuP9mxacv1pTb4gcDvDBIL4JLCXbIfRANgyC3tfHp0o
-         launZuB8XyUIg==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     konrad.dybcio@linaro.org, quic_bjorande@quicinc.com,
-        johan@kernel.org
-Cc:     dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH v7 0/4] arm64: dts: qcom: sc8280xp: Enable display
-Date:   Wed, 11 Jan 2023 13:49:07 -0600
-Message-Id: <167346654439.2315924.14828300044435518731.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230111035906.2975494-1-quic_bjorande@quicinc.com>
-References: <20230111035906.2975494-1-quic_bjorande@quicinc.com>
+        s=k20201202; t=1673466627;
+        bh=1rnb9bDgHwGMTz5A20UrPy/V5pD9T4YnbPxjYPkWHAI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=i5ZNYw3Ebh8thAcUTckqN52yigjE+h6oq6/G88H0UhzaOGUKGN5vdA+EF5g5rL7pj
+         loRFg/dW095QC7jUpNadqR8MmrXJolYcycA8Kx//51alA7FoceRUaBrRzh5GlseZlX
+         lMOqovMN7GdRjCpbHrKPJfnsP5FMmKGEpQQVDn72iVhpk2sE3zK1Y74CHA59zHZhuH
+         ovS+jC6zQ+K9TgQid6EsDsPw1xUojE9k9Hk1yJzSij/KfyTnCDKhQJ4GbjqHLVl/RH
+         5qBP1zMIfMmf+rTAE7gCglvlgDCy0L7q8bf/1dmfoN2eDSTqZtS4U+QJkVGBLtGIpr
+         Ika4JJdwRndUw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 011FB5C0920; Wed, 11 Jan 2023 11:50:26 -0800 (PST)
+Date:   Wed, 11 Jan 2023 11:50:26 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH rcu 09/27] drivers/clk: Remove "select SRCU"
+Message-ID: <20230111195026.GY4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+ <20230105003813.1770367-9-paulmck@kernel.org>
+ <c59b64de02161ceeed11b43230cd46d0.sboyd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c59b64de02161ceeed11b43230cd46d0.sboyd@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,25 +60,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 Jan 2023 19:59:02 -0800, Bjorn Andersson wrote:
-> The display subsystem and display port drivers for SC8280XP has been merged, so
-> they are dropped from this series.
+On Wed, Jan 11, 2023 at 11:37:15AM -0800, Stephen Boyd wrote:
+> Quoting Paul E. McKenney (2023-01-04 16:37:55)
+> > Now that the SRCU Kconfig option is unconditionally selected, there is
+> > no longer any point in selecting it.  Therefore, remove the "select SRCU"
+> > Kconfig statements.
+> > 
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: Michael Turquette <mturquette@baylibre.com>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: <linux-clk@vger.kernel.org>
+> > ---
 > 
-> The necessary defconfig update is also added to the series.
-> 
-> Bjorn Andersson (4):
->   arm64: dts: qcom: sc8280xp: Define some of the display blocks
->   arm64: dts: qcom: sc8280xp-crd: Enable EDP
->   arm64: dts: qcom: sa8295-adp: Enable DP instances
->   arm64: defconfig: Enable SC8280XP Display Clock Controller
-> 
-> [...]
+> Applied to clk-next
 
-Applied, thanks!
+Thank you!  I will drop it from my tree on my next rebase.
 
-[4/4] arm64: defconfig: Enable SC8280XP Display Clock Controller
-      commit: 41ddfbda83f23a7b007cf307409a17e3ece177c6
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+							Thanx, Paul
