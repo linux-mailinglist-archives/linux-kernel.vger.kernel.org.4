@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3258665FE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB7F665FEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235042AbjAKQC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
+        id S235618AbjAKQCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234175AbjAKQCV (ORCPT
+        with ESMTP id S234315AbjAKQCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:02:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189C6140F5;
-        Wed, 11 Jan 2023 08:02:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6958A61D8F;
-        Wed, 11 Jan 2023 16:02:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06ADC433EF;
-        Wed, 11 Jan 2023 16:02:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673452939;
-        bh=WDPK4ezOCWydIceMJVIpzVu3xHbUz8bsTbKyssT5l9A=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=sh0Erk94yVz5Y+9iwmzpb1XW5N3jNnDPLYkBDHOoP/UoyAOkO8S0QiVtcO896KS5q
-         J03RTgedaKSYofVgiPNPOg9PXk2jquJzH2RNZ0Bv6T/wPq+Of5Mtfj7gWcp2UoedOl
-         kL9z2liB6IAydXzXxXmeLs/WcXzLXcTtm0FPTBYrJG2fVOEq5yZ+lHHhknJW9uAkBO
-         zJw4mhoDAsLksgFK937mI8MoqFamN6AsjkKOFLk86IpfyKs813G1MyKxhWAF+WVT+f
-         waKi3Xhi6LZabmIoJMuQEYZPZuKjUZDPsiD1Z412va0XbBylIwRpga81y+zK42mLv9
-         bnrFRZkxSZY7Q==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Moshe Shemesh <moshe@nvidia.com>,
-        Shay Drory <shayd@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>
-Subject: Re: [patch V3 13/33] x86/apic/vector: Provide MSI parent domain
-References: <20221124230505.073418677@linutronix.de>
-        <20221124232326.034672592@linutronix.de> <Y7VyXNbWMdWWAC6d@nvidia.com>
-        <87eds2k2nr.ffs@tglx> <Y719OcFueTg09OUV@nvidia.com>
-Date:   Wed, 11 Jan 2023 18:02:13 +0200
-In-Reply-To: <Y719OcFueTg09OUV@nvidia.com> (Jason Gunthorpe's message of "Tue,
-        10 Jan 2023 10:59:05 -0400")
-Message-ID: <87o7r5dpq2.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 11 Jan 2023 11:02:34 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61190DFAD;
+        Wed, 11 Jan 2023 08:02:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=efDFlg+yOf7f+QHekxkFqaFu7IzDmipcTvP18voo0xg=; b=nHk3+6DFrTjYJgpsa2PRe+SndN
+        2Myzd1x/o3p9Pf7L2wTiQNAjYFoax1Rq7pyfPXMbw0+iibH4f2SjU/FFASPVl2Y7+tIcleGBq1ONa
+        HEfgv4sHB4WpSnbp8RavAMELKr7lyo4S0QJL/EggtAPGXCZ7drhgOI2Y/Xx4R/CpwCIcojqCXo4C+
+        kzXs3CT6dO/uEAnekZMwqoKpSisDWZP+EX+gFcdMYcIwUmAG8QEJhVelh/ChTqzzQ5gzVOfccpiOi
+        ssEUOomxggY4Wi6+/yxcp7htPEH9xvxTVsv0E6GN6RitOxAJWq3irOOes+P/s6OQ6umf5d8E1usGP
+        2vn6PKYw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pFdYY-001KCi-12;
+        Wed, 11 Jan 2023 16:02:26 +0000
+Date:   Wed, 11 Jan 2023 16:02:26 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Jeff Moyer <jmoyer@redhat.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH v2] fs/aio: Replace kmap{,_atomic}() with
+ kmap_local_page()
+Message-ID: <Y77dkghufF6GVq1Y@ZenIV>
+References: <20230109175629.9482-1-fmdefrancesco@gmail.com>
+ <Y73+xKXDELSd14p1@ZenIV>
+ <x498ri9ma5n.fsf@segfault.boston.devel.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <x498ri9ma5n.fsf@segfault.boston.devel.redhat.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason Gunthorpe <jgg@nvidia.com> writes:
+On Wed, Jan 11, 2023 at 09:13:40AM -0500, Jeff Moyer wrote:
+> Hi, Al,
+> 
+> Al Viro <viro@zeniv.linux.org.uk> writes:
+> 
+> > On Mon, Jan 09, 2023 at 06:56:29PM +0100, Fabio M. De Francesco wrote:
+> >
+> >> -	ring = kmap_atomic(ctx->ring_pages[0]);
+> >> +	ring = kmap_local_page(ctx->ring_pages[0]);
+> >>  	ring->nr = nr_events;	/* user copy */
+> >>  	ring->id = ~0U;
+> >>  	ring->head = ring->tail = 0;
+> >> @@ -575,7 +575,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
+> >>  	ring->compat_features = AIO_RING_COMPAT_FEATURES;
+> >>  	ring->incompat_features = AIO_RING_INCOMPAT_FEATURES;
+> >>  	ring->header_length = sizeof(struct aio_ring);
+> >> -	kunmap_atomic(ring);
+> >> +	kunmap_local(ring);
+> >>  	flush_dcache_page(ctx->ring_pages[0]);
+> >
+> > I wonder if it would be more readable as memcpy_to_page(), actually...
+> 
+> I'm not sure I understand what you're suggesting.
 
-> On Tue, Jan 10, 2023 at 01:14:00PM +0100, Thomas Gleixner wrote:
->
->> Care to send a proper patch with changelog?
->
-> Yes, I'll post it in a few days once the test team confirms it
+	memcpy_to_page(ctx->ring_pages[0], 0, &(struct aio_ring){
+			.nr = nr_events, .id = ~0U, .magic = AIO_RING_MAGIC,
+			.compat_features = AIO_RING_COMPAT_FEATURES,
+			.in_compat_features = AIO_RING_INCOMPAT_FEATURES,
+			.header_length = sizeof(struct aio_ring)},
+			sizeof(struct aio_ring));
 
-I think I'm seeing the same leak and it's spamming logs on my test box a
-lot. Let me know if you need any help with testing, I can do that pretty
-quickly.
+instead of the lines from kmap_atomic to flush_dcache_page...
 
-unreferenced object 0xffff888113dc7520 (size 96):
-comm "insmod", pid 50676, jiffies 4301551867 (age 1463.666s)
-hex dump (first 32 bytes):
-00 00 00 00 00 00 00 00 00 25 68 a5 ff ff ff ff  .........%h.....
-00 00 00 00 00 00 00 00 38 75 dc 13 81 88 ff ff  ........8u......
-backtrace:
-[<ffffffffa3105532>] __kmem_cache_alloc_node+0x1d2/0x2b0
-[<ffffffffa2fdfb45>] kmalloc_trace+0x25/0x60
-[<ffffffffa2cb8b42>] __irq_domain_alloc_fwnode+0x52/0x2b0
-[<ffffffffa2cc6add>] msi_create_device_irq_domain+0x27d/0x630
-[<ffffffffa3aaf5a9>] pci_setup_msi_device_domain+0xe9/0x120
-[<ffffffffa3aababd>] __pci_enable_msi_range+0x3fd/0x5a0
-[<ffffffffa3aa8ac3>] pci_alloc_irq_vectors_affinity+0x153/0x200
-[<ffffffffa3aa8b7c>] pci_alloc_irq_vectors+0xc/0x10
-[<ffffffffc0b75287>] ath11k_pci_alloc_msi+0xb7/0x610 [ath11k_pci]
-[<ffffffffc0b7696e>] ath11k_pci_probe+0x5be/0x1090 [ath11k_pci]
-[<ffffffffa3a8d4e9>] local_pci_probe+0xd9/0x170
-[<ffffffffa3a8f687>] pci_call_probe+0x167/0x440
-[<ffffffffa3a919f6>] pci_device_probe+0xa6/0x100
-[<ffffffffa43c2c09>] really_probe+0x1c9/0xa50
-[<ffffffffa43c361a>] __driver_probe_device+0x18a/0x460
-[<ffffffffa43c393a>] driver_probe_device+0x4a/0x120
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> 
+> >>  
+> >>  	return 0;
+> >> @@ -678,9 +678,9 @@ static int ioctx_add_table(struct kioctx *ctx, struct mm_struct *mm)
+> >>  					 * we are protected from page migration
+> >>  					 * changes ring_pages by ->ring_lock.
+> >>  					 */
+> >> -					ring = kmap_atomic(ctx->ring_pages[0]);
+> >> +					ring = kmap_local_page(ctx->ring_pages[0]);
+> >>  					ring->id = ctx->id;
+> >> -					kunmap_atomic(ring);
+> >> +					kunmap_local(ring);
+> >
+> > Incidentally, does it need flush_dcache_page()?
+> 
+> Yes, good catch.
