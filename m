@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889C366538D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869F266538B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbjAKFUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 00:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S236328AbjAKFUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 00:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbjAKFSO (ORCPT
+        with ESMTP id S229462AbjAKFSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 00:18:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE8413E22;
+        Wed, 11 Jan 2023 00:18:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3328B13E02;
         Tue, 10 Jan 2023 21:10:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 971C7B81ACD;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C157861A34;
         Wed, 11 Jan 2023 05:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E091C433EF;
-        Wed, 11 Jan 2023 05:09:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA6BC433D2;
+        Wed, 11 Jan 2023 05:09:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673413798;
-        bh=DWfNxBHjl/xswddFCqoT/ztLVWhx0Jz2Y6haU3VbnTQ=;
+        s=k20201202; t=1673413799;
+        bh=Fk+Hs3fAFkGyo6IJh9NpJNbdmUCBctRBnwpsFk8n5K4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hKaHrvFs5JTbKtWyzkoA+eybCLbuwN5XzJS9Q+OO/PFUq/cIprZWVM+JQ+QtIQbkQ
-         gsk+qg7HuaLFXsREtF/Zz3Ol9508jFgVMh5IuycycweuwId4dQXNzRZaDKrsuB/2Tw
-         b06UHF5hcH4VQNyczKZ8d01Fh3FaMscasa9YjxA4x/Qlp5SNhOOWn4/2TWVO3LboBt
-         eRAn/P4clhqAryngvXGMXSmcgcl5q9m9ACu+d7KjXpmz/SnUKR1KiJD/zM/2JaYLgu
-         0WMIU8AnEuaszqGS8NAroUkOeAU8FMCj4JpmrNExnmJ+jxW1DqmqD5BIH2ikyZje1+
-         4XbdCJAHoYSeQ==
+        b=b8ICVfIfcabrXTSMtgm1OlfkvteT+fA22Qp0yfl+CgfQjMulbOBJ3h+q5MmMXPI1L
+         KE9lwMOkugFAd9Ay3TyTTXpVdq/s3yOifA0Uk2jxUDyhJb7OFeAJeeR50LiLCNvNbu
+         Z4slI/lwBfa6sF1hu6ocxKOJQicP7aq+T0b2pvu611cTS3URMMhPLM68fkCZVTbrKd
+         ekK2hLy7mwJFpKHeUX7mDk+NkOKBdHoXeQAeZriic3R83HIlzdcMqM5uFvA5B/vOaO
+         b2rnJ2FBmaD/uNGbUwZuSpCXlXjaSGzvmGjWV5eefyU1nn9RZ9JSqAmt+3koQxr0Z1
+         abpL0OjzRQHBg==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, vkoul@kernel.org,
-        konrad.dybcio@somainline.org, devicetree@vger.kernel.org,
+Cc:     marijn.suijten@somainline.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
         robh+dt@kernel.org
-Subject: Re: (subset) [PATCH v2 1/7] arm64: dts: qcom: sm8450: add spmi node
-Date:   Tue, 10 Jan 2023 23:09:23 -0600
-Message-Id: <167341377719.2246479.15307317315205485244.b4-ty@kernel.org>
+Subject: Re: (subset) [PATCH v4 1/3] dt-bindings: reserved-memory: rmtfs: Make qcom,vmid an array
+Date:   Tue, 10 Jan 2023 23:09:24 -0600
+Message-Id: <167341377741.2246479.8259536119397257522.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221229103212.984324-1-konrad.dybcio@linaro.org>
-References: <20221229103212.984324-1-konrad.dybcio@linaro.org>
+In-Reply-To: <20230109130523.298971-1-konrad.dybcio@linaro.org>
+References: <20230109130523.298971-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,29 +56,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Dec 2022 11:32:06 +0100, Konrad Dybcio wrote:
-> From: Vinod Koul <vkoul@kernel.org>
-> 
-> Add the spmi bus as found in the SM8450 SoC
+On Mon, 9 Jan 2023 14:05:21 +0100, Konrad Dybcio wrote:
+> Some SoCs mandate that the RMTFS is also assigned to the NAV VM, while
+> others really don't want that. Since it has to be conditional, turn
+> qcom,vmid into an u32 array so that we can handle the NAV case, as
+> well as other similar ones if they pop up in the future.
 > 
 > 
 
 Applied, thanks!
 
-[1/7] arm64: dts: qcom: sm8450: add spmi node
-      commit: f891f86e47c3208986b0985ca1fbc94647ba2ad0
-[2/7] arm64: dts: qcom: sm8450-nagara: Include PMIC DTSIs
-      commit: 25deb75e99bc57a7860cef2688b032d0e2f979dc
-[3/7] arm64: dts: qcom: sm8450-nagara: Add GPIO line names for PMIC GPIOs
-      commit: 4c5ab70d11ba591e28d4b07e50847084141c2374
-[4/7] arm64: dts: qcom: sm8450-nagara: Add GPIO keys
-      commit: 7b2557697890a947e178d4dc20848b479e384123
-[5/7] arm64: dts: qcom: sm8450-nagara: Set up camera regulators
-      commit: 40430a7c485b5463247b28691ad6a4fc5e280235
-[6/7] arm64: dts: qcom: sm8450-nagara: Enable PMIC RESIN+PON
-      commit: e9090691e48d2ceabec70448ac893637fbf0e27e
-[7/7] arm64: dts: qcom: sm8450-nagara: Configure SLG51000 PMIC
-      commit: 0d89bfbcd6d4c2691f5d70b8f2938aeb7774e7f6
+[1/3] dt-bindings: reserved-memory: rmtfs: Make qcom,vmid an array
+      commit: da0d37e42f93f7bd6351e7ef67a52ea9a272c761
+[2/3] soc: qcom: rmtfs: Optionally map RMTFS to more VMs
+      commit: e656cd0bcf3d2ba2eceac82b44714bf355428ec4
+[3/3] dt-bindings: firmware: qcom: scm: Separate VMIDs from header to bindings
+      commit: 45ca30eb9dfe622b00ce352cf28ee141d243254b
 
 Best regards,
 -- 
