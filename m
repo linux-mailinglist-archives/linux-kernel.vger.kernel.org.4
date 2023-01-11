@@ -2,114 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02008666245
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A087366624C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjAKRtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
+        id S232212AbjAKRvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232376AbjAKRtV (ORCPT
+        with ESMTP id S229672AbjAKRvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:49:21 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3231262D4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:49:21 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-4b718cab0e4so205128107b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:49:21 -0800 (PST)
+        Wed, 11 Jan 2023 12:51:40 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226EA55AB;
+        Wed, 11 Jan 2023 09:51:39 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id m6so24698388lfj.11;
+        Wed, 11 Jan 2023 09:51:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ePKFgxTY+N2/lJawjZfA8T7NwNNbVvAEDKDS+DodhcA=;
-        b=oGppCfJz0FFp5Y7cMmyBjVC+6IJyztjkXrGbuY9sKKHCI8eMmhM/7O2McEjp6gADmb
-         +V0NeF2kWF2Nwx3q9gWsm+nYAZhClko9G/+1YL3Na6XbuL8eK6Mt2K1h5TrUYNL0gjZj
-         EdKTPpbii1X0xYEnTvCQabouks/frlB8HMIKJNjssTNM0vareCnqE5qN+nZhpNCV2op3
-         vHTLk1IVN7BpUvGL+T4ErN0fFl3kMEblGRpIp40HU1gf3C0N2si3drvDv1CfDZFLItf8
-         1vJX689W9VLjkDAY6yF+wPxZNPjwU2oyoT1WYSGmqbPzVRb6IwqfBJ9W1QC0Fo04OXv2
-         /HDA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rCPqy95C6Ull1wAoxhY/6/ppbJBtfCJsPETF3WTR/qM=;
+        b=JXouJcKGqRGXex2GF1mRZOeE2BvpKEr56XxDdtewRXWzaWfoUbjaMpCx6HReF3qCXZ
+         UJTj9PEkMIWvH0T8IWGnJ7iBOGSnhDavXUgGotmUL2A1CbN5m3dYj/7qEUjr/4diCvec
+         ZF9pFIRX4ZwAJhQAfwLwyZVlQdcYGnadRYvHCPKFt97gRzyHde48HGvP3vKbK8bnmOV/
+         zOL8B490gdPzWsjEVbfSeogsg1cEsD0aPkaAwloKOSqOZM3xWyOrwPca9OXFKd8ReUP8
+         iJ9fjMKgbNbt9NIQ6jXUAs87TvuCFn7LSQMnAr2NBk2t0vLLxvcuUY7uT6kicmd8fzml
+         u+3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ePKFgxTY+N2/lJawjZfA8T7NwNNbVvAEDKDS+DodhcA=;
-        b=25K39Y+NPtPZnfyyHyePm1Y31ZCQOekllwQAUTjCbc8EAJAehYO+9d1cwLmfL/GoKP
-         SrZnSdSPJklN09ggUdVAQc7Fj6s0yHYTy95FSCi0UbdIDZ8RfwuYQ362gLDOqlzp2BlZ
-         TQ0C/Yt3O7PfggROcEXjp6R+8ZZaYhwVh9rPyXnChgQpsOoq/UfWMZHmm0kuPDq6gnJQ
-         C3e1FDOjma7gdYLpebj7R6HDsJVwCW3Q6aFcC3QPhql3yU15NZoYPIevCMOO4k7CCQqJ
-         xoISyUAt9sZzCaEHLvYJFT98wFKdzSLkQTHNeEy9aop2a7jiNM9SKcfGI98yfCtVJmfz
-         XVhg==
-X-Gm-Message-State: AFqh2krP1GJyozUD0CBd+O25cmG9QhKmTyFdwMRghfs2EJPUG3AVS5pq
-        9yONZ8jMjHx2VgFBhnFLfCS/qMDyzNSaQgCM4Yx9WQ==
-X-Google-Smtp-Source: AMrXdXuOq+0O+cDiW8MM05elg260zh8GUOYQodmwyx/lttE2iOJ2vqd6ut8RJ3mh7qgQEhbfljGWdCv4611jx4QWNMI=
-X-Received: by 2002:a0d:c2c5:0:b0:433:f1c0:3f1c with SMTP id
- e188-20020a0dc2c5000000b00433f1c03f1cmr1980213ywd.438.1673459360046; Wed, 11
- Jan 2023 09:49:20 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rCPqy95C6Ull1wAoxhY/6/ppbJBtfCJsPETF3WTR/qM=;
+        b=TA81zgqMzvZTDEgJknB4GKmxiHRotkneKdpQPHIouEA9XwjfKLmxELUMAOPlV+EKnR
+         tIF/3A/oHILza/fNgTeMLr/jGkuV39E5duD1tKehdq9Exy8o3Npx2SbmLDfoQ0oQEY/J
+         WbQGtWcAGUEDdWPewzHjJDTt+45ORT6AORepDRIZFrNvyvqiJQpyceGY8kKVrUIcEejY
+         FQ4eXQKlWVwBowraqfBapQsP06skj9FAVszxWEQnJPaLj0mjehgA0ekECqcCip66zA75
+         IAy0Z3gD8i7JIF2GYNnzCKD0phDXgB3bc1tuC6BNCLOCWyimKKKHX5/baFJ0fhUSy733
+         2yxw==
+X-Gm-Message-State: AFqh2kpmWxrDuesQcJND6JKANxALGmar9PLzXd9WPppmVV3JEaNhHCk0
+        aETAVidsITlDbmxBPz9jrvQ=
+X-Google-Smtp-Source: AMrXdXsMLWhBweFdqHouGzNOfy2FLpER7WmQEJnvZO69e/RhuTihl8FAgTinoHWUAeuExYNdhUwTQA==
+X-Received: by 2002:a05:6512:6d4:b0:4cb:1e1:f380 with SMTP id u20-20020a05651206d400b004cb01e1f380mr19853095lff.40.1673459497379;
+        Wed, 11 Jan 2023 09:51:37 -0800 (PST)
+Received: from localhost.localdomain (077222238029.warszawa.vectranet.pl. [77.222.238.29])
+        by smtp.googlemail.com with ESMTPSA id x2-20020a056512130200b004a8f824466bsm2817098lfu.188.2023.01.11.09.51.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 09:51:36 -0800 (PST)
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+To:     alexander.duyck@gmail.com
+Cc:     kvalo@kernel.org, jussi.kivilinna@iki.fi, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        greg@kroah.com, szymon.heidrich@gmail.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] rndis_wlan: Prevent buffer overflow in rndis_query_oid
+Date:   Wed, 11 Jan 2023 18:50:31 +0100
+Message-Id: <20230111175031.7049-1-szymon.heidrich@gmail.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <CAKgT0UePq+Gg5mpvD7ag=ern9JN5JyAFv5RPc05Zn9jSh4W+0g@mail.gmail.com>
+References: <CAKgT0UePq+Gg5mpvD7ag=ern9JN5JyAFv5RPc05Zn9jSh4W+0g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-9-surenb@google.com>
- <20230111001331.cxdeh52vvta6ok2p@offworld> <CAJuCfpEv--awCY0=R3h5Fez8x74U1EZCzNkq4_7deCYqej5sSA@mail.gmail.com>
- <Y75x5fGPcJ63pBIp@dhcp22.suse.cz> <Y76HTfIeEt8ZOIH3@gmail.com>
- <6be809f5554a4faaa22c287ba4224bd0@AcuMS.aculab.com> <CAJuCfpH_VZq99=vGQGJ+evVg5wMPKGsjyawgHnOeoKhtEiAi6w@mail.gmail.com>
- <Y77ndimzUsVZwjTk@dhcp22.suse.cz> <CAJuCfpEEiFNAgb6TNwibUyTJ1J3b-rEGCSw63TiK6FSA=HCdtw@mail.gmail.com>
- <Y77zwYHMfjOL+9EK@dhcp22.suse.cz>
-In-Reply-To: <Y77zwYHMfjOL+9EK@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 11 Jan 2023 09:49:08 -0800
-Message-ID: <CAJuCfpHCRL5B7SxqTgNbpJqhFwzROX4HAOH5KArO1iXNs_3Kcg@mail.gmail.com>
-Subject: Re: [PATCH 08/41] mm: introduce CONFIG_PER_VMA_LOCK
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "michel@lespinasse.org" <michel@lespinasse.org>,
-        "joelaf@google.com" <joelaf@google.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "leewalsh@google.com" <leewalsh@google.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "jglisse@google.com" <jglisse@google.com>,
-        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
-        "arjunroy@google.com" <arjunroy@google.com>,
-        "minchan@google.com" <minchan@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "hughd@google.com" <hughd@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "gurua@google.com" <gurua@google.com>,
-        "laurent.dufour@fr.ibm.com" <laurent.dufour@fr.ibm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "axelrasmussen@google.com" <axelrasmussen@google.com>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "soheil@google.com" <soheil@google.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "jannh@google.com" <jannh@google.com>,
-        "liam.howlett@oracle.com" <liam.howlett@oracle.com>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "gthelen@google.com" <gthelen@google.com>,
-        "ldufour@linux.ibm.com" <ldufour@linux.ibm.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "posk@google.com" <posk@google.com>,
-        "lstoakes@gmail.com" <lstoakes@gmail.com>,
-        "peterjung1337@gmail.com" <peterjung1337@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
-        "hughlynch@google.com" <hughlynch@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "tatashin@google.com" <tatashin@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,36 +75,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 9:37 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Wed 11-01-23 09:04:41, Suren Baghdasaryan wrote:
-> > On Wed, Jan 11, 2023 at 8:44 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Wed 11-01-23 08:28:49, Suren Baghdasaryan wrote:
-> > > [...]
-> > > > Anyhow. Sounds like the overhead of the current design is small enough
-> > > > to remove CONFIG_PER_VMA_LOCK and let it depend only on architecture
-> > > > support?
-> > >
-> > > Yes. Further optimizations can be done on top. Let's not over optimize
-> > > at this stage.
-> >
-> > Sure, I won't optimize any further.
-> > Just to expand on your question. Original design would be problematic
-> > for embedded systems like Android. It notoriously has a high number of
-> > VMAs due to anonymous VMAs being named, which prevents them from
-> > merging.
->
-> What is the usual number of VMAs in that environment?
+Since resplen and respoffs are signed integers sufficiently
+large values of unsigned int len and offset members of RNDIS
+response will result in negative values of prior variables.
+This may be utilized to bypass implemented security checks
+to either extract memory contents by manipulating offset or
+overflow the data buffer via memcpy by manipulating both
+offset and len.
 
-I've seen some games which had over 4000 VMAs but that's on the upper
-side. In my calculations I used 40000 VMAs as a ballpark number and
-rough calculations before size optimization would increase memory
-consumption by ~2M (depending on the lock placement in vm_area_struct
-it would vary a bit). In Android, the performance team flags any
-change that exceeds 500KB, so it would raise questions.
+Additionally assure that sum of resplen and respoffs does not
+overflow so buffer boundaries are kept.
 
->
-> --
-> Michal Hocko
-> SUSE Labs
+Fixes: 80f8c5b434f9 ("rndis_wlan: copy only useful data from rndis_command respond")
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+---
+V1 -> V2: Use size_t and min macro, fix netdev_dbg format
+
+ drivers/net/wireless/rndis_wlan.c | 19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/net/wireless/rndis_wlan.c b/drivers/net/wireless/rndis_wlan.c
+index 82a7458e0..bf72e5fd3 100644
+--- a/drivers/net/wireless/rndis_wlan.c
++++ b/drivers/net/wireless/rndis_wlan.c
+@@ -696,8 +696,8 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
+ 		struct rndis_query	*get;
+ 		struct rndis_query_c	*get_c;
+ 	} u;
+-	int ret, buflen;
+-	int resplen, respoffs, copylen;
++	int ret;
++	size_t buflen, resplen, respoffs, copylen;
+ 
+ 	buflen = *len + sizeof(*u.get);
+ 	if (buflen < CONTROL_BUFFER_SIZE)
+@@ -732,22 +732,15 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
+ 
+ 		if (respoffs > buflen) {
+ 			/* Device returned data offset outside buffer, error. */
+-			netdev_dbg(dev->net, "%s(%s): received invalid "
+-				"data offset: %d > %d\n", __func__,
+-				oid_to_string(oid), respoffs, buflen);
++			netdev_dbg(dev->net,
++				   "%s(%s): received invalid data offset: %zu > %zu\n",
++				   __func__, oid_to_string(oid), respoffs, buflen);
+ 
+ 			ret = -EINVAL;
+ 			goto exit_unlock;
+ 		}
+ 
+-		if ((resplen + respoffs) > buflen) {
+-			/* Device would have returned more data if buffer would
+-			 * have been big enough. Copy just the bits that we got.
+-			 */
+-			copylen = buflen - respoffs;
+-		} else {
+-			copylen = resplen;
+-		}
++		copylen = min(resplen, buflen - respoffs);
+ 
+ 		if (copylen > *len)
+ 			copylen = *len;
+-- 
+2.39.0
+
