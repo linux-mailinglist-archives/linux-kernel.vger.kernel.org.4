@@ -2,124 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D59666259
+	by mail.lfdr.de (Postfix) with ESMTP id 8B186666258
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbjAKR4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
+        id S233587AbjAKR4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232735AbjAKR4P (ORCPT
+        with ESMTP id S231510AbjAKR4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:56:15 -0500
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC85913F6D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:56:13 -0800 (PST)
-Received: by mail-ej1-f45.google.com with SMTP id az20so19725444ejc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:56:13 -0800 (PST)
+        Wed, 11 Jan 2023 12:56:19 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2312513F6D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:56:18 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id bs20so15873295wrb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:56:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iATtwX45ufevzGDCQk6FprOJLywVs059/Zoh+UqczYk=;
+        b=oHmNoS5cGMmc4TMWWpwfbgeQ0tDKdN4IhHoVwR8mNEI0Apy9bv+5hVi4JYXKYlzaoN
+         UWkNzMkI8H/sPR1qDuxOUdv2Na+csxtsLqVWd62z8U6urrXwYkcGbwGjf/7hCW4AKFQm
+         EaT0pHS+rJ7NtVH9/wC8elXCHT0D5AHVPufa2gQhUXePqahPkaX+JqSuqs1qnftV5BLg
+         f3zkMVLgVNvaDCh61ZnLDK6QugohhnwOPYWE6IxKQaW5LwmwY7hRNmhhiD7SAb5lVY9Q
+         FJ6/K6MhV/8l1/scnfsGPmFMIfOG183LDroX+o01Bp9nC+4T090vIPN33+X23vZHo8Hr
+         dsAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=btQ0AMdvOQpF+hu0+WAqnwGM4Ktk9ZWe95MbXLJ3hNk=;
-        b=dseTmxcG+k2N+P7eTT5BPkQ6MUOZrDYy7QsLQlEFfFCea8UZfw3qRgjGwt1RHPP1Ny
-         GczgmB1KcIMHlW0gj4flgGOXRAQNitnsRCjbrgqpNqbaj8yep4AjNFZxlY1EX6Nhnz6T
-         +9V8TcdLZl16LqP58aeV2GuS8BEhIMGnJ8hmBn6EERja/yYOS3c41B2wv6w6fE6wuAOK
-         jQAMKHHqtqVAw2LzeTjYp0i9QzXwqCuhAT9oJPIAH9nOl2qsSWeljWk9KPbw/oYVsjl8
-         cgT9tUQQBoWHjjM4EhpXa0BIDMnd4msDWEjTL3c78psW8OEaS9vW+ivmSFSdOooDdHAJ
-         FaoQ==
-X-Gm-Message-State: AFqh2kqjF4UQfUXBLHAEEV8H7kdeTapngt3HtPCOwhv7mqFrwpA/0Dwk
-        LIFVK7ccPGBbd+nKTVv0NQ+HOPnfY3K/HxTvmGmc848XIbc=
-X-Google-Smtp-Source: AMrXdXvCa5dwn3YT3QvNBr5wNA++8qc2IG5Xn2iL/QFt++L6A9MBlsHn9XlRbSMY9vObDgerKKxZi7ard0T5b2FhXvU=
-X-Received: by 2002:a17:907:98ee:b0:7c1:5ff0:6cc2 with SMTP id
- ke14-20020a17090798ee00b007c15ff06cc2mr5350950ejc.246.1673459772403; Wed, 11
- Jan 2023 09:56:12 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iATtwX45ufevzGDCQk6FprOJLywVs059/Zoh+UqczYk=;
+        b=Wf8JO9FKsvzYEEuSYEogrkE1+1uGCLSafyIY2qXQWEUeM1Yr3a3/iQFGpByHNM+BoR
+         hIOBXuiu/HNOsCa2K9TmLz9IJUemHaC0OLolNz5cYssH6r0g3Wp0+5Ms+Dy9zUrtNSky
+         oMd+GNVX8+GVUjcz2/7ZinC/qtLnGFRBAMupSCYA1BlEWVZp3bLcSdgQ1zuoLuVP0o8p
+         hjFWvVZpCPPZtwrT3UkhLamA6WIAEvyjV84Zcre8FCXL5zbmgbz7V+Fihz2gxEzFW/P4
+         K3hZE/33TwIn8mKglRyPTQz8vQ5Df2/4ZZbUXr/i9NCofsjHW5DR2AXz6+GclJFe5QrW
+         b/Ng==
+X-Gm-Message-State: AFqh2koLR1VTC0Svkweu8pVvcap8UvLyYknE+4xpRRgLIHPjJiy0R6h+
+        oXx+rdI+dWJgqJEADtRvN2rkWA==
+X-Google-Smtp-Source: AMrXdXtF/CJ1z+mSVHqSfXPznFXga6/+3peruKnsc6Yyigv0V5rinWx4z34Y3uC7wHeAaIrU2EeLyA==
+X-Received: by 2002:a5d:5592:0:b0:2a2:4313:e880 with SMTP id i18-20020a5d5592000000b002a24313e880mr15167085wrv.61.1673459776750;
+        Wed, 11 Jan 2023 09:56:16 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b00241fde8fe04sm14243618wrr.7.2023.01.11.09.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 09:56:16 -0800 (PST)
+Date:   Wed, 11 Jan 2023 18:56:15 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: Re: [PATCH v3 01/13] riscv: fix jal offsets in patched alternatives
+Message-ID: <20230111175615.p7vpq6joyrzomcmz@orel>
+References: <20230111171027.2392-1-jszhang@kernel.org>
+ <20230111171027.2392-2-jszhang@kernel.org>
 MIME-Version: 1.0
-References: <20230108030748.158120-1-joanbrugueram@gmail.com>
- <20230109040531.7888-1-joanbrugueram@gmail.com> <Y76bbtJn+jIV3pOz@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y76bbtJn+jIV3pOz@hirez.programming.kicks-ass.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 11 Jan 2023 18:56:01 +0100
-Message-ID: <CAJZ5v0j1gk2bW1s3w23frjroxKihBFEb_9CJ7_Vx_ezkCO01GA@mail.gmail.com>
-Subject: Re: Wake-up from suspend to RAM broken under `retbleed=stuff`
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Joan Bruguera <joanbrugueram@gmail.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Juergen Gross <jgross@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111171027.2392-2-jszhang@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 12:20 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, Jan 12, 2023 at 01:10:15AM +0800, Jisheng Zhang wrote:
+> Alternatives live in a different section, so offsets used by jal
+> instruction will point to wrong locations after the patch got applied.
+> 
+> Similar to arm64, adjust the location to consider that offset.
+> 
+> Co-developed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/include/asm/insn.h   | 27 +++++++++++++++++++++++++++
+>  arch/riscv/kernel/alternative.c | 27 +++++++++++++++++++++++++++
+>  2 files changed, 54 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/insn.h b/arch/riscv/include/asm/insn.h
+> index 98453535324a..1d2df245d0bd 100644
+> --- a/arch/riscv/include/asm/insn.h
+> +++ b/arch/riscv/include/asm/insn.h
+> @@ -291,6 +291,33 @@ static __always_inline bool riscv_insn_is_branch(u32 code)
+>  	(RVC_X(x_, RVC_B_IMM_7_6_OPOFF, RVC_B_IMM_7_6_MASK) << RVC_B_IMM_7_6_OFF) | \
+>  	(RVC_IMM_SIGN(x_) << RVC_B_IMM_SIGN_OFF); })
+>  
+> +/*
+> + * Get the immediate from a J-type instruction.
+> + *
+> + * @insn: instruction to process
+> + * Return: immediate
+> + */
+> +static inline s32 riscv_insn_extract_jtype_imm(u32 insn)
+> +{
+> +	return RV_EXTRACT_JTYPE_IMM(insn);
+> +}
+> +
+> +/*
+> + * Update a J-type instruction with an immediate value.
+> + *
+> + * @insn: pointer to the jtype instruction
+> + * @imm: the immediate to insert into the instruction
+> + */
+> +static inline void riscv_insn_insert_jtype_imm(u32 *insn, s32 imm)
+> +{
+> +	/* drop the old IMMs, all jal IMM bits sit at 31:12 */
+> +	*insn &= ~GENMASK(31, 12);
+> +	*insn |= (RV_X(imm, RV_J_IMM_10_1_OFF, RV_J_IMM_10_1_MASK) << RV_J_IMM_10_1_OPOFF) |
+> +		 (RV_X(imm, RV_J_IMM_11_OFF, RV_J_IMM_11_MASK) << RV_J_IMM_11_OPOFF) |
+> +		 (RV_X(imm, RV_J_IMM_19_12_OFF, RV_J_IMM_19_12_MASK) << RV_J_IMM_19_12_OPOFF) |
+> +		 (RV_X(imm, RV_J_IMM_SIGN_OFF, 1) << RV_J_IMM_SIGN_OPOFF);
+> +}
+> +
+>  /*
+>   * Put together one immediate from a U-type and I-type instruction pair.
+>   *
+> diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
+> index 6212ea0eed72..3d4f1f32c7f6 100644
+> --- a/arch/riscv/kernel/alternative.c
+> +++ b/arch/riscv/kernel/alternative.c
+> @@ -79,6 +79,21 @@ static void riscv_alternative_fix_auipc_jalr(void *ptr, u32 auipc_insn,
+>  	patch_text_nosync(ptr, call, sizeof(u32) * 2);
+>  }
+>  
+> +static void riscv_alternative_fix_jal(void *ptr, u32 jal_insn, int patch_offset)
+> +{
+> +	s32 imm;
+> +
+> +	/* get and adjust new target address */
+> +	imm = riscv_insn_extract_jtype_imm(jal_insn);
+> +	imm -= patch_offset;
+> +
+> +	/* update instruction */
+> +	riscv_insn_insert_jtype_imm(&jal_insn, imm);
+> +
+> +	/* patch the call place again */
+> +	patch_text_nosync(ptr, &jal_insn, sizeof(u32));
+> +}
+> +
+>  void riscv_alternative_fix_offsets(void *alt_ptr, unsigned int len,
+>  				      int patch_offset)
+>  {
+> @@ -106,6 +121,18 @@ void riscv_alternative_fix_offsets(void *alt_ptr, unsigned int len,
+>  			riscv_alternative_fix_auipc_jalr(alt_ptr + i * sizeof(u32),
+>  							 insn, insn2, patch_offset);
+>  		}
+> +
+> +		if (riscv_insn_is_jal(insn)) {
+> +			s32 imm = riscv_insn_extract_jtype_imm(insn);
+> +
+> +			/* Don't modify jumps inside the alternative block */
+> +			if ((alt_ptr + i * sizeof(u32) + imm) >= alt_ptr &&
+> +			    (alt_ptr + i * sizeof(u32) + imm) < (alt_ptr + len))
+> +				continue;
+> +
+> +			riscv_alternative_fix_jal(alt_ptr + i * sizeof(u32),
+> +						  insn, patch_offset);
+> +		}
+>  	}
+>  }
+>  
+> -- 
+> 2.38.1
 >
-> On Mon, Jan 09, 2023 at 04:05:31AM +0000, Joan Bruguera wrote:
-> > This fixes wakeup for me on both QEMU and real HW
-> > (just a proof of concept, don't merge)
-> >
-> > diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
-> > index ffea98f9064b..8704bcc0ce32 100644
-> > --- a/arch/x86/kernel/callthunks.c
-> > +++ b/arch/x86/kernel/callthunks.c
-> > @@ -7,6 +7,7 @@
-> >  #include <linux/memory.h>
-> >  #include <linux/moduleloader.h>
-> >  #include <linux/static_call.h>
-> > +#include <linux/suspend.h>
-> >
-> >  #include <asm/alternative.h>
-> >  #include <asm/asm-offsets.h>
-> > @@ -150,6 +151,10 @@ static bool skip_addr(void *dest)
-> >       if (dest >= (void *)hypercall_page &&
-> >           dest < (void*)hypercall_page + PAGE_SIZE)
-> >               return true;
-> > +#endif
-> > +#ifdef CONFIG_PM_SLEEP
-> > +     if (dest == restore_processor_state)
-> > +             return true;
-> >  #endif
-> >       return false;
-> >  }
-> > diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-> > index 236447ee9beb..e667894936f7 100644
-> > --- a/arch/x86/power/cpu.c
-> > +++ b/arch/x86/power/cpu.c
-> > @@ -281,6 +281,9 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
-> >  /* Needed by apm.c */
-> >  void notrace restore_processor_state(void)
-> >  {
-> > +     /* Restore GS before calling anything to avoid crash on call depth accounting */
-> > +     native_wrmsrl(MSR_GS_BASE, saved_context.kernelmode_gs_base);
-> > +
-> >       __restore_processor_state(&saved_context);
-> >  }
->
-> Yeah, I can see why, but I'm not really comfortable with this. TBH, I
-> don't see how the whole resume code is correct to begin with. At the
-> very least it needs a heavy dose of noinstr.
->
-> Rafael, what cr3 is active when we call restore_processor_state()?
 
-On resume from suspend-to-RAM, the one that was saved by
-__save_processor_state() AFAICS.
-
-On resume from hibernation, it looks like this is the one that was
-used by the restore kernel.
-
-> Specifically, the problem is that I don't feel comfortable doing any
-> sort of weird code until all the CR and segment registers have been
-> restored, however, write_cr*() are paravirt functions that result in
-> CALL, which then gives us a bit of a checken and egg problem.
->
-> I'm also wondering how well retbleed=stuff works on Xen, if at all. If
-> we can ignore Xen, things are a little earier perhaps.
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
