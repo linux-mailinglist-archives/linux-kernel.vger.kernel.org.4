@@ -2,68 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C28665330
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BB5665332
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjAKFM4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 11 Jan 2023 00:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
+        id S235641AbjAKFOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 00:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbjAKFMB (ORCPT
+        with ESMTP id S236012AbjAKFNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 00:12:01 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354D7FCE9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 21:06:03 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 8B56624E1A6;
-        Wed, 11 Jan 2023 13:05:17 +0800 (CST)
-Received: from EXMBX167.cuchost.com (172.16.6.77) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 11 Jan
- 2023 13:05:17 +0800
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX167.cuchost.com
- (172.16.6.77) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 11 Jan
- 2023 13:05:16 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Wed, 11 Jan 2023 13:05:17 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     Conor Dooley <conor@kernel.org>
-CC:     Andrew Jones <ajones@ventanamicro.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: RE: [PATCH v2 3/3] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Topic: [PATCH v2 3/3] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Index: AQHZI/MH11WdbApPuUeV8qMdKhtSOK6V9U4AgAFQMgCAAE7gAIABF1UA
-Date:   Wed, 11 Jan 2023 05:05:16 +0000
-Message-ID: <6952df4474b54a31894d71e7cfe6077a@EXMBX066.cuchost.com>
-References: <20230109062407.3235-1-jeeheng.sia@starfivetech.com>
- <20230109062407.3235-4-jeeheng.sia@starfivetech.com>
- <20230109193624.iiuguwgimpn7zbyw@orel>
- <6638291f6a3c463994919ba0a875472c@EXMBX066.cuchost.com>
- <Y73I6H+X+qswIst0@spud>
-In-Reply-To: <Y73I6H+X+qswIst0@spud>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [202.188.176.82]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 11 Jan 2023 00:13:49 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11EA71A07B;
+        Tue, 10 Jan 2023 21:06:31 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3A5DFEC;
+        Tue, 10 Jan 2023 21:06:47 -0800 (PST)
+Received: from [10.162.40.17] (unknown [10.162.40.17])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B5453F71A;
+        Tue, 10 Jan 2023 21:06:01 -0800 (PST)
+Message-ID: <97d1d6a1-13b2-e971-b0c4-1d71623ca1e3@arm.com>
+Date:   Wed, 11 Jan 2023 10:35:58 +0530
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V7 0/6] arm64/perf: Enable branch stack sampling
+Content-Language: en-US
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230105031039.207972-1-anshuman.khandual@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20230105031039.207972-1-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,80 +55,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-> -----Original Message-----
-> From: Conor Dooley <conor@kernel.org>
-> Sent: Wednesday, 11 January, 2023 4:22 AM
-> To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> Cc: Andrew Jones <ajones@ventanamicro.com>; paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu; linux-
-> riscv@lists.infradead.org; linux-kernel@vger.kernel.org; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo
-> <mason.huo@starfivetech.com>
-> Subject: Re: [PATCH v2 3/3] RISC-V: Add arch functions to support hibernation/suspend-to-disk
+On 1/5/23 08:40, Anshuman Khandual wrote:
+> This series enables perf branch stack sampling support on arm64 platform
+> via a new arch feature called Branch Record Buffer Extension (BRBE). All
+> relevant register definitions could be accessed here.
 > 
-> Hey JeeHeng,
+> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
 > 
-> On Tue, Jan 10, 2023 at 08:37:01AM +0000, JeeHeng Sia wrote:
-> > > From: Andrew Jones <ajones@ventanamicro.com>
-> > > On Mon, Jan 09, 2023 at 02:24:07PM +0800, Sia Jee Heng wrote:
+> This series applies on v6.2-r2.
 > 
-> > > > +/* Helper parameters that help us to restore the image.
-> > >
-> > > Separate line for /*
-> > ok
+> Changes in V7:
 > 
-> I'm not sure why this one struct has an actual description that
-> resembles kerneldoc, when nothing else does - but why not make it
-> actually kerneldoc, as you're almost there as things stand:
-> https://docs.kernel.org/doc-guide/kernel-doc.html#structure-union-and-enumeration-documentation
-Thanks. This is a good info, will work on it.
-> 
-> > > > + * @hartid: To make sure same boot_cpu executing the hibernate/restore
-> > > code.
-> > > > + * @saved_satp: Original page table used by the hibernated image.
-> > > > + * @restore_cpu_addr: The kernel's image address to restore the CPU
-> > > context.
-> 
-> ^^ also your mail client is doing some really odd things wrapping wise.
-Oops. Hope I have fixed it in this round..
-> 
-> > > > +static unsigned long temp_pgtable_map_pmd(pmd_t *pmdp, unsigned
-> > > long vaddr, pgprot_t prot)
-> > > > +{
-> > > > +	uintptr_t pmd_idx = pmd_index(vaddr);
-> > > > +	pte_t *ptep;
-> > > > +
-> > > > +	if (pmd_none(pmdp[pmd_idx])) {
-> > > > +		ptep = (pte_t *) get_safe_page(GFP_ATOMIC);
-> > >
-> > > No space between cast and function. Same comment for following functions.
-> > > I thought checkpatch complained about that.
-> > Ok. But it is weird that checkpatch doesn't report the issue.
-> 
-> It does:
-ok, will double check again.
-> 20:08:17 conor /stuff/linux$ ./scripts/checkpatch.pl --strict --terse -g HEAD~3..HEAD
-> 7481f133eb0310496742c27d15a20fdd2c499d29:97: CHECK: Alignment should match open parenthesis
-> [...]
-> 7481f133eb0310496742c27d15a20fdd2c499d29:370: CHECK: No space is necessary after a cast
-> [...]
-> 7481f133eb0310496742c27d15a20fdd2c499d29:460: CHECK: No space is necessary after a cast
-> 7481f133eb0310496742c27d15a20fdd2c499d29:467: CHECK: No space is necessary after a cast
-> 7481f133eb0310496742c27d15a20fdd2c499d29:475: CHECK: Blank lines aren't necessary after an open brace '{'
-> 7481f133eb0310496742c27d15a20fdd2c499d29:480: CHECK: No space is necessary after a cast
-> 7481f133eb0310496742c27d15a20fdd2c499d29:487: CHECK: No space is necessary after a cast
-> 7481f133eb0310496742c27d15a20fdd2c499d29:499: CHECK: No space is necessary after a cast
-> 7481f133eb0310496742c27d15a20fdd2c499d29:506: CHECK: No space is necessary after a cast
-> 7481f133eb0310496742c27d15a20fdd2c499d29:518: CHECK: No space is necessary after a cast
-> 7481f133eb0310496742c27d15a20fdd2c499d29:525: CHECK: No space is necessary after a cast
-> 7481f133eb0310496742c27d15a20fdd2c499d29:577: CHECK: No space is necessary after a cast
-> 7481f133eb0310496742c27d15a20fdd2c499d29:591: CHECK: Alignment should match open parenthesis
-> 7481f133eb0310496742c27d15a20fdd2c499d29:596: CHECK: Alignment should match open parenthesis
-> total: 0 errors, 1 warnings, 21 checks, 545 lines checked
-> 
-> The patchwork automation seems to have ignored this patchset for some
-> reason. It was stuck on a patchset for some reason and this one may
-> have got skipped when I tried to sort that out.
-> Ordinarily, you'd see it complaining about these sorts of things.
-> 
-> Thanks,
-> Conor.
+> - Folded [PATCH 7/7] into [PATCH 3/7] which enables branch stack sampling event
+> - Defined BRBFCR_EL1_BRANCH_FILTERS, BRBCR_EL1_DEFAULT_CONFIG in the header
+> - Defined BRBFCR_EL1_DEFAULT_CONFIG in the header
+> - Updated BRBCR_EL1_DEFAULT_CONFIG with BRBCR_EL1_FZP
+> - Defined BRBCR_EL1_DEFAULT_TS in the header
+> - Updated BRBCR_EL1_DEFAULT_CONFIG with BRBCR_EL1_DEFAULT_TS
+> - Moved BRBCR_EL1_DEFAULT_CONFIG check inside branch_type_to_brbcr()
+> - Moved down BRBCR_EL1_CC, BRBCR_EL1_MPRED later in branch_type_to_brbcr()
+> - Also set BRBE in paused state in armv8pmu_branch_disable()
+> - Dropped brbe_paused(), set_brbe_paused() helpers
+> - Extracted error string via branch_filter_error_msg[] for armv8pmu_branch_valid()
+> - Replaced brbe_v1p1 with brbe_version in struct brbe_hw_attr
+> - Added valid_brbe_[cc, format, version]() helpers
+> - Split a separate brbe_attributes_probe() from armv8pmu_branch_probe()
+> - Capture event->attr.branch_sample_type earlier in armv8pmu_branch_valid()
+> - Defined enum brbe_bank_idx with possible values for BRBE bank indices
+> - Changed armpmu->hw_attr into armpmu->private
+> - Added missing space in stub definition for armv8pmu_branch_valid()
+> - Replaced both kmalloc() with kzalloc()
+> - Added BRBE_BANK_MAX_ENTRIES
+> - Updated comment for capture_brbe_flags()
+> - Updated comment for struct brbe_hw_attr
+> - Dropped space after type cast in couple of places
+> - Replaced inverse with negation for testing BRBCR_EL1_FZP in armv8pmu_branch_read()
+> - Captured cpuc->branches->branch_entries[idx] in a local variable
+> - Dropped saved_priv from armv8pmu_branch_read()
+> - Reorganize PERF_SAMPLE_BRANCH_NO_[CYCLES|NO_FLAGS] related configuration
+> - Replaced with FIELD_GET() and FIELD_PREP() wherever applicable
+> - Replaced BRBCR_EL1_TS_PHYSICAL with BRBCR_EL1_TS_VIRTUAL
+> - Moved valid_brbe_nr(), valid_brbe_cc(), valid_brbe_format(), valid_brbe_version()
+>   select_brbe_bank(), select_brbe_bank_index() helpers inside the C implementation
+> - Reorganized brbe_valid_nr() and dropped the pr_warn() message
+> - Changed probe sequence in brbe_attributes_probe()
+> - Added 'brbcr' argument into capture_brbe_flags() to ascertain correct state
+> - Disable BRBE before disabling the PMU event counter
+> - Enable PERF_SAMPLE_BRANCH_HV filters when is_kernel_in_hyp_mode()
+> - Guard armv8pmu_reset() & armv8pmu_sched_task() with arm_pmu_branch_stack_supported()
 
+Gentle ping, any updates on this series ?
