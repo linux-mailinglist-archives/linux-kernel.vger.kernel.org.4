@@ -2,95 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157DB665412
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54F7665416
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjAKF44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 00:56:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S232658AbjAKF5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 00:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234954AbjAKF4o (ORCPT
+        with ESMTP id S235813AbjAKF5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 00:56:44 -0500
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AC4C22;
-        Tue, 10 Jan 2023 21:56:43 -0800 (PST)
-Received: by mail-wm1-f43.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso11788444wms.5;
-        Tue, 10 Jan 2023 21:56:43 -0800 (PST)
+        Wed, 11 Jan 2023 00:57:31 -0500
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99403B7EB;
+        Tue, 10 Jan 2023 21:57:30 -0800 (PST)
+Received: by mail-io1-f53.google.com with SMTP id r72so7218012iod.5;
+        Tue, 10 Jan 2023 21:57:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nRJzXWIcLGfsAx1uj7LxnnT+lT00vnfCm0VUVZlOxf4=;
-        b=4PGs3vxXv8jmfiTEdT5Jkqt4HXEomIub8UhN2KDW4fc1Dl+iyGTlvvu6T145xaD9LJ
-         NTrS3Xxkq3iMgVCiuyrzTjqfbzaPhsejam54sr7f3HW8ESlgELodftT3vUNEjpAP+lZS
-         3KrwPmH5/fQgcnm9RgMBxxZHYqy12ygXDTDnQwxAjXIgtn/zNzkMO5mEXlQz7NgAUYvm
-         sPA/1G9iApMBT9CzHmj8XZKcwiTfEGoMatfyguUZqTAMBHMGnIAtnQ1eDwBniRraUwwh
-         BS387+TzqWPwdQX5GqJf4N7ZJ1VpukD0ZK/hjrvNo8A0V1aRd4itJ+yoc7apxikB44Gl
-         hVyw==
-X-Gm-Message-State: AFqh2koXKexg7JsroSFfORCG6HViA2e39T7wIYHN7j6ir+/m4amU37Ey
-        k4v41cyFLYiv7DpdcM/BITU=
-X-Google-Smtp-Source: AMrXdXuGMiv2BcYICZBUe09GCtW4hRfxWXShZC6GeIunbbzMLdfIj5QG6N/iKwiH0FjjphNqa2+B0A==
-X-Received: by 2002:a05:600c:22d4:b0:3cf:82b9:2fe6 with SMTP id 20-20020a05600c22d400b003cf82b92fe6mr61119232wmg.8.1673416601718;
-        Tue, 10 Jan 2023 21:56:41 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id az28-20020a05600c601c00b003cf57329221sm21419506wmb.14.2023.01.10.21.56.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 21:56:41 -0800 (PST)
-Message-ID: <c10bf347-9f53-bcaf-acc2-d3dd6baa0efb@kernel.org>
-Date:   Wed, 11 Jan 2023 06:56:38 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vljd4jpGI8JGO7YYKmUkcae95jo5r0whgkmYDkRel+o=;
+        b=XEaUXfV2oMGEfoypFAMmtWFPwKiL02COlAUi+zyE1R5hvjWA+r40dXGGMJtUt1X1Wx
+         WOcJFZmrcXe0X4trudv9T6LrBU7GLFUPUYhRiYOXuYbMADxaKsPQAS2YtO+CxaQOHAIj
+         kw+77Wsrwd8+c9TUSv8AwvUcOzghWmKq/G/suoeIRLwjvlY4+bDxxGyYf7zQFb9BuUs9
+         AFyfbhOfAJNDVO18+zvAeVNdLDEaMWiLOuJE84OvzWpceU/C/CNB26S9zoO1/H9IgK+0
+         c7pJQVgLBVBbVOYM2ke7ftOIGQgm2p5SD4JSgGByCJYO0G0R0vkre8R9O8QZX4wBIbnl
+         zPzw==
+X-Gm-Message-State: AFqh2kqB7BrIkjG/Dol61VZDuRBFc5WcAUmyoBgp3merohMoAYX8YLRz
+        3zkZCOb2yFcP9qatPEA68jAef0WfNKh6Uf9t2YQ=
+X-Google-Smtp-Source: AMrXdXsegqXia/vW6IrV9mzogZfZdjbpj0N5M9UIGnf6DQ9JwsRYd60BumYUKA6U7My9bYV/0IXfcRwd4eE8Hz/yXOQ=
+X-Received: by 2002:a6b:a16:0:b0:6e3:28c5:e8ee with SMTP id
+ z22-20020a6b0a16000000b006e328c5e8eemr6765804ioi.140.1673416649854; Tue, 10
+ Jan 2023 21:57:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 11/13] tty/serial: Call ->dtr_rts() parameter active
- consistently
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        =?UTF-8?Q?Samuel_Iglesias_Gons=c3=a1lvez?= <siglesias@igalia.com>,
-        Rodolfo Giometti <giometti@enneenne.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        David Lin <dtwlin@gmail.com>, Alex Elder <elder@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
-References: <20230110120226.14972-1-ilpo.jarvinen@linux.intel.com>
- <20230110120226.14972-12-ilpo.jarvinen@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20230110120226.14972-12-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230109223110.1201541-1-irogers@google.com> <CAM9d7cgGq=+MC+qwRNxO=0Bn_ZMOucEzh_WWH95Lq8fsYHMb4A@mail.gmail.com>
+ <CAP-5=fXniy80Jpc2Hu=-GF7yDNUNHjs0=B2iqkUkMb6zArPukg@mail.gmail.com>
+ <CAM9d7chS+91Nep8FtsJsOdTvMJ0HhkSD1_Fn70=hWPi7a1JpfQ@mail.gmail.com> <CAP-5=fUXoOFueaeSD2D9H+xoH5tKXRHK1164yPSX8_m_Nx_AeQ@mail.gmail.com>
+In-Reply-To: <CAP-5=fUXoOFueaeSD2D9H+xoH5tKXRHK1164yPSX8_m_Nx_AeQ@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 10 Jan 2023 21:57:17 -0800
+Message-ID: <CAM9d7ci3du09=uc05to7rLaRG7KCuwdLEFZ_492jcO7cOY7RAQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] perf tools: Remove HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        German Gomez <german.gomez@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Stephane Eranian <eranian@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10. 01. 23, 13:02, Ilpo Järvinen wrote:
-> Convert various parameter names for ->dtr_rts() and related functions
-> from onoff, on, and raise to active.
+On Tue, Jan 10, 2023 at 11:55 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Tue, Jan 10, 2023 at 11:09 AM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Mon, Jan 9, 2023 at 3:38 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > On Mon, Jan 9, 2023 at 2:57 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > > >
+> > > > Hi Ian,
+> > > >
+> > > > On Mon, Jan 9, 2023 at 2:31 PM Ian Rogers <irogers@google.com> wrote:
+> > > > > diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
+> > > > > index e188f74698dd..cfcc253239f0 100644
+> > > > > --- a/tools/perf/util/sort.c
+> > > > > +++ b/tools/perf/util/sort.c
+> > > > > @@ -28,6 +28,7 @@
+> > > > >  #include "time-utils.h"
+> > > > >  #include "cgroup.h"
+> > > > >  #include "machine.h"
+> > > > > +#include "trace-event.h"
+> > > > >  #include <linux/kernel.h>
+> > > > >  #include <linux/string.h>
+> > > > >
+> > > > > @@ -2667,7 +2668,7 @@ static int64_t __sort__hde_cmp(struct perf_hpp_fmt *fmt,
+> > > > >                 tep_read_number_field(field, a->raw_data, &dyn);
+> > > > >                 offset = dyn & 0xffff;
+> > > > >                 size = (dyn >> 16) & 0xffff;
+> > > > > -#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
+> > > > > +#if LIBTRACEEVENT_VERSION >= MAKE_LIBTRACEEVENT_VERSION(1, 5, 0)
+> > > > >                 if (field->flags & TEP_FIELD_IS_RELATIVE)
+> > > > >                         offset += field->offset + field->size;
+> > > >
+> > > > Maybe I missed the previous discussion.
+> > > >
+> > > > As it's only used in the bit test, can we have something like this
+> > > > in the header file?
+> > > >
+> > > > #if LIBTRACE_EVENT_VERSION < ...(1, 5, 0)
+> > > > # define TEP_FIELD_IS_RELATIVE  0
+> > > > #endif
+> > > >
+> > > > Thanks,
+> > > > Namhyung
+> > >
+> > > We could but I think we lose some of the intention revealing-ness that
+> > > TEP_FIELD_IS_RELATIVE is only present with libtraceevent 1.5.0 or
+> > > newer.
+> >
+> > I'm not sure how important it is to reveal the intention.
+> > I think we wanted to minimize #ifdef-ery in the .c file and
+> > moved the conditionals to the header.  Maybe we can add
+> > a wrapper like this.
+> >
+> > #if LIBTRACEEVENT_VERSION >= ...(1, 5, 0)
+> > static inline bool is_relative_field(field)
+> > {
+> >     return field->flags & TEP_FIELD_IS_RELATIVE;
+> > }
+> > #else
+> > static inline bool is_relative_field(field)
+> > {
+> >     return false;
+> > }
+> > #endif
+> >
+> > Thanks,
+> > Namhyung
+>
+> Sounds good. Should the change be part of this one or a follow up
+> patch? A follow up patch seems cleanest, I can add it to v2.
 
-Much better.
+Sounds good.
 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-
--- 
-js
-suse labs
-
+Thanks,
+Namhyung
