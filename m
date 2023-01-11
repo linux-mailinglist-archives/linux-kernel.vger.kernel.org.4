@@ -2,96 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA60665963
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02E1665965
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbjAKKvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 05:51:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
+        id S233266AbjAKKwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 05:52:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238964AbjAKKvL (ORCPT
+        with ESMTP id S235452AbjAKKvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 05:51:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2AA1789D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 02:49:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673434198;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KicQRhRW4GIgvI9D3cmZlt5g4pih7zwKs4FM1PmEwRI=;
-        b=c6qrOyDNn2Ja0CyhYadJF0kBGCDkJxMi1bMu34GwukcUcJrg5rilZLZZrpLVJhiuC0dbn9
-        CpWyqZz3VyZpW5ECA8mSu8KtLxuWGYveuAfobmSPHZgfPPBb0phaqq1QyD6det+fndUzGu
-        fGxcKKv56UntWm4siR5PMrSyjezx178=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-67-408C0QmUNbOwmDHQXPGZvA-1; Wed, 11 Jan 2023 05:49:57 -0500
-X-MC-Unique: 408C0QmUNbOwmDHQXPGZvA-1
-Received: by mail-il1-f199.google.com with SMTP id l13-20020a056e021c0d00b003034e24b866so10780351ilh.22
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 02:49:57 -0800 (PST)
+        Wed, 11 Jan 2023 05:51:48 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83501014
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 02:51:47 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id t15-20020a5d81cf000000b006f95aa9ba6eso8863100iol.16
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 02:51:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KicQRhRW4GIgvI9D3cmZlt5g4pih7zwKs4FM1PmEwRI=;
-        b=mZ/jG4jfAZ/xmJt3PGcKGY8ivBUgc6LiYOnjr0YcTLsMWG3kWffrUIYAaJLuwMqIk0
-         Md2lAl+qjQHGcKKXGuTeooU+0t6to5uM3YuwNv8cHu2vBMOeKqRxA9dktzoj3WCEqxM3
-         +owS/n0q8SzQ9Y+U2Twpff18zMcMpknuJAFTL2TorlJW385HvJVvIQu1uf8igCBhKi2+
-         leOGqSFDK2ZNjvooPf5yZ+vaqZ78/Y1nY15wtx+56YlhZ68pvzED7WYretpNxW5nwAEv
-         SmNk8e6nQUb34eo0XBIqVnctTWYMTeqdxROXM/Lm9kZeVaUWPjIgGsfmjnYcCqLHVLwE
-         zDgw==
-X-Gm-Message-State: AFqh2kqWMlR5ayyZX1RiLMtx1BgRCcVZAaqz5i5mf8xrVMn+QhLEeQeY
-        GS1Mg2NqtJ7dkLWLt95oVSMB2CGLLZZKQUY040Dvp+pwmtRU0LMNq+8dtIwloA1zcf9ssscv3Qs
-        /WYzkP6JZGje+g8N7OHAu1vGq
-X-Received: by 2002:a5d:9cc4:0:b0:6e5:d1b2:d925 with SMTP id w4-20020a5d9cc4000000b006e5d1b2d925mr49142215iow.6.1673434196857;
-        Wed, 11 Jan 2023 02:49:56 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs3Y45SXB/Nt9M0C16VUqO/0EV+05Hlv3juN5iJV2s2eapIOTQnzGAYArJYogQH6E8bee7eFw==
-X-Received: by 2002:a5d:9cc4:0:b0:6e5:d1b2:d925 with SMTP id w4-20020a5d9cc4000000b006e5d1b2d925mr49142208iow.6.1673434196657;
-        Wed, 11 Jan 2023 02:49:56 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id v19-20020a02b093000000b0039e8c12414asm2287897jah.164.2023.01.11.02.49.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 02:49:55 -0800 (PST)
-Date:   Wed, 11 Jan 2023 05:49:53 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Eric Chanudet <echanude@redhat.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sa8450p-pmics: add missing
- interrupt include
-Message-ID: <Y76UUZ7ZbM6csqmV@x1>
-References: <20230111082331.20641-1-johan+linaro@kernel.org>
- <20230111082331.20641-2-johan+linaro@kernel.org>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PuBRYIvom7mS4Ac9wn0/HMLBW0OGLlFTy8/iEDjPDeE=;
+        b=cCqDj1Kxoa3D6nSik6a3k7yTVa8Vj/CQYIdQcv5O88qcPh+HQB8HH7bLLsmuZLI30f
+         LF6mfoZNyhzNSEEO/f2npy/K81DJgCMyug1vXckLARURezqwgXLgyoBs90cJro4R1qFB
+         yERPbbna/l9ZvTP6yUZ9TBM9d1wD5nu3e+7TtZzQM0bFFHjJ8h9KdI4YpVdhpAFmRM6+
+         znEBIvbmheFMLc78tlR8Ee++hTmnKy8fq5TXwaRwUbeLaYRGhimaQg/I0UNuYVdRpbij
+         qUd3K0FIyH7VGS1HvynIfgXz8kGngd+iw2gXv10EA9Y4rIv3iVrTQHpVzBs9D21IaEEx
+         wPGw==
+X-Gm-Message-State: AFqh2koqLmcZGwdhFzGWvY9qAIi1n+drZiZdkCHK8qZzKLvmX4IOIovS
+        HoOryqIcjDsb/7TTxqnqxlFwQd5sZwh855SmGw+lm7VDYA5v
+X-Google-Smtp-Source: AMrXdXtzKG31e4C/I4hJQPawIibiSyzlyVPf32wktwSRxl+wNwgv040Z/cjlhxn49YUEs6IEGiotbx+pAQSM1BEGFeGJQQIVzVmb
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111082331.20641-2-johan+linaro@kernel.org>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:292:b0:38a:3cc1:130a with SMTP id
+ c18-20020a056638029200b0038a3cc1130amr5773380jaq.314.1673434307093; Wed, 11
+ Jan 2023 02:51:47 -0800 (PST)
+Date:   Wed, 11 Jan 2023 02:51:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006deae405f1fac97a@google.com>
+Subject: [syzbot] [btrfs?] kernel BUG in __set_extent_bit
+From:   syzbot <syzbot+89700d262ed1fb9f9351@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 09:23:30AM +0100, Johan Hovold wrote:
-> Add the missing interrupt-controller include which is needed by the RTC
-> node.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Hello,
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+syzbot found the following issue on:
 
+HEAD commit:    358a161a6a9e Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=12115e1c480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2573056c6a11f00d
+dashboard link: https://syzkaller.appspot.com/bug?extid=89700d262ed1fb9f9351
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13abc0a6480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1153e53c480000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/99d14e0f4c19/disk-358a161a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/23275b612976/vmlinux-358a161a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ed79195fac61/Image-358a161a.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/fdb7b054a0c8/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+89700d262ed1fb9f9351@syzkaller.appspotmail.com
+
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/extent-io-tree.c:379!
+Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 4396 Comm: syz-executor224 Not tainted 6.2.0-rc3-syzkaller-16369-g358a161a6a9e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : set_state_bits fs/btrfs/extent-io-tree.c:379 [inline]
+pc : __set_extent_bit+0x10c0/0x1174 fs/btrfs/extent-io-tree.c:1042
+lr : set_state_bits fs/btrfs/extent-io-tree.c:379 [inline]
+lr : __set_extent_bit+0x10c0/0x1174 fs/btrfs/extent-io-tree.c:1042
+sp : ffff80000feab890
+x29: ffff80000feab910 x28: ffff0000cafd9330 x27: ffff0000c9e6e300
+x26: 0000000000000800 x25: 0000000000000000 x24: 000000000000ffff
+x23: 000000000000ffff x22: ffff0000cafd9310 x21: 00000000fffffff4
+x20: ffff0000cafd9310 x19: ffff0000c9e6e180 x18: 00000000000000c0
+x17: 6e69676e45206574 x16: ffff80000dd86118 x15: ffff0000c4c30000
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c4c30000
+x11: ff80800009263dec x10: 0000000000000000 x9 : ffff800009263dec
+x8 : ffff0000c4c30000 x7 : ffff80000c11ee8c x6 : 0000000000000000
+x5 : 00000000ffffffff x4 : 0000000000000a20 x3 : 0000000000000080
+x2 : 0000000000000038 x1 : 00000000fffffff4 x0 : 0000000000000000
+Call trace:
+ set_state_bits fs/btrfs/extent-io-tree.c:379 [inline]
+ __set_extent_bit+0x10c0/0x1174 fs/btrfs/extent-io-tree.c:1042
+ set_record_extent_bits+0x74/0xb0 fs/btrfs/extent-io-tree.c:1690
+ qgroup_reserve_data+0x134/0x374 fs/btrfs/qgroup.c:3758
+ btrfs_qgroup_reserve_data+0x40/0xd0 fs/btrfs/qgroup.c:3801
+ btrfs_zero_range+0x638/0x8c0 fs/btrfs/file.c:2997
+ btrfs_fallocate+0x584/0xdd0 fs/btrfs/file.c:3114
+ vfs_fallocate+0x328/0x38c fs/open.c:323
+ ioctl_preallocate+0x16c/0x1bc fs/ioctl.c:290
+ do_vfs_ioctl+0x123c/0x16a4 fs/ioctl.c:849
+ __do_sys_ioctl fs/ioctl.c:868 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __arm64_sys_ioctl+0x98/0x140 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: d4210000 97c12b8e d4210000 97c12b8c (d4210000) 
+---[ end trace 0000000000000000 ]---
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
