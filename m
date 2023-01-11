@@ -2,110 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9B5665D4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F70665D4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbjAKOHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
+        id S233845AbjAKOIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbjAKOHl (ORCPT
+        with ESMTP id S232656AbjAKOIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:07:41 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBCD270;
-        Wed, 11 Jan 2023 06:07:38 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        Wed, 11 Jan 2023 09:08:52 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCF1270;
+        Wed, 11 Jan 2023 06:08:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E9006602D9C;
-        Wed, 11 Jan 2023 14:07:36 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673446057;
-        bh=n5WHHdQNBAmOfq5p8QxYo1xuR8hghbRyMcc6c0ej73E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ft+RLNTMPustVX31ZWVZ+VbC8cBRx/3a766ayXp+Je96O72qZb91w6D7v68FJ1NDL
-         KsXKIoRZVL4b6CmVrTmJ09ngH1dGN1MowQDAM81UCm8Vfsy36O7OTsl3egi55IDvV6
-         envsu1WpEfF5FCOQoI/tSwRMQCp1PH5R0mSDjCTs5EjD+tRatASSerY4C8QF/qGJFX
-         Lu2ho8UJ8BUTiWXUeloV2QzRIXUnb0CFLkcWxvcPCsq8NeLMZCdXgr4ikJ4pUrh8++
-         N4o15u4RBqLyukqKK7Zx8Tzb8XmYy54VBXvIDZH/3ov5gCxijHm4/Qw2YAAt5rUDzX
-         LSAWgXk4WxxnQ==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH] arm64: dts: mediatek: mt8173-elm: Move display to ps8640 auxiliary bus
-Date:   Wed, 11 Jan 2023 15:07:24 +0100
-Message-Id: <20230111140724.294533-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.0
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C5E9417B5C;
+        Wed, 11 Jan 2023 14:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673446130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NL+HnkITOgHJ0AagPsed/d+7cGSBCRxbVWfXMOm+fYo=;
+        b=tVlRC1Qg/hU8p77dRFo8KJRw3dOMRYE3XNLcaVkDwUkrwWEKqRBZSpRd5eleFS2BU3Cp/c
+        RAumpKoMM0DzgIejNhVbw6rf/UZX2h5i9b7XDFimvXxYzjtK4TeGwFScakDMmd2rFfwLoG
+        avJULLL25juA7cbZKOO11fMoRp0wPJM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673446130;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NL+HnkITOgHJ0AagPsed/d+7cGSBCRxbVWfXMOm+fYo=;
+        b=sYumW9XkOeV39MmAc6c+Rm/ccS/3ilVLvqmKKkg/QJsvUuZ2bVCAnHXhzt61dnKcBRjBCd
+        MTLQiqJjGXNxWnAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B83A41358A;
+        Wed, 11 Jan 2023 14:08:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GEfSLPLCvmNxBQAAMHmgww
+        (envelope-from <dwagner@suse.de>); Wed, 11 Jan 2023 14:08:50 +0000
+Date:   Wed, 11 Jan 2023 15:08:50 +0100
+From:   Daniel Wagner <dwagner@suse.de>
+To:     James Smart <jsmart2021@gmail.com>
+Cc:     Dick Kennedy <dick.kennedy@broadcom.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] lpfc: Handle gracefully failed FLOGI attempts in
+ devloss callback
+Message-ID: <20230111140850.cww4xgq5vtvrt6kx@carbon.lan>
+References: <20230111113841.108588-1-dwagner@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111113841.108588-1-dwagner@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the display to an aux-bus subnode of the PS8640 eDP bridge.
+On Wed, Jan 11, 2023 at 12:38:41PM +0100, Daniel Wagner wrote:
+> When FLOGI attempts fail, the vport can be released via
+> lpfc_nlp_release() function. This function will set the pointer to NULL
+> and the node state to NLP_STE_FREED_NODE. Though it wont stop the
+> devloss timer in the upper SCSI layer.
+> 
+> Hence when the devloss timer eventually fires,
+> lpfc_dev_loss_tmo_callbk() is called and it tries to operate on vport
+> NULL pointer.
+> 
+> Just do nothing in this case. To be extra cautions also check for the
+> state and issue a warning if we have an inconsistency.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 26 +++++++++++---------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+Ignore this one. Just saw the proper fix:
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-index 18e214464a2d..f9b10c7027cf 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-@@ -90,18 +90,6 @@ switch-volume-up {
- 		};
- 	};
- 
--	panel: panel {
--		compatible = "lg,lp120up1";
--		power-supply = <&panel_fixed_3v3>;
--		backlight = <&backlight>;
--
--		port {
--			panel_in: endpoint {
--				remote-endpoint = <&ps8640_out>;
--			};
--		};
--	};
--
- 	panel_fixed_3v3: regulator1 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "PANEL_3V3";
-@@ -282,6 +270,20 @@ ps8640_out: endpoint {
- 				};
- 			};
- 		};
-+
-+		aux-bus {
-+			panel: panel {
-+				compatible = "lg,lp120up1";
-+				power-supply = <&panel_fixed_3v3>;
-+				backlight = <&backlight>;
-+
-+				port {
-+					panel_in: endpoint {
-+						remote-endpoint = <&ps8640_out>;
-+					};
-+				};
-+			};
-+		};
- 	};
- };
- 
--- 
-2.39.0
-
+https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git/commit/?id=97f256913c5d
