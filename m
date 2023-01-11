@@ -2,154 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906056660DE
+	by mail.lfdr.de (Postfix) with ESMTP id 461C96660DD
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239082AbjAKQnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:43:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S231334AbjAKQm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234403AbjAKQmd (ORCPT
+        with ESMTP id S232608AbjAKQmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:42:33 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FC1CE21
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:41:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 79013CE1C03
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:41:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8970DC433A0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:41:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673455302;
-        bh=HAiGsZVdZ7bRLRhnBgYD+v8uX7S+LNMDjafB7ePSsPE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=srRV6h7579FD9/vtNnis7ZrO/GqsYNLwbmDaz24PDJNMbgv7klXK5jutPYQbMun9x
-         tBedsxB0fRKJeMO7hY8AQ3SO1b2q+cBiisk6pMe1/sPCLKTuo+QNncc9KX/fishber
-         +rzZlvNLXfbt65doUfW4pk1HT/ke7Uxreq4UdPet3DkhVoEEEPfB+wI1k6jj6RknOg
-         JR5KN6Op46lVZRYRSS0rxHJwTZLq9d2vWDzQMottX/72pmUV38GoE3W3ncKbd15/E4
-         E247tYUiGwI3bP1a4HpfHkIx4MJqQyoGqJCspRsPfmDlBVgMU0khNACZMd5/wDjuq8
-         NvAbeyRXfFo8g==
-Received: by mail-vs1-f46.google.com with SMTP id a64so16302058vsc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:41:42 -0800 (PST)
-X-Gm-Message-State: AFqh2koTbPRSXAvmd3cRH7+hhY5x6sYu55V3mrnUnnZXN/BaTUrCaOxb
-        JKAwpphIGWY3e1pbjtcXH2NnFKtHaQhFUvYETCdG8Q==
-X-Google-Smtp-Source: AMrXdXvGpcHrbGd1IktlEVtMp91mJzkaHY2rmPBAfofBvI8ZkhzTqUJSC534yKEI2uGlNiqT2NU+6cYF8rHr+kVIjU4=
-X-Received: by 2002:a05:6102:374d:b0:3d0:af13:3b6 with SMTP id
- u13-20020a056102374d00b003d0af1303b6mr1504766vst.65.1673455301431; Wed, 11
- Jan 2023 08:41:41 -0800 (PST)
+        Wed, 11 Jan 2023 11:42:32 -0500
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01647CE0B;
+        Wed, 11 Jan 2023 08:41:46 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-4d19b2686a9so75069857b3.6;
+        Wed, 11 Jan 2023 08:41:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zptl82ttrhrV63pMTO0viIa9cKU9Map9hB06vVk8Wqo=;
+        b=2W24tW4ZOys7/S3b5X4RgxaWvzroJkwclGHRT19DrtaeEToFJPhT0kVFOwt2+QYKuh
+         EzvL+0Xc4cpNclWkXLv5Azn7fjw89hHazT5U9p0t0zGgw8FCEc/7FATOWcFUsI5gKOd/
+         lunoahT/CT7UD3BXVP6WOTKIRvtbIKPRnoeibD3bZtDQxlQkB6cMfL//7r17pbAOwnyB
+         ntQukFImLqC+qVBKa/6Sfn/exSvlYEsBlI200pFA8kR9rVYNe0PKHCR1OOFY++c0Ckhi
+         W3cEetqIPgzYAPwHlHoZS1PZKL0tfBn3GNs0rKxOk4H4F6qfFGiGUnbNpHGT5LYwsc8G
+         Uxgw==
+X-Gm-Message-State: AFqh2krcAhpQh+cNFYoLTK7r5nOnZGE6M7iEbvZUlSkGbDo5FbGeIPu5
+        lpSwaNDe4HmSTfiO4TWhSpr6XgQHddzvUA==
+X-Google-Smtp-Source: AMrXdXv51sHXafLWUndB9GkOMJxfIsj8bY4lK6Nov3GUZRCvhiyFFELSXAaJsCB+l5NLjwsMEfTD2g==
+X-Received: by 2002:a81:190a:0:b0:364:1ba6:7e6 with SMTP id 10-20020a81190a000000b003641ba607e6mr19485322ywz.37.1673455304695;
+        Wed, 11 Jan 2023 08:41:44 -0800 (PST)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id 64-20020a370c43000000b006cfc1d827cbsm9115697qkm.9.2023.01.11.08.41.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 08:41:44 -0800 (PST)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-4d0f843c417so88646397b3.7;
+        Wed, 11 Jan 2023 08:41:43 -0800 (PST)
+X-Received: by 2002:a81:1751:0:b0:4bd:caff:589e with SMTP id
+ 78-20020a811751000000b004bdcaff589emr2155587ywx.502.1673455303487; Wed, 11
+ Jan 2023 08:41:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20230110103420.2430518-1-daniel.lezcano@kernel.org>
-In-Reply-To: <20230110103420.2430518-1-daniel.lezcano@kernel.org>
-From:   Amit Kucheria <amitk@kernel.org>
-Date:   Wed, 11 Jan 2023 22:11:30 +0530
-X-Gmail-Original-Message-ID: <CAHLCerOcDkUfb_SA6_XcrpYY9Zj2rmC973jApBpPJyXwEh1wVw@mail.gmail.com>
-Message-ID: <CAHLCerOcDkUfb_SA6_XcrpYY9Zj2rmC973jApBpPJyXwEh1wVw@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/qcom: Remove duplicate set next trip
- point interrupt code
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20230102222233.274021-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230102222233.274021-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 11 Jan 2023 17:41:31 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXVPdWb2GGSOoVSLNNE6k-JpKnqMGXwpJH=HaGz94GHQQ@mail.gmail.com>
+Message-ID: <CAMuHMdXVPdWb2GGSOoVSLNNE6k-JpKnqMGXwpJH=HaGz94GHQQ@mail.gmail.com>
+Subject: Re: [PATCH v2] riscv: dts: renesas: rzfive-smarc-som: Enable OSTM nodes
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 4:04 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Mon, Jan 2, 2023 at 11:22 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Enable OSTM{1,2} nodes on RZ/Five SMARC SoM.
 >
-> The tsens driver reprogram the next trip points in the irq
-> handler. This function then call thermal_zone_device_update().
+> Note, OSTM{1,2} nodes are enabled in the RZ/G2UL SMARC SoM DTSI [0] hence
+> deleting the disabled nodes from RZ/Five SMARC SoM DTSI enables it here
+> too as we include [0] in RZ/Five SMARC SoM DTSI.
 >
-> However, thermal_zone_device_update() calls thermal_zone_set_trips()
-> and from there it calls the backend 'set_trips' ops. This one in turn
-> reprogram the next trip points (low/high).
+> [0] arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
 >
-> Consequently, the code setting the next trip points interrupt in the
-> interrupt handle is not needed and could be removed.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
-
-Acked-by: Amit Kucheria <amitk@kernel.org>
-
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
->  drivers/thermal/qcom/tsens.c | 46 +-----------------------------------
->  1 file changed, 1 insertion(+), 45 deletions(-)
+> v1->v2
+> * Rebased patch on top of [0]
 >
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index b5b136ff323f..58693ee8c430 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -472,52 +472,8 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
->                         continue;
->                 if (!tsens_threshold_violated(priv, hw_id, &d))
->                         continue;
-> -               ret = get_temp_tsens_valid(s, &temp);
-> -               if (ret) {
-> -                       dev_err(priv->dev, "[%u] %s: error reading sensor\n",
-> -                               hw_id, __func__);
-> -                       continue;
-> -               }
->
-> -               spin_lock_irqsave(&priv->ul_lock, flags);
-> -
-> -               tsens_read_irq_state(priv, hw_id, s, &d);
-> -
-> -               if (d.up_viol &&
-> -                   !masked_irq(hw_id, d.up_irq_mask, tsens_version(priv))) {
-> -                       tsens_set_interrupt(priv, hw_id, UPPER, disable);
-> -                       if (d.up_thresh > temp) {
-> -                               dev_dbg(priv->dev, "[%u] %s: re-arm upper\n",
-> -                                       hw_id, __func__);
-> -                               tsens_set_interrupt(priv, hw_id, UPPER, enable);
-> -                       } else {
-> -                               trigger = true;
-> -                               /* Keep irq masked */
-> -                       }
-> -               } else if (d.low_viol &&
-> -                          !masked_irq(hw_id, d.low_irq_mask, tsens_version(priv))) {
-> -                       tsens_set_interrupt(priv, hw_id, LOWER, disable);
-> -                       if (d.low_thresh < temp) {
-> -                               dev_dbg(priv->dev, "[%u] %s: re-arm low\n",
-> -                                       hw_id, __func__);
-> -                               tsens_set_interrupt(priv, hw_id, LOWER, enable);
-> -                       } else {
-> -                               trigger = true;
-> -                               /* Keep irq masked */
-> -                       }
-> -               }
-> -
-> -               spin_unlock_irqrestore(&priv->ul_lock, flags);
-> -
-> -               if (trigger) {
-> -                       dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
-> -                               hw_id, __func__, temp);
-> -                       thermal_zone_device_update(s->tzd,
-> -                                                  THERMAL_EVENT_UNSPECIFIED);
-> -               } else {
-> -                       dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
-> -                               hw_id, __func__, temp);
-> -               }
-> +               thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
->
->                 if (tsens_version(priv) < VER_0_1) {
->                         /* Constraint: There is only 1 interrupt control register for all
-> --
-> 2.34.1
->
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=renesas-riscv-dt-for-v6.3
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.3.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
