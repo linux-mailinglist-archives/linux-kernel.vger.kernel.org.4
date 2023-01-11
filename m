@@ -2,124 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44540665709
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF85366571A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238579AbjAKJMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
+        id S238259AbjAKJOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238479AbjAKJLb (ORCPT
+        with ESMTP id S238425AbjAKJOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:11:31 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D797B15737;
-        Wed, 11 Jan 2023 01:08:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1673428086; x=1704964086;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=ktldcXxVnrk9cNFDRaUOrMoWTA9I+bDZmJoMwZ8rRTk=;
-  b=jY0aKZHgFzuPiJNiox9aDrF+Z/wp6DADw+byMOX/gKbyo+JYfAPg46Hf
-   G+vUY7mDiX3wssdTiXP35nvAfh3lgRq5QIB/7yLnDRRCPOWtFxZuca486
-   GTO6s4MHMDUWM2TGnegaXRppPrUGshCqisPq2TYolRl/3fMT1gEVVX8Tl
-   s=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Jan 2023 01:08:06 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.45.79.139])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 01:08:06 -0800
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 11 Jan 2023 01:08:04 -0800
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>
-CC:     <linux-hardening@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Mukesh Ojha" <quic_mojha@quicinc.com>
-Subject: [PATCH] pstore/ram: Rework logic for detecting ramoops
-Date:   Wed, 11 Jan 2023 14:37:45 +0530
-Message-ID: <1673428065-22356-1-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 11 Jan 2023 04:14:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC137BE28;
+        Wed, 11 Jan 2023 01:10:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F929B81ACE;
+        Wed, 11 Jan 2023 09:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F1F7EC433EF;
+        Wed, 11 Jan 2023 09:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673428219;
+        bh=42gL1q+GkZgt9fX2//DcHxxejEgYJTpJAhZ1nV5h5cc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ma5uFwIY9ynUxhmWaSUEHFE+DmL43KU8WXadcjMenbmQ+Ny4etnC46SRobdPbvKoI
+         O9q7dYY2OKOh03hdkScppXcgwuIrx/u4ygbMXV47PqhVO7n3KXYnWs+OQlj5fy4xn0
+         RewEUvrZpYZ6TKUfam7+Epk7jEd1Y3s2Kcmat/LWzbRlvJJz7fkpBNQEvMUxXRFH5x
+         Iy8E9zuBbJYQCLJCgE4BJKJ9Qn2FTu676sBDC9qn2d1hRT4BjA/TcqKo4qnIsZfoOk
+         peS9PALxHGd6u8woa8VxqcHmQBsSjPAQqbbRqw8RGPGIVuXMMGExoksMYhlnXq80ht
+         66YD0XBaBcSGQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB594E45233;
+        Wed, 11 Jan 2023 09:10:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 net-next 0/5] add PLCA RS support and onsemi NCN26000
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167342821882.24876.7581626078662045769.git-patchwork-notify@kernel.org>
+Date:   Wed, 11 Jan 2023 09:10:18 +0000
+References: <cover.1673282912.git.piergiorgio.beruto@gmail.com>
+In-Reply-To: <cover.1673282912.git.piergiorgio.beruto@gmail.com>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, o.rempel@pengutronix.de,
+        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
+        sbhatta@marvell.com, linux-doc@vger.kernel.org,
+        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
+        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reserved memory region for ramoops is assumed to be at a fixed
-and known location when read from the devicetree. This is not desirable
-in environments where it is preferred the region to be dynamically
-allocated at runtime, as opposed to being fixed at compile time.
+Hello:
 
-Also, Some of the platforms might be still expecting dedicated
-memory region for ramoops node where the region is known
-beforehand and platform_get_resource() is used in that case.
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-So, Add logic to detect the start and size of the ramoops memory
-region by looking up reserved memory region with
-of_reserved_mem_lookup() when platform_get_resource() failed.
+On Mon, 9 Jan 2023 17:59:25 +0100 you wrote:
+> This patchset adds support for getting/setting the Physical Layer
+> Collision Avoidace (PLCA) Reconciliation Sublayer (RS) configuration and
+> status on Ethernet PHYs that supports it.
+> 
+> PLCA is a feature that provides improved media-access performance in terms
+> of throughput, latency and fairness for multi-drop (P2MP) half-duplex PHYs.
+> PLCA is defined in Clause 148 of the IEEE802.3 specifications as amended
+> by 802.3cg-2019. Currently, PLCA is supported by the 10BASE-T1S single-pair
+> Ethernet PHY defined in the same standard and related amendments. The OPEN
+> Alliance SIG TC14 defines additional specifications for the 10BASE-T1S PHY,
+> including a standard register map for PHYs that embeds the PLCA RS (see
+> PLCA management registers at https://www.opensig.org/about/specifications/).
+> 
+> [...]
 
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
- fs/pstore/ram.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+Here is the summary with links:
+  - [v4,net-next,1/5] net/ethtool: add netlink interface for the PLCA RS
+    https://git.kernel.org/netdev/net-next/c/8580e16c28f3
+  - [v4,net-next,2/5] drivers/net/phy: add the link modes for the 10BASE-T1S Ethernet PHY
+    https://git.kernel.org/netdev/net-next/c/16178c8ef53d
+  - [v4,net-next,3/5] drivers/net/phy: add connection between ethtool and phylib for PLCA
+    https://git.kernel.org/netdev/net-next/c/a23a1e57a677
+  - [v4,net-next,4/5] drivers/net/phy: add helpers to get/set PLCA configuration
+    https://git.kernel.org/netdev/net-next/c/493323416fed
+  - [v4,net-next,5/5] drivers/net/phy: add driver for the onsemi NCN26000 10BASE-T1S PHY
+    https://git.kernel.org/netdev/net-next/c/b53e7e8d8557
 
-diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-index ade66db..e4bbba1 100644
---- a/fs/pstore/ram.c
-+++ b/fs/pstore/ram.c
-@@ -20,6 +20,7 @@
- #include <linux/compiler.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-+#include <linux/of_reserved_mem.h>
- 
- #include "internal.h"
- #include "ram_internal.h"
-@@ -643,6 +644,7 @@ static int ramoops_parse_dt(struct platform_device *pdev,
- {
- 	struct device_node *of_node = pdev->dev.of_node;
- 	struct device_node *parent_node;
-+	struct reserved_mem *rmem;
- 	struct resource *res;
- 	u32 value;
- 	int ret;
-@@ -651,13 +653,20 @@ static int ramoops_parse_dt(struct platform_device *pdev,
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (!res) {
--		dev_err(&pdev->dev,
--			"failed to locate DT /reserved-memory resource\n");
--		return -EINVAL;
-+		rmem = of_reserved_mem_lookup(of_node);
-+		if (rmem) {
-+			pdata->mem_size = rmem->size;
-+			pdata->mem_address = rmem->base;
-+		} else {
-+			dev_err(&pdev->dev,
-+				"failed to locate DT /reserved-memory resource\n");
-+			return -EINVAL;
-+		}
-+	} else {
-+		pdata->mem_size = resource_size(res);
-+		pdata->mem_address = res->start;
- 	}
- 
--	pdata->mem_size = resource_size(res);
--	pdata->mem_address = res->start;
- 	/*
- 	 * Setting "unbuffered" is deprecated and will be ignored if
- 	 * "mem_type" is also specified.
+You are awesome, thank you!
 -- 
-2.7.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
