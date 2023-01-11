@@ -2,149 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1480666081
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F6666608E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238964AbjAKQay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
+        id S235167AbjAKQdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239593AbjAKQaA (ORCPT
+        with ESMTP id S234993AbjAKQct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:30:00 -0500
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689FECE07;
-        Wed, 11 Jan 2023 08:29:34 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id h16so2768162qtu.2;
-        Wed, 11 Jan 2023 08:29:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JjrcWIBjmmPlwZTcOfDOO38h43AQNOgajs77lr03LAg=;
-        b=gvZbZGhnSt6eaRePRZ2MrpMG4AamK+sJRNN7LI/52IY7iGgg+dy65NfUKeCzyfAfa+
-         W3ciqyhotOLZP9seeS9s4+yo2ufjLC6Nmio2rC/qZ9d2ugkGQ8EmgQVZp+RNL9HLK9WB
-         KCSo16c3mh7HmToWJPy24DYavBziuqkONNlJ5VFt9UKBvDwJTPhuaqmG3t9LThMlY530
-         0rAPBObEuxxPcf1ruHqlJQmZiteKAY9IPybsBL7cNXhOS9Ks0/ovGhPcK/7/hZYLsfcz
-         X6FHSb4Y8dqLOshKNPPrmfAzZKdS01guv91HdwzYnaZIYMycdFcoXpzrkJtWjKr8KYE4
-         n9CA==
-X-Gm-Message-State: AFqh2kq1wv/94GiLEjLsgCCDIkMn+5SI88aJMEvdczXnt5gYzHJRNOgA
-        MMw7A0YbABKnwBgDXZhU4F9Gf2GQuqI03w==
-X-Google-Smtp-Source: AMrXdXsUDgB+NK0Fpm3QJtCw8pkwCUFw79A9mCE9laXxleJYgXMh3P/HRxy74N8CrLQDsBmSl1FmfQ==
-X-Received: by 2002:ac8:4c8c:0:b0:3a5:3134:48ac with SMTP id j12-20020ac84c8c000000b003a5313448acmr8939578qtv.3.1673454573263;
-        Wed, 11 Jan 2023 08:29:33 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id d16-20020ac85350000000b003a689a5b177sm7774491qto.8.2023.01.11.08.29.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 08:29:33 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id 16so15609333ybc.0;
-        Wed, 11 Jan 2023 08:29:32 -0800 (PST)
-X-Received: by 2002:a25:46c6:0:b0:7b8:a0b8:f7ec with SMTP id
- t189-20020a2546c6000000b007b8a0b8f7ecmr2429658yba.36.1673454572643; Wed, 11
- Jan 2023 08:29:32 -0800 (PST)
+        Wed, 11 Jan 2023 11:32:49 -0500
+Received: from a3.inai.de (a3.inai.de [IPv6:2a01:4f8:10b:45d8::f5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF26F5F4E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:32:24 -0800 (PST)
+Received: by a3.inai.de (Postfix, from userid 25121)
+        id 27283588C1A89; Wed, 11 Jan 2023 17:32:23 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by a3.inai.de (Postfix) with ESMTP id 2695B616497A7;
+        Wed, 11 Jan 2023 17:32:23 +0100 (CET)
+Date:   Wed, 11 Jan 2023 17:32:23 +0100 (CET)
+From:   Jan Engelhardt <jengelh@inai.de>
+To:     Pavel Machek <pavel@ucw.cz>
+cc:     Theodore Ts'o <tytso@mit.edu>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@osdl.org>
+Subject: Re: Dhrystone -- userland version
+In-Reply-To: <Y77WEO43H8eIPA5U@duo.ucw.cz>
+Message-ID: <28821r94-886p-5816-7s47-4s0q7p846qp@vanv.qr>
+References: <Y7nyd4hPeXsdiibH@duo.ucw.cz> <Y7pRw47hidw+s6+g@mit.edu> <Y7pzbnlXgv+asekg@amd.ucw.cz> <CAMuHMdVvVoEs8yjNLmK=_shmGkyz1zYc8ZMi-vmP4aee0yKoPQ@mail.gmail.com> <Y7sPq3Tmm6vI/RAJ@duo.ucw.cz> <Y7tjnhs77o4TL5ey@mit.edu> <614os9n2-2sq1-2qnr-56q6-1qq628271175@vanv.qr>
+ <Y77WEO43H8eIPA5U@duo.ucw.cz>
+User-Agent: Alpine 2.25 (LSU 592 2021-09-18)
 MIME-Version: 1.0
-References: <20230104141245.8407-1-aford173@gmail.com>
-In-Reply-To: <20230104141245.8407-1-aford173@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 11 Jan 2023 17:29:20 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWuE4L6K4ULdVLZKeLwd3xYfzkyBNrf6s7Qc2kf9b-_Cg@mail.gmail.com>
-Message-ID: <CAMuHMdWuE4L6K4ULdVLZKeLwd3xYfzkyBNrf6s7Qc2kf9b-_Cg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] arm64: dts: beacon-renesom: Fix gpio expander reference
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org, aford@beaconembedded.com,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
 
-On Wed, Jan 4, 2023 at 3:12 PM Adam Ford <aford173@gmail.com> wrote:
-> The board used to originally introduce the Beacon Embedded
-> RZ/G2[M/N/H] boards had a GPIO expander with address 20, but
-> this was change when the final board went to production.
+On Wednesday 2023-01-11 16:30, Pavel Machek wrote:
 >
-> The production boards changed both the part itself and
-> the address.  With the incorrect address, the LCD cannot
-> come up.  If the LCD fails, the rcar-du driver fails to come up,
-> and that also breaks HDMI.
+>> (All of) you could install boinc-client and just exercise
+>> --run_cpu_benchmarks without (I think) attaching to any particular
+>> computing project. The package should be in distros and you get
+>> both Dhrystone and Whetstone.
 >
-> Pre-release board were not shipped to the general public, so it
-> should be safe to push this as a fix.  Anyone with a production
-> board would have video fail due to this GPIO expander change.
+>Hehe, nice trick, but it does not work for me:
 >
-> Fixes: a1d8a344f1ca ("arm64: dts: renesas: Introduce r8a774a1-beacon-rzg2m-kit")
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-
-Thanks for your patch!
-
-> --- a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-> @@ -437,20 +437,6 @@ wm8962_endpoint: endpoint {
->                 };
->         };
+>boinc --run_cpu_benchmarks
 >
-> -       /* 0 - lcd_reset */
-> -       /* 1 - lcd_pwr */
-> -       /* 2 - lcd_select */
-> -       /* 3 - backlight-enable */
-> -       /* 4 - Touch_shdwn */
-> -       /* 5 - LCD_H_pol */
-> -       /* 6 - lcd_V_pol */
-> -       gpio_exp1: gpio@20 {
-> -               compatible = "onnn,pca9654";
-> -               reg = <0x20>;
-> -               gpio-controller;
-> -               #gpio-cells = <2>;
-> -       };
-> -
->         touchscreen@26 {
->                 compatible = "ilitek,ili2117";
->                 reg = <0x26>;
-> @@ -482,6 +468,21 @@ hd3ss3220_out_ep: endpoint {
->                         };
->                 };
->         };
-> +
-> +       gpio_exp1: gpio@70 {
-> +               compatible = "onnn,pca9654";
+>does not actually seem to run the benchmarks.
 
-According to the patch description, the actual part was changed, too?
+Maybe I misread the manpage.
 
-> +               reg = <0x70>;
-> +               gpio-controller;
-> +               #gpio-cells = <2>;
-> +               gpio-line-names =
-> +                       "lcd_reset",
-> +                       "lcd_pwr",
-> +                       "lcd_select",
-> +                       "backlight-enable",
-> +                       "Touch_shdwn",
-> +                       "LCD_H_pol",
-> +                       "lcd_V_pol";
-> +       };
->  };
+# runuser -u boinc -- /bin/bash --login
+$ cd ~
+$ boinccmd --get_messages
+11: 11-Jan-2023 17:23:50 (low) [] Processor: 16 AuthenticAMD AMD Ryzen 7 3700X 8-Core Processor [Family 23 Model 113 Stepping 0]
+12: 11-Jan-2023 17:23:50 (low) [] Processor features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip rdpid overflow_recov succor smca sev sev_es
+13: 11-Jan-2023 17:23:50 (low) [] OS: Linux openSUSE: openSUSE Tumbleweed [6.1.3|libc 2.36]
+...
+$ boinccmd --run_benchmarks
+...
+$ boinccmd --get_messages
+30: 11-Jan-2023 17:24:31 (low) [] Running CPU benchmarks
+31: 11-Jan-2023 17:24:31 (low) [] Suspending computation - CPU benchmarks in progress
+32: 11-Jan-2023 17:25:02 (low) [] Benchmark results:
+33: 11-Jan-2023 17:25:02 (low) [] Number of CPUs: 16
+34: 11-Jan-2023 17:25:02 (low) [] 7136 floating point MIPS (Whetstone) per CPU
+35: 11-Jan-2023 17:25:02 (low) [] 124780 integer MIPS (Dhrystone) per CPU
+36: 11-Jan-2023 17:25:03 (low) [] Resuming computation
 
-The rest LGTM.
+(This is using the openSUSE boinc-client package. It's modeled as a
+daemon/service, so runs without X11 or Wayland, since Geert was wondering.)
 
-Gr{oetje,eeting}s,
+>Thanks, but I really want an in-kernel benchmark
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Can't have everything :)
