@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA1E665CDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EF4665CE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbjAKNqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
+        id S238480AbjAKNqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233532AbjAKNqV (ORCPT
+        with ESMTP id S234188AbjAKNqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 Jan 2023 08:46:21 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EBD5F5E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:45:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F07DCD9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:45:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1673444755; x=1704980755;
+  t=1673444758; x=1704980758;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1o9L/4gS6hFw7QhrPiNy1BOlai1A8GCWCQbQw2g35go=;
-  b=FBi6yMeFn6kY4CuF0OtYFitOBkKBRbUtRGzPmSK+hIG+Z1l6/3ZbQGJN
-   zpua8RYpDEPpkEJEh/oGiPycJLz54sEQ7y3/AZkK1A6McCxnfeNvLhOnl
-   B3XTBgR2KPstelKZVKw+UOrn/j1+J+A+VCDNXo5yGv50t+RcXKo9eINnl
-   0mc4j/HJ8Jsga4AE8B7GcA9LNQ5zR1+jkuoFa0z5o8GKMayWu+qcqRc0S
-   MQMsMAY1KPzzRIS+JcJ/Lf9/o1/+VNlDhFh7pQByH+5It7r2v+RG6/6/f
-   BCqBUBKnx/9UORQyOvkrAUnmwXQrnQqCm67Ke34rWsR7k8/9V98nZYzBh
-   A==;
+  bh=FCOl+T+5C62VF4k5ASrJAWhazXtjeEzsINHVVaIW+hk=;
+  b=0Ry91HPtVZCDtQ/Bh54bCilOLnnLD20Dyl1BsJc4GAe3ZmvgRP5MxdNe
+   c/DvDQS/WwK9EOUh9WPBeOjMtMnBgZXn8s99ItWu2Og9YVQ8+Kl/maa7F
+   JKx4ffICnj+6ikIVTir0dwZzHH5DogThOaQwWbf0MPcCTL3UMQTwVD/iy
+   uFfUhQDAW3Dg94pnEDUlZ7Nk4+Cum3sOpVE9jL5oe7pt0ttEFANP34Rsj
+   ErPZEuDQ2PFG6fPRuktsubnUqRbUgd3fRjJRP0ymiyTmsuozhDQFFXnrZ
+   PsTS10TTmXzfs9SE5oNNpd+j6HKNvhb8x3FDD1z4oYqU4nrxLwpxJ1+oS
+   w==;
 X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="131834648"
+   d="scan'208";a="131834650"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jan 2023 06:45:54 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 11 Jan 2023 06:45:50 -0700
+ 15.1.2507.16; Wed, 11 Jan 2023 06:45:52 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
- Transport; Wed, 11 Jan 2023 06:45:49 -0700
+ Transport; Wed, 11 Jan 2023 06:45:51 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Jassi Brar <jassisinghbrar@gmail.com>
 CC:     Conor Dooley <conor.dooley@microchip.com>,
         Daire McNamara <daire.mcnamara@microchip.com>,
         <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 2/7] mailbox: mpfs: switch to txdone_poll
-Date:   Wed, 11 Jan 2023 13:45:08 +0000
-Message-ID: <20230111134513.2495510-3-conor.dooley@microchip.com>
+Subject: [PATCH v1 3/7] mailbox: mpfs: ditch a useless busy check
+Date:   Wed, 11 Jan 2023 13:45:09 +0000
+Message-ID: <20230111134513.2495510-4-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111134513.2495510-1-conor.dooley@microchip.com>
 References: <20230111134513.2495510-1-conor.dooley@microchip.com>
@@ -63,64 +63,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The system controller on PolarFire SoC has no interrupt to signify that
-the TX has been completed. The interrupt instead signals that a service
-requested by the mailbox client has succeeded. If a service fails, there
-will be no interrupt delivered.
+mpfs_mbox_rx_data() already checks if the system controller is busy
+before attempting to do anything, so drop the second check before
+reading any data.
 
-Switch to polling the busy register to determine whether transmission
-has completed.
+No functional change intended.
 
-Fixes: 83d7b1560810 ("mbox: add polarfire soc system controller mailbox")
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- drivers/mailbox/mailbox-mpfs.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/mailbox/mailbox-mpfs.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/mailbox/mailbox-mpfs.c b/drivers/mailbox/mailbox-mpfs.c
-index d37560e91116..e0e825bdbad9 100644
+index e0e825bdbad9..0d176aba3462 100644
 --- a/drivers/mailbox/mailbox-mpfs.c
 +++ b/drivers/mailbox/mailbox-mpfs.c
-@@ -79,6 +79,13 @@ static bool mpfs_mbox_busy(struct mpfs_mbox *mbox)
- 	return status & SCB_STATUS_BUSY_MASK;
- }
+@@ -170,12 +170,10 @@ static void mpfs_mbox_rx_data(struct mbox_chan *chan)
+ 	if (response->resp_status)
+ 		return;
  
-+static bool mpfs_mbox_last_tx_done(struct mbox_chan *chan)
-+{
-+	struct mpfs_mbox *mbox = (struct mpfs_mbox *)chan->con_priv;
-+
-+	return !mpfs_mbox_busy(mbox);
-+}
-+
- static int mpfs_mbox_send_data(struct mbox_chan *chan, void *data)
- {
- 	struct mpfs_mbox *mbox = (struct mpfs_mbox *)chan->con_priv;
-@@ -183,7 +190,6 @@ static irqreturn_t mpfs_mbox_inbox_isr(int irq, void *data)
+-	if (!mpfs_mbox_busy(mbox)) {
+-		for (i = 0; i < num_words; i++) {
+-			response->resp_msg[i] =
+-				readl_relaxed(mbox->mbox_base
+-					      + mbox->resp_offset + i * 0x4);
+-		}
++	for (i = 0; i < num_words; i++) {
++		response->resp_msg[i] =
++			readl_relaxed(mbox->mbox_base
++				      + mbox->resp_offset + i * 0x4);
+ 	}
  
- 	mpfs_mbox_rx_data(chan);
- 
--	mbox_chan_txdone(chan, 0);
- 	return IRQ_HANDLED;
- }
- 
-@@ -213,6 +219,7 @@ static const struct mbox_chan_ops mpfs_mbox_ops = {
- 	.send_data = mpfs_mbox_send_data,
- 	.startup = mpfs_mbox_startup,
- 	.shutdown = mpfs_mbox_shutdown,
-+	.last_tx_done = mpfs_mbox_last_tx_done,
- };
- 
- static int mpfs_mbox_probe(struct platform_device *pdev)
-@@ -248,7 +255,8 @@ static int mpfs_mbox_probe(struct platform_device *pdev)
- 	mbox->controller.num_chans = 1;
- 	mbox->controller.chans = mbox->chans;
- 	mbox->controller.ops = &mpfs_mbox_ops;
--	mbox->controller.txdone_irq = true;
-+	mbox->controller.txdone_poll = true;
-+	mbox->controller.txpoll_period = 10u;
- 
- 	ret = devm_mbox_controller_register(&pdev->dev, &mbox->controller);
- 	if (ret) {
+ 	mbox_chan_received_data(chan, response);
 -- 
 2.39.0
 
