@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371F26663DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FF86663D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbjAKTlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 14:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S233101AbjAKThr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 14:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233779AbjAKTk3 (ORCPT
+        with ESMTP id S231831AbjAKTho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 14:40:29 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647FA3AB08
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:40:15 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id w9-20020a05690210c900b007b20e8d0c99so17056753ybu.0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:40:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jROFcMIOfREA4pvBEWsXvm2O06wrZcKQPogWOWVjrB0=;
-        b=D1MUSWv+xcYp+8e8Z93OPrpXvAir7Vsy73rFaZnOnoCTIrqkRpOChaQSjhD/yjeua9
-         +IAYEJHPIv1/YczH/BFC+yEEpDzSs21d93HLLE39mdFDiIc45V4OBQQ8hvDJNQJvbVkp
-         5g9eaq0cQITh9qq7seexRWvL+yWohet9ZckS2zebI7/hKYi1d2IHju9ERumA6+KqhPby
-         LwxUdbf4vj3GpSf9oc2JbViesADCGEWh6rYwKnNad+luQKFl5bZLbBgKTy4s9zS1rHaF
-         CbVbjN2V4mJcjNqBy4SHsJOZJ88//N2OxsNWsGEccWmvK71CHSjq0F6aOZFQ3y/quuXU
-         S5qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jROFcMIOfREA4pvBEWsXvm2O06wrZcKQPogWOWVjrB0=;
-        b=T7fx1cxhrPcHord0EF+g9IAok/OL5QSpLvnmcjorN9WmLm89Ihw+frhgI9fAYXczm8
-         uLv7o0OKUfq0XQYBI75j/avmPkvj+dd/ychBdBFuaMsWFcLkXYO06FzOFg6N3bprnPCI
-         mxlrg/AWoeuLKeqHB7nIn8MMpMswGIYM5UBWgemxgjIAOmxgD7GWBzTvYeMu2xWBed0X
-         O5K08MHm/6wqz9/dZAOJwsBT9+I2sTNPaHUG7+o1vYNRbxBchZG6i5+0KdKcJg4Iq5yP
-         yXsqapnq0UOq0aayi0KhHNF07YGQRdbHjXuh+NoyEzRrPnAqv0fJJPu5UUbj08dIHav6
-         8idg==
-X-Gm-Message-State: AFqh2krGIdvbFLpoJxwcQcSdjbS8HYSK5MWrZkK7hJSmz1OGEFqRsUSX
-        6mDVEInZ9429tzS58VUDvp859YLnO/4Blt1xmvD/ZKPfL+UNmXXHqIzjVD/3Jw/Z/XgRxOvZQ2G
-        ztDL+FlHmS3z0eY5B+72B4P3ULpnS/Vrf73Us5Ciay/2naRtf9dRSDVI7QDzHgKfBnRRkgwALEN
-        kSNtacZbM=
-X-Google-Smtp-Source: AMrXdXvkfBHdMJmj+IxdpeRTnzrsi0sV/DAsHHhqwy47u7Iv+f7pKLZaetm63WfSMKybAxSdEe1qLT1ZuR7gQljR5w==
-X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a25:7694:0:b0:7bf:45f0:3ebb with SMTP
- id r142-20020a257694000000b007bf45f03ebbmr1096041ybc.599.1673466014555; Wed,
- 11 Jan 2023 11:40:14 -0800 (PST)
-Date:   Wed, 11 Jan 2023 19:40:01 +0000
-In-Reply-To: <20230111194001.1947849-1-dionnaglaze@google.com>
-Mime-Version: 1.0
-References: <20230111194001.1947849-1-dionnaglaze@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230111194001.1947849-8-dionnaglaze@google.com>
-Subject: [PATCH v11 7/7] x86/sev: Remove temporary typedef
-From:   Dionna Glaze <dionnaglaze@google.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Borislav Petkov <Borislav.Petkov@amd.com>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Wed, 11 Jan 2023 14:37:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C44261D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:37:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673465821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mbvcywh2c3HfOh904vLvZFGHnaoqFL7ia6UfCCLzqBY=;
+        b=esjjql4tmEj8tJt9K4Z51Q5Gi3zpV8bkLWpSIGMmKy4XiRG+UmrZUG8Kji5f47kodmOl/8
+        s09lE3c3j7ZJLuPSXRTOj5mLOEPMKU/Ria92uW6HUf628kBD7uIjUL6vkFr0rIEDV8P4zV
+        W3P3b7F8qfnfJRlu53NGaH4EbIlnzvs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-595--m7sSMw6Ny66ClXGMpAN-g-1; Wed, 11 Jan 2023 14:36:55 -0500
+X-MC-Unique: -m7sSMw6Ny66ClXGMpAN-g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4118C101A52E;
+        Wed, 11 Jan 2023 19:36:55 +0000 (UTC)
+Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EE47F1121314;
+        Wed, 11 Jan 2023 19:36:54 +0000 (UTC)
+From:   Jeff Moyer <jmoyer@redhat.com>
+To:     Seth Jenkins <sethjenkins@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Pavel Emelyanov <xemul@parallels.com>, stable@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] aio: fix mremap after fork null-deref
+References: <20221104212519.538108-1-sethjenkins@google.com>
+X-PGP-KeyID: 1F78E1B4
+X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
+Date:   Wed, 11 Jan 2023 14:40:51 -0500
+In-Reply-To: <20221104212519.538108-1-sethjenkins@google.com> (Seth Jenkins's
+        message of "Fri, 4 Nov 2022 17:25:19 -0400")
+Message-ID: <x49tu0wlv0c.fsf@segfault.boston.devel.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,68 +67,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sev_guestreq_err_t typedef has served its purpose for cleanly
-changing the sev_issue_guest_request signature, so it's no longer
-needed.
+Hi, Seth,
 
-Cc: Borislav Petkov <Borislav.Petkov@amd.com>
-Cc: Peter Gonda <pgonda@google.com>
-Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
+Seth Jenkins <sethjenkins@google.com> writes:
 
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
----
- arch/x86/include/asm/sev.h | 10 ++--------
- arch/x86/kernel/sev.c      |  2 +-
- 2 files changed, 3 insertions(+), 9 deletions(-)
+> Commit e4a0d3e720e7 ("aio: Make it possible to remap aio ring") introduced
+> a null-deref if mremap is called on an old aio mapping after fork as
+> mm->ioctx_table will be set to NULL.
+>
+> Fixes: e4a0d3e720e7 ("aio: Make it possible to remap aio ring")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Seth Jenkins <sethjenkins@google.com>
+> ---
+>  fs/aio.c | 20 +++++++++++---------
+>  1 file changed, 11 insertions(+), 9 deletions(-)
+>
+> diff --git a/fs/aio.c b/fs/aio.c
+> index 5b2ff20ad322..74eae7de7323 100644
+> --- a/fs/aio.c
+> +++ b/fs/aio.c
+> @@ -361,16 +361,18 @@ static int aio_ring_mremap(struct vm_area_struct *vma)
+>  	spin_lock(&mm->ioctx_lock);
+>  	rcu_read_lock();
+>  	table = rcu_dereference(mm->ioctx_table);
+> -	for (i = 0; i < table->nr; i++) {
+> -		struct kioctx *ctx;
+> -
+> -		ctx = rcu_dereference(table->table[i]);
+> -		if (ctx && ctx->aio_ring_file == file) {
+> -			if (!atomic_read(&ctx->dead)) {
+> -				ctx->user_id = ctx->mmap_base = vma->vm_start;
+> -				res = 0;
+> +	if (table) {
+> +		for (i = 0; i < table->nr; i++) {
+> +			struct kioctx *ctx;
+> +
+> +			ctx = rcu_dereference(table->table[i]);
+> +			if (ctx && ctx->aio_ring_file == file) {
+> +				if (!atomic_read(&ctx->dead)) {
+> +					ctx->user_id = ctx->mmap_base = vma->vm_start;
+> +					res = 0;
+> +				}
+> +				break;
+>  			}
+> -			break;
+>  		}
+>  	}
 
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 301e3b69f477..05de34d10d89 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -133,12 +133,6 @@ struct snp_secrets_page_layout {
- 	u8 rsvd3[3840];
- } __packed;
+I wonder if it would be better to not copy the ring mapping on fork.
+Something like the below?  I think that would be more in line with
+expectations (the ring isn't available in the child process).
+
+-Jeff
+
+diff --git a/fs/aio.c b/fs/aio.c
+index 562916d85cba..dbf3b0749cb4 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -390,7 +390,7 @@ static const struct vm_operations_struct aio_ring_vm_ops = {
  
--/*
-- * Use a type alias temporarily to cleanly change the snp_issue_guest_request
-- * signature cleanly over multiple patches.
-- */
--typedef u64 sev_guestreq_err_t;
--
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- extern struct static_key_false sev_es_enable_key;
- extern void __sev_es_ist_enter(struct pt_regs *regs);
-@@ -202,7 +196,7 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
- void snp_set_wakeup_secondary_cpu(void);
- bool snp_init(struct boot_params *bp);
- void __init __noreturn snp_abort(void);
--int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, sev_guestreq_err_t *exitinfo2);
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2);
- #else
- static inline void sev_es_ist_enter(struct pt_regs *regs) { }
- static inline void sev_es_ist_exit(void) { }
-@@ -223,7 +217,7 @@ static inline void snp_set_wakeup_secondary_cpu(void) { }
- static inline bool snp_init(struct boot_params *bp) { return false; }
- static inline void snp_abort(void) { }
- static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input,
--					  sev_guestreq_err_t *exitinfo2)
-+					  u64 *exitinfo2)
+ static int aio_ring_mmap(struct file *file, struct vm_area_struct *vma)
  {
- 	return -ENOTTY;
+-	vma->vm_flags |= VM_DONTEXPAND;
++	vma->vm_flags |= VM_DONTEXPAND|VM_DONTCOPY;
+ 	vma->vm_ops = &aio_ring_vm_ops;
+ 	return 0;
  }
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index d1a6092b1e03..70b4cbd33c45 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -2176,7 +2176,7 @@ static int __init init_sev_config(char *str)
- }
- __setup("sev=", init_sev_config);
- 
--int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, sev_guestreq_err_t *exitinfo2)
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2)
- {
- 	struct ghcb_state state;
- 	struct es_em_ctxt ctxt;
--- 
-2.39.0.314.g84b9a713c41-goog
 
