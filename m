@@ -2,264 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BAD665B9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A619D665B7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238713AbjAKMhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 07:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S234357AbjAKMhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 07:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235719AbjAKMh1 (ORCPT
+        with ESMTP id S231420AbjAKMhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 07:37:27 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD805766A;
-        Wed, 11 Jan 2023 04:37:25 -0800 (PST)
-X-UUID: b148a8a891ac11eda06fc9ecc4dadd91-20230111
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=jykuStcNhIaqoh/2vR5M8cvji1f+ctzxDeF4MG+9YW0=;
-        b=RKRjS8/rMN40GOjerItxJVs0PBCfHWdRudgDLxhK9j/daUl4x/gA0lbXvvYrGni9oog0P0jKltk+6FciboM8x+LqAzsdrIupzC8xFh/GY1Go70qsEBdrtyvatGaNRB5Coyc1d3pbUlvbfzA3CbFeVB5AfS0xx/m6Csf0xDe+TpA=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:97e55e01-38ea-4e66-9de2-0982bbb8e867,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:543e81c,CLOUDID:ab4af68b-8530-4eff-9f77-222cf6e2895b,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: b148a8a891ac11eda06fc9ecc4dadd91-20230111
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 34577008; Wed, 11 Jan 2023 20:37:21 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 11 Jan 2023 20:37:19 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 11 Jan 2023 20:37:19 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <sboyd@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <hsinyi@chromium.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH 9/9] arm64: dts: mediatek: mt8186: Add display nodes
-Date:   Wed, 11 Jan 2023 20:37:11 +0800
-Message-ID: <20230111123711.32020-10-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230111123711.32020-1-allen-kh.cheng@mediatek.com>
-References: <20230111123711.32020-1-allen-kh.cheng@mediatek.com>
+        Wed, 11 Jan 2023 07:37:17 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532B228A;
+        Wed, 11 Jan 2023 04:37:16 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id c6so16650209pls.4;
+        Wed, 11 Jan 2023 04:37:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/SfV/BmxfgdOOg5a6VYc2jWBCaoBDxbExawT4jBtqtI=;
+        b=O7/jUWap8/638xgc1Ns5tmKeXTVrPsNk54AfACcQGv9yvWZk1ra/GkWfNnS+mKj4Wz
+         uYE2up5XVY8j/4rdhu83e72UpnNlYVsBe1v0buspaQyq1wEsBhFqs4LLRORvzxsYeeZo
+         SfjYGP2FKujTTmrvyXe4kyTcSFhyvQn5E6ENkvnH2LFlwL5Vk9PlullK5Ia5qshMHw1U
+         qC1ceLtVOEZdMIRlBkEl5NCi+yWjrzz8oa586FzZw6lS0dU0lRBURInquiitvcIkVz8L
+         suciE74D914UNRjFY7wgVQR8BtaedeT4U2onJu2NwiHlhv43ZZHGWz9suqr14hR6Qpy+
+         6q9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/SfV/BmxfgdOOg5a6VYc2jWBCaoBDxbExawT4jBtqtI=;
+        b=fcQSEaaDa+8tiiiLwuedQOqY0VxlRvzAJwFIJE8K8aygEzB3Crp+kJNgU2pAOxyu6D
+         Wi9xOrhQY1pr73SRbMLBoR+fZ7wcAz7laWW4mn12yWaB9oFt4lLjlGwEiXDxUNFsll7e
+         6uzIvmQ1KjJExKxX2OkU1pnrndduoWjLH5Rf6IsxbHHaWF01NHISSSNuUdu/nk/9q13f
+         r/UCoY3DZVVED65e0TmFKC0RHhBxuIV9FiNbDp/iuA6miBTqwoOZvb/MkRwrpJ49mQLu
+         kjraR2mug4XIXw5DLMZyB6RsWrO9b0B3nZGHBa6m0U82gYeOP3NiNe/bDCbp031KmKFY
+         KtDg==
+X-Gm-Message-State: AFqh2kqHyzrUSIXFVm4lIuqjJOIqPoMFsUMAlZH1VYQ/h1/L9efDS3BD
+        QlGFV6dkmN6e1/wW9EQlA+8xazdLe1FwLg==
+X-Google-Smtp-Source: AMrXdXshuF+kzSTsj2dXwUwbKvAbPV58EeKK2WngYR6E++wbYodX3z6ukImfAX8/oqLycqEDaVDLWw==
+X-Received: by 2002:a17:902:f791:b0:192:5ec4:6656 with SMTP id q17-20020a170902f79100b001925ec46656mr74448750pln.3.1673440635738;
+        Wed, 11 Jan 2023 04:37:15 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.3])
+        by smtp.gmail.com with ESMTPSA id im22-20020a170902bb1600b00186748fe6ccsm10015648plb.214.2023.01.11.04.37.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 04:37:15 -0800 (PST)
+From:   korantwork@gmail.com
+To:     hverkuil-cisco@xs4all.nl, mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>, loydlv <loydlv@tencent.com>
+Subject: [PATCH] media:cec:fix double free and uaf issue when cancel data during noblocking
+Date:   Wed, 11 Jan 2023 20:37:12 +0800
+Message-Id: <20230111123712.160882-1-korantwork@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add display nodes and GCE info for MT8186 SoC. Also, add GCE
-(Global Command Engine) properties to the display nodes in order to
-enable the usage of the CMDQ (Command Queue), which is required for
-operating the display.
+From: Xinghui Li <korantli@tencent.com>
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+data could be free when it is not completed during transmit if
+the opt is nonblocking.In this case,the regular free could lead
+to double-free.So, add the return value '-EPERM' to mark the
+above case.
+
+Reported-by: loydlv <loydlv@tencent.com>
+Signed-off-by: Xinghui Li <korantli@tencent.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8186.dtsi | 128 +++++++++++++++++++++++
- 1 file changed, 128 insertions(+)
+ drivers/media/cec/core/cec-adap.c | 27 ++++++++++++++++-----------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-index eab30ab01572..8670d37970ef 100644
---- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-@@ -5,6 +5,7 @@
+diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
+index 4f5ab3cae8a7..c2ba8d1173c1 100644
+--- a/drivers/media/cec/core/cec-adap.c
++++ b/drivers/media/cec/core/cec-adap.c
+@@ -311,7 +311,7 @@ static void cec_post_state_event(struct cec_adapter *adap)
+  *
+  * This function is called with adap->lock held.
   */
- /dts-v1/;
- #include <dt-bindings/clock/mt8186-clk.h>
-+#include <dt-bindings/gce/mt8186-gce.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/memory/mt8186-memory-port.h>
-@@ -632,6 +633,15 @@
- 			clocks = <&clk13m>;
- 		};
+-static void cec_data_completed(struct cec_data *data)
++static int cec_data_completed(struct cec_data *data)
+ {
+ 	/*
+ 	 * Delete this transmit from the filehandle's xfer_list since
+@@ -339,7 +339,9 @@ static void cec_data_completed(struct cec_data *data)
+ 		if (data->fh)
+ 			cec_queue_msg_fh(data->fh, &data->msg);
+ 		kfree(data);
++		return -EPERM;
+ 	}
++	return 0;
+ }
  
-+		gce: mailbox@1022c000 {
-+			compatible = "mediatek,mt8186-gce";
-+			reg = <0 0X1022c000 0 0x4000>;
-+			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-+			#mbox-cells = <2>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_GCE>;
-+			clock-names = "gce";
-+		};
-+
- 		scp: scp@10500000 {
- 			compatible = "mediatek,mt8186-scp";
- 			reg = <0 0x10500000 0 0x40000>,
-@@ -1197,6 +1207,20 @@
- 			reg = <0 0x14000000 0 0x1000>;
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
-+			mboxes = <&gce 0 CMDQ_THR_PRIO_HIGHEST>,
-+				 <&gce 1 CMDQ_THR_PRIO_HIGHEST>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
-+		};
-+
-+		mutex: mutex@14001000 {
-+			compatible = "mediatek,mt8186-disp-mutex";
-+			reg = <0 0x14001000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_DISP_MUTEX0>;
-+			interrupts = <GIC_SPI 295 IRQ_TYPE_LEVEL_HIGH 0>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0x1000 0x1000>;
-+			mediatek,gce-events = <CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_0>,
-+					      <CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_1>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
- 		};
+ /*
+@@ -349,7 +351,7 @@ static void cec_data_completed(struct cec_data *data)
+  *
+  * This function is called with adap->lock held.
+  */
+-static void cec_data_cancel(struct cec_data *data, u8 tx_status, u8 rx_status)
++static int cec_data_cancel(struct cec_data *data, u8 tx_status, u8 rx_status)
+ {
+ 	struct cec_adapter *adap = data->adap;
  
- 		smi_common: smi@14002000 {
-@@ -1230,6 +1254,49 @@
- 			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
- 		};
+@@ -388,7 +390,7 @@ static void cec_data_cancel(struct cec_data *data, u8 tx_status, u8 rx_status)
+ 		/* Allow drivers to process the message first */
+ 		call_op(adap, received, &data->msg);
  
-+		ovl0: ovl@14005000 {
-+			compatible = "mediatek,mt8186-disp-ovl",
-+				     "mediatek,mt8192-disp-ovl";
-+			reg = <0 0x14005000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_DISP_OVL0>;
-+			interrupts = <GIC_SPI 297 IRQ_TYPE_LEVEL_HIGH 0>;
-+			iommus = <&iommu_mm IOMMU_PORT_L0_OVL_RDMA0>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x5000 0x1000>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-+		};
-+
-+		ovl0_2l: ovl@14006000 {
-+			compatible = "mediatek,mt8186-disp-ovl-2l",
-+				     "mediatek,mt8192-disp-ovl-2l";
-+			reg = <0 0x14006000 0 0x1000>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-+			clocks = <&mmsys CLK_MM_DISP_OVL0_2L>;
-+			interrupts = <GIC_SPI 298 IRQ_TYPE_LEVEL_HIGH 0>;
-+			iommus = <&iommu_mm IOMMU_PORT_L1_OVL_2L_RDMA0>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x6000 0x1000>;
-+		};
-+
-+		rdma0: rdma@14007000 {
-+			compatible = "mediatek,mt8186-disp-rdma",
-+				     "mediatek,mt8183-disp-rdma";
-+			reg = <0 0x14007000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_DISP_RDMA0>;
-+			interrupts = <GIC_SPI 299 IRQ_TYPE_LEVEL_HIGH 0>;
-+			iommus = <&iommu_mm IOMMU_PORT_L1_DISP_RDMA0>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x7000 0x1000>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-+		};
-+
-+		color0: color@14009000 {
-+			compatible = "mediatek,mt8186-disp-color",
-+				     "mediatek,mt8173-disp-color";
-+			reg = <0 0x14009000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_DISP_COLOR0>;
-+			interrupts = <GIC_SPI 301 IRQ_TYPE_LEVEL_HIGH 0>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x8000 0x1000>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-+		};
-+
- 		dpi0: dpi@1400a000 {
- 			compatible = "mediatek,mt8186-dpi";
- 			reg = <0 0x1400a000 0 0x1000>;
-@@ -1247,6 +1314,56 @@
- 			};
- 		};
+-	cec_data_completed(data);
++	return cec_data_completed(data);
+ }
  
-+		ccorr0: ccorr@1400b000 {
-+			compatible = "mediatek,mt8186-disp-ccorr",
-+				     "mediatek,mt8192-disp-ccorr";
-+			reg = <0 0x1400b000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_DISP_CCORR0>;
-+			interrupts = <GIC_SPI 302 IRQ_TYPE_LEVEL_HIGH 0>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xb000 0x1000>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-+		};
-+
-+		aal0: aal@1400c000 {
-+			compatible = "mediatek,mt8186-disp-aal",
-+				     "mediatek,mt8183-disp-aal";
-+			reg = <0 0x1400c000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_DISP_AAL0>;
-+			interrupts = <GIC_SPI 304 IRQ_TYPE_LEVEL_HIGH 0>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xc000 0x1000>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-+		};
-+
-+		gamma0: gamma@1400d000 {
-+			compatible = "mediatek,mt8186-disp-gamma",
-+				     "mediatek,mt8183-disp-gamma";
-+			reg = <0 0x1400d000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_DISP_GAMMA0>;
-+			interrupts = <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH 0>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xd000 0x1000>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-+		};
-+
-+		postmask0: postmask@1400e000 {
-+			compatible = "mediatek,mt8186-disp-postmask",
-+				     "mediatek,mt8192-disp-postmask";
-+			reg = <0 0x1400e000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_DISP_POSTMASK0>;
-+			interrupts = <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH 0>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xe000 0x1000>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-+		};
-+
-+		dither0: dither@1400f000 {
-+			compatible = "mediatek,mt8186-disp-dither",
-+				     "mediatek,mt8183-disp-dither";
-+			reg = <0 0x1400f000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_DISP_DITHER0>;
-+			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH 0>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0xf000 0x1000>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-+		};
-+
- 		dsi0: dsi@14013000 {
- 			compatible = "mediatek,mt8186-dsi";
- 			reg = <0 0x14013000 0 0x1000>;
-@@ -1280,6 +1397,17 @@
- 			#iommu-cells = <1>;
- 		};
+ /*
+@@ -744,6 +746,7 @@ int cec_transmit_msg_fh(struct cec_adapter *adap, struct cec_msg *msg,
+ {
+ 	struct cec_data *data;
+ 	bool is_raw = msg_is_raw(msg);
++	int ret = 0;
  
-+		rdma1: rdma@1401f000 {
-+			compatible = "mediatek,mt8186-disp-rdma",
-+				     "mediatek,mt8183-disp-rdma";
-+			reg = <0 0x1401f000 0 0x1000>;
-+			clocks = <&mmsys CLK_MM_DISP_RDMA1>;
-+			interrupts = <GIC_SPI 308 IRQ_TYPE_LEVEL_HIGH 0>;
-+			iommus = <&iommu_mm IOMMU_PORT_L1_DISP_RDMA1>;
-+			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xf000 0x1000>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-+		};
-+
- 		wpesys: clock-controller@14020000 {
- 			compatible = "mediatek,mt8186-wpesys";
- 			reg = <0 0x14020000 0 0x1000>;
+ 	if (adap->devnode.unregistered)
+ 		return -ENODEV;
+@@ -916,18 +919,20 @@ int cec_transmit_msg_fh(struct cec_adapter *adap, struct cec_msg *msg,
+ 	/* Cancel the transmit if it was interrupted */
+ 	if (!data->completed) {
+ 		if (data->msg.tx_status & CEC_TX_STATUS_OK)
+-			cec_data_cancel(data, CEC_TX_STATUS_OK, CEC_RX_STATUS_ABORTED);
++			ret = cec_data_cancel(data, CEC_TX_STATUS_OK, CEC_RX_STATUS_ABORTED);
+ 		else
+-			cec_data_cancel(data, CEC_TX_STATUS_ABORTED, 0);
++			ret = cec_data_cancel(data, CEC_TX_STATUS_ABORTED, 0);
+ 	}
+ 
+ 	/* The transmit completed (possibly with an error) */
+-	*msg = data->msg;
+-	if (WARN_ON(!list_empty(&data->list)))
+-		list_del(&data->list);
+-	if (WARN_ON(!list_empty(&data->xfer_list)))
+-		list_del(&data->xfer_list);
+-	kfree(data);
++	if (!ret) {
++		*msg = data->msg;
++		if (WARN_ON(!list_empty(&data->list)))
++			list_del(&data->list);
++		if (WARN_ON(!list_empty(&data->xfer_list)))
++			list_del(&data->xfer_list);
++		kfree(data);
++	}
+ 	return 0;
+ }
+ 
 -- 
-2.18.0
+2.34.1
+
 
