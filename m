@@ -2,102 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96026665673
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 09:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2712D665683
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 09:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235849AbjAKIs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 03:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
+        id S232016AbjAKIwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 03:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232515AbjAKIsM (ORCPT
+        with ESMTP id S231712AbjAKInP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 03:48:12 -0500
-X-Greylist: delayed 553 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 Jan 2023 00:48:09 PST
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2189DF6A;
-        Wed, 11 Jan 2023 00:48:09 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1673426330; bh=tYUkvP1LL/oKjpBzUtCikUMIK2n3hYe7+3rcbguWTLI=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=jB92gv8ARa5tL/VyJEF/uCMfvl1vtEXMwuAMJ+MMC63FMtUet8XBJLP3KY9UXwe7u
-         crj5snAwBqlFuMS+Tg4NgOWDTEwk2mJl81z/lGeAJRQ0/GkSWMi0n5JMVz7EkJb2en
-         3dIorM7Y2WBeYwV6O3Y6GSej5fdPsDMEIbI5b5Gs=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH V9 4/5] ASoC: codecs: Aw883xx chip register file, data
- type file and Kconfig Makefile
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-In-Reply-To: <20230111020233.4306-1-wangweidong.a@awinic.com>
-Date:   Wed, 11 Jan 2023 09:38:47 +0100
-Cc:     lkp@intel.com, 13691752556@139.com,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        Mark Brown <broonie@kernel.org>, cezary.rojewski@intel.com,
-        ckeepax@opensource.cirrus.com, daniel.beer@igorinstitute.com,
-        devicetree@vger.kernel.org, flatmax@flatmax.com,
-        james.schulman@cirrus.com, jonathan.albrieux@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, liweilei@awinic.com,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        perex@perex.cz, pierre-louis.bossart@linux.intel.com,
-        rf@opensource.cirrus.com, robh+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, steve@sk2.org, tiwai@suse.com,
-        yangxiaohua@everest-semi.com, yijiangtao@awinic.com,
-        zhaolei@awinic.com
+        Wed, 11 Jan 2023 03:43:15 -0500
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E04EB18
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 00:42:34 -0800 (PST)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id 2A9A183A36; Wed, 11 Jan 2023 08:41:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1673426553; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=g3aBfYjtKjkz9cyAlCz5zUg2GEJcTlp+q37Jb99/I9o218zDMirx0V105GdNDwGhH
+         zDD84VbTxNMN2nmkRixx92DEviuB+SijCyrHxqVNbzI/TAEpD2YDSTPEXP5DoflS9R
+         AcjK53AjNvqJ3+ls2LvhkqmMo+A0uAOVYhBseosNqVOsjki4XP+ofq06EMw1/jwyLB
+         chULntmZLjIxo5onSZbSI4Cfu8rjSUY83RB88JKPNvqR+vYsMtIXejbSn3158XJ99k
+         TYeHUo35kZddWrvdKiJsEgG4pIt8XhWtuHE1A2srF6I6ZWIYMpuhJEWPjx/aMjVy3V
+         UyAHirUnML0wA==
+Received: by mail.lokoho.com for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:40:15 GMT
+Message-ID: <20230111074501-0.1.3c.m89m.0.7i3dcyc6a9@lokoho.com>
+Date:   Wed, 11 Jan 2023 08:40:15 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <5EA7B038-9B49-4E5D-8209-8689C0D03071@cutebit.org>
-References: <202301100233.QuEJ8pyu-lkp@intel.com>
- <20230111020233.4306-1-wangweidong.a@awinic.com>
-To:     wangweidong.a@awinic.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,URIBL_CSS_A autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
-> On 11. 1. 2023, at 3:02, wangweidong.a@awinic.com wrote:
->=20
-> On 09/01/2023 03:00, kernel test robot wrote:
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
->> All errors (new ones prefixed by >>):
->=20
->>>> ld.lld: error: undefined symbol: crc8_populate_lsb
->>>>> referenced by aw883xx_bin_parse.c:1049 =
-(sound/soc/codecs/aw883xx/aw883xx_bin_parse.c:1049)
->>>>>              vmlinux.o:(aw883xx_dev_load_acf_check)
->> --
->>>> ld.lld: error: undefined symbol: crc8
->>>>> referenced by aw883xx_bin_parse.c:963 =
-(sound/soc/codecs/aw883xx/aw883xx_bin_parse.c:963)
->>>>>              vmlinux.o:(aw883xx_dev_load_acf_check)
->>>>> referenced by aw883xx_bin_parse.c:1022 =
-(sound/soc/codecs/aw883xx/aw883xx_bin_parse.c:1022)
->>>>>              vmlinux.o:(aw883xx_dev_load_acf_check)
->>>>> did you mean: crc4
->>>>> defined in: vmlinux.o
->=20
-> This looks like a false positive. crc8_populate_lsb is defined in the =
-lib/crc8.c file.
-> I also could not reproduce it with GCC.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Hi,
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-the issue here would be that it=E2=80=99s possible to select your driver =
-for compilation without
-having selected the CRC8 functions, leading to the linkage error.
 
-You can fix that by adding =E2=80=99select CRC8=E2=80=99 under the =
-Kconfig section of your driver, similarly
-to how the SND_SOC_SIGMADSP symbol selects CRC32.
-
-Best regards,
-Martin
-
->=20
-> Best regards,
-> Weidong Wang
-
+Pozdrawiam
+Adam Charachuta
