@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B3F665A83
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 077C7665A8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236329AbjAKLmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:42:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S232544AbjAKLnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:43:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbjAKLmS (ORCPT
+        with ESMTP id S232343AbjAKLmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:42:18 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111D81A226
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:41:11 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id c8-20020a17090a4d0800b00225c3614161so19699816pjg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:41:11 -0800 (PST)
+        Wed, 11 Jan 2023 06:42:22 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0669A1A21E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:41:16 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so19710630pjk.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:41:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WGn0PbiFymHKMcNjUGWXoioOm7PfQt5MHEJvVchVE4s=;
-        b=vQORdR6YtP3qXos2Sq8ad45eAuhZXsCz27JZRFq3fTkPUXkp5Yuamn7iSF5xo0dKGc
-         t90Ik+2YovehtVfbbRiqAIdxkSlRwTBkv92uP04k+6eP3C9gcOT6KWXx1rqlyXXBqzyJ
-         qg8VPMI1OoyEEiZ6WFsH8Mbm5Wg/KqmcxVXAsJZHcIfxOYG+vyjnDYHmUESLV2OmRu5w
-         ikS762lJND84NQ7iuWObM/GJcxkIUARS69OiB2vl9WSqx8xelhQyYHLmjndn3feuyGYo
-         FeANEJ6vdh6JQDoqWCasmnsG495/yALGi2GJY3CgJONvLwpLvfc6iVPin0b0eUrraybV
-         GBcw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1hyDFi6BwQQxvnWgZlqZn5l8SdU7JiBSKsGQ5Uy8Nc4=;
+        b=P9tGxpvAov1XFTAYprD/CPMh6kLhmqet4jxwfegRwKwi/DkBqaJvFy7gW/kaOJ5wfk
+         /r/S3lF9RHrK3d9G8dTIzftnHXDw96hxIoB6lqswUc6gRXe3DiuUSdGWivaKrPA+P8wY
+         7kv6qaVenvAZ8tiJ5j4Ot2/JpcVXW7yBXXIuO92Ogz8y2pc4QUxnKcMlAEivUY2bp3q4
+         6iG5kOGpS8+x9TiruG1lcHH8bY9m6NWwqxeI1N2DDshLX3dmRBdj1dhkZyPGod0R4c1N
+         Ajm/XroavAelHk77wwqsN3zYHuJW8UMkNr4DAIG4r5aq218HVJDcFoH8oOq/wByQURua
+         RbuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WGn0PbiFymHKMcNjUGWXoioOm7PfQt5MHEJvVchVE4s=;
-        b=12S145LtWKQtT93ObtpG9j9pgveEZ48TPacWAq2ZlikPLFhaaz8LS4iXbktFWp5XE1
-         kSeGVdykGYnLu5Eh0/wt0NeLVPbuGBam+qcLxwF30jq8i7N2FcKXlwTitg8blsCr2Xqr
-         SuwO81Lu+WMDIdB+8bABf/i+ma9hI20EhvkAA49odnJsfnDrSQR5YkiCAW8AOoUlxwF/
-         iSd7KlY1EID1NP72Q5Z+jf1vrvDqKbfdZUzNzZ8GWGy1DrFqIoVKqCN/7FFAirvOOFOa
-         OzlXr8e1i8TbyHWOC6Y6glSf197w50QxrWd2vTZZuF4PuPpFuAlCG5bPOwC1LZ/KM7gA
-         1yoQ==
-X-Gm-Message-State: AFqh2kreQ5iR/lYsCJ6HG992FZCPRQE2qaWpibVukvlUGh1Fq+WxVWpB
-        kDItPcTEZ3BS6dXotgRr/P7h
-X-Google-Smtp-Source: AMrXdXuBl2ZhAZQRvCvILyuORpqz/vseZxHZTIPCgKgEyfzzOBe1BUnhX7xv1+dj9b0WEizfhn4REA==
-X-Received: by 2002:a17:902:e805:b0:192:4b3e:9f8e with SMTP id u5-20020a170902e80500b001924b3e9f8emr87640938plg.36.1673437270953;
-        Wed, 11 Jan 2023 03:41:10 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1hyDFi6BwQQxvnWgZlqZn5l8SdU7JiBSKsGQ5Uy8Nc4=;
+        b=uIwkSnbcUTp6VPt047vhb3HvJ+4ineFm9WuBrJpcBoCV14fgTQ7k2AtwVsxyu5Q+R/
+         /vn/ZJoaswIdK8GWgb69cU5eDH3qlUumVuH357RWmlq6U3WPu0si6ju1KeBKCSI+bhqM
+         tGsm4GncRasq2IgpThPRyDFUAz8ANnfb0OjXZK0USDt3jPCtXA9OD6ciBeqMQI3z+M1s
+         lK6b5n3Tqbvs3Zsl5/cE/KVTgwDQfR58xNL0xcwdxY9U1pFxNCrBO3hApMe52wXRHCYE
+         itgwAIYS096yiR06JzcW5xFaxGtgz103IEIv851nY6KDkPmrz4nn/p4214FewGGWO+v4
+         frXg==
+X-Gm-Message-State: AFqh2kob/wqnWRcJvmlfTXjGU/s9ExBqpQj+OkauBBLclAm5XpWp72BU
+        lu0UtVCvOcadpIZrQUJobKB4
+X-Google-Smtp-Source: AMrXdXsbFxlz+rm8vf4cfcw4Ucpibd7EUMyp+jMLNsTY2iUogETPytyeDnJXkZv2/0id7rh7Loxd3A==
+X-Received: by 2002:a17:903:11cf:b0:192:9550:339a with SMTP id q15-20020a17090311cf00b001929550339amr70120845plh.52.1673437276326;
+        Wed, 11 Jan 2023 03:41:16 -0800 (PST)
 Received: from localhost.localdomain ([117.217.177.1])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170902e5ce00b0018958a913a2sm9942688plf.223.2023.01.11.03.41.06
+        by smtp.gmail.com with ESMTPSA id u14-20020a170902e5ce00b0018958a913a2sm9942688plf.223.2023.01.11.03.41.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 03:41:10 -0800 (PST)
+        Wed, 11 Jan 2023 03:41:15 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com
 Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
         kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [RESEND v4 0/5] PCI: endpoint: Rework the EPC to EPF notification
-Date:   Wed, 11 Jan 2023 17:10:54 +0530
-Message-Id: <20230111114059.6553-1-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: [RESEND v4 1/5] PCI: dra7xx: Use threaded IRQ handler for "dra7xx-pcie-main" IRQ
+Date:   Wed, 11 Jan 2023 17:10:55 +0530
+Message-Id: <20230111114059.6553-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230111114059.6553-1-manivannan.sadhasivam@linaro.org>
+References: <20230111114059.6553-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,77 +74,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The "dra7xx-pcie-main" hard IRQ handler is just printing the IRQ status
+and calling the dw_pcie_ep_linkup() API if LINK_UP status is set. But the
+execution of dw_pcie_ep_linkup() depends on the EPF driver and may take
+more time depending on the EPF implementation.
 
-During the review of the patch that fixes DBI access in PCI EP, Rob
-suggested [1] using a fixed interface for passing the events from EPC to
-EPF instead of the in-kernel notifiers.
+In general, hard IRQ handlers are supposed to return quickly and not block
+for so long. Moreover, there is no real need of the current IRQ handler to
+be a hard IRQ handler. So switch to the threaded IRQ handler for the
+"dra7xx-pcie-main" IRQ.
 
-This series introduces a simple callback based mechanism for passing the
-events from EPC to EPF. This interface is chosen for satisfying the below
-requirements:
+Acked-by: Kishon Vijay Abraham I <kishon@ti.com>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/pci/controller/dwc/pci-dra7xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-1. The notification has to reach the EPF drivers without any additional
-latency.
-2. The context of the caller (EPC) needs to be preserved while passing the
-notifications.
-
-With the existing notifier mechanism, the 1st case can be satisfied since
-notifiers aren't adding any huge overhead. But the 2nd case is clearly not
-satisfied, because the current atomic notifiers forces the EPF
-notification context to be atomic even though the caller (EPC) may not be
-in atomic context. In the notification function, the EPF drivers are
-required to call several EPC APIs that might sleep and this triggers a
-sleeping in atomic bug during runtime.
-
-The above issue could be fixed by using a blocking notifier instead of
-atomic, but that proposal was not accepted either [2].
-
-So instead of working around the issues within the notifiers, let's get rid
-of it and use the callback mechanism.
-
-NOTE: DRA7xx and TEGRA194 drivers are only compile tested. Testing this series
-on the real platforms is greatly appreciated.
-
-Thanks,
-Mani
-
-[1] https://lore.kernel.org/all/20220802072426.GA2494@thinkpad/T/#mfa3a5b3a9694798a562c36b228f595b6a571477d
-[2] https://lore.kernel.org/all/20220228055240.24774-1-manivannan.sadhasivam@linaro.org
-
-Changes in v4:
-
-* Added check for the presence of event_ops before involing the callbacks (Kishon)
-* Added return with IRQ_WAKE_THREAD when link_up event is found in the hard irq
-  handler of tegra194 driver (Vidya)
-* Collected review tags
-
-Changes in v3:
-
-* As Kishon spotted, fixed the DRA7xx driver and also the TEGRA194 driver to
-  call the LINK_UP callback in threaded IRQ handler.
-
-Changes in v2:
-
-* Introduced a new "list_lock" for protecting the epc->pci_epf list and
-  used it in the callback mechanism.
-
-Manivannan Sadhasivam (5):
-  PCI: dra7xx: Use threaded IRQ handler for "dra7xx-pcie-main" IRQ
-  PCI: tegra194: Move dw_pcie_ep_linkup() to threaded IRQ handler
-  PCI: endpoint: Use a separate lock for protecting epc->pci_epf list
-  PCI: endpoint: Use callback mechanism for passing events from EPC to
-    EPF
-  PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
-
- drivers/pci/controller/dwc/pci-dra7xx.c       |  2 +-
- drivers/pci/controller/dwc/pcie-tegra194.c    |  9 ++++-
- drivers/pci/endpoint/functions/pci-epf-test.c | 38 ++++++-------------
- drivers/pci/endpoint/pci-epc-core.c           | 32 ++++++++++++----
- include/linux/pci-epc.h                       | 10 +----
- include/linux/pci-epf.h                       | 19 ++++++----
- 6 files changed, 59 insertions(+), 51 deletions(-)
-
+diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
+index 38462ed11d07..4ae807e7cf79 100644
+--- a/drivers/pci/controller/dwc/pci-dra7xx.c
++++ b/drivers/pci/controller/dwc/pci-dra7xx.c
+@@ -840,7 +840,7 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
+ 	}
+ 	dra7xx->mode = mode;
+ 
+-	ret = devm_request_irq(dev, irq, dra7xx_pcie_irq_handler,
++	ret = devm_request_threaded_irq(dev, irq, NULL, dra7xx_pcie_irq_handler,
+ 			       IRQF_SHARED, "dra7xx-pcie-main", dra7xx);
+ 	if (ret) {
+ 		dev_err(dev, "failed to request irq\n");
 -- 
 2.25.1
 
