@@ -2,147 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FC06662FF
+	by mail.lfdr.de (Postfix) with ESMTP id 54C90666300
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbjAKSrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S233512AbjAKSra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:47:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbjAKSrR (ORCPT
+        with ESMTP id S234867AbjAKSrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 Jan 2023 13:47:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9F92F791;
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4395F15FD8;
         Wed, 11 Jan 2023 10:47:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD6FA61DD5;
-        Wed, 11 Jan 2023 18:47:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B17EEC433D2;
-        Wed, 11 Jan 2023 18:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673462835;
-        bh=LUwdBfI+Io1ch2RMgaYtsm8GKXDVco8UDikkgJQf+ZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uXT8KfXho7j5kLBrgXM5KTMKZlxJ1XRrtNULrZhtIeZHOxYqO76VH6GQIM4aUCqxS
-         /1KVTTVBBI+fPA1B8+DKQcqEu8NUL3M+i2y0SYVG6F7mjhH/HZ8ewoTUKl+9A0KvPq
-         7QQa6/8v8mTk/vtgZqXC46ITMwt+axPqlXBgtnRasbae3oDKJLuciRHu2dHypmyhzJ
-         zj5vvJOUCuemAmTo8IRncAYSSqAiIk8CK7XCE4LvheH4UqI9xv/tPworzAFvjav/hd
-         iJau6pARr5asjBQX9tnQUDQrpeb3+3IlgXYIegji3bUAaUk3o1iBx8lb+JEpvnjss0
-         I7kM8112dBDzw==
-Date:   Wed, 11 Jan 2023 12:47:12 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 2/4] arm64: dts: qcom: sc8280xp-crd: Enable EDP
-Message-ID: <20230111184712.krrcsg7fto464e7a@builder.lan>
-References: <20230111035906.2975494-1-quic_bjorande@quicinc.com>
- <20230111035906.2975494-3-quic_bjorande@quicinc.com>
- <Y764pvrxF9Z8tgKU@hovoldconsulting.com>
+Received: by mail-ot1-f45.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so9298555otk.8;
+        Wed, 11 Jan 2023 10:47:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JzVVh+fKujPsI6nJzYq3FThr+ETXFDdV8+q+BDcVj0Q=;
+        b=mQMNZoxJkrTf2YMvP0hCIsoWtjO/xvvygq+XksAngWt8NBkPcqCEe52AQvJa0myMlc
+         x1lyhYnvDD4oBoJazl0j6QuCSrmTgpkDSWUbbj9cUjNRdFMIXvApy3D8YKXosoWS7TMm
+         l4FHIjtzPf5u2sOFNvfDk1Fuiy9kTofg+TgEdqqp9mhyJYDZL5bSBLsQ27cfCOCVZkIK
+         ENUXtP0kvcQWO4m9mvg2k/wjBGmlEFKNk0V7dZtk0QMCdxlbuWuojfGJBOQL5VCBl7ZC
+         2NJuwGxOIVBuhIyEDOv9ISiD4dFbvz7MZGkm6jLlTQffHOljigSjZWqNEj5JU/ds6/5p
+         SU8Q==
+X-Gm-Message-State: AFqh2kqe9Mj4Cc0HzvcH9tsDgLDp1E9nZl3HKaOwjOAwW/1lGHmHIvih
+        1ehtuWtGDseQIh23p2T0jA==
+X-Google-Smtp-Source: AMrXdXsAVnC+efVv0faJRtQubP8A/BpMNUC9mne6ZPgsGEyKFYjoVA0F4H3g3dMiCIi1qyCEz7zukw==
+X-Received: by 2002:a9d:4547:0:b0:673:3fac:b328 with SMTP id p7-20020a9d4547000000b006733facb328mr34495980oti.10.1673462835429;
+        Wed, 11 Jan 2023 10:47:15 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m6-20020a9d6446000000b0066ec67bbc7asm7841142otl.7.2023.01.11.10.47.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 10:47:14 -0800 (PST)
+Received: (nullmailer pid 1107807 invoked by uid 1000);
+        Wed, 11 Jan 2023 18:47:13 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y764pvrxF9Z8tgKU@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Wadim Egorov <w.egorov@phytec.de>
+Cc:     a.zummo@towertech.it, krzysztof.kozlowski+dt@linaro.org,
+        riku.voipio@iki.fi, robh+dt@kernel.org, pavel@ucw.cz,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+        lee@kernel.org, linux-leds@vger.kernel.org,
+        upstream@lists.phytec.de
+In-Reply-To: <20230111163404.3526248-1-w.egorov@phytec.de>
+References: <20230111163404.3526248-1-w.egorov@phytec.de>
+Message-Id: <167346265519.1103752.16521267476598663004.robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: leds: Convert PCA9532 to dtschema
+Date:   Wed, 11 Jan 2023 12:47:13 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 02:24:54PM +0100, Johan Hovold wrote:
-> On Tue, Jan 10, 2023 at 07:59:04PM -0800, Bjorn Andersson wrote:
-> > From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > 
-> > The SC8280XP CRD has a EDP display on MDSS0 DP3, enable relevant nodes
-> > and link it together with the backlight control.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> > ---
-> > 
-> > Changes since v6:
-> > - None
-> > 
-> >  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 73 ++++++++++++++++++++++-
-> >  1 file changed, 72 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> > index 551768f97729..db12d8678861 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> > @@ -20,7 +20,7 @@ aliases {
-> >  		serial0 = &qup2_uart17;
-> >  	};
-> >  
-> > -	backlight {
-> > +	backlight: backlight {
-> >  		compatible = "pwm-backlight";
-> >  		pwms = <&pmc8280c_lpg 3 1000000>;
-> >  		enable-gpios = <&pmc8280_1_gpios 8 GPIO_ACTIVE_HIGH>;
-> > @@ -34,6 +34,22 @@ chosen {
-> >  		stdout-path = "serial0:115200n8";
-> >  	};
-> >  
-> > +	vreg_edp_3p3: regulator-edp-3p3 {
-> > +		compatible = "regulator-fixed";
-> > +
-> > +		regulator-name = "VREG_EDP_3P3";
+
+On Wed, 11 Jan 2023 17:34:03 +0100, Wadim Egorov wrote:
+> Convert the PCA9532 LED dimmer to dtschema.
+> While at it, also update and the the example to match
+> recommended node names and the link to the product datasheet.
 > 
-> Looks like you forgot to change this to "VCC3LCD" which should be the
-> net name.
+> Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
+> ---
+> v2:
+>   - Rename yaml file to match compatibles, nxp,pca953x.yaml
+>   - Remove Jacek Anaszewski from maintainers list
+>   - Remove color labels in example
+>   - Restore labels/default-states from original example
+>   - Drop reg description
+>   - Add unevaluatedProperties to patternProperties scope
+>   - Update description of type property & set default to 0
+>   - Fix indentation in example
+> ---
+>  .../devicetree/bindings/leds/leds-pca9532.txt | 49 -----------
+>  .../devicetree/bindings/leds/nxp,pca953x.yaml | 85 +++++++++++++++++++
+>  2 files changed, 85 insertions(+), 49 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/leds/leds-pca9532.txt
+>  create mode 100644 Documentation/devicetree/bindings/leds/nxp,pca953x.yaml
 > 
 
-That's because it's not called VCC3LCD on the CRD.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-> > +		regulator-min-microvolt = <3300000>;
-> > +		regulator-max-microvolt = <3300000>;
-> > +
-> > +		gpio = <&tlmm 25 GPIO_ACTIVE_HIGH>;
-> > +		enable-active-high;
-> > +
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&edp_reg_en>;
-> > +
-> > +		regulator-boot-on;
-> > +	};
-> > +
-> >  	vreg_edp_bl: regulator-edp-bl {
-> >  		compatible = "regulator-fixed";
-> 
-> > @@ -494,6 +559,12 @@ hastings_reg_en: hastings-reg-en-state {
-> >  &tlmm {
-> >  	gpio-reserved-ranges = <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
-> >  
-> > +	edp_reg_en: edp-reg-en-state {
-> > +		pins = "gpio25";
-> > +		function = "gpio";
-> > +		drive-strength = <16>;
-> 
-> 'bias-disable' as well?
-> 
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-Sound like a good idea, adding that as I'm picking up the patches.
+Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230111163404.3526248-1-w.egorov@phytec.de
 
-Regards,
-Bjorn
 
-> > +	};
-> > +
-> >  	kybd_default: kybd-default-state {
-> >  		disable-pins {
-> >  			pins = "gpio102";
-> 
-> Looks good otherwise,
-> 
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-> 
-> Johan
+leddimmer@62: 'led1', 'led2', 'led3', 'led4' do not match any of the regexes: '^led-[0-9a-z]+$', 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/rk3288-phycore-rdk.dtb
+
+leds@62: 'led1', 'led2', 'led3' do not match any of the regexes: '^led-[0-9a-z]+$', 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dtb
+
+pca9530@61: 'tft-panel@0' does not match any of the regexes: '^led-[0-9a-z]+$', 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/am335x-pdu001.dtb
+
+pca9532@60: '#gpio-cells', 'gpio-controller' do not match any of the regexes: '^led-[0-9a-z]+$', 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/lpc3250-ea3250.dtb
+
+pca9532@60: 'psc0', 'psc1', 'pwm0', 'pwm1', 'run.green@1', 'run.red@0', 's1.green@5', 's1.yellow@4', 's2.green@3', 's2.red@2' do not match any of the regexes: '^led-[0-9a-z]+$', 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/am335x-pdu001.dtb
+
