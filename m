@@ -2,152 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A6C66634A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 260D066634D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235978AbjAKTMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 14:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        id S236216AbjAKTOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 14:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbjAKTMu (ORCPT
+        with ESMTP id S234213AbjAKTOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 14:12:50 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F709F5B5;
-        Wed, 11 Jan 2023 11:12:48 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bt23so24981970lfb.5;
-        Wed, 11 Jan 2023 11:12:48 -0800 (PST)
+        Wed, 11 Jan 2023 14:14:22 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5F134D6F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:14:20 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id o7so16692876ljj.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:14:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8EiI9R96gCdmCFi5CyO8T9qRDKhT2cs8fqWKf1z80Mk=;
-        b=mzP921o8SwxZAZEKBG9QuzQEM4g4HTRqQDGWD4Vvl3pIdF397Tspd5R6U95sNohcI8
-         q/6G2gGVJmOcxtpKysysfTOLz/6C4+6L1BnMZ3tkSck7mz6F+FgsTbB0Ohq/6Z4Nf0D4
-         F6ZJi2yDRRh1Eww9vuARHHI3KHG4fli1oWQtI4EXzQeslYlt9HzXKC/4XZw1LXGMKa42
-         RlQj1YFfC+HRTIOYHb6PZXn20IhxjxeY9LLEwiPC9oh1TY+lacjhYV7m7eKE0ab4hxnV
-         EW6XFKwWKpM1fY+T98H1uhQx8dOHNhfmKi1rOs8d6F4MygvO42BRgUhLTttJ6ocGw+wG
-         xk/A==
+        bh=kfqBVq1gDLvWthBTlgZfuovTqtIjzay1A8lWapbrzn4=;
+        b=kHygLqOY2rfNvnHYmTm+NpCUpD6CX8fe4tByACYTv4sHedxTdwZzKkqzPrqIsa+ygy
+         IcXwY4/UfFSMN5lG8GF4Gfd/ZaZUbZFwKukU8kdbnKYFYGLuhKNMB3JPhJaVAn40Mrb3
+         uslBriQjUXUE+AW2KsgYvLqoZ4d0ccl4Xm6asBVG/Xk8Pwc8DwBhTsq8qPZhJ+ZkQZ//
+         QbkHpN6eVkhoV0vUGcRuM+5wrIkoHiyGbGXVBI6/MgRcrOWL4u6oBJbtHVDw/yynOkOv
+         6V6wHwYAWdlC/FyH39CmzK0hWwEjhF3Sw0I/BJO7uqd2/UDRt8utoULJ5FBW3/yOt/Sy
+         WGnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8EiI9R96gCdmCFi5CyO8T9qRDKhT2cs8fqWKf1z80Mk=;
-        b=dIzgBPFo0WncW90A2cBuvctgpQVevNLC9PmKd+GENH9uh0LIh1w2S8HO6cSNv+x2H9
-         I4oroIhCgqcDhAsLqvuCqsZR5pr4X/h8y4cOOCqWYTCeVb2QKmlmC4EKf6tRhZXCewOw
-         UxbyxE0uIsf35mY+dCF8VWJKzHxCHknOq4+yOGx+BqfwYbmIepqeps0/fOo6cZIFn4ST
-         exBg622BtPN6yO8VGCKKTyVB76c8nChvYRnrni0fd6gypkFtZ9UttKINeTda4vEvMe5h
-         8jaFWkg4zJ4UM+bXFojgLWec/CsbLAMFpz/gimRIzJLJFKybjnGE80hVXPxyITE/Elhc
-         RKsA==
-X-Gm-Message-State: AFqh2kr8uutLbTeMY0qc7m7qf7C9y7kucuQ9sinSwsVhVnvdyZoFOoU+
-        gWAPKG2z9/mPBIjRtT09uXU=
-X-Google-Smtp-Source: AMrXdXs3/hbAhL+hlD/dNGWChGW0aOZpS9pbfNrVsjqJj+ib+NAPcZVYUPYFwJ4N128WPlpSgS67RQ==
-X-Received: by 2002:a05:6512:3901:b0:4c7:d0ed:9605 with SMTP id a1-20020a056512390100b004c7d0ed9605mr19183485lfu.6.1673464366599;
-        Wed, 11 Jan 2023 11:12:46 -0800 (PST)
-Received: from [192.168.50.20] (077222238029.warszawa.vectranet.pl. [77.222.238.29])
-        by smtp.gmail.com with ESMTPSA id s28-20020a056512203c00b004cb0e527515sm2831407lfs.249.2023.01.11.11.12.45
+        bh=kfqBVq1gDLvWthBTlgZfuovTqtIjzay1A8lWapbrzn4=;
+        b=HdYYN0as34u/oGTGLbbznQX95EEZFfd7j+yYSQxr6KW7/XsMcO1uzXkI06Gp/EsVLN
+         XE1W8XAvn63ZPHcwJaJsG0EIqjf/WCGZySQKxkG5ZFT8sbZkEekrkeveprxW329/1PG0
+         6fvMyfxQjt63AV2sNZ3LhIB5v3xvogUeN52D7OFAJGPsrPZXROs7xWwHUlGpoSrO2EP7
+         ox0GLpYr1tKkDnQlupjcVKNzaKLaQpyhaK++vwDp0ljJMFDzg4mJ7/FKbacoyumFkrj2
+         zMxJo0wQPITzVezysCmml3E5fCaL5Y1A4owRshTHHfkJpNaGFBlCSl0mhSuPY9/knB9X
+         +B/g==
+X-Gm-Message-State: AFqh2kpJpI5Q6QFsoKB24AJKOJIUqqLn3V7jUdH/HW7g8y7kF+VXSdW7
+        FiuRX/EIPQzEy0H1C4I62QLloQ==
+X-Google-Smtp-Source: AMrXdXtigFiZ8QzSYmZ8FUgGlOuy4VAUFnAPp23B2cUbOwUMCjegOgOevtUhOZlyaQUMRuc5LDDqtw==
+X-Received: by 2002:a2e:a613:0:b0:277:794:ae14 with SMTP id v19-20020a2ea613000000b002770794ae14mr19541025ljp.28.1673464458748;
+        Wed, 11 Jan 2023 11:14:18 -0800 (PST)
+Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
+        by smtp.gmail.com with ESMTPSA id r16-20020a2e94d0000000b00283f2ddc308sm1488864ljh.137.2023.01.11.11.14.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 11:12:45 -0800 (PST)
-Message-ID: <f8471471-3b9f-526c-b8d0-88bd3de6d409@gmail.com>
-Date:   Wed, 11 Jan 2023 20:12:44 +0100
+        Wed, 11 Jan 2023 11:14:15 -0800 (PST)
+Message-ID: <43c8200a-bec0-6d5f-cf32-568b86a1f0c6@linaro.org>
+Date:   Wed, 11 Jan 2023 20:14:11 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v2] rndis_wlan: Prevent buffer overflow in rndis_query_oid
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     kvalo@kernel.org, jussi.kivilinna@iki.fi, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        greg@kroah.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CAKgT0UePq+Gg5mpvD7ag=ern9JN5JyAFv5RPc05Zn9jSh4W+0g@mail.gmail.com>
- <20230111175031.7049-1-szymon.heidrich@gmail.com>
- <CAKgT0UeiFGyttyQg_yWHA5L6ZPy9W8__b6DFSQe0-CNnLEvY7w@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] ARM: dts: qcom: apq8026-samsung-matisse-wifi: Add
+ display backlight
 Content-Language: en-US
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-In-Reply-To: <CAKgT0UeiFGyttyQg_yWHA5L6ZPy9W8__b6DFSQe0-CNnLEvY7w@mail.gmail.com>
+To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230111183502.706151-1-matti.lehtimaki@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230111183502.706151-1-matti.lehtimaki@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2023 19:28, Alexander Duyck wrote:
-> On Wed, Jan 11, 2023 at 9:51 AM Szymon Heidrich
-> <szymon.heidrich@gmail.com> wrote:
->>
->> Since resplen and respoffs are signed integers sufficiently
->> large values of unsigned int len and offset members of RNDIS
->> response will result in negative values of prior variables.
->> This may be utilized to bypass implemented security checks
->> to either extract memory contents by manipulating offset or
->> overflow the data buffer via memcpy by manipulating both
->> offset and len.
->>
->> Additionally assure that sum of resplen and respoffs does not
->> overflow so buffer boundaries are kept.
->>
->> Fixes: 80f8c5b434f9 ("rndis_wlan: copy only useful data from rndis_command respond")
->> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
->> ---
->> V1 -> V2: Use size_t and min macro, fix netdev_dbg format
->>
->>  drivers/net/wireless/rndis_wlan.c | 19 ++++++-------------
->>  1 file changed, 6 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/net/wireless/rndis_wlan.c b/drivers/net/wireless/rndis_wlan.c
->> index 82a7458e0..bf72e5fd3 100644
->> --- a/drivers/net/wireless/rndis_wlan.c
->> +++ b/drivers/net/wireless/rndis_wlan.c
->> @@ -696,8 +696,8 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
->>                 struct rndis_query      *get;
->>                 struct rndis_query_c    *get_c;
->>         } u;
->> -       int ret, buflen;
->> -       int resplen, respoffs, copylen;
->> +       int ret;
->> +       size_t buflen, resplen, respoffs, copylen;
->>
->>         buflen = *len + sizeof(*u.get);
->>         if (buflen < CONTROL_BUFFER_SIZE)
->> @@ -732,22 +732,15 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
->>
->>                 if (respoffs > buflen) {
->>                         /* Device returned data offset outside buffer, error. */
->> -                       netdev_dbg(dev->net, "%s(%s): received invalid "
->> -                               "data offset: %d > %d\n", __func__,
->> -                               oid_to_string(oid), respoffs, buflen);
->> +                       netdev_dbg(dev->net,
->> +                                  "%s(%s): received invalid data offset: %zu > %zu\n",
->> +                                  __func__, oid_to_string(oid), respoffs, buflen);
->>
->>                         ret = -EINVAL;
->>                         goto exit_unlock;
->>                 }
->>
->> -               if ((resplen + respoffs) > buflen) {
->> -                       /* Device would have returned more data if buffer would
->> -                        * have been big enough. Copy just the bits that we got.
->> -                        */
->> -                       copylen = buflen - respoffs;
->> -               } else {
->> -                       copylen = resplen;
->> -               }
->> +               copylen = min(resplen, buflen - respoffs);
->>
->>                 if (copylen > *len)
->>                         copylen = *len;
-> 
-> Looks good to me.
-> 
-> Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
 
-Awesome, thank you very much.
 
+On 11.01.2023 19:35, Matti Lehtimäki wrote:
+> Uses ti,lp8556 backlight with clk-pwm.
+> 
+> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+> This patch was part of the series
+> https://lore.kernel.org/linux-arm-msm/20230106114403.275865-1-matti.lehtimaki@gmail.com/
+> which already had the other patches applied.
+> 
+> Changes in v2:
+>   - Add empty line between subnodes
+>   - Move pwm node to correct place
+>   - Reorder pinctrl properties
+> ---
+>  .../dts/qcom-apq8026-samsung-matisse-wifi.dts | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+> index 15b9590ba07b..91b860e24681 100644
+> --- a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+> @@ -80,6 +80,55 @@ key-volume-up {
+>  		};
+>  	};
+>  
+> +	i2c-backlight {
+> +		compatible = "i2c-gpio";
+> +		sda-gpios = <&tlmm 20 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+> +		scl-gpios = <&tlmm 21 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+> +
+> +		pinctrl-0 = <&backlight_i2c_default_state>;
+> +		pinctrl-names = "default";
+> +
+> +		i2c-gpio,delay-us = <4>;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		backlight@2c {
+> +			compatible = "ti,lp8556";
+> +			reg = <0x2c>;
+> +
+> +			dev-ctrl = /bits/ 8 <0x80>;
+> +			init-brt = /bits/ 8 <0x3f>;
+> +			pwm-period = <100000>;
+> +
+> +			pwms = <&backlight_pwm 0 100000>;
+> +			pwm-names = "lp8556";
+> +
+> +			rom-a0h {
+> +				rom-addr = /bits/ 8 <0xa0>;
+> +				rom-val = /bits/ 8 <0x44>;
+> +			};
+> +
+> +			rom-a1h {
+> +				rom-addr = /bits/ 8 <0xa1>;
+> +				rom-val = /bits/ 8 <0x6c>;
+> +			};
+> +
+> +			rom-a5h {
+> +				rom-addr = /bits/ 8 <0xa5>;
+> +				rom-val = /bits/ 8 <0x24>;
+> +			};
+> +		};
+> +	};
+> +
+> +	backlight_pwm: pwm {
+> +		compatible = "clk-pwm";
+> +		#pwm-cells = <2>;
+> +		clocks = <&mmcc CAMSS_GP0_CLK>;
+> +		pinctrl-0 = <&backlight_pwm_default_state>;
+> +		pinctrl-names = "default";
+> +	};
+> +
+>  	reg_tsp_1p8v: regulator-tsp-1p8v {
+>  		compatible = "regulator-fixed";
+>  		regulator-name = "tsp_1p8v";
+> @@ -418,6 +467,18 @@ accel_int_default_state: accel-int-default-state {
+>  		bias-disable;
+>  	};
+>  
+> +	backlight_i2c_default_state: backlight-i2c-default-state {
+> +		pins = "gpio20", "gpio21";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	backlight_pwm_default_state: backlight-pwm-default-state {
+> +		pins = "gpio33";
+> +		function = "gp0_clk";
+> +	};
+> +
+>  	muic_int_default_state: muic-int-default-state {
+>  		pins = "gpio67";
+>  		function = "gpio";
