@@ -2,409 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA336662C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC0B6662D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236651AbjAKS2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:28:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
+        id S234496AbjAKSaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbjAKS2E (ORCPT
+        with ESMTP id S235083AbjAKS2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:28:04 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E36EB32EA7;
-        Wed, 11 Jan 2023 10:28:02 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9C2DFEC;
-        Wed, 11 Jan 2023 10:28:44 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.46.211])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BB283F587;
-        Wed, 11 Jan 2023 10:28:00 -0800 (PST)
-Date:   Wed, 11 Jan 2023 18:27:53 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mhiramat@kernel.org,
-        ndesaulniers@google.com, ojeda@kernel.org, peterz@infradead.org,
-        rafael.j.wysocki@intel.com, revest@chromium.org,
-        robert.moore@intel.com, rostedt@goodmis.org, will@kernel.org
-Subject: Re: [PATCH 1/8] Compiler attributes: GCC function alignment
- workarounds
-Message-ID: <Y77/qVgvaJidFpYt@FVFF77S0Q05N>
-References: <20230109135828.879136-1-mark.rutland@arm.com>
- <20230109135828.879136-2-mark.rutland@arm.com>
- <CANiq72kgmFYEO_EB_NxAF=S7VOf45KM7W3uwxxvftVErwfWzjg@mail.gmail.com>
+        Wed, 11 Jan 2023 13:28:25 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9BF33D46;
+        Wed, 11 Jan 2023 10:28:24 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 141so11163050pgc.0;
+        Wed, 11 Jan 2023 10:28:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8rjvOq9k/F/pv9zTj8LqXw/+Mi7PQp9geFeWzmYvddk=;
+        b=FeVvk402TAjY56JdUzGjDzoU4373hWMaJ094pEdCu3oCKpaH2Q7jIhMaOkx7KoBTB6
+         27b8L0KHRC+P3y7kvNvv+/jZHMLk3Ss2omvFFs+L2gYtzj26dp6KCkcXlnGQ1EIR1FRA
+         wcrQpHKdmBjlkyF+C+3v+l9h2bIA4uXl/NtjBUM2sTKUgDIQjGMak7gahl+qp80QKpty
+         WVwri5g7DN6rkZxU6APSsLwZ5Vi6jj4B5kUg4PCDsQdE6IoVwZQnyFLvq46r5DgU/bMv
+         kVYGsKOa4VgH4XeobBlXtZFL6tI2jCzNYk1wLwrqVKd+CAzgkhro6WhyeE8eQftwJex0
+         XWMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8rjvOq9k/F/pv9zTj8LqXw/+Mi7PQp9geFeWzmYvddk=;
+        b=2qX5dxU0CyTzetdO9+sGw5R/yEsYZafJg7F4h42LO3BxaqRp41XdYf4B8As3UTkQt0
+         ILMhXCDNcigKxzLLyzPSkKmKA9nQl6QtE0oGs40sYDr+rjr0GX6bl/Pt8RLDG4nXVBjy
+         e7cnxJgPU8xc70ugIyd4D/9y7Ek3of4XkVLseBzPE4dKS2+OsWqhrlMQ4yGNP8qLOXQN
+         ctY9dRTozUJfPdnAeIxXqILSzIaPgaHyzMEgLNNEgu+A/LHp9Lr+7Gg+20NugzUhZWuB
+         f2iR2aaLgFbSP2iQrx43ClkU6CPvShxvmobSlasc7tUIVrSc7TcSkUhlOpUSUSM2eCbd
+         M8OA==
+X-Gm-Message-State: AFqh2krlQQ+Iyx4iLVA9wIqnlXXRbYTY3mvA0B4OzFQRqFhu/M/FUKnR
+        1ks/aaLBVtQCZm5yb7xx/26u8V8H1ZR42BjVXZM=
+X-Google-Smtp-Source: AMrXdXsupKyphg+l1fOb8zU8tlH21mgYWekT1TGxSqw9nNXfTa+63QlbOHLMDkDKdSYOEkFRkFpbagLx44WO597pGPQ=
+X-Received: by 2002:a62:1853:0:b0:586:2b38:4927 with SMTP id
+ 80-20020a621853000000b005862b384927mr1624860pfy.53.1673461704120; Wed, 11 Jan
+ 2023 10:28:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiq72kgmFYEO_EB_NxAF=S7VOf45KM7W3uwxxvftVErwfWzjg@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAKgT0UePq+Gg5mpvD7ag=ern9JN5JyAFv5RPc05Zn9jSh4W+0g@mail.gmail.com>
+ <20230111175031.7049-1-szymon.heidrich@gmail.com>
+In-Reply-To: <20230111175031.7049-1-szymon.heidrich@gmail.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Wed, 11 Jan 2023 10:28:12 -0800
+Message-ID: <CAKgT0UeiFGyttyQg_yWHA5L6ZPy9W8__b6DFSQe0-CNnLEvY7w@mail.gmail.com>
+Subject: Re: [PATCH v2] rndis_wlan: Prevent buffer overflow in rndis_query_oid
+To:     Szymon Heidrich <szymon.heidrich@gmail.com>
+Cc:     kvalo@kernel.org, jussi.kivilinna@iki.fi, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        greg@kroah.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 03:43:16PM +0100, Miguel Ojeda wrote:
-> On Mon, Jan 9, 2023 at 2:58 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > As far as I can tell, GCC doesn't respect '-falign-functions=N':
-> >
-> > * When the __weak__ attribute is used
-> >
-> >   GCC seems to forget the alignment specified by '-falign-functions=N',
-> >   but will respect the '__aligned__(N)' function attribute. Thus, we can
-> >   work around this by explciitly setting the alignment for weak
-> >   functions.
-> >
-> > * When the __cold__ attribute is used
-> >
-> >   GCC seems to forget the alignment specified by '-falign-functions=N',
-> >   and also doesn't seem to respect the '__aligned__(N)' function
-> >   attribute. The only way to work around this is to not use the __cold__
-> >   attibute.
-> 
-> If you happen to have a reduced case, then it would be nice to link it
-> in the commit. A bug report to GCC would also be nice.
-> 
-> I gave it a very quick try in Compiler Explorer, but I couldn't
-> reproduce it, so I guess it depends on flags, non-trivial functions or
-> something else.
+On Wed, Jan 11, 2023 at 9:51 AM Szymon Heidrich
+<szymon.heidrich@gmail.com> wrote:
+>
+> Since resplen and respoffs are signed integers sufficiently
+> large values of unsigned int len and offset members of RNDIS
+> response will result in negative values of prior variables.
+> This may be utilized to bypass implemented security checks
+> to either extract memory contents by manipulating offset or
+> overflow the data buffer via memcpy by manipulating both
+> offset and len.
+>
+> Additionally assure that sum of resplen and respoffs does not
+> overflow so buffer boundaries are kept.
+>
+> Fixes: 80f8c5b434f9 ("rndis_wlan: copy only useful data from rndis_command respond")
+> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+> ---
+> V1 -> V2: Use size_t and min macro, fix netdev_dbg format
+>
+>  drivers/net/wireless/rndis_wlan.c | 19 ++++++-------------
+>  1 file changed, 6 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/net/wireless/rndis_wlan.c b/drivers/net/wireless/rndis_wlan.c
+> index 82a7458e0..bf72e5fd3 100644
+> --- a/drivers/net/wireless/rndis_wlan.c
+> +++ b/drivers/net/wireless/rndis_wlan.c
+> @@ -696,8 +696,8 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
+>                 struct rndis_query      *get;
+>                 struct rndis_query_c    *get_c;
+>         } u;
+> -       int ret, buflen;
+> -       int resplen, respoffs, copylen;
+> +       int ret;
+> +       size_t buflen, resplen, respoffs, copylen;
+>
+>         buflen = *len + sizeof(*u.get);
+>         if (buflen < CONTROL_BUFFER_SIZE)
+> @@ -732,22 +732,15 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
+>
+>                 if (respoffs > buflen) {
+>                         /* Device returned data offset outside buffer, error. */
+> -                       netdev_dbg(dev->net, "%s(%s): received invalid "
+> -                               "data offset: %d > %d\n", __func__,
+> -                               oid_to_string(oid), respoffs, buflen);
+> +                       netdev_dbg(dev->net,
+> +                                  "%s(%s): received invalid data offset: %zu > %zu\n",
+> +                                  __func__, oid_to_string(oid), respoffs, buflen);
+>
+>                         ret = -EINVAL;
+>                         goto exit_unlock;
+>                 }
+>
+> -               if ((resplen + respoffs) > buflen) {
+> -                       /* Device would have returned more data if buffer would
+> -                        * have been big enough. Copy just the bits that we got.
+> -                        */
+> -                       copylen = buflen - respoffs;
+> -               } else {
+> -                       copylen = resplen;
+> -               }
+> +               copylen = min(resplen, buflen - respoffs);
+>
+>                 if (copylen > *len)
+>                         copylen = *len;
 
-So having spent today coming up with tests, it turns out it's not quite as I
-described above, but in a sense worse. I'm posting a summary here for
-posterity; I'll try to get this to compiler folk shortly.
+Looks good to me.
 
-GCC appears to not align cold functions to the alignment specified by
-`-falign-functions=N` when compiling at `-O1` or above. Alignment *can* be
-restored with explicit attributes on each function, but due to some
-interprocedural analysis, callees can be implicitly marked as cold (losing
-their default alignment), which means we don't have a reliable mechanism to
-ensure functions are always aligned short of annotating *every* function
-explicitly (and I suspect that's not sufficient due to some interprocedural optimizations).
-
-I've tested with the 12.1.0 binary release from the kernel.org cross toolchains
-page).
-
-LLVM always seems to repsect `-falign-functions=N` at both `-O1` and `-O2` (I
-tested the 10.0.0, 11.0.0, 11.0.1, 15.0.6 binary releases from llvm.org).
-
-For example:
-
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% cat test-cold.c                                           
-| #define __cold \
-|         __attribute__((cold))
-| 
-| #define EXPORT_FUNC_PTR(func) \
-|         typeof((func)) *__ptr_##func = (func)
-| 
-| __cold
-| void cold_func_a(void) { }
-| 
-| __cold
-| void cold_func_b(void) { }
-| 
-| __cold
-| void cold_func_c(void) { }
-| 
-| static __cold
-| void static_cold_func_a(void) { }
-| EXPORT_FUNC_PTR(static_cold_func_a);
-| 
-| static __cold
-| void static_cold_func_b(void) { }
-| EXPORT_FUNC_PTR(static_cold_func_b);
-| 
-| static __cold
-| void static_cold_func_c(void) { }
-| EXPORT_FUNC_PTR(static_cold_func_c);
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% usekorg 12.1.0 aarch64-linux-gcc -falign-functions=16 -c test-cold.c -O1
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% usekorg 12.1.0 aarch64-linux-objdump -d test-cold.o                     
-| 
-| test-cold.o:     file format elf64-littleaarch64
-| 
-| 
-| Disassembly of section .text:
-| 
-| 0000000000000000 <static_cold_func_a>:
-|    0:   d65f03c0        ret
-| 
-| 0000000000000004 <static_cold_func_b>:
-|    4:   d65f03c0        ret
-| 
-| 0000000000000008 <static_cold_func_c>:
-|    8:   d65f03c0        ret
-| 
-| 000000000000000c <cold_func_a>:
-|    c:   d65f03c0        ret
-| 
-| 0000000000000010 <cold_func_b>:
-|   10:   d65f03c0        ret
-| 
-| 0000000000000014 <cold_func_c>:
-|   14:   d65f03c0        ret
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% usekorg 12.1.0 aarch64-linux-objdump -h test-cold.o
-| 
-| test-cold.o:     file format elf64-littleaarch64
-| 
-| Sections:
-| Idx Name          Size      VMA               LMA               File off  Algn
-|   0 .text         00000018  0000000000000000  0000000000000000  00000040  2**2
-|                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-|   1 .data         00000018  0000000000000000  0000000000000000  00000058  2**3
-|                   CONTENTS, ALLOC, LOAD, RELOC, DATA
-|   2 .bss          00000000  0000000000000000  0000000000000000  00000070  2**0
-|                   ALLOC
-|   3 .comment      00000013  0000000000000000  0000000000000000  00000070  2**0
-|                   CONTENTS, READONLY
-|   4 .note.GNU-stack 00000000  0000000000000000  0000000000000000  00000083  2**0
-|                   CONTENTS, READONLY
-|   5 .eh_frame     00000090  0000000000000000  0000000000000000  00000088  2**3
-|                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
-
-In simple cases, alignment *can* be restored if an explicit function attribute
-is used. For example:
-
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% cat test-aligned-cold.c                            
-| #define __aligned(n) \
-|         __attribute__((aligned(n)))
-| 
-| #define __cold \
-|         __attribute__((cold)) __aligned(16)
-| 
-| #define EXPORT_FUNC_PTR(func) \
-|         typeof((func)) *__ptr_##func = (func)
-| 
-| __cold
-| void cold_func_a(void) { }
-| 
-| __cold
-| void cold_func_b(void) { }
-| 
-| __cold
-| void cold_func_c(void) { }
-| 
-| static __cold
-| void static_cold_func_a(void) { }
-| EXPORT_FUNC_PTR(static_cold_func_a);
-| 
-| static __cold
-| void static_cold_func_b(void) { }
-| EXPORT_FUNC_PTR(static_cold_func_b);
-| 
-| static __cold
-| void static_cold_func_c(void) { }
-| EXPORT_FUNC_PTR(static_cold_func_c);
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% usekorg 12.1.0 aarch64-linux-gcc -falign-functions=16 -c test-aligned-cold.c -O1
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% usekorg 12.1.0 aarch64-linux-objdump -d test-aligned-cold.o                     
-| 
-| test-aligned-cold.o:     file format elf64-littleaarch64
-| 
-| 
-| Disassembly of section .text:
-| 
-| 0000000000000000 <static_cold_func_a>:
-|    0:   d65f03c0        ret
-|    4:   d503201f        nop
-|    8:   d503201f        nop
-|    c:   d503201f        nop
-| 
-| 0000000000000010 <static_cold_func_b>:
-|   10:   d65f03c0        ret
-|   14:   d503201f        nop
-|   18:   d503201f        nop
-|   1c:   d503201f        nop
-| 
-| 0000000000000020 <static_cold_func_c>:
-|   20:   d65f03c0        ret
-|   24:   d503201f        nop
-|   28:   d503201f        nop
-|   2c:   d503201f        nop
-| 
-| 0000000000000030 <cold_func_a>:
-|   30:   d65f03c0        ret
-|   34:   d503201f        nop
-|   38:   d503201f        nop
-|   3c:   d503201f        nop
-| 
-| 0000000000000040 <cold_func_b>:
-|   40:   d65f03c0        ret
-|   44:   d503201f        nop
-|   48:   d503201f        nop
-|   4c:   d503201f        nop
-| 
-| 0000000000000050 <cold_func_c>:
-|   50:   d65f03c0        ret
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% usekorg 12.1.0 aarch64-linux-objdump -h test-aligned-cold.o
-| 
-| test-aligned-cold.o:     file format elf64-littleaarch64
-| 
-| Sections:
-| Idx Name          Size      VMA               LMA               File off  Algn
-|   0 .text         00000054  0000000000000000  0000000000000000  00000040  2**4
-|                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-|   1 .data         00000018  0000000000000000  0000000000000000  00000098  2**3
-|                   CONTENTS, ALLOC, LOAD, RELOC, DATA
-|   2 .bss          00000000  0000000000000000  0000000000000000  000000b0  2**0
-|                   ALLOC
-|   3 .comment      00000013  0000000000000000  0000000000000000  000000b0  2**0
-|                   CONTENTS, READONLY
-|   4 .note.GNU-stack 00000000  0000000000000000  0000000000000000  000000c3  2**0
-|                   CONTENTS, READONLY
-|   5 .eh_frame     00000090  0000000000000000  0000000000000000  000000c8  2**3
-|                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
-
-
-Unfortunately it appears that some interprocedural analysis determines that if
-a callee is only called/referenced from cold callers, the callee is marked as
-cold, and the alignment it would have got from the command line option is
-dropped. If it's given an explicit alignment attribute, the alignment is
-retained.
-
-For example:
-
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% cat test-aligned-cold-caller.c                                    
-| #define noinline \
-|         __attribute__((noinline))
-| 
-| #define __aligned(n) \
-|         __attribute__((aligned(n)))
-| 
-| #define __cold \
-|         __attribute__((cold)) __aligned(16)
-| 
-| #define EXPORT_FUNC_PTR(func) \
-|         typeof((func)) *__ptr_##func = (func)
-| 
-| static noinline void callee_a(void)
-| {
-|         asm volatile("// callee_a\n" ::: "memory");
-| }
-| 
-| static noinline void callee_b(void)
-| {
-|         asm volatile("// callee_b\n" ::: "memory");
-| }
-| 
-| static noinline void callee_c(void)
-| {
-|         asm volatile("// callee_c\n" ::: "memory");
-| }
-| __cold
-| void cold_func_a(void) { callee_a(); }
-| 
-| __cold
-| void cold_func_b(void) { callee_b(); }
-| 
-| __cold
-| void cold_func_c(void) { callee_c(); }
-| 
-| static __cold
-| void static_cold_func_a(void) { callee_a(); }
-| EXPORT_FUNC_PTR(static_cold_func_a);
-| 
-| static __cold
-| void static_cold_func_b(void) { callee_b(); }
-| EXPORT_FUNC_PTR(static_cold_func_b);
-| 
-| static __cold
-| void static_cold_func_c(void) { callee_c(); }
-| EXPORT_FUNC_PTR(static_cold_func_c);
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% usekorg 12.1.0 aarch64-linux-gcc -falign-functions=16 -c test-aligned-cold-caller.c -O1
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% usekorg 12.1.0 aarch64-linux-objdump -d test-aligned-cold-caller.o                     
-| 
-| test-aligned-cold-caller.o:     file format elf64-littleaarch64
-| 
-| 
-| Disassembly of section .text:
-| 
-| 0000000000000000 <callee_a>:
-|    0:   d65f03c0        ret
-| 
-| 0000000000000004 <callee_b>:
-|    4:   d65f03c0        ret
-| 
-| 0000000000000008 <callee_c>:
-|    8:   d65f03c0        ret
-|    c:   d503201f        nop
-| 
-| 0000000000000010 <static_cold_func_a>:
-|   10:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|   14:   910003fd        mov     x29, sp
-|   18:   97fffffa        bl      0 <callee_a>
-|   1c:   a8c17bfd        ldp     x29, x30, [sp], #16
-|   20:   d65f03c0        ret
-|   24:   d503201f        nop
-|   28:   d503201f        nop
-|   2c:   d503201f        nop
-| 
-| 0000000000000030 <static_cold_func_b>:
-|   30:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|   34:   910003fd        mov     x29, sp
-|   38:   97fffff3        bl      4 <callee_b>
-|   3c:   a8c17bfd        ldp     x29, x30, [sp], #16
-|   40:   d65f03c0        ret
-|   44:   d503201f        nop
-|   48:   d503201f        nop
-|   4c:   d503201f        nop
-| 
-| 0000000000000050 <static_cold_func_c>:
-|   50:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|   54:   910003fd        mov     x29, sp
-|   58:   97ffffec        bl      8 <callee_c>
-|   5c:   a8c17bfd        ldp     x29, x30, [sp], #16
-|   60:   d65f03c0        ret
-|   64:   d503201f        nop
-|   68:   d503201f        nop
-|   6c:   d503201f        nop
-| 
-| 0000000000000070 <cold_func_a>:
-|   70:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|   74:   910003fd        mov     x29, sp
-|   78:   97ffffe2        bl      0 <callee_a>
-|   7c:   a8c17bfd        ldp     x29, x30, [sp], #16
-|   80:   d65f03c0        ret
-|   84:   d503201f        nop
-|   88:   d503201f        nop
-|   8c:   d503201f        nop
-| 
-| 0000000000000090 <cold_func_b>:
-|   90:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|   94:   910003fd        mov     x29, sp
-|   98:   97ffffdb        bl      4 <callee_b>
-|   9c:   a8c17bfd        ldp     x29, x30, [sp], #16
-|   a0:   d65f03c0        ret
-|   a4:   d503201f        nop
-|   a8:   d503201f        nop
-|   ac:   d503201f        nop
-| 
-| 00000000000000b0 <cold_func_c>:
-|   b0:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
-|   b4:   910003fd        mov     x29, sp
-|   b8:   97ffffd4        bl      8 <callee_c>
-|   bc:   a8c17bfd        ldp     x29, x30, [sp], #16
-|   c0:   d65f03c0        ret
-| [mark@lakrids:/mnt/data/tests/gcc-alignment]% usekorg 12.1.0 aarch64-linux-objdump -h test-aligned-cold-caller.o
-| 
-| test-aligned-cold-caller.o:     file format elf64-littleaarch64
-| 
-| Sections:
-| Idx Name          Size      VMA               LMA               File off  Algn
-|   0 .text         000000c4  0000000000000000  0000000000000000  00000040  2**4
-|                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-|   1 .data         00000018  0000000000000000  0000000000000000  00000108  2**3
-|                   CONTENTS, ALLOC, LOAD, RELOC, DATA
-|   2 .bss          00000000  0000000000000000  0000000000000000  00000120  2**0
-|                   ALLOC
-|   3 .comment      00000013  0000000000000000  0000000000000000  00000120  2**0
-|                   CONTENTS, READONLY
-|   4 .note.GNU-stack 00000000  0000000000000000  0000000000000000  00000133  2**0
-|                   CONTENTS, READONLY
-|   5 .eh_frame     00000110  0000000000000000  0000000000000000  00000138  2**3
-|                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
-
-Thanks,
-Mark.
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
