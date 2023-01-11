@@ -2,122 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FBF665D86
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BF6665D8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbjAKOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S238848AbjAKOSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239322AbjAKOR6 (ORCPT
+        with ESMTP id S239254AbjAKOSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:17:58 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B746CFD2E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:17:24 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 19CAF337D6;
-        Wed, 11 Jan 2023 14:17:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673446639; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0sVrq4Dniw5KnDcNZ1C6CZNPXzD9gn2lEBhnqlgUWQg=;
-        b=EXtg4ez0ch4jeVKmyNXeCXnuQie+WMbN7uTHT/Spqz9Lhu82IcRtoMI7K5IzlqjRl53JvS
-        lX9U23sleXpjF1VHRMIjz8XuTjeI6ptzTin6V3ueNjB8Fe/HltDjp6Dvx/uso5a3AEEKdW
-        WhWP6WtVCkCyZYq9t2oINfZk5XlclYI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C686513591;
-        Wed, 11 Jan 2023 14:17:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id V0KDL+7EvmOECgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 11 Jan 2023 14:17:18 +0000
-Date:   Wed, 11 Jan 2023 15:17:17 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Yuanchu Xie <yuanchu@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] mm: multi-gen LRU: working set extensions
-Message-ID: <20230111141716.GA14685@blackbody.suse.cz>
-References: <20221214225123.2770216-1-yuanchu@google.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="X1bOJ3K7DJ5YkBrT"
-Content-Disposition: inline
-In-Reply-To: <20221214225123.2770216-1-yuanchu@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 11 Jan 2023 09:18:34 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4DC12A8A;
+        Wed, 11 Jan 2023 06:18:30 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id C00F63200909;
+        Wed, 11 Jan 2023 09:18:28 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 11 Jan 2023 09:18:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1673446708; x=
+        1673533108; bh=dJ/xXFSDkjEfqMBaE24FsQ41/V3SlHaKIpW7ZnfXo14=; b=O
+        3CBp4GVX4+kfAK4zkgmj7UVzvtoyfbLPKwsbxigLSQOzRSNWZ+WZOxgw6rTocR+u
+        d6sjMkozZO5MIjPURkM5+iZKHdRupN/rrN7KgmDvAzqU0PN1IR/llka83TOBaKIM
+        HfPNir0W/yqjrHgI+Gfw8JOOG3EOXfN7j34FoY/vsO47AUJN9SvCMfDk8d/HeR6R
+        sQMQmNv3ZSr+Fu2Jfb+rnt2hOEtDj/rOetYSU6jKg3zSIIol/KMFpvULZRvFz1if
+        Ay8PNmSbSkhHc3l9ts6eSKkHpf2RgFruUOa8H8DG6lWpfVgy5Agy4korlVa/loHA
+        3fVLGWTNXFhzccbDFylOg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673446708; x=
+        1673533108; bh=dJ/xXFSDkjEfqMBaE24FsQ41/V3SlHaKIpW7ZnfXo14=; b=B
+        QBVhkhxdRHBx+qk8OOTVGOKOmyLHgJi04smlPmb6kJ5gdCRYy5nuSXKI/ow7DDPC
+        gL+4H5VWz5X9XwoVZ4fIoU1UIQeUxOzXJVy7cZdqHfQaxM5hGIthnXL+FTcSmc06
+        VLz3tkXFQ0N3IwzZFjH4HxNy7gji4EJjTKZy4t//nbBCTV6JzmrJvelQFnE+bxca
+        rsxM9JP1o0uShqUJppFAYYOY8B4LtHmmwK1GridVP8SPO8A4Z5AOCrw2jEdewcBT
+        hlla+PlA1Fs8YbzxviQuBOc4KkW0avERrnaqBDkmtfg4flrd+7BGh0nEtP2in1T5
+        a6fuMKU12OPjxFNnV2aDw==
+X-ME-Sender: <xms:M8W-Y4rwJZBSegkXLoGznwe25f5Ggk8HogpmfmGSUA1MQtNxh_qJRA>
+    <xme:M8W-Y-qCcSmdLUvVm21otl9wymnn7O2DTIhpLPlvS_Re_dfKhBXcD8-I2bcxf_NZc
+    chVTAy1LEOkrcihYNw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeggdeivdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeufeef
+    ieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:M8W-Y9NRCzTXN6E0c-hxHHYlur2UebEpH0V3CM0wSn6ziO1E2oQUOw>
+    <xmx:M8W-Y_7UvAHc0Mc93Is7ro1T23nC1WJcmVijJW9iixuVt_0fGOziZg>
+    <xmx:M8W-Y36oLj_vs5mBGfsqap7w2dVXigEgCnppPBBk_Ln3SAM1vtnr0g>
+    <xmx:NMW-Y2o2BW_uXjCRtuKBXRGQzKedTLLAhlGNKUMer1WMci7kMS0_Eg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id BC0C8B60086; Wed, 11 Jan 2023 09:18:27 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <ff7096b8-aaee-45db-8d0a-2790d9d227eb@app.fastmail.com>
+In-Reply-To: <CA+G9fYuQzq1bBt9k0PtpAc0Ubn9wXmjzVGNRhSOFBr-fx3KQQw@mail.gmail.com>
+References: <20230110180018.288460217@linuxfoundation.org>
+ <CA+G9fYuQzq1bBt9k0PtpAc0Ubn9wXmjzVGNRhSOFBr-fx3KQQw@mail.gmail.com>
+Date:   Wed, 11 Jan 2023 15:18:08 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        "Pavel Machek" <pavel@denx.de>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        "Mark Brown" <broonie@kernel.org>
+Subject: Re: [PATCH 6.1 000/159] 6.1.5-rc1 review
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 11, 2023, at 07:55, Naresh Kamboju wrote:
+> On Tue, 10 Jan 2023 at 23:44, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+>>
+>> This is the start of the stable review cycle for the 6.1.5 release.
+>> There are 159 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, plea=
+se
+>> let me know.
+>>
+>> Responses should be made by Thu, 12 Jan 2023 17:59:42 +0000.
+>> Anything received after that time might be too late.
+>>
+>> The whole patch series can be found in one patch at:
+>>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/pa=
+tch-6.1.5-rc1.gz
+>> or in the git tree and branch at:
+>>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
+able-rc.git linux-6.1.y
+>> and the diffstat can be found below.
+>>
+>> thanks,
+>>
+>> greg k-h
+>
+> Results from Linaro=E2=80=99s test farm.
+> Regressions on arm64 FVP.
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> Following kernel panic and warning notices on FVP 64k page size
+> enabled gcc-12 build on 6.1 and 6.0 kernel Image while running
+> LTP mm test cases.
+>
+> CONFIG_ARM64_64K_PAGES=3Dy
 
---X1bOJ3K7DJ5YkBrT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I assume you mean this only happens with 64K pages but not 4K pages?
+I see the machine only has 4GB of RAM, so it's possible this is
+a side-effect of an out-of-memory condition somewhere as kernels
+with 64K pages need a lot more RAM.
 
-On Wed, Dec 14, 2022 at 02:51:21PM -0800, Yuanchu Xie <yuanchu@google.com> =
-wrote:
-> that's frequently used. The only missing pieces between MGLRU
-> generations and working set estimation are a consistent aging cadence
-> and an interface; we introduce the two additions.
->=20
-> Periodic aging
-> =3D=3D=3D=3D=3D=3D
-> MGLRU Aging is currently driven by reclaim, so the amount of time
-> between generations is non-deterministic. With memcgs being aged
-> regularly, MGLRU generations become time-based working set information.
+>    SError Interrupt on CPU3, code 0x00000000be000000 -- SError
+>     Kernel panic - not syncing: Asynchronous SError Interrupt
 
-Is this periodic aging specific to memcgs? IOW, periodic aging isn't
-needed without memcgs (~with root only)
-(Perhaps similar question to Aneeh's.)
+This is an SError from user space, where the 'be' bit is the
+encoding for SError, and the ISS and ISS2 words are all zero.
 
-> Use case: proactive reclaimer
-> =3D=3D=3D=3D=3D=3D
-> The proactive reclaimer sets the aging interval, and periodically reads
-> the page idle age stats, forming a working set estimation, which it then
-> calculates an amount to write to memory.reclaim.
->=20
-> With the page idle age stats, a proactive reclaimer could calculate a
-> precise amount of memory to reclaim without continuously probing and
-> inducing reclaim.
+The CPU enables the 'RAS' extension, so ISS is defined according
+to [1], but none of the bits are set, so this is 'Uncategorized'.
 
-Could the aging be also made per-memcg? (Similar to memory.reclaim,
-possibly without the new kthread (if global reclaim's aging is enough).)
+This seems particularly unhelpful from FVP, possibly a bug
+in the RAS error reporting.
 
-Thanks,
-Michal
+>     WARNING: CPU: 3 PID: 685 at kernel/sched/core.c:3113 set_task_cpu
 
+This again seems unrelated and only happens when it panics the
+second time.
 
---X1bOJ3K7DJ5YkBrT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY77E6gAKCRAkDQmsBEOq
-ufzXAP9oSegjiyAMqSaGyInbRBFZQWAgWZSfIZLFLnPaHnPLewD/abXGqTRB65aj
-qyqWc5cOAqYeuzRkjwwaFp6QKtrImwE=
-=Jo1y
------END PGP SIGNATURE-----
-
---X1bOJ3K7DJ5YkBrT--
+      Arnd
