@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F619665E8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11376665E8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238792AbjAKO5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:57:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
+        id S238723AbjAKO5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238488AbjAKO47 (ORCPT
+        with ESMTP id S238870AbjAKO5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:56:59 -0500
+        Wed, 11 Jan 2023 09:57:15 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50A75FB2;
-        Wed, 11 Jan 2023 06:56:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E39EE04;
+        Wed, 11 Jan 2023 06:57:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7963C61D4C;
-        Wed, 11 Jan 2023 14:56:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 556BFC433D2;
-        Wed, 11 Jan 2023 14:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673449015;
-        bh=7KrxrMBTrm2k5eaChJutXbGFMMhPgdWPn4Daxh7vj4s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xB4v8A+uaOYPztnyzpvJhzF/L/8BSpKtxAKSF2vT3BVz9RxB3k+c6x4PJWplH9Kow
-         UgOdqDYZvRdjpsbRsqg7aEc5DeFYIDlBa0qxPsSU/rwHMp5wPRR8I/0b2AROGTz66K
-         PE/w7ZOXNejyCziVaxsLhn3ON6//0fMKtF08Emis=
-Date:   Wed, 11 Jan 2023 15:56:52 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jan Engelhardt <jengelh@inai.de>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-Message-ID: <Y77ONKx60xWUxvcN@kroah.com>
-References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
- <n9108s34-9rn0-3n8q-r3s5-51r9647331ns@vanv.qr>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C136761CFB;
+        Wed, 11 Jan 2023 14:57:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E045C43396;
+        Wed, 11 Jan 2023 14:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673449031;
+        bh=mYNw1iEQYVCp6RrmRe30DB6Teu7zpACGkO9NWFvDUyo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QaloOrONmjzv1NxnkIb/LFrLyvGzezX8IP6p+BTQwpjrgl1QKH4PNtYIph6Jnv0xy
+         UqOi2i1ffFiBdoNLDsJU/yJRjn4S75GCJFPM+APpHSv8iwblX7qs0DwIJmVqMOQ9nd
+         paa4QZw7H6L/ukm8SfqrMVRzDyuyvYwIGV5Agq7ONdhtiai7GwcH4fQa5PeL70rkYs
+         BbPdVEUoOUGJvCXQ9g+u/QUYjT+E2l+aYeGrKLT3sU1Ya/8URcBmlRWw5u4YXSUjrF
+         T4EfIVGYmI/YRxH3Asw5p1CtqiaEHckGigxorO6ARYWSTJlxmsu8+7ojwyblGxbtPD
+         b0X+2109HR02Q==
+Received: by mail-vs1-f48.google.com with SMTP id v127so11565399vsb.12;
+        Wed, 11 Jan 2023 06:57:11 -0800 (PST)
+X-Gm-Message-State: AFqh2kotW6GkwpSdr5NckfFqdfgG4Xvz2GjPkHQdb7IGNKf3p5c+tNl3
+        Kv++CunV2XRnvQ8BKhjVPO4dRxLAi4PWOutLJA==
+X-Google-Smtp-Source: AMrXdXsFn/ZNP2w63VaXh+QFHScOBYUxYSxX/aRHG1VxYtf9ib6mpqOY1EwCEur2HVupJ0D2QHWb7s3fHG7o5hrVc/k=
+X-Received: by 2002:a05:6102:3546:b0:3c8:a6ed:faa8 with SMTP id
+ e6-20020a056102354600b003c8a6edfaa8mr9164668vss.85.1673449030052; Wed, 11 Jan
+ 2023 06:57:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <n9108s34-9rn0-3n8q-r3s5-51r9647331ns@vanv.qr>
+References: <20221130135807.45028-1-konrad.dybcio@linaro.org>
+In-Reply-To: <20221130135807.45028-1-konrad.dybcio@linaro.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 11 Jan 2023 08:56:58 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL4Wymiov3bgXBo+1RJeMMjJ_+iCCo7oboSmU8P+0ew4A@mail.gmail.com>
+Message-ID: <CAL_JsqL4Wymiov3bgXBo+1RJeMMjJ_+iCCo7oboSmU8P+0ew4A@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: msm/dsi: Don't require vcca-supply on 14nm PHY
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, patches@linaro.org,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,30 +69,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 02:38:04PM +0100, Jan Engelhardt wrote:
-> 
-> On Wednesday 2022-11-23 13:46, Greg Kroah-Hartman wrote:
-> >
-> >The Microsoft RNDIS protocol is, as designed, insecure and vulnerable on
-> >any system that uses it with untrusted hosts or devices.  Because the
-> >protocol is impossible to make secure, just disable all rndis drivers to
-> >prevent anyone from using them again.
-> >
-> >Windows only needed this for XP and newer systems, Windows systems older
-> >than that can use the normal USB class protocols instead, which do not
-> >have these problems.
-> 
-> 
-> In other news, someone just proposed adding "RNDIS" things to UEFI, so 
-> now the security problem is added right back into machines but at 
-> another layer?!
-> 
-> https://edk2.groups.io/g/devel/topic/patch_1_3/95531719
+On Wed, Nov 30, 2022 at 7:58 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+> On some SoCs (hello SM6115) vcca-supply is not wired to any smd-rpm
+> or rpmh regulator, but instead powered by the VDD_MX line, which is
+> voted for in the DSI ctrl node.
+>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml | 1 -
+>  1 file changed, 1 deletion(-)
 
-I guess systems that use this will always have to trust that the device
-plugged into them is "trusted".  Seems like an easy way to get access to
-a "locked down" system if you ever need it :)
+What's the status of this patch? It is in linux-next already for some
+time, but it needs to go into v6.2.
 
-{sigh}
-
-greg k-h
+Rob
