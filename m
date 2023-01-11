@@ -2,104 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19456651D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D42D6651B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235809AbjAKCbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 21:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
+        id S233598AbjAKCZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 21:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235743AbjAKCai (ORCPT
+        with ESMTP id S233306AbjAKCZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 21:30:38 -0500
-Received: from mo-csw.securemx.jp (mo-csw1116.securemx.jp [210.130.202.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D192C6583;
-        Tue, 10 Jan 2023 18:30:35 -0800 (PST)
-Received: by mo-csw.securemx.jp (mx-mo-csw1116) id 30B2U8S9030693; Wed, 11 Jan 2023 11:30:09 +0900
-X-Iguazu-Qid: 2wGrC6bcpmgSbxQkbP
-X-Iguazu-QSIG: v=2; s=0; t=1673404208; q=2wGrC6bcpmgSbxQkbP; m=yO1krVtmgfhEKSgKntcfRcL0ENdOYioPH7eiHYGyGjg=
-Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
-        by relay.securemx.jp (mx-mr1111) id 30B2U6Z7021024
-        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 11 Jan 2023 11:30:06 +0900
-X-SA-MID: 52825691
-From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        yuji2.ishikawa@toshiba.co.jp
-Subject: [PATCH v5 6/6] MAINTAINERS: Add entries for Toshiba Visconti Video Input Interface
-Date:   Wed, 11 Jan 2023 11:24:33 +0900
-X-TSB-HOP2: ON
-Message-Id: <20230111022433.25950-7-yuji2.ishikawa@toshiba.co.jp>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230111022433.25950-1-yuji2.ishikawa@toshiba.co.jp>
-References: <20230111022433.25950-1-yuji2.ishikawa@toshiba.co.jp>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 21:25:40 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F95983
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:25:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=stucP06R0qWVO+IUCALRaxe+XhbUCnMB6X6QtRA9Sko=; b=ZCQNIzOYkwHUig19qLe9/5Og8q
+        plEZTfpntHXpPR5LLxIQLVI6G+DN6Javys4capsQOnmps842Cu+tLBfFtfztFEzKVlmJCEsfHWU/a
+        jyCuKHe6BUcQyouIjz9X+iHCMgstdtldYHv9cNg9gI3hqDRcAaxZYki0gfRodDeusobi9rAsbcTzX
+        kZ9mrhw631XTWHTQ8r+S4ZdWIQdWeNfnTnQNp2ikqynb2zXdB8BbsxdDTAAN5dUFDjRGcBo4JoaYM
+        L1mV1XB7xTcS5PcH5zATfz/p/2dJsllUt6dX1cBs2tAZ7U3OXZEh8A+j+eBVB3E+mqc2A2ECwyW4/
+        262EZcOg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pFQo3-0016gd-2Z;
+        Wed, 11 Jan 2023 02:25:35 +0000
+Date:   Wed, 11 Jan 2023 02:25:35 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [RESEND PATCH] fs/cramfs: Convert kmap() to kmap_local_data()
+Message-ID: <Y74eH0+++0HqHXV7@ZenIV>
+References: <20230109182843.12056-1-fmdefrancesco@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230109182843.12056-1-fmdefrancesco@gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added entries for visconti Video Input Interface driver, including;
-* device tree bindings
-* source files
-* documentation files
+On Mon, Jan 09, 2023 at 07:28:43PM +0100, Fabio M. De Francesco wrote:
+> The use of kmap() is being deprecated in favor of kmap_local_page().
+> 
+> There are two main problems with kmap(): (1) It comes with an overhead as
+> the mapping space is restricted and protected by a global lock for
+> synchronization and (2) it also requires global TLB invalidation when the
+> kmap’s pool wraps and it might block when the mapping space is fully
+> utilized until a slot becomes available.
+> 
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, the
+> kernel virtual addresses are restored and still valid.
+> 
+> Since its use in fs/cramfs is safe everywhere, it should be preferred.
+> 
+> Therefore, replace kmap() with kmap_local_page() in fs/cramfs. Instead
+> of open-coding kmap_local_page() + memcpy(), use memcpy_from_page().
 
-Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
----
-Changelog v2:
-- no change
-
-Changelog v3:
-- added entry for driver API documentation
-
-Changelog v4:
-- added entry for header file 
-
-Changelog v5:
-- no change
----
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 886d3f69ee6..e83ec3af09e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3014,18 +3014,22 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visconti.git
- F:	Documentation/devicetree/bindings/arm/toshiba.yaml
- F:	Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pipllct.yaml
- F:	Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pismu.yaml
-+F:	Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
- F:	Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
- F:	Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
- F:	Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml
- F:	Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-+F:	Documentation/driver-api/media/drivers/visconti-viif.rst
- F:	arch/arm64/boot/dts/toshiba/
- F:	drivers/clk/visconti/
-+F:	drivers/media/platform/visconti/
- F:	drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
- F:	drivers/gpio/gpio-visconti.c
- F:	drivers/pci/controller/dwc/pcie-visconti.c
- F:	drivers/pinctrl/visconti/
- F:	drivers/watchdog/visconti_wdt.c
-+F:	include/uapi/linux/visconti_viif.h
- N:	visconti
- 
- ARM/UNIPHIER ARCHITECTURE
--- 
-2.25.1
-
-
+Applied (#work.misc).
