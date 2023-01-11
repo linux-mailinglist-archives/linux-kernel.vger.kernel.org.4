@@ -2,119 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DC8665CAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D45E665CA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238754AbjAKNeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
+        id S238770AbjAKNeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238357AbjAKNct (ORCPT
+        with ESMTP id S238740AbjAKNcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:32:49 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74147389F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:31:23 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 016B21BF204;
-        Wed, 11 Jan 2023 13:31:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673443882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qf6yWNlKr7QSyIfIHzw7LhyhtqaNkxcbBpvkY0oQPe8=;
-        b=OEuM4d9gx3xOYzBNMmCy1p+OKc4MSv+8UWQ+YZpuSHm2QVEGYOqFWbBF+LVIl1EO9uGV1Z
-        cyr9/sWiVA6Q6K/WQbw1MTvcCnUh31tdOKYtrLWcplsusog9W76JQz+x5CZey0YyMqv3RX
-        QzLsGPnPhVSRgCKwy5BIskfzHDG3v8noh7DN6LCL31N/NlPwRSgqFA1+8/CFim7ElONoWz
-        t9DuAURl5GA3mhLPjeFhVYUSqvYehzuZaKHoIlz6l6aiagzOUSr5Y137NNfm2K1SmR2kXQ
-        izP8Ulh6j/syJ81EMr/TI4j0od3V/HeS/e2kBjQBkWu3dwtJO1J6YlGoVQxYbQ==
-Date:   Wed, 11 Jan 2023 14:31:20 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-i3c@lists.infradead.org
-Subject: Re: [PATCH v2 02/16] i3c: move dev_to_i3cdev() to use
- container_of_const()
-Message-ID: <Y766KHAN9oeQX1At@mail.local>
-References: <20230111113018.459199-1-gregkh@linuxfoundation.org>
- <20230111113018.459199-3-gregkh@linuxfoundation.org>
+        Wed, 11 Jan 2023 08:32:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C122365BA;
+        Wed, 11 Jan 2023 05:31:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE676B81BDE;
+        Wed, 11 Jan 2023 13:31:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82012C433D2;
+        Wed, 11 Jan 2023 13:31:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673443897;
+        bh=Z/FI02OooQV8N4EP0yXnfH5rMZ+Q6kh03FM7KDMyPqA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fYg/meIua4viTvHgOS3Jz6tZ87QvToH088WFNyl2gvZnv6Y7asRIJkiT3DEp5vU5n
+         ej4yrE+BV4PzLAojYrEjUMVLVpFaZzxR5IF6/R/Hz/7wKwDclhUraz2kDs3TvJBdJi
+         jmGu1tG82lRqQv0R8DVneYMu0FX05lF3KIf1wdEJwk3C6IR+68uE01+Lj5gyE/UnvC
+         WKGdQ4OWhV2J15A/awG5T8Hd18zydaLjT2IZ6OVs+Q0H9p6zhtEpVf9HQ/phutM2uJ
+         aSVEMCSmFGS2fBCiefuN/jjFdpMqi5032CDwB2/2jMDu6lBe4HPXccZZNDI7imxCmj
+         NvjAvq8to4W4w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pFbCf-0008HK-Rp; Wed, 11 Jan 2023 14:31:41 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] arm64: dts: qcom: sc8280xp-x13s: enable eDP display
+Date:   Wed, 11 Jan 2023 14:31:28 +0100
+Message-Id: <20230111133128.31813-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.38.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111113018.459199-3-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2023 12:30:04+0100, Greg Kroah-Hartman wrote:
-> The driver core is changing to pass some pointers as const, so move
-> dev_to_i3cdev() to use container_of_const() to handle this change.
-> dev_to_i3cdev() now properly keeps the const-ness of the pointer passed
-> into it, while as before it could be lost.
-> 
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: linux-i3c@lists.infradead.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Enable the eDP display on MDSS0 DP3, including backlight control.
 
-> ---
->  drivers/i3c/device.c       | 12 ------------
->  include/linux/i3c/device.h |  9 ++++++++-
->  2 files changed, 8 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/i3c/device.c b/drivers/i3c/device.c
-> index 9762630b917e..d111499061b2 100644
-> --- a/drivers/i3c/device.c
-> +++ b/drivers/i3c/device.c
-> @@ -208,18 +208,6 @@ struct device *i3cdev_to_dev(struct i3c_device *i3cdev)
->  }
->  EXPORT_SYMBOL_GPL(i3cdev_to_dev);
->  
-> -/**
-> - * dev_to_i3cdev() - Returns the I3C device containing @dev
-> - * @dev: device object
-> - *
-> - * Return: a pointer to an I3C device object.
-> - */
-> -struct i3c_device *dev_to_i3cdev(struct device *dev)
-> -{
-> -	return container_of(dev, struct i3c_device, dev);
-> -}
-> -EXPORT_SYMBOL_GPL(dev_to_i3cdev);
-> -
->  /**
->   * i3c_device_match_id() - Returns the i3c_device_id entry matching @i3cdev
->   * @i3cdev: I3C device
-> diff --git a/include/linux/i3c/device.h b/include/linux/i3c/device.h
-> index 1c997abe868c..68b558929aec 100644
-> --- a/include/linux/i3c/device.h
-> +++ b/include/linux/i3c/device.h
-> @@ -186,7 +186,14 @@ static inline struct i3c_driver *drv_to_i3cdrv(struct device_driver *drv)
->  }
->  
->  struct device *i3cdev_to_dev(struct i3c_device *i3cdev);
-> -struct i3c_device *dev_to_i3cdev(struct device *dev);
-> +
-> +/**
-> + * dev_to_i3cdev() - Returns the I3C device containing @dev
-> + * @dev: device object
-> + *
-> + * Return: a pointer to an I3C device object.
-> + */
-> +#define dev_to_i3cdev(__dev)	container_of_const(__dev, struct i3c_device, dev)
->  
->  const struct i3c_device_id *
->  i3c_device_match_id(struct i3c_device *i3cdev,
-> -- 
-> 2.39.0
-> 
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
 
+This one depends on the sc8280xp display patches:
+
+	https://lore.kernel.org/lkml/20230111035906.2975494-1-quic_bjorande@quicinc.com/T/#mbcdfc826df6683a71d80bab5d86645ba81b02d52
+
+Johan
+
+
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 75 ++++++++++++++++++-
+ 1 file changed, 73 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+index 23c1ca44ec11..ef17ef90d1f0 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+@@ -47,7 +47,7 @@ wcd938x: audio-codec {
+ 		#sound-dai-cells = <1>;
+ 	};
+ 
+-	backlight {
++	backlight: backlight {
+ 		compatible = "pwm-backlight";
+ 		pwms = <&pmc8280c_lpg 3 1000000>;
+ 		enable-gpios = <&pmc8280_1_gpios 8 GPIO_ACTIVE_HIGH>;
+@@ -72,6 +72,22 @@ switch-lid {
+ 		};
+ 	};
+ 
++	vreg_edp_3p3: regulator-edp-3p3 {
++		compatible = "regulator-fixed";
++
++		regulator-name = "VCC3LCD";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++
++		gpio = <&tlmm 25 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&edp_reg_en>;
++
++		regulator-boot-on;
++	};
++
+ 	vreg_edp_bl: regulator-edp-bl {
+ 		compatible = "regulator-fixed";
+ 
+@@ -259,7 +275,6 @@ vreg_l6b: ldo6 {
+ 			regulator-max-microvolt = <880000>;
+ 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+ 			regulator-boot-on;
+-			regulator-always-on;	/* FIXME: VDD_A_EDP_0_0P9 */
+ 		};
+ 	};
+ 
+@@ -340,6 +355,55 @@ vreg_l9d: ldo9 {
+ 	};
+ };
+ 
++&dispcc0 {
++	status = "okay";
++};
++
++&mdss0 {
++	status = "okay";
++};
++
++&mdss0_dp3 {
++	compatible = "qcom,sc8280xp-edp";
++
++	data-lanes = <0 1 2 3>;
++
++	status = "okay";
++
++	aux-bus {
++		panel {
++			compatible = "edp-panel";
++
++			backlight = <&backlight>;
++			power-supply = <&vreg_edp_3p3>;
++
++			ports {
++				port {
++					edp_panel_in: endpoint {
++						remote-endpoint = <&mdss0_dp3_out>;
++					};
++				};
++			};
++		};
++	};
++
++	ports {
++		port@1 {
++			reg = <1>;
++			mdss0_dp3_out: endpoint {
++				remote-endpoint = <&edp_panel_in>;
++			};
++		};
++	};
++};
++
++&mdss0_dp3_phy {
++	vdda-phy-supply = <&vreg_l6b>;
++	vdda-pll-supply = <&vreg_l3b>;
++
++	status = "okay";
++};
++
+ &pcie2a {
+ 	perst-gpios = <&tlmm 143 GPIO_ACTIVE_LOW>;
+ 	wake-gpios = <&tlmm 145 GPIO_ACTIVE_LOW>;
+@@ -902,6 +966,13 @@ hastings_reg_en: hastings-reg-en-state {
+ &tlmm {
+ 	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
+ 
++	edp_reg_en: edp-reg-en-state {
++		pins = "gpio25";
++		function = "gpio";
++		drive-strength = <16>;
++		bias-disable;
++	};
++
+ 	hall_int_n_default: hall-int-n-state {
+ 		pins = "gpio107";
+ 		function = "gpio";
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.38.2
+
