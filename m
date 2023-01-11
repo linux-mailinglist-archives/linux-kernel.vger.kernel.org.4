@@ -2,112 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED824666157
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4523D666159
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236627AbjAKRFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
+        id S239508AbjAKRFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:05:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235681AbjAKREt (ORCPT
+        with ESMTP id S236185AbjAKRFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:04:49 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E54D73F126
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:02:01 -0800 (PST)
-Received: (qmail 717901 invoked by uid 1000); 11 Jan 2023 12:01:53 -0500
-Date:   Wed, 11 Jan 2023 12:01:53 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <Y77rgeg+UgozV/oF@rowland.harvard.edu>
-References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
- <YytfFiMT2Xsdwowf@rowland.harvard.edu>
- <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
- <114ECED5-FED1-4361-94F7-8D9BC02449B7>
- <Y77QbG9lVXX9/B87@rowland.harvard.edu>
- <768ffe7edc7f4ddfacd5b0a8e844ed84@huawei.com>
+        Wed, 11 Jan 2023 12:05:07 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7732E395E2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:02:30 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id co23so15732056wrb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:02:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=b1AAzENehsPYWw2Oaedh0crDw1m6Zs6gd5zh20RGn1E=;
+        b=FwUOD+wCpn9aORxQQ9IZFC80gkiq974021pW37TQW8dMSa0nBryG+Y9/ufYw40yYdd
+         cfc8QrFcpiw45eaM4QhmQ4Qnd6Y6CSQc3mItEfUbZAZTZ2xylQ3/t1zOMXREjJ2V3BOd
+         05hSUiPmq2+ZbXFl2jn/CbytxTD/EGeYakr6M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b1AAzENehsPYWw2Oaedh0crDw1m6Zs6gd5zh20RGn1E=;
+        b=P338pThrGNhGafhk5+QJG89M3bcQgc9lqNDZQN4xS0T10bitPSjqHMTIkDKPkDf7VD
+         Ok/vv5xRuAeV9hePfsotMlndGCWRpdeF0A7KhXKg8cGZYhJ6LwC9M6XF7S6PxsXAbygP
+         DSeDU3p3kPzGC7oZ3pLHDBmtPzqRZwv/G1ucw1DNOmiAa1gHa5ZPvgu3m8slxeNGwZur
+         LYmUTH/hosMM4I6QrZXrcceA2F72nWuguNVnxkcgrF0J2ewmrS6gIyeVYnvXwfMkMq9p
+         XNyZBeyeFmKn8RzlwxYdUpB/hUB9MbLJI5ulynBHtrQjdMZdbKHzCZslSoT2fLgnv7Cn
+         U7Rw==
+X-Gm-Message-State: AFqh2kpk4x7bdL13G3CVRpUmLOE005uhWuJxzi32a9/L6thNnrbX8lUJ
+        GY0uzUBac+9d64tdehxz4x1o7Q==
+X-Google-Smtp-Source: AMrXdXtPPt+JpFASCNzf+qFF6+k8bl3HIp6rRi4y8P9mKZ6UBLFtd1bgk1B/AByfIzGUc7gGYAO2BA==
+X-Received: by 2002:a5d:48c6:0:b0:242:844a:835d with SMTP id p6-20020a5d48c6000000b00242844a835dmr41453252wrs.65.1673456549060;
+        Wed, 11 Jan 2023 09:02:29 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id n16-20020a5d4010000000b002bbed1388a5sm8972510wrp.15.2023.01.11.09.02.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 09:02:28 -0800 (PST)
+Date:   Wed, 11 Jan 2023 18:02:26 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH 01/11] drm/ast: Use
+ drm_aperture_remove_conflicting_pci_framebuffers
+Message-ID: <Y77rol9OibGAzgJk@phenom.ffwll.local>
+Mail-Followup-To: Thomas Zimmermann <tzimmermann@suse.de>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org
+References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
+ <1118bbfc-16f2-a65c-0dd0-ccc0e42e13c1@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <768ffe7edc7f4ddfacd5b0a8e844ed84@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1118bbfc-16f2-a65c-0dd0-ccc0e42e13c1@suse.de>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 04:45:46PM +0000, Jonas Oberhauser wrote:
+On Wed, Jan 11, 2023 at 04:48:39PM +0100, Thomas Zimmermann wrote:
+> Hi
 > 
-> 
-> -----Original Message-----
-> From: Alan Stern [mailto:stern@rowland.harvard.edu] 
-> > On Wed, Jan 11, 2023 at 11:33:33AM +0000, Jonas Oberhauser wrote:
-> > > Considering how much effort it is to keep the documentation up-to-date 
-> > > even for small changes, I'm extremely oscillation-averse.
-> > > Interestingly as I go through the documentation while preparing each 
-> > > patch I often find some remarks hinting at the content of the patch, 
-> > > e.g. "fences don't link events on different CPUs" and "rcu-fence is 
-> > > able to link events on different CPUs.  (Perhaps this fact should lead 
-> > > us to say that rcu-fence isn't really a fence at all!)" in the current 
-> > > explanation.txt.
-> >
-> > > [...] that I'll use strong-order right away, and then rename the handful of 
-> > > other fences-but-not-really-at-all to '-order' as well.
+> Am 11.01.23 um 16:41 schrieb Daniel Vetter:
+> > It's just open coded and matches.
 > > 
-> > Minor snag: There already is an rcu-order relation in the memory model.
-> > Maybe we need a different word from "order".  Or maybe rcu-order should be renamed.
+> > Note that Thomas said that his version apparently failed for some
+> > reason, but hey maybe we should try again.
 > 
-> Yeah, I noticed (it's in the same section I'm quoting from above). There are
-> some other minor things that might need editing in that section, e.g.,
-> "Written symbolically, X ->rcu-fence Y means
-> there are fence events E and F such that:
+> I'll give this patch a test tomorrow.
+
+Thanks a lot!
+-Daniel
+
 > 
->         X ->po E ->rcu-order F ->po Y."
-> But in fact the definition is
->     let rcu-fence = po ; rcu-order ; po?
-> which allows for F = Y and not F ->po Y.
-
-Yeah, that should be fixed.
-
-> I'll need to get a better understanding of rcu-order before I can form an
-> opinion of how things could be organized. The only thing I'm certain of is that
-> strong-order and rcu-fence should end up with the same suffix :D
+> Best regards
+> Thomas
 > 
-> Just looking at it from afar, it almost looks like there's a simpler,
-> non-recursive definition of rcu-order trying to come out. I assume you've tried
-> various things and they don't work xP ?
+> > 
+> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> > Cc: Dave Airlie <airlied@redhat.com>
+> > Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> > Cc: Javier Martinez Canillas <javierm@redhat.com>
+> > Cc: Helge Deller <deller@gmx.de>
+> > Cc: linux-fbdev@vger.kernel.org
+> > ---
+> >   drivers/gpu/drm/ast/ast_drv.c | 16 +---------------
+> >   1 file changed, 1 insertion(+), 15 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
+> > index 420fc75c240e..3ac24a780f50 100644
+> > --- a/drivers/gpu/drm/ast/ast_drv.c
+> > +++ b/drivers/gpu/drm/ast/ast_drv.c
+> > @@ -90,27 +90,13 @@ static const struct pci_device_id ast_pciidlist[] = {
+> >   MODULE_DEVICE_TABLE(pci, ast_pciidlist);
+> > -static int ast_remove_conflicting_framebuffers(struct pci_dev *pdev)
+> > -{
+> > -	bool primary = false;
+> > -	resource_size_t base, size;
+> > -
+> > -	base = pci_resource_start(pdev, 0);
+> > -	size = pci_resource_len(pdev, 0);
+> > -#ifdef CONFIG_X86
+> > -	primary = pdev->resource[PCI_ROM_RESOURCE].flags & IORESOURCE_ROM_SHADOW;
+> > -#endif
+> > -
+> > -	return drm_aperture_remove_conflicting_framebuffers(base, size, primary, &ast_driver);
+> > -}
+> > -
+> >   static int ast_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+> >   {
+> >   	struct ast_private *ast;
+> >   	struct drm_device *dev;
+> >   	int ret;
+> > -	ret = ast_remove_conflicting_framebuffers(pdev);
+> > +	ret = drm_aperture_remove_conflicting_pci_framebuffers(pdev, &ast_driver);
+> >   	if (ret)
+> >   		return ret;
+> 
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 Nürnberg, Germany
+> (HRB 36809, AG Nürnberg)
+> Geschäftsführer: Ivo Totev
 
-What is there to try?  As far as I know, the only construct in the cat 
-language that can be used to get the effect of counting is a recursive 
-definition.
 
-> Is it because you use the recursion to "count" the grace periods and read-side
-> critical sections, in the sense of maintaining the inequality invariant between
-> them? I wonder if there's a "pumping lemma" that can show this can't be done
-> with a non-recursive definition.
 
-Such a lemma would have to be based on the other constructs available in 
-the language.  The only things I can think of which even come close are 
-the * and + operators, and they are insufficient (because they are no 
-stronger than regular expressions, which are well known to be too weak 
--- there isn't even a regular expression for strings in which the 
-parentheses are balanced).
 
-Alan
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
