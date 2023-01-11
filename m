@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187B566539C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7867566539D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236012AbjAKFWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 00:22:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
+        id S229814AbjAKFWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 00:22:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbjAKFSW (ORCPT
+        with ESMTP id S232465AbjAKFSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 Jan 2023 00:18:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C8013F62;
-        Tue, 10 Jan 2023 21:10:14 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F9613F72;
+        Tue, 10 Jan 2023 21:10:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F0DC61A3C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B10E961A32;
+        Wed, 11 Jan 2023 05:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30773C433EF;
         Wed, 11 Jan 2023 05:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35975C433D2;
-        Wed, 11 Jan 2023 05:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673413814;
-        bh=cPHRfYFrciciPqgeb/VBfaXDkyxy0ej6ZDA9dHDDWeI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m4kLZhc1JJJh+2Sm8L6cp4lXs0+smI3/63BFCe6MlLsjZP2b+6O/6IJFrKLvphL+2
-         Er/a8DFQ2ZrX4HR1OpbnXbUlmwqIYYtt1penBOJXQuf36VSXu7i3S8GyF7kBQAOdZ9
-         z4MWFBXGdeognNruArXc2cHDxn9yywEmouyZgHLSETU8Zfmixm7KStQlm/K+M++YOm
-         pmV9tMV6m9AYG7wmNcajUjnIiLMP4ZJRKrO9vzWE0pvkYkV8kV4cCYFA/XXw9jaODm
-         1BAkRlkOCv52UfPWXqoiFEAS2PsVUixy7ESfat4RC9fbHskKiPDNRp37QsU3riuliy
-         9SCGcdzLPhOSQ==
+        s=k20201202; t=1673413815;
+        bh=r3eUZ8KOW7lqRoM2nfAPQ4cjqrchAFdxP4QUSi7lgdg=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=ICu4W2R4fOr+JAD/m1CWWapK9K8DW05Y5nVu5oSYsOu+DIG3vI1Tq2gmhaLfF7BXP
+         ZOGTXYZO7pQUFNLOnhOUorxXoLkmTn34YSVp0hMvAjWevXphwhh8Ew1gu1K4Mkz59z
+         ws389FF0FeZHo3anBcWo8QuQ49/sWLBOjsGJOAmVtxfAXekPYE0PFeHlCkZ2hhoOaZ
+         zHGF+tWAT+kmcOAo81z7xAY5PkMVrJYPw8ETh2W3napRp3JoR06qFGqWSK17NHXeEJ
+         UQOglagpJ7xkbyvelaMvfNm5HbLyuMW5fsv3mRVHIWsldJnRXmJC4iv5UfVAqBPCkO
+         u1ggKqBlcA3dw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     quic_shazhuss@quicinc.com, johan@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
-        devicetree@vger.kernel.org, agross@kernel.org,
+To:     quic_rjendra@quicinc.com, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        quic_rohkumar@quicinc.com, dianders@chromium.org,
+        quic_srivasam@quicinc.com, devicetree@vger.kernel.org,
+        agross@kernel.org, srinivas.kandagatla@linaro.org,
         linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, bmasney@redhat.com
-Subject: Re: [PATCH v5] arm64: dts: qcom: sa8540p-ride: enable pcie2a node
-Date:   Tue, 10 Jan 2023 23:09:39 -0600
-Message-Id: <167341377722.2246479.7988718666819689426.b4-ty@kernel.org>
+        robh+dt@kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sc7180: Set performance state for audio
+Date:   Tue, 10 Jan 2023 23:09:40 -0600
+Message-Id: <167341377724.2246479.5097877341806387252.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221213095922.11649-1-quic_shazhuss@quicinc.com>
-References: <20221213095922.11649-1-quic_shazhuss@quicinc.com>
+In-Reply-To: <1670932566-22923-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1670932566-22923-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,21 +58,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Dec 2022 15:29:21 +0530, Shazad Hussain wrote:
-> Add the pcie2a, pcie2a_phy, and respective tlmm nodes that are needed to
-> get pcie 2a controller enabled on Qdrive3.
+On Tue, 13 Dec 2022 17:26:06 +0530, Srinivasa Rao Mandadapu wrote:
+> Set a performance state for audio clks so that the minimally
+> correct corner voltage is picked when audio is active.
 > 
-> This patch enables 4GB 64bit memory space for PCIE_2A to have BAR
-> allocations of 64bit pref mem needed on this Qdrive3 platform with dual
-> SoCs for root port and switch NT-EP. Hence this ranges property is
-> overridden in sa8540p-ride.dts only.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sa8540p-ride: enable pcie2a node
-      commit: 2eb4cdcd5aba2db83f2111de1242721eeb659f71
+[1/1] arm64: dts: qcom: sc7180: Set performance state for audio
+      commit: 76ee8cd53016d0e157c20aa3dfaf2b86c0481111
 
 Best regards,
 -- 
