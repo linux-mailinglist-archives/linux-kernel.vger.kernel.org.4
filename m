@@ -2,121 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691AD665A07
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472F6665A02
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbjAKLZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:25:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
+        id S232663AbjAKLZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbjAKLYn (ORCPT
+        with ESMTP id S233489AbjAKLZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:24:43 -0500
-Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B60167FE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:24:39 -0800 (PST)
-Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
-        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 90143802DABE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:24:38 +0000 (UTC)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 080CB1004A26A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:24:38 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id FZDhpZTHDLXXpFZDipsupb; Wed, 11 Jan 2023 11:24:38 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=KvyIZUaN c=1 sm=1 tr=0 ts=63be9c76
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RvmDmJFTN0MA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=Hb3yA03KV983punxqLMA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=adwC5e4cUQqbA2g83TUJKu2pYjtu3IiGQj9Wn+W65+8=; b=y2C7DM+9Dqwo6wjL6tU4nEGcdC
-        RpD5L8KxJ0vgHRTPiPNbTn3qJmcXGEUsRtMVOyJ5+tPoLZ+5mnHJKTGW2/wXKq6EVqC5W7E7Gb3ui
-        Ms6LgN9QzH1EVjKmJ6EzLPOLd2w3b7G5IhdqkDiLWwymkWVYkvChYDpCVA0CT5s6ncHCwB+bTg7wq
-        AJcng7eMSKyJWDInyL9AXKeSMRglJX2tv8rFHqs5/Sk/UXr66B+QD9CCmhTarF7y8SHJ/qSrSV8I/
-        4X/C2Q8BYDBnd8go2umZr8T4cJ2NVXmfmJJPO1VFRk9IRkWZE8KPDmEorD2V2tudzO6W4s90l1tcE
-        D01XWjsw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51174 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pFZDg-0022us-Md;
-        Wed, 11 Jan 2023 04:24:36 -0700
-Subject: Re: [PATCH 6.1 000/159] 6.1.5-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230110180018.288460217@linuxfoundation.org>
-In-Reply-To: <20230110180018.288460217@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <71c6ce29-72dd-27c4-2d28-9fe9fcb21bb9@w6rz.net>
-Date:   Wed, 11 Jan 2023 03:24:31 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 11 Jan 2023 06:25:02 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43249F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:25:01 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id e3so5484370wru.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:25:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qbdDKI4Ey6JY+q0XVlpG88pauoONaYof/XvXYc94UzA=;
+        b=Qhw27iT/0tu/MU2cQXm2Dr6zbSB2A3n5D989VL7VYjalRm1qn5xDYtaN9B+c5b6Hm+
+         K0qEVuZubWBPIcqPkvyvmdi11MhcjWkQ2Xo1N1fVK/XfdPZ8cqYcGvjUzE7oht1/Uwt2
+         nc3t/s0O0DpjCietGC8WAYerFzWjjr7IxgndJbu993xkE29Y9HmZ630ur4auKA9K8ozL
+         WrbeJIOv0urwLcFvMNKe4s8rOsEjL7C5CVgnazM9yTNuuZCkKHnsss5O0mUuUSQEa+4A
+         D6sqEjQ73+Bh2zmdJCwE8iBFCxwIC/DodX518Q3mxomziX5LCuewJaHxwAKa+vJsCnjB
+         j+1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qbdDKI4Ey6JY+q0XVlpG88pauoONaYof/XvXYc94UzA=;
+        b=g3xLknAjnN/9TV32lnOz/LeqroDXOhLyi1kPYBkgDJgknkPTIA+MAUZ1AMKaIH09fS
+         j//adLIpd/76+ahgs20VRKR4UmRP+abUf1JvdLC0x15E2vacmUoKevV6wPI0eyU7DzKo
+         D+3YjQJIUAfpZbVFdPAzfcOO87WiQzF+XJEpACW6aYRc3RZXtuEbx5RVI7Esm+CH7WDn
+         CaXifI6X6a0GtZYxWMYwoDvhjD90gdJqKTt56SmfEfCnop2BwsOInmHTCWTpNMY3O/6F
+         NM/BLXUyTYIXirQJVGkq5oSAgQ1E7BpaEh5dENGXKYXGytyJQk7LQsIbIWUe4cUpiUyx
+         z83A==
+X-Gm-Message-State: AFqh2kpR2z0+xW+H543M6Z4h9hO5qOWXdcj3jHeixH4NMk/FNGjDqWV5
+        Rqn6JtpXPMg87GUa6n+SWUyc5g==
+X-Google-Smtp-Source: AMrXdXs+MEEL6QPXWp25IjjQP0ytvbLLgmYxzxdMAWuUKHHACK6fUF60Dkt6yH8ZKfS6vurGKMKxag==
+X-Received: by 2002:adf:dc81:0:b0:293:fff0:63b3 with SMTP id r1-20020adfdc81000000b00293fff063b3mr24022963wrj.4.1673436300202;
+        Wed, 11 Jan 2023 03:25:00 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id q16-20020adff950000000b002bcaa47bf78sm4253734wrr.26.2023.01.11.03.24.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 03:24:59 -0800 (PST)
+Message-ID: <a315e420-5fa4-21c4-e297-42480ebfa2bd@linaro.org>
+Date:   Wed, 11 Jan 2023 12:24:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] thermal/drivers/qcom: Remove duplicate set next trip
+ point interrupt code
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pFZDg-0022us-Md
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:51174
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     rafael@kernel.org, dmitry.baryshkov@linaro.org,
+        konrad.dybcio@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230110103420.2430518-1-daniel.lezcano@kernel.org>
+ <20230110181328.el2kicyrg2j554c2@builder.lan>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230110181328.el2kicyrg2j554c2@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/23 10:02 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.5 release.
-> There are 159 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 12 Jan 2023 17:59:42 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.5-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 10/01/2023 19:13, Bjorn Andersson wrote:
+> On Tue, Jan 10, 2023 at 11:34:20AM +0100, Daniel Lezcano wrote:
+>> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>
+>> The tsens driver reprogram the next trip points in the irq
+>> handler. This function then call thermal_zone_device_update().
+>>
+>> However, thermal_zone_device_update() calls thermal_zone_set_trips()
+>> and from there it calls the backend 'set_trips' ops. This one in turn
+>> reprogram the next trip points (low/high).
+>>
+>> Consequently, the code setting the next trip points interrupt in the
+>> interrupt handle is not needed and could be removed.
+>>
+> 
+> 
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> 
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
+> 
+> The last one should be the address you sent your patch from, and that
+> was the first one. So I think you should drop this one.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Thanks for the review. I'll remove the duplicated SoB.
 
-Tested-by: Ron Economos <re@w6rz.net>
+   -- Daniel
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
