@@ -2,67 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAF1665D20
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 277AD665D22
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbjAKNy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
+        id S232768AbjAKN4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238770AbjAKNyC (ORCPT
+        with ESMTP id S233760AbjAKNzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:54:02 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60853E0E5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:53:58 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 141so10592437pgc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:53:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+fAG7U9M59m9Mb4ZykFnz74kqztm1/k7/WyzvUXSzdY=;
-        b=LcDIkeDo1tArU/8EqZnunU3/ul/Zic5H5jDl5cA9InhTDvk9iodYF2JmEoKGbMmDi0
-         V+ZszmlSFWgcYZx7oZYFGmOwnQVbnbylua3nX9noUkgKOFitoXy+PHVBMDH2JlkxveUY
-         JjgHLnDdRng2kNfowFVpN+wpO3WHvUmXn6NcjRg/RsA4KoRzJCkkAPwAb1TQbnLTntNi
-         HryPbKMhDeGwDLNNotSKBrNfErsFshluY0OjmcTthMXOo9TBFhh2NMe33juueYs+Y4K0
-         LpZWp8ZJar4S5nD+zsXeZgzZDhSv2AWBq11vKVLSg7992wOKP6Tm+w0/KgYCryuXUa6U
-         V9vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+fAG7U9M59m9Mb4ZykFnz74kqztm1/k7/WyzvUXSzdY=;
-        b=b9I87CcyPkqF/pG+blHF5ZbQSvUuM/SkniboGop+uG41E8zHKAVWbiql5X9IdMDXH/
-         nj7RtwgLikanYssUHMmesF6AiFwemhWN+yYDaTyQbs0CU/9xLNWjuIjNkMJOJSXlYnjb
-         SKer+yUSe/I7SALpFAim1QVRxf5Epp84CwE0iPlfMmeqw9PWBRC0MoHCdiCSLLc0XaZS
-         jNsIZqYgp0vJRnHQHULcXb3FFERQAEGXFaWExh+4PocR4GDXKaf/ainQgbx/zDEl0xxn
-         I9XrHXAhEjOL5N7fLah9pHZvl9F9pUqgKG/ko+iNHr0+o5E5FE1l6fBPw1lzgxdu+fmO
-         9QAA==
-X-Gm-Message-State: AFqh2krVg+x1kidAh0/KL+0xO3k7mRk21VR5JZfmX7jRGE9pO+tKgOu5
-        MGC9iBOqo5DvGNPbPtxOt5g=
-X-Google-Smtp-Source: AMrXdXuUbLvvUXI8f/6iy/JxKz0eduGfNeyHa4kTyvRwhJD3kgycntZbGVTcixARpHtAE3jZlJH4iQ==
-X-Received: by 2002:a05:6a00:2997:b0:582:1f25:5b8 with SMTP id cj23-20020a056a00299700b005821f2505b8mr41513164pfb.19.1673445237833;
-        Wed, 11 Jan 2023 05:53:57 -0800 (PST)
-Received: from vernon-pc.. ([49.67.3.29])
-        by smtp.gmail.com with ESMTPSA id x14-20020aa79a4e000000b005811c421e6csm9880856pfj.162.2023.01.11.05.53.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 05:53:56 -0800 (PST)
-From:   Vernon Yang <vernon2gm@gmail.com>
-To:     Liam.Howlett@oracle.com, willy@infradead.org,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Vernon Yang <vernon2gm@gmail.com>
-Subject: [PATCH v2] maple_tree: fix comment of mte_destroy_walk
-Date:   Wed, 11 Jan 2023 21:53:48 +0800
-Message-Id: <20230111135348.803181-1-vernon2gm@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 11 Jan 2023 08:55:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33251EC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:55:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEB5161D1A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:55:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52567C433EF;
+        Wed, 11 Jan 2023 13:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673445341;
+        bh=a2ovFh3r2lNNdTC/NOVqzd3cJRBGKn8Cp6O4v6mIBVE=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=nyXFaNp6YQWRR2UMBvo0Wj8LbMPVLV3Kn5SHKmvYP3KkZFXRRUI/eJEATOQw76A92
+         wNzuc5m4HQoerCNAeKmt72+is7yhM8SbqyAT3msfToHRijnQeNRBOnMAa1aVm+Jk6P
+         wUM/O/i93rvEnGsw15mktvAteHtOk0oBtOQ+SgubH2YiiKVGtCi0hyWdT986BfMMIz
+         GbzVylChh+tCDga+qqbo+iNKvNgNTOKyziOSvv6nZmOqxpUijxIwIi9ZqOgspWYdyw
+         yBwAZDWPM1Gp/O1eIT2L9oS+9jLNUjPbSXS19y0LhQVjnZt1avpyzEzU/nNc/wnzkC
+         zfLbshTe3Sg7w==
+Message-ID: <b5868aa5-7b48-97db-bdbf-0a0d0adaec14@kernel.org>
+Date:   Wed, 11 Jan 2023 21:55:37 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230104114029.25689-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+Subject: Re: [PATCH v3] f2fs: introduce discard_io_aware_gran sysfs node
+In-Reply-To: <20230104114029.25689-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,38 +57,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The parameter name of maple tree is mt, make the comment to be mt
-instead of mn, and the separator between the parameter name and
-the description to be : instead of -.
+On 2023/1/4 19:40, Yangtao Li wrote:
+> The current discard_io_aware_gran is a fixed value, change it to be
+> configurable through the sys node.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+> v3: remove DEFAULT_IO_AWARE_DISCARD_GRANULARITY
+>   Documentation/ABI/testing/sysfs-fs-f2fs |  9 +++++++++
+>   fs/f2fs/f2fs.h                          |  1 +
+>   fs/f2fs/segment.c                       |  3 ++-
+>   fs/f2fs/sysfs.c                         | 13 +++++++++++++
+>   4 files changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+> index aaa379bb8a8f..75420c242cc4 100644
+> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
+> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+> @@ -708,3 +708,12 @@ Description:	Support configuring fault injection type, should be
+>   		FAULT_LOCK_OP            0x000020000
+>   		FAULT_BLKADDR            0x000040000
+>   		===================      ===========
+> +
+> +What:		/sys/fs/f2fs/<disk>/discard_io_aware_gran
+> +Date:		January 2023
+> +Contact:	"Yangtao Li" <frank.li@vivo.com>
+> +Description:	Controls background discard granularity of inner discard thread
+> +		when is not in idle. Inner thread will not issue discards with size that
+> +		is smaller than granularity. The unit size is one block(4KB), now only
+> +		support configuring in range of [0, 512].
+> +		Default: 512
 
-Fixes: 54a611b60590 ("Maple Tree: add new data structure")
-Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
----
+How about appending below comments to descirbe the semantics for two
+special value.
 
-Changes since v1:
- - fix the separator between the parameter name and
-   the description to be : instead of -.
+By default, the value is 512, all discard IOs will be interrupted
+by other inflight IO; it can be set to 0, then IO aware functionality
+will be disabled.
 
-v1: https://lore.kernel.org/linux-mm/20230110152216.1712120-1-vernon2gm@gmail.com/
+Thanks,
 
- lib/maple_tree.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 26e2045d3cda..3f5005261618 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -5590,8 +5590,8 @@ static void mt_destroy_walk(struct maple_enode *enode, unsigned char ma_flags,
-
- /*
-  * mte_destroy_walk() - Free a tree or sub-tree.
-- * @enode - the encoded maple node (maple_enode) to start
-- * @mn - the tree to free - needed for node types.
-+ * @enode: the encoded maple node (maple_enode) to start
-+ * @mt: the tree to free - needed for node types.
-  *
-  * Must hold the write lock.
-  */
---
-2.34.1
-
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 0a24447472db..cf60221d084e 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -409,6 +409,7 @@ struct discard_cmd_control {
+>   	unsigned int min_discard_issue_time;	/* min. interval between discard issue */
+>   	unsigned int mid_discard_issue_time;	/* mid. interval between discard issue */
+>   	unsigned int max_discard_issue_time;	/* max. interval between discard issue */
+> +	unsigned int discard_io_aware_gran; /* minimum discard granularity not be aware of I/O */
+>   	unsigned int discard_urgent_util;	/* utilization which issue discard proactively */
+>   	unsigned int discard_granularity;	/* discard granularity */
+>   	unsigned int max_ordered_discard;	/* maximum discard granularity issued by lba order */
+> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> index 34e9dc4df5bb..d988d83108b2 100644
+> --- a/fs/f2fs/segment.c
+> +++ b/fs/f2fs/segment.c
+> @@ -1059,7 +1059,7 @@ static void __init_discard_policy(struct f2fs_sb_info *sbi,
+>   	dpolicy->granularity = granularity;
+>   
+>   	dpolicy->max_requests = dcc->max_discard_request;
+> -	dpolicy->io_aware_gran = MAX_PLIST_NUM;
+> +	dpolicy->io_aware_gran = dcc->discard_io_aware_gran;
+>   	dpolicy->timeout = false;
+>   
+>   	if (discard_type == DPOLICY_BG) {
+> @@ -2063,6 +2063,7 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
+>   	if (!dcc)
+>   		return -ENOMEM;
+>   
+> +	dcc->discard_io_aware_gran = MAX_PLIST_NUM;
+>   	dcc->discard_granularity = DEFAULT_DISCARD_GRANULARITY;
+>   	dcc->max_ordered_discard = DEFAULT_MAX_ORDERED_DISCARD_GRANULARITY;
+>   	if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SEGMENT)
+> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+> index 805b632a3af0..e396851a6dd1 100644
+> --- a/fs/f2fs/sysfs.c
+> +++ b/fs/f2fs/sysfs.c
+> @@ -473,6 +473,17 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+>   		return count;
+>   	}
+>   
+> +	if (!strcmp(a->attr.name, "discard_io_aware_gran")) {
+> +		if (t > MAX_PLIST_NUM)
+> +			return -EINVAL;
+> +		if (!f2fs_block_unit_discard(sbi))
+> +			return -EINVAL;
+> +		if (t == *ui)
+> +			return count;
+> +		*ui = t;
+> +		return count;
+> +	}
+> +
+>   	if (!strcmp(a->attr.name, "discard_granularity")) {
+>   		if (t == 0 || t > MAX_PLIST_NUM)
+>   			return -EINVAL;
+> @@ -825,6 +836,7 @@ F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_request, max_discard_req
+>   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, min_discard_issue_time, min_discard_issue_time);
+>   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, mid_discard_issue_time, mid_discard_issue_time);
+>   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_issue_time, max_discard_issue_time);
+> +F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_io_aware_gran, discard_io_aware_gran);
+>   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_urgent_util, discard_urgent_util);
+>   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_granularity, discard_granularity);
+>   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_ordered_discard, max_ordered_discard);
+> @@ -960,6 +972,7 @@ static struct attribute *f2fs_attrs[] = {
+>   	ATTR_LIST(min_discard_issue_time),
+>   	ATTR_LIST(mid_discard_issue_time),
+>   	ATTR_LIST(max_discard_issue_time),
+> +	ATTR_LIST(discard_io_aware_gran),
+>   	ATTR_LIST(discard_urgent_util),
+>   	ATTR_LIST(discard_granularity),
+>   	ATTR_LIST(max_ordered_discard),
