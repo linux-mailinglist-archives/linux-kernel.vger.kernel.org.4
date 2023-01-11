@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D75266655B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8ECE666560
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233689AbjAKVOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 16:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S231458AbjAKVOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 16:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjAKVOL (ORCPT
+        with ESMTP id S231307AbjAKVOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 Jan 2023 16:14:11 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB4D3F105;
-        Wed, 11 Jan 2023 13:14:09 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id c17so24198221edj.13;
-        Wed, 11 Jan 2023 13:14:09 -0800 (PST)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DE43F106;
+        Wed, 11 Jan 2023 13:14:10 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id i15so24255693edf.2;
+        Wed, 11 Jan 2023 13:14:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QhmFViFxYeXhPBfMdH2JMXAQJizOCgQmv4Ir0VlAq7k=;
-        b=HyZ869rcIlQC9PV2d6dlnTequSI6pDi7seqna8LRb3bYGHrQezFLCor2NUvqXrJUZQ
-         2BVT0sPQ7LZrPMDCy8t3xIh0NsqdqBM0tFSxR+tGUpguo8Sf+qIEnygLHIERZTZ18mhr
-         eFWZwHML3h1kcbK7E2JnYvc1iv9pYzCIwAs5kN+n4anX82hzxboTCcwlRwhVLakq65H1
-         qD8PUngCAVr82wIcThbnz8RUKvbF+A/EpeeOhQdP4nhoCsfdsUk/nWUJMI5IXiFGBHYX
-         yKiML8Zu6rGagpiOSb/oo0aXPlVKTPGFy3ZyEroZkzLnNz7WDEi0+vn36YcaPPUNtO+m
-         eYpg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yO8dFAy9lMaaw7MiruB5XRKNwqBVqDzEtNURhlDQIyg=;
+        b=CkHbDQgssw9maLWDccwTm3a8+1oO50Yg+wcbWGvIKmM1Pz24pcOvvE1vYDfNa2Stec
+         70aL+nl8mGNAYo/x+HhXp8MrnqJhypqAERDcRAnwhX723xIhspDj/N5XlP5V1naLG1Cu
+         ekglZxKIkAqxU1TbxD1h7HFvMvRchLrE9ODzBYCMtfg/QxRWUZJNBIzzWNOuOdCaBdYk
+         I3jZxAoH+3Kv7knmoT9Jc2y+qvjl5LcoWeVH9y0JxoLvys5wgZyN97m8FfrUeEfKhZsf
+         zdFXNDy4Fo2flLDLpuJKSWx7z3YhbndbPp6dwKEfr0FimKsKIM+RmahwKPWr0DnmTSjN
+         3U0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QhmFViFxYeXhPBfMdH2JMXAQJizOCgQmv4Ir0VlAq7k=;
-        b=PmiILSfhKZJoifIAQ5LN7TNE6rvlL+klhfUTB4ef2okEc4wboBLxGijE+o8HHNBqbD
-         8RrLuTV8+BsV0pwWDEiMESpT4AnGHxvcOxS3s0qOubl2t0oVqmSmgEG4YBnIrQrjh153
-         4tPiQnSZmL562lwIRGxBBdsY2iJlyv0UFEVsQsojsZ4FPtD3qA1AKbj2CRQo8SX/4OGq
-         8zCsPF8h58lk6xX1Q8CuvQ5Eqg/HV+CYmCSduinnGKSlljomlkf8zr1xTpemeRBhQN4J
-         yssybsMCvbO6+NYV+f72ygvUVbRlnCptysAYZzP6C7gLoyZFI/bMZneyCPLV7KyKjl78
-         sAig==
-X-Gm-Message-State: AFqh2koQ0Kw+A3eYHWSngnanowS/G4+X7vQjQc/1Qdnq4g4NrDcpIXXO
-        e3H6WICZwfAyM/wH5rlbYsc=
-X-Google-Smtp-Source: AMrXdXuscaZmFnnTyBmB93xjcQuSnIeoJuHRy82sUhdhqEsMXDlcXIaeoOQrADX1xMXThD9aJrj61g==
-X-Received: by 2002:a05:6402:390b:b0:465:f6a9:cb7b with SMTP id fe11-20020a056402390b00b00465f6a9cb7bmr64883391edb.12.1673471647478;
-        Wed, 11 Jan 2023 13:14:07 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yO8dFAy9lMaaw7MiruB5XRKNwqBVqDzEtNURhlDQIyg=;
+        b=mj2b9Y0GH8ND8xp/Wn5YMp+qB0YE2dKWtHePw6p5g+tUjutITR/sjkqwTlG/rhooSE
+         DUmq3qkLjshhfBuKIcHAtgnAvDSapKjGGX2dySzOyLcu2NwjaGso/fy/lNPVo/kl1hGs
+         xM1w6b1oSNfWc3DyQY0cBiy5JwrGtp5SrWjYZzwjMhBm0xLUZuSMCjJWtVSsaLQDSaKz
+         gZf1tTG3OLycszwbnQmb9zPxFX6t9vw+qehOXhHQAdo83HTkKeTENmBNl77S/i0ZTG7M
+         OfVUaABJQI7soGGjB6J9IO4Dxg3dsuf5WQP+UaHd843JqfeOGrWEy/I1hqK/u/jjgMHu
+         SlVg==
+X-Gm-Message-State: AFqh2kp2OfW4hhf+2PZ3arFSkwweaw3Gn0efc0Ay717m08lQf2AQHOJv
+        Brv8RqSTKD2Xm9aS+sfxP1i3GzouvtM=
+X-Google-Smtp-Source: AMrXdXsMaupXPk9MGcqylPAR4I7rmZ1B1hapevHU6JBFJhSZrLhk5VotR+euRXs8TGhuk2HkY1rqeg==
+X-Received: by 2002:a05:6402:d51:b0:499:8849:5fac with SMTP id ec17-20020a0564020d5100b0049988495facmr11202794edb.40.1673471648883;
+        Wed, 11 Jan 2023 13:14:08 -0800 (PST)
 Received: from localhost.localdomain (dynamic-2a01-0c22-7325-0300-0000-0000-0000-0e63.c22.pool.telefonica.de. [2a01:c22:7325:300::e63])
-        by smtp.googlemail.com with ESMTPSA id l4-20020a056402344400b004822681a671sm6485079edc.37.2023.01.11.13.14.05
+        by smtp.googlemail.com with ESMTPSA id l4-20020a056402344400b004822681a671sm6485079edc.37.2023.01.11.13.14.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 13:14:06 -0800 (PST)
+        Wed, 11 Jan 2023 13:14:08 -0800 (PST)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 To:     linux-amlogic@lists.infradead.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         khilman@baylibre.com, neil.armstrong@linaro.org,
         jbrunet@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
         robh+dt@kernel.org, devicetree@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 0/6] arm64: dts: small .dts fixes
-Date:   Wed, 11 Jan 2023 22:13:44 +0100
-Message-Id: <20230111211350.1461860-1-martin.blumenstingl@googlemail.com>
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Vyacheslav Bocharov <adeep@lexina.in>
+Subject: [PATCH v2 1/6] arm64: dts: meson-gxl: jethub-j80: Fix WiFi MAC address node
+Date:   Wed, 11 Jan 2023 22:13:45 +0100
+Message-Id: <20230111211350.1461860-2-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230111211350.1461860-1-martin.blumenstingl@googlemail.com>
+References: <20230111211350.1461860-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,28 +76,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series contains a few .dts fixes which were found during review of
-[0] (which is now the first patch in this series).
+Unit addresses should be written using lower-case hex characters. Use
+wifi_mac@c to fix a yaml schema validation error once the eFuse
+dt-bindings have been converted to a yaml schema:
+  efuse: Unevaluated properties are not allowed ('wifi_mac@C' was
+  unexpected)
 
+Also node names should use hyphens instead of underscores as the latter
+can also cause warnings.
 
+Fixes: abfaae24ecf3 ("arm64: dts: meson-gxl: add support for JetHub H1")
+Acked-by: Vyacheslav Bocharov <adeep@lexina.in>
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+changes from v1 -> v2:
+- Added Vyacheslav's Acked-by (originally given as "Vyachesav", but my
+  understanding is that this was a typo
+- Also replace the underscore in the node name with a hyphen
 
-[0] https://lore.kernel.org/linux-amlogic/20230110215926.1296650-1-martin.blumenstingl@googlemail.com/
+ .../boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts     | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Martin Blumenstingl (6):
-  arm64: dts: meson-gxl: jethub-j80: Fix WiFi MAC address node
-  arm64: dts: meson-gxl: jethub-j80: Fix Bluetooth MAC node name
-  arm64: dts: meson-axg: jethub-j1xx: Fix MAC address node names
-  arm64: dts: meson-gx: Fix Ethernet MAC address unit name
-  arm64: dts: meson-g12a: Fix internal Ethernet PHY unit name
-  arm64: dts: meson-gx: Fix the SCPI DVFS node name and unit address
-
- .../boot/dts/amlogic/meson-axg-jethome-jethub-j1xx.dtsi     | 6 +++---
- arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi           | 2 +-
- arch/arm64/boot/dts/amlogic/meson-gx.dtsi                   | 4 ++--
- .../boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
+index 6831137c5c10..270483e007bc 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
+@@ -90,7 +90,7 @@ bt_mac: bt_mac@6 {
+ 		reg = <0x6 0x6>;
+ 	};
+ 
+-	wifi_mac: wifi_mac@C {
++	wifi_mac: wifi-mac@c {
+ 		reg = <0xc 0x6>;
+ 	};
+ };
 -- 
 2.39.0
 
