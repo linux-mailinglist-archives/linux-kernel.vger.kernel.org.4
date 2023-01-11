@@ -2,140 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493B7665D87
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FBF665D86
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbjAKOSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S232663AbjAKOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239334AbjAKOR6 (ORCPT
+        with ESMTP id S239322AbjAKOR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 Jan 2023 09:17:58 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515531209A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:17:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673446656; x=1704982656;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=fmJ8Bb9kgdkiYyjCAW2Eyzd2POxa83xS29bXEsoljHM=;
-  b=LyW6jFSSrRIvxT1rAJEySLC7MpJMk+b/ZrarVwlDfif0fzSSwzaxWfdf
-   zSIYlyjcGgNj4K/7h42GPo+wqfZ2NgmgZzlpDC6mawRSzlhBF2hdgMmBO
-   4tcAWx/6Ul+WkQAk7FhrR+/v7IxYz02fLX4RqaFXdjqxJ0gbcRBDoFJs1
-   FnCv1mCI44d2c1qObIIOMmYKBfXCLhFcTY7SccM8xS488rtXOPvv45Zqr
-   LcAi59LRs5IQyTLuRr/+KzOmbIOfKuUS/uICp6j4BvVj5jLIdEitNajxm
-   h6UGcoqAZxgp1K3XFmYltlnyfSV64O0+iecWzI1d/t/u/M1Li5pySwL50
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="306937345"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="306937345"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 06:17:18 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="765159886"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="765159886"
-Received: from mmgriffi-mobl.ger.corp.intel.com (HELO localhost) ([10.252.11.225])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 06:17:14 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Emma Anholt <emma@anholt.net>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH 2/9] drm/vc4: hdmi: Constify container_of wrappers
-In-Reply-To: <38a5f052-18d5-5297-f1c7-44ca5b8285f5@suse.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
- <20221207-rpi-hdmi-improvements-v1-2-6b15f774c13a@cerno.tech>
- <38a5f052-18d5-5297-f1c7-44ca5b8285f5@suse.de>
-Date:   Wed, 11 Jan 2023 16:17:12 +0200
-Message-ID: <87wn5tgnpz.fsf@intel.com>
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B746CFD2E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:17:24 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 19CAF337D6;
+        Wed, 11 Jan 2023 14:17:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673446639; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0sVrq4Dniw5KnDcNZ1C6CZNPXzD9gn2lEBhnqlgUWQg=;
+        b=EXtg4ez0ch4jeVKmyNXeCXnuQie+WMbN7uTHT/Spqz9Lhu82IcRtoMI7K5IzlqjRl53JvS
+        lX9U23sleXpjF1VHRMIjz8XuTjeI6ptzTin6V3ueNjB8Fe/HltDjp6Dvx/uso5a3AEEKdW
+        WhWP6WtVCkCyZYq9t2oINfZk5XlclYI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C686513591;
+        Wed, 11 Jan 2023 14:17:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id V0KDL+7EvmOECgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 11 Jan 2023 14:17:18 +0000
+Date:   Wed, 11 Jan 2023 15:17:17 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Yuanchu Xie <yuanchu@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] mm: multi-gen LRU: working set extensions
+Message-ID: <20230111141716.GA14685@blackbody.suse.cz>
+References: <20221214225123.2770216-1-yuanchu@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="X1bOJ3K7DJ5YkBrT"
+Content-Disposition: inline
+In-Reply-To: <20221214225123.2770216-1-yuanchu@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 Jan 2023, Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Hi
->
-> Am 07.12.22 um 17:07 schrieb Maxime Ripard:
->> None of our wrappers around container_of to access our objects from the
->> DRM object pointer actually modify the latter.
->> 
->> Let's make them const.
->> 
->> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->
-> Personally, I wouldn't take this patch as it does an implicit const cast 
-> on the pointer.
->
-> For const correctness, it seems better to add new helpers that keep the 
-> const. Those could be use in places where the caller is not allowed to 
-> modify the state (i.e., atomic_update, et al).
->
-> Something like this:
->
-> const struct vc4_hdmi *
-> const_connector_to_vc4_hdmi(const struct drm_connector *connector)
-> {
-> 	return container_of(connector, const struct vc4_hdmi,
-> 		connector);
-> }
 
-See container_of_const().
+--X1bOJ3K7DJ5YkBrT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-BR,
-Jani.
+On Wed, Dec 14, 2022 at 02:51:21PM -0800, Yuanchu Xie <yuanchu@google.com> =
+wrote:
+> that's frequently used. The only missing pieces between MGLRU
+> generations and working set estimation are a consistent aging cadence
+> and an interface; we introduce the two additions.
+>=20
+> Periodic aging
+> =3D=3D=3D=3D=3D=3D
+> MGLRU Aging is currently driven by reclaim, so the amount of time
+> between generations is non-deterministic. With memcgs being aged
+> regularly, MGLRU generations become time-based working set information.
 
->
-> Best regards
-> Thomas
->
->> ---
->>   drivers/gpu/drm/vc4/vc4_hdmi.h | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->> 
->> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.h b/drivers/gpu/drm/vc4/vc4_hdmi.h
->> index dc3ccd8002a0..023ea64ef006 100644
->> --- a/drivers/gpu/drm/vc4/vc4_hdmi.h
->> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.h
->> @@ -224,13 +224,13 @@ struct vc4_hdmi {
->>   };
->>   
->>   static inline struct vc4_hdmi *
->> -connector_to_vc4_hdmi(struct drm_connector *connector)
->> +connector_to_vc4_hdmi(const struct drm_connector *connector)
->>   {
->>   	return container_of(connector, struct vc4_hdmi, connector);
->>   }
->>   
->>   static inline struct vc4_hdmi *
->> -encoder_to_vc4_hdmi(struct drm_encoder *encoder)
->> +encoder_to_vc4_hdmi(const struct drm_encoder *encoder)
->>   {
->>   	struct vc4_encoder *_encoder = to_vc4_encoder(encoder);
->>   	return container_of(_encoder, struct vc4_hdmi, encoder);
->> @@ -244,7 +244,7 @@ struct vc4_hdmi_connector_state {
->>   };
->>   
->>   static inline struct vc4_hdmi_connector_state *
->> -conn_state_to_vc4_hdmi_conn_state(struct drm_connector_state *conn_state)
->> +conn_state_to_vc4_hdmi_conn_state(const struct drm_connector_state *conn_state)
->>   {
->>   	return container_of(conn_state, struct vc4_hdmi_connector_state, base);
->>   }
->> 
+Is this periodic aging specific to memcgs? IOW, periodic aging isn't
+needed without memcgs (~with root only)
+(Perhaps similar question to Aneeh's.)
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+> Use case: proactive reclaimer
+> =3D=3D=3D=3D=3D=3D
+> The proactive reclaimer sets the aging interval, and periodically reads
+> the page idle age stats, forming a working set estimation, which it then
+> calculates an amount to write to memory.reclaim.
+>=20
+> With the page idle age stats, a proactive reclaimer could calculate a
+> precise amount of memory to reclaim without continuously probing and
+> inducing reclaim.
+
+Could the aging be also made per-memcg? (Similar to memory.reclaim,
+possibly without the new kthread (if global reclaim's aging is enough).)
+
+Thanks,
+Michal
+
+
+--X1bOJ3K7DJ5YkBrT
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY77E6gAKCRAkDQmsBEOq
+ufzXAP9oSegjiyAMqSaGyInbRBFZQWAgWZSfIZLFLnPaHnPLewD/abXGqTRB65aj
+qyqWc5cOAqYeuzRkjwwaFp6QKtrImwE=
+=Jo1y
+-----END PGP SIGNATURE-----
+
+--X1bOJ3K7DJ5YkBrT--
