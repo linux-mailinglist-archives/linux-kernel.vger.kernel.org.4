@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E7D665F79
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DAD665F7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238847AbjAKPly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        id S239002AbjAKPmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbjAKPl3 (ORCPT
+        with ESMTP id S235295AbjAKPlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:41:29 -0500
+        Wed, 11 Jan 2023 10:41:31 -0500
 Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6B7D49
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:41:28 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so12970581wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:41:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7BB2E0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:41:29 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so12970636wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:41:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uA+tPLir+1X4c7NIGPD8fbGsyIZBKsPUjYPi9h9kAc8=;
-        b=eNQu3m5MBYcJ4ir7wnU2uKSOdOlTVnwwoNbl7ndwmx7pL0oaymY4tJ+VPavmH4gWu3
-         ctX/ciqpqll+Gi0G39VkzdIVV+zIy+55w4NRmQ48GvAAagPpdV92t11x9dtuCypNqs8x
-         VKs1+2qNooBYEQ/WTCaaYQDd8eQZXRMv5YgkU=
+        bh=okH8AsNmtLn+Xev5OTCMqwCCcQgJeFP0KaGCnceKOFQ=;
+        b=e3QgYRhA/FauY7S29GhmvTbp6mhIVjL3kUKyk/aiNJTXGHtP9m5oMyVm5h+bchf5VB
+         5Ozpe8kode9PPOMtykJJWS4wCtMq4JeTqLZWhNsrNNrrwUmqJgCj6729094+1wKf7qV8
+         SfwbZApVC/cUEh7SexrqejM4npd5PFpvVRP4I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uA+tPLir+1X4c7NIGPD8fbGsyIZBKsPUjYPi9h9kAc8=;
-        b=l8uxN7DnE+uvTiAP3Efp3ZBjGg5WOMuCHWUP248q2M89Zfkvht2XRqOpw7uHoxjdCs
-         n81rPFiq6CC3O3EHpfrEt2OM2Usbwn7QCIgvJ4jESzByaLaEAs60h2rbU0dN8mKoCvA9
-         C0+Ecvtvzd2XiIhm8IMVVCraJs6Tn2dzct/dfDjnqx9HUrZYD3AbhGJM3Aw/KaM4CIwR
-         XeMBsA0iAlj3/72IpN6Q9Y8T8ZI57HnBk7fyK3yNj1NxjECfXWj0IEdlPM3Np4oZlpO4
-         4XR4v/3WPo68o1/oKLWKMP/++69veIEOYbD1rW+QjcoUV2gTQmdDe+mirVTXJ8ZAKEyX
-         o+wA==
-X-Gm-Message-State: AFqh2kq6/b4CjNx/p1TR12oQVelFvfrhZD2mvOz+OV3rJVR1gZaoqj8x
-        dh6/uxr9LCtNd9ZODG6ePl9SuapCh3cXvR+z
-X-Google-Smtp-Source: AMrXdXvP0g7aBxRONWD/2hWDOWNy8uqW2LewLgFiVP8szo0yPD2T/n1jDfUyAtI8xKF52PjIaacOWg==
-X-Received: by 2002:a05:600c:4f83:b0:3d2:3f55:f73f with SMTP id n3-20020a05600c4f8300b003d23f55f73fmr53421615wmq.8.1673451688237;
-        Wed, 11 Jan 2023 07:41:28 -0800 (PST)
+        bh=okH8AsNmtLn+Xev5OTCMqwCCcQgJeFP0KaGCnceKOFQ=;
+        b=7LxQFHcmqk3oeufFgmgwt/NoLkhG5P2Z1Hv/geOQC1W2IZ6nqzRRuq55upDtjPxuUz
+         2UWp5MmhzqVaZzXCgBEto1owCa+YPSJE8KF464s5OUAj+oRxbHfKyzIXyjwsVx/LqcFx
+         k82cEI7rMgAMVvAY3uggT7/1CC7Tb8ENxaG/R4T/arf9YUou0FKNvVR/ZS1l/jXcZcRC
+         A6zoENEwrG1zQ0acQrkSonSYpJCa5qL8krb016YgD8K25GDqu1V2TSUOhkB0vuqlDROK
+         52uKwjfrtuJUVcplNjrIw/6nq2KR9HuqtHhXjUYr4HfFvYUabvto0U3FnArwI/1NV5sA
+         pE/g==
+X-Gm-Message-State: AFqh2koen4opR2qYhx4YAM+I3ESGoQRakEndxdtd7fm/TL1vJ1l2pQuT
+        dbPSk0aOXTVGvh1tbbjX/dmmnw==
+X-Google-Smtp-Source: AMrXdXv1xjpTqbp3o72Jk+q/9NKQX+TzVLexEvL4brcebjiwodaMtz9/eJQ29HVAzKVNvEUGaR8qtg==
+X-Received: by 2002:a05:600c:3d05:b0:3d3:5c21:dd94 with SMTP id bh5-20020a05600c3d0500b003d35c21dd94mr54680019wmb.9.1673451689538;
+        Wed, 11 Jan 2023 07:41:29 -0800 (PST)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id t9-20020a05600c198900b003d9e74dd9b2sm15936149wmq.9.2023.01.11.07.41.27
+        by smtp.gmail.com with ESMTPSA id t9-20020a05600c198900b003d9e74dd9b2sm15936149wmq.9.2023.01.11.07.41.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 07:41:27 -0800 (PST)
+        Wed, 11 Jan 2023 07:41:28 -0800 (PST)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         Daniel Vetter <daniel.vetter@intel.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         linux-fbdev@vger.kernel.org
-Subject: [PATCH 06/11] staging/lynxfb: Use pci aperture helper
-Date:   Wed, 11 Jan 2023 16:41:07 +0100
-Message-Id: <20230111154112.90575-6-daniel.vetter@ffwll.ch>
+Subject: [PATCH 07/11] fbdev/radeon: use pci aperture helpers
+Date:   Wed, 11 Jan 2023 16:41:08 +0100
+Message-Id: <20230111154112.90575-7-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
 References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
@@ -73,50 +72,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It exists! Note that since this is an exact copy, there shouldn't be
-any functional difference here.
+It's not exactly the same since the open coded version doesn't set
+primary correctly. But that's a bugfix, so shouldn't hurt really.
 
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc: Teddy Wang <teddy.wang@siliconmotion.com>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 Cc: linux-fbdev@vger.kernel.org
 ---
- drivers/staging/sm750fb/sm750.c | 16 +---------------
- 1 file changed, 1 insertion(+), 15 deletions(-)
+ drivers/video/fbdev/aty/radeon_base.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index effc7fcc3703..22ace3168723 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -989,20 +989,6 @@ static int sm750fb_framebuffer_alloc(struct sm750_dev *sm750_dev, int fbidx)
- 	return err;
- }
+diff --git a/drivers/video/fbdev/aty/radeon_base.c b/drivers/video/fbdev/aty/radeon_base.c
+index 657064227de8..972c4bbedfa3 100644
+--- a/drivers/video/fbdev/aty/radeon_base.c
++++ b/drivers/video/fbdev/aty/radeon_base.c
+@@ -2238,14 +2238,6 @@ static const struct bin_attribute edid2_attr = {
+ 	.read	= radeon_show_edid2,
+ };
  
--static int lynxfb_kick_out_firmware_fb(struct pci_dev *pdev)
+-static int radeon_kick_out_firmware_fb(struct pci_dev *pdev)
 -{
 -	resource_size_t base = pci_resource_start(pdev, 0);
 -	resource_size_t size = pci_resource_len(pdev, 0);
--	bool primary = false;
 -
--#ifdef CONFIG_X86
--	primary = pdev->resource[PCI_ROM_RESOURCE].flags &
--					IORESOURCE_ROM_SHADOW;
--#endif
--
--	return aperture_remove_conflicting_devices(base, size, primary, "sm750_fb1");
+-	return aperture_remove_conflicting_devices(base, size, false, KBUILD_MODNAME);
 -}
 -
- static int lynxfb_pci_probe(struct pci_dev *pdev,
- 			    const struct pci_device_id *ent)
+ static int radeonfb_pci_register(struct pci_dev *pdev,
+ 				 const struct pci_device_id *ent)
  {
-@@ -1011,7 +997,7 @@ static int lynxfb_pci_probe(struct pci_dev *pdev,
- 	int fbidx;
- 	int err;
+@@ -2296,7 +2288,7 @@ static int radeonfb_pci_register(struct pci_dev *pdev,
+ 	rinfo->fb_base_phys = pci_resource_start (pdev, 0);
+ 	rinfo->mmio_base_phys = pci_resource_start (pdev, 2);
  
--	err = lynxfb_kick_out_firmware_fb(pdev);
-+	err = aperture_remove_conflicting_pci_devices(pdev, "sm750_fb1");
- 	if (err)
- 		return err;
+-	ret = radeon_kick_out_firmware_fb(pdev);
++	ret = aperture_remove_conflicting_pci_devices(pdev, KBUILD_MODNAME);
+ 	if (ret)
+ 		goto err_release_fb;
  
 -- 
 2.39.0
