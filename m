@@ -2,151 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9438A666268
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F914666275
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbjAKSDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:03:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S235265AbjAKSGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:06:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234376AbjAKSDQ (ORCPT
+        with ESMTP id S234623AbjAKSFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:03:16 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976B015FC6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 10:03:14 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C4EC033A99;
-        Wed, 11 Jan 2023 18:03:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673460180; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bbHjv8f4G8yVHoUHU7VHjKcNPXbqT19MIbDP7lW2Ypw=;
-        b=AH95UKrzJ1Zliz+zgEejEfNeedAWYpcTW4dL6WRZ4YuKSDpRhdJmRAgphp/BNidqkNZSdS
-        n3efqyXjohG1QoWVwbLTiaMNcMXlfZ2q2fSgmImd3a+aspnHBzE78VhzTqh/A/s5Dz0f4s
-        gTF0p1am8yTAw6I0wEVbjPDtyvfku3M=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 98C9C1358A;
-        Wed, 11 Jan 2023 18:03:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /ULTJNT5vmMBBgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 11 Jan 2023 18:03:00 +0000
-Date:   Wed, 11 Jan 2023 19:02:59 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "michel@lespinasse.org" <michel@lespinasse.org>,
-        "joelaf@google.com" <joelaf@google.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "leewalsh@google.com" <leewalsh@google.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "jglisse@google.com" <jglisse@google.com>,
-        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
-        "arjunroy@google.com" <arjunroy@google.com>,
-        "minchan@google.com" <minchan@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "hughd@google.com" <hughd@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "gurua@google.com" <gurua@google.com>,
-        "laurent.dufour@fr.ibm.com" <laurent.dufour@fr.ibm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "axelrasmussen@google.com" <axelrasmussen@google.com>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "soheil@google.com" <soheil@google.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "jannh@google.com" <jannh@google.com>,
-        "liam.howlett@oracle.com" <liam.howlett@oracle.com>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "gthelen@google.com" <gthelen@google.com>,
-        "ldufour@linux.ibm.com" <ldufour@linux.ibm.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "posk@google.com" <posk@google.com>,
-        "lstoakes@gmail.com" <lstoakes@gmail.com>,
-        "peterjung1337@gmail.com" <peterjung1337@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
-        "hughlynch@google.com" <hughlynch@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "tatashin@google.com" <tatashin@google.com>
-Subject: Re: [PATCH 08/41] mm: introduce CONFIG_PER_VMA_LOCK
-Message-ID: <Y7750ym6lztDoRC0@dhcp22.suse.cz>
-References: <20230111001331.cxdeh52vvta6ok2p@offworld>
- <CAJuCfpEv--awCY0=R3h5Fez8x74U1EZCzNkq4_7deCYqej5sSA@mail.gmail.com>
- <Y75x5fGPcJ63pBIp@dhcp22.suse.cz>
- <Y76HTfIeEt8ZOIH3@gmail.com>
- <6be809f5554a4faaa22c287ba4224bd0@AcuMS.aculab.com>
- <CAJuCfpH_VZq99=vGQGJ+evVg5wMPKGsjyawgHnOeoKhtEiAi6w@mail.gmail.com>
- <Y77ndimzUsVZwjTk@dhcp22.suse.cz>
- <CAJuCfpEEiFNAgb6TNwibUyTJ1J3b-rEGCSw63TiK6FSA=HCdtw@mail.gmail.com>
- <Y77zwYHMfjOL+9EK@dhcp22.suse.cz>
- <CAJuCfpHCRL5B7SxqTgNbpJqhFwzROX4HAOH5KArO1iXNs_3Kcg@mail.gmail.com>
+        Wed, 11 Jan 2023 13:05:54 -0500
+Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D4115F27;
+        Wed, 11 Jan 2023 10:05:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1673460340;
+        bh=AV9Go+xHCdsoX9TINfpzQ7oy2kjUbf39EKCEUBJfj0U=;
+        h=From:To:Cc:Subject:Date;
+        b=ejms4cozp3pmCgI/JjFqB8yuR5tuunsSe24MVSaGYgxChDOGsg8hcwF+aO2p9ThG5
+         Dgj7CKlQvHg2ZND38f0K3PTvUTiTmm2lObCoiKLK8dcyBNwP9BarUFHzOf296Kk603
+         dtvSfnSW+ayyIjlEAdzrZNlz6LYwB1gbFwPLIZLw=
+Received: from localhost.localdomain ([111.60.247.106])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id 14F2600F; Thu, 12 Jan 2023 02:05:15 +0800
+X-QQ-mid: xmsmtpt1673460315tjyf90zqs
+Message-ID: <tencent_0F1C483464F866AD2DFA08F0BB3B0FFFC406@qq.com>
+X-QQ-XMAILINFO: Mu4fz8q1FCY3qQbmfCHUQmOmsTIPVLpe8FtYVnEgJLa9EBzoN4D4KXlmFUkAgb
+         RacKQt2fXT4nL9Bh1i2fuRENxAGqjdXGhWrLkRltnQO/GgV1StiwWgAIuQVayHc2lO3/NDc9vZE1
+         +NtDjhStK04Ox5f2rtNeIe0rVQhi0uaxuwJJ/xzO2i77nQ3kSTnpMwEP77BYSaHel3dd9jQAnk//
+         5rcCPWCdr9jRwAGoS6EUwGDXHK23RDH/kf54iEEmCRAi6tjbiDv4pbbnC8Mj/owjYrqsoSXnzu+V
+         /dYJR2MFM5SgximmqgUgbm/xHMnxnlQmWxdU80N/CPhub+6esRZVf79V+//8fnCsdQSmqUHWgowx
+         7+68vRcrUDLZn5U3jnCm2CEOvk3Cm5FDh+4RC9yssA4ZdsruNHR/srn2DBWxkff+8BZDQ53+jGjv
+         /1pJ3q93evXxT/q+VFRqyTyXJsS3+96QKqdicKSIGoQ5tzzbHvfAWbo0Ce4ybaSzjbEJnpzWb2RE
+         6+HwqUXkilURkRTZEL48IAS/Hr5YCJzdGuEqN0cW9AV7SB6MJf2I51K3kAB4BwCr3kVlJhfNbRb5
+         4jwFEdHG3+QRBrt7tEFhdJkDNBp8zDK1ukCrsllkjP9l6yLLzYrTxZ+SmPUTx6JI9shEaI5f1TRi
+         9VP/SuEq1VwTNuNymB8+Wl7scsTb2XM7JfxTCrcJKukXR2L4UvheTWIh99SJptLTZKBvk1NBXrku
+         gz7d5lP+BKjrsDNggkMBaKNn0dwTjgtygvP/tnRri7nEniInHnueXqpJifv9CdD7o7Dh2gvukHhx
+         jkzoKvnVh8sdU9Xgdz3Pt1J8e6f/3Mpw4Hcp4f/DR/AoX47ZwiR40dwF5pGkhAWG3cMWNYBpV9b9
+         K4Og9aT8R/2ZMAcKeD/1L3wck8Vo6rZYHP/+M+eQ3FxmXmzYwAkN+kqfjZE9BK3p3NZel9BpmZRY
+         AWYilsKpyU8U+zUtsy6xIx+UIQxU1nxkYUNeWmta4/xeq8oc7z8Q==
+From:   Yang Xiwen <forbidden405@foxmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Yang Xiwen <forbidden405@foxmail.com>,
+        Jaime Breva <jbreva@nayarsystems.com>,
+        Nikita Travkin <nikita@trvn.ru>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH v3 0/3] Support for MSM8916-based UFi ufi001c and uf896
+Date:   Thu, 12 Jan 2023 02:03:19 +0800
+X-OQ-MSGID: <20230111180322.21874-1-forbidden405@foxmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpHCRL5B7SxqTgNbpJqhFwzROX4HAOH5KArO1iXNs_3Kcg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 11-01-23 09:49:08, Suren Baghdasaryan wrote:
-> On Wed, Jan 11, 2023 at 9:37 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Wed 11-01-23 09:04:41, Suren Baghdasaryan wrote:
-> > > On Wed, Jan 11, 2023 at 8:44 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Wed 11-01-23 08:28:49, Suren Baghdasaryan wrote:
-> > > > [...]
-> > > > > Anyhow. Sounds like the overhead of the current design is small enough
-> > > > > to remove CONFIG_PER_VMA_LOCK and let it depend only on architecture
-> > > > > support?
-> > > >
-> > > > Yes. Further optimizations can be done on top. Let's not over optimize
-> > > > at this stage.
-> > >
-> > > Sure, I won't optimize any further.
-> > > Just to expand on your question. Original design would be problematic
-> > > for embedded systems like Android. It notoriously has a high number of
-> > > VMAs due to anonymous VMAs being named, which prevents them from
-> > > merging.
-> >
-> > What is the usual number of VMAs in that environment?
-> 
-> I've seen some games which had over 4000 VMAs but that's on the upper
-> side. In my calculations I used 40000 VMAs as a ballpark number and
-> rough calculations before size optimization would increase memory
-> consumption by ~2M (depending on the lock placement in vm_area_struct
-> it would vary a bit). In Android, the performance team flags any
-> change that exceeds 500KB, so it would raise questions.
+These devices are equipped with 512MB RAM, 4/8GB eMMC and MSM8916.
+This series introduces support for them and adds a dtsi for the class of
+MSM8916-based UFIs.
 
-Thanks, that is a useful information! This is just slightly off-topic
-but I ak wondering how much memory those vma names consume. Are there
-that many unique names or they just happen to be alternating so that
-neighboring ones tend to be different.
+v3:
+- Sort vendor-prefixes alphebatically
+v2:
+- Managed to get the real vendor
+- Remove some reduntant descriptions
+- Rename dtsi more formally
+
+Yang Xiwen (3):
+  dt-bindings: vendor-prefixes: add thwc
+  dt-bindings: qcom: Document msm8916-thwc-uf896 and ufi001c
+  arm64: dts: qcom: msm8916-thwc: Add initial device trees
+
+ .../devicetree/bindings/arm/qcom.yaml         |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ arch/arm64/boot/dts/qcom/Makefile             |   2 +
+ .../boot/dts/qcom/msm8916-thwc-uf896.dts      |  41 +++
+ .../boot/dts/qcom/msm8916-thwc-ufi001c.dts    |  39 +++
+ arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi     | 246 ++++++++++++++++++
+ 6 files changed, 332 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
+
 -- 
-Michal Hocko
-SUSE Labs
+2.39.0
+
