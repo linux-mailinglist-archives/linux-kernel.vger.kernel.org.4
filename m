@@ -2,186 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F37C665E91
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A041665E93
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbjAKO6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
+        id S232824AbjAKO7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:59:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbjAKO55 (ORCPT
+        with ESMTP id S233591AbjAKO70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:57:57 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84F4D4A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:57:53 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso9886054wmq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:57:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y3LJx+Nh8Xj8DEVlyljWWnwnw5ApxQN4nGKS5rYoQuE=;
-        b=m96JKu+SCNJmZ29gKAV8mtAjxXydKJ/YUgb6i2bGTW4UvE/3SJazsb4u/Eo8jVRuOQ
-         doG6HzrlrISQp+Yop+CxJQmN0aFD0VGGIu6+66/9HapTnQsbLxA7CKZRTPMtJ48/F5OV
-         cEnXRRqx6Lk8OkRV36CXHohrNVe9aPfWjXMOrKuHll/HftsgX0V1FGOwc6uCmUfpuxqP
-         fbjlU/KqTGTSlz+W4HEEjAflyJXb8N/dAFL5LeVU/NDBHzzETkX6hpT7PSi/blE96IKr
-         vgzfyEvxD6a416LdAIh4P1A5MTGR95bZK2EdDtS0zmKPz9Jo51oL7CLD9hR2ixhEwUSE
-         TFAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y3LJx+Nh8Xj8DEVlyljWWnwnw5ApxQN4nGKS5rYoQuE=;
-        b=X257YTrgnVZNtlm5H7mv9gRk6ed2nANagVsCwe82ITpooMetm8+IpIoxCPYM0NEhuP
-         mi8BAwUftQGPuLYIowOp/ZeVwzCDv5huiLKer+8J+ugT1s1n/lqqOaPDCnZMIQSmUinG
-         ZAdJcjXaDgVr3K0W/pEVlY8q/wPwvqbh3X4PZZBXGrO8ies2Wo1C/jaGXqeLuM11bodk
-         K3PQLurDnbXgTeBEafj/l97tOJskRdkZ7f6NmoSPcJEO13C1FUhVI5L94ukXefruG9D1
-         IIzmjYDTfTiTFnKkOrvz+mOSNrwFhStdP4kJadQrBkVANR2V0s48R1uMwLDBKFfxccw+
-         3UQQ==
-X-Gm-Message-State: AFqh2kocLRSMLzAdCvTQHgjN2Hga6VCzP6Ex/2D1Mc0g6E8FKM1CeijM
-        N8hWlU2csFzVNwHQnyRMFspszg==
-X-Google-Smtp-Source: AMrXdXtGdW4uPXVp3JxvxUDiP0L+DInrqSGxn+EBfesjB1hvMtndLnIA3vMlqdBAhEeAf3o6ZLRhUw==
-X-Received: by 2002:a1c:6a16:0:b0:3c6:f732:bf6f with SMTP id f22-20020a1c6a16000000b003c6f732bf6fmr52300716wmc.13.1673449072435;
-        Wed, 11 Jan 2023 06:57:52 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o19-20020a05600c511300b003d9862ec435sm7341529wms.20.2023.01.11.06.57.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 06:57:51 -0800 (PST)
-Message-ID: <2a2b2412-752a-1c64-41b7-eb256ae55f42@linaro.org>
-Date:   Wed, 11 Jan 2023 15:57:50 +0100
+        Wed, 11 Jan 2023 09:59:26 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999EDD4A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:59:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673449165; x=1704985165;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6uBzO+A42kjsB9M6kqGtA0XHS7zpg3L5miYdlRwNzaY=;
+  b=OjKNZkqjNAmaAQ1ngRUTRxQyiHBZYANf6r5l+7esV/nnbW6YOruAiAdP
+   /bhLSxaxeVVFXuhrAQds8zcmbr3dz35AxsHmCzYo7LTyxYCiY2aIvK7I8
+   NYdl8zS+U6x4zqh4mrMKy7vcULpawxje7uwo17W7uQQs+cwOdFBUo4OxG
+   qgNmWKoouTyxd2usjfSpuBr1Mn0ChUgvj8cyUcNRhcFKiLjmIEuVK/htX
+   Vvv1MevWrdqht4fLijW/F0ZhXsA8evMGMnE450Pl7ac7R2BC7cHz12Ja1
+   lns8iDJQO+G8VW9c1w4FsSMwYv98+nbtCo/cGxeL+X3OWAD0qEE/x1407
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="322129507"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="322129507"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 06:59:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="765176022"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="765176022"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 06:59:22 -0800
+Message-ID: <67ed911d-0a01-7f71-9258-495e2e143664@linux.intel.com>
+Date:   Wed, 11 Jan 2023 15:59:20 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH] memory: omap-gpmc: fix multi-device handling on the same
- CS
+Subject: Re: [PATCH 03/19] soundwire: amd: register sdw controller dai ops
 Content-Language: en-US
-To:     INAGAKI Hiroshi <musashino.open@gmail.com>, rogerq@kernel.org,
-        tony@atomide.com
-Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230111141346.1516-1-musashino.open@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230111141346.1516-1-musashino.open@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
+        vkoul@kernel.org, alsa-devel@alsa-project.org
+Cc:     Mastan.Katragadda@amd.com, Sunil-kumar.Dommati@amd.com,
+        Basavaraj.Hiregoudar@amd.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Mario.Limonciello@amd.com, arungopal.kondaveeti@amd.com,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
+ <20230111090222.2016499-4-Vijendar.Mukunda@amd.com>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <20230111090222.2016499-4-Vijendar.Mukunda@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2023 15:13, INAGAKI Hiroshi wrote:
-> This patch fixes the handling of multiple devices on the same CS by
-
-Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
-> replacing CS name to "name" of node instead of "full_name".
+On 1/11/2023 10:02 AM, Vijendar Mukunda wrote:
+> Register dai ops for two controller instances.
 > 
-> In c2ade654dbf7d02f09ad491f5621fc321d4af96b
-> ("memory: omap-gpmc: Use of_node_name_eq for node name comparisons"),
-
-Use syntax: commit short SHA (".....") as pointed by checkpatch.
-
-> the name for setting to CS was replaced but it doesn't fit for the
-> comparison by of_node_name_eq.
-> In of_node_name_eq, the length for strncmp will be obtained from the
-> node that trying to register and it doesn't contain the length of
-> "@<cs>,<offset>". 
-
-Skip explanation what is inside of_node_name_eq() but focus on what the
-driver is doing.
-
-> But the base name for comparison passed from
-> registered CS name contains the prefix,
-
-What is "the prefix"?
-
->  then, that two lengths won't
-> match and false will be returned, and registration on the same CS
-> will be failed.
-
-Unfortunately, based on this, I don't get what is compare with what. I
-bet the issue is simple, but based on the description it does not look
-like that.
-
-> 
-> example (Century Systems MA-E350/N, AM3352):
-> 
-> - Device Tree
-> 
->   /* memory mapped gpio controllers on GPMC */
->   gpio@2,2 {
->       reg = <2 0x2 0x1>; /* CS2, offset 0x2, IO size 0x1 */
->       ...
->   };
-> 
->   gpio@2,10 {
->       reg = <2 0x10 0x1>; /* CS2, offset 0x10, IO size 0x1 */
->       ...
->   };
-> 
->   gpio@2,12 {
->       reg = <2 0x12 0x1>; /* CS2, offset 0x12, IO size 0x1 */
->       ...
->   };
-> 
->   gpio@2,14 {
->       reg = <2 0x14 0x1>; /* CS2, offset 0x14, IO size 0x1 */
->       ...
->   };
-
-Trim it, two entries might be enough to illustrate it.
-
-> 
-> - dmesg
-> 
->   [    1.596402] omap-gpmc 50000000.gpmc: cannot request GPMC CS 2
->   [    1.596434] omap-gpmc 50000000.gpmc: failed to probe DT child 'gpio': -16
->   [    1.596489] omap-gpmc 50000000.gpmc: cannot request GPMC CS 2
->   [    1.596511] omap-gpmc 50000000.gpmc: failed to probe DT child 'gpio': -16
->   [    1.596564] omap-gpmc 50000000.gpmc: cannot request GPMC CS 2
->   [    1.596586] omap-gpmc 50000000.gpmc: failed to probe DT child 'gpio': -16
-> 
->   ("gpio@2,2" is ok, "gpio@2,10", "gpio@2,12", "gpio@2.14" are fail)
-> 
-> Fixes: c2ade654dbf7d02f09ad491f5621fc321d4af96b
-> ("memory: omap-gpmc: Use of_node_name_eq for node name comparisons")
-
-Also not correct tag. Run checkpatch.
-
-> 
-
-No blank lines.
-
-> Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
-
-
+> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 > ---
->  drivers/memory/omap-gpmc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
-> index d78f73db37c8..3e3e84e34795 100644
-> --- a/drivers/memory/omap-gpmc.c
-> +++ b/drivers/memory/omap-gpmc.c
-> @@ -2202,7 +2202,7 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
->  		dev_err(&pdev->dev, "cannot request GPMC CS %d\n", cs);
->  		return ret;
->  	}
-> -	gpmc_cs_set_name(cs, child->full_name);
-> +	gpmc_cs_set_name(cs, child->name);
->  
->  	gpmc_read_settings_dt(child, &gpmc_s);
->  	gpmc_read_timings_dt(child, &gpmc_t);
-> 
-> base-commit: 13f35b3c72f4075e13a974f439b20b9e26f8f243
 
-Best regards,
-Krzysztof
+> +static int amd_sdwc_hw_free(struct snd_pcm_substream *substream, struct snd_soc_dai *dai)
+> +{
+> +	struct amd_sdwc_ctrl *ctrl = snd_soc_dai_get_drvdata(dai);
+> +	struct sdw_amd_dma_data *dma;
+> +	int ret;
+> +
+> +	dma = snd_soc_dai_get_dma_data(dai, substream);
+> +	if (!dma)
+> +		return -EIO;
+> +
+> +	ret = sdw_stream_remove_master(&ctrl->bus, dma->stream);
+> +	if (ret < 0) {
+> +		dev_err(dai->dev, "remove master from stream %s failed: %d\n",
+> +			dma->stream->name, ret);
+> +		return ret;
+> +	}
+> +	dma->hw_params = NULL;
+> +	return 0;
+> +}
+> +
+> +static int amd_set_sdw_stream(struct snd_soc_dai *dai, void *stream, int direction)
+> +{
+> +	struct amd_sdwc_ctrl *ctrl = snd_soc_dai_get_drvdata(dai);
+> +	struct sdw_amd_dma_data *dma;
+> +
+> +	if (stream) {
+> +		if (direction == SNDRV_PCM_STREAM_PLAYBACK)
+> +			dma = dai->playback_dma_data;
+> +		else
+> +			dma = dai->capture_dma_data;
+> +
 
+The patch itself looks ok, but I have generic ASoC API question. Could 
+we perhaps change snd_soc_dai_get_dma_data() definition, so that instead 
+of it being:
+static inline void *snd_soc_dai_get_dma_data(const struct snd_soc_dai 
+*dai, const struct snd_pcm_substream *ss)
+it would be something like:
+static inline void *snd_soc_dai_get_dma_data(const struct snd_soc_dai 
+*dai, int direction)
+
+it would require converting current calls from something like
+dma = snd_soc_dai_get_dma_data(dai, substream);
+to
+dma = snd_soc_dai_get_dma_data(dai, substream->stream);
+but would also allow for use in code like above?
+It would become just:
+dma = snd_soc_dai_get_dma_data(dai, direction);
+
+The more I'm looking at the soc-dai.h header the more I like this idea, 
+as other functions in the area seem to pass stream/direction explicitly 
+instead of substream.
+
+Mark, what do you think?
