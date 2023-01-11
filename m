@@ -2,233 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531346663AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6116D6663AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbjAKTWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 14:22:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
+        id S234693AbjAKTXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 14:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239524AbjAKTWR (ORCPT
+        with ESMTP id S239360AbjAKTWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 14:22:17 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2068.outbound.protection.outlook.com [40.107.212.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0445F17046;
-        Wed, 11 Jan 2023 11:21:23 -0800 (PST)
+        Wed, 11 Jan 2023 14:22:32 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A7BE27
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:21:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673464899; x=1705000899;
+  h=message-id:date:subject:to:references:from:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=82GLAndZ//JYlIQ4A3P2Vamhprwui1jesFViKNBC5FY=;
+  b=jPvRmXT/rYizoRq7WNoPtRooPBYuOgXusGaauGVIgSn0HhO2SzFF8xUa
+   IUK6LHJr3UU6U0KfWwhPEKuxiDZNki7zlU7z9jPHqfBiVWOMICkwiAxBW
+   NQXTjMm4U4rajvytd3SDdwvX0uy0fyW30B2nZy19iF8UOFe6iComSW1TV
+   njI3NPO4MnQ/xBeOSWs1LYeUNF+MkJRQLpDX2EknLkZ9jV/QYs7Q5TpoL
+   qMx/p+yIDVDLbjj+OHj3Llu94tVWf7CGy+oeuSjVV//C4qB7hySF/Iiuq
+   3bcamFOe8PSfoZB+Qa81xjii+WW4+Xw7fu/XUCX5wNYFdd5lczPCdd6PI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="322214532"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="322214532"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 11:21:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="657529903"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="657529903"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga002.jf.intel.com with ESMTP; 11 Jan 2023 11:21:38 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 11 Jan 2023 11:21:38 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 11 Jan 2023 11:21:37 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 11 Jan 2023 11:21:37 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 11 Jan 2023 11:21:36 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HAS4awEIi6u91q4Q1PZdkFicE+bPkHzSRoG+0qKGwt+9WOTtsFOVt6CF/6CapZHCmJzHrApcYCSTBkJeulM1Bbo+WQTYeOm3NLy/K5MaA9/sH0+N5Y9x+q+BpG16l9MxEXv+Je4Z/pdyZXD0CIoJ9vb6z5hzsEzlOICibUr55pFFBElWelormRqz9X6KSbUY19GXXGn6gI7tyRlweEMTqTnnERMyxOkU11OcHLGJpJBLc8G4EN/silmdYbz2kI/1BJIWRN9LbOzdLZED8coUtWLrLGwN9ZbSRKIkZrhLOvfVUJQVKH2yMrnWJy+8yU1yz5MmcmCWvCCrG4GlNeHpEA==
+ b=acVZ8QS8PRCuqoQpPMb44FLX7E8ghgwSzGcY0ROYXLjfzG+yExX42PLqvR+bsVnqTWXvWuP/dQ2MFE0YsEv6iTKET8VqPAzxFYK1+EGtIlP8/hbRq2HCE65oSRjylLSqHueVLIG0PDZmsM8jchkWHK3PZ2B31eHBCXzFXorat6i0KU2xc7SnmAbMFnR8YZ6wwk8iqSdqTLYq4quS3RM52Cw8HBg+cx+kURCl+ebk7/DnqyhlkXSQzpgcm5gi/Y8we2hEZnm0/caJuqTrmUVhm+SP+iPXyOV5dpkJ5sFvhASUxWXZVjQZrxwYfnsgPOP2+B13qQZU1grp9b0yMRaeuw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DFMzcX5Wq22ECpbmlDpmFam1bJCRCI6ffWqKJme96h0=;
- b=gcq1gbvQSKhjb7vvyT5h9WPMSBJ6QQ2EWNukSKMugj/8PQq79aGa1c2Qt85u+D0/jd77Hx1jj1FegqdBbiiaGUriJ2wARbKFZUxkukhKN/AU2eu8rqi8vob0/O7s9PD1J5EPKNind5eRwm8RNfMNm+aOG7iEBjujWMGTvhJbnTJFhsDtQib7XdBoqY5Dj5tR9q2sRe7h8iSiXtNXvswU3En6tsDsXFy6yZlYKkG5rsVzCRnQZSLmFLy4+jzGkQTqEqYFDqeguULMDbPyhUWp2rXE6v2Ob7/bytFrps1w80GBnCvQI+cL8FUrR6FV4SdqIHtBybn+F1JIlZ/u5vqktQ==
+ bh=qPjWF02A/S0DAXqLm137TWxvOw6OIBNJM3eg1UDiGsw=;
+ b=VgNi96tYtfMvODJJ/4eGcptWiGTIrKWzKkC/xjWhcP4Rn65HZxRDVAdJvpj/tiWX+NzLg7gSzqCdu6E8ukjH6RJ1SlPShFj6H+BJf9jshchZ79nDXrEdqPZfLsgO1jwO33KjNjk5kkIkiioHqjpyqPxWYpxQy2ixYqNOqLn1UVOEGPGWxATpxIBVkU3e3l4GWp6XppoGVuOF1BjNNAeE6XsWfqAOQgrpgco+aiHqQVFF//0W5O5kQOpJwGgESHSbh4oeU8qTQMSrEo+jCLl9Tp+9BcxzecZUt+e7wixNmhlJUA8ESSeZzwmBP/SE63wYVuyPd4TVAgjsqmkPKbgF+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DFMzcX5Wq22ECpbmlDpmFam1bJCRCI6ffWqKJme96h0=;
- b=ohy3W8CWq19sEQZr8wpvbPNzTY6+CIyplmOzuIYY2wHXPvzC9afSVDc3zPm8pOC1WPcQXBnUKVMUcn3Msa4l6mcki/WsX+RNjHlHhRpLcbpxJdl0KfjdTo+GKWIwu4Pt7T0Qw5vrplWvsn3InYIqBsTrYijR75bUXM7d6+FqjGIbrGAARR9Qnr+QRgQP560Jhg+4hlrusJQtPXJYwlRflUn/bvF/B+9kWsNuCcmo7PLgliM9vMD293oAUsvqdQAt/THTymv6w1G+OJ7QknT+oqL3ibJuLGipMniNR9QdJZWAnkM/XOEyjY4Xs+XC6zkyrZH+66kIo+2R7HzTlZPwcQ==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB2981.namprd12.prod.outlook.com (2603:10b6:a03:de::26)
- by DM6PR12MB4202.namprd12.prod.outlook.com (2603:10b6:5:219::22) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5262.namprd11.prod.outlook.com (2603:10b6:5:389::10)
+ by CO6PR11MB5617.namprd11.prod.outlook.com (2603:10b6:5:35c::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
- 2023 19:21:20 +0000
-Received: from BYAPR12MB2981.namprd12.prod.outlook.com
- ([fe80::fb2:fc51:3d5f:a2f4]) by BYAPR12MB2981.namprd12.prod.outlook.com
- ([fe80::fb2:fc51:3d5f:a2f4%5]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 19:21:20 +0000
-Message-ID: <ad725823-f4ef-904f-c04c-90a6aad43323@nvidia.com>
-Date:   Wed, 11 Jan 2023 11:21:18 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 11/11] video/aperture: Only remove sysfb on the default
- vga pci device
+ 2023 19:21:31 +0000
+Received: from DM4PR11MB5262.namprd11.prod.outlook.com
+ ([fe80::1fe5:3ce9:9a3a:7de7]) by DM4PR11MB5262.namprd11.prod.outlook.com
+ ([fe80::1fe5:3ce9:9a3a:7de7%4]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
+ 19:21:31 +0000
+Message-ID: <e7352525-02e5-1a41-7eb2-4d9e1151fa02@intel.com>
+Date:   Wed, 11 Jan 2023 11:21:28 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+Subject: Re: [PATCH 1/7] x86/cpu: Enumerate LASS CPUID and CR4 bits
 Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Helge Deller <deller@gmx.de>, Sam Ravnborg <sam@ravnborg.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        stable@vger.kernel.org
-References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
- <20230111154112.90575-11-daniel.vetter@ffwll.ch>
- <fb72e067-3f5f-1bac-dc9b-3abd9d7739a2@redhat.com>
-X-Nvconfidentiality: public
-From:   Aaron Plattner <aplattner@nvidia.com>
-In-Reply-To: <fb72e067-3f5f-1bac-dc9b-3abd9d7739a2@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Sohil Mehta <sohil.mehta@intel.com>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ravi Shankar <ravi.v.shankar@intel.com>,
+        "Tony Luck" <tony.luck@intel.com>, Paul Lai <paul.c.lai@intel.com>
+References: <20230110055204.3227669-1-yian.chen@intel.com>
+ <20230110055204.3227669-2-yian.chen@intel.com>
+ <9d935618-8f84-2d6e-4f4c-9d38eec2ba67@intel.com>
+From:   "Chen, Yian" <yian.chen@intel.com>
+In-Reply-To: <9d935618-8f84-2d6e-4f4c-9d38eec2ba67@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0254.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::19) To BYAPR12MB2981.namprd12.prod.outlook.com
- (2603:10b6:a03:de::26)
+X-ClientProxiedBy: SJ0PR13CA0231.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::26) To DM4PR11MB5262.namprd11.prod.outlook.com
+ (2603:10b6:5:389::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2981:EE_|DM6PR12MB4202:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5cdf686e-c09a-4883-dd8c-08daf409052c
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5262:EE_|CO6PR11MB5617:EE_
+X-MS-Office365-Filtering-Correlation-Id: b51ee9a1-e8b6-491c-a10b-08daf4090bc6
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 82ibdznMss12vRo/TJtT7nBR9sym10GxBOMBQrXef9lU0xOrvsQ+wkkyJXiaCIMbxsVyMoSgtJMdn2I2nR7+kp56nKx+EP4TOaxGG4dF+ul/IzDmXwP2ZFcNFuRPsLCMvMCy5xS19ogfv2uiSU1lTe+IJK0vnXKzKdVkWMOanoBiMUaAGSz8wscR2uYkXhSdy5tU6PZqD+OtqG1I8hdH14cveEmm474yzYinzooWgj0WtZjoU0psXIDI2CpI0byTQPRVpOHZLtrwZUlFSCHuZuf1lUoEQb2L084fV3IRycZPPChsT/c7QGt7OywzxEy+DhKw2XwAkHpfqldBpYQQTgaXXBOK1bHIFwxGmZ/+DfwQJzxo8gVQrni5khIbP211swssJHsRcwF2jvLsBKtRDLRLOWvrWxiz0vq3ab17VpHGdLkMGFD7hPkk5J1wSwKXHwT+FA1au6Y6RVcnhe0HkKDV/aS8xJ585Is64molxqd+c6PnIwuOjhEXTKYjtzItzMtBy6Qb/92Whp2En6n3/bSbVvqMoiH8Rsyq+b9iRNU6NBBvvW3FAjFuM2DZgNguFoZZKWMLnrv5oldrK9m7rBPCZYcV+3wLFYmP04kC0eus/uhPkDVrxQNIPlkJMGVrBgKPGBJ8b1gRNLe3Rf5bZoDqwcRA1inaAgNL1nTNMafXiCSQvOB22SoQ/nL/OBECt34i23zlFDcVRRU0gI/w3zS6RBIC5kn/gGr9LPfbbPwZmcVRG21Xw4BC+c9hyb4qStos/NL2gfUrPtG36yLnX3APJKZ2v7B62q+X/Xd3xnKvqC9Rnuyo7w/JD++W/zlE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2981.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(136003)(396003)(376002)(346002)(451199015)(7416002)(316002)(186003)(5660300002)(6512007)(6486002)(966005)(478600001)(2616005)(41300700001)(31696002)(66556008)(66946007)(66476007)(4326008)(54906003)(8676002)(110136005)(83380400001)(8936002)(86362001)(36756003)(53546011)(31686004)(6506007)(38100700002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 8XaPzEdpNnvMHUXE+GJH3rPe1XByJSMG1HIvG31Ys9FnUQMucp7+dtE93r2V+Wt86U8xde/Bf3w9aCkXZVWT7cD924/gMfc1+E1UqnQ/incCzavrA+GQaoc8t0eycSSqEtUHBpm5BSQQtnXlPjhz4t4UC2UYv184FhkuDHC3UcoDitSKRcBmKIvk1q1RmshdazHj0l4IAVjSwGODQi+8cmoBaD5AM1duaoOA8jQ2Xssq16Jgm7gHRdEL/OeLe+zssSIW7yBx+VLWwXfV+K6iJZ38bRt0hkuAAFbKjFgAB34a8DxT+cWnqJ2fPK6dIsX6QJpybQK6UuJsFKtQQhAb3P5hmqH2FnFRzFvUcve7pSHxAoeodyaK9pYPqL+ALlPMHaGdXLv8x07sesx9GbhaoT3gTCE/sbEjQRQ3BN6hiRvpgQ1Oe9CnSV4U5BiBGvIs4nedL+npYW+xiGS7c/FiXQtcZijf9BvodoCCn+06z7f5Tcg3mZ7lANonl3LtxLuqzQX5NBs1+Asku+Sz7yUBX5AWLtFdqekOdLpJFzOQmgqohoWF/XemKCpwRfxFTqyLupM+jrOGmM6+P3A0Isodwkw2teDPuR8jkQ+x5bhhsvfxMdThGB8ldu5xI/9w8H5kYwrH9PlQi3BK/vITwDmbLrtfHuE5cvwcldDorT9xGSlqlghLg9RxgU87q55CqeRGQO07GNQT5M6/T4Q3sv9YSIF96T7Dj238zs/0/eqC75M=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5262.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(366004)(136003)(376002)(39860400002)(451199015)(8936002)(2906002)(5660300002)(41300700001)(66556008)(316002)(8676002)(66476007)(66946007)(110136005)(6636002)(26005)(6512007)(2616005)(38100700002)(31686004)(86362001)(186003)(31696002)(83380400001)(53546011)(36756003)(82960400001)(6506007)(6666004)(478600001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2xDWHFhc083MmxJdjM3bEFxQ3BGMC9xazJ5WGdZMStURFVuR1JmcTErVXla?=
- =?utf-8?B?V3pDa3NXdHk3RWZPYkVjZHhxYTFpaWZQb1hIMUlKNitkODV0MitEWUo2dEFT?=
- =?utf-8?B?c01keldieUlUQUE3Z21IRWNDV3kxUExpbzdZMFliT2MvVjlqbFpuVm41S0x0?=
- =?utf-8?B?RkU1TTErdGZJL1JTK3JHUWJlUDh2czd6YkZ3ZUVpc0pndVRJRzNMMkN5a3Z3?=
- =?utf-8?B?akNZME9OSll5bEx0VzQ1RUV5RUxqY012dmJoODU5cHBYYlFLQndpdmRMN2FQ?=
- =?utf-8?B?cEhOcmV5N1VpZ1JCRHNBVEZNTDNxdVUzMjNrL0lBMUFhWVVxVlhDVDA1VFF0?=
- =?utf-8?B?Uk5YcVNNajhZOGZPOURJWXh2cjdKZzAzamtjTXNsOVNjWVNBSnQ0ak5pZFAw?=
- =?utf-8?B?ZlpLanMzRUV2cmtNRHdNaFZ1dVgxTUM5TnpOMlU0RExZWHBieGlsOUMxYXpL?=
- =?utf-8?B?M09TTHRLN1dBK2NZQTBYbE5RdVg0anprckJndUhmd3RaR2xrY2RyMUNLZURu?=
- =?utf-8?B?RjNaMWV6cG01aTk3bldzZkQ3eE5SSFBmamhuUnVoRkxyQkVmU3dmSStWcENY?=
- =?utf-8?B?QUpZOFZmT0E0cnVMOXZpNm40R3hOUGppczZkNE9neU5ab2ZJOEpxdlBhTDh2?=
- =?utf-8?B?RTdjSUtmb2ZiRzJXZnJnRDhOZDNGa0xvbWpRa1hkSUVKY0FLUWtobmFhNUta?=
- =?utf-8?B?ZlBDNlZMOFdkeWx2ekJ1dHNnd2dBSkF4MkhOQmwyRDJMQ3NxNnAyMWhBczhD?=
- =?utf-8?B?K05NRVExUUdPMGE4ZjVwWFp0NWxZdnBIQ1U5VGR3bUw3Nmk3MDRDa2s1VDBI?=
- =?utf-8?B?ZFh3TCtKZnliam82WkZVOVVjZFRQSEJYTzZiT1hQc0FPNG05NE51cU9oRjhm?=
- =?utf-8?B?bm1ZelNEVVQvVGl2UXRVNm9hcGVTaU83S1JKWWFYUWZmNjlNQ3RMMC9vdGNC?=
- =?utf-8?B?c2JmSjVaazk5SnFGVGczRHcySWl5MFNxZ1ZWWHpKRkNjYUNPQW9lVnpNeG9K?=
- =?utf-8?B?eTNRa2RGaVBWNUVRSWhtZUFtTEgyREJhRVFJTTViSWU5TUxodURRd0llZXpy?=
- =?utf-8?B?RnNYc2UyR1BhRWVKZlVhUzNlR3hvczBTTXVUaURRTEIxWWRIL0lxWGVlOVJS?=
- =?utf-8?B?SytpWUVEc2p0bXJXckhSNFVwdGpxRHQrSjJrb1UvZzhYUXBBZ29jU01hRGRp?=
- =?utf-8?B?WlI0aW1iblpUeWc3WnpIOHNVbTJxcC9LMnRGVWQwdVZoSGMzUFFsNTJXUWtL?=
- =?utf-8?B?QlFWeUdESVNjd0RDK2NqV251a21ZWUN2bDl5d0hpbEdhWjNQMjRiMWpWU0ZZ?=
- =?utf-8?B?UnRLd29uczVwOWNyVC81ZzMxb1ZsVUVadDh0RnN6QTBWdlEzQzFndnNYYTNi?=
- =?utf-8?B?dmdGY2Zma2p3ZWV1R3pkS0l6ZGs5c0xIRlFBWExSMDMxd1VLb1pYT2s0c2l0?=
- =?utf-8?B?VjFGVnExc0ZWbEx5UFozTFI2U05DU1V4M3VTbVBVNGFQSis3N2krRlZ4eWlB?=
- =?utf-8?B?SHBhd0NNeFFXZTE4Yzk3YVI0WnJPMktBMVRUMVBySFFkSnF1K3F4cXFZckVX?=
- =?utf-8?B?eWgwL1M4QWhlTGJUTnFhaEVKc0ZESndURFgxTURkYlJNZEVwT28rM0RZWGdj?=
- =?utf-8?B?d2Z0ZDZod1h0Qzh0KzNHZmVrdFFTN3I4SGR4UlVLeGRXMDNKbDZxU1ZoOFJP?=
- =?utf-8?B?cldCeW9YRmxwS2FOQ0FwODB4VHhTMFBoKzRCSnhxL1dpdytIV21Kd2Rab01R?=
- =?utf-8?B?c0xoR04va1hLK25ORklmdzI2ZUVKa2FlZThPa3JXTGZpMVo5NnNqSUJmY0ZK?=
- =?utf-8?B?eUNxTTduSHo5QyttcHVnRm1CYzlReDBYYnJnWmo2Z2RDc09XcldMeElJZEVm?=
- =?utf-8?B?ajc4dzdmSzVXZ2F2SlVWQzZMQllhdnV1cnVSLzUwNzVtWXhxRjYxQzdiQTZn?=
- =?utf-8?B?NUs0TzRDVFJGTm84TExkNGRBT3BjYXhaSWNZcTBlS0JuNllweCtWbDdCVk1M?=
- =?utf-8?B?dUpRYUZVOEt1d3h0UmV6UVJIdHRQVXkyZDVTblhVc09uOVlYL0FpekFaQVVL?=
- =?utf-8?B?OFJ2TXc3VlBVbmpvZVRiMkEwR2toNTM5N2NBaGtvT25EQUszMW1Gd1VjMUpK?=
- =?utf-8?B?VVlVYUZ0cm1YenFuSHhOWm5BZFJwY3hqSmxyRkxORHhhcmRMZzZpVXBtcG5S?=
- =?utf-8?Q?V9zuCmgcBK4Fxri1uv37jIc=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5cdf686e-c09a-4883-dd8c-08daf409052c
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2981.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K01BWERDZSs1bUc1WSs2NDhRd1hCeGE4NUpXSzNNWEQyWnhRcytXbGRldS9U?=
+ =?utf-8?B?dEk1YWxpMXcvQ0tqWS9aSTVnNzhXdW5sQy9kYkNEaFc2WmxBT3IydGhYdWQv?=
+ =?utf-8?B?cTFGNFpWZGZvVG1uWGlrSWRBajQ1VUlHQURxZlVDSGhUeFlMOVZOTFJUbGZZ?=
+ =?utf-8?B?andoWTBMWkJBU09LNWZnL0QraStBTXg4ckt0Q1dHbDhONkEzNGM3TTQ0ZXg0?=
+ =?utf-8?B?eDhtbGZwNU9KSERKdFgzWXJyeEJWUFVwK1lUMmdheXBMSmRIWnhqSVQ4Ukgv?=
+ =?utf-8?B?bG80WGFYbzY0WGJ5SG5WTVBmdG0xczZvSTQrY3UrN0pVcUYxSXM3VUhOSVJV?=
+ =?utf-8?B?djVxZDdGRTZnUUt5SWt0am0yN2IxUTlHOVRBYmhQcnR6NjM0VWd1UkM4bUEw?=
+ =?utf-8?B?YzNJY0hqM2lyak9RczAzcEF4cVc5ZmtINGw4b0pQTHpxNi8zLytiTEQ5cHZT?=
+ =?utf-8?B?ak16ZXFqanFiUE5UZUwzeGhUNVRzb0ZOekt5UEJVUWhtN2pSeGhhMTMwUEJs?=
+ =?utf-8?B?TTFpdDllb1hKNC8vUVVvcjlXQWdWdUhTVFYxVmdQU1hXYjJLM09mN2loL00v?=
+ =?utf-8?B?dkpuMnhxTWZ2aVVobys0TXJaNzVyQVVYcHpEVW9yMVBEdjdJNDc3dEE3Mldr?=
+ =?utf-8?B?ZTlUM1hkSkEzckV3d2pubGs1d21kNVdibW9Wemt0RmFzaUtXZVBNQ3Zpd0RD?=
+ =?utf-8?B?WmNhN0ZYQUt1ak1VTnBhZGpEUGk0L01oQnNmV2J1SmpCN0JOU3FJL3Y2L0ZB?=
+ =?utf-8?B?K0o0NUVvTkdWdVdoNHQ0RXMwNFhWQnlxODVucUFRc0FueEJPa3lGZElHUDdE?=
+ =?utf-8?B?Y0VZZmMyVlRHRkxOdzNheTFoSVppTTZzenZqSnB6NURSTmhQdmdhUzB2V29V?=
+ =?utf-8?B?cUVPb3IybkI4WG5maGQ1R3A4S0txM1pBT0I3RmxDamNOUlpZelp2UTVjTWZy?=
+ =?utf-8?B?b0ViSkh1elJ0S0EzQkVkSm8vdW1uTDZJN25taHFobDVEWGdSa1JMcXE2b2pB?=
+ =?utf-8?B?QkJoTVJUYUhVTnBWbnNCRE8zdUdaa0ovUkg5RDg3MGZHM1Vxa2tmYndiM0dj?=
+ =?utf-8?B?ZENyQWtpY2UyTloycHlUbTJoNlJDbXBRVUM2bU5VMGZjSitwd3ZGZTlhNUFr?=
+ =?utf-8?B?Zjdsa2RvUEdJNDZXOW9PeHMrVWk3Q0xoMHVGUlc2SmRBWTNISm9Md0E4c2Vx?=
+ =?utf-8?B?SUkveFc0MFFZVmZ6enY0Rm5iS1FITjdtVldqVTdIb3ZsZkdNTW1mOExVTDI1?=
+ =?utf-8?B?UW9CcVdNZVBZREp5NVRYZmNWeWw5eGpSaWlLcnVWcWNscW5DQW5ZK0d5TGhO?=
+ =?utf-8?B?eGlHSmZ6QWQ0ZGZ3b3I5ZUFHRzh6MU5iUGJxckMxa2owN2hUc3Jid25qR1Fy?=
+ =?utf-8?B?STI5RzV1WW4xMGdIaSswYVRtV3F6Z3RqUThWTkZzY0oyeTVSaGxySytIeGc2?=
+ =?utf-8?B?V3ZXK25zWGVOU1B6Z3J3UWFPSEZvcW9Kd1lqOEwwMVkvMzFmR0x4NnBINDJD?=
+ =?utf-8?B?WlRWR3RGcTl6YU5HTTFJenVvQ202ZFpmWnRNSkFicytXTGY1SnRoU0oyRTFV?=
+ =?utf-8?B?WmZlK1NRQ3dsZzh0L0NCVkpBSWc5dmppa0F6SDJZQzVwd2E2Z01iSG1seTVh?=
+ =?utf-8?B?L3lYNmZ2b3E5UGJ4QWpockIxaVBudzNNaU1mTytTQi90YThiOXVha1dFdUdN?=
+ =?utf-8?B?b01INVhwOXNsQUdpOWl3blNPTHYrSjhwemFHcHFtK1F3WUtrdjh4QzArWFRT?=
+ =?utf-8?B?bC9MVkwyNHN1NStmSzk2a1FRblR2b1hhUlVBbHhsTjI5b1RpQTFSOFE2Um1S?=
+ =?utf-8?B?U2huUFRRTWtKNk1hMXZhL3hjQzJPQ0JuNWJOZ1d2RkljYnJNWC8vL21jZzVj?=
+ =?utf-8?B?THYxalgvL2hZNnNEZ0g5RjN6WnI3c2RjQTFmYzB4RWlxUGNVOHpiL2VmNG9Q?=
+ =?utf-8?B?MVY5T1FSb0FPT1dWeWNOY0dGNUVCLzVZRy9uWHBxRDJWZlFxZXpJZVovTWNl?=
+ =?utf-8?B?dGRUTTNPMFpOdDhjcHdIT2p5S25pWTZIbFJ4QkE0UXA3TnpnMU9TandxL05U?=
+ =?utf-8?B?NU44Z0xXL0pHaGs2U2w5Y2FoSW9KZGNHeVZWaFRWb2NtT1RnLzNkajNJUVZC?=
+ =?utf-8?Q?rfMVdLLNPtR3e0vpBqqaaKzcy?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b51ee9a1-e8b6-491c-a10b-08daf4090bc6
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5262.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 19:21:20.6618
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 19:21:31.7685
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F5e/LLbc6EZKa8V3K72kZFfUB7Uf+zhqgIFj3Ly0so5CjlLCyLTd5E8iQS4qdWPwoPAgsBAoJbaDnRq9blZB7w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4202
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: Vy80TSi6j7JeNBH8PT1GKac8TRXJ9UQ/BAyPjkxR5e9qeiWfJvgtrcZK3smYIVh34G/euQRjkhqFaCzyBXInEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5617
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/23 8:58 AM, Javier Martinez Canillas wrote:
-> Hello Daniel,
-> 
-> On 1/11/23 16:41, Daniel Vetter wrote:
->> This fixes a regression introduced by ee7a69aa38d8 ("fbdev: Disable
->> sysfb device registration when removing conflicting FBs"), where we
->> remove the sysfb when loading a driver for an unrelated pci device,
->> resulting in the user loosing their efifb console or similar.
->>
->> Note that in practice this only is a problem with the nvidia blob,
->> because that's the only gpu driver people might install which does not
->> come with an fbdev driver of it's own. For everyone else the real gpu
->> driver will restor a working console.
-> 
-> restore
-> 
->>
->> Also note that in the referenced bug there's confusion that this same
->> bug also happens on amdgpu. But that was just another amdgpu specific
->> regression, which just happened to happen at roughly the same time and
->> with the same user-observable symptons. That bug is fixed now, see
-> 
-> symptoms
-> 
->> https://bugzilla.kernel.org/show_bug.cgi?id=216331#c15
->>
->> For the above reasons the cc: stable is just notionally, this patch
->> will need a backport and that's up to nvidia if they care enough.
+
+
+On 1/10/2023 12:14 PM, Sohil Mehta wrote:
+> On 1/9/2023 9:51 PM, Yian Chen wrote:
+>> LASS (Linear Address Space Separation) is a CPU feature to
+>> prevent speculative address access in user/kernel mode.
 >>
 > 
-> Maybe adding a Fixes: ee7a69aa38d8 tag here too ?
+> Would it be better to say?
 > 
->> References: https://bugzilla.kernel.org/show_bug.cgi?id=216303#c28
->> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
->> Cc: Aaron Plattner <aplattner@nvidia.com>
->> Cc: Javier Martinez Canillas <javierm@redhat.com>
->> Cc: Thomas Zimmermann <tzimmermann@suse.de>
->> Cc: Helge Deller <deller@gmx.de>
->> Cc: Sam Ravnborg <sam@ravnborg.org>
->> Cc: Alex Deucher <alexander.deucher@amd.com>
->> Cc: <stable@vger.kernel.org> # v5.19+ (if someone else does the backport)
->> ---
->>   drivers/video/aperture.c | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
+> LASS (Linear Address Space Separation) is a security feature that 
+> intends to prevent unintentional speculative address access across 
+> user/kernel mode.
+> 
+>
+Sure, I will revise the statement precisely.
+
+>> LASS partitions 64-bit virtual address space into two
+>> halves, lower address (LA[63]=0) and upper address
+>> (LA[63]=1). It stops any data access or code execution
+>>      1. from upper half address space to any lower half address
+>>      2, from lower half address space to any upper half address
+>> and generates #GP fault for a violation.
 >>
->> diff --git a/drivers/video/aperture.c b/drivers/video/aperture.c
->> index ba565515480d..a1821d369bb1 100644
->> --- a/drivers/video/aperture.c
->> +++ b/drivers/video/aperture.c
->> @@ -321,15 +321,16 @@ int aperture_remove_conflicting_pci_devices(struct pci_dev *pdev, const char *na
->>   
->>   	primary = pdev == vga_default_device();
->>   
->> +	if (primary)
->> +		sysfb_disable();
->> +
->>   	for (bar = 0; bar < PCI_STD_NUM_BARS; ++bar) {
->>   		if (!(pci_resource_flags(pdev, bar) & IORESOURCE_MEM))
->>   			continue;
->>   
->>   		base = pci_resource_start(pdev, bar);
->>   		size = pci_resource_len(pdev, bar);
->> -		ret = aperture_remove_conflicting_devices(base, size, name);
->> -		if (ret)
->> -			return ret;
->> +		aperture_detach_devices(base, size);
 > 
-> Maybe mention in the commit message that you are doing this change, something like:
+> I am not sure if this is the best way to say it. The kernel already 
+> partitions the address space this way. LASS takes what is already the 
+> typical OS implementation and bakes it into the hardware architecture.
 > 
-> "Instead of calling aperture_remove_conflicting_devices() to remove the conflicting
-> devices, just call to aperture_detach_devices() to detach the device that matches
-> the same PCI BAR / aperture range. Since the former is just a wrapper of the latter
-> plus a sysfb_disable() call, and now that's done in this function but only for the
-> primary devices"
+Yes, LASS by design matches the addressing usage in OS. I will try to 
+include this in the statement.
+>> In Linux, this means LASS does not allow both kernel code
+>> to access any user space address and user code to access
+>> any kernel space address.
+>>
 > 
-> Patch looks good to me:
+> There is clearly an overlap between the protections provided by paging 
+> and with SMAP and SMEP. It would be useful to paraphrase some of the 
+> information mentioned in the spec regarding how LASS differs from them.
 > 
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Yes, I will differentiate between LASS and SMAP more clearly.
 
-Thanks Daniel and Javier!
+> "With these mode-based protections, paging can prevent malicious 
+> software from directly reading or writing memory inappropriately. To 
+> enforce these protections, the processor must traverse the hierarchy of 
+> paging structures in memory. Unprivileged software can use timing 
+> information resulting from this traversal to determine details about the 
+> paging structures, and these details may be used to determine the layout 
+> of supervisor memory.
+> 
+> Linear-address space separation (LASS) is an independent mechanism that 
+> enforces the same mode-based protections as paging but without 
+> traversing the paging structures. Because the protections enforced by 
+> LASS are applied before paging, “probes” by malicious software will 
+> provide no paging-based timing information."
+> 
+Yes, I will also state the advantage of LASS.
 
-I wasn't able to reproduce the original problem on my hybrid laptop 
-since it refuses to boot with the console on an external display, but I 
-was able to reproduce it by switching the configuration around: booting 
-with i915.modeset=0 and with an experimental version of nvidia-drm that 
-registers a framebuffer console. I verified that loading nvidia-drm 
-breaks the efi-firmware framebuffer on Intel on Arch's 
-linux-6.1.4-arch1-1 kernel and that applying this patch series fixes it. So
+>> Signed-off-by: Yian Chen <yian.chen@intel.com>
+>> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> 
 
-Tested-by: Aaron Plattner <aplattner@nvidia.com>
-
-FWIW, the bug ought to be reproducible with i915.modeset=0 + any other 
-drm driver that registers a framebuffer.
-
--- Aaron
+Thanks,
+Yian
