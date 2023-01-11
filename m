@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4471665CF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BF5665CFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238461AbjAKNtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:49:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S233456AbjAKNuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbjAKNt2 (ORCPT
+        with ESMTP id S233008AbjAKNuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:49:28 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D39E2661;
-        Wed, 11 Jan 2023 05:49:27 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 9E34AFF802;
-        Wed, 11 Jan 2023 13:49:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673444966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c9EnZLjG+M9U2ONqhUBGVZCcyMyK2X5wHaN45jR1ceg=;
-        b=ByaSXOKvk4XEECyLn27Tk4Ldxvxm05KVnKRViSa66Hk/L1mzTW0KAhZ6+m64s+qGIQCqM+
-        elsDF/epIy4V/u2A0zVBt2P49YhXxtnhz/EEMQw12FAkQSf4MOWbu/lZ0NpdyLMDXALo0U
-        c87+3x9imIyZz+9/2Ul+WphA2uyg/+LOVsQCfjMHB0TDWuz2vUdZxvSQFcz0UELsZjq2np
-        uO8GxdPQ1RhJFZGENK9PdGKov9nFqu+XwcT/Hl8sFe9TfkWs2gCdFGP5aXLT6cA//M1k3v
-        vwKzbAx661jtzhKC/OV1y/HvrRMlRTofhyIAdU3iD/U/PtWLVNVDjTYVkTd8KA==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 3/3] MAINTAINERS: add the Renesas IDT821034 codec entry
-Date:   Wed, 11 Jan 2023 14:49:05 +0100
-Message-Id: <20230111134905.248305-4-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230111134905.248305-1-herve.codina@bootlin.com>
-References: <20230111134905.248305-1-herve.codina@bootlin.com>
+        Wed, 11 Jan 2023 08:50:00 -0500
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38921C7E;
+        Wed, 11 Jan 2023 05:49:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1673444999; x=1704980999;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=T4VLwb+WAEhKP27vGcXiylUrNAmmuEI1ccEYWHt8Qec=;
+  b=Ra/PmN25pRyquOGRjfAQVmnV+bZMLuPl7xAquLVbZkzcqVUT3XjEinK5
+   Rk95o+h1EJ/BByVoEQZ0I8eKBsAv3rwvTc1k5RKYgix4q2XUvSQhYKVSi
+   DLDA8Gu1uc3ItYlWC8UYkXAOZKuWUgZmfT+hiMGP9GTgdfxL3D2zYYYXd
+   s=;
+X-IronPort-AV: E=Sophos;i="5.96,317,1665446400"; 
+   d="scan'208";a="285546276"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-edda28d4.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 13:49:56 +0000
+Received: from EX13D40EUA004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-m6i4x-edda28d4.us-east-1.amazon.com (Postfix) with ESMTPS id C212381180;
+        Wed, 11 Jan 2023 13:49:45 +0000 (UTC)
+Received: from EX19D024EUA002.ant.amazon.com (10.252.50.224) by
+ EX13D40EUA004.ant.amazon.com (10.43.165.178) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Wed, 11 Jan 2023 13:49:44 +0000
+Received: from [10.220.99.6] (10.43.161.114) by EX19D024EUA002.ant.amazon.com
+ (10.252.50.224) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.7; Wed, 11 Jan
+ 2023 13:49:30 +0000
+Message-ID: <3c9d5c84-7b54-e12e-f6ba-a73f66e0b094@amazon.com>
+Date:   Wed, 11 Jan 2023 15:49:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH RFC v7 49/64] KVM: SVM: Introduce ops for the post gfn map
+ and unmap
+Content-Language: en-US
+To:     Michael Roth <michael.roth@amd.com>, <kvm@vger.kernel.org>
+CC:     <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-crypto@vger.kernel.org>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <jroedel@suse.de>, <thomas.lendacky@amd.com>,
+        <hpa@zytor.com>, <ardb@kernel.org>, <pbonzini@redhat.com>,
+        <seanjc@google.com>, <vkuznets@redhat.com>,
+        <wanpengli@tencent.com>, <jmattson@google.com>, <luto@kernel.org>,
+        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
+        <pgonda@google.com>, <peterz@infradead.org>,
+        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
+        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
+        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
+        <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
+        <ashish.kalra@amd.com>, <harald@profian.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Jarkko Sakkinen <jarkko@profian.com>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-50-michael.roth@amd.com>
+From:   Sabin Rapan <sabrapan@amazon.com>
+In-Reply-To: <20221214194056.161492-50-michael.roth@amd.com>
+X-Originating-IP: [10.43.161.114]
+X-ClientProxiedBy: EX13D40UWC002.ant.amazon.com (10.43.162.191) To
+ EX19D024EUA002.ant.amazon.com (10.252.50.224)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After contributing the driver, add myself as the maintainer
-for the Renesas IDT821034 codec.
-
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9dcfadec5aa3..31115a7e01c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17809,6 +17809,13 @@ F:	Documentation/devicetree/bindings/net/renesas,*.yaml
- F:	drivers/net/ethernet/renesas/
- F:	include/linux/sh_eth.h
- 
-+RENESAS IDT821034 ASoC CODEC
-+M:	Herve Codina <herve.codina@bootlin.com>
-+L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/sound/renesas,idt821034.yaml
-+F:	sound/soc/codecs/idt821034.c
-+
- RENESAS R-CAR GYROADC DRIVER
- M:	Marek Vasut <marek.vasut@gmail.com>
- L:	linux-iio@vger.kernel.org
--- 
-2.38.1
+CgpPbiAxNC4xMi4yMDIyIDIxOjQwLCBNaWNoYWVsIFJvdGggd3JvdGU6Cj4gZGlmZiAtLWdpdCBh
+L2FyY2gveDg2L2t2bS9zdm0vc3ZtLmggYi9hcmNoL3g4Ni9rdm0vc3ZtL3N2bS5oCj4gaW5kZXgg
+YTRkNDhjM2UwZjg5Li5hZWYxM2MxMjBmMmQgMTAwNjQ0Cj4gLS0tIGEvYXJjaC94ODYva3ZtL3N2
+bS9zdm0uaAo+ICsrKyBiL2FyY2gveDg2L2t2bS9zdm0vc3ZtLmgKPiBAQCAtMTAwLDYgKzEwMCw3
+IEBAIHN0cnVjdCBrdm1fc2V2X2luZm8gewo+ICAgICAgICAgYXRvbWljX3QgbWlncmF0aW9uX2lu
+X3Byb2dyZXNzOwo+ICAgICAgICAgdTY0IHNucF9pbml0X2ZsYWdzOwo+ICAgICAgICAgdm9pZCAq
+c25wX2NvbnRleHQ7ICAgICAgLyogU05QIGd1ZXN0IGNvbnRleHQgcGFnZSAqLwo+ICsgICAgICAg
+c3BpbmxvY2tfdCBwc2NfbG9jazsKCkxvb2tzIGxpa2UgYSBsZWZ0b3ZlciBmcm9tIHY2IHNlcmll
+cy4KCi0tClNhYmluLgoKCgpBbWF6b24gRGV2ZWxvcG1lbnQgQ2VudGVyIChSb21hbmlhKSBTLlIu
+TC4gcmVnaXN0ZXJlZCBvZmZpY2U6IDI3QSBTZi4gTGF6YXIgU3RyZWV0LCBVQkM1LCBmbG9vciAy
+LCBJYXNpLCBJYXNpIENvdW50eSwgNzAwMDQ1LCBSb21hbmlhLiBSZWdpc3RlcmVkIGluIFJvbWFu
+aWEuIFJlZ2lzdHJhdGlvbiBudW1iZXIgSjIyLzI2MjEvMjAwNS4K
 
