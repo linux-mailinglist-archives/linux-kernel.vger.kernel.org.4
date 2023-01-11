@@ -2,176 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2E0665C68
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2CD665C7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235666AbjAKNYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
+        id S234269AbjAKN2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233564AbjAKNXz (ORCPT
+        with ESMTP id S234013AbjAKN1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:23:55 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71E725EF;
-        Wed, 11 Jan 2023 05:23:54 -0800 (PST)
-Received: from beast.luon.net (simons.connected.by.freedominter.net [45.83.240.172])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 11 Jan 2023 08:27:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1561C931;
+        Wed, 11 Jan 2023 05:24:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sjoerd)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7CB776602D9F;
-        Wed, 11 Jan 2023 13:23:53 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673443433;
-        bh=DGP5YuVVDTyIVeZ0yDO/PVajPfpgEyPnpUshoX7OQnI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MRQVLbOcltUepPFACmX/jGEKiXD2E1NRQePGat8BZalA1nMJcj6/vyrZCOJ5LD41C
-         ePRCPtZe1Xr0fvkfIt+gKHLA2ghiTKxkvL4lAOXlAod5VcORcfWxpYYkCty2dmP0Py
-         610e7ehB4PqY/yYkiOQOzDdI1EEaKcN+W+RiVZbw1dsfIKLXXLK+B3BdDmuJ7C7Fjt
-         U455v/vRLqgmtaV/LsO0sm8b8sy72wQ3mY2Ld0Daxz/h2IZ7osXLL6iB9Ms76t7DUJ
-         TzIF5du52JimwgQS3bAxDZ2VlnBZ+hW37bVX7pi4sF81fhHiCNI3KcCBCLIRXtGTii
-         wQNEFmnxz9Zog==
-Received: by beast.luon.net (Postfix, from userid 1000)
-        id EB14660ABD69; Wed, 11 Jan 2023 14:23:50 +0100 (CET)
-From:   Sjoerd Simons <sjoerd@collabora.com>
-To:     Nishanth Menon <nm@ti.com>
-Cc:     kernel@collabora.com, Nitin Yadav <n-yadav@ti.com>,
-        martyn.welch@collabora.com,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] arm64: dts: ti: k3-am625-sk: Add support for USB
-Date:   Wed, 11 Jan 2023 14:23:47 +0100
-Message-Id: <20230111132348.553061-4-sjoerd@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230111132348.553061-1-sjoerd@collabora.com>
-References: <20230111132348.553061-1-sjoerd@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AB8561A9C;
+        Wed, 11 Jan 2023 13:24:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A79C433F0;
+        Wed, 11 Jan 2023 13:24:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673443490;
+        bh=kS5axsOZNN55F7BQL6l3Toqbtp4pQirhubS5f4MOgJU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fAZPxIE8WaQ0RA5jhkHHhHUciY5V7Wj7UaUN4luxnktIE6IvBTLwR3B21LSx6Wowb
+         BKTee7R8cag4Gu4RznI+LMzlDio8gukgPUH59WSHdZLeb+HDjF9B/dvbJp4DK0AzSc
+         wJX4Y8ZdNmsxVCU8M3lDTh7AxDWOBmbmkD7Jn97aiL4hASVrQ4z/nvBeiFZ3TEFmxU
+         66MHaEylXZX3/HVVZHrArPVaLe0UcrrF2hRqgQtKkbcijrgFzRswF2XR0oVDzCbd/c
+         +SGDh90R5U+iFNE8QJ8QQnAfnjVji0jDlxX1YN9jHMCU/md+IBcGtwTdxpbtx1gavD
+         yC9n4THOx7ouA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pFb66-00089v-RK; Wed, 11 Jan 2023 14:24:54 +0100
+Date:   Wed, 11 Jan 2023 14:24:54 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 2/4] arm64: dts: qcom: sc8280xp-crd: Enable EDP
+Message-ID: <Y764pvrxF9Z8tgKU@hovoldconsulting.com>
+References: <20230111035906.2975494-1-quic_bjorande@quicinc.com>
+ <20230111035906.2975494-3-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111035906.2975494-3-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+On Tue, Jan 10, 2023 at 07:59:04PM -0800, Bjorn Andersson wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> The SC8280XP CRD has a EDP display on MDSS0 DP3, enable relevant nodes
+> and link it together with the backlight control.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+> 
+> Changes since v6:
+> - None
+> 
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 73 ++++++++++++++++++++++-
+>  1 file changed, 72 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> index 551768f97729..db12d8678861 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> @@ -20,7 +20,7 @@ aliases {
+>  		serial0 = &qup2_uart17;
+>  	};
+>  
+> -	backlight {
+> +	backlight: backlight {
+>  		compatible = "pwm-backlight";
+>  		pwms = <&pmc8280c_lpg 3 1000000>;
+>  		enable-gpios = <&pmc8280_1_gpios 8 GPIO_ACTIVE_HIGH>;
+> @@ -34,6 +34,22 @@ chosen {
+>  		stdout-path = "serial0:115200n8";
+>  	};
+>  
+> +	vreg_edp_3p3: regulator-edp-3p3 {
+> +		compatible = "regulator-fixed";
+> +
+> +		regulator-name = "VREG_EDP_3P3";
 
-AM62 SoC has two instances of USB and they are brought on to the board
-in the following way,
+Looks like you forgot to change this to "VCC3LCD" which should be the
+net name.
 
--> USB0 instance
- - This is brought out to a USB TypeC connector on board through TPS6598 PD
-   controller. The PD controller should decide the role based on CC pin in
-   the connector. Unfortunately the irq line for the TPS isn't hooked up
-   which is a mode not yet support by the driver (some patches were
-   submitted earlier this year[0]). So for now the PD controller is left
-   out and periphal mode chosen.
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +
+> +		gpio = <&tlmm 25 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&edp_reg_en>;
+> +
+> +		regulator-boot-on;
+> +	};
+> +
+>  	vreg_edp_bl: regulator-edp-bl {
+>  		compatible = "regulator-fixed";
 
--> USB1 instance
- - This is brought out to a USB TypeA connector on board.
+> @@ -494,6 +559,12 @@ hastings_reg_en: hastings-reg-en-state {
+>  &tlmm {
+>  	gpio-reserved-ranges = <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
+>  
+> +	edp_reg_en: edp-reg-en-state {
+> +		pins = "gpio25";
+> +		function = "gpio";
+> +		drive-strength = <16>;
 
-Therefore, add the required device tree support for the above in the board
-dts file.
+'bias-disable' as well?
 
-0: https://lore.kernel.org/lkml/f714ee55-ef47-317d-81b9-57020dda064b@ti.com/T/
+> +	};
+> +
+>  	kybd_default: kybd-default-state {
+>  		disable-pins {
+>  			pins = "gpio102";
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-[merge from vendor bsp, drop TPS6598 support, reword commit message]
-Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
-Tested-by: Martyn Welch <martyn.welch@collabora.com>
+Looks good otherwise,
 
----
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 
-Changes in v3:
-- Rebased against current ti-next aka 6.2-rc1
-- Add Martyn's tested-by
-
-Changes in v2:
-- Rebase against linux-next 20221220
-
- arch/arm64/boot/dts/ti/k3-am625-sk.dts | 50 ++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 4f179b146cab..c82a0ebf6772 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -24,6 +24,8 @@ aliases {
- 		spi0 = &ospi0;
- 		ethernet0 = &cpsw_port1;
- 		ethernet1 = &cpsw_port2;
-+		usb0 = &usb0;
-+		usb1 = &usb1;
- 	};
- 
- 	chosen {
-@@ -284,6 +286,12 @@ main_gpio1_ioexp_intr_pins_default: main-gpio1-ioexp-intr-pins-default {
- 			AM62X_IOPAD(0x01d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
- 		>;
- 	};
-+
-+	main_usb1_pins_default: main-usb1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x0258, PIN_OUTPUT, 0) /* (F18) USB1_DRVVBUS */
-+		>;
-+	};
- };
- 
- &wkup_uart0 {
-@@ -464,3 +472,45 @@ partition@3fc0000 {
- 		};
- 	};
- };
-+
-+&ecap0 {
-+	status = "disabled";
-+};
-+
-+&ecap1 {
-+	status = "disabled";
-+};
-+
-+&ecap2 {
-+	status = "disabled";
-+};
-+
-+&main_mcan0 {
-+	status = "disabled";
-+};
-+
-+&epwm0 {
-+	status = "disabled";
-+};
-+
-+&epwm1 {
-+	status = "disabled";
-+};
-+
-+&epwm2 {
-+	status = "disabled";
-+};
-+
-+&usbss0 {
-+	ti,vbus-divider;
-+};
-+
-+&usb0 {
-+	dr_mode = "peripheral";
-+};
-+
-+&usb1 {
-+	dr_mode = "host";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_usb1_pins_default>;
-+};
--- 
-2.39.0
-
+Johan
