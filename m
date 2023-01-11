@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29BC666118
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CFA66611E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234520AbjAKQ7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S236548AbjAKQ7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:59:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235405AbjAKQ7S (ORCPT
+        with ESMTP id S233181AbjAKQ7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:59:18 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AAE1D9;
-        Wed, 11 Jan 2023 08:59:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673456357; x=1704992357;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XmWC3XI33pAhrNwTO3pTEmkiACbcf3LnIHheDFqokkE=;
-  b=P3OU5mV+xXoLpwRrFF76da8/UzlrChX77c3/4uzU6KfSjoughgOUHR8X
-   kr0Khdh981k4EOyaDA3xJ9Xz2kbJ5ibeC3mcKYGaql1yb+Yt8t6KIQWnt
-   Iej0RHUMHLIJJlSW0LTxZWJSedMifZFjN9UXpfUnsD4xBb+bUsAKw7QVa
-   5qNvnjfA8HkGEvm50Cc372kK//p+6irPD4SUYfECmlj7LZBhdhe3HgwMP
-   Pot01bEWjEPsGzsMOPQN3aXWYhu1RFkzBAPKRL0G3mMiHOj9KkwoWZ1Bm
-   k1FwZclX//boldl8adiPb4onDNSZO0dHDPBUpwTisy7Ik6Ye0CqNrZ9E8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="311290796"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="311290796"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:59:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="765227402"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="765227402"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:59:15 -0800
-Message-ID: <dd7d9916697fd205038420ff00bf6f36f3fa91da.camel@linux.intel.com>
-Subject: Re: [PATCH v3] HID: Recognize sensors with application collections
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Aditya Garg <gargaditya08@live.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        "jkosina@suse.cz" <jkosina@suse.cz>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Cc:     "orlandoch.dev@gmail.com" <orlandoch.dev@gmail.com>,
-        "ronald@innovation.ch" <ronald@innovation.ch>
-Date:   Wed, 11 Jan 2023 08:59:15 -0800
-In-Reply-To: <9E66CF6F-99A0-4CC5-9FA0-3A9DCFCA0388@live.com>
-References: <8DA00FF4-DB08-4CEC-A5B4-47A71DC09C13@live.com>
-         <01D620E2-18CA-40F6-A330-454CBC20C542@live.com>
-         <EFCEA45A-C6F4-477A-B011-9C9E6E61E488@live.com>
-         <9E66CF6F-99A0-4CC5-9FA0-3A9DCFCA0388@live.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        Wed, 11 Jan 2023 11:59:42 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BCE316;
+        Wed, 11 Jan 2023 08:59:41 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:1ee3:efce:e4f6:17a3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4C7DB6602D3E;
+        Wed, 11 Jan 2023 16:59:39 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673456379;
+        bh=9Bbn1WtPvFToVRLim4iaHmWZPH9+E68UmmrGT4o+e4I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WFoTx95ZPrw/C12ELNi1zWuHnZ07VBxKUa40UwfuM2g9OZMBfReNpwi5xd76xlpuc
+         Wq6JGleRrkgFF3UBymcmuOG4kJRju1AdcKCUyv4wCjOo05T5voVcAtIQWKsuriHQdi
+         5qp2JJQRKHpw9qdIbaOvFqBSlpwOXbQZ+Q8XDP4T72yllZUWiVQysThPI8qETaxnx2
+         0tn/6nRunH2g8B/zuQw4R8DupeIxfBwJQLldK0HvHjgVqDJqPwha8KS9T/lGrxwla0
+         uf2kj7ySYhLSmztqJN3+JzBnJfJLFProaRsywazYwVqPjkvd1rvjxzhbJ4OEpLK+iG
+         yEfskYBC7c4JA==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 00/13] AV1 stateless decoder for RK3588
+Date:   Wed, 11 Jan 2023 17:59:18 +0100
+Message-Id: <20230111165931.753763-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,83 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-01-11 at 10:07 +0000, Aditya Garg wrote:
-> From: Ronald Tschalär <ronald@innovation.ch>
-> 
-> According to HUTRR39 logical sensor devices may be nested inside
-> physical collections or may be specified in multiple top-level
-> application collections (see page 59, strategies 1 and 2). However,
-> the current code was only recognizing those with physical
-> collections.
-> 
-> This issue turned up in the T2 MacBook Pros which define the ALS in
-> a top-level application collection.
-> 
-> Signed-off-by: Ronald Tschalär <ronald@innovation.ch>
-> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+This series implement AV1 stateless decoder for RK3588 SoC.
+The hardware support 8 and 10 bits bitstreams up to 7680x4320.
+AV1 feature like film grain or scaling are done by the postprocessor.
+The driver can produce NV12_4L4, NV12_10LE40_4L4, NV12 and P010 pixels formats.
+Even if Rockchip have named the hardware VPU981 it looks like a VC9000 but 
+with a different registers mapping.
 
-Since there are some hid core change, Jiri needs to check. If Jiri is
-fine with hid core changes:
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+It is based on Daniel's "[PATCH v4] media: Add AV1 uAPI" [1] patches.
 
+The full branch can be found here:
+https://gitlab.collabora.com/linux/for-upstream/-/commits/rk3588_av1_decoder_v3
 
+Fluster score is: 200/239 while testing AV1-TEST-VECTORS with GStreamer-AV1-V4L2SL-Gst1.0.
+The failing tests are:
+- the 2 tests with 2 spatial layers: few errors in luma/chroma values
+- tests with resolution < hardware limit (64x64)
+- 10bits film grain test: bad macroblocks while decoding, the same 8bits
+  test is working fine.
 
-> ---
-> V2 :- Add missing signed-off-by
-> V3 :- Avoid using language extensions
->  drivers/hid/hid-core.c       | 3 ++-
->  drivers/hid/hid-sensor-hub.c | 6 ++++--
->  2 files changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index bd47628da..8ff08e6c2 100644
-> --- a/drivers/hid/hid-core.c
-> +++ b/drivers/hid/hid-core.c
-> @@ -804,7 +804,8 @@ static void hid_scan_collection(struct hid_parser
-> *parser, unsigned type)
->         int i;
->  
->         if (((parser->global.usage_page << 16) == HID_UP_SENSOR) &&
-> -           type == HID_COLLECTION_PHYSICAL)
-> +           (type == HID_COLLECTION_PHYSICAL ||
-> +            type == HID_COLLECTION_APPLICATION))
->                 hid->group = HID_GROUP_SENSOR_HUB;
->  
->         if (hid->vendor == USB_VENDOR_ID_MICROSOFT &&
-> diff --git a/drivers/hid/hid-sensor-hub.c b/drivers/hid/hid-sensor-
-> hub.c
-> index 6abd3e2a9..83237b86c 100644
-> --- a/drivers/hid/hid-sensor-hub.c
-> +++ b/drivers/hid/hid-sensor-hub.c
-> @@ -397,7 +397,8 @@ int sensor_hub_input_get_attribute_info(struct
-> hid_sensor_hub_device *hsdev,
->                 for (i = 0; i < report->maxfield; ++i) {
->                         field = report->field[i];
->                         if (field->maxusage) {
-> -                               if (field->physical == usage_id &&
-> +                               if ((field->physical == usage_id ||
-> +                                    field->application == usage_id) &&
->                                         (field->logical ==
-> attr_usage_id ||
->                                         field->usage[0].hid ==
->                                                         attr_usage_id)
-> &&
-> @@ -506,7 +507,8 @@ static int sensor_hub_raw_event(struct hid_device
-> *hdev,
->                                         collection->usage);
->  
->                 callback = sensor_hub_get_callback(hdev,
-> -                               report->field[i]->physical,
-> +                               report->field[i]->physical ? report-
-> >field[i]->physical :
-> +                                                            report-
-> >field[i]->application,
->                                 report->field[i]-
-> >usage[0].collection_index,
->                                 &hsdev, &priv);
->                 if (!callback) {
-> -- 
-> 2.34.1
-> 
+Changes in v3:
+- Fix arrays loops limites.
+- Remove unused field.
+- Reset raw pixel formats list when bit depth or film grain feature
+  values change.
+- Enable post-processor P010 support
 
+Changes in v2:
+- Remove useless +1 in sbs computation. 
+- Describe NV12_10LE40_4L4 pixels format.
+- Post-processor could generate P010.
+- Fix comments done on v1.
+- The last patch make sure that only post-processed formats are used when film
+  grain feature is enabled.
+
+Benjamin
+
+[1] https://lore.kernel.org/linux-media/20230103154832.6982-1-daniel.almeida@collabora.com/T/#u
+
+Benjamin Gaignard (12):
+  dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
+  media: Add NV12_10LE40_4L4 pixel format
+  media: verisilicon: Get bit depth for V4L2_PIX_FMT_NV12_10LE40_4L4
+  media: verisilicon: Add AV1 decoder mode and controls
+  media: verisilicon: Save bit depth for AV1 decoder
+  media: verisilicon: Check AV1 bitstreams bit depth
+  media: verisilicon: Compute motion vectors size for AV1 frames
+  media: verisilicon: Add AV1 entropy helpers
+  media: verisilicon: Add Rockchip AV1 decoder
+  media: verisilicon: Add film grain feature to AV1 driver
+  media: verisilicon: Enable AV1 decoder on rk3588
+  media: verisilicon: Conditionnaly ignore native formats
+
+Nicolas Dufresne (1):
+  v4l2-common: Add support for fractional bpp
+
+ .../bindings/media/rockchip-vpu.yaml          |    1 +
+ .../media/v4l/pixfmt-yuv-planar.rst           |    4 +
+ drivers/media/platform/verisilicon/Makefile   |    3 +
+ drivers/media/platform/verisilicon/hantro.h   |    8 +
+ .../media/platform/verisilicon/hantro_drv.c   |   69 +
+ .../media/platform/verisilicon/hantro_hw.h    |  102 +
+ .../platform/verisilicon/hantro_postproc.c    |    7 +
+ .../media/platform/verisilicon/hantro_v4l2.c  |   22 +-
+ .../media/platform/verisilicon/hantro_v4l2.h  |    1 +
+ .../verisilicon/rockchip_av1_entropymode.c    | 4546 +++++++++++++++++
+ .../verisilicon/rockchip_av1_entropymode.h    |  272 +
+ .../verisilicon/rockchip_av1_filmgrain.c      |  401 ++
+ .../verisilicon/rockchip_av1_filmgrain.h      |   36 +
+ .../verisilicon/rockchip_vpu981_hw_av1_dec.c  | 2278 +++++++++
+ .../verisilicon/rockchip_vpu981_regs.h        |  477 ++
+ .../platform/verisilicon/rockchip_vpu_hw.c    |  134 +
+ drivers/media/v4l2-core/v4l2-common.c         |  149 +-
+ drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+ include/media/v4l2-common.h                   |    2 +
+ include/uapi/linux/videodev2.h                |    1 +
+ 20 files changed, 8439 insertions(+), 75 deletions(-)
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entropymode.c
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_entropymode.h
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmgrain.c
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_filmgrain.h
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c
+ create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_regs.h
+
+-- 
+2.34.1
 
