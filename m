@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05A66659E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711A86659ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbjAKLTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:19:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51362 "EHLO
+        id S231820AbjAKLVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbjAKLTX (ORCPT
+        with ESMTP id S232689AbjAKLUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:19:23 -0500
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A53101E3;
-        Wed, 11 Jan 2023 03:18:56 -0800 (PST)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-        by mx0.infotecs.ru (Postfix) with ESMTP id 10AA0132EAE9;
-        Wed, 11 Jan 2023 14:18:53 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 10AA0132EAE9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-        t=1673435933; bh=u6clYul3DTm2mKDh7DV/6GRx4J3QK/GQ9pTJSDwpvKQ=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=VIHfj9wtovGmkcG/6n9+8rsq/UFkP4ei/wH0q298b6lmRPhBLFhk9hqg2Nrt1rE78
-         vkOPn9GaVpdBX8TT/Z/7/j386WnrvpgX4kz3J48bj5ntJbTjUsD5rFUCxwGxG359od
-         nv0XwiLMn6RosDyfuVKI1rbYh226eMlfMzTPrRPQ=
-Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
-        by mx0.infotecs-nt (Postfix) with ESMTP id 0D3403100ABA;
-        Wed, 11 Jan 2023 14:18:53 +0300 (MSK)
-Received: from msk-exch-01.infotecs-nt (10.0.7.191) by msk-exch-01.infotecs-nt
- (10.0.7.191) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Wed, 11 Jan
- 2023 14:18:52 +0300
-Received: from msk-exch-01.infotecs-nt ([fe80::89df:c35f:46be:fd07]) by
- msk-exch-01.infotecs-nt ([fe80::89df:c35f:46be:fd07%14]) with mapi id
- 15.02.1118.012; Wed, 11 Jan 2023 14:18:52 +0300
-From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To:     Simon Horman <simon.horman@corigine.com>
-CC:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-        "coreteam@netfilter.org" <coreteam@netfilter.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
-Subject: Re: [PATCH] netfilter: ipset: Fix overflow before widen in the
- bitmap_ip_create() function.
-Thread-Topic: [PATCH] netfilter: ipset: Fix overflow before widen in the
- bitmap_ip_create() function.
-Thread-Index: AQHZJa588H6nj6krsk+2NVbkFBIg8A==
-Date:   Wed, 11 Jan 2023 11:18:52 +0000
-Message-ID: <5bad74e6-46fb-ebd0-4662-bc66e0f5ab5d@infotecs.ru>
-References: <20230109115432.3001636-1-Ilia.Gavrilov@infotecs.ru>
- <Y76NQ7tQVB7kE0dG@corigine.com>
-In-Reply-To: <Y76NQ7tQVB7kE0dG@corigine.com>
-Accept-Language: ru-RU, en-US
-Content-Language: ru-RU
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.17.0.10]
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FF08E108AF643344AF0346C913D2CF39@infotecs.ru>
-Content-Transfer-Encoding: base64
+        Wed, 11 Jan 2023 06:20:38 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1EFFCC7
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:20:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7y4EmNEiB7ucd21p81UzRMuWcGhP/yt/VrhwL2DWDCA=; b=osDX42GXI2c4zukGXf2B5XGfPH
+        z1o0lu/SaLv+XVVg284I7ea4pyFWcT5w135ZtVK14FWediB+MueeCbWaKx4uOo94SmEB9YP/jJJoJ
+        poWVodQOYdW8K8NJVNJnMHDiqR4MCd1XdZ3FQCIegYsjeYOwNCIuy9QUNJX4nRXHESSd6QddmjkbK
+        CmXdiPWzE2QGO+veqy9gpiJUIfyTmtmY9igH+FhW2GAIB2qOP1L9IiXgQLHH1wUt/mjk/T61j0UKu
+        bK1TlD/HXs/0sNmZp/EWhPROtYK4Jh30cY8DMuUcUcxCpYoJ0lR5qda9tFGeDCvo4iZFKB1JgULm/
+        QOSDN/kA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pFZ9h-00455s-IA; Wed, 11 Jan 2023 11:20:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B97BF3001F7;
+        Wed, 11 Jan 2023 12:20:14 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 82AF3201ABB7D; Wed, 11 Jan 2023 12:20:14 +0100 (CET)
+Date:   Wed, 11 Jan 2023 12:20:14 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Joan Bruguera <joanbrugueram@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Juergen Gross <jgross@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: Wake-up from suspend to RAM broken under `retbleed=stuff`
+Message-ID: <Y76bbtJn+jIV3pOz@hirez.programming.kicks-ass.net>
+References: <20230108030748.158120-1-joanbrugueram@gmail.com>
+ <20230109040531.7888-1-joanbrugueram@gmail.com>
 MIME-Version: 1.0
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 174635 [Jan 11 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_msgid_8}, {Tracking_from_domain_doesnt_match_to}, infotecs.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/01/11 06:26:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/01/11 02:11:00 #20757923
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109040531.7888-1-joanbrugueram@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMS8xMS8yMyAxMzoxOSwgU2ltb24gSG9ybWFuIHdyb3RlOg0KPiBIaSBHYXZyaWxvdiwNCj4g
-DQo+IE9uIE1vbiwgSmFuIDA5LCAyMDIzIGF0IDExOjU0OjAyQU0gKzAwMDAsIEdhdnJpbG92IEls
-aWEgd3JvdGU6DQo+PiBXaGVuIGZpcnN0X2lwIGlzIDAsIGxhc3RfaXAgaXMgMHhGRkZGRkZGLCBh
-bmQgbmV0bWFzayBpcyAzMSwgdGhlIHZhbHVlIG9mDQo+PiBhbiBhcml0aG1ldGljIGV4cHJlc3Np
-b24gMiA8PCAobmV0bWFzayAtIG1hc2tfYml0cyAtIDEpIGlzIHN1YmplY3QNCj4+IHRvIG92ZXJm
-bG93IGR1ZSB0byBhIGZhaWx1cmUgY2FzdGluZyBvcGVyYW5kcyB0byBhIGxhcmdlciBkYXRhIHR5
-cGUNCj4+IGJlZm9yZSBwZXJmb3JtaW5nIHRoZSBhcml0aG1ldGljLg0KPj4NCj4+IE5vdGUgdGhh
-dCBpdCdzIGhhcm1sZXNzIHNpbmNlIHRoZSB2YWx1ZSB3aWxsIGJlIGNoZWNrZWQgYXQgdGhlIG5l
-eHQgc3RlcC4NCj4gDQo+IERvIHlvdSBtZWFuIDB4RkZGRkZGRkYgKDggcmF0aGVyIHRoYW4gOCAn
-RidzKSA/DQo+IElmIHNvLCBJIGFncmVlIHdpdGggdGhpcyBwYXRjaC4NCj4gDQoNClllcywgaXQn
-cyBteSB0eXBvLiBJIG1lYW50IDB4RkZGRkZGRkYuDQoNCj4+IEZvdW5kIGJ5IEluZm9UZUNTIG9u
-IGJlaGFsZiBvZiBMaW51eCBWZXJpZmljYXRpb24gQ2VudGVyDQo+PiAobGludXh0ZXN0aW5nLm9y
-Zykgd2l0aCBTVkFDRS4NCj4+DQo+PiBGaXhlczogYjlmZWQ3NDgxODVhICgibmV0ZmlsdGVyOiBp
-cHNldDogQ2hlY2sgYW5kIHJlamVjdCBjcmF6eSAvMCBpbnB1dCBwYXJhbWV0ZXJzIikNCj4+IFNp
-Z25lZC1vZmYtYnk6IElsaWEuR2F2cmlsb3YgPElsaWEuR2F2cmlsb3ZAaW5mb3RlY3MucnU+DQo+
-PiAtLS0NCj4+ICAgbmV0L25ldGZpbHRlci9pcHNldC9pcF9zZXRfYml0bWFwX2lwLmMgfCAyICst
-DQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPj4N
-Cj4+IGRpZmYgLS1naXQgYS9uZXQvbmV0ZmlsdGVyL2lwc2V0L2lwX3NldF9iaXRtYXBfaXAuYyBi
-L25ldC9uZXRmaWx0ZXIvaXBzZXQvaXBfc2V0X2JpdG1hcF9pcC5jDQo+PiBpbmRleCBhOGNlMDRh
-NGJiNzIuLmI4ZjBmYjM3Mzc4ZiAxMDA2NDQNCj4+IC0tLSBhL25ldC9uZXRmaWx0ZXIvaXBzZXQv
-aXBfc2V0X2JpdG1hcF9pcC5jDQo+PiArKysgYi9uZXQvbmV0ZmlsdGVyL2lwc2V0L2lwX3NldF9i
-aXRtYXBfaXAuYw0KPj4gQEAgLTMwOSw3ICszMDksNyBAQCBiaXRtYXBfaXBfY3JlYXRlKHN0cnVj
-dCBuZXQgKm5ldCwgc3RydWN0IGlwX3NldCAqc2V0LCBzdHJ1Y3QgbmxhdHRyICp0YltdLA0KPj4g
-ICANCj4+ICAgCQlwcl9kZWJ1ZygibWFza19iaXRzICV1LCBuZXRtYXNrICV1XG4iLCBtYXNrX2Jp
-dHMsIG5ldG1hc2spOw0KPj4gICAJCWhvc3RzID0gMiA8PCAoMzIgLSBuZXRtYXNrIC0gMSk7DQo+
-IA0KPiBJIHRoaW5rIHRoYXQgaG9zdHMgYWxzbyBvdmVyZmxvd3MsIGluIHRoZSBjYXNlIHlvdSBo
-YXZlIGRlc2NyaWJlZC4NCj4gQWx0aG91Z2ggaXQgYWxzbyBkb2Vzbid0IG1hdHRlciBmb3IgdGhl
-IHNhbWUgcmVhc29uIHlvdSBzdGF0ZS4NCj4gQnV0IGZyb20gYSBjb3JyZWN0bmVzcyBwb2ludCBv
-ZiB2aWV3IHBlcmhhcHMgaXQgc2hvdWxkIGFsc28gYmUgYWRkcmVzc2VkPw0KPiANCg0KDQpBcyBm
-b3IgJ2hvc3RzJywgdGhlIGV4cHJlc3Npb24gIjIgPDwgKDMyIC0gbmV0bWFzayAtIDEpIiBpcyBh
-bHNvIHN1YmplY3QgDQp0byBvdmVyZmxvdywgYnV0IHRoZSB0eXBlIG9mIHRoZSB2YXJpYWJsZSAn
-aG9zdHMnIGlzIHUzMiwgYW5kIHRoZSB0eXBlIA0KY2FzdGluZyBnaXZlcyB0aGUgY29ycmVjdCBy
-ZXN1bHQuIEJ1dCBJIHdpbGwgZml4IGl0IGZvciBjb3JyZWN0bmVzcy4NCg0KDQpUaGFuayB5b3Ug
-Zm9yIHJldmlldy4gSSB3aWxsIGNoYW5nZSB0aGF0IGluIFYyLg0KDQpJbGlhLg0KDQo+PiAtCQll
-bGVtZW50cyA9IDIgPDwgKG5ldG1hc2sgLSBtYXNrX2JpdHMgLSAxKTsNCj4+ICsJCWVsZW1lbnRz
-ID0gMlVMIDw8IChuZXRtYXNrIC0gbWFza19iaXRzIC0gMSk7DQo+PiAgIAl9DQo+PiAgIAlpZiAo
-ZWxlbWVudHMgPiBJUFNFVF9CSVRNQVBfTUFYX1JBTkdFICsgMSkNCj4+ICAgCQlyZXR1cm4gLUlQ
-U0VUX0VSUl9CSVRNQVBfUkFOR0VfU0laRTsNCj4+IC0tIA0KPj4gMi4zMC4yDQo+Pg0KDQo=
+On Mon, Jan 09, 2023 at 04:05:31AM +0000, Joan Bruguera wrote:
+> This fixes wakeup for me on both QEMU and real HW
+> (just a proof of concept, don't merge)
+> 
+> diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
+> index ffea98f9064b..8704bcc0ce32 100644
+> --- a/arch/x86/kernel/callthunks.c
+> +++ b/arch/x86/kernel/callthunks.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/memory.h>
+>  #include <linux/moduleloader.h>
+>  #include <linux/static_call.h>
+> +#include <linux/suspend.h>
+>  
+>  #include <asm/alternative.h>
+>  #include <asm/asm-offsets.h>
+> @@ -150,6 +151,10 @@ static bool skip_addr(void *dest)
+>  	if (dest >= (void *)hypercall_page &&
+>  	    dest < (void*)hypercall_page + PAGE_SIZE)
+>  		return true;
+> +#endif
+> +#ifdef CONFIG_PM_SLEEP
+> +	if (dest == restore_processor_state)
+> +		return true;
+>  #endif
+>  	return false;
+>  }
+> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
+> index 236447ee9beb..e667894936f7 100644
+> --- a/arch/x86/power/cpu.c
+> +++ b/arch/x86/power/cpu.c
+> @@ -281,6 +281,9 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
+>  /* Needed by apm.c */
+>  void notrace restore_processor_state(void)
+>  {
+> +	/* Restore GS before calling anything to avoid crash on call depth accounting */
+> +	native_wrmsrl(MSR_GS_BASE, saved_context.kernelmode_gs_base);
+> +
+>  	__restore_processor_state(&saved_context);
+>  }
+
+Yeah, I can see why, but I'm not really comfortable with this. TBH, I
+don't see how the whole resume code is correct to begin with. At the
+very least it needs a heavy dose of noinstr.
+
+Rafael, what cr3 is active when we call restore_processor_state()?
+
+Specifically, the problem is that I don't feel comfortable doing any
+sort of weird code until all the CR and segment registers have been
+restored, however, write_cr*() are paravirt functions that result in
+CALL, which then gives us a bit of a checken and egg problem.
+
+I'm also wondering how well retbleed=stuff works on Xen, if at all. If
+we can ignore Xen, things are a little earier perhaps.
