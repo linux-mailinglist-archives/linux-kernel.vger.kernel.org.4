@@ -2,130 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7E2665E17
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15120665DF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238344AbjAKOed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:34:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S234421AbjAKOcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:32:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239258AbjAKOcU (ORCPT
+        with ESMTP id S233899AbjAKObj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:32:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611FB1A053
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:28:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673447327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aHSCj4zPC4mkOON80oQEYtx0eXxotvMSZPtDYH2SLv4=;
-        b=XmfSNSiIPFptaK57a4NqiD1+fdP3wgsgAEWUvSwdHtL58r+tbW7wUijuMMTwL1OuKdj/Tb
-        rE9V/ALmHiOcvG3jkkelOYpi2GlU8uwSKzqg2JJjk+QBQFXp8KOkgynjkTuZLFSIKDERqs
-        SuPdN3vf14LnGb+pyQMuhCM6Azs5PFY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-oCkpztbmNSK9cigzUzz1zw-1; Wed, 11 Jan 2023 09:28:44 -0500
-X-MC-Unique: oCkpztbmNSK9cigzUzz1zw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 372FF1C0BEE2;
-        Wed, 11 Jan 2023 14:28:44 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 035671121314;
-        Wed, 11 Jan 2023 14:28:42 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v5 9/9] bio: Fix bio_flagged() so that it can be combined
-From:   David Howells <dhowells@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 11 Jan 2023 14:28:42 +0000
-Message-ID: <167344732239.2425628.14636562879255014501.stgit@warthog.procyon.org.uk>
-In-Reply-To: <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
-References: <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Wed, 11 Jan 2023 09:31:39 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D9A1EECD
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:29:20 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id o13so12570747pjg.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:29:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/OTdQMwfQhFTnQWgBxUmTi+nldVOlVLSts2ym041evY=;
+        b=PKcsdansjEeRaAcKkeijLdmarAq+gEtId5/DH9kZvmyxoY9DfXvZpx6c998ZzBnWqb
+         0dU2rWct8gxtKsac3vuLCV3oJZzZQ4SmsxAhcG4hMwzVghKZuqouC0j8H8hLsPYT5MNz
+         5/4SUhZNfE0WwPTClrfcqgb9yf+hcQ86m3vBRn0vLxsRKdSoeYCMRrtcB8YGmEBGWGy3
+         zRZBCltCnzc1XQTZST+I8q5Tq83PPy1E+021/VkLlaYOxqUXvYISJHBHwomgdRXeChLg
+         mfzo31RiFubhR3iJR8ZfYol5ozgrV1Fg8XAMx7LJOM93E9XJxfsnQwk+TuKOH5uAqmb+
+         aqPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/OTdQMwfQhFTnQWgBxUmTi+nldVOlVLSts2ym041evY=;
+        b=B0GeJ1SOBA/mQHIgsLxpBvfwYy/87PGtk/HsDc9Y9JSzybLvNqs/uWq3tiK59PPORF
+         /4IbIRX79jOCH7qSKx6/QRyFHumIIhlrTDbmsyIw29HMf+xqE2G6VN1OAbSJK7S4pXNA
+         1Y1VsCT0Bw6lewuYHPN8tkZak1CsgBjHh6YSgLq3QaKvDDKFdyZghGXE7kmgerYU4zOA
+         aker9Y7mpDrScDq9ZdeeKVUSU7E3wP15br6uYCugaMFi6P9RBiynX/5jeg0UKKsR4Z++
+         bkGTVycrTa4fkQYfH7796FbsloxGkF17My4+Ma1huRkYY0pt+wBShOCaWTDK3NGCR4tM
+         oxlQ==
+X-Gm-Message-State: AFqh2kr9nLmuAnsVbmeJGRg0jmodW2Jiws4Eq9qe8JQTXx3yBkI6nQqD
+        V2SHUPu1HTGvLiToIVO+iPymIBqE4V0vtV0V
+X-Google-Smtp-Source: AMrXdXv4lUXYYUnixs5G7gSJtKvpyido8l7w37g1c75g2lmWF5dnYZlj0sRiTRwzxjybyOqx7KcHkg==
+X-Received: by 2002:a17:903:11cf:b0:192:9550:339a with SMTP id q15-20020a17090311cf00b001929550339amr70723935plh.52.1673447359882;
+        Wed, 11 Jan 2023 06:29:19 -0800 (PST)
+Received: from localhost.localdomain ([124.123.169.48])
+        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b001928c9d772bsm9559805plk.206.2023.01.11.06.29.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 06:29:19 -0800 (PST)
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        lkft-triage@lists.linaro.org
+Cc:     skhan@linuxfoundation.org, broonie@kernel.org, will@kernel.org,
+        anders.roxell@linaro.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: [PATCH] selftests/arm64: bump timeout to 15 minutes
+Date:   Wed, 11 Jan 2023 19:59:12 +0530
+Message-Id: <20230111142912.81606-1-naresh.kamboju@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix bio_flagged() so that multiple instances of it can be combined by the
-compiler into a single test (arguably, this is a compiler optimisation
-issue[1]).
+LKFT CI found that with the latest mainline kernel (6.1) on
+some QEMU emulators and FVP, the following tests will take
+longer than the kselftest framework default timeout (45 seconds) to
+run and thus got terminated with TIMEOUT error:
+* fp-stress - took about 11m30s
+* sve-ptrace - took about 8m50s
+* check_gcr_el1_cswitch - took about 6m
+* check_user_mem - took about 3m
+* syscall-abi - took about 5m
 
-The problem is that it compares the result of the bitwise-AND to zero.
-This results in an out-of-line bio_release_page() that looks something
-like:
+Current test timeouts:
+not ok 29 selftests: arm64: sve-ptrace # TIMEOUT 45 seconds
+not ok 36 selftests: arm64: check_gcr_el1_cswitch # TIMEOUT 45 seconds
+not ok 41 selftests: arm64: check_user_mem # TIMEOUT 45 seconds
+not ok 46 selftests: arm64: syscall-abi # TIMEOUT 45 seconds
 
-   <+0>:     mov    0x14(%rdi),%eax
-   <+3>:     test   $0x1,%al
-   <+5>:     jne    0xffffffff816dac53 <bio_release_pages+11>
-   <+7>:     test   $0x2,%al
-   <+9>:     je     0xffffffff816dac5c <bio_release_pages+20>
-   <+11>:    movzbl %sil,%esi
-   <+15>:    jmp    0xffffffff816daba1 <__bio_release_pages>
-   <+20>:    jmp    0xffffffff81d0b800 <__x86_return_thunk>
-
-Removing the test (it's superfluous as the return type is bool - the
-compiler will reduce the return to 0 or 1 as needed) results in:
-
-   <+0>:     testb  $0x3,0x14(%rdi)
-   <+4>:     je     0xffffffff816e4af4 <bio_release_pages+15>
-   <+6>:     movzbl %sil,%esi
-   <+10>:    jmp    0xffffffff816dab7c <__bio_release_pages>
-   <+15>:    jmp    0xffffffff81d0b7c0 <__x86_return_thunk>
-
-instead.
-
-The MOVZBL instruction also looks unnecessary[2] - I think it's just
-'re-booling' the mark_dirty.
-
-Fixes: b7c44ed9d2fc ("block: manipulate bio->bi_flags through helpers")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: linux-block@vger.kernel.org
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108370 [1]
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108371 [2]
+Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 ---
+ tools/testing/selftests/arm64/settings | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 tools/testing/selftests/arm64/settings
 
- include/linux/bio.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/bio.h b/include/linux/bio.h
-index 1c6f051f6ff2..2e6109b0fca8 100644
---- a/include/linux/bio.h
-+++ b/include/linux/bio.h
-@@ -227,7 +227,7 @@ static inline void bio_cnt_set(struct bio *bio, unsigned int count)
- 
- static inline bool bio_flagged(struct bio *bio, unsigned int bit)
- {
--	return (bio->bi_flags & (1U << bit)) != 0;
-+	return bio->bi_flags & (1U << bit);
- }
- 
- static inline void bio_set_flag(struct bio *bio, unsigned int bit)
-
+diff --git a/tools/testing/selftests/arm64/settings b/tools/testing/selftests/arm64/settings
+new file mode 100644
+index 000000000000..8959a5dd8ace
+--- /dev/null
++++ b/tools/testing/selftests/arm64/settings
+@@ -0,0 +1 @@
++timeout=900
+\ No newline at end of file
+-- 
+2.30.2
 
