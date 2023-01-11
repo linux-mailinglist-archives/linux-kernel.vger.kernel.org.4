@@ -2,99 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4466C665052
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 01:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31420665057
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 01:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235378AbjAKASn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 19:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
+        id S235300AbjAKAXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 19:23:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235546AbjAKAS2 (ORCPT
+        with ESMTP id S233118AbjAKAXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 19:18:28 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE06D100
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:18:27 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id s5so8058372qtx.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:18:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mkUelddT52dMhaIz46/bDTKpMbObeBPSL3ul3pn2Ees=;
-        b=H0Tg9UtjN3Euh2L3KR4vJ3iNxhOkDwGVzmRsf6uKGrnPd8NYDrQouYnC4I0YSI5i1X
-         BiLYdJDw+ihKaw7EFYU4AbEjGAC6NvCLwOMf7I1IvB4csdYDUc+RrOZIyyqbAOvDia5B
-         /qgyu6eiSdI71j0UGGGx+S0AJvgTlwEv9Pzrs3/x7EXAQJ0SAin4VD37n/NcMLT/O6H/
-         sUDt9jvDUfPslQnZc99goUncSh9k8m+FMcRECtxuUdGL/xVivoMpZbn+O01GJl60nleN
-         YKs2r8Vq5BNa+k/6CgC3oUMOfA3nQ7b4hC4CJs5cQNAhCl1FRHWUTFhVS9/gX9AfW6vS
-         RVzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mkUelddT52dMhaIz46/bDTKpMbObeBPSL3ul3pn2Ees=;
-        b=Rpuj0/7ivYC9HcE9u7//Zw2VJzEzOO7m5j4bXg3xps9nNWrThwGsFtJGuYIa8EOs2R
-         nk6Jpz/R8sEPGzjaWyPxRzdUF8868oN4kAsbi22llOg8CD64EgHPFfKZVn6MUkhd1EKc
-         QyAWb9euOXbwAdl/8imTLxsxUZdr/+0VKOViYyzTl6Bk0q5n7iL1px7vMIEV2Opsh6cB
-         q6LN+seI92Pn1nqAIbFy1Pvn4cLaeFo3z+NfKYxPTqHKyVcy9xIxmeBT7NCyvVYKQZBw
-         Nrv3cn9YgRw4+8MLP2vreakk9SfGxmRvnotYrPriI/q4gvMP/Q02AqCWEr15/xApS9sa
-         O7Uw==
-X-Gm-Message-State: AFqh2krLRI+iizB+aUi8AnPnKTlny3ADeZcTat5Qnb76YTNNyHESnkJ+
-        Xbwcafq5dGAC9Zhwm2nWtqmp8ldYXIJBv+a0zb0jQQ==
-X-Google-Smtp-Source: AMrXdXuhgcUdH/AGtyPPRRardKfs4c4A9elwj8I8dGo1sRndHi0yVG3afsxaNVELH/dx/oGXvwStghvWf4Ykxv/PXDU=
-X-Received: by 2002:ac8:6b8a:0:b0:3a7:e237:83dd with SMTP id
- z10-20020ac86b8a000000b003a7e23783ddmr3201868qts.219.1673396306122; Tue, 10
- Jan 2023 16:18:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20221228192438.2835203-1-vannapurve@google.com>
- <20221228192438.2835203-5-vannapurve@google.com> <Y7xbC+leVdO0TRVE@google.com>
-In-Reply-To: <Y7xbC+leVdO0TRVE@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Tue, 10 Jan 2023 16:18:15 -0800
-Message-ID: <CAGtprH_F-U799DT9OkrC=pEQJYt0=Tj2WWuKuczm6z2ftUZuQA@mail.gmail.com>
-Subject: Re: [V4 PATCH 4/4] KVM: selftests: x86: Invoke kvm hypercall as per
- host cpu
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        shuah@kernel.org, bgardon@google.com, oupton@google.com,
-        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 19:23:14 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300234F126;
+        Tue, 10 Jan 2023 16:23:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=lB3/oUiQ+pVa3onRwFzKH8YJVkOYTVRbneHLzsVtvD4=; b=czfF3gI5EhN07SWurtEOumrABb
+        F5oGtQmkN7dmn4KMRc9NnpsWCE31Lps7MoC2Xchrnf8aKA70fK0tIOb6FP8PqVsgBlpm1YzVDDZOP
+        JKg8zgIT+Du2L1R0Y7galc/ycYbEqySqtMnQT77KcZ3uZUGdIbIfyk2UUEx4O4ZKs2ao=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41152 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pFOtV-0002cr-Nn; Tue, 10 Jan 2023 19:23:06 -0500
+Date:   Tue, 10 Jan 2023 19:23:05 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     hvilleneuve@dimonoff.com, jic23@kernel.org, lars@metafoo.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <20230110192305.0214a1075518c7d5774e8166@hugovil.com>
+In-Reply-To: <c4b5c190-5fb5-17f2-69ce-7137ef7f33db@wanadoo.fr>
+References: <20230110160124.3853593-1-hugo@hugovil.com>
+        <20230110160124.3853593-2-hugo@hugovil.com>
+        <c4b5c190-5fb5-17f2-69ce-7137ef7f33db@wanadoo.fr>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/2] iio: adc: ti-ads7924: add Texas Instruments
+ ADS7924 driver
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 10:21 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> KVM: selftests: Use host's native hypercall instruction in kvm_hypercall()
->
-> On Wed, Dec 28, 2022, Vishal Annapurve wrote:
-> > Invoke vmcall/vmmcall instructions from kvm_hypercall as per host CPU
->
-> () for functions, i.e. kvm_hypercall().
->
-> > type.
->
-> s/type/vendor, "type" is too generic.
->
-> > CVMs and current kvm_hyerpcall callers need to execute hypercall
->
-> CVM isn't a not ubiquitous acronym.  I would avoid it entirely because "CVM"
-> doesn't strictly imply memory encryption, e.g. KVM could still patch the guest in
-> a pKVM-like implementation.
->
->   Use the host CPU's native hypercall instruction, i.e. VMCALL vs. VMMCALL,
->   in kvm_hypercall(), as relying on KVM to patch in the native hypercall on
->   a #UD for the "wrong" hypercall requires KVM_X86_QUIRK_FIX_HYPERCALL_INSN
->   to be enabled and flat out doesn't work if guest memory is encrypted with
->   a private key, e.g. for SEV VMs.
+On Tue, 10 Jan 2023 19:50:42 +0100
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
 
-Ack, this makes sense.
+> Le 10/01/2023 =E0 17:01, Hugo Villeneuve a =E9crit=A0:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >=20
+> > The Texas Instruments ADS7924 is a 4 channels, 12-bit analog to
+> > digital converter (ADC) with an I2C interface.
+> >=20
+> > Datasheet: https://www.ti.com/lit/gpn/ads7924
+> >=20
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+>=20
+> Hi,
+>=20
+> should there be a v3, a few nits below.
+
+Hi,
+there will definitely be a V3 (missing include), thanks for the input, I wi=
+ll incorporate these changes into V3.
+
+Hugo.
+
+
+>=20
+> CJ
+>=20
+> >   MAINTAINERS                  |   7 +
+> >   drivers/iio/adc/Kconfig      |  11 +
+> >   drivers/iio/adc/Makefile     |   1 +
+> >   drivers/iio/adc/ti-ads7924.c | 492 +++++++++++++++++++++++++++++++++++
+> >   4 files changed, 511 insertions(+)
+> >   create mode 100644 drivers/iio/adc/ti-ads7924.c
+> >=20
+>=20
+> [...]
+>=20
+> > +static int ads7924_get_channels_config(struct i2c_client *client,
+> > +				       struct iio_dev *indio_dev)
+> > +{
+> > +	struct ads7924_data *priv =3D iio_priv(indio_dev);
+> > +	struct device *dev =3D priv->dev;
+> > +	struct fwnode_handle *node;
+> > +	int num_channels =3D 0;
+> > +
+> > +	device_for_each_child_node(dev, node) {
+> > +		u32 pval;
+> > +		unsigned int channel;
+> > +
+> > +		if (fwnode_property_read_u32(node, "reg", &pval)) {
+> > +			dev_err(dev, "invalid reg on %pfw\n", node);
+> > +			continue;
+> > +		}
+> > +
+> > +		channel =3D pval;
+> > +		if (channel >=3D ADS7924_CHANNELS) {
+> > +			dev_err(dev, "invalid channel index %d on %pfw\n",
+> > +				channel, node);
+> > +			continue;
+> > +		}
+> > +
+> > +		num_channels++;
+> > +	}
+> > +
+> > +	if (num_channels > 0) {
+> > +		dev_dbg(dev, "found %d ADC channels\n", num_channels);
+> > +		return 0;
+> > +	} else {
+> > +		return -EINVAL;
+> > +	}
+>=20
+> 	if (num_channels <=3D 0)
+> 		return -EINVAL;
+>=20
+> 	dev_dbg(dev, "found %d ADC channels\n", num_channels);
+> 	return 0;
+>=20
+> is much more usual.
+>=20
+> > +}
+> > +
+>=20
+> [...]
+>=20
+> > +static int ads7924_reset(struct iio_dev *indio_dev)
+> > +{
+> > +	struct ads7924_data *data =3D iio_priv(indio_dev);
+> > +
+> > +	if (data->reset_gpio) {
+> > +		gpiod_set_value(data->reset_gpio, 1); /* Assert. */
+> > +		/* Educated guess: assert time not specified in datasheet... */
+> > +		mdelay(100);
+> > +		gpiod_set_value(data->reset_gpio, 0); /* Deassert. */
+> > +	} else {
+> > +		int ret;
+>=20
+> having 'ret' near 'struct ads7924_data *data' is more usual and saves 1 L=
+oC.
+>=20
+> > +
+> > +		/*
+> > +		 * A write of 10101010 to this register will generate a
+> > +		 * software reset of the ADS7924.
+> > +		 */
+> > +		ret =3D regmap_write(data->regmap, ADS7924_RESET_REG, 0b10101010);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > +
+> > +	return 0;
+> > +};
+>=20
+>=20
+
+
+--=20
+Hugo Villeneuve <hugo@hugovil.com>
