@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C42665A3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87D4665A46
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237970AbjAKLcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
+        id S238068AbjAKLce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233517AbjAKLb3 (ORCPT
+        with ESMTP id S234084AbjAKLb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 Jan 2023 06:31:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D428795AA
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:31:19 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26537959F;
+        Wed, 11 Jan 2023 03:31:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7050061C50
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 614B9C433EF;
-        Wed, 11 Jan 2023 11:31:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7F8BB81B8D;
+        Wed, 11 Jan 2023 11:31:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D567C433D2;
+        Wed, 11 Jan 2023 11:31:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673436678;
-        bh=u0VY5UwoT2+QL9Z3Dz17VePvzzJgSFHl9JCzw67dyL8=;
+        s=korg; t=1673436681;
+        bh=0Bpc3jZjc4ubxRXEsKaSqd4DQvO/82q+vPfR3P3xTaU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nz5K2gpAFAyrqyOSVSux5kKvWuiO9t6VXo21tG4KCohZVpkVPAQ3/UvfAnA62G36m
-         sSj86HDetffFNjIp9ZNRFbafyHfq57OLK5airjkXW7PkPJ8wSs+YCxT4ZC8jr8XCNj
-         OTUlCToAaIXetkyBFcOPz6eaknANgIBjAlojrRe4=
+        b=r2G5tc8BY8ykHRTD/OsbadLcY1VbAKeAdi6TlC8+3y+LG0eFIpUqlRNPaXjhniqDL
+         ofcdXdlfExzRc5T+fiT8Xz3RLG5A4DfqZyKr1Zs88N17J/jZVrA+gpAkuOLjqrU5tj
+         MpXeAEjbSL302ItcLZrQgjNIM4x0MVe9LfV8AhMI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 07/16] driver core: device_get_devnode() should take a const *
-Date:   Wed, 11 Jan 2023 12:30:09 +0100
-Message-Id: <20230111113018.459199-8-gregkh@linuxfoundation.org>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
+Subject: [PATCH v2 08/16] vio: move to_vio_dev() to use container_of_const()
+Date:   Wed, 11 Jan 2023 12:30:10 +0100
+Message-Id: <20230111113018.459199-9-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111113018.459199-1-gregkh@linuxfoundation.org>
 References: <20230111113018.459199-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2530; i=gregkh@linuxfoundation.org; h=from:subject; bh=u0VY5UwoT2+QL9Z3Dz17VePvzzJgSFHl9JCzw67dyL8=; b=owGbwMvMwCRo6H6F97bub03G02pJDMn75p44vv235FOPa6d5plXpWzfci+p49WJGz/enaxZrmfbe 2/lApiOWhUGQiUFWTJHlyzaeo/srDil6GdqehpnDygQyhIGLUwAm0mfJMFdmTRNz4MmU+0fy731m/V r/nN2fOYhhfqiKw5tnfBXRf9V2rz+yKPr+9dPHDQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2143; i=gregkh@linuxfoundation.org; h=from:subject; bh=0Bpc3jZjc4ubxRXEsKaSqd4DQvO/82q+vPfR3P3xTaU=; b=owGbwMvMwCRo6H6F97bub03G02pJDMn75p64zvshJ7oi+c3+BtE+i8Apuy+b/guyP3N4Tu78wtP/ ciJtO2JZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAi1VsY5mfKqPws5+bR2mlWnO3iE2 ykzmb3jGGuqNfd0JrDl5b/V425UlEbUj9xSdYrAA==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,64 +58,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-device_get_devnode() should take a constant * to struct device as it
-does not modify it in any way, so modify the function definition to do
-this and move it out of device.h as it does not need to be exposed to
-the whole kernel tree.
+The driver core is changing to pass some pointers as const, so move
+to_vio_dev() to use container_of_const() to handle this change.
+to_vio_dev() now properly keeps the const-ness of the pointer passed
+into it, while as before it could be lost.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Won Chung <wonchung@google.com>
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-kernel@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/base/base.h    | 2 ++
- drivers/base/core.c    | 2 +-
- include/linux/device.h | 2 --
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ arch/powerpc/include/asm/vio.h | 5 +----
+ arch/sparc/include/asm/vio.h   | 5 +----
+ 2 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/base/base.h b/drivers/base/base.h
-index 7d4803c03d3e..a8a119c36bdc 100644
---- a/drivers/base/base.h
-+++ b/drivers/base/base.h
-@@ -158,6 +158,8 @@ extern void device_block_probing(void);
- extern void device_unblock_probing(void);
- extern void deferred_probe_extend_timeout(void);
- extern void driver_deferred_probe_trigger(void);
-+const char *device_get_devnode(const struct device *dev, umode_t *mode,
-+			       kuid_t *uid, kgid_t *gid, const char **tmp);
+diff --git a/arch/powerpc/include/asm/vio.h b/arch/powerpc/include/asm/vio.h
+index e7479a4abf96..cc9b787627ad 100644
+--- a/arch/powerpc/include/asm/vio.h
++++ b/arch/powerpc/include/asm/vio.h
+@@ -161,10 +161,7 @@ static inline struct vio_driver *to_vio_driver(struct device_driver *drv)
+ 	return container_of(drv, struct vio_driver, driver);
+ }
  
- /* /sys/devices directory */
- extern struct kset *devices_kset;
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index a3e14143ec0c..72ec54a8a4e1 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3739,7 +3739,7 @@ static struct device *next_device(struct klist_iter *i)
-  * a name. This memory is returned in tmp and needs to be
-  * freed by the caller.
-  */
--const char *device_get_devnode(struct device *dev,
-+const char *device_get_devnode(const struct device *dev,
- 			       umode_t *mode, kuid_t *uid, kgid_t *gid,
- 			       const char **tmp)
- {
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 318861000b83..90aaf308c259 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -907,8 +907,6 @@ int device_rename(struct device *dev, const char *new_name);
- int device_move(struct device *dev, struct device *new_parent,
- 		enum dpm_order dpm_order);
- int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid);
--const char *device_get_devnode(struct device *dev, umode_t *mode, kuid_t *uid,
--			       kgid_t *gid, const char **tmp);
- int device_is_dependent(struct device *dev, void *target);
+-static inline struct vio_dev *to_vio_dev(struct device *dev)
+-{
+-	return container_of(dev, struct vio_dev, dev);
+-}
++#define to_vio_dev(__dev)	container_of_const(__dev, struct vio_dev, dev)
  
- static inline bool device_supports_offline(struct device *dev)
+ #endif /* __KERNEL__ */
+ #endif /* _ASM_POWERPC_VIO_H */
+diff --git a/arch/sparc/include/asm/vio.h b/arch/sparc/include/asm/vio.h
+index 2d7bdf665fd3..8a0c3c11c9ce 100644
+--- a/arch/sparc/include/asm/vio.h
++++ b/arch/sparc/include/asm/vio.h
+@@ -488,10 +488,7 @@ static inline struct vio_driver *to_vio_driver(struct device_driver *drv)
+ 	return container_of(drv, struct vio_driver, driver);
+ }
+ 
+-static inline struct vio_dev *to_vio_dev(struct device *dev)
+-{
+-	return container_of(dev, struct vio_dev, dev);
+-}
++#define to_vio_dev(__dev)	container_of_const(__dev, struct vio_dev, dev)
+ 
+ int vio_ldc_send(struct vio_driver_state *vio, void *data, int len);
+ void vio_link_state_change(struct vio_driver_state *vio, int event);
 -- 
 2.39.0
 
