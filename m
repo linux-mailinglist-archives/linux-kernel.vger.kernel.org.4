@@ -2,76 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D42D6651B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B481E6651BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbjAKCZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 21:25:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S235550AbjAKC0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 21:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233306AbjAKCZk (ORCPT
+        with ESMTP id S235314AbjAKC0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 21:25:40 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F95983
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:25:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=stucP06R0qWVO+IUCALRaxe+XhbUCnMB6X6QtRA9Sko=; b=ZCQNIzOYkwHUig19qLe9/5Og8q
-        plEZTfpntHXpPR5LLxIQLVI6G+DN6Javys4capsQOnmps842Cu+tLBfFtfztFEzKVlmJCEsfHWU/a
-        jyCuKHe6BUcQyouIjz9X+iHCMgstdtldYHv9cNg9gI3hqDRcAaxZYki0gfRodDeusobi9rAsbcTzX
-        kZ9mrhw631XTWHTQ8r+S4ZdWIQdWeNfnTnQNp2ikqynb2zXdB8BbsxdDTAAN5dUFDjRGcBo4JoaYM
-        L1mV1XB7xTcS5PcH5zATfz/p/2dJsllUt6dX1cBs2tAZ7U3OXZEh8A+j+eBVB3E+mqc2A2ECwyW4/
-        262EZcOg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pFQo3-0016gd-2Z;
-        Wed, 11 Jan 2023 02:25:35 +0000
-Date:   Wed, 11 Jan 2023 02:25:35 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [RESEND PATCH] fs/cramfs: Convert kmap() to kmap_local_data()
-Message-ID: <Y74eH0+++0HqHXV7@ZenIV>
-References: <20230109182843.12056-1-fmdefrancesco@gmail.com>
+        Tue, 10 Jan 2023 21:26:39 -0500
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 605DD63A1;
+        Tue, 10 Jan 2023 18:26:37 -0800 (PST)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 11 Jan 2023 11:26:36 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 220E82058B4F;
+        Wed, 11 Jan 2023 11:26:36 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 11 Jan 2023 11:26:36 +0900
+Received: from plum.e01.socionext.com (unknown [10.212.243.119])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 91CFC3D58;
+        Wed, 11 Jan 2023 11:26:35 +0900 (JST)
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marek Vasut <marex@denx.de>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: [PATCH net] dt-bindings: net: snps,stmmac: Fix inconsistencies in some properties belonging to stmmac-axi-config
+Date:   Wed, 11 Jan 2023 11:26:22 +0900
+Message-Id: <20230111022622.6779-1-hayashi.kunihiko@socionext.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230109182843.12056-1-fmdefrancesco@gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 07:28:43PM +0100, Fabio M. De Francesco wrote:
-> The use of kmap() is being deprecated in favor of kmap_local_page().
-> 
-> There are two main problems with kmap(): (1) It comes with an overhead as
-> the mapping space is restricted and protected by a global lock for
-> synchronization and (2) it also requires global TLB invalidation when the
-> kmap’s pool wraps and it might block when the mapping space is fully
-> utilized until a slot becomes available.
-> 
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page faults, and can be called from any context (including interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> the tasks can be preempted and, when they are scheduled to run again, the
-> kernel virtual addresses are restored and still valid.
-> 
-> Since its use in fs/cramfs is safe everywhere, it should be preferred.
-> 
-> Therefore, replace kmap() with kmap_local_page() in fs/cramfs. Instead
-> of open-coding kmap_local_page() + memcpy(), use memcpy_from_page().
+The description of some properties in stmmac-axi-config don't match the
+behavior of the corresponding driver. Fix the inconsistencies by fixing
+the dt-schema.
 
-Applied (#work.misc).
+Fixes: 5361660af6d3 ("dt-bindings: net: snps,dwmac: Document stmmac-axi-config subnode")
+Fixes: afea03656add ("stmmac: rework DMA bus setting and introduce new platform AXI structure")
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+---
+ .../devicetree/bindings/net/snps,dwmac.yaml      | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+In this patch the definition of the corresponding driver is applied.
+If applying the definition of the devicetree, we need to change the driver
+instead of this patch.
+
+diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+index e88a86623fce..2332bf7cfcd4 100644
+--- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+@@ -158,11 +158,11 @@ properties:
+         * snps,xit_frm, unlock on WoL
+         * snps,wr_osr_lmt, max write outstanding req. limit
+         * snps,rd_osr_lmt, max read outstanding req. limit
+-        * snps,kbbe, do not cross 1KiB boundary.
++        * snps,axi_kbbe, do not cross 1KiB boundary.
+         * snps,blen, this is a vector of supported burst length.
+-        * snps,fb, fixed-burst
+-        * snps,mb, mixed-burst
+-        * snps,rb, rebuild INCRx Burst
++        * snps,axi_fb, fixed-burst
++        * snps,axi_mb, mixed-burst
++        * snps,axi_rb, rebuild INCRx Burst
+ 
+   snps,mtl-rx-config:
+     $ref: /schemas/types.yaml#/definitions/phandle
+@@ -516,7 +516,7 @@ properties:
+         description:
+           max read outstanding req. limit
+ 
+-      snps,kbbe:
++      snps,axi_kbbe:
+         $ref: /schemas/types.yaml#/definitions/uint32
+         description:
+           do not cross 1KiB boundary.
+@@ -528,17 +528,17 @@ properties:
+         minItems: 7
+         maxItems: 7
+ 
+-      snps,fb:
++      snps,axi_fb:
+         $ref: /schemas/types.yaml#/definitions/flag
+         description:
+           fixed-burst
+ 
+-      snps,mb:
++      snps,axi_mb:
+         $ref: /schemas/types.yaml#/definitions/flag
+         description:
+           mixed-burst
+ 
+-      snps,rb:
++      snps,axi_rb:
+         $ref: /schemas/types.yaml#/definitions/flag
+         description:
+           rebuild INCRx Burst
+-- 
+2.25.1
+
