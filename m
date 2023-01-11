@@ -2,223 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F09E666083
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1480666081
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234896AbjAKQbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
+        id S238964AbjAKQay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234412AbjAKQaR (ORCPT
+        with ESMTP id S239593AbjAKQaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:30:17 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913431C417;
-        Wed, 11 Jan 2023 08:29:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673454596; x=1704990596;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=S0qQm9H2FJvzQbUjGJ77JCYSJVK7Oxqi71qeHyUH5C4=;
-  b=LXlydwhm+JQtjyGg02rm3kHp+pQ6d+TmAZE7VKF2jvxeIXdCjtCnw0R/
-   D68+lVfDKyA/ORJnn03/jtKX1qBtzxx5EwX4Sha5A8s2HfssxqmPRYelw
-   zhwUiUOgXO+4pRamS7HiHqRlKG39wsk/OsWqSQoSXEUmHLoEr0wTOYU4S
-   guI+V/ZYpzHMcdQZKLMsRuWoreDdMQyEmwHAQ1MAm1TljSJo3cG/zJU7M
-   +Av88++jSyL6YjtDkDEzvPVC59Wjc5UAt8f3nibqBc0U7wo/2G0rYUOav
-   a66oEeJAN5PdhfTf4gtf6l0GttuQstopTI/ISZMBGdq3+FcnJPGeKOgx5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303157951"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="303157951"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:29:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="831388696"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="831388696"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga005.jf.intel.com with ESMTP; 11 Jan 2023 08:29:28 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 11 Jan 2023 08:29:27 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 11 Jan 2023 08:29:27 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 11 Jan 2023 08:29:27 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LQmE76ymAPEXH6Dn/bSfBC/x0AiJa3dE9eh8OnOLN2ZeyAxKop1EnwxcCi3h5pkEl+BkSaShRBPHrtRsq8qaCxhmUXB7O6rFFNdqq5F/2ha41PNAh8jhWE8nPrI4ZR4zct5BhacuJubgxYIhmGxLUxYEaDiR/gd/xIfMqd+OJazsCb0KduTfj3BbQA7hLnCERBG9gLKEUhoOZc3/P6A1Cy1NQu/MH+HC7IsAVP/M4F7yBCOXiOwbY5aXU/Zi/nCTwbTLS7l8Hwd6dMoevutxcF1KE64O3ccOOI2TVS7b0cdcGLHvKpniRXAqwQDp/GB9upmZtej8NMzR7zaC71Pdfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WuKLYbTT8nVmttsibkPdU4dYmk3DlGaucEgMsgs3Of8=;
- b=D5falYEh/nUzfF1dYnwOaMheIQcAwxmd3yGvgxd5MoFCIa/4OYoMfMeXatdjSzm2VufKbAlkU4ZrYAieEEaTzIY24Wx6GPTVl8K5XZElLchDqNX9zlzOGSqBZCnsi6UxQZmzlrz/etSOuHS78AVeVB9JMPBoCJxRAY11P/MhzyGGPa2V5od49M2pja7OpGKiDCsimxa0xMp2MMWr6JWCa5OyFy9e0FfW9Z9KaahYi7yBBXA8NYbU8AiYIQdL5WNMD/rpxXs5wDQpNoh3gOC//ePLx1z6ZZjXulAY26tAhWRODQph2ngv6E3vlW8oIi+4s9r/ECYJprOL1sAbe19GcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by MW4PR11MB7101.namprd11.prod.outlook.com (2603:10b6:303:219::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Wed, 11 Jan
- 2023 16:29:25 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::288d:5cae:2f30:828b]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::288d:5cae:2f30:828b%8]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 16:29:25 +0000
-Date:   Wed, 11 Jan 2023 08:29:20 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-CC:     Jeff Moyer <jmoyer@redhat.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Benjamin LaHaise <bcrl@kvack.org>, <linux-aio@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
-Subject: Re: [PATCH v2] fs/aio: Replace kmap{,_atomic}() with
- kmap_local_page()
-Message-ID: <Y77j4ItupAhjh76P@iweiny-desk3>
-References: <20230109175629.9482-1-fmdefrancesco@gmail.com>
- <Y73+xKXDELSd14p1@ZenIV>
- <x498ri9ma5n.fsf@segfault.boston.devel.redhat.com>
- <Y77dkghufF6GVq1Y@ZenIV>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y77dkghufF6GVq1Y@ZenIV>
-X-ClientProxiedBy: BY5PR03CA0007.namprd03.prod.outlook.com
- (2603:10b6:a03:1e0::17) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Wed, 11 Jan 2023 11:30:00 -0500
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689FECE07;
+        Wed, 11 Jan 2023 08:29:34 -0800 (PST)
+Received: by mail-qt1-f178.google.com with SMTP id h16so2768162qtu.2;
+        Wed, 11 Jan 2023 08:29:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JjrcWIBjmmPlwZTcOfDOO38h43AQNOgajs77lr03LAg=;
+        b=gvZbZGhnSt6eaRePRZ2MrpMG4AamK+sJRNN7LI/52IY7iGgg+dy65NfUKeCzyfAfa+
+         W3ciqyhotOLZP9seeS9s4+yo2ufjLC6Nmio2rC/qZ9d2ugkGQ8EmgQVZp+RNL9HLK9WB
+         KCSo16c3mh7HmToWJPy24DYavBziuqkONNlJ5VFt9UKBvDwJTPhuaqmG3t9LThMlY530
+         0rAPBObEuxxPcf1ruHqlJQmZiteKAY9IPybsBL7cNXhOS9Ks0/ovGhPcK/7/hZYLsfcz
+         X6FHSb4Y8dqLOshKNPPrmfAzZKdS01guv91HdwzYnaZIYMycdFcoXpzrkJtWjKr8KYE4
+         n9CA==
+X-Gm-Message-State: AFqh2kq1wv/94GiLEjLsgCCDIkMn+5SI88aJMEvdczXnt5gYzHJRNOgA
+        MMw7A0YbABKnwBgDXZhU4F9Gf2GQuqI03w==
+X-Google-Smtp-Source: AMrXdXsUDgB+NK0Fpm3QJtCw8pkwCUFw79A9mCE9laXxleJYgXMh3P/HRxy74N8CrLQDsBmSl1FmfQ==
+X-Received: by 2002:ac8:4c8c:0:b0:3a5:3134:48ac with SMTP id j12-20020ac84c8c000000b003a5313448acmr8939578qtv.3.1673454573263;
+        Wed, 11 Jan 2023 08:29:33 -0800 (PST)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id d16-20020ac85350000000b003a689a5b177sm7774491qto.8.2023.01.11.08.29.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 08:29:33 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id 16so15609333ybc.0;
+        Wed, 11 Jan 2023 08:29:32 -0800 (PST)
+X-Received: by 2002:a25:46c6:0:b0:7b8:a0b8:f7ec with SMTP id
+ t189-20020a2546c6000000b007b8a0b8f7ecmr2429658yba.36.1673454572643; Wed, 11
+ Jan 2023 08:29:32 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|MW4PR11MB7101:EE_
-X-MS-Office365-Filtering-Correlation-Id: afd7db0f-6d8a-4028-705e-08daf3f100e2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: s5iow7MBZ8+76cB+7jLLX78WoilELM/4RFHVO2Sk0MFqP3uXDh9eo6lLn0SdSnQulqSIsCBLiPlI1lwLnTAiTv4RFTlvCqJmqzDSV2KjJnsL8pKMkF6RMksfmMtbSglKsOZ7mWxs0o+5LjkXVQCDIeoj+swrfA8OIWNvz7DMD7ByeXvZCSnuptq1FoCpAMfjK1C8YHarBKQVWQ3EvhPptHm+SNCyzpNpeYLuFvO7+znp0nVUmyJsQbcAd22AY2E6/cf0bRBz01VSxZIiBsbFvzHMDChKBKJVVnMuYEWViEzlaGDwP+j+b/ciAOlRhzv1ApoQAI6oSELjcaMjcF5oZjwHMtDwzFBYQH2sxXNHlAy4waALtpExbTi5VnKbP9xAgm0H2l7t6GhlOuZb3Asw4Zwmdvo7NyNyaslF1f0FwJ/776W1K+s5AOQZeS99nfmUkncAsgSUoGUddJWJwvKvBOwSNLCkRwxgLTlNJioNzCr5fHviC8RCVnlQjI2Ksy3dOsurh0AYKZU0y1y8QV6Ty6DBfDgguU7jxD5NSuAHe7bo7rKTBTo74y4iBltkjSujpKLkLv0sPKveaslNkAUzuRD6F0RJ7vi71GJpdnLMPUDg/MczRpr/y6ylu/qrd7Gv+aY0opb6TKp6UvYwPoORgg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(366004)(39860400002)(396003)(346002)(136003)(451199015)(82960400001)(9686003)(478600001)(6486002)(41300700001)(38100700002)(6512007)(86362001)(316002)(54906003)(26005)(33716001)(66556008)(66476007)(66946007)(186003)(8676002)(6916009)(5660300002)(107886003)(6666004)(6506007)(2906002)(4326008)(44832011)(83380400001)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wuq4zA/ipppKiEhLzs9bAxSs0w9O7EktWvgVzSKDzGjvm8cIAz4KK5pqZDnK?=
- =?us-ascii?Q?TFm28xfatGHik9VrPjPyjakEXYjlqDjfOLRGkxbrzJaJzK7nNkJYvDj2sKdV?=
- =?us-ascii?Q?GTwvb9Xtp41RMIKeD1Os8PpVReGjIKfaNSIjj3jYg4FvbJdaoFsbC4E4So/K?=
- =?us-ascii?Q?/e89IetoTRaZVNCSr6PaEhyrz1yFZFDowIJXy5JFXuPbPkfLqbmrKAJDmBYs?=
- =?us-ascii?Q?RBMfGG7gVt1aDgNPkfHsK8w+VXG6N3WYALU6CywPErUKIWS72GNV5JW/59Uz?=
- =?us-ascii?Q?hebhcJq3vYvY4euREHdT+B4IoLHaeEjemTo/CfBngsHgH0y6G+YTTss74t7y?=
- =?us-ascii?Q?fMWnn5Rku3StRfPGsp3yDrJTYM/Y+/FCKxndSrdRkOQUM9+3eZx2K6Hi9Idu?=
- =?us-ascii?Q?Krn+XZi8VXPE/x8rQvQhQ1PtaKV9BdmjBXGjNLJAV5VudTaaADPhkhtvoAuX?=
- =?us-ascii?Q?M30S+PGDIbySC3bm8srCmf9a8OoUXrXxHYDdhxRATdh5fBDm+aXZ7DvBTLTI?=
- =?us-ascii?Q?tcAgwRCZZZh9/idrBQjmuTQ+aHJ+Zf78qkty2R47O8u159QYQxGFy96xzCer?=
- =?us-ascii?Q?lyMKFe/NXMqi9EuQwE1jclhKYRUdp7l+PYcDxN2YrwYY2Rnwr6lWu6s5YGlZ?=
- =?us-ascii?Q?kI0mZcyeIcMqvUVw0REx1XmSsPd9Onspb3HDso0OhYgAp1EjFaap+4anxgfC?=
- =?us-ascii?Q?6ErHY8iV5N2Fo/jroJkum2LfDWhrPCM0UeANMnHsAijULeZ/wtXbbiJId86Q?=
- =?us-ascii?Q?0eKhBkPhW4brR7ezKgJfQBHZeYoin3caLYOoJgSVs2A28yDCm1IcaQOI310N?=
- =?us-ascii?Q?Kp/G/l/k9Fd+qrT+ASVy9Zyerix1ERY3xLalOsUoYLBqkmjcDAujN2yQmTn7?=
- =?us-ascii?Q?WTAZJ9t1YI1AwOWwJXEJ+kcJW9kLFnwRfTMmUuS4IKPdPTaw6TnMI95a4Oos?=
- =?us-ascii?Q?JhLTUfDjkxzDMatcGJ30gBqirVtYni3hWRUnj30FXm/IGS2CJMelxVFAaS+X?=
- =?us-ascii?Q?tPYVxAh6tHKH0ugBm+VM3MI1GkKNXYgcH8XNEVEZhxg1MG9RF0skNiEBSDSL?=
- =?us-ascii?Q?h5P/2nnDoku9IxEqnzjJsqPsHlQiTfl3Hliz2fQ9+NvcI3IKeMNkd6Zv9HLj?=
- =?us-ascii?Q?lK9Dt4+3vNpIicopIzXy66dnzILX8JobW8khmzu+4KqfEETNZaNMlLozScqh?=
- =?us-ascii?Q?XdMtfr8t7TaFP4uoLPdIdTbIMF/8S6cD231aUwOVMA6oqaOU5i/jMcqEnQCr?=
- =?us-ascii?Q?QDtj8c31bsp7BOFql+EpjQAfOKMSxWuCDHYmPPdZcVzoQDuYeziD8jiXgT6v?=
- =?us-ascii?Q?VBpOQg7XlJOmamDE+qiSnRC/W+1JFJLNIM7bzv6gsmuEYNalnzvpVpA3oHez?=
- =?us-ascii?Q?HbSgpviYquU+5HRE5mZHugqBfv+OxDHAY4ZF480VDUnVtJGJ2PbWkBAJhqYb?=
- =?us-ascii?Q?mI+pXU8mY7BSG3A1YKNXTN2bPuPD1iDH30o3dlGNt8SLzDQzru1jCG4WmWMO?=
- =?us-ascii?Q?52XKbOj8B6jo/QGPtfbSpPjme/GnkaGwcHCeczMVzbGxnNv+Eocq56r8jpQM?=
- =?us-ascii?Q?UAlZpcqJzOgCVNCs7dhQrxfGJf1C0/IjI+2tstRE?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: afd7db0f-6d8a-4028-705e-08daf3f100e2
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 16:29:25.7759
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zA7dATwrOEMctZ+lotdKT/JsbAT6cv7KE42eXZSGzFbOPscGGTgBBc5NXbFJ+J23A0oQauLEvK3nfMr4X/2/KQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7101
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230104141245.8407-1-aford173@gmail.com>
+In-Reply-To: <20230104141245.8407-1-aford173@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 11 Jan 2023 17:29:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWuE4L6K4ULdVLZKeLwd3xYfzkyBNrf6s7Qc2kf9b-_Cg@mail.gmail.com>
+Message-ID: <CAMuHMdWuE4L6K4ULdVLZKeLwd3xYfzkyBNrf6s7Qc2kf9b-_Cg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] arm64: dts: beacon-renesom: Fix gpio expander reference
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-renesas-soc@vger.kernel.org, aford@beaconembedded.com,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 04:02:26PM +0000, Al Viro wrote:
-> On Wed, Jan 11, 2023 at 09:13:40AM -0500, Jeff Moyer wrote:
-> > Hi, Al,
-> > 
-> > Al Viro <viro@zeniv.linux.org.uk> writes:
-> > 
-> > > On Mon, Jan 09, 2023 at 06:56:29PM +0100, Fabio M. De Francesco wrote:
-> > >
-> > >> -	ring = kmap_atomic(ctx->ring_pages[0]);
-> > >> +	ring = kmap_local_page(ctx->ring_pages[0]);
-> > >>  	ring->nr = nr_events;	/* user copy */
-> > >>  	ring->id = ~0U;
-> > >>  	ring->head = ring->tail = 0;
-> > >> @@ -575,7 +575,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
-> > >>  	ring->compat_features = AIO_RING_COMPAT_FEATURES;
-> > >>  	ring->incompat_features = AIO_RING_INCOMPAT_FEATURES;
-> > >>  	ring->header_length = sizeof(struct aio_ring);
-> > >> -	kunmap_atomic(ring);
-> > >> +	kunmap_local(ring);
-> > >>  	flush_dcache_page(ctx->ring_pages[0]);
-> > >
-> > > I wonder if it would be more readable as memcpy_to_page(), actually...
-> > 
-> > I'm not sure I understand what you're suggesting.
-> 
-> 	memcpy_to_page(ctx->ring_pages[0], 0, &(struct aio_ring){
-> 			.nr = nr_events, .id = ~0U, .magic = AIO_RING_MAGIC,
-> 			.compat_features = AIO_RING_COMPAT_FEATURES,
-> 			.in_compat_features = AIO_RING_INCOMPAT_FEATURES,
-> 			.header_length = sizeof(struct aio_ring)},
-> 			sizeof(struct aio_ring));
-> 
-> instead of the lines from kmap_atomic to flush_dcache_page...
+Hi Adam,
 
-For us mere mortals I think this may parse easier as:
+On Wed, Jan 4, 2023 at 3:12 PM Adam Ford <aford173@gmail.com> wrote:
+> The board used to originally introduce the Beacon Embedded
+> RZ/G2[M/N/H] boards had a GPIO expander with address 20, but
+> this was change when the final board went to production.
+>
+> The production boards changed both the part itself and
+> the address.  With the incorrect address, the LCD cannot
+> come up.  If the LCD fails, the rcar-du driver fails to come up,
+> and that also breaks HDMI.
+>
+> Pre-release board were not shipped to the general public, so it
+> should be safe to push this as a fix.  Anyone with a production
+> board would have video fail due to this GPIO expander change.
+>
+> Fixes: a1d8a344f1ca ("arm64: dts: renesas: Introduce r8a774a1-beacon-rzg2m-kit")
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-	struct aio_ring r;
+Thanks for your patch!
 
-...
-	r = (struct aio_ring) {
-		.nr = nr_events,
-		.id = ~0U,
-		.magic = AIO_RING_MAGIC,
-		.compat_features = AIO_RING_COMPAT_FEATURES,
-		.incompat_features = AIO_RING_INCOMPAT_FEATURES,
-		.header_length = sizeof(struct aio_ring),
-	};
+> --- a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
+> @@ -437,20 +437,6 @@ wm8962_endpoint: endpoint {
+>                 };
+>         };
+>
+> -       /* 0 - lcd_reset */
+> -       /* 1 - lcd_pwr */
+> -       /* 2 - lcd_select */
+> -       /* 3 - backlight-enable */
+> -       /* 4 - Touch_shdwn */
+> -       /* 5 - LCD_H_pol */
+> -       /* 6 - lcd_V_pol */
+> -       gpio_exp1: gpio@20 {
+> -               compatible = "onnn,pca9654";
+> -               reg = <0x20>;
+> -               gpio-controller;
+> -               #gpio-cells = <2>;
+> -       };
+> -
+>         touchscreen@26 {
+>                 compatible = "ilitek,ili2117";
+>                 reg = <0x26>;
+> @@ -482,6 +468,21 @@ hd3ss3220_out_ep: endpoint {
+>                         };
+>                 };
+>         };
+> +
+> +       gpio_exp1: gpio@70 {
+> +               compatible = "onnn,pca9654";
 
-	memcpy_to_page(ctx->ring_pages[0], 0, &r, sizeof(r));
-...
+According to the patch description, the actual part was changed, too?
 
-Is there any concern with the extra assignments to the stack only to copy into
-the page?  I guess this is not a critical path?
+> +               reg = <0x70>;
+> +               gpio-controller;
+> +               #gpio-cells = <2>;
+> +               gpio-line-names =
+> +                       "lcd_reset",
+> +                       "lcd_pwr",
+> +                       "lcd_select",
+> +                       "backlight-enable",
+> +                       "Touch_shdwn",
+> +                       "LCD_H_pol",
+> +                       "lcd_V_pol";
+> +       };
+>  };
 
-Ira
+The rest LGTM.
 
-> > 
-> > >>  
-> > >>  	return 0;
-> > >> @@ -678,9 +678,9 @@ static int ioctx_add_table(struct kioctx *ctx, struct mm_struct *mm)
-> > >>  					 * we are protected from page migration
-> > >>  					 * changes ring_pages by ->ring_lock.
-> > >>  					 */
-> > >> -					ring = kmap_atomic(ctx->ring_pages[0]);
-> > >> +					ring = kmap_local_page(ctx->ring_pages[0]);
-> > >>  					ring->id = ctx->id;
-> > >> -					kunmap_atomic(ring);
-> > >> +					kunmap_local(ring);
-> > >
-> > > Incidentally, does it need flush_dcache_page()?
-> > 
-> > Yes, good catch.
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
