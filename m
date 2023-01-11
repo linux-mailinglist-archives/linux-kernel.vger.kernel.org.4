@@ -2,97 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440D66665E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D936665E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235605AbjAKV6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 16:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S230047AbjAKV7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 16:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjAKV62 (ORCPT
+        with ESMTP id S230281AbjAKV7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 16:58:28 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42FE3E841
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:58:25 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id c9so12447288pfj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:58:25 -0800 (PST)
+        Wed, 11 Jan 2023 16:59:12 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFABB3F448
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:59:10 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id s5so10540784qtx.6
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:59:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8Obkb0kzjvD/4Rh3qw6c/69fgaEhJbsYAq/Q6o2FDWQ=;
-        b=HuuDX4tRBSTJnI+TIu8jzSsRF7dl6LoIO6huUTPB1oglJ+Q/xpRDxGkM88AO9Eqv9q
-         jq42xRqQnU0fFyJReqLTrhoghELhEvuL/QHgumVvAiLYyiNF1/hWkUZpJglE0LopXv1w
-         i+odRdzdU5XeRPqU4787IMalsxWpYhfOsyTB5MwAXqn/MMZoe6zxpze9+MNxAy2Qh9ix
-         hHB+UPWTwoUtuOSRxGyMToOEJ7WcENuql09xWPt4vLsKgZFQiGDO3hOsC3nn/G4StOEL
-         9Vc16MNUkXCTDJjFhXQ8FKUSnylUgct4p4QGUL5zXJWM0II68M3DN42L4KwbsrcWZlsb
-         F0mg==
+        d=soleen.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hLlRGFfxK+N0AdFFVO3VU9eoPoiCOoB3+UBhQVqyXOc=;
+        b=CmstqYp912NmC9R4Xxm0EZWE1EhKvjcarg8Dw/Wvo1asypNqfDTwrkBigSXdwnWl8a
+         4ops4Q+AZ0AZAR9vQ87owdxKCGQyO1aJVUMY/IHzpPs8rGSv2PsogsQfOABGUB0wTC0+
+         pJ065B57G02ECCMJGrn6Oc6MOKi8zH2FecW9PW7SWyWva98kX9k0AhQDxpjfolODUYhR
+         CkQnwaYhwRcFKnLZoTLY9RtUZpKEpdLKWbtYd23OPbAfYQc8/SGGSy4dhN3BhPhW+vgL
+         GbtU0c09nPenwJQh3RYSCB+o2ZH/R0FgrMVTAi51zP7oJ5FAioNBfWy8OxS77pzIG2Gg
+         htLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Obkb0kzjvD/4Rh3qw6c/69fgaEhJbsYAq/Q6o2FDWQ=;
-        b=bRG8u/wU7z8xJLLnjcdwwfDMqTVmZlwfIhYTPrxJ/mMQ2PSmFGQXmm5I6thOEsXtsv
-         v86CwEevuuD+52qBTH4a2tFmdEPUNaVsmIP97fHBUE2UZ6JwmOIo/BpIYxdbVMadLS/G
-         u+5lGt+A8J7tMOo5fki5lZPXXBl1ewGS4r1eLuXcFV7DWH1m5xacg48o0bKg46U05EOf
-         cdngrTUqh5K2tdvdVIUlRUuxk0KokIS1UxdWkGisKDdsUfDSSGCRxSdzgGwQj5cHz69s
-         9r+ar8iSgCS5493/8LO1ZeMZLpO3PjoKWjHtPzpYhBeCfaE0EhaletvnOBX1uDeXw8pw
-         slWA==
-X-Gm-Message-State: AFqh2kp12VQTiWXFkZluFlzzelp7V7G7YOU5IxXnJ/sQw0in9lFja1TE
-        ImTTIyUFnG2BSomJWuufkadTLg==
-X-Google-Smtp-Source: AMrXdXsIR82tbAtz9jygOyB/cpYtAQoBqPBu+GzWlRZYvwVPZLbir8tBLdXO7HHJIXbLe1BXNjVG4A==
-X-Received: by 2002:a05:6a00:2a0b:b0:585:4ca7:5c4b with SMTP id ce11-20020a056a002a0b00b005854ca75c4bmr4234358pfb.2.1673474305267;
-        Wed, 11 Jan 2023 13:58:25 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 5-20020a621505000000b005772d55df03sm10447621pfv.35.2023.01.11.13.58.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 13:58:24 -0800 (PST)
-Message-ID: <507593a5-3606-8a92-e599-dd8711df519e@kernel.dk>
-Date:   Wed, 11 Jan 2023 14:58:23 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hLlRGFfxK+N0AdFFVO3VU9eoPoiCOoB3+UBhQVqyXOc=;
+        b=c2wFvVCpQbS2UMAq1LgCzBrWVjD6RIZbXFl/vrDerFf2DGWsxvphvbqSnKO86PisqE
+         Xqc++7otEawCDpCy8x/Bdg+uUVYsYaT1+agHHIr4rc8iZp8jULBlJRzwJP8oifqkwq/x
+         4ZCitytlJb1fziC4/4SP1Wwb00IhQAfT0wycJwa2KFo5CotfOzB9y0SOMkj7pk/RPjzU
+         enpvqXY/qppye7fuJGAXnu+Gkn4gIlpkUSuRf+8jeQevOcC59BWx/yL4CGInBDN5zhPu
+         22KHT3M/X9kwPyIP5mq0NL58XP1IpOCjiavbxseoTD9a/Q8epb7Hv71W/XTn4DoibncP
+         iZKA==
+X-Gm-Message-State: AFqh2kpcRa4wu3yywXubbw1LwU+zSe9WrkSODdFarPziJGpN1JSmKI6z
+        +YLKeksQtxMudDz+0LKvrknMEg==
+X-Google-Smtp-Source: AMrXdXsI2I0zIUl7fjZav5IrW4r6Gg92vBY0uLe3rvbW4hymgGfFuhQ2srGQZjabnFysCNG8OZZtNw==
+X-Received: by 2002:ac8:4509:0:b0:3a8:287c:8aa9 with SMTP id q9-20020ac84509000000b003a8287c8aa9mr104803620qtn.31.1673474349971;
+        Wed, 11 Jan 2023 13:59:09 -0800 (PST)
+Received: from soleen.c.googlers.com.com (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
+        by smtp.gmail.com with ESMTPSA id l12-20020ac8078c000000b003996aa171b9sm8001201qth.97.2023.01.11.13.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 13:59:09 -0800 (PST)
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, akpm@linux-foundation.org,
+        mhocko@suse.com, vbabka@suse.cz, david@redhat.com,
+        quic_charante@quicinc.com, lizhe.67@bytedance.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH] mm/page_ext: Do not allocate space for page_ext->flags if not needed
+Date:   Wed, 11 Jan 2023 21:59:06 +0000
+Message-Id: <20230111215906.2645056-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] caif: don't assume iov_iter type
-Content-Language: en-US
-To:     Keith Busch <kbusch@meta.com>, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
-References: <20230111184245.3784393-1-kbusch@meta.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230111184245.3784393-1-kbusch@meta.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/23 11:42 AM, Keith Busch wrote:
-> From: Keith Busch <kbusch@kernel.org>
-> 
-> The details of the iov_iter types are appropriately abstracted, so
-> there's no need to check for specific type fields. Just let the
-> abstractions handle it.
-> 
-> This is preparing for io_uring/net's io_send to utilize the more
-> efficient ITER_UBUF.
+There is 8 byte page_ext->flags field allocated per page whenever
+CONFIG_PAGE_EXTENSION is enabled. However, not every user of page_ext
+uses flags. Therefore, check whether flags is needed at least by one
+user and if so allocate space for it.
 
-Looks good to me - the correct return here would be -EFAULT as well,
-not -EINVAL. Which is what will happen once memcpy_from_msg() is
-called anyway.
+For example when page_table_check is enabled, on a machine with 128G
+of memory before the fix:
 
-Reviewed-by: Jens Axboe <axboe@kernel.dk>
+[    2.244288] allocated 536870912 bytes of page_ext
+after the fix:
+[    2.160154] allocated 268435456 bytes of page_ext
 
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+---
+ include/linux/page_ext.h |  7 +++++++
+ mm/page_ext.c            | 12 +++++++++++-
+ mm/page_owner.c          |  1 +
+ mm/page_table_check.c    |  1 +
+ 4 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
+index 22be4582faae..29909e135052 100644
+--- a/include/linux/page_ext.h
++++ b/include/linux/page_ext.h
+@@ -12,10 +12,14 @@ struct page_ext_operations {
+ 	size_t size;
+ 	bool (*need)(void);
+ 	void (*init)(void);
++	bool using_shared_ext_flags;
+ };
+ 
+ #ifdef CONFIG_PAGE_EXTENSION
+ 
++/*
++ * The page_ext_flags users must set using_shared_ext_flags to true.
++ */
+ enum page_ext_flags {
+ 	PAGE_EXT_OWNER,
+ 	PAGE_EXT_OWNER_ALLOCATED,
+@@ -31,6 +35,9 @@ enum page_ext_flags {
+  * page_ext helps us add more information about the page.
+  * All page_ext are allocated at boot or memory hotplug event,
+  * then the page_ext for pfn always exists.
++ * Note: that if none of the users of page_ext is setting
++ * using_shared_ext_flags to true, the field cannot be used,
++ * as it will be overlapped with another data.
+  */
+ struct page_ext {
+ 	unsigned long flags;
+diff --git a/mm/page_ext.c b/mm/page_ext.c
+index 4ee522fd381c..7443a797b96b 100644
+--- a/mm/page_ext.c
++++ b/mm/page_ext.c
+@@ -71,6 +71,7 @@ static bool need_page_idle(void)
+ }
+ static struct page_ext_operations page_idle_ops __initdata = {
+ 	.need = need_page_idle,
++	.using_shared_ext_flags = true,
+ };
+ #endif
+ 
+@@ -86,7 +87,7 @@ static struct page_ext_operations *page_ext_ops[] __initdata = {
+ #endif
+ };
+ 
+-unsigned long page_ext_size = sizeof(struct page_ext);
++unsigned long page_ext_size;
+ 
+ static unsigned long total_usage;
+ static struct page_ext *lookup_page_ext(const struct page *page);
+@@ -105,6 +106,15 @@ static bool __init invoke_need_callbacks(void)
+ 	int entries = ARRAY_SIZE(page_ext_ops);
+ 	bool need = false;
+ 
++	for (i = 0; i < entries; i++) {
++		if (page_ext_ops[i]->need && page_ext_ops[i]->need()) {
++			if (page_ext_ops[i]->using_shared_ext_flags) {
++				page_ext_size = sizeof(struct page_ext);
++				break;
++			}
++		}
++	}
++
+ 	for (i = 0; i < entries; i++) {
+ 		if (page_ext_ops[i]->need && page_ext_ops[i]->need()) {
+ 			page_ext_ops[i]->offset = page_ext_size;
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index 2d27f532df4c..612a988373cc 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -99,6 +99,7 @@ struct page_ext_operations page_owner_ops = {
+ 	.size = sizeof(struct page_owner),
+ 	.need = need_page_owner,
+ 	.init = init_page_owner,
++	.using_shared_flags = true,
+ };
+ 
+ static inline struct page_owner *get_page_owner(struct page_ext *page_ext)
+diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+index 93e633c1d587..74cfe89d5f53 100644
+--- a/mm/page_table_check.c
++++ b/mm/page_table_check.c
+@@ -45,6 +45,7 @@ struct page_ext_operations page_table_check_ops = {
+ 	.size = sizeof(struct page_table_check),
+ 	.need = need_page_table_check,
+ 	.init = init_page_table_check,
++	.using_shared_ext_flags = false,
+ };
+ 
+ static struct page_table_check *get_page_table_check(struct page_ext *page_ext)
 -- 
-Jens Axboe
-
+2.39.0.314.g84b9a713c41-goog
 
