@@ -2,70 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954C6665274
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A70566527C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbjAKDmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 22:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S231871AbjAKDqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 22:46:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbjAKDma (ORCPT
+        with ESMTP id S230223AbjAKDqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 22:42:30 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAA82B1;
-        Tue, 10 Jan 2023 19:42:30 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v23so14524205pju.3;
-        Tue, 10 Jan 2023 19:42:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4n5QZy7g/1aDMvcFC/CDd1ADRJ2ZCV2H96hKEjp2Tt0=;
-        b=G/9WxcZwcHj82j+8ORnJb2+YWLi0gZQ2OIcaNA+0yq9/htNrwEC8Kg2Yhkw0EEdX0I
-         8XC/CXjXunp1ThVdZSIpwuuA9UyMNSHC0uruVUNbgjucqQpeqFcGTXG7wLK9mjn9GgeZ
-         +WeEIU45xxstA7U/eYp6paXW9tJ5UHKhD+/GWNIMHAdSrUh+kvL7Xh2u8TbASbMfHXRV
-         tI+pPZxqZ0zdJwoEWZ5WPVpL2dDh7O+jpF4bcAxUIqgeUYX/ewVgBoI+zuTra2cBc2rQ
-         7SZ0v7PzzrXBNvYapavcYvYSw0yxwrPb2LZzIO1HBekg3CdFY0309jjCvltNLu2zXNAD
-         tIZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4n5QZy7g/1aDMvcFC/CDd1ADRJ2ZCV2H96hKEjp2Tt0=;
-        b=wTN0HvA8LqgVV3+giHS3L5iPqo/Dmpn9s5vzZeDx/VVwamtJSKK8OUU/dVY447Behb
-         ei3uyOkynwC9Qy5OcrDQ6d8mWWidURe3XIkISh9JIQDU8MQt0UkSxFstTCyoqQXIyBro
-         VG1kAn6mACKMWEG6cwlT4+CNIffzw19xGcKGMo6GF8RC+hzi4aJ8EZk8aR/+VaYlX/W8
-         VgrMFDQZ6sZEjOO2DKUF0ai7YA2xxdppmtrTJ2IhY7jbLvDNsZ+MOtTD24A8fg4tl1eR
-         kTImWpfo2HabmC0C/qpnqStd56zz+I+Vo0/3BgrQLVS5suoFJPc88v++NpY/Iv+jVN1v
-         On4w==
-X-Gm-Message-State: AFqh2kqdSxUjpj0bBAB0BZ7uKsdmmXRxzjlBApaWkwJRwjHeCND29Dw9
-        HbIyjUQfX+2HAi/4qUP5Zsk=
-X-Google-Smtp-Source: AMrXdXvMM0hDGpPcpa3dadoUPn2d83HTpWr6n7dyfx/M6PGJCp2b/DqdSExEKoIWPHpyrawPvPpn2g==
-X-Received: by 2002:a17:902:ccc4:b0:186:e434:6265 with SMTP id z4-20020a170902ccc400b00186e4346265mr84653045ple.2.1673408549347;
-        Tue, 10 Jan 2023 19:42:29 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:3f43:2598:9756:e3b])
-        by smtp.gmail.com with ESMTPSA id ik9-20020a170902ab0900b00183c67844aesm8883541plb.22.2023.01.10.19.42.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 19:42:28 -0800 (PST)
-Date:   Tue, 10 Jan 2023 19:42:25 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Werner Sembach <wse@tuxedocomputers.com>
-Cc:     hdegoede@redhat.com, mkorpershoek@baylibre.com,
-        chenhuacai@kernel.org, tiwai@suse.de,
-        wsa+renesas@sang-engineering.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Input: i8042 - add Clevo PCX0DX to i8042 quirk table
-Message-ID: <Y74wIRrzalT5bJvt@google.com>
-References: <20230110134524.553620-1-wse@tuxedocomputers.com>
+        Tue, 10 Jan 2023 22:46:49 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8F422C
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:46:47 -0800 (PST)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NsD8h2PSHz16MWg;
+        Wed, 11 Jan 2023 11:45:08 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 11 Jan 2023 11:46:41 +0800
+Message-ID: <fb27e5cf-9056-3698-9e6f-9386f9cdf991@huawei.com>
+Date:   Wed, 11 Jan 2023 11:46:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230110134524.553620-1-wse@tuxedocomputers.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH -v2] x86/boot/compressed: Register dummy NMI handler in
+ EFI boot loader, to avoid kdump crashes
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Ingo Molnar <mingo@kernel.org>, <michael.roth@amd.com>,
+        <hpa@zytor.com>, <tglx@linutronix.de>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <kirill.shutemov@linux.intel.com>, <jroedel@suse.de>,
+        <keescook@chromium.org>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <brijesh.singh@amd.com>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        <liwei391@huawei.com>
+References: <20230110102745.2514694-1-zengheng4@huawei.com>
+ <Y71FJ+G0NGQe3Ppq@gmail.com> <Y71TglxSLJKO17SY@gmail.com>
+ <Y71V8SRLxZ/Uqkfs@zn.tnic> <684a2472-f388-b2e1-4a7a-7bc9a07650b4@huawei.com>
+ <Y7174pEWZ8IzCdQ9@zn.tnic>
+Content-Language: en-US
+From:   Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <Y7174pEWZ8IzCdQ9@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,14 +60,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 02:45:24PM +0100, Werner Sembach wrote:
-> The Clevo PCX0DX/TUXEDO XP1511, need quirks for the keyboard to not be
-> occasionally unresponsive after resume.
-> 
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> Cc: stable@vger.kernel.org
 
-Applied, thank you.
+On 2023/1/10 22:53, Borislav Petkov wrote:
+> On Tue, Jan 10, 2023 at 08:32:07PM +0800, Zeng Heng wrote:
+>> And here is the context of mce-inject:
+>>
+>> #0  relocate_kernel () at arch/x86/kernel/relocate_kernel_64.S:55
+>> #1  0xffffffff81a57fc2 in machine_kexec (image=0xffff888101ef8400)
+>>      at arch/x86/kernel/machine_kexec_64.c:391
+> Before we continue with this any further: are you doing this "exercise" in
+> qemu/kvm and nothing of that is happening on real hardware?
 
--- 
-Dmitry
+Real hardware and QEMU both can reproduce the issue.
+
+Here is description about NMI from Intel 64 and IA-32 Architectures 
+Software Developer's Manual in chapter 6.7.1:
+
+While an NMI interrupt handler is executing, the processor blocks 
+delivery of subsequent NMIs until the next execution of the IRET 
+instruction. This blocking of NMIs prevents nested execution of the NMI 
+handler. It is recommended that the NMI interrupt handler be accessed 
+through an interrupt gate to disable maskable hardware interrupts (see 
+Section 6.8.1, “Masking Maskable Hardware Interrupts”).
+
