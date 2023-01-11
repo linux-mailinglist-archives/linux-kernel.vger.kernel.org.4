@@ -2,80 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C25665D64
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB749665D62
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238311AbjAKONH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S238314AbjAKOMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238430AbjAKOMz (ORCPT
+        with ESMTP id S235794AbjAKOMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:12:55 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B6F19285;
-        Wed, 11 Jan 2023 06:12:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Kh81VbIZ8aAFzaPbdCIb8iu76NXqMZK7Zl9jSAAgmmY=; b=umNiLZslPng9U4Yh/wYN4u+NL/
-        KrbNWXqFAYwPFMKMKlrhpcKUivQwycoi2QKvUn/9M6dvKzVbboik7gXkf8rcTtG/Hdd1kwZ3SD0Mb
-        m8hMUwxA7IeKof01lpGO7pO3fy4rdDunWueIozaoUndTuQNdR0JQ5gSVHvbxI6LIyWXIlRwOYLzv4
-        EB+O9gEmju4MyNNjm/y7NN7szc3vF8dPfQFjEsZei7ThMFlJSEfKLMRbjDrmdsTo3KaaUWVxPLMyd
-        aBw5lAkGYy6S8g9SbiM8iIdkfvJ/DIZI7qGWwjcW+oy/OAqclsibkPaNGRSALijmBjii6bO2vHWGg
-        1N3KzOYw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pFbqU-004Bwu-DA; Wed, 11 Jan 2023 14:12:50 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Wed, 11 Jan 2023 09:12:49 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8EFA46F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:12:48 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B9355300327;
-        Wed, 11 Jan 2023 15:12:35 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9D09F2CA101E8; Wed, 11 Jan 2023 15:12:35 +0100 (CET)
-Date:   Wed, 11 Jan 2023 15:12:35 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
-        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Chris Kennelly <ckennelly@google.com>,
-        kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH tip] selftests/rseq: Revert "selftests/rseq: Add
- mm_numa_cid to test script"
-Message-ID: <Y77D0+e2tdl8c1k1@hirez.programming.kicks-ass.net>
-References: <20230104163542.10004-1-mathieu.desnoyers@efficios.com>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 423F517B86;
+        Wed, 11 Jan 2023 14:12:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673446367; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mE6y7iidhdQwZd82DKF1P74kvAoThMrkO4ILYhJI85s=;
+        b=otU9jeW47puvDnW4VE5snuBapCRXMvnaWEww5kef6FKrMlu2Z6ox/CAMABuoCgTnnhIgSI
+        nRjuOfv7axEJcBvgWII/TE/0KKy7x4Fy+6Qv08KRp2Nbfe5/Fs+Dbed8Q7m9ockc2Rt4SO
+        XgFLAdgFZoUhqOdSZUqq2zPJXCb7/f4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673446367;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mE6y7iidhdQwZd82DKF1P74kvAoThMrkO4ILYhJI85s=;
+        b=hIayZIEXLvp9eLqg376vCZivzXzrAubGfO9PbSoe6BDh8w+wbgZx8nHfwDk0II+EAb1Fxt
+        f1rkRXcnIfLw3ODQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1F0AB1358A;
+        Wed, 11 Jan 2023 14:12:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XtSJBt/DvmPwBwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 11 Jan 2023 14:12:47 +0000
+Message-ID: <2e6d0187-bbef-7db1-a2a6-7beae715a17c@suse.cz>
+Date:   Wed, 11 Jan 2023 15:12:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230104163542.10004-1-mathieu.desnoyers@efficios.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 6/7] mm/page_alloc: Give GFP_ATOMIC and non-blocking
+ allocations access to reserves
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Linux-MM <linux-mm@kvack.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230109151631.24923-1-mgorman@techsingularity.net>
+ <20230109151631.24923-7-mgorman@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230109151631.24923-7-mgorman@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 11:35:42AM -0500, Mathieu Desnoyers wrote:
-> The mm_numa_cid related rseq patches from the series were not picked up
-> into the tip tree, so enabling the mm_numa_cid test needs to be
-> reverted.
+On 1/9/23 16:16, Mel Gorman wrote:
+> Explicit GFP_ATOMIC allocations get flagged ALLOC_HARDER which is a bit
+> vague. In preparation for removing __GFP_ATOMIC, give GFP_ATOMIC and
+> other non-blocking allocation requests equal access to reserve.  Rename
+> ALLOC_HARDER to ALLOC_NON_BLOCK to make it more clear what the flag
+> means.
 > 
-> This reverts commit b344b8f2d88dbf095caf97ac57fd3645843fa70f.
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 
-Oh my bad, I got confused between the regular numa_id (which I did do
-merge, right?) and the fancy numa_cid, which I indeed didn't merge yet.
-I meant to give that a wee bit more thought, but that sadly hasn't
-happened yet :/
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Applied, thanks!
