@@ -2,96 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D29B666094
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BFFF666095
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234628AbjAKQd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S230164AbjAKQeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238487AbjAKQd1 (ORCPT
+        with ESMTP id S239296AbjAKQdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:33:27 -0500
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D042BC4;
-        Wed, 11 Jan 2023 08:33:26 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id l139so15538259ybl.12;
-        Wed, 11 Jan 2023 08:33:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9CXTrtqRp8xq1t4uI/gJlWDHaCDKcZXC3jcPMK78AGM=;
-        b=IsP6VG378zIvOIIc5PfbfEIKrdIRWjw8Xm2GzVn/3myTWgPK5Kt1vXlvXzoWBH5zyW
-         703zygsBxdMGwJu2B49919UgxqiPdxoS0RzvjC6BP82BuEtqK8nX39Wm0QXU8a4bUq26
-         8RR3U4VLFTq5O9OBzEfxWkgYT//tou97Iafy447nekO6+H0LMo570nJZuQLTbmVdeDQ0
-         OwxloSpT0ruwfRORQCKRk8olbGpSmK3H/18KReo0ZYdIksvnOXoLjVPVSfiui+7Qmg3j
-         Mrn1SN34cuJJYSJ/c4iw49SVUeK9Fo2UT020WWUb/un1bL2u/1zV/7M9PaQVnX5wLKsB
-         iFyA==
-X-Gm-Message-State: AFqh2kqqkxK+xBdqzR78W6oiDd5y36JyBvbdyhcJUlTjBZLpTORSTjhB
-        iXbVddVhv3IzpwjZX+AbLYOUqWGJMnydNw==
-X-Google-Smtp-Source: AMrXdXsOikQcjU4JcH5EteqpjGS60PI+TD23Yh9GlSzMdKj0my9bKxPWRyZfaJOe+67kE8d50x4aaQ==
-X-Received: by 2002:a25:8547:0:b0:7b2:991:9b7c with SMTP id f7-20020a258547000000b007b209919b7cmr23651699ybn.1.1673454805218;
-        Wed, 11 Jan 2023 08:33:25 -0800 (PST)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id bq35-20020a05620a46a300b00704c9015e68sm9290157qkb.116.2023.01.11.08.33.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 08:33:24 -0800 (PST)
-Received: by mail-yb1-f181.google.com with SMTP id 194so13314107ybf.8;
-        Wed, 11 Jan 2023 08:33:24 -0800 (PST)
-X-Received: by 2002:a25:d84e:0:b0:7b4:6a33:d89f with SMTP id
- p75-20020a25d84e000000b007b46a33d89fmr1645500ybg.543.1673454804653; Wed, 11
- Jan 2023 08:33:24 -0800 (PST)
+        Wed, 11 Jan 2023 11:33:36 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B48EB86;
+        Wed, 11 Jan 2023 08:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=XMF+LeDwuEJP2w3SL8oJxpqNjxtnGRPrPmivq/NK3Dc=; b=PmGF9AZcNMhaUvYUCXcIunoZim
+        vruEM0eiCV6da15xCq/c6wWoSFSmxch6EuKsJ1gzAsIUYf6Yjy+E15JRom9APGCc+k2OueRPxBqkB
+        eMBOq4s2YYyoj+iO/Tz15/s//H6Vp5iq2piuMNBo2yILWfhL/ks8sM8fLkTpkBVsyMxOdOJGKm9mq
+        dc2umH3RamjYa+WHxtSnRE9KE2MKON2zaqqiu9aHuz59cHtd535M1daZeOFB4aVR2e4XuOZsr/rKX
+        6pFAZA90ayXHThWW7qW0Q+OkbAC/gQ4Ek4XncQA3Uosk9P5ufDyF5MROnSWtuOLmOP5re2HhoFwN3
+        6iR0id7g==;
+Received: from [2601:1c2:d80:3110::9307]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pFe2g-00CBTi-C3; Wed, 11 Jan 2023 16:33:34 +0000
+Message-ID: <50a3b4ab-781a-e37f-49ad-cb4bbfcb4eac@infradead.org>
+Date:   Wed, 11 Jan 2023 08:33:33 -0800
 MIME-Version: 1.0
-References: <20230104141245.8407-1-aford173@gmail.com> <20230104141245.8407-4-aford173@gmail.com>
-In-Reply-To: <20230104141245.8407-4-aford173@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 11 Jan 2023 17:33:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW9cL=oGxKK0+2z49b=0is4kqG69mKz9PkDu96e6n2qAQ@mail.gmail.com>
-Message-ID: <CAMuHMdW9cL=oGxKK0+2z49b=0is4kqG69mKz9PkDu96e6n2qAQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] arm64: boot: dts: r8a774[a/b/e]1-beacon: Consolidate
- sound clocks
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org, aford@beaconembedded.com,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/4] tracing: Add creation of instances at boot command
+ line
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ross Zwisler <zwisler@google.com>
+References: <20230111145636.450953217@goodmis.org>
+ <20230111145842.376427803@goodmis.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230111145842.376427803@goodmis.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 3:18 PM Adam Ford <aford173@gmail.com> wrote:
-> Each kit-level file represents a SOM + baseboard for a specific
-> SoC type and uses specific clocks unique to each SoC.  With the
-> exception of one clock, the rest of the clock info was duplicated.
->
-> There is a generic clock called CPG_AUDIO_CLK_I defined in each of
-> the SoC DTSI files which points to this unique clock. By using that,
-> the clock information for the rcar_sound can be consolidated into
-> the baseboard file and have it reference this generic clock thus
-> removing the duplication from the three variants.
->
-> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.3.
 
-Gr{oetje,eeting}s,
+On 1/11/23 06:56, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> Add kernel command line to add tracing instances. This only creates
+> instances at boot but still does not enable any events to them. Later
+> changes will extend this command line to add enabling of events, filters,
+> and triggers. As well as possibly redirecting trace_printk()!
+> 
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |  6 +++
+>  kernel/trace/trace.c                          | 51 +++++++++++++++++++
+>  2 files changed, 57 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 6cfa6e3996cf..cec486217ccc 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -6272,6 +6272,12 @@
+>  			comma-separated list of trace events to enable. See
+>  			also Documentation/trace/events.rst
+>  
+> +	trace_instance=[instance-info]
+> +			[FTRACE] Create an ring buffer instance early in boot up.
 
-                        Geert
+s/an/a/
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> +			This will be listed in:
+> +
+> +				/sys/kernel/tracing/instances
+> +
+>  	trace_options=[option-list]
+>  			[FTRACE] Enable or disable tracer options at boot.
+>  			The option-list is a comma delimited list of options
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+-- 
+~Randy
