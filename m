@@ -2,183 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A475E666426
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF13666428
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbjAKTzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 14:55:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
+        id S232785AbjAKTzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 14:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjAKTy4 (ORCPT
+        with ESMTP id S230417AbjAKTzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 14:54:56 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E3319A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:54:55 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id s8so9592287plk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:54:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ee/v08QHfLLFjdeXhNUw+rKnRh9GF2x4adAxhgB0GYM=;
-        b=mUty29aJZngvM3haGgNz0VtX+oT1nq5NwGEIr+ywfTh11/SN5fAx8wJb3/AxwaV1IB
-         4fOLCF8Gt45RMnvd0FJPDGVCRtB65sGAnTnl2gvNSr25eaYWay+OCHLe12RQxNxI+uJ7
-         5kYKYjDUcHYnrs6l3M6L1KbEQhYV5D62TF38qCYkTXwjaK+f5NtvUlZlCgscCq8J7O5a
-         cFrNZdYpUthCuh4JWxIaHdv6KkGy7YvA0hNl80XsdOfzgo+Wyt1R1n7GaAcPdN90cK1L
-         tDvuY4iQ5Oi8XKJAFnLQc0Wu9A0lE/lOWo/eVhjs/O0IKSk8JTk8UHczuiPeZ6NLNiPn
-         S1Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ee/v08QHfLLFjdeXhNUw+rKnRh9GF2x4adAxhgB0GYM=;
-        b=ZgknoXqncCNGwLpxg1znuyFCIjniDDr9JWRn1aFAn26jQIS/zapr4za2EFkWc1c8O9
-         MfWsBGLfJGbGSJxAtRQ1X1iafvBPvirALhb4hfd98Vbl1RX/2ucc50gBsjJBLnUu6RZT
-         Wkn2AX5m3RWir7mHafADWdDPlEZZK1KCI4b40S78nMIXfj/rNp4Q1j0NVJByAJAUwgxd
-         l/rr9lGjrB732zKT4WwvLEX7MEUuPEMRq9TQRcuxkfbdaSLPp1J0J8pyG03TNjhRvYko
-         zXCcCrTp+y7I66666d+e0O5ZSVHW4kGAV16csUb88GM9plf0ULVhaSReGpDxnKdmu36b
-         aWDg==
-X-Gm-Message-State: AFqh2krpMwipbPZLo7kwWmfjv/sliReQ9FpDOcQof+FPFPbgjn5Ldpn0
-        lygNl+bXGpnmsHaT3/0wlNCKBg==
-X-Google-Smtp-Source: AMrXdXsUGcan4Od1kkbsywDEb3Eqlo0h8a16FR71K8XMA8z2GmZHxW9H5FaMeLYfZPUCz0pASaTbQw==
-X-Received: by 2002:a05:6a20:c527:b0:9d:c38f:9bdd with SMTP id gm39-20020a056a20c52700b0009dc38f9bddmr557202pzb.2.1673466895257;
-        Wed, 11 Jan 2023 11:54:55 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id t18-20020a62d152000000b00580f445d1easm10245195pfl.216.2023.01.11.11.54.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 11:54:54 -0800 (PST)
-Date:   Wed, 11 Jan 2023 19:54:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     alex.williamson@redhat.com, pbonzini@redhat.com, jgg@nvidia.com,
-        cohuck@redhat.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com, akrowiak@linux.ibm.com,
-        jjherne@linux.ibm.com, pasic@linux.ibm.com,
-        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] KVM: async kvm_destroy_vm for vfio devices
-Message-ID: <Y78UCz5oeuntSQtK@google.com>
-References: <20230109201037.33051-1-mjrosato@linux.ibm.com>
- <20230109201037.33051-2-mjrosato@linux.ibm.com>
+        Wed, 11 Jan 2023 14:55:45 -0500
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC06C9;
+        Wed, 11 Jan 2023 11:55:43 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id AF4D318631FE;
+        Wed, 11 Jan 2023 22:55:39 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id v5ixd9kkAFuB; Wed, 11 Jan 2023 22:55:39 +0300 (MSK)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 5EB981863D8C;
+        Wed, 11 Jan 2023 22:55:39 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id k3e5njk-Uncm; Wed, 11 Jan 2023 22:55:39 +0300 (MSK)
+Received: from ekaterina-MACHD-WXX9.. (host-189-224.skynet-msk.ru [91.227.189.224])
+        by mail.astralinux.ru (Postfix) with ESMTPSA id 98CC418631FE;
+        Wed, 11 Jan 2023 22:55:38 +0300 (MSK)
+From:   Esina Ekaterina <eesina@astralinux.ru>
+To:     Zhao Qiang <qiang.zhao@nxp.com>
+Cc:     Esina Ekaterina <eesina@astralinux.ru>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH v4] net: wan: Add checks for NULL for utdm in  undo_uhdlc_init and unmap_si_regs
+Date:   Wed, 11 Jan 2023 22:55:33 +0300
+Message-Id: <20230111195533.82519-1-eesina@astralinux.ru>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230111102848.44863b9c@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109201037.33051-2-mjrosato@linux.ibm.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023, Matthew Rosato wrote:
-> Currently it is possible that the final put of a KVM reference comes from
-> vfio during its device close operation.  This occurs while the vfio group
-> lock is held; however, if the vfio device is still in the kvm device list,
-> then the following call chain could result in a deadlock:
-> 
-> kvm_put_kvm
->  -> kvm_destroy_vm
->   -> kvm_destroy_devices
->    -> kvm_vfio_destroy
->     -> kvm_vfio_file_set_kvm
->      -> vfio_file_set_kvm
->       -> group->group_lock/group_rwsem
-> 
-> Avoid this scenario by adding kvm_put_kvm_async which will perform the
-> kvm_destroy_vm asynchronously if the refcount reaches 0.
+If uhdlc_priv_tsa !=3D 1 then utdm is not initialized.
+And if ret !=3D NULL then goto undo_uhdlc_init, where
+utdm is dereferenced. Same if dev =3D=3D NULL.
 
-Something feels off.  If KVM's refcount is 0, then accessing device->group->kvm
-in vfio_device_open() can't happen unless there's a refcounting bug somewhere.
+Found by Astra Linux on behalf of Linux Verification Center
+(linuxtesting.org) with SVACE.
 
-E.g. if this snippet holds group_lock
-
-		mutex_lock(&device->group->group_lock);
-		device->kvm = device->group->kvm;
-
-		if (device->ops->open_device) {
-			ret = device->ops->open_device(device);
-			if (ret)
-				goto err_undo_count;
-		}
-		vfio_device_container_register(device);
-		mutex_unlock(&device->group->group_lock);
-
-and kvm_vfio_destroy() has already been invoked and is waiting on group_lock in
-vfio_file_set_kvm(), then device->ops->open_device() is being called with a
-non-NULL device->kvm that has kvm->users_count==0.  And intel_vgpu_open_device()
-at least uses kvm_get_kvm(), i.e. assumes kvm->users_count > 0.
-
-If there's no refcounting bug then kvm_vfio_destroy() doesn't need to call
-kvm_vfio_file_set_kvm() since the only way there isn't a refcounting bug is if
-group->kvm is unreachable.  This seems unlikely.
-
-Assuming there is indeed a refcounting issue, one solution would be to harden all
-->open_device() implementations to use kvm_get_kvm_safe().  I'd prefer not to have
-to do that since it will complicate those implementations and also requires KVM
-to support an async put.
-
-Rather than force devices to get KVM references, why not handle that in common
-VFIO code and drop KVM refcountin from devices?  Worst case scenario KVM is pinned
-by a device that doesn't need KVM but is in a group associated with KVM.  If that's
-a concern, it seems easy enough to add a flag to vfio_device_ops to enumerate
-whether or not the device depends on KVM.
-
+Signed-off-by: Esina Ekaterina <eesina@astralinux.ru>
+  ---
+v4: Fix style
+v3: Remove braces
+v2: Add check for NULL for unmap_si_regs
 ---
- drivers/vfio/vfio_main.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/net/wan/fsl_ucc_hdlc.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-index 6e8804fe0095..fb43212d77a0 100644
---- a/drivers/vfio/vfio_main.c
-+++ b/drivers/vfio/vfio_main.c
-@@ -772,6 +772,13 @@ static struct file *vfio_device_open(struct vfio_device *device)
- 		 * reference and release it during close_device.
- 		 */
- 		mutex_lock(&device->group->group_lock);
-+
-+		if (device->group->kvm &&
-+		    !kvm_get_kvm_safe(device->group->kvm->kvm)) {
-+			ret = -ENODEV;
-+			goto err_undo_count;
-+		}
-+
- 		device->kvm = device->group->kvm;
- 
- 		if (device->ops->open_device) {
-@@ -823,8 +830,10 @@ static struct file *vfio_device_open(struct vfio_device *device)
- err_undo_count:
- 	mutex_unlock(&device->group->group_lock);
- 	device->open_count--;
--	if (device->open_count == 0 && device->kvm)
-+	if (device->open_count == 0 && device->kvm) {
-+		kvm_put_kvm(device->kvm);
- 		device->kvm = NULL;
-+	}
- 	mutex_unlock(&device->dev_set->lock);
- 	module_put(device->dev->driver->owner);
- err_unassign_container:
-@@ -1039,8 +1048,10 @@ static int vfio_device_fops_release(struct inode *inode, struct file *filep)
- 	}
- 	mutex_unlock(&device->group->group_lock);
- 	device->open_count--;
--	if (device->open_count == 0)
-+	if (device->open_count == 0 && device->kvm) {
-+		kvm_put_kvm(device->kvm);
- 		device->kvm = NULL;
-+	}
- 	mutex_unlock(&device->dev_set->lock);
- 
- 	module_put(device->dev->driver->owner);
+diff --git a/drivers/net/wan/fsl_ucc_hdlc.c b/drivers/net/wan/fsl_ucc_hdl=
+c.c
+index 22edea6ca4b8..1c53b5546927 100644
+--- a/drivers/net/wan/fsl_ucc_hdlc.c
++++ b/drivers/net/wan/fsl_ucc_hdlc.c
+@@ -1243,9 +1243,11 @@ static int ucc_hdlc_probe(struct platform_device *=
+pdev)
+ free_dev:
+ 	free_netdev(dev);
+ undo_uhdlc_init:
+-	iounmap(utdm->siram);
++	if (utdm)
++		iounmap(utdm->siram);
+ unmap_si_regs:
+-	iounmap(utdm->si_regs);
++	if (utdm)
++		iounmap(utdm->si_regs);
+ free_utdm:
+ 	if (uhdlc_priv->tsa)
+ 		kfree(utdm);
+--=20
+2.39.0
 
-base-commit: d52444c7a90fc551b4c3b0bda7d3f0b2ca9fc84d
--- 
