@@ -2,226 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA3F6664E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77E96664E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjAKUgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 15:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
+        id S231461AbjAKUkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 15:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjAKUgA (ORCPT
+        with ESMTP id S229448AbjAKUjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 15:36:00 -0500
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5F32DE8;
-        Wed, 11 Jan 2023 12:35:59 -0800 (PST)
-Received: by mail-ed1-f47.google.com with SMTP id z11so24131639ede.1;
-        Wed, 11 Jan 2023 12:35:59 -0800 (PST)
+        Wed, 11 Jan 2023 15:39:54 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C022E15F1F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:39:51 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id co23so16248682wrb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:39:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3pzuKNxf9Q46ptvGS0Ago60Vq8QP48Yl+S1kx4SuOlk=;
+        b=bCWMCFOIkyU1CKUm69SqBGC94663rVZtfdxTqVRo2NUmsDttk1sWHE8kr8z9+CTSok
+         ZFuwpBFcroYy5KnBpTgLrbmvGLVlm3gSo1fU31joe1qN18AaP4ZJxRmkiD7w86JjWHbH
+         SyxPxQnhyKtxOUiFWc/Z2/MN2s6T1skhg+Ar57O5x1sxNxK51exhgcp48leBvmwzyEpk
+         5IK9kegNxjTMVxtIxBjqP8IgTbZiXVc2Fp8oiTNRZawk+I6f2lLW/sqkyLNmJ/KxsSAD
+         vfukzUSaZXdrMmw/KwZN4KmFdD+0OnZVUzaa8KXX5z24S4vMf3/p2rKlRYpzt+NUakTc
+         lnHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Db8+0e8WN3nsfhyiEZdHDeAdZn8HsaNM9raQcYp0IFM=;
-        b=x0i2SS2hzo4LdLOtP7vYANFVYC6PRQ4Ob6fZBYrlXLJ2XvrVCnyVXQ6GdSX+JMSQE+
-         JzNOo41iUUNVDlokPLqzEPzpvKJXKJL34+GOBvha30upXP3/f9QKbcufVghA1XUzaOQ0
-         KV2S61MTeefOOAp/+E/LSEHC/7gvzhNVw05fSqQJSkUQXmGF1ET3q1VQrzGDyyL0BYSQ
-         qTT28u3YnWKYLId4VWcaLZWSsMFmj+719Rn/rBkSLi25tF5zyvU7C9+0qekUyesXtfAI
-         AqZiieCzJqZV0Wsw3YAbuemdiBuYYpSe6yEI7zJnd449HfgJhUAOWXcAQIUY63+WuqPF
-         yjtg==
-X-Gm-Message-State: AFqh2koAd6AyvQmPBrhsG87LMe4mY+i/5ZnMwoJ2I2GT+URYfZoamLsB
-        vayTrPhAWvrBM+Wak2zgoPZoEbz6+yTv85BZJlo=
-X-Google-Smtp-Source: AMrXdXtakobtBeFRC8OLzxXWfC2gsN1fkAR9nHlymD96JEbS15FIYazXeT0GWO1w5O3IgziXcp9UT5wuJwzLUxiGMrQ=
-X-Received: by 2002:a05:6402:c44:b0:499:c651:625d with SMTP id
- cs4-20020a0564020c4400b00499c651625dmr913357edb.413.1673469357828; Wed, 11
- Jan 2023 12:35:57 -0800 (PST)
+        bh=3pzuKNxf9Q46ptvGS0Ago60Vq8QP48Yl+S1kx4SuOlk=;
+        b=ojQjAnbFQU4uzAuYJjZCFt6EaKfWbH3PwqQs+giJ650/sFGkcUt9l+Q46lcKJMv4rF
+         9xzzF+tCrnf3CVi9kqvU7nQFQjQwrzXXopALQwh5QI5kgQ2KZNAlcz1XHT3cojPH085b
+         jvy+BpHIH++Y5JOerH2KT2Dy954YvFC0j2VSVaV3UmeOwtJEMs9J6bvOhKXKYKwKJyYv
+         6WJjFZzf3/RobKC8hCkgpelPQcEVsDZcQupt1HWvLAmaCXNmdcSTZxokPAM0Bcj6dSLT
+         PKZNAG+MxybSe8xV56aXwCcl5rmQ8jLUC+7tk/iOgbmadI0wvrPQczmAYK2hwtw+OSIK
+         uJTw==
+X-Gm-Message-State: AFqh2kqVttO53K0H0IiUteewbeok3i3cBAYMLH9dqCAFLhRnyKLqrbMi
+        ww8bcH48on0PL6K+dGYd1gJAWfgnqFI8bk3VVHM=
+X-Google-Smtp-Source: AMrXdXsvLUKsopEUMlX4xpD3SDkAfTZ3hQ1x8D6H7rfXGFh9qQ/TCJi/ikGyottDW0Hx7ptuPulix0kKnIOdkoNebqg=
+X-Received: by 2002:a5d:4404:0:b0:2bb:ecda:5e96 with SMTP id
+ z4-20020a5d4404000000b002bbecda5e96mr889134wrq.271.1673469590132; Wed, 11 Jan
+ 2023 12:39:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20230110211839.19572-1-rick.p.edgecombe@intel.com>
-In-Reply-To: <20230110211839.19572-1-rick.p.edgecombe@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 11 Jan 2023 21:35:46 +0100
-Message-ID: <CAJZ5v0jnp3jLdD1wN1NjMfxrt+gYZ+im_quHdgsOrWve0XQaWg@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/hibernate: Use fixmap for saving unmapped pages
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        rppt@kernel.org, peterz@infradead.org, luto@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230104231127.2634648-1-nphamcs@gmail.com> <20230104231127.2634648-3-nphamcs@gmail.com>
+ <Y710pFYI8rBX9Eqe@bfoster> <CAKEwX=OjhHRrH9uS4d5XWfRU=UEpBVQ9n9+-f4hyvB5Rs+r0Og@mail.gmail.com>
+ <Y76xXBxYR7MWcXyl@bfoster>
+In-Reply-To: <Y76xXBxYR7MWcXyl@bfoster>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Wed, 11 Jan 2023 12:39:38 -0800
+Message-ID: <CAKEwX=MH2x1Uwjikc_L0EiPm5ptv4xkWhj2ZB9wLxxQQZ-0VuA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] cachestat: implement cachestat syscall
+To:     Brian Foster <bfoster@redhat.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, willy@infradead.org,
+        kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 10:19 PM Rick Edgecombe
-<rick.p.edgecombe@intel.com> wrote:
+On Wed, Jan 11, 2023 at 4:52 AM Brian Foster <bfoster@redhat.com> wrote:
 >
-> Hibernate uses the direct map to read memory it saves to disk. Since
-> sometimes pages are not accessible on the direct map ("not present" on
-> x86), it has special case logic to temporarily make a page present. On x86
-> these direct map addresses can be mapped at various page sizes, but the
-> logic works ok as long as the not present pages are always mapped as
-> PAGE_SIZE such that they don't require a split to map the region as
-> present. If the address was mapped not present by a larger page size, the
-> split may fail and hibernate would then try to read an address mapped not
-> present.
+> On Tue, Jan 10, 2023 at 01:16:27PM -0800, Nhat Pham wrote:
+> > On Tue, Jan 10, 2023 at 6:21 AM Brian Foster <bfoster@redhat.com> wrote:
+> > >
+> > > On Wed, Jan 04, 2023 at 03:11:26PM -0800, Nhat Pham wrote:
+> > > > Implement a new syscall that queries cache state of a file and
+> > > > summarizes the number of cached pages, number of dirty pages, number of
+> > > > pages marked for writeback, number of (recently) evicted pages, etc. in
+> > > > a given range.
+> > > >
+> > > > NAME
+> > > >     cachestat - query the page cache statistics of a file.
+> > > >
+> > > > SYNOPSIS
+> > > >     #include <sys/mman.h>
+> > > >
+> > > >     struct cachestat {
+> > > >         __u64 nr_cache;
+> > > >         __u64 nr_dirty;
+> > > >         __u64 nr_writeback;
+> > > >         __u64 nr_evicted;
+> > > >         __u64 nr_recently_evicted;
+> > > >     };
+> > > >
+> > > >     int cachestat(unsigned int fd, off_t off, size_t len,
+> > > >           size_t cstat_size, struct cachestat *cstat,
+> > > >           unsigned int flags);
+> > > >
+> > > > DESCRIPTION
+> > > >     cachestat() queries the number of cached pages, number of dirty
+> > > >     pages, number of pages marked for writeback, number of evicted
+> > > >     pages, number of recently evicted pages, in the bytes range given by
+> > > >     `off` and `len`.
+> > > >
+> > > >     An evicted page is a page that is previously in the page cache but
+> > > >     has been evicted since. A page is recently evicted if its last
+> > > >     eviction was recent enough that its reentry to the cache would
+> > > >     indicate that it is actively being used by the system, and that
+> > > >     there is memory pressure on the system.
+> > > >
+> > > >     These values are returned in a cachestat struct, whose address is
+> > > >     given by the `cstat` argument.
+> > > >
+> > > >     The `off` and `len` arguments must be non-negative integers. If
+> > > >     `len` > 0, the queried range is [`off`, `off` + `len`]. If `len` ==
+> > > >     0, we will query in the range from `off` to the end of the file.
+> > > >
+> > > >     `cstat_size` allows users to obtain partial results. The syscall
+> > > >     will copy the first `csstat_size` bytes to the specified userspace
+> > > >     memory. `cstat_size` must be a non-negative value that is no larger
+> > > >     than the current size of the cachestat struct.
+> > > >
+> > > >     The `flags` argument is unused for now, but is included for future
+> > > >     extensibility. User should pass 0 (i.e no flag specified).
+> > > >
+> > > > RETURN VALUE
+> > > >     On success, cachestat returns 0. On error, -1 is returned, and errno
+> > > >     is set to indicate the error.
+> > > >
+> > > > ERRORS
+> > > >     EFAULT cstat points to an invalid address.
+> > > >
+> > > >     EINVAL invalid `cstat_size` or `flags`
+> > > >
+> > > >     EBADF  invalid file descriptor.
+> > > >
+> > > > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> > > > ---
+> > > >  arch/alpha/kernel/syscalls/syscall.tbl      |   1 +
+> > > >  arch/arm/tools/syscall.tbl                  |   1 +
+> > > >  arch/ia64/kernel/syscalls/syscall.tbl       |   1 +
+> > > >  arch/m68k/kernel/syscalls/syscall.tbl       |   1 +
+> > > >  arch/microblaze/kernel/syscalls/syscall.tbl |   1 +
+> > > >  arch/parisc/kernel/syscalls/syscall.tbl     |   1 +
+> > > >  arch/powerpc/kernel/syscalls/syscall.tbl    |   1 +
+> > > >  arch/s390/kernel/syscalls/syscall.tbl       |   1 +
+> > > >  arch/sh/kernel/syscalls/syscall.tbl         |   1 +
+> > > >  arch/sparc/kernel/syscalls/syscall.tbl      |   1 +
+> > > >  arch/x86/entry/syscalls/syscall_32.tbl      |   1 +
+> > > >  arch/x86/entry/syscalls/syscall_64.tbl      |   1 +
+> > > >  arch/xtensa/kernel/syscalls/syscall.tbl     |   1 +
+> > > >  include/linux/fs.h                          |   3 +
+> > > >  include/linux/syscalls.h                    |   3 +
+> > > >  include/uapi/asm-generic/unistd.h           |   5 +-
+> > > >  include/uapi/linux/mman.h                   |   9 ++
+> > > >  init/Kconfig                                |  10 ++
+> > > >  kernel/sys_ni.c                             |   1 +
+> > > >  mm/filemap.c                                | 143 ++++++++++++++++++++
+> > > >  20 files changed, 186 insertions(+), 1 deletion(-)
+> > > >
+> > > ...
+> > > > diff --git a/mm/filemap.c b/mm/filemap.c
+> > > > index 08341616ae7a..d70d47b20700 100644
+> > > > --- a/mm/filemap.c
+> > > > +++ b/mm/filemap.c
+> > > ...
+> > > > @@ -3949,3 +3953,142 @@ bool filemap_release_folio(struct folio *folio, gfp_t gfp)
+> > > >       return try_to_free_buffers(folio);
+> > > >  }
+> > > >  EXPORT_SYMBOL(filemap_release_folio);
+> > > ...
+> > > > +#ifdef CONFIG_CACHESTAT_SYSCALL
+> > > > +/*
+> > > > + * The cachestat(5) system call.
+> > > > + *
+> > > > + * cachestat() returns the page cache statistics of a file in the
+> > > > + * bytes range specified by `off` and `len`: number of cached pages,
+> > > > + * number of dirty pages, number of pages marked for writeback,
+> > > > + * number of evicted pages, and number of recently evicted pages.
+> > > > + *
+> > > > + * An evicted page is a page that is previously in the page cache
+> > > > + * but has been evicted since. A page is recently evicted if its last
+> > > > + * eviction was recent enough that its reentry to the cache would
+> > > > + * indicate that it is actively being used by the system, and that
+> > > > + * there is memory pressure on the system.
+> > > > + *
+> > > > + * `off` and `len` must be non-negative integers. If `len` > 0,
+> > > > + * the queried range is [`off`, `off` + `len`]. If `len` == 0,
+> > > > + * we will query in the range from `off` to the end of the file.
+> > > > + *
+> > > > + * `cstat_size` allows users to obtain partial results. The syscall
+> > > > + * will copy the first `csstat_size` bytes to the specified userspace
+> > > > + * memory. It also makes the cachestat struct extensible - new fields
+> > > > + * can be added in the future without breaking existing usage.
+> > > > + * `cstat_size` must be a non-negative value that is no larger than
+> > > > + * the current size of the cachestat struct.
+> > > > + *
+> > > > + * The `flags` argument is unused for now, but is included for future
+> > > > + * extensibility. User should pass 0 (i.e no flag specified).
+> > > > + *
+> > > > + * Because the status of a page can change after cachestat() checks it
+> > > > + * but before it returns to the application, the returned values may
+> > > > + * contain stale information.
+> > > > + *
+> > > > + * return values:
+> > > > + *  zero    - success
+> > > > + *  -EFAULT - cstat points to an illegal address
+> > > > + *  -EINVAL - invalid arguments
+> > > > + *  -EBADF   - invalid file descriptor
+> > > > + */
+> > > > +SYSCALL_DEFINE6(cachestat, unsigned int, fd, off_t, off, size_t, len,
+> > > > +             size_t, cstat_size, struct cachestat __user *, cstat,
+> > > > +             unsigned int, flags)
+> > > > +{
+> > > > +     struct fd f = fdget(fd);
+> > > > +     struct address_space *mapping;
+> > > > +     struct cachestat cs;
+> > > > +     pgoff_t first_index = off >> PAGE_SHIFT;
+> > > > +     pgoff_t last_index =
+> > > > +             len == 0 ? ULONG_MAX : (off + len - 1) >> PAGE_SHIFT;
+> > > > +
+> > > > +     if (off < 0 || cstat_size > sizeof(struct cachestat) || flags != 0)
+> > > > +             return -EINVAL;
+> > > > +
+> > > > +     if (!f.file)
+> > > > +             return -EBADF;
+> > > > +
+> > >
+> > > It looks like we miss an fdput() before returning via the above error
+> > > checks.
+> >
+> > Ooops yeah I missed that. I'll fix it.
+> >
+> > >
+> > > The only other thing that stands out as a bit odd to me is the
+> > > cstat_size check and associated ability to return a partial cachestat
+> > > struct. Do other syscalls do anything like that? I'd think we'd want to
+> > > ensure we always at least return a fully populated cachestat struct,
+> > > even if it happened to be an old/compat version if the size does ever
+> > > increase. Hm?
+> >
+> > Not that I know of, but the idea is that the user might expect a smaller
+> > struct cachestat in their code (and allocate memory accordingly).
+> > With this cstat_size, we can make sure that the expansion of cachestat
+> > struct (with new fields) does not break existing user's code - we only
+> > copy part of the struct.
+> >
 >
-> Today on x86 there are no known cases of this (huge not present pages on
-> the direct map), but it has come up from time to time when developing
-> things that operate on the direct map. It blocked making
-> VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and also
-> has been a complication for various direct map protection efforts.
->
-> This dependency is also pretty hidden and easily missed by people poking at
-> the direct map. For this reason, there are warnings in place to complain
-> but not handle this scenario.
->
-> One way to make this more robust would be to create some new CPA
-> functionality that can know to map and reset the whole huge page in the
-> case of trying to map a subpage. But for simplicity and smaller code, just
-> make x86 hibernate have its own fixmap PTE that it can use to point
-> to 4k pages when it encounters an unmapped direct map page.
->
-> Move do_copy_page() to a header such that it can be used in an arch
-> breakout. Rename it hib_copy_page() to be more hibernate specific since
-> it could appear in other files.
->
-> Use __weak for the arch breakout because there is not a suitable arch
-> specific header to use the #define method.
->
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> ---
->
-> Rebase to v6.2-rc3 (original still applied) and resending per:
-> https://lore.kernel.org/lkml/CAJZ5v0i6cxGD+V6G+q-Y_Lp-ov51_zmkZr8ZGpCtqWV-e=BsLg@mail.gmail.com/
->
->  arch/x86/include/asm/fixmap.h |  3 +++
->  arch/x86/power/hibernate.c    | 10 ++++++++++
->  include/linux/suspend.h       | 13 +++++++++++++
->  kernel/power/snapshot.c       | 21 +++++++--------------
->  4 files changed, 33 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
-> index d0dcefb5cc59..0fceed9a4152 100644
-> --- a/arch/x86/include/asm/fixmap.h
-> +++ b/arch/x86/include/asm/fixmap.h
-> @@ -108,6 +108,9 @@ enum fixed_addresses {
->  #ifdef CONFIG_PARAVIRT_XXL
->         FIX_PARAVIRT_BOOTMAP,
->  #endif
-> +#ifdef CONFIG_HIBERNATION
-> +       FIX_HIBERNATE,
-> +#endif
->
->  #ifdef CONFIG_ACPI_APEI_GHES
->         /* Used for GHES mapping from assorted contexts */
-> diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
-> index 6f955eb1e163..473b6b5f6b7e 100644
-> --- a/arch/x86/power/hibernate.c
-> +++ b/arch/x86/power/hibernate.c
-> @@ -147,6 +147,16 @@ int arch_hibernation_header_restore(void *addr)
->         return 0;
->  }
->
-> +void copy_unmapped_page(void *dst, struct page *page)
-> +{
-> +       WARN_ON(!preempt_count());
 
-I don't think the above is needed.  The code using this function
-cannot be preempted anyway AFAICS.
+I found a couple of syscalls doing something similar:
 
-> +
-> +       set_fixmap(FIX_HIBERNATE, page_to_phys(page));
-> +       __flush_tlb_all();
+statfs64
+https://github.com/torvalds/linux/blob/master/fs/statfs.c#L168-L190
 
-So do TLBs need to be flushed before copying every single page?
-Basically, they are all copied in one loop.
+io_uring_enter:
+https://github.com/torvalds/linux/blob/master/io_uring/io_uring.c#L3232-L3243
 
-> +       hib_copy_page(dst, (void *)fix_to_virt(FIX_HIBERNATE));
-> +       clear_fixmap(FIX_HIBERNATE);
-> +}
-> +
->  int relocate_restore_code(void)
->  {
->         pgd_t *pgd;
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index cfe19a028918..0b19b910526e 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -447,6 +447,19 @@ extern bool hibernation_available(void);
->  asmlinkage int swsusp_save(void);
->  extern struct pbe *restore_pblist;
->  int pfn_is_nosave(unsigned long pfn);
-> +void copy_unmapped_page(void *dst, struct page *page);
-> +
-> +/*
-> + * This is needed, because copy_page and memcpy are not usable for copying
-> + * task structs.
-> + */
-> +static inline void hib_copy_page(long *dst, long *src)
-> +{
-> +       int n;
-> +
-> +       for (n = PAGE_SIZE / sizeof(long); n; n--)
-> +               *dst++ = *src++;
-> +}
+It looks like these syscalls just error-out if the size argument does not match
+with the size of the kernel struct.
+
+> Yup, I get the idea of supporting future expansion. The part that
+> doesn't make sense to me is allowing a partial copy of struct cachestat.
+> For example, what happens if the user passes a cstat_size of 2? We copy
+> out two bytes of the first field of the struct and return 0 for
+> "success?"
 >
->  int hibernate_quiet_exec(int (*func)(void *data), void *data);
->  #else /* CONFIG_HIBERNATION */
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index cd8b7b35f1e8..344c071f29d3 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -1369,16 +1369,11 @@ static unsigned int count_data_pages(void)
->         return n;
->  }
+> The way I've commonly seen this sort of support for future expansion is
+> by versioning the structure and providing backwards compatibility for
+> old versions of the structure. I'd guess there are various ways to
+> implement that, but a simple example that comes to mind for me is
+> xfs_ioc_fsgeometry(). The caveat there is that it's an ioctl where IIRC
+> the command essentially changes when the structure size does, which
+> allows the kernel to determine what version is being used.
+
+Hmm xfs_ioc_fsgeometry looks interesting. From my understanding,
+it basically has an argument that can take on a couple of values, each of
+which delineates a version, right? I can give that a try and see if it looks
+better (and maybe send a new version with this updated API).
+
 >
-> -/*
-> - * This is needed, because copy_page and memcpy are not usable for copying
-> - * task structs.
-> - */
-> -static inline void do_copy_page(long *dst, long *src)
-> +void __weak copy_unmapped_page(void *dst, struct page *page)
->  {
-> -       int n;
-> -
-> -       for (n = PAGE_SIZE / sizeof(long); n; n--)
-> -               *dst++ = *src++;
-> +       hibernate_map_page(page);
-> +       hib_copy_page(dst, page_address(page));
-> +       hibernate_unmap_page(page);
->  }
+> I'm not quite sure what the ideal way to do that for a syscall is. I
+> suppose the kernel could just check that the size param matches some
+> version of the structure it knows about and assume that. Or since you
+> have the flags field, you could require a flag to be passed in to return
+> values for any new fields. Or yet another option could be to pad out the
+> size of the userspace structure to support future expansion for the
+> foreseeable future without the need for such a flag.
 >
->  /**
-> @@ -1392,11 +1387,9 @@ static inline void do_copy_page(long *dst, long *src)
->  static void safe_copy_page(void *dst, struct page *s_page)
->  {
->         if (kernel_page_present(s_page)) {
-> -               do_copy_page(dst, page_address(s_page));
-> +               hib_copy_page(dst, page_address(s_page));
->         } else {
-> -               hibernate_map_page(s_page);
-> -               do_copy_page(dst, page_address(s_page));
-> -               hibernate_unmap_page(s_page);
-> +               copy_unmapped_page(dst, s_page);
->         }
->  }
+> Perhaps this is something linux-api can help with?
+
+I think I should definitely forward my patch series to linux-api. Thanks for
+the suggestion, Brian!
+
 >
-> @@ -1417,7 +1410,7 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
->         if (PageHighMem(s_page)) {
->                 src = kmap_atomic(s_page);
->                 dst = kmap_atomic(d_page);
-> -               do_copy_page(dst, src);
-> +               hib_copy_page(dst, src);
->                 kunmap_atomic(dst);
->                 kunmap_atomic(src);
->         } else {
-> --
-> 2.17.1
+> Brian
+>
+> > >
+> > > Brian
+> > >
+> > > > +     memset(&cs, 0, sizeof(struct cachestat));
+> > > > +     mapping = f.file->f_mapping;
+> > > > +     filemap_cachestat(mapping, first_index, last_index, &cs);
+> > > > +     fdput(f);
+> > > > +
+> > > > +     if (copy_to_user(cstat, &cs, cstat_size))
+> > > > +             return -EFAULT;
+> > > > +
+> > > > +     return 0;
+> > > > +}
+> > > > +#endif /* CONFIG_CACHESTAT_SYSCALL */
+> > > > --
+> > > > 2.30.2
+> > > >
+> > >
+> >
 >
