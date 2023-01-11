@@ -2,142 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F204665EA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3B3665EAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbjAKPCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
+        id S234525AbjAKPD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbjAKPCT (ORCPT
+        with ESMTP id S232646AbjAKPCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:02:19 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0974E1C432;
-        Wed, 11 Jan 2023 07:02:17 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id c133so12934458oif.1;
-        Wed, 11 Jan 2023 07:02:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0egSRlD5ysAF1/1Mcrzc43lEP8kki52Q/tp1KL0aFq0=;
-        b=JTRokcX3zaOOa5DZ0ocv+qAiNLHN7v+XuqXLh2ziEGBWUateS/D4TGVet0Zwm2i2A3
-         EqWWhy5jwA3vxH3xmmrWHlmpHypTsUMkT/AuH/bR+YPy3NlEQNnMRTmsMrRy5oa1scgv
-         nj22zJKb0qW5fzEasQIf2ykHCDGPKEdXGBtlgPkRGxy4bTY6+EoRZukOh1kdpVLToTWs
-         dNSlde+evDr3RAcQJYdoCS9NzqCXpTw8dYKYRt6DHZK6AZCOOyb7fx6XY55rlJsukgGs
-         N8yvTICMHBnPlrxUvtT0GzGPthYxWLBPzDGl+/caPJYUlHahaBcecxGf+WEamOPFbc6C
-         FVOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0egSRlD5ysAF1/1Mcrzc43lEP8kki52Q/tp1KL0aFq0=;
-        b=ewRNeZKkfTKrR5fI5vcBLuXvv2KsMtp9H5MACMyhdjTvdRLqQZcr3kPNTXXPHmmGgj
-         6vW2WcsFmEFdjnWnt88C6nDjj5l4HmwgNI6cC5/PIcyAr4rmrKE23blhddA1tjoOlz6l
-         LfmKqeNuh4wxOtjDFUAjjuoINyPn1aotRwpNvYoCHAmvHWhegyq3Eje0RR5x6Wnmkjgl
-         cYobAdXcCac9+E49qAIgbywJJ7cA/9/Ox1ZJqlw/xdJUNB8RHKQW5x7UUxWZWwVgczrP
-         ZtFD8OMhZ6qFqJkv/9uhoyEe5UQJOPjEfFEFRHplkG0ifk6qUAWYD/qtJY5ZgrwnBXya
-         8Qng==
-X-Gm-Message-State: AFqh2kqtXRs293VaoWjVtqicAino4oZqAuZbYUzjyFKRLPGFPxcL5j8V
-        HZ+DW3eOvtJMBTZ5rT6lTJI=
-X-Google-Smtp-Source: AMrXdXsJ68tmNlldOty2WkVziBaah7VubXfqbSPrUVre3rpkZtb+MXnE0CNjRpQ5vpLhanXefNOLww==
-X-Received: by 2002:a05:6808:28e:b0:35e:e530:a07b with SMTP id z14-20020a056808028e00b0035ee530a07bmr31314497oic.57.1673449337028;
-        Wed, 11 Jan 2023 07:02:17 -0800 (PST)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id bi38-20020a05680818a600b00353fe4fb4casm6690322oib.48.2023.01.11.07.02.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 07:02:16 -0800 (PST)
-Message-ID: <68c81196-5421-8731-52be-b9b620837eb5@gmail.com>
-Date:   Wed, 11 Jan 2023 12:02:12 -0300
+        Wed, 11 Jan 2023 10:02:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9872D13E1E;
+        Wed, 11 Jan 2023 07:02:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FB0661D49;
+        Wed, 11 Jan 2023 15:02:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C121C433AC;
+        Wed, 11 Jan 2023 15:02:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673449372;
+        bh=UDpxO7rCpbkXZAOhJIiuell38ocfyxx962el9ZejsLk=;
+        h=From:Date:Subject:To:Cc:From;
+        b=niuLuHYV7lRffZio4EU8X6stclJYVM8Fax5gfeTpoPZKTT4sUSDHwIMAqBJCI3Ipm
+         TjcTAJirj1H3BY4hkhKqJazI73G0nmgK7VHoNNMp+liZIDoy34XRflr6aPrtWrq1/m
+         bdvozHRD17J0iM00g+2xcqM3iUAqCy04msWVywTqfrA3hnuWZAk6+TzaekoqXehOds
+         JVcJqJR6Flbh4QBluP8dOinE27cxehBer0SgpiHxadw+iEihqbIgMgbNSVSf7/cjwb
+         +HvHAIiVVmrpl7xDRnI/Bd4CHk2GrUSyqjhsGRlyruQ6o0uFY1mpBUmGce1GAau3bM
+         YlLMsxgfSIb2Q==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Wed, 11 Jan 2023 15:02:41 +0000
+Subject: [PATCH] kselftest/arm64: Limit the maximum VL we try to set via ptrace
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] scripts: Exclude Rust CUs with pahole
-To:     Eric Curtin <ecurtin@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Neal Gompa <neal@gompa.dev>, bpf@vger.kernel.org,
-        rust-for-linux@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-References: <20230108021450.120791-1-yakoyoku@gmail.com>
- <CAOgh=Fzc3_bCLCKE+6KVzyMbBUOcQ_s9ef6Rw33amD5+yu-_WA@mail.gmail.com>
- <CAOgh=FxxXQ0UV_3PEGS-_575WNfR2SpKp+i78HtSVX4XO4eC0A@mail.gmail.com>
-Content-Language: en-US
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <CAOgh=FxxXQ0UV_3PEGS-_575WNfR2SpKp+i78HtSVX4XO4eC0A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <20230111-arm64-kselftest-ptrace-max-vl-v1-1-8167f41d1ad8@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJHPvmMC/x2NQQ6CQAwAv0J6tglFguhXjIfuWmQDLKTdIAnh7
+ y4eZw4zO5hoEINHsYPKGizMMQNdCvA9x49geGeGqqyuJREh69TUOJiMXRJLuCRlLzjxhuuIVDXS
+ utq19xtBbjg2QaccfX9WvrMOp15UurD9t8/XcfwAHjZniIYAAAA=
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12-dev-8b3d1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3606; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=UDpxO7rCpbkXZAOhJIiuell38ocfyxx962el9ZejsLk=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjvs+aSkD4Zcju3QuXggplQ2pgVnRTSRJeS4Pgo67Q
+ xq5i5yyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY77PmgAKCRAk1otyXVSH0N+oB/
+ 9dsYuRUBMPs3iARfDlyxlgKeogXBrz2h8uDlyK0xHXyk3jcf3EGJcg7l+1E1PkQ/W+7IvcU9r6Ubi+
+ ddz9ZGIefA2i/b1AQh2LHWgOxcZFKV6ze3W1XGo+YCUrk1oNy12qY+eUWnDXb9om1rAPdGppaHVBH8
+ yKNBQ4L3wg5qzdTOd9b0xSWpjDwYBhWBIJiTtkbx17lsZI/LU+v9y9LUY1JccTudPIYLq2YA7lX5UG
+ rpdVXdeQASJHuUPEdjk5gVrjo2WPgxkKCmUnK6gkqBp9ZznlUTYbdNsegKDtj8DO6CzpJrg4VhsyfF
+ +msO9L/JaQZ79fVhjxC38OjpX4rCBx
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/8/23 16:19, Eric Curtin wrote:
-> On Sun, 8 Jan 2023 at 15:18, Eric Curtin <ecurtin@redhat.com> wrote:
->>
->> On Sun, 8 Jan 2023 at 02:15, Martin Rodriguez Reboredo
->> <yakoyoku@gmail.com> wrote:
->>>
->>> [ ... ]
->>
->> If it was me, I would do things more like v1 of the patch (instead
->> just checking pahole version), because this is the only flag set in
->> scripts/Makefile.modfinal, which is a little confusing and
->> inconsistent. It's ok to set --lang_exclude=rust in all cases, as long
->> as pahole_ver is recent enough.
->>
->> +if [ "${pahole_ver}" -ge "124" ]; then
->> +       # see PAHOLE_HAS_LANG_EXCLUDE
->> +       extra_paholeopt="${extra_paholeopt} --lang_exclude=rust"
->> +fi
->>
->> But I'm not too opinionated either on this so...
->>
->> Reviewed-by: Eric Curtin <ecurtin@redhat.com>
->>
->> can be reapplied. I'm gonna test this again to see if it works in a
->> Fedora Asahi rpm build.
-> 
-> After testing I probably have to retract my Reviewed-by tag,
-> apologies, bpf and all that did not work with this patch when I built
-> in the fedora way, but, the good news is when I alter v1 of the patch
-> to just check pahole version like so (instead of the is_enabled
-> check):
-> 
-> +if [ "${pahole_ver}" -ge "124" ]; then
-> +        # see PAHOLE_HAS_LANG_EXCLUDE
-> +        extra_paholeopt="${extra_paholeopt} --lang_exclude=rust"
-> +fi
-> 
-> it worked just fine, and that should satisfy the testbot and all the
-> other ways we build too. Could we change to that @Martin Rodriguez
-> Reboredo ?
-> 
+When SVE was initially merged we chose to export the maximum VQ in the ABI
+as being 512, rather more than the architecturally supported maximum of 16.
+For the ptrace tests this results in us generating a lot of test cases and
+hence log output which are redundant since a system couldn't possibly
+support them. Instead only check values up to the current architectural
+limit, plus one more so that we're covering the constraining of higher
+vector lengths.
 
-From my POV I don't like this way due to it being set regardless whether
-or not you are building the kernel with Rust. Though, because it doesn't
-affect non `CONFIG_RUST` builds, I _think_ it won't hurt if we use that
-way for now. Gonna send v3.
+This makes no practical difference to our test coverage, speeds things up
+on slower consoles and makes the output much more managable.
 
->>
->>
->>> +
->>>         vmlinux_link ${1}
->>>
->>>         info "BTF" ${2}
->>> --
->>> 2.39.0
->>>
-> 
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/fp/sve-ptrace.c | 14 ++++++++++++--
+ tools/testing/selftests/arm64/fp/za-ptrace.c  | 14 ++++++++++++--
+ 2 files changed, 24 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+index 8c4847977583..6d61992fe8a0 100644
+--- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
++++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+@@ -30,6 +30,16 @@
+ #define NT_ARM_SSVE 0x40b
+ #endif
+ 
++/*
++ * The architecture defines the maximum VQ as 16 but for extensibility
++ * the kernel specifies the SVE_VQ_MAX as 512 resulting in us running
++ * a *lot* more tests than are useful if we use it.  Until the
++ * architecture is extended let's limit our coverage to what is
++ * currently allowed, plus one extra to ensure we cover constraining
++ * the VL as expected.
++ */
++#define TEST_VQ_MAX 17
++
+ struct vec_type {
+ 	const char *name;
+ 	unsigned long hwcap_type;
+@@ -55,7 +65,7 @@ static const struct vec_type vec_types[] = {
+ 	},
+ };
+ 
+-#define VL_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 4)
++#define VL_TESTS (((TEST_VQ_MAX - SVE_VQ_MIN) + 1) * 4)
+ #define FLAG_TESTS 2
+ #define FPSIMD_TESTS 2
+ 
+@@ -689,7 +699,7 @@ static int do_parent(pid_t child)
+ 		}
+ 
+ 		/* Step through every possible VQ */
+-		for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
++		for (vq = SVE_VQ_MIN; vq <= TEST_VQ_MAX; vq++) {
+ 			vl = sve_vl_from_vq(vq);
+ 
+ 			/* First, try to set this vector length */
+diff --git a/tools/testing/selftests/arm64/fp/za-ptrace.c b/tools/testing/selftests/arm64/fp/za-ptrace.c
+index bf6158654056..ac27d87396fc 100644
+--- a/tools/testing/selftests/arm64/fp/za-ptrace.c
++++ b/tools/testing/selftests/arm64/fp/za-ptrace.c
+@@ -25,7 +25,17 @@
+ #define NT_ARM_ZA 0x40c
+ #endif
+ 
+-#define EXPECTED_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
++/*
++ * The architecture defines the maximum VQ as 16 but for extensibility
++ * the kernel specifies the SVE_VQ_MAX as 512 resulting in us running
++ * a *lot* more tests than are useful if we use it.  Until the
++ * architecture is extended let's limit our coverage to what is
++ * currently allowed, plus one extra to ensure we cover constraining
++ * the VL as expected.
++ */
++#define TEST_VQ_MAX 17
++
++#define EXPECTED_TESTS (((TEST_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
+ 
+ static void fill_buf(char *buf, size_t size)
+ {
+@@ -301,7 +311,7 @@ static int do_parent(pid_t child)
+ 	ksft_print_msg("Parent is %d, child is %d\n", getpid(), child);
+ 
+ 	/* Step through every possible VQ */
+-	for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
++	for (vq = SVE_VQ_MIN; vq <= TEST_VQ_MAX; vq++) {
+ 		vl = sve_vl_from_vq(vq);
+ 
+ 		/* First, try to set this vector length */
+
+---
+base-commit: b7bfaa761d760e72a969d116517eaa12e404c262
+change-id: 20230111-arm64-kselftest-ptrace-max-vl-126e8b4b8971
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
