@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDC6665AF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5B0665AFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjAKMEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 07:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
+        id S238714AbjAKMFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 07:05:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbjAKMEM (ORCPT
+        with ESMTP id S238497AbjAKMEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 07:04:12 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316DBBF5A;
-        Wed, 11 Jan 2023 04:02:04 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id z8-20020a05600c220800b003d33b0bda11so2488204wml.0;
-        Wed, 11 Jan 2023 04:02:04 -0800 (PST)
+        Wed, 11 Jan 2023 07:04:15 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331EDE09D;
+        Wed, 11 Jan 2023 04:02:20 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id b4so2467779edf.0;
+        Wed, 11 Jan 2023 04:02:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TVfpR4qnnt4VaJlKgg5uKC+n6RBtytfGonDbBkqbvhU=;
-        b=l8JdqoiRlZCHy0/sUK/ggzfLKv6dZ0hkwSA6WypM6VOYQO3LtTJhIS3yyuzQ7m3Mu/
-         O2LvkATVrursa5rHARQ2UklGPDi4UXjzN9nufnP5x/TaFB8EnL7j4/Z06n7ZxeXAe79j
-         Op60SZrTCplGrfi6kIgOSzAD0iYem8eT8fxiMMQ8RUgHGZdAGPYl6or+XUEwDTupr0tU
-         MeCVH2Smrj4ktUzDWUp7RfasWibCO2tkBtfoSDbU3PsWGSjuhQFmjr/ahKga5DrrXC6H
-         ibP8Qpl8rTeDOPe5cdKbhZeYRV/uY9Baps18lOz7h7R+xe4+YbrDyyjFvip8MvwRo3W8
-         6xHw==
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KSuqfITy3pm9CBhTZW7epwEnvbhgxRePj6Bs2ANFDpM=;
+        b=N1zS2hQ1HfEy0d09EjJCAjf3Vqojk+cS720EpMWNIeTlJ2I80nW2qQf8Zy+ZypDx0v
+         XLZVBsknEaUA0QubwMJwF8m8lmHgHJoQaZ3PxBPlNxMOc9RfduDJk36yPddNk2nrGU9f
+         /dJPghA+Ozl7657uwIVw7oTQm71EA1jsa4Y0c8LCobifFCens8JZzuat5iqaDnz97KlH
+         wGBFFGgI/mL07XvMLUELztxBEZ7iWGc4Ep2XSU6Vm4nqr7DcdydTtu9+0BKix56JCn6Y
+         9hRSn337QSa097wypWNnESgiPJkv7BfH1PjGJJj0PcWb0RhzjCspRwjITeojGLQmxjyf
+         LvUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TVfpR4qnnt4VaJlKgg5uKC+n6RBtytfGonDbBkqbvhU=;
-        b=jyMxbFKnIgJrVcSskrYz1PSoyiCb2XXmAAgXY+Af7eLb12vrDtvUTafc30pnjEyUJp
-         eSXFtCch83Yb56g5ZFQDMhKS1C3GPiQfmnVanoONSeDhi4zpj6APWHTgo+rUnm2/YJ2q
-         nfGDDH/VWL2z9Q1u++xgvtCd5RMh+zEJDCPnjd5T5BCvXo4GO75vkWQI32rsmQp74ELF
-         19PZA+S6BcHHz6zmRKC4kQUECxlrv4kN0rnxlSc0Z+jXNKYNwsMiXkHjr7jH8Jh4Cwfs
-         IvrPN4rmMnIoFcWB0UkXFQkpSEjVb7FWRNBOZYymqdASPn9vLvQjFHr+K1dl3LCo9Nol
-         rxhQ==
-X-Gm-Message-State: AFqh2kqJZMDMeplqQteLsseE1EHiqs82jd+mBkg6yHTXerUTTCTm7y+k
-        AqNk0ml3EOvunfAx035mzT4=
-X-Google-Smtp-Source: AMrXdXvecYCTkT70+jkiHCyw3UwZkXQsDEwpM6AgWar6XUAmcHX662YjzEzqEikkiMz+hxo4OMZ0Eg==
-X-Received: by 2002:a05:600c:5014:b0:3d3:446a:b46a with SMTP id n20-20020a05600c501400b003d3446ab46amr55108709wmr.38.1673438522610;
-        Wed, 11 Jan 2023 04:02:02 -0800 (PST)
-Received: from [192.168.2.202] (pd9ea33ef.dip0.t-ipconnect.de. [217.234.51.239])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003d1e1f421bfsm1530104wmo.10.2023.01.11.04.02.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 04:02:02 -0800 (PST)
-Message-ID: <d66843b0-5420-7237-c8e1-73bc402bff70@gmail.com>
-Date:   Wed, 11 Jan 2023 13:02:01 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 03/16] platform/surface: aggregator: move
- to_ssam_device() to use container_of_const()
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     platform-driver-x86@vger.kernel.org
-References: <20230111113018.459199-1-gregkh@linuxfoundation.org>
- <20230111113018.459199-4-gregkh@linuxfoundation.org>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20230111113018.459199-4-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KSuqfITy3pm9CBhTZW7epwEnvbhgxRePj6Bs2ANFDpM=;
+        b=kAGMX2ianm7ukDxWdpbyMnzgv3TVoBB+HpoPaCd8ufxP2h5sBkoYIGrcO2MjFK8xTM
+         1EMSYR8x0iSMx3Xa21jPS1jpf1TKQOwBRDe1zO8poc4PIWgJ4aOg080D1rOwzqBUryIe
+         OiI26VMKih5hT2X2ULZdH1+5yb+c2ApQCxoZhP4FHHswELxvVKSi2MkX1N1io9ZEl1Xq
+         loQ3s8xAZLvfsSKanyltOnOyNypJmpxwIt5dJBAnglgXa93PePCVvhXfaxL5v76YUEQZ
+         Le5nlvE+WSNdkVmtLfIVPe1MEbwfrHK43033BPUASahsxMdjG3Xf75BJuhcGcH5jJGPz
+         Jbww==
+X-Gm-Message-State: AFqh2kpJkunSmgX2AKKTVJp/8OPsaibrBjHhOa4olrFPlR+WR54KYG2m
+        ZrDkEmx5USXZ6ygrrknRS+BNVOE5QJE=
+X-Google-Smtp-Source: AMrXdXuNHA9Xyr1zGaRBGq3GFbifwPFLIhsMvnW3acesULec+F01SyfhE+HE+O82bqgEsIdqJF6mTA==
+X-Received: by 2002:a05:6402:34f:b0:461:7c4e:c437 with SMTP id r15-20020a056402034f00b004617c4ec437mr66195299edw.1.1673438538628;
+        Wed, 11 Jan 2023 04:02:18 -0800 (PST)
+Received: from felia.fritz.box ([2a02:810d:2a40:1104:a47e:7f3e:6b25:bafb])
+        by smtp.gmail.com with ESMTPSA id p9-20020aa7d309000000b0046776f98d0csm6002410edq.79.2023.01.11.04.02.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 04:02:18 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] crypto: hisilicon - remove redundant config PCI dependency for some CRYPTO_DEV_HISI configs
+Date:   Wed, 11 Jan 2023 13:02:03 +0100
+Message-Id: <20230111120203.822-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,39 +70,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/23 12:30, Greg Kroah-Hartman wrote:
-> The driver core is changing to pass some pointers as const, so move
-> to_ssam_device() to use container_of_const() to handle this change.
-> to_ssam_device() now properly keeps the const-ness of the pointer passed
-> into it, while as before it could be lost.
-> 
-> Cc: Maximilian Luz <luzmaximilian@gmail.com>
-> Cc: platform-driver-x86@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->   include/linux/surface_aggregator/device.h | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/surface_aggregator/device.h b/include/linux/surface_aggregator/device.h
-> index 46c45d1b6368..24151a0e2c96 100644
-> --- a/include/linux/surface_aggregator/device.h
-> +++ b/include/linux/surface_aggregator/device.h
-> @@ -229,10 +229,7 @@ static inline bool is_ssam_device(struct device *d)
->    * Return: Returns a pointer to the &struct ssam_device wrapping the given
->    * device @d.
->    */
-> -static inline struct ssam_device *to_ssam_device(struct device *d)
-> -{
-> -	return container_of(d, struct ssam_device, dev);
-> -}
-> +#define to_ssam_device(d)	container_of_const(d, struct ssam_device, dev)
->   
->   /**
->    * to_ssam_device_driver() - Casts the given device driver to a SSAM client
+While reviewing dependencies in some Kconfig files, I noticed the redundant
+dependency "depends on PCI && PCI_MSI". The config PCI_MSI has always,
+since its introduction, been dependent on the config PCI. So, it is
+sufficient to just depend on PCI_MSI, and know that the dependency on PCI
+is implicitly implied.
 
-A small note in addition to the comment by Hans: I think it might be a
-good idea to convert the to_ssam_device_driver() function as well. I
-could also send this in as a follow-up patch.
+Reduce the dependencies of configs CRYPTO_DEV_HISI_SEC2,
+CRYPTO_DEV_HISI_QM, CRYPTO_DEV_HISI_ZIP and CRYPTO_DEV_HISI_HPRE.
 
-Regards,
-Max
+No functional change and effective change of Kconfig dependendencies.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ drivers/crypto/hisilicon/Kconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/crypto/hisilicon/Kconfig b/drivers/crypto/hisilicon/Kconfig
+index 743ce4fc3158..4137a8bf131f 100644
+--- a/drivers/crypto/hisilicon/Kconfig
++++ b/drivers/crypto/hisilicon/Kconfig
+@@ -27,7 +27,7 @@ config CRYPTO_DEV_HISI_SEC2
+ 	select CRYPTO_SHA256
+ 	select CRYPTO_SHA512
+ 	select CRYPTO_SM4_GENERIC
+-	depends on PCI && PCI_MSI
++	depends on PCI_MSI
+ 	depends on UACCE || UACCE=n
+ 	depends on ARM64 || (COMPILE_TEST && 64BIT)
+ 	depends on ACPI
+@@ -42,7 +42,7 @@ config CRYPTO_DEV_HISI_SEC2
+ config CRYPTO_DEV_HISI_QM
+ 	tristate
+ 	depends on ARM64 || COMPILE_TEST
+-	depends on PCI && PCI_MSI
++	depends on PCI_MSI
+ 	depends on UACCE || UACCE=n
+ 	depends on ACPI
+ 	help
+@@ -51,7 +51,7 @@ config CRYPTO_DEV_HISI_QM
+ 
+ config CRYPTO_DEV_HISI_ZIP
+ 	tristate "Support for HiSilicon ZIP accelerator"
+-	depends on PCI && PCI_MSI
++	depends on PCI_MSI
+ 	depends on ARM64 || (COMPILE_TEST && 64BIT)
+ 	depends on !CPU_BIG_ENDIAN || COMPILE_TEST
+ 	depends on UACCE || UACCE=n
+@@ -62,7 +62,7 @@ config CRYPTO_DEV_HISI_ZIP
+ 
+ config CRYPTO_DEV_HISI_HPRE
+ 	tristate "Support for HISI HPRE accelerator"
+-	depends on PCI && PCI_MSI
++	depends on PCI_MSI
+ 	depends on UACCE || UACCE=n
+ 	depends on ARM64 || (COMPILE_TEST && 64BIT)
+ 	depends on ACPI
+-- 
+2.17.1
+
