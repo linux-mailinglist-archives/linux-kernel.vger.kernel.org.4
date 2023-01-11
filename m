@@ -2,145 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2426652A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 05:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9F46652A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 05:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234664AbjAKEDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 23:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        id S232004AbjAKEER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 23:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjAKEDT (ORCPT
+        with ESMTP id S230053AbjAKEEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 23:03:19 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F76018C;
-        Tue, 10 Jan 2023 20:03:18 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id o7-20020a17090a0a0700b00226c9b82c3aso15765911pjo.3;
-        Tue, 10 Jan 2023 20:03:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IR5AitmdKy8K6dgR5mXWgIcQ8C4Z2A1sM2KlP+lxFIw=;
-        b=E9m8UkKk0KPJY7lqwgBMwwgS8k8PC5c0vvq03PL6zPg5nibfitbxOOUEfvFWtBopIr
-         k05LqecZKqiiDcGVb7yFm0S0C3ZTo6ErMYEhWbhpEGXT1XkUPCsZl2yTrd90FwZLkjYS
-         aBHR+MqHD9/uSaOEhwenDk11uxr/y8oT0K9ZchO4GlAlB9KynbUFJM6wKXZeqrfcLF2t
-         yoQe1La6OeWC9fMhLj7ZLv0AfbS1ItFrZOn4qSEpjzYGS50/4Y8nQavGOAkQWHG8fYaT
-         UgX0bXlMYPNrd7isWwvVV09OApa2pVUY848WN+pwBC4hwFQB5NfTChwRqAwLu3IfhZxC
-         47VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IR5AitmdKy8K6dgR5mXWgIcQ8C4Z2A1sM2KlP+lxFIw=;
-        b=Kvd8fH2AVbQ0F3Wf6LufRXS9y7CG+vnlSu+Umi6MG0Mzdn8/LwsyPTg1ZsGH7XJ0li
-         p9I0RuD00Otpp3JdElopJ+XCL/WmavefK+AfFb6j6VbJXB1eDlfMcRkhFuHdnO329Izu
-         ydxQ5o+WGsnda2g4EAdFkrvxyl/K9dbUhJ7zVIZwD8EzqpKx3WRCcSmgAXIArRxUg0hP
-         oq7RmS4dWzmRGRN6k4u+6FFjaHxqSI+nnq8TFNyP8e4eB4pFPdGMYdy6rbnR1fWsezww
-         nadldbXG0lDxfHNFCcStmNLodF35Albe0+fcq86Ri4+WhziVML9n6Mscyw0pvPE1VCDa
-         MutQ==
-X-Gm-Message-State: AFqh2kqooDnMkGPNKtN3LQTg9BugfwV69OFDm/Hmfx1ra2gNoLrYniSG
-        a6shqE/rSdJRR3pMUExcpEDf342yNojO
-X-Google-Smtp-Source: AMrXdXtQTtGuTYq9yhoSnqAE0w2EguHsNNwzVw/Tb7zJ4i3W/+IQcM+KKRO3Ak0QNAiVr11LhxcN/g==
-X-Received: by 2002:a17:90a:6344:b0:225:ce95:dc15 with SMTP id v4-20020a17090a634400b00225ce95dc15mr61078528pjs.29.1673409792805;
-        Tue, 10 Jan 2023 20:03:12 -0800 (PST)
-Received: from localhost.localdomain ([144.214.0.13])
-        by smtp.gmail.com with ESMTPSA id gl1-20020a17090b120100b0020b2082e0acsm8013525pjb.0.2023.01.10.20.03.09
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 10 Jan 2023 20:03:12 -0800 (PST)
-From:   Hao Sun <sunhao.th@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
-Subject: WARNING: attempt to execute device eBPF program on the host!
-Date:   Wed, 11 Jan 2023 12:02:42 +0800
-Message-Id: <20230111040242.78139-1-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Tue, 10 Jan 2023 23:04:00 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4594BE1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 20:03:57 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NsDZG42yGz4f3ydT
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:03:50 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP2 (Coremail) with SMTP id Syh0CgCHeugkNb5jzwboBQ--.7168S2;
+        Wed, 11 Jan 2023 12:03:51 +0800 (CST)
+Subject: Re: [PATCH v2 0/2] Fixes for fscache volume operations
+To:     linux-cachefs@redhat.com
+Cc:     David Howells <dhowells@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        "houtao1@huawei.com" <houtao1@huawei.com>
+References: <20221226103309.953112-1-houtao@huaweicloud.com>
+From:   Hou Tao <houtao@huaweicloud.com>
+Message-ID: <57afbcf7-df1f-47b8-2b81-8fca87487f57@huaweicloud.com>
+Date:   Wed, 11 Jan 2023 12:03:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221226103309.953112-1-houtao@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID: Syh0CgCHeugkNb5jzwboBQ--.7168S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr15Wr1xCFWktFyxXF18Zrb_yoWDKFg_u3
+        4xKas8uw40qayDKayYkFnIqrs3uw4jga18JFyDtr17G34F9rn09F1kKrySyF1Igay7ZF45
+        Cr1kKFZYqr129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+ping ?
 
-The following warning can be triggered with the C reproducer in
-the link. The syz repro may be more readable:
-# {Threaded:false Repeat:true RepeatTimes:0 Procs:1 Slowdown:1 Sandbox:none SandboxArg:0 Leak:false NetInjection:true NetDevices:true NetReset:false Cgroups:true BinfmtMisc:false CloseFDs:true KCSAN:false DevlinkPCI:false NicVF:false USB:true VhciInjection:true Wifi:true IEEE802154:false Sysctl:true UseTmpDir:true HandleSegv:false Repro:false Trace:false LegacyOptions:{Collide:false Fault:false FaultCall:0 FaultNth:0}}
+On 12/26/2022 6:33 PM, Hou Tao wrote:
+> From: Hou Tao <houtao1@huawei.com>
+>
+> Hi,
+>
+> The patchset includes two fixes for fscache volume operations: patch 1
+> fixes the hang problem during volume acquisition when the volume
+> acquisition process waits for the freeing of relinquished volume, patch
+> 2 adds the missing memory barrier in fscache_create_volume_work() and it
+> is spotted through code review when checking whether or not these is
+> missing smp_mb() before invoking wake_up_bit().
+>
+> Comments are always welcome.
+>
+> Chang Log:
+> v2:
+>  * rebased on v6.1-rc1
+>  * Patch 1: use wait_on_bit() instead (Suggested by David)
+>  * Patch 2: add the missing smp_mb() in fscache_create_volume_work()
+>
+> v1: https://listman.redhat.com/archives/linux-cachefs/2022-December/007384.html
+>
+> Hou Tao (2):
+>   fscache: Use wait_on_bit() to wait for the freeing of relinquished
+>     volume
+>   fscache: Add the missing smp_mb__after_atomic() before wake_up_bit()
+>
+>  fs/fscache/volume.c | 17 ++++++++++++++---
+>  1 file changed, 14 insertions(+), 3 deletions(-)
+>
 
-r0 = bpf$MAP_CREATE(0x0, &(0x7f0000000140)={0xf, 0x4, 0x4, 0x8}, 0x48)
-r1 = bpf$PROG_LOAD_XDP(0x5, &(0x7f00000001c0)={0x6, 0xb, &(0x7f0000000000)={{@imm, @map_fd={0x18, 0x6, 0x1, 0x0, r0}, @map_fd={0x18, 0x7, 0x1, 0x0, r0}, @map_fd={0x18, 0x8, 0x1, 0x0, r0}, @map_fd={0x18, 0x9, 0x1, 0x0, r0}}}, &(0x7f0000000080)}, 0x80)
-r2 = bpf$BPF_LINK_CREATE_XDP(0x1c, &(0x7f0000000240)={r1, 0xf}, 0x10)
-bpf$MAP_CREATE(0x0, &(0x7f0000000000)={0x5, 0x81c, 0x630, 0x8, 0x0, 0x1}, 0x48)
-r3 = bpf$PROG_LOAD_XDP(0x5, &(0x7f0000000380)={0x6, 0xb, &(0x7f00000002c0)={{@imm, @imm, @imm, @imm, @imm}}, &(0x7f0000000340), 0x0, 0x0, 0x0, 0x0, 0x0, '\x00', 0x46}, 0x80)
-bpf$BPF_LINK_UPDATE(0x1d, &(0x7f0000000840)={r2, r3, 0x4, r1}, 0x10)
-
-This can be reproduced on:
-HEAD commit:    6d0c4b11e743 ("libbpf: Poison strlcpy()")
-git tree:       bpf-next
-console output: https://pastebin.com/raw/DwdHsbS5
-kernel config : https://pastebin.com/raw/AZCHdEbK
-C reproducer  : https://pastebin.com/raw/tE08i586
-
-------------[ cut here ]------------
-attempt to execute device eBPF program on the host!
-WARNING: CPU: 5 PID: 4498 at kernel/bpf/offload.c:252 bpf_prog_warn_on_exec+0x15/0x20 kernel/bpf/offload.c:252
-Modules linked in:
-CPU: 5 PID: 4498 Comm: kworker/5:3 Not tainted 6.2.0-rc2-00302-g6d0c4b11e743 #153
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-Workqueue: ipv6_addrconf addrconf_dad_work
-RIP: 0010:bpf_prog_warn_on_exec+0x15/0x20 kernel/bpf/offload.c:252
-Code: e1 35 2f 00 eb c8 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 f3 0f 1e fa e8 b7 10 df ff 48 c7 c7 a0 c6 55 8a e8 95 53 20 08 <0f> 0b 31 c0 c3 66 0f 1f 44 00 00 48 b8 00 00 00 00 00 fc ff df 41
-RSP: 0018:ffffc900009a09a8 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff888027587100 RCX: 0000000000000000
-RDX: ffff8881066c9d80 RSI: ffffffff81671400 RDI: fffff52000134127
-RBP: ffff888013c47890 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000101 R11: ffffffff90d3f143 R12: ffff888027587156
-R13: ffff888027587000 R14: ffffc900009a0a20 R15: ffff888013c47900
-FS:  0000000000000000(0000) GS:ffff888135d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000056006aaf00c0 CR3: 00000000264a0000 CR4: 0000000000750ee0
-PKRU: 55555554
-Call Trace:
- <IRQ>
- __bpf_prog_run include/linux/filter.h:600 [inline]
- bpf_prog_run_xdp include/linux/filter.h:775 [inline]
- veth_xdp_rcv_skb+0x8a2/0x21a0 drivers/net/veth.c:824
- veth_xdp_rcv.constprop.0+0x3f2/0xb20 drivers/net/veth.c:939
- veth_poll+0x141/0x8c0 drivers/net/veth.c:975
- __napi_poll.constprop.0+0xb0/0x440 net/core/dev.c:6485
- napi_poll net/core/dev.c:6552 [inline]
- net_rx_action+0x8f8/0xd50 net/core/dev.c:6663
- __do_softirq+0x1f7/0xaf6 kernel/softirq.c:571
- do_softirq kernel/softirq.c:472 [inline]
- do_softirq+0x10e/0x160 kernel/softirq.c:459
- </IRQ>
- <TASK>
- __local_bh_enable_ip+0xf8/0x120 kernel/softirq.c:396
- local_bh_enable include/linux/bottom_half.h:33 [inline]
- rcu_read_unlock_bh include/linux/rcupdate.h:834 [inline]
- ip6_finish_output2+0x634/0x1aa0 net/ipv6/ip6_output.c:135
- __ip6_finish_output net/ipv6/ip6_output.c:195 [inline]
- ip6_finish_output+0x485/0x11c0 net/ipv6/ip6_output.c:206
- NF_HOOK_COND include/linux/netfilter.h:291 [inline]
- ip6_output+0x243/0x820 net/ipv6/ip6_output.c:227
- dst_output include/net/dst.h:444 [inline]
- NF_HOOK.constprop.0+0xfa/0x4c0 include/linux/netfilter.h:302
- ndisc_send_skb+0x9e8/0x1320 net/ipv6/ndisc.c:508
- ndisc_send_ns+0xb5/0x130 net/ipv6/ndisc.c:666
- addrconf_dad_work+0xc6b/0x1300 net/ipv6/addrconf.c:4171
- process_one_work+0xa33/0x1720 kernel/workqueue.c:2289
- worker_thread+0x67d/0x10e0 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
