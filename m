@@ -2,129 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92B5665B14
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C6B665B19
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjAKML3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 07:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S232728AbjAKMLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 07:11:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233530AbjAKMLO (ORCPT
+        with ESMTP id S233594AbjAKMLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 07:11:14 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2ED97262A;
+        Wed, 11 Jan 2023 07:11:16 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A540B1C9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 04:11:14 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id j17so23215855lfr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 04:11:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LQ3ejIIcNy5wNB2nAKCgYVyxVsxuI4AQbfdxuKZTncs=;
+        b=yzSKfAiK6TVY86KqttCyW4EQY4cuqxw12pIH2DKrHqVKzaS6B5W/DDJo19vaO/pFZj
+         FlSUFtmlAdG5QdSPQJmT45aW8BAOT7SaygC+XgZEKHOv4JjmlaoIQ8lQDdML8219vYnC
+         OGQO40HhaBVKYOVkZTpI0OmU/dzkx6kKQLEutjiolI6lDlnk/dfO/qEyU0IT7zKOUyGu
+         2x1/15ULi/MC1sEi2MrfvQb/1IC4ZUMYPZVjuKSrwStWhyk9Qy4zv+Q7zU+4BnNr2A9c
+         XPODEUFLvylGpIFeF+QPEZ7xxdOsdJSfZlF3W60pp0ndfwkrSxk7BkWVUtbXl7+tev44
+         D4ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LQ3ejIIcNy5wNB2nAKCgYVyxVsxuI4AQbfdxuKZTncs=;
+        b=H4cM99QoQdUxDsSSHmPVk528I3LnwlbvuBIy55XTwfWOkB7OmXWYfQmuiizhOUUiMz
+         UdkPTUqWtIr1+DZ5QTS+mreb8XBc6dKAycJlmmPLejHNEzxLAxJT1GpRkFdiMXzY8HaT
+         VuTii8xqzcnddUFmCUJfra7EaD2amQZ/VSI++Bn/JqwYlEWVKIiGDTDGJ7lBUPQb3P1D
+         SDs7s5k9v/dzKxj67+jQinGU9avufQWdWqCeHI85LyfMtcojmGtYvRIQQeYuhrL0XI/B
+         4zo18qQ9hOt5tOYP3d4LuSlbRfyfde2tqFiP40u7w9d7vAVm72siFRJNgQSaOcHrWJEI
+         pYMg==
+X-Gm-Message-State: AFqh2krpbH3WuE2YuvUGQna0OfnsssyaH1fJdiNuA/nVm/eHHA/aRfP9
+        1drbH/8Vc2018Z0FU+87Yo8uCA==
+X-Google-Smtp-Source: AMrXdXsh19qIUk8Xn6V/5zPoR81BBWhrcSr8hpmf/IQukJLnkIBiA2tECGl5ikFvVdZLDCE+ErpoBw==
+X-Received: by 2002:a05:6512:400d:b0:4b5:936e:69df with SMTP id br13-20020a056512400d00b004b5936e69dfmr23711772lfb.53.1673439072523;
         Wed, 11 Jan 2023 04:11:12 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1F2BFEC;
-        Wed, 11 Jan 2023 04:11:53 -0800 (PST)
-Received: from [10.57.68.138] (unknown [10.57.68.138])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7D313F71A;
-        Wed, 11 Jan 2023 04:11:09 -0800 (PST)
-Message-ID: <02f259fe-1c6f-834b-c29d-aaf2a0595adb@arm.com>
-Date:   Wed, 11 Jan 2023 12:11:04 +0000
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id b4-20020a2e8484000000b00286dbab9a87sm725097ljh.91.2023.01.11.04.11.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 04:11:12 -0800 (PST)
+Message-ID: <2bcb3e4e-9a81-73f5-7820-06432ec062c5@linaro.org>
+Date:   Wed, 11 Jan 2023 13:11:10 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2] iommu/iova: Fix alloc iova overflows issue
-Content-Language: en-GB
-To:     yf.wang@mediatek.com, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:IOMMU DMA-API LAYER" <iommu@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Cc:     wsd_upstream@mediatek.com, stable@vger.kernel.org,
-        Libo Kang <Libo.Kang@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Ning Li <Ning.Li@mediatek.com>,
-        jianjiao zeng <jianjiao.zeng@mediatek.com>
-References: <20230111063801.25107-1-yf.wang@mediatek.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230111063801.25107-1-yf.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v7 2/4] arm64: dts: qcom: sc8280xp-crd: Enable EDP
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230111035906.2975494-1-quic_bjorande@quicinc.com>
+ <20230111035906.2975494-3-quic_bjorande@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230111035906.2975494-3-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-11 06:38, yf.wang@mediatek.com wrote:
-> From: Yunfei Wang <yf.wang@mediatek.com>
-> 
-> In __alloc_and_insert_iova_range, there is an issue that retry_pfn
-> overflows. The value of iovad->anchor.pfn_hi is ~0UL, then when
-> iovad->cached_node is iovad->anchor, curr_iova->pfn_hi + 1 will
-> overflow. As a result, if the retry logic is executed, low_pfn is
-> updated to 0, and then new_pfn < low_pfn returns false to make the
-> allocation successful.
-> 
-> This issue occurs in the following two situations:
-> 1. The first iova size exceeds the domain size. When initializing
-> iova domain, iovad->cached_node is assigned as iovad->anchor. For
-> example, the iova domain size is 10M, start_pfn is 0x1_F000_0000,
-> and the iova size allocated for the first time is 11M. The
-> following is the log information, new->pfn_lo is smaller than
-> iovad->cached_node.
-> 
-> Example log as follows:
-> [  223.798112][T1705487] sh: [name:iova&]__alloc_and_insert_iova_range
-> start_pfn:0x1f0000,retry_pfn:0x0,size:0xb00,limit_pfn:0x1f0a00
-> [  223.799590][T1705487] sh: [name:iova&]__alloc_and_insert_iova_range
-> success start_pfn:0x1f0000,new->pfn_lo:0x1efe00,new->pfn_hi:0x1f08ff
-> 
-> 2. The node with the largest iova->pfn_lo value in the iova domain
-> is deleted, iovad->cached_node will be updated to iovad->anchor,
-> and then the alloc iova size exceeds the maximum iova size that can
-> be allocated in the domain.
-> 
-> After judging that retry_pfn is less than limit_pfn, call retry_pfn+1
-> to fix the overflow issue.
-> 
-> Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
-> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-> Cc: <stable@vger.kernel.org> # 5.15.*
 
-Fixes: 4e89dce72521 ("iommu/iova: Retry from last rb tree node if iova search fails")
 
-Acked-by: Robin Murphy <robin.murphy@arm.com>
-
+On 11.01.2023 04:59, Bjorn Andersson wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> The SC8280XP CRD has a EDP display on MDSS0 DP3, enable relevant nodes
+> and link it together with the backlight control.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
-> v2: Update patch
->      1. Cc stable@vger.kernel.org
->         This patch needs to be merged stable branch,
->         add stable@vger.kernel.org in mail list.
->      2. Refer robin's suggestion to update patch.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
 > 
-> ---
->   drivers/iommu/iova.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> Changes since v6:
+> - None
 > 
-> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-> index a44ad92fc5eb..fe452ce46642 100644
-> --- a/drivers/iommu/iova.c
-> +++ b/drivers/iommu/iova.c
-> @@ -197,7 +197,7 @@ static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
->   
->   	curr = __get_cached_rbnode(iovad, limit_pfn);
->   	curr_iova = to_iova(curr);
-> -	retry_pfn = curr_iova->pfn_hi + 1;
-> +	retry_pfn = curr_iova->pfn_hi;
->   
->   retry:
->   	do {
-> @@ -211,7 +211,7 @@ static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
->   	if (high_pfn < size || new_pfn < low_pfn) {
->   		if (low_pfn == iovad->start_pfn && retry_pfn < limit_pfn) {
->   			high_pfn = limit_pfn;
-> -			low_pfn = retry_pfn;
-> +			low_pfn = retry_pfn + 1;
->   			curr = iova_find_limit(iovad, limit_pfn);
->   			curr_iova = to_iova(curr);
->   			goto retry;
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 73 ++++++++++++++++++++++-
+>  1 file changed, 72 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> index 551768f97729..db12d8678861 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> @@ -20,7 +20,7 @@ aliases {
+>  		serial0 = &qup2_uart17;
+>  	};
+>  
+> -	backlight {
+> +	backlight: backlight {
+>  		compatible = "pwm-backlight";
+>  		pwms = <&pmc8280c_lpg 3 1000000>;
+>  		enable-gpios = <&pmc8280_1_gpios 8 GPIO_ACTIVE_HIGH>;
+> @@ -34,6 +34,22 @@ chosen {
+>  		stdout-path = "serial0:115200n8";
+>  	};
+>  
+> +	vreg_edp_3p3: regulator-edp-3p3 {
+> +		compatible = "regulator-fixed";
+> +
+> +		regulator-name = "VREG_EDP_3P3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +
+> +		gpio = <&tlmm 25 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&edp_reg_en>;
+> +
+> +		regulator-boot-on;
+> +	};
+> +
+>  	vreg_edp_bl: regulator-edp-bl {
+>  		compatible = "regulator-fixed";
+>  
+> @@ -228,6 +244,55 @@ vreg_l9d: ldo9 {
+>  	};
+>  };
+>  
+> +&dispcc0 {
+> +	status = "okay";
+> +};
+> +
+> +&mdss0 {
+> +	status = "okay";
+> +};
+> +
+> +&mdss0_dp3 {
+> +	compatible = "qcom,sc8280xp-edp";
+> +
+> +	data-lanes = <0 1 2 3>;
+> +
+> +	status = "okay";
+> +
+> +	aux-bus {
+> +		panel {
+> +			compatible = "edp-panel";
+> +			power-supply = <&vreg_edp_3p3>;
+> +
+> +			backlight = <&backlight>;
+> +
+> +			ports {
+> +				port {
+> +					edp_panel_in: endpoint {
+> +						remote-endpoint = <&mdss0_dp3_out>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	ports {
+> +		port@1 {
+> +			reg = <1>;
+> +			mdss0_dp3_out: endpoint {
+> +				remote-endpoint = <&edp_panel_in>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&mdss0_dp3_phy {
+> +	vdda-phy-supply = <&vreg_l6b>;
+> +	vdda-pll-supply = <&vreg_l3b>;
+> +
+> +	status = "okay";
+> +};
+> +
+>  &pcie2a {
+>  	perst-gpios = <&tlmm 143 GPIO_ACTIVE_LOW>;
+>  	wake-gpios = <&tlmm 145 GPIO_ACTIVE_LOW>;
+> @@ -494,6 +559,12 @@ hastings_reg_en: hastings-reg-en-state {
+>  &tlmm {
+>  	gpio-reserved-ranges = <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
+>  
+> +	edp_reg_en: edp-reg-en-state {
+> +		pins = "gpio25";
+> +		function = "gpio";
+> +		drive-strength = <16>;
+> +	};
+> +
+>  	kybd_default: kybd-default-state {
+>  		disable-pins {
+>  			pins = "gpio102";
