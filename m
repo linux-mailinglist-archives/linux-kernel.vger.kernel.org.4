@@ -2,128 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9969866581D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8FE665811
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238436AbjAKJvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:51:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
+        id S231841AbjAKJt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:49:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239358AbjAKJt1 (ORCPT
+        with ESMTP id S239134AbjAKJtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:49:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D0911149
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:47:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673430441;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UE0xeHCU2bfsdgMc1zyv/Lgw7gDb0/ii1vRY0TiYYqA=;
-        b=F0Qzc9pOcBHuo5Dde0ELojDlA4f5urFDt1ws+oXym06rv8eG33z9EgVqY3ASn5cGyA6ktC
-        q6QYvf6FWHasKjS14G1dqiRtZQJxxBRCLqclHzmhwOkLjUeLQ9FqSGibRbLofFu8ywA/Su
-        8JLKUOldYAVYoQfpgZJcigTnV6uwMqo=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-554-axw3-0z_MzSJyQCJzF7c7Q-1; Wed, 11 Jan 2023 04:47:20 -0500
-X-MC-Unique: axw3-0z_MzSJyQCJzF7c7Q-1
-Received: by mail-io1-f72.google.com with SMTP id t15-20020a5d81cf000000b006f95aa9ba6eso8761137iol.16
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:47:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UE0xeHCU2bfsdgMc1zyv/Lgw7gDb0/ii1vRY0TiYYqA=;
-        b=AtvzAc+EJLl2wdgP1gcK/qAipx9ClxMp4Qewfm6b8TdcHoSPMdFzDEgK2QfKUPDGTq
-         c3WE1+VAiER7I8NLasLZyA0yt1r7YJG8eNkV5r3M3L7oZuACbi+kS+45pe4fnH/nTeJK
-         w0T3yTf/3b1n6Ys4O3ZCKIFuJcboOXQt5wVbEDzY9Qbn0E9GDaoFdvy1Tej8b8Qg07Mk
-         psXPzKtjOg7mYAgcqvFXnziB7c0MZIKYNjNjMZ5LG14R5Byvwipe/w22FBGLCzMu8xnB
-         jYjIbXVmL8Eb/uleuJ01T3SJOEya5ntEzhh4NJ+UH4YKR2tzbGu2NzIJrXzRmi4QLU8o
-         TWGA==
-X-Gm-Message-State: AFqh2kojKEXB7QTxkCF7oEkzwXQX3ZZWS5xfcqKUhYy5Uy/K50q9KlMZ
-        wE2I/ldMIdzZZ7EGUii/RpbBEYEUfVPLMqaRFBaIqaHU1caRCI8jvlJfhHOlQNLnFoEEt1Dej7n
-        qFkoR3pjdIIKXdHof+vfCroa4fvcCmIIaitTWQ0hw
-X-Received: by 2002:a05:6602:449:b0:6df:bfeb:f15d with SMTP id e9-20020a056602044900b006dfbfebf15dmr5813363iov.122.1673430439236;
-        Wed, 11 Jan 2023 01:47:19 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtMGuR8Fz8YM4jgsNWownmj/QbuhKvKMrvrkynsYoffbOpUWKeQSLAK7R9clAJLj9D4yWVopYxCWeyDIqtLC0Q=
-X-Received: by 2002:a05:6602:449:b0:6df:bfeb:f15d with SMTP id
- e9-20020a056602044900b006dfbfebf15dmr5813358iov.122.1673430439027; Wed, 11
- Jan 2023 01:47:19 -0800 (PST)
+        Wed, 11 Jan 2023 04:49:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF89E24F
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:47:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E41061B60
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E447C433D2;
+        Wed, 11 Jan 2023 09:47:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673430476;
+        bh=NRZQ78SMvO0fRJpsqUuHZCOMRrujjtVMkMIae33/L1Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M1QbBTa37RlMou78S+K3VcDcgcLRdcoTeeTxp7IqGeFX0g7bgepBOyD1rJ86KQcg/
+         8V/wZ64xLZ0Sgy3Z3pcEHm+/3/QQNjgqQ719rbJtEhklnvOo51ssSA/IfM6Z2zuQih
+         73IEbXo3no4D82CC8wJufVe61DCXO6IogEuy3tBE=
+Date:   Wed, 11 Jan 2023 10:47:54 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>
+Subject: Re: [PATCH 5/5] driver core: device_get_devnode() should take a
+ const *
+Message-ID: <Y76FypOBJchJEsWM@kroah.com>
+References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+ <20221123122523.1332370-5-gregkh@linuxfoundation.org>
+ <Y34h5QBMTxEn/lzC@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
- <20230106102332.1019632-7-benjamin.tissoires@redhat.com> <20230111061054.dqduab66plb6uzg2@macbook-pro-6.dhcp.thefacebook.com>
-In-Reply-To: <20230111061054.dqduab66plb6uzg2@macbook-pro-6.dhcp.thefacebook.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 11 Jan 2023 10:47:07 +0100
-Message-ID: <CAO-hwJLk7dNYHiharC0wR0563aTE9NfD_jE5qxdoM9m0pW__cA@mail.gmail.com>
-Subject: Re: [PATCH HID for-next v1 6/9] HID: bpf: rework how programs are
- attached and stored in the kernel
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y34h5QBMTxEn/lzC@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 7:11 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Jan 06, 2023 at 11:23:29AM +0100, Benjamin Tissoires wrote:
-> >
-> > +static void hid_bpf_link_release(struct bpf_link *link)
-> > +{
-> > +     struct hid_bpf_link *hid_link =
-> > +             container_of(link, struct hid_bpf_link, link);
-> > +
-> > +     __clear_bit(hid_link->index, jmp_table.enabled);
-> > +     schedule_work(&release_work);
-> > +}
->
-> ...
->
-> > +     link->index = prog_idx;
->
-> I was super confused that you use prog_idx as a bit in jmp_table
-> and had to look into your tree what hid_bpf_jmp_table.c is doing.
-> Looks like it's not prog_id (which is prog->aux->id) that we know.
-> It's hid specific prog idx in that jmp table.
-> Maybe would be good to rename your prog_idx to something with 'hid' suffix or prefix?
-> or 'table' suffix or prefix ?
-> prog_table_idx ?
+On Wed, Nov 23, 2022 at 03:36:37PM +0200, Andy Shevchenko wrote:
+> On Wed, Nov 23, 2022 at 01:25:23PM +0100, Greg Kroah-Hartman wrote:
+> > device_get_devnode() should take a constant * to struct device as it
+> > does not modify it in any way, so modify the function definition to do
+> > this and move it out of device.h as it does not need to be exposed to
+> > the whole kernel tree.
+> 
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> (see one nit-pick below)
+> 
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > Cc: Ira Weiny <ira.weiny@intel.com>
+> > Cc: Dan Williams <dan.j.williams@intel.com>
+> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Cc: Won Chung <wonchung@google.com>
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  drivers/base/base.h    | 2 ++
+> >  drivers/base/core.c    | 2 +-
+> >  include/linux/device.h | 2 --
+> >  3 files changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/base/base.h b/drivers/base/base.h
+> > index 7d4803c03d3e..a8a119c36bdc 100644
+> > --- a/drivers/base/base.h
+> > +++ b/drivers/base/base.h
+> > @@ -158,6 +158,8 @@ extern void device_block_probing(void);
+> >  extern void device_unblock_probing(void);
+> >  extern void deferred_probe_extend_timeout(void);
+> >  extern void driver_deferred_probe_trigger(void);
+> 
+> I would put a blank line here if the below doesn't belong to the deferral probe
+> routines.
 
-prog_table_idx sounds good :)
+This whole .h file needs to be cleaned up and made nicer (the externs
+show it's age), so I'll just leave this as-is and when all of the rework
+is done reorginize it.
 
->
-> Other than that the patch set looking great.
+thanks for the review!
 
-great, thanks!
-
-> I'm assuming removing call_hid_bpf_prog_put_deferred() and everything related
-> comes in the next set?
->
-
-Yep. I'll probably send it tomorrow. I have a bunch of urgent
-corporate stuff to do today so won't have time for the fun part of the
-job :(
-
-Cheers,
-Benjamin
-
+greg k-h
