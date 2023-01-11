@@ -2,65 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B76F665ED4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF48E665ED5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbjAKPN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:13:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S232064AbjAKPOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjAKPNz (ORCPT
+        with ESMTP id S233027AbjAKPOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:13:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5FBF1F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:13:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673449987;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HVmiJOgksdOGEHQqWYEPkqHT1UjW44QExBrLaj12oP4=;
-        b=IRfTqI077L1LqVvNTDAmeRgApFeWbZ8exsYfFhrqVC5VLdD/zOkAHd72ICbwqq/7A6BzrQ
-        I8SMQaR7UiqBzExRt9vafCNYMhuctodo5vw8A6PYtMaENljbONnYRWws4sLF0sOaGmOSvd
-        jeK2s5Hrz+90+DSyifR4rB+CMyuQCaE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-298-mov-pDGJMnKN6lHpH1pOrw-1; Wed, 11 Jan 2023 10:13:03 -0500
-X-MC-Unique: mov-pDGJMnKN6lHpH1pOrw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD76A185A78B;
-        Wed, 11 Jan 2023 15:13:02 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DE49E422A4;
-        Wed, 11 Jan 2023 15:13:01 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20221229164029.3009754-1-zyytlz.wz@163.com>
-References: <20221229164029.3009754-1-zyytlz.wz@163.com>
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     dhowells@redhat.com, marc.dionne@auristor.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        hackerzheng666@gmail.com, alex000young@gmail.com,
-        security@kernel.org
-Subject: Re: [PATCH] afs: Fix poential UAF in afs_make_call
+        Wed, 11 Jan 2023 10:14:11 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D866411C05;
+        Wed, 11 Jan 2023 07:14:10 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 671DFFEC;
+        Wed, 11 Jan 2023 07:14:52 -0800 (PST)
+Received: from [10.57.45.242] (unknown [10.57.45.242])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 543903F71A;
+        Wed, 11 Jan 2023 07:14:07 -0800 (PST)
+Message-ID: <974e7d1e-45c1-217f-1331-8cb498b187eb@arm.com>
+Date:   Wed, 11 Jan 2023 15:14:05 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2427544.1673449981.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 11 Jan 2023 15:13:01 +0000
-Message-ID: <2427545.1673449981@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 2/7] perf: Use perf_pmu__open_file() and
+ perf_pmu__scan_file()
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     linux-perf-users@vger.kernel.org, tanmay@marvell.com,
+        mike.leach@linaro.org, sgoutham@marvell.com, gcherian@marvell.com,
+        lcherian@marvell.com, bbhushan2@marvell.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230103162042.423694-1-james.clark@arm.com>
+ <20230103162042.423694-3-james.clark@arm.com>
+ <Y75gXmBZXQueCuvO@leoy-yangtze.lan>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <Y75gXmBZXQueCuvO@leoy-yangtze.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,48 +61,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zheng Wang <zyytlz.wz@163.com> wrote:
 
-> There is a function call : afs_fs_get_capabilities calls afs_make_call, =
-in
-> afs_make_call, if error occurs in rxrpc_kernel_send_data, it will call
-> afs_put_call twice, which will free the call. And the access of
-> call->state will trigger a use-after-free bug.
 
-Are you sure of that?  Did you actually trigger a UAF?
+On 11/01/2023 07:09, Leo Yan wrote:
+> On Tue, Jan 03, 2023 at 04:20:36PM +0000, James Clark wrote:
+>> Remove some code that duplicates existing methods. This requires that
+>> some consts are removed because one of the existing helper methods takes
+>> a struct perf_pmu instead of a name which has a non const name field.
+>> But except for the tests, the strings were already non const.
+>>
+>> No functional changes.
+> 
+> [...]
+> 
+>> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+>> index 2f2bb0286e2a..8f39e2d17fb1 100644
+>> --- a/tools/perf/util/pmu.h
+>> +++ b/tools/perf/util/pmu.h
+>> @@ -2,6 +2,7 @@
+>>  #ifndef __PMU_H
+>>  #define __PMU_H
+>>  
+>> +#include <bits/types/FILE.h>
+> 
+> Nitpick: it's good to use <stdio.h> to replace <bits/types/FILE.h>.
+> 
+> Either way, this patch looks good to me:
 
-> -		if (cancel_work_sync(&call->async_work))
-> -			afs_put_call(call);
-> +		cancel_work_sync(&call->async_work);
+Looks like I also forgot to update the commit message about removing the
+consts after the last change. Will update both in the next change.
 
-The problem with this change is that it will leak a ref if the work item w=
-as
-queued but gets cancelled before being run, given to it here:
-  =
+Thanks for the review!
 
-  static void afs_wake_up_async_call(struct sock *sk, struct rxrpc_call *r=
-xcall,
-  				   unsigned long call_user_ID)
-  {
-  	struct afs_call *call =3D (struct afs_call *)call_user_ID;
-  	int r;
-
-  	trace_afs_notify_call(rxcall, call);
-  	call->need_attention =3D true;
-
-  	if (__refcount_inc_not_zero(&call->ref, &r)) {  <----
-  		trace_afs_call(call->debug_id, afs_call_trace_wake, r + 1,
-  			       atomic_read(&call->net->nr_outstanding_calls),
-  			       __builtin_return_address(0));
-
-  		if (!queue_work(afs_async_calls, &call->async_work))
-  			afs_put_call(call);
-  	}
-  }
-
-I *think* that cancel_work_sync() returns false if the work item is execut=
-ing,
-but hasn't been requeued.
-
-David
-
+> 
+> Reviewed-by: Leo Yan <leo.yan@linaro.org>
