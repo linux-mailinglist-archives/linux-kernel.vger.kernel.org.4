@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C69665BB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:46:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA80665BB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjAKMq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 07:46:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S232486AbjAKMr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 07:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231831AbjAKMqW (ORCPT
+        with ESMTP id S232762AbjAKMr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 07:46:22 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FEBE1C;
-        Wed, 11 Jan 2023 04:46:21 -0800 (PST)
-Date:   Wed, 11 Jan 2023 12:46:18 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673441179;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0CBoRt39skz+jx4efNlFIgS/P6kHEEX3x4nw5kpDw6Q=;
-        b=SF07QcbtcT/lnCU1V1GhDAcyJm/arq8PAFTmlRYG64FJsGMcaSTwlb+FiZDwIJvKqJ8g93
-        wZ7OPQjsh5KHQr8Fg1BhgWV9tar3NKaOtjrl34bRWLkETQmAsx9ZPgKGBrH2CCg6JISSEV
-        nhgydFw0ZVTWhfQNRDTJ5vT5FwkDR4X/gftc/7mEsE6Gy5UUZpQnix48W6GVt9hlSZsfIX
-        MJsT8mQSMXV1yu2x4WHSaY98FRSsH+DpSqj+UtMSSDl3A0YY86g8o/m85U+qZGMT2WJ4BC
-        pDJIYB74AI7mz57H2QsC0sxTHkne7E2ocf4P9js8xE3hGaojY7ql4iB7keks8Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673441179;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0CBoRt39skz+jx4efNlFIgS/P6kHEEX3x4nw5kpDw6Q=;
-        b=Xrvxo+5RFoiXCS+qNEux3IuG/Is5ZLBl9U1+za6Arlggg4L9cULESbvCODSy9smchQtlO0
-        aB3odEIEo33YKTCw==
-From:   "tip-bot2 for Wang Yong" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/boot/e820: Fix typo in e820.c comment
-Cc:     Wang Yong <yongw.kernel@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221211103849.173870-1-yongw.kernel@gmail.com>
-References: <20221211103849.173870-1-yongw.kernel@gmail.com>
+        Wed, 11 Jan 2023 07:47:29 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E51E56
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 04:47:28 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id bj3so12555568pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 04:47:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wOeVnxO+fE7bo4EmMWsOcdPE11gX4zgt6EQ8dlbpp8U=;
+        b=Yi2qmkmv+mRzCarqDHjfD0S7azXhXzNqIGQB3u4MZ1VHuMgth/v8reC34x22ORPAth
+         ZlvST6EHMkvSGBt3DyA40G2CmhWVUy8bRpzmhEh5EtVJf6vqHTRwRjBZcjowCtPpV8Jy
+         ewaRREFW/LIFxuifjg24jB+ervuVlFAZ68CRFuJsneP0mjtvRHixBnGGZEBT9c5bLntM
+         4oZakGimJYWUHJmdOnnZqYKMPly70jS3Dfdav/BjutSaasrEpkPmyVelG4xmrjc7vJUm
+         4+3fvKi5sDBWBm0CRhcnMPEvQjKDE4z9J586zmnE8kDFKGjzUtomphpshjsH74cRk6dm
+         NqDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wOeVnxO+fE7bo4EmMWsOcdPE11gX4zgt6EQ8dlbpp8U=;
+        b=oSDJfNIDT9nKuH9V27fG2jelHgszDFdVTF5IRyDibA0o5PSzM0s7/AUL8CnF3NLVRs
+         RIlqdZ+SxzeRh6UL0A9z7x0KOXDMYSLPMY8v1/8hvq+synTtjNPBoHSzoTZzdKezMetI
+         fEcMwoBC/mNm+BD2rb4//dDUB9EeydOBLhFxsuUb5TWKa5TOH7hn5IjjSLlKKbqXmzAQ
+         /4PIHdmF48bckYjXWP2jwVbTrGGT+ZSn0Uq23MvhDatIYYlSpnYcbqwtSX6Z5cEmzWv7
+         w3Aka0s46spRgUQ8zEj9kDs8X1WXOGGUhyj9UKB0KDeRvmyhVxZFkksXDrEZB3Zz2vnd
+         y0uw==
+X-Gm-Message-State: AFqh2koEFvfXSpxCu5m2ZC0Msg4TqCai+F5+erazVSBJipMdcHuyRQ7n
+        9z12+w+Q6nNp/bROBgcOmyg=
+X-Google-Smtp-Source: AMrXdXsg06VXz/Zz0HN6/K+KyjOZvQhnmMAl9dKpDyzZlSXH7uoabAmRViaVEtHhl3xJ8+IzVkBfEQ==
+X-Received: by 2002:a17:902:a60f:b0:188:8745:35af with SMTP id u15-20020a170902a60f00b00188874535afmr2218809plq.63.1673441248315;
+        Wed, 11 Jan 2023 04:47:28 -0800 (PST)
+Received: from vernon-pc ([49.67.3.29])
+        by smtp.gmail.com with ESMTPSA id b2-20020a170902d50200b00192a96f4916sm9990241plg.259.2023.01.11.04.47.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 04:47:27 -0800 (PST)
+Date:   Wed, 11 Jan 2023 20:47:22 +0800
+From:   Vernon Yang <vernon2gm@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/mmap: fix comment of unmapped_area{_topdown}
+Message-ID: <Y76vr/24l8Vfv27R@vernon-pc>
+References: <20230110150320.1676299-1-vernon2gm@gmail.com>
+ <Y72yC04t03AOHQNI@casper.infradead.org>
 MIME-Version: 1.0
-Message-ID: <167344117849.4906.7905462837632668543.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y72yC04t03AOHQNI@casper.infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+On Tue, Jan 10, 2023 at 06:44:27PM +0000, Matthew Wilcox wrote:
+> On Tue, Jan 10, 2023 at 11:03:20PM +0800, Vernon Yang wrote:
+> > - * @info: The unmapped area information including the range (low_limit -
+> > + * @info: The unmapped area information including the range [low_limit -
+> >   * hight_limit), the alignment offset and mask.
+>
+> s/hight_limit/high_limit/
 
-Commit-ID:     b7d1f15b5c274999dfe8dda60a9a516eebfbc3d0
-Gitweb:        https://git.kernel.org/tip/b7d1f15b5c274999dfe8dda60a9a516eebfbc3d0
-Author:        Wang Yong <yongw.kernel@gmail.com>
-AuthorDate:    Sun, 11 Dec 2022 10:38:49 
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Wed, 11 Jan 2023 12:45:03 +01:00
+Okay, thanks you for review.
 
-x86/boot/e820: Fix typo in e820.c comment
-
-change "itsmain" to "its main".
-
-Fixes: 544a0f47e780 ("x86/boot/e820: Rename e820_table_saved to e820_table_firmware and improve the description")
-Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20221211103849.173870-1-yongw.kernel@gmail.com
----
- arch/x86/kernel/e820.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-index 9dac246..0614a79 100644
---- a/arch/x86/kernel/e820.c
-+++ b/arch/x86/kernel/e820.c
-@@ -53,7 +53,7 @@
-  *
-  * Once the E820 map has been converted to the standard Linux memory layout
-  * information its role stops - modifying it has no effect and does not get
-- * re-propagated. So itsmain role is a temporary bootstrap storage of firmware
-+ * re-propagated. So its main role is a temporary bootstrap storage of firmware
-  * specific memory layout data during early bootup.
-  */
- static struct e820_table e820_table_init		__initdata;
+>
+> > - * @info: The unmapped area information including the range (low_limit -
+> > + * @info: The unmapped area information including the range [low_limit -
+> >   * hight_limit), the alignment offset and mask.
+>
+> ditto
