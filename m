@@ -2,146 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B66665B6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12E3665B75
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbjAKMdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 07:33:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S234100AbjAKMet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 07:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbjAKMdJ (ORCPT
+        with ESMTP id S232120AbjAKMeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 07:33:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78F1E029;
-        Wed, 11 Jan 2023 04:33:07 -0800 (PST)
+        Wed, 11 Jan 2023 07:34:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEFD12613;
+        Wed, 11 Jan 2023 04:34:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75F4561CAB;
-        Wed, 11 Jan 2023 12:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F8EC433D2;
-        Wed, 11 Jan 2023 12:33:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D5261CD8;
+        Wed, 11 Jan 2023 12:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B26C433F0;
+        Wed, 11 Jan 2023 12:34:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673440386;
-        bh=6W/sprcBudgz8eSbOqZAoynmDsVr5n+AmKEg6gnvo7E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iNT+x5ovfUERKQKn0QCi2Hr6v1mc7OiOcp6FQWt55TXInjq9T7CaIw11ND7C5K6ZT
-         qrEZ7E3sqmJKzPFVmXFT/Dwd+jckngmq17h0qOdHtAhtAOa6FseN9c0fgoPKqXiP4a
-         yjqB+ITh1XrU3EA61z774v29nYdIAo76DcGTTgrHXRmxgCU9BwkfWP9Y8MsqvrLHO/
-         XWB4TpvaGXUcGljISgvuKfCUcmis1KaMB+7QA1ul4ZpeKCnZjKlzNmHw1Z7AptcCiu
-         M26Li5Hk/rrhHH8ew/GEO62iVArAjy0ZIA5pSknU6M7DIehshw8AlKfbin3S/yEJFi
-         L/v4Ma3Fu4+YQ==
-Message-ID: <f169d05a-7a07-aedf-bad2-30cb4a88fc16@kernel.org>
-Date:   Wed, 11 Jan 2023 13:32:57 +0100
+        s=k20201202; t=1673440482;
+        bh=8ECPtl95jMrSYLYK0fQjZE4iX607dsXxBcoAptHSDRk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F+WPq2If4Vxd4uFQRjL2LkRRf9V8pa09IzqQRBW1tQo12YsZ1tw3NnSEdj9rdOG24
+         PlCE940j1Xm70AovSQjfwjaDDjU4jllNsj+2/T2FJ+xuUK4kBbks+hXC9XM2NrDpAx
+         GkYicY+nCOlqpN3y4fxSE+L6XAx0BM4IfXvweS2eE86TUtape8hhIHhCRO5cFGxpr/
+         JgjCveVG/zIMVxMJqsZ3Utrc+is98aUhzP09TtW5wCbk1KgWabOxtcqzLvXaFhkSr+
+         EDXqcOQnVTHpAdbyBw2cG64blL2y1hSKYqaiIGyfC+rOBco0FxTU45nRspsjwWgIFb
+         FtTn4Xzb8jzOg==
+Date:   Wed, 11 Jan 2023 18:04:38 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v2 05/16] driver core: make struct device_type.uevent()
+ take a const *
+Message-ID: <Y76s3tgPkfGhUzEr@matsya>
+References: <20230111113018.459199-1-gregkh@linuxfoundation.org>
+ <20230111113018.459199-6-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 3/7] dt-bindings: bus: add STM32MP15 ETZPC firewall
- bus bindings
-Content-Language: en-US
-To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>,
-        alexandre.torgue@foss.st.com, robh+dt@kernel.org,
-        Oleksii_Moisieiev@epam.com, linus.walleij@linaro.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        loic.pallardy@st.com, devicetree@vger.kernel.org,
-        mark.rutland@arm.com, arnd@arndb.de
-References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
- <20221221173055.11719-4-gatien.chevallier@foss.st.com>
- <879325d2-4b2d-bc1d-310c-ece4c449ad8f@kernel.org>
- <8357d887-c8ab-39bc-4ef0-62e9225fb2a6@foss.st.com>
- <118e7f0c-bf5d-4bda-ee70-92eb2b71649c@kernel.org>
- <8f022dc8-d728-ba91-35ed-8a4006855f0d@foss.st.com>
- <dfe328fc-349b-3357-a8ac-6fc363f403fc@kernel.org>
- <19157c67-fa83-e598-d7ee-c313f3d4b198@foss.st.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <19157c67-fa83-e598-d7ee-c313f3d4b198@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111113018.459199-6-gregkh@linuxfoundation.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 12:54, Gatien CHEVALLIER wrote:
->>>> Then why do you define them in bindings? Use raw numbers. Do you see
->>>> anywhere in arm/arm64 bindings for GIC_SPI interrupt numbers?
->>>>
->>>
->>> What would you think of simply removing the comments that state that IDs
->>> are reserved, mimicking the way it is for qcom bindings? Fundamentally,
->>> they are indeed only IDs and could be raw numbers.
->>
->> If these are IDs then there are no reserved numbers and they are
->> continuous from 0 to X. Without gaps.
->>
->>> IMO, this makes reading the device tree harder. Because you'd have to
->>> look what the raw number corresponds to.
->>
->> Sure, but that's not the reason to put numbers to the bindings... You
->> mix defines with bindings.
->>
->>> To take an example, it has already been done for SCMI clocks and I find
->>> it eases comprehension.
->>
->> You need to be a bit more specific...
-> 
-> Please see include/dt-bindings/clock/stm32mp1-clks.h, where there are 
-> various clock IDs defined, some of them not contiguous.
+On 11-01-23, 12:30, Greg Kroah-Hartman wrote:
+> The uevent() callback in struct device_type should not be modifying the
+> device that is passed into it, so mark it as a const * and propagate the
+> function signature changes out into all relevant subsystems that use
+> this callback.
 
-These are pretty often added to accommodate space for exposing these
-clocks in the future. IOW, these might be IDs just not all are shared
-via header. There are such platforms and it is OK.
+Acked-by: Vinod Koul <vkoul@kernel.org>
 
-> 
-> Errata: for SCMI clocks they are indeed contiguous but not clock IDs.
-> 
->>
->> Anyway, IDs should be placed in bindings. Some mapping of
->> internal/hardware ports, registers, offsets, values - usually not.
->>
->> I don't know where exactly your case fits, but when some IDs are
->> reserved it is a clear sign that these are not IDs (again - IDs start
->> from 0 and go incrementally by one, without gaps).
->>
-> 
-> I do agree with your statement that IDs should not be reserved.
-> 
-> I think I've missed something to better highlight my point of view: It 
-> would be perfectly fine using numbers that are not described in this 
-> bindings file. It would just not correspond to an ID of a peripheral 
-> described in the SoC reference manual, thus making no sense to use them. 
-> Stating that they are reserved was incorrect, it's just that peripherals 
-> get a firewall ID, depending on the platform.
-
-Why peripheral ID should be put into the bindings? Why bindings is a
-place for it? Interrupt numbers, GPIO indices/numbers, register offsets,
-IOMMU ports - none of these are suitable for bindings.
-
-> 
-> I think it should be okay not describing IDs that are not relevant, what 
-> do you think? I found that in include/dt-bindings/arm/qcom,ids.h, IDs 
-> are not continuous. Not mentioning an ID could be used for deprecation.
-
-These are not IDs of clocks. These are unique identifiers assigned by
-vendor and used by different pieces: firmware/bootloaders, DTS and Linux
-driver. We have no control of them but they exist. They also do not
-represent any hardware number.
-
-You bring some examples as an argument, but these examples are not
-always related to your case. To be clear - we talk here about bindings,
-so they bind different interfaces of software components (e.g. Linux
-kernel with DTS). Now, what is the different interface here in your
-case? If you say your peripheral hardware ID, then answer is no - this
-is not software interface.
-
-Best regards,
-Krzysztof
-
+-- 
+~Vinod
