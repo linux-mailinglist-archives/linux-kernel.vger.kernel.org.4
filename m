@@ -2,114 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02792665924
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C14665928
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236777AbjAKKi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 05:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
+        id S235980AbjAKKjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 05:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233028AbjAKKiM (ORCPT
+        with ESMTP id S232326AbjAKKjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 05:38:12 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5581085
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 02:38:10 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso9311101wmq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 02:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jL8bdyRPY1NcExtbiegzjvNk1MnzQ71tWSU8fsf/VCg=;
-        b=TMZ2c4LfuAn0iG1uB0odaHKYEIjH1TrkA59vsulAFrdwZlEPgcUg8WgUwJ+/r6EAEE
-         7W0UNZ9UsGzLFRl/YFFmdaua4sub9Hv/UV1qcIpjUn4Y+7O04y+jM5Lg1RO8VCxLwLOn
-         nD2XMr/LHL4TdMSbi4LME8nu7G3EqyxAgZEJx0hY/dsQ66QXsX6SkV19O10vslB5tK/a
-         RLNwfjFfjYeeKj/rFOuln6dbYjkNWlBEXcDuCwEhK4dQbmCmYyoi6Hfm6YYfqWCKekSt
-         JMEH/hRxCRgE0SXiN4q56yrGczFGzJ54dqF5uyb087kLZvjghmL2k8+rDxES8UWLTRF+
-         V5kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jL8bdyRPY1NcExtbiegzjvNk1MnzQ71tWSU8fsf/VCg=;
-        b=WLov/6ImKw+ymH38EriEDdIjbPeFKGMLPn9icTCSCjK71+bSX4o0CQ7nfV7RQXjCoW
-         ZedVt4+VUJa1E6pfsOuDruedTuHrVjOD/Z0dimKIADBCkhVTaoOIDpEIQzo1AisAB8iW
-         Z1fRiXM6uowf3sID041LptIDZaT9Lch0hMPcGbNZ+R/wMgDPiPyEO958qC/2oFoxgN2l
-         KNSKUZSs4dvEqcbii9bw+LKAWqtuAFy1mQmTYcwcnVz8C01SAl8/tYX3nGRDoqwsc0uZ
-         /A1kQwoUcUMonOJHD0hQo8tZIGQdpHRF0OiBYQvyCtuqu+P7iRacnMDDagvmoVhdOWoS
-         wZXQ==
-X-Gm-Message-State: AFqh2kpt4j5MGl1NRoeHRXqc5KuU6xOHHmLFJVEwgK4etsohY6mMxKvo
-        5KXpIitHqGRZlMcB5LQi0YoC0w==
-X-Google-Smtp-Source: AMrXdXtMBZkDg5eU72KkLHfQX3lI/6XIjTLZFPJqac2B2TGmn77JlJmeUvXko1SMKMq8Pu25TunGIA==
-X-Received: by 2002:a05:600c:ac8:b0:3d7:7cea:b410 with SMTP id c8-20020a05600c0ac800b003d77ceab410mr51917041wmr.33.1673433489574;
-        Wed, 11 Jan 2023 02:38:09 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p9-20020a05600c358900b003cffd3c3d6csm19644020wmq.12.2023.01.11.02.38.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 02:38:09 -0800 (PST)
-Message-ID: <98d2af06-8ef3-bb6b-1f29-4e33c1c748d6@linaro.org>
-Date:   Wed, 11 Jan 2023 11:38:06 +0100
+        Wed, 11 Jan 2023 05:39:01 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D135FAE;
+        Wed, 11 Jan 2023 02:38:59 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id d11bdf500a244b40; Wed, 11 Jan 2023 11:38:57 +0100
+Received: from kreacher.localnet (unknown [213.134.189.3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 94D47262179E;
+        Wed, 11 Jan 2023 11:38:56 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: [PATCH v3] PCI / ACPI: PM: Take _S0W of the target bridge into account in acpi_pci_bridge_d3(()
+Date:   Wed, 11 Jan 2023 11:38:55 +0100
+Message-ID: <5659681.DvuYhMxLoT@kreacher>
+In-Reply-To: <8191575.T7Z3S40VBb@kreacher>
+References: <20221121221742.GA137841@bhelgaas> <8191575.T7Z3S40VBb@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] ARM: dts: Fix User button on stm32mp135f-dk
-Content-Language: en-US
-To:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>
-Cc:     devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230111100725.463136-1-amelie.delaunay@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230111100725.463136-1-amelie.delaunay@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.189.3
+X-CLIENT-HOSTNAME: 213.134.189.3
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrleeggdduiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeefudduuedtuefgleffudeigeeitdeufeelvdejgefftdethffhhfethfeljefgteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeelrdefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekledrfedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepudefpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgt
+ phhtthhopehlvghnsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtghomhdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepufgrnhhjuhdrofgvhhhtrgesrghmugdrtghomhdprhgtphhtthhopehluhhkrghsseifuhhnnhgvrhdruggvpdhrtghpthhtoheprhgrfhgrvghlrdhjrdifhihsohgtkhhisehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=13 Fuz1=13 Fuz2=13
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2023 11:07, Amelie Delaunay wrote:
-> This patch fixes the following dtbs_check warning on stm32mp135f-dk:
-> arch/arm/boot/dts/stm32mp135f-dk.dtb: gpio-keys: 'user-pa13' does not match any of the regexes: '^(button|event|key|switch|(button|event|key|switch)-[a-z0-9-]+|[a-z0-9-]+-(button|event|key|switch))$', 'pinctrl-[0-9]+'
-> From schema: Documentation/devicetree/bindings/input/gpio-keys.yaml
-> 
-> It renames user-pa13 node into button-user so that it matches gpio-keys
-> bindings.
-> 
-> Fixes: 57012d79fefd ("ARM: dts: stm32: add UserPA13 button on stm32mp135f-dk")
-> 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-No blank lines between the tags, but I would drop the Fixes anyway. This
-is not a bug, but convention and coding style.
+It is generally questionable to allow a PCI bridge to go into D3 if
+it has _S0W returning D2 or a shallower power state, so modify
+acpi_pci_bridge_d3(() to always take the return value of _S0W for the
+target bridge into accout.  That is, make it return 'false' if _S0W
+returns D2 or a shallower power state for the target bridge regardless
+of its ancestor PCIe Root Port properties.  Of course, this also causes
+'false' to be returned if the PCIe Root Port itself is the target and
+its _S0W returns D2 or a shallower power state.
 
-> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> ---
->  arch/arm/boot/dts/stm32mp135f-dk.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
-> index 9ff5a3eaf55b..931877d6ddb9 100644
-> --- a/arch/arm/boot/dts/stm32mp135f-dk.dts
-> +++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
-> @@ -40,7 +40,7 @@ optee@dd000000 {
->  	gpio-keys {
->  		compatible = "gpio-keys";
->  
-> -		user-pa13 {
-> +		button-user {
+However, still allow bridges without _S0W that are power-manageable via
+ACPI to enter D3 to retain the current code behavior in that case.
 
-Best regards,
-Krzysztof
+Link: https://lore.kernel.org/linux-pci/20221031223356.32570-1-mario.limonciello@amd.com/
+Reported-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v2 -> v3:
+   * Use rpadev for the ACPI companion of the Root Port in acpi_pci_bridge_d3(()
+     to avoid confusion.
+   * Make the function evaluating _S0W return the value produced by it or "unknown
+     state" on errors and let its caller deal with that value.
+
+---
+ drivers/acpi/device_pm.c |   19 +++++++++++++++++++
+ drivers/pci/pci-acpi.c   |   45 +++++++++++++++++++++++++++++++--------------
+ include/acpi/acpi_bus.h  |    1 +
+ 3 files changed, 51 insertions(+), 14 deletions(-)
+
+Index: linux-pm/drivers/pci/pci-acpi.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-acpi.c
++++ linux-pm/drivers/pci/pci-acpi.c
+@@ -976,24 +976,41 @@ bool acpi_pci_power_manageable(struct pc
+ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+ {
+ 	struct pci_dev *rpdev;
+-	struct acpi_device *adev;
+-	acpi_status status;
+-	unsigned long long state;
++	struct acpi_device *adev, *rpadev;
+ 	const union acpi_object *obj;
+ 
+ 	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
+ 		return false;
+ 
+-	/* Assume D3 support if the bridge is power-manageable by ACPI. */
+-	if (acpi_pci_power_manageable(dev))
+-		return true;
++	adev = ACPI_COMPANION(&dev->dev);
++	if (adev) {
++		/*
++		 * If the bridge has _S0W, whether or not it can go into D3
++		 * depends on what is returned by that object.  In particular,
++		 * if the power state returned by _S0W is D2 or shallower,
++		 * entering D3 should not be allowed.
++		 */
++		if (acpi_dev_power_state_for_wake(adev) <= ACPI_STATE_D3_HOT)
++			return false;
++
++		/*
++		 * Otherwise, assume that the bridge can enter D3 so long as it
++		 * is power-manageable via ACPI.
++		 */
++		if (acpi_device_power_manageable(adev))
++			return true;
++	}
+ 
+ 	rpdev = pcie_find_root_port(dev);
+ 	if (!rpdev)
+ 		return false;
+ 
+-	adev = ACPI_COMPANION(&rpdev->dev);
+-	if (!adev)
++	if (rpdev == dev)
++		rpadev = adev;
++	else
++		rpadev = ACPI_COMPANION(&rpdev->dev);
++
++	if (!rpadev)
+ 		return false;
+ 
+ 	/*
+@@ -1001,15 +1018,15 @@ bool acpi_pci_bridge_d3(struct pci_dev *
+ 	 * doesn't supply a wakeup GPE via _PRW, it cannot signal hotplug
+ 	 * events from low-power states including D3hot and D3cold.
+ 	 */
+-	if (!adev->wakeup.flags.valid)
++	if (!rpadev->wakeup.flags.valid)
+ 		return false;
+ 
+ 	/*
+-	 * If the Root Port cannot wake itself from D3hot or D3cold, we
+-	 * can't use D3.
++	 * In the bridge-below-a-Root-Port case, evaluate _S0W for the Root Port
++	 * to verify whether or not it can signal wakeup from D3.
+ 	 */
+-	status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
+-	if (ACPI_SUCCESS(status) && state < ACPI_STATE_D3_HOT)
++	if (rpadev != adev &&
++	    acpi_dev_power_state_for_wake(rpadev) <= ACPI_STATE_D3_HOT)
+ 		return false;
+ 
+ 	/*
+@@ -1018,7 +1035,7 @@ bool acpi_pci_bridge_d3(struct pci_dev *
+ 	 * bridges *below* that Root Port can also signal hotplug events
+ 	 * while in D3.
+ 	 */
+-	if (!acpi_dev_get_property(adev, "HotPlugSupportInD3",
++	if (!acpi_dev_get_property(rpadev, "HotPlugSupportInD3",
+ 				   ACPI_TYPE_INTEGER, &obj) &&
+ 	    obj->integer.value == 1)
+ 		return true;
+Index: linux-pm/drivers/acpi/device_pm.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/device_pm.c
++++ linux-pm/drivers/acpi/device_pm.c
+@@ -484,6 +484,25 @@ void acpi_dev_power_up_children_with_adr
+ 	acpi_dev_for_each_child(adev, acpi_power_up_if_adr_present, NULL);
+ }
+ 
++/**
++ * acpi_dev_power_state_for_wake - Deepest power state for wakeup signaling
++ * @adev: ACPI companion of the target device.
++ *
++ * Evaluate _S0W for @adev and return the value produced by it or return
++ * ACPI_STATE_UNKNOWN on errors (including _S0W not present).
++ */
++u8 acpi_dev_power_state_for_wake(struct acpi_device *adev)
++{
++	unsigned long long state;
++	acpi_status status;
++
++	status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
++	if (ACPI_FAILURE(status))
++		return ACPI_STATE_UNKNOWN;
++
++	return state;
++}
++
+ #ifdef CONFIG_PM
+ static DEFINE_MUTEX(acpi_pm_notifier_lock);
+ static DEFINE_MUTEX(acpi_pm_notifier_install_lock);
+Index: linux-pm/include/acpi/acpi_bus.h
+===================================================================
+--- linux-pm.orig/include/acpi/acpi_bus.h
++++ linux-pm/include/acpi/acpi_bus.h
+@@ -533,6 +533,7 @@ int acpi_bus_update_power(acpi_handle ha
+ int acpi_device_update_power(struct acpi_device *device, int *state_p);
+ bool acpi_bus_power_manageable(acpi_handle handle);
+ void acpi_dev_power_up_children_with_adr(struct acpi_device *adev);
++u8 acpi_dev_power_state_for_wake(struct acpi_device *adev);
+ int acpi_device_power_add_dependent(struct acpi_device *adev,
+ 				    struct device *dev);
+ void acpi_device_power_remove_dependent(struct acpi_device *adev,
+
+
 
