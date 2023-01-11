@@ -2,171 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86F2665EF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B20B6665EF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235237AbjAKPS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S234741AbjAKPTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjAKPSx (ORCPT
+        with ESMTP id S238848AbjAKPTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:18:53 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F03615F1F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:18:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 07CF717D59;
-        Wed, 11 Jan 2023 15:18:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673450331; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vW7EqoZN5JH9QZVEB8cp56/uppg3VKm8mRYkthii3vo=;
-        b=i+niIcAK/I4rZvR6OXmNvvtnfYWXZkNXihW3rZIlh00BhwJe0kYd2/sKVc1jqefEWeX6Ek
-        pVkxjlbu8DyZkct9pMt9/UjIUGyrXHottQlho4wcMt9mrZZJmUwPMIDtm96HIelTPWhQ2b
-        8jlkock1XDYKFQ3FBdksvK8CTEQP6Ko=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673450331;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vW7EqoZN5JH9QZVEB8cp56/uppg3VKm8mRYkthii3vo=;
-        b=D2Gz6r+QzOMFhgLtpDbeUude3MH67cHueGG1Jw4XB6y/0hW0h4vMOI0Rppqpj01/6j9TMp
-        NRzuRUa8mu+TH0Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CD26D13591;
-        Wed, 11 Jan 2023 15:18:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 69z9MFrTvmMKLgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 11 Jan 2023 15:18:50 +0000
-Message-ID: <31795464-8986-c2c3-74a2-3d2bc3455820@suse.de>
-Date:   Wed, 11 Jan 2023 16:18:50 +0100
-MIME-Version: 1.0
+        Wed, 11 Jan 2023 10:19:14 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2046.outbound.protection.outlook.com [40.107.243.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508241277E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:19:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dAIzUYqo5ZD0vQXonB1RZknWuBIEQKS8IFXpj+j1iXY4yVd+9bZQqOCvg7bVsWvEcX4cEDCfzcLh9WyRSWOvbfXmj4UPPNc5x3CyUsQ7ej6EUU1zg9hzrS4YCcLTdJmoq6EuKZPHT6p/u1+d4z4fxnj+Tm05GfXDyKUMW2Z97v3vO14w+vmyxav+D4k8vrGwyMRZLdycKB8NlhZeS2zu8hu53lPrEnonxjXfCpXmCdSOTXG1/X1yoIiAvXYztG9vZ43vZFoeLIlv7d5Lf1kKOu+XaKeMt1RzL+OwUPUTyIYwxdv+LKoKY4p2BYayfeCVuOGB9TH7PfaMNMwhrtMsnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DsUdLjuI/UdrkuJZS0rK4ndpO7Dlevicr8Ixp7QP+Ws=;
+ b=DJqQGjhvGroelpGRy2FSxS2g6UAG8S8EpvQ4M1AMYsu6ln/pDjDAoEokrYcQ1rS6BqPVtv1OXctkx+Ewy67m+Z49BCVVY8Mta2CVvNdTiyeYzsU6CdH4PqsZeRvzPscz+3itdINrqV+NyZKoiOIVCzQGAkOWx0PdCLMVCGE1k1LGu8NLuPSOFgbLmMho4DE3sf3MX/adl3OeBh3/V2+e69oCsj1VTDR/7ZEm7jidwSyn1LSN563RmDtaZyCKEKqyrIg3GH0w85zEX8jHAI/8iQiQpG7v7Avo9alR6iRwXqMqVJZFb/MJ3gIXsuyMYLnVsR22Wvf2iytdgEJbY9pyhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DsUdLjuI/UdrkuJZS0rK4ndpO7Dlevicr8Ixp7QP+Ws=;
+ b=PrmWq+2GEoTcId3APV27nXDbe1mrKtHy8SpyhMINTyQkASrvcLBo3mNe+QP9cT3/3aob6/FFskX8AXo/oLtcJDegRjCdJEfQMPZEpojSefvov9Bm2Sz/EOyfDkyf1mJmEkV2fRs9BP21mQDuP9iE+1N0cXOOiIqhbLkDDpqe9m8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by SA1PR12MB7409.namprd12.prod.outlook.com (2603:10b6:806:29c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
+ 2023 15:19:11 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::152b:e615:3d60:2bf0]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::152b:e615:3d60:2bf0%5]) with mapi id 15.20.6002.013; Wed, 11 Jan 2023
+ 15:19:11 +0000
+Message-ID: <aea4b937-351a-f036-61e5-790af633f5f2@amd.com>
+Date:   Wed, 11 Jan 2023 10:19:06 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH 9/9] drm/vc4: hdmi: Add BT.2020 Support
+Subject: Re: [PATCH] drm/amd/display: Fix set scaling doesn's work
 Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
- <20221207-rpi-hdmi-improvements-v1-9-6b15f774c13a@cerno.tech>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20221207-rpi-hdmi-improvements-v1-9-6b15f774c13a@cerno.tech>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------vsTcFjBTfdwjj2Vbi0sSwubl"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>,
+        nicholas.kazlauskas@amd.com, hongao <hongao@uniontech.com>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        sunpeng.li@amd.com, linux-kernel@vger.kernel.org,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        aurabindo.pillai@amd.com, roman.li@amd.com, Jerry.Zuo@amd.com
+References: <20221122112034.30080-1-hongao@uniontech.com>
+ <789c2c61-4959-c3c1-0916-d1cc7f659247@amd.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <789c2c61-4959-c3c1-0916-d1cc7f659247@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YTBP288CA0029.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:b01:14::42) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|SA1PR12MB7409:EE_
+X-MS-Office365-Filtering-Correlation-Id: 081897ea-6d9c-495a-6280-08daf3e730db
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tyKc2pboCJkq//jXXL/7ouIVI85FwFz/xVVORSE960ildsRWb7EpQPz6nmtA4Yql00Hgs4bdO5hnuGp+XTJ94WuYobsuJKZuRPY7OEoGH9li/ESTEN3eQqum6Ehy4Oa3gf3zHOGTAiJAOQWkLGImX7sy/TqcWGdJ2Rnw9Fpw9zulolRrmZgxEeuygOt14ct+yzBlZtFUkTIbho3ZtHLlspwiEaUoYQTHsWh/D0DEEnv02waqEeUb2ovi0Aq1bt3FB1z2MrzBzFdnvBTaDA5FAr79J32/0uw94RPa8CiUORqXIgWN14/ndbhoEscdav0N7WZT2RnD3b24gv+bDqKqPR6qYXprxqJW4XM5gVMw4o+zyCtvvdkKysxatGb8Vq/7HveT3+mmYs2hHHRxtHf8cmuDa8JO3/YTL2NPcaWEIvB/IVb4JpPY9e8GRQdLLYydwzVvy+L534smcA+u/bULk/Ri/4dTx+XT666MYwh2bY2RUnjqY0444Rui3nQrA+pIYZLdnK9ti2IGjCHS+edu9Hrf5cqy0fpAAmJbt8xojBZwnhNeHeldyI1nhSl1WyScQ/y2+f+cK5+f9p4j4gAtJT9xMWV5HJKHZ3pBeCU2K0lwsVdb9L4qB9LcDjsUnVJAZO/rM+IgqN7CbxQa1flkaSzgqQ8pjFdZLLJ0oxkimtvMuLcQYtwneeioF/yBpWZGyTk7JgEyKHrwZlWVVd+NotkusqrJHnnzxFLiMOlCv0s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(366004)(376002)(396003)(451199015)(31686004)(110136005)(2906002)(66946007)(5660300002)(6486002)(36756003)(31696002)(86362001)(44832011)(8936002)(66476007)(41300700001)(316002)(66556008)(4326008)(8676002)(38100700002)(53546011)(6506007)(83380400001)(2616005)(6666004)(6512007)(186003)(26005)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q3Vza2g1eHVWZi9KcTNNbUQwYWdHQzJUbWRjY2ZiQ2ViT1ZOWWtURXgzb2FW?=
+ =?utf-8?B?bU9NcFY3YmxtOHZRSEFCcmZPL0RLdWRyWHdsWkwyOVpnVXJnVWFYZmZIdEVQ?=
+ =?utf-8?B?enQ2dFpJMHVtRUhobTdyZnVhT2k5S1dCWk9rWC9lWjFTVUNYcHlnTjl4ZGdQ?=
+ =?utf-8?B?QkZHM05ibzlCUmFncllYTlJidzhoMDFKd29TTnQ3b3lGWDFwUHIzZ09reXVS?=
+ =?utf-8?B?V29nMGJTZXV0YlJSdXZoQnRmc0Z3Z0ZSSVpGU0h4TEtISmwybmF5cWdCalFR?=
+ =?utf-8?B?L1VWV3hxS0htOWhPQnBJREpGNWJvV3lMYVVtVFNaa1gzaVNvLzR1amJnS2c1?=
+ =?utf-8?B?N3BOWTJJOXN4UVdYeFJuak9wY0JhYTN3TU9rK3c1NC9yREhDSldJYVJ4NTVG?=
+ =?utf-8?B?ajVuVys2WHV3YVFUaGVNeWNCMnoxK1g5MjZaSGRraVBnMVkwWk9tTHZhVDhm?=
+ =?utf-8?B?eThvbnBSTnpTWFY5K0ticnBsNWZpRXp6NWtzeVdhNHZlcFEzOUR6dEFGYitT?=
+ =?utf-8?B?RDF1Rml4Y2pxUnVOSnRjMDN0MmdtdGdwYkQxamMxWXdkMEFaTlN6b3pxb0dn?=
+ =?utf-8?B?VTNLclJ4UXhaVUx2SWFYK0lyc2ZXVld6MlR6bUFjYUNMV3dwQU5UbmdJZStF?=
+ =?utf-8?B?ekFKbFpvTzVMMDFSYno1LzA3bE9FNmEyUTA0Z0RoWm5VV3NrWktHYTB5cW1O?=
+ =?utf-8?B?ZGFMNVNOUHlWQkxPUGoxTzVMRTVQOUVUa2hPTFB4L2RHWHdjaVFSa0dyVW54?=
+ =?utf-8?B?c2l2d3JBM1c0ZzM5eXpJOVJVSUtzdVV2OXBYZDZyMkxEekh3OGV2eFQvbytv?=
+ =?utf-8?B?dS9waUVnaGs1RWNyV2I2NkpsNnRJNHFOMXRYa3ZTZ2RxVmREU2lveFI4ZEZu?=
+ =?utf-8?B?eURkaGJ2NzVXbUdCQ3lJRmNra2loYmtMeTN0KytaUUk5TFJ4Z0pQNUZqM3hP?=
+ =?utf-8?B?RllzRlF5RlVmMmJ3ODE0NUU2eUpGbEJsaGdSdnNHREk2VmpxOG1tRWRGOXJU?=
+ =?utf-8?B?Qy82aktZNFRHR2oxQnNMUWRmRUMycDZUcUpLS2lFT09WeWx0Ry80Q0dndU1G?=
+ =?utf-8?B?NDFZSVB2anZmUEoxYy9POUJ2VUZqa210dm9yT1REOTNHejlUSkkwaTJBeEhW?=
+ =?utf-8?B?S0NtM2dpZmljQWs5WW5hTFIzOFo2T1J5NEtMT3J0MFVBQTZsYWhzSEVhMHpv?=
+ =?utf-8?B?SDBuWUtaeGh4NjA1dXVMdkpsZHZveW9jY3Fadm0vR0haWjROUHNrSmxoNE16?=
+ =?utf-8?B?YlRZQU9YY01nOGF3aTE1dUJEbm1hNW1WajE1a3g2LzNaVUdSRjd4Z3pBNW9y?=
+ =?utf-8?B?OHlkbWY0TmRZNnp6NnRSUllWbHlPTmQ2U1lackVKQlhEU2lxL2QzMWtIOGNZ?=
+ =?utf-8?B?bjNSazVGaDdTZjVRUk01OEFtZUlpUW9kdVA1aDYxbWpjZzNPV29VOHAxcjNI?=
+ =?utf-8?B?bEowQThkbnE3czlCYnVUUGlQREVNMUlMa014cGcwMTR5dTFCYVBmOGdhaG9r?=
+ =?utf-8?B?dHVOdFBhVW9DalVNYVlLTElTNnJQY2dVcE53UER4eWxPVHhOejZOQkx0c2dX?=
+ =?utf-8?B?ZzVuc1BEZkJoaUIyaVUrWkwvRnc5SEo4WFVTK0grRkplUmZzYi9UR3VFYTBM?=
+ =?utf-8?B?dHRuN1pUMmxKM3VYUUxHWkpITEpqZWcrc3FwSysvcWNCSy9vbEFWV2ovNGl6?=
+ =?utf-8?B?THdmNjNDcEJ3ZzFBWElmYTV5aTVIc1pvc21VMGQ2UkNLQW50cTBTeGFWUDlX?=
+ =?utf-8?B?Ym5lSDlSaFdVa2w5VGlsb3VxMjRVVzRkQzFBVERldUNKVUdnMSt3ajc4REhF?=
+ =?utf-8?B?c3dzNEpvZm9LeXd5c0RaZEZUZ3FWV0U0RVltUzJWL3hzR3ptbDZzSmxRRll4?=
+ =?utf-8?B?bXV0aFNvMG8yVU5qSHhYWmZrWWZEVXNxZHBzM1ErM2Z0enU5bUFwbk5JSkNV?=
+ =?utf-8?B?NEkrL05OVi9ZUGZybWhXY3dWdld3OW9VcktUelBIL2M3aE9aMVFPNDRqaFZU?=
+ =?utf-8?B?aTF4N3hHTzVHRnoxUGNtckM4U3o0QTFMNmxOZWplS2lHYklSVXRha1owNU42?=
+ =?utf-8?B?dlZWTFNqdFpIcDJiWHh0Rm4xMkh6UkxVL1NqcmttUnM2OEFmYWg3ZnN1UHk5?=
+ =?utf-8?Q?k97vuJUBxMO49U31yJCUCb/J6?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 081897ea-6d9c-495a-6280-08daf3e730db
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 15:19:11.2821
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AiWUtaG9TmKpXF51+KJQQnxdkli+wA5Eh011v1H3jE1tXDlTTJB0MIrcolewXzo35Wg83XD1mz7pRtffhSjfGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7409
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------vsTcFjBTfdwjj2Vbi0sSwubl
-Content-Type: multipart/mixed; boundary="------------8KHrfVrzvcIYthfrV2x1AJHW";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Dave Stevenson <dave.stevenson@raspberrypi.com>
-Message-ID: <31795464-8986-c2c3-74a2-3d2bc3455820@suse.de>
-Subject: Re: [PATCH 9/9] drm/vc4: hdmi: Add BT.2020 Support
-References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
- <20221207-rpi-hdmi-improvements-v1-9-6b15f774c13a@cerno.tech>
-In-Reply-To: <20221207-rpi-hdmi-improvements-v1-9-6b15f774c13a@cerno.tech>
+On 1/10/23 10:58, Rodrigo Siqueira Jordao wrote:
+> 
+> 
+> On 11/22/22 06:20, hongao wrote:
+>> [Why]
+>> Setting scaling does not correctly update CRTC state. As a result
+>> dc stream state's src (composition area) && dest (addressable area)
+>> was not calculated as expected. This causes set scaling doesn's work.
+>>
+>> [How]
+>> Correctly update CRTC state when setting scaling property.
+>>
+>> Signed-off-by: hongao <hongao@uniontech.com>
+>>
+>> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+>> index 3e1ecca72430..a88a6f758748 100644
+>> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+>> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+>> @@ -9386,8 +9386,8 @@ static int amdgpu_dm_atomic_check(struct drm_device *dev,
+>>               goto fail;
+>>           }
+>>   -        if (dm_old_con_state->abm_level !=
+>> -            dm_new_con_state->abm_level)
+>> +        if (dm_old_con_state->abm_level != dm_new_con_state->abm_level ||
+>> +            dm_old_con_state->scaling != dm_new_con_state->scaling)
+>>               new_crtc_state->connectors_changed = true;
+>>       }
+>>   
+> 
+> Hi,
+> 
+> This change lgtm, and I also run it in our CI, and from IGT perspective, we are good.
+> 
+> Harry, do you have any comment about this change?
+> 
 
---------------8KHrfVrzvcIYthfrV2x1AJHW
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+LGTM
 
-DQoNCkFtIDA3LjEyLjIyIHVtIDE3OjA3IHNjaHJpZWIgTWF4aW1lIFJpcGFyZDoNCj4gRnJv
-bTogRGF2ZSBTdGV2ZW5zb24gPGRhdmUuc3RldmVuc29uQHJhc3BiZXJyeXBpLmNvbT4NCj4g
-DQo+IEV2ZW4gdGhvdWdoIHdlIHJlcG9ydCB0aGF0IHdlIHN1cHBvcnQgdGhlIEJULjIwMjAg
-Q29sb3JzcGFjZSwgd2Ugd2VyZQ0KPiBhbHdheXMgdXNpbmcgdGhlIEJULjcwOSBjb252ZXJz
-aW9uIG1hdHJpY2VzLiBMZXQncyBhZGQgdGhlIEJULjIwMjAgb25lcy4NCj4gDQo+IFNpZ25l
-ZC1vZmYtYnk6IERhdmUgU3RldmVuc29uIDxkYXZlLnN0ZXZlbnNvbkByYXNwYmVycnlwaS5j
-b20+DQo+IFNpZ25lZC1vZmYtYnk6IE1heGltZSBSaXBhcmQgPG1heGltZUBjZXJuby50ZWNo
-Pg0KDQpSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2Uu
-ZGU+DQoNCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3ZjNC92YzRfaGRtaS5jIHwgMzgg
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gICAxIGZpbGUgY2hh
-bmdlZCwgMzggaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1
-L2RybS92YzQvdmM0X2hkbWkuYyBiL2RyaXZlcnMvZ3B1L2RybS92YzQvdmM0X2hkbWkuYw0K
-PiBpbmRleCBlMzQyOGZiMmMyMmQuLjI3MzRjYWIzNDY2MCAxMDA2NDQNCj4gLS0tIGEvZHJp
-dmVycy9ncHUvZHJtL3ZjNC92YzRfaGRtaS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS92
-YzQvdmM0X2hkbWkuYw0KPiBAQCAtMTI3Nyw2ICsxMjc3LDM3IEBAIHN0YXRpYyBjb25zdCB1
-MTYgdmM1X2hkbWlfY3NjX2Z1bGxfcmdiX3RvX3l1dl9idDcwOVsyXVszXVs0XSA9IHsNCj4g
-ICAJfSwNCj4gICB9Ow0KPiAgIA0KPiArLyoNCj4gKyAqIENvbnZlcnNpb24gYmV0d2VlbiBG
-dWxsIFJhbmdlIFJHQiBhbmQgWVVWIHVzaW5nIHRoZSBCVC4yMDIwIENvbG9yc3BhY2UNCj4g
-KyAqDQo+ICsgKiBNYXRyaWNlcyBhcmUgc2lnbmVkIDJwMTMgZml4ZWQgcG9pbnQsIHdpdGgg
-c2lnbmVkIDlwNiBvZmZzZXRzDQo+ICsgKi8NCj4gK3N0YXRpYyBjb25zdCB1MTYgdmM1X2hk
-bWlfY3NjX2Z1bGxfcmdiX3RvX3l1dl9idDIwMjBbMl1bM11bNF0gPSB7DQo+ICsJew0KPiAr
-CQkvKg0KPiArCQkgKiBGdWxsIFJhbmdlDQo+ICsJCSAqDQo+ICsJCSAqIFsgIDAuMjYyNzAw
-ICAwLjY3ODAwMCAgMC4wNTkzMDAgIDAgICBdDQo+ICsJCSAqIFsgLTAuMTM5NjMwIC0wLjM2
-MDM3MCAgMC41MDAwMDAgIDEyOCBdDQo+ICsJCSAqIFsgIDAuNTAwMDAwIC0wLjQ1OTc4NiAt
-MC4wNDAyMTQgIDEyOCBdDQo+ICsJCSAqLw0KPiArCQl7IDB4MDg2OCwgMHgxNWIyLCAweDAx
-ZTYsIDB4MDAwMCB9LA0KPiArCQl7IDB4ZmI4OSwgMHhmNDc5LCAweDEwMDAsIDB4MjAwMCB9
-LA0KPiArCQl7IDB4MTAwMCwgMHhmMTRhLCAweGZlYjgsIDB4MjAwMCB9LA0KPiArCX0sDQo+
-ICsJew0KPiArCQkvKiBMaW1pdGVkIFJhbmdlDQo+ICsJCSAqDQo+ICsJCSAqIFsgIDAuMjI0
-NzMyICAwLjU4MDAwOCAgMC4wNTA3MjkgIDE2ICBdDQo+ICsJCSAqIFsgLTAuMTIyMTc2IC0w
-LjMxNTMyNCAgMC40Mzc1MDAgIDEyOCBdDQo+ICsJCSAqIFsgIDAuNDM3NTAwIC0wLjQwMjMx
-MiAtMC4wMzUxODggIDEyOCBdDQo+ICsJCSAqLw0KPiArCQl7IDB4MDgyZiwgMHgxMDEyLCAw
-eDAzMWYsIDB4MDQwMCB9LA0KPiArCQl7IDB4ZmI0OCwgMHhmNmJhLCAweDBlMDAsIDB4MjAw
-MCB9LA0KPiArCQl7IDB4MGUwMCwgMHhmNDQ4LCAweGZkYmEsIDB4MjAwMCB9LA0KPiArCX0s
-DQo+ICt9Ow0KPiArDQo+ICAgc3RhdGljIHZvaWQgdmM1X2hkbWlfc2V0X2NzY19jb2VmZnMo
-c3RydWN0IHZjNF9oZG1pICp2YzRfaGRtaSwNCj4gICAJCQkJICAgIGNvbnN0IHUxNiBjb2Vm
-ZnNbM11bNF0pDQo+ICAgew0KPiBAQCAtMTMyMiw2ICsxMzUzLDEzIEBAIHN0YXRpYyBjb25z
-dCB1MTYNCj4gICAJY2FzZSBEUk1fTU9ERV9DT0xPUklNRVRSWV9SR0JfV0lERV9GSVhFRDoN
-Cj4gICAJY2FzZSBEUk1fTU9ERV9DT0xPUklNRVRSWV9SR0JfV0lERV9GTE9BVDoNCj4gICAJ
-CXJldHVybiB2YzVfaGRtaV9jc2NfZnVsbF9yZ2JfdG9feXV2X2J0NzA5W2xpbWl0ZWRdOw0K
-PiArDQo+ICsJY2FzZSBEUk1fTU9ERV9DT0xPUklNRVRSWV9CVDIwMjBfQ1lDQzoNCj4gKwlj
-YXNlIERSTV9NT0RFX0NPTE9SSU1FVFJZX0JUMjAyMF9ZQ0M6DQo+ICsJY2FzZSBEUk1fTU9E
-RV9DT0xPUklNRVRSWV9CVDIwMjBfUkdCOg0KPiArCWNhc2UgRFJNX01PREVfQ09MT1JJTUVU
-UllfRENJX1AzX1JHQl9ENjU6DQo+ICsJY2FzZSBEUk1fTU9ERV9DT0xPUklNRVRSWV9EQ0lf
-UDNfUkdCX1RIRUFURVI6DQo+ICsJCXJldHVybiB2YzVfaGRtaV9jc2NfZnVsbF9yZ2JfdG9f
-eXV2X2J0MjAyMFtsaW1pdGVkXTsNCj4gICAJfQ0KPiAgIH0NCj4gICANCj4gDQoNCi0tIA0K
-VGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29m
-dHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8
-cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRz
-ZsO8aHJlcjogSXZvIFRvdGV2DQo=
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
---------------8KHrfVrzvcIYthfrV2x1AJHW--
+Harry
 
---------------vsTcFjBTfdwjj2Vbi0sSwubl
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> Thanks
+> Siqueira
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmO+01oFAwAAAAAACgkQlh/E3EQov+A9
-fA/+NY0NW6KpOPxP7zN5APO3KzXptPHUJDXSYkmjaMkqOSod0YbQGmplKxHLIK/4L+2HKAoCu0WN
-HbWpWkDcJQuaFNiaB35QVcVDku+xn/sWXHfvftr8Bex/t05IzVjLyq9LAtfolJnMy61Bh/OaxdY4
-Tom6Nbp/61Lq/jtZFW6FHhhtKDognLmDYo7L3tl4v84C/JrXkufRB0Nv/co5r+IjCdS9qGbBAm16
-GXOGXFjwgRVof4xo2szy9qE5S2+SYbhfIOaG+i/eDP7x7k4YJRkZ0ebg49kDk8NbOe5C9IbfW+FC
-DlVRXKPgQImlDTunZrfnKBeMCPv9nC+hlWvpVMnKxOYe06uhEGvLS9TC9SgCKICMGI+wscU21aXV
-J4byGf8twidH6+91omrFcBb07Tc95WqtV4TGonZlroRPfgYdmi+r669oqz9FG3wD4mAemBbCnW26
-ImeMetJY4gEcrFvjL5VcBus9QrR94D8JNEcftqLawjpcB9sLDL25kPx69NwNR7a8gQGwRERt7g1A
-NQEEPawPPk9cYZPGhcJKhDG6y5rotcsUSYw6OKps3d9cSu/wiUSeKgDQue/BvmQ6oSdEm15fisgK
-5/75OCO7YEAk/mLXtkWJ6nZiuBwxzN/KZaNssMSAAO23Aux+Zh7ZYe/7fbzL3yRlzlLLXbxOCSSi
-ca8=
-=xEUi
------END PGP SIGNATURE-----
-
---------------vsTcFjBTfdwjj2Vbi0sSwubl--
