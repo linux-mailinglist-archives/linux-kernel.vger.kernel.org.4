@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC8B665A53
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D301665A56
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjAKLh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S232469AbjAKLjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:39:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238380AbjAKLh0 (ORCPT
+        with ESMTP id S232319AbjAKLiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:37:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531421DF1B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:34:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACC2BB819EF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F75FC433D2;
-        Wed, 11 Jan 2023 11:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673436821;
-        bh=HQIgtanyEm2Ah0TbVzmva7KtFo9tPgB6bRUi+i9nPaQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dzX8hsx45PDeJ/LEssi9cY2EPWGp9ZkyJu+CEWtrh/kss+LxLuHHGI+HkNUM7Nd2Y
-         ttTXaUttdFn49UoFYEIF4tJ6yuSHJyXseWjW7bM4XdtYWSeJ8ESNc4mq0yZqHERL58
-         axb4BQhco6ebbrWlJg8yrbjvNvBdGVyVeRnMF5vo=
-Date:   Wed, 11 Jan 2023 12:33:38 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Reg the next LTS kernel (6.1?)
-Message-ID: <Y76eklrASMczPLY0@kroah.com>
-References: <CAPDLWs-Z8pYkwQ13dEgHXqSCjiq4xVnjuAXTy26H3=8NZCpV_g@mail.gmail.com>
- <Yz/ZWBeNZvKenEVM@kroah.com>
- <CAPDLWs9KWKs_-fpAp2=97uBARYqrHSYTPEU6RbqtWjAD8NpqgQ@mail.gmail.com>
- <CAPDLWs9CoWw7NLfrtCfMsRAdCSfBgomVELRhM70QWVca99z65A@mail.gmail.com>
- <Y53BputYK+3djDME@kroah.com>
- <Y75wGwt2r8iWlCYf@wendy>
+        Wed, 11 Jan 2023 06:38:52 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DFE81ADB2;
+        Wed, 11 Jan 2023 03:35:09 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 059EEFEC;
+        Wed, 11 Jan 2023 03:35:51 -0800 (PST)
+Received: from [10.57.45.242] (unknown [10.57.45.242])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D720F3F587;
+        Wed, 11 Jan 2023 03:35:05 -0800 (PST)
+Message-ID: <4e6a0766-52d1-effa-9986-af6b3ca29f1a@arm.com>
+Date:   Wed, 11 Jan 2023 11:35:04 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y75wGwt2r8iWlCYf@wendy>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 0/7] perf cs_etm: Basic support for virtual/kernel
+ timestamps
+Content-Language: en-US
+To:     Tanmay Jagdale <tanmay@marvell.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "leo.yan@linaro.org" <leo.yan@linaro.org>,
+        "mike.leach@linaro.org" <mike.leach@linaro.org>
+Cc:     Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        George Cherian <gcherian@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230103162042.423694-1-james.clark@arm.com>
+ <PH0PR18MB5017223066D8744D12C1F1BAD6FF9@PH0PR18MB5017.namprd18.prod.outlook.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <PH0PR18MB5017223066D8744D12C1F1BAD6FF9@PH0PR18MB5017.namprd18.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 08:15:23AM +0000, Conor Dooley wrote:
-> Hey Greg,
+
+
+On 10/01/2023 16:42, Tanmay Jagdale wrote:
+> Hi James,
 > 
-> You didn't ask me specifically, but if it helps...
+[...]
 
-It really really does, thank you!
-
-> On Sat, Dec 17, 2022 at 02:18:30PM +0100, Greg KH wrote:
-> > On Sat, Dec 17, 2022 at 06:32:48PM +0530, Kaiwan N Billimoria wrote:
-> > > Hi,
-> > > Any update on 6.1 being set as the next LTS release?
-> > 
-> > You tell me please.  How has your testing gone for 6.1 so far?
-> > Does it work properly for you?
+>> base-commit: 09e6f9f98370be9a9f8978139e0eb1be87d1125f
+> I have tested this patch set on our platform and able to see updated
+> timestamp values in perf script's output.
 > 
-> AFIACT, it does. We had some issues, but they've since been resolved.
-
-Great!
-
-> > Are you and/or your company willing to test out
-> > the -rc releases and provide feedback if it works or not for your
-> > systems?
+> $ perf record -e cs_etm/cycacc,@tmc_etr0/k -C 9 taskset -c 9 sleep 2
+> $ perf script --itrace=i1ns --ns -Fcomm,tid,pid,time,cpu,event,ip,sym,addr,symoff,flags,callindent
 > 
-> Already do! Although so far I've just been reporting breakages rather
-> than providing tested-bys.
-
-Feel free to submit a tested-by if you want credit for doing the work
-(and so that I know it still is working), I'm more than glad to collect
-them all as they end up in the release commit message in the kernel log.
-One example can be seen here:
-	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-6.1.y&id=2cb8e624295ffa0c4d659fcec7d9e7a6c48de156
-
-> > Do you have problems with 6.1.y vs. older kernels?
+> At certain points noticed that hardware emits same timestamp packets
+> but with updated cycle count (CC) values. A small snippet of the log:
 > 
-> Nope, anything that needed fixing that was on my radar has already made
-> it into 6.1.y.
-> 
-> > Is there
-> > anything missing in it that you feel needs to be addressed with a newer
-> > kernel instead?
-> 
-> Anything missing on the RISC-V side of things, that we would want, is
-> still a work in progress for kernels later than 6.2 anyway.
+> Idx:100; ID:12; I_ADDR_S_IS0 : Address, Short, IS0.; Addr=0xFFFF8000086A761C ~[0x761C]
+> Idx:103; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x3d
+> Idx:107; ID:12; I_ATOM_F2 : Atom format 2.; EN
+> Idx:108; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x3f
+> Idx:112; ID:12; I_ATOM_F1 : Atom format 1.; N
+> Idx:113; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x45
+> Idx:116; ID:12; I_ATOM_F1 : Atom format 1.; E
+> Idx:117; ID:12; I_ADDR_S_IS0 : Address, Short, IS0.; Addr=0xFFFF8000086B52D4 ~[0x152D4]
 
-that's great to hear, thanks for letting me know and for testing.
+Hi Tanmay,
 
-greg k-h
+Are you able to email or send a download link with the perf archive and
+perf.data file of this recording please?
+
+Thanks
+James
