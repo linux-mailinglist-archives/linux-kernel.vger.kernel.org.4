@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1226665C72
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4394A665C70
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238128AbjAKNZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
+        id S237682AbjAKNZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234247AbjAKNYE (ORCPT
+        with ESMTP id S234102AbjAKNYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:24:04 -0500
+        Wed, 11 Jan 2023 08:24:02 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAC35F55
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:24:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1F45F67
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:24:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673443443; x=1704979443;
+  t=1673443441; x=1704979441;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=SGiBGTV0pV1LSdKWzpftY7fVqqKe+kxFUGucNy6ovfQ=;
-  b=Oy5FJwB+61G2i6gJr80oroQ8roSJKes7dWld9/8aSOTye5qGxlC3TRmL
-   Ur2f9k2GaGa1crgRs28LsfST7JPDam1tprmYbEwDcCmCXiqVM2sOynNuD
-   s0ln8ugV52Yb1TorUVcvxCG9JJ5La4TI+OERDVdcA3qXPMkBHRnMVEyNg
-   OsLVpvJaeIWwsV4+NhXRV0wMhrpsbHbtXqyUg3IWz1mitveHjvjvWqIf7
-   79FOlQ/5TnnnnMl3bSDfqc2Cu2x0xH/4gCSPnsjlVq4O9xEx9ZBeW57iK
-   gZcn25AhLCZJT7F+kPUiT1K2z1gVM7F/xGERKT97ke9sAUZ4ucf0ToSxB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324646159"
+  bh=UBKxNmRcAlY5Gk5PHZ4C0nPPjFoKYauY1gpRMXD9SVM=;
+  b=KCYsuFfFqeeGcm9L2zgKaB+zNanW+n10JeSyhhqmK0QJ+SAPh873eTe6
+   AEFVsmC1zAeihvqsgugH2CN79ZjbEJpzesNVWEINDKpZhRTDLB2CxzWqP
+   Ti6WLEqM8HfTihvvuvPJ8RO1QeMQJHaopH/nyaRxPeRM9eb+tS61oTryT
+   gGLk6XI/9maO1OR3hn//XDJdosub09Gq5MIWkCbyXCm8TJ6MQFzdqh0uC
+   kuJWDzdHFIS13IpmUiJql9hwzdy3LfucA62joJ3VaHLxZCR+lVNdh3TxS
+   LiCy2n4ZRIURMDv86wxmcL1AGl7o0HpqDRk3KUyX77noGe8EQS9qLzgjk
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324646129"
 X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="324646159"
+   d="scan'208";a="324646129"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 05:24:01 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="720725511"
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 05:23:55 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="720725492"
 X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="720725511"
+   d="scan'208";a="720725492"
 Received: from bachaue1-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.250])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 05:23:56 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 05:23:50 -0800
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 3DF10109C8B; Wed, 11 Jan 2023 15:37:41 +0300 (+03)
+        id 48E17109CB2; Wed, 11 Jan 2023 15:37:41 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv14 06/17] x86/uaccess: Provide untagged_addr() and remove tags before address check
-Date:   Wed, 11 Jan 2023 15:37:25 +0300
-Message-Id: <20230111123736.20025-7-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv14 07/17] x86/mm: Provide arch_prctl() interface for LAM
+Date:   Wed, 11 Jan 2023 15:37:26 +0300
+Message-Id: <20230111123736.20025-8-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.38.2
 In-Reply-To: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
 References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
@@ -77,204 +77,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-untagged_addr() is a helper used by the core-mm to strip tag bits and
-get the address to the canonical shape based on rules of the current
-thread. It only handles userspace addresses.
+Add a few of arch_prctl() handles:
 
-The untagging mask is stored in per-CPU variable and set on context
-switching to the task.
+ - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
+   of tag bits. It is rounded up to the nearest LAM mode that can
+   provide it. For now only LAM_U57 is supported, with 6 tag bits.
 
-The tags must not be included into check whether it's okay to access the
-userspace address. Strip tags in access_ok().
+ - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
+   bits located in the address.
+
+ - ARCH_GET_MAX_TAG_BITS returns the maximum tag bits user can request.
+   Zero if LAM is not supported.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/include/asm/mmu.h         |  3 +++
- arch/x86/include/asm/mmu_context.h | 11 +++++++++++
- arch/x86/include/asm/tlbflush.h    | 10 ++++++++++
- arch/x86/include/asm/uaccess.h     | 31 ++++++++++++++++++++++++++++--
- arch/x86/kernel/process.c          |  3 +++
- arch/x86/mm/init.c                 |  5 +++++
- 6 files changed, 61 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/mmu.h        |  2 ++
+ arch/x86/include/uapi/asm/prctl.h |  4 +++
+ arch/x86/kernel/process.c         |  3 ++
+ arch/x86/kernel/process_64.c      | 55 ++++++++++++++++++++++++++++++-
+ 4 files changed, 63 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-index 22fc9fbf1d0a..9cac8c45a647 100644
+index 9cac8c45a647..e80762e998ce 100644
 --- a/arch/x86/include/asm/mmu.h
 +++ b/arch/x86/include/asm/mmu.h
-@@ -45,6 +45,9 @@ typedef struct {
- #ifdef CONFIG_ADDRESS_MASKING
- 	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
- 	unsigned long lam_cr3_mask;
-+
-+	/* Significant bits of the virtual address. Excludes tag bits. */
-+	u64 untag_mask;
- #endif
+@@ -12,6 +12,8 @@
+ #define MM_CONTEXT_UPROBE_IA32		0
+ /* vsyscall page is accessible on this MM */
+ #define MM_CONTEXT_HAS_VSYSCALL		1
++/* Do not allow changing LAM mode */
++#define MM_CONTEXT_LOCK_LAM		2
  
- 	struct mutex lock;
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index 8388fccc4700..1d0b743daebb 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -100,6 +100,12 @@ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
- static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- {
- 	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
-+	mm->context.untag_mask = oldmm->context.untag_mask;
-+}
-+
-+static inline void mm_reset_untag_mask(struct mm_struct *mm)
-+{
-+	mm->context.untag_mask = -1UL;
- }
- 
- #else
-@@ -112,6 +118,10 @@ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
- static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- {
- }
-+
-+static inline void mm_reset_untag_mask(struct mm_struct *mm)
-+{
-+}
- #endif
- 
- #define enter_lazy_tlb enter_lazy_tlb
-@@ -138,6 +148,7 @@ static inline int init_new_context(struct task_struct *tsk,
- 		mm->context.execute_only_pkey = -1;
- 	}
- #endif
-+	mm_reset_untag_mask(mm);
- 	init_new_context_ldt(mm);
- 	return 0;
- }
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index e8b47f57bd4a..75bfaa421030 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -54,6 +54,15 @@ static inline void cr4_clear_bits(unsigned long mask)
- 	local_irq_restore(flags);
- }
- 
-+#ifdef CONFIG_ADDRESS_MASKING
-+DECLARE_PER_CPU(u64, tlbstate_untag_mask);
-+
-+static inline u64 current_untag_mask(void)
-+{
-+	return this_cpu_read(tlbstate_untag_mask);
-+}
-+#endif
-+
- #ifndef MODULE
  /*
-  * 6 because 6 should be plenty and struct tlb_state will fit in two cache
-@@ -380,6 +389,7 @@ static inline void set_tlbstate_lam_mode(struct mm_struct *mm)
- {
- 	this_cpu_write(cpu_tlbstate.lam,
- 		       mm->context.lam_cr3_mask >> X86_CR3_LAM_U57_BIT);
-+	this_cpu_write(tlbstate_untag_mask, mm->context.untag_mask);
- }
+  * x86 has arch-specific MMU state beyond what lives in mm_struct.
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index 500b96e71f18..a31e27b95b19 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -20,4 +20,8 @@
+ #define ARCH_MAP_VDSO_32		0x2002
+ #define ARCH_MAP_VDSO_64		0x2003
  
- #else
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 1cc756eafa44..32c9dd052e43 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -7,11 +7,13 @@
- #include <linux/compiler.h>
- #include <linux/instrumented.h>
- #include <linux/kasan-checks.h>
-+#include <linux/mm_types.h>
- #include <linux/string.h>
- #include <asm/asm.h>
- #include <asm/page.h>
- #include <asm/smap.h>
- #include <asm/extable.h>
-+#include <asm/tlbflush.h>
- 
- #ifdef CONFIG_DEBUG_ATOMIC_SLEEP
- static inline bool pagefault_disabled(void);
-@@ -21,6 +23,31 @@ static inline bool pagefault_disabled(void);
- # define WARN_ON_IN_IRQ()
- #endif
- 
-+#ifdef CONFIG_ADDRESS_MASKING
-+/*
-+ * Mask out tag bits from the address.
-+ *
-+ * Magic with the 'sign' allows to untag userspace pointer without any branches
-+ * while leaving kernel addresses intact.
-+ */
-+#define __untagged_addr(untag_mask, addr)	({			\
-+	u64 __addr = (__force u64)(addr);				\
-+	s64 sign = (s64)__addr >> 63;					\
-+	__addr &= untag_mask | sign;					\
-+	(__force __typeof__(addr))__addr;				\
-+})
++#define ARCH_GET_UNTAG_MASK		0x4001
++#define ARCH_ENABLE_TAGGED_ADDR		0x4002
++#define ARCH_GET_MAX_TAG_BITS		0x4003
 +
-+#define untagged_addr(addr) __untagged_addr(current_untag_mask(), addr)
-+
-+#define untagged_addr_remote(mm, addr)	({				\
-+	mmap_assert_locked(mm);						\
-+	__untagged_addr((mm)->context.untag_mask, addr);		\
-+})
-+
-+#else
-+#define untagged_addr(addr)    (addr)
-+#endif
-+
- /**
-  * access_ok - Checks if a user space pointer is valid
-  * @addr: User space pointer to start of block to check
-@@ -38,10 +65,10 @@ static inline bool pagefault_disabled(void);
-  * Return: true (nonzero) if the memory block may be valid, false (zero)
-  * if it is definitely invalid.
-  */
--#define access_ok(addr, size)					\
-+#define access_ok(addr, size)						\
- ({									\
- 	WARN_ON_IN_IRQ();						\
--	likely(__access_ok(addr, size));				\
-+	likely(__access_ok(untagged_addr(addr), size));			\
- })
- 
- #include <asm-generic/access_ok.h>
+ #endif /* _ASM_X86_PRCTL_H */
 diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 40d156a31676..ef6bde1d40d8 100644
+index ef6bde1d40d8..cc0677f58f42 100644
 --- a/arch/x86/kernel/process.c
 +++ b/arch/x86/kernel/process.c
-@@ -47,6 +47,7 @@
- #include <asm/frame.h>
- #include <asm/unwind.h>
- #include <asm/tdx.h>
-+#include <asm/mmu_context.h>
+@@ -162,6 +162,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
  
- #include "process.h"
- 
-@@ -367,6 +368,8 @@ void arch_setup_new_exec(void)
- 		task_clear_spec_ssb_noexec(current);
- 		speculation_ctrl_update(read_thread_flags());
- 	}
+ 	savesegment(es, p->thread.es);
+ 	savesegment(ds, p->thread.ds);
 +
-+	mm_reset_untag_mask(current->mm);
++	if (p->mm && (clone_flags & (CLONE_VM | CLONE_VFORK)) == CLONE_VM)
++		set_bit(MM_CONTEXT_LOCK_LAM, &p->mm->context.flags);
+ #else
+ 	p->thread.sp0 = (unsigned long) (childregs + 1);
+ 	savesegment(gs, p->thread.gs);
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 8b06034e8c70..88aae519c8f8 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -743,6 +743,48 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
  }
- 
- #ifdef CONFIG_X86_IOPL_IOPERM
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index d3987359d441..be5c7d1c0265 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1044,6 +1044,11 @@ __visible DEFINE_PER_CPU_ALIGNED(struct tlb_state, cpu_tlbstate) = {
- 	.cr4 = ~0UL,	/* fail hard if we screw up cr4 shadow initialization */
- };
+ #endif
  
 +#ifdef CONFIG_ADDRESS_MASKING
-+DEFINE_PER_CPU(u64, tlbstate_untag_mask);
-+EXPORT_PER_CPU_SYMBOL(tlbstate_untag_mask);
++
++#define LAM_U57_BITS 6
++
++static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_LAM))
++		return -ENODEV;
++
++	/* PTRACE_ARCH_PRCTL */
++	if (current->mm != mm)
++		return -EINVAL;
++
++	if (mmap_write_lock_killable(mm))
++		return -EINTR;
++
++	if (test_bit(MM_CONTEXT_LOCK_LAM, &mm->context.flags)) {
++		mmap_write_unlock(mm);
++		return -EBUSY;
++	}
++
++	if (!nr_bits) {
++		mmap_write_unlock(mm);
++		return -EINVAL;
++	} else if (nr_bits <= LAM_U57_BITS) {
++		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
++		mm->context.untag_mask =  ~GENMASK(62, 57);
++	} else {
++		mmap_write_unlock(mm);
++		return -EINVAL;
++	}
++
++	write_cr3(__read_cr3() | mm->context.lam_cr3_mask);
++	set_tlbstate_lam_mode(mm);
++	set_bit(MM_CONTEXT_LOCK_LAM, &mm->context.flags);
++
++	mmap_write_unlock(mm);
++
++	return 0;
++}
 +#endif
 +
- void update_cache_mode_entry(unsigned entry, enum page_cache_mode cache)
+ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
  {
- 	/* entry 0 MUST be WB (hardwired to speed up translations) */
+ 	int ret = 0;
+@@ -830,7 +872,18 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ 	case ARCH_MAP_VDSO_64:
+ 		return prctl_map_vdso(&vdso_image_64, arg2);
+ #endif
+-
++#ifdef CONFIG_ADDRESS_MASKING
++	case ARCH_GET_UNTAG_MASK:
++		return put_user(task->mm->context.untag_mask,
++				(unsigned long __user *)arg2);
++	case ARCH_ENABLE_TAGGED_ADDR:
++		return prctl_enable_tagged_addr(task->mm, arg2);
++	case ARCH_GET_MAX_TAG_BITS:
++		if (!cpu_feature_enabled(X86_FEATURE_LAM))
++			return put_user(0, (unsigned long __user *)arg2);
++		else
++			return put_user(LAM_U57_BITS, (unsigned long __user *)arg2);
++#endif
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
 -- 
 2.38.2
 
