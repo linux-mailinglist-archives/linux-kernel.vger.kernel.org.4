@@ -2,546 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2709966587B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F00566587C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjAKKCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 05:02:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S238542AbjAKKCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 05:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238220AbjAKKB5 (ORCPT
+        with ESMTP id S238319AbjAKKCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 05:01:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95009DF26
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:58:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20C6961B29
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:58:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ABD7C433D2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:58:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673431125;
-        bh=L3WyQgUf1+Gm1jgbzAYXM4OZoqBNr+9RWBDHCBR28yc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=i9i+ZJSX5e2Ere3rHyZrRIbKGiTOY04moqdYXK7LbxJdSyEcVCJu3xYAx0+ysoDYy
-         FtjeaADvXyhQH/O/TqRp8mQ429IV33vN1hBIBfBq3bc3+UQNwdv+j2XRnVQhwkQAgU
-         VhPL03mES6t/NUftI9rgLfDQOm2UR4UE3tKEE8ZsSO3q7gCYd+zZngMXAlgh0ZU5Uu
-         hdn4uD8OycCLcrOv4LJKJ30gp5iOHxcP1m4JJ51LWd+6d5OKMEwnvxHqUQdnc0b3WB
-         xPA66dA8+/WrtmewV4XY5YABu0RZ6IC5u025QL1xnYKTwJ1nsop0t/0wedXpDdWwS4
-         iV2cJ5wYeJXgQ==
-Received: by mail-ej1-f51.google.com with SMTP id cf18so29139033ejb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:58:45 -0800 (PST)
-X-Gm-Message-State: AFqh2kpClM0iouSnm4QPdceRLk4ZaIiA4o7dy50GKH8oL6pztO/rjzT8
-        3Tj2kMOfKMpqqUgOQ/tG+eO5SzPp5oipCimpbBc=
-X-Google-Smtp-Source: AMrXdXuO8gOd8cgaHJGglxVCx99x5hm8YuaJze+h3zL6eeANS3lVoySGmih0XvLqxI3K0rHDb2m5f8JOmasFPKYb158=
-X-Received: by 2002:a17:907:1de4:b0:7c0:dab0:d722 with SMTP id
- og36-20020a1709071de400b007c0dab0d722mr4026689ejc.353.1673431123449; Wed, 11
- Jan 2023 01:58:43 -0800 (PST)
+        Wed, 11 Jan 2023 05:02:02 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF70DF58;
+        Wed, 11 Jan 2023 01:58:59 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30B8lsYS023695;
+        Wed, 11 Jan 2023 09:58:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=Pgj/rUOBcK+gP9Gox90T2FDnMWhoBQJzT3daqtgrfjA=;
+ b=t0r0t2VJEueyp+muqiaMCMysA/mXaQxT84TsvIakshVla3dC7sBi6RnZxNs8OIGx1JTw
+ 4HClILdJ8NeE32qYvKG5t936wVdnqb2VcbZpvYUk7QRP9vXI1Ovdg3on7SbsfOdSqzr/
+ FGueu6vZiZHGG4SglfvxCSk4khBWm1vuIvhf3rpQqSxtHih3W2FBIMDyXsTNBPEfmjzH
+ cyVrGz5E2rfjkpj14wTu8jggTVFRUIPqGp+Us7+WcDUv9fySwMi7zkq5x1XmVvC7LUpZ
+ qw+rd+729jC8g/MFMuj99cYaZ542xfkIdCXCQj9SYou9HpSn2dNSMKgTYCVjymNIvt0W jA== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n1shbg6j3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Jan 2023 09:58:53 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30B8QDNl029834;
+        Wed, 11 Jan 2023 09:58:52 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n1k49g0vf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Jan 2023 09:58:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gkR33KheNnqYXtPwbku2zMo1FZ9DxkUjp7IAfqEVaQ57sm0w9FWvKYcd6dp5+Iisvfm19hTVdDUcla0Vl4Nzrff4ZeHBKyyAt8uXLTS6WXG16CURp6H4pu0DowfBMoY4GelmnaSnvp5oLzwEVU6tT83HpgVx5JC8ADw9JFFeCU9tqKgeqfpCpWWaSac6zSvD/PuqgVcJaZhxlXe9prLHsyLxp3iyYB612aW6zD7V/GLLSDY9cef/7sDfw/ptlD64TGbYyCtuF3jjqhiTUHAgyVrdKD0atOgqfC9RETB4E9yWP1IlJH7ELoxavsozvMumN2CWRhzGf5smk+GNHkUuMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Pgj/rUOBcK+gP9Gox90T2FDnMWhoBQJzT3daqtgrfjA=;
+ b=LRzHdmrKL2HiizV1kQ9D9PZV1bJpUbkk08LP1zTgYdgGgtF9eN40jp1zodcrhEff9F3TUFy6jNHG5o8xo0xNdKMM9o9EEEJ+sXmG/A+wwPllP8PeB1UT9xL4yI9aKPkjXiHbUWz43Gt1xxjviqRSCtNga2jPVdesc6Hax0x6hM/EJ9I0s6GK/zzeA9rKcI2+FIB4ONofIgg5B+ZG6jJjk6Iy9KaXoIVGRnqeUfV7HVQ6KQ2iqmEOwMA4tEPEohYq+iTOaCALlnV3NjtZDLMLrjlCmYRpDEJdeUvzDxhokVq6C41tMV5qMBYwX9njUdorR0VTsHeS30JD3T50VNtKdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pgj/rUOBcK+gP9Gox90T2FDnMWhoBQJzT3daqtgrfjA=;
+ b=VXRB5FXAfFt8QSv0gYWqM9PzwOQiaRw1G7l5oUUcaJxODEEg+6WBBtmZM2HQbAW51JYtzmRqsEF6FYGuPu/okUhIYw1TEa8qiPk8mXGOku1YzhcnBQAlz0KnWb2qH6VI6tKhD9WbNHHDiMjkuaqtftQ7DampqAwRBnSojwNqkcs=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by BN0PR10MB5192.namprd10.prod.outlook.com (2603:10b6:408:115::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Wed, 11 Jan
+ 2023 09:58:50 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::1040:f0e3:c129:cff]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::1040:f0e3:c129:cff%8]) with mapi id 15.20.6002.013; Wed, 11 Jan 2023
+ 09:58:50 +0000
+Message-ID: <e37b3007-a9eb-ff07-2efd-467a5eb8114c@oracle.com>
+Date:   Wed, 11 Jan 2023 09:58:45 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V4 6/6] blk-mq: Build default queue map via
+ group_cpus_evenly()
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+References: <20221227022905.352674-1-ming.lei@redhat.com>
+ <20221227022905.352674-7-ming.lei@redhat.com>
+From:   John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <20221227022905.352674-7-ming.lei@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0216.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:33a::8) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 MIME-Version: 1.0
-References: <20230107133549.4192639-1-guoren@kernel.org> <20230107133549.4192639-4-guoren@kernel.org>
- <2afc821c-82ea-03cb-319c-d534cbb88e5e@yadro.com>
-In-Reply-To: <2afc821c-82ea-03cb-319c-d534cbb88e5e@yadro.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 11 Jan 2023 17:58:31 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ-+x3wPd4AEa4PnLi-Asq3ZCK3sDoMx4qq84hOjtbGQQ@mail.gmail.com>
-Message-ID: <CAJF2gTQ-+x3wPd4AEa4PnLi-Asq3ZCK3sDoMx4qq84hOjtbGQQ@mail.gmail.com>
-Subject: Re: [PATCH -next V6 3/7] riscv: ftrace: Reduce the detour code size
- to half
-To:     Evgenii Shatokhin <e.shatokhin@yadro.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>, anup@brainfault.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
-        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
-        jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
-        linux@yadro.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|BN0PR10MB5192:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53d3ece6-b4c0-4d6b-23b4-08daf3ba7076
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jIkgvehwkoNaXg4cQFh3XqO+mp2Uq9IkHGR4Su/MHE8k/YTVhtIv2iHilRs2E8i/cmLfakIJWKevBNrgL1t+ffpdBpDniXi/dr77Xm/DBjapr6fCgl0jIzVI/lcCMX3kznKXBoZY1E9830WE45V+0DJMZrrfyOtdNvO/5LYRXBKzwvseamvJco+us2HJx5oKxj8rhxHCZ4yZlaze7A4PRljSeQT1Gq0i+Qd8HkcoNurCFDVdAfIxrRoS32EA69ZlsurkE4wsPrzr/q3VwPYy6MhUuTlPw/kjUkp3tAwHP2OkmWuhqghANdWACRiNHuRQKoi6LkSIdgyMgf2IQeEIlz6TxKHkeEcGop6tdFelZolMgp4UmG9AdyIPnv68LtMkMIX5L4aoPq8G5L1+QLOqfQIc64kwr02zxX1X1Pld8FIBbgldxbabEP/NkqufTvxnnY/fp4kIlVV1Ling4nNBrV6sh+KBbqphSAvVN2OF0hqzRQZ0DriBpRojbrfEfyH0HJcoomrX8uDJgdg++ApQOrp0apqAzCtzieksu7gd1S2BEc6t4y4jjvE/h7G58YSWuT/VxX052BBJBuVXBiTzBYz/LQlPLEMljPI2gG7gGqApLqUNFWHZ3w99wF0VRvCVqeF83LRc6jO2JWmGLO8ZWiI3FrT1mDxT3qYnAeDoSSdLb+iOlEkhfCibO8UrKgDnIoYcagnoy6Pzp57cMfNUPkuan/cjnugishdpqVF35zE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(346002)(136003)(396003)(39860400002)(451199015)(478600001)(6486002)(41300700001)(38100700002)(6512007)(86362001)(110136005)(316002)(31696002)(2616005)(186003)(26005)(36916002)(66556008)(66476007)(66946007)(8676002)(4326008)(36756003)(66899015)(5660300002)(53546011)(6666004)(6506007)(2906002)(31686004)(83380400001)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Yk55SG9vMTNKaWNPWFhWTzNScU4vNnVFQ2hNM3N2TFJvWXVINlQ1aDZEQUpG?=
+ =?utf-8?B?b2pkMURqVFdNZUJudWlPVjRZQjN0Zy9oMHJkWStsUEZWaHJEMjlRYTRpU1VM?=
+ =?utf-8?B?eFZaNzdmdzhCWGpyVlZpOG9naW1CV3VVMFZwYVBScU9FZHRXaXA0MFY4MjBP?=
+ =?utf-8?B?ZXFIWVg4U1RjZnZheklFenZWanMvMHVpdmFVeFZhRjBSRGFUaElXd0pjcXQz?=
+ =?utf-8?B?dElKcTZrNk1BYzhTS1IyMm5GTW5PMjFDL0VFZ3NQS3lXd0Z3UUxRV0MwWWF1?=
+ =?utf-8?B?T1VuYUk2Yndvb2V0VkRTaFZ0K0RHUG5BVHUrbklzelpIQjdRNVh5OHhBaHhZ?=
+ =?utf-8?B?MmVFQ01ORkk2L1RuR1d2QUJFMjl5U0R3RmR5cW5kNlg2anJDelNHRHM0Z2or?=
+ =?utf-8?B?WENLcHpPVklMQWE5cjI0ejE3YWhPbnk0b09QNGUvYzM2MUxSUGZyL0M3aktK?=
+ =?utf-8?B?VE9zeGdUY3d4UU5SR2lGS1FoM05vVU1DQSt5dzdYaUQyaXB4a0pqdlZ6Qm9R?=
+ =?utf-8?B?bmlWM2dwQ2tJWkN1MXQrQm5aK05PVlBmN0NpSHA3ZlQ2eTRheTQvN1FyOEYy?=
+ =?utf-8?B?OCtZeEhLTUF2T2NoNGlSV01OdTljaDNlQXVybGRBWktndFhHdDJleGFmQ2lS?=
+ =?utf-8?B?ZG1ndUcwVWQvSEJCWVU0UlBvV0d1Zi9lYldOTG5jUkd2VFRXTXdabXMzSjNK?=
+ =?utf-8?B?czcydGRmOTVFRzZDWThkYk5KcjVQWkFIKzBBSTdtVE5COUN4djFuVk5rZHZE?=
+ =?utf-8?B?SWF4Z3B1dkFUa3k1Q29KL1BLQVh0WFpUcjNqdUJyNEpGTUwvMzZkSm9zSGhK?=
+ =?utf-8?B?QXRBRG5oSUtiMDFYOGxKb29ueHROUTFpWFo3YnFRdmhIcWFVYWlsSmRBcHlr?=
+ =?utf-8?B?K3h0d0hrUVZQRWRQSDlqWGhSbSs4U0FyT1BaRy9BeENiMjdDKzRTRnEwQ2Q3?=
+ =?utf-8?B?dTA5aXpNQ1U5eHpPQXBiSTdQZ3puTkZsMnAzd0RVRGV2dXR6eFYyMFB4bmIx?=
+ =?utf-8?B?RmJYcklUSjZBUnpETFMxYktJb2l6TzRsNTNySWdCZDljalJnUW8zeW9PUnk4?=
+ =?utf-8?B?UU02MjNOeFZ5MTV3R2VhZ3doQWpFVldyMTVZREdXV2d5dXorVFFGSFZ0b3Jq?=
+ =?utf-8?B?UGRtcjlvNnRSaVNLYnpXZkdWeGhPNDlQRG50Z3JmV1lhUy9INHJMNGNodzB1?=
+ =?utf-8?B?OUdFdXUyRkpFbk1Ncm1QSTlUSGRYVGcwaXcxUjZjTW9qUHFYODZmLzdqaHE2?=
+ =?utf-8?B?S1RLSVJpNjVaNVdrM0VUWVV0Yys2K2dEOGc3UDZsUzFzSXFBaWlIa0FPeHlQ?=
+ =?utf-8?B?MmUrM2tJaGFpbzhhN2ZhNjRUSFdjdmh2bHpqZ1NMbTNBS1lVYjJXWFcxeXhF?=
+ =?utf-8?B?MmU2d2N2NlljeXR4ZXNseWl1VitkLzh0eFd1eHRDU0ZmNlFDa01ySHFReXRX?=
+ =?utf-8?B?bDhocFBiZTBLcmt1d2RjSmppSC9wYXU5TkZGanBWcC9pdm1jT1lDZ0R3ZmlQ?=
+ =?utf-8?B?Mk5RTDZIcDhmRFRrM3pvQ1E2N2VFUURsYXlVSTJJVGUxK0dHZDZoQlBzSlND?=
+ =?utf-8?B?YlYzYVVXbGR5SGkrRGxmcFVLOHVCZ3BJZU9zYXRvVFY0VE5NYWZ0RWFkZmFq?=
+ =?utf-8?B?WVB4L0lOMzJIK0I0dW92WHhSdURvOEZyYWpFYktjZ1NGbE1TcjBENm1ObzNw?=
+ =?utf-8?B?a1FMYW1kb2l4QmYyaktxaTl2Mmkwblk0OGwzb3JGSkUrUG9aRDlTL1djM1k0?=
+ =?utf-8?B?WnpwSG9iVU1lMHB5THB1NTFkcXF4RDRBOHJvZW9ka25PMWN3VFpuVlFCMFdS?=
+ =?utf-8?B?Vk15MnFHRHEzMlRKSDRXRXZWUldzK3l2clR2T0ZGczU5UW5ZL2lsSWFmclpo?=
+ =?utf-8?B?cWpWc0VJdGgwc3doV1NINTFSOThTZ3lCU0xVMkt2Unk2MDZNQVdsVTZ1d2hR?=
+ =?utf-8?B?L2FSaXhkWHNiZ2VjbkN0TmZ1MGY0OFI4QXF0QXF1ZXduTnR1MDFyTFZkOWlF?=
+ =?utf-8?B?WlNmSVRBMDA0MG1ScGcwcUdVZmEvQzkwZldJNlNadi9DVExBOU9QMFFUcTl3?=
+ =?utf-8?B?UlpzWTV3ZlNvTGZpSHBuWm5mR1NmNjdFRjNhYW1ESnhrOWU3N3VMTTg4ZXhK?=
+ =?utf-8?B?VjdRT0FCbGxoZ0M1SEJWbDh1SUNUMW15V0J3RDc5S2oyd1EwTG0ydjRsVmlq?=
+ =?utf-8?B?YWc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: dYgwlmDAg3bHYWCUWWvPG0zxQKX2Togb/i4dZdNmzJd8375Iwz+4dk3cfbOA2yFlOZcC3zTwCdXZzXLG99ASBbmOvXlMkWZ29ttGTzdUaygHVhlba9j1BtuqAQqZdu3tzttd1cF6PTVtLd84LrSGprBDcc0A47CfMQnHboJxKFZkp0n03XyR7kEKpqfCedfsiUuWcx5hKLTuFAjmAQisv0iEV68QV7mmN729juKGJ7+urgTd5a9O6oK7bdm71fphw+MGxAUvSXxGd7GM0S/KXEMb1dPUhcBO7kxIdOH2BM/6ao2p/lJbUUkqCY6C8xTa2n87oWWmHfAOZ8Jb/plPOplbN8O6eOYZ276dO3et4/K2xv9oo4lXhO/EWpgMwr1Re/13qhTkEzfeiBll1wcQrmNnr0CogsMo5fKu67+yJbhimbdu1MMJAxzs/RBwhYPb69wF41Eec66jebnRTDOSpYOOpiUUY6W9zCNcDs9iaZBglZdnREgZGSdg7+gbeStIKH9XVK+Rzvg+UI/59WYDM8A/KUptAekqSVI+nDw69nEda8J5qKgdzEayoUv/TWmBs+CAswbsOlFcv4J/OtmuWJXTecWqhr3Ydu5rvag1dwtKQ9dVjl/GMCl9SuhG9ewbY5jmAPSF9C5JkKDjla86nGb8pvfY/glkdlyZfEGPRLRwWMz/R0/U6gX71ELYVcL8HGi8scm0/otnEZrl6thEbwTP+ELgfIdKMqpNa6ImJ0MGBMF26oeYR3gM+EuZoW7+geAE1J7R4h2s6tRhwVRJP5GAWfalrzNJG+7ZZR5jTxtWAnBfUSHOzNhlmSD/VlUMm3Wi6Su0dUuJn6v7sbzDoK+vuThsYIsieuJv4ZaA3OSHeXEvcvzMH2iqMulbCaGA
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53d3ece6-b4c0-4d6b-23b4-08daf3ba7076
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 09:58:50.4946
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zte6NA1CCZxKBPz83nQIgr0Eha687VqybSSlo/cNtgIDdNwMpY6zh0/oOz+Z6xakxr8v7rUU76Sifz9hJEuzFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5192
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-11_04,2023-01-10_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0
+ adultscore=0 spamscore=0 mlxscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301110076
+X-Proofpoint-GUID: ejmeN_HCCsfot47Zkg-OzU4Er5-tcYCM
+X-Proofpoint-ORIG-GUID: ejmeN_HCCsfot47Zkg-OzU4Er5-tcYCM
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 1:13 AM Evgenii Shatokhin <e.shatokhin@yadro.com> wrote:
->
-> On 07.01.2023 16:35, guoren@kernel.org wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Use a temporary register to reduce the size of detour code from 16 bytes to
-> > 8 bytes. The previous implementation is from 'commit afc76b8b8011 ("riscv:
-> > Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")'.
-> >
-> > Before the patch:
-> > <func_prolog>:
-> >   0: REG_S  ra, -SZREG(sp)
-> >   4: auipc  ra, ?
-> >   8: jalr   ?(ra)
-> > 12: REG_L  ra, -SZREG(sp)
-> >   (func_boddy)
-> >
-> > After the patch:
-> > <func_prolog>:
-> >   0: auipc  t0, ?
-> >   4: jalr   t0, ?(t0)
-> >   (func_boddy)
-> >
-> > This patch not just reduces the size of detour code, but also fixes an
-> > important issue:
-> >
-> > An Ftrace callback registered with FTRACE_OPS_FL_IPMODIFY flag can
-> > actually change the instruction pointer, e.g. to "replace" the given
-> > kernel function with a new one, which is needed for livepatching, etc.
-> >
-> > In this case, the trampoline (ftrace_regs_caller) would not return to
-> > <func_prolog+12> but would rather jump to the new function. So, "REG_L
-> > ra, -SZREG(sp)" would not run and the original return address would not
-> > be restored. The kernel is likely to hang or crash as a result.
-> >
-> > This can be easily demonstrated if one tries to "replace", say,
-> > cmdline_proc_show() with a new function with the same signature using
-> > instruction_pointer_set(&fregs->regs, new_func_addr) in the Ftrace
-> > callback.
-> >
-> > Link: https://lore.kernel.org/linux-riscv/20221122075440.1165172-1-suagrfillet@gmail.com/
-> > Link: https://lore.kernel.org/linux-riscv/d7d5730b-ebef-68e5-5046-e763e1ee6164@yadro.com/
-> > Co-developed-by: Song Shuai <suagrfillet@gmail.com>
-> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Evgenii Shatokhin <e.shatokhin@yadro.com>
-> > ---
-> >   arch/riscv/Makefile             |  4 +-
-> >   arch/riscv/include/asm/ftrace.h | 50 +++++++++++++++++++------
-> >   arch/riscv/kernel/ftrace.c      | 65 ++++++++++-----------------------
-> >   arch/riscv/kernel/mcount-dyn.S  | 43 +++++++++-------------
-> >   4 files changed, 76 insertions(+), 86 deletions(-)
-> >
-> > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > index ea5a91da6897..3c9aaf67ed79 100644
-> > --- a/arch/riscv/Makefile
-> > +++ b/arch/riscv/Makefile
-> > @@ -12,9 +12,9 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
-> >          LDFLAGS_vmlinux := --no-relax
-> >          KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-> >   ifeq ($(CONFIG_RISCV_ISA_C),y)
-> > -       CC_FLAGS_FTRACE := -fpatchable-function-entry=8
-> > -else
-> >          CC_FLAGS_FTRACE := -fpatchable-function-entry=4
-> > +else
-> > +       CC_FLAGS_FTRACE := -fpatchable-function-entry=2
-> >   endif
-> >   endif
-> >
-> > diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
-> > index 04dad3380041..9e73922e1e2e 100644
-> > --- a/arch/riscv/include/asm/ftrace.h
-> > +++ b/arch/riscv/include/asm/ftrace.h
-> > @@ -42,6 +42,14 @@ struct dyn_arch_ftrace {
-> >    * 2) jalr: setting low-12 offset to ra, jump to ra, and set ra to
-> >    *          return address (original pc + 4)
-> >    *
-> > + *<ftrace enable>:
-> > + * 0: auipc  t0/ra, 0x?
-> > + * 4: jalr   t0/ra, ?(t0/ra)
-> > + *
-> > + *<ftrace disable>:
-> > + * 0: nop
-> > + * 4: nop
-> > + *
-> >    * Dynamic ftrace generates probes to call sites, so we must deal with
-> >    * both auipc and jalr at the same time.
-> >    */
-> > @@ -52,25 +60,43 @@ struct dyn_arch_ftrace {
-> >   #define AUIPC_OFFSET_MASK      (0xfffff000)
-> >   #define AUIPC_PAD              (0x00001000)
-> >   #define JALR_SHIFT             20
-> > -#define JALR_BASIC             (0x000080e7)
-> > -#define AUIPC_BASIC            (0x00000097)
-> > +#define JALR_RA                        (0x000080e7)
-> > +#define AUIPC_RA               (0x00000097)
-> > +#define JALR_T0                        (0x000282e7)
-> > +#define AUIPC_T0               (0x00000297)
-> >   #define NOP4                   (0x00000013)
-> >
-> > -#define make_call(caller, callee, call)                                        \
-> > +#define to_jalr_t0(offset)                                             \
-> > +       (((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_T0)
-> > +
-> > +#define to_auipc_t0(offset)                                            \
-> > +       ((offset & JALR_SIGN_MASK) ?                                    \
-> > +       (((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_T0) :       \
-> > +       ((offset & AUIPC_OFFSET_MASK) | AUIPC_T0))
-> > +
-> > +#define make_call_t0(caller, callee, call)                             \
-> >   do {                                                                   \
-> > -       call[0] = to_auipc_insn((unsigned int)((unsigned long)callee -  \
-> > -                               (unsigned long)caller));                \
-> > -       call[1] = to_jalr_insn((unsigned int)((unsigned long)callee -   \
-> > -                              (unsigned long)caller));                 \
-> > +       unsigned int offset =                                           \
-> > +               (unsigned long) callee - (unsigned long) caller;        \
-> > +       call[0] = to_auipc_t0(offset);                                  \
-> > +       call[1] = to_jalr_t0(offset);                                   \
-> >   } while (0)
-> >
-> > -#define to_jalr_insn(offset)                                           \
-> > -       (((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_BASIC)
-> > +#define to_jalr_ra(offset)                                             \
-> > +       (((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_RA)
-> >
-> > -#define to_auipc_insn(offset)                                          \
-> > +#define to_auipc_ra(offset)                                            \
-> >          ((offset & JALR_SIGN_MASK) ?                                    \
-> > -       (((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_BASIC) :    \
-> > -       ((offset & AUIPC_OFFSET_MASK) | AUIPC_BASIC))
-> > +       (((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_RA) :       \
-> > +       ((offset & AUIPC_OFFSET_MASK) | AUIPC_RA))
-> > +
-> > +#define make_call_ra(caller, callee, call)                             \
-> > +do {                                                                   \
-> > +       unsigned int offset =                                           \
-> > +               (unsigned long) callee - (unsigned long) caller;        \
-> > +       call[0] = to_auipc_ra(offset);                                  \
-> > +       call[1] = to_jalr_ra(offset);                                   \
-> > +} while (0)
-> >
-> >   /*
-> >    * Let auipc+jalr be the basic *mcount unit*, so we make it 8 bytes here.
-> > diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-> > index 2086f6585773..5bff37af4770 100644
-> > --- a/arch/riscv/kernel/ftrace.c
-> > +++ b/arch/riscv/kernel/ftrace.c
-> > @@ -55,12 +55,15 @@ static int ftrace_check_current_call(unsigned long hook_pos,
-> >   }
-> >
-> >   static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
-> > -                               bool enable)
-> > +                               bool enable, bool ra)
-> >   {
-> >          unsigned int call[2];
-> >          unsigned int nops[2] = {NOP4, NOP4};
-> >
-> > -       make_call(hook_pos, target, call);
-> > +       if (ra)
-> > +               make_call_ra(hook_pos, target, call);
-> > +       else
-> > +               make_call_t0(hook_pos, target, call);
-> >
-> >          /* Replace the auipc-jalr pair at once. Return -EPERM on write error. */
-> >          if (patch_text_nosync
-> > @@ -70,42 +73,13 @@ static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
-> >          return 0;
-> >   }
-> >
-> > -/*
-> > - * Put 5 instructions with 16 bytes at the front of function within
-> > - * patchable function entry nops' area.
-> > - *
-> > - * 0: REG_S  ra, -SZREG(sp)
-> > - * 1: auipc  ra, 0x?
-> > - * 2: jalr   -?(ra)
-> > - * 3: REG_L  ra, -SZREG(sp)
-> > - *
-> > - * So the opcodes is:
-> > - * 0: 0xfe113c23 (sd)/0xfe112e23 (sw)
-> > - * 1: 0x???????? -> auipc
-> > - * 2: 0x???????? -> jalr
-> > - * 3: 0xff813083 (ld)/0xffc12083 (lw)
-> > - */
-> > -#if __riscv_xlen == 64
-> > -#define INSN0  0xfe113c23
-> > -#define INSN3  0xff813083
-> > -#elif __riscv_xlen == 32
-> > -#define INSN0  0xfe112e23
-> > -#define INSN3  0xffc12083
-> > -#endif
-> > -
-> > -#define FUNC_ENTRY_SIZE        16
-> > -#define FUNC_ENTRY_JMP 4
-> > -
-> >   int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
-> >   {
-> > -       unsigned int call[4] = {INSN0, 0, 0, INSN3};
-> > -       unsigned long target = addr;
-> > -       unsigned long caller = rec->ip + FUNC_ENTRY_JMP;
-> > +       unsigned int call[2];
-> >
-> > -       call[1] = to_auipc_insn((unsigned int)(target - caller));
-> > -       call[2] = to_jalr_insn((unsigned int)(target - caller));
-> > +       make_call_t0(rec->ip, addr, call);
-> >
-> > -       if (patch_text_nosync((void *)rec->ip, call, FUNC_ENTRY_SIZE))
-> > +       if (patch_text_nosync((void *)rec->ip, call, MCOUNT_INSN_SIZE))
-> >                  return -EPERM;
-> >
-> >          return 0;
-> > @@ -114,15 +88,14 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
-> >   int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
-> >                      unsigned long addr)
-> >   {
-> > -       unsigned int nops[4] = {NOP4, NOP4, NOP4, NOP4};
-> > +       unsigned int nops[2] = {NOP4, NOP4};
-> >
-> > -       if (patch_text_nosync((void *)rec->ip, nops, FUNC_ENTRY_SIZE))
-> > +       if (patch_text_nosync((void *)rec->ip, nops, MCOUNT_INSN_SIZE))
-> >                  return -EPERM;
-> >
-> >          return 0;
-> >   }
-> >
-> > -
-> >   /*
-> >    * This is called early on, and isn't wrapped by
-> >    * ftrace_arch_code_modify_{prepare,post_process}() and therefor doesn't hold
-> > @@ -144,10 +117,10 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
-> >   int ftrace_update_ftrace_func(ftrace_func_t func)
-> >   {
-> >          int ret = __ftrace_modify_call((unsigned long)&ftrace_call,
-> > -                                      (unsigned long)func, true);
-> > +                                      (unsigned long)func, true, true);
-> >          if (!ret) {
-> >                  ret = __ftrace_modify_call((unsigned long)&ftrace_regs_call,
-> > -                                          (unsigned long)func, true);
-> > +                                          (unsigned long)func, true, true);
-> >          }
-> >
-> >          return ret;
-> > @@ -159,16 +132,16 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
-> >                         unsigned long addr)
-> >   {
-> >          unsigned int call[2];
-> > -       unsigned long caller = rec->ip + FUNC_ENTRY_JMP;
-> > +       unsigned long caller = rec->ip;
-> >          int ret;
-> >
-> > -       make_call(caller, old_addr, call);
-> > +       make_call_t0(caller, old_addr, call);
-> >          ret = ftrace_check_current_call(caller, call);
-> >
-> >          if (ret)
-> >                  return ret;
-> >
-> > -       return __ftrace_modify_call(caller, addr, true);
-> > +       return __ftrace_modify_call(caller, addr, true, false);
-> >   }
-> >   #endif
-> >
-> > @@ -203,12 +176,12 @@ int ftrace_enable_ftrace_graph_caller(void)
-> >          int ret;
-> >
-> >          ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
-> > -                                   (unsigned long)&prepare_ftrace_return, true);
-> > +                                   (unsigned long)&prepare_ftrace_return, true, true);
-> >          if (ret)
-> >                  return ret;
-> >
-> >          return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
-> > -                                   (unsigned long)&prepare_ftrace_return, true);
-> > +                                   (unsigned long)&prepare_ftrace_return, true, true);
-> >   }
-> >
-> >   int ftrace_disable_ftrace_graph_caller(void)
-> > @@ -216,12 +189,12 @@ int ftrace_disable_ftrace_graph_caller(void)
-> >          int ret;
-> >
-> >          ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
-> > -                                   (unsigned long)&prepare_ftrace_return, false);
-> > +                                   (unsigned long)&prepare_ftrace_return, false, true);
-> >          if (ret)
-> >                  return ret;
-> >
-> >          return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
-> > -                                   (unsigned long)&prepare_ftrace_return, false);
-> > +                                   (unsigned long)&prepare_ftrace_return, false, true);
-> >   }
-> >   #endif /* CONFIG_DYNAMIC_FTRACE */
-> >   #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-> > diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-> > index d171eca623b6..b75332ced757 100644
-> > --- a/arch/riscv/kernel/mcount-dyn.S
-> > +++ b/arch/riscv/kernel/mcount-dyn.S
-> > @@ -13,8 +13,8 @@
-> >
-> >          .text
-> >
-> > -#define FENTRY_RA_OFFSET       12
-> > -#define ABI_SIZE_ON_STACK      72
-> > +#define FENTRY_RA_OFFSET       8
-> > +#define ABI_SIZE_ON_STACK      80
-> >   #define ABI_A0                 0
-> >   #define ABI_A1                 8
-> >   #define ABI_A2                 16
-> > @@ -23,10 +23,10 @@
-> >   #define ABI_A5                 40
-> >   #define ABI_A6                 48
-> >   #define ABI_A7                 56
-> > -#define ABI_RA                 64
-> > +#define ABI_T0                 64
-> > +#define ABI_RA                 72
-> >
-> >          .macro SAVE_ABI
-> > -       addi    sp, sp, -SZREG
-> >          addi    sp, sp, -ABI_SIZE_ON_STACK
-> >
-> >          REG_S   a0, ABI_A0(sp)
-> > @@ -37,6 +37,7 @@
-> >          REG_S   a5, ABI_A5(sp)
-> >          REG_S   a6, ABI_A6(sp)
-> >          REG_S   a7, ABI_A7(sp)
-> > +       REG_S   t0, ABI_T0(sp)
-> >          REG_S   ra, ABI_RA(sp)
-> >          .endm
-> >
-> > @@ -49,24 +50,18 @@
-> >          REG_L   a5, ABI_A5(sp)
-> >          REG_L   a6, ABI_A6(sp)
-> >          REG_L   a7, ABI_A7(sp)
-> > +       REG_L   t0, ABI_T0(sp)
-> >          REG_L   ra, ABI_RA(sp)
-> >
-> >          addi    sp, sp, ABI_SIZE_ON_STACK
-> > -       addi    sp, sp, SZREG
-> >          .endm
-> >
-> >   #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> >          .macro SAVE_ALL
-> > -       addi    sp, sp, -SZREG
-> >          addi    sp, sp, -PT_SIZE_ON_STACK
-> >
-> > -       REG_S x1,  PT_EPC(sp)
-> > -       addi    sp, sp, PT_SIZE_ON_STACK
-> > -       REG_L x1,  (sp)
-> > -       addi    sp, sp, -PT_SIZE_ON_STACK
-> > +       REG_S t0,  PT_EPC(sp)
-> >          REG_S x1,  PT_RA(sp)
-> > -       REG_L x1,  PT_EPC(sp)
-> > -
-> >          REG_S x2,  PT_SP(sp)
-> >          REG_S x3,  PT_GP(sp)
-> >          REG_S x4,  PT_TP(sp)
-> > @@ -100,11 +95,8 @@
-> >          .endm
-> >
-> >          .macro RESTORE_ALL
-> > +       REG_L t0,  PT_EPC(sp)
-> >          REG_L x1,  PT_RA(sp)
-> > -       addi    sp, sp, PT_SIZE_ON_STACK
-> > -       REG_S x1,  (sp)
-> > -       addi    sp, sp, -PT_SIZE_ON_STACK
-> > -       REG_L x1,  PT_EPC(sp)
-> >          REG_L x2,  PT_SP(sp)
-> >          REG_L x3,  PT_GP(sp)
-> >          REG_L x4,  PT_TP(sp)
->
-> I did not notice it the last time, but RESTORE_ALL should skip "REG_L
-> x5,  PT_T0(sp)". Otherwise, the value of t0/x5 loaded from PT_EPC(sp)
-> will be overwritten.
->
-> With the "ipmodify" use case I mentioned earlier, the Ftrace handler
-> might have changed the value in PT_EPC(sp) by that time. Reading t0
-> again from PT_T0(sp) here breaks it.
+On 27/12/2022 02:29, Ming Lei wrote:
+> The default queue mapping builder of blk_mq_map_queues doesn't take NUMA
+> topo into account, so the built mapping is pretty bad, since CPUs
+> belonging to different NUMA node are assigned to same queue. It is
+> observed that IOPS drops by ~30% when running two jobs on same hctx
+> of null_blk from two CPUs belonging to two NUMA nodes compared with
+> from same NUMA node.
+> 
+> Address the issue by reusing group_cpus_evenly() for building queue
+> mapping since group_cpus_evenly() does group cpus according to CPU/NUMA
+> locality.
+> 
+> Also performance data becomes more stable with this patchset given
+> correct queue mapping is applied wrt. numa locality viewpoint, for
+> example, on one two nodes arm64 machine with 160 cpus, node 0(cpu 0~79),
+> node 1(cpu 80~159):
+> 
+> 1) modprobe null_blk nr_devices=1 submit_queues=2
+> 
+> 2) run 'fio(t/io_uring -p 0 -n 4 -r 20 /dev/nullb0)', and observe that
+> IOPS becomes much stable on multiple tests:
+> 
+> - without patched: IOPS is 2.5M ~ 4.5M
+> - patched: IOPS is 4.3 ~ 5M
+> 
+> Lots of drivers may benefit from the change, such as nvme pci poll,
+> nvme tcp, ...
+> 
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
 
+FWIW, but just a comment below:
 
-Correct, in kprobe_ftrace_handler, I found:
+Reviewed-by: John Garry <john.g.garry@oracle.com>
 
-                unsigned long orig_ip = instruction_pointer(regs);
+> ---
+>   block/blk-mq-cpumap.c | 63 +++++++++----------------------------------
+>   1 file changed, 13 insertions(+), 50 deletions(-)
+> 
+> diff --git a/block/blk-mq-cpumap.c b/block/blk-mq-cpumap.c
+> index 9c2fce1a7b50..0c612c19feb8 100644
+> --- a/block/blk-mq-cpumap.c
+> +++ b/block/blk-mq-cpumap.c
+> @@ -10,66 +10,29 @@
+>   #include <linux/mm.h>
+>   #include <linux/smp.h>
+>   #include <linux/cpu.h>
+> +#include <linux/group_cpus.h>
+>   
+>   #include <linux/blk-mq.h>
+>   #include "blk.h"
+>   #include "blk-mq.h"
+>   
+> -static int queue_index(struct blk_mq_queue_map *qmap,
+> -		       unsigned int nr_queues, const int q)
+> -{
+> -	return qmap->queue_offset + (q % nr_queues);
+> -}
+> -
+> -static int get_first_sibling(unsigned int cpu)
+> -{
+> -	unsigned int ret;
+> -
+> -	ret = cpumask_first(topology_sibling_cpumask(cpu));
+> -	if (ret < nr_cpu_ids)
+> -		return ret;
+> -
+> -	return cpu;
+> -}
+> -
+>   void blk_mq_map_queues(struct blk_mq_queue_map *qmap)
+>   {
+> -	unsigned int *map = qmap->mq_map;
+> -	unsigned int nr_queues = qmap->nr_queues;
+> -	unsigned int cpu, first_sibling, q = 0;
+> -
+> -	for_each_possible_cpu(cpu)
+> -		map[cpu] = -1;
+> -
+> -	/*
+> -	 * Spread queues among present CPUs first for minimizing
+> -	 * count of dead queues which are mapped by all un-present CPUs
+> -	 */
+> -	for_each_present_cpu(cpu) {
+> -		if (q >= nr_queues)
+> -			break;
+> -		map[cpu] = queue_index(qmap, nr_queues, q++);
+> +	const struct cpumask *masks;
+> +	unsigned int queue, cpu;
+> +
+> +	masks = group_cpus_evenly(qmap->nr_queues);
+> +	if (!masks) {
+> +		for_each_possible_cpu(cpu)
+> +			qmap->mq_map[cpu] = qmap->queue_offset;
 
-                instruction_pointer_set(regs, ip);
+I'm not sure if we should try something better than just assigning all 
+CPUs to a single queue (which we seem to be doing), but I suppose we 
+don't expect masks alloc to fail and there are bigger issues to deal 
+with if it does ....
 
-So, I must skip "REG_L x5,  PT_T0(sp)" to prevent the value from being
-overwritten.
+> +		return;
+>   	}
+>   
+> -	for_each_possible_cpu(cpu) {
+> -		if (map[cpu] != -1)
+> -			continue;
+> -		/*
+> -		 * First do sequential mapping between CPUs and queues.
+> -		 * In case we still have CPUs to map, and we have some number of
+> -		 * threads per cores then map sibling threads to the same queue
+> -		 * for performance optimizations.
+> -		 */
+> -		if (q < nr_queues) {
+> -			map[cpu] = queue_index(qmap, nr_queues, q++);
+> -		} else {
+> -			first_sibling = get_first_sibling(cpu);
+> -			if (first_sibling == cpu)
+> -				map[cpu] = queue_index(qmap, nr_queues, q++);
+> -			else
+> -				map[cpu] = map[first_sibling];
+> -		}
+> +	for (queue = 0; queue < qmap->nr_queues; queue++) {
+> +		for_each_cpu(cpu, &masks[queue])
+> +			qmap->mq_map[cpu] = qmap->queue_offset + queue;
+>   	}
+> +	kfree(masks);
+>   }
+>   EXPORT_SYMBOL_GPL(blk_mq_map_queues);
+>   
 
-
->
-> The same holds for "[PATCH -next V6 5/7] riscv: ftrace: Make
-> ftrace_caller call ftrace_graph_func".
->
-> > @@ -137,17 +129,16 @@
-> >          REG_L x31, PT_T6(sp)
-> >
-> >          addi    sp, sp, PT_SIZE_ON_STACK
-> > -       addi    sp, sp, SZREG
-> >          .endm
-> >   #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-> >
-> >   ENTRY(ftrace_caller)
-> >          SAVE_ABI
-> >
-> > -       addi    a0, ra, -FENTRY_RA_OFFSET
-> > +       addi    a0, t0, -FENTRY_RA_OFFSET
-> >          la      a1, function_trace_op
-> >          REG_L   a2, 0(a1)
-> > -       REG_L   a1, ABI_SIZE_ON_STACK(sp)
-> > +       mv      a1, ra
-> >          mv      a3, sp
-> >
-> >   ftrace_call:
-> > @@ -155,8 +146,8 @@ ftrace_call:
-> >          call    ftrace_stub
-> >
-> >   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> > -       addi    a0, sp, ABI_SIZE_ON_STACK
-> > -       REG_L   a1, ABI_RA(sp)
-> > +       addi    a0, sp, ABI_RA
-> > +       REG_L   a1, ABI_T0(sp)
-> >          addi    a1, a1, -FENTRY_RA_OFFSET
-> >   #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
-> >          mv      a2, s0
-> > @@ -166,17 +157,17 @@ ftrace_graph_call:
-> >          call    ftrace_stub
-> >   #endif
-> >          RESTORE_ABI
-> > -       ret
-> > +       jr t0
-> >   ENDPROC(ftrace_caller)
-> >
-> >   #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> >   ENTRY(ftrace_regs_caller)
-> >          SAVE_ALL
-> >
-> > -       addi    a0, ra, -FENTRY_RA_OFFSET
-> > +       addi    a0, t0, -FENTRY_RA_OFFSET
-> >          la      a1, function_trace_op
-> >          REG_L   a2, 0(a1)
-> > -       REG_L   a1, PT_SIZE_ON_STACK(sp)
-> > +       mv      a1, ra
-> >          mv      a3, sp
-> >
-> >   ftrace_regs_call:
-> > @@ -185,7 +176,7 @@ ftrace_regs_call:
-> >
-> >   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> >          addi    a0, sp, PT_RA
-> > -       REG_L   a1, PT_EPC(sp)
-> > +       REG_L   a1, PT_T0(sp)
-> >          addi    a1, a1, -FENTRY_RA_OFFSET
-> >   #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
-> >          mv      a2, s0
-> > @@ -196,6 +187,6 @@ ftrace_graph_regs_call:
-> >   #endif
-> >
-> >          RESTORE_ALL
-> > -       ret
-> > +       jr t0
-> >   ENDPROC(ftrace_regs_caller)
-> >   #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-> > --
-> > 2.36.1
-> >
-> >
->
-> Regards,
-> Evgenii
->
-
-
---
-Best Regards
- Guo Ren
