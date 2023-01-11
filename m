@@ -2,258 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32CB665A94
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB52B665A8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233136AbjAKLoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
+        id S233799AbjAKLoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:44:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbjAKLnB (ORCPT
+        with ESMTP id S238586AbjAKLni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:43:01 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7165CEE18
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:41:37 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id bj3so12395339pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:41:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AMFBNcMsSwUAtzp9lzITidEj8Y0BrN9scArVi0VzClw=;
-        b=Cj847BbbdZTsyxKXL070RY+vEBtesJT7pHaPuk/PL6G1J+O6r9G54Ulcmj0WjsR4Gi
-         SfkFuyDlZMtwyiamIKzhFjVDDzEwjFfOTgvQf67Ud1kHXHopN4uMEFUEJDUk+L9u5E6s
-         KaY0QaNTaUWXL1o4J14bsvHz8QB4qaUZnfRBjcc3mgB5fOZ2pw4tk4tdD4T+IVN0iqqj
-         Ese9sy+LW0DNjRHI2jDnEwGq4+sGyStTCi7DGTFmU85CR7bDqKK+izsnO+cMONv2V8rq
-         RQoWGEcJK6y0MUd8EdouvXL3+ekNyMKnX/8rHtbvIhXwDJQICzz5u8Dc9vlH+WhG45Y9
-         1rbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AMFBNcMsSwUAtzp9lzITidEj8Y0BrN9scArVi0VzClw=;
-        b=svy0EIouhvshhl9E2o1XJ2VswhVNjYdhlnsOJ97lp3etP5px8evxu0Xxr3DrBDbgpq
-         fIYZr86yGxdJQpzOx24jCeAp998fYJhTees9vEHWwJEQihnEmA74Kh+ddZxONqBfZuUb
-         wco/niAAT/0uLMOuGcM0KMHIpASGkwtg69PPeYC2NAaqe4Ipt7tBYBrEj3z1QCz7dzQ0
-         mCdX7sEnHh9FhMAue6dcN/vSr9LkLEXLD5Tt9xArD1g2lAPmdhL96tMi6KS8uZ4rVbtX
-         UdcW68oO/+nfbAoqUQXuXb0nBifXMHpr/i/zkLhSZIARHhg5/WkVtn8pllbQ4Cg5zC7r
-         Mllw==
-X-Gm-Message-State: AFqh2kqYx6oh9srmjtWMssvoyu3KVRrkNiOwqYpYty+iiQgNtXulEhUs
-        8zVs3iUqxNCLXgHEVvoZAvB5KaeIFOF0geU=
-X-Google-Smtp-Source: AMrXdXv0HEF4sIUbR+Cx9/GCA84i4KpTkopt+vRmMmGIMc6wJOmab24jm3J/febCcoh/GoImKQZ1Fw==
-X-Received: by 2002:a17:903:2685:b0:192:ca49:4c59 with SMTP id jf5-20020a170903268500b00192ca494c59mr31763833plb.16.1673437296915;
-        Wed, 11 Jan 2023 03:41:36 -0800 (PST)
-Received: from localhost.localdomain ([117.217.177.1])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170902e5ce00b0018958a913a2sm9942688plf.223.2023.01.11.03.41.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 03:41:35 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [RESEND v4 5/5] PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
-Date:   Wed, 11 Jan 2023 17:10:59 +0530
-Message-Id: <20230111114059.6553-6-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230111114059.6553-1-manivannan.sadhasivam@linaro.org>
-References: <20230111114059.6553-1-manivannan.sadhasivam@linaro.org>
+        Wed, 11 Jan 2023 06:43:38 -0500
+X-Greylist: delayed 66 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 Jan 2023 03:42:36 PST
+Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED271110D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:42:36 -0800 (PST)
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Wed, 11 Jan
+ 2023 14:41:21 +0300
+Received: from KANASHIN1.fintech.ru (10.0.253.125) by Ex16-01.fintech.ru
+ (10.0.10.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Wed, 11 Jan
+ 2023 14:41:21 +0300
+From:   Natalia Petrova <n.petrova@fintech.ru>
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     Natalia Petrova <n.petrova@fintech.ru>,
+        Ingo Molnar <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <lvc-project@linuxtesting.org>
+Subject: 
+Date:   Wed, 11 Jan 2023 14:41:18 +0300
+Message-ID: <20230111114118.3796-1-n.petrova@fintech.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.0.253.125]
+X-ClientProxiedBy: Ex16-01.fintech.ru (10.0.10.18) To Ex16-01.fintech.ru
+ (10.0.10.18)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As a part of the transition towards callback mechanism for signalling the
-events from EPC to EPF, let's use the link_up() callback in the place of
-the LINK_UP notifier. This also removes the notifier support completely
-from the PCI endpoint framework.
+Date: Thu, 15 Dec 2022 18:08:36 +0300
+Subject: [PATCH] trace_events_hist: add check for return value of
+ 'create_hist_field'
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Acked-by: Kishon Vijay Abraham I <kishon@kernel.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Function 'create_hist_field' is called recursively at
+trace_events_hist.c:1954 and can return NULL-value that's why we have
+to check it to avoid null pointer dereference.
+
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Fixes: 30350d65ac56 ("tracing: Add variable support to hist triggers")
+Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
 ---
- drivers/pci/endpoint/functions/pci-epf-test.c | 33 ++++++-------------
- drivers/pci/endpoint/pci-epc-core.c           | 12 +++++--
- include/linux/pci-epc.h                       |  8 -----
- include/linux/pci-epf.h                       |  8 ++---
- 4 files changed, 22 insertions(+), 39 deletions(-)
+ kernel/trace/trace_events_hist.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index 2fe161747e51..39fb3774aecf 100644
---- a/drivers/pci/endpoint/functions/pci-epf-test.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -826,30 +826,21 @@ static int pci_epf_test_core_init(struct pci_epf *epf)
- 	return 0;
- }
- 
--static const struct pci_epc_event_ops pci_epf_test_event_ops = {
--	.core_init = pci_epf_test_core_init,
--};
--
--static int pci_epf_test_notifier(struct notifier_block *nb, unsigned long val,
--				 void *data)
-+int pci_epf_test_link_up(struct pci_epf *epf)
- {
--	struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
- 	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
- 
--	switch (val) {
--	case LINK_UP:
--		queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
--				   msecs_to_jiffies(1));
--		break;
--
--	default:
--		dev_err(&epf->dev, "Invalid EPF test notifier event\n");
--		return NOTIFY_BAD;
--	}
-+	queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
-+			   msecs_to_jiffies(1));
- 
--	return NOTIFY_OK;
-+	return 0;
- }
- 
-+static const struct pci_epc_event_ops pci_epf_test_event_ops = {
-+	.core_init = pci_epf_test_core_init,
-+	.link_up = pci_epf_test_link_up,
-+};
-+
- static int pci_epf_test_alloc_space(struct pci_epf *epf)
- {
- 	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
-@@ -976,12 +967,8 @@ static int pci_epf_test_bind(struct pci_epf *epf)
- 	if (ret)
- 		epf_test->dma_supported = false;
- 
--	if (linkup_notifier || core_init_notifier) {
--		epf->nb.notifier_call = pci_epf_test_notifier;
--		pci_epc_register_notifier(epc, &epf->nb);
--	} else {
-+	if (!linkup_notifier && !core_init_notifier)
- 		queue_work(kpcitest_workqueue, &epf_test->cmd_handler.work);
--	}
- 
- 	return 0;
- }
-diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-index 7cb9587c6548..c9c3c6b58a9f 100644
---- a/drivers/pci/endpoint/pci-epc-core.c
-+++ b/drivers/pci/endpoint/pci-epc-core.c
-@@ -690,10 +690,19 @@ EXPORT_SYMBOL_GPL(pci_epc_remove_epf);
-  */
- void pci_epc_linkup(struct pci_epc *epc)
- {
-+	struct pci_epf *epf;
-+
- 	if (!epc || IS_ERR(epc))
- 		return;
- 
--	atomic_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
-+	mutex_lock(&epc->list_lock);
-+	list_for_each_entry(epf, &epc->pci_epf, list) {
-+		mutex_lock(&epf->lock);
-+		if (epf->event_ops && epf->event_ops->link_up)
-+			epf->event_ops->link_up(epf);
-+		mutex_unlock(&epf->lock);
-+	}
-+	mutex_unlock(&epc->list_lock);
- }
- EXPORT_SYMBOL_GPL(pci_epc_linkup);
- 
-@@ -788,7 +797,6 @@ __pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
- 	mutex_init(&epc->lock);
- 	mutex_init(&epc->list_lock);
- 	INIT_LIST_HEAD(&epc->pci_epf);
--	ATOMIC_INIT_NOTIFIER_HEAD(&epc->notifier);
- 
- 	device_initialize(&epc->dev);
- 	epc->dev.class = pci_epc_class;
-diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
-index fe729dfe509b..301bb0e53707 100644
---- a/include/linux/pci-epc.h
-+++ b/include/linux/pci-epc.h
-@@ -135,7 +135,6 @@ struct pci_epc_mem {
-  * @group: configfs group representing the PCI EPC device
-  * @lock: mutex to protect pci_epc ops
-  * @function_num_map: bitmap to manage physical function number
-- * @notifier: used to notify EPF of any EPC events (like linkup)
-  */
- struct pci_epc {
- 	struct device			dev;
-@@ -151,7 +150,6 @@ struct pci_epc {
- 	/* mutex to protect against concurrent access of EP controller */
- 	struct mutex			lock;
- 	unsigned long			function_num_map;
--	struct atomic_notifier_head	notifier;
- };
- 
- /**
-@@ -194,12 +192,6 @@ static inline void *epc_get_drvdata(struct pci_epc *epc)
- 	return dev_get_drvdata(&epc->dev);
- }
- 
--static inline int
--pci_epc_register_notifier(struct pci_epc *epc, struct notifier_block *nb)
--{
--	return atomic_notifier_chain_register(&epc->notifier, nb);
--}
--
- struct pci_epc *
- __devm_pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
- 		      struct module *owner);
-diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
-index fa629c191f00..a215dc8ce693 100644
---- a/include/linux/pci-epf.h
-+++ b/include/linux/pci-epf.h
-@@ -17,10 +17,6 @@
- struct pci_epf;
- enum pci_epc_interface_type;
- 
--enum pci_notify_event {
--	LINK_UP,
--};
--
- enum pci_barno {
- 	NO_BAR = -1,
- 	BAR_0,
-@@ -74,9 +70,11 @@ struct pci_epf_ops {
- /**
-  * struct pci_epf_event_ops - Callbacks for capturing the EPC events
-  * @core_init: Callback for the EPC initialization complete event
-+ * @link_up: Callback for the EPC link up event
-  */
- struct pci_epc_event_ops {
- 	int (*core_init)(struct pci_epf *epf);
-+	int (*link_up)(struct pci_epf *epf);
- };
- 
- /**
-@@ -134,7 +132,6 @@ struct pci_epf_bar {
-  * @epf_pf: the physical EPF device to which this virtual EPF device is bound
-  * @driver: the EPF driver to which this EPF device is bound
-  * @list: to add pci_epf as a list of PCI endpoint functions to pci_epc
-- * @nb: notifier block to notify EPF of any EPC events (like linkup)
-  * @lock: mutex to protect pci_epf_ops
-  * @sec_epc: the secondary EPC device to which this EPF device is bound
-  * @sec_epc_list: to add pci_epf as list of PCI endpoint functions to secondary
-@@ -162,7 +159,6 @@ struct pci_epf {
- 	struct pci_epf		*epf_pf;
- 	struct pci_epf_driver	*driver;
- 	struct list_head	list;
--	struct notifier_block   nb;
- 	/* mutex to protect against concurrent access of pci_epf_ops */
- 	struct mutex		lock;
- 
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index fdf784620c28..9c8c1614a78e 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -1952,6 +1952,8 @@ static struct hist_field *create_hist_field(struct hist_trigger_data *hist_data,
+ 		hist_field->fn = flags & HIST_FIELD_FL_LOG2 ? hist_field_log2 :
+ 			hist_field_bucket;
+ 		hist_field->operands[0] = create_hist_field(hist_data, field, fl, NULL);
++		if (!hist_field->operands[0])
++			goto free;
+ 		hist_field->size = hist_field->operands[0]->size;
+ 		hist_field->type = kstrdup_const(hist_field->operands[0]->type, GFP_KERNEL);
+ 		if (!hist_field->type)
 -- 
-2.25.1
+2.34.1
 
