@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F914666275
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF84666279
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235265AbjAKSGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:06:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S234786AbjAKSFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:05:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234623AbjAKSFy (ORCPT
+        with ESMTP id S232787AbjAKSFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:05:54 -0500
-Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D4115F27;
-        Wed, 11 Jan 2023 10:05:50 -0800 (PST)
+        Wed, 11 Jan 2023 13:05:49 -0500
+Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EB31056E;
+        Wed, 11 Jan 2023 10:05:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1673460340;
-        bh=AV9Go+xHCdsoX9TINfpzQ7oy2kjUbf39EKCEUBJfj0U=;
-        h=From:To:Cc:Subject:Date;
-        b=ejms4cozp3pmCgI/JjFqB8yuR5tuunsSe24MVSaGYgxChDOGsg8hcwF+aO2p9ThG5
-         Dgj7CKlQvHg2ZND38f0K3PTvUTiTmm2lObCoiKLK8dcyBNwP9BarUFHzOf296Kk603
-         dtvSfnSW+ayyIjlEAdzrZNlz6LYwB1gbFwPLIZLw=
+        s=s201512; t=1673460343;
+        bh=dOzKijcvaNNdMhzpGv7PUERkFEUFDKLcNyIL06jtdtk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=iH2tXGEytHBttMQ1/zbIzLMsGjuMdXk1Dcllga7s7O1DPxjX24lH765QuiQ1RIAr8
+         vNXIsslPRsiEo+7+2Ex5yOOZrXeuQmsXLWTjz0xDee4CfAupu1aIm17uYE4h96OxBS
+         z+TZMLYyMFaqhPAugP+ijAxI9gAbbrH/NtzOxKWc=
 Received: from localhost.localdomain ([111.60.247.106])
         by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
         id 14F2600F; Thu, 12 Jan 2023 02:05:15 +0800
-X-QQ-mid: xmsmtpt1673460315tjyf90zqs
-Message-ID: <tencent_0F1C483464F866AD2DFA08F0BB3B0FFFC406@qq.com>
-X-QQ-XMAILINFO: Mu4fz8q1FCY3qQbmfCHUQmOmsTIPVLpe8FtYVnEgJLa9EBzoN4D4KXlmFUkAgb
-         RacKQt2fXT4nL9Bh1i2fuRENxAGqjdXGhWrLkRltnQO/GgV1StiwWgAIuQVayHc2lO3/NDc9vZE1
-         +NtDjhStK04Ox5f2rtNeIe0rVQhi0uaxuwJJ/xzO2i77nQ3kSTnpMwEP77BYSaHel3dd9jQAnk//
-         5rcCPWCdr9jRwAGoS6EUwGDXHK23RDH/kf54iEEmCRAi6tjbiDv4pbbnC8Mj/owjYrqsoSXnzu+V
-         /dYJR2MFM5SgximmqgUgbm/xHMnxnlQmWxdU80N/CPhub+6esRZVf79V+//8fnCsdQSmqUHWgowx
-         7+68vRcrUDLZn5U3jnCm2CEOvk3Cm5FDh+4RC9yssA4ZdsruNHR/srn2DBWxkff+8BZDQ53+jGjv
-         /1pJ3q93evXxT/q+VFRqyTyXJsS3+96QKqdicKSIGoQ5tzzbHvfAWbo0Ce4ybaSzjbEJnpzWb2RE
-         6+HwqUXkilURkRTZEL48IAS/Hr5YCJzdGuEqN0cW9AV7SB6MJf2I51K3kAB4BwCr3kVlJhfNbRb5
-         4jwFEdHG3+QRBrt7tEFhdJkDNBp8zDK1ukCrsllkjP9l6yLLzYrTxZ+SmPUTx6JI9shEaI5f1TRi
-         9VP/SuEq1VwTNuNymB8+Wl7scsTb2XM7JfxTCrcJKukXR2L4UvheTWIh99SJptLTZKBvk1NBXrku
-         gz7d5lP+BKjrsDNggkMBaKNn0dwTjgtygvP/tnRri7nEniInHnueXqpJifv9CdD7o7Dh2gvukHhx
-         jkzoKvnVh8sdU9Xgdz3Pt1J8e6f/3Mpw4Hcp4f/DR/AoX47ZwiR40dwF5pGkhAWG3cMWNYBpV9b9
-         K4Og9aT8R/2ZMAcKeD/1L3wck8Vo6rZYHP/+M+eQ3FxmXmzYwAkN+kqfjZE9BK3p3NZel9BpmZRY
-         AWYilsKpyU8U+zUtsy6xIx+UIQxU1nxkYUNeWmta4/xeq8oc7z8Q==
+X-QQ-mid: xmsmtpt1673460340t9pmkemx2
+Message-ID: <tencent_FF77D11FE1B5B5D6E83CC03FEED8FCD87308@qq.com>
+X-QQ-XMAILINFO: MR/iVh5QLeie9yR/60qDFl5SJSa8OALbWbZdviDzJQnfD54hho82hiVpgv91s0
+         ej8u/aSNB1xB/7cT8oD4yxLIHW2OgR3oCTIZ9wTRrs9bf1BtLGcgwiXIGLaND8bF0zmJNJkPISjt
+         BTXrYL82Eu1pTwp2HTE0S/9oJIJJF9yYzg1p6a7fVUBXrTN6LNGNutR0Y5xjMEKKVnruDV3vrUB1
+         QOfc37A9qHubX9munca8z4cwQZ2ss2/se2sfAxf4rMqmjR/hE74GI07KR9tn8uLyminnAZ4MfGRa
+         y2/I2WNVgT7XQn/W0xn0H7mW015N6Pdj0/kqh6nCpjzvmSXRQhxmFpoMmJASykJspPEujLTcvdfq
+         R18/9dpw5gXMI1RvjT2X3tdyPv1X+LKjGIsBCD6kyz9Z7kEjDNvFOTuPndh+UpZWqzlvCEa3o414
+         JABrToGQ+iGSLcqauDq2h/bOQW14/DPKiYdJU6DZGlFX4nY4QS6Zt/qqGGO3PNzPkDsUktoQHZ5e
+         N6wOeg0kBTUP9aLPuC02uqOy+DNhlEslzfvXBVqZwylpANkLVRUcyWoFXrixGVVs63oQ+4OwLZ+m
+         vf2ZaekPQ/8cu3O1J9l0CAhgtOpAB13KZpecgsMLlTk6kRkiooRj6HUcbhZ0LHDxlpgqpVMpOqCw
+         cmim98lLXZqfv8GIcse1aJNW76wHjeFXJ4YTu7BNFMbnVtcoWXEtROgLahKGyQtDZj+gI6+ulHYE
+         1ExvGwEXwLmaNJhG1ZjACU0nJNDoGaBFOnHa21cYqRfMOeeRG+aFTjU2n1Jba9qEiZI7wus75e+A
+         Ef2cZFIuE5I/Tnr9ZAUoFm5erzG641fobf0S5KDKvyz2C2AdF38p1dwJz0AokTge2pQrfbI6xvKq
+         RycRwPy6Z2IeF55W8s4yr5D+GTRQ0pa983js8NJWNBqjOFpPivJ8v9UqgVnKjtdPqqlrdU52mTvb
+         nC4Kfl39XyE6pZfMIA41vz7oaJJ7untE53O9AVBhfpX0i4dvX/+Ak5ml/X4Oymww4lLtiSamzlGS
+         b2LrL72Q==
 From:   Yang Xiwen <forbidden405@foxmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -53,16 +54,19 @@ Cc:     Yang Xiwen <forbidden405@foxmail.com>,
         Jaime Breva <jbreva@nayarsystems.com>,
         Nikita Travkin <nikita@trvn.ru>,
         ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v3 0/3] Support for MSM8916-based UFi ufi001c and uf896
-Date:   Thu, 12 Jan 2023 02:03:19 +0800
-X-OQ-MSGID: <20230111180322.21874-1-forbidden405@foxmail.com>
+Subject: [PATCH v3 1/3] dt-bindings: vendor-prefixes: add thwc
+Date:   Thu, 12 Jan 2023 02:03:20 +0800
+X-OQ-MSGID: <20230111180322.21874-2-forbidden405@foxmail.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230111180322.21874-1-forbidden405@foxmail.com>
+References: <20230111180322.21874-1-forbidden405@foxmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,33 +74,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These devices are equipped with 512MB RAM, 4/8GB eMMC and MSM8916.
-This series introduces support for them and adds a dtsi for the class of
-MSM8916-based UFIs.
+Shenzhen Tong Heng Wei Chuang Technology Co., Ltd. (hereinafter referred
+to as "Tong Heng Wei Chuang") is a focus on wireless communications
+equipment brand manufacturers.
 
-v3:
-- Sort vendor-prefixes alphebatically
-v2:
-- Managed to get the real vendor
-- Remove some reduntant descriptions
-- Rename dtsi more formally
+Link: http://www.szthwc.com/en/about.html
+Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Yang Xiwen (3):
-  dt-bindings: vendor-prefixes: add thwc
-  dt-bindings: qcom: Document msm8916-thwc-uf896 and ufi001c
-  arm64: dts: qcom: msm8916-thwc: Add initial device trees
-
- .../devicetree/bindings/arm/qcom.yaml         |   2 +
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- arch/arm64/boot/dts/qcom/Makefile             |   2 +
- .../boot/dts/qcom/msm8916-thwc-uf896.dts      |  41 +++
- .../boot/dts/qcom/msm8916-thwc-ufi001c.dts    |  39 +++
- arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi     | 246 ++++++++++++++++++
- 6 files changed, 332 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 88227c14da99a..57d04039aca3c 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1329,6 +1329,8 @@ patternProperties:
+     description: thingy.jp
+   "^thundercomm,.*":
+     description: Thundercomm Technology Co., Ltd.
++  "^thwc,.*":
++    description: Shenzhen Tong Heng Wei Chuang Technology Co., Ltd.
+   "^ti,.*":
+     description: Texas Instruments
+   "^tianma,.*":
 -- 
 2.39.0
 
