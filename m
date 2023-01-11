@@ -2,379 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92010665E27
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48FB665E2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234175AbjAKOl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S232478AbjAKOlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:41:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234247AbjAKOk4 (ORCPT
+        with ESMTP id S239272AbjAKOlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:40:56 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B75C13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:37:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673447877; x=1704983877;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9Lq5/FX0ABfC7h72F60HMHF/CtDYeMSLanwV57PhYYg=;
-  b=E9Q6qvjqEEmDFSz9QbJkqQbmTU4incSB5GaugU3p23oLr9P/ij5LPG9r
-   Et5sh7z/h72+dt+yBf2nUn46H4t3NeCWcDGpHC/L0r+uSJKrqPmGmo5yQ
-   GBpQVww2twoCO8eNAjRgVWyW59UnXNv19MBRScPzKw0vO553YV8P/NJ+Z
-   Ao8wQKtCZZS6ZdlJmqfHNEv25qFjI5W9L0D6v0ky04mwJ3IvkAyaU95BC
-   Dj7xV59VaAXgmeom3kMzkMUsuWNavFoevYn96uSP+j5QWlvOyK6T7nyut
-   pKq3kw+G1Y3bsRrnBJYnxrNByeN6ZiaLGYqrpRKJLBx6ksnCCqGYQIK5Q
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350655536"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="350655536"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 06:37:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="687940578"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="687940578"
-Received: from bachaue1-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.250])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 06:37:50 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 41E21104377; Wed, 11 Jan 2023 17:37:47 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     kirill@shutemov.name
-Cc:     ak@linux.intel.com, andreyknvl@gmail.com, ashok.raj@intel.com,
-        bharata@amd.com, dave.hansen@linux.intel.com, dvyukov@google.com,
-        glider@google.com, hjl.tools@gmail.com,
-        jacob.jun.pan@linux.intel.com, kcc@google.com,
-        kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, luto@kernel.org, peterz@infradead.org,
-        rick.p.edgecombe@intel.com, ryabinin.a.a@gmail.com,
-        tarasmadan@google.com, torvalds@linux-foundation.org,
-        x86@kernel.org
-Subject: [PATCHv14.1 04/17] x86/mm: Handle LAM on context switch
-Date:   Wed, 11 Jan 2023 17:37:40 +0300
-Message-Id: <20230111143740.28106-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.38.2
-In-Reply-To: <20230111141459.ah7ijfbm733c4g7m@box.shutemov.name>
-References: <20230111141459.ah7ijfbm733c4g7m@box.shutemov.name>
+        Wed, 11 Jan 2023 09:41:13 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED65ACF9;
+        Wed, 11 Jan 2023 06:40:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1673447931; bh=KGDHyrq93FiiZx1EhWmtnBQOkzL5jkL4/UViqKUSfL4=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=T1i/unbasWn85o+aPTED4yXFVg7aLTucnQyk8ryAaSmEqmPCfyf+rETycugwO24rQ
+         fF7XuH5tCyDA/r2I+smEDWAhExcHBWpcZo/bQzLzrLCJxB4Ity0JowhbE41cCDZr5z
+         v0oaGYPBY5pBnLO0otKZQRVpojZvkUqmEy7xCoqCuex4IL+xRZ23QY9UdK9HeSVVOq
+         phoPQrIJj5wX3fJBvaPOslFYXdFXFVlCeWDI7sgfOwjWq9YlXJXvUd5mBjszRoyVSi
+         aibeKXgnonXYZ0Knv71UPYJBj3HWkamsneodQ2Oaw5uKdGPtiuB8p1EDavrOJ70UtA
+         jai1ONqaNRt3A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([134.147.254.72]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MCsPy-1p6qoF0gMa-008niX; Wed, 11
+ Jan 2023 15:38:51 +0100
+Date:   Wed, 11 Jan 2023 15:38:36 +0100
+From:   Tom Dohrmann <erbse.13@gmx.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        harald@profian.com, Brijesh Singh <brijesh.singh@amd.com>
+Subject: Re: [PATCH RFC v7 47/64] KVM: SVM: Add support to handle MSR based
+ Page State Change VMGEXIT
+Message-ID: <Y77J7C2E9Xd1QcmZ@notebook>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-48-michael.roth@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214194056.161492-48-michael.roth@amd.com>
+X-Provags-ID: V03:K1:fyBxy7/U5oJ/3CUIg8Fre+QtVDGfqDpzpl+I0WKzziUfm4MtvXH
+ AN3QAiMSkM5UBh+zOT1MtudGYJsm/9WAwTwuQVrW9T1IKHRY/XUiKRphImWDNWTF9ABn9xS
+ j/kH6EL/jxWkwofoHGGaOkbeNgGASfqpYy+Y8tEvaCU+RPPS/pXtABfeyrJlD6mKnOtM+Ku
+ xbRNGzskdvgqgPvCL3wtA==
+UI-OutboundReport: notjunk:1;M01:P0:dH+xw7ymR9w=;cLUfesrjFWuy3u94c3rIF8n1+Nx
+ Te1okBEsYhishwY+PSwiZ9P45qQcafKVEnwg3kwi7G7qUJE90dCwVjb61fzHJIflyBk7bp8S8
+ lWAvq0IlNkcNvdGdX61wK824zpC/0hO/MFKDUQGAYyifvcDl+VBfjTpBv/PYwzL3rER+wz4xZ
+ is1MgUjXQdM3U403EuPgq2Ian1vDg1IaXwLA5IFBxk8344enYegAvdZuBir+BVdQ3yTkcTULi
+ F3LMNqn/aznyBRhKXh6k+YVoMV7rGaUlIVU0CkwOXrmJYnJZHZD81KhdCQ82AidNp2FwShiXr
+ HKj8LP8ZM6os69A3u20QKAww3ocLBz1hvdabDtXGfK/rn5PO1JEmBfJi8SXEUy4rxKIEjaJ24
+ feK7F6jUf4wmyKAL1iZbQQoYprtKQ2nnJblgjepW9Q98t4ejFpmHKRjaO7C2jh4/tTRJjMoto
+ CNcjQ2u8My7e94rboXSXB6DD/4UjK4e5FbIe//pVhikhjqKtE8bpG1Ndt/kjdDR92aqZBlbmc
+ zqMan439EU+mrtTqeeNIH/Gk3HNX/xhlm+eY5rrVjus9a3lFqtsYazgVbUPfPWfpcilNnAod4
+ buXxXnm/JwKKOWc2Rpm/8azzTVFxqcUqZAA4ZbpBWIUO6jgJjt10WwyrbWQZzB5pA7HohRjx6
+ LsCd8d38mENFHkKleNmaFZwOgltfEcW7/EIN5iAySLJB/xs++G7f4MCCj7WxMWxOZOn9VYxI1
+ euOwd8rDf/dp1TBKgqbq3uB9ERjjI6yEssBhsBoMikcgZT7aN7hix/C/zbvgwzXkj2BuD5YBy
+ IeWGwk6ftwt+oCAZiRTr/BynKmVaWZy4DdRIO3dHZMSkk0CklYUyCyKKDUijX0qiQaTluWlVB
+ eMvyTAjNqfTFqMfTP+1LH3WPIHxALQ13f5Yo48Fhw1v5VuFn6+j8WYM5pHjGt//AqZq2rL2rV
+ 7WQk5LKZadDRgYgVCTSLA378BFk=
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linear Address Masking mode for userspace pointers encoded in CR3 bits.
-The mode is selected per-process and stored in mm_context_t.
+On Wed, Dec 14, 2022 at 01:40:39PM -0600, Michael Roth wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
+>
+> SEV-SNP VMs can ask the hypervisor to change the page state in the RMP
+> table to be private or shared using the Page State Change MSR protocol
+> as defined in the GHCB specification.
+>
+> Forward these requests to userspace via KVM_EXIT_VMGEXIT so the VMM can
+> issue the KVM ioctls to update the page state accordingly.
+>
+> Co-developed-by: Michael Roth <michael.roth@amd.com>
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> ---
+>  arch/x86/include/asm/sev-common.h |  9 ++++++++
+>  arch/x86/kvm/svm/sev.c            | 25 +++++++++++++++++++++++
+>  arch/x86/kvm/trace.h              | 34 +++++++++++++++++++++++++++++++
+>  arch/x86/kvm/x86.c                |  1 +
+>  4 files changed, 69 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/se=
+v-common.h
+> index 0a9055cdfae2..ee38f7408470 100644
+> --- a/arch/x86/include/asm/sev-common.h
+> +++ b/arch/x86/include/asm/sev-common.h
+> @@ -93,6 +93,10 @@ enum psc_op {
+>  };
+>
+>  #define GHCB_MSR_PSC_REQ		0x014
+> +#define GHCB_MSR_PSC_GFN_POS		12
+> +#define GHCB_MSR_PSC_GFN_MASK		GENMASK_ULL(39, 0)
+> +#define GHCB_MSR_PSC_OP_POS		52
+> +#define GHCB_MSR_PSC_OP_MASK		0xf
+>  #define GHCB_MSR_PSC_REQ_GFN(gfn, op)			\
+>  	/* GHCBData[55:52] */				\
+>  	(((u64)((op) & 0xf) << 52) |			\
+> @@ -102,6 +106,11 @@ enum psc_op {
+>  	GHCB_MSR_PSC_REQ)
+>
+>  #define GHCB_MSR_PSC_RESP		0x015
+> +#define GHCB_MSR_PSC_ERROR_POS		32
+> +#define GHCB_MSR_PSC_ERROR_MASK		GENMASK_ULL(31, 0)
+> +#define GHCB_MSR_PSC_ERROR		GENMASK_ULL(31, 0)
+> +#define GHCB_MSR_PSC_RSVD_POS		12
+> +#define GHCB_MSR_PSC_RSVD_MASK		GENMASK_ULL(19, 0)
+>  #define GHCB_MSR_PSC_RESP_VAL(val)			\
+>  	/* GHCBData[63:32] */				\
+>  	(((u64)(val) & GENMASK_ULL(63, 32)) >> 32)
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index d7b467b620aa..d7988629073b 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -29,6 +29,7 @@
+>  #include "svm_ops.h"
+>  #include "cpuid.h"
+>  #include "trace.h"
+> +#include "mmu.h"
+>
+>  #ifndef CONFIG_KVM_AMD_SEV
+>  /*
+> @@ -3350,6 +3351,23 @@ static void set_ghcb_msr(struct vcpu_svm *svm, u6=
+4 value)
+>  	svm->vmcb->control.ghcb_gpa =3D value;
+>  }
+>
+> +/*
+> + * TODO: need to get the value set by userspace in vcpu->run->vmgexit.g=
+hcb_msr
+> + * and process that here accordingly.
+> + */
+> +static int snp_complete_psc_msr_protocol(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_svm *svm =3D to_svm(vcpu);
+> +
+> +	set_ghcb_msr_bits(svm, 0,
+> +			  GHCB_MSR_PSC_ERROR_MASK, GHCB_MSR_PSC_ERROR_POS);
+> +
+> +	set_ghcb_msr_bits(svm, 0, GHCB_MSR_PSC_RSVD_MASK, GHCB_MSR_PSC_RSVD_PO=
+S);
+> +	set_ghcb_msr_bits(svm, GHCB_MSR_PSC_RESP, GHCB_MSR_INFO_MASK, GHCB_MSR=
+_INFO_POS);
+> +
+> +	return 1; /* resume */
+> +}
+> +
+>  static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+>  {
+>  	struct vmcb_control_area *control =3D &svm->vmcb->control;
+> @@ -3450,6 +3468,13 @@ static int sev_handle_vmgexit_msr_protocol(struct=
+ vcpu_svm *svm)
+>  				  GHCB_MSR_INFO_POS);
+>  		break;
+>  	}
+> +	case GHCB_MSR_PSC_REQ:
+> +		vcpu->run->exit_reason =3D KVM_EXIT_VMGEXIT;
+> +		vcpu->run->vmgexit.ghcb_msr =3D control->ghcb_gpa;
+> +		vcpu->arch.complete_userspace_io =3D snp_complete_psc_msr_protocol;
+> +
+> +		ret =3D -1;
+> +		break;
 
-switch_mm_irqs_off() now respects selected LAM mode and constructs CR3
-accordingly.
+What's the reasoning behind returning an error (-1) here? This error bubbl=
+es all
+the way up to the `KVM_RUN` ioctl. Would it be more appropriate to return =
+0?
+Returning 0 would cause a VM exit without indicating an error to userspace=
+.
 
-The active LAM mode gets recorded in the tlb_state.
+>  	case GHCB_MSR_TERM_REQ: {
+>  		u64 reason_set, reason_code;
+>
+> diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
+> index 83843379813e..65861d2d086c 100644
+> --- a/arch/x86/kvm/trace.h
+> +++ b/arch/x86/kvm/trace.h
+> @@ -7,6 +7,7 @@
+>  #include <asm/svm.h>
+>  #include <asm/clocksource.h>
+>  #include <asm/pvclock-abi.h>
+> +#include <asm/sev-common.h>
+>
+>  #undef TRACE_SYSTEM
+>  #define TRACE_SYSTEM kvm
+> @@ -1831,6 +1832,39 @@ TRACE_EVENT(kvm_vmgexit_msr_protocol_exit,
+>  		  __entry->vcpu_id, __entry->ghcb_gpa, __entry->result)
+>  );
+>
+> +/*
+> + * Tracepoint for the SEV-SNP page state change processing
+> + */
+> +#define psc_operation					\
+> +	{SNP_PAGE_STATE_PRIVATE, "private"},		\
+> +	{SNP_PAGE_STATE_SHARED,  "shared"}		\
+> +
+> +TRACE_EVENT(kvm_snp_psc,
+> +	TP_PROTO(unsigned int vcpu_id, u64 pfn, u64 gpa, u8 op, int level),
+> +	TP_ARGS(vcpu_id, pfn, gpa, op, level),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(int, vcpu_id)
+> +		__field(u64, pfn)
+> +		__field(u64, gpa)
+> +		__field(u8, op)
+> +		__field(int, level)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->vcpu_id =3D vcpu_id;
+> +		__entry->pfn =3D pfn;
+> +		__entry->gpa =3D gpa;
+> +		__entry->op =3D op;
+> +		__entry->level =3D level;
+> +	),
+> +
+> +	TP_printk("vcpu %u, pfn %llx, gpa %llx, op %s, level %d",
+> +		  __entry->vcpu_id, __entry->pfn, __entry->gpa,
+> +		  __print_symbolic(__entry->op, psc_operation),
+> +		  __entry->level)
+> +);
+> +
+>  #endif /* _TRACE_KVM_H */
+>
+>  #undef TRACE_INCLUDE_PATH
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 732f9cbbadb5..08dd1ef7e136 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -13481,6 +13481,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_vmgexit_enter);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_vmgexit_exit);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_vmgexit_msr_protocol_enter);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_vmgexit_msr_protocol_exit);
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_snp_psc);
+>
+>  static int __init kvm_x86_init(void)
+>  {
+> --
+> 2.25.1
+>
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Alexander Potapenko <glider@google.com>
----
- v14.1:
-  - Drop unneeded READ_ONCE();
----
- arch/x86/include/asm/mmu.h         |  5 +++
- arch/x86/include/asm/mmu_context.h | 24 ++++++++++++++
- arch/x86/include/asm/tlbflush.h    | 38 ++++++++++++++++++++-
- arch/x86/mm/tlb.c                  | 53 +++++++++++++++++++++---------
- 4 files changed, 103 insertions(+), 17 deletions(-)
-
-diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-index efa3eaee522c..22fc9fbf1d0a 100644
---- a/arch/x86/include/asm/mmu.h
-+++ b/arch/x86/include/asm/mmu.h
-@@ -42,6 +42,11 @@ typedef struct {
- 	unsigned long flags;
- #endif
- 
-+#ifdef CONFIG_ADDRESS_MASKING
-+	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
-+	unsigned long lam_cr3_mask;
-+#endif
-+
- 	struct mutex lock;
- 	void __user *vdso;			/* vdso base address */
- 	const struct vdso_image *vdso_image;	/* vdso image in use */
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index 53ef591a6166..a62e70801ea8 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -91,6 +91,29 @@ static inline void switch_ldt(struct mm_struct *prev, struct mm_struct *next)
- }
- #endif
- 
-+#ifdef CONFIG_ADDRESS_MASKING
-+static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
-+{
-+	return mm->context.lam_cr3_mask;
-+}
-+
-+static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
-+{
-+	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
-+}
-+
-+#else
-+
-+static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
-+{
-+	return 0;
-+}
-+
-+static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
-+{
-+}
-+#endif
-+
- #define enter_lazy_tlb enter_lazy_tlb
- extern void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk);
- 
-@@ -168,6 +191,7 @@ static inline int arch_dup_mmap(struct mm_struct *oldmm, struct mm_struct *mm)
- {
- 	arch_dup_pkeys(oldmm, mm);
- 	paravirt_arch_dup_mmap(oldmm, mm);
-+	dup_lam(oldmm, mm);
- 	return ldt_dup_context(oldmm, mm);
- }
- 
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index cda3118f3b27..e8b47f57bd4a 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -2,7 +2,7 @@
- #ifndef _ASM_X86_TLBFLUSH_H
- #define _ASM_X86_TLBFLUSH_H
- 
--#include <linux/mm.h>
-+#include <linux/mm_types.h>
- #include <linux/sched.h>
- 
- #include <asm/processor.h>
-@@ -12,6 +12,7 @@
- #include <asm/invpcid.h>
- #include <asm/pti.h>
- #include <asm/processor-flags.h>
-+#include <asm/pgtable.h>
- 
- void __flush_tlb_all(void);
- 
-@@ -101,6 +102,16 @@ struct tlb_state {
- 	 */
- 	bool invalidate_other;
- 
-+#ifdef CONFIG_ADDRESS_MASKING
-+	/*
-+	 * Active LAM mode.
-+	 *
-+	 * X86_CR3_LAM_U57/U48 shifted right by X86_CR3_LAM_U57_BIT or 0 if LAM
-+	 * disabled.
-+	 */
-+	u8 lam;
-+#endif
-+
- 	/*
- 	 * Mask that contains TLB_NR_DYN_ASIDS+1 bits to indicate
- 	 * the corresponding user PCID needs a flush next time we
-@@ -357,6 +368,31 @@ static inline bool huge_pmd_needs_flush(pmd_t oldpmd, pmd_t newpmd)
- }
- #define huge_pmd_needs_flush huge_pmd_needs_flush
- 
-+#ifdef CONFIG_ADDRESS_MASKING
-+static inline  u64 tlbstate_lam_cr3_mask(void)
-+{
-+	u64 lam = this_cpu_read(cpu_tlbstate.lam);
-+
-+	return lam << X86_CR3_LAM_U57_BIT;
-+}
-+
-+static inline void set_tlbstate_lam_mode(struct mm_struct *mm)
-+{
-+	this_cpu_write(cpu_tlbstate.lam,
-+		       mm->context.lam_cr3_mask >> X86_CR3_LAM_U57_BIT);
-+}
-+
-+#else
-+
-+static inline u64 tlbstate_lam_cr3_mask(void)
-+{
-+	return 0;
-+}
-+
-+static inline void set_tlbstate_lam_mode(struct mm_struct *mm)
-+{
-+}
-+#endif
- #endif /* !MODULE */
- 
- static inline void __native_tlb_flush_global(unsigned long cr4)
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index c1e31e9a85d7..8c330a6d0ece 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -154,26 +154,30 @@ static inline u16 user_pcid(u16 asid)
- 	return ret;
- }
- 
--static inline unsigned long build_cr3(pgd_t *pgd, u16 asid)
-+static inline unsigned long build_cr3(pgd_t *pgd, u16 asid, unsigned long lam)
- {
-+	unsigned long cr3 = __sme_pa(pgd) | lam;
-+
- 	if (static_cpu_has(X86_FEATURE_PCID)) {
--		return __sme_pa(pgd) | kern_pcid(asid);
-+		VM_WARN_ON_ONCE(asid > MAX_ASID_AVAILABLE);
-+		cr3 |= kern_pcid(asid);
- 	} else {
- 		VM_WARN_ON_ONCE(asid != 0);
--		return __sme_pa(pgd);
- 	}
-+
-+	return cr3;
- }
- 
--static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid)
-+static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid,
-+					      unsigned long lam)
- {
--	VM_WARN_ON_ONCE(asid > MAX_ASID_AVAILABLE);
- 	/*
- 	 * Use boot_cpu_has() instead of this_cpu_has() as this function
- 	 * might be called during early boot. This should work even after
- 	 * boot because all CPU's the have same capabilities:
- 	 */
- 	VM_WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_PCID));
--	return __sme_pa(pgd) | kern_pcid(asid) | CR3_NOFLUSH;
-+	return build_cr3(pgd, asid, lam) | CR3_NOFLUSH;
- }
- 
- /*
-@@ -274,15 +278,16 @@ static inline void invalidate_user_asid(u16 asid)
- 		  (unsigned long *)this_cpu_ptr(&cpu_tlbstate.user_pcid_flush_mask));
- }
- 
--static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, bool need_flush)
-+static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, unsigned long lam,
-+			    bool need_flush)
- {
- 	unsigned long new_mm_cr3;
- 
- 	if (need_flush) {
- 		invalidate_user_asid(new_asid);
--		new_mm_cr3 = build_cr3(pgdir, new_asid);
-+		new_mm_cr3 = build_cr3(pgdir, new_asid, lam);
- 	} else {
--		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid);
-+		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid, lam);
- 	}
- 
- 	/*
-@@ -491,6 +496,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- {
- 	struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
- 	u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
-+	unsigned long new_lam = mm_lam_cr3_mask(next);
- 	bool was_lazy = this_cpu_read(cpu_tlbstate_shared.is_lazy);
- 	unsigned cpu = smp_processor_id();
- 	u64 next_tlb_gen;
-@@ -520,7 +526,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- 	 * isn't free.
- 	 */
- #ifdef CONFIG_DEBUG_VM
--	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid))) {
-+	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid,
-+						   tlbstate_lam_cr3_mask()))) {
- 		/*
- 		 * If we were to BUG here, we'd be very likely to kill
- 		 * the system so hard that we don't see the call trace.
-@@ -552,9 +559,15 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- 	 * instruction.
- 	 */
- 	if (real_prev == next) {
-+		/* Not actually switching mm's */
- 		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
- 			   next->context.ctx_id);
- 
-+		/*
-+		 * If this races with another thread that enables lam, 'new_lam'
-+		 * might not match tlbstate_lam_cr3_mask().
-+		 */
-+
- 		/*
- 		 * Even in lazy TLB mode, the CPU should stay set in the
- 		 * mm_cpumask. The TLB shootdown code can figure out from
-@@ -622,15 +635,16 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- 		barrier();
- 	}
- 
-+	set_tlbstate_lam_mode(next);
- 	if (need_flush) {
- 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].ctx_id, next->context.ctx_id);
- 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].tlb_gen, next_tlb_gen);
--		load_new_mm_cr3(next->pgd, new_asid, true);
-+		load_new_mm_cr3(next->pgd, new_asid, new_lam, true);
- 
- 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, TLB_FLUSH_ALL);
- 	} else {
- 		/* The new ASID is already up to date. */
--		load_new_mm_cr3(next->pgd, new_asid, false);
-+		load_new_mm_cr3(next->pgd, new_asid, new_lam, false);
- 
- 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, 0);
- 	}
-@@ -691,6 +705,10 @@ void initialize_tlbstate_and_flush(void)
- 	/* Assert that CR3 already references the right mm. */
- 	WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
- 
-+	/* LAM expected to be disabled */
-+	WARN_ON(cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57));
-+	WARN_ON(mm_lam_cr3_mask(mm));
-+
- 	/*
- 	 * Assert that CR4.PCIDE is set if needed.  (CR4.PCIDE initialization
- 	 * doesn't work like other CR4 bits because it can only be set from
-@@ -699,8 +717,8 @@ void initialize_tlbstate_and_flush(void)
- 	WARN_ON(boot_cpu_has(X86_FEATURE_PCID) &&
- 		!(cr4_read_shadow() & X86_CR4_PCIDE));
- 
--	/* Force ASID 0 and force a TLB flush. */
--	write_cr3(build_cr3(mm->pgd, 0));
-+	/* Disable LAM, force ASID 0 and force a TLB flush. */
-+	write_cr3(build_cr3(mm->pgd, 0, 0));
- 
- 	/* Reinitialize tlbstate. */
- 	this_cpu_write(cpu_tlbstate.last_user_mm_spec, LAST_USER_MM_INIT);
-@@ -708,6 +726,7 @@ void initialize_tlbstate_and_flush(void)
- 	this_cpu_write(cpu_tlbstate.next_asid, 1);
- 	this_cpu_write(cpu_tlbstate.ctxs[0].ctx_id, mm->context.ctx_id);
- 	this_cpu_write(cpu_tlbstate.ctxs[0].tlb_gen, tlb_gen);
-+	set_tlbstate_lam_mode(mm);
- 
- 	for (i = 1; i < TLB_NR_DYN_ASIDS; i++)
- 		this_cpu_write(cpu_tlbstate.ctxs[i].ctx_id, 0);
-@@ -1071,8 +1090,10 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
-  */
- unsigned long __get_current_cr3_fast(void)
- {
--	unsigned long cr3 = build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
--		this_cpu_read(cpu_tlbstate.loaded_mm_asid));
-+	unsigned long cr3 =
-+		build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
-+			  this_cpu_read(cpu_tlbstate.loaded_mm_asid),
-+			  tlbstate_lam_cr3_mask());
- 
- 	/* For now, be very restrictive about when this can be called. */
- 	VM_WARN_ON(in_nmi() || preemptible());
--- 
-2.38.2
-
+Regards, Tom
