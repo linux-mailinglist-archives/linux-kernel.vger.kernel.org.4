@@ -2,137 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6936656DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 327C76656E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235407AbjAKJF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:05:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
+        id S236662AbjAKJGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:06:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236588AbjAKJEc (ORCPT
+        with ESMTP id S237682AbjAKJFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:04:32 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C0A15819
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:02:55 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m3so10616668wmq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:02:55 -0800 (PST)
+        Wed, 11 Jan 2023 04:05:34 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F142AF2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:03:42 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id a64so15021000vsc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:03:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jayg4ZreJdJdft84zMpQKgU5NC7skf1NU+gqLmjc7vs=;
-        b=kKZYLptAWmtXDFshJo4N2fcCUdZ/owDOuJBXW1RYEKuO6De/8wUEJx6qZ4HS6Vj3lp
-         GdWt+9lCKjqvuh9uSWx1A79yXiy/yutRGhwsiJ/5xKW6Q+XHs8KFDSmXXNu6jewavxmk
-         1tXc+9Ek7w4/qDwJ/58/mAKdQjk0bZe5Lk3YFKdQiOQ7PfeHCa9v5F8sRBDVCPz/o4QW
-         7piLErCOoqjKu104gaUjBXlcdKKrDBJNtdUAFWMQW+DHYIFeNuLLvy6a/vS1lqIsY/Kg
-         wVBomDwxbsq8S/gnwsKSWbUVXQf1SKOrQubj00HTg6xeAOJXnycs6VSvQJ9vVHGSj+tt
-         1dhA==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CuDeia0CiKF+kBYrZ/MDemWf2Ns0OMCpwHIl94bJeDQ=;
+        b=SixLufghEGhPEmxxlP0A0/uka1fXtkDi/h1sYVTDiDGSlE0gbb40W49vQf0gi91EE0
+         0IegYvFndksHzUGIFeissTjQDwqojJcWExswCWYzIvSlpvvSAZ+P8xpLv9AG490w1gIf
+         WEHEqyme0EAovtS1Mln9nBgIy2p+jVZQbvQpM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jayg4ZreJdJdft84zMpQKgU5NC7skf1NU+gqLmjc7vs=;
-        b=C7I/8/Ta9jWumIR/GongjP9nq8Gm0DyGtMDDm98L7hOKA+CcQCCRwe24wILA8dDyVO
-         cRADLt0Xvt0nX6nk2jQlVMi5BOkqy6zHBtf91yPngbpEAwoHWkIPlxOem/dix00Z2+SM
-         zqMWqCFmpAtBJgnxCiraabXu6nstnA1o/bnfruwCtqJjAFjntn+gZyyqTmIcgpzCgKaR
-         njRF3cZPc+5baYtQN7tjrKghDVprjVN3LWag445AA3VAqFBOIippkxwK8tpFJkvwEzJh
-         ZEmHGm2Jw6N+pt7HR6pLQDTgTeC0BcbVBqS3zfkfRBHohQhB8uEsbCXsCuiIsguJTz/3
-         gB+Q==
-X-Gm-Message-State: AFqh2koTqwgA0MDv5qa+lPS5XMrlgJHciQ5fyAwiSVezrhNSVa+sJQxh
-        cgyFGySdvVwsez7AbMNh9Uj72Q==
-X-Google-Smtp-Source: AMrXdXuMLV5O/x02mc56Rcm657IsU6f4NJfYHOW4ZfdpJ0pELh2LuBYStHhDWcxIBUE03xHkzcj3EA==
-X-Received: by 2002:a1c:4b04:0:b0:3c6:f0b8:74e6 with SMTP id y4-20020a1c4b04000000b003c6f0b874e6mr52794503wma.4.1673427773355;
-        Wed, 11 Jan 2023 01:02:53 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id x14-20020a1c7c0e000000b003d9f15efcd5sm8772274wmc.6.2023.01.11.01.02.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 01:02:52 -0800 (PST)
-Message-ID: <71c2e796-f0fb-90cd-4599-13c9718f41d5@linaro.org>
-Date:   Wed, 11 Jan 2023 10:02:50 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CuDeia0CiKF+kBYrZ/MDemWf2Ns0OMCpwHIl94bJeDQ=;
+        b=o1ztLBi2JTBvxd+DBl8tWmuuwoYGLjn7Vu+0jaVVktFHIMAefj6QxTI42DT0BC39Kx
+         qARh2R1iR2R2GEM7jG4K0VXnWc0VxpNkdjFiMDEB3DZ+qat79Wfc57FOOh5ksxRx5UTY
+         /0l740Z9xzwzDoDgAYaO35vVAe1YNCyxLbBcpF9Kw8iIWQ5DrdgKZtkgxWTe3PRnHMDw
+         Gi5MkbuGKAt1F0qXU8pdkddnLTay3GkSK/i354XvtGe2UYQ4rMRk3EixItEwVGg1YPXq
+         6vJ6Y84y0qjmcnrsyHRVljkUnXqDZL8xYLGoRwQTNGSqZkEi5T633tinI09mvr97nKR0
+         RV/w==
+X-Gm-Message-State: AFqh2kpBE8gEeXkLjMSpeW6HgZHzM0ykOpdrP9v1g1UUvJtWScLv7y2y
+        6xS3Mi8wDMHH6cQ7OwV72FkNbecR46jQn/dDDNYsoQ==
+X-Google-Smtp-Source: AMrXdXsFyoid4ItvwTPHWthZr/uIBj7vvrNjoGsRDiCIZPGJwqc3YKf8CK+48+Q+6SePCDAmPYVJtoonKfk5B/4kQek=
+X-Received: by 2002:a67:447:0:b0:3ce:d0ae:f6f6 with SMTP id
+ 68-20020a670447000000b003ced0aef6f6mr4429984vse.26.1673427813282; Wed, 11 Jan
+ 2023 01:03:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
- support
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-3-william.zhang@broadcom.com>
- <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
- <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
- <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
- <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
- <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
- <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230111074146.2624496-1-wenst@chromium.org> <CAGXv+5HTOR2Nt5CtmiYx2jrJ-0=YjFaGnQXesRBNFMoogsHJQw@mail.gmail.com>
+In-Reply-To: <CAGXv+5HTOR2Nt5CtmiYx2jrJ-0=YjFaGnQXesRBNFMoogsHJQw@mail.gmail.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 11 Jan 2023 17:03:22 +0800
+Message-ID: <CAGXv+5FtXn3Q7Y_om11vh-rkw_mKC_8k4XdTVLN4z7xefrzTDw@mail.gmail.com>
+Subject: Re: [PATCH v2] platform/chrome: cros_ec: Use per-device lockdep key
+To:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     Tzung-Bi Shih <tzungbi@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 23:18, Florian Fainelli wrote:
-> On 1/10/23 00:40, Krzysztof Kozlowski wrote:
->>>> No, it is discouraged in such forms. Family or IP block compatibles
->>>> should be prepended with a specific compatible. There were many issues
->>>> when people insisted on generic or family compatibles...
->>>>
->>>>> Otherwise we will have to have a compatible string with chip model for
->>>>> each SoC even they share the same IP. We already have more than ten of
->>>>> SoCs and the list will increase.  I don't see this is a good solution too.
->>>>
->>>> You will have to do it anyway even with generic fallback, so I don't get
->>>> what is here to gain... I also don't get why Broadcom should be here
->>>> special, different than others. Why it is not a good solution for
->>>> Broadcom SoCs but it is for others?
->>>>
->>> I saw a few other vendors like these qcom ones:
->>>    qcom,spi-qup.yaml
->>>        - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
->>>        - qcom,spi-qup-v2.1.1 # for 8974 and later
->>>        - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
->>>    qcom,spi-qup.yaml
->>>        const: qcom,geni-spi
->>
->> IP block version numbers are allowed when there is clear mapping between
->> version and SoCs using it. This is the case for Qualcomm because there
->> is such clear mapping documented and available for Qualcomm engineers
->> and also some of us (although not public).
->>
->>> I guess when individual who only has one particular board/chip and is
->>> not aware of the IP family,  it is understandable to use the chip
->>> specific compatible string.
->>
->> Family of devices is not a versioned IP block.
-> 
-> Would it be acceptable to define for instance:
-> 
-> - compatible = "brcm,bcm6868-hsspi", "brcm,bcmbca-hsspi";
+On Wed, Jan 11, 2023 at 4:47 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>
+> On Wed, Jan 11, 2023 at 3:41 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+> >
+> > Lockdep reports a bogus possible deadlock on MT8192 Chromebooks due to
+> > the following lock sequences:
+> >
+> > 1. lock(i2c_register_adapter) [1]; lock(&ec_dev->lock)
+> > 2. lock(&ec_dev->lock); lock(prepare_lock);
+> >
+> > The actual dependency chains are much longer. The shortened version
+> > looks somewhat like:
+> >
+> > 1. cros-ec-rpmsg on mtk-scp
+> >    ec_dev->lock -> prepare_lock
+> > 2. In rt5682_i2c_probe() on native I2C bus:
+> >    prepare_lock -> regmap->lock -> (possibly) i2c_adapter->bus_lock
+> > 3. In rt5682_i2c_probe() on native I2C bus:
+> >    regmap->lock -> i2c_adapter->bus_lock
+> > 4. In sbs_probe() on i2c-cros-ec-tunnel I2C bus attached on cros-ec:
+> >    i2c_adapter->bus_lock -> ec_dev->lock
+> >
+> > While lockdep is correct that the shared lockdep classes have a circular
+> > dependency, it is bogus because
+> >
+> >   a) 2+3 happen on a native I2C bus
+> >   b) 4 happens on the actual EC on ChromeOS devices
+> >   c) 1 happens on the SCP coprocessor on MediaTek Chromebooks that just
+> >      happens to expose a cros-ec interface, but does not have an
+> >      i2c-cros-ec-tunnel I2C bus
+> >
+> > In short, the "dependencies" are actually on different devices.
+> >
+> > Setup a per-device lockdep key for cros_ec devices so lockdep can tell
+> > the two instances apart. This helps with getting rid of the bogus
+> > lockdep warning. For ChromeOS devices that only have one cros-ec
+> > instance this doesn't change anything.
+>
+> Actually, hold off on this for a bit. I just realized this makes the
+> kernel give a big warning:
+>
+> INFO: trying to register non-static key.
+> The code is fine but needs lockdep annotation, or maybe
+> you didn't initialize this object before use?
+> turning off the locking correctness validator.
+>
+> CPU: 0 PID: 99 Comm: kworker/u16:3 Not tainted
+> 6.2.0-rc3-next-20230111-04021-g65853aed7123-dirty #472
+> 8115f54190814e6abf2d53f6a2194c1af0b27040
+> Hardware name: Google juniper sku16 board (DT)
+> Workqueue: events_unbound async_run_entry_fn
+> Call trace:
+>  dump_backtrace.part.0+0xb4/0xf8
+>  show_stack+0x20/0x38
+>  dump_stack_lvl+0x88/0xb4
+>  dump_stack+0x18/0x34
+>  register_lock_class+0x16c/0x40c
+>  __lock_acquire+0xa0/0x1064
+>  lock_acquire+0x1f0/0x2f0
+>  down_write+0x5c/0x80
+>  __blocking_notifier_chain_register+0x64/0x84
+>  blocking_notifier_chain_register+0x1c/0x28
+>  cros_ec_debugfs_probe+0x218/0x3ac
+>  platform_probe+0x70/0xc4
+>  really_probe+0x158/0x290
+>  __driver_probe_device+0xc8/0xe0
+>  driver_probe_device+0x44/0x100
+>  __device_attach_driver+0x64/0xdc
+>  bus_for_each_drv+0xa0/0xc8
+>  __device_attach_async_helper+0x70/0xc4
+>  async_run_entry_fn+0x3c/0xe4
+>  process_one_work+0x2d0/0x48c
+>  worker_thread+0x204/0x274
+>  kthread+0xe8/0xf8
+>  ret_from_fork+0x10/0x20
 
-Yes, this is perfectly valid. Although it does not solve William
-concerns because it requires defining specific compatibles for all of
-the SoCs.
+I think this is caused by
 
-Best regards,
-Krzysztof
+    d90fa2c64d59 platform/chrome: cros_ec: Poll EC log on EC panic
 
+That commit is missing a BLOCKING_INIT_NOTIFIER_HEAD() call.
+
+ChenYu
