@@ -2,143 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557FB665A2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A211665A4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235407AbjAKLbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S236364AbjAKLdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:33:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbjAKLbC (ORCPT
+        with ESMTP id S233266AbjAKLcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:31:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D9638A1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:30:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E63F461BB9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA7DCC433EF;
-        Wed, 11 Jan 2023 11:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673436657;
-        bh=AkE/lv0ihMfPjfXKWuy9LtK/5fpHAGwJNbIk/sxtpZA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xyH0PdKnpOfo7TCRFHEs08ZqcotuUYyK+WIvRGB/0HjLpnOWomvZh+6GQNsKr7u2p
-         Eq60cri1Ed3vS4oFsO9Bw2x2p77bU0GWyc4g8LtCT1Q8SMjRJMHpSXP5xoinl8NS+w
-         C+UkiM2qPh69fPryXwecghAsegOu7iIWhWuBzRA4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com
-Subject: [PATCH v2 16/16] kobject: kset_uevent_ops: make uevent() callback take a const *
-Date:   Wed, 11 Jan 2023 12:30:18 +0100
-Message-Id: <20230111113018.459199-17-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230111113018.459199-1-gregkh@linuxfoundation.org>
-References: <20230111113018.459199-1-gregkh@linuxfoundation.org>
+        Wed, 11 Jan 2023 06:32:45 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67180E0DA;
+        Wed, 11 Jan 2023 03:31:46 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30B97N0s017622;
+        Wed, 11 Jan 2023 11:31:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qAedOzZChfNMu/jpYPPvtQZDjmJrtSh186pQLPTdjlA=;
+ b=gNSqL3DLH6sGRA42T3PRrCtIwMN4ac9VJcuTAj2EcY9bR9GV1GzKRuecRJ1i5wICJ0vV
+ GlRwY+qXNzmeG5finw8WChlRHkR+VATdSHvuhoDA6hl5SwjeqRp2Z22g4V94fIoQTdUp
+ 2Ocxq7DmiZmgwZ3JC6P1cl31bt67Uw95WsN4+kjGBnOM/RDlRmMKprDG2khRPFpwB6oa
+ VOKNpVtJSlLqc8eov0Z3R6ulR2m9fCGK+RtKdAZ2r8MPCBbZUv6G+2ZCpqY8dcuPuayO
+ dohp+Kq/FnktapXQtR5l8FaoaVJMJNOiJSainVTQIX4uOFL1KKQm1G/UmgjucEfLHufx wg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1qnmehnf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Jan 2023 11:31:42 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30BB8voI003117;
+        Wed, 11 Jan 2023 11:31:42 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1qnmehn0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Jan 2023 11:31:42 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30B1siVp025740;
+        Wed, 11 Jan 2023 11:31:39 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3n1kv7rqf4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Jan 2023 11:31:39 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30BBVaNH37945794
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Jan 2023 11:31:36 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E02E320043;
+        Wed, 11 Jan 2023 11:31:35 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 38C0420040;
+        Wed, 11 Jan 2023 11:31:35 +0000 (GMT)
+Received: from [9.171.7.243] (unknown [9.171.7.243])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 11 Jan 2023 11:31:35 +0000 (GMT)
+Message-ID: <dfa59e13-bfd2-a7d9-bde4-13b1d836afe2@linux.ibm.com>
+Date:   Wed, 11 Jan 2023 12:31:34 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3307; i=gregkh@linuxfoundation.org; h=from:subject; bh=AkE/lv0ihMfPjfXKWuy9LtK/5fpHAGwJNbIk/sxtpZA=; b=owGbwMvMwCRo6H6F97bub03G02pJDMn75p6qlZSdpHHrmcBJ6auiRXqc+nP3tQvs417G8PzQwq+C fzXPd8SyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBEit4xLJhktThKvivX6kZh3JRCx2 gDdQPFZQxz+PzNY5+ezc2TFX3zzFfpjHBUSHkpAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+References: <20230110202632.2533978-1-scgl@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v5 00/10] KVM: s390: Extend MEM_OP ioctl by storage key
+ checked cmpxchg
+In-Reply-To: <20230110202632.2533978-1-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ypfVd2NAgtEURYaKEC0IR_YsK4GRXHgd
+X-Proofpoint-ORIG-GUID: 68dbTUox9QrPiD-uLrEyaJZHI025pOZF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-11_05,2023-01-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ priorityscore=1501 mlxlogscore=871 suspectscore=0 malwarescore=0
+ adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301110085
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The uevent() callback in struct kset_uevent_ops does not modify the
-kobject passed into it, so make the pointer const to enforce this
-restriction.  When doing so, fix up all existing uevent() callbacks to
-have the correct signature to preserve the build.
+On 1/10/23 21:26, Janis Schoetterl-Glausch wrote:
+> User space can use the MEM_OP ioctl to make storage key checked reads
+> and writes to the guest, however, it has no way of performing atomic,
+> key checked, accesses to the guest.
+> Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
+> mode. For now, support this mode for absolute accesses only.
+> 
+> This mode can be use, for example, to set the device-state-change
+> indicator and the adapter-local-summary indicator atomically.
+> 
+> Also contains some fixes/changes for the memop selftest independent of
+> the cmpxchg changes.
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christine Caulfield <ccaulfie@redhat.com>
-Cc: David Teigland <teigland@redhat.com>
-Cc: Bob Peterson <rpeterso@redhat.com>
-Cc: Andreas Gruenbacher <agruenba@redhat.com>
-Cc: cluster-devel@redhat.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/base/core.c     | 4 ++--
- fs/dlm/lockspace.c      | 4 ++--
- fs/gfs2/sys.c           | 6 +++---
- include/linux/kobject.h | 2 +-
- 4 files changed, 8 insertions(+), 8 deletions(-)
+Since the selftest fixes seem to apply and run without the new code I'm 
+considering splitting them off entirely.
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 72ec54a8a4e1..b0cee0f30d8d 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2387,9 +2387,9 @@ static const char *dev_uevent_name(const struct kobject *kobj)
- 	return NULL;
- }
- 
--static int dev_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
-+static int dev_uevent(const struct kobject *kobj, struct kobj_uevent_env *env)
- {
--	struct device *dev = kobj_to_dev(kobj);
-+	const struct device *dev = kobj_to_dev(kobj);
- 	int retval = 0;
- 
- 	/* add device node properties if present */
-diff --git a/fs/dlm/lockspace.c b/fs/dlm/lockspace.c
-index d0b4e2181a5f..9b6cfc4c30e3 100644
---- a/fs/dlm/lockspace.c
-+++ b/fs/dlm/lockspace.c
-@@ -215,9 +215,9 @@ static int do_uevent(struct dlm_ls *ls, int in)
- 	return ls->ls_uevent_result;
- }
- 
--static int dlm_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
-+static int dlm_uevent(const struct kobject *kobj, struct kobj_uevent_env *env)
- {
--	struct dlm_ls *ls = container_of(kobj, struct dlm_ls, ls_kobj);
-+	const struct dlm_ls *ls = container_of(kobj, struct dlm_ls, ls_kobj);
- 
- 	add_uevent_var(env, "LOCKSPACE=%s", ls->ls_name);
- 	return 0;
-diff --git a/fs/gfs2/sys.c b/fs/gfs2/sys.c
-index d87ea98cf535..d8dfabb0bc12 100644
---- a/fs/gfs2/sys.c
-+++ b/fs/gfs2/sys.c
-@@ -767,10 +767,10 @@ void gfs2_sys_fs_del(struct gfs2_sbd *sdp)
- 	wait_for_completion(&sdp->sd_kobj_unregister);
- }
- 
--static int gfs2_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
-+static int gfs2_uevent(const struct kobject *kobj, struct kobj_uevent_env *env)
- {
--	struct gfs2_sbd *sdp = container_of(kobj, struct gfs2_sbd, sd_kobj);
--	struct super_block *s = sdp->sd_vfs;
-+	const struct gfs2_sbd *sdp = container_of(kobj, struct gfs2_sbd, sd_kobj);
-+	const struct super_block *s = sdp->sd_vfs;
- 
- 	add_uevent_var(env, "LOCKTABLE=%s", sdp->sd_table_name);
- 	add_uevent_var(env, "LOCKPROTO=%s", sdp->sd_proto_name);
-diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-index 58a5b75612e3..bdab370a24f4 100644
---- a/include/linux/kobject.h
-+++ b/include/linux/kobject.h
-@@ -137,7 +137,7 @@ struct kobj_uevent_env {
- struct kset_uevent_ops {
- 	int (* const filter)(const struct kobject *kobj);
- 	const char *(* const name)(const struct kobject *kobj);
--	int (* const uevent)(struct kobject *kobj, struct kobj_uevent_env *env);
-+	int (* const uevent)(const struct kobject *kobj, struct kobj_uevent_env *env);
- };
- 
- struct kobj_attribute {
--- 
-2.39.0
-
+Most of them have reviews already and they are lower risk anyway so we 
+could add them to devel rather soonish.
