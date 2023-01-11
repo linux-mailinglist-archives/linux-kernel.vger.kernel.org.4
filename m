@@ -2,161 +2,829 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862466650D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 01:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06DB16650D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 02:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234954AbjAKA7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 19:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S235274AbjAKBA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 20:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbjAKA7o (ORCPT
+        with ESMTP id S235311AbjAKBAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 19:59:44 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B849F50F48
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:59:42 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id 3so14159772vsq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:59:42 -0800 (PST)
+        Tue, 10 Jan 2023 20:00:08 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63EB544E7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:59:59 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v6so20139372edd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:59:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MpqKCIgPRMhpXTruKjB1OC0juXM/o08kG+iDAT9++eA=;
-        b=gGC3PH3VfglXadEagUBFXOQTZR/RqQMmcQ2lP9IhyxzoFetggN2vu1o0T04fU9rYYm
-         3Ms7UToJO+NO2joHkS5Qr71wryywqwqyjhAqPxtKC9qoSjCM8Fk10fCqGTnxfl2LF3er
-         NVZA3sz7mHW23N/n6dGDFucJ2Tptzw0Ccr3u0=
+        d=futuring-girl-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uezqz7BIqYi2Xh/RtOujt8AOA9dXAENYkfJSfnTqLZo=;
+        b=Fvmts5P44MwPp7mvyATN+KyIWxc6IpKcirkFS/jSOoMII59R8QRk93g1eMBDff01SS
+         k5TGRvMGd5pJQLLWyAsVc7/k34RZMdB2mqj9ICklT/smM7pxycqaSI6355yAeoz8vOv9
+         MzD6JjP7jpQJV8ZMM2C1evIdVVgacD5q3e6uQiGdLMtFsaxPQxfcth4DyKD0w2lGFMq3
+         jWpFhin2NkQsxc60qgkL3YswUtaAVNmTAGgnGwecqwCMt6611fSMkwlJDx00v+80l0hi
+         Gr1quu8HgNUyveYjkbYSuagjF8vWp/TGx7Gx5n0c3nOFS94OftVBp7caMWDJdGsMDzak
+         Jg3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MpqKCIgPRMhpXTruKjB1OC0juXM/o08kG+iDAT9++eA=;
-        b=CnyTasdL4wTqIGHDpRdU58XK0kZMlsOCi+5ZIel/pFffM0VFENKtZDIOIkQfZrs7qc
-         YekoxbV0/eaYlrY2usCFvwtGUh6uuOY1dgmAGWwMxj1J/c6sPFMDq3SgCTMq4EmjZ3x2
-         Cwc68o1JWqh+9n3+2GzL0uZpOnfbEGUd9A7UvM44NuOdyq1tcMAVNAXwEQsmDhQPeaRu
-         YWSg6jjlAQkgQheWNNQOy+10zwxXcN/Z0edgTU9mZYGaigGH5dHVlaEo+OifAuakQsqA
-         z2pklL/QtWWIr1iTNP1g5ZXhRcEC7L0eAGpFXaMU/U2JviU8zaGpQHpfmPWzvoXcqvB4
-         EHLw==
-X-Gm-Message-State: AFqh2kp33H2MmD+OQ/ejeFxzETjv+A5ZuJeysoXAJEqpAFGxovCaIqzW
-        mHWTXFeHQ/5gmIYzrR4602DaKspqIHkQcnyZAEE=
-X-Google-Smtp-Source: AMrXdXvP5dkm85A15C/7L+qfVGB3djRFhTez4sbHsmCgKfd4WqXZ0I8pIny21+JGWv7HJgr9K1fgHA==
-X-Received: by 2002:a67:e3da:0:b0:3cb:1526:9dab with SMTP id k26-20020a67e3da000000b003cb15269dabmr25439031vsm.4.1673398781614;
-        Tue, 10 Jan 2023 16:59:41 -0800 (PST)
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com. [209.85.217.44])
-        by smtp.gmail.com with ESMTPSA id o13-20020a0561023f8d00b003c68cfd6630sm1099445vsv.1.2023.01.10.16.59.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 16:59:41 -0800 (PST)
-Received: by mail-vs1-f44.google.com with SMTP id v127so9776728vsb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:59:39 -0800 (PST)
-X-Received: by 2002:a05:6102:3e06:b0:3b5:fd8:7948 with SMTP id
- j6-20020a0561023e0600b003b50fd87948mr10845718vsv.85.1673398779099; Tue, 10
- Jan 2023 16:59:39 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Uezqz7BIqYi2Xh/RtOujt8AOA9dXAENYkfJSfnTqLZo=;
+        b=vvlz7PD/dnWIouyfXZO0BuOUTKgENEFrFFOo20zY+pep+yB2Vgwpm/WoQkjzTEjwRn
+         Gu756WSRI1sHlgNzfgNy0mvaC1+J1tePXQpDJLqrLmyAJW25pzOF9UDeBohCPpKmlaVC
+         M7qZ7xGI0FW105cm1cAqiVrTuMtj+2k2M2u0sTI3ANknRce+cQJ8s0ucS114093dM7vm
+         265DBPb22zPAC7DcYf7vZJ+NCk7WN7aLnpjhtfxd6Bf1fxtYCAB+NK7A1LsW/FWIPIQr
+         Q4PBlxocWTJnNMri2RR4iYNmvHsknFX6NgwYc98KAtiXFFvqauvVcRGzQuL35XT4/v7P
+         wWEA==
+X-Gm-Message-State: AFqh2kpEPd2II+wtdJBlA+CY+SVTMyzvsLL4xFmFo05jPqvTSAwxqbR9
+        Zk+LUxXgAs1QoFyUvn2uDlu5GUNuLvTIT8NKkQwXcw==
+X-Google-Smtp-Source: AMrXdXtW9o3OcY1er7K732WO69KJS1pcp3wo+RYLe8jGVR6EGpUcxtdf3ebKqelaEMGV2YLwKhjlLIpolIevKvpWU+Q=
+X-Received: by 2002:a05:6402:2915:b0:483:39e2:bc82 with SMTP id
+ ee21-20020a056402291500b0048339e2bc82mr7936659edb.252.1673398798077; Tue, 10
+ Jan 2023 16:59:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20221231142721.338643-1-abel.vesa@linaro.org> <20221231142721.338643-2-abel.vesa@linaro.org>
-In-Reply-To: <20221231142721.338643-2-abel.vesa@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 10 Jan 2023 16:59:26 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XdQfg3KVdVrQtVyHM_RBeP_4TZE07mr2KWpP8PxbAdmA@mail.gmail.com>
-Message-ID: <CAD=FV=XdQfg3KVdVrQtVyHM_RBeP_4TZE07mr2KWpP8PxbAdmA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/panel-edp: add IVO M133NW4J panel entry
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steev Klimaszewski <steev@kali.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>
+References: <20230110180018.288460217@linuxfoundation.org>
+In-Reply-To: <20230110180018.288460217@linuxfoundation.org>
+From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
+Date:   Wed, 11 Jan 2023 09:59:46 +0900
+Message-ID: <CAKL4bV7gRuk+1k_dBMj0fENnw7KDzk9sXa14-DShYU_whxdhvg@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/159] 6.1.5-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Greg
 
-On Sat, Dec 31, 2022 at 6:27 AM Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> Add an eDP panel entry for IVO M133NW4J.
->
-> Due to lack of documentation, use the delay_200_500_p2e100 timings like
-> some other IVO entries for now.
->
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->
-> Assuming the information from here is correct:
-> https://raw.githubusercontent.com/linuxhw/EDID/master/DigitalDisplay.md
->
-> This fixes the following WARN_ON on my X13s:
->
-> [    2.194973] CPU: 5 PID: 186 Comm: kworker/u16:6 Not tainted 6.2.0-rc1-00075-g5136d9aa278f-dirty #26
-> [    2.195409] Hardware name: LENOVO 21BX000WRI/21BX000WRI, BIOS N3HET44W (1.16 ) 05/27/2022
-> [    2.195820] Workqueue: events_unbound deferred_probe_work_func
-> [    2.196234] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    2.196639] pc : panel_edp_probe+0x3d4/0x520 [panel_edp]
-> [    2.197036] lr : panel_edp_probe+0x37c/0x520 [panel_edp]
-> [    2.197435] sp : ffff80000970b3b0
-> [    2.197833] x29: ffff80000970b3b0 x28: ffff0e0a80b7f760 x27: 0000000000000001
-> [    2.198231] x26: ffff0e11fe0e1b50 x25: ffffa8f9f585e0c8 x24: 0000000000000000
-> [    2.198630] x23: ffff0e0a81a39c80 x22: ffffa8f9f58c7638 x21: 0000000000000000
-> [    2.199032] x20: ffff0e0a8d1b0000 x19: ffff0e0a820fea80 x18: 0000000000000000
-> [    2.199576] x17: 0000000000000000 x16: ffffa8fa5e097080 x15: 0000000000000000
-> [    2.199969] x14: 0000000000000003 x13: 0000000000000059 x12: 0000000000000066
-> [    2.200360] x11: 0000000000000001 x10: 00000000000009e0 x9 : 0000000000000001
-> [    2.200748] x8 : ffff80000970b340 x7 : 0000000000000000 x6 : 0000000000000000
-> [    2.201132] x5 : 0000000000000049 x4 : 0000000000000056 x3 : 000000000000004f
-> [    2.201512] x2 : 0000000000000000 x1 : ffffa8f9f58c7a00 x0 : 000000000000854a
-> [    2.201888] Call trace:
-> [    2.202261]  panel_edp_probe+0x3d4/0x520 [panel_edp]
-> [    2.202636]  panel_edp_dp_aux_ep_probe+0x38/0x50 [panel_edp]
-> [    2.203009]  dp_aux_ep_probe+0x34/0xf4 [drm_dp_aux_bus]
-> [    2.203379]  really_probe+0xc0/0x3dc
-> [    2.203739]  __driver_probe_device+0x7c/0x190
-> [    2.204096]  driver_probe_device+0x3c/0x110
-> [    2.204448]  __device_attach_driver+0xbc/0x160
-> [    2.204795]  bus_for_each_drv+0x7c/0xd4
-> [    2.205136]  __device_attach+0x9c/0x1c0
-> [    2.205439]  device_initial_probe+0x14/0x20
-> [    2.205717]  bus_probe_device+0x9c/0xa4
-> [    2.205995]  device_add+0x3c4/0x8cc
-> [    2.206270]  device_register+0x20/0x30
-> [    2.206543]  of_dp_aux_populate_bus+0xe0/0x1bc [drm_dp_aux_bus]
-> [    2.206817]  msm_dp_modeset_init+0x1d8/0x274 [msm]
-> [    2.207096]  _dpu_kms_drm_obj_init+0x128/0x670 [msm]
-> [    2.207370]  dpu_kms_hw_init+0x540/0x640 [msm]
-> [    2.207645]  msm_drm_bind+0x18c/0x61c [msm]
-> [    2.207917]  try_to_bring_up_aggregate_device+0x1dc/0x2d0
-> [    2.208186]  __component_add+0xa4/0x190
-> [    2.208454]  component_add+0x14/0x20
-> [    2.208720]  dp_display_probe+0x29c/0x454 [msm]
-> [    2.208989]  platform_probe+0x68/0xc0
-> [    2.209252]  really_probe+0xc0/0x3dc
-> [    2.209511]  __driver_probe_device+0x7c/0x190
-> [    2.209767]  driver_probe_device+0x3c/0x110
-> [    2.210022]  __device_attach_driver+0xbc/0x160
-> [    2.210275]  bus_for_each_drv+0x7c/0xd4
-> [    2.210528]  __device_attach+0x9c/0x1c0
-> [    2.210781]  device_initial_probe+0x14/0x20
-> [    2.211032]  bus_probe_device+0x9c/0xa4
-> [    2.211280]  deferred_probe_work_func+0x9c/0xf0
-> [    2.211525]  process_one_work+0x1c4/0x320
-> [    2.211768]  worker_thread+0x6c/0x430
-> [    2.212012]  kthread+0x108/0x10c
-> [    2.212251]  ret_from_fork+0x10/0x20
-> [    2.212488] ---[ end trace 0000000000000000 ]---
-> [    2.212755] panel-simple-dp-aux aux-aea0000.displayport-controller: Unknown panel IVO 0x854a, using conservative timings
->
->  drivers/gpu/drm/panel/panel-edp.c | 1 +
->  1 file changed, 1 insertion(+)
+6.1.5-rc1 tested.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+x86_64
 
-Pushed to drm-misc-next:
+build successfully completed
+boot successfully completed
 
-e22391454e3e drm/panel-edp: add IVO M133NW4J panel entry
+Lenovo ThinkPad X1 Nano Gen1(Intel i5-1130G7, arch linux)
+
+Thanks
+
+Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+takeshi ogasawara
+e-mail:takeshi.ogasawara@futuring-girl.com
+Finger Print:666E954A
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+
+2023=E5=B9=B41=E6=9C=8811=E6=97=A5(=E6=B0=B4) 3:16 Greg Kroah-Hartman <greg=
+kh@linuxfoundation.org>:
+>
+> This is the start of the stable review cycle for the 6.1.5 release.
+> There are 159 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 Jan 2023 17:59:42 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.5-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
+> -------------
+> Pseudo-Shortlog of commits:
+>
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>     Linux 6.1.5-rc1
+>
+> Baochen Qiang <quic_bqiang@quicinc.com>
+>     wifi: ath11k: Send PME message during wakeup from D3cold
+>
+> Ard Biesheuvel <ardb@kernel.org>
+>     efi: random: combine bootloader provided RNG seed with RNG protocol o=
+utput
+>
+> Jani Nikula <jani.nikula@intel.com>
+>     drm/i915/dsi: fix MIPI_BKLT_EN_1 native GPIO index
+>
+> Jani Nikula <jani.nikula@intel.com>
+>     drm/i915/dsi: add support for ICL+ native MIPI GPIO sequence
+>
+> William Liu <will@willsroot.io>
+>     ksmbd: check nt_len to be at least CIFS_ENCPWD_SIZE in ksmbd_decode_n=
+tlmssp_auth_blob
+>
+> Marios Makassikis <mmakassikis@freebox.fr>
+>     ksmbd: send proper error response in smb2_tree_connect()
+>
+> Namjae Jeon <linkinjeon@kernel.org>
+>     ksmbd: fix infinite loop in ksmbd_conn_handler_loop()
+>
+> Qu Wenruo <wqu@suse.com>
+>     btrfs: handle case when repair happens with dev-replace
+>
+> Samson Tam <samson.tam@amd.com>
+>     drm/amd/display: Uninitialized variables causing 4k60 UCLK to stay at=
+ DPM1 and not DPM0
+>
+> Dillon Varone <Dillon.Varone@amd.com>
+>     drm/amd/display: Add check for DET fetch latency hiding for dcn32
+>
+> Rafael Mendonca <rafaelmendsr@gmail.com>
+>     virtio_blk: Fix signedness bug in virtblk_prep_rq()
+>
+> Dmitry Fomichev <dmitry.fomichev@wdc.com>
+>     virtio-blk: use a helper to handle request queuing errors
+>
+> Zhenyu Wang <zhenyuw@linux.intel.com>
+>     drm/i915/gvt: fix vgpu debugfs clean in remove
+>
+> Zhenyu Wang <zhenyuw@linux.intel.com>
+>     drm/i915/gvt: fix gvt debugfs destroy
+>
+> Mukul Joshi <mukul.joshi@amd.com>
+>     drm/amdkfd: Fix kernel warning during topology setup
+>
+> Ma Jun <majun@amd.com>
+>     drm/plane-helper: Add the missing declaration of drm_atomic_state
+>
+> Andreas Rammhold <andreas@rammhold.de>
+>     of/fdt: run soc memory setup when early_init_dt_scan_memory fails
+>
+> Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>     riscv, kprobes: Stricter c.jr/c.jalr decoding
+>
+> Ben Dooks <ben-linux@fluff.org>
+>     riscv: uaccess: fix type of 0 variable on error in get_user()
+>
+> Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+>     thermal: int340x: Add missing attribute for data rate base
+>
+> Cindy Lu <lulu@redhat.com>
+>     vhost_vdpa: fix the crash in unmap a large memory
+>
+> Jason A. Donenfeld <Jason@zx2c4.com>
+>     tpm: Allow system suspend to continue when TPM suspend fails
+>
+> Pavel Begunkov <asml.silence@gmail.com>
+>     io_uring: fix CQ waiting timeout handling
+>
+> Pavel Begunkov <asml.silence@gmail.com>
+>     io_uring: pin context while queueing deferred tw
+>
+> Jens Axboe <axboe@kernel.dk>
+>     block: don't allow splitting of a REQ_NOWAIT bio
+>
+> Christian Marangi <ansuelsmth@gmail.com>
+>     net: dsa: tag_qca: fix wrong MGMT_DATA2 size
+>
+> Christian Marangi <ansuelsmth@gmail.com>
+>     net: dsa: qca8k: fix wrong length value for mgmt eth packet
+>
+> Christian Marangi <ansuelsmth@gmail.com>
+>     Revert "net: dsa: qca8k: cache lo and hi for mdio write"
+>
+> Michel D=C3=A4nzer <mdaenzer@redhat.com>
+>     Revert "drm/amd/display: Enable Freesync Video Mode by default"
+>
+> Chuang Wang <nashuiliang@gmail.com>
+>     bpf: Fix panic due to wrong pageattr of im->image
+>
+> Paul Menzel <pmenzel@molgen.mpg.de>
+>     fbdev: matroxfb: G200eW: Increase max memory from 1 MB to 16 MB
+>
+> Jeff Layton <jlayton@kernel.org>
+>     nfsd: fix handling of readdir in v4root vs. mount upcall timeout
+>
+> Rodrigo Branco <bsdaemon@google.com>
+>     x86/bugs: Flush IBP in ib_prctl_set()
+>
+> Takashi Iwai <tiwai@suse.de>
+>     x86/kexec: Fix double-free of elf header buffer
+>
+> Kai Vehmanen <kai.vehmanen@linux.intel.com>
+>     ASoC: SOF: Intel: pci-tgl: unblock S5 entry if DMA stop has failed"
+>
+> Christoph Hellwig <hch@lst.de>
+>     nvme: also return I/O command effects from nvme_command_effects
+>
+> Christoph Hellwig <hch@lst.de>
+>     nvmet: use NVME_CMD_EFFECTS_CSUPP instead of open coding it
+>
+> YoungJun.park <her0gyugyu@gmail.com>
+>     kunit: alloc_string_stream_fragment error handling bug fix
+>
+> Jens Axboe <axboe@kernel.dk>
+>     io_uring: check for valid register opcode earlier
+>
+> Mario Limonciello <mario.limonciello@amd.com>
+>     ACPI: video: Don't enable fallback path for creating ACPI backlight b=
+y default
+>
+> Mario Limonciello <mario.limonciello@amd.com>
+>     drm/amd/display: Report to ACPI video if no panels were found
+>
+> Mario Limonciello <mario.limonciello@amd.com>
+>     ACPI: video: Allow GPU drivers to report no panels
+>
+> Yanjun Zhang <zhangyanjun@cestc.cn>
+>     nvme: fix multipath crash caused by flush request when blktrace is en=
+abled
+>
+> Jens Axboe <axboe@kernel.dk>
+>     io_uring/cancel: re-grab ctx mutex after finishing wait
+>
+> Philip Yang <Philip.Yang@amd.com>
+>     drm/amdkfd: Fix double release compute pasid
+>
+> Philip Yang <Philip.Yang@amd.com>
+>     drm/amdkfd: Fix kfd_process_device_init_vm error handling
+>
+> Luben Tuikov <luben.tuikov@amd.com>
+>     drm/amdgpu: Fix size validation for non-exclusive domains (v4)
+>
+> YC Hung <yc.hung@mediatek.com>
+>     ASoC: SOF: mediatek: initialize panic_info to zero
+>
+> Hans de Goede <hdegoede@redhat.com>
+>     ASoC: Intel: bytcr_rt5640: Add quirk for the Advantech MICA-071 table=
+t
+>
+> Dominique Martinet <asmadeus@codewreck.org>
+>     9p/client: fix data race on req->status
+>
+> Kai Vehmanen <kai.vehmanen@linux.intel.com>
+>     ASoC: SOF: Revert: "core: unregister clients and machine drivers in .=
+shutdown"
+>
+> Linus Torvalds <torvalds@linux-foundation.org>
+>     hfs/hfsplus: avoid WARN_ON() for sanity check, use proper error handl=
+ing
+>
+> Arnd Bergmann <arnd@arndb.de>
+>     usb: dwc3: xilinx: include linux/gpio/consumer.h
+>
+> Jan Kara <jack@suse.cz>
+>     udf: Fix extension of the last extent in the file
+>
+> Zhengchao Shao <shaozhengchao@huawei.com>
+>     caif: fix memory leak in cfctrl_linkup_request()
+>
+> Paolo Abeni <pabeni@redhat.com>
+>     net/ulp: prevent ULP without clone op from entering the LISTEN status
+>
+> Caleb Sander <csander@purestorage.com>
+>     qed: allow sleep in qed_mcp_trace_dump()
+>
+> Ming Lei <ming.lei@redhat.com>
+>     ublk: honor IO_URING_F_NONBLOCK for handling control command
+>
+> Zheng Wang <zyytlz.wz@163.com>
+>     drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
+>
+> Dan Carpenter <error27@gmail.com>
+>     drm/i915: unpin on error in intel_vgpu_shadow_mm_pin()
+>
+> Namhyung Kim <namhyung@kernel.org>
+>     perf stat: Fix handling of --for-each-cgroup with --bpf-counters to m=
+atch non BPF mode
+>
+> Namhyung Kim <namhyung@kernel.org>
+>     perf stat: Fix handling of unsupported cgroup events when using BPF c=
+ounters
+>
+> Thomas Richter <tmricht@linux.ibm.com>
+>     perf lock contention: Fix core dump related to not finding the "__sch=
+ed_text_end" symbol on s/390
+>
+> Szymon Heidrich <szymon.heidrich@gmail.com>
+>     usb: rndis_host: Secure rndis_query check against int overflow
+>
+> Geetha sowjanya <gakula@marvell.com>
+>     octeontx2-pf: Fix lmtst ID used in aura free
+>
+> Daniil Tatianin <d-tatianin@yandex-team.ru>
+>     drivers/net/bonding/bond_3ad: return when there's no aggregator
+>
+> Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>     fs/ntfs3: don't hold ni_lock when calling truncate_setsize()
+>
+> Philipp Zabel <p.zabel@pengutronix.de>
+>     drm/imx: ipuv3-plane: Fix overlay plane width
+>
+> Miaoqian Lin <linmq006@gmail.com>
+>     perf tools: Fix resources leak in perf_data__open_dir()
+>
+> Xiu Jianfeng <xiujianfeng@huawei.com>
+>     drm/virtio: Fix memory leak in virtio_gpu_object_create()
+>
+> Jozsef Kadlecsik <kadlec@netfilter.org>
+>     netfilter: ipset: Rework long task execution when adding/deleting ent=
+ries
+>
+> Jozsef Kadlecsik <kadlec@netfilter.org>
+>     netfilter: ipset: fix hash:net,port,net hang with /0 subnet
+>
+> Horatiu Vultur <horatiu.vultur@microchip.com>
+>     net: sparx5: Fix reading of the MAC address
+>
+> Ido Schimmel <idosch@nvidia.com>
+>     vxlan: Fix memory leaks in error path
+>
+> Jamal Hadi Salim <jhs@mojatatu.com>
+>     net: sched: cbq: dont intepret cls results when asked to drop
+>
+> Jamal Hadi Salim <jhs@mojatatu.com>
+>     net: sched: atm: dont intepret cls results when asked to drop
+>
+> Miaoqian Lin <linmq006@gmail.com>
+>     gpio: sifive: Fix refcount leak in sifive_gpio_probe
+>
+> Xiubo Li <xiubli@redhat.com>
+>     ceph: switch to vfs_inode_has_locks() to fix file lock bug
+>
+> Jeff Layton <jlayton@kernel.org>
+>     filelock: new helper: vfs_inode_has_locks
+>
+> Carlo Caione <ccaione@baylibre.com>
+>     drm/meson: Reduce the FIFO lines held when AFBC is not used
+>
+> Po-Hsu Lin <po-hsu.lin@canonical.com>
+>     selftests: net: return non-zero for failures reported in arp_ndisc_ev=
+ict_nocarrier
+>
+> Po-Hsu Lin <po-hsu.lin@canonical.com>
+>     selftests: net: fix cleanup_v6() for arp_ndisc_evict_nocarrier
+>
+> Maor Gottlieb <maorg@nvidia.com>
+>     RDMA/mlx5: Fix validation of max_rd_atomic caps for DC
+>
+> Shay Drory <shayd@nvidia.com>
+>     RDMA/mlx5: Fix mlx5_ib_get_hw_stats when used for device
+>
+> Haibo Chen <haibo.chen@nxp.com>
+>     gpio: pca953x: avoid to use uninitialized value pinctrl
+>
+> Miaoqian Lin <linmq006@gmail.com>
+>     net: phy: xgmiitorgmii: Fix refcount leak in xgmiitorgmii_probe
+>
+> David Arinzon <darinzon@amazon.com>
+>     net: ena: Update NUMA TPH hint register upon NUMA node update
+>
+> David Arinzon <darinzon@amazon.com>
+>     net: ena: Set default value for RX interrupt moderation
+>
+> David Arinzon <darinzon@amazon.com>
+>     net: ena: Fix rx_copybreak value update
+>
+> David Arinzon <darinzon@amazon.com>
+>     net: ena: Use bitmask to indicate packet redirection
+>
+> David Arinzon <darinzon@amazon.com>
+>     net: ena: Account for the number of processed bytes in XDP
+>
+> David Arinzon <darinzon@amazon.com>
+>     net: ena: Don't register memory info on XDP exchange
+>
+> David Arinzon <darinzon@amazon.com>
+>     net: ena: Fix toeplitz initial hash value
+>
+> Jiguang Xiao <jiguang.xiao@windriver.com>
+>     net: amd-xgbe: add missed tasklet_kill
+>
+> Jian Shen <shenjian15@huawei.com>
+>     net: hns3: refine the handling for VF heartbeat
+>
+> Kuniyuki Iwashima <kuniyu@amazon.com>
+>     tcp: Add TIME_WAIT sockets in bhash2.
+>
+> Kees Cook <keescook@chromium.org>
+>     bpf: Always use maximal size for copy_array()
+>
+> Eli Cohen <elic@nvidia.com>
+>     net/mlx5: Lag, fix failure to cancel delayed bond work
+>
+> Maor Dickman <maord@nvidia.com>
+>     net/mlx5e: Set geneve_tlv_option_0_exist when matching on geneve opti=
+on
+>
+> Adham Faris <afaris@nvidia.com>
+>     net/mlx5e: Fix hw mtu initializing at XDP SQ allocation
+>
+> Chris Mi <cmi@nvidia.com>
+>     net/mlx5e: Always clear dest encap in neigh-update-del
+>
+> Chris Mi <cmi@nvidia.com>
+>     net/mlx5e: CT: Fix ct debugfs folder name
+>
+> Tariq Toukan <tariqt@nvidia.com>
+>     net/mlx5e: Fix RX reporter for XSK RQs
+>
+> Dragos Tatulea <dtatulea@nvidia.com>
+>     net/mlx5e: IPoIB, Don't allow CQE compression to be turned on by defa=
+ult
+>
+> Shay Drory <shayd@nvidia.com>
+>     net/mlx5: Fix RoCE setting at HCA level
+>
+> Shay Drory <shayd@nvidia.com>
+>     net/mlx5: Avoid recovery in probe flows
+>
+> Shay Drory <shayd@nvidia.com>
+>     net/mlx5: Fix io_eq_size and event_eq_size params validation
+>
+> Jiri Pirko <jiri@nvidia.com>
+>     net/mlx5: Add forgotten cleanup calls into mlx5_init_once() error pat=
+h
+>
+> Moshe Shemesh <moshe@nvidia.com>
+>     net/mlx5: E-Switch, properly handle ingress tagged packets on VST
+>
+> Jason Wang <jasowang@redhat.com>
+>     vdpasim: fix memory leak when freeing IOTLBs
+>
+> Rong Wang <wangrong68@huawei.com>
+>     vdpa/vp_vdpa: fix kfree a wrong pointer in vp_vdpa_remove
+>
+> Wei Yongjun <weiyongjun1@huawei.com>
+>     virtio-crypto: fix memory leak in virtio_crypto_alg_skcipher_close_se=
+ssion()
+>
+> Stefano Garzarella <sgarzare@redhat.com>
+>     vdpa_sim: fix vringh initialization in vdpasim_queue_ready()
+>
+> Stefano Garzarella <sgarzare@redhat.com>
+>     vhost-vdpa: fix an iotlb memory leak
+>
+> Stefano Garzarella <sgarzare@redhat.com>
+>     vhost: fix range used in translate_desc()
+>
+> Stefano Garzarella <sgarzare@redhat.com>
+>     vringh: fix range used in iotlb_translate()
+>
+> Yuan Can <yuancan@huawei.com>
+>     vhost/vsock: Fix error handling in vhost_vsock_init()
+>
+> ruanjinjie <ruanjinjie@huawei.com>
+>     vdpa_sim: fix possible memory leak in vdpasim_net_init() and vdpasim_=
+blk_init()
+>
+> Eli Cohen <elic@nvidia.com>
+>     vdpa/mlx5: Fix wrong mac address deletion
+>
+> Eli Cohen <elic@nvidia.com>
+>     vdpa/mlx5: Fix rule forwarding VLAN to TIR
+>
+> Michael Chan <michael.chan@broadcom.com>
+>     bnxt_en: Fix HDS and jumbo thresholds for RX packets
+>
+> Michael Chan <michael.chan@broadcom.com>
+>     bnxt_en: Fix first buffer size calculations for XDP multi-buffer
+>
+> Michael Chan <michael.chan@broadcom.com>
+>     bnxt_en: Fix XDP RX path
+>
+> Michael Chan <michael.chan@broadcom.com>
+>     bnxt_en: Simplify bnxt_xdp_buff_init()
+>
+> Miaoqian Lin <linmq006@gmail.com>
+>     nfc: Fix potential resource leaks
+>
+> Johnny S. Lee <foss@jsl.io>
+>     net: dsa: mv88e6xxx: depend on PTP conditionally
+>
+> Daniil Tatianin <d-tatianin@yandex-team.ru>
+>     qlcnic: prevent ->dcb use-after-free on qlcnic_dcb_enable() failure
+>
+> Hawkins Jiawei <yin31149@gmail.com>
+>     net: sched: fix memory leak in tcindex_set_parms
+>
+> Jian Shen <shenjian15@huawei.com>
+>     net: hns3: fix VF promisc mode not update when mac table full
+>
+> Jian Shen <shenjian15@huawei.com>
+>     net: hns3: fix miss L3E checking for rx packet
+>
+> Jie Wang <wangjie125@huawei.com>
+>     net: hns3: add interrupts re-initialization while doing VF FLR
+>
+> Jeff Layton <jlayton@kernel.org>
+>     nfsd: shut down the NFSv4 state objects before the filecache
+>
+> Shawn Bohrer <sbohrer@cloudflare.com>
+>     veth: Fix race with AF_XDP exposing old or uninitialized descriptors
+>
+> Horatiu Vultur <horatiu.vultur@microchip.com>
+>     net: lan966x: Fix configuration of the PCS
+>
+> Eric Dumazet <edumazet@google.com>
+>     bonding: fix lockdep splat in bond_miimon_commit()
+>
+> Pablo Neira Ayuso <pablo@netfilter.org>
+>     netfilter: nf_tables: honor set timeout and garbage collection update=
+s
+>
+> Paolo Abeni <pabeni@redhat.com>
+>     mptcp: fix lockdep false positive
+>
+> Paolo Abeni <pabeni@redhat.com>
+>     mptcp: fix deadlock in fastopen error path
+>
+> Ronak Doshi <doshir@vmware.com>
+>     vmxnet3: correctly report csum_level for encapsulated packet
+>
+> Antoine Tenart <atenart@kernel.org>
+>     net: vrf: determine the dst using the original ifindex for multicast
+>
+> Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+>     ice: xsk: do not use xdp_return_frame() on tx_buf->raw_buf
+>
+> Pablo Neira Ayuso <pablo@netfilter.org>
+>     netfilter: nf_tables: perform type checking for existing sets
+>
+> Pablo Neira Ayuso <pablo@netfilter.org>
+>     netfilter: nf_tables: add function to create set stateful expressions
+>
+> Pablo Neira Ayuso <pablo@netfilter.org>
+>     netfilter: nf_tables: consolidate set description
+>
+> Steven Price <steven.price@arm.com>
+>     drm/panfrost: Fix GEM handle creation ref-counting
+>
+> Jakub Kicinski <kuba@kernel.org>
+>     bpf: pull before calling skb_postpull_rcsum()
+>
+> Arnd Bergmann <arnd@arndb.de>
+>     wifi: ath9k: use proper statements in conditionals
+>
+> minoura makoto <minoura@valinux.co.jp>
+>     SUNRPC: ensure the matching upcall is in-flight upon downcall
+>
+> Sasha Levin <sashal@kernel.org>
+>     btrfs: fix an error handling path in btrfs_defrag_leaves()
+>
+> Johan Hovold <johan+linaro@kernel.org>
+>     phy: qcom-qmp-combo: fix broken power on
+>
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>     perf probe: Fix to get the DW_AT_decl_file and DW_AT_call_file as uns=
+inged data
+>
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>     perf probe: Use dwarf_attr_integrate as generic DWARF attr accessor
+>
+> Qu Wenruo <wqu@suse.com>
+>     btrfs: fix compat_ro checks against remount
+>
+> Filipe Manana <fdmanana@suse.com>
+>     btrfs: fix off-by-one in delalloc search during lseek
+>
+> Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>     usb: dwc3: gadget: Ignore End Transfer delay on teardown
+>
+> Shyam Prasad N <sprasad@microsoft.com>
+>     cifs: refcount only the selected iface during interface update
+>
+> Shyam Prasad N <sprasad@microsoft.com>
+>     cifs: fix interface count calculation during refresh
+>
+> Sasha Levin <sashal@kernel.org>
+>     btrfs: replace strncpy() with strscpy()
+>
+> Jens Axboe <axboe@kernel.dk>
+>     ARM: renumber bits related to _TIF_WORK_MASK
+>
+>
+> -------------
+>
+> Diffstat:
+>
+>  Makefile                                           |   4 +-
+>  arch/arm/include/asm/thread_info.h                 |  13 +-
+>  arch/mips/ralink/of.c                              |   2 +-
+>  arch/riscv/include/asm/uaccess.h                   |   2 +-
+>  arch/riscv/kernel/probes/simulate-insn.h           |   4 +-
+>  arch/x86/kernel/cpu/bugs.c                         |   2 +
+>  arch/x86/kernel/crash.c                            |   4 +-
+>  block/blk-merge.c                                  |  10 +
+>  drivers/acpi/acpi_video.c                          |  17 +-
+>  drivers/block/ublk_drv.c                           |   3 +
+>  drivers/block/virtio_blk.c                         |  33 +--
+>  drivers/char/tpm/tpm-interface.c                   |   4 +-
+>  .../crypto/virtio/virtio_crypto_skcipher_algs.c    |   3 +-
+>  drivers/firmware/efi/efi.c                         |   4 +-
+>  drivers/firmware/efi/libstub/efistub.h             |   2 +
+>  drivers/firmware/efi/libstub/random.c              |  42 +++-
+>  drivers/gpio/gpio-pca953x.c                        |   3 +
+>  drivers/gpio/gpio-sifive.c                         |   1 +
+>  drivers/gpu/drm/amd/amdgpu/amdgpu.h                |   1 +
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.h         |   4 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c   |  39 ++-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |  27 +++
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |  19 +-
+>  drivers/gpu/drm/amd/amdkfd/kfd_process.c           |  24 +-
+>  drivers/gpu/drm/amd/amdkfd/kfd_topology.c          |   2 +-
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  16 +-
+>  .../amd/display/dc/dml/dcn32/display_mode_vba_32.c |  39 +++
+>  .../dc/dml/dcn32/display_mode_vba_util_32.c        |  69 ++++++
+>  .../dc/dml/dcn32/display_mode_vba_util_32.h        |  18 ++
+>  .../gpu/drm/amd/display/dc/dml/display_mode_vba.h  |   2 +
+>  drivers/gpu/drm/i915/display/intel_dsi_vbt.c       |  94 +++++++-
+>  drivers/gpu/drm/i915/gvt/debugfs.c                 |  17 +-
+>  drivers/gpu/drm/i915/gvt/gtt.c                     |  17 +-
+>  drivers/gpu/drm/i915/gvt/scheduler.c               |   1 +
+>  drivers/gpu/drm/i915/i915_irq.c                    |   3 +
+>  drivers/gpu/drm/i915/i915_reg.h                    |   1 +
+>  drivers/gpu/drm/imx/ipuv3-plane.c                  |  14 +-
+>  drivers/gpu/drm/meson/meson_viu.c                  |   5 +-
+>  drivers/gpu/drm/panfrost/panfrost_drv.c            |  27 ++-
+>  drivers/gpu/drm/panfrost/panfrost_gem.c            |  16 +-
+>  drivers/gpu/drm/panfrost/panfrost_gem.h            |   5 +-
+>  drivers/gpu/drm/virtio/virtgpu_object.c            |   6 +-
+>  drivers/infiniband/hw/mlx5/counters.c              |   6 +-
+>  drivers/infiniband/hw/mlx5/qp.c                    |  49 ++--
+>  drivers/net/bonding/bond_3ad.c                     |   1 +
+>  drivers/net/bonding/bond_main.c                    |   8 +-
+>  drivers/net/dsa/mv88e6xxx/Kconfig                  |   4 +-
+>  drivers/net/dsa/qca/qca8k-8xxx.c                   | 106 ++++-----
+>  drivers/net/dsa/qca/qca8k.h                        |   5 -
+>  drivers/net/ethernet/amazon/ena/ena_com.c          |  29 +--
+>  drivers/net/ethernet/amazon/ena/ena_ethtool.c      |   6 +-
+>  drivers/net/ethernet/amazon/ena/ena_netdev.c       |  83 +++++--
+>  drivers/net/ethernet/amazon/ena/ena_netdev.h       |  17 +-
+>  drivers/net/ethernet/amd/xgbe/xgbe-drv.c           |   3 +
+>  drivers/net/ethernet/amd/xgbe/xgbe-i2c.c           |   4 +-
+>  drivers/net/ethernet/amd/xgbe/xgbe-mdio.c          |   4 +-
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.c          |  22 +-
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.h          |  15 +-
+>  drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c      |  20 +-
+>  drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h      |   6 +-
+>  drivers/net/ethernet/hisilicon/hns3/hns3_enet.c    |  10 +-
+>  .../ethernet/hisilicon/hns3/hns3pf/hclge_main.c    | 132 +++++++----
+>  .../ethernet/hisilicon/hns3/hns3pf/hclge_main.h    |   7 +
+>  .../net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c |  71 +++++-
+>  .../ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c  |   3 +-
+>  drivers/net/ethernet/intel/ice/ice_xsk.c           |   2 +-
+>  .../ethernet/marvell/octeontx2/nic/otx2_common.c   |  30 ++-
+>  drivers/net/ethernet/mellanox/mlx5/core/devlink.c  |   4 +-
+>  .../ethernet/mellanox/mlx5/core/en/reporter_rx.c   |   6 +-
+>  drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c |   7 +-
+>  .../ethernet/mellanox/mlx5/core/en/tc_tun_encap.c  |   9 +-
+>  .../ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c |   5 +
+>  drivers/net/ethernet/mellanox/mlx5/core/en_main.c  |   2 +-
+>  .../mellanox/mlx5/core/esw/acl/egress_lgcy.c       |   7 +-
+>  .../mellanox/mlx5/core/esw/acl/ingress_lgcy.c      |  33 ++-
+>  drivers/net/ethernet/mellanox/mlx5/core/eswitch.c  |  30 ++-
+>  drivers/net/ethernet/mellanox/mlx5/core/eswitch.h  |   6 +
+>  drivers/net/ethernet/mellanox/mlx5/core/health.c   |   6 +
+>  .../net/ethernet/mellanox/mlx5/core/ipoib/ipoib.c  |   4 +
+>  drivers/net/ethernet/mellanox/mlx5/core/lag/lag.c  |   1 +
+>  drivers/net/ethernet/mellanox/mlx5/core/main.c     |   4 +-
+>  .../net/ethernet/microchip/lan966x/lan966x_port.c  |   2 +-
+>  .../net/ethernet/microchip/sparx5/sparx5_main.c    |   2 +-
+>  drivers/net/ethernet/qlogic/qed/qed_debug.c        |  28 ++-
+>  .../net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c  |   8 +-
+>  drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h    |  10 +-
+>  drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c   |   8 +-
+>  drivers/net/phy/xilinx_gmii2rgmii.c                |   1 +
+>  drivers/net/usb/rndis_host.c                       |   3 +-
+>  drivers/net/veth.c                                 |   5 +-
+>  drivers/net/vmxnet3/vmxnet3_drv.c                  |   8 +
+>  drivers/net/vrf.c                                  |   6 +-
+>  drivers/net/vxlan/vxlan_core.c                     |  19 +-
+>  drivers/net/wireless/ath/ath11k/qmi.c              |   3 +
+>  drivers/net/wireless/ath/ath9k/htc.h               |  14 +-
+>  drivers/nvme/host/core.c                           |  32 ++-
+>  drivers/nvme/host/nvme.h                           |   2 +-
+>  drivers/nvme/target/admin-cmd.c                    |  35 +--
+>  drivers/of/fdt.c                                   |   6 +-
+>  drivers/phy/qualcomm/phy-qcom-qmp-combo.c          |  20 +-
+>  .../intel/int340x_thermal/processor_thermal_rfim.c |   4 +
+>  drivers/usb/dwc3/dwc3-xilinx.c                     |   1 +
+>  drivers/usb/dwc3/gadget.c                          |   5 +-
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c                  |  10 +-
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c                   |   7 +-
+>  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c               |   4 +-
+>  drivers/vdpa/vdpa_sim/vdpa_sim_net.c               |   4 +-
+>  drivers/vdpa/virtio_pci/vp_vdpa.c                  |   2 +-
+>  drivers/vhost/vdpa.c                               |  52 ++--
+>  drivers/vhost/vhost.c                              |   4 +-
+>  drivers/vhost/vringh.c                             |   5 +-
+>  drivers/vhost/vsock.c                              |   9 +-
+>  drivers/video/fbdev/matrox/matroxfb_base.c         |   4 +-
+>  fs/btrfs/disk-io.c                                 |   8 +-
+>  fs/btrfs/disk-io.h                                 |   2 +-
+>  fs/btrfs/extent-io-tree.c                          |   2 +-
+>  fs/btrfs/extent_io.c                               |  11 +-
+>  fs/btrfs/file.c                                    |   2 +-
+>  fs/btrfs/ioctl.c                                   |   9 +-
+>  fs/btrfs/rcu-string.h                              |   6 +-
+>  fs/btrfs/super.c                                   |   2 +-
+>  fs/btrfs/tree-defrag.c                             |   6 +-
+>  fs/ceph/caps.c                                     |   2 +-
+>  fs/ceph/locks.c                                    |   4 -
+>  fs/ceph/super.h                                    |   1 -
+>  fs/cifs/sess.c                                     |   3 +-
+>  fs/cifs/smb2ops.c                                  |   3 +-
+>  fs/hfs/inode.c                                     |  15 +-
+>  fs/ksmbd/auth.c                                    |   3 +-
+>  fs/ksmbd/connection.c                              |   7 +-
+>  fs/ksmbd/smb2pdu.c                                 |   7 +-
+>  fs/ksmbd/transport_tcp.c                           |   5 +-
+>  fs/locks.c                                         |  23 ++
+>  fs/nfsd/nfs4xdr.c                                  |  11 +
+>  fs/nfsd/nfssvc.c                                   |   2 +-
+>  fs/ntfs3/file.c                                    |   4 +-
+>  fs/udf/inode.c                                     |   2 +-
+>  include/acpi/video.h                               |   2 +
+>  include/drm/drm_plane_helper.h                     |   1 +
+>  include/linux/dsa/tag_qca.h                        |   4 +-
+>  include/linux/efi.h                                |   2 -
+>  include/linux/fs.h                                 |   6 +
+>  include/linux/mlx5/device.h                        |   5 +
+>  include/linux/mlx5/mlx5_ifc.h                      |   3 +-
+>  include/linux/netfilter/ipset/ip_set.h             |   2 +-
+>  include/linux/sunrpc/rpc_pipe_fs.h                 |   5 +
+>  include/net/inet_hashtables.h                      |   4 +
+>  include/net/inet_timewait_sock.h                   |   5 +
+>  include/net/netfilter/nf_tables.h                  |  25 +-
+>  io_uring/cancel.c                                  |   9 +-
+>  io_uring/io_uring.c                                |  19 +-
+>  kernel/bpf/trampoline.c                            |   4 +
+>  kernel/bpf/verifier.c                              |  12 +-
+>  lib/kunit/string-stream.c                          |   4 +-
+>  net/9p/client.c                                    |  15 +-
+>  net/9p/trans_fd.c                                  |  12 +-
+>  net/9p/trans_rdma.c                                |   4 +-
+>  net/9p/trans_virtio.c                              |   9 +-
+>  net/9p/trans_xen.c                                 |   4 +-
+>  net/caif/cfctrl.c                                  |   6 +-
+>  net/core/filter.c                                  |   7 +-
+>  net/ipv4/inet_connection_sock.c                    |  40 +++-
+>  net/ipv4/inet_hashtables.c                         |   8 +-
+>  net/ipv4/inet_timewait_sock.c                      |  31 ++-
+>  net/ipv4/tcp_ulp.c                                 |   4 +
+>  net/mptcp/protocol.c                               |  20 +-
+>  net/mptcp/protocol.h                               |   4 +-
+>  net/mptcp/subflow.c                                |  19 +-
+>  net/netfilter/ipset/ip_set_core.c                  |   7 +-
+>  net/netfilter/ipset/ip_set_hash_ip.c               |  14 +-
+>  net/netfilter/ipset/ip_set_hash_ipmark.c           |  13 +-
+>  net/netfilter/ipset/ip_set_hash_ipport.c           |  13 +-
+>  net/netfilter/ipset/ip_set_hash_ipportip.c         |  13 +-
+>  net/netfilter/ipset/ip_set_hash_ipportnet.c        |  13 +-
+>  net/netfilter/ipset/ip_set_hash_net.c              |  17 +-
+>  net/netfilter/ipset/ip_set_hash_netiface.c         |  15 +-
+>  net/netfilter/ipset/ip_set_hash_netnet.c           |  23 +-
+>  net/netfilter/ipset/ip_set_hash_netport.c          |  19 +-
+>  net/netfilter/ipset/ip_set_hash_netportnet.c       |  40 ++--
+>  net/netfilter/nf_tables_api.c                      | 261 ++++++++++++++-=
+------
+>  net/nfc/netlink.c                                  |  52 ++--
+>  net/sched/cls_tcindex.c                            |  12 +-
+>  net/sched/sch_atm.c                                |   5 +-
+>  net/sched/sch_cbq.c                                |   4 +-
+>  net/sunrpc/auth_gss/auth_gss.c                     |  19 +-
+>  sound/soc/intel/boards/bytcr_rt5640.c              |  15 ++
+>  sound/soc/sof/core.c                               |   9 -
+>  sound/soc/sof/intel/hda-dsp.c                      |  72 ++++++
+>  sound/soc/sof/intel/hda.h                          |   1 +
+>  sound/soc/sof/intel/tgl.c                          |   2 +-
+>  sound/soc/sof/mediatek/mtk-adsp-common.c           |   2 +-
+>  tools/perf/builtin-lock.c                          |   2 +
+>  tools/perf/util/bpf_counter_cgroup.c               |  14 +-
+>  tools/perf/util/cgroup.c                           |  23 +-
+>  tools/perf/util/data.c                             |   2 +
+>  tools/perf/util/dwarf-aux.c                        |  23 +-
+>  .../selftests/net/arp_ndisc_evict_nocarrier.sh     |  15 +-
+>  197 files changed, 1988 insertions(+), 876 deletions(-)
+>
+>
