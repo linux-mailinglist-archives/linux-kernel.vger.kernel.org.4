@@ -2,79 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9364665AE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B913F665AE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233530AbjAKL7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
+        id S238706AbjAKL7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbjAKL6i (ORCPT
+        with ESMTP id S238887AbjAKL6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:58:38 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D01E0C0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:54:14 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id s22so15758021ljp.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:54:14 -0800 (PST)
+        Wed, 11 Jan 2023 06:58:42 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606C7FAD1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:54:35 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id a184so11206510pfa.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:54:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=87amYxxjuw2O3A5AUaxxYDc2vtYs2lif6mU7sZ39bg0=;
-        b=ZBXYSTrciQf8pT0kv7SCuxtJTnSOLrZ61DKbNQV+VumC0PIwmvY5G5LwU6PJOWiXhg
-         PAa2JbHrQ/VD7isf2LOZpAIh8k1Bb25MObE3qgDtw7NoZQGh/aqL+GV2Jr3FraldTufG
-         ZBrmHvfAaVAWVWOaK1sR+IZfieciD9Lgr/7fgH8hu/ysTk9SI04vjvhTFfTbP3+Fl/cW
-         0bklrPrswxf28r2MroubKCXON7dtwtZt7f+UE2qN9+cTsEVn9T84Lw+C9I1E2Tc7I5Y5
-         lJydHpX6EddBk9FjGZrt9V4Xa26ylwTo2zWwT/2PRmHFrLagy0CxdSWVgtPqtOV2yYb0
-         Ezcg==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tuGrfA5ZoduC+U+/Dzm1vbrMa/DrUpFo/Mb/KBOiJyM=;
+        b=sOllFDqSKsIoThCO+osFfVByaPssK7iEgoU4esNxabUirE3T+YG56eghykRrD2xDa5
+         q1tjRUhN9ty6cOd7Oniuf4yIqhQj91RrpiIey7LXJtyAwufTMdEU/KYoA17FwvqbYPHT
+         tLGcXeUONqUkwEwOk0qbOLJu3c47ogLOIkDaXI3mdc7je6OByPPA3b4VCbmGVxS7WiVS
+         4qLD1WewLDU+YQM4XRy9nk54RNun9OCu8N1/dFroexPbPNBSMoSdKerJB0YNka0I/The
+         y7TNmG/hFsgaTr6ycQh0pa+nlTJpGt8q7OOHSj5g15DYbCbIGV3phMuIRPE8GpRuKOHq
+         zS7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=87amYxxjuw2O3A5AUaxxYDc2vtYs2lif6mU7sZ39bg0=;
-        b=Hv0oJK4PvXhpzZ3rwHJmy7EqTltTeaZ0rcqNretfaOQyWAhOKwawS91CCPy0nbPL4b
-         jus0XD7jEDplNkI5wsnJNH9kQlqcvFIRA0zzCkSKpmWryuchryVLtNTnAxAabB7it16q
-         /N2K5e8pOrB9JUoZO3ndB3ysqyYVERu2aHYl/7RPdodHwBBv/o/SHg4jpa2a6wSQOVzD
-         tNekjki04UytHBR3j6nqXwAbL68Bcgfe+Gv0VAAv1LCoa/3Robr6h/vbU+/9SyUviVky
-         1mGoUACk6PyRBbu2VBbAlttXcI/MH9VMube+cjWJDtaVWRMwonTZXaS1RlqDul4aIbhL
-         6gdQ==
-X-Gm-Message-State: AFqh2kqzD44tSfgR8ELcXmqEkXsvOr15rRGPY+37F1sjVo+Du1eNVTrB
-        /7N98wyCNDxZdCumGI/ncg1JD5IBIdsugf7W
-X-Google-Smtp-Source: AMrXdXu9cjTTlZKrBOV+brVcyFOQTawCq5l05CxPSgUhMLwjlEGzn8V8Dt/S7SnzqZIrBxXAMzzIGQ==
-X-Received: by 2002:a05:651c:301:b0:27f:d652:f397 with SMTP id a1-20020a05651c030100b0027fd652f397mr10855210ljp.34.1673438052926;
-        Wed, 11 Jan 2023 03:54:12 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id 13-20020a05651c128d00b00285ac292d58sm1039067ljc.80.2023.01.11.03.54.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 03:54:11 -0800 (PST)
-Message-ID: <33218f23-93b7-2500-271b-0e57962637c4@linaro.org>
-Date:   Wed, 11 Jan 2023 12:54:09 +0100
+        bh=tuGrfA5ZoduC+U+/Dzm1vbrMa/DrUpFo/Mb/KBOiJyM=;
+        b=M9422tlwNTt3Se0vbXnaBscAcDmHtjxu4w2AEWvUdX3+GH6jEtDXwf4yqJZCukx2UY
+         aP7EQddFbb8PVAVHSOHyPybr879sQjZVQDM7jNI7yv9gvdzis2SEnYjtqFgjw502OeJ1
+         /6ZPxWxRCuFfUw81heYn72cpTNO1D3IQtR9SUC0kOW6Au43/dmV1YEPwpkEfDSE/I0C/
+         7QBsvYzDv7+mZUQ+xEcThCV7pdColGZwQ1ipbUAesxsgGmio4zAZ8aQUlZICQr/O6RJA
+         xz1DfRCxHoaLpQAfjM9y/AOAqririubwc3vrWNTuulKs3i4JdX9cT8dXfhR3cu7b17j/
+         uBXQ==
+X-Gm-Message-State: AFqh2kpsEa7gKL1RKSJT6SfVYpVT4z6dSc5X6D46JAF4TxtqgEcnAO9F
+        RGPZ7erpgLtByx8rUNR7qh2t
+X-Google-Smtp-Source: AMrXdXuY9rd2COIMugVCP6lJlrYfIZlsthTobcvWr8ibx9VwPpGiaIJ8pVuZWWivHpqXmFj28CQEKw==
+X-Received: by 2002:a62:6001:0:b0:582:33b4:4c57 with SMTP id u1-20020a626001000000b0058233b44c57mr1981705pfb.33.1673438074810;
+        Wed, 11 Jan 2023 03:54:34 -0800 (PST)
+Received: from thinkpad ([117.217.177.1])
+        by smtp.gmail.com with ESMTPSA id g28-20020aa79ddc000000b00575b6d7c458sm9853146pfq.21.2023.01.11.03.54.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 03:54:33 -0800 (PST)
+Date:   Wed, 11 Jan 2023 17:24:22 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, konrad.dybcio@somainline.org,
+        amit.pundir@linaro.org, regressions@leemhuis.info,
+        sumit.semwal@linaro.org, will@kernel.org, catalin.marinas@arm.com,
+        robin.murphy@arm.com
+Subject: Re: [PATCH V3 05/10] remoteproc: qcom_q6v5_mss: Use a carveout to
+ authenticate modem headers
+Message-ID: <20230111115422.GD4873@thinkpad>
+References: <20230111114337.24782-1-quic_sibis@quicinc.com>
+ <20230111114337.24782-6-quic_sibis@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sa8450p-pmics: rename pmic labels
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Eric Chanudet <echanude@redhat.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230111082331.20641-1-johan+linaro@kernel.org>
- <20230111082331.20641-3-johan+linaro@kernel.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230111082331.20641-3-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230111114337.24782-6-quic_sibis@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,104 +80,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11.01.2023 09:23, Johan Hovold wrote:
-> The SA8540P PMICs are named PMM8540. Rename the devicetree source labels
-> to reflect this.
+On Wed, Jan 11, 2023 at 05:13:32PM +0530, Sibi Sankar wrote:
+> Any access to the dynamically allocated metadata region by the application
+> processor after assigning it to the remote Q6 will result in a XPU
+> violation. Fix this by replacing the dynamically allocated memory region
+> with a no-map carveout and unmap the modem metadata memory region before
+> passing control to the remote Q6.
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Reported-and-tested-by: Amit Pundir <amit.pundir@linaro.org>
+> Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for mem ownership switch")
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  arch/arm64/boot/dts/qcom/sa8540p-pmics.dtsi | 24 ++++++++++-----------
->  1 file changed, 12 insertions(+), 12 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8540p-pmics.dtsi
-> index 8c393f0bd6a8..1221be89b3de 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8540p-pmics.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8540p-pmics.dtsi
-> @@ -8,7 +8,7 @@
->  #include <dt-bindings/spmi/spmi.h>
+> v3:
+>  * Drop revert no_kernel_mapping since it's already on the list [Mani]
+
+I thought you are going to include Christoph's patch into your series. That way
+all the patches will be in the same series, makig life easier for Bjorn.
+
+Thanks,
+Mani
+
+>  * kfree metadata from the branch for parity
+> 
+>  drivers/remoteproc/qcom_q6v5_mss.c | 48 ++++++++++++++++++++++++++----
+>  1 file changed, 42 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+> index e2f765f87ec9..e25d44e20ae7 100644
+> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> @@ -215,6 +215,7 @@ struct q6v5 {
+>  	size_t mba_size;
+>  	size_t dp_size;
 >  
->  &spmi_bus {
-> -	pm8450a: pmic@0 {
-> +	pmm8540a: pmic@0 {
->  		compatible = "qcom,pm8150", "qcom,spmi-pmic";
->  		reg = <0x0 SPMI_USID>;
->  		#address-cells = <1>;
-> @@ -22,62 +22,62 @@ rtc@6000 {
->  			wakeup-source;
->  		};
+> +	phys_addr_t mdata_phys;
+>  	phys_addr_t mpss_phys;
+>  	phys_addr_t mpss_reloc;
+>  	size_t mpss_size;
+> @@ -973,15 +974,29 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>  	if (IS_ERR(metadata))
+>  		return PTR_ERR(metadata);
 >  
-> -		pm8450a_gpios: gpio@c000 {
-> +		pmm8540a_gpios: gpio@c000 {
->  			compatible = "qcom,pm8150-gpio", "qcom,spmi-gpio";
->  			reg = <0xc000>;
->  			gpio-controller;
-> -			gpio-ranges = <&pm8450a_gpios 0 0 10>;
-> +			gpio-ranges = <&pmm8540a_gpios 0 0 10>;
->  			#gpio-cells = <2>;
->  			interrupt-controller;
->  			#interrupt-cells = <2>;
->  		};
->  	};
+> -	ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+> -	if (!ptr) {
+> -		kfree(metadata);
+> -		dev_err(qproc->dev, "failed to allocate mdt buffer\n");
+> -		return -ENOMEM;
+> +	if (qproc->mdata_phys) {
+> +		phys = qproc->mdata_phys;
+> +		ptr = memremap(qproc->mdata_phys, size, MEMREMAP_WC);
+> +		if (!ptr) {
+> +			kfree(metadata);
+> +			dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n",
+> +				&qproc->mdata_phys, size);
+> +			return -EBUSY;
+> +		}
+> +	} else {
+> +		ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+> +		if (!ptr) {
+> +			kfree(metadata);
+> +			dev_err(qproc->dev, "failed to allocate mdt buffer\n");
+> +			return -ENOMEM;
+> +		}
+>  	}
 >  
-> -	pm8450c: pmic@4 {
-> +	pmm8540c: pmic@4 {
->  		compatible = "qcom,pm8150", "qcom,spmi-pmic";
->  		reg = <0x4 SPMI_USID>;
->  		#address-cells = <1>;
->  		#size-cells = <0>;
+>  	memcpy(ptr, metadata, size);
 >  
-> -		pm8450c_gpios: gpio@c000 {
-> +		pmm8540c_gpios: gpio@c000 {
->  			compatible = "qcom,pm8150-gpio", "qcom,spmi-gpio";
->  			reg = <0xc000>;
->  			gpio-controller;
-> -			gpio-ranges = <&pm8450c_gpios 0 0 10>;
-> +			gpio-ranges = <&pmm8540c_gpios 0 0 10>;
->  			#gpio-cells = <2>;
->  			interrupt-controller;
->  			#interrupt-cells = <2>;
->  		};
->  	};
+> +	if (qproc->mdata_phys)
+> +		memunmap(ptr);
+> +
+>  	/* Hypervisor mapping to access metadata by modem */
+>  	mdata_perm = BIT(QCOM_SCM_VMID_HLOS);
+>  	ret = q6v5_xfer_mem_ownership(qproc, &mdata_perm, false, true,
+> @@ -1010,7 +1025,8 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>  			 "mdt buffer not reclaimed system may become unstable\n");
 >  
-> -	pm8450e: pmic@8 {
-> +	pmm8540e: pmic@8 {
->  		compatible = "qcom,pm8150", "qcom,spmi-pmic";
->  		reg = <0x8 SPMI_USID>;
->  		#address-cells = <1>;
->  		#size-cells = <0>;
+>  free_dma_attrs:
+> -	dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
+> +	if (!qproc->mdata_phys)
+> +		dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
+>  	kfree(metadata);
 >  
-> -		pm8450e_gpios: gpio@c000 {
-> +		pmm8540e_gpios: gpio@c000 {
->  			compatible = "qcom,pm8150-gpio", "qcom,spmi-gpio";
->  			reg = <0xc000>;
->  			gpio-controller;
-> -			gpio-ranges = <&pm8450e_gpios 0 0 10>;
-> +			gpio-ranges = <&pmm8540e_gpios 0 0 10>;
->  			#gpio-cells = <2>;
->  			interrupt-controller;
->  			#interrupt-cells = <2>;
->  		};
->  	};
+>  	return ret < 0 ? ret : 0;
+> @@ -1893,6 +1909,26 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
+>  	qproc->mpss_phys = qproc->mpss_reloc = r.start;
+>  	qproc->mpss_size = resource_size(&r);
 >  
-> -	pm8450g: pmic@c {
-> +	pmm8540g: pmic@c {
->  		compatible = "qcom,pm8150", "qcom,spmi-pmic";
->  		reg = <0xc SPMI_USID>;
->  		#address-cells = <1>;
->  		#size-cells = <0>;
+> +	if (!child) {
+> +		node = of_parse_phandle(qproc->dev->of_node, "memory-region", 2);
+> +	} else {
+> +		child = of_get_child_by_name(qproc->dev->of_node, "metadata");
+> +		node = of_parse_phandle(child, "memory-region", 0);
+> +		of_node_put(child);
+> +	}
+> +
+> +	if (!node)
+> +		return 0;
+> +
+> +	ret = of_address_to_resource(node, 0, &r);
+> +	of_node_put(node);
+> +	if (ret) {
+> +		dev_err(qproc->dev, "unable to resolve metadata region\n");
+> +		return ret;
+> +	}
+> +
+> +	qproc->mdata_phys = r.start;
+> +
+>  	return 0;
+>  }
 >  
-> -		pm8450g_gpios: gpio@c000 {
-> +		pmm8540g_gpios: gpio@c000 {
->  			compatible = "qcom,pm8150-gpio", "qcom,spmi-gpio";
->  			reg = <0xc000>;
->  			gpio-controller;
-> -			gpio-ranges = <&pm8450g_gpios 0 0 10>;
-> +			gpio-ranges = <&pmm8540g_gpios 0 0 10>;
->  			#gpio-cells = <2>;
->  			interrupt-controller;
->  			#interrupt-cells = <2>;
+> -- 
+> 2.17.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
