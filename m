@@ -2,116 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711A86659ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBA06659F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjAKLVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:21:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S231766AbjAKLYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:24:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232689AbjAKLUi (ORCPT
+        with ESMTP id S232077AbjAKLXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:20:38 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1EFFCC7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:20:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7y4EmNEiB7ucd21p81UzRMuWcGhP/yt/VrhwL2DWDCA=; b=osDX42GXI2c4zukGXf2B5XGfPH
-        z1o0lu/SaLv+XVVg284I7ea4pyFWcT5w135ZtVK14FWediB+MueeCbWaKx4uOo94SmEB9YP/jJJoJ
-        poWVodQOYdW8K8NJVNJnMHDiqR4MCd1XdZ3FQCIegYsjeYOwNCIuy9QUNJX4nRXHESSd6QddmjkbK
-        CmXdiPWzE2QGO+veqy9gpiJUIfyTmtmY9igH+FhW2GAIB2qOP1L9IiXgQLHH1wUt/mjk/T61j0UKu
-        bK1TlD/HXs/0sNmZp/EWhPROtYK4Jh30cY8DMuUcUcxCpYoJ0lR5qda9tFGeDCvo4iZFKB1JgULm/
-        QOSDN/kA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pFZ9h-00455s-IA; Wed, 11 Jan 2023 11:20:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B97BF3001F7;
-        Wed, 11 Jan 2023 12:20:14 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 82AF3201ABB7D; Wed, 11 Jan 2023 12:20:14 +0100 (CET)
-Date:   Wed, 11 Jan 2023 12:20:14 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Joan Bruguera <joanbrugueram@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Juergen Gross <jgross@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: Wake-up from suspend to RAM broken under `retbleed=stuff`
-Message-ID: <Y76bbtJn+jIV3pOz@hirez.programming.kicks-ass.net>
-References: <20230108030748.158120-1-joanbrugueram@gmail.com>
- <20230109040531.7888-1-joanbrugueram@gmail.com>
+        Wed, 11 Jan 2023 06:23:37 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7752FB
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:23:35 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so19664565pjk.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:23:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NdOgn1yCYJAyY06Gupgzi8+hM+Xp+RpyK1OnwHdM6Og=;
+        b=vy3Yu4DtcL96gccpDy/joOJ/lLj+h1IShOJMXAy1yh/hO/NvznzlkNUxewqnzk9VkW
+         EMHlz6Rr6/ILIwne8BiEO8wFVCh49WEfMwvvYp/5XskhLwbN6wig2ngBuf58jE6EfgdZ
+         rs++Kj55GRKD7q5G6x4vW8bPon5PkcE8yraczc8svUxhl4DlXy943PAOBRQ0XIeg64G9
+         48l44Jvluszb6Wq4uEhvg63Ly3FFJIkbB2+toC1JWE2Fqx52HpthyXA3yYW/ohMoQXlv
+         Zlu12NiFaRumyTHQTikCImxBRHtL2kxxL3JsmNbg9c8SY9ejUkTOOc/9aPScHxdIY0VY
+         LHVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NdOgn1yCYJAyY06Gupgzi8+hM+Xp+RpyK1OnwHdM6Og=;
+        b=sVlHFE6lG26FdUoQZegEqnI6KHjgVJZXE52oEOOEaT1n7crBOP/p1ROQgNGgVVFL1U
+         NB/rgDbBjDNS8D0T74xduBJhJSpyE6hNtAyn7wOkYCRaEMg6kIbJtpTjleyiLXnrkweG
+         WkH6lBijw/YTS90KUj7OnoM+YOeHdXvVJcFz1zdENZNg9seWoQjmYb9RfszT5xYdnr9B
+         oXWCksCcvspBEaKk2ubEx5jl1MV4ZPQSS0b84t8RZgMC+4TeCFuZKJUdOIJ8Wa1Y6xNZ
+         E8GNk/gPOMUuMiRaW9mkxQ8yKiopUJyLYA3wdT5LU8vrI2yEj/oArhX7NSTLjxffBAI3
+         64PQ==
+X-Gm-Message-State: AFqh2krj5JQusysDMJeelJV9IqJkTJ5v4xa6XNLbgZ5RAjtVFOMuc4t+
+        CnJ7aiLb5VTSGDQxzqQPfyAe
+X-Google-Smtp-Source: AMrXdXsjMOamYa8/f02u2xtM4J9oNufkjaCTGrGv0jSv1qMVhosBp/2ZhTx8Haic2yN1xI8jYctqfg==
+X-Received: by 2002:a17:903:3286:b0:193:1952:5a45 with SMTP id jh6-20020a170903328600b0019319525a45mr5187962plb.19.1673436214834;
+        Wed, 11 Jan 2023 03:23:34 -0800 (PST)
+Received: from thinkpad ([117.217.177.1])
+        by smtp.gmail.com with ESMTPSA id jg7-20020a17090326c700b0019324fbec59sm7633311plb.41.2023.01.11.03.23.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 03:23:33 -0800 (PST)
+Date:   Wed, 11 Jan 2023 16:53:24 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, robin.murphy@arm.com, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        amit.pundir@linaro.org, regressions@leemhuis.info,
+        sumit.semwal@linaro.org, will@kernel.org, catalin.marinas@arm.com
+Subject: Re: [PATCH V2 06/11] remoteproc: qcom_q6v5_mss: Use a carveout to
+ authenticate modem headers
+Message-ID: <20230111112324.GA4873@thinkpad>
+References: <20230109034843.23759-1-quic_sibis@quicinc.com>
+ <20230109034843.23759-7-quic_sibis@quicinc.com>
+ <20230109083231.GB4966@thinkpad>
+ <7552f8a1-9503-de7c-a6d4-46452ef78ece@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230109040531.7888-1-joanbrugueram@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7552f8a1-9503-de7c-a6d4-46452ef78ece@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 04:05:31AM +0000, Joan Bruguera wrote:
-> This fixes wakeup for me on both QEMU and real HW
-> (just a proof of concept, don't merge)
+On Mon, Jan 09, 2023 at 03:35:31PM +0530, Sibi Sankar wrote:
+> Hey Mani,
 > 
-> diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
-> index ffea98f9064b..8704bcc0ce32 100644
-> --- a/arch/x86/kernel/callthunks.c
-> +++ b/arch/x86/kernel/callthunks.c
-> @@ -7,6 +7,7 @@
->  #include <linux/memory.h>
->  #include <linux/moduleloader.h>
->  #include <linux/static_call.h>
-> +#include <linux/suspend.h>
->  
->  #include <asm/alternative.h>
->  #include <asm/asm-offsets.h>
-> @@ -150,6 +151,10 @@ static bool skip_addr(void *dest)
->  	if (dest >= (void *)hypercall_page &&
->  	    dest < (void*)hypercall_page + PAGE_SIZE)
->  		return true;
-> +#endif
-> +#ifdef CONFIG_PM_SLEEP
-> +	if (dest == restore_processor_state)
-> +		return true;
->  #endif
->  	return false;
->  }
-> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-> index 236447ee9beb..e667894936f7 100644
-> --- a/arch/x86/power/cpu.c
-> +++ b/arch/x86/power/cpu.c
-> @@ -281,6 +281,9 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
->  /* Needed by apm.c */
->  void notrace restore_processor_state(void)
->  {
-> +	/* Restore GS before calling anything to avoid crash on call depth accounting */
-> +	native_wrmsrl(MSR_GS_BASE, saved_context.kernelmode_gs_base);
-> +
->  	__restore_processor_state(&saved_context);
->  }
+> On 1/9/23 14:02, Manivannan Sadhasivam wrote:
+> > On Mon, Jan 09, 2023 at 09:18:38AM +0530, Sibi Sankar wrote:
+> > > Any access to the dynamically allocated metadata region by the application
+> > > processor after assigning it to the remote Q6 will result in a XPU
+> > > violation. Fix this by replacing the dynamically allocated memory region
+> > > with a no-map carveout and unmap the modem metadata memory region before
+> > > passing control to the remote Q6.
+> > > 
+> > > Reported-and-tested-by: Amit Pundir <amit.pundir@linaro.org>
+> > > Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for mem ownership switch")
+> > > Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> > > ---
+> > > 
+> > > v2:
+> > >   * Revert no_kernel_mapping [Mani/Robin]
+> > > 
+> > >   drivers/remoteproc/qcom_q6v5_mss.c | 48 ++++++++++++++++++++++++++----
+> > >   1 file changed, 42 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+> > > index e2f765f87ec9..b7a158751cef 100644
+> > > --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> > > +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> > > @@ -215,6 +215,7 @@ struct q6v5 {
+> > >   	size_t mba_size;
+> > >   	size_t dp_size;
+> > > +	phys_addr_t mdata_phys;
+> > >   	phys_addr_t mpss_phys;
+> > >   	phys_addr_t mpss_reloc;
+> > >   	size_t mpss_size;
+> > > @@ -973,15 +974,29 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+> > >   	if (IS_ERR(metadata))
+> > >   		return PTR_ERR(metadata);
+> > > -	ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+> > > -	if (!ptr) {
+> > > -		kfree(metadata);
+> > > -		dev_err(qproc->dev, "failed to allocate mdt buffer\n");
+> > > -		return -ENOMEM;
+> > > +	if (qproc->mdata_phys) {
+> > > +		phys = qproc->mdata_phys;
+> > > +		ptr = memremap(qproc->mdata_phys, size, MEMREMAP_WC);
+> > > +		if (!ptr) {
+> > > +			dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n",
+> > > +				&qproc->mdata_phys, size);
+> > > +			ret = -EBUSY;
+> > > +			goto free_dma_attrs;
+> > 
+> > There is no memory to free at this point.
+> 
+> we would just free the metadata in the no-map carveout scenario since
+> mdata_phys wouldn't be NULL. I can do a kfree(metadata) directly from
+> this branch and return as well if you think it makes things more
+> readable.
+> 
 
-Yeah, I can see why, but I'm not really comfortable with this. TBH, I
-don't see how the whole resume code is correct to begin with. At the
-very least it needs a heavy dose of noinstr.
+Oops, I missed that. But yeah it is confusing too with the current way of
+freeing metadata. I'd suggest using a separate label instead.
 
-Rafael, what cr3 is active when we call restore_processor_state()?
+Thanks,
+Mani
 
-Specifically, the problem is that I don't feel comfortable doing any
-sort of weird code until all the CR and segment registers have been
-restored, however, write_cr*() are paravirt functions that result in
-CALL, which then gives us a bit of a checken and egg problem.
+> > 
+> > Thanks,
+> > Mani
+> > 
+> > > +		}
+> > > +	} else {
+> > > +		ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+> > > +		if (!ptr) {
+> > > +			kfree(metadata);
+> > > +			dev_err(qproc->dev, "failed to allocate mdt buffer\n");
+> > > +			return -ENOMEM;
+> > > +		}
+> > >   	}
+> > >   	memcpy(ptr, metadata, size);
+> > > +	if (qproc->mdata_phys)
+> > > +		memunmap(ptr);
+> > > +
+> > >   	/* Hypervisor mapping to access metadata by modem */
+> > >   	mdata_perm = BIT(QCOM_SCM_VMID_HLOS);
+> > >   	ret = q6v5_xfer_mem_ownership(qproc, &mdata_perm, false, true,
+> > > @@ -1010,7 +1025,8 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+> > >   			 "mdt buffer not reclaimed system may become unstable\n");
+> > >   free_dma_attrs:
+> > > -	dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
+> > > +	if (!qproc->mdata_phys)
+> > > +		dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
+> > >   	kfree(metadata);
+> > >   	return ret < 0 ? ret : 0;
+> > > @@ -1893,6 +1909,26 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
+> > >   	qproc->mpss_phys = qproc->mpss_reloc = r.start;
+> > >   	qproc->mpss_size = resource_size(&r);
+> > > +	if (!child) {
+> > > +		node = of_parse_phandle(qproc->dev->of_node, "memory-region", 2);
+> > > +	} else {
+> > > +		child = of_get_child_by_name(qproc->dev->of_node, "metadata");
+> > > +		node = of_parse_phandle(child, "memory-region", 0);
+> > > +		of_node_put(child);
+> > > +	}
+> > > +
+> > > +	if (!node)
+> > > +		return 0;
+> > > +
+> > > +	ret = of_address_to_resource(node, 0, &r);
+> > > +	of_node_put(node);
+> > > +	if (ret) {
+> > > +		dev_err(qproc->dev, "unable to resolve metadata region\n");
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	qproc->mdata_phys = r.start;
+> > > +
+> > >   	return 0;
+> > >   }
+> > > -- 
+> > > 2.17.1
+> > > 
+> > 
 
-I'm also wondering how well retbleed=stuff works on Xen, if at all. If
-we can ignore Xen, things are a little earier perhaps.
+-- 
+மணிவண்ணன் சதாசிவம்
