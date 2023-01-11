@@ -2,148 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61606654DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 07:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AD16654BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 07:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbjAKGuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 01:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S231635AbjAKGkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 01:40:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235783AbjAKGtm (ORCPT
+        with ESMTP id S230522AbjAKGkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 01:49:42 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3564410FDD;
-        Tue, 10 Jan 2023 22:49:30 -0800 (PST)
-X-UUID: 176049ba917c11ed945fc101203acc17-20230111
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=YikO2rLCDulYaB/XHgOkJoUwL+d1QDp6nQB4HqkscJU=;
-        b=nQ7yCIi9DmKQ9YNjzUmnJdzUzpdDKXl+/OF4NjrNDhyNnrUbv8L+E6Yls68YSnFTnGlV7qOyuF+Wi8lDi3CPYiSVTFLi/nRLPmoqds19rsV1kwivX22hrLJuY68RmxXqC9f7Dko7i1G7jWY+cs8x33esDixqp+s3JicJaoJzm9M=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:05102e29-76ff-4b9c-bf6c-9e56d9f78b9c,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.17,REQID:05102e29-76ff-4b9c-bf6c-9e56d9f78b9c,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:543e81c,CLOUDID:e4b2ec8b-8530-4eff-9f77-222cf6e2895b,B
-        ulkID:230111144927FF2QD1BA,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0
-X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
-X-CID-BVR: 0
-X-UUID: 176049ba917c11ed945fc101203acc17-20230111
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 344695001; Wed, 11 Jan 2023 14:49:27 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 11 Jan 2023 14:49:26 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 11 Jan 2023 14:49:24 +0800
-From:   <yf.wang@mediatek.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:IOMMU DMA-API LAYER" <iommu@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-CC:     <wsd_upstream@mediatek.com>, <stable@vger.kernel.org>,
-        Libo Kang <Libo.Kang@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Ning Li <Ning.Li@mediatek.com>,
-        jianjiao zeng <jianjiao.zeng@mediatek.com>,
-        "Yunfei Wang" <yf.wang@mediatek.com>
-Subject: [PATCH v2] iommu/iova: Fix alloc iova overflows issue
-Date:   Wed, 11 Jan 2023 14:38:00 +0800
-Message-ID: <20230111063801.25107-1-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Wed, 11 Jan 2023 01:40:01 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B15E099
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 22:39:59 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VZM3vru_1673419196;
+Received: from 30.97.48.51(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VZM3vru_1673419196)
+          by smtp.aliyun-inc.com;
+          Wed, 11 Jan 2023 14:39:57 +0800
+Message-ID: <3c7c722d-e8d0-f52b-e0ea-7994bd6b55bb@linux.alibaba.com>
+Date:   Wed, 11 Jan 2023 14:40:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/5] mm: compaction: Remove redundant VM_BUG_ON() in
+ compact_zone()
+To:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <cover.1673342761.git.baolin.wang@linux.alibaba.com>
+ <740a2396d9b98154dba76e326cba5e798b640ead.1673342761.git.baolin.wang@linux.alibaba.com>
+ <Y71qNeLNeiBB5a/+@casper.infradead.org>
+ <20230110152532.8b2d34bf04d7b8e9a4e39130@linux-foundation.org>
+ <Y732taMH+r/QGcgD@casper.infradead.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <Y732taMH+r/QGcgD@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Wang <yf.wang@mediatek.com>
 
-In __alloc_and_insert_iova_range, there is an issue that retry_pfn
-overflows. The value of iovad->anchor.pfn_hi is ~0UL, then when
-iovad->cached_node is iovad->anchor, curr_iova->pfn_hi + 1 will
-overflow. As a result, if the retry logic is executed, low_pfn is
-updated to 0, and then new_pfn < low_pfn returns false to make the
-allocation successful.
 
-This issue occurs in the following two situations:
-1. The first iova size exceeds the domain size. When initializing
-iova domain, iovad->cached_node is assigned as iovad->anchor. For
-example, the iova domain size is 10M, start_pfn is 0x1_F000_0000,
-and the iova size allocated for the first time is 11M. The
-following is the log information, new->pfn_lo is smaller than
-iovad->cached_node.
+On 1/11/2023 7:37 AM, Matthew Wilcox wrote:
+> On Tue, Jan 10, 2023 at 03:25:32PM -0800, Andrew Morton wrote:
+>> On Tue, 10 Jan 2023 13:37:57 +0000 Matthew Wilcox <willy@infradead.org> wrote:
+>>
+>>> On Tue, Jan 10, 2023 at 09:36:18PM +0800, Baolin Wang wrote:
+>>>> The compaction_suitable() will never return values other than COMPACT_SUCCESS,
+>>>> COMPACT_SKIPPED and COMPACT_CONTINUE, so after validation of COMPACT_SUCCESS
+>>>> and COMPACT_SKIPPED, we will never hit other unexpected case. Thus remove
+>>>> the redundant VM_BUG_ON() validation for the return values of compaction_suitable().
+>>>
+>>> I don't understand why we'd remove this check.
+>>
+>> Well, just from code inspection it serves no purpose.
+>>
+>> Such an assertion might be useful during early code development, but I
+>> think we can consider compaction_suitable() to adequately debugged by
+>> now?
+> 
+> What if compaction_suitable() is modified to return another value?
 
-Example log as follows:
-[  223.798112][T1705487] sh: [name:iova&]__alloc_and_insert_iova_range
-start_pfn:0x1f0000,retry_pfn:0x0,size:0xb00,limit_pfn:0x1f0a00
-[  223.799590][T1705487] sh: [name:iova&]__alloc_and_insert_iova_range
-success start_pfn:0x1f0000,new->pfn_lo:0x1efe00,new->pfn_hi:0x1f08ff
-
-2. The node with the largest iova->pfn_lo value in the iova domain
-is deleted, iovad->cached_node will be updated to iovad->anchor,
-and then the alloc iova size exceeds the maximum iova size that can
-be allocated in the domain.
-
-After judging that retry_pfn is less than limit_pfn, call retry_pfn+1
-to fix the overflow issue.
-
-Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
-Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-Cc: <stable@vger.kernel.org> # 5.15.*
----
-v2: Update patch
-    1. Cc stable@vger.kernel.org
-       This patch needs to be merged stable branch,
-       add stable@vger.kernel.org in mail list.
-    2. Refer robin's suggestion to update patch.
-
----
- drivers/iommu/iova.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index a44ad92fc5eb..fe452ce46642 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -197,7 +197,7 @@ static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
- 
- 	curr = __get_cached_rbnode(iovad, limit_pfn);
- 	curr_iova = to_iova(curr);
--	retry_pfn = curr_iova->pfn_hi + 1;
-+	retry_pfn = curr_iova->pfn_hi;
- 
- retry:
- 	do {
-@@ -211,7 +211,7 @@ static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
- 	if (high_pfn < size || new_pfn < low_pfn) {
- 		if (low_pfn == iovad->start_pfn && retry_pfn < limit_pfn) {
- 			high_pfn = limit_pfn;
--			low_pfn = retry_pfn;
-+			low_pfn = retry_pfn + 1;
- 			curr = iova_find_limit(iovad, limit_pfn);
- 			curr_iova = to_iova(curr);
- 			goto retry;
--- 
-2.18.0
-
+Then this will be an expected value which should be handled by caller, 
+and IMO we can not make such assumption for future to keep this 
+unhelpful check.
