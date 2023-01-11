@@ -2,100 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13541665A4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED8B665A52
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 12:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236455AbjAKLeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 06:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S236002AbjAKLgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 06:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238753AbjAKLdn (ORCPT
+        with ESMTP id S233184AbjAKLfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 06:33:43 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5CE1A04D;
-        Wed, 11 Jan 2023 03:32:14 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id bp15so23028443lfb.13;
-        Wed, 11 Jan 2023 03:32:14 -0800 (PST)
+        Wed, 11 Jan 2023 06:35:50 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDAF1C931
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:33:14 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so19717908pjj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 03:33:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ejDLZHen3G/A6i6n+Ga6Cs9tUQnjBYCtgzbxnqhm2tw=;
-        b=X7aXjMRtKGAVT6uPuey5EJm7hw1MAJnqeZKj2DDtFNzhg1QB4q9AwtjUcNRgyTBdR9
-         /9/XHgVQQCyUkLQnlHcnBMD0xF9ul2KtjRX50DQZdKuPV5W13PluEfAZ2adDYi35FmKJ
-         QDWO+TWR7fN5cFpMEIll1XM7gze4K+HuFhD76yExvSvFNMev3ru+kuJ1YqYA+IZQk8zY
-         U5+xRDjvTaPY1Oj/climp0u2KVUTNcDuJ33FuTQzT3sL6Mk5DNuvdR7oqh2dUW9Ub7jc
-         8dLqU5N+AG8zoAhMTtrxKt/77TCbXqZAJgB+1eLXuDoQyOgpbu7uzVI9zbYl09NUtyaB
-         jErw==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fv2lNIsN5RpdQca9OCm9rk90hHk7bweKV30f5J8WYYQ=;
+        b=VieXLAyvO2y4YPOm+zc7KcDX0PVHDgjfApEMJu0ylXH5BmdgjvdvOKxl8yyGBi95sq
+         4JZ26LQEdFA0H8UjBEBzTSM0rTz9l8vohHxXfGISDOyE5jOHZL7CafWvix7eu7tGkgj6
+         +91SapGiL2oyzKJaH2aW4os0TvMCrDvVLDFCqk9hGtSixJoxZCn8OQvMa+LC06xOTTGT
+         Qx4L6kSjNOFGgJd31oV/lyvobTPCfoY22IVTBtmsfQ+t+YScVuJh7vgwKQuN+E5QCopG
+         ThTzKcmDs0qoBNDZnYx/e+TjsQN41n7++hxI3uxGlZ64tyahB2xHa2gYdBk7VmqtFjbb
+         1z2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ejDLZHen3G/A6i6n+Ga6Cs9tUQnjBYCtgzbxnqhm2tw=;
-        b=032Q0zYTWiTDL/bpy1uKS24cWx2zJnDQdn2z49CRUAXRuHtm2xCyuY8FHaNdgHx8JJ
-         KE5BPzPiiAz1uVU4S+ErSzH4nvDDSAfiDNZWyF5fs5CbR/4XU0GQW/mmQue+TwCgu0TK
-         maJZ34+eJzRhlho1ohgahFs8JpH9OQk4h5J5fPxYadkqPqjkHqZDnjlXE3Rh12qEN3dn
-         GU6X/AdJAaM9tGsh0zw9y8hl8X+XdK8cJLeQIug4BXfT/dFR8T1Ngv1jgBtjeUiebWz6
-         RFH66fmMqVxWbBoDL13poSqU4Cbjp+Xx7wmMqcp0QV05+HvIv+hYmNk8nxqXjDuLK2WQ
-         o8Jw==
-X-Gm-Message-State: AFqh2krIwhDv90WtxozMqcLwWzI9z0Ah3bgI5g6gLS21IFL6BUfDzArM
-        RpWag/Gqn57ym28fy0bD5UH1cSltRXZamw==
-X-Google-Smtp-Source: AMrXdXu9YDss0dVZtYQFXpY41w/3GimjvTmRw2wmCHbYfIj1HxEbAv8V4Rnwn23+U6l9W4DT/zSr7w==
-X-Received: by 2002:a05:6512:2356:b0:4b5:6417:43bb with SMTP id p22-20020a056512235600b004b5641743bbmr25824268lfu.51.1673436732415;
-        Wed, 11 Jan 2023 03:32:12 -0800 (PST)
-Received: from PC10319.67 ([82.97.198.254])
-        by smtp.googlemail.com with ESMTPSA id h3-20020a2ea483000000b0027ff22d93a1sm1729589lji.1.2023.01.11.03.32.11
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fv2lNIsN5RpdQca9OCm9rk90hHk7bweKV30f5J8WYYQ=;
+        b=IqVP0hVlyk7rGyXzLsBP1hBrdREicl1tXUTLGv4SEIH/QoVlXCdvrjgA+7xi0Dqa90
+         /zrrMzURf19g53cXVD0OgDkmxJ9LwtAEbl5XeneZNk96yCpYrhl/xW4aP42Yu1VpjaWt
+         3cWHSIw+CIVPvrtcwXNBL47ccXuPmxyW2y1/ue8aHFkGhkyR1nXiFGSaDe7vwpUX95wQ
+         fISpQEHPQLAMpS+HIgr2SmcV9crMc9WkWmnLQiPRWErMLU0EEoilUQ5DMRkc5hkI2gqq
+         Htbuqws1L23XTkPQc1caNM9O4WBSSDwmU0eKDZsjgr9i6h7SNdb2n9riAQYMQnyYaRtL
+         bMCQ==
+X-Gm-Message-State: AFqh2koI6W/BjYz/+G/x7G2c/ugx2wKUi4vLA5kkdg23eHt/Yv3AtG3+
+        MRTzl6oLeGXy/JttTgSQbcl7
+X-Google-Smtp-Source: AMrXdXvyHPHT1WibJbM3qxTpu5HLeZq89WaLpiM9yod6LlcXn5b+fAQP9wznHzVahmXGRKKL2US16w==
+X-Received: by 2002:a17:902:7c8a:b0:192:835d:c861 with SMTP id y10-20020a1709027c8a00b00192835dc861mr52121497pll.68.1673436789834;
+        Wed, 11 Jan 2023 03:33:09 -0800 (PST)
+Received: from thinkpad ([117.217.177.1])
+        by smtp.gmail.com with ESMTPSA id m18-20020a170902db1200b00192d07b8222sm9985139plx.100.2023.01.11.03.33.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 03:32:11 -0800 (PST)
-From:   Konstantin Aladyshev <aladyshev22@gmail.com>
-Cc:     Konstantin Aladyshev <aladyshev22@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: ethanolx: Correct EEPROM device name
-Date:   Wed, 11 Jan 2023 14:32:08 +0300
-Message-Id: <20230111113208.964-1-aladyshev22@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 11 Jan 2023 03:33:08 -0800 (PST)
+Date:   Wed, 11 Jan 2023 17:03:01 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        bhelgaas@google.com, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lpieralisi@kernel.org
+Subject: Re: [PATCH v3 2/3] dt-bindings: PCI: qcom: Document msi-map and
+ msi-map-mask properties
+Message-ID: <20230111113301.GC4873@thinkpad>
+References: <20230102105821.28243-1-manivannan.sadhasivam@linaro.org>
+ <20230102105821.28243-3-manivannan.sadhasivam@linaro.org>
+ <20230108203340.GA229573-robh@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230108203340.GA229573-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BMC on the EthanolX board uses 24LC128 EEPROM chip for the
-configuration settings. The correct compatible string for this
-chip is "atmel,24c128".
+On Sun, Jan 08, 2023 at 02:33:40PM -0600, Rob Herring wrote:
+> On Mon, Jan 02, 2023 at 04:28:20PM +0530, Manivannan Sadhasivam wrote:
+> > The Qcom PCIe controller is capable of using either internal MSI controller
+> > or the external GIC-ITS for signaling MSIs sent by endpoint devices.
+> > Currently, the binding only documents the internal MSI implementation.
+> > 
+> > Let's document the GIC-ITS imeplementation by making use of msi-map and
+> > msi-map-mask properties. Only one of the implementation should be used
+> > at a time.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > index a3639920fcbb..01208450e05c 100644
+> > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> > @@ -114,14 +114,20 @@ required:
+> >    - compatible
+> >    - reg
+> >    - reg-names
+> > -  - interrupts
+> > -  - interrupt-names
+> > -  - "#interrupt-cells"
+> >    - interrupt-map-mask
+> >    - interrupt-map
+> >    - clocks
+> >    - clock-names
+> >  
+> > +oneOf:
+> 
+> anyOf
+> 
+> The OS should have the option of both being present and pick which MSI 
+> path it wants to use. 
+> 
 
-Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
----
- arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Makes sense. Given that the current series merged by Bjorn, I'll send a
+follow-up patch.
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts b/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
-index 889b2fdd19cf..8d84dcc06221 100644
---- a/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
-@@ -161,7 +161,7 @@ &i2c2 {
- &i2c3 {
- 	status = "okay";
- 	eeprom@50 {
--		compatible = "atmel,24c256";
-+		compatible = "atmel,24c128";
- 		reg = <0x50>;
- 		pagesize = <64>;
- 	};
+Thanks,
+Mani
+
+> Rob
+
 -- 
-2.25.1
-
+மணிவண்ணன் சதாசிவம்
