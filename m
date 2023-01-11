@@ -2,129 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0AA666180
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1C066618F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234134AbjAKRNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:13:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
+        id S234422AbjAKRQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234415AbjAKRN2 (ORCPT
+        with ESMTP id S234484AbjAKRQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:13:28 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E775F2AFA
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:13:27 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso17947970pjf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:13:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7xoqM2b4yU5Wgrth55wL+NVhuuSQRsysOAOffMfb2Zs=;
-        b=UTHw9GP46gMj4w7BoWTjll73gGs6xDrYov0a9OBFb+A+fCEnj/lNlk/PdejnbXURqO
-         Bjaa3RzcOfRgNZwW4y4wEquG1PiGvWa+mDFtnWW0uykLypatPgx5G7+4SERoq1k+dvQG
-         xFFX2kzEYRvqMO5becq4T5XslALlZk0R4OFnPNGloW7hFS7+kr3EIBznbqo0ZIAm8A1H
-         +p3Zp0frWYwjCW7td3rratlrAVtlk1S+6jOhrJ+M/+CWMO1tC4v7PVqrV9Thc4XztjhF
-         1CE9QPZeiFYhJRLTxvImYXddOrBCNoD718EF13VjvKDTA1rmkfHp64GNv01N55tZjVL5
-         n6Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7xoqM2b4yU5Wgrth55wL+NVhuuSQRsysOAOffMfb2Zs=;
-        b=kN2nxolD+HZCRvdQFQDwcZj3l+QCYN58GMBJsHpU8U6N+TCirS8tB5b5vNCtBi6RNS
-         I9YgCC83WnLfrHg00H5Je2m+t4KrKv4VtXUICsUL19WEDZiVwg/Yh3rVVOwNStdDI0WU
-         TWj3AO90fAD3t9ZKbZiBlxo32eYefYYUnsxk2dnxI0eC7WkSbmco5gVYEShclaeTDr7P
-         d3wO6s/cSpMvCGXPnzsuRjuVcl/wpIxnYAkA5gbSojJR1Lg4eisrJ/aNxP+XjkCRzCzy
-         lKYRYiIlH+WWnWGZjutKKFWQ64Djd+ZSE/XwCx6BCc4sT0937pTSnEG7VhhXbKv/AVcz
-         aErA==
-X-Gm-Message-State: AFqh2krsJNxLew3orcdm5ur5GG7CMjisEbjk+RsMLyEYBuT2fhjbqUep
-        bIZIzqYvym7T1R7Ejc3XoM2x5A==
-X-Google-Smtp-Source: AMrXdXvZV+eSwBO+qB3Cyv97/dRNyiGborDMC+PfJG2AQCDQ93hQgMsB7NAdTQYHGQJUGIn+huvG/w==
-X-Received: by 2002:a17:90a:9503:b0:227:679:17df with SMTP id t3-20020a17090a950300b00227067917dfmr499019pjo.0.1673457207330;
-        Wed, 11 Jan 2023 09:13:27 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id e13-20020a63e00d000000b00485cbedd34bsm8852733pgh.89.2023.01.11.09.13.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 09:13:26 -0800 (PST)
-Date:   Wed, 11 Jan 2023 17:13:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
-Message-ID: <Y77uM/X94DtKXtK0@google.com>
-References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
- <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
- <YxenK8xZHC6Q4Eu4@phenom.ffwll.local>
- <YxeoEr6xAtlZ+IrU@phenom.ffwll.local>
+        Wed, 11 Jan 2023 12:16:31 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040B0F4B;
+        Wed, 11 Jan 2023 09:15:55 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1Mv2gw-1oxqlZ0vaa-00qz8j; Wed, 11 Jan 2023 18:15:41 +0100
+Message-ID: <9c242f84-367e-d857-24a6-8336d652257c@i2se.com>
+Date:   Wed, 11 Jan 2023 18:15:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YxeoEr6xAtlZ+IrU@phenom.ffwll.local>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] usb: misc: onboard_hub: Invert driver registration
+ order
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Icenowy Zheng <uwu@icenowy.me>, stable@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+References: <20230110172954.v2.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
+Content-Language: en-US
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20230110172954.v2.1.I75494ebee7027a50235ce4b1e930fa73a578fbe2@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:mlSvIIHDHoTWUrYZbV13DXLwgb5LmiMbUGrfSyk6xy9dIvfjHs4
+ SBkT6X1/UoAV0k2FJ+W1qxmXvyuMggPTpiWfIPLzMw2BPC4RX84zrIlxzz/WgUpwrSJi1+1
+ xC12eF77e4cU2xbmro9AGAoHMCxPs/7xyfLfy3FJfkt76kSwfWifwmnLkylg/nEFTrpbP5D
+ sccMSLqGhUlBxEeZ3ESow==
+UI-OutboundReport: notjunk:1;M01:P0:uBJw4yKVRVA=;ULD0lhkJDedWrQ4W1B5hTSUxABw
+ T18a30pAbHMyMZR7XqwxqUJ4SNOYnmYtyEaO/2FrJAw2TKOpcRvROQz8Rg8JjwrTjwCilt6Ta
+ iTf4fbv6LVCn5VDBmvc0Fc2e3oJDQo8ugWsOX9HTCDqKCoFDWM3J+jdXkrP5XXIIJvfMR0MrK
+ 8QSx/OfBqFPIK1vasnzFVZTWlzn4anGWVYH9V18A79JJPOVh+lh2M2VAwo7ztspF7VttBXUGx
+ 4+VL11D0lpiAf6/gCsNJLbvB1wja17F0aYAkRqe2veRASRQAccK8tam8D/0TeWqlig7u5Sxuz
+ fzpCvWVlngCRmgFXotWyLvyUpdxqmbEhJpKm/xwoEVB6OBSC48ZRkSsUvZORo3kkYxl4gk5D+
+ jbygHUWhE+uOJsgBAAebwFClZy7eTBf8ynTNaLrH2a8vlhnFfhCIis+pagOviNPfTMc6yK33j
+ OxhjVcAacKI0wSiTFhuRVZHBCOFA/PEPu3taiLRzye3a4wjeEkaDuE+d1TU82nbo/yyeSTerX
+ xN3vP1kLIgOy+4HRf28BuUlSHZngksudk2+4EhGT+He2byk+A7RigpbGqVXjF2eDDRKrXNfMh
+ ZAap2AHn0NoeIOWnw4Qs0/aYgJW99hUChPM7ntuFg+DrW0uAN55zYqFiuwDBPahSEVslU9wyi
+ DluFk5GmaaGXN9UwqNYa/S4UeIM1DTwiTDvUbcUngw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022, Daniel Vetter wrote:
-> On Tue, Sep 06, 2022 at 10:01:47PM +0200, Daniel Vetter wrote:
-> > On Mon, Aug 15, 2022 at 12:05:19PM +0200, Christian König wrote:
-> > > Am 15.08.22 um 11:54 schrieb Dmitry Osipenko:
-> > > > Higher order pages allocated using alloc_pages() aren't refcounted and they
-> > > > need to be refcounted, otherwise it's impossible to map them by KVM. This
-> > > > patch sets the refcount of the tail pages and fixes the KVM memory mapping
-> > > > faults.
-> > > > 
-> > > > Without this change guest virgl driver can't map host buffers into guest
-> > > > and can't provide OpenGL 4.5 profile support to the guest. The host
-> > > > mappings are also needed for enabling the Venus driver using host GPU
-> > > > drivers that are utilizing TTM.
-> > > > 
-> > > > Based on a patch proposed by Trigger Huang.
-> > > 
-> > > Well I can't count how often I have repeated this: This is an absolutely
-> > > clear NAK!
-> > > 
-> > > TTM pages are not reference counted in the first place and because of this
-> > > giving them to virgl is illegal.
-> > > 
-> > > Please immediately stop this completely broken approach. We have discussed
-> > > this multiple times now.
-> > 
-> > Yeah we need to get this stuff closed for real by tagging them all with
-> > VM_IO or VM_PFNMAP asap.
-> 
-> For a bit more context: Anything mapping a bo should be VM_SPECIAL. And I
-> think we should add the checks to the gem and dma-buf mmap functions to
-> validate for that, and fix all the fallout.
-> 
-> Otherwise this dragon keeps resurrecting ...
-> 
-> VM_SPECIAL _will_ block get_user_pages, which will block everyone from
-> even trying to refcount this stuff.
+Hi Matthias,
 
-FWIW, IIUC that won't change the KVM story.  KVM acquires the PFN for these pages
-via follow_pte(), not by gup().  Details are in a different strand of this thread[*].
+Am 10.01.23 um 18:32 schrieb Matthias Kaehlcke:
+> The onboard_hub 'driver' consists of two drivers, a platform
+> driver and a USB driver. Currently when the onboard hub driver
+> is initialized it first registers the platform driver, then the
+> USB driver. This results in a race condition when the 'attach'
+> work is executed, which is scheduled when the platform device
+> is probed. The purpose of fhe 'attach' work is to bind elegible
+> USB hub devices to the onboard_hub USB driver. This fails if
+> the work runs before the USB driver has been registered.
+>
+> Register the USB driver first, then the platform driver. This
+> increases the chances that the onboard_hub USB devices are probed
+> before their corresponding platform device, which the USB driver
+> tries to locate in _probe(). The driver already handles this
+> situation and defers probing if the onboard hub platform device
+> doesn't exist yet.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> Link: https://lore.kernel.org/lkml/Y6W00vQm3jfLflUJ@hovoldconsulting.com/T/#m0d64295f017942fd988f7c53425db302d61952b4
+> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 
-If TTM pages aren't tied into mmu_notifiers, then I believe the only solution is
-to not allow them to be mapped into user page tables.  If they are tied into
-mmu_notifiers, then this is fully a KVM limitation that we are (slowly) resolving.
+the whole series is:
 
-[*] https://lore.kernel.org/all/Y77sQZI0IfFVx7Jo@google.com
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+
+Thanks \o/
+
