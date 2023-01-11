@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C725665323
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A3866531E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234954AbjAKFEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 00:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
+        id S235829AbjAKFEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 00:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234948AbjAKFDg (ORCPT
+        with ESMTP id S234554AbjAKFDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 00:03:36 -0500
+        Wed, 11 Jan 2023 00:03:35 -0500
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CE9DF2B;
-        Tue, 10 Jan 2023 21:03:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DCADE8D;
+        Tue, 10 Jan 2023 21:03:34 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NsFv43zZSz4f3wQd;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NsFv45ykCz4f3v4X;
         Wed, 11 Jan 2023 13:03:28 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP1 (Coremail) with SMTP id cCh0CgDX9S8fQ75jGl2gBQ--.10280S9;
-        Wed, 11 Jan 2023 13:03:30 +0800 (CST)
+        by APP1 (Coremail) with SMTP id cCh0CgDX9S8fQ75jGl2gBQ--.10280S10;
+        Wed, 11 Jan 2023 13:03:31 +0800 (CST)
 From:   Kemeng Shi <shikemeng@huaweicloud.com>
 To:     hch@lst.de, axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
         ming.lei@redhat.com, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     john.garry@huawei.com, jack@suse.cz
-Subject: [PATCH v3 07/14] blk-mq: make blk_mq_commit_rqs a general function for all commits
-Date:   Wed, 11 Jan 2023 21:01:52 +0800
-Message-Id: <20230111130159.3741753-8-shikemeng@huaweicloud.com>
+Subject: [PATCH v3 08/14] blk-mq: remove unncessary error count and commit in blk_mq_plug_issue_direct
+Date:   Wed, 11 Jan 2023 21:01:53 +0800
+Message-Id: <20230111130159.3741753-9-shikemeng@huaweicloud.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20230111130159.3741753-1-shikemeng@huaweicloud.com>
 References: <20230111130159.3741753-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgDX9S8fQ75jGl2gBQ--.10280S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFyxZw4kWryfCF18AFyUAwb_yoW5ur4kpF
-        43Ja1Yy3yrJrsFvas5JanrZF13Gws5KrWUuryftw13XrWFgryxWw4ftryfJFWxtr4kAF13
-        ZrW5ur9xGF13GwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: cCh0CgDX9S8fQ75jGl2gBQ--.10280S10
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfJryDGFyUGF18Jry5urg_yoW8WrykpF
+        W3GanIkrs2qr48Za48JayxA3WUJrs5KryUArZ0kw1ag3yDGr4Sqw4rtryxWry0yrZ3Aa13
+        Zrn8W34DJF13Ww7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
         8IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAv
@@ -61,99 +61,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. rename orignal blk_mq_commit_rqs to blk_mq_plug_commit_rqs as
-trace_block_unplug is only needed when we dispatch request from plug list.
-We need a commit_rqs wrapper for this case. Besides, this patch
-adds queued check and only commits request if any request was queued
-to keep commit behavior consistent and remove unnecessary commit.
-2. add new blk_mq_commit_rqs for general commits. Current
-blk_mq_commit_rqs will not clear queued as queued clearing is not
-wanted generally.
-3. document rule for unusual cases which need explicit commit_rqs.
+We need only to explicitly commit in two error cases:
+ -did not queue everything initially scheduled to queue
+ -the last attempt to queue a request failed
+(see comment of blk_mq_commit_rqs for more details).
+Both cases can be checked with ret of last request which breaks list walk.
+Remove unnecessary error count and unnecessary commit triggered by error
+which is not covered by cases described above.
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 ---
- block/blk-mq.c | 38 ++++++++++++++++++++++++++------------
- 1 file changed, 26 insertions(+), 12 deletions(-)
+ block/blk-mq.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
 diff --git a/block/blk-mq.c b/block/blk-mq.c
-index c6cc3feb3b84..98f6003474f2 100644
+index 98f6003474f2..c6c84f44c7a6 100644
 --- a/block/blk-mq.c
 +++ b/block/blk-mq.c
-@@ -2007,6 +2007,29 @@ static void blk_mq_release_budgets(struct request_queue *q,
- 	}
- }
+@@ -2706,11 +2706,10 @@ static void blk_mq_plug_issue_direct(struct blk_plug *plug)
+ 	struct blk_mq_hw_ctx *hctx = NULL;
+ 	struct request *rq;
+ 	int queued = 0;
+-	int errors = 0;
++	blk_status_t ret;
  
-+/* blk_mq_commit_rqs and blk_mq_plug_commit_rqs notify driver using
-+ * bd->last that there is no more requests. (See comment in struct
-+ * blk_mq_ops for commit_rqs for details)
-+ * Attention, we should explicitly call this in unusual cases:
-+ *  1) did not queue everything initially scheduled to queue
-+ *  2) the last attempt to queue a request failed
-+ */
-+static void blk_mq_commit_rqs(struct blk_mq_hw_ctx *hctx, int queued)
-+{
-+	if (hctx->queue->mq_ops->commit_rqs && queued) {
-+		hctx->queue->mq_ops->commit_rqs(hctx);
-+	}
-+}
-+
-+static void blk_mq_plug_commit_rqs(struct blk_mq_hw_ctx *hctx, int *queued)
-+{
-+	if (hctx->queue->mq_ops->commit_rqs && *queued) {
-+		trace_block_unplug(hctx->queue, *queued, true);
-+		hctx->queue->mq_ops->commit_rqs(hctx);
-+	}
-+	*queued = 0;
-+}
-+
- /*
-  * Returns true if we did some work AND can potentially do more.
-  */
-@@ -2555,15 +2578,6 @@ void blk_mq_insert_requests(struct blk_mq_hw_ctx *hctx, struct blk_mq_ctx *ctx,
- 	spin_unlock(&ctx->lock);
- }
- 
--static void blk_mq_commit_rqs(struct blk_mq_hw_ctx *hctx, int *queued)
--{
--	if (hctx->queue->mq_ops->commit_rqs) {
--		trace_block_unplug(hctx->queue, *queued, true);
--		hctx->queue->mq_ops->commit_rqs(hctx);
--	}
--	*queued = 0;
--}
--
- static void blk_mq_bio_to_request(struct request *rq, struct bio *bio,
- 		unsigned int nr_segs)
- {
-@@ -2700,7 +2714,7 @@ static void blk_mq_plug_issue_direct(struct blk_plug *plug)
+ 	while ((rq = rq_list_pop(&plug->mq_list))) {
+ 		bool last = rq_list_empty(plug->mq_list);
+-		blk_status_t ret;
  
  		if (hctx != rq->mq_hctx) {
  			if (hctx)
--				blk_mq_commit_rqs(hctx, &queued);
-+				blk_mq_plug_commit_rqs(hctx, &queued);
- 			hctx = rq->mq_hctx;
- 		}
- 
-@@ -2712,7 +2726,7 @@ static void blk_mq_plug_issue_direct(struct blk_plug *plug)
+@@ -2726,20 +2725,15 @@ static void blk_mq_plug_issue_direct(struct blk_plug *plug)
  		case BLK_STS_RESOURCE:
  		case BLK_STS_DEV_RESOURCE:
  			blk_mq_request_bypass_insert(rq, false, true);
--			blk_mq_commit_rqs(hctx, &queued);
-+			blk_mq_plug_commit_rqs(hctx, &queued);
- 			return;
+-			blk_mq_plug_commit_rqs(hctx, &queued);
+-			return;
++			goto out;
  		default:
  			blk_mq_end_request(rq, ret);
-@@ -2726,7 +2740,7 @@ static void blk_mq_plug_issue_direct(struct blk_plug *plug)
- 	 * there was more coming, but that turned out to be a lie.
- 	 */
- 	if (errors)
--		blk_mq_commit_rqs(hctx, &queued);
-+		blk_mq_plug_commit_rqs(hctx, &queued);
+-			errors++;
+ 			break;
+ 		}
+ 	}
+ 
+-	/*
+-	 * If we didn't flush the entire list, we could have told the driver
+-	 * there was more coming, but that turned out to be a lie.
+-	 */
+-	if (errors)
++out:
++	if (ret != BLK_STS_OK)
+ 		blk_mq_plug_commit_rqs(hctx, &queued);
  }
  
- static void __blk_mq_flush_plug_list(struct request_queue *q,
 -- 
 2.30.0
 
