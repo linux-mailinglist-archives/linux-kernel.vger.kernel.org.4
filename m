@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D06466507A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 01:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0CCC66507F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 01:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235769AbjAKApK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 19:45:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S235766AbjAKApc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 19:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235691AbjAKApE (ORCPT
+        with ESMTP id S235743AbjAKApG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 19:45:04 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF935933A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:45:02 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4d4b54d0731so15854947b3.18
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:45:02 -0800 (PST)
+        Tue, 10 Jan 2023 19:45:06 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1D05931E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:45:04 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id z3-20020a170903018300b0018fb8ca1688so9384891plg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 16:45:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ibE48hPASiaydGO50HigqaPix7Fk3GewkWKsH3rEx8o=;
-        b=QDMREWCkJW7xwXSdwyB+jy0Hy0ipF0VIiK4k8kJDtxq6zgowXQk/i6IjWKL6ha9eeM
-         DWfA0Ozh3fxTNwO7PyKRchI1VCSMDQdUvbY3qk0Jd/SHc7YhFQyiQtTy8hJ8kKpU9fbk
-         UEzGzch7+uPo/8/Yog51+NlZbO1J9sat3igfRISSaIPPwbu7pWEkTQyxfuSFV19nuyKW
-         xOqVLLufpTspm/t+e5Fy4BQT7ZKxN1KNLwlJJHqDkSwgxj4ItZne6csXl3BPvnFZYQM1
-         PmAnTJSQ3TuvKqJ9fY8Sxe6KusmVjjUWnDOAQ+BHaN6uX/zpdE+Yg6Sq8/8NmNW9jj/K
-         MEzA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i5nmfF04B2IHgLFB8aCXKpeIh21CW5hhnA3Zs7nsESA=;
+        b=eO2t/+pj8mPlLMMdcEpbBNko4TJswSnywcF/DfhdxgABLVsoaSv5PwBNwl3Qma9Q/J
+         eXScNp2W/dA8aEVblqFCjNCBjYCy9lZ5DfDFpoVJQKW8nt15tQ3gpISUZq51HTO6+LPn
+         Ht8MK+yMvyLmKBsjXWJ9uxI1h77qVAgk6m/k3gQJCqiCjR1XHVpLSTLdyyEjfFJ4EOGp
+         x29Ky/AliXXIegn4/Dy/8vOdvdCxB4TSCf6e71+HcES1hoOOQDGKH7WBjui1oH2Wk3ZQ
+         Xfcy/crmDd6kyKLEaGlEjLbmhm6FKCgH/DBXy7teV2ghTi/tFYfy00Vm75JHekaMbbYa
+         Mt7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ibE48hPASiaydGO50HigqaPix7Fk3GewkWKsH3rEx8o=;
-        b=3x5xUGaEdySlEwSonVX6ux1PlidB/2AHCJHVwYtxvI79ZwwbBUiDrV6+1OKxzazSWH
-         hlvZQfBKPLUT7FrltLqnjJArftocPtPmL6NZJy96pYzEqb2JfYCHT9N7mtmUVKaSMX4A
-         UDLUxg+XcnEDSLKV9dAcQk638tpatGg1lMpmwLdrF0XPaMffD57Fw1Z9u44cz4qA5M6U
-         BjZf7lklRJ5MHjQwdYqCjs+c6WD/+v2qAhd+2uwiipf2wq4jzkw0DkCuPbqDZRrHaHc/
-         /61dfbICDt5S98+yNEnvpJt10xV6cBLkG+JyTZjLFzDyxIuTjcQO5Qbs3acYUve2ghVb
-         J5kA==
-X-Gm-Message-State: AFqh2koIkUwIHWoW0QdDT+tfb2x/XoXwE4F2/jcPQMD1YWyg3V6KVDBi
-        Glahrb2EHnaBgz7xGAXtOUmWh5mmY7Dt1fZb
-X-Google-Smtp-Source: AMrXdXsSWutbgAi4jSr0wcTRqmMwOHcHIKu9/EpTRTxKn638IGsKrxJvP5/oz8IgdsFvpXMqpI/YvB5GJKR2OFQM
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i5nmfF04B2IHgLFB8aCXKpeIh21CW5hhnA3Zs7nsESA=;
+        b=I2kVGmePBhVw174ZhxieL4CiCS6FqU4qC+bbcwgsS9ViSLmkA7UxJFmJSltMswsLLf
+         PVgBJCdsH4sp687B29VttA4SZ4TEmMrpfSqzzbx65Lg8Ts3qrB2uFb7hJCTZiqdVdwzk
+         RJcA7OKrDz8eRUBDKAdusklmMlJ+V6QQEPJP9LGAP7SMKXsPn9jjfNQeZigTk9Yea7OR
+         C0YC+nt4FGpUUS6ZEzQFd4gRLuRcuWCiOPn5Q4m12fWDpGlSHZlMSWKiBiOzijhEsH17
+         1w2v1NmyI3bZqkfyphWJCKpvziq5iwsuBwb41mcirBwcZ82QU226CDmZdEeVEjGY5bI7
+         a12Q==
+X-Gm-Message-State: AFqh2koho4jamjs2SVVCOOlSw4Jb6g+u0kdNesdSIsVDuxrVeZyd/1db
+        Rjhd8zd3I6irGb+reTNcLAoSTsja0Q/4hbRt
+X-Google-Smtp-Source: AMrXdXvIsZvqIwPXVSDDcpOSnlLt/VOqLw9atFZ7FZqmkCAhzULy+I69nrXjKn/XLRy+k8kzhieWBXvtznW6559i
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a25:2e0e:0:b0:7bf:e2b8:af73 with SMTP
- id u14-20020a252e0e000000b007bfe2b8af73mr805623ybu.98.1673397901764; Tue, 10
- Jan 2023 16:45:01 -0800 (PST)
-Date:   Wed, 11 Jan 2023 00:44:42 +0000
+ (user=vannapurve job=sendgmr) by 2002:aa7:81d4:0:b0:577:5678:bc80 with SMTP
+ id c20-20020aa781d4000000b005775678bc80mr5338691pfn.62.1673397904191; Tue, 10
+ Jan 2023 16:45:04 -0800 (PST)
+Date:   Wed, 11 Jan 2023 00:44:43 +0000
+In-Reply-To: <20230111004445.416840-1-vannapurve@google.com>
 Mime-Version: 1.0
+References: <20230111004445.416840-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230111004445.416840-1-vannapurve@google.com>
-Subject: [V5 PATCH 0/3] Execute hypercalls according to host cpu
+Message-ID: <20230111004445.416840-2-vannapurve@google.com>
+Subject: [V5 PATCH 1/3] KVM: selftests: x86: Use "this_cpu" prefix for cpu
+ vendor queries
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -61,7 +64,7 @@ Cc:     pbonzini@redhat.com, shuah@kernel.org, bgardon@google.com,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,49 +72,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Confidential VMs(CVMs) need to execute hypercall instruction as per the CPU
-type. Normally KVM emulates the vmcall/vmmcall instruction by patching
-the guest code at runtime. Such a guest memory manipulation by KVM is
-not allowed with CVMs and is also undesirable in general.
+Replace is_intel/amd_cpu helpers with this_cpu_* helpers to better
+convey the intent of querying vendor of the current cpu.
 
-This series adds support of executing hypercall as per the host cpu vendor.
-CPU vendor is queried early during selftest setup and guest setup to be
-reused later.
-
-Changes in v5:
-1) Incorporated suggestions from Sean -
-  * Rename the APIs to have "this_cpu*" prefix to better convey the
-    intent of callers to query cpu vendor of the current cpu
-  * Squash patches together to cache, share cpu vendor type and replace
-    current callers of "this_cpu*" with checking the saved host cpu vendor
-    in a single patch.
-
-Changes in v4:
-1) Incoporated suggestions from Sean -
-  * Added APIs to query host cpu type
-  * Shared the host cpu type with guests to avoid querying the cpu type
-    again
-  * Modified kvm_hypercall to execute vmcall/vmmcall according to host
-    cpu type.
-2) Dropped the separate API for kvm_hypercall.
-
-v4:
-https://lore.kernel.org/lkml/20221228192438.2835203-1-vannapurve@google.com/
-
-Vishal Annapurve (3):
-  KVM: selftests: x86: Use "this_cpu" prefix for cpu vendor queries
-  KVM: selftests: x86: Cache host CPU vendor (AMD vs. Intel)
-  KVM: selftests: x86: Use host's native hypercall instruction in
-    kvm_hypercall()
-
- .../selftests/kvm/include/x86_64/processor.h  | 28 +++++++++--
- .../selftests/kvm/lib/x86_64/processor.c      | 46 ++++++++-----------
- .../selftests/kvm/x86_64/fix_hypercall_test.c |  4 +-
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: David Matlack <dmatlack@google.com>
+Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+---
+ .../selftests/kvm/include/x86_64/processor.h  | 25 +++++++++++++++---
+ .../selftests/kvm/lib/x86_64/processor.c      | 26 ++-----------------
+ .../selftests/kvm/x86_64/fix_hypercall_test.c |  4 +--
  .../selftests/kvm/x86_64/mmio_warning_test.c  |  2 +-
- .../kvm/x86_64/pmu_event_filter_test.c        |  4 +-
+ .../kvm/x86_64/pmu_event_filter_test.c        |  4 +--
  .../vmx_exception_with_invalid_guest_state.c  |  2 +-
- 6 files changed, 51 insertions(+), 35 deletions(-)
+ 6 files changed, 30 insertions(+), 33 deletions(-)
 
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 2a5f47d51388..fdb1af5ca611 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -555,6 +555,28 @@ static inline uint32_t this_cpu_model(void)
+ 	return x86_model(this_cpu_fms());
+ }
+ 
++static inline bool this_cpu_vendor_string_is(const char *vendor)
++{
++	const uint32_t *chunk = (const uint32_t *)vendor;
++	uint32_t eax, ebx, ecx, edx;
++
++	cpuid(0, &eax, &ebx, &ecx, &edx);
++	return (ebx == chunk[0] && edx == chunk[1] && ecx == chunk[2]);
++}
++
++static inline bool this_cpu_is_intel(void)
++{
++	return this_cpu_vendor_string_is("GenuineIntel");
++}
++
++/*
++ * Exclude early K5 samples with a vendor string of "AMDisbetter!"
++ */
++static inline bool this_cpu_is_amd(void)
++{
++	return this_cpu_vendor_string_is("AuthenticAMD");
++}
++
+ static inline uint32_t __this_cpu_has(uint32_t function, uint32_t index,
+ 				      uint8_t reg, uint8_t lo, uint8_t hi)
+ {
+@@ -691,9 +713,6 @@ static inline void cpu_relax(void)
+ 		"hlt\n"	\
+ 		)
+ 
+-bool is_intel_cpu(void);
+-bool is_amd_cpu(void);
+-
+ struct kvm_x86_state *vcpu_save_state(struct kvm_vcpu *vcpu);
+ void vcpu_load_state(struct kvm_vcpu *vcpu, struct kvm_x86_state *state);
+ void kvm_x86_state_cleanup(struct kvm_x86_state *state);
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index acfa1d01e7df..7d1768543b91 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -113,7 +113,7 @@ static void sregs_dump(FILE *stream, struct kvm_sregs *sregs, uint8_t indent)
+ 
+ bool kvm_is_tdp_enabled(void)
+ {
+-	if (is_intel_cpu())
++	if (this_cpu_is_intel())
+ 		return get_kvm_intel_param_bool("ept");
+ 	else
+ 		return get_kvm_amd_param_bool("npt");
+@@ -1006,28 +1006,6 @@ void kvm_x86_state_cleanup(struct kvm_x86_state *state)
+ 	free(state);
+ }
+ 
+-static bool cpu_vendor_string_is(const char *vendor)
+-{
+-	const uint32_t *chunk = (const uint32_t *)vendor;
+-	uint32_t eax, ebx, ecx, edx;
+-
+-	cpuid(0, &eax, &ebx, &ecx, &edx);
+-	return (ebx == chunk[0] && edx == chunk[1] && ecx == chunk[2]);
+-}
+-
+-bool is_intel_cpu(void)
+-{
+-	return cpu_vendor_string_is("GenuineIntel");
+-}
+-
+-/*
+- * Exclude early K5 samples with a vendor string of "AMDisbetter!"
+- */
+-bool is_amd_cpu(void)
+-{
+-	return cpu_vendor_string_is("AuthenticAMD");
+-}
+-
+ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+ {
+ 	if (!kvm_cpu_has_p(X86_PROPERTY_MAX_PHY_ADDR)) {
+@@ -1236,7 +1214,7 @@ unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
+ 	max_gfn = (1ULL << (vm->pa_bits - vm->page_shift)) - 1;
+ 
+ 	/* Avoid reserved HyperTransport region on AMD processors.  */
+-	if (!is_amd_cpu())
++	if (!this_cpu_is_amd())
+ 		return max_gfn;
+ 
+ 	/* On parts with <40 physical address bits, the area is fully hidden */
+diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+index 32f7e09ef67c..5489c9836ec8 100644
+--- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
++++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+@@ -48,10 +48,10 @@ static void guest_main(void)
+ 	const uint8_t *other_hypercall_insn;
+ 	uint64_t ret;
+ 
+-	if (is_intel_cpu()) {
++	if (this_cpu_is_intel()) {
+ 		native_hypercall_insn = vmx_vmcall;
+ 		other_hypercall_insn  = svm_vmmcall;
+-	} else if (is_amd_cpu()) {
++	} else if (this_cpu_is_amd()) {
+ 		native_hypercall_insn = svm_vmmcall;
+ 		other_hypercall_insn  = vmx_vmcall;
+ 	} else {
+diff --git a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+index fb02581953a3..b0a2a0bae0f3 100644
+--- a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
++++ b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+@@ -93,7 +93,7 @@ int main(void)
+ {
+ 	int warnings_before, warnings_after;
+ 
+-	TEST_REQUIRE(is_intel_cpu());
++	TEST_REQUIRE(this_cpu_is_intel());
+ 
+ 	TEST_REQUIRE(!vm_is_unrestricted_guest(NULL));
+ 
+diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+index 2de98fce7edd..c728822461b2 100644
+--- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
++++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+@@ -363,7 +363,7 @@ static void test_pmu_config_disable(void (*guest_code)(void))
+  */
+ static bool use_intel_pmu(void)
+ {
+-	return is_intel_cpu() &&
++	return this_cpu_is_intel() &&
+ 	       kvm_cpu_property(X86_PROPERTY_PMU_VERSION) &&
+ 	       kvm_cpu_property(X86_PROPERTY_PMU_NR_GP_COUNTERS) &&
+ 	       kvm_pmu_has(X86_PMU_FEATURE_BRANCH_INSNS_RETIRED);
+@@ -397,7 +397,7 @@ static bool use_amd_pmu(void)
+ 	uint32_t family = kvm_cpu_family();
+ 	uint32_t model = kvm_cpu_model();
+ 
+-	return is_amd_cpu() &&
++	return this_cpu_is_amd() &&
+ 		(is_zen1(family, model) ||
+ 		 is_zen2(family, model) ||
+ 		 is_zen3(family, model));
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c b/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
+index 2641b286b4ed..53e1ef2fc774 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
+@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 
+-	TEST_REQUIRE(is_intel_cpu());
++	TEST_REQUIRE(this_cpu_is_intel());
+ 	TEST_REQUIRE(!vm_is_unrestricted_guest(NULL));
+ 
+ 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
 -- 
 2.39.0.314.g84b9a713c41-goog
 
