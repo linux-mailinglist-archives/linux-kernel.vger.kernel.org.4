@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B101665D36
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19C5665D38
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbjAKN76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S232757AbjAKOBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:01:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbjAKN7v (ORCPT
+        with ESMTP id S231972AbjAKOBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:59:51 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAD7283
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:59:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673445590; x=1704981590;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6GmdrrfPAFrTCzpxyHGgTB46FlBc6juYoJFaKX7l39E=;
-  b=Z31EYzM7I1N3XpWwOeCUBUp1PkFIf7PhTyN9HYy1OhfxrSW7E6b/h1xs
-   DfAaMHl9kZUbQM1Wu/IMu0RZkm5PDtdybH7m1YUHDFS0OnA6EfhcB145p
-   qy9gE/kjEEKnYKtvfBk8EsxN4Mqfjbs03ObpIXsJMTHjWXbq8gtQ3Rj53
-   xPzM82HfWe5SXQtaIN1HUpWm6CE+aRpZLdnmMQn6n9ZnFJ8W6GeZct2jh
-   wDA1Ilm2hwZtQR9JfWT6uUxdyXus9H8x7YMyVrbczeZnWzTwib8i0+n5L
-   X/9MIlnRspYRP2qTOW5qtSoWhYieCChZMWDs0bQ0hK/eTRqVUNsjL/u2u
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324652532"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="324652532"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 05:59:49 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="687931532"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="687931532"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 05:59:46 -0800
-Message-ID: <5dfc3961-206c-5a42-b648-74944de9212f@linux.intel.com>
-Date:   Wed, 11 Jan 2023 14:59:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 02/19] soundwire: amd: Add support for AMD Master driver
+        Wed, 11 Jan 2023 09:01:02 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D4B2656
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:00:56 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id F13B85FD0B;
+        Wed, 11 Jan 2023 17:00:53 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1673445654;
+        bh=HxgiRE5rRaXmpjC0HmfMMATSVDjKNRWhxPVRMIQT9eQ=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=gsYo9GJdUDmSirzFbgZstDSdw0EHDpRM6/mn/9oxGjvFdXVQAhI0H09Oq/JeBw5lv
+         Tzs1eNS+hGdoDOP/5WA2MrUNMZEN7M5fANQRqOQX+dW9OFUkXucQSYG6NTKiQcRd9g
+         VoWAGYMB5y3hfUp2RaumifR8UMg0eZZJLHWdqjIbMcE3E/VRXBuhfgZndg/xRkSHj8
+         Da/oyQGQkkFD5DyD1DUAhqUrvYV2GxvQABI9m1R5Bt85EDL1GwdJxXENUBcBL+k7T9
+         81bMmO05FY51o9CdZgrrU91r87WUjen11D+ZmUs1iJf+aKrRUukZgcGPF4Wj1DgECX
+         dl9zl94C84kRA==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 11 Jan 2023 17:00:51 +0300 (MSK)
+From:   Alexey Romanov <AVRomanov@sberdevices.ru>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+CC:     Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "ngupta@vflare.org" <ngupta@vflare.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 0/4] Introduce merge identical pages mechanism
+Thread-Topic: [RFC PATCH v1 0/4] Introduce merge identical pages mechanism
+Thread-Index: AQHY/duSaivivX4eVEi4n5R4teXteK5JpjKAgABo/ACAAAH8AIAAmLKAgAEMI4CAAE4AAIAMqVaAgAAJPYCAQKWgAA==
+Date:   Wed, 11 Jan 2023 14:00:51 +0000
+Message-ID: <20230111140046.ls5vitsymjz47uba@cab-wsm-0029881.sigma.sbrf.ru>
+References: <20221121190020.66548-1-avromanov@sberdevices.ru>
+ <Y3vjQ7VJYUEWl2uc@cmpxchg.org> <Y3w7VP5CKvm6XmoJ@google.com>
+ <Y3w8/q/HoSbqamoD@google.com>
+ <20221122121413.ssieckg523urj37h@cab-wsm-0029881.lan>
+ <Y32eA93V7w1Wu3VH@google.com>
+ <20221123085306.52ozfjimaeikcbof@CAB-WSD-L081021>
+ <20221201101417.f6qm4v3m7ibh3l72@CAB-WSD-L081021>
+ <Y4iGOTRvAS+WRrtq@google.com>
+In-Reply-To: <Y4iGOTRvAS+WRrtq@google.com>
+Accept-Language: ru-RU, en-US
 Content-Language: en-US
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
-        vkoul@kernel.org, alsa-devel@alsa-project.org
-Cc:     Mastan.Katragadda@amd.com, Sunil-kumar.Dommati@amd.com,
-        Basavaraj.Hiregoudar@amd.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Mario.Limonciello@amd.com, arungopal.kondaveeti@amd.com,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
- <20230111090222.2016499-3-Vijendar.Mukunda@amd.com>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20230111090222.2016499-3-Vijendar.Mukunda@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <685091418666C048A33A8D8B7F6D81E9@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/01/11 02:11:00 #20757923
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,261 +80,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/2023 10:02 AM, Vijendar Mukunda wrote:
-> AMD ACP IP block has two soundwire controller devices.
-> Add support for
-> - Master driver probe & remove sequence
-> - Helper functions to enable/disable interrupts, Initialize sdw controller,
->    enable sdw pads
-> - Master driver sdw_master_ops & port_ops callbacks
-> 
-> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-> ---
+Hello Sergey!=20
 
-...
+On Thu, Dec 01, 2022 at 07:47:21PM +0900, Sergey Senozhatsky wrote:
+> On (22/12/01 13:14), Dmitry Rokosov wrote:
+> > Hello Sergey,
+> >=20
+> > Hope you are doing well. Really sorry for the ping.
+> >=20
+> > Did you get a chance to see the patch series, my questions, and
+> > thoughts?
+>=20
+> Hey,
+>=20
+> Not really, sorry. It's a holidays season + pre-merge window week.
+> I probably will start looking attentively next week or so.
+>=20
+> In the meantime time I'll try to reach out to lawyers to get more
+> clarifications on that patent thingy.
 
-> +
-> +static int amd_sdwc_compute_params(struct sdw_bus *bus)
-> +{
-> +	struct sdw_transport_data t_data = {0};
-> +	struct sdw_master_runtime *m_rt;
-> +	struct sdw_port_runtime *p_rt;
-> +	struct sdw_bus_params *b_params = &bus->params;
-> +	int port_bo, hstart, hstop, sample_int;
-> +	unsigned int rate, bps;
-> +
-> +	port_bo  = 0;
+Is there any news about the patent, lawyers and my patchset?
 
-Double space before '='.
-
-> +	hstart = 1;
-> +	hstop = bus->params.col - 1;
-> +	t_data.hstop = hstop;
-> +	t_data.hstart = hstart;
-> +
-> +	list_for_each_entry(m_rt, &bus->m_rt_list, bus_node) {
-> +		rate = m_rt->stream->params.rate;
-> +		bps = m_rt->stream->params.bps;
-> +		sample_int = (bus->params.curr_dr_freq / rate);
-> +		list_for_each_entry(p_rt, &m_rt->port_list, port_node) {
-> +			port_bo = (p_rt->num * 64) + 1;
-> +			dev_dbg(bus->dev, "p_rt->num=%d hstart=%d hstop=%d port_bo=%d\n",
-> +				p_rt->num, hstart, hstop, port_bo);
-> +			sdw_fill_xport_params(&p_rt->transport_params, p_rt->num,
-> +					      false, SDW_BLK_GRP_CNT_1, sample_int,
-> +					      port_bo, port_bo >> 8, hstart, hstop,
-> +					      SDW_BLK_PKG_PER_PORT, 0x0);
-> +
-> +			sdw_fill_port_params(&p_rt->port_params,
-> +					     p_rt->num, bps,
-> +					     SDW_PORT_FLOW_MODE_ISOCH,
-> +					     b_params->m_data_mode);
-> +			t_data.hstart = hstart;
-> +			t_data.hstop = hstop;
-> +			t_data.block_offset = port_bo;
-> +			t_data.sub_block_offset = 0;
-> +		}
-> +		amd_sdwc_compute_slave_ports(m_rt, &t_data);
-> +	}
-> +	return 0;
-> +}
-> +
-
-...
-
-> +
-> +static int amd_sdwc_port_enable(struct sdw_bus *bus,
-> +				struct sdw_enable_ch *enable_ch,
-> +				unsigned int bank)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl = to_amd_sdw(bus);
-> +	u32 dpn_ch_enable;
-> +	u32 ch_enable_reg, channel_type;
-> +
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		channel_type = enable_ch->port_num;
-> +		break;
-> +	case ACP_SDW1:
-> +		channel_type = enable_ch->port_num + ACP_SDW0_MAX_DAI;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	switch (channel_type) {
-> +	case ACP_SDW0_AUDIO_TX:
-> +		ch_enable_reg = ACP_SW_AUDIO_TX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW0_HS_TX:
-> +		ch_enable_reg = ACP_SW_HEADSET_TX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW0_BT_TX:
-> +		ch_enable_reg = ACP_SW_BT_TX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW1_BT_TX:
-> +		ch_enable_reg = ACP_P1_SW_BT_TX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW0_AUDIO_RX:
-> +		ch_enable_reg = ACP_SW_AUDIO_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW0_HS_RX:
-> +		ch_enable_reg = ACP_SW_HEADSET_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW0_BT_RX:
-> +		ch_enable_reg = ACP_SW_BT_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW1_BT_RX:
-> +		ch_enable_reg = ACP_P1_SW_BT_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	default:
-> +		dev_err(bus->dev, "%s:Invalid channel:%d\n", __func__, channel_type);
-> +		return -EINVAL;
-> +	}
-> +
-> +	dpn_ch_enable =  acp_reg_readl(ctrl->mmio + ch_enable_reg);
-
-Double space after '='.
-
-> +	u32p_replace_bits(&dpn_ch_enable, enable_ch->ch_mask, AMD_DPN_CH_EN_CHMASK);
-> +	if (enable_ch->enable)
-> +		acp_reg_writel(dpn_ch_enable, ctrl->mmio + ch_enable_reg);
-> +	else
-> +		acp_reg_writel(0, ctrl->mmio + ch_enable_reg);
-> +	return 0;
-> +}
-> +
-
-...
-
-> +
-> +static void amd_sdwc_probe_work(struct work_struct *work)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl  = container_of(work, struct amd_sdwc_ctrl, probe_work);
-
-Double space before '='.
-
-> +	struct sdw_master_prop *prop;
-> +	int ret;
-> +
-> +	prop = &ctrl->bus.prop;
-> +	if (!prop->hw_disabled) {
-> +		ret = amd_enable_sdw_pads(ctrl);
-> +		if (ret)
-> +			return;
-> +		ret = amd_init_sdw_controller(ctrl);
-> +		if (ret)
-> +			return;
-> +		amd_enable_sdw_interrupts(ctrl);
-> +		ret = amd_enable_sdw_controller(ctrl);
-> +		if (ret)
-> +			return;
-> +		ret = amd_sdwc_set_frameshape(ctrl, 50, 10);
-> +		if (!ret)
-> +			ctrl->startup_done = true;
-> +	}
-> +}
-> +
-> +static int amd_sdwc_probe(struct platform_device *pdev)
-> +{
-> +	const struct acp_sdw_pdata *pdata = pdev->dev.platform_data;
-> +	struct resource *res;
-> +	struct device *dev = &pdev->dev;
-
-Same as in previous patch, you assign dev here, but keep using 
-&pdev->dev below?
-
-> +	struct sdw_master_prop *prop;
-> +	struct sdw_bus_params *params;
-> +	struct amd_sdwc_ctrl *ctrl;
-> +	int ret;
-> +
-> +	if (!pdev->dev.platform_data) {
-> +		dev_err(&pdev->dev, "platform_data not retrieved\n");
-> +		return -ENODEV;
-> +	}
-> +	ctrl = devm_kzalloc(&pdev->dev, sizeof(struct amd_sdwc_ctrl), GFP_KERNEL);
-> +	if (!ctrl)
-> +		return -ENOMEM;
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res) {
-> +		dev_err(&pdev->dev, "IORESOURCE_MEM FAILED\n");
-> +		return -ENOMEM;
-> +	}
-> +	ctrl->mmio = devm_ioremap(&pdev->dev, res->start, resource_size(res));
-> +	if (IS_ERR(ctrl->mmio)) {
-> +		dev_err(&pdev->dev, "mmio not found\n");
-> +		return PTR_ERR(ctrl->mmio);
-> +	}
-> +	ctrl->instance = pdata->instance;
-> +	ctrl->sdw_lock  = pdata->sdw_lock;
-
-Double space before '='.
-
-> +	ctrl->rows_index = sdw_find_row_index(50);
-> +	ctrl->cols_index = sdw_find_col_index(10);
-> +
-> +	ctrl->dev = dev;
-> +	dev_set_drvdata(&pdev->dev, ctrl);
-> +
-> +	ctrl->bus.ops = &amd_sdwc_ops;
-> +	ctrl->bus.port_ops = &amd_sdwc_port_ops;
-> +	ctrl->bus.compute_params = &amd_sdwc_compute_params;
-> +	ctrl->bus.clk_stop_timeout = 1;
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		ctrl->num_dout_ports =  AMD_SDW0_MAX_TX_PORTS;
-
-Double space after '='.
-
-> +		ctrl->num_din_ports = AMD_SDW0_MAX_RX_PORTS;
-> +		break;
-> +	case ACP_SDW1:
-> +		ctrl->num_dout_ports = AMD_SDW1_MAX_TX_PORTS;
-> +		ctrl->num_din_ports = AMD_SDW1_MAX_RX_PORTS;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	params = &ctrl->bus.params;
-> +	params->max_dr_freq = AMD_SDW_DEFAULT_CLK_FREQ * 2;
-> +	params->curr_dr_freq = AMD_SDW_DEFAULT_CLK_FREQ * 2;
-> +	params->col = 10;
-> +	params->row = 50;
-> +
-> +	prop = &ctrl->bus.prop;
-> +	prop->clk_freq = &amd_sdwc_freq_tbl[0];
-> +	prop->mclk_freq = AMD_SDW_BUS_BASE_FREQ;
-> +	ctrl->bus.link_id = ctrl->instance;
-> +	ret = sdw_bus_master_add(&ctrl->bus, dev, dev->fwnode);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to register Soundwire controller (%d)\n",
-> +			ret);
-> +		return ret;
-> +	}
-> +	INIT_WORK(&ctrl->probe_work, amd_sdwc_probe_work);
-> +	schedule_work(&ctrl->probe_work);
-> +	return 0;
-> +}
-> +
-> +static int amd_sdwc_remove(struct platform_device *pdev)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl = dev_get_drvdata(&pdev->dev);
-> +	int ret;
-> +
-
-You may need to cancel work if someone tries to unload driver before 
-probe work completes. Something like
-
-cancel_work_sync(&ctrl->probe_work);
-
-should probably work here.
-
-> +	amd_disable_sdw_interrupts(ctrl);
-> +	sdw_bus_master_delete(&ctrl->bus);
-> +	ret = amd_disable_sdw_controller(ctrl);
-> +	return ret;
-> +}
-> +
-
-
+--=20
+Thank you,
+Alexey=
