@@ -2,162 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4523D666159
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D55D66615D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239508AbjAKRFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
+        id S235681AbjAKRHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236185AbjAKRFH (ORCPT
+        with ESMTP id S235721AbjAKRGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:05:07 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7732E395E2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:02:30 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id co23so15732056wrb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:02:30 -0800 (PST)
+        Wed, 11 Jan 2023 12:06:36 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30DE3D5C5
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:04:32 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id i65so8413609pfc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:04:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b1AAzENehsPYWw2Oaedh0crDw1m6Zs6gd5zh20RGn1E=;
-        b=FwUOD+wCpn9aORxQQ9IZFC80gkiq974021pW37TQW8dMSa0nBryG+Y9/ufYw40yYdd
-         cfc8QrFcpiw45eaM4QhmQ4Qnd6Y6CSQc3mItEfUbZAZTZ2xylQ3/t1zOMXREjJ2V3BOd
-         05hSUiPmq2+ZbXFl2jn/CbytxTD/EGeYakr6M=
+        d=linuxtx.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P78j3kGdgbF9v+wVhjVXmiioDAvHYt+bU3WJdRcxjVc=;
+        b=C2UHUU75bCsITqXMa69Uq2TNgTJ3Znhtsr+7JDI2XoJ6CCtRsvdhRA9ITmF95/igPs
+         kL8F+gGvg1t+nD5/mspHv+XVGXY2JRu7wpx84uZiNW+r4I0YfWmFfp+y+4WNsXsm07P2
+         M45Dc/AwtLaQASmTND4j4dJnx6DPqiwAMefAE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b1AAzENehsPYWw2Oaedh0crDw1m6Zs6gd5zh20RGn1E=;
-        b=P338pThrGNhGafhk5+QJG89M3bcQgc9lqNDZQN4xS0T10bitPSjqHMTIkDKPkDf7VD
-         Ok/vv5xRuAeV9hePfsotMlndGCWRpdeF0A7KhXKg8cGZYhJ6LwC9M6XF7S6PxsXAbygP
-         DSeDU3p3kPzGC7oZ3pLHDBmtPzqRZwv/G1ucw1DNOmiAa1gHa5ZPvgu3m8slxeNGwZur
-         LYmUTH/hosMM4I6QrZXrcceA2F72nWuguNVnxkcgrF0J2ewmrS6gIyeVYnvXwfMkMq9p
-         XNyZBeyeFmKn8RzlwxYdUpB/hUB9MbLJI5ulynBHtrQjdMZdbKHzCZslSoT2fLgnv7Cn
-         U7Rw==
-X-Gm-Message-State: AFqh2kpk4x7bdL13G3CVRpUmLOE005uhWuJxzi32a9/L6thNnrbX8lUJ
-        GY0uzUBac+9d64tdehxz4x1o7Q==
-X-Google-Smtp-Source: AMrXdXtPPt+JpFASCNzf+qFF6+k8bl3HIp6rRi4y8P9mKZ6UBLFtd1bgk1B/AByfIzGUc7gGYAO2BA==
-X-Received: by 2002:a5d:48c6:0:b0:242:844a:835d with SMTP id p6-20020a5d48c6000000b00242844a835dmr41453252wrs.65.1673456549060;
-        Wed, 11 Jan 2023 09:02:29 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id n16-20020a5d4010000000b002bbed1388a5sm8972510wrp.15.2023.01.11.09.02.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 09:02:28 -0800 (PST)
-Date:   Wed, 11 Jan 2023 18:02:26 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH 01/11] drm/ast: Use
- drm_aperture_remove_conflicting_pci_framebuffers
-Message-ID: <Y77rol9OibGAzgJk@phenom.ffwll.local>
-Mail-Followup-To: Thomas Zimmermann <tzimmermann@suse.de>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org
-References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
- <1118bbfc-16f2-a65c-0dd0-ccc0e42e13c1@suse.de>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P78j3kGdgbF9v+wVhjVXmiioDAvHYt+bU3WJdRcxjVc=;
+        b=Qjdezkl3FR+oGRXsT8Ae/c8IXdu7MEWs3KgX6vYVY8LOcZHxIq7B+XMiekxrsyzYIT
+         FSTuAWygJKyrljSzYIo0xCpmvmxoUlveh/Onj4TmE9RvdVt7tX28hVTNorzVZ2JC7jjW
+         3Cj00uad+91fBPVGqHRCID0nh4wnTw+lmPqA2IIpwBMO3cyEYuy3dUbnsKeTVaoYYFGD
+         +x8X0SSn1s5VgD8K1fKrIF4B12chUZHmS+RegxkOcuCeKnDD9QFwTSeY999fOSiDcJFB
+         Kt9FTd6ZWcUPzHkc3bnJZSKpTdUEMQfpCUUQi0hARhpGzp4bNlffedZiRjqjiOi1Eoi5
+         Hm1A==
+X-Gm-Message-State: AFqh2koR/c6+BueYj9SHuQrguVjRIyNycq5ODgABVQ9geBx0awuVjKtU
+        yAkPgKlK7gB7hiUyGptgyTsviu5w8aqlzgyaUlA6TA==
+X-Google-Smtp-Source: AMrXdXuWvmJNAU7a++adQ+TBpesZus/OcSWjKd5zaXgS/SxyQcz0yAMStzIxmwYW+Xwfe/cW6ws0Jfe1BEVp978x/NA=
+X-Received: by 2002:aa7:9584:0:b0:582:46a4:87dc with SMTP id
+ z4-20020aa79584000000b0058246a487dcmr3290795pfj.2.1673456672340; Wed, 11 Jan
+ 2023 09:04:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1118bbfc-16f2-a65c-0dd0-ccc0e42e13c1@suse.de>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
+References: <CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com>
+ <26bd2928-9d62-32b3-4f9f-9dd9293cefeb@leemhuis.info> <CAK7LNAQ5VVRdrewtxrBdw561LL=yY8fdr=i1e7pp4DRht=r_Ww@mail.gmail.com>
+ <0ab93345-18e1-15c9-a4a3-066ea1cd862b@leemhuis.info> <CAMj1kXE+LBOBavOre1O8LTGPCmB8m58fbfo92Sx4WukyNAur-A@mail.gmail.com>
+ <CAK7LNATQ-NjYxPvGf4o6N5mp9kS07fpphcEn4_9LOMtS2nTbmQ@mail.gmail.com>
+In-Reply-To: <CAK7LNATQ-NjYxPvGf4o6N5mp9kS07fpphcEn4_9LOMtS2nTbmQ@mail.gmail.com>
+From:   Justin Forbes <jmforbes@linuxtx.org>
+Date:   Wed, 11 Jan 2023 11:04:21 -0600
+Message-ID: <CAFxkdAowJuVu_XGDQsWGqm_ofA+GVjz6jNsgUnskSsAydmgLhQ@mail.gmail.com>
+Subject: Re: BUG: arm64: missing build-id from vmlinux
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, Dennis Gilmore <dennis@ausil.us>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 04:48:39PM +0100, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 11.01.23 um 16:41 schrieb Daniel Vetter:
-> > It's just open coded and matches.
-> > 
-> > Note that Thomas said that his version apparently failed for some
-> > reason, but hey maybe we should try again.
-> 
-> I'll give this patch a test tomorrow.
+On Sat, Dec 24, 2022 at 8:17 PM Masahiro Yamada <masahiroy@kernel.org> wrot=
+e:
+>
+> On Thu, Dec 22, 2022 at 8:53 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Wed, 21 Dec 2022 at 17:29, Thorsten Leemhuis
+> > <regressions@leemhuis.info> wrote:
+> > >
+> > > On 21.12.22 16:39, Masahiro Yamada wrote:
+> > > > On Wed, Dec 21, 2022 at 5:23 PM Thorsten Leemhuis
+> > > > <regressions@leemhuis.info> wrote:
+> > > >>
+> > > >> Hi, this is your Linux kernel regression tracker. CCing the regres=
+sion
+> > > >> mailing list, as it should be in the loop for all regressions:
+> > > >> https://docs.kernel.org/admin-guide/reporting-regressions.html
+> > > >>
+> > > >> On 18.12.22 21:51, Dennis Gilmore wrote:
+> > > >>> The changes in https://lore.kernel.org/linux-arm-kernel/166783716=
+442.32724.935158280857906499.b4-ty@kernel.org/T/
+> > > >>> result in vmlinux no longer having a build-id.
+> > > >>
+> > > >> FWIW, that's 994b7ac1697b ("arm64: remove special treatment for th=
+e link
+> > > >> order of head.o") from Masahiro merged through Will this cycle.
+> > > >>
+> > > >>> At the least, this
+> > > >>> causes rpm builds to fail. Reverting the patch does bring back a
+> > > >>> build-id, but there may be a different way to fix the regression
+> > > >>
+> > > >> Makes me wonder if other distros or CIs relying on the build-id ar=
+e
+> > > >> broken, too.
+> > > >>
+> > > >> Anyway, the holiday season is upon us, hence I also wonder if it w=
+ould
+> > > >> be best to revert above change quickly and leave further debugging=
+ for 2023.
+> > > >>
+> > > >> Masahiro, Will, what's your option on this?
+> > >
+> > > Masahiro, many thx for looking into this.
+> > >
+> > > > I do not understand why you rush into the revert so quickly.
+> > > > We are before -rc1.
+> > > > We have 7 weeks before the 6.2 release
+> > > > (assuming we will have up to -rc7).
+> > > >
+> > > > If we get -rc6 or -rc7 and we still do not
+> > > > solve the issue, we should consider reverting it.
+> > >
+> > > Because it looked like a regression that makes it harder for people a=
+nd
+> > > CI systems to build and test mainline. To quote
+> > > Documentation/process/handling-regressions.rst (
+> > > https://docs.kernel.org/process/handling-regressions.html ):
+> > >
+> > > """
+> > >  * Fix regressions within two or three days, if they are critical for
+> > > some reason =E2=80=93 for example, if the issue is likely to affect m=
+any users
+> > > of the kernel series in question on all or certain architectures. Not=
+e,
+> > > this includes mainline, as issues like compile errors otherwise might
+> > > prevent many testers or continuous integration systems from testing t=
+he
+> > > series.
+> > > """
+> > >
+> > > I suspect that other distros rely on the build-id as well. Maybe I'm
+> > > wrong with that, but even if only Fedora and derivatives are effected=
+ it
+> > > will annoy some people. Sure, each can apply the revert, but before t=
+hat
+> > > everyone affected will spend time debugging the issue first. A quick
+> > > revert in mainline (with a reapply later together with a fix) thus IM=
+HO
+> > > is the most efficient approach afaics.
+> > >
+> >
+> > Agree with Masahiro here.
+> >
+> > The issue seems to be caused by the fact that whichever object gets
+> > linked first gets to decide the type of a section, and so the .notes
+> > section will be of type NOTE if head.o gets linked first, or PROGBITS
+> > otherwise. The latter PROGBITS type seems to be the result of the
+> > compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
+> >
+> > The hunk below fixes it for me, by avoiding notes emitted as PROGBITS.
+> > I'll leave it to Masahiro to decide whether this should be fixed for
+> > arm64 only or for all architectures, but I suspect the latter would be
+> > most appropriate.
+> >
+> > Note that the kernel's rpm-pkg and binrpm-pkg targets seem to be
+> > unaffected by this.
+>
+>
+> Thanks for root-causing this.
+>
+>
+> I like to fix this for all architectures because riscv is also broken.
+>
+> https://lore.kernel.org/lkml/20221224192751.810363-1-masahiroy@kernel.org=
+/
 
-Thanks a lot!
--Daniel
+Appreciate the patch, this does indeed fix the aarch64 issue as well
+and has allowed me to drop the original revert from Fedora.
 
-> 
-> Best regards
-> Thomas
-> 
-> > 
-> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> > Cc: Dave Airlie <airlied@redhat.com>
-> > Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> > Cc: Javier Martinez Canillas <javierm@redhat.com>
-> > Cc: Helge Deller <deller@gmx.de>
-> > Cc: linux-fbdev@vger.kernel.org
-> > ---
-> >   drivers/gpu/drm/ast/ast_drv.c | 16 +---------------
-> >   1 file changed, 1 insertion(+), 15 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
-> > index 420fc75c240e..3ac24a780f50 100644
-> > --- a/drivers/gpu/drm/ast/ast_drv.c
-> > +++ b/drivers/gpu/drm/ast/ast_drv.c
-> > @@ -90,27 +90,13 @@ static const struct pci_device_id ast_pciidlist[] = {
-> >   MODULE_DEVICE_TABLE(pci, ast_pciidlist);
-> > -static int ast_remove_conflicting_framebuffers(struct pci_dev *pdev)
-> > -{
-> > -	bool primary = false;
-> > -	resource_size_t base, size;
-> > -
-> > -	base = pci_resource_start(pdev, 0);
-> > -	size = pci_resource_len(pdev, 0);
-> > -#ifdef CONFIG_X86
-> > -	primary = pdev->resource[PCI_ROM_RESOURCE].flags & IORESOURCE_ROM_SHADOW;
-> > -#endif
-> > -
-> > -	return drm_aperture_remove_conflicting_framebuffers(base, size, primary, &ast_driver);
-> > -}
-> > -
-> >   static int ast_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
-> >   {
-> >   	struct ast_private *ast;
-> >   	struct drm_device *dev;
-> >   	int ret;
-> > -	ret = ast_remove_conflicting_framebuffers(pdev);
-> > +	ret = drm_aperture_remove_conflicting_pci_framebuffers(pdev, &ast_driver);
-> >   	if (ret)
-> >   		return ret;
-> 
-> -- 
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 Nürnberg, Germany
-> (HRB 36809, AG Nürnberg)
-> Geschäftsführer: Ivo Totev
+Jusitn
 
-
-
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+>
+> > diff --git a/arch/arm64/include/asm/assembler.h
+> > b/arch/arm64/include/asm/assembler.h
+> > index 376a980f2bad08bb..10a172601fe7f53f 100644
+> > --- a/arch/arm64/include/asm/assembler.h
+> > +++ b/arch/arm64/include/asm/assembler.h
+> > @@ -818,7 +818,7 @@ alternative_endif
+> >
+> >  #ifdef GNU_PROPERTY_AARCH64_FEATURE_1_DEFAULT
+> >  .macro emit_aarch64_feature_1_and, feat=3DGNU_PROPERTY_AARCH64_FEATURE=
+_1_DEFAULT
+> > -       .pushsection .note.gnu.property, "a"
+> > +       .pushsection .note.gnu.property, "a", %note
+> >         .align  3
+> >         .long   2f - 1f
+> >         .long   6f - 3f
+>
+>
+> I did not fold this hunk in my patch.
+>
+> I compiled with CONFIG_ARM64_BTI_KERNEL=3Dy.
+>
+> .note.gnu.property section in VDSO was already NOTE
+> without this hunk.
+>
+>
+>
+>
+>
+>
+>
+> > diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinu=
+x.lds.S
+> > index 4c13dafc98b8400f..8a8044dea71b0609 100644
+> > --- a/arch/arm64/kernel/vmlinux.lds.S
+> > +++ b/arch/arm64/kernel/vmlinux.lds.S
+> > @@ -160,6 +160,7 @@ SECTIONS
+> >         /DISCARD/ : {
+> >                 *(.interp .dynamic)
+> >                 *(.dynsym .dynstr .hash .gnu.hash)
+> > +               *(.note.GNU-stack) # emitted as PROGBITS
+> >         }
+> >
+> >         . =3D KIMAGE_VADDR;
+>
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
