@@ -2,148 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7382B665194
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5C56651B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbjAKCNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 21:13:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
+        id S229875AbjAKCX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 21:23:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbjAKCNW (ORCPT
+        with ESMTP id S230397AbjAKCX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 21:13:22 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6607F6544
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:13:21 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id jl4so15224431plb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:13:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b3v/mjJghvz+nesPcSFgua0EIfANDlTaoBpVT/LmX68=;
-        b=a/bd5+wBaxhAEoy70YSi7YZ7BQBdgPullvyp/DoVmVkCa7uz1Qz0VIqF+kluHX8vBJ
-         bu2otuyw+KOAUgIUo9oXDn5GEEbHu65ZVsiyrtBKAZN7SbnD3CI9UDav+5BXlYGOJ7A9
-         VOHoBb+B9qak26SYLbUu13RxKrkmSaJgyALnq5RbZ41UW3DjZaFAtKwvm3CHDwIywD+O
-         +HaQZUIYo2neOWYbmDvJCsPsoG8SXrmWD1459qupgzBe5+3HXtUsa6Y4wo95rzjlepEP
-         U3nQVIBgqvCro+s8I3A+MbRUbuomMN9gw1g28hrLghlJPN8CihWl7b8MBuy+bupbWm2A
-         fH/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b3v/mjJghvz+nesPcSFgua0EIfANDlTaoBpVT/LmX68=;
-        b=uzZiOMBNZ6bvVO1UC/tGklvVkCXIuxj9uGM9r32Tr01pSbng8DH2E/vMKp4Bvz+qFt
-         /3U9lfn+B/D4Zy0lPf2jxnYf3McAsjlyelP2RvZBNQzmSdz3TdoLQMs9ATxI1eQ+AwSY
-         Abrt9WK3fuV98Fjz2kGesfGqpsONynU/oASyBLnHuB7+R6nen7/XWs93T1g8MKVyvv5f
-         bxFKZI3SjT/zCmaYXDu8fxftGw/J05oWbPo22v5PvG7ylGeumBTd9Be4QBl/e+5KJc/L
-         q87DbK/Pzd9J12n9Fiae5+r3QDHaWJtXC4r4yJlxkdjjVJEXVIWJghM4iFIau0gF/F9g
-         OKHw==
-X-Gm-Message-State: AFqh2kqykozH+ShDpd9yfnowQ2AwgiPInUeDqjfqAZvQTBhwgb/RwAsY
-        GfzkiEtZOSsQ9aU0PIytio5TxQ==
-X-Google-Smtp-Source: AMrXdXtbYELwuDFtlM/Ll5KFvcS79aCWDZW84NYVf6rXDf0/DjYIeSXCYyeB9TLRNQSVuAHeKzj+6A==
-X-Received: by 2002:a05:6a20:4284:b0:9d:b8e6:d8e5 with SMTP id o4-20020a056a20428400b0009db8e6d8e5mr359588pzj.2.1673403200529;
-        Tue, 10 Jan 2023 18:13:20 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:6a48:569f:20c1:dc8])
-        by smtp.gmail.com with ESMTPSA id u11-20020a6540cb000000b0046ff3634a78sm7387774pgp.71.2023.01.10.18.13.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 18:13:19 -0800 (PST)
-Date:   Tue, 10 Jan 2023 18:13:14 -0800
-From:   Benson Leung <bleung@google.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>
-Subject: Re: [PATCH 3/3] usb: typec: altmodes/displayport: Use proper macro
- for pin assignment check
-Message-ID: <Y74bOlZC7VezQPl/@google.com>
-References: <20230111020546.3384569-1-pmalani@chromium.org>
- <20230111020546.3384569-3-pmalani@chromium.org>
+        Tue, 10 Jan 2023 21:23:57 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361461A4;
+        Tue, 10 Jan 2023 18:23:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673403836; x=1704939836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O6W8EEZZDpgsAPj45+hyJPC7dzxMaVkD0nu6O0WNFoY=;
+  b=f+csRMx2wpoxqtBXHluN4VTPrhg/CiLrPYUAnz2DqCp7eIR1riGtwvTv
+   ZRDwqDLG8SfD+7TioQTYw1bqqOGBDjBdlqorCyci2PjdDJLBaPlSdEljG
+   d5bvPnH7mzTsw28Fp7OZpOJnUv23ZrbKGqh8qyjpqbF2w7RjqB/+d2v6G
+   AWNFL2ymgG7QDc5CS6KB1jfimPs9+gkW70mThSXD5T2+XNS+P6R0g5Zz+
+   TU9nk6Dn+qSnjjAp3LTiV9+Z9RvbHBU9SJPg78YsLHt2MYioys2jcXVKD
+   FzGuUkorZ0Uy42z8nBuhmTTteX2Mt5uO43MrZWCU3lIeqPVPEUjGCoNHE
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324549812"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="324549812"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 18:23:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="687766202"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="687766202"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga008.jf.intel.com with ESMTP; 10 Jan 2023 18:23:50 -0800
+Date:   Wed, 11 Jan 2023 10:13:31 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v10 3/4] fpga: dfl: add basic support for DFHv1
+Message-ID: <Y74bSzUBLYH4cLDh@yilunxu-OptiPlex-7050>
+References: <20230110003029.806022-1-matthew.gerlach@linux.intel.com>
+ <20230110003029.806022-4-matthew.gerlach@linux.intel.com>
+ <Y708L2rRc1RDVkui@smile.fi.intel.com>
+ <alpine.DEB.2.22.394.2301101310150.815911@rhweight-WRK1>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2fVYJqbuNhrzGG0D"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230111020546.3384569-3-pmalani@chromium.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.22.394.2301101310150.815911@rhweight-WRK1>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-01-10 at 14:07:16 -0800, matthew.gerlach@linux.intel.com wrote:
+> 
+> 
+> On Tue, 10 Jan 2023, Andy Shevchenko wrote:
+> 
+> > On Mon, Jan 09, 2023 at 04:30:28PM -0800, matthew.gerlach@linux.intel.com wrote:
+> > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > 
+> > > Version 1 of the Device Feature Header (DFH) definition adds
+> > > functionality to the Device Feature List (DFL) bus.
+> > > 
+> > > A DFHv1 header may have one or more parameter blocks that
+> > > further describes the HW to SW. Add support to the DFL bus
+> > > to parse the MSI-X parameter.
+> > > 
+> > > The location of a feature's register set is explicitly
+> > > described in DFHv1 and can be relative to the base of the DFHv1
+> > > or an absolute address. Parse the location and pass the information
+> > > to DFL driver.
+> > 
+> > ...
+> > 
+> > > v10: change dfh_find_param to return size of parameter data in bytes
+> > 
+> > The problem that might occur with this approach is byte ordering.
+> > When we have u64 items, we know that they all are placed in CPU
+> > ordering by the bottom layer. What's the contract now? Can it be
+> > a problematic? Please double check this (always keep in mind BE32
+> > as most interesting case for u64/unsigned long representation and
+> > other possible byte ordering outcomes).
+> 
+> A number of u64 items certainly states explicit alignment of the memory, but
+> I think byte ordering is a different issue.
+> 
+> The bottom layer, by design, is still enforcing a number u64 items under the
+> hood. So the contract has not changed. Changing units of size from u64s to
+> bytes was suggested to match the general practice of size of memory being in
+> bytes. I think the suggestion was made because the return type for
+> dfh_find_param() changed from u64* to void* in version 9, when indirectly
+> returning the size of the parameter data was introduced.  So a void * with a
+> size in bytes makes sense. On the other hand, returning a u64 * is a more
+> precise reflection of the data alignment. I think the API should be as
 
---2fVYJqbuNhrzGG0D
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I prefer (void *) + bytes. The properties in the parameter block are not
+guarateed to be u64 for each, e.g. the REG_LAYOUT, so (void *) could better
+indicate it is not. It is just a block of data unknown to DFL core and to
+be parsed by drivers.
 
-On Wed, Jan 11, 2023 at 02:05:43AM +0000, Prashant Malani wrote:
-> While looking at the DP configuration VDO to determine the peripheral
-> configuration, the spec (Table 8-5: DisplayPort Configurations, VESA
-> DisplayPort Alt Mode Standard v2.0) lists the options as "UFP_U as a DP
-> Source/Sink Device".
->=20
-> So, use the correct macro while performing this check. Effectively it's
-> the same as the existing code, but the proposed macro describes the
-> state a little better.
->=20
-> No functional changes introduced.
->=20
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+And why users/drivers need to care about the alignment of the parameter
+block?
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+Thanks,
+Yilun
 
 
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec=
-/altmodes/displayport.c
-> index c0d65c93cefe..746bfbf3d557 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -426,7 +426,7 @@ static const char * const pin_assignments[] =3D {
->   */
->  static u8 get_current_pin_assignments(struct dp_altmode *dp)
->  {
-> -	if (DP_CONF_CURRENTLY(dp->data.conf) =3D=3D DP_CONF_DFP_D)
-> +	if (DP_CONF_CURRENTLY(dp->data.conf) =3D=3D DP_CONF_UFP_U_AS_DFP_D)
->  		return DP_CAP_PIN_ASSIGN_DFP_D(dp->alt->vdo);
->  	else
->  		return DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo);
-> --=20
-> 2.39.0.314.g84b9a713c41-goog
->=20
-
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
-
---2fVYJqbuNhrzGG0D
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY74bOgAKCRBzbaomhzOw
-wowAAQDFTes+DZuv7868tAyRpVpR36P6n2H9MOeH+OqxPzCE5AD+MLsdcrYXjV24
-gBXEi0yxLR33Mnnu3CMlN30COjy7IAo=
-=0CVW
------END PGP SIGNATURE-----
-
---2fVYJqbuNhrzGG0D--
+> follows:
+> 
+> /**
+>  * dfh_find_param() - find parameter block for the given parameter id
+>  * @dfl_dev: dfl device
+>  * @param_id: id of dfl parameter
+>  * @pcount: destination to store size of parameter data in u64 bit words
+>  *
+>  * Return: pointer to start of parameter data, PTR_ERR otherwise.
+>  */
+> u64 *dfh_find_param(struct dfl_device *dfl_dev, int param_id, size_t
+> *pcount)
+> 
+> Regarding byte ordering, Documentation/fpga/dfl.rst does not currently
+> mention endianness. All current HW implementations of DFL are little-endian.
+> I should add a statement in Documentation/fpga/dfl.rst that fields in the
+> Device Feature Header are little-endian.
+> 
+> Thanks for the feedback,
+> Matthew Gerlach
+> 
+> > 
+> > -- 
+> > With Best Regards,
+> > Andy Shevchenko
+> > 
+> > 
+> > 
