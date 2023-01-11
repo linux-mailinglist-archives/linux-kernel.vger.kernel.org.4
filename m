@@ -2,98 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8780666726
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC73666724
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235934AbjAKX2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 18:28:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
+        id S235916AbjAKX1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 18:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236011AbjAKX2G (ORCPT
+        with ESMTP id S235619AbjAKX1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 18:28:06 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2785F3D1EE;
-        Wed, 11 Jan 2023 15:28:02 -0800 (PST)
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1ML9uU-1pWjOQ0Uuw-00IFpU; Thu, 12
- Jan 2023 00:27:40 +0100
-Message-ID: <685f8fbc-5e61-d230-767f-e69784111b88@gmx.com>
-Date:   Thu, 12 Jan 2023 07:27:32 +0800
+        Wed, 11 Jan 2023 18:27:53 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466843D5CB;
+        Wed, 11 Jan 2023 15:27:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673479672; x=1705015672;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=n4DiTA+fkM0MEW9fB8q/JyMf0tXVGfHCcAWyb5AraTs=;
+  b=oBE7/PItJtUPZoqGQiGH1/kxzty7NhqBrDts41Xsdy979LyJlOmYyG4m
+   hq9uLkKUhc9xvLcHg3lE07aetClZR16UftbVnUkbMIzc/7tBm2G/LcQ7c
+   UYi7yCVUmgJ6CH628NQ7u1w7XteJlAJM1dxhZWfQ5NNdk0/Vxy7bECklY
+   skENUXQhtk3H70JOlKMLOkLF7dRBxl+ItmVyNo8AnnewYIqu4OMtSd7q4
+   BcSJZs9jcUGh/6GgdseFU6iHud6kHBFuK8FngBPUI7v28Uvre6pZqtdVJ
+   k1NRi307RQWy2J7dkVMvdAzvIREIJFz7HO221fCfT2OCEpKGDptmF3XHQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303937922"
+X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
+   d="scan'208";a="303937922"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 15:27:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="650918133"
+X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
+   d="scan'208";a="650918133"
+Received: from mabir-mobl.amr.corp.intel.com (HELO [10.209.115.16]) ([10.209.115.16])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 15:27:51 -0800
+Message-ID: <880c4d3c-86d2-082c-bb58-8212adc67ff3@linux.intel.com>
+Date:   Wed, 11 Jan 2023 15:27:51 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3] btrfs: use PAGE_{ALIGN, ALIGNED, ALIGN_DOWN} macro
-To:     dsterba@suse.cz
-Cc:     zys.zljxml@gmail.com, clm@fb.com, josef@toxicpanda.com,
-        dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yushan Zhou <katrinzhou@tencent.com>
-References: <20230103051137.4085572-1-zys.zljxml@gmail.com>
- <87d14908-dc9d-7ce4-c594-b28a9991efbb@gmx.com>
- <20230111184037.GI11562@twin.jikos.cz>
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH V1] PCI/AER: Configure ECRC only AER is native
 Content-Language: en-US
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-In-Reply-To: <20230111184037.GI11562@twin.jikos.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
+        ruscur@russell.cc, oohall@gmail.com, treding@nvidia.com,
+        jonathanh@nvidia.com, mmaddireddy@nvidia.com, kthota@nvidia.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vsethi@nvidia.com, linuxppc-dev@lists.ozlabs.org,
+        sagar.tv@gmail.com
+References: <20230111231033.GA1714672@bhelgaas>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230111231033.GA1714672@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:Kp2RjR85hmW9Kyf/GsKYhJahGsItLZBQroP/Pwr2bc+teQHwD3C
- FxkyGDE++ijqWPUf688K35uDVxaPIQx+Key5H90OlELU26Gz/IZYe5P/Xdi/DMlCzbFlWUy
- hUze0XzR/zbk/W4JCrWbkg2XSTOjtBdPqWaHWmefMAflY5xSL+RFeHxLheWtAqiAcOh8G7S
- Fyj8Y6d2WGWwRfpeMtx8g==
-UI-OutboundReport: notjunk:1;M01:P0:phg6aEFCvJE=;leuH3HfgEhbbPK8kOGUsBxN/v7s
- SvPHwR+T1QEgwYl+Sjq2tAc4Deadg2BW0BZYaFESzyTStqfTdeUhvLkrbJoRCw8YUVjT25VZd
- GtiJjlHiGEy7QMP6opCZZkGlVA1ABDF7AUlDAIqmia8hPSrnNzEX8RKRJSu4Uga57+gK4euGy
- EKNpfUqZBkdE9wE0xFOzuCf8uBfPtkhWfn3KnIWNRG0yENBgzNQ3aMutdUFOptvmVm1blL7Lf
- 8LApiz3bpN+SluppGcEaT4kZrHtOiPoR/wl18eDas5bl13CoPAOFt0ZlcwYx5cdMqIswczvBW
- tsOrKy5ZPaD0/Jzr/IiDnEhXi9G1AdPO2vP7fyLfEQxZ2kbv8XJ5gJmvfdFTJqzOXlUSAyhNN
- udzR6FWamddrhIXWQjBY9bayXe2zTmSSMPFGBN9zBytpDdBIqZCiF0kXA8Z/Z7ADotgoYP3D4
- FIRANAwHwXUiOrrgxUtNDETmNaoB8jiHCCU0cKGDZWg8UyZaxssy4hE0z/Rt1XEfSPhfA/53V
- FqTbXwmvdOvCIt+5UpnVrl145nc/7O5d4UJ4WjcVGs93XOcbzj80Fz9/CgEvCsAHm76jl2jDN
- GT3NBX47VMd916rkrgawvlLiCdzbTsWzVmR8CcEG3hdjIiq+ES4UKsVPnNrAswt2qe58sJOdo
- uBLjGklBYVyimQZAYn5eix90q1AoMBMzfTEuITtjYKlqU++YGpsVshBXfVubmVbgTqu1b/eRh
- /OWdeEidCIRwjhnqXFxxbw0epcZj7Fp5lmLxpLyqSgRZdOOTRx+s4PCMJhuWhPbGjNXIsNe9Z
- Ai5YXTv8Gw79ABvIL85+e0kIRplOZOH3QICXREwWt9o2S85RgOfZZtg33pgYdIPB4wQJhZz0g
- sFXwvqLLTp0UnAoXWZ0I2Wis2p02NeVFFFwj7TuT9FV2PWvfpJFmsOlgCVkMaHYSxxULBQlpo
- 4WMTcT9awOX9Ph5SL1fMCxa7/Bk=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 2023/1/12 02:40, David Sterba wrote:
-> On Tue, Jan 03, 2023 at 01:47:43PM +0800, Qu Wenruo wrote:
+On 1/11/23 3:10 PM, Bjorn Helgaas wrote:
+> On Wed, Jan 11, 2023 at 01:42:21PM -0800, Sathyanarayanan Kuppuswamy wrote:
+>> On 1/11/23 12:31 PM, Vidya Sagar wrote:
+>>> As the ECRC configuration bits are part of AER registers, configure
+>>> ECRC only if AER is natively owned by the kernel.
 >>
->>
->> On 2023/1/3 13:11, zys.zljxml@gmail.com wrote:
->>> From: Yushan Zhou <katrinzhou@tencent.com>
->>>
->>> The header file linux/mm.h provides PAGE_ALIGN, PAGE_ALIGNED,
->>> PAGE_ALIGN_DOWN macros. Use these macros to make code more
->>> concise.
->>
->> Is there anything benefit from the change?
->>
->> In fact, PAGE_ALIGN()/PAGE_ALIGNED() is just using the same
->> ALIGN()/IS_ALIGNED() macro.
->>
->> Thus I don't think your change is of any usefulness, not to mention it's
->> going to introduce confusion and extra effort.
->>
->> I'm completely fine with regular ALIGN()/IS_ALIGNED() usage with PAGE_SIZE.
+>> ecrc command line option takes "bios/on/off" as possible options. It
+>> does not clarify whether "on/off" choices can only be used if AER is
+>> owned by OS or it can override the ownership of ECRC configuration 
+>> similar to pcie_ports=native option. Maybe that needs to be clarified.
 > 
-> We already have PAGE_ALIGN in some places and I think it's a bit better
-> than the ALIGN/IS_ALIGN as it's clear that it's for a page.
+> Good point, what do you think of an update like this:
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 6cfa6e3996cf..f7b40a439194 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -4296,7 +4296,9 @@
+>  				specified, e.g., 12@pci:8086:9c22:103c:198f
+>  				for 4096-byte alignment.
+>  		ecrc=		Enable/disable PCIe ECRC (transaction layer
+> -				end-to-end CRC checking).
+> +				end-to-end CRC checking).  Only effective
+> +				if OS has native AER control (either granted by
+> +				ACPI _OSC or forced via "pcie_ports=native").
+>  				bios: Use BIOS/firmware settings. This is the
+>  				the default.
+>  				off: Turn ECRC off
 
-I'd argue that PAGE_ALIGN() is good for MM code, which btrfs has some.
+Looks fine. But do we even need "bios" option? Since it is the default
+value, I am not sure why we need to list that as an option again. IMO
+this could be removed.
 
-But overall, btrfs is more about sector alignment, and if we need to mix 
-them, regular ALIGN() would be more flex.
+> 
+> I don't know whether the "ecrc=" parameter is really needed.  If we
+> were adding it today, I would ask "why not enable ECRC wherever it is
+> supported?"  If there are devices where it's broken, we could always
+> add quirks to disable it on a case-by-case basis.
 
-Thanks,
-Qu
+Checking the original patch which added it, it looks like the intention
+is to give option to boost performance over integrity.
+
+commit 43c16408842b0eeb367c23a6fa540ce69f99e347
+Author: Andrew Patterson <andrew.patterson@hp.com>
+Date:   Wed Apr 22 16:52:09 2009 -0600
+
+    PCI: Add support for turning PCIe ECRC on or off
+    
+    Adds support for PCI Express transaction layer end-to-end CRC checking
+    (ECRC).  This patch will enable/disable ECRC checking by setting/clearing
+    the ECRC Check Enable and/or ECRC Generation Enable bits for devices that
+    support ECRC.
+    
+    The ECRC setting is controlled by the "pci=ecrc=<policy>" command-line
+    option. If this option is not set or is set to 'bios", the enable and
+    generation bits are left in whatever state that firmware/BIOS set them to.
+    The "off" setting turns them off, and the "on" option turns them on (if the
+    device supports it).
+    
+    Turning ECRC on or off can be a data integrity versus performance
+    tradeoff.  In theory, turning it on will catch more data errors, turning
+    it off means possibly better performance since CRC does not need to be
+    calculated by the PCIe hardware and packet sizes are reduced.
+
+
+> 
+> But I think the patch below is the right thing to do for now.  Vidya,
+
+Agree.
+
+> did you trip over an issue because of this, e.g., a conflict between
+> firmware use of AER and Linux use of it?  If so, maybe we could
+> mention a symptom on the commit log.  But my guess is you probably
+> found this by inspection.
+> 
+> Bjorn
+> 
+>>> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+>>> ---
+>>>  drivers/pci/pcie/aer.c | 3 +++
+>>>  1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+>>> index e2d8a74f83c3..730b47bdcdef 100644
+>>> --- a/drivers/pci/pcie/aer.c
+>>> +++ b/drivers/pci/pcie/aer.c
+>>> @@ -184,6 +184,9 @@ static int disable_ecrc_checking(struct pci_dev *dev)
+>>>   */
+>>>  void pcie_set_ecrc_checking(struct pci_dev *dev)
+>>>  {
+>>> +	if (!pcie_aer_is_native(dev))
+>>> +		return;
+>>> +
+>>>  	switch (ecrc_policy) {
+>>>  	case ECRC_POLICY_DEFAULT:
+>>>  		return;
+>>
+>> -- 
+>> Sathyanarayanan Kuppuswamy
+>> Linux Kernel Developer
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
