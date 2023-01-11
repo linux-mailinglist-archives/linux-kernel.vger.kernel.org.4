@@ -2,85 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78C1665196
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C199966518D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 03:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235615AbjAKCNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 21:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S234166AbjAKCM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 21:12:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235245AbjAKCNb (ORCPT
+        with ESMTP id S229535AbjAKCMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 21:13:31 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C85F64C7;
-        Tue, 10 Jan 2023 18:13:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=njrrmruQDIC0in34qwfwYVLn81yNCbta3wj2UCVqMgs=; b=nh0gZtN2mPu3w5awxIzCHyCM0m
-        VL7XTrWSWP/T3pXS1JaWh6hTp9KvW6KHDhtX2kyiA8TwA81F6Pqp6MN5fkdOW8mYBgv4PdAWlhPV5
-        HO78Fcczxdyq35HLxMLDtwOodiZ2yh6krPSU706FcQ7hzKU0gDz3zzYBXr4hSNnWGOVbwrT1cmA6r
-        h5aEO9JLRpDpneToikJt11IFS/KVgwbXQlCgNlO11DGxO0Y2XrcTxJzCJg+0AhCT1uzgmJS00241D
-        6QuZTgwjKcGVUzNQkX9fB3CfMoLRZ8ZIWrKz6eEqMFO7wlHlPvRp3Rsm1EAfnwwOVh84wSPT+W1vT
-        xRc2VA1g==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pFQbO-0016Yj-2p;
-        Wed, 11 Jan 2023 02:12:31 +0000
-Date:   Wed, 11 Jan 2023 02:12:30 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Mike Marshall <hubcap@omnibond.com>,
-        Martin Brandenburg <martin@omnibond.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Steve French <stfrench@microsoft.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, cluster-devel@redhat.com,
-        linux-nfs@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        devel@lists.orangefs.org, linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v2] filelock: move file locking definitions to separate
- header file
-Message-ID: <Y74bDlSiEb2dRFSx@ZenIV>
-References: <20230105211937.1572384-1-jlayton@kernel.org>
+        Tue, 10 Jan 2023 21:12:43 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B809C76C
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:12:42 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id b9-20020a17090a7ac900b00226ef160dcaso13819646pjl.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 18:12:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=irVeOhn1a5BJ5XA0SQi4wtUBmDMjtpLuPHDNe0+Ec60=;
+        b=RqZBJHmo7cc9H+guxiqP2NX8/GQ8JClOF8pN+9RtpdWT1LbdrPxz4IacjBbU0PcjYt
+         wDaAW6hmD277UmLUy/2Hm+hTc/iQnFcqMY4S++Pq7u+SmFyxYPVzDJpA/5S3GjsniwH9
+         dV7OLk1Am5qzV5vgzVM6OVlTolKHGBrk6eXc4jkhFADrt25K6FfrmE9paBWKRWKi+cia
+         NAS2/GObFO4psH8um4kHhpZuAIjSMAo6Wt9Z+8h5JLVAHnnAwoa5GB2FU/m/nflsxRA5
+         rWqIAU4/h5D6kUOmxmzPOV64eurU2Vo3vS+Jmrg1pAP5Noy+rPYdrO3Vu1X6xMkZ557A
+         hmRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=irVeOhn1a5BJ5XA0SQi4wtUBmDMjtpLuPHDNe0+Ec60=;
+        b=qdiBQpDQe8q4QiiObwLLAzt/Dg2ELqgqh91Bqrewm5ecTM5L52cFRCTuWhHxZvbgHj
+         5sx8avfIvcdeAYK1f79o2Zogk3rLSrd4rW2t5L/d1lJI5380EAkeuvTwoDkKWCV8PONQ
+         Xvvj2HKYm3IeKa44AdWgQWn0rWejuJW9C9SruiOgQFPbHLcgZCwbhq8KXLomBm9C9vGd
+         96ZBRyBRdwzKcvNSdb+kDfYcUfNa3BeBgkGuQU/xc73voEhKO/dvxwrEMSxPzafKdVOr
+         YLa+S+jZ+BWbsy5xShRS/CgQt8aVqO+Dwoo//7gvYr4Q1NgblO2DTl3cznf2TLANi7UH
+         DBxw==
+X-Gm-Message-State: AFqh2krGciAAw6YRvVFC4s3Yr8r82A37P2J9iA50yKYNZQQBwJUXhuFx
+        2DK7JM/9G6SMAbTzOgbZGrbBDQ==
+X-Google-Smtp-Source: AMrXdXsEVn2qTlKmP6JJUfhl6nqQZ6QlxNOmOSAQSZc5kHcdh34HBugnFRueVQPoQfUH25ZW5v0rfA==
+X-Received: by 2002:a17:902:b10e:b0:191:4367:7fde with SMTP id q14-20020a170902b10e00b0019143677fdemr226996plr.0.1673403161675;
+        Tue, 10 Jan 2023 18:12:41 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:6a48:569f:20c1:dc8])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902bd0500b001932a9e4f2csm5657256pls.255.2023.01.10.18.12.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 18:12:40 -0800 (PST)
+Date:   Tue, 10 Jan 2023 18:12:35 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, stable@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Pablo Sun <pablo.sun@mediatek.com>
+Subject: Re: [PATCH 2/3] usb: typec: altmodes/displayport: Fix pin assignment
+ calculation
+Message-ID: <Y74bEyUOT3mrAY+I@google.com>
+References: <20230111020546.3384569-1-pmalani@chromium.org>
+ <20230111020546.3384569-2-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="H3XDtXqWAjLUxnxA"
 Content-Disposition: inline
-In-Reply-To: <20230105211937.1572384-1-jlayton@kernel.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20230111020546.3384569-2-pmalani@chromium.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,23 +80,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 04:19:29PM -0500, Jeff Layton wrote:
-> The file locking definitions have lived in fs.h since the dawn of time,
-> but they are only used by a small subset of the source files that
-> include it.
-> 
-> Move the file locking definitions to a new header file, and add the
-> appropriate #include directives to the source files that need them. By
-> doing this we trim down fs.h a bit and limit the amount of rebuilding
-> that has to be done when we make changes to the file locking APIs.
-> 
-> Reviewed-by: Xiubo Li <xiubli@redhat.com>
-> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: David Howells <dhowells@redhat.com>
-> Acked-by: Chuck Lever <chuck.lever@oracle.com>
-> Acked-by: Joseph Qi <joseph.qi@linux.alibaba.com>
-> Acked-by: Steve French <stfrench@microsoft.com>
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Same question re git tree preferences (and my Acked-by in any case)
+--H3XDtXqWAjLUxnxA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jan 11, 2023 at 02:05:42AM +0000, Prashant Malani wrote:
+> Commit c1e5c2f0cb8a ("usb: typec: altmodes/displayport: correct pin
+> assignment for UFP receptacles") fixed the pin assignment calculation
+> to take into account whether the peripheral was a plug or a receptacle.
+>=20
+> But the "pin_assignments" sysfs logic was not updated. Address this by
+> using the macros introduced in the aforementioned commit in the sysfs
+> logic too.
+>=20
+> Fixes: c1e5c2f0cb8a ("usb: typec: altmodes/displayport: correct pin assig=
+nment for UFP receptacles")
+> Cc: stable@vger.kernel.org
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+
+Reviewed-by: Benson Leung <bleung@chromium.org>
+
+
+> ---
+>  drivers/usb/typec/altmodes/displayport.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec=
+/altmodes/displayport.c
+> index f9d4a7648bc9..c0d65c93cefe 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -427,9 +427,9 @@ static const char * const pin_assignments[] =3D {
+>  static u8 get_current_pin_assignments(struct dp_altmode *dp)
+>  {
+>  	if (DP_CONF_CURRENTLY(dp->data.conf) =3D=3D DP_CONF_DFP_D)
+> -		return DP_CAP_UFP_D_PIN_ASSIGN(dp->alt->vdo);
+> +		return DP_CAP_PIN_ASSIGN_DFP_D(dp->alt->vdo);
+>  	else
+> -		return DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo);
+> +		return DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo);
+>  }
+> =20
+>  static ssize_t
+> --=20
+> 2.39.0.314.g84b9a713c41-goog
+>=20
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--H3XDtXqWAjLUxnxA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY74bEwAKCRBzbaomhzOw
+wh4+APwJLOrut48PsUp3KdWO6i0ZWSEbCPvHJvr5NOu69xx+MgEAneRgoN+BIzhp
+qyspS5trJHRIAs3eO2MXCdpL0L7OAQk=
+=/0xh
+-----END PGP SIGNATURE-----
+
+--H3XDtXqWAjLUxnxA--
