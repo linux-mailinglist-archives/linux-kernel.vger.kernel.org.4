@@ -2,104 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF39665826
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EC8665831
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238542AbjAKJx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
+        id S238826AbjAKJyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238742AbjAKJx1 (ORCPT
+        with ESMTP id S235993AbjAKJxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:53:27 -0500
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FD2F0A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:51:03 -0800 (PST)
-Received: by mail-ed1-f53.google.com with SMTP id s5so21505045edc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:51:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qpFo+O8qS7NH3jrF08AXi3xEDczSSjFjrCll7MZBd7o=;
-        b=hOVAVOp2ZcnT77ct62gCnmgsUf2nI54Ac+ZA2RYqvsrm02YK38MohATC+gwGWgLvSf
-         uHTMTAg04fMQLwGdTtlcFgWjPqpmhnt3uy0wyA6biR2zufmXPtpCXIo2TOiXLV9x10En
-         HSDVCUDuCl9zfaV5BszQZG2dJhhEKpvxRwrgN9SKczIBL3KBbDunTcsYi/J19BA7fuzO
-         rtd6+yArxDvaCp056sAXh/8eX3Zo+Gv92kAI4R68YT+mz0e6iIzCcBFRlDuts5xtvwTt
-         ejiarBQEdsYaTzOjEBe9f1+dzT4WE6NUOqxW99/R4D32AN/1qwPP24ufNBxD/qb6Z4hO
-         BvWg==
-X-Gm-Message-State: AFqh2kpOBwr/b/2lkbINuAhiklH4y4wWlaIyiImqOXEGymZqu+vYD3CR
-        +BOutgHi4NfTFk9z/O7W+/xJGzNpWH+/yHtOzKdN5YxuBHM=
-X-Google-Smtp-Source: AMrXdXuRiZLKSgkQVxn1xTUcieSKQlliXk42T2ogw0cYWyEXGcVjQDzR0cv8FYXPwFJQJu4tErDft0CfQoq7s4gS63Y=
-X-Received: by 2002:a05:6402:c44:b0:499:c651:625d with SMTP id
- cs4-20020a0564020c4400b00499c651625dmr665628edb.413.1673430661871; Wed, 11
- Jan 2023 01:51:01 -0800 (PST)
+        Wed, 11 Jan 2023 04:53:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3A5D109;
+        Wed, 11 Jan 2023 01:51:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9221EB81B76;
+        Wed, 11 Jan 2023 09:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F6DC433F1;
+        Wed, 11 Jan 2023 09:51:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673430685;
+        bh=z0ZYgHqL1YLvYl+ue5zNy1KMy+u3shk6BmiAvHiQZSA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xZGcZ5JDRrdXTJbt9tLPDzh24ToBaCeG04aIrg63SxaV0mqioT6pGZXGHiVeh9ZOU
+         sO0JuLfJTFUVrJVMPgoU9Fwio7tkoa1uh4VeY/xzIKAbqvAAsfPDw+kuuk3E42lxBv
+         sJ9yu85to26aoTWWeVLBJDsI3mtwYFGQ3RchmYyA=
+Date:   Wed, 11 Jan 2023 10:51:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Message-ID: <Y76GmvOD9KxSuD7o@kroah.com>
+References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+ <20221123122523.1332370-3-gregkh@linuxfoundation.org>
+ <CAJZ5v0gqD_TW3iGLAiH=us1B0-JLGtv2VGTJjQwiWxCmris9ag@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230111093327.3955063-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20230111093327.3955063-1-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 11 Jan 2023 10:50:49 +0100
-Message-ID: <CAJZ5v0jDb9gbXNc8oeW4poPh_MQydOqjyfgWmDehfTeG_5F8uA@mail.gmail.com>
-Subject: Re: [PATCH] driver core: change to_subsys_private() to use container_of_const()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gqD_TW3iGLAiH=us1B0-JLGtv2VGTJjQwiWxCmris9ag@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 10:33 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> The macro to_subsys_private() needs to switch to using
-> container_of_const() as it turned out to being incorrectly casting a
-> const pointer to a non-const one.  Make this change and fix up the one
-> offending user to be correctly handling a const pointer properly.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Wed, Nov 23, 2022 at 01:38:05PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Nov 23, 2022 at 1:25 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > The uevent() callback in struct device_type should not be modifying the
+> > device that is passed into it, so mark it as a const * and propagate the
+> > function signature changes out into all relevant subsystems that use
+> > this callback.
+> >
+> > Cc: Jens Axboe <axboe@kernel.dk>
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: Len Brown <lenb@kernel.org>
+> > Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
+> > Cc: Wolfram Sang <wsa@kernel.org>
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > Cc: Sean Young <sean@mess.org>
+> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Frank Rowand <frowand.list@gmail.com>
+> > Cc: Maximilian Luz <luzmaximilian@gmail.com>
+> > Cc: Hans de Goede <hdegoede@redhat.com>
+> > Cc: Mark Gross <markgross@kernel.org>
+> > Cc: Vinod Koul <vkoul@kernel.org>
+> > Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
+> > Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > Cc: Sanyog Kale <sanyog.r.kale@intel.com>
+> > Cc: Andreas Noever <andreas.noever@gmail.com>
+> > Cc: Michael Jamet <michael.jamet@intel.com>
+> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
+> > Cc: Jiri Slaby <jirislaby@kernel.org>
+> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+> > Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> > Cc: Chaitanya Kulkarni <kch@nvidia.com>
+> > Cc: Ming Lei <ming.lei@redhat.com>
+> > Cc: Jilin Yuan <yuanjilin@cdjrlc.com>
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ira Weiny <ira.weiny@intel.com>
+> > Cc: Dan Williams <dan.j.williams@intel.com>
+> > Cc: Won Chung <wonchung@google.com>
+> > Cc: alsa-devel@alsa-project.org
+> > Cc: devicetree@vger.kernel.org
+> > Cc: linux-acpi@vger.kernel.org
+> > Cc: linux-block@vger.kernel.org
+> > Cc: linux-i2c@vger.kernel.org
+> > Cc: linux-i3c@lists.infradead.org
+> > Cc: linux-input@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: linux-media@vger.kernel.org
+> > Cc: linux-serial@vger.kernel.org
+> > Cc: linux-usb@vger.kernel.org
+> > Cc: linux1394-devel@lists.sourceforge.net
+> > Cc: platform-driver-x86@vger.kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> (which my ACPI maintainer hat on).
 
-Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+thanks for the review, I'll add it to the v2 patch.
 
-> ---
->  drivers/base/base.h  | 2 +-
->  drivers/base/class.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/base/base.h b/drivers/base/base.h
-> index 2e08258ce82e..3d1da1027206 100644
-> --- a/drivers/base/base.h
-> +++ b/drivers/base/base.h
-> @@ -53,7 +53,7 @@ struct subsys_private {
->         struct kset glue_dirs;
->         struct class *class;
->  };
-> -#define to_subsys_private(obj) container_of(obj, struct subsys_private, subsys.kobj)
-> +#define to_subsys_private(obj) container_of_const(obj, struct subsys_private, subsys.kobj)
->
->  struct driver_private {
->         struct kobject kobj;
-> diff --git a/drivers/base/class.c b/drivers/base/class.c
-> index 86ec554cfe60..3366da9c3ff6 100644
-> --- a/drivers/base/class.c
-> +++ b/drivers/base/class.c
-> @@ -64,7 +64,7 @@ static void class_release(struct kobject *kobj)
->
->  static const struct kobj_ns_type_operations *class_child_ns_type(const struct kobject *kobj)
->  {
-> -       struct subsys_private *cp = to_subsys_private(kobj);
-> +       const struct subsys_private *cp = to_subsys_private(kobj);
->         struct class *class = cp->class;
->
->         return class->ns_type;
-> --
-> 2.39.0
->
+greg k-h
