@@ -2,65 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51553666243
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02008666245
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjAKRr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
+        id S231516AbjAKRtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjAKRr4 (ORCPT
+        with ESMTP id S232376AbjAKRtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:47:56 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A1B762D4;
-        Wed, 11 Jan 2023 09:47:54 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBF72FEC;
-        Wed, 11 Jan 2023 09:48:35 -0800 (PST)
-Received: from [10.57.45.242] (unknown [10.57.45.242])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE5563F587;
-        Wed, 11 Jan 2023 09:47:50 -0800 (PST)
-Message-ID: <b61039b1-1f64-ff1e-8e6a-7d8ada28656c@arm.com>
-Date:   Wed, 11 Jan 2023 17:47:49 +0000
+        Wed, 11 Jan 2023 12:49:21 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3231262D4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:49:21 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-4b718cab0e4so205128107b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ePKFgxTY+N2/lJawjZfA8T7NwNNbVvAEDKDS+DodhcA=;
+        b=oGppCfJz0FFp5Y7cMmyBjVC+6IJyztjkXrGbuY9sKKHCI8eMmhM/7O2McEjp6gADmb
+         +V0NeF2kWF2Nwx3q9gWsm+nYAZhClko9G/+1YL3Na6XbuL8eK6Mt2K1h5TrUYNL0gjZj
+         EdKTPpbii1X0xYEnTvCQabouks/frlB8HMIKJNjssTNM0vareCnqE5qN+nZhpNCV2op3
+         vHTLk1IVN7BpUvGL+T4ErN0fFl3kMEblGRpIp40HU1gf3C0N2si3drvDv1CfDZFLItf8
+         1vJX689W9VLjkDAY6yF+wPxZNPjwU2oyoT1WYSGmqbPzVRb6IwqfBJ9W1QC0Fo04OXv2
+         /HDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ePKFgxTY+N2/lJawjZfA8T7NwNNbVvAEDKDS+DodhcA=;
+        b=25K39Y+NPtPZnfyyHyePm1Y31ZCQOekllwQAUTjCbc8EAJAehYO+9d1cwLmfL/GoKP
+         SrZnSdSPJklN09ggUdVAQc7Fj6s0yHYTy95FSCi0UbdIDZ8RfwuYQ362gLDOqlzp2BlZ
+         TQ0C/Yt3O7PfggROcEXjp6R+8ZZaYhwVh9rPyXnChgQpsOoq/UfWMZHmm0kuPDq6gnJQ
+         C3e1FDOjma7gdYLpebj7R6HDsJVwCW3Q6aFcC3QPhql3yU15NZoYPIevCMOO4k7CCQqJ
+         xoISyUAt9sZzCaEHLvYJFT98wFKdzSLkQTHNeEy9aop2a7jiNM9SKcfGI98yfCtVJmfz
+         XVhg==
+X-Gm-Message-State: AFqh2krP1GJyozUD0CBd+O25cmG9QhKmTyFdwMRghfs2EJPUG3AVS5pq
+        9yONZ8jMjHx2VgFBhnFLfCS/qMDyzNSaQgCM4Yx9WQ==
+X-Google-Smtp-Source: AMrXdXuOq+0O+cDiW8MM05elg260zh8GUOYQodmwyx/lttE2iOJ2vqd6ut8RJ3mh7qgQEhbfljGWdCv4611jx4QWNMI=
+X-Received: by 2002:a0d:c2c5:0:b0:433:f1c0:3f1c with SMTP id
+ e188-20020a0dc2c5000000b00433f1c03f1cmr1980213ywd.438.1673459360046; Wed, 11
+ Jan 2023 09:49:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 0/7] perf cs_etm: Basic support for virtual/kernel
- timestamps
-Content-Language: en-US
-From:   James Clark <james.clark@arm.com>
-To:     Tanmay Jagdale <tanmay@marvell.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "leo.yan@linaro.org" <leo.yan@linaro.org>,
-        "mike.leach@linaro.org" <mike.leach@linaro.org>
-Cc:     Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        George Cherian <gcherian@marvell.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-9-surenb@google.com>
+ <20230111001331.cxdeh52vvta6ok2p@offworld> <CAJuCfpEv--awCY0=R3h5Fez8x74U1EZCzNkq4_7deCYqej5sSA@mail.gmail.com>
+ <Y75x5fGPcJ63pBIp@dhcp22.suse.cz> <Y76HTfIeEt8ZOIH3@gmail.com>
+ <6be809f5554a4faaa22c287ba4224bd0@AcuMS.aculab.com> <CAJuCfpH_VZq99=vGQGJ+evVg5wMPKGsjyawgHnOeoKhtEiAi6w@mail.gmail.com>
+ <Y77ndimzUsVZwjTk@dhcp22.suse.cz> <CAJuCfpEEiFNAgb6TNwibUyTJ1J3b-rEGCSw63TiK6FSA=HCdtw@mail.gmail.com>
+ <Y77zwYHMfjOL+9EK@dhcp22.suse.cz>
+In-Reply-To: <Y77zwYHMfjOL+9EK@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 11 Jan 2023 09:49:08 -0800
+Message-ID: <CAJuCfpHCRL5B7SxqTgNbpJqhFwzROX4HAOH5KArO1iXNs_3Kcg@mail.gmail.com>
+Subject: Re: [PATCH 08/41] mm: introduce CONFIG_PER_VMA_LOCK
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "michel@lespinasse.org" <michel@lespinasse.org>,
+        "joelaf@google.com" <joelaf@google.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "leewalsh@google.com" <leewalsh@google.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "jglisse@google.com" <jglisse@google.com>,
+        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
+        "arjunroy@google.com" <arjunroy@google.com>,
+        "minchan@google.com" <minchan@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "hughd@google.com" <hughd@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "gurua@google.com" <gurua@google.com>,
+        "laurent.dufour@fr.ibm.com" <laurent.dufour@fr.ibm.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230103162042.423694-1-james.clark@arm.com>
- <PH0PR18MB5017223066D8744D12C1F1BAD6FF9@PH0PR18MB5017.namprd18.prod.outlook.com>
- <5acce414-eabb-3d22-4907-da6b64b85a9c@arm.com>
-In-Reply-To: <5acce414-eabb-3d22-4907-da6b64b85a9c@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        "rientjes@google.com" <rientjes@google.com>,
+        "axelrasmussen@google.com" <axelrasmussen@google.com>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        "soheil@google.com" <soheil@google.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "liam.howlett@oracle.com" <liam.howlett@oracle.com>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "gthelen@google.com" <gthelen@google.com>,
+        "ldufour@linux.ibm.com" <ldufour@linux.ibm.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "posk@google.com" <posk@google.com>,
+        "lstoakes@gmail.com" <lstoakes@gmail.com>,
+        "peterjung1337@gmail.com" <peterjung1337@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "hughlynch@google.com" <hughlynch@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tatashin@google.com" <tatashin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,152 +117,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 11, 2023 at 9:37 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Wed 11-01-23 09:04:41, Suren Baghdasaryan wrote:
+> > On Wed, Jan 11, 2023 at 8:44 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Wed 11-01-23 08:28:49, Suren Baghdasaryan wrote:
+> > > [...]
+> > > > Anyhow. Sounds like the overhead of the current design is small enough
+> > > > to remove CONFIG_PER_VMA_LOCK and let it depend only on architecture
+> > > > support?
+> > >
+> > > Yes. Further optimizations can be done on top. Let's not over optimize
+> > > at this stage.
+> >
+> > Sure, I won't optimize any further.
+> > Just to expand on your question. Original design would be problematic
+> > for embedded systems like Android. It notoriously has a high number of
+> > VMAs due to anonymous VMAs being named, which prevents them from
+> > merging.
+>
+> What is the usual number of VMAs in that environment?
 
+I've seen some games which had over 4000 VMAs but that's on the upper
+side. In my calculations I used 40000 VMAs as a ballpark number and
+rough calculations before size optimization would increase memory
+consumption by ~2M (depending on the lock placement in vm_area_struct
+it would vary a bit). In Android, the performance team flags any
+change that exceeds 500KB, so it would raise questions.
 
-On 11/01/2023 10:56, James Clark wrote:
-> 
-> 
-> On 10/01/2023 16:42, Tanmay Jagdale wrote:
-> [...]
->>>
->>> base-commit: 09e6f9f98370be9a9f8978139e0eb1be87d1125f
->> I have tested this patch set on our platform and able to see updated
->> timestamp values in perf script's output.
->>
->> $ perf record -e cs_etm/cycacc,@tmc_etr0/k -C 9 taskset -c 9 sleep 2
->> $ perf script --itrace=i1ns --ns -Fcomm,tid,pid,time,cpu,event,ip,sym,addr,symoff,flags,callindent
->>
->> At certain points noticed that hardware emits same timestamp packets
->> but with updated cycle count (CC) values. A small snippet of the log:
->>
->> Idx:100; ID:12; I_ADDR_S_IS0 : Address, Short, IS0.; Addr=0xFFFF8000086A761C ~[0x761C]
->> Idx:103; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x3d
->> Idx:107; ID:12; I_ATOM_F2 : Atom format 2.; EN
->> Idx:108; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x3f
->> Idx:112; ID:12; I_ATOM_F1 : Atom format 1.; N
->> Idx:113; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x45
->> Idx:116; ID:12; I_ATOM_F1 : Atom format 1.; E
->> Idx:117; ID:12; I_ADDR_S_IS0 : Address, Short, IS0.; Addr=0xFFFF8000086B52D4 ~[0x152D4]
->>
->> Since the source of timestamp is the Generic Timer block and the CPUs
->> run at higher frequencies, this behaviour could be possible on high
->> performance ARM cores.
->>
->> Having consecutive timestamps with same value is resulting in a
->> slightly jumbled order (in nanosecs) in perf script's time column.
->> A snippet corresponding to the Coresight trace data mentioned above:
->> ...
->> perf   965/965   [001]  3182.286629044:            instructions:k:   return                               0 ffff8000086a761c coresight_timeout+0xc8
->> perf   965/965   [001]  3182.286629044:            instructions:k:   return                               0 ffff8000086a7620 coresight_timeout+0xcc
->> perf   965/965   [001]  3182.286629046:            instructions:k:   jmp                                  0 ffff8000086a75c8 coresight_timeout+0x74
->> perf   965/965   [001]  3182.286629046:            instructions:k:   jmp                                  0 ffff8000086a75cc coresight_timeout+0x78
->> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75d0 coresight_timeout+0x7c
->> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75d4 coresight_timeout+0x80
->> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75d8 coresight_timeout+0x84
->> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75dc coresight_timeout+0x88
->> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75e0 coresight_timeout+0x8c
->> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75e4 coresight_timeout+0x90
->> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75e8 coresight_timeout+0x94
->> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75ec coresight_timeout+0x98
->>
->> Perf's do_soft_timestamp() logic in cs_etm_decoder.c file is incrementing
->> the HW timestamp based on instruction count. Since the next timestamp
->> also has the same value, it could be leading to this jumbled order.
->>
->> We would like to know if this has been observed on other platforms ?
->> And what could be a solution in SW for this ?
-> 
-> Nice catch. If I'm understanding this correctly it looks like the issue
-> is a combination of the cycle count in the packet being ignored by Perf,
-> and the instruction count being reset to 0 when a new timestamp is received.
-> 
-> It looks like it can be fixed by some combination of combining the cycle
-> count and instruction count and maybe not resetting instruction count if
-> the newly received timestamp is the same as the last one. I will look
-> into this.
-> 
-> We haven't noticed it on any other platforms, but we haven't been
-> looking too closely at the timestamps until now. Perhaps I can add a
-> test that checks if the trace in a known function goes in the correct
-> time order.
-> 
-
-I'm thinking of something like the following patch to fix the ordering.
-It doesn't use the cycle count, but I'm not sure if that would be
-worthwhile in the end, considering that it would have sub nanosecond
-resolution so wouldn't affect the Perf timestamps:
-
-
-diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-index 31fa3b45134a..08a028e3e87a 100644
---- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-+++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-@@ -112,6 +112,19 @@ int cs_etm_decoder__get_packet(struct cs_etm_packet_queue *packet_queue,
- 	return 1;
- }
- 
-+static u64 cs_etm_decoder__instr_count_to_ns(u64 instr_count)
-+{
-+	/*
-+	 * Assume a maximum of 0.1ns elapsed per instruction. This would be the
-+	 * case with a theoretical 10GHz core executing 1 instruction per cycle.
-+	 * Used to estimate the sample time for synthesized instructions because
-+	 * Coresight only emits a timestamp for a range of instructions rather
-+	 * than per instruction.
-+	 */
-+	const int INSTR_PER_NS = 10;
-+
-+	return instr_count / INSTR_PER_NS;
-+}
- static int cs_etm_decoder__gen_etmv3_config(struct cs_etm_trace_params *params,
- 					    ocsd_etmv3_cfg *config)
- {
-@@ -267,7 +280,7 @@ cs_etm_decoder__do_soft_timestamp(struct cs_etm_queue *etmq,
- 	packet_queue->cs_timestamp = packet_queue->next_cs_timestamp;
- 
- 	/* Estimate the timestamp for the next range packet */
--	packet_queue->next_cs_timestamp += packet_queue->instr_count;
-+	packet_queue->next_cs_timestamp += cs_etm_decoder__instr_count_to_ns(packet_queue->instr_count);
- 	packet_queue->instr_count = 0;
- 
- 	/* Tell the front end which traceid_queue needs attention */
-@@ -295,11 +308,17 @@ cs_etm_decoder__do_hard_timestamp(struct cs_etm_queue *etmq,
- 	 * hence asking the decoder to keep decoding rather than stopping.
- 	 */
- 	if (packet_queue->cs_timestamp) {
--		packet_queue->next_cs_timestamp = elem->timestamp;
-+		/*
-+		 * Don't allow next_cs_timestamp to be less than the last one estimated by
-+		 * cs_etm_decoder__do_soft_timestamp() otherwise new instructions would
-+		 * appear to go back in time. In theory this should never happen, but if
-+		 * it did, then next_cs_timestamp should eventually catch up to real time
-+		 * unless every single range was predicted to be too long for some reason.
-+		 */
-+		packet_queue->next_cs_timestamp = max(elem->timestamp, packet_queue->next_cs_timestamp);
- 		return OCSD_RESP_CONT;
- 	}
- 
--
- 	if (!elem->timestamp) {
- 		/*
- 		 * Zero timestamps can be seen due to misconfiguration or hardware bugs.
-@@ -312,7 +331,7 @@ cs_etm_decoder__do_hard_timestamp(struct cs_etm_queue *etmq,
- 					". Decoding may be improved by prepending 'Z' to your current --itrace arguments.\n",
- 					indx);
- 
--	} else if (packet_queue->instr_count > elem->timestamp) {
-+	} else if (cs_etm_decoder__instr_count_to_ns(packet_queue->instr_count) > elem->timestamp) {
- 		/*
- 		 * Sanity check that the elem->timestamp - packet_queue->instr_count would not
- 		 * result in an underflow. Warn and clamp at 0 if it would.
-@@ -327,7 +346,8 @@ cs_etm_decoder__do_hard_timestamp(struct cs_etm_queue *etmq,
- 		 * which instructions started by subtracting the number of instructions
- 		 * executed to the timestamp.
- 		 */
--		packet_queue->cs_timestamp = elem->timestamp - packet_queue->instr_count;
-+		packet_queue->cs_timestamp = elem->timestamp -
-+			cs_etm_decoder__instr_count_to_ns(packet_queue->instr_count);
- 	}
- 	packet_queue->next_cs_timestamp = elem->timestamp;
- 	packet_queue->instr_count = 0;
-
+>
+> --
+> Michal Hocko
+> SUSE Labs
