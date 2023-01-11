@@ -2,150 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54F7665416
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB7066545F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 07:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbjAKF5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 00:57:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        id S230264AbjAKGJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 01:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235813AbjAKF5b (ORCPT
+        with ESMTP id S231713AbjAKGJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 00:57:31 -0500
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99403B7EB;
-        Tue, 10 Jan 2023 21:57:30 -0800 (PST)
-Received: by mail-io1-f53.google.com with SMTP id r72so7218012iod.5;
-        Tue, 10 Jan 2023 21:57:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vljd4jpGI8JGO7YYKmUkcae95jo5r0whgkmYDkRel+o=;
-        b=XEaUXfV2oMGEfoypFAMmtWFPwKiL02COlAUi+zyE1R5hvjWA+r40dXGGMJtUt1X1Wx
-         WOcJFZmrcXe0X4trudv9T6LrBU7GLFUPUYhRiYOXuYbMADxaKsPQAS2YtO+CxaQOHAIj
-         kw+77Wsrwd8+c9TUSv8AwvUcOzghWmKq/G/suoeIRLwjvlY4+bDxxGyYf7zQFb9BuUs9
-         AFyfbhOfAJNDVO18+zvAeVNdLDEaMWiLOuJE84OvzWpceU/C/CNB26S9zoO1/H9IgK+0
-         c7pJQVgLBVBbVOYM2ke7ftOIGQgm2p5SD4JSgGByCJYO0G0R0vkre8R9O8QZX4wBIbnl
-         zPzw==
-X-Gm-Message-State: AFqh2kqB7BrIkjG/Dol61VZDuRBFc5WcAUmyoBgp3merohMoAYX8YLRz
-        3zkZCOb2yFcP9qatPEA68jAef0WfNKh6Uf9t2YQ=
-X-Google-Smtp-Source: AMrXdXsegqXia/vW6IrV9mzogZfZdjbpj0N5M9UIGnf6DQ9JwsRYd60BumYUKA6U7My9bYV/0IXfcRwd4eE8Hz/yXOQ=
-X-Received: by 2002:a6b:a16:0:b0:6e3:28c5:e8ee with SMTP id
- z22-20020a6b0a16000000b006e328c5e8eemr6765804ioi.140.1673416649854; Tue, 10
- Jan 2023 21:57:29 -0800 (PST)
+        Wed, 11 Jan 2023 01:09:23 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F35EDF32
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 22:09:16 -0800 (PST)
+X-UUID: 78094772917611eda06fc9ecc4dadd91-20230111
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=i65n54Pntj3LMiHk0kDTcKGqGuncnAshkJdAZpuEpWA=;
+        b=nvfoG21pOh2CcD9c3C/hTaCva/8FDgfUp43AjNHK3Va/SdJ7arP2NqyWh60WOeP3QW2yVJ69MgSySQhkydajWuLElIOiPd9tjL0EqgTE8eEZxX/ltVTphgE1TiTIvJPcrivZBqqQ43ugnsgNBJgpNs2GpQHP5f2yrW6NcWgcjlg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:471b37f3-1b2e-45f4-9db0-7ea402555533,IP:0,U
+        RL:0,TC:0,Content:9,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:54
+X-CID-INFO: VERSION:1.1.17,REQID:471b37f3-1b2e-45f4-9db0-7ea402555533,IP:0,URL
+        :0,TC:0,Content:9,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:54
+X-CID-META: VersionHash:543e81c,CLOUDID:2c7e5054-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:230111140913KY6GPHWI,BulkQuantity:0,Recheck:0,SF:28|17|19|48|102,TC:
+        nil,Content:4,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:
+        0,OSI:0,OSA:0
+X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
+X-CID-BVR: 0,NGT
+X-UUID: 78094772917611eda06fc9ecc4dadd91-20230111
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <yf.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 553618668; Wed, 11 Jan 2023 14:09:12 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 11 Jan 2023 14:09:11 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 11 Jan 2023 14:09:10 +0800
+From:   <yf.wang@mediatek.com>
+To:     <robin.murphy@arm.com>
+CC:     <Libo.Kang@mediatek.com>, <Ning.Li@mediatek.com>,
+        <iommu@lists.linux.dev>, <jianjiao.zeng@mediatek.com>,
+        <joro@8bytes.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <will@kernel.org>, <wsd_upstream@mediatek.com>,
+        <yf.wang@mediatek.com>, <yong.wu@mediatek.com>
+Subject: RE: [PATCH] iommu/iova: Fix alloc iova overflows issue
+Date:   Wed, 11 Jan 2023 13:57:49 +0800
+Message-ID: <20230111055749.11519-1-yf.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <99695d77-e54f-3270-ee9a-9b3cbb3296e5@arm.com>
+References: <99695d77-e54f-3270-ee9a-9b3cbb3296e5@arm.com>
 MIME-Version: 1.0
-References: <20230109223110.1201541-1-irogers@google.com> <CAM9d7cgGq=+MC+qwRNxO=0Bn_ZMOucEzh_WWH95Lq8fsYHMb4A@mail.gmail.com>
- <CAP-5=fXniy80Jpc2Hu=-GF7yDNUNHjs0=B2iqkUkMb6zArPukg@mail.gmail.com>
- <CAM9d7chS+91Nep8FtsJsOdTvMJ0HhkSD1_Fn70=hWPi7a1JpfQ@mail.gmail.com> <CAP-5=fUXoOFueaeSD2D9H+xoH5tKXRHK1164yPSX8_m_Nx_AeQ@mail.gmail.com>
-In-Reply-To: <CAP-5=fUXoOFueaeSD2D9H+xoH5tKXRHK1164yPSX8_m_Nx_AeQ@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 10 Jan 2023 21:57:17 -0800
-Message-ID: <CAM9d7ci3du09=uc05to7rLaRG7KCuwdLEFZ_492jcO7cOY7RAQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] perf tools: Remove HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        German Gomez <german.gomez@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Stephane Eranian <eranian@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 11:55 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Tue, Jan 10, 2023 at 11:09 AM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > On Mon, Jan 9, 2023 at 3:38 PM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > On Mon, Jan 9, 2023 at 2:57 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> > > >
-> > > > Hi Ian,
-> > > >
-> > > > On Mon, Jan 9, 2023 at 2:31 PM Ian Rogers <irogers@google.com> wrote:
-> > > > > diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-> > > > > index e188f74698dd..cfcc253239f0 100644
-> > > > > --- a/tools/perf/util/sort.c
-> > > > > +++ b/tools/perf/util/sort.c
-> > > > > @@ -28,6 +28,7 @@
-> > > > >  #include "time-utils.h"
-> > > > >  #include "cgroup.h"
-> > > > >  #include "machine.h"
-> > > > > +#include "trace-event.h"
-> > > > >  #include <linux/kernel.h>
-> > > > >  #include <linux/string.h>
-> > > > >
-> > > > > @@ -2667,7 +2668,7 @@ static int64_t __sort__hde_cmp(struct perf_hpp_fmt *fmt,
-> > > > >                 tep_read_number_field(field, a->raw_data, &dyn);
-> > > > >                 offset = dyn & 0xffff;
-> > > > >                 size = (dyn >> 16) & 0xffff;
-> > > > > -#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
-> > > > > +#if LIBTRACEEVENT_VERSION >= MAKE_LIBTRACEEVENT_VERSION(1, 5, 0)
-> > > > >                 if (field->flags & TEP_FIELD_IS_RELATIVE)
-> > > > >                         offset += field->offset + field->size;
-> > > >
-> > > > Maybe I missed the previous discussion.
-> > > >
-> > > > As it's only used in the bit test, can we have something like this
-> > > > in the header file?
-> > > >
-> > > > #if LIBTRACE_EVENT_VERSION < ...(1, 5, 0)
-> > > > # define TEP_FIELD_IS_RELATIVE  0
-> > > > #endif
-> > > >
-> > > > Thanks,
-> > > > Namhyung
-> > >
-> > > We could but I think we lose some of the intention revealing-ness that
-> > > TEP_FIELD_IS_RELATIVE is only present with libtraceevent 1.5.0 or
-> > > newer.
-> >
-> > I'm not sure how important it is to reveal the intention.
-> > I think we wanted to minimize #ifdef-ery in the .c file and
-> > moved the conditionals to the header.  Maybe we can add
-> > a wrapper like this.
-> >
-> > #if LIBTRACEEVENT_VERSION >= ...(1, 5, 0)
-> > static inline bool is_relative_field(field)
-> > {
-> >     return field->flags & TEP_FIELD_IS_RELATIVE;
-> > }
-> > #else
-> > static inline bool is_relative_field(field)
-> > {
-> >     return false;
-> > }
-> > #endif
-> >
-> > Thanks,
-> > Namhyung
->
-> Sounds good. Should the change be part of this one or a follow up
-> patch? A follow up patch seems cleanest, I can add it to v2.
+On Mon, 2023-01-09 at 11:47 +0000, Robin Murphy wrote:
+> On 2023-01-09 08:34, yf.wang@mediatek.com wrote:
+> > From: Yunfei Wang <yf.wang@mediatek.com>
+> > 
+> > In __alloc_and_insert_iova_range, there is an issue that retry_pfn
+> > overflows. The value of iovad->anchor.pfn_hi is ~0UL, then when
+> > iovad->cached_node is iovad->anchor, curr_iova->pfn_hi + 1 will
+> > overflow. As a result, if the retry logic is executed, low_pfn is
+> > updated to 0, and then new_pfn < low_pfn returns false to make the
+> > allocation successful.
+> > 
+> > This issue occurs in the following two situations:
+> > 1. The first iova size exceeds the domain size. When initializing
+> > iova domain, iovad->cached_node is assigned as iovad->anchor. For
+> > example, the iova domain size is 10M, start_pfn is 0x1_F000_0000,
+> > and the iova size allocated for the first time is 11M. The
+> > following is the log information, new->pfn_lo is smaller than
+> > iovad->cached_node.
+> > 
+> > Example log:
+> > [  223.798112][T1705487] sh:
+> > [name:iova&]__alloc_and_insert_iova_range
+> > start_pfn:0x1f0000,retry_pfn:0x0,size:0xb00,limit_pfn:0x1f0a00
+> > [  223.799590][T1705487] sh:
+> > [name:iova&]__alloc_and_insert_iova_range
+> > success start_pfn:0x1f0000,new->pfn_lo:0x1efe00,new-
+> > >pfn_hi:0x1f08ff
+> > 
+> > 2. The node with the largest iova->pfn_lo value in the iova domain
+> > is deleted, iovad->cached_node will be updated to iovad->anchor,
+> > and then the alloc iova size exceeds the maximum iova size that can
+> > be allocated in the domain.
+> > 
+> > Adding judgment that retry_pfn must be greater than iovad-
+> > >start_pfn
+> > can fix this issue.
+> 
+> Hmm, indeed that's a sneaky little bug - thanks for the thorough 
+> analysis - but couldn't we avoid the overflow entirely? I don't have
+> the 
+> complete logic paged in, but superficially it seems like:
+> 
+> 	retry_pfn = curr_iova->pfn_hi;
+> 	...
+> 		retry_pfn <= limit_pfn
+> 	...
+> 		low_pfn = retry_pfn + 1;
+> 
+> should still work, shouldn't it?
+> 
+> Thanks,
+> Robin.
+> 
 
-Sounds good.
+Hi Robin,
+Thanks for your suggestion, your solution is more perfect,
+PATCH v2 version will modify it.
 
 Thanks,
-Namhyung
+Yunfei.
+
+> > Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
+> > Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+> > ---
+> >   drivers/iommu/iova.c | 3 ++-
+> >   1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> > index a44ad92fc5eb..0073206c2a95 100644
+> > --- a/drivers/iommu/iova.c
+> > +++ b/drivers/iommu/iova.c
+> > @@ -209,7 +209,8 @@ static int __alloc_and_insert_iova_range(struct
+> > iova_domain *iovad,
+> >   	} while (curr && new_pfn <= curr_iova->pfn_hi && new_pfn >=
+> > low_pfn);
+> >   
+> >   	if (high_pfn < size || new_pfn < low_pfn) {
+> > -		if (low_pfn == iovad->start_pfn && retry_pfn <
+> > limit_pfn) {
+> > +		if (low_pfn == iovad->start_pfn &&
+> > +		    retry_pfn >= iovad->start_pfn && retry_pfn <
+> > limit_pfn) {
+> >   			high_pfn = limit_pfn;
+> >   			low_pfn = retry_pfn;
+> >   			curr = iova_find_limit(iovad, limit_pfn);
