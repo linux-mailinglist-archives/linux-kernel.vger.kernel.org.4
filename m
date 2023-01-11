@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D89B6654E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 07:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57576654E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 07:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbjAKGvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 01:51:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S235730AbjAKGwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 01:52:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjAKGvq (ORCPT
+        with ESMTP id S235515AbjAKGwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 01:51:46 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 666EBC3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 22:51:45 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 30B6paCc012241;
-        Wed, 11 Jan 2023 07:51:36 +0100
-Date:   Wed, 11 Jan 2023 07:51:36 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] nolibc: add support for the s390 platform
-Message-ID: <20230111065136.GA12019@1wt.eu>
-References: <20230109080910.26594-1-w@1wt.eu>
- <20230109191534.GU4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230110073242.GB3229@1wt.eu>
- <20230110092517.GA4626@1wt.eu>
- <20230110145334.GL4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230110161249.GB4649@1wt.eu>
- <20230110163210.GP4028633@paulmck-ThinkPad-P17-Gen-1>
- <yt9dh6wxa7ta.fsf@linux.ibm.com>
+        Wed, 11 Jan 2023 01:52:37 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F41614C
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 22:52:36 -0800 (PST)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1pFUyJ-0006cZ-Bc; Wed, 11 Jan 2023 07:52:27 +0100
+Message-ID: <d7951827-1023-4cd6-4230-0915716ee276@pengutronix.de>
+Date:   Wed, 11 Jan 2023 07:52:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yt9dh6wxa7ta.fsf@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/6] nvmem: core: add nvmem_dev_size() helper
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, u-boot@lists.denx.de,
+        Michael Walle <michael@walle.cc>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20230110105425.13188-1-zajec5@gmail.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20230110105425.13188-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 07:45:05AM +0100, Sven Schnelle wrote:
-> "Paul E. McKenney" <paulmck@kernel.org> writes:
+On 10.01.23 11:54, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> > On Tue, Jan 10, 2023 at 05:12:49PM +0100, Willy Tarreau wrote:
-> >> On Tue, Jan 10, 2023 at 06:53:34AM -0800, Paul E. McKenney wrote:
-> >> > Here is one of them, based on both the fixes and Sven's s390 support.
-> >> > Please let me know if you need any other combination.
-> >> 
-> >> Thanks, here's the problem:
-> >> 
-> >> > 0 getpid = 1                             [OK]
-> >> > 1 getppid = 0                            [OK]
-> >> > 3 gettid = 1                             [OK]
-> >> > 5 getpgid_self = 0                       [OK]
-> >> > 6 getpgid_bad = -1 ESRCH                 [OK]
-> >> > 7 kill_0[    1.940442] tsc: Refined TSC clocksource calibration: 2399.981 MHz
-> >> > [    1.942334] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x229825a5278, max_idle_ns: 440795306804 ns
-> >> >  = 0                             [OK]
-> >> > 8 kill_CONT = 0           [    1.944987] clocksource: Switched to clocksource tsc
-> >> >                [OK]
-> >> > 9 kill_BADPID = -1 ESRCH                 [OK]
-> >> (...)
-> >> 
-> >> It's clear that "grep -c ^[0-9].*OK" will not count all of them (2 are
-> >> indeed missing).
-> >> 
-> >> We could probably start with "quiet" but that would be against the
-> >> principle of using this to troubleshoot issues. I think we just stick
-> >> to the current search of "FAIL" and that as long as a success is
-> >> reported and the number of successes is within the expected range
-> >> that could be OK. At least I guess :-/
-> >
-> > Huh.  Would it make sense to delay the start of the nolibc testing by a
-> > few seconds in order to avoid this sort of thing?  Or would that cause
-> > other problems?
+> This is required by layouts that need to read whole NVMEM space. It
+> applies to NVMEM devices without hardcoded layout (like U-Boot
+> environment data block).
 > 
-> Or define a second serial port (or something similar) in qemu and run the
-> kernel console on ttyS0, and the init process writes to /dev/ttyS1? So the
-> output of the test program could be redirected to a file on the host?
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+>  drivers/nvmem/core.c           | 13 +++++++++++++
+>  include/linux/nvmem-consumer.h |  1 +
+>  2 files changed, 14 insertions(+)
+> 
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 1f05f0a50d86..81743ae8793b 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -2062,6 +2062,19 @@ void nvmem_del_cell_lookups(struct nvmem_cell_lookup *entries, size_t nentries)
+>  }
+>  EXPORT_SYMBOL_GPL(nvmem_del_cell_lookups);
+>  
+> +/**
+> + * nvmem_dev_size() - Get the size of a given nvmem device.
+> + *
+> + * @nvmem: nvmem device.
+> + *
+> + * Return: size of the nvmem device.
+> + */
+> +const size_t nvmem_dev_size(struct nvmem_device *nvmem)
 
-That could be an option I haven't thought about, but it could also make
-the collect a bit less convenient. Also, init executes on the main console
-by default and I'm not sure how we can redirect it to a different one
-before the initial execve() (so that we're certain not to miss anything).
+The const here is quite unusual. You can make the parameter
+a const struct nvmem_device though.
 
-I've seen situations where I was happy to have the two together, when a
-call you perform causes an oops, it's much easier when the oops immediately
-follows the test name.
+> +{
+> +	return nvmem->size;
+> +}
+> +EXPORT_SYMBOL_GPL(nvmem_dev_size);
+> +
+>  /**
+>   * nvmem_dev_name() - Get the name of a given nvmem device.
+>   *
+> diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
+> index fa030d93b768..d88294ddf562 100644
+> --- a/include/linux/nvmem-consumer.h
+> +++ b/include/linux/nvmem-consumer.h
+> @@ -78,6 +78,7 @@ ssize_t nvmem_device_cell_read(struct nvmem_device *nvmem,
+>  int nvmem_device_cell_write(struct nvmem_device *nvmem,
+>  			    struct nvmem_cell_info *info, void *buf);
+>  
+> +const size_t nvmem_dev_size(struct nvmem_device *nvmem);
+>  const char *nvmem_dev_name(struct nvmem_device *nvmem);
+>  
+>  void nvmem_add_cell_lookups(struct nvmem_cell_lookup *entries,
 
-I'm still inclined to think that it's probably just the tsc that might be
-an annoyance at the moment as it's reported after the startup. If that
-continues like this we could also imagine reconfiguring the console to
-start logging at level 4 minimum and not have it there anymore for example.
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-thanks,
-Willy
