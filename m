@@ -2,168 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040906665DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 440D66665E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235625AbjAKVvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 16:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
+        id S235605AbjAKV6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 16:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235775AbjAKVv3 (ORCPT
+        with ESMTP id S230055AbjAKV62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 16:51:29 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB0E645D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:51:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1673473884;
-        bh=s7tKIX0mX+CEOIalxAghDci1lw2/Im0ry59PQqPbzMI=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=UQ/e9FfcNjlOmmFoeT4qamSj5TYQUaZM30NNoA3cSbGo/Av7p7c0NSIFi4niTKDT+
-         Dnew7GG71CPWiQRrd7iGRfbC8YlbDb2cDchkJqk4VMtJJE4MXXY5UWi0PFxtYOnX2g
-         h20n5e1B1CNCnbm0qxCFvucdMAm4uM2BcXli/g01NbdtcSRDyZlUlAvuDQ8VzM9hHQ
-         MyDmRQelcjDDRmUDV0/UMuARwGB+KihE8AjT67CHkgVcPaqdT3hkVPemOVQfZAM2p2
-         3L8UIa1VRnWiZCr69on8WSpOJdxgJd8PPouxLTLRQUq6U6rAwE6RdTruXqMAeQmHm2
-         L9W2jjfKmW0zw==
-Received: from [172.16.0.101] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NshG41DpbzgRQ;
-        Wed, 11 Jan 2023 16:51:24 -0500 (EST)
-Message-ID: <960db64f-0698-5cef-1504-a2ec9230a632@efficios.com>
-Date:   Wed, 11 Jan 2023 16:51:56 -0500
+        Wed, 11 Jan 2023 16:58:28 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42FE3E841
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:58:25 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id c9so12447288pfj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:58:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8Obkb0kzjvD/4Rh3qw6c/69fgaEhJbsYAq/Q6o2FDWQ=;
+        b=HuuDX4tRBSTJnI+TIu8jzSsRF7dl6LoIO6huUTPB1oglJ+Q/xpRDxGkM88AO9Eqv9q
+         jq42xRqQnU0fFyJReqLTrhoghELhEvuL/QHgumVvAiLYyiNF1/hWkUZpJglE0LopXv1w
+         i+odRdzdU5XeRPqU4787IMalsxWpYhfOsyTB5MwAXqn/MMZoe6zxpze9+MNxAy2Qh9ix
+         hHB+UPWTwoUtuOSRxGyMToOEJ7WcENuql09xWPt4vLsKgZFQiGDO3hOsC3nn/G4StOEL
+         9Vc16MNUkXCTDJjFhXQ8FKUSnylUgct4p4QGUL5zXJWM0II68M3DN42L4KwbsrcWZlsb
+         F0mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Obkb0kzjvD/4Rh3qw6c/69fgaEhJbsYAq/Q6o2FDWQ=;
+        b=bRG8u/wU7z8xJLLnjcdwwfDMqTVmZlwfIhYTPrxJ/mMQ2PSmFGQXmm5I6thOEsXtsv
+         v86CwEevuuD+52qBTH4a2tFmdEPUNaVsmIP97fHBUE2UZ6JwmOIo/BpIYxdbVMadLS/G
+         u+5lGt+A8J7tMOo5fki5lZPXXBl1ewGS4r1eLuXcFV7DWH1m5xacg48o0bKg46U05EOf
+         cdngrTUqh5K2tdvdVIUlRUuxk0KokIS1UxdWkGisKDdsUfDSSGCRxSdzgGwQj5cHz69s
+         9r+ar8iSgCS5493/8LO1ZeMZLpO3PjoKWjHtPzpYhBeCfaE0EhaletvnOBX1uDeXw8pw
+         slWA==
+X-Gm-Message-State: AFqh2kp12VQTiWXFkZluFlzzelp7V7G7YOU5IxXnJ/sQw0in9lFja1TE
+        ImTTIyUFnG2BSomJWuufkadTLg==
+X-Google-Smtp-Source: AMrXdXsIR82tbAtz9jygOyB/cpYtAQoBqPBu+GzWlRZYvwVPZLbir8tBLdXO7HHJIXbLe1BXNjVG4A==
+X-Received: by 2002:a05:6a00:2a0b:b0:585:4ca7:5c4b with SMTP id ce11-20020a056a002a0b00b005854ca75c4bmr4234358pfb.2.1673474305267;
+        Wed, 11 Jan 2023 13:58:25 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 5-20020a621505000000b005772d55df03sm10447621pfv.35.2023.01.11.13.58.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 13:58:24 -0800 (PST)
+Message-ID: <507593a5-3606-8a92-e599-dd8711df519e@kernel.dk>
+Date:   Wed, 11 Jan 2023 14:58:23 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: rseq CPU ID not correct on 6.0 kernels for pinned threads
+Subject: Re: [PATCH] caif: don't assume iov_iter type
 Content-Language: en-US
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        libc-alpha@sourceware.org
-References: <87lem9cnxr.fsf@oldenburg.str.redhat.com>
- <8b52b0d6-c973-f959-b44a-1b54fb808a04@efficios.com>
- <ee304052-5731-4ae6-8f7b-69d0bd1e6c77@efficios.com>
-In-Reply-To: <ee304052-5731-4ae6-8f7b-69d0bd1e6c77@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Keith Busch <kbusch@meta.com>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+References: <20230111184245.3784393-1-kbusch@meta.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230111184245.3784393-1-kbusch@meta.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-11 14:31, Mathieu Desnoyers wrote:
-> On 2023-01-11 09:52, Mathieu Desnoyers wrote:
->> On 2023-01-11 06:26, Florian Weimer wrote:
->>> The glibc test suite contains a test that verifies that sched_getcpu
->>> returns the expected CPU number for a thread that is pinned (via
->>> sched_setaffinity) to a specific CPU.  There are other threads running
->>> which attempt to de-schedule the pinned thread from its CPU.  I believe
->>> the test is correctly doing what it is expected to do; it is invalid
->>> only if one believes that it is okay for the kernel to disregard the
->>> affinity mask for scheduling decisions.
->>>
->>> These days, we use the cpu_id rseq field as the return value of
->>> sched_getcpu if the kernel has rseq support (which it has in these
->>> cases).
->>>
->>> This test has started failing sporadically for us, some time around
->>> kernel 6.0.  I see failure occasionally on a Fedora builder, it runs:
->>>
->>> Linux buildvm-x86-26.iad2.fedoraproject.org 6.0.15-300.fc37.x86_64 #1 
->>> SMP PREEMPT_DYNAMIC Wed Dec 21 18:33:23 UTC 2022 x86_64 x86_64 x86_64 
->>> GNU/Linux
->>>
->>> I think I've seen it on the x86-64 builder only, but that might just be
->>> an accident.
->>>
->>> The failing tests log this output:
->>>
->>> =====FAIL: nptl/tst-thread-affinity-pthread.out=====
->>> info: Detected CPU set size (in bits): 64
->>> info: Maximum test CPU: 5
->>> error: Pinned thread 1 ran on impossible cpu 0
->>> error: Pinned thread 0 ran on impossible cpu 0
->>> info: Main thread ran on 4 CPU(s) of 6 available CPU(s)
->>> info: Other threads ran on 6 CPU(s)
->>> =====FAIL: nptl/tst-thread-affinity-pthread2.out=====
->>> info: Detected CPU set size (in bits): 64
->>> info: Maximum test CPU: 5
->>> error: Pinned thread 1 ran on impossible cpu 1
->>> error: Pinned thread 2 ran on impossible cpu 0
->>> error: Pinned thread 3 ran on impossible cpu 3
->>> info: Main thread ran on 5 CPU(s) of 6 available CPU(s)
->>> info: Other threads ran on 6 CPU(s)
->>>
->>> But I also encountered one local failure, but it is rare.  Maybe it's
->>> load-related.  There shouldn't be any CPU unplug or anything like that
->>> involved here.
->>>
->>> I am not entirely sure if something is changing CPU affinities from
->>> outside the process (which would be quite wrong, but not a kernel bug).
->>> But in the past, our glibc test has detected real rseq cpu_id
->>> brokenness, so I'm leaning towards that as the cause this time, too.
->>
->> It can be caused by rseq failing to update the cpu number field on 
->> return to userspace. Tthis could be validated by printing the regular 
->> getcpu vdso value and/or the value returned by the getcpu system call 
->> when the error is triggered, and see whether it matches the rseq cpu 
->> id value.
->>
->> It can also be caused by scheduler failure to take the affinity into
->> account.
->>
->> As you also point out, it can also be caused by some other task
->> modifying the affinity of your task concurrently. You could print
->> the result of sched_getaffinity on error to get a better idea of
->> the expected vs actual mask.
->>
->> Lastly, it could be caused by CPU hotplug which would set all bits
->> in the affinity mask as a fallback. As you mention it should not be
->> the cause there.
->>
->> Can you share your kernel configuration ?
+On 1/11/23 11:42 AM, Keith Busch wrote:
+> From: Keith Busch <kbusch@kernel.org>
 > 
-> Also, can you provide more information about the cpufreq driver and 
-> governor used in your system ? e.g. output of
+> The details of the iov_iter types are appropriately abstracted, so
+> there's no need to check for specific type fields. Just let the
+> abstractions handle it.
 > 
-> cpupower frequency-info
-> 
-> and also output of
-> 
-> sysctl kernel.sched_energy_aware
-> 
-> Is this on a physical machine or in a virtual machine ?
+> This is preparing for io_uring/net's io_send to utilize the more
+> efficient ITER_UBUF.
 
-And one more thing: can you reproduce with a CONFIG_RSEQ=n kernel, or 
-when disabling rseq with the glibc.pthread.rseq glibc tunable ?
+Looks good to me - the correct return here would be -EFAULT as well,
+not -EINVAL. Which is what will happen once memcpy_from_msg() is
+called anyway.
 
-Thanks,
-
-Mathieu
-
-> 
-> Thanks,
-> 
-> Mathieu
-> 
->>
->> Thanks,
->>
->> Mathieu
->>
->>>
->>> Thanks,
->>> Florian
->>>
->>
-> 
+Reviewed-by: Jens Axboe <axboe@kernel.dk>
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Jens Axboe
+
 
