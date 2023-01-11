@@ -2,127 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E5F66601A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A5C666028
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjAKQNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S232011AbjAKQRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbjAKQMv (ORCPT
+        with ESMTP id S232662AbjAKQRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:12:51 -0500
-Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2122.outbound.protection.outlook.com [40.107.10.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F3B17428;
-        Wed, 11 Jan 2023 08:12:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QC1hqiAJHYH5+bIKXeodj9Icq6eHv6+qeDKz4AOflShcu/3zRFmz0M5za1/AgI5ThUuXoS7gECMK3LmqWfeMZQULc6ucZ+2p6NMaOFWpvmYKLtVsFlQOyykrsWy3ptIXgehUjNnsl2dD4dEpXGaden0rvc31DXjw9ZBe7WGfIeL0RcppzpiuEWdT88D9d82P0tEov19loQKu7t8E7sFhY+MilIIItlyg2nnkXeG+6pBtjkJx3JK7b8VUibrwsCpB/E+JsumQd2HBUDcCGH3lQBmon3Jn7z7CXbm/GUSqNwtkkZ9joT2CjatCJZMpSwklvzazVr6pgkfGIC8nuNYiOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L/cq4syBM13khIYt0eqs+Kr3V5n1BlMlzvV04z7ICwk=;
- b=Ujv6Pz/Qqd5/GCBZjWs3dRw0vTNR8aIKpezc3mqYYyBtgU7dU6RVce2ejJzE3XGQVBMOKnppsCtAGnFqcXXntGn/oIAPfe3gRfQkI4hyCl2DWhXecxLPjornP6+0rt303CTTAX2z3GRgDl2lpAy8KeVXtWDTg2H6maxUcmKF/ztm2OGdAaLL1hAdb73x8n3L4eHNHMKFK25sF+OIjU+DhZV/VZPsFM5zZYyz24EGLsFFmAsfWqcA6ByHXJlUBgeS7fpXimvfqDebKc3mCqv8FSex3IwWRLCeDepd8G/k/pijfukh5rf6X4SX3fpM/fBVMZYEKcREq+veqPvudlLUlg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L/cq4syBM13khIYt0eqs+Kr3V5n1BlMlzvV04z7ICwk=;
- b=cj6OYVDytQ/whMk8jahTqaTfXoxqdyKmEKNo1p7hYeju24zO48dnKH8pYozPSYOmCub0+/NQBnfdqRrrbnPP+KjPuBhJysPuSHc8rPU6Gi0H6cFBkCKVYAVNLqlNqQBO2w+4p+Z4CEvTmdMG4yGXGC+aiEeUeGC4qWCcpFi7jr8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CWXP265MB5370.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1bd::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Wed, 11 Jan
- 2023 16:12:47 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f24:8099:5588:8ba8]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f24:8099:5588:8ba8%7]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 16:12:47 +0000
-From:   Gary Guo <gary@garyguo.net>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Wedson Almeida Filho <wedsonaf@google.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        rust-for-linux@vger.kernel.org
-Subject: [PATCH] modpost: support arbitrary symbol length in modversion
-Date:   Wed, 11 Jan 2023 16:11:51 +0000
-Message-Id: <20230111161155.1349375-1-gary@garyguo.net>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0658.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:316::7) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+        Wed, 11 Jan 2023 11:17:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF085F4A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:16:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673453783;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rdVdHrWSOthsu83h4mspCthGXV43Z66ec9tzF1QpCy0=;
+        b=edqaKft8xhdPzjfQKzAN33/0MbFOWcvnOAuc1wcnTF/cd4xh0F0HzHxugOwP6JlsUi7pIx
+        G/9u0IJbp2oSW+OQIhuOoq75a12ayhYV2FSSmXWf2yNNZxNnHUA0AYhEejs9+xMbtXHcMh
+        4wimSJs+CkIo5gTvZ7U6jJGGcRWmh4o=
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
+ [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-594-o4VAxrhnPk6zIgOA_eddAQ-1; Wed, 11 Jan 2023 11:16:22 -0500
+X-MC-Unique: o4VAxrhnPk6zIgOA_eddAQ-1
+Received: by mail-vk1-f197.google.com with SMTP id x75-20020a1f7c4e000000b003d591e8cac6so4705117vkc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:16:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rdVdHrWSOthsu83h4mspCthGXV43Z66ec9tzF1QpCy0=;
+        b=0TUb+kBH2VrszdwjB+a1+Hp6Jbmlc45QgJ4VsNHHSHs9NpFR3CMCgvu0kgvTrD/WOi
+         +V1sv/c6OB5dj83beNXSGE8jK8pL29qSR3O1cYpMW2V28M2s0qK07e1mxWnp4vkgL2V9
+         VBzJjVxWzjHm7wrhpVaTcWev8a+JJl3EOpHtBi3L1NqcikAyQq52yS3BlGv1N221me7e
+         oJ3e4MLiBGjlEFR/BSmtvEAtpxoqviRLXB4eY3fGCA//COnozfm67/GoyAEQ3SEwXCq9
+         2Iiur+avmwUFTqyzH1Sct2HKBL1KW7Tn5F5Y8V1F0f1LgcqKGdknwm52l9ljAdjY4Rig
+         TS1Q==
+X-Gm-Message-State: AFqh2kqIbi/3BhiEqWiEx72f1la235gw/biJKAE8XsKklCVW44hHjEPs
+        l9q5hxtrrWNGScpqb+oWZvPn+nAVHaWnQhKoPb7mUpu81NxlzHwsT6Cq7dXVXPuwT0A/8Jc1+5g
+        JSa+oc4DH9tDPp/3w6VRXAlnD1Xsioydsxf4J5DkP
+X-Received: by 2002:a67:e952:0:b0:3d0:bf68:840c with SMTP id p18-20020a67e952000000b003d0bf68840cmr1475250vso.77.1673453781471;
+        Wed, 11 Jan 2023 08:16:21 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtak3p24cmq19eeoK3cO2WUNbKWCsq8l66Nbt68Lh6eMqgevT8R30p+o4D+Rnr1CbXO/Ulfzga4uLfAT2UNDLQ=
+X-Received: by 2002:a67:e952:0:b0:3d0:bf68:840c with SMTP id
+ p18-20020a67e952000000b003d0bf68840cmr1475239vso.77.1673453781227; Wed, 11
+ Jan 2023 08:16:21 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWXP265MB5370:EE_
-X-MS-Office365-Filtering-Correlation-Id: f6811b3c-3412-4454-ece1-08daf3eeadba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /qJs+ZDvWZ9cC0Ut9vOREaRYPAIDJA0HF3Svy983Qc/JSHcYnTlBbudX+deV05fAxoXjNbo3oIM9pwCHim4Hb0AC4/i9lkGVqbqz4fFliIF5XsKe4RV2MZzEjErw1tLFCv85aeDeTbg1DDFlL9AQT/TTXdWSWLn2eTZLb3eF9j96dFxa2shz1D7FvDbOVSbFXE2W+hG3iMPH2uCNNlCmRHLkyM6jFIDnGOtnxmgLXIb4MNBoXEFnyNg2CY4QEuqAGJ0dM+uFIyBdS8bazTQNOVvokaoJYd/oLV6ORzOcQIpX9qSKGOLMQcT1SdGOZGOOHV1uSRhKIpYB1c1NS+QkdkBbrMLmo4ihJSXiYgZYH9V9BG4h7uvohqH+UW3UOQWQONSFWjV0+d5qbNzV5w2/BNWqc5fLG6KcjPvPsjVhKtzmqu+9iTpYMfQ1d8FJ3ITX7b/woHWEgEiqGyUolwzBJ7K47ddZ+nnRPMlG6YRSs8WJvqfv6ze/w6Wycje6xb189pqxRlnKKMeVFl4LRAVTtl0ijjaYRgrxCFBgaxO43k9FSqhcvf9a+I0hYYagqP1kQ8Y9DZZFqJthjHLDsEHbPh5ytBww/DRoN4jiqtzBz1xwFYdAkTBk0iZ+Q4W2iZBFBzlo4zEYXDOoA9rmpV1Mo9Qs7tPS4d1Ple3hBLH4cJBFhApYGl2BCMpK42EY5u+VZw9anvp++K3RvPV4EmHjEQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(39830400003)(366004)(136003)(376002)(451199015)(921005)(6512007)(38100700002)(966005)(478600001)(36756003)(6486002)(6666004)(6506007)(86362001)(186003)(26005)(41300700001)(5660300002)(66556008)(66476007)(8676002)(66946007)(4326008)(8936002)(7416002)(83380400001)(1076003)(2616005)(316002)(110136005)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P6e9S4wEVC0Cek+xD1IsJLwkPDy4u7I/H768I+2KIeUF4+h+cr2VRtP0aeVK?=
- =?us-ascii?Q?+YGlcgrbqNim+rG5qz3TV4wM7am/90vRrzekI1lyH8R+ZHgRi/7G5krGr+o6?=
- =?us-ascii?Q?2IOvfq0qeUP8jkqRH3cEYUmVgE2Ibcn6/p0qZFeBppOXT3QgmSJomj4P6aKV?=
- =?us-ascii?Q?wYoo06rlZHVqpQHj0GI0Kpeb2aJE+Gu70hgl8UQthkXVUcg33Mqfs8fY4auC?=
- =?us-ascii?Q?+PsfMfVCo9SVKFYDSAsTlZ+/jFOwyt6KUnArwqqKXjNzHljcxsG/Olj+SU+Z?=
- =?us-ascii?Q?ps7hv6uTrG2/pv0BxKfMmiXrJJCtVA2KVp1E+pcJaY6tbCULerNdb1wTneVT?=
- =?us-ascii?Q?08VXK2xpDNWGlcxIxzLgVQtD1x8VsxpH9ZMVGNE9jnaoiSaqzzIfoIwVVXqB?=
- =?us-ascii?Q?JFwHzaEV1VVXt8DQbFRSJz+RzxT8UFwvafdS5d0RqZWubfKYZuW2epIp251b?=
- =?us-ascii?Q?TNZuMklQRufMChX88/mUfKsIQq0WczUSyLpWLn+dgCT/z9eKwHPm6gzYqefX?=
- =?us-ascii?Q?NB4sOmDmPbpAfHNvkHySgXX/1tt4PlLUP6GlriRRKy/w34MDs61CAEL98Fj/?=
- =?us-ascii?Q?vcrUtJcaPL61AkR0rjiJpqSLy7bT8kfv4q9b0zUiypzi7S6gWWu6/qti3dgA?=
- =?us-ascii?Q?YM611XXFf15D8qrFERgsg3uD9Ij8KwX4QroNTlOyfB9HIk2DTptP6qZ/UDQo?=
- =?us-ascii?Q?EZL2+EL38tBzqsC7sGLhlQeurmS3rV6IHfThvG+rq2MFBYlNkkvkk01yaLRO?=
- =?us-ascii?Q?vHhHqEjdKcHnLauSz8wnvnTFZfHebdiSowtQ/2KX0lbAHJluBJJOUZ5W3Bhv?=
- =?us-ascii?Q?HPDpQV4lvHTYj+ZLgfMFM1Z4ihS+gDHLZBVDvv3QDo+edg8qDFdAYS/YXZpX?=
- =?us-ascii?Q?zvq7KLVDc1wyafF2zM+Ydw0Le93peLLWINAkemQPTI6KkY5Vi+rzlsbcNeKt?=
- =?us-ascii?Q?1wwzcVGC5s+NoPNsSYugMf41+qfg4pn2/jRENzYfhgDdQr40oFSHg+7JpeiG?=
- =?us-ascii?Q?OTgk9v626O3ZfroamtDSaQqbvCy5XcOW4a2NYl4iC+HRkYLyvPTZV6vU553s?=
- =?us-ascii?Q?6dl32SrHsrK824xYvUv7g29DEBFENjoumdcJmSYmXOy3gBUPlcb2wexBIEah?=
- =?us-ascii?Q?5Jo25/1nMVz0VXNx7A+YEZoMerRDuBD6JLsmI6Y2Wtrmu38SMDsN6JAhLPzL?=
- =?us-ascii?Q?BgvmOEcOrIwjP10wVnk2v8ZJfohMFS96Y4ALm3OMFSDGQc/3r4X0TlEmkeCr?=
- =?us-ascii?Q?+jMWeJdv4Xl3gZmkbKCZ5fhEwwur8G9szzTht18kGKK6Bh6i3zOuWjSJW642?=
- =?us-ascii?Q?TUCUeS3X4qGyLzbg1G2MMEQNPMNClJXyVXrpNPjzCup9Ov6QlGV4y+MOpnVS?=
- =?us-ascii?Q?DwiV6mUemajCUx9YYUlk4mI/uYE2gCeUhapprKOvaQ4k/8ReEd18O+8qq6Pi?=
- =?us-ascii?Q?GIIhkez0sgqeJ/qFTY741jpUMVDzk7NrlQjlkXYzNRTW3SxHquLg93k59Fto?=
- =?us-ascii?Q?BapOr5YbnpT53JEcUkU62leryBObXGMz9OiIk8rxjT+9maYxuSDxbzrxF/PW?=
- =?us-ascii?Q?5rvypSFAm+1GaPljuRM=3D?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6811b3c-3412-4454-ece1-08daf3eeadba
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 16:12:47.3039
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: w64zcsaEhjHr1U+lSpEHJyUYIgLmv2PEqn1tUDZwh8vK0coCbJwo3IiWJ7cBGa/iVoOP7H+YYC29qOL7zTmsHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB5370
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230111152050.559334-1-yakoyoku@gmail.com> <CAEg-Je-hOFT34_TBD_YwUNsOjdJv_O=VAL7ojXmEqQ6ybOp8Jg@mail.gmail.com>
+In-Reply-To: <CAEg-Je-hOFT34_TBD_YwUNsOjdJv_O=VAL7ojXmEqQ6ybOp8Jg@mail.gmail.com>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Wed, 11 Jan 2023 16:16:05 +0000
+Message-ID: <CAOgh=FxuUA_-rcp-p-R-WV6zYhywztNeXOfpuO5rFo=UJ5xVJA@mail.gmail.com>
+Subject: Re: [PATCH v3] scripts: Exclude Rust CUs with pahole
+To:     Neal Gompa <neal@gompa.dev>
+Cc:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,211 +82,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently modversion uses a fixed size array of size (64 - sizeof(long))
-to store symbol names, thus placing a hard limit on length of symbols.
-Rust symbols (which encodes crate and module names) can be quite a bit
-longer. The length limit in kallsyms is increased to 512 for this reason.
+On Wed, 11 Jan 2023 at 15:34, Neal Gompa <neal@gompa.dev> wrote:
+>
+> On Wed, Jan 11, 2023 at 10:21 AM Martin Rodriguez Reboredo
+> <yakoyoku@gmail.com> wrote:
+> >
+> > Version 1.24 of pahole has the capability to exclude compilation units
+> > (CUs) of specific languages [1] [2]. Rust, as of writing, is not
+> > currently supported by pahole and if it's used with a build that has
+> > BTF debugging enabled it results in malformed kernel and module
+> > binaries [3]. So it's better for pahole to exclude Rust CUs until
+> > support for it arrives.
+> >
+> > Link: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=
+=3D49358dfe2aaae4e90b072332c3e324019826783f [1]
+> > Link: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=
+=3D8ee363790b7437283c53090a85a9fec2f0b0fbc4 [2]
+> > Link: https://github.com/Rust-for-Linux/linux/issues/735 [3]
+> >
+> > Co-developed-by: Eric Curtin <ecurtin@redhat.com>
+> > Signed-off-by: Eric Curtin <ecurtin@redhat.com>
+> > Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> > ---
+> > V2 -> V3: Enable pahole option upon comparing with version 1.24
+> > V1 -> V2: Removed dependency on auto.conf
+> >
+> >  init/Kconfig            | 2 +-
+> >  lib/Kconfig.debug       | 9 +++++++++
+> >  scripts/pahole-flags.sh | 4 ++++
+> >  3 files changed, 14 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index 694f7c160c9c..360aef8d7292 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -1913,7 +1913,7 @@ config RUST
+> >         depends on !MODVERSIONS
+> >         depends on !GCC_PLUGINS
+> >         depends on !RANDSTRUCT
+> > -       depends on !DEBUG_INFO_BTF
+> > +       depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
+>
+> Does the order matter here? I'd rather it prefer a fixed pahole and
+> disable BTF only if we can't use pahole properly.
 
-It's a waste of space to simply expand the fixed array size to 512 in
-modversion info entries. I therefore make it variably sized, with offset
-to the next entry indicated by the initial "next" field.
+The order won't matter.
 
-In addition to supporting longer-than-56/60 byte symbols, this patch also
-reduce the size for short symbols by getting rid of excessive 0 paddings.
-There are still some zero paddings to ensure "next" and "crc" fields are
-properly aligned.
-
-This patch does have a tiny drawback that it makes ".mod.c" files generated
-a bit less easy to read, as code like
-
-	"\x08\x00\x00\x00\x78\x56\x34\x12"
-	"symbol\0\0"
-
-is generated as opposed to
-
-	{ 0x12345678, "symbol" },
-
-because the structure is now variable-length. But hopefully nobody reads
-the generated file :)
-
-Link: b8a94bfb3395 ("kallsyms: increase maximum kernel symbol length to 512")
-Link: https://github.com/Rust-for-Linux/linux/pull/379
-
-Signed-off-by: Gary Guo <gary@garyguo.net>
----
- arch/powerpc/kernel/module_64.c |  3 ++-
- include/linux/module.h          |  6 ++++--
- kernel/module/version.c         | 21 +++++++++------------
- scripts/export_report.pl        |  9 +++++----
- scripts/mod/modpost.c           | 33 +++++++++++++++++++++++----------
- 5 files changed, 43 insertions(+), 29 deletions(-)
-
-diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-index ff045644f13f..eac23c11d579 100644
---- a/arch/powerpc/kernel/module_64.c
-+++ b/arch/powerpc/kernel/module_64.c
-@@ -236,10 +236,11 @@ static void dedotify_versions(struct modversion_info *vers,
- {
- 	struct modversion_info *end;
- 
--	for (end = (void *)vers + size; vers < end; vers++)
-+	for (end = (void *)vers + size; vers < end; vers = (void *)vers + vers->next) {
- 		if (vers->name[0] == '.') {
- 			memmove(vers->name, vers->name+1, strlen(vers->name));
- 		}
-+	}
- }
- 
- /*
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 8c5909c0076c..37cb25af9099 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -34,8 +34,10 @@
- #define MODULE_NAME_LEN MAX_PARAM_PREFIX_LEN
- 
- struct modversion_info {
--	unsigned long crc;
--	char name[MODULE_NAME_LEN];
-+	/* Offset of the next modversion entry in relation to this one. */
-+	u32 next;
-+	u32 crc;
-+	char name[0];
- };
- 
- struct module;
-diff --git a/kernel/module/version.c b/kernel/module/version.c
-index 53f43ac5a73e..af7478dcc158 100644
---- a/kernel/module/version.c
-+++ b/kernel/module/version.c
-@@ -17,32 +17,29 @@ int check_version(const struct load_info *info,
- {
- 	Elf_Shdr *sechdrs = info->sechdrs;
- 	unsigned int versindex = info->index.vers;
--	unsigned int i, num_versions;
--	struct modversion_info *versions;
-+	struct modversion_info *versions, *end;
-+	u32 crcval;
- 
- 	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
- 	if (!crc)
- 		return 1;
-+	crcval = *crc;
- 
- 	/* No versions at all?  modprobe --force does this. */
- 	if (versindex == 0)
- 		return try_to_force_load(mod, symname) == 0;
- 
- 	versions = (void *)sechdrs[versindex].sh_addr;
--	num_versions = sechdrs[versindex].sh_size
--		/ sizeof(struct modversion_info);
-+	end = (void *)versions + sechdrs[versindex].sh_size;
- 
--	for (i = 0; i < num_versions; i++) {
--		u32 crcval;
--
--		if (strcmp(versions[i].name, symname) != 0)
-+	for (; versions < end; versions = (void *)versions + versions->next) {
-+		if (strcmp(versions->name, symname) != 0)
- 			continue;
- 
--		crcval = *crc;
--		if (versions[i].crc == crcval)
-+		if (versions->crc == crcval)
- 			return 1;
--		pr_debug("Found checksum %X vs module %lX\n",
--			 crcval, versions[i].crc);
-+		pr_debug("Found checksum %X vs module %X\n",
-+			 crcval, versions->crc);
- 		goto bad_version;
- 	}
- 
-diff --git a/scripts/export_report.pl b/scripts/export_report.pl
-index feb3d5542a62..1117646f3141 100755
---- a/scripts/export_report.pl
-+++ b/scripts/export_report.pl
-@@ -116,18 +116,19 @@ foreach my $thismod (@allcfiles) {
- 	while ( <$module> ) {
- 		chomp;
- 		if ($state == 0) {
--			$state = 1 if ($_ =~ /static const struct modversion_info/);
-+			$state = 1 if ($_ =~ /static const char ____versions/);
- 			next;
- 		}
- 		if ($state == 1) {
--			$state = 2 if ($_ =~ /__attribute__\(\(section\("__versions"\)\)\)/);
-+			$state = 2 if ($_ =~ /__used __section\("__versions"\)/);
- 			next;
- 		}
- 		if ($state == 2) {
--			if ( $_ !~ /0x[0-9a-f]+,/ ) {
-+			if ( $_ !~ /\\0"/ ) {
-+				last if ($_ =~ /;/);
- 				next;
- 			}
--			my $sym = (split /([,"])/,)[4];
-+			my $sym = (split /(["\\])/,)[2];
- 			my ($module, $value, $symbol, $gpl) = @{$SYMBOL{$sym}};
- 			$SYMBOL{ $sym } =  [ $module, $value+1, $symbol, $gpl];
- 			push(@{$MODULE{$thismod}} , $sym);
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index efff8078e395..334d170de31f 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -2046,13 +2046,17 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
- static void add_versions(struct buffer *b, struct module *mod)
- {
- 	struct symbol *s;
-+	unsigned int name_len;
-+	unsigned int name_len_padded;
-+	unsigned int tmp;
-+	unsigned char *tmp_view = (unsigned char *)&tmp;
- 
- 	if (!modversions)
- 		return;
- 
- 	buf_printf(b, "\n");
--	buf_printf(b, "static const struct modversion_info ____versions[]\n");
--	buf_printf(b, "__used __section(\"__versions\") = {\n");
-+	buf_printf(b, "static const char ____versions[]\n");
-+	buf_printf(b, "__used __section(\"__versions\") =\n");
- 
- 	list_for_each_entry(s, &mod->unresolved_symbols, list) {
- 		if (!s->module)
-@@ -2062,16 +2066,25 @@ static void add_versions(struct buffer *b, struct module *mod)
- 				s->name, mod->name);
- 			continue;
- 		}
--		if (strlen(s->name) >= MODULE_NAME_LEN) {
--			error("too long symbol \"%s\" [%s.ko]\n",
--			      s->name, mod->name);
--			break;
--		}
--		buf_printf(b, "\t{ %#8x, \"%s\" },\n",
--			   s->crc, s->name);
-+		name_len = strlen(s->name);
-+		name_len_padded = (name_len + 1 + 3) & ~3;
-+
-+		/* Offset to next entry */
-+		tmp = TO_NATIVE(8 + name_len_padded);
-+		buf_printf(b, "\t\"\\x%02x\\x%02x\\x%02x\\x%02x",
-+			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
-+
-+		tmp = TO_NATIVE(s->crc);
-+		buf_printf(b, "\\x%02x\\x%02x\\x%02x\\x%02x\"\n",
-+			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
-+
-+		buf_printf(b, "\t\"%s", s->name);
-+		for (; name_len < name_len_padded; name_len++)
-+			buf_printf(b, "\\0");
-+		buf_printf(b, "\"\n");
- 	}
- 
--	buf_printf(b, "};\n");
-+	buf_printf(b, ";\n");
- }
- 
- static void add_depends(struct buffer *b, struct module *mod)
--- 
-2.34.1
+>
+>
+> >         select CONSTRUCTORS
+> >         help
+> >           Enables Rust support in the kernel.
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index ea4c903c9868..d473d491e709 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -364,6 +364,15 @@ config PAHOLE_HAS_BTF_TAG
+> >           btf_decl_tag) or not. Currently only clang compiler implement=
+s
+> >           these attributes, so make the config depend on CC_IS_CLANG.
+> >
+> > +config PAHOLE_HAS_LANG_EXCLUDE
+> > +       def_bool PAHOLE_VERSION >=3D 124
+> > +       help
+> > +         Support for the --lang_exclude flag which makes pahole exclud=
+e
+> > +         compilation units from the supplied language. Used in Kbuild =
+to
+> > +         omit Rust CUs which are not supported in version 1.24 of paho=
+le,
+> > +         otherwise it would emit malformed kernel and module binaries =
+when
+> > +         using DEBUG_INFO_BTF_MODULES.
+> > +
+> >  config DEBUG_INFO_BTF_MODULES
+> >         def_bool y
+> >         depends on DEBUG_INFO_BTF && MODULES && PAHOLE_HAS_SPLIT_BTF
+> > diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
+> > index 0d99ef17e4a5..1f1f1d397c39 100755
+> > --- a/scripts/pahole-flags.sh
+> > +++ b/scripts/pahole-flags.sh
+> > @@ -19,5 +19,9 @@ fi
+> >  if [ "${pahole_ver}" -ge "122" ]; then
+> >         extra_paholeopt=3D"${extra_paholeopt} -j"
+> >  fi
+> > +if [ "${pahole_ver}" -ge "124" ]; then
+> > +       # see PAHOLE_HAS_LANG_EXCLUDE
+> > +       extra_paholeopt=3D"${extra_paholeopt} --lang_exclude=3Drust"
+> > +fi
+> >
+> >  echo ${extra_paholeopt}
+> > --
+> > 2.39.0
+> >
+>
+>
+> --
+> =E7=9C=9F=E5=AE=9F=E3=81=AF=E3=81=84=E3=81=A4=E3=82=82=E4=B8=80=E3=81=A4=
+=EF=BC=81/ Always, there's only one truth!
+>
 
