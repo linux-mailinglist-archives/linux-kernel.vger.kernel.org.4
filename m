@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BF5665CFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2C8665D13
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233456AbjAKNuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:50:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S231602AbjAKNxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbjAKNuA (ORCPT
+        with ESMTP id S238741AbjAKNxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:50:00 -0500
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38921C7E;
-        Wed, 11 Jan 2023 05:49:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1673444999; x=1704980999;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=T4VLwb+WAEhKP27vGcXiylUrNAmmuEI1ccEYWHt8Qec=;
-  b=Ra/PmN25pRyquOGRjfAQVmnV+bZMLuPl7xAquLVbZkzcqVUT3XjEinK5
-   Rk95o+h1EJ/BByVoEQZ0I8eKBsAv3rwvTc1k5RKYgix4q2XUvSQhYKVSi
-   DLDA8Gu1uc3ItYlWC8UYkXAOZKuWUgZmfT+hiMGP9GTgdfxL3D2zYYYXd
-   s=;
-X-IronPort-AV: E=Sophos;i="5.96,317,1665446400"; 
-   d="scan'208";a="285546276"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-edda28d4.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 13:49:56 +0000
-Received: from EX13D40EUA004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-m6i4x-edda28d4.us-east-1.amazon.com (Postfix) with ESMTPS id C212381180;
-        Wed, 11 Jan 2023 13:49:45 +0000 (UTC)
-Received: from EX19D024EUA002.ant.amazon.com (10.252.50.224) by
- EX13D40EUA004.ant.amazon.com (10.43.165.178) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Wed, 11 Jan 2023 13:49:44 +0000
-Received: from [10.220.99.6] (10.43.161.114) by EX19D024EUA002.ant.amazon.com
- (10.252.50.224) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.7; Wed, 11 Jan
- 2023 13:49:30 +0000
-Message-ID: <3c9d5c84-7b54-e12e-f6ba-a73f66e0b094@amazon.com>
-Date:   Wed, 11 Jan 2023 15:49:25 +0200
+        Wed, 11 Jan 2023 08:53:08 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B978F10EC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:52:39 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id d16so795230qtw.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:52:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tAUo9g+pZ7MGFpWgfp8Hgfry4Aku45YtfI7WJ19iP2c=;
+        b=bqeMXJc6OFBQasYaspezdnuV1BKaiuIAcUwaydUY8k1lED/bzBhKijVLU+dF9HuoZ7
+         gkEOCd/SI4Er9laG5V92aFG/vPF/1P0yLWH+QFXrT67uK7OX+6OoDZ0Xr9NdF44McUCI
+         IoqpSL6isiP3gpJT9XkkYjNHCSDM//3ueCjmNwuAiRbRuQZqp6J5R8CRJRl+sqeC3CsC
+         HXpQQoPw2vd3hqDqgvb/D9PE4O55fNYLLy255vhrml8XRg6sPU0qqGU8eyt2HH4y3doT
+         MqsH9yz/v44JKBKQBNkxSBvgjJXmkTtGvhY5h66hhb9aMTqM23vuxCFP7/L7bs/zCpi6
+         5M5A==
+X-Gm-Message-State: AFqh2kovsqtNYM1U8onJSzH2J/u1iL8gMGOR47+0ch9Mpqb6uBEJGaIG
+        2fF9E57TTz3ClIheyZ62xr/Up+NZuoPOBw==
+X-Google-Smtp-Source: AMrXdXtvxHVDp4g1uhDpj6VMwhWm9PqR885FSwZqZD6lAZ4GNfKrfFgcCimS4SACHN493lT386YCqg==
+X-Received: by 2002:ac8:4e04:0:b0:3ab:5dc7:6bf0 with SMTP id c4-20020ac84e04000000b003ab5dc76bf0mr98351490qtw.36.1673445158551;
+        Wed, 11 Jan 2023 05:52:38 -0800 (PST)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id c8-20020ac86608000000b003a4f435e381sm7546377qtp.18.2023.01.11.05.52.37
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 05:52:37 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-4a2f8ad29d5so195227647b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:52:37 -0800 (PST)
+X-Received: by 2002:a0d:fb81:0:b0:480:fa10:459e with SMTP id
+ l123-20020a0dfb81000000b00480fa10459emr333518ywf.283.1673445157171; Wed, 11
+ Jan 2023 05:52:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH RFC v7 49/64] KVM: SVM: Introduce ops for the post gfn map
- and unmap
-Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>, <kvm@vger.kernel.org>
-CC:     <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        <linux-crypto@vger.kernel.org>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <jroedel@suse.de>, <thomas.lendacky@amd.com>,
-        <hpa@zytor.com>, <ardb@kernel.org>, <pbonzini@redhat.com>,
-        <seanjc@google.com>, <vkuznets@redhat.com>,
-        <wanpengli@tencent.com>, <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
-        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <harald@profian.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Jarkko Sakkinen <jarkko@profian.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-50-michael.roth@amd.com>
-From:   Sabin Rapan <sabrapan@amazon.com>
-In-Reply-To: <20221214194056.161492-50-michael.roth@amd.com>
-X-Originating-IP: [10.43.161.114]
-X-ClientProxiedBy: EX13D40UWC002.ant.amazon.com (10.43.162.191) To
- EX19D024EUA002.ant.amazon.com (10.252.50.224)
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <Y7nyd4hPeXsdiibH@duo.ucw.cz> <Y7pRw47hidw+s6+g@mit.edu>
+ <Y7pzbnlXgv+asekg@amd.ucw.cz> <CAMuHMdVvVoEs8yjNLmK=_shmGkyz1zYc8ZMi-vmP4aee0yKoPQ@mail.gmail.com>
+ <Y7sPq3Tmm6vI/RAJ@duo.ucw.cz> <Y7tjnhs77o4TL5ey@mit.edu> <614os9n2-2sq1-2qnr-56q6-1qq628271175@vanv.qr>
+In-Reply-To: <614os9n2-2sq1-2qnr-56q6-1qq628271175@vanv.qr>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 11 Jan 2023 14:52:24 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXJh24d3u_RHm_Sa7YsAdbk_5yDVEbk-huRFSDxbgBkFA@mail.gmail.com>
+Message-ID: <CAMuHMdXJh24d3u_RHm_Sa7YsAdbk_5yDVEbk-huRFSDxbgBkFA@mail.gmail.com>
+Subject: Re: Dhrystone -- userland version
+To:     Jan Engelhardt <jengelh@inai.de>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, Pavel Machek <pavel@ucw.cz>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@osdl.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgpPbiAxNC4xMi4yMDIyIDIxOjQwLCBNaWNoYWVsIFJvdGggd3JvdGU6Cj4gZGlmZiAtLWdpdCBh
-L2FyY2gveDg2L2t2bS9zdm0vc3ZtLmggYi9hcmNoL3g4Ni9rdm0vc3ZtL3N2bS5oCj4gaW5kZXgg
-YTRkNDhjM2UwZjg5Li5hZWYxM2MxMjBmMmQgMTAwNjQ0Cj4gLS0tIGEvYXJjaC94ODYva3ZtL3N2
-bS9zdm0uaAo+ICsrKyBiL2FyY2gveDg2L2t2bS9zdm0vc3ZtLmgKPiBAQCAtMTAwLDYgKzEwMCw3
-IEBAIHN0cnVjdCBrdm1fc2V2X2luZm8gewo+ICAgICAgICAgYXRvbWljX3QgbWlncmF0aW9uX2lu
-X3Byb2dyZXNzOwo+ICAgICAgICAgdTY0IHNucF9pbml0X2ZsYWdzOwo+ICAgICAgICAgdm9pZCAq
-c25wX2NvbnRleHQ7ICAgICAgLyogU05QIGd1ZXN0IGNvbnRleHQgcGFnZSAqLwo+ICsgICAgICAg
-c3BpbmxvY2tfdCBwc2NfbG9jazsKCkxvb2tzIGxpa2UgYSBsZWZ0b3ZlciBmcm9tIHY2IHNlcmll
-cy4KCi0tClNhYmluLgoKCgpBbWF6b24gRGV2ZWxvcG1lbnQgQ2VudGVyIChSb21hbmlhKSBTLlIu
-TC4gcmVnaXN0ZXJlZCBvZmZpY2U6IDI3QSBTZi4gTGF6YXIgU3RyZWV0LCBVQkM1LCBmbG9vciAy
-LCBJYXNpLCBJYXNpIENvdW50eSwgNzAwMDQ1LCBSb21hbmlhLiBSZWdpc3RlcmVkIGluIFJvbWFu
-aWEuIFJlZ2lzdHJhdGlvbiBudW1iZXIgSjIyLzI2MjEvMjAwNS4K
+Hi Jan,
 
+On Wed, Jan 11, 2023 at 2:32 PM Jan Engelhardt <jengelh@inai.de> wrote:
+> On Monday 2023-01-09 01:45, Theodore Ts'o wrote:
+> >On Sun, Jan 08, 2023 at 07:47:07PM +0100, Pavel Machek wrote:
+> >> > However, as this is not Linux-specific, how hard can it be to convince
+> >> > your distro to include https://github.com/qris/dhrystone-deb.git?
+> >> > Usually, when I have a full userspace available, I just clone the above,
+> >> > and debuild it myself.
+> >>
+> >> Dunno. I'd not solve it if package was in Debian, but it is not.
+> >
+> >I would suspect the better long-term solution would be to get the
+> >package into Debian, since that will be easier for people to use.  I
+> >suspect the reason why most distros don't include it is because it
+> >really is a **terrible** benchmark for most use cases.
+>
+> (All of) you could install boinc-client and just exercise
+> --run_cpu_benchmarks without (I think) attaching to any particular
+> computing project. The package should be in distros and you get
+> both Dhrystone and Whetstone.
+
+Thanks, but I really want an in-kernel benchmark, as a full userland
+may not be available during early development.
+
+BTW, boinc doesn't seem to work under Wayland, spewing lots of
+"Invalid MIT-MAGIC-COOKIE-1 key", before printing Dhrystone and
+Whetstone numbers...
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
