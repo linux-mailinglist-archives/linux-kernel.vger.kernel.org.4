@@ -2,466 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E00666276
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C21B66626D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235532AbjAKSGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
+        id S234422AbjAKSEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbjAKSFz (ORCPT
+        with ESMTP id S231760AbjAKSEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:05:55 -0500
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C33A244;
-        Wed, 11 Jan 2023 10:05:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1673460348;
-        bh=ZHBM4wEZkQCSOA95jsJwDNAR1NvwB3A2kjI+WhHSIdo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=XQSn0qk3awf6C0kEy+WA3OnCpiv09c/aPXi5inudW92wA7qpFwXAeKP1OWzqiZf90
-         D6bXey0id6VnUe8y6j1WbW9LXnQ9coGD6bt+CmZAHqosn6w326701VGFMd7BTStm0G
-         y9ybD9M5qzBkAuOU0TZmcUpPv1uTRy/uZfamscd0=
-Received: from localhost.localdomain ([111.60.247.106])
-        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
-        id 14F2600F; Thu, 12 Jan 2023 02:05:15 +0800
-X-QQ-mid: xmsmtpt1673460345t2ayzqyup
-Message-ID: <tencent_ADF233CE9D445F8477D542A187006FB92B0A@qq.com>
-X-QQ-XMAILINFO: M8Cd2byC8kc4TxS6rrL65SI0n8oxxhGxnHDLz0LfXKDeycaoljX8MH/Htv1hIB
-         WPEdzXWWfvPOLVdUh0XQu+FZjN8BTa+EPNWqLMGTLNaynQpFUaI4W5WRDPlWfeVP+wiSwTPiann0
-         QCscLJ+cEnlORhFPZoSlqDw/TaZdQxGv5s/Z/Ldbkb0knco6V5ay8Vum2fn4cHZ8wtYiifEhF+32
-         i7BrfaqhjWHRuUDWqCdEoDdGMovqM6giyogVB+i5J5+gmt4nwKxUE91L67v0I1ZyZbwOPOGdlw6E
-         G16xrr0ZYH2etBs9h2ZhDlyQpX/YDox/022JXxdsUwd2JIaBWpx5AanJ/G4Hz6fHbNRjnmHVungf
-         7XFOAYqAYSUQH6Mpn+e0z4OzpLEwvI9vj9lNFZbADJ75/U1DhBh8tnja03mjlcACnT7IUamdKJ5n
-         sKs1fTsm4duH8MD5HNLTOnIR2LHqGUeUOzOD4IQEAtACuzTFzFyfXCcTUixPBVah5iL78zbdvFr5
-         JSjE2BlQhCfWk2jBXEoAKlOn6n7Y/Zqx0neTdWVqyfe50xWeCi8uj6XMXrwbw+ugBj630pz8kK3T
-         MC2N96j7EnCb+Hhpq3NvcVLHapsUPkuUMmHj8UrBJfIM/0VcujMSyl4KvkSJreCuiNsjEEbCnEkR
-         LkGRxw3t+PFWh2DNLcTbkF/LQLeJz8KUPeMm9IOQKf0U4pwSgXn+wXKgCxF7PdArnx8nePUh51x0
-         oT0/t5BfRKwmmOSmT/o5KKH4vRgxdOXJ907yTIBB8jYOEspLaRPTbWxHzk34Gjh7IEUbbwcnaSzl
-         8Uu/Gy+bdu1OidD9bQMWHgGwp+hrv3msvE40HHn98ZNz30vPweYYy8FNPKreuTp3ddrZ6xMuNAc6
-         dIy3DuLiUiIO68tZG/bBER6GN/DYVkT5jZkctMC2ogCLPiSiZIO5alGb9GCXDv05ikAzX/1m2php
-         1UmrDm+1SNdOBZlk1chVovK+ZRTflyac77LtayzjnXHAnQCgX9xic2+gcpVTuZvcE8KSy4Ylw=
-From:   Yang Xiwen <forbidden405@foxmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Wed, 11 Jan 2023 13:04:21 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B6515F1D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 10:04:20 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id cx21-20020a17090afd9500b00228f2ecc6dbso658705pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 10:04:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=MT5XQVfPwDnqCW33iL9Hwyhid1gVJp/ygpnOvn32NXs=;
+        b=O6YkHBTqerjcnQfoZASrN6CFaHdDZ6/1uWXueN+UsJsYeQovir9XJ9gbfGgnYrK1i7
+         F8kGhqIkrefxukIiMm26XXfCsiANvDI4hHKPgedAuk1BqFjo9NI56QzqYCQWaCFxSVAz
+         90huDvQFlEYYlJBw5FM9eUXeCt5n+M/fJYFks=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MT5XQVfPwDnqCW33iL9Hwyhid1gVJp/ygpnOvn32NXs=;
+        b=6D/n5N0xGhbImK6fmcqHy+wg3HLWUOwrjhq4YbZYS8wCyL0qF+6pQ/czlrEOf71diV
+         uPHvczfHyQmPMlGHGLJno4xhlcGpEpPTSjAK+bDbQtIxVQlqtW5HSoqaKTyS+WniVCQC
+         OgPT5g6YKM3x/ZL+dLEPl0cwUQmUtE4qzMwXNXgvLGqsmI8Vg8uw6uMU69hAijhlbrwV
+         H0GiznSL9dC4TpOPV4ny73ARIlluJAgvVpIr7Qk4Hxk+d+c+AZwb3CaS9GLxYafiSAqm
+         yXwJHKr3Ro1nQLn8jpqjpVzoXBCYugB9JY8XzY+9d5zgDjasMZ4JRHrEGgJhTJ/HJdWX
+         IcZQ==
+X-Gm-Message-State: AFqh2kpuZNX1sncSHXx/+uJAY+O7SMurrHLsZbXDROUb/SV1PAty/Kr/
+        vZIaa1V1lPU6VtHv++8AN12Sgq5ZXuPNL2I8FGyuBZOoQ/pac0CSJVgDASYp/cZQPDWk0JgtNOv
+        LqGcc8i7fVH17jiIVNJkSsk15UIbnQiI7ZeurMv2GdqvPIrBHWKLLWS1XkGFP+69eDqxVQvf+q4
+        E/SiKbyYZ41GM=
+X-Google-Smtp-Source: AMrXdXsSwKhHV6kJTH+zjOQsbZJ2JZyeJw7Z8ls5ZlqwVv1V3u5rb4WDk8QsHNQvgr/MvP1AZDHPig==
+X-Received: by 2002:a17:902:ee82:b0:193:30bc:ed86 with SMTP id a2-20020a170902ee8200b0019330bced86mr3441300pld.48.1673460259796;
+        Wed, 11 Jan 2023 10:04:19 -0800 (PST)
+Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id k18-20020a170902c41200b00190f5e3bcd9sm10526615plk.23.2023.01.11.10.04.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 11 Jan 2023 10:04:18 -0800 (PST)
+Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
+ support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Yang Xiwen <forbidden405@foxmail.com>,
-        Jaime Breva <jbreva@nayarsystems.com>,
-        Nikita Travkin <nikita@trvn.ru>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v3 3/3] arm64: dts: qcom: msm8916-thwc: Add initial device trees
-Date:   Thu, 12 Jan 2023 02:03:22 +0800
-X-OQ-MSGID: <20230111180322.21874-4-forbidden405@foxmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230111180322.21874-1-forbidden405@foxmail.com>
-References: <20230111180322.21874-1-forbidden405@foxmail.com>
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-3-william.zhang@broadcom.com>
+ <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
+ <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
+ <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
+ <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+ <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+ <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
+ <71c2e796-f0fb-90cd-4599-13c9718f41d5@linaro.org>
+From:   William Zhang <william.zhang@broadcom.com>
+Message-ID: <31644849-dc69-ddfc-a6b6-6ffd37d64d2b@broadcom.com>
+Date:   Wed, 11 Jan 2023 10:04:16 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <71c2e796-f0fb-90cd-4599-13c9718f41d5@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000005ba21c05f200d4cb"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds support for the ufi-001C and uf896 WiFi/LTE dongle made by
-Tong Heng Wei Chuang based on MSM8916.
-uf896 is another variant for the usb stick. The board design
-differs by using different gpios for the keys and leds.
+--0000000000005ba21c05f200d4cb
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-Note: The original firmware does not support 64-bit OS. It is necessary
-to flash 64-bit TZ firmware to boot arm64.
 
-Currently supported:
-- All CPU cores
-- Buttons
-- LEDs
-- Modem
-- SDHC
-- USB Device Mode
-- UART
 
-Co-developed-by: Jaime Breva <jbreva@nayarsystems.com>
-Signed-off-by: Jaime Breva <jbreva@nayarsystems.com>
-Co-developed-by: Nikita Travkin <nikita@trvn.ru>
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
----
- arch/arm64/boot/dts/qcom/Makefile             |   2 +
- .../boot/dts/qcom/msm8916-thwc-uf896.dts      |  41 +++
- .../boot/dts/qcom/msm8916-thwc-ufi001c.dts    |  39 +++
- arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi     | 246 ++++++++++++++++++
- 4 files changed, 328 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
+On 01/11/2023 01:02 AM, Krzysztof Kozlowski wrote:
+> On 10/01/2023 23:18, Florian Fainelli wrote:
+>> On 1/10/23 00:40, Krzysztof Kozlowski wrote:
+>>>>> No, it is discouraged in such forms. Family or IP block compatibles
+>>>>> should be prepended with a specific compatible. There were many issues
+>>>>> when people insisted on generic or family compatibles...
+>>>>>
+>>>>>> Otherwise we will have to have a compatible string with chip model for
+>>>>>> each SoC even they share the same IP. We already have more than ten of
+>>>>>> SoCs and the list will increase.  I don't see this is a good solution too.
+>>>>>
+>>>>> You will have to do it anyway even with generic fallback, so I don't get
+>>>>> what is here to gain... I also don't get why Broadcom should be here
+>>>>> special, different than others. Why it is not a good solution for
+>>>>> Broadcom SoCs but it is for others?
+>>>>>
+>>>> I saw a few other vendors like these qcom ones:
+>>>>     qcom,spi-qup.yaml
+>>>>         - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
+>>>>         - qcom,spi-qup-v2.1.1 # for 8974 and later
+>>>>         - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
+>>>>     qcom,spi-qup.yaml
+>>>>         const: qcom,geni-spi
+>>>
+>>> IP block version numbers are allowed when there is clear mapping between
+>>> version and SoCs using it. This is the case for Qualcomm because there
+>>> is such clear mapping documented and available for Qualcomm engineers
+>>> and also some of us (although not public).
+>>>
+>>>> I guess when individual who only has one particular board/chip and is
+>>>> not aware of the IP family,  it is understandable to use the chip
+>>>> specific compatible string.
+>>>
+>>> Family of devices is not a versioned IP block.
+>>
+>> Would it be acceptable to define for instance:
+>>
+>> - compatible = "brcm,bcm6868-hsspi", "brcm,bcmbca-hsspi";
+> 
+> Yes, this is perfectly valid. Although it does not solve William
+> concerns because it requires defining specific compatibles for all of
+> the SoCs.
+> 
+> Best regards,
+> Krzysztof
+> 
+As I mentioned in another email,  I would be okay to use these 
+compatibles to differentiate by ip rev and to conforms to brcm convention:
+"brcm,bcmXYZ-hsspi", "brcm,bcmbca-hsspi-v1.0", "brcm,bcmbca-hsspi";
+"brcm,bcmXYZ-hsspi", "brcm,bcmbca-hsspi-v1.1", "brcm,bcmbca-hsspi";
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 55f9c4903cfac..6301ec861ab4d 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -21,6 +21,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e7.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-grandmax.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-uf896.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-ufi001c.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts b/arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
-new file mode 100644
-index 0000000000000..79447ca48dd3a
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/dts-v1/;
-+
-+#include "msm8916-ufi.dtsi"
-+
-+/ {
-+	model = "uf896 4G Modem Stick";
-+	compatible = "thwc,uf896", "qcom,msm8916";
-+};
-+
-+&button_restart {
-+	gpios = <&msmgpio 35 GPIO_ACTIVE_LOW>;
-+};
-+
-+&led_r {
-+	gpios = <&msmgpio 82 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_g {
-+	gpios = <&msmgpio 83 GPIO_ACTIVE_HIGH>;
-+	function = LED_FUNCTION_WLAN;
-+};
-+
-+&led_b {
-+	gpios = <&msmgpio 81 GPIO_ACTIVE_HIGH>;
-+	function = LED_FUNCTION_WAN;
-+};
-+
-+&button_default {
-+	pins = "gpio35";
-+	bias-pull-up;
-+};
-+
-+&gpio_leds_default {
-+	pins = "gpio81", "gpio82", "gpio83";
-+};
-+
-+&sim_ctrl_default {
-+	pins = "gpio1", "gpio2";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts b/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
-new file mode 100644
-index 0000000000000..700cf81cbf8c0
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/dts-v1/;
-+
-+#include "msm8916-ufi.dtsi"
-+
-+/ {
-+	model = "ufi-001c/ufi-001b 4G Modem Stick";
-+	compatible = "thwc,ufi001c", "qcom,msm8916";
-+};
-+
-+&button_restart {
-+	gpios = <&msmgpio 37 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_r {
-+	gpios = <&msmgpio 22 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_g {
-+	gpios = <&msmgpio 21 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_b {
-+	gpios = <&msmgpio 20 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&button_default {
-+	pins = "gpio37";
-+	bias-pull-down;
-+};
-+
-+&gpio_leds_default {
-+	pins = "gpio20", "gpio21", "gpio22";
-+};
-+
-+&sim_ctrl_default {
-+	pins = "gpio1", "gpio2";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-new file mode 100644
-index 0000000000000..286768d0fbe70
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-@@ -0,0 +1,246 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include "msm8916-pm8916.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	chassis-type = "embedded";
-+
-+	aliases {
-+		serial0 = &blsp1_uart2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0";
-+	};
-+
-+	reserved-memory {
-+		mpss_mem: mpss@86800000 {
-+			reg = <0x0 0x86800000 0x0 0x5500000>;
-+			no-map;
-+		};
-+
-+		gps_mem: gps@8bd00000 {
-+			reg = <0x0 0x8bd00000 0x0 0x200000>;
-+			no-map;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-0 = <&button_default>;
-+		pinctrl-names = "default";
-+
-+		label = "GPIO Buttons";
-+
-+		/* gpio is board-specific */
-+		button_restart: button-restart {
-+			label = "Restart";
-+			linux,code = <KEY_RESTART>;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		pinctrl-0 = <&gpio_leds_default>;
-+		pinctrl-names = "default";
-+
-+		/* GPIOs are board-specific */
-+		led_r: led-r {
-+			color = <LED_COLOR_ID_RED>;
-+			default-state = "on";
-+			function = LED_FUNCTION_INDICATOR;
-+		};
-+
-+		led_g: led-g {
-+			color = <LED_COLOR_ID_GREEN>;
-+			default-state = "off";
-+			function = LED_FUNCTION_INDICATOR;
-+		};
-+
-+		led_b: led-b {
-+			color = <LED_COLOR_ID_BLUE>;
-+			default-state = "off";
-+			function = LED_FUNCTION_INDICATOR;
-+		};
-+	};
-+};
-+
-+&bam_dmux {
-+	status = "okay";
-+};
-+
-+&bam_dmux_dma {
-+	status = "okay";
-+};
-+
-+&blsp1_uart2 {
-+	status = "okay";
-+};
-+
-+/* Remove &dsi_phy0 from clocks to make sure that gcc probes with display disabled */
-+&gcc {
-+	clocks = <&xo_board>, <&sleep_clk>, <0>, <0>, <0>, <0>, <0>;
-+};
-+
-+&mpss {
-+	pinctrl-0 = <&sim_ctrl_default>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+};
-+
-+&pm8916_usbin {
-+	status = "okay";
-+};
-+
-+&pronto {
-+	status = "okay";
-+};
-+
-+&sdhc_1 {
-+	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
-+	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
-+	pinctrl-names = "default", "sleep";
-+
-+	status = "okay";
-+};
-+
-+&usb {
-+	extcon = <&pm8916_usbin>;
-+	dr_mode = "peripheral";
-+
-+	status = "okay";
-+};
-+
-+&usb_hs_phy {
-+	extcon = <&pm8916_usbin>;
-+};
-+
-+&smd_rpm_regulators {
-+	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-+	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-+	vdd_l7-supply = <&pm8916_s4>;
-+
-+	s3 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1300000>;
-+	};
-+
-+	s4 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2100000>;
-+	};
-+
-+	l1 {
-+		regulator-min-microvolt = <1225000>;
-+		regulator-max-microvolt = <1225000>;
-+	};
-+
-+	l2 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+	};
-+
-+	l4 {
-+		regulator-min-microvolt = <2050000>;
-+		regulator-max-microvolt = <2050000>;
-+	};
-+
-+	l5 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l6 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l7 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l8 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2900000>;
-+	};
-+
-+	l9 {
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l10 {
-+		regulator-min-microvolt = <2700000>;
-+		regulator-max-microvolt = <2800000>;
-+	};
-+
-+	l11 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2950000>;
-+		regulator-system-load = <200000>;
-+		regulator-allow-set-load;
-+	};
-+
-+	l12 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2950000>;
-+	};
-+
-+	l13 {
-+		regulator-min-microvolt = <3075000>;
-+		regulator-max-microvolt = <3075000>;
-+	};
-+
-+	l14 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l15 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l16 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l17 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2850000>;
-+	};
-+
-+	l18 {
-+		regulator-min-microvolt = <2700000>;
-+		regulator-max-microvolt = <2700000>;
-+	};
-+};
-+
-+&msmgpio {
-+	/* pins are board-specific */
-+	button_default: button-default-state {
-+		function = "gpio";
-+		drive-strength = <2>;
-+	};
-+
-+	gpio_leds_default: gpio-leds-default-state {
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	sim_ctrl_default: sim-ctrl-default-state {
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+		output-low;
-+	};
-+};
--- 
-2.39.0
+In the two drivers I included in this series, it will be bound to 
+brcm,bcmbca-hsspi-v1.0 (in additional to brcm,bcm6328-hsspi) and 
+brcm,bcmbca-hsspi-v1.1 respectively.  This way we don't need to update 
+the driver with a new soc specific compatible whenever a new chips comes 
+out.
 
+Does this sound good to you?
+
+--0000000000005ba21c05f200d4cb
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
+6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
+xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
+VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
+/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
+0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
+urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEJf15bXuCNmAeCPdLlqrcQS9oQV
+TH1mjcDY/JKAG0zwMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDExMTE4MDQyMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBzLfhXc3PATJDpKf/xBGv+9DSVVYkLHFsZ3Nup3I5FJkBX
+7RkkRAxsPaR2etUuaS8GA6nyVIpAJ05rZ6tkoQeR3fnSV7rrRTf/pLHAPGjFFK6V3TugF4z52sor
+b8n7SQMclzawZ83bYJHAaZY2GrGnVnL7MlorVlZi2T0Yz/lL7qPpE23hT9iKgX3efZ7L9JKOjbi0
+WT12Jd31aHCCaW88cGh1WMDOx37UtZXbLH8R/zu2gX0JDw+94iuoWj59BIk4SJlrT4NQe9oox6pl
+vlx7vUIpUu+q2HH0ynF/SXWMp7jZ97Y+X3oDVIshJu/p+0aPu5kx+kiazKSXpvf7fRX/
+--0000000000005ba21c05f200d4cb--
