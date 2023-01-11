@@ -2,174 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86DE6657B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178656657D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238167AbjAKJix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:38:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        id S232390AbjAKJmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbjAKJhb (ORCPT
+        with ESMTP id S238350AbjAKJlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:37:31 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9053F615B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:36:17 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso12143238wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:36:17 -0800 (PST)
+        Wed, 11 Jan 2023 04:41:10 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D0413CC1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:36:51 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id i65so7499713pfc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:36:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=agrBGzLEfDLBSaCHOLwWqzPW8aLKgXJ9Qn5pOrzQb5Y=;
-        b=L1ew/2SCwJ61mAaiVWmR/o/h0rvj5/f8oWZHWzHzYRw3DibCnHMEDLdOE6f3JibAv4
-         TIbFr3b6wleD09DJbyz69vNg50+ZP+SzNowSevdxBHlyMEYmtkEs/cfgpI3fBLmNFK7R
-         nj/kwt7wwkxVeqOcx6fTIfreTT7aXZpE185iHv1G3KCJnJjK4GbWVrbx2EC8H+LPLZO4
-         cbbthMcG4ULnar4283XFnePmqly+AR2Whbt32lHWAYJi4KAkQCudsQm8EvBNcH5Pn4bV
-         LGXG9pwErge9lO8e+ELGjblOWgaA8i8KSoo0pcm6JEtRNmzguwM2yBmgb+xfeuMicRhs
-         VcVQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lgxbe9iy/UIiGBDGt6X9MleqRSYp4HVx7CIEeTI4ufU=;
+        b=UEEhg/SX/TFPKsEVPlR4oEk9BfADyFg+Ym5uadlWJdA88dymfbQzGUqUcv53K8Ot9S
+         LEp/mjVABk63mEPJWe6twp4CnQX4OOte386K/jBXBW+qze5DQcEfgSzLZ/tD+MpZLCWd
+         3Z0x67zTLBAUoSf5VT7ZcrdGrSuoNtT7m2M5H47O6pS+g9AyI13IGMhhYojTWkCETSLZ
+         n2Us3htJCeH0cZhlEqifBRXkRUF4V6Dts9iPqfT8nTpIlGE8UKUraXaoI+cGizRUzwJ1
+         dSOfxS50WvQ/pM8Q3FZDdJ1BEw5ew9Fn5+8sSsQBoj5pFNOHC1BQhvjCoxFKy6SS8dqg
+         w5Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=agrBGzLEfDLBSaCHOLwWqzPW8aLKgXJ9Qn5pOrzQb5Y=;
-        b=Bf0NTkezCqRs5gjwSNABGcTAA8DKFhR/NcNoAiKz0UysKAlfl6ovaFOhmfWt/KQQ41
-         f2R4EdRO+Aj07cr5AgzSA0UD+zZBsK1zLt7IGVwe4geMCTtTGE749gCnh3eJa7+C4WDI
-         sSBEcOdmSZwpPn2O6UCdP/zxsu0Fr1OFkdHtz1LZZBci0XDQD/P8BPf9v5+zRuVS+fLl
-         pFM9u4Zx/owWb3v2+qRs/ieAmLo1WXTK9NZ7q/getpaFFRCT6c0hvWfn2SARhxccbICA
-         lLsdPSpOdGpEeWrpM3Cw77kRVmpVn4ccBijgW8kZVm7zIw9iQIxOkPmcKFTVJ/I8cGNx
-         x8iw==
-X-Gm-Message-State: AFqh2kr/0JJ5DId6V2r9JLTwHuStd0bV8a3tZy+scRGCuAGdZDe8L2Ce
-        85emOaR2y1AIBbqgzstaGTXCgg==
-X-Google-Smtp-Source: AMrXdXur2VYSsIb72rrxWp6CTmFDaeh2Stw30IqyKOpakPOnkVDT29DdV1AQ6EJLmwgaYmiy5MRsiw==
-X-Received: by 2002:a05:600c:4d25:b0:3d3:5b7a:1791 with SMTP id u37-20020a05600c4d2500b003d35b7a1791mr62592799wmp.41.1673429776076;
-        Wed, 11 Jan 2023 01:36:16 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id he5-20020a05600c540500b003d9ed40a512sm13601488wmb.45.2023.01.11.01.36.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 01:36:15 -0800 (PST)
-Message-ID: <603f9c39-3e36-bb44-2305-1d37fe033dd5@linaro.org>
-Date:   Wed, 11 Jan 2023 10:36:12 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lgxbe9iy/UIiGBDGt6X9MleqRSYp4HVx7CIEeTI4ufU=;
+        b=CJQAPysvEgj3HYbt1lyzQ40PnrZThswxoK+s7dy69iy6SZjF36e3+xe/XhJADptO0V
+         3L4whuZPg5oEGYaP/+5Djn9HTs32GJUSyFKRGtbHBUpQh4GzOYvjWXJeJvkjCLI3j2nV
+         exgfBSm7gubxxr/LYtjjAiBdH8Stqoh9wfRz6xIYvEBZk4CNopYD9o4Y0cQYgHzuKFU4
+         nZb/6AZIcm+8WhnNEN8bSvEYWY/O+xVQ+w5a50sMdS+7nOwLQglEhuGgb86RMlNehE7x
+         sbdKDLHTMnU3pDXunqfSaFwmh+sY+INFUFah3EUUnlKwYpAncbASoCrHWMVLONlqAAEv
+         JNQQ==
+X-Gm-Message-State: AFqh2krRa1PuS+NfLyyWlCSqXpvQKzvpffYRNwSfnzNXCDS0siiMFGiv
+        LG5JsRgFaX46gUsr88YQaII=
+X-Google-Smtp-Source: AMrXdXub5iyH1ER+/F6NZA6+AIJbsgt/6RPVVs6/bQTrKDKEAgPi27tls3bG1gM8jLpGoV+qdfLY9Q==
+X-Received: by 2002:a05:6a00:72a:b0:57d:56f1:6ae7 with SMTP id 10-20020a056a00072a00b0057d56f16ae7mr60870508pfm.33.1673429810487;
+        Wed, 11 Jan 2023 01:36:50 -0800 (PST)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id z24-20020aa79498000000b005821db4fd84sm9536546pfk.131.2023.01.11.01.36.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 01:36:48 -0800 (PST)
+Date:   Wed, 11 Jan 2023 09:36:44 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, vbabka@suse.cz,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/sl{a,u}b: fix wrong usages of folio_page() for
+ getting head pages
+Message-ID: <Y76DLDEHyeyGTPD8@localhost>
+References: <20230110005124.1609-1-sj@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/7] dt-bindings: arm64: ipq9574: Add binding descriptions
- for clock and reset
-Content-Language: en-US
-To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, tdas@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-2-quic_devipriy@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230110121316.24892-2-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110005124.1609-1-sj@kernel.org>
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 13:13, devi priya wrote:
-> Adding support for the global clock controller found on
-> IPQ9574 based devices
-
-Subject: drop second/last, redundant "bindings descriptions for". The
-"dt-bindings" prefix is already stating that these are bindings.
-
+On Tue, Jan 10, 2023 at 12:51:24AM +0000, SeongJae Park wrote:
+> The standard idiom for getting head page of a given folio is
+> '&folio->page', but some are wrongly using 'folio_page(folio, 0)' for
+> the purpose.  Fix those to use the idiom.
 > 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Signed-off-by: SeongJae Park <sj@kernel.org>
 > ---
->  .../bindings/clock/qcom,gcc-other.yaml        |   4 +
->  .../devicetree/bindings/clock/qcom,gcc.yaml   |   9 +-
->  include/dt-bindings/clock/qcom,gcc-ipq9574.h  | 226 ++++++++++++++++++
->  include/dt-bindings/reset/qcom,gcc-ipq9574.h  | 164 +++++++++++++
->  4 files changed, 402 insertions(+), 1 deletion(-)
->  create mode 100644 include/dt-bindings/clock/qcom,gcc-ipq9574.h
->  create mode 100644 include/dt-bindings/reset/qcom,gcc-ipq9574.h
+>  mm/slab.c | 4 ++--
+>  mm/slub.c | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
-> index 2e8acca64af1..cc563d640336 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
-> @@ -18,6 +18,8 @@ description: |
->      include/dt-bindings/clock/qcom,gcc-ipq4019.h
->      include/dt-bindings/clock/qcom,gcc-ipq6018.h
->      include/dt-bindings/reset/qcom,gcc-ipq6018.h
-> +    include/dt-bindings/clock/qcom,gcc-ipq9574.h
-> +    include/dt-bindings/reset/qcom,gcc-ipq9574.h
->      include/dt-bindings/clock/qcom,gcc-msm8953.h
->      include/dt-bindings/clock/qcom,gcc-mdm9607.h
->      include/dt-bindings/clock/qcom,gcc-mdm9615.h
-> @@ -34,6 +36,8 @@ properties:
->        - qcom,gcc-mdm9607
->        - qcom,gcc-msm8953
->        - qcom,gcc-mdm9615
-> +      - qcom,gcc-ipq9574
-
-Incorrect order but anyway let's switch to new naming style just like
-SM8550 and SA8775p.
-
-> +
-
-Not related change.
-
+> diff --git a/mm/slab.c b/mm/slab.c
+> index b77be9c6d6b1..a5398676dc60 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -1389,7 +1389,7 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
 >  
->  required:
->    - compatible
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-> index 7129fbcf2b6c..5a71268538e6 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-> @@ -24,6 +24,14 @@ properties:
->    '#power-domain-cells':
->      const: 1
+>  	BUG_ON(!folio_test_slab(folio));
+>  	__slab_clear_pfmemalloc(slab);
+> -	page_mapcount_reset(folio_page(folio, 0));
+> +	page_mapcount_reset(&folio->page);
+>  	folio->mapping = NULL;
+>  	/* Make the mapping reset visible before clearing the flag */
+>  	smp_wmb();
+> @@ -1398,7 +1398,7 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
+>  	if (current->reclaim_state)
+>  		current->reclaim_state->reclaimed_slab += 1 << order;
+>  	unaccount_slab(slab, order, cachep);
+> -	__free_pages(folio_page(folio, 0), order);
+> +	__free_pages(&folio->page, order);
+>  }
 >  
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 8
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 8
-
-This does not look correct, neither related.
-> +
->    reg:
->      maxItems: 1
+>  static void kmem_rcu_free(struct rcu_head *head)
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 67020074ecb4..d5f20c062004 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2066,7 +2066,7 @@ static void __free_slab(struct kmem_cache *s, struct slab *slab)
+>  	if (current->reclaim_state)
+>  		current->reclaim_state->reclaimed_slab += pages;
+>  	unaccount_slab(slab, order, s);
+> -	__free_pages(folio_page(folio, 0), order);
+> +	__free_pages(&folio->page, order);
+>  }
 >  
-> @@ -35,7 +43,6 @@ required:
->    - reg
->    - '#clock-cells'
->    - '#reset-cells'
-> -  - '#power-domain-cells'
+>  static void rcu_free_slab(struct rcu_head *h)
+> -- 
+> 2.25.1
+> 
+>
 
-Eee? Why? What's this?
+Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-
-
-
-Best regards,
-Krzysztof
-
+Thanks!
