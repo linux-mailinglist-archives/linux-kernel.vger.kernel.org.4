@@ -2,122 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3830D6666FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AEF6666FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235688AbjAKXKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 18:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
+        id S235728AbjAKXLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 18:11:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235566AbjAKXKh (ORCPT
+        with ESMTP id S235677AbjAKXLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 18:10:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9B232255;
-        Wed, 11 Jan 2023 15:10:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B55F861ED6;
-        Wed, 11 Jan 2023 23:10:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04C6C433EF;
-        Wed, 11 Jan 2023 23:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673478635;
-        bh=++uluPFMowPrY8s1xfgmEUXDgen39mn6C1pbnUZ2MU4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=kBqcCXiYgbOo0fz6xo/YOGVM2XLI/TGaRt6I6q6PjPGZghKE/om05zyqfQApLqDYT
-         jmtXbxl6mYgeTjvYJzO/uS6FXr7Jtgv4Vt9rxojdIH0almjY/NGOnq8M98oF8kwfKv
-         mCwqtmnaMLXuy53tHGIvRSpO6jJpLEDBsKoIBdgEktC94gHq4mrfugdJv1Tl6xx0Op
-         Kf2NLycwahihsEOlR2wzo34lyCEDQAN00QCHEvDa7CZKU+ikaJv0Sg+J3cVXJ9bOw8
-         YdLlhfDNoHLfjF0ARFO6qKNG2/37bTKDikGli5xn/eqK7HJNGt8MYp2vc2UsdDCZZn
-         X5NH/nGhjaa4A==
-Date:   Wed, 11 Jan 2023 17:10:33 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
-        ruscur@russell.cc, oohall@gmail.com, treding@nvidia.com,
-        jonathanh@nvidia.com, mmaddireddy@nvidia.com, kthota@nvidia.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vsethi@nvidia.com, linuxppc-dev@lists.ozlabs.org,
-        sagar.tv@gmail.com
-Subject: Re: [PATCH V1] PCI/AER: Configure ECRC only AER is native
-Message-ID: <20230111231033.GA1714672@bhelgaas>
+        Wed, 11 Jan 2023 18:11:11 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2049.outbound.protection.outlook.com [40.107.104.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1AD1868D
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 15:11:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N3x8+ZRD/dj2Zxtfg8adkUymXAm+hVJ16ZvzPob6bzPifGDSNP1o9tKllQTFjjxs3NdAMwXhEC75fK0M996SuSq0k6eg5aZqXrGXY+eb1Nz69/yqzcSUMPxu49Gj3t+r/BMgBe8QpThUb57Ade/IVYV8YKxcbWJgfm8/RFdcnQw1LffAKPTWSL4GJQdVcbFnXnWVyUygMe/NZFx/r0xva7SX3yy57eodxc5kjhVqHtIMeASVxM0iKvx2SkMzZeCea8AMKiJNhQrrMd0GXSoxEPUyCmk6qBV8UugpX6ptf4KlkWwXtOyerL0SKDYdeUlCQqQXYeAsiEEM7o/gBTG0Jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TQPITWpGfUQbxkcR4qtdoEaklY4vsCNvdFrrkr7s47s=;
+ b=PaxwAk4YZo8VB2E7x7kKvQ2JYFrtjo+JR97F3WGxMzawOD4zgzaextVc8Pkg26iNWrDC8RhaDa2ZEavY/IllKvlTfjGK6paiWJpaQbv1r58z+ZoeXLcOHCKRs2o4QKx+cgpGAfBX8E+gawXGCJ85RIHQ6mLYZZUGvebDbaOzXqD8C2mNV4ULM+Eb15CUGrJ/lJ9O5VaaKFItstKNa83xZSNiF7LubjHxaMkGpjHm6LwNYZbX46RjenvvYExnorX+mbCnz9pxhD0j8B7/WjG1ncdmC4MWmirWeVYrfreEDrD5h3YCyHx1JIk4Pw1C02cyfjhf1dE+xWQYaBo7Cl8+Xg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TQPITWpGfUQbxkcR4qtdoEaklY4vsCNvdFrrkr7s47s=;
+ b=UGykka3azYxPRyCvC46c4Y4I25DKN/mqAuFXzjcfkYhTihzGycsvpv53OsgLvGwTi4mLObCiGTh3YdshFqObUIhkqtF/ARH9hHOA66NawJLd31DOSwoNh0La/NLhxlCKpAVzotJFvP4BTfzMwn5Oc/DjREL7mhWPKkeRZ+VxnJo=
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com (2603:10a6:208:145::23)
+ by DBAPR04MB7208.eurprd04.prod.outlook.com (2603:10a6:10:1a8::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
+ 2023 23:11:07 +0000
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::398d:fc7c:d42c:643d]) by AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::398d:fc7c:d42c:643d%3]) with mapi id 15.20.6002.012; Wed, 11 Jan 2023
+ 23:11:07 +0000
+From:   Leo Li <leoyang.li@nxp.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        kernel test robot <lkp@intel.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+CC:     Nicolas Schier <nicolas@fjasle.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Qiang Zhao <qiang.zhao@nxp.com>
+Subject: RE: usb.c:undefined reference to `qe_immr'
+Thread-Topic: usb.c:undefined reference to `qe_immr'
+Thread-Index: AQHZJNs3buVsdQuYikmMf6e4p0UXXK6Y1fcAgACMVoCAAD26gIAANZ7Q
+Date:   Wed, 11 Jan 2023 23:11:07 +0000
+Message-ID: <AM0PR04MB628964BC4188D6CD4DCF51688FFC9@AM0PR04MB6289.eurprd04.prod.outlook.com>
+References: <202301101500.pillNv6R-lkp@intel.com>
+ <a0e325d2-a9c5-ffca-b2d6-5eea60f9ad3b@infradead.org>
+ <87lem9h64t.fsf@mpe.ellerman.id.au>
+ <5d8e3316-54bb-40c4-a8a4-dd1b10d1e1a6@infradead.org>
+ <1f3c83a3-95f3-771b-3d45-3e632e2116da@csgroup.eu>
+In-Reply-To: <1f3c83a3-95f3-771b-3d45-3e632e2116da@csgroup.eu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR04MB6289:EE_|DBAPR04MB7208:EE_
+x-ms-office365-filtering-correlation-id: eb8cef2d-dc66-4b9c-af0c-08daf4291ea8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /HiOcQCavMUFEP/dAIyX57Vmdiewq3mCXx2z9pkm6BjLRABr5mA9eC7Fm9p33Fukan/QTvw5l2kGrVyZ0d+rCErR9605wKXUpG0dvoBw99rN0Z+gJQrbfl8pX1Ojbf4mD2KMD/6Sq4KtQWtUWR+jebRfflc13Tb/Ig2XM9gHT5tQnINTsXQncTnbA5/y7slUEFQJGCASvOsXCU5Z+5+No3IsUcJ53qk30Gyman+yqo+ozUEMR8HJALbd29DFVJxXzjhUVP/CQWO8v/tYSQnp2dLqA3cq3np54b+KNkBI/vMHN9dI8Vg5TvwjPEettdXXka7LSLnrPChur1Upov02LAP31LlmjkbhhUrtw/rl72kIh8/TfY7gtHzQXrNiz+3AODySWtz5lNg1KdYw6QPNy8UUfoFYPPJFHHkfRBw/M0rw+cz+qf1LCYMEbPRGu3tgUH3syJmv7CdzTnUzUZ/rihulAb0e6pzGC4Qe6+JvggAKqpU3ew40/ySta/Bzb0zaxHIPpcqayjtpYBk7zKZW8WH8RtrvKujCN8a8mI0OoxFgjPZuU+6ge8LfFGU+OEbJiuVlJHsX+qyhk7dlGI3sWh/WzBHRVPCY+fw+RT15+P5ReLYRanODR2JTYnxHAwB7qMh5ADjbIVKoPg1PxJixcHaWqgiUD6VIuKDnBcc+iRmMhEuaSOgIrE8qu1yrPkpcFAEY3mWZKO5alPz31pTxBLTrxroXO5ER7HR/IS3f35hDCVfLhG0uu2YFcYXBx30o
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6289.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(136003)(346002)(366004)(451199015)(2906002)(66574015)(83380400001)(66446008)(66556008)(66476007)(64756008)(55016003)(66946007)(33656002)(5660300002)(9686003)(52536014)(8936002)(53546011)(122000001)(55236004)(26005)(186003)(6506007)(7696005)(478600001)(41300700001)(38100700002)(110136005)(8676002)(86362001)(54906003)(76116006)(966005)(38070700005)(316002)(4326008)(71200400001)(45080400002)(81973001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?tphYneZg05s8o6Euc6NHXoTi/KXoqhDR6WlEZaowtpKCXxdOgwq3F4j8Pj?=
+ =?iso-8859-1?Q?6KF1QugXXh7H2Zxih5180lg47HK6rpJM0Ia6TfkPR7JiiULUD7hTabZ1Ii?=
+ =?iso-8859-1?Q?BHqk07vRfwS0kCITIbCuFmANYHhDnu2qDuPzjm8BXrF3cmiI5flrLq4QxL?=
+ =?iso-8859-1?Q?bEqLV4GmrzdcqJsQIv0a5/MV7bEMgo2OEz1/t+77pOIsEQLfcIfRSF7w8A?=
+ =?iso-8859-1?Q?TucxaLvdpBKJSVrDP/Mt9QQLXnMLi/L/5Xmemt4WGfZ6ODZTjggB9atQ68?=
+ =?iso-8859-1?Q?IoHYDjBq92z1syDlK6IYHkE8bVezHTmFoKLz4njtJXoBde6K71n96Bo/V/?=
+ =?iso-8859-1?Q?c30V2H+5dQrvFH7k60X1Da3NbfgNdw4WbNQmEF/XbPoSnVb/ZeHftUfHPY?=
+ =?iso-8859-1?Q?l3EqWV79inruzSatBX+gGt2WQVIX8703lSdDStyF08qPcbAMbySJBITKL/?=
+ =?iso-8859-1?Q?8DlanKOA2A3SS1ZY/45rA7SzgSl4CVDtKmi0Cq7OAKE7i7qaFiBJHqYG8B?=
+ =?iso-8859-1?Q?82hukMX+S+wKKBYeaCP+zyymcK2vjZQeej2VKiJPENGZAnTsaLU9bPIAz5?=
+ =?iso-8859-1?Q?6KSuNJK1uxy9o/OTiBe5mMmjfdOodP39rgkKVfabKDXmuc3Dpxl1OsRD1V?=
+ =?iso-8859-1?Q?OyPtpm3Y8LuP6RytKxyUxo3c9Eb31Y3+Cd1EmjjyjPWIt+FRSLohwBnOKm?=
+ =?iso-8859-1?Q?2CcyFpqoqry+VvFBpziJxRQREfYuvBObciaIbb7aYwGsfjexod/vLQrmOr?=
+ =?iso-8859-1?Q?HKnHcJh74GQ2Y6GOYJEqnH27KEtBukaF7zzkBpqyMm3Zml2gO4/Z4/KJ6w?=
+ =?iso-8859-1?Q?IRNwv0ADvwxTmnAMyhSLMgVh0B/RhkPmjXIf26J4wqSL/jQrxfgmjy4aFZ?=
+ =?iso-8859-1?Q?ZO1s8i9Neh/iMg5zPZYgzsWaM6d/x8weO6HRIoDSaJ5L2uXEcjSjevDXU6?=
+ =?iso-8859-1?Q?KGeKmDfPe8yxDAUIMNwqd91ibuUyGcA9+UwQTXr2YplzEewkfcyAB74Dd8?=
+ =?iso-8859-1?Q?iEdFfcehDEm61BpkR05zXJWXHkz9Q91sCaDYyuG6uUd8DPwgpQzTf7XkCC?=
+ =?iso-8859-1?Q?ePHd0XXNNOQ1jXcLP+vzZpB0IpzcloTaZ5oqGyUA6Qg2KrBpNh2kKv7yJe?=
+ =?iso-8859-1?Q?xEwadGKI3gpSEauJqN4O/ddjF7glEXIuKwnOmBbKBnXKR7a+bWo6jdwdVw?=
+ =?iso-8859-1?Q?a+Q76yq3TyEz+sbWtim6JiIZSydw93MWQdcxfs6zd14Oa031X+jDen2kPi?=
+ =?iso-8859-1?Q?OT50XkVD1INIDzYZ3KyH8LOTvsRMP3EuDIcjZcUaKqNoZldXkf9pQ6Iydq?=
+ =?iso-8859-1?Q?GGS5DkYvBAKe7ZOI3cZFfR+0YvmFlx3QEm6YPVSymsOKtAnhCs4cUW0me2?=
+ =?iso-8859-1?Q?U+63NGRuTCvnQrdYc6U1rfNFsfb28TxpBberxchzdVnWd4UDyfo7Rrhjbz?=
+ =?iso-8859-1?Q?hLxKINdUbNb8uOYVhxaMqBlkxW8lSDm/PsokW5nt7RTWU5kLSDnDrMXaI7?=
+ =?iso-8859-1?Q?YviFhsGVAwTuBFSvVkuN7NfEIP1I418Pw3ln8/G1aR92GoSuqMkC/oRdqE?=
+ =?iso-8859-1?Q?ZEDNWaDP4bm/ZAj8sscDPnFV8KbIlNiSAG8e7YRoDNp22fUifAEDP7n0c+?=
+ =?iso-8859-1?Q?BzjAlC2oJeM1ufcOzv9pj67gHFcIWPSFKn?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a9126d49-6e98-956c-f4a3-699cc86d8b11@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6289.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb8cef2d-dc66-4b9c-af0c-08daf4291ea8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2023 23:11:07.1398
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bZwKTrGAN5T2mcRudgXviW/GfwL88zblHPhkZUxG1ZS30SKDFAh4AwrPidkX2WyzLSAy+SzDtvBSxNqDa7ox8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7208
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 01:42:21PM -0800, Sathyanarayanan Kuppuswamy wrote:
-> On 1/11/23 12:31 PM, Vidya Sagar wrote:
-> > As the ECRC configuration bits are part of AER registers, configure
-> > ECRC only if AER is natively owned by the kernel.
-> 
-> ecrc command line option takes "bios/on/off" as possible options. It
-> does not clarify whether "on/off" choices can only be used if AER is
-> owned by OS or it can override the ownership of ECRC configuration 
-> similar to pcie_ports=native option. Maybe that needs to be clarified.
 
-Good point, what do you think of an update like this:
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6cfa6e3996cf..f7b40a439194 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4296,7 +4296,9 @@
- 				specified, e.g., 12@pci:8086:9c22:103c:198f
- 				for 4096-byte alignment.
- 		ecrc=		Enable/disable PCIe ECRC (transaction layer
--				end-to-end CRC checking).
-+				end-to-end CRC checking).  Only effective
-+				if OS has native AER control (either granted by
-+				ACPI _OSC or forced via "pcie_ports=native").
- 				bios: Use BIOS/firmware settings. This is the
- 				the default.
- 				off: Turn ECRC off
+> -----Original Message-----
+> From: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Sent: Wednesday, January 11, 2023 1:43 PM
+> To: Randy Dunlap <rdunlap@infradead.org>; Michael Ellerman
+> <mpe@ellerman.id.au>; kernel test robot <lkp@intel.com>; Masahiro
+> Yamada <masahiroy@kernel.org>
+> Cc: Nicolas Schier <nicolas@fjasle.eu>; linux-kernel@vger.kernel.org; Leo=
+ Li
+> <leoyang.li@nxp.com>; oe-kbuild-all@lists.linux.dev; linuxppc-dev
+> <linuxppc-dev@lists.ozlabs.org>; Qiang Zhao <qiang.zhao@nxp.com>
+> Subject: Re: usb.c:undefined reference to `qe_immr'
+>=20
+>=20
+>=20
+> Le 11/01/2023 =E0 17:01, Randy Dunlap a =E9crit=A0:
+> >
+> >
+> > On 1/10/23 23:39, Michael Ellerman wrote:
+> >> Randy Dunlap <rdunlap@infradead.org> writes:
+> >>> [adding Cc's]
+> >>>
+> >>>
+> >>> On 1/9/23 23:59, kernel test robot wrote:
+> >>>> Hi Masahiro,
+> >>>>
+> >>>> FYI, the error/warning still remains.
+> >>>>
+> >>>> tree:
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit.k=
+e
+> rnel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git&d
+> ata=3D05%7C01%7Cleoyang.li%40nxp.com%7Cd7f37490b9ad42174b0408daf40c
+> 0376%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63809062972159
+> 7124%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2lu
+> MzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3Duv8%2
+> BzM6uKMc9VPSXwH60Hi4V27pIKvv7BPzAFA3GOK8%3D&reserved=3D0 master
+> >>>> head:   5a41237ad1d4b62008f93163af1d9b1da90729d8
+> >>>> commit: 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b kbuild: link
+> symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+> >>>> date:   8 months ago
+> >>>> config: powerpc-randconfig-r026-20230110
+> >>>> compiler: powerpc-linux-gcc (GCC) 12.1.0 reproduce (this is a W=3D1
+> >>>> build):
+> >>>>          wget
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fraw.g
+> ithubusercontent.com%2Fintel%2Flkp-
+> tests%2Fmaster%2Fsbin%2Fmake.cross&data=3D05%7C01%7Cleoyang.li%40nx
+> p.com%7Cd7f37490b9ad42174b0408daf40c0376%7C686ea1d3bc2b4c6fa92cd9
+> 9c5c301635%7C0%7C0%7C638090629721753373%7CUnknown%7CTWFpbGZs
+> b3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn
+> 0%3D%7C3000%7C%7C%7C&sdata=3DbZocY77aLRAMjD3F1ttgzm%2F2tW8JfhYf
+> xq%2B6vxJh9Mc%3D&reserved=3D0 -O ~/bin/make.cross
+> >>>>          chmod +x ~/bin/make.cross
+> >>>>          #
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit.k=
+e
+> rnel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git%2
+> Fcommit%2F%3Fid%3D7b4537199a4a8480b8c3ba37a2d44765ce76cd9b&data=3D
+> 05%7C01%7Cleoyang.li%40nxp.com%7Cd7f37490b9ad42174b0408daf40c0376
+> %7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638090629721753373
+> %7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiL
+> CJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3D%2F%2BX1fl
+> KB1kjgv3wNK18Cu9uq6%2FUOr%2FCTjIsudBfiGho%3D&reserved=3D0
+> >>>>          git remote add linus
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit.k=
+e
+> rnel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git&d
+> ata=3D05%7C01%7Cleoyang.li%40nxp.com%7Cd7f37490b9ad42174b0408daf40c
+> 0376%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63809062972175
+> 3373%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2lu
+> MzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3D%2BvI
+> %2BGkvbol1aWLlg%2FAF12%2F44xZeN8U1c%2B0Y%2BvGCadt0%3D&reserve
+> d=3D0
+> >>>>          git fetch --no-tags linus master
+> >>>>          git checkout 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+> >>>>          # save the config file
+> >>>>          mkdir build_dir && cp config build_dir/.config
+> >>>>          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0
+> make.cross W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc olddefconfig
+> >>>>          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0
+> >>>> make.cross W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc SHELL=3D/bin/bash
+> >>>>
+> >>>> If you fix the issue, kindly add following tag where applicable
+> >>>> | Reported-by: kernel test robot <lkp@intel.com>
+> >>>>
+> >>>> All errors (new ones prefixed by >>):
+> >>>>
+> >>>>     powerpc-linux-ld: powerpc-linux-ld: DWARF error: could not find
+> abbrev number 74
+> >>>>     drivers/soc/fsl/qe/usb.o: in function `qe_usb_clock_set':
+> >>>>>> usb.c:(.text+0x1e): undefined reference to `qe_immr'
+> >>>>>> powerpc-linux-ld: usb.c:(.text+0x2a): undefined reference to
+> `qe_immr'
+> >>>>>> powerpc-linux-ld: usb.c:(.text+0xbc): undefined reference to
+> `qe_setbrg'
+> >>>>>> powerpc-linux-ld: usb.c:(.text+0xca): undefined reference to
+> `cmxgcr_lock'
+> >>>>     powerpc-linux-ld: usb.c:(.text+0xce): undefined reference to
+> `cmxgcr_lock'
+> >>>>
+> >>>
+> >>> .config extract:
+> >>>
+> >>> #
+> >>> # NXP/Freescale QorIQ SoC drivers
+> >>> #
+> >>> # CONFIG_QUICC_ENGINE is not set
+> >>> CONFIG_QE_USB=3Dy
+> >>>
+> >>>
+> >>> This is caused by (drivers/soc/fsl/qe/Kconfig):
+> >>>
+> >>> config QE_USB
+> >>> 	bool
+> >>> 	default y if USB_FSL_QE
+> >>> 	help
+> >>> 	  QE USB Controller support
+> >>>
+> >>> which does not depend on QUICC_ENGINE, where the latter build
+> >>> provides the missing symbols.
+> >>
+> >> So QE_USB should depend on QUICC_ENGINE no?
+> >
+> > Yes, that would make sense, but I don't know enough about the
+> > hardware. I.e., could CONFIG_PPC_EP88XC have QE_USB without having a
+> > full QUICC_ENGINE?
+> >
+>=20
+> Kconfig says:
+>=20
+> config PPC_EP88XC
+> 	bool "Embedded Planet EP88xC (a.k.a. CWH-PPC-885XN-VE)"
+> 	select CPM1
+> 	help
+> 	  This enables support for the Embedded Planet EP88xC board.
+>=20
+> 	  This board is also resold by Freescale as the QUICCStart
+> 	  MPC885 Evaluation System and/or the CWH-PPC-885XN-VE.
+>=20
+>=20
+> MPC885 has an USB controller, but I was not aware Linux had any USB drive=
+r
+> for the 885. Need to dig into history. Was initialy added by commit
+> 3948f0e0c999 ("usb: add Freescale QE/CPM USB peripheral controller driver=
+"),
+> it explicitely says it should work on CPM.
 
-I don't know whether the "ecrc=" parameter is really needed.  If we
-were adding it today, I would ask "why not enable ECRC wherever it is
-supported?"  If there are devices where it's broken, we could always
-add quirks to disable it on a case-by-case basis.
+The udc driver should work with CPM.  But that driver doesn't use the qe_us=
+b_clock_set() defined in drivers/soc/fsl/qe/usb.c which seems only be neede=
+d for QE as the clock setting for legacy platforms with CPM is normally don=
+e in platform code.
 
-But I think the patch below is the right thing to do for now.  Vidya,
-did you trip over an issue because of this, e.g., a conflict between
-firmware use of AER and Linux use of it?  If so, maybe we could
-mention a symptom on the commit log.  But my guess is you probably
-found this by inspection.
+I think it should be safe to make QE_USB depends on QUICC_ENGINE.
 
-Bjorn
-
-> > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> > ---
-> >  drivers/pci/pcie/aer.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > index e2d8a74f83c3..730b47bdcdef 100644
-> > --- a/drivers/pci/pcie/aer.c
-> > +++ b/drivers/pci/pcie/aer.c
-> > @@ -184,6 +184,9 @@ static int disable_ecrc_checking(struct pci_dev *dev)
-> >   */
-> >  void pcie_set_ecrc_checking(struct pci_dev *dev)
-> >  {
-> > +	if (!pcie_aer_is_native(dev))
-> > +		return;
-> > +
-> >  	switch (ecrc_policy) {
-> >  	case ECRC_POLICY_DEFAULT:
-> >  		return;
-> 
-> -- 
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
+Regards,
+Leo
