@@ -2,98 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B45665E51
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39EE665E54
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234429AbjAKOte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S233583AbjAKOtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:49:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjAKOtW (ORCPT
+        with ESMTP id S234684AbjAKOte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:49:22 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B70E0BE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:49:21 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id s3so9049075pfd.12
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:49:21 -0800 (PST)
+        Wed, 11 Jan 2023 09:49:34 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3D6EE29
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:49:32 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id b9-20020a17090a7ac900b00226ef160dcaso15687884pjl.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:49:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PvGcltGHEZtmIUygQvDyURpCDrkBBZcFV280L4qV7tY=;
-        b=aXc2UrwAzQAkd1kWKBFiTOPpIRBdRzGe2fpB/7wbXByClQl/9/rPbll5RtrvIG9uHO
-         m9UXveHhTef3/rxL4pk1Y3uGAO51nSJAVnvnQCUlHD0ETDqaWJNQ28jpmkUsNpb3X1Hr
-         0nUWUA28xEXnrskcvvVlLqDazOfKrJMQUmCufowPbD0vWb/OUOaRQnja2bwl3wmiXnx8
-         9z6SLuM5/5fBP8znPfQ3aTmTEQoE8IBSL+/FJ1cdxN+EqxoWKFlLbAFAlLiirQGeM7e0
-         hxC8Cd98CAGIY5GbuokgS4ieF/YcHbJnVtp35KG1HIZRl2sIc57YnyiqhjmsF5KIpLsu
-         X2tA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yW8vy78r5/CaJ+7JPaSH55j7YIiKU2q/2tyilmGr7VY=;
+        b=uqaNLzwqoyie1yMZ8bKUfxYvMpHBmor0F5f2p7il9PAgUPhNL1mWxIXl4stcdX5YQm
+         mcRrkZP7vl+11YnWaZ05ogkXVpu3v46XfoPdHq8ql8TEk7qiKXybUVYFkNFmx/x0MMaT
+         tCHhdLdu3m2fa8Q0mK35isWG1V9mOA8KiKRn+F/QeW8W9prZ+t98CVZPPq2lau/ZPqIe
+         ioQaUm6aCLHNFmECFE3KTDaBG9/yw7osa3fFlF9M84uJ3fcC4fTMSCRlx+4mDajR+IzN
+         boGDtGQZcKAzW5/oPeEPAbnAv9hpWa2otveBuVtO5c+D1ppttnWw9PyuEOiRyuNps4CT
+         evEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PvGcltGHEZtmIUygQvDyURpCDrkBBZcFV280L4qV7tY=;
-        b=p5w6OuWTGsOoAHxof2U22YF1My2jJOtx4EmQe9OTLpXccaoD5acIKFs16eR+lIcvsT
-         U5nRfuePrdoDJcKL66L0ZDZ/W/BLGUZta7jL3hWcJQgAjmLu0swJDE6gh+D0iCvevai9
-         mZXXZPlh0RQuNPIada5DTXsl+6kev3jEL89Y3tqmbtRU29emaYr+EBVJoKRUbZc0sUec
-         Vx+5oIsu6ji7fJkL/xpBVKPlQKccClHo19WOkB9/hQmlEbjK/fUfAlwylJXdo5l+0kkn
-         tNWwrbArcchSqRP4GaCCxsWUJ+7HyPxFJkHfoFKt2qPAwGQLBUneIgARBWB5/jif1jKu
-         YRGQ==
-X-Gm-Message-State: AFqh2koJ866n6RbD12PKqww1RoQPgJzUuXrpeMgMZj2euObA6nGNjE1y
-        w59ZlPriN9uqtuGP4pBK5WJGW/Q7ea2wXL1h/+A=
-X-Google-Smtp-Source: AMrXdXvT/CmZZSH1RNppQcf0A4kT/LW3dVcDuqne2yum4buuryFRx0jeDuhraWRl1zMLPi8cJNQv/aNT3Ca8HMDQIUU=
-X-Received: by 2002:a05:6a00:806:b0:581:2427:e8b9 with SMTP id
- m6-20020a056a00080600b005812427e8b9mr4467409pfk.13.1673448561052; Wed, 11 Jan
- 2023 06:49:21 -0800 (PST)
+        bh=yW8vy78r5/CaJ+7JPaSH55j7YIiKU2q/2tyilmGr7VY=;
+        b=aJOU2ERmax7OnAwZuAxmrlFzPLUOVZ15daZ6NEJ5C9rj4s2XRZBO0Wygb+wmsNX1R0
+         OGQrvmCM2LaCOuH26ZlLXNfNyQ28XDsYcBgB9Cr294jU+k7QSZUhciRLJ1rGhKyFA9Nd
+         fUXY72qJjHCrTCjCa92Hrsr4KfiQ1aNrgo0vfZFeJh4m2IEzVIYcp0vicrk9Lxgztsze
+         OTopnJLPdkwubQc0wi/nUQ9ABeXNg1L2IaanpRhqke5IFHPXAriELa/dfM42O9GMGHFZ
+         9rjtDuGOswFpDlBICdxtoGcmwv5Gk+0aBHZyBJqFHSVYSAGV1MxGiKnceostuzl16WfQ
+         bwDA==
+X-Gm-Message-State: AFqh2kpM5V6TNtY5i0nIhK13qH0t+y6rDXgqa24kISIrOv8ZjH6691Zh
+        Xlv1Obcim4jZTKHCy5uQi1YGB+VkZVp+ZhDY
+X-Google-Smtp-Source: AMrXdXs/LnmncAUxOJciTiscI3S1kf8k8Azjv6Ail+7XwYbQxAT/n9d29Pe9YmHsFBNbahlQ7ogrrQ==
+X-Received: by 2002:a17:90a:bd0c:b0:219:3e05:64b7 with SMTP id y12-20020a17090abd0c00b002193e0564b7mr17179052pjr.0.1673448572299;
+        Wed, 11 Jan 2023 06:49:32 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id t12-20020a17090a6a0c00b0022713d5733esm1728465pjj.30.2023.01.11.06.49.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 06:49:31 -0800 (PST)
+Message-ID: <63d8e95e-894c-4268-648e-35e504ea80b6@kernel.dk>
+Date:   Wed, 11 Jan 2023 07:49:30 -0700
 MIME-Version: 1.0
-Received: by 2002:a05:7301:1692:b0:96:9070:250f with HTTP; Wed, 11 Jan 2023
- 06:49:20 -0800 (PST)
-Reply-To: jmrs30982@gmail.com
-From:   Elizabeth Anna John <johnmomah16@gmail.com>
-Date:   Wed, 11 Jan 2023 06:49:20 -0800
-Message-ID: <CADo75648cvodKX_gTNHPOV1LXA7-YsTwDX2kULmjVj_PL-HHBA@mail.gmail.com>
-Subject: Hello!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:433 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jmrs30982[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [johnmomah16[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [johnmomah16[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] io_uring: Add NULL checks for current->io_uring
+Content-Language: en-US
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>, asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+References: <20230111101907.600820-1-baijiaju1990@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230111101907.600820-1-baijiaju1990@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have a business that will be of mutual benefit to both of us, Reply
-via private email for more info : ( jmrs30982@gmail.com ).
+On 1/11/23 3:19 AM, Jia-Ju Bai wrote:
+> As described in a previous commit 998b30c3948e, current->io_uring could
+> be NULL, and thus a NULL check is required for this variable.
+> 
+> In the same way, other functions that access current->io_uring also
+> require NULL checks of this variable.
+
+This seems odd. Have you actually seen traces of this, or is it just
+based on "guess it can be NULL sometimes, check it in all spots"?
+
+-- 
+Jens Axboe
+
+
