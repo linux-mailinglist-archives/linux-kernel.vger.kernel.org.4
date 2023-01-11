@@ -2,177 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFC7665821
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413F866581A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238323AbjAKJvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:51:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S238604AbjAKJvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237634AbjAKJub (ORCPT
+        with ESMTP id S236139AbjAKJte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:50:31 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFACCBE3B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:49:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673430554; x=1704966554;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=q0nN4D1arpIrxWjBv3l/24posrH8Nblcrnn/ZYax0ik=;
-  b=A8WoCZuPuISAC5sOqSu5e/5FhoolpoYPeH54EOdHA8o1fJbDoSoShtFi
-   eCbMR1BTO26nFqgEm1Qv30Ysx9TVagK5QC3L+Wx5Uf3VwjgQRDIek4ulP
-   tAmBce9t6KG0v20VLp0p8G5IhBq/Wt/yNumiOhnXt3ID0c5MH6kd6DGel
-   gngVwtjnunSpznEnDypP2JrqV4pIXGKLQXYOkmDNAXoMYdbIs0fp8lGTD
-   juzAWeJV0lVyvluCic1ICS/76iZ77PJDTUTJuUMIWYYGFk3XSxBmbvTdz
-   DB4IMLx8uDyy9mVDyjgs5LUyUIEP30d6KzYhuJC8z5V4X7mrbAg+Okxig
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="385682801"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="385682801"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 01:49:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="902695277"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="902695277"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Jan 2023 01:49:13 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pFXjH-0008ye-18;
-        Wed, 11 Jan 2023 09:49:07 +0000
-Date:   Wed, 11 Jan 2023 17:48:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 2a81160d29d65b5876ab3f824fda99ae0219f05e
-Message-ID: <63be85e4.LOfMdPayt4EaT/VV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 11 Jan 2023 04:49:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B02CB4BB
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:48:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E455EB81B72
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:48:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3D0C433EF;
+        Wed, 11 Jan 2023 09:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673430504;
+        bh=DzJRlBRLs+B8dSkP4tOGd0goaj6Tw9H27iXg1CY5XYs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=K01Gh3WXBRv9YOutdTMOQQc2Tohi22oBFgmkRt5KAMAnofoXb0RzzUvcl1dmKAOTb
+         ver9nc/gkATJS8T3FuT608YSB8IqIjQXl/ik70VFNtiLJNzskV8zBmK9XxAnRoruXn
+         D6esSHUK7975uLqgv+u6CQ0OwxB30h5s39bUOHuJZNVFmfMdSO9/vNFe3yrOJVAhaq
+         Fbjf2ZPuw+2gFchYk21LyDnD1W8dq60H9/LwV37QamzNtVIzbgWXxztB9k2UOh/FOa
+         F3Mgvrwi423/kW0BXaYSpDUIZ93GifSRM3ni6tbyd9No1Z3KcLm7cCq7E++P9/0l+K
+         IS2zDNxHuSwww==
+Message-ID: <18134850-da17-80c5-1f83-203db571b63b@kernel.org>
+Date:   Wed, 11 Jan 2023 11:48:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V2 1/2] phy: ti: j721e-wiz: Manage TypeC lane swap if
+ typec-dir-gpios not specified
+Content-Language: en-US
+To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Ravi Gunasekaran <r-gunasekaran@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sinthu Raja <sinthu.raja@ti.com>
+References: <20230106071714.30562-1-sinthu.raja@ti.com>
+ <20230106071714.30562-2-sinthu.raja@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230106071714.30562-2-sinthu.raja@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 2a81160d29d65b5876ab3f824fda99ae0219f05e  x86/resctrl: Fix event counts regression in reused RMIDs
 
-elapsed time: 726m
 
-configs tested: 95
-configs skipped: 69
+On 06/01/2023 09:17, Sinthu Raja wrote:
+> From: Sinthu Raja <sinthu.raja@ti.com>
+> 
+> It's possible that the Type-C plug orientation on the DIR line will be
+> implemented through hardware design. In that situation, there won't be
+> an external GPIO line available, but the driver still needs to address
+> this since the DT won't use the typec-dir-gpios property.
+> 
+> Add code to handle LN10 Type-C swap if typec-dir-gpios property is not
+> specified in DT.
+> 
+> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
-gcc tested configs:
-x86_64                            allnoconfig
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-i386                                defconfig
-x86_64                              defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                               rhel-8.3
-i386                          randconfig-a005
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-i386                             allyesconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-x86_64                        randconfig-a006
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                        randconfig-a013
-riscv                randconfig-r042-20230110
-s390                 randconfig-r044-20230110
-arc                  randconfig-r043-20230110
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-m68k                          amiga_defconfig
-riscv                            allmodconfig
-ia64                             allmodconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-sparc                               defconfig
-xtensa                           allyesconfig
-csky                                defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
-powerpc                     taishan_defconfig
-arm                         assabet_defconfig
-parisc                generic-64bit_defconfig
-mips                        vocore2_defconfig
-powerpc                  iss476-smp_defconfig
-sh                          r7780mp_defconfig
-mips                           gcw0_defconfig
-arc                           tb10x_defconfig
-csky                             alldefconfig
-nios2                               defconfig
-mips                         bigsur_defconfig
-sh                          sdk7786_defconfig
-sh                             espt_defconfig
-openrisc                         alldefconfig
-sh                   rts7751r2dplus_defconfig
-m68k                                defconfig
-sh                          rsk7201_defconfig
-i386                             alldefconfig
-parisc                              defconfig
-sh                         microdev_defconfig
-sh                          urquell_defconfig
+> ---
+> 
+> Changes in V2:
+> =============
+> Address review comments:
+> - Update commit description as per review comments.
+> - Restore code to check only debounce delay only if typec-dir-gpios property is specified in DT.
+> - Rename lane_phy_reg variable as master_lane_num.
+> - Update inline comments.
+> 
+> V1: https://lore.kernel.org/lkml/20221213124854.3779-2-sinthu.raja@ti.com/T/#mb1f9f8d26b4ef735bbbc3994a1e9c16d52ca2c19
+> 
+>  drivers/phy/ti/phy-j721e-wiz.c | 39 +++++++++++++++++++++++++---------
+>  1 file changed, 29 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
+> index ddce5ef7711c..571f0ca18874 100644
+> --- a/drivers/phy/ti/phy-j721e-wiz.c
+> +++ b/drivers/phy/ti/phy-j721e-wiz.c
+> @@ -376,6 +376,7 @@ struct wiz {
+>  	struct gpio_desc	*gpio_typec_dir;
+>  	int			typec_dir_delay;
+>  	u32 lane_phy_type[WIZ_MAX_LANES];
+> +	u32 master_lane_num[WIZ_MAX_LANES];
+>  	struct clk		*input_clks[WIZ_MAX_INPUT_CLOCKS];
+>  	struct clk		*output_clks[WIZ_MAX_OUTPUT_CLOCKS];
+>  	struct clk_onecell_data	clk_data;
+> @@ -1234,15 +1235,31 @@ static int wiz_phy_reset_deassert(struct reset_controller_dev *rcdev,
+>  	struct wiz *wiz = dev_get_drvdata(dev);
+>  	int ret;
+>  
+> -	/* if typec-dir gpio was specified, set LN10 SWAP bit based on that */
+> -	if (id == 0 && wiz->gpio_typec_dir) {
+> -		if (wiz->typec_dir_delay)
+> -			msleep_interruptible(wiz->typec_dir_delay);
+> -
+> -		if (gpiod_get_value_cansleep(wiz->gpio_typec_dir))
+> -			regmap_field_write(wiz->typec_ln10_swap, 1);
+> -		else
+> -			regmap_field_write(wiz->typec_ln10_swap, 0);
+> +	if (id == 0) {
+> +		/* if typec-dir gpio was specified, set LN10 SWAP bit based on that */
+> +		if (wiz->gpio_typec_dir) {
+> +			if (wiz->typec_dir_delay)
+> +				msleep_interruptible(wiz->typec_dir_delay);
+> +
+> +			if (gpiod_get_value_cansleep(wiz->gpio_typec_dir))
+> +				regmap_field_write(wiz->typec_ln10_swap, 1);
+> +			else
+> +				regmap_field_write(wiz->typec_ln10_swap, 0);
+> +		} else {
+> +			/* if no typec-dir gpio was specified and PHY type is
+> +			 * USB3 with master lane number is '0', set LN10 SWAP
+> +			 * bit to '1'
+> +			 */
+> +			u32 num_lanes = wiz->num_lanes;
+> +			int i;
+> +
+> +			for (i = 0; i < num_lanes; i++) {
+> +				if ((wiz->lane_phy_type[i] == PHY_TYPE_USB3)
+> +						&& wiz->master_lane_num[i] == 0) {
+> +					regmap_field_write(wiz->typec_ln10_swap, 1);
+> +				}
+> +			}
+> +		}
+>  	}
+>  
+>  	if (id == 0) {
+> @@ -1386,8 +1403,10 @@ static int wiz_get_lane_phy_types(struct device *dev, struct wiz *wiz)
+>  		dev_dbg(dev, "%s: Lanes %u-%u have phy-type %u\n", __func__,
+>  			reg, reg + num_lanes - 1, phy_type);
+>  
+> -		for (i = reg; i < reg + num_lanes; i++)
+> +		for (i = reg; i < reg + num_lanes; i++) {
+> +			wiz->master_lane_num[i] = reg;
+>  			wiz->lane_phy_type[i] = phy_type;
+> +		}
+>  	}
+>  
+>  	return 0;
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64                          rhel-8.3-rust
-i386                          randconfig-a006
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-riscv                randconfig-r042-20230111
-s390                 randconfig-r044-20230111
-hexagon              randconfig-r041-20230111
-hexagon              randconfig-r045-20230111
-arm                  randconfig-r046-20230110
-hexagon              randconfig-r041-20230110
-hexagon              randconfig-r045-20230110
-x86_64                        randconfig-k001
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--
+cheers,
+-roger
