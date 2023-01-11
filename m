@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693BB665312
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D67665329
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbjAKFDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 00:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
+        id S235276AbjAKFFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 00:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233452AbjAKFDe (ORCPT
+        with ESMTP id S235319AbjAKFDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 00:03:34 -0500
+        Wed, 11 Jan 2023 00:03:38 -0500
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211E7CE3A;
-        Tue, 10 Jan 2023 21:03:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D4BDFD1;
+        Tue, 10 Jan 2023 21:03:37 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NsFv152Q5z4f3p0f;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NsFv1717Mz4f3lY5;
         Wed, 11 Jan 2023 13:03:25 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP1 (Coremail) with SMTP id cCh0CgDX9S8fQ75jGl2gBQ--.10280S2;
+        by APP1 (Coremail) with SMTP id cCh0CgDX9S8fQ75jGl2gBQ--.10280S3;
         Wed, 11 Jan 2023 13:03:28 +0800 (CST)
 From:   Kemeng Shi <shikemeng@huaweicloud.com>
 To:     hch@lst.de, axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
         ming.lei@redhat.com, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     john.garry@huawei.com, jack@suse.cz
-Subject: [PATCH v3 00/14] A few bugfix and cleanup patches for blk-mq
-Date:   Wed, 11 Jan 2023 21:01:45 +0800
-Message-Id: <20230111130159.3741753-1-shikemeng@huaweicloud.com>
+Subject: [PATCH v3 01/14] blk-mq: avoid sleep in blk_mq_alloc_request_hctx
+Date:   Wed, 11 Jan 2023 21:01:46 +0800
+Message-Id: <20230111130159.3741753-2-shikemeng@huaweicloud.com>
 X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20230111130159.3741753-1-shikemeng@huaweicloud.com>
+References: <20230111130159.3741753-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgDX9S8fQ75jGl2gBQ--.10280S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF1xXF4kAFW8Jw4xAry7Jrb_yoW8uryrpF
-        W3Ka13Gw4fXr17Xw1Syw47ZF9ayws7GrW7Xw13G3s5Xr4DCr18Gr4Iqa1fAFy0yFZ5Ca17
-        JF4Fv345KF1v937anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+X-CM-TRANSID: cCh0CgDX9S8fQ75jGl2gBQ--.10280S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF1rZw13Kw47GF13JFW8JFb_yoW8ZrWfpr
+        W7Ja1Utrn0934xCFyIywsrW3y7Cwsrur9rGF1aq34rZ3yUKr10kF4UZr48WFyxAFs7Aw45
+        J34rt3WUXryqk3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
-        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E
-        3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r
-        xl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
-        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z2
-        80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j7NVkUUUUU=
+        8IrcIa0xkI8VA2jI8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK
+        0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
+        x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+        84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I
+        8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
+        xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIv38DUUUU
 X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
@@ -58,54 +61,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this series contain several bugfix patches to fix potential io
-hung and a few cleanup patches to remove stale codes and unnecessary
-check. Most changes are in request issue and dispatch path. Thanks.
+Commit 1f5bd336b9150 ("blk-mq: add blk_mq_alloc_request_hctx") add
+blk_mq_alloc_request_hctx to send commands to a specific queue. If
+BLK_MQ_REQ_NOWAIT is not set in tag allocation, we may change to different
+hctx after sleep and get tag from unexpected hctx. So BLK_MQ_REQ_NOWAIT
+must be set in flags for blk_mq_alloc_request_hctx.
+After commit 600c3b0cea784 ("blk-mq: open code __blk_mq_alloc_request in
+blk_mq_alloc_request_hctx"), blk_mq_alloc_request_hctx return -EINVAL
+if both BLK_MQ_REQ_NOWAIT and BLK_MQ_REQ_RESERVED are not set instead of
+if BLK_MQ_REQ_NOWAIT is not set. So if BLK_MQ_REQ_NOWAIT is not set and
+BLK_MQ_REQ_RESERVED is set, blk_mq_alloc_request_hctx could alloc tag
+from unexpected hctx. I guess what we need here is that return -EINVAL
+if either BLK_MQ_REQ_NOWAIT or BLK_MQ_REQ_RESERVED is not set.
 
+Currently both BLK_MQ_REQ_NOWAIT and BLK_MQ_REQ_RESERVED will be set if
+specific hctx is needed in nvme_auth_submit, nvmf_connect_io_queue
+and nvmf_connect_admin_queue. Fix the potential BLK_MQ_REQ_NOWAIT missed
+case in future.
+
+Fixes: 600c3b0cea78 ("blk-mq: open code __blk_mq_alloc_request in blk_mq_alloc_request_hctx")
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 ---
-V3:
- -Collect Reviewed-by from Christoph
- -Add new patch "blk-mq: make blk_mq_commit_rqs a general function for all
-commits" suggested-by Christoph
- -Move patch "blk-mq: remove unncessary from_schedule parameter in
-blk_mq_plug_issue_direct" forwad. This is because of some abandoned
-work, no influence anyway. No special attention should be paied.
- -Make patch based on rewriten blk_mq_commit_rqs.
+ block/blk-mq.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-V2:
- -Thanks Christoph for review and there are two fixes in v2 according
-to recommends from Christoph.
-  1)Avoid overly long line in patch "blk-mq: avoid sleep in
-blk_mq_alloc_request_hctx"
-  2)Check BLK_MQ_REQ_NOWAIT and BLK_MQ_REQ_RESERVED in two WARN_ON_ONCE
----
-
-Kemeng Shi (14):
-  blk-mq: avoid sleep in blk_mq_alloc_request_hctx
-  blk-mq: remove stale comment for blk_mq_sched_mark_restart_hctx
-  blk-mq: wait on correct sbitmap_queue in blk_mq_mark_tag_wait
-  blk-mq: Fix potential io hung for shared sbitmap per tagset
-  blk-mq: remove unnecessary list_empty check in
-    blk_mq_try_issue_list_directly
-  blk-mq: remove unncessary from_schedule parameter in
-    blk_mq_plug_issue_direct
-  blk-mq: make blk_mq_commit_rqs a general function for all commits
-  blk-mq: remove unncessary error count and commit in
-    blk_mq_plug_issue_direct
-  blk-mq: use blk_mq_commit_rqs helper in blk_mq_try_issue_list_directly
-  blk-mq: simplify flush check in blk_mq_dispatch_rq_list
-  blk-mq: remove unnecessary error count and check in
-    blk_mq_dispatch_rq_list
-  blk-mq: remove set of bd->last when get driver tag for next request
-    fails
-  blk-mq: use switch/case to improve readability in
-    blk_mq_try_issue_list_directly
-  blk-mq: correct stale comment of .get_budget
-
- block/blk-mq-sched.c |   7 +--
- block/blk-mq.c       | 147 ++++++++++++++++++++-----------------------
- 2 files changed, 71 insertions(+), 83 deletions(-)
-
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index c5cf0dbca1db..f2586d485be6 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -658,7 +658,8 @@ struct request *blk_mq_alloc_request_hctx(struct request_queue *q,
+ 	 * allocator for this for the rare use case of a command tied to
+ 	 * a specific queue.
+ 	 */
+-	if (WARN_ON_ONCE(!(flags & (BLK_MQ_REQ_NOWAIT | BLK_MQ_REQ_RESERVED))))
++	if (WARN_ON_ONCE(!(flags & BLK_MQ_REQ_NOWAIT)) ||
++	    WARN_ON_ONCE(!(flags & BLK_MQ_REQ_RESERVED)))
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	if (hctx_idx >= q->nr_hw_queues)
 -- 
 2.30.0
 
