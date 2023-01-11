@@ -2,94 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B96665D6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3BB665D79
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238417AbjAKOOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:14:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
+        id S238792AbjAKOPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:15:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238439AbjAKOOM (ORCPT
+        with ESMTP id S238467AbjAKOPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:14:12 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4358055B4;
-        Wed, 11 Jan 2023 06:14:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1673446444;
-        bh=clte4+NfGueQmKGUoje7qohWAGjcauzVkyPoQNr/Wb4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VzJHaMbm8J8q5+p4GrHhPg4VWZh0YMwJ3Pl2Hmj0P+syEm8I3hJQ40d6ut079qM+s
-         YAuTieB02Mc9KTvbgrTxBDcOMRulCYa8x8ZTwf5QA/p5aF69goNLZI7QreWw7cPRND
-         SjxtckDJ6ts1IGYB6WFcYiNi8KQvQvY9EJ7m7G/6eBFEhrxGPZiBDO2aeyr9lgwwpj
-         B/e5xaahzlEn8CQiRfG0LP0djkGy+VDav6RvR/tk064GqoeL2XNZWZ7hOrqaPC+sN/
-         lp2EP6FCD/tR7X8aQvSkcpDfgQvfU7IDyJaoMLPkJFAmAK0GxKwhsSFuLRaF3V9nD+
-         7W4UrbXcmVkjA==
-Received: from [172.16.0.101] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NsV6M6DB2zgFZ;
-        Wed, 11 Jan 2023 09:14:03 -0500 (EST)
-Message-ID: <265a3900-45df-1b9a-b8de-85ef6d25141d@efficios.com>
-Date:   Wed, 11 Jan 2023 09:14:37 -0500
+        Wed, 11 Jan 2023 09:15:07 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE34918690
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:15:05 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 85C315C01BD;
+        Wed, 11 Jan 2023 09:15:04 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 11 Jan 2023 09:15:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1673446504; x=1673532904; bh=d7
+        o3kj/Z/vK6V725jjEnUNSDO4G71V9PXMP9Obm3o9M=; b=BIBP0klkoRyawjatsO
+        AHvzRWMjsOBzYHjzWRyVjft3peKFivD3em4OKL4nJEoaxnXIIesdzTdkklwCRqxz
+        T2zX6osIT8LYDsp01viXrHe87sgNjGzIDB5HdZrkebdAbUX3rLjG7a5q8GTL+Hj1
+        AT30h0moP6fGfucn/1cLOTQhaMxQiA2NdGk/sJKUpqR34Ccb1cAfQ90BBq0/9uMl
+        ai96qkrUYfXEuZa2vy0pqD2FM2yoMJ+zmx1rCQ9pIZHmWrZl/lumbDVaVfE0Kxi7
+        eowGxF9xS4yKTEAGFXTxWJmshrG5xt8rznCjQhD46sbXq5Y7L+i8hUZ3uDlXZ/HA
+        3v1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673446504; x=1673532904; bh=d7o3kj/Z/vK6V725jjEnUNSDO4G7
+        1V9PXMP9Obm3o9M=; b=WEISMpVytYlaMYfejIvTKo2aTBvvJmU+AG/y83yE7Vaa
+        o74pBAens5T71FO91s9aqU3laRruA/dEFjBt8+RTMbY5pT6YzfPEW9jEmihGvkxQ
+        xH2U7fLSoZd7AHf6UCIO+frsOZiuixWz6n2jtp5/vEE968vmHB3tNLqZBOEV50i6
+        VDYlPepDCAKPjOjDuoGy5qNCltb2NW0O5G0oK9byTllLzjtBbPEROiZ8Lp+s1v30
+        Wji/YCxQRDsEFCdZivBi6WHyg2y6k7jAmJRwrgwJbajrVAooDOJxxkJatvVGkT1a
+        iw+/HL/9F7rvnOc8ztbhYLBxuj+TqU42dNnzmFqtjw==
+X-ME-Sender: <xms:Z8S-Y8BFkLyeawxfGzdcjOuaiY4VW2h6y5zUgVeM7SbIsgp5GURO1w>
+    <xme:Z8S-Y-hODv2bEDXI6KKogJqEiN0PB3pyx0xmQxt6ArUymoSQ5OV0f1BCbzis3IyWh
+    DLVRCGYYUi1CuiqNE8>
+X-ME-Received: <xmr:Z8S-Y_lgPH_xI1n1J6T-I7QIQKaBXkWImnXFJjK3CMZ7Ofjhpd1ChPKU0h9FmQp76oBrgg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeggdeivdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:Z8S-YyxsRASlSmidm6QbWUFALubKU-39WaVW3LrHeKKUpqJ65tjbSA>
+    <xmx:Z8S-YxRbJWf01dwhgDoMr0eYnYvl9ibTcrqTnR4EFrbpv7Aug48hHA>
+    <xmx:Z8S-Y9ZbEkproRp37x8uNmgSruiDrXZ_PnjRdiAUKgSi_4O1YSsiOg>
+    <xmx:aMS-YyL2VZT_qdgHeoHIme0XKOL7P75xhjTdc6FxnUc8rtSi3x9T2A>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 11 Jan 2023 09:15:03 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id A4689104377; Wed, 11 Jan 2023 17:14:59 +0300 (+03)
+Date:   Wed, 11 Jan 2023 17:14:59 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv14 04/17] x86/mm: Handle LAM on context switch
+Message-ID: <20230111141459.ah7ijfbm733c4g7m@box.shutemov.name>
+References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
+ <20230111123736.20025-5-kirill.shutemov@linux.intel.com>
+ <CAHk-=whb1_6qwb=BSpj1KkTfJiTiahAnvTBh_=fnGyrnKAW19A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH tip] selftests/rseq: Revert "selftests/rseq: Add
- mm_numa_cid to test script"
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
-        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Chris Kennelly <ckennelly@google.com>,
-        kernel test robot <oliver.sang@intel.com>
-References: <20230104163542.10004-1-mathieu.desnoyers@efficios.com>
- <Y77D0+e2tdl8c1k1@hirez.programming.kicks-ass.net>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <Y77D0+e2tdl8c1k1@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whb1_6qwb=BSpj1KkTfJiTiahAnvTBh_=fnGyrnKAW19A@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-11 09:12, Peter Zijlstra wrote:
-> On Wed, Jan 04, 2023 at 11:35:42AM -0500, Mathieu Desnoyers wrote:
->> The mm_numa_cid related rseq patches from the series were not picked up
->> into the tip tree, so enabling the mm_numa_cid test needs to be
->> reverted.
->>
->> This reverts commit b344b8f2d88dbf095caf97ac57fd3645843fa70f.
+On Wed, Jan 11, 2023 at 07:49:30AM -0600, Linus Torvalds wrote:
+> Sorry, I'm traveling, and right now only on mobile. So I'm reading patches
+> on my phone, and answering on it too, so html garbage..
 > 
-> Oh my bad, I got confused between the regular numa_id (which I did do
-> merge, right?) and the fancy numa_cid, which I indeed didn't merge yet.
-
-Yes, that's indeed what happened.
-
-> I meant to give that a wee bit more thought, but that sadly hasn't
-> happened yet :/
+> On Wed, Jan 11, 2023, 07:24 Kirill A. Shutemov <
+> kirill.shutemov@linux.intel.com> wrote:
 > 
-> Applied, thanks!
+> >
+> > +static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
+> > +{
+> > +       return READ_ONCE(mm->context.lam_cr3_mask);
+> > +}
+> >
+> 
+> I mentioned this before - in the original version this needed (but didn't
+> have, iirc) that READ_ONCE, but in the new non-thread situation I don't
+> think that's true. There should be no concurrent changes that can interfere
+> with the read, no?
 
-No worries, let me know when you have time to discuss the fancy numa_cid 
-some more.
+It should be safe, yes. 
 
-Thanks,
+It is reachable from iommu_sva_bind_device(), but it only called with mm
+== current->mm.
 
-Mathieu
-
+I will drop the READ_ONCE().
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+  Kiryl Shutsemau / Kirill A. Shutemov
