@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7CB665800
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A266657FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233564AbjAKJs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
+        id S238428AbjAKJrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:47:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbjAKJrg (ORCPT
+        with ESMTP id S232741AbjAKJr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:47:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAC210541
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:44:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673430275;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wiP+ZFnGGkh1MiQTCARjLEk6aqI2ytHljt2h0Oi6JYo=;
-        b=Qry5E4C+ssWEwjA7fYYYV60LT9Z7bLDoV8p9xw8YFDEjXss5p5AZzXpIRCQcqR3Hj3ExR2
-        qBgwKRUmKltqa+gKsAX+82k6x3Dl0PYyZEAqH1VqjfFsh/34lx5IjzgM93T6sqKP8LwEN/
-        rjDC1wnNECLh2A/LJ/C56ywEKcTfvSI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-296-eCOgJBKgNr-X-GjcO5D0ZQ-1; Wed, 11 Jan 2023 04:44:30 -0500
-X-MC-Unique: eCOgJBKgNr-X-GjcO5D0ZQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3DF223802B83;
-        Wed, 11 Jan 2023 09:44:30 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CEF4E40C2064;
-        Wed, 11 Jan 2023 09:44:28 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230110104501.11722-1-jlayton@kernel.org>
-References: <20230110104501.11722-1-jlayton@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     dhowells@redhat.com, Marc Dionne <marc.dionne@auristor.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] fs: remove locks_inode
+        Wed, 11 Jan 2023 04:47:28 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE138D98;
+        Wed, 11 Jan 2023 01:45:34 -0800 (PST)
+Received: from [192.168.6.149] ([212.159.46.162]) by mrelayeu.kundenserver.de
+ (mreue012 [213.165.67.99]) with ESMTPSA (Nemesis) id
+ 1Mrfgi-1oRxIt3Uou-00nlPx; Wed, 11 Jan 2023 10:44:51 +0100
+Message-ID: <208196df-d0b2-5cf6-29b3-4570a0946e77@veremit.xyz>
+Date:   Wed, 11 Jan 2023 09:44:45 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2265540.1673430268.1@warthog.procyon.org.uk>
-Date:   Wed, 11 Jan 2023 09:44:28 +0000
-Message-ID: <2265541.1673430268@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: linux-6.1-rt ?
+Content-Language: en-GB
+To:     Christian Eggers <ceggers@arri.de>, linux-rt-users@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <12136223.O9o76ZdvQC@n95hx1g2>
+From:   Michael Everitt <gentoo@veremit.xyz>
+In-Reply-To: <12136223.O9o76ZdvQC@n95hx1g2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:GH4nCekC7J8gmdNRQj5CfXCLMrmjp1El7VNYXUlxouSG/WeCjXm
+ eWU2/W6P5KabxLKIatlTGVkDucSjauFF1TyJ+2AMMUo3YueDWVBZfNHErCrqn8n6SNRgaUj
+ DA1U5f51KADEmYplxrCVYQmYNbG26PTEYeyucN6RVzFmrRClD/Y2Z/MYh5IP2+GrF2G/+TX
+ WMxIhfBRU3iwcz53xhhUg==
+UI-OutboundReport: notjunk:1;M01:P0:cyKacGI8rXM=;EEyL3U6Pp4nNsi+4mfi38bkps/l
+ WWq0VH5nbm/PLg1qI/nXwBVCuKqccWfuoyphCzrZqO3Ym1o7hrBvNjgqs2Kpeh6vU1env2asm
+ YJEfMGGqC2NFriJDQR2/ZBJqQ3asbaiVAQZOdF6ObRbGk5sTQqsGQZgX2SBflcroyo667hSN+
+ 90ObzHKxE+OM0WIBTEzeMxj35+XUncViMH+xJsnR+kRX6nKJIT+b52JqDBrfk73AqgQ+UuGGx
+ YS1c/VgHIlNSaZ/6O3RSMQWnaH/xH4dD6/ObDC3ZZ0dOTNjZJK5ixvUQXmTRFiLZvY06bhjrE
+ spIm3TA0CliHM92L6fCA3ytNYUk07j6RiTNVrbt8ARLsqboiDdWKobZCe7hXfDyy8LmoMc3Dl
+ ON9vTfoBycm63XHq7PMwPSDXqqecd2zVvZ1ff4wCKZUYhDKrPosayIh0jWFddyOHsBCEDy6+h
+ pyYXIOZqJMZta4EXqzKntMqG4FOB586FR1/aVpZz6Uz/0gpGT23eM6ndBN+71kyVKykJrFY0b
+ DeHDAkqqdKoUiMUW4UJn2y1FHylcGKdA4VVgd/ig7wj8Es7YTLp4FbyGewFNUYUMJGlkrtesJ
+ uT8lQDIkZR7mbP6Ujfz96GYTsrKGz3OyomZ5IG9IXPcJTdDHr+SXEhiFOuEu/oeKIqa/0Zb83
+ GLfBtj2R2E/HH2n6HHkgvLBxTwtC16nF6VlE7gZXSA==
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,FROM_SUSPICIOUS_NTLD,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> wrote:
-
-> locks_inode was turned into a wrapper around file_inode in de2a4a501e71
-> (Partially revert "locks: fix file locking on overlayfs"). Finish
-> replacing locks_inode invocations everywhere with file_inode.
+On 11/01/2023 08:36, Christian Eggers wrote:
+> linux-6.1 seems to be the next LTS kernel [1]
 > 
-> Cc: Miklos Szeredi <mszeredi@redhat.com>
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> Are there any plans to release a -rt version of linux-6.1?
+> 
+> regards
+> Christian
+> 
+> [1] https://lore.kernel.org/lkml/Yz%2FZWBeNZvKenEVM@kroah.com/
+> 
+> 
 
-Reviewed-by: David Howells <dhowells@redhat.com>
+You probably want this: https://www.spinics.net/lists/linux-rt-users/msg26345.html
 
+You may wish to wait for the maintainer to complete their processes!
+
+Regards,
+veremitz/Michael.
