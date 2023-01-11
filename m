@@ -2,162 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4716650F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 02:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3137766510C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 02:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234163AbjAKBLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 20:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S235063AbjAKBUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 20:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbjAKBLD (ORCPT
+        with ESMTP id S234163AbjAKBUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 20:11:03 -0500
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED73B6342;
-        Tue, 10 Jan 2023 17:10:58 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowADn7+9wDL5jjEwfDA--.50119S2;
-        Wed, 11 Jan 2023 09:10:08 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     dianders@chromium.org
-Cc:     dmitry.baryshkov@linaro.org, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, marijn.suijten@somainline.org, vkoul@kernel.org,
-        marex@denx.de, vladimir.lypak@gmail.com,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] drm/msm/dsi: Drop the redundant fail label
-Date:   Wed, 11 Jan 2023 09:10:06 +0800
-Message-Id: <20230111011006.6238-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 10 Jan 2023 20:20:22 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D3D6426
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 17:20:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673400021; x=1704936021;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=akataVV8/0DapSMoYhbnfdEzhpmfzhdfJCigD6PWqj0=;
+  b=bRB1Q/1uyX3cdLdG/YHaUaSWgTNVHL42LResWvBd0fO3DsaeJIEk0vgH
+   lj5XECVdDtRPwPLXlLqqi4eABuh3hVy5BpQl6Iv8iTtZNBh3iVRvsUJ7v
+   4SLrykqM+kaBDFYQjK3jg2IFxgVACSfykeCUktu5gLUIBBtk+kDmWKQty
+   3BMnrRUNYvwd+zBAb3FwdxYurTthUewMiupOpzKTLs1qx3WDCzWQBc3Hi
+   9AZJQx/MC/qcot33VNYCzSXdQ1tPFN9fx14OKo2f5l/vbCobYhN5KdqDd
+   Ph3uqQsAxzoa/msU7gYaQ72/mkpBJj7nHfhsBaz4gEh/6dn5RQWTcYv4E
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="409538743"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="409538743"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 17:20:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="689612544"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="689612544"
+Received: from bphilli1-mobl1.amr.corp.intel.com (HELO [10.209.156.204]) ([10.209.156.204])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 17:20:08 -0800
+Message-ID: <edde76c0-a444-1c3a-3541-af79897701fa@linux.intel.com>
+Date:   Tue, 10 Jan 2023 19:20:08 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADn7+9wDL5jjEwfDA--.50119S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGw4ktry8uFWxGw1xCrWrAFb_yoW5Gw18pr
-        yaqFsrtrW0yws2krW7JF17A3WrKF4fGa48G34UCwnrAw1ayw4UXF4Dua10ga48t3y8uw4U
-        Kanaya4rWF1Utr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-        628vn2kIc2xKxwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUChFxUUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v1 2/6] ASoC: Intel: bytcht_es8316: Drop reference count
+ of ACPI device after use
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>
+References: <20230102203014.16041-1-andriy.shevchenko@linux.intel.com>
+ <20230102203014.16041-2-andriy.shevchenko@linux.intel.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230102203014.16041-2-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the redundant fail label and change the "goto fail" into "return ret"
-since they are the same.
 
-Reviewed-by: Doug Anderson <dianders@chromium.org>
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
 
-v1 -> v2:
+On 1/2/23 14:30, Andy Shevchenko wrote:
+> Theoretically the device might gone if its reference count drops to 0.
+> This might be the case when we try to find the first physical node of
+> the ACPI device. We need to keep reference to it until we get a result
+> of the above mentioned call. Refactor the code to drop the reference
+> count at the correct place.
+> 
+> While at it, move to acpi_dev_put() as symmetrical call to the
+> acpi_dev_get_first_match_dev().
+> 
+> Fixes: 3c22a73fb873 ("ASoC: Intel: bytcht_es8316: fix HID handling")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-1. No change of the error handling of the irq_of_parse_and_map.
----
- drivers/gpu/drm/msm/dsi/dsi_host.c | 24 ++++++++----------------
- 1 file changed, 8 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index 89aadd3b3202..de615c505def 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -1883,8 +1883,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
- 
- 	msm_host = devm_kzalloc(&pdev->dev, sizeof(*msm_host), GFP_KERNEL);
- 	if (!msm_host) {
--		ret = -ENOMEM;
--		goto fail;
-+		return -ENOMEM;
- 	}
- 
- 	msm_host->pdev = pdev;
-@@ -1893,31 +1892,28 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
- 	ret = dsi_host_parse_dt(msm_host);
- 	if (ret) {
- 		pr_err("%s: failed to parse dt\n", __func__);
--		goto fail;
-+		return ret;
- 	}
- 
- 	msm_host->ctrl_base = msm_ioremap_size(pdev, "dsi_ctrl", &msm_host->ctrl_size);
- 	if (IS_ERR(msm_host->ctrl_base)) {
- 		pr_err("%s: unable to map Dsi ctrl base\n", __func__);
--		ret = PTR_ERR(msm_host->ctrl_base);
--		goto fail;
-+		return PTR_ERR(msm_host->ctrl_base);
- 	}
- 
- 	pm_runtime_enable(&pdev->dev);
- 
- 	msm_host->cfg_hnd = dsi_get_config(msm_host);
- 	if (!msm_host->cfg_hnd) {
--		ret = -EINVAL;
- 		pr_err("%s: get config failed\n", __func__);
--		goto fail;
-+		return -EINVAL;
- 	}
- 	cfg = msm_host->cfg_hnd->cfg;
- 
- 	msm_host->id = dsi_host_get_id(msm_host);
- 	if (msm_host->id < 0) {
--		ret = msm_host->id;
- 		pr_err("%s: unable to identify DSI host index\n", __func__);
--		goto fail;
-+		return msm_host->id;
- 	}
- 
- 	/* fixup base address by io offset */
-@@ -1927,19 +1923,18 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
- 					    cfg->regulator_data,
- 					    &msm_host->supplies);
- 	if (ret)
--		goto fail;
-+		return ret;
- 
- 	ret = dsi_clk_init(msm_host);
- 	if (ret) {
- 		pr_err("%s: unable to initialize dsi clks\n", __func__);
--		goto fail;
-+		return ret;
- 	}
- 
- 	msm_host->rx_buf = devm_kzalloc(&pdev->dev, SZ_4K, GFP_KERNEL);
- 	if (!msm_host->rx_buf) {
--		ret = -ENOMEM;
- 		pr_err("%s: alloc rx temp buf failed\n", __func__);
--		goto fail;
-+		return -ENOMEM;
- 	}
- 
- 	ret = devm_pm_opp_set_clkname(&pdev->dev, "byte");
-@@ -1983,9 +1978,6 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
- 
- 	DBG("Dsi Host %d initialized", msm_host->id);
- 	return 0;
--
--fail:
--	return ret;
- }
- 
- void msm_dsi_host_destroy(struct mipi_dsi_host *host)
--- 
-2.25.1
-
+How do we proceed for this patchset? I am happy to ack a v2 if Andy
+splits the AMD and Intel patches w/ a cover letter, but this could also
+be added directly if there is no objection.
