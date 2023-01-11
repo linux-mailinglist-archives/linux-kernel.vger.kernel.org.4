@@ -2,197 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8BD666135
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B83666151
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234544AbjAKRAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        id S239749AbjAKRCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbjAKQ7u (ORCPT
+        with ESMTP id S239758AbjAKRCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:59:50 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41558140F9;
-        Wed, 11 Jan 2023 08:59:47 -0800 (PST)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:1ee3:efce:e4f6:17a3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 11 Jan 2023 12:02:12 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA75739F8E;
+        Wed, 11 Jan 2023 09:00:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BAFCB6602DA4;
-        Wed, 11 Jan 2023 16:59:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673456386;
-        bh=sB0B5hMmBlGyvoV5FP5UJ3qSGt/YAjWMOgO6CSVwApk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CaFBvxd7Jdz3MTr/xQ2E2zcTQrHcdQPZgwXFyrMxWXtA5T+wXz82spe/Q/g8vfFnm
-         sh48qyGdbEUn+nDLCX/go4qyfe/SgAJcfzT+aKro2mmbgmEenrrmps+VLicMib+o1D
-         n9uYQlpXF7E83qmFrtG5Y8Y8goQ9mGnt9J3I4S5Vdvlmcb0BkkXlAaejSdhoNjmxt4
-         lrNRbSBC+K0bnGyIOdC4Y926Jz+yybA6TirK2d/E1jjBUaJ9HFsO0UaL5SS6bkASJr
-         +KjMQhO4AKoR/QW4yGmi9OzK0BB3GS9MgHPeQpB6h0ppueskmzSNBMuttpPgH2d87o
-         Io9uYxRvI3+8Q==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 13/13] media: verisilicon: Conditionnaly ignore native formats
-Date:   Wed, 11 Jan 2023 17:59:31 +0100
-Message-Id: <20230111165931.753763-14-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230111165931.753763-1-benjamin.gaignard@collabora.com>
-References: <20230111165931.753763-1-benjamin.gaignard@collabora.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 38D15CE1C0E;
+        Wed, 11 Jan 2023 17:00:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 589D5C433EF;
+        Wed, 11 Jan 2023 17:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673456425;
+        bh=gw3qhEGU4Lybqbh3XH+6ho9+3sZW9wrUYwNViNOpF2I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GWFbkAeXa3dgeVgoV7FZW+JvWRCMnrhNvl7f9+eMdZyo+ISiwFQdrqiGIjLcg4Sy3
+         4YYtP5mv1rHb2kPNaQ9zWzKDuOY8ZVnjEfkj1wjqhERUwBP9tZT3bIhi8/8oiqN+0Y
+         4BRmyYEubqoWAJmdot/ydxLgns1ngE+5TJWf6GJFrnXPqNUZ7p9p9rmh83+qchZdjj
+         llsF5PZ1E0kK+3eQo/kY5IomChXpW3pH1jj45pjdNJenchMYVL86TAtOy2JpLKo8An
+         DhjPJ4+PzYM5WutRn6XVYZp+cmwaD29iJl0tewbW4WVNcpaQUW2wFBMgECxFJGtn7a
+         MIiLx4RUPYAug==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pFeSf-0003f9-RB; Wed, 11 Jan 2023 18:00:25 +0100
+Date:   Wed, 11 Jan 2023 18:00:25 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Samuel Iglesias =?utf-8?Q?Gons=C3=A1lvez?= 
+        <siglesias@igalia.com>, Rodolfo Giometti <giometti@enneenne.com>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 13/13] usb/serial: Rename dtr/rts parameters/variables
+ to active
+Message-ID: <Y77rKQfIYyiPwz3S@hovoldconsulting.com>
+References: <20230111142331.34518-1-ilpo.jarvinen@linux.intel.com>
+ <20230111142331.34518-14-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230111142331.34518-14-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AV1 film grain feature requires to use the postprocessor to produce
-valid frames. In such case the driver shouldn't propose native pixels
-format but only post-processed pixels format.
-Additionally if when setting a control a value could change capture
-queue pixels formats it is needed to call hantro_reset_raw_fmt().
+On Wed, Jan 11, 2023 at 04:23:31PM +0200, Ilpo Järvinen wrote:
+> Use active consistently for naming parameters and variables.
+> This converts all USB serial drivers + CDC-ACM.
+>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/usb/class/cdc-acm.c          | 4 ++--
+>  drivers/usb/serial/ch341.c           | 4 ++--
+>  drivers/usb/serial/cp210x.c          | 6 +++---
+>  drivers/usb/serial/cypress_m8.c      | 6 +++---
+>  drivers/usb/serial/digi_acceleport.c | 6 +++---
+>  drivers/usb/serial/f81232.c          | 4 ++--
+>  drivers/usb/serial/f81534.c          | 4 ++--
+>  drivers/usb/serial/ftdi_sio.c        | 6 +++---
+>  drivers/usb/serial/ipw.c             | 8 ++++----
+>  drivers/usb/serial/keyspan.c         | 6 +++---
+>  drivers/usb/serial/keyspan_pda.c     | 4 ++--
+>  drivers/usb/serial/mct_u232.c        | 6 +++---
+>  drivers/usb/serial/mxuport.c         | 4 ++--
+>  drivers/usb/serial/pl2303.c          | 4 ++--
+>  drivers/usb/serial/quatech2.c        | 6 +++---
+>  drivers/usb/serial/sierra.c          | 6 +++---
+>  drivers/usb/serial/spcp8x5.c         | 4 ++--
+>  drivers/usb/serial/ssu100.c          | 6 +++---
+>  drivers/usb/serial/upd78f0730.c      | 4 ++--
+>  drivers/usb/serial/usb-serial.c      | 4 ++--
+>  drivers/usb/serial/usb-wwan.h        | 2 +-
+>  drivers/usb/serial/usb_wwan.c        | 6 +++---
+>  drivers/usb/serial/xr_serial.c       | 4 ++--
+>  23 files changed, 57 insertions(+), 57 deletions(-)
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
-v3:
-- Reset raw pixel formats list when bit depth or film grain feature
-  values change.
+You should split this up as CDC-ACM is not a USB serial driver.
 
- drivers/media/platform/verisilicon/hantro.h      |  3 +++
- drivers/media/platform/verisilicon/hantro_drv.c  | 11 ++++++++++-
- .../media/platform/verisilicon/hantro_postproc.c |  4 ++++
- drivers/media/platform/verisilicon/hantro_v4l2.c | 16 +++++++++++++++-
- drivers/media/platform/verisilicon/hantro_v4l2.h |  1 +
- 5 files changed, 33 insertions(+), 2 deletions(-)
+But this all seem like unnecessary churn to me. It was one thing
+changing the parameter name in drivers that used something ambiguous
+like 'on_off' but 'on' is just as clear as 'active' (and its shorter
+too).
 
-diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index a98cb40a8d3b..7a5357e810fb 100644
---- a/drivers/media/platform/verisilicon/hantro.h
-+++ b/drivers/media/platform/verisilicon/hantro.h
-@@ -231,6 +231,8 @@ struct hantro_dev {
-  * @ctrl_handler:	Control handler used to register controls.
-  * @jpeg_quality:	User-specified JPEG compression quality.
-  * @bit_depth:		Bit depth of current frame
-+ * @need_postproc:	Set to true if the bitstream features require to
-+ *			use the post-processor.
-  *
-  * @codec_ops:		Set of operations related to codec mode.
-  * @postproc:		Post-processing context.
-@@ -258,6 +260,7 @@ struct hantro_ctx {
- 	struct v4l2_ctrl_handler ctrl_handler;
- 	int jpeg_quality;
- 	int bit_depth;
-+	bool need_postproc;
- 
- 	const struct hantro_codec_ops *codec_ops;
- 	struct hantro_postproc_ctx postproc;
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 4fc6dea16ae6..ef99f0f0fc53 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -340,12 +340,21 @@ static int hantro_av1_s_ctrl(struct v4l2_ctrl *ctrl)
- 	switch (ctrl->id) {
- 	case V4L2_CID_STATELESS_AV1_SEQUENCE:
- 		int bit_depth = ctrl->p_new.p_av1_sequence->bit_depth;
-+		bool need_postproc = false;
- 
- 		if (vb2_is_streaming(v4l2_m2m_get_src_vq(ctx->fh.m2m_ctx)))
- 			if (ctx->bit_depth != bit_depth)
- 				return -EINVAL;
- 
--		ctx->bit_depth = bit_depth;
-+		if (ctrl->p_new.p_av1_sequence->flags
-+		    & V4L2_AV1_SEQUENCE_FLAG_FILM_GRAIN_PARAMS_PRESENT)
-+			need_postproc = true;
-+
-+		if (ctx->bit_depth != bit_depth || ctx->need_postproc != need_postproc) {
-+			ctx->bit_depth = bit_depth;
-+			ctx->need_postproc = need_postproc;
-+			hantro_reset_raw_fmt(ctx);
-+		}
- 		break;
- 	default:
- 		return -EINVAL;
-diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
-index 7dc39519a2ee..293e5612e2ce 100644
---- a/drivers/media/platform/verisilicon/hantro_postproc.c
-+++ b/drivers/media/platform/verisilicon/hantro_postproc.c
-@@ -57,6 +57,10 @@ bool hantro_needs_postproc(const struct hantro_ctx *ctx,
- {
- 	if (ctx->is_encoder)
- 		return false;
-+
-+	if (ctx->need_postproc)
-+		return true;
-+
- 	return fmt->postprocessed;
- }
- 
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index bbe79dbd2cd9..7566fe86f624 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -38,6 +38,11 @@ hantro_get_formats(const struct hantro_ctx *ctx, unsigned int *num_fmts)
- {
- 	const struct hantro_fmt *formats;
- 
-+	if (ctx->need_postproc) {
-+		*num_fmts = 0;
-+		return NULL;
-+	}
-+
- 	if (ctx->is_encoder) {
- 		formats = ctx->dev->variant->enc_fmts;
- 		*num_fmts = ctx->dev->variant->num_enc_fmts;
-@@ -132,6 +137,15 @@ hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream)
- 		    hantro_check_depth_match(ctx, &formats[i]))
- 			return &formats[i];
- 	}
-+
-+	formats = hantro_get_postproc_formats(ctx, &num_fmts);
-+	for (i = 0; i < num_fmts; i++) {
-+		if (bitstream == (formats[i].codec_mode !=
-+				  HANTRO_MODE_NONE) &&
-+		    hantro_check_depth_match(ctx, &formats[i]))
-+			return &formats[i];
-+	}
-+
- 	return NULL;
- }
- 
-@@ -404,7 +418,7 @@ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
- 		hantro_set_fmt_out(ctx, fmt);
- }
- 
--static void
-+void
- hantro_reset_raw_fmt(struct hantro_ctx *ctx)
- {
- 	const struct hantro_fmt *raw_vpu_fmt;
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.h b/drivers/media/platform/verisilicon/hantro_v4l2.h
-index 64f6f57e9d7a..f642560aed93 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.h
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.h
-@@ -21,6 +21,7 @@
- extern const struct v4l2_ioctl_ops hantro_ioctl_ops;
- extern const struct vb2_ops hantro_queue_ops;
- 
-+void hantro_reset_raw_fmt(struct hantro_ctx *ctx);
- void hantro_reset_fmts(struct hantro_ctx *ctx);
- int hantro_get_format_depth(u32 fourcc);
- const struct hantro_fmt *
--- 
-2.34.1
+So please drop at least the USB serial changes as all drivers already
+use 'on' consistently. 
 
+Johan
