@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB49665B1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A92B5665B14
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbjAKML5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 07:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
+        id S231514AbjAKML3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 07:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233478AbjAKMLh (ORCPT
+        with ESMTP id S233530AbjAKMLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 07:11:37 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE7F218B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 04:11:36 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-4c9b9185d18so121151657b3.10
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 04:11:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RUzF6lCgQp1o/2q+i0d8WNfiUX6YauMmBM07mYYsz+8=;
-        b=C9cnI762pLG141ok2YPMk9grobHR2SRWbOx6Cu8AkaVyWSSPXRneG2gXkqPWXbHRDY
-         ZjnpMVG8VuglbhbX20cfLILPt9bbbn65qpN4r2YTDIjy7JmB9vhIf4ds1kHPWxFr7E/B
-         E1mMIpd4+O55RON360qn0NnY7NVmRMf4SQR4avMQFfRdMwW7GSCPIWGHzGOVpW7MTwFV
-         qAUOQ/GIhnyX6ZGTbW0Jxs1rNxmdwdJu0ZJ1qntBvmO6l5Ibu4aeWsiYcY9qAT3uiTCO
-         sHk46ShDefZxf5QT+QRZZ1xFFh73nHX1qL7o0jgScpC/jZu+VGEma2QR91dZ1cfW0F9a
-         LxYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RUzF6lCgQp1o/2q+i0d8WNfiUX6YauMmBM07mYYsz+8=;
-        b=n7jcoSfnkVBLGpRFkQm64KM6lH0OXFQFOq51JS5uLumLZdpM7IeVh/j8l8WhcwilZd
-         /+8NQwhJGY1dru5Zih9j1Z9WuZ3Tzd7d2i+bJxBCvO7MzTWygw1X57BNmGuOhi+d120k
-         tkASTXetzBGonmEILTahK0/ZuSEoRJAzoJrDMgdaeTVEuVwGAq1cRt0nGzDYGTU8OBVG
-         c2ftd9YTkgfp0fgkcaBAYkgkuJk4kU/ckO+l4rCuNd1KC0XnUWqoyEmP63qnu/kQ7AGf
-         0kzU2TP4/6NRacnXq5VRW4kYTBznUeVrIaaxtheeXxPGK/SQz2YCwxfdfUINLpSfMlcY
-         OMgQ==
-X-Gm-Message-State: AFqh2koje4423QrMMn4Dw5KFpsMlfUIf422G6igx4+YNRnJ0gH0HFKIa
-        mxFdzEooK87uf9FBPLkwlTm4OQ68tGj8zjWCWZ+cRg==
-X-Google-Smtp-Source: AMrXdXsBezIy12jb9dB6vhG664r5MR15R3YnEJOWcAFL3Nbg9ez+Wq1tPt0DzTD5RWYTCpvs4/4SWgAVcIDBRYy2oZ8=
-X-Received: by 2002:a81:a513:0:b0:4b5:55fb:6cbc with SMTP id
- u19-20020a81a513000000b004b555fb6cbcmr2804118ywg.10.1673439095845; Wed, 11
- Jan 2023 04:11:35 -0800 (PST)
+        Wed, 11 Jan 2023 07:11:14 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2ED97262A;
+        Wed, 11 Jan 2023 04:11:12 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1F2BFEC;
+        Wed, 11 Jan 2023 04:11:53 -0800 (PST)
+Received: from [10.57.68.138] (unknown [10.57.68.138])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7D313F71A;
+        Wed, 11 Jan 2023 04:11:09 -0800 (PST)
+Message-ID: <02f259fe-1c6f-834b-c29d-aaf2a0595adb@arm.com>
+Date:   Wed, 11 Jan 2023 12:11:04 +0000
 MIME-Version: 1.0
-References: <202301020356.dFruA4I5-lkp@intel.com> <aa722a69-8493-b449-c80c-a7cc1cf8a1b6@suse.cz>
-In-Reply-To: <aa722a69-8493-b449-c80c-a7cc1cf8a1b6@suse.cz>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 11 Jan 2023 13:10:59 +0100
-Message-ID: <CAG_fn=XmHKvpev4Gxv=SFOf2Kz0AwiuudXPqPjVJJo2gN=yOcg@mail.gmail.com>
-Subject: Re: mm/kmsan/instrumentation.c:41:26: warning: no previous prototype
- for function '__msan_metadata_ptr_for_load_n'
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Christoph Lameter <cl@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] iommu/iova: Fix alloc iova overflows issue
+Content-Language: en-GB
+To:     yf.wang@mediatek.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:IOMMU DMA-API LAYER" <iommu@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Cc:     wsd_upstream@mediatek.com, stable@vger.kernel.org,
+        Libo Kang <Libo.Kang@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Ning Li <Ning.Li@mediatek.com>,
+        jianjiao zeng <jianjiao.zeng@mediatek.com>
+References: <20230111063801.25107-1-yf.wang@mediatek.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230111063801.25107-1-yf.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,13 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 2, 2023 at 11:01 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->
-> +CC kmsan folks.
->
-> I think it's another side-effect where CONFIG_SLUB_TINY excludes KASAN which
-> in turn allows KMSAN to be enabled and uncover a pre-existing issue.
+On 2023-01-11 06:38, yf.wang@mediatek.com wrote:
+> From: Yunfei Wang <yf.wang@mediatek.com>
+> 
+> In __alloc_and_insert_iova_range, there is an issue that retry_pfn
+> overflows. The value of iovad->anchor.pfn_hi is ~0UL, then when
+> iovad->cached_node is iovad->anchor, curr_iova->pfn_hi + 1 will
+> overflow. As a result, if the retry logic is executed, low_pfn is
+> updated to 0, and then new_pfn < low_pfn returns false to make the
+> allocation successful.
+> 
+> This issue occurs in the following two situations:
+> 1. The first iova size exceeds the domain size. When initializing
+> iova domain, iovad->cached_node is assigned as iovad->anchor. For
+> example, the iova domain size is 10M, start_pfn is 0x1_F000_0000,
+> and the iova size allocated for the first time is 11M. The
+> following is the log information, new->pfn_lo is smaller than
+> iovad->cached_node.
+> 
+> Example log as follows:
+> [  223.798112][T1705487] sh: [name:iova&]__alloc_and_insert_iova_range
+> start_pfn:0x1f0000,retry_pfn:0x0,size:0xb00,limit_pfn:0x1f0a00
+> [  223.799590][T1705487] sh: [name:iova&]__alloc_and_insert_iova_range
+> success start_pfn:0x1f0000,new->pfn_lo:0x1efe00,new->pfn_hi:0x1f08ff
+> 
+> 2. The node with the largest iova->pfn_lo value in the iova domain
+> is deleted, iovad->cached_node will be updated to iovad->anchor,
+> and then the alloc iova size exceeds the maximum iova size that can
+> be allocated in the domain.
+> 
+> After judging that retry_pfn is less than limit_pfn, call retry_pfn+1
+> to fix the overflow issue.
+> 
+> Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
+> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+> Cc: <stable@vger.kernel.org> # 5.15.*
 
- Thanks for bringing this up, I'll fix this as Marco proposes.
+Fixes: 4e89dce72521 ("iommu/iova: Retry from last rb tree node if iova search fails")
 
-Would it also make sense to exclude KMSAN with CONFIG_SLUB_TINY?
+Acked-by: Robin Murphy <robin.murphy@arm.com>
+
+> ---
+> v2: Update patch
+>      1. Cc stable@vger.kernel.org
+>         This patch needs to be merged stable branch,
+>         add stable@vger.kernel.org in mail list.
+>      2. Refer robin's suggestion to update patch.
+> 
+> ---
+>   drivers/iommu/iova.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> index a44ad92fc5eb..fe452ce46642 100644
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -197,7 +197,7 @@ static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
+>   
+>   	curr = __get_cached_rbnode(iovad, limit_pfn);
+>   	curr_iova = to_iova(curr);
+> -	retry_pfn = curr_iova->pfn_hi + 1;
+> +	retry_pfn = curr_iova->pfn_hi;
+>   
+>   retry:
+>   	do {
+> @@ -211,7 +211,7 @@ static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
+>   	if (high_pfn < size || new_pfn < low_pfn) {
+>   		if (low_pfn == iovad->start_pfn && retry_pfn < limit_pfn) {
+>   			high_pfn = limit_pfn;
+> -			low_pfn = retry_pfn;
+> +			low_pfn = retry_pfn + 1;
+>   			curr = iova_find_limit(iovad, limit_pfn);
+>   			curr_iova = to_iova(curr);
+>   			goto retry;
