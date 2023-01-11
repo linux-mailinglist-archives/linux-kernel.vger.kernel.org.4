@@ -2,248 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D516660F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574B46660F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234012AbjAKQuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S234061AbjAKQu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233587AbjAKQuC (ORCPT
+        with ESMTP id S234299AbjAKQuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:50:02 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B9A140C1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:50:00 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id i188so16309086vsi.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:50:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c06q7Fj57CAs5lFLpRgHaQZHKGNjLTDnde3ARKQh2IA=;
-        b=Sc9I5cNm7pkDNxYXsObVjnMUNUZcyzfizODDVP/Q3lGn6qJJ6Yeul+s80nch9p42qG
-         5GR2SbUsFX4KvorpUA9NQ9ywig82Zk89dcETvWPg8LT2cPhipGzzJp3SCD1CPFBBVOPi
-         S0BUVvp0drAKAjatDJUKjaP62x26uN5ZzGX6QGtoQbRpF6XmOnFX9aS9GMJv5ROyKxtI
-         xa5Np/J2f34PQI0Bmy3TAJhxNc+LPqy2KxXNvNjzXCQxX5xe2UIWMAWz9r41WRGfN3r9
-         dihRiYUgo5b84QX9qmeMfgMck83S7IqHH3Qte2Px9EQK6eQmmk13ZXENCPOdkDkd8uk5
-         X+cQ==
+        Wed, 11 Jan 2023 11:50:23 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C97F6B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:50:22 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id u1-20020a5d8181000000b006ee29a8c421so9459167ion.19
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:50:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c06q7Fj57CAs5lFLpRgHaQZHKGNjLTDnde3ARKQh2IA=;
-        b=78mGJi38NCpo/438yRk8YwPZjVqBOGdH/xtL0YaXXlexyuTnF3ENq8RbaUs6e9Jud5
-         qPX4dY8mXt/dhlaSU7ZukBWMeA+zGJ3OHrW33yOyN1jpUNHSlSB55Hxoo6aadygQPWQR
-         lO1fT8IBgN3ma6fgt9uF87kcdSF9KI2DjdRujVdEOexTl7Z/1BznyE1uMBaH3Ow6xWxo
-         7TCmqb4x27ehZL0dwU/jUOD5HvmGIbJeeNDsAD71MWP6i+/+Mfi333qZs8CT+d1J3D2O
-         t3iuccPzEKRSeR6AtNhsdmp1Eu+G5QNHyKtFgz1XLKfqpbSvk4HKuC8t9FU3MUahhkV6
-         hyqQ==
-X-Gm-Message-State: AFqh2krU5aSc3MkH9Qlg44A8w2Unycnao09K540GRzbaskVFLV2v2pRT
-        w5WkRXOD0Tu4ox8JJeMyDK75cPAQYdGgNDdnpC4bbQ==
-X-Google-Smtp-Source: AMrXdXsdW/eFsF3QAm7+LGBlxkFvVtaitIjRBaku04sp1p5AdQfn981S+UweIZPGH4rS5OUs3W/GgsFx2EPrTEuez7A=
-X-Received: by 2002:a05:6102:c4e:b0:3c8:c513:197 with SMTP id
- y14-20020a0561020c4e00b003c8c5130197mr7644776vss.9.1673455799584; Wed, 11 Jan
- 2023 08:49:59 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IVlkwIcu/ERIdMF9zXl1iw0QgUBv4pumheJU/b/0NDs=;
+        b=a0WAveAnh2cNBOuxqm1SpN4ttnDDaXGUgydLcf2yZN1iP+UBLgq3PVYaTYToLwiGP+
+         u50/te/bp5ZTsgCzM5UutEP3LnMX40CP9zBvJIk9NesF7+XuVa9I7wPuXyqN/rVOilOz
+         chb6QVq2qUFjmn7yO7OcNlcZTPUXtdyJpH3moKIcijoqLDSoFtX1+xcVuCwGf8z8XLW/
+         ZpmSdrtnQ3bata6vtT7b0wiH9b1n4Yq8yqjth0RU5V9K29K1ee1gbz+rGOU7s33H2Yw5
+         +dmCJNBaU0rz8Q4vEOXnujysgk/YEMK3EflLzH8IRtScigkznNs3t5jzW+NUaYyaD6HV
+         o2Cg==
+X-Gm-Message-State: AFqh2krETW5WKro5Njw3C5466sTVJUWRZV9VbLUIvciXMu1BqulKFtIQ
+        cumeNTMZ3tafkigS/yu6SVfwzXKPxebw0WitgWLOjgk4u9Hk
+X-Google-Smtp-Source: AMrXdXujnSvvkWTnatFl3bt07Qrfr/4g3+DZMb319bEIWyA1L0LGyYfmqDQ3TNiVTo/n48VFRnoT4MotGowevDTm9Ec3f7rhjHlv
 MIME-Version: 1.0
-References: <20230110180018.288460217@linuxfoundation.org>
-In-Reply-To: <20230110180018.288460217@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 11 Jan 2023 22:19:48 +0530
-Message-ID: <CA+G9fYuLC+qMFYOCUwonVGs-a0OAfUdazwwnDHWTQmBe7WYM+g@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/159] 6.1.5-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+X-Received: by 2002:a05:6e02:c88:b0:303:7518:f784 with SMTP id
+ b8-20020a056e020c8800b003037518f784mr5091367ile.295.1673455821594; Wed, 11
+ Jan 2023 08:50:21 -0800 (PST)
+Date:   Wed, 11 Jan 2023 08:50:21 -0800
+In-Reply-To: <2265390.1673430114@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cb290605f1ffcbed@google.com>
+Subject: Re: [syzbot] kernel BUG in rxrpc_put_call
+From:   syzbot <syzbot+4bb6356bb29d6299360e@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 Jan 2023 at 23:44, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.5 release.
-> There are 159 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 12 Jan 2023 17:59:42 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.5-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hello,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Reported-and-tested-by: syzbot+4bb6356bb29d6299360e@syzkaller.appspotmail.com
 
-NOTE:
-Regression reported on FVP details can be found in this link,
-https://lore.kernel.org/stable/Y76ykHsQcyusWNah@debian/T/#m9dd9798da554c58e=
-5634205de1cb4203d065a177
+Tested on:
 
-## Build
-* kernel: 6.1.5-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.1.y
-* git commit: 06bcfb15cd3bb7bfcfa0b06528b2ba3013d2d17b
-* git describe: v6.1.4-160-g06bcfb15cd3b
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.4=
--160-g06bcfb15cd3b
+commit:         8fed7565 Merge tag 'mlx5-fixes-2023-01-09' of git://gi..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=13b40d1c480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=46221e8203c7aca6
+dashboard link: https://syzkaller.appspot.com/bug?extid=4bb6356bb29d6299360e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11834e5a480000
 
-## Test Regressions (compared to v6.1.4)
-
-## Metric Regressions (compared to v6.1.4)
-
-## Test Fixes (compared to v6.1.4)
-
-## Metric Fixes (compared to v6.1.4)
-
-## Test result summary
-total: 183653, pass: 152799, fail: 5075, skip: 25752, xfail: 27
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 148 passed, 3 failed
-* arm64: 51 total, 50 passed, 1 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 32 passed, 6 failed
-* riscv: 16 total, 15 passed, 1 failed
-* s390: 16 total, 13 passed, 3 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 44 total, 44 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ip
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Note: testing is done by a robot and is best-effort only.
