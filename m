@@ -2,105 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8C5665809
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1DC66580D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjAKJta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:49:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S238449AbjAKJti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:49:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238284AbjAKJrg (ORCPT
+        with ESMTP id S231975AbjAKJri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:47:36 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4394DAE47
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:46:07 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso12164375wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:46:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T8qJr9kxb2tGVbF6bozT+Foz2HcY6He6TrHRTcyBEDM=;
-        b=rsjaoGyhFkfmSubHNTKsjmnS6j/NmQ2fI7phFAvhMi1KiNzoVpbU32S/6rCEQav80Q
-         k8wcwGy3RWZ7sAS5zTiIob3nVWXuDCVwKQJBl5dg0fbA/BO2dARaE+gLiJu74Hykirhy
-         nTrYygWQ6HxEpJf18QaCMVhwgthjG0/ZcU73PjN1mvRVqgMD+4Hy5ssT1PUJSHTWGpEe
-         hZDBKFXVTpmqweD8YSHKy/16VP/8WYUvrHZJxFB9ZY5xzgFp+DZD+xF998O60Dlr4ph2
-         63enZTgXLDiIS81V7cev0/G770QAuiHVx1BD/q7KMVDK0OqjzW4YrDq8K2g7/dJPQPW8
-         cTow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T8qJr9kxb2tGVbF6bozT+Foz2HcY6He6TrHRTcyBEDM=;
-        b=NQAcjCqajoqHq2EyftNT9cjD6aamX8Hfry+gryajjJYdwu6C4T0BkdY2wVBc0D9vvl
-         pEkuWDwd1NpABPIIWfb/DAWtFT0jSjaOfvDW2MqBaDP795da7zVy8d9J+GArUUt1gqMt
-         QHyoA+DBY6eXCz+yKUypFYpd0mYXeE3KEMV+vxNPsNwuAC+FtujYt6LmitebgTAOXbP0
-         5LkKJ44dnZ91i45rfQXngniYx7T7LV+MeUpLiZBO4WbHj536E7oraJYFaLpFljrsWJ/w
-         1vSVYcg8RJOm20thJDlnW88uIqnc+u9G7fKO7Xd3YAwMW/8C24Xx3b8K7nWacOMm8fre
-         6uzg==
-X-Gm-Message-State: AFqh2krBt23AR2GP19i/nzvZ07qSudsZxy+GqP7TJFAl9X+2K0pQYivK
-        3m5/uU4YYOa8GPE5kaYoRXbVng==
-X-Google-Smtp-Source: AMrXdXvOSu6TmuYVPNW8+fAGh0hq7brP7g4tp3JJcm7IGvJ4njHTnFBbiRTuZMJLH4ukwt7yYhNCQQ==
-X-Received: by 2002:a05:600c:22d4:b0:3cf:82b9:2fe6 with SMTP id 20-20020a05600c22d400b003cf82b92fe6mr61741450wmg.8.1673430365782;
-        Wed, 11 Jan 2023 01:46:05 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t8-20020a1c7708000000b003d9f00c8f07sm9678192wmi.21.2023.01.11.01.46.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 01:46:05 -0800 (PST)
-Message-ID: <4d3003e7-f671-9971-dd3e-08b8654473db@linaro.org>
-Date:   Wed, 11 Jan 2023 10:46:02 +0100
+        Wed, 11 Jan 2023 04:47:38 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4621AE6C;
+        Wed, 11 Jan 2023 01:46:27 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E5EFB6602D92;
+        Wed, 11 Jan 2023 09:46:25 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673430386;
+        bh=ZJwlsBY464BplGHr72r5hWWc6BG/4HDq2NZ3M0JCMaA=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=IAui+3e0mTVabAj1AMfgOOBhqwNvOsQsae3YSUIgGpMWejhgZTaRIkjfgRa5cS9ok
+         La2f8A4zz4Dl2pCXDrwu+A0kxoOFEGH4vN0SVJIv576bedSN3RWmjUrJibsWfT6kH0
+         miVr9PBmn/cy8MRr6i+osK7uJ04z0JQNaDZ/PtK+5PLYD+Q0w90MVc/U1lDPfA1W32
+         UW3MGlvFNn2wslFMLhet2vMdXISdzzp2j4ClE5LWAx56COH6NcxQ0pxl7v5jTG5+I2
+         SnEAu22bsFNiRb0yQIG5aGDAhpmd5+22rUQyGDb3S4zsvIMnJ+LPdken9GSepfGkBK
+         d0eMVZrV17dLg==
+Message-ID: <4e98a5ee-96a1-eb98-8529-68f36c3cb7fa@collabora.com>
+Date:   Wed, 11 Jan 2023 10:46:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/7] dt-bindings: arm64: ipq9574: Add binding descriptions
- for clock and reset
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3] USB: gadget: Add ID numbers to configfs-gadget driver
+ names
+To:     Chanh Nguyen <chanh@os.amperecomputing.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Li <frank.li@nxp.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dan Vacura <w36195@motorola.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
+        Rondreis <linhaoguo86@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Open Source Submission <patches@amperecomputing.com>
+References: <20230111065105.29205-1-chanh@os.amperecomputing.com>
 Content-Language: en-US
-To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, tdas@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-2-quic_devipriy@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230110121316.24892-2-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20230111065105.29205-1-chanh@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 13:13, devi priya wrote:
-> Adding support for the global clock controller found on
-> IPQ9574 based devices
+Hello,
+
+W dniu 11.01.2023 o 07:51, Chanh Nguyen pisze:
+> It is unable to use configfs to attach more than one gadget. When
+> attaching the second gadget, it always fails and the kernel message
+> prints out:
 > 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+> Error: Driver 'configfs-gadget' is already registered, aborting...
+> UDC core: g1: driver registration failed: -16
+> 
+> This commit fixes the problem by using the gadget name as a suffix
+> to each configfs_gadget's driver name, thus making the names
+> distinct.
+> 
+> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
+> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+> 
 > ---
+> Changes in v3:
+>    - Use the gadget name as a unique suffix instead     [Andrzej]
+>    - Remove the driver.name allocation by template        [Chanh]
+>    - Update commit message                                [Chanh]
+> 
+> Changes in v2:
+>    - Replace scnprintf() by kasprintf() to simplify the code [CJ]
+>    - Move the clean up code from gadgets_drop() to
+>      gadget_info_attr_release()                        [Frank Li]
+>    - Correct the resource free up in gadges_make()   [Alan Stern]
+>    - Remove the unnecessary variable in gadgets_make()    [Chanh]
+>    - Fixes minor grammar issue in commit message          [Chanh]
+> ---
+>   drivers/usb/gadget/configfs.c | 12 ++++++++++--
+>   1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> index 96121d1c8df4..0853536cbf2e 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -393,6 +393,7 @@ static void gadget_info_attr_release(struct config_item *item)
+>   	WARN_ON(!list_empty(&gi->string_list));
+>   	WARN_ON(!list_empty(&gi->available_func));
+>   	kfree(gi->composite.gadget_driver.function);
+> +	kfree(gi->composite.gadget_driver.driver.name);
+>   	kfree(gi);
+>   }
+>   
+> @@ -1572,7 +1573,6 @@ static const struct usb_gadget_driver configfs_driver_template = {
+>   	.max_speed	= USB_SPEED_SUPER_PLUS,
+>   	.driver = {
+>   		.owner          = THIS_MODULE,
+> -		.name		= "configfs-gadget",
+>   	},
+>   	.match_existing_only = 1,
+>   };
+> @@ -1623,13 +1623,21 @@ static struct config_group *gadgets_make(
+>   
+>   	gi->composite.gadget_driver = configfs_driver_template;
+>   
+> +	gi->composite.gadget_driver.driver.name = kasprintf(GFP_KERNEL,
+> +							    "configfs-gadget.%s", name);
 
-Use subject prefixes matching the subsystem (which you can get for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching).
+This line is 88 chars long, which means you're taking advantage of checkpatch
+allowing 100 columns nowadays. That's absolutely fine. If you collapse the above
+two lines into one, the combined length is exactly 100 chars, so you might
+just as well use a single line. In any case (collapsed or not) you can add my
 
-Best regards,
-Krzysztof
+Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+
+> +	if (!gi->composite.gadget_driver.driver.name)
+> +		goto err;
+> +
+>   	gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
+>   	gi->composite.name = gi->composite.gadget_driver.function;
+>   
+>   	if (!gi->composite.gadget_driver.function)
+> -		goto err;
+> +		goto out_free_driver_name;
+>   
+>   	return &gi->group;
+> +
+> +out_free_driver_name:
+> +	kfree(gi->composite.gadget_driver.driver.name);
+>   err:
+>   	kfree(gi);
+>   	return ERR_PTR(-ENOMEM);
 
