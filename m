@@ -2,105 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7D466652B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF9B66653A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234545AbjAKU7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 15:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S235545AbjAKVCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 16:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235480AbjAKU7C (ORCPT
+        with ESMTP id S235325AbjAKVBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 15:59:02 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89DC60DC;
-        Wed, 11 Jan 2023 12:58:58 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id j15so9369993qtv.4;
-        Wed, 11 Jan 2023 12:58:58 -0800 (PST)
+        Wed, 11 Jan 2023 16:01:55 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0101177
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:00:58 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id g23so2489082plq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:00:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GhiaCs8Yrw8BBKN22ZfMUGXFz70szjaM7XSx2isDBd0=;
-        b=nnpV7JTuWnvYOLcgHmuIjXmPhPMZ2gYTcflG39feZhBy0hZWH8kvGvqdU4ks82w6VX
-         pmB7MXbNmTHfJgEV+8DI2C8RwlwCnh0cDURpkS488gGBRiZN8U8KNYKoVY17CY/1hCTa
-         rrbxqtmQ9glIl51yh5DddycP87OvggdJqsD1Ju25svaWbgtuiIJdVuiyO/X5KHEjW9rV
-         X+wcI+Iq3elmugzGol0x47MLu8/8huqIqCMQS1CS0ou0VwpB1CQMTZJn9GrzpyDYBxzF
-         zmUksAOOqkNcA7DYzqeyL6wOACws6FWPyXdIK4zPGvSMmWxHgFKtsbdrSBJlyaqOcakg
-         R8Cg==
+        d=paul-moore.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aYATQVBoAHjhOjUPsaD5jki6IaVs4YS9GjtTsAYD90g=;
+        b=VmnTEE4msRQnWVteMg0wJkJPSvzWrpzkhjxmGuyt/D/AZ7ywx5MiLmC3npuZzKgNtU
+         jE1E60rl+nT+8C3sSCDc08xcVaVud2WfGhdCj7+DpghA9rlRARpxS2DT3k8i1A0QgtRs
+         kbzO4MHFb/nlTRn/aSim4myAB0UIhGogQlTSMlk74Tj44HRKLE2CNllJnt02jr+ATxqZ
+         HQAobPGteN7xGJCdP9KTU0WmSCDZV5V56/vJggCSRKcrtnCgSeBPO2nxIKSoETiOLKwE
+         yBsmfmvd2bqax0m5t2Sv+wAJtVAlpILgHCRb0vy9eO7WTaoVyffNutOWn2DO4qFZi4fb
+         egSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GhiaCs8Yrw8BBKN22ZfMUGXFz70szjaM7XSx2isDBd0=;
-        b=MavpHZl2VHHSGOxQ78UbqyWSMm8vz5Uhh4b+zzq1WUaOouTr79yv15/1l0W6EC5DXW
-         1xnOCuQ4S+c2MWChUOwf71WTYPGP9g/uzuFLf8sUwucWIvuipo1wVLiblUaL1goEuRUx
-         3e5JYJUe8n4ML1HP5ritEfXT58fkKqcEstwPQIqbdOyPWijvC/FmK6m4w7NVBBrHuqs+
-         EqAiJihHTmeeaQnVxIvAfQMaeP7EJZIu1uk0ztci0vchGZT8s35kyW00Y/iHddAGvewb
-         3iYhpuDm6Hxu7/rkXnttP2tLkhd4hvGvjaR+lU6PFrXo9k1OT5qviA7NsFzaxqAijzZf
-         TxnQ==
-X-Gm-Message-State: AFqh2krO+Nhi7ZtAxjjVZCYsTyM42d6Nvp6mc80wmlq2dEVfY9LhmEcy
-        4BmbHM3mgEEjcJnTS2JlUArElFc2txfzZmkl
-X-Google-Smtp-Source: AMrXdXtlAX9o/eUB+Hgc0EJbaOqzTjq7QYK4ZUmOcuR18O+C6BGDz1K+7DEPi4ZdaPa39hbI0QtMLw==
-X-Received: by 2002:ac8:7216:0:b0:3af:65f5:607b with SMTP id a22-20020ac87216000000b003af65f5607bmr10918197qtp.55.1673470737532;
-        Wed, 11 Jan 2023 12:58:57 -0800 (PST)
-Received: from [192.168.50.134] (99-176-3-182.lightspeed.brhmal.sbcglobal.net. [99.176.3.182])
-        by smtp.gmail.com with ESMTPSA id d15-20020a05620a140f00b006fc92cf4703sm9462260qkj.132.2023.01.11.12.58.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 12:58:57 -0800 (PST)
-Message-ID: <7699e1c6-efe1-ac90-d054-f983d9d46735@gmail.com>
-Date:   Wed, 11 Jan 2023 14:58:56 -0600
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aYATQVBoAHjhOjUPsaD5jki6IaVs4YS9GjtTsAYD90g=;
+        b=JFya+CMtnOwclhNllFciji5vPHbSjjgozJHC+uzq4EORvQQe+SoQqKXLzaRNpUE3dG
+         FpjegBkONUAEw01mFSoCgkqdJsGqRuB2TmwffaeRLkp/YVIxfx9HUkSWU2RJKhTR5ap9
+         mW55hRWSZXMUheC4LKZtmXcsstfV4JPDMe/kMvdTjmJVDRMahZUEJ6CtuQQy0BALs9yg
+         n3lC4SPcLcxJUZvkABjtUwSf2Dna0cGJByidNZk3KBZq74g4tTq3cvj0OmSq1V8u2O7X
+         A0rX9+miunR3l7hiLUZN30u1+mXDFC7yERgXCTSdBx7kXc3pKGb/Py/ToacvIbRzb9aT
+         oguw==
+X-Gm-Message-State: AFqh2kopaGFXCS31G9QFFNKD0Wdx4brYLVO7F7mM3kgPKeIDZ7/6Nl4c
+        cvayAxXlQywqlqhAPdA64PrUPCYpIqRv5kmCvqNZ
+X-Google-Smtp-Source: AMrXdXsgdIQ4X4OUTR4u+VAD5j+EGTbU55NeMLJocpClVYburuQJFgP3O9hiZy+wU1Ngxjp9daU/WDQsGB+hBC/8thA=
+X-Received: by 2002:a17:902:cec8:b0:192:6675:8636 with SMTP id
+ d8-20020a170902cec800b0019266758636mr4279090plg.15.1673470857931; Wed, 11 Jan
+ 2023 13:00:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>
-From:   Walt Holman <waltholman09@gmail.com>
-Subject: [PATCH] HID: hid-logitech-hidpp: Add support for Logitech G923 wheel
- Xbox Edition (Take 2)
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230109180717.58855-1-casey@schaufler-ca.com> <20230109180717.58855-2-casey@schaufler-ca.com>
+In-Reply-To: <20230109180717.58855-2-casey@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 11 Jan 2023 16:00:46 -0500
+Message-ID: <CAHC9VhRs6BxukV97BaDuj6GDJwhiy+-vCmDfRUyojJiBUV2z1g@mail.gmail.com>
+Subject: Re: [PATCH v5 1/8] LSM: Identify modules by more than name
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
+        jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Jan 9, 2023 at 1:07 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> Create a struct lsm_id to contain identifying information
+> about Linux Security Modules (LSMs). At inception this contains
+> the name of the module, an identifier associated with the security
+> module and an integer member "attrs_used" which identifies the API
+> related data associated with each security module. The initial set
+> of features maps to information that has traditionaly been available
+> in /proc/self/attr. They are documented in a new userspace-api file.
+> Change the security_add_hooks() interface to use this structure.
+> Change the individual modules to maintain their own struct lsm_id
+> and pass it to security_add_hooks().
+>
+> The values are for LSM identifiers are defined in a new UAPI
+> header file linux/lsm.h. Each existing LSM has been updated to
+> include it's LSMID in the lsm_id.
+>
+> The LSM ID values are sequential, with the oldest module
+> LSM_ID_CAPABILITY being the lowest value and the existing modules
+> numbered in the order they were included in the main line kernel.
+> This is an arbitrary convention for assigning the values, but
+> none better presents itself. The value 0 is defined as being invalid.
+> The values 1-99 are reserved for any special case uses which may
+> arise in the future. This may include attributes of the LSM
+> infrastructure itself, possibly related to namespacing or network
+> attribute management. A special range is identified for such attributes
+> to help reduce confusion for developers unfamiliar with LSMs.
+>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> ---
+>  Documentation/userspace-api/index.rst |  1 +
+>  Documentation/userspace-api/lsm.rst   | 55 +++++++++++++++++++++++++++
+>  include/linux/lsm_hooks.h             | 18 ++++++++-
+>  include/uapi/linux/lsm.h              | 55 +++++++++++++++++++++++++++
+>  security/apparmor/lsm.c               |  9 ++++-
+>  security/bpf/hooks.c                  | 13 ++++++-
+>  security/commoncap.c                  |  8 +++-
+>  security/landlock/cred.c              |  2 +-
+>  security/landlock/fs.c                |  2 +-
+>  security/landlock/ptrace.c            |  2 +-
+>  security/landlock/setup.c             |  6 +++
+>  security/landlock/setup.h             |  1 +
+>  security/loadpin/loadpin.c            |  9 ++++-
+>  security/lockdown/lockdown.c          |  8 +++-
+>  security/safesetid/lsm.c              |  9 ++++-
+>  security/security.c                   | 12 +++---
+>  security/selinux/hooks.c              | 11 +++++-
+>  security/smack/smack_lsm.c            |  9 ++++-
+>  security/tomoyo/tomoyo.c              |  9 ++++-
+>  security/yama/yama_lsm.c              |  8 +++-
+>  20 files changed, 226 insertions(+), 21 deletions(-)
+>  create mode 100644 Documentation/userspace-api/lsm.rst
+>  create mode 100644 include/uapi/linux/lsm.h
 
-This patch adds support for the Logitech G923 Xbox edition steering wheel. This uses the hid-logitech-hidpp kernel module and from my testing, force feedback and all buttons work. This requires the usb_modeswitch application to setup the device in PC mode with a magic string that is the same as the Logitech 920 wheel.
+Mostly just nitpicky stuff below ...
 
-Signed-off-by: Walt Holman waltholman09@gmail.com
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index 0a5ba81f7367..6f2cabb79ec4 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -1665,6 +1665,20 @@ struct security_hook_heads {
+>         #undef LSM_HOOK
+>  } __randomize_layout;
+>
+> +/**
+> + * struct lsm_id - identify a Linux Security Module.
 
-diff -uprN linux-6.2-rc3-source/drivers/hid/hid-ids.h linux-6.2-rc3-target/drivers/hid/hid-ids.h
---- linux-6.2-rc3-source/drivers/hid/hid-ids.h	2023-01-10 15:03:06.000000000 -0600
-+++ linux-6.2-rc3-target/drivers/hid/hid-ids.h	2023-01-11 13:19:39.460052754 -0600
-@@ -820,6 +820,7 @@
-  #define USB_DEVICE_ID_LOGITECH_G510_USB_AUDIO	0xc22e
-  #define USB_DEVICE_ID_LOGITECH_G29_WHEEL	0xc24f
-  #define USB_DEVICE_ID_LOGITECH_G920_WHEEL	0xc262
-+#define USB_DEVICE_ID_LOGITECH_G923_XBOX_WHEEL	0xc26e
-  #define USB_DEVICE_ID_LOGITECH_WINGMAN_F3D	0xc283
-  #define USB_DEVICE_ID_LOGITECH_FORCE3D_PRO	0xc286
-  #define USB_DEVICE_ID_LOGITECH_FLIGHT_SYSTEM_G940	0xc287
-diff -uprN linux-6.2-rc3-source/drivers/hid/hid-logitech-hidpp.c linux-6.2-rc3-target/drivers/hid/hid-logitech-hidpp.c
---- linux-6.2-rc3-source/drivers/hid/hid-logitech-hidpp.c	2023-01-10 15:03:06.000000000 -0600
-+++ linux-6.2-rc3-target/drivers/hid/hid-logitech-hidpp.c	2023-01-11 13:19:39.460052754 -0600
-@@ -4347,6 +4347,9 @@ static const struct hid_device_id hidpp_
-  	{ /* Logitech G920 Wheel over USB */
-  	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G920_WHEEL),
-  		.driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS},
-+	{ /* Logitech G923 Wheel (Xbox version) over USB */
-+	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G923_XBOX_WHEEL),
-+		.driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS },
-  	{ /* Logitech G Pro Gaming Mouse over USB */
-  	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC088) },
-  
+According to the kernel-doc documentation it looks like "identify"
+should be capitalized.
+
+* https://docs.kernel.org/doc-guide/kernel-doc.html
+
+> + * @lsm: Name of the LSM. Must be approved by the LSM maintainers.
+> + * @id: LSM ID number from uapi/linux/lsm.h
+> + * @attrs_used: Which attributes this LSM supports.
+
+In a bit of a reversal to the above comment, it appears that the
+parameter descriptions should not start with a capital and should not
+end with punctuation:
+
+  * @lsm: name of the LSM, must be approved by the LSM maintainers
+
+> + * Contains the information that identifies the LSM.
+> + */
+> +struct lsm_id {
+> +       const u8        *lsm;
+> +       u32             id;
+> +       u64             attrs_used;
+> +};
+
+> @@ -1708,7 +1722,7 @@ extern struct security_hook_heads security_hook_heads;
+>  extern char *lsm_names;
+>
+>  extern void security_add_hooks(struct security_hook_list *hooks, int count,
+> -                               const char *lsm);
+> +                              struct lsm_id *lsmid);
+
+We should be able to mark @lsmid as a const, right?
+
+> diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
+> new file mode 100644
+> index 000000000000..61a91b7d946f
+> --- /dev/null
+> +++ b/include/uapi/linux/lsm.h
+> @@ -0,0 +1,55 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +/*
+> + * Linux Security Modules (LSM) - User space API
+> + *
+> + * Copyright (C) 2022 Casey Schaufler <casey@schaufler-ca.com>
+> + * Copyright (C) 2022 Intel Corporation
+> + */
+
+This file should be added to the SECURITY SUBSYSTEM section in MAINTAINERS:
+
+  F: include/uapi/linux/lsm.h
+
+> +#ifndef _UAPI_LINUX_LSM_H
+> +#define _UAPI_LINUX_LSM_H
+> +
+> +/*
+> + * ID values to identify security modules.
+> + * A system may use more than one security module.
+> + *
+> + * A value of 0 is considered invalid.
+> + * Values 1-99 are reserved for future use.
+> + * The interface is designed to extend to attributes beyond those which
+> + * are active today. Currently all the attributes are specific to the
+> + * individual modules. The LSM infrastructure itself has no variable state,
+> + * but that may change. One proposal would allow loadable modules, in which
+> + * case an attribute such as LSM_IS_LOADABLE might identify the dynamic
+> + * modules. Another potential attribute could be which security modules is
+> + * associated withnetwork labeling using netlabel. Another possible attribute
+> + * could be related to stacking behavior in a namespaced environment.
+> + * While it would be possible to intermingle the LSM infrastructure attribute
+> + * values with the security module provided values, keeping them separate
+> + * provides a clearer distinction.
+> + */
+
+As this is in a UAPI file, let's avoid speculation and stick to just
+the current facts.  Anything we write here with respect to the future
+is likely to be wrong so let's not tempt fate.
+
+Once I reached patch 3/8 I also realized that we may want to have more
+than just 0/invalid as a sentinel value, or at the very least we need
+to redefine 0 as something slightly different if for no other reason
+than we in fs/proc/base.c.  I know it seems a little trivial, but
+since we're talking about values that will be used in the UAPI I think
+we need to give it some thought and discussion.  The only think I can
+think of right now is to redefine 0 as "undefined", which isn't that
+far removed from "invalid" and will not look too terrible in patch 3/8
+- thoughts?
+
+With all that in mind, I would suggest something like this:
+
+  /*
+   * ID tokens to identify Linux Security Modules (LSMs)
+   *
+   * These token values are used to uniquely identify specific LSMs
+   * in the kernel as well in the kernel's LSM userspace API.
+   *
+   * A value of zero/0 is considered undefined and should not be used
+   * outside of the kernel, values 1-99 are reserved for potential
+   * future use.
+      */
+  #define LSM_ID_UNDEF 0
+
+> +#define LSM_ID_CAPABILITY      100
+> +#define LSM_ID_SELINUX         101
+> +#define LSM_ID_SMACK           102
+> +#define LSM_ID_TOMOYO          103
+> +#define LSM_ID_IMA             104
+> +#define LSM_ID_APPARMOR                105
+> +#define LSM_ID_YAMA            106
+> +#define LSM_ID_LOADPIN         107
+> +#define LSM_ID_SAFESETID       108
+> +#define LSM_ID_LOCKDOWN                109
+> +#define LSM_ID_BPF             110
+> +#define LSM_ID_LANDLOCK                111
+> +
+> +/*
+> + * LSM_ATTR_XXX values identify the /proc/.../attr entry that the
+> + * context represents. Not all security modules provide all of these
+> + * values. Some security modules provide none of them.
+> + */
+
+I'd rather see text closer to this:
+
+  /*
+   * LSM attributes
+   *
+   * The LSM_ATTR_XXX definitions identify different LSM
+   * attributes which are used in the kernel's LSM userspace API.
+   * Support for these attributes vary across the different LSMs,
+   * none are required.
+   */
+
+> +#define LSM_ATTR_CURRENT       0x0001
+> +#define LSM_ATTR_EXEC          0x0002
+> +#define LSM_ATTR_FSCREATE      0x0004
+> +#define LSM_ATTR_KEYCREATE     0x0008
+> +#define LSM_ATTR_PREV          0x0010
+> +#define LSM_ATTR_SOCKCREATE    0x0020
+> +
+> +#endif /* _UAPI_LINUX_LSM_H */
+> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+> index c6728a629437..63ea2a995987 100644
+> --- a/security/apparmor/lsm.c
+> +++ b/security/apparmor/lsm.c
+> @@ -24,6 +24,7 @@
+>  #include <linux/zstd.h>
+>  #include <net/sock.h>
+>  #include <uapi/linux/mount.h>
+> +#include <uapi/linux/lsm.h>
+>
+>  #include "include/apparmor.h"
+>  #include "include/apparmorfs.h"
+> @@ -1217,6 +1218,12 @@ struct lsm_blob_sizes apparmor_blob_sizes __lsm_ro_after_init = {
+>         .lbs_task = sizeof(struct aa_task_ctx),
+>  };
+>
+> +static struct lsm_id apparmor_lsmid __lsm_ro_after_init = {
+> +       .lsm = "apparmor",
+> +       .id = LSM_ID_APPARMOR,
+> +       .attrs_used = LSM_ATTR_CURRENT | LSM_ATTR_PREV | LSM_ATTR_EXEC,
+> +};
+
+Perhaps mark this as const in addition to ro_after_init?  This applies
+to all the other @lsm_id defs in this patch too.
+
+> diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+> index e5971fa74fd7..20983ae8d31f 100644
+> --- a/security/bpf/hooks.c
+> +++ b/security/bpf/hooks.c
+> @@ -5,6 +5,7 @@
+>   */
+>  #include <linux/lsm_hooks.h>
+>  #include <linux/bpf_lsm.h>
+> +#include <uapi/linux/lsm.h>
+>
+>  static struct security_hook_list bpf_lsm_hooks[] __lsm_ro_after_init = {
+>         #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
+> @@ -15,9 +16,19 @@ static struct security_hook_list bpf_lsm_hooks[] __lsm_ro_after_init = {
+>         LSM_HOOK_INIT(task_free, bpf_task_storage_free),
+>  };
+>
+> +/*
+> + * slot has to be LSMBLOB_NEEDED because some of the hooks
+> + * supplied by this module require a slot.
+> + */
+
+I don't think we need the above comment here, right?
+
+--
+paul-moore.com
