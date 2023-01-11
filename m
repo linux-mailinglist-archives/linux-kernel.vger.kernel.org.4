@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B3A665C61
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71CC665C67
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234005AbjAKNYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
+        id S235843AbjAKNYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbjAKNXx (ORCPT
+        with ESMTP id S233532AbjAKNXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:23:53 -0500
+        Wed, 11 Jan 2023 08:23:54 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF4A2BE8;
-        Wed, 11 Jan 2023 05:23:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A9A3883;
+        Wed, 11 Jan 2023 05:23:54 -0800 (PST)
 Received: from beast.luon.net (simons.connected.by.freedominter.net [45.83.240.172])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sjoerd)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B1A896602DA0;
-        Wed, 11 Jan 2023 13:23:51 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EA9A76602DA4;
+        Wed, 11 Jan 2023 13:23:52 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673443431;
-        bh=LFTN9teDna8hPSGoSa4Zf5XgtwtjA6FViA3w18oZMyU=;
+        s=mail; t=1673443433;
+        bh=vrExRKWn1yvyb41DuKIVLLzWMKJ/c2ehX7FeN9vg274=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J/qwKz1xiRNRjg87joiIBD68PQgf8S8jA1L0o/5PKTENHKp9ThwwIG/iPImachD0j
-         ex3oRi8A2RWfj3K8IS689yqj47fYg6O5dBzZ75ffcTglIhZam9cAYtF7lQN08TwAl3
-         qeF6oZfqF2mEjKEYLw+92V+DewvZqb58RTldp5EsG3AEj7MnW9pcq98Jzj/0ETw3VM
-         VPWCUdwnegn8QS2foyiBNi/ivOjOk35zkwWodv5bDFI2s27TrN8c9K7O56jhgOhUVX
-         EQMh0C+vOzMAQEGhb2dv7kV6NvKwfQyKbtBli65tVJLFatAWVmBtniILJtZXLtZRVa
-         Ydsx/+YLiVU8Q==
+        b=OYPBdiBMqBf+bvUXUzC1r/CJ38awKGXG9VDCLyw0SqEv+cFbz+Ure96EQ9cn609eg
+         Gnj8a6b8e4qptgUSF0KxL85z7zSUk9jX/Lqj6L2A/9n+ED3CmUwmnB3959nWmXwdpU
+         3Z7grVI0v1lE76yLHgN5quVzy8sD0YKe/JVLZJvi04bFkkjJkV/V63FelZa7wQJ+LY
+         psvcaScd4+daIwBmCGRmNG9nFn9yyVrep53ogTn6zkmkPpTaHbnaGFawxBcjxqN2BP
+         F23ypkI3fnF896BCfVNWjqK8JjlQslmBIOUxlLMomV5C1mjbWcQvUwvffLXGhLY6N7
+         IIa3Sm8/+naFw==
 Received: by beast.luon.net (Postfix, from userid 1000)
-        id 6874B60ABD65; Wed, 11 Jan 2023 14:23:49 +0100 (CET)
+        id 318DF60ABD67; Wed, 11 Jan 2023 14:23:50 +0100 (CET)
 From:   Sjoerd Simons <sjoerd@collabora.com>
 To:     Nishanth Menon <nm@ti.com>
 Cc:     kernel@collabora.com, Nitin Yadav <n-yadav@ti.com>,
         martyn.welch@collabora.com,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/3] arm64: dts: ti: k3-am62-main: Update OTAP and ITAP delay select
-Date:   Wed, 11 Jan 2023 14:23:45 +0100
-Message-Id: <20230111132348.553061-2-sjoerd@collabora.com>
+        Tero Kristo <kristo@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/3] arm64: dts: ti: k3-am62-main: Add support for USB
+Date:   Wed, 11 Jan 2023 14:23:46 +0100
+Message-Id: <20230111132348.553061-3-sjoerd@collabora.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111132348.553061-1-sjoerd@collabora.com>
 References: <20230111132348.553061-1-sjoerd@collabora.com>
@@ -61,17 +61,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nitin Yadav <n-yadav@ti.com>
+From: Aswath Govindraju <a-govindraju@ti.com>
 
-UHS Class U1 sd-card are not getting detected due to incorrect
-OTAP/ITAP delay select values in linux. Update OTAP and ITAP
-delay select values for various speed modes. For sdhci0, update
-OTAP delay values for ddr52 & HS200 and add ITAP delay for legacy
-& mmc-hs. For sdhci1 & sdhci2, update OTAP & ITAP delay select
-recommended as in RIOT for various speed modes.
+AM62 SoC has two instances of USB on it. Therefore, add support for the
+same.
 
-Signed-off-by: Nitin Yadav <n-yadav@ti.com>
-[cherry-pick from vendor BSP]
+Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+[cherry-pick from vendor BSP]]
 Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
 Tested-by: Martyn Welch <martyn.welch@collabora.com>
 
@@ -84,82 +81,64 @@ Changes in v3:
 Changes in v2:
 - Rebase against linux-next 20221220
 
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 46 ++++++++++++------------
- 1 file changed, 24 insertions(+), 22 deletions(-)
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 44 ++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-index 072903649d6e..466b94d1cee9 100644
+index 466b94d1cee9..4da15e8c956f 100644
 --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
 +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-@@ -501,8 +501,10 @@ sdhci0: mmc@fa10000 {
- 		ti,clkbuf-sel = <0x7>;
- 		ti,otap-del-sel-legacy = <0x0>;
- 		ti,otap-del-sel-mmc-hs = <0x0>;
--		ti,otap-del-sel-ddr52 = <0x9>;
--		ti,otap-del-sel-hs200 = <0x6>;
-+		ti,otap-del-sel-ddr52 = <0x5>;
-+		ti,otap-del-sel-hs200 = <0x5>;
-+		ti,itap-del-sel-legacy = <0xa>;
-+		ti,itap-del-sel-mmc-hs = <0x1>;
+@@ -555,6 +555,50 @@ sdhci2: mmc@fa20000 {
  		status = "disabled";
  	};
  
-@@ -514,17 +516,17 @@ sdhci1: mmc@fa00000 {
- 		clocks = <&k3_clks 58 5>, <&k3_clks 58 6>;
- 		clock-names = "clk_ahb", "clk_xin";
- 		ti,trm-icp = <0x2>;
--		ti,otap-del-sel-legacy = <0x0>;
-+		ti,otap-del-sel-legacy = <0x8>;
- 		ti,otap-del-sel-sd-hs = <0x0>;
--		ti,otap-del-sel-sdr12 = <0xf>;
--		ti,otap-del-sel-sdr25 = <0xf>;
--		ti,otap-del-sel-sdr50 = <0xc>;
--		ti,otap-del-sel-sdr104 = <0x6>;
--		ti,otap-del-sel-ddr50 = <0x9>;
--		ti,itap-del-sel-legacy = <0x0>;
--		ti,itap-del-sel-sd-hs = <0x0>;
--		ti,itap-del-sel-sdr12 = <0x0>;
--		ti,itap-del-sel-sdr25 = <0x0>;
-+		ti,otap-del-sel-sdr12 = <0x0>;
-+		ti,otap-del-sel-sdr25 = <0x0>;
-+		ti,otap-del-sel-sdr50 = <0x8>;
-+		ti,otap-del-sel-sdr104 = <0x7>;
-+		ti,otap-del-sel-ddr50 = <0x4>;
-+		ti,itap-del-sel-legacy = <0xa>;
-+		ti,itap-del-sel-sd-hs = <0x1>;
-+		ti,itap-del-sel-sdr12 = <0xa>;
-+		ti,itap-del-sel-sdr25 = <0x1>;
- 		ti,clkbuf-sel = <0x7>;
- 		bus-width = <4>;
- 		status = "disabled";
-@@ -538,17 +540,17 @@ sdhci2: mmc@fa20000 {
- 		clocks = <&k3_clks 184 5>, <&k3_clks 184 6>;
- 		clock-names = "clk_ahb", "clk_xin";
- 		ti,trm-icp = <0x2>;
--		ti,otap-del-sel-legacy = <0x0>;
-+		ti,otap-del-sel-legacy = <0x8>;
- 		ti,otap-del-sel-sd-hs = <0x0>;
--		ti,otap-del-sel-sdr12 = <0xf>;
--		ti,otap-del-sel-sdr25 = <0xf>;
--		ti,otap-del-sel-sdr50 = <0xc>;
--		ti,otap-del-sel-sdr104 = <0x6>;
--		ti,otap-del-sel-ddr50 = <0x9>;
--		ti,itap-del-sel-legacy = <0x0>;
--		ti,itap-del-sel-sd-hs = <0x0>;
--		ti,itap-del-sel-sdr12 = <0x0>;
--		ti,itap-del-sel-sdr25 = <0x0>;
-+		ti,otap-del-sel-sdr12 = <0x0>;
-+		ti,otap-del-sel-sdr25 = <0x0>;
-+		ti,otap-del-sel-sdr50 = <0x8>;
-+		ti,otap-del-sel-sdr104 = <0x7>;
-+		ti,otap-del-sel-ddr50 = <0x8>;
-+		ti,itap-del-sel-legacy = <0xa>;
-+		ti,itap-del-sel-sd-hs = <0xa>;
-+		ti,itap-del-sel-sdr12 = <0xa>;
-+		ti,itap-del-sel-sdr25 = <0x1>;
- 		ti,clkbuf-sel = <0x7>;
- 		status = "disabled";
- 	};
++	usbss0: dwc3-usb@f900000 {
++		compatible = "ti,am62-usb";
++		reg = <0x00 0x0f900000 0x00 0x800>;
++		clocks = <&k3_clks 161 3>;
++		clock-names = "ref";
++		ti,syscon-phy-pll-refclk = <&wkup_conf 0x4008>;
++		#address-cells = <2>;
++		#size-cells = <2>;
++		power-domains = <&k3_pds 178 TI_SCI_PD_EXCLUSIVE>;
++		ranges;
++
++		usb0: usb@31000000 {
++			compatible = "snps,dwc3";
++			reg =<0x00 0x31000000 0x00 0x50000>;
++			interrupts = <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>, /* irq.0 */
++				     <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>; /* irq.0 */
++			interrupt-names = "host", "peripheral";
++			maximum-speed = "high-speed";
++			dr_mode = "otg";
++		};
++	};
++
++	usbss1: dwc3-usb@f910000 {
++		compatible = "ti,am62-usb";
++		reg = <0x00 0x0f910000 0x00 0x800>;
++		clocks = <&k3_clks 162 3>;
++		clock-names = "ref";
++		ti,syscon-phy-pll-refclk = <&wkup_conf 0x4018>;
++		#address-cells = <2>;
++		#size-cells = <2>;
++		power-domains = <&k3_pds 179 TI_SCI_PD_EXCLUSIVE>;
++		ranges;
++
++		usb1: usb@31100000 {
++			compatible = "snps,dwc3";
++			reg =<0x00 0x31100000 0x00 0x50000>;
++			interrupts = <GIC_SPI 226 IRQ_TYPE_LEVEL_HIGH>, /* irq.0 */
++				     <GIC_SPI 226 IRQ_TYPE_LEVEL_HIGH>; /* irq.0 */
++			interrupt-names = "host", "peripheral";
++			maximum-speed = "high-speed";
++			dr_mode = "otg";
++		};
++	};
++
+ 	fss: bus@fc00000 {
+ 		compatible = "simple-bus";
+ 		reg = <0x00 0x0fc00000 0x00 0x70000>;
 -- 
 2.39.0
 
