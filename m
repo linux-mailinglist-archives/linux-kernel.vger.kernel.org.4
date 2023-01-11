@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADFD66558C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 08:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A07F3665594
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 09:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjAKH5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 02:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S231653AbjAKIAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 03:00:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236065AbjAKH4j (ORCPT
+        with ESMTP id S231377AbjAKIAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 02:56:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7045FB1;
-        Tue, 10 Jan 2023 23:56:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDE30B81AC7;
-        Wed, 11 Jan 2023 07:56:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69C57C433F0;
-        Wed, 11 Jan 2023 07:56:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673423783;
-        bh=2u7nhABhalr1syMdvDWnyzBAsvh3jha2i2GvzP5W6AI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lErlo3e4xmSv9OKudecdXAEB8QKLE+sW6hoWXlzF6rL5I42SakD9/9/DLREwZSV8g
-         9J8b0+XtLK4QNsC5PYtAKQNK5Zd3CuF78U2GAiFLXVKRRdlMyYhyOU7UNkeF2NLsG4
-         ctr8l/MvyaNfZtEkkcTaGLxQF8v2uYhCULiWvtQQrYRBjjuu0SQovDRAvnLvuzYlsu
-         4rcAJLmBPzhTq1WN8Agx5RhFG3l+tCgOiWXqxwc9N/F6xD2Qm1nNK+7qwkKWXosd4g
-         6nqWZYMOSA+8NRS7VZlgkNB5m1bt17pXtv24kJ1v8fkqXpI18fJCVHYIfE0Zj7HDLM
-         JNn7Mm/+oqSbg==
-Message-ID: <e83108ff-3f9b-8087-f7da-3b95bf89f0d3@kernel.org>
-Date:   Wed, 11 Jan 2023 08:56:15 +0100
+        Wed, 11 Jan 2023 03:00:25 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 Jan 2023 00:00:23 PST
+Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D08312
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 00:00:23 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="82239538"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665414000"; 
+   d="scan'208";a="82239538"
+Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
+  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP; 11 Jan 2023 16:59:16 +0900
+Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
+        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 341DFE8520;
+        Wed, 11 Jan 2023 16:59:16 +0900 (JST)
+Received: from yto-om4.fujitsu.com (yto-om4.o.css.fujitsu.com [10.128.89.165])
+        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 7D81AD5077;
+        Wed, 11 Jan 2023 16:59:15 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om4.fujitsu.com (Postfix) with ESMTP id 584414007AF34;
+        Wed, 11 Jan 2023 16:59:15 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v5 0/5] Some improvements of resctrl selftest
+Date:   Wed, 11 Jan 2023 16:57:57 +0900
+Message-Id: <20230111075802.3556803-1-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 1/6] dt-bindings: media: platform: visconti: Add
- Toshiba Visconti Video Input Interface bindings
-To:     yuji2.ishikawa@toshiba.co.jp, hverkuil@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        nobuhiro1.iwamatsu@toshiba.co.jp
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230110014143.18684-1-yuji2.ishikawa@toshiba.co.jp>
- <20230110014143.18684-2-yuji2.ishikawa@toshiba.co.jp>
- <b0245b64-a3eb-a242-8824-9effe0c63f0e@kernel.org>
- <TYAPR01MB6201932EC0EAB58C4228CD4292FC9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <TYAPR01MB6201932EC0EAB58C4228CD4292FC9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2023 03:19, yuji2.ishikawa@toshiba.co.jp wrote:
-> Hello Krzysztof,
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzk@kernel.org>
->> Sent: Wednesday, January 11, 2023 4:31 AM
->> To: ishikawa yuji(石川 悠司 ○ＲＤＣ□ＡＩＴＣ○ＥＡ開)
->> <yuji2.ishikawa@toshiba.co.jp>; Hans Verkuil <hverkuil@xs4all.nl>; Laurent
->> Pinchart <laurent.pinchart@ideasonboard.com>; Mauro Carvalho Chehab
->> <mchehab@kernel.org>; iwamatsu nobuhiro(岩松 信洋 □ＳＷＣ◯ＡＣＴ)
->> <nobuhiro1.iwamatsu@toshiba.co.jp>
->> Cc: linux-media@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
->> linux-kernel@vger.kernel.org; devicetree@vger.kernel.org
->> Subject: Re: [PATCH v4 1/6] dt-bindings: media: platform: visconti: Add Toshiba
->> Visconti Video Input Interface bindings
->>
->> On 10/01/2023 02:41, Yuji Ishikawa wrote:
->>> Adds the Device Tree binding documentation that allows to describe the
->>> Video Input Interface found in Toshiba Visconti SoCs.
->>>
->>> Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
->>> Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
->>
->> Please use scripts/get_maintainers.pl to get a list of necessary people and lists
->> to CC.  It might happen, that command when run on an older kernel, gives you
->> outdated entries.  Therefore please be sure you base your patches on recent
->> Linux kernel.
->>
->> You missed few of them, so clearly this was not sent correctly.
->>
->>
->> Subject: drop second/last, redundant "bindings". The "dt-bindings"
->> prefix is already stating that these are bindings.
-> 
-> Thanks for reporting. The recipient was generated with an older kernel.
-> I'll update the list and send the v5 patch.
+Hello,
 
-The patchset should be rebased and tested on new kernel. But this still
-does not explain missing CC to Rob - he is there since ages...
+The aim of this patch series is to improve the resctrl selftest.
+Without these fixes, some unnecessary processing will be executed
+and test results will be confusing. 
+There is no behavior change in test themselves.
 
-Best regards,
-Krzysztof
+[patch 1] Make write_schemata() run to set up shemata with 100% allocation
+	  on first run in MBM test.
+[patch 2] The MBA test result message is always output as "ok",
+	  make output message to be "not ok" if MBA check result is failed.
+[patch 3] When a child process is created by fork(), the buffer of the 
+	  parent process is also copied. Flush the buffer before
+	  executing fork().
+[patch 4] Add a signal handler to cleanup properly before exiting the 
+	  parent process if there is an error occurs after creating 
+	  a child process with fork() in the CAT test, and unregister
+	  signal handler when each test finished.
+[patch 5] Before exiting each test CMT/CAT/MBM/MBA, clear test result 
+	  files function cat/cmt/mbm/mba_test_cleanup() are called
+	  twice. Delete once.
+
+This patch series is based on Linux v6.2-rc3.
+
+Difference from v4:
+[patch 4] 
+  - Reuse signal handler of other tests(MBM/MBA/CAT).
+  - Unregister signal handler when tests finished.
+  - Fix change log.
+
+Pervious versions of this series:
+[v1] https://lore.kernel.org/lkml/20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com/
+[v2] https://lore.kernel.org/lkml/20221005013933.1486054-1-tan.shaopeng@jp.fujitsu.com/
+[v3] https://lore.kernel.org/lkml/20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com/
+[v4] https://lore.kernel.org/lkml/20221117010541.1014481-1-tan.shaopeng@jp.fujitsu.com/
+
+Shaopeng Tan (5):
+  selftests/resctrl: Fix set up schemata with 100% allocation on first
+    run in MBM test
+  selftests/resctrl: Return MBA check result and make it to output
+    message
+  selftests/resctrl: Flush stdout file buffer before executing fork()
+  selftests/resctrl: Cleanup properly when an error occurs in CAT test
+  selftests/resctrl: Remove duplicate codes that clear each test result
+    file
+
+ tools/testing/selftests/resctrl/cat_test.c    | 27 +++++----
+ tools/testing/selftests/resctrl/cmt_test.c    |  7 +--
+ tools/testing/selftests/resctrl/fill_buf.c    | 14 -----
+ tools/testing/selftests/resctrl/mba_test.c    | 23 ++++----
+ tools/testing/selftests/resctrl/mbm_test.c    | 20 +++----
+ tools/testing/selftests/resctrl/resctrl.h     |  2 +
+ .../testing/selftests/resctrl/resctrl_tests.c |  4 --
+ tools/testing/selftests/resctrl/resctrl_val.c | 57 ++++++++++++++-----
+ tools/testing/selftests/resctrl/resctrlfs.c   |  5 +-
+ 9 files changed, 89 insertions(+), 70 deletions(-)
+
+-- 
+2.27.0
 
