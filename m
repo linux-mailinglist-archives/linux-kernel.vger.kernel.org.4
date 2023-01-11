@@ -2,235 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D55D66615D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A69366615E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235681AbjAKRHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S239541AbjAKRHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:07:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235721AbjAKRGg (ORCPT
+        with ESMTP id S239078AbjAKRGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:06:36 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30DE3D5C5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:04:32 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id i65so8413609pfc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:04:32 -0800 (PST)
+        Wed, 11 Jan 2023 12:06:40 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A884321B9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:04:53 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id c82so8412232ybf.6
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:04:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P78j3kGdgbF9v+wVhjVXmiioDAvHYt+bU3WJdRcxjVc=;
-        b=C2UHUU75bCsITqXMa69Uq2TNgTJ3Znhtsr+7JDI2XoJ6CCtRsvdhRA9ITmF95/igPs
-         kL8F+gGvg1t+nD5/mspHv+XVGXY2JRu7wpx84uZiNW+r4I0YfWmFfp+y+4WNsXsm07P2
-         M45Dc/AwtLaQASmTND4j4dJnx6DPqiwAMefAE=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LTJYmIxK7HXmivC0K3EGms7i6vie+YSU0ogRPhLAOWY=;
+        b=mNAGtaf8jUOcbLC2GpY2IoOKVHZsaeSbuTMqB0BfbfYLRyVOF36Ix55jRi6VXABc2C
+         TxHjeefcMzNJWY/YYv6W5ahFqaQmr9lvf1jGIqiEx8ySeybJFbSXh7kyg0REyOpFJ3nH
+         qgVT4D8lYYrgosLusEdUk6v9fL81IeduQoDY1CoEHY7D6fZ1FTpu9HfIbpxV9/ZgBpjb
+         lhCOVJRxYZXXqUPheviOgPqcc0ccJ7ZE+SCJKJc9myn5grFAs5xj6zbeWKyRGyMjbouQ
+         FlOSd3pY+1imiSyJ1udW76G4nfJkk9sYWezx9f2BI+FYnk36Etq0x095sJRpXZCAhe9E
+         wTIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P78j3kGdgbF9v+wVhjVXmiioDAvHYt+bU3WJdRcxjVc=;
-        b=Qjdezkl3FR+oGRXsT8Ae/c8IXdu7MEWs3KgX6vYVY8LOcZHxIq7B+XMiekxrsyzYIT
-         FSTuAWygJKyrljSzYIo0xCpmvmxoUlveh/Onj4TmE9RvdVt7tX28hVTNorzVZ2JC7jjW
-         3Cj00uad+91fBPVGqHRCID0nh4wnTw+lmPqA2IIpwBMO3cyEYuy3dUbnsKeTVaoYYFGD
-         +x8X0SSn1s5VgD8K1fKrIF4B12chUZHmS+RegxkOcuCeKnDD9QFwTSeY999fOSiDcJFB
-         Kt9FTd6ZWcUPzHkc3bnJZSKpTdUEMQfpCUUQi0hARhpGzp4bNlffedZiRjqjiOi1Eoi5
-         Hm1A==
-X-Gm-Message-State: AFqh2koR/c6+BueYj9SHuQrguVjRIyNycq5ODgABVQ9geBx0awuVjKtU
-        yAkPgKlK7gB7hiUyGptgyTsviu5w8aqlzgyaUlA6TA==
-X-Google-Smtp-Source: AMrXdXuWvmJNAU7a++adQ+TBpesZus/OcSWjKd5zaXgS/SxyQcz0yAMStzIxmwYW+Xwfe/cW6ws0Jfe1BEVp978x/NA=
-X-Received: by 2002:aa7:9584:0:b0:582:46a4:87dc with SMTP id
- z4-20020aa79584000000b0058246a487dcmr3290795pfj.2.1673456672340; Wed, 11 Jan
- 2023 09:04:32 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LTJYmIxK7HXmivC0K3EGms7i6vie+YSU0ogRPhLAOWY=;
+        b=LA1YIVwsiGtkxg4j8M1vkg+/L7BfT0TSfP8FRS42K2nxNAKOem2YdLiyNTNT+oQkV9
+         DPNH003oceTl5QG+wdDmqU6a2Q/qlsNeSJCTBZP33t/71yvMnBaGWhrgZD78aLuaL47K
+         75QZ5CPmU1dWHCGky4V49K1PTRzDbu1yGtKFzlJ70pXmm8cqYsZeEDFwNtctMcjXwqVk
+         C5YgIuAOe8xsoVLytOnIm5K8lKqCQyYVlmpCSAJgFI3WfeydtGW3jLHckzmJEjxpVNJi
+         EMVgdkc3p75+idje7KnHjNVvMzEZfVWgA9UiYKZQWLm9YnQgpj0sBkOHbQ3HkJ/huBMG
+         7BOw==
+X-Gm-Message-State: AFqh2kpaiJoKw9cmQ336oX+cdyeBV+kzaBN2/YTIHNETJSF7IEt6GETv
+        XwpvpeNx1Cl+1WU08qTXgK7lp3GU+uGCmyW/ShCCGQ==
+X-Google-Smtp-Source: AMrXdXuT2tWUr2Hd/aaxX3TJlatyg89hpnEY3Qn0fpRBzhAdGcwVITlGCP7wKe7gcAbYlKYD+1hcbSYSMwXYBplkZ8k=
+X-Received: by 2002:a25:1388:0:b0:7b8:6d00:ef23 with SMTP id
+ 130-20020a251388000000b007b86d00ef23mr2129455ybt.119.1673456692551; Wed, 11
+ Jan 2023 09:04:52 -0800 (PST)
 MIME-Version: 1.0
-References: <CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com>
- <26bd2928-9d62-32b3-4f9f-9dd9293cefeb@leemhuis.info> <CAK7LNAQ5VVRdrewtxrBdw561LL=yY8fdr=i1e7pp4DRht=r_Ww@mail.gmail.com>
- <0ab93345-18e1-15c9-a4a3-066ea1cd862b@leemhuis.info> <CAMj1kXE+LBOBavOre1O8LTGPCmB8m58fbfo92Sx4WukyNAur-A@mail.gmail.com>
- <CAK7LNATQ-NjYxPvGf4o6N5mp9kS07fpphcEn4_9LOMtS2nTbmQ@mail.gmail.com>
-In-Reply-To: <CAK7LNATQ-NjYxPvGf4o6N5mp9kS07fpphcEn4_9LOMtS2nTbmQ@mail.gmail.com>
-From:   Justin Forbes <jmforbes@linuxtx.org>
-Date:   Wed, 11 Jan 2023 11:04:21 -0600
-Message-ID: <CAFxkdAowJuVu_XGDQsWGqm_ofA+GVjz6jNsgUnskSsAydmgLhQ@mail.gmail.com>
-Subject: Re: BUG: arm64: missing build-id from vmlinux
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org, Dennis Gilmore <dennis@ausil.us>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-9-surenb@google.com>
+ <20230111001331.cxdeh52vvta6ok2p@offworld> <CAJuCfpEv--awCY0=R3h5Fez8x74U1EZCzNkq4_7deCYqej5sSA@mail.gmail.com>
+ <Y75x5fGPcJ63pBIp@dhcp22.suse.cz> <Y76HTfIeEt8ZOIH3@gmail.com>
+ <6be809f5554a4faaa22c287ba4224bd0@AcuMS.aculab.com> <CAJuCfpH_VZq99=vGQGJ+evVg5wMPKGsjyawgHnOeoKhtEiAi6w@mail.gmail.com>
+ <Y77ndimzUsVZwjTk@dhcp22.suse.cz>
+In-Reply-To: <Y77ndimzUsVZwjTk@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 11 Jan 2023 09:04:41 -0800
+Message-ID: <CAJuCfpEEiFNAgb6TNwibUyTJ1J3b-rEGCSw63TiK6FSA=HCdtw@mail.gmail.com>
+Subject: Re: [PATCH 08/41] mm: introduce CONFIG_PER_VMA_LOCK
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "michel@lespinasse.org" <michel@lespinasse.org>,
+        "joelaf@google.com" <joelaf@google.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "leewalsh@google.com" <leewalsh@google.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "jglisse@google.com" <jglisse@google.com>,
+        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
+        "arjunroy@google.com" <arjunroy@google.com>,
+        "minchan@google.com" <minchan@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "hughd@google.com" <hughd@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "gurua@google.com" <gurua@google.com>,
+        "laurent.dufour@fr.ibm.com" <laurent.dufour@fr.ibm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "axelrasmussen@google.com" <axelrasmussen@google.com>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        "soheil@google.com" <soheil@google.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "liam.howlett@oracle.com" <liam.howlett@oracle.com>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "gthelen@google.com" <gthelen@google.com>,
+        "ldufour@linux.ibm.com" <ldufour@linux.ibm.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "posk@google.com" <posk@google.com>,
+        "lstoakes@gmail.com" <lstoakes@gmail.com>,
+        "peterjung1337@gmail.com" <peterjung1337@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "hughlynch@google.com" <hughlynch@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tatashin@google.com" <tatashin@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 24, 2022 at 8:17 PM Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
+On Wed, Jan 11, 2023 at 8:44 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> On Thu, Dec 22, 2022 at 8:53 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Wed, 21 Dec 2022 at 17:29, Thorsten Leemhuis
-> > <regressions@leemhuis.info> wrote:
-> > >
-> > > On 21.12.22 16:39, Masahiro Yamada wrote:
-> > > > On Wed, Dec 21, 2022 at 5:23 PM Thorsten Leemhuis
-> > > > <regressions@leemhuis.info> wrote:
-> > > >>
-> > > >> Hi, this is your Linux kernel regression tracker. CCing the regres=
-sion
-> > > >> mailing list, as it should be in the loop for all regressions:
-> > > >> https://docs.kernel.org/admin-guide/reporting-regressions.html
-> > > >>
-> > > >> On 18.12.22 21:51, Dennis Gilmore wrote:
-> > > >>> The changes in https://lore.kernel.org/linux-arm-kernel/166783716=
-442.32724.935158280857906499.b4-ty@kernel.org/T/
-> > > >>> result in vmlinux no longer having a build-id.
-> > > >>
-> > > >> FWIW, that's 994b7ac1697b ("arm64: remove special treatment for th=
-e link
-> > > >> order of head.o") from Masahiro merged through Will this cycle.
-> > > >>
-> > > >>> At the least, this
-> > > >>> causes rpm builds to fail. Reverting the patch does bring back a
-> > > >>> build-id, but there may be a different way to fix the regression
-> > > >>
-> > > >> Makes me wonder if other distros or CIs relying on the build-id ar=
-e
-> > > >> broken, too.
-> > > >>
-> > > >> Anyway, the holiday season is upon us, hence I also wonder if it w=
-ould
-> > > >> be best to revert above change quickly and leave further debugging=
- for 2023.
-> > > >>
-> > > >> Masahiro, Will, what's your option on this?
-> > >
-> > > Masahiro, many thx for looking into this.
-> > >
-> > > > I do not understand why you rush into the revert so quickly.
-> > > > We are before -rc1.
-> > > > We have 7 weeks before the 6.2 release
-> > > > (assuming we will have up to -rc7).
-> > > >
-> > > > If we get -rc6 or -rc7 and we still do not
-> > > > solve the issue, we should consider reverting it.
-> > >
-> > > Because it looked like a regression that makes it harder for people a=
-nd
-> > > CI systems to build and test mainline. To quote
-> > > Documentation/process/handling-regressions.rst (
-> > > https://docs.kernel.org/process/handling-regressions.html ):
-> > >
-> > > """
-> > >  * Fix regressions within two or three days, if they are critical for
-> > > some reason =E2=80=93 for example, if the issue is likely to affect m=
-any users
-> > > of the kernel series in question on all or certain architectures. Not=
-e,
-> > > this includes mainline, as issues like compile errors otherwise might
-> > > prevent many testers or continuous integration systems from testing t=
-he
-> > > series.
-> > > """
-> > >
-> > > I suspect that other distros rely on the build-id as well. Maybe I'm
-> > > wrong with that, but even if only Fedora and derivatives are effected=
- it
-> > > will annoy some people. Sure, each can apply the revert, but before t=
-hat
-> > > everyone affected will spend time debugging the issue first. A quick
-> > > revert in mainline (with a reapply later together with a fix) thus IM=
-HO
-> > > is the most efficient approach afaics.
-> > >
-> >
-> > Agree with Masahiro here.
-> >
-> > The issue seems to be caused by the fact that whichever object gets
-> > linked first gets to decide the type of a section, and so the .notes
-> > section will be of type NOTE if head.o gets linked first, or PROGBITS
-> > otherwise. The latter PROGBITS type seems to be the result of the
-> > compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
-> >
-> > The hunk below fixes it for me, by avoiding notes emitted as PROGBITS.
-> > I'll leave it to Masahiro to decide whether this should be fixed for
-> > arm64 only or for all architectures, but I suspect the latter would be
-> > most appropriate.
-> >
-> > Note that the kernel's rpm-pkg and binrpm-pkg targets seem to be
-> > unaffected by this.
+> On Wed 11-01-23 08:28:49, Suren Baghdasaryan wrote:
+> [...]
+> > Anyhow. Sounds like the overhead of the current design is small enough
+> > to remove CONFIG_PER_VMA_LOCK and let it depend only on architecture
+> > support?
 >
->
-> Thanks for root-causing this.
->
->
-> I like to fix this for all architectures because riscv is also broken.
->
-> https://lore.kernel.org/lkml/20221224192751.810363-1-masahiroy@kernel.org=
-/
+> Yes. Further optimizations can be done on top. Let's not over optimize
+> at this stage.
 
-Appreciate the patch, this does indeed fix the aarch64 issue as well
-and has allowed me to drop the original revert from Fedora.
+Sure, I won't optimize any further.
+Just to expand on your question. Original design would be problematic
+for embedded systems like Android. It notoriously has a high number of
+VMAs due to anonymous VMAs being named, which prevents them from
+merging. 2M per process increase would raise questions, therefore I
+felt the need for optimizing the memory overhead which is done in the
+last patch.
+Thanks for the feedback!
 
-Jusitn
-
->
-> > diff --git a/arch/arm64/include/asm/assembler.h
-> > b/arch/arm64/include/asm/assembler.h
-> > index 376a980f2bad08bb..10a172601fe7f53f 100644
-> > --- a/arch/arm64/include/asm/assembler.h
-> > +++ b/arch/arm64/include/asm/assembler.h
-> > @@ -818,7 +818,7 @@ alternative_endif
-> >
-> >  #ifdef GNU_PROPERTY_AARCH64_FEATURE_1_DEFAULT
-> >  .macro emit_aarch64_feature_1_and, feat=3DGNU_PROPERTY_AARCH64_FEATURE=
-_1_DEFAULT
-> > -       .pushsection .note.gnu.property, "a"
-> > +       .pushsection .note.gnu.property, "a", %note
-> >         .align  3
-> >         .long   2f - 1f
-> >         .long   6f - 3f
->
->
-> I did not fold this hunk in my patch.
->
-> I compiled with CONFIG_ARM64_BTI_KERNEL=3Dy.
->
-> .note.gnu.property section in VDSO was already NOTE
-> without this hunk.
->
->
->
->
->
->
->
-> > diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinu=
-x.lds.S
-> > index 4c13dafc98b8400f..8a8044dea71b0609 100644
-> > --- a/arch/arm64/kernel/vmlinux.lds.S
-> > +++ b/arch/arm64/kernel/vmlinux.lds.S
-> > @@ -160,6 +160,7 @@ SECTIONS
-> >         /DISCARD/ : {
-> >                 *(.interp .dynamic)
-> >                 *(.dynsym .dynstr .hash .gnu.hash)
-> > +               *(.note.GNU-stack) # emitted as PROGBITS
-> >         }
-> >
-> >         . =3D KIMAGE_VADDR;
->
->
->
 > --
-> Best Regards
-> Masahiro Yamada
+> Michal Hocko
+> SUSE Labs
