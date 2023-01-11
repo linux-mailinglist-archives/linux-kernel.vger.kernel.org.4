@@ -2,100 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA996660EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D516660F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbjAKQqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:46:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
+        id S234012AbjAKQuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbjAKQqg (ORCPT
+        with ESMTP id S233587AbjAKQuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:46:36 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F358AE014;
-        Wed, 11 Jan 2023 08:46:34 -0800 (PST)
-From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1673455592;
-        bh=LXP8YNxMczzf+pLAFEBraHS71TcH5D0s/f2HVc8xxo4=;
-        h=From:Date:Subject:To:Cc:From;
-        b=Yc7Axi0+ryvHb7W5TZEecULFxIr2/k+ULGBcJLv9MmdtQxO+I2KUWWZhT+VjMwDhh
-         AuhOjhBzWEPa37T9RGGPkGImtbwdT0GKR92tM6q+85o807NPlBRqR5TU2Xa3osqSOC
-         IEFMfTOd6P1rWxkPurgdnJC4vi+5VxrlFP3enSU8=
-Date:   Wed, 11 Jan 2023 16:46:30 +0000
-Subject: [PATCH RESEND v3] nsfs: add compat ioctl handler
+        Wed, 11 Jan 2023 11:50:02 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B9A140C1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:50:00 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id i188so16309086vsi.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:50:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c06q7Fj57CAs5lFLpRgHaQZHKGNjLTDnde3ARKQh2IA=;
+        b=Sc9I5cNm7pkDNxYXsObVjnMUNUZcyzfizODDVP/Q3lGn6qJJ6Yeul+s80nch9p42qG
+         5GR2SbUsFX4KvorpUA9NQ9ywig82Zk89dcETvWPg8LT2cPhipGzzJp3SCD1CPFBBVOPi
+         S0BUVvp0drAKAjatDJUKjaP62x26uN5ZzGX6QGtoQbRpF6XmOnFX9aS9GMJv5ROyKxtI
+         xa5Np/J2f34PQI0Bmy3TAJhxNc+LPqy2KxXNvNjzXCQxX5xe2UIWMAWz9r41WRGfN3r9
+         dihRiYUgo5b84QX9qmeMfgMck83S7IqHH3Qte2Px9EQK6eQmmk13ZXENCPOdkDkd8uk5
+         X+cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c06q7Fj57CAs5lFLpRgHaQZHKGNjLTDnde3ARKQh2IA=;
+        b=78mGJi38NCpo/438yRk8YwPZjVqBOGdH/xtL0YaXXlexyuTnF3ENq8RbaUs6e9Jud5
+         qPX4dY8mXt/dhlaSU7ZukBWMeA+zGJ3OHrW33yOyN1jpUNHSlSB55Hxoo6aadygQPWQR
+         lO1fT8IBgN3ma6fgt9uF87kcdSF9KI2DjdRujVdEOexTl7Z/1BznyE1uMBaH3Ow6xWxo
+         7TCmqb4x27ehZL0dwU/jUOD5HvmGIbJeeNDsAD71MWP6i+/+Mfi333qZs8CT+d1J3D2O
+         t3iuccPzEKRSeR6AtNhsdmp1Eu+G5QNHyKtFgz1XLKfqpbSvk4HKuC8t9FU3MUahhkV6
+         hyqQ==
+X-Gm-Message-State: AFqh2krU5aSc3MkH9Qlg44A8w2Unycnao09K540GRzbaskVFLV2v2pRT
+        w5WkRXOD0Tu4ox8JJeMyDK75cPAQYdGgNDdnpC4bbQ==
+X-Google-Smtp-Source: AMrXdXsdW/eFsF3QAm7+LGBlxkFvVtaitIjRBaku04sp1p5AdQfn981S+UweIZPGH4rS5OUs3W/GgsFx2EPrTEuez7A=
+X-Received: by 2002:a05:6102:c4e:b0:3c8:c513:197 with SMTP id
+ y14-20020a0561020c4e00b003c8c5130197mr7644776vss.9.1673455799584; Wed, 11 Jan
+ 2023 08:49:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221214-nsfs-ioctl-compat-v3-1-dce2d26e1fec@weissschuh.net>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrey Vagin <avagin@openvz.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Serge Hallyn <serge@hallyn.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Karel Zak <kzak@redhat.com>,
-        Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1673455590; l=1768;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=LXP8YNxMczzf+pLAFEBraHS71TcH5D0s/f2HVc8xxo4=;
- b=ZgToiTDahdoWp0LhjVZMSRvT+AAWvdKPw60kow4YX/v6R6SPspt8FjTS/3efh5vLpJ83nXZvASoX
- nyhNP5wUAJRM+BuYiO+2gubO1tKh+erPxDYgV+xtmNS40ENURsj3
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+References: <20230110180018.288460217@linuxfoundation.org>
+In-Reply-To: <20230110180018.288460217@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 11 Jan 2023 22:19:48 +0530
+Message-ID: <CA+G9fYuLC+qMFYOCUwonVGs-a0OAfUdazwwnDHWTQmBe7WYM+g@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/159] 6.1.5-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As all parameters and return values of the ioctls have the same
-representation on both 32bit and 64bit we can reuse the normal ioctl
-handler for the compat handler via compat_ptr_ioctl().
+On Tue, 10 Jan 2023 at 23:44, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.5 release.
+> There are 159 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 Jan 2023 17:59:42 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.5-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-All nsfs ioctls return a plain "int" filedescriptor which is a signed
-4-byte integer type on both 32bit and 64bit.
-The only parameter taken is by NS_GET_OWNER_UID and is a pointer to a
-"uid_t" which is a 4-byte unsigned integer type on both 32bit and 64bit.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Fixes: 6786741dbf99 ("nsfs: add ioctl to get an owning user namespace for ns file descriptor")
-Reported-by: Karel Zak <kzak@redhat.com>
-Link: https://github.com/util-linux/util-linux/pull/1924#issuecomment-1344133656
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-Changes in v3:
-- Resend without changes
-  v1 and v2 did not reach the mailing lists due to an issue in my mail setup
-- Link to v2: https://lore.kernel.org/r/20221214-nsfs-ioctl-compat-v2-0-b295bb3913f6@weissschuh.net
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Changes in v2:
-- Use compat_ptr_ioctl()
-- Link to v1: https://lore.kernel.org/r/20221214-nsfs-ioctl-compat-v1-0-b169796000b2@weissschuh.net
----
- fs/nsfs.c | 1 +
- 1 file changed, 1 insertion(+)
+NOTE:
+Regression reported on FVP details can be found in this link,
+https://lore.kernel.org/stable/Y76ykHsQcyusWNah@debian/T/#m9dd9798da554c58e=
+5634205de1cb4203d065a177
 
-diff --git a/fs/nsfs.c b/fs/nsfs.c
-index 3506f6074288..c28f69edef97 100644
---- a/fs/nsfs.c
-+++ b/fs/nsfs.c
-@@ -21,6 +21,7 @@ static long ns_ioctl(struct file *filp, unsigned int ioctl,
- static const struct file_operations ns_file_operations = {
- 	.llseek		= no_llseek,
- 	.unlocked_ioctl = ns_ioctl,
-+	.compat_ioctl   = compat_ptr_ioctl,
- };
- 
- static char *ns_dname(struct dentry *dentry, char *buffer, int buflen)
+## Build
+* kernel: 6.1.5-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 06bcfb15cd3bb7bfcfa0b06528b2ba3013d2d17b
+* git describe: v6.1.4-160-g06bcfb15cd3b
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.4=
+-160-g06bcfb15cd3b
 
----
-base-commit: f9ff5644bcc04221bae56f922122f2b7f5d24d62
-change-id: 20221214-nsfs-ioctl-compat-1548bf6581a7
+## Test Regressions (compared to v6.1.4)
 
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+## Metric Regressions (compared to v6.1.4)
+
+## Test Fixes (compared to v6.1.4)
+
+## Metric Fixes (compared to v6.1.4)
+
+## Test result summary
+total: 183653, pass: 152799, fail: 5075, skip: 25752, xfail: 27
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 148 passed, 3 failed
+* arm64: 51 total, 50 passed, 1 failed
+* i386: 39 total, 36 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 32 passed, 6 failed
+* riscv: 16 total, 15 passed, 1 failed
+* s390: 16 total, 13 passed, 3 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 44 total, 44 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ip
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
