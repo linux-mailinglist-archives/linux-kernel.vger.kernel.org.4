@@ -2,235 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AE2665EDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6DA665EDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:16:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbjAKPQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
+        id S235423AbjAKPQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbjAKPQK (ORCPT
+        with ESMTP id S235286AbjAKPQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:16:10 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2089.outbound.protection.outlook.com [40.107.247.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09754E01C;
-        Wed, 11 Jan 2023 07:16:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JRnPs9tHuHTjpNSFY563+pdY6tS1jsAFen8AGXNgYpEdvsTCX6lCFdTokayf3daYKTWu9FU3ybrl36WcC18ezejo7fl/7rmdqMS90np46R+aDCZtv2ZAnu5uhFJyMCIT/vcKkRu6x8LyrBcHSQjeSdpZ7DAe/UAa2ZzjVkU+bzF3zI8Dhe0TWvj8tjMVPhxS9roTSBnu7E836QoeS04iyXd7el6+NY0AbBeKqZrdCjmHkFLv/hM2m+EQq3TDT0RJjNxR1mubRktBFE7cd22Kpr7WPF6vVeMvg1k2e0lBaqjO2yQt4rEx29EEWEnK3/vRtnne2m8pluLgeSp82ao8JA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+tB93liz9RnFxTGcBapsO6NEwR98hhtBcsTfYrUJ35Y=;
- b=Qp+d5BAtSBel6ioTVgbMTjqV9o4lZwSxnVj1PIalIDRE4T3+EG1f1hC1/w1c6SVIMvgAAYmeqKcAPtshBQSi7O5H3BLIPd6LGrcJH/7y3ZQcqxbZyjVFw2wmwIXqUyhG5gRdTdm9nOHeocqlkdcaaiL2H5AiN1Tq7PYECEb8KRDHB2FpYYnqZvNWdqXV74tay+BAX4KWUdXgk1WzXJ8Z/OQxXJBrHamw5qF8DOYbcarsFTLMAqbuzzKXINfO2DPCIy8UpHhwaJmdZoohm3vNWHGBnHQe2dtQ1H6wDA2NJWiTdqbfeRBo+Bpl88a3HAGqZ9hwvY1hOjZ4Zaek3difpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+tB93liz9RnFxTGcBapsO6NEwR98hhtBcsTfYrUJ35Y=;
- b=Jooh+fDNdyCxH2I2nU2gauT2DbLYhA7/VGWBw7PE6/FBcEfqxZ9gactjct6oaeXQG3GybJuYQ57Nsetha1Mi3LE4OQgMeqgdxbGgqUWQT0uq5MOCvco/9Uw93DPSku/i0+qjA8hEHKnjwZZo3Xh9u/JVy6bp/W0dYYKtCdK9a2o=
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by PR3PR04MB7306.eurprd04.prod.outlook.com (2603:10a6:102:81::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
- 2023 15:16:05 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd%6]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 15:16:05 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Chanh Nguyen <chanh@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Rondreis <linhaoguo86@gmail.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Open Source Submission <patches@amperecomputing.com>
-Subject: RE: [EXT] [PATCH v3] USB: gadget: Add ID numbers to configfs-gadget
- driver names
-Thread-Topic: [EXT] [PATCH v3] USB: gadget: Add ID numbers to configfs-gadget
- driver names
-Thread-Index: AQHZJYksvH6c0HvTAEK5rLNkYqGpX66ZVArg
-Date:   Wed, 11 Jan 2023 15:16:05 +0000
-Message-ID: <HE1PR0401MB2331CC8AE82C4DD96A1D398E88FC9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-References: <20230111065105.29205-1-chanh@os.amperecomputing.com>
-In-Reply-To: <20230111065105.29205-1-chanh@os.amperecomputing.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|PR3PR04MB7306:EE_
-x-ms-office365-filtering-correlation-id: 12b89057-80b6-4bd2-84c8-08daf3e6c26a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EPKF0DPof2eYi6U3SzEsVjaLda2upYjs/6DOGqWHWNdcDyVUc4tFvMd7ldoOfLJHUYTEPew0GGs7tV7VRp2T1tTsYTRxMTrTI5rBTHTcmyX/EmrSDaSQkWBTrx7olK1+BWogastJt7ERrLQWi1fKe2o97m1JN40Kob4OJTbPqZktaecwWZt7/1CIn2pTDUuk6vEVB+RKt5NZe/cPnf0/xd8WXmYIPU1H93RdVqpZ2K72xlk9U8SZ9kNLMMmjzqmVmCJ3ZEN9vwSvilJ86zcsfK2JMl+DKdzaWniwmkYIwwLaku3HhsN/zzME821Dqd/W2XXlqM8LwHpKStQD6oC1mJdG/BmvaYgfRATUGzlfDQWoIqgU/pK4iZ1Mg3JwWNnYRzzRoTsr4C1RKszZS3NJAC6qaewZuJGLW++JSgdK3P2jKY//1UoKkM4Rye7e7QdL/rlJm30Eeq2W/GwLlVJz0s8oLFCsB2fdeRYdvwUciYY0P1yXtKuy5Y1iIgoo7yxrOXBKuHsMWiTmkIec5jJrqc6nwBDlad2NzDjuNvqTNvFYi7n+cI7VuNpP8lsOGlGtTvOzTAnYLu/2aDQbaK39DO1C44ECLr+qMajrprLgxeyfwwR2+29u+RrcQWCf1TOiBAK+XtLuPafGRetuLGn2r5WzejAZBy4TLJoYYugMQ4Hx74Bq6gqmXN4YhSHAZCGJKoagYpWtVuQXPCWpIpcCqEqiutWNaiSU/b0+BohJdRM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39860400002)(136003)(366004)(376002)(451199015)(6506007)(38100700002)(122000001)(55236004)(53546011)(921005)(2906002)(478600001)(7416002)(33656002)(26005)(7696005)(186003)(44832011)(5660300002)(71200400001)(316002)(9686003)(38070700005)(8936002)(83380400001)(52536014)(55016003)(86362001)(41300700001)(64756008)(8676002)(110136005)(76116006)(66556008)(66946007)(66476007)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9zzRXAISxYUAhbk88zELLhjR4oU5hDM1uk5kAyi8Xa3pSyR4DrcQph+U9Hya?=
- =?us-ascii?Q?5GosXC795ZYBWV1gjBXk9tkrMzsV0PHQG8Lz0jyDFWZdIivhjuNqo8w8cTYj?=
- =?us-ascii?Q?JtVRcYSUgwIOn/FYWZEuVNglxOF7ce9LoF8vuGhcwSkzIQVjnI5wEeix1RC3?=
- =?us-ascii?Q?7G6Jp67XxXmYGAaWYhgJ80s0Bwx+5jKmTQhg9Od2XGQGwg7qnTmcN283Y3IT?=
- =?us-ascii?Q?DXVU41uQNI1QQrFFPk5FERV/syAHUTxQYfNdFbOR7+V29utHCslIlxgG/IZ1?=
- =?us-ascii?Q?bQMWakyU8w/mOjFctyIbgIgb5W6EMVvGveg17NAmGsRg+iqzfg3YbKBacgZi?=
- =?us-ascii?Q?V1Owt+vrJRsD6W7NIxNmbhRmWbDnwYEfvHc1hvu0OY86U1EvHQ725H1ybROV?=
- =?us-ascii?Q?Jq8IlhfuRmAr75nC036kQKJKt+fPgoCdjGWp9Ux9P1F7KipDXLtR4bMGZ7br?=
- =?us-ascii?Q?C/1XvSngSQlqoybgDF24irpQq4wqmXGnXNFNhcr/2yqkP2mrLbyNE/ILcVM/?=
- =?us-ascii?Q?cpMA15XmNdt8g/RZ45vCEo2J5RUyCc/s03+uSNylWfk1c/Xc+VIO6OZGbsjq?=
- =?us-ascii?Q?oKueDNwulk9S/Llg5AOctUALrEvEktsLZulaAyY03XmcM5qVx34oxEZk8yFk?=
- =?us-ascii?Q?1LL47r6kjy7v86Vx7Rz3ruA6ryGvSM9cERdcxme+gP57X6Ol3ZPu+HkYgNzV?=
- =?us-ascii?Q?oMuDIZoE9VjZuVOYIhHLJeRjVn7Dp57ZeSup0GkOqMScViRQhl6MLICorFpm?=
- =?us-ascii?Q?BfwRZEkSQ7G4SjS+ZLW7dwuTLwkSXnnIJHYCloYegpJQC3St+y6NWmVioCQO?=
- =?us-ascii?Q?qTI3R3adlxfIYRlMjEVCuJGKqXS6Qv3PtG7IMSZrKtmd8XY6ZBOwmKIMMQLx?=
- =?us-ascii?Q?g9VcHP9z3SnDYN6KBu7zM+W0m+RRuSaFU9j6J8I2wEMZbjMwH1ejw6Ji42VP?=
- =?us-ascii?Q?y0yeu2ZBKldsGUsfR/HKOgLw+1FiFOK4bwvccqon+s8bsbXQdhX0Uy4elJjs?=
- =?us-ascii?Q?WdGSz58pxXGbLgj+aqBRDZrHnb8K1Qu3vgJRiDbnDZzFk9lyyGz7B8HbTvNX?=
- =?us-ascii?Q?N6Mgckq2C49yfWyVA3P6XznIqMsm1zJqBveDJSj5TnNg1qeg8IOA4WFmooHN?=
- =?us-ascii?Q?qSqPsJzN/tjsGrX5y49swu7nxw2zCZpNBNoPNNfcb2L8fH7/3jBCD2x0BksK?=
- =?us-ascii?Q?DkpP4nYlhyS66L+0CvrtxAo+tMi810EIr/VQZjGQfrZ3VVm0Dj4wIsvo1hbZ?=
- =?us-ascii?Q?LRNNNTvqyZ7BVYBGmVVqtkZfK6OrDXMGDMRHnsWMhxOiwnSsfghSsJ6PygQT?=
- =?us-ascii?Q?x1nYSa3+cqDa5JhOAE60mIo1RtJhCyLDP31G48enTY4gxFIHdMVt7KDbHaq7?=
- =?us-ascii?Q?Ujr9qYA77jpFz3ZbsDZ23lP0jDdt18TEhs+3N36eYEY1BLTEh8aj8A5yCMpy?=
- =?us-ascii?Q?cyvqmiK0+XMxU6ShzPSIyNkgDHxwgIKuAtebBxUTUyAqnt9vrHwYRuotms1Z?=
- =?us-ascii?Q?ZILCOmMKQglzgTaeTEs3hDpy4TfmFQo8D5EDq9tvGHMH9Zn1DxxUVMO4TAjJ?=
- =?us-ascii?Q?g/lP/SXsOLVJZAFWQU0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 11 Jan 2023 10:16:26 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F997120AE
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:16:23 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C0C6A17D41;
+        Wed, 11 Jan 2023 15:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673450181; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dhiLV1JhsDqhwJz7F/7yrUkhQWW00XFEQ+11ysZATOc=;
+        b=YR3cLAU3gNuQENncuAm7vviTjzr+2X3GEGef7N4CRGJu/R9BWYOijUA/zM6CdI0tm3O9Py
+        K7ywtkXfZ2yOL1+orD7mtqS+GDLWM99XyjbBFu9GlI3Z9qu2nG8l2hZEFMgx4YSxgaIvH7
+        xBHPK2hgXDMEgqvr1+hUjf1SyT/6Mos=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673450181;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dhiLV1JhsDqhwJz7F/7yrUkhQWW00XFEQ+11ysZATOc=;
+        b=+b5ifCT0jSEVni+tLrGUDmkuWZkaPp+l6LDsF5QtTLVcf94rJjzjItvDAPWVmeR0v2Sr8m
+        3r+94lYlUFbPesDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9735013591;
+        Wed, 11 Jan 2023 15:16:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id M54AJMXSvmPNLAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 11 Jan 2023 15:16:21 +0000
+Message-ID: <e9853566-f352-4e15-9e17-168dac482153@suse.de>
+Date:   Wed, 11 Jan 2023 16:16:21 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12b89057-80b6-4bd2-84c8-08daf3e6c26a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2023 15:16:05.5735
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gQ/qpRxjV9wPu2Jo+CChvGH6sn6LA7n0xRp2BpY3ftuC2EzqeXzUsHchLMuSh3272/O4uOTK2CLK5AupGN9HtA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7306
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 8/9] drm/vc4: hdmi: Add BT.601 Support
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
+ <20221207-rpi-hdmi-improvements-v1-8-6b15f774c13a@cerno.tech>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221207-rpi-hdmi-improvements-v1-8-6b15f774c13a@cerno.tech>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------K7CnMuMJzuvt7xQGaC75jsra"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------K7CnMuMJzuvt7xQGaC75jsra
+Content-Type: multipart/mixed; boundary="------------AclVDTxXZJcFa0QFEd47IWxg";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>
+Message-ID: <e9853566-f352-4e15-9e17-168dac482153@suse.de>
+Subject: Re: [PATCH 8/9] drm/vc4: hdmi: Add BT.601 Support
+References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
+ <20221207-rpi-hdmi-improvements-v1-8-6b15f774c13a@cerno.tech>
+In-Reply-To: <20221207-rpi-hdmi-improvements-v1-8-6b15f774c13a@cerno.tech>
 
+--------------AclVDTxXZJcFa0QFEd47IWxg
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> -----Original Message-----
-> From: Chanh Nguyen <chanh@os.amperecomputing.com>
-> Sent: Wednesday, January 11, 2023 12:51 AM
-> To: OpenBMC Maillist <openbmc@lists.ozlabs.org>; Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org>; Frank Li <frank.li@nxp.com>; Christophe
-> JAILLET <christophe.jaillet@wanadoo.fr>; Dan Vacura
-> <w36195@motorola.com>; Jakob Koschel <jakobkoschel@gmail.com>; Alan
-> Stern <stern@rowland.harvard.edu>; Vijayavardhan Vennapusa
-> <vvreddy@codeaurora.org>; Rondreis <linhaoguo86@gmail.com>; Andrzej
-> Pietrasiewicz <andrzej.p@collabora.com>; Heikki Krogerus
-> <heikki.krogerus@linux.intel.com>; linux-usb@vger.kernel.org; linux-
-> kernel@vger.kernel.org; Open Source Submission
-> <patches@amperecomputing.com>
-> Cc: Chanh Nguyen <chanh@os.amperecomputing.com>
-> Subject: [EXT] [PATCH v3] USB: gadget: Add ID numbers to configfs-gadget
-> driver names
->=20
-> Caution: EXT Email
->=20
-> It is unable to use configfs to attach more than one gadget. When
-> attaching the second gadget, it always fails and the kernel message
-> prints out:
->=20
-> Error: Driver 'configfs-gadget' is already registered, aborting...
-> UDC core: g1: driver registration failed: -16
->=20
-> This commit fixes the problem by using the gadget name as a suffix
-> to each configfs_gadget's driver name, thus making the names
-> distinct.
->=20
-> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+DQoNCkFtIDA3LjEyLjIyIHVtIDE3OjA3IHNjaHJpZWIgTWF4aW1lIFJpcGFyZDoNCj4gRnJv
+bTogRGF2ZSBTdGV2ZW5zb24gPGRhdmUuc3RldmVuc29uQHJhc3BiZXJyeXBpLmNvbT4NCj4g
+DQo+IEV2ZW4gdGhvdWdoIHdlIHJlcG9ydCB0aGF0IHdlIHN1cHBvcnQgdGhlIEJUNjAxIENv
+bG9yc3BhY2UsIHdlIHdlcmUNCj4gYWx3YXlzIHVzaW5nIHRoZSBCVC43MDkgY29udmVyc2lv
+biBtYXRyaWNlcy4gTGV0J3MgYWRkIHRoZSBCVDYwMSBvbmVzLg0KPiANCj4gU2lnbmVkLW9m
+Zi1ieTogRGF2ZSBTdGV2ZW5zb24gPGRhdmUuc3RldmVuc29uQHJhc3BiZXJyeXBpLmNvbT4N
+Cj4gU2lnbmVkLW9mZi1ieTogTWF4aW1lIFJpcGFyZCA8bWF4aW1lQGNlcm5vLnRlY2g+DQoN
+ClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4N
+Cg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vdmM0L3ZjNF9oZG1pLmMgfCAzOCArKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2Vk
+LCAzOCBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
+L3ZjNC92YzRfaGRtaS5jIGIvZHJpdmVycy9ncHUvZHJtL3ZjNC92YzRfaGRtaS5jDQo+IGlu
+ZGV4IGNkNjc3NTQyOWI1ZS4uZTM0MjhmYjJjMjJkIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJz
+L2dwdS9kcm0vdmM0L3ZjNF9oZG1pLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3ZjNC92
+YzRfaGRtaS5jDQo+IEBAIC0xMjE0LDYgKzEyMTQsMzcgQEAgc3RhdGljIGNvbnN0IHUxNiB2
+YzVfaGRtaV9jc2NfZnVsbF9yZ2JfdG9fcmdiWzJdWzNdWzRdID0gew0KPiAgIAl9LA0KPiAg
+IH07DQo+ICAgDQo+ICsvKg0KPiArICogQ29udmVyc2lvbiBiZXR3ZWVuIEZ1bGwgUmFuZ2Ug
+UkdCIGFuZCBZVVYgdXNpbmcgdGhlIEJULjYwMSBDb2xvcnNwYWNlDQo+ICsgKg0KPiArICog
+TWF0cmljZXMgYXJlIHNpZ25lZCAycDEzIGZpeGVkIHBvaW50LCB3aXRoIHNpZ25lZCA5cDYg
+b2Zmc2V0cw0KPiArICovDQo+ICtzdGF0aWMgY29uc3QgdTE2IHZjNV9oZG1pX2NzY19mdWxs
+X3JnYl90b195dXZfYnQ2MDFbMl1bM11bNF0gPSB7DQo+ICsJew0KPiArCQkvKg0KPiArCQkg
+KiBGdWxsIFJhbmdlDQo+ICsJCSAqDQo+ICsJCSAqIFsgIDAuMjk5MDAwICAwLjU4NzAwMCAg
+MC4xMTQwMDAgIDAgICBdDQo+ICsJCSAqIFsgLTAuMTY4NzM2IC0wLjMzMTI2NCAgMC41MDAw
+MDAgIDEyOCBdDQo+ICsJCSAqIFsgIDAuNTAwMDAwIC0wLjQxODY4OCAtMC4wODEzMTIgIDEy
+OCBdDQo+ICsJCSAqLw0KPiArCQl7IDB4MDk5MSwgMHgxMmM5LCAweDAzYTYsIDB4MDAwMCB9
+LA0KPiArCQl7IDB4ZmE5YiwgMHhmNTY3LCAweDEwMDAsIDB4MjAwMCB9LA0KPiArCQl7IDB4
+MTAwMCwgMHhmMjliLCAweGZkNjcsIDB4MjAwMCB9LA0KPiArCX0sDQo+ICsJew0KPiArCQkv
+KiBMaW1pdGVkIFJhbmdlDQo+ICsJCSAqDQo+ICsJCSAqIFsgIDAuMjU1Nzg1ICAwLjUwMjE2
+MCAgMC4wOTc1MjMgIDE2ICBdDQo+ICsJCSAqIFsgLTAuMTQ3NjQ0IC0wLjI4OTg1NiAgMC40
+Mzc1MDAgIDEyOCBdDQo+ICsJCSAqIFsgIDAuNDM3NTAwIC0wLjM2NjM1MiAtMC4wNzExNDgg
+IDEyOCBdDQo+ICsJCSAqLw0KPiArCQl7IDB4MDgyZiwgMHgxMDEyLCAweDAzMWYsIDB4MDQw
+MCB9LA0KPiArCQl7IDB4ZmI0OCwgMHhmNmJhLCAweDBlMDAsIDB4MjAwMCB9LA0KPiArCQl7
+IDB4MGUwMCwgMHhmNDQ4LCAweGZkYmEsIDB4MjAwMCB9LA0KPiArCX0sDQo+ICt9Ow0KPiAr
+DQo+ICAgLyoNCj4gICAgKiBDb252ZXJzaW9uIGJldHdlZW4gRnVsbCBSYW5nZSBSR0IgYW5k
+IFlVViB1c2luZyB0aGUgQlQuNzA5IENvbG9yc3BhY2UNCj4gICAgKg0KPiBAQCAtMTI3Nyw2
+ICsxMzA4LDEzIEBAIHN0YXRpYyBjb25zdCB1MTYNCj4gICAoKnZjNV9oZG1pX2dldF95dXZf
+Y3NjX2NvZWZmcyhzdHJ1Y3QgdmM0X2hkbWkgKnZjNF9oZG1pLCB1MzIgY29sb3JzcGFjZSwg
+Ym9vbCBsaW1pdGVkKSlbNF0NCj4gICB7DQo+ICAgCXN3aXRjaCAoY29sb3JzcGFjZSkgew0K
+PiArCWNhc2UgRFJNX01PREVfQ09MT1JJTUVUUllfU01QVEVfMTcwTV9ZQ0M6DQo+ICsJY2Fz
+ZSBEUk1fTU9ERV9DT0xPUklNRVRSWV9YVllDQ182MDE6DQo+ICsJY2FzZSBEUk1fTU9ERV9D
+T0xPUklNRVRSWV9TWUNDXzYwMToNCj4gKwljYXNlIERSTV9NT0RFX0NPTE9SSU1FVFJZX09Q
+WUNDXzYwMToNCj4gKwljYXNlIERSTV9NT0RFX0NPTE9SSU1FVFJZX0JUNjAxX1lDQzoNCj4g
+KwkJcmV0dXJuIHZjNV9oZG1pX2NzY19mdWxsX3JnYl90b195dXZfYnQ2MDFbbGltaXRlZF07
+DQo+ICsNCj4gICAJZGVmYXVsdDoNCj4gICAJY2FzZSBEUk1fTU9ERV9DT0xPUklNRVRSWV9O
+T19EQVRBOg0KPiAgIAljYXNlIERSTV9NT0RFX0NPTE9SSU1FVFJZX0JUNzA5X1lDQzoNCj4g
+DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXIN
+ClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwg
+OTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpH
+ZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Reviewed-by: Frank Li <frank.li@nxp.com>
+--------------AclVDTxXZJcFa0QFEd47IWxg--
 
->=20
-> ---
-> Changes in v3:
->   - Use the gadget name as a unique suffix instead     [Andrzej]
->   - Remove the driver.name allocation by template        [Chanh]
->   - Update commit message                                [Chanh]
->=20
-> Changes in v2:
->   - Replace scnprintf() by kasprintf() to simplify the code [CJ]
->   - Move the clean up code from gadgets_drop() to
->     gadget_info_attr_release()                        [Frank Li]
->   - Correct the resource free up in gadges_make()   [Alan Stern]
->   - Remove the unnecessary variable in gadgets_make()    [Chanh]
->   - Fixes minor grammar issue in commit message          [Chanh]
-> ---
->  drivers/usb/gadget/configfs.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.=
-c
-> index 96121d1c8df4..0853536cbf2e 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -393,6 +393,7 @@ static void gadget_info_attr_release(struct
-> config_item *item)
->         WARN_ON(!list_empty(&gi->string_list));
->         WARN_ON(!list_empty(&gi->available_func));
->         kfree(gi->composite.gadget_driver.function);
-> +       kfree(gi->composite.gadget_driver.driver.name);
->         kfree(gi);
->  }
->=20
-> @@ -1572,7 +1573,6 @@ static const struct usb_gadget_driver
-> configfs_driver_template =3D {
->         .max_speed      =3D USB_SPEED_SUPER_PLUS,
->         .driver =3D {
->                 .owner          =3D THIS_MODULE,
-> -               .name           =3D "configfs-gadget",
->         },
->         .match_existing_only =3D 1,
->  };
-> @@ -1623,13 +1623,21 @@ static struct config_group *gadgets_make(
->=20
->         gi->composite.gadget_driver =3D configfs_driver_template;
->=20
-> +       gi->composite.gadget_driver.driver.name =3D kasprintf(GFP_KERNEL,
-> +                                                           "configfs-gad=
-get.%s", name);
-> +       if (!gi->composite.gadget_driver.driver.name)
-> +               goto err;
-> +
->         gi->composite.gadget_driver.function =3D kstrdup(name, GFP_KERNEL=
-);
->         gi->composite.name =3D gi->composite.gadget_driver.function;
->=20
->         if (!gi->composite.gadget_driver.function)
-> -               goto err;
-> +               goto out_free_driver_name;
->=20
->         return &gi->group;
-> +
-> +out_free_driver_name:
-> +       kfree(gi->composite.gadget_driver.driver.name);
->  err:
->         kfree(gi);
->         return ERR_PTR(-ENOMEM);
-> --
-> 2.17.1
+--------------K7CnMuMJzuvt7xQGaC75jsra
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmO+0sUFAwAAAAAACgkQlh/E3EQov+DU
+vg//QP5KUSykm6vH8u+PZFlv+wFFpJ3GlqGoMmGMW20mkM/8OEbmBdPRmW16VI3976xvvhH2r1SU
+O0KytHUuZrh5UM+/I52S+S7rlsrYc512lf2mi15ZjJyeyZlLNGa/dHuHgf7LPEY1JHtx9RUY1896
+wcWPCwKJF1rWkDvI3Dx5rKXA+E0Go4OiCydAj5pry5DgQjboqUeqeSAu3ARD9BpzehTUm7LqiGpZ
+TbstHIs5s1tnTqJgIqi4zCV4JMXPEDHaFFPA/H0EhLBCfW1n/8QEnUDunOwLu6EgQ7U+RyZQNio8
+w61aRsUafxuZ1Xw1yvRJbROQURwtTPnm8W1D1WVRElx10lEdUQWF5Getg1HYSMJ/CluK1pfNid0P
+WaUECV7v++QBt8NUCzgwIkc2TtN0j8F75Iqpl8C8r+NEwI3Cznf9vG34eztk1D9v62kwR/sN5GBm
+DQXn7JfsdkXhuGXDzTviT4flfmVHvQRAut+HEfF10M7p2Akt7ZMMKMpVpIYYwQyOLaE9G4G7sX3Q
+XMvDq5t6xbhNGe6E2PX3R4OLjAE+J4fvYlMUKfMVspL7wCxTP0R0DcsrDoOp/3GVRLxjcpwO0Uff
+fB3rDCE7aAfJk+YskHsVORzbW49ohuTUps+qyoEe9ELtG9XCrB8qFv9kVEiLeI4m2q8jARJFJmRt
+NP0=
+=1ArV
+-----END PGP SIGNATURE-----
+
+--------------K7CnMuMJzuvt7xQGaC75jsra--
