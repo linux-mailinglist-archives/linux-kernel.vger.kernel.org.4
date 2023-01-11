@@ -2,255 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29253665E9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12D9665EA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbjAKPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        id S233591AbjAKPCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234755AbjAKPBN (ORCPT
+        with ESMTP id S234874AbjAKPCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:01:13 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9627CAE44
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:01:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673449262; x=1704985262;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=5TJ/bgu+pCgyshbImZghLSq0xbo/Ufa+G1i74+3HVv0=;
-  b=oDV8zKTOj+5yQKrEQnoyuUQPO3EHU0EIpqa/M+j5RgEAx7lkO1afagzC
-   zEChz3arRi0y0HlZZ00FqsGrD8XaZTQGyUPTeBXQ5NNG9pIJzlHsvmwlW
-   SPt8hQLRsJRCKDVrv9FBwa+5P3HSSQ5yKUpAo2wq7jqz8p0LuaHz1BW2k
-   4NaZ1l321tuJC0pemu6aKk/xf0MMp83AWs74os9lBjFa4PjhnW4Aw41bp
-   Fh3rui6eQs+xwl1EoNulKnt9rdYIl28R7rl3k7O8WgvCKV/GSnzy22Nbw
-   nR379ZtQy84RO22ea2xESMI2ARxXVVzGSsc6D8BpTXwaCUzKH0pDtc7C0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303803199"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="303803199"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 07:00:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="725945701"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="725945701"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Jan 2023 07:00:21 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 11 Jan 2023 07:00:19 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 11 Jan 2023 07:00:19 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 11 Jan 2023 07:00:19 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 11 Jan 2023 07:00:19 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R4tGkrKGyVN62RGrK8bR2+usiEFA4HxPDXA028H/lsWZzxcv4FB5c4wmGLiBHV/FnpDgtn2qv+UPsqW8LlVyLzZaFASV3WrVry8YQsOZr+MRLUYnF8JFYN0cJXynE9XtUJYQK4Yt0iB427R/n0k8RpYQu6jKYiFum5xAQ7+NDjBGhacmOXmRR5quXGJd6GyUKUg7021NpYCKomc6KAIzWjfBCtbB/36D1JDMKsO3eTMUH1mXQpGbbDT/G/3bsn+FAEkqglGateF54i1+l0gDzT2/pL4pWftgixhrkPGivwei+7f3Q5hauPtZknnHNfN0ESX8CZiEI7onv3bch/pxCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9yLSM1GjiJfYS3U4/bs2osGBzsIxFjFltGfuLctmsOI=;
- b=Ef1XK2cPoqran0NMY5czfhgmCkv3UbZJ0kPwvZb6y+H9oZqUdz3OLYv1M3un0qo64bm1NBrGBXXHPuxSqIDObMWWMcnPMXsB5rEpAe8YKKwjaERaMQM90k0OTmzQBb+uHM9t5ZLGnSY3mo5bvyzoZwLYcTCCb+Z/qd7o7MFGC8i/MM2iWc9eSvq5FyG9DLfpjnU/vmBlME6NGN+Tq3MLt52q2xhNmwzFFiG8+W5qdM6QY43ShmoGR+mxg+rpCkewSKwpquNWe5wTTK8VpH0zjEby9hzVc5IlhVahoHgCCAHGTeF3goUpAjQ/eyP2TYW52dAZKOXL6dEHzbeP+Y9+Gg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by PH0PR11MB5950.namprd11.prod.outlook.com (2603:10b6:510:14f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
- 2023 15:00:16 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::1818:e39d:454d:a930]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::1818:e39d:454d:a930%4]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 15:00:16 +0000
-Date:   Wed, 11 Jan 2023 10:00:11 -0500
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Deepak R Varma <drv@mailo.com>
-CC:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        <dri-devel@lists.freedesktop.org>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        <intel-gvt-dev@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Zhi Wang <zhi.a.wang@intel.com>
-Subject: Re: [PATCH 2/2] drm/i915/gvt: Avoid full proxy f_ops for vgpu_status
- debug attributes
-Message-ID: <Y77O+0uGm1GRZnZd@intel.com>
-References: <cover.1673375066.git.drv@mailo.com>
- <188df08e0feba0cda2c92145f513dd4e57c6e6cf.1673375066.git.drv@mailo.com>
- <Y72zVXYLVHXuyK05@intel.com>
- <Y76JGj0cJpYr6/rv@intel.com>
- <Y77NfeKbLL4s/Ibg@ubun2204.myguest.virtualbox.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y77NfeKbLL4s/Ibg@ubun2204.myguest.virtualbox.org>
-X-ClientProxiedBy: SJ0P220CA0014.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:a03:41b::22) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+        Wed, 11 Jan 2023 10:02:11 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F601C910
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:01:59 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id w1so15323869wrt.8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:01:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AaucJbeurArINzx/XqwlyeZxosCdZQCp+GGH59FoJLw=;
+        b=BzJQPThURwdCce7DSuHydqHFnFmMUYBpD8p+nqaJSxRUdS/2Xl6wckfZ2HjLnPcPN5
+         wE5o0YbTLBfcesWxHslwUojicom7kbnBpm/v0z81lnYABLl3zBtYkIGzU6YIRzS/xBbD
+         zoPhqylLhAalYVX5/wBk0lX/HSDo6UY5fOVP5d/8+BYOIRVReHteo4i9Xb5fkae6z17t
+         VwIpjW6WO/aL14f9vG9eq51Y/J5Lj85/30T3kzQlI/42D5pUn5Gjk0ZI5r/yZGplPf09
+         N3xi77sGwgWRjHNUuW7U91/x4ntr6EPjW7tKYoUeYibNGdhTofrob3G1eoPTgQNxEiGb
+         8iJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AaucJbeurArINzx/XqwlyeZxosCdZQCp+GGH59FoJLw=;
+        b=1hZpZ77PUN8TwvbIpT6ni3avlDrSDqMIhXxgMi0WLbOpSO5kDVbsbd735GlCzhxgg0
+         I4NfRbyCJcEDCA9EXOnIwkqal385F9F7sVfPVhMw1F/qCx2klK1fJE2vqfa9YnNJZRs4
+         IVxYqsQkfzt7zxJK80yswdkBEKi1jkxhWhTT7Vh3jVVSyyZy50txwRSFlVXltHA/DC3J
+         erPZkD2rxt02uyensO580K7h30pAZLtQHGtFukkghOT0uMdFWcpxTSFEHWdoi8gaqZ5F
+         FTHkHH5NBWUHc4QUx0L/t83Sh6xxQgYxCBgoi4LASUQjBaumLqQ4x2Bn5msfu55drgzM
+         l/WA==
+X-Gm-Message-State: AFqh2kogOww3Mx3m+fV3hi6NiFRLvuaOMQ6MZnhf9+xZkAQAZBfB4GmU
+        pzyPp+bsWqnm0HswPaTfgbSmHg==
+X-Google-Smtp-Source: AMrXdXtpWlmaH1CYDfLd+6Dy7rAPz1iLEIGX1Pos50zqDNV/j7WqrZblwbuWeIbTNepd9+4SFvngww==
+X-Received: by 2002:a5d:4cc2:0:b0:2a3:3a96:709a with SMTP id c2-20020a5d4cc2000000b002a33a96709amr21707353wrt.57.1673449318389;
+        Wed, 11 Jan 2023 07:01:58 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id z6-20020a05600c0a0600b003d96efd09b7sm27310573wmp.19.2023.01.11.07.01.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 07:01:57 -0800 (PST)
+Message-ID: <31c07acb-adcf-3c7e-c415-fa2cd67fd12f@linaro.org>
+Date:   Wed, 11 Jan 2023 16:01:56 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|PH0PR11MB5950:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3959b9c3-5212-427d-016b-08daf3e48c59
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uxBCAKodKGlJpYsRUEM7b6unSHo4wsh1YOBebrwOIKKD1iz+N511uVx7Ahqgxfa++BKuO/1njNsLjrKK766/RSYuCyL5Na3fIeSKiw53C2csHS9szPGauiIl8UJ27JfNATJxWJnYnlXYLme2a/mvsklmaqmj5r4L3LZ6Q6LN9+fYvjzGhQU0AGY+nE7O8oizvLDTxpA+4BpiTycGHSMBL0yC8QPqxcvXd4zRHL2zhTewLlnmXqKhhu4yqZiS7zJx0H7JlELu8T62ciiZmUGXarqTeTJ9yuKyINRbvIMJgr1qs5a2GPuOfZ+8cUiSRSe9gz1Lnm89QfQH4jZZFZiKMWua+skrZhcI7UROIcT8GJsnY7/LwxhGEUzm0UKyPYJRmns/K4mZ0BTeoIykr1jt9pq4cxtMDpoS/zW7EY1wNTb1l9lc/kWG2bSFFsFxRpvKDq1Q5uWiQy53OGCGHwQa8X0v+g3ivvaWCO8w4GDdoyLmzC8rBEczc/lT54cSCJ5gj3n4NwnN/s1fs8nye5q/vIvsrzyfZy3gUJ4voAop8+p8jPkbzQYFuYp8lnoq5b4VcMzaINisJVpRp7HJ2fZvsTvFFxzheCcr4BAAyRfRZOfxcbHVGst+fCsshKSdi2hEKLBYfhrPFVuAkyfAZl1SS7OqS/uHXInBqCv/ELThI7b01ZoVkPvJ6AhqODTrzEQU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(136003)(346002)(366004)(396003)(451199015)(6506007)(26005)(6486002)(478600001)(6512007)(186003)(6916009)(66476007)(2616005)(6666004)(8676002)(41300700001)(66946007)(54906003)(316002)(4326008)(83380400001)(82960400001)(86362001)(38100700002)(44832011)(66556008)(8936002)(36756003)(5660300002)(2906002)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zohsafeeQMgr17v2CqTPhHaKiL0ZHEG/qxjJip2jO6o8V04utRUsr7ekWEF4?=
- =?us-ascii?Q?MQJQXtD4gov0jKeYV6MefYpUDfiWpbWwJwEG5qfzheXsP+ZRwa0yx1j0vBXy?=
- =?us-ascii?Q?T2ZAgRXGVmYRE42x/bEERBCoM8p1Cswl1yHlXY9lrmJHytoYDa8+pD9Ijsgi?=
- =?us-ascii?Q?SCWoYA9QkmQtJT8VZW9+zWMvadHF1OXR6GQRQzfpr50XcW3vjNHUOs7QKhA/?=
- =?us-ascii?Q?Nqt3duRcQE/KcAIWx6+0YtRedRoV3RRQvcnwVjf+nWSXdhcU3KnsZmtB6LkW?=
- =?us-ascii?Q?OSIOPU55NPHoeaec4eUa6aL8IkCjnCE+CsWFvi60JLT7jrFEjXUOAdv+5TB1?=
- =?us-ascii?Q?0KrQSYHWz3zVSCLGjJwZrlY/bDn00QIXNuLJzcldhet6oyjl20jB432SA1jl?=
- =?us-ascii?Q?mRAeGq7si1BNFFq78ckU9cHCr2ssWdsANplC7eGk3ONdZwppF++1apCctc0O?=
- =?us-ascii?Q?kvIKQfoh9W1YpDYFtqHZynyqEAzqIi4OgSGd3xcPdw+H4xH4MhzA1gQ9bWgM?=
- =?us-ascii?Q?PYQH9jUiSl6TecC5/KW+L7XelM2BQ4P6RYNHlpm25pa12cnr4SFG6qeIJREf?=
- =?us-ascii?Q?JEJMZ7BO/sfM3MImC4bDQ1LdlkOrEqopQsw3uLbl8eVPjae5wzYXUARKvTZ2?=
- =?us-ascii?Q?5ZI1MQUyQ5wMSAAbyUeFRLhCbDfMbJ/tZqGUugyINIXfFntZ4sLkZualNZe+?=
- =?us-ascii?Q?UYFQkyCwtA+YqMB4pqKlMVZbOlejCsx4YAgAwsH1mtBQdWmeHu/k+Fs+Ely6?=
- =?us-ascii?Q?cDnNyREL6cem5rhvYJ6awW0LG7qS5nJbMxkWopmLC8WDyzOxjPYglymGv+xH?=
- =?us-ascii?Q?itloru51EMDc52h/NOk8RhEbNqCSFDTtldODmcr50K93ErTouGUg0XtCk2jP?=
- =?us-ascii?Q?EyC6NKniQSPfVwSxnLRlMkwxuC//52f4YgF0qE/5tujs5CyJb5cRRi3MqDs3?=
- =?us-ascii?Q?hvglsNPd94MXwn+LIs9WQec3kpxzBvI6Zk95I5VkXN8+TZeB4jx5H99M3Y4y?=
- =?us-ascii?Q?lHAXmyXQXND9pedHeQq6mecSxQU6QeZGJn9LbfbF4WuARfPmID7UeU6cMsAm?=
- =?us-ascii?Q?XGMaGV/DZWEinW9wP6axc97WxRukJk48Gi65jnPcmQMnIjtOy11B8Fjf1oL7?=
- =?us-ascii?Q?EdjBPvCZ+nJX2ywRdCoqZUyj/haRPZSdH2y8OuyFlPMaAsQSi3MHrpKDKWDm?=
- =?us-ascii?Q?Yj07SlaZQbZ0hS/MxqVaxTVrIgv1xXB5UrAAHzpYtrxfnzTVAQGsmlLz7YhC?=
- =?us-ascii?Q?IbqlMyYAmPDjff7SLvZdWtjUNdWON0zwnxcYCvNLULIvAkpZgvRLFCbHsiYN?=
- =?us-ascii?Q?jBC2dVaB5RdObw00wxDHoojLojWNg7qGf4tH5uqeA82WlJrF686oEyE1V9YO?=
- =?us-ascii?Q?WHVwVt/ttNzvE+1ZQ5jucFS4Y33+fuFulCarOr8ckiS7iUUv8BdjMACGjWMw?=
- =?us-ascii?Q?YKrG99jl0dy9YmM0gNYH7XiNCb4N0xfmLSVs+l/RWRrOd9fkMdaKtT+ojEPK?=
- =?us-ascii?Q?2TNmqXYFpVCniDxGsOmCGpgCtNh7LsbfTPb+3usgMdwVskZgr6XG6F9JO/jM?=
- =?us-ascii?Q?FeVeRkpveXaBOwbm/8ldtcSc04w3p7oSm/2IKrdO22LX3akhjEC2wMbKK35H?=
- =?us-ascii?Q?4w=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3959b9c3-5212-427d-016b-08daf3e48c59
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 15:00:16.1738
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6S5L52XSqM3tw55SVuic/CfwfljAOhYSDYR5IT431gXZ3/X6LSXihUaoUawWZxlxv7LWhp/BDjxmpp2QrSyxug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5950
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 0/3] Thermal ACPI APIs for generic trip points
+Content-Language: en-US
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+References: <20230110151745.2546131-1-daniel.lezcano@linaro.org>
+ <b070cfab-b8ab-f795-0c98-fc874f05f16b@linaro.org>
+ <d51432466ed6b1a8eef0e966bf1b2c2bb2e1e37f.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <d51432466ed6b1a8eef0e966bf1b2c2bb2e1e37f.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 08:23:49PM +0530, Deepak R Varma wrote:
-> On Wed, Jan 11, 2023 at 05:02:02AM -0500, Rodrigo Vivi wrote:
-> > On Tue, Jan 10, 2023 at 01:49:57PM -0500, Rodrigo Vivi wrote:
-> > > On Wed, Jan 11, 2023 at 12:00:12AM +0530, Deepak R Varma wrote:
-> > > > Using DEFINE_SIMPLE_ATTRIBUTE macro with the debugfs_create_file()
-> > > > function adds the overhead of introducing a proxy file operation
-> > > > functions to wrap the original read/write inside file removal protection
-> > > > functions. This adds significant overhead in terms of introducing and
-> > > > managing the proxy factory file operations structure and function
-> > > > wrapping at runtime.
-> > > > As a replacement, a combination of DEFINE_DEBUGFS_ATTRIBUTE macro paired
-> > > > with debugfs_create_file_unsafe() is suggested to be used instead.  The
-> > > > DEFINE_DEBUGFS_ATTRIBUTE utilises debugfs_file_get() and
-> > > > debugfs_file_put() wrappers to protect the original read and write
-> > > > function calls for the debug attributes. There is no need for any
-> > > > runtime proxy file operations to be managed by the debugfs core.
-> > > > Following coccicheck make command helped identify this change:
-> > > > 
-> > > > make coccicheck M=drivers/gpu/drm/i915/ MODE=patch COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
-> > > > 
-> > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > > 
-> > > I believe these 2 gvt cases could be done in one patch.
-> > > But anyways,
-> > > 
-> > > Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> > > 
-> > > for both patches... and will leave these 2 patches for gvt folks
-> > > to apply. Unless they ack and I apply in the drm-intel along with the other ones.
-> > 
-> > Actually, could you please address the checkpatch issues before we can push?
-> > Sorry about that, but just noticed now when I was going to push the other ones.
+On 11/01/2023 15:49, Zhang, Rui wrote:
+> On Wed, 2023-01-11 at 12:52 +0100, Daniel Lezcano wrote:
+>> Can I consider these changes ok for thermal/bleeding-edge ?
+>>
+>>
+> Hi, Daniel,
 > 
-> Hello Rodrigo,
-> The checkpatch warning is associated with the long "make coccicheck ..." command
-> in the commit message. It is not part of the code, so is should not be carried
-> forward into the code base.
-> If you still want me to correct it, I will need to split it into two lines which
-> I think still violates the commit description guidelines.
+> In general, the patch looks good to me.
+> But can you give me more time so that I can test them on my test box by
+> this week?
 
-This part I would just ignore or fix myself while merging. But the next one about
-the parenthesis alignment need to be fixed in the code so we need another version.
-Since we try to avoid touching the code between CI and merge.
+Ah, yes, definitively. If you have a test box for these changes that is 
+awesome.
 
-Then, since you need to change that, while changing that, also please break
-the coccinelle line in the commit msg.
-
-I'd appreciate to have the patch for the pxp as well :)
-
-Thanks a lot,
-Rodrigo.
+Do you have a suggestion for a x86 platform to test quark_dts, 
+processor_thermal_device_pci and intel_soc_dts_iosf ?
 
 
-> 
-> Let me know what you think.
-> 
-> Thank you,
-> ./drv
-> 
-> > 
-> > > 
-> > > > ---
-> > > >  drivers/gpu/drm/i915/gvt/debugfs.c | 6 +++---
-> > > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/gpu/drm/i915/gvt/debugfs.c b/drivers/gpu/drm/i915/gvt/debugfs.c
-> > > > index 03f081c3d9a4..baccbf1761b7 100644
-> > > > --- a/drivers/gpu/drm/i915/gvt/debugfs.c
-> > > > +++ b/drivers/gpu/drm/i915/gvt/debugfs.c
-> > > > @@ -165,7 +165,7 @@ static int vgpu_status_get(void *data, u64 *val)
-> > > >  	return 0;
-> > > >  }
-> > > >  
-> > > > -DEFINE_SIMPLE_ATTRIBUTE(vgpu_status_fops, vgpu_status_get, NULL, "0x%llx\n");
-> > > > +DEFINE_DEBUGFS_ATTRIBUTE(vgpu_status_fops, vgpu_status_get, NULL, "0x%llx\n");
-> > > >  
-> > > >  /**
-> > > >   * intel_gvt_debugfs_add_vgpu - register debugfs entries for a vGPU
-> > > > @@ -182,8 +182,8 @@ void intel_gvt_debugfs_add_vgpu(struct intel_vgpu *vgpu)
-> > > >  			    &vgpu_mmio_diff_fops);
-> > > >  	debugfs_create_file_unsafe("scan_nonprivbb", 0644, vgpu->debugfs, vgpu,
-> > > >  				   &vgpu_scan_nonprivbb_fops);
-> > > > -	debugfs_create_file("status", 0644, vgpu->debugfs, vgpu,
-> > > > -			    &vgpu_status_fops);
-> > > > +	debugfs_create_file_unsafe("status", 0644, vgpu->debugfs, vgpu,
-> > > > +				   &vgpu_status_fops);
-> > > >  }
-> > > >  
-> > > >  /**
-> > > > -- 
-> > > > 2.34.1
-> > > > 
-> > > > 
-> > > > 
-> 
-> 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
