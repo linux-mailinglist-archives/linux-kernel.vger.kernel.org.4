@@ -2,140 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A087366624C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA6E66624A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbjAKRvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S229568AbjAKRvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:51:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjAKRvk (ORCPT
+        with ESMTP id S231286AbjAKRvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:51:40 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226EA55AB;
-        Wed, 11 Jan 2023 09:51:39 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id m6so24698388lfj.11;
-        Wed, 11 Jan 2023 09:51:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rCPqy95C6Ull1wAoxhY/6/ppbJBtfCJsPETF3WTR/qM=;
-        b=JXouJcKGqRGXex2GF1mRZOeE2BvpKEr56XxDdtewRXWzaWfoUbjaMpCx6HReF3qCXZ
-         UJTj9PEkMIWvH0T8IWGnJ7iBOGSnhDavXUgGotmUL2A1CbN5m3dYj/7qEUjr/4diCvec
-         ZF9pFIRX4ZwAJhQAfwLwyZVlQdcYGnadRYvHCPKFt97gRzyHde48HGvP3vKbK8bnmOV/
-         zOL8B490gdPzWsjEVbfSeogsg1cEsD0aPkaAwloKOSqOZM3xWyOrwPca9OXFKd8ReUP8
-         iJ9fjMKgbNbt9NIQ6jXUAs87TvuCFn7LSQMnAr2NBk2t0vLLxvcuUY7uT6kicmd8fzml
-         u+3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rCPqy95C6Ull1wAoxhY/6/ppbJBtfCJsPETF3WTR/qM=;
-        b=TA81zgqMzvZTDEgJknB4GKmxiHRotkneKdpQPHIouEA9XwjfKLmxELUMAOPlV+EKnR
-         tIF/3A/oHILza/fNgTeMLr/jGkuV39E5duD1tKehdq9Exy8o3Npx2SbmLDfoQ0oQEY/J
-         WbQGtWcAGUEDdWPewzHjJDTt+45ORT6AORepDRIZFrNvyvqiJQpyceGY8kKVrUIcEejY
-         FQ4eXQKlWVwBowraqfBapQsP06skj9FAVszxWEQnJPaLj0mjehgA0ekECqcCip66zA75
-         IAy0Z3gD8i7JIF2GYNnzCKD0phDXgB3bc1tuC6BNCLOCWyimKKKHX5/baFJ0fhUSy733
-         2yxw==
-X-Gm-Message-State: AFqh2kpmWxrDuesQcJND6JKANxALGmar9PLzXd9WPppmVV3JEaNhHCk0
-        aETAVidsITlDbmxBPz9jrvQ=
-X-Google-Smtp-Source: AMrXdXsMLWhBweFdqHouGzNOfy2FLpER7WmQEJnvZO69e/RhuTihl8FAgTinoHWUAeuExYNdhUwTQA==
-X-Received: by 2002:a05:6512:6d4:b0:4cb:1e1:f380 with SMTP id u20-20020a05651206d400b004cb01e1f380mr19853095lff.40.1673459497379;
-        Wed, 11 Jan 2023 09:51:37 -0800 (PST)
-Received: from localhost.localdomain (077222238029.warszawa.vectranet.pl. [77.222.238.29])
-        by smtp.googlemail.com with ESMTPSA id x2-20020a056512130200b004a8f824466bsm2817098lfu.188.2023.01.11.09.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 09:51:36 -0800 (PST)
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-To:     alexander.duyck@gmail.com
-Cc:     kvalo@kernel.org, jussi.kivilinna@iki.fi, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        greg@kroah.com, szymon.heidrich@gmail.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] rndis_wlan: Prevent buffer overflow in rndis_query_oid
-Date:   Wed, 11 Jan 2023 18:50:31 +0100
-Message-Id: <20230111175031.7049-1-szymon.heidrich@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <CAKgT0UePq+Gg5mpvD7ag=ern9JN5JyAFv5RPc05Zn9jSh4W+0g@mail.gmail.com>
-References: <CAKgT0UePq+Gg5mpvD7ag=ern9JN5JyAFv5RPc05Zn9jSh4W+0g@mail.gmail.com>
+        Wed, 11 Jan 2023 12:51:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B202DFE
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:50:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C646B81BB2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 17:50:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4834C433F1;
+        Wed, 11 Jan 2023 17:50:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673459456;
+        bh=GpVC1Dzk0i09V4IPVyIyOyfYZGn4q0Ab9WKeG6xG8rg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=rFEZ7P2U3oDglrsnTLUpTns6xNCYVIiJktusTB1ryoWoAL2zjtv489xgLKBaEcxCl
+         z6rUByvRrKNGYPrq/zfdUTU20MRCB4bUm5e75LyVgRZf+MDiXh6relG7tHknjJeNsg
+         JjDL5PG475BFjn28wqrN+zmha1xm/MoKwDwWuQOAMXBxOtVPBNLPFmzuFFqV63e+Fu
+         78+WjpBb7uIxNEqBhO7OEqYDTYxE4hh2AcAUdC0RhOKrt1w7l4l+TriCWVeIHYFiFm
+         aC0TyD6mtal/AKPpNlk22u2STFfrKmgYEAbiLkxn3UfQrdUFNWMiXV87nD1AyFP53K
+         X3LcfJeFZtiZA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 67C445C0920; Wed, 11 Jan 2023 09:50:56 -0800 (PST)
+Date:   Wed, 11 Jan 2023 09:50:56 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
+        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
+        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
+        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com,
+        Waiman Long <longman@redhat.com>,
+        John Stultz <jstultz@google.com>
+Subject: Re: [PATCH clocksource 5/6] clocksource: Suspend the watchdog
+ temporarily when high read latency detected
+Message-ID: <20230111175056.GW4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230105010429.GA1773522@paulmck-ThinkPad-P17-Gen-1>
+ <20230105010701.1773895-5-paulmck@kernel.org>
+ <87r0w1ia65.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87r0w1ia65.ffs@tglx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since resplen and respoffs are signed integers sufficiently
-large values of unsigned int len and offset members of RNDIS
-response will result in negative values of prior variables.
-This may be utilized to bypass implemented security checks
-to either extract memory contents by manipulating offset or
-overflow the data buffer via memcpy by manipulating both
-offset and len.
+On Wed, Jan 11, 2023 at 12:26:58PM +0100, Thomas Gleixner wrote:
+> On Wed, Jan 04 2023 at 17:07, Paul E. McKenney wrote:
+> > This can be reproduced by running memory intensive 'stream' tests,
+> > or some of the stress-ng subcases such as 'ioport'.
+> >
+> > The reason for these issues is the when system is under heavy load, the
+> > read latency of the clocksources can be very high.  Even lightweight TSC
+> > reads can show high latencies, and latencies are much worse for external
+> > clocksources such as HPET or the APIC PM timer.  These latencies can
+> > result in false-positive clocksource-unstable determinations.
+> >
+> > Given that the clocksource watchdog is a continual diagnostic check with
+> > frequency of twice a second, there is no need to rush it when the system
+> > is under heavy load.  Therefore, when high clocksource read latencies
+> > are detected, suspend the watchdog timer for 5 minutes.
+> 
+> We should have enough heuristics in place by now to qualify the output of
+> the clocksource watchdog as a random number generator, right?
 
-Additionally assure that sum of resplen and respoffs does not
-overflow so buffer boundaries are kept.
+Glad to see that you are still keeping up your style, Thomas!  ;-)
 
-Fixes: 80f8c5b434f9 ("rndis_wlan: copy only useful data from rndis_command respond")
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
----
-V1 -> V2: Use size_t and min macro, fix netdev_dbg format
+We really do see the occasional clocksource skew in our fleet, and
+sometimes it really is the TSC that is in disagreement with atomic-clock
+time.  And the watchdog does detect these, for example, the 40,000
+parts-per-million case discussed recently.  We therefore need a way to
+check this, but without producing false positives on busy systems and
+without the current kneejerk reflex of disabling TSC, thus rendering the
+system useless from a performance standpoint for some important workloads.
 
- drivers/net/wireless/rndis_wlan.c | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
+Yes, if a system was 100% busy forever, this patch would suppress these
+checks.  But 100% busy forever is not the common case, due to thermal
+throttling and to security updates if nothing else.
 
-diff --git a/drivers/net/wireless/rndis_wlan.c b/drivers/net/wireless/rndis_wlan.c
-index 82a7458e0..bf72e5fd3 100644
---- a/drivers/net/wireless/rndis_wlan.c
-+++ b/drivers/net/wireless/rndis_wlan.c
-@@ -696,8 +696,8 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
- 		struct rndis_query	*get;
- 		struct rndis_query_c	*get_c;
- 	} u;
--	int ret, buflen;
--	int resplen, respoffs, copylen;
-+	int ret;
-+	size_t buflen, resplen, respoffs, copylen;
- 
- 	buflen = *len + sizeof(*u.get);
- 	if (buflen < CONTROL_BUFFER_SIZE)
-@@ -732,22 +732,15 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
- 
- 		if (respoffs > buflen) {
- 			/* Device returned data offset outside buffer, error. */
--			netdev_dbg(dev->net, "%s(%s): received invalid "
--				"data offset: %d > %d\n", __func__,
--				oid_to_string(oid), respoffs, buflen);
-+			netdev_dbg(dev->net,
-+				   "%s(%s): received invalid data offset: %zu > %zu\n",
-+				   __func__, oid_to_string(oid), respoffs, buflen);
- 
- 			ret = -EINVAL;
- 			goto exit_unlock;
- 		}
- 
--		if ((resplen + respoffs) > buflen) {
--			/* Device would have returned more data if buffer would
--			 * have been big enough. Copy just the bits that we got.
--			 */
--			copylen = buflen - respoffs;
--		} else {
--			copylen = resplen;
--		}
-+		copylen = min(resplen, buflen - respoffs);
- 
- 		if (copylen > *len)
- 			copylen = *len;
--- 
-2.39.0
+With all that said, is there a better way to get the desired effects of
+this patch?
 
+							Thanx, Paul
