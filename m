@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08C46661E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CBD6661F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235143AbjAKRal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
+        id S231831AbjAKRa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239672AbjAKR2s (ORCPT
+        with ESMTP id S239626AbjAKR2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:28:48 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5171B3E0F3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:25:06 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id z4-20020a17090a170400b00226d331390cso17959689pjd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:25:06 -0800 (PST)
+        Wed, 11 Jan 2023 12:28:42 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9BF3D5C2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:24:40 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id f34so24575562lfv.10
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:24:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c/CxlYBi388NDPbDSoqcwBjvGrii9x3/S/0h+i6WeGA=;
-        b=oo0eRw2g8jOAp10levb4WD5yMGtiaNPRCY0wUJNOLxMJq7zYYsp1Bf5FKtN/+8sx0e
-         P2gv1oxrqaat+lnipA9FvzPpxUaGPxq0jV++nAKm/MqRpYwScgH8VshqZDpyS+S9VRRy
-         hV1H+B5twRfEZmpY8NF6oVBprMp37v5ntum8Zf8e8UDmKUmnjl2WPQHWfl8qhIuubLI6
-         GhCb/ddxSjDY+oeBOUHCi5DSgBcjDnwE7Q0JQvLxIuz8eVbfuO0mgIENwqTTgIrBx8kU
-         bL9k99XLQNeXpnkSzSC0wrARqfWSnvQRrhnBsAfZJCwyH9oA6JXXed0KLsvWKd5TE0HV
-         PK8A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BufMsqlOmmyRV+XDYJhsyo4WkH0AKxC4lBAUlIrdNpw=;
+        b=EjhiTHwgsLYT1dXXadNVuaLrEVqPaKDgcEk/n7llNSw4fOryw6ICtE72kHW7R4Nv1G
+         xPJhEk3Ul+t5OPL2no5zC6lqaGrTYmNcEIHe+9YAtUaaUrUraNfYIa7htYIQ0QpYL6hF
+         j/B4NujczzQGVUYvRfdA/NxTD5rHNJSiaXX6Sz7CE/Pm2S1+RRKv5YqKedMbvLKhZGsY
+         VlxRjb0hEAOTGYrk93bdIGQKKqSTmTEz0U2tec/q69YaUizsmuCM+HlX9G4fUCXAaTvG
+         rzB5CrEDDlzGtz23bsLMEkuzJdrZZuT2VHvvvnjMdcOY8u1U9t4JgHR8zdOpefZo5WVV
+         421g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c/CxlYBi388NDPbDSoqcwBjvGrii9x3/S/0h+i6WeGA=;
-        b=6Nh4pPyOMVJRZayfH/+VmSeWtoWD2CRHf9DcnlVlYjAXsydyMsoOE9BNkK52CSmybu
-         DHdTBvC3456fIu0gMWeL4x24H5g3Kak+teTqQcXSbIZCb53TnBZYvVk7J1s1r6pLAoHa
-         bA7fTxTiPxI5J4MmCBt6hR4gXFLQ0R9K/XoWqTZynT2c3drCf0WVyIuV4PnD2rEqnYZ8
-         Vy4+Gwdz1ttvjm+s7mfv4QeYVT9h+7bkqIauGOEVis6J6nyBM5YoBxgoj2fJWczr7aea
-         kJ/znAf1UPe7qyDCdazFSTU6BvVcj+YcOTQkKs/9uqpqMgRoujKwTkPA9mrn6sQKZ+SL
-         pwoQ==
-X-Gm-Message-State: AFqh2krxbRiwu6EfENMllVK1W5SqFbsRY70FXlUzMzsB8OvRx/PYz1zf
-        77IAheDJ/lnPURSWI39uRQfLag==
-X-Google-Smtp-Source: AMrXdXs7OzbIhx9etHa36fQ9ETAVJ4i9nKt/8w1rFjvuwXDA0rzizVgdXyi7HaHdKxCzwFVrpb9iKw==
-X-Received: by 2002:a17:90a:558c:b0:226:1189:ad3e with SMTP id c12-20020a17090a558c00b002261189ad3emr51627132pji.27.1673457905925;
-        Wed, 11 Jan 2023 09:25:05 -0800 (PST)
-Received: from archl-hc1b.. ([45.112.3.15])
-        by smtp.gmail.com with ESMTPSA id rm14-20020a17090b3ece00b00218fa115f83sm11110722pjb.57.2023.01.11.09.25.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 09:25:05 -0800 (PST)
-From:   Anand Moon <anand@edgeble.ai>
-To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Johan Jonker <jbx6244@gmail.com>, Anand Moon <anand@edgeble.ai>,
-        Jagan Teki <jagan@edgeble.ai>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 linux-next 4/4] ARM: dts: rockchip: rv1126: Enable Ethernet for Neu2-IO
-Date:   Wed, 11 Jan 2023 17:24:34 +0000
-Message-Id: <20230111172437.5295-4-anand@edgeble.ai>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230111172437.5295-1-anand@edgeble.ai>
-References: <20230111172437.5295-1-anand@edgeble.ai>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BufMsqlOmmyRV+XDYJhsyo4WkH0AKxC4lBAUlIrdNpw=;
+        b=Xeqlh/nq/vjQPCgc9DD7DBu68R4T1aJmiqw1ebo6aQcm4iKOtS9j4EL5aCgH/8MVq3
+         UeQJ1jI29U5IWWq89VGMIF/rpMEiWOV7zi57LA+raJalifXuGZbSTxuY2U2sxVt6/+ql
+         yNEbYF8CGAgqhBdbaDqW5FndzH/HtIXibFAA6d/3eSCHvVhz4BtL0GTjJ2vB/RSfJ7nl
+         pLJGtq5zoNvFVIQ13gxGxRh9ZoTnMknFAkELzrJKu63TjAj3v1Dctk1+RfFC31Ic/Iey
+         d+xkKQazk7Owfoi6avVw4YzLj+f5eV2CSWxM3F2q4sTWY4fYOBCQ7gcNZiQzj/MGqwLQ
+         zzJg==
+X-Gm-Message-State: AFqh2kqqg2yIL0JAhGcG6EZxiPvrnckPWKtejB//zkcu0uaz0jkxIVxX
+        fyRARjotI8KAJEF4xIACx1M=
+X-Google-Smtp-Source: AMrXdXujTyNtlst9+CBaQp6G4ZsaUKLRlM/diN5BcAsJA2TLQFc9R4ywslpUwNMPu5s6kDpNgBpuZg==
+X-Received: by 2002:ac2:43a4:0:b0:4cb:3a60:65cc with SMTP id t4-20020ac243a4000000b004cb3a6065ccmr9145712lfl.5.1673457878294;
+        Wed, 11 Jan 2023 09:24:38 -0800 (PST)
+Received: from ?IPV6:2a00:1370:8180:6b00:a1a8:4887:1af4:637a? ([2a00:1370:8180:6b00:a1a8:4887:1af4:637a])
+        by smtp.gmail.com with ESMTPSA id q6-20020a056512210600b004aa0870b5e5sm2817544lfr.147.2023.01.11.09.24.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 09:24:37 -0800 (PST)
+Message-ID: <bfbdb94f-c965-0b07-3539-c1a057e5b0b4@gmail.com>
+Date:   Wed, 11 Jan 2023 20:24:37 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 4/4] staging: r8188eu: always process urb status
+Content-Language: en-US
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230110205626.183516-1-martin@kaiser.cx>
+ <20230110205626.183516-5-martin@kaiser.cx>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20230110205626.183516-5-martin@kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,69 +79,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rockchip RV1126 has GMAC 10/100/1000M ethernet controller.
-Enable ethernet node on Neu2-IO board.
+Hi Martin,
 
-Co-Developed-by: Jagan Teki <jagan@edgeble.ai>
-Signed-off-by: Jagan Teki <jagan@edgeble.ai>
-Signed-off-by: Anand Moon <anand@edgeble.ai>
----
-v5: add CoD of Jagan
-v4: none
-v3: Address review coments from Johan and Add SoB Jagan Teki.
-v2: drop SoB of Jagan Teki.
----
- arch/arm/boot/dts/rv1126-edgeble-neu2-io.dts | 37 ++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+Martin Kaiser <martin@kaiser.cx> says:
+> Remove the if clause in usb_write_port_complete and process the urb
+> status regardless of bSurpriseRemoved, bDriverStopped and
+> bWritePortCancel.
+> 
+> The only possible results of urb status processing are updates to
+> bSurpriseRemoved and bDriverStopped. All of the three status variable are
+> set to true only if the whole USB processing has to be stopped (when the
+> driver is unloaded or when the system goes to sleep).
+> 
 
-diff --git a/arch/arm/boot/dts/rv1126-edgeble-neu2-io.dts b/arch/arm/boot/dts/rv1126-edgeble-neu2-io.dts
-index dded0a12f0cd..3340fc3f0739 100644
---- a/arch/arm/boot/dts/rv1126-edgeble-neu2-io.dts
-+++ b/arch/arm/boot/dts/rv1126-edgeble-neu2-io.dts
-@@ -22,6 +22,43 @@ chosen {
- 	};
- };
- 
-+&gmac {
-+	assigned-clocks = <&cru CLK_GMAC_SRC>, <&cru CLK_GMAC_TX_RX>,
-+			  <&cru CLK_GMAC_ETHERNET_OUT>;
-+	assigned-clock-parents = <&cru CLK_GMAC_SRC_M1>, <&cru RGMII_MODE_CLK>;
-+	assigned-clock-rates = <125000000>, <0>, <25000000>;
-+	clock_in_out = "input";
-+	phy-handle = <&phy>;
-+	phy-mode = "rgmii";
-+	phy-supply = <&vcc_3v3>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rgmiim1_pins &clk_out_ethernetm1_pins>;
-+	tx_delay = <0x2a>;
-+	rx_delay = <0x1a>;
-+	status = "okay";
-+};
-+
-+&mdio {
-+	phy: ethernet-phy@0 {
-+		compatible = "ethernet-phy-id001c.c916",
-+			     "ethernet-phy-ieee802.3-c22";
-+		reg = <0x0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&eth_phy_rst>;
-+		reset-assert-us = <20000>;
-+		reset-deassert-us = <100000>;
-+		reset-gpios = <&gpio0 RK_PB6 GPIO_ACTIVE_LOW>;
-+	};
-+};
-+
-+&pinctrl {
-+	ethernet {
-+		eth_phy_rst: eth-phy-rst {
-+			rockchip,pins = <0 RK_PB6 RK_FUNC_GPIO &pcfg_pull_down>;
-+		};
-+	};
-+};
-+
- &sdmmc {
- 	bus-width = <4>;
- 	cap-mmc-highspeed;
--- 
-2.39.0
+Not sure if it matters but we still have that weird rule that after 5 
+failed usb read/writes bSurpriseRemoved will be set to true
 
+Maybe also worth removing above logic?
+
+
+> It's no problem if one of the "stop everything" variables is already set
+> and the urb status processing sets another one.
+> 
+> This patch removes the last goto in usb_write_port_complete. It's also
+> part of the ongoing effort to limit the use of the "stop everything"
+> variables.
+> 
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> ---
+>   drivers/staging/r8188eu/os_dep/usb_ops_linux.c | 4 ----
+>   1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
+> index 3fd080091340..62106d2f82ad 100644
+> --- a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
+> +++ b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
+> @@ -44,9 +44,6 @@ static void usb_write_port_complete(struct urb *purb)
+>   	if (pxmitbuf->flags == HIGH_QUEUE_INX)
+>   		rtw_chk_hi_queue_cmd(padapter);
+>   
+> -	if (padapter->bSurpriseRemoved || padapter->bDriverStopped || padapter->bWritePortCancel)
+> -		goto check_completion;
+> -
+>   	switch (purb->status) {
+>   	case 0:
+>   	case -EINPROGRESS:
+> @@ -63,7 +60,6 @@ static void usb_write_port_complete(struct urb *purb)
+>   		break;
+>   	}
+>   
+> -check_completion:
+>   	rtw_sctx_done_err(&pxmitbuf->sctx,
+>   			  purb->status ? RTW_SCTX_DONE_WRITE_PORT_ERR : RTW_SCTX_DONE_SUCCESS);
+>   	rtw_free_xmitbuf(pxmitpriv, pxmitbuf);
+
+
+
+
+
+With regards,
+Pavel Skripkin
