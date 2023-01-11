@@ -2,196 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9836B665C94
+	by mail.lfdr.de (Postfix) with ESMTP id 4C061665C93
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238209AbjAKNcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
+        id S234184AbjAKNcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237634AbjAKNcK (ORCPT
+        with ESMTP id S238380AbjAKNcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:32:10 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E531BEB0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:28:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673443684; x=1704979684;
+        Wed, 11 Jan 2023 08:32:13 -0500
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE891BEB9;
+        Wed, 11 Jan 2023 05:28:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1673443716; x=1704979716;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=k7MGDdueXV0hxglws6KfXGvJ46M4lOKkMqZznlffKp0=;
-  b=S9t+A86oxov3tr/i1zbY83WKzfqCfLZeu8a4eGyJ9ZkylyTJg9ySRWkJ
-   eF7tAxnAH0IBhPIpzme28SHSlwdj1EzBXfSF4I//MVfjaZvxejVww9uKo
-   a+mOBeBZRR7NiKfNA3G5DOGaeS43zGd3SfwuP7WOj+fvbjS61S/a9cxWF
-   d507+Jn0WxsJpzJ3zoBcPBh0RIeaZdBstMiCsJQ0j1NpvBByXLMCnLMOo
-   +wwv50p9X0itsIJ9pbsNVgRR2xA/6ttTlOzo6sCe1M+u7kalVFTnixG5d
-   IXEUDeSpZJOfJEDBoCC6NjTUL7kFTLbmr638aGNPKLi25bF6Lo5CR1o/i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="409655472"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="409655472"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 05:27:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="831360000"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="831360000"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 05:27:08 -0800
-Message-ID: <f7ca6b33-19b2-7a59-da0c-c34e441e0063@linux.intel.com>
-Date:   Wed, 11 Jan 2023 14:27:06 +0100
+  bh=WCzp7M4ycosz0EMSJh4L4RaC5FrOhLeIurCLoHLODJg=;
+  b=qFUBXMNLpabYD/VxcApwE6SwLA0I4gN4LHiA54ab7eJah6vuCnvvv8tr
+   Cvb5E/5YXUH/UJzB+xs58zHGvNk9UxN7atkzkGykd8UV56n8CHg7ZNS8C
+   FTiPPqDT2SXYzsa8ISuJsWUzLlyyBNlF7bEM0GS2wWjO98x6z4b9/5uK7
+   A=;
+X-IronPort-AV: E=Sophos;i="5.96,317,1665446400"; 
+   d="scan'208";a="299087112"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-0aba4706.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 13:28:27 +0000
+Received: from EX13D40EUA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-m6i4x-0aba4706.us-east-1.amazon.com (Postfix) with ESMTPS id C9BBEA2673;
+        Wed, 11 Jan 2023 13:28:15 +0000 (UTC)
+Received: from EX19D024EUA002.ant.amazon.com (10.252.50.224) by
+ EX13D40EUA001.ant.amazon.com (10.43.165.234) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Wed, 11 Jan 2023 13:28:14 +0000
+Received: from [10.220.99.6] (10.43.161.114) by EX19D024EUA002.ant.amazon.com
+ (10.252.50.224) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.7; Wed, 11 Jan
+ 2023 13:28:00 +0000
+Message-ID: <cc2998c8-1d18-caa7-0421-584c08406847@amazon.com>
+Date:   Wed, 11 Jan 2023 15:27:56 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 01/19] ASoC: amd: ps: create platform devices based on acp
- config
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
-        vkoul@kernel.org, alsa-devel@alsa-project.org
-Cc:     Mastan.Katragadda@amd.com, Sunil-kumar.Dommati@amd.com,
-        open list <linux-kernel@vger.kernel.org>,
-        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Mario.Limonciello@amd.com, arungopal.kondaveeti@amd.com,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>
-References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
- <20230111090222.2016499-2-Vijendar.Mukunda@amd.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH RFC v7 40/64] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_FINISH
+ command
 Content-Language: en-US
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20230111090222.2016499-2-Vijendar.Mukunda@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Michael Roth <michael.roth@amd.com>, <kvm@vger.kernel.org>
+CC:     <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-crypto@vger.kernel.org>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <jroedel@suse.de>, <thomas.lendacky@amd.com>,
+        <hpa@zytor.com>, <ardb@kernel.org>, <pbonzini@redhat.com>,
+        <seanjc@google.com>, <vkuznets@redhat.com>,
+        <wanpengli@tencent.com>, <jmattson@google.com>, <luto@kernel.org>,
+        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
+        <pgonda@google.com>, <peterz@infradead.org>,
+        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
+        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
+        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
+        <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
+        <ashish.kalra@amd.com>, <harald@profian.com>,
+        Brijesh Singh <brijesh.singh@amd.com>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-41-michael.roth@amd.com>
+From:   Sabin Rapan <sabrapan@amazon.com>
+In-Reply-To: <20221214194056.161492-41-michael.roth@amd.com>
+X-Originating-IP: [10.43.161.114]
+X-ClientProxiedBy: EX13D49UWC004.ant.amazon.com (10.43.162.106) To
+ EX19D024EUA002.ant.amazon.com (10.252.50.224)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/2023 10:02 AM, Vijendar Mukunda wrote:
-> Create platform devices for sdw controllers and PDM controller
-> based on ACP pin config selection and ACPI fw handle for
-> pink sardine platform.
-> 
-> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-> Signed-off-by: Mastan Katragadda <Mastan.Katragadda@amd.com>
-> ---
->   include/linux/soundwire/sdw_amd.h |  18 +++
->   sound/soc/amd/ps/acp63.h          |  24 ++-
->   sound/soc/amd/ps/pci-ps.c         | 248 ++++++++++++++++++++++++++++--
->   3 files changed, 277 insertions(+), 13 deletions(-)
->   create mode 100644 include/linux/soundwire/sdw_amd.h
-> 
-
-...
-
-> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
-> index e86f23d97584..85154cf0b2a2 100644
-> --- a/sound/soc/amd/ps/pci-ps.c
-> +++ b/sound/soc/amd/ps/pci-ps.c
-> @@ -14,6 +14,7 @@
->   #include <linux/interrupt.h>
->   #include <sound/pcm_params.h>
->   #include <linux/pm_runtime.h>
-> +#include <linux/soundwire/sdw_amd.h>
->   
->   #include "acp63.h"
->   
-> @@ -134,12 +135,68 @@ static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
->   	return IRQ_NONE;
->   }
->   
-> -static void get_acp63_device_config(u32 config, struct pci_dev *pci,
-> -				    struct acp63_dev_data *acp_data)
-> +static int sdw_amd_scan_controller(struct device *dev)
-> +{
-> +	struct acp63_dev_data *acp_data;
-> +	struct fwnode_handle *link;
-> +	char name[32];
-> +	u8 count = 0;
-> +	u32 acp_sdw_power_mode = 0;
-> +	int index;
-> +	int ret;
-> +
-> +	acp_data = dev_get_drvdata(dev);
-> +	acp_data->acp_sdw_power_off = true;
-> +	/* Found controller, find links supported */
-> +	ret = fwnode_property_read_u8_array((acp_data->sdw_fw_node),
-> +					    "mipi-sdw-master-count", &count, 1);
-> +
-> +	if (ret) {
-> +		dev_err(dev,
-> +			"Failed to read mipi-sdw-master-count: %d\n", ret);
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Check count is within bounds */
-> +	if (count > AMD_SDW_MAX_CONTROLLERS) {
-> +		dev_err(dev, "Controller count %d exceeds max %d\n",
-> +			count, AMD_SDW_MAX_CONTROLLERS);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!count) {
-> +		dev_warn(dev, "No SoundWire controllers detected\n");
-> +		return -EINVAL;
-> +	}
-> +	dev_dbg(dev, "ACPI reports %d Soundwire Controller devices\n", count);
-> +	acp_data->sdw_master_count  = count;
-
-Double space before '='.
-
-> +	for (index = 0; index < count; index++) {
-> +		snprintf(name, sizeof(name), "mipi-sdw-link-%d-subproperties", index);
-> +		link = fwnode_get_named_child_node(acp_data->sdw_fw_node, name);
-> +		if (!link) {
-> +			dev_err(dev, "Master node %s not found\n", name);
-> +			return -EIO;
-> +		}
-> +
-> +		fwnode_property_read_u32(link, "amd-sdw-power-mode",
-> +					 &acp_sdw_power_mode);
-> +		if (acp_sdw_power_mode != AMD_SDW_POWER_OFF_MODE)
-> +			acp_data->acp_sdw_power_off = false;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int get_acp63_device_config(u32 config, struct pci_dev *pci, struct acp63_dev_data *acp_data)
->   {
->   	struct acpi_device *dmic_dev;
-> +	struct acpi_device *sdw_dev;
-> +	struct device *dev;
->   	const union acpi_object *obj;
->   	bool is_dmic_dev = false;
-> +	bool is_sdw_dev = false;
-> +	int ret;
-> +
-> +	dev = &pci->dev;
->   
->   	dmic_dev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP63_DMIC_ADDR, 0);
-
-If you set dev above, you might as well use it throughout the function 
-context? Like above in ACPI_COMPANION?
-
->   	if (dmic_dev) {
-> @@ -149,22 +206,84 @@ static void get_acp63_device_config(u32 config, struct pci_dev *pci,
->   			is_dmic_dev = true;
->   	}
->   
-> +	sdw_dev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP63_SDW_ADDR, 0);
-> +	if (sdw_dev) {
-> +		is_sdw_dev = true;
-> +		acp_data->sdw_fw_node = acpi_fwnode_handle(sdw_dev);
-> +		ret = sdw_amd_scan_controller(dev);
-
-Or just use &pci->dev here, so there is no need for separate variable?
-
-
+CgpPbiAxNC4xMi4yMDIyIDIxOjQwLCBNaWNoYWVsIFJvdGggd3JvdGU6Cj4gK3N0YXRpYyBpbnQg
+c25wX2xhdW5jaF91cGRhdGVfdm1zYShzdHJ1Y3Qga3ZtICprdm0sIHN0cnVjdCBrdm1fc2V2X2Nt
+ZCAqYXJncCkKPiArewo+ICsgICAgICAgc3RydWN0IGt2bV9zZXZfaW5mbyAqc2V2ID0gJnRvX2t2
+bV9zdm0oa3ZtKS0+c2V2X2luZm87Cj4gKyAgICAgICBzdHJ1Y3Qgc2V2X2RhdGFfc25wX2xhdW5j
+aF91cGRhdGUgZGF0YSA9IHt9Owo+ICsgICAgICAgaW50IGksIHJldDsKPiArCj4gKyAgICAgICBk
+YXRhLmdjdHhfcGFkZHIgPSBfX3BzcF9wYShzZXYtPnNucF9jb250ZXh0KTsKPiArICAgICAgIGRh
+dGEucGFnZV90eXBlID0gU05QX1BBR0VfVFlQRV9WTVNBOwo+ICsKPiArICAgICAgIGZvciAoaSA9
+IDA7IGkgPCBrdm0tPmNyZWF0ZWRfdmNwdXM7IGkrKykgewoKU2hvdWxkIGJlIHJlcGxhY2VkIHdp
+dGgga3ZtX2Zvcl9lYWNoX3ZjcHUoKSBhcyBpdCB3YXMgZG9uZSBmb3IKc2V2X2xhdW5jaF91cGRh
+dGVfdm1zYSgpIGluIGMzNmIxNmQyOWYzYSAoIktWTTogU1ZNOiBVc2Ugb25saW5lX3ZjcHVzLApu
+b3QgY3JlYXRlZF92Y3B1cywgdG8gaXRlcmF0ZSBvdmVyIHZDUFVzIikuClByZXZlbnRzIGFjY2Vz
+c2luZyB1bmluaXRpYWxpemVkIGRhdGEgaW4gc3RydWN0IHZjcHVfc3ZtLgoKLS0KU2FiaW4uCgoK
+CkFtYXpvbiBEZXZlbG9wbWVudCBDZW50ZXIgKFJvbWFuaWEpIFMuUi5MLiByZWdpc3RlcmVkIG9m
+ZmljZTogMjdBIFNmLiBMYXphciBTdHJlZXQsIFVCQzUsIGZsb29yIDIsIElhc2ksIElhc2kgQ291
+bnR5LCA3MDAwNDUsIFJvbWFuaWEuIFJlZ2lzdGVyZWQgaW4gUm9tYW5pYS4gUmVnaXN0cmF0aW9u
+IG51bWJlciBKMjIvMjYyMS8yMDA1Lgo=
 
