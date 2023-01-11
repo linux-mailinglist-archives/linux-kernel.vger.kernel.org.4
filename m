@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13294665C2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 059B9665C43
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbjAKNLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:11:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S230477AbjAKNQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbjAKNLT (ORCPT
+        with ESMTP id S230182AbjAKNQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:11:19 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5008E39;
-        Wed, 11 Jan 2023 05:11:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673442674; x=1704978674;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tPgiAxXLY4gShdjl9d7GsMDyiml/2QFNArrDwpdyHfc=;
-  b=msv4S96QkMlQX3+6eDtKfocmPauL1J9o4wfTiDOzv3cr4G7lI3JD7Pdf
-   f4zXFJwFJIPbS064SfD6R8LcTd9uM6Dedwdz5TP8GX4a9yFjXObXjlMdX
-   O2o7svmvrs4FPMFwJr4b168BpAajE4GJJud+Wu/mWQwRoajgwd6j5DIQP
-   0jRNAFV8HwIOaG5zrasTDoweWrVV9fi2FPQnJt9MMR7lBNgX+ikHQMlHx
-   7qryoZwsZszYRJmYsTHCOPKCu0bOtiAThZt8B55KmbLjy34DD7xV3FNdt
-   BdJQZbVTchfYPV9QQbiTHQSH64M9m8r1QBlRLmjTo13FBeETXusbs3iJu
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="409651827"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="409651827"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 05:09:44 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="650746989"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="650746989"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 05:09:33 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Fix the start_poll_synchronize_rcu_expedited() be invoked very early
-Date:   Wed, 11 Jan 2023 21:14:53 +0800
-Message-Id: <20230111131453.1626214-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 11 Jan 2023 08:16:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879CA60EE;
+        Wed, 11 Jan 2023 05:16:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AE25B81BE6;
+        Wed, 11 Jan 2023 13:16:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3CE7C433EF;
+        Wed, 11 Jan 2023 13:16:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673443001;
+        bh=xHtzKMNO2jMg6JzWjhGA9a6by3sdnOw4VBI0pKdU8G4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Llgr4Hj/Pxyak6ZPTgMGr0SXsUu6sI07GwbRGOlBrwJIDt6558hUGvA4a9gRRecZS
+         QSOUZdWEXAuX4NWx+uHSktAOtTSCl4H2/tn4BME9/dpOnOZDOnX8Ud5btNjv2C8PiA
+         ZtMf0gzqtNXD6dOP/gSyrMwijSIOJmfYpLmwU7SmMQ1cr6PSvHQfQvdhO3rPvzEPNI
+         xsPlcmyABOQ7MzGGA+uVc3kndK6BuRiDVxG/FG88J1yAIXHTKQW1fGNZ1Fdakg77/V
+         8sB3W77lWdDlmNNuhBFjsByt1Z4C56MIr3jKXGIXsG7zrWzvxmyAlkgj1m4YVkJ/Yr
+         LxtA/ghwSeFGw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4B53E40468; Wed, 11 Jan 2023 10:16:39 -0300 (-03)
+Date:   Wed, 11 Jan 2023 10:16:39 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Dmitry Dolgov <9erthalion6@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH] perf auxtrace: Fix address filter duplicate symbol
+ selection
+Message-ID: <Y762t7QWEKPYRFC4@kernel.org>
+References: <20230110185659.15979-1-adrian.hunter@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110185659.15979-1-adrian.hunter@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the start_poll_synchronize_rcu_expedited() can be invoked
-very early. before rcu_init(), the rcu_data structure's->mynode is not
-initialized, if invoke start_poll_synchronize_rcu_expedited() before
-rcu_init(), will access to NULL mynode pointer.
+Em Tue, Jan 10, 2023 at 08:56:59PM +0200, Adrian Hunter escreveu:
+>   After:
+> 
+>     $ perf record -e intel_pt//u --filter 'filter func #2 @ ./test' -- ./test
+>     First func
+>     Second func
+>     [ perf record: Woken up 1 times to write data ]
+>     [ perf record: Captured and wrote 0.016 MB perf.data ]
+>     $ perf script --itrace=b -Ftime,flags,ip,sym,addr --ns
+>     1231062.526977619:   tr strt                               0 [unknown] =>     558495708179 func
+>     1231062.526977619:   tr end  call               558495708188 func =>     558495708050 _init
+>     1231062.526979286:   tr strt                               0 [unknown] =>     55849570818d func
+>     1231062.526979286:   tr end  return             55849570818f func =>     55849570819d other
+> 
+> Reported-by: Dmitry Dolgov <9erthalion6@gmail.com>
+> Fixes: 1b36c03e3569 ("perf record: Add support for using symbols in address filters")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
-This commit therefore add exp_seq_poll_rq member to rcu_state structure
-to store snap seq number
+Thanks, applied.
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree.c     | 3 ++-
- kernel/rcu/tree.h     | 1 +
- kernel/rcu/tree_exp.h | 6 ++++--
- 3 files changed, 7 insertions(+), 3 deletions(-)
+Dmitry, can I have your Tested-by? Checking the original thread...
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 63545d79da51..34b13d6bd8c4 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -92,6 +92,7 @@ static struct rcu_state rcu_state = {
- 	.exp_mutex = __MUTEX_INITIALIZER(rcu_state.exp_mutex),
- 	.exp_wake_mutex = __MUTEX_INITIALIZER(rcu_state.exp_wake_mutex),
- 	.ofl_lock = __ARCH_SPIN_LOCK_UNLOCKED,
-+	.exp_seq_poll_rq = RCU_GET_STATE_COMPLETED,
- };
- 
- /* Dump rcu_node combining tree at boot to verify correct setup. */
-@@ -4938,7 +4939,7 @@ void __init rcu_init(void)
- 		qovld_calc = qovld;
- 
- 	// Kick-start any polled grace periods that started early.
--	if (!(per_cpu_ptr(&rcu_data, cpu)->mynode->exp_seq_poll_rq & 0x1))
-+	if (!(rcu_state.exp_seq_poll_rq & 0x1))
- 		(void)start_poll_synchronize_rcu_expedited();
- 
- 	rcu_test_sync_prims();
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 192536916f9a..dbc7c7484a7e 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -397,6 +397,7 @@ struct rcu_state {
- 						/* Synchronize offline with */
- 						/*  GP pre-initialization. */
- 	int nocb_is_setup;			/* nocb is setup from boot */
-+	unsigned long exp_seq_poll_rq;
- };
- 
- /* Values for rcu_state structure's gp_flags field. */
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index 956cd459ba7f..5964d1cccab1 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -1068,9 +1068,11 @@ unsigned long start_poll_synchronize_rcu_expedited(void)
- 	if (rcu_init_invoked())
- 		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
- 	if (!poll_state_synchronize_rcu(s)) {
--		rnp->exp_seq_poll_rq = s;
--		if (rcu_init_invoked())
-+		if (rcu_init_invoked()) {
-+			rnp->exp_seq_poll_rq = s;
- 			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
-+		} else
-+			rcu_state.exp_seq_poll_rq = s;
- 	}
- 	if (rcu_init_invoked())
- 		raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
--- 
-2.25.1
+- Arnaldo
 
+> ---
+>  tools/perf/util/auxtrace.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+> index 265d20cc126b..c2e323cd7d49 100644
+> --- a/tools/perf/util/auxtrace.c
+> +++ b/tools/perf/util/auxtrace.c
+> @@ -2611,7 +2611,7 @@ static int find_dso_sym(struct dso *dso, const char *sym_name, u64 *start,
+>  				*size = sym->start - *start;
+>  			if (idx > 0) {
+>  				if (*size)
+> -					return 1;
+> +					return 0;
+>  			} else if (dso_sym_match(sym, sym_name, &cnt, idx)) {
+>  				print_duplicate_syms(dso, sym_name);
+>  				return -EINVAL;
+> -- 
+> 2.34.1
