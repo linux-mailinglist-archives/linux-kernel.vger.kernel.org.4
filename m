@@ -2,165 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3B3665EAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA98665EB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234525AbjAKPD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:03:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S236455AbjAKPD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:03:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbjAKPCz (ORCPT
+        with ESMTP id S236548AbjAKPDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:02:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9872D13E1E;
-        Wed, 11 Jan 2023 07:02:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FB0661D49;
-        Wed, 11 Jan 2023 15:02:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C121C433AC;
-        Wed, 11 Jan 2023 15:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673449372;
-        bh=UDpxO7rCpbkXZAOhJIiuell38ocfyxx962el9ZejsLk=;
-        h=From:Date:Subject:To:Cc:From;
-        b=niuLuHYV7lRffZio4EU8X6stclJYVM8Fax5gfeTpoPZKTT4sUSDHwIMAqBJCI3Ipm
-         TjcTAJirj1H3BY4hkhKqJazI73G0nmgK7VHoNNMp+liZIDoy34XRflr6aPrtWrq1/m
-         bdvozHRD17J0iM00g+2xcqM3iUAqCy04msWVywTqfrA3hnuWZAk6+TzaekoqXehOds
-         JVcJqJR6Flbh4QBluP8dOinE27cxehBer0SgpiHxadw+iEihqbIgMgbNSVSf7/cjwb
-         +HvHAIiVVmrpl7xDRnI/Bd4CHk2GrUSyqjhsGRlyruQ6o0uFY1mpBUmGce1GAau3bM
-         YlLMsxgfSIb2Q==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Wed, 11 Jan 2023 15:02:41 +0000
-Subject: [PATCH] kselftest/arm64: Limit the maximum VL we try to set via ptrace
+        Wed, 11 Jan 2023 10:03:32 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2110B15802
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:03:27 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id bs20so15331258wrb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:03:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gSjNh53fuTFX648VbV+cFXPXevheHMtqh9ORKZBfONQ=;
+        b=f/DcrDMTm8lUsMVzMA8CVkGtWSVbYy0MBnnFulQCEoaplBnKgCmmlA6eu+TPbwNyjT
+         ue/gAZSerx8XPU2+nVTkUu4idw0agYAb4x79ZlW1tVSLLQrs8vpvTilUbIZNfsZthldY
+         eIM6Y7xaOEX2hd+7rd7z/FjmilAtsdhEzhPj3dqoqR4T03uAp4/IdnduAuzzdhRytJtR
+         rwlBS9CJ6LoBv1+DwkLW+WTEE9ic9xtf933JMrcZGWamx4SaOABE2VoUuZNX0Gk/B7ga
+         lTfXcrtwgYFiEZXW3WZVDqkRXRdusDuDKL8GPPERQg1Qah4UxEs4y7uPm/BDROgI7Em+
+         Cbow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gSjNh53fuTFX648VbV+cFXPXevheHMtqh9ORKZBfONQ=;
+        b=SjecTKr9mQhi0TQ1vPHtY+ca//tGoEhsC2dc3ORKRQ4x7KdXMZXjAGF52Bl/1Tmi1u
+         nA4ckfofrqaDEChzZSgnV/BcCG2xaKh2Zk563ycM6fgkijl+/2y2+mqf9zUf4Kbqkrhq
+         Bm6Q3blxcCVglcMj+5r0e7IlIJUSAzzli0DqX2wHMFWyQj93cOHkS8b47h2khMB6fN6A
+         /lpCshds5WrDxG2qjmP9ib19i8ctwndRFyBTJsn39NuYgMfx7kLFxI2sPAETec81TioX
+         TEYjkVjR0gBbGzoMNkS89B6p9ag42CHeF6Nul+aoLDvPqdd4gPorlPl7Nva33Ql3b+QJ
+         oPmg==
+X-Gm-Message-State: AFqh2krz3QmwWxYeCSpz5yj8DNFFPebTGM30BXSIU061M8fy8bWg9S4I
+        xiYFUFXhWPmNru393PFxLVob8A==
+X-Google-Smtp-Source: AMrXdXtmbc+MAiHw2DNZmN5yQ7ULD99oOLR1VBGQvIju6NvR2aRocEC8S977tjFA900+RAJES1EUBQ==
+X-Received: by 2002:a5d:6b87:0:b0:2bc:371a:8a1 with SMTP id n7-20020a5d6b87000000b002bc371a08a1mr7240550wrx.22.1673449405630;
+        Wed, 11 Jan 2023 07:03:25 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id w5-20020a05600018c500b002420dba6447sm13885188wrq.59.2023.01.11.07.03.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 07:03:25 -0800 (PST)
+Message-ID: <24461c28-0939-bd37-a6bc-774dc70ed8ed@linaro.org>
+Date:   Wed, 11 Jan 2023 16:03:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 7/7] arm64: defconfig: Enable IPQ9574 SoC base configs
+Content-Language: en-US
+To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
+        devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, tdas@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
+References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
+ <20230110121316.24892-8-quic_devipriy@quicinc.com>
+ <a9dfc45a-dc7a-9e39-ccc4-a451ea165bdf@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a9dfc45a-dc7a-9e39-ccc4-a451ea165bdf@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230111-arm64-kselftest-ptrace-max-vl-v1-1-8167f41d1ad8@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAJHPvmMC/x2NQQ6CQAwAv0J6tglFguhXjIfuWmQDLKTdIAnh7
- y4eZw4zO5hoEINHsYPKGizMMQNdCvA9x49geGeGqqyuJREh69TUOJiMXRJLuCRlLzjxhuuIVDXS
- utq19xtBbjg2QaccfX9WvrMOp15UurD9t8/XcfwAHjZniIYAAAA=
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12-dev-8b3d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3606; i=broonie@kernel.org;
- h=from:subject:message-id; bh=UDpxO7rCpbkXZAOhJIiuell38ocfyxx962el9ZejsLk=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjvs+aSkD4Zcju3QuXggplQ2pgVnRTSRJeS4Pgo67Q
- xq5i5yyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY77PmgAKCRAk1otyXVSH0N+oB/
- 9dsYuRUBMPs3iARfDlyxlgKeogXBrz2h8uDlyK0xHXyk3jcf3EGJcg7l+1E1PkQ/W+7IvcU9r6Ubi+
- ddz9ZGIefA2i/b1AQh2LHWgOxcZFKV6ze3W1XGo+YCUrk1oNy12qY+eUWnDXb9om1rAPdGppaHVBH8
- yKNBQ4L3wg5qzdTOd9b0xSWpjDwYBhWBIJiTtkbx17lsZI/LU+v9y9LUY1JccTudPIYLq2YA7lX5UG
- rpdVXdeQASJHuUPEdjk5gVrjo2WPgxkKCmUnK6gkqBp9ZznlUTYbdNsegKDtj8DO6CzpJrg4VhsyfF
- +msO9L/JaQZ79fVhjxC38OjpX4rCBx
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When SVE was initially merged we chose to export the maximum VQ in the ABI
-as being 512, rather more than the architecturally supported maximum of 16.
-For the ptrace tests this results in us generating a lot of test cases and
-hence log output which are redundant since a system couldn't possibly
-support them. Instead only check values up to the current architectural
-limit, plus one more so that we're covering the constraining of higher
-vector lengths.
+On 11/01/2023 15:48, Kathiravan Thirumoorthy wrote:
+> 
+> On 1/10/2023 5:43 PM, devi priya wrote:
+>> Enables clk & pinctrl related configs
+>>
+>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>> ---
+>>   arch/arm64/configs/defconfig | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+>> index 851e8f9be06d..e0ae0996d5ad 100644
+>> --- a/arch/arm64/configs/defconfig
+>> +++ b/arch/arm64/configs/defconfig
+>> @@ -545,6 +545,7 @@ CONFIG_PINCTRL_IMX93=y
+>>   CONFIG_PINCTRL_MSM=y
+>>   CONFIG_PINCTRL_IPQ8074=y
+>>   CONFIG_PINCTRL_IPQ6018=y
+>> +CONFIG_PINCTRL_IPQ9574=y
+> Please move this after IPQ8074, to keep it in ascending order. We can 
+> move the IPQ6018 config before IPQ8074.
 
-This makes no practical difference to our test coverage, speeds things up
-on slower consoles and makes the output much more managable.
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/sve-ptrace.c | 14 ++++++++++++--
- tools/testing/selftests/arm64/fp/za-ptrace.c  | 14 ++++++++++++--
- 2 files changed, 24 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-index 8c4847977583..6d61992fe8a0 100644
---- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-@@ -30,6 +30,16 @@
- #define NT_ARM_SSVE 0x40b
- #endif
- 
-+/*
-+ * The architecture defines the maximum VQ as 16 but for extensibility
-+ * the kernel specifies the SVE_VQ_MAX as 512 resulting in us running
-+ * a *lot* more tests than are useful if we use it.  Until the
-+ * architecture is extended let's limit our coverage to what is
-+ * currently allowed, plus one extra to ensure we cover constraining
-+ * the VL as expected.
-+ */
-+#define TEST_VQ_MAX 17
-+
- struct vec_type {
- 	const char *name;
- 	unsigned long hwcap_type;
-@@ -55,7 +65,7 @@ static const struct vec_type vec_types[] = {
- 	},
- };
- 
--#define VL_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 4)
-+#define VL_TESTS (((TEST_VQ_MAX - SVE_VQ_MIN) + 1) * 4)
- #define FLAG_TESTS 2
- #define FPSIMD_TESTS 2
- 
-@@ -689,7 +699,7 @@ static int do_parent(pid_t child)
- 		}
- 
- 		/* Step through every possible VQ */
--		for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
-+		for (vq = SVE_VQ_MIN; vq <= TEST_VQ_MAX; vq++) {
- 			vl = sve_vl_from_vq(vq);
- 
- 			/* First, try to set this vector length */
-diff --git a/tools/testing/selftests/arm64/fp/za-ptrace.c b/tools/testing/selftests/arm64/fp/za-ptrace.c
-index bf6158654056..ac27d87396fc 100644
---- a/tools/testing/selftests/arm64/fp/za-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/za-ptrace.c
-@@ -25,7 +25,17 @@
- #define NT_ARM_ZA 0x40c
- #endif
- 
--#define EXPECTED_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
-+/*
-+ * The architecture defines the maximum VQ as 16 but for extensibility
-+ * the kernel specifies the SVE_VQ_MAX as 512 resulting in us running
-+ * a *lot* more tests than are useful if we use it.  Until the
-+ * architecture is extended let's limit our coverage to what is
-+ * currently allowed, plus one extra to ensure we cover constraining
-+ * the VL as expected.
-+ */
-+#define TEST_VQ_MAX 17
-+
-+#define EXPECTED_TESTS (((TEST_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
- 
- static void fill_buf(char *buf, size_t size)
- {
-@@ -301,7 +311,7 @@ static int do_parent(pid_t child)
- 	ksft_print_msg("Parent is %d, child is %d\n", getpid(), child);
- 
- 	/* Step through every possible VQ */
--	for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
-+	for (vq = SVE_VQ_MIN; vq <= TEST_VQ_MAX; vq++) {
- 		vl = sve_vl_from_vq(vq);
- 
- 		/* First, try to set this vector length */
-
----
-base-commit: b7bfaa761d760e72a969d116517eaa12e404c262
-change-id: 20230111-arm64-kselftest-ptrace-max-vl-126e8b4b8971
+This must match savedefconfig order, not alphabetical.
 
 Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+Krzysztof
+
