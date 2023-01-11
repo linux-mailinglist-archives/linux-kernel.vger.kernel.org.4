@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4946660EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA996660EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbjAKQqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:46:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
+        id S231666AbjAKQqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:46:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbjAKQp6 (ORCPT
+        with ESMTP id S231972AbjAKQqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:45:58 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E26E1B;
-        Wed, 11 Jan 2023 08:45:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/zqkC0892nBvrzYj8I4E+E+GwZS3RoYTgsGXNXbQl80=; b=Lal16jcupYrWfDauUZEA3dTJOI
-        ZmMZ4GF9bkozac3T5YXCKX3pQ9m1UTNLttQI1FaYNCvIDgikYoJ8R9FwOb03EZJwSb0XrEMtK25/t
-        pw2gT4Gxr22m7l2P05qdM5xrEW11MVEhs9hX8HFSF+yVSEU1w8JzL69YKNDvV3DgKEZpoCdPrX8GM
-        v6QPUSWOatzEFLmBZ9J/l+y5Gwx7yjx2fr5NKLUw1Fr+QDrOCCJC4XMxLg0lQbFZgtsAzdQeYj3zW
-        pDFRftSobCC8nLN5jbiyjglbVy9TsRDQj2A+ATcuuCFp3eU1nA4CBHrv0qw2o+zqd7IFRKUUGCv28
-        T+wKPzIA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pFeEd-004Ip4-7M; Wed, 11 Jan 2023 16:45:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 76F40300472;
-        Wed, 11 Jan 2023 17:45:39 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5DDF22CA25088; Wed, 11 Jan 2023 17:45:39 +0100 (CET)
-Date:   Wed, 11 Jan 2023 17:45:39 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 2/3] perf/core: Set data->sample_flags in
- perf_prepare_sample()
-Message-ID: <Y77nswJ7gMWekXTt@hirez.programming.kicks-ass.net>
-References: <20221229204101.1099430-1-namhyung@kernel.org>
- <20221229204101.1099430-2-namhyung@kernel.org>
- <Y7wFJ+NF0NwnmzLa@hirez.programming.kicks-ass.net>
- <Y7x3RUd67smv3EFQ@google.com>
- <CAM9d7ciVZCHk0YqpobfR+t0FPN_-tpnLgNbN981=EygkM_riDg@mail.gmail.com>
- <Y76xng1U6UYpIGaW@hirez.programming.kicks-ass.net>
+        Wed, 11 Jan 2023 11:46:36 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F358AE014;
+        Wed, 11 Jan 2023 08:46:34 -0800 (PST)
+From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1673455592;
+        bh=LXP8YNxMczzf+pLAFEBraHS71TcH5D0s/f2HVc8xxo4=;
+        h=From:Date:Subject:To:Cc:From;
+        b=Yc7Axi0+ryvHb7W5TZEecULFxIr2/k+ULGBcJLv9MmdtQxO+I2KUWWZhT+VjMwDhh
+         AuhOjhBzWEPa37T9RGGPkGImtbwdT0GKR92tM6q+85o807NPlBRqR5TU2Xa3osqSOC
+         IEFMfTOd6P1rWxkPurgdnJC4vi+5VxrlFP3enSU8=
+Date:   Wed, 11 Jan 2023 16:46:30 +0000
+Subject: [PATCH RESEND v3] nsfs: add compat ioctl handler
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y76xng1U6UYpIGaW@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Message-Id: <20221214-nsfs-ioctl-compat-v3-1-dce2d26e1fec@weissschuh.net>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrey Vagin <avagin@openvz.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Serge Hallyn <serge@hallyn.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Karel Zak <kzak@redhat.com>,
+        Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1673455590; l=1768;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=LXP8YNxMczzf+pLAFEBraHS71TcH5D0s/f2HVc8xxo4=;
+ b=ZgToiTDahdoWp0LhjVZMSRvT+AAWvdKPw60kow4YX/v6R6SPspt8FjTS/3efh5vLpJ83nXZvASoX
+ nyhNP5wUAJRM+BuYiO+2gubO1tKh+erPxDYgV+xtmNS40ENURsj3
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 01:54:54PM +0100, Peter Zijlstra wrote:
-> On Tue, Jan 10, 2023 at 12:06:00PM -0800, Namhyung Kim wrote:
-> 
-> > Another example, but in this case it's real, is ADDR.  We cannot update
-> > the data->addr just because filtered_sample_type has PHYS_ADDR or
-> > DATA_PAGE_SIZE as it'd lose the original value.
-> 
-> Hmm, how about something like so?
-> 
-> /*
->  * if (flags & s) flags |= d; // without branches
->  */
-> static __always_inline unsigned long
-> __cond_set(unsigned long flags, unsigned long s, unsigned long d)
-> {
-> 	return flags | (d * !!(flags & s));
-> }
-> 
-> Then:
-> 
-> 	fst = sample_type;
-> 	fst = __cond_set(fst, PERF_SAMPLE_CODE_PAGE_SIZE, PERF_SAMPLE_IP);
-> 	fst = __cond_set(fst, PERF_SAMPLE_DATA_PAGE_SIZE |
-> 			      PERF_SAMPLE_PHYS_ADDR,	  PERF_SAMPLE_ADDR);
-> 	fst = __cond_set(fst, PERF_SAMPLE_STACK_USER,     PERF_SAMPLE_REGS_USER);
-> 	fst &= ~data->sample_flags;
-> 
+As all parameters and return values of the ioctls have the same
+representation on both 32bit and 64bit we can reuse the normal ioctl
+handler for the compat handler via compat_ptr_ioctl().
 
-Hmm, I think it's better to write this like:
+All nsfs ioctls return a plain "int" filedescriptor which is a signed
+4-byte integer type on both 32bit and 64bit.
+The only parameter taken is by NS_GET_OWNER_UID and is a pointer to a
+"uid_t" which is a 4-byte unsigned integer type on both 32bit and 64bit.
 
-static __always_inline unsigned long
-__cond_set(unsigned long flags, unsigned long s, unsigned long d)
-{
-	return d * !!(flags & s);
-}
+Fixes: 6786741dbf99 ("nsfs: add ioctl to get an owning user namespace for ns file descriptor")
+Reported-by: Karel Zak <kzak@redhat.com>
+Link: https://github.com/util-linux/util-linux/pull/1924#issuecomment-1344133656
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v3:
+- Resend without changes
+  v1 and v2 did not reach the mailing lists due to an issue in my mail setup
+- Link to v2: https://lore.kernel.org/r/20221214-nsfs-ioctl-compat-v2-0-b295bb3913f6@weissschuh.net
 
-	fst = sample_type;
-	fst |= __cond_set(sample_type, PERF_SAMPLE_CODE_PAGE_SIZE, PERF_SAMPLE_IP);
-	fst |= __cond_set(sample_type, PERF_SAMPLE_DATA_PAGE_SIZE |
-			               PERF_SAMPLE_PHYS_ADDR,	   PERF_SAMPLE_ADDR);
-	fst |= __cond_set(sample_type, PERF_SAMPLE_STACK_USER,     PERF_SAMPLE_REGS_USER);
-	fst &= ~data->sample_flags;
+Changes in v2:
+- Use compat_ptr_ioctl()
+- Link to v1: https://lore.kernel.org/r/20221214-nsfs-ioctl-compat-v1-0-b169796000b2@weissschuh.net
+---
+ fs/nsfs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Which should be identical but has less data dependencies and thus gives
-an OoO CPU more leaway to paralleize things.
+diff --git a/fs/nsfs.c b/fs/nsfs.c
+index 3506f6074288..c28f69edef97 100644
+--- a/fs/nsfs.c
++++ b/fs/nsfs.c
+@@ -21,6 +21,7 @@ static long ns_ioctl(struct file *filp, unsigned int ioctl,
+ static const struct file_operations ns_file_operations = {
+ 	.llseek		= no_llseek,
+ 	.unlocked_ioctl = ns_ioctl,
++	.compat_ioctl   = compat_ptr_ioctl,
+ };
+ 
+ static char *ns_dname(struct dentry *dentry, char *buffer, int buflen)
+
+---
+base-commit: f9ff5644bcc04221bae56f922122f2b7f5d24d62
+change-id: 20221214-nsfs-ioctl-compat-1548bf6581a7
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
