@@ -2,243 +2,546 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D801665877
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2709966587B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238303AbjAKKCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 05:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
+        id S231202AbjAKKCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 05:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235989AbjAKKB5 (ORCPT
+        with ESMTP id S238220AbjAKKB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 11 Jan 2023 05:01:57 -0500
-Received: from egress-ip33a.ess.de.barracuda.com (egress-ip33a.ess.de.barracuda.com [18.185.115.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B902DECE
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:58:39 -0800 (PST)
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com [209.85.208.200]) by mx-outbound9-241.eu-central-1a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Wed, 11 Jan 2023 09:58:35 +0000
-Received: by mail-lj1-f200.google.com with SMTP id l11-20020a2e99cb000000b0027fbbafe46fso3746406ljj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:58:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f+NDmNbFwjo9DxMWr9KM3RKDdc7/RIp0UCXNPTu6MxA=;
-        b=VlOJxEjrjd+VrQXJF6dP3QOBELPyvzrhRIc7t7KdSQp+j9RupVVVCYCNvRx4+ZKgeb
-         ql5Q/vYxqD39/7mRf5D/l4Vw8MeK/rfq+3ubX9EJWsSCiLW/VTtTaHTA9xVHzV4jQp/p
-         gpBATLZFlgKMT5mtSUOTXETbKZJC/8XAj/deM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f+NDmNbFwjo9DxMWr9KM3RKDdc7/RIp0UCXNPTu6MxA=;
-        b=x9+E/jwmpCoJy3VSMzfz9GrquFl643K+lQEYOfup37fWJQIzoMytVmzLWzZJaMNd/3
-         igawdvIxuOER92MOx63DKMsAWheO63QvfQNChLXGxvGwzh7NdE/AjYXrytOMDtDp99xA
-         bfAovMrzBbHOqARysHFUrbhl3ywk9VEqvUCGLHLDirO99j+7IZV1WQetxfUd+rLA0s0w
-         z1CBMq3hPKgLIPnFHDkyQRC+lf60pjEp5uHgCMAlEClKfaIjJLZlWipXIc/VE/5JlGPN
-         sQYvI6m1FB1XTXM7GCnCSlbW11TrjKFc8SU+P0XZwBAQ/6C07BbgmJ4WsqraOLgOL/Y2
-         Mjng==
-X-Gm-Message-State: AFqh2kqfh4UHQV++7BK28Vh8X7en0Kp5NNxwWo1jry+d42sBUoREj0vd
-        ppqQIklZAFkaOcsjms234U5v1BO91aAilhBP+i4yzCgk8b1Y0tDEGyPyymPJ7GsP31GW8Qnf4Rl
-        /FvOQ430CWWhRuATqGsbelu9nE/TzNMKFcdRJVjrKouLtnZ4ll7Av9oAd2/13G7trn6tvT2ACSQ
-        rD
-X-Received: by 2002:a05:651c:210c:b0:286:6e49:190f with SMTP id a12-20020a05651c210c00b002866e49190fmr717447ljq.40.1673431115258;
-        Wed, 11 Jan 2023 01:58:35 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsufEAoTnnzxY8wmHx63idXKB1GFlobCduIWhEry1RFVfcwllpiNPdlE9GyZtuOaND3yRD93DBm8KZoD8RtA18=
-X-Received: by 2002:a05:651c:210c:b0:286:6e49:190f with SMTP id
- a12-20020a05651c210c00b002866e49190fmr717441ljq.40.1673431114978; Wed, 11 Jan
- 2023 01:58:34 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95009DF26
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:58:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20C6961B29
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:58:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ABD7C433D2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673431125;
+        bh=L3WyQgUf1+Gm1jgbzAYXM4OZoqBNr+9RWBDHCBR28yc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=i9i+ZJSX5e2Ere3rHyZrRIbKGiTOY04moqdYXK7LbxJdSyEcVCJu3xYAx0+ysoDYy
+         FtjeaADvXyhQH/O/TqRp8mQ429IV33vN1hBIBfBq3bc3+UQNwdv+j2XRnVQhwkQAgU
+         VhPL03mES6t/NUftI9rgLfDQOm2UR4UE3tKEE8ZsSO3q7gCYd+zZngMXAlgh0ZU5Uu
+         hdn4uD8OycCLcrOv4LJKJ30gp5iOHxcP1m4JJ51LWd+6d5OKMEwnvxHqUQdnc0b3WB
+         xPA66dA8+/WrtmewV4XY5YABu0RZ6IC5u025QL1xnYKTwJ1nsop0t/0wedXpDdWwS4
+         iV2cJ5wYeJXgQ==
+Received: by mail-ej1-f51.google.com with SMTP id cf18so29139033ejb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:58:45 -0800 (PST)
+X-Gm-Message-State: AFqh2kpClM0iouSnm4QPdceRLk4ZaIiA4o7dy50GKH8oL6pztO/rjzT8
+        3Tj2kMOfKMpqqUgOQ/tG+eO5SzPp5oipCimpbBc=
+X-Google-Smtp-Source: AMrXdXuO8gOd8cgaHJGglxVCx99x5hm8YuaJze+h3zL6eeANS3lVoySGmih0XvLqxI3K0rHDb2m5f8JOmasFPKYb158=
+X-Received: by 2002:a17:907:1de4:b0:7c0:dab0:d722 with SMTP id
+ og36-20020a1709071de400b007c0dab0d722mr4026689ejc.353.1673431123449; Wed, 11
+ Jan 2023 01:58:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20230106071714.30562-1-sinthu.raja@ti.com> <20230106071714.30562-3-sinthu.raja@ti.com>
- <cf854af6-fbbc-6e5c-f773-c4a868d85278@kernel.org>
-In-Reply-To: <cf854af6-fbbc-6e5c-f773-c4a868d85278@kernel.org>
-From:   Sinthu Raja M <sinthu.raja@mistralsolutions.com>
-Date:   Wed, 11 Jan 2023 15:28:23 +0530
-Message-ID: <CAEd-yTTDrTs_dpb_VqhyZjbTWDcXvZwKqhoP=sU_921PjuLpGQ@mail.gmail.com>
-Subject: Re: [PATCH V2 2/2] phy: ti: j721e-wiz: Add support to enable LN23
- Type-C swap
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Ravi Gunasekaran <r-gunasekaran@ti.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sinthu Raja <sinthu.raja@ti.com>
+References: <20230107133549.4192639-1-guoren@kernel.org> <20230107133549.4192639-4-guoren@kernel.org>
+ <2afc821c-82ea-03cb-319c-d534cbb88e5e@yadro.com>
+In-Reply-To: <2afc821c-82ea-03cb-319c-d534cbb88e5e@yadro.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 11 Jan 2023 17:58:31 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ-+x3wPd4AEa4PnLi-Asq3ZCK3sDoMx4qq84hOjtbGQQ@mail.gmail.com>
+Message-ID: <CAJF2gTQ-+x3wPd4AEa4PnLi-Asq3ZCK3sDoMx4qq84hOjtbGQQ@mail.gmail.com>
+Subject: Re: [PATCH -next V6 3/7] riscv: ftrace: Reduce the detour code size
+ to half
+To:     Evgenii Shatokhin <e.shatokhin@yadro.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>, anup@brainfault.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
+        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
+        jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
+        linux@yadro.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-BESS-ID: 1673431115-302545-5392-2780-1
-X-BESS-VER: 2019.1_20221214.2106
-X-BESS-Apparent-Source-IP: 209.85.208.200
-X-BESS-Outbound-Spam-Score: 0.40
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.245392 [from 
-        cloudscan9-143.eu-central-1a.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.40 BSF_SC0_SA085b         META: Custom Rule SA085b 
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-X-BESS-Outbound-Spam-Status: SCORE=0.40 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_SC0_SA085b, BSF_BESS_OUTBOUND, BSF_SC0_MISMATCH_TO
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 3:24 PM Roger Quadros <rogerq@kernel.org> wrote:
+On Wed, Jan 11, 2023 at 1:13 AM Evgenii Shatokhin <e.shatokhin@yadro.com> wrote:
 >
-> Hi Sinthu,
->
-> On 06/01/2023 09:17, Sinthu Raja wrote:
-> > From: Sinthu Raja <sinthu.raja@ti.com>
+> On 07.01.2023 16:35, guoren@kernel.org wrote:
 > >
-> > The WIZ acts as a wrapper for SerDes and has Lanes 0 and 2 reserved
-> > for USB for type-C lane swap if Lane 1 and Lane 3 are linked to the
-> > USB PHY that is integrated into the SerDes IP. The WIZ control register
-> > has to be configured to support this lane swap feature.
+> > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > The support for swapping lanes 2 and 3 is missing and therefore
-> > add support to configure the control register to swap between
-> > lanes 2 and 3 if PHY type is USB.
+> > Use a temporary register to reduce the size of detour code from 16 bytes to
+> > 8 bytes. The previous implementation is from 'commit afc76b8b8011 ("riscv:
+> > Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")'.
 > >
-> > Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> > Before the patch:
+> > <func_prolog>:
+> >   0: REG_S  ra, -SZREG(sp)
+> >   4: auipc  ra, ?
+> >   8: jalr   ?(ra)
+> > 12: REG_L  ra, -SZREG(sp)
+> >   (func_boddy)
+> >
+> > After the patch:
+> > <func_prolog>:
+> >   0: auipc  t0, ?
+> >   4: jalr   t0, ?(t0)
+> >   (func_boddy)
+> >
+> > This patch not just reduces the size of detour code, but also fixes an
+> > important issue:
+> >
+> > An Ftrace callback registered with FTRACE_OPS_FL_IPMODIFY flag can
+> > actually change the instruction pointer, e.g. to "replace" the given
+> > kernel function with a new one, which is needed for livepatching, etc.
+> >
+> > In this case, the trampoline (ftrace_regs_caller) would not return to
+> > <func_prolog+12> but would rather jump to the new function. So, "REG_L
+> > ra, -SZREG(sp)" would not run and the original return address would not
+> > be restored. The kernel is likely to hang or crash as a result.
+> >
+> > This can be easily demonstrated if one tries to "replace", say,
+> > cmdline_proc_show() with a new function with the same signature using
+> > instruction_pointer_set(&fregs->regs, new_func_addr) in the Ftrace
+> > callback.
+> >
+> > Link: https://lore.kernel.org/linux-riscv/20221122075440.1165172-1-suagrfillet@gmail.com/
+> > Link: https://lore.kernel.org/linux-riscv/d7d5730b-ebef-68e5-5046-e763e1ee6164@yadro.com/
+> > Co-developed-by: Song Shuai <suagrfillet@gmail.com>
+> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Evgenii Shatokhin <e.shatokhin@yadro.com>
 > > ---
+> >   arch/riscv/Makefile             |  4 +-
+> >   arch/riscv/include/asm/ftrace.h | 50 +++++++++++++++++++------
+> >   arch/riscv/kernel/ftrace.c      | 65 ++++++++++-----------------------
+> >   arch/riscv/kernel/mcount-dyn.S  | 43 +++++++++-------------
+> >   4 files changed, 76 insertions(+), 86 deletions(-)
 > >
-> > Changes in V2:
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > Address review comments:
-> > - Update commit description.
-> > - Rename enum variable name from wiz_lane_typec_swap_mode to wiz_typec_=
-master_lane.
-> > - Rename enumerators name specific to list of master lanes used for lan=
-e swapping.
-> > - Add inline comments.
+> > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> > index ea5a91da6897..3c9aaf67ed79 100644
+> > --- a/arch/riscv/Makefile
+> > +++ b/arch/riscv/Makefile
+> > @@ -12,9 +12,9 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
+> >          LDFLAGS_vmlinux := --no-relax
+> >          KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+> >   ifeq ($(CONFIG_RISCV_ISA_C),y)
+> > -       CC_FLAGS_FTRACE := -fpatchable-function-entry=8
+> > -else
+> >          CC_FLAGS_FTRACE := -fpatchable-function-entry=4
+> > +else
+> > +       CC_FLAGS_FTRACE := -fpatchable-function-entry=2
+> >   endif
+> >   endif
 > >
-> > V1: https://linkprotect.cudasvc.com/url?a=3Dhttps%3a%2f%2flore.kernel.o=
-rg%2flkml%2f20221213124854.3779-2-sinthu.raja%40ti.com%2fT%2f%23m5e2d1a15d6=
-47f5df9dd28ed2dedc4b0812d6466f&c=3DE,1,Y-aGHFF9W5xMNeMlJ71LqKOZsmcrFFVOKtXq=
-77GFhXQctctl3hRfr-TLmdAnjdaeSzzP0z8DPPPmxLORLMeyROZypsrLBJDsa2LdQkLThbo_gfu=
-7bN9Uj_qC&typo=3D1
+> > diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
+> > index 04dad3380041..9e73922e1e2e 100644
+> > --- a/arch/riscv/include/asm/ftrace.h
+> > +++ b/arch/riscv/include/asm/ftrace.h
+> > @@ -42,6 +42,14 @@ struct dyn_arch_ftrace {
+> >    * 2) jalr: setting low-12 offset to ra, jump to ra, and set ra to
+> >    *          return address (original pc + 4)
+> >    *
+> > + *<ftrace enable>:
+> > + * 0: auipc  t0/ra, 0x?
+> > + * 4: jalr   t0/ra, ?(t0/ra)
+> > + *
+> > + *<ftrace disable>:
+> > + * 0: nop
+> > + * 4: nop
+> > + *
+> >    * Dynamic ftrace generates probes to call sites, so we must deal with
+> >    * both auipc and jalr at the same time.
+> >    */
+> > @@ -52,25 +60,43 @@ struct dyn_arch_ftrace {
+> >   #define AUIPC_OFFSET_MASK      (0xfffff000)
+> >   #define AUIPC_PAD              (0x00001000)
+> >   #define JALR_SHIFT             20
+> > -#define JALR_BASIC             (0x000080e7)
+> > -#define AUIPC_BASIC            (0x00000097)
+> > +#define JALR_RA                        (0x000080e7)
+> > +#define AUIPC_RA               (0x00000097)
+> > +#define JALR_T0                        (0x000282e7)
+> > +#define AUIPC_T0               (0x00000297)
+> >   #define NOP4                   (0x00000013)
 > >
-> >  drivers/phy/ti/phy-j721e-wiz.c | 33 ++++++++++++++++++++++++++++++---
-> >  1 file changed, 30 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-=
-wiz.c
-> > index 571f0ca18874..815e8124b94a 100644
-> > --- a/drivers/phy/ti/phy-j721e-wiz.c
-> > +++ b/drivers/phy/ti/phy-j721e-wiz.c
-> > @@ -58,6 +58,14 @@ enum wiz_lane_standard_mode {
-> >       LANE_MODE_GEN4,
-> >  };
-> >
-> > +/*
-> > + * List of master lanes used for lane swapping
-> > + */
-> > +enum wiz_typec_master_lane {
-> > +     LANE0 =3D 0,
-> > +     LANE2 =3D 2,
-> > +};
+> > -#define make_call(caller, callee, call)                                        \
+> > +#define to_jalr_t0(offset)                                             \
+> > +       (((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_T0)
 > > +
-> >  enum wiz_refclk_mux_sel {
-> >       PLL0_REFCLK,
-> >       PLL1_REFCLK,
-> > @@ -194,6 +202,9 @@ static const struct reg_field p_mac_div_sel1[WIZ_MA=
-X_LANES] =3D {
-> >  static const struct reg_field typec_ln10_swap =3D
-> >                                       REG_FIELD(WIZ_SERDES_TYPEC, 30, 3=
-0);
-> >
-> > +static const struct reg_field typec_ln23_swap =3D
-> > +                                     REG_FIELD(WIZ_SERDES_TYPEC, 31, 3=
-1);
+> > +#define to_auipc_t0(offset)                                            \
+> > +       ((offset & JALR_SIGN_MASK) ?                                    \
+> > +       (((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_T0) :       \
+> > +       ((offset & AUIPC_OFFSET_MASK) | AUIPC_T0))
 > > +
-> >  struct wiz_clk_mux {
-> >       struct clk_hw           hw;
-> >       struct regmap_field     *field;
-> > @@ -367,6 +378,7 @@ struct wiz {
-> >       struct regmap_field     *mux_sel_field[WIZ_MUX_NUM_CLOCKS];
-> >       struct regmap_field     *div_sel_field[WIZ_DIV_NUM_CLOCKS_16G];
-> >       struct regmap_field     *typec_ln10_swap;
-> > +     struct regmap_field     *typec_ln23_swap;
-> >       struct regmap_field     *sup_legacy_clk_override;
+> > +#define make_call_t0(caller, callee, call)                             \
+> >   do {                                                                   \
+> > -       call[0] = to_auipc_insn((unsigned int)((unsigned long)callee -  \
+> > -                               (unsigned long)caller));                \
+> > -       call[1] = to_jalr_insn((unsigned int)((unsigned long)callee -   \
+> > -                              (unsigned long)caller));                 \
+> > +       unsigned int offset =                                           \
+> > +               (unsigned long) callee - (unsigned long) caller;        \
+> > +       call[0] = to_auipc_t0(offset);                                  \
+> > +       call[1] = to_jalr_t0(offset);                                   \
+> >   } while (0)
 > >
-> >       struct device           *dev;
-> > @@ -676,6 +688,13 @@ static int wiz_regfield_init(struct wiz *wiz)
-> >               return PTR_ERR(wiz->typec_ln10_swap);
-> >       }
+> > -#define to_jalr_insn(offset)                                           \
+> > -       (((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_BASIC)
+> > +#define to_jalr_ra(offset)                                             \
+> > +       (((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_RA)
 > >
-> > +     wiz->typec_ln23_swap =3D devm_regmap_field_alloc(dev, regmap,
-> > +                                                    typec_ln23_swap);
-> > +     if (IS_ERR(wiz->typec_ln23_swap)) {
-> > +             dev_err(dev, "LN23_SWAP reg field init failed\n");
-> > +             return PTR_ERR(wiz->typec_ln23_swap);
-> > +     }
+> > -#define to_auipc_insn(offset)                                          \
+> > +#define to_auipc_ra(offset)                                            \
+> >          ((offset & JALR_SIGN_MASK) ?                                    \
+> > -       (((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_BASIC) :    \
+> > -       ((offset & AUIPC_OFFSET_MASK) | AUIPC_BASIC))
+> > +       (((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_RA) :       \
+> > +       ((offset & AUIPC_OFFSET_MASK) | AUIPC_RA))
 > > +
-> >       wiz->phy_en_refclk =3D devm_regmap_field_alloc(dev, regmap, phy_e=
-n_refclk);
-> >       if (IS_ERR(wiz->phy_en_refclk)) {
-> >               dev_err(dev, "PHY_EN_REFCLK reg field init failed\n");
-> > @@ -1254,9 +1273,17 @@ static int wiz_phy_reset_deassert(struct reset_c=
-ontroller_dev *rcdev,
-> >                       int i;
+> > +#define make_call_ra(caller, callee, call)                             \
+> > +do {                                                                   \
+> > +       unsigned int offset =                                           \
+> > +               (unsigned long) callee - (unsigned long) caller;        \
+> > +       call[0] = to_auipc_ra(offset);                                  \
+> > +       call[1] = to_jalr_ra(offset);                                   \
+> > +} while (0)
+> >
+> >   /*
+> >    * Let auipc+jalr be the basic *mcount unit*, so we make it 8 bytes here.
+> > diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+> > index 2086f6585773..5bff37af4770 100644
+> > --- a/arch/riscv/kernel/ftrace.c
+> > +++ b/arch/riscv/kernel/ftrace.c
+> > @@ -55,12 +55,15 @@ static int ftrace_check_current_call(unsigned long hook_pos,
+> >   }
+> >
+> >   static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
+> > -                               bool enable)
+> > +                               bool enable, bool ra)
+> >   {
+> >          unsigned int call[2];
+> >          unsigned int nops[2] = {NOP4, NOP4};
+> >
+> > -       make_call(hook_pos, target, call);
+> > +       if (ra)
+> > +               make_call_ra(hook_pos, target, call);
+> > +       else
+> > +               make_call_t0(hook_pos, target, call);
+> >
+> >          /* Replace the auipc-jalr pair at once. Return -EPERM on write error. */
+> >          if (patch_text_nosync
+> > @@ -70,42 +73,13 @@ static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
+> >          return 0;
+> >   }
+> >
+> > -/*
+> > - * Put 5 instructions with 16 bytes at the front of function within
+> > - * patchable function entry nops' area.
+> > - *
+> > - * 0: REG_S  ra, -SZREG(sp)
+> > - * 1: auipc  ra, 0x?
+> > - * 2: jalr   -?(ra)
+> > - * 3: REG_L  ra, -SZREG(sp)
+> > - *
+> > - * So the opcodes is:
+> > - * 0: 0xfe113c23 (sd)/0xfe112e23 (sw)
+> > - * 1: 0x???????? -> auipc
+> > - * 2: 0x???????? -> jalr
+> > - * 3: 0xff813083 (ld)/0xffc12083 (lw)
+> > - */
+> > -#if __riscv_xlen == 64
+> > -#define INSN0  0xfe113c23
+> > -#define INSN3  0xff813083
+> > -#elif __riscv_xlen == 32
+> > -#define INSN0  0xfe112e23
+> > -#define INSN3  0xffc12083
+> > -#endif
+> > -
+> > -#define FUNC_ENTRY_SIZE        16
+> > -#define FUNC_ENTRY_JMP 4
+> > -
+> >   int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+> >   {
+> > -       unsigned int call[4] = {INSN0, 0, 0, INSN3};
+> > -       unsigned long target = addr;
+> > -       unsigned long caller = rec->ip + FUNC_ENTRY_JMP;
+> > +       unsigned int call[2];
+> >
+> > -       call[1] = to_auipc_insn((unsigned int)(target - caller));
+> > -       call[2] = to_jalr_insn((unsigned int)(target - caller));
+> > +       make_call_t0(rec->ip, addr, call);
+> >
+> > -       if (patch_text_nosync((void *)rec->ip, call, FUNC_ENTRY_SIZE))
+> > +       if (patch_text_nosync((void *)rec->ip, call, MCOUNT_INSN_SIZE))
+> >                  return -EPERM;
+> >
+> >          return 0;
+> > @@ -114,15 +88,14 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+> >   int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+> >                      unsigned long addr)
+> >   {
+> > -       unsigned int nops[4] = {NOP4, NOP4, NOP4, NOP4};
+> > +       unsigned int nops[2] = {NOP4, NOP4};
+> >
+> > -       if (patch_text_nosync((void *)rec->ip, nops, FUNC_ENTRY_SIZE))
+> > +       if (patch_text_nosync((void *)rec->ip, nops, MCOUNT_INSN_SIZE))
+> >                  return -EPERM;
+> >
+> >          return 0;
+> >   }
+> >
+> > -
+> >   /*
+> >    * This is called early on, and isn't wrapped by
+> >    * ftrace_arch_code_modify_{prepare,post_process}() and therefor doesn't hold
+> > @@ -144,10 +117,10 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+> >   int ftrace_update_ftrace_func(ftrace_func_t func)
+> >   {
+> >          int ret = __ftrace_modify_call((unsigned long)&ftrace_call,
+> > -                                      (unsigned long)func, true);
+> > +                                      (unsigned long)func, true, true);
+> >          if (!ret) {
+> >                  ret = __ftrace_modify_call((unsigned long)&ftrace_regs_call,
+> > -                                          (unsigned long)func, true);
+> > +                                          (unsigned long)func, true, true);
+> >          }
+> >
+> >          return ret;
+> > @@ -159,16 +132,16 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+> >                         unsigned long addr)
+> >   {
+> >          unsigned int call[2];
+> > -       unsigned long caller = rec->ip + FUNC_ENTRY_JMP;
+> > +       unsigned long caller = rec->ip;
+> >          int ret;
+> >
+> > -       make_call(caller, old_addr, call);
+> > +       make_call_t0(caller, old_addr, call);
+> >          ret = ftrace_check_current_call(caller, call);
+> >
+> >          if (ret)
+> >                  return ret;
+> >
+> > -       return __ftrace_modify_call(caller, addr, true);
+> > +       return __ftrace_modify_call(caller, addr, true, false);
+> >   }
+> >   #endif
+> >
+> > @@ -203,12 +176,12 @@ int ftrace_enable_ftrace_graph_caller(void)
+> >          int ret;
+> >
+> >          ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
+> > -                                   (unsigned long)&prepare_ftrace_return, true);
+> > +                                   (unsigned long)&prepare_ftrace_return, true, true);
+> >          if (ret)
+> >                  return ret;
+> >
+> >          return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
+> > -                                   (unsigned long)&prepare_ftrace_return, true);
+> > +                                   (unsigned long)&prepare_ftrace_return, true, true);
+> >   }
+> >
+> >   int ftrace_disable_ftrace_graph_caller(void)
+> > @@ -216,12 +189,12 @@ int ftrace_disable_ftrace_graph_caller(void)
+> >          int ret;
+> >
+> >          ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
+> > -                                   (unsigned long)&prepare_ftrace_return, false);
+> > +                                   (unsigned long)&prepare_ftrace_return, false, true);
+> >          if (ret)
+> >                  return ret;
+> >
+> >          return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
+> > -                                   (unsigned long)&prepare_ftrace_return, false);
+> > +                                   (unsigned long)&prepare_ftrace_return, false, true);
+> >   }
+> >   #endif /* CONFIG_DYNAMIC_FTRACE */
+> >   #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+> > diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
+> > index d171eca623b6..b75332ced757 100644
+> > --- a/arch/riscv/kernel/mcount-dyn.S
+> > +++ b/arch/riscv/kernel/mcount-dyn.S
+> > @@ -13,8 +13,8 @@
+> >
+> >          .text
+> >
+> > -#define FENTRY_RA_OFFSET       12
+> > -#define ABI_SIZE_ON_STACK      72
+> > +#define FENTRY_RA_OFFSET       8
+> > +#define ABI_SIZE_ON_STACK      80
+> >   #define ABI_A0                 0
+> >   #define ABI_A1                 8
+> >   #define ABI_A2                 16
+> > @@ -23,10 +23,10 @@
+> >   #define ABI_A5                 40
+> >   #define ABI_A6                 48
+> >   #define ABI_A7                 56
+> > -#define ABI_RA                 64
+> > +#define ABI_T0                 64
+> > +#define ABI_RA                 72
+> >
+> >          .macro SAVE_ABI
+> > -       addi    sp, sp, -SZREG
+> >          addi    sp, sp, -ABI_SIZE_ON_STACK
+> >
+> >          REG_S   a0, ABI_A0(sp)
+> > @@ -37,6 +37,7 @@
+> >          REG_S   a5, ABI_A5(sp)
+> >          REG_S   a6, ABI_A6(sp)
+> >          REG_S   a7, ABI_A7(sp)
+> > +       REG_S   t0, ABI_T0(sp)
+> >          REG_S   ra, ABI_RA(sp)
+> >          .endm
+> >
+> > @@ -49,24 +50,18 @@
+> >          REG_L   a5, ABI_A5(sp)
+> >          REG_L   a6, ABI_A6(sp)
+> >          REG_L   a7, ABI_A7(sp)
+> > +       REG_L   t0, ABI_T0(sp)
+> >          REG_L   ra, ABI_RA(sp)
+> >
+> >          addi    sp, sp, ABI_SIZE_ON_STACK
+> > -       addi    sp, sp, SZREG
+> >          .endm
+> >
+> >   #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+> >          .macro SAVE_ALL
+> > -       addi    sp, sp, -SZREG
+> >          addi    sp, sp, -PT_SIZE_ON_STACK
+> >
+> > -       REG_S x1,  PT_EPC(sp)
+> > -       addi    sp, sp, PT_SIZE_ON_STACK
+> > -       REG_L x1,  (sp)
+> > -       addi    sp, sp, -PT_SIZE_ON_STACK
+> > +       REG_S t0,  PT_EPC(sp)
+> >          REG_S x1,  PT_RA(sp)
+> > -       REG_L x1,  PT_EPC(sp)
+> > -
+> >          REG_S x2,  PT_SP(sp)
+> >          REG_S x3,  PT_GP(sp)
+> >          REG_S x4,  PT_TP(sp)
+> > @@ -100,11 +95,8 @@
+> >          .endm
+> >
+> >          .macro RESTORE_ALL
+> > +       REG_L t0,  PT_EPC(sp)
+> >          REG_L x1,  PT_RA(sp)
+> > -       addi    sp, sp, PT_SIZE_ON_STACK
+> > -       REG_S x1,  (sp)
+> > -       addi    sp, sp, -PT_SIZE_ON_STACK
+> > -       REG_L x1,  PT_EPC(sp)
+> >          REG_L x2,  PT_SP(sp)
+> >          REG_L x3,  PT_GP(sp)
+> >          REG_L x4,  PT_TP(sp)
+>
+> I did not notice it the last time, but RESTORE_ALL should skip "REG_L
+> x5,  PT_T0(sp)". Otherwise, the value of t0/x5 loaded from PT_EPC(sp)
+> will be overwritten.
+>
+> With the "ipmodify" use case I mentioned earlier, the Ftrace handler
+> might have changed the value in PT_EPC(sp) by that time. Reading t0
+> again from PT_T0(sp) here breaks it.
+
+
+Correct, in kprobe_ftrace_handler, I found:
+
+                unsigned long orig_ip = instruction_pointer(regs);
+
+                instruction_pointer_set(regs, ip);
+
+So, I must skip "REG_L x5,  PT_T0(sp)" to prevent the value from being
+overwritten.
+
+
+>
+> The same holds for "[PATCH -next V6 5/7] riscv: ftrace: Make
+> ftrace_caller call ftrace_graph_func".
+>
+> > @@ -137,17 +129,16 @@
+> >          REG_L x31, PT_T6(sp)
+> >
+> >          addi    sp, sp, PT_SIZE_ON_STACK
+> > -       addi    sp, sp, SZREG
+> >          .endm
+> >   #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> >
+> >   ENTRY(ftrace_caller)
+> >          SAVE_ABI
+> >
+> > -       addi    a0, ra, -FENTRY_RA_OFFSET
+> > +       addi    a0, t0, -FENTRY_RA_OFFSET
+> >          la      a1, function_trace_op
+> >          REG_L   a2, 0(a1)
+> > -       REG_L   a1, ABI_SIZE_ON_STACK(sp)
+> > +       mv      a1, ra
+> >          mv      a3, sp
+> >
+> >   ftrace_call:
+> > @@ -155,8 +146,8 @@ ftrace_call:
+> >          call    ftrace_stub
+> >
+> >   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+> > -       addi    a0, sp, ABI_SIZE_ON_STACK
+> > -       REG_L   a1, ABI_RA(sp)
+> > +       addi    a0, sp, ABI_RA
+> > +       REG_L   a1, ABI_T0(sp)
+> >          addi    a1, a1, -FENTRY_RA_OFFSET
+> >   #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+> >          mv      a2, s0
+> > @@ -166,17 +157,17 @@ ftrace_graph_call:
+> >          call    ftrace_stub
+> >   #endif
+> >          RESTORE_ABI
+> > -       ret
+> > +       jr t0
+> >   ENDPROC(ftrace_caller)
+> >
+> >   #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+> >   ENTRY(ftrace_regs_caller)
+> >          SAVE_ALL
+> >
+> > -       addi    a0, ra, -FENTRY_RA_OFFSET
+> > +       addi    a0, t0, -FENTRY_RA_OFFSET
+> >          la      a1, function_trace_op
+> >          REG_L   a2, 0(a1)
+> > -       REG_L   a1, PT_SIZE_ON_STACK(sp)
+> > +       mv      a1, ra
+> >          mv      a3, sp
+> >
+> >   ftrace_regs_call:
+> > @@ -185,7 +176,7 @@ ftrace_regs_call:
+> >
+> >   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+> >          addi    a0, sp, PT_RA
+> > -       REG_L   a1, PT_EPC(sp)
+> > +       REG_L   a1, PT_T0(sp)
+> >          addi    a1, a1, -FENTRY_RA_OFFSET
+> >   #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+> >          mv      a2, s0
+> > @@ -196,6 +187,6 @@ ftrace_graph_regs_call:
+> >   #endif
+> >
+> >          RESTORE_ALL
+> > -       ret
+> > +       jr t0
+> >   ENDPROC(ftrace_regs_caller)
+> >   #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> > --
+> > 2.36.1
+> >
 > >
 >
-> Don't you have to update the below comment you added in patch 1 to mentio=
-n about LN23 as well?
-
-Thanks for the review, Roger.
-Yes, I have to. My bad. I will send out another version updating this comme=
-nt.
->
->
-> +                       /* if no typec-dir gpio was specified and PHY typ=
-e is
-> +                        * USB3 with master lane number is '0', set LN10 =
-SWAP
-> +                        * bit to '1'
-> +                        */
->
->
-> >                       for (i =3D 0; i < num_lanes; i++) {
-> > -                             if ((wiz->lane_phy_type[i] =3D=3D PHY_TYP=
-E_USB3)
-> > -                                             && wiz->master_lane_num[i=
-] =3D=3D 0) {
-> > -                                     regmap_field_write(wiz->typec_ln1=
-0_swap, 1);
-> > +                             if (wiz->lane_phy_type[i] =3D=3D PHY_TYPE=
-_USB3) {
-> > +                                     switch (wiz->master_lane_num[i]) =
-{
-> > +                                     case LANE0:
-> > +                                             regmap_field_write(wiz->t=
-ypec_ln10_swap, 1);
-> > +                                             break;
-> > +                                     case LANE2:
-> > +                                             regmap_field_write(wiz->t=
-ypec_ln23_swap, 1);
-> > +                                             break;
-> > +                                     default:
-> > +                                             break;
-> > +                                     }
-> >                               }
-> >                       }
-> >               }
->
-> Otherwise looks good.
->
-> cheers,
-> -roger
+> Regards,
+> Evgenii
 >
 
 
---=20
-With Regards
-Sinthu Raja
+--
+Best Regards
+ Guo Ren
