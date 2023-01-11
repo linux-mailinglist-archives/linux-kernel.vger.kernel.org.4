@@ -2,90 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF88066546B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 07:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 900C366546E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 07:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbjAKGPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 01:15:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
+        id S230283AbjAKGRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 01:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjAKGPW (ORCPT
+        with ESMTP id S230313AbjAKGRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 01:15:22 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48E260EE;
-        Tue, 10 Jan 2023 22:15:21 -0800 (PST)
-Received: from [10.7.7.5] (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id 84F0D7E4CF;
-        Wed, 11 Jan 2023 06:15:19 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1673417721;
-        bh=sH4y0Bg/YC4VQSKQlDsB5/u57z7QvT23qSAkZaISeGE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=n6ZgauoIZWlxFy43ZpmZMcsDnTUXMWxvVkjrxn2UDZHJ+dy19prcZ2naXRpVtATye
-         /70gk/3i+YJL6e8OdqQ0ZTeGErpy3VWe0G/k+N1v1aPqOmftfP6JXYGtUTgvxWC75b
-         PeE+V0OkBnbJk+VkFdLoT/lfLnrOCMaUgGSa0h3aeMqwkkfTQThXvM93lKtorJ3DE8
-         kv2cIvyiNEQ1rHoTiCNJHbkHr1NADizzePl4y1h0SoxI5hcA2CGONy3NIsuxKGKH18
-         1lZpVA5Lg4/ofas7KuzgbUkVJwO78LCjUIMoBhDdAsDyhNfuQ9vZoQWy67OHk2KNi8
-         r6ABt9NYmruxw==
-Message-ID: <efbc4e6f-b583-239b-439b-6ebc01ffe44d@gnuweeb.org>
-Date:   Wed, 11 Jan 2023 13:15:17 +0700
+        Wed, 11 Jan 2023 01:17:41 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91175DFBE
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 22:17:16 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso11811002wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 22:17:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0RrLy7xqWg1RnasudUvZBWKEA1yRY0PzlYprkCqFjws=;
+        b=GyeBjW22NyAmEp9Vg91TZBgMb+YTns5QP/d9s835LoybvRg1tPhifllP1C7p5zxyBb
+         ri3iK8Sv/Ig9OLEC0QeGSguv1neXysmQAgH1d4FkVN+7GsyiU71OhbnygOD26+kw9il5
+         vGIz9c+QwmJ5Rwu4VBhQBCGaaMn9rPRW9PCAYTOvk5duKfguUCprUHObQn3OZuSPkQ04
+         mWoT5Fz9CL0RyWs5oUeSuHxFit3+MAd3fmgu1ZPig9w1C9RrNCWs2coh2K1laR+TUuwA
+         ELQyaAzueWIzqzPn2QrI+rpOoOy2OOEaTUBTLF54lycLEi9jP9yAD3HnzRzKGjjwtHgq
+         MkkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0RrLy7xqWg1RnasudUvZBWKEA1yRY0PzlYprkCqFjws=;
+        b=lQoazNc+TW5jLnwyKVVczMcb8YRAqBVxDOYiLqNWjg7rGz0DbvDyb3f/qwohEnGiHT
+         KBDPJlMyX53bY2aIud8YanhB6gSpoCQ9BBvnff75okHjlfCRqKFDZDZS9MwT0v+ENnL7
+         3dDhTxhCrK4bvrJro9jJgFumSBiVBMM2tMpc/nRgY6ZuGemqCQoLL1PeKk40zk17kS+o
+         z29o/Oz1dWhMO/A+u6hhWiyCizxMIfPtoM0AtvzUaW/tISNQi5UtfwQw/CVKxZcBpAHn
+         AppPqhZEzDTHth7Z3fzlXeiXTe6Z4jJQAQX03fGXlXDBJPlUQ1UusOB7K2RB9ptx/qtW
+         xp5w==
+X-Gm-Message-State: AFqh2komWpod9ESQ2K1GMh7U6bx1AouLKdzAYZhBbfu/kidCFG1Cqtoj
+        8Ih/98s3LtPhkmWjV9oIzW0cMddo/FbAPIKf9wuCzA==
+X-Google-Smtp-Source: AMrXdXvUXG/20qDMqPMjWOCkbdTXLsSllvNMxCWx5sZ8AC8O46XC7jpKSDg4yZu1o5EclM9TlPxoJ/kkytPH8oBqtPM=
+X-Received: by 2002:a05:600c:44d4:b0:3d1:fd95:a8f6 with SMTP id
+ f20-20020a05600c44d400b003d1fd95a8f6mr3752705wmo.189.1673417835232; Tue, 10
+ Jan 2023 22:17:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*)
- conversions
-Content-Language: en-US
-To:     XU pengfei <xupengfei@nfschina.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
-References: <20230111043729.3792-1-xupengfei@nfschina.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20230111043729.3792-1-xupengfei@nfschina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230110091356.1524-1-cuiyunhui@bytedance.com>
+ <CANn89i+Wh2krOy4YFWvBsEx-s_JgQ0HixHAVJwGw18dVPeyiqw@mail.gmail.com>
+ <20230110104419.67294691@gandalf.local.home> <CAEEQ3w=aU3siD-ubhPB3+Wv10ARfUeR=cUHmvdEp2q+y105vAw@mail.gmail.com>
+ <20230110231201.5eddb889@gandalf.local.home>
+In-Reply-To: <20230110231201.5eddb889@gandalf.local.home>
+From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
+Date:   Wed, 11 Jan 2023 14:17:04 +0800
+Message-ID: <CAEEQ3wn7XbsjfQaUR_Ka_KZz-+sb-edcQUtipspnUZQQ3+Y4ig@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v5] sock: add tracepoint for send recv length
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Eric Dumazet <edumazet@google.com>, mhiramat@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        kuniyu@amazon.com, xiyou.wangcong@gmail.com,
+        duanxiongchun@bytedance.com, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        dust.li@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/23 11:37 AM, XU pengfei wrote:
-> Pointer variables of void * type do not require type cast.
-> 
-> Signed-off-by: XU pengfei <xupengfei@nfschina.com>
-> ---
->   drivers/hwmon/powr1220.c | 2 +-
->   1 files changed, 1 insertions(+), 1 deletions(-)
-> 
-> diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
-> index f77dc6db31ac..501337ee5aa3 100644
-> --- a/drivers/hwmon/powr1220.c
-> +++ b/drivers/hwmon/powr1220.c
-> @@ -174,7 +174,7 @@ static umode_t
->   powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
->   		    attr, int channel)
->   {
-> -	struct powr1220_data *chip_data = (struct powr1220_data *)data;
-> +	struct powr1220_data *chip_data = data;
+On Wed, Jan 11, 2023 at 12:12 PM Steven Rostedt <rostedt@goodmis.org> wrote=
+:
+>
+> On Wed, 11 Jan 2023 11:53:24 +0800
+> =E8=BF=90=E8=BE=89=E5=B4=94 <cuiyunhui@bytedance.com> wrote:
+>
+> > Hi Steve, Based on your suggestion, can we use the following code
+> > instead of using DEFINE_EVENT_PRINT =EF=BC=9F
+>
+> I only suggested it because you didn't have that logic for the
+> sock_send_length trace event. But if you don't care about that one, then
+> sure, use it for both.
+>
+> -- Steve
+>
 
-Broken:
-
-   CC [M]  drivers/hwmon/powr1220.o
-drivers/hwmon/powr1220.c: In function ‘powr1220_is_visible’:
-drivers/hwmon/powr1220.c:177:43: error: initialization discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
-   177 |         struct powr1220_data *chip_data = data;
-       |                                           ^~~~
-cc1: all warnings being treated as errors
-make[2]: *** [scripts/Makefile.build:249: drivers/hwmon/powr1220.o] Error 1
-make[1]: *** [scripts/Makefile.build:465: drivers/hwmon] Error 2
-make: *** [Makefile:1853: drivers] Error 2
-
--- 
-Ammar Faizi
+Ok, Thank you, I'll post v6 later.
