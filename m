@@ -2,48 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2537D665262
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E343665265
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbjAKD3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 22:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
+        id S235647AbjAKD37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 22:29:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235300AbjAKD3B (ORCPT
+        with ESMTP id S235720AbjAKD3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 22:29:01 -0500
-Received: from out30-1.freemail.mail.aliyun.com (out30-1.freemail.mail.aliyun.com [115.124.30.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB4C175B5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:28:46 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VZLFR69_1673407722;
-Received: from 30.97.48.51(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VZLFR69_1673407722)
-          by smtp.aliyun-inc.com;
-          Wed, 11 Jan 2023 11:28:43 +0800
-Message-ID: <7e3fe94e-9183-bc5b-3de5-6efb8eb44c5c@linux.alibaba.com>
-Date:   Wed, 11 Jan 2023 11:29:06 +0800
+        Tue, 10 Jan 2023 22:29:24 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2671E0EE;
+        Tue, 10 Jan 2023 19:29:23 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id i26-20020a9d68da000000b00672301a1664so8162476oto.6;
+        Tue, 10 Jan 2023 19:29:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=h0nyoR/pePv8lb7AbIl1M+zu+JOCA53u13ysae92ni0=;
+        b=DwCph2MoJfPPFXtYCrrPSHEgwMHw07NYr6kJxhPzF5aOv9rXzqT8sUdAdnOYnGFRJT
+         WNsoSRqcybv54Qc40/HMlxtgyNuA4zoxe98XefJhF3JeDI8QIGKRV5BJf0jEwchbI1BN
+         oBPft9m5Nyq3EIZ0tQGOF2RLma2Ddkwkk5e+Zgun5EfCTB7tRVkqWW6wosCikrzcAqrW
+         OJaqkkroCrFFfhcbDNxKfiSA+UkfeSP3+4kGAyyagbDN40ndBBPUYzyRbvwYgrWyzUf5
+         k0oj+jj4hER8d+e8NwSBv9gHy2sucwywS29cYOH2xMI8G+uTx5VIxMDthKKFC5sWukFb
+         ZDjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h0nyoR/pePv8lb7AbIl1M+zu+JOCA53u13ysae92ni0=;
+        b=i10QKtKxzrCeAfGv1i/L5SMUBr0nVgYO2Z8r46d4k0qWr0iZRn6Td571SW7PHMz6P9
+         LKdw7z4lkRlwfZcvbWP1FgpBS/+ZFE08AdD4eQHCm4HROCr/L0o6vw0qqNAurXTFvhU5
+         /Ag8Y6VaBuDgbyvM0LBe/kWsmk4QrFyCOH5xEH7jQI1QXGs20emMqBODo3p8mUqpYkAr
+         jXAQd/Oz2/kaXGi+GkS3GgvkpMWk0gsiBtll28sJa24W4yq3XNU3U2A5sL3ChcBwV8/h
+         ZtFJVPXyA+R/ZsX/Z6c7+B+rIbUtuiQd7IL2fKx6zUewm3PXcbxFrbylgwUP7y/GcC/w
+         niww==
+X-Gm-Message-State: AFqh2koH+nhi7MghUpyCAkPxT7xqhk/jvzdNNgSfrDFq9+Zws2VmNbYn
+        kuoTKbA6Q/t2ok99Nb19iU56APE/uRc=
+X-Google-Smtp-Source: AMrXdXvL2U3r1PK4AV7A72qmHVGCVmkhhlHmqDPmFJQyX8tRw0tYFU1C3V9tzchg11NdTvUy+Qs8ww==
+X-Received: by 2002:a9d:7a49:0:b0:670:73fc:fa3c with SMTP id z9-20020a9d7a49000000b0067073fcfa3cmr34162469otm.36.1673407763202;
+        Tue, 10 Jan 2023 19:29:23 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k13-20020a9d7dcd000000b00684a7b9ee66sm1005926otn.14.2023.01.10.19.29.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 19:29:22 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <db4276db-bbec-142a-d306-928421eb49fc@roeck-us.net>
+Date:   Tue, 10 Jan 2023 19:29:20 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH -v2 4/9] migrate_pages: split unmap_and_move() to _unmap()
- and _move()
-To:     Huang Ying <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Bharata B Rao <bharata@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        haoxin <xhao@linux.alibaba.com>
-References: <20230110075327.590514-1-ying.huang@intel.com>
- <20230110075327.590514-5-ying.huang@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20230110075327.590514-5-ying.huang@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/1] hwmon: remove unnecessary (void*) conversions
+Content-Language: en-US
+To:     XU pengfei <xupengfei@nfschina.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230111020723.3194-1-xupengfei@nfschina.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230111020723.3194-1-xupengfei@nfschina.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,302 +77,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/10/2023 3:53 PM, Huang Ying wrote:
-> This is a preparation patch to batch the folio unmapping and moving.
+On 1/10/23 18:07, XU pengfei wrote:
+> Pointer variables of void * type do not require type cast.
 > 
-> In this patch, unmap_and_move() is split to migrate_folio_unmap() and
-> migrate_folio_move().  So, we can batch _unmap() and _move() in
-> different loops later.  To pass some information between unmap and
-> move, the original unused dst->mapping and dst->private are used.
-> 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Bharata B Rao <bharata@amd.com>
-> Cc: Alistair Popple <apopple@nvidia.com>
-> Cc: haoxin <xhao@linux.alibaba.com>
+
+One patch per driver, and include the driver name (ibmpex, powr1220)
+in the subject.
+
+Guenter
+
+> Signed-off-by: XU pengfei <xupengfei@nfschina.com>
 > ---
-
-LGTM.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
->   include/linux/migrate.h |   1 +
->   mm/migrate.c            | 169 ++++++++++++++++++++++++++++++----------
->   2 files changed, 128 insertions(+), 42 deletions(-)
+>   drivers/hwmon/ibmpex.c   | 2 +-
+>   drivers/hwmon/powr1220.c | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-> index 3ef77f52a4f0..7376074f2e1e 100644
-> --- a/include/linux/migrate.h
-> +++ b/include/linux/migrate.h
-> @@ -18,6 +18,7 @@ struct migration_target_control;
->    * - zero on page migration success;
->    */
->   #define MIGRATEPAGE_SUCCESS		0
-> +#define MIGRATEPAGE_UNMAP		1
+> diff --git a/drivers/hwmon/ibmpex.c b/drivers/hwmon/ibmpex.c
+> index 1837cccd993c..db066b368918 100644
+> --- a/drivers/hwmon/ibmpex.c
+> +++ b/drivers/hwmon/ibmpex.c
+> @@ -546,7 +546,7 @@ static void ibmpex_bmc_gone(int iface)
 >   
->   /**
->    * struct movable_operations - Driver page migration
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 4931dc4c1215..4c35c2a49574 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1009,11 +1009,53 @@ static int move_to_new_folio(struct folio *dst, struct folio *src,
->   	return rc;
->   }
->   
-> -static int __unmap_and_move(struct folio *src, struct folio *dst,
-> +/*
-> + * To record some information during migration, we uses some unused
-> + * fields (mapping and private) of struct folio of the newly allocated
-> + * destination folio.  This is safe because nobody is using them
-> + * except us.
-> + */
-> +static void __migrate_folio_record(struct folio *dst,
-> +				   unsigned long page_was_mapped,
-> +				   struct anon_vma *anon_vma)
-> +{
-> +	dst->mapping = (void *)anon_vma;
-> +	dst->private = (void *)page_was_mapped;
-> +}
-> +
-> +static void __migrate_folio_extract(struct folio *dst,
-> +				   int *page_was_mappedp,
-> +				   struct anon_vma **anon_vmap)
-> +{
-> +	*anon_vmap = (void *)dst->mapping;
-> +	*page_was_mappedp = (unsigned long)dst->private;
-> +	dst->mapping = NULL;
-> +	dst->private = NULL;
-> +}
-> +
-> +/* Cleanup src folio upon migration success */
-> +static void migrate_folio_done(struct folio *src,
-> +			       enum migrate_reason reason)
-> +{
-> +	/*
-> +	 * Compaction can migrate also non-LRU pages which are
-> +	 * not accounted to NR_ISOLATED_*. They can be recognized
-> +	 * as __PageMovable
-> +	 */
-> +	if (likely(!__folio_test_movable(src)))
-> +		mod_node_page_state(folio_pgdat(src), NR_ISOLATED_ANON +
-> +				    folio_is_file_lru(src), -folio_nr_pages(src));
-> +
-> +	if (reason != MR_MEMORY_FAILURE)
-> +		/* We release the page in page_handle_poison. */
-> +		folio_put(src);
-> +}
-> +
-> +static int __migrate_folio_unmap(struct folio *src, struct folio *dst,
->   				int force, enum migrate_mode mode)
+>   static void ibmpex_msg_handler(struct ipmi_recv_msg *msg, void *user_msg_data)
 >   {
->   	int rc = -EAGAIN;
-> -	bool page_was_mapped = false;
-> +	int page_was_mapped = 0;
->   	struct anon_vma *anon_vma = NULL;
->   	bool is_lru = !__PageMovable(&src->page);
+> -	struct ibmpex_bmc_data *data = (struct ibmpex_bmc_data *)user_msg_data;
+> +	struct ibmpex_bmc_data *data = user_msg_data;
 >   
-> @@ -1089,8 +1131,8 @@ static int __unmap_and_move(struct folio *src, struct folio *dst,
->   		goto out_unlock;
->   
->   	if (unlikely(!is_lru)) {
-> -		rc = move_to_new_folio(dst, src, mode);
-> -		goto out_unlock_both;
-> +		__migrate_folio_record(dst, page_was_mapped, anon_vma);
-> +		return MIGRATEPAGE_UNMAP;
->   	}
->   
->   	/*
-> @@ -1115,11 +1157,40 @@ static int __unmap_and_move(struct folio *src, struct folio *dst,
->   		VM_BUG_ON_FOLIO(folio_test_anon(src) &&
->   			       !folio_test_ksm(src) && !anon_vma, src);
->   		try_to_migrate(src, 0);
-> -		page_was_mapped = true;
-> +		page_was_mapped = 1;
->   	}
->   
-> -	if (!folio_mapped(src))
-> -		rc = move_to_new_folio(dst, src, mode);
-> +	if (!folio_mapped(src)) {
-> +		__migrate_folio_record(dst, page_was_mapped, anon_vma);
-> +		return MIGRATEPAGE_UNMAP;
-> +	}
-> +
-> +
-> +	if (page_was_mapped)
-> +		remove_migration_ptes(src, src, false);
-> +
-> +out_unlock_both:
-> +	folio_unlock(dst);
-> +out_unlock:
-> +	/* Drop an anon_vma reference if we took one */
-> +	if (anon_vma)
-> +		put_anon_vma(anon_vma);
-> +	folio_unlock(src);
-> +out:
-> +
-> +	return rc;
-> +}
-> +
-> +static int __migrate_folio_move(struct folio *src, struct folio *dst,
-> +				enum migrate_mode mode)
-> +{
-> +	int rc;
-> +	int page_was_mapped = 0;
-> +	struct anon_vma *anon_vma = NULL;
-> +
-> +	__migrate_folio_extract(dst, &page_was_mapped, &anon_vma);
-> +
-> +	rc = move_to_new_folio(dst, src, mode);
->   
->   	/*
->   	 * When successful, push dst to LRU immediately: so that if it
-> @@ -1140,14 +1211,11 @@ static int __unmap_and_move(struct folio *src, struct folio *dst,
->   		remove_migration_ptes(src,
->   			rc == MIGRATEPAGE_SUCCESS ? dst : src, false);
->   
-> -out_unlock_both:
->   	folio_unlock(dst);
-> -out_unlock:
->   	/* Drop an anon_vma reference if we took one */
->   	if (anon_vma)
->   		put_anon_vma(anon_vma);
->   	folio_unlock(src);
-> -out:
->   	/*
->   	 * If migration is successful, decrease refcount of dst,
->   	 * which will not free the page because new page owner increased
-> @@ -1159,19 +1227,15 @@ static int __unmap_and_move(struct folio *src, struct folio *dst,
->   	return rc;
->   }
->   
-> -/*
-> - * Obtain the lock on folio, remove all ptes and migrate the folio
-> - * to the newly allocated folio in dst.
-> - */
-> -static int unmap_and_move(new_page_t get_new_page,
-> -				   free_page_t put_new_page,
-> -				   unsigned long private, struct folio *src,
-> -				   int force, enum migrate_mode mode,
-> -				   enum migrate_reason reason,
-> -				   struct list_head *ret)
-> +/* Obtain the lock on page, remove all ptes. */
-> +static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page,
-> +			       unsigned long private, struct folio *src,
-> +			       struct folio **dstp, int force,
-> +			       enum migrate_mode mode, enum migrate_reason reason,
-> +			       struct list_head *ret)
+>   	if (msg->msgid != data->tx_msgid) {
+>   		dev_err(data->bmc_device,
+> diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
+> index f77dc6db31ac..501337ee5aa3 100644
+> --- a/drivers/hwmon/powr1220.c
+> +++ b/drivers/hwmon/powr1220.c
+> @@ -174,7 +174,7 @@ static umode_t
+>   powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
+>   		    attr, int channel)
 >   {
->   	struct folio *dst;
-> -	int rc = MIGRATEPAGE_SUCCESS;
-> +	int rc = MIGRATEPAGE_UNMAP;
->   	struct page *newpage = NULL;
+> -	struct powr1220_data *chip_data = (struct powr1220_data *)data;
+> +	struct powr1220_data *chip_data = data;
 >   
->   	if (!thp_migration_supported() && folio_test_transhuge(src))
-> @@ -1182,20 +1246,50 @@ static int unmap_and_move(new_page_t get_new_page,
->   		folio_clear_active(src);
->   		folio_clear_unevictable(src);
->   		/* free_pages_prepare() will clear PG_isolated. */
-> -		goto out;
-> +		list_del(&src->lru);
-> +		migrate_folio_done(src, reason);
-> +		return MIGRATEPAGE_SUCCESS;
->   	}
->   
->   	newpage = get_new_page(&src->page, private);
->   	if (!newpage)
->   		return -ENOMEM;
->   	dst = page_folio(newpage);
-> +	*dstp = dst;
->   
->   	dst->private = NULL;
-> -	rc = __unmap_and_move(src, dst, force, mode);
-> +	rc = __migrate_folio_unmap(src, dst, force, mode);
-> +	if (rc == MIGRATEPAGE_UNMAP)
-> +		return rc;
-> +
-> +	/*
-> +	 * A page that has not been migrated will have kept its
-> +	 * references and be restored.
-> +	 */
-> +	/* restore the folio to right list. */
-> +	if (rc != -EAGAIN)
-> +		list_move_tail(&src->lru, ret);
-> +
-> +	if (put_new_page)
-> +		put_new_page(&dst->page, private);
-> +	else
-> +		folio_put(dst);
-> +
-> +	return rc;
-> +}
-> +
-> +/* Migrate the folio to the newly allocated folio in dst. */
-> +static int migrate_folio_move(free_page_t put_new_page, unsigned long private,
-> +			      struct folio *src, struct folio *dst,
-> +			      enum migrate_mode mode, enum migrate_reason reason,
-> +			      struct list_head *ret)
-> +{
-> +	int rc;
-> +
-> +	rc = __migrate_folio_move(src, dst, mode);
->   	if (rc == MIGRATEPAGE_SUCCESS)
->   		set_page_owner_migrate_reason(&dst->page, reason);
->   
-> -out:
->   	if (rc != -EAGAIN) {
->   		/*
->   		 * A folio that has been migrated has all references
-> @@ -1211,20 +1305,7 @@ static int unmap_and_move(new_page_t get_new_page,
->   	 * we want to retry.
->   	 */
->   	if (rc == MIGRATEPAGE_SUCCESS) {
-> -		/*
-> -		 * Compaction can migrate also non-LRU folios which are
-> -		 * not accounted to NR_ISOLATED_*. They can be recognized
-> -		 * as __folio_test_movable
-> -		 */
-> -		if (likely(!__folio_test_movable(src)))
-> -			mod_node_page_state(folio_pgdat(src), NR_ISOLATED_ANON +
-> -					folio_is_file_lru(src), -folio_nr_pages(src));
-> -
-> -		if (reason != MR_MEMORY_FAILURE)
-> -			/*
-> -			 * We release the folio in page_handle_poison.
-> -			 */
-> -			folio_put(src);
-> +		migrate_folio_done(src, reason);
->   	} else {
->   		if (rc != -EAGAIN)
->   			list_add_tail(&src->lru, ret);
-> @@ -1516,7 +1597,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->   	int pass = 0;
->   	bool is_large = false;
->   	bool is_thp = false;
-> -	struct folio *folio, *folio2;
-> +	struct folio *folio, *folio2, *dst = NULL;
->   	int rc, nr_pages;
->   	LIST_HEAD(split_folios);
->   	bool nosplit = (reason == MR_NUMA_MISPLACED);
-> @@ -1543,9 +1624,13 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->   
->   			cond_resched();
->   
-> -			rc = unmap_and_move(get_new_page, put_new_page,
-> -					    private, folio, pass > 2, mode,
-> -					    reason, ret_folios);
-> +			rc = migrate_folio_unmap(get_new_page, put_new_page, private,
-> +						 folio, &dst, pass > 2, mode,
-> +						 reason, ret_folios);
-> +			if (rc == MIGRATEPAGE_UNMAP)
-> +				rc = migrate_folio_move(put_new_page, private,
-> +							folio, dst, mode,
-> +							reason, ret_folios);
->   			/*
->   			 * The rules are:
->   			 *	Success: folio will be freed
+>   	if (channel >= chip_data->max_channels)
+>   		return 0;
+
