@@ -2,102 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF85366571A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB22F66571C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238259AbjAKJOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S238698AbjAKJOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:14:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238425AbjAKJOJ (ORCPT
+        with ESMTP id S238312AbjAKJOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:14:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC137BE28;
-        Wed, 11 Jan 2023 01:10:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F929B81ACE;
-        Wed, 11 Jan 2023 09:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F1F7EC433EF;
-        Wed, 11 Jan 2023 09:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673428219;
-        bh=42gL1q+GkZgt9fX2//DcHxxejEgYJTpJAhZ1nV5h5cc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ma5uFwIY9ynUxhmWaSUEHFE+DmL43KU8WXadcjMenbmQ+Ny4etnC46SRobdPbvKoI
-         O9q7dYY2OKOh03hdkScppXcgwuIrx/u4ygbMXV47PqhVO7n3KXYnWs+OQlj5fy4xn0
-         RewEUvrZpYZ6TKUfam7+Epk7jEd1Y3s2Kcmat/LWzbRlvJJz7fkpBNQEvMUxXRFH5x
-         Iy8E9zuBbJYQCLJCgE4BJKJ9Qn2FTu676sBDC9qn2d1hRT4BjA/TcqKo4qnIsZfoOk
-         peS9PALxHGd6u8woa8VxqcHmQBsSjPAQqbbRqw8RGPGIVuXMMGExoksMYhlnXq80ht
-         66YD0XBaBcSGQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB594E45233;
-        Wed, 11 Jan 2023 09:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 11 Jan 2023 04:14:18 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847F1BC17
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:10:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uKH7RdVENw3RLiAjTEDH9D/8mvYYWQIYWy15IOfkE7I=; b=sMKkrBx7B+eEUcYtyWs34je/3J
+        v8TnxPVubc9Ry+CaPUWnfcr6Jx2Xc3ODUBE1MznjFJY0Xo+z59f34FDGI/wed81tHzxerckmSIxmO
+        cFcgU8MUNiiWE2fLT7A2FKs4AMjumQsHQXHNv46kE5hPgwcPbfpN4Gk/erojpSsdnX+KMu2DFaGK6
+        XVSh6Q0QbKlyOZiIBfMfKiStabUYlpejhWUKa1gQ0j28X0T3gtNL7mlaC7OfHJNZecvqRmT4D8jCo
+        Yyu/ilEkzRLCG7UOqiBuoBxm7CuUz0nwyteVSLEOe2tTLP/sj/GAqIgWUkIl/nk5JsNYMT0Ulnkob
+        j9zHoAbw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pFX84-003yvY-0F; Wed, 11 Jan 2023 09:10:40 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DA57330006D;
+        Wed, 11 Jan 2023 10:10:24 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 927CE20575A14; Wed, 11 Jan 2023 10:10:24 +0100 (CET)
+Date:   Wed, 11 Jan 2023 10:10:24 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Chen, Yian" <yian.chen@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ravi Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Sohil Mehta <sohil.mehta@intel.com>,
+        Paul Lai <paul.c.lai@intel.com>
+Subject: Re: [PATCH 3/7] x86/cpu: Disable kernel LASS when patching kernel
+ alternatives
+Message-ID: <Y759AJ/0N9fqwDED@hirez.programming.kicks-ass.net>
+References: <20230110055204.3227669-1-yian.chen@intel.com>
+ <20230110055204.3227669-4-yian.chen@intel.com>
+ <Y73S56t/wDIGEPlK@hirez.programming.kicks-ass.net>
+ <34600873-3716-eedd-84d0-dada88dc1a70@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 net-next 0/5] add PLCA RS support and onsemi NCN26000
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167342821882.24876.7581626078662045769.git-patchwork-notify@kernel.org>
-Date:   Wed, 11 Jan 2023 09:10:18 +0000
-References: <cover.1673282912.git.piergiorgio.beruto@gmail.com>
-In-Reply-To: <cover.1673282912.git.piergiorgio.beruto@gmail.com>
-To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, o.rempel@pengutronix.de,
-        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
-        sbhatta@marvell.com, linux-doc@vger.kernel.org,
-        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
-        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34600873-3716-eedd-84d0-dada88dc1a70@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, Jan 10, 2023 at 05:01:59PM -0800, Chen, Yian wrote:
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Mon, 9 Jan 2023 17:59:25 +0100 you wrote:
-> This patchset adds support for getting/setting the Physical Layer
-> Collision Avoidace (PLCA) Reconciliation Sublayer (RS) configuration and
-> status on Ethernet PHYs that supports it.
+> > > +/* Deactivate/activate LASS via AC bit in EFLAGS register */
+> > > +static __always_inline void low_addr_access_begin(void)
+> > > +{
+> > > +	/* Note: a barrier is implicit in alternative() */
+> > > +	alternative("", __ASM_STAC, X86_FEATURE_LASS);
+> > > +}
+> > > +
+> > > +static __always_inline void low_addr_access_end(void)
+> > > +{
+> > > +	/* Note: a barrier is implicit in alternative() */
+> > > +	alternative("", __ASM_CLAC, X86_FEATURE_LASS);
+> > > +}
+> > 
+> > Can't say I like the name.
+> Indeed, there are alternative ways to name the functions. for example,
+> enable_kernel_lass()/disable_kernel_lass(), or simply keep no change to use
+> stac()/clac().
 > 
-> PLCA is a feature that provides improved media-access performance in terms
-> of throughput, latency and fairness for multi-drop (P2MP) half-duplex PHYs.
-> PLCA is defined in Clause 148 of the IEEE802.3 specifications as amended
-> by 802.3cg-2019. Currently, PLCA is supported by the 10BASE-T1S single-pair
-> Ethernet PHY defined in the same standard and related amendments. The OPEN
-> Alliance SIG TC14 defines additional specifications for the 10BASE-T1S PHY,
-> including a standard register map for PHYs that embeds the PLCA RS (see
-> PLCA management registers at https://www.opensig.org/about/specifications/).
-> 
-> [...]
+> I choose this name because it is straight forward to the purpose and helps
+> in understanding when to use the functions.
 
-Here is the summary with links:
-  - [v4,net-next,1/5] net/ethtool: add netlink interface for the PLCA RS
-    https://git.kernel.org/netdev/net-next/c/8580e16c28f3
-  - [v4,net-next,2/5] drivers/net/phy: add the link modes for the 10BASE-T1S Ethernet PHY
-    https://git.kernel.org/netdev/net-next/c/16178c8ef53d
-  - [v4,net-next,3/5] drivers/net/phy: add connection between ethtool and phylib for PLCA
-    https://git.kernel.org/netdev/net-next/c/a23a1e57a677
-  - [v4,net-next,4/5] drivers/net/phy: add helpers to get/set PLCA configuration
-    https://git.kernel.org/netdev/net-next/c/493323416fed
-  - [v4,net-next,5/5] drivers/net/phy: add driver for the onsemi NCN26000 10BASE-T1S PHY
-    https://git.kernel.org/netdev/net-next/c/b53e7e8d8557
+Given we normally refer to the kernel address space as negative, it is
+somewhat confusing.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  lass_access_{begin,end}()
 
+or something might be better names.
 
+> Also if you look at bit 63 as a sign bit,
+> > it's actively wrong since -1 is lower than 0.
+> This could be a trade-off choice. While considering address manipulation
+> and calculation, it is likely an unsigned. I would be happy to get input for
+> better naming.
+
+Note that Documentation/x86/x86_64/mm.rst likes to refer to the kernel
+range as negative.
+
+Also things like making a canonical address use sign-extention.
+
+> > This is horrific tinkering :/
+> > 
+> This part seems difficult to have a perfect solution since function call or
+> function pointer inside the guard of instruction stac and clac will trigger
+> objtool warning (stated the reasons in the commit msg)
+
+Yeah, I'm familiar with that objtool warning, I wrote that particular check :-)
+
+Still, this is a horrific solution. Adding something like
+__inline_mem{set,cpy}() is a much saner option.
+
+Something a little like the completely untested below.
+
+---
+diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
+index 888731ccf1f6..f43fc2d9b182 100644
+--- a/arch/x86/include/asm/string_64.h
++++ b/arch/x86/include/asm/string_64.h
+@@ -23,6 +23,16 @@ extern void *memcpy(void *to, const void *from, size_t len);
+ #endif
+ extern void *__memcpy(void *to, const void *from, size_t len);
+ 
++static __always_inline void *__inline_memcpy(void *to, const void *from, size_t len)
++{
++	void *ret = to;
++
++	asm volatile ("rep movsb"
++		      : "+D" (to), "+S" (from), "+c" (len)
++		      : : "memory");
++	return ret;
++}
++
+ #define __HAVE_ARCH_MEMSET
+ #if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
+ extern void *__msan_memset(void *s, int c, size_t n);
+@@ -33,6 +43,17 @@ void *memset(void *s, int c, size_t n);
+ #endif
+ void *__memset(void *s, int c, size_t n);
+ 
++static __always_inline void *__inline_memset(void *s, int v, size_t n)
++{
++	void *ret = s;
++
++	asm volatile("rep stosb"
++		     : "+D" (s), "+c" (n)
++		     : "a" ((uint8_t)v)
++		     : "memory");
++	return ret;
++}
++
+ #define __HAVE_ARCH_MEMSET16
+ static inline void *memset16(uint16_t *s, uint16_t v, size_t n)
+ {
