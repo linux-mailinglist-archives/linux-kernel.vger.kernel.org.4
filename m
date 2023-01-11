@@ -2,175 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20B6665EF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09ED8665EF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234741AbjAKPTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:19:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        id S238714AbjAKPTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:19:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238848AbjAKPTO (ORCPT
+        with ESMTP id S232621AbjAKPT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:19:14 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2046.outbound.protection.outlook.com [40.107.243.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508241277E
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:19:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dAIzUYqo5ZD0vQXonB1RZknWuBIEQKS8IFXpj+j1iXY4yVd+9bZQqOCvg7bVsWvEcX4cEDCfzcLh9WyRSWOvbfXmj4UPPNc5x3CyUsQ7ej6EUU1zg9hzrS4YCcLTdJmoq6EuKZPHT6p/u1+d4z4fxnj+Tm05GfXDyKUMW2Z97v3vO14w+vmyxav+D4k8vrGwyMRZLdycKB8NlhZeS2zu8hu53lPrEnonxjXfCpXmCdSOTXG1/X1yoIiAvXYztG9vZ43vZFoeLIlv7d5Lf1kKOu+XaKeMt1RzL+OwUPUTyIYwxdv+LKoKY4p2BYayfeCVuOGB9TH7PfaMNMwhrtMsnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DsUdLjuI/UdrkuJZS0rK4ndpO7Dlevicr8Ixp7QP+Ws=;
- b=DJqQGjhvGroelpGRy2FSxS2g6UAG8S8EpvQ4M1AMYsu6ln/pDjDAoEokrYcQ1rS6BqPVtv1OXctkx+Ewy67m+Z49BCVVY8Mta2CVvNdTiyeYzsU6CdH4PqsZeRvzPscz+3itdINrqV+NyZKoiOIVCzQGAkOWx0PdCLMVCGE1k1LGu8NLuPSOFgbLmMho4DE3sf3MX/adl3OeBh3/V2+e69oCsj1VTDR/7ZEm7jidwSyn1LSN563RmDtaZyCKEKqyrIg3GH0w85zEX8jHAI/8iQiQpG7v7Avo9alR6iRwXqMqVJZFb/MJ3gIXsuyMYLnVsR22Wvf2iytdgEJbY9pyhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DsUdLjuI/UdrkuJZS0rK4ndpO7Dlevicr8Ixp7QP+Ws=;
- b=PrmWq+2GEoTcId3APV27nXDbe1mrKtHy8SpyhMINTyQkASrvcLBo3mNe+QP9cT3/3aob6/FFskX8AXo/oLtcJDegRjCdJEfQMPZEpojSefvov9Bm2Sz/EOyfDkyf1mJmEkV2fRs9BP21mQDuP9iE+1N0cXOOiIqhbLkDDpqe9m8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by SA1PR12MB7409.namprd12.prod.outlook.com (2603:10b6:806:29c::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
- 2023 15:19:11 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::152b:e615:3d60:2bf0]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::152b:e615:3d60:2bf0%5]) with mapi id 15.20.6002.013; Wed, 11 Jan 2023
- 15:19:11 +0000
-Message-ID: <aea4b937-351a-f036-61e5-790af633f5f2@amd.com>
-Date:   Wed, 11 Jan 2023 10:19:06 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] drm/amd/display: Fix set scaling doesn's work
-Content-Language: en-US
-To:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>,
-        nicholas.kazlauskas@amd.com, hongao <hongao@uniontech.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        sunpeng.li@amd.com, linux-kernel@vger.kernel.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        aurabindo.pillai@amd.com, roman.li@amd.com, Jerry.Zuo@amd.com
-References: <20221122112034.30080-1-hongao@uniontech.com>
- <789c2c61-4959-c3c1-0916-d1cc7f659247@amd.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <789c2c61-4959-c3c1-0916-d1cc7f659247@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YTBP288CA0029.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:b01:14::42) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Wed, 11 Jan 2023 10:19:26 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D97FCE9;
+        Wed, 11 Jan 2023 07:19:24 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30BFG3LL009132;
+        Wed, 11 Jan 2023 15:19:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=OHDMQpv2dJpEZbt3U/eWON7xyHWAcKvE5imG6Zbu2sk=;
+ b=Ivvg8j3xnfjATGyWHBE4wppo+nXs7ZKlw7xxYbUa5olN+btTurcqDOcuaXvFJbbd+oV+
+ ig3BoceRn5NWYyy3QjmxfehQglprNEtLCw6QatCCO92MlPFMTEzpW/P5cjDI8qQit/un
+ N7RwVGIOOckz6HXNpjBgYKGfQ6oXXQueVhXLW4TKR1eXmlXmY0UQLAp7UWLgATvD8I0b
+ /D/W9K89mILBiNveG/W2HGT4eVBkJ4bPehPEPYtzprA+pB89TwWNU1PJHJQ+q9WI5f3L
+ 8HqtAQB9P5Yi/VOuLuKnkFFGQ0oaxnhNOfQ8reAGcI/tXDwmKJn0IQSTnjbgVwVvFd/D CQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1ykv02tp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Jan 2023 15:19:19 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30BFGZ7s010434;
+        Wed, 11 Jan 2023 15:19:19 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1ykv02t0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Jan 2023 15:19:19 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30B1dE6j003398;
+        Wed, 11 Jan 2023 15:19:17 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3n1kmtgscv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Jan 2023 15:19:17 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30BFJDlU39256320
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Jan 2023 15:19:13 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2DD7620049;
+        Wed, 11 Jan 2023 15:19:13 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD9C820043;
+        Wed, 11 Jan 2023 15:19:12 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.175.58])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 11 Jan 2023 15:19:12 +0000 (GMT)
+Message-ID: <bcc971f8acc670bb05e44451f027458dcea1f095.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 01/10] KVM: s390: Extend MEM_OP ioctl by storage key
+ checked cmpxchg
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Janosch Frank <frankja@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Date:   Wed, 11 Jan 2023 16:19:12 +0100
+In-Reply-To: <02b34aa1-d71a-99cc-77db-3613f881b1a8@linux.ibm.com>
+References: <20230110202632.2533978-1-scgl@linux.ibm.com>
+         <20230110202632.2533978-2-scgl@linux.ibm.com>
+         <02b34aa1-d71a-99cc-77db-3613f881b1a8@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|SA1PR12MB7409:EE_
-X-MS-Office365-Filtering-Correlation-Id: 081897ea-6d9c-495a-6280-08daf3e730db
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tyKc2pboCJkq//jXXL/7ouIVI85FwFz/xVVORSE960ildsRWb7EpQPz6nmtA4Yql00Hgs4bdO5hnuGp+XTJ94WuYobsuJKZuRPY7OEoGH9li/ESTEN3eQqum6Ehy4Oa3gf3zHOGTAiJAOQWkLGImX7sy/TqcWGdJ2Rnw9Fpw9zulolRrmZgxEeuygOt14ct+yzBlZtFUkTIbho3ZtHLlspwiEaUoYQTHsWh/D0DEEnv02waqEeUb2ovi0Aq1bt3FB1z2MrzBzFdnvBTaDA5FAr79J32/0uw94RPa8CiUORqXIgWN14/ndbhoEscdav0N7WZT2RnD3b24gv+bDqKqPR6qYXprxqJW4XM5gVMw4o+zyCtvvdkKysxatGb8Vq/7HveT3+mmYs2hHHRxtHf8cmuDa8JO3/YTL2NPcaWEIvB/IVb4JpPY9e8GRQdLLYydwzVvy+L534smcA+u/bULk/Ri/4dTx+XT666MYwh2bY2RUnjqY0444Rui3nQrA+pIYZLdnK9ti2IGjCHS+edu9Hrf5cqy0fpAAmJbt8xojBZwnhNeHeldyI1nhSl1WyScQ/y2+f+cK5+f9p4j4gAtJT9xMWV5HJKHZ3pBeCU2K0lwsVdb9L4qB9LcDjsUnVJAZO/rM+IgqN7CbxQa1flkaSzgqQ8pjFdZLLJ0oxkimtvMuLcQYtwneeioF/yBpWZGyTk7JgEyKHrwZlWVVd+NotkusqrJHnnzxFLiMOlCv0s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(366004)(376002)(396003)(451199015)(31686004)(110136005)(2906002)(66946007)(5660300002)(6486002)(36756003)(31696002)(86362001)(44832011)(8936002)(66476007)(41300700001)(316002)(66556008)(4326008)(8676002)(38100700002)(53546011)(6506007)(83380400001)(2616005)(6666004)(6512007)(186003)(26005)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q3Vza2g1eHVWZi9KcTNNbUQwYWdHQzJUbWRjY2ZiQ2ViT1ZOWWtURXgzb2FW?=
- =?utf-8?B?bU9NcFY3YmxtOHZRSEFCcmZPL0RLdWRyWHdsWkwyOVpnVXJnVWFYZmZIdEVQ?=
- =?utf-8?B?enQ2dFpJMHVtRUhobTdyZnVhT2k5S1dCWk9rWC9lWjFTVUNYcHlnTjl4ZGdQ?=
- =?utf-8?B?QkZHM05ibzlCUmFncllYTlJidzhoMDFKd29TTnQ3b3lGWDFwUHIzZ09reXVS?=
- =?utf-8?B?V29nMGJTZXV0YlJSdXZoQnRmc0Z3Z0ZSSVpGU0h4TEtISmwybmF5cWdCalFR?=
- =?utf-8?B?L1VWV3hxS0htOWhPQnBJREpGNWJvV3lMYVVtVFNaa1gzaVNvLzR1amJnS2c1?=
- =?utf-8?B?N3BOWTJJOXN4UVdYeFJuak9wY0JhYTN3TU9rK3c1NC9yREhDSldJYVJ4NTVG?=
- =?utf-8?B?ajVuVys2WHV3YVFUaGVNeWNCMnoxK1g5MjZaSGRraVBnMVkwWk9tTHZhVDhm?=
- =?utf-8?B?eThvbnBSTnpTWFY5K0ticnBsNWZpRXp6NWtzeVdhNHZlcFEzOUR6dEFGYitT?=
- =?utf-8?B?RDF1Rml4Y2pxUnVOSnRjMDN0MmdtdGdwYkQxamMxWXdkMEFaTlN6b3pxb0dn?=
- =?utf-8?B?VTNLclJ4UXhaVUx2SWFYK0lyc2ZXVld6MlR6bUFjYUNMV3dwQU5UbmdJZStF?=
- =?utf-8?B?ekFKbFpvTzVMMDFSYno1LzA3bE9FNmEyUTA0Z0RoWm5VV3NrWktHYTB5cW1O?=
- =?utf-8?B?ZGFMNVNOUHlWQkxPUGoxTzVMRTVQOUVUa2hPTFB4L2RHWHdjaVFSa0dyVW54?=
- =?utf-8?B?c2l2d3JBM1c0ZzM5eXpJOVJVSUtzdVV2OXBYZDZyMkxEekh3OGV2eFQvbytv?=
- =?utf-8?B?dS9waUVnaGs1RWNyV2I2NkpsNnRJNHFOMXRYa3ZTZ2RxVmREU2lveFI4ZEZu?=
- =?utf-8?B?eURkaGJ2NzVXbUdCQ3lJRmNra2loYmtMeTN0KytaUUk5TFJ4Z0pQNUZqM3hP?=
- =?utf-8?B?RllzRlF5RlVmMmJ3ODE0NUU2eUpGbEJsaGdSdnNHREk2VmpxOG1tRWRGOXJU?=
- =?utf-8?B?Qy82aktZNFRHR2oxQnNMUWRmRUMycDZUcUpLS2lFT09WeWx0Ry80Q0dndU1G?=
- =?utf-8?B?NDFZSVB2anZmUEoxYy9POUJ2VUZqa210dm9yT1REOTNHejlUSkkwaTJBeEhW?=
- =?utf-8?B?S0NtM2dpZmljQWs5WW5hTFIzOFo2T1J5NEtMT3J0MFVBQTZsYWhzSEVhMHpv?=
- =?utf-8?B?SDBuWUtaeGh4NjA1dXVMdkpsZHZveW9jY3Fadm0vR0haWjROUHNrSmxoNE16?=
- =?utf-8?B?YlRZQU9YY01nOGF3aTE1dUJEbm1hNW1WajE1a3g2LzNaVUdSRjd4Z3pBNW9y?=
- =?utf-8?B?OHlkbWY0TmRZNnp6NnRSUllWbHlPTmQ2U1lackVKQlhEU2lxL2QzMWtIOGNZ?=
- =?utf-8?B?bjNSazVGaDdTZjVRUk01OEFtZUlpUW9kdVA1aDYxbWpjZzNPV29VOHAxcjNI?=
- =?utf-8?B?bEowQThkbnE3czlCYnVUUGlQREVNMUlMa014cGcwMTR5dTFCYVBmOGdhaG9r?=
- =?utf-8?B?dHVOdFBhVW9DalVNYVlLTElTNnJQY2dVcE53UER4eWxPVHhOejZOQkx0c2dX?=
- =?utf-8?B?ZzVuc1BEZkJoaUIyaVUrWkwvRnc5SEo4WFVTK0grRkplUmZzYi9UR3VFYTBM?=
- =?utf-8?B?dHRuN1pUMmxKM3VYUUxHWkpITEpqZWcrc3FwSysvcWNCSy9vbEFWV2ovNGl6?=
- =?utf-8?B?THdmNjNDcEJ3ZzFBWElmYTV5aTVIc1pvc21VMGQ2UkNLQW50cTBTeGFWUDlX?=
- =?utf-8?B?Ym5lSDlSaFdVa2w5VGlsb3VxMjRVVzRkQzFBVERldUNKVUdnMSt3ajc4REhF?=
- =?utf-8?B?c3dzNEpvZm9LeXd5c0RaZEZUZ3FWV0U0RVltUzJWL3hzR3ptbDZzSmxRRll4?=
- =?utf-8?B?bXV0aFNvMG8yVU5qSHhYWmZrWWZEVXNxZHBzM1ErM2Z0enU5bUFwbk5JSkNV?=
- =?utf-8?B?NEkrL05OVi9ZUGZybWhXY3dWdld3OW9VcktUelBIL2M3aE9aMVFPNDRqaFZU?=
- =?utf-8?B?aTF4N3hHTzVHRnoxUGNtckM4U3o0QTFMNmxOZWplS2lHYklSVXRha1owNU42?=
- =?utf-8?B?dlZWTFNqdFpIcDJiWHh0Rm4xMkh6UkxVL1NqcmttUnM2OEFmYWg3ZnN1UHk5?=
- =?utf-8?Q?k97vuJUBxMO49U31yJCUCb/J6?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 081897ea-6d9c-495a-6280-08daf3e730db
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 15:19:11.2821
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AiWUtaG9TmKpXF51+KJQQnxdkli+wA5Eh011v1H3jE1tXDlTTJB0MIrcolewXzo35Wg83XD1mz7pRtffhSjfGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7409
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0hicx49KazwkwGbCXu7TchEQ7JKiaHKx
+X-Proofpoint-GUID: DsRBmqnKfeqUgLeRT3nG2uYVvgG1fI1M
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-11_07,2023-01-11_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ clxscore=1015 mlxlogscore=999 spamscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301110109
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/23 10:58, Rodrigo Siqueira Jordao wrote:
-> 
-> 
-> On 11/22/22 06:20, hongao wrote:
->> [Why]
->> Setting scaling does not correctly update CRTC state. As a result
->> dc stream state's src (composition area) && dest (addressable area)
->> was not calculated as expected. This causes set scaling doesn's work.
->>
->> [How]
->> Correctly update CRTC state when setting scaling property.
->>
->> Signed-off-by: hongao <hongao@uniontech.com>
->>
->> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
->> index 3e1ecca72430..a88a6f758748 100644
->> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
->> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
->> @@ -9386,8 +9386,8 @@ static int amdgpu_dm_atomic_check(struct drm_device *dev,
->>               goto fail;
->>           }
->>   -        if (dm_old_con_state->abm_level !=
->> -            dm_new_con_state->abm_level)
->> +        if (dm_old_con_state->abm_level != dm_new_con_state->abm_level ||
->> +            dm_old_con_state->scaling != dm_new_con_state->scaling)
->>               new_crtc_state->connectors_changed = true;
->>       }
->>   
-> 
-> Hi,
-> 
-> This change lgtm, and I also run it in our CI, and from IGT perspective, we are good.
-> 
-> Harry, do you have any comment about this change?
-> 
+On Wed, 2023-01-11 at 10:35 +0100, Janosch Frank wrote:
+> On 1/10/23 21:26, Janis Schoetterl-Glausch wrote:
+> > User space can use the MEM_OP ioctl to make storage key checked reads
+> > and writes to the guest, however, it has no way of performing atomic,
+> > key checked, accesses to the guest.
+> > Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
+> > mode. For now, support this mode for absolute accesses only.
+> >=20
+> > This mode can be use, for example, to set the device-state-change
+> > indicator and the adapter-local-summary indicator atomically.
+> >=20
+> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> > ---
+> >   include/uapi/linux/kvm.h |   7 +++
+> >   arch/s390/kvm/gaccess.h  |   3 ++
+> >   arch/s390/kvm/gaccess.c  | 102 ++++++++++++++++++++++++++++++++++++++=
++
+> >   arch/s390/kvm/kvm-s390.c |  41 +++++++++++++++-
+> >   4 files changed, 151 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> > index 55155e262646..452f43c1cc34 100644
+> > --- a/include/uapi/linux/kvm.h
+> > +++ b/include/uapi/linux/kvm.h
+> > @@ -583,6 +583,8 @@ struct kvm_s390_mem_op {
+> >   		struct {
+> >   			__u8 ar;	/* the access register number */
+> >   			__u8 key;	/* access key, ignored if flag unset */
+> > +			__u8 pad1[6];	/* ignored */
+> > +			__u64 old_addr;	/* ignored if flag unset */
+> >   		};
+> >   		__u32 sida_offset; /* offset into the sida */
+> >   		__u8 reserved[32]; /* ignored */
+> > @@ -599,6 +601,11 @@ struct kvm_s390_mem_op {
+> >   #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
+> >   #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
+> >   #define KVM_S390_MEMOP_F_SKEY_PROTECTION	(1ULL << 2)
+> > +#define KVM_S390_MEMOP_F_CMPXCHG		(1ULL << 3)
+> > +/* flags specifying extension support */
+>=20
+> Would that fit behind the bit shifts without getting into the "line too=
+=20
+> long" territory?
 
-LGTM
+Bit shifts or the next line?
+>=20
+> > +#define KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG 0x2
+>=20
+> \n please
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Not sure about all that, this is the way it looks right now:
 
-Harry
+/* types for kvm_s390_mem_op->op */
+#define KVM_S390_MEMOP_LOGICAL_READ     0
+#define KVM_S390_MEMOP_LOGICAL_WRITE    1
+#define KVM_S390_MEMOP_SIDA_READ        2
+#define KVM_S390_MEMOP_SIDA_WRITE       3
+#define KVM_S390_MEMOP_ABSOLUTE_READ    4
+#define KVM_S390_MEMOP_ABSOLUTE_WRITE   5
+/* flags for kvm_s390_mem_op->flags */
+#define KVM_S390_MEMOP_F_CHECK_ONLY             (1ULL << 0)
+#define KVM_S390_MEMOP_F_INJECT_EXCEPTION       (1ULL << 1)
+#define KVM_S390_MEMOP_F_SKEY_PROTECTION        (1ULL << 2)
+#define KVM_S390_MEMOP_F_CMPXCHG                (1ULL << 3)
+/* flags specifying extension support */
+#define KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG 0x2
+/* Non program exception return codes (pgm codes are 16 bit) */
+#define KVM_S390_MEMOP_R_NO_XCHG                (1 << 16)
 
-> Thanks
-> Siqueira
+Seems consistent to me.
+>=20
+> > +/* Non program exception return codes (pgm codes are 16 bit) */
+> > +#define KVM_S390_MEMOP_R_NO_XCHG		(1 << 16)
+> >  =20
+> >   /* for KVM_INTERRUPT */
+> >   struct kvm_interrupt {
+> > diff --git a/arch/s390/kvm/gaccess.h b/arch/s390/kvm/gaccess.h
+> > index 9408d6cc8e2c..92a3b9fb31ec 100644
+> > --- a/arch/s390/kvm/gaccess.h
+> > +++ b/arch/s390/kvm/gaccess.h
+> > @@ -206,6 +206,9 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, un=
+signed long ga, u8 ar,
+> >   int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
+> >   		      void *data, unsigned long len, enum gacc_mode mode);
+> >  =20
+> > +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
+> > +			       __uint128_t *old, __uint128_t new, u8 access_key);
+> > +
+> >   /**
+> >    * write_guest_with_key - copy data from kernel space to guest space
+> >    * @vcpu: virtual cpu
+> > diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+> > index 0243b6e38d36..6165e761a637 100644
+> > --- a/arch/s390/kvm/gaccess.c
+> > +++ b/arch/s390/kvm/gaccess.c
+> > @@ -1161,6 +1161,108 @@ int access_guest_real(struct kvm_vcpu *vcpu, un=
+signed long gra,
+> >   	return rc;
+> >   }
+> >  =20
+> > +/**
+> > + * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute ad=
+dress.
+> > + * @kvm: Virtual machine instance.
+> > + * @gpa: Absolute guest address of the location to be changed.
+> > + * @len: Operand length of the cmpxchg, required: 1 <=3D len <=3D 16. =
+Providing a
+> > + *       non power of two will result in failure.
+> > + * @old_addr: Pointer to old value. If the location at @gpa contains t=
+his value, the
+> > + *         exchange will succeed. After calling cmpxchg_guest_abs_with=
+_key() *@old
+> > + *         contains the value at @gpa before the attempt to exchange t=
+he value.
+> > + * @new: The value to place at @gpa.
+> > + * @access_key: The access key to use for the guest access.
+> > + *
+> > + * Atomically exchange the value at @gpa by @new, if it contains *@old=
+.
+> > + * Honors storage keys.
+> > + *
+> > + * Return: * 0: successful exchange
+> > + *         * 1: exchange unsuccessful
+> > + *         * a program interruption code indicating the reason cmpxchg=
+ could
+> > + *           not be attempted
+>=20
+>  > 1 Access related program interruption code indicating the reason=20
+> cmpxchg could not be attempted
+>=20
+> < 1 Kernel / input data error codes
+
+I think I'll do it like I said in the email to Thomas, that way it's maxima=
+lly
+explicit about the return values one might get.
+>=20
+> > + *         * -EINVAL: address misaligned or len not power of two
+> > + *         * -EAGAIN: transient failure (len 1 or 2)
+> > + *         * -EOPNOTSUPP: read-only memslot (should never occur)
+>=20
+> Would PGM_PROTECTED also make sense here instead of EOPNOTSUPP?
+
+I don't think so, if you get EOPNOTSUPP there's a programming error somewhe=
+re
+that needs to be fixed.
+I wouldn't want to mix that with the totally fine case of a protection exce=
+ption.
+>=20
+[...]
+
+> > @@ -2772,12 +2779,19 @@ static bool access_key_invalid(u8 access_key)
+> >   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op=
+ *mop)
+> >   {
+> >   	void __user *uaddr =3D (void __user *)mop->buf;
+> > +	void __user *old_addr =3D (void __user *)mop->old_addr;
+> > +	union {
+> > +		__uint128_t quad;
+> > +		char raw[sizeof(__uint128_t)];
+> > +	} old =3D { .quad =3D 0}, new =3D { .quad =3D 0 };
+> > +	unsigned int off_in_quad =3D sizeof(new) - mop->size;
+> >   	u64 supported_flags;
+> >   	void *tmpbuf =3D NULL;
+> >   	int r, srcu_idx;
+> >  =20
+> >   	supported_flags =3D KVM_S390_MEMOP_F_SKEY_PROTECTION
+> > -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
+> > +			  | KVM_S390_MEMOP_F_CHECK_ONLY
+> > +			  | KVM_S390_MEMOP_F_CMPXCHG;
+> >   	if (mop->flags & ~supported_flags || !mop->size)
+> >   		return -EINVAL;
+> >   	if (mop->size > MEM_OP_MAX_SIZE)
+> > @@ -2799,6 +2813,21 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, s=
+truct kvm_s390_mem_op *mop)
+> >   	} else {
+> >   		mop->key =3D 0;
+> >   	}
+> > +	if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
+> > +		/*
+> > +		 * This validates off_in_quad. Checking that size is a power
+> > +		 * of two is not necessary, as cmpxchg_guest_abs_with_key
+> > +		 * takes care of that
+> > +		 */
+> > +		if (mop->size > sizeof(new))
+> > +			return -EINVAL;
+>=20
+> !mop->size || mop->size > sizeof(new)
+
+Not sure why that would be necessary, but I did write
+"Operand length of the cmpxchg, required: 1 <=3D len <=3D 16",
+so I'll trust my past self on that.
+>=20
+>=20
+> > +		if (mop->op !=3D KVM_S390_MEMOP_ABSOLUTE_WRITE)
+> > +			return -EINVAL;
+> > +		if (copy_from_user(&new.raw[off_in_quad], uaddr, mop->size))
+> > +			return -EFAULT;
+> > +		if (copy_from_user(&old.raw[off_in_quad], old_addr, mop->size))
+> > +			return -EFAULT;
+> > +	}
+> >   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
+> >   		tmpbuf =3D vmalloc(mop->size);
+> >   		if (!tmpbuf)
+> > @@ -2829,6 +2858,14 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, s=
+truct kvm_s390_mem_op *mop)
+> >   	case KVM_S390_MEMOP_ABSOLUTE_WRITE: {
+> >   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
+> >   			r =3D check_gpa_range(kvm, mop->gaddr, mop->size, GACC_STORE, mop-=
+>key);
+> > +		} else if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
+> > +			r =3D cmpxchg_guest_abs_with_key(kvm, mop->gaddr, mop->size,
+> > +						       &old.quad, new.quad, mop->key);
+> > +			if (r =3D=3D 1) {
+> > +				r =3D KVM_S390_MEMOP_R_NO_XCHG;
+>=20
+> Why don't we return KVM_S390_MEMOP_R_NO_XCHG from=20
+> cmpxchg_guest_abs_with_key instead of aliasing 1 here?
+
+I think it's a bit ugly, since cmpxchg_guest_abs_with_key is an internal fu=
+nction and not memop specific.
+I don't like returning a MEMOP API constant there.
+
+> > +				if (copy_to_user(old_addr, &old.raw[off_in_quad], mop->size))
+> > +					r =3D -EFAULT;
+> > +			}
+> >   		} else {
+> >   			if (copy_from_user(tmpbuf, uaddr, mop->size)) {
+> >   				r =3D -EFAULT;
+>=20
 
