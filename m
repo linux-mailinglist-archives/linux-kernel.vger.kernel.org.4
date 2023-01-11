@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F1D6658D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 970C56658D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 11:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234095AbjAKKS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 05:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S235651AbjAKKTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 05:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbjAKKR7 (ORCPT
+        with ESMTP id S232154AbjAKKSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 05:17:59 -0500
+        Wed, 11 Jan 2023 05:18:00 -0500
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A33DDDA;
-        Wed, 11 Jan 2023 02:17:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AB31038;
+        Wed, 11 Jan 2023 02:17:59 -0800 (PST)
 Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30B7UU7w024925;
-        Wed, 11 Jan 2023 10:17:50 GMT
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30B51xQk017194;
+        Wed, 11 Jan 2023 10:17:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=qcppdkim1;
- bh=J4Lov1mdMDLpfAf1DIEnzXirjpeXZYs01KPgNOPMj5M=;
- b=Ob9W4rCQTsjP0QTVgxDznapelPRPZpSILCbpUSw+2ibplYs63K2q7EUIVY+o8YfRSyBm
- id3ClKTGn1SpbDiBEjR8/2WZ/vsZomiff9zMNCgAh0a/BQD1Job2EPXxO99IKqm2/zMW
- rA/G5jfyWhIyLuAdTW4Eq/ur6TlYDi+/vK6KGesqvpMM+0CXrLbsrelmTnXxqlPLCWCn
- H+ENSEl1bjei4oPHyOr+j3frjZhcjs3pAjJEa8Q0m8XB+UCceWJe5qeVSn4Pl7G1V7X2
- mQjRlNcgulGXCHGh/4umYkhYasYYFd8uZi+JhBsQkYAGSBfXjso6zedNyK/9Y/Gfdc33 UA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1k6a0xkh-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=+YgbCYAPSVK90SB97LphXVYIY5ZBmjOJkMcTj+4RzHo=;
+ b=J2TOtTd0umFveEHJYpfrbdwvXDgMt/9FNUEuN8VTi4PrMWzkpkFZ9x4/bKIJ6tb/94xZ
+ 3mp3oK/9M4l72zDuwlMhhEhJniPTS8wM8XCdVYFBF4PtISpxLtJMzjqeo0HlLq6dlY2P
+ Ypo/UuzBvteKSUWdsE4eeRo68jAfs170XlYPq3jOONAM0jCi6R+sYiAlTIfTSGu6Vyra
+ TnqXm/w4y2Mv0aM5ZCG/ltVvYuM7uEoOwzdDAhuG2SHs9RnfK8iN3YNSMnXh79J0OQB3
+ oWnspqX70vW7Bw798TGWH0JZH16KIZo0URM/kDsLGEIBMPswtt1/AvPQGS3YQ0Om1CRl DA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1k6a0xkn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 10:17:49 +0000
+        Wed, 11 Jan 2023 10:17:53 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30BAHmQ5029706
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30BAHqJp020598
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 10:17:48 GMT
+        Wed, 11 Jan 2023 10:17:52 GMT
 Received: from blr-ubuntu-87.ap.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 11 Jan 2023 02:17:44 -0800
+ 15.2.986.36; Wed, 11 Jan 2023 02:17:48 -0800
 From:   Sibi Sankar <quic_sibis@quicinc.com>
 To:     <andersson@kernel.org>, <srinivas.kandagatla@linaro.org>
 CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
@@ -46,20 +46,21 @@ CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
         <konrad.dybcio@somainline.org>, <robimarko@gmail.com>,
         <quic_gurus@quicinc.com>, Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [PATCH V8 0/2] SCM: Add support for wait-queue aware firmware
-Date:   Wed, 11 Jan 2023 15:47:16 +0530
-Message-ID: <20230111101718.9225-1-quic_sibis@quicinc.com>
+Subject: [PATCH V8 1/2] dt-bindings: firmware: qcom,scm: Add optional interrupt
+Date:   Wed, 11 Jan 2023 15:47:17 +0530
+Message-ID: <20230111101718.9225-2-quic_sibis@quicinc.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230111101718.9225-1-quic_sibis@quicinc.com>
+References: <20230111101718.9225-1-quic_sibis@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: n3Ag30uiyrkGFjttsHeS-JVMqB9uSlMZ
-X-Proofpoint-GUID: n3Ag30uiyrkGFjttsHeS-JVMqB9uSlMZ
+X-Proofpoint-ORIG-GUID: q8Io6auYhCx4p0vFzIELQCL1GS0rhq-5
+X-Proofpoint-GUID: q8Io6auYhCx4p0vFzIELQCL1GS0rhq-5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-11_04,2023-01-11_01,2022-06-22_01
@@ -77,87 +78,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series enables the QCOM SCM driver to support firmware (FW) versions
-that expect the high-level OS (HLOS) to be tolerant of SCM call requests not
-being processed right away and, instead, being placed on a wait-queue in FW and
-processed accordingly.
+From: Guru Das Srinagesh <quic_gurus@quicinc.com>
 
-The problem this feature is fixing is as follows. In a scenario where there is
-a VM in addition to HLOS (and an underlying hypervisor):
+Add an interrupt specification to the bindings to support the wait-queue
+feature on SM8450 SoCs.
 
-1. HLOS makes an SMC call on core 5
-2. The hypervisor scheduling interrupt interrupts this SMC call.
-3. The hypervisor schedules the VM on core 5.
-4. The VM makes an SMC call on core 5.
-5. The SMC call is non-interruptibly stuck on FW spinlock on core 5.
-6. HLOS cannot reschedule since core 5 is not responding to Reschedule IPIs.
-7. Watchdog timer expires waiting for core 5.
+Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 
-This problem is solved by FW returning a new return code SCM_WAITQ_SLEEP to
-HLOS right away when it is overwhelmed by the VM's SMC call. HLOS then places
-the call on a wait-queue and wakes it up when it receives an interrupt that
-signifies "all-clear".
+The interrupt property for scm firmware from a binding perspective is
+completely optional i.e. not all tz fw running in the wild on sm8450
+devices support this feature. The bootloader does the interrupt property
+addition on sm8450 devices with wait-queue support.
 
-There are two new SMC calls also being defined in this design that, together
-with one new return code, form the handshake protocol between Linux and FW.
-
-This design is also backwards-compatible with existing firmware versions that
-do not support this feature.
-
-v8:
-- Rename qcom_scm_lookup_wq to qcom_scm_assert_valid_wq_ctx [Bjorn] 
-- Document wq_ctx limitations [Guru]
-- Drop dev check and add include completion header [Srini]
-- Rename qcom_scm_lookup_completion to qcom_scm_wait_for_wq_completion.
-
-v7:
-- Move lookup + wait_for_completion into a single function in qcom_scm [Bjorn]
-- Simplify completion retrieval [Bjorn]
+v7
+- Pick up R-b.
 
 v6:
 - Fix subject of bindings [Krzysztof]
 - Update commit message to include the SoC supporting the feature [Krzysztof]
 - Make the interrupt property valid on SM8450 SoC [Krzysztof]
-- Fix misc. nits in the scm driver [Krzysztof]
 - Rebased on Krzysztof's narrow clocks and interconnect series.
+- Drop R-b
 
 v5:
 - Pick up R-b
-- Handle the wake_one/wake_all flags [Guru]
-- Rename flag handler to qcom_scm_waitq_wakeup [Bjorn]
-- Resume scm call can return ebusy as well handle that scenario by retrying
-  the original smc call and not the resume call
 
 v4:
-- platform_set_drvdata will be used by __scm_smc_do_quirk_handle_waitq to
-  get access to scm struct from device so retain it
-- Use a single completion as it satisfies all of the current usecases [Bjorn]
-- Inline scm_get_wq_ctx [Bjorn]
-- Convert all pr_err to dev_err [Bjorn]
-- Handle idr_destroy in a thread safe manner [Bjorn]
-- Misc. Style fixes [Bjorn]
 - Qualify bindings [Krzysztoff]
 
-v3:
-- Drop allow-multi-call property since HLOS doesn't completely support it
-  yet.
-- Fixup irq handling so as not to affect SoCs without the interrupt.
-- Fix warnings reported by kernel test-bot.
+ .../devicetree/bindings/firmware/qcom,scm.yaml | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-v2:
-- Changes made to patches 4 and 5 are listed therein.
-- Rebased dt-bindings on top of the YAML conversion patch [1].
-
-Guru Das Srinagesh (2):
-  dt-bindings: firmware: qcom,scm: Add optional interrupt
-  firmware: qcom: scm: Add wait-queue handling logic
-
- .../bindings/firmware/qcom,scm.yaml           | 18 ++++
- drivers/firmware/qcom_scm-smc.c               | 87 +++++++++++++++--
- drivers/firmware/qcom_scm.c                   | 93 ++++++++++++++++++-
- drivers/firmware/qcom_scm.h                   |  8 ++
- 4 files changed, 198 insertions(+), 8 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+index 8e6e9ebb343d..01c861f36983 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+@@ -73,6 +73,12 @@ properties:
+   '#reset-cells':
+     const: 1
+ 
++  interrupts:
++    description:
++      The wait-queue interrupt that firmware raises as part of handshake
++      protocol to handle sleeping SCM calls.
++    maxItems: 1
++
+   qcom,dload-mode:
+     $ref: /schemas/types.yaml#/definitions/phandle-array
+     items:
+@@ -162,6 +168,18 @@ allOf:
+       properties:
+         interconnects: false
+ 
++  # Interrupts
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - qcom,scm-sm8450
++    then:
++      properties:
++        interrupts: false
++
+ required:
+   - compatible
+ 
 -- 
 2.17.1
 
