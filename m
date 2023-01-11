@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277AD665D22
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F018B665D25
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbjAKN4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:56:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S232663AbjAKN4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233760AbjAKNzn (ORCPT
+        with ESMTP id S231848AbjAKN4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:55:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33251EC
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:55:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 11 Jan 2023 08:56:35 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9201C187
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:56:32 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEB5161D1A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:55:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52567C433EF;
-        Wed, 11 Jan 2023 13:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673445341;
-        bh=a2ovFh3r2lNNdTC/NOVqzd3cJRBGKn8Cp6O4v6mIBVE=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=nyXFaNp6YQWRR2UMBvo0Wj8LbMPVLV3Kn5SHKmvYP3KkZFXRRUI/eJEATOQw76A92
-         wNzuc5m4HQoerCNAeKmt72+is7yhM8SbqyAT3msfToHRijnQeNRBOnMAa1aVm+Jk6P
-         wUM/O/i93rvEnGsw15mktvAteHtOk0oBtOQ+SgubH2YiiKVGtCi0hyWdT986BfMMIz
-         GbzVylChh+tCDga+qqbo+iNKvNgNTOKyziOSvv6nZmOqxpUijxIwIi9ZqOgspWYdyw
-         yBwAZDWPM1Gp/O1eIT2L9oS+9jLNUjPbSXS19y0LhQVjnZt1avpyzEzU/nNc/wnzkC
-         zfLbshTe3Sg7w==
-Message-ID: <b5868aa5-7b48-97db-bdbf-0a0d0adaec14@kernel.org>
-Date:   Wed, 11 Jan 2023 21:55:37 +0800
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DF34217381;
+        Wed, 11 Jan 2023 13:56:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673445390; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Cb6jpfiSiTAuBIC+7gmGiVDtipbuVT1j7hxK+X6CZcM=;
+        b=q6p0sAmiI6+dqke6EvADmvGAjEGCjzcvm7PCc3wCdRy9nUFWOAnNV6SA48Rpb777PL8xsX
+        kO24pYw2bSPXeHExFneWQcbjhGKGcIqn3qwJONWgeucFKVSai+VqoxUJCDgmMo37d6LM8j
+        +ssD+1mgaozTN63uje6nGhh/pqin0DE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673445390;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Cb6jpfiSiTAuBIC+7gmGiVDtipbuVT1j7hxK+X6CZcM=;
+        b=uiqeG+ciaH37NMfkVpleRIJImql/5WpD8jAN68q0Y3VaY6Z/QQe1Ba5R5G0jDTfZT0/YSz
+        Mt/enD4ucl6J+xBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B21ED1358A;
+        Wed, 11 Jan 2023 13:56:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WC8yKg7AvmPFfAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 11 Jan 2023 13:56:30 +0000
+Message-ID: <34dec867-dbb0-5175-351a-ca4b1bd807b6@suse.de>
+Date:   Wed, 11 Jan 2023 14:56:30 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
+Subject: Re: [PATCH 1/9] drm/vc4: hdmi: Update all the planes if the TV
+ margins are changed
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230104114029.25689-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-Subject: Re: [PATCH v3] f2fs: introduce discard_io_aware_gran sysfs node
-In-Reply-To: <20230104114029.25689-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+To:     Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
+ <20221207-rpi-hdmi-improvements-v1-1-6b15f774c13a@cerno.tech>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221207-rpi-hdmi-improvements-v1-1-6b15f774c13a@cerno.tech>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------WZkWcBVctBjfGSHgZipot7pj"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,114 +78,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/4 19:40, Yangtao Li wrote:
-> The current discard_io_aware_gran is a fixed value, change it to be
-> configurable through the sys node.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
-> v3: remove DEFAULT_IO_AWARE_DISCARD_GRANULARITY
->   Documentation/ABI/testing/sysfs-fs-f2fs |  9 +++++++++
->   fs/f2fs/f2fs.h                          |  1 +
->   fs/f2fs/segment.c                       |  3 ++-
->   fs/f2fs/sysfs.c                         | 13 +++++++++++++
->   4 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-> index aaa379bb8a8f..75420c242cc4 100644
-> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
-> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-> @@ -708,3 +708,12 @@ Description:	Support configuring fault injection type, should be
->   		FAULT_LOCK_OP            0x000020000
->   		FAULT_BLKADDR            0x000040000
->   		===================      ===========
-> +
-> +What:		/sys/fs/f2fs/<disk>/discard_io_aware_gran
-> +Date:		January 2023
-> +Contact:	"Yangtao Li" <frank.li@vivo.com>
-> +Description:	Controls background discard granularity of inner discard thread
-> +		when is not in idle. Inner thread will not issue discards with size that
-> +		is smaller than granularity. The unit size is one block(4KB), now only
-> +		support configuring in range of [0, 512].
-> +		Default: 512
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------WZkWcBVctBjfGSHgZipot7pj
+Content-Type: multipart/mixed; boundary="------------ypoiDIkHvE0X3Ioer0fXt8Ty";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>
+Message-ID: <34dec867-dbb0-5175-351a-ca4b1bd807b6@suse.de>
+Subject: Re: [PATCH 1/9] drm/vc4: hdmi: Update all the planes if the TV
+ margins are changed
+References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
+ <20221207-rpi-hdmi-improvements-v1-1-6b15f774c13a@cerno.tech>
+In-Reply-To: <20221207-rpi-hdmi-improvements-v1-1-6b15f774c13a@cerno.tech>
 
-How about appending below comments to descirbe the semantics for two
-special value.
+--------------ypoiDIkHvE0X3Ioer0fXt8Ty
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-By default, the value is 512, all discard IOs will be interrupted
-by other inflight IO; it can be set to 0, then IO aware functionality
-will be disabled.
+SGkNCg0KQW0gMDcuMTIuMjIgdW0gMTc6MDcgc2NocmllYiBNYXhpbWUgUmlwYXJkOg0KPiBP
+biBWQzQsIHRoZSBUViBtYXJnaW5zIG9uIHRoZSBIRE1JIGNvbm5lY3RvciBhcmUgaW1wbGVt
+ZW50ZWQgYnkgc2NhbGluZw0KPiB0aGUgcGxhbmVzLg0KPiANCj4gSG93ZXZlciwgaWYgb25s
+eSB0aGUgVFYgbWFyZ2lucyBvciB0aGUgY29ubmVjdG9yIGFyZSBjaGFuZ2VkIGJ5IGEgbmV3
+DQo+IHN0YXRlLCB0aGUgcGxhbmVzIGVuZGluZyB1cCBvbiB0aGF0IGNvbm5lY3RvciB3b24n
+dCBiZS4gVGh1cywgdGhleSB3b24ndA0KPiBiZSB1cGRhdGVkIHByb3Blcmx5IGFuZCB3ZSds
+bCBlZmZlY3RpdmVseSBpZ25vcmUgdGhhdCBjaGFuZ2UgdW50aWwgdGhlDQo+IG5leHQgY29t
+bWl0IGFmZmVjdGluZyB0aGVzZSBwbGFuZXMuDQo+IA0KPiBMZXQncyBtYWtlIHN1cmUgdG8g
+YWRkIGFsbCB0aGUgcGxhbmVzIGF0dGFjaGVkIHRvIHRoZSBjb25uZWN0b3Igc28gdGhhdA0K
+PiB3ZSBjYW4gdXBkYXRlIHRoZW0gcHJvcGVybHkuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBN
+YXhpbWUgUmlwYXJkIDxtYXhpbWVAY2Vybm8udGVjaD4NCg0KUmV2aWV3ZWQtYnk6IFRob21h
+cyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiAgIGRyaXZl
+cnMvZ3B1L2RybS92YzQvdmM0X2hkbWkuYyB8IDE2ICsrKysrKysrKysrKysrKysNCj4gICAx
+IGZpbGUgY2hhbmdlZCwgMTYgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvZ3B1L2RybS92YzQvdmM0X2hkbWkuYyBiL2RyaXZlcnMvZ3B1L2RybS92YzQvdmM0
+X2hkbWkuYw0KPiBpbmRleCAxMmEwMGQ2NDRiNjEuLjBlYWZhZjBiNzZlNSAxMDA2NDQNCj4g
+LS0tIGEvZHJpdmVycy9ncHUvZHJtL3ZjNC92YzRfaGRtaS5jDQo+ICsrKyBiL2RyaXZlcnMv
+Z3B1L2RybS92YzQvdmM0X2hkbWkuYw0KPiBAQCAtNTIyLDYgKzUyMiwyMiBAQCBzdGF0aWMg
+aW50IHZjNF9oZG1pX2Nvbm5lY3Rvcl9hdG9taWNfY2hlY2soc3RydWN0IGRybV9jb25uZWN0
+b3IgKmNvbm5lY3RvciwNCj4gICAJaWYgKCFjcnRjKQ0KPiAgIAkJcmV0dXJuIDA7DQo+ICAg
+DQo+ICsJaWYgKG9sZF9zdGF0ZS0+dHYubWFyZ2lucy5sZWZ0ICE9IG5ld19zdGF0ZS0+dHYu
+bWFyZ2lucy5sZWZ0IHx8DQo+ICsJICAgIG9sZF9zdGF0ZS0+dHYubWFyZ2lucy5yaWdodCAh
+PSBuZXdfc3RhdGUtPnR2Lm1hcmdpbnMucmlnaHQgfHwNCj4gKwkgICAgb2xkX3N0YXRlLT50
+di5tYXJnaW5zLnRvcCAhPSBuZXdfc3RhdGUtPnR2Lm1hcmdpbnMudG9wIHx8DQo+ICsJICAg
+IG9sZF9zdGF0ZS0+dHYubWFyZ2lucy5ib3R0b20gIT0gbmV3X3N0YXRlLT50di5tYXJnaW5z
+LmJvdHRvbSkgew0KPiArCQlzdHJ1Y3QgZHJtX2NydGNfc3RhdGUgKmNydGNfc3RhdGU7DQo+
+ICsJCWludCByZXQ7DQo+ICsNCj4gKwkJY3J0Y19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X2Ny
+dGNfc3RhdGUoc3RhdGUsIGNydGMpOw0KPiArCQlpZiAoSVNfRVJSKGNydGNfc3RhdGUpKQ0K
+PiArCQkJcmV0dXJuIFBUUl9FUlIoY3J0Y19zdGF0ZSk7DQo+ICsNCj4gKwkJcmV0ID0gZHJt
+X2F0b21pY19hZGRfYWZmZWN0ZWRfcGxhbmVzKHN0YXRlLCBjcnRjKTsNCg0KVGhpcyBpcyBz
+bGlnaHRseSBkYW5nZXJvdXMsIGJ1dCB3b3JrcyBpbiB0aGUgZ2l2ZW4gY2FzZS4gSSdkIGFw
+cHJlY2lhdGUgDQphIGNvbW1lbnQgYWxhICdwbGFuZSBzdGF0ZSB3aWxsIGJlIGNoZWNrZWQg
+YnkgYXRvbWljIGhlbHBlcnMnLg0KDQpUaGUgcGxhbmUgc3RhdGUgb2YgdGhlIGFkZGVkIHBs
+YW5lcyBoYXMgdG8gYmUgdGVzdGVkIHZpYSB0aGVpciANCmF0b21pY19jaGVjayBoZWxwZXJz
+LiBUaGF0J3Mgbm8gcHJvYmxlbSBoZXJlIGJlY2F1c2UgdGhlIGNvbm5lY3RvcidzIA0KYXRv
+bWljX2NoZWNrIHJ1bnMgYmVmb3JlIHRoZSBwbGFuZSdzIGF0b21pY19jaGVjay4gU2VlIF9j
+aGVja19tb2Rlc2V0IHZzIA0KX2NoZWNrX3BsYW5lcyBpbiBbMV0uDQoNCldlIGhhZCBjb2Rl
+IHRoYXQgaW52b2tlZCBkcm1fYXRvbWljX2FkZF9hZmZlY3RlZF9wbGFuZXMoKSBmcm9tIHRo
+ZSANCkNSVEMncyBhdG9taWNfY2hlY2suIEF0IHRoYXQgcG9pbnQsIHRoZSBwbGFuZSdzIGF0
+b21pY19jaGVjayBoYXMgYmVlbiANCmV4ZWN1dGVkIGFscmVhZHkgYW5kIHRoZSBuZXdseSBh
+ZGRlZCBwbGFuZXMgd2VyZSBuZXZlciByZWFsbHkgc3RhdGUtY2hlY2tlZC4NCg0KQmVzdCBy
+ZWdhcmRzDQpUaG9tYXMNCg0KWzFdIA0KaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGlu
+dXgvdjYuMS40L3NvdXJjZS9kcml2ZXJzL2dwdS9kcm0vZHJtX2F0b21pY19oZWxwZXIuYyNM
+MTA2OQ0KDQo+ICsJCWlmIChyZXQpDQo+ICsJCQlyZXR1cm4gcmV0Ow0KPiArCX0NCj4gKw0K
+PiAgIAlpZiAob2xkX3N0YXRlLT5jb2xvcnNwYWNlICE9IG5ld19zdGF0ZS0+Y29sb3JzcGFj
+ZSB8fA0KPiAgIAkgICAgIWRybV9jb25uZWN0b3JfYXRvbWljX2hkcl9tZXRhZGF0YV9lcXVh
+bChvbGRfc3RhdGUsIG5ld19zdGF0ZSkpIHsNCj4gICAJCXN0cnVjdCBkcm1fY3J0Y19zdGF0
+ZSAqY3J0Y19zdGF0ZTsNCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNz
+IERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21i
+SA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5
+LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Thanks,
+--------------ypoiDIkHvE0X3Ioer0fXt8Ty--
 
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index 0a24447472db..cf60221d084e 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -409,6 +409,7 @@ struct discard_cmd_control {
->   	unsigned int min_discard_issue_time;	/* min. interval between discard issue */
->   	unsigned int mid_discard_issue_time;	/* mid. interval between discard issue */
->   	unsigned int max_discard_issue_time;	/* max. interval between discard issue */
-> +	unsigned int discard_io_aware_gran; /* minimum discard granularity not be aware of I/O */
->   	unsigned int discard_urgent_util;	/* utilization which issue discard proactively */
->   	unsigned int discard_granularity;	/* discard granularity */
->   	unsigned int max_ordered_discard;	/* maximum discard granularity issued by lba order */
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index 34e9dc4df5bb..d988d83108b2 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -1059,7 +1059,7 @@ static void __init_discard_policy(struct f2fs_sb_info *sbi,
->   	dpolicy->granularity = granularity;
->   
->   	dpolicy->max_requests = dcc->max_discard_request;
-> -	dpolicy->io_aware_gran = MAX_PLIST_NUM;
-> +	dpolicy->io_aware_gran = dcc->discard_io_aware_gran;
->   	dpolicy->timeout = false;
->   
->   	if (discard_type == DPOLICY_BG) {
-> @@ -2063,6 +2063,7 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
->   	if (!dcc)
->   		return -ENOMEM;
->   
-> +	dcc->discard_io_aware_gran = MAX_PLIST_NUM;
->   	dcc->discard_granularity = DEFAULT_DISCARD_GRANULARITY;
->   	dcc->max_ordered_discard = DEFAULT_MAX_ORDERED_DISCARD_GRANULARITY;
->   	if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SEGMENT)
-> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> index 805b632a3af0..e396851a6dd1 100644
-> --- a/fs/f2fs/sysfs.c
-> +++ b/fs/f2fs/sysfs.c
-> @@ -473,6 +473,17 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
->   		return count;
->   	}
->   
-> +	if (!strcmp(a->attr.name, "discard_io_aware_gran")) {
-> +		if (t > MAX_PLIST_NUM)
-> +			return -EINVAL;
-> +		if (!f2fs_block_unit_discard(sbi))
-> +			return -EINVAL;
-> +		if (t == *ui)
-> +			return count;
-> +		*ui = t;
-> +		return count;
-> +	}
-> +
->   	if (!strcmp(a->attr.name, "discard_granularity")) {
->   		if (t == 0 || t > MAX_PLIST_NUM)
->   			return -EINVAL;
-> @@ -825,6 +836,7 @@ F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_request, max_discard_req
->   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, min_discard_issue_time, min_discard_issue_time);
->   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, mid_discard_issue_time, mid_discard_issue_time);
->   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_issue_time, max_discard_issue_time);
-> +F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_io_aware_gran, discard_io_aware_gran);
->   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_urgent_util, discard_urgent_util);
->   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_granularity, discard_granularity);
->   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_ordered_discard, max_ordered_discard);
-> @@ -960,6 +972,7 @@ static struct attribute *f2fs_attrs[] = {
->   	ATTR_LIST(min_discard_issue_time),
->   	ATTR_LIST(mid_discard_issue_time),
->   	ATTR_LIST(max_discard_issue_time),
-> +	ATTR_LIST(discard_io_aware_gran),
->   	ATTR_LIST(discard_urgent_util),
->   	ATTR_LIST(discard_granularity),
->   	ATTR_LIST(max_ordered_discard),
+--------------WZkWcBVctBjfGSHgZipot7pj
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmO+wA4FAwAAAAAACgkQlh/E3EQov+Df
+qhAAgdR2UN5G1re4OlPaIbxWy5zJRUt6RXGz2nhamCVltan/8ovFD3k7Qhru7J1/esl3WfMgpBYJ
+17wUV4CR6p9SUtxezbyrZgkYzq+g90kXRV2/aX7pQOYdbyEz4Z8LJtdLDzWojyVPo1A/9EMXFfJx
+uohxbOYwF/tcr7wg++eL5VZwQ6/1sibOKtKXomyxIOQg4PMXS4i20mW3cSWh+WWZ1FV2xbJE6MCO
+Rqrkn/dRIfp3ahObYPHX9eQhwJHmb7v+IUJ/Lvlt38vNX7k3GOzHz+rggXIBKRwbnqg/3v4hX1Mk
+NYnEJwCrnMBSggO60K3336HZX05F3NMPiAyR9HRsaaM8k8RXTxScD6FESWn5dH/diQwCnteaFxJY
+2qtHaEMwwgcqVO4uRoRgAmlkLL8By5j76WMa8OYkqh0oAiiAdggc1bHWHRHxpXCwEX+cDCKNiO2v
+hSoUzs1HKiSubyf5Ilpcz8dHcULzaT/KFQlxFLZKTOcd/BfOeJQx3FjkkhYR6lv4sN5rh+nOFfO6
+Ga1uuv4QYmSBx80mTH+mNwsMPJwT3KkKs2KEt6siF3umw6ktFL3m/F1nz5q53Ds5CNXIEtKJMpZ9
+LQ5K3ouIYki7JOSjLcW5sLkwEppcwA103dwWapmy6uFgiCL9i4Gc5203yiSJk+ID2/dkanP7tP1p
+ygs=
+=yO4N
+-----END PGP SIGNATURE-----
+
+--------------WZkWcBVctBjfGSHgZipot7pj--
