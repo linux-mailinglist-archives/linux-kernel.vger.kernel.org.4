@@ -2,137 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB3E665539
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 08:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0C7665540
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 08:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjAKHhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 02:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S231978AbjAKHjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 02:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjAKHhi (ORCPT
+        with ESMTP id S230283AbjAKHjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 02:37:38 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC774109A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 23:37:37 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id l13-20020a056e0212ed00b00304c6338d79so10388544iln.21
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 23:37:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k63yZNPt76OpraTnKp5kn1vZ8b3gPRGwLKruVEw/acY=;
-        b=dATZYWnkv7fN12MsYqigLdlyCEKAM+U078l8n5jmOv/wGtWj2Ur8fRUBHT1VmjT9TW
-         Y3Kmtn34n9kimBHFvUWtQKMaD/ozVZXhQ3n2jHzD5kQgXvT3oX6P2cJf3JB8IbCoNRn9
-         HKaolGVdt8K+7kbxYI3PspJ/1EB6B7d96ViBTPrnPyg4ci6zqERJeu2W9kbsI9VLrCl5
-         VPxw3iqrnW/YvCI1tBuSS2kOaQUhehxEIFGCBEcDzGX5zk3eDbl4fV67W5Qhckil8tnR
-         iGn9XITMCJX+xYXeCZYLVvJrSJ38W2m+cn5l33L94qWfahy8XwZahBYGrOoS0Sh6i/IQ
-         NheQ==
-X-Gm-Message-State: AFqh2ko4zaYbnKoyjXhK1F52hlajb2+aWttFgkdckdhl5fR3WURc6uVq
-        uAC26BER2nb95dHhAMl920IrtzDpkqXyZPi2QEJ2yri/1CB6
-X-Google-Smtp-Source: AMrXdXtkserdAL266aVvjdSA3W9/5aHT8I3zKgEjNxpHGiaRI1u1k0yibhK5roxog4vdgoennrKIuG/buJh8YM1FdYi0cCdEVN6b
+        Wed, 11 Jan 2023 02:39:40 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBE010FCE
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 23:39:38 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NsKMB5Gm2z4wgq;
+        Wed, 11 Jan 2023 18:39:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1673422777;
+        bh=PUC4l7Fl/CYIwqAtVD801/4BMGg7ktBI9zLEQEpluMA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=RrSr59lPcKMMbBRFNah0TBy4jWHYK+OAp0ldEdZrhxHrj9fqUi3YjxqVs8D2LmUPZ
+         C6XvY25KTWziL2MY964rkXsMaCYC0kaLRdyO1ZPcRvasepS55tvcLTH3YMOvALoulu
+         njFE0TxSKQ/Yq1k2cZc7muh3oBebitI+efc8CxqPF++EiY76ZWDD69qZFL7IBjmCwN
+         CwF7c3tGuapY1S1rI/jXx8RZ+U7qRUP/CjKxu2qCOyibxWoyS26RyVxE8Q2tj9dsKM
+         4Zinmz9uTmH9JmUv4S1Ibp5MicKUwxm98ice6UaD2qrIMfx4LVxR86SSpOhUf9fXQb
+         /8QMIDCGPUvVQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Li Yang <leoyang.li@nxp.com>
+Subject: Re: usb.c:undefined reference to `qe_immr'
+In-Reply-To: <a0e325d2-a9c5-ffca-b2d6-5eea60f9ad3b@infradead.org>
+References: <202301101500.pillNv6R-lkp@intel.com>
+ <a0e325d2-a9c5-ffca-b2d6-5eea60f9ad3b@infradead.org>
+Date:   Wed, 11 Jan 2023 18:39:30 +1100
+Message-ID: <87lem9h64t.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-Received: by 2002:a02:9a0a:0:b0:38a:b479:86f with SMTP id
- b10-20020a029a0a000000b0038ab479086fmr8745816jal.116.1673422656987; Tue, 10
- Jan 2023 23:37:36 -0800 (PST)
-Date:   Tue, 10 Jan 2023 23:37:36 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000076ab405f1f8134a@google.com>
-Subject: [syzbot] WARNING in devlink_free
-From:   syzbot <syzbot+9f0dd863b87113935acf@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, jiri@nvidia.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Randy Dunlap <rdunlap@infradead.org> writes:
+> [adding Cc's]
+>
+>
+> On 1/9/23 23:59, kernel test robot wrote:
+>> Hi Masahiro,
+>> 
+>> FYI, the error/warning still remains.
+>> 
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   5a41237ad1d4b62008f93163af1d9b1da90729d8
+>> commit: 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+>> date:   8 months ago
+>> config: powerpc-randconfig-r026-20230110
+>> compiler: powerpc-linux-gcc (GCC) 12.1.0
+>> reproduce (this is a W=1 build):
+>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>         chmod +x ~/bin/make.cross
+>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+>>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>         git fetch --no-tags linus master
+>>         git checkout 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+>>         # save the config file
+>>         mkdir build_dir && cp config build_dir/.config
+>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+>> 
+>> If you fix the issue, kindly add following tag where applicable
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> 
+>> All errors (new ones prefixed by >>):
+>> 
+>>    powerpc-linux-ld: powerpc-linux-ld: DWARF error: could not find abbrev number 74
+>>    drivers/soc/fsl/qe/usb.o: in function `qe_usb_clock_set':
+>>>> usb.c:(.text+0x1e): undefined reference to `qe_immr'
+>>>> powerpc-linux-ld: usb.c:(.text+0x2a): undefined reference to `qe_immr'
+>>>> powerpc-linux-ld: usb.c:(.text+0xbc): undefined reference to `qe_setbrg'
+>>>> powerpc-linux-ld: usb.c:(.text+0xca): undefined reference to `cmxgcr_lock'
+>>    powerpc-linux-ld: usb.c:(.text+0xce): undefined reference to `cmxgcr_lock'
+>> 
+>
+> .config extract:
+>
+> #
+> # NXP/Freescale QorIQ SoC drivers
+> #
+> # CONFIG_QUICC_ENGINE is not set
+> CONFIG_QE_USB=y
+>
+>
+> This is caused by (drivers/soc/fsl/qe/Kconfig):
+>
+> config QE_USB
+> 	bool
+> 	default y if USB_FSL_QE
+> 	help
+> 	  QE USB Controller support
+>
+> which does not depend on QUICC_ENGINE, where the latter build provides
+> the missing symbols.
 
-syzbot found the following issue on:
+So QE_USB should depend on QUICC_ENGINE no?
 
-HEAD commit:    6d0c4b11e743 libbpf: Poison strlcpy()
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17b1945a480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=46221e8203c7aca6
-dashboard link: https://syzkaller.appspot.com/bug?extid=9f0dd863b87113935acf
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/83567aa48724/disk-6d0c4b11.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6047fdb8660e/vmlinux-6d0c4b11.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a94d1047d7b7/bzImage-6d0c4b11.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9f0dd863b87113935acf@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(mutex_is_locked(lock))
-WARNING: CPU: 1 PID: 14225 at kernel/locking/mutex-debug.c:102 mutex_destroy+0xc1/0x100 kernel/locking/mutex-debug.c:102
-Modules linked in:
-CPU: 1 PID: 14225 Comm: syz-executor.5 Not tainted 6.2.0-rc2-syzkaller-00302-g6d0c4b11e743 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:mutex_destroy+0xc1/0x100 kernel/locking/mutex-debug.c:102
-Code: 03 0f b6 14 11 38 d0 7c 04 84 d2 75 3f 8b 05 ee 21 10 0d 85 c0 75 92 48 c7 c6 00 47 4c 8a 48 c7 c7 40 47 4c 8a e8 af 7f 5c 08 <0f> 0b e9 78 ff ff ff 48 c7 c7 00 8a c0 91 e8 2c 64 6c 00 e9 5d ff
-RSP: 0018:ffffc900030efa20 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff88807ca752d0 RCX: 0000000000000000
-RDX: ffff88802749d7c0 RSI: ffffffff8166724c RDI: fffff5200061df36
-RBP: ffff88807ca75000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000001 R12: ffff88807ca73000
-R13: ffff88807ca73078 R14: ffffffff8d7af3c0 R15: 0000000000000000
-FS:  0000555556d5f400(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055a9c409d950 CR3: 000000004f7a2000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- devlink_free+0x83/0x510 net/devlink/core.c:262
- nsim_drv_remove+0x158/0x1d0 drivers/net/netdevsim/dev.c:1688
- device_remove+0xc8/0x170 drivers/base/dd.c:548
- __device_release_driver drivers/base/dd.c:1253 [inline]
- device_release_driver_internal+0x4a5/0x700 drivers/base/dd.c:1279
- bus_remove_device+0x2e7/0x5a0 drivers/base/bus.c:529
- device_del+0x4f7/0xc80 drivers/base/core.c:3666
- device_unregister+0x1e/0xc0 drivers/base/core.c:3698
- nsim_bus_dev_del drivers/net/netdevsim/bus.c:310 [inline]
- del_device_store+0x34e/0x470 drivers/net/netdevsim/bus.c:219
- bus_attr_store+0x76/0xa0 drivers/base/bus.c:122
- sysfs_kf_write+0x114/0x170 fs/sysfs/file.c:136
- kernfs_fop_write_iter+0x3f1/0x600 fs/kernfs/file.c:334
- call_write_iter include/linux/fs.h:2186 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x9ed/0xdd0 fs/read_write.c:584
- ksys_write+0x12b/0x250 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fcfd903de4f
-Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 99 fd ff ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 48 89 44 24 08 e8 cc fd ff ff 48
-RSP: 002b:00007ffcd827a1d0 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fcfd903de4f
-RDX: 0000000000000001 RSI: 00007ffcd827a220 RDI: 0000000000000005
-RBP: 0000000000000005 R08: 0000000000000000 R09: 00007ffcd827a170
-R10: 0000000000000000 R11: 0000000000000293 R12: 00007fcfd90e76fe
-R13: 00007ffcd827a220 R14: 0000000000000000 R15: 00007ffcd827a8f0
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+cheers
