@@ -2,361 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404D766559B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 09:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218D46655A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 09:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235829AbjAKIBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 03:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
+        id S230079AbjAKIC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 03:02:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235800AbjAKIAu (ORCPT
+        with ESMTP id S236041AbjAKIBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 03:00:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6748CFD
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 00:00:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673424002;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ryKP4Syb0QxMHTHezxVFEI/PQgexEWoWhCwUcUgI3Bs=;
-        b=HrRlBA5VKo9MbGx/wbnwz+8S5Lsjq4O5cNeY5TjGi3smoR/RKAIKvM1AAEIdgx8wuK6wy5
-        2LTMC+25OtSXVPcJkhO/SX1JzKpGt79hqJqefcgiQN/+s6MlG/TYaij2QCkkumc/s0Mcnn
-        ruD9stLpQLAM/mLU29ketCmh88ZQTKQ=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-660-8bufjMr3NRyJlwqoqD9dJQ-1; Wed, 11 Jan 2023 03:00:00 -0500
-X-MC-Unique: 8bufjMr3NRyJlwqoqD9dJQ-1
-Received: by mail-qt1-f197.google.com with SMTP id g19-20020ac84693000000b003acef862350so4081677qto.7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 00:00:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ryKP4Syb0QxMHTHezxVFEI/PQgexEWoWhCwUcUgI3Bs=;
-        b=aBG27i32aTIHc2XK3sQSF7Tfq/TxtNTKMCDs1hgzDbvWRBzzI+bfhsAPfZS0aRBRIh
-         ENsRYg0U4ueKWH380PYoaZ2M9ja7bVHMiQM3jM70xbiHOXkdY36+9cwPseqd7lG526Ci
-         bEq2aJKd+BZrsNYh5nQ1en1voqt9aYGZsny6ccHGRZycsek0Bf3enb2d12cSQLy4DrR4
-         LAwNLNNcN+1zgpGSAG6Wq4YekvTkWnp1eFad19HUKJG3ukbZQjN+2TBmWpZYORJQUl8g
-         RliSrvE6rSHd65tH7WBz6ncGnyY3oW15TUO9KAMF+e9wsNGtKI49WBHhoRnqmY3KI78E
-         0YlA==
-X-Gm-Message-State: AFqh2krqCkMevE78kW2GOtLOYRoRqfm7hwEnThNCKJH6eGqQ+nSUYHQd
-        XSG+ketyDmDUWdBN5ZDUB+/KDEsCjAurCtCFFgjGEpp/0tUFoy7pI2E3YdxBDTtds+mGjwXnUlz
-        qiHYCrDHQ8mjTK2tflkxBO9OG
-X-Received: by 2002:ac8:1386:0:b0:3ac:57b4:8af1 with SMTP id h6-20020ac81386000000b003ac57b48af1mr17407495qtj.48.1673424000215;
-        Wed, 11 Jan 2023 00:00:00 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuCxMYAF0XtzpQS+jcWvPGgAusQLEHTTzEMCOqWd8k+VpNsYPzqN2dh6WTpHkbgSTx6FIB2Qw==
-X-Received: by 2002:ac8:1386:0:b0:3ac:57b4:8af1 with SMTP id h6-20020ac81386000000b003ac57b48af1mr17407472qtj.48.1673423999824;
-        Tue, 10 Jan 2023 23:59:59 -0800 (PST)
-Received: from [192.168.0.2] (ip-109-43-176-91.web.vodafone.de. [109.43.176.91])
-        by smtp.gmail.com with ESMTPSA id hj4-20020a05622a620400b003995f6513b9sm7141809qtb.95.2023.01.10.23.59.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 23:59:59 -0800 (PST)
-Message-ID: <d124764c-f221-98d8-a286-79efe176515c@redhat.com>
-Date:   Wed, 11 Jan 2023 08:59:55 +0100
+        Wed, 11 Jan 2023 03:01:50 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1D3F5B7;
+        Wed, 11 Jan 2023 00:01:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673424077; x=1704960077;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pCPF/jbvTEFtAT8/l9myxQBO5ti7YRWIFj+IrkVL6+g=;
+  b=ehAp04/vJZUjmz3pm3LEOTxMBGDp6sULPukh1omQlmyw9Ol08pyAHVgc
+   2RlTmr+inJcmf0EsTOjZccUFeVvfhpCdoJTNQcZ6X7OUyu9ecEzeGIERo
+   2u2EShAOfFL2TEGrRkANcf/YyAgdD+KtWYgGfVym3SRJb6XaAfAmKYc9g
+   ZPXzIBdMJS0RRiv/EVKtDNpa6IXvEwJQTNWRTw2hOVR4uCDbeGJjs4WCN
+   xmCnV8znbm04olcNc29HnGXjUhhSroPs4ijBA0I2nNU3U6FzcNlhe0XJa
+   CBEH/Gz8eJGZ0g6OUMLlE7DY8iVIWCOdKZarWjnNVV1HHl4GKvtAlUL35
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="asc'?scan'208";a="196159866"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jan 2023 01:01:16 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 11 Jan 2023 01:01:15 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Wed, 11 Jan 2023 01:01:13 -0700
+Date:   Wed, 11 Jan 2023 08:00:51 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Conor Dooley <conor@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v13 1/2] pwm: add microchip soft ip corePWM driver
+Message-ID: <Y75ss+aSCjx7E9SZ@wendy>
+References: <20221221112912.147210-1-conor@kernel.org>
+ <20221221112912.147210-2-conor@kernel.org>
+ <20230110224805.3pqxd3yv4wyci2zj@pengutronix.de>
+ <Y73/oUwuOwQFR0NZ@spud>
+ <20230111070250.w7egzcufa4waxg2n@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 01/10] KVM: s390: Extend MEM_OP ioctl by storage key
- checked cmpxchg
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20230110202632.2533978-1-scgl@linux.ibm.com>
- <20230110202632.2533978-2-scgl@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20230110202632.2533978-2-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="E6V8omzJMHIjX4MZ"
+Content-Disposition: inline
+In-Reply-To: <20230111070250.w7egzcufa4waxg2n@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 21.26, Janis Schoetterl-Glausch wrote:
-> User space can use the MEM_OP ioctl to make storage key checked reads
-> and writes to the guest, however, it has no way of performing atomic,
-> key checked, accesses to the guest.
-> Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
-> mode. For now, support this mode for absolute accesses only.
-> 
-> This mode can be use, for example, to set the device-state-change
-> indicator and the adapter-local-summary indicator atomically.
-> 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
->   include/uapi/linux/kvm.h |   7 +++
->   arch/s390/kvm/gaccess.h  |   3 ++
->   arch/s390/kvm/gaccess.c  | 102 +++++++++++++++++++++++++++++++++++++++
->   arch/s390/kvm/kvm-s390.c |  41 +++++++++++++++-
->   4 files changed, 151 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 55155e262646..452f43c1cc34 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -583,6 +583,8 @@ struct kvm_s390_mem_op {
->   		struct {
->   			__u8 ar;	/* the access register number */
->   			__u8 key;	/* access key, ignored if flag unset */
-> +			__u8 pad1[6];	/* ignored */
-> +			__u64 old_addr;	/* ignored if flag unset */
->   		};
->   		__u32 sida_offset; /* offset into the sida */
->   		__u8 reserved[32]; /* ignored */
-> @@ -599,6 +601,11 @@ struct kvm_s390_mem_op {
->   #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
->   #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
->   #define KVM_S390_MEMOP_F_SKEY_PROTECTION	(1ULL << 2)
-> +#define KVM_S390_MEMOP_F_CMPXCHG		(1ULL << 3)
-> +/* flags specifying extension support */
-> +#define KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG 0x2
-> +/* Non program exception return codes (pgm codes are 16 bit) */
-> +#define KVM_S390_MEMOP_R_NO_XCHG		(1 << 16)
->   
->   /* for KVM_INTERRUPT */
->   struct kvm_interrupt {
-> diff --git a/arch/s390/kvm/gaccess.h b/arch/s390/kvm/gaccess.h
-> index 9408d6cc8e2c..92a3b9fb31ec 100644
-> --- a/arch/s390/kvm/gaccess.h
-> +++ b/arch/s390/kvm/gaccess.h
-> @@ -206,6 +206,9 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->   int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
->   		      void *data, unsigned long len, enum gacc_mode mode);
->   
-> +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
-> +			       __uint128_t *old, __uint128_t new, u8 access_key);
-> +
->   /**
->    * write_guest_with_key - copy data from kernel space to guest space
->    * @vcpu: virtual cpu
-> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-> index 0243b6e38d36..6165e761a637 100644
-> --- a/arch/s390/kvm/gaccess.c
-> +++ b/arch/s390/kvm/gaccess.c
-> @@ -1161,6 +1161,108 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
->   	return rc;
->   }
->   
-> +/**
-> + * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute address.
-> + * @kvm: Virtual machine instance.
-> + * @gpa: Absolute guest address of the location to be changed.
-> + * @len: Operand length of the cmpxchg, required: 1 <= len <= 16. Providing a
-> + *       non power of two will result in failure.
-> + * @old_addr: Pointer to old value. If the location at @gpa contains this value, the
-> + *         exchange will succeed. After calling cmpxchg_guest_abs_with_key() *@old
-> + *         contains the value at @gpa before the attempt to exchange the value.
-> + * @new: The value to place at @gpa.
-> + * @access_key: The access key to use for the guest access.
-> + *
-> + * Atomically exchange the value at @gpa by @new, if it contains *@old.
-> + * Honors storage keys.
-> + *
-> + * Return: * 0: successful exchange
-> + *         * 1: exchange unsuccessful
-> + *         * a program interruption code indicating the reason cmpxchg could
-> + *           not be attempted
+--E6V8omzJMHIjX4MZ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-PGM_OPERATION has also the value 1 ... can we be sure that it never happens 
-here? ... maybe it would make sense to use KVM_S390_MEMOP_R_NO_XCHG for 
-return value here instead of 1, too, just to be on the safe side?
+Hey Uwe,
 
-Apart from that, patch looks fine to me.
+On Wed, Jan 11, 2023 at 08:02:50AM +0100, Uwe Kleine-K=F6nig wrote:
+> On Wed, Jan 11, 2023 at 12:15:29AM +0000, Conor Dooley wrote:
+> > On Tue, Jan 10, 2023 at 11:48:05PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > On Wed, Dec 21, 2022 at 11:29:12AM +0000, Conor Dooley wrote:
+> > > > From: Conor Dooley <conor.dooley@microchip.com>
+> >=20
+> > > > +		delay_us =3D DIV_ROUND_UP_ULL(remaining_ns, NSEC_PER_USEC);
+> > > > +		if ((delay_us / 1000) > MAX_UDELAY_MS)
+> > > > +			msleep(delay_us / 1000 + 1);
+> > >=20
+> > > Is this better than
+> > >=20
+> > > 	msleep(DIV_ROUND_UP(delay_us, 1000);
+> > >=20
+> > > ? Also I wonder about your usage of MAX_UDELAY_MS. This is about
+> >=20
+> > I probably started hacking on the example you gave and didn't notice
+> > the U. What I have here is ~what you suggested last time.
+>=20
+> A series with (up to now) 13 revisions and long delays between the
+> review rounds (which are mostly attributed to my time schedule) is
+> difficult to handle on both sides. Some repetition isn't easy to prevent
+> in such a case. Sorry for that.
 
-  Thomas
+It is what it is, you've only got so much time :)
+
+> > > udelay() but you're using usleep_range()?
+> > >=20
+> > > > +		else
+> > > > +			usleep_range(delay_us, delay_us * 2);
+> > >=20
+> > > I wonder if there isn't a function that implements something like
+> > >=20
+> > > 	wait_until(mchp_core_pwm->update_timestamp);
+> > >=20
+> > > which would be a bit nicer than doing this by hand. Maybe fsleep()?
+> >=20
+> > That'd be fsleep(delay_us), but does at least clean up some of the
+> > messing.
+> >=20
+> > > > +static void mchp_core_pwm_apply_duty(struct pwm_chip *chip, struct=
+ pwm_device *pwm,
+> > > > +				     const struct pwm_state *state, u64 duty_steps,
+> > > > +				     u8 period_steps)
+> > > > +{
+> > > > +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chi=
+p);
+> > > > +	u8 posedge, negedge;
+> > > > +	u8 period_steps_val =3D PREG_TO_VAL(period_steps);
+> > > > +
+> > > > +	/*
+> > > > +	 * Setting posedge =3D=3D negedge doesn't yield a constant output,
+> > > > +	 * so that's an unsuitable setting to model duty_steps =3D 0.
+> > > > +	 * In that case set the unwanted edge to a value that never
+> > > > +	 * triggers.
+> > > > +	 */
+> > > > +	if (state->polarity =3D=3D PWM_POLARITY_INVERSED) {
+> > > > +		negedge =3D !duty_steps ? period_steps_val : 0u;
+> > >=20
+> > > IMHO
+> > >=20
+> > > 		negedge =3D duty_steps ? 0 : period_steps_val;
+> > >=20
+> > > is a bit easier to parse.
+> > >=20
+> > > > +		posedge =3D duty_steps;
+> > > > +	} else {
+> > > > +		posedge =3D !duty_steps ? period_steps_val : 0u;
+> > > > +		negedge =3D duty_steps;
+> > > > +	}
+> > >=20
+> > > The following code is equivalent:
+> > >=20
+> > > 	u8 first_edge =3D 0, second_edge =3D duty_steps;
+> > >=20
+> > > 	/*
+> > > 	 * Setting posedge =3D=3D negedge doesn't yield a constant output,
+> > > 	 * so that's an unsuitable setting to model duty_steps =3D 0.
+> > > 	 * In that case set the unwanted edge to a value that never
+> > > 	 * triggers.
+> > > 	 */
+> > > 	if (duty_steps =3D=3D 0)
+> > > 		first_edge =3D period_steps_val;
+> > >=20
+> > > 	if (state->polarity =3D=3D PWM_POLARITY_INVERSED) {
+> > > 		negedge =3D first_edge;
+> > > 		posedge =3D second_edge;
+> > > 	} else {
+> > > 		posedge =3D first_edge;
+> > > 		negedge =3D second_edge;
+> > > 	}
+> > >=20
+> > > I'm not sure if it's easier to understand. What do you think?
+> >=20
+> > Despite having used them, I dislike ternary statements.
+>=20
+> My variant is a bit longer and uses more variables, but has less
+> repetition. I don't expect a relevant change on the generated code. I
+> slightly prefer my variant, but I let you choose which one you prefer.
+
+Yah, I prefer anything that doesn't have ternarys in it.
+
+> > > > +	writel_relaxed(posedge, mchp_core_pwm->base + MCHPCOREPWM_POSEDGE=
+(pwm->hwpwm));
+> > > > +	writel_relaxed(negedge, mchp_core_pwm->base + MCHPCOREPWM_NEGEDGE=
+(pwm->hwpwm));
+> > > > +}
+> > > > +
+> > > > +static void mchp_core_pwm_calc_period(const struct pwm_state *stat=
+e, unsigned long clk_rate,
+> > > > +				      u16 *prescale, u8 *period_steps)
+> > > > +{
+> > > > +	u64 tmp;
+> > > > +
+> > > > +	/*
+> > > > +	 * Calculate the period cycles and prescale values.
+> > > > +	 * The registers are each 8 bits wide & multiplied to compute the=
+ period
+> > > > +	 * using the formula:
+> > > > +	 * (clock_period) * (prescale + 1) * (period_steps + 1)
+> > > > +	 * so the maximum period that can be generated is 0x10000 times t=
+he
+> > > > +	 * period of the input clock.
+> > > > +	 * However, due to the design of the "hardware", it is not possib=
+le to
+> > > > +	 * attain a 100% duty cycle if the full range of period_steps is =
+used.
+> > > > +	 * Therefore period_steps is restricted to 0xFE and the maximum m=
+ultiple
+> > > > +	 * of the clock period attainable is 0xFF00.
+> > > > +	 */
+> > > > +	tmp =3D mul_u64_u64_div_u64(state->period, clk_rate, NSEC_PER_SEC=
+);
+> > > > +
+> > > > +	/*
+> > > > +	 * The hardware adds one to the register value, so decrement by o=
+ne to
+> > > > +	 * account for the offset
+> > > > +	 */
+> > > > +	if (tmp >=3D MCHPCOREPWM_PERIOD_MAX) {
+> > > > +		*prescale =3D MCHPCOREPWM_PRESCALE_MAX - 1;
+> > > > +		*period_steps =3D MCHPCOREPWM_PERIOD_STEPS_MAX - 1;
+> > > > +
+> > > > +		return;
+> > > > +	}
+> > > > +
+> > > > +	*prescale =3D div_u64(tmp, MCHPCOREPWM_PERIOD_STEPS_MAX);
+> > > > +	/* PREG_TO_VAL() can produce a value larger than UINT8_MAX */
+> > > > +	*period_steps =3D div_u64(tmp, PREG_TO_VAL(*prescale)) - 1;
+> > >=20
+> > > This looks wrong, but I didn't think long about that. Did we discuss
+> > > this already and/or are you sure this is correct?
+> >=20
+> > We did discuss it previously AFAICT;
+> > https://lore.kernel.org/linux-pwm/896d73ac-05af-8673-8379-29011800be83@=
+microchip.com/
+> >=20
+> > [...]
+> > Unfortunately, I don't think I am seeing what you're seeing.
+>=20
+> Well, the calculation lands in the right ballpark for sure, but if my
+> intuition is right, it's not as exact as it could be. I need some time
+> with pencil and paper ...
+>=20
+> > [...]
+> > Perhaps I need to watch a lecture on how to write a PWM driver since I
+> > am clearly no good at it, given the 15 revisions. Do you know of any?
+>=20
+> I'm not aware of such a lecture.
+
+I thought you were doing one at FOSDEM!
+
+> I'm willing to take the blame for some
+> of the revisions because I'm very picky and the math involved here isn't
+> trivial.
+
+I'd rather the maths was right. Fixing it up front is better than trying
+to debug it from a customer complaint - so thanks for that.
+And the maths was very naive to begin with, although I only submitted it
+in the summer, I think I wrote the driver prior to having upstreamed a
+single patch, and I think that showed in the maths.
+
+> And I sometimes wonder about myself pointing out an issue in
+> (say) v5 which was there unnoticed already in v1.
+
+I dunno. I feel bad if I do that too - but if the problem you didn't
+notice earlier on is a bug, rather than some sort of style comment, I
+don't see why you wouldn't call it out.
+
+> In sum a patch series going through such a high number of revisions is
+> mostly a good sign.
+
+Or that it was poor to begin with & barely improved over time...
+
+> In the end we can be sure that the merged code is
+> checked deep-rootedly and that both you and me have a certain amount of
+> endurance. :-)
+
+I wasn't really blaming you for the number of revisions, the number of
+silly mistakes I've made really irritates me.
+
+Thanks,
+Conor.
 
 
-> + *         * -EINVAL: address misaligned or len not power of two
-> + *         * -EAGAIN: transient failure (len 1 or 2)
-> + *         * -EOPNOTSUPP: read-only memslot (should never occur)
-> + */
-> +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
-> +			       __uint128_t *old_addr, __uint128_t new,
-> +			       u8 access_key)
-> +{
-> +	gfn_t gfn = gpa >> PAGE_SHIFT;
-> +	struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
-> +	bool writable;
-> +	hva_t hva;
-> +	int ret;
-> +
-> +	if (!IS_ALIGNED(gpa, len))
-> +		return -EINVAL;
-> +
-> +	hva = gfn_to_hva_memslot_prot(slot, gfn, &writable);
-> +	if (kvm_is_error_hva(hva))
-> +		return PGM_ADDRESSING;
-> +	/*
-> +	 * Check if it's a read-only memslot, even though that cannot occur
-> +	 * since those are unsupported.
-> +	 * Don't try to actually handle that case.
-> +	 */
-> +	if (!writable)
-> +		return -EOPNOTSUPP;
-> +
-> +	hva += offset_in_page(gpa);
-> +	switch (len) {
-> +	case 1: {
-> +		u8 old;
-> +
-> +		ret = cmpxchg_user_key((u8 *)hva, &old, *old_addr, new, access_key);
-> +		ret = ret < 0 ? ret : old != *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 2: {
-> +		u16 old;
-> +
-> +		ret = cmpxchg_user_key((u16 *)hva, &old, *old_addr, new, access_key);
-> +		ret = ret < 0 ? ret : old != *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 4: {
-> +		u32 old;
-> +
-> +		ret = cmpxchg_user_key((u32 *)hva, &old, *old_addr, new, access_key);
-> +		ret = ret < 0 ? ret : old != *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 8: {
-> +		u64 old;
-> +
-> +		ret = cmpxchg_user_key((u64 *)hva, &old, *old_addr, new, access_key);
-> +		ret = ret < 0 ? ret : old != *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 16: {
-> +		__uint128_t old;
-> +
-> +		ret = cmpxchg_user_key((__uint128_t *)hva, &old, *old_addr, new, access_key);
-> +		ret = ret < 0 ? ret : old != *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	mark_page_dirty_in_slot(kvm, slot, gfn);
-> +	/*
-> +	 * Assume that the fault is caused by protection, either key protection
-> +	 * or user page write protection.
-> +	 */
-> +	if (ret == -EFAULT)
-> +		ret = PGM_PROTECTION;
-> +	return ret;
-> +}
-> +
->   /**
->    * guest_translate_address_with_key - translate guest logical into guest absolute address
->    * @vcpu: virtual cpu
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index e4890e04b210..56f4f6ddd5bb 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -584,7 +584,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->   	case KVM_CAP_S390_VCPU_RESETS:
->   	case KVM_CAP_SET_GUEST_DEBUG:
->   	case KVM_CAP_S390_DIAG318:
-> -	case KVM_CAP_S390_MEM_OP_EXTENSION:
->   		r = 1;
->   		break;
->   	case KVM_CAP_SET_GUEST_DEBUG2:
-> @@ -598,6 +597,14 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->   	case KVM_CAP_S390_MEM_OP:
->   		r = MEM_OP_MAX_SIZE;
->   		break;
-> +	case KVM_CAP_S390_MEM_OP_EXTENSION:
-> +		/*
-> +		 * Flag bits indicating which extensions are supported.
-> +		 * The first extension doesn't use a flag, but pretend it does,
-> +		 * this way that can be changed in the future.
-> +		 */
-> +		r = KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG | 1;
-> +		break;
->   	case KVM_CAP_NR_VCPUS:
->   	case KVM_CAP_MAX_VCPUS:
->   	case KVM_CAP_MAX_VCPU_ID:
-> @@ -2772,12 +2779,19 @@ static bool access_key_invalid(u8 access_key)
->   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
-> +	void __user *old_addr = (void __user *)mop->old_addr;
-> +	union {
-> +		__uint128_t quad;
-> +		char raw[sizeof(__uint128_t)];
-> +	} old = { .quad = 0}, new = { .quad = 0 };
-> +	unsigned int off_in_quad = sizeof(new) - mop->size;
->   	u64 supported_flags;
->   	void *tmpbuf = NULL;
->   	int r, srcu_idx;
->   
->   	supported_flags = KVM_S390_MEMOP_F_SKEY_PROTECTION
-> -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
-> +			  | KVM_S390_MEMOP_F_CHECK_ONLY
-> +			  | KVM_S390_MEMOP_F_CMPXCHG;
->   	if (mop->flags & ~supported_flags || !mop->size)
->   		return -EINVAL;
->   	if (mop->size > MEM_OP_MAX_SIZE)
-> @@ -2799,6 +2813,21 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   	} else {
->   		mop->key = 0;
->   	}
-> +	if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
-> +		/*
-> +		 * This validates off_in_quad. Checking that size is a power
-> +		 * of two is not necessary, as cmpxchg_guest_abs_with_key
-> +		 * takes care of that
-> +		 */
-> +		if (mop->size > sizeof(new))
-> +			return -EINVAL;
-> +		if (mop->op != KVM_S390_MEMOP_ABSOLUTE_WRITE)
-> +			return -EINVAL;
-> +		if (copy_from_user(&new.raw[off_in_quad], uaddr, mop->size))
-> +			return -EFAULT;
-> +		if (copy_from_user(&old.raw[off_in_quad], old_addr, mop->size))
-> +			return -EFAULT;
-> +	}
->   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
->   		tmpbuf = vmalloc(mop->size);
->   		if (!tmpbuf)
-> @@ -2829,6 +2858,14 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   	case KVM_S390_MEMOP_ABSOLUTE_WRITE: {
->   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
->   			r = check_gpa_range(kvm, mop->gaddr, mop->size, GACC_STORE, mop->key);
-> +		} else if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
-> +			r = cmpxchg_guest_abs_with_key(kvm, mop->gaddr, mop->size,
-> +						       &old.quad, new.quad, mop->key);
-> +			if (r == 1) {
-> +				r = KVM_S390_MEMOP_R_NO_XCHG;
-> +				if (copy_to_user(old_addr, &old.raw[off_in_quad], mop->size))
-> +					r = -EFAULT;
-> +			}
->   		} else {
->   			if (copy_from_user(tmpbuf, uaddr, mop->size)) {
->   				r = -EFAULT;
+--E6V8omzJMHIjX4MZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY75srAAKCRB4tDGHoIJi
+0kKWAQDPqazsRBhltTrzGU+iYTrjjhqwkas55kbz+huUuHmgYwD+KoxtcvsbR0IB
+zlz6r5+GOtTG0OjHM+4nihdmtppAGwE=
+=qlzw
+-----END PGP SIGNATURE-----
+
+--E6V8omzJMHIjX4MZ--
