@@ -2,192 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F9C6666F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3830D6666FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235619AbjAKXJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 18:09:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S235688AbjAKXKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 18:10:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233101AbjAKXJr (ORCPT
+        with ESMTP id S235566AbjAKXKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 18:09:47 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8553224C
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 15:09:46 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so13803734wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 15:09:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9UQScSJfyMGe4w+apoimOZM3ngB2dIeu4UVoAiWJO0g=;
-        b=NivEwwX8J4L0H7sgLkPd37KpZrWb6uHyWcJAyn5yiWiPYvEvzOKcylhrA5kQOboSrD
-         zKbsr6WJQsSAsM+7eK6SlNXlmPwo4nTUg6gue5TQ34pkOtynhnbTo1bj6r/ADYwEb5bf
-         zJbRjF/r196NHPQQs24Z/3lOewFmqKT3CK8hg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9UQScSJfyMGe4w+apoimOZM3ngB2dIeu4UVoAiWJO0g=;
-        b=McSRUtlwgfJpOy3U0kc/rn3MaKX1aRBtpNVtwK4I+N3HY9ZFVEkEQDytvFo4l/OppE
-         FUTviE3yU0s9Ig5OjCYkFX+q6Hd9xFgNYAuFlfG0hPBpRqsV6QQDjsJLtQg9CtwrxuOw
-         euVxHaqxKW2d/F5wD6u6rHCaq5qQiEWjEa5pZXD0+XafXrS8HY/lLOi7T+W5uM8I+CpC
-         PLLGgMpxMAuHSb7ZZo/x3RkKAcjiP30xX2wfcEf0RjpLwAHaPUwndrlEK1grNkKsHzrZ
-         RvS9+y/EK3SfFGS0/ny8Wf0bheNo/K9ITzokm9C8maTfDyd5rTgmILLQJZGNc/QMkCPp
-         4wOg==
-X-Gm-Message-State: AFqh2krAOaHVUuH3lvtC5OGbxeLHZzzWw37uY1igDQYD2chUs/u59xVy
-        duTp9TKgyGePog3QB3gjpnqAeA==
-X-Google-Smtp-Source: AMrXdXsnDe3Ivq+JdQToTPbj4x7KGohtSYDeDDwMtFiMTv7llocWLZI46CtlGQeBOvjqpkl3kJYP/A==
-X-Received: by 2002:a05:600c:1c21:b0:3d2:2faf:e54b with SMTP id j33-20020a05600c1c2100b003d22fafe54bmr53489153wms.6.1673478584778;
-        Wed, 11 Jan 2023 15:09:44 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id t9-20020a05600c198900b003d9e74dd9b2sm17037786wmq.9.2023.01.11.15.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 15:09:43 -0800 (PST)
-Date:   Thu, 12 Jan 2023 00:09:41 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Jim Cromie <jim.cromie@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, jani.nikula@intel.com,
-        ville.syrjala@linux.intel.com, daniel.vetter@ffwll.ch,
-        seanpaul@chromium.org, robdclark@gmail.com, jbaron@akamai.com,
-        gregkh@linuxfoundation.org
-Subject: Re: [RFC PATCH 00/17] DRM_USE_DYNAMIC_DEBUG regression
-Message-ID: <Y79Btep8JnPKvuAp@phenom.ffwll.local>
-Mail-Followup-To: Jim Cromie <jim.cromie@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, jani.nikula@intel.com,
-        ville.syrjala@linux.intel.com, seanpaul@chromium.org,
-        robdclark@gmail.com, jbaron@akamai.com, gregkh@linuxfoundation.org
-References: <20221206003424.592078-1-jim.cromie@gmail.com>
+        Wed, 11 Jan 2023 18:10:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9B232255;
+        Wed, 11 Jan 2023 15:10:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B55F861ED6;
+        Wed, 11 Jan 2023 23:10:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04C6C433EF;
+        Wed, 11 Jan 2023 23:10:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673478635;
+        bh=++uluPFMowPrY8s1xfgmEUXDgen39mn6C1pbnUZ2MU4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=kBqcCXiYgbOo0fz6xo/YOGVM2XLI/TGaRt6I6q6PjPGZghKE/om05zyqfQApLqDYT
+         jmtXbxl6mYgeTjvYJzO/uS6FXr7Jtgv4Vt9rxojdIH0almjY/NGOnq8M98oF8kwfKv
+         mCwqtmnaMLXuy53tHGIvRSpO6jJpLEDBsKoIBdgEktC94gHq4mrfugdJv1Tl6xx0Op
+         Kf2NLycwahihsEOlR2wzo34lyCEDQAN00QCHEvDa7CZKU+ikaJv0Sg+J3cVXJ9bOw8
+         YdLlhfDNoHLfjF0ARFO6qKNG2/37bTKDikGli5xn/eqK7HJNGt8MYp2vc2UsdDCZZn
+         X5NH/nGhjaa4A==
+Date:   Wed, 11 Jan 2023 17:10:33 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
+        ruscur@russell.cc, oohall@gmail.com, treding@nvidia.com,
+        jonathanh@nvidia.com, mmaddireddy@nvidia.com, kthota@nvidia.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vsethi@nvidia.com, linuxppc-dev@lists.ozlabs.org,
+        sagar.tv@gmail.com
+Subject: Re: [PATCH V1] PCI/AER: Configure ECRC only AER is native
+Message-ID: <20230111231033.GA1714672@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221206003424.592078-1-jim.cromie@gmail.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a9126d49-6e98-956c-f4a3-699cc86d8b11@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 05:34:07PM -0700, Jim Cromie wrote:
-> Hi everyone,
+On Wed, Jan 11, 2023 at 01:42:21PM -0800, Sathyanarayanan Kuppuswamy wrote:
+> On 1/11/23 12:31 PM, Vidya Sagar wrote:
+> > As the ECRC configuration bits are part of AER registers, configure
+> > ECRC only if AER is natively owned by the kernel.
 > 
-> DRM_USE_DYNAMIC_DEBUG=y has a regression on rc-*
-> 
-> Regression is due to a chicken-egg problem loading modules; on
-> `modprobe i915`, drm is loaded 1st, and drm.debug is set.  When
-> drm_debug_enabled() tested __drm_debug at runtime, that just worked.
-> 
-> But with DRM_USE_DYNAMIC_DEBUG=y, the runtime test is replaced with a
-> post-load enablement of drm_dbg/dyndbg callsites (static-keys), via
-> dyndbg's callback on __drm_debug.  Since all drm-drivers need drm.ko,
-> it is loaded 1st, then drm.debug=X is applied, then drivers load, but
-> too late for drm_dbgs to be enabled.
-> 
-> STATUS
-> 
-> For all-loadable drm,i915,amdgpu configs, it almost works, but
-> propagating drm.debug to dependent modules doesnt actually apply,
-> though the motions are there.  This is not the problem I want to chase
-> here.
-> 
-> The more basic trouble is:
-> 
-> For builtin drm + helpers, things are broken pretty early; at the
-> beginning of dynamic_debug_init().  As the ddebug_sanity() commit-msg
-> describes in some detail, the records added by _USE fail to reference
-> the struct ddebug_class_map created and exported by _DEFINE, but get
-> separate addresses to "other" data that segv's when used as the
-> expected pointer. FWIW, the pointer val starts with "revi".
+> ecrc command line option takes "bios/on/off" as possible options. It
+> does not clarify whether "on/off" choices can only be used if AER is
+> owned by OS or it can override the ownership of ECRC configuration 
+> similar to pcie_ports=native option. Maybe that needs to be clarified.
 
-So I honestly have no idea here, linker stuff is way beyond where I have
-clue. So what's the way forward here?
+Good point, what do you think of an update like this:
 
-The DEFINE/USE split does like the right thing to do at least from the
-"how it's used in drivers" pov. But if we're just running circles not
-quite getting there I dunno :-/
--Daniel
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 6cfa6e3996cf..f7b40a439194 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4296,7 +4296,9 @@
+ 				specified, e.g., 12@pci:8086:9c22:103c:198f
+ 				for 4096-byte alignment.
+ 		ecrc=		Enable/disable PCIe ECRC (transaction layer
+-				end-to-end CRC checking).
++				end-to-end CRC checking).  Only effective
++				if OS has native AER control (either granted by
++				ACPI _OSC or forced via "pcie_ports=native").
+ 				bios: Use BIOS/firmware settings. This is the
+ 				the default.
+ 				off: Turn ECRC off
 
-> 
-> OVERVIEW
-> 
-> DECLARE_DYNDBG_CLASSMAP is broken: it is one-size-fits-all-poorly.
-> It muddles the distinction between a (single) definition, and multiple
-> references.  Something exported should suffice.
-> 
-> The core of this patchset splits it into:
-> 
-> DYNDBG_CLASSMAP_DEFINE	used once per subsystem to define each classmap
-> DYNDBG_CLASSMAP_USE	declare dependence on a DEFINEd classmap
-> 
-> This makes the weird coordinated-changes-by-identical-classmaps
-> "feature" unnecessary; the DEFINE can export the var, and USE refers
-> to the exported var.
-> 
-> So this patchset adds another section: __dyndbg_class_refs.
-> 
-> It is like __dyndbg_classes; it is scanned under ddebug_add_module(),
-> and attached to each module's ddebug_table.  Once attached, it can be
-> used like classes to validate and apply class FOO >control queries.
-> 
-> It also maps the class user -> definer explicitly, so that when the
-> module is loaded, the section scan can find the kernel-param that is
-> wired to dyndbg's kparam-callback, and apply its state-var, forex:
-> __drm_debug to the just loaded helper/driver module.
-> 
-> Theres plenty to address Im sure.
-> 
-> Jim Cromie (17):
->   test-dyndbg: fixup CLASSMAP usage error
->   test-dyndbg: show that DEBUG enables prdbgs at compiletime
->   dyndbg: fix readback value on LEVEL_NAMES interfaces
->   dyndbg: replace classmap list with a vector
->   dyndbg: make ddebug_apply_class_bitmap more selective
->   dyndbg: dynamic_debug_init - use pointer inequality, not strcmp
->   dyndbg: drop NUM_TYPE_ARRAY
->   dyndbg: reduce verbose/debug clutter
->   dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP with
->     DYNDBG_CLASSMAP(_DEFINE|_USE)
->   dyndbg-API: specialize DYNDBG_CLASSMAP_(DEFINE|USE)
->   dyndbg-API: DYNDBG_CLASSMAP_USE drop extra args
->   dyndbg-API: DYNDBG_CLASSMAP_DEFINE() improvements
->   drm_print: fix stale macro-name in comment
->   dyndbg: unwrap __ddebug_add_module inner function NOTYET
->   dyndbg: ddebug_sanity()
->   dyndbg: mess-w-dep-class
->   dyndbg: miss-on HACK
-> 
->  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  14 +-
->  drivers/gpu/drm/display/drm_dp_helper.c |  14 +-
->  drivers/gpu/drm/drm_crtc_helper.c       |  14 +-
->  drivers/gpu/drm/drm_print.c             |  22 +--
->  drivers/gpu/drm/i915/i915_params.c      |  14 +-
->  drivers/gpu/drm/nouveau/nouveau_drm.c   |  14 +-
->  include/asm-generic/vmlinux.lds.h       |   3 +
->  include/drm/drm_print.h                 |   6 +-
->  include/linux/dynamic_debug.h           |  57 ++++--
->  include/linux/map.h                     |  54 ++++++
->  kernel/module/main.c                    |   2 +
->  lib/dynamic_debug.c                     | 240 +++++++++++++++++++-----
->  lib/test_dynamic_debug.c                |  47 ++---
->  13 files changed, 344 insertions(+), 157 deletions(-)
->  create mode 100644 include/linux/map.h
+I don't know whether the "ecrc=" parameter is really needed.  If we
+were adding it today, I would ask "why not enable ECRC wherever it is
+supported?"  If there are devices where it's broken, we could always
+add quirks to disable it on a case-by-case basis.
+
+But I think the patch below is the right thing to do for now.  Vidya,
+did you trip over an issue because of this, e.g., a conflict between
+firmware use of AER and Linux use of it?  If so, maybe we could
+mention a symptom on the commit log.  But my guess is you probably
+found this by inspection.
+
+Bjorn
+
+> > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> > ---
+> >  drivers/pci/pcie/aer.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > index e2d8a74f83c3..730b47bdcdef 100644
+> > --- a/drivers/pci/pcie/aer.c
+> > +++ b/drivers/pci/pcie/aer.c
+> > @@ -184,6 +184,9 @@ static int disable_ecrc_checking(struct pci_dev *dev)
+> >   */
+> >  void pcie_set_ecrc_checking(struct pci_dev *dev)
+> >  {
+> > +	if (!pcie_aer_is_native(dev))
+> > +		return;
+> > +
+> >  	switch (ecrc_policy) {
+> >  	case ECRC_POLICY_DEFAULT:
+> >  		return;
 > 
 > -- 
-> 2.38.1
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> Sathyanarayanan Kuppuswamy
+> Linux Kernel Developer
