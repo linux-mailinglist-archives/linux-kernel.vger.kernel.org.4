@@ -2,176 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E884665DD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB355665D75
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbjAKO0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
+        id S232343AbjAKOOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:14:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238543AbjAKONO (ORCPT
+        with ESMTP id S232656AbjAKOOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:13:14 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE11918689
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:13:12 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6148637F8B;
-        Wed, 11 Jan 2023 14:13:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673446391; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zW6IH8u1j0oxMPa86Yerh2cAeUK7W93SAjwADEwIV/A=;
-        b=N57ovwqxWbl2fk43d1G5rqHs5AQj13WTNHHdcIG24zopf/Wrz9n5woXV92UItGDxg+4YxI
-        W1md8r1MaCRf8exK+6RF0HqpsTAQuiyLVc8A9xqLbXp4oqzm0uadjubUK16c6HWIOpps4h
-        5JUxoJEvVB+g8Pu8j3Hk27pmCbegDHE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673446391;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zW6IH8u1j0oxMPa86Yerh2cAeUK7W93SAjwADEwIV/A=;
-        b=Xq32uZSpCR9IdXETv1hM2XY4GH6fOasYN1ZHCYMS+cD2zAb8blr/iLwOr0P29izOg2BW4F
-        CYFGpVitYMqWmkCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 349CF1358A;
-        Wed, 11 Jan 2023 14:13:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xm+kC/fDvmMlCAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 11 Jan 2023 14:13:11 +0000
-Message-ID: <1d31c923-2f0a-b0c3-6763-f58605bb5315@suse.de>
-Date:   Wed, 11 Jan 2023 15:13:10 +0100
+        Wed, 11 Jan 2023 09:14:19 -0500
+Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E1E38B4;
+        Wed, 11 Jan 2023 06:14:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1673446455;
+        bh=5R+BDO8hhIMYzqA8po6d4hMbVhMtgHcE2MvtMKkOAk8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=eCPcgJuewLowX0Q8qWQQIogHk2eVWeH/4MYGw9eQyR99cAakTS48jJ360p5Bk6zdb
+         PWmAP13rVLOIPCYx8p8dXXF0dT9Q/UAqNmAgO1Fit1x6CZW6yJOCosxCMCNbkCAXuh
+         F3pkEcQJTH0zrJU7XmqTwFAyAzwhOqv0UFyC5YHY=
+Received: from localhost.localdomain ([111.60.247.106])
+        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
+        id 37731CEB; Wed, 11 Jan 2023 22:13:55 +0800
+X-QQ-mid: xmsmtpt1673446452t0n5cqb9g
+Message-ID: <tencent_CBBB183FDF1C6134607850ED023A2930AE06@qq.com>
+X-QQ-XMAILINFO: NMGzQWUSIfvTx6o2bDgHiM/5FMAB/i49UepwPDEVPF/CPWymsc/q1PshUQyz7d
+         /OebKUMqVQge5cgj7Mlk+f7RR66c1xLJ1hMj64ptKOv5J5E9BlHb4EC5phA3IQ6rns1MCH6IF5eC
+         GsncWmNnahFkskHhcYk4RX3AbdBPXn7iuPkIgjCZk/1Fyq8eldJE9y+6ol264/0RDarZhYB/R0m2
+         pxxBuPIFrj14PXj0WCuAATX2v7RT+77KBhzgY5a29eToz4Ik8Qq0sMk36v13en58bFFYOwgk41kD
+         tv5BxDAx4Ug7uBZQ34Xb3AiotCB5bRTTtrE9FEgo8/Wn1WfYn8ngKrlR6iHiBsLcCTM4XPGAKNef
+         fqOEys604beA6d8sXJopKeOyzfXLvUsEYabo3TdvOj97xSI6Sou9IBt887cbP4gaf26vdEXkPmLt
+         FhgHVhXLj5XY+CQun416qnHMITbrLiL9pqFah0Usmx3IOT8D1RyVHMyRyKa2atKvXdV7J+ZnGF6x
+         lBUziluceDzvJeOl+3STwfm9vulc7BTLvZVhT0y+BYqz/3+keVQvsAyn0iYszQ7CF3sVT8TqF7vU
+         vmUQ5GIsvEN6KHp+QFPAtEXf/Sgl2L53SGa/tMtw/TX6AtiyF7ct4F0FWrPssDGG27Bt1t/Y19Ae
+         EXhvK6Eob4ft3MgmNnYTspit0qcpeHQ+R6CjMlkhBB2OKCp2RtEi/LG/nAjbRvjxXqzKDzVpO35P
+         FsxcA8Tu/ml6RekFqqXxkXuMf+H8O4bBrgUh1yFDnvHXnhyWFHnuo+0u75eDeCO7PeqBCk99/Ykm
+         1cPOIS6UDNyshrgpGa9XTYuUDIgUR2kOC+Bv45bxBmRzdckCndFkNgheGhaQXRY88nV/W63dMXhe
+         2xSgYSg9KQsVRzxCcuxqCCmqyj8q8OHb/MGR7Z5c7DcAFSuhfb4vLci1yKksYqVGaeCnsAWvsSq6
+         Ou1AA9AX4ebyfnF+qIA+s4UMH5eJZ4mHzlJPc747hyCP7fCDAZOuXH/ZQVvTcxYM2OZXwINO1bw6
+         WQq2vca0iXRxwQw36xuCgAQUkwZv8=
+From:   Yang Xiwen <forbidden405@foxmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jaime Breva <jbreva@nayarsystems.com>,
+        Nikita Travkin <nikita@trvn.ru>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Yang Xiwen <forbidden405@foxmail.com>
+Subject: [PATCH v2 2/3] dt-bindings: qcom: Document msm8916-thwc-uf896 and ufi001c
+Date:   Wed, 11 Jan 2023 22:13:10 +0800
+X-OQ-MSGID: <20230111141311.14682-3-forbidden405@foxmail.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230111141311.14682-1-forbidden405@foxmail.com>
+References: <20230111141311.14682-1-forbidden405@foxmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 4/9] drm/vc4: hdmi: Rename full range helper
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
- <20221207-rpi-hdmi-improvements-v1-4-6b15f774c13a@cerno.tech>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20221207-rpi-hdmi-improvements-v1-4-6b15f774c13a@cerno.tech>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------xKQvYyngF3JG5mxw0ZQ0S57L"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------xKQvYyngF3JG5mxw0ZQ0S57L
-Content-Type: multipart/mixed; boundary="------------rvewgrP6s4yR5qrCzeX1yrtj";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Dave Stevenson <dave.stevenson@raspberrypi.com>
-Message-ID: <1d31c923-2f0a-b0c3-6763-f58605bb5315@suse.de>
-Subject: Re: [PATCH 4/9] drm/vc4: hdmi: Rename full range helper
-References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
- <20221207-rpi-hdmi-improvements-v1-4-6b15f774c13a@cerno.tech>
-In-Reply-To: <20221207-rpi-hdmi-improvements-v1-4-6b15f774c13a@cerno.tech>
+Document the new thwc,uf896/ufi001c device tree bindings used in their device
+trees.
 
---------------rvewgrP6s4yR5qrCzeX1yrtj
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
+---
+ Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-DQoNCkFtIDA3LjEyLjIyIHVtIDE3OjA3IHNjaHJpZWIgTWF4aW1lIFJpcGFyZDoNCj4gRnJv
-bTogRGF2ZSBTdGV2ZW5zb24gPGRhdmUuc3RldmVuc29uQHJhc3BiZXJyeXBpLmNvbT4NCj4g
-DQo+IFRoZSBWQzQgSERNSSBkcml2ZXIgaGFzIGEgaGVscGVyIGZ1bmN0aW9uIHRvIGZpZ3Vy
-ZSBvdXQgd2hldGhlciBmdWxsDQo+IHJhbmdlIG9yIGxpbWl0ZWQgcmFuZ2UgUkdCIGlzIGJl
-aW5nIHVzZWQgY2FsbGVkDQo+IHZjNF9oZG1pX2lzX2Z1bGxfcmFuZ2VfcmdiKCkuDQo+IA0K
-PiBXZSdsbCBuZWVkIGl0IHRvIHN1cHBvcnQgb3RoZXIgY29sb3JzcGFjZXMsIHNvIGxldCdz
-IHJlbmFtZSBpdCB0bw0KPiB2YzRfaGRtaV9pc19mdWxsX3JhbmdlKCkuDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBEYXZlIFN0ZXZlbnNvbiA8ZGF2ZS5zdGV2ZW5zb25AcmFzcGJlcnJ5cGku
-Y29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBNYXhpbWUgUmlwYXJkIDxtYXhpbWVAY2Vybm8udGVj
-aD4NCg0KUmV2aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNl
-LmRlPg0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS92YzQvdmM0X2hkbWkuYyB8IDEw
-ICsrKysrLS0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA1IGRl
-bGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS92YzQvdmM0
-X2hkbWkuYyBiL2RyaXZlcnMvZ3B1L2RybS92YzQvdmM0X2hkbWkuYw0KPiBpbmRleCA0ODhh
-NDAxMmQ0MjIuLjUxNDY5OTM5YThiNCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJt
-L3ZjNC92YzRfaGRtaS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS92YzQvdmM0X2hkbWku
-Yw0KPiBAQCAtMTQ5LDggKzE0OSw4IEBAIHN0YXRpYyBib29sIHZjNF9oZG1pX21vZGVfbmVl
-ZHNfc2NyYW1ibGluZyhjb25zdCBzdHJ1Y3QgZHJtX2Rpc3BsYXlfbW9kZSAqbW9kZSwNCj4g
-ICAJcmV0dXJuIGNsb2NrID4gSERNSV8xNF9NQVhfVE1EU19DTEs7DQo+ICAgfQ0KPiAgIA0K
-PiAtc3RhdGljIGJvb2wgdmM0X2hkbWlfaXNfZnVsbF9yYW5nZV9yZ2Ioc3RydWN0IHZjNF9o
-ZG1pICp2YzRfaGRtaSwNCj4gLQkJCQkgICAgICAgY29uc3Qgc3RydWN0IGRybV9kaXNwbGF5
-X21vZGUgKm1vZGUpDQo+ICtzdGF0aWMgYm9vbCB2YzRfaGRtaV9pc19mdWxsX3JhbmdlKHN0
-cnVjdCB2YzRfaGRtaSAqdmM0X2hkbWksDQo+ICsJCQkJICAgY29uc3Qgc3RydWN0IGRybV9k
-aXNwbGF5X21vZGUgKm1vZGUpDQo+ICAgew0KPiAgIAlzdHJ1Y3QgZHJtX2Rpc3BsYXlfaW5m
-byAqZGlzcGxheSA9ICZ2YzRfaGRtaS0+Y29ubmVjdG9yLmRpc3BsYXlfaW5mbzsNCj4gICAN
-Cj4gQEAgLTg5Miw3ICs4OTIsNyBAQCBzdGF0aWMgdm9pZCB2YzRfaGRtaV9zZXRfYXZpX2lu
-Zm9mcmFtZShzdHJ1Y3QgZHJtX2VuY29kZXIgKmVuY29kZXIpDQo+ICAgDQo+ICAgCWRybV9o
-ZG1pX2F2aV9pbmZvZnJhbWVfcXVhbnRfcmFuZ2UoJmZyYW1lLmF2aSwNCj4gICAJCQkJCSAg
-IGNvbm5lY3RvciwgbW9kZSwNCj4gLQkJCQkJICAgdmM0X2hkbWlfaXNfZnVsbF9yYW5nZV9y
-Z2IodmM0X2hkbWksIG1vZGUpID8NCj4gKwkJCQkJICAgdmM0X2hkbWlfaXNfZnVsbF9yYW5n
-ZSh2YzRfaGRtaSwgbW9kZSkgPw0KPiAgIAkJCQkJICAgSERNSV9RVUFOVElaQVRJT05fUkFO
-R0VfRlVMTCA6DQo+ICAgCQkJCQkgICBIRE1JX1FVQU5USVpBVElPTl9SQU5HRV9MSU1JVEVE
-KTsNCj4gICAJZHJtX2hkbWlfYXZpX2luZm9mcmFtZV9jb2xvcmltZXRyeSgmZnJhbWUuYXZp
-LCBjc3RhdGUpOw0KPiBAQCAtMTE0NSw3ICsxMTQ1LDcgQEAgc3RhdGljIHZvaWQgdmM0X2hk
-bWlfY3NjX3NldHVwKHN0cnVjdCB2YzRfaGRtaSAqdmM0X2hkbWksDQo+ICAgCWNzY19jdGwg
-PSBWQzRfU0VUX0ZJRUxEKFZDNF9IRF9DU0NfQ1RMX09SREVSX0JHUiwNCj4gICAJCQkJVkM0
-X0hEX0NTQ19DVExfT1JERVIpOw0KPiAgIA0KPiAtCWlmICghdmM0X2hkbWlfaXNfZnVsbF9y
-YW5nZV9yZ2IodmM0X2hkbWksIG1vZGUpKSB7DQo+ICsJaWYgKCF2YzRfaGRtaV9pc19mdWxs
-X3JhbmdlKHZjNF9oZG1pLCBtb2RlKSkgew0KPiAgIAkJLyogQ0VBIFZJQ3Mgb3RoZXIgdGhh
-biAjMSByZXF1cmUgbGltaXRlZCByYW5nZSBSR0INCj4gICAJCSAqIG91dHB1dCB1bmxlc3Mg
-b3ZlcnJpZGRlbiBieSBhbiBBVkkgaW5mb2ZyYW1lLg0KPiAgIAkJICogQXBwbHkgYSBjb2xv
-cnNwYWNlIGNvbnZlcnNpb24gdG8gc3F1YXNoIDAtMjU1IGRvd24NCj4gQEAgLTEyOTgsNyAr
-MTI5OCw3IEBAIHN0YXRpYyB2b2lkIHZjNV9oZG1pX2NzY19zZXR1cChzdHJ1Y3QgdmM0X2hk
-bWkgKnZjNF9oZG1pLA0KPiAgIAljYXNlIFZDNF9IRE1JX09VVFBVVF9SR0I6DQo+ICAgCQlp
-Zl94YmFyID0gMHgzNTQwMjE7DQo+ICAgDQo+IC0JCWlmICghdmM0X2hkbWlfaXNfZnVsbF9y
-YW5nZV9yZ2IodmM0X2hkbWksIG1vZGUpKQ0KPiArCQlpZiAoIXZjNF9oZG1pX2lzX2Z1bGxf
-cmFuZ2UodmM0X2hkbWksIG1vZGUpKQ0KPiAgIAkJCXZjNV9oZG1pX3NldF9jc2NfY29lZmZz
-KHZjNF9oZG1pLCB2YzVfaGRtaV9jc2NfZnVsbF9yZ2JfdG9fbGltaXRlZF9yZ2IpOw0KPiAg
-IAkJZWxzZQ0KPiAgIAkJCXZjNV9oZG1pX3NldF9jc2NfY29lZmZzKHZjNF9oZG1pLCB2YzVf
-aGRtaV9jc2NfZnVsbF9yZ2JfdW5pdHkpOw0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFu
-bg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMg
-R2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkN
-CihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90
-ZXYNCg==
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 65ef7e442da0d..18070574848ae 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -209,6 +209,8 @@ properties:
+               - samsung,grandmax
+               - samsung,j5
+               - samsung,serranove
++              - thwc,uf896
++              - thwc,ufi001c
+               - wingtech,wt88047
+           - const: qcom,msm8916
+ 
+-- 
+2.39.0
 
---------------rvewgrP6s4yR5qrCzeX1yrtj--
-
---------------xKQvYyngF3JG5mxw0ZQ0S57L
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmO+w/YFAwAAAAAACgkQlh/E3EQov+CK
-kxAArnH5uWn11sJi+zGskdqUndHnKsKYYJ9WiaSQdkaoumbzQpEAe+J1tsbhRDuMPhlFCQCRDjgd
-iCrpCEiJAlhQimRuXmhKHcy15VfLpZDigu7rk2IV+2D3dEiGS9pxAj4Z8euefHhqdNBD+f0PbqtK
-5QzrI0fnoS0/EyX8xnHLVS6RiPYqk+3yKLbRtagePKaOgJ5iEjO/0cuSvkW6XGO0Ay6J+QKlvXx4
-NTdLVmwNJcVYxbPRmkQmmMVUCxYEBpWykhHhKNaneUryRl+y7khu+wLtLlJL5YRXDYZMbmIF2M13
-XDHhpskZfiCGpxO7VWcUv4ZIDDLKWM/7aO5l8m9ZcG/SNck2Zpglp2Z+2/HiAg0/Eu3NRUg26uSh
-q6Nf+UUopnshsdn4E6yl2o2twS5ANiPuYvAe6QNAax8cGC1LwfzqHdOQaRf38/nfwhp6qIX3KGq+
-jdKGoeEYSGlBz9LX8m51HRWWNMX46NdNMRDFWaImOZ6oCs9kQoy0Gmi+zvzt5jDeGiabgK23qnKw
-0ngLBfXJ9tL3UjhsHv9jg2+7pJ/ShCe9EhPNdvBFKyU8/g/iNt6DF8gZq9ddKygu4pI2R5BIp2dg
-PFtMIW8y66P1I7erpJHV2SJJPF3vopH8Y6mczDt+TSVyL6O3cM+ZHNErgWVjXeJw6jv7PZFMliXM
-5kQ=
-=Y8+s
------END PGP SIGNATURE-----
-
---------------xKQvYyngF3JG5mxw0ZQ0S57L--
