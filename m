@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4BBE666720
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8780666726
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjAKXZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 18:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
+        id S235934AbjAKX2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 18:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjAKXZf (ORCPT
+        with ESMTP id S236011AbjAKX2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 18:25:35 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106693C71D;
-        Wed, 11 Jan 2023 15:25:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=/U5bcrGDanLKc62PA+phmWzytWx8BAc4mSGDJUe5s0E=; b=rz2FNkYl+FVT6TsC5LKkpaPIPb
-        K55zYA32f2ILfOZQdlYcdLenT1Q9fY+CCFEz3qBDZodc+Mm7hgCdUVtTMyoVyek7Js1Tcft0bMiF4
-        TPVmdUdWui+LB4KIHJX1lCppWjFkAPvYBm43Ro6g53G7aDkQbgPCWU+GidX/Njl0d3nI=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41168 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pFkTJ-00015P-Vp; Wed, 11 Jan 2023 18:25:31 -0500
-Date:   Wed, 11 Jan 2023 18:25:29 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hvilleneuve@dimonoff.com,
-        jic23@kernel.org, linux-iio@vger.kernel.org, robh+dt@kernel.org,
-        lars@metafoo.de
-Message-Id: <20230111182529.b9a40a24b23bfe0bfe933aac@hugovil.com>
-In-Reply-To: <167340066186.3433002.1362198141589296440.robh@kernel.org>
-References: <20230110160124.3853593-1-hugo@hugovil.com>
-        <20230110160124.3853593-3-hugo@hugovil.com>
-        <167340066186.3433002.1362198141589296440.robh@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 11 Jan 2023 18:28:06 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2785F3D1EE;
+        Wed, 11 Jan 2023 15:28:02 -0800 (PST)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1ML9uU-1pWjOQ0Uuw-00IFpU; Thu, 12
+ Jan 2023 00:27:40 +0100
+Message-ID: <685f8fbc-5e61-d230-767f-e69784111b88@gmx.com>
+Date:   Thu, 12 Jan 2023 07:27:32 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3] btrfs: use PAGE_{ALIGN, ALIGNED, ALIGN_DOWN} macro
+To:     dsterba@suse.cz
+Cc:     zys.zljxml@gmail.com, clm@fb.com, josef@toxicpanda.com,
+        dsterba@suse.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yushan Zhou <katrinzhou@tencent.com>
+References: <20230103051137.4085572-1-zys.zljxml@gmail.com>
+ <87d14908-dc9d-7ce4-c594-b28a9991efbb@gmx.com>
+ <20230111184037.GI11562@twin.jikos.cz>
+Content-Language: en-US
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <20230111184037.GI11562@twin.jikos.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Provags-ID: V03:K1:Kp2RjR85hmW9Kyf/GsKYhJahGsItLZBQroP/Pwr2bc+teQHwD3C
+ FxkyGDE++ijqWPUf688K35uDVxaPIQx+Key5H90OlELU26Gz/IZYe5P/Xdi/DMlCzbFlWUy
+ hUze0XzR/zbk/W4JCrWbkg2XSTOjtBdPqWaHWmefMAflY5xSL+RFeHxLheWtAqiAcOh8G7S
+ Fyj8Y6d2WGWwRfpeMtx8g==
+UI-OutboundReport: notjunk:1;M01:P0:phg6aEFCvJE=;leuH3HfgEhbbPK8kOGUsBxN/v7s
+ SvPHwR+T1QEgwYl+Sjq2tAc4Deadg2BW0BZYaFESzyTStqfTdeUhvLkrbJoRCw8YUVjT25VZd
+ GtiJjlHiGEy7QMP6opCZZkGlVA1ABDF7AUlDAIqmia8hPSrnNzEX8RKRJSu4Uga57+gK4euGy
+ EKNpfUqZBkdE9wE0xFOzuCf8uBfPtkhWfn3KnIWNRG0yENBgzNQ3aMutdUFOptvmVm1blL7Lf
+ 8LApiz3bpN+SluppGcEaT4kZrHtOiPoR/wl18eDas5bl13CoPAOFt0ZlcwYx5cdMqIswczvBW
+ tsOrKy5ZPaD0/Jzr/IiDnEhXi9G1AdPO2vP7fyLfEQxZ2kbv8XJ5gJmvfdFTJqzOXlUSAyhNN
+ udzR6FWamddrhIXWQjBY9bayXe2zTmSSMPFGBN9zBytpDdBIqZCiF0kXA8Z/Z7ADotgoYP3D4
+ FIRANAwHwXUiOrrgxUtNDETmNaoB8jiHCCU0cKGDZWg8UyZaxssy4hE0z/Rt1XEfSPhfA/53V
+ FqTbXwmvdOvCIt+5UpnVrl145nc/7O5d4UJ4WjcVGs93XOcbzj80Fz9/CgEvCsAHm76jl2jDN
+ GT3NBX47VMd916rkrgawvlLiCdzbTsWzVmR8CcEG3hdjIiq+ES4UKsVPnNrAswt2qe58sJOdo
+ uBLjGklBYVyimQZAYn5eix90q1AoMBMzfTEuITtjYKlqU++YGpsVshBXfVubmVbgTqu1b/eRh
+ /OWdeEidCIRwjhnqXFxxbw0epcZj7Fp5lmLxpLyqSgRZdOOTRx+s4PCMJhuWhPbGjNXIsNe9Z
+ Ai5YXTv8Gw79ABvIL85+e0kIRplOZOH3QICXREwWt9o2S85RgOfZZtg33pgYdIPB4wQJhZz0g
+ sFXwvqLLTp0UnAoXWZ0I2Wis2p02NeVFFFwj7TuT9FV2PWvfpJFmsOlgCVkMaHYSxxULBQlpo
+ 4WMTcT9awOX9Ph5SL1fMCxa7/Bk=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v2 2/2] dt-bindings: iio: adc: add Texas Instruments
- ADS7924
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 Jan 2023 19:34:56 -0600
-Rob Herring <robh@kernel.org> wrote:
 
-> 
-> On Tue, 10 Jan 2023 11:01:24 -0500, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Add device tree bindings document for the Texas Instruments ADS7924
-> > ADC.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  .../bindings/iio/adc/ti,ads7924.yaml          | 104 ++++++++++++++++++
-> >  1 file changed, 104 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml: 'oneOf' conditional failed, one must be fixed:
-> 	'unevaluatedProperties' is a required property
-> 	'additionalProperties' is a required property
-> 	hint: Either unevaluatedProperties or additionalProperties must be present
-> 	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-> Error: Documentation/devicetree/bindings/iio/adc/ti,ads7924.example.dts:29.40-41 syntax error
-> FATAL ERROR: Unable to parse input tree
-> make[1]: *** [scripts/Makefile.lib:434: Documentation/devicetree/bindings/iio/adc/ti,ads7924.example.dtb] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1508: dt_binding_check] Error 2
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230110160124.3853593-3-hugo@hugovil.com
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
 
-Hi Rob,
-I already did specify the base-commit in the first patch of the series (cover letter). Do you also want me to add an additional message in *this* commit to specify the git repos and branch that were used? Or put this comment in the cover letter?
-
-I tried to follow the documentation here:
-    https://www.kernel.org/doc/html/v6.2-rc3/process/submitting-patches.html
-but it was not clear as to what base branch to use when no "T:" field is found in the MAINTAINERS file.
-
+On 2023/1/12 02:40, David Sterba wrote:
+> On Tue, Jan 03, 2023 at 01:47:43PM +0800, Qu Wenruo wrote:
+>>
+>>
+>> On 2023/1/3 13:11, zys.zljxml@gmail.com wrote:
+>>> From: Yushan Zhou <katrinzhou@tencent.com>
+>>>
+>>> The header file linux/mm.h provides PAGE_ALIGN, PAGE_ALIGNED,
+>>> PAGE_ALIGN_DOWN macros. Use these macros to make code more
+>>> concise.
+>>
+>> Is there anything benefit from the change?
+>>
+>> In fact, PAGE_ALIGN()/PAGE_ALIGNED() is just using the same
+>> ALIGN()/IS_ALIGNED() macro.
+>>
+>> Thus I don't think your change is of any usefulness, not to mention it's
+>> going to introduce confusion and extra effort.
+>>
+>> I'm completely fine with regular ALIGN()/IS_ALIGNED() usage with PAGE_SIZE.
 > 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
+> We already have PAGE_ALIGN in some places and I think it's a bit better
+> than the ALIGN/IS_ALIGN as it's clear that it's for a page.
 
-I didn't run it for this series, my bad, I now have added it to my automated scripts to not forget it next time.
+I'd argue that PAGE_ALIGN() is good for MM code, which btrfs has some.
 
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
+But overall, btrfs is more about sector alignment, and if we need to mix 
+them, regular ALIGN() would be more flex.
 
-Done, thank you for your suggestions.
-
-Hugo Villeneuve <hugo@hugovil.com>
+Thanks,
+Qu
