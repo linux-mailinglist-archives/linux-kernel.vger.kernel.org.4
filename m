@@ -2,149 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA43665241
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A52D6665231
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjAKDTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 22:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S231246AbjAKDQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 22:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234554AbjAKDS1 (ORCPT
+        with ESMTP id S230106AbjAKDQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 22:18:27 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC16914086
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:18:22 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id 17so15419313pll.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:18:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DAbF+23J3WNopzFWmwTkdmCspCTcLNnSoUJcTK0GAFs=;
-        b=DE/cmeK3OBSndt4c0IKA6JG+HDRlOVKjYBXKoUihcvFcJ03NuoZwBVHI7wxYUvMJxT
-         wuZiHEjFprkHQl3NkLLHZtmv2YdO9qBE6cpxlLWIVEJUPeD6QLsqgY8SGHFIzDnv76mE
-         vZoICCP+B8Zt7b9OorU2AuvtzSSo/rp3U9qjA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DAbF+23J3WNopzFWmwTkdmCspCTcLNnSoUJcTK0GAFs=;
-        b=i4aR6+xTVbpCBoUf+wfVAJat/41icOSyJvMyQQc6rJsLODN5nu7H/15yq7u55F11TA
-         HLOHABDkFbRVc4KaDy9NDmd2nNrWXhEkqpx73J/IzH+NigJET5prc0UlM5Im1YXV5UK0
-         RKlwwPz0VGpAcwpqRD62QAFByMsQ1eLmgQrF6E+aCyu1Xy0IbyvRdkCua2ir0khMUHiw
-         uNPmUds7BoBDTF+cRTFA0e0+21YdWQbqHO8j+r2aw1nUed2gIrniNpnhxTpPXDRILmiq
-         4Nh3dCScCsmXvck0np4Fw4+TByYVdzsrZE+ANZSNyU4D5OEVokzpyfeQ3MpV8TFe+I/8
-         SSyQ==
-X-Gm-Message-State: AFqh2kqtaPJh8v5OT+rOMaCnr7WVZmuiyUJOLmueHzZ0QF4goGMaJVp9
-        j92T53n6QUwRDGiFBH/Boy8hlw==
-X-Google-Smtp-Source: AMrXdXtdXPd92VZ4OuZs+hLhLJ0sBhmQ9zsy8iKrN3gjRA28v67aK3QwpoKwrHM7ZfKUz/fBm/dk8g==
-X-Received: by 2002:a05:6a20:3c8a:b0:af:8128:757 with SMTP id b10-20020a056a203c8a00b000af81280757mr110302543pzj.61.1673407102474;
-        Tue, 10 Jan 2023 19:18:22 -0800 (PST)
-Received: from localhost (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
-        by smtp.gmail.com with UTF8SMTPSA id gk19-20020a17090b119300b00218f9bd50c7sm7896488pjb.50.2023.01.10.19.18.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 19:18:21 -0800 (PST)
-From:   Ying Hsu <yinghsu@chromium.org>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        leon@kernel.org, luiz.dentz@gmail.com
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        Ying Hsu <yinghsu@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tedd Ho-Jeong An <tedd.an@intel.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v3] Bluetooth: Fix possible deadlock in rfcomm_sk_state_change
-Date:   Wed, 11 Jan 2023 03:16:14 +0000
-Message-Id: <20230111031540.v3.1.I1f29bb547a03e9adfe2e6754212f9d14a2e39c4b@changeid>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        Tue, 10 Jan 2023 22:16:40 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD60AC769;
+        Tue, 10 Jan 2023 19:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673406999; x=1704942999;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=eiUGacdelBh6i4MLgLO5PEcQ0q58R3cpUTNNPuRjubk=;
+  b=mixy8TKW2cbGVTayGXAHNT5gTiRq6DxI1/WeyORvGUEl6UZNMhGHsm9+
+   c7ZAu93nM6Z2lL7fJfg4J16TE7RheVbh3uFs+zPk4qPVA+MBkFW+cXNR/
+   Ns+BvGbiqBQ9bakrQ/b/A6MLCy7ij6bInaZtdwu43/42EISq0JydirY/+
+   0xHN0vVKD3oSA+kSETX/DfXQHvPUU58mnCCeyB3bHlq96chtLWf3ocQT5
+   oYfrQoAqfPOKoYXMRT1eMsuCNGcpa8nEK3rRs0M9v7KY4sV3xula9iVbU
+   LsnwY19/a44tKUlkCwN397oiJoxFIn97V+Qb+VtYtz1dEVMXr3azp5RPV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303688159"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="303688159"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 19:16:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607206515"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="607206515"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.252.188.177]) ([10.252.188.177])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 19:16:35 -0800
+Message-ID: <7c2af186-5868-d962-f810-ef810fbd074c@linux.intel.com>
+Date:   Wed, 11 Jan 2023 11:16:32 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, Vasant Hegde <vasant.hegde@amd.com>,
+        Matt Fagnani <matt.fagnani@bell.net>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Joerg Roedel <jroedel@suse.de>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        amd-gfx@lists.freedesktop.org
+Subject: =?UTF-8?Q?Re=3a_=5bregression=2c_bisected=2c_pci/iommu=5d_Bug=c2=a0?=
+ =?UTF-8?Q?216865_-_Black_screen_when_amdgpu_started_during_6=2e2-rc1_boot_w?=
+ =?UTF-8?Q?ith_AMD_IOMMU_enabled?=
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>
+References: <15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info>
+ <5aa0e698-f715-0481-36e5-46505024ebc1@bell.net>
+ <aea57c5f-2d20-c589-ad44-a63f1133a3db@linux.intel.com>
+ <157c4ca4-370a-5d7e-fe32-c64d934f6979@amd.com>
+ <223ee6d6-70ea-1d53-8bc2-2d22201d8dde@bell.net>
+ <6fff9d10-f77f-e55a-9020-8a1bd34cf508@amd.com> <Y7gs0zYKp/VXACBi@nvidia.com>
+ <f96b1cf3-6865-663d-f1cd-466a71519b08@linux.intel.com>
+ <Y71nZuF5wQp3eqmn@nvidia.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Y71nZuF5wQp3eqmn@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot reports a possible deadlock in rfcomm_sk_state_change [1].
-While rfcomm_sock_connect acquires the sk lock and waits for
-the rfcomm lock, rfcomm_sock_release could have the rfcomm
-lock and hit a deadlock for acquiring the sk lock.
-Here's a simplified flow:
+On 2023/1/10 21:25, Jason Gunthorpe wrote:
+>> +       } else {
+>> +               if (!pdev->bus->self ||
+>> +                   !pci_acs_path_enabled(pdev->bus->self, NULL,
+>> +                                         PCI_ACS_RR | PCI_ACS_UF))
+>> +                       return -EINVAL;
+>> +       }
+> Why would these be exclusive? Both the path and endpoint needs to be
+> checked
 
-rfcomm_sock_connect:
-  lock_sock(sk)
-  rfcomm_dlc_open:
-    rfcomm_lock()
+If the device is not an MFD, do we still need to check the ACS on it?
+Perhaps I didn't get your point correctly.
 
-rfcomm_sock_release:
-  rfcomm_sock_shutdown:
-    rfcomm_lock()
-    __rfcomm_dlc_close:
-        rfcomm_k_state_change:
-	  lock_sock(sk)
-
-This patch drops the sk lock before calling rfcomm_dlc_open to
-avoid the possible deadlock and holds sk's reference count to
-prevent use-after-free after rfcomm_dlc_open completes.
-
-Reported-by: syzbot+d7ce59...@syzkaller.appspotmail.com
-Fixes: 1804fdf6e494 ("Bluetooth: btintel: Combine setting up MSFT extension")
-Link: https://syzkaller.appspot.com/bug?extid=d7ce59b06b3eb14fd218 [1]
-
-Signed-off-by: Ying Hsu <yinghsu@chromium.org>
----
-This commit has been tested with a C reproducer on qemu-x86_64
-and a ChromeOS device.
-
-Changes in v3:
-- Revise the commit message.
-
-Changes in v2:
-- Fix potential use-after-free in rfc_comm_sock_connect.
-
- net/bluetooth/rfcomm/sock.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/net/bluetooth/rfcomm/sock.c b/net/bluetooth/rfcomm/sock.c
-index 21e24da4847f..4397e14ff560 100644
---- a/net/bluetooth/rfcomm/sock.c
-+++ b/net/bluetooth/rfcomm/sock.c
-@@ -391,6 +391,7 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
- 	    addr->sa_family != AF_BLUETOOTH)
- 		return -EINVAL;
- 
-+	sock_hold(sk);
- 	lock_sock(sk);
- 
- 	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
-@@ -410,14 +411,18 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
- 	d->sec_level = rfcomm_pi(sk)->sec_level;
- 	d->role_switch = rfcomm_pi(sk)->role_switch;
- 
-+	/* Drop sock lock to avoid potential deadlock with the RFCOMM lock */
-+	release_sock(sk);
- 	err = rfcomm_dlc_open(d, &rfcomm_pi(sk)->src, &sa->rc_bdaddr,
- 			      sa->rc_channel);
--	if (!err)
-+	lock_sock(sk);
-+	if (!err && !sock_flag(sk, SOCK_ZAPPED))
- 		err = bt_sock_wait_state(sk, BT_CONNECTED,
- 				sock_sndtimeo(sk, flags & O_NONBLOCK));
- 
- done:
- 	release_sock(sk);
-+	sock_put(sk);
- 	return err;
- }
- 
--- 
-2.39.0.314.g84b9a713c41-goog
-
+--
+Best regards,
+baolu
