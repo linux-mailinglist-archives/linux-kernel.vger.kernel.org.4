@@ -2,66 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190DA6652E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 05:36:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4C16652E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 05:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjAKEgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 23:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
+        id S231724AbjAKEiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 23:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjAKEgh (ORCPT
+        with ESMTP id S231312AbjAKEi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 23:36:37 -0500
-Received: from mail.nfschina.com (unknown [42.101.60.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F71643B;
-        Tue, 10 Jan 2023 20:36:26 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 08EDB1A009D5;
-        Wed, 11 Jan 2023 12:36:40 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8jEW19MEqXmt; Wed, 11 Jan 2023 12:36:39 +0800 (CST)
-Received: from localhost.localdomain.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: xupengfei@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 289C21A00919;
-        Wed, 11 Jan 2023 12:36:39 +0800 (CST)
-From:   XU pengfei <xupengfei@nfschina.com>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        XU pengfei <xupengfei@nfschina.com>
-Subject: [PATCH 1/1] hwmon: ibmpex: remove unnecessary (void*) conversions
-Date:   Wed, 11 Jan 2023 12:36:06 +0800
-Message-Id: <20230111043605.3726-1-xupengfei@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 10 Jan 2023 23:38:27 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96D27640
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 20:38:25 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sendonly@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id B050842165;
+        Wed, 11 Jan 2023 04:38:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1673411903; bh=HfFhuO/foSzEbmya21quSWIKZF8twzaOgyIjDrYqKHo=;
+        h=From:To:Cc:Subject:Date;
+        b=P8chu566SCCEyb4pTVwA4dMqw4vFrkbsl9qjBm/MzvlDIJeDc/vjNar8nvW82f2Fa
+         7MqX5rOJfyHjU3IOUkuYSN3QD+WiOGBXyp2nceOLmd3PfPilW+4wleApLWjewq2MGc
+         jINYTXgCFgU6VUHeWxSNqA1phlmiBK3HjM6LILNs7ewfDLruFdpI4tulULomJCFX4k
+         NitLYn4zFL13bDuf7cqnRSUUW9ci5pbejzZpiBRPRWBU9uLmo1IoYGMPd+cah930Gh
+         PKF9f2COtxJiPou2h65K5B6FdLx2z17IXuMAhXRdyJAdU7t5MeVg1iA+w/xqswp4bb
+         TnaO+WaEiSaxA==
+From:   Hector Martin <marcan@marcan.st>
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Cc:     Eric Curtin <ecurtin@redhat.com>, Janne Grunau <j@jannau.net>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [PATCH 0/2] nvme-apple: Fix suspend-resume regression
+Date:   Wed, 11 Jan 2023 13:36:12 +0900
+Message-Id: <20230111043614.27087-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer variables of void * type do not require type cast.
+Commit c76b8308e4c9 introduced a behavior change in the way nvme-apple
+disables controllers, avoiding a disable in the shutdown path.
+Unfortunately, the NVMe core does not know how to actually start up
+controllers in the shutdown state, and this broke suspend/resume since
+we use the shutdown command for device suspend in nvme-apple.
 
-Signed-off-by: XU pengfei <xupengfei@nfschina.com>
----
- drivers/hwmon/ibmpex.c   | 2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Additionally, nvme-apple was also checking only for the disable state in
+the reset path to decide whether to disable the controller again, and
+just having the controller shut down was triggering an unnecessary code
+path that broke things further.
 
-diff --git a/drivers/hwmon/ibmpex.c b/drivers/hwmon/ibmpex.c
-index 1837cccd993c..db066b368918 100644
---- a/drivers/hwmon/ibmpex.c
-+++ b/drivers/hwmon/ibmpex.c
-@@ -546,7 +546,7 @@ static void ibmpex_bmc_gone(int iface)
- 
- static void ibmpex_msg_handler(struct ipmi_recv_msg *msg, void *user_msg_data)
- {
--	struct ibmpex_bmc_data *data = (struct ibmpex_bmc_data *)user_msg_data;
-+	struct ibmpex_bmc_data *data = user_msg_data;
- 
- 	if (msg->msgid != data->tx_msgid) {
- 		dev_err(data->bmc_device,
+This short series fixes those issues and makes suspend/resume work on
+nvme-apple again.
+
+nvme-pci is, to my knowledge, not affected since it only issues a shutdown
+when the whole system is actually shutting down, never to come back.
+
+Hector Martin (2):
+  nvme-apple: Do not try to shut down the controller twice
+  nvme: Handle shut down controllers during initialization
+
+ drivers/nvme/host/apple.c |  3 ++-
+ drivers/nvme/host/core.c  | 13 +++++++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
 -- 
-2.18.2
+2.35.1
 
