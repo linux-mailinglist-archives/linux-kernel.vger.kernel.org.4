@@ -2,133 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC008665DE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C81D665DF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239005AbjAKO2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
+        id S234408AbjAKOcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239596AbjAKO1m (ORCPT
+        with ESMTP id S234636AbjAKObq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:27:42 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CC61EED0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:26:08 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id y1so16952812plb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:26:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j0t2bn4nZtdh7DYNiHghgOiJ5/dQ9do1qFUNd17Ho0Q=;
-        b=Gy4Mryka1zuuoKtaVN8MVkw7dRGJo1zKk8dXXcAaFhsufGRUkcyaoY9eEylCpjBRoA
-         tc9oSd+PPBOUqYbDEv3hZKPjcdo0RESO3HlfLycCfVqINLxYWX90Pw0nnC0gLLS1Lkcr
-         c8EEaRcUHhd+/RBgerhwWCc2y/KbqpucELD83s89s40YDId/3CuVFxAqasNQJAzY7rz/
-         zZJCROGm5h4+YlAL9YviW/7Oor0mkuUi8vKBd09fFQtcmcO3oAAcpRX3XABhJr5a0NdI
-         jU4Cbvcyh3hhX0Q3f8XfLMU5lGqBjEtJ7/dRxSIgdJBHr4XdJio8fEs7VP7qh0EOLd9l
-         g5pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j0t2bn4nZtdh7DYNiHghgOiJ5/dQ9do1qFUNd17Ho0Q=;
-        b=t5QC75xsogwRcdsB87Zq0tY5jBBWh30/Csvte9lcVE3vLDRmE1tOySU10sXVc4OJv8
-         Vq39c/ppMkPrsDQNW08ZbjB+3lBsZrFLBVarGrq5SOnDFY/paF+Ip9oXt9tF6/4Nqefu
-         VDskMqcHPaC0yLbxoW0D2xitFz/Q4X+HAh4L+wcW1XfQMVQAO9Z5VMbbgqBekkUdSB7o
-         os74L8FgQZ1+Sy2sl9qNsaLy4dIzKFt0ygM7c1x0tBQIVUNuj6Jlw4AON+CChlD9ydeY
-         brJpiDFwkZFk7VeYqT6Xg2wlHR8qS2L1gA8vso/Eay5+uxyBCReQvI2ZP//ItAckjVMF
-         vcWA==
-X-Gm-Message-State: AFqh2koliYPgPwJzLzFbK/jegIJNOwvX9JOat7y39EgNn9J5dzkVAFJY
-        vO6UdOt6NcoweyCTyF9lx+Q+6atPfAeqU/W69hl8
-X-Google-Smtp-Source: AMrXdXtesEwVv45pauhHUrlC1hMdCovkRhk98mmpCmIArBxsYtbrASQb9FOY34shKM97pdStAwTTTawAfp1LlKVzuZY=
-X-Received: by 2002:a17:902:7d83:b0:193:2c1b:3371 with SMTP id
- a3-20020a1709027d8300b001932c1b3371mr1314817plm.56.1673447168187; Wed, 11 Jan
- 2023 06:26:08 -0800 (PST)
+        Wed, 11 Jan 2023 09:31:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CD31DDEF
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:27:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673447265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Encmrg/Q4pn4U4TaedIzlRttIsiQ9mtGF2IR0CVdSuk=;
+        b=fR8I6AJC1JxNLLZ1qV5PGJtS9zVcz5LIC3mPtm1Y4BamdrPn4ZothMfpNXLvrAgsV85DWD
+        qvQn2w7m50z2RkncbmACxLkPluTpkz1oXlMSEjUn+IXCySAOl+5uI1PeTWIKqf272so7oV
+        QHlbrK0sbHkM4CWkKtMA3TidQPry3dY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661-lPtvx7LnPke_XH7ONluRdw-1; Wed, 11 Jan 2023 09:27:39 -0500
+X-MC-Unique: lPtvx7LnPke_XH7ONluRdw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F1301857D0D;
+        Wed, 11 Jan 2023 14:27:38 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B0D39492C14;
+        Wed, 11 Jan 2023 14:27:35 +0000 (UTC)
+Subject: [PATCH v5 0/9] iov_iter: Add extraction helpers
+From:   David Howells <dhowells@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        linux-block@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-cachefs@redhat.com,
+        Jan Kara <jack@suse.cz>, Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>, linux-cifs@vger.kernel.org,
+        dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 11 Jan 2023 14:27:35 +0000
+Message-ID: <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-References: <20221221141007.2579770-1-roberto.sassu@huaweicloud.com>
- <CAHC9VhQUAuF-Fan72j7BOqOdLE=B=mJpJ_GpR5p5cUmXruYT=Q@mail.gmail.com> <4b8688ee3d533d989196004d5f9f2c7eb4093f8b.camel@huaweicloud.com>
-In-Reply-To: <4b8688ee3d533d989196004d5f9f2c7eb4093f8b.camel@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 11 Jan 2023 09:25:56 -0500
-Message-ID: <CAHC9VhSamRVpgrDrSuc2dsbbw3-pvjDi9BsFWoWssHkAD2W5vA@mail.gmail.com>
-Subject: Re: [PATCH v2] security: Restore passing final prot to ima_file_mmap()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 4:31 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Fri, 2023-01-06 at 16:14 -0500, Paul Moore wrote:
-> > On Wed, Dec 21, 2022 at 9:10 AM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > >
-> > > Commit 98de59bfe4b2f ("take calculation of final prot in
-> > > security_mmap_file() into a helper") moved the code to update prot with the
-> > > actual protection flags to be granted to the requestor by the kernel to a
-> > > helper called mmap_prot(). However, the patch didn't update the argument
-> > > passed to ima_file_mmap(), making it receive the requested prot instead of
-> > > the final computed prot.
-> > >
-> > > A possible consequence is that files mmapped as executable might not be
-> > > measured/appraised if PROT_EXEC is not requested but subsequently added in
-> > > the final prot.
-> > >
-> > > Replace prot with mmap_prot(file, prot) as the second argument of
-> > > ima_file_mmap() to restore the original behavior.
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > ---
-> > >  security/security.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/security/security.c b/security/security.c
-> > > index d1571900a8c7..0d2359d588a1 100644
-> > > --- a/security/security.c
-> > > +++ b/security/security.c
-> > > @@ -1666,7 +1666,7 @@ int security_mmap_file(struct file *file, unsigned long prot,
-> > >                                         mmap_prot(file, prot), flags);
-> > >         if (ret)
-> > >                 return ret;
-> > > -       return ima_file_mmap(file, prot);
-> > > +       return ima_file_mmap(file, mmap_prot(file, prot));
-> > >  }
-> >
-> > This seems like a reasonable fix, although as the original commit is
-> > ~10 years old at this point I am a little concerned about the impact
-> > this might have on IMA.  Mimi, what do you think?
-> >
-> > Beyond that, my only other comment would be to only call mmap_prot()
-> > once and cache the results in a local variable.  You could also fix up
-> > some of the ugly indentation crimes in security_mmap_file() while you
-> > are at it, e.g. something like this:
->
-> Hi Paul
->
-> thanks for the comments. With the patch set to move IMA and EVM to the
-> LSM infrastructure we will be back to calling mmap_prot() only once,
-> but I guess we could do anyway, as the patch (if accepted) would be
-> likely backported to stable kernels.
 
-I think there is value in fixing this now and keeping it separate from
-the IMA-to-LSM work as they really are disjoint.
+Hi Al,
 
--- 
-paul-moore.com
+Here are patches clean up some use of READ/WRITE and ITER_SOURCE/DEST,
+patches to provide support for extracting pages from an iov_iter and a
+patch to use the primary extraction function in the block layer bio code if
+you could take a look?
+
+[!] NOTE that I've switched the functions to be exported GPL-only at
+    Christoph's request[1].  They are, however, intended as a replacement
+    for iov_iter_get_pages*(), which is not marked _GPL - so that
+    functionality will probably become unavailable to non-GPL 3rd party
+    modules in future.
+
+The first three patches deal with ITER_SOURCE/DEST:
+
+ (1) Switch ITER_SOURCE/DEST to an enum and add a couple of helper
+     functions to query if an iterator represents a source or a destination
+     buffer.  Using an enum may allow extra consistency warnings from the
+     compiler.
+
+ (2) Use the ITER_SOURCE/DEST values in the iov_iter core functions rather
+     than READ/WRITE.
+
+ (3) Get rid of most of the callers of iov_iter_rw(), using the IOCB_WRITE
+     and IOMAP_WRITE instead where available.  This leaves only two places
+     looking at the this value: a consistency check in cifs and a single
+     place in the block layer.
+
+The next patch adds a replacement for iov_iter_get_pages*(), including
+Logan's new version:
+
+ (4) Add a function to list-only, get or pin pages from an iterator as a
+     future replacement for iov_iter_get_pages*().  Pointers to the pages
+     are placed into an array (which will get allocated if not provided)
+     and, depending on the iterator type and direction, the pages will have
+     a ref or a pin get on them or be left untouched (on the assumption
+     that the caller manages their lifetime).
+
+     The determination is:
+
+	UBUF/IOVEC + DEST	-> pin
+	UBUF/IOVEC + SOURCE	-> get
+	PIPE + DEST		-> list-only
+	BVEC/XARRAY		-> list-only
+	Anything else		-> EFAULT
+
+     The function also returns an indication of which of "list only, get or
+     pin" the extraction function did to aid in cleaning up (returning 0,
+     FOLL_GET or FOLL_PIN as appropriate).
+
+Then there are a couple of patches that add stuff to netfslib that I want
+to use there as well as in cifs:
+
+ (5) Add a netfslib function to use (4) to extract pages from an ITER_IOBUF
+     or ITER_UBUF iterator into an ITER_BVEC iterator.  This will get or
+     pin the pages as appropriate.
+
+ (6) Add a netfslib function to extract pages from an iterator that's of
+     type ITER_UBUF/IOVEC/BVEC/KVEC/XARRAY and add them to a scatterlist.
+
+     The function in (4) is used for a UBUF and IOVEC iterators, so those
+     need cleaning up afterwards.  BVEC and XARRAY iterators are ungot and
+     unpinned and may be rendered into elements that span multiple pages,
+     for example if large folios are present.
+
+Finally, there are a set of three patches to make the block layer's BIO
+code use iov_iter_extract_pages():
+
+ (7) Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED (opposite logic).
+
+ (8) Make the block layer's BIO code pin pages or leave pages unaltered
+     rather than getting a ref on the pages when the circumstances warrant,
+     and noting in the bio struct what cleanups should be performed so that
+     the bio cleanup code then does the right thing.
+
+ (9) Remove an unnecessary check against 0 in bio_flagged() (it returns
+     bool) thus allowing the gcc optimiser to combine multiple instances of
+     the bitwise-AND on the same flags value.
+
+Changes:
+========
+ver #5)
+ - Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED and split into own patch.
+ - Transcribe FOLL_GET/PIN into BIO_PAGE_REFFED/PINNED flags.
+ - Add patch to allow bio_flagged() to be combined by gcc.
+
+ver #4)
+ - Drop the patch to move the FOLL_* flags to linux/mm_types.h as they're
+   no longer referenced by linux/uio.h.
+ - Add ITER_SOURCE/DEST cleanup patches.
+ - Make iov_iter/netfslib iter extraction patches use ITER_SOURCE/DEST.
+ - Allow additional gup_flags to be passed into iov_iter_extract_pages().
+ - Add struct bio patch.
+
+ver #3)
+ - Switch to using EXPORT_SYMBOL_GPL to prevent indirect 3rd-party access
+   to get/pin_user_pages_fast()[1].
+
+ver #2)
+ - Rolled the extraction cleanup mode query function into the extraction
+   function, returning the indication through the argument list.
+ - Fixed patch 4 (extract to scatterlist) to actually use the new
+   extraction API.
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
+
+David
+
+Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [1]
+Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166732024173.3186319.18204305072070871546.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166869687556.3723671.10061142538708346995.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166920902005.1461876.2786264600108839814.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk/ # v3
+Link: https://lore.kernel.org/r/167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk/ # v4
+
+---
+David Howells (9):
+      iov_iter: Change the direction macros into an enum
+      iov_iter: Use the direction in the iterator functions
+      iov_iter: Use IOCB/IOMAP_WRITE if available rather than iterator direction
+      iov_iter: Add a function to extract a page list from an iterator
+      netfs: Add a function to extract a UBUF or IOVEC into a BVEC iterator
+      netfs: Add a function to extract an iterator into a scatterlist
+      bio: Rename BIO_NO_PAGE_REF to BIO_PAGE_REFFED and invert the meaning
+      iov_iter, block: Make bio structs pin pages rather than ref'ing if appropriate
+      bio: Fix bio_flagged() so that it can be combined
+
+
+ block/bio.c               |  59 ++++--
+ block/fops.c              |   8 +-
+ fs/9p/vfs_addr.c          |   2 +-
+ fs/affs/file.c            |   4 +-
+ fs/ceph/file.c            |   2 +-
+ fs/dax.c                  |   6 +-
+ fs/direct-io.c            |  22 +--
+ fs/exfat/inode.c          |   6 +-
+ fs/ext2/inode.c           |   2 +-
+ fs/f2fs/file.c            |  10 +-
+ fs/fat/inode.c            |   4 +-
+ fs/fuse/dax.c             |   2 +-
+ fs/fuse/file.c            |   8 +-
+ fs/hfs/inode.c            |   2 +-
+ fs/hfsplus/inode.c        |   2 +-
+ fs/iomap/direct-io.c      |   6 +-
+ fs/jfs/inode.c            |   2 +-
+ fs/netfs/Makefile         |   1 +
+ fs/netfs/iterator.c       | 367 ++++++++++++++++++++++++++++++++++
+ fs/nfs/direct.c           |   2 +-
+ fs/nilfs2/inode.c         |   2 +-
+ fs/ntfs3/inode.c          |   2 +-
+ fs/ocfs2/aops.c           |   2 +-
+ fs/orangefs/inode.c       |   2 +-
+ fs/reiserfs/inode.c       |   2 +-
+ fs/udf/inode.c            |   2 +-
+ include/linux/bio.h       |   5 +-
+ include/linux/blk_types.h |   3 +-
+ include/linux/netfs.h     |   7 +
+ include/linux/uio.h       |  59 ++++--
+ lib/iov_iter.c            | 407 +++++++++++++++++++++++++++++++++++---
+ mm/vmalloc.c              |   1 +
+ 32 files changed, 903 insertions(+), 108 deletions(-)
+ create mode 100644 fs/netfs/iterator.c
+
+
