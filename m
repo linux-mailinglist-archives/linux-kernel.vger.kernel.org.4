@@ -2,71 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC3E66522F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA43665241
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjAKDO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 22:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S230106AbjAKDTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 22:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbjAKDOy (ORCPT
+        with ESMTP id S234554AbjAKDS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 22:14:54 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDED5E038;
-        Tue, 10 Jan 2023 19:14:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4oVge3+sCGnCyr9n3sgVnOMeZqCZSCXC9r9hEGN1JLc=; b=hZezXo7GyHHL9cGaR11hdg+HgM
-        gaYGo0O3iaw24k6B3bzUPadRj9UJUv3RZs6zLV12XEZMxbwJEs35Sjw3HW8BCJDiHR88sbo7ZmwcL
-        hNf8NaiPdV4kfVPRanj3kH4gRiQLnirDMHTjUxLCOa8GaW/NEQvq4mm3oRhb5R2L0ka/Nh27II72/
-        qlqNviHX3MkXtDYmm+DLRbIYjV56L0OA9eOGNB+m0OhGpNp5nn5e5SSjEBzYQVsE6rxnfuA6yw0aR
-        IHWoOGbBuUTeSMXcCpNAayNv6N3K44/F5AuBosqlp0p7LrGs9KkZtZJDQw2YIrcd8Tw/YJfZThuSJ
-        gja9Ps4A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pFRZe-0016xk-0p;
-        Wed, 11 Jan 2023 03:14:46 +0000
-Date:   Wed, 11 Jan 2023 03:14:46 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs/pipe: Delete unused do_pipe_flags()
-Message-ID: <Y74pphK09fZ9x8gI@ZenIV>
-References: <20230111030547.7730-1-zhouchengming@bytedance.com>
+        Tue, 10 Jan 2023 22:18:27 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC16914086
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:18:22 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id 17so15419313pll.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:18:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DAbF+23J3WNopzFWmwTkdmCspCTcLNnSoUJcTK0GAFs=;
+        b=DE/cmeK3OBSndt4c0IKA6JG+HDRlOVKjYBXKoUihcvFcJ03NuoZwBVHI7wxYUvMJxT
+         wuZiHEjFprkHQl3NkLLHZtmv2YdO9qBE6cpxlLWIVEJUPeD6QLsqgY8SGHFIzDnv76mE
+         vZoICCP+B8Zt7b9OorU2AuvtzSSo/rp3U9qjA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DAbF+23J3WNopzFWmwTkdmCspCTcLNnSoUJcTK0GAFs=;
+        b=i4aR6+xTVbpCBoUf+wfVAJat/41icOSyJvMyQQc6rJsLODN5nu7H/15yq7u55F11TA
+         HLOHABDkFbRVc4KaDy9NDmd2nNrWXhEkqpx73J/IzH+NigJET5prc0UlM5Im1YXV5UK0
+         RKlwwPz0VGpAcwpqRD62QAFByMsQ1eLmgQrF6E+aCyu1Xy0IbyvRdkCua2ir0khMUHiw
+         uNPmUds7BoBDTF+cRTFA0e0+21YdWQbqHO8j+r2aw1nUed2gIrniNpnhxTpPXDRILmiq
+         4Nh3dCScCsmXvck0np4Fw4+TByYVdzsrZE+ANZSNyU4D5OEVokzpyfeQ3MpV8TFe+I/8
+         SSyQ==
+X-Gm-Message-State: AFqh2kqtaPJh8v5OT+rOMaCnr7WVZmuiyUJOLmueHzZ0QF4goGMaJVp9
+        j92T53n6QUwRDGiFBH/Boy8hlw==
+X-Google-Smtp-Source: AMrXdXtdXPd92VZ4OuZs+hLhLJ0sBhmQ9zsy8iKrN3gjRA28v67aK3QwpoKwrHM7ZfKUz/fBm/dk8g==
+X-Received: by 2002:a05:6a20:3c8a:b0:af:8128:757 with SMTP id b10-20020a056a203c8a00b000af81280757mr110302543pzj.61.1673407102474;
+        Tue, 10 Jan 2023 19:18:22 -0800 (PST)
+Received: from localhost (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
+        by smtp.gmail.com with UTF8SMTPSA id gk19-20020a17090b119300b00218f9bd50c7sm7896488pjb.50.2023.01.10.19.18.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 19:18:21 -0800 (PST)
+From:   Ying Hsu <yinghsu@chromium.org>
+To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        leon@kernel.org, luiz.dentz@gmail.com
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        Ying Hsu <yinghsu@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Tedd Ho-Jeong An <tedd.an@intel.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v3] Bluetooth: Fix possible deadlock in rfcomm_sk_state_change
+Date:   Wed, 11 Jan 2023 03:16:14 +0000
+Message-Id: <20230111031540.v3.1.I1f29bb547a03e9adfe2e6754212f9d14a2e39c4b@changeid>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111030547.7730-1-zhouchengming@bytedance.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 11:05:47AM +0800, Chengming Zhou wrote:
-> It looks like do_pipe_flags() is not used anywhere and not exported
-> too, so delete it. No any functional changes.
+syzbot reports a possible deadlock in rfcomm_sk_state_change [1].
+While rfcomm_sock_connect acquires the sk lock and waits for
+the rfcomm lock, rfcomm_sock_release could have the rfcomm
+lock and hit a deadlock for acquiring the sk lock.
+Here's a simplified flow:
 
-What do you mean, not used anywhere?
+rfcomm_sock_connect:
+  lock_sock(sk)
+  rfcomm_dlc_open:
+    rfcomm_lock()
 
-<checks>
+rfcomm_sock_release:
+  rfcomm_sock_shutdown:
+    rfcomm_lock()
+    __rfcomm_dlc_close:
+        rfcomm_k_state_change:
+	  lock_sock(sk)
 
-; git grep -n -w do_pipe_flags
-arch/alpha/kernel/osf_sys.c:1315:       int res = do_pipe_flags(fd, 0);
-arch/ia64/kernel/sys_ia64.c:109:        retval = do_pipe_flags(fd, 0);
-arch/mips/kernel/syscall.c:54:  int error = do_pipe_flags(fd, 0);
-arch/sh/kernel/sys_sh32.c:31:   error = do_pipe_flags(fd, 0);
-arch/sparc/kernel/sys_sparc_32.c:81:    error = do_pipe_flags(fd, 0);
-arch/sparc/kernel/sys_sparc_64.c:319:   error = do_pipe_flags(fd, 0);
-fs/pipe.c:989:int do_pipe_flags(int *fd, int flags)
-include/linux/fs.h:3019:extern int do_pipe_flags(int *, int);
-;
+This patch drops the sk lock before calling rfcomm_dlc_open to
+avoid the possible deadlock and holds sk's reference count to
+prevent use-after-free after rfcomm_dlc_open completes.
 
-A bunch of callers, and it's easy to check that they are not
-ifdefed out, etc. - normal live code...
+Reported-by: syzbot+d7ce59...@syzkaller.appspotmail.com
+Fixes: 1804fdf6e494 ("Bluetooth: btintel: Combine setting up MSFT extension")
+Link: https://syzkaller.appspot.com/bug?extid=d7ce59b06b3eb14fd218 [1]
+
+Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+---
+This commit has been tested with a C reproducer on qemu-x86_64
+and a ChromeOS device.
+
+Changes in v3:
+- Revise the commit message.
+
+Changes in v2:
+- Fix potential use-after-free in rfc_comm_sock_connect.
+
+ net/bluetooth/rfcomm/sock.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/net/bluetooth/rfcomm/sock.c b/net/bluetooth/rfcomm/sock.c
+index 21e24da4847f..4397e14ff560 100644
+--- a/net/bluetooth/rfcomm/sock.c
++++ b/net/bluetooth/rfcomm/sock.c
+@@ -391,6 +391,7 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
+ 	    addr->sa_family != AF_BLUETOOTH)
+ 		return -EINVAL;
+ 
++	sock_hold(sk);
+ 	lock_sock(sk);
+ 
+ 	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
+@@ -410,14 +411,18 @@ static int rfcomm_sock_connect(struct socket *sock, struct sockaddr *addr, int a
+ 	d->sec_level = rfcomm_pi(sk)->sec_level;
+ 	d->role_switch = rfcomm_pi(sk)->role_switch;
+ 
++	/* Drop sock lock to avoid potential deadlock with the RFCOMM lock */
++	release_sock(sk);
+ 	err = rfcomm_dlc_open(d, &rfcomm_pi(sk)->src, &sa->rc_bdaddr,
+ 			      sa->rc_channel);
+-	if (!err)
++	lock_sock(sk);
++	if (!err && !sock_flag(sk, SOCK_ZAPPED))
+ 		err = bt_sock_wait_state(sk, BT_CONNECTED,
+ 				sock_sndtimeo(sk, flags & O_NONBLOCK));
+ 
+ done:
+ 	release_sock(sk);
++	sock_put(sk);
+ 	return err;
+ }
+ 
+-- 
+2.39.0.314.g84b9a713c41-goog
+
