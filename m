@@ -2,1220 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1A26660A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A25665ECD
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjAKQg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:36:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
+        id S234573AbjAKPIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235212AbjAKQgA (ORCPT
+        with ESMTP id S239278AbjAKO6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:36:00 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2A1CD6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:35:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673454956; x=1704990956;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=72PaTYesMW80vMily3JGRP1WXS2H9ylBNLWcZ9UwqQA=;
-  b=gfwOMEOKr9YOXT+LRQ4aZVp0CDbcz7ihaLD//WN/fhijCkxCP7bC2f6f
-   iJugc6G3Ii0qSGhtl9TOUFJCyB+twWBYwAynJpzVXrpP1dRIt3tuTe9VB
-   m3GQ/Q5LWi9DaSJuU4c4iUs+mWIk16RoRRUIrQVpoo1oMmZ/UZ+Wp4qcE
-   tSUAZRaj0HjpKGpPp/+xpU8xdcNaWPKcmDDTwwXMYH76/llF/SqdzuQQR
-   xcoeLvYigHQ6s0YC+u1dbmFf2+o6UHlCtRsLvYazpSK9xgtnghoI8boI2
-   l8fShfH9TJ75Ol5YfP4aqDyRjgjP0KBXeS292aNc7mJ29ReBc4FHptBEo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324704008"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="324704008"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:32:10 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607408284"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="607408284"
-Received: from flobatol-mobl1.amr.corp.intel.com (HELO [10.212.110.208]) ([10.212.110.208])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:32:08 -0800
-Message-ID: <991ff630-17a7-eef3-1436-e4a905fe0541@linux.intel.com>
-Date:   Wed, 11 Jan 2023 08:37:35 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH 02/19] soundwire: amd: Add support for AMD Master driver
+        Wed, 11 Jan 2023 09:58:24 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2053.outbound.protection.outlook.com [40.107.220.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FA613D64
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:58:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oDPxxtxHD0IssB8qmlrkTObVEEU0P3hu2GSKTvNJS5TX4GBhIiB+P49fbOFAc6WJk+VyY020QihIO/u4h+71dCJfUXOaQ/r7E8V5axftLJwf5J/Ymsi5LmhQ5F1x9nIYTD2lDvhlY2E/J1sr705Coki2BsLdaD5uTQDKS4piP5zgTmA/UY0sYmrkNA1mZ/86Wvd/b3fs2V2jeuzkRi7SeDZ+qUUCQrhb8kJY+IBK4Gc03T4oR2/ut+MOtHi7s+1ial3T564FDW/+NKBz0dYgb6jBfzgeNCYtie+OeLFbymBmdCkvhZkYXX3PB3tp2BwWiPF7ga7LaYziLv1rjpvaiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=j6/MSaiaWdr0GSQOBo0EG8IkmD1+jhOW2KwlBeAcWTA=;
+ b=Nkggk59hTi2BQFh5SWIFDxUQtlqyBB3qSbtzpsWzlzvhiaFlukQRq7V1PrggkEsYDKCjKHxoDLhvZJuKa4UAwYEliv2+0zJ3AwIySE+SZpe/N4j4Klc1GRIgtqUpeX4qIha/MX9OmAzhGdPr2FEbvt+vOkIR93Z7ixtpM4xgA4Cf2O4oHvX7CY+GDjceMccZljLhi2QbNuih+SEP+pcQiAZjRzOTSMgTYZHZr7Ea3rHa+dpv9y6715ZgoWXn6gty/5woFasCIzCcreFq39NqUoiA/16IDCyQPIozt7qlAoZD0EASHmAKMUV2F5NW0BMYVzeNk0TIZ5swZNITgk+Tog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j6/MSaiaWdr0GSQOBo0EG8IkmD1+jhOW2KwlBeAcWTA=;
+ b=QHS4WTXhU6oQEeBbGi2BRJjTMkjYUX1QhcruYUnGXam6YEAk9DamV23UExfrkHKdw50CRca6qHHLRt95OLmAYoexVHIPdrHBXi+AVNQ1asCl33Vpbe4A/DO6GlIslPqH9NoUsh9pql2IKbuo3bDBPIK/Y5IrY7YIU3xYNlB/VKrjSVdF6vXPkkFtSjacHayrn+mC77G5hP8pSIs1LwyA5boX05/wX3UjSRQVtcaeQp5r/rPC2uvUHiM2SvleeT5gMLgCzZlNswLUkoDrGwo5reZlMOFsT1+GJq9NBSJ8rLYL7Oi9FocZhvcR8dW2tt0qI1BSzEXgrAroiIztesUzVg==
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
+ PH7PR12MB7967.namprd12.prod.outlook.com (2603:10b6:510:273::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5986.18; Wed, 11 Jan 2023 14:58:21 +0000
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::70c6:a62a:4199:b8ed]) by DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::70c6:a62a:4199:b8ed%4]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
+ 14:58:21 +0000
+From:   Eli Cohen <elic@nvidia.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+CC:     Jason Wang <jasowang@redhat.com>,
+        "gdawar@amd.com" <gdawar@amd.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>
+Subject: RE: [PATCH 1/5] virtio_ring: per virtqueue dma device
+Thread-Topic: [PATCH 1/5] virtio_ring: per virtqueue dma device
+Thread-Index: AQHZJYXp/exib+Y5JEShlN8ZA2yzKK6ZNvrwgAAF4wCAAA5B8IAAAweAgAAAr8A=
+Date:   Wed, 11 Jan 2023 14:58:21 +0000
+Message-ID: <DM8PR12MB54005A89EB05BF46AD7D2DFEABFC9@DM8PR12MB5400.namprd12.prod.outlook.com>
+References: <20230111062809.25020-1-jasowang@redhat.com>
+ <20230111062809.25020-2-jasowang@redhat.com>
+ <DM8PR12MB5400E61C7E968AC7604556EBABFC9@DM8PR12MB5400.namprd12.prod.outlook.com>
+ <20230111085210-mutt-send-email-mst@kernel.org>
+ <DM8PR12MB54008B92885A8971C4CFED0EABFC9@DM8PR12MB5400.namprd12.prod.outlook.com>
+ <20230111095358-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230111095358-mutt-send-email-mst@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
-        vkoul@kernel.org, alsa-devel@alsa-project.org
-Cc:     Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
-        arungopal.kondaveeti@amd.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
- <20230111090222.2016499-3-Vijendar.Mukunda@amd.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230111090222.2016499-3-Vijendar.Mukunda@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM8PR12MB5400:EE_|PH7PR12MB7967:EE_
+x-ms-office365-filtering-correlation-id: 2cfc007c-80ea-4bd5-23ce-08daf3e44800
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MEO17YPrmg4BUASDhVixj2785WsFLQNs3hvIufWz/7VNRRv1+XeWfw2Pxc/ej6uIYcaALoPAcANIaaQGQk3WRg77kkONHneFR7MKFrRx6B+ZXspNDVYvKAsI5bHvtcgYCjQjeHA9nCQAGLmZCMgs/H+U6uY3hqAtq5HQLqwSP5nrRW5/wMRy3C6Rs75+TdGFyJm1jGZRc1SdgoyoOU29vhOlOMveg38KhyPIPhhubKHJHJZg+N1HKHob4TjWopdLbEtESmLBam8WoUZFLx9qpQTrTg3e4W1vF8gsjQvqKtTPwDozcn2wFCfVlTu7cdsPgjbcouzKwSL0+Y0O1tgtXRGzRUf3/f7ZBl4fxVQjmUyTXwKqxM/5F+NTuLcFjWgc/sRXBAoBCwjVIwGxhSR/SLwTdaV54OD+/EfHe0CVG3xuPjje7drNPvPHRKQBgpFbi0zyzycUgBpzW10AzfGBcZCYCVxl1RLk4zx97nF583zZhhL/13U1ldrMA4Hc3rC9oPQkmK8DxoxAtD9b0JDGpiGeV1juzBPdk61wBWTDszzPa86RL1SyhPi30K6dd5lkrgXFf24IcV8m9w33sLNqr3GTYGUCR3nUn2j4r7y+UB8YyA8OsgAwWU+Bvc5d/Xvz0zkJTZSBiOy3Li5M3g8SuK/Qcla+fO4IcmIeiAK1gURuOlE+OyZ6DLvd7dbZ1944wPPwRW7Ibcj6jlvbn2+uVA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(346002)(366004)(396003)(451199015)(6506007)(26005)(478600001)(9686003)(55016003)(33656002)(186003)(6916009)(66476007)(76116006)(71200400001)(64756008)(8676002)(41300700001)(66946007)(66446008)(54906003)(53546011)(7696005)(316002)(4326008)(83380400001)(86362001)(38070700005)(38100700002)(122000001)(52536014)(66556008)(8936002)(5660300002)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RWllUE4rUWp2MEIwL2FPNGZ1SDhiM0dxWjlSMU42aVN6dkFMYWZ2cWFjTnAr?=
+ =?utf-8?B?MlVWTjVEQXhKWDNNV1ZLUHlVMHA3R3FxRVBDTWFCNmZ5b1B0L0tvS2FtWlU3?=
+ =?utf-8?B?MTEyOUtlenlRQ1FqUGtQb0YwbzVpWGpCOHY0dVRXdGtlbjN5Zk91c3c2dDY0?=
+ =?utf-8?B?NWdvL2cwVlE4QTlmZFVIdVdnZUg1Z2lzZjlEc3FtQlJMZUg1Tm1TMkxJU3Uw?=
+ =?utf-8?B?dzNpeUg3akY2eVFKMXpHZEVMeXNYR0VnQzRyV1hLaElEQ2lSUk5YcUVnYVdq?=
+ =?utf-8?B?ajdHY0lOdlhEYkh3TkUzd3BGWmw0c21pZnVwdktSREdzK3ZkV0U5TytVZHp2?=
+ =?utf-8?B?dnJqMWJtNzBiT25xVmtqZmF4OWk5MGtlc2NUMzBha2ZsTnpvaVhrbjREVUZO?=
+ =?utf-8?B?Smx0UzV2RWNEODNCMi9FcERrR1IzVXR5b1JoZGdsbEFheTNqZW9ENE9aN3hO?=
+ =?utf-8?B?L2drRFAwSkxISFhRVUIwTjI5eHpaeXdJMnVMNjFLNnlWOWhqR1ovZDlkUWFq?=
+ =?utf-8?B?akdMaXFDRlFjeVJUdkdvbTVkQUg5eENITzE2QTQ5Y2FidTc3Ui9CZVVnWUFJ?=
+ =?utf-8?B?Mjl0T3BjRXdMZ1h5ZDVHUzBpRmRjM2xkRHl3VVZ6Njk0RUtVTnFPc2pSVlVp?=
+ =?utf-8?B?MGRWUUtQWWw1elRUSjgvSExHTzd6TmJrUXpsUGFQMmRHNFU4QnBjckJ0SDFG?=
+ =?utf-8?B?M0o1amxXUm44UE5NWWtwa0d4MWJhTUVaNllYeHBxU3h1Zk5vbURiZzMyckg0?=
+ =?utf-8?B?ZjlsRldaaU5qUkl0VFhab3hub1JYVzlKR2tVTlI5QjIzMm4yeFRwcUVhQVU1?=
+ =?utf-8?B?OWZ5MDRBcmRTMlIyYWdVWkZvWTkrNDJ1cjlVNWMvclVWQVhWbnR0YXU5Z3Er?=
+ =?utf-8?B?QzFkRlp6aWl5K05iNFBEWHViZHIwTDN2NXoyMjJ6OWtCV3ZlVG9SZmZGWGZ4?=
+ =?utf-8?B?eDVHWWVQNlVQaWpQMUZ6NFpCSTQza3RmR1lscEtqNEhsc0tWK2JudkdRRXEw?=
+ =?utf-8?B?bFRaMXloWnZPNHM4MGtabFl1TXpXSXZwK3ZadDgwYzI2ZE5ma3RjT0R0dmpC?=
+ =?utf-8?B?Umk2MUVyeTE5czBQNitJalVwckcxVVhEK29KaXJlQzBLTU1mTDlsY3JUeVk0?=
+ =?utf-8?B?ZkV6Z1h6R0lma3NEMTdTUWt0WWpjMDcxWExucGxleDh0WnBuUDJHZUFoVzRm?=
+ =?utf-8?B?TExBV2lRcEF4Ri9QNExYTi9RWFFjNjNtOGkxV0xBalFKYm81R3BRTDJPb09W?=
+ =?utf-8?B?NVgvOENtYmRNekdtcE8xNW1RbkRYNEJSKzhFREI0MTlUb201OWIrenZXMFVM?=
+ =?utf-8?B?allhS0REdTVSK0lXUVpRR1dac09pS0pKSWoycFZjR0toUHZ5eGpla0JzQVpB?=
+ =?utf-8?B?MTBXZWQ4VjRRRXdhMDlob1NmeVZCMlRod2V5Z3lUSjhXdzNTdTJISFNVQmEz?=
+ =?utf-8?B?TzEzZi92SWFhWk1RY2VOdHdwR1lJMmwwV2lVK3hDamxZYzJSZU9BK0FoTFU3?=
+ =?utf-8?B?ZzhrUzdVZEtaWUVuYTNZVzQ0dTZTR2VnMDBQUHRra1YwSXFtWTNMNlhTb0VU?=
+ =?utf-8?B?c3Z0ellYRUFIVXhPWXhmZDJveHZaOXpFdGJhMmFNeVc4REFqby9sUGN0eTJQ?=
+ =?utf-8?B?UzJ3MXVnQVVGamlDZ3lzWnd6VlRXL2x6bXQ1QUF6UHQrVHV3RWVublhVUkNk?=
+ =?utf-8?B?cXFBQW1BMlZYRGw5ZjYwNS9MSk02YlkxSGw0ZFp5N05MSzFhUnlyS3ArazVD?=
+ =?utf-8?B?amNlMURZbUM0aERwVWRPaUwrRjdtNnphZGNhRWFPSm9HOWtOMXc0SG1HUnlU?=
+ =?utf-8?B?bWtZWEg0WlVJS1NGNWFPUC9FNDhiVVJJZ1lLRnVmZ0ZqTkdtQkFrN0I1cERj?=
+ =?utf-8?B?ODk0QkcxcHRLaWZiT2MwZnhqZ2pCMktidDdzaTVMdW1uV0p5Qy9iNnpuSWRi?=
+ =?utf-8?B?Wko1eDlZdHFlckZ6WjhwUzNuNVhaUG5xcW1kM0FNYWFkM3BrYUsyMEkrc1NV?=
+ =?utf-8?B?WnZGVXZsbG03SHRYV01hanIwWm1WRURhYXV0R2JrT1BJUFdoelRRQVVMRmZ5?=
+ =?utf-8?B?WnFNY0RjOG5zcmtlTkFNNGJmZzVUTEJXWGMxNDA4N1NRQWJVYmZXZEZxV1c2?=
+ =?utf-8?Q?RjSU=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2cfc007c-80ea-4bd5-23ce-08daf3e44800
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2023 14:58:21.2095
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aJpr5mUFKMKuCEZ25MPq9SxheB2aAHCKKaUJ/qnaX7YL29sCmI/2TJjsYzGuirNF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7967
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/11/23 03:02, Vijendar Mukunda wrote:
-> AMD ACP IP block has two soundwire controller devices.
-
-s/controller/manager?
-
-> Add support for
-> - Master driver probe & remove sequence
-> - Helper functions to enable/disable interrupts, Initialize sdw controller,
->   enable sdw pads
-> - Master driver sdw_master_ops & port_ops callbacks
-> 
-> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-> ---
->  drivers/soundwire/amd_master.c    | 1075 +++++++++++++++++++++++++++++
->  drivers/soundwire/amd_master.h    |  279 ++++++++
->  include/linux/soundwire/sdw_amd.h |   21 +
->  3 files changed, 1375 insertions(+)
->  create mode 100644 drivers/soundwire/amd_master.c
->  create mode 100644 drivers/soundwire/amd_master.h
-> 
-> diff --git a/drivers/soundwire/amd_master.c b/drivers/soundwire/amd_master.c
-> new file mode 100644
-> index 000000000000..7e1f618254ac
-> --- /dev/null
-> +++ b/drivers/soundwire/amd_master.c
-> @@ -0,0 +1,1075 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * SoundWire AMD Master driver
-> + *
-> + * Copyright 2023 Advanced Micro Devices, Inc.
-> + */
-> +
-> +#include <linux/completion.h>
-> +#include <linux/device.h>
-> +#include <linux/io.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/soundwire/sdw.h>
-> +#include <linux/soundwire/sdw_registers.h>
-> +#include <linux/soundwire/sdw_amd.h>
-> +#include <linux/wait.h>
-> +#include <sound/pcm_params.h>
-> +#include <sound/soc.h>
-> +#include "bus.h"
-> +#include "amd_master.h"
-> +
-> +#define DRV_NAME "amd_sdw_controller"
-> +
-> +#define to_amd_sdw(b)	container_of(b, struct amd_sdwc_ctrl, bus)
-> +
-> +static int amd_enable_sdw_pads(struct amd_sdwc_ctrl *ctrl)
-> +{
-> +	u32 sw_pad_enable_mask;
-> +	u32 sw_pad_pulldown_mask;
-> +	u32 sw_pad_pulldown_val;
-> +	u32 val = 0;
-> +
-> +	switch (ctrl->instance) {
-
-Goodness no. A controller has one or more masters. It cannot have pins
-as described in the SoundWire master specification.
-
-> +	case ACP_SDW0:
-> +		sw_pad_enable_mask = AMD_SDW0_PAD_KEEPER_EN_MASK;
-> +		sw_pad_pulldown_mask = AMD_SDW0_PAD_PULLDOWN_CTRL_ENABLE_MASK;
-> +		break;
-> +	case ACP_SDW1:
-> +		sw_pad_enable_mask = AMD_SDW1_PAD_KEEPER_EN_MASK;
-> +		sw_pad_pulldown_mask = AMD_SDW1_PAD_PULLDOWN_CTRL_ENABLE_MASK;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	mutex_lock(ctrl->sdw_lock);
-> +	val = acp_reg_readl(ctrl->mmio + ACP_SW_PAD_KEEPER_EN);
-> +	val |= sw_pad_enable_mask;
-> +	acp_reg_writel(val, ctrl->mmio + ACP_SW_PAD_KEEPER_EN);
-> +	mutex_unlock(ctrl->sdw_lock);
-> +	usleep_range(1000, 1500);
-> +
-> +	mutex_lock(ctrl->sdw_lock);
-> +	sw_pad_pulldown_val  = acp_reg_readl(ctrl->mmio + ACP_PAD_PULLDOWN_CTRL);
-> +	sw_pad_pulldown_val &= sw_pad_pulldown_mask;
-> +	acp_reg_writel(sw_pad_pulldown_val, ctrl->mmio + ACP_PAD_PULLDOWN_CTRL);
-> +	mutex_unlock(ctrl->sdw_lock);
-> +	return 0;
-> +}
-> +
-> +static int amd_init_sdw_controller(struct amd_sdwc_ctrl *ctrl)
-> +{
-> +	u32 acp_sw_en_reg, acp_sw_en_stat_reg, sw_bus_reset_reg;
-> +	u32 val = 0;
-> +	u32 timeout = 0;
-> +	u32 retry_count = 0;
-> +
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		acp_sw_en_reg = ACP_SW_EN;
-> +		acp_sw_en_stat_reg = ACP_SW_EN_STATUS;
-> +		sw_bus_reset_reg = ACP_SW_BUS_RESET_CTRL;
-> +		break;
-> +	case ACP_SDW1:
-> +		acp_sw_en_reg = ACP_P1_SW_EN;
-> +		acp_sw_en_stat_reg = ACP_P1_SW_EN_STATUS;
-> +		sw_bus_reset_reg = ACP_P1_SW_BUS_RESET_CTRL;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	acp_reg_writel(AMD_SDW_ENABLE, ctrl->mmio + acp_sw_en_reg);
-> +	do {
-> +		val = acp_reg_readl(ctrl->mmio + acp_sw_en_stat_reg);
-> +		if (val)
-> +			break;
-> +		usleep_range(10, 50);
-> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
-> +
-> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
-> +		return -ETIMEDOUT;
-> +
-> +	/* Sdw Controller reset */
-> +	acp_reg_writel(AMD_SDW_BUS_RESET_REQ, ctrl->mmio + sw_bus_reset_reg);
-> +	val = acp_reg_readl(ctrl->mmio + sw_bus_reset_reg);
-> +	while (!(val & AMD_SDW_BUS_RESET_DONE)) {
-> +		val = acp_reg_readl(ctrl->mmio + sw_bus_reset_reg);
-> +		if (timeout > AMD_DELAY_LOOP_ITERATION)
-> +			break;
-> +		usleep_range(1, 5);
-> +		timeout++;
-> +	}
-
-no test on timeout here to check if the bus was indeed reset?
-
-If you are talking about bus_reset you are referring to a master btw.
-The terms bus/master/link are interchangeable. A controller is not
-defined in the SoundWire specification, this is part of the DisCo spec
-to deal with enumeration when multiple bus/master/link are supported in
-the platform.
-
-> +	timeout = 0;
-> +	acp_reg_writel(AMD_SDW_BUS_RESET_CLEAR_REQ, ctrl->mmio + sw_bus_reset_reg);
-> +	val = acp_reg_readl(ctrl->mmio + sw_bus_reset_reg);
-> +	while (val) {
-> +		val = acp_reg_readl(ctrl->mmio + sw_bus_reset_reg);
-> +		if (timeout > AMD_DELAY_LOOP_ITERATION)
-> +			break;
-> +		usleep_range(1, 5);
-> +		timeout++;
-> +	}
-> +	if (timeout == AMD_DELAY_LOOP_ITERATION) {
-> +		dev_err(ctrl->dev, "Failed to reset SW%x Soundwire Controller\n", ctrl->instance);
-> +		return -ETIMEDOUT;
-> +	}
-> +	retry_count = 0;
-> +	acp_reg_writel(AMD_SDW_DISABLE, ctrl->mmio + acp_sw_en_reg);
-> +	do {
-> +		val = acp_reg_readl(ctrl->mmio + acp_sw_en_stat_reg);
-> +		if (!val)
-> +			break;
-> +		usleep_range(10, 50);
-> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
-> +
-> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
-> +		return -ETIMEDOUT;
-> +	return 0;
-> +}
-> +
-> +static int amd_enable_sdw_controller(struct amd_sdwc_ctrl *ctrl)
-> +{
-> +	u32 acp_sw_en_reg;
-> +	u32 acp_sw_en_stat_reg;
-> +	u32 val = 0;
-> +	u32 retry_count = 0;
-> +
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		acp_sw_en_reg = ACP_SW_EN;
-> +		acp_sw_en_stat_reg = ACP_SW_EN_STATUS;
-> +		break;
-> +	case ACP_SDW1:
-> +		acp_sw_en_reg = ACP_P1_SW_EN;
-> +		acp_sw_en_stat_reg = ACP_P1_SW_EN_STATUS;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	acp_reg_writel(AMD_SDW_ENABLE, ctrl->mmio + acp_sw_en_reg);
-> +
-> +	do {
-> +		val = acp_reg_readl(ctrl->mmio + acp_sw_en_stat_reg);
-> +		if (val)
-> +			break;
-> +		usleep_range(10, 50);
-> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
-> +
-> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
-> +		return -ETIMEDOUT;
-> +	return 0;
-> +}
-> +
-> +static int amd_disable_sdw_controller(struct amd_sdwc_ctrl *ctrl)
-> +{
-> +	u32 clk_resume_ctrl_reg;
-> +	u32 acp_sw_en_reg;
-> +	u32 acp_sw_en_stat_reg;
-> +	u32 val = 0;
-> +	u32 retry_count = 0;
-> +
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		acp_sw_en_reg = ACP_SW_EN;
-> +		acp_sw_en_stat_reg = ACP_SW_EN_STATUS;
-> +		clk_resume_ctrl_reg = ACP_SW_CLK_RESUME_CTRL;
-> +		break;
-> +	case ACP_SDW1:
-> +		acp_sw_en_reg = ACP_P1_SW_EN;
-> +		acp_sw_en_stat_reg = ACP_P1_SW_EN_STATUS;
-> +		clk_resume_ctrl_reg = ACP_P1_SW_CLK_RESUME_CTRL;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	acp_reg_writel(AMD_SDW_DISABLE, ctrl->mmio + acp_sw_en_reg);
-> +
-> +	/*
-> +	 * After invoking controller disable sequence, check whether
-> +	 * controller has executed clock stop sequence. In this case,
-> +	 * controller should ignore checking enable status register.
-
-again clock stop is a sequence at the master/link/bus level, not the
-controller.
-
-> +	 */
-> +	val = acp_reg_readl(ctrl->mmio + clk_resume_ctrl_reg);
-> +	if (val)
-> +		return 0;
-> +
-> +	do {
-> +		val = acp_reg_readl(ctrl->mmio + acp_sw_en_stat_reg);
-> +		if (!val)
-> +			break;
-> +		usleep_range(10, 50);
-> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
-> +
-> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
-> +		return -ETIMEDOUT;
-> +	return 0;
-> +}
-> +
-> +static int amd_enable_sdw_interrupts(struct amd_sdwc_ctrl *ctrl)
-> +{
-> +	u32 val;
-> +	u32 acp_ext_intr_stat, acp_ext_intr_ctrl, acp_sdw_intr_mask;
-> +	u32 sw_stat_mask_0to7, sw_stat_mask_8to11, sw_err_intr_mask;
-> +
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		acp_ext_intr_ctrl = ACP_EXTERNAL_INTR_CNTL;
-
-should be renamed and end in CNTL0 if the other is CNTL1
-
-And it's manager anyways, not controller.
-
-> +		acp_sdw_intr_mask = AMD_SDW0_EXT_INTR_MASK;
-> +		acp_ext_intr_stat = ACP_EXTERNAL_INTR_STAT;
-> +		sw_stat_mask_0to7 = SW_STATE_CHANGE_STATUS_MASK_0TO7;
-> +		sw_stat_mask_8to11 = SW_STATE_CHANGE_STATUS_MASK_8TO11;
-> +		sw_err_intr_mask = SW_ERROR_INTR_MASK;
-> +		break;
-> +	case ACP_SDW1:
-> +		acp_ext_intr_ctrl = ACP_EXTERNAL_INTR_CNTL1;
-> +		acp_sdw_intr_mask = AMD_SDW1_EXT_INTR_MASK;
-> +		acp_ext_intr_stat = ACP_EXTERNAL_INTR_STAT1;
-> +		sw_stat_mask_0to7 = P1_SW_STATE_CHANGE_STATUS_MASK_0TO7;
-> +		sw_stat_mask_8to11 = P1_SW_STATE_CHANGE_STATUS_MASK_8TO11;
-> +		sw_err_intr_mask = P1_SW_ERROR_INTR_MASK;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	mutex_lock(ctrl->sdw_lock);
-> +	val = acp_reg_readl(ctrl->mmio + acp_ext_intr_ctrl);
-> +	val |= acp_sdw_intr_mask;
-> +	acp_reg_writel(val, ctrl->mmio + acp_ext_intr_ctrl);
-> +	val = acp_reg_readl(ctrl->mmio + acp_ext_intr_ctrl);
-> +	mutex_unlock(ctrl->sdw_lock);
-> +	dev_dbg(ctrl->dev, "%s: acp_ext_intr_ctrl[0x%x]:0x%x\n", __func__, acp_ext_intr_ctrl, val);
-> +	val = acp_reg_readl(ctrl->mmio + acp_ext_intr_stat);
-> +	if (val)
-> +		acp_reg_writel(val, ctrl->mmio + acp_ext_intr_stat);
-> +	acp_reg_writel(AMD_SDW_IRQ_MASK_0TO7, ctrl->mmio + sw_stat_mask_0to7);
-> +	acp_reg_writel(AMD_SDW_IRQ_MASK_8TO11, ctrl->mmio + sw_stat_mask_8to11);
-> +	acp_reg_writel(AMD_SDW_IRQ_ERROR_MASK, ctrl->mmio + sw_err_intr_mask);
-> +	return 0;
-> +}
-> +
-
-> +static u64 amd_sdwc_send_cmd_get_resp(struct amd_sdwc_ctrl *ctrl, u32 lword, u32 uword)
-> +{
-> +	u64 resp = 0;
-> +	u32 imm_cmd_stat_reg, imm_cmd_uword_reg, imm_cmd_lword_reg;
-> +	u32 imm_resp_uword_reg, imm_resp_lword_reg;
-> +	u32 resp_lower, resp_high;
-> +	u32 sts = 0;
-> +	u32 timeout = 0;
-> +
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		imm_cmd_stat_reg = SW_IMM_CMD_STS;
-> +		imm_cmd_uword_reg = SW_IMM_CMD_UPPER_WORD;
-> +		imm_cmd_lword_reg = SW_IMM_CMD_LOWER_QWORD;
-> +		imm_resp_uword_reg = SW_IMM_RESP_UPPER_WORD;
-> +		imm_resp_lword_reg = SW_IMM_RESP_LOWER_QWORD;
-> +		break;
-> +	case ACP_SDW1:
-> +		imm_cmd_stat_reg = P1_SW_IMM_CMD_STS;
-> +		imm_cmd_uword_reg = P1_SW_IMM_CMD_UPPER_WORD;
-> +		imm_cmd_lword_reg = P1_SW_IMM_CMD_LOWER_QWORD;
-> +		imm_resp_uword_reg = P1_SW_IMM_RESP_UPPER_WORD;
-> +		imm_resp_lword_reg = P1_SW_IMM_RESP_LOWER_QWORD;
-
-naming consistency would be good, the P1 is sometimes a prefix,
-sometimes a suffix, sometimes in the middle. Pick one.
-
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	sts = acp_reg_readl(ctrl->mmio + imm_cmd_stat_reg);
-> +	while (sts & AMD_SDW_IMM_CMD_BUSY) {
-> +		sts = acp_reg_readl(ctrl->mmio + imm_cmd_stat_reg);
-> +		if (timeout > AMD_SDW_RETRY_COUNT) {
-> +			dev_err(ctrl->dev, "SDW%x previous cmd status clear failed\n",
-> +				ctrl->instance);
-> +			return -ETIMEDOUT;
-> +		}
-> +		timeout++;
-> +	}
-> +
-> +	timeout = 0;
-> +	if (sts & AMD_SDW_IMM_RES_VALID) {
-> +		dev_err(ctrl->dev, "SDW%x controller is in bad state\n", ctrl->instance);
-> +		acp_reg_writel(0x00, ctrl->mmio + imm_cmd_stat_reg);
-> +	}
-> +	acp_reg_writel(uword, ctrl->mmio + imm_cmd_uword_reg);
-> +	acp_reg_writel(lword, ctrl->mmio + imm_cmd_lword_reg);
-> +
-> +	sts = acp_reg_readl(ctrl->mmio + imm_cmd_stat_reg);
-> +	while (!(sts & AMD_SDW_IMM_RES_VALID)) {
-> +		sts = acp_reg_readl(ctrl->mmio + imm_cmd_stat_reg);
-> +		if (timeout > AMD_SDW_RETRY_COUNT) {
-> +			dev_err(ctrl->dev, "SDW%x cmd response timeout occurred\n", ctrl->instance);
-> +			return -ETIMEDOUT;
-> +		}
-> +		timeout++;
-> +	}
-> +	resp_high = acp_reg_readl(ctrl->mmio + imm_resp_uword_reg);
-> +	resp_lower = acp_reg_readl(ctrl->mmio + imm_resp_lword_reg);
-> +	timeout = 0;
-> +	acp_reg_writel(AMD_SDW_IMM_RES_VALID, ctrl->mmio + imm_cmd_stat_reg);
-> +	while ((sts & AMD_SDW_IMM_RES_VALID)) {
-> +		sts = acp_reg_readl(ctrl->mmio + imm_cmd_stat_reg);
-> +		if (timeout > AMD_SDW_RETRY_COUNT) {
-> +			dev_err(ctrl->dev, "SDW%x cmd status retry failed\n", ctrl->instance);
-> +			return -ETIMEDOUT;
-> +		}
-> +		timeout++;
-> +	}
-> +	resp = resp_high;
-> +	resp = (resp << 32) | resp_lower;
-> +	return resp;
-> +}
-> +
-> +static enum sdw_command_response
-> +amd_program_scp_addr(struct amd_sdwc_ctrl *ctrl, struct sdw_msg *msg)
-> +{
-> +	struct sdw_msg scp_msg = {0};
-> +	u64 response_buf[2] = {0};
-> +	u32 uword = 0, lword = 0;
-> +	int nack = 0, no_ack = 0;
-> +	int index, timeout = 0;
-> +
-> +	scp_msg.dev_num = msg->dev_num;
-> +	scp_msg.addr = SDW_SCP_ADDRPAGE1;
-> +	scp_msg.buf = &msg->addr_page1;
-> +	amd_sdwc_ctl_word_prep(&lword, &uword, AMD_SDW_CMD_WRITE, &scp_msg, 0);
-> +	response_buf[0] = amd_sdwc_send_cmd_get_resp(ctrl, lword, uword);
-> +	scp_msg.addr = SDW_SCP_ADDRPAGE2;
-> +	scp_msg.buf = &msg->addr_page2;
-> +	amd_sdwc_ctl_word_prep(&lword, &uword, AMD_SDW_CMD_WRITE, &scp_msg, 0);
-> +	response_buf[1] = amd_sdwc_send_cmd_get_resp(ctrl, lword, uword);
-> +
-> +	/* check response the writes */
-
-response to the writes?  after the writes?
-
-> +	for (index = 0; index < 2; index++) {
-> +		if (response_buf[index] == -ETIMEDOUT) {
-> +			dev_err(ctrl->dev, "Program SCP cmd timeout\n");
-> +			timeout = 1;
-> +		} else if (!(response_buf[index] & AMD_SDW_MCP_RESP_ACK)) {
-> +			no_ack = 1;
-> +			if (response_buf[index] & AMD_SDW_MCP_RESP_NACK) {
-> +				nack = 1;
-> +				dev_err(ctrl->dev, "Program SCP NACK received\n");
-> +			}
-
-this is a copy of the cadence_master.c code... With the error added that
-this is not for a controller but for a master...
-
-> +		}
-> +	}
-> +
-> +	if (timeout) {
-> +		dev_err_ratelimited(ctrl->dev,
-> +				    "SCP_addrpage command timeout for Slave %d\n", msg->dev_num);
-> +		return SDW_CMD_TIMEOUT;
-> +	}
-> +
-> +	if (nack) {
-> +		dev_err_ratelimited(ctrl->dev,
-> +				    "SCP_addrpage NACKed for Slave %d\n", msg->dev_num);
-> +		return SDW_CMD_FAIL;
-> +	}
-> +
-> +	if (no_ack) {
-> +		dev_dbg_ratelimited(ctrl->dev,
-> +				    "SCP_addrpage ignored for Slave %d\n", msg->dev_num);
-> +		return SDW_CMD_IGNORED;
-> +	}
-> +	return SDW_CMD_OK;
-
-this should probably become a helper since the response is really the
-same as in cadence_master.c
-
-There's really room for optimization and reuse here.
-
-> +}
-> +
-> +static int amd_prep_msg(struct amd_sdwc_ctrl *ctrl, struct sdw_msg *msg, int *cmd)
-> +{
-> +	int ret;
-> +
-> +	if (msg->page) {
-> +		ret = amd_program_scp_addr(ctrl, msg);
-> +		if (ret) {
-> +			msg->len = 0;
-> +			return ret;
-> +		}
-> +	}
-> +	switch (msg->flags) {
-> +	case SDW_MSG_FLAG_READ:
-> +		*cmd = AMD_SDW_CMD_READ;
-> +		break;
-> +	case SDW_MSG_FLAG_WRITE:
-> +		*cmd = AMD_SDW_CMD_WRITE;
-> +		break;
-> +	default:
-> +		dev_err(ctrl->dev, "Invalid msg cmd: %d\n", msg->flags);
-> +		return -EINVAL;
-> +	}
-> +	return 0;
-> +}
-
-this is the same code as in cadence_master.c
-
-you just replaced sdw_cnds by amd_sdw_ctrl (which is a mistake) and
-cdns->dev by ctrl->dev.
-
-> +
-> +static unsigned int _amd_sdwc_xfer_msg(struct amd_sdwc_ctrl *ctrl, struct sdw_msg *msg,
-> +				       int cmd, int cmd_offset)
-> +{
-> +	u64 response = 0;
-> +	u32 uword = 0, lword = 0;
-> +	int nack = 0, no_ack = 0;
-> +	int timeout = 0;
-> +
-> +	amd_sdwc_ctl_word_prep(&lword, &uword, cmd, msg, cmd_offset);
-> +	response = amd_sdwc_send_cmd_get_resp(ctrl, lword, uword);
-> +
-> +	if (response & AMD_SDW_MCP_RESP_ACK) {
-> +		if (cmd == AMD_SDW_CMD_READ)
-> +			msg->buf[cmd_offset] = FIELD_GET(AMD_SDW_MCP_RESP_RDATA, response);
-> +	} else {
-> +		no_ack = 1;
-> +		if (response == -ETIMEDOUT) {
-> +			timeout = 1;
-> +		} else if (response & AMD_SDW_MCP_RESP_NACK) {
-> +			nack = 1;
-> +			dev_err(ctrl->dev, "Program SCP NACK received\n");
-> +		}
-> +	}
-> +
-> +	if (timeout) {
-> +		dev_err_ratelimited(ctrl->dev, "command timeout for Slave %d\n", msg->dev_num);
-> +		return SDW_CMD_TIMEOUT;
-> +	}
-> +	if (nack) {
-> +		dev_err_ratelimited(ctrl->dev,
-> +				    "command response NACK received for Slave %d\n", msg->dev_num);
-> +		return SDW_CMD_FAIL;
-> +	}
-> +
-> +	if (no_ack) {
-> +		dev_err_ratelimited(ctrl->dev, "command is ignored for Slave %d\n", msg->dev_num);
-> +		return SDW_CMD_IGNORED;
-> +	}
-> +	return SDW_CMD_OK;
-> +}
-> +
-> +static enum sdw_command_response amd_sdwc_xfer_msg(struct sdw_bus *bus, struct sdw_msg *msg)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl = to_amd_sdw(bus);
-> +	int ret, i;
-> +	int cmd = 0;
-> +
-> +	ret = amd_prep_msg(ctrl, msg, &cmd);
-> +	if (ret)
-> +		return SDW_CMD_FAIL_OTHER;
-> +	for (i = 0; i < msg->len; i++) {
-> +		ret = _amd_sdwc_xfer_msg(ctrl, msg, cmd, i);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +	return SDW_CMD_OK;
-> +}
-> +
-> +static enum sdw_command_response
-> +amd_reset_page_addr(struct sdw_bus *bus, unsigned int dev_num)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl = to_amd_sdw(bus);
-> +	struct sdw_msg msg;
-> +
-> +	/* Create dummy message with valid device number */
-> +	memset(&msg, 0, sizeof(msg));
-> +	msg.dev_num = dev_num;
-> +	return amd_program_scp_addr(ctrl, &msg);
-> +}
-> +
-> +static u32 amd_sdwc_read_ping_status(struct sdw_bus *bus)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl = to_amd_sdw(bus);
-> +	u64 response;
-> +	u32 slave_stat = 0;
-> +
-> +	response = amd_sdwc_send_cmd_get_resp(ctrl, 0, 0);
-> +	/* slave status from ping response*/
-> +	slave_stat = FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_0_3, response);
-> +	slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
-> +	dev_dbg(ctrl->dev, "%s: slave_stat:0x%x\n", __func__, slave_stat);
-> +	return slave_stat;
-> +}
-> +
-> +static void amd_sdwc_compute_slave_ports(struct sdw_master_runtime *m_rt,
-> +					 struct sdw_transport_data *t_data)
-> +{
-> +	struct sdw_slave_runtime *s_rt = NULL;
-> +	struct sdw_port_runtime *p_rt;
-> +	int port_bo, sample_int;
-> +	unsigned int rate, bps, ch = 0;
-> +	unsigned int slave_total_ch;
-> +	struct sdw_bus_params *b_params = &m_rt->bus->params;
-> +
-> +	port_bo = t_data->block_offset;
-> +	list_for_each_entry(s_rt, &m_rt->slave_rt_list, m_rt_node) {
-> +		rate = m_rt->stream->params.rate;
-> +		bps = m_rt->stream->params.bps;
-> +		sample_int = (m_rt->bus->params.curr_dr_freq / rate);
-> +		slave_total_ch = 0;
-> +
-> +		list_for_each_entry(p_rt, &s_rt->port_list, port_node) {
-> +			ch = sdw_ch_mask_to_ch(p_rt->ch_mask);
-> +
-> +			sdw_fill_xport_params(&p_rt->transport_params,
-> +					      p_rt->num, false,
-> +					      SDW_BLK_GRP_CNT_1,
-> +					      sample_int, port_bo, port_bo >> 8,
-> +					      t_data->hstart,
-> +					      t_data->hstop,
-> +					      SDW_BLK_PKG_PER_PORT, 0x0);
-> +
-> +			sdw_fill_port_params(&p_rt->port_params,
-> +					     p_rt->num, bps,
-> +					     SDW_PORT_FLOW_MODE_ISOCH,
-> +					     b_params->s_data_mode);
-> +
-> +			port_bo += bps * ch;
-> +			slave_total_ch += ch;
-> +		}
-> +
-> +		if (m_rt->direction == SDW_DATA_DIR_TX &&
-> +		    m_rt->ch_count == slave_total_ch) {
-> +			port_bo = t_data->block_offset;
-> +		}
-> +	}
-> +}
-
-ok, this is really bad.
-
-This is a verbatim copy of the same function in
-generic_bandwidth_allocation.c
-
-see
-https://elixir.bootlin.com/linux/latest/source/drivers/soundwire/generic_bandwidth_allocation.c#L38
-
-You only removed the comments and renamed the function.
-
-Seriously? Why would you do that?
-
-And in addition, this has *NOTHING* to do with the master support.
-
-Programming the ports on peripheral side is something that happens at
-the stream level.
-
-I am afraid it's a double NAK, or rather NAK^2 from me here.
-
-> +
-> +static int amd_sdwc_compute_params(struct sdw_bus *bus)
-> +{
-> +	struct sdw_transport_data t_data = {0};
-> +	struct sdw_master_runtime *m_rt;
-> +	struct sdw_port_runtime *p_rt;
-> +	struct sdw_bus_params *b_params = &bus->params;
-> +	int port_bo, hstart, hstop, sample_int;
-> +	unsigned int rate, bps;
-> +
-> +	port_bo  = 0;
-> +	hstart = 1;
-> +	hstop = bus->params.col - 1;
-> +	t_data.hstop = hstop;
-> +	t_data.hstart = hstart;
-> +
-> +	list_for_each_entry(m_rt, &bus->m_rt_list, bus_node) {
-> +		rate = m_rt->stream->params.rate;
-> +		bps = m_rt->stream->params.bps;
-> +		sample_int = (bus->params.curr_dr_freq / rate);
-> +		list_for_each_entry(p_rt, &m_rt->port_list, port_node) {
-> +			port_bo = (p_rt->num * 64) + 1;
-> +			dev_dbg(bus->dev, "p_rt->num=%d hstart=%d hstop=%d port_bo=%d\n",
-> +				p_rt->num, hstart, hstop, port_bo);
-> +			sdw_fill_xport_params(&p_rt->transport_params, p_rt->num,
-> +					      false, SDW_BLK_GRP_CNT_1, sample_int,
-> +					      port_bo, port_bo >> 8, hstart, hstop,
-> +					      SDW_BLK_PKG_PER_PORT, 0x0);
-> +
-> +			sdw_fill_port_params(&p_rt->port_params,
-> +					     p_rt->num, bps,
-> +					     SDW_PORT_FLOW_MODE_ISOCH,
-> +					     b_params->m_data_mode);
-> +			t_data.hstart = hstart;
-> +			t_data.hstop = hstop;
-> +			t_data.block_offset = port_bo;
-> +			t_data.sub_block_offset = 0;
-> +		}
-> +		amd_sdwc_compute_slave_ports(m_rt, &t_data);
-> +	}
-> +	return 0;
-> +}
-
-this is a variation on sdw_compute_master_ports() in generic_allocation.c
-
-You would need a lot more comments to convince me that this is
-intentional and needed.
-
-> +
-> +static int amd_sdwc_port_params(struct sdw_bus *bus, struct sdw_port_params *p_params,
-> +				unsigned int bank)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl = to_amd_sdw(bus);
-> +	u32 channel_type, frame_fmt_reg, dpn_frame_fmt;
-> +
-> +	dev_dbg(ctrl->dev, "%s: p_params->num:0x%x\n", __func__, p_params->num);
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		channel_type = p_params->num;
-> +		break;
-> +	case ACP_SDW1:
-> +		channel_type = p_params->num + ACP_SDW0_MAX_DAI;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	switch (channel_type) {
-> +	case ACP_SDW0_AUDIO_TX:
-
-you'll have to explain what you mean by 'channel_type'
-
-This looks like the streams that can be supported by this master
-implementation, with dailinks for each.
-
-> +		frame_fmt_reg = ACP_SW_AUDIO_TX_FRAME_FORMAT;
-> +		break;
-> +	case ACP_SDW0_HS_TX:
-> +		frame_fmt_reg = ACP_SW_HEADSET_TX_FRAME_FORMAT;
-> +		break;
-> +	case ACP_SDW0_BT_TX:
-> +		frame_fmt_reg = ACP_SW_BT_TX_FRAME_FORMAT;
-> +		break;
-> +	case ACP_SDW1_BT_TX:
-> +		frame_fmt_reg = ACP_P1_SW_BT_TX_FRAME_FORMAT;
-> +		break;
-> +	case ACP_SDW0_AUDIO_RX:
-> +		frame_fmt_reg = ACP_SW_AUDIO_RX_FRAME_FORMAT;
-> +		break;
-> +	case ACP_SDW0_HS_RX:
-> +		frame_fmt_reg = ACP_SW_HEADSET_RX_FRAME_FORMAT;
-> +		break;
-> +	case ACP_SDW0_BT_RX:
-> +		frame_fmt_reg = ACP_SW_BT_RX_FRAME_FORMAT;
-> +		break;
-> +	case ACP_SDW1_BT_RX:
-> +		frame_fmt_reg = ACP_P1_SW_BT_RX_FRAME_FORMAT;
-> +		break;
-> +	default:
-> +		dev_err(bus->dev, "%s:Invalid channel:%d\n", __func__, channel_type);
-> +		return -EINVAL;
-> +	}
-> +	dpn_frame_fmt = acp_reg_readl(ctrl->mmio + frame_fmt_reg);
-> +	u32p_replace_bits(&dpn_frame_fmt, p_params->flow_mode, AMD_DPN_FRAME_FMT_PFM);
-> +	u32p_replace_bits(&dpn_frame_fmt, p_params->data_mode, AMD_DPN_FRAME_FMT_PDM);
-> +	u32p_replace_bits(&dpn_frame_fmt, p_params->bps - 1, AMD_DPN_FRAME_FMT_WORD_LEN);
-> +	acp_reg_writel(dpn_frame_fmt, ctrl->mmio + frame_fmt_reg);
-> +	return 0;
-> +}
-> +
-> +static int amd_sdwc_transport_params(struct sdw_bus *bus,
-> +				     struct sdw_transport_params *params,
-> +				     enum sdw_reg_bank bank)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl = to_amd_sdw(bus);
-> +	u32 ssp_counter_reg;
-> +	u32 dpn_frame_fmt;
-> +	u32 dpn_sampleinterval;
-> +	u32 dpn_hctrl;
-> +	u32 dpn_offsetctrl;
-> +	u32 dpn_lanectrl;
-> +	u32 channel_type;
-> +	u32 frame_fmt_reg, sample_int_reg, hctrl_dp0_reg;
-> +	u32 offset_reg, lane_ctrl_reg;
-> +
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		ssp_counter_reg = ACP_SW_SSP_COUNTER;
-> +		channel_type = params->port_num;
-> +		break;
-> +	case ACP_SDW1:
-> +		ssp_counter_reg = ACP_P1_SW_SSP_COUNTER;
-> +		channel_type = params->port_num + ACP_SDW0_MAX_DAI;
-
-There's obviously a dependency between SDW0 and SDW1 managers that you
-haven't described?
-
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	acp_reg_writel(AMD_SDW_SSP_COUNTER_VAL, ctrl->mmio + ssp_counter_reg);
-> +	dev_dbg(bus->dev, "%s: p_params->num:0x%x entry channel_type:0x%x\n",
-> +		__func__, params->port_num, channel_type);
-> +
-> +	switch (channel_type) {
-> +	case ACP_SDW0_AUDIO_TX:
-> +	{
-> +		frame_fmt_reg = ACP_SW_AUDIO_TX_FRAME_FORMAT;
-> +		sample_int_reg = ACP_SW_AUDIO_TX_SAMPLEINTERVAL;
-> +		hctrl_dp0_reg = ACP_SW_AUDIO_TX_HCTRL_DP0;
-> +		offset_reg = ACP_SW_AUDIO_TX_OFFSET_DP0;
-> +		lane_ctrl_reg = ACP_SW_AUDIO_TX_CHANNEL_ENABLE_DP0;
-
-This is confusing. Is this about enabling a stream or selecting the lane
-for this port? Same for all cases.
-
-is this saying that the two cases are handled by the same register -
-unlike what is normative for the peripherals where the two concepts are
-handeld in DPN_ChannelEn and DPN_LaneCtrl registers?
-
-> +		break;
-> +	}
-> +	case ACP_SDW0_HS_TX:
-> +	{
-> +		frame_fmt_reg = ACP_SW_HEADSET_TX_FRAME_FORMAT;
-> +		sample_int_reg = ACP_SW_HEADSET_TX_SAMPLEINTERVAL;
-> +		hctrl_dp0_reg = ACP_SW_HEADSET_TX_HCTRL;
-> +		offset_reg = ACP_SW_HEADSET_TX_OFFSET;
-> +		lane_ctrl_reg = ACP_SW_HEADSET_TX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	}
-> +	case ACP_SDW0_BT_TX:
-> +	{
-> +		frame_fmt_reg = ACP_SW_BT_TX_FRAME_FORMAT;
-> +		sample_int_reg = ACP_SW_BT_TX_SAMPLEINTERVAL;
-> +		hctrl_dp0_reg = ACP_SW_BT_TX_HCTRL;
-> +		offset_reg = ACP_SW_BT_TX_OFFSET;
-> +		lane_ctrl_reg = ACP_SW_BT_TX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	}
-> +	case ACP_SDW1_BT_TX:
-> +	{
-> +		frame_fmt_reg = ACP_P1_SW_BT_TX_FRAME_FORMAT;
-> +		sample_int_reg = ACP_P1_SW_BT_TX_SAMPLEINTERVAL;
-> +		hctrl_dp0_reg = ACP_P1_SW_BT_TX_HCTRL;
-> +		offset_reg = ACP_P1_SW_BT_TX_OFFSET;
-> +		lane_ctrl_reg = ACP_P1_SW_BT_TX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	}
-> +	case ACP_SDW0_AUDIO_RX:
-> +	{
-> +		frame_fmt_reg = ACP_SW_AUDIO_RX_FRAME_FORMAT;
-> +		sample_int_reg = ACP_SW_AUDIO_RX_SAMPLEINTERVAL;
-> +		hctrl_dp0_reg = ACP_SW_AUDIO_RX_HCTRL_DP0;
-> +		offset_reg = ACP_SW_AUDIO_RX_OFFSET_DP0;
-> +		lane_ctrl_reg = ACP_SW_AUDIO_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	}
-> +	case ACP_SDW0_HS_RX:
-> +	{
-> +		frame_fmt_reg = ACP_SW_HEADSET_RX_FRAME_FORMAT;
-> +		sample_int_reg = ACP_SW_HEADSET_RX_SAMPLEINTERVAL;
-> +		hctrl_dp0_reg = ACP_SW_HEADSET_RX_HCTRL;
-> +		offset_reg = ACP_SW_HEADSET_RX_OFFSET;
-> +		lane_ctrl_reg = ACP_SW_HEADSET_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	}
-> +	case ACP_SDW0_BT_RX:
-> +	{
-> +		frame_fmt_reg = ACP_SW_BT_RX_FRAME_FORMAT;
-> +		sample_int_reg = ACP_SW_BT_RX_SAMPLEINTERVAL;
-> +		hctrl_dp0_reg = ACP_SW_BT_RX_HCTRL;
-> +		offset_reg = ACP_SW_BT_RX_OFFSET;
-> +		lane_ctrl_reg = ACP_SW_BT_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	}
-> +	case ACP_SDW1_BT_RX:
-> +	{
-> +		frame_fmt_reg = ACP_P1_SW_BT_RX_FRAME_FORMAT;
-> +		sample_int_reg = ACP_P1_SW_BT_RX_SAMPLEINTERVAL;
-> +		hctrl_dp0_reg = ACP_P1_SW_BT_RX_HCTRL;
-> +		offset_reg = ACP_P1_SW_BT_RX_OFFSET;
-> +		lane_ctrl_reg = ACP_P1_SW_BT_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	}
-> +	default:
-> +		dev_err(bus->dev, "%s:Invalid channel:%d\n", __func__, channel_type);
-> +		return -EINVAL;
-> +	}
-> +	dpn_frame_fmt = acp_reg_readl(ctrl->mmio + frame_fmt_reg);
-> +	u32p_replace_bits(&dpn_frame_fmt, params->blk_pkg_mode, AMD_DPN_FRAME_FMT_BLK_PKG_MODE);
-> +	u32p_replace_bits(&dpn_frame_fmt, params->blk_grp_ctrl, AMD_DPN_FRAME_FMT_BLK_GRP_CTRL);
-> +	u32p_replace_bits(&dpn_frame_fmt, SDW_STREAM_PCM, AMD_DPN_FRAME_FMT_PCM_OR_PDM);
-> +	acp_reg_writel(dpn_frame_fmt, ctrl->mmio + frame_fmt_reg);
-> +
-> +	dpn_sampleinterval = params->sample_interval - 1;
-> +	acp_reg_writel(dpn_sampleinterval, ctrl->mmio + sample_int_reg);
-> +
-> +	dpn_hctrl = FIELD_PREP(AMD_DPN_HCTRL_HSTOP, params->hstop);
-> +	dpn_hctrl |= FIELD_PREP(AMD_DPN_HCTRL_HSTART, params->hstart);
-> +	acp_reg_writel(dpn_hctrl, ctrl->mmio + hctrl_dp0_reg);
-> +
-> +	dpn_offsetctrl = FIELD_PREP(AMD_DPN_OFFSET_CTRL_1, params->offset1);
-> +	dpn_offsetctrl |= FIELD_PREP(AMD_DPN_OFFSET_CTRL_2, params->offset2);
-> +	acp_reg_writel(dpn_offsetctrl, ctrl->mmio + offset_reg);
-> +
-> +	dpn_lanectrl = acp_reg_readl(ctrl->mmio + lane_ctrl_reg);
-> +	u32p_replace_bits(&dpn_lanectrl, params->lane_ctrl, AMD_DPN_CH_EN_LCTRL);
-> +	acp_reg_writel(dpn_lanectrl, ctrl->mmio + lane_ctrl_reg);
-> +	return 0;
-> +}
-> +
-> +static int amd_sdwc_port_enable(struct sdw_bus *bus,
-> +				struct sdw_enable_ch *enable_ch,
-> +				unsigned int bank)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl = to_amd_sdw(bus);
-> +	u32 dpn_ch_enable;
-> +	u32 ch_enable_reg, channel_type;
-> +
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		channel_type = enable_ch->port_num;
-> +		break;
-> +	case ACP_SDW1:
-> +		channel_type = enable_ch->port_num + ACP_SDW0_MAX_DAI;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	switch (channel_type) {
-> +	case ACP_SDW0_AUDIO_TX:
-> +		ch_enable_reg = ACP_SW_AUDIO_TX_CHANNEL_ENABLE_DP0;
-
-in the function above, I commented on
-
-		lane_ctrl_reg = ACP_SW_AUDIO_TX_CHANNEL_ENABLE_DP0;
-
-This looks really weird. You need to add comments is this is really
-intentional.
-
-> +		break;
-> +	case ACP_SDW0_HS_TX:
-> +		ch_enable_reg = ACP_SW_HEADSET_TX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW0_BT_TX:
-> +		ch_enable_reg = ACP_SW_BT_TX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW1_BT_TX:
-> +		ch_enable_reg = ACP_P1_SW_BT_TX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW0_AUDIO_RX:
-> +		ch_enable_reg = ACP_SW_AUDIO_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW0_HS_RX:
-> +		ch_enable_reg = ACP_SW_HEADSET_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW0_BT_RX:
-> +		ch_enable_reg = ACP_SW_BT_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	case ACP_SDW1_BT_RX:
-> +		ch_enable_reg = ACP_P1_SW_BT_RX_CHANNEL_ENABLE_DP0;
-> +		break;
-> +	default:
-> +		dev_err(bus->dev, "%s:Invalid channel:%d\n", __func__, channel_type);
-> +		return -EINVAL;
-> +	}
-> +
-> +	dpn_ch_enable =  acp_reg_readl(ctrl->mmio + ch_enable_reg);
-> +	u32p_replace_bits(&dpn_ch_enable, enable_ch->ch_mask, AMD_DPN_CH_EN_CHMASK);
-> +	if (enable_ch->enable)
-> +		acp_reg_writel(dpn_ch_enable, ctrl->mmio + ch_enable_reg);
-> +	else
-> +		acp_reg_writel(0, ctrl->mmio + ch_enable_reg);
-> +	return 0;
-> +}
-> +
-> +static int sdw_master_read_amd_prop(struct sdw_bus *bus)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl = to_amd_sdw(bus);
-> +	struct fwnode_handle *link;
-> +	struct sdw_master_prop *prop;
-> +	u32 quirk_mask = 0;
-> +	u32 wake_en_mask = 0;
-> +	u32 power_mode_mask = 0;
-> +	char name[32];
-> +
-> +	prop = &bus->prop;
-> +	/* Find master handle */
-> +	snprintf(name, sizeof(name), "mipi-sdw-link-%d-subproperties", bus->link_id);
-> +	link = device_get_named_child_node(bus->dev, name);
-> +	if (!link) {
-> +		dev_err(bus->dev, "Master node %s not found\n", name);
-> +		return -EIO;
-> +	}
-> +	fwnode_property_read_u32(link, "amd-sdw-enable", &quirk_mask);
-> +	if (!(quirk_mask & AMD_SDW_QUIRK_MASK_BUS_ENABLE))
-> +		prop->hw_disabled = true;
-
-same quirk as Intel, nice :-)
-
-> +	prop->quirks = SDW_MASTER_QUIRKS_CLEAR_INITIAL_CLASH |
-> +		       SDW_MASTER_QUIRKS_CLEAR_INITIAL_PARITY;
-
-And here too. Is this really needed or just-copy-pasted?
-
-> +	fwnode_property_read_u32(link, "amd-sdw-wake-enable", &wake_en_mask);
-> +	ctrl->wake_en_mask = wake_en_mask;
-> +	fwnode_property_read_u32(link, "amd-sdw-power-mode", &power_mode_mask);
-> +	ctrl->power_mode_mask = power_mode_mask;
-> +	return 0;
-> +}
-> +
-
-> +static int amd_sdwc_probe(struct platform_device *pdev)
-
-why not use an auxiliary device? we've moved away from platform devices
-maybe two years ago.
-
-> +{
-> +	const struct acp_sdw_pdata *pdata = pdev->dev.platform_data;
-> +	struct resource *res;
-> +	struct device *dev = &pdev->dev;
-> +	struct sdw_master_prop *prop;
-> +	struct sdw_bus_params *params;
-> +	struct amd_sdwc_ctrl *ctrl;
-> +	int ret;
-> +
-> +	if (!pdev->dev.platform_data) {
-> +		dev_err(&pdev->dev, "platform_data not retrieved\n");
-> +		return -ENODEV;
-> +	}
-> +	ctrl = devm_kzalloc(&pdev->dev, sizeof(struct amd_sdwc_ctrl), GFP_KERNEL);
-> +	if (!ctrl)
-> +		return -ENOMEM;
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res) {
-> +		dev_err(&pdev->dev, "IORESOURCE_MEM FAILED\n");
-> +		return -ENOMEM;
-> +	}
-> +	ctrl->mmio = devm_ioremap(&pdev->dev, res->start, resource_size(res));
-> +	if (IS_ERR(ctrl->mmio)) {
-> +		dev_err(&pdev->dev, "mmio not found\n");
-> +		return PTR_ERR(ctrl->mmio);
-> +	}
-> +	ctrl->instance = pdata->instance;
-> +	ctrl->sdw_lock  = pdata->sdw_lock;
-> +	ctrl->rows_index = sdw_find_row_index(50);
-> +	ctrl->cols_index = sdw_find_col_index(10);
-> +
-> +	ctrl->dev = dev;
-> +	dev_set_drvdata(&pdev->dev, ctrl);
-> +
-> +	ctrl->bus.ops = &amd_sdwc_ops;
-> +	ctrl->bus.port_ops = &amd_sdwc_port_ops;
-> +	ctrl->bus.compute_params = &amd_sdwc_compute_params;
-> +	ctrl->bus.clk_stop_timeout = 1;
-> +	switch (ctrl->instance) {
-> +	case ACP_SDW0:
-> +		ctrl->num_dout_ports =  AMD_SDW0_MAX_TX_PORTS;
-> +		ctrl->num_din_ports = AMD_SDW0_MAX_RX_PORTS;
-> +		break;
-> +	case ACP_SDW1:
-> +		ctrl->num_dout_ports = AMD_SDW1_MAX_TX_PORTS;
-> +		ctrl->num_din_ports = AMD_SDW1_MAX_RX_PORTS;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	params = &ctrl->bus.params;
-> +	params->max_dr_freq = AMD_SDW_DEFAULT_CLK_FREQ * 2;
-> +	params->curr_dr_freq = AMD_SDW_DEFAULT_CLK_FREQ * 2;
-> +	params->col = 10;
-> +	params->row = 50;
-> +
-> +	prop = &ctrl->bus.prop;
-> +	prop->clk_freq = &amd_sdwc_freq_tbl[0];
-> +	prop->mclk_freq = AMD_SDW_BUS_BASE_FREQ;
-> +	ctrl->bus.link_id = ctrl->instance;
-> +	ret = sdw_bus_master_add(&ctrl->bus, dev, dev->fwnode);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to register Soundwire controller (%d)\n",
-
-master. the confusion continues.
-
-> +			ret);
-> +		return ret;
-> +	}
-> +	INIT_WORK(&ctrl->probe_work, amd_sdwc_probe_work);
-> +	schedule_work(&ctrl->probe_work);
-> +	return 0;
-> +}
-> +
-> +static int amd_sdwc_remove(struct platform_device *pdev)
-> +{
-> +	struct amd_sdwc_ctrl *ctrl = dev_get_drvdata(&pdev->dev);
-> +	int ret;
-> +
-> +	amd_disable_sdw_interrupts(ctrl);
-> +	sdw_bus_master_delete(&ctrl->bus);
-> +	ret = amd_disable_sdw_controller(ctrl);
-> +	return ret;
-> +}
-> +
-> +static struct platform_driver amd_sdwc_driver = {
-> +	.probe	= &amd_sdwc_probe,
-> +	.remove = &amd_sdwc_remove,
-> +	.driver = {
-> +		.name	= "amd_sdw_controller",
-> +	}
-> +};
-> +module_platform_driver(amd_sdwc_driver);
-> +
-> +MODULE_AUTHOR("Vijendar.Mukunda@amd.com");
-> +MODULE_DESCRIPTION("AMD soundwire driver");
-> +MODULE_LICENSE("GPL v2");
-
-"GPL" is enough
-
-> +enum amd_sdw_channel {
-> +	/* SDW0 */
-> +	ACP_SDW0_AUDIO_TX = 0,
-> +	ACP_SDW0_BT_TX,
-> +	ACP_SDW0_HS_TX,
-> +	ACP_SDW0_AUDIO_RX,
-> +	ACP_SDW0_BT_RX,
-> +	ACP_SDW0_HS_RX,
-> +	/* SDW1 */
-> +	ACP_SDW1_BT_TX,
-> +	ACP_SDW1_BT_RX,
-> +};
-
-you really need to comment on this. It looks like you've special-cased
-manager ports for specific usages? This is perfectly fine in closed
-applications, but it's not clear how it might work with headset,
-amplifier and mic codec devices.
-
-
-> diff --git a/include/linux/soundwire/sdw_amd.h b/include/linux/soundwire/sdw_amd.h
-> index f0123815af46..5ec39f8c2f2e 100644
-> --- a/include/linux/soundwire/sdw_amd.h
-> +++ b/include/linux/soundwire/sdw_amd.h
-> @@ -10,9 +10,30 @@
->  
->  #define AMD_SDW_CLK_STOP_MODE		1
->  #define AMD_SDW_POWER_OFF_MODE		2
-> +#define ACP_SDW0	0
-> +#define ACP_SDW1	1
-> +#define ACP_SDW0_MAX_DAI	6
-
-is this related to the definition of amd_sdw_channel or the number of
-ports available?
->  
->  struct acp_sdw_pdata {
->  	u16 instance;
->  	struct mutex *sdw_lock;
->  };
-> +
-> +struct amd_sdwc_ctrl {
-> +	struct sdw_bus bus;
-> +	struct device *dev;
-> +	void __iomem *mmio;
-> +	struct work_struct probe_work;
-> +	struct mutex *sdw_lock;
-
-comment please.
-
-> +	int num_din_ports;
-> +	int num_dout_ports;
-> +	int cols_index;
-> +	int rows_index;
-> +	u32 instance;
-> +	u32 quirks;
-> +	u32 wake_en_mask;
-> +	int num_ports;
-> +	bool startup_done;
-
-ah this was an Intel definition. Due to power dependencies we had to
-split the probe and startup step. Does AMD have a need for this? Is the
-SoundWire master IP dependent on DSP boot or something?
-
-> +	u32 power_mode_mask;
-> +};
->  #endif
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBNaWNoYWVsIFMuIFRzaXJraW4g
+PG1zdEByZWRoYXQuY29tPg0KPiBTZW50OiBXZWRuZXNkYXksIDExIEphbnVhcnkgMjAyMyAxNjo1
+NA0KPiBUbzogRWxpIENvaGVuIDxlbGljQG52aWRpYS5jb20+DQo+IENjOiBKYXNvbiBXYW5nIDxq
+YXNvd2FuZ0ByZWRoYXQuY29tPjsgZ2Rhd2FyQGFtZC5jb207DQo+IHZpcnR1YWxpemF0aW9uQGxp
+c3RzLmxpbnV4LWZvdW5kYXRpb24ub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOw0K
+PiB0YW51ai5rYW1kZUBhbWQuY29tDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMS81XSB2aXJ0aW9f
+cmluZzogcGVyIHZpcnRxdWV1ZSBkbWEgZGV2aWNlDQo+IA0KPiBPbiBXZWQsIEphbiAxMSwgMjAy
+MyBhdCAwMjo0NjoyMFBNICswMDAwLCBFbGkgQ29oZW4gd3JvdGU6DQo+ID4gPiBGcm9tOiBNaWNo
+YWVsIFMuIFRzaXJraW4gPG1zdEByZWRoYXQuY29tPg0KPiA+ID4gU2VudDogV2VkbmVzZGF5LCAx
+MSBKYW51YXJ5IDIwMjMgMTU6NTMNCj4gPiA+IFRvOiBFbGkgQ29oZW4gPGVsaWNAbnZpZGlhLmNv
+bT4NCj4gPiA+IENjOiBKYXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPjsgZ2Rhd2FyQGFt
+ZC5jb207DQo+ID4gPiB2aXJ0dWFsaXphdGlvbkBsaXN0cy5saW51eC1mb3VuZGF0aW9uLm9yZzsg
+bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsNCj4gPiA+IHRhbnVqLmthbWRlQGFtZC5jb20N
+Cj4gPiA+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMS81XSB2aXJ0aW9fcmluZzogcGVyIHZpcnRxdWV1
+ZSBkbWEgZGV2aWNlDQo+ID4gPg0KPiA+ID4gT24gV2VkLCBKYW4gMTEsIDIwMjMgYXQgMDE6MzI6
+MjBQTSArMDAwMCwgRWxpIENvaGVuIHdyb3RlOg0KPiA+ID4gPiA+IEZyb206IEphc29uIFdhbmcg
+PGphc293YW5nQHJlZGhhdC5jb20+DQo+ID4gPiA+ID4gU2VudDogV2VkbmVzZGF5LCAxMSBKYW51
+YXJ5IDIwMjMgODoyOA0KPiA+ID4gPiA+IFRvOiBtc3RAcmVkaGF0LmNvbTsgamFzb3dhbmdAcmVk
+aGF0LmNvbQ0KPiA+ID4gPiA+IENjOiBFbGkgQ29oZW4gPGVsaWNAbnZpZGlhLmNvbT47IGdkYXdh
+ckBhbWQuY29tOw0KPiA+ID4gPiA+IHZpcnR1YWxpemF0aW9uQGxpc3RzLmxpbnV4LWZvdW5kYXRp
+b24ub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOw0KPiA+ID4gPiA+IHRhbnVqLmth
+bWRlQGFtZC5jb20NCj4gPiA+ID4gPiBTdWJqZWN0OiBbUEFUQ0ggMS81XSB2aXJ0aW9fcmluZzog
+cGVyIHZpcnRxdWV1ZSBkbWEgZGV2aWNlDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBUaGlzIHBhdGNo
+IGludHJvZHVjZXMgYSBwZXIgdmlydHF1ZXVlIGRtYSBkZXZpY2UuIFRoaXMgd2lsbCBiZSB1c2Vk
+DQo+ID4gPiA+ID4gZm9yIHZpcnRpbyBkZXZpY2VzIHdob3NlIHZpcnRxdWV1ZSBhcmUgYmFja2Vk
+IGJ5IGRpZmZlcmVudCB1bmRlcmxheWVyDQo+ID4gPiA+ID4gZGV2aWNlcy4NCj4gPiA+ID4gPg0K
+PiA+ID4gPiA+IE9uZSBleGFtcGxlIGlzIHRoZSB2RFBBIHRoYXQgd2hlcmUgdGhlIGNvbnRyb2wg
+dmlydHF1ZXVlIGNvdWxkIGJlDQo+ID4gPiA+ID4gaW1wbGVtZW50ZWQgdGhyb3VnaCBzb2Z0d2Fy
+ZSBtZWRpYXRpb24uDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBTb21lIG9mIHRoZSB3b3JrIGFyZSBh
+Y3R1YWxseSBkb25lIGJlZm9yZSBzaW5jZSB0aGUgaGVscGVyIGxpa2UNCj4gPiA+ID4gPiB2cmlu
+Z19kbWFfZGV2aWNlKCkuIFRoaXMgd29yayBsZWZ0IGFyZToNCj4gPiA+ID4gPg0KPiA+ID4gPiA+
+IC0gTGV0IHZyaW5nX2RtYV9kZXZpY2UoKSByZXR1cm4gdGhlIHBlciB2aXJ0cXVldWUgZG1hIGRl
+dmljZSBpbnN0ZWFkDQo+ID4gPiA+ID4gICBvZiB0aGUgdmRldidzIHBhcmVudC4NCj4gPiA+ID4g
+PiAtIEFsbG93IHBhc3NpbmcgYSBkbWFfZGV2aWNlIHdoZW4gY3JlYXRpbmcgdGhlIHZpcnRxdWV1
+ZSB0aHJvdWdoIGENCj4gbmV3DQo+ID4gPiA+ID4gICBoZWxwZXIsIG9sZCB2cmluZyBjcmVhdGlv
+biBoZWxwZXIgd2lsbCBrZWVwIHVzaW5nIHZkZXYncyBwYXJlbnQuDQo+ID4gPiA+ID4NCj4gPiA+
+ID4gPiBTaWduZWQtb2ZmLWJ5OiBKYXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPg0KPiA+
+ID4gPiA+IC0tLQ0KPiA+ID4gPiA+ICBkcml2ZXJzL3ZpcnRpby92aXJ0aW9fcmluZy5jIHwgMTMz
+ICsrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tDQo+ID4gPiA+ID4gIGluY2x1ZGUv
+bGludXgvdmlydGlvX3JpbmcuaCAgfCAgMTYgKysrKysNCj4gPiA+ID4gPiAgMiBmaWxlcyBjaGFu
+Z2VkLCAxMDkgaW5zZXJ0aW9ucygrKSwgNDAgZGVsZXRpb25zKC0pDQo+ID4gPiA+ID4NCj4gPiA+
+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy92aXJ0aW8vdmlydGlvX3JpbmcuYyBiL2RyaXZlcnMv
+dmlydGlvL3ZpcnRpb19yaW5nLmMNCj4gPiA+ID4gPiBpbmRleCA3MjNjNGUyOWUxZDMuLjQxMTQ0
+YjUyNDZhOCAxMDA2NDQNCj4gPiA+ID4gPiAtLS0gYS9kcml2ZXJzL3ZpcnRpby92aXJ0aW9fcmlu
+Zy5jDQo+ID4gPiA+ID4gKysrIGIvZHJpdmVycy92aXJ0aW8vdmlydGlvX3JpbmcuYw0KPiA+ID4g
+PiA+IEBAIC0yMDIsNiArMjAyLDkgQEAgc3RydWN0IHZyaW5nX3ZpcnRxdWV1ZSB7DQo+ID4gPiA+
+ID4gIAkvKiBETUEsIGFsbG9jYXRpb24sIGFuZCBzaXplIGluZm9ybWF0aW9uICovDQo+ID4gPiA+
+ID4gIAlib29sIHdlX293bl9yaW5nOw0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gKwkvKiBEZXZpY2Ug
+dXNlZCBmb3IgZG9pbmcgRE1BICovDQo+ID4gPiA+ID4gKwlzdHJ1Y3QgZGV2aWNlICpkbWFfZGV2
+Ow0KPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiAgI2lmZGVmIERFQlVHDQo+ID4gPiA+ID4gIAkvKiBU
+aGV5J3JlIHN1cHBvc2VkIHRvIGxvY2sgZm9yIHVzLiAqLw0KPiA+ID4gPiA+ICAJdW5zaWduZWQg
+aW50IGluX3VzZTsNCj4gPiA+ID4gPiBAQCAtMjE5LDcgKzIyMiw4IEBAIHN0YXRpYyBzdHJ1Y3Qg
+dmlydHF1ZXVlDQo+ID4gPiA+ID4gKl9fdnJpbmdfbmV3X3ZpcnRxdWV1ZSh1bnNpZ25lZCBpbnQg
+aW5kZXgsDQo+ID4gPiA+ID4gIAkJCQkJICAgICAgIGJvb2wgY29udGV4dCwNCj4gPiA+ID4gPiAg
+CQkJCQkgICAgICAgYm9vbCAoKm5vdGlmeSkoc3RydWN0IHZpcnRxdWV1ZSAqKSwNCj4gPiA+ID4g
+PiAgCQkJCQkgICAgICAgdm9pZCAoKmNhbGxiYWNrKShzdHJ1Y3QgdmlydHF1ZXVlDQo+ID4gPiA+
+ID4gKiksDQo+ID4gPiA+ID4gLQkJCQkJICAgICAgIGNvbnN0IGNoYXIgKm5hbWUpOw0KPiA+ID4g
+PiA+ICsJCQkJCSAgICAgICBjb25zdCBjaGFyICpuYW1lLA0KPiA+ID4gPiA+ICsJCQkJCSAgICAg
+ICBzdHJ1Y3QgZGV2aWNlICpkbWFfZGV2KTsNCj4gPiA+ID4gPiAgc3RhdGljIHN0cnVjdCB2cmlu
+Z19kZXNjX2V4dHJhICp2cmluZ19hbGxvY19kZXNjX2V4dHJhKHVuc2lnbmVkIGludA0KPiBudW0p
+Ow0KPiA+ID4gPiA+ICBzdGF0aWMgdm9pZCB2cmluZ19mcmVlKHN0cnVjdCB2aXJ0cXVldWUgKl92
+cSk7DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBAQCAtMjk3LDEwICszMDEsMTEgQEAgc2l6ZV90IHZp
+cnRpb19tYXhfZG1hX3NpemUoc3RydWN0DQo+IHZpcnRpb19kZXZpY2UNCj4gPiA+ID4gPiAqdmRl
+dikNCj4gPiA+ID4gPiAgRVhQT1JUX1NZTUJPTF9HUEwodmlydGlvX21heF9kbWFfc2l6ZSk7DQo+
+ID4gPiA+ID4NCj4gPiA+ID4gPiAgc3RhdGljIHZvaWQgKnZyaW5nX2FsbG9jX3F1ZXVlKHN0cnVj
+dCB2aXJ0aW9fZGV2aWNlICp2ZGV2LCBzaXplX3Qgc2l6ZSwNCj4gPiA+ID4gPiAtCQkJICAgICAg
+ZG1hX2FkZHJfdCAqZG1hX2hhbmRsZSwgZ2ZwX3QgZmxhZykNCj4gPiA+ID4gPiArCQkJICAgICAg
+IGRtYV9hZGRyX3QgKmRtYV9oYW5kbGUsIGdmcF90IGZsYWcsDQo+ID4gPiA+ID4gKwkJCSAgICAg
+ICBzdHJ1Y3QgZGV2aWNlICpkbWFfZGV2KQ0KPiA+ID4gPiA+ICB7DQo+ID4gPiA+ID4gIAlpZiAo
+dnJpbmdfdXNlX2RtYV9hcGkodmRldikpIHsNCj4gPiA+ID4gPiAtCQlyZXR1cm4gZG1hX2FsbG9j
+X2NvaGVyZW50KHZkZXYtPmRldi5wYXJlbnQsIHNpemUsDQo+ID4gPiA+ID4gKwkJcmV0dXJuIGRt
+YV9hbGxvY19jb2hlcmVudChkbWFfZGV2LCBzaXplLA0KPiA+ID4gPiA+ICAJCQkJCSAgZG1hX2hh
+bmRsZSwgZmxhZyk7DQo+ID4gPiA+ID4gIAl9IGVsc2Ugew0KPiA+ID4gPiA+ICAJCXZvaWQgKnF1
+ZXVlID0gYWxsb2NfcGFnZXNfZXhhY3QoUEFHRV9BTElHTihzaXplKSwgZmxhZyk7DQo+ID4gPiA+
+ID4gQEAgLTMzMCwxMCArMzM1LDExIEBAIHN0YXRpYyB2b2lkICp2cmluZ19hbGxvY19xdWV1ZShz
+dHJ1Y3QNCj4gPiA+IHZpcnRpb19kZXZpY2UNCj4gPiA+ID4gPiAqdmRldiwgc2l6ZV90IHNpemUs
+DQo+ID4gPiA+ID4gIH0NCj4gPiA+ID4gPg0KPiA+ID4gPiA+ICBzdGF0aWMgdm9pZCB2cmluZ19m
+cmVlX3F1ZXVlKHN0cnVjdCB2aXJ0aW9fZGV2aWNlICp2ZGV2LCBzaXplX3Qgc2l6ZSwNCj4gPiA+
+ID4gPiAtCQkJICAgICB2b2lkICpxdWV1ZSwgZG1hX2FkZHJfdCBkbWFfaGFuZGxlKQ0KPiA+ID4g
+PiA+ICsJCQkgICAgIHZvaWQgKnF1ZXVlLCBkbWFfYWRkcl90IGRtYV9oYW5kbGUsDQo+ID4gPiA+
+ID4gKwkJCSAgICAgc3RydWN0IGRldmljZSAqZG1hX2RldikNCj4gPiA+ID4gPiAgew0KPiA+ID4g
+PiA+ICAJaWYgKHZyaW5nX3VzZV9kbWFfYXBpKHZkZXYpKQ0KPiA+ID4gPiA+IC0JCWRtYV9mcmVl
+X2NvaGVyZW50KHZkZXYtPmRldi5wYXJlbnQsIHNpemUsIHF1ZXVlLA0KPiA+ID4gPiA+IGRtYV9o
+YW5kbGUpOw0KPiA+ID4gPiA+ICsJCWRtYV9mcmVlX2NvaGVyZW50KGRtYV9kZXYsIHNpemUsIHF1
+ZXVlLA0KPiBkbWFfaGFuZGxlKTsNCj4gPiA+ID4gPiAgCWVsc2UNCj4gPiA+ID4gPiAgCQlmcmVl
+X3BhZ2VzX2V4YWN0KHF1ZXVlLCBQQUdFX0FMSUdOKHNpemUpKTsNCj4gPiA+ID4gPiAgfQ0KPiA+
+ID4gPiA+IEBAIC0zNDEsMTEgKzM0NywxMSBAQCBzdGF0aWMgdm9pZCB2cmluZ19mcmVlX3F1ZXVl
+KHN0cnVjdA0KPiA+ID4gdmlydGlvX2RldmljZQ0KPiA+ID4gPiA+ICp2ZGV2LCBzaXplX3Qgc2l6
+ZSwNCj4gPiA+ID4gPiAgLyoNCj4gPiA+ID4gPiAgICogVGhlIERNQSBvcHMgb24gdmFyaW91cyBh
+cmNoZXMgYXJlIHJhdGhlciBnbmFybHkgcmlnaHQgbm93LCBhbmQNCj4gPiA+ID4gPiAgICogbWFr
+aW5nIGFsbCBvZiB0aGUgYXJjaCBETUEgb3BzIHdvcmsgb24gdGhlIHZyaW5nIGRldmljZSBpdHNl
+bGYNCj4gPiA+ID4gPiAtICogaXMgYSBtZXNzLiAgRm9yIG5vdywgd2UgdXNlIHRoZSBwYXJlbnQg
+ZGV2aWNlIGZvciBETUEgb3BzLg0KPiA+ID4gPiA+ICsgKiBpcyBhIG1lc3MuDQo+ID4gPiA+ID4g
+ICAqLw0KPiA+ID4gPiA+ICBzdGF0aWMgaW5saW5lIHN0cnVjdCBkZXZpY2UgKnZyaW5nX2RtYV9k
+ZXYoY29uc3Qgc3RydWN0DQo+IHZyaW5nX3ZpcnRxdWV1ZQ0KPiA+ID4gKnZxKQ0KPiA+ID4gPiA+
+ICB7DQo+ID4gPiA+ID4gLQlyZXR1cm4gdnEtPnZxLnZkZXYtPmRldi5wYXJlbnQ7DQo+ID4gPiA+
+ID4gKwlyZXR1cm4gdnEtPmRtYV9kZXY7DQo+ID4gPiA+ID4gIH0NCj4gPiA+ID4NCj4gPiA+ID4g
+SG93IGFib3V0IGdldHRpbmcgcmlkIG9mIHRoaXMgZnVuY3Rpb24gYW5kIGp1c3QgdXNlIHZxLT5k
+bWFfZGV2Pw0KPiA+ID4NCj4gPiA+IFdpbGwgbWFrZSB0aGUgcGF0Y2ggZXZlbiBiaWdnZXIgdGhh
+biBpdCBpcy4NCj4gPg0KPiA+IEkgY2FuJ3Qgc2VlIGhvdyB0aGlzIGNhbiBoYXBwZW4uIFlvdSBn
+ZXQgcmlkIG9mIHRoZSBmdW5jdGlvbiBhbmQgeW91IGxvc2UNCj4gb3ZlcmFsbCAxMCBsaW5lcy4g
+V2hhdCBhbSBJIG1pc3Npbmc/DQo+IA0KPiBUaGlzIGlzIGFuIGV4aXN0aW5nIGZ1bmN0aW9uLCBp
+ZiB5b3UgZHJvcCBpdCB5b3UgbmVlZCB0byByZWZhY3Rvcg0KPiBtb3JlIG9mIHRoZSBleGlzdGlu
+ZyBjb2RlLiBObz8NCkl0J3Mgc3RhdGljIGZ1bmN0aW9uIGluIHRoZSBmaWxlIHRoYXQgaXMgdXNl
+ZCB3aGVuZXZlciB5b3UgbmVlZCB0aGUgZG1hIGRldmljZS4NCj4gDQo+ID4gPiBJZiB5b3UgZG8g
+cGF0Y2ggb24gdG9wIHBscy4NCj4gPg0KDQo=
