@@ -2,71 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120B966512A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 02:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D69AC66512E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 02:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbjAKBgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 20:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
+        id S233363AbjAKBkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 20:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjAKBgg (ORCPT
+        with ESMTP id S231265AbjAKBkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 20:36:36 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D82BF5C;
-        Tue, 10 Jan 2023 17:36:33 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Ns9J83YFVz4f3wQQ;
-        Wed, 11 Jan 2023 09:36:24 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP1 (Coremail) with SMTP id cCh0CgDX9zGZEr5j9HiXBQ--.59805S3;
-        Wed, 11 Jan 2023 09:36:27 +0800 (CST)
-Subject: Re: [PATCH v2 1/2] blk-iocost: add refcounting for iocg
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20221227125502.541931-1-yukuai1@huaweicloud.com>
- <20221227125502.541931-2-yukuai1@huaweicloud.com>
- <Y7XzUee5Bq+DoIC1@slm.duckdns.org>
- <c63ee2ad-23d5-3be0-c731-28494398b391@huaweicloud.com>
- <Y7cX0SJ0y6+EIY5Q@slm.duckdns.org>
- <7dcdaef3-65c1-8175-fea7-53076f39697f@huaweicloud.com>
- <Y7iCId3pnEnLqY8G@slm.duckdns.org>
- <875eb43e-202d-5b81-0bff-ef0434358d99@huaweicloud.com>
- <Y7xbpidpq7+DqJan@slm.duckdns.org>
- <a71f997f-6cae-d57b-85dd-2fd499d238f6@huaweicloud.com>
- <Y72wF/b0/xNRmP7f@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <53b30ac8-d608-ba0b-8b1b-7fe5cfed6d61@huaweicloud.com>
-Date:   Wed, 11 Jan 2023 09:36:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 10 Jan 2023 20:40:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7AFD2F1;
+        Tue, 10 Jan 2023 17:40:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2028CB81A93;
+        Wed, 11 Jan 2023 01:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ADCC2C433F0;
+        Wed, 11 Jan 2023 01:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673401215;
+        bh=boBQbq7SfvcVRwpzl0eKShV5W3LhzCslmIq3ogYoLiM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=r7ZReUMlD5AAiFDS4+FqGtEZqcmf4MAe0ulL8WXjU3HazpL5fhi1HLr5KrDYMpjPq
+         Ba4uWfP9ZE9JjNPi6k6gcOe44iWHXmJcy91evniYOMiT0j560r3ywQS6Tp+d7Cc8Gg
+         Le2t48vdTkDpyyYMT4IUtK6C/n3rJ7S95Xdm0xkEvWS7BZcQi+0LhaNFkskRVfU0hK
+         16dQpjSAZAcpUPD0yJr8GQcY5u5zsy8FVXGSVbqnOiYcpAOjmAi5ckyBOH5a2vb1q3
+         DVQlLGyquDPr1mPdjsPQWMeKA/NM03Cw+slLYsK6+dq3KOmGAPFzKInPjP+BpJAg1w
+         FrJ44+euZWXyQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92BFEE4D026;
+        Wed, 11 Jan 2023 01:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <Y72wF/b0/xNRmP7f@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgDX9zGZEr5j9HiXBQ--.59805S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrtrWxuF1fCw15Cr1kGw48Zwb_yoWfCrb_uF
-        yFva98uwn8Jr1kC3W3Kr4YvrWkKFWjgryxGFs2ga4IyF98Xa93urWIq34xua45J34rtrnx
-        Zrs8J3Wjqwn2kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Subject: Re: [PATCH bpf-next v3] bpf: btf: limit logging of ignored BTF mismatches
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167340121559.21440.10650818438262209592.git-patchwork-notify@kernel.org>
+Date:   Wed, 11 Jan 2023 01:40:15 +0000
+References: <20230107025331.3240536-1-connoro@google.com>
+In-Reply-To: <20230107025331.3240536-1-connoro@google.com>
+To:     Connor O'Brien <connoro@google.com>
+Cc:     bpf@vger.kernel.org, martin.lau@linux.dev, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello:
 
-ÔÚ 2023/01/11 2:36, Tejun Heo Ð´µÀ:
-> Hello,
-> 
-> On Tue, Jan 10, 2023 at 09:39:44AM +0800, Yu Kuai wrote:
->> As I tried to explain before, we can make sure blkg_free() is called
->> in order, but blkg_free() from remove cgroup can concurrent with
->> deactivate policy, and we can't guarantee the order of ioc_pd_free()
->> that is called both from blkg_free() and blkcg_deactivate_policy().
->> Hence I don't think #3 is possible.
-> 
-> Hahaha, sorry that I keep forgetting that. This doesn't really feel like
-> that important or difficult part of the problem tho. Can't it be solved by
-> synchronizing blkg free work item against the deactivate path with a mutex?
-> 
+This patch was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-I'm not sure, of course this can fix the problem, but two spinlock
-'blkcg->lock' and 'q->queue_lock' are used to protect blkg_destroy()
-currently, add a mutex£¨disk level?) requires a refactor, which seems
-complex to me.
+On Sat,  7 Jan 2023 02:53:31 +0000 you wrote:
+> Enabling CONFIG_MODULE_ALLOW_BTF_MISMATCH is an indication that BTF
+> mismatches are expected and module loading should proceed
+> anyway. Logging with pr_warn() on every one of these "benign"
+> mismatches creates unnecessary noise when many such modules are
+> loaded. Instead, handle this case with a single log warning that BTF
+> info may be unavailable.
+> 
+> [...]
 
-Thanks,
-Kuai
+Here is the summary with links:
+  - [bpf-next,v3] bpf: btf: limit logging of ignored BTF mismatches
+    https://git.kernel.org/bpf/bpf-next/c/9cb61e50bf6b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
