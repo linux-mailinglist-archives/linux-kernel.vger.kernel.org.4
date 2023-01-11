@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D55F665FB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A70D665FC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbjAKPwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:52:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S233529AbjAKPwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239316AbjAKPvf (ORCPT
+        with ESMTP id S239532AbjAKPwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:51:35 -0500
+        Wed, 11 Jan 2023 10:52:25 -0500
 Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CA9BCBF
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:51:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75EB3475B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 07:52:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1673452284; bh=THQIBZsCDLUDELR9zM2u/FFpjKMFppx+9GbC/MJGIh0=;
+        t=1673452324; bh=QHeZldMKVWp9Cp9mxOeha2QFBOXYtsTVP8kjQEfSrZw=;
         h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
          MIME-Version:Content-Type:In-Reply-To;
-        b=bqX2UtXrBjNnUqciMOAPWkkrCwZAjnnJ5asG9VanqoB0V+1AB5H53NDjuVlZVegNb
-         9+9LQfuRq+Wng1TCzL7uQOIBf0DO6UbXo2nQm70n0oLhKh7cjEJuIpQNNmqso3oVcK
-         qsyJpH2MC3wR0bOwR/sdV9DbwquJl0NOCZiXxKqA=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        b=dhQ76Q5qWbdwieoX7S8a3HflKBaJR5R0TTGJXGnzA32tstm4XcijZEOvFS62J5qM5
+         VaQJIcf8JLwEM0aMQYeS8QIdcD7CJm5uN1jgkn/WSHLOy0PbnPvxXEKQzPhgzUzccW
+         a0baxbbbXs7geGagVcVdV/18+jQTMvgzKA4nmfMc=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
         via ip-206.mailobj.net [213.182.55.206]
-        Wed, 11 Jan 2023 16:51:24 +0100 (CET)
-X-EA-Auth: 9JimyKqsqRTHIQ0l7mD0jb69Pga8jl5XRjRQnAeWaucLzoY+0wvBYU2iC6EpI1rGzIsbtQiGAzRKXkGmu2mjFH7VsNcbfXVK
-Date:   Wed, 11 Jan 2023 21:21:20 +0530
+        Wed, 11 Jan 2023 16:52:03 +0100 (CET)
+X-EA-Auth: u5jvOLR5x9//Zkc8IMR5oNVJAAF0lJRlVIyLovRtl5gS15Vj30kxR2eXf+WDRR0PXE7lTP9chqyCJpfbE+S9CoqnkWNXnn/t
+Date:   Wed, 11 Jan 2023 21:21:59 +0530
 From:   Deepak R Varma <drv@mailo.com>
 To:     Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
@@ -38,9 +38,9 @@ To:     Jani Nikula <jani.nikula@linux.intel.com>,
         linux-kernel@vger.kernel.org
 Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
         Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: [PATCH v3 1/2] drm/i915/display: Avoid full proxy f_ops for DRRS
- debug attributes
-Message-ID: <9e08dd1b5fabf3e4f54dda27dd1d6ea1dbe6c542.1673451705.git.drv@mailo.com>
+Subject: [PATCH v3 2/2] drm/i915/fbc: Avoid full proxy f_ops for FBC debug
+ attributes
+Message-ID: <5d26e924ec8dea21925c77fa79a2bf2a34cef705.1673451705.git.drv@mailo.com>
 References: <cover.1673451705.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -74,40 +74,46 @@ make coccicheck M=drivers/gpu/drm/i915/ MODE=patch COCCI=./scripts/coccinelle/ap
 Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
 Changes in v3:
-   - Fix checkpatch complaint around function parameter alignment
+   - None
 
 Changes in v2:
    - Include coccicheck make command in the patch log message for clarity.
      Suggested by Rodrigo Vivi <rodrigo.vivi@intel.com>
 
- drivers/gpu/drm/i915/display/intel_drrs.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/display/intel_drrs.c b/drivers/gpu/drm/i915/display/intel_drrs.c
-index 5b9e44443814..29c6421cd666 100644
---- a/drivers/gpu/drm/i915/display/intel_drrs.c
-+++ b/drivers/gpu/drm/i915/display/intel_drrs.c
-@@ -374,16 +374,16 @@ static int intel_drrs_debugfs_ctl_set(void *data, u64 val)
- 	return ret;
+ drivers/gpu/drm/i915/display/intel_fbc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/display/intel_fbc.c b/drivers/gpu/drm/i915/display/intel_fbc.c
+index 5e69d3c11d21..c508dcf415b4 100644
+--- a/drivers/gpu/drm/i915/display/intel_fbc.c
++++ b/drivers/gpu/drm/i915/display/intel_fbc.c
+@@ -1807,10 +1807,10 @@ static int intel_fbc_debugfs_false_color_set(void *data, u64 val)
+ 	return 0;
  }
  
--DEFINE_SIMPLE_ATTRIBUTE(intel_drrs_debugfs_ctl_fops,
--			NULL, intel_drrs_debugfs_ctl_set, "%llu\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(intel_drrs_debugfs_ctl_fops,
-+			 NULL, intel_drrs_debugfs_ctl_set, "%llu\n");
+-DEFINE_SIMPLE_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
+-			intel_fbc_debugfs_false_color_get,
+-			intel_fbc_debugfs_false_color_set,
+-			"%llu\n");
++DEFINE_DEBUGFS_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
++			 intel_fbc_debugfs_false_color_get,
++			 intel_fbc_debugfs_false_color_set,
++			 "%llu\n");
  
- void intel_drrs_crtc_debugfs_add(struct intel_crtc *crtc)
- {
- 	debugfs_create_file("i915_drrs_status", 0444, crtc->base.debugfs_entry,
- 			    crtc, &intel_drrs_debugfs_status_fops);
+ static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
+ 				  struct dentry *parent)
+@@ -1819,8 +1819,8 @@ static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
+ 			    fbc, &intel_fbc_debugfs_status_fops);
  
--	debugfs_create_file("i915_drrs_ctl", 0644, crtc->base.debugfs_entry,
--			    crtc, &intel_drrs_debugfs_ctl_fops);
-+	debugfs_create_file_unsafe("i915_drrs_ctl", 0644, crtc->base.debugfs_entry,
-+				   crtc, &intel_drrs_debugfs_ctl_fops);
+ 	if (fbc->funcs->set_false_color)
+-		debugfs_create_file("i915_fbc_false_color", 0644, parent,
+-				    fbc, &intel_fbc_debugfs_false_color_fops);
++		debugfs_create_file_unsafe("i915_fbc_false_color", 0644, parent,
++					   fbc, &intel_fbc_debugfs_false_color_fops);
  }
  
- static int intel_drrs_debugfs_type_show(struct seq_file *m, void *unused)
+ void intel_fbc_crtc_debugfs_add(struct intel_crtc *crtc)
 -- 
 2.34.1
 
