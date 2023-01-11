@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948FE66633C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8ED866633E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235897AbjAKTFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 14:05:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
+        id S235742AbjAKTFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 14:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235623AbjAKTFC (ORCPT
+        with ESMTP id S235119AbjAKTFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 14:05:02 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC4ADF3D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:04:58 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d9so17758231pll.9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:04:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PlzAnfauG/SrWpxzD/HFqmo0bekDwT+PiGFDCinqA6o=;
-        b=07Nh4WTyDbwyfZzqhJ1UkQq0uAGvOjeK8lUiAK9rY289VOkv2sr8xYob6lNWPt8PuU
-         ZPtIjprgFW1QCoxkSp0QLCobk/RY7yTOZPDzL3IkNEJ6wmXfMj7E3z5nFtVP46JyyEtY
-         nLJ1On0cPoobJox9yphhx+0qNHP0q6mnV0Z3kuc2yFj0AKJpFVpu8mET3I7GVGG7Hvc5
-         E1b1uJ25DO5jWpmgVO2ve4txrl65ZVgDjjTWsaBytLKXz9sv2ikLVsAPHzFsq01vaaCA
-         RRYHvr5pZoZ5cV5nkNYoz0iycxNFaqFueUdoleRXzah1OBUHRcwguOUcA3gagrmYWnNe
-         ZyMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PlzAnfauG/SrWpxzD/HFqmo0bekDwT+PiGFDCinqA6o=;
-        b=WzjOz1L9VoTFlDPFXcbECq4PZrEooUbNeu1OaX91EDdrpMhuFGvuUnSU6BpEBVpT/2
-         7Bryi2yfOklot+U27ErzSiVzHHdOGpLlhrSqxMT7EV/SbeC9LbQNPlH7DaHPsTAd89ur
-         dPtQAn3jHU31CpMjnxoDdMb4NbVMItSrJpt92BNC3t2Cs4P960O6F6BE7BhNVgSr7otz
-         LvfyUZyfgJ4ly1CTqSRsLINsLEDrul/KzAdv15qN90coVwVPdyPSMFqPMwvz4Dbjmkuk
-         SMKdbF2wTqsHu/PcOc3wpvNb+PjXOxCc0w/kuBhRKg/4MrbT+hukY5ja6OicoiHztp3Y
-         tFDA==
-X-Gm-Message-State: AFqh2kqanwhFBChS/W+Vm2uBc1vaAURvHdtdiWXDwtS/c7UazawDksXd
-        jKELlDqR8MK3zNHARc4Xgr0O8A==
-X-Google-Smtp-Source: AMrXdXtzU+Q4Jj1NUJ0JrAuhndnIFmQRonwPtkOc39sQrciDCIM0yuPytaaqKIZACwMwK3j+qLLeKg==
-X-Received: by 2002:a17:902:6acb:b0:191:40a9:60f6 with SMTP id i11-20020a1709026acb00b0019140a960f6mr16988537plt.0.1673463897989;
-        Wed, 11 Jan 2023 11:04:57 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id z15-20020a170903018f00b00189f2fdc178sm10529771plg.177.2023.01.11.11.04.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 11:04:57 -0800 (PST)
-Message-ID: <ca08f6b8-a491-3a7e-f576-833acdf2135b@kernel.dk>
-Date:   Wed, 11 Jan 2023 12:04:56 -0700
+        Wed, 11 Jan 2023 14:05:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5283DBE2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:05:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A8BF61DE4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 19:05:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7611DC433F2;
+        Wed, 11 Jan 2023 19:05:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673463911;
+        bh=uOC5NCGWiQA9ZD1hmTK2gCEiddmvMcjfda4MJGVK4Uo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ClkCMzxdbo62pYFtJmpcVy68gIQMGd6CJulvvv6KzaTRIkiZGHfJ5TZuf1LenaCrQ
+         4obXLaHpeNKpFgl2lq4aGJ49o86Qm0wxtmBOdhzF9wieqIM+mtHX3MyehWgARx57fT
+         LAj9reijno7QXD29dNwlzxhasdUjwosrwM2zJOo0+JY1cuG+airx/WAt4pTWceJhFQ
+         w+rT9XKOX34hszXP9Hq3Ptj91Wm1eN2hagI1+Bel6jfnpcKs8oKYle6ZuCPvkeorFC
+         LZYl5/GHixEa3ntVV0BKcB1+jNlV2UjrdsRpaD4zPDM9/OxXBPYzCYmjRj+egPo17L
+         sC1YiR9gp4l0g==
+Date:   Wed, 11 Jan 2023 19:05:07 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Reg the next LTS kernel (6.1?)
+Message-ID: <Y78IYxiKDK/zLQQY@spud>
+References: <CAPDLWs-Z8pYkwQ13dEgHXqSCjiq4xVnjuAXTy26H3=8NZCpV_g@mail.gmail.com>
+ <Yz/ZWBeNZvKenEVM@kroah.com>
+ <CAPDLWs9KWKs_-fpAp2=97uBARYqrHSYTPEU6RbqtWjAD8NpqgQ@mail.gmail.com>
+ <CAPDLWs9CoWw7NLfrtCfMsRAdCSfBgomVELRhM70QWVca99z65A@mail.gmail.com>
+ <Y53BputYK+3djDME@kroah.com>
+ <Y75wGwt2r8iWlCYf@wendy>
+ <Y76eklrASMczPLY0@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH V4 0/6] genirq/affinity: Abstract APIs from managed irq
- affinity spread
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        John Garry <john.garry@huawei.com>
-References: <20221227022905.352674-1-ming.lei@redhat.com>
- <Y74cXN4SP7FNtSl3@T590>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y74cXN4SP7FNtSl3@T590>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/h5/Io3RCUohSmBy"
+Content-Disposition: inline
+In-Reply-To: <Y76eklrASMczPLY0@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/23 7:18 PM, Ming Lei wrote:
-> Hello Thomas, Jens and guys,
 
-I took a look and it looks good to me, no immediate issues spotted.
+--/h5/Io3RCUohSmBy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Jens Axboe
+On Wed, Jan 11, 2023 at 12:33:38PM +0100, Greg KH wrote:
+> On Wed, Jan 11, 2023 at 08:15:23AM +0000, Conor Dooley wrote:
+> > Already do! Although so far I've just been reporting breakages rather
+> > than providing tested-bys.
+
+> Feel free to submit a tested-by if you want credit for doing the work
+
+Yah, IDC much about getting the credit, saving myself work if something
+broken lands downstream is the goal!
+There's no real overhead to doing it though, so I suppose I may as well!
 
 
+--/h5/Io3RCUohSmBy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY78IYwAKCRB4tDGHoIJi
+0iJDAQDcbw+jWfLzB7fviEdqTesUosgcKJeXzXiE5yytZv9HGgEAuDiB3oCQcTpx
+RiuRGSbeXWNKsCtKT0IkCvzgDAQFoAM=
+=JYdq
+-----END PGP SIGNATURE-----
+
+--/h5/Io3RCUohSmBy--
