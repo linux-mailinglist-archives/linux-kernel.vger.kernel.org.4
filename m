@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5E76662C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58EA46662D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234628AbjAKSaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:30:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
+        id S232042AbjAKSbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:31:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236094AbjAKS2x (ORCPT
+        with ESMTP id S235353AbjAKSb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:28:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE961BCAE;
-        Wed, 11 Jan 2023 10:28:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 11 Jan 2023 13:31:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC7837501
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 10:30:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673461838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DsHR+gK9NXOoSaKdGDYaK34gTAYNmEFxKqyOr6ZMcO4=;
+        b=UPwke6rtEqtQI43GqDf4I0gpNViL7naWBTXq5ht6i/evhPKblZAVWAKdXvvfiMlN7n29Y2
+        UxbW1gMNlhwN3Dv3+t+BdSfgTHlSKq56xOj8uo5KPAdQyAwKreKXXhxx+GyM45E24UAsyj
+        8MrIz+X9e/1NaNjsQ0hIjH3JfzpUEHw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-lodOvzh5NXicVlPIqy2l4A-1; Wed, 11 Jan 2023 13:30:33 -0500
+X-MC-Unique: lodOvzh5NXicVlPIqy2l4A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB26CB81BDC;
-        Wed, 11 Jan 2023 18:28:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19F09C433EF;
-        Wed, 11 Jan 2023 18:28:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673461729;
-        bh=SEVadaaZ7nAyP60UPoBxxqnNElyp72turpT4z9GLOgY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=m85A0ufJDBXb1Inco40yvIDQ6syjaqa2qJNvkraRufme1NPFfmkrc2yP1g8IIwYoj
-         8rz2fJymIGpMd0JU0P/YxWFMV9OU8pyOREFqkvZLywcbXyqn+tHXHGyBa3eBqHTBtl
-         Jzzr1Oa+oEE7Q+90PDiH28vBpInizMmr0UFWsZ8sxjzWxrDj3CtFXGzm5k/9qShacS
-         9XAff7LW6mN77xfgxFRb07WIdrZgMH9I1T5vKVdFbsi2HJr3rSJmuRlB7SvzUts/pJ
-         vmfa1RylFItRdURplCvZY+ftCtggDjwIQQxC5LAdqJWNSEojhB1kHaQfr34nmBY1xb
-         MY5VhmTgsnCiw==
-Date:   Wed, 11 Jan 2023 10:28:48 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Esina Ekaterina <eesina@astralinux.ru>
-Cc:     Zhao Qiang <qiang.zhao@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v3]   net: wan: Add checks for NULL for utdm in
- undo_uhdlc_init and unmap_si_regs
-Message-ID: <20230111102848.44863b9c@kernel.org>
-In-Reply-To: <20230111090504.66434-1-eesina@astralinux.ru>
-References: <20230110204418.79f43f45@kernel.org>
-        <20230111090504.66434-1-eesina@astralinux.ru>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B8708030A0;
+        Wed, 11 Jan 2023 18:30:32 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 777C7140EBF5;
+        Wed, 11 Jan 2023 18:30:32 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     dwmw@amazon.co.uk, seanjc@google.com
+Subject: [PATCH] Documentation: kvm: fix SRCU locking order docs
+Date:   Wed, 11 Jan 2023 13:30:31 -0500
+Message-Id: <20230111183031.2449668-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 Jan 2023 12:05:03 +0300 Esina Ekaterina wrote:
-> Subject: [PATCH v3]   net: wan: Add checks for NULL for utdm in undo_uhdlc_init and unmap_si_regs
+kvm->srcu is taken in KVM_RUN and several other vCPU ioctls, therefore
+vcpu->mutex is susceptible to the same deadlock that is documented
+for kvm->slots_lock.  The same holds for kvm->lock, since kvm->lock
+is held outside vcpu->mutex.  Fix the documentation and rearrange it
+to highlight the difference between these locks and kvm->slots_arch_lock,
+and how kvm->slots_arch_lock can be useful while processing a vmexit.
 
-net: wan: prevent null-deref on error path for non-tdm case
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ Documentation/virt/kvm/locking.rst | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
->   If uhdlc_priv_tsa != 1 then utdm is not initialized.
->   And if ret != NULL then goto undo_uhdlc_init, where
->   utdm is dereferenced. Same if dev == NULL.
-> 
->   Found by Linux Verification Center (linuxtesting.org) with SVACE.
+diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
+index 897ca39b72bf..53826098183e 100644
+--- a/Documentation/virt/kvm/locking.rst
++++ b/Documentation/virt/kvm/locking.rst
+@@ -24,17 +24,18 @@ The acquisition orders for mutexes are as follows:
+ 
+ For SRCU:
+ 
+-- ``synchronize_srcu(&kvm->srcu)`` is called _inside_
+-  the kvm->slots_lock critical section, therefore kvm->slots_lock
+-  cannot be taken inside a kvm->srcu read-side critical section.
+-  Instead, kvm->slots_arch_lock is released before the call
+-  to ``synchronize_srcu()`` and _can_ be taken inside a
+-  kvm->srcu read-side critical section.
+-
+-- kvm->lock is taken inside kvm->srcu, therefore
+-  ``synchronize_srcu(&kvm->srcu)`` cannot be called inside
+-  a kvm->lock critical section.  If you cannot delay the
+-  call until after kvm->lock is released, use ``call_srcu``.
++- ``synchronize_srcu(&kvm->srcu)`` is called inside critical sections
++  for kvm->lock, vcpu->mutex and kvm->slots_lock.  These locks _cannot_
++  be taken inside a kvm->srcu read-side critical section; that is, the
++  following is broken::
++
++      srcu_read_lock(&kvm->srcu);
++      mutex_lock(&kvm->slots_lock);
++
++- kvm->slots_arch_lock instead is released before the call to
++  ``synchronize_srcu()``.  It _can_ therefore be taken inside a
++  kvm->srcu read-side critical section, for example while processing
++  a vmexit.
+ 
+ On x86:
+ 
+-- 
+2.39.0
 
-I did the indentation to make the content stand out in the email, 
-there should be no indentation in the actual msg, sorry.
-
-> --- a/drivers/net/wan/fsl_ucc_hdlc.c
-> +++ b/drivers/net/wan/fsl_ucc_hdlc.c
-> @@ -1243,9 +1243,11 @@ static int ucc_hdlc_probe(struct platform_device *pdev)
->  free_dev:
->  	free_netdev(dev);
->  undo_uhdlc_init:
-> -	iounmap(utdm->siram);
-> +	if (utdm != NULL)
-
-and here just:
-
-	if (utdm)
-
-comparing to NULL or zero is less idiomatic in kernel C.
-
-> +		iounmap(utdm->siram);
->  unmap_si_regs:
-> -	iounmap(utdm->si_regs);
-> +	if (utdm != NULL)
-> +		iounmap(utdm->si_regs);
