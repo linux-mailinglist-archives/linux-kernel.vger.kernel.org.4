@@ -2,142 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05971666638
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 23:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A10666639
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 23:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236189AbjAKWa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 17:30:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S236386AbjAKWbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 17:31:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbjAKWay (ORCPT
+        with ESMTP id S236111AbjAKWa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 17:30:54 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B991C76;
-        Wed, 11 Jan 2023 14:30:52 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 11 Jan 2023 17:30:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08F35F48;
+        Wed, 11 Jan 2023 14:30:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 06414166C;
-        Wed, 11 Jan 2023 23:30:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1673476250;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AL3D6fuBAPLwBqIn3nADqpL5RfYmlL7iAJcDIl8hybk=;
-        b=UnslZtSR/5gXE7MrC0DSsUaff5dWD5BJ6Cdmi9jtr0d2z1ACC0wJbXBi5roXDUeAXEVeLv
-        8XWxCUZ0B+t5QrPPJkkvLdiJaGCynENs94/8if6RIrj2TdmNJIBLpPjB8YeZJRqOImMd2v
-        N7dbAt3aY1lD7IXV3adWN+iIO+8zmrnf2O95x5aP55ott4l7vfkD/1ZY+/MsXgnUttaI8M
-        ZS0AEDXXmFl4fmuHq0rAr0anb5gOnErC9GAjjXZH993opNbne1owcEvJDWhy0+LOPUXIe4
-        7Fc67tocND1rpACUoh+mlNxhEU7W68tgQi0M/GMgX2TXs9TN/PiM/w0KITlRNA==
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A94461EE7;
+        Wed, 11 Jan 2023 22:30:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6359AC433EF;
+        Wed, 11 Jan 2023 22:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673476257;
+        bh=KUi1HGeABxjWRsu8PJIH+JwPcZ8NI+ELZCnpYlQMHT4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Kf0tL8z6062nMukSXj1bvr1p2+gTipJIIAonn6AF+NvYFqLCjffe3AnTHerJKON4X
+         4XlVyqh7SbpnYnHGKCJbqki8pLXtRRlMGXCjRA2bX1+cAM/MWZh6Y2PqP5kOi4P8aA
+         TAU6ux9d7GP3M2hHkNjcAdghPQeR+OEVwmJoRHDZOUGGdb0Wsf01iMHwJfU8Zms/5z
+         E4yextY1IkFAA1H7ZGLXLOvrYvuC6m2qjKYBlQwvzX8m3JRi3zg/98ASwD1hvhjIEP
+         7EzqVSMkcUU0QWS7IPBmijS7p9sO2De9edsnyvU/9V/1m7ZblnP86jQCSVw1BazflW
+         zALJ7OVhpjOEw==
+Date:   Wed, 11 Jan 2023 16:30:55 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     linux-pci@vger.kernel.org
+Cc:     Dan J Williams <dan.j.williams@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        David E Box <david.e.box@intel.com>,
+        Yunying Sun <yunying.sun@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Florent DELAHAYE <linuxkernelml@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 0/2] PCI: Fix extended config space regression
+Message-ID: <20230111223055.GA1712775@bhelgaas>
 MIME-Version: 1.0
-Date:   Wed, 11 Jan 2023 23:30:49 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Rob Herring <robh@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Xu Liang <lxu@maxlinear.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3 2/4] dt-bindings: net: phy: add MaxLinear
- GPY2xx bindings
-In-Reply-To: <20230111202639.GA1236027-robh@kernel.org>
-References: <20230109123013.3094144-1-michael@walle.cc>
- <20230109123013.3094144-3-michael@walle.cc>
- <20230111202639.GA1236027-robh@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <73f8aad30e0d5c3badbd62030e545ef6@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110180243.1590045-1-helgaas@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-01-11 21:26, schrieb Rob Herring:
-> On Mon, Jan 09, 2023 at 01:30:11PM +0100, Michael Walle wrote:
->> Add the device tree bindings for the MaxLinear GPY2xx PHYs, which
->> essentially adds just one flag: maxlinear,use-broken-interrupts.
->> 
->> One might argue, that if interrupts are broken, just don't use
->> the interrupt property in the first place. But it needs to be more
->> nuanced. First, this interrupt line is also used to wake up systems by
->> WoL, which has nothing to do with the (broken) PHY interrupt handling.
+On Tue, Jan 10, 2023 at 12:02:41PM -0600, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> I don't understand how this is useful. If the interrupt line is 
-> asserted
-> after the 1st interrupt, how is it ever deasserted later on to be
-> useful.
-
-Nobody said, that the interrupt line will stay asserted. The broken
-behavior is that of the PHY doesn't respond *immediately* with a
-deassertion of the interrupt line after the its internal status
-register is cleared. Instead there is a random delay of up to 2ms.
-
-There is already a workaround to avoid an interrupt storm by delaying
-the ISR until the line is actually cleared. *But* if this line is
-a shared one. The line is blocked by these 2ms and important
-interrupts (like PTP timestaming) of other devices on this line
-will get delayed. Therefore, the only viabale option is to disable
-the interrupts handling in the broken PHY altogether. I.e. the line
-will never be asserted by the broken PHY.
-
-> In any case, you could use 'wakeup-source' if that's the functionality
-> you need. Then just ignore the interrupt if 'wakeup-source' is not
-> present.
-
-Right, that would work for the first case. But not if someone really
-wants to use interrupts with the PHY, which is still a valid scenario
-if it has a dedicated interrupt line.
-
->> Second and more importantly, there are devicetrees which have this
->> property set. Thus, within the driver we have to switch off interrupt
->> handling by default as a workaround. But OTOH, a systems designer who
->> knows the hardware and knows there are no shared interrupts for 
->> example,
->> can use this new property as a hint to the driver that it can enable 
->> the
->> interrupt nonetheless.
+> 07eab0901ede ("efi/x86: Remove EfiMemoryMappedIO from E820 map") appeared
+> in v6.2-rc1 and broke extended config space on several machines.
 > 
-> Pretty sure I said this already, but this schema has no effect. Add an
-> extra property to the example and see. No error despite your
-> 'unevaluatedProperties: false'. Or drop 'interrupts-extended' and no
-> dependency error...
-
-I know, I noticed this the first time I tested the schema. But then
-I've looked at all the other PHY binding and not one has a compatible.
-
-I presume if there is a compatible, the devicetrees also need a
-compatible. So basically, "required: compatible" in the schema, right?
-But that is where the PHY maintainers don't agree.
-
-> You won't get errors as there's no defined way to decide when to apply
-> this because it is based on node name or compatible unless you do a
-> custom select, but I don't see what you would key off of here...
-
-Actually, in the previous version I've asked why the custom select
-of ethernet-phy.yaml doesn't get applied here, when there is a
-"allOf: $ref ethernet-phy.yaml".
-
--michael
-
-> The real answer here is add a compatible. But I'm tired of pointing 
-> this
-> out to the networking maintainers every damn time. Ethernet PHYs are 
-> not
-> special.
+> This broke drivers that use things in extended config space, e.g., perf,
+> VSEC telemetry, EDAC, QAT, etc.
 > 
-> Rob
+> This happened because mmconfig-shared.c checks to see that ECAM space is
+> reserved in E820 or ACPI motherboard resources.  If it's not, it assumes
+> ECAM doesn't work.  07eab0901ede removed some E820 entries, so it looked
+> like ECAM was no longer reserved, so we stopped using it.
+> 
+> The machines where this broke don't reserve the ECAM in ACPI PNP0C02
+> devices (which seems to be what the PCI Firmware spec requires), but they
+> do mention it in the EFI memory map as EfiMemoryMappedIO.
+> 
+> Bjorn Helgaas (2):
+>   x86/pci: Simplify is_mmconf_reserved() messages
+>   x86/pci: Treat EfiMemoryMappedIO as reservation of ECAM space
+> 
+>  arch/x86/pci/mmconfig-shared.c | 44 +++++++++++++++++++++++++++++-----
+>  1 file changed, 38 insertions(+), 6 deletions(-)
+
+Applied to for-linus for v6.2.  Sorry for the breakage and thank you
+very much for the debugging and testing help!
