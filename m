@@ -2,109 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2C8665D13
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC0D665D1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbjAKNxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S232478AbjAKNyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:54:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238741AbjAKNxI (ORCPT
+        with ESMTP id S238657AbjAKNx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:53:08 -0500
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B978F10EC
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:52:39 -0800 (PST)
-Received: by mail-qt1-f173.google.com with SMTP id d16so795230qtw.8
+        Wed, 11 Jan 2023 08:53:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D202165C7
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:52:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673445160;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EVXd0+tTmNanAqtPTUXnzWMvK7HgkczZRyk87Gekezw=;
+        b=ax7jTDmjXaevws4mYIClrQ+WypILTr5hR/x8vnS0TOywqMhghkaSL06vTeloqyrwqSTXZj
+        eDt0H4Beeu8Cg3ndXv3DBt27l8fBhfOSng1jJr7Zs8ia7MUfYLKfvjA2zkqsDOcT8wi6Ri
+        /TKTpuRG0oib3aWXhAj5eimh/4g4EyU=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-437-S0O_Q73SONqZ_n6c7E_tVg-1; Wed, 11 Jan 2023 08:52:39 -0500
+X-MC-Unique: S0O_Q73SONqZ_n6c7E_tVg-1
+Received: by mail-wr1-f70.google.com with SMTP id u4-20020adfc644000000b002ad64393461so2711033wrg.7
         for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:52:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tAUo9g+pZ7MGFpWgfp8Hgfry4Aku45YtfI7WJ19iP2c=;
-        b=bqeMXJc6OFBQasYaspezdnuV1BKaiuIAcUwaydUY8k1lED/bzBhKijVLU+dF9HuoZ7
-         gkEOCd/SI4Er9laG5V92aFG/vPF/1P0yLWH+QFXrT67uK7OX+6OoDZ0Xr9NdF44McUCI
-         IoqpSL6isiP3gpJT9XkkYjNHCSDM//3ueCjmNwuAiRbRuQZqp6J5R8CRJRl+sqeC3CsC
-         HXpQQoPw2vd3hqDqgvb/D9PE4O55fNYLLy255vhrml8XRg6sPU0qqGU8eyt2HH4y3doT
-         MqsH9yz/v44JKBKQBNkxSBvgjJXmkTtGvhY5h66hhb9aMTqM23vuxCFP7/L7bs/zCpi6
-         5M5A==
-X-Gm-Message-State: AFqh2kovsqtNYM1U8onJSzH2J/u1iL8gMGOR47+0ch9Mpqb6uBEJGaIG
-        2fF9E57TTz3ClIheyZ62xr/Up+NZuoPOBw==
-X-Google-Smtp-Source: AMrXdXtvxHVDp4g1uhDpj6VMwhWm9PqR885FSwZqZD6lAZ4GNfKrfFgcCimS4SACHN493lT386YCqg==
-X-Received: by 2002:ac8:4e04:0:b0:3ab:5dc7:6bf0 with SMTP id c4-20020ac84e04000000b003ab5dc76bf0mr98351490qtw.36.1673445158551;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EVXd0+tTmNanAqtPTUXnzWMvK7HgkczZRyk87Gekezw=;
+        b=fhRFV1NBuf6mynxdUY+6ToCAfjoT/JMl/qofWsBKbBGbJLiHtil+efY002biesbB1B
+         W8lYXh7UYWVwZxoOj1zM10VfZGxUpdlr8aXMnH2G0GrUHgvLoQ9cXmNI3gwMgptFb+PB
+         A/z04wOlduRQHu+g86evyeHFLna+rrkDNB4Jkl7uXCo/hUUeGVq8/i38mkOYaQX7sRuU
+         NttuZNDiPUxAlCfrDiXXmUtlG5kI8w5b6JxD8vsQzYUblZmAHEGR4Y0C40jceEqS4Nzb
+         kP62FDpdoopms4RlFDYlLEvnNdJcdVLmY+0F4o9n7uSK7n5DoJBd5HzwmTiC2Xv4aegN
+         OS0w==
+X-Gm-Message-State: AFqh2krc14UZL1cG6K86Z9ulcWlcGHZZiLqFbfH+qMJkm+msXRNn5KnY
+        ZGhM6Ho3UmNAdgGUgW52J6V+iJvUFk5gAWL+t4cJoPbDFsvSWu21HBpUtaaJhzW0N82gihdF85b
+        cJSTTrEu8seztJIrSdpxLtHbY
+X-Received: by 2002:a05:6000:910:b0:242:733b:af28 with SMTP id bz16-20020a056000091000b00242733baf28mr61561358wrb.5.1673445158339;
         Wed, 11 Jan 2023 05:52:38 -0800 (PST)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id c8-20020ac86608000000b003a4f435e381sm7546377qtp.18.2023.01.11.05.52.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+X-Google-Smtp-Source: AMrXdXvZsLF5O5by/jN4b7/Dxocy8fV9SSbKWgBeKVV6PBIXB42ZP1FOxfklK2qKs3KZ6zIt+ghfMw==
+X-Received: by 2002:a05:6000:910:b0:242:733b:af28 with SMTP id bz16-20020a056000091000b00242733baf28mr61561341wrb.5.1673445158119;
+        Wed, 11 Jan 2023 05:52:38 -0800 (PST)
+Received: from redhat.com ([2.52.157.155])
+        by smtp.gmail.com with ESMTPSA id m10-20020adff38a000000b002bc83b85180sm5361050wro.114.2023.01.11.05.52.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 11 Jan 2023 05:52:37 -0800 (PST)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-4a2f8ad29d5so195227647b3.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:52:37 -0800 (PST)
-X-Received: by 2002:a0d:fb81:0:b0:480:fa10:459e with SMTP id
- l123-20020a0dfb81000000b00480fa10459emr333518ywf.283.1673445157171; Wed, 11
- Jan 2023 05:52:37 -0800 (PST)
+Date:   Wed, 11 Jan 2023 08:52:34 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "gdawar@amd.com" <gdawar@amd.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>
+Subject: Re: [PATCH 1/5] virtio_ring: per virtqueue dma device
+Message-ID: <20230111085210-mutt-send-email-mst@kernel.org>
+References: <20230111062809.25020-1-jasowang@redhat.com>
+ <20230111062809.25020-2-jasowang@redhat.com>
+ <DM8PR12MB5400E61C7E968AC7604556EBABFC9@DM8PR12MB5400.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-References: <Y7nyd4hPeXsdiibH@duo.ucw.cz> <Y7pRw47hidw+s6+g@mit.edu>
- <Y7pzbnlXgv+asekg@amd.ucw.cz> <CAMuHMdVvVoEs8yjNLmK=_shmGkyz1zYc8ZMi-vmP4aee0yKoPQ@mail.gmail.com>
- <Y7sPq3Tmm6vI/RAJ@duo.ucw.cz> <Y7tjnhs77o4TL5ey@mit.edu> <614os9n2-2sq1-2qnr-56q6-1qq628271175@vanv.qr>
-In-Reply-To: <614os9n2-2sq1-2qnr-56q6-1qq628271175@vanv.qr>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 11 Jan 2023 14:52:24 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXJh24d3u_RHm_Sa7YsAdbk_5yDVEbk-huRFSDxbgBkFA@mail.gmail.com>
-Message-ID: <CAMuHMdXJh24d3u_RHm_Sa7YsAdbk_5yDVEbk-huRFSDxbgBkFA@mail.gmail.com>
-Subject: Re: Dhrystone -- userland version
-To:     Jan Engelhardt <jengelh@inai.de>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, Pavel Machek <pavel@ucw.cz>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@osdl.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR12MB5400E61C7E968AC7604556EBABFC9@DM8PR12MB5400.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jan,
+On Wed, Jan 11, 2023 at 01:32:20PM +0000, Eli Cohen wrote:
+> > From: Jason Wang <jasowang@redhat.com>
+> > Sent: Wednesday, 11 January 2023 8:28
+> > To: mst@redhat.com; jasowang@redhat.com
+> > Cc: Eli Cohen <elic@nvidia.com>; gdawar@amd.com;
+> > virtualization@lists.linux-foundation.org; linux-kernel@vger.kernel.org;
+> > tanuj.kamde@amd.com
+> > Subject: [PATCH 1/5] virtio_ring: per virtqueue dma device
+> > 
+> > This patch introduces a per virtqueue dma device. This will be used
+> > for virtio devices whose virtqueue are backed by different underlayer
+> > devices.
+> > 
+> > One example is the vDPA that where the control virtqueue could be
+> > implemented through software mediation.
+> > 
+> > Some of the work are actually done before since the helper like
+> > vring_dma_device(). This work left are:
+> > 
+> > - Let vring_dma_device() return the per virtqueue dma device instead
+> >   of the vdev's parent.
+> > - Allow passing a dma_device when creating the virtqueue through a new
+> >   helper, old vring creation helper will keep using vdev's parent.
+> > 
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > ---
+> >  drivers/virtio/virtio_ring.c | 133 ++++++++++++++++++++++++-----------
+> >  include/linux/virtio_ring.h  |  16 +++++
+> >  2 files changed, 109 insertions(+), 40 deletions(-)
+> > 
+> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > index 723c4e29e1d3..41144b5246a8 100644
+> > --- a/drivers/virtio/virtio_ring.c
+> > +++ b/drivers/virtio/virtio_ring.c
+> > @@ -202,6 +202,9 @@ struct vring_virtqueue {
+> >  	/* DMA, allocation, and size information */
+> >  	bool we_own_ring;
+> > 
+> > +	/* Device used for doing DMA */
+> > +	struct device *dma_dev;
+> > +
+> >  #ifdef DEBUG
+> >  	/* They're supposed to lock for us. */
+> >  	unsigned int in_use;
+> > @@ -219,7 +222,8 @@ static struct virtqueue
+> > *__vring_new_virtqueue(unsigned int index,
+> >  					       bool context,
+> >  					       bool (*notify)(struct virtqueue *),
+> >  					       void (*callback)(struct virtqueue
+> > *),
+> > -					       const char *name);
+> > +					       const char *name,
+> > +					       struct device *dma_dev);
+> >  static struct vring_desc_extra *vring_alloc_desc_extra(unsigned int num);
+> >  static void vring_free(struct virtqueue *_vq);
+> > 
+> > @@ -297,10 +301,11 @@ size_t virtio_max_dma_size(struct virtio_device
+> > *vdev)
+> >  EXPORT_SYMBOL_GPL(virtio_max_dma_size);
+> > 
+> >  static void *vring_alloc_queue(struct virtio_device *vdev, size_t size,
+> > -			      dma_addr_t *dma_handle, gfp_t flag)
+> > +			       dma_addr_t *dma_handle, gfp_t flag,
+> > +			       struct device *dma_dev)
+> >  {
+> >  	if (vring_use_dma_api(vdev)) {
+> > -		return dma_alloc_coherent(vdev->dev.parent, size,
+> > +		return dma_alloc_coherent(dma_dev, size,
+> >  					  dma_handle, flag);
+> >  	} else {
+> >  		void *queue = alloc_pages_exact(PAGE_ALIGN(size), flag);
+> > @@ -330,10 +335,11 @@ static void *vring_alloc_queue(struct virtio_device
+> > *vdev, size_t size,
+> >  }
+> > 
+> >  static void vring_free_queue(struct virtio_device *vdev, size_t size,
+> > -			     void *queue, dma_addr_t dma_handle)
+> > +			     void *queue, dma_addr_t dma_handle,
+> > +			     struct device *dma_dev)
+> >  {
+> >  	if (vring_use_dma_api(vdev))
+> > -		dma_free_coherent(vdev->dev.parent, size, queue,
+> > dma_handle);
+> > +		dma_free_coherent(dma_dev, size, queue, dma_handle);
+> >  	else
+> >  		free_pages_exact(queue, PAGE_ALIGN(size));
+> >  }
+> > @@ -341,11 +347,11 @@ static void vring_free_queue(struct virtio_device
+> > *vdev, size_t size,
+> >  /*
+> >   * The DMA ops on various arches are rather gnarly right now, and
+> >   * making all of the arch DMA ops work on the vring device itself
+> > - * is a mess.  For now, we use the parent device for DMA ops.
+> > + * is a mess.
+> >   */
+> >  static inline struct device *vring_dma_dev(const struct vring_virtqueue *vq)
+> >  {
+> > -	return vq->vq.vdev->dev.parent;
+> > +	return vq->dma_dev;
+> >  }
+> 
+> How about getting rid of this function and just use vq->dma_dev?
 
-On Wed, Jan 11, 2023 at 2:32 PM Jan Engelhardt <jengelh@inai.de> wrote:
-> On Monday 2023-01-09 01:45, Theodore Ts'o wrote:
-> >On Sun, Jan 08, 2023 at 07:47:07PM +0100, Pavel Machek wrote:
-> >> > However, as this is not Linux-specific, how hard can it be to convince
-> >> > your distro to include https://github.com/qris/dhrystone-deb.git?
-> >> > Usually, when I have a full userspace available, I just clone the above,
-> >> > and debuild it myself.
-> >>
-> >> Dunno. I'd not solve it if package was in Debian, but it is not.
-> >
-> >I would suspect the better long-term solution would be to get the
-> >package into Debian, since that will be easier for people to use.  I
-> >suspect the reason why most distros don't include it is because it
-> >really is a **terrible** benchmark for most use cases.
->
-> (All of) you could install boinc-client and just exercise
-> --run_cpu_benchmarks without (I think) attaching to any particular
-> computing project. The package should be in distros and you get
-> both Dhrystone and Whetstone.
+Will make the patch even bigger than it is.
+If you do patch on top pls.
 
-Thanks, but I really want an in-kernel benchmark, as a full userland
-may not be available during early development.
-
-BTW, boinc doesn't seem to work under Wayland, spewing lots of
-"Invalid MIT-MAGIC-COOKIE-1 key", before printing Dhrystone and
-Whetstone numbers...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
