@@ -2,47 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D75B66579F
+	by mail.lfdr.de (Postfix) with ESMTP id AFC856657A1
 	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238708AbjAKJgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S229920AbjAKJgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbjAKJey (ORCPT
+        with ESMTP id S230282AbjAKJfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:34:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F61F120A8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:33:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0C6C61B19
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A00A8C433D2;
-        Wed, 11 Jan 2023 09:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673429613;
-        bh=FR67UhswNG3QQsrxEFVbf2J5y7PVFWFRXJRJAYU9reQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=niWlvKyj14Pj2jqAOqXHpp3bZGkaHA/Sg9i79uII+wTB8zowpDLSK/beOv/t9drIA
-         55Fv1VJJAydjtU0Ixuh0kyyU5XUDCEvkEkKtdpHlfbIYWiV8PQkGSkQNqcwDAYYG2u
-         2Tix88jqzliQgV7FyznNfh4uCp6r192zcP6tHIzk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH] driver core: change to_subsys_private() to use container_of_const()
-Date:   Wed, 11 Jan 2023 10:33:27 +0100
-Message-Id: <20230111093327.3955063-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.0
+        Wed, 11 Jan 2023 04:35:11 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D506ED98;
+        Wed, 11 Jan 2023 01:34:20 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30B7X1sn029595;
+        Wed, 11 Jan 2023 09:34:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mvSen0YPktxZ6yY811DDXcSx4nAy7KzBUaW4BDWH8SE=;
+ b=WjX12aX1Co7bHatr4Rakla7oHxjAM4fhKpkRCO/7rbiu2gImE7sP+6LHD+hqwMO8ynZ9
+ 8CleY31OUMdVfmtMt6I2KH/dF1u+HSdhxrGPpVjKbcm0lpf93qH8Fgp/dLd7UYevTFCz
+ e3D5zgjIxzAci8/Te3Nm1D8OqYRe6l4k/Tvbe/zs+VxpzVPY4tSNKpnBBAMiGlXGohVL
+ YuWyYB0hP0lcrukRoDlaZwwl/knvGQNNpq7FOy6t6awCgxWwSwdBQVtJ/duSKP77mw5d
+ nLQ1fDumH9C2d0apzKxnyuC/DBzrnJWlfrGQjE1fh7+pqQKAx2a7D1owUwI8BiGxq7Rf /g== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1kxhgtys-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Jan 2023 09:34:12 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30B9YCG0004761
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Jan 2023 09:34:12 GMT
+Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 11 Jan
+ 2023 01:34:08 -0800
+Message-ID: <8ede3a51-179d-986b-ea02-d698c8bda284@quicinc.com>
+Date:   Wed, 11 Jan 2023 15:04:05 +0530
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1496; i=gregkh@linuxfoundation.org; h=from:subject; bh=FR67UhswNG3QQsrxEFVbf2J5y7PVFWFRXJRJAYU9reQ=; b=owGbwMvMwCRo6H6F97bub03G02pJDMn7mtITO9jXPFphO/3M75uz826tPDx58tW0oMRw/uZ49nfP DD+mdMSyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBETKMY5vu2rvfQ/HUu6crJY2nsvF PFN244r8YwP+T8HZGMj9q7Z6+56Gx+/OFtN6nkKAA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V7 2/2] firmware: qcom: scm: Add wait-queue handling logic
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        <andersson@kernel.org>
+CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <konrad.dybcio@somainline.org>, <robimarko@gmail.com>,
+        <quic_gurus@quicinc.com>
+References: <20230110063745.16739-1-quic_sibis@quicinc.com>
+ <20230110063745.16739-3-quic_sibis@quicinc.com>
+ <b7470966-55f6-fee7-0014-2aae3048612e@linaro.org>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <b7470966-55f6-fee7-0014-2aae3048612e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zehQERBPI6N38mewlHPKkysqyWt98-lR
+X-Proofpoint-ORIG-GUID: zehQERBPI6N38mewlHPKkysqyWt98-lR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-11_04,2023-01-10_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 bulkscore=0 adultscore=0
+ clxscore=1011 suspectscore=0 malwarescore=0 mlxlogscore=970
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301110073
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,44 +84,257 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The macro to_subsys_private() needs to switch to using
-container_of_const() as it turned out to being incorrectly casting a
-const pointer to a non-const one.  Make this change and fix up the one
-offending user to be correctly handling a const pointer properly.
+Hey Srini,
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/base/base.h  | 2 +-
- drivers/base/class.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for taking time to review the series.
 
-diff --git a/drivers/base/base.h b/drivers/base/base.h
-index 2e08258ce82e..3d1da1027206 100644
---- a/drivers/base/base.h
-+++ b/drivers/base/base.h
-@@ -53,7 +53,7 @@ struct subsys_private {
- 	struct kset glue_dirs;
- 	struct class *class;
- };
--#define to_subsys_private(obj) container_of(obj, struct subsys_private, subsys.kobj)
-+#define to_subsys_private(obj) container_of_const(obj, struct subsys_private, subsys.kobj)
- 
- struct driver_private {
- 	struct kobject kobj;
-diff --git a/drivers/base/class.c b/drivers/base/class.c
-index 86ec554cfe60..3366da9c3ff6 100644
---- a/drivers/base/class.c
-+++ b/drivers/base/class.c
-@@ -64,7 +64,7 @@ static void class_release(struct kobject *kobj)
- 
- static const struct kobj_ns_type_operations *class_child_ns_type(const struct kobject *kobj)
- {
--	struct subsys_private *cp = to_subsys_private(kobj);
-+	const struct subsys_private *cp = to_subsys_private(kobj);
- 	struct class *class = cp->class;
- 
- 	return class->ns_type;
--- 
-2.39.0
+On 1/10/23 17:44, Srinivas Kandagatla wrote:
+> Hi Sibi,
+> 
+> Few minor comments below,
+> 
+> On 10/01/2023 06:37, Sibi Sankar wrote:
+>> From: Guru Das Srinagesh <quic_gurus@quicinc.com>
+>>
+>> When the firmware (FW) supports multiple requests per VM, multiple 
+>> requests
+>> from the same/different VM can reach the firmware at the same time. Since
+>> the firmware currently being used has limited resources, it guards them
+>> with a resource lock and puts requests on a wait-queue internally and
+>> signals to HLOS that it is doing so. It does this by returning a new 
+>> return
+>> value in addition to success or error: SCM_WAITQ_SLEEP. A sleeping SCM 
+>> call
+>> can be woken up by an interrupt that the FW raises.
+>>
+> ...
+> 
+>>   drivers/firmware/qcom_scm-smc.c | 90 ++++++++++++++++++++++++++++++---
+>>   drivers/firmware/qcom_scm.c     | 89 +++++++++++++++++++++++++++++++-
+>>   drivers/firmware/qcom_scm.h     |  8 +++
+>>   3 files changed, 179 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/firmware/qcom_scm-smc.c 
+>> b/drivers/firmware/qcom_scm-smc.c
+>> index d111833364ba..30999f04749c 100644
+>> --- a/drivers/firmware/qcom_scm-smc.c
+>> +++ b/drivers/firmware/qcom_scm-smc.c
+> ...
+>> +static int __scm_smc_do_quirk_handle_waitq(struct device *dev, struct 
+>> arm_smccc_args *waitq,
+>> +                       struct arm_smccc_res *res)
+>> +{
+>> +    int ret;
+>> +    struct arm_smccc_args resume;
+>> +    u32 wq_ctx, smc_call_ctx, flags;
+>> +    struct arm_smccc_args *smc = waitq;
+>> +
+>> +    do {
+>> +        __scm_smc_do_quirk(smc, res);
+>> +
+>> +        if (res->a0 == QCOM_SCM_WAITQ_SLEEP) {
+>> +            wq_ctx = res->a1;
+>> +            smc_call_ctx = res->a2;
+>> +            flags = res->a3;
+>> +
+>> +            if (!dev)
+>> +                return -EPROBE_DEFER;
+> 
+> why are we checking dev pointer in the middle of the call?
+> A comment here would really help readers.
 
+Given that we no longer use drv_data to pass around scm struct,
+the check is no longer required. I'll drop it in the next re-spin.
+
+> 
+>> +
+>> +            ret = qcom_scm_lookup_completion(wq_ctx);
+>> +            if (ret)
+>> +                return ret;
+>> +
+>> +            fill_wq_resume_args(&resume, smc_call_ctx);
+>> +            smc = &resume;
+>> +        }
+>> +    } while (res->a0 == QCOM_SCM_WAITQ_SLEEP);
+>> +
+>> +    return 0;
+>> +}
+>> +
+> ...
+>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+>> index cdbfe54c8146..19ac506a9b1f 100644
+>> --- a/drivers/firmware/qcom_scm.c
+>> +++ b/drivers/firmware/qcom_scm.c
+>> @@ -4,6 +4,7 @@
+>>    */
+>>   #include <linux/platform_device.h>
+>>   #include <linux/init.h>
+>> +#include <linux/interrupt.h>
+>>   #include <linux/cpumask.h>
+>>   #include <linux/export.h>
+>>   #include <linux/dma-mapping.h>
+>> @@ -13,6 +14,7 @@
+>>   #include <linux/qcom_scm.h>
+>>   #include <linux/of.h>
+>>   #include <linux/of_address.h>
+>> +#include <linux/of_irq.h>
+>>   #include <linux/of_platform.h>
+>>   #include <linux/clk.h>
+>>   #include <linux/reset-controller.h>
+> 
+> include <linux/completion.h> ??
+> 
+
+ack
+
+> 
+>> @@ -33,6 +35,7 @@ struct qcom_scm {
+>>       struct clk *iface_clk;
+>>       struct clk *bus_clk;
+>>       struct icc_path *path;
+>> +    struct completion waitq_comp;
+>>       struct reset_controller_dev reset;
+>>       /* control access to the interconnect path */
+>> @@ -63,6 +66,9 @@ static const u8 
+>> qcom_scm_cpu_warm_bits[QCOM_SCM_BOOT_MAX_CPUS] = {
+>>       BIT(2), BIT(1), BIT(4), BIT(6)
+>>   };
+>> +#define QCOM_SMC_WAITQ_FLAG_WAKE_ONE    BIT(0)
+>> +#define QCOM_SMC_WAITQ_FLAG_WAKE_ALL    BIT(1)
+>> +
+>>   static const char * const qcom_scm_convention_names[] = {
+>>       [SMC_CONVENTION_UNKNOWN] = "unknown",
+>>       [SMC_CONVENTION_ARM_32] = "smc arm 32",
+>> @@ -1325,11 +1331,79 @@ bool qcom_scm_is_available(void)
+>>   }
+>>   EXPORT_SYMBOL(qcom_scm_is_available);
+>> +static struct completion *qcom_scm_lookup_wq(struct qcom_scm *scm, 
+>> u32 wq_ctx)
+>> +{
+>> +    /* assert wq_ctx is zero */ > +    if (wq_ctx != 0) {
+> 
+> Is this correct? looks like zero is the only valid one.
+> 
+> I thought wq_ctx was a unique number (UID).
+
+Currently the SMC calls from the kernel scm driver are still serialized
+and firmware only supports a single wq_ctx. This is expected to change
+in the future, will document it the comments.
+
+
+> 
+>> +        dev_err(scm->dev, "No waitqueue found for wq_ctx %d\n", wq_ctx);
+>> +        return ERR_PTR(-EINVAL);
+>> +    }
+>> +
+>> +    return &scm->waitq_comp;
+>> +}
+>> +
+>> +int qcom_scm_lookup_completion(u32 wq_ctx)
+>> +{
+>> +    struct completion *wq = NULL;
+>> +
+>> +    wq = qcom_scm_lookup_wq(__scm, wq_ctx);
+>> +    if (IS_ERR(wq))
+>> +        return PTR_ERR(wq);
+>> +
+>> +    wait_for_completion(wq);
+> 
+> We can potentially block here forever without a timeout.
+> 
+
+yeah potentially until a hung task timeout. This is what
+we want since we can't make additional scm calls anyway.
+
+> As you are reusing completion, I have not seen any reinitialization of 
+> completion, this could potentially return above line without waiting at 
+> all.
+
+A complete would paired with a single waiter, so additional
+completes would be neccessary for it to go through without
+waiting.
+
+> 
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int qcom_scm_waitq_wakeup(struct qcom_scm *scm, unsigned int 
+>> wq_ctx, bool wake_all)
+>> +{
+>> +    struct completion *wq_to_wake;
+>> +
+>> +    wq_to_wake = qcom_scm_lookup_wq(scm, wq_ctx);
+>> +    if (IS_ERR(wq_to_wake))
+>> +        return PTR_ERR(wq_to_wake);
+>> +
+>> +    if (wake_all)
+>> +        complete_all(wq_to_wake);
+>> +    else
+>> +        complete(wq_to_wake);
+> 
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static irqreturn_t qcom_scm_irq_handler(int irq, void *data)
+>> +{
+>> +    int ret;
+>> +    struct qcom_scm *scm = data;
+>> +    u32 wq_ctx, flags, more_pending = 0;
+>> +
+>> +    do {
+>> +        ret = scm_get_wq_ctx(&wq_ctx, &flags, &more_pending);
+>> +        if (ret) {
+>> +            dev_err(scm->dev, "GET_WQ_CTX SMC call failed: %d\n", ret);
+>> +            goto out;
+>> +        }
+>> +
+>> +        if (flags != QCOM_SMC_WAITQ_FLAG_WAKE_ONE &&
+>> +            flags != QCOM_SMC_WAITQ_FLAG_WAKE_ALL) {
+>> +            dev_err(scm->dev, "Invalid flags found for wq_ctx: %u\n", 
+>> flags);
+>> +            goto out;
+>> +        }
+>> +
+>> +        ret = qcom_scm_waitq_wakeup(scm, wq_ctx, !!(flags & 
+>> QCOM_SMC_WAITQ_FLAG_WAKE_ALL));
+>> +        if (ret)
+>> +            goto out;
+>> +    } while (more_pending);
+>> +
+>> +out:
+>> +    return IRQ_HANDLED;
+>> +}
+>> +
+>>   static int qcom_scm_probe(struct platform_device *pdev)
+>>   {
+>>       struct qcom_scm *scm;
+>>       unsigned long clks;
+>> -    int ret;
+>> +    int irq, ret;
+>>       scm = devm_kzalloc(&pdev->dev, sizeof(*scm), GFP_KERNEL);
+>>       if (!scm)
+>> @@ -1402,6 +1476,19 @@ static int qcom_scm_probe(struct 
+>> platform_device *pdev)
+>>       __scm = scm;
+>>       __scm->dev = &pdev->dev;
+>> +    init_completion(&__scm->waitq_comp);
+>> +
+>> +    irq = platform_get_irq(pdev, 0);
+>> +    if (irq < 0) {
+>> +        if (irq != -ENXIO)
+>> +            return irq;
+>> +    } else {
+>> +        ret = devm_request_threaded_irq(__scm->dev, irq, NULL, 
+>> qcom_scm_irq_handler,
+>> +                        IRQF_ONESHOT, "qcom-scm", __scm);
+>> +        if (ret < 0)
+>> +            return dev_err_probe(scm->dev, ret, "Failed to request 
+>> qcom-scm irq\n");
+>> +    }
+>> +
+>>       __get_convention();
+>>       /*
+> 
+> --srini
