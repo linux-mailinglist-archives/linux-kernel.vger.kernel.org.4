@@ -2,89 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79636661D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A056661D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239110AbjAKR36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:29:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
+        id S235022AbjAKRaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239865AbjAKR31 (ORCPT
+        with ESMTP id S234061AbjAKR3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:29:27 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BCA395DF;
-        Wed, 11 Jan 2023 09:27:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F1C02CE1B0D;
-        Wed, 11 Jan 2023 17:27:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2100DC433EF;
-        Wed, 11 Jan 2023 17:27:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673458059;
-        bh=/miXrqCOjiG0Qs8BlvyFBFYxjZFoCwZzpXeOHMETUtc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IqSpmuntV2Ie6MwaRXSZyBhgJd2+W2VU4+4PRmnt6xf0q7f27CkhVJ/nU80EI6XKA
-         KSeU1+/3ZlmMmyEaNIDyRU5qzxRjwL4cHv2eFBK2ZIuh83g3l5yaTTAppf8ad5GXlK
-         um4sPN8jlWoKgrxtru75myWH6z8HvqkJSvNK4ZnnClcQ4h3IoXd2wm2gUczs8g8Bgi
-         JZd0udB4prUz3FfEQQxQa5S7AmPTCgBAT5hI7ahJxthMrhu3cFKfHF1gG3PNGT/It5
-         j5vCVp+SQ+9igBlETn8PKZB5LvMKmb5p9v9vhEDcWyL30dm+Xad1Fygid/vZpK0ahF
-         vJNcSydSbXp4g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pFet5-00049L-Vs; Wed, 11 Jan 2023 18:27:44 +0100
-Date:   Wed, 11 Jan 2023 18:27:43 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Samuel Iglesias =?utf-8?Q?Gons=C3=A1lvez?= 
-        <siglesias@igalia.com>, Rodolfo Giometti <giometti@enneenne.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 08/13] tty/serial: Make
- ->dcd_change()+uart_handle_dcd_change() status bool active
-Message-ID: <Y77xj6Lk06m27X8J@hovoldconsulting.com>
-References: <20230111142331.34518-1-ilpo.jarvinen@linux.intel.com>
- <20230111142331.34518-9-ilpo.jarvinen@linux.intel.com>
+        Wed, 11 Jan 2023 12:29:41 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8077C395F3;
+        Wed, 11 Jan 2023 09:28:19 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id d15so17496722pls.6;
+        Wed, 11 Jan 2023 09:28:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yrIkiViylEgVu6ZuHAgyOCheYiQrsg59YN+MI+nDprE=;
+        b=c0ufZIq2sgNi3qTiU/Xmc7FOpFVXquc1lNGuLhG1Q5T8HOKoPQ22tbICHXW2MGIBQB
+         1uGGRYrhwJHffT7seCIt+lRPOawH7rwRpYmuksI4NOve8pG6TGuccYvJM8U4OQIWyyyV
+         GQioQmFqrlXwhNBA1IckELxRi2d0MZxBNHbD07ItF4/D920V8nlhy5VSGLcY962huHMB
+         Sxe6jvArbrnNBM25wRnTaeQElrJKRdjfUZLFA0kVvn6GjBHsz0AS9zK9dylqqoFqtiJf
+         M4ayUZAvqzYbCQ+dS5uvLl3/BFz0J5kVgHZcIQ2igN+RF7HxXUoLID4cJTflNo29xPM3
+         DatA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yrIkiViylEgVu6ZuHAgyOCheYiQrsg59YN+MI+nDprE=;
+        b=mzVQusZlrzweZdvjuAOng4uomSJBdvWvG9f6bD2Qnd7T4ZqLNLnfHj+9i6VzNjMskA
+         HhhHR38+D2dKUCXKN7FrMySXC/F/NFiCgc38i1n24vU2pOdCZU+C7Wcxp7QIhV+04x8+
+         WMOSJtmD7cL7kg31Y9sOGml53aZPbltpuKYIyq0s8rXslb+EKj0bmEQx33lauO9BDrcc
+         95Onwjlr/tdL3aiuKG4jXKJtXMswwSxtEzrOEp89/pIZJDsc1IZp4YprvVIz3xETBggW
+         RdR3e3dhjixzfimCjW6CYGpM8kwAH9z7Jt7hyXkO+WXsWScmdc07G/aMJJDyOIv0kb+1
+         AQ9Q==
+X-Gm-Message-State: AFqh2koGGOSTfzt8h3HzZjCnvW2i7ACRqDc1S3AjFDEL/QQhZ6n/PG/i
+        vP8XpTmHzUyxgdSW8ynwO3OoxoQTo2cmgUoIS6s=
+X-Google-Smtp-Source: AMrXdXuecLOQ3peFwfbkliYpXmwQqXfiKu4JVnPUtGOEQ8OaH8Vw9YJ0/wHazgyiQahR7HS/wLEAMDErgVMcjh9ecHo=
+X-Received: by 2002:a17:90b:4fc9:b0:226:85d6:e6fc with SMTP id
+ qa9-20020a17090b4fc900b0022685d6e6fcmr2997258pjb.12.1673458099034; Wed, 11
+ Jan 2023 09:28:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230111142331.34518-9-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230110180018.288460217@linuxfoundation.org>
+In-Reply-To: <20230110180018.288460217@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Wed, 11 Jan 2023 09:28:08 -0800
+Message-ID: <CAJq+SaB6HWg7PJpMn6+k_mrumTOh8CK3qFKxmcE=csTZrn+29A@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/159] 6.1.5-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 04:23:26PM +0200, Ilpo Järvinen wrote:
-> Convert status parameter for ->dcd_change() and
-> uart_handle_dcd_change() to bool which matches to how the parameter is
-> used.
-> 
-> Rename status to active to better describe what the parameter means.
-> 
-> Acked-by: Rodolfo Giometti <giometti@enneenne.com>
-> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/pps/clients/pps-ldisc.c  |  6 +++---
->  drivers/tty/serial/serial_core.c |  8 ++++----
->  drivers/tty/serial/sunhv.c       |  8 ++++----
->  drivers/usb/serial/generic.c     | 10 +++++-----
->  include/linux/serial_core.h      |  3 +--
->  include/linux/tty_ldisc.h        |  4 ++--
->  include/linux/usb/serial.h       |  2 +-
->  7 files changed, 20 insertions(+), 21 deletions(-)
+> This is the start of the stable review cycle for the 6.1.5 release.
+> There are 159 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 Jan 2023 17:59:42 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.5-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-Same here, split out the USB serial changes in a separate series.
+Compiled and booted on my x86_64 and ARM64 test systems. No errors or
+regressions.
 
-Johan
+Tested-by: Allen Pais <apais@linux.microsoft.com>
+
+Thanks.
