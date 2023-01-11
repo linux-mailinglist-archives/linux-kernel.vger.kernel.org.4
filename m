@@ -2,133 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3BB665D79
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57240665D7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238792AbjAKOPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:15:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
+        id S238877AbjAKOQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:16:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238467AbjAKOPH (ORCPT
+        with ESMTP id S238931AbjAKOQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:15:07 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE34918690
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:15:05 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 85C315C01BD;
-        Wed, 11 Jan 2023 09:15:04 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 11 Jan 2023 09:15:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1673446504; x=1673532904; bh=d7
-        o3kj/Z/vK6V725jjEnUNSDO4G71V9PXMP9Obm3o9M=; b=BIBP0klkoRyawjatsO
-        AHvzRWMjsOBzYHjzWRyVjft3peKFivD3em4OKL4nJEoaxnXIIesdzTdkklwCRqxz
-        T2zX6osIT8LYDsp01viXrHe87sgNjGzIDB5HdZrkebdAbUX3rLjG7a5q8GTL+Hj1
-        AT30h0moP6fGfucn/1cLOTQhaMxQiA2NdGk/sJKUpqR34Ccb1cAfQ90BBq0/9uMl
-        ai96qkrUYfXEuZa2vy0pqD2FM2yoMJ+zmx1rCQ9pIZHmWrZl/lumbDVaVfE0Kxi7
-        eowGxF9xS4yKTEAGFXTxWJmshrG5xt8rznCjQhD46sbXq5Y7L+i8hUZ3uDlXZ/HA
-        3v1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673446504; x=1673532904; bh=d7o3kj/Z/vK6V725jjEnUNSDO4G7
-        1V9PXMP9Obm3o9M=; b=WEISMpVytYlaMYfejIvTKo2aTBvvJmU+AG/y83yE7Vaa
-        o74pBAens5T71FO91s9aqU3laRruA/dEFjBt8+RTMbY5pT6YzfPEW9jEmihGvkxQ
-        xH2U7fLSoZd7AHf6UCIO+frsOZiuixWz6n2jtp5/vEE968vmHB3tNLqZBOEV50i6
-        VDYlPepDCAKPjOjDuoGy5qNCltb2NW0O5G0oK9byTllLzjtBbPEROiZ8Lp+s1v30
-        Wji/YCxQRDsEFCdZivBi6WHyg2y6k7jAmJRwrgwJbajrVAooDOJxxkJatvVGkT1a
-        iw+/HL/9F7rvnOc8ztbhYLBxuj+TqU42dNnzmFqtjw==
-X-ME-Sender: <xms:Z8S-Y8BFkLyeawxfGzdcjOuaiY4VW2h6y5zUgVeM7SbIsgp5GURO1w>
-    <xme:Z8S-Y-hODv2bEDXI6KKogJqEiN0PB3pyx0xmQxt6ArUymoSQ5OV0f1BCbzis3IyWh
-    DLVRCGYYUi1CuiqNE8>
-X-ME-Received: <xmr:Z8S-Y_lgPH_xI1n1J6T-I7QIQKaBXkWImnXFJjK3CMZ7Ofjhpd1ChPKU0h9FmQp76oBrgg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeggdeivdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:Z8S-YyxsRASlSmidm6QbWUFALubKU-39WaVW3LrHeKKUpqJ65tjbSA>
-    <xmx:Z8S-YxRbJWf01dwhgDoMr0eYnYvl9ibTcrqTnR4EFrbpv7Aug48hHA>
-    <xmx:Z8S-Y9ZbEkproRp37x8uNmgSruiDrXZ_PnjRdiAUKgSi_4O1YSsiOg>
-    <xmx:aMS-YyL2VZT_qdgHeoHIme0XKOL7P75xhjTdc6FxnUc8rtSi3x9T2A>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 11 Jan 2023 09:15:03 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id A4689104377; Wed, 11 Jan 2023 17:14:59 +0300 (+03)
-Date:   Wed, 11 Jan 2023 17:14:59 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv14 04/17] x86/mm: Handle LAM on context switch
-Message-ID: <20230111141459.ah7ijfbm733c4g7m@box.shutemov.name>
-References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
- <20230111123736.20025-5-kirill.shutemov@linux.intel.com>
- <CAHk-=whb1_6qwb=BSpj1KkTfJiTiahAnvTBh_=fnGyrnKAW19A@mail.gmail.com>
+        Wed, 11 Jan 2023 09:16:08 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6301B7FC;
+        Wed, 11 Jan 2023 06:15:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=13MEdz4iJ2vVIT4qZus8tp4KQdEvpmtZcNgcvXYg/50=; b=q0Un1ViVqDfyyC7buQJ07rIqiv
+        geVf1FTDEIhq4vUURyUkBDlR3Mxa5uoQebA3cfEMpIfUIwm3p9/O+UW7hu5oS4OMF0lXeRT/wo1CA
+        JNJqS2ARU35yr+kKdoXSh6EytPa0KfE1txGfG9ADArHwPM5YlwcKZ/Q62vcmr1xQnU7fvxiE2j/oh
+        KkqjhAkiRch2wzOJ1/lTsKcSD0zA9z3dvEWwVX68ux88Rm/7vI8CEmKUvSnJBEJtvpR6fxOp5aL8z
+        //TmY1nYmzCyz6qgtoaaq35eYO+5IbWKDw+R+5z4ktyGmABzb0qUznZbJ5hjYdgs/K+7Dh1TjU/y7
+        wJRvLlAA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pFbt7-003hbQ-1c;
+        Wed, 11 Jan 2023 14:15:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2BB9A300129;
+        Wed, 11 Jan 2023 15:15:40 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 14DED2CA1DB41; Wed, 11 Jan 2023 15:15:40 +0100 (CET)
+Date:   Wed, 11 Jan 2023 15:15:39 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>
+Subject: Re: [RFC PATCH tip] rseq: Fix: Increase AT_VECTOR_SIZE_BASE to match
+ rseq auxvec entries
+Message-ID: <Y77Ei4/WIT4ARQQj@hirez.programming.kicks-ass.net>
+References: <20230104192054.34046-1-mathieu.desnoyers@efficios.com>
+ <Y7XSWdLZqwEXWXml@dev-arch.thelio-3990X>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whb1_6qwb=BSpj1KkTfJiTiahAnvTBh_=fnGyrnKAW19A@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7XSWdLZqwEXWXml@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 07:49:30AM -0600, Linus Torvalds wrote:
-> Sorry, I'm traveling, and right now only on mobile. So I'm reading patches
-> on my phone, and answering on it too, so html garbage..
+On Wed, Jan 04, 2023 at 12:24:09PM -0700, Nathan Chancellor wrote:
+> On Wed, Jan 04, 2023 at 02:20:54PM -0500, Mathieu Desnoyers wrote:
+> > Two new auxiliary vector entries are introduced for rseq without
+> > matching increment of the AT_VECTOR_SIZE_BASE, which causes failures
+> > with CONFIG_HARDENED_USERCOPY=y.
+> > 
+> > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > Link: https://lore.kernel.org/r/Y7XJKZhuU9VJZQ11@dev-arch.thelio-3990X
+> > Fixes: 317c8194e6ae ("rseq: Introduce feature size and alignment ELF auxiliary vector entries")
+> > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > 
-> On Wed, Jan 11, 2023, 07:24 Kirill A. Shutemov <
-> kirill.shutemov@linux.intel.com> wrote:
+> This resolves the boot failure with the configuration I tested:
 > 
-> >
-> > +static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
-> > +{
-> > +       return READ_ONCE(mm->context.lam_cr3_mask);
-> > +}
-> >
-> 
-> I mentioned this before - in the original version this needed (but didn't
-> have, iirc) that READ_ONCE, but in the new non-thread situation I don't
-> think that's true. There should be no concurrent changes that can interfere
-> with the read, no?
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-It should be safe, yes. 
-
-It is reachable from iommu_sva_bind_device(), but it only called with mm
-== current->mm.
-
-I will drop the READ_ONCE().
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Thanks!
