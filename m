@@ -2,117 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3427F665C48
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A05665C51
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 14:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbjAKNRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 08:17:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S232854AbjAKNTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 08:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbjAKNRG (ORCPT
+        with ESMTP id S231453AbjAKNTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 08:17:06 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2122.outbound.protection.outlook.com [40.107.243.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AD060EE;
-        Wed, 11 Jan 2023 05:17:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BYM2HloZVyrzHmD0Q1SXbcALyctFkMQf21OJ4UINrDdsnIaJZPhCON6GH608fJNcNv85ri00ulrx0n3HY8Lh9+/9J6z8tUbrY1UzS/zeD3NfR1DCdTUulHkHeR1O0FHqo3MCoBJVEWmq7Sj3byX+lxAenyxIZEdz5kTIJpwxhItBU+T738BGqaZq8JUObJcm9nUBv9MfUqt4/eCDZVXXiHcOTAontCkze9JyzLkvKBw8E+h1yTlU1A5a5juWB0Csb8Kfr3hbBy9YbyUvqMHAPGBy2A6KA2MxfMK1uHjr+LDF7XzcwnofqHk0fGmO62y+WSmHLGZF3UABaa3pZqA14A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BCFOAmyRgIErWsJWsDvNvqsfE51Z39vHkVLACPmVFUA=;
- b=jmvaxbu9/Ftn0RrUv6B2t60mV2drQWm4HSr5ZqQ1r5Q1WM3Vtiu+qZJS8Qce/G1vnnobDn0mAz3ipx+oCh5t5/XNyVj71xd8uL9CLwBiyGrRVEFaAsUE8PGRwxrYaMGOn//JPE/88fTwcBGEWe87P8cOedt3A1iJ+bQwPicG7o7/x3pLuXphQ9khj9gpwf1zedUeJcylM+rqBdh2FpLhPnd8mPlnPG7w+Cxh8n7us/q72CPCVNNs3KNJv6DRRI3riBg3x/0pgmflQVhzLivNkV9ua9EASDTh4C+9U8xpandn83Jr6ifFXUKtMX6V1HqhRzOs2oISRHR6yFe66s77Kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BCFOAmyRgIErWsJWsDvNvqsfE51Z39vHkVLACPmVFUA=;
- b=EKI2kcIRi76hsQ5hdtYHORdSr+wRa9Id1gytvFwSRSdkiibohCqTDs4RhKAMptHdjWCmHvR+ZKR5LFoZeKXWK1gcBisozdKpFt2KR49UHB7ovamQW+ldGGfE5YIYIS2N1hdL+e4453A6Ghd7CWR0V6tym+TSh6soZNbbdiNd0Ss=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB4988.namprd13.prod.outlook.com (2603:10b6:510:94::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Wed, 11 Jan
- 2023 13:17:02 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb5c:910f:3730:fd65%6]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 13:17:02 +0000
-Date:   Wed, 11 Jan 2023 14:16:40 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Dimitris Michailidis <dmichail@fungible.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        oss-drivers@corigine.com, "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: remove redundant config PCI dependency for some
- network driver configs
-Message-ID: <Y762uPnsRuwKi4is@corigine.com>
-References: <20230111125855.19020-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111125855.19020-1-lukas.bulwahn@gmail.com>
-X-ClientProxiedBy: AM0PR04CA0056.eurprd04.prod.outlook.com
- (2603:10a6:208:1::33) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 11 Jan 2023 08:19:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84BC659A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:18:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673443097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zTMWfGAiBPFZXwWQF8kE22q3w7eEUdeC1OsbaC6TZ6E=;
+        b=Reae9ZWhaid/jb2NJ5UDF0uzswRRtE1BCn1LiufkZjP2UG5tptqade3JegHtHXVcMiIojS
+        lw6wZQG5jKsTxd15Y4OStZNrTFiaM8LaefhkhfsGStz65oiB1B+vDbRm2KfgrNgwZSVkmE
+        bGUMzPLUp1kvjylKCt03bJECgN8AeaA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-532-I0i_BI_TOMGEL9M36ABF8A-1; Wed, 11 Jan 2023 08:18:15 -0500
+X-MC-Unique: I0i_BI_TOMGEL9M36ABF8A-1
+Received: by mail-wr1-f69.google.com with SMTP id o14-20020adfa10e000000b002631c56fe26so2646605wro.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 05:18:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zTMWfGAiBPFZXwWQF8kE22q3w7eEUdeC1OsbaC6TZ6E=;
+        b=3HQyrcN80hJD2OFRmlmfK6EV2Sux+MHD1xhiJq9gT1vrLR1XIuvpLqyGRzCw2803lg
+         0G/W1YAA4FZUh+GK39i7q92Qrk5X8osHLupMvjsE+V+J1xorpFbxQY6IbtYaWBWCwHAP
+         Geuk7X4ag33oNd5EVFsyfv7kA9llKe1jz874Gx9+801XRDEzPS2x86b6Qd0pZf7UJvFH
+         AGubakDFej53zXyH75qal92T2WeEDHgO2o7ekt5KRQhjGSZ0DwfCKnMKI2l7ObBYjIWJ
+         wi7ByBEBbfVygKb3LEYmyrOTOe/TBqHwXBtJY90JC+km6ZqdWKaEGscd/txjff5zJ2ju
+         NHeA==
+X-Gm-Message-State: AFqh2kpqLXw3xCLc3riMGKM/+io+u/bg8Fhj5cgXJDuENSN19akqIkMB
+        x3bd7yvpMip4ZwWxaOJBO7MajJGr0Qs35c1bnBdyhKW8dqPSn/tPF2TnO3aQbyGZJU2LvgyZkHS
+        AMdnzDWNFVxaVcraP93DZu8mj
+X-Received: by 2002:adf:d216:0:b0:2bc:854d:fc50 with SMTP id j22-20020adfd216000000b002bc854dfc50mr4280060wrh.7.1673443094702;
+        Wed, 11 Jan 2023 05:18:14 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuNl2FDi0fKOWNnsiMV/GUZfmzpnJNXZ/u6KsR6fZaN/GQO0TXronHArzG60dycD8iFkLQS8Q==
+X-Received: by 2002:adf:d216:0:b0:2bc:854d:fc50 with SMTP id j22-20020adfd216000000b002bc854dfc50mr4280045wrh.7.1673443094360;
+        Wed, 11 Jan 2023 05:18:14 -0800 (PST)
+Received: from [192.168.31.129] (84-115-237-15.cable.dynamic.surfer.at. [84.115.237.15])
+        by smtp.gmail.com with ESMTPSA id q4-20020adff784000000b0026e94493858sm13479690wrp.106.2023.01.11.05.18.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 05:18:13 -0800 (PST)
+Message-ID: <928c76bf-39bc-cbc0-373e-70c5561cd5b0@redhat.com>
+Date:   Wed, 11 Jan 2023 14:18:12 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB4988:EE_
-X-MS-Office365-Filtering-Correlation-Id: b631d5e3-4520-4ca8-4299-08daf3d62070
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Rz6i/vnGCvJvL1ynwVXzjX0VkMShhKPX2eDpB/x/7TGEbt3Q+F85fnZRNgqzl47POfkBIAz8aiB4f9BAjgJM9G7alwlZ9zvrYe3E3SZ18rK45XHNwn/01UZCgSJoxHZTdxBCiKWWC4XlCz7tKw+9Uw+Cvd/fFdqa5Uh+cmiqFW5LvRYmcL2H8OK66iedYpTR/RPeemMoS9h8xRLrO/MYDGdQUqqLb29z7jJbMbXZCu4dcXpSLwoW54zQhPxzLrlac8L4tl4tSHiYlSEWcB2cQO0iVxpCVX8OW5iZbhpR4Lp9+9SqP1n5ceLBXkPEThdUU6hlFr9r1MYlLKWaceLsYrOZBwryPO1K9UXYRzufn+QZLTomd1WFq1v5syS7nxZEOXi5kSm5NFpAYwo+v9fsj6SRsPHKYF/0thw5y+bsqAn2IYlQnizJ9t4BVA2b8F3G+wLZe6c4RTtKFMISJjvZ5IARzRJmggwrVOCyodB1fuGSXS6qyioxaB2r+unMwLmfz1bftA5A1Nk/5cUmZy1Ap2IiOtzWmrAsGHtBQnDYaDzaSxnPE0alPAKgMAfMkACdnB9PkXNOyJrH2+MSQhXI3kFHN27SHlg4ObOlEJrILTtVO+M0aJLDjpFyEMD4cWm/Dgb3oD3Bc8un8c6fs+NY0wdD/1nvLswX1SJ3maWbbEN+ZvvJCgL30AFk6264dsgG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(366004)(396003)(376002)(39830400003)(451199015)(38100700002)(83380400001)(86362001)(44832011)(5660300002)(7416002)(2906002)(4326008)(6916009)(66946007)(66556008)(66476007)(8676002)(8936002)(41300700001)(6512007)(186003)(6666004)(6506007)(2616005)(54906003)(316002)(478600001)(6486002)(966005)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3UG10at55H9AHxD5DNO9ystBvMuOawdVHdm0Qw5UVfndG52wW6sABEN/enbg?=
- =?us-ascii?Q?JAhe2UqU8/6W8jK4NpcZOTTNVsuOrr5ahEndiP9Vw4xzAHVVe348fuQXI5d/?=
- =?us-ascii?Q?rtoMLefubrGqbVWiskLUVdwuFCnL5WNM4nZXKx7irQU07mDR8zbX23du6sjP?=
- =?us-ascii?Q?8ya4b+HSJNTMKJVNrX7aWhCVCnq4vNCA7ol8HynPgcYefVafxpBcZxpjjOUb?=
- =?us-ascii?Q?ynrppLJgRnuIffB3EnSGyH+kgLeEP6bVQkVRreB7PFe11SiXObfaTQRsO4+q?=
- =?us-ascii?Q?L+j7PRlxHt2CSBKn3YcDpubu49f50YHTvW6KswRZgJap8lNfAE1HLZk6f8tk?=
- =?us-ascii?Q?dj9l7IA1vnMMnMl785uuH2n+S/YiB8cUbdJWYzCQnCIcLZzQt9B1OyS4MWOP?=
- =?us-ascii?Q?8TmTwujdQf9HvSZtHkJMSezAoxneesK+51vf4o711hKTbV29U8qhgd6jODS4?=
- =?us-ascii?Q?LxyUEQb5DjtwMwS7TxAdAC0EU9FY3vGtOQ4xEPFMP1rll04ZCKS7+lw7Ja2I?=
- =?us-ascii?Q?Jz8fT2K/6jimx93ZbZsBpZr5c8Z/fy9oEDEp+XbLr5elRCxzOhkhCY6mALoJ?=
- =?us-ascii?Q?Vgj/QdzashJ6t1hUJxbFBuVuSHbqmWik99+ogp2l1PnNGts8RPhExjslZJ32?=
- =?us-ascii?Q?kgmVFVQ1Tcyxtkl2S4sfZsvuvmY/kzuRXT7WCxf5T9rllmPbOQboDqP/GgDW?=
- =?us-ascii?Q?o4yOFI1vuW2fjVAJ0iPZQz2CgabT208pX836Vpd0ne1vJ2cyar/yXWu0rpKq?=
- =?us-ascii?Q?Dx/t1wNoSxm5aDKTzFCag//EcyXyagCoC1JePNLkrz2heficwBYP+qtY8IgN?=
- =?us-ascii?Q?3dG3FtQSU/IhBzJUtr0G01Cx+dIJFR5wQBagoJmk5T43GNEQ+e/qcHW4Rn86?=
- =?us-ascii?Q?PohmrOpScBk0XB/EEXN4bwyfL1bZ65lwhqbAvv0zo4RZtnRhIbqEpkRvyJbs?=
- =?us-ascii?Q?M+KZMV8gTh7r0n3jrSt2mgvt2BYHScczugrt9SLNVV8ClsoKngUpN5Mq+Eee?=
- =?us-ascii?Q?ykHiL4Ex5yrhMZtOjcjOQvNJVx5lF53RUuR2FhV/Mwme4rjPFpsJAthEpGgy?=
- =?us-ascii?Q?659u3EvfzpvmOzR9040dnS68MgErMKNc6YdnAwC+3XeuHOV7++4Mh7/7t8Sd?=
- =?us-ascii?Q?KrXJ3bBlYenwvsv/ezGrleWqSBVHdHdfngxWMY82xS4RX/4+Qcd8OCwZ6fzo?=
- =?us-ascii?Q?H5MtR0XjJQ6FKbMJV22n7/1nU7hpzrdDs++UHkIGGv/XQrL3nS+9+XidZUjd?=
- =?us-ascii?Q?OC7sZFSThGPXN7Noi96RRm/6suxzkrOiYsUiSy3xQwEnSy3vOpQhE/jN34Bj?=
- =?us-ascii?Q?iawt7bAuw2QP5opQvV2C8ECiv0wDZXfjUBuFp52kYsOJhZA5bxDR+q+Kp8IK?=
- =?us-ascii?Q?/kLU/OhD+fIh7q/otJyrSbknpITJ+iPM9Fk+QqONVr1pX34e2k7C6oD2y6aw?=
- =?us-ascii?Q?NGA2REnTaj1T41koXqzRiY5slDHTpLLcEmO7tiWTMo1JK+/OiAslu8ZlUscw?=
- =?us-ascii?Q?ObZzRnKE1vlBb0ILdZdhclUvQCfgN24m8FzetQ5WhmgjkJXjETMZS++ACaWj?=
- =?us-ascii?Q?zHsWvYMoLMKdeN4NRp/NXiqC0lRNJqGZCEdCgCNQSYpdznQpb7GRg0+UCoA/?=
- =?us-ascii?Q?gDcVDvqQBg+EHDm7ieQY7XWsJarp+sQqlsSOfVUZYbPIP2T1YSnbD5/C+TBM?=
- =?us-ascii?Q?kedg5g=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b631d5e3-4520-4ca8-4299-08daf3d62070
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 13:17:02.1156
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Yv0a6FjIjoKxSKxasP702kNpNwJSVdhgUI8tXCv0SbhYvaRmH9OxPPIzGgK3M1rhdrqRRwp09a3ISVQ6nKSGcdM+YhObT+CKoWkuY+yYiVg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB4988
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1] perf script flamegraph: Avoid d3-flame-graph package
+ dependency
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        996839@bugs.debian.org, Brendan Gregg <brendan@intel.com>,
+        spiermar@gmail.com
+References: <20230105030434.255603-1-irogers@google.com>
+ <CAP-5=fXi_9zdhTAoYApiFQoLURAvpEatFzU3uL23o3zs=z25ZQ@mail.gmail.com>
+ <bd4a55a4-8e9c-82bf-92c8-1fa354289dce@redhat.com>
+ <CAP-5=fX3LaJgft8T+nYV8SHpmoAOYZ9S5-pztKF9j--Um4HKDQ@mail.gmail.com>
+From:   Andreas Gerstmayr <agerstmayr@redhat.com>
+In-Reply-To: <CAP-5=fX3LaJgft8T+nYV8SHpmoAOYZ9S5-pztKF9j--Um4HKDQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,25 +93,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 01:58:55PM +0100, Lukas Bulwahn wrote:
-> [Some people who received this message don't often get email from lukas.bulwahn@gmail.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+On 10.01.23 20:51, Ian Rogers wrote:
+> On Tue, Jan 10, 2023 at 10:02 AM Andreas Gerstmayr
+> <agerstmayr@redhat.com> wrote:
+>>
+>> On 05.01.23 10:24, Ian Rogers wrote:
+>>> On Wed, Jan 4, 2023 at 7:04 PM Ian Rogers <irogers@google.com> wrote:
+>>>>
+>>>> Currently flame graph generation requires a d3-flame-graph template to
+>>>> be installed. Unfortunately this is hard to come by for things like
+>>>> Debian [1]. If the template isn't installed warn and download it from
+>>>> jsdelivr CDN. If downloading fails generate a minimal flame graph
+>>>> again with the javascript coming from jsdelivr CDN.
+>>>>
+>>>> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996839
+>>>>
+>>>> Signed-off-by: Ian Rogers <irogers@google.com>
+>>
+>> I'm not entirely convinced that this perf script should make a network
+>> request. In my opinion
+>>
+>> * best would be if this template gets packaged in Debian
+>> * alternatively print instructions how to install the template:
+>>
+>>       sudo mkdir /usr/share/d3-flame-graph
+>>       sudo wget -O /usr/share/d3-flame-graph/d3-flamegraph-base.html
+>> https://cdn.jsdelivr.net/npm/d3-flame-graph@4/dist/templates/d3-flamegraph-base.html
+>>
+>> * or eventually just embed the entire template (66 KB) in the Python
+>> file (not sure if this is permissible though, it's basically a minified
+>> HTML/JS blob)?
+>> * if the above options don't work, I'd recommend asking the user before
+>> making the network request, and eventually persist the template
+>> somewhere so it doesn't need to be downloaded every time
+>>
+>> What do you think?
 > 
-> While reviewing dependencies in some Kconfig files, I noticed the redundant
-> dependency "depends on PCI && PCI_MSI". The config PCI_MSI has always,
-> since its introduction, been dependent on the config PCI. So, it is
-> sufficient to just depend on PCI_MSI, and know that the dependency on PCI
-> is implicitly implied.
+> So the script following this patch is going to try 3 things:
+> 1) look for a local template HTML,
+> 2) if a local template isn't found warn and switch to downloading the
+> CDN version,
+> 3) if the CDN version fails to download then use a minimal (embedded
+> in the script) HTML file with JS dependencies coming from the CDN.
 > 
-> Reduce the dependencies of some network driver configs.
-> No functional change and effective change of Kconfig dependendencies.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  drivers/net/ethernet/freescale/enetc/Kconfig | 4 ++--
->  drivers/net/ethernet/fungible/funeth/Kconfig | 2 +-
->  drivers/net/ethernet/netronome/Kconfig       | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
+> For (1) there are references in the generated HTML to www.w3.org,
+> meaning the HTML isn't fully hermetic - although these references may
+> not matter.
 
-For nfp portion.
+The references to w3.org are XML namespace names. As far as I'm aware 
+they do not matter, as they are merely identifiers and are never 
+accessed [1,2]. Therefore the generated HTML file in its current form is 
+hermetic.
 
-Acked-by: Simon Horman <simon.horman@corigine.com>
+This was a design decision from the start - the flame graph generation 
+and the resulting HTML file should not use any external resources loaded 
+over the network (the external host could be inaccessible or compromised 
+at any time). I understand that this requirement may not apply to every 
+user or company.
+
+> For (2) there will be a download from the CDN of the template during
+> the execution of flamegraph. The template is better than (3) as it
+> features additional buttons letting you zoom out, etc. The HTML will
+> contain CDN references.
+> For (3) the generated HTML isn't hermetic and will use the CDN.
+> 
+> For (2) we could give a prompt before trying to download the template,
+> or we could change it so that we give the wget command. I wouldn't
+> have the wget command require root privileges, I'd say that the
+> template could be downloaded and then the path of the download given
+> as an option to the flamegraph program. Downloading the file and then
+> adding an option to flamegraph seems inconvenient to the user,
+> something that the use of urllib in the patch avoids - it is
+> essentially just doing this for the user without storing the file on
+> disk. I think I prefer to be less inconvenient, and so the state of
+> the code at the moment looks best to me. Given that no choice results
+> in a fully hermetic HTML file, they seem similar in this regard. Is it
+> okay to try a download with urllib? Should there be a prompt? I think
+> the warning is enough and allows scripts, etc. using flamegraph to
+> more easily function across differing distributions.
+
+I fully agree, your changes make the flame graph generation more 
+convenient in case the template is not installed. Also, downloading the 
+template to a local directory and having to specify the path to the 
+template every time is an inconvenience.
+
+I think it is a tradeoff between convenience and security/privacy. 
+jsdelivr can get compromised, serving malicious JS (well, in that case, 
+printing instructions to jsdelivr is also flawed :|).
+In the end it's up to the maintainers to decide.
+
+> An aside, Namhyung pointed out to me that there is a "perf report -g
+> folded" option, that was added in part to simplify creating
+> flamegraphs:
+> http://lkml.kernel.org/r/1447047946-1691-2-git-send-email-namhyung@kernel.org
+> Building off of perf report may improve/simplify the flamegraph code,
+> or avoid the requirement that libpython be linked against perf.
+
+Yep, in this case another tool is required to generate the flame graph 
+visualization, for example [3].
+
+
+[1] https://www.w3.org/TR/xml-names11/
+[2] https://developer.mozilla.org/en-US/docs/Web/SVG/Namespaces_Crash_Course
+[3] https://github.com/brendangregg/FlameGraph
+
+
+Cheers,
+Andreas
+
+> 
+> Thanks,
+> Ian
+> 
+> 
+> 
+> 
+>>
+>> Cheers,
+>> Andreas
+>>
+>>>> ---
+>>>>    tools/perf/scripts/python/flamegraph.py | 63 ++++++++++++++++++-------
+>>>>    1 file changed, 45 insertions(+), 18 deletions(-)
+>>>>
+>>>> diff --git a/tools/perf/scripts/python/flamegraph.py b/tools/perf/scripts/python/flamegraph.py
+>>>> index b6af1dd5f816..808b0e1c9be5 100755
+>>>> --- a/tools/perf/scripts/python/flamegraph.py
+>>>> +++ b/tools/perf/scripts/python/flamegraph.py
+>>>> @@ -25,6 +25,27 @@ import io
+>>>>    import argparse
+>>>>    import json
+>>>>    import subprocess
+>>>> +import urllib.request
+>>>> +
+>>>> +minimal_html = """<head>
+>>>> +  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.css">
+>>>
+>>> (hopefully fixed Martin Spier's e-mail address)
+>>>
+>>> The @4.1.3 comes from the README.md:
+>>> https://github.com/spiermar/d3-flame-graph/blob/master/README.md
+>>> Does it make sense just to drop it or use @latest ? It'd be nice not
+>>> to patch this file for every d3-flame-graph update.
+>>>
+>>> Thanks,
+>>> Ian
+>>>
+>>>> +</head>
+>>>> +<body>
+>>>> +  <div id="chart"></div>
+>>>> +  <script type="text/javascript" src="https://d3js.org/d3.v7.js"></script>
+>>>> +  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/d3-flamegraph.min.js"></script>
+>>>> +  <script type="text/javascript">
+>>>> +  const stacks = [/** @flamegraph_json **/];
+>>>> +  // Note, options is unused.
+>>>> +  const options = [/** @options_json **/];
+>>>> +
+>>>> +  var chart = flamegraph();
+>>>> +  d3.select("#chart")
+>>>> +        .datum(stacks[0])
+>>>> +        .call(chart);
+>>>> +  </script>
+>>>> +</body>
+>>>> +"""
+>>>>
+>>>>    # pylint: disable=too-few-public-methods
+>>>>    class Node:
+>>>> @@ -50,15 +71,18 @@ class FlameGraphCLI:
+>>>>            self.args = args
+>>>>            self.stack = Node("all", "root")
+>>>>
+>>>> -        if self.args.format == "html" and \
+>>>> -                not os.path.isfile(self.args.template):
+>>>> -            print("Flame Graph template {} does not exist. Please install "
+>>>> -                  "the js-d3-flame-graph (RPM) or libjs-d3-flame-graph (deb) "
+>>>> -                  "package, specify an existing flame graph template "
+>>>> -                  "(--template PATH) or another output format "
+>>>> -                  "(--format FORMAT).".format(self.args.template),
+>>>> -                  file=sys.stderr)
+>>>> -            sys.exit(1)
+>>>> +        if self.args.format == "html":
+>>>> +            if os.path.isfile(self.args.template):
+>>>> +                self.template = f"file://{self.args.template}"
+>>>> +            else:
+>>>> +                print(f"""
+>>>> +Warning: Flame Graph template '{self.args.template}'
+>>>> +does not exist, a template will be downloaded via http. To avoid this
+>>>> +please install a package such as the js-d3-flame-graph or
+>>>> +libjs-d3-flame-graph, specify an existing flame graph template
+>>>> +(--template PATH) or another output format (--format FORMAT).
+>>>> +""", file=sys.stderr)
+>>>> +            self.template = "https://cdn.jsdelivr.net/npm/d3-flame-graph@4.1.3/dist/templates/d3-flamegraph-base.html"
+>>>>
+>>>>        @staticmethod
+>>>>        def get_libtype_from_dso(dso):
+>>>> @@ -129,15 +153,18 @@ class FlameGraphCLI:
+>>>>                options_json = json.dumps(options)
+>>>>
+>>>>                try:
+>>>> -                with io.open(self.args.template, encoding="utf-8") as template:
+>>>> -                    output_str = (
+>>>> -                        template.read()
+>>>> -                        .replace("/** @options_json **/", options_json)
+>>>> -                        .replace("/** @flamegraph_json **/", stacks_json)
+>>>> -                    )
+>>>> -            except IOError as err:
+>>>> -                print("Error reading template file: {}".format(err), file=sys.stderr)
+>>>> -                sys.exit(1)
+>>>> +                with urllib.request.urlopen(self.template) as template:
+>>>> +                    output_str = '\n'.join([
+>>>> +                        l.decode('utf-8') for l in template.readlines()
+>>>> +                    ])
+>>>> +            except Exception as err:
+>>>> +                print(f"Error reading template {self.template}: {err}\n"
+>>>> +                      "a minimal flame graph will be generated", file=sys.stderr)
+>>>> +                output_str = minimal_html
+>>>> +
+>>>> +            output_str = output_str.replace("/** @options_json **/", options_json)
+>>>> +            output_str = output_str.replace("/** @flamegraph_json **/", stacks_json)
+>>>> +
+>>>>                output_fn = self.args.output or "flamegraph.html"
+>>>>            else:
+>>>>                output_str = stacks_json
+>>>> --
+>>>> 2.39.0.314.g84b9a713c41-goog
+>>>>
+>>>
+>>
+>> --
+>> Red Hat Austria GmbH, Registered seat: A-1200 Vienna, Millennium Tower,
+>> 26.floor, Handelskai 94-96, Austria
+>> Commercial register: Commercial Court Vienna, FN 479668w
+>>
+> 
+
+-- 
+Red Hat Austria GmbH, Registered seat: A-1200 Vienna, Millennium Tower, 
+26.floor, Handelskai 94-96, Austria
+Commercial register: Commercial Court Vienna, FN 479668w
+
