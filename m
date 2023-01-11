@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86196665B7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F9A665B84
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236002AbjAKMfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 07:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S238276AbjAKMh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 07:37:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235719AbjAKMfk (ORCPT
+        with ESMTP id S231420AbjAKMhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 07:35:40 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A41415FE9;
-        Wed, 11 Jan 2023 04:35:36 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 32A1F17847;
-        Wed, 11 Jan 2023 12:35:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673440534; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KUl6YA1IKQUKcScNMyJ415yLqRxEtI8kTOV2MucdUwI=;
-        b=j8rDezHZBy0CHoXmut/N/eeDkVcSrSq7aWYb5DR4MRZOYPn0lF3k4OfsNWh/JMkukmXI5a
-        jnVqayNAkJa2dXnAOZ2jAW7c3IzpBFryMclHuyPIidoCAeQy0Uz42dbyRCZp1Waf/ELEBW
-        WMG/RLx2vU0i9sSpqAnw6cTTTox7xYM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F2AD413591;
-        Wed, 11 Jan 2023 12:35:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VTo9OhWtvmPaTQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 11 Jan 2023 12:35:33 +0000
-Date:   Wed, 11 Jan 2023 13:35:32 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     hanjinke <hanjinke.666@bytedance.com>, Tejun Heo <tj@kernel.org>
-Cc:     Jan Kara <jack@suse.cz>, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yinxin.x@bytedance.com
-Subject: Re: [External] Re: [PATCH v3] blk-throtl: Introduce sync and async
- queues for blk-throtl
-Message-ID: <20230111123532.GB3673@blackbody.suse.cz>
-References: <20221226130505.7186-1-hanjinke.666@bytedance.com>
- <20230105161854.GA1259@blackbody.suse.cz>
- <20230106153813.4ttyuikzaagkk2sc@quack3>
- <Y7hTHZQYsCX6EHIN@slm.duckdns.org>
- <c839ba6c-80ac-6d92-af64-5c0e1956ae93@bytedance.com>
+        Wed, 11 Jan 2023 07:37:23 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574C1233;
+        Wed, 11 Jan 2023 04:37:20 -0800 (PST)
+X-UUID: ad6b88cc91ac11eda06fc9ecc4dadd91-20230111
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Sr+PIg3JVKq3dP3YdqVRBlMxm/APW0FS9VzxDQ6sE/c=;
+        b=jpknjceJY1Vw1iM8Z0GnyoonmRDDG/tDGGIzC7TZYuE08CCadIgLzbVrnZA3ClgcNgXDLIWUZYWibtQXP6Bhhk5tz/63Im9cgW2DjdFKwrerbAY5S+c48qjDYQJ53+8bx/88WhzUXJurQReH98sAlMkvhHuEjoSPOYW9nabSUBs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:4e93d748-071d-49ac-b5a8-a11accca12ed,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.17,REQID:4e93d748-071d-49ac-b5a8-a11accca12ed,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:543e81c,CLOUDID:505b5b54-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:2301112037169N1MZ4T9,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0
+X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
+X-CID-BVR: 0
+X-UUID: ad6b88cc91ac11eda06fc9ecc4dadd91-20230111
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 848764774; Wed, 11 Jan 2023 20:37:14 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 11 Jan 2023 20:37:13 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 11 Jan 2023 20:37:13 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <sboyd@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <hsinyi@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH 0/9] Add and update some driver nodes for MT8186 SoC
+Date:   Wed, 11 Jan 2023 20:37:02 +0800
+Message-ID: <20230111123711.32020-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="L6iaP+gRLNZHKoI4"
-Content-Disposition: inline
-In-Reply-To: <c839ba6c-80ac-6d92-af64-5c0e1956ae93@bytedance.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series is based on matthias github, for-next.
 
---L6iaP+gRLNZHKoI4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Allen-KH Cheng (9):
+  arm64: dts: mediatek: mt8186: Add MTU3 nodes
+  dt-bindings: spmi: spmi-mtk-pmif: Document mediatek,mt8195-spmi as
+    fallback of mediatek,mt8186-spmi
+  arm64: dts: mediatek: mt8186: Add SPMI node
+  arm64: dts: mediatek: mt8186: Add ADSP mailbox nodes
+  arm64: dts: mediatek: mt8186: Add ADSP node
+  arm64: dts: mediatek: mt8186: Add audio controller node
+  arm64: dts: mediatek: mt8186: Add DPI node
+  dt-bindings: display: mediatek: Fix the fallback for
+    mediatek,mt8186-disp-ccorr
+  arm64: dts: mediatek: mt8186: Add display nodes
 
-Hello.
+ .../display/mediatek/mediatek,ccorr.yaml      |   2 +-
+ .../bindings/spmi/mtk,spmi-mtk-pmif.yaml      |  11 +-
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      | 335 ++++++++++++++++++
+ 3 files changed, 344 insertions(+), 4 deletions(-)
 
-Thanks all for sharing ideas and more details (in time-previous messages).
+-- 
+2.18.0
 
-On Sat, Jan 07, 2023 at 02:07:38AM +0800, hanjinke <hanjinke.666@bytedance.=
-com> wrote:
-> But for some specific scenarios with old kernel versions, blk-throtl
-> is alose needed. The scenario described in my email is in the early stage=
- of
-> research and extensive testing for it. During this period=EF=BC=8Csome pr=
-iority
-> inversion issues amoug cgroups or within one cgroup have been observed. S=
-o I
-> send this patch to try to fix or mitigate some of these issues.
-
-Jinke, do you combine blk-throtl with memory limits? (As that could in theo=
-ry
-indirectly reduce async requests as dirtier would be slowed down.)
-
-Thanks,
-Michal
-
---L6iaP+gRLNZHKoI4
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY76tEgAKCRAkDQmsBEOq
-uTntAQCFo6a3wu0l6VAEdVs14UXuwMrppoC19q2D3MXh03vohQEAjdb/QSHK87YF
-XpY7Qj73w0N3r7QhlT9J4wOlGj1WVQ4=
-=m0hK
------END PGP SIGNATURE-----
-
---L6iaP+gRLNZHKoI4--
