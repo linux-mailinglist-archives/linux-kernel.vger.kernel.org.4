@@ -2,467 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F450665D74
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 923A1665D57
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238368AbjAKOOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:14:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S234628AbjAKOKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236599AbjAKOOX (ORCPT
+        with ESMTP id S234133AbjAKOKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:14:23 -0500
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD53638B4;
-        Wed, 11 Jan 2023 06:14:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1673446457;
-        bh=WeAfG4q7lscsbUtzVg64kqY5IfCJe6Z4UI1XTaa+95M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=vyaHVrHvAm0tS9JiSoVZ/vqOv7WMXNSotk5MHCRxuc9wypuwaHn9P1FXaGzPsJyr/
-         kj0URfXjp7ncYS7r+I5c8kNAcxd5smu++WY1g2PEH3PtwHMYUCs4ONOfxQzlE5hIQO
-         BaauUdOEminWqXseKo1+TbXYaxJBV/c56GZIW2yc=
-Received: from localhost.localdomain ([111.60.247.106])
-        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
-        id 37731CEB; Wed, 11 Jan 2023 22:13:55 +0800
-X-QQ-mid: xmsmtpt1673446454t2pfeo66q
-Message-ID: <tencent_F934F7427EB7B986E8AF70A95A397436E007@qq.com>
-X-QQ-XMAILINFO: Md8NwmqZYy3fbANy6RbzLrwah382LG/Bqb3hJJQps1++cwqE2CbVfTWMLQ3Mq7
-         Eeq8AY6dPPl95QXgxE3xvM4x/SC0WmH+OuqIV4nxUxPpoJ7Zg4USLrdILJV4DaP8SS73Bh2dOZue
-         jBURo+oR8N/3bGRTn8wNVMUlasKFl8/MCofj9Sav9LfTEQBHGARKmcd0gKoqgCS/Mk7qFzObRWhe
-         uc9lUSIdQlkW3FUVCz38ZS9JP2KWWe7izEnLJADDflGi7uwr6hl+S9u2Wk0PyZpQYUn3wv7YWOcI
-         wAJJym2pj6T+xB/iM7/IlzHil/sOq49UMKE+qVJ3SDazDfnr8zgYYkfpWoC+/04iXWHgdEY437Vs
-         n1+D/QfCxvXF7u9PKb5xn6cqTX60wlfSEtl+2Tsob05126F29LKHoVqnfcsOZVN30UoCAuQ8efhk
-         3a2kUmkB0RNA3XarP0zq3LHT5xaN8Z41+20hHh0JElXIPt8bKp8xgUM4yrL/1C2DMUe68ecMq8tO
-         j6JlDEKgfXID8WMSeHF9h4pvm8T22y51GUtuLgd5PrZ8druzaDqaVYShj9hU1maTmEdrJ0QyUZdd
-         +LY38uUtQjnH/Xp4soTjo8sVqK7qmzlZzJriagSg8SdOy/jZKs9EDRC/IV17EprMyHL1BDmUJiR7
-         LXW2PrA965B1e9YSZxoYBZ28dYKWyhddzqwTq7exMYO/3M2P/xvRyelN6B4+hP7hkec2sks793r3
-         hbzOTk3reZ896MhVg4G9XDso5Vif6E/SK2Eqcvq1PMVG9YF3OXliEJoTXpJOwBHd/heXlKpp5yA1
-         lPi4rj5oZdPwjfCSzJG7nRAksBt8IJNbNdMPBLDr9hSkSz0I/VEGgrmcCldJPnWa9E2yrNdWnzwP
-         C892ORSeYwCxG02dm125Qs/ZtyfLlzlr+XjRNr8Gl4+6RQcwRS3pxxkuiCCuJBTYV5K+cD4GGBK8
-         Bht4d//ZbqbHCdMHctuVLIdDK3o1Ms3ddC4s6JgkArINyjPfpGZVIoojNzhkM3DAeGdwBkg1VQte
-         xhQNoWqQ==
-From:   Yang Xiwen <forbidden405@foxmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jaime Breva <jbreva@nayarsystems.com>,
-        Nikita Travkin <nikita@trvn.ru>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Yang Xiwen <forbidden405@foxmail.com>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: msm8916-thwc: Add initial device tree for Tong Heng Wei Chuang Wifi/LTE dongle UFI-001C and uf896
-Date:   Wed, 11 Jan 2023 22:13:11 +0800
-X-OQ-MSGID: <20230111141311.14682-4-forbidden405@foxmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230111141311.14682-1-forbidden405@foxmail.com>
-References: <20230111141311.14682-1-forbidden405@foxmail.com>
-MIME-Version: 1.0
+        Wed, 11 Jan 2023 09:10:36 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2051.outbound.protection.outlook.com [40.107.237.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA54BFC
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:10:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TKAWjTW/5xO9lTkb8dDHLZhiUvAiIqq8thnHNh/B+o2lK8FuMMCf7R8eAoPxCCE3QLwosBpDChdgZvNssMpIiUS0tzAgEijfcwxcf+kYQ8sa2vyu1r+dO/llNEA+V8h0+2aAf1ak7N9W0/IJFAJ/XOH1ZgBtQg9JMpOVBKseqnvUCdoXiflWcz/XykCVSdlVWJjIJqzGVlmlWVFm4RAFAC42ZAypz1tKf6tYYEi9HrSc2ChTDh/OpR8D/vtMw6rlPEedFNR8KIxKPavr0n9ysj46fD0739nwD6HtpQ7tVdhTdQ6yoKLNnUZ3REdZDqYkA7jODc6+Y4AQoSx+1zKWZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8/pYDRk5rWNePptkPdKvstlmdIAEa/mAU3M3Rt7NpXw=;
+ b=foAnc0ol0pLmFXyKQtuQzv8I5UI12J33c71LfibDky6U1oYMsSIfrpkBTyvRqAVScxCzkSOY9vADKCjrfFgt5m7eAyKohF/N+zZf3b8beg0hucvN+2sJAwWgzrDuN38OhQv51P/ejaA4oo6YR0BB+eCV4CPbZ5k8/qiD7b76iCYbA0A0mVgbeSQYUUWn+5fzeLJDq4iyE6uMD1CFiUulI9NaVSwNoC2DDiHSN9h7FE/wDRio7x/9Y3WPzpA+COqTHEOat46gYLD1LviRfQDHPKsND09GNxzPMIPOh34/yp5LgOh6LosTkkUIg6AoF+OAAgmCCya+I1zWZ/FoVnedpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8/pYDRk5rWNePptkPdKvstlmdIAEa/mAU3M3Rt7NpXw=;
+ b=QQY+oK/Ikkle0IgIuHsU/Q6cYyCpWRUu6evwn8vsup9PSI4qH+RuMOtdU/XYQ9ouQpNxR8aJJHMHmTESlnKhL47r/WbrgvRbAC3mZZh+0uotiBsoYEe6Acivlz5K95HW4x973EUbtrRV+piIGG2iQSpfLawviZi30Hh/rpVAJdg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
+ by DS7PR12MB8232.namprd12.prod.outlook.com (2603:10b6:8:e3::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
+ 2023 14:10:33 +0000
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::fc88:7080:445e:6866]) by DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::fc88:7080:445e:6866%5]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
+ 14:10:33 +0000
+Message-ID: <b036edca-1694-bc21-0fb1-82b1dc5f0c22@amd.com>
+Date:   Wed, 11 Jan 2023 19:43:27 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 01/19] ASoC: amd: ps: create platform devices based on acp
+ config
+Content-Language: en-US
+To:     =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>, broonie@kernel.org,
+        vkoul@kernel.org, alsa-devel@alsa-project.org
+Cc:     Mastan.Katragadda@amd.com, Sunil-kumar.Dommati@amd.com,
+        open list <linux-kernel@vger.kernel.org>,
+        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Mario.Limonciello@amd.com, arungopal.kondaveeti@amd.com,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>
+References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
+ <20230111090222.2016499-2-Vijendar.Mukunda@amd.com>
+ <f7ca6b33-19b2-7a59-da0c-c34e441e0063@linux.intel.com>
+From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
+In-Reply-To: <f7ca6b33-19b2-7a59-da0c-c34e441e0063@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-ClientProxiedBy: PN2PR01CA0225.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:ea::20) To DM6PR12MB4123.namprd12.prod.outlook.com
+ (2603:10b6:5:21f::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|DS7PR12MB8232:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5b7ec366-beea-481d-a263-08daf3dd9a85
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: z9B3qIhhW45PnaM9QH9BrxKkM0xAFpIiSlPtovyAIto6SS7AfDnTp9HZDHNQi2HEmYzWRDj9kWEibF9EDiUUswTGnNXItm40cdns0O+CEQ/46qNnPxKZmJQ0+guLckzZq8pqGyneEMsvOwqvCmsuzkK9RZhpdT1h3hc0mqk1VffJFOokT3WF+VcOKXBso9o6AQS4IttAdGRyNr92cCzzLHQd2ewq77dxlaLOtobO945yDuRPhQgJ4Umwu47jq6c2JUDPEuE8ka5bLcxK21osFnOoFArXnWfBJ5gT8T4nVy4l43e0QaGjboA4D9Ey92rVG42Xw7IsDi27Z4kCnRd+eVZRKbkvMweS7zHGIu0AcMQv5aMc5Jnsp/UaJZKVwU00RSzfRDawXGkarIZpgp6DTn62735TVtotMhrAyHtLaM8nCHgykd31KGHqI1XhrA/YNRP2ZFhDE+hd9gxmCtPb+wVkSkMLteGVxNQwV0+RNvOhea+2C64wuyIKDyXlqptsSlKf0cF7JaYH5QgEJcCTdOdGVwWMQfqduwmOFFLK1SGRuZsb6Cvv8ohyTRq9XpSOI68pjWY5n1s5Zrl/zGu25kxklFRtqdX/8Kdoftz0dMMK1+W+6jhZVp/7cURBt3b2cGTHtSNwLbMz5lXLVjo4GR6ebJrF0E8k4AXEPfbRhK7VQLrTYx14BxYIlReKajtPGurmz9VRVcA7GmMuy17MeId88bGSzbIOQUmq99nOa3w=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199015)(53546011)(31686004)(2906002)(6506007)(6486002)(26005)(6512007)(478600001)(6666004)(186003)(8676002)(83380400001)(2616005)(36756003)(316002)(66946007)(66476007)(54906003)(66556008)(4326008)(41300700001)(5660300002)(38100700002)(31696002)(7416002)(86362001)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUx5ZWZBcjZ1VngySU5jSjB4RXF6aElTRzVNbUJBSnQxL0t5dnFxRlhRSTMw?=
+ =?utf-8?B?QVpmckpCTWNVOC9KekZOcTlDaGdkV2VtMFVxQ21vRmMydGM5MDdEWDUyWGp2?=
+ =?utf-8?B?S1dCbjBXdEVMVVRyWkRweDB3Y2pWdlo3ZlRRb1duVm1hVlNWQm5oTmRNTGpV?=
+ =?utf-8?B?by9USFBZUkhpVllCU0JoSGtNdXFYVHhXUThlamdOSEc2MmhvNkJzSmkrQXZS?=
+ =?utf-8?B?Vkt4czhYcGhJMUtyS2VHbm9FNXd3U0dOU1YwSzN4ZWdEQmJFSmJxdllmbWdU?=
+ =?utf-8?B?MHl4Nzk2Z0M0QVVWc2cyK0gyY3FBRWdsUUh1UlpPenVxS1pudzdLdFhkZmdP?=
+ =?utf-8?B?aEVrTjdDai92U1E1eU5HeVhEdGRHVW80eHVCKzZIWXdiYzk3WEowZGUraHFu?=
+ =?utf-8?B?UVdodFJlMklBL1pmbm5BeU95clY5aUIvRGtnUDFqb0ZqN3dnOEtqWGl0RDdt?=
+ =?utf-8?B?eW0valU1ZG50NEwrWW5NK0lWa1pscGFqTXdFNmZOSkQvV3RaY3FNZW41WkJo?=
+ =?utf-8?B?ajdVZzRTT3A4LzRTN05IZGFjTDVvT3Axc2U0TnhGdFRLaHhpNk9NOXV4eE1M?=
+ =?utf-8?B?R3lIVnQ2Q2dsNDBBb1FPLzJ3enF1RmVHSElnTXM3RW1pNlJBTldEQTl1K1o0?=
+ =?utf-8?B?RnhjelJ6MmlEZEoySWpwelVjeEFqRHFxaWFqL200dzU4eTBtRXlUN05WQTFN?=
+ =?utf-8?B?Qm9XdUxQWWFEdnlyTjBBTnJoUlFjMUFpS0ZvL1Q1dlhtSnpZbzBQNktQL1lQ?=
+ =?utf-8?B?Qm1QRHRtQ3VyM1pmREpzc01HUWo3UnVJOG9lM1RCZ1lBcG5rZWw0bS9HeTJD?=
+ =?utf-8?B?dWpTbUpMUjcwNEpZS0ViWkxzTDQ4WmY5OGc3WGdKR2R5TTA3Smh1Y2lBRHh0?=
+ =?utf-8?B?RW5GVFJab2ZjSEdMUTU4M1BvYXcrOERGUGoxbXJ6c0RrdEdvQ2JOMTZXeW55?=
+ =?utf-8?B?dWcwQnpaSE02QUV5ZUx1VlhtR0JjOS9VS3FMRG1wdE50cngwaEszQzE4QzVv?=
+ =?utf-8?B?bldYSFZmTFFFbjNqakZVcktHcmF0Y2lBNlpUZVFaMndYd1FEUy9Hei9SUWp1?=
+ =?utf-8?B?cnNHZ1h5cExBaEFPMWlqWmg4cHBlOGlXbGVXbzBMTDdoZ0ZLOWkvbzRsS2c2?=
+ =?utf-8?B?VGVZUHRUWXA5VGJuVFQyNFhINCsxZXRsVUw5WnZZaWxwYjkxeVJ1OUJ6Sjh4?=
+ =?utf-8?B?TmVST0NNbUY5Mk8rVE1EWFFHM1Z2bkRNVWhlQXJLQkFvREM3eE1pbnBtK0lI?=
+ =?utf-8?B?aU1lYzYzNTdSNnoxVkYya3VDRS9qV29FU0JBTTdYMFpzekc4SW04SU9PQkJ0?=
+ =?utf-8?B?K2UyRXF5RW5pUUZnRXhMbjJqRjdXMTJYVDROMkhQTndRTW9RSnRpTVBJOEF1?=
+ =?utf-8?B?Vmc2S0RwbTA5dVNiSHdTY0hlS25QUmkwRHU1WUpWeENSWE5RYnlrNEdBaEs5?=
+ =?utf-8?B?ZzJWVVlvVmhRc3FaMkYxTFZxbDdVU3l5WnhUZndxeVBlM1FhZ2FQZEpUTUxs?=
+ =?utf-8?B?cGdic25RN1BrZ2xtSFlZWnliSDlEYmxTYkc2NVppN05HM3UrOXBMaXA3RXda?=
+ =?utf-8?B?VzIyQlA1eWpMby9naENUMjZIdU5uQ1NsNzVDMFdOV0F1QTQ5eU11dTlGbXJv?=
+ =?utf-8?B?V2JaYzIrZlQ5a0Rvei9YcTA5UGpaeVhZNjAyTmZRT3MxOURJQitOQnlTTUJI?=
+ =?utf-8?B?V2x1Rmd2S1VOWGQxOVVzQ2JqZmxramtlYVhDM2JLU0RDWVdMQTYzcEQvVHhZ?=
+ =?utf-8?B?UU4xNFNpWVRxN01naHRWRzJ4TU0vVnk1VUppVXlodC9mcmd1TWx2QWV1RjV2?=
+ =?utf-8?B?dnlwQUhMTkpuVTdwSE1wTzQ1ck1DbitqSlYxT2E0TW5WWUVxMWF4Vk5KaFdi?=
+ =?utf-8?B?WmtHUlcrSHZEL2pLNFdUWUVxeDV4NWVqU3pRUVBtVDhQWlVQRFFvQUx3c0Rv?=
+ =?utf-8?B?d2k0UmxCR2ZHOHZQTHVNbGhkQmJUYTdabXB3L3NscHdoRWFaeFlYa2E5TDBQ?=
+ =?utf-8?B?TkZ3eGUvbjdaaXZlQUJLdzREdFYwZnVVUEE2WUVqUVJYR1RhMGl5VmRQMjlL?=
+ =?utf-8?B?V3ZqK0h2L0RUdUFJRHZkQkh0K2VCd01VbHo1amkyL1hMMmd2MUdUVEU1dmJG?=
+ =?utf-8?Q?F5SacCvUlQWcuQS+ZW+xi7IkQ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b7ec366-beea-481d-a263-08daf3dd9a85
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 14:10:33.3211
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pnjg7Jis6U/Dgq68FTiKfsGqeqW1JQvnAOPZD/LNiy9v3/fbi3fHhnh3XW4SQTcJeu3BzS9vEiI2dquQIZwJDQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8232
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds support for the ufi-001C and uf896 WiFi/LTE dongle made by
-Tong Heng Wei Chuang based on MSM8916.
-uf896 is another variant for the usb stick. The board design
-differs by using different gpios for the keys and leds.
+On 11/01/23 18:57, Amadeusz Sławiński wrote:
+> On 1/11/2023 10:02 AM, Vijendar Mukunda wrote:
+>> Create platform devices for sdw controllers and PDM controller
+>> based on ACP pin config selection and ACPI fw handle for
+>> pink sardine platform.
+>>
+>> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+>> Signed-off-by: Mastan Katragadda <Mastan.Katragadda@amd.com>
+>> ---
+>>   include/linux/soundwire/sdw_amd.h |  18 +++
+>>   sound/soc/amd/ps/acp63.h          |  24 ++-
+>>   sound/soc/amd/ps/pci-ps.c         | 248 ++++++++++++++++++++++++++++--
+>>   3 files changed, 277 insertions(+), 13 deletions(-)
+>>   create mode 100644 include/linux/soundwire/sdw_amd.h
+>>
+>
+> ...
+>
+>> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
+>> index e86f23d97584..85154cf0b2a2 100644
+>> --- a/sound/soc/amd/ps/pci-ps.c
+>> +++ b/sound/soc/amd/ps/pci-ps.c
+>> @@ -14,6 +14,7 @@
+>>   #include <linux/interrupt.h>
+>>   #include <sound/pcm_params.h>
+>>   #include <linux/pm_runtime.h>
+>> +#include <linux/soundwire/sdw_amd.h>
+>>     #include "acp63.h"
+>>   @@ -134,12 +135,68 @@ static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
+>>       return IRQ_NONE;
+>>   }
+>>   -static void get_acp63_device_config(u32 config, struct pci_dev *pci,
+>> -                    struct acp63_dev_data *acp_data)
+>> +static int sdw_amd_scan_controller(struct device *dev)
+>> +{
+>> +    struct acp63_dev_data *acp_data;
+>> +    struct fwnode_handle *link;
+>> +    char name[32];
+>> +    u8 count = 0;
+>> +    u32 acp_sdw_power_mode = 0;
+>> +    int index;
+>> +    int ret;
+>> +
+>> +    acp_data = dev_get_drvdata(dev);
+>> +    acp_data->acp_sdw_power_off = true;
+>> +    /* Found controller, find links supported */
+>> +    ret = fwnode_property_read_u8_array((acp_data->sdw_fw_node),
+>> +                        "mipi-sdw-master-count", &count, 1);
+>> +
+>> +    if (ret) {
+>> +        dev_err(dev,
+>> +            "Failed to read mipi-sdw-master-count: %d\n", ret);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    /* Check count is within bounds */
+>> +    if (count > AMD_SDW_MAX_CONTROLLERS) {
+>> +        dev_err(dev, "Controller count %d exceeds max %d\n",
+>> +            count, AMD_SDW_MAX_CONTROLLERS);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    if (!count) {
+>> +        dev_warn(dev, "No SoundWire controllers detected\n");
+>> +        return -EINVAL;
+>> +    }
+>> +    dev_dbg(dev, "ACPI reports %d Soundwire Controller devices\n", count);
+>> +    acp_data->sdw_master_count  = count;
+>
+> Double space before '='.
+> will fix it.
+>> +    for (index = 0; index < count; index++) {
+>> +        snprintf(name, sizeof(name), "mipi-sdw-link-%d-subproperties", index);
+>> +        link = fwnode_get_named_child_node(acp_data->sdw_fw_node, name);
+>> +        if (!link) {
+>> +            dev_err(dev, "Master node %s not found\n", name);
+>> +            return -EIO;
+>> +        }
+>> +
+>> +        fwnode_property_read_u32(link, "amd-sdw-power-mode",
+>> +                     &acp_sdw_power_mode);
+>> +        if (acp_sdw_power_mode != AMD_SDW_POWER_OFF_MODE)
+>> +            acp_data->acp_sdw_power_off = false;
+>> +    }
+>> +    return 0;
+>> +}
+>> +
+>> +static int get_acp63_device_config(u32 config, struct pci_dev *pci, struct acp63_dev_data *acp_data)
+>>   {
+>>       struct acpi_device *dmic_dev;
+>> +    struct acpi_device *sdw_dev;
+>> +    struct device *dev;
+>>       const union acpi_object *obj;
+>>       bool is_dmic_dev = false;
+>> +    bool is_sdw_dev = false;
+>> +    int ret;
+>> +
+>> +    dev = &pci->dev;
+>>         dmic_dev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP63_DMIC_ADDR, 0);
+>
+> If you set dev above, you might as well use it throughout the function context? Like above in ACPI_COMPANION? 
 
-Note: The original firmware does not support 64-bit OS. It is necessary
-to flash 64-bit TZ firmware to boot arm64.
+> will use pci->dev throughtout the function context.
+>>       if (dmic_dev) {
+>> @@ -149,22 +206,84 @@ static void get_acp63_device_config(u32 config, struct pci_dev *pci,
+>>               is_dmic_dev = true;
+>>       }
+>>   +    sdw_dev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP63_SDW_ADDR, 0);
+>> +    if (sdw_dev) {
+>> +        is_sdw_dev = true;
+>> +        acp_data->sdw_fw_node = acpi_fwnode_handle(sdw_dev);
+>> +        ret = sdw_amd_scan_controller(dev);
+>
+> Or just use &pci->dev here, so there is no need for separate variable?
 
-Currently supported:
-- All CPU cores
-- Buttons
-- LEDs
-- Modem
-- SDHC
-- USB Device Mode
-- UART
-
-Co-developed-by: Jaime Breva <jbreva@nayarsystems.com>
-Signed-off-by: Jaime Breva <jbreva@nayarsystems.com>
-Co-developed-by: Nikita Travkin <nikita@trvn.ru>
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
----
- arch/arm64/boot/dts/qcom/Makefile             |   2 +
- .../boot/dts/qcom/msm8916-thwc-uf896.dts      |  41 +++
- .../boot/dts/qcom/msm8916-thwc-ufi001c.dts    |  39 +++
- arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi     | 246 ++++++++++++++++++
- 4 files changed, 328 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index b42362c7be1bf..523dbe6d06be8 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -21,6 +21,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e7.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-grandmax.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-uf896.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-ufi001c.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts b/arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
-new file mode 100644
-index 0000000000000..79447ca48dd3a
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/dts-v1/;
-+
-+#include "msm8916-ufi.dtsi"
-+
-+/ {
-+	model = "uf896 4G Modem Stick";
-+	compatible = "thwc,uf896", "qcom,msm8916";
-+};
-+
-+&button_restart {
-+	gpios = <&msmgpio 35 GPIO_ACTIVE_LOW>;
-+};
-+
-+&led_r {
-+	gpios = <&msmgpio 82 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_g {
-+	gpios = <&msmgpio 83 GPIO_ACTIVE_HIGH>;
-+	function = LED_FUNCTION_WLAN;
-+};
-+
-+&led_b {
-+	gpios = <&msmgpio 81 GPIO_ACTIVE_HIGH>;
-+	function = LED_FUNCTION_WAN;
-+};
-+
-+&button_default {
-+	pins = "gpio35";
-+	bias-pull-up;
-+};
-+
-+&gpio_leds_default {
-+	pins = "gpio81", "gpio82", "gpio83";
-+};
-+
-+&sim_ctrl_default {
-+	pins = "gpio1", "gpio2";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts b/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
-new file mode 100644
-index 0000000000000..700cf81cbf8c0
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/dts-v1/;
-+
-+#include "msm8916-ufi.dtsi"
-+
-+/ {
-+	model = "ufi-001c/ufi-001b 4G Modem Stick";
-+	compatible = "thwc,ufi001c", "qcom,msm8916";
-+};
-+
-+&button_restart {
-+	gpios = <&msmgpio 37 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_r {
-+	gpios = <&msmgpio 22 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_g {
-+	gpios = <&msmgpio 21 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_b {
-+	gpios = <&msmgpio 20 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&button_default {
-+	pins = "gpio37";
-+	bias-pull-down;
-+};
-+
-+&gpio_leds_default {
-+	pins = "gpio20", "gpio21", "gpio22";
-+};
-+
-+&sim_ctrl_default {
-+	pins = "gpio1", "gpio2";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-new file mode 100644
-index 0000000000000..286768d0fbe70
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-@@ -0,0 +1,246 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include "msm8916-pm8916.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	chassis-type = "embedded";
-+
-+	aliases {
-+		serial0 = &blsp1_uart2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0";
-+	};
-+
-+	reserved-memory {
-+		mpss_mem: mpss@86800000 {
-+			reg = <0x0 0x86800000 0x0 0x5500000>;
-+			no-map;
-+		};
-+
-+		gps_mem: gps@8bd00000 {
-+			reg = <0x0 0x8bd00000 0x0 0x200000>;
-+			no-map;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-0 = <&button_default>;
-+		pinctrl-names = "default";
-+
-+		label = "GPIO Buttons";
-+
-+		/* gpio is board-specific */
-+		button_restart: button-restart {
-+			label = "Restart";
-+			linux,code = <KEY_RESTART>;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		pinctrl-0 = <&gpio_leds_default>;
-+		pinctrl-names = "default";
-+
-+		/* GPIOs are board-specific */
-+		led_r: led-r {
-+			color = <LED_COLOR_ID_RED>;
-+			default-state = "on";
-+			function = LED_FUNCTION_INDICATOR;
-+		};
-+
-+		led_g: led-g {
-+			color = <LED_COLOR_ID_GREEN>;
-+			default-state = "off";
-+			function = LED_FUNCTION_INDICATOR;
-+		};
-+
-+		led_b: led-b {
-+			color = <LED_COLOR_ID_BLUE>;
-+			default-state = "off";
-+			function = LED_FUNCTION_INDICATOR;
-+		};
-+	};
-+};
-+
-+&bam_dmux {
-+	status = "okay";
-+};
-+
-+&bam_dmux_dma {
-+	status = "okay";
-+};
-+
-+&blsp1_uart2 {
-+	status = "okay";
-+};
-+
-+/* Remove &dsi_phy0 from clocks to make sure that gcc probes with display disabled */
-+&gcc {
-+	clocks = <&xo_board>, <&sleep_clk>, <0>, <0>, <0>, <0>, <0>;
-+};
-+
-+&mpss {
-+	pinctrl-0 = <&sim_ctrl_default>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+};
-+
-+&pm8916_usbin {
-+	status = "okay";
-+};
-+
-+&pronto {
-+	status = "okay";
-+};
-+
-+&sdhc_1 {
-+	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
-+	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
-+	pinctrl-names = "default", "sleep";
-+
-+	status = "okay";
-+};
-+
-+&usb {
-+	extcon = <&pm8916_usbin>;
-+	dr_mode = "peripheral";
-+
-+	status = "okay";
-+};
-+
-+&usb_hs_phy {
-+	extcon = <&pm8916_usbin>;
-+};
-+
-+&smd_rpm_regulators {
-+	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-+	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-+	vdd_l7-supply = <&pm8916_s4>;
-+
-+	s3 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1300000>;
-+	};
-+
-+	s4 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2100000>;
-+	};
-+
-+	l1 {
-+		regulator-min-microvolt = <1225000>;
-+		regulator-max-microvolt = <1225000>;
-+	};
-+
-+	l2 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+	};
-+
-+	l4 {
-+		regulator-min-microvolt = <2050000>;
-+		regulator-max-microvolt = <2050000>;
-+	};
-+
-+	l5 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l6 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l7 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l8 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2900000>;
-+	};
-+
-+	l9 {
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l10 {
-+		regulator-min-microvolt = <2700000>;
-+		regulator-max-microvolt = <2800000>;
-+	};
-+
-+	l11 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2950000>;
-+		regulator-system-load = <200000>;
-+		regulator-allow-set-load;
-+	};
-+
-+	l12 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2950000>;
-+	};
-+
-+	l13 {
-+		regulator-min-microvolt = <3075000>;
-+		regulator-max-microvolt = <3075000>;
-+	};
-+
-+	l14 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l15 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l16 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l17 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2850000>;
-+	};
-+
-+	l18 {
-+		regulator-min-microvolt = <2700000>;
-+		regulator-max-microvolt = <2700000>;
-+	};
-+};
-+
-+&msmgpio {
-+	/* pins are board-specific */
-+	button_default: button-default-state {
-+		function = "gpio";
-+		drive-strength = <2>;
-+	};
-+
-+	gpio_leds_default: gpio-leds-default-state {
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	sim_ctrl_default: sim-ctrl-default-state {
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+		output-low;
-+	};
-+};
--- 
-2.39.0
+> will remove the "dev" local variable.
+>
+>
 
