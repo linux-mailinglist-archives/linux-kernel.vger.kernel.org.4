@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAEC66572A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575AF66572F
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238513AbjAKJRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:17:14 -0500
+        id S235850AbjAKJSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:18:05 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238487AbjAKJQl (ORCPT
+        with ESMTP id S238309AbjAKJRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:16:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8878FC6;
-        Wed, 11 Jan 2023 01:13:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DA92B81ACE;
-        Wed, 11 Jan 2023 09:13:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08D5BC433D2;
-        Wed, 11 Jan 2023 09:13:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673428401;
-        bh=0WVLdCVwcdgtGPOdr929/5D8vJGUAgy4wFl12/1hm9I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=urgqz4m9ghxcuXnHzqU12VEd6UaLsrYZDk02vDVv9vIKSWf35A8VyG+3dANyFgHyk
-         hQS0KEdk32KFrcSXpuPH1qbITmgTEwcTU/FTQYRCYoEmlFxqgtka5VlU+4ePjdJUxg
-         vZIV9fh/BqF9A3QJuDPM/kM46yxQBRo+oATSNlj7aTRzaciczDHXKxwYQeu+52P/2d
-         wwRFbsrf/3MgnvaQL7RTgE5lcu18wNCYb0mYC6f7Ap230/FN3E5tNg+PZHR9X/kW1T
-         SmMs5hhu+9EqruncQaA8HJnMIHNd15liZ3m8omnPphQ3VgsKiZlY4yMT7DyRL7dxQz
-         M3LSxqXfMZawA==
-Message-ID: <e015e927-283a-2685-07b5-11b28f12e4f9@kernel.org>
-Date:   Wed, 11 Jan 2023 17:13:17 +0800
+        Wed, 11 Jan 2023 04:17:36 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3BEBE3B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:15:45 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pFXCj-0003bM-QK; Wed, 11 Jan 2023 10:15:29 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pFXCi-005GgP-TK; Wed, 11 Jan 2023 10:15:28 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pFXCi-00BveW-8A; Wed, 11 Jan 2023 10:15:28 +0100
+Date:   Wed, 11 Jan 2023 10:15:28 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 1/2] pwm: add microchip soft ip corePWM driver
+Message-ID: <20230111091528.dh4nlk4xlpgn6paw@pengutronix.de>
+References: <20221221112912.147210-1-conor@kernel.org>
+ <20221221112912.147210-2-conor@kernel.org>
+ <20230110224805.3pqxd3yv4wyci2zj@pengutronix.de>
+ <Y73/oUwuOwQFR0NZ@spud>
+ <20230111070250.w7egzcufa4waxg2n@pengutronix.de>
+ <Y75ss+aSCjx7E9SZ@wendy>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] proc: fix to check name length in proc_lookup_de()
-Content-Language: en-US
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-References: <20230110152112.1119517-1-chao@kernel.org> <Y72oBFXX6DiEh2/p@p183>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y72oBFXX6DiEh2/p@p183>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6gsm32m6fyt25ymx"
+Content-Disposition: inline
+In-Reply-To: <Y75ss+aSCjx7E9SZ@wendy>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/11 2:01, Alexey Dobriyan wrote:
-> On Tue, Jan 10, 2023 at 11:21:12PM +0800, Chao Yu wrote:
->> __proc_create() has limited dirent's max name length with 255, let's
->> add this limitation in proc_lookup_de(), so that it can return
->> -ENAMETOOLONG correctly instead of -ENOENT when stating a file which
->> has out-of-range name length.
-> 
-> Both returns are correct and this is trading one errno for another.
 
-Oh, but it looks ENOENT is a little bit ambiguity, it may indicate file name
-length is valid for procfs, but the entry is not exist.
+--6gsm32m6fyt25ymx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This change is trying to make lookup logic keeping align w/ most other
-filesystems' behavior. Also it can avoid running into unneeded lookup logic
-in proc_lookup_de() for such ENAMETOOLONG case.
+Hello Conor,
 
-How do you think? :)
+On Wed, Jan 11, 2023 at 08:00:51AM +0000, Conor Dooley wrote:
+> > > [...]
+> > > Perhaps I need to watch a lecture on how to write a PWM driver since I
+> > > am clearly no good at it, given the 15 revisions. Do you know of any?
+> >=20
+> > I'm not aware of such a lecture.
+>=20
+> I thought you were doing one at FOSDEM!
 
-Thanks,
+Oh that knowledge already spread? Anyhow that doesn't help you today
+:-)
 
-> 
->> --- a/fs/proc/generic.c
->> +++ b/fs/proc/generic.c
->> @@ -246,6 +246,9 @@ struct dentry *proc_lookup_de(struct inode *dir, struct dentry *dentry,
->>   {
->>   	struct inode *inode;
->>   
->> +	if (dentry->d_name.len > PROC_NAME_LEN)
->> +		return ERR_PTR(-ENAMETOOLONG);
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--6gsm32m6fyt25ymx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmO+fi0ACgkQwfwUeK3K
+7AklXAf/WNPDNf10f5a7E1fnSiX74OV7ET+g8/DfocYVDgMGuXcplwCLnXNk6a05
+iD98QEPw3H4wH5bMGsEMhJ8gFWvvmbF+T0U62n0EpKIo9OlB30ICh8lSOnbTsrJw
+KLbfjnk0pLWMnkA5QD3RHOli7WIP5d8RIUNDuufetrwEJCPuu2p7vvpkEBgSlvbX
+S5SswsoTW5v82AeDhudq3lQkahbqOOVXG2IQoU+QozB+8gFaKZi6UL7ZpZ1+RUB8
+f9UuLZZAVt2sOWEh9K6SxOhqxl28FXVUQuLvN/r8TPEoPPWM0BBYs7vhM6znP3I3
+qfYSJ89UqAR4MbjXsrETyVbThuRvkQ==
+=HCWT
+-----END PGP SIGNATURE-----
+
+--6gsm32m6fyt25ymx--
