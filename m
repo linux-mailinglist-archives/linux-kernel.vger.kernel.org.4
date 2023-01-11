@@ -2,74 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF9D666290
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:12:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A2F666294
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235532AbjAKSMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
+        id S233386AbjAKSNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235157AbjAKSMB (ORCPT
+        with ESMTP id S235644AbjAKSNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:12:01 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1B036323
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 10:11:55 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id d17so15917236wrs.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 10:11:55 -0800 (PST)
+        Wed, 11 Jan 2023 13:13:14 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D58F37523
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 10:12:56 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso13358037wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 10:12:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3qNjCgtCiFMyIYhxMDbaTasJyJ7EAMrtsxaOkH6xleA=;
-        b=JAY+f8OHx5UfKGQZx7kF5zot7xfb0jQNF961xcXesWbBvMHEveWwjj0UG4HyKx3azG
-         AA6kgivY4jCkHV/1HoDtIYhpP+8PnGP2QrNGHVyEEDa+WhqfkNphCF91owPGLz+qTlpR
-         ZjzZ7GF5l0zF+U5Lda+maO9N3vQCsvLRdQsxQVDRgLmll1khhdfsKkJo5xCC5utjtKh4
-         b4vOaz2in4hA3mxhGehryvQ152TtlLWA663D8g+RI3DwbEfOZbDg3BZ82GjvSKQXsNJG
-         bv3xDDqkMuY1zN7vlBVJ3/7wWtSMwZkq8pUkGyLGNo5VDBveIK/JBPOEDKqnpX0XFwz+
-         F4Rw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jgU48L7QcU60FOWGaPRhnxY2hkRU0gQ83LzvkNzDZlI=;
+        b=eBtCnRqiaCviFjQSXzigKCV18OEyaN7SPUaZMyo5ABDVDcNsrE8xUe7ybl+GZQAw58
+         ed+61NQMRxLfTjXL+c0znGQ39zzj7XQrKrFq6nQeTo/ofcCaJz8cmW3HcDpr055WXve7
+         qD9VCQgEo1t/HwN6YiNQX6s0XtJNyiZcU7I4PVsxHl+A/BT3Qllelc7dyFWxAxrFlFlD
+         /kKh11L/HTmg8XMx+57J455J3UPQEvvst9pQTUNpl+bfOwXC+nnRa0zY3pEIMct/ladV
+         mLFigmxIDArqZxcRd3CPtkYnasnyHMV4OVSd+bshyNQBzPzbhaxtyFnl10nkfcEdFvBp
+         Axhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3qNjCgtCiFMyIYhxMDbaTasJyJ7EAMrtsxaOkH6xleA=;
-        b=5le/Jf0KKEBeIDn+MyHMtM9I8GdGbb4djVUzQgvZr3jfpFa4nXNS8hlPp+H8+D1Vvw
-         dALd/VoijSYDeKGZ21OzRZkBaEuXcRS6WjhkDs7uPXKsFIPJSKo92X6ga/Y7rOsK0TS0
-         16ZzyU9fNRMOUnvoCXPOdj0nbLR8g3It2vwu8+SiiIcpt4Ir9nTVUAUaruHL17FDCeT+
-         KG2OsZbRuTrv+/vDWCOdSIKfjdyqMkWmvGyZxmXH4BL02XbnqpsU/T9IIDbN2P+ehVBR
-         bXg3htqHr3/MuHsQS9M6Vn7ghmaUsURwFTKi+rnnp+JzrRj2Sa4PrCzDTZoNa9uim8mz
-         ILBg==
-X-Gm-Message-State: AFqh2kq/h7EIVPwplRwTdUgWi1HAg0fPNlQmqCU+xIR6Wd8crD4O9gk6
-        0iJYoN++FiyIeov1idikMgAoKw==
-X-Google-Smtp-Source: AMrXdXvUew920jU+Lr17it/M2QvyLnGR/nuiaulC5//SLD5ZreOji9KY0iqN+iwjsSpQ4x1Is6qJ/Q==
-X-Received: by 2002:a5d:618a:0:b0:2bc:5115:f072 with SMTP id j10-20020a5d618a000000b002bc5115f072mr8751439wru.50.1673460714002;
-        Wed, 11 Jan 2023 10:11:54 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id t10-20020a5d534a000000b00272c0767b4asm14459920wrv.109.2023.01.11.10.11.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 10:11:53 -0800 (PST)
-Date:   Wed, 11 Jan 2023 19:11:52 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 09/13] riscv: switch to relative alternative entries
-Message-ID: <20230111181152.7c646ffbdhh6lblr@orel>
-References: <20230111171027.2392-1-jszhang@kernel.org>
- <20230111171027.2392-10-jszhang@kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jgU48L7QcU60FOWGaPRhnxY2hkRU0gQ83LzvkNzDZlI=;
+        b=x9aSwzweD8tC/hpmjjK9Eb+7cQHV28Eq03Efk/nffX/oc/Y0xHmCQuptHIokqLaBta
+         /yiCjrSQFfDzP4zLkabmOx1PMOiKgPHUrjlUxhkyQfuNCUOXYOOKsFqXFHdT4J9u1HUq
+         7IDQFdGin5XY2E0TvQcCWk5WTcrdro2asbxCmE+yub+VRNiR38tXBXyGy9NnReNrnLHR
+         Al0x2tKRsLl4E3AsyfyImZqruJs5xc2UjOJ80x7Tmz9xkvY73zL9KH65hHaK7KVYatWp
+         ez7zG9U29tsYsHF0Y6+trRs5Q8NucDN8ZpEJaHL/eZP15qQWFOubAsC+sYw7UE6sqGLu
+         7J+Q==
+X-Gm-Message-State: AFqh2koqVxnVyri6MFYKUUD2kTFUk29Ap7XhkjybSnWHy3EYUf2nZJoT
+        4SUYG/CUlpUJG89E+pt6IZcU/w==
+X-Google-Smtp-Source: AMrXdXtTXdWfx04S0c5JPQS/5PFz740EqgtORn2SjwdLrrYbvVgQ7bkTBST0TFGnxuCnaI1+TDbTlw==
+X-Received: by 2002:a05:600c:5121:b0:3d9:d1bc:310 with SMTP id o33-20020a05600c512100b003d9d1bc0310mr21356168wms.25.1673460774921;
+        Wed, 11 Jan 2023 10:12:54 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id p21-20020a7bcc95000000b003c65c9a36dfsm18607821wma.48.2023.01.11.10.12.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 10:12:54 -0800 (PST)
+Message-ID: <f0a50234-bc8c-09c4-e2c1-22cbeaba5c15@linaro.org>
+Date:   Wed, 11 Jan 2023 19:12:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111171027.2392-10-jszhang@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
+ support
+Content-Language: en-US
+To:     William Zhang <william.zhang@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-3-william.zhang@broadcom.com>
+ <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
+ <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
+ <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
+ <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+ <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+ <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
+ <71c2e796-f0fb-90cd-4599-13c9718f41d5@linaro.org>
+ <31644849-dc69-ddfc-a6b6-6ffd37d64d2b@broadcom.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <31644849-dc69-ddfc-a6b6-6ffd37d64d2b@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,179 +92,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 01:10:23AM +0800, Jisheng Zhang wrote:
-> Instead of using absolute addresses for both the old instrucions and
-> the alternative instructions, use offsets relative to the alt_entry
-> values. So this not only cuts the size of the alternative entry, but
-> also meets the prerequisite for patching alternatives in the vDSO,
-> since absolute alternative entries are subject to dynamic relocation,
-> which is incompatible with the vDSO building.
+On 11/01/2023 19:04, William Zhang wrote:
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/errata/sifive/errata.c           |  4 +++-
->  arch/riscv/errata/thead/errata.c            | 11 ++++++++---
->  arch/riscv/include/asm/alternative-macros.h | 20 ++++++++++----------
->  arch/riscv/include/asm/alternative.h        | 12 ++++++------
->  arch/riscv/kernel/cpufeature.c              |  8 +++++---
->  5 files changed, 32 insertions(+), 23 deletions(-)
 > 
-> diff --git a/arch/riscv/errata/sifive/errata.c b/arch/riscv/errata/sifive/errata.c
-> index 1031038423e7..0e537cdfd324 100644
-> --- a/arch/riscv/errata/sifive/errata.c
-> +++ b/arch/riscv/errata/sifive/errata.c
-> @@ -107,7 +107,9 @@ void __init_or_module sifive_errata_patch_func(struct alt_entry *begin,
->  
->  		tmp = (1U << alt->errata_id);
->  		if (cpu_req_errata & tmp) {
-> -			patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> +			patch_text_nosync((void *)&alt->old_offset + alt->old_offset,
-> +					  (void *)&alt->alt_offset + alt->alt_offset,
+> On 01/11/2023 01:02 AM, Krzysztof Kozlowski wrote:
+>> On 10/01/2023 23:18, Florian Fainelli wrote:
+>>> On 1/10/23 00:40, Krzysztof Kozlowski wrote:
+>>>>>> No, it is discouraged in such forms. Family or IP block compatibles
+>>>>>> should be prepended with a specific compatible. There were many issues
+>>>>>> when people insisted on generic or family compatibles...
+>>>>>>
+>>>>>>> Otherwise we will have to have a compatible string with chip model for
+>>>>>>> each SoC even they share the same IP. We already have more than ten of
+>>>>>>> SoCs and the list will increase.  I don't see this is a good solution too.
+>>>>>>
+>>>>>> You will have to do it anyway even with generic fallback, so I don't get
+>>>>>> what is here to gain... I also don't get why Broadcom should be here
+>>>>>> special, different than others. Why it is not a good solution for
+>>>>>> Broadcom SoCs but it is for others?
+>>>>>>
+>>>>> I saw a few other vendors like these qcom ones:
+>>>>>     qcom,spi-qup.yaml
+>>>>>         - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
+>>>>>         - qcom,spi-qup-v2.1.1 # for 8974 and later
+>>>>>         - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
+>>>>>     qcom,spi-qup.yaml
+>>>>>         const: qcom,geni-spi
+>>>>
+>>>> IP block version numbers are allowed when there is clear mapping between
+>>>> version and SoCs using it. This is the case for Qualcomm because there
+>>>> is such clear mapping documented and available for Qualcomm engineers
+>>>> and also some of us (although not public).
+>>>>
+>>>>> I guess when individual who only has one particular board/chip and is
+>>>>> not aware of the IP family,  it is understandable to use the chip
+>>>>> specific compatible string.
+>>>>
+>>>> Family of devices is not a versioned IP block.
+>>>
+>>> Would it be acceptable to define for instance:
+>>>
+>>> - compatible = "brcm,bcm6868-hsspi", "brcm,bcmbca-hsspi";
+>>
+>> Yes, this is perfectly valid. Although it does not solve William
+>> concerns because it requires defining specific compatibles for all of
+>> the SoCs.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> As I mentioned in another email,  I would be okay to use these 
+> compatibles to differentiate by ip rev and to conforms to brcm convention:
+> "brcm,bcmXYZ-hsspi", "brcm,bcmbca-hsspi-v1.0", "brcm,bcmbca-hsspi";
+> "brcm,bcmXYZ-hsspi", "brcm,bcmbca-hsspi-v1.1", "brcm,bcmbca-hsspi";
 
-I was hoping to see Conor's macro suggestion show up in this version.
 
-> +					  alt->alt_len);
->  			cpu_apply_errata |= tmp;
->  		}
->  	}
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> index fac5742d1c1e..d56d76a529b5 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -87,6 +87,7 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
->  	struct alt_entry *alt;
->  	u32 cpu_req_errata = thead_errata_probe(stage, archid, impid);
->  	u32 tmp;
-> +	void *oldptr, *altptr;
->  
->  	for (alt = begin; alt < end; alt++) {
->  		if (alt->vendor_id != THEAD_VENDOR_ID)
-> @@ -96,12 +97,16 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
->  
->  		tmp = (1U << alt->errata_id);
->  		if (cpu_req_errata & tmp) {
-> +			oldptr = (void *)&alt->old_offset + alt->old_offset;
-> +			altptr = (void *)&alt->alt_offset + alt->alt_offset;
-> +
->  			/* On vm-alternatives, the mmu isn't running yet */
->  			if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> -				memcpy((void *)__pa_symbol(alt->old_ptr),
-> -				       (void *)__pa_symbol(alt->alt_ptr), alt->alt_len);
-> +				memcpy((void *)__pa_symbol(oldptr),
-> +				       (void *)__pa_symbol(altptr),
-> +				       alt->alt_len);
->  			else
-> -				patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> +				patch_text_nosync(oldptr, altptr, alt->alt_len);
->  		}
->  	}
->  
-> diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-> index 7226e2462584..3c3ca65e521b 100644
-> --- a/arch/riscv/include/asm/alternative-macros.h
-> +++ b/arch/riscv/include/asm/alternative-macros.h
-> @@ -7,11 +7,11 @@
->  #ifdef __ASSEMBLY__
->  
->  .macro ALT_ENTRY oldptr newptr vendor_id errata_id new_len
-> -	RISCV_PTR \oldptr
-> -	RISCV_PTR \newptr
-> -	REG_ASM \vendor_id
-> -	REG_ASM \new_len
-> -	.word	\errata_id
-> +	.long \oldptr - .
-> +	.long \newptr - .
-> +	.short \vendor_id
-> +	.short \new_len
-> +	.long \errata_id
+Drop the version in such case, no benefits. I assume XYZ is the SoC
+model, so for example 6868.
 
-nit: I like .2byte and .4byte since I always have to double check how many
-bytes .long is.
+> 
+> In the two drivers I included in this series, it will be bound to 
+> brcm,bcmbca-hsspi-v1.0 (in additional to brcm,bcm6328-hsspi) and 
+> brcm,bcmbca-hsspi-v1.1 respectively.  This way we don't need to update 
+> the driver with a new soc specific compatible whenever a new chips comes 
+> out.
 
->  .endm
->  
->  .macro ALT_NEW_CONTENT vendor_id, errata_id, enable = 1, new_c : vararg
-> @@ -59,11 +59,11 @@
->  #include <linux/stringify.h>
->  
->  #define ALT_ENTRY(oldptr, newptr, vendor_id, errata_id, newlen)		\
-> -	RISCV_PTR " " oldptr "\n"					\
-> -	RISCV_PTR " " newptr "\n"					\
-> -	REG_ASM " " vendor_id "\n"					\
-> -	REG_ASM " " newlen "\n"						\
-> -	".word " errata_id "\n"
-> +	".long	((" oldptr ") - .) \n"					\
-> +	".long	((" newptr ") - .) \n"					\
-> +	".short	" vendor_id "\n"					\
-> +	".short	" newlen "\n"						\
-> +	".long	" errata_id "\n"
->  
->  #define ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)		\
->  	".if " __stringify(enable) " == 1\n"				\
-> diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-> index 1bd4027d34ca..b6050a235f50 100644
-> --- a/arch/riscv/include/asm/alternative.h
-> +++ b/arch/riscv/include/asm/alternative.h
-> @@ -31,12 +31,12 @@ void riscv_alternative_fix_offsets(void *alt_ptr, unsigned int len,
->  				   int patch_offset);
->  
->  struct alt_entry {
-> -	void *old_ptr;		 /* address of original instruciton or data  */
-> -	void *alt_ptr;		 /* address of replacement instruction or data */
-> -	unsigned long vendor_id; /* cpu vendor id */
-> -	unsigned long alt_len;   /* The replacement size */
-> -	unsigned int errata_id;  /* The errata id */
-> -} __packed;
-> +	s32 old_offset;		/* offset relative to original instruciton or data  */
-                                                               ^
-							       instruction
+I don't understand why do you bring it now as an argument. You defined
+before that your driver will bind to the generic bcmbca compatible, so
+now it is not enough?
 
-(The typo was already there, but, IMO, we can fix something like that
-while touching it.)
+Best regards,
+Krzysztof
 
-> +	s32 alt_offset;		/* offset relative to replacement instruction or data */
-> +	u16 vendor_id;		/* cpu vendor id */
-> +	u16 alt_len;		/* The replacement size */
-> +	u32 errata_id;		/* The errata id */
-> +};
->  
->  struct errata_checkfunc_id {
->  	unsigned long vendor_id;
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 6db8b31d9149..c394cde2560b 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -280,6 +280,7 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
->  						  unsigned int stage)
->  {
->  	struct alt_entry *alt;
-> +	void *oldptr, *altptr;
->  
->  	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
->  		return;
-> @@ -293,12 +294,13 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
->  			continue;
->  		}
->  
-> +		oldptr = (void *)&alt->old_offset + alt->old_offset;
-> +		altptr = (void *)&alt->alt_offset + alt->alt_offset;
->  		if (!__riscv_isa_extension_available(NULL, alt->errata_id))
->  			continue;
->  
-> -		patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> -		riscv_alternative_fix_offsets(alt->old_ptr, alt->alt_len,
-> -					      alt->old_ptr - alt->alt_ptr);
-> +		patch_text_nosync(oldptr, altptr, alt->alt_len);
-> +		riscv_alternative_fix_offsets(oldptr, alt->alt_len, oldptr - altptr);
->  	}
->  }
->  #endif
-> -- 
-> 2.38.1
-
-Besides preferring a macro and the nits, LGTM
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
