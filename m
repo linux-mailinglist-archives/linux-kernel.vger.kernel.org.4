@@ -2,103 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D054766616D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E450766616E
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjAKRJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S238685AbjAKRKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:10:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238898AbjAKRIH (ORCPT
+        with ESMTP id S238488AbjAKRJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:08:07 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EA732E8A;
-        Wed, 11 Jan 2023 09:07:31 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id g20so11887219pfb.3;
-        Wed, 11 Jan 2023 09:07:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k4Ltazrwl/l2bFldORo8VUeEFxLxrMEFR8+gfbzAdUs=;
-        b=UFZI8xA6j4lfGzbM+8ybzfcwAYyEF34IaXTIqMSvwvftTCWP9LC1faQd84iRVL4+jV
-         FLLFGnk2vFj2dT7UTT/jZmZqv9xxQaMdNmr6o3vp+pNFs6pHSg4wt6q2qm5D+6yEum+6
-         +L0s467ooed8epoM+osT2be4A08T70dM2vdnbZzqgbN3DFR4Jc6FPO8L6IyDaEH3rAb9
-         QiY91aVQ4jjoTHOrJ6Wc6CW/AazOVENVedlX5hIL6lyuP4QZzHPqJQBxIEB1szKpOG9z
-         tRjimvJNb8NkZCYdxnLQPTfKuSOE7dNaoUqA1zdGxvfSp5vCrEiemfAFc6a6vdxQaSw1
-         83qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k4Ltazrwl/l2bFldORo8VUeEFxLxrMEFR8+gfbzAdUs=;
-        b=jVHHu3PVqtH2lco0bBhFfugVzFmOTvtzidRAk/QQL0NsLRVYQFesESn2u61W9LH9KH
-         0fpoC1Qu4AnPMu4Wqwh4NKcgyQIsiJDKSTbyZGe+erDz2T7K+/nbnmZkL2kreUNoI655
-         RuOLdcaeLSOyvIuiZ6ecpdopoYtAN0SF2IuYi28hQO56SGNYeIVWxGYRphgDYXIyOzey
-         51MIQjKR9EBTKNUKOuoHRsx74s7vRRwnVWSTHtmTQLj3Ce4/T43bozAqBZJhFtcPPI03
-         TKC7XWL+QC3+GrAzlBNvtaVePepj/D8o9GJOv7ola6GSqDFsV/arcgN1udTYw94dqB+v
-         zQfA==
-X-Gm-Message-State: AFqh2koQCFPKW+5CFhH6bexjGA11c6asbZJpmErd/OMeQEF+p9e65Uge
-        z4NlR+bHY/qxaJoNoahQtVw=
-X-Google-Smtp-Source: AMrXdXtiI2reTRu1AQ/aiUhAHnp5TC09nRddU5nz7s1IqWJh5tkSo3DpQagIATPbk1HXW/CebTkkWA==
-X-Received: by 2002:aa7:9156:0:b0:57e:f1a2:1981 with SMTP id 22-20020aa79156000000b0057ef1a21981mr77900899pfi.8.1673456850823;
-        Wed, 11 Jan 2023 09:07:30 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id w9-20020a628209000000b0058a72925687sm3809664pfd.212.2023.01.11.09.07.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 09:07:30 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 11 Jan 2023 07:07:29 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH v2 1/2] blk-iocost: add refcounting for iocg
-Message-ID: <Y77s0f741mFfGlTO@slm.duckdns.org>
-References: <Y7XzUee5Bq+DoIC1@slm.duckdns.org>
- <c63ee2ad-23d5-3be0-c731-28494398b391@huaweicloud.com>
- <Y7cX0SJ0y6+EIY5Q@slm.duckdns.org>
- <7dcdaef3-65c1-8175-fea7-53076f39697f@huaweicloud.com>
- <Y7iCId3pnEnLqY8G@slm.duckdns.org>
- <875eb43e-202d-5b81-0bff-ef0434358d99@huaweicloud.com>
- <Y7xbpidpq7+DqJan@slm.duckdns.org>
- <a71f997f-6cae-d57b-85dd-2fd499d238f6@huaweicloud.com>
- <Y72wF/b0/xNRmP7f@slm.duckdns.org>
- <53b30ac8-d608-ba0b-8b1b-7fe5cfed6d61@huaweicloud.com>
+        Wed, 11 Jan 2023 12:09:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A005B868
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:08:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673456902;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IducYfddzH6lMplxq5YrX0OgBDUYvrG6JVse4EUppbE=;
+        b=Ayzxx8Dpw4lk2haLG4gg3SYoVuwF3hLWexFsYjLpwV3H+IUsWJkK41QQzkSOtQkzdtbHNz
+        21Q48iAGptpkO3704kt4iThT1uoctT173EDBBE6V4az8AdUKGYzjT2EsC22vi2rj9KC6OA
+        IZDOLNtU5V/V9GwKme+TQNz46MN4Fvs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-84-h6Akq_tMN7yf2EHiQ2PiFw-1; Wed, 11 Jan 2023 12:08:06 -0500
+X-MC-Unique: h6Akq_tMN7yf2EHiQ2PiFw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5E6463C4220B;
+        Wed, 11 Jan 2023 17:08:05 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 100EBC0328F;
+        Wed, 11 Jan 2023 17:08:05 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 8E81E401A035B; Wed, 11 Jan 2023 14:07:47 -0300 (-03)
+Date:   Wed, 11 Jan 2023 14:07:47 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Christoph Lameter <cl@gentwo.de>
+Cc:     Frederic Weisbecker <frederic@kernel.org>, atomlin@atomlin.com,
+        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
+        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v13 2/6] mm/vmstat: Use vmstat_dirty to track
+ CPU-specific vmstat discrepancies
+Message-ID: <Y77s4x5yC4O1OxTQ@tpad>
+References: <20230105125218.031928326@redhat.com>
+ <20230105125248.813825852@redhat.com>
+ <b89a9828-d4e-9874-d482-dbb6cbe46@gentwo.de>
+ <Y71XpnJGumySL9ej@lothringen>
+ <7c2af941-42a9-a59b-6a20-b331a4934a3@gentwo.de>
+ <Y73F4tbfxT6Kb9kZ@tpad>
+ <60183179-3a28-6bf9-a6ab-8a8976f283d@gentwo.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <53b30ac8-d608-ba0b-8b1b-7fe5cfed6d61@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <60183179-3a28-6bf9-a6ab-8a8976f283d@gentwo.de>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Jan 11, 2023 at 09:42:18AM +0100, Christoph Lameter wrote:
+> On Tue, 10 Jan 2023, Marcelo Tosatti wrote:
+> 
+> > > The basic primitives add a  lot of weight.
+> >
+> > Can't see any alternative given the necessity to avoid interruption
+> > by the work to sync per-CPU vmstats to global vmstats.
+> 
+> this_cpu operations are designed to operate on a *single* value (a counter) and can
+> be run on an arbitrary cpu, There is no preemption or interrupt
+> disable required since the counters of all cpus will be added up at the
+> end.
+> 
+> You want *two* values (the counter and the dirty flag) to be modified
+> together and want to use the counters/flag to identify the cpu where
+> these events occurred. this_cpu_xxx operations are not suitable for that
+> purpose. You would need a way to ensure that both operations occur on the
+> same cpu.
 
-On Wed, Jan 11, 2023 at 09:36:25AM +0800, Yu Kuai wrote:
-> I'm not sure, of course this can fix the problem, but two spinlock
-> 'blkcg->lock' and 'q->queue_lock' are used to protect blkg_destroy()
-> currently, add a mutex（disk level?) requires a refactor, which seems
-> complex to me.
+Which is either preempt_disable (CONFIG_HAVE_CMPXCHG_LOCAL case), or 
+local_irq_disable (!CONFIG_HAVE_CMPXCHG_LOCAL case).
 
-The fact that the two paths can race each other already seems buggy. e.g.
-What prevents them from running pd_free on the same pd twice? So, it needs
-to be fixed anyway and the intention always has been that these callbacks
-are called in the correct traversal order.
+> > > > And the pre cpu atomic updates operations require the modification
+> > > of multiple values. The operation
+> > > cannot be "atomic" in that sense anymore and we need some other form of
+> > > synchronization that can
+> > > span multiple instructions.
+> >
+> >     So use this_cpu_cmpxchg() to avoid the overhead. Since we can no longer
+> >     count on preremption being disabled we still have some minor issues.
+> >     The fetching of the counter thresholds is racy.
+> >     A threshold from another cpu may be applied if we happen to be
+> >     rescheduled on another cpu.  However, the following vmstat operation
+> >     will then bring the counter again under the threshold limit.
+> >
+> > Those small issues are gone, OTOH.
+> 
+> Well you could use this_cpu_cmpxchg128 to update a 64 bit counter and a
+> flag at the same time. 
 
-Thanks.
+But then you transform the "per-CPU vmstat is dirty" bit (bool) into a 
+number of flags that must be scanned (when returning to userspace).
 
--- 
-tejun
+Which increases the overhead of a fast path (return to userspace).
+
+> Otherwise you will have to switch off preemption or
+> interrupts when incrementing the counters and updating the dirty flag.
+> 
+> Thus you do not really need the this_cpu operations anymore. It would
+> best to use a preempt_disable section and uuse C operators -- ++ for the
+> counter and do regular assignment for the flag.
+
+OK, can replace this_cpu operations with this_cpu_ptr + standard C operators 
+(and in fact can do that for interrupt disabled functions as well, that
+is CONFIG_HAVE_CMPXCHG_LOCAL not defined).
+
+Is that it?
+
