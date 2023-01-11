@@ -2,289 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2560E665251
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A856665255
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 04:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbjAKD0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 Jan 2023 22:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
+        id S232833AbjAKD0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 Jan 2023 22:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235140AbjAKD0W (ORCPT
+        with ESMTP id S232658AbjAKD0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 Jan 2023 22:26:22 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C012DF19;
-        Tue, 10 Jan 2023 19:26:17 -0800 (PST)
-X-UUID: b43e3bce915f11eda06fc9ecc4dadd91-20230111
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=mbHqNJkSdR1rCR9KdCc2/hI6jI6Bavtsh5EvXljRiSY=;
-        b=Yyt9KLWoTR957uQaMxj3N+z0wARJDwemIejKu7atqV+tLagg0wcHErtlbbsPw/mQP4cbSYOfzzEssGyyDQjn/BHWDlR+M20sfRi7hRswLmJamZFfvUnTMbsUwQGyQwXPnahYvDKGNHU0I4JczcQQneFs7oZntmfN/K8UMHOvfSA=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:01b2d061-dd8a-4f74-b8b4-78af5d8d2350,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:543e81c,CLOUDID:2f194c54-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: b43e3bce915f11eda06fc9ecc4dadd91-20230111
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <jian.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 152184516; Wed, 11 Jan 2023 11:26:15 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 11 Jan 2023 11:26:13 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 11 Jan 2023 11:26:12 +0800
-From:   Jian Yang <jian.yang@mediatek.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-CC:     <linux-pci@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <jian.yang@mediatek.com>, <chuanjia.liu@mediatek.com>,
-        <jieyy.yang@mediatek.com>, <qizhong.cheng@mediatek.com>,
-        <rex-bc.chen@mediatek.com>, <david-yh.chiu@mediatek.com>
-Subject: [PATCH 1/2] PCI: mediatek-gen3: Add power and reset control feature for downstream component
-Date:   Wed, 11 Jan 2023 11:25:41 +0800
-Message-ID: <20230111032542.20306-2-jian.yang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230111032542.20306-1-jian.yang@mediatek.com>
-References: <20230111032542.20306-1-jian.yang@mediatek.com>
+        Tue, 10 Jan 2023 22:26:45 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27C910BF
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:26:43 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id g20so10428439pfb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 19:26:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=alncDRdItzGVC9H0nB2eZTIUdgfc1NKFCap3fed5pds=;
+        b=izrilxH9gs69Tz2WgBhBHAOEXPd+T4IF7O/CMa7SyYp2QGRWxPzhxVkJ+wfJMx00MD
+         tvv036Af6sjwa+nP5DEZ6RqOob4aQpgI8fq+CnV2StFy9fDUcc9cmvGlU2lilVhRng6/
+         Ft+V58ocfNByYVhXN6O1/8YKqLLOD+rvPA9HZWo8RWDNt+5QQ4AdYg+TokKoQt8IBTNz
+         +KbvRdpjnbXkDE7SaIT2906Xlo1FVl9QCwQAV09+o4N7kU0Pjn8SbMiZ08lRekNTQdW+
+         se8YF6It/blHmhdh/2cg+FcGFzWIZ6Y6fHufzonT76GlZSoZ9eWqqiz4dHRw+viitZla
+         yBfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=alncDRdItzGVC9H0nB2eZTIUdgfc1NKFCap3fed5pds=;
+        b=zijN6udKG4vZnJBLx+bj4hZN2eAkMzF1CRQJl1uWQ4jufNOuINoyNGQbvcyv4Xza33
+         rslUbv/0GHcaljkGYNQ3wtbbH7Wjaqax4fz9Ha37KR9+csfC2hVCok2osB302v9/zkKY
+         ytzBgN3E2jo3Fm+np3DUDcye85tu1ICD/8zXlZMYVVuGXFrhsFtNSV0AtOPIyQ8XLlIR
+         93B51c/yztWTTsLqGLY+EyHXSNc++SUeLaX2S/AWTzDfFkLJY1Vob7RAG0Lt1STtiA/D
+         qCNhE9lhEgx7ZN81ZHxcBFCIjW9nUzPX7nBlPxlnq6eUUuBrqALzdJeGsuHIXJobYH+l
+         LL1w==
+X-Gm-Message-State: AFqh2koF93Ra26O69TpGWsEFrfNrhRjyJuzsStY2JD1/YqvdC6JVWBLD
+        oXwVJ8ShPjM9GNoq7SQhu8RxTw==
+X-Google-Smtp-Source: AMrXdXtPEgDn7RC/sWl6ItzRrxeRyhA6Zhw0n5qUmtAeOTEJJiIJPYEoz6/9OW7xMf2mBV7popeSOw==
+X-Received: by 2002:a05:6a00:1813:b0:582:a492:f302 with SMTP id y19-20020a056a00181300b00582a492f302mr34855118pfa.16.1673407603186;
+        Tue, 10 Jan 2023 19:26:43 -0800 (PST)
+Received: from [10.16.128.218] (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id t2-20020aa79462000000b00582a224e738sm8820334pfq.63.2023.01.10.19.26.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 19:26:42 -0800 (PST)
+Message-ID: <18a0a7cd-0601-0ff6-12d7-353819692155@igel.co.jp>
+Date:   Wed, 11 Jan 2023 12:26:38 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 2/9] vringh: remove vringh_iov and unite to
+ vringh_kiov
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221227022528.609839-1-mie@igel.co.jp>
+ <20221227022528.609839-3-mie@igel.co.jp>
+ <CACGkMEtAaYpuZtS0gx_m931nFzcvqSNK9BhvUZH_tZXTzjgQCg@mail.gmail.com>
+ <CANXvt5rfXDYa0nLzKW5-Q-hjhw-19npXVneqBO1TcsariU6rWg@mail.gmail.com>
+ <CACGkMEvmZ5MEX4WMa3JhzT404C2uhsNk0nnkYBRtvLPhNTSzHQ@mail.gmail.com>
+Content-Language: en-US
+From:   Shunsuke Mie <mie@igel.co.jp>
+In-Reply-To: <CACGkMEvmZ5MEX4WMa3JhzT404C2uhsNk0nnkYBRtvLPhNTSzHQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "jian.yang" <jian.yang@mediatek.com>
 
-Make MediaTek's controller driver capable of controlling power
-supplies and reset pin of a downstream component in power-on and
-power-off flow.
+On 2022/12/28 15:36, Jason Wang wrote:
+> On Tue, Dec 27, 2022 at 3:06 PM Shunsuke Mie <mie@igel.co.jp> wrote:
+>> 2022年12月27日(火) 15:04 Jason Wang <jasowang@redhat.com>:
+>>> On Tue, Dec 27, 2022 at 10:25 AM Shunsuke Mie <mie@igel.co.jp> wrote:
+>>>> struct vringh_iov is defined to hold userland addresses. However, to use
+>>>> common function, __vring_iov, finally the vringh_iov converts to the
+>>>> vringh_kiov with simple cast. It includes compile time check code to make
+>>>> sure it can be cast correctly.
+>>>>
+>>>> To simplify the code, this patch removes the struct vringh_iov and unifies
+>>>> APIs to struct vringh_kiov.
+>>>>
+>>>> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+>>> While at this, I wonder if we need to go further, that is, switch to
+>>> using an iov iterator instead of a vringh customized one.
+>> I didn't see the iov iterator yet, thank you for informing me.
+>> Is that iov_iter? https://lwn.net/Articles/625077/
+> Exactly.
 
-Some downstream components (e.g., a WIFI chip) may need an extra
-reset other than of PERST# and their power supplies, depending on
-the requirements of platform, may need to controlled by their
-parent's driver. To meet the requirements described above, I add this
-feature to MediaTek's PCIe controller driver as a optional feature.
+I've investigated the iov_iter, vhost and related APIs. As a result, I
+think that it is not easy to switch to use the iov_iter. Because, the
+design of vhost and vringh is different.
 
-Signed-off-by: jian.yang <jian.yang@mediatek.com>
----
- drivers/pci/controller/pcie-mediatek-gen3.c | 114 +++++++++++++++++++-
- 1 file changed, 113 insertions(+), 1 deletion(-)
+The iov_iter has vring desc info and meta data of transfer method. The
+vhost provides generic transfer function for the iov_iter. In constrast,
+vringh_iov just has vring desc info. The vringh provides transfer functions
+for each methods.
 
-diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-index b8612ce5f4d0..5ddbc2a0c020 100644
---- a/drivers/pci/controller/pcie-mediatek-gen3.c
-+++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-@@ -8,6 +8,8 @@
- 
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/iopoll.h>
- #include <linux/irq.h>
- #include <linux/irqchip/chained_irq.h>
-@@ -15,11 +17,13 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/msi.h>
-+#include <linux/of_gpio.h>
- #include <linux/pci.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/reset.h>
- 
- #include "../pci.h"
-@@ -100,6 +104,13 @@
- #define PCIE_ATR_TLP_TYPE_MEM		PCIE_ATR_TLP_TYPE(0)
- #define PCIE_ATR_TLP_TYPE_IO		PCIE_ATR_TLP_TYPE(2)
- 
-+/* Downstream Component power supplies used by MediaTek PCIe */
-+static const char *const dsc_power_supplies[] = {
-+	"pcie1v8",
-+	"pcie3v3",
-+	"pcie12v",
-+};
-+
- /**
-  * struct mtk_msi_set - MSI information for each set
-  * @base: IO mapped register base
-@@ -122,6 +133,10 @@ struct mtk_msi_set {
-  * @phy: PHY controller block
-  * @clks: PCIe clocks
-  * @num_clks: PCIe clocks count for this port
-+ * @supplies: Downstream Component power supplies
-+ * @num_supplies: Downstream Component power supplies count
-+ * @dsc_reset: The GPIO pin to reset Downstream component
-+ * @dsc_reset_delay_ms: Delay in ms before the deassertion of reset GPIO
-  * @irq: PCIe controller interrupt number
-  * @saved_irq_state: IRQ enable state saved at suspend time
-  * @irq_lock: lock protecting IRQ register access
-@@ -141,6 +156,10 @@ struct mtk_gen3_pcie {
- 	struct phy *phy;
- 	struct clk_bulk_data *clks;
- 	int num_clks;
-+	struct regulator_bulk_data *supplies;
-+	int num_supplies;
-+	struct gpio_desc *dsc_reset;
-+	u32 dsc_reset_delay_ms;
- 
- 	int irq;
- 	u32 saved_irq_state;
-@@ -763,7 +782,9 @@ static int mtk_pcie_parse_port(struct mtk_gen3_pcie *pcie)
- 	struct device *dev = pcie->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct resource *regs;
--	int ret;
-+	enum of_gpio_flags flags;
-+	enum gpiod_flags dsc_reset_init_flags;
-+	int ret, i;
- 
- 	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "pcie-mac");
- 	if (!regs)
-@@ -809,14 +830,103 @@ static int mtk_pcie_parse_port(struct mtk_gen3_pcie *pcie)
- 		return pcie->num_clks;
- 	}
- 
-+	pcie->num_supplies = ARRAY_SIZE(dsc_power_supplies);
-+	pcie->supplies = devm_kcalloc(dev, pcie->num_supplies,
-+				      sizeof(*pcie->supplies),
-+				      GFP_KERNEL);
-+	if (!pcie->supplies)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < pcie->num_supplies; i++)
-+		pcie->supplies[i].supply = dsc_power_supplies[i];
-+
-+	ret = devm_regulator_bulk_get(dev, pcie->num_supplies, pcie->supplies);
-+	if (ret)
-+		return ret;
-+
-+	ret = of_get_named_gpio_flags(dev->of_node, "dsc-reset-gpios", 0,
-+				      &flags);
-+	if (ret < 0) {
-+		if (ret == -EPROBE_DEFER)
-+			return ret;
-+
-+		/*
-+		 * It's okay that the reset GPIO of a downstream component not
-+		 * defined in related devicetree node since it's an optional
-+		 * property.
-+		 */
-+		return 0;
-+	}
-+
-+	dsc_reset_init_flags = (flags & OF_GPIO_ACTIVE_LOW) ? GPIOD_OUT_HIGH :
-+			       GPIOD_OUT_LOW;
-+	pcie->dsc_reset = devm_gpiod_get_optional(dev, "dsc-reset",
-+						  dsc_reset_init_flags);
-+	if (IS_ERR(pcie->dsc_reset)) {
-+		ret = PTR_ERR(pcie->dsc_reset);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "failed to request DSC reset gpio\n");
-+
-+		return ret;
-+	}
-+
-+	ret = of_property_read_u32(dev->of_node, "dsc-reset-msleep",
-+				   &pcie->dsc_reset_delay_ms);
-+	if (ret) {
-+		dev_info(dev, "Failed to get delay time of DSC, set it to default 5ms\n");
-+		pcie->dsc_reset_delay_ms = 5;
-+	}
-+
- 	return 0;
- }
- 
-+static int mtk_pcie_dsc_power_up(struct mtk_gen3_pcie *pcie)
-+{
-+	struct device *dev = pcie->dev;
-+	int ret;
-+
-+	/* Assert Downstream Component reset */
-+	if (pcie->dsc_reset)
-+		gpiod_set_value_cansleep(pcie->dsc_reset, 1);
-+
-+	ret = regulator_bulk_enable(pcie->num_supplies, pcie->supplies);
-+	if (ret)
-+		dev_err(dev, "failed to enable DSC power supplies: %d\n", ret);
-+
-+	/* De-assert Downstream Component reset */
-+	if (pcie->dsc_reset) {
-+		/*
-+		 * Wait for a short time before we de-assert the reset GPIO.
-+		 * Depends on the requirement of a specific Downstream
-+		 * Component.
-+		 */
-+		usleep_range(1000 * pcie->dsc_reset_delay_ms,
-+			     1000 * pcie->dsc_reset_delay_ms + 100);
-+		gpiod_set_value_cansleep(pcie->dsc_reset, 0);
-+	}
-+
-+	return ret;
-+}
-+
-+static void mtk_pcie_dsc_power_down(struct mtk_gen3_pcie *pcie)
-+{
-+	/* Assert Downstream Component reset */
-+	if (pcie->dsc_reset)
-+		gpiod_set_value_cansleep(pcie->dsc_reset, 1);
-+
-+	regulator_bulk_disable(pcie->num_supplies, pcie->supplies);
-+}
-+
- static int mtk_pcie_power_up(struct mtk_gen3_pcie *pcie)
- {
- 	struct device *dev = pcie->dev;
- 	int err;
- 
-+	/* Downstream Component power up before RC */
-+	err = mtk_pcie_dsc_power_up(pcie);
-+	if (err)
-+		return err;
-+
- 	/* PHY power on and enable pipe clock */
- 	reset_control_deassert(pcie->phy_reset);
- 
-@@ -855,6 +965,7 @@ static int mtk_pcie_power_up(struct mtk_gen3_pcie *pcie)
- 	phy_exit(pcie->phy);
- err_phy_init:
- 	reset_control_assert(pcie->phy_reset);
-+	mtk_pcie_dsc_power_down(pcie);
- 
- 	return err;
- }
-@@ -870,6 +981,7 @@ static void mtk_pcie_power_down(struct mtk_gen3_pcie *pcie)
- 	phy_power_off(pcie->phy);
- 	phy_exit(pcie->phy);
- 	reset_control_assert(pcie->phy_reset);
-+	mtk_pcie_dsc_power_down(pcie);
- }
- 
- static int mtk_pcie_setup(struct mtk_gen3_pcie *pcie)
--- 
-2.18.0
+In the future, it is better to use common data structure and APIs between
+vhost and vringh (or merge completely), but it requires a lot of 
+changes, so I'd like to just
+organize data structure in vringh as a first step in this patch.
 
+
+Best
+
+> Thanks
+>
+>>> Thanks
+>>>
+>>>> ---
+>>>>   drivers/vhost/vringh.c | 32 ++++++------------------------
+>>>>   include/linux/vringh.h | 45 ++++--------------------------------------
+>>>>   2 files changed, 10 insertions(+), 67 deletions(-)
+>>>>
+>>>> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+>>>> index 828c29306565..aa3cd27d2384 100644
+>>>> --- a/drivers/vhost/vringh.c
+>>>> +++ b/drivers/vhost/vringh.c
+>>>> @@ -691,8 +691,8 @@ EXPORT_SYMBOL(vringh_init_user);
+>>>>    * calling vringh_iov_cleanup() to release the memory, even on error!
+>>>>    */
+>>>>   int vringh_getdesc_user(struct vringh *vrh,
+>>>> -                       struct vringh_iov *riov,
+>>>> -                       struct vringh_iov *wiov,
+>>>> +                       struct vringh_kiov *riov,
+>>>> +                       struct vringh_kiov *wiov,
+>>>>                          bool (*getrange)(struct vringh *vrh,
+>>>>                                           u64 addr, struct vringh_range *r),
+>>>>                          u16 *head)
+>>>> @@ -708,26 +708,6 @@ int vringh_getdesc_user(struct vringh *vrh,
+>>>>          if (err == vrh->vring.num)
+>>>>                  return 0;
+>>>>
+>>>> -       /* We need the layouts to be the identical for this to work */
+>>>> -       BUILD_BUG_ON(sizeof(struct vringh_kiov) != sizeof(struct vringh_iov));
+>>>> -       BUILD_BUG_ON(offsetof(struct vringh_kiov, iov) !=
+>>>> -                    offsetof(struct vringh_iov, iov));
+>>>> -       BUILD_BUG_ON(offsetof(struct vringh_kiov, i) !=
+>>>> -                    offsetof(struct vringh_iov, i));
+>>>> -       BUILD_BUG_ON(offsetof(struct vringh_kiov, used) !=
+>>>> -                    offsetof(struct vringh_iov, used));
+>>>> -       BUILD_BUG_ON(offsetof(struct vringh_kiov, max_num) !=
+>>>> -                    offsetof(struct vringh_iov, max_num));
+>>>> -       BUILD_BUG_ON(sizeof(struct iovec) != sizeof(struct kvec));
+>>>> -       BUILD_BUG_ON(offsetof(struct iovec, iov_base) !=
+>>>> -                    offsetof(struct kvec, iov_base));
+>>>> -       BUILD_BUG_ON(offsetof(struct iovec, iov_len) !=
+>>>> -                    offsetof(struct kvec, iov_len));
+>>>> -       BUILD_BUG_ON(sizeof(((struct iovec *)NULL)->iov_base)
+>>>> -                    != sizeof(((struct kvec *)NULL)->iov_base));
+>>>> -       BUILD_BUG_ON(sizeof(((struct iovec *)NULL)->iov_len)
+>>>> -                    != sizeof(((struct kvec *)NULL)->iov_len));
+>>>> -
+>>>>          *head = err;
+>>>>          err = __vringh_iov(vrh, *head, (struct vringh_kiov *)riov,
+>>>>                             (struct vringh_kiov *)wiov,
+>>>> @@ -740,14 +720,14 @@ int vringh_getdesc_user(struct vringh *vrh,
+>>>>   EXPORT_SYMBOL(vringh_getdesc_user);
+>>>>
+>>>>   /**
+>>>> - * vringh_iov_pull_user - copy bytes from vring_iov.
+>>>> + * vringh_iov_pull_user - copy bytes from vring_kiov.
+>>>>    * @riov: the riov as passed to vringh_getdesc_user() (updated as we consume)
+>>>>    * @dst: the place to copy.
+>>>>    * @len: the maximum length to copy.
+>>>>    *
+>>>>    * Returns the bytes copied <= len or a negative errno.
+>>>>    */
+>>>> -ssize_t vringh_iov_pull_user(struct vringh_iov *riov, void *dst, size_t len)
+>>>> +ssize_t vringh_iov_pull_user(struct vringh_kiov *riov, void *dst, size_t len)
+>>>>   {
+>>>>          return vringh_iov_xfer(NULL, (struct vringh_kiov *)riov,
+>>>>                                 dst, len, xfer_from_user);
+>>>> @@ -755,14 +735,14 @@ ssize_t vringh_iov_pull_user(struct vringh_iov *riov, void *dst, size_t len)
+>>>>   EXPORT_SYMBOL(vringh_iov_pull_user);
+>>>>
+>>>>   /**
+>>>> - * vringh_iov_push_user - copy bytes into vring_iov.
+>>>> + * vringh_iov_push_user - copy bytes into vring_kiov.
+>>>>    * @wiov: the wiov as passed to vringh_getdesc_user() (updated as we consume)
+>>>>    * @src: the place to copy from.
+>>>>    * @len: the maximum length to copy.
+>>>>    *
+>>>>    * Returns the bytes copied <= len or a negative errno.
+>>>>    */
+>>>> -ssize_t vringh_iov_push_user(struct vringh_iov *wiov,
+>>>> +ssize_t vringh_iov_push_user(struct vringh_kiov *wiov,
+>>>>                               const void *src, size_t len)
+>>>>   {
+>>>>          return vringh_iov_xfer(NULL, (struct vringh_kiov *)wiov,
+>>>> diff --git a/include/linux/vringh.h b/include/linux/vringh.h
+>>>> index 1991a02c6431..733d948e8123 100644
+>>>> --- a/include/linux/vringh.h
+>>>> +++ b/include/linux/vringh.h
+>>>> @@ -79,18 +79,6 @@ struct vringh_range {
+>>>>          u64 offset;
+>>>>   };
+>>>>
+>>>> -/**
+>>>> - * struct vringh_iov - iovec mangler.
+>>>> - *
+>>>> - * Mangles iovec in place, and restores it.
+>>>> - * Remaining data is iov + i, of used - i elements.
+>>>> - */
+>>>> -struct vringh_iov {
+>>>> -       struct iovec *iov;
+>>>> -       size_t consumed; /* Within iov[i] */
+>>>> -       unsigned i, used, max_num;
+>>>> -};
+>>>> -
+>>>>   /**
+>>>>    * struct vringh_kiov - kvec mangler.
+>>>>    *
+>>>> @@ -113,44 +101,19 @@ int vringh_init_user(struct vringh *vrh, u64 features,
+>>>>                       vring_avail_t __user *avail,
+>>>>                       vring_used_t __user *used);
+>>>>
+>>>> -static inline void vringh_iov_init(struct vringh_iov *iov,
+>>>> -                                  struct iovec *iovec, unsigned num)
+>>>> -{
+>>>> -       iov->used = iov->i = 0;
+>>>> -       iov->consumed = 0;
+>>>> -       iov->max_num = num;
+>>>> -       iov->iov = iovec;
+>>>> -}
+>>>> -
+>>>> -static inline void vringh_iov_reset(struct vringh_iov *iov)
+>>>> -{
+>>>> -       iov->iov[iov->i].iov_len += iov->consumed;
+>>>> -       iov->iov[iov->i].iov_base -= iov->consumed;
+>>>> -       iov->consumed = 0;
+>>>> -       iov->i = 0;
+>>>> -}
+>>>> -
+>>>> -static inline void vringh_iov_cleanup(struct vringh_iov *iov)
+>>>> -{
+>>>> -       if (iov->max_num & VRINGH_IOV_ALLOCATED)
+>>>> -               kfree(iov->iov);
+>>>> -       iov->max_num = iov->used = iov->i = iov->consumed = 0;
+>>>> -       iov->iov = NULL;
+>>>> -}
+>>>> -
+>>>>   /* Convert a descriptor into iovecs. */
+>>>>   int vringh_getdesc_user(struct vringh *vrh,
+>>>> -                       struct vringh_iov *riov,
+>>>> -                       struct vringh_iov *wiov,
+>>>> +                       struct vringh_kiov *riov,
+>>>> +                       struct vringh_kiov *wiov,
+>>>>                          bool (*getrange)(struct vringh *vrh,
+>>>>                                           u64 addr, struct vringh_range *r),
+>>>>                          u16 *head);
+>>>>
+>>>>   /* Copy bytes from readable vsg, consuming it (and incrementing wiov->i). */
+>>>> -ssize_t vringh_iov_pull_user(struct vringh_iov *riov, void *dst, size_t len);
+>>>> +ssize_t vringh_iov_pull_user(struct vringh_kiov *riov, void *dst, size_t len);
+>>>>
+>>>>   /* Copy bytes into writable vsg, consuming it (and incrementing wiov->i). */
+>>>> -ssize_t vringh_iov_push_user(struct vringh_iov *wiov,
+>>>> +ssize_t vringh_iov_push_user(struct vringh_kiov *wiov,
+>>>>                               const void *src, size_t len);
+>>>>
+>>>>   /* Mark a descriptor as used. */
+>>>> --
+>>>> 2.25.1
+>>>>
+>> Best,
+>> Shunsuke
+>>
