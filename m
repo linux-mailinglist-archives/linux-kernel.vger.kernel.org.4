@@ -2,102 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68DA665534
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 08:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB3E665539
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 08:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjAKHdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 02:33:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S229905AbjAKHhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 02:37:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjAKHdX (ORCPT
+        with ESMTP id S230314AbjAKHhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 02:33:23 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FABEE1C;
-        Tue, 10 Jan 2023 23:32:46 -0800 (PST)
-Date:   Wed, 11 Jan 2023 08:32:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673422364;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gnoU21dfZfsK7C0/T0w43z6dHTJwm4LjhRe84LVnovc=;
-        b=C4/Q8vhFsvczuz3F7lCwXRE7Kax3e3/iOgNv2TBHeSnt2osUnM7/gJEy4he4Eyuu5FAg9X
-        MynEv4LQhsgTO6tMFsJaEuK1Y65xA1bA4BwVXgOZ0aQTjB0psCpPub0J0QEvhzw0aQiXhi
-        4NamsFOPdVRXFLpKBvyTvVW5vE6Whyf7oWuQja5kVXSFR/gh7ReCgqEtO4R2EMzQcJEG7z
-        ofvsxZ3kwTU7KGgCpSLm+0OYk6dHfaLWCsQ3YXyPVzPqkGldJy0kdDfOzROKQbT8bQPN4T
-        fEYEZc0SGwOHhugoYdEZkz/NCvDh8QPv8H9Mpvvg6hXHw47HPgB5EPaXI7A7nA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673422364;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gnoU21dfZfsK7C0/T0w43z6dHTJwm4LjhRe84LVnovc=;
-        b=pONzYW/ACL5x1qcAUiz659Mc3zO7GWVpAkVHf4xw784apW4P8rAK5s973yfO3e9kk/8G3a
-        q6w3wPXEBvBV95Ag==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Wei Wang <weiwan@google.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        =?utf-8?B?5p2O5ZOy?= <sensor1010@163.com>, davem@davemloft.net,
-        pabeni@redhat.com, imagedong@tencent.com, kuniyu@amazon.com,
-        petrm@nvidia.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] net/dev.c : Remove redundant state settings after
- waking up
-Message-ID: <Y75mGsoe5XUVtqqa@linutronix.de>
-References: <20230110091409.2962-1-sensor1010@163.com>
- <CANn89iL0EYuGASWaXPwKN+E6mZvFicbDKOoZVA8N+BXFQV7e2A@mail.gmail.com>
- <20230110163043.069c9aa4@kernel.org>
- <CAEA6p_AdUL-NgX-C9j0DRNbwnc+nKPnwKRY8dXNCEZ4_pnTOXQ@mail.gmail.com>
+        Wed, 11 Jan 2023 02:37:38 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC774109A
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 23:37:37 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id l13-20020a056e0212ed00b00304c6338d79so10388544iln.21
+        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 23:37:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k63yZNPt76OpraTnKp5kn1vZ8b3gPRGwLKruVEw/acY=;
+        b=dATZYWnkv7fN12MsYqigLdlyCEKAM+U078l8n5jmOv/wGtWj2Ur8fRUBHT1VmjT9TW
+         Y3Kmtn34n9kimBHFvUWtQKMaD/ozVZXhQ3n2jHzD5kQgXvT3oX6P2cJf3JB8IbCoNRn9
+         HKaolGVdt8K+7kbxYI3PspJ/1EB6B7d96ViBTPrnPyg4ci6zqERJeu2W9kbsI9VLrCl5
+         VPxw3iqrnW/YvCI1tBuSS2kOaQUhehxEIFGCBEcDzGX5zk3eDbl4fV67W5Qhckil8tnR
+         iGn9XITMCJX+xYXeCZYLVvJrSJ38W2m+cn5l33L94qWfahy8XwZahBYGrOoS0Sh6i/IQ
+         NheQ==
+X-Gm-Message-State: AFqh2ko4zaYbnKoyjXhK1F52hlajb2+aWttFgkdckdhl5fR3WURc6uVq
+        uAC26BER2nb95dHhAMl920IrtzDpkqXyZPi2QEJ2yri/1CB6
+X-Google-Smtp-Source: AMrXdXtkserdAL266aVvjdSA3W9/5aHT8I3zKgEjNxpHGiaRI1u1k0yibhK5roxog4vdgoennrKIuG/buJh8YM1FdYi0cCdEVN6b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAEA6p_AdUL-NgX-C9j0DRNbwnc+nKPnwKRY8dXNCEZ4_pnTOXQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:9a0a:0:b0:38a:b479:86f with SMTP id
+ b10-20020a029a0a000000b0038ab479086fmr8745816jal.116.1673422656987; Tue, 10
+ Jan 2023 23:37:36 -0800 (PST)
+Date:   Tue, 10 Jan 2023 23:37:36 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000076ab405f1f8134a@google.com>
+Subject: [syzbot] WARNING in devlink_free
+From:   syzbot <syzbot+9f0dd863b87113935acf@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, jiri@nvidia.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-10 16:42:56 [-0800], Wei Wang wrote:
-> I was not able to see the entire changelog, but I don't think
-> > -               set_current_state(TASK_INTERRUPTIBLE);
-> is redundant.
-> 
-> It makes sure that if the previous if statement:
->     if (test_bit(NAPI_STATE_SCHED_THREADED, &napi->state) || woken)
-> is false, this napi thread yields the CPU to other threads waiting to
-> be run by calling schedule().
+Hello,
 
-It made sense in the beginning but now the suggested patch is a clean
-up. First the `woken' parameter was added in commit
-   cb038357937ee ("net: fix race between napi kthread mode and busy poll")
+syzbot found the following issue on:
 
-and then the `napi_disable_pending' check was removed in commit
-   27f0ad71699de ("net: fix hangup on napi_disable for threaded napi")
+HEAD commit:    6d0c4b11e743 libbpf: Poison strlcpy()
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17b1945a480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=46221e8203c7aca6
+dashboard link: https://syzkaller.appspot.com/bug?extid=9f0dd863b87113935acf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-which renders the code to:
-|         while (!kthread_should_stop()) {
-|                 if (test_bit(NAPI_STATE_SCHED_THREADED, &napi->state) || woken) {
-|                         WARN_ON(!list_empty(&napi->poll_list));
-|                         __set_current_state(TASK_RUNNING);
-|                         return 0;
-|                 }
-| 
-|                 schedule();
-|                 /* woken being true indicates this thread owns this napi. */
-|                 woken = true;
-|                 set_current_state(TASK_INTERRUPTIBLE);
-|         }
-|         __set_current_state(TASK_RUNNING);
+Unfortunately, I don't have any reproducer for this issue yet.
 
-so when you get out of schedule() woken is set and even if
-NAPI_STATE_SCHED_THREADED is not set, the while() loop is left due to
-`woken = true'. So changing state to TASK_INTERRUPTIBLE makes no sense
-since it will be set back to TASK_RUNNING cycles later.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/83567aa48724/disk-6d0c4b11.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6047fdb8660e/vmlinux-6d0c4b11.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a94d1047d7b7/bzImage-6d0c4b11.xz
 
-Sebastian
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9f0dd863b87113935acf@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(mutex_is_locked(lock))
+WARNING: CPU: 1 PID: 14225 at kernel/locking/mutex-debug.c:102 mutex_destroy+0xc1/0x100 kernel/locking/mutex-debug.c:102
+Modules linked in:
+CPU: 1 PID: 14225 Comm: syz-executor.5 Not tainted 6.2.0-rc2-syzkaller-00302-g6d0c4b11e743 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:mutex_destroy+0xc1/0x100 kernel/locking/mutex-debug.c:102
+Code: 03 0f b6 14 11 38 d0 7c 04 84 d2 75 3f 8b 05 ee 21 10 0d 85 c0 75 92 48 c7 c6 00 47 4c 8a 48 c7 c7 40 47 4c 8a e8 af 7f 5c 08 <0f> 0b e9 78 ff ff ff 48 c7 c7 00 8a c0 91 e8 2c 64 6c 00 e9 5d ff
+RSP: 0018:ffffc900030efa20 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff88807ca752d0 RCX: 0000000000000000
+RDX: ffff88802749d7c0 RSI: ffffffff8166724c RDI: fffff5200061df36
+RBP: ffff88807ca75000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000001 R12: ffff88807ca73000
+R13: ffff88807ca73078 R14: ffffffff8d7af3c0 R15: 0000000000000000
+FS:  0000555556d5f400(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055a9c409d950 CR3: 000000004f7a2000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ devlink_free+0x83/0x510 net/devlink/core.c:262
+ nsim_drv_remove+0x158/0x1d0 drivers/net/netdevsim/dev.c:1688
+ device_remove+0xc8/0x170 drivers/base/dd.c:548
+ __device_release_driver drivers/base/dd.c:1253 [inline]
+ device_release_driver_internal+0x4a5/0x700 drivers/base/dd.c:1279
+ bus_remove_device+0x2e7/0x5a0 drivers/base/bus.c:529
+ device_del+0x4f7/0xc80 drivers/base/core.c:3666
+ device_unregister+0x1e/0xc0 drivers/base/core.c:3698
+ nsim_bus_dev_del drivers/net/netdevsim/bus.c:310 [inline]
+ del_device_store+0x34e/0x470 drivers/net/netdevsim/bus.c:219
+ bus_attr_store+0x76/0xa0 drivers/base/bus.c:122
+ sysfs_kf_write+0x114/0x170 fs/sysfs/file.c:136
+ kernfs_fop_write_iter+0x3f1/0x600 fs/kernfs/file.c:334
+ call_write_iter include/linux/fs.h:2186 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x9ed/0xdd0 fs/read_write.c:584
+ ksys_write+0x12b/0x250 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fcfd903de4f
+Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 99 fd ff ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 48 89 44 24 08 e8 cc fd ff ff 48
+RSP: 002b:00007ffcd827a1d0 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fcfd903de4f
+RDX: 0000000000000001 RSI: 00007ffcd827a220 RDI: 0000000000000005
+RBP: 0000000000000005 R08: 0000000000000000 R09: 00007ffcd827a170
+R10: 0000000000000000 R11: 0000000000000293 R12: 00007fcfd90e76fe
+R13: 00007ffcd827a220 R14: 0000000000000000 R15: 00007ffcd827a8f0
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
