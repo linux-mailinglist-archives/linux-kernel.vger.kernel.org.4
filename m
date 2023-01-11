@@ -2,190 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8097665F9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2336660AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbjAKPtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 10:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S232716AbjAKQgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:36:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239657AbjAKPsi (ORCPT
+        with ESMTP id S238606AbjAKQgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:48:38 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F21C34774;
-        Wed, 11 Jan 2023 07:47:51 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id c8-20020a17090a4d0800b00225c3614161so20433439pjg.5;
-        Wed, 11 Jan 2023 07:47:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gj+rHUQSHl08kG5q/y5nClhBM+nXgO1wjgjAshKqRk4=;
-        b=BA2MTP8TRivv5ERqEnO+FDXOnY5MGer/9WLPAKaw8wQUvIBNxsRh57uL9s8vhJ+qCy
-         Fxv4LGKl0dzupA/mFiJLV5n5+xaz7/oUy05rIzAPz7STFw4Ux0B1+zO37hSvsC1CmTcK
-         KUawJMgPgHd4ZqdnQSK24z2zfBI4u0R8kcqkmKKjnmaXgYRmm2TYPUbm6yNxKo7N/tC+
-         55QpGyiz+5yliIiBlZt/zss5KKUAJE/9I44xCllcy/POmvOH8Jj4Tpfl5UWD/IP0u/li
-         +fCvkAA7fC5op6sbxMc7KqGTF5ixYoVjf+MlkoJRSqMADNTAIs/tOP7pPKiQmL3pgtW8
-         /UlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gj+rHUQSHl08kG5q/y5nClhBM+nXgO1wjgjAshKqRk4=;
-        b=4y9iAXoWzHKU/OBMqIjBNH5t9tQHgG6Pya412TS7CqLa2mLEcUrNoCY/gGBzoc2F+L
-         kywwS3/enEJC+95EP0Qs44Tazf+wZaeIZKaQ164ilAU2dNPdAe5nIWYAaB6IM5OmWh37
-         8Brc0I8o8UI8ufBkqDVD0QtFPOcNNpzT8Y+MAKa4zB19nb75iNo7k66UOaogsMMOgQgQ
-         UXGEoanN+Se4jTgKHJsfVZXcj9DlqPwOCs64A3X/FeR11VvT3KBGRYTe3x1MW62810Tz
-         KGwZ02akC4yyXPrjJLvWjQ0+8+fPqX/TG4k5ni3mpdFitQk9HUS0iWCWGUbSxQvnjn9s
-         pUYQ==
-X-Gm-Message-State: AFqh2kroQe2/2T5A/HpglP7rCi9uyWqs63kcIGzuHqZKjM5tE2yQwRkS
-        ckaqB5RWv2XaTS84dGSnEEAs9cwwY4YYHmcxKio=
-X-Google-Smtp-Source: AMrXdXugVy81scU/ovy38kPXgK2XTNp3pAqYobSDJPO7mipFqeXtmPEHSEe24ieDNYOyCaNvXpZLQPLAHrSNv76ck3E=
-X-Received: by 2002:a17:902:8a8f:b0:190:fc28:8cb6 with SMTP id
- p15-20020a1709028a8f00b00190fc288cb6mr4195582plo.144.1673452070938; Wed, 11
- Jan 2023 07:47:50 -0800 (PST)
+        Wed, 11 Jan 2023 11:36:09 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A28E2BC4
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:36:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673454968; x=1704990968;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gsngSkA9zuCYNZaMCNMhzxKvwqJqeTucuW8uvJ0fSwY=;
+  b=Jg0Jcus7q/IicnNqBTOdPNbhWrOfxI0y3H7pwixe/LubyEQuUSrFe/Pn
+   uOcm28EVcoiSFOwj+1cAbZvrA7wUGu6892Pq7SA1l+4hvobE23KNPFn34
+   Mqbh86pO9gs98DqhPVZTYNBuazjAfyS3MFaHCbthDcQQrZYMxmhUFvyiE
+   vcbBmEYbyVXmwrJitDmRHGVfyaS5DkiapjBja/HqKrf90+wJGHNi3Zrua
+   t1OWGcOyKHvwqBaRE6tSqBgEpQbRdIk7zE65dydZgrg+Av2zQRugQv6OL
+   32lV7W6qCBqOYJZbiNFWvZ39RG0UEXg4F+9yg7ZAXSp5kbNEmNLwMrNld
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324704176"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="324704176"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:32:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607408685"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="607408685"
+Received: from flobatol-mobl1.amr.corp.intel.com (HELO [10.212.110.208]) ([10.212.110.208])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:32:33 -0800
+Message-ID: <1af8aa6a-9896-4d35-48de-f084fd16ebc7@linux.intel.com>
+Date:   Wed, 11 Jan 2023 09:47:55 -0600
 MIME-Version: 1.0
-References: <20230110173007.57110-1-szymon.heidrich@gmail.com>
- <ece5f6a7fad9eb55d0fbf97c6227571e887c2c33.camel@gmail.com> <d06d2e44-7403-7e7e-1936-588139bf448e@gmail.com>
-In-Reply-To: <d06d2e44-7403-7e7e-1936-588139bf448e@gmail.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Wed, 11 Jan 2023 07:47:39 -0800
-Message-ID: <CAKgT0UePq+Gg5mpvD7ag=ern9JN5JyAFv5RPc05Zn9jSh4W+0g@mail.gmail.com>
-Subject: Re: [PATCH] rndis_wlan: Prevent buffer overflow in rndis_query_oid
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc:     kvalo@kernel.org, jussi.kivilinna@iki.fi, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Greg KH <greg@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH 14/19] soundwire: amd: add runtime pm ops for AMD master
+ driver
+Content-Language: en-US
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
+        vkoul@kernel.org, alsa-devel@alsa-project.org
+Cc:     Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
+        arungopal.kondaveeti@amd.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
+ <20230111090222.2016499-15-Vijendar.Mukunda@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230111090222.2016499-15-Vijendar.Mukunda@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 1:54 AM Szymon Heidrich
-<szymon.heidrich@gmail.com> wrote:
->
-> On 10/01/2023 20:39, Alexander H Duyck wrote:
-> > On Tue, 2023-01-10 at 18:30 +0100, Szymon Heidrich wrote:
-> >> Since resplen and respoffs are signed integers sufficiently
-> >> large values of unsigned int len and offset members of RNDIS
-> >> response will result in negative values of prior variables.
-> >> This may be utilized to bypass implemented security checks
-> >> to either extract memory contents by manipulating offset or
-> >> overflow the data buffer via memcpy by manipulating both
-> >> offset and len.
-> >>
-> >> Additionally assure that sum of resplen and respoffs does not
-> >> overflow so buffer boundaries are kept.
-> >>
-> >> Fixes: 80f8c5b434f9 ("rndis_wlan: copy only useful data from rndis_command respond")
-> >> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-> >> ---
-> >>  drivers/net/wireless/rndis_wlan.c | 4 ++--
-> >>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/net/wireless/rndis_wlan.c b/drivers/net/wireless/rndis_wlan.c
-> >> index 82a7458e0..d7fc05328 100644
-> >> --- a/drivers/net/wireless/rndis_wlan.c
-> >> +++ b/drivers/net/wireless/rndis_wlan.c
-> >> @@ -697,7 +697,7 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
-> >>              struct rndis_query_c    *get_c;
-> >>      } u;
-> >>      int ret, buflen;
-> >> -    int resplen, respoffs, copylen;
-> >> +    u32 resplen, respoffs, copylen;
-> >
-> > Rather than a u32 why not just make it an size_t? The advantage is that
-> > is the native type for all the memory allocation and copying that takes
-> > place in the function so it would avoid having to cast between u32 and
-> > size_t.
->
-> My sole intention with this patch was to address the exploitable overflow
-> with minimal chance of introducing any extra issues.
-> Sure some things probably could be done differently, but I would stick to
-> the choices made by original authors of this driver, especially since Greg
-> mentioned that RNDIS support generally should be dropped at some point.
 
-My main concern was that your change will introduce a comparison
-between signed and unsigned integer expressions. If you build with W=3
-you should find that your changes add new warnings when they trigger
-the "-Wsign-compare" check. Based on the comment earlier that you were
-concerned about integer roll-over I thought that it might be good to
-address that as well.
 
-Basically my initial thought was that buflen should be a u32, but I
-had opted to suggest size_t since that is the native type for the size
-of memory regions in the kernel.
+On 1/11/23 03:02, Vijendar Mukunda wrote:
+> Add support for runtime pm ops for AMD master driver.
+> 
+> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+> Signed-off-by: Mastan Katragadda <Mastan.Katragadda@amd.com>
+> ---
+>  drivers/soundwire/amd_master.c    | 205 ++++++++++++++++++++++++++++++
+>  drivers/soundwire/amd_master.h    |   3 +
+>  include/linux/soundwire/sdw_amd.h |   1 +
+>  3 files changed, 209 insertions(+)
+> 
+> diff --git a/drivers/soundwire/amd_master.c b/drivers/soundwire/amd_master.c
+> index c7063b8bdd7b..d2d7f07de202 100644
+> --- a/drivers/soundwire/amd_master.c
+> +++ b/drivers/soundwire/amd_master.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/soundwire/sdw.h>
+>  #include <linux/soundwire/sdw_registers.h>
+>  #include <linux/soundwire/sdw_amd.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/wait.h>
+>  #include <sound/pcm_params.h>
+>  #include <sound/soc.h>
+> @@ -290,6 +291,17 @@ static int amd_disable_sdw_interrupts(struct amd_sdwc_ctrl *ctrl)
+>  	return 0;
+>  }
+>  
+> +static int amd_deinit_sdw_controller(struct amd_sdwc_ctrl *ctrl)
+> +{
+> +	int ret;
+> +
+> +	ret = amd_disable_sdw_interrupts(ctrl);
+> +	if (ret)
+> +		return ret;
+> +	ret = amd_disable_sdw_controller(ctrl);
+> +	return ret;
+> +}
+> +
+>  static int amd_sdwc_set_frameshape(struct amd_sdwc_ctrl *ctrl, u32 rows, u32 cols)
+>  {
+>  	u32 sdw_rows, sdw_cols, frame_size;
+> @@ -1387,6 +1399,12 @@ static int amd_sdwc_probe(struct platform_device *pdev)
+>  	INIT_WORK(&ctrl->amd_sdw_work, amd_sdwc_update_slave_status_work);
+>  	INIT_WORK(&ctrl->probe_work, amd_sdwc_probe_work);
+>  	schedule_work(&ctrl->probe_work);
+> +	/* Enable runtime PM */
+> +	pm_runtime_set_autosuspend_delay(dev, AMD_SDW_MASTER_SUSPEND_DELAY_MS);
+> +	pm_runtime_use_autosuspend(dev);
+> +	pm_runtime_mark_last_busy(dev);
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_enable(dev);
+>  	return 0;
+>  }
+>  
+> @@ -1398,14 +1416,201 @@ static int amd_sdwc_remove(struct platform_device *pdev)
+>  	amd_disable_sdw_interrupts(ctrl);
+>  	sdw_bus_master_delete(&ctrl->bus);
+>  	ret = amd_disable_sdw_controller(ctrl);
+> +	pm_runtime_disable(&pdev->dev);
+>  	return ret;
+>  }
+>  
+> +static int amd_sdwc_clock_stop(struct amd_sdwc_ctrl *ctrl)
+> +{
+> +	u32 clk_resume_ctrl_reg;
+> +	u32 wake_en_reg;
+> +	u32 val;
+> +	u32 retry_count = 0;
+> +	int ret;
+> +
+> +	ret = sdw_bus_prep_clk_stop(&ctrl->bus);
+> +	if (ret < 0 && ret != -ENODATA) {
+> +		dev_err(ctrl->dev, "prepare clock stop failed %d", ret);
+> +		return ret;
+> +	}
+> +	ret = sdw_bus_clk_stop(&ctrl->bus);
+> +	if (ret < 0 && ret != -ENODATA) {
+> +		dev_err(ctrl->dev, "bus clock stop failed %d", ret);
+> +		return ret;
 
-> > Also why not move buflen over to the unsigned integer category with the
-> > other values you stated were at risk of overflow?
-> >
-> >>
-> >>      buflen = *len + sizeof(*u.get);
-> >>      if (buflen < CONTROL_BUFFER_SIZE)
-> >
-> > For example, this line here is comparing buflen to a fixed constant. If
-> > we are concerned about overflows this could be triggering an integer
-> > overflow resulting in truncation assuming *len is close to the roll-
-> > over threshold.
->
-> I'm not sure how this would be exploitable since len is controlled by the
-> developer rather than potential attacker, at least in existing code. Please
-> correct me in case I'm wrong.
+You need to be very careful here, because returning an error may prevent
+the device from suspending.
 
-The fact that w/ buflen signed and your other variables unsigned it
-can lead to mix-ups between the comparisons below as it has to promote
-one side or the other so that the types match before making the
-comparison.
+If it's safe and possible to recover during the resume step, you
+probably want to log the error but let the suspend continue.
 
-> > By converting to a size_t we would most likely end up blowing up on the
-> > kmalloc and instead returning an -ENOMEM.
-> >
-> >> @@ -740,7 +740,7 @@ static int rndis_query_oid(struct usbnet *dev, u32 oid, void *data, int *len)
-> >
-> > Also with any type change such as this I believe you would also need to
-> > update the netdev_dbg statement that displays respoffs and the like to
-> > account for the fact that you are now using an unsigned value.
-> > Otherwise I believe %d will display the value as a signed integer
-> > value.
-> >
-> >>                      goto exit_unlock;
-> >>              }
-> >>
-> >> -            if ((resplen + respoffs) > buflen) {
-> >> +            if (resplen > (buflen - respoffs)) {
-> >>                      /* Device would have returned more data if buffer would
-> >>                       * have been big enough. Copy just the bits that we got.
-> >>                       */
-> >
-> > Actually you should be able to simplfy this further. Assuming resplen,
-> > buflen and respoffs all the same type this entire if statement could be
-> > broken down into:
-> >               copylen = min(resplen, buflen - respoffs);
-> >
-> >
->
-> Agree, yet I would prefer to avoid any non-essential changes to keep the risk
-> of introducing errors as low as possible. I intentionally refrained from any
-> additional modifications. Is this acceptable?
->
-> Thank you for your review, I really appreciate all the suggestions.
+> +	}
+> +	switch (ctrl->instance) {
+> +	case ACP_SDW0:
+> +		clk_resume_ctrl_reg = ACP_SW_CLK_RESUME_CTRL;
+> +		wake_en_reg = ACP_SW_WAKE_EN;
+> +		break;
+> +	case ACP_SDW1:
+> +		clk_resume_ctrl_reg = ACP_P1_SW_CLK_RESUME_CTRL;
+> +		wake_en_reg = ACP_SW1_WAKE_EN;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
 
-What I was getting at is that with this change the use of min should
-result in almost exactly the same assembler code. If you look at the
-min macro all it is doing is a comparison followed by an assignment,
-and in your case you are working with only the two values "resplen"
-and "buflen - respoffs" so it just saves space to make use of the
-macro.
+why not store these offsets during the probe and use them directly here?
+You know at probe time which master you're using.
 
-If you opt to not use the macro at a minimum you can get rid of the
-parenthesis around "(buflen - respoffs)" since the order of operations
-will complete the subtraction first before the comparison.
+> +
+> +	do {
+> +		val = acp_reg_readl(ctrl->mmio + clk_resume_ctrl_reg);
+> +		if (val & AMD_SDW_CLK_STOP_DONE) {
+> +			ctrl->clk_stopped = true;
+> +			break;
+> +		}
+> +	} while (retry_count++ < AMD_SDW_CLK_STOP_MAX_RETRY_COUNT);
+> +
+> +	if (!ctrl->clk_stopped) {
+> +		dev_err(ctrl->dev, "SDW%x clock stop failed\n", ctrl->instance);
+> +		return -ETIMEDOUT;
+> +	}
+> +
+> +	if (ctrl->wake_en_mask)
+> +		acp_reg_writel(0x01, ctrl->mmio + wake_en_reg);
+> +
+> +	dev_dbg(ctrl->dev, "SDW%x clock stop successful\n", ctrl->instance);
+> +	return 0;
+> +}
+> +
+> +static int amd_sdwc_clock_stop_exit(struct amd_sdwc_ctrl *ctrl)
+> +{
+> +	int ret;
+> +	u32 clk_resume_ctrl_reg;
+> +	u32 val = 0;
+> +	u32 retry_count = 0;
+> +
+> +	switch (ctrl->instance) {
+> +	case ACP_SDW0:
+> +		clk_resume_ctrl_reg = ACP_SW_CLK_RESUME_CTRL;
+> +		break;
+> +	case ACP_SDW1:
+> +		clk_resume_ctrl_reg = ACP_P1_SW_CLK_RESUME_CTRL;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +	if (ctrl->clk_stopped) {
+> +		val = acp_reg_readl(ctrl->mmio + clk_resume_ctrl_reg);
+> +		val |= AMD_SDW_CLK_RESUME_REQ;
+> +		acp_reg_writel(val, ctrl->mmio + clk_resume_ctrl_reg);
+> +		do {
+> +			val = acp_reg_readl(ctrl->mmio + clk_resume_ctrl_reg);
+> +			if (val & AMD_SDW_CLK_RESUME_DONE)
+> +				break;
+> +			usleep_range(10, 100);
+> +		} while (retry_count++ < AMD_SDW_CLK_STOP_MAX_RETRY_COUNT);
+> +		if (val & AMD_SDW_CLK_RESUME_DONE) {
+> +			acp_reg_writel(0, ctrl->mmio + clk_resume_ctrl_reg);
+> +			ret = sdw_bus_exit_clk_stop(&ctrl->bus);
+> +			if (ret < 0)
+> +				dev_err(ctrl->dev, "bus failed to exit clock stop %d\n", ret);
+> +			ctrl->clk_stopped = false;
+> +		}
+> +	}
+> +	if (ctrl->clk_stopped) {
+> +		dev_err(ctrl->dev, "SDW%x clock stop exit failed\n", ctrl->instance);
+> +		return -ETIMEDOUT;
+> +	}
+> +
+> +	dev_dbg(ctrl->dev, "SDW%x clock stop exit successful\n", ctrl->instance);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused amd_suspend_runtime(struct device *dev)
+> +{
+> +	struct amd_sdwc_ctrl *ctrl = dev_get_drvdata(dev);
+> +	struct sdw_bus *bus = &ctrl->bus;
+> +	int ret;
+> +
+> +	if (bus->prop.hw_disabled || !ctrl->startup_done) {
+
+do you have a case where the startup is not done? This was an
+Intel-specific thing.
+
+> +		dev_dbg(bus->dev, "SoundWire master %d is disabled or not-started, ignoring\n",
+> +			bus->link_id);
+> +		return 0;
+> +	}
+> +	if (ctrl->power_mode_mask & AMD_SDW_CLK_STOP_MODE) {
+> +		ret = amd_sdwc_clock_stop(ctrl);
+> +		if (ret)
+> +			return ret;
+> +	} else if (ctrl->power_mode_mask & AMD_SDW_POWER_OFF_MODE) {
+> +		ret = amd_sdwc_clock_stop(ctrl);
+> +		if (ret)
+> +			return ret;
+> +		ret = amd_deinit_sdw_controller(ctrl);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused amd_resume_runtime(struct device *dev)
+> +{
+> +	struct amd_sdwc_ctrl *ctrl = dev_get_drvdata(dev);
+> +	struct sdw_bus *bus = &ctrl->bus;
+> +	int ret;
+> +	u32 clk_resume_ctrl_reg;
+> +	u32 val = 0;
+> +	u32 retry_count = 0;
+> +
+> +	if (bus->prop.hw_disabled || !ctrl->startup_done) {
+
+same here
+
+> +		dev_dbg(bus->dev, "SoundWire master %d is disabled or not-started, ignoring\n",
+> +			bus->link_id);
+> +		return 0;
+> +	}
+> +
+> +	switch (ctrl->instance) {
+> +	case ACP_SDW0:
+> +		clk_resume_ctrl_reg = ACP_SW_CLK_RESUME_CTRL;
+> +		break;
+> +	case ACP_SDW1:
+> +		clk_resume_ctrl_reg = ACP_P1_SW_CLK_RESUME_CTRL;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+
+select registers in the probe.
+
+> +
+> +	if (ctrl->power_mode_mask & AMD_SDW_CLK_STOP_MODE) {
+> +		ret = amd_sdwc_clock_stop_exit(ctrl);
+> +		if (ret)
+> +			return ret;
+> +	} else if (ctrl->power_mode_mask & AMD_SDW_POWER_OFF_MODE) {
+> +		val = acp_reg_readl(ctrl->mmio + clk_resume_ctrl_reg);
+> +		if (val) {
+> +			val |= AMD_SDW_CLK_RESUME_REQ;
+> +			acp_reg_writel(val, ctrl->mmio + clk_resume_ctrl_reg);
+> +			do {
+> +				val = acp_reg_readl(ctrl->mmio + clk_resume_ctrl_reg);
+> +				if (val & AMD_SDW_CLK_RESUME_DONE)
+> +					break;
+> +				usleep_range(10, 100);
+> +			} while (retry_count++ < AMD_SDW_CLK_STOP_MAX_RETRY_COUNT);
+> +			if (val & AMD_SDW_CLK_RESUME_DONE) {
+> +				acp_reg_writel(0, ctrl->mmio + clk_resume_ctrl_reg);
+> +				ctrl->clk_stopped = false;
+> +			}
+> +		}
+> +		sdw_clear_slave_status(bus, SDW_UNATTACH_REQUEST_MASTER_RESET);
+> +		amd_init_sdw_controller(ctrl);
+> +		amd_enable_sdw_interrupts(ctrl);
+> +		ret = amd_enable_sdw_controller(ctrl);
+> +		if (ret)
+> +			return ret;
+> +		ret = amd_sdwc_set_frameshape(ctrl, 50, 10);
+
+this should be defined at probe time, using magic numbers like this will
+not work in all cases and totally depends on the frame rate and
+bandwidth needs.
+
+> +		if (ret)
+> +			return ret;
+> +	}
+> +	return 0;
+> +}
