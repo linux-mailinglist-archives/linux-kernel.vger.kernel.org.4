@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8326B665DED
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0ED665E16
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbjAKObp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S234804AbjAKOe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbjAKObX (ORCPT
+        with ESMTP id S238870AbjAKOcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:31:23 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D0514081
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:28:27 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id v81so7269517vkv.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:28:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=M1hk39DcijWIOLVjHqGnFGHD0/V+Kbmdll+haGVgDXU=;
-        b=ggTM38SWb/dsCtjN7w1lCPj4Sji21TLmFlZZEPbWuONPPRYpxAj8nJy+m2mrAN3QrV
-         XjLlM4x82wN3Ghx0Bdk2a7Eh2NBgQyl9Ub3eo/w6UIQeKTv7PBMS9wr58AFILohtnqos
-         S1cjV+eWruo8LyVEUDVRzJ8FCaNb0JIA9yIhAmKvgsJIfiihoeGrUdJFDNEFaBB6A1mA
-         RrtpMAX6k3sn4D8y7DLQuoR/W2MAHKK5WA7AFTgjgQcDRHic2+ixX/DdO+5RzSixlvbo
-         T93TvS7jHBcLzGMvU6aokoT2iuyy2kG8D3hCDXpnds95vzRqOINViWBI5utdYXWVsb4q
-         VIoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M1hk39DcijWIOLVjHqGnFGHD0/V+Kbmdll+haGVgDXU=;
-        b=En0N+UZ395CU5q2pxNvcdmUk2A92yfIvrBPWleClPyuiC5Df42gui9WaQzXREcHvT1
-         viBrP0H1wh+KQ+wvcj5GFNIZXADu8d5Oy8zj5eaGZKOkFZmz++pspO2Z4yVdxGMKw8J7
-         LJwq+FSvGd6H2xMZiMlZbpxWjbzGpVvE0ppxzKnhhaYwcHjCbe2/8WIRDsOmPmBxVwYN
-         guCyOwppawei/GBD/nOj2L/ymDNafqg8gV633VEVY83KLzpTD5CIyjmvAWoUI/aYB88Z
-         uRzyVjg1xOqGQGRxPiayH1Pfec5aKzGuglpuniIkkiLJtMPhuWNYXi0qLAM1qVRaYQQ9
-         mn4A==
-X-Gm-Message-State: AFqh2kp2fiyISB/6uTSaXeE4X+wLAuWOPJszdMW4RsHGmtbTSFoUtEby
-        b2KkPDozTd0/QUi7ZeHfk4T4pQ==
-X-Google-Smtp-Source: AMrXdXs3OJQO6WWQxGZkZo3kWdSwCu9lal2oLWcDAW2dK//APxZnYDP9qU+Udh89pNtiVu5F71OeVg==
-X-Received: by 2002:a1f:6012:0:b0:3d5:a227:6e46 with SMTP id u18-20020a1f6012000000b003d5a2276e46mr23034394vkb.5.1673447306420;
-        Wed, 11 Jan 2023 06:28:26 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id m4-20020a05620a290400b00705377347b9sm9241693qkp.70.2023.01.11.06.28.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 06:28:25 -0800 (PST)
-Message-ID: <88e1772841b84a786f4864a6540e03c2e7cd744b.camel@ndufresne.ca>
-Subject: Re: [PATCH 1/2] media: add RealMedia format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        xiahong.bao@nxp.com, ming.zhou@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Wed, 11 Jan 2023 09:28:24 -0500
-In-Reply-To: <969b6905c945a1cf0986a2188290ddf3c52c5511.1671525379.git.ming.qian@nxp.com>
-References: <cover.1671525379.git.ming.qian@nxp.com>
-         <969b6905c945a1cf0986a2188290ddf3c52c5511.1671525379.git.ming.qian@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Wed, 11 Jan 2023 09:32:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92A31EC61
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:28:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673447313;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=78gt1tV6YuWzjUMppuc9FVKAQ/1A9299UaaLagqn+ik=;
+        b=QZZyBib1NzvVBFgdAgmhQbXwabbVVrExmJScBopxiUavXYR6hWa0ju3SKTYpYbHwXyTF5E
+        nayn32eZeem6Ln5A2evvyIqdHlEppBPO/RZwVyGvGRYL/xoflSi9j5bVx1o7aZSS4p6lEv
+        bSx9NGp0G25Jj1G6WzucWtOcJTNmKcE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-425-Pa9QBOowMkKbz4G4OI1VQg-1; Wed, 11 Jan 2023 09:28:30 -0500
+X-MC-Unique: Pa9QBOowMkKbz4G4OI1VQg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1166B101A55E;
+        Wed, 11 Jan 2023 14:28:30 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.87])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A073D492C14;
+        Wed, 11 Jan 2023 14:28:28 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v5 7/9] bio: Rename BIO_NO_PAGE_REF to BIO_PAGE_REFFED and
+ invert the meaning
+From:   David Howells <dhowells@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, dhowells@redhat.com,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 11 Jan 2023 14:28:28 +0000
+Message-ID: <167344730802.2425628.14034153595667416149.stgit@warthog.procyon.org.uk>
+In-Reply-To: <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
+References: <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,99 +77,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ming,
+Rename BIO_NO_PAGE_REF to BIO_PAGE_REFFED and invert the meaning.  In a
+following patch I intend to add a BIO_PAGE_PINNED flag to indicate that the
+page needs unpinning and this way both flags have the same logic.
 
-sorry for the late reply ...
+Changes
+=======
+ver #5)
+ - Split from patch that uses iov_iter_extract_pages().
 
-Le mardi 20 d=C3=A9cembre 2022 =C3=A0 16:39 +0800, Ming Qian a =C3=A9crit=
-=C2=A0:
-> RealMedia is a proprietary multimedia container format
-> created by RealNetworks with the filename extension .rm.
-> RealMedia is generally used in conjunction with RealVideo and RealAudio,
-> while also being used for streaming content over the Internet.
->=20
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> ---
->  .../userspace-api/media/v4l/pixfmt-compressed.rst     | 11 +++++++++++
->  drivers/media/v4l2-core/v4l2-ioctl.c                  |  1 +
->  include/uapi/linux/videodev2.h                        |  1 +
->  3 files changed, 13 insertions(+)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst =
-b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-> index 8794b92fde36..31ba2c00091e 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-> @@ -237,6 +237,17 @@ Compressed Formats
->          Metadata associated with the frame to decode is required to be p=
-assed
->          through the ``V4L2_CID_STATELESS_FWHT_PARAMS`` control.
->  	See the :ref:`associated Codec Control ID <codec-stateless-fwht>`.
-> +    * .. _V4L2-PIX-FMT-RV:
-> +
-> +      - ``V4L2_PIX_FMT_RV``
-> +      - 'RealMedia'
-> +      - RealMedia is a proprietary multimedia container format
-> +        created by RealNetworks with the filename extension .rm.
-> +        RealMedia is generally used in conjunction with RealVideo and Re=
-alAudio,
-> +        while also being used for streaming content over the Internet.
-> +        Typically these streams are in CBR (constant bitrate),
-> +        but a container for VBR (variable bitrate) streams
-> +        named RMVB (RealMedia variable bitrate) has been developed.
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Al Viro <viro@zeniv.linux.org.uk>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Jan Kara <jack@suse.cz>
+cc: Christoph Hellwig <hch@lst.de>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: Logan Gunthorpe <logang@deltatee.com>
+cc: linux-block@vger.kernel.org
+Link: https://lore.kernel.org/r/167305166150.1521586.10220949115402059720.stgit@warthog.procyon.org.uk/ # v4
+---
 
-I'm a bit confused with the description here. It describes the RealMedia (R=
-M)
-container format, but what you wanted is a RealVideo encoding (RV).
+ block/bio.c               |    9 ++++++++-
+ include/linux/bio.h       |    2 +-
+ include/linux/blk_types.h |    2 +-
+ 3 files changed, 10 insertions(+), 3 deletions(-)
 
-A quick search into FFMpeg (the only Open Source software decoder I could f=
-ind),
-the RealVideo comes in 4 incompatible flavours, RV10/RV20/RV30/RV40 also kn=
-own
-as  RealVideo 1 / G2 / 8 / 9+10. I think the format here should be a RealVi=
-deo
-format, and it should specify the flavours you want to support (probably on=
-ly
-RV40).
+diff --git a/block/bio.c b/block/bio.c
+index 5f96fcae3f75..0fa140789d16 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -243,6 +243,10 @@ static void bio_free(struct bio *bio)
+  * Users of this function have their own bio allocation. Subsequently,
+  * they must remember to pair any call to bio_init() with bio_uninit()
+  * when IO has completed, or when the bio is released.
++ *
++ * We set the initial assumption that pages attached to the bio will be
++ * released with put_page() by setting BIO_PAGE_REFFED; if the pages
++ * should not be put, this flag should be cleared.
+  */
+ void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
+ 	      unsigned short max_vecs, blk_opf_t opf)
+@@ -274,6 +278,7 @@ void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
+ #ifdef CONFIG_BLK_DEV_INTEGRITY
+ 	bio->bi_integrity = NULL;
+ #endif
++	bio_set_flag(bio, BIO_PAGE_REFFED);
+ 	bio->bi_vcnt = 0;
+ 
+ 	atomic_set(&bio->__bi_remaining, 1);
+@@ -302,6 +307,7 @@ void bio_reset(struct bio *bio, struct block_device *bdev, blk_opf_t opf)
+ {
+ 	bio_uninit(bio);
+ 	memset(bio, 0, BIO_RESET_BYTES);
++	bio_set_flag(bio, BIO_PAGE_REFFED);
+ 	atomic_set(&bio->__bi_remaining, 1);
+ 	bio->bi_bdev = bdev;
+ 	if (bio->bi_bdev)
+@@ -812,6 +818,7 @@ EXPORT_SYMBOL(bio_put);
+ static int __bio_clone(struct bio *bio, struct bio *bio_src, gfp_t gfp)
+ {
+ 	bio_set_flag(bio, BIO_CLONED);
++	bio_clear_flag(bio, BIO_PAGE_REFFED);
+ 	bio->bi_ioprio = bio_src->bi_ioprio;
+ 	bio->bi_iter = bio_src->bi_iter;
+ 
+@@ -1198,7 +1205,7 @@ void bio_iov_bvec_set(struct bio *bio, struct iov_iter *iter)
+ 	bio->bi_io_vec = (struct bio_vec *)iter->bvec;
+ 	bio->bi_iter.bi_bvec_done = iter->iov_offset;
+ 	bio->bi_iter.bi_size = size;
+-	bio_set_flag(bio, BIO_NO_PAGE_REF);
++	bio_clear_flag(bio, BIO_PAGE_REFFED);
+ 	bio_set_flag(bio, BIO_CLONED);
+ }
+ 
+diff --git a/include/linux/bio.h b/include/linux/bio.h
+index 22078a28d7cb..63bfd91793f9 100644
+--- a/include/linux/bio.h
++++ b/include/linux/bio.h
+@@ -482,7 +482,7 @@ void zero_fill_bio(struct bio *bio);
+ 
+ static inline void bio_release_pages(struct bio *bio, bool mark_dirty)
+ {
+-	if (!bio_flagged(bio, BIO_NO_PAGE_REF))
++	if (bio_flagged(bio, BIO_PAGE_REFFED))
+ 		__bio_release_pages(bio, mark_dirty);
+ }
+ 
+diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+index 99be590f952f..2f64b3606397 100644
+--- a/include/linux/blk_types.h
++++ b/include/linux/blk_types.h
+@@ -318,7 +318,7 @@ struct bio {
+  * bio flags
+  */
+ enum {
+-	BIO_NO_PAGE_REF,	/* don't put release vec pages */
++	BIO_PAGE_REFFED,	/* Pages need refs putting (see FOLL_GET) */
+ 	BIO_CLONED,		/* doesn't own data */
+ 	BIO_BOUNCED,		/* bio is a bounce bio */
+ 	BIO_QUIET,		/* Make BIO Quiet */
 
-regards,
-Nicolas
-
-> =20
->  .. raw:: latex
-> =20
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-co=
-re/v4l2-ioctl.c
-> index 9b5b04b8aa69..a4d12eea7fc5 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1473,6 +1473,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
-mt)
->  		case V4L2_PIX_FMT_FWHT:		descr =3D "FWHT"; break; /* used in vicodec *=
-/
->  		case V4L2_PIX_FMT_FWHT_STATELESS:	descr =3D "FWHT Stateless"; break; /=
-* used in vicodec */
->  		case V4L2_PIX_FMT_SPK:		descr =3D "Sorenson Spark"; break;
-> +		case V4L2_PIX_FMT_RV:		descr =3D "RealMedia"; break;
->  		case V4L2_PIX_FMT_CPIA1:	descr =3D "GSPCA CPiA YUV"; break;
->  		case V4L2_PIX_FMT_WNVA:		descr =3D "WNVA"; break;
->  		case V4L2_PIX_FMT_SN9C10X:	descr =3D "GSPCA SN9C10X"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
-2.h
-> index 262ef10cfa02..a7a7969ae4f8 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -740,6 +740,7 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 =
-parsed slices */
->  #define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC =
-parsed slices */
->  #define V4L2_PIX_FMT_SPK      v4l2_fourcc('S', 'P', 'K', '0') /* Sorenso=
-n Spark */
-> +#define V4L2_PIX_FMT_RV       v4l2_fourcc('R', 'V', '0', '0') /* RealMed=
-ia */
-> =20
->  /*  Vendor-specific formats   */
->  #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 Y=
-UV */
 
