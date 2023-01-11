@@ -2,193 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D826E66615F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E021666163
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 18:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjAKRHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 12:07:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        id S231841AbjAKRHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 12:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239152AbjAKRGr (ORCPT
+        with ESMTP id S235089AbjAKRG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 12:06:47 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5DF32267
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:05:10 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id v23so12515016plo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:05:10 -0800 (PST)
+        Wed, 11 Jan 2023 12:06:57 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B778E3227E;
+        Wed, 11 Jan 2023 09:05:28 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id s8so9111003plk.5;
+        Wed, 11 Jan 2023 09:05:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oDP9iHBz114gTPVon7+29iOp7H+9gVmvkP1sBBtZVDA=;
-        b=fJF1iA21Eh2Ps4YUG5BTSRAlKr8ewtW0a/S0d61RuFJnx5BLNsRr7So6UdDtgMe5iG
-         9WBXJelltOenGOc6m7LAPpTpasCUh002+Mfoi87hGTXHAlo79u5Y2689VNmCUoB+ZNEq
-         nXnke2ST7CeYJdq2c1cv0FMX5oao34vkAePIjWt/a8zU5K2gUR1hauI8esZEUaq2mB0H
-         U3VrTTIgxzQp3MLFL+Z2FLi0rgquIKmfcqQ/FT8djk+IryiB6xlR2CAQLi4A6IAMGPnF
-         mSczaPgLDxyVlW0K0mBBzgVzeTlYMuLmooheNK8bJaqkobZ1NkpWcuu43dnrCB9TiyeE
-         es6w==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7Mtc0spCsD+rm92VEIBVNTKPPOVdpe1DRfTXR4bQ3gk=;
+        b=nReZsM5tgfJ1l5eOIta8b87KVLeXba3A6W7QjW6pTJy0g2xDd58y2qb9ABgzii2X1X
+         TNwY6BDERswTrDEHDl5V5iX+bokJS+ONxXmil9zS48bWdTz8ymVONlyQYA/U21I+YmWz
+         2KHALbbentQx2Inap/MHi2dUZCZN4N/gkIj28tUlL/qJDUNB1shkVW5pKAhfkvt1cDJk
+         FHrFykTqwTqA4cWsvah7GRpKfZq10W7vIJmQhXVgB4DBqAXj1WGxCLmSjfBliYDeojIB
+         NznyNkcXGydIiz1pWj+DoPvclrpKoVtxhLHSflM/sgqPcsi4uEvHWyV4fsKPSKmu9hxj
+         +fEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oDP9iHBz114gTPVon7+29iOp7H+9gVmvkP1sBBtZVDA=;
-        b=IpcHc3znSj5AvT33EM54dahzItroz4QBt5nLPgonexxveEQuXKqaw+cq6IrshLwhHc
-         9ToYsX5cQP5CiBEUyxlFOvXIv1Z65dcRcYPPMnudtbTqScKaxlipqVtp3ema0Fcqul2c
-         jOWpW95E7vzZXZvw8RG9Ubc4NLTJd5ThqpM0EpL2SWy8NG9D9Z6nDm8rCOvlqmXAWBLZ
-         rJuCePGfuYP/LTwDF5ggW5nuCaCQdRZ4v0TE7Hwv3O/Ai+c4c+3SZIq2iX3MrPhD1X8X
-         Z0TaYQqjZSKALIYqhn8HN4KhzUpJaG97jnEHn4Nzlg8exfcf8JDAnkCc3FOUHeQCH9C5
-         u+NA==
-X-Gm-Message-State: AFqh2kqtRwnJDZIk/MbMXkkp6UTgv3J8tnL5j6VjwrHEg6PnhdLDZmiF
-        4ZkLwRVeGIF4niQza3lJfZTNbA==
-X-Google-Smtp-Source: AMrXdXvW3zNVUD8bGcENqOAYjNvZPQigzdhvIDDoRaz3qi0HGFDLAJOGIn22pNrZ1lJH0/9OE/PhFQ==
-X-Received: by 2002:a17:90b:274b:b0:219:f970:5119 with SMTP id qi11-20020a17090b274b00b00219f9705119mr425092pjb.1.1673456710117;
-        Wed, 11 Jan 2023 09:05:10 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l17-20020a170903245100b001890cbd1ff1sm10482685pls.149.2023.01.11.09.05.09
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7Mtc0spCsD+rm92VEIBVNTKPPOVdpe1DRfTXR4bQ3gk=;
+        b=SY0fi+DVN13NlhEPAasbcVkMizfpF0NyDBorWv8vl99JCHMJvEaICUkGalxbVNDnI8
+         k19EAsuCXee3K+7abqfb0j+2FtfZJSMqqH3xwD03keFowUd2NdY1vu+a3CmxyUicmaeT
+         8MhHlKxicjFHr0S2s+EZ4pG6BJjbJfHmthClHsWQBzuFQ4v3MxYmLNYZUbOiU/GItOOr
+         E2zPgpfDACx+yghfNFLcHHVWzPsUQERT/RH3kkMgv7II1QEcDuaNnFcRt4OC7M50Ktoi
+         6MN4mfZy7KT0E3X8IcuUkKYBG2Qf2bb4OrglzaJ4F3HYq3pQXiQDjuHmxj6plE2AoHFh
+         M1iA==
+X-Gm-Message-State: AFqh2koKm6PzCdOCIb/5/aC3350ajghK6/xR/jaql750xy0j2LcJ+s5p
+        wAWb2EJYJ+XdfM8JMKm6qus=
+X-Google-Smtp-Source: AMrXdXumvCwF8tFFkWtKAffR3QOym7v6ltwcnuif+T+ZdTijpazg0isadFTHB5QXX5GHdODjX8jxKg==
+X-Received: by 2002:a17:902:b18b:b0:192:6198:a51b with SMTP id s11-20020a170902b18b00b001926198a51bmr66275060plr.20.1673456727791;
+        Wed, 11 Jan 2023 09:05:27 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902e74400b001896ba683b9sm10416161plf.131.2023.01.11.09.05.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 09:05:09 -0800 (PST)
-Date:   Wed, 11 Jan 2023 17:05:05 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
-Message-ID: <Y77sQZI0IfFVx7Jo@google.com>
-References: <8f749cd0-9a04-7c72-6a4f-a42d501e1489@amd.com>
- <5340d876-62b8-8a64-aa6d-7736c2c8710f@collabora.com>
- <594f1013-b925-3c75-be61-2d649f5ca54e@amd.com>
- <6893d5e9-4b60-0efb-2a87-698b1bcda63e@collabora.com>
- <73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com>
- <c9d89644-409e-0363-69f0-a3b8f2ef0ae4@collabora.com>
- <6effcd33-8cc3-a4e0-3608-b9cef7a76da7@collabora.com>
- <ff28e1b4-cda2-14b8-b9bf-10706ae52cac@collabora.com>
- <48b5dd12-b0df-3cc6-a72d-f35156679844@collabora.com>
- <b1963713-4df6-956f-c16f-81a0cf1a978b@amd.com>
+        Wed, 11 Jan 2023 09:05:27 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 11 Jan 2023 07:05:25 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jinke Han <hanjinke.666@bytedance.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+Subject: Re: [PATCH v5] blk-throtl: Introduce sync and async queues for
+ blk-throtl
+Message-ID: <Y77sVSbS6fIXh3jp@slm.duckdns.org>
+References: <20230111162030.31094-1-hanjinke.666@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b1963713-4df6-956f-c16f-81a0cf1a978b@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230111162030.31094-1-hanjinke.666@bytedance.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022, Christian König wrote:
-> Am 18.08.22 um 01:13 schrieb Dmitry Osipenko:
-> > On 8/18/22 01:57, Dmitry Osipenko wrote:
-> > > On 8/15/22 18:54, Dmitry Osipenko wrote:
-> > > > On 8/15/22 17:57, Dmitry Osipenko wrote:
-> > > > > On 8/15/22 16:53, Christian König wrote:
-> > > > > > Am 15.08.22 um 15:45 schrieb Dmitry Osipenko:
-> > > > > > > [SNIP]
-> > > > > > > > Well that comment sounds like KVM is doing the right thing, so I'm
-> > > > > > > > wondering what exactly is going on here.
-> > > > > > > KVM actually doesn't hold the page reference, it takes the temporal
-> > > > > > > reference during page fault and then drops the reference once page is
-> > > > > > > mapped, IIUC. Is it still illegal for TTM? Or there is a possibility for
-> > > > > > > a race condition here?
-> > > > > > > 
-> > > > > > Well the question is why does KVM grab the page reference in the first
-> > > > > > place?
-> > > > > > 
-> > > > > > If that is to prevent the mapping from changing then yes that's illegal
-> > > > > > and won't work. It can always happen that you grab the address, solve
-> > > > > > the fault and then immediately fault again because the address you just
-> > > > > > grabbed is invalidated.
-> > > > > > 
-> > > > > > If it's for some other reason than we should probably investigate if we
-> > > > > > shouldn't stop doing this.
-
-...
-
-> > > > If we need to bump the refcount only for VM_MIXEDMAP and not for
-> > > > VM_PFNMAP, then perhaps we could add a flag for that to the kvm_main
-> > > > code that will denote to kvm_release_page_clean whether it needs to put
-> > > > the page?
-> > > The other variant that kind of works is to mark TTM pages reserved using
-> > > SetPageReserved/ClearPageReserved, telling KVM not to mess with the page
-> > > struct. But the potential consequences of doing this are unclear to me.
-> > > 
-> > > Christian, do you think we can do it?
-> > Although, no. It also doesn't work with KVM without additional changes
-> > to KVM.
+On Thu, Jan 12, 2023 at 12:20:30AM +0800, Jinke Han wrote:
+> From: Jinke Han <hanjinke.666@bytedance.com>
 > 
-> Well my fundamental problem is that I can't fit together why KVM is grabing
-> a page reference in the first place.
-
-It's to workaround a deficiency in KVM.
-
-> See the idea of the page reference is that you have one reference is that
-> you count the reference so that the memory is not reused while you access
-> it, e.g. for I/O or mapping it into different address spaces etc...
+> Now we don't distinguish sync write ios from normal buffer write ios
+> in blk-throtl. A bio with REQ_SYNC tagged always mean it will be wait
+> until write completion soon after it submit. So it's reasonable for sync
+> io to complete as soon as possible.
 > 
-> But none of those use cases seem to apply to KVM. If I'm not totally
-> mistaken in KVM you want to make sure that the address space mapping, e.g.
-> the translation between virtual and physical address, don't change while you
-> handle it, but grabbing a page reference is the completely wrong approach
-> for that.
+> In our test, fio writes a 100g file in sequential 4k blocksize in
+> a container with low bps limit configured (wbps=10M). More than 1200
+> ios were throttled in blk-throtl queue and the avarage throtle time
+> of each io is 140s. At the same time, the operation of saving a small
+> file by vim will be blocked amolst 140s. As a fsync will be send by vim,
+> the sync ios of fsync will be blocked by a huge amount of buffer write
+> ios ahead. This is also a priority inversion problem within one cgroup.
+> In the database scene, things got really bad with blk-throtle enabled
+> as fsync is called very often.
+> 
+> This patch splits bio queue into sync and async queues for blk-throtl
+> and gives a huge priority to sync write ios. Sync queue only make sense
+> for write ios as we treat all read io as sync io. I think it's a nice
+> respond to the semantics of REQ_SYNC. Bios with REQ_META and REQ_PRIO
+> gains the same priority as they are important to fs. This may avoid
+> some potential priority inversion problems.
+> 
+> With this patch, do the same test above, the duration of the fsync sent
+> by vim drops to several hundreds of milliseconds.
+> 
+> Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
+> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
 
-TL;DR: 100% agree, and we're working on fixing this in KVM, but were still months
-away from a full solution.
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Yep.  KVM uses mmu_notifiers to react to mapping changes, with a few caveats that
-we are (slowly) fixing, though those caveats are only tangentially related.
+with some nits below:
 
-The deficiency in KVM is that KVM's internal APIs to translate a virtual address
-to a physical address spit out only the resulting host PFN.  The details of _how_
-that PFN was acquired are not captured.  Specifically, KVM loses track of whether
-or not a PFN was acquired via gup() or follow_pte() (KVM is very permissive when
-it comes to backing guest memory).
+> +/**
+> + * throtl_qnode_bio_peek - peek a bio from a qn
+> + * @qn: the qnode to peek from
+> + *
+> + * For read, always peek bio from the SYNC queue.
+> + *
+> + * For write, we always peek bio from next_to_disp. If it's NULL, a bio
+                    ^
+                    first 
 
-Because gup() gifts the caller a reference, that means KVM also loses track of
-whether or not KVM holds a page refcount.  To avoid pinning guest memory, KVM does
-quickly put the reference gifted by gup(), but because KVM doesn't _know_ if it
-holds a reference, KVM uses a heuristic, which is essentially "is the PFN associated
-with a 'normal' struct page?".
+> + * will be popped from SYNC or ASYNC queue to fill it. The next_to_disp
+> + * is used to make sure that the peeked bio and the next popped bio are
+                                   ^
+                                   previously
 
-   /*
-    * Returns a 'struct page' if the pfn is "valid" and backed by a refcounted
-    * page, NULL otherwise.  Note, the list of refcounted PG_reserved page types
-    * is likely incomplete, it has been compiled purely through people wanting to
-    * back guest with a certain type of memory and encountering issues.
-    */
-   struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn)
+> + * always the same even in case that the spinlock of queue was released
+> + * and re-holded.
+          ^
+          re-grabbed / re-acquired
+> + *
+> + * Without the next_to_disp, consider the following situation:
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+      maybe drop this part and move the latter part to the end of the
+      previous para?
 
-That heuristic also triggers if follow_pte() resolves to a PFN that is associated
-with a "struct page", and so to avoid putting a reference it doesn't own, KVM does
-the silly thing of manually getting a reference immediately after follow_pte().
+> + * Assumed that there are only bios queued in ASYNC queue and the SYNC
+      ^
+      Assume
 
-And that in turn gets tripped up non-refcounted tail pages because KVM sees a
-normal, valid "struct page" and assumes it's refcounted.  To fudge around that
-issue, KVM requires "struct page" memory to be refcounted.
+> + * queue is empty and all ASYNC bios are 1M in size and the bps limit is
+> + * 1M/s. The throtl_slice is 100ms. The current slice is [jiffies1,
+> + * jiffies1+100] and the bytes_disp[w] is 0.
+> + *
+> + * The disp_sync_cnt is 0 as it was set 0 after each dispatching of a
+> + * ASYNC bio. A ASYNC bio wil be peeked to check in tg_may_dispatch.
+> + * Obviously, it can't be dispatched in current slice and the wait time
+> + * is 900ms. The slice will be extended to [jiffies1, jiffies1+1000] in
+> + * tg_may_dispatch. The spinlock of the queue will be released after the
+> + * process of dispatch giving up. A 4k size SYNC bio was queued in and
+> + * the SYNC queue becomes no-empty. After 900ms, it's time to dispatch
+> + * the tg, the SYNC bio will be popped to dispatched as the disp_sync_cnt
+> + * is 0 and the SYNC queue is no-empty. The slice will be extended to
+      ^
+ Maybe combine the previous several sentences like:
 
-The long-term solution is to refactor KVM to precisely track whether or not KVM
-holds a reference.  Patches have been prosposed to do exactly that[1], but they
-were put on hold due to the aforementioned caveats with mmu_notifiers.  The
-caveats are that most flows where KVM plumbs a physical address into hardware
-structures aren't wired up to KVM's mmu_notifier.
+ The queue lock is released and a 4k SYNC bio gets queued during the 900ms
+ wait.
 
-KVM could support non-refcounted struct page memory without first fixing the
-mmu_notifier issues, but I was (and still am) concerned that that would create an
-even larger hole in KVM until the mmu_notifier issues are sorted out[2].
- 
-[1] https://lore.kernel.org/all/20211129034317.2964790-1-stevensd@google.com
-[2] https://lore.kernel.org/all/Ydhq5aHW+JFo15UF@google.com
+> + * [jiffies1, jiffies1+1100] in tg_may_dispatch. Then the slice will be
+> + * trimed to [jiffies1+1000, jiffies1+1100] after the SYNC bio was
+> + * dispatched. Then the former 1M size ASYNC bio will be peeked to be
+> + * checked and still can't be dispatched because of overlimit within
+> + * the current slice. The same thing may happen DISPACH_SYNC_FACTOR times
+> + * if always there is a SYNC bio be queued in the SYNC queue when the
+> + * ASYNC bio is waiting. This means that in nearly 5s, we have dispathed
+> + * four 4k SYNC bios and one  1M ASYNC bio. It is hard to fill up the
+> + * bandwidth considering that the bps limit is 1M/s.
+
+Simiarly I think the information can be conveyed in a more compact form.
+
+Thanks.
+
+-- 
+tejun
