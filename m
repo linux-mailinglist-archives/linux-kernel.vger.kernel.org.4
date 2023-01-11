@@ -2,135 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC36E665BDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C241665BE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 13:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjAKMzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 07:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
+        id S231712AbjAKM5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 07:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238823AbjAKMz0 (ORCPT
+        with ESMTP id S229746AbjAKM51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 07:55:26 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADC819285;
-        Wed, 11 Jan 2023 04:55:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VKsur9CfmJqd7RUyGBR9q++t3bYeorhbrnyT99ptMKU=; b=gVROtrLBNj1yG8sCxjN9JxNi4e
-        C9VB0rnlQ1k5fVCeA+nQ6FfyjaSOsRXlsRbOZ/Je/JlPZH+x+zZ5JcUy3epn/kPCP56GGmesEFS78
-        X1lY/6W0wZ2fqf7ihnUyqwuaMfvqlhK3WWwRF8gSFVWLoESF8L0cVzRy3auzjG6l1n7LKKqn0L3RT
-        yDIRAzkOOHrqJx9MBpDae7IY/Q5zXTlThhaahQ5Z+ocWKTuPuGJbTuC06PWDoFZZZOTBhupesObT4
-        54p3OGyHtdFHkS4h1SRWye6GNFWI+0WaJmFI2GfpuDRfWegdhhHQok6tLAWhq6N6FZUa5YVGhmdvo
-        lq9nsCYQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pFacy-003gFb-2p;
-        Wed, 11 Jan 2023 12:54:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 63BDF3001F7;
-        Wed, 11 Jan 2023 13:54:54 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 466A42C9F6B72; Wed, 11 Jan 2023 13:54:54 +0100 (CET)
-Date:   Wed, 11 Jan 2023 13:54:54 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 2/3] perf/core: Set data->sample_flags in
- perf_prepare_sample()
-Message-ID: <Y76xng1U6UYpIGaW@hirez.programming.kicks-ass.net>
-References: <20221229204101.1099430-1-namhyung@kernel.org>
- <20221229204101.1099430-2-namhyung@kernel.org>
- <Y7wFJ+NF0NwnmzLa@hirez.programming.kicks-ass.net>
- <Y7x3RUd67smv3EFQ@google.com>
- <CAM9d7ciVZCHk0YqpobfR+t0FPN_-tpnLgNbN981=EygkM_riDg@mail.gmail.com>
+        Wed, 11 Jan 2023 07:57:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764CD1C4;
+        Wed, 11 Jan 2023 04:57:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ADE561A9C;
+        Wed, 11 Jan 2023 12:57:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3C0CC433EF;
+        Wed, 11 Jan 2023 12:57:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673441845;
+        bh=2Ok56WfZJaCSfZDKDQWYGdgKxRCuAs08e+mmKxHXkzQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=P99z6P9TEqBjn98Wr/1dWqSNvVmQ/MiFdfbD983uPUSRYD7y4/adFnXkKvBUzUQ8+
+         Eegqf1WofVKzJ8xD4FKg8yVvV9l1wi86QUvK73kxD8cYVUj1BN/YlSiWd4HcFf34dM
+         OjeqP6kw2bUJq4W3/8OKvUW3ugMnzJKeJ7JoE6Y8DRcqVHmbgyNaD0aCLUJH6nmpgC
+         1AvxO3/s5st572JmHmHv9d6II0N5Rwdi1d0zrC5OWlj5ZLFTeaZBO1pENzDaMItUcH
+         GvQjQoezGK6ogUFIGiIu/rDjoS1lsCkRKjVlWdAhmvJ5+dY8oulsrEgKiUVdN1Dnc1
+         yv4veRc//aJFw==
+Message-ID: <77b18266-69c4-c7f0-0eab-d2069a7b21d5@kernel.org>
+Date:   Wed, 11 Jan 2023 20:57:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7ciVZCHk0YqpobfR+t0FPN_-tpnLgNbN981=EygkM_riDg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: retry to update the inode page given
+ EIO
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     stable@vger.kernel.org
+References: <20230105233908.1030651-1-jaegeuk@kernel.org>
+ <Y74O+5SklijYqMU1@google.com>
+Content-Language: en-US
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Y74O+5SklijYqMU1@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 12:06:00PM -0800, Namhyung Kim wrote:
+On 2023/1/11 9:20, Jaegeuk Kim wrote:
+> In f2fs_update_inode_page, f2fs_get_node_page handles EIO along with
+> f2fs_handle_page_eio that stops checkpoint, if the disk couldn't be recovered.
+> As a result, we don't need to stop checkpoint right away given single EIO.
 
-> Another example, but in this case it's real, is ADDR.  We cannot update
-> the data->addr just because filtered_sample_type has PHYS_ADDR or
-> DATA_PAGE_SIZE as it'd lose the original value.
+f2fs_handle_page_eio() only covers the case that EIO occurs on the same
+page, should we cover the case EIO occurs on different pages?
 
-Hmm, how about something like so?
+Thanks,
 
-/*
- * if (flags & s) flags |= d; // without branches
- */
-static __always_inline unsigned long
-__cond_set(unsigned long flags, unsigned long s, unsigned long d)
-{
-	return flags | (d * !!(flags & s));
-}
-
-Then:
-
-	fst = sample_type;
-	fst = __cond_set(fst, PERF_SAMPLE_CODE_PAGE_SIZE, PERF_SAMPLE_IP);
-	fst = __cond_set(fst, PERF_SAMPLE_DATA_PAGE_SIZE |
-			      PERF_SAMPLE_PHYS_ADDR,	  PERF_SAMPLE_ADDR);
-	fst = __cond_set(fst, PERF_SAMPLE_STACK_USER,     PERF_SAMPLE_REGS_USER);
-	fst &= ~data->sample_flags;
-
-This way we express the implicit conditions by setting the required
-sample data flags, then we mask those we already have set.
-
-After the above something like:
-
-	if (fst & PERF_SAMPLE_ADDR) {
-		data->addr = 0;
-		data->sample_flags |= PERF_SAMPLE_ADDR;
-	}
-
-	if (fst & PERF_SAMPLE_PHYS_ADDR) {
-		data->phys_addr = perf_virt_to_phys(data->addr);
-		data->sample_flags |= PERF_SAMPLE_PHYS_ADDR;
-	}
-
-	if (fst & PERF_SAMPLE_DATA_PAGE_SIZE) {
-		data->data_page_size = perf_get_page_size(data->addr);
-		data->sample_flags |= PERF_SAMPLE_DATA_PAGE_SIZE;
-	}
-
-And maybe something like:
-
-#define __IF_SAMPLE_DATA(f_)		({		\
-	bool __f = fst & PERF_SAMPLE_##f_;		\
-	if (__f) data->sample_flags |= PERF_SAMPLE_##f_;\
-	__f;				})
-
-#define IF_SAMPLE_DATA(f_) if (__IF_SAMPLE_DATA(f_))
-
-Then we can write:
-
-	IF_SAMPLE_DATA(ADDR)
-		data->addr = 0;
-
-	IF_SAMPLE_DATA(PHYS_ADDR)
-		data->phys_addr = perf_virt_to_phys(data->addr);
-
-	IF_SAMPLE_DATA(DATA_PAGE_SIZE)
-		data->data_page_size = perf_get_page_size(data->addr);
-
-But I didn't check code-gen for this last suggestion.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Randall Huang <huangrandall@google.com>
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> ---
+> 
+>   Change log from v1:
+>    - fix a bug
+> 
+>   fs/f2fs/inode.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> index ff6cf66ed46b..2ed7a621fdf1 100644
+> --- a/fs/f2fs/inode.c
+> +++ b/fs/f2fs/inode.c
+> @@ -719,7 +719,7 @@ void f2fs_update_inode_page(struct inode *inode)
+>   	if (IS_ERR(node_page)) {
+>   		int err = PTR_ERR(node_page);
+>   
+> -		if (err == -ENOMEM) {
+> +		if (err == -ENOMEM || (err == -EIO && !f2fs_cp_error(sbi))) {
+>   			cond_resched();
+>   			goto retry;
+>   		} else if (err != -ENOENT) {
