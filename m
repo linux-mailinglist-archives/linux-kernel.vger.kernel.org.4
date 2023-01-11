@@ -2,161 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C333F6664D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A475E666426
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239703AbjAKU3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 15:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
+        id S230442AbjAKTzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 14:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233587AbjAKU2P (ORCPT
+        with ESMTP id S230417AbjAKTy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 15:28:15 -0500
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5387312ACA
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:27:17 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 632623C0F4C;
-        Wed, 11 Jan 2023 20:18:54 +0000 (UTC)
-Received: from pdx1-sub0-mail-a292.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id D4E573C11B1;
-        Wed, 11 Jan 2023 20:18:52 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1673468333; a=rsa-sha256;
-        cv=none;
-        b=o1bQ0SlWXjhpUMKJqMY++h4yREFBaCy0k2PvwXuAG4DrW1ePtRtSfUHKgUVtCEi7WmtBm1
-        K8LJstY7q4J9lkTMSkrlDtFxz2URtHnCMulJzWyHywRklCbvHwq3l7cB1v9Us1lk9knA6O
-        j5DXed8U13miKm/nBWvuG4L/DdedVLuIzyfm/vDZ5MpNEfhCMxa2yYfOHrNwDZ0LiS/5pX
-        oDxplhKMvj7qd5oNlYmzaZbgZazs1md5VqHFAbmttlIaf9ci7IYNjmjHh2XrnONnRyKMV2
-        uCWagx6IWpE2LoeEHzSiL10ss5NmpmrpjEaea/sZqd0SCHkhQ4IOSh+eM2j8eA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1673468333;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=wS+GmrFpvGE25kGRXu4cr712LGdTZyedIO8N8BIAZig=;
-        b=H2ZwOVFAek61HzxEZRCNoRGEE3TpYPeKeGa0IA69wusZLobsCkJ1AtQ2+tjkJaDhAi7zOo
-        LbSf+vFGJSg1k2GwlqgIHTbJDKFNdbt3AlJL1RFo8DYO2uz0/m+/08aPY77Y31m4S0qBbv
-        4MCfRc3iYiP6cfvakD8UwW3PCyMR12fN1G/aCltT8A1awF0+n6eu1tdNAm28zBPNix02sY
-        bnGimyZGhYs7QXBFFFFPuoXli3Yfw01sYBSFWLImeOP0gE+YIO9KnidAWfWuYBRvhvGQfu
-        xURvDIuIDDDbmcNXzJg9wbar6skAsdpq6EcPZcolQ58aC/D5UW79rzGR0JAZug==
-ARC-Authentication-Results: i=1;
-        rspamd-6f569fcb69-64672;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Plucky-Reign: 1875abcc38b9467a_1673468333974_2650156361
-X-MC-Loop-Signature: 1673468333974:760517353
-X-MC-Ingress-Time: 1673468333974
-Received: from pdx1-sub0-mail-a292.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.99.229.59 (trex/6.7.1);
-        Wed, 11 Jan 2023 20:18:53 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a292.dreamhost.com (Postfix) with ESMTPSA id 4NsfCD1FpdzBR;
-        Wed, 11 Jan 2023 12:18:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1673468331;
-        bh=wS+GmrFpvGE25kGRXu4cr712LGdTZyedIO8N8BIAZig=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=TaLEus5Kxs4Xgc7EFqEAlAtzzYTJ5Ns/cPdthJRVyguJMTXO22OiW4rUNoNV+jYft
-         MP/2MMYkp0ThoDJyLDqGUOnh0yCFasMO62DOBsGuNoJGZ5IrSxev/cRsPVvLbzqObC
-         dgPbP3psGAjHX83NlTwPhHUjOImqFGW22izEgF06mr4IzxI9GVmAEjwi+ATAQMbJGa
-         VoHJUBiUAd6BgFmPomIsoyyiDr9nV6YhCh1M2ftpXxiLnB4oB+VfaNNTtSVJWPqhoN
-         x3RU+K3bNgNwCDLw3fSHcMpIaP/lxT1tXjlql6EzObb+ULQjwk/xfdmcwEFX2Dbbbn
-         WfXRzd2RzPlaw==
-Date:   Wed, 11 Jan 2023 11:52:50 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 13/41] mm: introduce vma->vm_flags modifier functions
-Message-ID: <20230111195250.cj27sg4yoslbdjdp@offworld>
-Mail-Followup-To: Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-14-surenb@google.com>
- <20230111154726.stadwtzicabwh5u5@offworld>
- <CAJuCfpFmO310qoFJr2EKHRavLx87k6tVkHO3-JCE0s4q5g+TCw@mail.gmail.com>
+        Wed, 11 Jan 2023 14:54:56 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E3319A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:54:55 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id s8so9592287plk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:54:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ee/v08QHfLLFjdeXhNUw+rKnRh9GF2x4adAxhgB0GYM=;
+        b=mUty29aJZngvM3haGgNz0VtX+oT1nq5NwGEIr+ywfTh11/SN5fAx8wJb3/AxwaV1IB
+         4fOLCF8Gt45RMnvd0FJPDGVCRtB65sGAnTnl2gvNSr25eaYWay+OCHLe12RQxNxI+uJ7
+         5kYKYjDUcHYnrs6l3M6L1KbEQhYV5D62TF38qCYkTXwjaK+f5NtvUlZlCgscCq8J7O5a
+         cFrNZdYpUthCuh4JWxIaHdv6KkGy7YvA0hNl80XsdOfzgo+Wyt1R1n7GaAcPdN90cK1L
+         tDvuY4iQ5Oi8XKJAFnLQc0Wu9A0lE/lOWo/eVhjs/O0IKSk8JTk8UHczuiPeZ6NLNiPn
+         S1Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ee/v08QHfLLFjdeXhNUw+rKnRh9GF2x4adAxhgB0GYM=;
+        b=ZgknoXqncCNGwLpxg1znuyFCIjniDDr9JWRn1aFAn26jQIS/zapr4za2EFkWc1c8O9
+         MfWsBGLfJGbGSJxAtRQ1X1iafvBPvirALhb4hfd98Vbl1RX/2ucc50gBsjJBLnUu6RZT
+         Wkn2AX5m3RWir7mHafADWdDPlEZZK1KCI4b40S78nMIXfj/rNp4Q1j0NVJByAJAUwgxd
+         l/rr9lGjrB732zKT4WwvLEX7MEUuPEMRq9TQRcuxkfbdaSLPp1J0J8pyG03TNjhRvYko
+         zXCcCrTp+y7I66666d+e0O5ZSVHW4kGAV16csUb88GM9plf0ULVhaSReGpDxnKdmu36b
+         aWDg==
+X-Gm-Message-State: AFqh2krpMwipbPZLo7kwWmfjv/sliReQ9FpDOcQof+FPFPbgjn5Ldpn0
+        lygNl+bXGpnmsHaT3/0wlNCKBg==
+X-Google-Smtp-Source: AMrXdXsUGcan4Od1kkbsywDEb3Eqlo0h8a16FR71K8XMA8z2GmZHxW9H5FaMeLYfZPUCz0pASaTbQw==
+X-Received: by 2002:a05:6a20:c527:b0:9d:c38f:9bdd with SMTP id gm39-20020a056a20c52700b0009dc38f9bddmr557202pzb.2.1673466895257;
+        Wed, 11 Jan 2023 11:54:55 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t18-20020a62d152000000b00580f445d1easm10245195pfl.216.2023.01.11.11.54.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 11:54:54 -0800 (PST)
+Date:   Wed, 11 Jan 2023 19:54:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     alex.williamson@redhat.com, pbonzini@redhat.com, jgg@nvidia.com,
+        cohuck@redhat.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com, akrowiak@linux.ibm.com,
+        jjherne@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] KVM: async kvm_destroy_vm for vfio devices
+Message-ID: <Y78UCz5oeuntSQtK@google.com>
+References: <20230109201037.33051-1-mjrosato@linux.ibm.com>
+ <20230109201037.33051-2-mjrosato@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJuCfpFmO310qoFJr2EKHRavLx87k6tVkHO3-JCE0s4q5g+TCw@mail.gmail.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230109201037.33051-2-mjrosato@linux.ibm.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 Jan 2023, Suren Baghdasaryan wrote:
+On Mon, Jan 09, 2023, Matthew Rosato wrote:
+> Currently it is possible that the final put of a KVM reference comes from
+> vfio during its device close operation.  This occurs while the vfio group
+> lock is held; however, if the vfio device is still in the kvm device list,
+> then the following call chain could result in a deadlock:
+> 
+> kvm_put_kvm
+>  -> kvm_destroy_vm
+>   -> kvm_destroy_devices
+>    -> kvm_vfio_destroy
+>     -> kvm_vfio_file_set_kvm
+>      -> vfio_file_set_kvm
+>       -> group->group_lock/group_rwsem
+> 
+> Avoid this scenario by adding kvm_put_kvm_async which will perform the
+> kvm_destroy_vm asynchronously if the refcount reaches 0.
 
->On Wed, Jan 11, 2023 at 8:13 AM Davidlohr Bueso <dave@stgolabs.net> wrote:
->>
->> On Mon, 09 Jan 2023, Suren Baghdasaryan wrote:
->>
->> >To keep vma locking correctness when vm_flags are modified, add modifier
->> >functions to be used whenever flags are updated.
->>
->> How about moving this patch and the ones that follow out of this series,
->> into a preliminary patchset? It would reduce the amount of noise in the
->> per-vma lock changes, which would then only be adding the needed
->> vma_write_lock()ing.
->
->How about moving those prerequisite patches to the beginning of the
->patchset (before maple_tree RCU changes)? I feel like they do belong
->in the patchset because as a standalone patchset it would be unclear
->why I'm adding all these accessor functions and introducing this
->churn. Would that be acceptable?
+Something feels off.  If KVM's refcount is 0, then accessing device->group->kvm
+in vfio_device_open() can't happen unless there's a refcounting bug somewhere.
 
-imo the abstraction of vm_flags handling is worth being standalone and is
-easier to be picked up before a more complex locking scheme change. But
-either way, it's up to you.
+E.g. if this snippet holds group_lock
 
-Thanks,
-Davidlohr
+		mutex_lock(&device->group->group_lock);
+		device->kvm = device->group->kvm;
+
+		if (device->ops->open_device) {
+			ret = device->ops->open_device(device);
+			if (ret)
+				goto err_undo_count;
+		}
+		vfio_device_container_register(device);
+		mutex_unlock(&device->group->group_lock);
+
+and kvm_vfio_destroy() has already been invoked and is waiting on group_lock in
+vfio_file_set_kvm(), then device->ops->open_device() is being called with a
+non-NULL device->kvm that has kvm->users_count==0.  And intel_vgpu_open_device()
+at least uses kvm_get_kvm(), i.e. assumes kvm->users_count > 0.
+
+If there's no refcounting bug then kvm_vfio_destroy() doesn't need to call
+kvm_vfio_file_set_kvm() since the only way there isn't a refcounting bug is if
+group->kvm is unreachable.  This seems unlikely.
+
+Assuming there is indeed a refcounting issue, one solution would be to harden all
+->open_device() implementations to use kvm_get_kvm_safe().  I'd prefer not to have
+to do that since it will complicate those implementations and also requires KVM
+to support an async put.
+
+Rather than force devices to get KVM references, why not handle that in common
+VFIO code and drop KVM refcountin from devices?  Worst case scenario KVM is pinned
+by a device that doesn't need KVM but is in a group associated with KVM.  If that's
+a concern, it seems easy enough to add a flag to vfio_device_ops to enumerate
+whether or not the device depends on KVM.
+
+---
+ drivers/vfio/vfio_main.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+index 6e8804fe0095..fb43212d77a0 100644
+--- a/drivers/vfio/vfio_main.c
++++ b/drivers/vfio/vfio_main.c
+@@ -772,6 +772,13 @@ static struct file *vfio_device_open(struct vfio_device *device)
+ 		 * reference and release it during close_device.
+ 		 */
+ 		mutex_lock(&device->group->group_lock);
++
++		if (device->group->kvm &&
++		    !kvm_get_kvm_safe(device->group->kvm->kvm)) {
++			ret = -ENODEV;
++			goto err_undo_count;
++		}
++
+ 		device->kvm = device->group->kvm;
+ 
+ 		if (device->ops->open_device) {
+@@ -823,8 +830,10 @@ static struct file *vfio_device_open(struct vfio_device *device)
+ err_undo_count:
+ 	mutex_unlock(&device->group->group_lock);
+ 	device->open_count--;
+-	if (device->open_count == 0 && device->kvm)
++	if (device->open_count == 0 && device->kvm) {
++		kvm_put_kvm(device->kvm);
+ 		device->kvm = NULL;
++	}
+ 	mutex_unlock(&device->dev_set->lock);
+ 	module_put(device->dev->driver->owner);
+ err_unassign_container:
+@@ -1039,8 +1048,10 @@ static int vfio_device_fops_release(struct inode *inode, struct file *filep)
+ 	}
+ 	mutex_unlock(&device->group->group_lock);
+ 	device->open_count--;
+-	if (device->open_count == 0)
++	if (device->open_count == 0 && device->kvm) {
++		kvm_put_kvm(device->kvm);
+ 		device->kvm = NULL;
++	}
+ 	mutex_unlock(&device->dev_set->lock);
+ 
+ 	module_put(device->dev->driver->owner);
+
+base-commit: d52444c7a90fc551b4c3b0bda7d3f0b2ca9fc84d
+-- 
