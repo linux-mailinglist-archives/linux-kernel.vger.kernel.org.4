@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A12B66605D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE42666052
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233945AbjAKQZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:25:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S234896AbjAKQXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:23:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239322AbjAKQYp (ORCPT
+        with ESMTP id S238284AbjAKQXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:24:45 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A651EAE9;
-        Wed, 11 Jan 2023 08:21:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1673453996; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=KM/fWr6Ijp70rtm8BZuHp4yu61t3UXAW5rtoQ6TXGcicAfJmHGPfWLKr1gytRoSKd8RkFFo9uEWR22Bhfm+UxDGANxl6JOGr27UdMYWvtgvWRjZn0e7X72aX4eom3nwSbyezPydcXNa3LtLcjuu9FZETcZ+zXvJiBfS3gVXmwuE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1673453996; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=tiQTww6+qZYfimr4KPwcIb2tftIxWwGfB8Hm6/Cz1yE=; 
-        b=Fq+x9KElNqehQrZGMJw69xRwsNuD311UXDJ9bkbqSa49Bhruze+kkmiUVsKvwD0MYpJxcxnuZQoWSdo5pOEFSVwCOtmizn5s1NDPOCoUnWC+xVrCDz+WuttE3C+jQ8skTtcdChEr18E5eOBBt1SAy3lJj0kbdE6Wy26FyhuRUm8=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673453996;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=tiQTww6+qZYfimr4KPwcIb2tftIxWwGfB8Hm6/Cz1yE=;
-        b=pJbSoUWrTmpTUzq+rwtrHjuujzN9fCIUXl8zqM90VORnwxTSqUNH2Y8uBmVdrB6d
-        FaXexjLpbLxFRqnpKv2UdSOXAXBttTZFkOYbK9be51q77qMETJEozSPKPRivgHFS1W0
-        uTEWfkwldcnnTZE2KKgrPNhADs6Zejk/R3ut48Vs=
-Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1673453995499381.7961469408317; Wed, 11 Jan 2023 21:49:55 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     keyrings <keyrings@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <20230111161934.336743-1-code@siddh.me>
-Subject: [PATCH v4] kernel/watch_queue: NULL the dangling *pipe, and use it for clear check
-Date:   Wed, 11 Jan 2023 21:49:34 +0530
-X-Mailer: git-send-email 2.39.0
+        Wed, 11 Jan 2023 11:23:20 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBDD3D1DF
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:20:31 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A5CFF4DEB;
+        Wed, 11 Jan 2023 16:20:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673454001; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=58f0LLfbqxSo7X5EEbErmWGaVVMVjGGLJJwU7gW14+w=;
+        b=f5EkiFGX6rNk7HoAujbfxpf6UvHaEwcQZ8M7ra5rnWcH3Vp6ykdUNWQHOvkPffgRxgm26H
+        m4izapSsbsLyQZ47mQQvTc6DmovgBFWVWt/g81detfu1csmi7dUH+SzWZjTZmeVzPGmN0/
+        +BqJD2Sln9h8l8CEv2YTm5IwUl8WBmo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673454001;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=58f0LLfbqxSo7X5EEbErmWGaVVMVjGGLJJwU7gW14+w=;
+        b=Lhz4WyHUzHXn/WYCX6ZOc05vuE4y7B3wBFa+/p3bzVc4KP8jel1VpOi6sgZ9JVybreIEs6
+        2sT8dR1NoEurX8Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 69C971358A;
+        Wed, 11 Jan 2023 16:20:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bGi8GLHhvmOlTwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 11 Jan 2023 16:20:01 +0000
+Message-ID: <2102a618-2d5e-c286-311f-30e4baa4f85b@suse.de>
+Date:   Wed, 11 Jan 2023 17:20:00 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 11/11] video/aperture: Only remove sysfb on the default
+ vga pci device
+Content-Language: en-US
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Aaron Plattner <aplattner@nvidia.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Helge Deller <deller@gmx.de>
+References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
+ <20230111154112.90575-11-daniel.vetter@ffwll.ch>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230111154112.90575-11-daniel.vetter@ffwll.ch>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Ml6ObZcRSbozD0DLMa0dlELb"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,98 +80,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NULL the dangling pipe reference while clearing watch_queue.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Ml6ObZcRSbozD0DLMa0dlELb
+Content-Type: multipart/mixed; boundary="------------Yx1hdsmghhcaCcyvaTGQcYBc";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Daniel Vetter <daniel.vetter@ffwll.ch>,
+ DRI Development <dri-devel@lists.freedesktop.org>
+Cc: Aaron Plattner <aplattner@nvidia.com>,
+ Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+ LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Alex Deucher <alexander.deucher@amd.com>,
+ Daniel Vetter <daniel.vetter@intel.com>, Sam Ravnborg <sam@ravnborg.org>,
+ Helge Deller <deller@gmx.de>
+Message-ID: <2102a618-2d5e-c286-311f-30e4baa4f85b@suse.de>
+Subject: Re: [PATCH 11/11] video/aperture: Only remove sysfb on the default
+ vga pci device
+References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
+ <20230111154112.90575-11-daniel.vetter@ffwll.ch>
+In-Reply-To: <20230111154112.90575-11-daniel.vetter@ffwll.ch>
 
-If not done, a reference to a freed pipe remains in the watch_queue,
-as this function is called before freeing a pipe in free_pipe_info()
-(see line 834 of fs/pipe.c).
+--------------Yx1hdsmghhcaCcyvaTGQcYBc
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-The sole use of wqueue->defunct is for checking if the watch queue has
-been cleared, but wqueue->pipe is also NULLed while clearing.
+SGkNCg0KQW0gMTEuMDEuMjMgdW0gMTY6NDEgc2NocmllYiBEYW5pZWwgVmV0dGVyOg0KPiBU
+aGlzIGZpeGVzIGEgcmVncmVzc2lvbiBpbnRyb2R1Y2VkIGJ5IGVlN2E2OWFhMzhkOCAoImZi
+ZGV2OiBEaXNhYmxlDQo+IHN5c2ZiIGRldmljZSByZWdpc3RyYXRpb24gd2hlbiByZW1vdmlu
+ZyBjb25mbGljdGluZyBGQnMiKSwgd2hlcmUgd2UNCj4gcmVtb3ZlIHRoZSBzeXNmYiB3aGVu
+IGxvYWRpbmcgYSBkcml2ZXIgZm9yIGFuIHVucmVsYXRlZCBwY2kgZGV2aWNlLA0KPiByZXN1
+bHRpbmcgaW4gdGhlIHVzZXIgbG9vc2luZyB0aGVpciBlZmlmYiBjb25zb2xlIG9yIHNpbWls
+YXIuDQo+IA0KPiBOb3RlIHRoYXQgaW4gcHJhY3RpY2UgdGhpcyBvbmx5IGlzIGEgcHJvYmxl
+bSB3aXRoIHRoZSBudmlkaWEgYmxvYiwNCj4gYmVjYXVzZSB0aGF0J3MgdGhlIG9ubHkgZ3B1
+IGRyaXZlciBwZW9wbGUgbWlnaHQgaW5zdGFsbCB3aGljaCBkb2VzIG5vdA0KPiBjb21lIHdp
+dGggYW4gZmJkZXYgZHJpdmVyIG9mIGl0J3Mgb3duLiBGb3IgZXZlcnlvbmUgZWxzZSB0aGUg
+cmVhbCBncHUNCj4gZHJpdmVyIHdpbGwgcmVzdG9yIGEgd29ya2luZyBjb25zb2xlLg0KPiAN
+Cj4gQWxzbyBub3RlIHRoYXQgaW4gdGhlIHJlZmVyZW5jZWQgYnVnIHRoZXJlJ3MgY29uZnVz
+aW9uIHRoYXQgdGhpcyBzYW1lDQo+IGJ1ZyBhbHNvIGhhcHBlbnMgb24gYW1kZ3B1LiBCdXQg
+dGhhdCB3YXMganVzdCBhbm90aGVyIGFtZGdwdSBzcGVjaWZpYw0KPiByZWdyZXNzaW9uLCB3
+aGljaCBqdXN0IGhhcHBlbmVkIHRvIGhhcHBlbiBhdCByb3VnaGx5IHRoZSBzYW1lIHRpbWUg
+YW5kDQo+IHdpdGggdGhlIHNhbWUgdXNlci1vYnNlcnZhYmxlIHN5bXB0b25zLiBUaGF0IGJ1
+ZyBpcyBmaXhlZCBub3csIHNlZQ0KPiBodHRwczovL2J1Z3ppbGxhLmtlcm5lbC5vcmcvc2hv
+d19idWcuY2dpP2lkPTIxNjMzMSNjMTUNCj4gDQo+IEZvciB0aGUgYWJvdmUgcmVhc29ucyB0
+aGUgY2M6IHN0YWJsZSBpcyBqdXN0IG5vdGlvbmFsbHksIHRoaXMgcGF0Y2gNCj4gd2lsbCBu
+ZWVkIGEgYmFja3BvcnQgYW5kIHRoYXQncyB1cCB0byBudmlkaWEgaWYgdGhleSBjYXJlIGVu
+b3VnaC4NCj4gDQo+IFJlZmVyZW5jZXM6IGh0dHBzOi8vYnVnemlsbGEua2VybmVsLm9yZy9z
+aG93X2J1Zy5jZ2k/aWQ9MjE2MzAzI2MyOA0KPiBTaWduZWQtb2ZmLWJ5OiBEYW5pZWwgVmV0
+dGVyIDxkYW5pZWwudmV0dGVyQGludGVsLmNvbT4NCj4gQ2M6IEFhcm9uIFBsYXR0bmVyIDxh
+cGxhdHRuZXJAbnZpZGlhLmNvbT4NCj4gQ2M6IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyA8
+amF2aWVybUByZWRoYXQuY29tPg0KPiBDYzogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJt
+YW5uQHN1c2UuZGU+DQo+IENjOiBIZWxnZSBEZWxsZXIgPGRlbGxlckBnbXguZGU+DQo+IENj
+OiBTYW0gUmF2bmJvcmcgPHNhbUByYXZuYm9yZy5vcmc+DQo+IENjOiBBbGV4IERldWNoZXIg
+PGFsZXhhbmRlci5kZXVjaGVyQGFtZC5jb20+DQo+IENjOiA8c3RhYmxlQHZnZXIua2VybmVs
+Lm9yZz4gIyB2NS4xOSsgKGlmIHNvbWVvbmUgZWxzZSBkb2VzIHRoZSBiYWNrcG9ydCkNCj4g
+LS0tDQo+ICAgZHJpdmVycy92aWRlby9hcGVydHVyZS5jIHwgNyArKysrLS0tDQo+ICAgMSBm
+aWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL3ZpZGVvL2FwZXJ0dXJlLmMgYi9kcml2ZXJzL3ZpZGVvL2Fw
+ZXJ0dXJlLmMNCj4gaW5kZXggYmE1NjU1MTU0ODBkLi5hMTgyMWQzNjliYjEgMTAwNjQ0DQo+
+IC0tLSBhL2RyaXZlcnMvdmlkZW8vYXBlcnR1cmUuYw0KPiArKysgYi9kcml2ZXJzL3ZpZGVv
+L2FwZXJ0dXJlLmMNCj4gQEAgLTMyMSwxNSArMzIxLDE2IEBAIGludCBhcGVydHVyZV9yZW1v
+dmVfY29uZmxpY3RpbmdfcGNpX2RldmljZXMoc3RydWN0IHBjaV9kZXYgKnBkZXYsIGNvbnN0
+IGNoYXIgKm5hDQo+ICAgDQo+ICAgCXByaW1hcnkgPSBwZGV2ID09IHZnYV9kZWZhdWx0X2Rl
+dmljZSgpOw0KPiAgIA0KPiArCWlmIChwcmltYXJ5KQ0KPiArCQlzeXNmYl9kaXNhYmxlKCk7
+DQo+ICsNCg0KVGhlcmUncyBhbm90aGVyIHN5c2ZiX2Rpc2FibGUoKSBpbiBhcGVydHVyZV9y
+ZW1vdmVfY29uZmxpY3RpbmdfZGV2aWNlcygpIA0Kd2l0aG91dCB0aGUgYnJhbmNoIGJ1dCB3
+aXRoIGEgbG9uZyBjb21tZW50LiAgSSBmaW5kIHRoaXMgc2xpZ2h0bHkgY29uZnVzaW5nLg0K
+DQpJJ2QgcmF0aGVyIGFkZCBhIGJyYW5jaGVkIHN5c2ZiX2Rpc2FibGUoKSBwbHVzIHRoZSBj
+b21tZW50ICB0byANCmFwZXJ0dXJlX2RldGFjaF9kZXZpY2VzKCkuIEFuZCB0aGVuIGFkZCBh
+ICdwcmltYXJ5JyBwYXJhbWV0ZXIgdG8gDQphcGVydHVyZV9kZXRhY2hfZGV2aWNlcygpLiBJ
+biBhcGVydHVyZV9yZW1vdmVfY29uZmxpY3RpbmdfZGV2aWNlcygpIHRoZSANCnBhcmFtZXRl
+ciB3b3VsZCBiZSB1bmNvbmRpdGlvbmFsbHkgdHJ1ZS4NCg0KQmVzdCByZWdhcmRzDQpUaG9t
+YXMNCg0KPiAgIAlmb3IgKGJhciA9IDA7IGJhciA8IFBDSV9TVERfTlVNX0JBUlM7ICsrYmFy
+KSB7DQo+ICAgCQlpZiAoIShwY2lfcmVzb3VyY2VfZmxhZ3MocGRldiwgYmFyKSAmIElPUkVT
+T1VSQ0VfTUVNKSkNCj4gICAJCQljb250aW51ZTsNCj4gICANCj4gICAJCWJhc2UgPSBwY2lf
+cmVzb3VyY2Vfc3RhcnQocGRldiwgYmFyKTsNCj4gICAJCXNpemUgPSBwY2lfcmVzb3VyY2Vf
+bGVuKHBkZXYsIGJhcik7DQo+IC0JCXJldCA9IGFwZXJ0dXJlX3JlbW92ZV9jb25mbGljdGlu
+Z19kZXZpY2VzKGJhc2UsIHNpemUsIG5hbWUpOw0KPiAtCQlpZiAocmV0KQ0KPiAtCQkJcmV0
+dXJuIHJldDsNCj4gKwkJYXBlcnR1cmVfZGV0YWNoX2RldmljZXMoYmFzZSwgc2l6ZSk7DQo+
+ICAgCX0NCj4gICANCj4gICAJaWYgKCFwcmltYXJ5KQ0KDQotLSANClRob21hcyBaaW1tZXJt
+YW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9u
+cyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFu
+eQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBU
+b3Rldg0K
 
-Thus, wqueue->defunct is superfluous, as wqueue->pipe can be checked
-for NULL. Hence, the former can be removed.
+--------------Yx1hdsmghhcaCcyvaTGQcYBc--
 
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
----
-Changes in v4:
-- Drop preceeding kerneldoc-changes patch and change appropriately.
+--------------Ml6ObZcRSbozD0DLMa0dlELb
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Changes in v3 (8 Jan 2023):
-- Minor rephrase of comment before NULLing in watch_queue_clear().
+-----BEGIN PGP SIGNATURE-----
 
-Changes in v2 (6 Aug 2022):
-- Merged the NULLing and removing defunct patches.
-- Removed READ_ONCE barrier in lock_wqueue().
-- Better commit messages.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmO+4bAFAwAAAAAACgkQlh/E3EQov+A0
+Dg//cjhjyvyNrq1Unm9x1sHYxc3/gIlRODM1tEoT7vAIxsRVimAF4vTjEFoqaD7oZxqeABXOfWUh
+HQu72Jd4pzI/NGWVr+N1I8vFQEa98xdFUaE2t/yGNmGjJMiUQbXjbhjj7UpbyB7dH/XKoamEHjfT
+dbpW2p8TRxbKZzW0lAcQVhwGbn/ad+AEepfrhKzUdU1GxNQKuPr3MiOavtckZ2kfMZ++zpiZeKhr
+4KX4mUj+PWCwaB8Fd/OWGdCk9M8MpomSBvmFWT/1PCOvgXOWbf/0lsX1RomclDg4H/j5aoUC8JD7
+D+Em3WQr231VORCXnAXBv3qNrtBeywGAe0sGMAmzcdX1PUi0wB3jFv+8EZfdNMRchlyjDjtkJ81f
+H+eVVnYKT2IcNg5oTs/Uw/cczQ6oo4djULK8Fa1gqu6o5dl0L5ijlw9Na38I9fEDEa8UXBtjfohV
+96fT+/xQaIiX2iv/2rXkmNzQtcWjl3885Apo4/kp/AEqDdSlhOoSlL6RbzRTxQnFjy8e7sA38WMh
+4aLBJ/r1yR+TY0Irv2z/gEtyKDOaTzkAUp6z1AA5PeKylY6ySOR6YfGrNaI2mOCHMF4QGiMcgFTa
++2MxZzQOohfmIzBWi+pcWH5lDpYa6DwMtuv8Xv5y+2yCcKavJSsGldKbTTeTLEsneDWqhtAKWA4c
+buU=
+=MQ26
+-----END PGP SIGNATURE-----
 
- include/linux/watch_queue.h |  3 +--
- kernel/watch_queue.c        | 12 ++++++------
- 2 files changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/watch_queue.h b/include/linux/watch_queue.h
-index fc6bba20273b..45cd42f55d49 100644
---- a/include/linux/watch_queue.h
-+++ b/include/linux/watch_queue.h
-@@ -38,7 +38,7 @@ struct watch_filter {
- struct watch_queue {
- =09struct rcu_head=09=09rcu;
- =09struct watch_filter __rcu *filter;
--=09struct pipe_inode_info=09*pipe;=09=09/* The pipe we're using as a buffe=
-r */
-+=09struct pipe_inode_info=09*pipe;=09=09/* Pipe we use as a buffer, NULL i=
-f queue closed */
- =09struct hlist_head=09watches;=09/* Contributory watches */
- =09struct page=09=09**notes;=09/* Preallocated notifications */
- =09unsigned long=09=09*notes_bitmap;=09/* Allocation bitmap for notes */
-@@ -46,7 +46,6 @@ struct watch_queue {
- =09spinlock_t=09=09lock;
- =09unsigned int=09=09nr_notes;=09/* Number of notes */
- =09unsigned int=09=09nr_pages;=09/* Number of pages in notes[] */
--=09bool=09=09=09defunct;=09/* T when queues closed */
- };
-=20
- /*
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index a6f9bdd956c3..6ead921c15c0 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -43,7 +43,7 @@ MODULE_LICENSE("GPL");
- static inline bool lock_wqueue(struct watch_queue *wqueue)
- {
- =09spin_lock_bh(&wqueue->lock);
--=09if (unlikely(wqueue->defunct)) {
-+=09if (unlikely(!wqueue->pipe)) {
- =09=09spin_unlock_bh(&wqueue->lock);
- =09=09return false;
- =09}
-@@ -105,9 +105,6 @@ static bool post_one_notification(struct watch_queue *w=
-queue,
- =09unsigned int head, tail, mask, note, offset, len;
- =09bool done =3D false;
-=20
--=09if (!pipe)
--=09=09return false;
--
- =09spin_lock_irq(&pipe->rd_wait.lock);
-=20
- =09mask =3D pipe->ring_size - 1;
-@@ -603,8 +600,11 @@ void watch_queue_clear(struct watch_queue *wqueue)
- =09rcu_read_lock();
- =09spin_lock_bh(&wqueue->lock);
-=20
--=09/* Prevent new notifications from being stored. */
--=09wqueue->defunct =3D true;
-+=09/*
-+=09 * This pipe can be freed by callers like free_pipe_info().
-+=09 * Removing this reference also prevents new notifications.
-+=09 */
-+=09wqueue->pipe =3D NULL;
-=20
- =09while (!hlist_empty(&wqueue->watches)) {
- =09=09watch =3D hlist_entry(wqueue->watches.first, struct watch, queue_nod=
-e);
---=20
-2.39.0
-
-
+--------------Ml6ObZcRSbozD0DLMa0dlELb--
