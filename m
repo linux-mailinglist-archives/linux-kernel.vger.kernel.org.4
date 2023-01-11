@@ -2,40 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A73266556F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 08:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAC3665571
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 08:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236024AbjAKHqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 02:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S236329AbjAKHql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 02:46:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235554AbjAKHpq (ORCPT
+        with ESMTP id S235720AbjAKHpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 02:45:46 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AA21182F;
-        Tue, 10 Jan 2023 23:45:42 -0800 (PST)
-X-UUID: ecb572d2918311ed945fc101203acc17-20230111
+        Wed, 11 Jan 2023 02:45:47 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24C411837;
+        Tue, 10 Jan 2023 23:45:43 -0800 (PST)
+X-UUID: eca7c0a6918311eda06fc9ecc4dadd91-20230111
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=8i/kTiL7qMggq0JM+wjpexcmuwEQeM/AkSaq1pFFVPU=;
-        b=n49Cs3fBZ8h+kHtJyBExDr501d6BgMj0anld91RxbMPVy2Ejyzs0yyBiOmyuBPcx1i8q8X80hb4QjUEf5gKy2m/O6FyZETak7CvSnsr1VHF3wifAzC+a5qZhvOSn25pEP7fSL/FTnWmCIJs18OjNBZ4T49Lxheyxjh2oHhOsrYw=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=2Hkn9SuFvXWyv/cJOV8Biw8LBLcInLDPrBFgM/Hh9Tw=;
+        b=SvXc8NGhpEeOrV7PBZQqmHhxt+e94OxvNYoMpUSbtGLvdTJKkv5f+RohlbbWFS8Bm+/9C2iq14pdROffhsJfaPlsKS5dwLKvrYaiD8G16qVJ0JvvZaYFRrOUMwEqg5ea+aDQwMHX9LzEUaC/qH4mjVFuEjo/bYgT6z7ipVv0nNc=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:6181f2b2-4f36-42e4-839d-1a565275ceca,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:543e81c,CLOUDID:22ac5354-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0,NGT
-X-UUID: ecb572d2918311ed945fc101203acc17-20230111
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.17,REQID:53bb143c-837f-4fd4-817d-a292adcafd4a,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.17,REQID:53bb143c-837f-4fd4-817d-a292adcafd4a,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:543e81c,CLOUDID:71ac5354-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:230111154535X4K282AW,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0
+X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
+X-CID-BVR: 0
+X-UUID: eca7c0a6918311eda06fc9ecc4dadd91-20230111
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <roger.lu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1626707124; Wed, 11 Jan 2023 15:45:31 +0800
+        with ESMTP id 457910678; Wed, 11 Jan 2023 15:45:31 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 11 Jan 2023 15:45:30 +0800
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 11 Jan 2023 15:45:30 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
  15.2.792.15 via Frontend Transport; Wed, 11 Jan 2023 15:45:30 +0800
@@ -51,9 +56,9 @@ CC:     Fan Chen <fan.chen@mediatek.com>, Roger Lu <roger.lu@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v4 07/14] soc: mediatek: mtk-svs: keep svs alive if CONFIG_DEBUG_FS not supported
-Date:   Wed, 11 Jan 2023 15:45:21 +0800
-Message-ID: <20230111074528.29354-8-roger.lu@mediatek.com>
+Subject: [PATCH v4 08/14] soc: mediatek: mtk-svs: clean up platform probing
+Date:   Wed, 11 Jan 2023 15:45:22 +0800
+Message-ID: <20230111074528.29354-9-roger.lu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230111074528.29354-1-roger.lu@mediatek.com>
 References: <20230111074528.29354-1-roger.lu@mediatek.com>
@@ -70,64 +75,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some projects might not support CONFIG_DEBUG_FS but still needs svs to be
-alive. Therefore, enclose debug cmd codes with CONFIG_DEBUG_FS to make sure
-svs can be alive when CONFIG_DEBUG_FS not supported.
+From: Matthias Brugger <matthias.bgg@gmail.com>
 
+We only ever call the SoC specific probe function from
+svs_platform_probe. No need to carry that function in a global
+datastructure around.
+
+Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 ---
- drivers/soc/mediatek/mtk-svs.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/soc/mediatek/mtk-svs.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index a3c84e819bc5..70ca9c9acae0 100644
+index 70ca9c9acae0..41c0ac5ed8d3 100644
 --- a/drivers/soc/mediatek/mtk-svs.c
 +++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -138,6 +138,7 @@
+@@ -321,7 +321,6 @@ static const u32 svs_regs_v2[] = {
+  * @banks: svs banks that svs platform supports
+  * @rst: svs platform reset control
+  * @efuse_parsing: svs platform efuse parsing function pointer
+- * @probe: svs platform probe function pointer
+  * @efuse_max: total number of svs efuse
+  * @tefuse_max: total number of thermal efuse
+  * @regs: svs platform registers map
+@@ -339,7 +338,6 @@ struct svs_platform {
+ 	struct svs_bank *banks;
+ 	struct reset_control *rst;
+ 	bool (*efuse_parsing)(struct svs_platform *svsp);
+-	int (*probe)(struct svs_platform *svsp);
+ 	size_t efuse_max;
+ 	size_t tefuse_max;
+ 	const u32 *regs;
+@@ -2409,11 +2407,10 @@ static struct svs_platform *svs_platform_probe(struct platform_device *pdev)
+ 	svsp->name = svsp_data->name;
+ 	svsp->banks = svsp_data->banks;
+ 	svsp->efuse_parsing = svsp_data->efuse_parsing;
+-	svsp->probe = svsp_data->probe;
+ 	svsp->regs = svsp_data->regs;
+ 	svsp->bank_max = svsp_data->bank_max;
  
- static DEFINE_SPINLOCK(svs_lock);
- 
-+#ifdef CONFIG_DEBUG_FS
- #define debug_fops_ro(name)						\
- 	static int svs_##name##_debug_open(struct inode *inode,		\
- 					   struct file *filp)		\
-@@ -170,6 +171,7 @@ static DEFINE_SPINLOCK(svs_lock);
- 	}
- 
- #define svs_dentry_data(name)	{__stringify(name), &svs_##name##_debug_fops}
-+#endif
- 
- /**
-  * enum svsb_phase - svs bank phase enumeration
-@@ -652,6 +654,7 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
- 	return ret;
- }
- 
-+#ifdef CONFIG_DEBUG_FS
- static int svs_dump_debug_show(struct seq_file *m, void *p)
- {
- 	struct svs_platform *svsp = (struct svs_platform *)m->private;
-@@ -867,6 +870,7 @@ static int svs_create_debug_cmds(struct svs_platform *svsp)
- 
- 	return 0;
- }
-+#endif /* CONFIG_DEBUG_FS */
- 
- static u32 interpolate(u32 f0, u32 f1, u32 v0, u32 v1, u32 fx)
- {
-@@ -2476,11 +2480,13 @@ static int svs_probe(struct platform_device *pdev)
- 		goto svs_probe_iounmap;
- 	}
- 
-+#ifdef CONFIG_DEBUG_FS
- 	ret = svs_create_debug_cmds(svsp);
- 	if (ret) {
- 		dev_err(svsp->dev, "svs create debug cmds fail: %d\n", ret);
- 		goto svs_probe_iounmap;
- 	}
-+#endif
- 
- 	return 0;
+-	ret = svsp->probe(svsp);
++	ret = svsp_data->probe(svsp);
+ 	if (ret)
+ 		return ERR_PTR(ret);
  
 -- 
 2.18.0
