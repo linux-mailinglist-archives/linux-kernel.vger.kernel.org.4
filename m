@@ -2,319 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B17665E20
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92010665E27
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 15:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238754AbjAKOgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 09:36:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S234175AbjAKOl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 09:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238964AbjAKOgQ (ORCPT
+        with ESMTP id S234247AbjAKOk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 09:36:16 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1041632180;
-        Wed, 11 Jan 2023 06:32:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jH2Pv5+dn/WkPDFchI0T4NsnAjNypOnRQFx4rUz+kc+FZBcsSwMm38fJmRu71T2ok0aKsHNCICCQH5j7j70MWuRbGnbWkoEzcLIg6xL4o0A2vWHyV9lYUQPhuRiuB6X2sicGT7E0Pkfm/m6PjbSFFbINcGdslusHUCMR9dUba8goCFdhlP2Vl0MfU90lg/BpiO+DljdgRQ9sC6DieHryTFXL2F0BQtDVXjHi+aiyGZ3eddMDJ0/zYPk5Izv32io/UkF3T6Man4n4S629wZUmz8Cbs5snlot2wMmGjpTmGG40TejPEmhQ5f4RipnLzPrVaoT0PzR71lSMuAwbmjYFaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bfdMHRWYMnxhSuc30Yxqe6k74+cHW1tPOmzIkD68Mqg=;
- b=ZHP0dqEozsWtZ0ZiLU8YKnjxCAQrR25p1pQm1rO3ddEMZA4OkNde4BMnsD6rWiiJ3UCkmg66A+m5McdCSC9PFirN8V0FrENfh+K6pKcxmGp8wk18hf6e0xXP0FWJ+2c1ch9b/Sh374dT8qs/Gp5n125+MUchW3QyjEt05I5HWRT+Z4x6LeczH/itz5f6sU7MTmdYidURqtVq5AkVdnSQrJsLBFBlOVW7hfSw0DXHjBf/3DlzIBKz/7TXnfC0XF133M+6BM8Ikp8FOC/s+RCg4nY4+S0Q25jEQQByv3iisHqSpcQnlKKnVctnQkQKnXlt6iQISg1uvoWisSv0abI4Hw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bfdMHRWYMnxhSuc30Yxqe6k74+cHW1tPOmzIkD68Mqg=;
- b=NXxPzjRKbK6yO92+KJ9/g3EK8muSa8kVhszQAeAA5LwcwIkV+m8zK2ivqt6HSgZ2w48R57TTCbWHNn0fUR65MBigTpkEH7L4e9EMTHZfOxxwLzEQbrJxRmqU/JTyu3G+1BucV7ktFdfsMvQDY2A+8LV1LXvNxJk+3gq+Jacd7YQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by MW4PR12MB7032.namprd12.prod.outlook.com (2603:10b6:303:20a::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
- 2023 14:32:36 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::8200:4042:8db4:63d7]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::8200:4042:8db4:63d7%3]) with mapi id 15.20.6002.013; Wed, 11 Jan 2023
- 14:32:36 +0000
-Message-ID: <d6b835e0-43e7-e5ae-e291-6ff0611cc817@amd.com>
-Date:   Wed, 11 Jan 2023 08:32:32 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH RFC v7 62/64] x86/sev: Add KVM commands for instance certs
-Content-Language: en-US
-To:     Dov Murik <dovmurik@linux.ibm.com>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, hpa@zytor.com, ardb@kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, tobin@ibm.com, bp@alien8.de, vbabka@suse.cz,
-        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
-        ashish.kalra@amd.com, harald@profian.com
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-63-michael.roth@amd.com>
- <1c02cc0d-9f0c-cf4a-b012-9932f551dd83@linux.ibm.com>
- <CAAH4kHbhFezeY3D_qoMQBLuFzWNDQF2YLQ-FW_dp5itHShKUWw@mail.gmail.com>
- <54ff7326-e3a4-945f-1f60-e73dd8865527@amd.com>
- <a3ecd9fc-11f8-49b6-09a2-349df815d2cf@linux.ibm.com>
- <1047996c-309b-6839-fdd7-265fc51eb07a@amd.com>
- <9f221719-7ab3-3e87-7d66-a4ca6ce0e794@linux.ibm.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <9f221719-7ab3-3e87-7d66-a4ca6ce0e794@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH2PR08CA0020.namprd08.prod.outlook.com
- (2603:10b6:610:5a::30) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Wed, 11 Jan 2023 09:40:56 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B75C13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 06:37:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673447877; x=1704983877;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9Lq5/FX0ABfC7h72F60HMHF/CtDYeMSLanwV57PhYYg=;
+  b=E9Q6qvjqEEmDFSz9QbJkqQbmTU4incSB5GaugU3p23oLr9P/ij5LPG9r
+   Et5sh7z/h72+dt+yBf2nUn46H4t3NeCWcDGpHC/L0r+uSJKrqPmGmo5yQ
+   GBpQVww2twoCO8eNAjRgVWyW59UnXNv19MBRScPzKw0vO553YV8P/NJ+Z
+   Ao8wQKtCZZS6ZdlJmqfHNEv25qFjI5W9L0D6v0ky04mwJ3IvkAyaU95BC
+   Dj7xV59VaAXgmeom3kMzkMUsuWNavFoevYn96uSP+j5QWlvOyK6T7nyut
+   pKq3kw+G1Y3bsRrnBJYnxrNByeN6ZiaLGYqrpRKJLBx6ksnCCqGYQIK5Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350655536"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="350655536"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 06:37:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="687940578"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="687940578"
+Received: from bachaue1-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.250])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 06:37:50 -0800
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 41E21104377; Wed, 11 Jan 2023 17:37:47 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     kirill@shutemov.name
+Cc:     ak@linux.intel.com, andreyknvl@gmail.com, ashok.raj@intel.com,
+        bharata@amd.com, dave.hansen@linux.intel.com, dvyukov@google.com,
+        glider@google.com, hjl.tools@gmail.com,
+        jacob.jun.pan@linux.intel.com, kcc@google.com,
+        kirill.shutemov@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, luto@kernel.org, peterz@infradead.org,
+        rick.p.edgecombe@intel.com, ryabinin.a.a@gmail.com,
+        tarasmadan@google.com, torvalds@linux-foundation.org,
+        x86@kernel.org
+Subject: [PATCHv14.1 04/17] x86/mm: Handle LAM on context switch
+Date:   Wed, 11 Jan 2023 17:37:40 +0300
+Message-Id: <20230111143740.28106-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.38.2
+In-Reply-To: <20230111141459.ah7ijfbm733c4g7m@box.shutemov.name>
+References: <20230111141459.ah7ijfbm733c4g7m@box.shutemov.name>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|MW4PR12MB7032:EE_
-X-MS-Office365-Filtering-Correlation-Id: 76812c0f-ca7f-459c-3fce-08daf3e0aecc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UOV7WxsKmL6PtHJNZjURnjRphvyN5CYU4VNvIdXK5548hApTBNXHSUb52jG3i0m8TRJYfeK7Yyqa06AG+v4tcBbZ8jwwAFQnf8gy20bqtbjAaJgLFapAXivncaAlqR3TmMuq9viz2fRAZteFC6tE35QWal5Xo8A8U/texAHXuqzrsIai+/Iqxb9zWpTfpYRcnOBPl2qJY0jqgN0NwDWgq62w1Pyoxptet0n9s1XhKs1xlPwJO16TSrpy9lMyP6uGOSloleVTFKG6Szu+p/nBZEv6xah7auNcRkI8ZC2hE9lmDb/+UczuDqs0XoAwD5RwNAiszGEW06G4K5ecR5AvOalkRbsLydw+Ut16++pESkt7V57H9/7HdO63W9tkmE3iMiX/svOpk9optBjSY4wicrE94nBnTTU55Pb/uzzHdxZYFjrmHbQxDI9S0D5PIJLQdauhthnKCaH6fPLkK+/j23awoV1gRHi8L1xkkjp7vknYKCNpabqNJXM2qZvh4wqc6hYiBe53kbm37893TfHQMu3p3flL+vXAlQAOSVaC2IsnyWT0SM1Yvx0rk4dLq7wenPgVbaQd773UkiQJR7Im/4JlQTAeSyh7Jx3oQpv/Vhk7I1GQiWgq2T78XNNqg4naXClLWQP5chtx11wRMl+vdqNnkxXJkd8RVwRQUgKH7dRlaYa8m1FcFtxptTQq4xqNY8r4ms2CdUc2gAKcX/HOzusHJvCKctiaTSyGl57jBk0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(396003)(39860400002)(366004)(451199015)(66946007)(110136005)(2616005)(4326008)(41300700001)(8676002)(316002)(66476007)(66556008)(36756003)(86362001)(31696002)(83380400001)(8936002)(38100700002)(5660300002)(7416002)(7406005)(6486002)(2906002)(6506007)(6512007)(53546011)(31686004)(478600001)(186003)(26005)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d1lHN1NLTjdUK3p4cytjOENwVXNtZWNnQnkzMjd5dzVyZ1JkMVoyRVFsNzR5?=
- =?utf-8?B?bHA3SG1QZG9naXBCRzBLcEI1ZkllRXNqREtpMEtSMzJ5SjFtcGswUXUvTkZW?=
- =?utf-8?B?RDdvU3lBSXZWVnlvNGJoK3U4Z2VZNnpkQjh0WDR2YTVjYlVBaGxpUGtueU5S?=
- =?utf-8?B?MndpMlQ4dXpaSHdqV2ZWZ2ZlWVhYMEsyQ1dGUjJOYisrN1lFSHZrZ1ZGVGEz?=
- =?utf-8?B?MnBSdDI2c0tFOHJNYnpCYUdhV3JrdlVGdnUybWV1SDEzWG1YSEYwRHNoRXBS?=
- =?utf-8?B?MWg5NE13RDJ1Rmw4OHMzSDFnWmczU3Z0NFlNa2t6aGljNjk3NkhYaUJRRVdu?=
- =?utf-8?B?eEFmZGVRMU14Vmd2aTVvTXNsYTRQWC9pOWRlOGV0M0thY2lkOG5pSkxvQ09U?=
- =?utf-8?B?M0piVzhlT0ZSczF1T2pGTlBrTC9Lcy9OQmUrU2pMdjg0V0RLRjRTSVl2TUQr?=
- =?utf-8?B?bEtvT0lMQllvYnJuWTF4SGF1T3dxYzhaY3ZwMTZGTDYyY2RNRXNOcld5U0Uz?=
- =?utf-8?B?bVhkUDY0cU9ncmdRSER5Z2dZT1dxQ3dDY2VubS8xRFk3ZE1BMzkyRTJDcXdk?=
- =?utf-8?B?SVJuazVDM3U5bnF2U1lCV1NCWHdRQUNaVjQ5SVZZRU1hYStveHZPVE1QWkdM?=
- =?utf-8?B?QTkrU0YrbDRtNzJyM2VXNFJhckhHdlJGcFpWRWRCR1hJQWpGcjJpbi9CbS9D?=
- =?utf-8?B?VEdOWEo5U2lxVThXYVZTalBUTVc2RHJCZG83K2czZmQzSEhRcUxLTHJjdUlB?=
- =?utf-8?B?SFBOLy9UNHY2NFlwcnJtRjFOWE1PaENKTXpsK0dTcytvbmNsSHV2VGlBWU41?=
- =?utf-8?B?eGZrWFRsVUgvZys5ZDJ2UEN4dXRQOTRPY2JIeDhGZkNVSHRPblNmZkN3SlJu?=
- =?utf-8?B?MW5ZeGh6c2o4aXpYSEZVNVorVUVxTjVDMFFncGJlRmRqVGxlbkdaRkttMlRz?=
- =?utf-8?B?VTFkd3VvY3NITDlNdSszbXdaQWFhaEZpamRYZ2pFTUZpd3hNRjV4UGM1aDAr?=
- =?utf-8?B?UWl3a29UeEwwaGFXQjFmNDJjS1RjbzRLeFRBZVVWR3cwbzJSTG9qdURpaytN?=
- =?utf-8?B?eGFTUDJUY2NCaFF4RXhzY2Z5Ym5ZZllmUjdwbmZnK3pncUNNNzJpRGJ3cEky?=
- =?utf-8?B?akxya0ZzOVFxdUdBbVNHZVoybVZTK0FldG5JcC95OUNGN1U2c1JFdTdMVWxS?=
- =?utf-8?B?alc5TkF6MERBemJIV2t6WHNkTmlQTVVVRXpuSmU2enl5MHRiSG4xUlUyMUY5?=
- =?utf-8?B?TmtsSEF5S3FxQUF1ZytZTmJRM0pWQjJ1eE1kOFZpM1k3NGpGNXFHZ2tYQmpH?=
- =?utf-8?B?Slh4cndVTFh6dXB0cDUxSGJ6ak5xd1pyZ3lWam9YSmEzcnY2cEdpeDBKRE9o?=
- =?utf-8?B?dkJVZ2pHNkMxNURlWHc5Qk1YTS9QT2ZIdlhsZDRwZnY2RVM1V2ZHWEJ0Uld2?=
- =?utf-8?B?WEJ4MDVnWllTSFJwbWJLWXR0WTM2V2hWaWNqbVhHTkFIQThSaUcvSStycWxN?=
- =?utf-8?B?VVhTeUVuVzhzMUR4OTNReWxMZHhHZkUzZkJSM0VKMmZNc1ZtdVU2ZkZORmQ1?=
- =?utf-8?B?cUg5bEhCUzRpK2pGc1ZWZjY4QjNTQUQyTjNWWlNUUTJGWVNlZEYra2puNFJR?=
- =?utf-8?B?SXExYUZXVWt5Znd2QTdqeXM5c0lHaWp1Z0xPeGkwSDJ0dnVtN2pBanZFUTRY?=
- =?utf-8?B?anV0MTFpUktOOGdZQ2VYT2NJSGs2dVJMMVRZYW5ZdnpWUUo4V2xFbnhqMjRE?=
- =?utf-8?B?bkl0c2x2MFIzWDlnb0l3SXFVeVpTVXNEeEtlbEsrd3lnTjlHSHZ5M294eERQ?=
- =?utf-8?B?aUhYQTh6QVlvWXF0R1ByeUtkNnRzdDFQZXdnZHBxMk0zN2lENCtWaE1OdlhM?=
- =?utf-8?B?UnV5ZHZ2QjRxZjNjYVFIWWQwVC80K2VKcG8vMzhxK2RzWU1semtRUXI1Vm5v?=
- =?utf-8?B?aFVnM1dLbHhBV3BVM2lDdlJyUnU5TTF3bm5kQ3FnNnpvdmFaSjhCUU1sMXhF?=
- =?utf-8?B?M1pTbmF0UTMvd3VSOWlyRm51eHhFZThWZVZwZmhSM3VqbDBzRWhHN3R4U2JH?=
- =?utf-8?B?MWxxZEFjTHc5OXBtNGFzbm1PaDJvRFJ0UHpzbVo4bUxLWUlCdnprUUdDeEhS?=
- =?utf-8?Q?WSnBOeYvIEJXwt6GeAk3F8w7D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76812c0f-ca7f-459c-3fce-08daf3e0aecc
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 14:32:35.9222
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uLLFQrYnxw5ZcQvmmmPIwOps3F5eD13vxy7iiKOtgrzdTAN4/1N6A5Jx4m7w+QOyAC+f8b6d99olVVT2AKm2sw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7032
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/23 00:00, Dov Murik wrote:
-> 
-> 
-> On 10/01/2023 17:10, Tom Lendacky wrote:
->> On 1/10/23 01:10, Dov Murik wrote:
->>> Hi Tom,
->>>
->>> On 10/01/2023 0:27, Tom Lendacky wrote:
->>>> On 1/9/23 10:55, Dionna Amalie Glaze wrote:
->>>>>>> +
->>>>>>> +static int snp_set_instance_certs(struct kvm *kvm, struct
->>>>>>> kvm_sev_cmd *argp)
->>>>>>> +{
->>>>>> [...]
->>>>>>
->>>>>> Here we set the length to the page-aligned value, but we copy only
->>>>>> params.cert_len bytes.  If there are two subsequent
->>>>>> snp_set_instance_certs() calls where the second one has a shorter
->>>>>> length, we might "keep" some leftover bytes from the first call.
->>>>>>
->>>>>> Consider:
->>>>>> 1. snp_set_instance_certs(certs_addr point to "AAA...",
->>>>>> certs_len=8192)
->>>>>> 2. snp_set_instance_certs(certs_addr point to "BBB...",
->>>>>> certs_len=4097)
->>>>>>
->>>>>> If I understand correctly, on the second call we'll copy 4097 "BBB..."
->>>>>> bytes into the to_certs buffer, but length will be (4096 + PAGE_SIZE -
->>>>>> 1) & PAGE_MASK which will be 8192.
->>>>>>
->>>>>> Later when fetching the certs (for the extended report or in
->>>>>> snp_get_instance_certs()) the user will get a buffer of 8192 bytes
->>>>>> filled with 4097 BBBs and 4095 leftover AAAs.
->>>>>>
->>>>>> Maybe zero sev->snp_certs_data entirely before writing to it?
->>>>>>
->>>>>
->>>>> Yes, I agree it should be zeroed, at least if the previous length is
->>>>> greater than the new length. Good catch.
->>>>>
->>>>>
->>>>>> Related question (not only for this patch) regarding snp_certs_data
->>>>>> (host or per-instance): why is its size page-aligned at all? why is it
->>>>>> limited by 16KB or 20KB? If I understand correctly, for SNP, this
->>>>>> buffer
->>>>>> is never sent to the PSP.
->>>>>>
->>>>>
->>>>> The buffer is meant to be copied into the guest driver following the
->>>>> GHCB extended guest request protocol. The data to copy back are
->>>>> expected to be in 4K page granularity.
->>>>
->>>> I don't think the data has to be in 4K page granularity. Why do you
->>>> think it does?
->>>>
->>>
->>> I looked at AMD publication 56421 SEV-ES Guest-Hypervisor Communication
->>> Block Standardization (July 2022), page 37.  The table says:
->>>
->>> --------------
->>>
->>> NAE Event: SNP Extended Guest Request
->>>
->>> Notes:
->>>
->>> RAX will have the guest physical address of the page(s) to hold returned
->>> data
->>>
->>> RBX
->>> State to Hypervisor: will contain the number of guest contiguous
->>> pages supplied to hold returned data
->>> State from Hypervisor: on error will contain the number of guest
->>> contiguous pages required to hold the data to be returned
->>>
->>> ...
->>>
->>> The request page, response page and data page(s) must be assigned to the
->>> hypervisor (shared).
->>>
->>> --------------
->>>
->>>
->>> According to this spec, it looks like the sizes are communicated as
->>> number of pages in RBX.  So the data should start at a 4KB alignment
->>> (this is verified in snp_handle_ext_guest_request()) and its length
->>> should be 4KB-aligned, as Dionna noted.
->>
->> That only indicates how many pages are required to hold the data, but
->> the hypervisor only has to copy however much data is present. If the
->> data is 20 bytes, then you only have to copy 20 bytes. If the user
->> supplied 0 for the number of pages, then the code returns 1 in RBX to
->> indicate that one page is required to hold the 20 bytes.
->>
-> 
-> 
-> Maybe it should only copy 20 bytes, but current implementation copies
-> whole 4KB pages:
-> 
-> 
->          if (sev->snp_certs_len)
->                  data_npages = sev->snp_certs_len >> PAGE_SHIFT;
->          ...
->          ...
->          /* Copy the certificate blob in the guest memory */
->          if (data_npages &&
->              kvm_write_guest(kvm, data_gpa, sev->snp_certs_data, data_npages << PAGE_SHIFT))
->                  rc = SEV_RET_INVALID_ADDRESS;
-> 
-> 
-> (elsewhere we ensure that sev->snp_certs_len is page-aligned, so the assignment
-> to data_npages is in fact correct even though looks off-by-one; aside, maybe it's
-> better to use some DIV_ROUND_UP macro anywhere we calculate the number of
-> needed pages.)
+Linear Address Masking mode for userspace pointers encoded in CR3 bits.
+The mode is selected per-process and stored in mm_context_t.
 
-Hmmm... yeah, not sure why it was implemented that way, I guess it can 
-always be changed later if desired.
+switch_mm_irqs_off() now respects selected LAM mode and constructs CR3
+accordingly.
 
-> 
-> Also -- how does the guest know they got only 20 bytes and not 4096? Do they have
-> to read all the 'struct cert_table' entries at the beginning of the received data?
+The active LAM mode gets recorded in the tlb_state.
 
-Yes, they should walk the cert table entries.
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Alexander Potapenko <glider@google.com>
+---
+ v14.1:
+  - Drop unneeded READ_ONCE();
+---
+ arch/x86/include/asm/mmu.h         |  5 +++
+ arch/x86/include/asm/mmu_context.h | 24 ++++++++++++++
+ arch/x86/include/asm/tlbflush.h    | 38 ++++++++++++++++++++-
+ arch/x86/mm/tlb.c                  | 53 +++++++++++++++++++++---------
+ 4 files changed, 103 insertions(+), 17 deletions(-)
 
-Thanks,
-Tom
+diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+index efa3eaee522c..22fc9fbf1d0a 100644
+--- a/arch/x86/include/asm/mmu.h
++++ b/arch/x86/include/asm/mmu.h
+@@ -42,6 +42,11 @@ typedef struct {
+ 	unsigned long flags;
+ #endif
+ 
++#ifdef CONFIG_ADDRESS_MASKING
++	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
++	unsigned long lam_cr3_mask;
++#endif
++
+ 	struct mutex lock;
+ 	void __user *vdso;			/* vdso base address */
+ 	const struct vdso_image *vdso_image;	/* vdso image in use */
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index 53ef591a6166..a62e70801ea8 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -91,6 +91,29 @@ static inline void switch_ldt(struct mm_struct *prev, struct mm_struct *next)
+ }
+ #endif
+ 
++#ifdef CONFIG_ADDRESS_MASKING
++static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
++{
++	return mm->context.lam_cr3_mask;
++}
++
++static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
++{
++	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
++}
++
++#else
++
++static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
++{
++	return 0;
++}
++
++static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
++{
++}
++#endif
++
+ #define enter_lazy_tlb enter_lazy_tlb
+ extern void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk);
+ 
+@@ -168,6 +191,7 @@ static inline int arch_dup_mmap(struct mm_struct *oldmm, struct mm_struct *mm)
+ {
+ 	arch_dup_pkeys(oldmm, mm);
+ 	paravirt_arch_dup_mmap(oldmm, mm);
++	dup_lam(oldmm, mm);
+ 	return ldt_dup_context(oldmm, mm);
+ }
+ 
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index cda3118f3b27..e8b47f57bd4a 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -2,7 +2,7 @@
+ #ifndef _ASM_X86_TLBFLUSH_H
+ #define _ASM_X86_TLBFLUSH_H
+ 
+-#include <linux/mm.h>
++#include <linux/mm_types.h>
+ #include <linux/sched.h>
+ 
+ #include <asm/processor.h>
+@@ -12,6 +12,7 @@
+ #include <asm/invpcid.h>
+ #include <asm/pti.h>
+ #include <asm/processor-flags.h>
++#include <asm/pgtable.h>
+ 
+ void __flush_tlb_all(void);
+ 
+@@ -101,6 +102,16 @@ struct tlb_state {
+ 	 */
+ 	bool invalidate_other;
+ 
++#ifdef CONFIG_ADDRESS_MASKING
++	/*
++	 * Active LAM mode.
++	 *
++	 * X86_CR3_LAM_U57/U48 shifted right by X86_CR3_LAM_U57_BIT or 0 if LAM
++	 * disabled.
++	 */
++	u8 lam;
++#endif
++
+ 	/*
+ 	 * Mask that contains TLB_NR_DYN_ASIDS+1 bits to indicate
+ 	 * the corresponding user PCID needs a flush next time we
+@@ -357,6 +368,31 @@ static inline bool huge_pmd_needs_flush(pmd_t oldpmd, pmd_t newpmd)
+ }
+ #define huge_pmd_needs_flush huge_pmd_needs_flush
+ 
++#ifdef CONFIG_ADDRESS_MASKING
++static inline  u64 tlbstate_lam_cr3_mask(void)
++{
++	u64 lam = this_cpu_read(cpu_tlbstate.lam);
++
++	return lam << X86_CR3_LAM_U57_BIT;
++}
++
++static inline void set_tlbstate_lam_mode(struct mm_struct *mm)
++{
++	this_cpu_write(cpu_tlbstate.lam,
++		       mm->context.lam_cr3_mask >> X86_CR3_LAM_U57_BIT);
++}
++
++#else
++
++static inline u64 tlbstate_lam_cr3_mask(void)
++{
++	return 0;
++}
++
++static inline void set_tlbstate_lam_mode(struct mm_struct *mm)
++{
++}
++#endif
+ #endif /* !MODULE */
+ 
+ static inline void __native_tlb_flush_global(unsigned long cr4)
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index c1e31e9a85d7..8c330a6d0ece 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -154,26 +154,30 @@ static inline u16 user_pcid(u16 asid)
+ 	return ret;
+ }
+ 
+-static inline unsigned long build_cr3(pgd_t *pgd, u16 asid)
++static inline unsigned long build_cr3(pgd_t *pgd, u16 asid, unsigned long lam)
+ {
++	unsigned long cr3 = __sme_pa(pgd) | lam;
++
+ 	if (static_cpu_has(X86_FEATURE_PCID)) {
+-		return __sme_pa(pgd) | kern_pcid(asid);
++		VM_WARN_ON_ONCE(asid > MAX_ASID_AVAILABLE);
++		cr3 |= kern_pcid(asid);
+ 	} else {
+ 		VM_WARN_ON_ONCE(asid != 0);
+-		return __sme_pa(pgd);
+ 	}
++
++	return cr3;
+ }
+ 
+-static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid)
++static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid,
++					      unsigned long lam)
+ {
+-	VM_WARN_ON_ONCE(asid > MAX_ASID_AVAILABLE);
+ 	/*
+ 	 * Use boot_cpu_has() instead of this_cpu_has() as this function
+ 	 * might be called during early boot. This should work even after
+ 	 * boot because all CPU's the have same capabilities:
+ 	 */
+ 	VM_WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_PCID));
+-	return __sme_pa(pgd) | kern_pcid(asid) | CR3_NOFLUSH;
++	return build_cr3(pgd, asid, lam) | CR3_NOFLUSH;
+ }
+ 
+ /*
+@@ -274,15 +278,16 @@ static inline void invalidate_user_asid(u16 asid)
+ 		  (unsigned long *)this_cpu_ptr(&cpu_tlbstate.user_pcid_flush_mask));
+ }
+ 
+-static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, bool need_flush)
++static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, unsigned long lam,
++			    bool need_flush)
+ {
+ 	unsigned long new_mm_cr3;
+ 
+ 	if (need_flush) {
+ 		invalidate_user_asid(new_asid);
+-		new_mm_cr3 = build_cr3(pgdir, new_asid);
++		new_mm_cr3 = build_cr3(pgdir, new_asid, lam);
+ 	} else {
+-		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid);
++		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid, lam);
+ 	}
+ 
+ 	/*
+@@ -491,6 +496,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ {
+ 	struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
+ 	u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
++	unsigned long new_lam = mm_lam_cr3_mask(next);
+ 	bool was_lazy = this_cpu_read(cpu_tlbstate_shared.is_lazy);
+ 	unsigned cpu = smp_processor_id();
+ 	u64 next_tlb_gen;
+@@ -520,7 +526,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 	 * isn't free.
+ 	 */
+ #ifdef CONFIG_DEBUG_VM
+-	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid))) {
++	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid,
++						   tlbstate_lam_cr3_mask()))) {
+ 		/*
+ 		 * If we were to BUG here, we'd be very likely to kill
+ 		 * the system so hard that we don't see the call trace.
+@@ -552,9 +559,15 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 	 * instruction.
+ 	 */
+ 	if (real_prev == next) {
++		/* Not actually switching mm's */
+ 		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
+ 			   next->context.ctx_id);
+ 
++		/*
++		 * If this races with another thread that enables lam, 'new_lam'
++		 * might not match tlbstate_lam_cr3_mask().
++		 */
++
+ 		/*
+ 		 * Even in lazy TLB mode, the CPU should stay set in the
+ 		 * mm_cpumask. The TLB shootdown code can figure out from
+@@ -622,15 +635,16 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 		barrier();
+ 	}
+ 
++	set_tlbstate_lam_mode(next);
+ 	if (need_flush) {
+ 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].ctx_id, next->context.ctx_id);
+ 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].tlb_gen, next_tlb_gen);
+-		load_new_mm_cr3(next->pgd, new_asid, true);
++		load_new_mm_cr3(next->pgd, new_asid, new_lam, true);
+ 
+ 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, TLB_FLUSH_ALL);
+ 	} else {
+ 		/* The new ASID is already up to date. */
+-		load_new_mm_cr3(next->pgd, new_asid, false);
++		load_new_mm_cr3(next->pgd, new_asid, new_lam, false);
+ 
+ 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, 0);
+ 	}
+@@ -691,6 +705,10 @@ void initialize_tlbstate_and_flush(void)
+ 	/* Assert that CR3 already references the right mm. */
+ 	WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
+ 
++	/* LAM expected to be disabled */
++	WARN_ON(cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57));
++	WARN_ON(mm_lam_cr3_mask(mm));
++
+ 	/*
+ 	 * Assert that CR4.PCIDE is set if needed.  (CR4.PCIDE initialization
+ 	 * doesn't work like other CR4 bits because it can only be set from
+@@ -699,8 +717,8 @@ void initialize_tlbstate_and_flush(void)
+ 	WARN_ON(boot_cpu_has(X86_FEATURE_PCID) &&
+ 		!(cr4_read_shadow() & X86_CR4_PCIDE));
+ 
+-	/* Force ASID 0 and force a TLB flush. */
+-	write_cr3(build_cr3(mm->pgd, 0));
++	/* Disable LAM, force ASID 0 and force a TLB flush. */
++	write_cr3(build_cr3(mm->pgd, 0, 0));
+ 
+ 	/* Reinitialize tlbstate. */
+ 	this_cpu_write(cpu_tlbstate.last_user_mm_spec, LAST_USER_MM_INIT);
+@@ -708,6 +726,7 @@ void initialize_tlbstate_and_flush(void)
+ 	this_cpu_write(cpu_tlbstate.next_asid, 1);
+ 	this_cpu_write(cpu_tlbstate.ctxs[0].ctx_id, mm->context.ctx_id);
+ 	this_cpu_write(cpu_tlbstate.ctxs[0].tlb_gen, tlb_gen);
++	set_tlbstate_lam_mode(mm);
+ 
+ 	for (i = 1; i < TLB_NR_DYN_ASIDS; i++)
+ 		this_cpu_write(cpu_tlbstate.ctxs[i].ctx_id, 0);
+@@ -1071,8 +1090,10 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
+  */
+ unsigned long __get_current_cr3_fast(void)
+ {
+-	unsigned long cr3 = build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
+-		this_cpu_read(cpu_tlbstate.loaded_mm_asid));
++	unsigned long cr3 =
++		build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
++			  this_cpu_read(cpu_tlbstate.loaded_mm_asid),
++			  tlbstate_lam_cr3_mask());
+ 
+ 	/* For now, be very restrictive about when this can be called. */
+ 	VM_WARN_ON(in_nmi() || preemptible());
+-- 
+2.38.2
 
-> 
-> -Dov
-> 
-> 
->>>
->>> I see no reason (in the spec and in the kernel code) for the data length
->>> to be limited to 16KB (SEV_FW_BLOB_MAX_SIZE) but I might be missing some
->>> flow because Dionna ran into this limit.
->>
->> Correct, there is no limit. I believe that SEV_FW_BLOB_MAX_SIZE is a way
->> to keep the memory usage controlled because data is coming from
->> userspace and it isn't expected that the data would be larger than that.
->>
->> I'm not sure if that was in from the start or as a result of a review
->> comment. Not sure what is the best approach is.
->>
->> Thanks,
->> Tom
->>
->>>
->>>
->>> -Dov
->>>
->>>
->>>
->>>> Thanks,
->>>> Tom
->>>>
->>>>>
->>>>>> [...]
->>>>>>>
->>>>>>> -#define SEV_FW_BLOB_MAX_SIZE 0x4000  /* 16KB */
->>>>>>> +#define SEV_FW_BLOB_MAX_SIZE 0x5000  /* 20KB */
->>>>>>>
->>>>>>
->>>>>> This has effects in drivers/crypto/ccp/sev-dev.c
->>>>>>                                                                   (for
->>>>>> example in alloc_snp_host_map).  Is that OK?
->>>>>>
->>>>>
->>>>> No, this was a mistake of mine because I was using a bloated data
->>>>> encoding that needed 5 pages for the GUID table plus 4 small
->>>>> certificates. I've since fixed that in our user space code.
->>>>> We shouldn't change this size and instead wait for a better size
->>>>> negotiation protocol between the guest and host to avoid this awkward
->>>>> hard-coding.
->>>>>
->>>>>
