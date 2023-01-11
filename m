@@ -2,49 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B471766565F
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 09:44:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBAC665678
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 09:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236192AbjAKIoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 03:44:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S231720AbjAKIuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 03:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237809AbjAKIn1 (ORCPT
+        with ESMTP id S231997AbjAKIuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 03:43:27 -0500
-Received: from gentwo.de (gentwo.de [161.97.139.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D916542
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 00:42:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
-        t=1673426538; bh=KoVgyzHofNvsfxU3iLQZtrwKbN6bHAYrV7gkyQq2px8=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=wFba+scBlp5eEKXHkkgePqb6kAocgsKjyyZ1xuBacniGPTplix/P4diFoLgimrbrA
-         q9PbSJUZ/t2AC4/KF/RP4XdAwvxTMP7e10Dk9iizCASAKLO33jvu2syES7yWHs0HxF
-         XMOcWZa/bu0PPCBiqcU42tC80oOwPsLXk4SEpRJe6TJwA7M0A0T/nSawQFkOqEAKA3
-         cgaHh7cNESHsg2LCvmJQFnb6hARlrmwPjp2Mq8CVYC21tNIqRifkxCYAtSgbcagy5V
-         LLETxp2jq+Fx3RrbJjPjTmAunktIWuLqXZ5EpXKp3JQEDovw9PDzv7XFWruDiEOzk5
-         h6BDmMKYwmIKQ==
-Received: by gentwo.de (Postfix, from userid 1001)
-        id B984AB001DF; Wed, 11 Jan 2023 09:42:18 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by gentwo.de (Postfix) with ESMTP id B7AE2B00129;
-        Wed, 11 Jan 2023 09:42:18 +0100 (CET)
-Date:   Wed, 11 Jan 2023 09:42:18 +0100 (CET)
-From:   Christoph Lameter <cl@gentwo.de>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-cc:     Frederic Weisbecker <frederic@kernel.org>, atomlin@atomlin.com,
-        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
-        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v13 2/6] mm/vmstat: Use vmstat_dirty to track CPU-specific
- vmstat discrepancies
-In-Reply-To: <Y73F4tbfxT6Kb9kZ@tpad>
-Message-ID: <60183179-3a28-6bf9-a6ab-8a8976f283d@gentwo.de>
-References: <20230105125218.031928326@redhat.com> <20230105125248.813825852@redhat.com> <b89a9828-d4e-9874-d482-dbb6cbe46@gentwo.de> <Y71XpnJGumySL9ej@lothringen> <7c2af941-42a9-a59b-6a20-b331a4934a3@gentwo.de> <Y73F4tbfxT6Kb9kZ@tpad>
+        Wed, 11 Jan 2023 03:50:14 -0500
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92250DF1F;
+        Wed, 11 Jan 2023 00:50:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1673427014; x=1704963014;
+  h=references:from:to:cc:subject:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=ikQdH8m796ihx32dJUgR1hV1YKER/WpBzoyYK0/iPXE=;
+  b=Ar+Y/igd97NTRl5y/sqSLcqJOmyJ+iJkEfYdcDpqdY4dxN3HlhJMbbAh
+   WwKBvlLuMl88dLOFIAdDN9vhXrwKRVypJgioiK24oloOKIgUXOWEQ5ED1
+   4shygitr5idsJXVYmJx8oMXNz9pLyUQvBWqwEneyJJ+ImUUxGXViEVAjp
+   E=;
+X-IronPort-AV: E=Sophos;i="5.96,315,1665446400"; 
+   d="scan'208";a="285453292"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-bbc6e425.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:50:10 +0000
+Received: from EX13D27EUB004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-m6i4x-bbc6e425.us-east-1.amazon.com (Postfix) with ESMTPS id 9216381161;
+        Wed, 11 Jan 2023 08:50:05 +0000 (UTC)
+Received: from EX19D028EUB003.ant.amazon.com (10.252.61.31) by
+ EX13D27EUB004.ant.amazon.com (10.43.166.152) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Wed, 11 Jan 2023 08:50:05 +0000
+Received: from u570694869fb251.ant.amazon.com.amazon.com (10.43.162.56) by
+ EX19D028EUB003.ant.amazon.com (10.252.61.31) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.7; Wed, 11 Jan 2023 08:49:57 +0000
+References: <20230108143843.2987732-1-trix@redhat.com>
+ <CANn89iLFtrQm-E5BRwgKFw4xRZiOOdWg-WTFi5eZsg7ycq2szg@mail.gmail.com>
+ <pj41zlpmbmba16.fsf@u570694869fb251.ant.amazon.com>
+ <db824c89-13f2-3349-9dd0-0fb7559c6273@redhat.com>
+User-agent: mu4e 1.6.10; emacs 28.0.91
+From:   Shay Agroskin <shayagr@amazon.com>
+To:     Tom Rix <trix@redhat.com>
+CC:     Eric Dumazet <edumazet@google.com>, <akiyano@amazon.com>,
+        <darinzon@amazon.com>, <ndagan@amazon.com>, <saeedb@amazon.com>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <nathan@kernel.org>, <ndesaulniers@google.com>, <khalasa@piap.pl>,
+        <wsa+renesas@sang-engineering.com>, <yuancan@huawei.com>,
+        <tglx@linutronix.de>, <42.hyeyoo@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+Subject: Re: [PATCH] net: ena: initialize dim_sample
+Date:   Wed, 11 Jan 2023 10:46:50 +0200
+In-Reply-To: <db824c89-13f2-3349-9dd0-0fb7559c6273@redhat.com>
+Message-ID: <pj41zllem9bglr.fsf@u570694869fb251.ant.amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.43.162.56]
+X-ClientProxiedBy: EX13D27UWA003.ant.amazon.com (10.43.160.56) To
+ EX19D028EUB003.ant.amazon.com (10.252.61.31)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,44 +74,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 Jan 2023, Marcelo Tosatti wrote:
 
-> > The basic primitives add a  lot of weight.
+Tom Rix <trix@redhat.com> writes:
+
+> On 1/10/23 8:58 AM, Shay Agroskin wrote:
+>>
+>> Eric Dumazet <edumazet@google.com> writes:
+>>
+>>> On Sun, Jan 8, 2023 at 3:38 PM Tom Rix <trix@redhat.com>=20
+>>> wrote:
+>>>>
+>>>> clang static analysis reports this problem
+>>>> drivers/net/ethernet/amazon/ena/ena_netdev.c:1821:2: warning:
+>>>> Passed-by-value struct
+>>>> =C2=A0 argument contains uninitialized data (e.g., field:=20
+>>>> 'comp_ctr')
+>>>> [core.CallAndMessage]
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 net_dim(&ena_napi->dim, dim=
+_sample);
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~
+>>>>
+>>>> net_dim can call dim_calc_stats() which uses the comp_ctr=20
+>>>> element,
+>>>> so it must be initialized.
+>>>
+>>> This seems to be a dim_update_sample() problem really, when=20
+>>> comp_ctr
+>>> has been added...
+>>>
+>>> Your patch works, but we could avoid pre-initializing=20
+>>> dim_sample in
+>>> all callers,
+>>> then re-writing all but one field...
+>>>
+>>> diff --git a/include/linux/dim.h b/include/linux/dim.h
+>>> index
+>>> 6c5733981563eadf5f06c59c5dc97df961692b02..4604ced4517268ef8912cd8053ac8=
+f4d2630f977
+>>> 100644
+>>> --- a/include/linux/dim.h
+>>> +++ b/include/linux/dim.h
+>>> @@ -254,6 +254,7 @@ dim_update_sample(u16 event_ctr, u64=20
+>>> packets, u64
+>>> bytes, struct dim_sample *s)
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->pkt_ctr=C2=A0=C2=A0 =3D p=
+ackets;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->byte_ctr=C2=A0 =3D bytes;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->event_ctr =3D event_ctr;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->comp_ctr=C2=A0 =3D 0;
+>>> =C2=A0}
+>>>
+>>> =C2=A0/**
+>>
+>> Hi,
+>>
+>> I'd rather go with Eric's solution to this issue than zero the=20
+>> whole
+>> struct in ENA
 >
-> Can't see any alternative given the necessity to avoid interruption
-> by the work to sync per-CPU vmstats to global vmstats.
-
-this_cpu operations are designed to operate on a *single* value (a counter) and can
-be run on an arbitrary cpu, There is no preemption or interrupt
-disable required since the counters of all cpus will be added up at the
-end.
-
-You want *two* values (the counter and the dirty flag) to be modified
-together and want to use the counters/flag to identify the cpu where
-these events occurred. this_cpu_xxx operations are not suitable for that
-purpose. You would need a way to ensure that both operations occur on the
-same cpu.
-
-> > > And the pre cpu atomic updates operations require the modification
-> > of multiple values. The operation
-> > cannot be "atomic" in that sense anymore and we need some other form of
-> > synchronization that can
-> > span multiple instructions.
+> Please look at the other callers of dim_update_sample.=C2=A0 The=20
+> common
+> pattern is to initialize the struct.
 >
->     So use this_cpu_cmpxchg() to avoid the overhead. Since we can no longer
->     count on preremption being disabled we still have some minor issues.
->     The fetching of the counter thresholds is racy.
->     A threshold from another cpu may be applied if we happen to be
->     rescheduled on another cpu.  However, the following vmstat operation
->     will then bring the counter again under the threshold limit.
+> This alternative will work, but the pattern of initializing the=20
+> struct
+> the other (~20) callers should be refactored.
 >
-> Those small issues are gone, OTOH.
+> Tom
+>
 
-Well you could use this_cpu_cmpxchg128 to update a 64 bit counter and a
-flag at the same time. Otherwise you will have to switch off preemption or
-interrupts when incrementing the counters and updating the dirty flag.
+While Eric's patch might be bigger if you also remove the=20
+pre-initialization in the other drivers, the Linux code itself=20
+would be smaller (granted not significantly) and
+it make less room for pitfalls in adding DIM support in other=20
+drivers.
 
-Thus you do not really need the this_cpu operations anymore. It would
-best to use a preempt_disable section and uuse C operators -- ++ for the
-counter and do regular assignment for the flag.
+Is there a good argument against using Eric's patch other than=20
+'the other patch would be bigger' ?
+
+Shay
+
+>>
+>> Thanks,
+>> Shay
+>>
 
