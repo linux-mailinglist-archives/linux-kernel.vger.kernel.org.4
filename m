@@ -2,179 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1063A6660A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAF9665F00
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 16:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239524AbjAKQgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:36:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S234299AbjAKPYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 10:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235426AbjAKQgD (ORCPT
+        with ESMTP id S232608AbjAKPX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:36:03 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205A363CA
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:36:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673454962; x=1704990962;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XHUr/CORx1SuyvuYcSDmm9Qfy38H53He+lyFrfgcJxM=;
-  b=RWJMg7EQgDJ2tFUlemsGpOV5OJJETxttE5+lcsbsP/r3QxxbP8zxAuna
-   ++eGVNA+sNwFVbz60r/Zq0ycOCBY69MZjlUT0FmwqXRcJoUCIhQd86x44
-   m1Da2GK8Qm7n5514vKHXoctYpXtJkKmRYUGeV0zztuumefE/W4rQ0ap6e
-   PM/0/qcormSfsQGML2RbZ15ncHBOYkXE7XfS8WY+UawiW9ZSmM9rS4IpX
-   vXrJYYHrCffxmcnFKntqZL2LKrXE+eZh+iu08cz9/mV+Q4GPWNwThCiqg
-   nOQiJCh3/bvo49hiBEbvrLNVSKC7Akbi5ARPlfE6nAiIRLBytwcmA0IRO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324704075"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="324704075"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:32:22 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607408443"
-X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
-   d="scan'208";a="607408443"
-Received: from flobatol-mobl1.amr.corp.intel.com (HELO [10.212.110.208]) ([10.212.110.208])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:32:20 -0800
-Message-ID: <6a0fa6bd-efb0-9363-4c8d-0e919992557f@linux.intel.com>
-Date:   Wed, 11 Jan 2023 09:22:45 -0600
+        Wed, 11 Jan 2023 10:23:58 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622AA17590;
+        Wed, 11 Jan 2023 07:23:56 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id 203so15329799yby.10;
+        Wed, 11 Jan 2023 07:23:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ScXchrZhHaMfOyWhgGbERboGk+ZwayTCLY0Jfe3kxjM=;
+        b=iWcOuCggMRNQ6gvg0kVgo3ZwzUGvgRTc+h80/OJDTpG2B00sPBaL9wKeFeQhSTi9m0
+         Hmz2MI5aZcpbfYNWcNYjVc7WkxAyqwK4A+MqRuRx/O3SZlqrN38LOo8SchaNSYlNU879
+         Ul8CMudGM6xQlyfPek4JfzOSFDj7NqY04FPPDxlsAAroewIy0mLNarrLfiCh6SvbNLzU
+         Sv6jtcBykcpTV2WzZL32EWWfXkhXg5B94fJ+xeoGSwxE64DT/XnToqjticiuY8PxMn+9
+         bL3RLi6oDwaO8ntpYZZxtOZHXVotJEY9x0jStoHFV4C+PzG5XcSst24BrUzRMmb5GQ9H
+         QlDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ScXchrZhHaMfOyWhgGbERboGk+ZwayTCLY0Jfe3kxjM=;
+        b=wt3p6oltG10Cq2GaJVCyuTeuThfPrjAuiScGdFHe6+8pDuChU5YaRwjwYmPt6eu2wr
+         ocJYkXTaaqgKC+XKUCTxcCtd83LOPvXdnOM++kf23XM/N8XfNz1+fXUA5FRjzUJ4G5S8
+         cEsfIBTWeSEcOw9Yi5STxd9qFbMVgxizhTB055WGdqJYs9bIBd/orj/daCXDa4BJX/hX
+         pfOWI+veHYVDBzbHoM/bEA2xpPeWs9FjvQGweMVMw3nb7mvT7T/g2BGr0RDyK9khltAK
+         EnozKwwJ7pKaS3RLaKJgmV4gOON/q6VRNtfJECBiedLDJGjTYwMDVzbZINKvLhXCOA7v
+         qwxg==
+X-Gm-Message-State: AFqh2kqboDtLLWpY2W9e47rWdbJyU7wqYANmmIyHMqMzpbMYTZf7Xxg1
+        1SeEuP2I7aHnx15PFQaCkcrSWISfkJROw/7GzHk=
+X-Google-Smtp-Source: AMrXdXuW8mdV/9TigUxZZwsVg8uixUL0NrJSiX3zuDN8DSzMgAhRTXvIzgjyFsEr3/DsCEdl0HayfDA05acQ6GwKr5E=
+X-Received: by 2002:a25:ac08:0:b0:73b:23cf:ad63 with SMTP id
+ w8-20020a25ac08000000b0073b23cfad63mr8879587ybi.323.1673450635438; Wed, 11
+ Jan 2023 07:23:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH 07/19] ASoC: amd: ps: add soundwire dma driver for pink
- sardine platform
-Content-Language: en-US
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
-        vkoul@kernel.org, alsa-devel@alsa-project.org
-Cc:     Mastan.Katragadda@amd.com, Sunil-kumar.Dommati@amd.com,
-        open list <linux-kernel@vger.kernel.org>,
-        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>, Mario.Limonciello@amd.com,
-        arungopal.kondaveeti@amd.com,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>
-References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
- <20230111090222.2016499-8-Vijendar.Mukunda@amd.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230111090222.2016499-8-Vijendar.Mukunda@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230108021450.120791-1-yakoyoku@gmail.com> <CAOgh=Fzc3_bCLCKE+6KVzyMbBUOcQ_s9ef6Rw33amD5+yu-_WA@mail.gmail.com>
+ <CAOgh=FxxXQ0UV_3PEGS-_575WNfR2SpKp+i78HtSVX4XO4eC0A@mail.gmail.com> <68c81196-5421-8731-52be-b9b620837eb5@gmail.com>
+In-Reply-To: <68c81196-5421-8731-52be-b9b620837eb5@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 11 Jan 2023 16:23:44 +0100
+Message-ID: <CANiq72kMfL08r2fJstcfXs3ruzCGTPUkXpWi7hVm5=N9XbuD5w@mail.gmail.com>
+Subject: Re: [PATCH v2] scripts: Exclude Rust CUs with pahole
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     Eric Curtin <ecurtin@redhat.com>, linux-kernel@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Neal Gompa <neal@gompa.dev>, bpf@vger.kernel.org,
+        rust-for-linux@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 11, 2023 at 4:02 PM Martin Rodriguez Reboredo
+<yakoyoku@gmail.com> wrote:
+>
+> From my POV I don't like this way due to it being set regardless whether
+> or not you are building the kernel with Rust. Though, because it doesn't
+> affect non `CONFIG_RUST` builds, I _think_ it won't hurt if we use that
+> way for now. Gonna send v3.
 
+One advantage (in general, i.e. not talking about this case in
+particular) of having something always done is that it is one less
+moving part, so less complexity, everyone will test it all the time,
+etc.
 
-On 1/11/23 03:02, Vijendar Mukunda wrote:
-> Soundwire DMA platform driver binds to the platform device created by
-> ACP PCI device. Soundwire DMA driver registers ALSA DMA component
-> with ASoC framework.
-> 
-> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-> ---
->  sound/soc/amd/ps/acp63.h      |  5 +++
->  sound/soc/amd/ps/ps-sdw-dma.c | 72 +++++++++++++++++++++++++++++++++++
->  2 files changed, 77 insertions(+)
->  create mode 100644 sound/soc/amd/ps/ps-sdw-dma.c
-> 
-> diff --git a/sound/soc/amd/ps/acp63.h b/sound/soc/amd/ps/acp63.h
-> index 0bd9dc363461..b462320fdf2a 100644
-> --- a/sound/soc/amd/ps/acp63.h
-> +++ b/sound/soc/amd/ps/acp63.h
-> @@ -135,3 +135,8 @@ struct acp63_dev_data {
->  	bool is_sdw_dev;
->  	bool acp_sdw_power_off;
->  };
-> +
-> +struct sdw_dma_dev_data {
-> +	void __iomem *acp_base;
-> +	struct mutex *acp_lock;
-> +};
-> diff --git a/sound/soc/amd/ps/ps-sdw-dma.c b/sound/soc/amd/ps/ps-sdw-dma.c
-> new file mode 100644
-> index 000000000000..388a4b7df715
-> --- /dev/null
-> +++ b/sound/soc/amd/ps/ps-sdw-dma.c
-> @@ -0,0 +1,72 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * AMD ALSA SoC Pink Sardine Soundwire DMA Driver
-> + *
-> + * Copyright 2023 Advanced Micro Devices, Inc.
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <sound/pcm_params.h>
-> +#include <sound/soc.h>
-> +#include <sound/soc-dai.h>
-> +#include "acp63.h"
-> +
-> +#define DRV_NAME "amd_ps_sdw_dma"
-> +
-> +static const struct snd_soc_component_driver acp63_sdw_component = {
-> +	.name		= DRV_NAME,
-> +};
-> +
-> +static int acp63_sdw_platform_probe(struct platform_device *pdev)
-> +{
-> +	struct resource *res;
-> +	struct sdw_dma_dev_data *sdw_data;
-> +	int status;
-> +
-> +	if (!pdev->dev.platform_data) {
-> +		dev_err(&pdev->dev, "platform_data not retrieved\n");
-> +		return -ENODEV;
-> +	}
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res) {
-> +		dev_err(&pdev->dev, "IORESOURCE_MEM FAILED\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	sdw_data = devm_kzalloc(&pdev->dev, sizeof(*sdw_data), GFP_KERNEL);
-> +	if (!sdw_data)
-> +		return -ENOMEM;
-> +
-> +	sdw_data->acp_base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
-> +	if (!sdw_data->acp_base)
-> +		return -ENOMEM;
-> +
-> +	sdw_data->acp_lock = pdev->dev.platform_data;
-> +	dev_set_drvdata(&pdev->dev, sdw_data);
-> +	status = devm_snd_soc_register_component(&pdev->dev,
-> +						 &acp63_sdw_component,
-> +						 NULL, 0);
-> +	if (status) {
-> +		dev_err(&pdev->dev, "Fail to register acp pdm dai\n");
+So if it is not expected to hurt, but it does for an unknown reason,
+then it would be nice to know as soon as possible, regardless of
+whether it is gated under `CONFIG_RUST` or not.
 
-not sure what this means? Are you registering a PDM component or a DMA one?
+Of course, it can always happen that something changes over time, and
+thus it may start to hurt in the future only, and therefore breaking
+everybody instead of a subset of people. But then again, the sooner we
+would know about that unexpected change, the better; especially since
+the goal is to eventually get to a point where `CONFIG_RUST` can start
+to be routinely enabled by common configurations etc.
 
-> +
-> +		return -ENODEV;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver acp63_sdw_dma_driver = {
-> +	.probe = acp63_sdw_platform_probe,
-> +	.driver = {
-> +		.name = "amd_ps_sdw_dma",
-> +	},
-> +};
-> +
-> +module_platform_driver(acp63_sdw_dma_driver);
-> +
-> +MODULE_AUTHOR("Vijendar.Mukunda@amd.com");
-> +MODULE_DESCRIPTION("AMD ACP6.3 PS SDW DMA Driver");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("platform:" DRV_NAME);
+Cheers,
+Miguel
