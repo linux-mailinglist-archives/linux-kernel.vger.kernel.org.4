@@ -2,140 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A146F665855
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C8366585C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 10:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235452AbjAKJ5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 04:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S231947AbjAKJ6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 04:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239256AbjAKJ47 (ORCPT
+        with ESMTP id S238696AbjAKJ5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:56:59 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0444D98
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:54:27 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so12187204wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:54:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mFXFErf1cq+teYIb8hlzraGgrqjKGOqEZ+fy0lNXo3c=;
-        b=Ez55A3lcqCOOEpQ5a4MBkBx/2zChunM795At0TWV11V9WbBJ3DNkEB+66S9HGrtTvn
-         ZDrwYqwzDgMm/GUyX2mzE2EyNcXUbISgQIhYJEFkNsxa/WJWRcmrCKKbqV3CK84/r0Hx
-         gQf3ozUakFu5DN1h0mhXmm1aXmV2UdIPGbHqRzOGvUihTrEa/8iNTkAkHvzMJhamqLTm
-         QEJD46zYp2AUnJ8M0wB+YLQ0S8c8KCU/HRIw8my1jcP70fUUhlXfPYdDdPu4vClkcdjb
-         i8UhuaFbVL7Wq8WsQORBLS3P0UyAc+JZsDHoSzAQqympHQwKCHd983BEMxllkefRdkgp
-         ruvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mFXFErf1cq+teYIb8hlzraGgrqjKGOqEZ+fy0lNXo3c=;
-        b=ovgHncY4XemHMBLP987cIyTKyriUWAEcNoLOZpnjtpSb8n5xIeG2ySQik8x/nOKG4d
-         HIZHedvHRWCEyLTF/hxi/S2KUd2/HtaWymth/3/vgWnDyQVHWJTXslsEvEe91OmFeG9f
-         opsWZfcTEgtqja0KpalrU+9+RoNdrGcGR24Q8NcY132KRhQ+FBpacok6s3CnqJLJ+AOX
-         FyxUlTTR10WBhSL7gKmug6OsQQcEH+x/lG/A9EmMGXxDEwlBrzrBCMPrws4dZpTdVS6p
-         gWdpd6AdFONVspF1vg3SSi3jXapvljhrz6BbHxUABQ0z7ZTwvHuapnRpTPQpZg7qJMZ9
-         gklw==
-X-Gm-Message-State: AFqh2krUsnhxRef0lq37vOt2RD14VTy6DdFPhrrGUXsNqy8fOdZYG+Wa
-        saRZ+nL/wiqkRX3Xol1lMA4=
-X-Google-Smtp-Source: AMrXdXs4Bilzbryqesa6Iq2CcbBPhULbeIu/iOoHs0IaVyp+PUdwh0hB46bGVPQijouO6TJpzE7mXw==
-X-Received: by 2002:a05:600c:229a:b0:3d9:ec70:befc with SMTP id 26-20020a05600c229a00b003d9ec70befcmr9365764wmf.13.1673430866212;
-        Wed, 11 Jan 2023 01:54:26 -0800 (PST)
-Received: from gmail.com (1F2EF2EB.nat.pool.telekom.hu. [31.46.242.235])
-        by smtp.gmail.com with ESMTPSA id f19-20020a1c6a13000000b003d9fb04f658sm4077431wmc.4.2023.01.11.01.54.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 01:54:25 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 11 Jan 2023 10:54:21 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 08/41] mm: introduce CONFIG_PER_VMA_LOCK
-Message-ID: <Y76HTfIeEt8ZOIH3@gmail.com>
-References: <20230109205336.3665937-1-surenb@google.com>
- <20230109205336.3665937-9-surenb@google.com>
- <20230111001331.cxdeh52vvta6ok2p@offworld>
- <CAJuCfpEv--awCY0=R3h5Fez8x74U1EZCzNkq4_7deCYqej5sSA@mail.gmail.com>
- <Y75x5fGPcJ63pBIp@dhcp22.suse.cz>
+        Wed, 11 Jan 2023 04:57:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1542000
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 01:54:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53B6FB81B79
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 09:54:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428EBC433D2;
+        Wed, 11 Jan 2023 09:54:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673430892;
+        bh=kbawuu+G4uhdhk6Z3iHZybE1MSwuvuLFahb8EbDh9VM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BQoovrkzqShYA5ElXnNFPZZMv8OCDbzkP7k+/fTO0DWODS9jAXrtliuh3qjaSkwpu
+         65apxuUgPGLr/gj7eW/qE0qAsCwasphkV//btWgaOOK8z3Uner+mpVXULd7Md+Pjet
+         U7cu8oWMPawGFJAD/sJH9xWMwqJqZczd79EVKm7E9tianfU/cyl6Pf9YSjlG3Br0RE
+         Ngqy4ejUdsJKC6JO1LQD3NxK6E7592v9u57Q97gEszAHVR3srbDEcGDQxiT3NMV1+t
+         3ToMATiJX9TQSauuDlN0+RginTu5NVmCryA37cBZtG6SQA4BzTAjMNNgqh5C17yW0R
+         xXca0N8L9iwJg==
+Message-ID: <cf854af6-fbbc-6e5c-f773-c4a868d85278@kernel.org>
+Date:   Wed, 11 Jan 2023 11:54:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y75x5fGPcJ63pBIp@dhcp22.suse.cz>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V2 2/2] phy: ti: j721e-wiz: Add support to enable LN23
+ Type-C swap
+Content-Language: en-US
+To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Ravi Gunasekaran <r-gunasekaran@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sinthu Raja <sinthu.raja@ti.com>
+References: <20230106071714.30562-1-sinthu.raja@ti.com>
+ <20230106071714.30562-3-sinthu.raja@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230106071714.30562-3-sinthu.raja@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Sinthu,
 
-* Michal Hocko <mhocko@suse.com> wrote:
-
-> On Tue 10-01-23 16:44:42, Suren Baghdasaryan wrote:
-> > On Tue, Jan 10, 2023 at 4:39 PM Davidlohr Bueso <dave@stgolabs.net> wrote:
-> > >
-> > > On Mon, 09 Jan 2023, Suren Baghdasaryan wrote:
-> > >
-> > > >This configuration variable will be used to build the support for VMA
-> > > >locking during page fault handling.
-> > > >
-> > > >This is enabled by default on supported architectures with SMP and MMU
-> > > >set.
-> > > >
-> > > >The architecture support is needed since the page fault handler is called
-> > > >from the architecture's page faulting code which needs modifications to
-> > > >handle faults under VMA lock.
-> > >
-> > > I don't think that per-vma locking should be something that is user-configurable.
-> > > It should just be depdendant on the arch. So maybe just remove CONFIG_PER_VMA_LOCK?
-> > 
-> > Thanks for the suggestion! I would be happy to make that change if
-> > there are no objections. I think the only pushback might have been the
-> > vma size increase but with the latest optimization in the last patch
-> > maybe that's less of an issue?
+On 06/01/2023 09:17, Sinthu Raja wrote:
+> From: Sinthu Raja <sinthu.raja@ti.com>
 > 
-> Has vma size ever been a real problem? Sure there might be a lot of those 
-> but your patch increases it by rwsem (without the last patch) which is 
-> something like 40B on top of 136B vma so we are talking about 400B in 
-> total which even with wild mapcount limits shouldn't really be 
-> prohibitive. With a default map count limit we are talking about 2M 
-> increase at most (per address space).
+> The WIZ acts as a wrapper for SerDes and has Lanes 0 and 2 reserved
+> for USB for type-C lane swap if Lane 1 and Lane 3 are linked to the
+> USB PHY that is integrated into the SerDes IP. The WIZ control register
+> has to be configured to support this lane swap feature.
 > 
-> Or are you aware of any specific usecases where vma size is a real 
-> problem?
+> The support for swapping lanes 2 and 3 is missing and therefore
+> add support to configure the control register to swap between
+> lanes 2 and 3 if PHY type is USB.
+> 
+> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> ---
+> 
+> Changes in V2:
+> =============
+> Address review comments:
+> - Update commit description.
+> - Rename enum variable name from wiz_lane_typec_swap_mode to wiz_typec_master_lane.
+> - Rename enumerators name specific to list of master lanes used for lane swapping.
+> - Add inline comments.
+> 
+> V1: https://lore.kernel.org/lkml/20221213124854.3779-2-sinthu.raja@ti.com/T/#m5e2d1a15d647f5df9dd28ed2dedc4b0812d6466f
+> 
+>  drivers/phy/ti/phy-j721e-wiz.c | 33 ++++++++++++++++++++++++++++++---
+>  1 file changed, 30 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
+> index 571f0ca18874..815e8124b94a 100644
+> --- a/drivers/phy/ti/phy-j721e-wiz.c
+> +++ b/drivers/phy/ti/phy-j721e-wiz.c
+> @@ -58,6 +58,14 @@ enum wiz_lane_standard_mode {
+>  	LANE_MODE_GEN4,
+>  };
+>  
+> +/*
+> + * List of master lanes used for lane swapping
+> + */
+> +enum wiz_typec_master_lane {
+> +	LANE0 = 0,
+> +	LANE2 = 2,
+> +};
+> +
+>  enum wiz_refclk_mux_sel {
+>  	PLL0_REFCLK,
+>  	PLL1_REFCLK,
+> @@ -194,6 +202,9 @@ static const struct reg_field p_mac_div_sel1[WIZ_MAX_LANES] = {
+>  static const struct reg_field typec_ln10_swap =
+>  					REG_FIELD(WIZ_SERDES_TYPEC, 30, 30);
+>  
+> +static const struct reg_field typec_ln23_swap =
+> +					REG_FIELD(WIZ_SERDES_TYPEC, 31, 31);
+> +
+>  struct wiz_clk_mux {
+>  	struct clk_hw		hw;
+>  	struct regmap_field	*field;
+> @@ -367,6 +378,7 @@ struct wiz {
+>  	struct regmap_field	*mux_sel_field[WIZ_MUX_NUM_CLOCKS];
+>  	struct regmap_field	*div_sel_field[WIZ_DIV_NUM_CLOCKS_16G];
+>  	struct regmap_field	*typec_ln10_swap;
+> +	struct regmap_field	*typec_ln23_swap;
+>  	struct regmap_field	*sup_legacy_clk_override;
+>  
+>  	struct device		*dev;
+> @@ -676,6 +688,13 @@ static int wiz_regfield_init(struct wiz *wiz)
+>  		return PTR_ERR(wiz->typec_ln10_swap);
+>  	}
+>  
+> +	wiz->typec_ln23_swap = devm_regmap_field_alloc(dev, regmap,
+> +						       typec_ln23_swap);
+> +	if (IS_ERR(wiz->typec_ln23_swap)) {
+> +		dev_err(dev, "LN23_SWAP reg field init failed\n");
+> +		return PTR_ERR(wiz->typec_ln23_swap);
+> +	}
+> +
+>  	wiz->phy_en_refclk = devm_regmap_field_alloc(dev, regmap, phy_en_refclk);
+>  	if (IS_ERR(wiz->phy_en_refclk)) {
+>  		dev_err(dev, "PHY_EN_REFCLK reg field init failed\n");
+> @@ -1254,9 +1273,17 @@ static int wiz_phy_reset_deassert(struct reset_controller_dev *rcdev,
+>  			int i;
+>  
 
-40 bytes for the rwsem, plus the patch also adds a 32-bit sequence counter:
+Don't you have to update the below comment you added in patch 1 to mention about LN23 as well?
 
-  + int vm_lock_seq;
-  + struct rw_semaphore lock;
++			/* if no typec-dir gpio was specified and PHY type is
++			 * USB3 with master lane number is '0', set LN10 SWAP
++			 * bit to '1'
++			 */
 
-So it's +44 bytes.
 
-Thanks,
+>  			for (i = 0; i < num_lanes; i++) {
+> -				if ((wiz->lane_phy_type[i] == PHY_TYPE_USB3)
+> -						&& wiz->master_lane_num[i] == 0) {
+> -					regmap_field_write(wiz->typec_ln10_swap, 1);
+> +				if (wiz->lane_phy_type[i] == PHY_TYPE_USB3) {
+> +					switch (wiz->master_lane_num[i]) {
+> +					case LANE0:
+> +						regmap_field_write(wiz->typec_ln10_swap, 1);
+> +						break;
+> +					case LANE2:
+> +						regmap_field_write(wiz->typec_ln23_swap, 1);
+> +						break;
+> +					default:
+> +						break;
+> +					}
+>  				}
+>  			}
+>  		}
 
-	Ingo
+Otherwise looks good.
+
+cheers,
+-roger
+
