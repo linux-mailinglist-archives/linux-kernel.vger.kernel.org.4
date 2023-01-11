@@ -2,79 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055D46663D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43D66663D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbjAKTkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 14:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S235351AbjAKTkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 14:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234496AbjAKTkI (ORCPT
+        with ESMTP id S234693AbjAKTkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 14:40:08 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62FA14037
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:40:06 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id y37-20020a634b25000000b004b1d90ea947so5023497pga.15
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:40:06 -0800 (PST)
+        Wed, 11 Jan 2023 14:40:10 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4011EE0A8;
+        Wed, 11 Jan 2023 11:40:09 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso10550390wmq.3;
+        Wed, 11 Jan 2023 11:40:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NgJJjf3XhaPlMIkedvk8DADSWPbDqjPvpDq99Cffqu0=;
-        b=ha/GpuIffF2aT3mhbf29pv+Ym+Was4HCFTAuAmQDlgBVlIamCt+tSl9DvjtGywyInX
-         Xb7HOyujW5KQA0LiKUpE3Iclpq4JrPXm9wUBiPFO/TPrUUhX4CrfaJP5VwSyUK1pT84N
-         5InKtJrL3tObd50tUyGbOnViU/aPxwawhw2hksh8q3WK+drkIdqAKFXkhYA/MuN4gQV7
-         nVkVwgklJHLvHdb5x9yEEk2GhG74Kxpbj3w8aaH+mIGY43iaygfq4uEOAswtvZToC59G
-         4p5wXBypQJ1jxHnkPn81IATCKIH/cFPfUAeJ3Sai/MV73D4BAGIKXyBA+xt7LFN+Fmod
-         oCbQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zqjyIjqa21DKlLc9aiLyfHVjAwLQSQqAdSY+ejwIkis=;
+        b=cyZj3gnrvmF8CnpQxy9/fPUf4R722i8raRiSVDtidZIzrJ6zAHa8P9TQTyQvB6Qp9i
+         Mzq19yoP8G+5PhJl9UfKr6Hgy5oPu1chk6+ZLnkyoeCpbNycrTMAOvCCAobNvLUY38en
+         YNTuuYKbGI4J2xwwVchiD2que80nEawIqs8NLOenb+ndIN93950B2EXXec1DdPVus4pb
+         FXYbQHghxWEmsL053HHODj4vm+by7AZLaxhKz1mm/Kgy39KaECIMekfmqF7Y9p3DTdr+
+         ngDSSQPDMT7jk163/nhXbFqBT7eDNhy7s9fF0jF7wJ6kjD6+V/QJPgPmaIYxRW0oetor
+         n5Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NgJJjf3XhaPlMIkedvk8DADSWPbDqjPvpDq99Cffqu0=;
-        b=FRvEa8vJiySm6WdEjAdXt1O7g3eJxoMrN6zDaI90JGCMyh1/tHTMBK6vJnqohsdspE
-         Y0IIvb5hb0L5qAt2rIfIUS6ibSZG7XtUAAqttozB/xnx+EnRKCQY0W2jyOCwEX7eb7Gy
-         fT+dvyjwf4dzrt4/GySoZHVATvXGl3uJLIagtGOQuziImLXYJqkwq8iMEYdhU6a+FPqY
-         nDRNx5qb3KL9aqSgvorR7sP6sb5SxeaV428mXcTiRlCVQ64ioT9b3HmjUPUT+IrNRMCE
-         WLTMlHTRD0Pi0dTgk78caQv7HRnKNCjHsBe5rzKndOtX2FYmFO0pnQRcGe3Gi7XMHuo/
-         O1sg==
-X-Gm-Message-State: AFqh2kp8O9TEKQocILmIMgXZm15Bxdh/ch/FVrTX+luFewscq4ceDyDE
-        QYGyvxWi4F/5O2QA+FM73YT0RgzVMTNi37ijSgG/AoXa3RlqchncPtXmgBbgkWP37jo76VD5K+g
-        XWxr0GYnv+HtcDmGwys6TeZCHv6rgLOtBduwg7XITxF6z8ZRB8O1AGjWCM/GwlK3ZwqwsxMKhif
-        hyWNqyY+0=
-X-Google-Smtp-Source: AMrXdXuikOzUTMv9Br9/QRekPPGn/a7pAzNRpV2qQ0EkhLBBv4sw5QYcprpz5S6EiWS+MtWsGfqvCec9a18YSlenjw==
-X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:90a:8b0b:b0:219:5a12:e1eb with
- SMTP id y11-20020a17090a8b0b00b002195a12e1ebmr7312208pjn.88.1673466006301;
- Wed, 11 Jan 2023 11:40:06 -0800 (PST)
-Date:   Wed, 11 Jan 2023 19:39:56 +0000
-In-Reply-To: <20230111194001.1947849-1-dionnaglaze@google.com>
-Mime-Version: 1.0
-References: <20230111194001.1947849-1-dionnaglaze@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230111194001.1947849-3-dionnaglaze@google.com>
-Subject: [PATCH v11 2/7] x86/sev: Change snp_guest_issue_request's fw_err
-From:   Dionna Glaze <dionnaglaze@google.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <Borislav.Petkov@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michael Sterritt <sterritt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zqjyIjqa21DKlLc9aiLyfHVjAwLQSQqAdSY+ejwIkis=;
+        b=sbWIAifyNADCTxjSvAFU8NRo5DORgqUfRHKirJgION4BGSEy2V6vjVZheW0/nmMfx2
+         JBT1vdZH3VIDrNrv3PVZim+WYWPbRzALrWUWzlq/KLKKW/RapP4lUcRAZWjrcbdx5S+t
+         /RIl7liPy2/vhWAR6mLuDG82v42UO5vgrc2ASjyTWhGE8r7KgC+QSstlK9aKAE2L7zHG
+         HbuiYLm5a00RHvwzNFlEx9E2kN3HKkmKmIf056inZ1+obyEt5xzCYcyAHD9V8lKnhi3f
+         OI1PrS3NNq/KIHGZkAjcwgSK7ZJrQ1ZK8WB/69+n7BGyNtAAUHfHxDm6NmNbrDW1h97p
+         ooVg==
+X-Gm-Message-State: AFqh2krhanEd6xYDjQa7gyRnC+uLAFhlbDFIEM5RfMOFpcW3aVHm9hBT
+        ESulV5UgKmM4wR7LXXSTykY=
+X-Google-Smtp-Source: AMrXdXs56CDgvt1nUOLqLqObRvQcTxebbICW2BYjPDtCRRSWfu/8YL2yfyo7sbrGuI8gr7QcbEVZTQ==
+X-Received: by 2002:a05:600c:42d5:b0:3d6:e790:c9a0 with SMTP id j21-20020a05600c42d500b003d6e790c9a0mr63567225wme.10.1673466007570;
+        Wed, 11 Jan 2023 11:40:07 -0800 (PST)
+Received: from localhost.localdomain (93-34-92-88.ip49.fastwebnet.it. [93.34.92.88])
+        by smtp.googlemail.com with ESMTPSA id p11-20020a05600c358b00b003cfa3a12660sm7815451wmq.1.2023.01.11.11.40.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 11:40:07 -0800 (PST)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [RESEND PATCH] clk: Warn and add workaround on misuse of .parent_data with .name only
+Date:   Wed, 11 Jan 2023 20:39:57 +0100
+Message-Id: <20230111193957.27650-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,128 +70,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GHCB specification declares that the firmware error value for a
-guest request will be stored in the lower 32 bits of EXIT_INFO_2.
-The upper 32 bits are for the VMM's own error code. The fw_err argument
-is thus a misnomer, and callers will need access to all 64 bits.
+By a simple mistake in a .parent_names to .parent_data conversion it was
+found that clk core assume fw_name is always provided with a parent_data
+struct for each parent and never fallback to .name to get parent name even
+if declared.
 
-The type of unsigned long also causes problems, since sw_exit_info2 is
-u64 (unsigned long long) vs the argument's unsigned long*. A temporary
-typedef is introduced for the err argument so it can be changed in a
-later patch more cleanly.
+This is caused by clk_core_get that only checks for parent .fw_name and
+doesn't handle .name.
 
-The firmware might not even be called, so the call is bookended with
-the no firmware call error and clearing the error.
+While it's sane to request the dev to correctly do the conversion and
+add both .fw_name and .name in a parent_data struct, it's not sane to
+silently drop parents without a warning.
 
-Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Peter Gonda <pgonda@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <Borislav.Petkov@amd.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Venu Busireddy <venu.busireddy@oracle.com>
-Cc: Michael Roth <michael.roth@amd.com>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Michael Sterritt <sterritt@google.com>
+Fix this in 2 ways. Add a kernel warning when a wrong implementation is
+used and copy .name in .fw_name in parent map populate function to
+handle clk problems and malfunctions.
 
-Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request NAEs")
-Reviewed-by: Tom Lendacky <Thomas.Lendacky@amd.com>
-Reviewed-by: Borislav Petkov <Borislav.Petkov@amd.com>
-Reviewed-by: Peter Gonda <pgonda@google.com>
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- arch/x86/include/asm/sev.h | 10 ++++++++--
- arch/x86/kernel/sev.c      | 10 ++++++----
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ drivers/clk/clk.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index ebc271bb6d8e..5b03ba18fee7 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -133,6 +133,12 @@ struct snp_secrets_page_layout {
- 	u8 rsvd3[3840];
- } __packed;
- 
-+/*
-+ * Use a type alias temporarily to cleanly change the snp_issue_guest_request
-+ * signature cleanly over multiple patches.
-+ */
-+typedef unsigned long sev_guestreq_err_t;
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 57b83665e5c3..dccd4ea6f692 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -4015,10 +4015,21 @@ static int clk_core_populate_parent_map(struct clk_core *core,
+ 			ret = clk_cpy_name(&parent->name, parent_names[i],
+ 					   true);
+ 		} else if (parent_data) {
++			const char *parent_name;
 +
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- extern struct static_key_false sev_es_enable_key;
- extern void __sev_es_ist_enter(struct pt_regs *regs);
-@@ -196,7 +202,7 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
- void snp_set_wakeup_secondary_cpu(void);
- bool snp_init(struct boot_params *bp);
- void __init __noreturn snp_abort(void);
--int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err);
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, sev_guestreq_err_t *exitinfo2);
- #else
- static inline void sev_es_ist_enter(struct pt_regs *regs) { }
- static inline void sev_es_ist_exit(void) { }
-@@ -217,7 +223,7 @@ static inline void snp_set_wakeup_secondary_cpu(void) { }
- static inline bool snp_init(struct boot_params *bp) { return false; }
- static inline void snp_abort(void) { }
- static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input,
--					  unsigned long *fw_err)
-+					  sev_guestreq_err_t *exitinfo2)
- {
- 	return -ENOTTY;
- }
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 679026a640ef..d1a6092b1e03 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -22,6 +22,7 @@
- #include <linux/efi.h>
- #include <linux/platform_device.h>
- #include <linux/io.h>
-+#include <linux/psp-sev.h>
- 
- #include <asm/cpu_entry_area.h>
- #include <asm/stacktrace.h>
-@@ -2175,7 +2176,7 @@ static int __init init_sev_config(char *str)
- }
- __setup("sev=", init_sev_config);
- 
--int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err)
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, sev_guestreq_err_t *exitinfo2)
- {
- 	struct ghcb_state state;
- 	struct es_em_ctxt ctxt;
-@@ -2186,9 +2187,11 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
- 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
- 		return -ENODEV;
- 
--	if (!fw_err)
-+	if (!exitinfo2)
- 		return -EINVAL;
- 
-+	*exitinfo2 = SEV_RET_NO_FW_CALL;
+ 			parent->hw = parent_data[i].hw;
+ 			parent->index = parent_data[i].index;
++			parent_name = parent_data[i].fw_name;
 +
- 	/*
- 	 * __sev_get_ghcb() needs to run with IRQs disabled because it is using
- 	 * a per-CPU GHCB.
-@@ -2212,14 +2215,13 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
- 	if (ret)
- 		goto e_put;
- 
-+	*exitinfo2 = ghcb->save.sw_exit_info_2;
- 	if (ghcb->save.sw_exit_info_2) {
- 		/* Number of expected pages are returned in RBX */
- 		if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
- 		    ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN)
- 			input->data_npages = ghcb_get_rbx(ghcb);
- 
--		*fw_err = ghcb->save.sw_exit_info_2;
--
- 		ret = -EIO;
- 	}
- 
++			if (!parent_name && parent_data[i].name) {
++				WARN(1, "Empty .fw_name with .name in %s's .parent_data. Using .name for .fw_name declaration.\n",
++				     core->name);
++				parent_name = parent_data[i].name;
++			}
++
+ 			ret = clk_cpy_name(&parent->fw_name,
+-					   parent_data[i].fw_name, false);
++					   parent_name, false);
++
+ 			if (!ret)
+ 				ret = clk_cpy_name(&parent->name,
+ 						   parent_data[i].name,
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.37.2
 
