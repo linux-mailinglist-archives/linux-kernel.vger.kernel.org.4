@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAE866651D
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7D466652B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 21:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbjAKUxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 15:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
+        id S234545AbjAKU7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 15:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235039AbjAKUxk (ORCPT
+        with ESMTP id S235480AbjAKU7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 15:53:40 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED523D9E2
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:53:38 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id d9so18045469pll.9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 12:53:38 -0800 (PST)
+        Wed, 11 Jan 2023 15:59:02 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89DC60DC;
+        Wed, 11 Jan 2023 12:58:58 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id j15so9369993qtv.4;
+        Wed, 11 Jan 2023 12:58:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ltp+seogK+PxaVsEYogy95r8h77BHMwLLlXz9DiN8w=;
-        b=ZkKElg+8IcsEScy6KU15ENBM4hY2OLh2JUmXtCiQe9D357/FhbWQQdTbJ+XgevOLlQ
-         eZWwyGY8JM8invv4+POFOm46+9jGIVnHl7vXs4qg8G3YJh+ukYRpWYpSdKzWqldYdRag
-         Iuf2HPbQaTOscBk6xESwqqLMjSShui4NJxKzidDiJuFixDGvCf5v0LD7uVodNAW+2KUx
-         SbP0aqJY7HzBnc9JRoNoGs/f86bvYvaRMrkMrolcBaBu6QTt34OHz9uDQrqfCQ7AhQsp
-         Nn0A0msUsx1Z16wvpmKtG8iKTJopRdDqNCgbtFp3Zt36U360mVfWc0WG+obDtljR4h9+
-         jOBw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GhiaCs8Yrw8BBKN22ZfMUGXFz70szjaM7XSx2isDBd0=;
+        b=nnpV7JTuWnvYOLcgHmuIjXmPhPMZ2gYTcflG39feZhBy0hZWH8kvGvqdU4ks82w6VX
+         pmB7MXbNmTHfJgEV+8DI2C8RwlwCnh0cDURpkS488gGBRiZN8U8KNYKoVY17CY/1hCTa
+         rrbxqtmQ9glIl51yh5DddycP87OvggdJqsD1Ju25svaWbgtuiIJdVuiyO/X5KHEjW9rV
+         X+wcI+Iq3elmugzGol0x47MLu8/8huqIqCMQS1CS0ou0VwpB1CQMTZJn9GrzpyDYBxzF
+         zmUksAOOqkNcA7DYzqeyL6wOACws6FWPyXdIK4zPGvSMmWxHgFKtsbdrSBJlyaqOcakg
+         R8Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0ltp+seogK+PxaVsEYogy95r8h77BHMwLLlXz9DiN8w=;
-        b=EVdNYmgjMAJicM2rKNZLBP6EX+HLZ3THhMzBbY10SJR3xFdlia/WcrEyRPgTI+6to3
-         Pt0/le5VmT6RX4gZNX0k7Ob8oun4IEOhEr7EFG9/jQd01zQtThauHfgssN58LxrQ/Gba
-         bX2U3dEQhJdxus83yDjDfhVWycReqVlBDk2uHeyHpqMcOZ6eskCV2LDKarojCPVU75wb
-         smdg/m+Az4i3sciFpvFrXXaax32AfWFip/HywbkFzG5/xzVlhF87Fry6i5J5ntvtfCTV
-         jOQSeG6hi7K8inY7L9sFUtzvGbYm99VHxswFxTQWsILcST8xzFxvhb9QrgjBe1CjByim
-         VlHQ==
-X-Gm-Message-State: AFqh2kpzeYYdZw/QI+oPzQlct//nKTonBNEHMYnTLRXwjXB4KDnQ+/x0
-        Ofo49Uuz1Nb88B6jK/2x0llC6A==
-X-Google-Smtp-Source: AMrXdXtc4CpOFmwV1Hw4NH/1QoEjdUGEehsu8+s0heNHbjQKL27VEfPV1Z8tPmwPD/xRgsHw1J4USA==
-X-Received: by 2002:a05:6a20:c527:b0:9d:c38f:9bdd with SMTP id gm39-20020a056a20c52700b0009dc38f9bddmr581152pzb.2.1673470418329;
-        Wed, 11 Jan 2023 12:53:38 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d11-20020a170902654b00b001895d87225csm10569179pln.182.2023.01.11.12.53.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 12:53:37 -0800 (PST)
-Date:   Wed, 11 Jan 2023 20:53:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        alex.williamson@redhat.com, pbonzini@redhat.com, cohuck@redhat.com,
-        farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com, akrowiak@linux.ibm.com,
-        jjherne@linux.ibm.com, pasic@linux.ibm.com,
-        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] KVM: async kvm_destroy_vm for vfio devices
-Message-ID: <Y78hzsHiwaFpL60+@google.com>
-References: <20230109201037.33051-1-mjrosato@linux.ibm.com>
- <20230109201037.33051-2-mjrosato@linux.ibm.com>
- <Y78UCz5oeuntSQtK@google.com>
- <Y78Wk2/P5+gLMdpk@nvidia.com>
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GhiaCs8Yrw8BBKN22ZfMUGXFz70szjaM7XSx2isDBd0=;
+        b=MavpHZl2VHHSGOxQ78UbqyWSMm8vz5Uhh4b+zzq1WUaOouTr79yv15/1l0W6EC5DXW
+         1xnOCuQ4S+c2MWChUOwf71WTYPGP9g/uzuFLf8sUwucWIvuipo1wVLiblUaL1goEuRUx
+         3e5JYJUe8n4ML1HP5ritEfXT58fkKqcEstwPQIqbdOyPWijvC/FmK6m4w7NVBBrHuqs+
+         EqAiJihHTmeeaQnVxIvAfQMaeP7EJZIu1uk0ztci0vchGZT8s35kyW00Y/iHddAGvewb
+         3iYhpuDm6Hxu7/rkXnttP2tLkhd4hvGvjaR+lU6PFrXo9k1OT5qviA7NsFzaxqAijzZf
+         TxnQ==
+X-Gm-Message-State: AFqh2krO+Nhi7ZtAxjjVZCYsTyM42d6Nvp6mc80wmlq2dEVfY9LhmEcy
+        4BmbHM3mgEEjcJnTS2JlUArElFc2txfzZmkl
+X-Google-Smtp-Source: AMrXdXtlAX9o/eUB+Hgc0EJbaOqzTjq7QYK4ZUmOcuR18O+C6BGDz1K+7DEPi4ZdaPa39hbI0QtMLw==
+X-Received: by 2002:ac8:7216:0:b0:3af:65f5:607b with SMTP id a22-20020ac87216000000b003af65f5607bmr10918197qtp.55.1673470737532;
+        Wed, 11 Jan 2023 12:58:57 -0800 (PST)
+Received: from [192.168.50.134] (99-176-3-182.lightspeed.brhmal.sbcglobal.net. [99.176.3.182])
+        by smtp.gmail.com with ESMTPSA id d15-20020a05620a140f00b006fc92cf4703sm9462260qkj.132.2023.01.11.12.58.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 12:58:57 -0800 (PST)
+Message-ID: <7699e1c6-efe1-ac90-d054-f983d9d46735@gmail.com>
+Date:   Wed, 11 Jan 2023 14:58:56 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y78Wk2/P5+gLMdpk@nvidia.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Bastien Nocera <hadess@hadess.net>
+From:   Walt Holman <waltholman09@gmail.com>
+Subject: [PATCH] HID: hid-logitech-hidpp: Add support for Logitech G923 wheel
+ Xbox Edition (Take 2)
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,139 +74,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023, Jason Gunthorpe wrote:
-> On Wed, Jan 11, 2023 at 07:54:51PM +0000, Sean Christopherson wrote:
-> 
-> > Something feels off.  If KVM's refcount is 0, then accessing device->group->kvm
-> > in vfio_device_open() can't happen unless there's a refcounting bug somewhere.
-> 
-> The problem is in close, not open.
+Hello,
 
-The deadlock problem is, yes.  My point is that if group_lock needs to be taken
-when nullifying group->kvm during kvm_vfio_destroy(), then there is also a refcounting
-prolem with respect to open().  If there is no refcounting problem, then nullifying
-group->kvm during kvm_vfio_destroy() is unnecessary (but again, I doubt this is
-the case).
+This patch adds support for the Logitech G923 Xbox edition steering wheel. This uses the hid-logitech-hidpp kernel module and from my testing, force feedback and all buttons work. This requires the usb_modeswitch application to setup the device in PC mode with a magic string that is the same as the Logitech 920 wheel.
 
-The two things aren't directly related, but it seems possible to solve both while
-making this all slightly less ugly.  Well, at least from KVM's perspective, whether
-or not it'd be an improvement on the VFIO side is definitely debatable.
+Signed-off-by: Walt Holman waltholman09@gmail.com
 
-> Specifically it would be very hard to avoid holding the group_lock
-> during close which is when the put is done.
-> 
-> > Rather than force devices to get KVM references, why not handle that in common
-> > VFIO code and drop KVM refcountin from devices?  Worst case scenario KVM is pinned
-> > by a device that doesn't need KVM but is in a group associated with KVM.  If that's
-> > a concern, it seems easy enough to add a flag to vfio_device_ops to enumerate
-> > whether or not the device depends on KVM.
-> 
-> We can't make cross-dependencies between kvm and core VFIO - it is why
-> so much of this is soo ugly.
-
-Ugh, right, modules for everyone.
-
-> The few device drivers that unavoidably have KVM involvment already
-> have a KVM module dependency, so they can safely do the get/put
-
-Rather than store a "struct kvm *" in vfio_device, what about adding a new set
-of optional ops to get/put KVM references?  Having dedicated KVM ops is gross,
-but IMO it's less gross than backdooring the KVM pointer into open_device() by
-stashing KVM into the device, e.g. it formalizes the VFIO API for devices that
-depend on KVM instead of making devices pinky-swear to grab a reference during
-open_device().
-
-To further harden things, KVM could export only kvm_get_safe_kvm() if there are
-no vendor modules.  I.e. make kvm_get_kvm() an internal-only helper when possible
-and effectively force VFIO devices to use the safe variant.  That would work even
-x86, as kvm_get_kvm() wouldn't be exported if neither KVM_AMD nor KVM_INTEL is
-built as a module.
-
----
- drivers/vfio/vfio_main.c | 20 +++++++++++++-------
- include/linux/vfio.h     |  9 +++++++--
- 2 files changed, 20 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-index 6e8804fe0095..b3a84d65baa6 100644
---- a/drivers/vfio/vfio_main.c
-+++ b/drivers/vfio/vfio_main.c
-@@ -772,7 +772,12 @@ static struct file *vfio_device_open(struct vfio_device *device)
- 		 * reference and release it during close_device.
- 		 */
- 		mutex_lock(&device->group->group_lock);
--		device->kvm = device->group->kvm;
-+
-+		if (device->kvm_ops && device->group->kvm) {
-+			ret = device->kvm_ops->get_kvm(device->group->kvm);
-+			if (ret)
-+				goto err_undo_count;
-+		}
- 
- 		if (device->ops->open_device) {
- 			ret = device->ops->open_device(device);
-@@ -823,8 +828,9 @@ static struct file *vfio_device_open(struct vfio_device *device)
- err_undo_count:
- 	mutex_unlock(&device->group->group_lock);
- 	device->open_count--;
--	if (device->open_count == 0 && device->kvm)
--		device->kvm = NULL;
-+	if (device->open_count == 0 && device->kvm_ops)
-+		device->kvm_ops->put_kvm();
-+
- 	mutex_unlock(&device->dev_set->lock);
- 	module_put(device->dev->driver->owner);
- err_unassign_container:
-@@ -1039,8 +1045,8 @@ static int vfio_device_fops_release(struct inode *inode, struct file *filep)
- 	}
- 	mutex_unlock(&device->group->group_lock);
- 	device->open_count--;
--	if (device->open_count == 0)
--		device->kvm = NULL;
-+	if (device->open_count == 0 && device->kvm_ops)
-+		device->kvm_ops->put_kvm();
- 	mutex_unlock(&device->dev_set->lock);
- 
- 	module_put(device->dev->driver->owner);
-@@ -1656,8 +1662,8 @@ EXPORT_SYMBOL_GPL(vfio_file_enforced_coherent);
-  * @file: VFIO group file
-  * @kvm: KVM to link
-  *
-- * When a VFIO device is first opened the KVM will be available in
-- * device->kvm if one was associated with the group.
-+ * When a VFIO device is first opened, the device's kvm_ops->get_kvm() will be
-+ * invoked with the KVM instance associated with the group (if applicable).
-  */
- void vfio_file_set_kvm(struct file *file, struct kvm *kvm)
- {
-diff --git a/include/linux/vfio.h b/include/linux/vfio.h
-index fdd393f70b19..d6dcbe0546bf 100644
---- a/include/linux/vfio.h
-+++ b/include/linux/vfio.h
-@@ -18,6 +18,11 @@
- 
- struct kvm;
- 
-+struct vfio_device_kvm_ops {
-+	int (*get_kvm)(struct kvm *kvm);
-+	void (*put_kvm)(void);
-+};
-+
- /*
-  * VFIO devices can be placed in a set, this allows all devices to share this
-  * structure and the VFIO core will provide a lock that is held around
-@@ -43,8 +48,8 @@ struct vfio_device {
- 	struct vfio_device_set *dev_set;
- 	struct list_head dev_set_list;
- 	unsigned int migration_flags;
--	/* Driver must reference the kvm during open_device or never touch it */
--	struct kvm *kvm;
-+
-+	const struct vfio_device_kvm_ops *kvm_ops;
- 
- 	/* Members below here are private, not for driver use */
- 	unsigned int index;
-
-base-commit: d52444c7a90fc551b4c3b0bda7d3f0b2ca9fc84d
--- 
-
+diff -uprN linux-6.2-rc3-source/drivers/hid/hid-ids.h linux-6.2-rc3-target/drivers/hid/hid-ids.h
+--- linux-6.2-rc3-source/drivers/hid/hid-ids.h	2023-01-10 15:03:06.000000000 -0600
++++ linux-6.2-rc3-target/drivers/hid/hid-ids.h	2023-01-11 13:19:39.460052754 -0600
+@@ -820,6 +820,7 @@
+  #define USB_DEVICE_ID_LOGITECH_G510_USB_AUDIO	0xc22e
+  #define USB_DEVICE_ID_LOGITECH_G29_WHEEL	0xc24f
+  #define USB_DEVICE_ID_LOGITECH_G920_WHEEL	0xc262
++#define USB_DEVICE_ID_LOGITECH_G923_XBOX_WHEEL	0xc26e
+  #define USB_DEVICE_ID_LOGITECH_WINGMAN_F3D	0xc283
+  #define USB_DEVICE_ID_LOGITECH_FORCE3D_PRO	0xc286
+  #define USB_DEVICE_ID_LOGITECH_FLIGHT_SYSTEM_G940	0xc287
+diff -uprN linux-6.2-rc3-source/drivers/hid/hid-logitech-hidpp.c linux-6.2-rc3-target/drivers/hid/hid-logitech-hidpp.c
+--- linux-6.2-rc3-source/drivers/hid/hid-logitech-hidpp.c	2023-01-10 15:03:06.000000000 -0600
++++ linux-6.2-rc3-target/drivers/hid/hid-logitech-hidpp.c	2023-01-11 13:19:39.460052754 -0600
+@@ -4347,6 +4347,9 @@ static const struct hid_device_id hidpp_
+  	{ /* Logitech G920 Wheel over USB */
+  	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G920_WHEEL),
+  		.driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS},
++	{ /* Logitech G923 Wheel (Xbox version) over USB */
++	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G923_XBOX_WHEEL),
++		.driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS },
+  	{ /* Logitech G Pro Gaming Mouse over USB */
+  	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC088) },
+  
