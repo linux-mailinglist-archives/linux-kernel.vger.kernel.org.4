@@ -2,150 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046596665CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2311D6665DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 22:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbjAKVqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 16:46:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
+        id S235807AbjAKVw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 16:52:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbjAKVqx (ORCPT
+        with ESMTP id S232768AbjAKVwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 16:46:53 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED52E13F69
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:46:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673473610; x=1705009610;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=D4/M42gkAs1Q2kEoWVjkeTqX6yoNR0yPBP0jHxdbCfE=;
-  b=BIpPh1AiQrKcQSGNN6SvT/lBXTMwqkkOed2aDGBD5wYr2ZswjZ6PkVAK
-   4TBJonSlFVcgirDagE5T/OzSs/99kQfs6EvThciK9dwb2cs3cw1oH3QlP
-   7lQ8gy5GGM2BokYA3D+2hCM/dVG5VkCttkst0aqJWLvdR58LdeYSpwYg2
-   zJG+r9gH9p+tZxq2Owa1rv55EJ4tsKe7EI8OKYLCmflU+UGyTNagpncv5
-   eUA+mEEZd5rwUhKN3KUtXWFolxBMmYnmmeWC0P8PK0VlfPyCQB7qQ6BAf
-   FkoBXIEY+c3XFdj2tTFaKJs8eCTNvcHUPIwwJHa3YSHuXeaL5fpCiu9t1
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303239764"
-X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
-   d="scan'208";a="303239764"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 13:46:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="689904552"
-X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
-   d="scan'208";a="689904552"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Jan 2023 13:46:49 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pFivj-0009YU-1U;
-        Wed, 11 Jan 2023 21:46:43 +0000
-Date:   Thu, 12 Jan 2023 05:46:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 40055919c6fec60c40809e5d3480f406ba248379
-Message-ID: <63bf2e1e.XXLZuU5HEuYmKyCC%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 11 Jan 2023 16:52:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D31165FD
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:51:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673473900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rmQhK16s21vxdj+vsmOp1AcpEH/3VrVvL3h8R46Yfuk=;
+        b=eFdTvsyC79OfDM6hAyJMHG8Ykj24Vo99QnhUY6CVpKcv2KkxZVYYnIB2jP3vSqZ1zbJjM2
+        FAwIGkaJ8D31zeeI2Av1t0mzoAQBnyJCZT8VF/AG3zDy98MeVN+ZQAUXQeP0aPyVnFG2tw
+        wp0JnWvF62rRZFFTMTEd4rgO8t0KZDI=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-79-UQvt00XWOXes1uGJ3PA_lw-1; Wed, 11 Jan 2023 16:51:39 -0500
+X-MC-Unique: UQvt00XWOXes1uGJ3PA_lw-1
+Received: by mail-qv1-f69.google.com with SMTP id qf9-20020a0562144b8900b004c71efc3528so9078071qvb.22
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 13:51:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rmQhK16s21vxdj+vsmOp1AcpEH/3VrVvL3h8R46Yfuk=;
+        b=4ttGYHe6OzkoLHLecM9SFGcXZlG5E+9DIRNtswxrLeS1jUiDvRevNL8/6rdMRZp8t4
+         TlxrEaOMb1/GknSl5QE8/iMeSo7p0M72wwsTD28wt7dBq8I6hF7KrsOfM6hFvT6oO512
+         hCkhnFkfGLmWfMu+kZnWVGIq/donYcAOkQrKC65ndaZ/PU8k/0P012LIfg2v9Qxv8j8O
+         LXC7anF0mfF0MpJAV2PX/A8xFQQRBBOilo9CmXHxxUsuc9CJhe6KeELqZWanRTXbCNWi
+         WoIN7y5mPcG4mCz9UHtr/wjG4oUZiRcPd/Z4kqYzvgYAnIj6wAzs4w8XXI/IWsLVojUC
+         0wIw==
+X-Gm-Message-State: AFqh2kqDJjfGTodW+YtCSO6iIZC69iGv4DbpGXX38kSMN9N8K4oQ+ahB
+        UeMmCQvYdkMM5+c7lmDP1APFirEwP6+dtDeVQdQHRVHyCsjYf4luKyBf/A2Fn7HH6eGByRiBtLK
+        Xd7W3L1O3AAu5tMsvKlW1J6Mw
+X-Received: by 2002:a05:6214:2b94:b0:532:1944:769 with SMTP id kr20-20020a0562142b9400b0053219440769mr29747857qvb.18.1673473899082;
+        Wed, 11 Jan 2023 13:51:39 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu9e84AKdKTSOdZm66j992VQ2/CKaO9nQMHR17/gjpvXtnlgiyK/YZsRNZNiSYFEg4dRdXicg==
+X-Received: by 2002:a05:6214:2b94:b0:532:1944:769 with SMTP id kr20-20020a0562142b9400b0053219440769mr29747826qvb.18.1673473898789;
+        Wed, 11 Jan 2023 13:51:38 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id j20-20020a05620a289400b006fed58fc1a3sm9728529qkp.119.2023.01.11.13.51.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 13:51:38 -0800 (PST)
+Date:   Wed, 11 Jan 2023 16:51:36 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 13/46] hugetlb: add hugetlb_hgm_walk and hugetlb_walk_step
+Message-ID: <Y78vaNW10X6vUKjA@x1n>
+References: <20230105101844.1893104-1-jthoughton@google.com>
+ <20230105101844.1893104-14-jthoughton@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230105101844.1893104-14-jthoughton@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 40055919c6fec60c40809e5d3480f406ba248379  Merge branch into tip/master: 'x86/platform'
+On Thu, Jan 05, 2023 at 10:18:11AM +0000, James Houghton wrote:
 
-elapsed time: 724m
+[...]
 
-configs tested: 68
-configs skipped: 2
+> +static int hugetlb_hgm_walk_uninit(struct hugetlb_pte *hpte,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Nitpick on the name: the "uninit" can be misread into pairing with some
+other "init()" calls..
 
-gcc tested configs:
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-arc                                 defconfig
-x86_64                           rhel-8.3-kvm
-s390                             allmodconfig
-alpha                               defconfig
-x86_64                            allnoconfig
-s390                                defconfig
-s390                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                                defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                              defconfig
-x86_64                               rhel-8.3
-arc                  randconfig-r043-20230110
-ia64                             allmodconfig
-alpha                            allyesconfig
-x86_64                        randconfig-a015
-m68k                             allyesconfig
-s390                 randconfig-r044-20230110
-m68k                             allmodconfig
-x86_64                           allyesconfig
-arc                              allyesconfig
-riscv                randconfig-r042-20230110
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a014
-i386                          randconfig-a012
-arm                                 defconfig
-i386                          randconfig-a005
-i386                          randconfig-a016
-i386                             allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-microblaze                      mmu_defconfig
-arm                           tegra_defconfig
-loongarch                 loongson3_defconfig
-parisc                           allyesconfig
-powerpc                      pasemi_defconfig
-mips                       bmips_be_defconfig
+How about just call it hugetlb_hgm_walk (since it's the higher level API
+comparing to the existing one)?  Then the existing hugetlb_hgm_walk can be
+called hugetlb_hgm_do_walk/__hugetlb_hgm_walk since it's one level down.
 
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-hexagon              randconfig-r041-20230110
-arm                  randconfig-r046-20230110
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20230110
-x86_64                          rhel-8.3-rust
-i386                          randconfig-a002
-i386                          randconfig-a013
-i386                          randconfig-a004
-i386                          randconfig-a011
-i386                          randconfig-a015
-i386                          randconfig-a006
+> +				   pte_t *ptep,
+> +				   struct vm_area_struct *vma,
+> +				   unsigned long addr,
+> +				   unsigned long target_sz,
+> +				   bool alloc)
+> +{
+> +	struct hstate *h = hstate_vma(vma);
+> +
+> +	hugetlb_pte_populate(vma->vm_mm, hpte, ptep, huge_page_shift(h),
+> +			     hpage_size_to_level(huge_page_size(h)));
+
+Another nitpick on name: I remembered we used to reach a consensus of using
+hugetlb_pte_init before?  Can we still avoid the word "populate" (if "init"
+is not suitable since it can be updated during stepping, how about "setup")?
+
+[...]
+
+> +int hugetlb_walk_step(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> +		      unsigned long addr, unsigned long sz)
+> +{
+> +	pte_t *ptep;
+> +	spinlock_t *ptl;
+> +
+> +	switch (hpte->level) {
+> +	case HUGETLB_LEVEL_PUD:
+> +		ptep = (pte_t *)hugetlb_alloc_pmd(mm, hpte, addr);
+> +		if (IS_ERR(ptep))
+> +			return PTR_ERR(ptep);
+> +		hugetlb_pte_populate(mm, hpte, ptep, PMD_SHIFT,
+> +				     HUGETLB_LEVEL_PMD);
+> +		break;
+> +	case HUGETLB_LEVEL_PMD:
+> +		ptep = hugetlb_alloc_pte(mm, hpte, addr);
+> +		if (IS_ERR(ptep))
+> +			return PTR_ERR(ptep);
+> +		ptl = pte_lockptr(mm, (pmd_t *)hpte->ptep);
+> +		__hugetlb_pte_populate(hpte, ptep, PAGE_SHIFT,
+> +				       HUGETLB_LEVEL_PTE, ptl);
+> +		hpte->ptl = ptl;
+
+This line seems to be superfluous (even if benign).
+
+> +		break;
+> +	default:
+> +		WARN_ONCE(1, "%s: got invalid level: %d (shift: %d)\n",
+> +				__func__, hpte->level, hpte->shift);
+> +		return -EINVAL;
+> +	}
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Return a mask that can be used to update an address to the last huge
+>   * page in a page table page mapping size.  Used to skip non-present
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Peter Xu
+
