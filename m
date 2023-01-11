@@ -2,262 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707686654F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 08:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693BB665312
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 06:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjAKHAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 02:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
+        id S232465AbjAKFDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 00:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjAKHAS (ORCPT
+        with ESMTP id S233452AbjAKFDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 02:00:18 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD31A2DDA
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 23:00:16 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id b17so8324418pld.7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 Jan 2023 23:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yNcGHeECqDQtB1BPvR98d72LqRmvpgPjIP0nqQX8lsE=;
-        b=ejhJ3Zj+f0SekNfLrwQnnSDuizXNOfW4s4MWkbAPLJeB2pyADBImtH8IMTDb4BB4/U
-         gb7FJBRXBuo4tvALZKoV76/mAMWLTPWs2CqrR66wPJFc+pQE8N6dWkvkGjwZADJsdWBL
-         g+od9HUm7lh6cTyYLFzL3C/vp+2TUZ16sYU9lnf3GpCENCS9/kA7C5v5HHF7/HcHcuS8
-         0jBYivY71PRdtqaaIv8CwbLlb+ChgFevVCbfCN3l9WLYk46Br/I2Nd92beIa9swgWssT
-         bHNSddtvhYtGh5i+4ksMzsdPrIPbLnZppZTNzIjZfr9PEUNn52cl9QkP78vWTD01Z9nx
-         QnuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yNcGHeECqDQtB1BPvR98d72LqRmvpgPjIP0nqQX8lsE=;
-        b=Cm8W8tIX441O2p/oTiIPm41WVqpEYsgONmX4TM65Em1r77+zcsFdhVE0XbBuYY7fp+
-         hmpY1GsAoF3fktGWcOedzeqxPI/jablIoNE3l0rI+38/sRU1NGnRAXY6eiqYL4CpKOL9
-         ujHLtStCL3bQZoJZg4rBvt88AsjBzYJ85IodiCrxolgtgQwpyi2MsadyOdSIubZZsxz3
-         ljt0iI+9jZJEpXD1wneV1tIKhcEPKwBU5WjcFnY4u8dkhvsP+BaVLOmBeus+TjlRLUYP
-         FnrZDHkVt2x0LG/F0MKpEdtPkNFHVIAwHvsaVIuGmbpH4XAOinSUvjKqYlZsO7Tu11d0
-         IDSw==
-X-Gm-Message-State: AFqh2krUUWro6mc2n8POsqAOfakl8iUd2nGkgeH6eZo54vQoqGE9y+Xb
-        WukFdkFmqDKXPrAHYhv/PO7Kmw==
-X-Google-Smtp-Source: AMrXdXumy3ecW/9eHoAvTe5Y6+o43clkz9MjRFV9H9TTK1oKsgD42Q7rksvila0shf2og10+yZTUYw==
-X-Received: by 2002:a05:6a20:9589:b0:b0:2070:2ef5 with SMTP id iu9-20020a056a20958900b000b020702ef5mr87433323pzb.22.1673420416321;
-        Tue, 10 Jan 2023 23:00:16 -0800 (PST)
-Received: from PF2E59YH-BKX.inc.bytedance.com ([61.213.176.12])
-        by smtp.gmail.com with ESMTPSA id x3-20020aa79563000000b005769cee6735sm9211463pfq.43.2023.01.10.23.00.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 23:00:15 -0800 (PST)
-From:   Yunhui Cui <cuiyunhui@bytedance.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        kuniyu@amazon.com, xiyou.wangcong@gmail.com,
-        duanxiongchun@bytedance.com, cuiyunhui@bytedance.com,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, dust.li@linux.alibaba.com
-Subject: [PATCH v6] sock: add tracepoint for send recv length
-Date:   Wed, 11 Jan 2023 14:59:30 +0800
-Message-Id: <20230111065930.1494-1-cuiyunhui@bytedance.com>
-X-Mailer: git-send-email 2.37.3.windows.1
+        Wed, 11 Jan 2023 00:03:34 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211E7CE3A;
+        Tue, 10 Jan 2023 21:03:32 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NsFv152Q5z4f3p0f;
+        Wed, 11 Jan 2023 13:03:25 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP1 (Coremail) with SMTP id cCh0CgDX9S8fQ75jGl2gBQ--.10280S2;
+        Wed, 11 Jan 2023 13:03:28 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     hch@lst.de, axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
+        ming.lei@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     john.garry@huawei.com, jack@suse.cz
+Subject: [PATCH v3 00/14] A few bugfix and cleanup patches for blk-mq
+Date:   Wed, 11 Jan 2023 21:01:45 +0800
+Message-Id: <20230111130159.3741753-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CM-TRANSID: cCh0CgDX9S8fQ75jGl2gBQ--.10280S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF1xXF4kAFW8Jw4xAry7Jrb_yoW8uryrpF
+        W3Ka13Gw4fXr17Xw1Syw47ZF9ayws7GrW7Xw13G3s5Xr4DCr18Gr4Iqa1fAFy0yFZ5Ca17
+        JF4Fv345KF1v937anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
+        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E
+        3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r
+        xl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
+        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z2
+        80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j7NVkUUUUU=
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 2 tracepoints to monitor the tcp/udp traffic
-of per process and per cgroup.
+Hi, this series contain several bugfix patches to fix potential io
+hung and a few cleanup patches to remove stale codes and unnecessary
+check. Most changes are in request issue and dispatch path. Thanks.
 
-Regarding monitoring the tcp/udp traffic of each process, there are two
-existing solutions, the first one is https://www.atoptool.nl/netatop.php.
-The second is via kprobe/kretprobe.
-
-Netatop solution is implemented by registering the hook function at the
-hook point provided by the netfilter framework.
-
-These hook functions may be in the soft interrupt context and cannot
-directly obtain the pid. Some data structures are added to bind packets
-and processes. For example, struct taskinfobucket, struct taskinfo ...
-
-Every time the process sends and receives packets it needs multiple
-hashmaps,resulting in low performance and it has the problem fo inaccurate
-tcp/udp traffic statistics(for example: multiple threads share sockets).
-
-We can obtain the information with kretprobe, but as we know, kprobe gets
-the result by trappig in an exception, which loses performance compared
-to tracepoint.
-
-We compared the performance of tracepoints with the above two methods, and
-the results are as follows:
-
-ab -n 1000000 -c 1000 -r http://127.0.0.1/index.html
-without trace:
-Time per request: 39.660 [ms] (mean)
-Time per request: 0.040 [ms] (mean, across all concurrent requests)
-
-netatop:
-Time per request: 50.717 [ms] (mean)
-Time per request: 0.051 [ms] (mean, across all concurrent requests)
-
-kr:
-Time per request: 43.168 [ms] (mean)
-Time per request: 0.043 [ms] (mean, across all concurrent requests)
-
-tracepoint:
-Time per request: 41.004 [ms] (mean)
-Time per request: 0.041 [ms] (mean, across all concurrent requests
-
-It can be seen that tracepoint has better performance.
-
-Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
-Signed-off-by: Xiongchun Duan <duanxiongchun@bytedance.com>
 ---
- include/trace/events/sock.h | 45 +++++++++++++++++++++++++++++++++++++
- net/socket.c                | 33 +++++++++++++++++++++++----
- 2 files changed, 74 insertions(+), 4 deletions(-)
+V3:
+ -Collect Reviewed-by from Christoph
+ -Add new patch "blk-mq: make blk_mq_commit_rqs a general function for all
+commits" suggested-by Christoph
+ -Move patch "blk-mq: remove unncessary from_schedule parameter in
+blk_mq_plug_issue_direct" forwad. This is because of some abandoned
+work, no influence anyway. No special attention should be paied.
+ -Make patch based on rewriten blk_mq_commit_rqs.
 
-diff --git a/include/trace/events/sock.h b/include/trace/events/sock.h
-index 777ee6cbe933..71492e8276da 100644
---- a/include/trace/events/sock.h
-+++ b/include/trace/events/sock.h
-@@ -263,6 +263,51 @@ TRACE_EVENT(inet_sk_error_report,
- 		  __entry->error)
- );
- 
-+/*
-+ * sock send/recv msg length
-+ */
-+DECLARE_EVENT_CLASS(sock_msg_length,
-+
-+	TP_PROTO(struct sock *sk, int ret, int flags),
-+
-+	TP_ARGS(sk, ret, flags),
-+
-+	TP_STRUCT__entry(
-+		__field(void *, sk)
-+		__field(__u16, family)
-+		__field(__u16, protocol)
-+		__field(int, ret)
-+		__field(int, flags)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->sk = sk;
-+		__entry->family = sk->sk_family;
-+		__entry->protocol = sk->sk_protocol;
-+		__entry->ret = ret;
-+		__entry->flags = flags;
-+	),
-+
-+	TP_printk("sk address = %p, family = %s protocol = %s, length = %d, error = %d, flags = 0x%x",
-+		  __entry->sk, show_family_name(__entry->family),
-+		  show_inet_protocol_name(__entry->protocol),
-+		  !(__entry->flags & MSG_PEEK) ?
-+		  (__entry->ret > 0 ? __entry->ret : 0) : 0,
-+		  __entry->ret < 0 ? __entry->ret : 0,
-+		  __entry->flags)
-+);
-+
-+DEFINE_EVENT(sock_msg_length, sock_send_length,
-+	TP_PROTO(struct sock *sk, int ret, int flags),
-+
-+	TP_ARGS(sk, ret, flags)
-+);
-+
-+DEFINE_EVENT(sock_msg_length, sock_recv_length,
-+	TP_PROTO(struct sock *sk, int ret, int flags),
-+
-+	TP_ARGS(sk, ret, flags)
-+);
- #endif /* _TRACE_SOCK_H */
- 
- /* This part must be outside protection */
-diff --git a/net/socket.c b/net/socket.c
-index 888cd618a968..77626e4d9690 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -106,6 +106,7 @@
- #include <net/busy_poll.h>
- #include <linux/errqueue.h>
- #include <linux/ptp_clock_kernel.h>
-+#include <trace/events/sock.h>
- 
- #ifdef CONFIG_NET_RX_BUSY_POLL
- unsigned int sysctl_net_busy_read __read_mostly;
-@@ -709,12 +710,22 @@ INDIRECT_CALLABLE_DECLARE(int inet_sendmsg(struct socket *, struct msghdr *,
- 					   size_t));
- INDIRECT_CALLABLE_DECLARE(int inet6_sendmsg(struct socket *, struct msghdr *,
- 					    size_t));
-+
-+static noinline void call_trace_sock_send_length(struct sock *sk, int ret,
-+						 int flags)
-+{
-+	trace_sock_send_length(sk, ret, 0);
-+}
-+
- static inline int sock_sendmsg_nosec(struct socket *sock, struct msghdr *msg)
- {
- 	int ret = INDIRECT_CALL_INET(sock->ops->sendmsg, inet6_sendmsg,
- 				     inet_sendmsg, sock, msg,
- 				     msg_data_left(msg));
- 	BUG_ON(ret == -EIOCBQUEUED);
-+
-+	if (trace_sock_send_length_enabled())
-+		call_trace_sock_send_length(sock->sk, ret, 0);
- 	return ret;
- }
- 
-@@ -989,12 +1000,21 @@ INDIRECT_CALLABLE_DECLARE(int inet_recvmsg(struct socket *, struct msghdr *,
- 					   size_t, int));
- INDIRECT_CALLABLE_DECLARE(int inet6_recvmsg(struct socket *, struct msghdr *,
- 					    size_t, int));
-+
-+static noinline void call_trace_sock_recv_length(struct sock *sk, int ret, int flags)
-+{
-+	trace_sock_recv_length(sk, ret, flags);
-+}
-+
- static inline int sock_recvmsg_nosec(struct socket *sock, struct msghdr *msg,
- 				     int flags)
- {
--	return INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
--				  inet_recvmsg, sock, msg, msg_data_left(msg),
--				  flags);
-+	int ret = INDIRECT_CALL_INET(sock->ops->recvmsg, inet6_recvmsg,
-+				     inet_recvmsg, sock, msg,
-+				     msg_data_left(msg), flags);
-+	if (trace_sock_recv_length_enabled())
-+		call_trace_sock_recv_length(sock->sk, ret, flags);
-+	return ret;
- }
- 
- /**
-@@ -1044,6 +1064,7 @@ static ssize_t sock_sendpage(struct file *file, struct page *page,
- {
- 	struct socket *sock;
- 	int flags;
-+	int ret;
- 
- 	sock = file->private_data;
- 
-@@ -1051,7 +1072,11 @@ static ssize_t sock_sendpage(struct file *file, struct page *page,
- 	/* more is a combination of MSG_MORE and MSG_SENDPAGE_NOTLAST */
- 	flags |= more;
- 
--	return kernel_sendpage(sock, page, offset, size, flags);
-+	ret = kernel_sendpage(sock, page, offset, size, flags);
-+
-+	if (trace_sock_send_length_enabled())
-+		call_trace_sock_send_length(sock->sk, ret, 0);
-+	return ret;
- }
- 
- static ssize_t sock_splice_read(struct file *file, loff_t *ppos,
+V2:
+ -Thanks Christoph for review and there are two fixes in v2 according
+to recommends from Christoph.
+  1)Avoid overly long line in patch "blk-mq: avoid sleep in
+blk_mq_alloc_request_hctx"
+  2)Check BLK_MQ_REQ_NOWAIT and BLK_MQ_REQ_RESERVED in two WARN_ON_ONCE
+---
+
+Kemeng Shi (14):
+  blk-mq: avoid sleep in blk_mq_alloc_request_hctx
+  blk-mq: remove stale comment for blk_mq_sched_mark_restart_hctx
+  blk-mq: wait on correct sbitmap_queue in blk_mq_mark_tag_wait
+  blk-mq: Fix potential io hung for shared sbitmap per tagset
+  blk-mq: remove unnecessary list_empty check in
+    blk_mq_try_issue_list_directly
+  blk-mq: remove unncessary from_schedule parameter in
+    blk_mq_plug_issue_direct
+  blk-mq: make blk_mq_commit_rqs a general function for all commits
+  blk-mq: remove unncessary error count and commit in
+    blk_mq_plug_issue_direct
+  blk-mq: use blk_mq_commit_rqs helper in blk_mq_try_issue_list_directly
+  blk-mq: simplify flush check in blk_mq_dispatch_rq_list
+  blk-mq: remove unnecessary error count and check in
+    blk_mq_dispatch_rq_list
+  blk-mq: remove set of bd->last when get driver tag for next request
+    fails
+  blk-mq: use switch/case to improve readability in
+    blk_mq_try_issue_list_directly
+  blk-mq: correct stale comment of .get_budget
+
+ block/blk-mq-sched.c |   7 +--
+ block/blk-mq.c       | 147 ++++++++++++++++++++-----------------------
+ 2 files changed, 71 insertions(+), 83 deletions(-)
+
 -- 
-2.20.1
+2.30.0
 
