@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575F46662E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5086662E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 19:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235035AbjAKSiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 13:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
+        id S235155AbjAKSjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 13:39:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234534AbjAKSis (ORCPT
+        with ESMTP id S229578AbjAKSj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:38:48 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006A714007;
-        Wed, 11 Jan 2023 10:38:47 -0800 (PST)
-Date:   Wed, 11 Jan 2023 18:38:45 -0000
+        Wed, 11 Jan 2023 13:39:28 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8854114007;
+        Wed, 11 Jan 2023 10:39:27 -0800 (PST)
+Date:   Wed, 11 Jan 2023 18:39:25 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673462326;
+        s=2020; t=1673462366;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p8y8nobWxJCXxABHliZ6sNM8bCx6NZKVFz9SwmPoCrQ=;
-        b=bJppQ4+5qgJcHNToETLOWI0fnwbdB0QsXaPx3UeLFdg1Ozm+rj8QmcX4WHsaO8jl1baQDG
-        OgVmLo+wKewLI7K13pwiTDKeIn3V6EVrAhcLRp+gU+Dpw8EPPiVGZKa5ImWDF094iAJ8l/
-        lUJrtxke6l0xx4qmiWzr9s/codS3ykGLjieHqmElM2pfKfY+pz86Ffqtj69Tang19qn/qo
-        3fgReC3VbFtp6yYK+M2RKIDnfszQckHcAWGLHrYmAOqDbYjUQ94gtxkTnShQGvqCG/VB+V
-        CiWuN6LuorE+43OUWWypP9cD9+0HZtJ7adbRTLSFWYgZfHd16M2sxxwylTUNzQ==
+        bh=3G9j0KCQrJ9qzbie1aavXreNhv7IA4pk96ICTRrRB6Y=;
+        b=dROs6o1qFLgwsrL36waWfOxi2wrk6sDEUvL0Oo7Ord/HYVT65iy0ilO2h+ZytU1P4W+HjN
+        0JxTwpp/gLE0qfNAvr8JPZ8K6YiNVpZQzwDR/F3tvWFTiCGjyADC/ju408DtKwXNj6kSTy
+        fRBD+3ZQoWwNbALIpG4L1YQSHVLVHE8BgeszY8KvmF2lDEcAF/dannW3jNhK6gbsOt/Fd+
+        IiyyrI0idZHY0lfcRSuhQAnpmZe25sY7FnMgdzAFOxbC3fazPN75TU+fN3rdn7uOEU0Bsp
+        LQQS9ZoxjhhzKFXFLqMOIVOoxZRu619QBWTwjZCdVIrNwE21HMw56za7OYpiQQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673462326;
+        s=2020e; t=1673462366;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p8y8nobWxJCXxABHliZ6sNM8bCx6NZKVFz9SwmPoCrQ=;
-        b=RH4yXX5IdR2kk9r3Qkrbrek4InvKcH87oft2+4swQysIdmTfn5sAVDB9+XnBsQjvgabbHd
-        pvmVsEDmcJ5ij5Cw==
-From:   "tip-bot2 for Manfred Spraul" <tip-bot2@linutronix.de>
+        bh=3G9j0KCQrJ9qzbie1aavXreNhv7IA4pk96ICTRrRB6Y=;
+        b=8ebpNRgtn08mvIWs2dngzDcz3CAgO4kf/2irMRv3q4/wWcc5ujPnegniJt9yPjzbmqsak6
+        g90OBWy5phiBZFAg==
+From:   "tip-bot2 for Jann Horn" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] genirq: Add might_sleep() to disable_irq()
-Cc:     Manfred Spraul <manfred@colorfullife.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20221216150441.200533-3-manfred@colorfullife.com>
-References: <20221216150441.200533-3-manfred@colorfullife.com>
+Subject: [tip: timers/core] timers: Prevent union confusion from unexpected
+ restart_syscall()
+Cc:     Jann Horn <jannh@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230105134403.754986-1-jannh@google.com>
+References: <20230105134403.754986-1-jannh@google.com>
 MIME-Version: 1.0
-Message-ID: <167346232582.4906.17142708908609012375.tip-bot2@tip-bot2>
+Message-ID: <167346236586.4906.18034926965503097572.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -64,50 +64,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/core branch of tip:
+The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     17549b0f184d870f2cfa4e5cfa79f4c4905ed757
-Gitweb:        https://git.kernel.org/tip/17549b0f184d870f2cfa4e5cfa79f4c4905ed757
-Author:        Manfred Spraul <manfred@colorfullife.com>
-AuthorDate:    Fri, 16 Dec 2022 16:04:41 +01:00
+Commit-ID:     9f76d59173d9d146e96c66886b671c1915a5c5e5
+Gitweb:        https://git.kernel.org/tip/9f76d59173d9d146e96c66886b671c1915a5c5e5
+Author:        Jann Horn <jannh@google.com>
+AuthorDate:    Thu, 05 Jan 2023 14:44:03 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Wed, 11 Jan 2023 19:35:13 +01:00
+CommitterDate: Wed, 11 Jan 2023 19:31:47 +01:00
 
-genirq: Add might_sleep() to disable_irq()
+timers: Prevent union confusion from unexpected restart_syscall()
 
-With the introduction of threaded interrupt handlers, it is virtually
-never safe to call disable_irq() from non-premptible context.
+The nanosleep syscalls use the restart_block mechanism, with a quirk:
+The `type` and `rmtp`/`compat_rmtp` fields are set up unconditionally on
+syscall entry, while the rest of the restart_block is only set up in the
+unlikely case that the syscall is actually interrupted by a signal (or
+pseudo-signal) that doesn't have a signal handler.
 
-Thus: Update the documentation, add an explicit might_sleep() to catch any
-offenders. This is more obvious and straight forward than the implicit
-might_sleep() check deeper down in the disable_irq() call chain.
+If the restart_block was set up by a previous syscall (futex(...,
+FUTEX_WAIT, ...) or poll()) and hasn't been invalidated somehow since then,
+this will clobber some of the union fields used by futex_wait_restart() and
+do_restart_poll().
 
-Fixes: 3aa551c9b4c4 ("genirq: add threaded interrupt handler support")
-Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
+If userspace afterwards wrongly calls the restart_syscall syscall,
+futex_wait_restart()/do_restart_poll() will read struct fields that have
+been clobbered.
+
+This doesn't actually lead to anything particularly interesting because
+none of the union fields contain trusted kernel data, and
+futex(..., FUTEX_WAIT, ...) and poll() aren't syscalls where it makes much
+sense to apply seccomp filters to their arguments.
+
+So the current consequences are just of the "if userspace does bad stuff,
+it can damage itself, and that's not a problem" flavor.
+
+But still, it seems like a hazard for future developers, so invalidate the
+restart_block when partly setting it up in the nanosleep syscalls.
+
+Signed-off-by: Jann Horn <jannh@google.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20221216150441.200533-3-manfred@colorfullife.com
-
-
+Link: https://lore.kernel.org/r/20230105134403.754986-1-jannh@google.com
 ---
- kernel/irq/manage.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ kernel/time/hrtimer.c      | 2 ++
+ kernel/time/posix-stubs.c  | 2 ++
+ kernel/time/posix-timers.c | 2 ++
+ 3 files changed, 6 insertions(+)
 
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index 5b7cf28..8ce7549 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -723,10 +723,13 @@ EXPORT_SYMBOL(disable_irq_nosync);
-  *	to complete before returning. If you use this function while
-  *	holding a resource the IRQ handler may need you will deadlock.
-  *
-- *	This function may be called - with care - from IRQ context.
-+ *	Can only be called from preemptible code as it might sleep when
-+ *	an interrupt thread is associated to @irq.
-+ *
-  */
- void disable_irq(unsigned int irq)
- {
-+	might_sleep();
- 	if (!__disable_irq_nosync(irq))
- 		synchronize_irq(irq);
- }
+diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
+index 3ae661a..e4f0e3b 100644
+--- a/kernel/time/hrtimer.c
++++ b/kernel/time/hrtimer.c
+@@ -2126,6 +2126,7 @@ SYSCALL_DEFINE2(nanosleep, struct __kernel_timespec __user *, rqtp,
+ 	if (!timespec64_valid(&tu))
+ 		return -EINVAL;
+ 
++	current->restart_block.fn = do_no_restart_syscall;
+ 	current->restart_block.nanosleep.type = rmtp ? TT_NATIVE : TT_NONE;
+ 	current->restart_block.nanosleep.rmtp = rmtp;
+ 	return hrtimer_nanosleep(timespec64_to_ktime(tu), HRTIMER_MODE_REL,
+@@ -2147,6 +2148,7 @@ SYSCALL_DEFINE2(nanosleep_time32, struct old_timespec32 __user *, rqtp,
+ 	if (!timespec64_valid(&tu))
+ 		return -EINVAL;
+ 
++	current->restart_block.fn = do_no_restart_syscall;
+ 	current->restart_block.nanosleep.type = rmtp ? TT_COMPAT : TT_NONE;
+ 	current->restart_block.nanosleep.compat_rmtp = rmtp;
+ 	return hrtimer_nanosleep(timespec64_to_ktime(tu), HRTIMER_MODE_REL,
+diff --git a/kernel/time/posix-stubs.c b/kernel/time/posix-stubs.c
+index 90ea5f3..828aeec 100644
+--- a/kernel/time/posix-stubs.c
++++ b/kernel/time/posix-stubs.c
+@@ -147,6 +147,7 @@ SYSCALL_DEFINE4(clock_nanosleep, const clockid_t, which_clock, int, flags,
+ 		return -EINVAL;
+ 	if (flags & TIMER_ABSTIME)
+ 		rmtp = NULL;
++	current->restart_block.fn = do_no_restart_syscall;
+ 	current->restart_block.nanosleep.type = rmtp ? TT_NATIVE : TT_NONE;
+ 	current->restart_block.nanosleep.rmtp = rmtp;
+ 	texp = timespec64_to_ktime(t);
+@@ -240,6 +241,7 @@ SYSCALL_DEFINE4(clock_nanosleep_time32, clockid_t, which_clock, int, flags,
+ 		return -EINVAL;
+ 	if (flags & TIMER_ABSTIME)
+ 		rmtp = NULL;
++	current->restart_block.fn = do_no_restart_syscall;
+ 	current->restart_block.nanosleep.type = rmtp ? TT_COMPAT : TT_NONE;
+ 	current->restart_block.nanosleep.compat_rmtp = rmtp;
+ 	texp = timespec64_to_ktime(t);
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 5dead89..0c8a87a 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -1270,6 +1270,7 @@ SYSCALL_DEFINE4(clock_nanosleep, const clockid_t, which_clock, int, flags,
+ 		return -EINVAL;
+ 	if (flags & TIMER_ABSTIME)
+ 		rmtp = NULL;
++	current->restart_block.fn = do_no_restart_syscall;
+ 	current->restart_block.nanosleep.type = rmtp ? TT_NATIVE : TT_NONE;
+ 	current->restart_block.nanosleep.rmtp = rmtp;
+ 
+@@ -1297,6 +1298,7 @@ SYSCALL_DEFINE4(clock_nanosleep_time32, clockid_t, which_clock, int, flags,
+ 		return -EINVAL;
+ 	if (flags & TIMER_ABSTIME)
+ 		rmtp = NULL;
++	current->restart_block.fn = do_no_restart_syscall;
+ 	current->restart_block.nanosleep.type = rmtp ? TT_COMPAT : TT_NONE;
+ 	current->restart_block.nanosleep.compat_rmtp = rmtp;
+ 
