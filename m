@@ -2,166 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2549766670F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FBF666711
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 00:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbjAKXS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 18:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
+        id S233869AbjAKXTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 18:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235824AbjAKXS0 (ORCPT
+        with ESMTP id S230281AbjAKXTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 18:18:26 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2085.outbound.protection.outlook.com [40.107.101.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C077A3C0FB;
-        Wed, 11 Jan 2023 15:18:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gtnBhywwfgZb8i8ejOitZiZJJsJwRy72HiL9f26f/lxZYQp3cH9DyJuWwywsU+mdKr0htQ0MYXdZKX/zCbnaqPROj4Wko6+wbxdItP1HUV0k0fMquw9TptbchqVs44pwMwgD0IAu4j4mwx1SsOfAox3/xwB5WSQ2WKuI5UH1f/lH58O3J2FVMU/qt79TRuI/20jI4kdkJcBNf0RVgzv/Q+5nAD04MFVHk0suFgX03TRdNUFCAUJsxF7+C7ycnjoiNxevx0/MXZvK2WM3JC/XyGAL1Od9q2hzBKGvRpoazwPHQvfRUz5b5Vh93Icvp5oZObW19Fja/CEmnSaH/mDtFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2EFJ4M8HhmT2IWsebnxl2ZlGqs3m5zKvHtC/Sj4bzeg=;
- b=bIxZJgzCTI6Hz3efpmSBSXkKBSDC8Q47r8nzeuLg0ri2RyYZIUxV26ZTuZc4D54L6gAS40khTAuvt57gnAZJzQHwF0tBkYg3NInTZmvX11pFG+LfTexS3rCPu7bA8nwZP8LEsqip8SUNjhzIdtjlWj71hvqYj1Vx6GsERAZza6LBnmyBYkGdmnwLJ7u8RU+1h7KHmKlnNvIXlVFASM1mLtl2Qg6fWh2NUGIFB60vZyZaPF3h1JRP28ZJlirXX9He44EcyNfIaY7FYVTQbh1NSWPyEyLGBLAZNixxxkRjBA9tS2jwaUOTkaKDp7Adj57wdPG+IzQqgIme03FsXfAS8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2EFJ4M8HhmT2IWsebnxl2ZlGqs3m5zKvHtC/Sj4bzeg=;
- b=A9wYf1UEZLAQ7wKq6iV3lys1qiRz8VRXi7TKlhJznbXcLx5Yp+r4h88vpUzKM+HWaWfdUqWrRqJCJ96943BrHdy1xIxe/zLsPS4c71NoinTZHTd7sm8fmTwez5T5s/hLIxupPlnken9U09MyaoVz4So6lq0SQqe2ZchDbn+5ovY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by PH0PR12MB8049.namprd12.prod.outlook.com (2603:10b6:510:28f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Wed, 11 Jan
- 2023 23:18:22 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::5317:fa3f:5cbe:45e9]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::5317:fa3f:5cbe:45e9%3]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 23:18:22 +0000
-Message-ID: <0a8727f0-d3fd-f842-e050-bbfbb72b5728@amd.com>
-Date:   Wed, 11 Jan 2023 17:18:16 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH RFC v7 40/64] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_FINISH
- command
-Content-Language: en-US
-To:     Sabin Rapan <sabrapan@amazon.com>,
-        Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
-Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, harald@profian.com,
-        Brijesh Singh <brijesh.singh@amd.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-41-michael.roth@amd.com>
- <cc2998c8-1d18-caa7-0421-584c08406847@amazon.com>
-From:   "Kalra, Ashish" <ashish.kalra@amd.com>
-In-Reply-To: <cc2998c8-1d18-caa7-0421-584c08406847@amazon.com>
+        Wed, 11 Jan 2023 18:19:30 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C973C0C2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 15:19:28 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id g14so17583215ljh.10
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 15:19:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mC5m0TUcxUCYj+K6Vrt74XfJKXwtL5Pl6atowem6kR0=;
+        b=kRJjWVWd8ykMNyErYET8dVGwXEu36d1MZDo272nyRNqA4NJAfEBj9je4s/wsADbu0E
+         mx+gZL4bIfrxz3wcM2G26wusBuYhCHZEL8n9FJYSVSWFaw7lb9SMAeyDeI1y75nfpn4G
+         ePSdXBrbQJu5EmIdbocTt6CutE94UMbdajPsxh4kBJOQ52FtcoYmwUTi+3NC84MJYD9h
+         AH0N9+dV3b1DRaNgdtC1g6di+xY70D5TBDHFKKG20WQzWBAvZkfWXJcgsEWxFcCR17xv
+         TkIzLcA3tOLraPPY8srk5ZfmTnEP6jMDCcPKzOyBQGFp71aj3+XBvC1PDy275HjUNL/4
+         ghQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mC5m0TUcxUCYj+K6Vrt74XfJKXwtL5Pl6atowem6kR0=;
+        b=j3xNd8to6sSnVLfZTgd7AtVGtizMymaAkKeKQjcU+mnInuOYoWDebNDGUpN9Jzkhli
+         WEGBFJDtDhet8O5ktevO1FRuYjDqmmFXikzwuych+xSHbPOLVc5FvSWpFCWTLA2JpvHq
+         3e2DCeRntQ8bECoRDo7PkXFMQjlqy5okzFG8LoM42LIURfaTj5Q2xHLXvuhlzB46J3YX
+         G1iL5HU9l7i2NVghoScZEXeOtR+ZXFCPpADUcgbVn8NMZG/Qxpe3PueX4KWlRaNp5whV
+         3fApJYwahE40h8ZIFB/gmt571s2Mw/gKP+QnE48mj5t5RM8Kw8TKA8mMXfV2S9gKv2F3
+         At6g==
+X-Gm-Message-State: AFqh2ko8PIOsz5wprzVMbY58LxokGmtv3yJdihF3Nlv/vD8Sv/ODtv9A
+        +LhLknic6B7s1r+JXjupWi0h/g==
+X-Google-Smtp-Source: AMrXdXsfsyzEhotBfXDjDajSkYz7NBRWL2/mFEKY5xBt/06pWM8e+wO07fI8DN43jQGZ3eK1xi6LfQ==
+X-Received: by 2002:a2e:9b92:0:b0:27f:ed3e:8c80 with SMTP id z18-20020a2e9b92000000b0027fed3e8c80mr9189878lji.52.1673479166984;
+        Wed, 11 Jan 2023 15:19:26 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05651220c600b004cc865fdfdfsm1543437lfr.89.2023.01.11.15.19.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 15:19:26 -0800 (PST)
+Message-ID: <08ffedc3-3104-18fc-4813-287eccd1fdca@linaro.org>
+Date:   Thu, 12 Jan 2023 01:19:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/2] soc: qcom: socinfo: Add sysfs attributes for fields
+ in v2-v6
+Content-Language: en-GB
+To:     Naman Jain <quic_namajain@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com
+References: <20230111082141.18109-1-quic_namajain@quicinc.com>
+ <20230111082141.18109-3-quic_namajain@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230111082141.18109-3-quic_namajain@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR13CA0011.namprd13.prod.outlook.com
- (2603:10b6:610:b1::16) To SN6PR12MB2767.namprd12.prod.outlook.com
- (2603:10b6:805:75::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:EE_|PH0PR12MB8049:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5fb67bb6-026f-4b76-1234-08daf42a217c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JbNBxC7fIvslTS3ELjJIjLj334pa8IFBuDK6GSaip+g5dgcGeRjstRD/7G/gsxKpTrdiW4xq9tn5ermzHKkEZbNNKQcf/qRrvMjIMHhtz4ENYL37L+hZ2tyRXAQ1ar/KpeJjFENVMKj7phZn6EfX9fxkrrbUuXmSQf7PYK/HDFd1oCuQ6bcI8L7cjp4F7393ZnmvV27V2gnpcxexyyenuzHAI8BHbgQxHmnNRgqwuY1LjDsHCQZHEsLFVHvJsL/wwFEyeYTjws2PkPtV+O197M+iEDP0D0vyYPofyT3PoeGW8m5BDL8wef/kPCThISgeoDXRwZml5VfuzYm6n+54uii0NAZ9wPplg2bvIRxkJAhYcu3TgMkqPk3uUUSaUUpG46EzRE2tRaPvrl4bwYaK3+EtuJ2C9GsvpzcTEYI5Z3aeNyu750CJTybNC3uEsZbzSVpWQbx4VV01frYpUTSdYqtNauP4E2qxC5cQ5iPsSpUygxIWUFQrydnFCIQ+ANxjJJouFy6HzgBJGUEcmBZLPeD8IjixvnbJg9fHSquQ+pESOsQzdPRkTqB0xpw8ueR9GWanzne9JVAWwXKS/B0KUPxL7g5+KxlBrfbTUEmoPj9P3tPP8AYTU9Aee2OVo/hIaMJcS/bEvTUuDf7cnKkP/vMIwDlW/GmOT5NHEseTI43/7nNx6uw03aRVU2+NQ8HLdvOpIh4hrxhUpf9H5fW6zlzwlUNaUrEHKJh4E0I67pU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(39860400002)(366004)(396003)(376002)(451199015)(31686004)(66556008)(2906002)(7416002)(7406005)(5660300002)(4744005)(36756003)(8936002)(6666004)(66946007)(8676002)(41300700001)(66476007)(2616005)(316002)(4326008)(53546011)(110136005)(6486002)(478600001)(26005)(6506007)(186003)(6512007)(31696002)(86362001)(83380400001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RUtCb2VyOVZvWkRTSmxibFlWb1hMTmRQMVR4SVZWWFluV1hCcmdab2h5WW1H?=
- =?utf-8?B?OEdoeC92NkFXV1hFaGN5TTlKZ0JURlJmVHJiRk5xQVdGekZ5S2d0emRQNldC?=
- =?utf-8?B?SThlSVp2Z1d6dEdEU0dFVHZ3ZzhDNTllUHI1d3hRTXZvYmNkRCt3MGVFb214?=
- =?utf-8?B?KzFacW4yVjZ2K0VmbmFTclJ3MmlISUVGdWtKS05qWlFtVnFrcDN5Ni9IOGsx?=
- =?utf-8?B?MFl6TFlxcFVUcVpTYlZCOE1hdWZEUXRXc2s2T0R3ZU0yMi9WUnpYR01Eb2pM?=
- =?utf-8?B?WDNZdFdocytmUm9qOTVkNFY1RHRLN0NLbkJ6cXNiVUxha0cwMDYyT1JudXJP?=
- =?utf-8?B?Qjh6dCtvaWltT0E0RWVrV1M0cjZwVmRYamVmOUVLaEVOUkZjMHRVV2NFcWo5?=
- =?utf-8?B?bS8xRUU0Y3V1Ym10SWFRZ0xxV0FXa0wrNDBuQlVhOG05dnZpSzRHYzlhSTFr?=
- =?utf-8?B?WWZMRjlPRVRpY21XUEczMHdNa3V5Z2NNdjlUK2lPWndEVGlLcHE0cVZOQlJx?=
- =?utf-8?B?RlBBZ2V3bEV5WDk0dTdERFNMM1RDUFEySWdUdzdKTG9IYWZ4dXh4OTRLUCtM?=
- =?utf-8?B?OERPTmxQQ0xVY00ybmdqRndUU2pQcDcyRTFUaUFhYzhIT25JWXA2QWpnS0ln?=
- =?utf-8?B?WW5sU2dWOGRVYW40Q3Q0Q1AwSEYxa0s3cTBJMUVkVzlhRTcrVjhVaHp0Ymdr?=
- =?utf-8?B?Qm5YcllnRmFSUmRocXQxbEJEMTZYeVljd3Nna0F4RzFaK0xEaGtmcGFueUND?=
- =?utf-8?B?SnJtaWNBem13SDJ2SzJCOGMvV3NLSXlkVWcrM3Vpd0xMZHVac3A2ZUZMaFlU?=
- =?utf-8?B?TnU4N0daYlpIcTVEY1RyWlVVSFhtSWVXVm43TmxucG9ZMVJmeWVsUkVORlF4?=
- =?utf-8?B?VTRkbXlaMUd2bWozcFhuWnVSZEpOVWVHTnB5Z24zOVBISUpnakxtWEdYeWRm?=
- =?utf-8?B?Nmh0UXA4VzFuY3g2b3ZIUldrNHFCU0lCandJSnJuUjhLUmt4RnhsVm5VQ2Nu?=
- =?utf-8?B?M0FQQmpveEUydHFrVXFUYXV3OHpIektFVmZDMW1nUzNPbG4xV2dqSS9Mb08z?=
- =?utf-8?B?aDFYVitKelBZSG1lS2lRS0lYQ2NUdXovTm5mNSs0SFhoY3l6d05ScDA4WUpQ?=
- =?utf-8?B?WWhpWkhHSjIvM3BGYjhmWUx5c01qaEtOV3VSbnZiYzZ6MGUzZmt1Rm9kTFR4?=
- =?utf-8?B?eW85Z3JGcU43UDNMeW53L0FxcTdkVVhIREQ5TFBkOGp6WCs0NzZsUUJzMXBq?=
- =?utf-8?B?MVplUnJxK0tCZytTL3J1RnpuNjRtdWp4bXJibGwxb1FnNFlwb255di9Gcytx?=
- =?utf-8?B?T0JQUlFvOElJZnZvR21tMjNuRjZqV2ZxTUVuK0NiWmZNL1UraXI0bk5oOU9n?=
- =?utf-8?B?SWVUZGsrQXc4TXRGbE0wUThlWUl4S3A5bGRPVC9tUmdRaExSUnRiUXY3Z0VM?=
- =?utf-8?B?d2VQeWlmamFnblhwam5qZUU2QmI3Q3dNMWUwYkltOE1qNjAvOElXa1IrQ0lK?=
- =?utf-8?B?Y2lvOUhDRTExSFVEb2hJZlVBS1JHa3NnT0VvSlhsWkNxbHJTSjV4dTBJby9v?=
- =?utf-8?B?NFMxVjZhVVZmRWwxcDNNTUZOWVoraEFRWi9WczBaT245YkxVNmVGWDRZaDlB?=
- =?utf-8?B?eHM5MWVWN1MxVy9WRDBpeTJGN3NDUHA0UGFZN3VJTWNUUk9odXJJRHcxL3Rx?=
- =?utf-8?B?L0FTZ1Q1bThHVGY5QmN1N0c0SzIvNUtOd1RqQ2ZOVS9WcFE1eUdSNlNBWG1r?=
- =?utf-8?B?Qm1Nanh2Qi9UeHJjNW5JY1AzOGNnVHdqU3orajhrRVdrWTR1a3J4Nmd1djJE?=
- =?utf-8?B?Y3RLekNzMFloa3FSMGl4RitQMVNzRjZhVVgvcEtEQW45VGk4WmtqUnl0M25B?=
- =?utf-8?B?UnlMeVZBYUxWUEJFWUd2TFo4bEtGbi8wMGpDaUNDMnRFYXBoNDZZZDVmcWMx?=
- =?utf-8?B?SXhBTG14NVhrQ2xoMWhVN3d6VFpoNGErMXBqYVIzZVJxTE8vMEdHN29DMElx?=
- =?utf-8?B?Wlp3NlQxUTA3L2praU5lYktTd29QbXRaU0RCY1MzSmxkekxHWW1ZWXExUitp?=
- =?utf-8?B?dlJXSFNJMmprOVNkV2MwU1BMcGhEZ0JtVHZ0YjRzVDdST1lrZTdjRW0wMUht?=
- =?utf-8?Q?dVClxQx8j5GCodPBCI/yq7pu9?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fb67bb6-026f-4b76-1234-08daf42a217c
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 23:18:22.5491
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WVj8bLH2bNMtDu5dRLEMUKhAl7UzW9OZGLTRzWFofeMhUpGRWg5wR6nNdKPJplj67qWqJJwjS/sfPHf+//ZhRw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8049
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/2023 7:27 AM, Sabin Rapan wrote:
-> 
-> 
-> On 14.12.2022 21:40, Michael Roth wrote:
->> +static int snp_launch_update_vmsa(struct kvm *kvm, struct kvm_sev_cmd *argp)
->> +{
->> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
->> +       struct sev_data_snp_launch_update data = {};
->> +       int i, ret;
->> +
->> +       data.gctx_paddr = __psp_pa(sev->snp_context);
->> +       data.page_type = SNP_PAGE_TYPE_VMSA;
->> +
->> +       for (i = 0; i < kvm->created_vcpus; i++) {
-> 
-> Should be replaced with kvm_for_each_vcpu() as it was done for
-> sev_launch_update_vmsa() in c36b16d29f3a ("KVM: SVM: Use online_vcpus,
-> not created_vcpus, to iterate over vCPUs").
-> Prevents accessing uninitialized data in struct vcpu_svm.
+On 11/01/2023 10:21, Naman Jain wrote:
+> Add support in sysfs custom attributes for fields in socinfo version
+> v2-v6. This is to support SoC based operations in userland scripts
+> and test scripts. Also, add name mappings for hw-platform type to
+> make the sysfs information more descriptive.
 
-Yes, fixed this one.
+Please include a patch documenting your additions to 
+Documentation/ABI/testing/sysfs-devices-soc. Please describe usecases 
+for new attributes and their applicability to non-Qualcomm boards.
 
-Thanks,
-Ashish
+Note, that testing scripts can access debugfs entries without any issues.
+
+> 
+> Signed-off-by: Naman Jain <quic_namajain@quicinc.com>
+> ---
+>   drivers/soc/qcom/socinfo.c | 181 +++++++++++++++++++++++++++++++++++++
+>   1 file changed, 181 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+> index 251c0fd94962..ff92064c2246 100644
+> --- a/drivers/soc/qcom/socinfo.c
+> +++ b/drivers/soc/qcom/socinfo.c
+> @@ -41,6 +41,52 @@
+>    */
+>   #define SMEM_HW_SW_BUILD_ID            137
+>   
+> +enum {
+> +	HW_PLATFORM_UNKNOWN = 0,
+> +	HW_PLATFORM_SURF = 1,
+> +	HW_PLATFORM_FFA = 2,
+> +	HW_PLATFORM_FLUID = 3,
+> +	HW_PLATFORM_SVLTE_FFA = 4,
+> +	HW_PLATFORM_SVLTE_SURF = 5,
+> +	HW_PLATFORM_MTP_MDM = 7,
+> +	HW_PLATFORM_MTP = 8,
+> +	HW_PLATFORM_LIQUID = 9,
+> +	HW_PLATFORM_DRAGON = 10,
+> +	HW_PLATFORM_QRD = 11,
+> +	HW_PLATFORM_HRD = 13,
+> +	HW_PLATFORM_DTV = 14,
+> +	HW_PLATFORM_RCM = 21,
+> +	HW_PLATFORM_STP = 23,
+> +	HW_PLATFORM_SBC = 24,
+> +	HW_PLATFORM_HDK = 31,
+> +	HW_PLATFORM_ATP = 33,
+> +	HW_PLATFORM_IDP = 34,
+> +	HW_PLATFORM_INVALID
+> +};
+> +
+> +static const char * const hw_platform[] = {
+> +	[HW_PLATFORM_UNKNOWN] = "Unknown",
+> +	[HW_PLATFORM_SURF] = "Surf",
+> +	[HW_PLATFORM_FFA] = "FFA",
+> +	[HW_PLATFORM_FLUID] = "Fluid",
+> +	[HW_PLATFORM_SVLTE_FFA] = "SVLTE_FFA",
+> +	[HW_PLATFORM_SVLTE_SURF] = "SLVTE_SURF",
+> +	[HW_PLATFORM_MTP_MDM] = "MDM_MTP_NO_DISPLAY",
+> +	[HW_PLATFORM_MTP] = "MTP",
+> +	[HW_PLATFORM_RCM] = "RCM",
+> +	[HW_PLATFORM_LIQUID] = "Liquid",
+> +	[HW_PLATFORM_DRAGON] = "Dragon",
+> +	[HW_PLATFORM_QRD] = "QRD",
+> +	[HW_PLATFORM_HRD] = "HRD",
+> +	[HW_PLATFORM_DTV] = "DTV",
+> +	[HW_PLATFORM_STP] = "STP",
+> +	[HW_PLATFORM_SBC] = "SBC",
+> +	[HW_PLATFORM_HDK] = "HDK",
+> +	[HW_PLATFORM_ATP] = "ATP",
+> +	[HW_PLATFORM_IDP] = "IDP",
+> +	[HW_PLATFORM_INVALID] = "Invalid",
+> +};
+
+This is not a property of the SoC. It is a property of the device. As 
+such it should not be part of /sys/bus/soc devices.
+
+You can find board description in /sys/firmware/devicetree/base/model
+
+> +
+>   #ifdef CONFIG_DEBUG_FS
+>   #define SMEM_IMAGE_VERSION_BLOCKS_COUNT        32
+>   #define SMEM_IMAGE_VERSION_SIZE                4096
+> @@ -368,6 +414,140 @@ static const struct soc_id soc_id[] = {
+>   	{ qcom_board_id(QRU1062) },
+>   };
+>   
+> +/* sysfs attributes */
+> +#define ATTR_DEFINE(param) \
+> +	static DEVICE_ATTR(param, 0644, qcom_get_##param, NULL)
+> +
+> +/* Version 2 */
+> +static ssize_t
+> +qcom_get_raw_id(struct device *dev,
+> +		struct device_attribute *attr,
+> +		char *buf)
+> +{
+> +	return scnprintf(buf, PAGE_SIZE, "%u\n",
+> +			 le32_to_cpu(soc_info->raw_id));
+> +}
+> +ATTR_DEFINE(raw_id);
+> +
+> +static ssize_t
+> +qcom_get_raw_version(struct device *dev,
+> +		struct device_attribute *attr,
+> +		char *buf)
+> +{
+> +	return scnprintf(buf, PAGE_SIZE, "%u\n",
+> +			 le32_to_cpu(soc_info->raw_ver));
+> +}
+> +ATTR_DEFINE(raw_version);
+
+Why are they raw? can you unraw them?
+
+Whose version and id are these attributes referring to?
+
+> +
+> +/* Version 3 */
+> +static ssize_t
+> +qcom_get_hw_platform(struct device *dev,
+> +		struct device_attribute *attr,
+> +		char *buf)
+> +{
+> +	uint32_t hw_plat = le32_to_cpu(soc_info->hw_plat);
+> +
+> +	hw_plat = (hw_plat >= HW_PLATFORM_INVALID) ? HW_PLATFORM_INVALID : hw_plat;
+> +	return scnprintf(buf, PAGE_SIZE, "%-.32s\n",
+> +			hw_platform[hw_plat]);
+> +}
+> +ATTR_DEFINE(hw_platform);
+> +
+> +/* Version 4 */
+> +static ssize_t
+> +qcom_get_platform_version(struct device *dev,
+> +		struct device_attribute *attr,
+> +		char *buf)
+> +{
+> +	return scnprintf(buf, PAGE_SIZE, "%u\n",
+> +			 le32_to_cpu(soc_info->plat_ver));
+> +}
+> +ATTR_DEFINE(platform_version);
+> +
+> +/* Version 5 */
+> +static ssize_t
+> +qcom_get_accessory_chip(struct device *dev,
+> +		struct device_attribute *attr,
+> +		char *buf)
+> +{
+> +	return scnprintf(buf, PAGE_SIZE, "%u\n",
+> +			le32_to_cpu(soc_info->accessory_chip));
+> +}
+> +ATTR_DEFINE(accessory_chip);
+
+If this an _accessory_ chip, there should be a separate soc device 
+describing it, rather than stuffing information into the soc0.
+
+> +
+> +/* Version 6 */
+> +static ssize_t
+> +qcom_get_platform_subtype_id(struct device *dev,
+> +		struct device_attribute *attr,
+> +		char *buf)
+> +{
+> +	return scnprintf(buf, PAGE_SIZE, "%u\n",
+> +			 le32_to_cpu(soc_info->hw_plat_subtype));
+> +}
+> +ATTR_DEFINE(platform_subtype_id);
+
+Again, this is the board property, not an SoC one.
+
+> +
+> +static struct attribute *qcom_custom_socinfo_attrs[7];
+> +
+> +static const struct attribute_group custom_soc_attr_group = {
+> +	.attrs = qcom_custom_socinfo_attrs,
+> +};
+> +
+> +static void qcom_socinfo_populate_sysfs(struct qcom_socinfo *qcom_socinfo)
+> +{
+> +	int i = 0, socinfo_format = le32_to_cpu(soc_info->fmt);
+> +
+> +	/* Note: qcom_custom_socinfo_attrs[] size needs to be in sync with attributes added here. */
+> +	switch (socinfo_format) {
+> +	case SOCINFO_VERSION(0, 16):
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 15):
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 14):
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 13):
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 12):
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 11):
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 10):
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 9):
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 8):
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 7):
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 6):
+> +		qcom_custom_socinfo_attrs[i++] =
+> +			&dev_attr_platform_subtype_id.attr;
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 5):
+> +		qcom_custom_socinfo_attrs[i++] = &dev_attr_accessory_chip.attr;
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 4):
+> +		qcom_custom_socinfo_attrs[i++] = &dev_attr_platform_version.attr;
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 3):
+> +		qcom_custom_socinfo_attrs[i++] = &dev_attr_hw_platform.attr;
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 2):
+> +		qcom_custom_socinfo_attrs[i++] = &dev_attr_raw_id.attr;
+> +		qcom_custom_socinfo_attrs[i++] = &dev_attr_raw_version.attr;
+> +		fallthrough;
+> +	case SOCINFO_VERSION(0, 1):
+> +		break;
+> +	default:
+> +		pr_err("Unknown socinfo format: v%u.%u\n",
+> +				SOCINFO_MAJOR(socinfo_format),
+> +				SOCINFO_MINOR(socinfo_format));
+> +		break;
+> +	}
+> +
+> +	qcom_custom_socinfo_attrs[i] = NULL;
+> +	qcom_socinfo->attr.custom_attr_group = &custom_soc_attr_group;
+> +}
+> +
+>   static const char *socinfo_machine(struct device *dev, unsigned int id)
+>   {
+>   	int idx;
+> @@ -696,6 +876,7 @@ static int qcom_socinfo_probe(struct platform_device *pdev)
+>   							"%u",
+>   							le32_to_cpu(soc_info->serial_num));
+>   
+> +	qcom_socinfo_populate_sysfs(qs);
+>   	qs->soc_dev = soc_device_register(&qs->attr);
+>   	if (IS_ERR(qs->soc_dev))
+>   		return PTR_ERR(qs->soc_dev);
+
+-- 
+With best wishes
+Dmitry
+
