@@ -2,133 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1CF6660E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE946660E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 17:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjAKQox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 11:44:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
+        id S234002AbjAKQpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 11:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbjAKQou (ORCPT
+        with ESMTP id S232233AbjAKQo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:44:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227F36374
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:43:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673455432;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 11 Jan 2023 11:44:56 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370671A8
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:44:55 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AE9C04E91;
+        Wed, 11 Jan 2023 16:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673455479; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=HxRYFvZ1+BeTGMrTtJZgEBUI9joLdvIfL1k/Gm7E0+s=;
-        b=TmbgmCvjRLNInAY+VsvVbgx1rWtUTb/har4ZotZRXI5n5JrWUYa505Ui1R7wLRHY4JeOUu
-        06x5uAadA3cYLMUxsBsSL1KWATKzNCAKYgCVEumdfgX/FwtJQYdtIHEDspMCQcIPApO4xS
-        /hjKK2wcafuEwmpvGgFGa853wpckZMc=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-325-_CDbt5TbPmq4FZWxS8Yx-Q-1; Wed, 11 Jan 2023 11:43:48 -0500
-X-MC-Unique: _CDbt5TbPmq4FZWxS8Yx-Q-1
-Received: by mail-wm1-f71.google.com with SMTP id p34-20020a05600c1da200b003d990064285so10982026wms.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 08:43:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HxRYFvZ1+BeTGMrTtJZgEBUI9joLdvIfL1k/Gm7E0+s=;
-        b=eRXKxIm5g9kLlm+QBSd0ge5k7sEGWufooov7K/B5gS12av6dKY6TkBkJ5rJ+XtnSbc
-         yD+wi7Q6BfFlucga9V7nWd7CGOupsoRDMKBEzyyMzEy14tPwqlL3GYKToIFNuxBL9EH3
-         cWW20QCVuSBTmu+CpwDDrr4WS9LLmOJFJbwoqFX/lmWOGRBxua9ZqjyNmZCiu/dOsHR3
-         zVN8GsXXWH+dcvsMfmWgi5Z0tVNiw3mV0/i1Zf/djDVOdisTQ0kI4E4rH7NLDf+AbR1B
-         qqcexNMYCThGK76G8mlhsipzRefo6+JDQrZd/zCUQ+4CookvuDzOd4wfV489Aoo4YwJz
-         t9qQ==
-X-Gm-Message-State: AFqh2kqnprbaP2yzw1DaOmscGodRZx7dOym5JpaQa/V6H5AkTdI8/hCi
-        p+CN03E9lWp+RDykx6uZeqA/jTGQZTIagFhkq7RKR/RxIHpCFS7JfK2TiZLTu7/P7Elaj+d+Lqc
-        C0AzRY69lUn1dwwil4d3x7yra
-X-Received: by 2002:a05:600c:a51:b0:3d2:3376:6f38 with SMTP id c17-20020a05600c0a5100b003d233766f38mr51935574wmq.20.1673455427719;
-        Wed, 11 Jan 2023 08:43:47 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXt8bs5GVHKAAyzPrAmLCp/tLubFFeFPYbGqzxKyfH2/luqZIN7to1nvrwQTAx8OXJqYX3VBcw==
-X-Received: by 2002:a05:600c:a51:b0:3d2:3376:6f38 with SMTP id c17-20020a05600c0a5100b003d233766f38mr51935564wmq.20.1673455427564;
-        Wed, 11 Jan 2023 08:43:47 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id u21-20020a7bc055000000b003d9aa76dc6asm27673760wmc.0.2023.01.11.08.43.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 08:43:47 -0800 (PST)
-Message-ID: <dc578554-570d-9496-6661-4c9bcd3e2496@redhat.com>
-Date:   Wed, 11 Jan 2023 17:43:46 +0100
+        bh=+lGYOpDp4bNuKnxJ8tlVYLr+bl6xRPelNh0S14fBeXs=;
+        b=I7OoxYg3OlBX6EVM379TBGXUacU8S9i5T/xnB98LgJhbKPsWPa2P1VE6kAqNpctknauSk/
+        kKvWiz7MUkRa3+JWHr6fOLyEJ4gjNiAl0XViAt3U78Ut0ayY18F99tkVfpCbgeuyDaLq0U
+        2uunWKRUZusTCXL7/ZsZbinX7aMYMgw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 879B413591;
+        Wed, 11 Jan 2023 16:44:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KM+lIHfnvmNOXAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 11 Jan 2023 16:44:39 +0000
+Date:   Wed, 11 Jan 2023 17:44:38 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "michel@lespinasse.org" <michel@lespinasse.org>,
+        "joelaf@google.com" <joelaf@google.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "leewalsh@google.com" <leewalsh@google.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "jglisse@google.com" <jglisse@google.com>,
+        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
+        "arjunroy@google.com" <arjunroy@google.com>,
+        "minchan@google.com" <minchan@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "hughd@google.com" <hughd@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "gurua@google.com" <gurua@google.com>,
+        "laurent.dufour@fr.ibm.com" <laurent.dufour@fr.ibm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "axelrasmussen@google.com" <axelrasmussen@google.com>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        "soheil@google.com" <soheil@google.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "liam.howlett@oracle.com" <liam.howlett@oracle.com>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "gthelen@google.com" <gthelen@google.com>,
+        "ldufour@linux.ibm.com" <ldufour@linux.ibm.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "posk@google.com" <posk@google.com>,
+        "lstoakes@gmail.com" <lstoakes@gmail.com>,
+        "peterjung1337@gmail.com" <peterjung1337@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "hughlynch@google.com" <hughlynch@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tatashin@google.com" <tatashin@google.com>
+Subject: Re: [PATCH 08/41] mm: introduce CONFIG_PER_VMA_LOCK
+Message-ID: <Y77ndimzUsVZwjTk@dhcp22.suse.cz>
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-9-surenb@google.com>
+ <20230111001331.cxdeh52vvta6ok2p@offworld>
+ <CAJuCfpEv--awCY0=R3h5Fez8x74U1EZCzNkq4_7deCYqej5sSA@mail.gmail.com>
+ <Y75x5fGPcJ63pBIp@dhcp22.suse.cz>
+ <Y76HTfIeEt8ZOIH3@gmail.com>
+ <6be809f5554a4faaa22c287ba4224bd0@AcuMS.aculab.com>
+ <CAJuCfpH_VZq99=vGQGJ+evVg5wMPKGsjyawgHnOeoKhtEiAi6w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 11/11] video/aperture: Only remove sysfb on the default
- vga pci device
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Aaron Plattner <aplattner@nvidia.com>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Helge Deller <deller@gmx.de>
-References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
- <20230111154112.90575-11-daniel.vetter@ffwll.ch>
- <2102a618-2d5e-c286-311f-30e4baa4f85b@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <2102a618-2d5e-c286-311f-30e4baa4f85b@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpH_VZq99=vGQGJ+evVg5wMPKGsjyawgHnOeoKhtEiAi6w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/23 17:20, Thomas Zimmermann wrote:
-
+On Wed 11-01-23 08:28:49, Suren Baghdasaryan wrote:
 [...]
+> Anyhow. Sounds like the overhead of the current design is small enough
+> to remove CONFIG_PER_VMA_LOCK and let it depend only on architecture
+> support?
 
->>
->> diff --git a/drivers/video/aperture.c b/drivers/video/aperture.c
->> index ba565515480d..a1821d369bb1 100644
->> --- a/drivers/video/aperture.c
->> +++ b/drivers/video/aperture.c
->> @@ -321,15 +321,16 @@ int aperture_remove_conflicting_pci_devices(struct pci_dev *pdev, const char *na
->>   
->>   	primary = pdev == vga_default_device();
->>   
->> +	if (primary)
->> +		sysfb_disable();
->> +
-> 
-> There's another sysfb_disable() in aperture_remove_conflicting_devices() 
-> without the branch but with a long comment.  I find this slightly confusing.
-> 
-> I'd rather add a branched sysfb_disable() plus the comment  to 
-> aperture_detach_devices(). And then add a 'primary' parameter to 
-> aperture_detach_devices(). In aperture_remove_conflicting_devices() the 
-> parameter would be unconditionally true.
->
-
-Or just remove that long comment since there's already kernel-doc for the
-sysfb_disable() function definition.
-
-This feels to me that any approach to parameterize this will lead to code
-that is harder to read.
-
-Since is just a single function call, I would just duplicate like $subject
-does to be honest.
-
+Yes. Further optimizations can be done on top. Let's not over optimize
+at this stage.
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Michal Hocko
+SUSE Labs
