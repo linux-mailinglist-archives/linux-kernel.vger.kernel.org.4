@@ -2,157 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6CC6663C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552F56663CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 Jan 2023 20:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjAKTaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 14:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S231831AbjAKTdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 14:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjAKTaw (ORCPT
+        with ESMTP id S229701AbjAKTdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 14:30:52 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7DFD13D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 11:30:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1673465447;
-        bh=P5o+X5w9OffEjvSaI+GOzWtEzWbMVtkRV9QeB10s/Uo=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=BYdzV5aGrS2mDWushzIiZHeGklmS+cyaMUOmgCWDDprghvolkS7hL3SxkQfQX0Hyj
-         9AQh1Wja5Oez71znxfEf9bgyIcJWIteRHxBFPAJ7lBAqji9a8Yt2x6UzSMaVLTCZV3
-         Y9rWPBK8qbWVQAfo3B3g2OjSGPRKLl1duFIfsFbRUJMgh7wlDtJXyVHPyTFi4FDUWW
-         XxIA8aXRWf+eSeJJrsKCw4b2NL5jGDpwFVmSuUid7L4mJoXcAdJ/4gF1+2txXhZ8d/
-         ACiXvcvbA1PVFeyOqffnZZMaRn8hpbGitZF+u+T6HGPuR4I9NEPyOmjHIdcHLPvlrA
-         jYclhyVaj2BYA==
-Received: from [172.16.0.101] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Nsd7q5WfrzgJM;
-        Wed, 11 Jan 2023 14:30:47 -0500 (EST)
-Message-ID: <ee304052-5731-4ae6-8f7b-69d0bd1e6c77@efficios.com>
-Date:   Wed, 11 Jan 2023 14:31:21 -0500
+        Wed, 11 Jan 2023 14:33:07 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA23216498;
+        Wed, 11 Jan 2023 11:33:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673465585; x=1705001585;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0cOJw84V6/UKZ6A9b4jwVD33YpuY7WN9o7pXNfDH4kA=;
+  b=g4jrhCCrTFyqHGZ1lB6RWLacwiOMPgxrBM9E82FXFf0cFB77dHq/x7zW
+   CNlTw/vi7LCz422hii6IGu5QW6JVgtzwiIWnzqYinthi6rm500ZMo8cIu
+   MvtCTqmle1apV8AbRCm/gWuZXaCpLDSqq7MsShfYFtdIS9b6MppR0x1Op
+   Qgezj6dMi+0hffhnFhw2cHKX9FQZd+PWqwpS/oh9fWp6ZnxZG0/CwIGW1
+   BxXg3EIjfkTVBv/vVRtCaK6NMnyJTGE3nHrMz2Iy5ofhiM8b9et8dxWlB
+   UWRWUrBJptKHvDtx4i9qPnzi50NgSOgYO/TSHQmj0uoX++h6wtthrzuGu
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="385828038"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="385828038"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 11:33:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="746281835"
+X-IronPort-AV: E=Sophos;i="5.96,317,1665471600"; 
+   d="scan'208";a="746281835"
+Received: from sohilmeh.sc.intel.com ([172.25.103.65])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 Jan 2023 11:33:04 -0800
+From:   Sohil Mehta <sohil.mehta@intel.com>
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     Sohil Mehta <sohil.mehta@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [PATCH] x86/vsyscall: Fix documentation to reflect the default mode
+Date:   Wed, 11 Jan 2023 19:32:11 +0000
+Message-Id: <20230111193211.1987047-1-sohil.mehta@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: rseq CPU ID not correct on 6.0 kernels for pinned threads
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        libc-alpha@sourceware.org
-References: <87lem9cnxr.fsf@oldenburg.str.redhat.com>
- <8b52b0d6-c973-f959-b44a-1b54fb808a04@efficios.com>
-Content-Language: en-US
-In-Reply-To: <8b52b0d6-c973-f959-b44a-1b54fb808a04@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-11 09:52, Mathieu Desnoyers wrote:
-> On 2023-01-11 06:26, Florian Weimer wrote:
->> The glibc test suite contains a test that verifies that sched_getcpu
->> returns the expected CPU number for a thread that is pinned (via
->> sched_setaffinity) to a specific CPU.  There are other threads running
->> which attempt to de-schedule the pinned thread from its CPU.  I believe
->> the test is correctly doing what it is expected to do; it is invalid
->> only if one believes that it is okay for the kernel to disregard the
->> affinity mask for scheduling decisions.
->>
->> These days, we use the cpu_id rseq field as the return value of
->> sched_getcpu if the kernel has rseq support (which it has in these
->> cases).
->>
->> This test has started failing sporadically for us, some time around
->> kernel 6.0.  I see failure occasionally on a Fedora builder, it runs:
->>
->> Linux buildvm-x86-26.iad2.fedoraproject.org 6.0.15-300.fc37.x86_64 #1 
->> SMP PREEMPT_DYNAMIC Wed Dec 21 18:33:23 UTC 2022 x86_64 x86_64 x86_64 
->> GNU/Linux
->>
->> I think I've seen it on the x86-64 builder only, but that might just be
->> an accident.
->>
->> The failing tests log this output:
->>
->> =====FAIL: nptl/tst-thread-affinity-pthread.out=====
->> info: Detected CPU set size (in bits): 64
->> info: Maximum test CPU: 5
->> error: Pinned thread 1 ran on impossible cpu 0
->> error: Pinned thread 0 ran on impossible cpu 0
->> info: Main thread ran on 4 CPU(s) of 6 available CPU(s)
->> info: Other threads ran on 6 CPU(s)
->> =====FAIL: nptl/tst-thread-affinity-pthread2.out=====
->> info: Detected CPU set size (in bits): 64
->> info: Maximum test CPU: 5
->> error: Pinned thread 1 ran on impossible cpu 1
->> error: Pinned thread 2 ran on impossible cpu 0
->> error: Pinned thread 3 ran on impossible cpu 3
->> info: Main thread ran on 5 CPU(s) of 6 available CPU(s)
->> info: Other threads ran on 6 CPU(s)
->>
->> But I also encountered one local failure, but it is rare.  Maybe it's
->> load-related.  There shouldn't be any CPU unplug or anything like that
->> involved here.
->>
->> I am not entirely sure if something is changing CPU affinities from
->> outside the process (which would be quite wrong, but not a kernel bug).
->> But in the past, our glibc test has detected real rseq cpu_id
->> brokenness, so I'm leaning towards that as the cause this time, too.
-> 
-> It can be caused by rseq failing to update the cpu number field on 
-> return to userspace. Tthis could be validated by printing the regular 
-> getcpu vdso value and/or the value returned by the getcpu system call 
-> when the error is triggered, and see whether it matches the rseq cpu id 
-> value.
-> 
-> It can also be caused by scheduler failure to take the affinity into
-> account.
-> 
-> As you also point out, it can also be caused by some other task
-> modifying the affinity of your task concurrently. You could print
-> the result of sched_getaffinity on error to get a better idea of
-> the expected vs actual mask.
-> 
-> Lastly, it could be caused by CPU hotplug which would set all bits
-> in the affinity mask as a fallback. As you mention it should not be
-> the cause there.
-> 
-> Can you share your kernel configuration ?
+The default vsyscall mode has been updated from emulate to xonly for a
+while. Update the kernel-parameters doc to reflect that.
 
-Also, can you provide more information about the cpufreq driver and 
-governor used in your system ? e.g. output of
+Fixes: 625b7b7f79c6 ("x86/vsyscall: Change the default vsyscall mode to xonly")
+Cc: Andy Lutomirski <luto@kernel.org>
+Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+---
+Do documentation fixes typically get backported to stable? I haven't included
+a stable cc assuming they do not.
 
-cpupower frequency-info
+ Documentation/admin-guide/kernel-parameters.txt | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-and also output of
-
-sysctl kernel.sched_energy_aware
-
-Is this on a physical machine or in a virtual machine ?
-
-Thanks,
-
-Mathieu
-
-> 
-> Thanks,
-> 
-> Mathieu
-> 
->>
->> Thanks,
->> Florian
->>
-> 
-
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 6cfa6e3996cf..87f0b645922c 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6756,11 +6756,11 @@
+ 			functions are at fixed addresses, they make nice
+ 			targets for exploits that can control RIP.
+ 
+-			emulate     [default] Vsyscalls turn into traps and are
+-			            emulated reasonably safely.  The vsyscall
+-				    page is readable.
++			emulate     Vsyscalls turn into traps and are emulated
++			            reasonably safely.  The vsyscall page is
++				    readable.
+ 
+-			xonly       Vsyscalls turn into traps and are
++			xonly       [default] Vsyscalls turn into traps and are
+ 			            emulated reasonably safely.  The vsyscall
+ 				    page is not readable.
+ 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+2.34.1
 
