@@ -2,57 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A030666B65
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C23E666B6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjALHJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 02:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
+        id S235811AbjALHLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 02:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236097AbjALHJm (ORCPT
+        with ESMTP id S235894AbjALHL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 02:09:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F921C90D;
-        Wed, 11 Jan 2023 23:09:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65B0BB81D79;
-        Thu, 12 Jan 2023 07:09:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 107B3C433D2;
-        Thu, 12 Jan 2023 07:09:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673507378;
-        bh=Oqydj0oJ7lWgc8KOd0cdULCtOKRcsaepxFT40526GeM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZI1IE3CfJnmRKlQxUvFKU4HC2yLudSu10piwKyFxLs2wpnk2yv5JAtH2ZoEsg/r5Y
-         nNdZ+MEEoVi2ivlYrIckNxC7b5QAiRZNEi+QVwdCdJAxbZpzPNwahSelwwKmhkH+8m
-         CE5IVFBk9cL5JPxxk49qdqaLpQrFj4QxiHPCORdGym/voqAYBMyIEnRor1Q7LpuFcb
-         zfrQsB+Esn8uhsuWMuAto+4Ukeu362Nug+cyGC4z06w+M94Q8Tus325z4sXeSrBlQo
-         0hb78fq7QCXRebgc81y0w3CWoCfnUB51VGYMkXPSbx9u7PWLihAvGrtiiusrQZpV6+
-         Hra6G/rhgXpWA==
-Date:   Thu, 12 Jan 2023 09:09:34 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Esina Ekaterina <eesina@astralinux.ru>
-Cc:     Zhao Qiang <qiang.zhao@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v4] net: wan: Add checks for NULL for utdm in
- undo_uhdlc_init and unmap_si_regs
-Message-ID: <Y7+yLgGr1GO/rXun@unreal>
-References: <20230111102848.44863b9c@kernel.org>
- <20230111195533.82519-1-eesina@astralinux.ru>
+        Thu, 12 Jan 2023 02:11:29 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA89630A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 23:11:28 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id gz9-20020a17090b0ec900b002290bda1b07so40728pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 23:11:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5iPyrg0DtEaf3W1nn9XRn6Wwv8d6QmlMBX2Zvvut2+E=;
+        b=gdRCqJRulQK10XMSXaD5n2XL88L0eEvXNTIDbcSg5qZwi/HhkR3GKbevncdYCvIv8R
+         VBZmm42uZDImXVrIO6Vyod7qxfVyq5kCxucf6tKkxTV4rjzeIjWfBceyHw1CWXl57KT/
+         pvj9D72tjiMZ33wrtsvtxPRRGYAvggmpbgRP4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5iPyrg0DtEaf3W1nn9XRn6Wwv8d6QmlMBX2Zvvut2+E=;
+        b=MaLYhoero61QGUV2DZTa1pIBNzDqQteXM8GbPB8ACZh8rlMUDyp9O+jNVDFnQiGGmc
+         VQKudMa79RPmJnvdJ75MmoLROceyB1GMRHAuad+kfCylrBGLHiHfWx/nGDXG1XDDNE3L
+         /b51zZ8lHTJz2YSzG1nI/LvqapvySPr4nu5t1NlkxGJIPn3YFySjhgm90IFPfWuoSWZS
+         subD21ql95khIqVHNNPfKl6der9IX6h1pgwVhcM8KlXan0lbEUiktPCgRLaHCIY0hKKM
+         HWgmHxNSXCJaCHh7kG2/U5jVs8Nps7A6G5OwhhHeuZYWvg/WsivWPmO4J8eUzfBhQ1vi
+         9tMQ==
+X-Gm-Message-State: AFqh2kqVBnkDTOsrRKFtkxEpAcXopF2Mp30laRQSmqa7zhkRMk/zaT5V
+        AKmyl/4+WRT9+WcdYcgCwEKlqw==
+X-Google-Smtp-Source: AMrXdXvwt775kMrjXQjPrzPgckZnot3BpcRnCqeDcvcDFfzEFZX0ItcYurMciOQ85DNLjhNZoyr5vw==
+X-Received: by 2002:a17:90a:2bcd:b0:225:be4c:2586 with SMTP id n13-20020a17090a2bcd00b00225be4c2586mr68702819pje.45.1673507487855;
+        Wed, 11 Jan 2023 23:11:27 -0800 (PST)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id ms19-20020a17090b235300b002132f3e71c6sm10240471pjb.52.2023.01.11.23.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 23:11:27 -0800 (PST)
+Date:   Thu, 12 Jan 2023 16:11:23 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Minchan Kim <minchan@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCHv2 3/4] zsmalloc: make zspage chain size configurable
+Message-ID: <Y7+ym2gT+XMuL/U5@google.com>
+References: <20230109033838.2779902-1-senozhatsky@chromium.org>
+ <20230109033838.2779902-4-senozhatsky@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230111195533.82519-1-eesina@astralinux.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230109033838.2779902-4-senozhatsky@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,24 +68,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 10:55:33PM +0300, Esina Ekaterina wrote:
-> If uhdlc_priv_tsa != 1 then utdm is not initialized.
-> And if ret != NULL then goto undo_uhdlc_init, where
-> utdm is dereferenced. Same if dev == NULL.
+On (23/01/09 12:38), Sergey Senozhatsky wrote:
+> Remove hard coded limit on the maximum number of physical
+> pages per-zspage.
 > 
-> Found by Astra Linux on behalf of Linux Verification Center
-> (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Esina Ekaterina <eesina@astralinux.ru>
->   ---
-> v4: Fix style
-> v3: Remove braces
-> v2: Add check for NULL for unmap_si_regs
-> ---
->  drivers/net/wan/fsl_ucc_hdlc.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> This will allow tuning of zsmalloc pool as zspage chain
+> size changes `pages per-zspage` and `objects per-zspage`
+> characteristics of size classes which also affects size
+> classes clustering (the way size classes are merged).
 
-In addition to what Jakub said, please don't send patches as reply-to.
-Please sent them as new threads.
-
-Thanks
+Andrew I have small fixup patch (0day build bot failure on
+parisc64). How would you prefer to handle this?
