@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE738666F40
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEEB666F45
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbjALKPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
+        id S240019AbjALKQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239865AbjALKPA (ORCPT
+        with ESMTP id S237019AbjALKPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 05:15:00 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8929F2BC3
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:14:23 -0800 (PST)
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8DB62E7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:14:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673518463; x=1705054463;
+  t=1673518464; x=1705054464;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oRXi0A8UvnI9/37rkmxYQJBeXqQb51nyJuKI+eZ9+L0=;
-  b=LRVZ29Tfyj3Wl0uGBie3wyX5tY98zZjbNQ9hUTpDKwcUVuc4KR2CfPNq
-   CNnL6jnLilgtAyok7W0PKACK7XGHlbX1fe77My3NGvvkqw2Elj0ZG2w33
-   3tmIqdrDsO8DeIw0fQlHG8e27qLs4H4wTFU1KAIOm0mpvOr8BYUBsrQBv
-   TWIxVPhn/K8kpBCufnFUiPfmScKC30spDWEf8PEAMUlIOeDcXcVs5RKSH
-   Cj3PdIixFOyS4E4VBkrpcpsMP+vtAdzKCm6n7Qu8FCwJXunotllPvIVKI
-   u1iZb7IhzBSJzdaFPc7lXP0XEH5zFNRT/LIACRB63W3iy3WYMr5oBtjs0
+  bh=LevyWGVkjbR3XtkwGaqhIDNbRXys+KmZlOUqinj8SNU=;
+  b=ZuovMUXY6fnFmy0ZxxCgq8sGq4SPLSlFZSOrgn1mQYYXXlO8iflfKasJ
+   oS985OVzy/VHlsAxmr4mdAySriRdm0V6XxT6uQZQDAw+gPfDGmtqW23qe
+   Zf3wDgPQflyGswv/2Fmwajx8VKHHqXKyKVSwBq2L9xFedDzG7WZ95/QVy
+   WM8m2SIotqTXcwFXYMSIQLHcAijvkvQdcESZVabRPRsKHjJf2SlsIWpam
+   EhQBaMyaHpxZa3DyB03RErqzPvaDUkYxqUWoVk/xK+6kNjktkcEa71XDg
+   Ai4Y2AoNf7NZja7xqR8zBOejgD57Of9RuQ5upMN+wldBIhmFGSkjETHxi
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350892187"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324899417"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="350892187"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="659722914"
+   d="scan'208";a="324899417"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:24 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="903128288"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="659722914"
+   d="scan'208";a="903128288"
 Received: from glieseu-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.52.1])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:20 -0800
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:21 -0800
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id AEE8A109AF6; Thu, 12 Jan 2023 13:14:13 +0300 (+03)
+        id B9318109AF7; Thu, 12 Jan 2023 13:14:13 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@intel.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -50,9 +50,9 @@ Cc:     Kuppuswamy Sathyanarayanan
         Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
         linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv2 6/7] x86/tdx: Relax SEPT_VE_DISABLE check for debug TD
-Date:   Thu, 12 Jan 2023 13:14:06 +0300
-Message-Id: <20230112101407.24327-7-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv2 7/7] x86/tdx: Disable NOTIFY_ENABLES
+Date:   Thu, 12 Jan 2023 13:14:07 +0300
+Message-Id: <20230112101407.24327-8-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.38.2
 In-Reply-To: <20230112101407.24327-1-kirill.shutemov@linux.intel.com>
 References: <20230112101407.24327-1-kirill.shutemov@linux.intel.com>
@@ -68,81 +68,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A "SEPT #VE" occurs when a TDX guest touches memory that is not properly
-mapped into the "secure EPT".  This can be the result of hypervisor
-attacks or bugs, *OR* guest bugs.  Most notably, buggy guests might
-touch unaccepted memory for lots of different memory safety bugs like
-buffer overflows.
+== Background ==
 
-TDX guests do not want to continue in the face of hypervisor attacks or
-hypervisor bugs.  They want to terminate as fast and safely as possible.
-SEPT_VE_DISABLE ensures that TDX guests *can't* continue in the face of
-these kinds of issues.
+There is a class of side-channel attacks against SGX enclaves called
+"SGX Step"[1]. These attacks create lots of exceptions inside of
+enclaves. Basically, run an in-enclave instruction, cause an exception.
+Over and over.
 
-But, that causes a problem.  TDX guests that can't continue can't spit
-out oopses or other debugging info.  In essence SEPT_VE_DISABLE=1 guests
-are not debuggable.
+There is a concern that a VMM could attack a TDX guest in the same way
+by causing lots of #VE's. The TDX architecture includes new
+countermeasures for these attacks. It basically counts the number of
+exceptions and can send another *special* exception once the number of
+VMM-induced #VE's hits a critical threshold[2].
 
-Relax the SEPT_VE_DISABLE check to warning on debug TD and panic() in
-the #VE handler on EPT-violation on private memory. It will produce
-useful backtrace.
+== Problem ==
+
+But, these special exceptions are independent of any action that the
+guest takes. They can occur anywhere that the guest executes. This
+includes sensitive areas like the entry code. The (non-paranoid) #VE
+handler is incapable of handling exceptions in these areas.
+
+== Solution ==
+
+Fortunately, the special exceptions can be disabled by the guest via
+write to NOTIFY_ENABLES TDCS field. NOTIFY_ENABLES is disabled by
+default, but might be enabled by a bootloader, firmware or an earlier
+kernel before the current kernel runs.
+
+Disable NOTIFY_ENABLES feature explicitly and unconditionally. Any
+NOTIFY_ENABLES-based #VE's that occur before this point will end up
+in the early #VE exception handler and die due to unexpected exit
+reason.
+
+[1] https://github.com/jovanbulck/sgx-step
+[2] https://intel.github.io/ccc-linux-guest-hardening-docs/security-spec.html#safety-against-ve-in-kernel-code
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Reviewed-by: Dave Hansen <dave.hansen@intel.com>
 ---
- arch/x86/coco/tdx/tdx.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ arch/x86/coco/tdx/tdx.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 56accf653709..2f4fbb7cd990 100644
+index 2f4fbb7cd990..d72176a7d3a0 100644
 --- a/arch/x86/coco/tdx/tdx.c
 +++ b/arch/x86/coco/tdx/tdx.c
-@@ -38,6 +38,7 @@
- #define VE_GET_PORT_NUM(e)	((e) >> 16)
- #define VE_IS_IO_STRING(e)	((e) & BIT(4))
- 
-+#define ATTR_DEBUG		BIT(0)
- #define ATTR_SEPT_VE_DISABLE	BIT(28)
- 
- /* TDX Module call error codes */
-@@ -207,8 +208,15 @@ static void tdx_parse_tdinfo(u64 *cc_mask)
- 	 * TD-private memory.  Only VMM-shared memory (MMIO) will #VE.
- 	 */
- 	td_attr = out.rdx;
--	if (!(td_attr & ATTR_SEPT_VE_DISABLE))
--		tdx_panic("TD misconfiguration: SEPT_VE_DISABLE attribute must be set.");
-+	if (!(td_attr & ATTR_SEPT_VE_DISABLE)) {
-+		const char *msg = "TD misconfiguration: SEPT_VE_DISABLE attribute must be set.";
+@@ -19,6 +19,10 @@
+ #define TDX_GET_VEINFO			3
+ #define TDX_GET_REPORT			4
+ #define TDX_ACCEPT_PAGE			6
++#define TDX_WR				8
 +
-+		/* Relax SEPT_VE_DISABLE check for debug TD. */
-+		if (td_attr & ATTR_DEBUG)
-+			pr_warn("%s\n", msg);
-+		else
-+			tdx_panic(msg);
-+	}
- }
++/* TDCS fields. To be used by TDG.VM.WR and TDG.VM.RD module calls */
++#define TDCS_NOTIFY_ENABLES		0x9100000000000010
  
- /*
-@@ -664,6 +672,11 @@ static int virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
- 	}
- }
+ /* TDX hypercall Leaf IDs */
+ #define TDVMCALL_MAP_GPA		0x10001
+@@ -863,6 +867,9 @@ void __init tdx_early_init(void)
+ 	tdx_parse_tdinfo(&cc_mask);
+ 	cc_set_mask(cc_mask);
  
-+static inline bool is_private_gpa(u64 gpa)
-+{
-+	return gpa == cc_mkenc(gpa);
-+}
++	/* Kernel does not use NOTIFY_ENABLES and does not need random #VEs */
++	tdx_module_call(TDX_WR, 0, TDCS_NOTIFY_ENABLES, 0, -1ULL, NULL);
 +
- /*
-  * Handle the kernel #VE.
-  *
-@@ -682,6 +695,8 @@ static int virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
- 	case EXIT_REASON_CPUID:
- 		return handle_cpuid(regs, ve);
- 	case EXIT_REASON_EPT_VIOLATION:
-+		if (is_private_gpa(ve->gpa))
-+			panic("Unexpected EPT-violation on private memory.");
- 		return handle_mmio(regs, ve);
- 	case EXIT_REASON_IO_INSTRUCTION:
- 		return handle_io(regs, ve);
+ 	/*
+ 	 * All bits above GPA width are reserved and kernel treats shared bit
+ 	 * as flag, not as part of physical address.
 -- 
 2.38.2
 
