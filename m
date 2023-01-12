@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1FB667C99
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B94A667CB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjALRfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:35:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
+        id S230135AbjALRh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 12:37:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbjALRe6 (ORCPT
+        with ESMTP id S232845AbjALRgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:34:58 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3A0C973C;
-        Thu, 12 Jan 2023 08:57:36 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id d3so20799484plr.10;
-        Thu, 12 Jan 2023 08:57:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=44uls0T5zLOmzt4WmcHXZuXUMffcgjhS26drNArBO9U=;
-        b=cr/lss4Cy8hnfjXO8Ci33QjYnR/ITDvzc+wn6dmYxlv/OVhRQj4M1z/F4KogINRgCm
-         hu+Z1ohC/TLeqKR0Yr1R10zoltGDOIlHu+eRbkZkZjcKONhkFvDwM/XsF26SzVmY4dJj
-         ZM5WKuk1GPUGjIv9VqFyjCvczwIk4SNOsHlCMbi2eiqyv68y9H2zDQ9xDf97xq5mNB+w
-         p3jFFs7H03illKXb+MaRQNxk972wWqavsNnDw/uGmvC+AE5VNxdBrkoFMaTFstGddlpw
-         veeG4eKfHlio1bFBzvhlMFn9ZPcDiyeGg/VLlUZAI76hmV1fIdl5sOSRVsOnztILVN6R
-         QgcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=44uls0T5zLOmzt4WmcHXZuXUMffcgjhS26drNArBO9U=;
-        b=vZYZZKEGoaTMoFuA1JxZgAAy46tD2gEY1BHW62Wz+ayj7K2xhjQ6z8tzxRG0psocSQ
-         rx5YMRkdijbkPmf8Ipb3PljAl134P+YjW642sKo/eB45JkzU6L3g9cWFkNtL/OvCuolB
-         kA6c4fYCYwOwU3AmGKmGOScBCc6iHeOCRJD+CIrNl2OMWqmqgny2iPLlOop0kMh64Q2X
-         4TUxGBN2QgvHbc9u60CJAfmb4/sb3qzo9UDDjh0pwJTodctj3/0dRr2J/HfkeMKUJ/Sd
-         NF0cR9/zWzhFogGm11A2NY8KP721iLrULl66f7rO0E7RBiNX7+GN8ewh6dSgIsBkPQ9O
-         mtTw==
-X-Gm-Message-State: AFqh2kpc5l3wKCjScAD+J66pIG8ROXV8ETlywR2yYhbivXPfGnCjM9Nc
-        5Lmq21CpG6oQN4FFCopbgFI=
-X-Google-Smtp-Source: AMrXdXuBdLKkht363ZE8WZGQemn7xBTJ9NHYsu8XrkyeHFn/bYgP03yWqKT8tRWqXpSnCcm/tDYt2A==
-X-Received: by 2002:a05:6a20:8346:b0:a7:8ce5:6fc6 with SMTP id z6-20020a056a20834600b000a78ce56fc6mr72883015pzc.13.1673542631012;
-        Thu, 12 Jan 2023 08:57:11 -0800 (PST)
-Received: from [192.168.0.128] ([98.97.117.20])
-        by smtp.googlemail.com with ESMTPSA id bb9-20020a170902bc8900b00192c4055e72sm12428823plb.173.2023.01.12.08.57.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 08:57:10 -0800 (PST)
-Message-ID: <3e278fed9f59a4e325933d4a4ef4b02991fb2c17.camel@gmail.com>
-Subject: Re: [PATCH net] rxrpc: Fix wrong error return in
- rxrpc_connect_call()
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        Dan Carpenter <error27@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        syzbot+4bb6356bb29d6299360e@syzkaller.appspotmail.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Thu, 12 Jan 2023 08:57:09 -0800
-In-Reply-To: <2438405.1673460435@warthog.procyon.org.uk>
-References: <2438405.1673460435@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 12 Jan 2023 12:36:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91978CBBC8;
+        Thu, 12 Jan 2023 08:58:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 014DA620DC;
+        Thu, 12 Jan 2023 16:58:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD4F3C43398;
+        Thu, 12 Jan 2023 16:57:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673542681;
+        bh=fFRqgsrl7Ewslx/ZwWvBlTVHZWIOjbNberPekWlv87Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vJ1kIpslROY2MZ+qkiqGFEmYrbEbgPz1K1+ljcqoFfC4YRRzL+DLJ8HD00cpLPI77
+         iCXwCf+2nD5jZvYJhMOGhrC3cMP39qnG0M3HDS309gfnOwPYu0NZ1WxjrzAYtFqPdn
+         wViCjfbz02u8+vjIMSSKyOR6hmNm6psvkE4VWAJ8zvhnOZwIl8XQmqyO7mRARWnebP
+         +8tFSbZvWIkucAUmkNNZoCAQBCCHtNkHd3faMumvtIev6x32Zisz1nx5RCSZizwfmd
+         aTzdvXZQvDWkYTyQOHShHuSyGI7ww2j3y5cLrhQ89eCYhSumbufhAegpY3iLcQ0oQp
+         r0ZlSRaRL4W5g==
+Date:   Thu, 12 Jan 2023 16:57:55 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        kursad.oney@broadcom.com, dregan@mail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
+Message-ID: <Y8A8EykJYWuu17ew@sirena.org.uk>
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-12-william.zhang@broadcom.com>
+ <Y7iaEOBP4TRBoDYy@sirena.org.uk>
+ <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
+ <Y7xrhjhhY3g5DE25@sirena.org.uk>
+ <04b740e0-09d1-8c39-4f0e-8f61a74eeb58@broadcom.com>
+ <Y73WL3Gwo6w6dJJr@sirena.org.uk>
+ <7871b35b-df7f-793c-c4a9-c850425ca2b4@broadcom.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tB4e0N4NIUaXxw/e"
+Content-Disposition: inline
+In-Reply-To: <7871b35b-df7f-793c-c4a9-c850425ca2b4@broadcom.com>
+X-Cookie: A watched clock never boils.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-01-11 at 18:07 +0000, David Howells wrote:
->    =20
-> Fix rxrpc_connect_call() to return -ENOMEM rather than 0 if it fails to
-> look up a peer.
->=20
-> This generated a smatch warning:
->         net/rxrpc/call_object.c:303 rxrpc_connect_call() warn: missing er=
-ror code 'ret'
->=20
-> I think this also fixes a syzbot-found bug:
->=20
->         rxrpc: Assertion failed - 1(0x1) =3D=3D 11(0xb) is false
->         ------------[ cut here ]------------
->         kernel BUG at net/rxrpc/call_object.c:645!
->=20
-> where the call being put is in the wrong state - as would be the case if =
-we
-> failed to clear up correctly after the error in rxrpc_connect_call().
->=20
-> Fixes: 9d35d880e0e4 ("rxrpc: Move client call connection to the I/O threa=
-d")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Reported-and-tested-by: syzbot+4bb6356bb29d6299360e@syzkaller.appspotmail=
-.com
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Link: https://lore.kernel.org/r/202301111153.9eZRYLf1-lkp@intel.com/
-> ---
->  net/rxrpc/call_object.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
-> index 3ded5a24627c..f3c9f0201c15 100644
-> --- a/net/rxrpc/call_object.c
-> +++ b/net/rxrpc/call_object.c
-> @@ -294,7 +294,7 @@ static void rxrpc_put_call_slot(struct rxrpc_call *ca=
-ll)
->  static int rxrpc_connect_call(struct rxrpc_call *call, gfp_t gfp)
->  {
->  	struct rxrpc_local *local =3D call->local;
-> -	int ret =3D 0;
-> +	int ret =3D -ENOMEM;
-> =20
->  	_enter("{%d,%lx},", call->debug_id, call->user_call_ID);
-> =20
 
-Looks good to me.
+--tB4e0N4NIUaXxw/e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+On Wed, Jan 11, 2023 at 11:42:57AM -0800, William Zhang wrote:
+> On 01/10/2023 01:18 PM, Mark Brown wrote:
+
+> > spi_replace_transfers().
+
+> Okay I saw this function is used by spi_split_transfers_maxsize which a few
+> drivers use to limit the transfer size and it make sense.  I can come up
+> something like spi_merge_transfers to be used by my driver's prepend
+> function.  But it has the same issue I mentioned early as the these tx, rx
+> transfers have the dependency on the order they present in the original
+> transfer list for my prepend function to work.  And for the same reason, it
+> won't be generally useful for other drivers.
+
+I wouldn't be surprised if something else turned up which had similar
+constraints, SPI isn't the most complex thing ever so there's a lot of
+patterns in controlers that get reproduced.
+
+--tB4e0N4NIUaXxw/e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPAPBIACgkQJNaLcl1U
+h9B7owf+NOOGAbdzEW4Bw5MOOF0h1haRJ/Fc1hX/4OplSftennksQwctqCI9LB5s
+jxA3Rn8Itza83awPYWcIJ9fT5ZwNeXBTcNEsQ1KPhHBE+vzYTWYiNlTWABa7vFOE
+EFqu9erZJoYHYgXlb86MSuzC5om0zYGzt/xeGnvaZcMzqQNV3+Ib6urT0I0jRncL
+Uo3sjZoNyJ7FGCRGYVvBuqov9igoCLPFsV0C6+T6NtsE2YwDF9I000oWwmVGgRuo
+dOh8QAZYFfWxvmmw2tIzUGwfyxZshgBCKzlO7PFOprbLza3c1Tf34gLIzJ9lYJ4n
+Rt2HOSabCoThRauJ2p5o/HcW+WjBhw==
+=6GPD
+-----END PGP SIGNATURE-----
+
+--tB4e0N4NIUaXxw/e--
