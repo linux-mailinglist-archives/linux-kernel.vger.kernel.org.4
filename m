@@ -2,109 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E6F667DCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF1C667DCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240480AbjALST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
+        id S240562AbjALSTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:19:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240093AbjALSSU (ORCPT
+        with ESMTP id S240518AbjALSSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:18:20 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143E6DA4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:49:46 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id i70so194773ioa.12
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:49:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lX65Kc7nPBXbKkjC+fwCboVLbKB6Sj5cvcRLzBYpuH8=;
-        b=zjXR+czZhQA6mN23SRRhdexwgum0awej5ztuUJiGA5aPYiAuxIHFtH9TYVl8hBT40d
-         uBsDyhJLi0BcfTxlZrk6Q2MzUW/iTnbg+JohjC6LOvpa/euVj1i+TawUPbPTW4VqMcmj
-         IkjFrD7EB6drCGUkKVO75zihiEFPOz497TuvDH3g2Z8GoS8ugNgUj43YPcUcM9l1SJ88
-         Kg7ewxWinPXqrTMahDkkxCw7P+5/n43YYYhzJ9lu8mZvYVAfsa6ryfXHgxbRJMcdJXTI
-         wL9ku14WherXIxbuLVM49sZbPOtF1LLjvmrTOKgM48fXoH2jy21sc3t/Sj4+M6bjO6ut
-         cHuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lX65Kc7nPBXbKkjC+fwCboVLbKB6Sj5cvcRLzBYpuH8=;
-        b=2b8+XNzQ3tC7agYhIMNK1VwFXugXVf9MzO2GsEmYHII1q5GPF43b5aITcfSCUPHJJU
-         K9gq01c7zrhQ7Vr37DhBwNZq/nufcC+NxLAzax0dCwAMVoIgek3FKNZbUsB6tO4ynAEE
-         yc9ojb27/U0r7xyxgnyKjMiC5/lJzTsrnm95sygVHP4EgWLWd94bYec3J58E52g4FnSL
-         3ZFeZxj2E9a9j+dR5RNl1O4RQsnOpOmseK5Fm0eBPUiBILFHgeq81sr851TpNzrWDm5u
-         vTINpc2aF5sKuyKFcm+luwxwaPPcQFHgAcm7+iD6+v549oppnEaeiIoinnU3hJ4OUgmu
-         3fvw==
-X-Gm-Message-State: AFqh2kpZUZKIx5pu/jrdWA9Ws402gbDqv3pBFhuZLhCvAVVfmnmxfOZr
-        fSZPbk5ConIrCw2aQoTmzFNOqQ==
-X-Google-Smtp-Source: AMrXdXvfJPdLEtfNFkqs3kJLgiXfwKPgDLqr+vUzgKVDpr7E0hVILPhNql9TZ0A9d7sdAlUC3iKdfg==
-X-Received: by 2002:a05:6602:1cf:b0:6ed:95f:92e7 with SMTP id w15-20020a05660201cf00b006ed095f92e7mr9115315iot.0.1673545785360;
-        Thu, 12 Jan 2023 09:49:45 -0800 (PST)
-Received: from [127.0.0.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id d2-20020a0566022be200b006e00ddb4517sm6280650ioy.48.2023.01.12.09.49.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 09:49:44 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        Breno Leitao <leitao@debian.org>,
-        Christian Mazakas <christian.mazakas@gmail.com>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        VNLX Kernel Department <kernel@vnlx.org>,
-        "io-uring Mailing List" <io-uring@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>
-In-Reply-To: <20230112155709.303615-1-ammar.faizi@intel.com>
-References: <20230112155709.303615-1-ammar.faizi@intel.com>
-Subject: Re: [PATCH liburing v1 0/4] liburing updates for 2.4
-Message-Id: <167354578448.497205.2301808870925643742.b4-ty@kernel.dk>
-Date:   Thu, 12 Jan 2023 10:49:44 -0700
+        Thu, 12 Jan 2023 13:18:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EA9DEF
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:49:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC35CB81F08
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 17:49:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D14C43398;
+        Thu, 12 Jan 2023 17:49:53 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64/cpufeature: Remove 4 bit assumption in ARM64_FEATURE_MASK()
+Date:   Thu, 12 Jan 2023 17:49:50 +0000
+Message-Id: <167354578784.3644325.17415348273046160452.b4-ty@arm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221222-arm64-arm64-feature-mask-v1-1-c34c1e177f90@kernel.org>
+References: <20221222-arm64-arm64-feature-mask-v1-1-c34c1e177f90@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-78c63
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu, 12 Jan 2023 22:57:05 +0700, Ammar Faizi wrote:
-> I have found two people confused about the io_uring_prep_splice()
-> function, especially on the offset part. The current manpage for
-> io_uring_prep_splice() doesn't tell about the rules of the offset
-> arguments.
-> 
-> Despite these rules are already noted in "man 2 io_uring_enter",
-> people who want to know about this prep function will prefer to read
-> "man 3 io_uring_prep_splice". Let's explain it there.
+On Tue, 27 Dec 2022 13:00:39 +0000, Mark Brown wrote:
+> The ARM64_FEATURE_MASK(), used extensively by KVM, assumes that all ID
+> register fields are 4 bits wide but this is not the case any more, for
+> example there are several 1 bit fields in ID_AA64SMFR0_EL1. Fortunately
+> we now have generated constants for all the ID mask registers which can
+> be used instead. Rather than create churn from updating existing users
+> update the macro to reference the generated constants and replace the
+> comment with a note advising against adding new users.
 > 
 > [...]
 
-Applied, thanks!
+Applied to arm64 (for-next/sysreg), thanks!
 
-[1/4] liburing-ffi.map: Add io_uring_prep_msg_ring_cqe_flags() function
-      commit: 390b4f6a1314f8b1c51ced51c70b8646a51ad081
-[2/4] CHANGELOG: Note about --nolibc configure option deprecation
-      commit: 68c2a983819edae4e724b49b2e644767684eb103
-[3/4] liburing.h: 's/is adjust/is adjusted/' and fix indentation
-      commit: f63a594cbc58bb0f680e7d424f2d8f836142aa35
-[4/4] man/io_uring_prep_splice.3: Explain more about io_uring_prep_splice()
-      commit: 55bbe5b71c7d39c9ea44e5abb886846010c67baa
+[1/1] arm64/cpufeature: Remove 4 bit assumption in ARM64_FEATURE_MASK()
+      https://git.kernel.org/arm64/c/e978eaca4bee
 
-Best regards,
 -- 
-Jens Axboe
-
-
+Catalin
 
