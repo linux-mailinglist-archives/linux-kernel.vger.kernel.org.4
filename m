@@ -2,125 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5170667A0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7AB667A16
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240598AbjALP5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:57:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S236370AbjALP6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbjALP4l (ORCPT
+        with ESMTP id S240641AbjALP5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:56:41 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E405F83
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:47:07 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id v30so27374692edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=touwoPoiYZf0HhlEwi8bPQAghKKkIn4o576UC3VAJig=;
-        b=Y7UoxZEpqnNjH0C9dutC6Y5LH1YueEA7ar7GIXTHlsjyRJ1sQpJtfyBFGYZZ0+I62Z
-         9eTjvcW9vrhwTGHfni2BokqqH/0aQEat3j0uzP2TfbaEwjeBuOGoDCUQlmeA4FkZ+ewt
-         meVWwzqwaN/2To9Bls79seggrsSl5K8RyhUL27PyWuJ7fUbMscS7CW5OERw9WTa/Ze99
-         R99lWv2BngR25eDhMzpt4vvtuXuNlya7pJ998yVIWOjpAq9szC6mqV6DYPWlsR0D0SYu
-         ysMrm5D/chxmdZmDr6sOiiMJjeqm0JXxL9A2SAW52cz4uN1tcoaqzvnuI1zyPOuRC9Gy
-         BNPA==
+        Thu, 12 Jan 2023 10:57:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934FE6342
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:47:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673538463;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KRE5893iX04jrGywKNs0iqtC9XhdTqoDhy9dIOaS4B0=;
+        b=dgbRe/WYQHoa+UbXC9xT/9QsDvkn6b7pnrDmorcPxJ6Puh1V8fMFFwdYkQqer4oo1YdBNw
+        PGxSq2ceNaCLsA8GsQRm5Jq3Tu014wwfKKWB3GAUoE42n2scwt3Y5w93JmFkMcdo/Var6F
+        juD4VouaXoHU+JSZfNzp3VTcBrutIII=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-528-aloRACgrPhSx_WFVLXyaSQ-1; Thu, 12 Jan 2023 10:47:42 -0500
+X-MC-Unique: aloRACgrPhSx_WFVLXyaSQ-1
+Received: by mail-wm1-f69.google.com with SMTP id q19-20020a1cf313000000b003d96c95e2f9so4409460wmq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:47:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=touwoPoiYZf0HhlEwi8bPQAghKKkIn4o576UC3VAJig=;
-        b=bpe/KIagColsXzqfllHI99Y5M/cmiaIP9laoiUhnVmo7x4BC3E9Tf5JChKPRdP73Qo
-         ECQRcLxuqwaSw9go57SFYeWRxuCqe3mfbVStOfBImIDnxE1J1zAe9f0cKSMeWM4cBKiz
-         TP5TcgkMR/LV5GdojtD6D676Ir6VQHVBCqiZlgYNwEIBhcVyySPKtXh5Nq1l55x9rHLi
-         vITMZj9ciqey+/0sG7LLuQBBIGvnMS0MiErDuii1ad+cKPtcdyXYtYmUycHuYzDPjHS/
-         AVA3hpBjbNnL868gMSjzLkxGWAkYJeySnaDgD9y8T2VSMs6JjNWJh8bpyYoCOBFrNnY3
-         Uw6Q==
-X-Gm-Message-State: AFqh2kpP1Snryc+ajymOosmdLVTANYhhNdSC46rgZVs5vVwKqP29i7AU
-        cgpoIvUqwQQFYbfGwHwzWb7S1Q==
-X-Google-Smtp-Source: AMrXdXssM3QKtx3x/hfO1hFv0f1b7bDY5i5kFJO302k1BGtRn7sQ9lO5PV+s3tuqXmOqb6biVLRgvw==
-X-Received: by 2002:a05:6402:d55:b0:499:c294:77b6 with SMTP id ec21-20020a0564020d5500b00499c29477b6mr9702559edb.9.1673538426017;
-        Thu, 12 Jan 2023 07:47:06 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id fd7-20020a056402388700b00483dd234ac6sm7119348edb.96.2023.01.12.07.47.05
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KRE5893iX04jrGywKNs0iqtC9XhdTqoDhy9dIOaS4B0=;
+        b=JykFssFBGevozPQL5aifiPFiS6kerg6P3SjcBWhdUz2T6LWGGZLaG1rBdVWoRDPab3
+         wazCNzhAjjnYa9HFbaTHu5soV2AJuDdLm1RTaIhqon7LffFCVw0MH24n7zemSWMb5TGS
+         sGVEVc1Nb6g2bY+RqiwMSwdcguZefGOKPZPAkU3lqRt7W8nrgMzIsOuUaW5WpDTlwqbP
+         sC4neI25pm17rZpHAR+x43eSt0ujYs9t380TdR/6qAd8droLBddX52QSUnyzs125RTvt
+         RA1X9Bj273zvtR8q6hTawJLSKDtxKPJEbOMtUw2BgKDnqFR6y6UArUtnQLoHtYc+Pxdq
+         kjzQ==
+X-Gm-Message-State: AFqh2kr141Eg2Gdz1uHxMlb6egskUNLiGsqGZZXv5GuN+r/Ira0UvISi
+        2bAXSwnLKG3Fdb6ex7E80zKAtoYCDEnA0wBkm+bbkC+Nag2nUyWfkAXq+Nf0aYxbiMH4X7nJcqG
+        HgL4DwL4gZzg2O25u7eV2EjGG
+X-Received: by 2002:a05:600c:354c:b0:3da:10e6:b79c with SMTP id i12-20020a05600c354c00b003da10e6b79cmr3055892wmq.24.1673538460984;
+        Thu, 12 Jan 2023 07:47:40 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuGt9Xp38VuihuiQSwcLY4/Te4d2ubEUq6EvNtdkAysW0dGE5N4524IEcewJLaHgKiOFsh+PQ==
+X-Received: by 2002:a05:600c:354c:b0:3da:10e6:b79c with SMTP id i12-20020a05600c354c00b003da10e6b79cmr3055879wmq.24.1673538460719;
+        Thu, 12 Jan 2023 07:47:40 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-113-183.dyn.eolo.it. [146.241.113.183])
+        by smtp.gmail.com with ESMTPSA id hg11-20020a05600c538b00b003cf6a55d8e8sm21422831wmb.7.2023.01.12.07.47.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 07:47:05 -0800 (PST)
-Date:   Thu, 12 Jan 2023 16:47:04 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 08/11] RISC-V: KVM: Disable all hpmcounter access for
- VS/VU mode
-Message-ID: <20230112154704.x6ml27hnsxh25my2@orel>
-References: <20221215170046.2010255-1-atishp@rivosinc.com>
- <20221215170046.2010255-9-atishp@rivosinc.com>
+        Thu, 12 Jan 2023 07:47:39 -0800 (PST)
+Message-ID: <47d9b00c664dbaabd8921a47257ffc3b7c5a1325.camel@redhat.com>
+Subject: Re: [PATCH net 2/2] net/af_packet: fix tx skb network header on
+ SOCK_RAW sockets over VLAN device
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     =?ISO-8859-1?Q?Herv=E9?= Boisse <admin@netgeek.ovh>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 12 Jan 2023 16:47:38 +0100
+In-Reply-To: <Y8Am5wAxC48N12PE@quaddy.sgn>
+References: <20230110191725.22675-1-admin@netgeek.ovh>
+         <20230110191725.22675-2-admin@netgeek.ovh>
+         <fa5895ae62e0f9c1eb8f662295ca920d1da7e88f.camel@redhat.com>
+         <Y8Am5wAxC48N12PE@quaddy.sgn>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221215170046.2010255-9-atishp@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 09:00:43AM -0800, Atish Patra wrote:
-> Any guest must not get access to any hpmcounter including cycle/instret
-> without any checks. We achieve that by disabling all the bits except TM
-> bit in hcountern.
-
-hcounteren
-
+On Thu, 2023-01-12 at 16:27 +0100, Hervé Boisse wrote:
+> On Thu, Jan 12, 2023 at 01:48:51PM +0100, Paolo Abeni wrote:
+> > I'm unsure I read correctly the use case: teh user-space application is
+> > providing an L2 header and is expecting the Linux stack to add a vlan
+> > tag? Or the linux application is sending packets on top of a vlan
+> > device and desire no tag on the egress packet? or something else?
 > 
-> However, instret and cycle access for guest userspace can be enabled
-> upon explicit request (via ONE REG) or on first trap from VU mode
-> to maintain ABI requirement in the future. This patch doesn't support
-> that as ONE REG inteface is not settled yet.
+> The userland app does not care about the device being a VLAN one or not. Just a regular Ethernet device on which to send raw frames.
+> This means the app provides a standard 14 byte Ethernet header on the socket and does not matter about any VLAN tag.
 > 
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/kvm/main.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> Then, the goal is to be able to alter those packets at the qdisc level with tc filters.
+> But, when such packets are sent on top of a VLAN device whose real device does not support VLAN tx offloading, the bad position of the skb network header makes this task impossible.
 > 
-> diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
-> index 58c5489..9c2efd3 100644
-> --- a/arch/riscv/kvm/main.c
-> +++ b/arch/riscv/kvm/main.c
-> @@ -49,7 +49,8 @@ int kvm_arch_hardware_enable(void)
->  	hideleg |= (1UL << IRQ_VS_EXT);
->  	csr_write(CSR_HIDELEG, hideleg);
->  
-> -	csr_write(CSR_HCOUNTEREN, -1UL);
-> +	/* VS should access only TM bit. Everything else should trap */
-
-s/TM bit/the time counter/
-
-> +	csr_write(CSR_HCOUNTEREN, 0x02);
->  
->  	csr_write(CSR_HVIP, 0);
->  
-> -- 
-> 2.25.1
+> To give a concrete example, here are few commands to show the problem easily:
 > 
+> # modprobe dummy
+> # ip link add link dummy0 dummy0.832 type vlan id 832
+> # tc qdisc replace dev dummy0.832 root handle 1: prio
+> # tc filter del dev dummy0.832
+> # tc filter add dev dummy0.832 parent 1: prio 1 protocol ip u32 match u8 0 0 action pedit pedit munge ip tos set 0xc0
+> # ip link set dummy0 up
+> # ip link set dummy0.832 up
+> 
+> Then start an application that uses AF_PACKET+SOCK_RAW sockets over the VLAN device:
+> 
+> # dhclient -v dummy0.832
+> 
+> If you look at the emitted packets on dummy0, you will see that the 0xc0 byte of the IPv4 TOS/DSCP field is not set.
+> Instead, the 0xc0 tos byte is written 4 bytes too far, in the last byte of the IPv4 Identification field.
 
-Otherwise,
+I understand, thanks. Still is not clear why the user-space application
+would attach to dummy0.832 instead of dummy0.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+With your patch the filter will match, but the dhcp packet will reach
+the wire untagged, so the app will behave exactly as it would do
+if/when attached to dummy0.
 
-Thanks,
-drew
+To me it looks like the dhcp client has a bad configuration (wrong
+interface) and these patches address the issue in the wrong place
+(inside the kernel).
+
+Cheers,
+
+Paolo
+
