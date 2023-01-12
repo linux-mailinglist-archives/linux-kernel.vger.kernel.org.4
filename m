@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD5B667E95
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93B9667E98
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbjALTEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
+        id S233589AbjALTES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237748AbjALTDX (ORCPT
+        with ESMTP id S240250AbjALTDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:03:23 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CF569B19;
-        Thu, 12 Jan 2023 10:43:16 -0800 (PST)
+        Thu, 12 Jan 2023 14:03:43 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512EA642E
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:44:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673548996; x=1705084996;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XQH5u3DL5ISx2GfFC4iQ4W+ecE1+55/FppouOEOhfe8=;
-  b=VVsrj5WMcC2BPr6ywLtnKXGPa4ohqPXLGkil3fAX56O5tjzutKLgXZQv
-   MmFacd08PX9HKKNbXG5HbYuiYlws8jbuzQh8tyKc9a0RW3mischey3T7h
-   7Nk1PRJ/LSOjAZ1s2/iTGB+89f59I+alWSpGOri4WzDJ1wjIGDHp2ftto
-   01piTyp8UF5lDxwlExHmd8wosvWF5wL1qc5P2wtfyY431t+4lMr41yk/h
-   PwKFOCGxVpCPRl+SDPCRTx6quZPvs9hkTVm6QTYH8BbsWnInHD4Hi4bMN
-   oqfEV35ZsyoSfv7QqFFYvInvSSb7/dcCX4b3jeWZCJlirwXvHGvOPgCLe
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="325844576"
+  t=1673549069; x=1705085069;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AexL3P28r9vc3bJFkrnWOMI0QcFDFJKxP5z/sh/eWnw=;
+  b=iNvsDt3jaibEX425BpjOrLmoKsb7GB+vCR4jtBBpNaV/mkFMjUn4qvHu
+   F48zf71vEvRly1VH/cRfOCvNaBwBzPCyhqI4mIJ/pE88/qrpYh5zxtPSw
+   YWHNle3RAQT1zaH1Cv4ZjjDUTcTMhCn2AQCssASYOLmFiMeYvtg0ycdvN
+   BRMz1hGLQnkD/qKheWZQPe9rMRE68xI9E7CwrMOwGiR2RkbLjW/JmvxU+
+   YZtic2Sto1K5VbWDhoW78Qf+q24uTs8RbeNkvuyeq0eF+gxJwZcn8ZeYK
+   F6oiNwkmxv+yAI63rFnXTt6laeUgSuka2WVjXJlwO+ZIVRHzgWXDAg4JB
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="304173576"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="325844576"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 10:43:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="781868438"
+   d="scan'208";a="304173576"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 10:43:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="903318868"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="781868438"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 12 Jan 2023 10:43:09 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 074E0130; Thu, 12 Jan 2023 20:43:42 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] pinctrl: mediatek: Remove duplicate assignment of of_gpio_n_cells
-Date:   Thu, 12 Jan 2023 20:43:40 +0200
-Message-Id: <20230112184340.79606-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
+   d="scan'208";a="903318868"
+Received: from jbetan3x-mobl1.amr.corp.intel.com (HELO [10.209.143.163]) ([10.209.143.163])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 10:43:47 -0800
+Message-ID: <3320e6b8-28c7-d028-3c4c-2b4b25a963fb@linux.intel.com>
+Date:   Thu, 12 Jan 2023 12:43:46 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] regmap: sdw: Remove 8-bit value size restriction
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+References: <20230112171840.2098463-1-ckeepax@opensource.cirrus.com>
+ <20230112171840.2098463-3-ckeepax@opensource.cirrus.com>
+ <756fcb2d-d571-18cb-985e-d907ab682275@linux.intel.com>
+ <Y8BOCpXyOyF3igfG@sirena.org.uk>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <Y8BOCpXyOyF3igfG@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The of_gpio_n_cells default is 2 when ->of_xlate() callback is
-not defined. No need to assign it explicitly in the driver.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pinctrl/mediatek/pinctrl-moore.c      | 1 -
- drivers/pinctrl/mediatek/pinctrl-mtk-common.c | 1 -
- drivers/pinctrl/mediatek/pinctrl-paris.c      | 1 -
- 3 files changed, 3 deletions(-)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-moore.c b/drivers/pinctrl/mediatek/pinctrl-moore.c
-index 1ec0413959e1..007b98ce5631 100644
---- a/drivers/pinctrl/mediatek/pinctrl-moore.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-moore.c
-@@ -574,7 +574,6 @@ static int mtk_build_gpiochip(struct mtk_pinctrl *hw)
- 	chip->set_config	= mtk_gpio_set_config;
- 	chip->base		= -1;
- 	chip->ngpio		= hw->soc->npins;
--	chip->of_gpio_n_cells	= 2;
- 
- 	ret = gpiochip_add_data(chip, hw);
- 	if (ret < 0)
-diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-index 553d16703475..665dec419e7c 100644
---- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-@@ -906,7 +906,6 @@ static const struct gpio_chip mtk_gpio_chip = {
- 	.set			= mtk_gpio_set,
- 	.to_irq			= mtk_gpio_to_irq,
- 	.set_config		= mtk_gpio_set_config,
--	.of_gpio_n_cells	= 2,
- };
- 
- static int mtk_eint_suspend(struct device *device)
-diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
-index 475f4172d508..17eead44b675 100644
---- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-@@ -987,7 +987,6 @@ static int mtk_build_gpiochip(struct mtk_pinctrl *hw)
- 	chip->set_config	= mtk_gpio_set_config;
- 	chip->base		= -1;
- 	chip->ngpio		= hw->soc->npins;
--	chip->of_gpio_n_cells	= 2;
- 
- 	ret = gpiochip_add_data(chip, hw);
- 	if (ret < 0)
--- 
-2.39.0
+On 1/12/23 12:14, Mark Brown wrote:
+> On Thu, Jan 12, 2023 at 11:38:38AM -0600, Pierre-Louis Bossart wrote:
+> 
+>>> +static int regmap_sdw_gather_write(void *context,
+>>> +				   const void *reg_buf, size_t reg_size,
+>>> +				   const void *val_buf, size_t val_size)
+>>>  {
+>>>  	struct device *dev = context;
+>>>  	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+>>> -	int read;
+>>> +	u32 addr = le32_to_cpu(*(const __le32 *)reg_buf);
+> 
+>> what's the difference between regmap_sdw_write() and
+>> regmap_sdw_gather_write()? Seems to me that it's the same functionality
+>> of writing at consecutive addresses. It's not a true 'gather' in the
+>> sense that only the first address is used?
+> 
+> The regmap gather_write() operation allows the bus to take two buffers,
+> one for the register and one for the value, rather than requiring the
+> core combine everything into a single buffer (mainly useful for large
+> transfers like firmware downloads).
 
+Right, but that's not supported in SoundWire. sdw_nwrite() will only
+work with consecutive addresses - and the auto-increment is handled in
+software, not hardware.
+
+What's suggested here is to use the first element of reg_buf, which begs
+the question how different this is from a regular write. If there was a
+discontinuity in reg_buf then this wouldn't work at all.
