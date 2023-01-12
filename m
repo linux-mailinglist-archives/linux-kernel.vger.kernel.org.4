@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AFE666B27
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 07:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE249666B2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 07:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239023AbjALGSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 01:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
+        id S235405AbjALGX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 01:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbjALGSX (ORCPT
+        with ESMTP id S234409AbjALGXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 01:18:23 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D931263E;
-        Wed, 11 Jan 2023 22:18:22 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NsvVv0tWQz4f3wQw;
-        Thu, 12 Jan 2023 14:18:15 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP1 (Coremail) with SMTP id cCh0CgCXtjAnpr9jeF7hBQ--.43940S3;
-        Thu, 12 Jan 2023 14:18:17 +0800 (CST)
-Subject: Re: [PATCH v2 1/2] blk-iocost: add refcounting for iocg
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <Y7XzUee5Bq+DoIC1@slm.duckdns.org>
- <c63ee2ad-23d5-3be0-c731-28494398b391@huaweicloud.com>
- <Y7cX0SJ0y6+EIY5Q@slm.duckdns.org>
- <7dcdaef3-65c1-8175-fea7-53076f39697f@huaweicloud.com>
- <Y7iCId3pnEnLqY8G@slm.duckdns.org>
- <875eb43e-202d-5b81-0bff-ef0434358d99@huaweicloud.com>
- <Y7xbpidpq7+DqJan@slm.duckdns.org>
- <a71f997f-6cae-d57b-85dd-2fd499d238f6@huaweicloud.com>
- <Y72wF/b0/xNRmP7f@slm.duckdns.org>
- <53b30ac8-d608-ba0b-8b1b-7fe5cfed6d61@huaweicloud.com>
- <Y77s0f741mFfGlTO@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <4aeef320-c6c8-d9b4-8826-d58f00ea6264@huaweicloud.com>
-Date:   Thu, 12 Jan 2023 14:18:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 12 Jan 2023 01:23:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28B841000;
+        Wed, 11 Jan 2023 22:23:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 885E9B81DB5;
+        Thu, 12 Jan 2023 06:23:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32714C43396;
+        Thu, 12 Jan 2023 06:23:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673504598;
+        bh=/RCNuQr6WRHa66Xb4//C83baWNn3VPnq6QBFQQ6fxZk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rbhBN2LmRRXLpW9/3NNvuB7iUq3uIEl/pQK6SM+20c0XxexSes7iXM2/3VEkHsPYm
+         PI1qofLpTImTKchrbnBDZ3efPpaF8pNuKqcxDXtx0lvj5U/0rY/2eBISl6dXVbWO8E
+         Ys7zZ6N+U3ywD8eLk3lqlHnV9lUSjCkLDpsoHzXr8aPp0+lBoWQ+PZZhi+l0lEH1lx
+         osAWkbS2ZhwKnK+3G9xVZxaNtFBohwzJwk/wdJ6zEQh2nifLZX6BPaWWU9GkaFO/xy
+         zUoxPG2QKWFVMUeVKXxf+eaLsYpNPO/dhxv4E/Q77tNLN29CfhuK8v+LgVAfHxgOeb
+         QZnJrY7w1NurQ==
+Received: by mail-oi1-f173.google.com with SMTP id n8so14620574oih.0;
+        Wed, 11 Jan 2023 22:23:18 -0800 (PST)
+X-Gm-Message-State: AFqh2kr42c5FkiQZv5bdOMMgjSwwAvFekiShpbfK4MIN/cXirFle8cnc
+        ExZ6eLwCNQ7MWArZOVY31Jq1i3jhupCknj7Xrm0=
+X-Google-Smtp-Source: AMrXdXvuxQPCrcD75or7FJw8XqNZU8LWRTvOMxvIDMZy99+x9b13wEK7RuDEXMYDZzzHOghqdcAe9VGxtcfaZVeAYV8=
+X-Received: by 2002:aca:3755:0:b0:35e:7c55:b015 with SMTP id
+ e82-20020aca3755000000b0035e7c55b015mr4869285oia.287.1673504597380; Wed, 11
+ Jan 2023 22:23:17 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Y77s0f741mFfGlTO@slm.duckdns.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgCXtjAnpr9jeF7hBQ--.43940S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF15Aw4UGr1kXr1kZryxZrb_yoW8GFW8pF
-        WfG3sagrWvyw1IyrnFyw4xX34Ska1UAr15KFyDG3yfCr4Fgr92kFyfAr1DAF93JFs5tFyY
-        gFyYgF17W39rAF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20230109204520.539080-1-ojeda@kernel.org> <20230109204520.539080-6-ojeda@kernel.org>
+In-Reply-To: <20230109204520.539080-6-ojeda@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 12 Jan 2023 15:22:41 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQYk6s11MASRHW6oxtkqF00EJVqhHOP=5rynWt-QDUsXw@mail.gmail.com>
+Message-ID: <CAK7LNAQYk6s11MASRHW6oxtkqF00EJVqhHOP=5rynWt-QDUsXw@mail.gmail.com>
+Subject: Re: [PATCH 6/6] kbuild: rust_is_available: normalize version matching
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,44 +68,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jan 10, 2023 at 5:46 AM Miguel Ojeda <ojeda@kernel.org> wrote:
+>
+> In order to match the version string, `sed` is used in a couple
+> cases, and `grep` and `head` in a couple others.
+>
+> Make the script more consistent and easier to understand by
+> using the same method, `sed`, for all of them.
+>
+> This makes the version matching also a bit more strict for
+> the changed cases, since the strings `rustc ` and `bindgen `
+> will now be required, which should be fine since `rustc`
+> complains if one attempts to call it with another program
+> name, and `bindgen` uses a hardcoded string.
+>
+> In addition, clarify why one of the existing `sed` commands
+> does not provide an address like the others.
+>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-在 2023/01/12 1:07, Tejun Heo 写道:
-> Hello,
-> 
-> On Wed, Jan 11, 2023 at 09:36:25AM +0800, Yu Kuai wrote:
->> I'm not sure, of course this can fix the problem, but two spinlock
->> 'blkcg->lock' and 'q->queue_lock' are used to protect blkg_destroy()
->> currently, add a mutex（disk level?) requires a refactor, which seems
->> complex to me.
-> 
-> The fact that the two paths can race each other already seems buggy. e.g.
-> What prevents them from running pd_free on the same pd twice? So, it needs
 
-I think the root cause is that blkg is tracked from two different list,
-blkcg->blkg_list from cgroup level and q->blkg_list from disk level. And
-pd_free_fn is also called from both blkg_destroy() and deactivate policy
-for a disk.
+Maybe, your purpose is to use sed consistently, but
+perhaps you can avoid forking sed if you know the
+format of the first line.
 
-I just thought about another solution:
 
-remove the blkcg_deactivate_policy() from rq_qos_exit() from deleting
-the device, and delay the policy cleanup and free to blkg_destroy_all().
-Then the policies(other than bfq) can only call pd_free_fn() from
-blkg_destroy(), and it's easy to guarantee the order. For bfq, it can
-stay the same since bfq has refcounting itself.
+BTW, what is missing here is, you do not check if
+${RUSTC} is really rustc.
 
-Then for the problem that ioc can be freed in pd_free_fn(), we can fix
-it by freeing ioc in ioc_pd_free() for root blkg instead of
-rq_qos_exit().
 
-What do you think?
+I can fool this script to print
+"arithmetic expression: expecting primary: "100000 *  + 100 *  + "
 
-Thanks,
-Kuai
-> to be fixed anyway and the intention always has been that these callbacks
-> are called in the correct traversal order.
-> 
-> Thanks.
-> 
 
+
+$ make RUSTC=true rustavailable
+./scripts/rust_is_available.sh: 19: arithmetic expression: expecting
+primary: "100000 *  + 100 *  + "
+***
+*** Please see Documentation/rust/quick-start.rst for details
+*** on how to setup Rust support.
+***
+make: *** [Makefile:1809: rustavailable] Error 2
+
+
+
+
+
+
+scripts/{as,ld}-version.sh tried their best to
+parse the line with shell syntax only, and
+print "unknown assembler invoked" if the given
+tool does not seem to be a supported assembler.
+
+
+
+
+
+
+
+> ---
+>  scripts/rust_is_available.sh | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
+> index a86659410e48..99811842b61f 100755
+> --- a/scripts/rust_is_available.sh
+> +++ b/scripts/rust_is_available.sh
+> @@ -66,8 +66,7 @@ fi
+>  # Non-stable and distributions' versions may have a version suffix, e.g. `-dev`.
+>  rust_compiler_version=$( \
+>         LC_ALL=C "$RUSTC" --version 2>/dev/null \
+> -               | head -n 1 \
+> -               | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
+> +               | sed -nE '1s:.*rustc ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
+>  )
+>  rust_compiler_min_version=$($min_tool_version rustc)
+>  rust_compiler_cversion=$(get_canonical_version $rust_compiler_version)
+> @@ -94,8 +93,7 @@ fi
+>  # Non-stable and distributions' versions may have a version suffix, e.g. `-dev`.
+>  rust_bindings_generator_version=$( \
+>         LC_ALL=C "$BINDGEN" --version 2>/dev/null \
+> -               | head -n 1 \
+> -               | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
+> +               | sed -nE '1s:.*bindgen ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
+>  )
+>  rust_bindings_generator_min_version=$($min_tool_version bindgen)
+>  rust_bindings_generator_cversion=$(get_canonical_version $rust_bindings_generator_version)
+> @@ -139,6 +137,9 @@ fi
+>
+>  # `bindgen` returned successfully, thus use the output to check that the version
+>  # of the `libclang` found by the Rust bindings generator is suitable.
+> +#
+> +# Unlike other version checks, note that this one does not necessarily appear
+> +# in the first line of the output, thus no `sed` address is provided.
+>  bindgen_libclang_version=$( \
+>         echo "$bindgen_libclang_output" \
+>                 | sed -nE 's:.*clang version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
+> --
+> 2.39.0
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
