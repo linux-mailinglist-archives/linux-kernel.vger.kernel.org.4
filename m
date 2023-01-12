@@ -2,295 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABF86684D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 654BA6684D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240481AbjALVAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 16:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
+        id S240547AbjALVAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 16:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240686AbjALU6H (ORCPT
+        with ESMTP id S240344AbjALU6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 15:58:07 -0500
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793C63DBEE;
-        Thu, 12 Jan 2023 12:42:24 -0800 (PST)
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 30CKfiZ2012540;
-        Thu, 12 Jan 2023 21:41:50 +0100
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id DCE721208DB;
-        Thu, 12 Jan 2023 21:41:40 +0100 (CET)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-        s=ed201904; t=1673556101; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wG8TA0zvqM8XSTGO+kuG0U8acSvdjSIWtmKxCQ68rf0=;
-        b=eheIYTybggC+Bb8/Fb7GuCZdV1DxR1KxHie/HufpA1Bn39rXct09i849V+ryU7oFJ4XSv1
-        DrXk7Y977+04sSDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-        t=1673556101; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wG8TA0zvqM8XSTGO+kuG0U8acSvdjSIWtmKxCQ68rf0=;
-        b=Ghz8JhwYKe+4M6O16p4F7ebY4qsy0Bn3K4IviEmEdPYR3X7hH5VFF8yvVFttabVuj56WH+
-        UgdCUfPqLj9xWuCLsv7TfCqTiL2/fbGkLrho1r5h4Hj/SWX03tpYlfU5kwL4fpBhgz/qzD
-        3cZBGbLHCDY4hCFuzwgfBLj+rYHDpb7oWF8HPT07w2Dy1cVFnNJnC50KeGARu2iN8dSjC5
-        p4fI6ZXoNf0B673OLVZX5eOsU4kCJdT9IuDTUQ9g+S+Pq3Uf7IAXo4lglQKu+7cTeBkFov
-        OhlpFLq3CeQumFyb/dm+QVky5njb9ey3nwSx8A2G/twTm72WrNoAXPhdnF3wuA==
-Date:   Thu, 12 Jan 2023 21:41:40 +0100
-From:   Andrea Mayer <andrea.mayer@uniroma2.it>
-To:     Jon Maxwell <jmaxwell37@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        martin.lau@kernel.org, joel@joelfernandes.org, paulmck@kernel.org,
-        eyal.birger@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [net-next v2] ipv6: remove max_size check inline with ipv4
-Message-Id: <20230112214140.b490f5e77e46d9cdab53d2b2@uniroma2.it>
-In-Reply-To: <20230112012532.311021-1-jmaxwell37@gmail.com>
-References: <20230112012532.311021-1-jmaxwell37@gmail.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119243DBD1;
+        Thu, 12 Jan 2023 12:42:37 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id bk16so19261209wrb.11;
+        Thu, 12 Jan 2023 12:42:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DrIck5ao7PDl0gXYa+erLdjTlEjrxSHeKI8TQvNSwaY=;
+        b=K1cKi1/OT7K52Tvz3gUWxUGoJKpYo7JWtFlUXztCQaSUVjIL4OBpv7O/fLZ6Fq30tR
+         1nCUiiGI8Oj6CSCoCFzW9mgmU6gHNw++4qK0li5pk98wAfSQnq1yok0upPcpaWFbHB1q
+         mSRpVV5mL0W4VdKB1h322qazpJA9KWwppLt9La7uxELblE+MTUUtzZDtsA0o7w5KGm0j
+         OUQtV3bTK2NhKM5WEX8Ep88bsxaPvxrzTFC4Lt++X5a6c9ZpRjupGLwCjJDmHb4yX/6p
+         RxNtdlm5O6wyNzwYhoC2XDyZ7dfY1UNAxScpf4/W5F6uinoH1qyAth9jWJsHZ/TEaXVo
+         gnoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DrIck5ao7PDl0gXYa+erLdjTlEjrxSHeKI8TQvNSwaY=;
+        b=asOXDC2daNzM1X6U3MBkXt+ZqcdXePMv/gQPuiDKYCTKELVWkN1Jh36gSVfk4Ldrlr
+         akApprXuSk/jWOwr4Ivst0EtWAx/DrVuJ3O2BYvlfkwJFQhdKn7chSKCp6NTxUemGGsP
+         xkbNOcsN5w3McJtbHubI+9NNGHDlEpF4Eixq6GFJ/hwtm6qmMgRg+PlSsNASQfMPDzuk
+         l767tgMXtoISFYx0a3yH3BpR5hQFURTmS6y4/kSM8hfuGcVOFVbH52loxdSLXW+0oPsR
+         s+iXxsJke/vYva/QsvH8kdNOJ5MqWe6DUJxzoGxLOD5wS5lgdsJ3KXDKtIhHlMwDYE9l
+         gb7g==
+X-Gm-Message-State: AFqh2krbtqR+WQjqG8uC/oZNffwHg+QGtdakbDH0AU3JRXVFMFx2VGGI
+        SNjOgyFRWSa0E2hjc9uyJSQlRT6kR4k=
+X-Google-Smtp-Source: AMrXdXs4Aq39IuzlqVj7kU6FC5te3VmhqT7aDHEhnzQSzqRz7kV+CrZdKpTmyUBgelRMPtM41IB/tg==
+X-Received: by 2002:a05:6000:11d2:b0:2bd:d542:e010 with SMTP id i18-20020a05600011d200b002bdd542e010mr2154894wrx.46.1673556155457;
+        Thu, 12 Jan 2023 12:42:35 -0800 (PST)
+Received: from suse.localnet (host-79-42-161-127.retail.telecomitalia.it. [79.42.161.127])
+        by smtp.gmail.com with ESMTPSA id q11-20020adf9dcb000000b00268aae5fb5bsm17593359wre.3.2023.01.12.12.42.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 12:42:34 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jeff Moyer <jmoyer@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH v2] fs/aio: Replace kmap{,_atomic}() with kmap_local_page()
+Date:   Thu, 12 Jan 2023 21:42:33 +0100
+Message-ID: <3477941.iIbC2pHGDl@suse>
+In-Reply-To: <Y77dkghufF6GVq1Y@ZenIV>
+References: <20230109175629.9482-1-fmdefrancesco@gmail.com>
+ <x498ri9ma5n.fsf@segfault.boston.devel.redhat.com> <Y77dkghufF6GVq1Y@ZenIV>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jon,
+On mercoled=EC 11 gennaio 2023 17:02:26 CET Al Viro wrote:
+> On Wed, Jan 11, 2023 at 09:13:40AM -0500, Jeff Moyer wrote:
+> > Hi, Al,
+> >=20
+> > Al Viro <viro@zeniv.linux.org.uk> writes:
+> > > On Mon, Jan 09, 2023 at 06:56:29PM +0100, Fabio M. De Francesco wrote:
+> > >> -	ring =3D kmap_atomic(ctx->ring_pages[0]);
+> > >> +	ring =3D kmap_local_page(ctx->ring_pages[0]);
+> > >>=20
+> > >>  	ring->nr =3D nr_events;	/* user copy */
+> > >>  	ring->id =3D ~0U;
+> > >>  	ring->head =3D ring->tail =3D 0;
+> > >>=20
+> > >> @@ -575,7 +575,7 @@ static int aio_setup_ring(struct kioctx *ctx,
+> > >> unsigned int nr_events)> >>=20
+> > >>  	ring->compat_features =3D AIO_RING_COMPAT_FEATURES;
+> > >>  	ring->incompat_features =3D AIO_RING_INCOMPAT_FEATURES;
+> > >>  	ring->header_length =3D sizeof(struct aio_ring);
+> > >>=20
+> > >> -	kunmap_atomic(ring);
+> > >> +	kunmap_local(ring);
+> > >>=20
+> > >>  	flush_dcache_page(ctx->ring_pages[0]);
+> > >=20
+> > > I wonder if it would be more readable as memcpy_to_page(), actually...
+> >=20
+> > I'm not sure I understand what you're suggesting.
+>=20
+> 	memcpy_to_page(ctx->ring_pages[0], 0, &(struct aio_ring){
+> 			.nr =3D nr_events, .id =3D ~0U, .magic =3D=20
+AIO_RING_MAGIC,
+> 			.compat_features =3D AIO_RING_COMPAT_FEATURES,
+> 			.in_compat_features =3D=20
+AIO_RING_INCOMPAT_FEATURES,
+> 			.header_length =3D sizeof(struct aio_ring)},
+> 			sizeof(struct aio_ring));
+>=20
+> instead of the lines from kmap_atomic to flush_dcache_page...
 
-On Thu, 12 Jan 2023 12:25:32 +1100
-Jon Maxwell <jmaxwell37@gmail.com> wrote:
+Actually, I'd prefer Ira's solution for readability, but I have nothing=20
+against yours. I will send you the code in the way you rewrote it.
 
-> v2: Correct syntax error in net/ipv6/route.c
-> 
-> In ip6_dst_gc() replace: 
-> 
-> if (entries > gc_thresh)
-> 
-> With:
-> 
-> if (entries > ops->gc_thresh)
-> 
-> Sending Ipv6 packets in a loop via a raw socket triggers an issue where a 
-> route is cloned by ip6_rt_cache_alloc() for each packet sent. This quickly 
-> consumes the Ipv6 max_size threshold which defaults to 4096 resulting in 
-> these warnings:
-> 
-> [1]   99.187805] dst_alloc: 7728 callbacks suppressed
-> [2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-> .
-> .
-> [300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
-> 
-> When this happens the packet is dropped and sendto() gets a network is 
-> unreachable error:
-> 
-> # ./a.out -s 
-> 
-> remaining pkt 200557 errno 101
-> remaining pkt 196462 errno 101
-> .
-> .
-> remaining pkt 126821 errno 101
-> 
-> Implement David Aherns suggestion to remove max_size check seeing that Ipv6 
-> has a GC to manage memory usage. Ipv4 already does not check max_size.
-> 
-> Here are some memory comparisons for Ipv4 vs Ipv6 with the patch:
-> 
-> Test by running 5 instances of a program that sends UDP packets to a raw 
-> socket 5000000 times. Compare Ipv4 and Ipv6 performance with a similar 
-> program.
-> 
-> Ipv4: 
-> 
+> > >>  	return 0;
+> > >>=20
+> > >> @@ -678,9 +678,9 @@ static int ioctx_add_table(struct kioctx *ctx,=20
+struct
+> > >> mm_struct *mm)> >>=20
+> > >>  					 * we are protected from=20
+page migration
+> > >>  					 * changes ring_pages by -
+>ring_lock.
+> > >>  					 */
+> > >>=20
+> > >> -					ring =3D kmap_atomic(ctx-
+>ring_pages[0]);
+> > >> +					ring =3D kmap_local_page(ctx-
+>ring_pages[0]);
+> > >>=20
+> > >>  					ring->id =3D ctx->id;
+> > >>=20
+> > >> -					kunmap_atomic(ring);
+> > >> +					kunmap_local(ring);
+> > >=20
+> > > Incidentally, does it need flush_dcache_page()?
+> >=20
+> > Yes, good catch.
 
-is it supposed to be Ipv6, right?
+Yes, I missed it :-(
 
-Ciao,
-Andrea
+However, with the use of memcpy_to_page() we no longer need that explicit c=
+all=20
+to flush_dcache_page().
 
-> Before test:
-> 
-> # grep -e Slab -e Free /proc/meminfo
-> MemFree:        29427108 kB
-> Slab:             237612 kB
-> 
-> # grep dst_cache /proc/slabinfo
-> ip6_dst_cache       1912   2528    256   32    2 : tunables    0    0    0 
-> xfrm_dst_cache         0      0    320   25    2 : tunables    0    0    0 
-> ip_dst_cache        2881   3990    192   42    2 : tunables    0    0    0 
-> 
-> During test:
-> 
-> # grep -e Slab -e Free /proc/meminfo
-> MemFree:        29417608 kB
-> Slab:             247712 kB
-> 
-> # grep dst_cache /proc/slabinfo
-> ip6_dst_cache       1912   2528    256   32    2 : tunables    0    0    0 
-> xfrm_dst_cache         0      0    320   25    2 : tunables    0    0    0 
-> ip_dst_cache       44394  44394    192   42    2 : tunables    0    0    0 
-> 
-> After test:
-> 
-> # grep -e Slab -e Free /proc/meminfo
-> MemFree:        29422308 kB
-> Slab:             238104 kB
-> 
-> # grep dst_cache /proc/slabinfo
-> ip6_dst_cache       1912   2528    256   32    2 : tunables    0    0    0 
-> xfrm_dst_cache         0      0    320   25    2 : tunables    0    0    0 
-> ip_dst_cache        3048   4116    192   42    2 : tunables    0    0    0 
-> 
-> Ipv6 with patch:
-> 
-> Errno 101 errors are not observed anymore with the patch.
-> 
-> Before test:
-> 
-> # grep -e Slab -e Free /proc/meminfo
-> MemFree:        29422308 kB
-> Slab:             238104 kB
-> 
-> # grep dst_cache /proc/slabinfo
-> ip6_dst_cache       1912   2528    256   32    2 : tunables    0    0    0 
-> xfrm_dst_cache         0      0    320   25    2 : tunables    0    0    0 
-> ip_dst_cache        3048   4116    192   42    2 : tunables    0    0    0 
-> 
-> During Test:
-> 
-> # grep -e Slab -e Free /proc/meminfo
-> MemFree:        29431516 kB
-> Slab:             240940 kB
-> 
-> # grep dst_cache /proc/slabinfo
-> ip6_dst_cache      11980  12064    256   32    2 : tunables    0    0    0
-> xfrm_dst_cache         0      0    320   25    2 : tunables    0    0    0
-> ip_dst_cache        3048   4116    192   42    2 : tunables    0    0    0
-> 
-> After Test:
-> 
-> # grep -e Slab -e Free /proc/meminfo
-> MemFree:        29441816 kB
-> Slab:             238132 kB
-> 
-> # grep dst_cache /proc/slabinfo
-> ip6_dst_cache       1902   2432    256   32    2 : tunables    0    0    0
-> xfrm_dst_cache         0      0    320   25    2 : tunables    0    0    0
-> ip_dst_cache        3048   4116    192   42    2 : tunables    0    0    0
-> 
-> Tested-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> Signed-off-by: Jon Maxwell <jmaxwell37@gmail.com>
-> ---
->  include/net/dst_ops.h |  2 +-
->  net/core/dst.c        |  8 ++------
->  net/ipv6/route.c      | 13 +++++--------
->  3 files changed, 8 insertions(+), 15 deletions(-)
-> 
-> diff --git a/include/net/dst_ops.h b/include/net/dst_ops.h
-> index 88ff7bb2bb9b..632086b2f644 100644
-> --- a/include/net/dst_ops.h
-> +++ b/include/net/dst_ops.h
-> @@ -16,7 +16,7 @@ struct dst_ops {
->  	unsigned short		family;
->  	unsigned int		gc_thresh;
->  
-> -	int			(*gc)(struct dst_ops *ops);
-> +	void			(*gc)(struct dst_ops *ops);
->  	struct dst_entry *	(*check)(struct dst_entry *, __u32 cookie);
->  	unsigned int		(*default_advmss)(const struct dst_entry *);
->  	unsigned int		(*mtu)(const struct dst_entry *);
-> diff --git a/net/core/dst.c b/net/core/dst.c
-> index 6d2dd03dafa8..31c08a3386d3 100644
-> --- a/net/core/dst.c
-> +++ b/net/core/dst.c
-> @@ -82,12 +82,8 @@ void *dst_alloc(struct dst_ops *ops, struct net_device *dev,
->  
->  	if (ops->gc &&
->  	    !(flags & DST_NOCOUNT) &&
-> -	    dst_entries_get_fast(ops) > ops->gc_thresh) {
-> -		if (ops->gc(ops)) {
-> -			pr_notice_ratelimited("Route cache is full: consider increasing sysctl net.ipv6.route.max_size.\n");
-> -			return NULL;
-> -		}
-> -	}
-> +	    dst_entries_get_fast(ops) > ops->gc_thresh)
-> +		ops->gc(ops);
->  
->  	dst = kmem_cache_alloc(ops->kmem_cachep, GFP_ATOMIC);
->  	if (!dst)
-> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-> index e74e0361fd92..b643dda68d31 100644
-> --- a/net/ipv6/route.c
-> +++ b/net/ipv6/route.c
-> @@ -91,7 +91,7 @@ static struct dst_entry *ip6_negative_advice(struct dst_entry *);
->  static void		ip6_dst_destroy(struct dst_entry *);
->  static void		ip6_dst_ifdown(struct dst_entry *,
->  				       struct net_device *dev, int how);
-> -static int		 ip6_dst_gc(struct dst_ops *ops);
-> +static void		 ip6_dst_gc(struct dst_ops *ops);
->  
->  static int		ip6_pkt_discard(struct sk_buff *skb);
->  static int		ip6_pkt_discard_out(struct net *net, struct sock *sk, struct sk_buff *skb);
-> @@ -3284,11 +3284,10 @@ struct dst_entry *icmp6_dst_alloc(struct net_device *dev,
->  	return dst;
->  }
->  
-> -static int ip6_dst_gc(struct dst_ops *ops)
-> +static void ip6_dst_gc(struct dst_ops *ops)
->  {
->  	struct net *net = container_of(ops, struct net, ipv6.ip6_dst_ops);
->  	int rt_min_interval = net->ipv6.sysctl.ip6_rt_gc_min_interval;
-> -	int rt_max_size = net->ipv6.sysctl.ip6_rt_max_size;
->  	int rt_elasticity = net->ipv6.sysctl.ip6_rt_gc_elasticity;
->  	int rt_gc_timeout = net->ipv6.sysctl.ip6_rt_gc_timeout;
->  	unsigned long rt_last_gc = net->ipv6.ip6_rt_last_gc;
-> @@ -3296,11 +3295,10 @@ static int ip6_dst_gc(struct dst_ops *ops)
->  	int entries;
->  
->  	entries = dst_entries_get_fast(ops);
-> -	if (entries > rt_max_size)
-> +	if (entries > ops->gc_thresh)
->  		entries = dst_entries_get_slow(ops);
->  
-> -	if (time_after(rt_last_gc + rt_min_interval, jiffies) &&
-> -	    entries <= rt_max_size)
-> +	if (time_after(rt_last_gc + rt_min_interval, jiffies))
->  		goto out;
->  
->  	fib6_run_gc(atomic_inc_return(&net->ipv6.ip6_rt_gc_expire), net, true);
-> @@ -3310,7 +3308,6 @@ static int ip6_dst_gc(struct dst_ops *ops)
->  out:
->  	val = atomic_read(&net->ipv6.ip6_rt_gc_expire);
->  	atomic_set(&net->ipv6.ip6_rt_gc_expire, val - (val >> rt_elasticity));
-> -	return entries > rt_max_size;
->  }
->  
->  static int ip6_nh_lookup_table(struct net *net, struct fib6_config *cfg,
-> @@ -6512,7 +6509,7 @@ static int __net_init ip6_route_net_init(struct net *net)
->  #endif
->  
->  	net->ipv6.sysctl.flush_delay = 0;
-> -	net->ipv6.sysctl.ip6_rt_max_size = 4096;
-> +	net->ipv6.sysctl.ip6_rt_max_size = INT_MAX;
->  	net->ipv6.sysctl.ip6_rt_gc_min_interval = HZ / 2;
->  	net->ipv6.sysctl.ip6_rt_gc_timeout = 60*HZ;
->  	net->ipv6.sysctl.ip6_rt_gc_interval = 30*HZ;
-> -- 
-> 2.31.1
+Thank you,
+
+=46abio
+
+
