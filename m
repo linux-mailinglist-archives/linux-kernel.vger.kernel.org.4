@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73454667DAA
+	by mail.lfdr.de (Postfix) with ESMTP id BE97F667DAB
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240298AbjALSOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:14:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
+        id S240317AbjALSOr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 12 Jan 2023 13:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240515AbjALSNs (ORCPT
+        with ESMTP id S240523AbjALSNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:13:48 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58F36DBAA
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:17 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id o8so9707275ilo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dgKrza2NtsFkWIoqInfkYFIF1ejr0kkPFxk6nS4NQjw=;
-        b=1FP3lYMDFzpooPWyS6CiSsFyMJB3Z4HPH+Fm+WXhIVpiAH13l1yf70RTXoFEOQ0AiH
-         w3T3f9d6cP3OcXoiLTqjvbYjl/WXE+famL6wp/gJ9/np4uZ/nRABO1iHnoCbZkJuk3VP
-         bbdqYVbvdhhOreeNnvGOePMKP9+V9FBRfLET/b27tN7MrJVmCAPsVmFxUanaWE/rYbBD
-         GoywOO1C2biFiY3nY3yVklHN2Rev7Voj76jPiPYwCptFTK14ceLVJdbDrhm6UpyGcmDY
-         cFu7qR88z4FdKVSmJAqtyqBcLzCgdRekRFcJbN5mbh0YRSIWBi1sSRmww//8NWKBPzDm
-         YLRQ==
+        Thu, 12 Jan 2023 13:13:49 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56A46DBAF
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:18 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id e9-20020a056e020b2900b003036757d5caso13983498ilu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dgKrza2NtsFkWIoqInfkYFIF1ejr0kkPFxk6nS4NQjw=;
-        b=DOl4MVXsusKf0CfnX8SoBroph7XxhsGcD28TuzSCDWa9NROTAmP/QFZXX+QDfPsawG
-         wNpKcdt6tMCVU4V2cVuuGHa/QafT2Nn2Ob0jVm0dllhC54plraCDxAbw1in+hx6ABoqc
-         zHHyml4mZcuMa7oxih+i/+YYLfCNoJV1FKlGbdl2l6ZOXJCpRqrzfH6GJPUNBHCJ6rsj
-         G+IQcYh43qxbHnVxUahRDZ5jizFegbJyMVafLe4aTvcJJwYMNpfFu2pEibdVGOW9cZUl
-         6+QBz1wcPX3GrXVcztueC9E5X32+2Q8OafRYbkTUF4hjaf4uUi6mtAEpc+ruuU+ydzUI
-         +dHg==
-X-Gm-Message-State: AFqh2kpumKDZ6GeP6Motxnp5C+KHwQCi0fFrpCETZ5JZWM8lcNOQgIyZ
-        3K/pXLAYCAjWU/mJ65eetkZ5yw==
-X-Google-Smtp-Source: AMrXdXvclKjcy7OSFpmzvK1g+tr/pTH8hn2p5gv21gwpS+TWX8ENpYOuzI9Tyu6qM5IsG/S8kp3cvA==
-X-Received: by 2002:a92:d28f:0:b0:30b:d89f:35b2 with SMTP id p15-20020a92d28f000000b0030bd89f35b2mr8969427ilp.3.1673545397040;
-        Thu, 12 Jan 2023 09:43:17 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id c72-20020a02964e000000b00363d6918540sm5398895jai.171.2023.01.12.09.43.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 09:43:16 -0800 (PST)
-Message-ID: <b130dd91-0871-6138-9a40-8499fb776875@kernel.dk>
-Date:   Thu, 12 Jan 2023 10:43:15 -0700
+        h=content-transfer-encoding:cc:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4mJ/3NEdJjcfIwphz3ctLNzvcyG4TGwGYyLvC3FGbeU=;
+        b=QIW8pHDBM/qA/DTcmwkbvgVponpdUbP0A/Z8LuEWks9BQ3nXzzL/8mUVjNz/k7vlNZ
+         UYuDXKqVZeAbULEwhcyc4O5hdQzX12PgclXlBFxL6ZcDreUjmryNPq/RAC70UzLPc4ho
+         CzSjnRlincK12obXjN9yFOSlbcpNC1jBlgPhqhR8tkiEfE43+nC1HOyuP2Fzv0a6AbHT
+         NdEP5aZmbrOo3Exfss7A/O+s0MGyAjG5jiwlfCJNkM1dyOAr6al4FkVqZb6Z96/pYDSx
+         ZvVMTTVsvWlsDgAsyUW8zgAqL5Xjif4WzhppjnHNuL0I1ASdgywixuRHIs/77vhZQLI8
+         7+cg==
+X-Gm-Message-State: AFqh2krlESC58YIU7PE2BegnJvVN6w9mYEJ22XwxtNZgLw7qwYvrzR2i
+        0MrvqIGTxLkGt6jQhd+6/smsJ3HpuyWqkuDw9xNKaU78iEoX
+X-Google-Smtp-Source: AMrXdXsi/nM7b2/T2ZImf2mdRFJBqoTWqs7nDy7uSg47A2a/jY21QFeZggHBd3V2E/8L2XD1GMgfLU70Qc4Fzm4TQPfw2wcsXfm1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
+X-Received: by 2002:a5d:9644:0:b0:6ec:c7a1:aa0d with SMTP id
+ d4-20020a5d9644000000b006ecc7a1aa0dmr6588951ios.139.1673545398261; Thu, 12
+ Jan 2023 09:43:18 -0800 (PST)
+Date:   Thu, 12 Jan 2023 09:43:18 -0800
+In-Reply-To: <b130dd91-0871-6138-9a40-8499fb776875@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fa9db705f214a6c2@google.com>
 Subject: Re: [syzbot] WARNING: ODEBUG bug in __io_put_task
-Content-Language: en-US
-To:     syzbot <syzbot+1aa0bce76589e2e98756@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
+From:   syzbot <syzbot+1aa0bce76589e2e98756@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk
+Cc:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
         linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <00000000000098a61b05f20e62db@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <00000000000098a61b05f20e62db@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 3:14 AM, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14d269ce480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=1aa0bce76589e2e98756
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
+> On 1/12/23 3:14 AM, syzbot wrote:
+>> Hello,
+>> 
+>> syzbot found the following issue on:
+>> 
+>> HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
+>> git tree:       linux-next
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=14d269ce480000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=1aa0bce76589e2e98756
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> 
+>> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> I know there's no reproducer yet, but when there is:
+>
+> #syz test: git://git.kernel.dk/linux.git for-next
 
-I know there's no reproducer yet, but when there is:
+This crash does not have a reproducer. I cannot test it.
 
-#syz test: git://git.kernel.dk/linux.git for-next
-
-All of the ones from today was due to a buggy patch that was staged
-for 6.2, should all be gone with the updated branches.
-
--- 
-Jens Axboe
-
-
+>
+> All of the ones from today was due to a buggy patch that was staged
+> for 6.2, should all be gone with the updated branches.
+>
+> -- 
+> Jens Axboe
+>
+>
