@@ -2,216 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841A96678C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4E96678CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbjALPOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S240298AbjALPO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240367AbjALPOY (ORCPT
+        with ESMTP id S232996AbjALPO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:14:24 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2116.outbound.protection.outlook.com [40.107.215.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C55312635
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:04:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=STXagMssoSxnM8Y6fIBv9RfPUNmQrsVEtPgeqDeZub2f937hRcSlZx8OSndmiNx7s37fV02pwGJuGu8V7ZetpRtIFj8cB01mYzgfnd7XhhqsjQYGmDxHqP+r8QvuUuLi6shEg+kMOHhxHY8u9ZWDCIm6DN83AWaalgwzboZJePSI5RY0L/WYLIpFDuZDs2XVismsRnVu/wFhQAkyO0q+tiVmdSFdIxI/5wgUlBCsz1lC10lWhrfgcrPkt8vS07Dzkx8ei+ltr04EQ6IodAzaBUqXHNKByqFT91OB9iZVlIBf+HxkRk2eppXoDjMXNzknIKQeYAjNadIGegxdkb5p+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=krazqck6N1xLUZjCzRlx0XvF1ayG8lWJ0PZnnS4J8po=;
- b=IShr4pm3inzIn5LLbeXcbo5VUpG7dXpAqWWtgkfNJn32oJMB+XWO9fZ8vwcz0h73Qwq4gN3dcu+a7G/jJZQs95m58lK5EBid6zXvE5iL2uy+2VX+uPtNIUJP2zC1Bx8KGeJdcHPCFixcreRV+vHjUeZTIzbOVI4fqvIvWGMOFD9J9cpLpAZ/7I33MaibwrGi2dH8Ed4eEWEIPS3NsbyKt5QwP77XZBgOodic41k1viQe2A3cCKj4neGaOy8O0yyVHghfaALHx7KVzQPBi9r0I54XpkI3u2JLPhLPz31uv/6c3TqXcEKPDM9aJZmIJXOiVBe6u+fHZHGdnD/XkPASRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=krazqck6N1xLUZjCzRlx0XvF1ayG8lWJ0PZnnS4J8po=;
- b=bOlCXVQXnZl3mKdf56lWUEo3Uv8PNuPT51WhGj0QEpSiUMsv6Bl2FZbcevcFR9QR7L2JqEMfRVVwdqproZwhrf/BoqowB2JoEJamEq7gHdTOqpc2sNHnW/Q4tQGSHwrwOUvjf67Xag9dp2rnNjVk6IbsZMtHNKY05w6d9kkLytjOZWdeI5roVP/pRSQGxEibN8dhfeI0X6l/o2R9cjavCFAxCZBAv3OH0uCYQXxeeFGqPJ3WnBRTKDH86tTTYdmwzYltNdHYyBLXFCjBu4rRNHIPz2mf50pXCER9QDnacUzk/6PJ/ObCIF1gSIH14M6YKPFgqlazhNGFj61kFEfXNg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEYPR06MB5988.apcprd06.prod.outlook.com (2603:1096:101:c5::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 12 Jan
- 2023 15:04:46 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::3e52:d08c:ecf4:d572%5]) with mapi id 15.20.6002.012; Thu, 12 Jan 2023
- 15:04:46 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH v4] f2fs: introduce discard_io_aware_gran sysfs node
-Date:   Thu, 12 Jan 2023 23:04:37 +0800
-Message-Id: <20230112150437.28089-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0032.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::18) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Thu, 12 Jan 2023 10:14:29 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E820C12AAC;
+        Thu, 12 Jan 2023 07:05:33 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id jo4so45491739ejb.7;
+        Thu, 12 Jan 2023 07:05:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wltNgvmoTEOdzqXrThP0TENXCKomPCLaFAPp9HR3deY=;
+        b=ZgZ5L3Bketfsde0TLMzOY61Fvk+o266XO03TTckE5BOB8DKDeMsOkLLE2J/h9QoWsR
+         yeSTo32aRST1+hrkt2TZLcLCPvV8u0Xj3adH/eVbCu3tcUicfMaPe/M7DmzWzE1zfDOC
+         anFbgi4a52k/Iq89DCof5zYCIxa90PvHpvUgyhXCl4MxPx1/FIrzxfQOoQEKuxK7OjoW
+         7MzbY8TXhqfFLIQhfjxaVrYbfty0dFLY8lDmyg6pO7+32RGNxtHqT+RJg6J8JRR9ZCdt
+         Pi7XVJcfYtQCBC2ic5QICsAuxBIHzVPGzNy4xLRMP7MzkMw9rpP+TXzhooX2U4TTa3ux
+         mW5w==
+X-Gm-Message-State: AFqh2kpPt7iWWrphufPztSTKw72xKNmMSY2haYJ2Q+nwtmRQJvwyUHfe
+        EKMrufUwxNCny0eCa9FdGtIOc9SDK4utQYKPBBU=
+X-Google-Smtp-Source: AMrXdXvKmZ2PCMXVnx7nExgmOtUWzRBMI/6pY7Omz5S3AXQJ76U8+Cuvv1wgfhkdhzXb7XvSkvwJKcy+CYycMkK7wro=
+X-Received: by 2002:a17:907:75ea:b0:7c0:f118:7e4e with SMTP id
+ jz10-20020a17090775ea00b007c0f1187e4emr4416278ejc.478.1673535932416; Thu, 12
+ Jan 2023 07:05:32 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEYPR06MB5988:EE_
-X-MS-Office365-Filtering-Correlation-Id: ec1299b6-8371-45fb-93d0-08daf4ae580d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uuHJNuS27Uzwcll2iuK78YBbPSvhZhEZaDT5NTyOR/ITi2ihyienAFKLXXADZSzcpzskqTaxeSlyPfQX9asd+KhBq1aq197y/HHFGdie/qkDx9F31Bd4K6syz1SCugxtnTGWJlVj6aCCaJ5ZpBQrx3eGrIKYSOPd0QgaOXLIhhTZLu4icjIXTWM82DrMje1LBpNLqFHEZPPhq5t63H0p+qvRniz8edQNtX6KavJnVPb0lgj6J/2HRPmrSmoIOSH8d0iCOWLQyPGkGPf0y7VX9H7jG48DIRZqxBKR68hTaufATUpjxx1EwLlRf6BkU5miyKeydtP7LId6GKcnzuTU8EzXx1GJnl4e2hYzC9gK6oGP60zbZajkTcliugGtN8b8RtMvc3nk9UwkCUh+pNkwr4Brtxtg64x+d3DElm2yKP9gHf0VUkmQWsj7TJVFjWHk6NWUEkCDEpqkvCUuszCTqnYQMS9jmT8L8+KSlyM5tqio9+2nbp3+H5pSn7EU0meQVDRMUkuFYlT+iY7KSWow+Z9Sok8kTw8we9OWaG/VdCh6s/wNMoLDGpQLDx4Dwft+ku+eprnpUjrAbZZKF5Dmza1aIhdlEOnDxGVMPKFmevevZx58wN1GLsoSZdLGCE8tTe8FZ2m7/ptC7I54ur1EsP8hf+RuT9BZQYkm0Ftzw3si8deMZjdNMwz40elc97fj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(366004)(396003)(136003)(376002)(451199015)(38350700002)(38100700002)(83380400001)(8676002)(86362001)(5660300002)(4326008)(2906002)(8936002)(66946007)(66556008)(66476007)(41300700001)(107886003)(6666004)(6512007)(26005)(6506007)(1076003)(186003)(2616005)(316002)(19627235002)(478600001)(6486002)(52116002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xuneOfKR0AEjcZnDR9FEaCsMJ/GBbyLft75j1tmCQDwR1xjvmRAiBR0z4InZ?=
- =?us-ascii?Q?viApkjg9T6+yxHRAUZhiJv9T0oeiZxvqSMoo7e2bfxeAn8rzB74FNOh6mazz?=
- =?us-ascii?Q?6NZMXAbsRGwyiydVpE+lzyjq/rjRa6K24rUxJaX3GnI6JDjt9R+xOfGe8mts?=
- =?us-ascii?Q?putbZps9g6oADOOhNuDEawZD6YQdRQbzM4FM8ABCgBIrswCOXxyS0Ohue7VO?=
- =?us-ascii?Q?a1MCGXBV4i7I2QMkLRqNfaEtOvpbckY6AJOXUeb6EvnEE1UH/AjcDRZLAWf1?=
- =?us-ascii?Q?4yRmmrn+Nrfd+CQclUfyAWWVcthzmKWuyXSrFXag6Ey58pn++v0IX9LdKOD7?=
- =?us-ascii?Q?cq8uyKtgzU/YMydba2ET87Scv65l/d9Hc2oo8PqLVI7+dYkS1tiWFVtz9lkG?=
- =?us-ascii?Q?bkEOsJmcLiMSS227tbgPeruI2AZofohUdQ/WJdfKQrs2NUVfpht8gsY313uA?=
- =?us-ascii?Q?ojX2uQ3od+80kRYMcOTBr6R7Im6SrORaUbNvVqDFwAmFp159BBg1kNakCCwX?=
- =?us-ascii?Q?deSgMSA4kJWKfJMHC0bRX84WAF7KAyzq8BR9dvdC4y0O7R7dHpy3U/zXb+jD?=
- =?us-ascii?Q?7+CIVnegWkTqPLJb0zfsxaGPebBwAZZXovecuwK7ic016jhEz7/vOaLr7Dpp?=
- =?us-ascii?Q?SvfTOL/Q/aCCFiKQRQTADgFjCix7I1QYgUbNK6CBAxDZrXODKNTtjuHHeEUT?=
- =?us-ascii?Q?PRVoXyMe9RvM+0RX9Mz8umklnQYFubxQgjbS3Qvq50EG8U367nTSgntzQSs1?=
- =?us-ascii?Q?HG5uSDbKZ30P6cMOLLRA5zPHruDvV/GfzQlX6d5Sc77K2kUjfkVz4P3Dx0RU?=
- =?us-ascii?Q?tyyu4MvFg1DLF6SzO612Qy+FEDBRp5qDYpcq4UJku80ZPd4fkme55KEdrrqF?=
- =?us-ascii?Q?0OTDsYSUoq9hVSEmYqSPL6MK31xUr8nPTtH0td2qG3XQM9dKiSXbA6swRqso?=
- =?us-ascii?Q?J/mIJaaSlX+ltegVGUDRvCu1mExXoukb8UQkr6gOxoDjvnDU9PH8FG+vDQ25?=
- =?us-ascii?Q?6yg/jlzrbMGDhLe8bN4S8H8Mqwfyebk7diaS4+NHu7vpEjwA+KGwOPXyrz0z?=
- =?us-ascii?Q?qCpz3T1xvahS/cgj/mjkXlkZJgNKu6sN+KlCoFihkLCL+2QB8jQiXaR6krfs?=
- =?us-ascii?Q?Br5LuX/qGM+di5lcoajfauwWz+ZTBjQTBTN2XbcLpx11Ua2S2YVuHsHplYDF?=
- =?us-ascii?Q?nXMRW0znza13DVkPd++1dez40AN/QImYnGl2ohneihpSoYLVVSgC7wbthZPs?=
- =?us-ascii?Q?5fPAWrBtfkmUZVOpWREVEP0cBkDXiOgrKvKh0CopJrMlA3lb+oD//qGcNzzs?=
- =?us-ascii?Q?vSnSDWbFeMywdd38wHhve8EFZ75Lkb3HhS5gSYK4C9p/4ywgQjSThM1XUJ5Z?=
- =?us-ascii?Q?2vu+SR+2BP3oNOjTakhjXVkjRJd5XkX2CAqAWznKowrr+qVLFus9fqtSazRz?=
- =?us-ascii?Q?0ddTlaxN+SqDsKuVGiFSunRxfJjfKl3Taf50C0IcOhEmlmniVa/P7hVZy57N?=
- =?us-ascii?Q?dKTvcb1zdHUaKZdSFP4bsmG5AhyXfIspMP/lnfNu75L8w095OaIYDsglMxaf?=
- =?us-ascii?Q?sPuh46ShZL13StsBw7v9Zc+C2u6rkWWYNXcRxhMK?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec1299b6-8371-45fb-93d0-08daf4ae580d
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 15:04:46.6524
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9mL+m/mjckdo+E9CmS7OXL910APqmjNNYlpIKUNHcuoB/YzH49H0r7PbLLQ4Uf2YVL93HGoowMjeqP5AVplWAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5988
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com> <20221129233419.4022830-2-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20221129233419.4022830-2-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Jan 2023 16:05:21 +0100
+Message-ID: <CAJZ5v0gxTdHW_Wk2E13M+tK+B5rqOirY4sz6UJVMjhentvEstg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] powercap: idle_inject: Export symbols
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current discard_io_aware_gran is a fixed value, change it to be
-configurable through the sys node.
+On Wed, Nov 30, 2022 at 12:34 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Export symbols for external interfaces, so that they can be used in
+> other loadable modules.
+>
+> Export is done under name space IDLE_INJECT.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
-v4:update description
- Documentation/ABI/testing/sysfs-fs-f2fs | 10 ++++++++++
- fs/f2fs/f2fs.h                          |  1 +
- fs/f2fs/segment.c                       |  3 ++-
- fs/f2fs/sysfs.c                         | 13 +++++++++++++
- 4 files changed, 26 insertions(+), 1 deletion(-)
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-index aaa379bb8a8f..06e6795db6f5 100644
---- a/Documentation/ABI/testing/sysfs-fs-f2fs
-+++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-@@ -708,3 +708,13 @@ Description:	Support configuring fault injection type, should be
- 		FAULT_LOCK_OP            0x000020000
- 		FAULT_BLKADDR            0x000040000
- 		===================      ===========
-+
-+What:		/sys/fs/f2fs/<disk>/discard_io_aware_gran
-+Date:		January 2023
-+Contact:	"Yangtao Li" <frank.li@vivo.com>
-+Description:	Controls background discard granularity of inner discard thread
-+		when is not in idle. Inner thread will not issue discards with size that
-+		is smaller than granularity. The unit size is one block(4KB), now only
-+		support configuring in range of [0, 512].
-+		By default, the value is 512, all discard IOs will be interrupted by other
-+		inflight IO. It can be set to 0, then IO aware functionality will be disabled.
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 331c330ea31d..f3c5f7740c1a 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -409,6 +409,7 @@ struct discard_cmd_control {
- 	unsigned int min_discard_issue_time;	/* min. interval between discard issue */
- 	unsigned int mid_discard_issue_time;	/* mid. interval between discard issue */
- 	unsigned int max_discard_issue_time;	/* max. interval between discard issue */
-+	unsigned int discard_io_aware_gran; /* minimum discard granularity not be aware of I/O */
- 	unsigned int discard_urgent_util;	/* utilization which issue discard proactively */
- 	unsigned int discard_granularity;	/* discard granularity */
- 	unsigned int max_ordered_discard;	/* maximum discard granularity issued by lba order */
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 976316218bd3..bd1cd98fa6eb 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -1059,7 +1059,7 @@ static void __init_discard_policy(struct f2fs_sb_info *sbi,
- 	dpolicy->granularity = granularity;
- 
- 	dpolicy->max_requests = dcc->max_discard_request;
--	dpolicy->io_aware_gran = MAX_PLIST_NUM;
-+	dpolicy->io_aware_gran = dcc->discard_io_aware_gran;
- 	dpolicy->timeout = false;
- 
- 	if (discard_type == DPOLICY_BG) {
-@@ -2063,6 +2063,7 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
- 	if (!dcc)
- 		return -ENOMEM;
- 
-+	dcc->discard_io_aware_gran = MAX_PLIST_NUM;
- 	dcc->discard_granularity = DEFAULT_DISCARD_GRANULARITY;
- 	dcc->max_ordered_discard = DEFAULT_MAX_ORDERED_DISCARD_GRANULARITY;
- 	if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SEGMENT)
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index 805b632a3af0..e396851a6dd1 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -473,6 +473,17 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
- 		return count;
- 	}
- 
-+	if (!strcmp(a->attr.name, "discard_io_aware_gran")) {
-+		if (t > MAX_PLIST_NUM)
-+			return -EINVAL;
-+		if (!f2fs_block_unit_discard(sbi))
-+			return -EINVAL;
-+		if (t == *ui)
-+			return count;
-+		*ui = t;
-+		return count;
-+	}
-+
- 	if (!strcmp(a->attr.name, "discard_granularity")) {
- 		if (t == 0 || t > MAX_PLIST_NUM)
- 			return -EINVAL;
-@@ -825,6 +836,7 @@ F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_request, max_discard_req
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, min_discard_issue_time, min_discard_issue_time);
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, mid_discard_issue_time, mid_discard_issue_time);
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_issue_time, max_discard_issue_time);
-+F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_io_aware_gran, discard_io_aware_gran);
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_urgent_util, discard_urgent_util);
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_granularity, discard_granularity);
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_ordered_discard, max_ordered_discard);
-@@ -960,6 +972,7 @@ static struct attribute *f2fs_attrs[] = {
- 	ATTR_LIST(min_discard_issue_time),
- 	ATTR_LIST(mid_discard_issue_time),
- 	ATTR_LIST(max_discard_issue_time),
-+	ATTR_LIST(discard_io_aware_gran),
- 	ATTR_LIST(discard_urgent_util),
- 	ATTR_LIST(discard_granularity),
- 	ATTR_LIST(max_ordered_discard),
--- 
-2.25.1
-
+> ---
+> v2:
+>         No change
+>
+>  drivers/powercap/idle_inject.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+> index fe86a09e3b67..dfa989182e71 100644
+> --- a/drivers/powercap/idle_inject.c
+> +++ b/drivers/powercap/idle_inject.c
+> @@ -160,6 +160,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
+>                 WRITE_ONCE(ii_dev->idle_duration_us, idle_duration_us);
+>         }
+>  }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_set_duration, IDLE_INJECT);
+>
+>  /**
+>   * idle_inject_get_duration - idle and run duration retrieval helper
+> @@ -174,6 +175,7 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
+>         *run_duration_us = READ_ONCE(ii_dev->run_duration_us);
+>         *idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
+>  }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_get_duration, IDLE_INJECT);
+>
+>  /**
+>   * idle_inject_set_latency - set the maximum latency allowed
+> @@ -185,6 +187,7 @@ void idle_inject_set_latency(struct idle_inject_device *ii_dev,
+>  {
+>         WRITE_ONCE(ii_dev->latency_us, latency_us);
+>  }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_set_latency, IDLE_INJECT);
+>
+>  /**
+>   * idle_inject_start - start idle injections
+> @@ -216,6 +219,7 @@ int idle_inject_start(struct idle_inject_device *ii_dev)
+>
+>         return 0;
+>  }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_start, IDLE_INJECT);
+>
+>  /**
+>   * idle_inject_stop - stops idle injections
+> @@ -262,6 +266,7 @@ void idle_inject_stop(struct idle_inject_device *ii_dev)
+>
+>         cpu_hotplug_enable();
+>  }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_stop, IDLE_INJECT);
+>
+>  /**
+>   * idle_inject_setup - prepare the current task for idle injection
+> @@ -337,6 +342,7 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
+>
+>         return NULL;
+>  }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
+>
+>  /**
+>   * idle_inject_unregister - unregister idle injection control device
+> @@ -357,6 +363,7 @@ void idle_inject_unregister(struct idle_inject_device *ii_dev)
+>
+>         kfree(ii_dev);
+>  }
+> +EXPORT_SYMBOL_NS_GPL(idle_inject_unregister, IDLE_INJECT);
+>
+>  static struct smp_hotplug_thread idle_inject_threads = {
+>         .store = &idle_inject_thread.tsk,
+> --
+> 2.31.1
+>
