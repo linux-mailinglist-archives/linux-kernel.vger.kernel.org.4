@@ -2,122 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A26156678B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F68F6678B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240320AbjALPMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S240361AbjALPMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240229AbjALPLo (ORCPT
+        with ESMTP id S233576AbjALPLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:11:44 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCE32602
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:00:32 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id DCD1F320097F;
-        Thu, 12 Jan 2023 10:00:30 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 12 Jan 2023 10:00:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1673535630; x=
-        1673622030; bh=LqqpGtID4VjpEU89F09GHBCJBYnLV9JhpECNMhPFXFA=; b=m
-        +TDaGzov1ZchoEywUVxJFNAhORAvI6eldmtzYwBEHQtovXtkkVuR6xLhD9R4UiA4
-        9FMkd6HRY6p93+Vqye/Fi2sk0fwwzBLY+kBtUSOJXiXzAv6BbbR9yae6ujHbZIua
-        8UIMkq7hJ0srFd3eQ5futPISn70HQYRSJKQBXs71OYYPe78J/WbYNpwNnPQiIYlX
-        o7jDd9JfdqM3xLm2deppnQDFwdntxayQ3r/oGVDWbC8cJ5ZY1dYjA4zhR762bXUy
-        fcL8Ar4INeDilQNhvsVafUUo0ZBXeKl8Z2UnzV4PoTzK6jtQSn0g8f5h7wISLLPE
-        UulhwyoUSI4KNkmJLf//w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673535630; x=
-        1673622030; bh=LqqpGtID4VjpEU89F09GHBCJBYnLV9JhpECNMhPFXFA=; b=e
-        P/+X8+ClVAytJpkbDu8AyrTRsofXFaLtPRRE4e3Y4nHHKWoj3ifcZUsKXbKaakz4
-        LOMzPpaa9L6/rzXXPGu9YmDbMK/hf8cLWdhOu4dH/EprKJGUgY8ibn23gO5dmkpG
-        44c0RKW6l2GZwz1fiGTLuSm6cw2RSIe90Eg/v4gZdi8rQMe8j1Sbdj4QvqGDQiSl
-        Xn5WCS1vAvz4xMkcAO7lFxB0MGqSFjV3bi52FuFPSCAnXkNnKDNPtW+Dg5tPQIak
-        8aDndJdBNdB7d9l7VE+sVf5tgNhHPcyJ8jZjqe65hnzyD4t4jVHXYYGCcHvsJ/Ak
-        daGC0Fep5V2Nl0dL7ozmw==
-X-ME-Sender: <xms:jiDAY3ZpMiRE-5aQv85DH9qGyv9tRyGqXMrspRBZIU0aDJEp7I4UsA>
-    <xme:jiDAY2YH9Yi-tSwTkSsIfVun1vnP30yFDkiBp53E_qt7zqygHUboEbuvw7wYCVN3w
-    CW7GEP1IUkUo8KW5tQ>
-X-ME-Received: <xmr:jiDAY58iYrK4vY_-D-gfbLrfm3STVtg3sqSlOMGXa3JNmxCBQHKPf1KDwjev2g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdejtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepvfihtghh
-    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
-    grthhtvghrnhepffetvdekudetgeffueeivdeggeehhefhgeeuleffiedujefhgfdugfeu
-    vdeivdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epthihtghhohesthihtghhohdrphhiiiiirg
-X-ME-Proxy: <xmx:jiDAY9oDWzDZ1prkdMo-OxDu2exdit2XnL4tI-Gwd7-EsAnPZpvVxw>
-    <xmx:jiDAYypEcjFFJNXEHzJBnFdA2UdvC5FkvFNdYefRaJ6Ql8ExH4Qx2A>
-    <xmx:jiDAYzReg3oZpOC3KPImJEpifc7niYyHExgsC5aF3n_ggLfqWlJw6w>
-    <xmx:jiDAY_RlPZAf065ZWprwLKY_CPOW6qF8_ZP24H1Nvy5XwuJTnU8ygA>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 12 Jan 2023 10:00:27 -0500 (EST)
-Date:   Thu, 12 Jan 2023 08:00:25 -0700
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Andrei Vagin <avagin@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Oskolkov <posk@google.com>,
-        Will Drewry <wad@chromium.org>
-Subject: Re: [PATCH 4/5] seccomp: add the synchronous mode for seccomp_unotify
-Message-ID: <Y8AgiZqYSjozXbhP@tycho.pizza>
-References: <20230110213010.2683185-1-avagin@google.com>
- <20230110213010.2683185-5-avagin@google.com>
+        Thu, 12 Jan 2023 10:11:45 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C6913FBE;
+        Thu, 12 Jan 2023 07:00:38 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso15276250wms.5;
+        Thu, 12 Jan 2023 07:00:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CEpR1Oghu5jEh+XHJUeeAWnEqFA8sGLzT1Q2gGhmDfc=;
+        b=kQ63ArvEjzXqRck7zKZEwAyh5nGwRANCnuIVm8WrAdRY8tMo44S4wS/RYukWQlYZbd
+         w8rEzqK5GlM3IcUlsH21acsBij842Z9DoNE1nHdehTZfcPDDrxF1oDT5q1/Prc9hoRxl
+         7bE3PjjzggefIaBl4Mnl+ecOD7+5lUXuZgJgAYK1dWal7VkTl0v70kDluCGMiGnH+Oo5
+         XfO1KVJtE2pyptoFW9xbLPWc0fSy/z7AEUAjTAv8+X3VfN+D0xdWMCmkmaQHh3UAjKpI
+         AYsx3g+FtJddVDZllZlTYo2UtI3+l47u/VuVhB4hWhgXBsG30mnNDGUeTGrV/usiX5hq
+         ctLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CEpR1Oghu5jEh+XHJUeeAWnEqFA8sGLzT1Q2gGhmDfc=;
+        b=nfew2ez8+l38MEShSRm9io7vZLqdtjUtSEtP1Ci/Ek+Dgkj2X7/rUrpva7ry+ZnFYk
+         ylid84tvmN1CxBJyHwFW0ghgnele2kEQZ0gobds8LztFsOK6R0wzZarlP2v3WIiGHSMK
+         jtDEzDP7V659kmeob0TQIXb9onNNh4EBEQXVyXzXQb3ndTu6E5FGxBWM036iByziRHl5
+         tp0TESiEAxAknAUtz6W/XpkvIDifZIvAW3gfPEeK/iCy/ho5mgmQhTYlioOCWhBAiFuq
+         pcyaho+9Gg/wOy1l9lknB2fJFj6ps4GehftP01VuyFDX3vTljcud7kjD8gs7XlNhhelx
+         m/pA==
+X-Gm-Message-State: AFqh2kp2TpJer43Hkk2s4pg8aMTf6zqSuhz/CqGVQCTQVi1KqlQFosEj
+        EqyC527TEg8C5ZobH+zirJxiwVv5I98=
+X-Google-Smtp-Source: AMrXdXuGLkT3WZD2pYqv1rvVwoetthcfUn6ngawoGge0A/6oW0jjMXW61GolUhC9dFk9o4yNWMSfww==
+X-Received: by 2002:a05:600c:3b29:b0:3cf:d18e:528b with SMTP id m41-20020a05600c3b2900b003cfd18e528bmr56615779wms.39.1673535636697;
+        Thu, 12 Jan 2023 07:00:36 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05600c154c00b003d9fba3c7a4sm8832671wmg.16.2023.01.12.07.00.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 07:00:35 -0800 (PST)
+Date:   Thu, 12 Jan 2023 18:00:33 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Alex Bee <knaerzche@gmail.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Collabora Kernel-domain <kernel@collabora.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: Re: [PATCH v2 04/12] staging: media: rkvdec: Block start streaming
+ until both queues run
+Message-ID: <Y8AgkQ8WehS4PfX7@kadam>
+References: <20230101-patch-series-v2-6-2-rc1-v2-0-fa1897efac14@collabora.com>
+ <20230101-patch-series-v2-6-2-rc1-v2-4-fa1897efac14@collabora.com>
+ <CAAEAJfBuA=gTpyeKs5mj0_1z+x5sZhse2OGPP5nmb5E6XNjBKw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230110213010.2683185-5-avagin@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAAEAJfBuA=gTpyeKs5mj0_1z+x5sZhse2OGPP5nmb5E6XNjBKw@mail.gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 01:30:09PM -0800, Andrei Vagin wrote:
-> From: Andrei Vagin <avagin@gmail.com>
+On Thu, Jan 12, 2023 at 11:55:07AM -0300, Ezequiel Garcia wrote:
+> Hi Sebastian,
 > 
-> seccomp_unotify allows more privileged processes do actions on behalf
-> of less privileged processes.
+> On Thu, Jan 12, 2023 at 9:56 AM Sebastian Fricke
+> <sebastian.fricke@collabora.com> wrote:
+> >
+> > Ensure that both the CAPTURE and the OUTPUT queue are running (e.g. busy
+> > -> have buffers allocated) before starting the actual streaming process.
+> >
 > 
-> In many cases, the workflow is fully synchronous. It means a target
-> process triggers a system call and passes controls to a supervisor
-> process that handles the system call and returns controls to the target
-> process. In this context, "synchronous" means that only one process is
-> running and another one is waiting.
+> Usually, you want to write the "why" in the commit description,
+> instead of the "what",
+> which is (hopefully) more or less clear by reading the commit change.
 > 
-> There is the WF_CURRENT_CPU flag that is used to advise the scheduler to
-> move the wakee to the current CPU. For such synchronous workflows, it
-> makes context switches a few times faster.
+> The commit description should have enough information to understand
+> what is the impact of merging the commit (or what is the bug without
+> the merging the commit).
 > 
-> Right now, each interaction takes 12µs. With this patch, it takes about
-> 3µs.
+> If you are fixing a spec violation, adding a reference to the spec is important,
+> if you are fixing a v4l2-compliance, pasting the error, etc.
 > 
-> This change introduce the SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP flag that
-> it used to enable the sync mode.
 
-What about just not having a flag and using the new primitives all the
-time? Is there any reason not to?
+Yeah, and if it's a bug fix then add a Fixes tag as well.  Even if the
+bug was added when the driver was first merged, that's still useful
+information.
 
-Tycho
+regards,
+dan carpenter
+
