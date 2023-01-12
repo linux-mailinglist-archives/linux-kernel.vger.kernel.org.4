@@ -2,110 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9741666DA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B92A666DB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239894AbjALJLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        id S239955AbjALJLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239940AbjALJKW (ORCPT
+        with ESMTP id S236648AbjALJKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:10:22 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D4D4E43E;
-        Thu, 12 Jan 2023 01:06:08 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 964DB5C00EF;
-        Thu, 12 Jan 2023 04:06:07 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 12 Jan 2023 04:06:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673514367; x=1673600767; bh=i0Vf2i9x70
-        fWXxPpRrZTCxU0nL+Gr6Pa34HbDF5NKhg=; b=YTjeuD4wKJ7HrtZWtHhsXNxsKq
-        cNOVgLCCr48zVApp4I+dGidjpEwO52kI/8/OrHx57KOqKryuXjC5Oo9PxBtatKSC
-        akFuo+LTIiOo2IOpWyEtd4McQR8bboOjcgNME7zFfOe6HqER4caPmWWjZ0rw8Aw+
-        IsoBj0NCmu06X6oiESocaT4tjYVsbJ34o3YFpPKVXYGTyQZ+70G49533ENDbjEnH
-        4lm6DTLz2fzScqMe3ccvk2HNwy7VFdCyfUYT8uU0mO9ZfsQksv9nW+rKRetDFfTG
-        iDXVXWFp9SO7N/Sm2GSxYbg1WtoUZbByWlgBPQ1fyb75nEoldGrG8YTCrSaw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673514367; x=1673600767; bh=i0Vf2i9x70fWXxPpRrZTCxU0nL+G
-        r6Pa34HbDF5NKhg=; b=pm2NzmomMkR6Z3IEHZh5NgtTVo2jgipoBuDt//2h/AG5
-        S+4jqrHNsbCYqk1f+BJk4M89mnBHUpQXfx+whFXWQWyNjnhmB8cUSv1rk0Q9t0SG
-        wgq29B9BL9Meb7p9htR+vi9/xI510gtGWLS1jl3rU3GJMQ7qShSqkUi9NaTEGIPv
-        xDJy1fyQZP/AahEnLBaTDR9zyeSql52rSVVZMeVffw21bsYhYQpqCOIR13HQcFvk
-        0kKbo7v3yW8UVnov+KowhBPbbUSbqDc35UBhEe5SNb+109CLpIySP4lOSufu01P+
-        Huw1fG7dFS41lGNxuZ6e7iyLxCDSnnTqLwFFr4vJ3w==
-X-ME-Sender: <xms:f82_Y8rZObVjPMvCH-CvjESEUl2uHJqzkyZKi7F2iGL3XYXt6nVvtA>
-    <xme:f82_YypTe13rIXZFEJIKbWBekxKT9GgOjt3z9NfnF4uA0VUxzoRWXNE87IaVxJmV2
-    p8hrRb3s5Gl0pd79LY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleehgdduvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:f82_YxN9UqinprXnHU1kvfphUuDyKIhuD2U8BqWCZx7u2KnwQ2vZlQ>
-    <xmx:f82_Yz6_5dOaz3XKTO-tHclB4-cvIoTkrxVMn_dgva0BU9EqyLJyHg>
-    <xmx:f82_Y77lD_AIrBduzpD3zz0-yQDpV2HLm8K7RNeC9Z_V-J7nvNzlKg>
-    <xmx:f82_Y1vQNmbKVazZWrQ3ChoPEmDrxRRabaxg0_f1Y_WqB8xUU-d_bg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id F26A7B60086; Thu, 12 Jan 2023 04:06:06 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <4d2f2b81-b7ab-4ad6-84cc-f3a3c932880d@app.fastmail.com>
-In-Reply-To: <20230112083746.9551-3-lukas.bulwahn@gmail.com>
-References: <20230112083746.9551-1-lukas.bulwahn@gmail.com>
- <20230112083746.9551-3-lukas.bulwahn@gmail.com>
-Date:   Thu, 12 Jan 2023 10:05:47 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Lukas Bulwahn" <lukas.bulwahn@gmail.com>
-Cc:     "Aaro Koskinen" <aaro.koskinen@iki.fi>,
-        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
-        "Tony Lindgren" <tony@atomide.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] ARM: pxa: remove further dead code after pxa93 support removal
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 12 Jan 2023 04:10:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138D252C7C
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:06:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 878B261FA1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE5ABC433EF;
+        Thu, 12 Jan 2023 09:06:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673514373;
+        bh=PdWUuWJ4Lr8SwSoxVGWeFZKL7yT/kAkQLLkWnpEugb4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XhMsrfVeF1B421cv0/ddaett5e7ENhyK9PBnK/Nv33TUBG8/V4GM2tM8plzqdMQS7
+         5TZ9p9mNjksofzExuBZNCVTJ3w28DFYdoYUtLCoNcGFlM+JckIvM9tqBT3conEz4Xx
+         CWWaQy94/lBtPkcRQf5Lp17OO0/T1bOTwJ1if8tnr437YkQE45TBHgAob8vN+lLTDo
+         e+Ppo7xVt2yTDi2lRuMVHB3x5hUpgEFlBRnejd5bppqW96SunXqTWSU1/fQTCpu0Xa
+         OR+CawgGKOoWz8DuQ1mV+QWt26YmpfEEz73CNzrA/bi1OruqvxwtNiP7iK4m7AupJB
+         K068y1ee9d/Yw==
+From:   guoren@kernel.org
+To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
+        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
+        jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
+        e.shatokhin@yadro.com, guoren@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V7 0/7] riscv: Optimize function trace
+Date:   Thu, 12 Jan 2023 04:05:56 -0500
+Message-Id: <20230112090603.1295340-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023, at 09:37, Lukas Bulwahn wrote:
-> Commit 150ccb6f9a89 ("ARM: pxa: remove pxa93x support") removes configs
-> CPU_PXA930 and CPU_PXA935 and uses of cpu_is_pxa93x() and cpu_is_pxa935().
->
-> Remove some further dead code in ./include/linux/soc/pxa/cpu.h on top of
-> that commit above.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-I had this in an earlier version and ended up leaving this bit in
-when I reworked the series to not drop support for PXA310 and PXA320.
+The previous ftrace detour implementation fc76b8b8011 ("riscv: Using
+PATCHABLE_FUNCTION_ENTRY instead of MCOUNT") contain three problems.
 
-You are probably right that we should not reference the removed
-Kconfig symbols, but I see that this causes a regression
-unless I also bring back the change to
+ - The most horrible bug is preemption panic which found by Andy [1].
+   Let's disable preemption for ftrace first, and Andy could continue
+   the ftrace preemption work.
+ - The "-fpatchable-function-entry= CFLAG" wasted code size
+   !RISCV_ISA_C.
+ - The ftrace detour implementation wasted code size.
+ - When livepatching, the trampoline (ftrace_regs_caller) would not
+   return to <func_prolog+12> but would rather jump to the new function.
+   So, "REG_L ra, -SZREG(sp)" would not run and the original return
+   address would not be restored. The kernel is likely to hang or crash
+   as a result. (Found by Evgenii Shatokhin [4]) 
 
-drivers/mmc/host/pxamci.c:                              || cpu_is_pxa935())
+Patches 1,2,3 fixup above problems.
 
-    Arnd
+Patches 4,5,6,7 are the features based on reduced detour code
+patch, we include them in the series for test and maintenance.
+
+You can directly try it with:
+https://github.com/guoren83/linux/tree/ftrace_fixup_v7
+
+Make function graph use ftrace directly [2] (patch 4, 5)
+======================================================== 
+
+In RISC-V architecture, when we enable the ftrace_graph tracer on some
+functions, the function tracings on other functions will suffer extra
+graph tracing work. In essence, graph_ops isn't limited by its func_hash
+due to the global ftrace_graph_[regs]_call label. That should be
+corrected.
+
+What inspires me is the commit 0c0593b45c9b ("x86/ftrace: Make function
+graph use ftrace directly") that uses graph_ops::func function to
+install return_hooker and makes the function called against its
+func_hash.
+
+This series of patches makes function graph use ftrace directly for
+riscv.
+
+If FTRACE_WITH_REGS isn't defined, ftrace_caller keeps ftrace_graph_call
+so that it can be replaced with the calling of prepare_ftrace_return by
+the enable/disable helper.
+
+As for defining FTRACE_WITH_REGS, ftrace_caller is adjusted to save the
+necessary regs against the pt_regs layout, so it can reasonably call the
+graph_ops::func function - ftrace_graph_func. And
+ftrace_graph_[regs]_call
+and its enable/disable helper aren't needed.
+
+Test log:
+
+The tests generated by CONFIG_FTRACE_STARTUP_TEST have passed in the
+local
+qemu-system-riscv64 virt machine. The following is the log during
+startup.
+
+```
+Nov 15 03:07:13 stage4 kernel: Testing tracer function: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #1: 
+Nov 15 03:07:13 stage4 kernel: (1 0 1 0 0)  
+Nov 15 03:07:13 stage4 kernel: (1 1 2 0 0)  
+Nov 15 03:07:13 stage4 kernel: (2 1 3 0 365) 
+Nov 15 03:07:13 stage4 kernel: (2 2 4 0 399) 
+Nov 15 03:07:13 stage4 kernel: (3 2 4 0 146071) 
+Nov 15 03:07:13 stage4 kernel: (3 3 5 0 146105) PASSED
+Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #2: 
+Nov 15 03:07:13 stage4 kernel: (1 0 1 589 0)  
+Nov 15 03:07:13 stage4 kernel: (1 1 2 635 0)  
+Nov 15 03:07:13 stage4 kernel: (2 1 3 1 2)  
+Nov 15 03:07:13 stage4 kernel: (2 2 4 125 126) 
+Nov 15 03:07:13 stage4 kernel: (3 2 4 146001 146078) 
+Nov 15 03:07:13 stage4 kernel: (3 3 5 146035 146112) PASSED
+Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion safe: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing ftrace regs: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer nop: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer irqsoff: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup:
+Nov 15 03:07:13 stage4 kernel: sched: DL replenish lagged too much
+Nov 15 03:07:13 stage4 kernel: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_rt: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_dl: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer function_graph: PASSED
+```
+
+Add WITH_DIRECT_CALLS support [3] (patch 6, 7)
+==============================================
+
+This series adds DYNAMIC_FTRACE_WITH_DIRECT_CALLS support for RISC-V.
+SAMPLE_FTRACE_DIRECT and SAMPLE_FTRACE_DIRECT_MULTI are also included
+here as the samples for testing DIRECT_CALLS related interface.
+
+First, select the DYNAMIC_FTRACE_WITH_DIRECT_CALLS to provide 
+register_ftrace_direct[_multi] interfaces allowing user to register 
+the customed trampoline (direct_caller) as the mcount for one or 
+more target functions. And modify_ftrace_direct[_multi] are also 
+provided for modify direct_caller.
+
+At the same time, the samples in ./samples/ftrace/ can be built
+as kerenl module for testing these interfaces with SAMPLE_FTRACE_DIRECT
+and SAMPLE_FTRACE_DIRECT_MULTI selected.
+
+Second, to make the direct_caller and the other ftrace hooks
+(eg. function/fgraph tracer, k[ret]probes) co-exist, a temporary
+register
+are nominated to store the address of direct_caller in
+ftrace_regs_caller.
+After the setting of the address direct_caller by direct_ops->func and
+the RESTORE_REGS in ftrace_regs_caller, direct_caller will be jumped to
+by the `jr` inst.
+
+The following tests have been passed in my local qemu-riscv64 virt
+machine. 
+
+1. tests with CONFIG_FTRACE_STARTUP_TEST
+2. tests of samples/ftrace/ftrace*.ko
+3. manual tests with any combination of the following hooks
+  - function/function_graph tracer 
+  - ftrace*.ko
+  - kprobe/kretprobe
+
+For your reference, here is the log when function tracer, kretprobe and 
+ftrace-direct-too.ko co-hooks the handle_mm_fault function.
+
+```
+[root@stage4 tracing]# echo handle_mm_fault > set_ftrace_filter
+[root@stage4 tracing]# echo 'r:myr handle_mm_fault' > kprobe_events
+[root@stage4 tracing]# echo function > current_tracer 
+[root@stage4 tracing]# echo 1 > events/kprobes/myr/enable 
+[root@stage4 tracing]# insmod /root/ftrace-direct-too.ko 
+[root@stage4 tracing]# 
+[root@stage4 tracing]# cat trace | tail
+             cat-388     [000] ...1.   583.051438: myr:
+(do_page_fault+0x16c/0x5f2 <- handle_mm_fault)
+             cat-388     [000] ...2.   583.057930: handle_mm_fault
+<-do_page_fault
+             cat-388     [000] .....   583.057990: my_direct_func:
+handle mm fault vma=000000002d9fe19c address=ffffffae9b7000 flags=215
+             cat-388     [000] ...1.   583.058284: myr:
+(do_page_fault+0x16c/0x5f2 <- handle_mm_fault)
+            tail-389     [001] ...2.   583.059062: handle_mm_fault
+<-do_page_fault
+            tail-389     [001] .....   583.059104: my_direct_func:
+handle mm fault vma=0000000017f3c48e address=aaaaaabebf3000 flags=215
+            tail-389     [001] ...1.   583.059325: myr:
+(do_page_fault+0x16c/0x5f2 <- handle_mm_fault)
+            tail-389     [001] ...2.   583.060371: handle_mm_fault
+<-do_page_fault
+            tail-389     [001] .....   583.060410: my_direct_func:
+handle mm fault vma=0000000017f3c48e address=aaaaaabebf1000 flags=255
+            tail-389     [001] ...1.   583.060996: myr:
+(do_page_fault+0x16c/0x5f2 <- handle_mm_fault)
+```
+Note1:
+
+The checkpatch.pl will output some warnings on this series, like this
+
+```
+WARNING: Prefer using '"%s...", __func__' to using 'my_direct_func2',
+this function's name, in a string
+111: FILE: samples/ftrace/ftrace-direct-multi-modify.c:48:
++"       call my_direct_func2\n"
+```
+
+The reason is that checkpatch depends on patch context providing the
+function name. In the above warning, my_direct_func2 has some codeline
+distance with the changed trunk, so its declaration doesn't come into
+the patch, and then the warning jumps out.
+
+You may notice the location of `my_ip` variable changes in the 2nd
+patch. I did that for reducing the warnings to some extent. But killing
+all the warnings will makes the patch less readable, so I stopped here.
+
+[1] https://lpc.events/event/16/contributions/1171/
+[2] https://lore.kernel.org/lkml/20221120084230.910152-1-suagrfillet@gmail.com/
+[3] https://lore.kernel.org/linux-riscv/20221123142025.1504030-1-suagrfillet@gmail.com/ 
+[4] https://lore.kernel.org/linux-riscv/d7d5730b-ebef-68e5-5046-e763e1ee6164@yadro.com/
+
+Changes in v7:
+ - Fixup RESTORE_ABI_REGS by remove PT_T0(sp) overwrite.
+ - Add FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+ - Fixup kconfig with HAVE_SAMPLE_FTRACE_DIRECT &
+   HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+
+Changes in v6:
+https://lore.kernel.org/linux-riscv/20230107133549.4192639-1-guoren@kernel.org/
+ - Replace 8 with MCOUNT_INSN_SIZE
+ - Replace "REG_L a1, PT_RA(sp)" with "mv a1, ra"
+ - Add Evgenii Shatokhin comment
+
+Changes in v5:
+https://lore.kernel.org/linux-riscv/20221208091244.203407-1-guoren@kernel.org/
+ - Sort Kconfig entries in alphabetical order.
+
+Changes in v4:
+https://lore.kernel.org/linux-riscv/20221129033230.255947-1-guoren@kernel.org/
+ - Include [3] for maintenance. [Song Shuai]
+
+Changes in V3:
+https://lore.kernel.org/linux-riscv/20221123153950.2911981-1-guoren@kernel.org/
+ - Include [2] for maintenance. [Song Shuai]
+
+Changes in V2:
+https://lore.kernel.org/linux-riscv/20220921034910.3142465-1-guoren@kernel.org/
+ - Add Signed-off for preemption fixup.
+
+Changes in V1:
+https://lore.kernel.org/linux-riscv/20220916103817.9490-1-guoren@kernel.org/
+
+Andy Chiu (1):
+  riscv: ftrace: Fixup panic by disabling preemption
+
+Guo Ren (2):
+  riscv: ftrace: Remove wasted nops for !RISCV_ISA_C
+  riscv: ftrace: Reduce the detour code size to half
+
+Song Shuai (4):
+  riscv: ftrace: Add ftrace_graph_func
+  riscv: ftrace: Add DYNAMIC_FTRACE_WITH_DIRECT_CALLS support
+  samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
+  riscv : select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+
+ arch/riscv/Kconfig                          |   6 +-
+ arch/riscv/Makefile                         |   6 +-
+ arch/riscv/include/asm/ftrace.h             |  71 ++++++--
+ arch/riscv/kernel/ftrace.c                  |  91 ++++------
+ arch/riscv/kernel/mcount-dyn.S              | 179 +++++++++++++-------
+ samples/ftrace/ftrace-direct-modify.c       |  33 ++++
+ samples/ftrace/ftrace-direct-multi-modify.c |  37 ++++
+ samples/ftrace/ftrace-direct-multi.c        |  22 +++
+ samples/ftrace/ftrace-direct-too.c          |  26 +++
+ samples/ftrace/ftrace-direct.c              |  22 +++
+ 10 files changed, 356 insertions(+), 137 deletions(-)
+
+-- 
+2.36.1
+
