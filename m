@@ -2,145 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B72667A4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4395667A4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbjALQFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 11:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
+        id S234262AbjALQGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 11:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232316AbjALQEz (ORCPT
+        with ESMTP id S233471AbjALQFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:04:55 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C2558D12;
-        Thu, 12 Jan 2023 07:56:12 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id tz12so45850154ejc.9;
-        Thu, 12 Jan 2023 07:56:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pDQZ8VZwl5KhjAItQfxHiU6aWmum35dmJVfQv+8C2E8=;
-        b=KIkiQMQDsWJqtqoECLPbne0v0wW1pWL+l7x53ZS3nhj0+nyq3tfma+Wuu7F36FlSy4
-         Hw1SnjNkfnspSkIo7eWtxOGMGMPhQf9A8HfEp4elCNdn1lmZRLHWppRnRocc+eRxPTFw
-         i9G/sN1NmxO3dONdrtNrMOjGv0oGdMBxSp4EP5dKQJqvLc6QrN9mlOst7s8v8I2BRnEP
-         xNtBP21W/dWArmI9/NeREtGxWFswhiyMcQAgn/81Habm0Iv3HCRhvgbvMNJQiaqZSrWN
-         kfDGzwSZJp3WzwSyp/5HMLkNXwFUb1cL41NC7q2kC377tcstoC7bGXk/jv+ct/Jmt76S
-         N60g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pDQZ8VZwl5KhjAItQfxHiU6aWmum35dmJVfQv+8C2E8=;
-        b=PLzbLtpivuysxtm3QA1CMmjkPzCh7r2KDe8TZqrmGZ/d11OHmU+no3fJOTK14Yu8N/
-         bQFxlBQjQASli4sFPGYiIWmuXyXumCEAdkgq/JoNkwCN0Hj4H+4DAtEkm10dmovZZvYF
-         ukOyaMsYC/NlQ+rNeK4HdZ8cQBauS0AuFPJnajaN0GxDhu3+K8vvlhr4lK9FPl9CuIhp
-         MD0T3jVyC7I43iiIescKQ5oQn7zj8YcFy3sDns23ZAV7WM1pKMr9reegmBY/pJ5iRLsZ
-         8UvQ2uTPOvozQsHGfvsOQGmuApXTURkCCpGodmmkL75mu6EFc8QHBBNX7EXOguGwE1jy
-         QjiA==
-X-Gm-Message-State: AFqh2kptS1FnWF7mM3wJ9EnbHiK/NEQt+KfFFS0f+yyf77OOR7+HENpo
-        nNkzOdfuLnyBNpMvaQXp3e8=
-X-Google-Smtp-Source: AMrXdXtcXj/CoCVbXdVH+MgdQm67oQMAHqK0KedNvXi1zhVc6k+s50ZPdBsRa5075TN1J4E1LxFEBg==
-X-Received: by 2002:a17:907:8b09:b0:7c1:bb5:5704 with SMTP id sz9-20020a1709078b0900b007c10bb55704mr69946814ejc.26.1673538970523;
-        Thu, 12 Jan 2023 07:56:10 -0800 (PST)
-Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
-        by smtp.gmail.com with ESMTPSA id n12-20020a1709062bcc00b007ae38d837c5sm7650059ejg.174.2023.01.12.07.56.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 07:56:09 -0800 (PST)
-Date:   Thu, 12 Jan 2023 16:56:11 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
-        sbhatta@marvell.com, linux-doc@vger.kernel.org,
-        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
-        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
-Subject: [PATCH v2 net-next 1/1] plca.c: fix obvious mistake in checking
- retval
-Message-ID: <df38c69a85bf528f3e6e672f00be4dc9cdd6298e.1673538908.git.piergiorgio.beruto@gmail.com>
+        Thu, 12 Jan 2023 11:05:55 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8E45AC4E;
+        Thu, 12 Jan 2023 07:57:19 -0800 (PST)
+Received: from localhost.localdomain (unknown [182.253.183.184])
+        by gnuweeb.org (Postfix) with ESMTPSA id DDA3D7E73F;
+        Thu, 12 Jan 2023 15:57:14 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1673539038;
+        bh=L3owUwAQTcGDFP+VbIiTwKgrDGKNNsJz9xcK8cYS6xk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZPXdzdWGIbG5sr3cMAID6mHcsXJpyKv8ebgll7uwY+fuN330P2TVrO6jFHwOtSoe+
+         dOlqRYX0gKPG0vi4py7QCS5Ry1K7z2Tg2HB2BxO1slb/FN62Xz9JGusTL31j0pU1pG
+         WN6MRbvrqFLHSUiJBpmi8JgtJN25mCzAlTv7uQtIysql8TSlMlXA3EPXbs2VntBLb1
+         pHSwDAwvw7V6oFg4lmuVkDZmQW09SSdEnrePIVOnAwd/vkxl00yOJ3kLmypkA4+S+v
+         6veUTG7RqiSUCtOp3pLFLN5OSXcWR+f7hz3/ayl2i+AhpbH3X6NPCCKKeqeReoS1Ek
+         I8Rzu/KqsuypQ==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Breno Leitao <leitao@debian.org>,
+        Christian Mazakas <christian.mazakas@gmail.com>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
+        VNLX Kernel Department <kernel@vnlx.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [PATCH liburing v1 0/4] liburing updates for 2.4
+Date:   Thu, 12 Jan 2023 22:57:05 +0700
+Message-Id: <20230112155709.303615-1-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch addresses a wrong fix that was done during the review
-process. The intention was to substitute "if(ret < 0)" with
-"if(ret)". Unfortunately, in this specific file the intended fix did not
-meet the code. After additional review, it seems like if(ret < 0) was
-actually the right thing to do. So this patch reverts those changes.
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Fixes: 8580e16c28f3 ("net/ethtool: add netlink interface for the PLCA RS")
-Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Hi Jens,
+
+I have found two people confused about the io_uring_prep_splice()
+function, especially on the offset part. The current manpage for
+io_uring_prep_splice() doesn't tell about the rules of the offset
+arguments.
+
+Despite these rules are already noted in "man 2 io_uring_enter",
+people who want to know about this prep function will prefer to read
+"man 3 io_uring_prep_splice". Let's explain it there.
+
+Additionally, this series also contains:
+
+  - Fix a typo: 's/is adjust/is adjusted/' and indentation in
+    liburing.h.
+
+  - Add io_uring_prep_msg_ring_cqe_flags() to liburing-ffi.map.
+    Commit 27180d7be059 ("Add io_uring_prep_msg_ring_cqe_flags
+    function") adds a new inline function in liburing.h, but it doesn't
+    update the liburing-ffi.map file. Update it.
+
+  - Note about --nolibc configure option deprecation in the CHANGELOG.
+    Since commit bfb432f4cce5 ("configure: Always enable `CONFIG_NOLIBC`
+    if the arch is supported"), the --nolibc configure option is
+    deprecated and has no effect. Plus, building liburing on x86-64,
+    x86, and aarch64 always enables CONFIG_NOLIBC. Note these changes
+    in the CHANGELOG file.
+
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- net/ethtool/plca.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/net/ethtool/plca.c b/net/ethtool/plca.c
-index d9bb13ffc654..be7404dc9ef2 100644
---- a/net/ethtool/plca.c
-+++ b/net/ethtool/plca.c
-@@ -61,7 +61,7 @@ static int plca_get_cfg_prepare_data(const struct ethnl_req_info *req_base,
- 	}
- 
- 	ret = ethnl_ops_begin(dev);
--	if (!ret)
-+	if (ret < 0)
- 		goto out;
- 
- 	memset(&data->plca_cfg, 0xff,
-@@ -151,7 +151,7 @@ int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
- 					 tb[ETHTOOL_A_PLCA_HEADER],
- 					 genl_info_net(info), info->extack,
- 					 true);
--	if (!ret)
-+	if (ret < 0)
- 		return ret;
- 
- 	dev = req_info.dev;
-@@ -171,7 +171,7 @@ int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
- 	}
- 
- 	ret = ethnl_ops_begin(dev);
--	if (!ret)
-+	if (ret < 0)
- 		goto out_rtnl;
- 
- 	memset(&plca_cfg, 0xff, sizeof(plca_cfg));
-@@ -189,7 +189,7 @@ int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
- 		goto out_ops;
- 
- 	ret = ops->set_plca_cfg(dev->phydev, &plca_cfg, info->extack);
--	if (!ret)
-+	if (ret < 0)
- 		goto out_ops;
- 
- 	ethtool_notify(dev, ETHTOOL_MSG_PLCA_NTF, NULL);
-@@ -233,7 +233,7 @@ static int plca_get_status_prepare_data(const struct ethnl_req_info *req_base,
- 	}
- 
- 	ret = ethnl_ops_begin(dev);
--	if (!ret)
-+	if (ret < 0)
- 		goto out;
- 
- 	memset(&data->plca_st, 0xff,
+Ammar Faizi (4):
+  liburing-ffi.map: Add io_uring_prep_msg_ring_cqe_flags() function
+  CHANGELOG: Note about --nolibc configure option deprecation
+  liburing.h: 's/is adjust/is adjusted/' and fix indentation
+  man/io_uring_prep_splice.3: Explain more about io_uring_prep_splice()
+
+ CHANGELOG                  |  2 ++
+ man/io_uring_prep_splice.3 | 38 ++++++++++++++++++++++++++++++++++++++
+ src/include/liburing.h     |  4 ++--
+ src/liburing-ffi.map       |  1 +
+ 4 files changed, 43 insertions(+), 2 deletions(-)
+
+base-commit: 47679a9019e48bf4293a4f55adade9eae715f9e4
 -- 
-2.37.4
+Ammar Faizi
 
