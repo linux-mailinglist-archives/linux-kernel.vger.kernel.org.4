@@ -2,165 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68440666E88
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF104666E8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239591AbjALJo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S239134AbjALJpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:45:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240072AbjALJno (ORCPT
+        with ESMTP id S236701AbjALJol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:43:44 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B694517D0;
-        Thu, 12 Jan 2023 01:41:43 -0800 (PST)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A3EED3EEB2;
-        Thu, 12 Jan 2023 09:41:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673516500; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6co9Mq3/4tg5vYTRc6Bu/MTG1Uz5/2WeUp1oM2NDVSk=;
-        b=ITIvBazLa38FQyvum4fNY1LLPIwITQg+Pt7TJx7dmrZEA5KNI6MVYLSjql2VT8A8bDA8Yu
-        lS9imnVpGBjB7vUMZpbZ+B1c5n7r32uPdT5NsDBUX+TLqBnWkh91tEl/3cjtARcDJAj7Nn
-        HgAPcu2APnkOU6DUQHhBa9Ypn1Rtyeg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673516500;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6co9Mq3/4tg5vYTRc6Bu/MTG1Uz5/2WeUp1oM2NDVSk=;
-        b=BbLpIv7SfvHsogcpc9GutuDkESQagaL+63zBqAW507r6G/hjf6bYu/N2QILEM2Tyck7LBd
-        Uu5iOxKvaBNHj4DA==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 728E0136AE;
-        Thu, 12 Jan 2023 09:41:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id 3y32GtTVv2MqIwAAGKfGzw
-        (envelope-from <tzimmermann@suse.de>); Thu, 12 Jan 2023 09:41:40 +0000
-Message-ID: <59149393-73cf-83a3-5ea5-ff6f47fe2c31@suse.de>
-Date:   Thu, 12 Jan 2023 10:41:40 +0100
+        Thu, 12 Jan 2023 04:44:41 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D23B1DDE6;
+        Thu, 12 Jan 2023 01:42:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673516529; x=1705052529;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=xbMAyidOCWMfF0EUAGtsCu/QnTnIwHL8t0BUKbedv0Q=;
+  b=W3NrEFd1wDSzIryanZDRyfajarL4k2guJEhjkjkL/cNI6mg2TGPSk1AZ
+   QbVbaD+zHQeA1NPeXkBftMPZk59IyaSYurIvxc7ef5tMsreQUDyR/BAiT
+   u6ALSxH5veSTrE6mtN1WpmlJmeuE94ZREkbZHdbX9980I3iVLkIzJ5xT7
+   Mq3CEwdD2vQF8wrrTVkEHaqGybU4vePkn90c9gpJi+sRoMi5sDbeiFHFr
+   uLJW8WQ1SlO7AoUAXQUkR0Wy09LZ4e3wv+yYuYsFh6FqVaXPm1w5/Xq/o
+   ouOsa8izoaQ58M99f2/bax2ebR+1MSDiozCrgt+Atk208WdgGqdHJBUQi
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="409898768"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="409898768"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 01:42:09 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="659713883"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="659713883"
+Received: from vbucoci-mobl1.ger.corp.intel.com ([10.252.52.43])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 01:42:07 -0800
+Date:   Thu, 12 Jan 2023 11:42:05 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+cc:     gregkh@linuxfoundation.org, Kees Cook <keescook@chromium.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/11] tty: vt: remove struct uni_screen
+In-Reply-To: <20230112080136.4929-6-jirislaby@kernel.org>
+Message-ID: <48c6dbb-7f42-33aa-c62f-e04a198a63@linux.intel.com>
+References: <20230112080136.4929-1-jirislaby@kernel.org> <20230112080136.4929-6-jirislaby@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 01/11] drm/ast: Use
- drm_aperture_remove_conflicting_pci_framebuffers
-Content-Language: en-US
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org
-References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------vOwfUhSOD3p0obgeA20yv5UJ"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-153673084-1673516528=:1665"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------vOwfUhSOD3p0obgeA20yv5UJ
-Content-Type: multipart/mixed; boundary="------------IR20Ox5nOYlN0pQH131diBcQ";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Daniel Vetter <daniel.vetter@ffwll.ch>,
- DRI Development <dri-devel@lists.freedesktop.org>
-Cc: Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
- LKML <linux-kernel@vger.kernel.org>, Daniel Vetter
- <daniel.vetter@intel.com>, Dave Airlie <airlied@redhat.com>,
- Javier Martinez Canillas <javierm@redhat.com>, Helge Deller <deller@gmx.de>,
- linux-fbdev@vger.kernel.org
-Message-ID: <59149393-73cf-83a3-5ea5-ff6f47fe2c31@suse.de>
-Subject: Re: [PATCH 01/11] drm/ast: Use
- drm_aperture_remove_conflicting_pci_framebuffers
-References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
-In-Reply-To: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
---------------IR20Ox5nOYlN0pQH131diBcQ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+--8323329-153673084-1673516528=:1665
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-DQoNCkFtIDExLjAxLjIzIHVtIDE2OjQxIHNjaHJpZWIgRGFuaWVsIFZldHRlcjoNCj4gSXQn
-cyBqdXN0IG9wZW4gY29kZWQgYW5kIG1hdGNoZXMuDQo+IA0KPiBOb3RlIHRoYXQgVGhvbWFz
-IHNhaWQgdGhhdCBoaXMgdmVyc2lvbiBhcHBhcmVudGx5IGZhaWxlZCBmb3Igc29tZQ0KPiBy
-ZWFzb24sIGJ1dCBoZXkgbWF5YmUgd2Ugc2hvdWxkIHRyeSBhZ2Fpbi4NCg0KSXQgYXBwYXJl
-bnRseSB3b3JrZWQgdGhpcyB0aW1lLiBUZXN0ZWQgb24gYW4gQVNUMjEwMCBjaGlwLg0KDQo+
-IA0KPiBTaWduZWQtb2ZmLWJ5OiBEYW5pZWwgVmV0dGVyIDxkYW5pZWwudmV0dGVyQGludGVs
-LmNvbT4NCj4gQ2M6IERhdmUgQWlybGllIDxhaXJsaWVkQHJlZGhhdC5jb20+DQo+IENjOiBU
-aG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4gQ2M6IEphdmllciBN
-YXJ0aW5leiBDYW5pbGxhcyA8amF2aWVybUByZWRoYXQuY29tPg0KPiBDYzogSGVsZ2UgRGVs
-bGVyIDxkZWxsZXJAZ214LmRlPg0KPiBDYzogbGludXgtZmJkZXZAdmdlci5rZXJuZWwub3Jn
-DQoNClRlc3RlZC1ieTogVGhvbWFzIFppbW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRl
-Pg0KUmV2aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRl
-Pg0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X2Rydi5jIHwgMTYgKy0t
-LS0tLS0tLS0tLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMTUg
-ZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FzdC9h
-c3RfZHJ2LmMgYi9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9kcnYuYw0KPiBpbmRleCA0MjBm
-Yzc1YzI0MGUuLjNhYzI0YTc4MGY1MCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJt
-L2FzdC9hc3RfZHJ2LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfZHJ2LmMN
-Cj4gQEAgLTkwLDI3ICs5MCwxMyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHBjaV9kZXZpY2Vf
-aWQgYXN0X3BjaWlkbGlzdFtdID0gew0KPiAgIA0KPiAgIE1PRFVMRV9ERVZJQ0VfVEFCTEUo
-cGNpLCBhc3RfcGNpaWRsaXN0KTsNCj4gICANCj4gLXN0YXRpYyBpbnQgYXN0X3JlbW92ZV9j
-b25mbGljdGluZ19mcmFtZWJ1ZmZlcnMoc3RydWN0IHBjaV9kZXYgKnBkZXYpDQo+IC17DQo+
-IC0JYm9vbCBwcmltYXJ5ID0gZmFsc2U7DQo+IC0JcmVzb3VyY2Vfc2l6ZV90IGJhc2UsIHNp
-emU7DQo+IC0NCj4gLQliYXNlID0gcGNpX3Jlc291cmNlX3N0YXJ0KHBkZXYsIDApOw0KPiAt
-CXNpemUgPSBwY2lfcmVzb3VyY2VfbGVuKHBkZXYsIDApOw0KPiAtI2lmZGVmIENPTkZJR19Y
-ODYNCj4gLQlwcmltYXJ5ID0gcGRldi0+cmVzb3VyY2VbUENJX1JPTV9SRVNPVVJDRV0uZmxh
-Z3MgJiBJT1JFU09VUkNFX1JPTV9TSEFET1c7DQo+IC0jZW5kaWYNCj4gLQ0KPiAtCXJldHVy
-biBkcm1fYXBlcnR1cmVfcmVtb3ZlX2NvbmZsaWN0aW5nX2ZyYW1lYnVmZmVycyhiYXNlLCBz
-aXplLCBwcmltYXJ5LCAmYXN0X2RyaXZlcik7DQo+IC19DQo+IC0NCj4gICBzdGF0aWMgaW50
-IGFzdF9wY2lfcHJvYmUoc3RydWN0IHBjaV9kZXYgKnBkZXYsIGNvbnN0IHN0cnVjdCBwY2lf
-ZGV2aWNlX2lkICplbnQpDQo+ICAgew0KPiAgIAlzdHJ1Y3QgYXN0X3ByaXZhdGUgKmFzdDsN
-Cj4gICAJc3RydWN0IGRybV9kZXZpY2UgKmRldjsNCj4gICAJaW50IHJldDsNCj4gICANCj4g
-LQlyZXQgPSBhc3RfcmVtb3ZlX2NvbmZsaWN0aW5nX2ZyYW1lYnVmZmVycyhwZGV2KTsNCj4g
-KwlyZXQgPSBkcm1fYXBlcnR1cmVfcmVtb3ZlX2NvbmZsaWN0aW5nX3BjaV9mcmFtZWJ1ZmZl
-cnMocGRldiwgJmFzdF9kcml2ZXIpOw0KPiAgIAlpZiAocmV0KQ0KPiAgIAkJcmV0dXJuIHJl
-dDsNCj4gICANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERl
-dmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxk
-c3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJu
-YmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+On Thu, 12 Jan 2023, Jiri Slaby (SUSE) wrote:
 
---------------IR20Ox5nOYlN0pQH131diBcQ--
+> It contains only lines with pointers to characters (u32s). So use
+> simple clear 'u32 **lines' all over the code.
+> 
+> This avoids zero-length arrays. It also makes the allocation less
+> error-prone (size of the struct wasn't taken into account at all).
+> 
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
 
---------------vOwfUhSOD3p0obgeA20yv5UJ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
------BEGIN PGP SIGNATURE-----
+-- 
+ i.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmO/1dQFAwAAAAAACgkQlh/E3EQov+Cc
-5xAAk3FJIwGC3Ck8LsaxJld64fexaAC3Pw+8kJCHmcrHz5LNOzKA5DwAqRBv2WcftULO73E5VCVn
-pgAGNw6D1N6h7D/L5+e+9GW8Qfm78QEHINYnCEcrfTTDPaK7On5fOMnDxCcgzH3Pmt9wIq8wnDfT
-09CL3+v0tLjTX4hTyuyDd6RPcrj/4T5AHgz9gWfKy5571Dz02Fs/R29x1wfiAuUFmCO1F0bOlLJR
-kpH+CTKihh18EMRWRVzKP5+7JtJc78omDsLqWaiDkfO2QNMC9XDRf0ZUk+nX7HNGgJRglIIJf36R
-cVyuTtQDGxKhqOAjO8b78QyU1rqHTuO2FNwmKsQeCLCpahyHWpFu6bgA1+bsyN2OVborpibaMQNG
-y/CAYox6FqsfEdIQ+Zk/KY1lb+QIOvpyBO9lFzzscr4TsFcFS0hIPQn/lavTu424KcH174upKie2
-K7ac77a2REabSElUrXdapgD1gbPHr/Vbu2PTM1EmkldUBS6knkpntQ/8H8mIsyoRiK9EA3knS3q4
-JiNxk8PWHTKFEP/RjzSjlqDyUKdKc0PgpzzHFv8h5TXyT0rDJP5GrpGDr7KkUuN1GrBsOu6wAqFc
-vZYQHdjwqQy9IYkTa1esd7i1zfxXP50u2MrUsTCd/iviAyBgtwA2tIsiMIYt7WYKRuR51ycz8Bah
-rEw=
-=X8Ot
------END PGP SIGNATURE-----
-
---------------vOwfUhSOD3p0obgeA20yv5UJ--
+--8323329-153673084-1673516528=:1665--
