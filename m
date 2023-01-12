@@ -2,96 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53515667FB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72EE3668446
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjALT4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
+        id S240130AbjALUug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjALT4Z (ORCPT
+        with ESMTP id S239769AbjALUt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:56:25 -0500
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93F8200F;
-        Thu, 12 Jan 2023 11:56:01 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id 3F0BA47206;
-        Thu, 12 Jan 2023 20:55:59 +0100 (CET)
-Authentication-Results: ext-mx-out003.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received; s=dkim20160331; t=
-        1673553356; x=1675367757; bh=ymQw9MaNL66asGkSLYyB1FHEAJLENfpL+HS
-        qkDjzQJ8=; b=X+Q3s3A/WqhCr4v8RdLwD9mQ12Hx9hj1NY422u7j8yftx9SDyOF
-        RmvK2+DZzKj6l/du+XVsf5N6UJ3EDttVzr5zBXdG5QcgFXK3fMk/wmboGVn95v6t
-        nyXL9etsMaUooWVkh4oKl1bw6VMECtsTIucyIortuMrRWwO9r6NT7bmbIaAb4Csf
-        WYfn3Lcq8dh1DaSwdQLyCTQA/eA26bWRMKM1WVlTU6mnVgw6AK0WhYAD9B6vLEL6
-        0fE2lznS2X5fhB3MJB8YERfiCDeQoCrLoNzUXbBWWyPcTITZKWc8F1Vb27i3bFTV
-        I3Iy/2D7/AakuYwbSnb+Ay/xTN3rR27L3cQVRPq7Zw3SM8K5WnGqYpXGjx1NHEeK
-        o99AulLAt0fux1jMq30eQmb3Rsh5iQMgJcmLtUDjSSk02NbDTIDN1mHylvKr7wMA
-        +IQRrCf9WZ9W2t7XAHNn1w+ZmN3CgPU4d0mJV9a7ODfyBps23Y7GLYp0bIjb04RA
-        Mfmwx1EB4wIpWe94uQvyaGxWyf/6oPMkFYR12b2FlyPS6xDwTgAs5/UK3ljwdytQ
-        9OIcZpABeggbqXOVBI50Nbqd8QIwzQ+llausiygm/2tIlMSYyrKg0MlfsaOBcH+1
-        bKLazgezHF2yhWxMPXNsBmPpgHReYFy9Q8N6Z1wn0eCDYqOj1P7vOgRo=
-X-Virus-Scanned: amavisd-new at mykolab.com
-X-Spam-Score: -1.899
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out003.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id y4r5nY76Npyj; Thu, 12 Jan 2023 20:55:56 +0100 (CET)
-Received: from int-mx002.mykolab.com (unknown [10.9.13.2])
-        by mx.kolabnow.com (Postfix) with ESMTPS id 9F04A47205;
-        Thu, 12 Jan 2023 20:55:55 +0100 (CET)
-Received: from ext-subm001.mykolab.com (unknown [10.9.6.1])
-        by int-mx002.mykolab.com (Postfix) with ESMTPS id 60A834EB1;
-        Thu, 12 Jan 2023 20:55:55 +0100 (CET)
-Date:   Thu, 12 Jan 2023 20:55:52 +0100
-From:   Federico Vaga <federico.vaga@vaga.pv.it>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] doc: monospace style for inline code in botching ioctl
-Message-ID: <20230112195552.qapndatj66nqmu4n@numero-86.vaga.pv.it>
-References: <20230102183649.9626-1-federico.vaga@vaga.pv.it>
- <874jswwuc2.fsf@meer.lwn.net>
+        Thu, 12 Jan 2023 15:49:57 -0500
+X-Greylist: delayed 1346 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 12:20:20 PST
+Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB89D12609;
+        Thu, 12 Jan 2023 12:20:20 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id 83B4FC80091;
+        Thu, 12 Jan 2023 20:57:52 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id Et299hrPquQa; Thu, 12 Jan 2023 20:57:52 +0100 (CET)
+Received: from [192.168.176.165] (host-88-217-226-44.customer.m-online.net [88.217.226.44])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPSA id 6319BC8008D;
+        Thu, 12 Jan 2023 20:57:51 +0100 (CET)
+Message-ID: <5824c823-dced-bdff-dbd1-5cec9e89480f@tuxedocomputers.com>
+Date:   Thu, 12 Jan 2023 20:57:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <874jswwuc2.fsf@meer.lwn.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 09/13] HID: i2c-hid: acpi: Stop setting wakeup_capable
+Content-Language: en-US
+To:     Raul E Rangel <rrangel@chromium.org>, linux-acpi@vger.kernel.org,
+        linux-input@vger.kernel.org
+Cc:     andriy.shevchenko@linux.intel.com, dmitry.torokhov@gmail.com,
+        hdegoede@redhat.com, rafael@kernel.org,
+        mika.westerberg@linux.intel.com, mario.limonciello@amd.com,
+        timvp@google.com, linus.walleij@linaro.org, jingle.wu@emc.com.tw,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Alistair Francis <alistair@alistair23.me>,
+        Jiri Kosina <jikos@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220929161917.2348231-1-rrangel@chromium.org>
+ <20220929093200.v6.9.I2efb7f551e0aa2dc4c53b5fd5bbea91a1cdd9b32@changeid>
+From:   Werner Sembach <wse@tuxedocomputers.com>
+In-Reply-To: <20220929093200.v6.9.I2efb7f551e0aa2dc4c53b5fd5bbea91a1cdd9b32@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 03:59:57PM -0700, Jonathan Corbet wrote:
->Federico Vaga <federico.vaga@vaga.pv.it> writes:
->
->> Highlighting inline code improves text readability.
->>
->> Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
->
->It improves *HTML* text readability; the results for plain text are
->... less clear.  I think it's better to avoid this kind of extra markup
->when we can.
+Hi,
 
-Shouldn't we consider higher priority the HTML text? Perhaps I've a biased
-opinion. Do you think that plain-text is the favorite way of reading the kernel
-documentation?
+Am 29.09.22 um 18:19 schrieb Raul E Rangel:
+> This is now handled by the i2c-core drive >
+> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> ---
+> 
+> (no changes since v5)
+> 
+> Changes in v5:
+> - Added Acked-by: Benjamin Tissoires
+> 
+>   drivers/hid/i2c-hid/i2c-hid-acpi.c | 5 -----
+>   1 file changed, 5 deletions(-)
+> 
+> diff --git a/drivers/hid/i2c-hid/i2c-hid-acpi.c b/drivers/hid/i2c-hid/i2c-hid-acpi.c
+> index b96ae15e0ad917e..375c77c3db74d92 100644
+> --- a/drivers/hid/i2c-hid/i2c-hid-acpi.c
+> +++ b/drivers/hid/i2c-hid/i2c-hid-acpi.c
+> @@ -105,11 +105,6 @@ static int i2c_hid_acpi_probe(struct i2c_client *client)
+>   
+>   	acpi_device_fix_up_power(adev);
+>   
+> -	if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0) {
+> -		device_set_wakeup_capable(dev, true);
+> -		device_set_wakeup_enable(dev, false);
+> -	}
+> -
+>   	return i2c_hid_core_probe(client, &ihid_acpi->ops,
+>   				  hid_descriptor_address, 0);
+>   }
 
-Let me profit from this point and ask. Are there statistics about the usage of
-https://www.kernel.org/doc/html/latest/?
+this patch is causing a regression on the Clevo NL50RU of which the touchpad 
+instantly wakes up the device when going to sleep. That wasn't triggered until 
+this patch by the default settings: Setting wake capable but not enabling it by 
+default. So unless a user enabled it by hand, the device went correctly to sleep.
 
+I'm not deep into this subsystem so I don't know what the best approach is to 
+?work around this firmware bug?/?fix this issue?:
+- Changing the default back again?
+- Adding a quirk list for bad devices?
+- Maybe this isn't a firmware bug, but the touchpad was not meant to wakeup the 
+device and we can somehow detect that?
 
->Thanks,
->
->jon
+For reference: The debugging issue that lead me here: 
+https://gitlab.freedesktop.org/drm/amd/-/issues/1722#note_1719789
 
--- 
-Federico Vaga
+Kind regards,
+Werner
