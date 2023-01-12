@@ -2,119 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966D3666F4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D28C666F47
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236915AbjALKOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:14:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S234607AbjALKOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:14:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236952AbjALKNm (ORCPT
+        with ESMTP id S239906AbjALKNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:13:42 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFCD33D69;
-        Thu, 12 Jan 2023 02:12:27 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 66E7F5C00FF;
-        Thu, 12 Jan 2023 05:12:24 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 12 Jan 2023 05:12:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1673518344; x=
-        1673604744; bh=vEhta7zMZrchbjHApsTWQNVEwRZyW+Qr5Tm1UgjUS68=; b=S
-        /cdkq7wd6o/lMcnkf0KzrxSckHt8rkcmgQ/7bjXsCCNu2wzJehxZZiYVCtdHlOux
-        b8BGjlNV8lLg/2uyWXuRnZoT1DkepLgH6K71+CKU6lg1tZNSnxD4swoPEHZNN0dW
-        AWbTNZfm0EQCBiQ3sMxRPxkx+bYZRbsh8Muf032sbyYjDFkGNMlF4aodoQOzOdGC
-        XM81nJSYZMXdYnbhI1s6J7sL1YITcmS/g3SE9aDJyaBFmDM4uWObODbvfYsmPnLk
-        Re3E8mJX6Z10tOILlkCVEj+IyuLnq7kp07LFmQkpg0VPboyCaDBHtdLgXdT3837g
-        W6Hwk/Ltc0TDiq6N4MoCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673518344; x=
-        1673604744; bh=vEhta7zMZrchbjHApsTWQNVEwRZyW+Qr5Tm1UgjUS68=; b=I
-        lC3zCD38qxnJMOfi/LxaGEZbv8L542ffFDUM/e/hNEwyFNW0lISQeSc9qwRCBT1X
-        xaiUIaWwaOcnRAPHg3xxKOtz8Olsm2MOfE06FjM23BrSMMgR+6X23pRs9rKVBIzS
-        hn8st4/DL+u3p5ZnXMLhxhtGWQi0vCmWrO5ryuHBs5VrwQQ+CmacoJeGkEedVZ1Z
-        IF2+xL9r6XSy6tAwdYMjhUuLCyJ65Oi/gd8xVoaxEjrRxDP6H89abA+bsk2InuIZ
-        oy/a9FgoySYSlT//wN4csVDM1kmFv6DogVuyNNHshafDzc8aISVUIUvKduDnBN6w
-        16S3Buj9r7iWu1tn4RuSA==
-X-ME-Sender: <xms:CN2_Y1Zf9ugX6PoAuPFmSkaJlDxDIRQ040dMQOPEOkxkbnZvy4HKXA>
-    <xme:CN2_Y8b3y0ms7Jaid71Nj8QidSSn-sHFLEajFBuxI4zxC0ABB64450gFBxC_8wwRF
-    9NP0qsgljWveA>
-X-ME-Received: <xmr:CN2_Y3-7XMJ9YFJ3z5Ha_hy9cCskGa-EWJjEbMBcTwwvg3ZRPLVExpWm2oI2YdwM2kkQJKlIbS9LzJHx7F6ONmvSaSNZFCjSRYL3Kg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdduvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeevve
-    etgfevjeffffevleeuhfejfeegueevfeetudejudefudetjedttdehueffnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:CN2_Yzpb51HchpD8N9XvcI61SLVuaZ8Qa7m33SHXytDqGr3Bo-U13g>
-    <xmx:CN2_Ywq4M10qlLZrTtvWpJMNSgKS9iz0QjQ6D09m7Br1VC4YMaNGyA>
-    <xmx:CN2_Y5T0fPyfAy881qb2nX5PcWdBgRkJbM7OeGM41VQQYgqyqqfLew>
-    <xmx:CN2_Y-a98dfR5giMhqiLZaWDNahtmJAbtNAAyKA7L_C4J7cycKbH5Q>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 12 Jan 2023 05:12:23 -0500 (EST)
-Date:   Thu, 12 Jan 2023 11:12:21 +0100
-From:   Greg KH <greg@kroah.com>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] r8152; preserve device list format
-Message-ID: <Y7/dBXrI2QkiBFlW@kroah.com>
-References: <87k01s6tkr.fsf@miraculix.mork.no>
- <20230112100100.180708-1-bjorn@mork.no>
+        Thu, 12 Jan 2023 05:13:54 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5C8654C
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:12:40 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id p2-20020a5d9842000000b007047916de1cso923907ios.18
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:12:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+hJHl7iV8f1sYSqGJtEFNLAOHn3tn9sXTJHzL+rZ44k=;
+        b=2nmCR7ZZPVDFDBxVwGLNoSQd1ZuOsG5+Lluga0hu2sa0IPe5BPFIZ5VvNHNX+CNuCw
+         QDPU3H1JtIexB6+8pLAKY30Sul4bItwNmx52q1VuVsmb5J64lBSzteBkzB8kd9VQaKWE
+         S7NKDuQWzw4m0yueo1W74vqsjKo9AXkxmWEZcoxNJJGykw1fu9XusYLtVyMUS43e156n
+         MAk+D/jL8ySmznitt+6Bnpb3IIk2jOVd7m6qOuNujhW20l/+IGbXmSug5ING69Jcddrx
+         A3OFpB5qUUQaKGKnNOr9w878CAR9O6RsZlhTE2vIUsYnRFi8CsDfDHJp6aRYQURAHq1a
+         sl3Q==
+X-Gm-Message-State: AFqh2kr070w6PCbj2itYuVysnA2gHJEDbdIeo3vb4guFaHSmg6yKDEQ+
+        ETxbfPcNoIXn99ZU7pMQDTTLV9F2COmb6QRK129y/ohGu2RO
+X-Google-Smtp-Source: AMrXdXurBxuYu0nhD0PaEOwHTy7qvi0IMq+b8qmXhXbFK7SZ28SbXP+kfBgzivzv0yQ+mAeHgD/g4rExqh9Bz48nPCQy0ihcNA4/
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230112100100.180708-1-bjorn@mork.no>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:50b:b0:373:d769:bc14 with SMTP id
+ i11-20020a056638050b00b00373d769bc14mr8061266jar.264.1673518359945; Thu, 12
+ Jan 2023 02:12:39 -0800 (PST)
+Date:   Thu, 12 Jan 2023 02:12:39 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005ea9dd05f20e5b48@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in snd_rawmidi_poll
+From:   syzbot <syzbot+e3ec01fd2d18c9264c3b@syzkaller.appspotmail.com>
+To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 11:01:00AM +0100, Bjørn Mork wrote:
-> This is a partial revert of commit ec51fbd1b8a2 ("r8152:
-> add USB device driver for config selection")
-> 
-> Keep a simplified version of the REALTEK_USB_DEVICE macro
-> to avoid unnecessary reformatting of the device list. This
-> makes new device ID additions apply cleanly across driver
-> versions.
-> 
-> Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
-> Signed-off-by: Bjørn Mork <bjorn@mork.no>
-> ---
-> The patch in
-> https://lore.kernel.org/lkml/20230111133228.190801-1-andre.przywara@arm.com/
-> will apply cleanly on top of this.
-> 
-> This fix will also prevent a lot of stable backporting hassle.
+Hello,
 
-No need for this, just backport the original change to older kernels and
-all will be fine.
+syzbot found the following issue on:
 
-Don't live with stuff you don't want to because of stable kernels,
-that's not how this whole process works at all :)
+HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1748baa1480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3ec01fd2d18c9264c3b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-thanks,
+Unfortunately, I don't have any reproducer for this issue yet.
 
-greg k-h
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e3ec01fd2d18c9264c3b@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in snd_rawmidi_poll+0x559/0x680 sound/core/rawmidi.c:1655
+Read of size 8 at addr ffff8881479ea708 by task syz-executor.0/7629
+
+CPU: 1 PID: 7629 Comm: syz-executor.0 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:417
+ kasan_report+0xc0/0xf0 mm/kasan/report.c:517
+ snd_rawmidi_poll+0x559/0x680 sound/core/rawmidi.c:1655
+ vfs_poll include/linux/poll.h:88 [inline]
+ io_poll_check_events io_uring/poll.c:279 [inline]
+ io_poll_task_func+0x3a6/0x1220 io_uring/poll.c:327
+ handle_tw_list+0xa8/0x460 io_uring/io_uring.c:1169
+ tctx_task_work+0x12e/0x530 io_uring/io_uring.c:1224
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ get_signal+0x1c7/0x24f0 kernel/signal.c:2635
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f66cbc8c0c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f66cc936168 EFLAGS: 00000246 ORIG_RAX: 0000000000000013
+RAX: fffffffffffffe00 RBX: 00007f66cbdabf80 RCX: 00007f66cbc8c0c9
+RDX: 0000000000000001 RSI: 0000000020000800 RDI: 0000000000000006
+RBP: 00007f66cbce7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe231decef R14: 00007f66cc936300 R15: 0000000000022000
+ </TASK>
+
+Allocated by task 7629:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:330 [inline]
+ __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:380
+ kmalloc include/linux/slab.h:580 [inline]
+ snd_rawmidi_open+0x39a/0xb70 sound/core/rawmidi.c:482
+ snd_open+0x223/0x460 sound/core/sound.c:169
+ chrdev_open+0x26a/0x770 fs/char_dev.c:414
+ do_dentry_open+0x6cc/0x13f0 fs/open.c:883
+ do_open fs/namei.c:3558 [inline]
+ path_openat+0x1bc1/0x2b40 fs/namei.c:3715
+ do_filp_open+0x1ba/0x410 fs/namei.c:3742
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1311
+ do_sys_open fs/open.c:1327 [inline]
+ __do_sys_openat fs/open.c:1343 [inline]
+ __se_sys_openat fs/open.c:1338 [inline]
+ __x64_sys_openat+0x143/0x1f0 fs/open.c:1338
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 7629:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ __kmem_cache_free+0xaf/0x2d0 mm/slub.c:3800
+ snd_rawmidi_release+0x6a/0xf0 sound/core/rawmidi.c:619
+ __fput+0x27c/0xa90 fs/file_table.c:321
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ get_signal+0x1c7/0x24f0 kernel/signal.c:2635
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff8881479ea700
+ which belongs to the cache kmalloc-32 of size 32
+The buggy address is located 8 bytes inside of
+ 32-byte region [ffff8881479ea700, ffff8881479ea720)
+
+The buggy address belongs to the physical page:
+page:ffffea00051e7a80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1479ea
+flags: 0x57ff00000000200(slab|node=1|zone=2|lastcpupid=0x7ff)
+raw: 057ff00000000200 ffff888012441500 ffffea0001debd00 dead000000000004
+raw: 0000000000000000 0000000000400040 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 9844741481, free_ts 0
+ prep_new_page mm/page_alloc.c:2549 [inline]
+ get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
+ __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
+ alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2114
+ alloc_pages+0x233/0x270 mm/mempolicy.c:2276
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x25f/0x350 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ __kmem_cache_alloc_node+0x136/0x330 mm/slub.c:3491
+ __do_kmalloc_node mm/slab_common.c:966 [inline]
+ __kmalloc+0x4a/0xd0 mm/slab_common.c:980
+ kmalloc include/linux/slab.h:584 [inline]
+ usb_get_configuration+0x381/0x3b60 drivers/usb/core/config.c:919
+ usb_enumerate_device drivers/usb/core/hub.c:2405 [inline]
+ usb_new_device+0x56a/0x7b0 drivers/usb/core/hub.c:2543
+ register_root_hub+0x421/0x573 drivers/usb/core/hcd.c:1017
+ usb_add_hcd.cold+0x100c/0x13a1 drivers/usb/core/hcd.c:2991
+ vhci_hcd_probe+0x14f/0x3a0 drivers/usb/usbip/vhci_hcd.c:1362
+ platform_probe+0x100/0x1f0 drivers/base/platform.c:1400
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff8881479ea600: 00 00 00 00 fc fc fc fc 00 00 00 07 fc fc fc fc
+ ffff8881479ea680: fa fb fb fb fc fc fc fc 00 00 00 07 fc fc fc fc
+>ffff8881479ea700: fa fb fb fb fc fc fc fc 00 00 00 00 fc fc fc fc
+                      ^
+ ffff8881479ea780: 00 00 00 00 fc fc fc fc 00 00 00 00 fc fc fc fc
+ ffff8881479ea800: 00 00 00 01 fc fc fc fc 00 00 00 00 fc fc fc fc
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
