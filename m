@@ -2,119 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21754667C41
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9276D667C96
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240346AbjALRLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S232835AbjALRe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 12:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240269AbjALRKe (ORCPT
+        with ESMTP id S231222AbjALRe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:10:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E0960857;
-        Thu, 12 Jan 2023 08:48:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F04062092;
-        Thu, 12 Jan 2023 16:42:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE85C433EF;
-        Thu, 12 Jan 2023 16:42:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673541726;
-        bh=F609UnYf0WMG5QfHIvhOUjsUndJBWWCnct0nm6EhNSM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=OPsjwdv4nwXuXqDGZ+Grn5wxcXDYn9RTtehvqMpkLU44l/jIIjLHEeLJglh3X32Vw
-         zk40TZLH73wxhMWeRaB7cwvF8cyRdMfmc1R5gDhcH0keIHTS5CNYEEuWIkc82okltr
-         hizJFSnMs8oyj3vSvvwBJ/giPdIuMoRLIrM+LipXifeGxnnYKEZK2U4fvjsq4TmSyG
-         /IvtdslpbWYDh4o6Rw0bCq3GcVflqAKEBxOkt96H8Ss/38ALdrOzhY+PNappYNAVFh
-         SNGAuGpcMsrpwHp3a/KayLg8FoowcfN1tbkgGVPBPDW3A12rbOdVid5+7T0IU8WqVW
-         Oy3o9fbvnfJjg==
-Date:   Thu, 12 Jan 2023 10:42:04 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Julian =?iso-8859-1?Q?Gro=DF?= <julian.g@posteo.de>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: Regression in Kernel 6.0: System partially freezes with "nvme
- controller is down"
-Message-ID: <20230112164204.GA1768006@bhelgaas>
+        Thu, 12 Jan 2023 12:34:28 -0500
+Received: from outbound-smtp48.blacknight.com (outbound-smtp48.blacknight.com [46.22.136.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3033984F96
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 08:57:19 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp48.blacknight.com (Postfix) with ESMTPS id E0B85FABFF
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:42:23 +0000 (GMT)
+Received: (qmail 26989 invoked from network); 12 Jan 2023 16:42:23 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 Jan 2023 16:42:23 -0000
+Date:   Thu, 12 Jan 2023 16:42:22 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/7] mm/page_alloc: Treat RT tasks similar to __GFP_HIGH
+Message-ID: <20230112164222.7cfygytun7gj4u7v@techsingularity.net>
+References: <20230109151631.24923-1-mgorman@techsingularity.net>
+ <20230109151631.24923-3-mgorman@techsingularity.net>
+ <Y77VYdboKBUsILhD@dhcp22.suse.cz>
+ <20230112093623.sl4jpqf6f2ng43w2@techsingularity.net>
+ <Y7/XLPfpZqtsRRMg@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9d46a35f-5830-9761-ca2c-eaa640e9cc86@leemhuis.info>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y7/XLPfpZqtsRRMg@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 03:48:46PM +0100, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
-> ...
-> On 11.01.23 23:11, Julian Groß wrote:
-> > Dear Maintainer,
-> > 
-> > when running Linux Kernel version 6.0.12, 6.0.10, 6.0-rc7, or 6.1.4, my
-> > system seemingly randomly freezes due to the file system being set to
-> > read-only due to an issue with my NVMe controller.
-> > The issue does *not* appear on Linux Kernel version 5.19.11 or lower.
-> > 
-> > Through network logging I am able to catch the issue:
-> > ```
-> > Jan  8 14:50:16 x299-desktop kernel: [ 1461.259288] nvme nvme0:
-> > controller is down; will reset: CSTS=0xffffffff, PCI_STATUS=0x10
-> > Jan  8 14:50:16 x299-desktop kernel: [ 1461.259293] nvme nvme0: Does
-> > your device have a faulty power saving mode enabled?
-> > Jan  8 14:50:16 x299-desktop kernel: [ 1461.259293] nvme nvme0: Try
-> > "nvme_core.default_ps_max_latency_us=0 pcie_aspm=off" and report a bug
-> > Jan  8 14:50:16 x299-desktop kernel: [ 1461.331360] nvme 0000:01:00.0:
-> > enabling device (0000 -> 0002)
-> > ...
-> > 
-> > I have tried the suggestion in the log without luck.
-> > 
-> > Attached is a log that includes two system freezes, as well as a list of
-> > PCI(e) devices created by Debian reportbug.
-> > The first freeze happens at "Jan  8 04:26:28" and the second freeze
-> > happens at "Jan  8 14:50:16".
-> > 
-> > Currently, I am using git bisect to narrow down the window of possible
-> > commits, but since the issue appears seemingly random, it will take many
-> > months to identify the offending commit this way.
-> > 
-> > The original Debian bug report is here:
-> > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1028309
+On Thu, Jan 12, 2023 at 10:47:24AM +0100, Michal Hocko wrote:
+> On Thu 12-01-23 09:36:23, Mel Gorman wrote:
+> [...]
+> > I agree with you but given the risk of bisections hitting this series,
+> > would you be opposed to delaying the removal by 1 kernel release? That
+> > way bisections for failures will hit 6.3 and a single commit or at least
+> > just a report against 6.3. That would mitigate the risk of a full revert
+> > of the series. I can add a note to the changelog mentioning the expected
+> > removal so git blame will also highlight it.
+> 
+> Sure. I will post the removal on top of your series and put myself into
+> the "wait for regression chair".
+> 
 
-For some reason the log [1] has very little of the kernel dmesg log.
-It does seem like the freeze is partial (I see messages for hundreds
-or thousands of seconds after the nvme reset), but requires a reboot
-to recover.
+I'm happy to sit in the same chair and send the patch. If there is an
+example of an RT task actually caring about memory reserves, I'd like to
+determine if it's a real problem or a badly designed RT application.
 
-The lspci information [2] shows the 00:1b.0 Root Port leading to the
-01:00.0 NVMe device.
-
-Is it possible to collect lspci output after the nvme freeze?  If so,
-please save the output of:
-
-  sudo lspci -vv -s00:1b.0
-  sudo lspci -vv -s01:00.0
-
-Make sure to run lspci as root so we can see the error logging
-registers for these devices.
-
-If you can collect more of the dmesg log after the freeze, e.g., via
-the "dmesg" command, that might be helpful, too.
-
-Bjorn
-
-[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1028309;filename=x299-desktop_crash.log.xz;msg=5
-[2] https://bugs.debian.org/cgi-bin/bugreport.cgi?att=0;bug=1028309;msg=5
+-- 
+Mel Gorman
+SUSE Labs
