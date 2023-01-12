@@ -2,304 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52DA6669E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5826669EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236271AbjALEAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 23:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
+        id S235483AbjALEDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 23:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235573AbjALEAP (ORCPT
+        with ESMTP id S230329AbjALEDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 23:00:15 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D853DBC9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:00:13 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id d30so21710699lfv.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:00:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5EVhIygjFXI/wEoux14pr0fCdUTfx0iiJBUloQllnVI=;
-        b=Xyrya5U/NSLY9sRln6RfP1MnF8iETi9sdYaEYQ3HOPpDcBIMdx7sYtCsIMF0NIQp8a
-         PmlRe/AZTNHVl5dEKFw5BVzkBCLifL0RJD4rYy4kkm8V4FodOS4jGGNbHCyu+XNSBhgQ
-         ZsYBUD6nT/9AY5rR7XpXiBMZu+ATk3qaMRGSVA/XvSoC801HMzBSKwh5WuHkKWVX3/Hm
-         lTHqk9K5TvTtvm/wcOkCYSJpFPuMrEHvkXvOHEeSPYwYSPs2Hc696i/R4b8Pl8vqjAYH
-         W+jq6L4ikY5/LRdQQCyYyomDfb7abVEEEYCYX3zLqQZ81EGgY3BGoVdPAoL9aHk98QDG
-         O7Cg==
+        Wed, 11 Jan 2023 23:03:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB67F4A97A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:02:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673496168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Ead6NbYjGEcOLExh9Mv61ETFXQQrhvNXO4fmiWeGhg=;
+        b=SM57v6Fy6RLpJYzThdkqInXSkLBBZW4mqglQjKbgRg8lRHP2nOKjDKobdoAL+qEyxdQEKj
+        rgwwJmratw+yX0SKKQh+BoWm55ntWgMhSgece0A7xjRynSOOgiYizZsQ7aZdCcNL+tgGYx
+        6fFVelosa+DV1XUFguqGhCWIAyXhl1k=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-125-CPzxIWB1PsGBXFO5ABZv5A-1; Wed, 11 Jan 2023 23:02:47 -0500
+X-MC-Unique: CPzxIWB1PsGBXFO5ABZv5A-1
+Received: by mail-oo1-f69.google.com with SMTP id z24-20020a4a9c98000000b004f209cc2866so3161646ooj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:02:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5EVhIygjFXI/wEoux14pr0fCdUTfx0iiJBUloQllnVI=;
-        b=mgs9DWQnoRmvgjCaCLx9rQh+rr32adNUwJ+Zja6WLIHnOTXOIfDfV9deIIAnnfMovw
-         icHvp2F0etTDcCaDAGsXFhvU2obi37dDoQmrg0Q+d34JLD51wboNfYqaexXIbgzB9sD/
-         9QoS0UTfYPc5uISaADXfX5Z81sgK4Sz8OLe1gsp6cUz7bHdkIXFqmi40aOjPv3wqWD00
-         4kMt/My/QNgUCzlSI9id6Id6roo+Oq5a0WiZvwYJYt5RJqFgLtFnK63wytyapTrMQjBA
-         5SXyPW3OYBOZNb+li/K4zNVWse9u7x3HryLs0P26vYOKCcUvRr253dLRTtbuDisJEoGl
-         Tqew==
-X-Gm-Message-State: AFqh2koQc27WoCTd8lXZmqacZOvIl6Mz80yElmvDiIWVpiDqw64806dx
-        Lopi4AM8CNzZkJLCDG1NUBKKgA==
-X-Google-Smtp-Source: AMrXdXudJ6zq35HX6LsvmUjQfgdbWkNYChpGbSjoQYJvDsgM9+AJHJISaSV38xz2ki3wZGsoSiVeNg==
-X-Received: by 2002:a05:6512:340d:b0:4b6:ec96:bb9a with SMTP id i13-20020a056512340d00b004b6ec96bb9amr26246255lfr.60.1673496011595;
-        Wed, 11 Jan 2023 20:00:11 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id y4-20020a0565123f0400b004cc590975f7sm3051138lfa.183.2023.01.11.20.00.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 20:00:10 -0800 (PST)
-Message-ID: <f851bca5-d0e1-fe40-9b06-e6f2af37cce0@linaro.org>
-Date:   Thu, 12 Jan 2023 06:00:10 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9Ead6NbYjGEcOLExh9Mv61ETFXQQrhvNXO4fmiWeGhg=;
+        b=M8Ds0bG9p+O/Y1DgSqgyy8ylJ2/Ut9dC/UKu5SX3/yFrw3iLLuVXc+RqqcJppCo+rj
+         Eb45a53hPB4N0BlEY3mivMZWuuNfIs00yCi6yhbGsfg+Np4r9cTA87ZxS2eBEk4vpEvi
+         sAPq2nBvOMIX2nW4co8epd9yfYbII53paDPL2PzLz1VHA2Cea1vV2UZCKKKaOowsmz+W
+         o2FJPWpcrGF7t3VYRpvo54u+mink2ZW/bkXLKjWGvWI5m2OFi2/xiwj2jCTJdPPxiues
+         7SzCE77/yEA9Kn2Kk09E9QK9xirN2NR9amOWBVmqatCC5NNcNabJZ2LNewr73XgLHqYf
+         aFbg==
+X-Gm-Message-State: AFqh2krjlqp/TPz2XapgNdVvFK3pk7IvWxnmHgPtIcAag/xGOYZh09IH
+        A2awUDt90eHR4g6A+ppAdsrXil2DIVbAOqLiqJqFm6dzZ0cBOpcfFiYnlFtbxIdrUvcbwdcoKR0
+        IUeKhOiyTMAs01jPwA3Tu0My9b126s/MCNwFjgDEm
+X-Received: by 2002:a05:6870:4413:b0:144:a97b:1ae2 with SMTP id u19-20020a056870441300b00144a97b1ae2mr4131307oah.35.1673496166794;
+        Wed, 11 Jan 2023 20:02:46 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXs23GgCUjE+n1ZMX3l44UXf7JP96onjuoMkRSJyeIQHYTd/0zJHvVdCU1raqdOjILjzA9GfGaIqELD3q2P6bPU=
+X-Received: by 2002:a05:6870:4413:b0:144:a97b:1ae2 with SMTP id
+ u19-20020a056870441300b00144a97b1ae2mr4131300oah.35.1673496166467; Wed, 11
+ Jan 2023 20:02:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v6 2/6] dt-bindings: arm: msm: Convert and split kpss-acc
- driver Documentation to yaml
-Content-Language: en-GB
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20230110183259.19142-1-ansuelsmth@gmail.com>
- <20230110183259.19142-3-ansuelsmth@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230110183259.19142-3-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230111060730.24779-1-jasowang@redhat.com> <Y78Lfmzr6s1BU3ri@fedora>
+In-Reply-To: <Y78Lfmzr6s1BU3ri@fedora>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 12 Jan 2023 12:02:35 +0800
+Message-ID: <CACGkMEukZ42N4ZNbGvn6gr3C74aAbFpot-4Zeyp0GL7LmS9tRw@mail.gmail.com>
+Subject: Re: [PATCH] vhost-scsi: unbreak any layout for response
+To:     Stefan Hajnoczi <stefanha@redhat.com>
+Cc:     mst@redhat.com, pbonzini@redhat.com, bcodding@redhat.com,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Nicholas Bellinger <nab@linux-iscsi.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 20:32, Christian Marangi wrote:
-> Convert kpss-acc driver Documentation to yaml.
-> The original Documentation was wrong all along. Fix it while we are
-> converting it.
-> The example was wrong as kpss-acc-v2 should only expose the regs but we
-> don't have any driver that expose additional clocks. The kpss-acc driver
-> is only specific to v1. For this exact reason, split the Documentation
-> to 2 different schema, v1 as clock-controller and v2 for
-> power-controller as per msm-3.10 specification, the exposed regs handle
-> power domains.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->   .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 -------------
->   .../bindings/clock/qcom,kpss-acc-v1.yaml      | 72 +++++++++++++++++++
->   .../bindings/power/qcom,kpss-acc-v2.yaml      | 47 ++++++++++++
->   3 files changed, 119 insertions(+), 49 deletions(-)
->   delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
->   create mode 100644 Documentation/devicetree/bindings/clock/qcom,kpss-acc-v1.yaml
->   create mode 100644 Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
-> deleted file mode 100644
-> index 7f696362a4a1..000000000000
-> --- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
-> +++ /dev/null
-> @@ -1,49 +0,0 @@
-> -Krait Processor Sub-system (KPSS) Application Clock Controller (ACC)
-> -
-> -The KPSS ACC provides clock, power domain, and reset control to a Krait CPU.
-> -There is one ACC register region per CPU within the KPSS remapped region as
-> -well as an alias register region that remaps accesses to the ACC associated
-> -with the CPU accessing the region.
-> -
-> -PROPERTIES
-> -
-> -- compatible:
-> -	Usage: required
-> -	Value type: <string>
-> -	Definition: should be one of:
-> -			"qcom,kpss-acc-v1"
-> -			"qcom,kpss-acc-v2"
-> -
-> -- reg:
-> -	Usage: required
-> -	Value type: <prop-encoded-array>
-> -	Definition: the first element specifies the base address and size of
-> -		    the register region. An optional second element specifies
-> -		    the base address and size of the alias register region.
-> -
-> -- clocks:
-> -        Usage: required
-> -        Value type: <prop-encoded-array>
-> -        Definition: reference to the pll parents.
-> -
-> -- clock-names:
-> -        Usage: required
-> -        Value type: <stringlist>
-> -        Definition: must be "pll8_vote", "pxo".
-> -
-> -- clock-output-names:
-> -	Usage: optional
-> -	Value type: <string>
-> -	Definition: Name of the output clock. Typically acpuX_aux where X is a
-> -		    CPU number starting at 0.
-> -
-> -Example:
-> -
-> -	clock-controller@2088000 {
-> -		compatible = "qcom,kpss-acc-v2";
-> -		reg = <0x02088000 0x1000>,
-> -		      <0x02008000 0x1000>;
-> -		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
-> -		clock-names = "pll8_vote", "pxo";
-> -		clock-output-names = "acpu0_aux";
-> -	};
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,kpss-acc-v1.yaml b/Documentation/devicetree/bindings/clock/qcom,kpss-acc-v1.yaml
-> new file mode 100644
-> index 000000000000..a466e4e8aacd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,kpss-acc-v1.yaml
-> @@ -0,0 +1,72 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,kpss-acc-v1.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Krait Processor Sub-system (KPSS) Application Clock Controller (ACC) v1
-> +
-> +maintainers:
-> +  - Christian Marangi <ansuelsmth@gmail.com>
-> +
-> +description:
-> +  The KPSS ACC provides clock, power domain, and reset control to a Krait CPU.
-> +  There is one ACC register region per CPU within the KPSS remapped region as
-> +  well as an alias register region that remaps accesses to the ACC associated
-> +  with the CPU accessing the region. ACC v1 is currently used as a
-> +  clock-controller for enabling the cpu and hanling the aux clocks.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,kpss-acc-v1
-> +
-> +  reg:
-> +    items:
-> +      - description: Base address and size of the register region
-> +      - description: Optional base address and size of the alias register region
-> +    minItems: 1
-> +
-> +  clocks:
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    items:
-> +      - const: pll8_vote
-> +      - const: pxo
-> +
-> +  clock-output-names:
-> +    description: Name of the aux clock. Krait can have at most 4 cpu.
-> +    enum:
-> +      - acpu0_aux
-> +      - acpu1_aux
-> +      - acpu2_aux
-> +      - acpu3_aux
-> +
-> +  '#clock-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - clock-output-names
-> +  - '#clock-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,gcc-ipq806x.h>
-> +
-> +    clock-controller@2088000 {
-> +      compatible = "qcom,kpss-acc-v1";
-> +      reg = <0x02088000 0x1000>, <0x02008000 0x1000>;
-> +      clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
-> +      clock-names = "pll8_vote", "pxo";
-> +      clock-output-names = "acpu0_aux";
-> +      #clock-cells = <0>;
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml b/Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml
-> new file mode 100644
-> index 000000000000..91af95569ae6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/qcom,kpss-acc-v2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Krait Processor Sub-system (KPSS) Application Clock Controller (ACC) v2
-> +
-> +maintainers:
-> +  - Christian Marangi <ansuelsmth@gmail.com>
-> +
-> +description:
-> +  The KPSS ACC provides clock, power domain, and reset control to a Krait CPU.
-> +  There is one ACC register region per CPU within the KPSS remapped region as
-> +  well as an alias register region that remaps accesses to the ACC associated
-> +  with the CPU accessing the region. ACC v2 is currently used as a
-> +  power-controller for enabling the cpu.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,kpss-acc-v2
-> +
-> +  reg:
-> +    items:
-> +      - description: Base address and size of the register region
-> +      - description: Optional base address and size of the alias register region
-> +    minItems: 1
-> +
-> +  '#power-domain-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#power-domain-cells'
+On Thu, Jan 12, 2023 at 3:18 AM Stefan Hajnoczi <stefanha@redhat.com> wrote:
+>
+> On Wed, Jan 11, 2023 at 02:07:30PM +0800, Jason Wang wrote:
+> > Al Viro said:
+> >
+> > """
+> > Since "vhost/scsi: fix reuse of &vq->iov[out] in response"
+> > we have this:
+> >                 cmd->tvc_resp_iov = vq->iov[vc.out];
+> >                 cmd->tvc_in_iovs = vc.in;
+> > combined with
+> >                 iov_iter_init(&iov_iter, ITER_DEST, &cmd->tvc_resp_iov,
+> >                               cmd->tvc_in_iovs, sizeof(v_rsp));
+> > in vhost_scsi_complete_cmd_work().  We used to have ->tvc_resp_iov
+> > _pointing_ to vq->iov[vc.out]; back then iov_iter_init() asked to
+> > set an iovec-backed iov_iter over the tail of vq->iov[], with
+> > length being the amount of iovecs in the tail.
+> >
+> > Now we have a copy of one element of that array.  Fortunately, the members
+> > following it in the containing structure are two non-NULL kernel pointers,
+> > so copy_to_iter() will not copy anything beyond the first iovec - kernel
+> > pointer is not (on the majority of architectures) going to be accepted by
+> > access_ok() in copyout() and it won't be skipped since the "length" (in
+> > reality - another non-NULL kernel pointer) won't be zero.
+> >
+> > So it's not going to give a guest-to-qemu escalation, but it's definitely
+> > a bug.  Frankly, my preference would be to verify that the very first iovec
+> > is long enough to hold rsp_size.  Due to the above, any users that try to
+> > give us vq->iov[vc.out].iov_len < sizeof(struct virtio_scsi_cmd_resp)
+> > would currently get a failure in vhost_scsi_complete_cmd_work()
+> > anyway.
+> > """
+> >
+> > However, the spec doesn't say anything about the legacy descriptor
+> > layout for the respone. So this patch tries to not assume the response
+> > to reside in a single separate descriptor which is what commit
+> > 79c14141a487 ("vhost/scsi: Convert completion path to use") tries to
+> > achieve towards to ANY_LAYOUT.
+> >
+> > This is done by allocating and using dedicate resp iov in the
+> > command. To be safety, start with UIO_MAXIOV to be consistent with the
+> > vhost core.
+> >
+> > Testing with the hacked virtio-scsi driver that use 1 descriptor for 1
+> > byte in the response.
+> >
+> > Reported-by: Al Viro <viro@zeniv.linux.org.uk>
+> > Cc: Benjamin Coddington <bcodding@redhat.com>
+> > Cc: Nicholas Bellinger <nab@linux-iscsi.org>
+> > Fixes: a77ec83a5789 ("vhost/scsi: fix reuse of &vq->iov[out] in response")
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > ---
+> >  drivers/vhost/scsi.c | 21 +++++++++++++++++----
+> >  1 file changed, 17 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
+> > index dca6346d75b3..7d6d70072603 100644
+> > --- a/drivers/vhost/scsi.c
+> > +++ b/drivers/vhost/scsi.c
+> > @@ -80,7 +80,7 @@ struct vhost_scsi_cmd {
+> >       struct scatterlist *tvc_prot_sgl;
+> >       struct page **tvc_upages;
+> >       /* Pointer to response header iovec */
+> > -     struct iovec tvc_resp_iov;
+> > +     struct iovec *tvc_resp_iov;
+> >       /* Pointer to vhost_scsi for our device */
+> >       struct vhost_scsi *tvc_vhost;
+> >       /* Pointer to vhost_virtqueue for the cmd */
+> > @@ -563,7 +563,7 @@ static void vhost_scsi_complete_cmd_work(struct vhost_work *work)
+> >               memcpy(v_rsp.sense, cmd->tvc_sense_buf,
+> >                      se_cmd->scsi_sense_length);
+> >
+> > -             iov_iter_init(&iov_iter, ITER_DEST, &cmd->tvc_resp_iov,
+> > +             iov_iter_init(&iov_iter, ITER_DEST, cmd->tvc_resp_iov,
+> >                             cmd->tvc_in_iovs, sizeof(v_rsp));
+> >               ret = copy_to_iter(&v_rsp, sizeof(v_rsp), &iov_iter);
+> >               if (likely(ret == sizeof(v_rsp))) {
+> > @@ -594,6 +594,7 @@ vhost_scsi_get_cmd(struct vhost_virtqueue *vq, struct vhost_scsi_tpg *tpg,
+> >       struct vhost_scsi_cmd *cmd;
+> >       struct vhost_scsi_nexus *tv_nexus;
+> >       struct scatterlist *sg, *prot_sg;
+> > +     struct iovec *tvc_resp_iov;
+> >       struct page **pages;
+> >       int tag;
+> >
+> > @@ -613,6 +614,7 @@ vhost_scsi_get_cmd(struct vhost_virtqueue *vq, struct vhost_scsi_tpg *tpg,
+> >       sg = cmd->tvc_sgl;
+> >       prot_sg = cmd->tvc_prot_sgl;
+> >       pages = cmd->tvc_upages;
+> > +     tvc_resp_iov = cmd->tvc_resp_iov;
+> >       memset(cmd, 0, sizeof(*cmd));
+> >       cmd->tvc_sgl = sg;
+> >       cmd->tvc_prot_sgl = prot_sg;
+> > @@ -625,6 +627,7 @@ vhost_scsi_get_cmd(struct vhost_virtqueue *vq, struct vhost_scsi_tpg *tpg,
+> >       cmd->tvc_data_direction = data_direction;
+> >       cmd->tvc_nexus = tv_nexus;
+> >       cmd->inflight = vhost_scsi_get_inflight(vq);
+> > +     cmd->tvc_resp_iov = tvc_resp_iov;
+> >
+> >       memcpy(cmd->tvc_cdb, cdb, VHOST_SCSI_MAX_CDB_SIZE);
+> >
+> > @@ -935,7 +938,7 @@ vhost_scsi_handle_vq(struct vhost_scsi *vs, struct vhost_virtqueue *vq)
+> >       struct iov_iter in_iter, prot_iter, data_iter;
+> >       u64 tag;
+> >       u32 exp_data_len, data_direction;
+> > -     int ret, prot_bytes, c = 0;
+> > +     int ret, prot_bytes, i, c = 0;
+> >       u16 lun;
+> >       u8 task_attr;
+> >       bool t10_pi = vhost_has_feature(vq, VIRTIO_SCSI_F_T10_PI);
+> > @@ -1092,7 +1095,8 @@ vhost_scsi_handle_vq(struct vhost_scsi *vs, struct vhost_virtqueue *vq)
+> >               }
+> >               cmd->tvc_vhost = vs;
+> >               cmd->tvc_vq = vq;
+> > -             cmd->tvc_resp_iov = vq->iov[vc.out];
+> > +             for (i = 0; i < vc.in ; i++)
+> > +                     cmd->tvc_resp_iov[i] = vq->iov[vc.out + i];
+>
+> Where is the guarantee that vc.in < UIO_MAXIOV?
+>
 
-This dictates that if at some point we implement the kps-acc-v2 driver, 
-it will return a single power domain. I can not confirm that this would 
-be the case. I see that you want to migrate from the clock-controller as 
-the acc-v2 doesn't provide clocks. I'd suggest instead using the neutral 
-`power-manager@...` node name. It doesn't demand anything, so we can 
-drop the (unused and unsupported) #power-domain-cells property.
+We limit it here in the vhost_virtqueue structure:
 
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    power-controller@f9088000 {
-> +      compatible = "qcom,kpss-acc-v2";
-> +      reg = <0xf9088000 0x1000>,
-> +            <0xf9008000 0x1000>;
-> +      #power-domain-cells = <0>;
-> +    };
-> +...
+        struct iovec iov[UIO_MAXIOV];
 
--- 
-With best wishes
-Dmitry
+And we pass sizeof(vq->iov) to vhost_get_vq_desc():
+
+        vc->head = vhost_get_vq_desc(vq, vq->iov,
+                                     ARRAY_SIZE(vq->iov), &vc->out, &vc->in,
+                                     NULL, NULL);
+
+> >               cmd->tvc_in_iovs = vc.in;
+> >
+> >               pr_debug("vhost_scsi got command opcode: %#02x, lun: %d\n",
+> > @@ -1461,6 +1465,7 @@ static void vhost_scsi_destroy_vq_cmds(struct vhost_virtqueue *vq)
+> >               kfree(tv_cmd->tvc_sgl);
+> >               kfree(tv_cmd->tvc_prot_sgl);
+> >               kfree(tv_cmd->tvc_upages);
+> > +             kfree(tv_cmd->tvc_resp_iov);
+> >       }
+> >
+> >       sbitmap_free(&svq->scsi_tags);
+> > @@ -1508,6 +1513,14 @@ static int vhost_scsi_setup_vq_cmds(struct vhost_virtqueue *vq, int max_cmds)
+> >                       goto out;
+> >               }
+> >
+> > +             tv_cmd->tvc_resp_iov = kcalloc(UIO_MAXIOV,
+> > +                                            sizeof(struct page *),
+> > +                                            GFP_KERNEL);
+>
+> Should sizeof(struct page *) be sizeof(struct iovec)?
+
+Yes, I will fix it.
+
+Thanks
+
+>
+> > +             if (!tv_cmd->tvc_resp_iov) {
+> > +                     pr_err("Unable to allocate tv_cmd->tvc_resp_iov\n");
+> > +                     goto out;
+> > +             }
+> > +
+> >               tv_cmd->tvc_prot_sgl = kcalloc(VHOST_SCSI_PREALLOC_PROT_SGLS,
+> >                                              sizeof(struct scatterlist),
+> >                                              GFP_KERNEL);
+> > --
+> > 2.25.1
+> >
 
