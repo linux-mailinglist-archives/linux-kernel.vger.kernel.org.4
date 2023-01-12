@@ -2,70 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C034667A8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D362F667A7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbjALQQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 11:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S233379AbjALQPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 11:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjALQPR (ORCPT
+        with ESMTP id S239847AbjALQNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:15:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEDA55A1;
-        Thu, 12 Jan 2023 08:12:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68D6A6206E;
-        Thu, 12 Jan 2023 16:12:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E96C433EF;
-        Thu, 12 Jan 2023 16:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673539948;
-        bh=dX2scFFzTh1LRjQiS/hvAmTEVH8M+mE8PnR/uCjzsvo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T+R5mGnr0I2WZDUeEB3kBTez2MsBxaIywJRrwDcrvygv7dBkUn/LJw0grQfWTN5hX
-         hoIMZl0rYZRf7ufoZOntczjdLnnQ0iAdzMZhcmLfoxuDVEdUXDJid0nkX8sWCRK17S
-         1+QPSyYAts4O/djtYUGMnO3ju3gQkETUdJLxaW50TB+q4L4y8s2te4ZJrgukZFnWeH
-         /FFu7j5ycHvxjvRqdNAqgsJg+kXxt83+hUgICY1czE/g9Ui4ravYJ8TaTXJ+Z5sWkK
-         8LX0XjE7K2CYc2woCoPJiZFRmFytfcqBcK49czRcERG5SL5F+l5FfUEylscf+uSMWF
-         NLea5WBksqVWw==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     konrad.dybcio@linaro.org, quic_mojha@quicinc.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 1/2] dt-bindings: mfd: qcom,tcsr: Add compatible for sm8450
-Date:   Thu, 12 Jan 2023 10:12:23 -0600
-Message-Id: <167353993748.2393683.2612853906580487491.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <1673513697-30173-1-git-send-email-quic_mojha@quicinc.com>
-References: <1673513697-30173-1-git-send-email-quic_mojha@quicinc.com>
+        Thu, 12 Jan 2023 11:13:44 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88307FF9;
+        Thu, 12 Jan 2023 08:11:10 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 067DFE000A;
+        Thu, 12 Jan 2023 16:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1673539868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xxLaGegYQm28LPQufEzUPjtyh2y4iexg9LenfhO2O48=;
+        b=EqqUksdz+Wxq6Gb1gYEudLrOKAe6EUtL7snjY2ALGo/XyVZWK5kbc0Ci4x8VjqIjS6I0MJ
+        wku7KgfrCf9VXTh6JS+da4MAe7Tq/tl3U+toTpiTxnoj+zROPElOn/sDeOuzRSdvJsIt96
+        j1xGSq/GcSW+ffjsAnbE2fxVgQPnc2RBEKanRokilGdBGhV5m0y4Hf3nNiHVekdUAGAaly
+        +Ut4rcW5AlyuvCW7OoWilecspetpaxhjWasBYkcoVVfefKKHh1Hs/8rWvkf4cvM8nA+Vvi
+        7MwwPRxupXsRs+iSB7+aWxer4JfV1ii+4tn4wTzhBYtf1Yyga4hI/POh2QLxZQ==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net] net: lan966x: add missing fwnode_handle_put() for ports node
+Date:   Thu, 12 Jan 2023 17:13:11 +0100
+Message-Id: <20230112161311.495124-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 14:24:56 +0530, Mukesh Ojha wrote:
-> Document the qcom,sm8450-tcsr compatible.
-> 
-> 
+Since the "ethernet-ports" node is retrieved using
+device_get_named_child_node(), it should be release after using it. Add
+missing fwnode_handle_put() and move the code that retrieved the node
+from device-tree to avoid complicated handling in case of error.
 
-Applied, thanks!
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+---
+ .../net/ethernet/microchip/lan966x/lan966x_main.c   | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-[2/2] arm64: dts: qcom: sm8450: Add TCSR halt register space
-      commit: 1f731bbf71e374d93d477831518402ebcfddb75b
-
-Best regards,
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+index cadde20505ba..580c91d24a52 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+@@ -1043,11 +1043,6 @@ static int lan966x_probe(struct platform_device *pdev)
+ 		lan966x->base_mac[5] &= 0xf0;
+ 	}
+ 
+-	ports = device_get_named_child_node(&pdev->dev, "ethernet-ports");
+-	if (!ports)
+-		return dev_err_probe(&pdev->dev, -ENODEV,
+-				     "no ethernet-ports child found\n");
+-
+ 	err = lan966x_create_targets(pdev, lan966x);
+ 	if (err)
+ 		return dev_err_probe(&pdev->dev, err,
+@@ -1125,6 +1120,11 @@ static int lan966x_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	ports = device_get_named_child_node(&pdev->dev, "ethernet-ports");
++	if (!ports)
++		return dev_err_probe(&pdev->dev, -ENODEV,
++				     "no ethernet-ports child found\n");
++
+ 	/* init switch */
+ 	lan966x_init(lan966x);
+ 	lan966x_stats_init(lan966x);
+@@ -1162,6 +1162,8 @@ static int lan966x_probe(struct platform_device *pdev)
+ 			goto cleanup_ports;
+ 	}
+ 
++	fwnode_handle_put(ports);
++
+ 	lan966x_mdb_init(lan966x);
+ 	err = lan966x_fdb_init(lan966x);
+ 	if (err)
+@@ -1191,6 +1193,7 @@ static int lan966x_probe(struct platform_device *pdev)
+ 	lan966x_fdb_deinit(lan966x);
+ 
+ cleanup_ports:
++	fwnode_handle_put(ports);
+ 	fwnode_handle_put(portnp);
+ 
+ 	lan966x_cleanup_ports(lan966x);
 -- 
-Bjorn Andersson <andersson@kernel.org>
+2.39.0
+
