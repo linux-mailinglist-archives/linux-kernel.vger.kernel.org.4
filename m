@@ -2,107 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56A066784D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A58666784E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240141AbjALO53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S240254AbjALO5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:57:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240032AbjALO4V (ORCPT
+        with ESMTP id S238569AbjALO5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:56:21 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FD63D5E9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:43:20 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id bu8so28720111lfb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:43:20 -0800 (PST)
+        Thu, 12 Jan 2023 09:57:01 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE83942625
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:43:31 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id d10so12884191pgm.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:43:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+SachbnsjogB9d6VznmJ7gd3XdXdQ4weNjS4U9PfSA0=;
-        b=lHbyQy+FNSi/meLPTdjOq7NTzEMuxLi4iUUn3c+/PXWcgaHj7llhT0nJmhX86Z+TCo
-         GHuvV9WZZbZ1pRpdUsPw37NBE9xIQJwQWYovvGpaR42pZ+13ZKNrUe38ZtvJNylJwG4B
-         wJBmA+2m7ENe2ZClbpg98qYjd5mcu4OrW2270zoB3PIvBmrIPekzEwRO8vGqdtKYp6Z4
-         kLy8dRkMiNWsj4B0D016+3koH9l4hlJ5vvvxNscIMUIOoj0uN7TbOGNHrYFrZwejFzUg
-         Yq1wrSNxKRYxjzKVAHRdDS+wYUvUNpZZaEixbdR7kSyqEP3XldD1p4vek/ifeUbKZf3Q
-         1i7A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zS2T9dR6c6kcyaKB6UcxI33YN3XGf+D0vGX3KbZ3PWA=;
+        b=RqqsuRR0KYxhbPvkZ1HoHrS8MIu2IOY06CzW1KCEFA6JQ1VjCAs24Zc99f2uLKtKFH
+         OjPpm3zS9LyKUcxQWYfC4w0puKjDi/KsIwbR36xbjeXQvp5/ydTFz1RBzaI2xGJBQd9U
+         qmGp51o+emTJ4VkmFaaCv5p3jcfCCg0I2QwEbAeqqisC7cRMQFFjX3bYlN8pqJfbUWpT
+         d2XiyxKCSlMeoBQvx9FveR2XKvEhrcoAXPiK5XdR0FNJZCIMuyLuiF7w0gKMf3A5SNCX
+         Ilmq8KHLKc1zEaH52gNGLOIccQo2m6WUqX2p1PdWyKJbP6run/fh2Qu9S20AQ26+e9st
+         gaDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+SachbnsjogB9d6VznmJ7gd3XdXdQ4weNjS4U9PfSA0=;
-        b=IyHKET1YkgwWcjp+TFnjz/0Fh6v9J3/0wJae9ruQTKbP72YPPuYG8Sfj3z07lfrKNw
-         q/eMYhD8rCSIbkKETBREOjDDQbQNsymcti0rYS+ybjAU7+SUe5fGIUUSOaAsXZC3trxy
-         IFgJFcqe4PvsuEytDS3v0R0pm9RZGO+EMABIseF1gHrLv9bhxRuMKgR1nw7glA+3VbhA
-         MY8gIsPJs+f72J+7nIoikwgPucf/ASDsm7aizSXo500W5/vkOiDYdC6x0389QV28MdoE
-         nTz1wQ23w7kuEGVAYyKZccEJ4CvPgPoPdxDJWLgnKtOCSE6nVpTqkEPxxjqdzBksf1YV
-         mUhQ==
-X-Gm-Message-State: AFqh2kqCESqMtbtfs50DPe+71kZE6e88lj+CoDuKH3nnOwLkPB2w9ePQ
-        LT/k+7wxTOK3QPA8SaLP6kYI7/FIyENuhJMA
-X-Google-Smtp-Source: AMrXdXteBrqUViDjNqvb+oHsCd44njBcMUd77PqwBIZ1I35b614s1q1vnnGbjk9VCt7bz0X5c6TFnQ==
-X-Received: by 2002:ac2:5082:0:b0:4c8:eceb:60d2 with SMTP id f2-20020ac25082000000b004c8eceb60d2mr19894251lfm.46.1673534599069;
-        Thu, 12 Jan 2023 06:43:19 -0800 (PST)
-Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id p7-20020ac24ec7000000b004b587e37265sm3299527lfr.58.2023.01.12.06.43.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 06:43:15 -0800 (PST)
-Message-ID: <eb1418f6-43be-6b0e-555c-dd9887577b95@linaro.org>
-Date:   Thu, 12 Jan 2023 15:43:14 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zS2T9dR6c6kcyaKB6UcxI33YN3XGf+D0vGX3KbZ3PWA=;
+        b=ghjb/BUI5Pu1LnunH/7SJopIUxiQcYS04g75AKfUO+eos2CkxadT63XJP2yqzngiIy
+         L7hhtGjBiAo9mdsCpx7wHsAOZVDPxPrP3k89N8irUqMicdUUp0Pgs2D5oEczclMLeJA2
+         Gjnwbne1h3Yo2dV4Ih5nQdKqaVlX3xsB7wFO5LD/wsKsY2yMV8euVUypsR7WfLqcBG7+
+         LRqxACF3XwuE2PHMIDrpVHvVONxZIvuqEWOQHtnYMX0PvDJyPzJU9wW0tVoaXBBg3k6p
+         akQW1xEBGbmdDJ7FaQMZY8TAEuQpmr/CMyjAPm1fgWr7kMt0hcc5PDJdPIgLq7FDN1QA
+         Vlkw==
+X-Gm-Message-State: AFqh2krQxf/rCUlETh1BMs2hGYiSKcV6+k72S9xFz9RhtDFdgy3N7ePf
+        bxWeINuMLYQa9GnSP/CMn8HU3ahLb4PbG9Jr6Kq8eQ==
+X-Google-Smtp-Source: AMrXdXsaRC2qltV1ZFSeM2VDtEEGgSrnh3q8shAR5baprOgapilQYAMEVUxsYnfcd3af6b1u2TipOp6OK87AQwuuN6w=
+X-Received: by 2002:a62:be08:0:b0:581:c0d:19ea with SMTP id
+ l8-20020a62be08000000b005810c0d19eamr4324713pff.31.1673534611219; Thu, 12 Jan
+ 2023 06:43:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-crd: allow vreg_l3b to be
- disabled
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230112074503.12185-1-johan+linaro@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230112074503.12185-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230110110736.2709917-1-james.clark@arm.com> <20230110110736.2709917-4-james.clark@arm.com>
+In-Reply-To: <20230110110736.2709917-4-james.clark@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Thu, 12 Jan 2023 14:43:19 +0000
+Message-ID: <CAJ9a7ViT6vTdq8BMt0nv1CK1FNDOAF8r2Ca8HPWuKeeEXRSRVg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] coresight: cti: Remove atomic type from enable_req_count
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org, quic_jinlmao@quicinc.com,
+        suzuki.poulose@arm.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12.01.2023 08:45, Johan Hovold wrote:
-> The vreg_l3b supply is used by the eDP, UFS and USB1 PHYs which are now
-> described by the devicetree so that the regulator no longer needs to be
-> marked always-on.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On Tue, 10 Jan 2023 at 11:08, James Clark <james.clark@arm.com> wrote:
+>
+> enable_req_count is only ever accessed inside the spinlock, so to avoid
+> confusion that there are concurrent accesses and simplify the code,
+> change it to an int.
+>
+> One access outside of the spinlock is in enable_show() which appears to
+> allow partially written data to be displayed between enable_req_count,
+> powered and enabled so move this one inside the spin lock too.
+>
+> Signed-off-by: James Clark <james.clark@arm.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>  drivers/hwtracing/coresight/coresight-cti-core.c  | 14 +++++++-------
+>  drivers/hwtracing/coresight/coresight-cti-sysfs.c |  2 +-
+>  drivers/hwtracing/coresight/coresight-cti.h       |  2 +-
+>  3 files changed, 9 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-cti-core.c b/drivers/hwtracing/coresight/coresight-cti-core.c
+> index 838872f2484d..277c890a1f1f 100644
+> --- a/drivers/hwtracing/coresight/coresight-cti-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-cti-core.c
+> @@ -107,12 +107,12 @@ static int cti_enable_hw(struct cti_drvdata *drvdata)
+>         cti_write_all_hw_regs(drvdata);
+>
+>         config->hw_enabled = true;
+> -       atomic_inc(&drvdata->config.enable_req_count);
+> +       drvdata->config.enable_req_count++;
+>         spin_unlock_irqrestore(&drvdata->spinlock, flags);
+>         return rc;
+>
+>  cti_state_unchanged:
+> -       atomic_inc(&drvdata->config.enable_req_count);
+> +       drvdata->config.enable_req_count++;
+>
+>         /* cannot enable due to error */
+>  cti_err_not_enabled:
+> @@ -129,7 +129,7 @@ static void cti_cpuhp_enable_hw(struct cti_drvdata *drvdata)
+>         config->hw_powered = true;
+>
+>         /* no need to do anything if no enable request */
+> -       if (!atomic_read(&drvdata->config.enable_req_count))
+> +       if (!drvdata->config.enable_req_count)
+>                 goto cti_hp_not_enabled;
+>
+>         /* try to claim the device */
+> @@ -156,13 +156,13 @@ static int cti_disable_hw(struct cti_drvdata *drvdata)
+>         spin_lock(&drvdata->spinlock);
+>
+>         /* don't allow negative refcounts, return an error */
+> -       if (!atomic_read(&drvdata->config.enable_req_count)) {
+> +       if (!drvdata->config.enable_req_count) {
+>                 ret = -EINVAL;
+>                 goto cti_not_disabled;
+>         }
+>
+>         /* check refcount - disable on 0 */
+> -       if (atomic_dec_return(&drvdata->config.enable_req_count) > 0)
+> +       if (--drvdata->config.enable_req_count > 0)
+>                 goto cti_not_disabled;
+>
+>         /* no need to do anything if disabled or cpu unpowered */
+> @@ -239,7 +239,7 @@ static void cti_set_default_config(struct device *dev,
+>         /* Most regs default to 0 as zalloc'ed except...*/
+>         config->trig_filter_enable = true;
+>         config->ctigate = GENMASK(config->nr_ctm_channels - 1, 0);
+> -       atomic_set(&config->enable_req_count, 0);
+> +       config->enable_req_count = 0;
+>  }
+>
+>  /*
+> @@ -696,7 +696,7 @@ static int cti_cpu_pm_notify(struct notifier_block *nb, unsigned long cmd,
+>                 drvdata->config.hw_enabled = false;
+>
+>                 /* check enable reference count to enable HW */
+> -               if (atomic_read(&drvdata->config.enable_req_count)) {
+> +               if (drvdata->config.enable_req_count) {
+>                         /* check we can claim the device as we re-power */
+>                         if (coresight_claim_device(csdev))
+>                                 goto cti_notify_exit;
+> diff --git a/drivers/hwtracing/coresight/coresight-cti-sysfs.c b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
+> index 71e7a8266bb3..e528cff9d4e2 100644
+> --- a/drivers/hwtracing/coresight/coresight-cti-sysfs.c
+> +++ b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
+> @@ -84,8 +84,8 @@ static ssize_t enable_show(struct device *dev,
+>         bool enabled, powered;
+>         struct cti_drvdata *drvdata = dev_get_drvdata(dev->parent);
+>
+> -       enable_req = atomic_read(&drvdata->config.enable_req_count);
+>         spin_lock(&drvdata->spinlock);
+> +       enable_req = drvdata->config.enable_req_count;
+>         powered = drvdata->config.hw_powered;
+>         enabled = drvdata->config.hw_enabled;
+>         spin_unlock(&drvdata->spinlock);
+> diff --git a/drivers/hwtracing/coresight/coresight-cti.h b/drivers/hwtracing/coresight/coresight-cti.h
+> index acf7b545e6b9..8b106b13a244 100644
+> --- a/drivers/hwtracing/coresight/coresight-cti.h
+> +++ b/drivers/hwtracing/coresight/coresight-cti.h
+> @@ -141,7 +141,7 @@ struct cti_config {
+>         int nr_trig_max;
+>
+>         /* cti enable control */
+> -       atomic_t enable_req_count;
+> +       int enable_req_count;
+>         bool hw_enabled;
+>         bool hw_powered;
+>
+> --
+> 2.25.1
+>
 
-Konrad
->  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> index db12d8678861..e5e75cc2c670 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> @@ -150,7 +150,6 @@ vreg_l3b: ldo3 {
->  			regulator-max-microvolt = <1200000>;
->  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->  			regulator-boot-on;
-> -			regulator-always-on;
->  		};
->  
->  		vreg_l4b: ldo4 {
+Reviewed-by: Mike Leach <mike.leach@linaro.org>
+
+-- 
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
