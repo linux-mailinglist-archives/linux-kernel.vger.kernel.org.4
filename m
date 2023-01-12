@@ -2,82 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A2A6684D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AF9667F4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232777AbjALVAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 16:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
+        id S240682AbjALTa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:30:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240706AbjALU6Y (ORCPT
+        with ESMTP id S234912AbjALT3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 15:58:24 -0500
-X-Greylist: delayed 2393 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 12:42:55 PST
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB70F01D;
-        Thu, 12 Jan 2023 12:42:55 -0800 (PST)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id D0E2A7FCE1;
-        Thu, 12 Jan 2023 19:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1673551439;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I2YK0KStoZilkvt5Gd+Z0QXSKrgiOl1UdETNcSgpEpE=;
-        b=i+65F8jlt9SrxFye0Gw20zt6UKpTEaqiZQ5hMVqSu0k7iplUUCLaWGe7MPjLIcUXvR2Ze2
-        EPZvayy3ujt17G7U6k4N9U3mDmbAViZrJRkdIjJ30e2YmzNFL9kFY3KN4OmLssXkKylqmj
-        E8tOKo4JSk3JfhG8aJ26Wc/wDEh7vUicPsX8QXZqm+7WwOK9nS0qxN7D/+flVsxas11Fth
-        oU/iflnYw8+Gm87I9cBkOHMwnYst1u7763QKPIvahJlVCd3cUAf31rG9cwxkdB+Sbii/p1
-        NDe89irKrvEmsmtdfYfdlUgHuTnNrT2Ps2o/IkqPzfauQjAjCU8/6VVNF8HXCA==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        linux-fsdevel@vger.kernel.org
-Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: [PATCH v5 09/23] cifs: Convert wdata_alloc_and_fillpages() to
- use filemap_get_folios_tag()
-In-Reply-To: <20230104211448.4804-10-vishal.moola@gmail.com>
-References: <20230104211448.4804-1-vishal.moola@gmail.com>
- <20230104211448.4804-10-vishal.moola@gmail.com>
-Date:   Thu, 12 Jan 2023 16:23:54 -0300
-Message-ID: <87ilhb36b9.fsf@cjr.nz>
+        Thu, 12 Jan 2023 14:29:22 -0500
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B7113CF4;
+        Thu, 12 Jan 2023 11:24:16 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id w14so10929710edi.5;
+        Thu, 12 Jan 2023 11:24:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YMnmIzijuaqZflMjTtYj3OMB+Pw4CnTvILOcUfn79Dg=;
+        b=GnH5pCZrAoVhTAwmLW5XkDZmMnLaT05kH+wjAQec+0FMdrFjdBxBre7ZwCM4sbnGFS
+         DLguLmpvZr9F5Pn7aibq6TYF42MdryglhBPN0BEJN5G3a2MepTJtw6pVIPUm9+Fuyb/o
+         xUGdO+OFvB48KUmyCrR96JwpIVDRcsw7/9U0bM1Sp9LlXFIqxRL3FycKjm1A8ZbUhbrH
+         U9kmGS2/GIo0uPRGeN0BkldtnZRjpblsoVVc/VSelJz0tpDOC122eys05MaSVw1G6yWh
+         cySrRJeCiwMtT0CtfZUh7WJgebao4C2sD0sR9i1jjRuJNH8URm0QIbFBiFElU+ZAkIZj
+         XvWQ==
+X-Gm-Message-State: AFqh2kp6TLtj60SIjZwMhMSs4kh+MznXtYGm/soyW22cgOVY34WzGTun
+        0ojK6buDTulLV5GAhm8lnE3eWbeWJwSEMY8MYIY=
+X-Google-Smtp-Source: AMrXdXtQgP05F0VUbaSSiLUXXPpwhzoqg6IKpiGRNLVL+VBYmqdsS7uJgawpVSSYXoJNM82CAMH0k6IcttIrGpYHJK8=
+X-Received: by 2002:aa7:c853:0:b0:47e:4f0b:7ad9 with SMTP id
+ g19-20020aa7c853000000b0047e4f0b7ad9mr5614791edt.239.1673551454572; Thu, 12
+ Jan 2023 11:24:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230110151029.1945544-1-perry.yuan@amd.com>
+In-Reply-To: <20230110151029.1945544-1-perry.yuan@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Jan 2023 20:24:03 +0100
+Message-ID: <CAJZ5v0hvvm4j+LvQsL_Uz9o8gD95L=mn257E5yMWvCRC25bV7w@mail.gmail.com>
+Subject: Re: [PATCH v3] cpufreq: amd-pstate: fix kernel hang issue while
+ amd-pstate unregistering
+To:     Perry Yuan <perry.yuan@amd.com>
+Cc:     rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
+        ray.huang@amd.com, viresh.kumar@linaro.org, Deepak.Sharma@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Shimmer.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
+        wyes.karny@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Vishal Moola (Oracle)" <vishal.moola@gmail.com> writes:
-
-> This is in preparation for the removal of find_get_pages_range_tag(). Now also
-> supports the use of large folios.
+On Tue, Jan 10, 2023 at 4:11 PM Perry Yuan <perry.yuan@amd.com> wrote:
 >
-> Since tofind might be larger than the max number of folios in a
-> folio_batch (15), we loop through filling in wdata->pages pulling more
-> batches until we either reach tofind pages or run out of folios.
+> In the amd_pstate_adjust_perf(), there is one cpufreq_cpu_get() call to
+> increase increments the kobject reference count of policy and make it as
+> busy. Therefore, a corresponding call to cpufreq_cpu_put() is needed to
+> decrement the kobject reference count back, it will resolve the kernel
+> hang issue when unregistering the amd-pstate driver and register the
+> `amd_pstate_epp` driver instance.
 >
-> This function may not return all pages in the last found folio before
-> tofind pages are reached.
+> Fixes: 1d215f0319 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Tested-by: Wyes Karny <wyes.karny@amd.com>
+> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> Cc: stable@vger.kernel.org
 >
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> v3: add Fixes tag
+> v2: add test-by flag from Wyes.
 > ---
->  fs/cifs/file.c | 32 +++++++++++++++++++++++++++++---
->  1 file changed, 29 insertions(+), 3 deletions(-)
+>  drivers/cpufreq/amd-pstate.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 204e39006dda..c17bd845f5fc 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -307,6 +307,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+>                 max_perf = min_perf;
+>
+>         amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true);
+> +       cpufreq_cpu_put(policy);
+>  }
+>
+>  static int amd_get_min_freq(struct amd_cpudata *cpudata)
+> --
 
-Looks good.
-
-Acked-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Applied as 6.2-rc material, thanks!
