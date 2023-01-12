@@ -2,148 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718486686D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6106686CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240368AbjALWXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 17:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S240645AbjALWXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 17:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240464AbjALWWr (ORCPT
+        with ESMTP id S232919AbjALWWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 17:22:47 -0500
-Received: from mo6-p02-ob.smtp.rzone.de (mo6-p02-ob.smtp.rzone.de [IPv6:2a01:238:400:300::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583A91EED6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 14:17:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1673561645; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=G2/DMKr2IQQ/DWZlEuQyYWoSFpf+6qncBh+ghXoTRDGPTn2R+GPh3/d/77X1AYnTsF
-    9M1A8yIJtR11Hzp6cpjmjDG+HIr8/quXN7HMlMsjqALHXrL+DhMgZp5pYM29w+vGs7W7
-    ivWevshQf5QeF5em4gEc6S5ew6xfye7waZV4IjGKoDxVGyBZEs2/vXzhekFobA7Q15gW
-    9ALYOcI9E1MHzr2joXl+BocDfxh8GRAiySWtWNn+/plBeBE8qLQUPrRKJIsJKlmNjQ8u
-    SJ/GTJZOEb1+sKBcFZKmgcrJCcOJCqnWgBexoto39kJUaMUtN4oTN1Z3wSi6sH6yFEgc
-    hR7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1673561645;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=TEdXWHVhS9prVucODKXt7RQnhFf3D9Qp+AqDNuSHKzw=;
-    b=mTpykbiHBF7ZhuoZ4V1f8F+XMX6fXVWewkb/H9e8YvqgqB3tdfNU6JW8MHUzF9xcw4
-    ao7wcXX7kFys9C0lWbBTDoFygLWUfTfKNunzQV+mMtxFn7H6CRGgebv01jpeqCRrUiEH
-    0qS47XGWAoyfVTeckIW7yYwO+Igu2eWLK7vknw1fFpzxwaajEmrx65yhj3bVTENKwJiD
-    JGYE5cjADSHvv+MkoE8H8CryLv1rQPXpVBOheGtUcplwqJNImFH8pB4GTTT6p5o1Af2z
-    4YPT4V0A+49WFPAP22VONKtfRk4IUJX8p5oXedpm7tt8LNIzrnHyPrz+hW96NhPsyHla
-    TnXQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1673561645;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=TEdXWHVhS9prVucODKXt7RQnhFf3D9Qp+AqDNuSHKzw=;
-    b=qE33znHPJ2Zg6VLn4jmUc448/zsdqNuQSar1vlecGZmAeUg3BC3dd8KgKfM4efBZkv
-    urtXRTwb9ybDtyughdXuKfv7cPf/963t6ILnbPzpw0Gc/bX9ViZzxLmD/82Tpq7r3ht1
-    wkIlnPhRRTZ77cZ6L+JApDLEEcECzDvk3B6Ob5jimOQW0jh9/W5y4b1Ij00lGsPamMpr
-    1rr8ORwBZpv7iegoTHAruPAI4SUwZ6HSWMOcWtNefMGgJoQ75eADDK9MPhAKTBUXlz9t
-    HWKguStp5EP065WSCCxEljVrhZrpmbgsQClPVo+N+1e0Uulap5rBkHlqOMXF0LcA/kPN
-    ahWg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWwfGjtQ=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.6.2 DYNA|AUTH)
-    with ESMTPSA id yacdeez0CME54gu
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 12 Jan 2023 23:14:05 +0100 (CET)
-Date:   Thu, 12 Jan 2023 23:14:04 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Matti =?iso-8859-1?Q?Lehtim=E4ki?= <matti.lehtimaki@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] remoteproc: qcom_q6v5_mss: Add modem support on
- MSM8226
-Message-ID: <Y8CGLK/8TW2aRGZu@gerhold.net>
-References: <20230112202612.791455-1-matti.lehtimaki@gmail.com>
- <20230112202612.791455-4-matti.lehtimaki@gmail.com>
+        Thu, 12 Jan 2023 17:22:39 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4EB1BC85
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 14:16:20 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id g20so14845339pfb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 14:16:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QGhHJVbzLQd0GesoU/hL3GlEfg47qZVAEKWQkmB7laM=;
+        b=iy/oF9SD9ZVgH/AexFVr9sY3eB/gQIexg5CxAG+6NgIwr7bsGfaehW3siLiPOlsEpg
+         LBaRGB+f7ghihju+lIqxQGxnMSnoVwizV92xwK7t2FqyKBUUfZrM2iBbRx62rIze95Nb
+         WHjC5bFxWgXQaRfrsWbtR1MkGd7MqITZXMEUI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QGhHJVbzLQd0GesoU/hL3GlEfg47qZVAEKWQkmB7laM=;
+        b=r46JiZj9QuuPZw///eMm2TgnZF4otB+ISxtCXI6dsf9KttIG44SIj2E61AGRYvkNOy
+         TgO+IQQEtK3E0IOS/zNwuLFog8VucXrwf4HN/dlSvF2nfWllwLM9XILifneq2hGbM74K
+         c08cxwLbH1zBxyLg5ccFykxntxQKPXhT3NTxC/8d2W3kwGq9qhyS5fnGUbnGd0KxQUDk
+         e+I1IaC3/eboFtPR9Jy07ikGrFyPG5vCurUZG9ImCqEYgYvEykotaXmTvXS4QziViU/x
+         pbz+8NKXvHfDGADoIfoXWe6x+5JmGmbeSy3rto6Hq2dOWUfNqOy/0jTC/b/DB8fAfX/4
+         5C2w==
+X-Gm-Message-State: AFqh2kqZxvs09XMDoQDwywzZH5cgs1cTTdbFSoG3IY5im4oMGid2vWnh
+        vf7NDnOygdbWfa+UMe8w9MQBlYd0YzZoSLhv
+X-Google-Smtp-Source: AMrXdXujDfTwMKvjVqf14H0DNRGOHXKXjfzghMDmp0bxMIc5txPi9nb6YcOnDzFrXSlwxFQ/IGE2yA==
+X-Received: by 2002:a62:6102:0:b0:578:3bc0:57d7 with SMTP id v2-20020a626102000000b005783bc057d7mr72602961pfb.13.1673561779847;
+        Thu, 12 Jan 2023 14:16:19 -0800 (PST)
+Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id d191-20020a621dc8000000b0058193135f6bsm12330658pfd.84.2023.01.12.14.16.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 14:16:19 -0800 (PST)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 0/3] usb: typec: Add retimer support to bus code
+Date:   Thu, 12 Jan 2023 22:16:05 +0000
+Message-Id: <20230112221609.540754-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230112202612.791455-4-matti.lehtimaki@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 10:26:06PM +0200, Matti Lehtimäki wrote:
-> From: Luca Weiss <luca@z3ntu.xyz>
-> 
-> Add support for the external power block headswitch register needed by
-> MSM8226 and some other qcom platforms.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> Co-developed-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> ---
->  drivers/remoteproc/qcom_q6v5_mss.c | 123 +++++++++++++++++++++++++++++
->  1 file changed, 123 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-> index 745627a36bcf..0dff7e811736 100644
-> --- a/drivers/remoteproc/qcom_q6v5_mss.c
-> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
-> [...]
-> @@ -2453,13 +2529,60 @@ static const struct rproc_hexagon_res msm8974_mss = {
->  	.has_mba_logs = false,
->  	.has_spare_reg = false,
->  	.has_qaccept_regs = false,
-> +	.has_ext_bhs_reg = false,
->  	.has_ext_cntl_regs = false,
->  	.has_vq6 = false,
->  	.version = MSS_MSM8974,
->  };
+This is a short series which introduces retimer control to Type-C bus
+code, chiefly in the context of alternate mode drivers.
 
-If you change MX in the DT schema for MSM8974 like I suggested please
-also add a patch here that moves mx from "fallback_proxy_supply" to
-"proxy_supply". This is also a fix for my patch back then
-(Fixes: 8750cf39239 ("remoteproc: qcom_q6v5_mss: Allow replacing
-regulators with power domains")).
+Patch 1/3 adds retimer handles to the altmode struct.
 
->  
-> +static const struct rproc_hexagon_res msm8226_mss = {
-> +	.hexagon_mba_image = "mba.b00",
-> +	.proxy_supply = (struct qcom_mss_reg_res[]) {
-> +		{
-> +			.supply = "pll",
-> +			.uA = 100000,
-> +		},
-> +		{
-> +			.supply = "mx",
-> +			.uV = 1050000,
-> +		},
-> +		{}
-> +	},
-> +	.fallback_proxy_supply = (struct qcom_mss_reg_res[]) {
-> +		{
-> +			.supply = "cx",
-> +			.uA = 100000,
-> +		},
-> +		{}
-> +	},
+Patch 2/3 introduces a wrapper where all Type-C switch commands can be
+placed; this is a foundation patch for Patch 3/3. No functional changes
+are introduced by this patch.
 
-I assume you're immediately going to start with CX represented as power
-domain on 8226, so you don't need the fallback here for using it as
-regulator on old DTBs.
+Patch 3/3 introduces the typec_retimer_set() call to the switch wrapper.
 
-Thanks,
-Stephan
+Prashant Malani (3):
+  usb: typec: Add retimer handle to port altmode
+  usb: typec: Add wrapper for bus switch set code
+  usb: typec: Make bus switch code retimer-aware
+
+ drivers/usb/typec/bus.c     | 33 +++++++++++++++++++++++++++++++--
+ drivers/usb/typec/bus.h     |  2 ++
+ drivers/usb/typec/class.c   | 15 +++++++++++++--
+ drivers/usb/typec/retimer.h |  2 +-
+ 4 files changed, 47 insertions(+), 5 deletions(-)
+
+-- 
+2.39.0.314.g84b9a713c41-goog
+
