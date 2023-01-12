@@ -2,139 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A918666BD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AA7666BDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239134AbjALHxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 02:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
+        id S239405AbjALHyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 02:54:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239582AbjALHxl (ORCPT
+        with ESMTP id S231394AbjALHyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 02:53:41 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35732D3;
-        Wed, 11 Jan 2023 23:53:40 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30C507nG031933;
-        Thu, 12 Jan 2023 07:53:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Z2E17IM8wAOkzE3bOMcYE5ko48avJ+SntFtszHOnGuc=;
- b=SiifzYuwUFICBPEh5dFp+77i6wvq0Imjzup0t8Vj9EPRcgPSkSLUFZN4i3FM2sCHgafq
- bWnHN9gr+GqHyifPlzcIAdtN5pOFyctKOKS3cz5MKtssfYUYac7Kf5rd6NUWzmWlGCc4
- gg7unVrCIzL1K5kcf7nbZiWLHovIETI0rIkJ1PkJP1Xa2BUfHyYC4DUz59UtA/M85l6M
- DPyVEyvfFuMvwS/NyPAFv9sPtYbO9FSgZJ9rDpslxHqs25WhoplWy8+5mHafQHLM9q5Y
- hVTAp+vxSQcIbzqXDykbnxr29Qo1Y/jVk20G3PWhmmtKiVuwR1DhZNvMMcXsxVhobxz1 cw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1kbqbaxq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 07:53:31 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30C7rUru013433
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 07:53:30 GMT
-Received: from [10.216.26.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 11 Jan
- 2023 23:53:26 -0800
-Message-ID: <6cea0a3f-08de-47d5-99d1-74b0d8c7b732@quicinc.com>
-Date:   Thu, 12 Jan 2023 13:23:23 +0530
+        Thu, 12 Jan 2023 02:54:31 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BA960D5;
+        Wed, 11 Jan 2023 23:54:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=s3TjPAFjRqnBuoET6D3Wlhqe4sSMChdk41PYCR2aI7s=; b=dA3vKN7oguxt0/A1U9XDalYfkA
+        P9KPlEaYhKRV1VIc+elvxZlB5i7smggNemN5yZQ9p/d5wZQ+tvJ7gwF/9QWE3XT6C6/xvdKlRyp1s
+        VdfhjAHsYJfXcieL+3bNf6VPv4ACiGisJILvRifAxfBz1uCDl4lXYFZiddg4/fytnlYk0rmYnHPfI
+        dCkgusR7kMVoBXA04eh91HTOWQDbiwKPYyoxtfItoYIOUZyWDS7oZySJf+ANSFHqHLjED2Q5Kl+eP
+        oIfCGPOQBtR1wYeidGOKDztvfVMLl2cLfgnE5rOEBhnzh4NMSYigDFPI5cLDiKt66h01nj5OAg1DZ
+        1n88OWrA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pFsPn-00E37f-Ak; Thu, 12 Jan 2023 07:54:23 +0000
+Date:   Wed, 11 Jan 2023 23:54:23 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/9] iov_iter: Use IOCB/IOMAP_WRITE if available
+ rather than iterator direction
+Message-ID: <Y7+8r1IYQS3sbbVz@infradead.org>
+References: <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
+ <167344727810.2425628.4715663653893036683.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RESEND v3 4/4] clk: qcom: lpasscc-sc7280: Add resets for
- audioreach
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <broonie@kernel.org>,
-        <konrad.dybcio@somainline.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mturquette@baylibre.com>,
-        <quic_plai@quicinc.com>, <quic_rohkumar@quicinc.com>,
-        <robh+dt@kernel.org>
-References: <1672849297-3116-1-git-send-email-quic_srivasam@quicinc.com>
- <1672849297-3116-5-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n51AZCa9K_uY=ikTLqV-g_MsSA6Lv=Zq1LMrF-wVhR8_pg@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <CAE-0n51AZCa9K_uY=ikTLqV-g_MsSA6Lv=Zq1LMrF-wVhR8_pg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SKRscNP94S3IzVaPS207vQZG7rWJWdq_
-X-Proofpoint-ORIG-GUID: SKRscNP94S3IzVaPS207vQZG7rWJWdq_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-12_04,2023-01-11_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 adultscore=0
- mlxscore=0 impostorscore=0 phishscore=0 clxscore=1015 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301120055
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167344727810.2425628.4715663653893036683.stgit@warthog.procyon.org.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 11, 2023 at 02:27:58PM +0000, David Howells wrote:
+> This allows all but three of the users of iov_iter_rw() to be got rid of: a
+> consistency check and a warning statement in cifs
 
-On 1/12/2023 2:54 AM, Stephen Boyd wrote:
-Thanks for your time Stephen!!!
-> Quoting Srinivasa Rao Mandadapu (2023-01-04 08:21:37)
->> The clock gating control for TX/RX/WSA core bus clocks would be required
->> to be reset(moved from hardware control) from audio core driver. Thus
->> add the support for the reset clocks in audioreach based clock driver.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
->> ---
->>   drivers/clk/qcom/lpasscc-sc7280.c | 23 +++++++++++++++++++++++
->>   1 file changed, 23 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc-sc7280.c
->> index 85dd5b9..1efb72d 100644
->> --- a/drivers/clk/qcom/lpasscc-sc7280.c
->> +++ b/drivers/clk/qcom/lpasscc-sc7280.c
->> @@ -12,10 +12,12 @@
->>   #include <linux/regmap.h>
->>
->>   #include <dt-bindings/clock/qcom,lpass-sc7280.h>
->> +#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
->>
->>   #include "clk-regmap.h"
->>   #include "clk-branch.h"
->>   #include "common.h"
->> +#include "reset.h"
->>
->>   static struct clk_branch lpass_top_cc_lpi_q6_axim_hs_clk = {
->>          .halt_reg = 0x0,
->> @@ -102,6 +104,18 @@ static const struct qcom_cc_desc lpass_qdsp6ss_sc7280_desc = {
->>          .num_clks = ARRAY_SIZE(lpass_qdsp6ss_sc7280_clocks),
->>   };
->>
->> +static const struct qcom_reset_map lpass_cc_sc7280_resets[] = {
->> +       [LPASS_AUDIO_SWR_RX_CGCR] =  { 0xa0, 1 },
->> +       [LPASS_AUDIO_SWR_TX_CGCR] =  { 0xa8, 1 },
->> +       [LPASS_AUDIO_SWR_WSA_CGCR] = { 0xb0, 1 },
-> Why are we adding these resets again? These are already exposed in
-> lpassaudiocc-sc7280.c
+Let's just drop these two.
 
-As explained in previous versions, legacy path nodes are not being used 
-in ADSP based platforms, due to conflicts.
+> and one user in the block
+> layer that has neither available.
 
-Hence lpasscc node alone being used exclusively in ADSP based solution, 
-resets are added.
+And use the information in the request for this one (see patch below),
+and then move this patch first in the series, add an explicit direction
+parameter in the gup_flags to the get/pin helper and drop iov_iter_rw
+and the whole confusing source/dest information in the iov_iter entirely,
+which is a really nice big tree wide cleanup that remove redundant
+information.
 
-In probe also, these reset controls are enabled based on 
-"qcom,adsp-pil-mode" property.
-
+---
+diff --git a/block/blk-map.c b/block/blk-map.c
+index 19940c978c73bb..08cbb7ff3b196d 100644
+--- a/block/blk-map.c
++++ b/block/blk-map.c
+@@ -203,7 +203,7 @@ static int bio_copy_user_iov(struct request *rq, struct rq_map_data *map_data,
+ 	/*
+ 	 * success
+ 	 */
+-	if ((iov_iter_rw(iter) == WRITE &&
++	if ((op_is_write(rq->cmd_flags) &&
+ 	     (!map_data || !map_data->null_mapped)) ||
+ 	    (map_data && map_data->from_user)) {
+ 		ret = bio_copy_from_iter(bio, iter);
