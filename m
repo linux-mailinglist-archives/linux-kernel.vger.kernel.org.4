@@ -2,182 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AC4666CC9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE7E666CC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239873AbjALIpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 03:45:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S239601AbjALIoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 03:44:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239732AbjALIoJ (ORCPT
+        with ESMTP id S230210AbjALIn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 03:44:09 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280A049151
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:42:06 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id g23so3950106plq.12
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:42:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oEg4bQ6lpGrIUrq1T+gt3Ejj1Swr0qeWVL35vq5Po6U=;
-        b=taeeV0OMcAkInTg8vAnOBHKivystFadZ28hvDI0CRtwa+zGUkmuuJu7s9CY8olfEfk
-         qYZrKNb6EcrIunkCdUNwZOAq4VfeqVujcPa7tVQc8BA76qqjKZhZAhBzWc+jX2sqof7r
-         ul7kG0Bjc5Tc10dUdtw0rTwQte2dYX1xBwWVBKzngl1A8MkFOwgTRwbnDYREbIb+YN4k
-         6hOeggaxJLEhFqPiB2Pt7c7cFL+PaDDjC86ZHH2OgweCaxY+gCMRhjR3u7Lo0awYAExv
-         3KMpqRcm6JSeIgk5HKR3aosi302Hjr+guXh7/sC/IeC0DvalkGby20ZNib2af+AOc5Fc
-         AJsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oEg4bQ6lpGrIUrq1T+gt3Ejj1Swr0qeWVL35vq5Po6U=;
-        b=sOe3nCgkaAhKLY38dVH92ULwym7iBvoNLVeROciBV6/YCD1dAI+/aIR7eQzuY05Wz6
-         qu6xsJAetzxyOwiQNJrMTVwDBHb5IfILDFelHe+AHaWffETk1OlXd/yDF861IWihTccb
-         ne5vRo6R/bX4YYI7Qe5fKT9srLUEen0BnE4fBXrAI3V7OV38ure+dvH5LHS+sQ9Iiv37
-         DyHFtxelbjF4wL0wTAws39bhTqd9p8Q9RRX1GykfZnmO8ogPnKBqCXFpTWiEWWhv5N9/
-         czzuO1VpOUx+dSMjb6reK/b1FCBWnDX74fPiCKw3GjgZsAnEnMiRlDHxQOKdiesHWv0D
-         X19g==
-X-Gm-Message-State: AFqh2krKdJJF3+j2/LuN1CM65Zxi0N3SWLzOcAd+BiFvCzELl+A/48rH
-        Ne/YQuP5bLsvOgPsX/l8VpgtrQ==
-X-Google-Smtp-Source: AMrXdXtKyU3I2NR2YXrzW14f3Qypnb5R1CkBKI+EepMfwkROtVQP9h0wsQxWgy9dbYBQVA3lyM/SgQ==
-X-Received: by 2002:a17:903:1355:b0:193:3a92:f4bd with SMTP id jl21-20020a170903135500b001933a92f4bdmr5929867plb.47.1673512925646;
-        Thu, 12 Jan 2023 00:42:05 -0800 (PST)
-Received: from [10.254.85.126] ([139.177.225.248])
-        by smtp.gmail.com with ESMTPSA id x11-20020a170902b40b00b001931c37da2dsm10242468plr.20.2023.01.12.00.42.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 00:42:05 -0800 (PST)
-Message-ID: <7a348aec-0e5c-ec6a-36cd-30a844d276ad@bytedance.com>
-Date:   Thu, 12 Jan 2023 16:42:00 +0800
+        Thu, 12 Jan 2023 03:43:59 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63D81B3;
+        Thu, 12 Jan 2023 00:43:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673513027; x=1705049027;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=moJdiCvkzK+PGHKwA8ucF5vW4Kl5qrfBNHhDw5qp86k=;
+  b=mLQvqmk+8AHFkn7qhxbNNWKlVK7uu5+BQtFue85GQFhlS+0CvF4NsyQp
+   i9E2/8Y/EeSvJSd7o7PVww+rGOT8emUZ62w8mRGq0JIJHHPWYBANKOTLH
+   kUUcPygjeAK42Qywg6wls1F4NP3eY+8BfzZtkJFrRigLcXWrqoW55VSQK
+   46+05Bvkx2MmrBZu+VX7FtwuauJM1V+oR5O1Fu0RChmPO/d1EXuqmNN4L
+   56wl0FfzfegnJfXzIHRF41nlgcmxv1bSlptTJ7uvfnhZejiNlNq5u3vgq
+   vgtM4srvqIi/kskBbRQJ5bGrimY5vTWgKF+Zb3Q2o1MJi1AZ5COiCBZvU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303346844"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="303346844"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 00:43:47 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="765525297"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="765525297"
+Received: from vbucoci-mobl1.ger.corp.intel.com ([10.252.52.43])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 00:43:44 -0800
+Date:   Thu, 12 Jan 2023 10:43:42 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/11] tty: vt: remove vc_uniscr_debug_check()
+In-Reply-To: <20230112080136.4929-1-jirislaby@kernel.org>
+Message-ID: <7f5d6357-a4a3-f5ee-9a7b-2eb3329da1@linux.intel.com>
+References: <20230112080136.4929-1-jirislaby@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [External] Re: [PATCH v5] blk-throtl: Introduce sync and async
- queues for blk-throtl
-To:     Tejun Heo <tj@kernel.org>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com
-References: <20230111162030.31094-1-hanjinke.666@bytedance.com>
- <Y77sVSbS6fIXh3jp@slm.duckdns.org>
-From:   hanjinke <hanjinke.666@bytedance.com>
-In-Reply-To: <Y77sVSbS6fIXh3jp@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-42314877-1673513009=:1665"
+Content-ID: <2f8d7abd-f775-d276-d235-cd76d8c26572@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
+--8323329-42314877-1673513009=:1665
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <3d932570-9c0-710-7189-7d51d1a5a20@linux.intel.com>
 
-在 2023/1/12 上午1:05, Tejun Heo 写道:
-> On Thu, Jan 12, 2023 at 12:20:30AM +0800, Jinke Han wrote:
->> From: Jinke Han <hanjinke.666@bytedance.com>
->>
->> Now we don't distinguish sync write ios from normal buffer write ios
->> in blk-throtl. A bio with REQ_SYNC tagged always mean it will be wait
->> until write completion soon after it submit. So it's reasonable for sync
->> io to complete as soon as possible.
->>
->> In our test, fio writes a 100g file in sequential 4k blocksize in
->> a container with low bps limit configured (wbps=10M). More than 1200
->> ios were throttled in blk-throtl queue and the avarage throtle time
->> of each io is 140s. At the same time, the operation of saving a small
->> file by vim will be blocked amolst 140s. As a fsync will be send by vim,
->> the sync ios of fsync will be blocked by a huge amount of buffer write
->> ios ahead. This is also a priority inversion problem within one cgroup.
->> In the database scene, things got really bad with blk-throtle enabled
->> as fsync is called very often.
->>
->> This patch splits bio queue into sync and async queues for blk-throtl
->> and gives a huge priority to sync write ios. Sync queue only make sense
->> for write ios as we treat all read io as sync io. I think it's a nice
->> respond to the semantics of REQ_SYNC. Bios with REQ_META and REQ_PRIO
->> gains the same priority as they are important to fs. This may avoid
->> some potential priority inversion problems.
->>
->> With this patch, do the same test above, the duration of the fsync sent
->> by vim drops to several hundreds of milliseconds.
->>
->> Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
->> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-> 
-> Acked-by: Tejun Heo <tj@kernel.org>
-> 
-> with some nits below:
-> 
->> +/**
->> + * throtl_qnode_bio_peek - peek a bio from a qn
->> + * @qn: the qnode to peek from
->> + *
->> + * For read, always peek bio from the SYNC queue.
->> + *
->> + * For write, we always peek bio from next_to_disp. If it's NULL, a bio
->                      ^
->                      first
-> 
->> + * will be popped from SYNC or ASYNC queue to fill it. The next_to_disp
->> + * is used to make sure that the peeked bio and the next popped bio are
->                                     ^
->                                     previously
-> 
->> + * always the same even in case that the spinlock of queue was released
->> + * and re-holded.
->            ^
->            re-grabbed / re-acquired
->> + *
->> + * Without the next_to_disp, consider the following situation:
->        ^^^^^^^^^^^^^^^^^^^^^^^^^^
->        maybe drop this part and move the latter part to the end of the
->        previous para?
-> 
->> + * Assumed that there are only bios queued in ASYNC queue and the SYNC
->        ^
->        Assume
-> 
->> + * queue is empty and all ASYNC bios are 1M in size and the bps limit is
->> + * 1M/s. The throtl_slice is 100ms. The current slice is [jiffies1,
->> + * jiffies1+100] and the bytes_disp[w] is 0.
->> + *
->> + * The disp_sync_cnt is 0 as it was set 0 after each dispatching of a
->> + * ASYNC bio. A ASYNC bio wil be peeked to check in tg_may_dispatch.
->> + * Obviously, it can't be dispatched in current slice and the wait time
->> + * is 900ms. The slice will be extended to [jiffies1, jiffies1+1000] in
->> + * tg_may_dispatch. The spinlock of the queue will be released after the
->> + * process of dispatch giving up. A 4k size SYNC bio was queued in and
->> + * the SYNC queue becomes no-empty. After 900ms, it's time to dispatch
->> + * the tg, the SYNC bio will be popped to dispatched as the disp_sync_cnt
->> + * is 0 and the SYNC queue is no-empty. The slice will be extended to
->        ^
->   Maybe combine the previous several sentences like:
-> 
->   The queue lock is released and a 4k SYNC bio gets queued during the 900ms
->   wait.
-> 
->> + * [jiffies1, jiffies1+1100] in tg_may_dispatch. Then the slice will be
->> + * trimed to [jiffies1+1000, jiffies1+1100] after the SYNC bio was
->> + * dispatched. Then the former 1M size ASYNC bio will be peeked to be
->> + * checked and still can't be dispatched because of overlimit within
->> + * the current slice. The same thing may happen DISPACH_SYNC_FACTOR times
->> + * if always there is a SYNC bio be queued in the SYNC queue when the
->> + * ASYNC bio is waiting. This means that in nearly 5s, we have dispathed
->> + * four 4k SYNC bios and one  1M ASYNC bio. It is hard to fill up the
->> + * bandwidth considering that the bps limit is 1M/s.
-> 
-> Simiarly I think the information can be conveyed in a more compact form.
-> 
-> Thanks.
-> 
-The comment will be further adjusted based on your suggestions and the
-v6 with your Acked-by will be send.
+On Thu, 12 Jan 2023, Jiri Slaby (SUSE) wrote:
 
-Thanks
-Jinke
+> VC_UNI_SCREEN_DEBUG is always defined as 0, so this code is never
+> executed. Drop it along with VC_UNI_SCREEN_DEBUG.
+> 
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+
+Reviewed-by: Ilpo J�rvinen <ilpo.jarvinen@linux.intel.com>
+
+-- 
+ i.
+--8323329-42314877-1673513009=:1665--
