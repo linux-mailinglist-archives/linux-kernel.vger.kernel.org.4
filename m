@@ -2,452 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CBA668713
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C531668717
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237238AbjALWjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 17:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
+        id S234846AbjALWja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 17:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235201AbjALWi5 (ORCPT
+        with ESMTP id S233576AbjALWj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 17:38:57 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4D659324
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 14:38:55 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id v2so8503051wrw.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 14:38:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iYOgRxVnVO9WiL8/xIYxULkQkHyZrlvgyKSvkvkG3+8=;
-        b=MQbYuzhLsQu6MkS1jzHazC1VCHcVKtONrzMZyNtvDwHUObhi0tHazvoEfjn8/FwwSI
-         OGID1S9c9sKgft0fh2n8uWZ84at5FnSaJqtbL85b1PnsUt/z4X0A6QevA3wNOyYX8gMl
-         eGpPUq0ZuKa1GkZj5r0SsQk02t6XrbDdF67Y4/yMq+ef/NeAp9dJa5/ENEOgaX+Z9FCz
-         MSTY+Kuqamhg/evlAX5ag+5lZe8PMz7ab87qpREAI758WC9CewvI+gW+H9DjVGAXA8pA
-         x2L5dDJbPewhN+qyApGh1WKhMmohmT0Dbv5CN7ZE/yvWkJZ/rlKl1GvFTDTGXCknEg3O
-         8vww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iYOgRxVnVO9WiL8/xIYxULkQkHyZrlvgyKSvkvkG3+8=;
-        b=VM38GccuC5EkIKxDwCLloThkxUrLyp12n9GUCTcAdFSYRkRIqCpyKOTlX0xXoXAab8
-         506pm+4woPzrBbq28O/FQ4PFq0kQa6ZpZV+WDFPAh9gawvIYSQ05Fcq99MmNC6szvgXa
-         G7TdYDge1i+imEmjgsTaUydew6tn6nVUPzYKPPcOaBCgteIW+UufwyasgWYfrsmBLXNc
-         YNLX3ztVV9TCV7jI4/p/WPqgn47pQZfAXY3vioV+vSdYxJzpGnpyE/LwuxkQ1yOABaBs
-         c841b72AlPMxnR1BvO/5ZmkNiWtU1ZuwcIparapxOhOrUZMxwH1bcsbimGa3FH+caDNZ
-         Kv1A==
-X-Gm-Message-State: AFqh2kolWQQzeMXLE6AWhFHrF4nV5Nrrjp997hM2RiaK8LEaAILBeSZ1
-        ZECJEeC/U08a4/SiI7lJTrevEg==
-X-Google-Smtp-Source: AMrXdXsmISdu3qNJHjekfd3ZBDYw5rdWELoEhuuAzbzZiZuJI2p1mOfmiRfTWsVauytHmKnxrurYkw==
-X-Received: by 2002:a05:6000:384:b0:297:175c:3cbd with SMTP id u4-20020a056000038400b00297175c3cbdmr36440247wrf.66.1673563133985;
-        Thu, 12 Jan 2023 14:38:53 -0800 (PST)
-Received: from smtpclient.apple (global-5-143.n-2.net.cam.ac.uk. [131.111.5.143])
-        by smtp.gmail.com with ESMTPSA id bw28-20020a0560001f9c00b002421888a011sm17124456wrb.69.2023.01.12.14.38.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 12 Jan 2023 14:38:53 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v2] riscv: elf: add .riscv.attributes parsing
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <20230112210622.2337254-1-vineetg@rivosinc.com>
-Date:   Thu, 12 Jan 2023 22:38:52 +0000
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, Guo Ren <guoren@kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>, linux@rivosinc.com
+        Thu, 12 Jan 2023 17:39:27 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2053.outbound.protection.outlook.com [40.107.96.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFE959329;
+        Thu, 12 Jan 2023 14:39:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DerNMCRG3FhIQOA0H4iRacxMaWscNLDAUetFWl9KOgxjSHz2yK9eflvoZP+qdO540gsTYZzeXqtVmJZM0gOgbCUTgVf7q5WYkbtI2HEViHVE7ShpL/s8+DdtAGx17TBNAtGwtN0ZzFbj6oNMmb92aztW9HNCFTz34QDTbwZJpUErWVshkE6lEae+AAidYsOtnAbei06AxLhuJ26zWKb9waHQoxHK3zVfSFd46HL60n07LrVYDReVy6ZR1mFmyS+RbYV1aWF21mtbcrcbL55qcbJUxM7M9ZVUlpoT4w2ujS78puTRykfVBtubCXYwghT6mN4y4zNbqduYNsNNF1p/PQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wOXc9IwbKXL/fUAUY0rVCTtCA/tFCTmz7CU4Pl8/hTs=;
+ b=IJnzQ9vegxynF0sEU9RIz3as3EsUrx3qWVve8AhdYqN/SswiKR04FtvYpRJCsz4FN0IfmZBDp+LBxrOFwxoj2tqrN/K1CPtSsnFyC3ljMRVYTgAJiPaCFIwvHvDKfML5wVsIA4mp2xN40HVr6WD13CiceaQG/w+enyIBBygcOjZIyjjD5N2sMQAShOCAYEsoKjw7HLpNxlo/9wNmJN1Q/1VvdyYXBKjuanlOI1ZDYfOP6vp0hGUaVgkWTDEp9iPYs+pRYgQXmLLomOcfjSoeb2sCONCT9MKqtXdwvaXRthEnE7VmcwwDq2cBH9/Zt7+Q5h2go1FxLLw9TvgG3RqgKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wOXc9IwbKXL/fUAUY0rVCTtCA/tFCTmz7CU4Pl8/hTs=;
+ b=VdRHPdHKbnTE7eymamW2X2bz5J8VZ/G26mfFM9xMq1hjTfqYYYUx0U7x8Zi1+0f1f50QwnHrM935HFspcDxggIA5J2jum/0YCpwrpTFcDYyrqEN3Ol3DXD+KdNr7qZKI6zah82AJryH5LFA5M0EhqWzeDOqFJPcuQpQDPkryzb4=
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM8PR12MB5477.namprd12.prod.outlook.com (2603:10b6:8:35::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Thu, 12 Jan
+ 2023 22:39:20 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::ff3c:2d37:75f3:442a]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::ff3c:2d37:75f3:442a%7]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
+ 22:39:20 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     coverity-bot <keescook@chromium.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Li, Roman" <Roman.Li@amd.com>, "Zuo, Jerry" <Jerry.Zuo@amd.com>,
+        "Wu, Hersen" <hersenxs.wu@amd.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
+        "Pillai, Aurabindo" <Aurabindo.Pillai@amd.com>,
+        "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "Wheeler, Daniel" <Daniel.Wheeler@amd.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: RE: Coverity: dm_dmub_sw_init(): Incorrect expression
+Thread-Topic: Coverity: dm_dmub_sw_init(): Incorrect expression
+Thread-Index: AQHZJtTECKjZOHrrA0Or7NAan2z2hq6bX6Gw
+Date:   Thu, 12 Jan 2023 22:39:20 +0000
+Message-ID: <MN0PR12MB6101667DFB81967706C13111E2FD9@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <202301121425.FB249B61B4@keescook>
+In-Reply-To: <202301121425.FB249B61B4@keescook>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-01-12T22:39:18Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=01286f80-20b7-4ccb-8a21-4f66ef654ab7;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2023-01-12T22:39:18Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 7a39bf39-cc4a-4df3-bf19-8ef46ce1f562
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|DM8PR12MB5477:EE_
+x-ms-office365-filtering-correlation-id: a323c9ad-47ef-40a1-e143-08daf4edd89d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Om7OUWhwqnqbQNv5Y2wq9R78x/wLej9GvTQjAmdREG5M2JVUQUa8NfXHzzeZPGAkQq1uKb0v0TIs0qV4rZmH692bpdsSLQ1eyf6sdAyFUwpEtyvQJ6+sKupTtqGv2mKuebIkdwN7pReN6cMfQgwyYNcKtA8gHKdAOD6eS+XF2nt5yHaqysdj/339LoOk2lpNhQDsLaSZhvcoynlXtTDEHRarzQCOqnW7m3FzMLqdtAHhzy/6iypaRPZ7BbrTzppvCOmXArlyhGZA05EtrbYN80BZ96cZKdfkXy/sgEczLX86irsLVVZhLU5PcWHnfb8pjgrhLZqyMtk4/fj4Q87qal427faZj0ks9tGPVpT6n18vJDuJSRoNIBsANSOC57K8wnDv6TrHa5UuJENSjMI1nGtAcBWXINCRN2UM98xGLYxO/oh1BbKF6GU9MDZdq9Bjo2lDQORyL0FKty7lSZVoT7hE+JAWpdqjax4OV/JrC1i35Z/GRuFj20fSB+/eKUc7Vh/o2WWAfdM84UVnW1gUH/KuVf0TaVVl4ZJsVXKn8rjP3NLqCkfjsSwWgvgy0vEHIbupAQhw2ED3yqlfvH0wXleUrRV0f429ZoaYwmdg+Rg44PHt4t4BSLHGPFrCJQTc8sfKZwpEV4Vg09rF64GLYoEwfIKGMmVMI+VGywViSOWrS+5mZEAnFM0CYzljaJ3hcNhcCNFQwjqPntsyMjYWKbH42InWzMDxTSFhnKju4Yc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(366004)(136003)(396003)(451199015)(6506007)(478600001)(6916009)(33656002)(76116006)(55016003)(186003)(9686003)(966005)(66476007)(8676002)(71200400001)(66446008)(7696005)(64756008)(66946007)(41300700001)(53546011)(316002)(54906003)(4326008)(83380400001)(86362001)(38070700005)(38100700002)(122000001)(66556008)(52536014)(8936002)(5660300002)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZbnsTmx8aApJ0Suk2O8lNZETVIzWa13hdZqqwG2YwGdZFDvbtL3jN9wBh4TE?=
+ =?us-ascii?Q?HDtkiA5Gt27X1DTU/nVbqwAe28X1gzbEXwuPDINyAbqgxEOplmm3ctBwrtLe?=
+ =?us-ascii?Q?asbxd7ijR7MqPQdTWFxEpVtIIjDxp0mJb1SsIDLLIbbdtakR0q5gsnDRpZeR?=
+ =?us-ascii?Q?yM1lAivqgsFadk8rWQL7MWJFZxgdLpUxBejxaHIDfuRjnBvJCh4WD0MPGzv6?=
+ =?us-ascii?Q?sbeC8Ql31HbT/4fO7YeyHbBry5EpHf0M/7LpR5JoS/Xxm8IdXU4IY2WdpNGD?=
+ =?us-ascii?Q?kupL5I/vxFOmnudFH/jEOKsv0PM7WznE+MDxEQtY6cnR9tGGyxvMX3EaH7Sf?=
+ =?us-ascii?Q?ulBMF4v5ma4WNNFz3R3S1f75/zsCL5G0jImfWfEyQz1mvwgG6cfC7lcRl/Qg?=
+ =?us-ascii?Q?2S6hsBA/WDdSacJbImdOlzq+v2cPsu1LqtE+RdqDTrxRSQxSdc79PVBzeyWp?=
+ =?us-ascii?Q?tcVd77RMbJygmILA1u+oPmwRN5tMk2g8iuvgAXYuCzHegGNeCOAKyELOjLZK?=
+ =?us-ascii?Q?Xo1Loscqjw5vUnGI57LbrcVA63PVLuu6QNKX7I5nr7bBER4jY80g7qwjTBnh?=
+ =?us-ascii?Q?YcWmNB1TMpelc8/A3FM3dB3IHxvE8nT4VhLgM8bxGP+dlkJvsVHrxrOGrmpk?=
+ =?us-ascii?Q?4quZtXpeuuKxJAvNZKRNcfS9InF5R5VQhgngSLy08RQ5BWz1C4IYWx5JG9Tr?=
+ =?us-ascii?Q?7lQBurUewk6EHbP/s6rOaJ5eMF4F9r6tb8kz1T/KzcO4TX9ld5SZHO3DpZJ7?=
+ =?us-ascii?Q?wA2U4IVQ5cGPWUV0fHEkSH8PINQMV2bWlqEnx4HGtwTB6e7dHXvRPfg+6hhL?=
+ =?us-ascii?Q?5QiWHDiRh7VKmJbg0exUWCLNQxeies3Or5fTtrkwCSsYDkV9FzInLGlaKEdT?=
+ =?us-ascii?Q?w6wB1K9F8liS+IbyELBuWWuYmkpF2DKfkYkbSPz+qMWOKcNikHhecZCxelax?=
+ =?us-ascii?Q?QwfXN3S7NdOqzhqnKqtVBxNFmtRXxD0UdUkaAQ2i1H9DvUcavgTDhKxlNamu?=
+ =?us-ascii?Q?B8PIokW8R1637U9/VEtp1WSgPWB7aRB3jc5HL7LnKYNZbRJiXsxeUam/iC7J?=
+ =?us-ascii?Q?Iu61M4VZkOUesVLYu5xAjnveEfAXR1DylA++L2Abz0UzeZW35vC8+9W6a2Xj?=
+ =?us-ascii?Q?xOjAZKSt1S1YfZ5NYlYATVc2rSFskNyZg64mU31RgBh24YCMUsZKK7QBqT1v?=
+ =?us-ascii?Q?iCSwq1BRDj03dEsqoH76lfFji/TAaQU7CFrXLgoHz8t6Epw4L0uoXQeZBloA?=
+ =?us-ascii?Q?GUsV8myoeTbOXf2uQ4aqCR9ti4FaVCDwiPiAGujhTwKjAqWG0exauY0Bw/g7?=
+ =?us-ascii?Q?n27Fu+7YEPEEbS33ZbezO1UDbfHwgoBT+HS7KLd/4CHJGO/taIgbuSeSRDcl?=
+ =?us-ascii?Q?Sf1upamwwMEZpqKyrZ7gxgC9653bMuIGcOTI6mDcb0spacEvlrpJnSZOOCWH?=
+ =?us-ascii?Q?jzu1dm5ft2BNNxS4rdGgO0UNX0LkXddg9oLVr0JdG+DgfZQVaT0tqjPz/Pjv?=
+ =?us-ascii?Q?G3oioyBNZO1v5YPrLvkUFNenqywIVANIPZfGpCWLIc+DN2X9BpkFNduIgR9c?=
+ =?us-ascii?Q?mehu+c6CATwN1EGhZSsIe2tpiFrWPlY5um0a0d9kpttXtv3Zdiky9f/5Pdvr?=
+ =?us-ascii?Q?/c8xDDxhWiqv37PlM2lrId4=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <D6A37757-DB22-44C6-A906-D68A0B8BD7A6@jrtc27.com>
-References: <20230112210622.2337254-1-vineetg@rivosinc.com>
-To:     Vineet Gupta <vineetg@rivosinc.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a323c9ad-47ef-40a1-e143-08daf4edd89d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2023 22:39:20.4529
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WJh7y8QdXaPrXOYwDgKke/bqX0GNdtgeTpnQZKVtrd7G73zBfJNDKqEFsPOg8PS4Q2GkKjvIy/w7YcUJmZxILw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5477
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12 Jan 2023, at 21:06, Vineet Gupta <vineetg@rivosinc.com> wrote:
+[AMD Official Use Only - General]
+
+This particular one was fixed already in https://patchwork.freedesktop.org/=
+patch/518050/ which got applied today.
+
+> -----Original Message-----
+> From: coverity-bot <keescook@chromium.org>
+> Sent: Thursday, January 12, 2023 16:25
+> To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> Cc: linux-kernel@vger.kernel.org; amd-gfx@lists.freedesktop.org; Siqueira=
+,
+> Rodrigo <Rodrigo.Siqueira@amd.com>; Li, Sun peng (Leo)
+> <Sunpeng.Li@amd.com>; Li, Roman <Roman.Li@amd.com>; Zuo, Jerry
+> <Jerry.Zuo@amd.com>; Wu, Hersen <hersenxs.wu@amd.com>; dri-
+> devel@lists.freedesktop.org; Koenig, Christian <Christian.Koenig@amd.com>=
+;
+> Lazar, Lijo <Lijo.Lazar@amd.com>; Pillai, Aurabindo
+> <Aurabindo.Pillai@amd.com>; Wentland, Harry <Harry.Wentland@amd.com>;
+> Deucher, Alexander <Alexander.Deucher@amd.com>; Daniel Vetter
+> <daniel@ffwll.ch>; David Airlie <airlied@gmail.com>; Pan, Xinhui
+> <Xinhui.Pan@amd.com>; Wheeler, Daniel <Daniel.Wheeler@amd.com>;
+> Gustavo A. R. Silva <gustavo@embeddedor.com>; linux-next@vger.kernel.org;
+> linux-hardening@vger.kernel.org
+> Subject: Coverity: dm_dmub_sw_init(): Incorrect expression
 >=20
-> This implements the elf loader hook to parse RV specific
-> .riscv.attributes section. This section is inserted by compilers
-> (gcc/llvm) with build related information such as -march organized as
-> tag/value attribute pairs.
+> Hello!
 >=20
-> It identifies the various attribute tags (and corresponding values) as
-> currently specified in the psABI specification.
+> This is an experimental semi-automated report about issues detected by
+> Coverity from a scan of next-20230111 as part of the linux-next scan proj=
+ect:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
 >=20
-> This patch only implements the elf parsing mechanics, leaving out the
-> recording/usage of the attributes to subsequent patches.
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by commits:
 >=20
-> Signed-off-by: Vineet Gupta <vineetg@rivosinc.com>
-> ---
-> Changes since v1 [1]
->  - Handling potential oob accesses due to against malformed elf =
-contents
->  - Handling of multiple sub-subsections
+>   Tue Jan 10 14:32:57 2023 -0500
+>     a7ab345149b8 ("drm/amd/display: Load DMUB microcode during early_init=
+")
 >=20
-> =
-[1]https://lore.kernel.org/linux-riscv/20230110201841.2069353-1-vineetg@ri=
-vosinc.com
+> Coverity reported the following:
 >=20
-> Given the current state of discussions, the intended Vector extension
-> support would likely not need it, still posting the reworked v2 for
-> logical conclusion and for posterity in case need comes up in future
-> for something like CFI elf annotation.
-> Maintainers/reviewers can decide whether to merge it.
-> ---
-> arch/riscv/Kconfig           |   1 +
-> arch/riscv/include/asm/elf.h |  11 ++
-> arch/riscv/kernel/Makefile   |   1 +
-> arch/riscv/kernel/elf-attr.c | 232 +++++++++++++++++++++++++++++++++++
-> 4 files changed, 245 insertions(+)
-> create mode 100644 arch/riscv/kernel/elf-attr.c
+> *** CID 1530544:  Incorrect expression  (IDENTICAL_BRANCHES)
+> drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c:1951 in
+> dm_dmub_sw_init()
+> 1945
+> 1946     	switch (adev->ip_versions[DCE_HWIP][0]) {
+> 1947     	case IP_VERSION(2, 1, 0):
+> 1948     		dmub_asic =3D DMUB_ASIC_DCN21;
+> 1949     		break;
+> 1950     	case IP_VERSION(3, 0, 0):
+> vvv     CID 1530544:  Incorrect expression  (IDENTICAL_BRANCHES)
+> vvv     The same code is executed regardless of whether "adev-
+> >ip_versions[GC_HWIP][0] =3D=3D 656128U" is true, because the 'then' and =
+'else'
+> branches are identical. Should one of the branches be modified, or the en=
+tire 'if'
+> statement replaced?
+> 1951     		if (adev->ip_versions[GC_HWIP][0] =3D=3D IP_VERSION(10, 3, 0))
+> 1952     			dmub_asic =3D DMUB_ASIC_DCN30;
+> 1953     		else
+> 1954     			dmub_asic =3D DMUB_ASIC_DCN30;
+> 1955     		break;
+> 1956     	case IP_VERSION(3, 0, 1):
 >=20
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index e2b656043abf..f7e0ab05a2d2 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -12,6 +12,7 @@ config 32BIT
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include these lines (but double-check the "Fixes" first):
 >=20
-> config RISCV
-> 	def_bool y
-> +	select ARCH_BINFMT_ELF_STATE
-> 	select ARCH_CLOCKSOURCE_INIT
-> 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if HUGETLB_PAGE && =
-MIGRATION
-> 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
-> diff --git a/arch/riscv/include/asm/elf.h =
-b/arch/riscv/include/asm/elf.h
-> index e7acffdf21d2..7ab8bd0ec330 100644
-> --- a/arch/riscv/include/asm/elf.h
-> +++ b/arch/riscv/include/asm/elf.h
-> @@ -116,6 +116,17 @@ do {							=
-\
-> 		*(struct user_regs_struct *)regs;	\
-> } while (0);
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1530544 ("Incorrect expression")
+> Fixes: a7ab345149b8 ("drm/amd/display: Load DMUB microcode during
+> early_init")
 >=20
-> +struct arch_elf_state {
-> +};
-> +
-> +#define INIT_ARCH_ELF_STATE {}
-> +
-> +extern int arch_elf_pt_proc(void *ehdr, void *phdr, struct file *elf,
-> +			    bool is_interp, struct arch_elf_state =
-*state);
-> +
-> +extern int arch_check_elf(void *ehdr, bool has_interpreter, void =
-*interp_ehdr,
-> +			  struct arch_elf_state *state);
-> +
-> #ifdef CONFIG_COMPAT
+> Thanks for your attention!
 >=20
-> #define SET_PERSONALITY(ex)					\
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index 4cf303a779ab..eff6d845ac9d 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -50,6 +50,7 @@ obj-y	+=3D riscv_ksyms.o
-> obj-y	+=3D stacktrace.o
-> obj-y	+=3D cacheinfo.o
-> obj-y	+=3D patch.o
-> +obj-y	+=3D elf-attr.o
-> obj-y	+=3D probes/
-> obj-$(CONFIG_MMU) +=3D vdso.o vdso/
->=20
-> diff --git a/arch/riscv/kernel/elf-attr.c =
-b/arch/riscv/kernel/elf-attr.c
-> new file mode 100644
-> index 000000000000..51bcee92dd5b
-> --- /dev/null
-> +++ b/arch/riscv/kernel/elf-attr.c
-> @@ -0,0 +1,232 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 Rivos Inc.
-> + */
-> +
-> +#include <linux/binfmts.h>
-> +#include <linux/elf.h>
-> +#include <asm/unaligned.h>
-> +
-> +#undef pr_fmt
-> +#define pr_fmt(fmt) "rv-elf-attr: " fmt
-> +
-> +#define PT_RISCV_ATTRIBUTES		0x70000003
-> +
-> +#define RV_ATTR_TAG_file		1
-> +
-> +#define RV_ATTR_TAG_stack_align		4
-> +#define RV_ATTR_TAG_arch		5
-> +#define RV_ATTR_TAG_unaligned_access	6
-> +
-> +#define RV_ATTR_VENDOR_RISCV		"riscv"
-> +
-> +#define RV_ATTR_SEC_SZ			SZ_1K
-> +
-> +static void rv_elf_attr_int(u32 tag, u32 val)
-> +{
-> +	pr_debug("Tag %x=3D%d\n", tag, val);
-> +}
-> +
-> +static void rv_elf_attr_str(u32 tag, const unsigned char *str)
-> +{
-> +	pr_debug("Tag %x=3D[%s]\n", tag, str);
-> +}
-> +
-> +/*
-> + * Decode a ule128 encoded value.
-> + */
-> +static int
-> +decode_uleb128_safe(unsigned char **dpp, u32 *val, const unsigned =
-char *p_end)
-> +{
-> +	unsigned char *bp =3D *dpp;
-> +	unsigned char byte;
-> +	unsigned int shift =3D 0;
-> +	u32 result =3D 0;
-> +	int ok =3D 0;
-> +
-> +	while (bp < p_end) {
-> +		byte =3D *bp++;
-> +		result |=3D (byte & 0x7f) << shift;
-> +		if ((byte & 0x80) =3D=3D 0) {
-> +			ok =3D 1;
-> +			break;
-
-Why not just do the return here?
-
-> +		}
-> +		shift +=3D 7;
-> +	}
-> +	if (!ok)
-> +		return -1;
-> +	*dpp =3D bp;
-> +	*val =3D result;
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Parse a single elf attribute.
-> + */
-> +static int rv_parse_elf_attr_safe(unsigned char **dpp, unsigned char =
-*p_end)
-> +{
-> +	unsigned char *p =3D *dpp;
-> +	unsigned char *str;
-> +	u32 tag, val, s_len;
-> +
-> +	if (decode_uleb128_safe(&p, &tag, p_end))
-> +		goto bad_attr;
-> +
-> +	switch (tag) {
-> +	case RV_ATTR_TAG_stack_align:
-> +		if (decode_uleb128_safe(&p, &val, p_end))
-> +			goto bad_attr;
-> +		rv_elf_attr_int(tag, val);
-> +		break;
-> +
-> +	case RV_ATTR_TAG_unaligned_access:
-> +		if (decode_uleb128_safe(&p, &val, p_end))
-> +			goto bad_attr;
-> +		rv_elf_attr_int(tag, val);
-> +		break;
-> +
-> +	case RV_ATTR_TAG_arch:
-> +		str =3D p;
-> +		s_len =3D strnlen(p, p_end - p) + 1;
-> +		p +=3D s_len;
-> +		if (p > p_end)
-
-Constructing such a p is UB, check s_len before instead.
-
-> +			goto bad_attr;
-> +		rv_elf_attr_str(tag, str);
-> +		break;
-> +
-> +	default:
-> +		if (decode_uleb128_safe(&p, &val, p_end))
-
-=46rom the ratified spec:
-
-  "RISC-V attributes have a string value if the tag number is odd and an =
-integer value if the tag number is even."
-
-> +			goto bad_attr;
-> +		pr_debug("skipping Unrecognized Tag [%u]=3D%u\n", tag, =
-val);
-> +		break;
-> +	}
-> +
-> +	*dpp =3D p;
-> +	return 0;
-> +bad_attr:
-> +	return -ENOEXEC;
-> +}
-> +
-> +/*
-> + * Parse .riscv.attributes elf section.
-> + */
-> +static int rv_parse_elf_attributes(struct file *f, const struct =
-elf_phdr *phdr,
-> +				   struct arch_elf_state *state)
-> +{
-> +	unsigned char buf[RV_ATTR_SEC_SZ];
-> +	unsigned char *p, *p_end;
-> +	ssize_t n;
-> +	int ret =3D 0;
-> +	loff_t pos;
-> +
-> +	pr_debug("Section .riscv.attributes found\n");
-> +
-> +	/* Assume a reasonable size for now */
-> +	if (phdr->p_filesz > sizeof(buf))
-> +		goto bad_elf;
-> +
-> +	memset(buf, 0, RV_ATTR_SEC_SZ);
-
-This will hide bugs from sanitisers...
-
-> +	pos =3D phdr->p_offset;
-> +	n =3D kernel_read(f, &buf, phdr->p_filesz, &pos);
-> +
-> +	if (n < 0)
-> +		return -EIO;
-> +
-> +	p =3D buf;
-> +	p_end =3D p + n;
-> +
-> +	/* sanity check format-version */
-> +	if (*p++ !=3D 'A')
-
-What if n is 0?
-
-> +		goto bad_elf;
-> +
-> +	/*
-> +	 * elf attribute section organized as Vendor sub-sections(s)
-> +	 *   {sub-section length, vendor name, vendor data}
-> +	 * Vendor data organized as sub-subsection(s)
-> +	 *   {tag, sub-subsection length, attributes contents}
-> +	 * Attribute contents organized as
-> +	 *   {tag, value} pair(s).
-> +	 */
-> +	while ((p_end - p) >=3D 4) {
-> +		int sub_len, vname_len;
-
-u32?
-
-> +
-> +		sub_len =3D get_unaligned_le32(p);
-> +		if (sub_len <=3D 4 || sub_len > n)
-
-n is the total amount read in, not the remaining amount.
-
-> +			goto bad_elf;
-> +
-> +		p +=3D 4;
-> +		sub_len -=3D 4;
-> +
-> +		/* Vendor name string */
-> +		vname_len =3D strnlen(p, sub_len) + 1;
-> +		if (vname_len > sub_len)
-> +			goto bad_elf;
-> +
-> +		/* skip non-mandatory sub-section for now */
-> +		if (strncmp(p, RV_ATTR_VENDOR_RISCV, sub_len)) {
-> +			p +=3D sub_len;
-> +			continue;
-> +		}
-> +
-> +		p +=3D vname_len;
-> +		sub_len -=3D vname_len;
-> +
-> +		/* Vendor data: sub-subsections(s) */
-> +		while (sub_len > 0) {
-> +			u32 tag, content_len;
-> +			unsigned char *sub_end, *sub_start =3D p;
-
-Confusing naming for sub-subsection variables.
-
-> +
-> +			if (decode_uleb128_safe(&p, &tag, p_end))
-> +				goto bad_elf;
-> +
-> +			if ((p_end - p) < 4)
-> +				goto bad_elf;
-> +
-> +			content_len =3D get_unaligned_le32(p);
-> +			if (content_len > sub_len)
-> +				goto bad_elf;
-> +
-> +			p +=3D 4;
-> +			sub_len -=3D content_len;
-> +			sub_end =3D sub_start + content_len;
-> +
-> +			/* For now handle attributes relating to whole =
-file */
-> +			if (tag !=3D RV_ATTR_TAG_file) {
-> +				p =3D sub_end;
-> +				continue;
-> +			}
-> +
-> +			/* Attribute(s): tag:value pairs */
-> +			while (p < sub_end) {
-> +				ret =3D rv_parse_elf_attr_safe(&p, =
-p_end);
-> +				if (ret)
-> +					goto bad_elf;
-> +			}
-> +		}
-> +	}
-> +
-> +	return ret;
-> +bad_elf:
-> +	return -ENOEXEC;
-> +}
-> +
-> +/*
-> + * Hook invoked by generic elf loader to parse riscv specific elf =
-segments.
-> + */
-> +int arch_elf_pt_proc(void *_ehdr, void *_phdr, struct file *elf,
-> +		     bool is_interp, struct arch_elf_state *state)
-> +{
-> +	struct elf_phdr *phdr =3D _phdr;
-> +	int ret =3D 0;
-> +
-> +	if (phdr->p_type =3D=3D PT_RISCV_ATTRIBUTES && !is_interp)
-> +		ret =3D rv_parse_elf_attributes(elf, phdr, state);
-> +
-> +	return ret;
-> +}
-> +
-> +int arch_check_elf(void *_ehdr, bool has_interpreter, void =
-*_interp_ehdr,
-> +		   struct arch_elf_state *state)
-> +{
-> +	return 0;
-> +}
-> --=20
-> 2.34.1
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
+> --
+> Coverity-bot
