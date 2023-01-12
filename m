@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4E06673D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3336673D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbjALOAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
+        id S234070AbjALOAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjALN7w (ORCPT
+        with ESMTP id S233614AbjALN7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 08:59:52 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4064A532AA
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:59:31 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id m21so26945681edc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:59:31 -0800 (PST)
+        Thu, 12 Jan 2023 08:59:53 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E0A532AD
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:59:32 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id tz12so44974134ejc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:59:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IOgG4eKjPYKS7EoOjZ7QgExUrhV27SwGOcYeDK/QSfQ=;
-        b=UiHw34pHfhygR/6vgLXXCP2/BU1MT2FetomDPNmlVYtT0UBFPnGYwLX2glic4YotVb
-         i7RGf3cUbowpFUZz393qH/WdEo4134BZJK6pmQWsREbwb64T/paDdKsme+cFNv3Ldfzv
-         Bmi1oA8ohf6IsXwW+ea1scOxwQFokJfPH2dDxkbyqPkBgEd32H8qAC7vSvWkjI5+1lpf
-         pND92rftPvZ1LcBkyxn2Pn2bM61eHphxw0bXH+8H5jiZI5svvA0CyxfGgUcRx94Kw9aX
-         VXbGQwBrhG3m5SwUm9cQaZLfdF8PY7R+C1y8O0lJtus+McNJH5oPzV/pd2fDk7hZPd6P
-         t85w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q1hCAdnriPTiqUAC3Z9eazAM9x+QqA4Mn0IVX/+2PdE=;
+        b=Xo6ArLBpXO2MnY9QMq85ZB0u2FsdWergMakVIF5Gq9D90R+UDnIW8Ne8k3B6bPlxYj
+         Je2QThRGEozmdemJj5czgOL8DXbjcbkBvep7Zpp5GjwXWAHtc3asLqMFRkzNT6dgQPG8
+         fMO2CbBNmjGKnynq9CuyTbgeqx3mHx0ArCIA1i669imW4dVq5/fLv2M+YKI/mbSEdhsy
+         d/mq8GCfkEHdtyplhjuJ3Gz0sg/1rYnlDMvXU2k7jRfKHkVD1jy96VEEgvc4OAER+JD/
+         6swYn+UminuEy5eiobDuwA+UmaPVM4VUrFFOtkkzW1PGwP/MY3qzcrb1mSt0FfBGEExO
+         QQyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IOgG4eKjPYKS7EoOjZ7QgExUrhV27SwGOcYeDK/QSfQ=;
-        b=EUKHQJzeltmhQBn1vlrjKosJVMdnDutZxCwEtjGV2rFaY1+Z2v66IxBKUXUQPuZBv4
-         hXEytpSxVicEOg7JdwPzUGwV3sniFELwuTzSqoK9sIe69Wpf3y2crLzk5jnx5SGjIJAZ
-         o9IPVgKkZSJsrgSDoTZ+Ok67pcJz/8xw9Y3Q8293dth6c5rfg111f4yy22TitwgJh5/a
-         nJm1LIa+XVuflJEg9QjyIyV1oIDeOSG/z7zyylFjH43YSs02FOFJ+p69s37bLcMkTUBV
-         k92My0NZA+iXCfPGcn5ZsZlhPtr5faGPYPPQ488hTIma3U0m83XUaDa9jGJD2fUY547Q
-         jLBA==
-X-Gm-Message-State: AFqh2kr8p9W8JiZxWGTE5lNNVL1t4lnGK4XuzSZd76s+yHTQ2De3Teel
-        24yI8Q4rIQCzoWfc89qH5ZQ8hA==
-X-Google-Smtp-Source: AMrXdXs4diXMPLEwXalKr+SJyaBNgNtcYGwkpGuF7N33G7oWjKunLeWnb6DR7gQs7UBVkjqol7i7cQ==
-X-Received: by 2002:a05:6402:3201:b0:48e:a96c:fd64 with SMTP id g1-20020a056402320100b0048ea96cfd64mr35765310eda.25.1673531969690;
-        Thu, 12 Jan 2023 05:59:29 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q1hCAdnriPTiqUAC3Z9eazAM9x+QqA4Mn0IVX/+2PdE=;
+        b=Fkr4qmw5E0cpMFGPf+8pA3SngMBfBJ8lW4MS4hyNYeZ2Fnsvz4G2YuSmm5X1pCcWxw
+         0JG964T5cD8dFpCe1feqiz4hbXzku69uXshLERATUjdoEaUuGXARP2UOdGLYAr1VFqxT
+         YVK9gUlfXLu+LyzU5qP6QilgzOcH38ufrfZalxwcEcjGH4k5rIvr8CGQeNFzRRtjqC9a
+         SM0OgjBlFaAxf/pH0nG7mTeQTCFqMK5uaaXZ+U4FUTx8zy63ia+X3AtWR74A01ZQmSVc
+         m5i9qRhPc9zPpxrlUq+q8P9xpAc5yKWztpHH+aOcSiSIon4Yjd+V59LL7kp/qVfYHISZ
+         UXeg==
+X-Gm-Message-State: AFqh2kqusJKhYan4lPp4JAEqc5biL2bA0zssPNFat+LN8ONO0edEclqo
+        66+p7DuHooglhIUC2PkeSwOvVnWHwwe7AZDq
+X-Google-Smtp-Source: AMrXdXuyiidN9ecZ78S3tPa0KeXhzsT6PQexKin6Yf/aIi/NNDSBkq76yFxWLGtZ1I2mMnpKIlWMzg==
+X-Received: by 2002:a17:907:6e05:b0:7c1:235d:2a2b with SMTP id sd5-20020a1709076e0500b007c1235d2a2bmr84877092ejc.24.1673531970943;
+        Thu, 12 Jan 2023 05:59:30 -0800 (PST)
 Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906329100b007c0bb571da5sm7376494ejw.41.2023.01.12.05.59.28
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906329100b007c0bb571da5sm7376494ejw.41.2023.01.12.05.59.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 05:59:29 -0800 (PST)
+        Thu, 12 Jan 2023 05:59:30 -0800 (PST)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -57,10 +58,12 @@ To:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 1/2] arm64: dts: qcom: sm8550: Add UFS host controller and phy nodes
-Date:   Thu, 12 Jan 2023 15:59:25 +0200
-Message-Id: <20230112135926.1572191-1-abel.vesa@linaro.org>
+Subject: [PATCH v2 2/2] arm64: dts: qcom: sm8550-mtp: Add UFS host controller and PHY node
+Date:   Thu, 12 Jan 2023 15:59:26 +0200
+Message-Id: <20230112135926.1572191-2-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230112135926.1572191-1-abel.vesa@linaro.org>
+References: <20230112135926.1572191-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,114 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add UFS host controller and PHY nodes.
+Enable UFS host controller and PHY node on SM8550 MTP board.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
 
 Changes since v1:
- * dropped ufs_mem_phy_lanes child node, like Johan suggested
- * addressed Konrad comments.
+ * moved status property last, like Konrad suggested
 
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 78 ++++++++++++++++++++++++++--
- 1 file changed, 75 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index 59756ec11564..d20b5fbcb2c3 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -649,9 +649,9 @@ gcc: clock-controller@100000 {
- 				 <0>,
- 				 <0>,
- 				 <0>,
--				 <0>,
--				 <0>,
--				 <0>,
-+				 <&ufs_mem_phy 0>,
-+				 <&ufs_mem_phy 1>,
-+				 <&ufs_mem_phy 2>,
- 				 <0>;
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+index 8586e16d6079..81fcbdc6bdc4 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
++++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+@@ -399,6 +399,25 @@ &uart7 {
+ 	status = "okay";
+ };
  
-@@ -1571,6 +1571,78 @@ crypto: crypto@1de0000 {
- 			interconnect-names = "memory";
- 		};
- 
-+		ufs_mem_phy: phy@1d80000 {
-+			compatible = "qcom,sm8550-qmp-ufs-phy";
-+			reg = <0x0 0x01d80000 0x0 0x2000>;
-+			clock-names = "ref", "qref";
-+			clocks = <&gcc GCC_UFS_PHY_PHY_AUX_CLK>,
-+				 <&tcsr TCSR_UFS_CLKREF_EN>;
++&ufs_mem_hc {
++	reset-gpios = <&tlmm 210 GPIO_ACTIVE_LOW>;
++	vcc-supply = <&vreg_l17b_2p5>;
++	vcc-max-microamp = <1300000>;
++	vccq-supply = <&vreg_l1g_1p2>;
++	vccq-max-microamp = <1200000>;
++	vccq2-supply = <&vreg_l3g_1p2>;
++	vccq2-max-microamp = <100>;
 +
-+			power-domains = <&gcc UFS_MEM_PHY_GDSC>;
++	status = "okay";
++};
 +
-+			resets = <&ufs_mem_hc 0>;
-+			reset-names = "ufsphy";
++&ufs_mem_phy {
++	vdda-phy-supply = <&vreg_l1d_0p88>;
++	vdda-pll-supply = <&vreg_l3e_1p2>;
 +
-+			#address-cells = <2>;
-+			#size-cells = <2>;
++	status = "okay";
++};
 +
-+			#phy-cells = <0>;
-+
-+			#clock-cells = <1>;
-+
-+			ranges;
-+
-+			status = "disabled";
-+		};
-+
-+		ufs_mem_hc: ufshc@1d84000 {
-+			compatible = "qcom,sm8550-ufshc", "qcom,ufshc",
-+				     "jedec,ufs-2.0";
-+			reg = <0x0 0x01d84000 0x0 0x3000>;
-+			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
-+			phys = <&ufs_mem_phy>;
-+			phy-names = "ufsphy";
-+			lanes-per-direction = <2>;
-+			#reset-cells = <1>;
-+			resets = <&gcc GCC_UFS_PHY_BCR>;
-+			reset-names = "rst";
-+
-+			power-domains = <&gcc UFS_PHY_GDSC>;
-+
-+			iommus = <&apps_smmu 0x60 0x0>;
-+
-+			interconnects = <&aggre1_noc MASTER_UFS_MEM 0 &mc_virt SLAVE_EBI1 0>,
-+					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_UFS_MEM_CFG 0>;
-+
-+			interconnect-names = "ufs-ddr", "cpu-ufs";
-+			clock-names = "core_clk",
-+				      "bus_aggr_clk",
-+				      "iface_clk",
-+				      "core_clk_unipro",
-+				      "ref_clk",
-+				      "tx_lane0_sync_clk",
-+				      "rx_lane0_sync_clk",
-+				      "rx_lane1_sync_clk";
-+			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-+				 <&gcc GCC_UFS_PHY_AHB_CLK>,
-+				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
-+				 <&rpmhcc RPMH_LN_BB_CLK3>,
-+				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
-+				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
-+				 <&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
-+			freq-table-hz =
-+				<75000000 300000000>,
-+				<0 0>,
-+				<0 0>,
-+				<75000000 300000000>,
-+				<100000000 403000000>,
-+				<0 0>,
-+				<0 0>,
-+				<0 0>;
-+			status = "disabled";
-+		};
-+
- 		tcsr_mutex: hwlock@1f40000 {
- 			compatible = "qcom,tcsr-mutex";
- 			reg = <0 0x01f40000 0 0x20000>;
+ &xo_board {
+ 	clock-frequency = <76800000>;
+ };
 -- 
 2.34.1
 
