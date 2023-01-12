@@ -2,81 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE00666793
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 01:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F06B66679B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 01:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbjALAVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 19:21:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
+        id S231618AbjALA2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 19:28:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjALAVV (ORCPT
+        with ESMTP id S230075AbjALA15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 19:21:21 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BDA2F7AA
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:21:17 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-4d0f843c417so103977727b3.7
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:21:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JOFWK7S0QU8xmUK+yBgEsb+MAKsxUcDHs25Z2aSj5ws=;
-        b=SlIcXlORe2ImkMbeZxwV/aVUF7SWQQ0CD62R7d+UbBCWaeoB/dGQxWLNEAqzwI9XH0
-         scVUPGtxWcCvUe7c95hRRt950s3FVB/rN144AGcc6g13CwK/zaIbuGr3gaTYmfjBILFT
-         OBua/HWISHD8CMvaY6GeVjGijG/Bc54ACRugaQJwXwetL5c4VwqArxqGs5ERzXSTmiXx
-         i5GUiqmCm7Re/ruBv9hRSzAKlKJwW895OoRU3xE06OWZgYJwE1tnfdNOmwEYKG5Zx5Tc
-         w3s+KudIbAxzqVO1ewABScWpVVIC9UZ3BBNPtsoLKX2yHKfoIzPqBHGVcaAM/cel3FK8
-         cQgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JOFWK7S0QU8xmUK+yBgEsb+MAKsxUcDHs25Z2aSj5ws=;
-        b=CN0mYT05cz6xsqXFm/TZUDoCwfr8KbBTVbBrVR8PQiyEcFLwodhRYNOx2bMeWmOdfR
-         Llooyh53p4uJrp+5EApo41Oyr0NpksVBUiMZFdSx2Hx9WWyQBqYWofpjHcq8XjOpc51Q
-         Ebokd6ZVJa5vsbluoGy9IWwWsH0z8ci6Alo2rH6sao1Y/Lvjc9q2XbCV3ALoC88Q/jM5
-         uH0Rc85hYhwIdjKPs1AIhamRQQ04HoJHRbkB+aFx+Wv65q/4kcjrZQxBnJHeSm/QEDFf
-         b+sgm/711S1UXFftVtBPjEcmPGgZwi3aQ7q2eAtozZfpVJRyak3Tkd06/8Ydq9hH++QM
-         ieFg==
-X-Gm-Message-State: AFqh2kpMDLVfJrkchNlbhyDhldNs1BLk0Ebqem5tKqWMREh07r2OkMzH
-        VkRZTHCij/3pcEQyAZFDipfRVwj6kYft2Lxv/W0tBg==
-X-Google-Smtp-Source: AMrXdXv//B7Z9uVRrJ72r0SJYHXvm5gTjOdwGOeS8hW6kDzyLtEmUV3ElVz4ZAjR1QWaSRgYV0hAqURbPS38yvtNrDo=
-X-Received: by 2002:a05:690c:688:b0:4ab:cd28:a5e2 with SMTP id
- bp8-20020a05690c068800b004abcd28a5e2mr4453982ywb.234.1673482876837; Wed, 11
- Jan 2023 16:21:16 -0800 (PST)
+        Wed, 11 Jan 2023 19:27:57 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6578A2F799
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:27:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673483276; x=1705019276;
+  h=message-id:date:subject:to:references:from:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=Pozu9yndicdqBLJmlcVG3oCSk70a2x10uvd16MJa9no=;
+  b=aDyks9fh8xlluwC5Y7vwhjbyotUNUTP6BfHYw58tgK/rNiEo6xZrDENs
+   zyrFLXmzpiW1Xv5UbIDZLsnmk1j5044wYkW/A/KjFvxD29FxJcZit6ch4
+   U8/KwKLial6fq/HUwJUYlvIMArrkQkn2sgnDZ9xVKv4iSUM+56fOp7wv2
+   DtTaYDoWNg2BlWPl6dftIgkVcOO3aV/pnX4TUIioAfbwLt2lsWuve/s4T
+   pAl/Q0y3G4kp4CuPIm8KihqKRudacdsgKQGABJJ20jSaq9M3N0e2SB3Cy
+   1IXNBi9hbYXfoGXic4TGTe3JcB6jp1TlyPDAQS7PgzPYcOe1qOMV+P0nQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303949616"
+X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
+   d="scan'208";a="303949616"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 16:27:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="781574180"
+X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
+   d="scan'208";a="781574180"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga004.jf.intel.com with ESMTP; 11 Jan 2023 16:27:55 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 11 Jan 2023 16:27:55 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 11 Jan 2023 16:27:55 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 11 Jan 2023 16:27:55 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F8YD74/EQ/akDpIpLxCB+HiHVH62QZ2kXRvUf5B8e6XPyLawpDDksZ50CVSQXgRixk7Btn5Cy00+77iYbrKSCjOIqpo6YiObJb3AWFTVhn1z4K03e+EWmwwR6wD8+lpGT5pM6v14Fkec6L5nWSwZznLUCbyQGuvsa4y3JZwo5nNbIeVjY7N75dP/50XYD/+MhelDLsjFRGXo9a/QLX3yQLHAmrQSITVEyHZpsV5hZn7AjfTREWISF8GyRxbz7uNom/VG1twp7+DZD/wahuSBoZ6aTF/ayJ1zHXRs+kObaSw3Rr8v8A8CuvX1kfIXUisNmt8meXffVVafRwTsazEj1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pf4JY5TtDiTcMVPDOXZj7tCXrs01A5iaGtkt6u+bkG4=;
+ b=JWnlhQHoxR4Yn9RTIiescyg/2hdm5NfelI2o750v9gdNX4oZtM/V3du4sQ7ZbZ/Q1izj8IgkA44bI6AYCVtm0kOfPviDo08Kd93YHK2aruFJt3a+AOIZEX6j9FYwUHWrxxig7pQFdtoIXmsbspx0/Swm1M3ctxe8R9ZlTCTAFLx4aNqviMrfB8tMdOlSxJdaKoveUaXKpHW5EUjzrNGhPW1EOxMUD8zjxOC19AkLFnmYb9R32nnQ9vpIVWKhlRao0DrBMa6NMiCRusSOZBjjGj/724181C2NDObhXQz5MO6UKIT9qanfViAFttwoUdTaQVDKJ5Ea7A1ufUB5dL254g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5262.namprd11.prod.outlook.com (2603:10b6:5:389::10)
+ by BN9PR11MB5500.namprd11.prod.outlook.com (2603:10b6:408:105::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Thu, 12 Jan
+ 2023 00:27:52 +0000
+Received: from DM4PR11MB5262.namprd11.prod.outlook.com
+ ([fe80::1fe5:3ce9:9a3a:7de7]) by DM4PR11MB5262.namprd11.prod.outlook.com
+ ([fe80::1fe5:3ce9:9a3a:7de7%4]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
+ 00:27:52 +0000
+Message-ID: <ad2da884-c8c8-bc57-e21f-452a08cb10cc@intel.com>
+Date:   Wed, 11 Jan 2023 16:27:49 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+Subject: Re: [PATCH 3/7] x86/cpu: Disable kernel LASS when patching kernel
+ alternatives
+Content-Language: en-US
+To:     Sohil Mehta <sohil.mehta@intel.com>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ravi Shankar <ravi.v.shankar@intel.com>,
+        "Tony Luck" <tony.luck@intel.com>, Paul Lai <paul.c.lai@intel.com>
+References: <20230110055204.3227669-1-yian.chen@intel.com>
+ <20230110055204.3227669-4-yian.chen@intel.com>
+ <693d8332-3b86-3dcf-fc87-5c3a08a752db@intel.com>
+From:   "Chen, Yian" <yian.chen@intel.com>
+In-Reply-To: <693d8332-3b86-3dcf-fc87-5c3a08a752db@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR06CA0044.namprd06.prod.outlook.com
+ (2603:10b6:a03:14b::21) To DM4PR11MB5262.namprd11.prod.outlook.com
+ (2603:10b6:5:389::10)
 MIME-Version: 1.0
-References: <20230109213809.418135-1-tjmercier@google.com> <20230109213809.418135-5-tjmercier@google.com>
- <CAHC9VhT+5oE4DZzxqCGFDoHjkP+5GcKU1R2BBW29uUu8BcgiAg@mail.gmail.com>
-In-Reply-To: <CAHC9VhT+5oE4DZzxqCGFDoHjkP+5GcKU1R2BBW29uUu8BcgiAg@mail.gmail.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Wed, 11 Jan 2023 16:21:05 -0800
-Message-ID: <CABdmKX2FPf+Ox47g8nMeYw1OBNUOZrnKD5qVBtaVY01FbQq4ig@mail.gmail.com>
-Subject: Re: [PATCH 4/4] security: binder: Add transfer_charge SElinux hook
-To:     Paul Moore <paul@paul-moore.com>,
-        Jeffrey Vander Stoep <jeffv@google.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, hannes@cmpxchg.org,
-        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5262:EE_|BN9PR11MB5500:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba566e63-2689-4852-2101-08daf433d76d
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: euFggibwm3KQrcmF1CEC5ZBWNOV95bLSl7xA0dg6Hffgc96vX5+2nFO0ra8xeHp2CZTOyx47RpRXi23D0nEtJrDcGLX1XoqBjHG/LeF0wkTxOrOdt5QPAlAWZ5lqTuUh/zWzeyKgTbWn/NVhBh97C322XCdmVHfd35ZTrbreHVbPs2LYYLclmIeJb/IyBwmHQ3NzKAubipcF+BM3Uq3Nb3mJ7VZf3xQ5RjbkUWctXpTpqJDJIDTs0QSreYsl93xSMnFIbfSbVYD88nFmfoRucSlNSNLjlL8AKTjwcALlpTz6sOMX7VRKDzFxP4jZU2ulocfV5LUJQVSPOLOyixAKg4lsBrzl2QFMZ7zhMoy7sGbpcsy85hoCcqyOE+hf6UTEM7TgWvefhVUADbq+9cH7BETuc3nXJB02E5lkSvCEx/fnAhUSOneF7fIN9QZT4RomKbBMGSSSQlMSWTRX89JMpfzY6Dy+suI5LXD73WYAdKby7K4QDfeKh9a40b51s2E4g6D+GEveERnUWB4wE3dHOUX7Cn8xg6+r1enwNSLlKqYaeCoFCtePg30GM/bxiKgqhDMbuKVazsU7N2SfJLJXjX2I+3oNx9otOxJ62Mtgf4ZhuBvtXpek0o4NHilKCtoXxOStL0WqQtvBWtjd6VNtW96g8M3hEgV7uFVPLgTJT+rwupsNpUHqU7no4mKYuYjC1Nbu/BND0uXgD5xG7suz3UrlQL3hZ+AJl9MIOTUMquM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5262.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(376002)(346002)(39860400002)(396003)(451199015)(8676002)(186003)(316002)(26005)(5660300002)(6512007)(86362001)(6486002)(478600001)(2616005)(31696002)(41300700001)(66556008)(110136005)(66476007)(66946007)(6636002)(36756003)(8936002)(83380400001)(31686004)(6666004)(6506007)(82960400001)(38100700002)(2906002)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aEJvLzA3QXpjd3d1UytEMEJxaUpmeXE4NjVDK3lva001V3lDQ2l6bUVwWktj?=
+ =?utf-8?B?c3V3aFMvUUJGTW1TdWlzYXBjSWFpWlRSZncxcTA0T1M1dm53aTQwTm5QeGNi?=
+ =?utf-8?B?eDNIdXRpV0paVTgzQUxuQzBHU0tKbHYzVDdNWCtTLzluL0FDZmt4allSNndQ?=
+ =?utf-8?B?ejJyOG9tSHVXVm1ERFhLMGNwZkJ0dndMOU90TXI2dXpRdWdORGh5MHBtdnQw?=
+ =?utf-8?B?Q0MxQkVqRzFDbStLbnJkYjVSeHRrQzZJWmZWYjhRRWFOUVhDYktjb1lwKzBz?=
+ =?utf-8?B?UFJIV3hTL0RxcHcwUFlyTXdyOHQwZkUwd0lTeXBFOTlGNkx0cVhnaU5ORnBs?=
+ =?utf-8?B?SVZkNWVZZTh6YUxxYTZ1WktxaTI4bXh4NGM3ekNYbm1KT3ZCN05RV2xPeWYv?=
+ =?utf-8?B?bGhQcGlvbmZGODZ6eGdKSDFSeGVhVU9UdStFaE9QY2pnVituQ1MzZDZVUk5T?=
+ =?utf-8?B?TDE2ZDRjWVFXVG1SVUEvc1lsSmNNZzFpVkJ0aXNCRDVyMWpsaWJEY0lGTkRo?=
+ =?utf-8?B?M2E4c3dVQklNRnZCWDNjdndZUGR5d1ZCaFRVRFBBOHdOWnRGRUk5Misza0ht?=
+ =?utf-8?B?d1VxQ2lUOHVkSHRwUDFHbVlVRHZWNEdVS2xTaHRHQ3dVbXpYMXkxeWlxNXRK?=
+ =?utf-8?B?L1lnM21EUjg2RjlINVNFNnM1M2UrZnFTczFLSk9nU0ZmSm45RkFnYkpsQjMx?=
+ =?utf-8?B?QWlCY3NiZng2ZHBGS2ZMYk55OGNlK05DR3dSZU1hVlRwZGp4Nk5aSEZVWkNY?=
+ =?utf-8?B?R0ZiNmdzaEczOWw5dnJ3a3dhOVpPK3dPaHcwY0xOQUNBNWhGamhtMUFSb2p1?=
+ =?utf-8?B?Y2tXMlFXRFBYVk5JNURDZzd4RXlNbHpIM0NMd2swTkpPM21uNzkzWmF1V2I0?=
+ =?utf-8?B?VllRNGRHWFNRM2IzQmwvQkt1UTE2RG83NkZPNG9FTnJzTERkZUFzTHZGWTZX?=
+ =?utf-8?B?TVBpWlhJZk10ay9BR3E2QnlSc283Rk9TaTRtSENDY0VOZUwvaTE4TmxQQlBx?=
+ =?utf-8?B?ZURCYWhSVUpqL3ZUM09pUkRMU2NidnRlNlE3Q21PTnNOUFFxRlhNQzlsMTc3?=
+ =?utf-8?B?ZW42elpPN2VsbSs1ckdzMlRMOWs2WnR2UTZFazRWWXVMdlFGVEtkMXczSHFQ?=
+ =?utf-8?B?Zkg2Y1ZtckJ1STZvdUpHMFR5S2JBOG1VZlE3UDExRUFoc0JDYnlUbG95Z0dq?=
+ =?utf-8?B?RUtxTUZEblNKOG5EZGJqc0JERVk1WXZINzg0aE9RZjJmTHpMZ0VWN2ZMbmpo?=
+ =?utf-8?B?OHdaOWRYL3pPRFprU2hFNlZqZUtVR2hOK3FHRThNVEZVQjJIdVJsTTgyMDR5?=
+ =?utf-8?B?UitpcU5DTkQ3YXlNeXZQUHV3clJYUW45dzd3bXZjSXVXYjFyTG1qS1BaQzJD?=
+ =?utf-8?B?RkU3L1hUUFE2bElVM3RjWUZJS0dlZ0d4RG1vZHpnV0FFeGljcWF2Vld5ekM5?=
+ =?utf-8?B?amd6ekoxc2lYd2U0OW1XcHl3ZDJrNmpLY21paWNWV3RlMGRhZ09SQ3Z4RWRJ?=
+ =?utf-8?B?OHA3UXB2ZlJINDNlNHNZNmJDVldFcFROSWhMcERhWlVlMWU0NlpJOHZMdlNX?=
+ =?utf-8?B?YWluNWhwN2VJeGpsSUFiSzlhdHNVWjNQK1NaQVhVQVkyWUJhVzdscC9ESDg1?=
+ =?utf-8?B?M3ZscWhnRUtkb3dsbUlJYXc2dXlTM3NSQW53Tm9LNHovcElTT3duMllwbGk5?=
+ =?utf-8?B?WnlGQ3Zpa0FWaWtDMFg1U2t5aHMyZVQ1R3h3YVNCVmFCaUZRdWdMOHd1U1dR?=
+ =?utf-8?B?MGFIdnZraVViVnM5dU1jL1AxVk1reTdaK2VvZW02Uy8xL2FBYWhZUTVCWjZP?=
+ =?utf-8?B?U3NYTW52SExOYmlkUzlHaklYQjNCeVFQTUsyVEoyK3c2d2JsWSsrK1M4aEVY?=
+ =?utf-8?B?SkJqYnZQanRDby9uTUVKS2VKMnZmY1NIM2UxT2dwTzZjVWt5bGYxSWlRZEZ3?=
+ =?utf-8?B?bGx2dldZS2N2VG0vV2xVdGdPK2pJWkx4VGd0VU9WVEp2M1FhMzRtdDA3Y0hN?=
+ =?utf-8?B?M1MyWG5hVHArclB5aXBsSWszM3pmKy9MR09CMUhWWXlXdWhGcEhnV2ZSR1ND?=
+ =?utf-8?B?dVhSVmtGd2dMblR2V3lUcUVZK21kbjhVL1hqeFRPSkJTWFUralYwbStkbHhu?=
+ =?utf-8?Q?2dhypuiRwdvVZzrsGEEtTTFsP?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba566e63-2689-4852-2101-08daf433d76d
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5262.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 00:27:52.2671
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LYXoIuco6WaHK+jpuBPrBtYuubr8KSqLRGCVy/Y2al2s6DfwMTxI1/0cSlj2JoJAk9egcduMNzIdXJ1xe5s9KA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5500
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,153 +163,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 3:00 PM Paul Moore <paul@paul-moore.com> wrote:
->
-> On Mon, Jan 9, 2023 at 4:38 PM T.J. Mercier <tjmercier@google.com> wrote:
-> >
-> > Any process can cause a memory charge transfer to occur to any other
-> > process when transmitting a file descriptor through binder. This should
-> > only be possible for central allocator processes, so a new SELinux
-> > permission is added to restrict which processes are allowed to initiate
-> > these charge transfers.
-> >
-> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > ---
-> >  drivers/android/binder.c            | 5 +++++
-> >  include/linux/lsm_hook_defs.h       | 2 ++
-> >  include/linux/lsm_hooks.h           | 6 ++++++
-> >  include/linux/security.h            | 2 ++
-> >  security/security.c                 | 6 ++++++
-> >  security/selinux/hooks.c            | 9 +++++++++
-> >  security/selinux/include/classmap.h | 2 +-
-> >  7 files changed, 31 insertions(+), 1 deletion(-)
->
-> Hi T.J.,
->
-> A few things come to mind when looking at this patchset, but let me
-> start with the big one first: you only sent 0/4 and 4/4 to the LSM and
-> SELinux lists, so that's all I'm seeing in my inbox to review, and
-> it's hard to make sense of what you want to do with just these
-> snippets.  This makes me cranky, and less inclined to spend the time
-> to give this a proper review, because there are plenty of other things
-> which need attention and don't require me having to hunt down missing
-> pieces.  Yes, I'm aware of b4/lei, and while they are great tools, my
-> workflow was pretty well established before they came into existence
-> and I still do things the good ol' fashioned way with mailing lists,
-> etc.
->
-> Make the patch reviewer's life easy whenever you can, it will rarely
-> (ever?) backfire, I promise.
->
-Hi Paul, sorry about that. I have git send-email calling
-get_maintainer.pl to automatically figure out the recipients, and I
-think that's why it only sent particular patches to a subset of lists.
-Looks like the list of recipients for each patch should be a union of
-all patches. Thank you for taking a look anyway! Here's a lore link:
-https://lore.kernel.org/lkml/20230109213809.418135-1-tjmercier@google.com/
-
-> > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> > index 9830848c8d25..9063db04826d 100644
-> > --- a/drivers/android/binder.c
-> > +++ b/drivers/android/binder.c
-> > @@ -2279,6 +2279,11 @@ static int binder_translate_fd(u32 fd, binder_size_t fd_offset, __u32 flags,
-> >         if (IS_ENABLED(CONFIG_MEMCG) && (flags & BINDER_FD_FLAG_XFER_CHARGE)) {
-> >                 struct dma_buf *dmabuf;
-> >
-> > +               if (security_binder_transfer_charge(proc->cred, target_proc->cred)) {
-> > +                       ret = -EPERM;
-> > +                       goto err_security;
-> > +               }
->
-> This is where I believe I'm missing the proper context, as this
-> version of binder_translate_fd() differs from what I see in Linus'
-> tree.  However, the version in Linus' tree does have a LSM hook,
-> security_binder_transfer_file(), which is passed both the credentials
-> you are using above and based solely on the level of indentation shown
-> in the chunk of code above, it seems like the existing hook might be
-> suitable?
->
-Yes, patch 3 plumbs through flags to this function:
-https://lore.kernel.org/lkml/20230109213809.418135-4-tjmercier@google.com/
-
-I don't think the existing hook is suitable, which I've tried to explain below.
-
-> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> > index 3c5be76a9199..823ef14924bd 100644
-> > --- a/security/selinux/hooks.c
-> > +++ b/security/selinux/hooks.c
-> > @@ -2066,6 +2066,14 @@ static int selinux_binder_transfer_file(const struct cred *from,
-> >                             &ad);
-> >  }
-> >
-> > +static int selinux_binder_transfer_charge(const struct cred *from, const struct cred *to)
-> > +{
-> > +       return avc_has_perm(&selinux_state,
-> > +                           cred_sid(from), cred_sid(to),
-> > +                           SECCLASS_BINDER, BINDER__TRANSFER_CHARGE,
-> > +                           NULL);
-> > +}
->
-> Generally speaking SELinux doesn't really worry about resource
-> accounting controls so this seems a bit out of place, but perhaps the
-> larger question is do you see this being sufficiently distinct from
-> the existing binder:transfer permission?  In other words, would you
-> ever want to grant a domain the ability to transfer a file *without*
-> also granting it the ability to transfer the memory charge?  You need
-> to help me explain why we need an additional permission for this,
-> because I don't currently see the need.
->
-Yes, and that's actually more often the case than not. A file here
-means a file descriptor that points at any type of resource: file on
-disk, memfd, dmabuf, etc. Currently there exists policy that restricts
-which processes are allowed to interact with FDs over binder using the
-security_binder_transfer_file hook you reference. [1] However this new
-transfer_charge permission is meant to restrict the ability of a FD
-sender to transfer the memory charge associated with that FD (if one
-exists) to a recipient (who may or may not want to accept the memory
-charge). So the memory charge is independent of (potentially one-time,
-read-only) access to the FD. I thought this would be a good idea for
-two reasons:
-1) The recipient has no control over whether to accept the memory
-charge or not. If the recipient shouldn't have the memory charge
-associated with a shared/loaned resource attributed to it, the
-recipient doesn't have a way to prevent that. When the charge is
-transferred, it could initiate memory reclaim on the recipient, or
-make it a bigger target for a future process kill than it should be.
-2) Only certain senders should be doing this. Without this control,
-any sender could circumvent process memory limits by transferring
-memory charges that should be attributed to them onto others.
-
-[1] https://cs.android.com/search?q=%22fd%20use%22&ss=android%2Fplatform%2Fsuperproject:system%2Fsepolicy%2F
 
 
-
-> >  static int selinux_ptrace_access_check(struct task_struct *child,
-> >                                        unsigned int mode)
-> >  {
-> > @@ -7052,6 +7060,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
-> >         LSM_HOOK_INIT(binder_transaction, selinux_binder_transaction),
-> >         LSM_HOOK_INIT(binder_transfer_binder, selinux_binder_transfer_binder),
-> >         LSM_HOOK_INIT(binder_transfer_file, selinux_binder_transfer_file),
-> > +       LSM_HOOK_INIT(binder_transfer_charge, selinux_binder_transfer_charge),
-> >
-> >         LSM_HOOK_INIT(ptrace_access_check, selinux_ptrace_access_check),
-> >         LSM_HOOK_INIT(ptrace_traceme, selinux_ptrace_traceme),
-> > diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-> > index a3c380775d41..2eef180d10d7 100644
-> > --- a/security/selinux/include/classmap.h
-> > +++ b/security/selinux/include/classmap.h
-> > @@ -172,7 +172,7 @@ const struct security_class_mapping secclass_map[] = {
-> >         { "tun_socket",
-> >           { COMMON_SOCK_PERMS, "attach_queue", NULL } },
-> >         { "binder", { "impersonate", "call", "set_context_mgr", "transfer",
-> > -                     NULL } },
-> > +                     "transfer_charge", NULL } },
-> >         { "cap_userns",
-> >           { COMMON_CAP_PERMS, NULL } },
-> >         { "cap2_userns",
-> > --
-> > 2.39.0.314.g84b9a713c41-goog
+On 1/10/2023 2:41 PM, Sohil Mehta wrote:
+> On 1/9/2023 9:52 PM, Yian Chen wrote:
+> 
+>> LASS stops access to a lower half address in kernel,
+>> and this can be deactivated if AC bit in EFLAGS
+>> register is set. Hence use stac and clac instructions
+>> around access to the address to avoid triggering a
+>> LASS #GP fault.
+>>
+> 
+> It seems we are implicitly relying on the on stac() and clac() calls 
+> that are added for SMAP. Have you tried running with SMAP disabled  i.e 
+> "clearcpuid=smap"?
 >
-> --
-> paul-moore.com
+Yes, I tested with clearcpuid=smap.
+
+> I believe there needs to be a dependency between LASS and SMAP.
+> 
+Yes, In kernel mode, LASS depends on SMAP to work. And in user mode, it 
+doesn't, so the dependency description in following may miss user space 
+effect.
+
+> diff --git a/arch/x86/kernel/cpu/cpuid-deps.c 
+> b/arch/x86/kernel/cpu/cpuid-deps.c
+> index d95221117129..00bc7e4a65d2 100644
+> --- a/arch/x86/kernel/cpu/cpuid-deps.c
+> +++ b/arch/x86/kernel/cpu/cpuid-deps.c
+> @@ -79,6 +79,7 @@ static const struct cpuid_dep cpuid_deps[] = {
+>       { X86_FEATURE_XFD,            X86_FEATURE_XSAVES    },
+>       { X86_FEATURE_XFD,            X86_FEATURE_XGETBV1   },
+>       { X86_FEATURE_AMX_TILE,            X86_FEATURE_XFD       },
+> +    { X86_FEATURE_LASS,            X86_FEATURE_SMAP      },
+>       {}
+>   };
+
+Thanks,
+Yian
