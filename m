@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F79666FEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24871667005
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238498AbjALKmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
+        id S239633AbjALKnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbjALKmT (ORCPT
+        with ESMTP id S234973AbjALKmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:42:19 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20E7559C2;
-        Thu, 12 Jan 2023 02:36:34 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 667195C0256;
-        Thu, 12 Jan 2023 05:36:34 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 12 Jan 2023 05:36:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1673519794; x=
-        1673606194; bh=IW9Zp0/sF/1Ckn+yDeOYUE9+fXzzehSr0zbVXxTpuhI=; b=k
-        oMNLx8fIWkOqklFBAPfcX6QBzMCWaLQAk6C65gfs5KpP/w3nmNYo7tuDp4hHd+nE
-        Qzg42r7kHyDzwwqS4HFvc79+z5Fwg8BjA0NmSAZDKt6GAouh5jNP5swLNXeYuDeG
-        3FCFnivtnwzwI/JGkXQpNnu6lEPn8vdekf3imjGMEDbO8eBTBzKKbI1iaP/B1QP2
-        uQ3H+IuLt8cfzhNasII1w9OGAv8BY0HYWhYTscMf8f3j0eV4x0ZpaUlDwh9pOrhu
-        SzZ9S4IlAjQwHi6WUS4V9oY/E6AI7AalxRvE6MA0UQlljh2+HSG/fktWRgZKFOSz
-        kKiyIKXBuQO69lIBPp0fQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673519794; x=
-        1673606194; bh=IW9Zp0/sF/1Ckn+yDeOYUE9+fXzzehSr0zbVXxTpuhI=; b=C
-        aPGQb5EAQKz1I5Lj4/NK2Ac5TXAdXWrIa18CMCB1Lc+Erme2Cq6N9B295N6U7Rgk
-        akGFxlV6C4Od0LHY56XNXXt805VdHYRci6zvFUcvE5rmd4L/ajwX2vkc/NPMCSqa
-        gBjyB05Ya2BkCoRqlqcuDn6Xx1YWFGeSCxEukFTwF4tDe4YneWSA42cU6Duh02Za
-        gvEQvmpnnVuweDOAi0qMlDpSwBlABHKMZxldGM2pQ1UPzM5nI2/BBE1e3cSgfznk
-        BMfaiQntykffDrIYjLTM0XnoURzaGwdNT4Op6iAZ047cbieBMNeNEX2PeNGLrUS+
-        XpO2iAm68u+vbALCvsRWg==
-X-ME-Sender: <xms:suK_Y6kIA8cKHDt2kksd3RRahVa0BzuIB1bBJ6lM_opGh0S2qsX6wA>
-    <xme:suK_Yx2i1Ee8TimwuFdGWmf3fnFyMyelPdRyN5XBbxYulPo0WIi98G-IDoRVixmgY
-    u-0z2AHTGZVPQ>
-X-ME-Received: <xmr:suK_Y4psSy_OFHUQDu6CXH0LYJasImyJZ9gfYyY2RWvb2g8utVyLbwqucxsc3gW2VV3amXOe2o1Hs3cnYhUX5bNFv3deHffZxEU7Cw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigddujecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeevve
-    etgfevjeffffevleeuhfejfeegueevfeetudejudefudetjedttdehueffnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:suK_Y-mevOZrrzVXmuCQ0YWxmpH2Hzez0RdSD2SwnycQnnxlADsxhg>
-    <xmx:suK_Y43DJH4KjbGOwvVdtQL_88pCLYu2VuL1wt8DItisB8HYFWRLrw>
-    <xmx:suK_Y1uNOso6JVebYxw9a843LMUTN1zR6HGrVIVYzWAHzbAMbMoBAA>
-    <xmx:suK_YxEWeMILbnTu7iginJUJsNO1j3rchj1Qkcu6p0EtCpSz4hBtaA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 12 Jan 2023 05:36:33 -0500 (EST)
-Date:   Thu, 12 Jan 2023 11:36:31 +0100
-From:   Greg KH <greg@kroah.com>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] r8152; preserve device list format
-Message-ID: <Y7/ir/zcJQUVec72@kroah.com>
-References: <87k01s6tkr.fsf@miraculix.mork.no>
- <20230112100100.180708-1-bjorn@mork.no>
- <Y7/dBXrI2QkiBFlW@kroah.com>
- <87cz7k6ooc.fsf@miraculix.mork.no>
- <878ri86o6j.fsf@miraculix.mork.no>
+        Thu, 12 Jan 2023 05:42:37 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805F458836;
+        Thu, 12 Jan 2023 02:36:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673519817; x=1705055817;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=slo6xLj/PY1pP/5JhL5TcH4kig+nfZoqmJ2N2YXxOIk=;
+  b=bOWexgT5Ku3CDRIiDtBXdCT/iZjZOendYgXiB8qVb8+ksOq/MMdG4u4M
+   oDwN1qmDHEuyDU+ABnqiZZbptv/vgWzS30zYJpAcKXxRTJFDN5zX+nRSh
+   sKFoMZI3Nn6jMdJBEQXFKCi3iqVEMd4JIublBDDmB3TNGHkc+UJJ5Sd1g
+   7n0Xl7B/gWqgR9vcyidVezubifVDP1XsHJd6ehx9+V2/GLFFCn0RVkP95
+   3YjHNikj/R5zvqQpRJJfiyyyZNXEZHEfjdpEdc9O0R/CiMtMK9jM3KL+r
+   xiFbca+zzQeDHNOIYudz63YMD6YoOcQCZFGQFli54GDDDr7Vpd6xPC4Wt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="325693728"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="325693728"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:36:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="651082180"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="651082180"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 12 Jan 2023 02:36:46 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pFuwo-007zvQ-1N;
+        Thu, 12 Jan 2023 12:36:38 +0200
+Date:   Thu, 12 Jan 2023 12:36:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Pin-yen Lin <treapking@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
+        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, chrome-platform@lists.linux.dev,
+        Xin Ji <xji@analogixsemi.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
+        linux-acpi@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>,
+        shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: Re: [PATCH v10 0/9] Register Type-C mode-switch in DP bridge
+ endpoints
+Message-ID: <Y7/itipjqIyulh6b@smile.fi.intel.com>
+References: <20230112042104.4107253-1-treapking@chromium.org>
+ <61ba2880-6784-1014-a7a2-a1eecc4e810e@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <878ri86o6j.fsf@miraculix.mork.no>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <61ba2880-6784-1014-a7a2-a1eecc4e810e@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 11:29:40AM +0100, Bjørn Mork wrote:
-> Bjørn Mork <bjorn@mork.no> writes:
-> > Greg KH <greg@kroah.com> writes:
-> >
-> >> No need for this, just backport the original change to older kernels and
-> >> all will be fine.
-> >>
-> >> Don't live with stuff you don't want to because of stable kernels,
-> >> that's not how this whole process works at all :)
-> >
-> > OK, thanks.  Will prepare a patch for stable instead then.
-> >
-> > But I guess the original patch is unacceptable for stable as-is? It
-> > changes how Linux react to these devces, and includes a completely new
-> > USB device driver (i.e not interface driver).
+On Thu, Jan 12, 2023 at 06:34:52AM +0200, Dmitry Baryshkov wrote:
+> On 12/01/2023 06:20, Pin-yen Lin wrote:
+> > 
+> > This series introduces bindings for anx7625/it6505 to register Type-C
+> > mode-switch in their output endpoints, and use data-lanes property to
+> > describe the pin connections.
 > 
-> Doh!  I gotta start thinking before I send email.  Will start right
-> after sending this one ;-)
-> 
-> We cannot backport the device-id table change to stable without taking
-> the rest of the patch. The strategy used by the old driver needs two
-> entries per device ID, which is why the macro was there.
-> 
-> So the question is: Can commit ec51fbd1b8a2 ("r8152: add USB device
-> driver for config selection") be accepted in stable?
-> 
-> ( Direct link for convenience since it's not yet in mainline:
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/drivers/net/usb/r8152.c?id=ec51fbd1b8a2bca2948dede99c14ec63dc57ff6b
-> )
-> 
-> This is not within the rules as I read them, but it's your call...
+> Please cc everybody on all patches. Having received just a single patch made
+> me spend time on having to look them up on lore.
 
-Ah, yeah, that's simple enough, I'd take it if you send it to me :)
+Sorry but this seems a bit outdated requirement nowadays.
+Why? Because we have `b4` in each famous Linux distro and
+nice lore.kernel.org. It's really easy for the experienced
+maintainer to catch up the whole thread.
 
-greg k-h
+Putting _all_ people on all patches may be an overkill.
+What people should really get is the cover letter (assuming
+that it explains well the structure of the series). The rest
+depends.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
