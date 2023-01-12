@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53A2666B43
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 07:46:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD28D666B46
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 07:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjALGqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 01:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
+        id S233710AbjALGtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 01:49:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbjALGqP (ORCPT
+        with ESMTP id S229921AbjALGtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 01:46:15 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8535DE0B6
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 22:46:14 -0800 (PST)
-Received: from letrec.thunk.org (host-67-21-23-146.mtnsat.com [67.21.23.146] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 30C6jIxt010374
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 01:45:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1673505928; bh=CyRnDzsMBmOI7XtmSzCn6s4XIqiz+Q3AJ472rqOgfMc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=djUOCHe0k9OZwoDMrv9/DyFjwkPNlF5cBZsnNyU6be8AYYFrWu9ayDS6Fu2ouysG+
-         XaEgrnUnas6aZtBhFgPGoXmS6qvLlQQtXtVfBZ8AtNo6dniUXVI5ey3RDwfIqQ4QRK
-         ZcMTdCUb3sUynFCKovy8rJEywXYZ1QUmyqpuJDaQHIUx3ZLbtN13nRtXbFSbB7+3nw
-         vqwQ8vJzpm6PuqgbjfSJVZYYtrJieNSHKEWCttBOoDeAX8uEg6N9YGD0dx5ozIq6zZ
-         4vrybwEJnkejwT9LsX6iLQtTOT8fz45WAEiPyh1tUAb1ZMdO5MBupbuAUUsqv9mIm9
-         LNNpMD75/pcsg==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id 8C1DC8C0873; Thu, 12 Jan 2023 01:45:15 -0500 (EST)
-Date:   Thu, 12 Jan 2023 01:45:15 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Arseniy Lesin <emptiedsoul@hardclanz.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [RESEND RFC] SIGOOM Proposal
-Message-ID: <Y7+se9vpA7JB3Mmm@mit.edu>
-References: <CPPXX7JYJGIE.3F2R53GC3ULGZ@hardclanz>
+        Thu, 12 Jan 2023 01:49:08 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDD94A978;
+        Wed, 11 Jan 2023 22:49:05 -0800 (PST)
+Received: from kwepemm600010.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Nsw5b2xypzJqH5;
+        Thu, 12 Jan 2023 14:44:51 +0800 (CST)
+Received: from [10.67.110.237] (10.67.110.237) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 12 Jan 2023 14:48:59 +0800
+Subject: Re: [PATCH 4/8] ftrace: Add DYNAMIC_FTRACE_WITH_CALL_OPS
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     <catalin.marinas@arm.com>, <lenb@kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mhiramat@kernel.org>, <ndesaulniers@google.com>,
+        <ojeda@kernel.org>, <peterz@infradead.org>,
+        <rafael.j.wysocki@intel.com>, <revest@chromium.org>,
+        <robert.moore@intel.com>, <rostedt@goodmis.org>, <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230109135828.879136-1-mark.rutland@arm.com>
+ <20230109135828.879136-5-mark.rutland@arm.com>
+From:   Li Huafei <lihuafei1@huawei.com>
+Message-ID: <ec65815e-a8c9-470a-ff89-41626c94df28@huawei.com>
+Date:   Thu, 12 Jan 2023 14:48:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20230109135828.879136-5-mark.rutland@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CPPXX7JYJGIE.3F2R53GC3ULGZ@hardclanz>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Originating-IP: [10.67.110.237]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,74 +56,371 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 07:51:45AM +0300, Arseniy Lesin wrote:
+
+
+On 2023/1/9 21:58, Mark Rutland wrote:
+> Architectures without dynamic ftrace trampolines incur an overhead when
+> multiple ftrace_ops are enabled with distinct filters. in these cases,
+> each call site calls a common trampoline which uses
+> ftrace_ops_list_func() to iterate over all enabled ftrace functions, and
+> so incurs an overhead relative to the size of this list (including RCU
+> protection overhead).
 > 
-> 2. Proposal
-> ==================
+> Architectures with dynamic ftrace trampolines avoid this overhead for
+> call sites which have a single associated ftrace_ops. In these cases,
+> the dynamic trampoline is customized to branch directly to the relevant
+> ftrace function, avoiding the list overhead.
 > 
-> 2.1. The SIGOOM Signal
-> ------------------
+> On some architectures it's impractical and/or undesirable to implement
+> dynamic ftrace trampolines. For example, arm64 has limited branch ranges
+> and cannot always directly branch from a call site to an arbitrary
+> address (e.g. from a kernel text address to an arbitrary module
+> address). Calls from modules to core kernel text can be indirected via
+> PLTs (allocated at module load time) to address this, but the same is
+> not possible from calls from core kernel text.
 > 
-> I propose the addition of new signal: SIGOOM (Out-Of-Memory SIGnal)
-
-AIX had a similar SIGDANGER signal which was sent to all processes
-when memory was low.  By default, it was ignored, but processes that
-were aware of it could use this as an opportunity to shrink their
-memory footprint.
-
-> The technical detail of this addition is a bit unpleasant: there is
-> actually no room for new signals! 
+> Using an indirect branch from a call site to an arbitrary trampoline is
+> possible, but requires several more instructions in the function
+> prologue (or immediately before it), and/or comes with far more complex
+> requirements for patching.
 > 
-> Numbers 1-31 are already assigned, every signal with number > SIGRTMIN 
-> (currently 32) is considered realtime and queued accordingly. 
+> Instead, this patch adds a new option, where an architecture can
+> associate each call site with a pointer to an ftrace_ops, placed at a
+> fixed offset from the call site. A shared trampoline can recover this
+> pointer and call ftrace_ops::func() without needing to go via
+> ftrace_ops_list_func(), avoiding the associated overhead.
 > 
-> Adding SIGOOM as signal #32 by shifting SIGRTMIN to 33 can do a trick,
-> but this will almost certainly break compatibility (namely, with glibc
-> threading)
+> This avoids issues with branch range limitations, and avoids the need to
+> allocate and manipulate dynamic trampolines, making it far simpler to
+> implement and maintain, while having similar performance
+> characteristics.
 > 
-> I propose adding SIGOOM as signal #65 (after SIGRTMAX), but we should
-> clarify some checks in kernel/signal.c (possibly in other places too,
-> where signal number is tested against being realtime) and possibly add a
-> such-like macro:
+> Note that this allows for dynamic ftrace_ops to be invoked directly from
+> an architecture's ftrace_caller trampoline, whereas existing code forces
+> the use of ftrace_ops_get_list_func(), which is in part necessary to
+> permit the ftrace_ops to be freed once unregistereed *and* to avoid
+> branch/address-generation range limitation on some architectures (e.g.
+> where ops->func is a module address, and may be outside of the direct
+> branch range for callsites within the main kernel image).
 > 
-> #define SIG_IS_REALTIME(signum) (((signum) > SIGRTMIN) && ((signum) < SIGRTMAX))
+> The CALL_OPS approach avoids this problems and is safe as:
+> 
+> * The existing synchronization in ftrace_shutdown() using
+>   ftrace_shutdown() using synchronize_rcu_tasks_rude() (and
+>   synchronize_rcu_tasks()) ensures that no tasks hold a stale reference
+>   to an ftrace_ops (e.g. in the middle of the ftrace_caller trampoline,
+>   or while invoking ftrace_ops::func), when that ftrace_ops is
+>   unregistered.
+> 
+>   Arguably this could also be relied upon for the existing scheme,
+>   permitting dynamic ftrace_ops to be invoked directly when ops->func is
+>   in range, but this will require additional logic to handle branch
+>   range limitations, and is not handled by this patch.
+> 
+> * Each callsite's ftrace_ops pointer literal can hold any valid kernel
+>   address, and is updated atomically. As an architecture's ftrace_caller
+>   trampoline will atomically load the ops pointer then derefrence
+>   ops->func, there is no risk of invoking ops->func with a mismatches
+>   ops pointer, and updates to the ops pointer do not require special
+>   care.
+> 
+> A subsequent patch will implement architectures support for arm64. There
+> should be no functional change as a result of this patch alone.
+> 
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Florent Revest <revest@chromium.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Will Deacon <will@kernel.org>
+> ---
+>  include/linux/ftrace.h |  15 +++++-
+>  kernel/trace/Kconfig   |   7 +++
+>  kernel/trace/ftrace.c  | 109 +++++++++++++++++++++++++++++++++++++++--
+>  3 files changed, 124 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index 99f1146614c04..5eeb2776124c5 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
+> @@ -57,6 +57,9 @@ void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip);
+>  void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
+>  			       struct ftrace_ops *op, struct ftrace_regs *fregs);
+>  #endif
+> +extern const struct ftrace_ops ftrace_nop_ops;
+> +extern const struct ftrace_ops ftrace_list_ops;
+> +struct ftrace_ops *ftrace_find_unique_ops(struct dyn_ftrace *rec);
 
-It's actually worse than this.  The problem is space in the signal
-mask.  From the signal(7) man page:
+Hi Mark,
 
-   Signal mask and pending signals
+This patch has build issues on x86:
 
-       A signal may be blocked, which means that it will not be
-       delivered until it is later unblocked.  Between the time when
-       it is generated and when it is deliv‐ ered a signal is said to
-       be pending.
+    CC      mm/readahead.o
+  In file included from include/linux/perf_event.h:52:0,
+                   from arch/x86/events/amd/lbr.c:2:
+  include/linux/ftrace.h:62:50: error: ‘struct dyn_ftrace’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+   struct ftrace_ops *ftrace_find_unique_ops(struct dyn_ftrace *rec);
 
-       Each thread in a process has an independent signal mask, which
-       indicates the set of signals that the thread is currently
-       blocking.  A thread can manipulate its signal mask using
-       pthread_sigmask(3).  In a traditional single-threaded ap‐
-       plication, sigprocmask(2) can be used to manipulate the signal
-       mask.
+Here we should need 'struct dyn_ftrace' forward declaration.
 
-The signal mask is stored in the signal set structure (sigset_t /
-kernel_sigset_t).    Later in that same man page:
+Thanks,
+Huafei
 
-       The addition of real-time signals required the widening of the
-       signal set structure (sigset_t) from 32 to 64 bits.
-       Consequently, various system calls were superseded by new
-       system calls that supported the larger signal sets.  The old
-       and new system calls are as follows:
-
-       Linux 2.0 and earlier   Linux 2.2 and later
-       sigaction(2)            rt_sigaction(2)
-       sigpending(2)           rt_sigpending(2)
-       sigprocmask(2)          rt_sigprocmask(2)
-       sigreturn(2)            rt_sigreturn(2)
-       sigsuspend(2)           rt_sigsuspend(2)
-       sigtimedwait(2)         rt_sigtimedwait(2)
-
-This is why adding a new signal is _hard_, whether it's
-SIGDANGER/SIGOOM, or the SIGINFO from the people who want BSD-style
-control-T support.
-
-						- Ted
+>  #endif /* CONFIG_FUNCTION_TRACER */
+>  
+>  /* Main tracing buffer and events set up */
+> @@ -563,6 +566,8 @@ bool is_ftrace_trampoline(unsigned long addr);
+>   *  IPMODIFY - the record allows for the IP address to be changed.
+>   *  DISABLED - the record is not ready to be touched yet
+>   *  DIRECT   - there is a direct function to call
+> + *  CALL_OPS - the record can use callsite-specific ops
+> + *  CALL_OPS_EN - the function is set up to use callsite-specific ops
+>   *
+>   * When a new ftrace_ops is registered and wants a function to save
+>   * pt_regs, the rec->flags REGS is set. When the function has been
+> @@ -580,9 +585,11 @@ enum {
+>  	FTRACE_FL_DISABLED	= (1UL << 25),
+>  	FTRACE_FL_DIRECT	= (1UL << 24),
+>  	FTRACE_FL_DIRECT_EN	= (1UL << 23),
+> +	FTRACE_FL_CALL_OPS	= (1UL << 22),
+> +	FTRACE_FL_CALL_OPS_EN	= (1UL << 21),
+>  };
+>  
+> -#define FTRACE_REF_MAX_SHIFT	23
+> +#define FTRACE_REF_MAX_SHIFT	21
+>  #define FTRACE_REF_MAX		((1UL << FTRACE_REF_MAX_SHIFT) - 1)
+>  
+>  #define ftrace_rec_count(rec)	((rec)->flags & FTRACE_REF_MAX)
+> @@ -820,7 +827,8 @@ static inline int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+>   */
+>  extern int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr);
+>  
+> -#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+> +#if defined(CONFIG_DYNAMIC_FTRACE_WITH_REGS) || \
+> +	defined(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS)
+>  /**
+>   * ftrace_modify_call - convert from one addr to another (no nop)
+>   * @rec: the call site record (e.g. mcount/fentry)
+> @@ -833,6 +841,9 @@ extern int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr);
+>   * what we expect it to be, and then on success of the compare,
+>   * it should write to the location.
+>   *
+> + * When using call ops, this is called when the associated ops change, even
+> + * when (addr == old_addr).
+> + *
+>   * The code segment at @rec->ip should be a caller to @old_addr
+>   *
+>   * Return must be:
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 197545241ab83..5df427a2321df 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -42,6 +42,9 @@ config HAVE_DYNAMIC_FTRACE_WITH_REGS
+>  config HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>  	bool
+>  
+> +config HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS
+> +	bool
+> +
+>  config HAVE_DYNAMIC_FTRACE_WITH_ARGS
+>  	bool
+>  	help
+> @@ -257,6 +260,10 @@ config DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>  	depends on DYNAMIC_FTRACE_WITH_REGS
+>  	depends on HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>  
+> +config DYNAMIC_FTRACE_WITH_CALL_OPS
+> +	def_bool y
+> +	depends on HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS
+> +
+>  config DYNAMIC_FTRACE_WITH_ARGS
+>  	def_bool y
+>  	depends on DYNAMIC_FTRACE
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 442438b93fe98..c0b219ab89d2f 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -125,6 +125,33 @@ struct ftrace_ops global_ops;
+>  void ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
+>  			  struct ftrace_ops *op, struct ftrace_regs *fregs);
+>  
+> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
+> +/*
+> + * Stub used to invoke the list ops without requiring a separate trampoline.
+> + */
+> +const struct ftrace_ops ftrace_list_ops = {
+> +	.func	= ftrace_ops_list_func,
+> +	.flags	= FTRACE_OPS_FL_STUB,
+> +};
+> +
+> +static void ftrace_ops_nop_func(unsigned long ip, unsigned long parent_ip,
+> +				struct ftrace_ops *op,
+> +				struct ftrace_regs *fregs)
+> +{
+> +	/* do nothing */
+> +}
+> +
+> +/*
+> + * Stub used when a call site is disabled. May be called transiently by threads
+> + * which have made it into ftrace_caller but haven't yet recovered the ops at
+> + * the point the call site is disabled.
+> + */
+> +const struct ftrace_ops ftrace_nop_ops = {
+> +	.func	= ftrace_ops_nop_func,
+> +	.flags  = FTRACE_OPS_FL_STUB,
+> +};
+> +#endif
+> +
+>  static inline void ftrace_ops_init(struct ftrace_ops *ops)
+>  {
+>  #ifdef CONFIG_DYNAMIC_FTRACE
+> @@ -1814,6 +1841,18 @@ static bool __ftrace_hash_rec_update(struct ftrace_ops *ops,
+>  			 * if rec count is zero.
+>  			 */
+>  		}
+> +
+> +		/*
+> +		 * If the rec has a single associated ops, and ops->func can be
+> +		 * called directly, allow the call site to call via the ops.
+> +		 */
+> +		if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS) &&
+> +		    ftrace_rec_count(rec) == 1 &&
+> +		    ftrace_ops_get_func(ops) == ops->func)
+> +			rec->flags |= FTRACE_FL_CALL_OPS;
+> +		else
+> +			rec->flags &= ~FTRACE_FL_CALL_OPS;
+> +
+>  		count++;
+>  
+>  		/* Must match FTRACE_UPDATE_CALLS in ftrace_modify_all_code() */
+> @@ -2108,8 +2147,9 @@ void ftrace_bug(int failed, struct dyn_ftrace *rec)
+>  		struct ftrace_ops *ops = NULL;
+>  
+>  		pr_info("ftrace record flags: %lx\n", rec->flags);
+> -		pr_cont(" (%ld)%s", ftrace_rec_count(rec),
+> -			rec->flags & FTRACE_FL_REGS ? " R" : "  ");
+> +		pr_cont(" (%ld)%s%s", ftrace_rec_count(rec),
+> +			rec->flags & FTRACE_FL_REGS ? " R" : "  ",
+> +			rec->flags & FTRACE_FL_CALL_OPS ? " O" : "  ");
+>  		if (rec->flags & FTRACE_FL_TRAMP_EN) {
+>  			ops = ftrace_find_tramp_ops_any(rec);
+>  			if (ops) {
+> @@ -2177,6 +2217,7 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
+>  		 * want the direct enabled (it will be done via the
+>  		 * direct helper). But if DIRECT_EN is set, and
+>  		 * the count is not one, we need to clear it.
+> +		 *
+>  		 */
+>  		if (ftrace_rec_count(rec) == 1) {
+>  			if (!(rec->flags & FTRACE_FL_DIRECT) !=
+> @@ -2185,6 +2226,19 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
+>  		} else if (rec->flags & FTRACE_FL_DIRECT_EN) {
+>  			flag |= FTRACE_FL_DIRECT;
+>  		}
+> +
+> +		/*
+> +		 * Ops calls are special, as count matters.
+> +		 * As with direct calls, they must only be enabled when count
+> +		 * is one, otherwise they'll be handled via the list ops.
+> +		 */
+> +		if (ftrace_rec_count(rec) == 1) {
+> +			if (!(rec->flags & FTRACE_FL_CALL_OPS) !=
+> +			    !(rec->flags & FTRACE_FL_CALL_OPS_EN))
+> +				flag |= FTRACE_FL_CALL_OPS;
+> +		} else if (rec->flags & FTRACE_FL_CALL_OPS_EN) {
+> +			flag |= FTRACE_FL_CALL_OPS;
+> +		}
+>  	}
+>  
+>  	/* If the state of this record hasn't changed, then do nothing */
+> @@ -2229,6 +2283,21 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
+>  					rec->flags &= ~FTRACE_FL_DIRECT_EN;
+>  				}
+>  			}
+> +
+> +			if (flag & FTRACE_FL_CALL_OPS) {
+> +				if (ftrace_rec_count(rec) == 1) {
+> +					if (rec->flags & FTRACE_FL_CALL_OPS)
+> +						rec->flags |= FTRACE_FL_CALL_OPS_EN;
+> +					else
+> +						rec->flags &= ~FTRACE_FL_CALL_OPS_EN;
+> +				} else {
+> +					/*
+> +					 * Can only call directly if there's
+> +					 * only one sets of associated ops.
+> +					 */
+> +					rec->flags &= ~FTRACE_FL_CALL_OPS_EN;
+> +				}
+> +			}
+>  		}
+>  
+>  		/*
+> @@ -2258,7 +2327,8 @@ static int ftrace_check_record(struct dyn_ftrace *rec, bool enable, bool update)
+>  			 * and REGS states. The _EN flags must be disabled though.
+>  			 */
+>  			rec->flags &= ~(FTRACE_FL_ENABLED | FTRACE_FL_TRAMP_EN |
+> -					FTRACE_FL_REGS_EN | FTRACE_FL_DIRECT_EN);
+> +					FTRACE_FL_REGS_EN | FTRACE_FL_DIRECT_EN |
+> +					FTRACE_FL_CALL_OPS_EN);
+>  	}
+>  
+>  	ftrace_bug_type = FTRACE_BUG_NOP;
+> @@ -2431,6 +2501,25 @@ ftrace_find_tramp_ops_new(struct dyn_ftrace *rec)
+>  	return NULL;
+>  }
+>  
+> +struct ftrace_ops *
+> +ftrace_find_unique_ops(struct dyn_ftrace *rec)
+> +{
+> +	struct ftrace_ops *op, *found = NULL;
+> +	unsigned long ip = rec->ip;
+> +
+> +	do_for_each_ftrace_op(op, ftrace_ops_list) {
+> +
+> +		if (hash_contains_ip(ip, op->func_hash)) {
+> +			if (found)
+> +				return NULL;
+> +			found = op;
+> +		}
+> +
+> +	} while_for_each_ftrace_op(op);
+> +
+> +	return found;
+> +}
+> +
+>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>  /* Protected by rcu_tasks for reading, and direct_mutex for writing */
+>  static struct ftrace_hash *direct_functions = EMPTY_HASH;
+> @@ -3780,11 +3869,12 @@ static int t_show(struct seq_file *m, void *v)
+>  	if (iter->flags & FTRACE_ITER_ENABLED) {
+>  		struct ftrace_ops *ops;
+>  
+> -		seq_printf(m, " (%ld)%s%s%s",
+> +		seq_printf(m, " (%ld)%s%s%s%s",
+>  			   ftrace_rec_count(rec),
+>  			   rec->flags & FTRACE_FL_REGS ? " R" : "  ",
+>  			   rec->flags & FTRACE_FL_IPMODIFY ? " I" : "  ",
+> -			   rec->flags & FTRACE_FL_DIRECT ? " D" : "  ");
+> +			   rec->flags & FTRACE_FL_DIRECT ? " D" : "  ",
+> +			   rec->flags & FTRACE_FL_CALL_OPS ? " O" : "  ");
+>  		if (rec->flags & FTRACE_FL_TRAMP_EN) {
+>  			ops = ftrace_find_tramp_ops_any(rec);
+>  			if (ops) {
+> @@ -3800,6 +3890,15 @@ static int t_show(struct seq_file *m, void *v)
+>  		} else {
+>  			add_trampoline_func(m, NULL, rec);
+>  		}
+> +		if (rec->flags & FTRACE_FL_CALL_OPS_EN) {
+> +			ops = ftrace_find_unique_ops(rec);
+> +			if (ops) {
+> +				seq_printf(m, "\tops: %pS (%pS)",
+> +					   ops, ops->func);
+> +			} else {
+> +				seq_puts(m, "\tops: ERROR!");
+> +			}
+> +		}
+>  		if (rec->flags & FTRACE_FL_DIRECT) {
+>  			unsigned long direct;
+>  
+> 
