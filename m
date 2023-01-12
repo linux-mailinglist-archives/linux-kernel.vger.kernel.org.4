@@ -2,106 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B94A667CB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F639667E36
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjALRh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
+        id S237148AbjALSiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232845AbjALRgz (ORCPT
+        with ESMTP id S231873AbjALSht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:36:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91978CBBC8;
-        Thu, 12 Jan 2023 08:58:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 014DA620DC;
-        Thu, 12 Jan 2023 16:58:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD4F3C43398;
-        Thu, 12 Jan 2023 16:57:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673542681;
-        bh=fFRqgsrl7Ewslx/ZwWvBlTVHZWIOjbNberPekWlv87Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vJ1kIpslROY2MZ+qkiqGFEmYrbEbgPz1K1+ljcqoFfC4YRRzL+DLJ8HD00cpLPI77
-         iCXwCf+2nD5jZvYJhMOGhrC3cMP39qnG0M3HDS309gfnOwPYu0NZ1WxjrzAYtFqPdn
-         wViCjfbz02u8+vjIMSSKyOR6hmNm6psvkE4VWAJ8zvhnOZwIl8XQmqyO7mRARWnebP
-         +8tFSbZvWIkucAUmkNNZoCAQBCCHtNkHd3faMumvtIev6x32Zisz1nx5RCSZizwfmd
-         aTzdvXZQvDWkYTyQOHShHuSyGI7ww2j3y5cLrhQ89eCYhSumbufhAegpY3iLcQ0oQp
-         r0ZlSRaRL4W5g==
-Date:   Thu, 12 Jan 2023 16:57:55 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        kursad.oney@broadcom.com, dregan@mail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/16] spi: bcm63xx-hsspi: Add prepend feature support
-Message-ID: <Y8A8EykJYWuu17ew@sirena.org.uk>
-References: <20230106200809.330769-1-william.zhang@broadcom.com>
- <20230106200809.330769-12-william.zhang@broadcom.com>
- <Y7iaEOBP4TRBoDYy@sirena.org.uk>
- <88534207-6b1c-75c1-26a1-be88a19eeecb@broadcom.com>
- <Y7xrhjhhY3g5DE25@sirena.org.uk>
- <04b740e0-09d1-8c39-4f0e-8f61a74eeb58@broadcom.com>
- <Y73WL3Gwo6w6dJJr@sirena.org.uk>
- <7871b35b-df7f-793c-c4a9-c850425ca2b4@broadcom.com>
+        Thu, 12 Jan 2023 13:37:49 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED1168C92
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:09:11 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id b3so29614384lfv.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:09:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2AONvkhef5f2cDlIqM1wUc/wodA5wwmZ55DlKYwb5ZA=;
+        b=OLPT5eRQ6Z3xt1YMnQLnudatq+kWQNJHtdB7dS8D8Xe3KzlO46LJCqTfbsqiQFrVyv
+         jbzFpOu5bM94/iyKUmzzG5fdyZC7emI/O8QYiOj3TXgnKWnwpNFWv7uuhIIuvIINUnJW
+         O8TE80ZMV27mPqWup4cX92nWHH7hx0LysK4xBiotjpb60MKNm1osej0IhRq/XpyMdx/N
+         C0sIZCtkaC/3t1IUdvuIYimSR2zmzGJgZNUppytfcDcs1wRejq9mwIiC0wvUXQp0LcHO
+         Fd+oZa0vyLfloW/R+BFlxFVrUdfFk85/zZ1I4qIl4766epCGU4h69FAcgbOzQZ1iUOUa
+         D5Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2AONvkhef5f2cDlIqM1wUc/wodA5wwmZ55DlKYwb5ZA=;
+        b=6hewhC2gOFcDX3NHAwziCg9oyfiZgV2QXoL7SUoYBn2zSzfGJWDOybnXxaxC5hU1Ye
+         l8vNEKbbfMPWu696xhmhnfzKeMrancmNrp62myikLMgRn+iYEx46KX6mftM3tcWsp+xG
+         5oet1rbFXwBR3JFfKDsE4ksqC0AGDe671+dgwyZCnU0AkfHq5wpfjR4bSM4LdFarP3zX
+         XPEb/m8Is0p6SdrwdL+GcsZ6D9wtbCgw93Up2NK2zKN8AXWPU1d2DKKXHIsk3B/nTA2h
+         KzDljx/IP6L5yD5A6rofY9iv+CSIiXCcnP2fpkHtMssyaPxq4cjotGl7v8vbTl3Y/cSe
+         5W7A==
+X-Gm-Message-State: AFqh2koPKBGkt9fbHqirWaQkGem2vPZ4/G+HdQK5GHBg0BJJPqE0jf97
+        NmK9PeFOjjU1eWF6jh9k5pz5+w==
+X-Google-Smtp-Source: AMrXdXvbW0xpuY3Tfk8QTt05lRP1Iv3YN6CkHIYnf0ujcw7rvU7p73KK1BwSulRFu8kixMJEkO/pkg==
+X-Received: by 2002:a05:6512:340d:b0:4b5:69f1:61b1 with SMTP id i13-20020a056512340d00b004b569f161b1mr21998055lfr.42.1673546950140;
+        Thu, 12 Jan 2023 10:09:10 -0800 (PST)
+Received: from [127.0.0.1] (85-76-49-9-nat.elisa-mobile.fi. [85.76.49.9])
+        by smtp.gmail.com with ESMTPSA id t18-20020a192d52000000b004cc66d4419asm3399113lft.39.2023.01.12.10.09.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 10:09:09 -0800 (PST)
+Date:   Thu, 12 Jan 2023 19:00:29 +0200
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_arm64=3A_dts=3A_qcom=3A_sc828?= =?US-ASCII?Q?0xp=3A_Vote_for_CX_in_USB_controllers?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <a3594770-1d7e-de02-b78c-8446d239b60b@linaro.org>
+References: <20230112135117.3836655-1-quic_bjorande@quicinc.com> <a3594770-1d7e-de02-b78c-8446d239b60b@linaro.org>
+Message-ID: <9CCF91EB-3BB8-4547-AF0F-7CB774A15BDE@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tB4e0N4NIUaXxw/e"
-Content-Disposition: inline
-In-Reply-To: <7871b35b-df7f-793c-c4a9-c850425ca2b4@broadcom.com>
-X-Cookie: A watched clock never boils.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+12 =D1=8F=D0=BD=D0=B2=D0=B0=D1=80=D1=8F 2023 =D0=B3=2E 16:21:14 GMT+02:00, =
+Konrad Dybcio <konrad=2Edybcio@linaro=2Eorg> =D0=BF=D0=B8=D1=88=D0=B5=D1=82=
+:
+>
+>
+>On 12=2E01=2E2023 14:51, Bjorn Andersson wrote:
+>> Running GCC_USB30_*_MASTER_CLK at 200MHz requires CX at nominal level,
+>> not doing so results in occasional lockups=2E This was previously hidde=
+n
+>> by the fact that the display stack incorrectly voted for CX (instead of
+>> MMCX)=2E
+>>=20
+>> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc=2Ecom>
+>> ---https://git=2Ecodelinaro=2Eorg/clo/la/kernel/msm-5=2E4/-/blob/LV=2EA=
+U=2E1=2E2=2E3=2Er1-03600-gen3meta=2E0/drivers/clk/qcom/gcc-direwolf=2Ec#L27=
+03-2725
+>
+>Maybe in the future there could be some power savings for lower freqs=2E=
+=2E
 
---tB4e0N4NIUaXxw/e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I had the same question=2E If the vote is not static, but depends on the f=
+req, shouldn't this be to implemented as an opp + table?
 
-On Wed, Jan 11, 2023 at 11:42:57AM -0800, William Zhang wrote:
-> On 01/10/2023 01:18 PM, Mark Brown wrote:
 
-> > spi_replace_transfers().
+>
+>Reviewed-by: Konrad Dybcio <konrad=2Edybcio@linaro=2Eorg>
+>
+>Konrad
+>>  arch/arm64/boot/dts/qcom/sc8280xp=2Edtsi | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>=20
+>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp=2Edtsi b/arch/arm64/boot=
+/dts/qcom/sc8280xp=2Edtsi
+>> index 2ed17baf50d3=2E=2E4f4353f84cba 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc8280xp=2Edtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp=2Edtsi
+>> @@ -2265,6 +2265,7 @@ usb_0: usb@a6f8800 {
+>>  					  "ss_phy_irq";
+>> =20
+>>  			power-domains =3D <&gcc USB30_PRIM_GDSC>;
+>> +			required-opps =3D <&rpmhpd_opp_nom>;
+>> =20
+>>  			resets =3D <&gcc GCC_USB30_PRIM_BCR>;
+>> =20
+>> @@ -2319,6 +2320,7 @@ usb_1: usb@a8f8800 {
+>>  					  "ss_phy_irq";
+>> =20
+>>  			power-domains =3D <&gcc USB30_SEC_GDSC>;
+>> +			required-opps =3D <&rpmhpd_opp_nom>;
+>> =20
+>>  			resets =3D <&gcc GCC_USB30_SEC_BCR>;
+>> =20
 
-> Okay I saw this function is used by spi_split_transfers_maxsize which a few
-> drivers use to limit the transfer size and it make sense.  I can come up
-> something like spi_merge_transfers to be used by my driver's prepend
-> function.  But it has the same issue I mentioned early as the these tx, rx
-> transfers have the dependency on the order they present in the original
-> transfer list for my prepend function to work.  And for the same reason, it
-> won't be generally useful for other drivers.
-
-I wouldn't be surprised if something else turned up which had similar
-constraints, SPI isn't the most complex thing ever so there's a lot of
-patterns in controlers that get reproduced.
-
---tB4e0N4NIUaXxw/e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPAPBIACgkQJNaLcl1U
-h9B7owf+NOOGAbdzEW4Bw5MOOF0h1haRJ/Fc1hX/4OplSftennksQwctqCI9LB5s
-jxA3Rn8Itza83awPYWcIJ9fT5ZwNeXBTcNEsQ1KPhHBE+vzYTWYiNlTWABa7vFOE
-EFqu9erZJoYHYgXlb86MSuzC5om0zYGzt/xeGnvaZcMzqQNV3+Ib6urT0I0jRncL
-Uo3sjZoNyJ7FGCRGYVvBuqov9igoCLPFsV0C6+T6NtsE2YwDF9I000oWwmVGgRuo
-dOh8QAZYFfWxvmmw2tIzUGwfyxZshgBCKzlO7PFOprbLza3c1Tf34gLIzJ9lYJ4n
-Rt2HOSabCoThRauJ2p5o/HcW+WjBhw==
-=6GPD
------END PGP SIGNATURE-----
-
---tB4e0N4NIUaXxw/e--
