@@ -2,276 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F283C666EA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 813AE666EA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbjALJtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S237148AbjALJty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbjALJsF (ORCPT
+        with ESMTP id S240070AbjALJtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:48:05 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2FB315
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:44:10 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id v6so342574ejg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:44:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Oa5slRNBNNIqMVWPb21PTixUg0CS9e53tBflIIJxqM=;
-        b=Z2l1L873yghsz5/eXnO7c1aI5LQBJRwUvPxhDN79sf2LupNS8aeUvpZCALFf8TIbjm
-         2ROZeqvOl0YIyPMOx0YJOfED7Advsc80lP4gUJEuWg3PvP2Q7Xz2px5CH2XQgKUzr+jK
-         OeRQ7K1Q6T/Z+uXhqUrRrcKsLMBq2wbWEiZsU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Oa5slRNBNNIqMVWPb21PTixUg0CS9e53tBflIIJxqM=;
-        b=6JC9VmDRUlXfoZb2X6N/ircJ6N6f9lPjcTmwWdGOfvif8ph+6ysbc4sq6eWQxUjFVc
-         OKs8yCwsQ3brbF2JPW/PohVo/b+HScoJBBKFo5ujp32VI1k6PvlA2494lPDHiGuDRG2y
-         RY5jKVF12rXC68N9B6/OVB0bjNIAg18mv88WBoffL+Ogq61baYr970dhdjreetL/dZZV
-         /KmitltvsnwX5opS7kRyMhiKfWwpqlYt+M80kW/rla4PRg5PrktPTxIJc1j9zXB3G8Uc
-         sNohIx7SHQFXZUcn1eLAc2XzY1wAsZtYlfAEGD8o+PtX5lVo7DhK8bnq1OZ5F/W5uby0
-         JeWQ==
-X-Gm-Message-State: AFqh2kpxYY7n2nzCMsr1g1140KZsRGSvpbSZnxrs1yijUgpFFb7YTVfp
-        wKoMRtY8mXDkTVgdAPoDmSuPpYpXi4UfnpMi
-X-Google-Smtp-Source: AMrXdXtahSlcUV3YLcD8ZfB9I2NIcENT0/1vLmKd1QcVDlZ5lGrzjtBySQG1J+xhOiz2muS5ihmH/Q==
-X-Received: by 2002:a17:906:7fc3:b0:7c1:10b8:e6a4 with SMTP id r3-20020a1709067fc300b007c110b8e6a4mr60890823ejs.19.1673516648682;
-        Thu, 12 Jan 2023 01:44:08 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id ky24-20020a170907779800b007c09a304eb5sm7149300ejc.201.2023.01.12.01.44.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 01:44:07 -0800 (PST)
-Date:   Thu, 12 Jan 2023 10:44:05 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>, Borislav Petkov <bp@suse.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Danilo Krummrich <dakr@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [RESEND PATCH linux-next v2 00/10] drm: Remove some obsolete
- drivers(tdfx, mga, i810, savage, r128, sis, via)
-Message-ID: <Y7/WZezKsjax7isu@phenom.ffwll.local>
-Mail-Followup-To: Thomas Zimmermann <tzimmermann@suse.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>, Borislav Petkov <bp@suse.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Danilo Krummrich <dakr@redhat.com>, Sam Ravnborg <sam@ravnborg.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20221203102502.3185-1-cai.huoqing@linux.dev>
- <20221208124207.GA7628@chq-T47>
- <Y7bFNQ5a+qAcxWj+@phenom.ffwll.local>
- <d5d44da7-2ca9-d26d-7474-223abb8f6aa3@suse.de>
+        Thu, 12 Jan 2023 04:49:14 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D911BD45
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:45:11 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 619273ED65;
+        Thu, 12 Jan 2023 09:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673516710; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KNiMMQNVa5sMzIVJxz1JeBcyurPbf7owbHpmHsMMjls=;
+        b=M/ll2JxbXKarOND/NWDMQnnEv4wMiNFhx+H1RxnuakOBXNgAZXW67kEbJuMOZPUwqg850S
+        bkyJR/TXsfKRzS3dLAqzrsft5vi7oY2acCNtbR599ljSeoEC0oZiCemGMA7B16OZRfQaO+
+        qQPxgWpvKe1Q5+fnR6DtkjLk9TVkCVo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F0CD013585;
+        Thu, 12 Jan 2023 09:45:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id W2ZzK6XWv2NDHAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 12 Jan 2023 09:45:09 +0000
+Date:   Thu, 12 Jan 2023 10:45:07 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 6/7] mm/page_alloc: Give GFP_ATOMIC and non-blocking
+ allocations access to reserves
+Message-ID: <Y7/Wo+09moX5OMrH@dhcp22.suse.cz>
+References: <20230109151631.24923-1-mgorman@techsingularity.net>
+ <20230109151631.24923-7-mgorman@techsingularity.net>
+ <Y77cikPSHepZ/GQj@dhcp22.suse.cz>
+ <20230111170552.5b7z5hetc2lcdwmb@techsingularity.net>
+ <Y7/AmgN1Wz73lyVz@dhcp22.suse.cz>
+ <20230112092452.rtvo6tkp4rpmxm7v@techsingularity.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d5d44da7-2ca9-d26d-7474-223abb8f6aa3@suse.de>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230112092452.rtvo6tkp4rpmxm7v@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 02:01:50PM +0100, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 05.01.23 um 13:40 schrieb Daniel Vetter:
-> > On Thu, Dec 08, 2022 at 08:42:07PM +0800, Cai Huoqing wrote:
-> > > On 03 12月 22 18:22:51, Cai Huoqing wrote:
-> > > > Commit 399516ab0fee ("MAINTAINERS: Add a bunch of legacy (UMS) DRM drivers")
-> > > > marked these drivers obsolete 7 years ago.
-> > > > And the mesa UMD of these drm drivers already in deprecated list
-> > > > in the link: https://docs.mesa3d.org/systems.html
+On Thu 12-01-23 09:24:52, Mel Gorman wrote:
+> On Thu, Jan 12, 2023 at 09:11:06AM +0100, Michal Hocko wrote:
+> > On Wed 11-01-23 17:05:52, Mel Gorman wrote:
+> > > On Wed, Jan 11, 2023 at 04:58:02PM +0100, Michal Hocko wrote:
+> > > > On Mon 09-01-23 15:16:30, Mel Gorman wrote:
+> > > > > Explicit GFP_ATOMIC allocations get flagged ALLOC_HARDER which is a bit
+> > > > > vague. In preparation for removing __GFP_ATOMIC, give GFP_ATOMIC and
+> > > > > other non-blocking allocation requests equal access to reserve.  Rename
+> > > > > ALLOC_HARDER to ALLOC_NON_BLOCK to make it more clear what the flag
+> > > > > means.
 > > > > 
-> > > > 3dfx Glide-->driver/gpu/drm/tdfx
-> > > > Matrox-->driver/gpu/drm/mga
-> > > > Intel i810-->driver/gpu/drm/i810
-> > > > S3 Savage-->drivers/gpu/drm/savage
-> > > > ATI Rage 128->drivers/gpu/drm/r128
-> > > > Silicon Integrated Systems->drivers/gpu/drm/sis
-> > > > VIA Unichrome->drivers/gpu/drm/via
-> > > > 
-> > > > v1->v2:
-> > > > 1.Add drm via driver to the patchset.
-> > > > 2.Remove related drm_pciids.
-> > > > 3.Remove related drm uapi header files.
-> > > > 4.split to series avoid large patch email.
-> > > Just ping these patch series.
-> > > The v1 comments here,
-> > > https://lore.kernel.org/lkml/39d8ac1a-d92f-7cdc-14cd-944342f78c1a@suse.de/
-> > 
-> > Are we really sure that all users of these are gone? Also, I'm not really
-> > seeing the benefit of this, we've managed to split out the legacy code
-> > quite well, so carrying around isn't hurting anything afaics?
-> 
-> My first reaction was 'no way'. But then I thought about possible users of
-> this code and I cannot see anyone relying on it. You'd need an ancient
-> userspace Mesa library plus the most recent kernel. And all the rendering is
-> OpenGL 1.x. Are there even Linux programs for that?
-> 
-> So as far as I'm concerned
-> 
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-> 
-> DRM's legacy infrastructure could be kept for a few more releases. Just in
-> case one of the drivers makes a comeback.
-> 
-> There is code in nouveau that uses legacy functionality for its ancient
-> userspace. I think we should scrap that as well. (See
-> NOUVEAU_LEGACY_CTX_SUPPORT.)
-
-From the irc discussion:
-
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Acked-by: Dave Airlie <airlied@redhat.com>
-> 
-> Best regards
-> Thomas
-> 
-> > -Daniel
-> > 
+> > > > GFP_NOWAIT can be also used for opportunistic allocations which can and
+> > > > should fail quickly if the memory is tight and more elaborate path
+> > > > should be taken (e.g. try higher order allocation first but fall back to
+> > > > smaller request if the memory is fragmented). Do we really want to give
+> > > > those access to memory reserves as well?
 > > > 
-> > > Thanks,
-> > > Cai
-> > > > 
-> > > > Cai Huoqing (10):
-> > > >    drm: Remove the obsolete driver-i810
-> > > >    drm: Remove the obsolete driver-mga
-> > > >    drm: Remove the obsolete driver-r128
-> > > >    drm: Remove the obsolete driver-savage
-> > > >    drm: Remove the obsolete driver-sis
-> > > >    drm: Remove the obsolete driver-tdfx
-> > > >    drm: Remove the obsolete driver-via
-> > > >    drm: Add comments to Kconfig
-> > > >    drm: Remove some obsolete drm pciids(tdfx, mga, i810, savage, r128,
-> > > >      sis, via)
-> > > >    MAINTAINERS: Remove some obsolete drivers info(tdfx, mga, i810,
-> > > >      savage, r128, sis)
-> > > > 
-> > > >   MAINTAINERS                           |   29 -
-> > > >   drivers/gpu/drm/Kconfig               |   59 +-
-> > > >   drivers/gpu/drm/Makefile              |    7 -
-> > > >   drivers/gpu/drm/i810/Makefile         |    8 -
-> > > >   drivers/gpu/drm/i810/i810_dma.c       | 1266 ---------
-> > > >   drivers/gpu/drm/i810/i810_drv.c       |  101 -
-> > > >   drivers/gpu/drm/i810/i810_drv.h       |  246 --
-> > > >   drivers/gpu/drm/mga/Makefile          |   11 -
-> > > >   drivers/gpu/drm/mga/mga_dma.c         | 1168 --------
-> > > >   drivers/gpu/drm/mga/mga_drv.c         |  104 -
-> > > >   drivers/gpu/drm/mga/mga_drv.h         |  685 -----
-> > > >   drivers/gpu/drm/mga/mga_ioc32.c       |  197 --
-> > > >   drivers/gpu/drm/mga/mga_irq.c         |  169 --
-> > > >   drivers/gpu/drm/mga/mga_state.c       | 1099 --------
-> > > >   drivers/gpu/drm/mga/mga_warp.c        |  167 --
-> > > >   drivers/gpu/drm/r128/Makefile         |   10 -
-> > > >   drivers/gpu/drm/r128/ati_pcigart.c    |  228 --
-> > > >   drivers/gpu/drm/r128/ati_pcigart.h    |   31 -
-> > > >   drivers/gpu/drm/r128/r128_cce.c       |  944 -------
-> > > >   drivers/gpu/drm/r128/r128_drv.c       |  116 -
-> > > >   drivers/gpu/drm/r128/r128_drv.h       |  544 ----
-> > > >   drivers/gpu/drm/r128/r128_ioc32.c     |  199 --
-> > > >   drivers/gpu/drm/r128/r128_irq.c       |  118 -
-> > > >   drivers/gpu/drm/r128/r128_state.c     | 1641 -----------
-> > > >   drivers/gpu/drm/savage/Makefile       |    9 -
-> > > >   drivers/gpu/drm/savage/savage_bci.c   | 1082 --------
-> > > >   drivers/gpu/drm/savage/savage_drv.c   |   91 -
-> > > >   drivers/gpu/drm/savage/savage_drv.h   |  580 ----
-> > > >   drivers/gpu/drm/savage/savage_state.c | 1169 --------
-> > > >   drivers/gpu/drm/sis/Makefile          |   10 -
-> > > >   drivers/gpu/drm/sis/sis_drv.c         |  143 -
-> > > >   drivers/gpu/drm/sis/sis_drv.h         |   80 -
-> > > >   drivers/gpu/drm/sis/sis_mm.c          |  363 ---
-> > > >   drivers/gpu/drm/tdfx/Makefile         |    8 -
-> > > >   drivers/gpu/drm/tdfx/tdfx_drv.c       |   90 -
-> > > >   drivers/gpu/drm/tdfx/tdfx_drv.h       |   47 -
-> > > >   drivers/gpu/drm/via/Makefile          |    8 -
-> > > >   drivers/gpu/drm/via/via_3d_reg.h      | 1771 ------------
-> > > >   drivers/gpu/drm/via/via_dri1.c        | 3630 -------------------------
-> > > >   include/drm/drm_pciids.h              |  112 -
-> > > >   include/uapi/drm/i810_drm.h           |  292 --
-> > > >   include/uapi/drm/mga_drm.h            |  429 ---
-> > > >   include/uapi/drm/r128_drm.h           |  336 ---
-> > > >   include/uapi/drm/savage_drm.h         |  220 --
-> > > >   include/uapi/drm/sis_drm.h            |   77 -
-> > > >   include/uapi/drm/via_drm.h            |  282 --
-> > > >   46 files changed, 1 insertion(+), 19975 deletions(-)
-> > > >   delete mode 100644 drivers/gpu/drm/i810/Makefile
-> > > >   delete mode 100644 drivers/gpu/drm/i810/i810_dma.c
-> > > >   delete mode 100644 drivers/gpu/drm/i810/i810_drv.c
-> > > >   delete mode 100644 drivers/gpu/drm/i810/i810_drv.h
-> > > >   delete mode 100644 drivers/gpu/drm/mga/Makefile
-> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_dma.c
-> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_drv.c
-> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_drv.h
-> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_ioc32.c
-> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_irq.c
-> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_state.c
-> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_warp.c
-> > > >   delete mode 100644 drivers/gpu/drm/r128/Makefile
-> > > >   delete mode 100644 drivers/gpu/drm/r128/ati_pcigart.c
-> > > >   delete mode 100644 drivers/gpu/drm/r128/ati_pcigart.h
-> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_cce.c
-> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_drv.c
-> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_drv.h
-> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_ioc32.c
-> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_irq.c
-> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_state.c
-> > > >   delete mode 100644 drivers/gpu/drm/savage/Makefile
-> > > >   delete mode 100644 drivers/gpu/drm/savage/savage_bci.c
-> > > >   delete mode 100644 drivers/gpu/drm/savage/savage_drv.c
-> > > >   delete mode 100644 drivers/gpu/drm/savage/savage_drv.h
-> > > >   delete mode 100644 drivers/gpu/drm/savage/savage_state.c
-> > > >   delete mode 100644 drivers/gpu/drm/sis/Makefile
-> > > >   delete mode 100644 drivers/gpu/drm/sis/sis_drv.c
-> > > >   delete mode 100644 drivers/gpu/drm/sis/sis_drv.h
-> > > >   delete mode 100644 drivers/gpu/drm/sis/sis_mm.c
-> > > >   delete mode 100644 drivers/gpu/drm/tdfx/Makefile
-> > > >   delete mode 100644 drivers/gpu/drm/tdfx/tdfx_drv.c
-> > > >   delete mode 100644 drivers/gpu/drm/tdfx/tdfx_drv.h
-> > > >   delete mode 100644 drivers/gpu/drm/via/Makefile
-> > > >   delete mode 100644 drivers/gpu/drm/via/via_3d_reg.h
-> > > >   delete mode 100644 drivers/gpu/drm/via/via_dri1.c
-> > > >   delete mode 100644 include/uapi/drm/i810_drm.h
-> > > >   delete mode 100644 include/uapi/drm/mga_drm.h
-> > > >   delete mode 100644 include/uapi/drm/r128_drm.h
-> > > >   delete mode 100644 include/uapi/drm/savage_drm.h
-> > > >   delete mode 100644 include/uapi/drm/sis_drm.h
-> > > >   delete mode 100644 include/uapi/drm/via_drm.h
-> > > > 
-> > > > -- 
-> > > > 2.25.1
-> > > > 
+> > > Good question. Without __GFP_ATOMIC, GFP_NOWAIT only differs from GFP_ATOMIC
+> > > by __GFP_HIGH but that is not enough to distinguish between a caller that
+> > > cannot sleep versus one that is speculatively attempting an allocation but
+> > > has other options. That changelog is misleading, it's not equal access
+> > > as GFP_NOWAIT ends up with 25% of the reserves which is less than what
+> > > GFP_ATOMIC gets.
+> > > 
+> > > Because it becomes impossible to distinguish between non-blocking and
+> > > atomic without __GFP_ATOMIC, there is some justification for allowing
+> > > access to reserves for GFP_NOWAIT. bio for example attempts an allocation
+> > > (clears __GFP_DIRECT_RECLAIM) before falling back to mempool but delays
+> > > in IO can also lead to further allocation pressure. mmu gather failing
+> > > GFP_WAIT slows the rate memory can be freed. NFS failing GFP_NOWAIT will
+> > > have to retry IOs multiple times. The examples were picked at random but
+> > > the point is that there are cases where failing GFP_NOWAIT can degrade
+> > > the system, particularly delay the cleaning of pages before reclaim.
+> > 
+> > Fair points.
+> > 
+> > > A lot of the truly speculative users appear to use GFP_NOWAIT | __GFP_NOWARN
+> > > so one compromise would be to avoid using reserves if __GFP_NOWARN is
+> > > also specified.
+> > > 
+> > > Something like this as a separate patch?
+> > 
+> > I cannot say I would be happy about adding more side effects to
+> > __GFP_NOWARN. You are right that it should be used for those optimistic
+> > allocation requests but historically all many of these subtle side effects
+> > have kicked back at some point.
+> 
+> True.
+> 
+> > Wouldn't it make sense to explicitly
+> > mark those places which really benefit from reserves instead?
+> 
+> That would be __GFP_HIGH and would require context from every caller on
+> whether they need reserves or not and to determine what the consequences
+> are if there is a stall. Is there immediate local fallout or wider fallout
+> such as a variable delay before pages can be cleaned?
+
+Yes, and I will not hide I do not mind putting the burden on caller to
+justify adding requirement and eat from otherwise shared pool which
+memory reserves are.
+
+> > This is
+> > more work but it should pay off long term. Your examples above would use
+> > GFP_ATOMIC instead of GFP_NOWAIT.
 > > 
 > 
-> -- 
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 Nürnberg, Germany
-> (HRB 36809, AG Nürnberg)
-> Geschäftsführer: Ivo Totev
+> Yes, although it would confuse the meaning of GFP_ATOMIC as a result.
+> It's described as "%GFP_ATOMIC users can not sleep and need the allocation to
+> succeed" and something like the bio callsite does not *need* the allocation
+> to succeed. It can fallback to the mempool and performance simply degrades
+> temporarily. No doubt there are a few abuses of GFP_ATOMIC just to get
+> non-blocking behaviour already.
 
+I am afraid GFP_ATOMIC will eventually require a closer look. Many
+users are simply confused by the name and use it from the spin lock
+context. Others use it from IRQ context because that is the right thing
+to do (TM).
 
+> > The semantic would be easier to explain as well. GFP_ATOMIC - non
+> > sleeping allocations which are important so they have access to memory
+> > reserves. GFP_NOWAIT - non sleeping allocations.
+> > 
+> 
+> People's definition of "important" will vary wildly. The following would
+> avoid reserve access for GFP_NOWAIT for now. It would need to be folded
+> into this patch and a new changelog
 
+OK, so that effectively means that __GFP_HIGH modifier will give more
+reserves to non-sleepable allocations than sleepable. That is a better
+semantic than other special casing because when the two allocations are
+competing then the priority non-sleepable should win because it simply
+cannot reclaim. That hierarchy makes sense to me. Thanks for bearing
+with me here. Changing gfp flags semantic is a PITA. I wish would could
+design the whole thing from scratch (and screw it in yet another way).
 
+I will ack the patch once you post the full version of it.
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Michal Hocko
+SUSE Labs
