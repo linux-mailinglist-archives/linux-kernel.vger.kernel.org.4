@@ -2,85 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE71667163
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F306667168
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbjALL4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
+        id S230271AbjALL5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjALLzz (ORCPT
+        with ESMTP id S231660AbjALL4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:55:55 -0500
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8EB52C51
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:47:23 -0800 (PST)
-Received: by mail-vs1-xe2e.google.com with SMTP id o63so18734855vsc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:47:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j/p/iE9FkOKMo7gwBFTP4+PfxlZi9hnBSH41zreYTFY=;
-        b=SLS2iJF8Cp/L8Htgd1U5Rj5zBINtlHnlv6QMAZ0oGzQW9CY7NA3jttx7MGhbzxOuoM
-         IoDMhbuJ4VFqIHMntVaKdORn/KMGHZsZAhARzCWqUEChLZRD8NACJDnl/LWfmVfSq07x
-         yAW9nCNVlzAd4MUTuqEUv89eJ+kgDblaTDDRo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j/p/iE9FkOKMo7gwBFTP4+PfxlZi9hnBSH41zreYTFY=;
-        b=GewitNiHJ1R9btCqO43leloNDBtbEVPl5p3IlGrWQzsDB0rVEbZFJ83ktqdP/P2As/
-         Qn0dYdvfJTr40EoT70OdI0LcPsLUzGVGeN0qU1ERsi+g1IfE5R8SPMnZUHKrwqmvGAwU
-         egvBqls5dHYjuCwPmOrrGPG964HqBtTbSiLDywW0LIifFseJtRH+PsMVTlfCYlXJgYCh
-         EO7kWGItbBrK8KmEgGOel54O3xX1NPmoDQBqA/IxiNXqXBqZDHIBCb6CrnAO1k5y7qzd
-         KvS4dYqZOWnEBWvt9GO+Hz57QDbJwWkvZnp9mBAl9GWYBFqvGzL5gjJGD2Wpijz2kRqi
-         MNdA==
-X-Gm-Message-State: AFqh2krnyCFPjWAgqfNHgnDNxDjO6eSskt2Gct0Y8eOYZ5sYwWAkD/7d
-        H3XOLEmmWx5mtOJ3B5W7fLbHL5ajCf9k3TnxU1CSYA==
-X-Google-Smtp-Source: AMrXdXvSajYR9jV6VGsPH7TwZTubfkHmhhX+kXom5wSr5YNKiTnawmEt7PjpbDQCDMbfYdgjqI/uCAYVJWaS0J83yRk=
-X-Received: by 2002:a05:6102:374d:b0:3d0:af13:3b6 with SMTP id
- u13-20020a056102374d00b003d0af1303b6mr1897629vst.65.1673524042864; Thu, 12
- Jan 2023 03:47:22 -0800 (PST)
+        Thu, 12 Jan 2023 06:56:44 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20594564EB;
+        Thu, 12 Jan 2023 03:49:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=tA9VcsOS7NQTEj8noepMWEcGNsFK3ovKo6+otF7zRi8=; b=iPoVPVcLC6fC9NBlhZx1jP5Any
+        sKQTYc62BtEy81wLa6HoSwoQ7DvMCh4CD3e29gV9kkdxBrnGW7hSqX9hstN2wEnbz94+dGr4dbJKU
+        /cMIV4nM59AknDpRhdo3NkTntuug1pJSyfDu4M1O8b0VlWVt+J/pt3Q0TnO3B28ElG1MSaJBoEfoA
+        QbVA16zDr9QZWF2BO8WFQLLn6QVWKraWhSSAQvGnruO7hBBGgswEzxJsl9SJRI+ccMiGUz9/YdExM
+        acUB37cBxEs+2oF1+CC4zOF8BT3bVY/TWe8WwUfuZXnhhBVNU/Pja6ipY8fXDLdUlqIGO7ab1u1Lp
+        RjF5169w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36066)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pFw4f-0006Dj-Pb; Thu, 12 Jan 2023 11:48:49 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pFw4V-0002Au-S8; Thu, 12 Jan 2023 11:48:39 +0000
+Date:   Thu, 12 Jan 2023 11:48:39 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jerry Ray <jerry.ray@microchip.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, jbe@pengutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v6 6/6] dsa: lan9303: Migrate to PHYLINK
+Message-ID: <Y7/zlzcyTsF+z0cN@shell.armlinux.org.uk>
+References: <20230109211849.32530-1-jerry.ray@microchip.com>
+ <20230109211849.32530-7-jerry.ray@microchip.com>
 MIME-Version: 1.0
-References: <20230111123711.32020-1-allen-kh.cheng@mediatek.com> <20230111123711.32020-2-allen-kh.cheng@mediatek.com>
-In-Reply-To: <20230111123711.32020-2-allen-kh.cheng@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 12 Jan 2023 19:47:11 +0800
-Message-ID: <CAGXv+5Gpzz-pp+YSQhFkH1cejGB5csNnz_Qwop_7Fkbxm6SHxA@mail.gmail.com>
-Subject: Re: [PATCH 1/9] arm64: dts: mediatek: mt8186: Add MTU3 nodes
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <sboyd@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-mediatek@lists.infradead.org, hsinyi@chromium.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230109211849.32530-7-jerry.ray@microchip.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 8:37 PM Allen-KH Cheng
-<allen-kh.cheng@mediatek.com> wrote:
->
-> Add MTU3 nodes for MT8186 SoC.
->
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+On Mon, Jan 09, 2023 at 03:18:49PM -0600, Jerry Ray wrote:
+> +static void lan9303_phylink_get_caps(struct dsa_switch *ds, int port,
+> +				     struct phylink_config *config)
+> +{
+> +	struct lan9303 *chip = ds->priv;
+> +
+> +	dev_dbg(chip->dev, "%s(%d) entered.", __func__, port);
+> +
+> +	config->mac_capabilities = MAC_10 | MAC_100 | MAC_ASYM_PAUSE |
+> +				   MAC_SYM_PAUSE;
 
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+You indicate that pause modes are supported, but...
+
+> +static void lan9303_phylink_mac_link_up(struct dsa_switch *ds, int port,
+> +					unsigned int mode,
+> +					phy_interface_t interface,
+> +					struct phy_device *phydev, int speed,
+> +					int duplex, bool tx_pause,
+> +					bool rx_pause)
+> +{
+> +	u32 ctl;
+> +
+> +	/* On this device, we are only interested in doing something here if
+> +	 * this is the xMII port. All other ports are 10/100 phys using MDIO
+> +	 * to control there link settings.
+> +	 */
+> +	if (port != 0)
+> +		return;
+> +
+> +	ctl = lan9303_phy_read(ds, port, MII_BMCR);
+> +
+> +	ctl &= ~BMCR_ANENABLE;
+> +
+> +	if (speed == SPEED_100)
+> +		ctl |= BMCR_SPEED100;
+> +	else if (speed == SPEED_10)
+> +		ctl &= ~BMCR_SPEED100;
+> +	else
+> +		dev_err(ds->dev, "unsupported speed: %d\n", speed);
+> +
+> +	if (duplex == DUPLEX_FULL)
+> +		ctl |= BMCR_FULLDPLX;
+> +	else
+> +		ctl &= ~BMCR_FULLDPLX;
+> +
+> +	lan9303_phy_write(ds, port, MII_BMCR, ctl);
+
+There is no code here to program the resolved pause modes. Is it handled
+internally within the switch? (Please add a comment to this effect
+either in get_caps or here.)
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
