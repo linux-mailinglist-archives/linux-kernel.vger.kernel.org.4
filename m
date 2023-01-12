@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2455B666BD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEABD666BEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239204AbjALHvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 02:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
+        id S236806AbjALH4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 02:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239589AbjALHv0 (ORCPT
+        with ESMTP id S236720AbjALH4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 02:51:26 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDF13726A;
-        Wed, 11 Jan 2023 23:51:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673509874; x=1705045874;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Yn345f6A8xT4Ihg6H07aIdh08XFZ516Tsct5gO5ktsE=;
-  b=HCgUh5dH+Dp0z3DRdc5hX427gz3+eG7bc4ljFNPcj9SIH81AVgz8NsB+
-   r9IQfB+bu2MONbuRjB849djVSfMHfYBkgZFD2DSQ1z9YZeDUlFIH+pTQx
-   zFkPvEyVK3qn91gWvuE8AkbUEIp1nKpMy+EVRkc5gQuQjcZIVSUr4s5nF
-   GAPcDnBaXJwFYWAZaUSVjV6E3bSil8TaFTDIyfygyNVuFPVXdTVLo57m8
-   VVZgWg0qa53xmWQJO83QpIg+4O/rhY29FM7WfTdCaqm9hevmnlpWaW1aj
-   bgfEdMY+9SEKGV8CFhLPAPNhiwcmdXg1+7D2c9xYG9SqkK467JV07vxv5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="307159888"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="307159888"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 23:51:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="726213355"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="726213355"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 23:51:09 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] rcu: Fix the start_poll_synchronize_rcu_expedited() be invoked very early
-Date:   Thu, 12 Jan 2023 15:56:29 +0800
-Message-Id: <20230112075629.1661429-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 12 Jan 2023 02:56:36 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCF36374
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 23:56:35 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id r17-20020a17090aa09100b0021903e75f14so7653138pjp.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 23:56:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vg6nAgYjZ4wYYlTqMF3jbo791ipG8SuFLzs8v41dmTI=;
+        b=kL0UvQite/urbN7Yp3NlzfzFTECRjRM1K7T5g4ZxG3zHylBlslAyzr6qxrAi9aysJM
+         RDeACOZIgRrgriXoR4Pb3FUm6siAnl76A15BakL+7xmzzyJYvBrIKvFGmqzOdrHuLyHw
+         eLCWL5a84U7mTNiiuZkhyyW//9BsTntHFbTMWG3xqNxmoxumrT4tac24HiqQmCacQxb7
+         hWUb45XPnPy09DrO6jQeVMIxbVjfhO/QXKCL83ehtKjjTMjBps8fFK6gPa75SmpeTyw8
+         vcf4DzdsP5Yv5ETLXzCGGp7Lotol2entUVESDqjWMyWKfU3XQsKSss8PleO3BkZomuWi
+         ioIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vg6nAgYjZ4wYYlTqMF3jbo791ipG8SuFLzs8v41dmTI=;
+        b=VwvN7llNc1JkhJv8/wQUaMlszYxyTlsBClMV06H38FNDxwFcAx0m1pL1axbShulgYU
+         gUXCb/KdM5QT1W9RqNWIUoB4dBSkXSP+sBSXxePGvaWBebpMb6CQHFgxAXJRMuJFP4GZ
+         aIk1O+6qlNtT/hZEl/C3J1l0tsd+m+mn2LdVkob+HWjY/VjFjmIhzqNYnqqyZZzvCsAK
+         9c3i3SibVHkUC23i71oE1pHFemTMzLe4GQYTipgrhUfRlinTx4sA7qhjDLde/2LnWll9
+         +z+MyxVBQQlMHu4pMfKU9teRZvBG+/NXTOazWWxav2/M8s5Hvt5y2xXJHkAeeXOtqbK6
+         I74Q==
+X-Gm-Message-State: AFqh2kpsVqWfq8PoErrks6zknWbKqwJJ4ANEeTaapVZfjZDY7Fqr/gbK
+        SUEgLrv+cDywImYeiF0dik/8Uss249frVg==
+X-Google-Smtp-Source: AMrXdXv29WhmagcsXxW5VJTVWoRrJdV9U6Gev8NYUGOd+PwEKkvAbufkJGb0qU84S3rueo4liZ5Ei6F1OKpY1Q==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a62:1488:0:b0:581:85ab:16b3 with SMTP id
+ 130-20020a621488000000b0058185ab16b3mr4558933pfu.67.1673510194669; Wed, 11
+ Jan 2023 23:56:34 -0800 (PST)
+Date:   Thu, 12 Jan 2023 07:56:31 +0000
+In-Reply-To: <Y78+rfzXPq5XGs9O@phenom.ffwll.local>
+Mime-Version: 1.0
+References: <20230109213809.418135-1-tjmercier@google.com> <CALvZod4ru7F38tAO-gM9ZFKaEhS0w3KqFbPwhwcTvgJs4xMUow@mail.gmail.com>
+ <Y78+rfzXPq5XGs9O@phenom.ffwll.local>
+Message-ID: <20230112075631.wc6fd54ci55drhkp@google.com>
+Subject: Re: [PATCH 0/4] Track exported dma-buffers with memcg
+From:   Shakeel Butt <shakeelb@google.com>
+To:     "T.J. Mercier" <tjmercier@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Arve =?utf-8?B?SGrDuG5uZXbDpWc=?=" <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Christian =?utf-8?B?S8O2bmln?=" <christian.koenig@amd.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, android-mm@google.com,
+        jstultz@google.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the start_poll_synchronize_rcu_expedited() can be invoked
-very early. before rcu_init(), the rcu_data structure's->mynode is not
-initialized, if invoke start_poll_synchronize_rcu_expedited() before
-rcu_init(), will trigger a null rcu_node structure's->exp_seq_poll access.
+On Wed, Jan 11, 2023 at 11:56:45PM +0100, Daniel Vetter wrote:
+> 
+[...]
+> I think eventually, at least for other "account gpu stuff in cgroups" use
+> case we do want to actually charge the memory.
+> 
+> The problem is a bit that with gpu allocations reclaim is essentially "we
+> pass the error to userspace and they get to sort the mess out". There are
+> some exceptions (some gpu drivers to have shrinkers) would we need to make
+> sure these shrinkers are tied into the cgroup stuff before we could enable
+> charging for them?
+> 
 
-This commit add boot_exp_seq_poll_rq member to rcu_state structure to
-store seq number return by invoke start_poll_synchronize_rcu_expedited()
-very early.
+No, there is no requirement to have shrinkers or making such memory
+reclaimable before charging it. Though existing shrinkers and the
+possible future shrinkers would need to be converted into memcg aware
+shrinkers.
 
-Fixes: d96c52fe4907 ("rcu: Add polled expedited grace-period primitives")
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree.c     | 3 ++-
- kernel/rcu/tree.h     | 1 +
- kernel/rcu/tree_exp.h | 6 ++++--
- 3 files changed, 7 insertions(+), 3 deletions(-)
+Though there will be a need to update user expectations that if they 
+use memcgs with hard limits, they may start seeing memcg OOMs after the
+charging of dmabuf.
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 63545d79da51..12f0891ce7f4 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -92,6 +92,7 @@ static struct rcu_state rcu_state = {
- 	.exp_mutex = __MUTEX_INITIALIZER(rcu_state.exp_mutex),
- 	.exp_wake_mutex = __MUTEX_INITIALIZER(rcu_state.exp_wake_mutex),
- 	.ofl_lock = __ARCH_SPIN_LOCK_UNLOCKED,
-+	.boot_exp_seq_poll_rq = RCU_GET_STATE_COMPLETED,
- };
- 
- /* Dump rcu_node combining tree at boot to verify correct setup. */
-@@ -4938,7 +4939,7 @@ void __init rcu_init(void)
- 		qovld_calc = qovld;
- 
- 	// Kick-start any polled grace periods that started early.
--	if (!(per_cpu_ptr(&rcu_data, cpu)->mynode->exp_seq_poll_rq & 0x1))
-+	if (!(rcu_state.boot_exp_seq_poll_rq & 0x1))
- 		(void)start_poll_synchronize_rcu_expedited();
- 
- 	rcu_test_sync_prims();
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 192536916f9a..ae50ca6853ad 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -397,6 +397,7 @@ struct rcu_state {
- 						/* Synchronize offline with */
- 						/*  GP pre-initialization. */
- 	int nocb_is_setup;			/* nocb is setup from boot */
-+	unsigned long boot_exp_seq_poll_rq;
- };
- 
- /* Values for rcu_state structure's gp_flags field. */
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index 956cd459ba7f..1b35a1e233d9 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -1068,9 +1068,11 @@ unsigned long start_poll_synchronize_rcu_expedited(void)
- 	if (rcu_init_invoked())
- 		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
- 	if (!poll_state_synchronize_rcu(s)) {
--		rnp->exp_seq_poll_rq = s;
--		if (rcu_init_invoked())
-+		if (rcu_init_invoked()) {
-+			rnp->exp_seq_poll_rq = s;
- 			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
-+		} else
-+			rcu_state.boot_exp_seq_poll_rq = s;
- 	}
- 	if (rcu_init_invoked())
- 		raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
--- 
-2.25.1
+> Also note that at least from the gpu driver side this is all a huge
+> endeavour, so if we can split up the steps as much as possible (and get
+> something interim useable that doesn't break stuff ofc), that is
+> practically need to make headway here. 
 
+This sounds reasonable to me.
