@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B1E668433
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9B96683FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232884AbjALUrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 15:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S229917AbjALUPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240221AbjALUq4 (ORCPT
+        with ESMTP id S240739AbjALUNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 15:46:56 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81E0BC93;
-        Thu, 12 Jan 2023 12:15:27 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id az7so19222592wrb.5;
-        Thu, 12 Jan 2023 12:15:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ioOXl34VLzTy8PWkypTLZzOP5yVDq5ecCNgcBHDa6WI=;
-        b=BinQEcudtyrVYQorZ1Xc0qlCGaoLXXXhQdR/vg5MAbBfEpSJ7OzjLd8LPJVV2+SLaL
-         jPO69xEndO/H6gkGgmIOv3OTL2rcMwfMHGK8HtmCSspux+aaNs7chTkch21ZCfie1DU1
-         kJ56l3hRI39NhBVL+nqxR1mwAz+ScjEC0HsuShjgaqYGlgFZuEV9MaFYLe3BjlKAZI11
-         k+PzEzHnNgqNsK4BIxEB78evcLVNdIAcjknw+obH1d9GN/uRM2mhba5Qn679OYxqvUML
-         vNTV4pJVt2AVLsRsI07VVP4y+mS5LFb+B0f8ZgOPkrRE2o9QXah2TGdihfH6UgoFwtkx
-         lgTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ioOXl34VLzTy8PWkypTLZzOP5yVDq5ecCNgcBHDa6WI=;
-        b=JSZFyp7hze4QFYE6GN4Vj3fTHNZMZNxiTxcHdYEjX3i2TFWm8jgEny5ohYBcCrPCyM
-         jnmkI9Z+Tm6MBsdXDKwxO3fnKH5w/e1JIlmCYull57QhJDsTdOjdSYEaqVwLzi3il3dE
-         JKs5DXwAJMLVlFbdfFx9o2O31cIi6Aow8nU/OR60O1HA1SAQJik7kTwcUxVQgjWlCCe8
-         J4ReEiCy2DsOY2xee3TQAGPA/mqJvvz3f4wPsUw0fVuTl8RfR6/urITEPNrzUrqSbzud
-         yqBV8xVjgV6DtSmq9KBIxFH1RBCyInFoLzibulN+nSeWe4TN4lKYTaZmgOUA9dRfjeT8
-         8jeQ==
-X-Gm-Message-State: AFqh2koTmeGGHNt+zvKmJphRaSCSkv0YMW5MVuau+EuEsdp/q7thQeCo
-        tgCDugD+B31k2oMev8LM31Y=
-X-Google-Smtp-Source: AMrXdXtOwUJVLHA0oe5ZBy611e5s1ACzshDGzDZsnGVBwr/7k/njieWmGDzaa5GzFGBOGi6UDX/ZfA==
-X-Received: by 2002:a5d:680a:0:b0:2bd:c690:2e66 with SMTP id w10-20020a5d680a000000b002bdc6902e66mr4524671wru.5.1673554526300;
-        Thu, 12 Jan 2023 12:15:26 -0800 (PST)
-Received: from suse.localnet (host-79-42-161-127.retail.telecomitalia.it. [79.42.161.127])
-        by smtp.gmail.com with ESMTPSA id s2-20020adff802000000b00241bd7a7165sm17207728wrp.82.2023.01.12.12.15.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 12:15:25 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: Re: [PATCH v2 2/4] fs/sysv: Change the signature of dir_get_page()
-Date:   Thu, 12 Jan 2023 21:15:24 +0100
-Message-ID: <4773794.GXAFRqVoOG@suse>
-In-Reply-To: <Y74gRx6jLf2RHgdq@ZenIV>
-References: <20230109170639.19757-1-fmdefrancesco@gmail.com>
- <20230109170639.19757-3-fmdefrancesco@gmail.com> <Y74gRx6jLf2RHgdq@ZenIV>
+        Thu, 12 Jan 2023 15:13:41 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B08C01;
+        Thu, 12 Jan 2023 12:03:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673553838; x=1705089838;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nfq4nL4FT0YM5dexEnaI0SAiUHpTKSX9GeNSf0o/w10=;
+  b=cTlYWKHyFQkeLwWe8wlEOAhRQEoRwwHUdOE7hJ0zlUtK6uvy3yIW8apC
+   rhVMEFgfVI0SlMtGZg1qaGUVjgbYlSWKqswoFuIPlCwALujVmRN+FhQUW
+   VV9KHJxu0vk6a7JDG7FnE7q5emxuoYKC4ezLAGiU9g68Ldfg0YbNuGWH9
+   HgEyTzOjxiQbebOdz9zFS43iIvP+B+72V5Im68biw05CbmSiqNv4bBQHR
+   59hu3f/DsVpBC28kg0iWthxQb75DzIz+Lo6n78ZH559TRXI/Z2kDJR8Oe
+   Oq9msjBQ5iNLAHfb8I9oN6AUV59QoQrN00Dqsw9wKnU7FZI2qa3bNH4qz
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,211,1669100400"; 
+   d="scan'208";a="195535553"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jan 2023 13:03:57 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 12 Jan 2023 13:03:51 -0700
+Received: from DEN-LT-70577.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Thu, 12 Jan 2023 13:03:48 -0700
+From:   Daniel Machon <daniel.machon@microchip.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <lars.povlsen@microchip.com>,
+        <Steen.Hegelund@microchip.com>, <daniel.machon@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
+        <error27@gmail.com>, <horatiu.vultur@microchip.com>,
+        <Julia.Lawall@inria.fr>, <petrm@nvidia.com>,
+        <vladimir.oltean@nxp.com>, <maxime.chevallier@bootlin.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next 0/6] Introduce new DCB rewrite table
+Date:   Thu, 12 Jan 2023 21:15:48 +0100
+Message-ID: <20230112201554.752144-1-daniel.machon@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,56 +67,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On mercoled=EC 11 gennaio 2023 03:34:47 CET Al Viro wrote:
-> On Mon, Jan 09, 2023 at 06:06:37PM +0100, Fabio M. De Francesco wrote:
-> > -struct sysv_dir_entry * sysv_dotdot (struct inode *dir, struct page **=
-p)
-> > +struct sysv_dir_entry *sysv_dotdot(struct inode *dir, struct page **p)
-> >=20
-> >  {
-> >=20
-> > -	struct page *page =3D dir_get_page(dir, 0);
-> > -	struct sysv_dir_entry *de =3D NULL;
-> > +	struct page *page =3D NULL;
-> > +	struct sysv_dir_entry *de =3D dir_get_page(dir, 0, &page);
-> >=20
-> > -	if (!IS_ERR(page)) {
-> > -		de =3D (struct sysv_dir_entry*) page_address(page) + 1;
-> > +	if (!IS_ERR(de)) {
-> >=20
-> >  		*p =3D page;
-> >=20
-> > +		return (struct sysv_dir_entry *)page_address(page) + 1;
-> >=20
-> >  	}
-> >=20
-> > -	return de;
-> > +	return NULL;
-> >=20
-> >  }
->=20
-> Would be better off with
->=20
-> 	struct sysv_dir_entry *de =3D dir_get_page(dir, 0, p);
->=20
-> 	if (!IS_ERR(de))
-> 		return de + 1;	// ".." is the second directory entry
-> 	return NULL;
->=20
-> IMO...
+There is currently no support for per-port egress mapping of priority to PCP and
+priority to DSCP. Some support for expressing egress mapping of PCP is supported
+through ip link, with the 'egress-qos-map', however this command only maps
+priority to PCP, and for vlan interfaces only. DCB APP already has support for
+per-port ingress mapping of PCP/DEI, DSCP and a bunch of other stuff. So why not
+take advantage of this fact, and add a new table that does the reverse.
 
-I totally agree with you...
+This patch series introduces the new DCB rewrite table. Whereas the DCB
+APP table deals with ingress mapping of PID (protocol identifier) to priority,
+the rewrite table deals with egress mapping of priority to PID.
 
-1) This comment is a good way to explain why we return "de + 1".
-2) "*p =3D page" is redundant, so it's not necessary because we assign the =
-out=20
-argument in dir_get_page() if and only if read_mapping_page() doesn't fail.
+It is indeed possible to integrate rewrite in the existing APP table, by
+introducing new dedicated rewrite selectors, and altering existing functions
+to treat rewrite entries specially. However, I feel like this is not a good
+solution, and will pollute the APP namespace. APP is well-defined in IEEE, and
+some userspace relies of advertised entries - for this fact, separating APP and
+rewrite into to completely separate objects, seems to me the best solution.
 
-I will send v3 asap.
+The new table shares much functionality with the APP table, and as such, much
+existing code is reused, or slightly modified, to work for both.
 
-Thanks for your suggestions.
+================================================================================
+DCB rewrite table in a nutshell
+================================================================================
+The table is implemented as a simple linked list, and uses the same lock as the
+APP table. New functions for getting, setting and deleting entries have been
+added, and these are exported, so they can be used by the stack or drivers.
+Additionnaly, new dcbnl_setrewr and dcnl_delrewr hooks has been added, to
+support hardware offload of the entries.
 
-=46abio
+================================================================================
+Sparx5 per-port PCP rewrite support
+================================================================================
+Sparx5 supports PCP egress mapping through two eight-entry switch tables.
+One table maps QoS class 0-7 to PCP for DE0 (DP levels mapped to
+drop-eligibility 0) and the other for DE1. DCB does currently not have support
+for expressing DP/color, so instead, the tagged DEI bit will reflect the DP
+levels, for any rewrite entries> 7 ('de').
 
+The driver will take apptrust (contributed earlier) into consideration, so
+that the mapping tables only be used, if PCP is trusted *and* the rewrite table
+has active mappings, otherwise classified PCP (same as frame PCP) will be used
+instead.
 
+================================================================================
+Sparx5 per-port DSCP rewrite support
+================================================================================
+Sparx5 support DSCP egress mapping through a single 32-entry table. This table
+maps classified QoS class and DP level to classified DSCP, and is consulted by
+the switch Analyzer Classifier at ingress. At egress, the frame DSCP can either
+be rewritten to classified DSCP to frame DSCP.
+
+The driver will take apptrust into consideration, so that the mapping tables
+only be used, if DSCP is trusted *and* the rewrite table has active mappings,
+otherwise frame DSCP will be used instead.
+
+================================================================================
+Patches
+================================================================================
+Patch #1 modifies dcb_app_add to work for both APP and rewrite
+
+Patch #2 adds dcbnl_apprewr_setdel() for setting and deleting both APP and
+         rewrite entries.
+
+Patch #3 adds the rewrite table and all required functions, offload hooks and
+         bookkeeping for maintaining it.
+
+Patch #4 adds two new helper functions for getting a priority to PCP bitmask
+         map, and a priority to DSCP bitmask map.
+
+Patch #5 adds support for PCP rewrite in the Sparx5 driver
+Patch #6 adds support for DSCP rewrite in the Sparx5 driver
+
+Daniel Machon (6):
+  net: dcb: modify dcb_app_add to take list_head ptr as parameter
+  net: dcb: add new common function for set/del of app/rewr entries
+  net: dcb: add new rewrite table
+  net: dcb: add helper functions to retrieve PCP and DSCP rewrite maps
+  net: microchip: sparx5: add support for PCP rewrite
+  net: microchip: sparx5: add support for DSCP rewrite
+
+ .../ethernet/microchip/sparx5/sparx5_dcb.c    | 121 +++++++-
+ .../microchip/sparx5/sparx5_main_regs.h       |  70 ++++-
+ .../ethernet/microchip/sparx5/sparx5_port.c   |  97 ++++++
+ .../ethernet/microchip/sparx5/sparx5_port.h   |  41 +++
+ include/net/dcbnl.h                           |  18 ++
+ include/uapi/linux/dcbnl.h                    |   1 +
+ net/dcb/dcbnl.c                               | 275 ++++++++++++++----
+ 7 files changed, 550 insertions(+), 73 deletions(-)
+
+--
+2.34.1
 
