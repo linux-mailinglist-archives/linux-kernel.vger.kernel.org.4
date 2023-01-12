@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FC8666FC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B31666FC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235489AbjALKfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:35:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S237235AbjALKgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:36:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236265AbjALKev (ORCPT
+        with ESMTP id S236789AbjALKfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:34:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A19223C
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:28:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673519330;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G1PS7mB2JtEkDjLUk4xftZvEMD5IXSfO99hn6l84qLI=;
-        b=Bp6ZlAJAps7yXAYR8ujyRczPMb9pVG8ZWO8LvlUBUYYhi+Wq+m7GOo923ViA0K3g9lte3q
-        YSIcsB82kluE3z9LtyJsmfHO3a28/+zP0izquuenFGPtqSu0XFE5dZnP8qm/zhVWKp8xsr
-        GE20Nx2cSMhJlP2LNMVU+2/8+KrSZro=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-454-gBYO1yzCOQS1GiMIxPZReQ-1; Thu, 12 Jan 2023 05:28:44 -0500
-X-MC-Unique: gBYO1yzCOQS1GiMIxPZReQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6339B101A521;
-        Thu, 12 Jan 2023 10:28:43 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B298AC15BA0;
-        Thu, 12 Jan 2023 10:28:41 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y7+6YVkhZsvdW+Hr@infradead.org>
-References: <Y7+6YVkhZsvdW+Hr@infradead.org> <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk> <167344731521.2425628.5403113335062567245.stgit@warthog.procyon.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 8/9] iov_iter, block: Make bio structs pin pages rather than ref'ing if appropriate
+        Thu, 12 Jan 2023 05:35:22 -0500
+Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DDD50F7F;
+        Thu, 12 Jan 2023 02:30:07 -0800 (PST)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
+        (authenticated bits=0)
+        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 30CATjjR1796956
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Thu, 12 Jan 2023 10:29:47 GMT
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 30CATenM3820531
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Thu, 12 Jan 2023 11:29:40 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1673519380; bh=q65tD7oXhhlM7mbc/basdUYlkSC0DmP9LIm8r+kgxPs=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=e0p2iZbr9VQv3xhxrP9rgnAGktc78I+tRa0D7180JoL8SHqlLOmiBSIMaKbQF/B//
+         MpwvVcOu6Is/1Fxk/zXyZLv3D3apsDjBidioB5xANWJWPSAEYiYBNeoBWM5QRQ++fr
+         22P+rfGT1GbXXhfS9ioP/8yU73hV8LMwq00jC5gQ=
+Received: (nullmailer pid 181829 invoked by uid 1000);
+        Thu, 12 Jan 2023 10:29:40 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Greg KH <greg@kroah.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] r8152; preserve device list format
+Organization: m
+References: <87k01s6tkr.fsf@miraculix.mork.no>
+        <20230112100100.180708-1-bjorn@mork.no> <Y7/dBXrI2QkiBFlW@kroah.com>
+        <87cz7k6ooc.fsf@miraculix.mork.no>
+Date:   Thu, 12 Jan 2023 11:29:40 +0100
+In-Reply-To: <87cz7k6ooc.fsf@miraculix.mork.no> (=?utf-8?Q?=22Bj=C3=B8rn?=
+ Mork"'s message of
+        "Thu, 12 Jan 2023 11:18:59 +0100")
+Message-ID: <878ri86o6j.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <15236.1673519321.1@warthog.procyon.org.uk>
-Date:   Thu, 12 Jan 2023 10:28:41 +0000
-Message-ID: <15237.1673519321@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.7 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
+Bj=C3=B8rn Mork <bjorn@mork.no> writes:
+> Greg KH <greg@kroah.com> writes:
+>
+>> No need for this, just backport the original change to older kernels and
+>> all will be fine.
+>>
+>> Don't live with stuff you don't want to because of stable kernels,
+>> that's not how this whole process works at all :)
+>
+> OK, thanks.  Will prepare a patch for stable instead then.
+>
+> But I guess the original patch is unacceptable for stable as-is? It
+> changes how Linux react to these devces, and includes a completely new
+> USB device driver (i.e not interface driver).
 
-> 	if (cleanup_mode & FOLL_GET) {
-> 		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_PINNED));
-> 		bio_set_flag(bio, BIO_PAGE_REFFED);
-> 	}
-> 	if (cleanup_mode & FOLL_PIN) {
-> 		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_REFFED));
-> 		bio_set_flag(bio, BIO_PAGE_PINNED);
-> 	}
+Doh!  I gotta start thinking before I send email.  Will start right
+after sending this one ;-)
 
-That won't necessarily work as you might get back cleanup_mode == 0, in which
-case both flags are cleared - and neither warning will trip on the next
-addition.
+We cannot backport the device-id table change to stable without taking
+the rest of the patch. The strategy used by the old driver needs two
+entries per device ID, which is why the macro was there.
 
-I could change it so that rather than using a pair of flags, it uses a
-four-state variable (which can be stored in bi_flags): BIO_PAGE_DEFAULT,
-BIO_PAGE_REFFED, BIO_PAGE_PINNED, BIO_PAGE_NO_CLEANUP, say.
+So the question is: Can commit ec51fbd1b8a2 ("r8152: add USB device
+driver for config selection") be accepted in stable?
 
-Or I could add an extra flag to say that the setting is locked.  Or we could
-just live with the scenario I outlined possibly happening.
+( Direct link for convenience since it's not yet in mainline:
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/=
+drivers/net/usb/r8152.c?id=3Dec51fbd1b8a2bca2948dede99c14ec63dc57ff6b
+)
 
-David
+This is not within the rules as I read them, but it's your call...
+
+
+Bj=C3=B8rn
+
 
