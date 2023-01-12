@@ -2,113 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4F3667006
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D469667001
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbjALKoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:44:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
+        id S230238AbjALKoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234339AbjALKnS (ORCPT
+        with ESMTP id S230410AbjALKnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 05:43:18 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D91517C7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:38:46 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2A8FF3FC25;
-        Thu, 12 Jan 2023 10:38:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673519925; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eiHbfAzoDiwycK23l3fHbtyWHUw9DB1Df3pT+ntfda8=;
-        b=e73uzU+bnMqq9LFOQgGpNrgqdhEKQrmaXaUODm8nFeQrUi0xBZA1oXURiJCEjStvc0RwUi
-        unweLn6ObU1xePCVHxI3uQelM3jo/9YaESDW02qxuIqCM3S10Crf2mhhsJKjqkMElSHnZB
-        C//uMqmhK8vMYsMH6QHEVRKRAzW9e/M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673519925;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eiHbfAzoDiwycK23l3fHbtyWHUw9DB1Df3pT+ntfda8=;
-        b=mNHJ2hvqK/CEoOHSOX99Pd7CFVkbLz8ZzUVkHf+yeh7tYJcYVNzsR1uWf93RcnIsgOj3qL
-        3pOyxNUWO12mxvBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EB4AE13776;
-        Thu, 12 Jan 2023 10:38:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vNelODTjv2MMKgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 12 Jan 2023 10:38:44 +0000
-Message-ID: <9005c77f-c929-21f7-a735-3ab4e6d89832@suse.cz>
-Date:   Thu, 12 Jan 2023 11:38:44 +0100
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2318B52773
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:38:51 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id u1-20020a5d8181000000b006ee29a8c421so11009394ion.19
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:38:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OC4LA1cA+kPrcLUJOJ6pcEADWhFB3YivjRWdVGPG9as=;
+        b=TJEPeHIKrNaK5xWs0Y19n2eopb0CdmIvVL2GOaba37JFTGYLS4e6vrV4hLK5p/5y6I
+         YONNLKzXIFJrsK+ZWPr+3tk7ps6lPO2citT+jgR3OFLuEatHfYIyjUNGqiqZ6y29U8Hu
+         OHPgVVfUYZoxSpAI+TbuM0aVQNb4ZUlUcnsIZZar+gnz0zbSF3cOgqBR8j4ge6T7o2+7
+         gMRczpmPR8ODmHdS8HgT0HpacwqVelrWoJXOplpGzsiEkIzfQf/AFVHKX+La6rfCucI+
+         /fdRUshClhzjofhGIsEFH3UvFYO6gJ20GrCDSVrW09S1HrOjS97eBrmfZYbEk5Fi6Zs8
+         qNzQ==
+X-Gm-Message-State: AFqh2kofRXl89Kyr2Fignzic4lqgkLqvVpOgqIgwUhcDu7yvNEYijPKC
+        3lmU11x44sNwqLgl25HzYGf4l5f9YzeDshMDT24T+uqzlvNE
+X-Google-Smtp-Source: AMrXdXv9YbV4euO+Hc4HOffnZ+FlkmtDMpe8DPVcuOUfImoQdmw5278/SA/qIB9XxOPKNV++DUqtcwtWwufWZueB1MtBuctjG6jN
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 3/5] m68k/mm/motorola: specify pmd_page() type
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Hugh Dickins <hughd@google.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Rapoport <rppt@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <cover.1672043615.git.lstoakes@gmail.com>
- <4b59f47ff4cd89ff76a5b6edbef6e8e0b37046f1.1672043615.git.lstoakes@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <4b59f47ff4cd89ff76a5b6edbef6e8e0b37046f1.1672043615.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a5d:88ce:0:b0:6e2:fb39:a5d4 with SMTP id
+ i14-20020a5d88ce000000b006e2fb39a5d4mr7372686iol.45.1673519930505; Thu, 12
+ Jan 2023 02:38:50 -0800 (PST)
+Date:   Thu, 12 Jan 2023 02:38:50 -0800
+In-Reply-To: <3f4c1d69-cca2-ee6a-55e0-95028cf739da@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fb82de05f20eb8e8@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in io_fallback_req_func
+From:   syzbot <syzbot+bc022c162e3b001bf607@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com
+Cc:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/26/22 09:44, Lorenzo Stoakes wrote:
-> Failing to specify a specific type here breaks anything that relies on the type
-> being explicitly known, such as page_folio().
-> 
-> Make explicit the type of null pointer returned here.
-> 
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> On 1/12/23 10:09, syzbot wrote:
+>> Hello,
+>> 
+>> syzbot found the following issue on:
+>> 
+>> HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
+>> git tree:       linux-next
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=103269ce480000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=bc022c162e3b001bf607
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> 
+>> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> #syz test: git://git.kernel.dk/linux.git syztest
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+This crash does not have a reproducer. I cannot test it.
 
-> ---
->  arch/m68k/include/asm/motorola_pgtable.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/m68k/include/asm/motorola_pgtable.h b/arch/m68k/include/asm/motorola_pgtable.h
-> index 7ac3d64c6b33..562b54e09850 100644
-> --- a/arch/m68k/include/asm/motorola_pgtable.h
-> +++ b/arch/m68k/include/asm/motorola_pgtable.h
-> @@ -124,7 +124,7 @@ static inline void pud_set(pud_t *pudp, pmd_t *pmdp)
->   * expects pmd_page() to exists, only to then DCE it all. Provide a dummy to
->   * make the compiler happy.
->   */
-> -#define pmd_page(pmd)		NULL
-> +#define pmd_page(pmd)		((struct page *)NULL)
->  
->  
->  #define pud_none(pud)		(!pud_val(pud))
-
+>
+>> 
+>> Downloadable assets:
+>> disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
+>> kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+>> 
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+bc022c162e3b001bf607@syzkaller.appspotmail.com
+>> 
+>> ==================================================================
+>> BUG: KASAN: use-after-free in io_fallback_req_func+0xc7/0x204 io_uring/io_uring.c:251
+>> Read of size 8 at addr ffff888070ac2e48 by task kworker/0:0/7
+>> 
+>> CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+>> Workqueue: events io_fallback_req_func
+>> Call Trace:
+>>   <TASK>
+>>   __dump_stack lib/dump_stack.c:88 [inline]
+>>   dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+>>   print_address_description mm/kasan/report.c:306 [inline]
+>>   print_report+0x15e/0x45d mm/kasan/report.c:417
+>>   kasan_report+0xc0/0xf0 mm/kasan/report.c:517
+>>   io_fallback_req_func+0xc7/0x204 io_uring/io_uring.c:251
+>>   process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
+>>   worker_thread+0x669/0x1090 kernel/workqueue.c:2440
+>>   kthread+0x2e8/0x3a0 kernel/kthread.c:376
+>>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+>>   </TASK>
+>> 
+>> Allocated by task 7766:
+>>   kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+>>   kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+>>   __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
+>>   kasan_slab_alloc include/linux/kasan.h:186 [inline]
+>>   slab_post_alloc_hook mm/slab.h:769 [inline]
+>>   kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
+>>   __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
+>>   io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+>>   io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
+>>   __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
+>>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> 
+>> Freed by task 5179:
+>>   kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+>>   kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+>>   kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
+>>   ____kasan_slab_free mm/kasan/common.c:236 [inline]
+>>   ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+>>   kasan_slab_free include/linux/kasan.h:162 [inline]
+>>   slab_free_hook mm/slub.c:1781 [inline]
+>>   slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+>>   slab_free mm/slub.c:3787 [inline]
+>>   kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
+>>   io_req_caches_free+0x1a9/0x1e6 io_uring/io_uring.c:2737
+>>   io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2967
+>>   process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
+>>   worker_thread+0x669/0x1090 kernel/workqueue.c:2440
+>>   kthread+0x2e8/0x3a0 kernel/kthread.c:376
+>>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+>> 
+>> The buggy address belongs to the object at ffff888070ac2dc0
+>>   which belongs to the cache io_kiocb of size 216
+>> The buggy address is located 136 bytes inside of
+>>   216-byte region [ffff888070ac2dc0, ffff888070ac2e98)
+>> 
+>> The buggy address belongs to the physical page:
+>> page:ffffea0001c2b080 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x70ac2
+>> memcg:ffff88802a81d181
+>> flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+>> raw: 00fff00000000200 ffff8881461d1780 dead000000000122 0000000000000000
+>> raw: 0000000000000000 00000000800c000c 00000001ffffffff ffff88802a81d181
+>> page dumped because: kasan: bad access detected
+>> page_owner tracks the page as allocated
+>> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5547, tgid 5545 (syz-executor.4), ts 182131630120, free_ts 181898498774
+>>   prep_new_page mm/page_alloc.c:2549 [inline]
+>>   get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
+>>   __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
+>>   alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
+>>   alloc_slab_page mm/slub.c:1851 [inline]
+>>   allocate_slab+0x25f/0x350 mm/slub.c:1998
+>>   new_slab mm/slub.c:2051 [inline]
+>>   ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+>>   __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
+>>   kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
+>>   __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
+>>   io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+>>   io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
+>>   __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
+>>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> page last free stack trace:
+>>   reset_page_owner include/linux/page_owner.h:24 [inline]
+>>   free_pages_prepare mm/page_alloc.c:1451 [inline]
+>>   free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
+>>   free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+>>   free_unref_page+0x1d/0x490 mm/page_alloc.c:3482
+>>   qlink_free mm/kasan/quarantine.c:168 [inline]
+>>   qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+>>   kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
+>>   __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:302
+>>   kasan_slab_alloc include/linux/kasan.h:186 [inline]
+>>   slab_post_alloc_hook mm/slab.h:769 [inline]
+>>   slab_alloc_node mm/slub.c:3452 [inline]
+>>   slab_alloc mm/slub.c:3460 [inline]
+>>   __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+>>   kmem_cache_alloc+0x175/0x320 mm/slub.c:3476
+>>   kmem_cache_zalloc include/linux/slab.h:710 [inline]
+>>   taskstats_tgid_alloc kernel/taskstats.c:583 [inline]
+>>   taskstats_exit+0x5f3/0xb80 kernel/taskstats.c:622
+>>   do_exit+0x822/0x2a90 kernel/exit.c:852
+>>   do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+>>   get_signal+0x225f/0x24f0 kernel/signal.c:2859
+>>   arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+>>   exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+>>   exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+>>   __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+>>   syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+>>   do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> 
+>> Memory state around the buggy address:
+>>   ffff888070ac2d00: fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc fc
+>>   ffff888070ac2d80: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
+>>> ffff888070ac2e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>>                                                ^
+>>   ffff888070ac2e80: fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc fc
+>>   ffff888070ac2f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>> ==================================================================
+>> 
+>> 
+>> ---
+>> This report is generated by a bot. It may contain errors.
+>> See https://goo.gl/tpsmEJ for more information about syzbot.
+>> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>> 
+>> syzbot will keep track of this issue. See:
+>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> -- 
+> Pavel Begunkov
