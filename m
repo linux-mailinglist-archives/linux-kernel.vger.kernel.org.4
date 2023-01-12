@@ -2,816 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DE5666B96
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF6B666E3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235489AbjALHbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 02:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
+        id S240136AbjALJ3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:29:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234409AbjALHbP (ORCPT
+        with ESMTP id S239994AbjALJ3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 02:31:15 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7212373A6;
-        Wed, 11 Jan 2023 23:31:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1673508672; x=1705044672;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Bqzn6ImxaAXnwgSAwrV4k39iNA6Qp8LULG1FMm/NeE4=;
-  b=0BX8G8x1CRvZ8i1iZYXzZ+n6GKK26SiblQLGUaeSdNyQ959qN0rHf3wl
-   A746mo/DvVGjri92JPJf4dO/LwQ35oPSNViVlv160FL3x9MOKNafMaRW7
-   44v2uA9jx6GJiuylG1Dj6zM2zS9j4FO2vx2zi3uGmd4xkjzMVuLZrhS3+
-   ysuaQxzVlRZ3C91cGURYdLK2sCeRQSvXnetXZAqdLTspiOAMO8FUHA7WJ
-   hpAGEXjZlQI5pYyr+pIgKLDR4n1ypMnoVzIx/KBM/DdB845GFKa+EgLVI
-   Rz7tQnXonhzj5D4Zn7bj6MGceAcPDLnege7AVmr9jjqEcFNrqBWxMmGnF
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="196323884"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jan 2023 00:31:11 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 12 Jan 2023 00:31:11 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 12 Jan 2023 00:31:08 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <arnd@arndb.de>
-CC:     <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <unglinuxdriver@microchip.com>,
-        "kernel test robot" <lkp@intel.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: [PATCH v2 char-misc-next] misc: microchip: pci1xxxx: Add OTP/EEPROM driver for the pci1xxxx switch
-Date:   Fri, 13 Jan 2023 01:36:19 +0530
-Message-ID: <20230112200619.2336505-1-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 12 Jan 2023 04:29:02 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29FA5004F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:23:29 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A34C33F8E4;
+        Thu, 12 Jan 2023 08:49:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673513374; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=awrr/2eQN8kHkx6Ll5v8jHUAG0dqkLvR+E0A3pmoohk=;
+        b=jWeR+7UIObZEbVO/mD4onmOCHgzhSCgnWorYu/Z3N13Rw2r9MAm9wdc8vQ7aQoQMPyjC3v
+        XwW2tS8N0MiVEBy+AM8A31ZeP2aY05b9S+U6aGAz983scZgzxtCFDG3RHrS9fhDFIMblVv
+        LbP6XWtAlH8WOM1coB28++bWCMnXmJw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673513374;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=awrr/2eQN8kHkx6Ll5v8jHUAG0dqkLvR+E0A3pmoohk=;
+        b=YoSB7387XvbuoFauipzh5bfoYxDHT6Mh8BCnZI6nvW2pPTLRBGHcmcfXC5K4NNqVva7y0Q
+        7prG70yQy4+E3DDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 78D2013776;
+        Thu, 12 Jan 2023 08:49:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QlC0HJ7Jv2PJDAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 12 Jan 2023 08:49:34 +0000
+Message-ID: <e443af8a-6fde-bd5a-3e5b-e30f7d5ac578@suse.cz>
+Date:   Thu, 12 Jan 2023 09:49:34 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [linus:master] [mm, slub] 0af8489b02:
+ kernel_BUG_at_include/linux/mm.h
+Content-Language: en-US
+To:     Oliver Sang <oliver.sang@intel.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, Mike Rapoport <rppt@linux.ibm.com>,
+        Christoph Lameter <cl@linux.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
+References: <202212312021.bc1efe86-oliver.sang@intel.com>
+ <41276905-b8a5-76ae-8a17-a8ec6558e988@suse.cz>
+ <Y7Qxucg5le7WOzr7@xsang-OptiPlex-9020> <Y7VBFLHY/PMbb4XS@hyeyoo>
+ <Y7Yr3kEkDEd51xns@xsang-OptiPlex-9020>
+ <3f7fa3b3-9623-5c4c-94b1-a41dea6eaaf2@suse.cz>
+ <Y7weKyxIY+QFYq6j@xsang-OptiPlex-9020> <Y71t89JMgtRoNHM/@xsang-OptiPlex-9020>
+ <d024b846-9282-4ecd-eafd-2e5571932a72@suse.cz>
+ <Y7+7KUyuo/9HeCF2@xsang-OptiPlex-9020>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y7+7KUyuo/9HeCF2@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microchip's pci1xxxx is an unmanaged PCIe3.1a switch for consumer, industrial,
-and automotive applications. This switch integrates OTP and EEPROM to enable
-customization of the part in the field. This patch provides the OTP/EEPROM
-driver to support the same.
+On 1/12/23 08:47, Oliver Sang wrote:
+> hi, Vlastimil,
+> 
+> On Tue, Jan 10, 2023 at 03:09:36PM +0100, Vlastimil Babka wrote:
+>> On 1/10/23 14:53, Oliver Sang wrote:
+>> > hi all,
+>> > 
+>> > On Mon, Jan 09, 2023 at 10:01:15PM +0800, Oliver Sang wrote:
+>> >> 
+>> >> On Fri, Jan 06, 2023 at 11:13:15AM +0100, Vlastimil Babka wrote:
+>> >> 
+>> >> > And if the rate at the parent (has it increased thanks to the
+>> >> > DEBUG_PAGEALLOC?) is sufficient to bisect to the truly first bad commit. Thanks!
+>> >> 
+>> >> got it. Thanks for suggestion!
+>> >> 
+>> >> since 0af8489b02 is based on v6.1-rc2, we will test (both rectorture and boot)
+>> >> with same config upon v6.1-rc2 to see if it's really clean there.
+>> >> if so we will use dmesg.invalid_opcode:#[##] to trigger new bisect.
+>> >> 
+>> >> will keep you updated. Thanks
+>> > 
+>> > by more tests, we cannot make sure the v6.1-rc2 is clean, so we also checked
+>> > v6.1-rc1 and v6.0. from results, we have low confidence that we can make a
+>> > successful bisection based on them [1][2]. could you suggest?
+>> 
+>> So am I reading it right, that the probleam appears to be introduced between
+>> v6.0 (0 failures) and v6.1-rc1 (>0 failures)? But agree that with such low
+>> incidence, it's hard to bisect.
+> 
+> yeah, you are reading it right :)
+> 
+>> 
+>> > a further information not sure if it's helpful, [1][2] are both i386 based.
+>> > we also tried to run boot tests on x86_64 upon commit 0af8489b02, whatever
+>> > with or without CONFIG_DEBUG_PAGEALLOC/CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT,
+>> > we never obseve similar issues (also run 999 times).
+>> 
+>> Yeah it looks very much like something that manifests only on i386 (perhaps
+>> only in QEMU as well?) and never x86_64.
+>> 
+>> What might be interesting then is v6.1-rc1 with further modified config to
+>> enabled CONFIG_SLUB_DEBUG and CONFIG_SLUB_DEBUG_ON. Maybe it will catch the
+>> culprit sooner. Or maybe it will obscure the bug instead, unfortunately.
+> 
+> oh, seems, unfortunalately, 'obscure' happen :(
+> 
+> we enabled CONFIG_SLUB_DEBUG and CONFIG_SLUB_DEBUG_ON, along with
+> CONFIG_DEBUG_PAGEALLOC and CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT
+> 
+> boot (we also add the test for v6.2-rc3):
+> =========================================================================================
+> compiler/kconfig/rootfs/sleep/tbox_group/testcase:
+>   gcc-11/i386-randconfig-a012-20221226+CONFIG_DEBUG_PAGEALLOC+CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT+CONFIG_SLUB_DEBUG_ON/debian-11.1-i386-20220923.cgz/1/vm-snb/boot
+> 
+>             v6.0                    v6.1-rc1                    v6.1-rc2 56d5a2b9ba85a390473e86b4fe4 0af8489b0216fa1dd83e264bef8                    v6.2-rc3
+> ---------------- --------------------------- --------------------------- --------------------------- --------------------------- ---------------------------
+>        fail:runs  %reproduction    fail:runs  %reproduction    fail:runs  %reproduction    fail:runs  %reproduction    fail:runs  %reproduction    fail:runs
+>            |             |             |             |             |             |             |             |             |             |             |
+>          43:999          3%          68:999          4%          84:999          6%          99:999          5%          94:999          4%          86:999   dmesg.invalid_opcode:#[##]
+>           4:999         -0%           2:999          0%           7:999          0%           8:999          0%           4:999         -0%            :999   dmesg.kernel_BUG_at_include/linux/mm.h
+>           3:999          0%           4:999          0%           3:999          0%           7:999          0%           5:999          1%           9:999   dmesg.kernel_BUG_at_include/linux/page-flags.h
+>          34:999          3%          61:999          4%          73:999          5%          81:999          5%          85:999          4%          74:999   dmesg.kernel_BUG_at_lib/list_debug.c
+>            :999          0%            :999          0%            :999          0%           1:999          0%            :999          0%            :999   dmesg.kernel_BUG_at_mm/internal.h
+>           3:999         -0%           1:999         -0%            :999         -0%           2:999         -0%            :999         -0%           2:999   dmesg.kernel_BUG_at_mm/page_alloc.c
+>            :999          0%            :999          0%           2:999          0%            :999          0%            :999          0%           2:999   dmesg.kernel_BUG_at_mm/usercopy.c
+> 
+> 
+> since now even the v6.0 is not clean, attached one dmesg FYI
 
-Reported-by: kernel test robot <lkp@intel.com>
-Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
----
-V1 -> V2:
-1. Resolve build issue reported by kernel test robot
----
- MAINTAINERS                                   |   1 +
- drivers/misc/mchp_pci1xxxx/Kconfig            |   1 +
- drivers/misc/mchp_pci1xxxx/Makefile           |   2 +-
- .../misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c | 693 ++++++++++++++++++
- 4 files changed, 696 insertions(+), 1 deletion(-)
- create mode 100644 drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
+Interesting one, btw.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9886aa1a4403..195af3ac451d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13614,6 +13614,7 @@ S:	Supported
- F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
- F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h
- F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-+F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
- 
- MICROCHIP OTPC DRIVER
- M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-diff --git a/drivers/misc/mchp_pci1xxxx/Kconfig b/drivers/misc/mchp_pci1xxxx/Kconfig
-index 4abb47de7219..67fa3299cfb6 100644
---- a/drivers/misc/mchp_pci1xxxx/Kconfig
-+++ b/drivers/misc/mchp_pci1xxxx/Kconfig
-@@ -2,6 +2,7 @@ config GP_PCI1XXXX
-        tristate "Microchip PCI1XXXX PCIe to GPIO Expander + OTP/EEPROM manager"
-        depends on PCI
-        depends on GPIOLIB
-+       depends on BLOCK
-        select GPIOLIB_IRQCHIP
-        select AUXILIARY_BUS
-        help
-diff --git a/drivers/misc/mchp_pci1xxxx/Makefile b/drivers/misc/mchp_pci1xxxx/Makefile
-index fc4615cfe28b..ae31251dab37 100644
---- a/drivers/misc/mchp_pci1xxxx/Makefile
-+++ b/drivers/misc/mchp_pci1xxxx/Makefile
-@@ -1 +1 @@
--obj-$(CONFIG_GP_PCI1XXXX) := mchp_pci1xxxx_gp.o mchp_pci1xxxx_gpio.o
-+obj-$(CONFIG_GP_PCI1XXXX) := mchp_pci1xxxx_gp.o mchp_pci1xxxx_gpio.o mchp_pci1xxxx_otpe2p.o
-diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
-new file mode 100644
-index 000000000000..03a537d45873
---- /dev/null
-+++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
-@@ -0,0 +1,693 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2023 Microchip Technology Inc.
-+// PCI1xxxx OTP/EEPROM driver
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bio.h>
-+#include <linux/blkdev.h>
-+#include <linux/blk-mq.h>
-+#include <linux/delay.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/kthread.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/spinlock.h>
-+
-+#include "mchp_pci1xxxx_gp.h"
-+
-+#define PERI_PF3_SYSTEM_REG_ADDR_BASE	(0x2000)
-+#define PERI_PF3_SYSTEM_REG_LENGTH	(0x4000)
-+
-+#define CONFIG_REG_ADDR_BASE		(0)
-+#define EEPROM_REG_ADDR_BASE		(0x0E00)
-+#define OTP_REG_ADDR_BASE		(0x1000)
-+
-+#define MMAP_CFG_OFFSET(x)		(CONFIG_REG_ADDR_BASE + (x))
-+
-+#define CFG_SYS_LOCK_OFFSET		(0xA0)
-+#define CFG_SYS_LOCK_PF3		BIT(5)
-+
-+#define MMAP_OTP_OFFSET(x)		(OTP_REG_ADDR_BASE + (x))
-+
-+#define OTP_PWR_DN_OFFSET		(0x00)
-+#define OTP_ADDR_HIGH_OFFSET		(0x04)
-+#define OTP_ADDR_LOW_OFFSET		(0x08)
-+#define	OTP_ADDR_BITS_OFFSET		(0x0C)
-+#define OTP_PRGM_DATA_OFFSET		(0x10)
-+#define OTP_PRGM_MODE_OFFSET		(0x14)
-+#define OTP_RD_DATA_OFFSET		(0x18)
-+#define OTP_FUNC_CMD_OFFSET		(0x20)
-+#define OTP_TEST_CMD_OFFSET		(0x24)
-+#define OTP_CMD_GO_OFFSET		(0x28)
-+#define OTP_PASS_FAIL_OFFSET		(0x2C)
-+#define OTP_STATUS_OFFSET		(0x30)
-+#define OTP_MAX_PRG_OFFSET		(0x34)
-+#define OTP_RSTB_PW_OFFSET		(0x50)
-+#define OTP_PGM_PW_OFFSET		(0x60)
-+#define OTP_READ_PW_OFFSET		(0x70)
-+
-+#define OTP_PWR_DN_BIT			BIT(0)
-+#define OTP_CMD_GO_BIT			BIT(0)
-+#define OTP_PGM_MODE_BYTE_BIT		BIT(0)
-+#define OTP_STATUS_BUSY_BIT		BIT(0)
-+#define OTP_FUNC_PGM_BIT		BIT(1)
-+#define OTP_FUNC_RD_BIT			BIT(0)
-+
-+#define OTP_RW_TIMEOUT_MILLISECONDS	(5)
-+
-+#define MMAP_EEPROM_OFFSET(x)		(EEPROM_REG_ADDR_BASE + (x))
-+
-+#define E2P_CMD_REG			(0x00)
-+#define E2P_DATA_REG			(0x04)
-+#define E2P_CFG_REG			(0x08)
-+#define E2P_PAD_CTL_REG			(0x0C)
-+
-+#define E2P_CMD_EPC_BUSY_BIT		BIT(31)
-+#define E2P_CMD_EPC_TIMEOUT_BIT		BIT(17)
-+#define E2P_CMD_EPC_WRITE		(BIT(29) | BIT(28))
-+
-+#define E2P_CFG_BAUD_RATE_100KHZ	BIT(9)
-+#define E2P_CFG_SIZE_SEL		BIT(12)
-+#define E2P_CFG_PULSE_WIDTH_100KHZ	(BIT(17) | BIT(16))
-+#define OTP_E2P_SECTOR_SIZE		(512)
-+#define OTP_SIZE_IN_BYTES		(8 * 1024)
-+#define E2P_SIZE_IN_BYTES		(8 * 1024)
-+
-+struct pci1xxxx_otp_e2p_device {
-+	struct pci1xxxx_otp_e2p_disk *otp_e2p_device;
-+	struct auxiliary_device *pdev;
-+	void __iomem *reg_base;
-+	int block_device_count;
-+};
-+
-+struct pci1xxxx_otp_e2p_disk {
-+	struct blk_mq_tag_set tag_set;
-+	struct auxiliary_device *pdev;
-+	struct request_queue *queue;
-+	struct mutex  lock;
-+	struct gendisk *gd;
-+	bool E2P;
-+	int (*disk_write_byte)(struct pci1xxxx_otp_e2p_device *priv,
-+		unsigned long byte_offset, u8 value);
-+	int (*disk_read_byte)(struct pci1xxxx_otp_e2p_device *priv,
-+		unsigned long byte_offset, u8 *data);
-+};
-+
-+static int OTP_sector_count = OTP_SIZE_IN_BYTES / OTP_E2P_SECTOR_SIZE;
-+static int E2P_sector_count = E2P_SIZE_IN_BYTES / OTP_E2P_SECTOR_SIZE;
-+static int otp_device_count, e2p_device_count;
-+static int block_driver_registered;
-+static int OTP_block_driver_major;
-+
-+static void otp_device_set_address(struct pci1xxxx_otp_e2p_device *priv, u16 address)
-+{
-+	u32 lo, hi;
-+
-+	lo = address & 0xFF;
-+	hi = (address & 0x1f00) >> 8;
-+	writel(lo, priv->reg_base + MMAP_OTP_OFFSET(OTP_ADDR_LOW_OFFSET));
-+	writel(hi, priv->reg_base + MMAP_OTP_OFFSET(OTP_ADDR_HIGH_OFFSET));
-+}
-+
-+static int set_sys_lock(struct pci1xxxx_otp_e2p_device *priv)
-+{
-+	void __iomem *p = priv->reg_base + MMAP_CFG_OFFSET(CFG_SYS_LOCK_OFFSET);
-+	u8 data;
-+
-+	writel(CFG_SYS_LOCK_PF3, p);
-+	data = readl(p);
-+	if (data != CFG_SYS_LOCK_PF3)
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+static int release_sys_lock(struct pci1xxxx_otp_e2p_device *priv)
-+{
-+	void __iomem *p = priv->reg_base + MMAP_CFG_OFFSET(CFG_SYS_LOCK_OFFSET);
-+	u8 data;
-+
-+	data = readl(p);
-+	if (data != CFG_SYS_LOCK_PF3)
-+		return 0;
-+
-+	writel(0, p);
-+
-+	data = readl(p);
-+	if (data & CFG_SYS_LOCK_PF3)
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+static int otp_e2p_device_open(struct block_device *bdev, fmode_t mode)
-+{
-+	struct pci1xxxx_otp_e2p_disk *disk_priv;
-+	struct pci1xxxx_otp_e2p_device *priv;
-+	struct auxiliary_device *pdev;
-+	int retval = 0;
-+	u8 data;
-+
-+	disk_priv = (struct pci1xxxx_otp_e2p_disk *)bdev->bd_disk->private_data;
-+	pdev = (struct auxiliary_device *)disk_priv->pdev;
-+	priv = dev_get_drvdata(&pdev->dev);
-+
-+	mutex_lock(&disk_priv->lock);
-+
-+	do {
-+		retval = set_sys_lock(priv);
-+		if (retval)
-+			break;
-+
-+		if (!disk_priv->E2P) {
-+			data = readl(priv->reg_base +
-+				     MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-+			writel((data & ~OTP_PWR_DN_BIT), priv->reg_base +
-+				MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-+		}
-+	} while (false);
-+
-+	mutex_unlock(&disk_priv->lock);
-+
-+	return retval;
-+}
-+
-+static void otp_e2p_device_release(struct gendisk *disk, fmode_t mode)
-+{
-+	struct pci1xxxx_otp_e2p_disk *disk_priv;
-+	struct pci1xxxx_otp_e2p_device *priv;
-+	u8 data;
-+
-+	disk_priv = (struct pci1xxxx_otp_e2p_disk *)disk->private_data;
-+	priv = dev_get_drvdata(&disk_priv->pdev->dev);
-+
-+	mutex_lock(&disk_priv->lock);
-+
-+	if (!disk_priv->E2P) {
-+		data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-+		writel((data | OTP_PWR_DN_BIT), priv->reg_base +
-+			MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-+	}
-+	release_sys_lock(priv);
-+
-+	mutex_unlock(&disk_priv->lock);
-+}
-+
-+static int e2p_device_write_byte(struct pci1xxxx_otp_e2p_device *priv,
-+				 unsigned long byte_offset, u8 value)
-+{
-+	u32 data;
-+
-+	/* Write the value into E2P_DATA_REG register */
-+	writel(value, priv->reg_base + MMAP_EEPROM_OFFSET(E2P_DATA_REG));
-+	data = E2P_CMD_EPC_TIMEOUT_BIT | E2P_CMD_EPC_WRITE | byte_offset;
-+
-+	/* Write the data into E2P_CMD_REG register */
-+	writel(data, priv->reg_base + MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Set the EPC_BUSY bit of E2P_CMD_REG register */
-+	writel(E2P_CMD_EPC_BUSY_BIT | data, priv->reg_base +
-+	       MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Wait for the EPC_BUSY bit to get cleared */
-+	do {
-+		data = readl(priv->reg_base + MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+	} while (data & E2P_CMD_EPC_BUSY_BIT);
-+
-+	if (data & E2P_CMD_EPC_TIMEOUT_BIT) {
-+		dev_err(&priv->pdev->dev, "%s timed out\n", __func__);
-+		return -EFAULT;
-+	}
-+
-+	return 0;
-+}
-+
-+static int e2p_device_read_byte(struct pci1xxxx_otp_e2p_device *priv,
-+				unsigned long byte_offset, u8 *data)
-+{
-+	u32 regval;
-+
-+	/*
-+	 * Write the byte offset into the EPC_ADDRESS field of E2P_CMD_REG
-+	 * register
-+	 */
-+	writel(byte_offset, priv->reg_base + MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Set the EPC_BUSY bit of E2P_CMD_REG register */
-+	writel(E2P_CMD_EPC_BUSY_BIT | byte_offset, priv->reg_base +
-+	       MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Wait for the EPC_BUSY bit to get cleared */
-+	do {
-+		regval = readl(priv->reg_base + MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+	} while (regval & E2P_CMD_EPC_BUSY_BIT);
-+
-+	if (regval & E2P_CMD_EPC_TIMEOUT_BIT) {
-+		dev_err(&priv->pdev->dev, "%s timed out\n", __func__);
-+		return -EFAULT;
-+	}
-+
-+	/* Read the contents from the E2P_DATA_REG */
-+	*data = readl(priv->reg_base + MMAP_EEPROM_OFFSET(E2P_DATA_REG));
-+	return 0;
-+}
-+
-+static bool check_e2p_response(struct pci1xxxx_otp_e2p_device *priv)
-+{
-+	u32 data;
-+
-+	if (set_sys_lock(priv))
-+		return false;
-+
-+	writel((E2P_CFG_PULSE_WIDTH_100KHZ | E2P_CFG_SIZE_SEL |
-+		E2P_CFG_BAUD_RATE_100KHZ), priv->reg_base +
-+		MMAP_EEPROM_OFFSET(E2P_CFG_REG));
-+
-+	/*
-+	 * Write the byte offset into the EPC_ADDRESS field of E2P_CMD_REG
-+	 * register
-+	 */
-+	writel(E2P_CMD_EPC_TIMEOUT_BIT, priv->reg_base +
-+	       MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Set the EPC_BUSY bit of E2P_CMD_REG register */
-+	writel(E2P_CMD_EPC_BUSY_BIT, priv->reg_base +
-+	       MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Wait for the EPC_BUSY bit to get cleared or timeout bit to get set*/
-+	do {
-+		data = readl(priv->reg_base + MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+	} while (data & E2P_CMD_EPC_BUSY_BIT);
-+
-+	/* If EPC_TIMEOUT is set, then the EEPROM is not responsive */
-+	release_sys_lock(priv);
-+
-+	if (data & E2P_CMD_EPC_TIMEOUT_BIT) {
-+		dev_err(&priv->pdev->dev,
-+			"EPC_Timeout, EEPROM is unresponsive: %x\n", data);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+static int otp_device_write_byte(struct pci1xxxx_otp_e2p_device *priv,
-+				 unsigned long byte_offset, u8 value)
-+{
-+	unsigned long j0, j1, delay;
-+	u8 data;
-+
-+	if (!value)
-+		return 0;
-+
-+	otp_device_set_address(priv, (u16)byte_offset);
-+
-+	/* Set OTP_PGM_MODE_BYTE command bit in OTP_PRGM_MODE register */
-+	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_PRGM_MODE_OFFSET));
-+	writel((data | OTP_PGM_MODE_BYTE_BIT), priv->reg_base +
-+		MMAP_OTP_OFFSET(OTP_PRGM_MODE_OFFSET));
-+
-+	/* Write the value to program into OTP_PRGM_DATA register */
-+	writel(value, priv->reg_base + MMAP_OTP_OFFSET(OTP_PRGM_DATA_OFFSET));
-+
-+	/* Set OTP_PROGRAM command bit in OTP_FUNC_CMD register */
-+	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-+	writel((data | OTP_FUNC_PGM_BIT), priv->reg_base +
-+		MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-+
-+	/* Set OTP_GO command bit in OTP_CMD_GO register */
-+	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-+	writel((data | OTP_CMD_GO_BIT), priv->reg_base +
-+		MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-+	delay = msecs_to_jiffies(OTP_RW_TIMEOUT_MILLISECONDS);
-+	j0 = jiffies;
-+	j1 = j0 + delay;
-+
-+	/* Wait for the OTP_BUSY bit to get cleared in OTP_STATUS register */
-+	do {
-+		data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_STATUS_OFFSET));
-+	} while ((data & OTP_STATUS_BUSY_BIT) && (time_before(jiffies, j1)));
-+
-+	if (data & OTP_STATUS_BUSY_BIT) {
-+		dev_err(&priv->pdev->dev, "%s timed out\n", __func__);
-+		return -EFAULT;
-+	}
-+
-+	/* Read the result from OTP_RD_DATA register */
-+	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_PASS_FAIL_OFFSET));
-+	if (data & 0x02)
-+		return 0;
-+
-+	dev_err(&priv->pdev->dev, "%s write read mismatch 0x%x\n", __func__, data);
-+	return -EFAULT;
-+}
-+
-+static int otp_device_read_byte(struct pci1xxxx_otp_e2p_device *priv,
-+				unsigned long byte_offset, u8 *data)
-+{
-+	unsigned long j0, j1, delay;
-+
-+	otp_device_set_address(priv, (u16)byte_offset);
-+
-+	/* Set OTP_READ command bit in OTP_FUNC_CMD register */
-+	*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-+	writel((*data | OTP_FUNC_RD_BIT), priv->reg_base +
-+		MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-+
-+	/* Set OTP_GO command bit in OTP_CMD_GO register */
-+	*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-+	writel((*data | OTP_CMD_GO_BIT), priv->reg_base +
-+		MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-+	delay = msecs_to_jiffies(OTP_RW_TIMEOUT_MILLISECONDS);
-+	j0 = jiffies;
-+	j1 = j0 + delay;
-+
-+	/* Wait for OTP_BUSY bit to get cleared in OTP_STATUS */
-+	do {
-+		*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_STATUS_OFFSET));
-+	} while ((*data & OTP_STATUS_BUSY_BIT) && (time_before(jiffies, j1)));
-+
-+	if (*data & OTP_STATUS_BUSY_BIT) {
-+		dev_err(&priv->pdev->dev, "%s timed out\n", __func__);
-+		return -EFAULT;
-+	}
-+
-+	/* Read the result from OTP_RD_DATA register */
-+	*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_RD_DATA_OFFSET));
-+	return 0;
-+}
-+
-+static int otp_e2P_device_transfer(struct request *req)
-+{
-+	struct pci1xxxx_otp_e2p_disk *disk_priv;
-+	struct pci1xxxx_otp_e2p_device *priv;
-+	unsigned long sector;
-+	unsigned long nsect;
-+	long byte_offset;
-+	int retval;
-+	u8 *buffer;
-+	int write;
-+	int i, j;
-+
-+	sector = blk_rq_pos(req);
-+	nsect = blk_rq_cur_sectors(req);
-+	buffer = bio_data(req->bio);
-+	write = rq_data_dir(req);
-+	disk_priv = (struct pci1xxxx_otp_e2p_disk *)req->q->disk->private_data;
-+	priv = dev_get_drvdata(&disk_priv->pdev->dev);
-+
-+	if (write) {
-+		for (i = 0; i < nsect; i++) {
-+			byte_offset = (sector + i) * OTP_E2P_SECTOR_SIZE;
-+			for (j = 0; j < OTP_E2P_SECTOR_SIZE; j++) {
-+				retval = disk_priv->disk_write_byte(priv,
-+								    byte_offset + j,
-+								    *buffer);
-+				if (retval)
-+					return retval;
-+
-+				buffer++;
-+			}
-+		}
-+	} else {
-+		for (i = 0; i < nsect; i++) {
-+			byte_offset = (sector + i) * OTP_E2P_SECTOR_SIZE;
-+			for (j = 0; j < OTP_E2P_SECTOR_SIZE; j++) {
-+				retval = disk_priv->disk_read_byte(priv,
-+								   byte_offset + j,
-+								   buffer);
-+				if (retval)
-+					return retval;
-+
-+				buffer++;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static blk_status_t OTPE2P_queue_rq(struct blk_mq_hw_ctx *hctx,
-+				    const struct blk_mq_queue_data *bd)
-+{
-+	struct request *req = bd->rq;
-+
-+	blk_mq_start_request(req);
-+	if (!otp_e2P_device_transfer(req)) {
-+		blk_mq_end_request(req, BLK_STS_OK);
-+		return BLK_STS_OK;
-+	}
-+
-+	return BLK_STS_IOERR;
-+}
-+
-+static const struct blk_mq_ops OTPE2P_mq_ops = {
-+	.queue_rq	= OTPE2P_queue_rq,
-+};
-+
-+static const struct block_device_operations otp_e2p_device_ops = {
-+	.owner = THIS_MODULE,
-+	.open = otp_e2p_device_open,
-+	.release = otp_e2p_device_release,
-+};
-+
-+static int otp_e2p_device_create_block_device(struct auxiliary_device *aux_dev)
-+{
-+	struct auxiliary_device_wrapper *aux_dev_wrapper;
-+	struct pci1xxxx_otp_e2p_device *priv;
-+	struct gp_aux_data_type *pdata;
-+	int retval = 0, i;
-+
-+	aux_dev_wrapper = (struct auxiliary_device_wrapper *) container_of(aux_dev,
-+			  struct auxiliary_device_wrapper, aux_dev);
-+	pdata = &(aux_dev_wrapper->gp_aux_data);
-+	if (!pdata) {
-+		dev_err(&aux_dev->dev, "Invalid data in aux_dev_wrapper->gp_aux_data\n");
-+		return -EINVAL;
-+	}
-+
-+	priv = devm_kzalloc(&aux_dev->dev, sizeof(struct pci1xxxx_otp_e2p_device),
-+			    GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->pdev = aux_dev;
-+
-+	dev_set_drvdata(&aux_dev->dev, priv);
-+
-+	if (!devm_request_mem_region(&aux_dev->dev, pdata->region_start +
-+				     PERI_PF3_SYSTEM_REG_ADDR_BASE,
-+		PERI_PF3_SYSTEM_REG_LENGTH, aux_dev->name)) {
-+		dev_err(&aux_dev->dev, "can't request otpe2p region\n");
-+		return -ENOMEM;
-+	}
-+
-+	priv->reg_base = devm_ioremap(&aux_dev->dev, pdata->region_start +
-+				      PERI_PF3_SYSTEM_REG_ADDR_BASE,
-+				      PERI_PF3_SYSTEM_REG_LENGTH);
-+	if (!priv->reg_base) {
-+		dev_err(&aux_dev->dev, "ioremap failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	priv->block_device_count = 0;
-+	do {
-+		if (check_e2p_response(priv))
-+			priv->block_device_count = 2;
-+		else
-+			priv->block_device_count = 1;
-+
-+		priv->otp_e2p_device = devm_kzalloc(&priv->pdev->dev,
-+						    priv->block_device_count *
-+						    sizeof(struct pci1xxxx_otp_e2p_disk),
-+						    GFP_KERNEL);
-+		if (!priv->otp_e2p_device) {
-+			retval = -ENOMEM;
-+			break;
-+		}
-+
-+		for (i = 0; i < priv->block_device_count; i++) {
-+			mutex_init(&priv->otp_e2p_device[i].lock);
-+			priv->otp_e2p_device[i].tag_set.ops = &OTPE2P_mq_ops;
-+			priv->otp_e2p_device[i].tag_set.nr_hw_queues = 1;
-+			priv->otp_e2p_device[i].tag_set.queue_depth = 16;
-+			priv->otp_e2p_device[i].tag_set.flags = BLK_MQ_F_SHOULD_MERGE;
-+
-+			retval = blk_mq_alloc_tag_set(&priv->otp_e2p_device[i].tag_set);
-+			if (retval) {
-+				dev_err(&aux_dev->dev, "blk_mq_alloc_tag_set failed\n");
-+				break;
-+			}
-+
-+			priv->otp_e2p_device[i].queue =
-+				blk_mq_init_queue(&priv->otp_e2p_device[i].tag_set);
-+			if (IS_ERR(priv->otp_e2p_device[i].queue)) {
-+				retval = PTR_ERR(priv->otp_e2p_device[i].queue);
-+				priv->otp_e2p_device[i].queue = NULL;
-+				if (i)
-+					goto e2p_free_tag_set;
-+				else
-+					goto otp_free_tag_set;
-+			}
-+
-+			blk_queue_logical_block_size(priv->otp_e2p_device[i].queue,
-+						     OTP_E2P_SECTOR_SIZE);
-+			blk_queue_physical_block_size(priv->otp_e2p_device[i].queue,
-+						      OTP_E2P_SECTOR_SIZE);
-+			priv->otp_e2p_device[i].queue->queuedata = priv;
-+			priv->otp_e2p_device[i].gd =
-+				blk_mq_alloc_disk(&priv->otp_e2p_device[i].tag_set,
-+				NULL);
-+			if (IS_ERR(priv->otp_e2p_device[i].gd)) {
-+				retval = PTR_ERR(priv->otp_e2p_device[i].gd);
-+				if (i)
-+					goto e2p_destroy_queue;
-+				else
-+					goto otp_destroy_queue;
-+			}
-+
-+			priv->otp_e2p_device[i].pdev = aux_dev;
-+			priv->otp_e2p_device[i].gd->major = OTP_block_driver_major;
-+			priv->otp_e2p_device[i].gd->minors = 1;
-+			priv->otp_e2p_device[i].gd->first_minor =
-+				otp_device_count + e2p_device_count;
-+			priv->otp_e2p_device[i].gd->fops = &otp_e2p_device_ops;
-+			priv->otp_e2p_device[i].gd->private_data =
-+				&priv->otp_e2p_device[i];
-+
-+			if (i == 0) {
-+				snprintf(priv->otp_e2p_device[i].gd->disk_name,
-+					 32, "PCI1xxxxOTP%x", otp_device_count);
-+				set_capacity(priv->otp_e2p_device[i].gd,
-+					     OTP_sector_count);
-+				priv->otp_e2p_device[i].disk_read_byte = otp_device_read_byte;
-+				priv->otp_e2p_device[i].disk_write_byte = otp_device_write_byte;
-+				otp_device_count++;
-+			} else {
-+				snprintf(priv->otp_e2p_device[i].gd->disk_name,
-+					 32, "PCI1xxxxE2P%x", otp_device_count - 1);
-+				set_capacity(priv->otp_e2p_device[i].gd,
-+					     E2P_sector_count);
-+				priv->otp_e2p_device[i].E2P = true;
-+				priv->otp_e2p_device[i].disk_read_byte = e2p_device_read_byte;
-+				priv->otp_e2p_device[i].disk_write_byte = e2p_device_write_byte;
-+				e2p_device_count++;
-+			}
-+
-+			retval = add_disk(priv->otp_e2p_device[i].gd);
-+			if (retval) {
-+				if (i)
-+					goto e2p_free_disk;
-+				else
-+					goto otp_free_disk;
-+			}
-+		}
-+
-+	} while (false);
-+
-+	return retval;
-+
-+e2p_free_disk:
-+	del_gendisk(priv->otp_e2p_device[1].gd);
-+	put_disk(priv->otp_e2p_device[1].gd);
-+e2p_destroy_queue:
-+	blk_mq_destroy_queue(priv->otp_e2p_device[1].queue);
-+e2p_free_tag_set:
-+	blk_mq_free_tag_set(&priv->otp_e2p_device[1].tag_set);
-+otp_free_disk:
-+	del_gendisk(priv->otp_e2p_device[0].gd);
-+	put_disk(priv->otp_e2p_device[0].gd);
-+otp_destroy_queue:
-+	blk_mq_destroy_queue(priv->otp_e2p_device[0].queue);
-+otp_free_tag_set:
-+	blk_mq_free_tag_set(&priv->otp_e2p_device[0].tag_set);
-+
-+	return retval;
-+}
-+
-+static void pci1xxxx_otp_e2p_remove(struct auxiliary_device *aux_dev)
-+{
-+	struct pci1xxxx_otp_e2p_device *priv = dev_get_drvdata(&aux_dev->dev);
-+	int i;
-+
-+	for (i = 0; i < priv->block_device_count; i++) {
-+
-+		if (priv->otp_e2p_device[i].queue)
-+			blk_mq_destroy_queue(priv->otp_e2p_device[i].queue);
-+
-+		if (priv->otp_e2p_device[i].gd) {
-+			del_gendisk(priv->otp_e2p_device[i].gd);
-+			put_disk(priv->otp_e2p_device[i].gd);
-+			blk_mq_free_tag_set(&priv->otp_e2p_device[i].tag_set);
-+		}
-+	}
-+}
-+
-+static int pci1xxxx_otp_e2p_probe(struct auxiliary_device *aux_dev,
-+				  const struct auxiliary_device_id *id)
-+{
-+	int retval;
-+
-+	retval = otp_e2p_device_create_block_device(aux_dev);
-+	if (retval) {
-+		dev_err(&aux_dev->dev,
-+			"otp/eeprom device enumeration failed with errno = %d\n",
-+			retval);
-+		return retval;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct auxiliary_device_id pci1xxxx_otp_e2p_auxiliary_id_table[] = {
-+	{.name = "mchp_pci1xxxx_gp.gp_otp_e2p"},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(auxiliary, pci1xxxx_otp_e2p_auxiliary_id_table);
-+
-+static struct auxiliary_driver pci1xxxx_otp_e2p_driver = {
-+	.driver = {
-+		.name = "PCI1xxxxOTPE2P",
-+	},
-+	.probe = pci1xxxx_otp_e2p_probe,
-+	.remove = pci1xxxx_otp_e2p_remove,
-+	.id_table = pci1xxxx_otp_e2p_auxiliary_id_table
-+};
-+
-+static int __init pci1xxxx_otp_e2p_driver_init(void)
-+{
-+	int retval;
-+
-+	do {
-+		OTP_block_driver_major = register_blkdev(OTP_block_driver_major,
-+			"OTPBlockDevice");
-+		if (OTP_block_driver_major < 0) {
-+			retval = OTP_block_driver_major;
-+			break;
-+		}
-+
-+		block_driver_registered = 1;
-+
-+		retval = auxiliary_driver_register(&pci1xxxx_otp_e2p_driver);
-+		if (retval)
-+			break;
-+
-+	} while (false);
-+
-+	return retval;
-+}
-+
-+static void __exit pci1xxxx_otp_e2p_driver_exit(void)
-+{
-+	auxiliary_driver_unregister(&pci1xxxx_otp_e2p_driver);
-+	if (block_driver_registered)
-+		unregister_blkdev(OTP_block_driver_major, "OTPBlockDevice");
-+}
-+
-+module_init(pci1xxxx_otp_e2p_driver_init);
-+module_exit(pci1xxxx_otp_e2p_driver_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>");
-+MODULE_AUTHOR("Tharun Kumar P<tharunkumar.pasumarthi@microchip.com>");
-+MODULE_DESCRIPTION("Microchip Technology Inc. PCI1xxxx OTP EEPROM programmer");
--- 
-2.25.1
+> [   38.392164][  T193] page:e6c3e400 refcount:1 mapcount:0 mapping:00000000 index:0x0 pfn:0x9e80
+> [   38.393441][  T193] head:e6c3e2c0 order:3 compound_mapcount:0 compound_pincount:0
+
+Yay, struct page pointers no longer hashed for printing, thanks to slub_debug.
+Head page is order-3 (8 pages), yet e6c3e400 would be 9th page, nonsense.
+
+> [   38.394491][  T193] flags: 0x10200(slab|head|zone=0)
+> [   38.395181][  T193] raw: 00010000 e6c3e2c1 00000122 00000400 00000000 00000000 ffffffff 00000001
+
+We have head flag, compound_head is e6c3e2c0+PageTail, there's again
+00000400 in mapping that's specifically set by prep_compound_tail().
+
+> [   38.396386][  T193] raw: 00000000 00000000
+> [   38.396956][  T193] head: 00010200 e6ac7904 c01007f0 c0101a40 c9e79a00 00150004 ffffffff 00000001
+
+00150004 are slub's counters suggesting it's been used for a while, we
+should not be racing with e6c3e2c0's allocation here!
+
+> [   38.398161][  T193] head: 00000000 00000000
+> [   38.398775][  T193] page dumped because: VM_BUG_ON_PAGE(PageTail(page))
+> [   38.399724][  T193] page_owner tracks the page as allocated
+> [   38.400525][  T193] page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 193, tgid 193 (systemd-udevd), ts 38392157598, free_ts 0
+
+This is a dump of e6c3e400, not the "head".
+
+> [   38.403183][  T193]  post_alloc_hook+0x29a/0x320
+> [   38.403891][  T193]  get_page_from_freelist+0x226/0x310
+> [   38.404644][  T193]  __alloc_pages+0xdd/0x360
+> [   38.405256][  T193]  alloc_slab_page+0x12d/0x200
+> [   38.405936][  T193]  allocate_slab+0x6a/0x670
+> [   38.406586][  T193]  new_slab+0x48/0xc0
+> [   38.407127][  T193]  ___slab_alloc+0x9ba/0x1610
+> [   38.407942][  T193]  __slab_alloc+0x41/0x70
+> [   38.408776][  T193]  __kmalloc_track_caller+0x57b/0x710
+> [   38.409538][  T193]  kmalloc_reserve+0x3f/0x100
+> [   38.410339][  T193]  __alloc_skb+0xad/0x310
+> [   38.410925][  T193]  netlink_sendmsg+0x384/0x6f0
+> [   38.411602][  T193]  sock_sendmsg+0x79/0xe0
+> [   38.420425][  T193]  ____sys_sendmsg+0x1ef/0x390
+> [   38.421069][  T193]  ___sys_sendmsg+0xb0/0x120
+> [   38.421726][  T193]  __sys_sendmsg+0x84/0x100
+> [   38.422372][  T193] page_owner free stack trace missing
+> [   38.423113][  T193] ------------[ cut here ]------------
+> [   38.423899][  T193] kernel BUG at include/linux/page-flags.h:319!
+> [   38.424778][  T193] invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC
+> [   38.425610][  T193] CPU: 1 PID: 193 Comm: systemd-udevd Tainted: G S                 6.0.0 #1 b46e496fab9f0be3d12299e0bf71444aabf1c433
+> [   38.427187][  T193] EIP: folio_flags+0x31/0x70
+> [   38.427951][  T193] Code: 48 83 05 e8 89 bd c5 01 ba a4 c0 2b c4 55 89 e5 83 15 ec 89 bd c5 00 e8 8d 3f f6 ff 83 05 f8 89 bd c5 01 83 15 fc 89 bd c5 00 <0f> 0b 83 05 00 8a bd c5 01 b8 38 1e a6 c4 83 15 04 8a bd c5 00 e8
+> [   38.430464][  T193] EAX: 00000000 EBX: e6c3e400 ECX: 00000000 EDX: ee7ead00
+> [   38.431382][  T193] ESI: 00000000 EDI: 000c2cc0 EBP: c995fb30 ESP: c995fb30
+> [   38.432350][  T193] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00210246
+> [   38.433348][  T193] CR0: 80050033 CR2: b5c4f018 CR3: 09cab000 CR4: 000006d0
+> [   38.434288][  T193] Call Trace:
+> [   38.434737][  T193]  alloc_slab_page+0x7f/0x200
+
+Aha, we have crashed while allocating a fresh new slab page, probably at
+__folio_set_slab(folio), the page doesn't have het PageSlab() flag set.
+
+So we have just took the page from a freelist (that modifies lru.next
+overlapping compound_head, we can still see the poison in lru.prev),
+verified that it's page->mapping is 0 (in page_expected_state()). Few
+moments later there's a compound_head set and mapping set in a way that only
+prep_compound_tail() does.
+But the head that would be connected seems to have done its
+prep_compound_tail()'s a while ago (nevermind that it would have to be an
+off-by-one). So that just makes no sense.
+
+> [   38.435361][  T193]  allocate_slab+0x6a/0x670
+> [   38.436007][  T193]  new_slab+0x48/0xc0
+> [   38.436536][  T193]  ___slab_alloc+0x9ba/0x1610
+> [   38.437293][  T193]  ? __might_sleep+0x5a/0x100
+> [   38.437912][  T193]  ? __alloc_skb+0xad/0x310
+> [   38.438513][  T193]  ? lock_release+0xa1/0x190
+> [   38.439127][  T193]  __slab_alloc+0x41/0x70
+> [   38.439845][  T193]  __kmalloc_track_caller+0x57b/0x710
+> [   38.440557][  T193]  ? kmem_cache_alloc+0x2d6/0x690
+> [   38.441217][  T193]  ? __alloc_skb+0xad/0x310
+> [   38.441821][  T193]  kmalloc_reserve+0x3f/0x100
+> [   38.442569][  T193]  ? security_capable+0x40/0xd0
+> [   38.443214][  T193]  __alloc_skb+0xad/0x310
+> [   38.443801][  T193]  ? ns_capable_common+0x41/0x80
+> [   38.444452][  T193]  netlink_sendmsg+0x384/0x6f0
+> [   38.445089][  T193]  ? iovec_from_user+0xea/0x1b0
+> [   38.445737][  T193]  sock_sendmsg+0x79/0xe0
+> [   38.446313][  T193]  ____sys_sendmsg+0x1ef/0x390
+> [   38.446955][  T193]  ___sys_sendmsg+0xb0/0x120
+> [   38.447586][  T193]  __sys_sendmsg+0x84/0x100
+> [   38.448225][  T193]  __do_sys_socketcall+0x20d/0x5e0
+> [   38.448908][  T193]  __ia32_sys_socketcall+0x1b/0x30
+> [   38.449593][  T193]  __do_fast_syscall_32+0x72/0xd0
+> [   38.450264][  T193]  ? syscall_exit_to_user_mode+0x5f/0x90
+> [   38.451001][  T193]  ? __do_fast_syscall_32+0x7c/0xd0
+> [   38.451702][  T193]  ? __do_fast_syscall_32+0x7c/0xd0
+> [   38.452388][  T193]  ? lockdep_hardirqs_on_prepare+0x242/0x400
+> [   38.453184][  T193]  ? syscall_exit_to_user_mode+0x5f/0x90
+> [   38.453922][  T193]  ? __do_fast_syscall_32+0x7c/0xd0
+> [   38.454609][  T193]  ? lockdep_hardirqs_on_prepare+0x242/0x400
+> [   38.455390][  T193]  ? syscall_exit_to_user_mode+0x5f/0x90
+> [   38.460224][  T193]  ? __do_fast_syscall_32+0x7c/0xd0
+> [   38.460922][  T193]  ? irqentry_exit_to_user_mode+0x23/0x30
+> [   38.461675][  T193]  do_fast_syscall_32+0x32/0x70
+> [   38.462327][  T193]  do_SYSENTER_32+0x15/0x20
+> [   38.462936][  T193]  entry_SYSENTER_32+0xa2/0xfb
+> [   38.463567][  T193] EIP: 0xb7ed4549
+> [   38.464077][  T193] Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90 8d 76
+> [   38.466578][  T193] EAX: ffffffda EBX: 00000010 ECX: bfc1aa40 EDX: 00000000
+> [   38.467499][  T193] ESI: b7e0f000 EDI: 00000000 EBP: 00534540 ESP: bfc1aa30
+> [   38.468437][  T193] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00200282
+> [   38.469442][  T193] Modules linked in:
+> [   38.470183][  T193] ---[ end trace 0000000000000000 ]---
+> [   38.470910][  T193] EIP: folio_flags+0x31/0x70
+> [   38.471704][  T193] Code: 48 83 05 e8 89 bd c5 01 ba a4 c0 2b c4 55 89 e5 83 15 ec 89 bd c5 00 e8 8d 3f f6 ff 83 05 f8 89 bd c5 01 83 15 fc 89 bd c5 00 <0f> 0b 83 05 00 8a bd c5 01 b8 38 1e a6 c4 83 15 04 8a bd c5 00 e8
+> [   38.474274][  T193] EAX: 00000000 EBX: e6c3e400 ECX: 00000000 EDX: ee7ead00
+> [   38.475233][  T193] ESI: 00000000 EDI: 000c2cc0 EBP: c995fb30 ESP: c995fb30
+> [   38.476218][  T193] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00210246
+> [   38.477246][  T193] CR0: 80050033 CR2: b5c4f018 CR3: 09cab000 CR4: 000006d0
+> [   38.478206][  T193] Kernel panic - not syncing: Fatal exception
+> [   38.479153][  T193] Kernel Offset: disabled
 
