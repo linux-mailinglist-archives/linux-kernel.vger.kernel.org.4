@@ -2,192 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CACF667960
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B4D667963
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237463AbjALPeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
+        id S240427AbjALPf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:35:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233104AbjALPeN (ORCPT
+        with ESMTP id S240383AbjALPeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:34:13 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED58661463
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:24:57 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id u24-20020a6be918000000b006ed1e9ad302so11587972iof.22
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:24:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M9Zf/miwcHLHdjuwhn1tof/VbQJRtjvI28zo155yc28=;
-        b=ejLfCA9rOpevgHEwjpjTtsml4D2GeT0+u6rkoU9P4atP+bss5I7tbIYB8xpOy97EA9
-         EMvcNI9P7sBWEYptG437XQCQU9xU5UX0mrOK1qejTYkeH4faCqlefm813EyL0WdI+8x7
-         xLaiYr/Euoc7QdNn7NUiCMp9UeGAXXre9s0E+zyQqq6htHDxEY/Cfi2+DMojtYUVuoVW
-         uAp189JdRWnWawcfJ8q2aQ+HS40LWgoPpWXCg4lnzlP1sNczvN78NStoPzsw8BA7SDKS
-         mk2xhqXrHAxlrcy7upWOVoRaUDfY5yEoXQMR4ftICIkz6dfqQ152ZiwyqSI/PBMjiJrL
-         G67w==
-X-Gm-Message-State: AFqh2kqNV6lxLnCqeYMJrjps8YMsDiwt3x70odyKmmbNW/uzmqvohnic
-        WXlZVU4m+v9bYqHjkwdNCiNCVZbPYUYVESaB5hC3mM1y09Ns
-X-Google-Smtp-Source: AMrXdXvZIBuEaFR7oann2faAz8VUASMdahw9GjGzkbCCFishkCIGtnavZ9GmV+2JY+aVXtUysGrNK03D+VVUoSsaEoF36B95mHki
+        Thu, 12 Jan 2023 10:34:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22C3625E8;
+        Thu, 12 Jan 2023 07:25:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B7F4B81E85;
+        Thu, 12 Jan 2023 15:25:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 042BDC433F0;
+        Thu, 12 Jan 2023 15:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673537103;
+        bh=GQl+TWZ0lnrDJO8A5lwHu11g+ftYrH3VhsAL3ZgMFWk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tlzFMbN/JXIzWEoNTyGumTKR4PUw5Vc7B1E/cMDEoZje0fAkYNiTVUPTjedti/jFj
+         r9i8ScD0tlLJwVa4KxzNZj4fyG38McIKeALAC6D4zHRXYc9mCsZTKZ8t/48Sfn+uBT
+         ZSgfPfEJUaMNQ9tu2yGA7ZQdP1ZY4wePfeCkafomtEKjfPRDf/yAgNaWDec66b46MA
+         rVemYgJkFZTvOIiin6NWDKsJPUAvgkl0WhrOVqOe8Y1dXFHneqJ8aCCPBg1IQv0m4E
+         /mbHUx5O/8YQaVEeDBWM09YI+w3Bar2QkzV0GisihpLDV8I3ExtVaGXISJGQvDnokH
+         eotab+39gC3tg==
+Date:   Thu, 12 Jan 2023 09:25:01 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] arm64: dts: qcom: sm8550: Add UFS host controller
+ and phy nodes
+Message-ID: <20230112152501.lwamtdsuufobof3c@builder.lan>
+References: <20230112135926.1572191-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:cd45:0:b0:6e2:ca58:69c with SMTP id
- d66-20020a6bcd45000000b006e2ca58069cmr6772959iog.42.1673537083294; Thu, 12
- Jan 2023 07:24:43 -0800 (PST)
-Date:   Thu, 12 Jan 2023 07:24:43 -0800
-In-Reply-To: <000000000000cf0f4905f20e504c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005e4ea205f212b7ac@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in io_fallback_req_func
-From:   syzbot <syzbot+bc022c162e3b001bf607@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112135926.1572191-1-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Thu, Jan 12, 2023 at 03:59:25PM +0200, Abel Vesa wrote:
+> Add UFS host controller and PHY nodes.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> Changes since v1:
+>  * dropped ufs_mem_phy_lanes child node, like Johan suggested
+>  * addressed Konrad comments.
+> 
+>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 78 ++++++++++++++++++++++++++--
+>  1 file changed, 75 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 59756ec11564..d20b5fbcb2c3 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -649,9 +649,9 @@ gcc: clock-controller@100000 {
+>  				 <0>,
+>  				 <0>,
+>  				 <0>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> +				 <&ufs_mem_phy 0>,
+> +				 <&ufs_mem_phy 1>,
+> +				 <&ufs_mem_phy 2>,
+>  				 <0>;
+>  		};
+>  
+> @@ -1571,6 +1571,78 @@ crypto: crypto@1de0000 {
+>  			interconnect-names = "memory";
+>  		};
+>  
+> +		ufs_mem_phy: phy@1d80000 {
+> +			compatible = "qcom,sm8550-qmp-ufs-phy";
+> +			reg = <0x0 0x01d80000 0x0 0x2000>;
+> +			clock-names = "ref", "qref";
+> +			clocks = <&gcc GCC_UFS_PHY_PHY_AUX_CLK>,
+> +				 <&tcsr TCSR_UFS_CLKREF_EN>;
+> +
+> +			power-domains = <&gcc UFS_MEM_PHY_GDSC>;
+> +
+> +			resets = <&ufs_mem_hc 0>;
+> +			reset-names = "ufsphy";
+> +
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +
+> +			#phy-cells = <0>;
+> +
+> +			#clock-cells = <1>;
+> +
+> +			ranges;
 
-HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=176167ba480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=bc022c162e3b001bf607
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d58fbe480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=151b0316480000
+Isn't this a leftover from the older binding?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		ufs_mem_hc: ufshc@1d84000 {
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bc022c162e3b001bf607@syzkaller.appspotmail.com
+ufs@ I believe.
 
-==================================================================
-BUG: KASAN: use-after-free in io_fallback_req_func+0xc7/0x204 io_uring/io_uring.c:251
-Read of size 8 at addr ffff8880793aa948 by task kworker/0:3/4401
+> +			compatible = "qcom,sm8550-ufshc", "qcom,ufshc",
+> +				     "jedec,ufs-2.0";
+> +			reg = <0x0 0x01d84000 0x0 0x3000>;
+> +			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
+> +			phys = <&ufs_mem_phy>;
+> +			phy-names = "ufsphy";
+> +			lanes-per-direction = <2>;
+> +			#reset-cells = <1>;
+> +			resets = <&gcc GCC_UFS_PHY_BCR>;
+> +			reset-names = "rst";
+> +
+> +			power-domains = <&gcc UFS_PHY_GDSC>;
+> +
+> +			iommus = <&apps_smmu 0x60 0x0>;
+> +
+> +			interconnects = <&aggre1_noc MASTER_UFS_MEM 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_UFS_MEM_CFG 0>;
+> +
+> +			interconnect-names = "ufs-ddr", "cpu-ufs";
+> +			clock-names = "core_clk",
+> +				      "bus_aggr_clk",
+> +				      "iface_clk",
+> +				      "core_clk_unipro",
+> +				      "ref_clk",
+> +				      "tx_lane0_sync_clk",
+> +				      "rx_lane0_sync_clk",
+> +				      "rx_lane1_sync_clk";
+> +			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
+> +				 <&gcc GCC_UFS_PHY_AHB_CLK>,
+> +				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
+> +				 <&rpmhcc RPMH_LN_BB_CLK3>,
 
-CPU: 0 PID: 4401 Comm: kworker/0:3 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: events io_fallback_req_func
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xc0/0xf0 mm/kasan/report.c:517
- io_fallback_req_func+0xc7/0x204 io_uring/io_uring.c:251
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+ref_clk here represents the refclk to the memory device, which I believe
+is what is the thing you have as <&tcsrcc TCSR_UFS_PAD_CLKREF_EN>.
 
-Allocated by task 5077:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> +				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
+> +				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
+> +				 <&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
+> +			freq-table-hz =
+> +				<75000000 300000000>,
 
-Freed by task 31:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
- io_req_caches_free+0x1a9/0x1e6 io_uring/io_uring.c:2737
- io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2967
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+GCC_UFS_PHY_AXI_CLK requires SM8550_CX (UFS_PHY_GDSC) to be voted to
+nominal, so please ensure that this is done. (e.g. using required-opps)
 
-The buggy address belongs to the object at ffff8880793aa8c0
- which belongs to the cache io_kiocb of size 216
-The buggy address is located 136 bytes inside of
- 216-byte region [ffff8880793aa8c0, ffff8880793aa998)
+Thanks,
+Bjorn
 
-The buggy address belongs to the physical page:
-page:ffffea0001e4ea80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x793aa
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff88814610fc80 dead000000000122 0000000000000000
-raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 5077, tgid 5077 (syz-executor134), ts 60034717602, free_ts 59988620363
- prep_new_page mm/page_alloc.c:2549 [inline]
- get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
- __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x350 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
- __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
- kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1451 [inline]
- free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page_list+0x176/0xcd0 mm/page_alloc.c:3528
- release_pages+0xcb1/0x1330 mm/swap.c:1072
- tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:97
- tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
- tlb_flush_mmu mm/mmu_gather.c:299 [inline]
- tlb_finish_mmu+0x14b/0x7e0 mm/mmu_gather.c:391
- exit_mmap+0x202/0x7c0 mm/mmap.c:3100
- __mmput+0x128/0x4c0 kernel/fork.c:1212
- mmput+0x60/0x70 kernel/fork.c:1234
- exit_mm kernel/exit.c:563 [inline]
- do_exit+0x9ac/0x2a90 kernel/exit.c:854
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
- get_signal+0x225f/0x24f0 kernel/signal.c:2859
- arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
- exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
- exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
- irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
- exc_page_fault+0xc0/0x170 arch/x86/mm/fault.c:1557
- asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
-
-Memory state around the buggy address:
- ffff8880793aa800: fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc fc
- ffff8880793aa880: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
->ffff8880793aa900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                              ^
- ffff8880793aa980: fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8880793aaa00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
+> +				<0 0>,
+> +				<0 0>,
+> +				<75000000 300000000>,
+> +				<100000000 403000000>,
+> +				<0 0>,
+> +				<0 0>,
+> +				<0 0>;
+> +			status = "disabled";
+> +		};
+> +
+>  		tcsr_mutex: hwlock@1f40000 {
+>  			compatible = "qcom,tcsr-mutex";
+>  			reg = <0 0x01f40000 0 0x20000>;
+> -- 
+> 2.34.1
+> 
