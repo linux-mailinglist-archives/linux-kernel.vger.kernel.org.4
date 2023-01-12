@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591D9666D3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB248666D4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236730AbjALJAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S239204AbjALJCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239860AbjALI5s (ORCPT
+        with ESMTP id S239783AbjALJBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 03:57:48 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D87738AC9;
-        Thu, 12 Jan 2023 00:55:26 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30C7sRmO004043;
-        Thu, 12 Jan 2023 08:55:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=/v2CdOrf4Z17VR11u6HItm6Vj0VBzlrchZCCWtJrPCI=;
- b=EmtIVpaWPM2eCOUs1AglbUlhmhMbiwXr2ds3AqWYfaXgIgh2qU+9U6IcOjzFZmi3Nzj1
- tzNjayk94FmhsuP5R/9Ujax1VjpMM0GcyxxwDXiP6ywlIWEXDGcY7U8HcD017nDqh6QM
- EczQyE4dCJzTX4J7fLJ4su3b2fPlNsvI46QZh2DnZHOf8US8J0R2VjnK4S3qL0YtYugp
- SWmcWs/mjdbt6n+KAkhi4Il9FWtwrDb6ray6Gg+9Wo+7XsXfdfoF05RidtQ46Mybr6/J
- aNcS6vLkr/X460xXSKS+bqNPSP2y4wWlBeF0wgyqczyLJItLGOn6g8O0yGq2xq9myp0f ow== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1km2ka87-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 08:55:22 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30C8tLYC029701
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 08:55:21 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 12 Jan 2023 00:55:18 -0800
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH v3 2/2] arm64: dts: qcom: sm8450: Add TCSR halt register space
-Date:   Thu, 12 Jan 2023 14:24:57 +0530
-Message-ID: <1673513697-30173-2-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1673513697-30173-1-git-send-email-quic_mojha@quicinc.com>
-References: <1673513697-30173-1-git-send-email-quic_mojha@quicinc.com>
+        Thu, 12 Jan 2023 04:01:12 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD871DF19
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:56:56 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 702885C009B;
+        Thu, 12 Jan 2023 03:56:53 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 12 Jan 2023 03:56:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1673513813; x=1673600213; bh=/m
+        Z4Vm+ef7Fcse4BfKsJqYMNeCYam4CxxvzvAMJvOpI=; b=qOTbh7F0sUjm9HN6fw
+        z+jXZhYpIF1EoBCHqwJnw+/w0Rur1WFX54+gBl0w76UxRKPQUlSNNZnOKvVv/rrP
+        KNUTNIWKT5/86SbO2DZ7R7fgwl3gKOjTzSNmtbvj4hDdIY+oIXqdJNAV/dWFGgBy
+        m2r98cQH/wahk28Fa+HE2SfJ1+h0QiGdV6SY/7rHNh5rq0BgdLsGICMVNKsNEK1B
+        KoeFwMdLqHv6tTmH2i3HVYO/LpcLe7AVoiGWK0VdYMxJro/e2BAcT+JwAJdjP2tS
+        vwgTWh2pHcrR9s/XOsEzN80JTlUKFBRfw/HD+PnSvA+P7DsKdaUltWz8nZgckLCp
+        l7SQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673513813; x=1673600213; bh=/mZ4Vm+ef7Fcse4BfKsJqYMNeCYa
+        m4CxxvzvAMJvOpI=; b=f0vnSQErjrLUJGF/V1xrO7b3Q9Y2Ph3Uo+NacnV/P/FL
+        Bv5aWGC4Z7+oIm2MhP7hxt1gThrmfYYLb+IPNVCqSJF/qV3rhtZpXY+CxmAMEruh
+        8JnEL29EJeDRaKfp4Z7aLhtNhZcqIIJ18zY0+oQkVXXRcUh4OBkyV8d3jOPJtcfD
+        VT2mUzjuQY9gDAbntgJAE5H9xtW0wGIvuGDsT63iu1eSm76uMeayHddh5cWJNNQI
+        kwdb3zsjMay0CYYzlFBxVub2abVO7nNgi2vfm+8A6i1/uofyWLdGwrQ7raD5GPbY
+        ntcXlLtZHgqHsyet9Ukb6ieAQDZ9kYWhXtiu//vylA==
+X-ME-Sender: <xms:Vcu_Y-l_OtHcoFboiKxHSlwnP5lla-39Z5xcvhqCxkUX-pvSEhbd1Q>
+    <xme:Vcu_Y13oleW2rSS2cUE8FSy5VvloxEDu5UCSL_RYPmyVyGbcAcghuInjh8SN6bkN_
+    DOdu0rzjIyaxLWN-qE>
+X-ME-Received: <xmr:Vcu_Y8rVs0K-k6iCMiFBKRb4xU6J3LQacoWOql1q3yoaZp_uumDO2Ua4wo8ex0MUvaXNwg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleehgdduvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeelvdduleeluedtgedvhedvtedulefhjeffudeu
+    heehheehhffgfffhveeifefgveenucffohhmrghinhepvhdurdhmmhenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhht
+    vghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:Vcu_YynvwH-5SF46BTauiK43PnbHopx_mKWQZytBGSwS2bspS-4SaA>
+    <xmx:Vcu_Y81uFAD4gskNxrlog7ux_mEGCLUcAWVD8bJs3eSrdCQsMJcPNA>
+    <xmx:Vcu_Y5v3IdDm60BwmS9orHo3trTf5gl5wSCYzO1VrcnpQ-3KkTCMYw>
+    <xmx:Vcu_Y2qx25XQ-YPGvhLl6gJIRtNpDbNVYd1evP8zrCmlCpjhJHwahA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 12 Jan 2023 03:56:52 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 8B97D109AF0; Thu, 12 Jan 2023 11:56:49 +0300 (+03)
+Date:   Thu, 12 Jan 2023 11:56:49 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Jann Horn <jannh@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
+Message-ID: <20230112085649.gvriasb2t5xwmxkm@box.shutemov.name>
+References: <20230111133351.807024-1-jannh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 9qUDvZZ-1HEfQace3VvbGZ3zJiHKr1Ku
-X-Proofpoint-GUID: 9qUDvZZ-1HEfQace3VvbGZ3zJiHKr1Ku
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-12_04,2023-01-11_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- mlxscore=0 mlxlogscore=846 malwarescore=0 bulkscore=0 lowpriorityscore=0
- phishscore=0 spamscore=0 adultscore=0 suspectscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301120062
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111133351.807024-1-jannh@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,44 +90,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add TCSR register space and refer it from scm node, so that
-it can be used by SCM driver.
+On Wed, Jan 11, 2023 at 02:33:51PM +0100, Jann Horn wrote:
+> If an ->anon_vma is attached to the VMA, collapse_and_free_pmd() requires
+> it to be locked. retract_page_tables() bails out if an ->anon_vma is
+> attached, but does this check before holding the mmap lock (as the comment
+> above the check explains).
+> 
+> If we racily merge an existing ->anon_vma (shared with a child process)
+> from a neighboring VMA, subsequent rmap traversals on pages belonging to
+> the child will be able to see the page tables that we are concurrently
+> removing while assuming that nothing else can access them.
+> 
+> Repeat the ->anon_vma check once we hold the mmap lock to ensure that there
+> really is no concurrent page table access.
+> 
+> Reported-by: Zach O'Keefe <zokeefe@google.com>
+> Fixes: f3f0e1d2150b ("khugepaged: add support of collapse for tmpfs/shmem pages")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jann Horn <jannh@google.com>
+> ---
+> zokeefe@ pointed out to me that the current code (after my last round of patches)
+> can hit a lockdep assert by racing, and after staring at it a bit I've
+> convinced myself that this is a real, preexisting bug.
+> (I haven't written a reproducer for it though. One way to hit it might be
+> something along the lines of:
+> 
+>  - set up a process A with a private-file-mapping VMA V1
+>  - let A fork() to create process B, thereby copying V1 in A to V1' in B
+>  - let B extend the end of V1'
+>  - let B put some anon pages into the extended part of V1'
 
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
-Change in v3:
-  - Align with new format of compatible for Qcom SoC.
+At this point V1' gets it's own ->anon_vma, not connected to V1, right?
 
-Changes in v2:
-  - Added SoC compatible based on comment made by krzysztof in v1.
+>  - let A map a new private-file-mapping VMA V2 directly behind V1, without
+>    an anon_vma
+> [race begins here]
+>   - in A's thread 1: begin retract_page_tables() on V2, run through first
+>     ->anon_vma check
+>   - in A's thread 2: run __anon_vma_prepare() on V2 and ensure that it
+>     merges the anon_vma of V1 (which implies V1 and V2 must be mapping the
+>     same file at compatible offsets)
+>   - in B: trigger rmap traversal on anon page in V1'
 
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+I don't follow the race. rmap on V1' will not reach V1.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 5704750..d9f7a9b 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -270,6 +270,7 @@
- 	firmware {
- 		scm: scm {
- 			compatible = "qcom,scm-sm8450", "qcom,scm";
-+			qcom,dload-mode = <&tcsr 0x13000>;
- 			interconnects = <&aggre2_noc MASTER_CRYPTO 0 &mc_virt SLAVE_EBI1 0>;
- 			#reset-cells = <1>;
- 		};
-@@ -1986,6 +1987,11 @@
- 			#hwlock-cells = <1>;
- 		};
- 
-+		tcsr: syscon@1fc0000 {
-+			compatible = "qcom,sm8450-tcsr", "syscon";
-+			reg = <0x0 0x1fc0000 0x0 0x30000>;
-+		};
-+
- 		usb_1_hsphy: phy@88e3000 {
- 			compatible = "qcom,sm8450-usb-hs-phy",
- 				     "qcom,usb-snps-hs-7nm-phy";
+>  mm/khugepaged.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 5cb401aa2b9d..0bfed37f3a3b 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -1644,7 +1644,7 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+>  		 * has higher cost too. It would also probably require locking
+>  		 * the anon_vma.
+>  		 */
+> -		if (vma->anon_vma) {
+> +		if (READ_ONCE(vma->anon_vma)) {
+>  			result = SCAN_PAGE_ANON;
+>  			goto next;
+>  		}
+
+This makes perfect sense. At least for readability. But I think
+false-negative should not lead to bad results.
+
+> @@ -1672,6 +1672,18 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+>  		result = SCAN_PTE_MAPPED_HUGEPAGE;
+>  		if ((cc->is_khugepaged || is_target) &&
+>  		    mmap_write_trylock(mm)) {
+> +			/*
+> +			 * Re-check whether we have an ->anon_vma, because
+> +			 * collapse_and_free_pmd() requires that either no
+> +			 * ->anon_vma exists or the anon_vma is locked.
+> +			 * We already checked ->anon_vma above, but that check
+> +			 * is racy because ->anon_vma can be populated under the
+> +			 * mmap lock in read mode.
+> +			 */
+> +			if (vma->anon_vma) {
+> +				result = SCAN_PAGE_ANON;
+> +				goto unlock_next;
+> +			}
+
+This is totally wrong direction. Or I don't understand the race.
+
+At this point we already paid nearly all price of of pagetable retraction.
+I don't see any correctness reason to stop here, except for the assert.
+
+I think lockdep assert in collapse_and_free_pmd() is wrong and has to be
+dropped.
+
+>  			/*
+>  			 * When a vma is registered with uffd-wp, we can't
+>  			 * recycle the pmd pgtable because there can be pte
+> 
+> base-commit: 7dd4b804e08041ff56c88bdd8da742d14b17ed25
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
+> 
+
 -- 
-2.7.4
-
+  Kiryl Shutsemau / Kirill A. Shutemov
