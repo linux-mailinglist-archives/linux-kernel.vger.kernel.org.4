@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4B6667BF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE408667BF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241335AbjALQtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 11:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
+        id S241348AbjALQty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 11:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241262AbjALQoj (ORCPT
+        with ESMTP id S241305AbjALQoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:44:39 -0500
+        Thu, 12 Jan 2023 11:44:44 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF69E58834;
-        Thu, 12 Jan 2023 08:38:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2026DBE14;
+        Thu, 12 Jan 2023 08:38:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673541505; x=1705077505;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=68OPSiZVY1KVbajcXwUGWj+MRV19nF/DUDmqYU0Aj6I=;
-  b=Zll/R+8E+ITOdeBMGhDfdNMkYX22wjgLCWKYmyt+hOgbYklUU5dSO4VL
-   Kri2Y374BRL6l5iLHu+a1VZzoNILj6nRX6hX2W9nyNGmdn38cRh19ecJg
-   AdU79KTaHgw8XRGAFSixlsWHgjLYvhnOhLtODTxjytBjz+KJvKSVfHlk6
-   YwMNG2ah77SRUOoexV3X6X3xbcL5eTBkj2GIR+uQytYuNYx3778Z09c/r
-   hZgSQCI3NKm6B2aLuOGsKyoOVjmJM44bkrJS8TU6AftDExKwy7Q0Z2XOz
-   Qge3XjP3eV/JPMdQB8Ql2xF800AKfK1ea6020fDC2Dq2TD/iEphwsZhyK
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="304132438"
+  t=1673541513; x=1705077513;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4BOtLkvp4AVdkK2zPygGM6fUB1lerPp5K/6FblR5a3Q=;
+  b=R5vyJ2Bagf28KdcLpfMWEKK5BjBZkusDsNjni2ghCRQUqfVKwfjpxcrs
+   TXkCSRImEkmjOPXH5Yp9jW+F+y6U1od1pg3zAns3M7aRI8Ef3F11TmAXF
+   aYLg5QnZvFTTrAeCqQn672iYh9ccv9tTe6+n8KaiRWlAntvdW1D8vNiwP
+   eXVrVtYyVIBc19iZKZRSEVORw7nZ18sNdco5+2ZUr8Az8cK4haiLTVQBq
+   6Sn1OB+ZIh5g9ovU8p+r2z2MptqvQyVp35o2SgUOUiQt2xxPGd0sEbeAi
+   D22IRZrUzrggCcKD9Pnn0MBjOTyEcqjOOsx6WaXaW+gzxjnXxe8g7htZx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="304132472"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="304132438"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:38:01 -0800
+   d="scan'208";a="304132472"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:38:04 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="690193082"
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="635446946"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="690193082"
+   d="scan'208";a="635446946"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 12 Jan 2023 08:37:58 -0800
+  by orsmga006.jf.intel.com with ESMTP; 12 Jan 2023 08:37:59 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E3D71E1; Thu, 12 Jan 2023 18:38:31 +0200 (EET)
+        id B8AE0130; Thu, 12 Jan 2023 18:38:33 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -55,10 +55,12 @@ Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/2] pinctrl: bcm: bcm2835: Switch to use ->add_pin_ranges()
-Date:   Thu, 12 Jan 2023 18:38:24 +0200
-Message-Id: <20230112163825.72983-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/2] gpiolib: of: Remove no more used ->of_gpio_ranges_fallback()
+Date:   Thu, 12 Jan 2023 18:38:25 +0200
+Message-Id: <20230112163825.72983-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230112163825.72983-1-andriy.shevchenko@linux.intel.com>
+References: <20230112163825.72983-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -70,63 +72,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yeah, while the ->add_pin_ranges() shouldn't be used by DT drivers,
-this one requires it to support quite old firmware descriptions that
-do not have gpio-ranges property.
-
-The change allows to clean up GPIO library from OF specifics.
-There is no functional change intended.
+Since the only one and last user of the ->of_gpio_ranges_fallback()
+gone, remove the callback completely. New platforms must use the
+gpio-ranges property.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/bcm/pinctrl-bcm2835.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/gpio/gpiolib-of.c   |  5 -----
+ include/linux/gpio/driver.h | 11 -----------
+ 2 files changed, 16 deletions(-)
 
-diff --git a/drivers/pinctrl/bcm/pinctrl-bcm2835.c b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-index 7857e612a100..fea1d1bcb389 100644
---- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-+++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-@@ -358,16 +358,18 @@ static int bcm2835_gpio_direction_output(struct gpio_chip *chip,
- 	return 0;
- }
- 
--static int bcm2835_of_gpio_ranges_fallback(struct gpio_chip *gc,
--					   struct device_node *np)
-+static int bcm2835_add_pin_ranges_fallback(struct gpio_chip *gc)
- {
-+	struct bcm2835_pinctrl *pc = gpiochip_get_data(gc);
-+	struct device_node *np = dev_of_node(&gc->gpiodev->dev);
- 	struct pinctrl_dev *pctldev = of_pinctrl_get(np);
- 
--	of_node_put(np);
--
- 	if (!pctldev)
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index 72d8a3da31e3..266352b1a966 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -980,11 +980,6 @@ static int of_gpiochip_add_pin_range(struct gpio_chip *chip)
+ 	if (!np)
  		return 0;
  
-+	if (of_property_read_bool(np, "gpio-ranges"))
-+		return 0;
-+
- 	gpiochip_add_pin_range(gc, pinctrl_dev_get_devname(pctldev), 0, 0,
- 			       gc->ngpio);
+-	if (!of_property_read_bool(np, "gpio-ranges") &&
+-	    chip->of_gpio_ranges_fallback) {
+-		return chip->of_gpio_ranges_fallback(chip, np);
+-	}
+-
+ 	group_names = of_find_property(np, group_names_propname, NULL);
  
-@@ -388,7 +390,7 @@ static const struct gpio_chip bcm2835_gpio_chip = {
- 	.base = -1,
- 	.ngpio = BCM2835_NUM_GPIOS,
- 	.can_sleep = false,
--	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
-+	.add_pin_ranges = bcm2835_add_pin_ranges_fallback,
+ 	for (;; index++) {
+diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+index ddc7a14a274f..29c283919f8a 100644
+--- a/include/linux/gpio/driver.h
++++ b/include/linux/gpio/driver.h
+@@ -522,17 +522,6 @@ struct gpio_chip {
+ 	int (*of_xlate)(struct gpio_chip *gc,
+ 			const struct of_phandle_args *gpiospec, u32 *flags);
+ 
+-	/**
+-	 * @of_gpio_ranges_fallback:
+-	 *
+-	 * Optional hook for the case that no gpio-ranges property is defined
+-	 * within the device tree node "np" (usually DT before introduction
+-	 * of gpio-ranges). So this callback is helpful to provide the
+-	 * necessary backward compatibility for the pin ranges.
+-	 */
+-	int (*of_gpio_ranges_fallback)(struct gpio_chip *gc,
+-				       struct device_node *np);
+-
+ #endif /* CONFIG_OF_GPIO */
  };
  
- static const struct gpio_chip bcm2711_gpio_chip = {
-@@ -405,7 +407,7 @@ static const struct gpio_chip bcm2711_gpio_chip = {
- 	.base = -1,
- 	.ngpio = BCM2711_NUM_GPIOS,
- 	.can_sleep = false,
--	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
-+	.add_pin_ranges = bcm2835_add_pin_ranges_fallback,
- };
- 
- static void bcm2835_gpio_irq_handle_bank(struct bcm2835_pinctrl *pc,
 -- 
 2.39.0
 
