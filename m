@@ -2,139 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D3C667A00
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DE36679CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238279AbjALP5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
+        id S238279AbjALPrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:47:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjALP4Z (ORCPT
+        with ESMTP id S240481AbjALPrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:56:25 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB59A5A8B1;
-        Thu, 12 Jan 2023 07:46:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673538398; x=1705074398;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=rZdVhyovnZwLRgUV7awB0Pfol4ouRAVFDTvxApxMr2g=;
-  b=IowAaLT+HC1pWN9l9MSwt5jVGt4xIqpIyXQtoR0NSkZM8rwd9zDvCvjf
-   AYvmg6X5DxIZRuVDi1KoKxZ9vOpyH/wHE/HPCDcmfDRrDmaybytq9oVRb
-   Iedey8cxYGt6WuCua/8XfJlbEjRSM4iIJ+FyDDfaXCZwifWp6m3ITCmrq
-   SatOX83LomXgU87VBrb3Bwld8i7elWMdp8HCrL8fqduhx1EerOIOfOurJ
-   2pXjlycMA1uCrkSkXPDvg60eMQvBlEqPvnRy5S5srT87sq9+jPfu1VgLq
-   MglKmSwsrEBChoautvnmYZ/AJMKSnrU9AAARNl51WNraUlvrnlzsTHaMV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="388223956"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="388223956"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 07:35:52 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="690171248"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="690171248"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 07:35:51 -0800
-Date:   Thu, 12 Jan 2023 07:36:29 -0800 (PST)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     Xu Yilun <yilun.xu@intel.com>, hao.wu@intel.com,
-        russell.h.weight@intel.com, basheer.ahmed.muddebihal@intel.com,
-        trix@redhat.com, mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v10 3/4] fpga: dfl: add basic support for DFHv1
-In-Reply-To: <Y7/ggajPS2WNrPPU@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2301120732500.845139@rhweight-WRK1>
-References: <20230110003029.806022-1-matthew.gerlach@linux.intel.com> <20230110003029.806022-4-matthew.gerlach@linux.intel.com> <Y708L2rRc1RDVkui@smile.fi.intel.com> <alpine.DEB.2.22.394.2301101310150.815911@rhweight-WRK1> <Y74bSzUBLYH4cLDh@yilunxu-OptiPlex-7050>
- <Y7/ggajPS2WNrPPU@smile.fi.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 12 Jan 2023 10:47:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1F7192B9;
+        Thu, 12 Jan 2023 07:37:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6464462077;
+        Thu, 12 Jan 2023 15:37:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F33C433EF;
+        Thu, 12 Jan 2023 15:37:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673537827;
+        bh=5APceSExAsrf4VwDnGXlJySaXuHRaZgzWG4NnwXl+Jo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O7IU4VWz85tfErlM/RwYKz5Pdon4CNtAKJnKzulWLSuCghMXTX3smxLR1or6853JL
+         uYKsZaQe+8GBJhGGeOwMUbQ3AmCvMo5UQdx0ZiJ65jwR60ZIZa+QwXCRymp1kXN1v+
+         Bd8ui0hlVzhOBnrY2bJOiLpndAW+QLJoTnFhgz/A6AIl4fDLJ/Z98jO+6/XOto/0YV
+         r82gOmbqah641Jm0UZbxAZTJTMLCHD8I5dxpAiyET3LR1Z7xDP7kuOfNbHTHwQ119j
+         RzSvdwqz0xVdXloWwqVFbLiSYHgSzz8TShONiqJPtM6de62FZUdOy1rZbqKJXiHAu3
+         mukrIdkzkPdhw==
+Date:   Thu, 12 Jan 2023 09:37:04 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] cpufreq: qcom-hw: Ensure only freq-domain regs are
+ counted in num_domains
+Message-ID: <20230112153704.6d37dygm4yfexdq6@builder.lan>
+References: <20230111205125.1860858-1-konrad.dybcio@linaro.org>
+ <20230111205125.1860858-2-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111205125.1860858-2-konrad.dybcio@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 11, 2023 at 09:51:25PM +0100, Konrad Dybcio wrote:
+> In preparation for CPRh-aware OSM programming, change the probe
+> function so that we determine the number of frequency domains by
+> counting the number of reg-names entries that begin with
+> "freq-domain", as the aforementioned changes require introduction
+> of non-freq-domain register spaces.
+> 
 
+Requiring reg-names would break backwards compatibility with at least
+sc7280 and sm6115.
 
-On Thu, 12 Jan 2023, Andy Shevchenko wrote:
+Regards,
+Bjorn
 
-> On Wed, Jan 11, 2023 at 10:13:31AM +0800, Xu Yilun wrote:
->> On 2023-01-10 at 14:07:16 -0800, matthew.gerlach@linux.intel.com wrote:
->>> On Tue, 10 Jan 2023, Andy Shevchenko wrote:
->>>> On Mon, Jan 09, 2023 at 04:30:28PM -0800, matthew.gerlach@linux.intel.com wrote:
->>>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->
-> ...
->
->>>>> v10: change dfh_find_param to return size of parameter data in bytes
->>>>
->>>> The problem that might occur with this approach is byte ordering.
->>>> When we have u64 items, we know that they all are placed in CPU
->>>> ordering by the bottom layer. What's the contract now? Can it be
->>>> a problematic? Please double check this (always keep in mind BE32
->>>> as most interesting case for u64/unsigned long representation and
->>>> other possible byte ordering outcomes).
->>>
->>> A number of u64 items certainly states explicit alignment of the memory, but
->>> I think byte ordering is a different issue.
->>>
->>> The bottom layer, by design, is still enforcing a number u64 items under the
->>> hood. So the contract has not changed. Changing units of size from u64s to
->>> bytes was suggested to match the general practice of size of memory being in
->>> bytes. I think the suggestion was made because the return type for
->>> dfh_find_param() changed from u64* to void* in version 9, when indirectly
->>> returning the size of the parameter data was introduced.  So a void * with a
->>> size in bytes makes sense. On the other hand, returning a u64 * is a more
->>> precise reflection of the data alignment. I think the API should be as
->>
->> I prefer (void *) + bytes. The properties in the parameter block are not
->> guarateed to be u64 for each, e.g. the REG_LAYOUT, so (void *) could better
->> indicate it is not. It is just a block of data unknown to DFL core and to
->> be parsed by drivers.
->
-> If the hardware / protocol is capable of communicating the arbitrary lengths
-> of parameters, then yes, bytes make sense. But this should be clear what byte
-> ordering is there if the items can be words / dwords / qwords.
-
-The hardware does communicate the arbitrary lengths of the parameter data; 
-so bytes make sense.  I will update Documentation/fpga/dfl.rst to 
-explicitly say that multi-byte quantities are little-endian.
-
->
-> TL;DR: The Q is: Is the parameter block a byte stream? If yes, then your
-> proposal is okay. If no, no void * should be used. In the latter it should
-> be union of possible items or a like as defined by a protocol.
-
-The parameter block is not a byte stream; so void * should be used.
-
-Thanks,
-Matthew Gerlach
-
-
->
->> And why users/drivers need to care about the alignment of the parameter
->> block?
->>
->>> follows:
->
+> Fixes: 1a6a8b0080b0 ("cpufreq: qcom-hw: Fix reading "reg" with address/size-cells != 2")
+> Fixes: 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 34 ++++++++++++++++++++++---------
+>  1 file changed, 24 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 9505a812d6a1..89d5ed267399 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -651,8 +651,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	struct device_node *soc_node;
+>  	struct device *cpu_dev;
+> +	const char *reg_name;
+>  	struct clk *clk;
+> -	int ret, i, num_domains, reg_sz;
+> +	int ret, i, num_reg_names, num_domains = 0;
+>  
+>  	clk = clk_get(dev, "xo");
+>  	if (IS_ERR(clk))
+> @@ -684,19 +685,32 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  	if (!soc_node)
+>  		return -EINVAL;
+>  
+> -	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
+> -	if (ret)
+> +	num_reg_names = of_property_count_strings(dev->of_node, "reg-names");
+> +	if (num_reg_names <= 0) {
+> +		ret = num_reg_names ? num_reg_names : -ENODATA;
+>  		goto of_exit;
+> +	}
+>  
+> -	ret = of_property_read_u32(soc_node, "#size-cells", &i);
+> -	if (ret)
+> -		goto of_exit;
+> +	for (i = 0; i < num_reg_names; i++) {
+> +		ret = of_property_read_string_index(dev->of_node, "reg-names", i, &reg_name);
+> +		if (ret < 0)
+> +			goto of_exit;
+>  
+> -	reg_sz += i;
+> +		/*
+> +		 * Check if the i-th reg is a freq-domain base, no need to add 1
+> +		 * more byte for idx, as sizeof counts \0 whereas strlen does not.
+> +		 */
+> +		if (strlen(reg_name) == sizeof("freq-domain")) {
+> +			/* Check if this reg-name begins with "freq-domain" */
+> +			if (!strncmp(reg_name, "freq-domain", sizeof("freq-domain") - 1))
+> +				num_domains++;
+> +		}
+> +	}
+>  
+> -	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
+> -	if (num_domains <= 0)
+> -		return num_domains;
+> +	if (num_domains <= 0) {
+> +		ret = -EINVAL;
+> +		goto of_exit;
+> +	}
+>  
+>  	qcom_cpufreq.data = devm_kzalloc(dev, sizeof(struct qcom_cpufreq_data) * num_domains,
+>  					 GFP_KERNEL);
 > -- 
-> With Best Regards,
-> Andy Shevchenko
->
->
->
+> 2.39.0
+> 
