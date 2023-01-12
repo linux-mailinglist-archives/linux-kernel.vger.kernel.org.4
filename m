@@ -2,236 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CDF666E44
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F55666E4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjALJae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
+        id S240144AbjALJbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240117AbjALJ3r (ORCPT
+        with ESMTP id S240063AbjALJas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:29:47 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8182350F4E
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:25:17 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id u9so43302862ejo.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:25:17 -0800 (PST)
+        Thu, 12 Jan 2023 04:30:48 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2973B1CC;
+        Thu, 12 Jan 2023 01:26:12 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id qk9so43273165ejc.3;
+        Thu, 12 Jan 2023 01:26:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9UOvk5uyQGsRUZs22U+SL6M32TRGuh0Bg7yw7vCjuLU=;
-        b=C58mc0fbpRuLE3Z72kvAVwtpYKi0LbbX65IN4430jxWeX2xjysqvFoYLXVQUT3GnCr
-         vaiYvBBXQ5VuEJv/D/sJjJIsS4jESwCzgPDTMB+wnHA75UXWCQrf7NKNMyM1VydacYCb
-         ZmfDFRvCr4CWiHKL5waTtfy/u5aYTE5eW1BYdSoEiotOLJzcme0MODZ7ZxnReBZhrHbb
-         dJF81COjYRjNl0BsIQIwtVP/jYBmXclzUp0O8Yy3/LZ3L1HLSICyMgUjTL6V+CIBj/vA
-         jryaJaLINYyct5I6pnaPtPHPRj6RuXWiyuUR3bflR4Ff6YBcuv+zWUNHnOY4IiOQ8JoT
-         T3GQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PR3FCK8jevczBl2UhB85vtXZ48F6Lz73xrO5XCgZHBY=;
+        b=agaiZqmWB85gcIkW3xiRxHarqMRlo3MPvklXc74QhW+qLarqWVvMvByOwal4ZoVi7E
+         8iyTqNoWnYGn7thYTP+m3QuAVcQ2R3DBSkTf+Vyw011D7kATC6b9zt8755k9Bw+KnV6x
+         xb0K4JJkl+fv3cl/rM1KIpd/3lKLl3AtG9A48P/WxKTzDr/LYCYagOjS3VhNnWfEEpD5
+         QwsgvvW9cQM9GiBXdtNoaANVD/hdTccNoGLYUizSndxci+EgV6uv2gC5v/kF12stwWFc
+         aNmuh48/+vTiIlV2HUzb+Lw2SVKYxYpCX00gBeHmJS0MrAiLnt6yTsTPq5KbLZUVx4yO
+         YG+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9UOvk5uyQGsRUZs22U+SL6M32TRGuh0Bg7yw7vCjuLU=;
-        b=3XLMAT0XMQ4Bi9rbgzu3IH5UKDMbtg7/oNXIsp4izhJA7DfZYH9B49loC1v75js4bQ
-         +FN+26bARZwEub5t9UABfz8EIN7V25fpV6iVws0fF6oUOcWOewb1l+6YXE8zdLz7m6E4
-         kctzcPVVIO4nmnOZblNfyG/bzQ1LX+pZ/WS70q9fhj7Brz8VLGXEVwTDmbIF3te6MVHA
-         HbUwuJ32TPpWCVUX02DBHzg/7xHzsMiR4UXeV3nBFJ2ovyeA9zfwfuODGcQd4uhJRR1W
-         6Bsexx1SXqasnuc38IynJcGR/PbJKrJBm5SvyR5+kOT+xU2PWe+HCFea0mogpMzjY5iB
-         9FvQ==
-X-Gm-Message-State: AFqh2kraUBNNKEU4MK+E9iN1bq/RArPRzyzg08rer+urkYuFAVyGCwWQ
-        6Bind1mDpEjFsn9Y6eRdBV0wHQ==
-X-Google-Smtp-Source: AMrXdXsYVYTQ5ViFr64/0wXBdnwnuclIkzc6zV64iUrPQVEOpfCuUl7LjG7vIZhvx4wFYE2Xn2Gvcg==
-X-Received: by 2002:a17:906:99d1:b0:7ad:cf9c:b210 with SMTP id s17-20020a17090699d100b007adcf9cb210mr60573303ejn.18.1673515516080;
-        Thu, 12 Jan 2023 01:25:16 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id gk8-20020a17090790c800b0084d35ffbc20sm6155551ejb.68.2023.01.12.01.25.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 01:25:15 -0800 (PST)
-Message-ID: <f566a556-4f9e-f5df-1ea4-2c8f633bdb4c@linaro.org>
-Date:   Thu, 12 Jan 2023 10:25:13 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PR3FCK8jevczBl2UhB85vtXZ48F6Lz73xrO5XCgZHBY=;
+        b=RHXCX2sJpZDRJ8VxLQNKD7m+wjzcQOAHictvskDN6f/8k97/9GqWiNdu43sPSa7ozm
+         01BeETM/KxKcIUCq83H2+tEoOxXkbMuARzckXPSsDfwkpLpXAKAOf8SZm9Fx0PxpazfQ
+         D2zaqljx9u0IWOHpPsKzDRygLSd4eAGPo0ePc4Tw1QiHEaMH8fylxKZ+JuPE4lAZCM3q
+         kWYfpH4CheEhFj/LIBrUx/1UEn1VAf2Supev8gLGc84TM/P3+hrt1kGbU980YxVbCNxs
+         Scl73SzV+Ip2tjNxKZsVz71vfGjsiJiUlZhCgS+j8mLyzEh12+35Ops67IPeldXazsoG
+         OjeA==
+X-Gm-Message-State: AFqh2kpd9Nu/9cyTtxpizOI6heUDraNOcF+OBzReKgC55mw6semYd4Zn
+        zLQ0Rle+Qy+UKle420uODTF8z5tZyWLhaZIc+hM=
+X-Google-Smtp-Source: AMrXdXvXFyga8myPB2cyI62NtveSMPiuxqKxMwiHFG2IB1BstYfcKsA16ul35E8scVqCz+anEG94J8GjIC7LrQAppiA=
+X-Received: by 2002:a17:907:a485:b0:7c1:5422:c39c with SMTP id
+ vp5-20020a170907a48500b007c15422c39cmr5129541ejc.130.1673515571298; Thu, 12
+ Jan 2023 01:26:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/4] dt-bindings: net: Add FSD EQoS device tree
- bindings
-Content-Language: en-US
-To:     Sriranjani P <sriranjani.p@samsung.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pankaj.dubey@samsung.com,
-        alim.akhtar@samsung.com, ravi.patel@samsung.com
-References: <20230111075422.107173-1-sriranjani.p@samsung.com>
- <CGME20230111075441epcas5p4f0b503484de61228e3ed71a4041cdd41@epcas5p4.samsung.com>
- <20230111075422.107173-2-sriranjani.p@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230111075422.107173-2-sriranjani.p@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230112083746.9551-1-lukas.bulwahn@gmail.com>
+ <20230112083746.9551-3-lukas.bulwahn@gmail.com> <4d2f2b81-b7ab-4ad6-84cc-f3a3c932880d@app.fastmail.com>
+In-Reply-To: <4d2f2b81-b7ab-4ad6-84cc-f3a3c932880d@app.fastmail.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Thu, 12 Jan 2023 10:26:00 +0100
+Message-ID: <CAKXUXMzRk1aK-_kELB7dZXAS711HuiF4TGaf_BgDK=dhY=iyVQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] ARM: pxa: remove further dead code after pxa93
+ support removal
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2023 08:54, Sriranjani P wrote:
-> Add FSD Ethernet compatible in Synopsys dt-bindings document. Add FSD
-> Ethernet YAML schema to enable the DT validation.
-> 
-> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
-> Signed-off-by: Ravi Patel <ravi.patel@samsung.com>
-> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
-> ---
->  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
->  .../net/tesla,dwc-qos-ethernet-4.21.yaml      | 103 ++++++++++++++++++
->  2 files changed, 104 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/tesla,dwc-qos-ethernet-4.21.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> index 2f909ffe2fe8..e8d53061fd35 100644
-> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> @@ -89,6 +89,7 @@ properties:
->          - snps,dwmac-5.10a
->          - snps,dwxgmac
->          - snps,dwxgmac-2.10
-> +        - tesla,dwc-qos-ethernet-4.21
+On Thu, Jan 12, 2023 at 10:06 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Jan 12, 2023, at 09:37, Lukas Bulwahn wrote:
+> > Commit 150ccb6f9a89 ("ARM: pxa: remove pxa93x support") removes configs
+> > CPU_PXA930 and CPU_PXA935 and uses of cpu_is_pxa93x() and cpu_is_pxa935().
+> >
+> > Remove some further dead code in ./include/linux/soc/pxa/cpu.h on top of
+> > that commit above.
+> >
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+>
+> I had this in an earlier version and ended up leaving this bit in
+> when I reworked the series to not drop support for PXA310 and PXA320.
+>
+> You are probably right that we should not reference the removed
+> Kconfig symbols, but I see that this causes a regression
+> unless I also bring back the change to
+>
+> drivers/mmc/host/pxamci.c:                              || cpu_is_pxa935())
+>
 
-I don't get, why did you add the IP version number? Can Tesla FSD come
-with different ones? The compatible should be specific to SoC and that's
-all. Also keep consistent naming, so this is a "mac", right?
+Thanks for the insights of your previous attempt. In my janitorial
+work, I am just triggered by references to removed configs and hardly
+have the resources to test all the various arm pxa configs. Let us
+keep it as is for now, and see once your clean-up has settled in
+mainline, if we find a good suitable further cleanup patch on these
+code parts here then.
 
->  
->    reg:
->      minItems: 1
-> diff --git a/Documentation/devicetree/bindings/net/tesla,dwc-qos-ethernet-4.21.yaml b/Documentation/devicetree/bindings/net/tesla,dwc-qos-ethernet-4.21.yaml
-> new file mode 100644
-> index 000000000000..d0dfc4a38d17
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/tesla,dwc-qos-ethernet-4.21.yaml
-> @@ -0,0 +1,103 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/tesla,dwc-qos-ethernet-4.21.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: FSD Ethernet Quality of Service Device Tree Bindings
-
-Drop "Device Tree Bindings"
-
-
-> +
-> +allOf:
-> +  - $ref: "snps,dwmac.yaml#"
-
-Drop quoets.
-
-> +
-> +maintainers:
-> +  - Sriranjani P <sriranjani.p@samsung.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: tesla,dwc-qos-ethernet-4.21.yaml
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 4
-> +
-> +  clock-names:
-> +    minItems: 4
-
-Why rx clock might be not connected?
-
-> +    items:
-> +      - const: ptp_ref
-> +      - const: master_bus
-> +      - const: slave_bus
-> +      - const: tx
-> +      - const: rx
-> +      - const: master2_bus
-> +      - const: slave2_bus
-> +      - const: eqos_rxclk_mux
-> +      - const: eqos_phyrxclk
-> +      - const: dout_peric_rgmii_clk
-
-You have here 10 clocks, but snps,dwmac allows maximum 8. You need to
-update it and fix any other dependent schemas.
-
-> +
-> +  rx-clock-skew:
-
-Does not look like generic property. Missing vendor prefix, description,
-constraints.
-
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +
-> +  iommus:
-> +    maxItems: 1
-> +
-> +  phy-mode:
-> +    $ref: ethernet-controller.yaml#/properties/phy-connection-type
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - rx-clock-skew
-> +  - iommus
-> +  - phy-mode
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/fsd-clk.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    ethernet_1: ethernet@14300000 {
-> +              compatible = "tesla,dwc-qos-ethernet-4.21";
-> +              reg = <0x0 0x14300000 0x0 0x10000>;
-
-Are you sure you tested the bindings? 100% sure?
-
-> +              interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
-> +              clocks =
-
-Don't introduce fake blank lines.
-
-> +                       <&clock_peric PERIC_EQOS_TOP_IPCLKPORT_CLK_PTP_REF_I>,
-> +                       <&clock_peric PERIC_EQOS_TOP_IPCLKPORT_ACLK_I>,
-> +                       <&clock_peric PERIC_EQOS_TOP_IPCLKPORT_HCLK_I>,
-> +                       <&clock_peric PERIC_EQOS_TOP_IPCLKPORT_RGMII_CLK_I>,
-> +                       <&clock_peric PERIC_EQOS_TOP_IPCLKPORT_CLK_RX_I>,
-> +                       <&clock_peric PERIC_BUS_D_PERIC_IPCLKPORT_EQOSCLK>,
-> +                       <&clock_peric PERIC_BUS_P_PERIC_IPCLKPORT_EQOSCLK>,
-> +                       <&clock_peric PERIC_EQOS_PHYRXCLK_MUX>,
-> +                       <&clock_peric PERIC_EQOS_PHYRXCLK>,
-> +                       <&clock_peric PERIC_DOUT_RGMII_CLK>;
-> +              clock-names =
-
-Ditto
-
-> +                            "ptp_ref",
-> +                            "master_bus",
-
-Best regards,
-Krzysztof
-
+Lukas
