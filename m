@@ -2,103 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4A2667D2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E73667D35
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbjALSA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S239833AbjALSAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:00:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232194AbjALR7X (ORCPT
+        with ESMTP id S239847AbjALSAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:59:23 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBE37DE1D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:19:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=LNFZdqmxri5F07CGFwUu0kpG4HLKkrGeCVzSp+ij6mQ=; b=1kvyUBZ8JMIZJMC9LK+wnH4Lxb
-        h6G9cn4H/Z/gEjQiqKr8ZU4zsW3xrJn0lAj2JkKJFVs9powR1npi/bv5YtY6pSUXZDZxHn50xHH1h
-        jvHg2VCzDhfmesT2ksNcV/QB3fC9nNfvegVrfwEA4nDPdfCiMYgSGDNmMtZ/71UreHWEDQ9qCQ/3O
-        /vcEBYVTo0drU+GhTUivRgRCaznM/RsdyRHNGbzpQ8CiHOjdn21x9rcN6ajMlWuf9EZVKiyR0U+eT
-        Q6lYGvrz5GTQFwUwVtHaoSGvQFbPr8YdhqDRrGn4f4yCb7KBmztSVsUpXR7j8ca8nwUCL8GskUUbg
-        /YCbZayQ==;
-Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pG1Eg-00G06L-47; Thu, 12 Jan 2023 17:19:30 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Leo Li <leoyang.li@nxp.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Anton Vorontsov <avorontsov@ru.mvista.com>,
-        Kumar Gala <galak@kernel.crashing.org>
-Subject: [PATCH] soc/fsl/qe: fix usb.c build errors
-Date:   Thu, 12 Jan 2023 09:19:28 -0800
-Message-Id: <20230112171928.29653-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.0
+        Thu, 12 Jan 2023 13:00:08 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242B15E0BF;
+        Thu, 12 Jan 2023 09:20:02 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id e76so19458633ybh.11;
+        Thu, 12 Jan 2023 09:20:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=E+c881Dpe/85Aq62y2qtNDOsySQkmPy3VHLSOKalLuM=;
+        b=Pc/Xg/kvl8DhMy2mV5DSv0JY0A6VI9FAm0F9VYc/dWZQyf9ydWoM7408OMWs2Kt4+S
+         eCo3wgwd+MlvDDhfoUGkDIHkrJCrglJGkVPgM1Oz/eqrjqRxIUt6ATz63+Zu6orRFNgG
+         FQGLvnnrHoT7dPPaTZzgvM7ZMRU4T4kxqvK2dz+jrBacryTz+KXjnEm1lE9Im5xoXhH6
+         uaeXjEyPwqRZI6/5GVgzLBgcQ8qcs+by+yaLr7atp5Urs68114vwsX10TNqGRNH04pMs
+         QclnYeakKcSogdPbUF9XgR9U7I3ZKCshjFY/gZue60/KZOW51I77izQ6dwI6z0pu5/hK
+         x6BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E+c881Dpe/85Aq62y2qtNDOsySQkmPy3VHLSOKalLuM=;
+        b=VDaqOA08Dm5H79a2XQauxlLeiIwYmNVaZ11oQvcBhE6nWnUgIBx1IpBMRkT/lBa1dt
+         eGSBZgy9hi7DcHoe+i5UE2WtPJVZdKmpqp9WHovW/5de0uNyG/1WMdH1Ro1zhX4jvDEO
+         ZaxyZ7WsPWXFpeCm/kbh6y5hFBz1i8NvOi9NA+pqkNvNAIUu51rh1MfrGyN3cCiPp0Wc
+         T8x2HCn/ZWXpC/Bk4jeh4+5ylYpns5JzGVYKwG/MXvC6NgkjWaT6IquLDfBX2I1VB7gO
+         ZKX/MSAa95yt8Oth45WCJprkFyekCfekbfudJobSYt6PQplcvJNdZ957Od8xcsLQ3VX2
+         rpyw==
+X-Gm-Message-State: AFqh2kp/O7oF3w3q4s9aoAvr5fSGxJLk37f2aBMaOvFhm+N2H1NtDF/D
+        z3eeBHT0G8PHPMhE59QuabMNPqJue1uSmMVHxt3Nl38KcYUYPQ==
+X-Google-Smtp-Source: AMrXdXsAU7a6oM1sLrHI9+oxo29VzkKN9mlRylNCqKeDfYmz3uqWRlBtx5f1lx9/AgauD4UB5gGLFmj2h4TGKEvLRKQ=
+X-Received: by 2002:a25:8a:0:b0:7ca:7f22:5c15 with SMTP id 132-20020a25008a000000b007ca7f225c15mr196720yba.219.1673544001120;
+ Thu, 12 Jan 2023 09:20:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230104211448.4804-1-vishal.moola@gmail.com> <20230104211448.4804-10-vishal.moola@gmail.com>
+In-Reply-To: <20230104211448.4804-10-vishal.moola@gmail.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Thu, 12 Jan 2023 09:19:50 -0800
+Message-ID: <CAOzc2pw9WCgHyA2epbz5=HEWN4bFzD4C7zL2452J_egv7iSLrw@mail.gmail.com>
+Subject: Re: [PATCH v5 09/23] cifs: Convert wdata_alloc_and_fillpages() to use filemap_get_folios_tag()
+To:     linux-fsdevel@vger.kernel.org, pc@cjr.nz, tom@talpey.com
+Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-nilfs@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix build errors in soc/fsl/qe/usb.c when QUICC_ENGINE is not set.
-This happens when PPC_EP88XC is set, which selects CPM1 & CPM.
-When CPM is set, USB_FSL_QE can be set without QUICC_ENGINE
-being set. When USB_FSL_QE is set, QE_USB deafults to y, which
-causes build errors when QUICC_ENGINE is not set. Making
-QE_USB depend on QUICC_ENGINE prevents QE_USB from defaulting to y.
+On Wed, Jan 4, 2023 at 1:15 PM Vishal Moola (Oracle)
+<vishal.moola@gmail.com> wrote:
+>
+> This is in preparation for the removal of find_get_pages_range_tag(). Now also
+> supports the use of large folios.
+>
+> Since tofind might be larger than the max number of folios in a
+> folio_batch (15), we loop through filling in wdata->pages pulling more
+> batches until we either reach tofind pages or run out of folios.
+>
+> This function may not return all pages in the last found folio before
+> tofind pages are reached.
+>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+>  fs/cifs/file.c | 32 +++++++++++++++++++++++++++++---
+>  1 file changed, 29 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+> index 22dfc1f8b4f1..8cdd2f67af24 100644
+> --- a/fs/cifs/file.c
+> +++ b/fs/cifs/file.c
+> @@ -2527,14 +2527,40 @@ wdata_alloc_and_fillpages(pgoff_t tofind, struct address_space *mapping,
+>                           unsigned int *found_pages)
+>  {
+>         struct cifs_writedata *wdata;
+> -
+> +       struct folio_batch fbatch;
+> +       unsigned int i, idx, p, nr;
+>         wdata = cifs_writedata_alloc((unsigned int)tofind,
+>                                      cifs_writev_complete);
+>         if (!wdata)
+>                 return NULL;
+>
+> -       *found_pages = find_get_pages_range_tag(mapping, index, end,
+> -                               PAGECACHE_TAG_DIRTY, tofind, wdata->pages);
+> +       folio_batch_init(&fbatch);
+> +       *found_pages = 0;
+> +
+> +again:
+> +       nr = filemap_get_folios_tag(mapping, index, end,
+> +                               PAGECACHE_TAG_DIRTY, &fbatch);
+> +       if (!nr)
+> +               goto out; /* No dirty pages left in the range */
+> +
+> +       for (i = 0; i < nr; i++) {
+> +               struct folio *folio = fbatch.folios[i];
+> +
+> +               idx = 0;
+> +               p = folio_nr_pages(folio);
+> +add_more:
+> +               wdata->pages[*found_pages] = folio_page(folio, idx);
+> +               folio_get(folio);
+> +               if (++*found_pages == tofind) {
+> +                       folio_batch_release(&fbatch);
+> +                       goto out;
+> +               }
+> +               if (++idx < p)
+> +                       goto add_more;
+> +       }
+> +       folio_batch_release(&fbatch);
+> +       goto again;
+> +out:
+>         return wdata;
+>  }
+>
+> --
+> 2.38.1
+>
 
-Fixes these build errors:
-
-drivers/soc/fsl/qe/usb.o: in function `qe_usb_clock_set':
-usb.c:(.text+0x1e): undefined reference to `qe_immr'
-powerpc-linux-ld: usb.c:(.text+0x2a): undefined reference to `qe_immr'
-powerpc-linux-ld: usb.c:(.text+0xbc): undefined reference to `qe_setbrg'
-powerpc-linux-ld: usb.c:(.text+0xca): undefined reference to `cmxgcr_lock'
-powerpc-linux-ld: usb.c:(.text+0xce): undefined reference to `cmxgcr_lock'
-
-Fixes: 5e41486c408e ("powerpc/QE: add support for QE USB clocks routing")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/all/202301101500.pillNv6R-lkp@intel.com/
-Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Leo Li <leoyang.li@nxp.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>
-Cc: Qiang Zhao <qiang.zhao@nxp.com>
-Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: Anton Vorontsov <avorontsov@ru.mvista.com>
-Cc: Kumar Gala <galak@kernel.crashing.org>
----
- drivers/soc/fsl/qe/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
-
-diff -- a/drivers/soc/fsl/qe/Kconfig b/drivers/soc/fsl/qe/Kconfig
---- a/drivers/soc/fsl/qe/Kconfig
-+++ b/drivers/soc/fsl/qe/Kconfig
-@@ -39,6 +39,7 @@ config QE_TDM
- 
- config QE_USB
- 	bool
-+	depends on QUICC_ENGINE
- 	default y if USB_FSL_QE
- 	help
- 	  QE USB Controller support
+Could someone review this cifs patch, please? This is one of the
+2 remaining patches that need to be looked at in the series.
