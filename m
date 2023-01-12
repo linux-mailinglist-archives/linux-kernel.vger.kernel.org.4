@@ -2,92 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5DD666DDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69EA666DD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240033AbjALJNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:13:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S240097AbjALJMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239822AbjALJLJ (ORCPT
+        with ESMTP id S239952AbjALJKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:11:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C842642605
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:06:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E356B81DD7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:06:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47097C433D2;
-        Thu, 12 Jan 2023 09:06:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673514413;
-        bh=TPEEMc3HaWaP+Mt2KfPXle42oBuXI/4U/PIW+OSCPxY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LGou6CSsyBFI9CXvpokX7hLPkUAbBBGr+vvBqv9qzab6cLmHGKcMeC72ZlN72Au6G
-         roB7MPUJJeCZ7Hm+JXwTzoh9yFqV85VTZkiI6yeMKS47HfXWYnvPBpt3REOJ7mUCqD
-         blu4PuntvUh7mYqUBzf4viixWYj5CoHfh12pDSgvnVxPJwr/ztDN2lbEQvzbB7KXha
-         4yQgZIqbp34m+BMpDVILulJURT62vzsy4EQ9wy6lRx0khX9zoXnEEENaFxTcdbQy1S
-         cULaeZTSZYk05qh830JIgo0FKyrKPiqYHOGWHBQlmHnwv6aKh1HE7vo8L+SeJpNh38
-         zlMOCz5PqLVYg==
-From:   guoren@kernel.org
-To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
-        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
-        jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
-        e.shatokhin@yadro.com, guoren@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH -next V7 7/7] riscv : select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
-Date:   Thu, 12 Jan 2023 04:06:03 -0500
-Message-Id: <20230112090603.1295340-8-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20230112090603.1295340-1-guoren@kernel.org>
-References: <20230112090603.1295340-1-guoren@kernel.org>
+        Thu, 12 Jan 2023 04:10:39 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D895AE48;
+        Thu, 12 Jan 2023 01:06:46 -0800 (PST)
+Date:   Thu, 12 Jan 2023 09:06:44 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673514405;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IL5ZIP9DYWv2XGsGuDCylsAv4oLuc8Ydy6IeN3eeYd4=;
+        b=gMBriOPkAjWzM9xfLa3A64Yd5U4lcLMC6VczYi2ZjqqZYkEBXE3sPgQtkvi/N7O2tH19yP
+        sJJSaHpdLvFutSM33EimXj9jtprToVStt7CTkF23zTrFHxMpLk3dmpJvpDiwjRSqk5YLdg
+        qP3fQsSWCDfF3nohundfiOeP+OS7e+xyng1CBYjRLDkTI90r878h0sw1pKjKbDwhF3xgv7
+        LBFF8xnDN/6HgPljCm7VcWTdMe5RLPL2qPgN8YqCY9DvPsf1soY9aFLkSvDoZzHpgsLt1e
+        E9L5tBSi8JZcGrhy3dqAOWkd3CfK8hdNWyOBhloe/3d/fO1XTwvf4Ns6YYdRPQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673514405;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IL5ZIP9DYWv2XGsGuDCylsAv4oLuc8Ydy6IeN3eeYd4=;
+        b=6Ithw1n9crRy+7vgHkI2hSAbatOvGxTYOQlxN9Qvf71fFnacFl2sJukVIW/ib45gdbUQfP
+        OJwXYT6mmX9m+KDA==
+From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/mm: fix poking_init() for Xen PV guests
+Cc:     Juergen Gross <jgross@suse.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230109150922.10578-1-jgross@suse.com>
+References: <20230109150922.10578-1-jgross@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167351440417.4906.2133498085196807325.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Song Shuai <suagrfillet@gmail.com>
+The following commit has been merged into the x86/urgent branch of tip:
 
-In RISC-V, -fpatchable-function-entry option is used to support
-dynamic ftrace in this commit afc76b8b8011 ("riscv: Using
-PATCHABLE_FUNCTION_ENTRY instead of MCOUNT"). So recordmcount
-don't have to be called to create the __mcount_loc section before
-the vmlinux linking.
+Commit-ID:     8a6b240fef388e9c2c40dcb72d142ee781f6432a
+Gitweb:        https://git.kernel.org/tip/8a6b240fef388e9c2c40dcb72d142ee781f6432a
+Author:        Juergen Gross <jgross@suse.com>
+AuthorDate:    Mon, 09 Jan 2023 16:09:22 +01:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Thu, 12 Jan 2023 09:48:02 +01:00
 
-Here selects FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY to tell
-Makefile not to run recordmcount.
+x86/mm: fix poking_init() for Xen PV guests
 
-Link: https://lore.kernel.org/linux-riscv/CAAYs2=j3Eak9vU6xbAw0zPuoh00rh8v5C2U3fePkokZFibWs2g@mail.gmail.com/T/#t
-Link: https://lore.kernel.org/linux-riscv/Y4jtfrJt+%2FQ5nMOz@spud/
-Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-Tested-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Guo Ren <guoren@kernel.org>
+Commit 3f4c8211d982 ("x86/mm: Use mm_alloc() in poking_init()") broke
+the kernel for running as Xen PV guest.
+
+It seems as if the new address space is never activated before being
+used, resulting in Xen rejecting to accept the new CR3 value (the PGD
+isn't pinned).
+
+Fix that by adding the now missing call of paravirt_arch_dup_mmap() to
+poking_init(). That call was previously done by dup_mm()->dup_mmap() and
+it is a NOP for all cases but for Xen PV, where it is just doing the
+pinning of the PGD.
+
+Fixes: 3f4c8211d982 ("x86/mm: Use mm_alloc() in poking_init()")
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20230109150922.10578-1-jgross@suse.com
 ---
- arch/riscv/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/mm/init.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index e944af44f681..a78d39780b76 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -54,6 +54,7 @@ config RISCV
- 	select COMMON_CLK
- 	select CPU_PM if CPU_IDLE
- 	select EDAC_SUPPORT
-+	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY if DYNAMIC_FTRACE
- 	select GENERIC_ARCH_TOPOLOGY
- 	select GENERIC_ATOMIC64 if !64BIT
- 	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
--- 
-2.36.1
-
+diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
+index d398735..5f8ba53 100644
+--- a/arch/x86/mm/init.c
++++ b/arch/x86/mm/init.c
+@@ -804,6 +804,9 @@ void __init poking_init(void)
+ 	poking_mm = mm_alloc();
+ 	BUG_ON(!poking_mm);
+ 
++	/* Xen PV guests need the PGD to be pinned. */
++	paravirt_arch_dup_mmap(NULL, poking_mm);
++
+ 	/*
+ 	 * Randomize the poking address, but make sure that the following page
+ 	 * will be mapped at the same PMD. We need 2 pages, so find space for 3,
