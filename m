@@ -2,203 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8228666A8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E194666A8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbjALEw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 23:52:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
+        id S236659AbjALEv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 23:51:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238128AbjALEwS (ORCPT
+        with ESMTP id S236387AbjALEvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 23:52:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AB017E39;
-        Wed, 11 Jan 2023 20:52:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF1B461F65;
-        Thu, 12 Jan 2023 04:52:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39B7CC433EF;
-        Thu, 12 Jan 2023 04:52:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673499133;
-        bh=puI6pmQu2ZBulYkEVUmsU5TYGSZwwHCRvW/+HBIj8UE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AxznadA80ioQfs+gPs1n2K33JimH6BoPAsLVPGc24vKc2OMSy5CH3orHPZ6UyaLxW
-         8Y9akCar8pVqWn6Td61OTLMNznPOdhRQzyHFInps3oZvsLKerr7uXt+HSD62yyHj3c
-         mM4dAjPkGi5o8lwv27qXvWOUUQDk3txxxFo8H+Pn9iikI6KrqfoQX1wK5heZWPcE8N
-         5QRfXcUcAQJYd0Zky2QZVm699HQMFFNrI6ovPJYz8wkqUaSo9G0F+L4MyL40uZ5Ldq
-         DaXATOXIrfmUtbQkDjIoV3Q4c6gmEXc5T/i4GYPVrjSXFAYBMDZv6xpAA7o3XWkAyx
-         O4W93eVKnrj/w==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-15bb8ec196aso6019767fac.3;
-        Wed, 11 Jan 2023 20:52:13 -0800 (PST)
-X-Gm-Message-State: AFqh2konJrfapnpXbMPi/tu+rQXspI3Q+E3qBwl6iWqnVdDq1yyeUH0p
-        7p2tfsy468v0n5D6wVfVYffO2ufkG+Qa1xtKiww=
-X-Google-Smtp-Source: AMrXdXt1bjJlPmLyy/3/oqw9QiH6hx1fB/zYsb3i9V76/COZ37EBO3BT0CD5+mmVljZOZcTkPGj3x63mN2a3djggky8=
-X-Received: by 2002:a05:6870:514c:b0:150:7e4a:2f00 with SMTP id
- z12-20020a056870514c00b001507e4a2f00mr2609492oak.194.1673499132468; Wed, 11
- Jan 2023 20:52:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20230111-kconfig-v1-1-a921f03670f0@pefoley.com>
-In-Reply-To: <20230111-kconfig-v1-1-a921f03670f0@pefoley.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 12 Jan 2023 13:51:36 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR2Hor39X6tBpB0p1hW5RyUY7-g0eXRiKuLm=b6fFqHZg@mail.gmail.com>
-Message-ID: <CAK7LNAR2Hor39X6tBpB0p1hW5RyUY7-g0eXRiKuLm=b6fFqHZg@mail.gmail.com>
-Subject: Re: [PATCH] kconfig: Update all declared targets
-To:     Peter Foley <pefoley2@pefoley.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 11 Jan 2023 23:51:51 -0500
+Received: from sr40.hostlife.net (sr40.hostlife.net [185.43.220.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF8F630A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:51:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=hardclanz.org; s=default; h=To:From:Subject:Message-Id:Date:Content-Type:
+        Content-Transfer-Encoding:Mime-Version:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=B2RlFVCzBZiiHWKxoHan5c13KwJIoIcrCOogS8pNM9w=; b=zLRf7Ldfo+b6HamXgDl8nFb7yp
+        U0JAsoA3FWZ+f7G2ZYGtLO5ttMI6/ZsjciLpDTJP5gbYH+Z3qhbYCCSHZaVV1jYnHJoZH92Ikku9b
+        y2obqUteLWEOrgFtl2FfR3A61Nd3eV5WhpIOHFZIR05i0jkJWSWZ5Dy7JoD+02AgXzL41U824J4ne
+        QzsXoSTUbDFacCOqO1UFz2w9KYbd5dAistZUlr1BL9r/hnpzk/PjrMPVJbElkF/gH/ZwtpNnUVy2l
+        6NgRXfRYiwVegfnKoJYb125Qx2FMJeabKQf62f6Vl6ZJI8xMU+QixzyTYN8oybnESbKcm12mDPypT
+        smN7qV/w==;
+Received: from [109.225.40.181] (port=49384 helo=localhost)
+        by sr40.hostlife.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <emptiedsoul@hardclanz.org>)
+        id 1pFpZ2-005XKa-Vi
+        for linux-kernel@vger.kernel.org;
+        Thu, 12 Jan 2023 05:51:44 +0100
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 12 Jan 2023 07:51:45 +0300
+Message-Id: <CPPXX7JYJGIE.3F2R53GC3ULGZ@hardclanz>
+Subject: [RESEND RFC] SIGOOM Proposal
+From:   "Arseniy Lesin" <emptiedsoul@hardclanz.org>
+To:     <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.12.0
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - sr40.hostlife.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - hardclanz.org
+X-Get-Message-Sender-Via: sr40.hostlife.net: authenticated_id: emptiedsoul@hardclanz.org
+X-Authenticated-Sender: sr40.hostlife.net: emptiedsoul@hardclanz.org
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 1:39 PM Peter Foley <pefoley2@pefoley.com> wrote:
->
-> Currently qconf-cfg.sh is the only script that touches the "-bin"
-> target, even though all of the conf_cfg rules declare that they do.
-> Make the other scripts touch all declared targets to avoid
-> incompatibilities with upcoming versions of GNU make:
-> https://lists.gnu.org/archive/html/info-gnu/2022-10/msg00008.html
->
-> e.g.
-> scripts/kconfig/Makefile:215: warning: pattern recipe did not update peer target 'scripts/kconfig/nconf-bin'.
-> scripts/kconfig/Makefile:215: warning: pattern recipe did not update peer target 'scripts/kconfig/mconf-bin'.
-> scripts/kconfig/Makefile:215: warning: pattern recipe did not update peer target 'scripts/kconfig/gconf-bin'.
->
-> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
 
+1. Introduction
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
+AFAIK, majority of linux-running machines are configured to overcommit
+memory -- so, memory needs of every process are always pleased. However,
+in the Out-Of-Memory condition we repay cruely -- by _killing_ the most
+memory-hungry process.=20
 
-I prefer changing only one line:
+Dealing with OOM was always questionable -- kernel-space OOM-killer
+often works as the last resort -- system can hang for a pretty long time
+(especially when using swap) before it resolves the OOM condition.
 
+User-space OOM-killers solve this problem _partially_ -- they can _kill_
+such processes preventively or even display nice GUI prompt for user.
 
+However, the key problem persists -- we can only _kill_ unaware process,
+possibly causing valuable data loss. There is no way to tell process: "You
+are causing system OOM, release memory or you will be terminated forcefully=
+"!
 
-diff --git a/scripts/kconfig/Makefile b/scripts/kconfig/Makefile
-index 0b1d15efaeb0..af1c96198f49 100644
---- a/scripts/kconfig/Makefile
-+++ b/scripts/kconfig/Makefile
-@@ -209,7 +209,7 @@ $(obj)/gconf: | $(obj)/gconf-libs
- $(obj)/gconf.o: | $(obj)/gconf-cflags
+2. Proposal
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
- # check if necessary packages are available, and configure build flags
--cmd_conf_cfg = $< $(addprefix $(obj)/$*conf-, cflags libs bin)
-+cmd_conf_cfg = $< $(addprefix $(obj)/$*conf-, cflags libs bin); touch
-$(obj)/$*conf-bin
+2.1. The SIGOOM Signal
+------------------
 
- $(obj)/%conf-cflags $(obj)/%conf-libs $(obj)/%conf-bin: $(src)/%conf-cfg.sh
-        $(call cmd,conf_cfg)
+I propose the addition of new signal: SIGOOM (Out-Of-Memory SIGnal)=20
 
+This signal is intended to be sent to the most memory-hungry process(es)
+in order to give process a chance to release memory used for
+non-valuable data (for example, browser can unload tabs, that are
+currently not in use, assuming tabs are not separate processes) or to
+write down valuable data and exit gracefully (for example, some
+graphical editor).
 
+Some applications can even set up a poll for OOM event by using signalfd
 
+Default action: 	IGNORE
+Proposed senders: 	kernel- and user-space OOM-killers
 
+The technical detail of this addition is a bit unpleasant: there is
+actually no room for new signals!=20
 
+Numbers 1-31 are already assigned, every signal with number > SIGRTMIN=20
+(currently 32) is considered realtime and queued accordingly.=20
 
+Adding SIGOOM as signal #32 by shifting SIGRTMIN to 33 can do a trick,
+but this will almost certainly break compatibility (namely, with glibc
+threading)
 
-Also, please update .gitignore
+I propose adding SIGOOM as signal #65 (after SIGRTMAX), but we should
+clarify some checks in kernel/signal.c (possibly in other places too,
+where signal number is tested against being realtime) and possibly add a
+such-like macro:
 
+#define SIG_IS_REALTIME(signum) (((signum) > SIGRTMIN) && ((signum) < SIGRT=
+MAX))
 
-diff --git a/scripts/kconfig/.gitignore b/scripts/kconfig/.gitignore
-index c8a3f9cd52f0..f8bdf0cf4662 100644
---- a/scripts/kconfig/.gitignore
-+++ b/scripts/kconfig/.gitignore
-@@ -3,5 +3,5 @@
- /[gmnq]conf
- /[gmnq]conf-cflags
- /[gmnq]conf-libs
--/qconf-bin
-+/[gmnq]conf-bin
- /qconf-moc.cc
+I expect your comments on this topic very much, thanks in advance.
 
+2.2. Adjusting kernel oom-killer to use SIGOOM
+----------------------------------------------
 
+Since we now have a way to inform process of it's memory utilization we
+can try to send process SIGOOM signal first (if process set up handler
+or poll for it) and only then kill it.
 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
+I will try to prepare a patchset for kernel in next couple of weeks.
+Also going to create some patches for user-space oom-killers (sd-oomd,
+meta's oomd) and propose a new system call for those (it is not as
+important, so i decided not to include it for this RFC).
 
-Thanks.
+I invite all interested to discuss this RFC here on list, or you can
+catch me on #linux IRC channel (libera network) tonight (nick:
+emptiedsoul)
 
-
-
-
-
-
-
-> ---
->  scripts/kconfig/gconf-cfg.sh | 2 ++
->  scripts/kconfig/mconf-cfg.sh | 3 +++
->  scripts/kconfig/nconf-cfg.sh | 3 +++
->  3 files changed, 8 insertions(+)
->
-> diff --git a/scripts/kconfig/gconf-cfg.sh b/scripts/kconfig/gconf-cfg.sh
-> index 040d8f3388202..d98c2ed09b158 100755
-> --- a/scripts/kconfig/gconf-cfg.sh
-> +++ b/scripts/kconfig/gconf-cfg.sh
-> @@ -3,6 +3,7 @@
->
->  cflags=$1
->  libs=$2
-> +bin=$3
->
->  PKG="gtk+-2.0 gmodule-2.0 libglade-2.0"
->
-> @@ -31,3 +32,4 @@ fi
->
->  ${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
->  ${HOSTPKG_CONFIG} --libs ${PKG} > ${libs}
-> +touch ${bin}
-> diff --git a/scripts/kconfig/mconf-cfg.sh b/scripts/kconfig/mconf-cfg.sh
-> index 1e61f50a59050..3719e1607d34a 100755
-> --- a/scripts/kconfig/mconf-cfg.sh
-> +++ b/scripts/kconfig/mconf-cfg.sh
-> @@ -3,10 +3,13 @@
->
->  cflags=$1
->  libs=$2
-> +bin=$3
->
->  PKG="ncursesw"
->  PKG2="ncurses"
->
-> +touch ${bin}
-> +
->  if [ -n "$(command -v ${HOSTPKG_CONFIG})" ]; then
->         if ${HOSTPKG_CONFIG} --exists $PKG; then
->                 ${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
-> diff --git a/scripts/kconfig/nconf-cfg.sh b/scripts/kconfig/nconf-cfg.sh
-> index f871a2160e363..a0edc427719f0 100755
-> --- a/scripts/kconfig/nconf-cfg.sh
-> +++ b/scripts/kconfig/nconf-cfg.sh
-> @@ -3,10 +3,13 @@
->
->  cflags=$1
->  libs=$2
-> +bin=$3
->
->  PKG="ncursesw menuw panelw"
->  PKG2="ncurses menu panel"
->
-> +touch ${bin}
-> +
->  if [ -n "$(command -v ${HOSTPKG_CONFIG})" ]; then
->         if ${HOSTPKG_CONFIG} --exists $PKG; then
->                 ${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
->
-> ---
-> base-commit: e8f60cd7db24f94f2dbed6bec30dd16a68fc0828
-> change-id: 20230111-kconfig-e59c6154f506
->
-> Best regards,
-> --
-> Peter Foley <pefoley2@pefoley.com>
-
-
-
---
-Best Regards
-Masahiro Yamada
+THX for reading, and again, thanks in advance for your comments.
