@@ -2,236 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463266672E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8AD6672ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjALNGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 08:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        id S232822AbjALNJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 08:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbjALNGC (ORCPT
+        with ESMTP id S231560AbjALNJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 08:06:02 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B5360D5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:05:59 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id hw16so32737009ejc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:05:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/0QhPI3IEWZUgBJhkds+oNc1kecb4XG5aSnwS1qpLSY=;
-        b=EIHWOMg6fqJgKbj1/dpHrk7BlWNfQ0XdNiihkAzRpzqeLQiAidabsIgt6b7ruWftlg
-         DK7kjtMzp/iHnkuR+eNgKET+PvPnbeAMjHqqzlwy7cGa5czu23ej6ZGGunc/Gtuu0EdD
-         0bnfrkOK95FBiBoBbJHcTkFXjeS4e+a6iM7loOkeKf6APx2GWVnlZSFtIAceDMTHfmI6
-         WxNJ40wMUPYBXUzMHQTDqveNmfyJs2MywOOKWqAHRNPDxyer0NEtxD4Vknt4Q+Vvn5zg
-         IhGJoe387zMkGvRyluWG8udYZkxMsRRjLxIMXKIgBjz5DJtuvdOF5qTHfOM4dA2QmZ3X
-         vGfg==
+        Thu, 12 Jan 2023 08:09:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A691D51320
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:08:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673528938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nCRS/MpkyPeaVrlVLdkBcx6JcO4jj78Pqfq4rjjeatI=;
+        b=dSP+GfkcK+FNkoMF7B0v8fqIVbBug4pISHwTK4HMHzDYVFW865TaazM5pBpmOhduo1ju0x
+        sPqrhWC+4cWmoiyCr27a+JSND5sb9bPveZPj5z8cMLXdMNXpEwqGal7LFG/26anDh/HKj9
+        zbmkqYjvevh5Owku1SG3AW0ecewdyGc=
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
+ [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-215-So4eDxYIMLmNS7bBEaCLPg-1; Thu, 12 Jan 2023 08:08:57 -0500
+X-MC-Unique: So4eDxYIMLmNS7bBEaCLPg-1
+Received: by mail-yb1-f197.google.com with SMTP id a14-20020a5b0ace000000b007bf99065fcbso11218724ybr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:08:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/0QhPI3IEWZUgBJhkds+oNc1kecb4XG5aSnwS1qpLSY=;
-        b=cCHDbS1zXW4cPf9RdIDY+Gi1xsu6wSr4DsDcmafetjexGk/8mKNqCkjkbdJ3jkqg4N
-         O0B67NiZ2+Swc8jrjyKEWAOc79XUMynWjOFApuXoyxAPEcSh8TPGDRa8GNjNA7eiKjYd
-         hRGe7HZE6/ukucqt9eQUDO88ftOYqOgeUmdoQ7Cs7tw8+B2EnZAs4Zkf+s6m4hRw9jEt
-         Hi+2o67aL3G+O/mqfPMDi+TH+f7nYT2+a8DOqEhtoZ1Dgp6vfalgC2UR0DnF1Dy5x+zD
-         MDxSArbWTqOIVjR1oLYuhpEOcboPtkU0wp/1dHK9utc1Y8OrbrKfYy2sXDPLWPqjeDuy
-         lauw==
-X-Gm-Message-State: AFqh2kq6zstxSGMWRlk9pQNsoW5xmJ2LyWED7QxmO0vPfX7KUo1Bq428
-        ikry0KMcMDpCpcWWEzmhzcVmtg==
-X-Google-Smtp-Source: AMrXdXuHYHkRj25o5Yr1gYbbQjH4fNjHC11ABs1RNKJ1cW+9A8rSFYOYIaA4tKG9lwaLVBu7SOEUVA==
-X-Received: by 2002:a17:906:6dd4:b0:836:e6f7:8138 with SMTP id j20-20020a1709066dd400b00836e6f78138mr78744185ejt.13.1673528758457;
-        Thu, 12 Jan 2023 05:05:58 -0800 (PST)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id 11-20020a170906318b00b0078d3f96d293sm7427668ejy.30.2023.01.12.05.05.57
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nCRS/MpkyPeaVrlVLdkBcx6JcO4jj78Pqfq4rjjeatI=;
+        b=APanvqS+bixEw2ijn/dpqjK4IkVlaXfnRsXVLnnqresWyd6F7rF8+Cb8xjFAXe6oEw
+         VhQWAXA3kjlEo3v/5OPFlr12PDVxMHMMIgVh00zfBfd9ofbIo6KMvwlNfMa8Od5vniZY
+         3+aKo2OmUhhLt5nL0RCCkOiQzlkX+Zvy7UUVFT1L1GweR3mQIRh0bd+Ms2dHCWqTt8vb
+         LjCT/yt5Wnev8/8Sa4pF0SEcYQQ30Hcli3yHVCtqQr5ncLihAUsS/jbMlXj+nHlasH3x
+         VWwqoxlnHA/vCHXzleOT/VvqcJ4Ju4UMdpbzHQHUlPfAIUmF7IBqq3y/+mBqQuLyZXvu
+         h3tA==
+X-Gm-Message-State: AFqh2kpAUincystbwTEmDpOPaNL+kVgeHf+Epu0QZWChVO24asnh0M+N
+        LCcxCJrf+7atDYRA1nfJOFHGmm9MCLN2lY6FFS/Yx1jVmHEbdOjgYytPEJKgiZmwpHnbC/CaWDG
+        EmXpizJrOniPN0q22Q7VchkaZ
+X-Received: by 2002:a05:7500:16cc:b0:f0:4692:cc0 with SMTP id ce12-20020a05750016cc00b000f046920cc0mr1298089gab.28.1673528937050;
+        Thu, 12 Jan 2023 05:08:57 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtVkkADuVZjTJe4BA/F7Hbb10OyHI3PlW0oPb18BdiV3GHvC5tzK1mPBMMc0FP3iW/BXGLyqQ==
+X-Received: by 2002:a05:7500:16cc:b0:f0:4692:cc0 with SMTP id ce12-20020a05750016cc00b000f046920cc0mr1298060gab.28.1673528936660;
+        Thu, 12 Jan 2023 05:08:56 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-113-183.dyn.eolo.it. [146.241.113.183])
+        by smtp.gmail.com with ESMTPSA id j9-20020a05620a288900b006f9f714cb6asm10549640qkp.50.2023.01.12.05.08.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 05:05:58 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 6/6] phy: qcom-qmp-ufs: Add SM8550 support
-Date:   Thu, 12 Jan 2023 15:05:42 +0200
-Message-Id: <20230112130542.1399921-7-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230112130542.1399921-1-abel.vesa@linaro.org>
-References: <20230112130542.1399921-1-abel.vesa@linaro.org>
+        Thu, 12 Jan 2023 05:08:56 -0800 (PST)
+Message-ID: <bd39d0ffec879ccff7bff79f9ff16a727a3f8301.camel@redhat.com>
+Subject: Re: [PATCH net-next] r8152: add vendor/device ID pair for Microsoft
+ Devkit
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+Date:   Thu, 12 Jan 2023 14:08:53 +0100
+In-Reply-To: <20230112115659.27fb453d@donnerap.cambridge.arm.com>
+References: <20230111133228.190801-1-andre.przywara@arm.com>
+         <20230111213143.71f2ad7e@kernel.org>
+         <20230112105137.7b09e70b@donnerap.cambridge.arm.com>
+         <4c48269962dafbb641d5b0c38ec5b7bf951f3b4d.camel@redhat.com>
+         <20230112115659.27fb453d@donnerap.cambridge.arm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SM8550 specific register layout and table configs.
+On Thu, 2023-01-12 at 11:56 +0000, Andre Przywara wrote:
+> On Thu, 12 Jan 2023 12:39:01 +0100
+> Paolo Abeni <pabeni@redhat.com> wrote:
+> 
+> Hi,
+> 
+> > On Thu, 2023-01-12 at 10:51 +0000, Andre Przywara wrote:
+> > > On Wed, 11 Jan 2023 21:31:43 -0800 Jakub Kicinski <kuba@kernel.org> wrote:  
+> > > > Hm, we have a patch in net-next which reformats the entries:
+> > > > ec51fbd1b8a2bca2948dede99c14ec63dc57ff6b
+> > > > 
+> > > > Would you like this ID to be also added in stable? We could just 
+> > > > apply it to net, and deal with the conflict locally. But if you 
+> > > > don't care about older kernels then better if you rebase.  
+> > > 
+> > > Stable would be nice, but only to v6.1. I think I don't care
+> > > about older kernels.
+> > > So what about if I resend this one here, based on top of the reformat
+> > > patch, with a:
+> > > Cc: <stable@vger.kernel.org> # 6.1.x
+> > > line in there, and then reply to the email that the automatic backport
+> > > failed, with a tailored patch for v6.1?
+> > > Alternatively I can send an explicit stable backport email once this one
+> > > is merged.  
+> > 
+> > Note that we can merge this kind of changes via the -net tree. No
+> > repost will be needed. We can merge it as is on -net and you can follow
+> > the option 2 from the stable kernel rules doc, with no repost nor
+> > additional mangling for stable will be needed.
+> > 
+> > If you are ok with the above let me know.
+> 
+> That sounds good to me, but that will then trigger a merge conflict when
+> net-next (with the reformat patch) is merged? I guess it's easy enough to
+> solve, but that would be extra work on your side. If you are fine with
+> that, it's OK for me.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 100 ++++++++++++++++++++++++
- 1 file changed, 100 insertions(+)
+Fine by us (well, probably poor Jakub will end-up handling the
+conflict, but AFAIK he is ok with this specific case).
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-index 5936a3a05002..a9b666f32f59 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-@@ -95,6 +95,13 @@ static const unsigned int sm8150_ufsphy_regs_layout[QPHY_LAYOUT_SIZE] = {
- 	[QPHY_PCS_POWER_DOWN_CONTROL]	= QPHY_V4_PCS_UFS_POWER_DOWN_CONTROL,
- };
- 
-+static const unsigned int sm8550_ufsphy_regs_layout[QPHY_LAYOUT_SIZE] = {
-+	[QPHY_START_CTRL]		= QPHY_V6_PCS_UFS_PHY_START,
-+	[QPHY_PCS_READY_STATUS]		= QPHY_V6_PCS_UFS_READY_STATUS,
-+	[QPHY_SW_RESET]			= QPHY_V6_PCS_UFS_SW_RESET,
-+	[QPHY_PCS_POWER_DOWN_CONTROL]	= QPHY_V6_PCS_UFS_POWER_DOWN_CONTROL,
-+};
-+
- static const struct qmp_phy_init_tbl msm8996_ufsphy_serdes[] = {
- 	QMP_PHY_INIT_CFG(QSERDES_COM_CMN_CONFIG, 0x0e),
- 	QMP_PHY_INIT_CFG(QSERDES_COM_SYSCLK_EN_SEL, 0xd7),
-@@ -599,6 +606,61 @@ static const struct qmp_phy_init_tbl sm8350_ufsphy_g4_pcs[] = {
- 	QMP_PHY_INIT_CFG(QPHY_V5_PCS_UFS_BIST_FIXED_PAT_CTRL, 0x0a),
- };
- 
-+static const struct qmp_phy_init_tbl sm8550_ufsphy_serdes[] = {
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_SYSCLK_EN_SEL, 0xd9),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CMN_CONFIG_1, 0x16),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_HSCLK_SEL_1, 0x11),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_HSCLK_HS_SWITCH_SEL_1, 0x00),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP_EN, 0x01),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_VCO_TUNE_MAP, 0x04),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_IVCO, 0x0f),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_VCO_TUNE_INITVAL2, 0x00),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_DEC_START_MODE0, 0x41),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CP_CTRL_MODE0, 0x0a),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_RCTRL_MODE0, 0x18),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_CCTRL_MODE0, 0x14),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP1_MODE0, 0x7f),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP2_MODE0, 0x06),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_DEC_START_MODE0, 0x4c),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CP_CTRL_MODE0, 0x0a),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_RCTRL_MODE0, 0x18),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_CCTRL_MODE0, 0x14),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP1_MODE0, 0x99),
-+	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP2_MODE0, 0x07),
-+};
-+
-+static const struct qmp_phy_init_tbl sm8550_ufsphy_tx[] = {
-+	QMP_PHY_INIT_CFG(QSERDES_V6_TX_LANE_MODE_1, 0x05),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_TX_RES_CODE_LANE_OFFSET_TX, 0x07),
-+};
-+
-+static const struct qmp_phy_init_tbl sm8550_ufsphy_rx[] = {
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_UCDR_FO_GAIN_RATE2, 0x0c),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_UCDR_FO_GAIN_RATE4, 0x0f),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_VGA_CAL_MAN_VAL, 0x0e),
-+
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B0, 0xc2),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B1, 0xc2),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B3, 0x1a),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B6, 0x60),
-+
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE2_B3, 0x9e),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE2_B6, 0x60),
-+
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B3, 0x9e),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B4, 0x0e),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B5, 0x36),
-+	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B8, 0x02),
-+};
-+
-+static const struct qmp_phy_init_tbl sm8550_ufsphy_pcs[] = {
-+	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_RX_SIGDET_CTRL2, 0x69),
-+	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_TX_LARGE_AMP_DRV_LVL, 0x0f),
-+	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_TX_MID_TERM_CTRL1, 0x43),
-+	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_PLL_CNTL, 0x2b),
-+	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_MULTI_LANE_CTRL1, 0x02),
-+};
-+
- struct qmp_ufs_offsets {
- 	u16 serdes;
- 	u16 pcs;
-@@ -703,6 +765,10 @@ static const char * const sm8450_ufs_phy_clk_l[] = {
- 	"qref", "ref", "ref_aux",
- };
- 
-+static const char * const sm8550_ufs_phy_clk_l[] = {
-+	"qref", "ref",
-+};
-+
- static const char * const sdm845_ufs_phy_clk_l[] = {
- 	"ref", "ref_aux",
- };
-@@ -721,6 +787,15 @@ static const struct qmp_ufs_offsets qmp_ufs_offsets_v5 = {
- 	.rx2		= 0xa00,
- };
- 
-+static const struct qmp_ufs_offsets qmp_ufs_offsets_v6 = {
-+	.serdes		= 0,
-+	.pcs		= 0x400,
-+	.tx		= 0x1000,
-+	.rx		= 0x1200,
-+	.tx2		= 0x1800,
-+	.rx2		= 0x1a00,
-+};
-+
- static const struct qmp_phy_cfg msm8996_ufsphy_cfg = {
- 	.lanes			= 1,
- 
-@@ -958,6 +1033,28 @@ static const struct qmp_phy_cfg sm8450_ufsphy_cfg = {
- 	.regs			= sm8150_ufsphy_regs_layout,
- };
- 
-+static const struct qmp_phy_cfg sm8550_ufsphy_cfg = {
-+	.lanes			= 2,
-+
-+	.offsets		= &qmp_ufs_offsets_v6,
-+
-+	.tbls = {
-+		.serdes		= sm8550_ufsphy_serdes,
-+		.serdes_num	= ARRAY_SIZE(sm8550_ufsphy_serdes),
-+		.tx		= sm8550_ufsphy_tx,
-+		.tx_num		= ARRAY_SIZE(sm8550_ufsphy_tx),
-+		.rx		= sm8550_ufsphy_rx,
-+		.rx_num		= ARRAY_SIZE(sm8550_ufsphy_rx),
-+		.pcs		= sm8550_ufsphy_pcs,
-+		.pcs_num	= ARRAY_SIZE(sm8550_ufsphy_pcs),
-+	},
-+	.clk_list		= sm8550_ufs_phy_clk_l,
-+	.num_clks		= ARRAY_SIZE(sm8550_ufs_phy_clk_l),
-+	.vreg_list		= qmp_phy_vreg_l,
-+	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-+	.regs			= sm8550_ufsphy_regs_layout,
-+};
-+
- static void qmp_ufs_configure_lane(void __iomem *base,
- 					const struct qmp_phy_init_tbl tbl[],
- 					int num,
-@@ -1467,6 +1564,9 @@ static const struct of_device_id qmp_ufs_of_match_table[] = {
- 	}, {
- 		.compatible = "qcom,sm8450-qmp-ufs-phy",
- 		.data = &sm8450_ufsphy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8550-qmp-ufs-phy",
-+		.data = &sm8550_ufsphy_cfg,
- 	},
- 	{ },
- };
--- 
-2.34.1
+I'll merge the patch on net.
+
+Cheers,
+
+Paolo
 
