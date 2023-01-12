@@ -2,127 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D586672D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC5D6672E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbjALNFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 08:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
+        id S232839AbjALNGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 08:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjALNE6 (ORCPT
+        with ESMTP id S231915AbjALNF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 08:04:58 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10F14914A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jXccVwgifgiakCw/v67piF8vEizpd5h16zGTQvi/fvU=; b=MSxnYOCZ8hb5TPk/0o84Qhqm7L
-        Z4HvzLvRZspGbNQPqF9JJYGc/gkTeVKCHBurzZS7fbocmO5DGws9xPHaGDjQ59x/k7Q84gjTp8TbF
-        YqDxPPXuihepR9ViWBc7+5acQktkF9593Y6ln+sBv1Izrnb0rJKwherpwK7En3HthkjRyYbwwbIwH
-        Wz165BHtOXxpSYHHjvmdHaa/GhRs7HO4UnuKixm8qqEMwD006XkXbqaND4NJ+1JnBlGtD1/J2GWfd
-        kGILdm6DGyoBG74/EUoz9LFMpWkyF4AS3CizB92YZ/6ylNw1uCE4Gnw9JrLttbEU/twCrVu7ii2iI
-        3AkDGJew==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pFxGT-0054RI-A8; Thu, 12 Jan 2023 13:05:05 +0000
-Date:   Thu, 12 Jan 2023 13:05:05 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     syzbot <syzbot+fa6f2ee9039b87ef86c4@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [tmpfs?] kernel BUG in folio_flags
-Message-ID: <Y8AFgZEEjnUIaCbf@casper.infradead.org>
-References: <000000000000d9ae1305f20e89bd@google.com>
+        Thu, 12 Jan 2023 08:05:58 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3464813E02
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:05:52 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id u19so44532536ejm.8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:05:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0IszrXcLbv1C0ufOCUrkZd80J905kQzALamm/CPBXfM=;
+        b=xlQfeN7xC3TRUc5W1wnqMmOH5bhEryi+j7MuZXvP4NYK/TnRAPocLfCRZXInvZWFax
+         j2aQVVtgc6pg/uS4umUG9NHrI70MQ9nlwCBSdckRkQFGoxzIWLZASZhHZ7p+othw1yHF
+         eHlDiWlTorZfj3TUaSDPROoYECZ++AJ/hZaW8nCEmLc1mcPKtKwDX2Ic4d86gw+Y1Q0u
+         QZME5eeztGxr31yUGxwJR/Kdbyl5+r0LcE9rSyRBlZuQg6PmuvwL2cTEX0iJIVgRDAmE
+         UevHO6G74oKqN2zZUXYNQOR1PQ+/42Lmj0uBdNsFdg/lbBQkAAqHvZtxEschn1VXQXJd
+         a7gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0IszrXcLbv1C0ufOCUrkZd80J905kQzALamm/CPBXfM=;
+        b=Ij7d6WLIEwam0Qj56OcrIXS0rRPk4aEsFTVTdf3Aak2NZi1xGolNwTd+7DMpWhgye5
+         jx3bhi7yylXX6u6ZXcg0jc8Ir95R7BJesdVPKJ77W//ptubFAB4ETcoRMYxHpZ/poBso
+         4KVkTQC3QhD73Dw280MFdONgH7TcmgoaDdzAfCy1ujttlro1thAVGUjvBrveBK3NluVT
+         hWuP+BuZrRLKd4F1eHgw/jkWawxSkW1xkeY6uOjLjCqlIt5BdkPuKzl9dTDuwSj6FcrV
+         MWUGrv+j+dUvrBsUwcI/qSdLEGss6ki+yrs/g8NBP+d1CPfGpmVvVg2ryBhAq/b25dJN
+         XeGA==
+X-Gm-Message-State: AFqh2kp6k5n8JCc+FIti6um7LkDi6XZ4Z7Mcg5SehFXRzPZlwKjKQpEc
+        uSo0df4VSCQjp3+t0FdjnPBN8A==
+X-Google-Smtp-Source: AMrXdXsF3pTGMimbHjkVQwICvApD/N1OZJva+QH5LWTUFwBg/7Pk3pS6B1jaWQYBxxtq/ond66wyeA==
+X-Received: by 2002:a17:906:33d0:b0:854:6e3:2388 with SMTP id w16-20020a17090633d000b0085406e32388mr9818022eja.12.1673528750749;
+        Thu, 12 Jan 2023 05:05:50 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id 11-20020a170906318b00b0078d3f96d293sm7427668ejy.30.2023.01.12.05.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 05:05:50 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/6] phy: qualcomm: Add UFS support for SM8550
+Date:   Thu, 12 Jan 2023 15:05:36 +0200
+Message-Id: <20230112130542.1399921-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000d9ae1305f20e89bd@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 02:25:39AM -0800, syzbot wrote:
-> ------------[ cut here ]------------
-> kernel BUG at include/linux/page-flags.h:317!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 10782 Comm: syz-executor.1 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> RIP: 0010:folio_flags.constprop.0+0x122/0x150 include/linux/page-flags.h:317
-> Code: 52 ff ff ff e8 ff f2 cd ff 48 8d 43 ff 49 39 c4 0f 84 40 ff ff ff e8 ed f2 cd ff 48 c7 c6 40 0b 57 8a 4c 89 e7 e8 2e e4 05 00 <0f> 0b e8 57 c2 1b 00 e9 fe fe ff ff e8 4d c2 1b 00 eb a9 4c 89 e7
-> RSP: 0018:ffffc90005437b00 EFLAGS: 00010246
-> RAX: 0000000000040000 RBX: 0000000000000001 RCX: ffffc90014e22000
-> RDX: 0000000000040000 RSI: ffffffff81b3ca02 RDI: 0000000000000000
-> RBP: 0000000000000004 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000001 R12: ffffea0000b28100
-> R13: 0000000000000000 R14: dffffc0000000000 R15: 1ffffd400016502c
-> FS:  00007f1e422fd700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00005642ce910130 CR3: 000000001cef4000 CR4: 00000000003506f0
-> Call Trace:
->  <TASK>
->  folio_test_head include/linux/page-flags.h:780 [inline]
->  folio_test_large include/linux/page-flags.h:801 [inline]
->  folio_nr_pages include/linux/mm.h:1735 [inline]
->  compound_nr include/linux/mm.h:1747 [inline]
->  zero_user_segments.constprop.0+0x262/0x350 include/linux/highmem.h:288
->  shmem_write_end+0x684/0x780 mm/shmem.c:2600
+This patchset relies on the following two patchsets:
+https://lore.kernel.org/all/20221123104443.3415267-1-dmitry.baryshkov@linaro.org/
+https://lore.kernel.org/all/20221222141001.54849-2-manivannan.sadhasivam@linaro.org/
 
-Oh, good one.  shmem isn't actually doing anything wrong here, but
-it'll be nice to fix it.  (net -10 lines)
+The v1 of this patchset is:
+https://lore.kernel.org/all/20221116120157.2706810-1-abel.vesa@linaro.org/
 
-What's happening is that shmem is deliberately calling
-zero_user_segments() on a tail page.  zero_user_segments() calls
-compound_nr() which used to return 1 when called on a tail page but now
-trips this assert.  I didn't intend this change of behaviour, so
-let's start by fixing that.
+Changes since v1:
+ * dropped all UFS unrelated patches and also register offsets
+ * switched to sc8280xp bindings, like Johan's suggested.
 
-Andrew, this is a fix for "mm: Reimplement compound_nr()".  I'll send
-the shmem change separately since it's not a bug fix.
+Abel Vesa (6):
+  dt-bindings: phy: Add QMP UFS PHY comptible for SM8550
+  phy: qcom-qmp: qserdes-com: Add v6 register offsets
+  phy: qcom-qmp: qserdes-txrx: Add v6 register offsets
+  phy: qcom-qmp: qserdes-txrx-ufs: Add v6 register offsets
+  phy: qcom-qmp: pcs-ufs: Add v6 register offsets
+  phy: qcom-qmp-ufs: Add SM8550 support
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 57d702fc8677..78f751f3ba5b 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1741,10 +1741,22 @@ static inline long folio_nr_pages(struct folio *folio)
- #endif
- }
- 
--/* Returns the number of pages in this potentially compound page. */
-+/*
-+ * compound_nr() returns the number of pages in this potentially compound
-+ * page.  compound_nr() can be called on a tail page, and is defined to
-+ * return 1 in that case.
-+ */
- static inline unsigned long compound_nr(struct page *page)
- {
--	return folio_nr_pages((struct folio *)page);
-+	struct folio *folio = (struct folio *)page;
-+
-+	if (!test_bit(PG_head, &folio->flags))
-+		return 1;
-+#ifdef CONFIG_64BIT
-+	return folio->_folio_nr_pages;
-+#else
-+	return 1L << folio->_folio_order;
-+#endif
- }
- 
- /**
-@@ -1753,8 +1765,7 @@ static inline unsigned long compound_nr(struct page *page)
-  */
- static inline int thp_nr_pages(struct page *page)
- {
--	VM_BUG_ON_PGFLAGS(PageTail(page), page);
--	return compound_nr(page);
-+	return folio_nr_pages((struct folio *)page);
- }
- 
- /**
+ .../phy/qcom,sc8280xp-qmp-ufs-phy.yaml        |   1 +
+ .../phy/qualcomm/phy-qcom-qmp-pcs-ufs-v6.h    |  31 ++++++
+ .../qualcomm/phy-qcom-qmp-qserdes-com-v6.h    |  82 ++++++++++++++
+ .../phy-qcom-qmp-qserdes-txrx-ufs-v6.h        |  30 ++++++
+ .../qualcomm/phy-qcom-qmp-qserdes-txrx-v6.h   |  77 ++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-ufs.c       | 100 ++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp.h           |   6 ++
+ 7 files changed, 327 insertions(+)
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-ufs-v6.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-com-v6.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-ufs-v6.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v6.h
+
+-- 
+2.34.1
+
