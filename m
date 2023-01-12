@@ -2,168 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416BF66880A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 00:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1257166880C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 00:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbjALX7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 18:59:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S239204AbjALX7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 18:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234657AbjALX7a (ORCPT
+        with ESMTP id S232888AbjALX7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 18:59:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CDF65B0;
-        Thu, 12 Jan 2023 15:59:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E1F0621DE;
-        Thu, 12 Jan 2023 23:59:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59626C433D2;
-        Thu, 12 Jan 2023 23:59:27 +0000 (UTC)
-Date:   Thu, 12 Jan 2023 18:59:25 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ross Zwisler <zwisler@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 1/4] tracing: Add creation of instances at boot command
- line
-Message-ID: <20230112185925.5a51843e@gandalf.local.home>
-In-Reply-To: <Y8CWodcFALp3MEBM@google.com>
-References: <20230111145636.450953217@goodmis.org>
-        <20230111145842.376427803@goodmis.org>
-        <Y8CWodcFALp3MEBM@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 12 Jan 2023 18:59:44 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ED45D8AB
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 15:59:39 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cx21-20020a17090afd9500b00228f2ecc6dbso338550pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 15:59:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YOxGu9TF0QtV9czLWlRoi8MtO/LfBf5pI1clFeTOj3o=;
+        b=sWx4RBoGeV3nGFYmL0SgAWnfFH7s/pPAka7EdFUbaGzvI+oz9UpEJ/MkQDEtTuwnN9
+         ED2OZlG8Oc1Y/tAlmxByk1osBkmYbNDZFMdEVgbMyQt++/iBLJ77u1urNxwq5OA8Qe2C
+         ZaPFXwFSFeUAQdG0JVNbeWX1KowNmelNcdauSM80Wz6HXNDh+eHXCIADwF/s4SBEtZsg
+         NB8JEcUHOPgT6O1QpfqYNDcgT2v43qEUqY5N7+Ik5R11fF8nqgZdH87rpoLAmOLaJgVJ
+         Nd/bapu4YRQuYRTFv9grs7qrkxl9l4oxvL0f+tLxHwetZL0cliCw/l+jxF5dUthWAxKr
+         Sc1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YOxGu9TF0QtV9czLWlRoi8MtO/LfBf5pI1clFeTOj3o=;
+        b=c8GYA1nwC25tbCc63JHEVowVWFxHpElasaHmvjzmUuXo/z4jHCcWLSDib7WRXdteOc
+         CRhOPmoEb68/uBpUImrN9UzHVQQ9WAzj2s3ssD7RQn0PZ9LDfpqklPFNL5F9zT6zj2Z7
+         iTtgorTxFFoBmCAJ8PSJJYvtu3m+EFmhX6WGeyYeAq329d6jj+Rt3Ig5NGjEafLpXXhZ
+         LoN+TAKtVthLx7BQbZOyH1K2fw/ja4qthTD/4yVgQZEcgePUNGKu/kQwPHa907iFQwHe
+         kWsKizIiChSplOJcthKZqsBXMnmKxQ7TTAa+tL1O2eNB69vsFbM39SZ8FIMLIA23N+id
+         gydQ==
+X-Gm-Message-State: AFqh2kprAMVYY0yt6W8xSzEJFSpESk3AWsLuIpTDnonNMmlTOLqjDdC+
+        9EYoadkZSO86sNH0pcIRffkgyw==
+X-Google-Smtp-Source: AMrXdXtscQ7xEgomCamqZcZazKq6mWA71lXLjuymhU8awjVGmi4jnbBHrzR/XzGQnLoGXa4o7sltYw==
+X-Received: by 2002:a05:6a20:4284:b0:9d:b8e6:d8e5 with SMTP id o4-20020a056a20428400b0009db8e6d8e5mr1410949pzj.2.1673567978825;
+        Thu, 12 Jan 2023 15:59:38 -0800 (PST)
+Received: from [2620:15c:29:203:1f3b:d48c:199c:9f57] ([2620:15c:29:203:1f3b:d48c:199c:9f57])
+        by smtp.gmail.com with ESMTPSA id d4-20020a17090a8d8400b001fd6066284dsm11340564pjo.6.2023.01.12.15.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 15:59:38 -0800 (PST)
+Date:   Thu, 12 Jan 2023 15:59:37 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Jarkko Sakkinen <jarkko@profian.com>
+cc:     Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5] crypto: ccp: Sanitize sev_platform_init() error
+ messages
+In-Reply-To: <20230110191201.29666-1-jarkko@profian.com>
+Message-ID: <1a78beb1-bd63-ca70-6b05-bff45de842e5@google.com>
+References: <20230110191201.29666-1-jarkko@profian.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 16:24:17 -0700
-Ross Zwisler <zwisler@google.com> wrote:
+On Tue, 10 Jan 2023, Jarkko Sakkinen wrote:
 
-> On Wed, Jan 11, 2023 at 09:56:37AM -0500, Steven Rostedt wrote:
-> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> > 
-> > Add kernel command line to add tracing instances. This only creates
-> > instances at boot but still does not enable any events to them. Later
-> > changes will extend this command line to add enabling of events, filters,
-> > and triggers. As well as possibly redirecting trace_printk()!
-> > 
-> > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > ---
-> >  .../admin-guide/kernel-parameters.txt         |  6 +++
-> >  kernel/trace/trace.c                          | 51 +++++++++++++++++++
-> >  2 files changed, 57 insertions(+)
-> > 
-> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > index 6cfa6e3996cf..cec486217ccc 100644
-> > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > @@ -6272,6 +6272,12 @@
-> >  			comma-separated list of trace events to enable. See
-> >  			also Documentation/trace/events.rst
-> >  
-> > +	trace_instance=[instance-info]
-> > +			[FTRACE] Create an ring buffer instance early in boot up.
-> > +			This will be listed in:
-> > +
-> > +				/sys/kernel/tracing/instances  
+> The following functions end up calling sev_platform_init() or
+> __sev_platform_init_locked():
 > 
-> Should this be "/sys/kernel/debug/tracing/instances"?
-
-No, the /sys/kernel/debug/tracing is deprecated. It only exists for
-backward compatibility. If it's still in documentation, it should be
-updated.
-
+> * sev_guest_init()
+> * sev_ioctl_do_pek_csr
+> * sev_ioctl_do_pdh_export()
+> * sev_ioctl_do_pek_import()
+> * sev_ioctl_do_pek_pdh_gen()
+> * sev_pci_init()
 > 
-> Ditto for the text for 'ftrace_boot_snapshot':
+> However, only sev_pci_init() prints out the failed command error code, and
+> even there, the error message does not specify which SEV command failed.
 > 
-> 	ftrace_boot_snapshot
-> 			[FTRACE] On boot up, a snapshot will be taken of the
-> 			ftrace ring buffer that can be read at:
-> 			/sys/kernel/tracing/snapshot.
+> Address this by printing out the SEV command errors inside
+> __sev_platform_init_locked(), and differentiate between DF_FLUSH, INIT and
+> INIT_EX commands.  As a side-effect, @error can be removed from the
+> parameter list.
 > 
-> Everywhere else we use /sys/kernel/debug/tracing, though we do use
-> /sys/kernel/tracing in Documentation/trace/ftrace.txt ?
-
-Right, that's because it was missed when I was updating it ;-)
-
-All documentation that references /sys/kernel/debug/tracing should be
-replaced with /sys/kernel/tracing.
-
+> This extra information is particularly useful if firmware loading and/or
+> initialization is going to be made more robust, e.g. by allowing firmware
+> loading to be postponed.
 > 
-> I guess either works, but having just 1 or the other will help us not confuse
-> users.
+> Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
 
-Agreed. Want to send a clean up patch? ;-)
-
-> 
-> > +
-> >  	trace_options=[option-list]
-> >  			[FTRACE] Enable or disable tracer options at boot.
-> >  			The option-list is a comma delimited list of options
-> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> > index a555a861b978..34ed504ffca9 100644
-> > --- a/kernel/trace/trace.c
-> > +++ b/kernel/trace/trace.c
-> > @@ -48,6 +48,9 @@
-> >  #include <linux/fsnotify.h>
-> >  #include <linux/irq_work.h>
-> >  #include <linux/workqueue.h>
-> > +#include <linux/workqueue.h>  
-> 
-> Duplicate include 1 line above.
-
-Good catch.
-
-> 
-> > +
-> > +#include <asm/setup.h> /* COMMAND_LINE_SIZE */
-> >  
-> >  #include "trace.h"
-> >  #include "trace_output.h"
-> > @@ -186,6 +189,9 @@ static char *default_bootup_tracer;
-> >  static bool allocate_snapshot;
-> >  static bool snapshot_at_boot;
-> >  
-> > +static char boot_instance_info[COMMAND_LINE_SIZE] __initdata;
-> > +static int boot_instance_index;
-> > +
-> >  static int __init set_cmdline_ftrace(char *str)
-> >  {
-> >  	strlcpy(bootup_tracer_buf, str, MAX_TRACER_SIZE);
-> > @@ -239,6 +245,23 @@ static int __init boot_snapshot(char *str)
-> >  __setup("ftrace_boot_snapshot", boot_snapshot);
-> >  
-> >  
-> > +static int __init boot_instance(char *str)
-> > +{
-> > +	char *slot = boot_instance_info + boot_instance_index;
-> > +	int left = COMMAND_LINE_SIZE - boot_instance_index;  
-> 
-> A bit safer to use sizeof(boot_instance_info) instead of COMMAND_LINE_SIZE,
-> so we can change the allocation size of boot_instance_info without having to
-> keep them in sync.
-
-Either way is fine. I wouldn't make this change if it was the only thing I
-needed to fix, but as I need to get rid of the extra "workqueue.h", I can
-make this change too.
-
-> 
-> These are mostly nits, you can add:
-> 
-> Reviewed-by: Ross Zwisler <zwisler@google.com>
-
-Thanks!
-
--- Steve
+Acked-by: David Rientjes <rientjes@google.com>
