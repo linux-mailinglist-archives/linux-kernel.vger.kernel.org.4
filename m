@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70300666BC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709F0666BC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235894AbjALHom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 02:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
+        id S230430AbjALHoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 02:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238848AbjALHoZ (ORCPT
+        with ESMTP id S238942AbjALHoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 02:44:25 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8B340C0B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 23:44:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5D73F45B
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 23:44:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1673509464; x=1705045464;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lER2iCdo4YT1z/t6Fjq+OdHUqkdAih3mri0JWVBf8do=;
-  b=bJINky6+6hvaDsT2zUiUwzlGEFzJ2DeFbWe6ZvPy5pUGcy5FiOyaWH6B
-   P/7PjoFH8BJSomIasfy2b8RHLvlDrbAKKQoSwrUaOFHPKSxe2W18DnfY7
-   1WUIRonKiIq/SfZCdlJjVIYboNt+AE4tZ5EQpkKUa79Rum5D88mMrljd/
-   +AZ2wFhSlwGKGe9kOC8Q97VRp10Nf0tBn9gCnBvzWJqJl1OASUyLoz93U
-   XjegEYJYmsFjBMJ+4nG5Iwnb2NATTbKBPXekbb6iVklDH5BucLETW1Mhy
-   n9qE7rM9Zdxa+mOfdsthlabMxAZc1XZi+AMpUM/NNvQkNDeC+l55ucG/s
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="321328706"
+  bh=zfPuPqY/N+g3C8lVyiqhCWzrPDWRk0al1rHlpRNy3Y0=;
+  b=eA9GJvV86bAUnnRoOLoNpdGoaTHyqm3dldE9aqiaHHf+dd+Y4TxInSmU
+   Yw3oFVGQQDgURbYEL4p8A4fs4mKODga28i9QxDYwuKrwk+gEMdfut2d/p
+   DFaUbLxi+Tb4cp/IWuNYRkHbWzSvYzlYow/lpKbqSwwiORob87U8VzM7j
+   aDFkoFDBmO/hHgkMM4BPXfxGPBH8NqgJpvgqBi1Gvl4X3BaeBd4RJ3Zx8
+   5hVXxzggOIwjehL6ZZISMwPGEoVsuUqtud3pNWr8dLngWZ28zY8pxoS/F
+   NOaFGDrT3K3Qto4lHsSbOlVTLvH1ZXU+eC25UyJs16FxUW8ptDc0cR2T9
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="321328717"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="321328706"
+   d="scan'208";a="321328717"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 23:44:23 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 23:44:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="635283985"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="635283994"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="635283985"
+   d="scan'208";a="635283994"
 Received: from unknown (HELO fred..) ([172.25.112.68])
-  by orsmga006.jf.intel.com with ESMTP; 11 Jan 2023 23:44:22 -0800
+  by orsmga006.jf.intel.com with ESMTP; 11 Jan 2023 23:44:23 -0800
 From:   Xin Li <xin3.li@intel.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
         brgerst@gmail.com, chang.seok.bae@intel.com, jgross@suse.com
-Subject: [PATCH v6 4/5] x86/gsseg: move load_gs_index() to its own new header file
-Date:   Wed, 11 Jan 2023 23:20:31 -0800
-Message-Id: <20230112072032.35626-5-xin3.li@intel.com>
+Subject: [PATCH v6 5/5] x86/gsseg: use the LKGS instruction if available for load_gs_index()
+Date:   Wed, 11 Jan 2023 23:20:32 -0800
+Message-Id: <20230112072032.35626-6-xin3.li@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230112072032.35626-1-xin3.li@intel.com>
 References: <20230112072032.35626-1-xin3.li@intel.com>
@@ -63,155 +63,117 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
 
-GS is a special segment on x86_64, move load_gs_index() to its own new
-header file to simplify header inclusion.
+The LKGS instruction atomically loads a segment descriptor into the
+%gs descriptor registers, *except* that %gs.base is unchanged, and the
+base is instead loaded into MSR_IA32_KERNEL_GS_BASE, which is exactly
+what we want this function to do.
 
 Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
 Signed-off-by: Xin Li <xin3.li@intel.com>
 ---
- arch/x86/include/asm/gsseg.h         | 41 ++++++++++++++++++++++++++++
- arch/x86/include/asm/mmu_context.h   |  1 +
- arch/x86/include/asm/special_insns.h | 21 --------------
- arch/x86/kernel/paravirt.c           |  1 +
- arch/x86/kernel/signal_32.c          |  1 +
- arch/x86/kernel/tls.c                |  1 +
- 6 files changed, 45 insertions(+), 21 deletions(-)
- create mode 100644 arch/x86/include/asm/gsseg.h
+
+Changes since v5:
+* Remove reviewers' SOBs (Borislav Petkov).
+
+Changes since v4:
+* Clear the LKGS feature from Xen PV guests (Juergen Gross).
+
+Changes since v3:
+* We want less ASM not more, thus keep local_irq_{save,restore}() inside
+  native_load_gs_index() (Thomas Gleixner).
+* For paravirt enabled kernels, initialize pv_ops.cpu.load_gs_index to
+  native_lkgs (Thomas Gleixner).
+
+Changes since v2:
+* Mark DI as input and output (+D) as in v1, since the exception handler
+  modifies it (Brian Gerst).
+
+Changes since v1:
+* Use EX_TYPE_ZERO_REG instead of fixup code in the obsolete .fixup code
+  section (Peter Zijlstra).
+* Add a comment that states the LKGS_DI macro will be replaced with "lkgs %di"
+  once the binutils support the LKGS instruction (Peter Zijlstra).
+---
+ arch/x86/include/asm/gsseg.h | 33 +++++++++++++++++++++++++++++----
+ arch/x86/kernel/cpu/common.c |  1 +
+ arch/x86/xen/enlighten_pv.c  |  1 +
+ 3 files changed, 31 insertions(+), 4 deletions(-)
 
 diff --git a/arch/x86/include/asm/gsseg.h b/arch/x86/include/asm/gsseg.h
-new file mode 100644
-index 000000000000..d15577c39e8d
---- /dev/null
+index d15577c39e8d..ab6a595cea70 100644
+--- a/arch/x86/include/asm/gsseg.h
 +++ b/arch/x86/include/asm/gsseg.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef _ASM_X86_GSSEG_H
-+#define _ASM_X86_GSSEG_H
+@@ -14,17 +14,42 @@
+ 
+ extern asmlinkage void asm_load_gs_index(u16 selector);
+ 
++/* Replace with "lkgs %di" once binutils support LKGS instruction */
++#define LKGS_DI _ASM_BYTES(0xf2,0x0f,0x00,0xf7)
 +
-+#include <linux/types.h>
-+
-+#include <asm/asm.h>
-+#include <asm/cpufeature.h>
-+#include <asm/alternative.h>
-+#include <asm/processor.h>
-+#include <asm/nops.h>
-+
-+#ifdef CONFIG_X86_64
-+
-+extern asmlinkage void asm_load_gs_index(u16 selector);
-+
-+static inline void native_load_gs_index(unsigned int selector)
++static inline void native_lkgs(unsigned int selector)
 +{
-+	unsigned long flags;
-+
-+	local_irq_save(flags);
-+	asm_load_gs_index(selector);
-+	local_irq_restore(flags);
++	u16 sel = selector;
++	asm_inline volatile("1: " LKGS_DI
++			    _ASM_EXTABLE_TYPE_REG(1b, 1b, EX_TYPE_ZERO_REG, %k[sel])
++			    : [sel] "+D" (sel));
 +}
 +
-+#endif /* CONFIG_X86_64 */
-+
-+#ifndef CONFIG_PARAVIRT_XXL
-+
-+static inline void load_gs_index(unsigned int selector)
-+{
-+#ifdef CONFIG_X86_64
-+	native_load_gs_index(selector);
-+#else
-+	loadsegment(gs, selector);
-+#endif
-+}
-+
-+#endif /* CONFIG_PARAVIRT_XXL */
-+
-+#endif /* _ASM_X86_GSSEG_H */
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index b8d40ddeab00..e01aa74a6de7 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -12,6 +12,7 @@
- #include <asm/tlbflush.h>
- #include <asm/paravirt.h>
- #include <asm/debugreg.h>
-+#include <asm/gsseg.h>
- 
- extern atomic64_t last_mm_ctx_id;
- 
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index a71d0e8d4684..cfd9499b617c 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -120,17 +120,6 @@ static inline void native_wbinvd(void)
- 	asm volatile("wbinvd": : :"memory");
- }
- 
--extern asmlinkage void asm_load_gs_index(u16 selector);
--
--static inline void native_load_gs_index(unsigned int selector)
--{
+ static inline void native_load_gs_index(unsigned int selector)
+ {
 -	unsigned long flags;
--
++	if (cpu_feature_enabled(X86_FEATURE_LKGS)) {
++		native_lkgs(selector);
++	} else {
++		unsigned long flags;
+ 
 -	local_irq_save(flags);
 -	asm_load_gs_index(selector);
 -	local_irq_restore(flags);
--}
--
- static inline unsigned long __read_cr4(void)
- {
- 	return native_read_cr4();
-@@ -184,16 +173,6 @@ static inline void wbinvd(void)
- 	native_wbinvd();
++		local_irq_save(flags);
++		asm_load_gs_index(selector);
++		local_irq_restore(flags);
++	}
  }
  
--
--static inline void load_gs_index(unsigned int selector)
--{
--#ifdef CONFIG_X86_64
--	native_load_gs_index(selector);
--#else
--	loadsegment(gs, selector);
--#endif
--}
--
- #endif /* CONFIG_PARAVIRT_XXL */
+ #endif /* CONFIG_X86_64 */
  
- static inline void clflush(volatile void *__p)
-diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
-index 327757afb027..bdc886c3f13a 100644
---- a/arch/x86/kernel/paravirt.c
-+++ b/arch/x86/kernel/paravirt.c
-@@ -32,6 +32,7 @@
- #include <asm/special_insns.h>
- #include <asm/tlb.h>
- #include <asm/io_bitmap.h>
-+#include <asm/gsseg.h>
++static inline void __init lkgs_init(void)
++{
++#ifdef CONFIG_PARAVIRT_XXL
++#ifdef CONFIG_X86_64
++	if (cpu_feature_enabled(X86_FEATURE_LKGS))
++		pv_ops.cpu.load_gs_index = native_lkgs;
++#endif
++#endif
++}
++
+ #ifndef CONFIG_PARAVIRT_XXL
  
- /*
-  * nop stub, which must not clobber anything *including the stack* to
-diff --git a/arch/x86/kernel/signal_32.c b/arch/x86/kernel/signal_32.c
-index 2553136cf39b..bb4f3f3b1c84 100644
---- a/arch/x86/kernel/signal_32.c
-+++ b/arch/x86/kernel/signal_32.c
-@@ -31,6 +31,7 @@
- #include <asm/sigframe.h>
- #include <asm/sighandling.h>
- #include <asm/smap.h>
-+#include <asm/gsseg.h>
+ static inline void load_gs_index(unsigned int selector)
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 9cfca3d7d0e2..b7ac85a1e5df 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1960,6 +1960,7 @@ void __init identify_boot_cpu(void)
+ 	setup_cr_pinning();
  
- #ifdef CONFIG_IA32_EMULATION
- #include <asm/ia32_unistd.h>
-diff --git a/arch/x86/kernel/tls.c b/arch/x86/kernel/tls.c
-index 3c883e064242..3ffbab0081f4 100644
---- a/arch/x86/kernel/tls.c
-+++ b/arch/x86/kernel/tls.c
-@@ -12,6 +12,7 @@
- #include <asm/ldt.h>
- #include <asm/processor.h>
- #include <asm/proto.h>
-+#include <asm/gsseg.h>
+ 	tsx_init();
++	lkgs_init();
+ }
  
- #include "tls.h"
+ void identify_secondary_cpu(struct cpuinfo_x86 *c)
+diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+index 5b1379662877..ce2f19ee4bfc 100644
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -276,6 +276,7 @@ static void __init xen_init_capabilities(void)
+ 	setup_clear_cpu_cap(X86_FEATURE_ACC);
+ 	setup_clear_cpu_cap(X86_FEATURE_X2APIC);
+ 	setup_clear_cpu_cap(X86_FEATURE_SME);
++	setup_clear_cpu_cap(X86_FEATURE_LKGS);
  
+ 	/*
+ 	 * Xen PV would need some work to support PCID: CR3 handling as well
 -- 
 2.34.1
 
