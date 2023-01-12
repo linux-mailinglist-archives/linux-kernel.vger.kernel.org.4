@@ -2,147 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575AE6669F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0540A6669F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjALEFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 23:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S236145AbjALEIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 23:08:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234237AbjALEFC (ORCPT
+        with ESMTP id S235156AbjALEI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 23:05:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD074BD76
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:04:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673496250;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t0OY2I1ezHTRqIu9Y/LC7ts0y7/Uyj7Fzh0DQLGJ/B0=;
-        b=Nv9D4/1aM1Sm8aTd1SHNdZtAhfppRWGvLwqoOXi81EYvAEV3v7gU9xteba+C06NTIWNSPG
-        Bv9KQJuXH5GjmGVBk4X+4A2mteHjIA7OI6etYwSqVJPvf21t+O2PgT4Z93weO6ZqowmmlZ
-        8mfimbltegfNbA0/Jy77x2bDV9oZkm4=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-639-BndBdAbrMC-ib8T6Cj9Zrg-1; Wed, 11 Jan 2023 23:04:09 -0500
-X-MC-Unique: BndBdAbrMC-ib8T6Cj9Zrg-1
-Received: by mail-oo1-f71.google.com with SMTP id n30-20020a4a345e000000b004ac99b461b5so6386607oof.19
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:04:09 -0800 (PST)
+        Wed, 11 Jan 2023 23:08:27 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7464341A6A
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:08:25 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bp15so26607038lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:08:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w7THg9ysCyORDofeZeb5cwtB7iuBZFtsX/HadXdT8Cw=;
+        b=JSrrop6cbxT6UHOx++WjIFHUJA14AEqhdd7iyueO6KaLW2hklkdfbUkkMwavZRuJ+J
+         V4h4cJSpkn70lAm8aywuVHCa5mnla+WFXlScoGk7lYajz8+V/1I6YNIz/1TB3W+jkyTC
+         biNQn7ufYDlKnqMPoVEQGHQXZ9c3ZpQ9sE2DpAsx2JW3a2Gi/gN0MZdhCVjj6nf7cDE5
+         Qt1NNyXZtj3T9UTZh0s0O0IF+oVZo0t6Tpom9Zx9e5POSJimkt98vJ9BkKMnxa+b7Mmq
+         jCRkBwIoiSZRIgUhxZZvAkadElfqfVc3jj49ngj1/wj+X4Y+FuCnF1gCFvC75+SEI0Os
+         Vf9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t0OY2I1ezHTRqIu9Y/LC7ts0y7/Uyj7Fzh0DQLGJ/B0=;
-        b=CjmX4X/n/YjH83O9giLHz0Vgo5a8k56GdmYnp7C1noRJhkByj8EJJ+OEQaM5ewZpp4
-         Um5djk2gnSffBNzJFWzfX9KqSrzMgheQaV+lomEe1XrEAA5zr46lTYcJPp6F+vtL+HP9
-         cl/T3tQ1pY93V0F6WG0Jihogt/M6XLLY2AolltP2nfhsiRCTTNTnqjgx7dHQIY0MXyND
-         270z+xGYWfUtgBl2/0H2AOcNa5SO9fxm2h38TLe5xlWKa5+t7b3Jk7CDWdBLlylsqgDe
-         keC1eSqiCQJr5QYMKOtIZTASvpl5HzIiRS44g040qH5yVS55TPmD0jqVsb+pkB1/v5LZ
-         rKHw==
-X-Gm-Message-State: AFqh2krVscae9P8tmgmZdlh7TCRTctgi5S3f/9dNCgDxBUnk7TGI0gHA
-        vhKQjZs5Fi2elo2/8ZhQG3S6ypF5789cZZHMdjfiWDuYE4kQt9IxaJ8Hx0HPj5l4EIKyEWP3icu
-        /UXB/av/q3sTnDLWHdwF7hgLJiPGomz69pFIHWcpD
-X-Received: by 2002:a05:6830:6481:b0:684:9f72:3fe3 with SMTP id ck1-20020a056830648100b006849f723fe3mr579248otb.201.1673496248610;
-        Wed, 11 Jan 2023 20:04:08 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvdhsnX1tQ73S1tyQpK140LB2FMMbmrPAh6IYodfSt/BgEx43J6hE6A3CR6z4IpaIqh9udBSGJaPJYAFihg+yY=
-X-Received: by 2002:a05:6830:6481:b0:684:9f72:3fe3 with SMTP id
- ck1-20020a056830648100b006849f723fe3mr579244otb.201.1673496248425; Wed, 11
- Jan 2023 20:04:08 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w7THg9ysCyORDofeZeb5cwtB7iuBZFtsX/HadXdT8Cw=;
+        b=hPvGdecY7zqPQEp1FB+Z8YFO9tWKV0DvQUy+EVAot31+s86hfvG2WgHCeG3em/5eLW
+         Ll6oeZIkhG3ihRsKJxg77T+FUGdmutz8Jpe8MWJ9/FQS+H7LUwSHRmbK3YQEhGUVuLqI
+         aSrSRHgnyXzrvjxmv2QuswRgYFOCuGOWbnNdmR5oS4w/O4goaMMFTlCQQnWs8tACddVi
+         AYFwYC6myp6tWL5qpztlU8gnIY7/wnE5u3VnwfeJ5RxRPw158tR3Q4HbCz4NxvKxDlw0
+         TnSvHG9ku5MkmSCLQ5j5Og/OK1gGsiuqUwrOR4ob30TC8mlFzwjH0/mWNaWZ0VGnJEYr
+         ZOsg==
+X-Gm-Message-State: AFqh2kpZfAMgVsLvzBAisXIvPWjKeKvjycroCPf7ncitWtoXnARvK7MB
+        D9hR3fPxR1ChyluMxC6r0aY7ag==
+X-Google-Smtp-Source: AMrXdXupBBJwsfIUeUpY7ybPBGb99U6p5RPRzBKJP75fEXRSyGFUaSn9Rymxvcovw8XaXyFpwQ/ZGg==
+X-Received: by 2002:ac2:4e07:0:b0:4cc:ff7c:4846 with SMTP id e7-20020ac24e07000000b004ccff7c4846mr77463lfr.0.1673496503796;
+        Wed, 11 Jan 2023 20:08:23 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id o5-20020ac24e85000000b004917a30c82bsm3058632lfr.153.2023.01.11.20.08.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 20:08:23 -0800 (PST)
+Message-ID: <b69d816a-4277-ed6b-5d3a-8ede7ad01178@linaro.org>
+Date:   Thu, 12 Jan 2023 06:08:22 +0200
 MIME-Version: 1.0
-References: <20230111062809.25020-1-jasowang@redhat.com> <DM8PR12MB540054712BACEF34E065C2BBABFC9@DM8PR12MB5400.namprd12.prod.outlook.com>
-In-Reply-To: <DM8PR12MB540054712BACEF34E065C2BBABFC9@DM8PR12MB5400.namprd12.prod.outlook.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 12 Jan 2023 12:03:57 +0800
-Message-ID: <CACGkMEtNn5oiQEdY49O4TyCOV68AF7ypGzMQKzRaq0Tc6rvcYA@mail.gmail.com>
-Subject: Re: [PATCH 0/5] virtio_ring: per virtqueue DMA device
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     "mst@redhat.com" <mst@redhat.com>,
-        "gdawar@amd.com" <gdawar@amd.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v6 5/6] ARM: dts: qcom: fix various wrong definition for
+ kpss-acc-v1
+Content-Language: en-GB
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20230110183259.19142-1-ansuelsmth@gmail.com>
+ <20230110183259.19142-6-ansuelsmth@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230110183259.19142-6-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 9:33 PM Eli Cohen <elic@nvidia.com> wrote:
->
-> > From: Jason Wang <jasowang@redhat.com>
-> > Sent: Wednesday, 11 January 2023 8:28
-> > To: mst@redhat.com; jasowang@redhat.com
-> > Cc: Eli Cohen <elic@nvidia.com>; gdawar@amd.com;
-> > virtualization@lists.linux-foundation.org; linux-kernel@vger.kernel.org;
-> > tanuj.kamde@amd.com
-> > Subject: [PATCH 0/5] virtio_ring: per virtqueue DMA device
-> >
-> > Hi All:
-> >
-> > In some cases, the virtqueue could be backed by different devices. One
-> > example is that in the case of vDPA some parent may emualte virtqueue
-> > via vringh. In this case, it would be wrong if we stick with the
-> > physical DMA device for software emulated device, since there's no
-> > easy way for vringh to know about the hardware IOMMU mappings.
-> >
-> > So this series tries to introduce per virtqueue DMA device, then
-> > software virtqueues can utilize the transport specific method to
-> > assign appropirate DMA device.
-> >
-> > This fixes the crash of mlx5_vdpa + virtio_vdpa when platform IOMMU is
-> > enabled but not in the passthrough mode. The reason for the crash is
-> > that the virito_ring tries to map the control virtqueue into platform
-> > IOMMU but the vringh assumes a direct mapping (PA as IOVA). This is
-> > fixed by advetise the vDPA device that doesnt do DMA (without a DMA
-> > ops). So DMA API can go with the direct mapping then the vringh will
-> > be happy since mlx5_vdpa assuems a direct/identical mapping by
-> > default.
-> >
->
-> Could you provide instructions how to reproduce the crash you were seeing?
+On 10/01/2023 20:32, Christian Marangi wrote:
+> Fix dtbs_check warning now that we have a correct kpss-acc-v1 yaml
+> schema.
 
-It should be something like:
+I think the commit message is a bit misleading. You are not barely 
+fixing the warnings, you are adding the clocks configuration. Please 
+adjust the commit subject and drop the first sentence of the commit message.
 
-1) boot host kernel with iommu enabled but not in passthrough mode: I
-use intel_iommu=on
-2) create vdpa device on top of mlx5_vdpa VF
-3) bind the vdpa device to virtio_vdpa
+With that fixed:
 
-Then I can see the crash.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Thanks
+> Add missing clocks, clock-names, clock-output-names and #clock-cells
+> bindings for each kpss-acc-v1 clock-controller to reflect Documentation
+> schema.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>   arch/arm/boot/dts/qcom-apq8064.dtsi | 16 ++++++++++++++++
+>   arch/arm/boot/dts/qcom-ipq8064.dtsi |  8 ++++++++
+>   arch/arm/boot/dts/qcom-msm8960.dtsi |  8 ++++++++
+>   3 files changed, 32 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
+> index 1e68b42acb91..af84f2d350ef 100644
+> --- a/arch/arm/boot/dts/qcom-apq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
+> @@ -389,21 +389,37 @@ timer@200a000 {
+>   		acc0: clock-controller@2088000 {
+>   			compatible = "qcom,kpss-acc-v1";
+>   			reg = <0x02088000 0x1000>, <0x02008000 0x1000>;
+> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+> +			clock-names = "pll8_vote", "pxo";
+> +			clock-output-names = "acpu0_aux";
+> +			#clock-cells = <0>;
+>   		};
+>   
+>   		acc1: clock-controller@2098000 {
+>   			compatible = "qcom,kpss-acc-v1";
+>   			reg = <0x02098000 0x1000>, <0x02008000 0x1000>;
+> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+> +			clock-names = "pll8_vote", "pxo";
+> +			clock-output-names = "acpu1_aux";
+> +			#clock-cells = <0>;
+>   		};
+>   
+>   		acc2: clock-controller@20a8000 {
+>   			compatible = "qcom,kpss-acc-v1";
+>   			reg = <0x020a8000 0x1000>, <0x02008000 0x1000>;
+> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+> +			clock-names = "pll8_vote", "pxo";
+> +			clock-output-names = "acpu2_aux";
+> +			#clock-cells = <0>;
+>   		};
+>   
+>   		acc3: clock-controller@20b8000 {
+>   			compatible = "qcom,kpss-acc-v1";
+>   			reg = <0x020b8000 0x1000>, <0x02008000 0x1000>;
+> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+> +			clock-names = "pll8_vote", "pxo";
+> +			clock-output-names = "acpu3_aux";
+> +			#clock-cells = <0>;
+>   		};
+>   
+>   		saw0: power-controller@2089000 {
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> index de87fcaaa836..e796094a7af5 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> @@ -580,6 +580,10 @@ l2cc: clock-controller@2011000 {
+>   		acc0: clock-controller@2088000 {
+>   			compatible = "qcom,kpss-acc-v1";
+>   			reg = <0x02088000 0x1000>, <0x02008000 0x1000>;
+> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+> +			clock-names = "pll8_vote", "pxo";
+> +			clock-output-names = "acpu0_aux";
+> +			#clock-cells = <0>;
+>   		};
+>   
+>   		saw0: regulator@2089000 {
+> @@ -591,6 +595,10 @@ saw0: regulator@2089000 {
+>   		acc1: clock-controller@2098000 {
+>   			compatible = "qcom,kpss-acc-v1";
+>   			reg = <0x02098000 0x1000>, <0x02008000 0x1000>;
+> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+> +			clock-names = "pll8_vote", "pxo";
+> +			clock-output-names = "acpu1_aux";
+> +			#clock-cells = <0>;
+>   		};
+>   
+>   		saw1: regulator@2099000 {
+> diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+> index 3bd07cac315b..4fd56d85be3f 100644
+> --- a/arch/arm/boot/dts/qcom-msm8960.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+> @@ -208,11 +208,19 @@ regulators {
+>   		acc0: clock-controller@2088000 {
+>   			compatible = "qcom,kpss-acc-v1";
+>   			reg = <0x02088000 0x1000>, <0x02008000 0x1000>;
+> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+> +			clock-names = "pll8_vote", "pxo";
+> +			clock-output-names = "acpu0_aux";
+> +			#clock-cells = <0>;
+>   		};
+>   
+>   		acc1: clock-controller@2098000 {
+>   			compatible = "qcom,kpss-acc-v1";
+>   			reg = <0x02098000 0x1000>, <0x02008000 0x1000>;
+> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+> +			clock-names = "pll8_vote", "pxo";
+> +			clock-output-names = "acpu1_aux";
+> +			#clock-cells = <0>;
+>   		};
+>   
+>   		saw0: regulator@2089000 {
 
->
-> > Please review.
-> >
-> > Thanks
-> >
-> > Jason Wang (5):
-> >   virtio_ring: per virtqueue dma device
-> >   vdpa: introduce get_vq_dma_device()
-> >   virtio-vdpa: support per vq dma device
-> >   vdpa: set dma mask for vDPA device
-> >   vdpa: mlx5: support per virtqueue dma device
-> >
-> >  drivers/vdpa/mlx5/net/mlx5_vnet.c |  11 +++
-> >  drivers/vdpa/vdpa.c               |   5 ++
-> >  drivers/virtio/virtio_ring.c      | 133 +++++++++++++++++++++---------
-> >  drivers/virtio/virtio_vdpa.c      |  13 ++-
-> >  include/linux/vdpa.h              |   6 ++
-> >  include/linux/virtio_ring.h       |  16 ++++
-> >  6 files changed, 141 insertions(+), 43 deletions(-)
-> >
-> > --
-> > 2.25.1
->
+-- 
+With best wishes
+Dmitry
 
