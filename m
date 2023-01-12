@@ -2,164 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C477D666F5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E6D666F60
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235030AbjALKRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
+        id S230316AbjALKSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239881AbjALKPi (ORCPT
+        with ESMTP id S239865AbjALKPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:15:38 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDE3D98;
-        Thu, 12 Jan 2023 02:15:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673518537; x=1705054537;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=jFP9aQEfPbjadxD0A6G/7Tdp9/QXKykODGpkmN/88FE=;
-  b=aUitqnpB7bVawKfT2qoBwkJBQ+0BowHXU1IeQMnoCusB3IFtGuh6+0/J
-   WN03GJQmwCddbe7z55j7FEyEri4+QbIWrfJgW06gPOP3mu4NBg0FT5nw/
-   L+LeHljDswL0xcn5htuDa/4ca49mowvO8kW5VzIsQ6o8HzpeVWaxrtrIr
-   MYZ5Wc3Po93v+SNH2YRfKQJsi5Qom9mxWzVibXtLW7Y2O1raFGUn2zUNO
-   cQt9pN8SiYw9lK+3hjs8A0nwsv2Fqe+/W1hhy29+HJn7RMB572DWx3XGK
-   2a64oTnufdywntH0cfhAnBsQO5iiqfHYnP/yLKtU4AbjLNnnToOpxAkBS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="321358245"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="321358245"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:15:36 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="651075956"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="651075956"
-Received: from vbucoci-mobl1.ger.corp.intel.com ([10.252.52.43])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:15:34 -0800
-Date:   Thu, 12 Jan 2023 12:15:32 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-cc:     gregkh@linuxfoundation.org, Kees Cook <keescook@chromium.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/11] tty: vt: separate array juggling to
- juggle_array()
-In-Reply-To: <20230112080136.4929-9-jirislaby@kernel.org>
-Message-ID: <73d26b6d-6272-37cf-f09e-3e652c5212d0@linux.intel.com>
-References: <20230112080136.4929-1-jirislaby@kernel.org> <20230112080136.4929-9-jirislaby@kernel.org>
+        Thu, 12 Jan 2023 05:15:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA78BF2;
+        Thu, 12 Jan 2023 02:15:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D99AE61FCA;
+        Thu, 12 Jan 2023 10:15:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DCBCC433EF;
+        Thu, 12 Jan 2023 10:15:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673518551;
+        bh=eZSAfDKuRBo0xGVikbboiQneetQV4uSvYjwwu4EYGa0=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=WyHIKPds/xpQeQuBcbJcgTRVOWErVVr9bdlytmSVrh8GXxP84ll9AGmqGGdZ9hCR3
+         nzkwBoAxRLsYKBhMa5rvZhg6LUbHNhDc1eDEkO7E8iOEVT4Sr421gJlWPvyR/9kChw
+         /tQzlqY8OCLcJ9UL9sJfZryQbVNxD5Zc3dFv7aivqlGkfR6XBb2Jjm0HSksIXH4b5z
+         Hs8FP8OeXz+pyzN2Q3i9WgfRHz0OKiwsk+WJgiWu/bIl3G8Y8lAv/t5k+93Nh+rl0H
+         DIPCYmLJ1MwL+7au6LbsizTKzRQs47Oil/CbPkeNvIqvdljdK+4LKVt0ZDR615CWne
+         v+GFMCyekccUg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Abhishek Kumar <kuabhs@chromium.org>
+Cc:     Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH] ath10k: snoc: enable threaded napi on WCN3990
+References: <20221220075215.1.Ic12e347e0d61a618124b742614e82bbd5d770173@changeid>
+        <56d4941a-ad35-37ca-48ca-5f1bf7a86d25@quicinc.com>
+        <CACTWRwt7oQrCyHf=ZF6dW8TtRhOfa14XMZW39cYZWi4hhszcqg@mail.gmail.com>
+Date:   Thu, 12 Jan 2023 12:15:42 +0200
+In-Reply-To: <CACTWRwt7oQrCyHf=ZF6dW8TtRhOfa14XMZW39cYZWi4hhszcqg@mail.gmail.com>
+        (Abhishek Kumar's message of "Wed, 28 Dec 2022 16:01:38 -0800")
+Message-ID: <87tu0wcb3l.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023, Jiri Slaby (SUSE) wrote:
+Abhishek Kumar <kuabhs@chromium.org> writes:
 
-> The algorithm used for scrolling is the array juggling. It has
-> complexity O(N) and space complexity O(1). I.e. quite fast w/o
-> requirements for temporary storage.
-> 
-> Move the algorithm to a separate function so it is obvious what it is.
-> It is almost generic (except the array type), so if anyone else wants
-> array rotation, feel free to make it generic and move it to include/.
-> 
-> And rename all the variables from i, j, k, sz, d, and so on to something
-> saner.
-> 
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> ---
->  drivers/tty/vt/vt.c | 52 ++++++++++++++++++++++++---------------------
->  1 file changed, 28 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-> index 74db07b32abe..7cda18b7ee3d 100644
-> --- a/drivers/tty/vt/vt.c
-> +++ b/drivers/tty/vt/vt.c
-> @@ -398,40 +398,44 @@ static void vc_uniscr_clear_lines(struct vc_data *vc, unsigned int y,
->  			memset32(vc->vc_uni_lines[y++], ' ', vc->vc_cols);
->  }
->  
-> +/* juggling array rotation algorithm (complexity O(N), size complexity O(1)) */
-> +static void juggle_array(u32 **array, unsigned int size, unsigned int nr)
-> +{
-> +	unsigned int gcd_idx;
-> +
-> +	for (gcd_idx = 0; gcd_idx < gcd(nr, size); gcd_idx++) {
-> +		u32 *gcd_idx_val = array[gcd_idx];
-> +		unsigned int dst_idx = gcd_idx;
-> +
-> +		while (1) {
-> +			unsigned int src_idx = (dst_idx + nr) % size;
-> +			if (src_idx == gcd_idx)
-> +				break;
-> +
-> +			array[dst_idx] = array[src_idx];
-> +			dst_idx = src_idx;
-> +		}
-> +
-> +		array[dst_idx] = gcd_idx_val;
-> +	}
-> +}
-> +
->  static void vc_uniscr_scroll(struct vc_data *vc, unsigned int t, unsigned int b,
->  			     enum con_scroll dir, unsigned int nr)
->  {
->  	u32 **uni_lines = vc->vc_uni_lines;
-> -	unsigned int i, j, k, sz, d, clear;
-> +	unsigned int size = b - t;
->  
->  	if (!uni_lines)
->  		return;
->  
-> -	sz = b - t;
-> -	clear = b - nr;
-> -	d = nr;
-> -
->  	if (dir == SM_DOWN) {
-> -		clear = t;
-> -		d = sz - nr;
-> -	}
-> -
-> -	for (i = 0; i < gcd(d, sz); i++) {
-> -		u32 *tmp = uni_lines[t + i];
-> -		j = i;
-> -		while (1) {
-> -			k = j + d;
-> -			if (k >= sz)
-> -				k -= sz;
-> -			if (k == i)
-> -				break;
-> -			uni_lines[t + j] = uni_lines[t + k];
-> -			j = k;
-> -		}
-> -		uni_lines[t + j] = tmp;
-> +		juggle_array(&uni_lines[top], size, size - nr);
+>> > --- a/drivers/net/wireless/ath/ath10k/snoc.c
+>> > +++ b/drivers/net/wireless/ath/ath10k/snoc.c
+>> > @@ -927,6 +927,9 @@ static int ath10k_snoc_hif_start(struct ath10k *ar)
+>> >
+>> >       bitmap_clear(ar_snoc->pending_ce_irqs, 0, CE_COUNT_MAX);
+>> >
+>> > +     if (ar->hw_params.enable_threaded_napi)
+>> > +             dev_set_threaded(&ar->napi_dev, true);
+>> > +
+>>
+>> Since this is done in the API specific to WCN3990, we do not need
+>> hw_param for this.
+>
+> Just so that I am clear, are you suggesting to enable this by default
+> in snoc.c, similar to what you did in
+>
+> https://lore.kernel.org/all/20220905071805.31625-2-quic_mpubbise@quicinc.com/
+>
+> If my understanding is correct and there is no objection, I can remove
+> hw_param and enable it by default on snoc.c . I used hw_param because,
+> as I see it, threaded NAPI can have some adverse effect on the cache
+> utilization and power.
 
-top? Should be t I think.
-
-> +		vc_uniscr_clear_lines(vc, t, nr);
-> +	} else {
-> +		juggle_array(&uni_lines[top], size, nr);
-
-Ditto.
-
-> +		vc_uniscr_clear_lines(vc, b - nr, nr);
->  	}
-> -
-> -	vc_uniscr_clear_lines(vc, clear, nr);
->  }
->  
->  static void vc_uniscr_copy_area(u32 **dst_lines,
-> 
-
-
+WCN3990 is the only device using SNOC bus so the hw_param is not needed.
+It's safe to call dev_set_threaded() in ath10k_snoc_hif_start()
+unconditionally as it only affects WCN3990.
 
 -- 
- i.
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
