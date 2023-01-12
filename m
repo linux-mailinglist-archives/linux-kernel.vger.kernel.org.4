@@ -2,127 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648FB667900
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94078667907
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjALPWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:22:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
+        id S234633AbjALPX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbjALPWM (ORCPT
+        with ESMTP id S234943AbjALPWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:22:12 -0500
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B82D2DB;
-        Thu, 12 Jan 2023 07:14:54 -0800 (PST)
-Received: by mail-yb1-f174.google.com with SMTP id e76so18981793ybh.11;
-        Thu, 12 Jan 2023 07:14:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5Y6qY7Xi7w4nejlKSxi1fYejKBcc6r8h/6CzmR1L1Uk=;
-        b=cfetF7YgvWZzeA6YsIlEdpbTlNWGHzLPtMw//oNCDwfLtzh6FtXTIP6k66gocUMj2S
-         5J0x4g0XM7m6GWwuIJqzK7nUOUnJbQkXkuSlb4SaKfB/BMJY66/5uCJ+45a1dtpo2+aQ
-         GEV9bpbA8029gGqw1TouUnDLiKSx5/avqDQFPl15ln/MWva2mqVm7MXmSWLl1XkD7Bq8
-         B0zS0aOSG1yo/e860McBKbVa9jP9Ez0CuRNdgmmeOBYIj7OPPJXwfOLSoF8Em7Fy6ImO
-         bsxV8aN/zpLjDwH04YSfv1BPjPhw/H7VHWhQ7HhdLZifjJJmbgKrfYIietCl/iPny3Sd
-         dQbA==
-X-Gm-Message-State: AFqh2kpanpBn8YaF8hA6bKD9F+mWzterFr66FhWwWZS5BcYTDbV5nVeq
-        +2va56hV3AQGMYHCJlLH5oLfa/HOqo9uzA==
-X-Google-Smtp-Source: AMrXdXsWa0RSqrqbDnzDudymKVXjSLCYLCOdQSyE3q0oSko+1ZA/oq04ZzvN+XUHAix3cI40mmoKZg==
-X-Received: by 2002:a25:ce82:0:b0:6fa:392c:78a2 with SMTP id x124-20020a25ce82000000b006fa392c78a2mr69026790ybe.5.1673536493315;
-        Thu, 12 Jan 2023 07:14:53 -0800 (PST)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id c23-20020a05620a269700b006fb11eee465sm11121485qkp.64.2023.01.12.07.14.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 07:14:52 -0800 (PST)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-4bf16baa865so242942587b3.13;
-        Thu, 12 Jan 2023 07:14:51 -0800 (PST)
-X-Received: by 2002:a81:1a16:0:b0:46f:bd6:957d with SMTP id
- a22-20020a811a16000000b0046f0bd6957dmr1837351ywa.383.1673536491636; Thu, 12
- Jan 2023 07:14:51 -0800 (PST)
+        Thu, 12 Jan 2023 10:22:53 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B64017418;
+        Thu, 12 Jan 2023 07:15:25 -0800 (PST)
+Received: from mwalle01.sab.local (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 17DAF1243;
+        Thu, 12 Jan 2023 16:15:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1673536523;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Z7B4pND5e+QR5QtoQ7I5oChkxQuHHA20+0hEeYmGTgM=;
+        b=u49FS3Dk9qDfluXiGp9TkmisU6Qu5EvwZeqGdovxab6dVxup2BRDNMldkVcrzwCEAfpQAO
+        ZqMoR10rIPYiZXZgHEfpSBuByb641u4TLay6c3YIfCdpyyraN3BAKHkEcEFVIkadRUCeaH
+        NhRHm0VW+4rqcCspn5gc2CDfsZ3V9+V77PoUo5/EbEgb2mqudJB6j2SVDvbwlriGHsQVNE
+        g+ewd5Nm+se/6Xbqu+vFAXV0+H4iY4LjVWzQ14ymHNqNk0p3sf4brIiS32qqEmA3kq2MDu
+        6wV/2+U3EUaZghtv6GX3t0E72N3yCT7u78d3h0OeNauAyUvteuYApMHhmZ3Iug==
+From:   Michael Walle <michael@walle.cc>
+Subject: [PATCH net-next 00/10] net: mdio: Continue separating C22 and C45
+Date:   Thu, 12 Jan 2023 16:15:07 +0100
+Message-Id: <20230112-net-next-c45-seperation-part-2-v1-0-5eeaae931526@walle.cc>
 MIME-Version: 1.0
-References: <20230112133942.58471-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230112133942.58471-1-andriy.shevchenko@linux.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 12 Jan 2023 16:14:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXSc-H5TKBGisthv3DH3sZmF3fV_15FuMEt=typwTWUtA@mail.gmail.com>
-Message-ID: <CAMuHMdXSc-H5TKBGisthv3DH3sZmF3fV_15FuMEt=typwTWUtA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpio: Remove unused and obsoleted irq_to_gpio()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-m68k@lists.linux-m68k.org, linux-sh@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Greg Ungerer <gerg@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAPsjwGMC/zWNwQrCMBBEf6Xs2YVuTLX4K+Jhk25tDsawG6RQ+
+ u+mgoc5PIZ5s4GJJjG4dRuofJKld25Apw7iwvkpmKbG4Hp37okcZqkta8XoBzQpolzbBgtrRYcU
+ xjkE8v4yXqFJAptgUM5xOTQvtip6FEVlTuvv+Q5/KTz2/QtSEQk5kwAAAA==
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Li Yang <leoyang.li@nxp.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linuxppc-dev@lists.ozlabs.org, Andrew Lunn <andrew@lunn.ch>,
+        Michael Walle <michael@walle.cc>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC greg
+I've picked this older series from Andrew up and rebased it onto
+the latest net-next.
 
-On Thu, Jan 12, 2023 at 2:39 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> irq_to_gpio() is legacy and unused API, remove it for good.
->
-> This leaves gpio_to_irq() as it's used yet in many places.
-> Nevertheless, removal of its counterpart is a good signal
-> to whoever even trying to consider using them that do not.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  Documentation/driver-api/gpio/legacy.rst             |  8 --------
->  .../translations/zh_CN/driver-api/gpio/legacy.rst    |  7 -------
->  Documentation/translations/zh_TW/gpio.txt            |  7 -------
->  arch/m68k/include/asm/gpio.h                         |  7 -------
->  arch/sh/include/asm/gpio.h                           |  5 -----
->  include/linux/gpio.h                                 | 12 ------------
->  6 files changed, 46 deletions(-)
+This is the second patch set in the series which separates the C22
+and C45 MDIO bus transactions at the API level to the MDIO bus drivers.
 
-[...]
+Signed-off-by: Michael Walle <michael@walle.cc>
 
-> --- a/arch/m68k/include/asm/gpio.h
-> +++ b/arch/m68k/include/asm/gpio.h
-> @@ -66,13 +66,6 @@ static inline int gpio_to_irq(unsigned gpio)
->                 return __gpio_to_irq(gpio);
->  }
->
-> -static inline int irq_to_gpio(unsigned irq)
-> -{
-> -       return (irq >= MCFGPIO_IRQ_VECBASE &&
-> -               irq < (MCFGPIO_IRQ_VECBASE + MCFGPIO_IRQ_MAX)) ?
-> -               irq - MCFGPIO_IRQ_VECBASE : -ENXIO;
-> -}
-> -
->  static inline int gpio_cansleep(unsigned gpio)
->  {
->         return gpio < MCFGPIO_PIN_MAX ? 0 : __gpio_cansleep(gpio);
+￼
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+To: Russell King <linux@armlinux.org.uk>
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Ray Jui <rjui@broadcom.com>
+To: Scott Branden <sbranden@broadcom.com>
+To: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+To: Joel Stanley <joel@jms.id.au>
+To: Andrew Jeffery <andrew@aj.id.au>
+To: Felix Fietkau <nbd@nbd.name>
+To: John Crispin <john@phrozen.org>
+To: Sean Wang <sean.wang@mediatek.com>
+To: Mark Lee <Mark-MC.Lee@mediatek.com>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+To: Bryan Whitehead <bryan.whitehead@microchip.com>
+To: UNGLinuxDriver@microchip.com
+To: Giuseppe Cavallaro <peppe.cavallaro@st.com>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+To: Jose Abreu <joabreu@synopsys.com>
+To: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: Claudiu Manoil <claudiu.manoil@nxp.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
+To: Li Yang <leoyang.li@nxp.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-aspeed@lists.ozlabs.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Michael Walle <michael@walle.cc>
 
-Gr{oetje,eeting}s,
+---
+Andrew Lunn (10):
+      net: mdio: cavium: Separate C22 and C45 transactions
+      net: mdio: i2c: Separate C22 and C45 transactions
+      net: mdio: mux-bcm-iproc: Separate C22 and C45 transactions
+      net: mdio: aspeed: Separate C22 and C45 transactions
+      net: mdio: ipq4019: Separate C22 and C45 transactions
+      net: ethernet: mtk_eth_soc: Separate C22 and C45 transactions
+      net: lan743x: Separate C22 and C45 transactions
+      net: stmmac: Separate C22 and C45 transactions for xgmac2
+      net: stmmac: Separate C22 and C45 transactions for xgmac
+      enetc: Separate C22 and C45 transactions
 
-                        Geert
+ drivers/net/dsa/ocelot/felix_vsc9959.c             |   6 +-
+ drivers/net/ethernet/freescale/enetc/enetc_mdio.c  | 119 ++++++--
+ .../net/ethernet/freescale/enetc/enetc_pci_mdio.c  |   6 +-
+ drivers/net/ethernet/freescale/enetc/enetc_pf.c    |  12 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c        | 178 +++++++----
+ drivers/net/ethernet/microchip/lan743x_main.c      | 106 ++++---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c  | 331 ++++++++++++++-------
+ drivers/net/mdio/mdio-aspeed.c                     |  47 +--
+ drivers/net/mdio/mdio-cavium.c                     | 111 +++++--
+ drivers/net/mdio/mdio-cavium.h                     |   9 +-
+ drivers/net/mdio/mdio-i2c.c                        |  32 +-
+ drivers/net/mdio/mdio-ipq4019.c                    | 154 ++++++----
+ drivers/net/mdio/mdio-mux-bcm-iproc.c              |  54 +++-
+ drivers/net/mdio/mdio-octeon.c                     |   6 +-
+ drivers/net/mdio/mdio-thunder.c                    |   6 +-
+ include/linux/fsl/enetc_mdio.h                     |  21 +-
+ 16 files changed, 766 insertions(+), 432 deletions(-)
+---
+base-commit: 0a093b2893c711d82622a9ab27da4f1172821336
+change-id: 20230112-net-next-c45-seperation-part-2-1b8fbb144687
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+-- 
+Michael Walle <michael@walle.cc>
