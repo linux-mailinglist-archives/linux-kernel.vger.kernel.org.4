@@ -2,254 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2861C668540
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E212668549
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:26:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240721AbjALVYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 16:24:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S240612AbjALV0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 16:26:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240143AbjALVX0 (ORCPT
+        with ESMTP id S231748AbjALV0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 16:23:26 -0500
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8404E437;
-        Thu, 12 Jan 2023 13:03:26 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id j16so28590661edw.11;
-        Thu, 12 Jan 2023 13:03:26 -0800 (PST)
+        Thu, 12 Jan 2023 16:26:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A279682F58
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:05:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673557521;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h6f/xkDFcthJcSJTvgCInVgMfaXKqM0yPFFK06gOaJY=;
+        b=PycuaJQbxERzObE4747hpGlSSt/IhF3CIX2INuu5ZT5AsCEYJhwR8egmVsnpAqdYBChtj3
+        TVYaTbI6F1/qZRkBbq28YKdvDHPVIVFH7jdYgN0bPP37A7iZ9i2nxfC664j+dQVNjUQfhT
+        Fg2BYoNiIKtfCevRuthmmhz0Y4QCoDU=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-453-xFEl_BoMN7CBLEzUee4WgA-1; Thu, 12 Jan 2023 16:05:20 -0500
+X-MC-Unique: xFEl_BoMN7CBLEzUee4WgA-1
+Received: by mail-il1-f200.google.com with SMTP id n15-20020a056e021baf00b0030387c2e1d3so14303613ili.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:05:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Zj/N95Ji5ZdK8xc/oqVwzmf/fFqgkizzqKPRjzALu+4=;
-        b=gNhuYfMGeckVO2VOrMR+IG779XVf0WPmprZap+Y3k7nZjnurK24M3R2q7D/Bc9Ree1
-         tkXqOZAv4fHjPEaEi2PpBHmTxXzDLNQsBdkANciN6YrbNQSoq8Gp+uLFJGJpDkXpQqFP
-         Z/ZW22JZXI9M8cywB2lWKcuzcfYjmMqV6hdb+3E4MKy2FDaMZ3umZoilLJ8QZzGrbad5
-         G9ESjNtYwYWw17Yp+NoTt+u8oKnlhXcSECmfl7Fy01AUz7gdcf4ksE1sSI42Qf7VETPw
-         b341iF9DxT/j17BG7FwzfirIhNpjg7B4vUqjMJphJegaCv6vGyMfoWBDX55IdTKe3ZQd
-         +s9A==
-X-Gm-Message-State: AFqh2kp1MIja6w6Z3Uu6ud66CArCKJ3BoR4DGo0OmRh+uWvuJRg5BjPX
-        45orLmblitCEN6v/uQ6q15Hf/CA4tRUubS1Zpo9wZSNmdKo=
-X-Google-Smtp-Source: AMrXdXtTR2myoTxXVkai7xE8q8x4eOH3jG9d9vYPQfE3Bo4T48gZXYyqBFOioqchPE/jvGgGe2OOmYe+YaCThuZSNd4=
-X-Received: by 2002:a50:eb49:0:b0:46d:731c:2baf with SMTP id
- z9-20020a50eb49000000b0046d731c2bafmr7780458edp.280.1673557404782; Thu, 12
- Jan 2023 13:03:24 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h6f/xkDFcthJcSJTvgCInVgMfaXKqM0yPFFK06gOaJY=;
+        b=o0uXZyWJj3giNhccjVFR8Ae1s54RHmNBhVKKmQ/UOPXpR+nO1Lwu5M+nk7I91gmq+r
+         ITzmfPRAn6VuMBu7efFJMP6XHznXqFCRs1FClGsqyDjdy85iCuV8vbQCq7MezcLpiXJH
+         8kYnFBzTOHcWHoiYg71/wUuX9bc+0lUQM8zNCn/h3YUfcME4tiBrpoZNsCNPs9zmWFza
+         SfZW856p+6gjaex5nNlmBz7pHanfl/7VzVNtosNlGed46cNY5IeR7hw6lw+AI6i2jNCQ
+         cGjBZ/cxYPIBc82BVbb8HGgmkw3o955/RnOYQ8/VHXGK/xYUA5JA4V0qmzHp564JGwAl
+         RDPQ==
+X-Gm-Message-State: AFqh2koeFWlwQRSisSkOndedx3FciYBJGYcT4MB/FynnkeK2ceH25Ep8
+        jrJjQXOHovjcPeC/e5p+fmMSlx2eVodBJor7ht/u57QqIqTomULUiftiCSsSiTk4/nq+KiXKdIP
+        HI6yvAcSZVqv2Cf10kHx3cJlA
+X-Received: by 2002:a05:6e02:1d88:b0:30d:7cf4:5d5c with SMTP id h8-20020a056e021d8800b0030d7cf45d5cmr31649872ila.31.1673557519888;
+        Thu, 12 Jan 2023 13:05:19 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvrH5SQuIa+SM0JX2id5B1E3t2j9jN9JvjT6ILFvMMJfCCKm4aTtrr6JdMNkSQtGVDDL9mJbQ==
+X-Received: by 2002:a05:6e02:1d88:b0:30d:7cf4:5d5c with SMTP id h8-20020a056e021d8800b0030d7cf45d5cmr31649859ila.31.1673557519587;
+        Thu, 12 Jan 2023 13:05:19 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id a17-20020a92d591000000b0030be6c79645sm5428334iln.68.2023.01.12.13.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 13:05:19 -0800 (PST)
+Date:   Thu, 12 Jan 2023 14:05:17 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     pbonzini@redhat.com, jgg@nvidia.com, cohuck@redhat.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com, akrowiak@linux.ibm.com,
+        jjherne@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, seanjc@google.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vfio: fix potential deadlock on vfio group lock
+Message-ID: <20230112140517.6db5b346.alex.williamson@redhat.com>
+In-Reply-To: <20230112203844.41179-1-mjrosato@linux.ibm.com>
+References: <20230112203844.41179-1-mjrosato@linux.ibm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
- <20221129233419.4022830-4-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0iPfFi9oS3D2=CvzdqZc+iZ7XUex8s_81-voVHYuU4Pvw@mail.gmail.com> <beda908814705a9e71f8241c787e5c53d2c7cda3.camel@linux.intel.com>
-In-Reply-To: <beda908814705a9e71f8241c787e5c53d2c7cda3.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Jan 2023 22:03:13 +0100
-Message-ID: <CAJZ5v0jmFLoPFTg9GLKt--iWThG4ezzWM7MH69=Q2BtCBP+Giw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] thermal/drivers/intel_powerclamp: Use powercap
- idle-inject framework
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, amitk@kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 9:23 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Thu, 2023-01-12 at 19:32 +0100, Rafael J. Wysocki wrote:
-> > On Wed, Nov 30, 2022 at 12:34 AM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > There are two idle injection implementation in the Linux kernel.
-> > > One
-> > > via intel_powerclamp and the other using powercap/idle_inject. Both
-> > > implementation end up in calling play_idle* function from a FIFO
-> > > priority thread. Both can't be used at the same time.
-> > >
-> > > Currently per core idle injection (cpuidle_cooling) is using
-> > > powercap/idle_inject, which is not used in platforms where
-> > > intel_powerclamp is used for system wide idle injection. So there
-> > > is
-> > > no conflict. But there are some use cases where per core idle
-> > > injection
-> > > is beneficial on the same system where system wide idle injection
-> > > is
-> > > also used via intel_powerclamp. To avoid conflict only one of the
-> > > idle
-> > > injection type must be in use at a time. This require a common
-> > > framework
-> > > which both per core and system wide idle injection can use.
-> > >
-> > > Here powercap/idle_inject can be used for both per-core and for
-> > > system
-> > > wide idle injection. This framework has a well defined interface
-> > > which allow registry for per-core or for all CPUs (system wide). If
-> > > particular CPU is already participating in idle injection, the call
-> > > to registry fails. Here the registry can be done when user space
-> > > changes the current cooling device state.
-> > >
-> > > Also one framework for idle injection is better as there is one
-> > > loop
-> > > calling play_idle*, instead of multiple for better maintenance.
-> > >
-> > > So, reuse powercap/idle_inject calls in intel_powerclamp. This
-> > > simplifies
-> > > the code as all per CPU kthreads which calls play_idle* can be
-> > > removed.
-> > >
-> > > The changes include:
-> > > - Remove unneeded include files
-> > > - Remove per CPU kthread workers: balancing_work and
-> > > idle_injection_work
-> > > - Reuse the compensation related code by moving from previous
-> > > worker
-> > > thread to idle_injection callbacks
-> > > - Adjust the idle_duration and runtime by using
-> > > powercap/idle_inject
-> > > interface
-> > > - Remove all variables, which are not required once
-> > > powercap/idle_inject
-> > > is used
-> > > - Add mutex to avoid race during removal of idle injection during
-> > > module
-> > > unload and user action to change idle inject percent
-> > > - Use READ_ONCE and WRITE_ONCE for data accessed from multiple CPUs
-> > >
-> > > Signed-off-by: Srinivas Pandruvada
-> > > <srinivas.pandruvada@linux.intel.com>
-> > > ---
-> > > v2:
-> > > - Use idle_inject_register_full instead of idle_inject_register
-> > > - Also fix dependency issue with POWERCAP config
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > >  drivers/thermal/intel/Kconfig            |   2 +
-> > >  drivers/thermal/intel/intel_powerclamp.c | 292 ++++++++++---------
-> > > ----
-> > >  2 files changed, 126 insertions(+), 168 deletions(-)
-> > >
-> > > diff --git a/drivers/thermal/intel/Kconfig
-> > > b/drivers/thermal/intel/Kconfig
-> > > index f0c845679250..6c2a95f41c81 100644
-> > > --- a/drivers/thermal/intel/Kconfig
-> > > +++ b/drivers/thermal/intel/Kconfig
-> > > @@ -3,6 +3,8 @@ config INTEL_POWERCLAMP
-> > >         tristate "Intel PowerClamp idle injection driver"
-> > >         depends on X86
-> > >         depends on CPU_SUP_INTEL
-> > > +       select POWERCAP
-> > > +       select IDLE_INJECT
-> > >         help
-> > >           Enable this to enable Intel PowerClamp idle injection
-> > > driver. This
-> > >           enforce idle time which results in more package C-state
-> > > residency. The
-> > > diff --git a/drivers/thermal/intel/intel_powerclamp.c
-> > > b/drivers/thermal/intel/intel_powerclamp.c
-> > > index b80e25ec1261..3f2b20ae8f68 100644
-> > > --- a/drivers/thermal/intel/intel_powerclamp.c
-> > > +++ b/drivers/thermal/intel/intel_powerclamp.c
-> > > @@ -2,7 +2,7 @@
-> > >  /*
-> > >   * intel_powerclamp.c - package c-state idle injection
-> > >   *
-> > > - * Copyright (c) 2012, Intel Corporation.
-> > > + * Copyright (c) 2022, Intel Corporation.
-> >
-> > Nit: I would retain the original year of introduction, so 2012 -
-> > 2022.
-> OK
->
-> >
-> > >   *
-> > >
->
-> [...]
->
-> > > +
-> > > +static int idle_inject_begin(unsigned int cpu)
-> >
-> > So this would be the ->prepare() callback to be invoked on each CPU
-> > from idle_inject_fn() IIUC.
-> >
-> Yes
->
-> > >  {
-> > > -       struct powerclamp_worker_data *w_data =
-> > > per_cpu_ptr(worker_data, cpu);
-> > > -       struct kthread_worker *worker;
-> > > +       /*
-> > > +        * only elected controlling cpu can collect stats and
-> > > update
-> > > +        * control parameters.
-> > > +        */
-> > > +       if (cpu == control_cpu) {
-> > > +               bool update = READ_ONCE(target_ratio_updated);
-> > > +
-> > > +               if (!(powerclamp_data.count %
-> > > powerclamp_data.window_size_now)) {
-> > > +                       bool skip =
-> > > powerclamp_adjust_controls(powerclamp_data.target_ratio,
-> > > +
-> > > powerclamp_data.guard,
-> > > +
-> > > powerclamp_data.window_size_now);
-> > > +                       WRITE_ONCE(should_skip, skip);
-> > > +                       update = true;
-> > > +               }
-> > >
-> > > -       worker = kthread_create_worker_on_cpu(cpu, 0,
-> > > "kidle_inj/%ld", cpu);
-> > > -       if (IS_ERR(worker))
-> > > -               return;
-> > > +               if (update) {
-> > > +                       unsigned int runtime;
-> > > +
-> > > +                       runtime = get_run_time();
-> > > +                       idle_inject_set_duration(ii_dev, runtime,
-> > > duration);
-> > > +                       WRITE_ONCE(target_ratio_updated, false);
-> > > +               }
-> > > +               powerclamp_data.count++;
-> > > +       }
-> > > +
-> > > +       if (READ_ONCE(should_skip))
-> > > +               return -EAGAIN;
-> >
-> > This has a bit of a synchronization issue, because the control CPU is
-> > not guaranteed to run this code before any other CPUs in the given
-> > cycle, so at least some of them may see a stale value of should_skip
-> > and they will still inject idle in this cycle.  Or else, they may
-> > skip
-> > idle injection when it should be done.
-> This is correct observation. This is true in in even in current
-> implementation. The per thread timer in the existing implementation has
-> this sync issue. So I tried to just mimic current implementation as is.
+On Thu, 12 Jan 2023 15:38:44 -0500
+Matthew Rosato <mjrosato@linux.ibm.com> wrote:
 
-I see, but I don't think that the new implementation has to be bug
-compatible with the old one.
+> Currently it is possible that the final put of a KVM reference comes from
+> vfio during its device close operation.  This occurs while the vfio group
+> lock is held; however, if the vfio device is still in the kvm device list,
+> then the following call chain could result in a deadlock:
+> 
+> kvm_put_kvm
+>  -> kvm_destroy_vm
+>   -> kvm_destroy_devices
+>    -> kvm_vfio_destroy
+>     -> kvm_vfio_file_set_kvm
+>      -> vfio_file_set_kvm
+>       -> group->group_lock/group_rwsem  
+> 
+> Avoid this scenario by having vfio core code acquire a KVM reference
+> the first time a device is opened and hold that reference until the
+> device fd is closed, at a point after the group lock has been released.
+> 
+> Fixes: 421cfe6596f6 ("vfio: remove VFIO_GROUP_NOTIFY_SET_KVM")
+> Reported-by: Alex Williamson <alex.williamson@redhat.com>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+> Changes from v1:
+> * Re-write using symbol get logic to get kvm ref during first device
+>   open, release the ref during device fd close after group lock is
+>   released
+> * Drop kvm get/put changes to drivers; now that vfio core holds a
+>   kvm ref until sometime after the device_close op is called, it
+>   should be fine for drivers to get and put their own references to it.
+> ---
+>  drivers/vfio/group.c     |  6 ++---
+>  drivers/vfio/vfio_main.c | 48 +++++++++++++++++++++++++++++++++++++---
+>  include/linux/vfio.h     |  1 -
+>  3 files changed, 48 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
+> index bb24b2f0271e..2b0da82f82f4 100644
+> --- a/drivers/vfio/group.c
+> +++ b/drivers/vfio/group.c
+> @@ -165,9 +165,9 @@ static int vfio_device_group_open(struct vfio_device *device)
+>  	}
+>  
+>  	/*
+> -	 * Here we pass the KVM pointer with the group under the lock.  If the
+> -	 * device driver will use it, it must obtain a reference and release it
+> -	 * during close_device.
+> +	 * Here we pass the KVM pointer with the group under the lock.  A
+> +	 * reference will be obtained the first time the device is opened and
+> +	 * will be held until the device fd is closed.
+>  	 */
+>  	ret = vfio_device_open(device, device->group->iommufd,
+>  			       device->group->kvm);
+> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+> index 5177bb061b17..c969e2a0ecd3 100644
+> --- a/drivers/vfio/vfio_main.c
+> +++ b/drivers/vfio/vfio_main.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/fs.h>
+>  #include <linux/idr.h>
+>  #include <linux/iommu.h>
+> +#include <linux/kvm_host.h>
+>  #include <linux/list.h>
+>  #include <linux/miscdevice.h>
+>  #include <linux/module.h>
+> @@ -344,6 +345,35 @@ static bool vfio_assert_device_open(struct vfio_device *device)
+>  	return !WARN_ON_ONCE(!READ_ONCE(device->open_count));
+>  }
+>  
+> +static bool vfio_kvm_get_kvm_safe(struct kvm *kvm)
+> +{
+> +	bool (*fn)(struct kvm *kvm);
+> +	bool ret;
+> +
+> +	fn = symbol_get(kvm_get_kvm_safe);
+> +	if (WARN_ON(!fn))
+> +		return false;
+> +
+> +	ret = fn(kvm);
+> +
+> +	symbol_put(kvm_get_kvm_safe);
+> +
+> +	return ret;
+> +}
+> +
+> +static void vfio_kvm_put_kvm(struct kvm *kvm)
+> +{
+> +	void (*fn)(struct kvm *kvm);
+> +
+> +	fn = symbol_get(kvm_put_kvm);
+> +	if (WARN_ON(!fn))
+> +		return;
+> +
+> +	fn(kvm);
+> +
+> +	symbol_put(kvm_put_kvm);
+> +}
+> +
+>  static int vfio_device_first_open(struct vfio_device *device,
+>  				  struct iommufd_ctx *iommufd, struct kvm *kvm)
+>  {
+> @@ -361,16 +391,24 @@ static int vfio_device_first_open(struct vfio_device *device,
+>  	if (ret)
+>  		goto err_module_put;
+>  
+> +	if (kvm && !vfio_kvm_get_kvm_safe(kvm)) {
+> +		ret = -ENOENT;
+> +		goto err_unuse_iommu;
+> +	}
+>  	device->kvm = kvm;
 
-> >
-> > I think that it would be better to run the callback from
-> > idle_inject_timer_fn() where it would decide whether or not to call
-> > idle_inject_wakeup(), in which case the control CPU would not be
-> > needed any more (which would be a plus), because the "control" could
-> > be done by the CPU running the timer function, whichever it is.
-> >
-> > Does this sound viable?
->
-> Yes it is. In this case prepare() callback from idle_inject core is not
-> per CPU, but per device.
+This could just as easily be:
 
-Right.
+	if (kvm && vfio_kvm_get_kvm_safe(kvm))
+		device->kvm = kvm;
 
-BTW, I also would call it "update" and make it return bool, so
-idle_inject_wakeup() would be called when it returned 'true'.
+Right?  The error path would test device->kvm and we already use
+device->kvm in the release path.
+
+Otherwise, in the off chance userspace hits this error, what's the
+value in generating a failure here for a device that may or may not
+have a kvm dependency.  A driver with a dependency should fail if
+device->kvm is NULL.
+
+>  	if (device->ops->open_device) {
+>  		ret = device->ops->open_device(device);
+>  		if (ret)
+> -			goto err_unuse_iommu;
+> +			goto err_put_kvm;
+>  	}
+>  	return 0;
+>  
+> +err_put_kvm:
+> +	if (kvm) {
+> +		vfio_kvm_put_kvm(kvm);
+> +		device->kvm = NULL;
+> +	}
+>  err_unuse_iommu:
+> -	device->kvm = NULL;
+>  	if (iommufd)
+>  		vfio_iommufd_unbind(device);
+>  	else
+> @@ -387,7 +425,6 @@ static void vfio_device_last_close(struct vfio_device *device,
+>  
+>  	if (device->ops->close_device)
+>  		device->ops->close_device(device);
+> -	device->kvm = NULL;
+>  	if (iommufd)
+>  		vfio_iommufd_unbind(device);
+>  	else
+> @@ -465,6 +502,11 @@ static int vfio_device_fops_release(struct inode *inode, struct file *filep)
+>  
+>  	vfio_device_group_close(device);
+>  
+> +	if (device->open_count == 0 && device->kvm) {
+> +		vfio_kvm_put_kvm(device->kvm);
+> +		device->kvm = NULL;
+> +	}
+
+IIUC, device->open_count is protected by device->dev_set->lock.  Thanks,
+
+Alex
+
+> +
+>  	vfio_device_put_registration(device);
+>  
+>  	return 0;
+> diff --git a/include/linux/vfio.h b/include/linux/vfio.h
+> index 35be78e9ae57..3ff7e9302cc1 100644
+> --- a/include/linux/vfio.h
+> +++ b/include/linux/vfio.h
+> @@ -46,7 +46,6 @@ struct vfio_device {
+>  	struct vfio_device_set *dev_set;
+>  	struct list_head dev_set_list;
+>  	unsigned int migration_flags;
+> -	/* Driver must reference the kvm during open_device or never touch it */
+>  	struct kvm *kvm;
+>  
+>  	/* Members below here are private, not for driver use */
+
