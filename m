@@ -2,166 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD11666CDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D84666D11
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239705AbjALIvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 03:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
+        id S239579AbjALIyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 03:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239546AbjALIuF (ORCPT
+        with ESMTP id S236034AbjALIxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 03:50:05 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C63C52776
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:47:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673513238; x=1705049238;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=h5m7P3ApwoYtxTr2JyHySDG+hPGAgpKeo5UNspZ01+U=;
-  b=Nd1G5EBtWJFbG7H8wDChTDPbhftLMyNhnHgX1tD8zb4I6dMzQhEvFyMF
-   uBTTgt4d/seIhSpQEfx53MYHtcQS+NpHO4AJ6hzhmqtRMoN9o+uZiTG+n
-   0h68A+kFPd2ddt6XI4Q13u0ClZS0ZSq9XNGbm/03WRfnuMBw8+LgJrVjF
-   sUKdxS3zYK23NOsYekC6jYo9aJSzr+ZpUIUwl256jZnt4351DUPOmv1ve
-   /STikTgu5IqVU5wkiU2lY0kUc1Vwv5rWbDcbvduW/4DxtvKYwZKS/iH1C
-   p0hEqxnluOjQeWRyLZ4HqyPhRJ467VKLGmXNcaf1ZYJCSCb7UQmsWuBly
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="325674758"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="325674758"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 00:47:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="746475853"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="746475853"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 00:47:15 -0800
-Message-ID: <1eb6b8a5-7955-a283-fcc4-9d0c0f53a71e@linux.intel.com>
-Date:   Thu, 12 Jan 2023 09:47:13 +0100
+        Thu, 12 Jan 2023 03:53:07 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C192D3;
+        Thu, 12 Jan 2023 00:52:05 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30C82YEV032159;
+        Thu, 12 Jan 2023 08:51:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=vaaXR6/xLkXfr+cdrvDTRu6EKhyxTeql7XGBY3p8j5Q=;
+ b=G1F09zrNKvnVjMTT448WSCBa18uF8aCRNBUAlx/czYS9dxCN7CEK8LETI3l5tB568G75
+ mg5C+9r4Ikcc+dM46rjvmtLWMmNrL8SB9Y0E8axesjbpmG+qJAHLqjxQLPW1wKAauI9N
+ qqi3p/flNNyN80koMiFGhIEZVZdYNdyr7NxIQjPwuW2zaoHzuB2K3Xd7mM7EPApsoawh
+ 9/kfkYgccZXe9R0x3UBRIb3/GG9obdtK+lGZm5TD0nOzk60H+jgokrVhwGXMp2HwFQT3
+ 9bK/r3p9xXCbdAaGUYGiQEuLGTndvxVgYmC9zouJrKi30UNdOHZo3NA6l9OzDr5iWB0y ZA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1m6p38mc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Jan 2023 08:51:56 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30C8ptkS008059
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Jan 2023 08:51:55 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 12 Jan 2023 00:51:52 -0800
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH 1/2] arm64: dts: qcom: sm8450: Add TCSR halt register space
+Date:   Thu, 12 Jan 2023 14:21:41 +0530
+Message-ID: <1673513501-29938-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] ASoC: soc-pcm.c: Introduce a count to record the times of
- setting DAIs parameters
-Content-Language: en-US
-To:     Chancel Liu <chancel.liu@nxp.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20230112065834.580192-1-chancel.liu@nxp.com>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20230112065834.580192-1-chancel.liu@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: txpHnp4PFXodNVrk9QuQ9ybv9x0U-bqD
+X-Proofpoint-GUID: txpHnp4PFXodNVrk9QuQ9ybv9x0U-bqD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-12_04,2023-01-11_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ mlxscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=875
+ clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301120061
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/2023 7:58 AM, Chancel Liu wrote:
-> The commit 1da681e52853 ("ASoC: soc-pcm.c: Clear DAIs parameters after
-> stream_active is updated") tries to make sure DAIs parameters can be
-> cleared properly through moving the cleanup to the place where
-> stream_active is updated. However, it will cause the cleanup only
-> happening in soc_pcm_close().
-> 
-> Suppose a case: aplay -Dhw:0 44100.wav 48000.wav. The case calls
-> soc_pcm_open()->soc_pcm_hw_params()->soc_pcm_hw_free()->
-> soc_pcm_hw_params()->soc_pcm_hw_free()->soc_pcm_close() in order. The
-> parameters would be remained in the system even if the playback of
-> 44100.wav is finished.
-> 
-> The case requires us clearing parameters in phase of soc_pcm_hw_free().
-> We shouldn't use stream_active to decide if we must do the cleanup
-> since it is finally updated in soc_pcm_close().
-> 
-> This patch introduces a usage count called hw_params_count in
-> snd_soc_dai structure. It records the times of setting parameters to
-> this DAI then decreases each time soc_pcm_hw_free() is called. If the
-> count decreases to 0, it means this DAI is not used now and we should
-> clear the parameters.
-> 
+Add TCSR register space and refer it from scm node, so that
+it can be used by SCM driver.
 
-Can rtd->dpcm[dir].users be somehow used instead or do DAI users need to 
-be count explicitly?
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> Fixes: 1da681e52853 ("ASoC: soc-pcm.c: Clear DAIs parameters after stream_active is updated")
-> 
-> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
-> ---
->   include/sound/soc-dai.h |  3 +++
->   sound/soc/soc-pcm.c     | 16 +++++++++++-----
->   2 files changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/sound/soc-dai.h b/include/sound/soc-dai.h
-> index ea7509672086..a7e589a0fe72 100644
-> --- a/include/sound/soc-dai.h
-> +++ b/include/sound/soc-dai.h
-> @@ -451,6 +451,9 @@ struct snd_soc_dai {
->   	unsigned int channels;
->   	unsigned int sample_bits;
->   
-> +	/* Count of setting DAI parameters */
-> +	unsigned int hw_params_count;
-> +
->   	/* parent platform/codec */
->   	struct snd_soc_component *component;
->   
-> diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
-> index 579a44d81d9a..2c2a5dcf9e06 100644
-> --- a/sound/soc/soc-pcm.c
-> +++ b/sound/soc/soc-pcm.c
-> @@ -711,14 +711,10 @@ static int soc_pcm_clean(struct snd_soc_pcm_runtime *rtd,
->   
->   	if (!rollback) {
->   		snd_soc_runtime_deactivate(rtd, substream->stream);
-> -		/* clear the corresponding DAIs parameters when going to be inactive */
-> -		for_each_rtd_dais(rtd, i, dai) {
-> -			if (snd_soc_dai_active(dai) == 0)
-> -				soc_pcm_set_dai_params(dai, NULL);
->   
-> +		for_each_rtd_dais(rtd, i, dai)
->   			if (snd_soc_dai_stream_active(dai, substream->stream) == 0)
->   				snd_soc_dai_digital_mute(dai, 1, substream->stream);
-> -		}
->   	}
->   
->   	for_each_rtd_dais(rtd, i, dai)
-> @@ -949,6 +945,14 @@ static int soc_pcm_hw_clean(struct snd_soc_pcm_runtime *rtd,
->   
->   	snd_soc_dpcm_mutex_assert_held(rtd);
->   
-> +	/* clear the corresponding DAIs parameters when hw_params_count decreases to 0 */
-> +	for_each_rtd_dais(rtd, i, dai)
-> +		if (snd_soc_dai_stream_valid(dai, substream->stream)) {
-> +			dai->hw_params_count--;
-> +			if (dai->hw_params_count == 0)
-> +				soc_pcm_set_dai_params(dai, NULL);
-> +		}
-> +
->   	/* run the stream event */
->   	snd_soc_dapm_stream_stop(rtd, substream->stream);
->   
-> @@ -1051,6 +1055,7 @@ static int __soc_pcm_hw_params(struct snd_soc_pcm_runtime *rtd,
->   
->   		soc_pcm_set_dai_params(codec_dai, &codec_params);
->   		snd_soc_dapm_update_dai(substream, &codec_params, codec_dai);
-> +		codec_dai->hw_params_count++;
->   	}
->   
->   	for_each_rtd_cpu_dais(rtd, i, cpu_dai) {
-> @@ -1068,6 +1073,7 @@ static int __soc_pcm_hw_params(struct snd_soc_pcm_runtime *rtd,
->   		/* store the parameters for each DAI */
->   		soc_pcm_set_dai_params(cpu_dai, params);
->   		snd_soc_dapm_update_dai(substream, params, cpu_dai);
-> +		cpu_dai->hw_params_count++;
->   	}
->   
->   	ret = snd_soc_pcm_component_hw_params(substream, params);
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 5704750..e0fa733 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -270,6 +270,7 @@
+ 	firmware {
+ 		scm: scm {
+ 			compatible = "qcom,scm-sm8450", "qcom,scm";
++			qcom,dload-mode = <&tcsr 0x13000>;
+ 			interconnects = <&aggre2_noc MASTER_CRYPTO 0 &mc_virt SLAVE_EBI1 0>;
+ 			#reset-cells = <1>;
+ 		};
+@@ -1986,6 +1987,11 @@
+ 			#hwlock-cells = <1>;
+ 		};
+ 
++		tcsr: syscon@1fc0000 {
++			compatible = "syscon";
++			reg = <0x0 0x1fc0000 0x0 0x30000>;
++		};
++
+ 		usb_1_hsphy: phy@88e3000 {
+ 			compatible = "qcom,sm8450-usb-hs-phy",
+ 				     "qcom,usb-snps-hs-7nm-phy";
+-- 
+2.7.4
 
