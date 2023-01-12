@@ -2,70 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B318666EA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3107666D5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235489AbjALJtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
+        id S239650AbjALJEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235483AbjALJsI (ORCPT
+        with ESMTP id S239874AbjALJDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:48:08 -0500
-X-Greylist: delayed 1815 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 01:44:22 PST
-Received: from m13101.mail.163.com (m13101.mail.163.com [220.181.13.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1661D50F69
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:44:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=DTlVCsACkosA40+UL2Cx6wAyr3jb/5hrs9h8dtBq4zQ=; b=S
-        eXzUe0/A272UqsCwHkxmAGfkGhuURi66SR5bhMhoraqFf+pc9Mq6lMLxxdxme2G4
-        Z+HV082yF6nIv5o/vZUJMcWgbWA4cEoCfdUGXYo5xZ5lc2ix+Yv319P/teE75Txl
-        lu6/V83hjd0wpEVpshgqnz7z1XtKwy1IRcrPixp7oc=
-Received: from slark_xiao$163.com ( [43.134.191.38] ) by
- ajax-webmail-wmsvr101 (Coremail) ; Thu, 12 Jan 2023 16:58:37 +0800 (CST)
-X-Originating-IP: [43.134.191.38]
-Date:   Thu, 12 Jan 2023 16:58:37 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     mani@kernel.org, manivannan.sadhasivam@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:[PATCH] bus: mhi: host: Update mhi driver description
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220708(c4627114)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <20221229011358.15874-1-slark_xiao@163.com>
-References: <20221229011358.15874-1-slark_xiao@163.com>
-X-NTES-SC: AL_QuycAfmavEEq4SKQYOkXmE8bgOg9UcK3vPgv3YdfP5k0vSv29zIZTEB9A0rSzcOrGRi0jye0SRZV6MV5fbJoWaOU2vUm+PEhCtG1pmq9EN9V
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Thu, 12 Jan 2023 04:03:24 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2950032E8F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:58:56 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id jo4so43108568ejb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:58:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MigYz6tBw4+yKweKth5khXbfl3nCTQxgPvk6amIZtKM=;
+        b=wG2M0pwvt8H1YSu+YeUBiiVnmM/3S+/9tDJ4c35mj8wrvw2dO+tOlRVYT1YdWZ8QGN
+         nzrrPmL6g1xLs8/JnkwGsixS35r8gxxKLraWAUNbusbqMYCA88wBCM89MDQtdqX+JHMy
+         lyBNv1M+6vSDYlzOA1rbF54b5/moirwdRIfiGye7L8Ib6oAq4/ff5iRBQMnTDlulaeGg
+         vclTmBfU1QOVmu64dQGi3vPd8QAu+TxyOo+hYhitWhd5Pakq+GHBON5HJ7fiPUor7PHX
+         7LZsk/mVL88hec/5ASuQbh+4bn4QTHXaeLAXp+gU5Skb8+2DjDNd1PPS6vnxhD0c4/xw
+         qFlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MigYz6tBw4+yKweKth5khXbfl3nCTQxgPvk6amIZtKM=;
+        b=U+I8pxeEBdjbOJcxpFhjuFli5DeJyPwWR2NllGuVZw1p9bLwQp2K3Rius3pgBcuzUv
+         RBPmOZS8w56YgB4YZU4nPjvuH9t4NrDKbodm/lFWtmaVj25y0KGeizmPomG00+y3JSxJ
+         Ir/0+FR3qD1RzrYNkYLswkAsZntzdAI2qiY43S7HpMZmM5mTfd774mrPQ8H68Icg4QW6
+         Kwmr9EJxFAq4tR3M4Z5M6pegIHbWopsZu7O81030mFkJlaWNsfseYRj1GVS7gY4pAkYC
+         YbTOh6iELu1/VtNddGjSi5EbcpE6YqKWzQmqzINURNQnYVwMx2De8CGFduWhNl4vT+Pp
+         x0aw==
+X-Gm-Message-State: AFqh2krqWUonrtGHJrC5trcFMxKx/qbO+rtMHhMHDyctx2tpyBvE1uAA
+        hjPuIXuaCv+gQVGGdXYusVACaQ==
+X-Google-Smtp-Source: AMrXdXsPkr4Yq01Za/hKWM4fVZAt3sFP5s/z0/QcuKFr65wRjg5evQCwV8puzlT40wT6o3g4CRKJmw==
+X-Received: by 2002:a17:907:8b09:b0:7c1:bb5:5704 with SMTP id sz9-20020a1709078b0900b007c10bb55704mr68749552ejc.26.1673513934721;
+        Thu, 12 Jan 2023 00:58:54 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t4-20020a1709066bc400b0085481fa14dbsm3303452ejs.1.2023.01.12.00.58.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 00:58:54 -0800 (PST)
+Message-ID: <0c50d8aa-4fb1-5891-c9db-a2145445db07@linaro.org>
+Date:   Thu, 12 Jan 2023 09:58:52 +0100
 MIME-Version: 1.0
-Message-ID: <5b95162c.5aa8.185a533db68.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: ZcGowAAXMQG9y79jBN0AAA--.4330W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiNRXzZGI0bAGcOgACso
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 1/2] dt-bindings: mfd: qcom,tcsr: Add compatible for
+ sm8450
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1673513697-30173-1-git-send-email-quic_mojha@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1673513697-30173-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTWFuaSwKTm8gcmVzcG9uc2Ugb2Ygc2VuZGluZyBlbWFpbCB0byBtYW5pQGtlcm5lbC5vcmcu
-IFRoaXMgZW1haWwgYWRkcmVzcwp3YXMgZ2VuZXJhdGVkIGJ5IHNjcmlwdHMvZ2V0X21haW50YWlu
-ZXIucGwuCgpBdCAyMDIyLTEyLTI5IDA5OjEzOjU4LCAiU2xhcmsgWGlhbyIgPHNsYXJrX3hpYW9A
-MTYzLmNvbT4gd3JvdGU6Cj5UaGlzIHNob3VsZCBiZSBhIG1pc3Rha2UuIE1ISSBjb250YWlucyAi
-SG9zdCBJbnRlcmZhY2UiCj5hbHJlYWR5LiBTbyB3ZSBzaGFsbCB1cGRhdGUgIk1ISSIgdG8gIk1v
-ZGVtIiBhbmQgdGhlIGZ1bGwKPm5hbWUgc2hhbGwgYmUgIk1vZGVtIEhvc3QgSW50ZXJmYWNlIi4K
-Pgo+U2lnbmVkLW9mZi1ieTogU2xhcmsgWGlhbyA8c2xhcmtfeGlhb0AxNjMuY29tPgo+LS0tCj4g
-ZHJpdmVycy9idXMvbWhpL2hvc3QvaW5pdC5jIHwgMiArLQo+IDEgZmlsZSBjaGFuZ2VkLCAxIGlu
-c2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+Cj5kaWZmIC0tZ2l0IGEvZHJpdmVycy9idXMvbWhp
-L2hvc3QvaW5pdC5jIGIvZHJpdmVycy9idXMvbWhpL2hvc3QvaW5pdC5jCj5pbmRleCBiZjY3MmRl
-MzUxMzEuLjczMDczMzVjNGZkMSAxMDA2NDQKPi0tLSBhL2RyaXZlcnMvYnVzL21oaS9ob3N0L2lu
-aXQuYwo+KysrIGIvZHJpdmVycy9idXMvbWhpL2hvc3QvaW5pdC5jCj5AQCAtMTQ0OSw0ICsxNDQ5
-LDQgQEAgcG9zdGNvcmVfaW5pdGNhbGwobWhpX2luaXQpOwo+IG1vZHVsZV9leGl0KG1oaV9leGl0
-KTsKPiAKPiBNT0RVTEVfTElDRU5TRSgiR1BMIHYyIik7Cj4tTU9EVUxFX0RFU0NSSVBUSU9OKCJN
-SEkgSG9zdCBJbnRlcmZhY2UiKTsKPitNT0RVTEVfREVTQ1JJUFRJT04oIk1vZGVtIEhvc3QgSW50
-ZXJmYWNlIik7Cj4tLSAKPjIuMTcuMQo=
+On 12/01/2023 09:54, Mukesh Ojha wrote:
+> Document the qcom,sm8450-tcsr compatible.
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+> Change in v3:
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
