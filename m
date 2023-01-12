@@ -2,123 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8083F667E5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA5B667E59
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239336AbjALSqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:46:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S231222AbjALSqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239902AbjALSqQ (ORCPT
+        with ESMTP id S232578AbjALSpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:46:16 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5A18099C
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:19:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673547563; x=1705083563;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=agEBJwFDyT+Gk+KNwyRfcZtOwjfGxVNcowtBC6hm3XA=;
-  b=CTFfE4IZcmSvNzwHXqI6I+OOmt5TryFUg3uY1zCuxUpBJqdiExTwzyZM
-   27UlEfvrND45YzeQjebM/wsvjdN1VVbva+B2E1qFCpkIKLx00ivFEgfmo
-   fuXLyQ/t26pVZLhVB0U66nQ5vdqAcZn0Hp4QYcU8UgLEMtLW59VhUaFNz
-   lz0Qzk7b5thqdmGJ8ZFYug7Lf9itUKWxN08w6KTirfua7/Vg1Faxi3+jM
-   nN/fVoSBrrsV9tXJ6fvmllc5xeEPm9xDsBn3M/xI+UHybbn9f0m5dUlLB
-   U7eCRDbaXF81qofR17lwNXWdyAyH1UPzCSISF0NKLBVcUVDJuE/Yu/3B0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="304164906"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="304164906"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 10:17:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="746637295"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="746637295"
-Received: from mdarpino-mobl.amr.corp.intel.com (HELO [10.209.117.208]) ([10.209.117.208])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 10:17:11 -0800
-Message-ID: <7e859e72-4624-73c7-8195-c252ace0a49d@intel.com>
-Date:   Thu, 12 Jan 2023 10:17:11 -0800
+        Thu, 12 Jan 2023 13:45:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C661C118
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:17:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673547446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yDXFj5hdnKEo0Ma8q/gACMhNgB1M01IuG8WyERS0f3w=;
+        b=fP9th42cLzTdOXxy34eWZh+z9lIB5o9j2d2QCYjrrQtLTnlBst+Z9EcFK3pVRwYuIcZIa8
+        lsl2P4+JreVKgwNnjGLV3vefd8nUeH72mzaZd4RIRyURLr4wEOYFOilliqLWAETphMCkjz
+        bUqfv+VI4iPEQsLyvZ36Ibu4fIKZTTQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-407-dAmrjTUgPge2Yj9UyCVVYQ-1; Thu, 12 Jan 2023 13:17:21 -0500
+X-MC-Unique: dAmrjTUgPge2Yj9UyCVVYQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7257D380670E;
+        Thu, 12 Jan 2023 18:17:20 +0000 (UTC)
+Received: from [10.22.17.189] (unknown [10.22.17.189])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 16B6F492C14;
+        Thu, 12 Jan 2023 18:17:20 +0000 (UTC)
+Message-ID: <8b69165c-054d-dad6-9801-7767d40d37ce@redhat.com>
+Date:   Thu, 12 Jan 2023 13:17:19 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 5/7] x86/cpu: Enable LASS (Linear Address Space
- Separation)
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] acpi: add support for the NBFT
 Content-Language: en-US
-To:     Yian Chen <yian.chen@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ravi Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Sohil Mehta <sohil.mehta@intel.com>,
-        Paul Lai <paul.c.lai@intel.com>
-References: <20230110055204.3227669-1-yian.chen@intel.com>
- <20230110055204.3227669-6-yian.chen@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230110055204.3227669-6-yian.chen@intel.com>
-Content-Type: text/plain; charset=UTF-8
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Hayes <stuart.w.hayes@gmail.com>
+Cc:     Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, Charles Rose <charles_rose@dell.com>,
+        Doug Farley <Douglas_Farley@dell.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>
+References: <20221208232536.591347-1-stuart.w.hayes@gmail.com>
+ <CAJZ5v0jq_z3H5Uw7vM1998pgtUyHE0M19aOg+mf1O=UgApf7cg@mail.gmail.com>
+From:   John Meneghini <jmeneghi@redhat.com>
+Organization: RHEL Core Storge Team
+In-Reply-To: <CAJZ5v0jq_z3H5Uw7vM1998pgtUyHE0M19aOg+mf1O=UgApf7cg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 21:52, Yian Chen wrote:
-> +static __always_inline void setup_lass(struct cpuinfo_x86 *c)
-> +{
-> +	if (cpu_feature_enabled(X86_FEATURE_LASS)) {
-> +		cr4_set_bits(X86_CR4_LASS);
-> +	} else {
-> +		/*
-> +		 * only clear the feature and cr4 bits when hardware
-> +		 * supports LASS, in case it was enabled in a previous
-> +		 * boot (e.g., via kexec)
-> +		 */
-> +		if (cpu_has(c, X86_FEATURE_LASS)) {
-> +			cr4_clear_bits(X86_CR4_LASS);
-> +			clear_cpu_cap(c, X86_FEATURE_LASS);
-> +		}
-> +	}
-> +}
+Thank Rafael.
 
-Could you try testing this, please?
+To clarify: this patch was developed by Stuart Hayes. So there should be no need for that additional Signed-off-bys.
 
-Please remember that there are three things in play here:
- 1. disabled-features.h.  Makes cpu_feature_enabled(X86_FEATURE_LASS)==0
-    when CONFIG_X86_LASS=n.
- 2. The X86_FEATURE_LASS software feature bit itself.  clearcpuid=lass
-    would clear it.
- 3. The actual CPU enumeration of X86_FEATURE_LASS
+Sorry for the confusion...
 
-The else{} is handling the case where X86_FEATURE_LASS is compiled out
-but where the CPU supports LASS.  It doesn't do anything when the CPU
-lacks LASS support *OR* when clearcpuid=lass is used.
+John A. Meneghini
+Senior Principal Platform Storage Engineer
+RHEL SST - Platform Storage Group
+jmeneghi@redhat.com
 
-In the end, want X86_CR4_LASS set when the kernel wants LASS and clear
-in *ALL* other cases.  That would be simply:
+On 12/30/22 12:45, Rafael J. Wysocki wrote:
+> On Fri, Dec 9, 2022 at 12:25 AM Stuart Hayes <stuart.w.hayes@gmail.com> wrote:
+>>
+>> Add support for the NVMe Boot Firmware Table (NBFT) to facilitate
+>> booting from NVM Express namespaces which are accessed via
+>> NVMe over Fabrics (NVMe-oF).
+>>
+>> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
+> 
+> Tentatively applied as 6.3 material, but it was unclear what the S-o-b
+> tags below mean, so I've dropped them.
+> 
+> If you are not the original author of the patch, you should add a From
+> line pointing to the original author to it and the corresponding S-o-b
+> tag along with your S-o-b.
+> 
+> If you have developed the patch in collaboration with someone, there
+> should be a Co-developed-by tag pointing to the other author along
+> with the corresponding S-o-b tag.
+> 
+> S-o-b alone is meaningful only if you are sending a patch from someone
+> else, for example as a code maintainer.
+> 
+>> Signed-off-by: Doug Farley <Douglas_Farley@dell.com>
+>> Signed-off-by: Lenny Szubowicz <lszubowi@redhat.com>
+>> ---
+>>   drivers/acpi/tables.c | 3 ++-
+>>   include/acpi/actbl1.h | 2 ++
+>>   2 files changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
+>> index 47ec11d4c68e..f390c5883b56 100644
+>> --- a/drivers/acpi/tables.c
+>> +++ b/drivers/acpi/tables.c
+>> @@ -545,7 +545,8 @@ static const char table_sigs[][ACPI_NAMESEG_SIZE] __initconst = {
+>>          ACPI_SIG_WDDT, ACPI_SIG_WDRT, ACPI_SIG_DSDT, ACPI_SIG_FADT,
+>>          ACPI_SIG_PSDT, ACPI_SIG_RSDT, ACPI_SIG_XSDT, ACPI_SIG_SSDT,
+>>          ACPI_SIG_IORT, ACPI_SIG_NFIT, ACPI_SIG_HMAT, ACPI_SIG_PPTT,
+>> -       ACPI_SIG_NHLT, ACPI_SIG_AEST, ACPI_SIG_CEDT, ACPI_SIG_AGDI };
+>> +       ACPI_SIG_NHLT, ACPI_SIG_AEST, ACPI_SIG_CEDT, ACPI_SIG_AGDI,
+>> +       ACPI_SIG_NBFT };
+>>
+>>   #define ACPI_HEADER_SIZE sizeof(struct acpi_table_header)
+>>
+>> diff --git a/include/acpi/actbl1.h b/include/acpi/actbl1.h
+>> index 15c78678c5d3..6ec43410288a 100644
+>> --- a/include/acpi/actbl1.h
+>> +++ b/include/acpi/actbl1.h
+>> @@ -49,6 +49,8 @@
+>>   #define ACPI_SIG_S3PT           "S3PT" /* S3 Performance (sub)Table */
+>>   #define ACPI_SIG_PCCS           "PCC"  /* PCC Shared Memory Region */
+>>
+>> +#define ACPI_SIG_NBFT          "NBFT"  /* NVMe Boot Firmware Table */
+>> +
+>>   /* Reserved table signatures */
+>>
+>>   #define ACPI_SIG_MATR           "MATR" /* Memory Address Translation Table */
+>> --
+>> 2.31.1
+>>
+> 
 
-	if (cpu_feature_enabled(X86_FEATURE_LASS)) {
-		cr4_set_bits(X86_CR4_LASS);
-	} else {
-		cr4_clear_bits(X86_CR4_LASS);
-	}
-
-The cr4_clear_bits(X86_CR4_LASS) should be safe regardless of CPU or
-kernel support for LASS.
-
-As for the:
-
-	clear_cpu_cap(c, X86_FEATURE_LASS);
-
-It really only matters for kernels where CONFIG_X86_LASS=n but where the
-CPU supports it.  I'm not clear on what specifically you expect to gain
-from it, though.
-
-I'm also wondering if we even want a Kconfig option.  Is anyone
-realistically going to be compiling this support out?
