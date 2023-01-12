@@ -2,136 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB34166722F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2046667241
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjALM1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 07:27:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S229730AbjALMdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 07:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbjALM1c (ORCPT
+        with ESMTP id S229680AbjALMdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 07:27:32 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A97116F
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 04:27:31 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so14899927wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 04:27:31 -0800 (PST)
+        Thu, 12 Jan 2023 07:33:12 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607D76384
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 04:33:10 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id v127so14479950vsb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 04:33:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3sCX1b48e8dRGm1touskXh42mYr8pJ9DdJayuAposRc=;
-        b=IE/wdueTnBV8FapPdkMf8yP0YzRm2TMURIv35p5iyuS5/ZvpJv0s4IkPuEd9ph6f9p
-         18fvwd6Oan1q4yWzwtvPT+ZpnYofMxaM8PpVENT6PgWFsirii8BfyN5PXDZbrIT5WsMW
-         Uf723Po9SiWTNphA9rk3HXvJizFTFrgC2FN47U90YgbGczl00r6ZulYdKDdIIIvgBKro
-         NaiCOO9XtL1fCUa7CEY9HK4nJmfbUGNm6VHsDLaBJnQzNLql6Zpea2VQ066IfbNUTkzz
-         I+tOKkG7KlByWNPhSMMHUzP8xcVfAXNZBYehy5e7CxgBia0ppLJYRCNf1MrmImasNasc
-         e//A==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmMMKRN2mYFSKBWdfS4KEk8FcK8S7SAJEuBn9XGJN0Y=;
+        b=gFe2+58oQUeTne9Zkfg/uZ9QWaIynLRPo7PQDJ5C/B/JiBw/x/ytir+8cc2ShEVEpM
+         h1jAtFbbp7ClBkAXMOF0BppMfBNqixsIgnHhR3ykhKHeUymrnYCtxiYLGCoe2TjT9Bmt
+         XMEDeAyOFogPrwD8JuhSHAK3nr+cnt+udZNp8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3sCX1b48e8dRGm1touskXh42mYr8pJ9DdJayuAposRc=;
-        b=UqIjTyWPQ9NTOOJUtBKLIkS6ic6GRl0K8JFx0rxhDscgQ/dDDsHfrdysIpTmFDwFEX
-         H0Q6CQ97RpOAhcTwOhMgGBMs5doptl4f4ey9+IZq3osfgoZnEc9E30K4yvm0qg2S2KEZ
-         Dzp3TAfpeGuBf0rtgqeM507PZmb3daixJ5h0sq4SC3ZDLSSPbrj0ZDe88/Hfme5TUzOR
-         sDYvCwzgvBheua+45X5XW+BSodNeNRK9fPsQ7AQqP2lZbp48+NvI7AlToygtI23CmTK1
-         XgmzA5X7cPqMv0KN/2EoC+4cVLo8+UHc5ITeIAv6q4PfyuH72SjBYHoI9nt3r/gBADIw
-         /oMA==
-X-Gm-Message-State: AFqh2kq7ankLjbznkeRqvPKCt34v5aoeNR6qX2kl+AtXGXy0ek0GyVpk
-        w75jg/EaKxeCbf7hKFddaDToLE6m0x73qy7A
-X-Google-Smtp-Source: AMrXdXvUCFEgHhLT6z/Jt7Oae8f3sKqIfWixkAEiIfyelwJg072FkpqJkrXJJTq+OkPsb+sEGQCzGQ==
-X-Received: by 2002:a05:600c:2112:b0:3d3:396e:5e36 with SMTP id u18-20020a05600c211200b003d3396e5e36mr54272884wml.0.1673526449885;
-        Thu, 12 Jan 2023 04:27:29 -0800 (PST)
-Received: from airbuntu.lon.corp.google.com ([104.132.45.104])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05600c4e8b00b003d04e4ed873sm30132354wmq.22.2023.01.12.04.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 04:27:29 -0800 (PST)
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Qais Yousef <qyousef@layalina.io>
-Subject: [PATCH v3 2/2] sched/fair: Fixes for capacity inversion detection
-Date:   Thu, 12 Jan 2023 12:27:08 +0000
-Message-Id: <20230112122708.330667-3-qyousef@layalina.io>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230112122708.330667-1-qyousef@layalina.io>
-References: <20230112122708.330667-1-qyousef@layalina.io>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lmMMKRN2mYFSKBWdfS4KEk8FcK8S7SAJEuBn9XGJN0Y=;
+        b=YgBl8ygaGKf0nnA9th/+iX5dIioVEAvnZawb9BFlvidHJbd3HtHfiWgX0Wsd7aczT5
+         kzmOaoANLMFI6VnWF/R8bHG4AnQBrL9YTLe0myLpfFc8QGsPS77Y7CJvHnhbw3/JdJNz
+         +Rqk/JB2KknacMlnyjWsNKqbFApSoiUsK87KNTelXGutJjN/y/di7D5R/0+2G8hdgP3L
+         ebxsg0zuP3INPSb2yG/ReIwDpnGxTQ6lX+H7CZLIqCB1yvOosUvsDRSK6XPOzq93cE82
+         dHMBD3TadNdCwnERNdQF5PJy6Y4DsAyWKrRszeNN4FoV6Mf1+fcUch1+pRsRIOn/nuJb
+         9+aA==
+X-Gm-Message-State: AFqh2kod+U3RGMCBVPk3iP5I5nwViF2oBxXDvX/GjblCngJgHVTo34OB
+        AO6hM7kPUqlG3nGTpGV3dRLnM/3ibY+PqcDBVW9iew==
+X-Google-Smtp-Source: AMrXdXtCB2FwlHoY21KCpYVwLL1xj0HeaIsLRbFONUmvlRokBMQ/nNZG1R0mfhDYTDrxpXmDZBtfE8Cd1Wy2420mG2Q=
+X-Received: by 2002:a05:6102:3d9f:b0:3c4:4918:80c with SMTP id
+ h31-20020a0561023d9f00b003c44918080cmr9078574vsv.9.1673526789365; Thu, 12 Jan
+ 2023 04:33:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230112042104.4107253-1-treapking@chromium.org> <20230112042104.4107253-10-treapking@chromium.org>
+In-Reply-To: <20230112042104.4107253-10-treapking@chromium.org>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 12 Jan 2023 20:32:58 +0800
+Message-ID: <CAGXv+5ErwJFmu3tFX5RjB9jj-2YWH6mabnHFxnRWv+oAZud=1Q@mail.gmail.com>
+Subject: Re: [PATCH v10 9/9] drm/bridge: it6505: Register Type C mode switches
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Xin Ji <xji@analogixsemi.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Traversing the Perf Domains requires rcu_read_lock() to be held and is
-conditional on sched_energy_enabled(). Ensure right protections applied.
+On Thu, Jan 12, 2023 at 12:22 PM Pin-yen Lin <treapking@chromium.org> wrote:
+>
+> Register USB Type-C mode switches when the "mode-switch" property and
+> relevant port are available in Device Tree. Configure the "lane_swap"
+> state based on the entered alternate mode for a specific Type-C
+> connector, which ends up updating the lane swap registers of the it6505
+> chip.
+>
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 
-Also skip capacity inversion detection for our own pd; which was an
-error.
-
-Fixes: 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
-Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
----
- kernel/sched/fair.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 5a8e75d4a17b..34239d3118f0 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -8992,16 +8992,23 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
- 	 *   * Thermal pressure will impact all cpus in this perf domain
- 	 *     equally.
- 	 */
--	if (static_branch_unlikely(&sched_asym_cpucapacity)) {
-+	if (sched_energy_enabled()) {
- 		unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
--		struct perf_domain *pd = rcu_dereference(rq->rd->pd);
-+		struct perf_domain *pd;
-+
-+		rcu_read_lock();
- 
-+		pd = rcu_dereference(rq->rd->pd);
- 		rq->cpu_capacity_inverted = 0;
- 
- 		for (; pd; pd = pd->next) {
- 			struct cpumask *pd_span = perf_domain_span(pd);
- 			unsigned long pd_cap_orig, pd_cap;
- 
-+			/* We can't be inverted against our own pd */
-+			if (cpumask_test_cpu(cpu_of(rq), pd_span))
-+				continue;
-+
- 			cpu = cpumask_any(pd_span);
- 			pd_cap_orig = arch_scale_cpu_capacity(cpu);
- 
-@@ -9026,6 +9033,8 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
- 				break;
- 			}
- 		}
-+
-+		rcu_read_unlock();
- 	}
- 
- 	trace_sched_cpu_capacity_tp(rq);
--- 
-2.25.1
-
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
