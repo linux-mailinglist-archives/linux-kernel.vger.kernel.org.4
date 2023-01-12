@@ -2,118 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C356673C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4E06673D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjALN53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 08:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
+        id S234056AbjALOAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:00:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbjALN5Y (ORCPT
+        with ESMTP id S233051AbjALN7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 08:57:24 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A7D48CEE
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:57:23 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id z11so26974106ede.1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:57:23 -0800 (PST)
+        Thu, 12 Jan 2023 08:59:52 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4064A532AA
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:59:31 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id m21so26945681edc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:59:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lAIJYoaT0aDl15YG3H1eMEMaYgD5WX/ORv2kxg7sdSw=;
-        b=EiNxkia7GsR7QRi+Wd0ov/5Z9F8SvDTbRlXeI6n9fpTjMSpvusaGH4Z4ikneokmx4h
-         9AJ/lD2QQLqk3AESNWWmx+vNX7X/y05xXDryrVyuG/HU71zp+ccBgmFKuDihdgeBVqP/
-         kR62ZcBcE5lSXNtiPJ7LfXnvvPj4EG7NEqZpi1nS6oagEmzgXGl6kUHwLD5ACMjmiTWU
-         BSq4VVG4h5ygcq+GmvRodqbWAqsXrxbAiuUBkolrYF3ws4IEgtuIU5jeeV/GNyWbnnm6
-         de2mLw3xAv2wsf/O+3v+M2SHlwpj9z43Jf3vPzbqQm1lNbwE0Et37+K6goUknfrmXSEl
-         RqBA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IOgG4eKjPYKS7EoOjZ7QgExUrhV27SwGOcYeDK/QSfQ=;
+        b=UiHw34pHfhygR/6vgLXXCP2/BU1MT2FetomDPNmlVYtT0UBFPnGYwLX2glic4YotVb
+         i7RGf3cUbowpFUZz393qH/WdEo4134BZJK6pmQWsREbwb64T/paDdKsme+cFNv3Ldfzv
+         Bmi1oA8ohf6IsXwW+ea1scOxwQFokJfPH2dDxkbyqPkBgEd32H8qAC7vSvWkjI5+1lpf
+         pND92rftPvZ1LcBkyxn2Pn2bM61eHphxw0bXH+8H5jiZI5svvA0CyxfGgUcRx94Kw9aX
+         VXbGQwBrhG3m5SwUm9cQaZLfdF8PY7R+C1y8O0lJtus+McNJH5oPzV/pd2fDk7hZPd6P
+         t85w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lAIJYoaT0aDl15YG3H1eMEMaYgD5WX/ORv2kxg7sdSw=;
-        b=nlbq8Do2R8Zg2sIKacWTs0rznv5geoBAqUIO/Z0FYpA4dr/2wpkWKbetD3cvjpQe6Y
-         zDL6uZlPenoJ+WYwQZA6wNlggKZ4HOVgl08zHQrCPHci4J421mnt8sHExFCeG8DYyxy+
-         HnbPNVVXD5tV6+NfXxdTVo7+ZYwt2CnVQvKtPT1aCf8oLMmPQL0Sqj77msRfE0wDdQ0v
-         3wf1wGb+H3lAF1i6twlQpHAJQtKL4h9JHxkP5pSyQv4FH3CZYcczZDX5jdrg6UCyqCVT
-         QbaJuI707t6yGnOf57LA4NkI0b2jZAuBwnZDCS6x+lWBv06qA1dDNDlsX4QjN4ZQOX+a
-         AEXA==
-X-Gm-Message-State: AFqh2ko/dPut43OnEfdi8ypHLlaTRu73gbLzfvidohB0Ovp+P7PxNysx
-        baBjn9rX2T8JC1YAW/N3zOU=
-X-Google-Smtp-Source: AMrXdXuPxZIkHJlRSR9HstBwA4XcVbGgOYYr+EwZ2ZqIgVCpXdqtj0yBeB9GCZNF7/IP3XpkNgaxLQ==
-X-Received: by 2002:a05:6402:685:b0:479:ab7d:1dad with SMTP id f5-20020a056402068500b00479ab7d1dadmr81650699edy.32.1673531841776;
-        Thu, 12 Jan 2023 05:57:21 -0800 (PST)
-Received: from gmail.com ([31.46.242.235])
-        by smtp.gmail.com with ESMTPSA id lb11-20020a170907784b00b007b935641971sm7346874ejc.5.2023.01.12.05.57.20
+        bh=IOgG4eKjPYKS7EoOjZ7QgExUrhV27SwGOcYeDK/QSfQ=;
+        b=EUKHQJzeltmhQBn1vlrjKosJVMdnDutZxCwEtjGV2rFaY1+Z2v66IxBKUXUQPuZBv4
+         hXEytpSxVicEOg7JdwPzUGwV3sniFELwuTzSqoK9sIe69Wpf3y2crLzk5jnx5SGjIJAZ
+         o9IPVgKkZSJsrgSDoTZ+Ok67pcJz/8xw9Y3Q8293dth6c5rfg111f4yy22TitwgJh5/a
+         nJm1LIa+XVuflJEg9QjyIyV1oIDeOSG/z7zyylFjH43YSs02FOFJ+p69s37bLcMkTUBV
+         k92My0NZA+iXCfPGcn5ZsZlhPtr5faGPYPPQ488hTIma3U0m83XUaDa9jGJD2fUY547Q
+         jLBA==
+X-Gm-Message-State: AFqh2kr8p9W8JiZxWGTE5lNNVL1t4lnGK4XuzSZd76s+yHTQ2De3Teel
+        24yI8Q4rIQCzoWfc89qH5ZQ8hA==
+X-Google-Smtp-Source: AMrXdXs4diXMPLEwXalKr+SJyaBNgNtcYGwkpGuF7N33G7oWjKunLeWnb6DR7gQs7UBVkjqol7i7cQ==
+X-Received: by 2002:a05:6402:3201:b0:48e:a96c:fd64 with SMTP id g1-20020a056402320100b0048ea96cfd64mr35765310eda.25.1673531969690;
+        Thu, 12 Jan 2023 05:59:29 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906329100b007c0bb571da5sm7376494ejw.41.2023.01.12.05.59.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 05:57:21 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 12 Jan 2023 14:57:17 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [GIT PULL] objtool fix
-Message-ID: <Y8ARvWVv5gXT88Ee@gmail.com>
+        Thu, 12 Jan 2023 05:59:29 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 1/2] arm64: dts: qcom: sm8550: Add UFS host controller and phy nodes
+Date:   Thu, 12 Jan 2023 15:59:25 +0200
+Message-Id: <20230112135926.1572191-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Add UFS host controller and PHY nodes.
 
-Please pull the latest core/urgent git tree from:
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core-urgent-2023-01-12
+Changes since v1:
+ * dropped ufs_mem_phy_lanes child node, like Johan suggested
+ * addressed Konrad comments.
 
-   # HEAD: cad90e5381d840cf2296aaac9b3eff71a30b7c5b objtool: Tolerate STT_NOTYPE symbols at end of section
+ arch/arm64/boot/dts/qcom/sm8550.dtsi | 78 ++++++++++++++++++++++++++--
+ 1 file changed, 75 insertions(+), 3 deletions(-)
 
-- Fix objtool to be more permissive with hand-written assembly
-  that uses non-function symbols in executable sections.
-
- Thanks,
-
-	Ingo
-
------------------->
-Nicholas Piggin (1):
-      objtool: Tolerate STT_NOTYPE symbols at end of section
-
-
- tools/objtool/check.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 4350be739f4f..4b7c8b33069e 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -427,6 +427,15 @@ static int decode_instructions(struct objtool_file *file)
- 			if (func->type != STT_NOTYPE && func->type != STT_FUNC)
- 				continue;
+diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+index 59756ec11564..d20b5fbcb2c3 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+@@ -649,9 +649,9 @@ gcc: clock-controller@100000 {
+ 				 <0>,
+ 				 <0>,
+ 				 <0>,
+-				 <0>,
+-				 <0>,
+-				 <0>,
++				 <&ufs_mem_phy 0>,
++				 <&ufs_mem_phy 1>,
++				 <&ufs_mem_phy 2>,
+ 				 <0>;
+ 		};
  
-+			if (func->offset == sec->sh.sh_size) {
-+				/* Heuristic: likely an "end" symbol */
-+				if (func->type == STT_NOTYPE)
-+					continue;
-+				WARN("%s(): STT_FUNC at end of section",
-+				     func->name);
-+				return -1;
-+			}
+@@ -1571,6 +1571,78 @@ crypto: crypto@1de0000 {
+ 			interconnect-names = "memory";
+ 		};
+ 
++		ufs_mem_phy: phy@1d80000 {
++			compatible = "qcom,sm8550-qmp-ufs-phy";
++			reg = <0x0 0x01d80000 0x0 0x2000>;
++			clock-names = "ref", "qref";
++			clocks = <&gcc GCC_UFS_PHY_PHY_AUX_CLK>,
++				 <&tcsr TCSR_UFS_CLKREF_EN>;
 +
- 			if (func->return_thunk || func->alias != func)
- 				continue;
- 
++			power-domains = <&gcc UFS_MEM_PHY_GDSC>;
++
++			resets = <&ufs_mem_hc 0>;
++			reset-names = "ufsphy";
++
++			#address-cells = <2>;
++			#size-cells = <2>;
++
++			#phy-cells = <0>;
++
++			#clock-cells = <1>;
++
++			ranges;
++
++			status = "disabled";
++		};
++
++		ufs_mem_hc: ufshc@1d84000 {
++			compatible = "qcom,sm8550-ufshc", "qcom,ufshc",
++				     "jedec,ufs-2.0";
++			reg = <0x0 0x01d84000 0x0 0x3000>;
++			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
++			phys = <&ufs_mem_phy>;
++			phy-names = "ufsphy";
++			lanes-per-direction = <2>;
++			#reset-cells = <1>;
++			resets = <&gcc GCC_UFS_PHY_BCR>;
++			reset-names = "rst";
++
++			power-domains = <&gcc UFS_PHY_GDSC>;
++
++			iommus = <&apps_smmu 0x60 0x0>;
++
++			interconnects = <&aggre1_noc MASTER_UFS_MEM 0 &mc_virt SLAVE_EBI1 0>,
++					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_UFS_MEM_CFG 0>;
++
++			interconnect-names = "ufs-ddr", "cpu-ufs";
++			clock-names = "core_clk",
++				      "bus_aggr_clk",
++				      "iface_clk",
++				      "core_clk_unipro",
++				      "ref_clk",
++				      "tx_lane0_sync_clk",
++				      "rx_lane0_sync_clk",
++				      "rx_lane1_sync_clk";
++			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
++				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
++				 <&gcc GCC_UFS_PHY_AHB_CLK>,
++				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
++				 <&rpmhcc RPMH_LN_BB_CLK3>,
++				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
++				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
++				 <&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
++			freq-table-hz =
++				<75000000 300000000>,
++				<0 0>,
++				<0 0>,
++				<75000000 300000000>,
++				<100000000 403000000>,
++				<0 0>,
++				<0 0>,
++				<0 0>;
++			status = "disabled";
++		};
++
+ 		tcsr_mutex: hwlock@1f40000 {
+ 			compatible = "qcom,tcsr-mutex";
+ 			reg = <0 0x01f40000 0 0x20000>;
+-- 
+2.34.1
+
