@@ -2,69 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20BE66729C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D79A6672A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbjALMwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 07:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        id S231140AbjALMwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 07:52:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjALMv4 (ORCPT
+        with ESMTP id S230496AbjALMwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 07:51:56 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49131131;
-        Thu, 12 Jan 2023 04:51:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Ka0B6ZRYHP+Z/pIWCv9PAnb+5byUzLYOug/EwehsPSU=; b=a0M6V+AkuXSXH8M3porhaxRO5u
-        JTD2y44bQVmythEQF8tkoYLs0rSzNzlPatKKr+2Ln1kFfWnkI+12Yp02hGU+EFJkaXkNx0mSExkYg
-        IUsKZW+qmEBsIgjiiJdkt6KhVp6Zscm+ICEjIWjV5BGPp1IIbauiNNZ9LEuzlnRJfi6A=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pFx3P-001rbu-HM; Thu, 12 Jan 2023 13:51:35 +0100
-Date:   Thu, 12 Jan 2023 13:51:35 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
-        sbhatta@marvell.com, linux-doc@vger.kernel.org,
-        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
-        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
-Subject: Re: [PATCH net-next 1/1] plca.c: fix obvious mistake in checking
- retval
-Message-ID: <Y8ACVykpY11Sq/Pg@lunn.ch>
-References: <f6b7050dcfb07714fb3abdb89829a3820e6a555c.1673458121.git.piergiorgio.beruto@gmail.com>
+        Thu, 12 Jan 2023 07:52:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83604EC8E;
+        Thu, 12 Jan 2023 04:52:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 687AA60AC3;
+        Thu, 12 Jan 2023 12:52:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C37FC433EF;
+        Thu, 12 Jan 2023 12:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673527951;
+        bh=y28Fp8xoZWZVm5zKdmGi0Ihx0GiHsk0YCVX29bnybjg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gVVZ+BYzKXdi+W4nuI6DYf7ZadoindJpejIWncosE+Uv+CPmFi5+p6P2bQP1Nl3Bb
+         2tXnG3n5M1l1gA5q/gZVIU+fVW2wJYsHZ1YHOPXWwHs74HxXND3vKqWVjQ5UJYQVpS
+         /lNsf/k9GJCUiMVgE8KcxzSGLIfeTYispfrTv4Zs=
+Date:   Thu, 12 Jan 2023 13:52:28 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Isaac J. Manjarres" <isaacmanjarres@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Ulf Hansson <ulf.hansson@linaro.org>, stable@vger.kernel.org,
+        Saravana Kannan <saravanak@google.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH stable-4.14] driver core: Fix bus_type.match() error
+ handling in __driver_attach()
+Message-ID: <Y8ACjLc272RM0vSP@kroah.com>
+References: <20230110021536.1347134-1-isaacmanjarres@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f6b7050dcfb07714fb3abdb89829a3820e6a555c.1673458121.git.piergiorgio.beruto@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230110021536.1347134-1-isaacmanjarres@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 06:30:48PM +0100, Piergiorgio Beruto wrote:
-> This patch addresses a wrong fix that was done during the review
-> process. The intention was to substitute "if(ret < 0)" with
-> "if(ret)". Unfortunately, in this specific file the intended fix did not
-> meet the code.
+On Mon, Jan 09, 2023 at 06:15:36PM -0800, Isaac J. Manjarres wrote:
+> commit 27c0d217340e47ec995557f61423ef415afba987 upstream.
 > 
-> Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+> When a driver registers with a bus, it will attempt to match with every
+> device on the bus through the __driver_attach() function. Currently, if
+> the bus_type.match() function encounters an error that is not
+> -EPROBE_DEFER, __driver_attach() will return a negative error code, which
+> causes the driver registration logic to stop trying to match with the
+> remaining devices on the bus.
+> 
+> This behavior is not correct; a failure while matching a driver to a
+> device does not mean that the driver won't be able to match and bind
+> with other devices on the bus. Update the logic in __driver_attach()
+> to reflect this.
+> 
+> Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
+> Cc: stable@vger.kernel.org
+> Cc: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+> ---
+>  drivers/base/dd.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+All now queued up, thanks.
 
-    Andrew
+greg k-h
