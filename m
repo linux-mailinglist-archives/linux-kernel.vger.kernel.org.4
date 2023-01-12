@@ -2,53 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13AF667CD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B592F667CDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjALRmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
+        id S238082AbjALRpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 12:45:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbjALRli (ORCPT
+        with ESMTP id S231891AbjALRo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:41:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437C06DB81;
-        Thu, 12 Jan 2023 09:00:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C437A61FE8;
-        Thu, 12 Jan 2023 17:00:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F0A9C433D2;
-        Thu, 12 Jan 2023 17:00:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673542849;
-        bh=26KhBu0kRKblxOrkqakXSpo0g6L8nPlodh5vrUxhSDg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SR/XJKvvDLUetccH084IvpAOTyh4nH4JbPM+r6SYbya5AgOVdGjxKQCAyelzK2kCv
-         gXzp0aok0HCeE1Fo2sUw3vvbg51bbUivH7Hk0jIOBlu6SsNTkqFIgfkb5uRJGW5SYa
-         k8gaTrS3LhHHBEc1gF2OS4zHy628Ry21Uqoy9L9kd6qv0tlBh9dhr7X66wk0hB8DfO
-         8tCukKEU1rVcU/7GIX+XQjJkwpHUgm9iK/8rZcDYkU90y/5hQTefkiC/TeS2Q3JU/f
-         L/+O88d2IMS0S9vP2PDuV02mLEC11AR1K14oxo2kUiHzE3per79WwecDRhCJpNXU7E
-         iNWuRJ3xW4NXA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pG0wj-0005bc-0q; Thu, 12 Jan 2023 18:00:57 +0100
-Date:   Thu, 12 Jan 2023 18:00:57 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Ali Mirghasemi <ali.mirghasemi1376@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Quectel EC200U modem
-Message-ID: <Y8A8yZXqg0usMEk8@hovoldconsulting.com>
-References: <20221228113847.8550-1-ali.mirghasemi1376@gmail.com>
+        Thu, 12 Jan 2023 12:44:28 -0500
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D6E82D05;
+        Thu, 12 Jan 2023 09:03:14 -0800 (PST)
+Received: from localhost (unknown [IPv6:2a01:e35:39f2:1220:dc8b:b602:9bcd:3004])
+        by smtp6-g21.free.fr (Postfix) with ESMTPS id 90AC57802D7;
+        Thu, 12 Jan 2023 18:02:54 +0100 (CET)
+From:   Yann Droneaud <ydroneaud@opteya.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Yann Droneaud <ydroneaud@opteya.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Florian Weimer <fweimer@redhat.com>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        "Carlos O'Donell" <carlos@redhat.com>
+Subject: [RFC PATCH 0/4] random: a simple vDSO mechanism for reseeding userspace CSPRNGs
+Date:   Thu, 12 Jan 2023 18:02:32 +0100
+Message-Id: <cover.1673539719.git.ydroneaud@opteya.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221228113847.8550-1-ali.mirghasemi1376@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,64 +46,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 03:08:47PM +0330, Ali Mirghasemi wrote:
-> Add support for EC200U modem
-> 
-> 0x0901: EC200U - AT + AP + CP + NMEA + DIAG + MOS
->
-> usb-device output:
-> T: Bus=01 Lev=02 Prnt=02 Port=02 Cnt=01 Dev#= 4 Spd=480 MxCh= 0
-> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
-> P: Vendor=2c7c ProdID=0901 Rev= 3.18
-> S: Manufacturer=Android
-> S: Product=Android
-> C:* #Ifs= 9 Cfg#= 1 Atr=e0 MxPwr=400mA
-> A: FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-> E: Ad=81(I) Atr=03(Int.) MxPS= 16 Ivl=32ms
-> I: If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> E: Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=83(I) Atr=03(Int.) MxPS= 512 Ivl=4096ms
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=89(I) Atr=03(Int.) MxPS= 512 Ivl=4096ms
-> I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=8b(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Signed-off-by: Ali Mirghasemi <ali.mirghasemi1376@gmail.com>
-> ---
+Hi,
 
-Thanks for the update, looks good.
+Here's my humble hack at improving kernel for a faster secure arc4random()
+userspace implementation, by allowing userspace to buffer getrandom()
+generated entropy, discarding it as the kernel's own CSPRNG is reseeded.
 
-In the future when you send new revisions you should include a short
-changelog here below the --- line (so that it doesn't end up in the git
-log).
+It's largely built upon the vDSO work of Jason A. Donenfeld, as part of
+its latest patchset "[PATCH v14 0/7] implement getrandom() in vDSO" [1]
+but it's made simpler by making available only one of the missing tools
+for the userspace to properly buffer the output of getrandom().
 
-You should also add a version number to your Subject (e.g. "[PATCH v2]:
-USB: ...").
+Using MADV_WIPEONFORK and mlock(), userspace can reasonably offer forward
+secrecy*, until something like VM_DROPPABLE[2] is provided by the kernel,
+to allow for the buffer memory to never, ever be written to the disk
+before its used, being inherited accross fork(), and isn't limited by
+RLIMIT_MEMLOCK.
 
-And for my enlightenment, could you spell out what AP, CP and MOS stands
-for (or what they are used for)?
+ * provided userspace can mlock() the memory and calls mlock() on buffer
+   after fork, as memory locks are not inherited accross fork().
 
-Now applied.
+As it's a hack, it's far from perfect. The main drawback I see is the
+case where fresh entropy has to be discarded as the kernel's CSPRNG
+generation is updated as the result of calling getrandom() to generate
+the mentionned entropy. The workaround, is to limit the amount of fresh
+entropy fetched when a kernel's CSPRNG generation change is detected,
+and to increase the amount the data retrieved with getrandom() when
+generation doesn't change between calls.
 
-Johan
+Performance wise, the improvements are here, as one can check with the
+test program provided:
+
+    getrandom(,,GRND_TIMESTAMP) test
+    getrandom() support GRND_TIMESTAMP
+    found getrandom() in vDSO at 0x7ffc3efccc60
+    == direct syscall getrandom(), 16777216 u32, 2.866324020 s,   5.853 M u32/s, 170.846 ns/u32
+    == direct vDSO getrandom(),    16777216 u32, 2.883473280 s,   5.818 M u32/s, 171.868 ns/u32
+    == pooled syscall getrandom(), 16777216 u32, 1.152421219 s,  14.558 M u32/s,  68.690 ns/u32, (0 bytes discarded)
+    == pooled vDSO getrandom(),    16777216 u32, 0.162477863 s, 103.258 M u32/s,   9.684 ns/u32, (0 bytes discarded)
+
+With the requirement to mlock() the memory page(s) used to buffer
+getrandom() output, I'm not sure userspace could afford to allocate
+4KBytes per thread, before being hit by RLIMIT_MEMLOCK (or worse,
+OOM killer). Thus, some form of sharing between threads would be
+needed, which would require locking, reducing the performances
+shown above.
+
+Also I haven't studied the security impact of making the kernel base
+CSPRNG seed generation available to userspace. It can be made more
+opaque if needed.
+
+Regards.
+
+[1] https://lore.kernel.org/all/20230101162910.710293-1-Jason@zx2c4.com/
+[2] https://lore.kernel.org/all/20230101162910.710293-3-Jason@zx2c4.com/
+
+Jason A. Donenfeld (2):
+  random: introduce generic vDSO getrandom(,, GRND_TIMESTAMP) fast path
+  x86: vdso: Wire up getrandom() vDSO implementation.
+
+Yann Droneaud (2):
+  random: introduce getrandom() GRND_TIMESTAMP
+  testing: add a getrandom() GRND_TIMESTAMP vDSO demonstration/benchmark
+
+ MAINTAINERS                                   |   1 +
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/entry/vdso/Makefile                  |   3 +-
+ arch/x86/entry/vdso/vdso.lds.S                |   2 +
+ arch/x86/entry/vdso/vgetrandom.c              |  17 +
+ arch/x86/include/asm/vdso/getrandom.h         |  42 +++
+ arch/x86/include/asm/vdso/vsyscall.h          |   2 +
+ arch/x86/include/asm/vvar.h                   |  16 +
+ drivers/char/random.c                         |  52 ++-
+ include/linux/random.h                        |  31 ++
+ include/uapi/linux/random.h                   |   2 +
+ include/vdso/datapage.h                       |   9 +
+ lib/vdso/Kconfig                              |   5 +
+ lib/vdso/getrandom.c                          |  51 +++
+ tools/testing/crypto/getrandom/Makefile       |   4 +
+ .../testing/crypto/getrandom/test-getrandom.c | 307 ++++++++++++++++++
+ 16 files changed, 543 insertions(+), 2 deletions(-)
+ create mode 100644 arch/x86/entry/vdso/vgetrandom.c
+ create mode 100644 arch/x86/include/asm/vdso/getrandom.h
+ create mode 100644 lib/vdso/getrandom.c
+ create mode 100644 tools/testing/crypto/getrandom/Makefile
+ create mode 100644 tools/testing/crypto/getrandom/test-getrandom.c
+
+-- 
+2.37.2
+
