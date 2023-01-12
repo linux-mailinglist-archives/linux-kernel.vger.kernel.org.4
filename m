@@ -2,200 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6C066712F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1887667132
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjALLrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
+        id S232684AbjALLrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:47:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjALLq0 (ORCPT
+        with ESMTP id S233241AbjALLqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:46:26 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7165C92C
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:37:30 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id l22so14314698eja.12
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:37:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hXQ/SgOW9ZIz5YPVls2OSgh2a8mqb0cRkYRLLkLbVHI=;
-        b=uX4CGHSmu8BJWn04RKsyh8DbfwXi9VpEohOvGmvvEE2DZjYm7gO3ehgZujRagi2N8T
-         Fg+s2iMX/JLFPBnFtxDCUZQZlsrOc6+OvM8Y2vD60B4FfXZQTWcPKHNJEbUAb5d/oEDr
-         2XgyxpDm5qb6z441NicpOHTr8KNOLBO5zwfCfANgmQN60KEknw4qzzN6SsfY15Mqwrw9
-         6IyZJNSH4R2RSwjka4pIg/3sTBaoDcZ6M00tG44WtAO+nWSWunMKlgC5jxq10D+XuXxv
-         3U5Cm3IH140QagEVhbtEIbnaYS/0ywNZ/ShGG47XQ5NnF+Dx31aMIpLREa9qr0UkwYj+
-         3ldw==
+        Thu, 12 Jan 2023 06:46:36 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DB15CF97
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:37:37 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id g11-20020a056e021a2b00b0030da3e7916fso9600940ile.18
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:37:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hXQ/SgOW9ZIz5YPVls2OSgh2a8mqb0cRkYRLLkLbVHI=;
-        b=ECfZacjirTYewHo8MwuF8E9ogpVPxKItuGVua88PFYbZ8rK5KtOMwURvLBVGbOdpRi
-         grypekLJ7bc1O9oThMCVflbE6sCK5eMz+L4RVcNwNp9o8baSarOzaIHdGADNnv3UrNIc
-         fGcxdYPg0mcnLrxNhhYGv5p6Zcqi73rL3oj8Yva7Pj9Jm32B7Sh6MckMY/YDkleYXElP
-         duCbuV80LAt4UZcJSZIk34aIK6V5Q/fPwSZMgMNjzbLDDc34FfBXwJXGYoM0iPYJ0bqw
-         lnAJj61iE3J79qaLWBagNWrR2SaRnidI7z0zSTMRMVLGFdwGySZAoQ4yYB/edSCtlF8b
-         Yujw==
-X-Gm-Message-State: AFqh2kq5UM1hBGYi+M2rPY7kxfqA66H7DlUEkIHwq4w5Hw3CrYvTuw0d
-        Facf5cDF/bJvQobVDiTE0550Yw==
-X-Google-Smtp-Source: AMrXdXtISiqCWRExHvPBfANuhyJGYIWCtdeYm0iF4V7TNOJs9R8iNDdaYn430QChTu9b2s5637tU/Q==
-X-Received: by 2002:a17:907:c28f:b0:83f:5f77:8ff9 with SMTP id tk15-20020a170907c28f00b0083f5f778ff9mr65293259ejc.12.1673523449252;
-        Thu, 12 Jan 2023 03:37:29 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id ku12-20020a170907788c00b0084d4564c65fsm5158059ejc.42.2023.01.12.03.37.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 03:37:28 -0800 (PST)
-Message-ID: <4562c5c8-e2bd-4ade-55df-dab07540ce19@linaro.org>
-Date:   Thu, 12 Jan 2023 12:37:26 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wNqj14hq1ZmMXk1ki/tpD2RyflNBufk7g6Rn75mefPk=;
+        b=fS0iKWDyct2TZVpETZPA5wV88j+NK8/Q3EwPmzrJ98AebltBADyt2UCmmQcyq+9qre
+         lE1OONBiMhs7WKWxyuvBW3BvgV5nZECNckNtVK+AuiAmoLgOXU4+IPnHwfmozOOL1M92
+         gY1uB1pi4SirTrtvnz0PtES+mT0qmP8BKOIUHiGGsmlLUC7DyD9HwdZLTnLPRvhQ4X0T
+         C88pbXOWAnMC3TQyztThYR0wwy2JoSr0s/c61X/4+jIcO9ctk+tZHqLyr1OQQJ2e5atU
+         FnTHyJCVfZairOyv+fa5QGabm0gpBtNmDrPHCpBzmOOLRRDtIf5Vpi1aPN3G7ePc+NB7
+         uU0w==
+X-Gm-Message-State: AFqh2kr6Q0azMUq6Wgtr/csy6o0wnIBHyjANT0e2J6JnmgkTFWj0pP2h
+        ZXP+PBWb1bTgmWqHqzPsY+RDEWum+jO21lswspDts5KYBQMe
+X-Google-Smtp-Source: AMrXdXunL+1Lgm4hPngP0/gYdfSj1aFp5ubVrdX479epzsfjt3JEbaGt1aHfc2kM2TclTwPSXvYXIod4yPltKwm3prJ4fdyZ7rf7
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 5/5] PM: domains: Do not call
- device_pm_check_callbacks() when holding genpd_lock()
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
- <20221219151503.385816-6-krzysztof.kozlowski@linaro.org>
- <Y7/vdnD8qELX4A5m@linutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y7/vdnD8qELX4A5m@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:d111:0:b0:6bc:2a47:a874 with SMTP id
+ l17-20020a6bd111000000b006bc2a47a874mr6363310iob.126.1673523456454; Thu, 12
+ Jan 2023 03:37:36 -0800 (PST)
+Date:   Thu, 12 Jan 2023 03:37:36 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000253b7305f20f8be8@google.com>
+Subject: [syzbot] WARNING in rate_control_rate_init
+From:   syzbot <syzbot+352621ea3116a4a2c99b@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/01/2023 12:31, Sebastian Andrzej Siewior wrote:
-> On 2022-12-19 16:15:03 [+0100], Krzysztof Kozlowski wrote:
->> If PM domain on PREEMPT_RT is marked as GENPD_FLAG_RT_SAFE(), the
->> genpd_lock() will be a raw spin lock, thus device_pm_check_callbacks()
-> 
-> a raw_spinlock_t
-> 
->> must be called outside of the domain lock.
-> 
-> Right. First the sleeping lock, followed by the spinning locks. This is
-> covered in
-> 	Documentation/locking/locktypes.rst
-> 
-> at the end. 
+Hello,
 
-I don't understand your comment. Do you expect me to change something?
+syzbot found the following issue on:
 
-> 
->> This solves on PREEMPT_RT:
-> Yes but
->>   [ BUG: Invalid wait context ]
-> 
-> This "Invalid wait context" should also trigger on !PREEMPT_RT with
-> CONFIG_PROVE_RAW_LOCK_NESTING.
+HEAD commit:    f23395b4049c Merge branch 'net-wangxun-adjust-code-structu..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12f87d76480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=46221e8203c7aca6
+dashboard link: https://syzkaller.appspot.com/bug?extid=352621ea3116a4a2c99b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Could be, I just did not hit it.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> 
->>   6.1.0-rt5-00325-g8a5f56bcfcca #8 Tainted: G        W
->>   -----------------------------
->>   swapper/0/1 is trying to lock:
->>   ffff76e045dec9a0 (&dev->power.lock){+.+.}-{3:3}, at: device_pm_check_callbacks+0x20/0xf0
->>   other info that might help us debug this:
->>   context-{5:5}
->>   3 locks held by swapper/0/1:
->>    #0: ffff76e045deb8e8 (&dev->mutex){....}-{4:4}, at: __device_attach+0x38/0x1c0
->>    #1: ffffa92b81f825e0 (gpd_list_lock){+.+.}-{4:4}, at: __genpd_dev_pm_attach+0x7c/0x250
->>    #2: ffff76e04105c7a0 (&genpd->rslock){....}-{2:2}, at: genpd_lock_rawspin+0x1c/0x30
->>   stack backtrace:
->>   CPU: 5 PID: 1 Comm: swapper/0 Tainted: G        W          6.1.0-rt5-00325-g8a5f56bcfcca #8
->>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
->>   Call trace:
->>    dump_backtrace.part.0+0xe0/0xf0
->>    show_stack+0x18/0x40
->>    dump_stack_lvl+0x8c/0xb8
->>    dump_stack+0x18/0x34
->>    __lock_acquire+0x938/0x2100
->>    lock_acquire.part.0+0x104/0x28c
->>    lock_acquire+0x68/0x84
->>    rt_spin_lock+0x40/0x100
->>    device_pm_check_callbacks+0x20/0xf0
->>    dev_pm_domain_set+0x54/0x64
->>    genpd_add_device+0x258/0x340
->>    __genpd_dev_pm_attach+0xa8/0x250
->>    genpd_dev_pm_attach_by_id+0xc4/0x190
->>    genpd_dev_pm_attach_by_name+0x3c/0x60
->>    dev_pm_domain_attach_by_name+0x20/0x30
->>    dt_idle_attach_cpu+0x24/0x90
->>    psci_cpuidle_probe+0x300/0x4b0
->>    platform_probe+0x68/0xe0
->>    really_probe+0xbc/0x2dc
->>    __driver_probe_device+0x78/0xe0
->>    driver_probe_device+0x3c/0x160
->>    __device_attach_driver+0xb8/0x140
->>    bus_for_each_drv+0x78/0xd0
->>    __device_attach+0xa8/0x1c0
->>    device_initial_probe+0x14/0x20
->>    bus_probe_device+0x9c/0xa4
->>    device_add+0x3b4/0x8dc
->>    platform_device_add+0x114/0x234
->>    platform_device_register_full+0x108/0x1a4
->>    psci_idle_init+0x6c/0xb0
->>    do_one_initcall+0x74/0x450
->>    kernel_init_freeable+0x2e0/0x350
->>    kernel_init+0x24/0x130
->>    ret_from_fork+0x10/0x20
-> 
-> I would prefer a description of the issue instead hacing this
-> backtrace.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5aa1ecd77028/disk-f23395b4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7d8e9efbea4d/vmlinux-f23395b4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/001988a09954/bzImage-f23395b4.xz
 
-I'll extend the commit msg.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+352621ea3116a4a2c99b@syzkaller.appspotmail.com
 
-> 
->> Cc: Adrien Thierry <athierry@redhat.com>
->> Cc: Brian Masney <bmasney@redhat.com>
->> Cc: linux-rt-users@vger.kernel.org
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  drivers/base/power/domain.c | 6 +++++-
->>  1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
->> index 4dfce1d476f4..db499ba40497 100644
->> --- a/drivers/base/power/domain.c
->> +++ b/drivers/base/power/domain.c
->> @@ -1666,10 +1666,14 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
->>  	if (ret)
->>  		goto out;
->>  
->> +
->> +	/* PREEMPT_RT: Must be outside of genpd_lock */
-> 
-> Could this comment be rewritten if needed?
-> The callback, which acquires sleeping locks on PREEMPT_RT, can be moved
-> before genpd_lock() because it does not rely on this lock. It must be
-> moved because the latter may acquire spinning locks.
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 10778 at net/mac80211/rate.c:48 rate_control_rate_init+0x4ed/0x6b0 net/mac80211/rate.c:48
+Modules linked in:
+CPU: 0 PID: 10778 Comm: syz-executor.5 Not tainted 6.2.0-rc2-syzkaller-00314-gf23395b4049c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:rate_control_rate_init+0x4ed/0x6b0 net/mac80211/rate.c:48
+Code: f8 48 c7 c2 c0 31 7c 8b be 19 03 00 00 48 c7 c7 80 31 7c 8b c6 05 f0 d3 16 05 01 e8 ba f5 78 00 e9 33 fe ff ff e8 13 74 3a f8 <0f> 0b e8 0c 32 24 f8 31 ff 89 c3 89 c6 e8 71 70 3a f8 84 db 74 27
+RSP: 0018:ffffc900145b7280 EFLAGS: 00010216
+RAX: 0000000000002825 RBX: ffff88801cad46e0 RCX: ffffc9000b3ca000
+RDX: 0000000000040000 RSI: ffffffff8946de7d RDI: 0000000000000005
+RBP: ffff888042a78000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
+R13: 0000000000000000 R14: ffff88801c738de0 R15: ffff88807b9bc000
+FS:  00007f6d736d4700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f752b9ad988 CR3: 0000000029022000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ sta_apply_auth_flags.constprop.0+0x424/0x4a0 net/mac80211/cfg.c:1569
+ sta_apply_parameters+0xaf8/0x16f0 net/mac80211/cfg.c:1896
+ ieee80211_add_station+0x3d0/0x620 net/mac80211/cfg.c:1961
+ rdev_add_station net/wireless/rdev-ops.h:201 [inline]
+ nl80211_new_station+0x1288/0x1c60 net/wireless/nl80211.c:7398
+ genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2564
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
+ netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xd3/0x120 net/socket.c:734
+ ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6d7288c0c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6d736d4168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f6d729abf80 RCX: 00007f6d7288c0c9
+RDX: 0000000000000000 RSI: 0000000020000080 RDI: 0000000000000003
+RBP: 00007f6d728e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffff260419f R14: 00007f6d736d4300 R15: 0000000000022000
+ </TASK>
 
-Sure
 
-Best regards,
-Krzysztof
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
