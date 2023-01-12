@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34056667E76
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5877667E77
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjALS4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
+        id S232805AbjALS4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:56:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbjALSz3 (ORCPT
+        with ESMTP id S234782AbjALS4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:55:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC3287912;
-        Thu, 12 Jan 2023 10:25:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 593DA6213B;
-        Thu, 12 Jan 2023 18:25:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 867E5C433EF;
-        Thu, 12 Jan 2023 18:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673547923;
-        bh=7E80cFZGxF2ybWEYKWVeToLIO7ZFtLVaNaJj6DWrgtE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=rXcTrjNcq6AOHbgz725RLARmoWDfgUQOF4mZ1FavcoZeG+r/Ahb5BWnkvg2lrlD3M
-         xW/H2kQi+QifH3v7qlvSknWQs1ONJh/b3qZBjYPdekHFJplvzPuNm8a4fDBQWWWZBV
-         268pM833VrVzCS7stzhlbIvrmpsl9jgQhfq5Hjej0QtR/d1i+pyra6v4dvtncnGvim
-         12K9MDJKrqZ3+PWgeFHalHjtXjPA13RymwPO7QbnLvioyAJl4hx5J23sMiZJJdP8hA
-         xgdn6KKmmY9w6/2Xl+bhh5eHM4fr8CRZ4ED9TTI5o3QUXh+aX/0heczhPxd/N8B28U
-         RU0MXGL4cPOHQ==
-Date:   Thu, 12 Jan 2023 12:25:22 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     bhelgaas@google.com, ruscur@russell.cc, oohall@gmail.com,
-        treding@nvidia.com, jonathanh@nvidia.com, mmaddireddy@nvidia.com,
-        kthota@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vsethi@nvidia.com,
-        linuxppc-dev@lists.ozlabs.org, sagar.tv@gmail.com
-Subject: Re: [PATCH V2] PCI/AER: Configure ECRC only AER is native
-Message-ID: <20230112182522.GA1778254@bhelgaas>
+        Thu, 12 Jan 2023 13:56:23 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BF259FAB
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:26:17 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30CHNj22017591;
+        Thu, 12 Jan 2023 18:26:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=Z82I5GLP+uqyDlDgupDEX6N8IYIrwtQEqaS+xCBQSTc=;
+ b=F8eFle9tulDMuE6eQ6+AYdAXsZ1ZBeOffkgJ4Le7S4BcyeZt1+CXyEp7kDorGJkHvc/8
+ He7QSDnBDL1ZrYzgexmfKbs+/3qC8tBRJz9FOGye0/12sIaKGaXmt2Xwf5Fo1bwzUM7P
+ lk9sDbMMWK8R9OX9HHbkMsBxhxfPwX3XPTZ8xr4nlAxuIK5vBWOSxIFuNAuc17t4fzk+
+ b19YkkDjZL+uRYjyRj8JNAA/7GlSNby1Ua8JvJrPT07hEaYkBo7ONq6iFk7ZsL6VY+qO
+ SaxN8ub5q4Ms8Y6yjqPDYP0XNPVKU/f+TtGnaR0do16r2WJlOSaFcEyWBo0erSakovz8 LA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2edusby0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Jan 2023 18:26:02 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30CIQ1IG007043
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Jan 2023 18:26:01 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 12 Jan 2023 10:26:00 -0800
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] arm64: smccc: Include alternative-macros.h
+Date:   Thu, 12 Jan 2023 10:25:47 -0800
+Message-ID: <20230112182548.537295-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112072111.20063-1-vidyas@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DuZHONfbr5Nfy4x5LQ36DjulHaQ2raj-
+X-Proofpoint-ORIG-GUID: DuZHONfbr5Nfy4x5LQ36DjulHaQ2raj-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-12_10,2023-01-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=634 mlxscore=0 phishscore=0 clxscore=1015 adultscore=0
+ bulkscore=0 impostorscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301120132
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 12:51:11PM +0530, Vidya Sagar wrote:
-> As the ECRC configuration bits are part of AER registers, configure
-> ECRC only if AER is natively owned by the kernel.
-> 
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+Fix build error when CONFIG_ARM64_SVE is selected and
+asm/alternative-macros.h wasn't implicitly included by another header.
 
-Applied to pci/aer for v6.3, thanks!
+./include/linux/arm-smccc.h:387:25: error: expected string literal before `ALTERNATIVE'
+  387 | #define SMCCC_SVE_CHECK ALTERNATIVE("nop \n",  "bl __arm_smccc_sve_check \n", \
 
-> ---
-> v2:
-> * Updated kernel-parameters.txt document based on Bjorn's suggestion
-> 
->  Documentation/admin-guide/kernel-parameters.txt | 4 +++-
->  drivers/pci/pcie/aer.c                          | 3 +++
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 426fa892d311..8f85a1230525 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -4242,7 +4242,9 @@
->  				specified, e.g., 12@pci:8086:9c22:103c:198f
->  				for 4096-byte alignment.
->  		ecrc=		Enable/disable PCIe ECRC (transaction layer
-> -				end-to-end CRC checking).
-> +				end-to-end CRC checking). Only effective if
-> +				OS has native AER control (either granted by
-> +				ACPI _OSC or forced via "pcie_ports=native")
->  				bios: Use BIOS/firmware settings. This is the
->  				the default.
->  				off: Turn ECRC off
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index e2d8a74f83c3..730b47bdcdef 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -184,6 +184,9 @@ static int disable_ecrc_checking(struct pci_dev *dev)
->   */
->  void pcie_set_ecrc_checking(struct pci_dev *dev)
->  {
-> +	if (!pcie_aer_is_native(dev))
-> +		return;
-> +
->  	switch (ecrc_policy) {
->  	case ECRC_POLICY_DEFAULT:
->  		return;
-> -- 
-> 2.17.1
-> 
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+---
+ include/linux/arm-smccc.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
+index 220c8c60e021..6a627cdbbdec 100644
+--- a/include/linux/arm-smccc.h
++++ b/include/linux/arm-smccc.h
+@@ -383,6 +383,7 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, unsigned long a1,
+ 
+ /* nVHE hypervisor doesn't have a current thread so needs separate checks */
+ #if defined(CONFIG_ARM64_SVE) && !defined(__KVM_NVHE_HYPERVISOR__)
++#include <asm/alternative-macros.h>
+ 
+ #define SMCCC_SVE_CHECK ALTERNATIVE("nop \n",  "bl __arm_smccc_sve_check \n", \
+ 				    ARM64_SVE)
+
+base-commit: 68a63a412d18bd2e2577c8928139f92541afa7a6
+-- 
+2.39.0
+
