@@ -2,73 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAF6668663
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A568E668667
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240214AbjALWH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 17:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
+        id S240222AbjALWIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 17:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238033AbjALWGm (ORCPT
+        with ESMTP id S232816AbjALWH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 17:06:42 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26FEF73;
-        Thu, 12 Jan 2023 13:56:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TflQIBHtbOtCl9ZDGmCGckLCF53giYE4nhRaQzDOaxQ=; b=CgIrh+M6NGkT6uXzBzX+fXvROx
-        wuTvPtlIEUE08URn9QyBlAJmQ1Sv+TAIuo3qLS3tKEE/jc79z1WAdayFLATVY4wHp2bsM+l26TdEj
-        7jvBAvnSrlnqwq/Wmu2mvIDZKTy/zfSLFq9gBLBQPjo0oMFOEyolDceoHeG1LdhVRwMNKROnZDkka
-        cIucsR/1yP6ZVkH/ubLx1WCHUkeIMBfDlpIBEgrZkljcz/hznCLXdKcpEFfnwc56akJ4RUElW3Pem
-        dSHXq6LMGEyYCEtVrLht64Y1BnnZHUmAMGB6km3InIHL2FAUcubwoVUrQpKXU2UkGi8ZeUFmfXuo1
-        uZAZLvvA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pG5Yf-001ZAk-2q;
-        Thu, 12 Jan 2023 21:56:25 +0000
-Date:   Thu, 12 Jan 2023 21:56:25 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/9] iov_iter: Use IOCB/IOMAP_WRITE if available
- rather than iterator direction
-Message-ID: <Y8CCCQLrm9vshGw0@ZenIV>
-References: <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
- <167344727810.2425628.4715663653893036683.stgit@warthog.procyon.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167344727810.2425628.4715663653893036683.stgit@warthog.procyon.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 12 Jan 2023 17:07:26 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E37A167F6;
+        Thu, 12 Jan 2023 13:57:40 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 9D9BC320046F;
+        Thu, 12 Jan 2023 16:57:35 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 12 Jan 2023 16:57:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1673560655; x=1673647055; bh=s7tq5Dt4vQ
+        7KWmnlphnVVetcWhkbTgMUgBJi8a3V96c=; b=FH6VjcMHfmIaUgUjinAiyozgq8
+        CuO4EN2FoQdMnf0Q5EWOYzUaiyrRSEYyG7eW/dY4OfmjlsNMfIlDJ///YxWBVAt8
+        4lvsHRxNWPTvvcnFtw86rsh78eLG5wwreZzZUOrtxqKUnP6+JLHGhHHC+J41/GpY
+        +pI7OKaf2wODzjjvvwBl3mqXq5JVtQFPLJuLHjJJNtd2ND9u/J6E2ThNKYRnnh0G
+        sdIh5VxpF0MKNlBp+WvKpq9waN1HAZGrCYSeq/2CDgzziGkFo0pF075JN0H/0fMI
+        Z7weZIAWaWdhVyr3ZYHSdpMUVpgoS40kkW+GnBSK3ucJyUj7cfoiOfizWr0g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673560655; x=1673647055; bh=s7tq5Dt4vQ7KWmnlphnVVetcWhkb
+        TgMUgBJi8a3V96c=; b=pgK/1suD/fOcIK9hUgjbK/lN103NpjOTTIAlUO7mr97V
+        W7cdmlDu3tBreLzMVCuY2UnlnmpRw1qdawNFdwtK1IhYD3l2e8q85DwZaS6wNHBU
+        VRZHXixN2lyT09ohcuECYWZpgF7Sb7TQNbMTs7STcKrS/KWOAxY+jG9sqWiktHwb
+        BjuxPy9pwLTHFujXcO62FyFi/+t+gk1B1W0SYpQtke+194l/PjgkzxCfScl4yFkl
+        84c5WVD0p9YA7bjZ9tifo0drq8RFyxGn00QTmegdKoEUJ/64bGJlWM7GKMttASNo
+        wDFESfuC1d34YAi+69p6duDAZQdx1A08Nq3KTKsbnQ==
+X-ME-Sender: <xms:ToLAYxtx37Ut_RzsJ0g9MwqnR0nad8zwCw8Q5RpVqVOjqkgqJeSUzg>
+    <xme:ToLAY6eGmyYyM96mn7oYYGEB37mbzTDwdydauWs39Aj_NgYp3w1RYHQDBuHGIaxx1
+    8v-8DUDie0AEDBBbAY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdduheejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ToLAY0y3hhaW1ftV0i3rRGGYWWAbLAPeLqPHnQFzpHMf3Gdn_QmazA>
+    <xmx:ToLAY4O__cbsHDj-StOiBvhgX6i8Hd_QAjnlhcf9EmDKPIWkgvNx0g>
+    <xmx:ToLAYx8BIhfcW-8c1FHPoxWnfgH6UXYBGdjnPo_vMibcwkcKPDnMxg>
+    <xmx:T4LAYy0ZF9YYoaIct6NKe7XqSlK7_fR-wYyCGzAiSuZIdpiwGj8lVQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8C0F7B60086; Thu, 12 Jan 2023 16:57:34 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <83f5fc9f-4b46-4ac4-ba65-455d0aaaed88@app.fastmail.com>
+In-Reply-To: <1E4BFECB-D29A-43CE-A521-F2A81939202F@hpe.com>
+References: <20230103203654.59322-1-nick.hawkins@hpe.com>
+ <20230103203654.59322-4-nick.hawkins@hpe.com>
+ <5ad677f3-2cbc-4ba0-bd48-2f832a72fb28@app.fastmail.com>
+ <E2B35D8A-B8A6-40C1-8AC9-46E6C2CAE656@hpe.com>
+ <6bae68eb-866f-4b78-b4db-e3154feec28e@app.fastmail.com>
+ <1E4BFECB-D29A-43CE-A521-F2A81939202F@hpe.com>
+Date:   Thu, 12 Jan 2023 22:57:13 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Jean Delvare" <jdelvare@suse.com>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v4 3/5] ARM: dts: add GXP Support for fans and SPI
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 02:27:58PM +0000, David Howells wrote:
-> If a kiocb or iomap_iter is available, then use the IOCB_WRITE flag or the
-> IOMAP_WRITE flag to determine whether we're writing rather than the
-> iterator direction flag.
-> 
-> This allows all but three of the users of iov_iter_rw() to be got rid of: a
-> consistency check and a warning statement in cifs and one user in the block
-> layer that has neither available.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> Link: https://lore.kernel.org/r/167305163159.1521586.9460968250704377087.stgit@warthog.procyon.org.uk/ # v4
+On Thu, Jan 12, 2023, at 20:58, Hawkins, Nick wrote:
 
-Incidentally, I'd suggest iocb_is_write(iocb) - just look at the amount of
-places where you end up with clumsy parentheses...
+> The updated section of the device tree will be:
+>
+> ahb@80000000 {
+>                         compatible = "simple-bus";
+>                         #address-cells = <1>;
+>                         #size-cells = <1>;
+>                         ranges = <0x0 0x80000000 0xf000000>, /* 
+> 0x80000000 - 0x8f000000 */
+>                                  <0x40000000 0xc0000000 0x40000000>; /* 
+> 0xc0000000 - 0xffffffff */
+>                         dma-ranges;
+
+Ok
+
+>
+>                       ...
+>
+>                        vic0: interrupt-controller@4eff0000 { /* 0xceff0000 */
+>                                 compatible = "arm,pl192-vic";
+>                                 reg = <0x4eff0000 0x1000>;
+>                                 interrupt-controller;
+>                                 #interrupt-cells = <1>;
+>                         };
+>
+>                         vic1: interrupt-controller@f00000 { /* 0x80f00000 */
+>                                 compatible = "arm,pl192-vic";
+>                                 reg = <0xf00000 0x1000>;
+>                                 interrupt-controller;
+>                                 #interrupt-cells = <1>;
+>                         };
+
+I still don't see the value of the /* 0x80f00000 */ comments,
+you should define the ranges to the most sensible mapping
+based on the datasheet so you don't need the comments.
+
+If the datasheet uses a bus-local address (0xf00000), then
+just get rid of the comment, since that only adds confusion.
+OTOH if the 0x80f00000 number is what is in the datasheet,
+then adjust the ranges to do a 1:1 mapping of the registers
+on the bus and use that address directly.
+
+      Arnd
