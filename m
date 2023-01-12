@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29A9666BC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F624666BC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbjALHpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 02:45:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
+        id S238681AbjALHqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 02:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238942AbjALHpJ (ORCPT
+        with ESMTP id S236578AbjALHqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 02:45:09 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2B84F11C;
-        Wed, 11 Jan 2023 23:44:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nzHwDouomVyJ1c2Xw2OmNpBzQCQzZ9c6gVs9Afvw21w=; b=FHDgptf0MVXGgvN8JRjPHW4mwO
-        9VktTKVNgQtpjlgnlU329Q7w4wEfSqeFdW8G7yJeFZ2vD75A+RozPc1g/dnN8JkUiyJCjFWV4z5K3
-        FlF4ptPBLr0Yy663pFCBkijZClpz1e0PIgRnIaodBpATojP1Taz+NKyfCTToZ+gI56ON1H6Bv1C1o
-        kKoMDngV1VO8Y8O8g1FZImh6INXEUvsm0Ceq1P6RQIo4I2ne/CZbaVpKYfhayi6GPInKv4k1e83U4
-        vK/Baciq/VnRW6otFY+jVzHhIwAl2+xCVw7qlDEbR0cIRE2zg6NCvfBagRIGdvOwV1RRzlmSHEJak
-        EC30yyng==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pFsGH-00E2Fv-E2; Thu, 12 Jan 2023 07:44:33 +0000
-Date:   Wed, 11 Jan 2023 23:44:33 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 8/9] iov_iter, block: Make bio structs pin pages
- rather than ref'ing if appropriate
-Message-ID: <Y7+6YVkhZsvdW+Hr@infradead.org>
-References: <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
- <167344731521.2425628.5403113335062567245.stgit@warthog.procyon.org.uk>
+        Thu, 12 Jan 2023 02:46:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E27D4BD46;
+        Wed, 11 Jan 2023 23:45:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4D0661F7A;
+        Thu, 12 Jan 2023 07:45:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47346C433D2;
+        Thu, 12 Jan 2023 07:45:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673509533;
+        bh=EWBwBnYK0xV+Glxx6Z/EVTFLlwix0VJtnazOnfUdeT4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=png2WOfLLGAoQpqEDt0S1ahBd/UXNg2eTnPhqBrr3UFBw0pUuIpbz8PDj8dHTzk7M
+         hDh1Hc5sqKnyoL0m/XyHVCSUID+usEJn0HFDrSLFYJPRJQPq8nIP3MgJteS47Z+nQ6
+         n5YhtLTM1L1VdpvRAgxkTQo00qqbxf76Uos+/H6tH4rBY2Dx/eF/oGKGy5v6VHqMHR
+         QMMgEziJ1bFKC5EB7JkO+F87e1ju44YA12X9VL4m72kHBcoIt/Hi+ItrZJfd64MdTx
+         gWeqd6ukyh0i7S93LQh3CNRwFFH9O5q9evm0Ijgxhh6I2wb0y4JecGQ32jOeh+PZaV
+         z+ucHcpXizerA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pFsHL-0003Bl-Hm; Thu, 12 Jan 2023 08:45:39 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] arm64: dts: qcom: sc8280xp-crd: allow vreg_l3b to be disabled
+Date:   Thu, 12 Jan 2023 08:45:03 +0100
+Message-Id: <20230112074503.12185-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.38.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167344731521.2425628.5403113335062567245.stgit@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 02:28:35PM +0000, David Howells wrote:
-> [!] Note that this is tested a bit with ext4, but nothing else.
+The vreg_l3b supply is used by the eDP, UFS and USB1 PHYs which are now
+described by the devicetree so that the regulator no longer needs to be
+marked always-on.
 
-You probably want to also at least test it with block device I/O
-as that is a slightly different I/O path from iomap.  More file systems
-also never hurt, but aren't quite as important.
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-> +/*
-> + * Clean up a page appropriately, where the page may be pinned, may have a
-> + * ref taken on it or neither.
-> + */
-> +static void bio_release_page(struct bio *bio, struct page *page)
-> +{
-> +	if (bio_flagged(bio, BIO_PAGE_PINNED))
-> +		unpin_user_page(page);
-> +	if (bio_flagged(bio, BIO_PAGE_REFFED))
-> +		put_page(page);
-> +}
-> +
->  void __bio_release_pages(struct bio *bio, bool mark_dirty)
->  {
->  	struct bvec_iter_all iter_all;
-> @@ -1183,7 +1197,7 @@ void __bio_release_pages(struct bio *bio, bool mark_dirty)
->  	bio_for_each_segment_all(bvec, bio, iter_all) {
->  		if (mark_dirty && !PageCompound(bvec->bv_page))
->  			set_page_dirty_lock(bvec->bv_page);
-> -		put_page(bvec->bv_page);
-> +		bio_release_page(bio, bvec->bv_page);
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+index db12d8678861..e5e75cc2c670 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+@@ -150,7 +150,6 @@ vreg_l3b: ldo3 {
+ 			regulator-max-microvolt = <1200000>;
+ 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+ 			regulator-boot-on;
+-			regulator-always-on;
+ 		};
+ 
+ 		vreg_l4b: ldo4 {
+-- 
+2.38.2
 
-So this does look correc an sensible, but given that the new pin/unpin
-path has a significantly higher overhead I wonder if this might be a
-good time to switch to folios here as soon as possible in a follow on
-patch.
-
-
-> +	size = iov_iter_extract_pages(iter, &pages,
-> +				      UINT_MAX - bio->bi_iter.bi_size,
-> +				      nr_pages, gup_flags,
-> +				      &offset, &cleanup_mode);
->  	if (unlikely(size <= 0))
->  		return size ? size : -EFAULT;
->  
-> +	bio_clear_flag(bio, BIO_PAGE_REFFED);
-> +	bio_clear_flag(bio, BIO_PAGE_PINNED);
-> +	if (cleanup_mode & FOLL_GET)
-> +		bio_set_flag(bio, BIO_PAGE_REFFED);
-> +	if (cleanup_mode & FOLL_PIN)
-> +		bio_set_flag(bio, BIO_PAGE_PINNED);
-
-The flags here must not change from one invocation to another, so
-clearing and resetting them on every iteration seems dangerous.
-
-This should probably be a:
-
-	if (cleanup_mode & FOLL_GET) {
-		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_PINNED));
-		bio_set_flag(bio, BIO_PAGE_REFFED);
-	}
-	if (cleanup_mode & FOLL_PIN) {
-		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_REFFED));
-		bio_set_flag(bio, BIO_PAGE_PINNED);
-	}
