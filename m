@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A585D666F55
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:17:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27002666F4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbjALKQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S229806AbjALKQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbjALKO6 (ORCPT
+        with ESMTP id S239863AbjALKO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:14:58 -0500
+        Thu, 12 Jan 2023 05:14:59 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C502640
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:14:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2795FE9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:14:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673518459; x=1705054459;
+  t=1673518461; x=1705054461;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7DqRv8Yg6e6tLhs+ztrt2ocPkjLI6upwYnCAtIxC5R0=;
-  b=UezXzceVkzK0H9uIP7Y+sdMryiFv7xGFoZktq1stbnNYGm1bPMcqVp7B
-   dX/pclL6S64XOEVXSaVd2A4GWLcmfM/1kb/d5MHUJE6JITtwGEu4RNaxS
-   FlD1/mPk71/rlORQw66iWkBDq7Jtfhx9AcaUsNCgRqXnlNqg8P+IOFT+J
-   LXfQenv8fUWqiODC5X4Bq7E+iA0HqW7OzRcTXTeXrVjJPtFlibYKdS251
-   cyz5PU4Kn/fEAVv5EDIpOGWhCD7A0xiRp6yqGGSk/si7dcjYYoNoMSTiV
-   CygjV9zj2TvKyRi4amKcFvi9HD7LYrUpeu1opTGfA0o1bTLKDOvw4Yfcx
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350892143"
+  bh=W8YJlqpgpyrIFdBluBlo3KeuiQWVU3Fxn6IGrBsufUk=;
+  b=aay5pgjK9JHyw1h1AD4mCJ8pbGnJw8qCB6CaBsRv6hlPipFZvWTeyfwQ
+   LfH7EjrzXMAGb5SaVxmkpJtuouxWiIq/qb1vd498FhYNNIxDDayoSSkIe
+   sp+FrU54JI/TxNoCEZ5yI+xhtG4W2Vn10bZsoreN9HO5+wxAk0aQs92nA
+   igrR3c1TNuZusKoSjBCQh3oWb5VW21TxTELdkfUia9hoSW6RQmgaveLxl
+   qInfRWethwYyIMaqJ8TYpg157TR2E3cMFxTYvoQf4rcP3xzG6aUuRluRv
+   dyycAbmFrbWZHPj+ATYoQC5cZ/yBFhmFORvdQJWXb1XlfNVoqYXILdbwQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350892153"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="350892143"
+   d="scan'208";a="350892153"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:18 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="659722887"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="659722888"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="659722887"
+   d="scan'208";a="659722888"
 Received: from glieseu-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.52.1])
   by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:16 -0800
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 7CD2F109AF1; Thu, 12 Jan 2023 13:14:13 +0300 (+03)
+        id 872FE109AF2; Thu, 12 Jan 2023 13:14:13 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@intel.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -50,9 +50,9 @@ Cc:     Kuppuswamy Sathyanarayanan
         Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
         linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv2 1/7] x86/tdx: Fix typo in comment in __tdx_hypercall()
-Date:   Thu, 12 Jan 2023 13:14:01 +0300
-Message-Id: <20230112101407.24327-2-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv2 2/7] x86/tdx: Add more registers to struct tdx_hypercall_args
+Date:   Thu, 12 Jan 2023 13:14:02 +0300
+Message-Id: <20230112101407.24327-3-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.38.2
 In-Reply-To: <20230112101407.24327-1-kirill.shutemov@linux.intel.com>
 References: <20230112101407.24327-1-kirill.shutemov@linux.intel.com>
@@ -68,29 +68,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Comment in __tdx_hypercall() points that RAX==0 indicates TDVMCALL
-failure which is opposite of the truth: RAX==0 is success.
+struct tdx_hypercall_args is used to pass down hypercall arguments to
+__tdx_hypercall() assembly routine.
 
-Fix the comment. No functional changes.
+Currently __tdx_hypercall() handles up to 6 arguments. In preparation to
+changes in __tdx_hypercall(), expand the structure to 6 more registers
+and generate asm offsets for them.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/coco/tdx/tdcall.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/shared/tdx.h | 6 ++++++
+ arch/x86/kernel/asm-offsets.c     | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
-index f9eb1134f22d..74b108e94a0d 100644
---- a/arch/x86/coco/tdx/tdcall.S
-+++ b/arch/x86/coco/tdx/tdcall.S
-@@ -155,7 +155,7 @@ SYM_FUNC_START(__tdx_hypercall)
- 	tdcall
+diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
+index e53f26228fbb..8068faa52de1 100644
+--- a/arch/x86/include/asm/shared/tdx.h
++++ b/arch/x86/include/asm/shared/tdx.h
+@@ -22,12 +22,18 @@
+  * This is a software only structure and not part of the TDX module/VMM ABI.
+  */
+ struct tdx_hypercall_args {
++	u64 r8;
++	u64 r9;
+ 	u64 r10;
+ 	u64 r11;
+ 	u64 r12;
+ 	u64 r13;
+ 	u64 r14;
+ 	u64 r15;
++	u64 rdi;
++	u64 rsi;
++	u64 rbx;
++	u64 rdx;
+ };
  
- 	/*
--	 * RAX==0 indicates a failure of the TDVMCALL mechanism itself and that
-+	 * RAX!=0 indicates a failure of the TDVMCALL mechanism itself and that
- 	 * something has gone horribly wrong with the TDX module.
- 	 *
- 	 * The return status of the hypercall operation is in a separate
+ /* Used to request services from the VMM */
+diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+index 82c783da16a8..8650f29387e0 100644
+--- a/arch/x86/kernel/asm-offsets.c
++++ b/arch/x86/kernel/asm-offsets.c
+@@ -75,12 +75,18 @@ static void __used common(void)
+ 	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
+ 
+ 	BLANK();
++	OFFSET(TDX_HYPERCALL_r8,  tdx_hypercall_args, r8);
++	OFFSET(TDX_HYPERCALL_r9,  tdx_hypercall_args, r9);
+ 	OFFSET(TDX_HYPERCALL_r10, tdx_hypercall_args, r10);
+ 	OFFSET(TDX_HYPERCALL_r11, tdx_hypercall_args, r11);
+ 	OFFSET(TDX_HYPERCALL_r12, tdx_hypercall_args, r12);
+ 	OFFSET(TDX_HYPERCALL_r13, tdx_hypercall_args, r13);
+ 	OFFSET(TDX_HYPERCALL_r14, tdx_hypercall_args, r14);
+ 	OFFSET(TDX_HYPERCALL_r15, tdx_hypercall_args, r15);
++	OFFSET(TDX_HYPERCALL_rdi, tdx_hypercall_args, rdi);
++	OFFSET(TDX_HYPERCALL_rsi, tdx_hypercall_args, rsi);
++	OFFSET(TDX_HYPERCALL_rbx, tdx_hypercall_args, rbx);
++	OFFSET(TDX_HYPERCALL_rdx, tdx_hypercall_args, rdx);
+ 
+ 	BLANK();
+ 	OFFSET(BP_scratch, boot_params, scratch);
 -- 
 2.38.2
 
