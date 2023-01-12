@@ -2,81 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244E46669FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A716669FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235894AbjALELo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 23:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S236554AbjALEMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 23:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236216AbjALELi (ORCPT
+        with ESMTP id S236145AbjALEL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 23:11:38 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0782841023
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:11:36 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id j17so26657632lfr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:11:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pvn/baf5QiCOBloPlwpObevrgyxqdmuAeWZ6cxEzeUI=;
-        b=M+S9wnnUVoR4QwB8fDZwUMQQ31XVdLMaDf8LcQ42T2D+6FGNTwTWXWjwkyQm0K452R
-         takbokr+8wiO42RpB9jOjVdaDNHMdheNGWRBzhHrTPLpc8geFDOUYThW7zPS/3JVF00z
-         IS7c07b3i7DTRl4DzoOVfmoig+9fTE1rloVG8v8Yjf7Q70xLgbCd0lc7ki3BYxWzTyzv
-         ydcZ9m+9fR0u+bjsxBm3ZzPzPSDZPNbF0tbJYivN/mPmJSnuYTk+rRPRS9wx7cdzu3hy
-         g9yDDEZ+rwKr9DCKkTlIGtnfJ4fOYNhv/4ERdFOIzFqHnJq/gXsJR1WF7sG9IuMIoWFd
-         E43w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pvn/baf5QiCOBloPlwpObevrgyxqdmuAeWZ6cxEzeUI=;
-        b=68MGkl/27N21LTUpwpzmKGuaLR1+w/RnXdcW04Kt/ZwiO+WHHGr7Fb+gpIlyF7vNfh
-         E+SeqWzJQ95oy9TWzSCuoYmmJSItc+rfhI//T8xGINRimfm9UI98bVQt2h1dH2IZOLQe
-         Z4z3khWo3DQ4IExK+HerALr8OAe1GjQLamRBZWy7B7IE3vkixBB4rdHb2MlOTa0RBgus
-         1p1e0tiGSsY4lEwqTbLTqYi38YCc+QgF6wZ4Z1MS1lPvoVf2n20mDMHGBXx5o/tMpu6b
-         7mrHlSArTV41ISpkXYfR3h/jtHkR7VLRXDDP/gyzl7aq/+mn4BEAQ25M4p7afbwo6+jH
-         5Brg==
-X-Gm-Message-State: AFqh2kr0eYgQeL1KzkSOpIDv1YaWC4Txmesm4zcHJb4sXzcCeUd/Xr8K
-        f+0DzpidyBkUzyqXYF9xgizwaQ==
-X-Google-Smtp-Source: AMrXdXs4CM1VLfdisNIajwoqeNbjJTs2ijY/q0iQY3SOzYyNzRLEtcVXtT00orXleLuKy6BLRMjnrQ==
-X-Received: by 2002:a05:6512:2308:b0:4b5:6b87:a5ce with SMTP id o8-20020a056512230800b004b56b87a5cemr24075465lfu.46.1673496694382;
-        Wed, 11 Jan 2023 20:11:34 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id g5-20020a19ac05000000b0049465afdd38sm3046457lfc.108.2023.01.11.20.11.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 20:11:33 -0800 (PST)
-Message-ID: <a1d3be86-d986-6f36-1f17-ab91e7b609c8@linaro.org>
-Date:   Thu, 12 Jan 2023 06:11:33 +0200
+        Wed, 11 Jan 2023 23:11:56 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9F14C700;
+        Wed, 11 Jan 2023 20:11:48 -0800 (PST)
+X-UUID: 390dd42a922f11eda06fc9ecc4dadd91-20230112
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=lcuCv0HZr2C2o7pqLKbqyavho3YBaOUbCp1tDuk6hkQ=;
+        b=WsOsV5GNRMbtsJF2LAjH5ENvo35ny8qiCQ92EmtphxCkg0Xp6pkgbZN2S/s4aJ4NQZkDXBJu5P1/YCPic2IiH5MlCbATJmunDQW6lLu7fsJCAp9WKfUDAZViLfTBFeCLa8ltdJtrnxWhouTQrboV8lEOSJZrVT6UwNX1DtMU0Xs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:b1178831-d4f6-4b39-8466-bcc79f54fc5f,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.17,REQID:b1178831-d4f6-4b39-8466-bcc79f54fc5f,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:543e81c,CLOUDID:0f8295f5-ff42-4fb0-b929-626456a83c14,B
+        ulkID:230112121144INYVB5PY,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0
+X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:0,Malicious:0
+X-CID-BVR: 0
+X-UUID: 390dd42a922f11eda06fc9ecc4dadd91-20230112
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 735739956; Thu, 12 Jan 2023 12:11:43 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 12 Jan 2023 12:11:42 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 12 Jan 2023 12:11:41 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v3,0/7] media: mediatek: vcodec: Fix power_VideoCall test fail
+Date:   Thu, 12 Jan 2023 12:11:33 +0800
+Message-ID: <20230112041140.833-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v6 4/6] ARM: dts: qcom: fix various wrong definition for
- kpss-gcc node
-Content-Language: en-GB
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20230110183259.19142-1-ansuelsmth@gmail.com>
- <20230110183259.19142-5-ansuelsmth@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230110183259.19142-5-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,112 +82,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2023 20:32, Christian Marangi wrote:
-> Fix dtbs_check warning now that we have a correct kpss-gcc yaml
-> schema. Add additional qcom,kpss-gcc compatible to differentiate
-> devices where kpss-gcc should provide a clk and where kpss-gcc should
-> just provide the registers and the syscon phandle.
-> Add missing #clock-cells and remove useless clock-output-names for
-> ipq806x.
-> Add missing bindings for msm8960 and apq8064 kpss-gcc node.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->   arch/arm/boot/dts/qcom-apq8064.dtsi | 5 ++++-
->   arch/arm/boot/dts/qcom-ipq8064.dtsi | 4 ++--
->   arch/arm/boot/dts/qcom-mdm9615.dtsi | 2 +-
->   arch/arm/boot/dts/qcom-msm8660.dtsi | 2 +-
->   arch/arm/boot/dts/qcom-msm8960.dtsi | 5 ++++-
->   5 files changed, 12 insertions(+), 6 deletions(-)
+Random getting below error message when test power_VideoCall/control.49_vp9:
+pc : __list_del_entry_valid+0xb0/0xfc
+lr : __list_del_entry_valid+0xac/0xfc
 
-Please split this commit into two commits:
-- one adding per-SoC compatibles. Mention that they are not (yet) used 
-by the driver, but can serve further customisation.
+The lat_buf in core list won't be deleted when one instance decode done.
+Will access invalid released lat_buf list when queue work continue to decode.
+Firstly, remove all unused lat_buf to the top of core list, making sure
+these buffers can be decoded in highest priority; lastly, remove all unused
+lat_buf when the instance is freed.
 
-- another one adding and fixing clock configuration. My notes to patch 
-5/6 applies here too.
+patch 1 add params to record lat and core lat_buf count.
+patch 2 using each instance lat_buf count replace core ready list.
+patch 3 move lat_buf to the top of core list.
+patch 4 add core decode done event.
+patch 5 remove unused lat_buf.
+patch 6 making sure queue_work successfully
+patch 7 change lat thread decode error condition
+---
+changed with v2:
+- fix seek fail for patch 3
+changed with v1:
+- remove mutex for atomic for patch 1
+- add patch 6 to make sure queue_work successfully
+- add patch 7 change lat thread decode error condition
+---
+Yunfei Dong (7):
+  media: mediatek: vcodec: add params to record lat and core lat_buf
+    count
+  media: mediatek: vcodec: using each instance lat_buf count replace
+    core ready list
+  media: mediatek: vcodec: move lat_buf to the top of core list
+  media: mediatek: vcodec: add core decode done event
+  media: mediatek: vcodec: remove unused lat_buf
+  media: mediatek: vcodec: making sure queue_work successfully
+  media: mediatek: vcodec: change lat thread decode error condition
 
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
-> index 1f3e0aa9ab0c..1e68b42acb91 100644
-> --- a/arch/arm/boot/dts/qcom-apq8064.dtsi
-> +++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
-> @@ -880,8 +880,11 @@ mmcc: clock-controller@4000000 {
->   		};
->   
->   		l2cc: clock-controller@2011000 {
-> -			compatible = "qcom,kpss-gcc", "syscon";
-> +			compatible = "qcom,kpss-gcc-apq8064", "qcom,kpss-gcc", "syscon";
->   			reg = <0x2011000 0x1000>;
-> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
-> +			clock-names = "pll8_vote", "pxo";
-> +			#clock-cells = <0>;
->   		};
->   
->   		rpm: rpm@108000 {
-> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> index 7e784b0995da..de87fcaaa836 100644
-> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> @@ -570,11 +570,11 @@ IRQ_TYPE_EDGE_RISING)>,
->   		};
->   
->   		l2cc: clock-controller@2011000 {
-> -			compatible = "qcom,kpss-gcc", "syscon";
-> +			compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc", "syscon";
->   			reg = <0x02011000 0x1000>;
->   			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
->   			clock-names = "pll8_vote", "pxo";
-> -			clock-output-names = "acpu_l2_aux";
-> +			#clock-cells = <0>;
->   		};
->   
->   		acc0: clock-controller@2088000 {
-> diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-> index b0fe1d95d88f..61dfec3b9037 100644
-> --- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
-> +++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-> @@ -116,7 +116,7 @@ lcc: clock-controller@28000000 {
->   		};
->   
->   		l2cc: clock-controller@2011000 {
-> -			compatible = "qcom,kpss-gcc", "syscon";
-> +			compatible = "qcom,kpss-gcc-mdm9615", "qcom,kpss-gcc", "syscon";
->   			reg = <0x02011000 0x1000>;
->   		};
->   
-> diff --git a/arch/arm/boot/dts/qcom-msm8660.dtsi b/arch/arm/boot/dts/qcom-msm8660.dtsi
-> index 86f76d0feff4..f601b40ebcf4 100644
-> --- a/arch/arm/boot/dts/qcom-msm8660.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8660.dtsi
-> @@ -473,7 +473,7 @@ pm8058_led133: led@133 {
->   		};
->   
->   		l2cc: clock-controller@2082000 {
-> -			compatible = "qcom,kpss-gcc", "syscon";
-> +			compatible = "qcom,kpss-gcc-msm8660", "qcom,kpss-gcc", "syscon";
->   			reg = <0x02082000 0x1000>;
->   		};
->   
-> diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
-> index 7debf9db7cb1..3bd07cac315b 100644
-> --- a/arch/arm/boot/dts/qcom-msm8960.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
-> @@ -183,8 +183,11 @@ clock-controller@4000000 {
->   		};
->   
->   		l2cc: clock-controller@2011000 {
-> -			compatible = "qcom,kpss-gcc", "syscon";
-> +			compatible = "qcom,kpss-gcc-msm8960", "qcom,kpss-gcc", "syscon";
->   			reg = <0x2011000 0x1000>;
-> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
-> +			clock-names = "pll8_vote", "pxo";
-> +			#clock-cells = <0>;
->   		};
->   
->   		rpm: rpm@108000 {
+ .../vcodec/mtk_vcodec_dec_stateless.c         |  6 +-
+ .../vcodec/vdec/vdec_h264_req_multi_if.c      |  2 +-
+ .../vcodec/vdec/vdec_vp9_req_lat_if.c         |  2 +-
+ .../platform/mediatek/vcodec/vdec_msg_queue.c | 95 ++++++++++++++++---
+ .../platform/mediatek/vcodec/vdec_msg_queue.h | 12 +++
+ 5 files changed, 100 insertions(+), 17 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.18.0
 
