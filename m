@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D95666C41
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18515666C43
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237663AbjALISL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 03:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
+        id S239827AbjALISb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 03:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239628AbjALIRx (ORCPT
+        with ESMTP id S239535AbjALIRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 03:17:53 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB1436319
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:17:36 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Nsy6j12wLz16MkP;
-        Thu, 12 Jan 2023 16:15:57 +0800 (CST)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA4C3591A
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:17:35 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nsy315qzgzqV8x;
+        Thu, 12 Jan 2023 16:12:45 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 12 Jan 2023 16:17:32 +0800
+ 15.1.2375.34; Thu, 12 Jan 2023 16:17:33 +0800
 From:   Kefeng Wang <wangkefeng.wang@huawei.com>
 To:     <akpm@linux-foundation.org>, <willy@infradead.org>,
         <linux-mm@kvack.org>
 CC:     <linux-kernel@vger.kernel.org>,
         Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH -next 3/7] mm: memory: convert do_cow_fault to use folios
-Date:   Thu, 12 Jan 2023 16:30:02 +0800
-Message-ID: <20230112083006.163393-4-wangkefeng.wang@huawei.com>
+Subject: [PATCH -next 4/7] mm: memory: convert page_copy_prealloc() to use a folio
+Date:   Thu, 12 Jan 2023 16:30:03 +0800
+Message-ID: <20230112083006.163393-5-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230112083006.163393-1-wangkefeng.wang@huawei.com>
 References: <20230112083006.163393-1-wangkefeng.wang@huawei.com>
@@ -48,71 +48,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The page functions are converted to corresponding folio functions in
-do_cow_fault().
+The page functions are converted to corresponding to folio functions
+in page_copy_prealloc().
 
 Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- mm/memory.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ mm/memory.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/mm/memory.c b/mm/memory.c
-index 1cfdb0fd8d79..f29bca499e0d 100644
+index f29bca499e0d..b66c425b4d7c 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
-@@ -4507,22 +4507,24 @@ static vm_fault_t do_read_fault(struct vm_fault *vmf)
- static vm_fault_t do_cow_fault(struct vm_fault *vmf)
+@@ -958,19 +958,19 @@ static inline struct page *
+ page_copy_prealloc(struct mm_struct *src_mm, struct vm_area_struct *vma,
+ 		   unsigned long addr)
  {
- 	struct vm_area_struct *vma = vmf->vma;
-+	struct folio *cow_folio, *folio;
- 	vm_fault_t ret;
+-	struct page *new_page;
++	struct folio *new_folio;
  
- 	if (unlikely(anon_vma_prepare(vma)))
- 		return VM_FAULT_OOM;
+-	new_page = alloc_page_vma(GFP_HIGHUSER_MOVABLE, vma, addr);
+-	if (!new_page)
++	new_folio = vma_alloc_folio(GFP_HIGHUSER_MOVABLE, 0, vma, addr, false);
++	if (!new_folio)
+ 		return NULL;
  
--	vmf->cow_page = alloc_page_vma(GFP_HIGHUSER_MOVABLE, vma, vmf->address);
--	if (!vmf->cow_page)
-+	cow_folio = vma_alloc_folio(GFP_HIGHUSER_MOVABLE, 0, vma, vmf->address,
-+				    false);
-+	if (!cow_folio)
- 		return VM_FAULT_OOM;
- 
--	if (mem_cgroup_charge(page_folio(vmf->cow_page), vma->vm_mm,
--				GFP_KERNEL)) {
--		put_page(vmf->cow_page);
-+	if (mem_cgroup_charge(cow_folio, vma->vm_mm, GFP_KERNEL)) {
-+		folio_put(cow_folio);
- 		return VM_FAULT_OOM;
+-	if (mem_cgroup_charge(page_folio(new_page), src_mm, GFP_KERNEL)) {
+-		put_page(new_page);
++	if (mem_cgroup_charge(new_folio, src_mm, GFP_KERNEL)) {
++		folio_put(new_folio);
+ 		return NULL;
  	}
--	cgroup_throttle_swaprate(vmf->cow_page, GFP_KERNEL);
-+	folio_throttle_swaprate(cow_folio, GFP_KERNEL);
+-	cgroup_throttle_swaprate(new_page, GFP_KERNEL);
++	folio_throttle_swaprate(new_folio, GFP_KERNEL);
  
-+	vmf->cow_page = &cow_folio->page;
- 	ret = __do_fault(vmf);
- 	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY)))
- 		goto uncharge_out;
-@@ -4530,16 +4532,17 @@ static vm_fault_t do_cow_fault(struct vm_fault *vmf)
- 		return ret;
- 
- 	copy_user_highpage(vmf->cow_page, vmf->page, vmf->address, vma);
--	__SetPageUptodate(vmf->cow_page);
-+	__folio_mark_uptodate(cow_folio);
- 
- 	ret |= finish_fault(vmf);
--	unlock_page(vmf->page);
--	put_page(vmf->page);
-+	folio = page_folio(vmf->page);
-+	folio_unlock(folio);
-+	folio_put(folio);
- 	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY)))
- 		goto uncharge_out;
- 	return ret;
- uncharge_out:
--	put_page(vmf->cow_page);
-+	folio_put(cow_folio);
- 	return ret;
+-	return new_page;
++	return &new_folio->page;
  }
  
+ static int
 -- 
 2.35.3
 
