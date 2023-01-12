@@ -2,64 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FEAB666AE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 06:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB47666AE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 06:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236805AbjALFcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 00:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S236805AbjALFku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 00:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjALFco (ORCPT
+        with ESMTP id S236387AbjALFks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 00:32:44 -0500
+        Thu, 12 Jan 2023 00:40:48 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F3B1B9F9;
-        Wed, 11 Jan 2023 21:32:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6204D709
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 21:40:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A972261F69;
-        Thu, 12 Jan 2023 05:32:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C9F9C43392;
-        Thu, 12 Jan 2023 05:32:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1F1961F6B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE481C433EF;
+        Thu, 12 Jan 2023 05:40:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673501562;
-        bh=qCsLq3Gwfs2hFBNeQ4DQLdXWHTbkhZv7LAbRhhLeMbo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nX+zL4aM18oi3+MFVqnmFJLrPk5GuX57Fz+7L+/q2rotOT0Jt2+0K8V9DEdKljjAH
-         /ZqVrLaJANiko11hSmwWSdEbPH8nTe9uCPdDvwb8+nr3yC9fMq+t7CeXefzuO3ZDlw
-         loE8cdycXnhOSXBcve5BTuwKRRo94qNGOGSCxKkgS915zBssWNy8K5RPL8kUtMp7ZI
-         fAKImse67IcjMnhhVRnNcEUrHqNUm4x/LHVE++F5ZwGKumuTcHlJl+EvnLGrfJcnlp
-         7kiVOVkhX/Ed8zMfnh1uWnERaCdx/BXe4RTzAR9she1piVKHES4ADw6RIpRevy7YhQ
-         3QeZ4FgthPTgQ==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-142b72a728fso17820963fac.9;
-        Wed, 11 Jan 2023 21:32:42 -0800 (PST)
-X-Gm-Message-State: AFqh2kpGm2H6GqKcRN28hc0EQJ8ICxqZeohpLruPzMNgVj887gtLPLGm
-        kSlYKkhoJOwBuH3G0ksBdLlLog8AcM3Zfcz7vzE=
-X-Google-Smtp-Source: AMrXdXvMYsQlRfQmsM5yLj5gL55H1a42aLVk7psPfzHi9/X9tv8YeMLsx1ZTVcH0glclCT5vN0v1xms57X24VqdBGzM=
-X-Received: by 2002:a05:6870:514c:b0:150:7e4a:2f00 with SMTP id
- z12-20020a056870514c00b001507e4a2f00mr2614641oak.194.1673501561332; Wed, 11
- Jan 2023 21:32:41 -0800 (PST)
+        s=k20201202; t=1673502047;
+        bh=myBiU/3Fer12uUSduojm5vdjd3qpc1yR2KR1rOH5oCQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cfa6IT8A5au3jCqZjqcBjCcTvOOoprV5qNIFBmlF0PKBSSBi099drsUZJJ6t96E+c
+         M/vRjdSveACDNXq+dQK8LxoyOO53jr5QEJ80xGprAh9PrQVdF4zTytLzIiTyg4Furv
+         237V515uXiVLZuvilikaI5rJ+QuDQRDzdaCv5o2DRlCQKtRz9P/YGgtkETYOJeSM1k
+         vha8WKGEjhhbte+ICpUho3nvy2kIzsyR83tt3y4k5HevkP7UFoodIoYTnLesGdJfxh
+         EliBYmIO3Auc/zToXyFzsP06IzDZPCvAqjc3jNcDsqAfAGN9HwByV3kjZvgSn+59hQ
+         qBJpBXU9eJzzA==
+Date:   Wed, 11 Jan 2023 21:40:45 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org
+Cc:     Alexander Potapenko <glider@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86: suppress KMSAN reports in arch_within_stack_frames()
+Message-ID: <Y7+dXStDx9G0h2JE@sol.localdomain>
+References: <20221118172305.3321253-1-glider@google.com>
+ <Y4bs2hoG3MANYgF7@sol.localdomain>
 MIME-Version: 1.0
-References: <20230109204520.539080-1-ojeda@kernel.org> <20230109204520.539080-5-ojeda@kernel.org>
-In-Reply-To: <20230109204520.539080-5-ojeda@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 12 Jan 2023 14:32:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQj_WykFWcrj=L3wJYxDhOCGs+JHPB4E2vzWcx8y_at0w@mail.gmail.com>
-Message-ID: <CAK7LNAQj_WykFWcrj=L3wJYxDhOCGs+JHPB4E2vzWcx8y_at0w@mail.gmail.com>
-Subject: Re: [PATCH 5/6] kbuild: rust_is_available: fix confusion when a
- version appears in the path
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4bs2hoG3MANYgF7@sol.localdomain>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,85 +55,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 5:46 AM Miguel Ojeda <ojeda@kernel.org> wrote:
->
-> `bindgen`'s output for `libclang`'s version check contains paths, which
-> in turn may contain strings that look like version numbers [1]:
->
->     .../6.1.0-dev/.../rust_is_available_bindgen_libclang.h:2:9: warning: clang version 11.1.0  [-W#pragma-messages], err: false
->
-> which the script will pick up as the version instead of the latter.
->
-> It is also the case that versions may appear after the actual version
-> (e.g. distribution's version text), which was the reason behind `head` [2]:
->
->     .../rust-is-available-bindgen-libclang.h:2:9: warning: clang version 13.0.0 (Fedora 13.0.0-3.fc35) [-W#pragma-messages], err: false
->
-> Thus instead ask for a match after the `clang version` string.
->
-> Reported-by: Jordan (@jordanisaacs)
-> Link: https://github.com/Rust-for-Linux/linux/issues/942 [1]
-> Link: https://github.com/Rust-for-Linux/linux/pull/789 [2]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  scripts/rust_is_available.sh | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
-> index 0c082a248f15..a86659410e48 100755
-> --- a/scripts/rust_is_available.sh
-> +++ b/scripts/rust_is_available.sh
-> @@ -141,9 +141,7 @@ fi
->  # of the `libclang` found by the Rust bindings generator is suitable.
->  bindgen_libclang_version=$( \
->         echo "$bindgen_libclang_output" \
-> -               | grep -F 'clang version ' \
-> -               | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
-> -               | head -n 1 \
-> +               | sed -nE 's:.*clang version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
->  )
->  bindgen_libclang_min_version=$($min_tool_version llvm)
->  bindgen_libclang_cversion=$(get_canonical_version $bindgen_libclang_version)
-> --
-> 2.39.0
->
+On Tue, Nov 29, 2022 at 09:40:45PM -0800, Eric Biggers wrote:
+> On Fri, Nov 18, 2022 at 06:23:05PM +0100, Alexander Potapenko wrote:
+> > arch_within_stack_frames() performs stack walking and may confuse
+> > KMSAN by stepping on stale shadow values. To prevent false positive
+> > reports, disable KMSAN checks in this function.
+> > 
+> > This fixes KMSAN's interoperability with CONFIG_HARDENED_USERCOPY.
+> > 
+> > Link: https://github.com/google/kmsan/issues/89
+> > Link: https://lore.kernel.org/lkml/Y3b9AAEKp2Vr3e6O@sol.localdomain/
+> > Cc: Eric Biggers <ebiggers@kernel.org>
+> > Signed-off-by: Alexander Potapenko <glider@google.com>
+> > ---
+> >  arch/x86/include/asm/thread_info.h | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> 
+> Tested-by: Eric Biggers <ebiggers@google.com>
+> 
 
+Can this patch be applied to the x86 tree, please?
 
-
-You do not need to fork sed.
-
-
-
-
-diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
-index 1f478d7e0f77..ebe427e27379 100755
---- a/scripts/rust_is_available.sh
-+++ b/scripts/rust_is_available.sh
-@@ -137,14 +137,9 @@ fi
-
- # `bindgen` returned successfully, thus use the output to check that
-the version
- # of the `libclang` found by the Rust bindings generator is suitable.
--bindgen_libclang_version=$( \
--       echo "$bindgen_libclang_output" \
--               | grep -F 'clang version ' \
--               | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
--               | head -n 1 \
--)
-+set -- ${bindgen_libclang_output#**clang version}
-+bindgen_libclang_cversion=$(get_canonical_version $1)
- bindgen_libclang_min_version=$($min_tool_version llvm)
--bindgen_libclang_cversion=$(get_canonical_version $bindgen_libclang_version)
- bindgen_libclang_min_cversion=$(get_canonical_version
-$bindgen_libclang_min_version)
- if [ "$bindgen_libclang_cversion" -lt "$bindgen_libclang_min_cversion" ]; then
-        echo >&2 "***"
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+- Eric
