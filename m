@@ -2,250 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64731666CAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB105666CB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239766AbjALIkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 03:40:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
+        id S236361AbjALIn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 03:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239710AbjALIjP (ORCPT
+        with ESMTP id S239691AbjALInT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 03:39:15 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2104.outbound.protection.outlook.com [40.107.243.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA00811147;
-        Thu, 12 Jan 2023 00:38:37 -0800 (PST)
+        Thu, 12 Jan 2023 03:43:19 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84FCBD4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:41:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673512863; x=1705048863;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=rDfHyvMpKcGjj1qUq+mBzw5eDxcvJDQoDRZei7RNKXI=;
+  b=VjNwkoTbHrVTiE9zUetJOqiOPYBomyFdXpSlSXZgHDjcT4GKtAh9xuP9
+   JTXHEx44M2RSZHxBT/23Da7GQgJWKLDb4P0sBy3wIAJRZ5lK7AYrOkxR9
+   BDbh//52ukj2GI1Ua8jBakyPB0j/1bLCM7NyDuR08NbMMysUc3nLmboDJ
+   Fv4Xi4IPIFm/mzf/cfZIT/AnfRfU/4IFVxiJhGJG+N6gt93twdBav9VS9
+   p1XzlKyZu8OOelT877cmz9RE4JtOYsxNidPJy/gv6cPB/zclVr87gpG+1
+   fgd/tMnpcHsnqX7ZnSV0FK0fYzc1GcEM7IZkhCAtqvGAgojY1IbXD1Ps7
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350874196"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="350874196"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 00:40:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="986453397"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="986453397"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Jan 2023 00:40:57 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 12 Jan 2023 00:40:56 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 12 Jan 2023 00:40:56 -0800
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.43) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 12 Jan 2023 00:40:55 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n2bAQpLVC+gPFxtrqcs9Q+avjE5YDH4PnIKX2SNh7mR0uzDq9VuX3+JS3J+QwOVS1OC1LAwa0ENQm5uz2N+b12irXAUb9Qx4CufG+17SiifCxwhJE28abHJexZap1jav4SJp6Ha87d8c0ngrfdwtLLeR9S/GBHcTJ0LMDKbENfyOcL/+7qPZRCeGg38y9YvzIvoncCLm8EnCgp6KbN02c28Efd1fbIECE0R4i20roeXNcY+wPFbfztJAcVsTTddithAw1BaXb9J7rdX9Ir8hMklcQAp++bXVtDrd6iUeP/4u5q7XRdAZhOHFO2RRpxny9ZK4y7rO1LjlbdwpPSGyMg==
+ b=Ys/Lls/txR/RAIumwpsmrLmc9qLdLIgnmTcHPpAhSeXu5QTrWOx8oyI/eRUXiGZ8FYnZx4OZF8IkFmUPjKP05YKQhDCDOri3Fhr7oAdrFzCsOdu/t50zk9Vb4xwM0fQuJCpiyS80wl4MwiXvCAZ7bIVWm/Sk8XLr6Fypp/bYkVNMf1anfyR+jMDsiOU0C+dEImgD4VBmTQrftOazLBX+x28+MnI7Pummz/7rEK5/BK8eXuDvV7FF98TtU1d+s3O+SKOkwxQ50aD3Q/m0oqV4sxt2sV4b9mjXzML+AzgecB2ylZTwo1DHUK2Mk8k9g5WLrXsQ+1L58kBH30YdapV8vg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lTfe3dSgUiQj2z0KuatLpEi2/7/4j3RDM/JZ1jmXVv0=;
- b=OnK2SMJ8MRnrSRhMWFLhEUUVByUygmAsozEUtDwEvH6fuWDTBLO3NN9vqae5fhDP8JuW+ucAPDVLqcTgHcTYktWARuykQucLC5FSFU2zLmFhZOD4bgCrhFMpZWIMr4uXFiXQskWc4XpBmytWc4Om6l/vqG6Mlgu7ulzxUb7Bhvlin7C9/hfsovVjHOkfC35PffUz4XsRvCfrSJcaNwF91Nv5JA0SfT+wadnDyr07MngGLD+JLODICKbYvviopR5hEO9L+pg/akhpVYhZ2qs0IwXY8uRtOewU/zQoM51iTJTEnaERobuy8W48pRueYBkWWsPIjoLUVZE64LnOjk80vQ==
+ bh=/3LByAiYpgQYkri/SWwJ/uFSaPuubhEcnyNREt9cRuo=;
+ b=SSRgNYcwUFEbAM72dxPq/crTqcyDqVKE0AW2tV1B1c9TLLnmod846yiTRA4jvQ9VrgZPlHq2bxB+1USyGq+qIqzGveDVdsECNGoNyF28h/74+NEB6Wd85aWWLn1/KBNjcnsKz88XH4jRnarj8/rm2uG3NMh6n3WQIrBkcWMVI1a2v611plqdgV+hD8bqSrEQZhDVBemEI7JK4J46x7EBvpJBoQFRJ22aQSsQEp1y5ujIc30TMq+IadvcvsRYwcO2vDH6rPhjaKTYx4YqCnAl0XYhJ0me2iQImE/WbrROo5TA26mpn6HM91Ra7Q89YP91cwoYxYkm+vCbjmjaagMYbQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lTfe3dSgUiQj2z0KuatLpEi2/7/4j3RDM/JZ1jmXVv0=;
- b=L3jo97ird2Bj7X2s9TgBX1B7xWSm3ouEj9E8ztI2Q0xK+TFDlu0nJE7e/gpzEr0GG8JiPZ06ARdUpWkLoSTZ9U+5hHXsse5+B2yQSmCVFHAsiVFBB4t8WKJXsaPcoQCi0tLa4Gk9lVs5uUbfNilzAfYGXNIBKN1cKuH+H5aDYFc=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from SN6PR01MB4973.prod.exchangelabs.com (2603:10b6:805:c4::13) by
- DM6PR01MB4460.prod.exchangelabs.com (2603:10b6:5:7a::26) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5986.18; Thu, 12 Jan 2023 08:38:35 +0000
-Received: from SN6PR01MB4973.prod.exchangelabs.com
- ([fe80::1e67:38ac:ed37:be1c]) by SN6PR01MB4973.prod.exchangelabs.com
- ([fe80::1e67:38ac:ed37:be1c%3]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 08:38:35 +0000
-Message-ID: <4d63de84-f398-3bee-cf04-5cf9020b1cfd@amperemail.onmicrosoft.com>
-Date:   Thu, 12 Jan 2023 15:38:23 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [EXT] [PATCH v3] USB: gadget: Add ID numbers to configfs-gadget
- driver names
-Content-Language: en-US
-To:     Frank Li <frank.li@nxp.com>,
-        Chanh Nguyen <chanh@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Rondreis <linhaoguo86@gmail.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Open Source Submission <patches@amperecomputing.com>
-References: <20230111065105.29205-1-chanh@os.amperecomputing.com>
- <HE1PR0401MB2331CC8AE82C4DD96A1D398E88FC9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-From:   Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
-In-Reply-To: <HE1PR0401MB2331CC8AE82C4DD96A1D398E88FC9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SGBP274CA0009.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::21)
- To SN6PR01MB4973.prod.exchangelabs.com (2603:10b6:805:c4::13)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+ by CY8PR11MB7825.namprd11.prod.outlook.com (2603:10b6:930:71::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Thu, 12 Jan
+ 2023 08:40:53 +0000
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::11d0:8d26:91be:68b2]) by MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::11d0:8d26:91be:68b2%4]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
+ 08:40:53 +0000
+Date:   Thu, 12 Jan 2023 16:40:36 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Yuanhan Zhang <zyhtheonly@gmail.com>
+CC:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <pmladek@suse.com>,
+        <zyhtheonly@yeah.net>, <zwp10758@gmail.com>,
+        <tiozhang@didiglobal.com>
+Subject: Re: [PATCH] sched: print parent comm in sched_show_task()
+Message-ID: <Y7/HhF2OQQc70Dfv@chenyu5-mobl1>
+References: <20221227161400.GA7646@didi-ThinkCentre-M930t-N000>
+ <Y60WrwuM43HcNVC7@chenyu5-mobl1>
+ <CAEQmJ=gcCx1hMf7HicE5OFeUstipdtr=3JkF1JxLuP-CrG++Pw@mail.gmail.com>
+ <Y7fvOz9jZPndTDqp@chenyu5-mobl1>
+ <CAEQmJ=gZJL6K1yUPq0hHy5D7Rc6g=5Ri72V_kE=xfqR6gJedWg@mail.gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAEQmJ=gZJL6K1yUPq0hHy5D7Rc6g=5Ri72V_kE=xfqR6gJedWg@mail.gmail.com>
+X-ClientProxiedBy: SI2PR01CA0030.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::15) To MN0PR11MB6206.namprd11.prod.outlook.com
+ (2603:10b6:208:3c6::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR01MB4973:EE_|DM6PR01MB4460:EE_
-X-MS-Office365-Filtering-Correlation-Id: 93178fad-4b5a-41cc-53b8-08daf4786482
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|CY8PR11MB7825:EE_
+X-MS-Office365-Filtering-Correlation-Id: 936a51ac-62e5-45b4-8065-08daf478b6bb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SaVM+pg1/mCASwd+zuOK6hYGXglGZzwst4G03f7zMObOyb5a/qXby580dUzfW8pQJoi8b6nP+T0grWQ15PXbIGx6itGhLmdO74bVei1t9NzTo+fbhoNfwrEutCToTbPoO6hxRyqaOgeFccovP9VN2ROUD8iCs27svCZGzfVqQ9L5zbMSOExhNpjrvrRijzKFqH9m/ZdAgjfG02D34tLOVfO1lZrvxr/cZ+90niPzEs/IVmx48IZaiehXNKOp0xhAYE5ToEFdWh8/A/ZwZscvf0eE+b4c/MbtmwT1u74cd88j2mDlZ/fdCVDuRkCxtbytyYC7F0Emt2u6UfG4o3a6NRxb4Dyvnfr0JcNK58vsplzrnDUIjK/IFFBpnz6lj1hHDZvKnQMh2yIzLeAVk+rKJmz9WTuCM2PRvk66nGdutfAnooGS4Izsa4ndWeAl2z8jfgdn3I8+YGvwfSqjz6Oypt4Yl6DJHuZBV1Pk5H5jUy7GTAbGu5PRHaEsyzkPD1Ww6tuz8fPdSKtiDjyfzaUnuF6bY2QOzD70rq1IJEpGBuXhRJis7mvIrS1mEJJztFLrpfuusN1iKyn2Emf1dYXaSCxH4vbAmavrIV04v7t2ccPzqtznPP/pfSBvFJuDClCRGRyOjn0CVQDcR3DH7yb3K4/RYJH7VvzA+W3++dK+HKSvRNfqLF5JWMj00X8L6XPBsEiQw7FIlul/mCnzEMpbvvbNl7liJeAQ9wlnqblh4x8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR01MB4973.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39850400004)(396003)(366004)(136003)(376002)(451199015)(83170400001)(38100700002)(478600001)(921005)(31696002)(6486002)(186003)(26005)(6666004)(53546011)(6506007)(6512007)(41300700001)(42882007)(66556008)(5660300002)(7416002)(66946007)(66476007)(8676002)(8936002)(83380400001)(110136005)(2616005)(316002)(31686004)(2906002)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: ZtfNXqVVLglvhZvf3F/Gn7E6e+UOM4tJiVoh6eTKsR9c0gTjFMN+McazYTGIc3uJcG+P1iorOrSWEyZAyKIjQEAhPB/KfFZ0OPQHrxmbjASb8ORbll1bi0NTy5WcUmcoB7OX8G5USLgzW8oY0LzwQGsOKfZlfsWM9/Khuhnoy2w72TIyoCSlKJFFf6Jqq2wJL2d/AN3Vo3z7U695vz6LliJRCthPSVIEsd9xDsOj/b9BMNVd9phn5uXBuh7LbNmumgQlMPin8L3hTsrPyJfQtrlvDtd2pNV3M+fxp8EAJtIg7GgfhqDHOsFE8N4gLLQhIqF0IO5Gt59k0d0mPOn0EpZgpCbv0xwmUbcbwA+hdLJ6urVohclNrl+7LrepzZuB7UMuOqSIdU+NOtS+xU+yfGTn4GPycDVoMFb3YvpRw6HUGWRhnZRIlMgIYIoAqio3wccZTuR4IBQAyK+p0Ub97M//B3MjJ1h1v7lopmgaef9A8Zbhaqjo3HWizSr1IafSFtbp37tUuF80Si2B+iwGOZmwkyFbkc99GscZSUNy3hk045gWoZGGV7GghObluVP5jNKNmP4K665YtBp3fYNNQSE5xyCCZ+TQH2KXktezG4n1YQWUFJl4FQMm3trRD+oH+u8WDIreHIVIxFurKQGGFg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(366004)(396003)(346002)(376002)(39860400002)(451199015)(9686003)(6512007)(186003)(478600001)(26005)(53546011)(66556008)(66946007)(66476007)(316002)(6666004)(6506007)(8676002)(6916009)(4326008)(6486002)(38100700002)(8936002)(7416002)(5660300002)(41300700001)(83380400001)(4744005)(86362001)(82960400001)(2906002)(33716001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVlrWGdHRUg3cjdYTWNSL1JkS2tLRFlSOEVmTXBRS08zd0UybVY3alREeHVU?=
- =?utf-8?B?ZEpmQ2NheEJycGMvZ3IvZ3djUXVTODd6dVByN0djVmZ6MFRXL1lDUVlHRDhC?=
- =?utf-8?B?R0sxdzFScTZadXY5eGpnMU5WcDZGU0xxRmVITW9MVlR2aGRUTWFEK3QxL2ZG?=
- =?utf-8?B?cU5tbDJjOTBTcnZtUEpLOUtvNkJjN2Nndy9ncEZJK21nNWgxU0t6TDZPQjhL?=
- =?utf-8?B?MUVXNEcyTGV1MllqNVNJbExYS3ZQY0NDQ2Y5bWVCVytJZHFrUlZUUDZzbklI?=
- =?utf-8?B?bG9oN3RPQXFDRldMNXNwNTVmTUFvVGpYS3R4V3dxd2VkTk5wbW5GOFFISEZq?=
- =?utf-8?B?cGp5RkFzZjk5MWZzTThWWVMyQlNYN3k4TmduKzM5Vi81VUJWaGYxczFVb2RZ?=
- =?utf-8?B?dnNrd1cyem5YQnMrKzdkb3ZTUCs2M0VzNWxremVIb2FwRzlPN1diOGtXTU0w?=
- =?utf-8?B?TG53VzlmOGRxOXY4RkxUYS9hMk1nWTUyTGpwWElHb1ZNRVY1VHhHYnlzL2c2?=
- =?utf-8?B?UCtZc0pZNUorTmJtR3FtNkg4elEwWkFCUmZKZGlIVmRadXJkeUt3S0VPOXRl?=
- =?utf-8?B?TnpTNVZCOFp1WE1BblJ1V1dVSHlXSkE3ckVmQ1pON25qUFlnNzF0NHhrZ0tk?=
- =?utf-8?B?VmRhd2V3K1NTZ0Rnbjh2b3JmUjFsbFlGbG92emNwQk1xLzN1YjFGYk5lUFZH?=
- =?utf-8?B?MEpGb1NtVUVPV2ZsUU1vQk5ZazYrODBXaXdKMGNrOEpSVVp0bzl4c2RNOGJa?=
- =?utf-8?B?QkZueXVlQ1h3OW5XNnNOTmE3VGFIZ01PMStSYmg2N2pKUHFSZnpzTHEvVS9a?=
- =?utf-8?B?eXVMdU1RMXN5dHV0UmlxUWx3Y2g0S1UyOUFxa2tKY1lIZG1OSlZHZVlCek9B?=
- =?utf-8?B?Um8yNTkvSG1tZ0RNNS81NENlcWptdHlsdGR6czArMXhKd213SmNSWU5jbndJ?=
- =?utf-8?B?RC96b2FRY3FuWUswUFFwK2JtaUNrcU9NdDJXUDBiUUQ0OEFGOHpmemxmQVgv?=
- =?utf-8?B?TnZ5TUJqOVdwQ2VzdG5uZ01raERHcjM0VjNtS3dHb2tpREFMVzRHM3VTZFpC?=
- =?utf-8?B?dGQvRmg0ZUFkamUydFI1UnhSbytXK0JvdnlDazE0cUx5ZkkvRmlKQW94dzgy?=
- =?utf-8?B?WEtDWFFKRGxsdnNiZFpLZ3NJYWRnL2dDVjVQbU1zejVNejJPVloxUm42Smw5?=
- =?utf-8?B?eHQwOHdWdDUxUHRZOElqZ3B5SnBPYWl5eVdjd1hyZTFyK0ZWQk56cDZmeElw?=
- =?utf-8?B?SzNHcEg1NS9RS1U5SzJqaDBUL2Qrbmt0ZXVkdDdmVjk1MFBValE4Rmo3TndG?=
- =?utf-8?B?QWNTbUtBS3BYVWRaL2hCeFU2YkdveFN1TnBWY01mMEpJNXdmNUh6cUZDZG5D?=
- =?utf-8?B?ZHErcitVclN4WTlsLzRVdlRvbERDY0Rzbko3a095djFFY1V6dU1qYkh1QzdS?=
- =?utf-8?B?TUNveDhQSDFtVHA1S1YrSUYzb0NBbjV3YTdWa2krSzl4eHFhL0d0QzhZaGFJ?=
- =?utf-8?B?NkxRYVNxQ21aRHoxM2UxYzFlMk9lUzE0amZnSzBsOW9WdFZCbmpOTU9NdVo3?=
- =?utf-8?B?eFVTZ1loUHV5Z2RqRjFDZ09DTHprZnl0bGo3UUJ1a2VPT25iU2h6UGRYYkhw?=
- =?utf-8?B?Rmx3ZmVPWElpcFI1UCtjZnVYbk1BUDQ1b2RnUkpBdjhBRjJtdnBJVURKa2xU?=
- =?utf-8?B?Vm1jQnRVY2c1WHcvQVlvK1RmVEs4STV1WHN3TUxxcElQVzQzcFFTaW9BLzFZ?=
- =?utf-8?B?V29hb1VpYnp5bmszNlE0VEo1dXd2Y29ldXI3cTVDWjVLam1mTk96V0dvQmpa?=
- =?utf-8?B?OTJyVzcwL01reXQrenVZNWUveEhPaUQ3c3FtUE1pK0NoWWQ5YjVnQUhYQVpj?=
- =?utf-8?B?NS9nRFhHZ2lCOC91alo4blYwTjV0ckRGR3FaTjRPeCsweVJsUDA2TkFrVGhN?=
- =?utf-8?B?RlRtN2NkeGpvejJkSlU5bG1OL3p0c0xXci91bGNmbXkxb2hOUHlURHRGVkFE?=
- =?utf-8?B?bCtuVUFQKzJ4ckF1WnZ0QzFNZkFmTWs5VTJId25TVy9teEx6YUlrajU1Nm42?=
- =?utf-8?B?WnFNbitFcVo4SDAzUExGeWdQc0w0Lys0SHdkZm5rTmg0aTNNTW41M1F5NWVL?=
- =?utf-8?B?OUJnODF2eVRXVkk1YSs0eFBFRDA2aHNpZUY5Um51eDlDYTdodDhzd2VBQmFR?=
- =?utf-8?Q?ilv3TJWbb1n2fF86s9+G2tU=3D?=
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93178fad-4b5a-41cc-53b8-08daf4786482
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR01MB4973.prod.exchangelabs.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CD6hwVJY9nRUpsotkcXneKBLv+rgOljkRY9VHm7aqQSKO/19y0NJ24AZIfMM?=
+ =?us-ascii?Q?jVMrs7IhHHCJLrxUuHmf/+qiCzqrtnrdDHJeyfXSHFK+8mmcyXZwKlMNzKAz?=
+ =?us-ascii?Q?2KM94/vKKtXgwZnOlERhjhuEKU6p0cYZp+EFIaHGyyPKNTuUyYFiUsymzjpL?=
+ =?us-ascii?Q?65DUidQbyjn/xLFmxh9X3NOsE5ftXFFv9N6wFAvBXu0nirgs/s5abYo7Tn4p?=
+ =?us-ascii?Q?TwJleYqniR7/Aydw7lpaUQ50lG+AYqXGdSOzVGJ64zaRDYjtsXk83wOhWLNg?=
+ =?us-ascii?Q?kPTKvWRX5MVfq841MTM7oIyGefgceCzV5rhGKY8i4BP5wMpGVSEOOK8qQiik?=
+ =?us-ascii?Q?HtN7SUvHR/o1eO6Q92K+f1m5NJg2Xwg+je9SeR97tv+uRfyJUT/3ux/Dlnnp?=
+ =?us-ascii?Q?FYi0t9YEW/VmqGsaLurBI/voSQscDfRlIq4uj3l9h8e+YrGG/61BXitJdUR7?=
+ =?us-ascii?Q?jhdiYYwHvq2TdmlIAnffh7vsqjg2bhAyhoYo4WEyAFQfkYNlo9ImAvYfuY7S?=
+ =?us-ascii?Q?1Pqffyl0p2bnWdGlGba+mCBXjG4LM8qaZXBfvqLZxAXoRe7YVkPFbnw7vj2H?=
+ =?us-ascii?Q?3Ln0ddRS5AvMSm5kpw6G7C2kVZEgAgpnH+Yb3gTojEv3ir+FvfbveO7dQF/e?=
+ =?us-ascii?Q?RLLNIqMIPJh/uW50iuNA4mwIOuQPb3moiVkrKWQs7sK/mzRLzfr7Zo0Fs5bN?=
+ =?us-ascii?Q?/PUoL61QwOVBvbq4SXE6awL2CGqIFCMA5eEgetIlyFM3vV78oD3f9+VyUPMB?=
+ =?us-ascii?Q?ItUfCfNgMOFVaVtTQ++ZYZuYPBqyCVviMFELlFBC183CM+Vvw3HxQlho7ieO?=
+ =?us-ascii?Q?podSqJMgXP5NxCcamb6cRGWrcKaULvprbKtfNzxmgkF2SkYLGoi8K7kz9+I3?=
+ =?us-ascii?Q?W0wJH64MuruKSjFYJDHxJxYfXHIlI3D9LSEXqi7hi6+fm0YvaFPcRIozj1hQ?=
+ =?us-ascii?Q?OLQOjZ6bl63IbD3jJnaqPjnXwjO+qzMSW++EjciN3MdSMAMafKVHRHF+/Eg0?=
+ =?us-ascii?Q?kdYM8hObtF2loU7CfhM3iubnsR2WHlrEhznNK10pztfXdxfw+kDObJnq35S2?=
+ =?us-ascii?Q?awUHy3vPIMYvTW3GFGUJsm8PTZgl2tKihu2cM2MS88d0Ltxktyxyhi2CaNf8?=
+ =?us-ascii?Q?ttAnztcH5ClJB8j2rB3lRWx45EacBVYGzQPF+UcIUyP2uELJEu24UhVkooBI?=
+ =?us-ascii?Q?ZMqfoX/gP5PNj5rs5oKVK2k5dmMhxXWT23iZ6dYNenLolU6rfUy9CKfygXCL?=
+ =?us-ascii?Q?eNMpQOU3Qshjr2gTLuNYU3Ymr3LnPJ165J9k0F8HzRymLD0uoqQzSnkSwCeP?=
+ =?us-ascii?Q?IjjN5qauqqcoOMdQR/p4b4w4aL0y3Gunl6dNc+MEDxod8aj1cUXA5pCKggNc?=
+ =?us-ascii?Q?o9Aw5EURZLmJsiJdqP2UchPGVGqAFcG7l9Zg702IzudIlddlBrFRt6uvK4mW?=
+ =?us-ascii?Q?2jvDsRQkqCbGgihDnimKm1nEyJtX1MpJghsePmsMGklo9AVIneu44IfvoNpA?=
+ =?us-ascii?Q?5A9STt0DiOlVzPtdlcwxpxbU2YjuybRNrzRjcy+IV6xafJvtmLTCqC/PybFb?=
+ =?us-ascii?Q?g1GDfuIg70UsGuiIgQLsOadW8Ww+pDHBw1mMQA85?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 936a51ac-62e5-45b4-8065-08daf478b6bb
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 08:38:34.9143
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 08:40:52.9714
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0Bk4Za0xTY9x23mO47xBHxPhVFQKWG6nbUo7kd/vQFvNfy+uNaleIsSgxEEwNnr5QRxZeZ6MMb7aYERwaZi9gHWp9n8Ng14JYRJPOHvm4gP5lH5By1r0J5TNOiM8mvem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB4460
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: to6Qo3WUQiYj4DMSADRrEct5/DtPPT0ZeE0ni8vCg0Fs9bEE0F3fC5bOyWUo9slO0pTGN99C6fGFyJwAozh5qA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7825
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+On 2023-01-10 at 17:35:34 +0800, Yuanhan Zhang wrote:
+> Hi Petr and Chen,
+> Thanks for your emails! Petr's suggestions sure make a lot of sense.
+> Please review the following implementation, it would print a new line like:
+>  " parent:kthreadd        ppid:2 "
+>  after the origin line.
+> 
+> ---
+> 
+>  kernel/sched/core.c | 15 ++++++++-------
+> 
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> 
+> index cb2aa2b54c7a..86ee90404ddb 100644
+> 
+> --- a/kernel/sched/core.c
+> 
+> +++ b/kernel/sched/core.c
+> 
+> @@ -8853,7 +8853,7 @@ SYSCALL_DEFINE2(sched_rr_get_interval_time32, pid_t,
+> pid,
+> 
+>  void sched_show_task(struct task_struct *p)
+> 
+>  {
+> 
+>   unsigned long free = 0;
+> 
+> - int ppid;
+> 
+> + struct task_struct *parent;
+> 
+Above line could be moved inside: if (pid_alive(p)).
+And the format of this patch seems to be broken, please resend after fixing the issues
+reported by scripts/checkpatch.pl
 
-
-On 11/01/2023 22:16, Frank Li wrote:
-> 
-> 
->> -----Original Message-----
->> From: Chanh Nguyen <chanh@os.amperecomputing.com>
->> Sent: Wednesday, January 11, 2023 12:51 AM
->> To: OpenBMC Maillist <openbmc@lists.ozlabs.org>; Greg Kroah-Hartman
->> <gregkh@linuxfoundation.org>; Frank Li <frank.li@nxp.com>; Christophe
->> JAILLET <christophe.jaillet@wanadoo.fr>; Dan Vacura
->> <w36195@motorola.com>; Jakob Koschel <jakobkoschel@gmail.com>; Alan
->> Stern <stern@rowland.harvard.edu>; Vijayavardhan Vennapusa
->> <vvreddy@codeaurora.org>; Rondreis <linhaoguo86@gmail.com>; Andrzej
->> Pietrasiewicz <andrzej.p@collabora.com>; Heikki Krogerus
->> <heikki.krogerus@linux.intel.com>; linux-usb@vger.kernel.org; linux-
->> kernel@vger.kernel.org; Open Source Submission
->> <patches@amperecomputing.com>
->> Cc: Chanh Nguyen <chanh@os.amperecomputing.com>
->> Subject: [EXT] [PATCH v3] USB: gadget: Add ID numbers to configfs-gadget
->> driver names
->>
->> Caution: EXT Email
->>
->> It is unable to use configfs to attach more than one gadget. When
->> attaching the second gadget, it always fails and the kernel message
->> prints out:
->>
->> Error: Driver 'configfs-gadget' is already registered, aborting...
->> UDC core: g1: driver registration failed: -16
->>
->> This commit fixes the problem by using the gadget name as a suffix
->> to each configfs_gadget's driver name, thus making the names
->> distinct.
->>
->> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
->> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
-> 
-> Reviewed-by: Frank Li <frank.li@nxp.com>
-> 
-
-Thanks Frank!
-
->>
->> ---
->> Changes in v3:
->>    - Use the gadget name as a unique suffix instead     [Andrzej]
->>    - Remove the driver.name allocation by template        [Chanh]
->>    - Update commit message                                [Chanh]
->>
->> Changes in v2:
->>    - Replace scnprintf() by kasprintf() to simplify the code [CJ]
->>    - Move the clean up code from gadgets_drop() to
->>      gadget_info_attr_release()                        [Frank Li]
->>    - Correct the resource free up in gadges_make()   [Alan Stern]
->>    - Remove the unnecessary variable in gadgets_make()    [Chanh]
->>    - Fixes minor grammar issue in commit message          [Chanh]
->> ---
->>   drivers/usb/gadget/configfs.c | 12 ++++++++++--
->>   1 file changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
->> index 96121d1c8df4..0853536cbf2e 100644
->> --- a/drivers/usb/gadget/configfs.c
->> +++ b/drivers/usb/gadget/configfs.c
->> @@ -393,6 +393,7 @@ static void gadget_info_attr_release(struct
->> config_item *item)
->>          WARN_ON(!list_empty(&gi->string_list));
->>          WARN_ON(!list_empty(&gi->available_func));
->>          kfree(gi->composite.gadget_driver.function);
->> +       kfree(gi->composite.gadget_driver.driver.name);
->>          kfree(gi);
->>   }
->>
->> @@ -1572,7 +1573,6 @@ static const struct usb_gadget_driver
->> configfs_driver_template = {
->>          .max_speed      = USB_SPEED_SUPER_PLUS,
->>          .driver = {
->>                  .owner          = THIS_MODULE,
->> -               .name           = "configfs-gadget",
->>          },
->>          .match_existing_only = 1,
->>   };
->> @@ -1623,13 +1623,21 @@ static struct config_group *gadgets_make(
->>
->>          gi->composite.gadget_driver = configfs_driver_template;
->>
->> +       gi->composite.gadget_driver.driver.name = kasprintf(GFP_KERNEL,
->> +                                                           "configfs-gadget.%s", name);
->> +       if (!gi->composite.gadget_driver.driver.name)
->> +               goto err;
->> +
->>          gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->>          gi->composite.name = gi->composite.gadget_driver.function;
->>
->>          if (!gi->composite.gadget_driver.function)
->> -               goto err;
->> +               goto out_free_driver_name;
->>
->>          return &gi->group;
->> +
->> +out_free_driver_name:
->> +       kfree(gi->composite.gadget_driver.driver.name);
->>   err:
->>          kfree(gi);
->>          return ERR_PTR(-ENOMEM);
->> --
->> 2.17.1
-> 
+thanks,
+Chenyu
