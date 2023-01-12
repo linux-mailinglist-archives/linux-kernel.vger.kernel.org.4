@@ -2,215 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13896671DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ADA26671E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjALMQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 07:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
+        id S235484AbjALMQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 07:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjALMPv (ORCPT
+        with ESMTP id S232622AbjALMQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 07:15:51 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CF511A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 04:15:50 -0800 (PST)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 426553F26A;
-        Thu, 12 Jan 2023 12:15:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673525749; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J/EiKam3sZue+l+klqKh2zvhcKpCKWR8ZcRcUwtxsFE=;
-        b=JlN9l9zJTdDM+1y2gEtmls7UuqwrV4sCuKswMEeMLRro3SnNjOVuqXHEDlUxjIGCAoVHyA
-        AmMaquy8RH2XhA0seaEx3nh2UN/11F0MX3mvFiu9mLvMIcqMazrARtIxzqXfXq59c0c3Ti
-        axEcmenhO95/7mfmhKvgGZDGvpUGPIE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673525749;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J/EiKam3sZue+l+klqKh2zvhcKpCKWR8ZcRcUwtxsFE=;
-        b=mrvVASDrcxD1F/F7FPE2jhtOGlxSUwAlfdbW1MEtEXmW6ok+dYyXKz18BawdDujcPRsIgo
-        zLkDgJ9eKH9EarBw==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 241E4136AE;
-        Thu, 12 Jan 2023 12:15:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id ygfQB/X5v2MFWQAAGKfGzw
-        (envelope-from <tzimmermann@suse.de>); Thu, 12 Jan 2023 12:15:49 +0000
-Message-ID: <c4f8ffde-2226-cc1f-a5a8-d7462b92cb24@suse.de>
-Date:   Thu, 12 Jan 2023 13:15:48 +0100
+        Thu, 12 Jan 2023 07:16:14 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEB8FDF26
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 04:16:07 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C6541063;
+        Thu, 12 Jan 2023 04:16:49 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.43.206])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 09C7D3F67D;
+        Thu, 12 Jan 2023 04:16:04 -0800 (PST)
+Date:   Thu, 12 Jan 2023 12:16:02 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     guoren@kernel.org
+Cc:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
+        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
+        jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
+        e.shatokhin@yadro.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next V7 1/7] riscv: ftrace: Fixup panic by disabling
+ preemption
+Message-ID: <Y7/6AtX5X0+5qF6Y@FVFF77S0Q05N>
+References: <20230112090603.1295340-1-guoren@kernel.org>
+ <20230112090603.1295340-2-guoren@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 02/11] drm/gma500: Use
- drm_aperture_remove_conflicting_pci_framebuffers
-Content-Language: en-US
-To:     DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>
-References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
- <20230111154112.90575-2-daniel.vetter@ffwll.ch>
- <bad82927-1c58-4c2a-c265-571e10d1f67d@suse.de>
- <Y7/Z5dvADG6AspV3@phenom.ffwll.local>
- <8a154783-b433-c9b8-bfe5-286dde1258e9@suse.de>
- <Y7/kw+JdGCHJdptI@phenom.ffwll.local>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <Y7/kw+JdGCHJdptI@phenom.ffwll.local>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------ypSpHYAck0gxNmzFnbMJOqYF"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112090603.1295340-2-guoren@kernel.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------ypSpHYAck0gxNmzFnbMJOqYF
-Content-Type: multipart/mixed; boundary="------------pBFFBLeS18imoopHCeEattG0";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: DRI Development <dri-devel@lists.freedesktop.org>,
- Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
- LKML <linux-kernel@vger.kernel.org>, Daniel Vetter <daniel.vetter@intel.com>
-Message-ID: <c4f8ffde-2226-cc1f-a5a8-d7462b92cb24@suse.de>
-Subject: Re: [PATCH 02/11] drm/gma500: Use
- drm_aperture_remove_conflicting_pci_framebuffers
-References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
- <20230111154112.90575-2-daniel.vetter@ffwll.ch>
- <bad82927-1c58-4c2a-c265-571e10d1f67d@suse.de>
- <Y7/Z5dvADG6AspV3@phenom.ffwll.local>
- <8a154783-b433-c9b8-bfe5-286dde1258e9@suse.de>
- <Y7/kw+JdGCHJdptI@phenom.ffwll.local>
-In-Reply-To: <Y7/kw+JdGCHJdptI@phenom.ffwll.local>
+Hi Guo,
 
---------------pBFFBLeS18imoopHCeEattG0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Thu, Jan 12, 2023 at 04:05:57AM -0500, guoren@kernel.org wrote:
+> From: Andy Chiu <andy.chiu@sifive.com>
+> 
+> In RISCV, we must use an AUIPC + JALR pair to encode an immediate,
+> forming a jump that jumps to an address over 4K. This may cause errors
+> if we want to enable kernel preemption and remove dependency from
+> patching code with stop_machine(). For example, if a task was switched
+> out on auipc. And, if we changed the ftrace function before it was
+> switched back, then it would jump to an address that has updated 11:0
+> bits mixing with previous XLEN:12 part.
+> 
+> p: patched area performed by dynamic ftrace
+> ftrace_prologue:
+> p|      REG_S   ra, -SZREG(sp)
+> p|      auipc   ra, 0x? ------------> preempted
+> 					...
+> 				change ftrace function
+> 					...
+> p|      jalr    -?(ra) <------------- switched back
+> p|      REG_L   ra, -SZREG(sp)
+> func:
+> 	xxx
+> 	ret
 
-SGkNCg0KQW0gMTIuMDEuMjMgdW0gMTE6NDUgc2NocmllYiBEYW5pZWwgVmV0dGVyOg0KPiBP
-biBUaHUsIEphbiAxMiwgMjAyMyBhdCAxMToyNDoxM0FNICswMTAwLCBUaG9tYXMgWmltbWVy
-bWFubiB3cm90ZToNCj4+IEhpDQo+Pg0KPj4gQW0gMTIuMDEuMjMgdW0gMTA6NTkgc2Nocmll
-YiBEYW5pZWwgVmV0dGVyOg0KPj4+IE9uIFRodSwgSmFuIDEyLCAyMDIzIGF0IDEwOjA0OjQ4
-QU0gKzAxMDAsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4+PiBIaQ0KPj4+Pg0KPj4+
-PiBBbSAxMS4wMS4yMyB1bSAxNjo0MSBzY2hyaWViIERhbmllbCBWZXR0ZXI6DQo+Pj4+PiBU
-aGlzIG9uZSBudWtlcyBhbGwgZnJhbWVidWZmZXJzLCB3aGljaCBpcyBhIGJpdCBtdWNoLiBJ
-biByZWFsaXR5DQo+Pj4+PiBnbWE1MDAgaXMgaWdwdSBhbmQgbmV2ZXIgc2hpcHBlZCB3aXRo
-IGFueXRoaW5nIGRpc2NyZXRlLCBzbyB0aGVyZSBzaG91bGQNCj4+Pj4+IG5vdCBiZSBhbnkg
-ZGlmZmVyZW5jZS4NCj4+Pj4+DQo+Pj4+PiBTaWduZWQtb2ZmLWJ5OiBEYW5pZWwgVmV0dGVy
-IDxkYW5pZWwudmV0dGVyQGludGVsLmNvbT4NCj4+Pj4+IC0tLQ0KPj4+Pj4gICAgIGRyaXZl
-cnMvZ3B1L2RybS9nbWE1MDAvcHNiX2Rydi5jIHwgMiArLQ0KPj4+Pj4gICAgIDEgZmlsZSBj
-aGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPj4+Pj4NCj4+Pj4+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZ21hNTAwL3BzYl9kcnYuYyBiL2RyaXZlcnMv
-Z3B1L2RybS9nbWE1MDAvcHNiX2Rydi5jDQo+Pj4+PiBpbmRleCBjZDljNzNmNWE2NGEuLjli
-MGRhZjkwZGM1MCAxMDA2NDQNCj4+Pj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9nbWE1MDAv
-cHNiX2Rydi5jDQo+Pj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZ21hNTAwL3BzYl9kcnYu
-Yw0KPj4+Pj4gQEAgLTQyOSw3ICs0MjksNyBAQCBzdGF0aWMgaW50IHBzYl9wY2lfcHJvYmUo
-c3RydWN0IHBjaV9kZXYgKnBkZXYsIGNvbnN0IHN0cnVjdCBwY2lfZGV2aWNlX2lkICplbnQp
-DQo+Pj4+PiAgICAgCSAqIFRPRE86IFJlZmFjdG9yIHBzYl9kcml2ZXJfbG9hZCgpIHRvIG1h
-cCB2ZGNfcmVnIGVhcmxpZXIuIFRoZW4gd2UNCj4+Pj4+ICAgICAJICogICAgICAgbWlnaHQg
-YmUgYWJsZSB0byByZWFkIHRoZSBmcmFtZWJ1ZmZlciByYW5nZSBmcm9tIHRoZSBkZXZpY2Uu
-DQo+Pj4+PiAgICAgCSAqLw0KPj4+Pj4gLQlyZXQgPSBkcm1fYXBlcnR1cmVfcmVtb3ZlX2Zy
-YW1lYnVmZmVycyh0cnVlLCAmZHJpdmVyKTsNCj4+Pj4+ICsJcmV0ID0gZHJtX2FwZXJ0dXJl
-X3JlbW92ZV9jb25mbGljdGluZ19wY2lfZnJhbWVidWZmZXJzKHBkZXYsICZkcml2ZXIpOw0K
-Pj4+Pg0KPj4+PiBUaGlzIGRvZXMgbm90IHdvcmsuIFRoZSBjb21tZW50IGp1c3QgYWJvdmUg
-dGhlIGNoYW5nZWQgbGluZSBleHBsYWlucyB3aHkuDQo+Pj4+IFRoZSBkZXZpY2UgdXNlcyBz
-aGFyZWQgbWVtb3J5IHNpbWlsYXIgdG8gb3RoZXIgaW50ZWdyYXRlZCBJbnRlbCBjaGlwcy4g
-VGhlDQo+Pj4+IGNvbnNvbGUgaXMgc29tZXdoZXJlIGluIGEgMTYgTWlCIHJhbmdlLCB3aGlj
-aCBoYXMgYmVlbiBzdG9sZW4gYnkgdGhlIEJJT1MNCj4+Pj4gZnJvbSBtYWluIG1lbW9yeS4g
-VGhlcmUncyBvbmx5IGEgMSBNaUIgbWVtb3J5IHJhbmdlIG9uIHRoZSBkZXZpY2UgdG8gcHJv
-Z3JhbQ0KPj4+PiB0aGUgZGV2aWNlLiBVbmxlc3MgeW91IHdhbnQgdG8gcmVmYWN0b3IgYXMg
-ZGVzY3JpYmVkLCB0aGlzIGNhbGwgaGFzIHRvIGNvdmVyDQo+Pj4+IHRoZSB3aG9sZSBtZW1v
-cnkgZm9yIG5vdy4NCj4+Pg0KPj4+IFVoLiBTbyBpdCdzIG1heWJlIG5vdCBzbyBwcmV0dHks
-IGJ1dCB3aGF0IGlmIEkganVzdCBjYWxsIGJvdGggZnVuY3Rpb25zPw0KPj4NCj4+IFRoYXQn
-cyB3YXlzIG1vcmUgdWdseSBJTUhPLg0KPj4NCj4+PiBUaGF0IHdheSB3ZSBnZXQgdGhlIHZn
-YSBoYW5kbGluZyB0aHJvdWdoIHRoZSBwY2kgb25lLCBhbmQgdGhlICJtYWtlIHN1cmUNCj4+
-PiB0aGVyZSdzIG5vIGZiIGxlZnQiIHRocm91Z2ggdGhlIG90aGVyIG9uZS4gUGx1cyBjb21t
-ZW50IG9mIGNvdXJzZS4NCj4+Pg0KPj4+IE90aGVyd2lzZSB3ZSdkIG5lZWQgdG8gc29tZWhv
-dyBrZWVwIHRoZSB2Z2Egc3R1ZmYgaW4gdGhlIG5vbi1wY2kgcGF0aHMsDQo+Pj4gYW5kIHRo
-YXQganVzdCBmZWVscyBhbGwga2luZHMgb2Ygd3JvbmcgdG8gbWUuDQo+Pg0KPj4gV2l0aCB5
-b3VyIHBhdGNoIGFwcGxpZWQsIGFwZXJ0dXJlX2RldGFjaF9kZXZpY2VzKCkgZG9lcyBhbGwg
-dGhlIHdvcmsgb2YNCj4+IHJlbW92aW5nLiBJJ2QgYWRkIHRoZSBmb2xsb3dpbmcgaW50ZXJu
-YWwgZnVuY3Rpb25zOg0KPj4NCj4+IHN0YXRpYyB2b2lkIGFwZXJ0dXJlX2RldGFjaF9oZWFk
-KGJvb2wgaXNfcHJpbWFyeSkNCj4+IHsNCj4+IAkvKg0KPj4gCSAqIGxlbmd0aHkgY29tbWVu
-dCBoZXJlDQo+PiAJICovDQo+PiAJaWYgKGlzX3ByaW1hcnkpDQo+PiAJCXN5c2ZiX2Rpc2Fi
-bGUoKQ0KPj4gfQ0KPj4NCj4+IHN0YXRpYyB2b2lkIGFwZXJ0dXJlX2RldGFjaF90YWlsKGJv
-b2wgcmVtb3ZlX3ZnYSkNCj4+IHsNCj4+IAlpZiAocmVtb3ZlX3ZnYSkgew0KPj4gCQlhcGVy
-dHVyZV9kZXRhY2hfZGV2aWNlcyhWR0FfUEhZU18pDQo+PiAJCXZnYV9yZW1vdmVfdmdhY29u
-KCkNCj4+IAl9DQo+PiB9DQo+Pg0KPj4gQW5kIGNhbGwgYm90aCBvZiB0aGVtIGF0IHRoZSBi
-ZWdpbm5pbmcvZW5kIG9mDQo+PiBhcGVydHVyZV9yZW1vdmVfY29uZmxpY3RpbmdfZGV2aWNl
-cygpIGFuZA0KPj4gYXBlcnR1cmVfcmVtb3ZlX2NvbmZsaWN0aW5nX3BjaV9kZXZpY2VzKCku
-DQo+Pg0KPj4gWW91J2Qgc3RpbGwgbmVlZCB0byBwcmltYXJ5IGFyZ3VtZW50IHRvDQo+PiBh
-cGVydHVyZV9yZW1vdmVfY29uZmxpY3RpbmdfZGV2aWNlcygpLCBidXQgdGhlcmUgd2lsbCBi
-ZSBubyBjb2RlIGR1cGxpY2F0aW9uDQo+PiB3aXRoIHRoZSBhcGVydHVyZSBoZWxwZXJzIGFu
-ZCB0aGUgcHVycG9zZSBvZiBlYWNoIGNvZGUgZnJhZ21lbnQgd2lsbCBiZQ0KPj4gY2xlYXJl
-ci4NCj4gDQo+IFllYWggSSBkb24ndCB3YW50IHRoZSBwcmltYXJ5IGFyZ3VtZW50LiBBc2lk
-ZSBmcm9tIHRoaXMgb25lIGNhc2UgaGVyZSBpdCdzDQo+IG5vdCBuZWVkZWQuIEFsc28gYnkg
-cHVzaGluZyB0aGlzIHNwZWNpYWwgY2FzZSBpbnRvIHRoZSBvbmUgZHJpdmVyIHRoYXQNCj4g
-bmVlZHMgaXQgd2Uga2VlcCBpdCBjb250YWluZWQsIGluc3RlYWQgb2Ygc3ByZWFkaW5nIGl0
-IGFsbCBhcm91bmQuDQo+IEluZmxpY3RpbmcgYSBwYXJhbWV0ZXIgb24gZXZlcnkgKGFuZCBp
-biB0b3RhbCB3ZSBoYXZlIGEgbG90IG9mIGNhbGxlcnMgb2YNCj4gdGhpcyBzdHVmZikganVz
-dCBiZWNhdXNlIG9mIGdtYTUwMCBkb2VzIG5vdCBzZWVtIGxpa2UgYSBnb29kIGlkZWEgdG8g
-bWUuDQoNClVuZm9ydHVuYXRlbHksIHZnYWNvbiBhbmQgdmdhYXJiIHJlcXVpcmUgYSBQQ0kg
-ZGV2aWNlLiBJIGRvbid0IGxpa2UgdGhlIA0KcHJvcG9zYWwsIGJ1dCBtYXliZSBpdCdzIHRo
-ZSBiZXN0IGZvciBub3cuIFNvIGdvIGFoZWFkIGlmIHlvdSBsaWtlLiBJIGRvIA0KZXhwZWN0
-IHRoYXQgdGhpcyBuZWVkcyBhZGRpdGlvbmFsIHdvcmsgaW4gZnV0dXJlLCBob3dldmVyLg0K
-DQpKdXN0IHNvbWUgbW9yZSB0aG91Z2h0cy4NCg0KR3JlcCBmb3IgZHJtX2FwZXJ0dXJlX3Jl
-bW92ZV9mcmFtZWJ1ZmZlcnMoKS4gV2l0aGluIERSTSB0aGVyZSBhcmUgcmVhbGx5IA0KanVz
-dCAxMCBkcml2ZXJzIGNhbGxpbmcgdGhpcyBmdW5jdGlvbiAodnMuIDEyIGNhbGxlcnMgb2Yg
-DQpkcm1fYXBlcnR1cmVfcmVtb3ZlX2NvbmZsaWN0aW5nX3BjaV9mcmFtZWJ1ZmZlcnMoKSku
-IEluIGZiZGV2LCB0aGVyZSBhcmUgDQptYW55IGNhbGxlcnMgb2YgdGhlIFBDSSBoZWxwZXIg
-KH40MCkgYW5kIGFwcGFyZW50bHkgb25seSAzIGZvciB0aGUgDQpub24tUENJIG9uZS4gVGhl
-IG90aGVyIGRyaXZlcnMgYXJlIHBhbmVscywgVVNCLCBNSVBJLCBldGMgYW5kIGRvbid0IA0K
-aW50ZXJhY3Qgd2l0aCB0aGUgc3lzdGVtIGZyYW1lYnVmZmVyLiBDb21wYXJlZCB0byB0aGUg
-b3ZlcmFsbCBudW1iZXIgb2YgDQpkcml2ZXJzLCB3ZSBoYXZlIHN1cnByaXNpbmdseSBmZXcg
-J3RyYWRpdGlvbmFsIGdyYXBoaWNzIGNhcmRzJyBpbiBEUk0uDQoNCkFub3RoZXIgdGhpbmcg
-aXMgdGhhdCBnbWE1MDAgYW5kIHRoZSBvdGhlciA5IGRyaXZlcnMgc2ltcGx5IGRvbid0IGJv
-dGhlciANCnRvIGdldCB0aGUgZnJhbWVidWZmZXIgcmFuZ2UuIFRoZXkgc2hvdWxkIGJlIHJl
-d29ya2VkIHRvIGZldGNoIHRoZSANCmNvbmZpZ3VyZWQgZnJhbWVidWZmZXIgZnJvbSB0aGUg
-ZGV2aWNlIGFuZCByZWxlYXNlIHRoYXQgcmVnaW9uIG9ubHkuIFRoZSANCnByYWN0aWNhbCBp
-bXBhY3QgaXMgY2xvc2UgdG8gemVybywgc28gaXQgaGFzbid0IGhhcHBlbmVkLg0KDQpCZXN0
-IHJlZ2FyZHMNClRob21hcw0KDQoNCj4gLURhbmllbA0KDQotLSANClRob21hcyBaaW1tZXJt
-YW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9u
-cyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFu
-eQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBU
-b3Rldg0K
+As mentioned on the last posting, I don't think this is sufficient to fix the
+issue. I've replied with more detail there:
 
---------------pBFFBLeS18imoopHCeEattG0--
+  https://lore.kernel.org/lkml/Y7%2F3hoFjS49yy52W@FVFF77S0Q05N/
 
---------------ypSpHYAck0gxNmzFnbMJOqYF
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Even in a non-preemptible SMP kernel, if one CPU can be in the middle of
+executing the ftrace_prologue while another CPU is patching the
+ftrace_prologue, you have the exact same issue.
 
------BEGIN PGP SIGNATURE-----
+For example, if CPU X is in the prologue fetches the old AUIPC and the new
+JALR (because it races with CPU Y modifying those), CPU X will branch to the
+wrong address. The race window is much smaller in the absence of preemption,
+but it's still there (and will be exacerbated in virtual machines since the
+hypervisor can preempt a vCPU at any time).
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmO/+fQFAwAAAAAACgkQlh/E3EQov+Cx
-DA/8DWDqClAIzHxPPwbbdoOrVUorF9scie7xZ8rmnr12fKRxsz9gFo8Qh9TCERI/xFr7ivsFuuKR
-8giNF0YzSgd9MbSfpoVht5cPeKObBPjpT9nIb2MVue6TkzSf2sT0s4ky9lg0kIxF5RTHkcjSs0K9
-eNArWeQRUUwMfQA4CVjmFpYNwVwPudN/uECOHG7cG3S1i95ww34MluDGYiVP3Zj/uqrZ4dDEKHvL
-vsyEiRZf5Jbcjs+YWyWwR+Wt6n+Vaw5feD5nRC0NJGMhxzh/ZHBlQfwzQ+8VzDz000eGlOkyCYbP
-K7u518QrVzXrUn1JcM9iwyJuZyV4npxtssRTrMJeq4XgcDaxpjH0J/Q8U/HKmZcVBLilZoELunzW
-HNFS9jqf/7oWshpHiWkMgbenBJEdT2WjA20fkJwWipwikJEBshUYoM4kR6e4kYj3UYkCFeSsdthd
-vBYx6NgH34M65v0ZYYP4ipXi36FhwzWgdibn/7M36/HCY1D6aeRiChJ5eLg48gP+IgIPh3y853nL
-CfJjeMH5nR3O0BOLBY7BT56NzgurLK0DHhr963QanQohaRPsmD302DFpmmNDdoe/S/XV5nTLOoJh
-b082VZlIbQAVPKs9dijSJq4CgyDxsVcyINJWZSdB4aDo047TaZrso509nkXAmjR7kuXNdGi349Dc
-h3Q=
-=0XKG
------END PGP SIGNATURE-----
+Note that the above is even assuming that instruction fetches are atomic, which
+I'm not sure is the case; for example arm64 has special CMODX / "Concurrent
+MODification and eXecutuion of instructions" rules which mean only certain
+instructions can be patched atomically.
 
---------------ypSpHYAck0gxNmzFnbMJOqYF--
+Either I'm missing something that provides mutual exclusion between the
+patching and execution of the ftrace_prologue, or this patch is not sufficient.
+
+Thanks,
+Mark.
+
+> Fixes: afc76b8b8011 ("riscv: Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")
+> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/riscv/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index e2b656043abf..ee0d39b26794 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -138,7 +138,7 @@ config RISCV
+>  	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+>  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+>  	select HAVE_FUNCTION_GRAPH_TRACER
+> -	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
+> +	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
+>  
+>  config ARCH_MMAP_RND_BITS_MIN
+>  	default 18 if 64BIT
+> -- 
+> 2.36.1
+> 
