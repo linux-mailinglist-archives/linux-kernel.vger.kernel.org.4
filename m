@@ -2,117 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2835667F7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F1B667F86
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240128AbjALToq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:44:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
+        id S231566AbjALTpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237046AbjALToG (ORCPT
+        with ESMTP id S232571AbjALToh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:44:06 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8684A101F0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 11:35:16 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id bf43so29922414lfb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 11:35:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yAYjynh/JlSA73SJ+NClSDWR2Z+GwEtREPC4s1NxZeM=;
-        b=GHFE1mgKGNMBi88jxaIEXnLBn3cC2pHb7pcv7ZbbS07IdBfH/fjwvLPsOOf4lRc2Ji
-         jROi2YaMBZ+BWsbmsa2ANMyBuL41Uca0hOqE1zJFuGSsF9ZFE7s78WymunKIONPk/Mjs
-         QxRIizM2TyP/lO0Q1RmLmGTakDIsbT5HT4gB8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yAYjynh/JlSA73SJ+NClSDWR2Z+GwEtREPC4s1NxZeM=;
-        b=ym5DitPp4wi56ecT266K1/3BeCTppA0crboX7wqY30asyCIeyBf2viAiqodWM1T4xI
-         Uvp5Th6J5xFLp9RXJM7/9+Ies/KVKJdNaIpctRMcwvDjLne334uuPm1aoYSYNM2vZ3nY
-         6JtkaS7KtlMGJp+t0HMoSREA257nrDWM+JnPMXelRo1VprwnOBGiG2DglbpLyh9Nv2db
-         AeerZM5PYOpOqktj5ynkSG6VP+/EYLQVu+Qgz1xTioa5nmyXSRkVtK6bqbcFK8UrUlk0
-         oszCYfOTo0SRqZRXbbfzOOgGHGHrOjl27Icrt0QDrCtT/6no8Ecc8xgWPRYtD26FkJTd
-         C+6g==
-X-Gm-Message-State: AFqh2kq4GVKrN8SoE2ogOwekUcb1Af9tTlqBe/qzsg7v9DZixJGLgpho
-        DgkHHKABq2jrySwpoK4569N2mmMcq2m6XX9cMOJ0Ng==
-X-Google-Smtp-Source: AMrXdXsiV4/qvAwCS2YzjkQkBI2pWHnV74UvffxWaNqCcnh7r+wpnwzqtGa37hxSn3pp+XeRTd+rObR64w2TTviCRQc=
-X-Received: by 2002:a05:6512:ba1:b0:4b5:5f2d:1458 with SMTP id
- b33-20020a0565120ba100b004b55f2d1458mr3475453lfv.253.1673552114933; Thu, 12
- Jan 2023 11:35:14 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 12 Jan 2023 11:35:14 -0800
+        Thu, 12 Jan 2023 14:44:37 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2052.outbound.protection.outlook.com [40.107.8.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B054321B3;
+        Thu, 12 Jan 2023 11:36:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N17MZumrWOW+PtPgO+iq09mhwe/LxWJveRLu6DS2nztLADJuE2pGY/KfVTuFvsW5hBJzqhJ3a2uWz1o3HALokDR8Zwm+gnPPFUERkYV4zgo7DonNHVMb+iay6K7eFqqYKKvNgByy1gWj5qnrq6hCO4wmZ0HcHC4/MXNdolO9mBqA0D7MFUYP6kxkG5CJNI4ojhuyKb2SQi5KzY0AmKlyBi6EB+gdWf/bjXZ/qGeykC65Dbku/18VNthC9bA0ffpYYqIAngvNvkZJQYzX1+WZnaR/eGLXtRrsHS7CYOESqA72vY+SoT87iX2ujWmtfzNDhOw36/9s1iAOPzdR24onig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iF5Hq1QwjgGRvLo5zqovqtlNmE4N1a1EZdHK6vBNKsU=;
+ b=kg/GmVjWpedKlmF2jl2zE8dqLkRLbhMkWcdFr54YlHNvB7vDFOSUoY0ALT0DKPxKKXniW+kaWQWcp7U05ZHs0bjmb4Rs3xwJMeFj+TaRsCETGaYk/KDHwVQkMyFm2knd/S1jZ46ZZwhl/TFV5Nu8MCSS+ooLMH/rY4pT9UIu16yhZ7yoDG5VDfGNdJ7MhLc7dZMdgKuXHyr79TUzgj/mnJEVMF178zfMFTeUKNZgdN+KTp283uGDvT6R2feUiKzN7h/R02EdRAWyYAQwxMCI+GTaIipwT60kmJ92D9o8UxFvGRviI24i0ddWpqpOthGZQqt1Pz1adkru2poPsOQ3mQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iF5Hq1QwjgGRvLo5zqovqtlNmE4N1a1EZdHK6vBNKsU=;
+ b=c98oOyEeuZFA3e//HSZUILnbwGSQqsO3v+2L1JCZVYvro+Zw30McPwNSGyRXWi6raTrXSnB3rN03gCchLi36OzZPIlMrs7lFVo0krtRl2JSbIEDzFWe2f7RJgdWqmb0w3lzSt1wQAqHaHChXlSZDviWpycsjhC1Im16qt5PddRY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
+ by AM9PR04MB8178.eurprd04.prod.outlook.com (2603:10a6:20b:3e3::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 12 Jan
+ 2023 19:36:42 +0000
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::ca48:3816:f0b6:3fcd]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::ca48:3816:f0b6:3fcd%6]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
+ 19:36:41 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     Minghuan Lian <minghuan.Lian@nxp.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linuxppc-dev@lists.ozlabs.org (open list:PCI DRIVER FOR FREESCALE
+        LAYERSCAPE),
+        linux-pci@vger.kernel.org (open list:PCI DRIVER FOR FREESCALE
+        LAYERSCAPE),
+        linux-arm-kernel@lists.infradead.org (moderated list:PCI DRIVER FOR
+        FREESCALE LAYERSCAPE), linux-kernel@vger.kernel.org (open list)
+Cc:     imx@lists.linux.dev
+Subject: [PATCH 1/1] PCI: layerscape: Set 64-bit DMA mask
+Date:   Thu, 12 Jan 2023 14:36:21 -0500
+Message-Id: <20230112193621.1513505-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR04CA0027.namprd04.prod.outlook.com
+ (2603:10b6:a03:40::40) To HE1PR0401MB2331.eurprd04.prod.outlook.com
+ (2603:10a6:3:24::22)
 MIME-Version: 1.0
-In-Reply-To: <6cea0a3f-08de-47d5-99d1-74b0d8c7b732@quicinc.com>
-References: <1672849297-3116-1-git-send-email-quic_srivasam@quicinc.com>
- <1672849297-3116-5-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n51AZCa9K_uY=ikTLqV-g_MsSA6Lv=Zq1LMrF-wVhR8_pg@mail.gmail.com> <6cea0a3f-08de-47d5-99d1-74b0d8c7b732@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 12 Jan 2023 11:35:14 -0800
-Message-ID: <CAE-0n52ahKMzk0ho5jG1wxebm3ZE+Wfu_BunCaTR1WhN+J5jpw@mail.gmail.com>
-Subject: Re: [RESEND v3 4/4] clk: qcom: lpasscc-sc7280: Add resets for audioreach
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, broonie@kernel.org,
-        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
-        quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
-        robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HE1PR0401MB2331:EE_|AM9PR04MB8178:EE_
+X-MS-Office365-Filtering-Correlation-Id: cf440f79-6de3-4aaa-85f1-08daf4d45487
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uIz/fH5g9ibwnYbidrAoTgdF2WhgwrojJ2fiUMQbfKg52xwoj7BsyYOLbrfJelyTISaPbjTnzf9puVc1r/a5ZyJv1GgaC/GlTG8khl0R/BudbH4aJ7K02Jp9we5GklvWUUJyCSHRbvTh9STheAdd1/qzLE8HKkAO3rHAovTz4ZMz8DcVCoZC7+PXUvSZ8b+WJofNnhpiZzM4D1aIARxPH3w8oG1EcSqSBAfdqRbG7LnRaqqIOF0Co2bJ95R4OnPo5Ag8xxtPZlqqWtdv7RqIjFZJasRH/9F/bRolL5y148MK8moM5drHI1/ccf/ZTHw1XQAQ4YuwDIRNUlOaVh31dkp8K+jClFkO8rtJm2tcd6AdiWtA10SCCQQk5Rpo0jH/qpEs6InAiXKQzVRdYjuQ8EXjj/0Y8GNVuu5YpPLtFpwKsksE2gg5jtex0jqRirwNqpdY6qQcPV9cgL1Mv2KHXy5NfnDRaMk7bNwTowUgUu3eikqXU9xjHlvrSNlT7lDoEYohgMUiz2pR6TLQ+sjxBBLLJ+JZ1cslgYu9GlyQlXcIUeMx5S5BPBdxRzRbDahM57OilGvrPvAiU0nqCh+OeyDTZWVbyQauQcQNXeJ1hhFUiIk7Hl1V8A1o/cig+APlyxGybaR+8lPRYlesCUMKX+AMjyT1gw6MOr6S/HFs96B/oy62royFr/b6ZJ9f1m6Q2zRthqp3ASgDIUHyx9bwn+fJj21JOp2b3XzTHo9IjAI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(39860400002)(136003)(396003)(451199015)(478600001)(6486002)(921005)(41300700001)(6512007)(38100700002)(38350700002)(1076003)(86362001)(316002)(110136005)(2616005)(26005)(66556008)(66946007)(186003)(66476007)(52116002)(4326008)(36756003)(5660300002)(6506007)(2906002)(6666004)(8676002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0UA//skogdyZVwk1HpTDGR+Gh6ti9LxcnuVrUCAJSNHdKNiivArbJqXilIai?=
+ =?us-ascii?Q?isYayVYTRgRsEbqNf/GdtSrK2bjg5yD8sFHGCjEpGDogi3N7p25eGcIF3ELG?=
+ =?us-ascii?Q?mOq3WkARWQLgldkE3yjtQfpiMH9XjPfUjbj6GQ+6OYQ0kwfMam5gxIboOrWz?=
+ =?us-ascii?Q?ipuJ5/EfDy+icGKUG9iD/p2RqPpQWKcTwEkbzUH9bh8rlMdGYKqEeQ9dA9fH?=
+ =?us-ascii?Q?QnItWd7Q9KSgeeydBYmoVnGiI26gfgZdt6AyAEOpTiWwC6iGB9tN4sPFOLFZ?=
+ =?us-ascii?Q?6mTD0HAmyy0yblwbq2VJT3ZFCT55ST1NGyUwNOgU8rvww6CVxV8+NrmUpcev?=
+ =?us-ascii?Q?1hKd0VsQ+WoGY9ijjWCEPrUtQkNw4eexeYhCFYFw/MS/y0EElatrW1L2E5Wf?=
+ =?us-ascii?Q?6KWJ6WQ/h1G4z1LTs3+UnPuwmQbD4JzyZzZjqYdpvdkjxGv4UcEIsonrIrVF?=
+ =?us-ascii?Q?q6XpIT+26716nwpDjM9B3lXT2mKP/G4y3458s963JAxaIIzi0R6YJ2pYUFxB?=
+ =?us-ascii?Q?PkPeSlviE4JuU3qXuJYs/I1rJoaQkgN+weVEtLHaGz8QgYrWKdPzC4pw3LYy?=
+ =?us-ascii?Q?L/B5JiYGGLACWKBMjCN6oKdOFxnJWH3CMPLcR2kRcY3Vgo7nncb5eqt6Ixs3?=
+ =?us-ascii?Q?p0UwWu30QZ4Q4aqpfNZM6tsz+0GJwr89IOXV1SLcWBF7x8cViamEVItEGrG/?=
+ =?us-ascii?Q?kSvMgFm3BeVB4RNQVn1ntVH2cl5se9+QzUTHGhBBZxgQli+TxOnKQGVtWbTE?=
+ =?us-ascii?Q?8LSu+19RAgQC8cig8i1ke5zyV7+rEqUqCox18Gsjn/1x+9aqx6E6fLbCq+B2?=
+ =?us-ascii?Q?/ZSdjm1jjaBNqET8Ha+zAvqMIu5U/Z98wYYOJV1YrTuqbMGtqjhY1hZDGh1J?=
+ =?us-ascii?Q?Si239TvHILbX8LZPjceUX8k2Hu4jGaQzY9SO2bZRu3v14jpD6zL7xqfJd8bj?=
+ =?us-ascii?Q?JZmFhu6rDg2z+INnpu9OehHN31WSyqlNJJou1aDdYaybdHg0UboLHZElAKz8?=
+ =?us-ascii?Q?4MApPp71zTbG03nknCSZImUoRJ3vr+CQvRjSo/ZB2eOt+J6EqZyZgKsdgpm4?=
+ =?us-ascii?Q?R1vX4NlD6BYBBI+Za75HEo5eYRoR0ULsedAYUrNAPoPBKbvyLYn1GFxy0tfv?=
+ =?us-ascii?Q?kn3wA7pytYoGnFm04uN/56GgAQqoVnYPF4edMkS6qbOxlF4T9E/4KKGBGOta?=
+ =?us-ascii?Q?ZJ8AoIyXxnteeZSwp8Xu531CXgVPiSP3cibLtJtlxNgLA5rkk4vV7jRPom6I?=
+ =?us-ascii?Q?irKguYZtZOwK/qP5vHpjGOVVxb48j9LhmiI91kFiI273K23Imegud3pmbpsk?=
+ =?us-ascii?Q?EKENLgiqi67pLafTEHoKq1nKA+bobH8ss3TWAB7PmTCHmw2LMqQ4CqO+5IGh?=
+ =?us-ascii?Q?8bOTjMfhmmUyXEN1lNXmaxatC6WO3nMppSGlnozM20mbedBtDFFTmW7ZV9bs?=
+ =?us-ascii?Q?jTJD5gkxCCWUpgo0bcTQS5yPCYMsYVMDLErIc/lY/kg0FdfhTLJEhhgQ6+Bm?=
+ =?us-ascii?Q?zRpXWpR505HpQe33KUko3xXOoKpURL9su2LgQi8peJHwVAw+0eHTNvKsbsUo?=
+ =?us-ascii?Q?jsT2C3f9Yn50sUGnF1cuEsCZNagc+2J+ZqeKD7Xc?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf440f79-6de3-4aaa-85f1-08daf4d45487
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 19:36:41.8396
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LTEQ83cLxE5XM7f5pRmeXdONwuVegZOcBMMlU9p+4uHGdV+RxXFARWy38xjWdhyK39LL9i46Rb4ku9Ff3/JR+Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8178
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2023-01-11 23:53:23)
->
-> On 1/12/2023 2:54 AM, Stephen Boyd wrote:
-> Thanks for your time Stephen!!!
-> > Quoting Srinivasa Rao Mandadapu (2023-01-04 08:21:37)
-> >> diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc-sc7280.c
-> >> index 85dd5b9..1efb72d 100644
-> >> --- a/drivers/clk/qcom/lpasscc-sc7280.c
-> >> +++ b/drivers/clk/qcom/lpasscc-sc7280.c
-> >> @@ -102,6 +104,18 @@ static const struct qcom_cc_desc lpass_qdsp6ss_sc7280_desc = {
-> >>          .num_clks = ARRAY_SIZE(lpass_qdsp6ss_sc7280_clocks),
-> >>   };
-> >>
-> >> +static const struct qcom_reset_map lpass_cc_sc7280_resets[] = {
-> >> +       [LPASS_AUDIO_SWR_RX_CGCR] =  { 0xa0, 1 },
-> >> +       [LPASS_AUDIO_SWR_TX_CGCR] =  { 0xa8, 1 },
-> >> +       [LPASS_AUDIO_SWR_WSA_CGCR] = { 0xb0, 1 },
-> > Why are we adding these resets again? These are already exposed in
-> > lpassaudiocc-sc7280.c
->
-> As explained in previous versions, legacy path nodes are not being used
-> in ADSP based platforms, due to conflicts.
+From: Guanhua Gao <guanhua.gao@nxp.com>
 
-What is legacy path nodes?
+Set DMA mask and coherent DMA mask to enable 64-bit addressing.
 
->
-> Hence lpasscc node alone being used exclusively in ADSP based solution,
-> resets are added.
+Signed-off-by: Guanhua Gao <guanhua.gao@nxp.com>
+Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+ drivers/pci/controller/dwc/pci-layerscape-ep.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I think I understand..
+diff --git a/drivers/pci/controller/dwc/pci-layerscape-ep.c b/drivers/pci/controller/dwc/pci-layerscape-ep.c
+index 1b884854c18e..c19e7ec58b05 100644
+--- a/drivers/pci/controller/dwc/pci-layerscape-ep.c
++++ b/drivers/pci/controller/dwc/pci-layerscape-ep.c
+@@ -261,6 +261,10 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
+ 	pcie->max_width = (dw_pcie_readw_dbi(pci, PCIE_LINK_CAP) >>
+ 			  MAX_LINK_W_SHIFT) & MAX_LINK_W_MASK;
+ 
++	/* set 64-bit DMA mask and coherent DMA mask */
++	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64)))
++		dev_warn(dev, "Failed to set 64-bit DMA mask.\n");
++
+ 	platform_set_drvdata(pdev, pcie);
+ 
+ 	ret = dw_pcie_ep_init(&pci->ep);
+-- 
+2.34.1
 
->
-> In probe also, these reset controls are enabled based on
-> "qcom,adsp-pil-mode" property.
->
-
-but now I'm super confused! Please help me! We shouldn't have two
-different device nodes for the same physical hardware registers.
-Instead, we should have one node. The "qcom,adsp-pil-mode" property was
-supposed to indicate the different mode of operation.
-
-Maybe the audio clk and reset drivers on sc7280 are duplicating each
-other and one of them can be removed?
