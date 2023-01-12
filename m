@@ -2,125 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85098667971
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0786667975
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240474AbjALPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
+        id S240484AbjALPg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:36:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240314AbjALPft (ORCPT
+        with ESMTP id S240451AbjALPf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:35:49 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF7F34765
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:26:57 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 17so20607753pll.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:26:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WVlLxH2Rj+8QSEZoiILadbKJQqSAUcthH+jBOnJMZHA=;
-        b=JftHModyBQyWOf9IbcHgv+wM+wAMjzeIgqay2Sc8xYfkI5JHsWwEEaR0BrMLIrDI0F
-         yxykKOAvVOboJ8Q3inG5JiMM5zD9V4Wn648fS3KtICCIxD5uZqOMV4/KjWnV0Hk62u/K
-         0g4zOe1NM3yXUlV8A36BJ7zUBJLOFJCN2pqMQ=
+        Thu, 12 Jan 2023 10:35:56 -0500
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372303AB06;
+        Thu, 12 Jan 2023 07:27:06 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id z8-20020a05600c220800b003d33b0bda11so4262362wml.0;
+        Thu, 12 Jan 2023 07:27:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WVlLxH2Rj+8QSEZoiILadbKJQqSAUcthH+jBOnJMZHA=;
-        b=3JA/hNOsPUCXSHyXPL+ipTLgcIvIpAgREzqflV6utGcUPJLFWKab+CBJjpYcqX1B7K
-         aZ/za9VLIHFboBaDWEEaU7ssiZ2ZP97T8Gyv6auT2ir62M8ajdzbzqaNWJzRjfwvwgS2
-         ng1QpBZPkKlxGoNQ9T35nPr2LrO7NRAZXtKkCmUPcXua1YMzzPLCXFvZVlKvc4NxmvfX
-         V09dyUMRE6kED4UWGNYbo816Tnxz1+UloAm9x0Ln2j9uVU0/IYk/i3qO22TExp1QiCip
-         5ksCUUBQDubOk4tzQwZ1otvjC7jULEiFkZgCNHEVKyU8RyQwWTq9OqJoCttqKRzR5u1Z
-         KhAQ==
-X-Gm-Message-State: AFqh2kqobvi0IkRfB2bI7/7G1gNAr5UfsSDAkYhvCILyFR+c2YJ2sHR1
-        F/k6ODN2G8vRv9M5VqjB8nmpT5X4GQDdiIvSZB39cg==
-X-Google-Smtp-Source: AMrXdXszpIuyfj/mHnCEnh6uhFgYKDm3M6iMpGAaIQNcUe0iGzTUPpaT/7EySwmrAqTumWdnNX0AssRqS0MYKX5qVxs=
-X-Received: by 2002:a17:902:bf45:b0:189:505b:73dd with SMTP id
- u5-20020a170902bf4500b00189505b73ddmr5104347pls.143.1673537217363; Thu, 12
- Jan 2023 07:26:57 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RUAlS4xgLT+q07oikxtXjHfsLxbnxwYffAIH6pi3rgg=;
+        b=WkZEQMr4gO69yvSyT9RS4DuTEmdKb1tiy/3bb4jmWhD/vC1yXVkHCTxU1lGMIcSO/i
+         FKqHWsvLP0kaUvkVNNPw5nlDQPWyX/N54hnyVntI0xl8LdF9Nd6AdlV5V+nQLOnifFNb
+         UkiDNhRGqcW634bAeNMNHa3TaRu0RSfWuwQC5gkKhHrZhztSj45rrB5T0lN2GCrVm1Sz
+         RogDBZrIOtJaal6oLgLDtOpg9s4txc4fdf8UdM7izVvVpwuQ1lofbPMIxexHvUCPCfEd
+         zHZAT2qfCcoNG/vwIkDN/WmMWdEyCD78LNrFwlp84aO/E2eI/ijSDgkoHDQNzoQfikK7
+         l2qw==
+X-Gm-Message-State: AFqh2kotStfWW7ViUXaRA0t8buofTpO7TzQVy07e47lZSudCvSsGOtOc
+        jlXVkFV1qP9QD+eqMO5ZMew=
+X-Google-Smtp-Source: AMrXdXt6Yb9atDnwfn4DCLxeXNTFRLZ2KSTrWEJF6cTR6nJ7FM3fMnCzprIygcdoPxtJM01Pd96AzQ==
+X-Received: by 2002:a05:600c:1d98:b0:3d3:48f4:7a69 with SMTP id p24-20020a05600c1d9800b003d348f47a69mr66277177wms.17.1673537224581;
+        Thu, 12 Jan 2023 07:27:04 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id q6-20020a05600c46c600b003d1f3e9df3csm28746893wmo.7.2023.01.12.07.27.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 07:27:04 -0800 (PST)
+Date:   Thu, 12 Jan 2023 15:27:02 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Jinank Jain <jinankjain@linux.microsoft.com>
+Cc:     jinankjain@microsoft.com, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        arnd@arndb.de, peterz@infradead.org, jpoimboe@kernel.org,
+        seanjc@google.com, kirill.shutemov@linux.intel.com,
+        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
+        mikelley@microsoft.com
+Subject: Re: [PATCH v10 5/5] x86/hyperv: Change interrupt vector for nested
+ root partition
+Message-ID: <Y8Amxh/FZITobj51@liuwe-devbox-debian-v2>
+References: <cover.1672639707.git.jinankjain@linux.microsoft.com>
+ <021f748f15870f3e41f417511aa88607627ec327.1672639707.git.jinankjain@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20230104175633.1420151-1-dragos.panait@windriver.com>
- <20230104175633.1420151-2-dragos.panait@windriver.com> <Y8ABeXQLzWdoaGAY@kroah.com>
-In-Reply-To: <Y8ABeXQLzWdoaGAY@kroah.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Thu, 12 Jan 2023 16:26:45 +0100
-Message-ID: <CAKMK7uEgzJU8ukgR3sQtSUB5+wrD9VyMwCHOA-SReFWd0tKzzw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 1/1] drm/amdkfd: Check for null pointer after calling kmemdup
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Dragos-Marian Panait <dragos.panait@windriver.com>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Kent Russell <kent.russell@amd.com>,
-        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <021f748f15870f3e41f417511aa88607627ec327.1672639707.git.jinankjain@linux.microsoft.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 at 13:47, Greg KH <gregkh@linuxfoundation.org> wrote:
-> On Wed, Jan 04, 2023 at 07:56:33PM +0200, Dragos-Marian Panait wrote:
-> > From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> >
-> > [ Upstream commit abfaf0eee97925905e742aa3b0b72e04a918fa9e ]
-> >
-> > As the possible failure of the allocation, kmemdup() may return NULL
-> > pointer.
-> > Therefore, it should be better to check the 'props2' in order to prevent
-> > the dereference of NULL pointer.
-> >
-> > Fixes: 3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
-> > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-> > Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
-> > Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-> > Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
-> > ---
-> >  drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-> > index 86b4dadf772e..02e3c650ed1c 100644
-> > --- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-> > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-> > @@ -408,6 +408,9 @@ static int kfd_parse_subtype_iolink(struct crat_subtype_iolink *iolink,
-> >                       return -ENODEV;
-> >               /* same everything but the other direction */
-> >               props2 = kmemdup(props, sizeof(*props2), GFP_KERNEL);
-> > +             if (!props2)
-> > +                     return -ENOMEM;
->
-> Not going to queue this up as this is a bogus CVE.
+On Mon, Jan 02, 2023 at 07:12:55AM +0000, Jinank Jain wrote:
+> Traditionally we have been using the HYPERVISOR_CALLBACK_VECTOR to relay
+> the VMBus interrupt. But this does not work in case of nested
+> hypervisor. Microsoft Hypervisor reserves 0x31 to 0x34 as the interrupt
+> vector range for VMBus and thus we have to use one of the vectors from
+> that range and setup the IDT accordingly.
+> 
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
 
-Are we at the point where CVE presence actually contraindicates
-backporting? At least I'm getting a bit the feeling there's a surge of
-automated (security) fixes that just don't hold up to any scrutiny.
-Last week I had to toss out an fbdev locking patch due to static
-checker that has no clue at all how refcounting works, and so
-complained that things need more locking ... (that was -fixes, but
-would probably have gone to stable too if I didn't catch it).
+I've applied all but this patch to hyperv-next.
 
-Simple bugfixes from random people was nice when it was checkpatch
-stuff and I was fairly happy to take these aggressively in drm. But my
-gut feeling says things seem to be shifting towards more advanced
-tooling, but without more advanced understanding by submitters. Does
-that holder in other areas too?
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+This patch still needs an ack or nack from x86 maintainers to proceed.
+
+Thanks,
+Wei.
+
+> ---
+>  arch/x86/include/asm/idtentry.h    |  2 ++
+>  arch/x86/include/asm/irq_vectors.h |  6 ++++++
+>  arch/x86/kernel/cpu/mshyperv.c     | 15 +++++++++++++++
+>  arch/x86/kernel/idt.c              | 10 ++++++++++
+>  drivers/hv/vmbus_drv.c             |  3 ++-
+>  5 files changed, 35 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+> index 72184b0b2219..c0648e3e4d4a 100644
+> --- a/arch/x86/include/asm/idtentry.h
+> +++ b/arch/x86/include/asm/idtentry.h
+> @@ -686,6 +686,8 @@ DECLARE_IDTENTRY_SYSVEC(POSTED_INTR_NESTED_VECTOR,	sysvec_kvm_posted_intr_nested
+>  DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_hyperv_callback);
+>  DECLARE_IDTENTRY_SYSVEC(HYPERV_REENLIGHTENMENT_VECTOR,	sysvec_hyperv_reenlightenment);
+>  DECLARE_IDTENTRY_SYSVEC(HYPERV_STIMER0_VECTOR,	sysvec_hyperv_stimer0);
+> +DECLARE_IDTENTRY_SYSVEC(HYPERV_INTR_NESTED_VMBUS_VECTOR,
+> +			sysvec_hyperv_nested_vmbus_intr);
+>  #endif
+>  
+>  #if IS_ENABLED(CONFIG_ACRN_GUEST)
+> diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
+> index 43dcb9284208..729d19eab7f5 100644
+> --- a/arch/x86/include/asm/irq_vectors.h
+> +++ b/arch/x86/include/asm/irq_vectors.h
+> @@ -102,6 +102,12 @@
+>  #if IS_ENABLED(CONFIG_HYPERV)
+>  #define HYPERV_REENLIGHTENMENT_VECTOR	0xee
+>  #define HYPERV_STIMER0_VECTOR		0xed
+> +/*
+> + * FIXME: Change this, once Microsoft Hypervisor changes its assumption
+> + * around VMBus interrupt vector allocation for nested root partition.
+> + * Or provides a better interface to detect this instead of hardcoding.
+> + */
+> +#define HYPERV_INTR_NESTED_VMBUS_VECTOR	0x31
+>  #endif
+>  
+>  #define LOCAL_TIMER_VECTOR		0xec
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> index 938fc82edf05..4dfe0f9d7be3 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -126,6 +126,21 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
+>  	set_irq_regs(old_regs);
+>  }
+>  
+> +DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_nested_vmbus_intr)
+> +{
+> +	struct pt_regs *old_regs = set_irq_regs(regs);
+> +
+> +	inc_irq_stat(irq_hv_callback_count);
+> +
+> +	if (vmbus_handler)
+> +		vmbus_handler();
+> +
+> +	if (ms_hyperv.hints & HV_DEPRECATING_AEOI_RECOMMENDED)
+> +		ack_APIC_irq();
+> +
+> +	set_irq_regs(old_regs);
+> +}
+> +
+>  void hv_setup_vmbus_handler(void (*handler)(void))
+>  {
+>  	vmbus_handler = handler;
+> diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
+> index a58c6bc1cd68..3536935cea39 100644
+> --- a/arch/x86/kernel/idt.c
+> +++ b/arch/x86/kernel/idt.c
+> @@ -160,6 +160,16 @@ static const __initconst struct idt_data apic_idts[] = {
+>  # endif
+>  	INTG(SPURIOUS_APIC_VECTOR,		asm_sysvec_spurious_apic_interrupt),
+>  	INTG(ERROR_APIC_VECTOR,			asm_sysvec_error_interrupt),
+> +#ifdef CONFIG_HYPERV
+> +	/*
+> +	 * This is a hack because we cannot install this interrupt handler
+> +	 * via alloc_intr_gate as it does not allow interrupt vector less
+> +	 * than FIRST_SYSTEM_VECTORS. And hyperv does not want anything other
+> +	 * than 0x31-0x34 as the interrupt vector for vmbus interrupt in case
+> +	 * of nested setup.
+> +	 */
+> +	INTG(HYPERV_INTR_NESTED_VMBUS_VECTOR, asm_sysvec_hyperv_nested_vmbus_intr),
+> +#endif
+>  #endif
+>  };
+>  
+> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> index 6324e01d5eec..740878367426 100644
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
+> @@ -2768,7 +2768,8 @@ static int __init hv_acpi_init(void)
+>  	 * normal Linux IRQ mechanism is not used in this case.
+>  	 */
+>  #ifdef HYPERVISOR_CALLBACK_VECTOR
+> -	vmbus_interrupt = HYPERVISOR_CALLBACK_VECTOR;
+> +	vmbus_interrupt = hv_nested ? HYPERV_INTR_NESTED_VMBUS_VECTOR :
+> +				      HYPERVISOR_CALLBACK_VECTOR;
+>  	vmbus_irq = -1;
+>  #endif
+>  
+> -- 
+> 2.25.1
+> 
