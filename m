@@ -2,152 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AAD667368
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A21D566736F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234629AbjALNkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 08:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
+        id S233480AbjALNl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 08:41:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234352AbjALNjh (ORCPT
+        with ESMTP id S234088AbjALNl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 08:39:37 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED4A48CE8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:38:15 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so15057242wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:38:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=znmW8joeNg1jmfKypKeLrmbUtyOkQqXYCi/lvfTsrdI=;
-        b=Xp0TRmqlsjjffiwxl0b0CiwXPilusQSP/SU9BxYBpigVwWpqBMplvDmS+3MSAPF09i
-         PTr+3OYQuzOIR2mg7EpxH5tn4S85J7qF4RzNWLrVnLcFc+CSEWWEY12VX5+rVcBvYRnM
-         KoGadlfGXw9Z8Uk37XSlBLxEw3uq0BkmE7/ZxPkROFbpUW+tXU70hKkK4b97ajVSex+g
-         LbFJdoYgaY5d5QhwBBVp1EJmT5KyRLATPVP3M0D97hKFNKdjX5p47Ky/OQncckodt17q
-         egXGj09/aeLOdwwY6xKZssRm/yHPlWyWIaNoWXlHdXfTmQh/PrPr3jatx/kzw+AshjGJ
-         WAwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=znmW8joeNg1jmfKypKeLrmbUtyOkQqXYCi/lvfTsrdI=;
-        b=fTA0eXA7ad3LfYV+JirWb4pllN9irPdtwEyGBFgYmZYNnA8eGvL3EfJSjIapk4vl9K
-         9xdpw6soToZ0UChUDaiBbXSEb6oyL448uddlCJ7I5j+GQokY68Bz6jAxm3kDjzJREx9k
-         L6ureNHdiu47bboZPitWMUZOKMjvLdCjZZ4aLXDF3d5Bauh0iOEjOJp5QDthLnaoNLAk
-         bZeoxXgZrVnRim8ybBdIwPQKCY+rF4abxfpjQlopragj5VMcpMIHr8xC3jqHt09oYptH
-         9QC9dbCHQe5oQ2oDZt016EMtrLjx9n6kl4E02KuO42owk0rMOmUethOb+KDbIJFZZEjQ
-         h+HA==
-X-Gm-Message-State: AFqh2koA9GNf4/RB3d68CmpvmnRpPCJcXMiBOoi3VNqLDwXyfesfR7pZ
-        269LNg4kgFC8v1ddzUGGKZ1Ue4Q0Hm3zAXrls9DzWQ==
-X-Google-Smtp-Source: AMrXdXvsTW5fSCQd5wEYlEg/EKrAsjeKT1Gel7lICz1kX2DxrngJOgXMxeF4KdV/Unu34j7CRdbSeHop2BZO6p2yeL8=
-X-Received: by 2002:a05:600c:1684:b0:3da:1b37:8ff5 with SMTP id
- k4-20020a05600c168400b003da1b378ff5mr76464wmn.166.1673530693828; Thu, 12 Jan
- 2023 05:38:13 -0800 (PST)
+        Thu, 12 Jan 2023 08:41:29 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F06850F7F;
+        Thu, 12 Jan 2023 05:39:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673530768; x=1705066768;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Fiq7O/W4y1Cb9Aw+M/Hi2kk/28EdDxDe2am7SsMM7o4=;
+  b=dwGGnMD+oNLutEXuNzDl/G1bzhFj9WVxUIgQhkR5ybwLRfe6LYp3V2mT
+   4Pxrmxn1twvKc1VJsgVr8qbRFh392X3niXALY+oqsbLHiSQAR4u7SH3Xu
+   n0lUqKRStz6wc34UQ1SNYLWmpR/9fVFfWMFShqek5kPGFyhnbb5JinNci
+   Z0+I9ta8qbRdTFB1q1lMPNDyYbV/L8PicsW3qPMPL51WVM6RIl+F5561V
+   lbjf1wZCME09sbJt7dbOGwp+3mrXaq5/xWvcg6IdiUycd7pm+S3w7ILOo
+   MxGX5iSXYfu5V7Col+BjFpvT8hbO0BZwStONlTdepz/l/yOSSzOAiNCFB
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10587"; a="307227124"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="307227124"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 05:39:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10587"; a="831695528"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="831695528"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 12 Jan 2023 05:39:24 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D190EE1; Thu, 12 Jan 2023 15:39:57 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-m68k@lists.linux-m68k.org, linux-sh@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>
+Subject: [PATCH v1 1/1] gpio: Remove unused and obsoleted irq_to_gpio()
+Date:   Thu, 12 Jan 2023 15:39:42 +0200
+Message-Id: <20230112133942.58471-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230105101844.1893104-1-jthoughton@google.com>
- <20230105101844.1893104-14-jthoughton@google.com> <Y78vaNW10X6vUKjA@x1n>
-In-Reply-To: <Y78vaNW10X6vUKjA@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 12 Jan 2023 08:38:02 -0500
-Message-ID: <CADrL8HWJvxGej8arUtCch_=OcFy_vzo11rD0yRK8ey_Oe2BHXQ@mail.gmail.com>
-Subject: Re: [PATCH 13/46] hugetlb: add hugetlb_hgm_walk and hugetlb_walk_step
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 4:51 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Thu, Jan 05, 2023 at 10:18:11AM +0000, James Houghton wrote:
->
-> [...]
->
-> > +static int hugetlb_hgm_walk_uninit(struct hugetlb_pte *hpte,
->
-> Nitpick on the name: the "uninit" can be misread into pairing with some
-> other "init()" calls..
->
-> How about just call it hugetlb_hgm_walk (since it's the higher level API
-> comparing to the existing one)?  Then the existing hugetlb_hgm_walk can be
-> called hugetlb_hgm_do_walk/__hugetlb_hgm_walk since it's one level down.
->
-> > +                                pte_t *ptep,
-> > +                                struct vm_area_struct *vma,
-> > +                                unsigned long addr,
-> > +                                unsigned long target_sz,
-> > +                                bool alloc)
-> > +{
-> > +     struct hstate *h = hstate_vma(vma);
-> > +
-> > +     hugetlb_pte_populate(vma->vm_mm, hpte, ptep, huge_page_shift(h),
-> > +                          hpage_size_to_level(huge_page_size(h)));
->
-> Another nitpick on name: I remembered we used to reach a consensus of using
-> hugetlb_pte_init before?  Can we still avoid the word "populate" (if "init"
-> is not suitable since it can be updated during stepping, how about "setup")?
+irq_to_gpio() is legacy and unused API, remove it for good.
 
-Right, we did talk about this, sorry. Ok I'll go ahead with this name change.
-- hugetlb_hgm_walk => __hugetlb_hgm_walk
-- hugetlb_hgm_walk_uninit => hugetlb_hgm_walk
-- [__,]hugetlb_pte_populate => [__,]hugetlb_pte_init
+This leaves gpio_to_irq() as it's used yet in many places.
+Nevertheless, removal of its counterpart is a good signal
+to whoever even trying to consider using them that do not.
 
->
-> [...]
->
-> > +int hugetlb_walk_step(struct mm_struct *mm, struct hugetlb_pte *hpte,
-> > +                   unsigned long addr, unsigned long sz)
-> > +{
-> > +     pte_t *ptep;
-> > +     spinlock_t *ptl;
-> > +
-> > +     switch (hpte->level) {
-> > +     case HUGETLB_LEVEL_PUD:
-> > +             ptep = (pte_t *)hugetlb_alloc_pmd(mm, hpte, addr);
-> > +             if (IS_ERR(ptep))
-> > +                     return PTR_ERR(ptep);
-> > +             hugetlb_pte_populate(mm, hpte, ptep, PMD_SHIFT,
-> > +                                  HUGETLB_LEVEL_PMD);
-> > +             break;
-> > +     case HUGETLB_LEVEL_PMD:
-> > +             ptep = hugetlb_alloc_pte(mm, hpte, addr);
-> > +             if (IS_ERR(ptep))
-> > +                     return PTR_ERR(ptep);
-> > +             ptl = pte_lockptr(mm, (pmd_t *)hpte->ptep);
-> > +             __hugetlb_pte_populate(hpte, ptep, PAGE_SHIFT,
-> > +                                    HUGETLB_LEVEL_PTE, ptl);
-> > +             hpte->ptl = ptl;
->
-> This line seems to be superfluous (even if benign).
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ Documentation/driver-api/gpio/legacy.rst             |  8 --------
+ .../translations/zh_CN/driver-api/gpio/legacy.rst    |  7 -------
+ Documentation/translations/zh_TW/gpio.txt            |  7 -------
+ arch/m68k/include/asm/gpio.h                         |  7 -------
+ arch/sh/include/asm/gpio.h                           |  5 -----
+ include/linux/gpio.h                                 | 12 ------------
+ 6 files changed, 46 deletions(-)
 
-Nice catch! It shouldn't be there; I accidentally left it in when I
-changed how `ptl` was handled.
+diff --git a/Documentation/driver-api/gpio/legacy.rst b/Documentation/driver-api/gpio/legacy.rst
+index e3e9d26a60ce..a0559d93efd1 100644
+--- a/Documentation/driver-api/gpio/legacy.rst
++++ b/Documentation/driver-api/gpio/legacy.rst
+@@ -387,9 +387,6 @@ map between them using calls like::
+ 	/* map GPIO numbers to IRQ numbers */
+ 	int gpio_to_irq(unsigned gpio);
+ 
+-	/* map IRQ numbers to GPIO numbers (avoid using this) */
+-	int irq_to_gpio(unsigned irq);
+-
+ Those return either the corresponding number in the other namespace, or
+ else a negative errno code if the mapping can't be done.  (For example,
+ some GPIOs can't be used as IRQs.)  It is an unchecked error to use a GPIO
+@@ -405,11 +402,6 @@ devices, by the board-specific initialization code.  Note that IRQ trigger
+ options are part of the IRQ interface, e.g. IRQF_TRIGGER_FALLING, as are
+ system wakeup capabilities.
+ 
+-Non-error values returned from irq_to_gpio() would most commonly be used
+-with gpio_get_value(), for example to initialize or update driver state
+-when the IRQ is edge-triggered.  Note that some platforms don't support
+-this reverse mapping, so you should avoid using it.
+-
+ 
+ Emulating Open Drain Signals
+ ----------------------------
+diff --git a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+index 8599e253fcc5..74fa473bb504 100644
+--- a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
++++ b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+@@ -358,9 +358,6 @@ GPIO 编号是无符号整数;IRQ 编号也是。这些构成了两个逻辑上
+ 	/* 映射 GPIO 编号到 IRQ 编号 */
+ 	int gpio_to_irq(unsigned gpio);
+ 
+-	/* 映射 IRQ 编号到 GPIO 编号 (尽量避免使用) */
+-	int irq_to_gpio(unsigned irq);
+-
+ 它们的返回值为对应命名空间的相关编号，或是负的错误代码(如果无法映射)。
+ (例如,某些 GPIO 无法做为 IRQ 使用。)以下的编号错误是未经检测的:使用一个
+ 未通过 gpio_direction_input()配置为输入的 GPIO 编号，或者使用一个
+@@ -373,10 +370,6 @@ gpio_to_irq()返回的非错误值可以传递给 request_irq()或者 free_irq()
+ 触发选项是 IRQ 接口的一部分，如 IRQF_TRIGGER_FALLING，系统唤醒能力
+ 也是如此。
+ 
+-irq_to_gpio()返回的非错误值大多数通常可以被 gpio_get_value()所使用，
+-比如在 IRQ 是沿触发时初始化或更新驱动状态。注意某些平台不支持反映射,所以
+-你应该尽量避免使用它。
+-
+ 
+ 模拟开漏信号
+ ------------
+diff --git a/Documentation/translations/zh_TW/gpio.txt b/Documentation/translations/zh_TW/gpio.txt
+index abd8e4c0973e..1b986bbb0909 100644
+--- a/Documentation/translations/zh_TW/gpio.txt
++++ b/Documentation/translations/zh_TW/gpio.txt
+@@ -363,9 +363,6 @@ GPIO 編號是無符號整數;IRQ 編號也是。這些構成了兩個邏輯上
+ 	/* 映射 GPIO 編號到 IRQ 編號 */
+ 	int gpio_to_irq(unsigned gpio);
+ 
+-	/* 映射 IRQ 編號到 GPIO 編號 (儘量避免使用) */
+-	int irq_to_gpio(unsigned irq);
+-
+ 它們的返回值爲對應命名空間的相關編號，或是負的錯誤代碼(如果無法映射)。
+ (例如,某些 GPIO 無法做爲 IRQ 使用。)以下的編號錯誤是未經檢測的:使用一個
+ 未通過 gpio_direction_input()配置爲輸入的 GPIO 編號，或者使用一個
+@@ -378,10 +375,6 @@ gpio_to_irq()返回的非錯誤值可以傳遞給 request_irq()或者 free_irq()
+ 觸發選項是 IRQ 接口的一部分，如 IRQF_TRIGGER_FALLING，系統喚醒能力
+ 也是如此。
+ 
+-irq_to_gpio()返回的非錯誤值大多數通常可以被 gpio_get_value()所使用，
+-比如在 IRQ 是沿觸發時初始化或更新驅動狀態。注意某些平台不支持反映射,所以
+-你應該儘量避免使用它。
+-
+ 
+ 模擬開漏信號
+ ----------------------------
+diff --git a/arch/m68k/include/asm/gpio.h b/arch/m68k/include/asm/gpio.h
+index a50b27719a58..5cfc0996ba94 100644
+--- a/arch/m68k/include/asm/gpio.h
++++ b/arch/m68k/include/asm/gpio.h
+@@ -66,13 +66,6 @@ static inline int gpio_to_irq(unsigned gpio)
+ 		return __gpio_to_irq(gpio);
+ }
+ 
+-static inline int irq_to_gpio(unsigned irq)
+-{
+-	return (irq >= MCFGPIO_IRQ_VECBASE &&
+-		irq < (MCFGPIO_IRQ_VECBASE + MCFGPIO_IRQ_MAX)) ?
+-		irq - MCFGPIO_IRQ_VECBASE : -ENXIO;
+-}
+-
+ static inline int gpio_cansleep(unsigned gpio)
+ {
+ 	return gpio < MCFGPIO_PIN_MAX ? 0 : __gpio_cansleep(gpio);
+diff --git a/arch/sh/include/asm/gpio.h b/arch/sh/include/asm/gpio.h
+index d643250f0a0f..588c1380e4cb 100644
+--- a/arch/sh/include/asm/gpio.h
++++ b/arch/sh/include/asm/gpio.h
+@@ -40,11 +40,6 @@ static inline int gpio_to_irq(unsigned gpio)
+ 	return __gpio_to_irq(gpio);
+ }
+ 
+-static inline int irq_to_gpio(unsigned int irq)
+-{
+-	return -ENOSYS;
+-}
+-
+ #endif /* CONFIG_GPIOLIB */
+ 
+ #endif /* __ASM_SH_GPIO_H */
+diff --git a/include/linux/gpio.h b/include/linux/gpio.h
+index e94815b3ce1d..85beb236c925 100644
+--- a/include/linux/gpio.h
++++ b/include/linux/gpio.h
+@@ -81,11 +81,6 @@ static inline int gpio_to_irq(unsigned int gpio)
+ 	return __gpio_to_irq(gpio);
+ }
+ 
+-static inline int irq_to_gpio(unsigned int irq)
+-{
+-	return -EINVAL;
+-}
+-
+ #endif /* ! CONFIG_ARCH_HAVE_CUSTOM_GPIO_H */
+ 
+ /* CONFIG_GPIOLIB: bindings for managed devices that want to request gpios */
+@@ -210,13 +205,6 @@ static inline int gpio_to_irq(unsigned gpio)
+ 	return -EINVAL;
+ }
+ 
+-static inline int irq_to_gpio(unsigned irq)
+-{
+-	/* irq can never have been returned from gpio_to_irq() */
+-	WARN_ON(1);
+-	return -EINVAL;
+-}
+-
+ static inline int devm_gpio_request(struct device *dev, unsigned gpio,
+ 				    const char *label)
+ {
+-- 
+2.39.0
 
-Thanks Peter!
