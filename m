@@ -2,160 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFAE668500
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1BE668502
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240362AbjALVFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 16:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
+        id S233136AbjALVFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 16:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240567AbjALVDJ (ORCPT
+        with ESMTP id S240649AbjALVDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 16:03:09 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FDF544FB
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:47:02 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30CJXnaL023237;
-        Thu, 12 Jan 2023 20:46:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=tCuH70LX61NaAmPZDpiFd6AZPAtH40sYk1LROkus1Zs=;
- b=bFwnqI3KaWXNtxZP2dfsh4NiIlOirHr7Lt3UEX1qi2hCJE2u+C5ownCCQ6LSAOBV084Y
- LGKJoO7XnZXqStLoKfw4HNGyn69w2J5DmNcBg77oTsUWqNnmTMJgxvPhY4ADZa+6ekBR
- ZIjOUhbz6eq3ckddhbWS1b9D6X9+/fErTbg7zXG8qtPplNK4ZB6Ds6vLWowR3ehdlE2O
- 0dVQOgVj3uVc3d9vTRAcoqxrvg7CMBOELmj/gdz0l9X9NMqZbAK7oLZvdt4wpPQu28e2
- ufn2lXejFk+2kmo5RXuFOyWVNdodMWdvnDIA95vWrj2DZLYom15Y3rO/HL6c8gfgZc0Y GA== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n1y1nkhd1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Jan 2023 20:46:40 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30CKHvDh005280;
-        Thu, 12 Jan 2023 20:46:39 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n1k4brr7d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Jan 2023 20:46:39 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NMIKXKrZihcPHT3CmW1falupQ/SqOQNWfMZoPDraLt3H/7u0t1g7Jl8uROOrBf4DQA0ok8r/XAHe/su3Lnic+CV8YVYg2H+Mtf2RdTawxx9V8+eHvD73Sr4U9GErx5vHLnaNzV75oDlBPO+xufOijbwoBwL5a0DA13IV2Vdrw7lWvkXjEc8RjlOXfEL9Xg07rk138M08t7pIWticZNzZzJRs9JAQlMT1CV5D1pyuOXoNmDA5oCCN0HH8dZxauCLDsMan6+aNHJHlZNjqh+DrhcyfXdMTbmEzSdveTyK7Img065gWPw+N/jrC58pY2inUEJz2UU8/sD8gv4438tyXnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tCuH70LX61NaAmPZDpiFd6AZPAtH40sYk1LROkus1Zs=;
- b=RCOhZQ6H6aTiRXqxwX/1j378vv0ThQBrOItXbEs8usulaoRocASDNw7kqVcWKo0P2po53l7zUCn4QyVD/22zVHFmSV2hjPh9I9BUmFSBpLWzhTmg4t9928Od4StucNcBh0CP310wFXvy35IHG3a1tIOmk5cUzfBJnyPQ+p73P5UeMwSVKIFVtVkP0fRDQ+y2MnpMLlpE+2/qIL/SH6MByU1xD8uJ7GH+/7LwACly77FsuuLrpQ5Q98jLofQMHimQXJdFOXqN1GzgInajXNcnd9LEfSVsLPwkLTSwuK/zcljadatxUT3VF0GUKE2OPCkP60gyKrSxcOuvwIdV68prGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 12 Jan 2023 16:03:20 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692B43D5E4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:47:33 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id i70so418161ioa.12
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:47:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tCuH70LX61NaAmPZDpiFd6AZPAtH40sYk1LROkus1Zs=;
- b=qnjAOCIS2Woot2aOMjFB8tcrUlZB0DMIVTfRR1EP9wMQeplIjU7MbjUIRsdkj2Ob4/bZuUFBpzHnxG1sGycSGGTOPWlFAFmsbc71BNK7W5cWAWpQBAszXmDrtSkO7UksFtjHKL6TPeD2sexKfj3fMjNKaT62z45+i46e0FMmHoo=
-Received: from DS7PR10MB5117.namprd10.prod.outlook.com (2603:10b6:5:3a6::17)
- by CY8PR10MB6804.namprd10.prod.outlook.com (2603:10b6:930:9b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.11; Thu, 12 Jan
- 2023 20:46:37 +0000
-Received: from DS7PR10MB5117.namprd10.prod.outlook.com
- ([fe80::93ca:e22f:aa6d:94d9]) by DS7PR10MB5117.namprd10.prod.outlook.com
- ([fe80::93ca:e22f:aa6d:94d9%2]) with mapi id 15.20.6002.011; Thu, 12 Jan 2023
- 20:46:37 +0000
-From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, linmiaohe@huawei.com,
-        naoya.horiguchi@nec.com, willy@infradead.org,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: [PATCH mm-unstable 8/8] mm/memory-failure: convert unpoison_memory() to folios
-Date:   Thu, 12 Jan 2023 14:46:08 -0600
-Message-Id: <20230112204608.80136-9-sidhartha.kumar@oracle.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230112204608.80136-1-sidhartha.kumar@oracle.com>
-References: <20230112204608.80136-1-sidhartha.kumar@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: DS7PR05CA0094.namprd05.prod.outlook.com
- (2603:10b6:8:56::11) To DS7PR10MB5117.namprd10.prod.outlook.com
- (2603:10b6:5:3a6::17)
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y33TCnC4aTVsOPz+eKs6ANS+v42Ifz3XrQ+jwhHqUTI=;
+        b=ObYOd2UTQhbRFEokIARxDLMWIZ/pno5W+IFLwElvD2F6//NiJJoEpB18gOEPMVZNF2
+         S95GWvK80yfBIIrvAcKrUJLPCmVFsFbymPwzQxMhXeY8/XflVzhYSqOFCD/bl+MQBhXF
+         dv5CELBCQytLVbNtDkxivMNgdwcZGNpIiQwWqfdq7svmRjM03vxVLuRYt+/gZGm21dA2
+         w8Xj3ZRntXkS7N9z83dzx9a5W1CNlosOWm3ckTaJLwfT85HwXa4xod5+TxMqzXjT5p/5
+         vfJfVzS/FaLpK/iehVsVhdsNhAc5IQdCbUPkvGBjalKJp4tpoqR9NYP2JuflaVSWvOJ6
+         de1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y33TCnC4aTVsOPz+eKs6ANS+v42Ifz3XrQ+jwhHqUTI=;
+        b=rHvDDy2y/KyT5tBCNgXfW50Q9pLu6E0xvjHDOBoF3ixJvvgNig4cBZEWN//zybuYWE
+         ymgszsS91FugAxNW5vdNtorMOCGfSgufiPmSJ0wbsQv6SBshsFmQ4smcX22pY8Itdq0r
+         hcz5IcENAOyE+aAumkH7gsz4pMNEHBjJgfa/8ifa+NyboC4gXHi6EGwolr6BSK+LvRi2
+         sxfI9p8MZLr0H9IKo6thfgSzKQwv4uxPa7wFysW/u96IvCvTKtB62KUpZ94rpYyEYx22
+         lYHmqGtEU3S2vhM7waxq4K537ETuRezYJsE3+zVlTWkns0w6JmzpMiCkNE8wRAp77/Lt
+         xy/A==
+X-Gm-Message-State: AFqh2kr0p6AvV2f3YRGPAm6m59EWjXm6BrMQ+NKjaymWIWESh0In0hQ3
+        hcCnRUW/JHiEk+JSvTs9Na38UxXdM/25XGV7qKKMWxHytpEq6bLzrog=
+X-Google-Smtp-Source: AMrXdXuXcHHtAB+9TKlwl92wMAzc2QxA0XGfO5saf7T5G93StO021s1YFWnMHPVoFaiDG0eY3yPYnB6upaH+98os8S8=
+X-Received: by 2002:a05:6638:388:b0:38a:89cc:20bc with SMTP id
+ y8-20020a056638038800b0038a89cc20bcmr8097617jap.249.1673556452457; Thu, 12
+ Jan 2023 12:47:32 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5117:EE_|CY8PR10MB6804:EE_
-X-MS-Office365-Filtering-Correlation-Id: 160283f4-a515-4a5d-8244-08daf4de1916
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ODm5ygdpxO/xlxZ7aTNSpggIaiW3/gbY9AAoXPDciEARMxNztPwDlVkPnNJZ8pRKgjzVeV6HW9RDdCpPqayWjt6sOF6JVCpr2DwwlfGpmhu8nfzmX00LJ62Q9Kgw3wMkkY57oumfK8G5IDEcvj0VY3dLy543JCCV9c6moHAx+6A7n9CTxLuarkPJ4voYHdR19ciyEzDdSZ1yHhFKvafKRvbIbS+yUCBr345V9FQP09ixUHVHIoPWUrjok3us7IZt58vL1bOJdrGEkAmTT0hwBMM2Ce1tr5SPZf5xF90/XwBJIo+KWyg8AkOqV0RFI0xoHHXS7O0f52fkcfjP67kv2Jwgvi2W8oVFoVJG8HQk6BhOeAOOZh8hKzVRYq/rJdNYK5Udbxfa7e9gdY1ARtWvFmlo+7JNMFO0HnvWh3Q9JHHQjhA/eD2iHL+C+IPsRLdZIr7RxzM0CPgmhkz+MJjubOj7DE+8vQwszgLLkqs/jQ2uqFJGYGfStlK/FA0+MWsP7YkB5OJrfsF4qB3/xQTlFJnbwAVCaKotOxcA1IlB+LX3nm4VruVYB5cUq3KdjwwTRRfdJwT81isvaOwKEdk2q/UbPHRIUfnj0o73V5GWwI+Z1cfnkmZ1MNNVPNKFk3RDNlc7i55BNvq82KxmhXGs9w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5117.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(346002)(136003)(366004)(376002)(396003)(451199015)(44832011)(186003)(2616005)(6512007)(478600001)(316002)(5660300002)(107886003)(6486002)(1076003)(66946007)(8676002)(66476007)(66556008)(4326008)(83380400001)(8936002)(86362001)(41300700001)(36756003)(38100700002)(6666004)(6506007)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iU2jqVIU39p6E/p5/hOM/1ulHa97LScsbH08Fb6x41vr7tQtz0V4+yTrhnji?=
- =?us-ascii?Q?9NiM6W7gyZYprNMylNrZc0Dpwriidnt1Jo9PnbxI2YDYyIoJnKcrz0rxtuTQ?=
- =?us-ascii?Q?a1UF/eX8LWP569uL/v5ka1ByvEzG0TljP7C0X5Z2GEVOTvrebqPF7E3o7LKS?=
- =?us-ascii?Q?z6qcu1d3K8ppVtkGydob59DYaePMdpmKOpE4bwgBMcuI1QyzVvljN1ipYDQw?=
- =?us-ascii?Q?Te0ZY9f2/Jshf0AjGxnKJreXvZHITl1aQBbUICXsMfDX+T6E+XuvhTegKpJf?=
- =?us-ascii?Q?/oNzx9i6vBN0+nOn6efOb62+9Cm9PRL4eaG7nIWKKAiUu44vDsa5JTBUGFG7?=
- =?us-ascii?Q?4JypzWEQXU1puYQt2yZsgvTbuNmDESm63Is7eJRaa7p04fEos3+je+V5Pjjc?=
- =?us-ascii?Q?LF259Nhz45L41mYW+ebqiVVFq9Pga9AVHrHgtD2BXBJLVdNbbLibV8tRnZOI?=
- =?us-ascii?Q?DFjKVQ5GkkXj5q57R5JS/m+NYN2BfmWOkprvuSRu5XYcCLd3P5HDthE9fTQh?=
- =?us-ascii?Q?yIAm3cjsb0jqx+PkNKPn89wqpTkLv2VwFxnqTc7EgC51a243pLA+OqUKAD7P?=
- =?us-ascii?Q?n6Wq6PDQNJcWE386MTS8m89NvC17OVRYSKbVHSEanLKxMsJyfcdf30rM5/It?=
- =?us-ascii?Q?3ptxKZ3qS5GNaS/RXcrBKSHvdUc1EhfZfPIDb66qfekFz58vmu4l1bz3KEgX?=
- =?us-ascii?Q?MxEEWodUivRVlkLuMNk0TYw23YHgFbl2/hTwbzmpMsHFVLo40N69x1Q1+fPm?=
- =?us-ascii?Q?UhZlJj7/2XrYo9zut6YJdYHP0CFXQHqfy42LXR76NMEm3iRkxgvk1EXfrdCI?=
- =?us-ascii?Q?1E9MRV39RdZmx9kFg/1eLS//SMiqHKtfr1W5W6ZIdAgvYBS6HOxks5iPv96b?=
- =?us-ascii?Q?+zBVCVM2ww8r01d6RC+vH/bLPt5fpbrAyMLOFALxh7o7f8nv3MpOiIgWfhYq?=
- =?us-ascii?Q?FqDSSyEwAqiax6kVe03LoZ56gt9tI2f0VaWDXhQ6eg7EZ1m0spxosrjqh8F0?=
- =?us-ascii?Q?eqQHxGR3qfCxLg4XJygOfMOhD0VnLAUtMCQWxJahxB9+TgXZ25GmFa4BW/ww?=
- =?us-ascii?Q?o8C0qoLZggwXGe1WCCNHxoStf5MjsPy4htZpQ6y95RIlUxN9mUvJ8jpFBXGR?=
- =?us-ascii?Q?MWkupv/KjEa+hAABxQF/n/3zRRNmMHywczayotLhlpRslWTHC5R1oiSNRSKt?=
- =?us-ascii?Q?Ke/23fPwlL8ZLhCm3JGefegA3h7v2BRMhhI1i9q38d6atMPo8Yo3Gk9LuQE1?=
- =?us-ascii?Q?S65ygznAzo6eGh159Raau7/nYpKoUyFDN3hKVpAdHOYPOjkHeEyFVjIOXtmZ?=
- =?us-ascii?Q?OF33IhGlouRlrxPf6jp6UGm56uvhXrniXyI5DunDaTSoLNylzHIA1XYRZzQ/?=
- =?us-ascii?Q?8gC0+D/mNEHslM616zFSOh3Nqcl73ylIJNjJDzhUy398+q85bNwLh85dMJHn?=
- =?us-ascii?Q?mLURtzhHWSjM2X4k4BFSwrjHnxmEv2a3Lc7Now63umV4KiDZDHxYy9w4uNdg?=
- =?us-ascii?Q?bUJgWJ+6RKIWgwHXV71hY2VYGwHhk+ehp2HGJljAOitdGUOr2Bv+izf2KJLy?=
- =?us-ascii?Q?jY5Sd/HIGhBnegcK1vY2WFRg6+0PK6A8VrMe1g88OhCvZxjdfCMOsQitpkCu?=
- =?us-ascii?Q?ShAMxxousZofuMmP/n0Jcrg=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?ZE96NTJhkioZ1959X/s9cAgzzomvxPneCPfMhHaWpkGH+9dQq4TScO987+/p?=
- =?us-ascii?Q?5YytVlfaOeFX0N0R8jtfsaYNwBSiQJGolLHXHPd1TS9VIkHTe5NKceH0xnO+?=
- =?us-ascii?Q?RYkMWfVFsHU+SFvaJErFwhMLEx7Ld/BRARVrRLVp/TSg7MYn59TkU6RDrZqG?=
- =?us-ascii?Q?aPZBj7sYOBgUzmsetsQAXyzCQgaBcWRqBOrIzdmnHGFkjlacyKN91QKJeyLu?=
- =?us-ascii?Q?VMmykiy6TD4jzidJMwRsmGTfATOUODPBDlUbJbHASx66VvgGquBuxUojl5h/?=
- =?us-ascii?Q?A6v16/K0kmDQRniVJBH8bsO+QZGbfPqmX8N3n3LtlG7UwNK4J09rXHZzBtPw?=
- =?us-ascii?Q?q8xaDw3/S/M6o8qOcP5tL5n92QK5KWk/g7iIA7FUChkDdW4iCdnATGcMkMov?=
- =?us-ascii?Q?syYXw4Yw4NwFjA30ctjnv6k5bBNv7i85glfKuQ2Ne7SGDrGljcWoZqEKF1D+?=
- =?us-ascii?Q?sOJs7iOx/1q7ZJxAV+b4In9SnyO4qtr1GBDD0X9ZSJiLut8W8lrK/84ydmu6?=
- =?us-ascii?Q?kljxbaFqbriXkUiQ8nVm/wYIkiZGo8Ui+G80EGD/wuz+CCX1Rv4En/2LEdGu?=
- =?us-ascii?Q?ZJ2q8LVND1D0zS79PHK+akhQMcOu64QlYbhtzjuaTHLiPm1V9NIbJrhYO8Ol?=
- =?us-ascii?Q?yfeeSdIGGeg9VZgpzP3NaJPmEKBym5OYgV+1KgqY6eL9FziYXJ+0Z0MEfJ8v?=
- =?us-ascii?Q?BVjJrSIPDRM3HP9UaTISDR+iMh2a4AjMFwkdKvF/1YCyEhRPcYsBQgmYGl6M?=
- =?us-ascii?Q?T6R8cR4z1pW7+y+5uV0qq2O7F6PQ5upj0cQfwa83VcDBoeekAnvQSbvCJ0qs?=
- =?us-ascii?Q?ODitYqNKpVjbeXlScER7mB2SnPVgp0X4mVtALnndbh7DuewDOpuztqOz6J7C?=
- =?us-ascii?Q?G1onyUp3r3IS+2e6p7Su9DVwIWjtKJKZemRBcLbyUkkx2+sAk0r1YgcLyz0Z?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 160283f4-a515-4a5d-8244-08daf4de1916
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5117.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 20:46:36.9668
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1mvapwMG79qpDm7CpSON1nNIcek94aGdASGn2wrLRUvFWvudMimT9Db+/07cmMF66GbVEx6YAGMDOjSJkGR8TIhgiZHdRapFLr7eTPML3K8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB6804
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-12_12,2023-01-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0
- adultscore=0 spamscore=0 mlxscore=0 bulkscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301120148
-X-Proofpoint-GUID: Up0ZQxvXtFXJ1c_RKKsgAcBm45uK0Acv
-X-Proofpoint-ORIG-GUID: Up0ZQxvXtFXJ1c_RKKsgAcBm45uK0Acv
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221214194056.161492-1-michael.roth@amd.com> <20221214194056.161492-30-michael.roth@amd.com>
+In-Reply-To: <20221214194056.161492-30-michael.roth@amd.com>
+From:   Alper Gun <alpergun@google.com>
+Date:   Thu, 12 Jan 2023 12:47:21 -0800
+Message-ID: <CABpDEum=-3_izZJYzQb4B2ef699f2R+SDWC-L2Ca-rPE5-ekpw@mail.gmail.com>
+Subject: Re: [PATCH RFC v7 29/64] crypto: ccp: Handle the legacy SEV command
+ when SNP is enabled
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, dgilbert@redhat.com,
+        jarkko@kernel.org, ashish.kalra@amd.com, harald@profian.com,
+        Brijesh Singh <brijesh.singh@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,98 +82,539 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a folio inside unpoison_memory which replaces a compound_head() call
-with a call to page_folio().
+On Wed, Dec 14, 2022 at 11:54 AM Michael Roth <michael.roth@amd.com> wrote:
+>
+> From: Brijesh Singh <brijesh.singh@amd.com>
+>
+> The behavior of the SEV-legacy commands is altered when the SNP firmware
+> is in the INIT state. When SNP is in INIT state, all the SEV-legacy
+> commands that cause the firmware to write to memory must be in the
+> firmware state before issuing the command..
+>
+> A command buffer may contains a system physical address that the firmware
+> may write to. There are two cases that need to be handled:
+>
+> 1) system physical address points to a guest memory
+> 2) system physical address points to a host memory
+>
+> To handle the case #1, change the page state to the firmware in the RMP
+> table before issuing the command and restore the state to shared after the
+> command completes.
+>
+> For the case #2, use a bounce buffer to complete the request.
+>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  drivers/crypto/ccp/sev-dev.c | 370 ++++++++++++++++++++++++++++++++++-
+>  drivers/crypto/ccp/sev-dev.h |  12 ++
+>  2 files changed, 372 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index 4c12e98a1219..5eb2e8f364d4 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -286,6 +286,30 @@ static int rmp_mark_pages_firmware(unsigned long paddr, unsigned int npages, boo
+>         return rc;
+>  }
+>
+> +static int rmp_mark_pages_shared(unsigned long paddr, unsigned int npages)
+> +{
+> +       /* Cbit maybe set in the paddr */
+> +       unsigned long pfn = __sme_clr(paddr) >> PAGE_SHIFT;
+> +       int rc, n = 0, i;
+> +
+> +       for (i = 0; i < npages; i++, pfn++, n++) {
+> +               rc = rmp_make_shared(pfn, PG_LEVEL_4K);
+> +               if (rc)
+> +                       goto cleanup;
+> +       }
+> +
+> +       return 0;
+> +
+> +cleanup:
+> +       /*
+> +        * If failed to change the page state to shared, then its not safe
+> +        * to release the page back to the system, leak it.
+> +        */
+> +       snp_mark_pages_offline(pfn, npages - n);
+> +
+> +       return rc;
+> +}
+> +
+>  static struct page *__snp_alloc_firmware_pages(gfp_t gfp_mask, int order, bool locked)
+>  {
+>         unsigned long npages = 1ul << order, paddr;
+> @@ -487,12 +511,295 @@ static int sev_write_init_ex_file_if_required(int cmd_id)
+>         return sev_write_init_ex_file();
+>  }
+>
+> +static int alloc_snp_host_map(struct sev_device *sev)
+> +{
+> +       struct page *page;
+> +       int i;
+> +
+> +       for (i = 0; i < MAX_SNP_HOST_MAP_BUFS; i++) {
+> +               struct snp_host_map *map = &sev->snp_host_map[i];
+> +
+> +               memset(map, 0, sizeof(*map));
+> +
+> +               page = alloc_pages(GFP_KERNEL_ACCOUNT, get_order(SEV_FW_BLOB_MAX_SIZE));
+> +               if (!page)
+> +                       return -ENOMEM;
+> +
+> +               map->host = page_address(page);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static void free_snp_host_map(struct sev_device *sev)
+> +{
+> +       int i;
+> +
+> +       for (i = 0; i < MAX_SNP_HOST_MAP_BUFS; i++) {
+> +               struct snp_host_map *map = &sev->snp_host_map[i];
+> +
+> +               if (map->host) {
+> +                       __free_pages(virt_to_page(map->host), get_order(SEV_FW_BLOB_MAX_SIZE));
+> +                       memset(map, 0, sizeof(*map));
+> +               }
+> +       }
+> +}
+> +
+> +static int map_firmware_writeable(u64 *paddr, u32 len, bool guest, struct snp_host_map *map)
+> +{
+> +       unsigned int npages = PAGE_ALIGN(len) >> PAGE_SHIFT;
+> +
+> +       map->active = false;
+> +
+> +       if (!paddr || !len)
+> +               return 0;
+> +
+> +       map->paddr = *paddr;
+> +       map->len = len;
+> +
+> +       /* If paddr points to a guest memory then change the page state to firmwware. */
+> +       if (guest) {
+> +               if (rmp_mark_pages_firmware(*paddr, npages, true))
+> +                       return -EFAULT;
+> +
+> +               goto done;
+> +       }
+> +
+> +       if (!map->host)
+> +               return -ENOMEM;
+> +
+> +       /* Check if the pre-allocated buffer can be used to fullfil the request. */
+> +       if (len > SEV_FW_BLOB_MAX_SIZE)
+> +               return -EINVAL;
+> +
+> +       /* Transition the pre-allocated buffer to the firmware state. */
+> +       if (rmp_mark_pages_firmware(__pa(map->host), npages, true))
+> +               return -EFAULT;
+> +
+> +       /* Set the paddr to use pre-allocated firmware buffer */
+> +       *paddr = __psp_pa(map->host);
+> +
+> +done:
+> +       map->active = true;
+> +       return 0;
+> +}
+> +
+> +static int unmap_firmware_writeable(u64 *paddr, u32 len, bool guest, struct snp_host_map *map)
+> +{
+> +       unsigned int npages = PAGE_ALIGN(len) >> PAGE_SHIFT;
+> +
+> +       if (!map->active)
+> +               return 0;
+> +
+> +       /* If paddr points to a guest memory then restore the page state to hypervisor. */
+> +       if (guest) {
+> +               if (snp_reclaim_pages(*paddr, npages, true))
+> +                       return -EFAULT;
+> +
+> +               goto done;
+> +       }
+> +
+> +       /*
+> +        * Transition the pre-allocated buffer to hypervisor state before the access.
+> +        *
+> +        * This is because while changing the page state to firmware, the kernel unmaps
+> +        * the pages from the direct map, and to restore the direct map the pages must
+> +        * be transitioned back to the shared state.
+> +        */
+> +       if (snp_reclaim_pages(__pa(map->host), npages, true))
+> +               return -EFAULT;
+> +
+> +       /* Copy the response data firmware buffer to the callers buffer. */
+> +       memcpy(__va(__sme_clr(map->paddr)), map->host, min_t(size_t, len, map->len));
+> +       *paddr = map->paddr;
+> +
+> +done:
+> +       map->active = false;
+> +       return 0;
+> +}
+> +
+> +static bool sev_legacy_cmd_buf_writable(int cmd)
+> +{
+> +       switch (cmd) {
+> +       case SEV_CMD_PLATFORM_STATUS:
+> +       case SEV_CMD_GUEST_STATUS:
+> +       case SEV_CMD_LAUNCH_START:
+> +       case SEV_CMD_RECEIVE_START:
+> +       case SEV_CMD_LAUNCH_MEASURE:
+> +       case SEV_CMD_SEND_START:
+> +       case SEV_CMD_SEND_UPDATE_DATA:
+> +       case SEV_CMD_SEND_UPDATE_VMSA:
+> +       case SEV_CMD_PEK_CSR:
+> +       case SEV_CMD_PDH_CERT_EXPORT:
+> +       case SEV_CMD_GET_ID:
+> +       case SEV_CMD_ATTESTATION_REPORT:
+> +               return true;
+> +       default:
+> +               return false;
+> +       }
+> +}
+> +
+> +#define prep_buffer(name, addr, len, guest, map) \
+> +       func(&((typeof(name *))cmd_buf)->addr, ((typeof(name *))cmd_buf)->len, guest, map)
+> +
+> +static int __snp_cmd_buf_copy(int cmd, void *cmd_buf, bool to_fw, int fw_err)
+> +{
+> +       int (*func)(u64 *paddr, u32 len, bool guest, struct snp_host_map *map);
+> +       struct sev_device *sev = psp_master->sev_data;
+> +       bool from_fw = !to_fw;
+> +
+> +       /*
+> +        * After the command is completed, change the command buffer memory to
+> +        * hypervisor state.
+> +        *
+> +        * The immutable bit is automatically cleared by the firmware, so
+> +        * no not need to reclaim the page.
+> +        */
+> +       if (from_fw && sev_legacy_cmd_buf_writable(cmd)) {
+> +               if (rmp_mark_pages_shared(__pa(cmd_buf), 1))
+> +                       return -EFAULT;
 
-Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
----
- mm/memory-failure.c | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+If we return here, we will skip calling unmap_firmware_writeable and
+we will leak some pages in firmware state.
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index fb98652b211a..c53588ea5993 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2335,7 +2335,6 @@ core_initcall(memory_failure_init);
-  */
- int unpoison_memory(unsigned long pfn)
- {
--	struct page *page;
- 	struct folio *folio;
- 	struct page *p;
- 	int ret = -EBUSY;
-@@ -2348,7 +2347,6 @@ int unpoison_memory(unsigned long pfn)
- 		return -ENXIO;
- 
- 	p = pfn_to_page(pfn);
--	page = compound_head(p);
- 	folio = page_folio(p);
- 
- 	mutex_lock(&mf_mutex);
-@@ -2360,31 +2358,31 @@ int unpoison_memory(unsigned long pfn)
- 		goto unlock_mutex;
- 	}
- 
--	if (!PageHWPoison(p)) {
-+	if (!folio_test_hwpoison(folio)) {
- 		unpoison_pr_info("Unpoison: Page was already unpoisoned %#lx\n",
- 				 pfn, &unpoison_rs);
- 		goto unlock_mutex;
- 	}
- 
--	if (page_count(page) > 1) {
-+	if (folio_ref_count(folio) > 1) {
- 		unpoison_pr_info("Unpoison: Someone grabs the hwpoison page %#lx\n",
- 				 pfn, &unpoison_rs);
- 		goto unlock_mutex;
- 	}
- 
--	if (page_mapped(page)) {
-+	if (folio_mapped(folio)) {
- 		unpoison_pr_info("Unpoison: Someone maps the hwpoison page %#lx\n",
- 				 pfn, &unpoison_rs);
- 		goto unlock_mutex;
- 	}
- 
--	if (page_mapping(page)) {
-+	if (folio_mapping(folio)) {
- 		unpoison_pr_info("Unpoison: the hwpoison page has non-NULL mapping %#lx\n",
- 				 pfn, &unpoison_rs);
- 		goto unlock_mutex;
- 	}
- 
--	if (PageSlab(page) || PageTable(page) || PageReserved(page))
-+	if (folio_test_slab(folio) || PageTable(&folio->page) || folio_test_reserved(folio))
- 		goto unlock_mutex;
- 
- 	ret = get_hwpoison_page(p, MF_UNPOISON);
-@@ -2397,7 +2395,7 @@ int unpoison_memory(unsigned long pfn)
- 				goto unlock_mutex;
- 			}
- 		}
--		ret = TestClearPageHWPoison(page) ? 0 : -EBUSY;
-+		ret = folio_test_clear_hwpoison(folio) ? 0 : -EBUSY;
- 	} else if (ret < 0) {
- 		if (ret == -EHWPOISON) {
- 			ret = put_page_back_buddy(p) ? 0 : -EBUSY;
-@@ -2410,14 +2408,14 @@ int unpoison_memory(unsigned long pfn)
- 			count = folio_free_raw_hwp(folio, false);
- 			if (count == 0) {
- 				ret = -EBUSY;
--				put_page(page);
-+				folio_put(folio);
- 				goto unlock_mutex;
- 			}
- 		}
- 
--		put_page(page);
-+		folio_put(folio);
- 		if (TestClearPageHWPoison(p)) {
--			put_page(page);
-+			folio_put(folio);
- 			ret = 0;
- 		}
- 	}
--- 
-2.39.0
+> +
+> +               /* No need to go further if firmware failed to execute command. */
+> +               if (fw_err)
+> +                       return 0;
+> +       }
+> +
+> +       if (to_fw)
+> +               func = map_firmware_writeable;
+> +       else
+> +               func = unmap_firmware_writeable;
+> +
+> +       /*
+> +        * A command buffer may contains a system physical address. If the address
+> +        * points to a host memory then use an intermediate firmware page otherwise
+> +        * change the page state in the RMP table.
+> +        */
+> +       switch (cmd) {
+> +       case SEV_CMD_PDH_CERT_EXPORT:
+> +               if (prep_buffer(struct sev_data_pdh_cert_export, pdh_cert_address,
+> +                               pdh_cert_len, false, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               if (prep_buffer(struct sev_data_pdh_cert_export, cert_chain_address,
+> +                               cert_chain_len, false, &sev->snp_host_map[1]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_GET_ID:
+> +               if (prep_buffer(struct sev_data_get_id, address, len,
+> +                               false, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_PEK_CSR:
+> +               if (prep_buffer(struct sev_data_pek_csr, address, len,
+> +                               false, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_LAUNCH_UPDATE_DATA:
+> +               if (prep_buffer(struct sev_data_launch_update_data, address, len,
+> +                               true, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_LAUNCH_UPDATE_VMSA:
+> +               if (prep_buffer(struct sev_data_launch_update_vmsa, address, len,
+> +                               true, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_LAUNCH_MEASURE:
+> +               if (prep_buffer(struct sev_data_launch_measure, address, len,
+> +                               false, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_LAUNCH_UPDATE_SECRET:
+> +               if (prep_buffer(struct sev_data_launch_secret, guest_address, guest_len,
+> +                               true, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_DBG_DECRYPT:
+> +               if (prep_buffer(struct sev_data_dbg, dst_addr, len, false,
+> +                               &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_DBG_ENCRYPT:
+> +               if (prep_buffer(struct sev_data_dbg, dst_addr, len, true,
+> +                               &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_ATTESTATION_REPORT:
+> +               if (prep_buffer(struct sev_data_attestation_report, address, len,
+> +                               false, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_SEND_START:
+> +               if (prep_buffer(struct sev_data_send_start, session_address,
+> +                               session_len, false, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_SEND_UPDATE_DATA:
+> +               if (prep_buffer(struct sev_data_send_update_data, hdr_address, hdr_len,
+> +                               false, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               if (prep_buffer(struct sev_data_send_update_data, trans_address,
+> +                               trans_len, false, &sev->snp_host_map[1]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_SEND_UPDATE_VMSA:
+> +               if (prep_buffer(struct sev_data_send_update_vmsa, hdr_address, hdr_len,
+> +                               false, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               if (prep_buffer(struct sev_data_send_update_vmsa, trans_address,
+> +                               trans_len, false, &sev->snp_host_map[1]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_RECEIVE_UPDATE_DATA:
+> +               if (prep_buffer(struct sev_data_receive_update_data, guest_address,
+> +                               guest_len, true, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       case SEV_CMD_RECEIVE_UPDATE_VMSA:
+> +               if (prep_buffer(struct sev_data_receive_update_vmsa, guest_address,
+> +                               guest_len, true, &sev->snp_host_map[0]))
+> +                       goto err;
+> +               break;
+> +       default:
+> +               break;
+> +       }
+> +
+> +       /* The command buffer need to be in the firmware state. */
+> +       if (to_fw && sev_legacy_cmd_buf_writable(cmd)) {
+> +               if (rmp_mark_pages_firmware(__pa(cmd_buf), 1, true))
+> +                       return -EFAULT;
 
+This function moves two separate pages to firmware state. First
+calling map_firmware_writeable and second calling
+rmp_mark_pages_firmware for cmd_buf.
+In case rmp_mark_pages_firmware fails for cmd_buf, the page which has
+already moved to firmware state in map_firmware_writeable should be
+reclaimed.
+This is a problem especially if we leak a guest owned page in firmware
+state. Since this is used only by legacy SEV VMs, these leaked pages
+will never be reclaimed back when destroying these VMs.
+
+>
+> +       }
+> +
+> +       return 0;
+> +
+> +err:
+> +       return -EINVAL;
+> +}
+> +
+> +static inline bool need_firmware_copy(int cmd)
+> +{
+> +       struct sev_device *sev = psp_master->sev_data;
+> +
+> +       /* After SNP is INIT'ed, the behavior of legacy SEV command is changed. */
+> +       return ((cmd < SEV_CMD_SNP_INIT) && sev->snp_initialized) ? true : false;
+> +}
+> +
+> +static int snp_aware_copy_to_firmware(int cmd, void *data)
+> +{
+> +       return __snp_cmd_buf_copy(cmd, data, true, 0);
+> +}
+> +
+> +static int snp_aware_copy_from_firmware(int cmd, void *data, int fw_err)
+> +{
+> +       return __snp_cmd_buf_copy(cmd, data, false, fw_err);
+> +}
+> +
+>  static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
+>  {
+>         struct psp_device *psp = psp_master;
+>         struct sev_device *sev;
+>         unsigned int phys_lsb, phys_msb;
+>         unsigned int reg, ret = 0;
+> +       void *cmd_buf;
+>         int buf_len;
+>
+>         if (!psp || !psp->sev_data)
+> @@ -512,12 +819,28 @@ static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
+>          * work for some memory, e.g. vmalloc'd addresses, and @data may not be
+>          * physically contiguous.
+>          */
+> -       if (data)
+> -               memcpy(sev->cmd_buf, data, buf_len);
+> +       if (data) {
+> +               if (sev->cmd_buf_active > 2)
+> +                       return -EBUSY;
+> +
+> +               cmd_buf = sev->cmd_buf_active ? sev->cmd_buf_backup : sev->cmd_buf;
+> +
+> +               memcpy(cmd_buf, data, buf_len);
+> +               sev->cmd_buf_active++;
+> +
+> +               /*
+> +                * The behavior of the SEV-legacy commands is altered when the
+> +                * SNP firmware is in the INIT state.
+> +                */
+> +               if (need_firmware_copy(cmd) && snp_aware_copy_to_firmware(cmd, sev->cmd_buf))
+> +                       return -EFAULT;
+> +       } else {
+> +               cmd_buf = sev->cmd_buf;
+> +       }
+>
+>         /* Get the physical address of the command buffer */
+> -       phys_lsb = data ? lower_32_bits(__psp_pa(sev->cmd_buf)) : 0;
+> -       phys_msb = data ? upper_32_bits(__psp_pa(sev->cmd_buf)) : 0;
+> +       phys_lsb = data ? lower_32_bits(__psp_pa(cmd_buf)) : 0;
+> +       phys_msb = data ? upper_32_bits(__psp_pa(cmd_buf)) : 0;
+>
+>         dev_dbg(sev->dev, "sev command id %#x buffer 0x%08x%08x timeout %us\n",
+>                 cmd, phys_msb, phys_lsb, psp_timeout);
+> @@ -560,15 +883,24 @@ static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
+>                 ret = sev_write_init_ex_file_if_required(cmd);
+>         }
+>
+> -       print_hex_dump_debug("(out): ", DUMP_PREFIX_OFFSET, 16, 2, data,
+> -                            buf_len, false);
+> -
+>         /*
+>          * Copy potential output from the PSP back to data.  Do this even on
+>          * failure in case the caller wants to glean something from the error.
+>          */
+> -       if (data)
+> -               memcpy(data, sev->cmd_buf, buf_len);
+> +       if (data) {
+> +               /*
+> +                * Restore the page state after the command completes.
+> +                */
+> +               if (need_firmware_copy(cmd) &&
+> +                   snp_aware_copy_from_firmware(cmd, cmd_buf, ret))
+> +                       return -EFAULT;
+> +
+> +               memcpy(data, cmd_buf, buf_len);
+> +               sev->cmd_buf_active--;
+> +       }
+> +
+> +       print_hex_dump_debug("(out): ", DUMP_PREFIX_OFFSET, 16, 2, data,
+> +                            buf_len, false);
+>
+>         return ret;
+>  }
+> @@ -1579,10 +1911,12 @@ int sev_dev_init(struct psp_device *psp)
+>         if (!sev)
+>                 goto e_err;
+>
+> -       sev->cmd_buf = (void *)devm_get_free_pages(dev, GFP_KERNEL, 0);
+> +       sev->cmd_buf = (void *)devm_get_free_pages(dev, GFP_KERNEL, 1);
+>         if (!sev->cmd_buf)
+>                 goto e_sev;
+>
+> +       sev->cmd_buf_backup = (uint8_t *)sev->cmd_buf + PAGE_SIZE;
+> +
+>         psp->sev_data = sev;
+>
+>         sev->dev = dev;
+> @@ -1648,6 +1982,12 @@ static void sev_firmware_shutdown(struct sev_device *sev)
+>                 snp_range_list = NULL;
+>         }
+>
+> +       /*
+> +        * The host map need to clear the immutable bit so it must be free'd before the
+> +        * SNP firmware shutdown.
+> +        */
+> +       free_snp_host_map(sev);
+> +
+>         sev_snp_shutdown(&error);
+>  }
+>
+> @@ -1722,6 +2062,14 @@ void sev_pci_init(void)
+>                                 dev_err(sev->dev, "SEV-SNP: failed to INIT error %#x\n", error);
+>                         }
+>                 }
+> +
+> +               /*
+> +                * Allocate the intermediate buffers used for the legacy command handling.
+> +                */
+> +               if (alloc_snp_host_map(sev)) {
+> +                       dev_notice(sev->dev, "Failed to alloc host map (disabling legacy SEV)\n");
+> +                       goto skip_legacy;
+> +               }
+>         }
+>
+>         /* Obtain the TMR memory area for SEV-ES use */
+> @@ -1739,12 +2087,14 @@ void sev_pci_init(void)
+>                 dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
+>                         error, rc);
+>
+> +skip_legacy:
+>         dev_info(sev->dev, "SEV%s API:%d.%d build:%d\n", sev->snp_initialized ?
+>                 "-SNP" : "", sev->api_major, sev->api_minor, sev->build);
+>
+>         return;
+>
+>  err:
+> +       free_snp_host_map(sev);
+>         psp_master->sev_data = NULL;
+>  }
+>
+> diff --git a/drivers/crypto/ccp/sev-dev.h b/drivers/crypto/ccp/sev-dev.h
+> index 34767657beb5..19d79f9d4212 100644
+> --- a/drivers/crypto/ccp/sev-dev.h
+> +++ b/drivers/crypto/ccp/sev-dev.h
+> @@ -29,11 +29,20 @@
+>  #define SEV_CMDRESP_CMD_SHIFT          16
+>  #define SEV_CMDRESP_IOC                        BIT(0)
+>
+> +#define MAX_SNP_HOST_MAP_BUFS          2
+> +
+>  struct sev_misc_dev {
+>         struct kref refcount;
+>         struct miscdevice misc;
+>  };
+>
+> +struct snp_host_map {
+> +       u64 paddr;
+> +       u32 len;
+> +       void *host;
+> +       bool active;
+> +};
+> +
+>  struct sev_device {
+>         struct device *dev;
+>         struct psp_device *psp;
+> @@ -52,8 +61,11 @@ struct sev_device {
+>         u8 build;
+>
+>         void *cmd_buf;
+> +       void *cmd_buf_backup;
+> +       int cmd_buf_active;
+>
+>         bool snp_initialized;
+> +       struct snp_host_map snp_host_map[MAX_SNP_HOST_MAP_BUFS];
+>  };
+>
+>  int sev_dev_init(struct psp_device *psp);
+> --
+> 2.25.1
+>
