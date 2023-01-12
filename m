@@ -2,101 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1903667E4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C2C667E53
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240513AbjALSlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
+        id S231625AbjALSol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240515AbjALSk7 (ORCPT
+        with ESMTP id S240565AbjALSn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:40:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB92A6D501
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:14:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49607B81F02
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 18:14:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC84C433D2;
-        Thu, 12 Jan 2023 18:14:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673547281;
-        bh=ZHwPqXda3cP76H31k4wg9TUOciDZ22NXwzl5Pg5ZuB8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dFyPKjEz89mpn4VEFMpjTmcGuC+vaR+1/9lE+zKt1sMbyxd7AOse6b4bnReyndf5e
-         6rnJ48MFe6rkSNujHiheEAdb2FsAzTap2RhF35SZWCJXbHqfxaEII0vMGa/sSYg6qz
-         6ouzDwScgmft68J7qFbiw8DDvN3aTQ9d8POT8J5WmM4lrWwJF4SkMmet2DrMTUhEyF
-         pJd2vDcck0/GvOhagmAmVrfLWEAxbY3+LkV4V3IsKzDYfeybOUQabGlGgW6ASgwnBB
-         Ruh0kvUXw3DqEPPhlykQMshiZDOEvD3/8dvCjNrmp8Wey+tf8x/IHG9w2kb4D/J05o
-         4naUKHC7jmJuw==
-Date:   Thu, 12 Jan 2023 18:14:34 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH 2/2] regmap: sdw: Remove 8-bit value size restriction
-Message-ID: <Y8BOCpXyOyF3igfG@sirena.org.uk>
-References: <20230112171840.2098463-1-ckeepax@opensource.cirrus.com>
- <20230112171840.2098463-3-ckeepax@opensource.cirrus.com>
- <756fcb2d-d571-18cb-985e-d907ab682275@linux.intel.com>
+        Thu, 12 Jan 2023 13:43:29 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FD6395C1;
+        Thu, 12 Jan 2023 10:15:52 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id c6so21043552pls.4;
+        Thu, 12 Jan 2023 10:15:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h5xmPZZpsxDAD9C0zb1qoc3jWG8cLDMF9uzRrIE8Z5M=;
+        b=MsGsIJV8PkuLfxxK8ujOQj7unxBCu9ywEW8jKUhdVpMH73qzuPv4h7p41McWreWoZd
+         asynsJi8kUZBCW0+5RfYTMXLTR6M/2w+XAQ+TTCxrGug5FTUJ77R9cn4oIjTdhKVXKA5
+         FVXXaGt5KONFBgybjCZPtRSDrr7vutoK7TLjocf+bibhyRB4vbq48ORnuGt/bCHK5eHB
+         XYSTVOKTG8FMxAEKtSvL4rAurD1vGNZTW76scNYLMhyvbYI/0GweCDeCcmQM/p5GJ7Ym
+         IaR5Q9P0ZqKehNxRkI+bVwoVcPsMfx6y0hjJPXOdq8pJgt6s2NU2f+fnfX6MzjqOjiwh
+         L5iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h5xmPZZpsxDAD9C0zb1qoc3jWG8cLDMF9uzRrIE8Z5M=;
+        b=sQcOG7cCQVV676LOMvA3OQP7uODEj7EPWo7kggdC6uSXUictxrDZGckbHSl3SRLPcd
+         2mC+2SA1aaEofLrPptZ4XedwmYdR+swgCdWZBGsojRohhbudOwq4c5iQmLwtyZGyNzSv
+         cOyEpPZsYzXvT6dndsqRMerBVWhmepI3gkByujE0m647I+wQUM50+81nIDHywgblIwY1
+         ILbpjsl+o0cogBuJuWI8BJ3Mjey2VVKArPhbfMBLhc9P4kp6g8R3CYf/RYtjKg+JLM5O
+         qvm5WytXJaWI/14yUlBn3JV64O+DMK7B2GvOhk0zIhTYq0nBb0XldQaNLnaUPOtzZhDM
+         iFfw==
+X-Gm-Message-State: AFqh2kqYHwsi8+0EmwxNSFM9m0rIZ9NBNFWxOLkR9zjBLlR/sEiCE7rG
+        m9n55WQWr+oPzKiHEGp6V9sx+5cBxen8hA==
+X-Google-Smtp-Source: AMrXdXt69GN1hSct/IKzxuRgchaNHMLJQEClNzRhc2AS9lIY4IF9PDrYBXlHnT8aRcMLEtJzykTLww==
+X-Received: by 2002:a05:6a20:d39a:b0:9d:efbf:6618 with SMTP id iq26-20020a056a20d39a00b0009defbf6618mr93924412pzb.38.1673547342253;
+        Thu, 12 Jan 2023 10:15:42 -0800 (PST)
+Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
+        by smtp.gmail.com with ESMTPSA id b5-20020a630c05000000b00477def759cbsm10397806pgl.58.2023.01.12.10.15.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 10:15:41 -0800 (PST)
+Date:   Thu, 12 Jan 2023 10:15:39 -0800
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Gregory Price <gourry.memverge@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        oleg@redhat.com, peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
+Subject: Re: [PATCH 3/3] prctl,syscall_user_dispatch: add a getter for
+ configuration info
+Message-ID: <Y8BOSwkISphWtEQ5@gmail.com>
+References: <20230109153348.5625-1-gregory.price@memverge.com>
+ <20230109153348.5625-4-gregory.price@memverge.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NyngNFsuXRwJtzSl"
+Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
-In-Reply-To: <756fcb2d-d571-18cb-985e-d907ab682275@linux.intel.com>
-X-Cookie: A watched clock never boils.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230109153348.5625-4-gregory.price@memverge.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 09, 2023 at 10:33:48AM -0500, Gregory Price wrote:
+> This patch implements simple getter interface for syscall user dispatch
+> configuration info.
+> 
+> To support checkpoint/resume of a syscall user dispatch process,
+> the prctl settings for syscall user dispatch must be fetchable.
+> Presently, these settings are write-only, making it impossible to
+> implement transparent checkpoint (coordination with the software is
+> required).
+> 
+> As Syscall User Dispatch is explicitly not for secure-container
+> development, exposing the configuration state via prctl does not
+> violate the original design intent.
+> 
+> Signed-off-by: Gregory Price <gregory.price@memverge.com>
+> ---
+>  .../admin-guide/syscall-user-dispatch.rst     | 18 +++++++
+>  include/linux/syscall_user_dispatch.h         |  7 +++
+>  include/uapi/linux/prctl.h                    |  3 ++
+>  kernel/entry/syscall_user_dispatch.c          | 14 +++++
+>  kernel/sys.c                                  |  4 ++
+>  .../syscall_user_dispatch/sud_test.c          | 54 +++++++++++++++++++
+>  6 files changed, 100 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
+> index 60314953c728..8b2c8b6441b7 100644
+> --- a/Documentation/admin-guide/syscall-user-dispatch.rst
+> +++ b/Documentation/admin-guide/syscall-user-dispatch.rst
+> @@ -45,6 +45,10 @@ only the syscall dispatcher address and the userspace key.
+>  As the ABI of these intercepted syscalls is unknown to Linux, these
+>  syscalls are not instrumentable via ptrace or the syscall tracepoints.
+>  
+> +A getter interface is supplied for the purpose of userland
+> +checkpoint/restore software being able to suspend and restore the
+> +current state of the system.
+> +
+>  Interface
+>  ---------
+>  
+> @@ -73,6 +77,20 @@ thread-wide, without the need to invoke the kernel directly.  selector
+>  can be set to SYSCALL_DISPATCH_FILTER_ALLOW or SYSCALL_DISPATCH_FILTER_BLOCK.
+>  Any other value should terminate the program with a SIGSYS.
+>  
+> +
+> +A thread can fetch the current Syscall User Dispatch configuration with the following prctl:
+> +
+> +  prctl(PR_GET_SYSCALL_USER_DISPATCH, <dispatch_config>))
+> +
+> +<dispatch_config> is a pointer to a ``struct syscall_user_dispatch`` as defined in ``linux/include/linux/syscall_user_dispatch.h``::
 
---NyngNFsuXRwJtzSl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+syscall_user_dispatch.h isn't a part of uapi, so I am not sure that it
+is a good idea to use it here.
 
-On Thu, Jan 12, 2023 at 11:38:38AM -0600, Pierre-Louis Bossart wrote:
+For criu, it is much more convinient to have a ptrace interface to get
+this sort of parameters. prctl requires to execute a system call from a
+context of the target process. It is tricky so we want to minimize a
+number of such calls.
 
-> > +static int regmap_sdw_gather_write(void *context,
-> > +				   const void *reg_buf, size_t reg_size,
-> > +				   const void *val_buf, size_t val_size)
-> >  {
-> >  	struct device *dev = context;
-> >  	struct sdw_slave *slave = dev_to_sdw_dev(dev);
-> > -	int read;
-> > +	u32 addr = le32_to_cpu(*(const __le32 *)reg_buf);
-
-> what's the difference between regmap_sdw_write() and
-> regmap_sdw_gather_write()? Seems to me that it's the same functionality
-> of writing at consecutive addresses. It's not a true 'gather' in the
-> sense that only the first address is used?
-
-The regmap gather_write() operation allows the bus to take two buffers,
-one for the register and one for the value, rather than requiring the
-core combine everything into a single buffer (mainly useful for large
-transfers like firmware downloads).
-
---NyngNFsuXRwJtzSl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPATgkACgkQJNaLcl1U
-h9DY9gf/TllVCVxT32j19TNlvR5swp3GekXYm0Qe0BdlkBVEWl0Q/HpKixSkgeGR
-hn7T5+BdVcpK+FezM681wvCPe5G10YGFW2xoYyL0AJtiVTUo7BOPyP5X6qsxvpiN
-vCUyCS58J+sb5eUiDm6Ogvf3b+Gxqx3eZWy+CfGmMkkZuTPj/HUYkWcXYlRDLFoq
-G2H7hPHaiuJZRgrhB5N/KPe1aS0tv0vLSIv9c9ggjsIt7syhVlG3LRyqH5+X5FsE
-J2kcO5wBMNG0FnoO2+pSe10QZ2/0+P+Cew05yjE5Am/Zvk7stFrkZ/hIKLpj/aBQ
-J97DRNhK8Ar45nHSbdcLSZSHfyKdZQ==
-=Pt+0
------END PGP SIGNATURE-----
-
---NyngNFsuXRwJtzSl--
+Thanks,
+Andrei
