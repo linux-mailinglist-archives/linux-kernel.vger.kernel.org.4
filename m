@@ -2,139 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E82D6674C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0D26674E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232882AbjALOM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
+        id S230339AbjALOPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235122AbjALOKo (ORCPT
+        with ESMTP id S235077AbjALOO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:10:44 -0500
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253DD59319;
-        Thu, 12 Jan 2023 06:05:36 -0800 (PST)
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPS id B42B51B001DE;
-        Thu, 12 Jan 2023 16:05:33 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1673532333;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a42ddED8o+V9ePA7ykJUXoFIdNLHF7yzyFQBjqmdKao=;
-        b=vIQ2YXfr3xNvbTOdl83e19bPe2xDIasfxZoBuZhkEVGPFSiOzJ+V+p9lGqs1t+tnYnQC9I
-        g0sjgAGGOWS466QiM5sJITzzpIo20DcR0tv3je/mm+gWMEhqoqGgm4yigBpIqsF0N+53g5
-        Rd1oGaPoOZ4Qfcgo2DMnVExb2b9CEcEFtXo4xdEddZ23kGIEJtT6T7pLvQ2TLKbnY4tzBN
-        fe2oMEBSRJ+my7bR0Mus3ELFfjvfTfjh359DEXsulC5+rzqjXJ4aKedwG5k/FqG/yb317P
-        I7qACWS+XJKBjFIQlYxWZELN/KnS8ncVsoXbWC65FYzySrVmAYT+7dC4us0OEA==
-Received: from darkstar.musicnaut.iki.fi (85-76-134-241-nat.elisa-mobile.fi [85.76.134.241])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by meesny.iki.fi (Postfix) with ESMTPSA id B240B20035;
-        Thu, 12 Jan 2023 16:05:26 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1673532327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a42ddED8o+V9ePA7ykJUXoFIdNLHF7yzyFQBjqmdKao=;
-        b=OTVmEy7cAIC2YV0GRP5Z3UN/hqAAHBlBXTIklXfbIH1sGgjB7Mj7y8KXvhCWuetxxixmgo
-        63Pu9yO2S3/gGck7DgkYTKCfF4KMG1mN4zW4wpDkJ8jn5nl3e8hVta8QrCzDE5Rkq3LUlk
-        yq4oJRSEew/o9UYuutj3V2Q+vKtTDbs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1673532327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a42ddED8o+V9ePA7ykJUXoFIdNLHF7yzyFQBjqmdKao=;
-        b=Yf6JJnmg9Rvc7t5bCOrwCKFEbA6lIuM3GH35pHypszsVX+SW0NbSA1WElYoxKSEwQ0efZ6
-        16Lra2Ssjhqg0EQ1Y8kx9DAJE3YU1DYq8wF7HvkjcFxm+Rl8AOJUnZT39Z+PqwforTEloh
-        8ejnkD8Gz1RaKBwqNT7LCzLyVyY2mD8=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1673532327; a=rsa-sha256; cv=none;
-        b=BlSSRJwBB6M1x9Im046gh9g8xl8qv7hOi7A9fvWSGH4nbeAlKYllI6fXycSgDmOpT4dFiY
-        fksFAIIhPyio/cLPRaSJeFBPhSdMY3m5LvbmYWOajvzJ2HE16Cyj3dz8hP0S9mPQXGzr0x
-        Dw5xu8Lo+q390+6BwGu9TTZyZJwZUk8=
-Date:   Thu, 12 Jan 2023 16:05:24 +0200
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] usb: remove OMAP USB Device Controller and OHCI
- support for OMAP1/2 chips
-Message-ID: <20230112140524.GK730856@darkstar.musicnaut.iki.fi>
-References: <20230112083746.9551-1-lukas.bulwahn@gmail.com>
- <20230112083746.9551-4-lukas.bulwahn@gmail.com>
- <3f2663ff-ff3f-4632-853a-ba4d38df9701@app.fastmail.com>
- <Y7/YiMPIDN0Cf5Ky@atomide.com>
- <c9821df0-cd3e-43a0-b903-430d1251d51c@app.fastmail.com>
+        Thu, 12 Jan 2023 09:14:57 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022D05CF8B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:07:00 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id k8so3692495wrc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:07:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VeQspTnffiwI58L9LycVhK0E5SPBlYLIUK7B8t+8/6A=;
+        b=MFX2NB5TMIFbOLH7I+9IQK889rOdZYfEhXxTxxThTb7W6cM+VdBHV99ld0Ek5raHWr
+         0QnGbZIaX/Uf3A7hezWUNwA5C+b1hltdMG7EfCPJQ99LDymNeyRB7MgnAU1usmV3lM0y
+         BC7yCwUq3QusphxYA631uWFAVnnrsEHjVK4TbADR1U52gNzYeWEFQAx6hjabwqyHocE/
+         OKeATcA6Jc8tMpVpGkSp2kpiY8QGuu+PBNqBQCCpllEplmsQWbtqoXU4y/GizjSSJedC
+         tW60ojiQS9r1lIjQbqQkoKN/uXhchTXy41RvYULJcTc07CYd75K6mhZl84pmq+rkcJs+
+         wdAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VeQspTnffiwI58L9LycVhK0E5SPBlYLIUK7B8t+8/6A=;
+        b=KtUR/1kO16VssNf7ZDusUH+tWKifPZBXCkf+A19cC7IfhU3Kx464b5KFehaEuSAF5h
+         rYQb0+2q1f0ReIMPGkbV6vOKYq4vukrtW2alGD27M+60ByET+nrI17Utybu62wFfq41E
+         hWgmAtcz5vyA6uYDL9TnrtiHSgzX/VvZbHNQVjV58SaSyLpv6K5ekTlomWgXsESCidD9
+         zvbrtCpyaXCsB6Q9iJgfZQLRLRZKSZfjYLXUCBUatvwm/8BehEXw1vo929Ig7yHO5dG2
+         uwqtOM9HQi1lkK/e8IYlZAdgRE8aocFUFyhQHkztJ2Zb02FWQ9DtKd1+ktnZ47oUuv2W
+         YYRw==
+X-Gm-Message-State: AFqh2koU0w3mBt9Sz+5RjfWtplvqw/MeD9Z6w9rsBsiziAPF4AqAZsUD
+        hK3ILWPUEZuVKmeu87phG5+4btWs1UCo3HIcAe65dg==
+X-Google-Smtp-Source: AMrXdXucJQn/K8isV2eY+/IdgIcNJyHlG81hYcnf/Bltvh3vgEDQRkW1xtnnHbhEt01DnGFPaMDQMysKTtjyleC3axk=
+X-Received: by 2002:a5d:6b51:0:b0:2b7:74c3:560d with SMTP id
+ x17-20020a5d6b51000000b002b774c3560dmr1430049wrw.39.1673532419131; Thu, 12
+ Jan 2023 06:06:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c9821df0-cd3e-43a0-b903-430d1251d51c@app.fastmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230105101844.1893104-1-jthoughton@google.com>
+ <20230105101844.1893104-22-jthoughton@google.com> <Y78+/wleTEC3gyqu@x1n>
+In-Reply-To: <Y78+/wleTEC3gyqu@x1n>
+From:   James Houghton <jthoughton@google.com>
+Date:   Thu, 12 Jan 2023 09:06:48 -0500
+Message-ID: <CADrL8HU-prbfx2xxXCi0RPznp5DB68-NjqqmdM+4aUeUUURhiA@mail.gmail.com>
+Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Jan 12, 2023 at 11:19:53AM +0100, Arnd Bergmann wrote:
-> On Thu, Jan 12, 2023, at 10:53, Tony Lindgren wrote:
-> > * Arnd Bergmann <arnd@arndb.de> [230112 09:03]:
-> >> On Thu, Jan 12, 2023, at 09:37, Lukas Bulwahn wrote:
-> >> > Commit 0fee2eac5c2b ("usb: phy: remove phy-isp1301-omap driver") removes
-> >> > the Philips ISP1301 with OMAP OTG driver and its corresponding config
-> >> > ISP1301_OMAP. The drivers, OMAP USB Device Controller and OHCI support for
-> >> > OMAP1/2 chips, with corresponding configs, USB_OMAP and USB_OHCI_HCD_OMAP1,
-> >> > need this removed driver (see "depends on ISP1301_OMAP") to build.
-> >> >
-> >> > Remove those two drivers.
-> >> >
-> >> > With the config USB_OMAP removed in this commit, remove some further code
-> >> > in the omap-dma header and mach-omap1 architecture code.
-> >> >
-> >> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> >> 
-> >> This would be a great cleanup because of the simplications of the
-> >> omap-dma code. I had previously looked at it and concluded that
-> >> the driver is still in use though, and I think my mistake was
-> >> just in the Kconfig part of this patch:
+On Wed, Jan 11, 2023 at 5:58 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> James,
+>
+> On Thu, Jan 05, 2023 at 10:18:19AM +0000, James Houghton wrote:
+> > @@ -751,9 +761,9 @@ static int smaps_hugetlb_range(pte_t *pte, unsigned long hmask,
+> >               int mapcount = page_mapcount(page);
 > >
-> > It sure would be nice to drop the old custom dma api in omap-dma.c
-> > while keeping the dma.c in arch/arm/mach-omap1.
-> 
-> I see that four out of the five remaining board files still use
-> omap_udc, which is the only remaining user of the custom
-> DMA interface. What I had not noticed earlier is that DMA support
-> in that driver is actually optional, though it's hardwired
-> to be enabled.
-> 
-> So if we want to kill off the old DMA stuff there is actually
-> a choice between either making omap_udc PIO-only or converting
-> it to use the standard dmaengine interface.
+> >               if (mapcount >= 2)
+> > -                     mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
+> > +                     mss->shared_hugetlb += hugetlb_pte_size(hpte);
+> >               else
+> > -                     mss->private_hugetlb += huge_page_size(hstate_vma(vma));
+> > +                     mss->private_hugetlb += hugetlb_pte_size(hpte);
+> >       }
+> >       return 0;
+>
+> One thing interesting I found with hgm right now is mostly everything will
+> be counted as "shared" here, I think it's because mapcount is accounted
+> always to the huge page even if mapped in smaller sizes, so page_mapcount()
+> to a small page should be huge too because the head page mapcount should be
+> huge.  I'm curious the reasons behind the mapcount decision.
+>
+> For example, would that risk overflow with head_compound_mapcount?  One 1G
+> page mapping all 4K takes 0.25M counts, while the limit should be 2G for
+> atomic_t.  Looks like it's possible.
 
-I use this driver on Palm TE and 770, and without it those boards would
-be useless for my use cases. Also DMA doubles the throughput, probably
-also power usage is smaller.
+The original mapcount approach was "if the hstate-level PTE is
+present, increment the compound_mapcount by 1" (basically "if any of
+the hugepage is mapped, increment the compound_mapcount by 1"), but
+this was painful to implement, so I changed it to what it is now (each
+new PT mapping increments the compound_mapcount by 1). I think you're
+right, there is absolutely an overflow risk. :( I'm not sure what the
+best solution is. I could just go back to the old approach.
 
-A.
+Regarding when things are accounted in private_hugetlb vs.
+shared_hugetlb, HGM shouldn't change that, because it only applies to
+shared mappings (right now anyway). It seems like "private_hugetlb"
+can include cases where the page is shared but has only one mapping,
+in which case HGM will change it from "private" to "shared".
+
+>
+> Btw, are the small page* pointers still needed in the latest HGM design?
+> Is there code taking care of disabling of hugetlb vmemmap optimization for
+> HGM?  Or maybe it's not needed anymore for the current design?
+
+The hugetlb vmemmap optimization can still be used with HGM, so there
+is no code to disable it. We don't need small page* pointers either,
+except for when we're dealing with mapping subpages, like in
+hugetlb_no_page. Everything else can handle the hugetlb page as a
+folio.
+
+I hope we can keep compatibility with the vmemmap optimization while
+solving the mapcount overflow risk.
+
+Thanks Peter.
+- James
