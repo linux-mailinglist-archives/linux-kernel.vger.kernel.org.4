@@ -2,130 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D633667C73
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A0C667CC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbjALRW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        id S237046AbjALRkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 12:40:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbjALRVg (ORCPT
+        with ESMTP id S236915AbjALRjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:21:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EA014D28;
-        Thu, 12 Jan 2023 08:51:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC05FB81EE4;
-        Thu, 12 Jan 2023 16:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55DAC433EF;
-        Thu, 12 Jan 2023 16:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673541945;
-        bh=oLyzs7BrkGWrZjSzv965hq1U/ogrEev6fsNywyDh/lU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qGKOr22K15obpuPJ2CduJ03kjMfQsEsBg+IopFp8651muUYVjOz3wPA0Adark/TSt
-         P7H+ZB/lKXM6Qb4ztgkLjiHRHMMO6EfuGuusauu4hLJvKNWOPeTAoE/GIxkAUVFhCw
-         SxQCaub5ZANAeRoCXsiGnWAOihOOVdrqBPp0t91k=
-Date:   Thu, 12 Jan 2023 17:45:42 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Dragos-Marian Panait <dragos.panait@windriver.com>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Kent Russell <kent.russell@amd.com>,
-        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        Thu, 12 Jan 2023 12:39:47 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571626C2A4;
+        Thu, 12 Jan 2023 08:58:55 -0800 (PST)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 79BB0CC598;
+        Thu, 12 Jan 2023 16:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1673542018; bh=YZ31VjxQ998swhidkgP8BiVfHd20jGadBRqpOMOLJDQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=SQFARVSqmS/CuDdOTzoZkQwh/4ZgdafNH+jLRa2Ts1j2Nbgd8k8dInb3Ss2slpbFx
+         n7xx0jNpvt2WWfi+TZECHmbOIiIdoKTf5NGvBLBd/j7DhuG5mFNY2bnN26sOpUrrbg
+         aXvrgOFRj/EA1QG49jP14y9mzX+E14sLDoGefoic=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5.10 1/1] drm/amdkfd: Check for null pointer after
- calling kmemdup
-Message-ID: <Y8A5NgtGLDJv4sON@kroah.com>
-References: <20230104175633.1420151-1-dragos.panait@windriver.com>
- <20230104175633.1420151-2-dragos.panait@windriver.com>
- <Y8ABeXQLzWdoaGAY@kroah.com>
- <CAKMK7uEgzJU8ukgR3sQtSUB5+wrD9VyMwCHOA-SReFWd0tKzzw@mail.gmail.com>
+Subject: Re: [PATCH 1/5] dt-bindings: cpufreq: cpufreq-qcom-hw: Add missing
+ compatibles
+Date:   Thu, 12 Jan 2023 17:46:57 +0100
+Message-ID: <2662546.mvXUDI8C0e@g550jk>
+In-Reply-To: <20230112031621.rphz4zu63ibul374@vireshk-i7>
+References: <20221016090035.565350-1-luca@z3ntu.xyz> <4899603.LvFx2qVVIh@g550jk>
+ <20230112031621.rphz4zu63ibul374@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKMK7uEgzJU8ukgR3sQtSUB5+wrD9VyMwCHOA-SReFWd0tKzzw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FROM_SUSPICIOUS_NTLD,SPF_HELO_NONE,SPF_PASS,
+        T_PDS_OTHER_BAD_TLD autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 04:26:45PM +0100, Daniel Vetter wrote:
-> On Thu, 12 Jan 2023 at 13:47, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > On Wed, Jan 04, 2023 at 07:56:33PM +0200, Dragos-Marian Panait wrote:
-> > > From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > >
-> > > [ Upstream commit abfaf0eee97925905e742aa3b0b72e04a918fa9e ]
-> > >
-> > > As the possible failure of the allocation, kmemdup() may return NULL
-> > > pointer.
-> > > Therefore, it should be better to check the 'props2' in order to prevent
-> > > the dereference of NULL pointer.
-> > >
-> > > Fixes: 3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
-> > > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > > Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-> > > Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
-> > > Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-> > > Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
-> > > ---
-> > >  drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-> > > index 86b4dadf772e..02e3c650ed1c 100644
-> > > --- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-> > > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-> > > @@ -408,6 +408,9 @@ static int kfd_parse_subtype_iolink(struct crat_subtype_iolink *iolink,
-> > >                       return -ENODEV;
-> > >               /* same everything but the other direction */
-> > >               props2 = kmemdup(props, sizeof(*props2), GFP_KERNEL);
-> > > +             if (!props2)
-> > > +                     return -ENOMEM;
-> >
-> > Not going to queue this up as this is a bogus CVE.
-> 
-> Are we at the point where CVE presence actually contraindicates
-> backporting?
+On Donnerstag, 12. J=E4nner 2023 04:16:21 CET Viresh Kumar wrote:
+> On 11-01-23, 20:48, Luca Weiss wrote:
+> > Hi Viresh,
+> >=20
+> > gentle bump, I hope this patch could get applied in-time for the next
+> > merge
+> > window.
+>=20
+> I thought Bjorn applied this patch long back. But now that I look back
+> at his email, he applied 2/5 and replied to 1/5, probably because
+> there wasn't a cover-letter available :(
+>=20
+> Sorry for the confusion, applied now.
 
-Some would say that that point passed a long time ago :)
+No worries, thanks for applying!
 
-> At least I'm getting a bit the feeling there's a surge of
-> automated (security) fixes that just don't hold up to any scrutiny.
 
-That has been happening a lot more in the past 6-8 months than in years
-past with the introduction of more automated tools being present.
-
-> Last week I had to toss out an fbdev locking patch due to static
-> checker that has no clue at all how refcounting works, and so
-> complained that things need more locking ... (that was -fixes, but
-> would probably have gone to stable too if I didn't catch it).
-> 
-> Simple bugfixes from random people was nice when it was checkpatch
-> stuff and I was fairly happy to take these aggressively in drm. But my
-> gut feeling says things seem to be shifting towards more advanced
-> tooling, but without more advanced understanding by submitters. Does
-> that holder in other areas too?
-
-Again, yes, I have seen that a lot recently, especially with regards to
-patches that purport to fix bugs yet obviously were never tested.
-
-That being said, there are a few developers who are doing great things
-with fault-injection testing and providing good patches for that.  So we
-can't just say that everyone using these tools has no clue.
-
-thanks,
-
-greg k-h
