@@ -2,117 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A48666C22
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12632666C23
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237663AbjALILE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 03:11:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        id S238774AbjALILW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 03:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239591AbjALIKy (ORCPT
+        with ESMTP id S238488AbjALILK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 03:10:54 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88FC1B9F4;
-        Thu, 12 Jan 2023 00:10:50 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30C86sMg009829;
-        Thu, 12 Jan 2023 08:10:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=iPvVXtsjDRp1y8Gz4uV+/0Q7gdrwyKAqYIPr/df9K6w=;
- b=M3NO3RY93psH1i+T6GSmeWnCUuQN3T+YcJDRJvlf23Aji7/yr+Uc0RL+gPa108I5+d1c
- ZFRrw7oJnbPz8oxmkxL6/kgi0rlsnkLAJpzeXcEraMX+S/j06CHATLaQUVyiiHz6XJ88
- mX4KqkzTe7fZsuuqOsIET6syC+tg16k26qKOJFievFG0Zc5uYNyv7o8iBPnwZUENKj1e
- 8a5dIX7nnCATRg4TNyuKxVY+LLbo0YeVtE3+i9aGZdXrfM+1wk/xjFBfAlUWXM2sticO
- ekmxhtwURKXOv0Ff6LzRw0qzRA4c55SM2oTJeNoUWYOA+b5HMkmU1MFCEOHXq56idzTw cA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1m6p36na-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 08:10:47 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30C8AkLZ010327
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 08:10:46 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 12 Jan 2023 00:10:43 -0800
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH v2 2/2] arm64: dts: qcom: sm8450: Add TCSR halt register space
-Date:   Thu, 12 Jan 2023 13:40:14 +0530
-Message-ID: <1673511014-4721-2-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1673511014-4721-1-git-send-email-quic_mojha@quicinc.com>
-References: <1673511014-4721-1-git-send-email-quic_mojha@quicinc.com>
+        Thu, 12 Jan 2023 03:11:10 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304B8E022
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:11:09 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CD5243F60C;
+        Thu, 12 Jan 2023 08:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673511067; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g3rOVtr3FiiKyQNYoIzTg/bnyNbi0bomA2m3YXQL33w=;
+        b=MXQcfGJtyiYGn9YKNiZfgcR6UavUB8jL8lrmiMtqR5MAAPuSmslm2tPu1u2O3i7WdJc7xf
+        fgiRDb2OA5aUFeAi8O4AyRa3VF3VNQJkGaQxYiw7u47jzOTjWXI7csyGvxHITikyKaXi1M
+        MRzCvMocbBP6zr3ga7ziGR4sfiNy87M=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ACB80134B3;
+        Thu, 12 Jan 2023 08:11:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jyjfJ5vAv2NJaAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 12 Jan 2023 08:11:07 +0000
+Date:   Thu, 12 Jan 2023 09:11:06 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 6/7] mm/page_alloc: Give GFP_ATOMIC and non-blocking
+ allocations access to reserves
+Message-ID: <Y7/AmgN1Wz73lyVz@dhcp22.suse.cz>
+References: <20230109151631.24923-1-mgorman@techsingularity.net>
+ <20230109151631.24923-7-mgorman@techsingularity.net>
+ <Y77cikPSHepZ/GQj@dhcp22.suse.cz>
+ <20230111170552.5b7z5hetc2lcdwmb@techsingularity.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3oqPqJZwawS9tNx7M2XAZmP0MMQjGNGz
-X-Proofpoint-GUID: 3oqPqJZwawS9tNx7M2XAZmP0MMQjGNGz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-12_04,2023-01-11_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- mlxscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=850
- clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301120057
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111170552.5b7z5hetc2lcdwmb@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add TCSR register space and refer it from scm node, so that
-it can be used by SCM driver.
+On Wed 11-01-23 17:05:52, Mel Gorman wrote:
+> On Wed, Jan 11, 2023 at 04:58:02PM +0100, Michal Hocko wrote:
+> > On Mon 09-01-23 15:16:30, Mel Gorman wrote:
+> > > Explicit GFP_ATOMIC allocations get flagged ALLOC_HARDER which is a bit
+> > > vague. In preparation for removing __GFP_ATOMIC, give GFP_ATOMIC and
+> > > other non-blocking allocation requests equal access to reserve.  Rename
+> > > ALLOC_HARDER to ALLOC_NON_BLOCK to make it more clear what the flag
+> > > means.
+> > 
+> > GFP_NOWAIT can be also used for opportunistic allocations which can and
+> > should fail quickly if the memory is tight and more elaborate path
+> > should be taken (e.g. try higher order allocation first but fall back to
+> > smaller request if the memory is fragmented). Do we really want to give
+> > those access to memory reserves as well?
+> 
+> Good question. Without __GFP_ATOMIC, GFP_NOWAIT only differs from GFP_ATOMIC
+> by __GFP_HIGH but that is not enough to distinguish between a caller that
+> cannot sleep versus one that is speculatively attempting an allocation but
+> has other options. That changelog is misleading, it's not equal access
+> as GFP_NOWAIT ends up with 25% of the reserves which is less than what
+> GFP_ATOMIC gets.
+> 
+> Because it becomes impossible to distinguish between non-blocking and
+> atomic without __GFP_ATOMIC, there is some justification for allowing
+> access to reserves for GFP_NOWAIT. bio for example attempts an allocation
+> (clears __GFP_DIRECT_RECLAIM) before falling back to mempool but delays
+> in IO can also lead to further allocation pressure. mmu gather failing
+> GFP_WAIT slows the rate memory can be freed. NFS failing GFP_NOWAIT will
+> have to retry IOs multiple times. The examples were picked at random but
+> the point is that there are cases where failing GFP_NOWAIT can degrade
+> the system, particularly delay the cleaning of pages before reclaim.
 
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
-Changes in v2:
-  - Added SoC compatible based on comment made by krzysztof in v1.
+Fair points.
 
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+> A lot of the truly speculative users appear to use GFP_NOWAIT | __GFP_NOWARN
+> so one compromise would be to avoid using reserves if __GFP_NOWARN is
+> also specified.
+> 
+> Something like this as a separate patch?
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 5704750..8c866e4 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -270,6 +270,7 @@
- 	firmware {
- 		scm: scm {
- 			compatible = "qcom,scm-sm8450", "qcom,scm";
-+			qcom,dload-mode = <&tcsr 0x13000>;
- 			interconnects = <&aggre2_noc MASTER_CRYPTO 0 &mc_virt SLAVE_EBI1 0>;
- 			#reset-cells = <1>;
- 		};
-@@ -1986,6 +1987,11 @@
- 			#hwlock-cells = <1>;
- 		};
- 
-+		tcsr: syscon@1fc0000 {
-+			compatible = "qcom,tcsr-sm8450", "syscon";
-+			reg = <0x0 0x1fc0000 0x0 0x30000>;
-+		};
-+
- 		usb_1_hsphy: phy@88e3000 {
- 			compatible = "qcom,sm8450-usb-hs-phy",
- 				     "qcom,usb-snps-hs-7nm-phy";
+I cannot say I would be happy about adding more side effects to
+__GFP_NOWARN. You are right that it should be used for those optimistic
+allocation requests but historically all many of these subtle side effects
+have kicked back at some point. Wouldn't it make sense to explicitly
+mark those places which really benefit from reserves instead? This is
+more work but it should pay off long term. Your examples above would use
+GFP_ATOMIC instead of GFP_NOWAIT.
+
+The semantic would be easier to explain as well. GFP_ATOMIC - non
+sleeping allocations which are important so they have access to memory
+reserves. GFP_NOWAIT - non sleeping allocations.
+
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 7244ab522028..0a7a0ac1b46d 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -4860,9 +4860,11 @@ gfp_to_alloc_flags(gfp_t gfp_mask, unsigned int order)
+>  	if (!(gfp_mask & __GFP_DIRECT_RECLAIM)) {
+>  		/*
+>  		 * Not worth trying to allocate harder for __GFP_NOMEMALLOC even
+> -		 * if it can't schedule.
+> +		 * if it can't schedule. Similarly, a caller specifying
+> +		 * __GFP_NOWARN is likely a speculative allocation with a
+> +		 * graceful recovery path.
+>  		 */
+> -		if (!(gfp_mask & __GFP_NOMEMALLOC)) {
+> +		if (!(gfp_mask & (__GFP_NOMEMALLOC|__GFP_NOWARN))) {
+>  			alloc_flags |= ALLOC_NON_BLOCK;
+>  
+>  			if (order > 0)
+
 -- 
-2.7.4
-
+Michal Hocko
+SUSE Labs
