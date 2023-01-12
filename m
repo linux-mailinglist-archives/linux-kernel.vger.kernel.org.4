@@ -2,156 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42921666E2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E61C666E37
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240206AbjALJ2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:28:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S239586AbjALJ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240122AbjALJ1W (ORCPT
+        with ESMTP id S239659AbjALJ2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:27:22 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15D0B57;
-        Thu, 12 Jan 2023 01:19:19 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id tz12so43207391ejc.9;
-        Thu, 12 Jan 2023 01:19:19 -0800 (PST)
+        Thu, 12 Jan 2023 04:28:49 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85654D72F
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:21:44 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ss4so35937512ejb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:21:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b2F015oMATpuWShCHNXOwNWi691GDNYuGqKdTMWs8xA=;
-        b=CiIgS3rsRGi73IrS6drvleCIKh9LQuJE3q/5jfd9d/RK13h3/tlPXTQAPGwUDL4dmo
-         wjET0IdC0KOfavfSvST7q/MW7izquaQ7o7Zr3LuNnmqYP5Y4SYAtgBfCSf+/RPWGwV9w
-         sf9brE5js40Ju4u/HQDDNVCtAxto9x70cfJra89/a4J8EJ6oWVXGRUnNFDUuwex4X1xw
-         +kqVSiogycj0od/4MYjT2fNnFhqJRFWmsG/GKLWsLCqVCwDRJjytjuYnuSLX57A9kZZV
-         upNz8BCStCKVVoVJP8pSHtBR6RP2I5OzYuK3hJhc2BxSLxRaugcw4Go83VJ39JBKDAld
-         QZFA==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kqb6Iris8XWiiMxft3j9JHa7v06d0Pz4gSRMhwJTQx0=;
+        b=n/F6PNUGVNPoZrDebVKmVpiZJ+hGLnh9tTOom2GkMxmVqhiyluaHAS2mBeZ+cssrXK
+         bLQjy0nWfHpIxez+jYZWgkjA6OiUnTKL9YEYoI+7cP76G0AvRrsmQ6wjpXoccCUStBP4
+         0csRTNp5wI1csOg0vSp1k0usXDWeatgNKt9JkZu3PIUlq14P4jCWeYU5bG9GnOsazUu4
+         QVEtXP5nka4fCPL3IId1dI4rA43UPGnDlpgPPN+StdxX1bn1GEK7MMAof+79Yt3iU1zM
+         jcokevDrio0CVEdvkfLF9M8n9gAW8KKaXiQTLBNrINIAJ4SDfUoH5IwDkpkGi1+jcQP8
+         ee3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b2F015oMATpuWShCHNXOwNWi691GDNYuGqKdTMWs8xA=;
-        b=B2pS7osLDlykEKVm1VuFpyk5WiODKhzBjGhizj0OFzx1ob56ekhOAEUPVGXpBb8+eR
-         38J/yvEKM/VPoe26jw/N0thEhoHgv45GA39HQvnKOcdsuKsOPnL0OcfFgKvA4EN0HGvq
-         RynAJFvlaRyZDC2U6JwW1wQh4+YssIcw3H1i+U5y0RhdTpGMMW6Zz+J3ZZltcKsq5aNC
-         9JZ2BQO/FJi79th1f0sX3bAw1H4ePONUFqJJdojS5cZCEA4LmI10HrVJKtA/dZmDbmza
-         jOf8NW1gG/KkA80tTpiJVIk7WH5q1Cbk3lVKgad107o8P/5B8uTqB8Ka02TyodB+GPbM
-         9QAw==
-X-Gm-Message-State: AFqh2kp4xjLtX+s4qyvZHOouGcQpDyirnsaTGIsy9mCAuSMP7d22/Dxz
-        qlYEHNDrNXqOY+gvNvPXuaB+oIDeh+ZkQdHCHkE=
-X-Google-Smtp-Source: AMrXdXtbjwlni0oo+vbOtg+PV6WaGLudh/F3ifwpsn/TiN6E6hTMxrSciIqk0GOPKTMCktPtPRJ6fVZI8Vq5G5v1Ed0=
-X-Received: by 2002:a17:907:20fa:b0:7c1:6f86:ec4 with SMTP id
- rh26-20020a17090720fa00b007c16f860ec4mr8952406ejb.621.1673515158387; Thu, 12
- Jan 2023 01:19:18 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kqb6Iris8XWiiMxft3j9JHa7v06d0Pz4gSRMhwJTQx0=;
+        b=gBQIS2ASdfV0iE3xyE3HwL66/POOyyYPk6DHiXXpE47LAN2r2rSxWFczoiKaG4Uix4
+         A2ZdLMgGFOmYhKp7+H7u3HEa/PuQTDhvKRRVsewoyt8dNylEGZvf6Co4Sn6B+Ulb1b0o
+         s8JncHUL40rFxdXdmkUADZswkipl94mImnKuZFqjTIaPptl9BgWg6V9zxC2gXbIBuf+p
+         w8OekWMdsXBZUSuhzf23AxGVtvUyBzQFdQBa9iOgYdLk9aMdy9KX7Y6d2NPnYdPUebyx
+         W+0cc2XAEKwhm8zIPXyqzE3VrpnHNvDauXOU/ZaN8hbWB1YPNoP+MpgOaohNNu4vumzo
+         OXww==
+X-Gm-Message-State: AFqh2kqemQU6DQjJ8+ureawpV7QfXPkllSmjX8iOvgjfFC5iL5JVec1t
+        Hm7oNW+JFywIs36ySENP8Rv2wA==
+X-Google-Smtp-Source: AMrXdXtlLbGsD7vOfKM14h8N4DFizPIig28V7mzUwlWavZAZ0XBiIpC8ynNkF7zMf6Uiq65IATUG/w==
+X-Received: by 2002:a17:906:34db:b0:842:3920:df75 with SMTP id h27-20020a17090634db00b008423920df75mr66807232ejb.33.1673515303467;
+        Thu, 12 Jan 2023 01:21:43 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id y16-20020a1709063a9000b0084ce5d5d21bsm7189751ejd.22.2023.01.12.01.21.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 01:21:43 -0800 (PST)
+Date:   Thu, 12 Jan 2023 10:21:36 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 05/13] riscv: cpufeature: extend
+ riscv_cpufeature_patch_func to all ISA extensions
+Message-ID: <20230112092136.f2g43hrhmrqouy4y@orel>
+References: <20230111171027.2392-1-jszhang@kernel.org>
+ <20230111171027.2392-6-jszhang@kernel.org>
+ <2398293.3Lj2Plt8kZ@diego>
 MIME-Version: 1.0
-References: <20230112083746.9551-1-lukas.bulwahn@gmail.com>
- <20230112083746.9551-4-lukas.bulwahn@gmail.com> <3f2663ff-ff3f-4632-853a-ba4d38df9701@app.fastmail.com>
-In-Reply-To: <3f2663ff-ff3f-4632-853a-ba4d38df9701@app.fastmail.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Thu, 12 Jan 2023 10:19:06 +0100
-Message-ID: <CAKXUXMyRBhtHBu=9TdaumwuHPzKv48YCWnAoCx=Vr8p_fTJVqg@mail.gmail.com>
-Subject: Re: [PATCH 3/4] usb: remove OMAP USB Device Controller and OHCI
- support for OMAP1/2 chips
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2398293.3Lj2Plt8kZ@diego>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 10:03 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Jan 12, 2023, at 09:37, Lukas Bulwahn wrote:
-> > Commit 0fee2eac5c2b ("usb: phy: remove phy-isp1301-omap driver") removes
-> > the Philips ISP1301 with OMAP OTG driver and its corresponding config
-> > ISP1301_OMAP. The drivers, OMAP USB Device Controller and OHCI support for
-> > OMAP1/2 chips, with corresponding configs, USB_OMAP and USB_OHCI_HCD_OMAP1,
-> > need this removed driver (see "depends on ISP1301_OMAP") to build.
-> >
-> > Remove those two drivers.
-> >
-> > With the config USB_OMAP removed in this commit, remove some further code
-> > in the omap-dma header and mach-omap1 architecture code.
-> >
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
->
-> This would be a great cleanup because of the simplications of the
-> omap-dma code. I had previously looked at it and concluded that
-> the driver is still in use though, and I think my mistake was
-> just in the Kconfig part of this patch:
->
-> commit c32fd10914a314dd96c5d24030200070c84df5f1
-> Author: Arnd Bergmann <arnd@arndb.de>
-> Date:   Thu Sep 29 15:38:56 2022 +0200
->
->     ARM: omap1: remove unused board files
->
->     All board support that was marked as 'unused' earlier can
->     now be removed, leaving the five machines that that still
->     had someone using them in 2022, or that are supported in
->     qemu.
->
->     Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
->     Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
->     Cc: Tony Lindgren <tony@atomide.com>
->     Cc: linux-omap@vger.kernel.org
->     Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-> index b3006d8b04ab..95751062078e 100644
-> --- a/drivers/usb/gadget/udc/Kconfig
-> +++ b/drivers/usb/gadget/udc/Kconfig
-> @@ -118,7 +118,7 @@ config USB_GR_UDC
->  config USB_OMAP
->         tristate "OMAP USB Device Controller"
->         depends on ARCH_OMAP1
-> -       depends on ISP1301_OMAP || !(MACH_OMAP_H2 || MACH_OMAP_H3)
-> +       depends on ISP1301_OMAP
->         help
->            Many Texas Instruments OMAP processors have flexible full
->            speed USB device controllers, with support for up to 30
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> index 0442dc4bc334..a0c14c62ff32 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -409,7 +409,7 @@ if USB_OHCI_HCD
->  config USB_OHCI_HCD_OMAP1
->         tristate "OHCI support for OMAP1/2 chips"
->         depends on ARCH_OMAP1
-> -       depends on ISP1301_OMAP || !(MACH_OMAP_H2 || MACH_OMAP_H3)
-> +       depends on ISP1301_OMAP
->         default y
->         help
->           Enables support for the OHCI controller on OMAP1/2 chips.
->
-> Instead of changing this to 'depends on ISP1301_OMAP', the line
-> probably should just be dropped entirely.
->
+On Thu, Jan 12, 2023 at 12:29:57AM +0100, Heiko Stübner wrote:
+> Hi Jisheng.
+> 
+> Am Mittwoch, 11. Januar 2023, 18:10:19 CET schrieb Jisheng Zhang:
+> > riscv_cpufeature_patch_func() currently only scans a limited set of
+> > cpufeatures, explicitly defined with macros. Extend it to probe for all
+> > ISA extensions.
+> > 
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> > ---
+> >  arch/riscv/include/asm/errata_list.h |  9 ++--
+> >  arch/riscv/kernel/cpufeature.c       | 63 ++++------------------------
+> >  2 files changed, 11 insertions(+), 61 deletions(-)
+> 
+> hmmm ... I do see a somewhat big caveat for this.
+> and would like to take back my Reviewed-by for now
+> 
+> 
+> With this change we would limit the patchable cpufeatures to actual
+> riscv extensions. But cpufeatures can also be soft features like
+> how performant the core handles unaligned accesses.
 
-I see. Yes, probably, !(MACH_OMAP_H2 || MACH_OMAP_H3) is really in the
-current state of the repository "always true", and hence this
-dependency "depends on ISP1301_OMAP || !(MACH_OMAP_H2 ||
-MACH_OMAP_H3)" is always independent of  ISP1301_OMAP.
+I agree that this needs to be addressed and Jisheng also raised this
+yesterday here [*]. It seems we need the concept of cpufeatures, which
+may be extensions or non-extensions.
 
-Are you going to fix up your commit "ARM: omap1: remove unused board
-files" with this change?
+[*] https://lore.kernel.org/all/Y77xyNPNqnFQUqAx@xhacker/
 
-Please ignore this patch then; patch 1 and 4 still seem good to pick, though.
+> 
+> See Palmer's series [0].
+> 
+> 
+> Also this essentially codifies that each ALTERNATIVE can only ever
+> be attached to exactly one extension.
+> 
+> But contrary to vendor-errata, it is very likely that we will need
+> combinations of different extensions for some alternatives in the future.
 
-Lukas
+One possible approach may be to combine extensions/non-extensions at boot
+time into pseudo-cpufeatures. Then, alternatives can continue attaching to
+a single "feature". (I'm not saying that's a better approach than the
+bitmap, I'm just suggesting it as something else to consider.)
+
+Thanks,
+drew
+
+> 
+> In my optimization quest, I found that it's actually pretty neat to
+> convert the errata-id for cpufeatures to a bitfield [1], because then it's
+> possible to just combine extensions into said bitfield [2]:
+> 
+> 	ALTERNATIVE_2("nop",
+> 		      "j strcmp_zbb_unaligned", 0, CPUFEATURE_ZBB | CPUFEATURE_FAST_UNALIGNED, 0, CONFIG_RISCV_ISA_ZBB,
+> 		      "j variant_zbb", 0, CPUFEATURE_ZBB, CPUFEATURE_FAST_UNALIGNED, CONFIG_RISCV_ISA_ZBB)
+> 
+> [the additional field there models a "not" component]
+> 
+> So I really feel this would limit us quite a bit.
+> 
+> 
+> Heiko
+> 
+> 
+> 
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?h=riscv-hwprobe-v1&id=510c491cb9d87dcbdc91c63558dc704968723240
+> [1] https://github.com/mmind/linux-riscv/commit/f57a896122ee7e666692079320fc35829434cf96
+> [2] https://github.com/mmind/linux-riscv/commit/8cef615dab0c00ad68af2651ee5b93d06be17f27#diff-194cb8a86f9fb9b03683295f21c8f46b456a9f94737f01726ddbcbb9e3aace2cR12
+> 
+> 
