@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13512666F27
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D18A666F2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjALKLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
+        id S239673AbjALKMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:12:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239665AbjALKKy (ORCPT
+        with ESMTP id S237731AbjALKLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:10:54 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9454218B39;
-        Thu, 12 Jan 2023 02:06:35 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id v23so18654662pju.3;
-        Thu, 12 Jan 2023 02:06:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cV8o0U4qTI0TxZVhOyY3mGcUb8HtKuRa5nMD5AUhlew=;
-        b=qQ/v6lNiJNet1HvuPLvU1FPIrevnYcOKIkHSQk2V8J4GTjnJP+M7MVTyfYJeUX7LkH
-         INy/oNEQf8hJnXNsloVokWrV9mRv5GbAAEsqSpY+Aul66jKzUrfeTTsD2ZDZjObPkdjy
-         NDdcxqb5G/THcIvfRdBrtlLjEdqS3zWAm9z3gaNAcELaQ7ZHKpZlxK0Sd+/7+BBr3C7V
-         mcsk1BchooJmSuA0deh7YErL3CCp/5Lbv1UBcVm6Weh8gCDfDvmsPXuPqPGYG8JUQX1U
-         p/T2oa3qJHKdX83/nJRBwj2+oSvbpA1cJ2Ct2G+Zo/Gy6XsNDjDCgU4MG4j4ZFU+gxNE
-         jZkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cV8o0U4qTI0TxZVhOyY3mGcUb8HtKuRa5nMD5AUhlew=;
-        b=JjAzhEZU6U1s4pqpNadBVIjKNyCFUC0M2Q9/b4TqlTgooeaoZ7YgQvTxdzwAflQkf7
-         SKyutwwiEjeqFW0JDdxssSgKjlfCUgA5caeApcC76MNjp3pnKvfR4my0UtzKThSQkqkc
-         9OK04thDoxMI2nIezEKb+CTY0dCgAIlDoV3f8sJkxQzrtPujnIiCXUPe+1xQ8cJ7KDhE
-         B4GBrHUow8/dM1NFjhNQbZjAt5G6zvKqaFx++Gn5Lctu6rRkHf/C96nk2VzHU8yWsELP
-         cfqfcIGNqQlBHN1wDurXFUqoHSdKHRPXWHtI9XOt9NPoNcLbTI+luvFFRcIO+zvP4xD6
-         WjBA==
-X-Gm-Message-State: AFqh2kp3dAQbI1L9PEmJfDOJ1XZ7Kr8H89SwTv1GEi9DZtJBtbDY4X33
-        PKN9aLPkZE++GNsx3ABHFzizK+9qshM=
-X-Google-Smtp-Source: AMrXdXtMX25FVpi+IYvJ4DJIeOyXmH3amjHl7vyzS5i5YTergjM71gfDTqLWTyMzrVB4ChNI8oWBXg==
-X-Received: by 2002:a17:90b:8d5:b0:227:252b:4fe4 with SMTP id ds21-20020a17090b08d500b00227252b4fe4mr10946648pjb.6.1673517994831;
-        Thu, 12 Jan 2023 02:06:34 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id k36-20020a635a64000000b0048988ed9e4bsm9549402pgm.19.2023.01.12.02.06.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 02:06:34 -0800 (PST)
-Date:   Thu, 12 Jan 2023 02:06:33 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        pbonzini@redhat.com, erdemaktas@google.com, seanjc@google.com,
-        sagis@google.com, dmatlack@google.com
-Subject: Re: [PATCH v10 098/108] KVM: TDX: Implement callbacks for MSR
- operations for TDX
-Message-ID: <20230112100633.GC2034518@ls.amr.corp.intel.com>
-References: <1cacbda18e3c7dcccd92a7390b0ca7f4ba073f85.1667110240.git.isaku.yamahata@intel.com>
- <diqz5ydmov3m.fsf@google.com>
+        Thu, 12 Jan 2023 05:11:09 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D36C7;
+        Thu, 12 Jan 2023 02:09:41 -0800 (PST)
+Date:   Thu, 12 Jan 2023 11:09:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673518179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cLAM5jl0W0wl/XlHApINoAqRk2rz+TLJ1Ghtr9ebUfE=;
+        b=vcTGXdwHdoY4677vgiRLmUDxBn9xfcxcs9XzVWEFDZUqQg5YjgEAZnTPAy32VXxdUwDDTM
+        ZWd3Uk/1xTms3FXpQSsdj8S1oJTDVovlO70fx1nF+672kQvXiiFOXhW11Uz5g+XO5iF7Ns
+        u0H10Peg1Rv5Sr/ccv0XeZHOYn4JKfC3fUsfE6iDoKBraGrG3dYnwqE5acdKxsmLmBKMMi
+        mr0VoXuU0fhBviSfOK0yqWLzauGele9lAq6VV9bjLQwOjFVN4n+PaC1wMe3qWshhSAj6U9
+        FCnjkesFWpVDJ2MyhsRQyvzne5qBDHgaK0iufhvrFS+1/q0PT75CHqTdS9CiCg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673518179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cLAM5jl0W0wl/XlHApINoAqRk2rz+TLJ1Ghtr9ebUfE=;
+        b=VxWKJ/kxxAfgEhvPXtIgIePTtVsaN83zmhMIF+QXuZKqoBUw58ipVRZnmigKzDk3kl2+3o
+        wBVlggp8D/vrAlAw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Michael Everitt <gentoo@veremit.xyz>
+Cc:     Christian Eggers <ceggers@arri.de>, linux-rt-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: linux-6.1-rt ?
+Message-ID: <Y7/cYsEXHpCEGwwa@linutronix.de>
+References: <12136223.O9o76ZdvQC@n95hx1g2>
+ <208196df-d0b2-5cf6-29b3-4570a0946e77@veremit.xyz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <diqz5ydmov3m.fsf@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <208196df-d0b2-5cf6-29b3-4570a0946e77@veremit.xyz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 01:20:13PM -0800,
-Ackerley Tng <ackerleytng@google.com> wrote:
+On 2023-01-11 09:44:45 [+0000], Michael Everitt wrote:
+> On 11/01/2023 08:36, Christian Eggers wrote:
+> > linux-6.1 seems to be the next LTS kernel [1]
+> >=20
+> > Are there any plans to release a -rt version of linux-6.1?
+> >=20
+> > regards
+> > Christian
+> >=20
+> > [1] https://lore.kernel.org/lkml/Yz%2FZWBeNZvKenEVM@kroah.com/
+> >=20
+> >=20
+>=20
+> You probably want this: https://www.spinics.net/lists/linux-rt-users/msg2=
+6345.html
+>=20
+> You may wish to wait for the maintainer to complete their processes!
 
-> 
-> I believe we should also have a handler for .msr_filter_changed.
-> 
-> Without an .msr_filter_changed handler, a host crash can occur if we
-> first set up a vcpu for the TD, and then set an MSR filter.
-> 
-> If we first set up a vcpu for the TD, and then set an MSR filter, upon
-> vcpu_enter_guest, the .msr_filter_changed handler (currently
-> vmx_msr_filter_changed()) will be invoked. to_vmx(vcpu) interprets the
-> containing struct of struct kvm_vcpu to be a struct vcpu_vmx instead of
-> a struct vcpu_tdx.
-> 
-> In my case, I was working on a selftest and the missing handler caused a
-> NULL dereference in vmx_disable_intercept_for_msr() because
-> vmx->vmcs01.msr_bitmap is NULL.
+There is a 6.1-RT but it hasn't been updated for a while. There should
+be a 6.2-RT later today.
+As for the link [1] it has not been confirmed nor denied that v6.1 will
+be a LTS kernel. Once the version 6.1 left its Schr=C3=B6dinger state then
+there will be an update (or not).
 
-Nice catch. I'll fix it.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+> Regards,
+> veremitz/Michael.
+
+Sebastian
