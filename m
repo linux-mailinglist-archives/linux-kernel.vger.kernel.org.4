@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85FA667E9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168F7667EA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjALTEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:04:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
+        id S240208AbjALTFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:05:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbjALTD7 (ORCPT
+        with ESMTP id S240154AbjALTF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:03:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B893814037;
-        Thu, 12 Jan 2023 10:45:32 -0800 (PST)
+        Thu, 12 Jan 2023 14:05:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F0F13D1B;
+        Thu, 12 Jan 2023 10:46:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71C3DB81FF0;
-        Thu, 12 Jan 2023 18:45:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB87BC433D2;
-        Thu, 12 Jan 2023 18:45:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9AD9B81FF6;
+        Thu, 12 Jan 2023 18:46:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE49C433EF;
+        Thu, 12 Jan 2023 18:46:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673549129;
-        bh=z2EaDr0mycRicVJhhuAX799aLzcYHxAh4bAC2+rrckk=;
+        s=k20201202; t=1673549204;
+        bh=GHrrw9qWTNs9t2tpYUa9+9mfy+wwMMMsbxkrugEewro=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M9OFZkoJT9dJoq+CcSI50P/Tj4OPjOhmaHPj6y7ioLP8aX9qN9Ji6S8hJducBfNXM
-         ju3hTRnEhaSFCISGoX6gFuEUCe+x6jQrfOc+N2xlR2QwMJs2/qgpy7eK1pfrSynSxq
-         LUqsD0N0LBqVN6ceZC4G2wVwIJW57mt50xiyECDIJK+VmcsO7m0pj03BOpIkgBOrfd
-         yoWX3EukIzX/O3TQ/bBhANOqkDl7i3Q2d0JQuANWw0qUXOl9kiR9n4h94jx/j2BVW1
-         Tl5kEKXhYGxUl4nUs8miW5v0R9rDBej1ulfLtQzPcG0J42P23DcEPzjDY7WrACxgVs
-         T+FdbHHuJXTag==
-Date:   Thu, 12 Jan 2023 18:45:24 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/10] 6.1.6-rc1 review
-Message-ID: <Y8BVRObU8v8KUZxx@spud>
-References: <20230112135326.981869724@linuxfoundation.org>
+        b=nqzU1sWiKO8tXO1ihDuCoL1L8AQHSCRRqpSb+oW4k1a9ekg6D06NmQF3erceORHkV
+         JzTGIgfa4O6Xzcs3qOB2FSDHOrb+gozwM+/IhExZ4qAb6cxoZHh3H5nY+42mZax8P9
+         MedhJ6GtVLC1cX2B4TN0pOrAny1/v1A2+N0BgOLItFZLPBfHFFsQd+WTI21zp7TQI2
+         rh3dq5iAc6ZYoWXMZfDNv5fYsZyjBrhJvvx1lb96E/WKmv6YnS1o3XkwcXzzgqOWvO
+         rQ0gVutZXWwewlX2gy9gOgvYgtB7lBOMdEIs6HwH5hoxeefb4t9j+cxQuFJ1t5d4jU
+         YN3KiXUu4tifA==
+Date:   Thu, 12 Jan 2023 10:46:42 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Robert Elliott <elliott@hpe.com>, davem@davemloft.net,
+        Jason@zx2c4.com, ardb@kernel.org, ap420073@gmail.com,
+        David.Laight@aculab.com, tim.c.chen@linux.intel.com,
+        peter@n8pjl.ca, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, linux-crypto@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/13] crypto: x86/sha - yield FPU context during long
+ loops
+Message-ID: <Y8BVkjwPc6DLm7HT@sol.localdomain>
+References: <20221219220223.3982176-1-elliott@hpe.com>
+ <20221219220223.3982176-4-elliott@hpe.com>
+ <Y7+/Yy7+mLEyqeiK@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="fwuvP1Jk5iVb4Kyb"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230112135326.981869724@linuxfoundation.org>
+In-Reply-To: <Y7+/Yy7+mLEyqeiK@gondor.apana.org.au>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,47 +60,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 12, 2023 at 04:05:55PM +0800, Herbert Xu wrote:
+> On Mon, Dec 19, 2022 at 04:02:13PM -0600, Robert Elliott wrote:
+> >
+> > @@ -41,9 +41,7 @@ static int sha1_update(struct shash_desc *desc, const u8 *data,
+> 
+> I just realised a show-stopper with this patch-set.  We don't
+> have a desc->flags field that tells us whether we can sleep or
+> not.
+> 
+> I'm currently doing a patch-set for per-request keys and I will
+> add a flags field to shash_desc so we could use that for your
+> patch-set too.
+> 
 
---fwuvP1Jk5iVb4Kyb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Right, this used to exist, but it didn't actually do anything, and it had
+suffered heavily from bitrot.  For example, some callers specified MAY_SLEEP
+when actually they couldn't sleep.  IIRC, some callers also didn't even bother
+initializing the flags, so they were passing uninitialized memory.  So I removed
+it in commit 877b5691f27a ("crypto: shash - remove shash_desc::flags").
 
-Hey Greg,
+Has there been any consideration of just adding the crypto_shash_update_large()
+helper function that I had mentioned in the commit message of 877b5691f27a?
 
-On Thu, Jan 12, 2023 at 02:56:21PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.6 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-> Anything received after that time might be too late.
->=20
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.6-r=
-c1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git=
- linux-6.1.y
-> and the diffstat can be found below.
-
-Looks like not much in it that's of concern for RISC-V, but FWIW:
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
-
---fwuvP1Jk5iVb4Kyb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8BVRAAKCRB4tDGHoIJi
-0kz3AP9fjlEnFeqSysQuxkZNT480k3srTgkwc0n/z2c0kPmtcQEAxEzq1Cj7Z2J2
-XbY4+l1/snNjOSwuxonSUFB4vjoPKAQ=
-=HsRv
------END PGP SIGNATURE-----
-
---fwuvP1Jk5iVb4Kyb--
+- Eric
