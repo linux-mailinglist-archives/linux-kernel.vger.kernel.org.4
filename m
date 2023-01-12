@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C83667A8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C034667A8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbjALQPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 11:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S232174AbjALQQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 11:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236216AbjALQPQ (ORCPT
+        with ESMTP id S230102AbjALQPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:15:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C76389C;
-        Thu, 12 Jan 2023 08:12:28 -0800 (PST)
+        Thu, 12 Jan 2023 11:15:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEDA55A1;
+        Thu, 12 Jan 2023 08:12:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FA7F6208B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68D6A6206E;
+        Thu, 12 Jan 2023 16:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E96C433EF;
         Thu, 12 Jan 2023 16:12:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE42C433F2;
-        Thu, 12 Jan 2023 16:12:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1673539948;
-        bh=nN0UmsR4nQjr6Pe2C+5BfoRxIlTvSeYQue3M9gxh7xY=;
+        bh=dX2scFFzTh1LRjQiS/hvAmTEVH8M+mE8PnR/uCjzsvo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IKeKklGTtlgXvkGxo9oPXuL77YM6e6eEDd58lghd+ZJEb7XMMSe4JinmjKg91+NRp
-         V/T1lMXu9uvTVEiBcsYYG48hux0Ncmb82SrR7BHFsxdxKETp9hZzavNd2qnhMfw3WU
-         t7pnwT6NPAufY5dG4rZJ6ChLK6lO7e/zaPKR7pOD5HVDoFgJ7RrzopKW1pLguLxQTH
-         2i1mj8Ea2CedTRPAVnV0MJ+c3TtDnSTGwNavOGWIvCanT+XElZek4OwA6pOuFpab+6
-         9fDHrLK/jQoMF5nf+6bHdElxkFUqLOPtcPbQsvw/llQfxuZI0Grxg0p1AT+dYglj1k
-         UGZdgDobSukUQ==
+        b=T+R5mGnr0I2WZDUeEB3kBTez2MsBxaIywJRrwDcrvygv7dBkUn/LJw0grQfWTN5hX
+         hoIMZl0rYZRf7ufoZOntczjdLnnQ0iAdzMZhcmLfoxuDVEdUXDJid0nkX8sWCRK17S
+         1+QPSyYAts4O/djtYUGMnO3ju3gQkETUdJLxaW50TB+q4L4y8s2te4ZJrgukZFnWeH
+         /FFu7j5ycHvxjvRqdNAqgsJg+kXxt83+hUgICY1czE/g9Ui4ravYJ8TaTXJ+Z5sWkK
+         8LX0XjE7K2CYc2woCoPJiZFRmFytfcqBcK49czRcERG5SL5F+l5FfUEylscf+uSMWF
+         NLea5WBksqVWw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     konrad.dybcio@linaro.org, quic_bjorande@quicinc.com
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+To:     konrad.dybcio@linaro.org, quic_mojha@quicinc.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        agross@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Vote for CX in USB controllers
-Date:   Thu, 12 Jan 2023 10:12:22 -0600
-Message-Id: <167353993749.2393683.17825205360701248553.b4-ty@kernel.org>
+Subject: Re: (subset) [PATCH v3 1/2] dt-bindings: mfd: qcom,tcsr: Add compatible for sm8450
+Date:   Thu, 12 Jan 2023 10:12:23 -0600
+Message-Id: <167353993748.2393683.2612853906580487491.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230112135117.3836655-1-quic_bjorande@quicinc.com>
-References: <20230112135117.3836655-1-quic_bjorande@quicinc.com>
+In-Reply-To: <1673513697-30173-1-git-send-email-quic_mojha@quicinc.com>
+References: <1673513697-30173-1-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,18 +56,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 05:51:17 -0800, Bjorn Andersson wrote:
-> Running GCC_USB30_*_MASTER_CLK at 200MHz requires CX at nominal level,
-> not doing so results in occasional lockups. This was previously hidden
-> by the fact that the display stack incorrectly voted for CX (instead of
-> MMCX).
+On Thu, 12 Jan 2023 14:24:56 +0530, Mukesh Ojha wrote:
+> Document the qcom,sm8450-tcsr compatible.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sc8280xp: Vote for CX in USB controllers
-      commit: fe07640280cd29ac2997a617a1fb5487feef9387
+[2/2] arm64: dts: qcom: sm8450: Add TCSR halt register space
+      commit: 1f731bbf71e374d93d477831518402ebcfddb75b
 
 Best regards,
 -- 
