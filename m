@@ -2,207 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D73B666F2E
+	by mail.lfdr.de (Postfix) with ESMTP id ED45F666F2F
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:12:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235947AbjALKML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        id S235861AbjALKMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:12:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjALKLV (ORCPT
+        with ESMTP id S230522AbjALKL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:11:21 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73884F20
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:09:43 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id t22-20020a5e9916000000b007047e94706aso366279ioj.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:09:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kL4dCH663Y91IgXPc1uA9oWX+JA++Dgb92FuGb43z24=;
-        b=r2O6NOMDmCSZT8Dl74iObv5/pqlGpnFwqo+m0TluUPqwqXWPUeQKwq2obWd2IKX43e
-         fsna+RpptvYgWmDDo6k4h+NsKxUs1nZWrnqyePBkfGYSE23nvQHHXk2Qt84zkujXGg6t
-         OrZV/pI1MdbVb0dH/Fp+wFn6gvR2i7/2cOWP0gf26U6weoq1n/5ma9rOaDeREC6Yfhz8
-         tsrCZJsSSB76B9x14rI/PTrKOP6tGoWZMemztGHe1Gj4fqFqR6wUwzde/v9ZUbg/GXxx
-         d/9vChHBRkMnTBbqXDb9G5d2lKo3Xh99lh+tNryFe2e/rD1GlJ/iSzfIsQjTqmwzzESK
-         Bx1Q==
-X-Gm-Message-State: AFqh2kodRg/w0XNE0fXKTfSnSN9n+1wNg8EHVsYMprKo56571lfEwiLQ
-        DYjV+U9n64YCzoTqBriaRU3+2SPd05LloExPIXypldCtjpeY
-X-Google-Smtp-Source: AMrXdXtreEYcVZ19eYluopR11N/j8aA4DoDBJxDwX/BolqT4nB30Bua9C/p6nZhe2J3tg1V4Eu3lzh50i4IZmozi/qBGmeZ8atoF
+        Thu, 12 Jan 2023 05:11:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A2A2E6;
+        Thu, 12 Jan 2023 02:11:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20D2161FCC;
+        Thu, 12 Jan 2023 10:11:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFF3AC433D2;
+        Thu, 12 Jan 2023 10:10:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673518259;
+        bh=jHnN5TpjDsuEmpEXoiNJ8vZOnsWHRV/v7Jjf9zxez+c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TGVnq9Iqk9wH7rfxSRBa4J2HpxstIG4Z5WKyITO+s65XJkUX/avf0hrFttJytcQON
+         ZHhnQbJFrndso01+aTlXR4YwkIyCq9ld+l/ujWp5YpecmleYso4IHCoZ+r0182gAWZ
+         ZlKPeren892boP6XKvRxWMt+5TpjaW/y4MYJKPk7EVWIXzaPGjg2BDW66qfLKBrwIC
+         5zNO9PJ8laBGAWwAHUvx2uqu+EV0Qc2P4PiIEV+eYh9J9QRqzmD6rnZr0gOVsUOcR2
+         DXZeyGRn11V4+P8Tmz8nS5HuqC6NNqKOqC5FoddN9ZPljiX7QSbKgVGOHlQx/KcFU+
+         +myzC5Gn5/zTw==
+Message-ID: <06144828-d1c4-7423-81e3-9c35df996da7@kernel.org>
+Date:   Thu, 12 Jan 2023 11:10:52 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4101:b0:39e:5302:38c0 with SMTP id
- ay1-20020a056638410100b0039e530238c0mr2890396jab.128.1673518182762; Thu, 12
- Jan 2023 02:09:42 -0800 (PST)
-Date:   Thu, 12 Jan 2023 02:09:42 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cf0f4905f20e504c@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in io_fallback_req_func
-From:   syzbot <syzbot+bc022c162e3b001bf607@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [LINUX PATCH 2/3] dt-bindings: timer: Update device tree bindings
+ for cadence TTC PWM
+To:     Mubin Sayyed <mubin.sayyed@amd.com>, robh+dt@kernel.org,
+        treding@nvidia.com, u.kleine-koenig@pengutronix.de,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, git@amd.com, michal.simek@amd.com,
+        siva.durga.prasad.paladugu@amd.com, mubin10@gmail.com
+References: <20230112071526.3035949-1-mubin.sayyed@amd.com>
+ <20230112071526.3035949-3-mubin.sayyed@amd.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230112071526.3035949-3-mubin.sayyed@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 12/01/2023 08:15, Mubin Sayyed wrote:
+> Cadence TTC can act as PWM device, it is supported through
 
-syzbot found the following issue on:
+Subject: drop second/last, redundant "device tree bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
 
-HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=103269ce480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=bc022c162e3b001bf607
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Anyway subject is poor - every commit is an "update", so basically you
+said there nothing...
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> separate PWM framework based driver. Decision to configure
+> specific TTC device as PWM or clocksource/clockevent would
+> be done based on presence of "#pwm-cells" property.
+> 
+> Also, interrupt property is not required for TTC PWM driver.
+> Updated bindings to support TTC PWM configuration.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bc022c162e3b001bf607@syzkaller.appspotmail.com
+> 
+> Signed-off-by: Mubin Sayyed <mubin.sayyed@amd.com>
+> ---
+>  .../devicetree/bindings/timer/cdns,ttc.yaml   | 25 ++++++++++++++++++-
+>  1 file changed, 24 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+> index 7d821fd480f6..2855e92e02e3 100644
+> --- a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+> +++ b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+> @@ -32,12 +32,26 @@ properties:
+>      description: |
+>        Bit width of the timer, necessary if not 16.
+>  
+> +  "#pwm-cells":
+> +    description: |
+> +      Required to configure TTC as PWM device, supported cells are 0 to 3.
+> +    minimum: 0
+> +    maximum: 3
 
-==================================================================
-BUG: KASAN: use-after-free in io_fallback_req_func+0xc7/0x204 io_uring/io_uring.c:251
-Read of size 8 at addr ffff888070ac2e48 by task kworker/0:0/7
+Better make it const. What's the benefit of flexible cells? You also
+should describe the arguments.
 
-CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: events io_fallback_req_func
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xc0/0xf0 mm/kasan/report.c:517
- io_fallback_req_func+0xc7/0x204 io_uring/io_uring.c:251
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+> +
+>  required:
+>    - compatible
+>    - reg
+> -  - interrupts
+>    - clocks
+>  
+> +allOf:
+> +  - if:
+> +      not:
+> +        required:
+> +          - "#pwm-cells"
+> +    then:
+> +      required:
+> +        - interrupts
+> +
+>  additionalProperties: false
+>  
+>  examples:
+> @@ -50,3 +64,12 @@ examples:
+>          clocks = <&cpu_clk 3>;
+>          timer-width = <32>;
+>      };
+> +
+> +  - |
+> +    ttc1: ttc1@f8002000 {
 
-Allocated by task 7766:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-Freed by task 5179:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
- io_req_caches_free+0x1a9/0x1e6 io_uring/io_uring.c:2737
- io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2967
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+> +        compatible = "cdns,ttc";
+> +        reg = <0xF8002000 0x1000>;
 
-The buggy address belongs to the object at ffff888070ac2dc0
- which belongs to the cache io_kiocb of size 216
-The buggy address is located 136 bytes inside of
- 216-byte region [ffff888070ac2dc0, ffff888070ac2e98)
+lowercase hex
 
-The buggy address belongs to the physical page:
-page:ffffea0001c2b080 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x70ac2
-memcg:ffff88802a81d181
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff8881461d1780 dead000000000122 0000000000000000
-raw: 0000000000000000 00000000800c000c 00000001ffffffff ffff88802a81d181
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5547, tgid 5545 (syz-executor.4), ts 182131630120, free_ts 181898498774
- prep_new_page mm/page_alloc.c:2549 [inline]
- get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
- __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x350 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
- __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
- kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1451 [inline]
- free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page+0x1d/0x490 mm/page_alloc.c:3482
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- slab_alloc_node mm/slub.c:3452 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc+0x175/0x320 mm/slub.c:3476
- kmem_cache_zalloc include/linux/slab.h:710 [inline]
- taskstats_tgid_alloc kernel/taskstats.c:583 [inline]
- taskstats_exit+0x5f3/0xb80 kernel/taskstats.c:622
- do_exit+0x822/0x2a90 kernel/exit.c:852
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
- get_signal+0x225f/0x24f0 kernel/signal.c:2859
- arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
- exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
- exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> +        clocks = <&cpu_clk 3>;
+> +        timer-width = <32>;
+> +        #pwm-cells = <3>;
+> +    };
 
-Memory state around the buggy address:
- ffff888070ac2d00: fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc fc
- ffff888070ac2d80: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
->ffff888070ac2e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                              ^
- ffff888070ac2e80: fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888070ac2f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+Best regards,
+Krzysztof
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
