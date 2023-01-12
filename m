@@ -2,151 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F1B667F86
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 891B3667F83
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjALTpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:45:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
+        id S231945AbjALTpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:45:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232571AbjALToh (ORCPT
+        with ESMTP id S233009AbjALToe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:44:37 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2052.outbound.protection.outlook.com [40.107.8.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B054321B3;
-        Thu, 12 Jan 2023 11:36:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N17MZumrWOW+PtPgO+iq09mhwe/LxWJveRLu6DS2nztLADJuE2pGY/KfVTuFvsW5hBJzqhJ3a2uWz1o3HALokDR8Zwm+gnPPFUERkYV4zgo7DonNHVMb+iay6K7eFqqYKKvNgByy1gWj5qnrq6hCO4wmZ0HcHC4/MXNdolO9mBqA0D7MFUYP6kxkG5CJNI4ojhuyKb2SQi5KzY0AmKlyBi6EB+gdWf/bjXZ/qGeykC65Dbku/18VNthC9bA0ffpYYqIAngvNvkZJQYzX1+WZnaR/eGLXtRrsHS7CYOESqA72vY+SoT87iX2ujWmtfzNDhOw36/9s1iAOPzdR24onig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iF5Hq1QwjgGRvLo5zqovqtlNmE4N1a1EZdHK6vBNKsU=;
- b=kg/GmVjWpedKlmF2jl2zE8dqLkRLbhMkWcdFr54YlHNvB7vDFOSUoY0ALT0DKPxKKXniW+kaWQWcp7U05ZHs0bjmb4Rs3xwJMeFj+TaRsCETGaYk/KDHwVQkMyFm2knd/S1jZ46ZZwhl/TFV5Nu8MCSS+ooLMH/rY4pT9UIu16yhZ7yoDG5VDfGNdJ7MhLc7dZMdgKuXHyr79TUzgj/mnJEVMF178zfMFTeUKNZgdN+KTp283uGDvT6R2feUiKzN7h/R02EdRAWyYAQwxMCI+GTaIipwT60kmJ92D9o8UxFvGRviI24i0ddWpqpOthGZQqt1Pz1adkru2poPsOQ3mQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iF5Hq1QwjgGRvLo5zqovqtlNmE4N1a1EZdHK6vBNKsU=;
- b=c98oOyEeuZFA3e//HSZUILnbwGSQqsO3v+2L1JCZVYvro+Zw30McPwNSGyRXWi6raTrXSnB3rN03gCchLi36OzZPIlMrs7lFVo0krtRl2JSbIEDzFWe2f7RJgdWqmb0w3lzSt1wQAqHaHChXlSZDviWpycsjhC1Im16qt5PddRY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by AM9PR04MB8178.eurprd04.prod.outlook.com (2603:10a6:20b:3e3::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 12 Jan
- 2023 19:36:42 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd%6]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 19:36:41 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     Minghuan Lian <minghuan.Lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linuxppc-dev@lists.ozlabs.org (open list:PCI DRIVER FOR FREESCALE
-        LAYERSCAPE),
-        linux-pci@vger.kernel.org (open list:PCI DRIVER FOR FREESCALE
-        LAYERSCAPE),
-        linux-arm-kernel@lists.infradead.org (moderated list:PCI DRIVER FOR
-        FREESCALE LAYERSCAPE), linux-kernel@vger.kernel.org (open list)
-Cc:     imx@lists.linux.dev
-Subject: [PATCH 1/1] PCI: layerscape: Set 64-bit DMA mask
-Date:   Thu, 12 Jan 2023 14:36:21 -0500
-Message-Id: <20230112193621.1513505-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR04CA0027.namprd04.prod.outlook.com
- (2603:10b6:a03:40::40) To HE1PR0401MB2331.eurprd04.prod.outlook.com
- (2603:10a6:3:24::22)
+        Thu, 12 Jan 2023 14:44:34 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB73E13D7D
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 11:36:30 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id g13so29929018lfv.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 11:36:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QP7ZDXy/vz6h2E8Aw8jzhMKk5b2tVMVMs8kkY7DjRxg=;
+        b=VRa1lYmLZwBt9u8EhEFY9jOztdyhUc0rbhIsKErJjegBmGKvqae+ioHuWXiDv8ojQs
+         VlENQvWkzosriREEEtozgXWWfl2TYj+fITtabr02X4YmTjsxazE8spp0ZSVPe17AF+0X
+         Kf++ghoP05TZk5uCbVqQ4pz8Ihs3X6acl8/V2BC9zwxAM7bcjHXKeSHrYOXCD3wmXeZX
+         L4vzc9sup3I3A+2RRNz29LyV3BXZWW9cdvn1IgEczE5Hsv/XyXDC0rNvAl0kQsgdRV8O
+         2fpL+QlmoVN5qFyfEgD9on8glRvlVvMVbwnRpaFg9M06xeZiV+rObea1NNJzF+hKYPgZ
+         n4/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QP7ZDXy/vz6h2E8Aw8jzhMKk5b2tVMVMs8kkY7DjRxg=;
+        b=PFpW9SXpWNuS87SnmQaj7h/MTVCyx5XhuXA0l09TL3Q7NZBpGbfB07S+kb51eLt+to
+         QLJhiEjXTeElYUHdHVU5oTxxctZ3Rar0W5ajuuvXJ808P1LWc3yyk5b7z9RwAlN5rnzU
+         wqfo/UNL7UJOFU9lkOn7ISJmuzYkeDGnBdi1tHOo4P9lVKGSYi3oy+swnQywFFgjsQY4
+         M2/ibgD2efBpd9ts7h+mqfjnDLXqwt806LHwaeNmWt44+7LscI5m1erRxTd8h4pJIytt
+         jQtU/FwvPSYdm6ahUT1cYH09Tew0lqMORa2OrcF3KM9D89zTJl7hWQTjFWIHCbhkaRZ6
+         aqFg==
+X-Gm-Message-State: AFqh2krgBsSHhmi6KWSkh9LGkfs66jnzLcC2597mLf5PjrfQRvim1w9I
+        tOTbK2Va1PYHtXU82019I7kFNA==
+X-Google-Smtp-Source: AMrXdXuCP2iZ9ad22QlH8IWK4c8i8Rc8dMqOQZuciPiR9xdgK9SnFECFIPl7JvZMmqyyu5q35RCHjw==
+X-Received: by 2002:a05:6512:33c4:b0:4cc:53e2:5387 with SMTP id d4-20020a05651233c400b004cc53e25387mr10413221lfg.50.1673552189189;
+        Thu, 12 Jan 2023 11:36:29 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id k17-20020a05651210d100b004ab2cb8deb5sm3403247lfg.18.2023.01.12.11.36.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 11:36:28 -0800 (PST)
+Message-ID: <790207ad-9184-577a-ed0f-55e04b26aa09@linaro.org>
+Date:   Thu, 12 Jan 2023 21:36:28 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HE1PR0401MB2331:EE_|AM9PR04MB8178:EE_
-X-MS-Office365-Filtering-Correlation-Id: cf440f79-6de3-4aaa-85f1-08daf4d45487
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uIz/fH5g9ibwnYbidrAoTgdF2WhgwrojJ2fiUMQbfKg52xwoj7BsyYOLbrfJelyTISaPbjTnzf9puVc1r/a5ZyJv1GgaC/GlTG8khl0R/BudbH4aJ7K02Jp9we5GklvWUUJyCSHRbvTh9STheAdd1/qzLE8HKkAO3rHAovTz4ZMz8DcVCoZC7+PXUvSZ8b+WJofNnhpiZzM4D1aIARxPH3w8oG1EcSqSBAfdqRbG7LnRaqqIOF0Co2bJ95R4OnPo5Ag8xxtPZlqqWtdv7RqIjFZJasRH/9F/bRolL5y148MK8moM5drHI1/ccf/ZTHw1XQAQ4YuwDIRNUlOaVh31dkp8K+jClFkO8rtJm2tcd6AdiWtA10SCCQQk5Rpo0jH/qpEs6InAiXKQzVRdYjuQ8EXjj/0Y8GNVuu5YpPLtFpwKsksE2gg5jtex0jqRirwNqpdY6qQcPV9cgL1Mv2KHXy5NfnDRaMk7bNwTowUgUu3eikqXU9xjHlvrSNlT7lDoEYohgMUiz2pR6TLQ+sjxBBLLJ+JZ1cslgYu9GlyQlXcIUeMx5S5BPBdxRzRbDahM57OilGvrPvAiU0nqCh+OeyDTZWVbyQauQcQNXeJ1hhFUiIk7Hl1V8A1o/cig+APlyxGybaR+8lPRYlesCUMKX+AMjyT1gw6MOr6S/HFs96B/oy62royFr/b6ZJ9f1m6Q2zRthqp3ASgDIUHyx9bwn+fJj21JOp2b3XzTHo9IjAI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(39860400002)(136003)(396003)(451199015)(478600001)(6486002)(921005)(41300700001)(6512007)(38100700002)(38350700002)(1076003)(86362001)(316002)(110136005)(2616005)(26005)(66556008)(66946007)(186003)(66476007)(52116002)(4326008)(36756003)(5660300002)(6506007)(2906002)(6666004)(8676002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0UA//skogdyZVwk1HpTDGR+Gh6ti9LxcnuVrUCAJSNHdKNiivArbJqXilIai?=
- =?us-ascii?Q?isYayVYTRgRsEbqNf/GdtSrK2bjg5yD8sFHGCjEpGDogi3N7p25eGcIF3ELG?=
- =?us-ascii?Q?mOq3WkARWQLgldkE3yjtQfpiMH9XjPfUjbj6GQ+6OYQ0kwfMam5gxIboOrWz?=
- =?us-ascii?Q?ipuJ5/EfDy+icGKUG9iD/p2RqPpQWKcTwEkbzUH9bh8rlMdGYKqEeQ9dA9fH?=
- =?us-ascii?Q?QnItWd7Q9KSgeeydBYmoVnGiI26gfgZdt6AyAEOpTiWwC6iGB9tN4sPFOLFZ?=
- =?us-ascii?Q?6mTD0HAmyy0yblwbq2VJT3ZFCT55ST1NGyUwNOgU8rvww6CVxV8+NrmUpcev?=
- =?us-ascii?Q?1hKd0VsQ+WoGY9ijjWCEPrUtQkNw4eexeYhCFYFw/MS/y0EElatrW1L2E5Wf?=
- =?us-ascii?Q?6KWJ6WQ/h1G4z1LTs3+UnPuwmQbD4JzyZzZjqYdpvdkjxGv4UcEIsonrIrVF?=
- =?us-ascii?Q?q6XpIT+26716nwpDjM9B3lXT2mKP/G4y3458s963JAxaIIzi0R6YJ2pYUFxB?=
- =?us-ascii?Q?PkPeSlviE4JuU3qXuJYs/I1rJoaQkgN+weVEtLHaGz8QgYrWKdPzC4pw3LYy?=
- =?us-ascii?Q?L/B5JiYGGLACWKBMjCN6oKdOFxnJWH3CMPLcR2kRcY3Vgo7nncb5eqt6Ixs3?=
- =?us-ascii?Q?p0UwWu30QZ4Q4aqpfNZM6tsz+0GJwr89IOXV1SLcWBF7x8cViamEVItEGrG/?=
- =?us-ascii?Q?kSvMgFm3BeVB4RNQVn1ntVH2cl5se9+QzUTHGhBBZxgQli+TxOnKQGVtWbTE?=
- =?us-ascii?Q?8LSu+19RAgQC8cig8i1ke5zyV7+rEqUqCox18Gsjn/1x+9aqx6E6fLbCq+B2?=
- =?us-ascii?Q?/ZSdjm1jjaBNqET8Ha+zAvqMIu5U/Z98wYYOJV1YrTuqbMGtqjhY1hZDGh1J?=
- =?us-ascii?Q?Si239TvHILbX8LZPjceUX8k2Hu4jGaQzY9SO2bZRu3v14jpD6zL7xqfJd8bj?=
- =?us-ascii?Q?JZmFhu6rDg2z+INnpu9OehHN31WSyqlNJJou1aDdYaybdHg0UboLHZElAKz8?=
- =?us-ascii?Q?4MApPp71zTbG03nknCSZImUoRJ3vr+CQvRjSo/ZB2eOt+J6EqZyZgKsdgpm4?=
- =?us-ascii?Q?R1vX4NlD6BYBBI+Za75HEo5eYRoR0ULsedAYUrNAPoPBKbvyLYn1GFxy0tfv?=
- =?us-ascii?Q?kn3wA7pytYoGnFm04uN/56GgAQqoVnYPF4edMkS6qbOxlF4T9E/4KKGBGOta?=
- =?us-ascii?Q?ZJ8AoIyXxnteeZSwp8Xu531CXgVPiSP3cibLtJtlxNgLA5rkk4vV7jRPom6I?=
- =?us-ascii?Q?irKguYZtZOwK/qP5vHpjGOVVxb48j9LhmiI91kFiI273K23Imegud3pmbpsk?=
- =?us-ascii?Q?EKENLgiqi67pLafTEHoKq1nKA+bobH8ss3TWAB7PmTCHmw2LMqQ4CqO+5IGh?=
- =?us-ascii?Q?8bOTjMfhmmUyXEN1lNXmaxatC6WO3nMppSGlnozM20mbedBtDFFTmW7ZV9bs?=
- =?us-ascii?Q?jTJD5gkxCCWUpgo0bcTQS5yPCYMsYVMDLErIc/lY/kg0FdfhTLJEhhgQ6+Bm?=
- =?us-ascii?Q?zRpXWpR505HpQe33KUko3xXOoKpURL9su2LgQi8peJHwVAw+0eHTNvKsbsUo?=
- =?us-ascii?Q?jsT2C3f9Yn50sUGnF1cuEsCZNagc+2J+ZqeKD7Xc?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf440f79-6de3-4aaa-85f1-08daf4d45487
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 19:36:41.8396
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LTEQ83cLxE5XM7f5pRmeXdONwuVegZOcBMMlU9p+4uHGdV+RxXFARWy38xjWdhyK39LL9i46Rb4ku9Ff3/JR+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8178
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 0/3] add color management support for the crtc
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        Kalyan Thota <quic_kalyant@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com
+References: <1669021695-4397-1-git-send-email-quic_kalyant@quicinc.com>
+ <167330408778.609993.9217470869804308069.b4-ty@linaro.org>
+In-Reply-To: <167330408778.609993.9217470869804308069.b4-ty@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guanhua Gao <guanhua.gao@nxp.com>
+On 10/01/2023 01:43, Dmitry Baryshkov wrote:
+> 
+> On Mon, 21 Nov 2022 01:08:12 -0800, Kalyan Thota wrote:
+>> Add color management support for the crtc provided there are
+>> enough dspps that can be allocated from the catalog
+>>
+>> Kalyan Thota (3):
+>>    drm/msm/disp/dpu1: pin 1 crtc to 1 encoder
+>>    drm/msm/disp/dpu1: add helper to know if display is builtin
+>>    drm/msm/disp/dpu1: add color management support for the crtc
+>>
+>> [...]
+> 
+> Applied, thanks!
+> 
+> [1/3] drm/msm/disp/dpu1: pin 1 crtc to 1 encoder
+>        https://gitlab.freedesktop.org/lumag/msm/-/commit/a4d6f8253645
+> [2/3] drm/msm/disp/dpu1: add helper to know if display is builtin
+>        https://gitlab.freedesktop.org/lumag/msm/-/commit/4cb6b1eebb92
+> [3/3] drm/msm/disp/dpu1: add color management support for the crtc
+>        https://gitlab.freedesktop.org/lumag/msm/-/commit/c48c475bd75a
 
-Set DMA mask and coherent DMA mask to enable 64-bit addressing.
+These patches break sc7180 in a bad way, as the SoC is short on SSPP 
+units. I'm going to carve these patches out and wait for better solution 
+for the color management issue.
 
-Signed-off-by: Guanhua Gao <guanhua.gao@nxp.com>
-Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- drivers/pci/controller/dwc/pci-layerscape-ep.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> 
+> Best regards,
 
-diff --git a/drivers/pci/controller/dwc/pci-layerscape-ep.c b/drivers/pci/controller/dwc/pci-layerscape-ep.c
-index 1b884854c18e..c19e7ec58b05 100644
---- a/drivers/pci/controller/dwc/pci-layerscape-ep.c
-+++ b/drivers/pci/controller/dwc/pci-layerscape-ep.c
-@@ -261,6 +261,10 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
- 	pcie->max_width = (dw_pcie_readw_dbi(pci, PCIE_LINK_CAP) >>
- 			  MAX_LINK_W_SHIFT) & MAX_LINK_W_MASK;
- 
-+	/* set 64-bit DMA mask and coherent DMA mask */
-+	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64)))
-+		dev_warn(dev, "Failed to set 64-bit DMA mask.\n");
-+
- 	platform_set_drvdata(pdev, pcie);
- 
- 	ret = dw_pcie_ep_init(&pci->ep);
 -- 
-2.34.1
+With best wishes
+Dmitry
 
