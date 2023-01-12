@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F4666854C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825F1668550
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235985AbjALV13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 16:27:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S240811AbjALV2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 16:28:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbjALV0x (ORCPT
+        with ESMTP id S234697AbjALV2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 16:26:53 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D510831A8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:06:27 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 36so13629508pgp.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:06:27 -0800 (PST)
+        Thu, 12 Jan 2023 16:28:03 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCE78460A;
+        Thu, 12 Jan 2023 13:07:16 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id cf18so41453122ejb.5;
+        Thu, 12 Jan 2023 13:07:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DDsh5GRLDmAPT4ohGzYkIMdBdaGK6a97VLrKERNXpSI=;
-        b=tC88Nl63tlsqkUVXbppM8YyNoBDPMJ+wX9IGOvEwtqpHT/QQDNc6B23b26p3/GE2xC
-         Hv0XaI+Yp2/yv8Uk5lg/9zlLhNfRGbnvq/+p4zsXDk3g5c/RjXNv35N0RyAb/iW9lbgF
-         PZHloYiuqIJt/JBYLbi50vZUYFjgvFmPTgD/5UMPS4OEO3V/CiMn3cVBnkUn3k2LF3OF
-         7S7fwQoigqFodERVfs2x4uAib9GFLZM4DU21atw0fmuSzw4ndZyWS0xz7PM2bS8CBamP
-         mHjEGgiL4VGMTtdo6YuQuKwRrCESQwFUi3u33nFVKwFQB5MZsaP5P/MR5e4oYpTpq1Rj
-         u85g==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yi96tsdQR6WdP5GsKIXazABTTCV4uwO+W40vPdabGLI=;
+        b=O+QDNRr8kwQzK7WmMnAXpuHQH1PZMeQrj0licS71OUJQMRBomMoDi3AmQzz8Lnc83N
+         x+Mv7aWvrwGVwoHnLCcacSlxKMaR4wHkha+1+INzjhp0Yagto/KlW+sK0iJYCw9sIWIo
+         4njF6TfQlfvMpl++f3aGEHCmjpqXaV9mBE6MR//WlXMhjtbaSzsGTP17+wvXyyU/DG7+
+         QCGC9KHL+BOaCL+deAvdV4ikDEediQNLwppkf3rmONYmC51lp8O+MGtJ+/KD1P1zjGd6
+         u3e02epWZTM06DBUdy1FXtAJ8Yl53l5qXXJZKcSsfs9bQRN3YNzEieKSAP0SDL2iBxBL
+         qP1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DDsh5GRLDmAPT4ohGzYkIMdBdaGK6a97VLrKERNXpSI=;
-        b=eoFQonv2eH9HGDkKeTt1MnZlWM6PVqPYciuworIouYQi50OnxADDLrWW3GrlpOKPiq
-         MErBKpB78KyCLqNGk+og7xjDy7RQtwhHE89Bm2rQbP8DRbr0KoXpKnDWK7IdeoUTnIQ0
-         fK3u1lMNGwajsN6aNbPGEbSf82ENcfvUgDGNw6SAd0ICfwG9c+F33PWI57LYfUMsEGQk
-         OBaauUYpIYEuz87bsgaa4C8+AmFp98ME7E8NSHf45U+TQ7oOhpUItLZP80z73+dBj3//
-         E1cNF0f7bl1hu6qvZHze1HEZgs7XuQNRuvP7wGc0MQKaPwGfizXLcueT1HJdPiXYdtha
-         wKTw==
-X-Gm-Message-State: AFqh2koNro2iLisZ4FuthavafTs8MDSDXFobWCsMJ3KG/EeRU+fcPL/N
-        gTluhhd4+83pzXaAHd3cWmXgrg==
-X-Google-Smtp-Source: AMrXdXsWQjghAE7kgEGAEd1aCFC8+rYzpvT4J079pmOQkHUq/42SJ+7iweefO9sVUj+hscQUxYqVpA==
-X-Received: by 2002:a05:6a00:1715:b0:580:ea08:5277 with SMTP id h21-20020a056a00171500b00580ea085277mr7392268pfc.16.1673557586949;
-        Thu, 12 Jan 2023 13:06:26 -0800 (PST)
-Received: from vineet-framework.ba.rivosinc.com (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
-        by smtp.gmail.com with ESMTPSA id a203-20020a621ad4000000b00580e3917af7sm9206679pfa.117.2023.01.12.13.06.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 13:06:26 -0800 (PST)
-From:   Vineet Gupta <vineetg@rivosinc.com>
-To:     linux-riscv@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, palmer@rivosinc.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, Guo Ren <guoren@kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>, linux@rivosinc.com,
-        Vineet Gupta <vineetg@rivosinc.com>
-Subject: [PATCH v2] riscv: elf: add .riscv.attributes parsing
-Date:   Thu, 12 Jan 2023 13:06:22 -0800
-Message-Id: <20230112210622.2337254-1-vineetg@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
+        bh=Yi96tsdQR6WdP5GsKIXazABTTCV4uwO+W40vPdabGLI=;
+        b=i4AgYgeAThuiAB7QJzyNsLP0ziN+rPn8bM7ExkHoeFfhflWUQ9mx+eb2sL6CKfBbZ5
+         lUOHQa4Jf7tSkkUmkHZYit3uXUQYbZQf2zDL+J88xue0J41fR95cfdCKCm91seRuatpz
+         o2HEmbfXPxJyzhPTIQuGLB0+rJzzqVYAWGpLlcoYXCqtYBn3EVl12MGtYQgMhohw69Eq
+         B0YFKRIuWOB1H6fYOKBSqM8FFaP3cToz6oTcT3A2Zz8Un1tgCeVgUjMmdjN+tzhD6Uow
+         y7H+2rPYBwKxsVgTB2eLwppQviSBqkmUZvgufNWmBSfGD7eXPRGZGhmoM5zj4pwkOlUZ
+         SpRw==
+X-Gm-Message-State: AFqh2kpnZ9D9w+MLgP6zEFEGgC9cEdcq+LWFpOOmFcEkr+qbWv8P/mXT
+        b6mtAAsNK5/Q/evUvxuQ3NDBntPev0huTYlatMP4bUpG
+X-Google-Smtp-Source: AMrXdXvHyknXCPOG1Y++mFApOmYsZxlHbhzKNgms8atKRZ1ze2Wk2vlsO6N3Z+qoW+bToALTQsAAtxAemEQIwO9VCyY=
+X-Received: by 2002:a17:907:3103:b0:864:dab4:760f with SMTP id
+ wl3-20020a170907310300b00864dab4760fmr279928ejb.633.1673557634775; Thu, 12
+ Jan 2023 13:07:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230109094247.1464856-1-imagedong@tencent.com>
+ <504cc35a-74a8-751a-5899-186d7a0aff87@meta.com> <CADxym3bRciuyM1nYCrbaAwSMRJQvgV=hJFSLeiu9jysejPaTQQ@mail.gmail.com>
+ <6c14e7ad-3b6d-4f88-64b8-8e3968d2b2e6@meta.com> <6455133c-87a2-1a0f-7da4-f8b99f02fc95@oracle.com>
+In-Reply-To: <6455133c-87a2-1a0f-7da4-f8b99f02fc95@oracle.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 12 Jan 2023 13:07:03 -0800
+Message-ID: <CAADnVQJRntdqa4uCHtTrQNAsgGS13DtNV-ue2wTdHQxiuLo_Yg@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: resolve kernel function name optimization for kprobe
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Yonghong Song <yhs@meta.com>,
+        Menglong Dong <menglong8.dong@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,322 +80,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implements the elf loader hook to parse RV specific
-.riscv.attributes section. This section is inserted by compilers
-(gcc/llvm) with build related information such as -march organized as
-tag/value attribute pairs.
+On Thu, Jan 12, 2023 at 2:20 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> On 12/01/2023 07:23, Yonghong Song wrote:
+> >
+> >
+> > On 1/9/23 7:11 PM, Menglong Dong wrote:
+> >> On Tue, Jan 10, 2023 at 4:29 AM Yonghong Song <yhs@meta.com> wrote:
+> >>>
+> >>>
+> >>>
+> >>> On 1/9/23 1:42 AM, menglong8.dong@gmail.com wrote:
+> >>>> From: Menglong Dong <imagedong@tencent.com>
+> >>>>
+> >>>> The function name in kernel may be changed by the compiler. For example,
+> >>>> the function 'ip_rcv_core' can be compiled to 'ip_rcv_core.isra.0'.
+> >>>>
+> >>>> This kind optimization can happen in any kernel function. Therefor, we
+> >>>> should conside this case.
+> >>>>
+> >>>> If we failed to attach kprobe with a '-ENOENT', then we can lookup the
+> >>>> kallsyms and check if there is a similar function end with '.xxx', and
+> >>>> retry.
+> >>>
+> >>> This might produce incorrect result, so this approach won't work
+> >>> for all .isra.0 cases. When a function name is changed from
+> >>> <func> to <func>.isra.<num>, it is possible that compiler may have
+> >>> make some changes to the arguments, e.g., removing one argument,
+> >>> chaning a semantics of argument, etc. if bpf program still
+> >>> uses the original function signature, the bpf program may
+> >>> produce unexpected result.
+> >>
+> >> Oops, I wasn't aware of this part. Can we make this function disabled
+> >> by default and offer an option to users to enable it? Such as:
+> >>
+> >>      bpf_object_adapt_sym(struct bpf_object *obj)
+> >>
+> >> In my case, kernel function rename is common, and I have to
+> >> check all functions and do such adaptation before attaching
+> >> my kprobe programs, which makes me can't use auto-attach.
+> >>
+> >> What's more, I haven't seen the arguments change so far, and
+> >> maybe it's not a common case?
+> >
+> > I don't have statistics, but it happens. In general, if you
+> > want to attach to a function like <foo>, but it has a variant
+> > <foo>.isra.<num>, you probably should check assembly code
+> > to ensure the parameter semantics not changed, and then
+> > you can attach to kprobe function <foo>.isra.<num>, which
+> > I assume current libbpf infrastructure should support it.
+> > After you investigate all these <foo>.isra.<num> functions
+> > and confirm their argument semantics won't change, you
+> > could use kprobe multi to do attachment.
+> >
+>
+> I crunched some numbers on this, and discovered out of ~1600
+> .isra/.constprop functions, 76 had a missing argument. The patch series
+> at [1] is a rough attempt to get pahole to spot these, and add
+> BTF entries for each, where the BTF representation reflects
+> reality by skipping optimized-out arguments. So for a function
+> like
+>
+> static int ip6_nh_lookup_table(struct net *net, struct fib6_config *cfg,
+>                                const struct in6_addr *gw_addr, u32 tbid,
+>                                int flags, struct fib6_result *res);
+>
+> Examining the BTF representation using pahole from [1], we see
+>
+> int ip6_nh_lookup_table.isra.0(struct net *net, struct fib6_config *cfg, struct in6_addr *gw_addr, u32 tbid, int flags);
+>
+> Comparing to the definition, we see the last parameter is missing,
+> i.e. the "struct fib6_result *" argument is missing. The calling pattern -
+> where the callers have a struct fib6_result on the stack and pass a pointer -
+> is reflected in late DWARF info which shows the argument is not actually
+> passed as a register, but can be expressed as an offset relative to the current
+> function stack (DW_OP_fbreg).
+>
+> This approach howvever introduces the problem that currently the kernel
+> doesn't  allow a "." in a function name. We can fix that, but any BTF encoding
+> that introduced optimized functions containing a  "." would have to be opt-in
+> via a pahole option, so we do not generate invalid vmlinux BTF for kernels
+> without that change.
+>
+> An alternative approach would be to simply encode .isra functions
+> in BTF without the .isra suffix (i.e. using "function_name" not
+> "function_name.isra"), only doing the BTF encoding if no arguments were
+> optimized out - i.e. if the function signature matches expectations.
+> The 76 functions with optimized-out parameters could simply be skipped.
+> To me that feels like the simpler approach - it avoids issues
+> with function name BTF encoding, and with that sort of model a
+> loose-matching kallsyms approach - like that described here - could be used
+> for kprobes and fentry/fexit. It also fits with the DWARF representation -
+> the .isra suffixes are not present in DWARF representations of the function,
+> only in the symbol table and kallsyms, so perhaps BTF should follow suit
+> and not add the suffixes. What do you think?
 
-It identifies the various attribute tags (and corresponding values) as
-currently specified in the psABI specification.
-
-This patch only implements the elf parsing mechanics, leaving out the
-recording/usage of the attributes to subsequent patches.
-
-Signed-off-by: Vineet Gupta <vineetg@rivosinc.com>
----
-Changes since v1 [1]
-  - Handling potential oob accesses due to against malformed elf contents
-  - Handling of multiple sub-subsections
-
-[1]https://lore.kernel.org/linux-riscv/20230110201841.2069353-1-vineetg@rivosinc.com
-
-Given the current state of discussions, the intended Vector extension
-support would likely not need it, still posting the reworked v2 for
-logical conclusion and for posterity in case need comes up in future
-for something like CFI elf annotation.
-Maintainers/reviewers can decide whether to merge it.
----
- arch/riscv/Kconfig           |   1 +
- arch/riscv/include/asm/elf.h |  11 ++
- arch/riscv/kernel/Makefile   |   1 +
- arch/riscv/kernel/elf-attr.c | 232 +++++++++++++++++++++++++++++++++++
- 4 files changed, 245 insertions(+)
- create mode 100644 arch/riscv/kernel/elf-attr.c
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index e2b656043abf..f7e0ab05a2d2 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -12,6 +12,7 @@ config 32BIT
- 
- config RISCV
- 	def_bool y
-+	select ARCH_BINFMT_ELF_STATE
- 	select ARCH_CLOCKSOURCE_INIT
- 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if HUGETLB_PAGE && MIGRATION
- 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
-diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
-index e7acffdf21d2..7ab8bd0ec330 100644
---- a/arch/riscv/include/asm/elf.h
-+++ b/arch/riscv/include/asm/elf.h
-@@ -116,6 +116,17 @@ do {							\
- 		*(struct user_regs_struct *)regs;	\
- } while (0);
- 
-+struct arch_elf_state {
-+};
-+
-+#define INIT_ARCH_ELF_STATE {}
-+
-+extern int arch_elf_pt_proc(void *ehdr, void *phdr, struct file *elf,
-+			    bool is_interp, struct arch_elf_state *state);
-+
-+extern int arch_check_elf(void *ehdr, bool has_interpreter, void *interp_ehdr,
-+			  struct arch_elf_state *state);
-+
- #ifdef CONFIG_COMPAT
- 
- #define SET_PERSONALITY(ex)					\
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 4cf303a779ab..eff6d845ac9d 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -50,6 +50,7 @@ obj-y	+= riscv_ksyms.o
- obj-y	+= stacktrace.o
- obj-y	+= cacheinfo.o
- obj-y	+= patch.o
-+obj-y	+= elf-attr.o
- obj-y	+= probes/
- obj-$(CONFIG_MMU) += vdso.o vdso/
- 
-diff --git a/arch/riscv/kernel/elf-attr.c b/arch/riscv/kernel/elf-attr.c
-new file mode 100644
-index 000000000000..51bcee92dd5b
---- /dev/null
-+++ b/arch/riscv/kernel/elf-attr.c
-@@ -0,0 +1,232 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 Rivos Inc.
-+ */
-+
-+#include <linux/binfmts.h>
-+#include <linux/elf.h>
-+#include <asm/unaligned.h>
-+
-+#undef pr_fmt
-+#define pr_fmt(fmt) "rv-elf-attr: " fmt
-+
-+#define PT_RISCV_ATTRIBUTES		0x70000003
-+
-+#define RV_ATTR_TAG_file		1
-+
-+#define RV_ATTR_TAG_stack_align		4
-+#define RV_ATTR_TAG_arch		5
-+#define RV_ATTR_TAG_unaligned_access	6
-+
-+#define RV_ATTR_VENDOR_RISCV		"riscv"
-+
-+#define RV_ATTR_SEC_SZ			SZ_1K
-+
-+static void rv_elf_attr_int(u32 tag, u32 val)
-+{
-+	pr_debug("Tag %x=%d\n", tag, val);
-+}
-+
-+static void rv_elf_attr_str(u32 tag, const unsigned char *str)
-+{
-+	pr_debug("Tag %x=[%s]\n", tag, str);
-+}
-+
-+/*
-+ * Decode a ule128 encoded value.
-+ */
-+static int
-+decode_uleb128_safe(unsigned char **dpp, u32 *val, const unsigned char *p_end)
-+{
-+	unsigned char *bp = *dpp;
-+	unsigned char byte;
-+	unsigned int shift = 0;
-+	u32 result = 0;
-+	int ok = 0;
-+
-+	while (bp < p_end) {
-+		byte = *bp++;
-+		result |= (byte & 0x7f) << shift;
-+		if ((byte & 0x80) == 0) {
-+			ok = 1;
-+			break;
-+		}
-+		shift += 7;
-+	}
-+	if (!ok)
-+		return -1;
-+	*dpp = bp;
-+	*val = result;
-+	return 0;
-+}
-+
-+/*
-+ * Parse a single elf attribute.
-+ */
-+static int rv_parse_elf_attr_safe(unsigned char **dpp, unsigned char *p_end)
-+{
-+	unsigned char *p = *dpp;
-+	unsigned char *str;
-+	u32 tag, val, s_len;
-+
-+	if (decode_uleb128_safe(&p, &tag, p_end))
-+		goto bad_attr;
-+
-+	switch (tag) {
-+	case RV_ATTR_TAG_stack_align:
-+		if (decode_uleb128_safe(&p, &val, p_end))
-+			goto bad_attr;
-+		rv_elf_attr_int(tag, val);
-+		break;
-+
-+	case RV_ATTR_TAG_unaligned_access:
-+		if (decode_uleb128_safe(&p, &val, p_end))
-+			goto bad_attr;
-+		rv_elf_attr_int(tag, val);
-+		break;
-+
-+	case RV_ATTR_TAG_arch:
-+		str = p;
-+		s_len = strnlen(p, p_end - p) + 1;
-+		p += s_len;
-+		if (p > p_end)
-+			goto bad_attr;
-+		rv_elf_attr_str(tag, str);
-+		break;
-+
-+	default:
-+		if (decode_uleb128_safe(&p, &val, p_end))
-+			goto bad_attr;
-+		pr_debug("skipping Unrecognized Tag [%u]=%u\n", tag, val);
-+		break;
-+	}
-+
-+	*dpp = p;
-+	return 0;
-+bad_attr:
-+	return -ENOEXEC;
-+}
-+
-+/*
-+ * Parse .riscv.attributes elf section.
-+ */
-+static int rv_parse_elf_attributes(struct file *f, const struct elf_phdr *phdr,
-+				   struct arch_elf_state *state)
-+{
-+	unsigned char buf[RV_ATTR_SEC_SZ];
-+	unsigned char *p, *p_end;
-+	ssize_t n;
-+	int ret = 0;
-+	loff_t pos;
-+
-+	pr_debug("Section .riscv.attributes found\n");
-+
-+	/* Assume a reasonable size for now */
-+	if (phdr->p_filesz > sizeof(buf))
-+		goto bad_elf;
-+
-+	memset(buf, 0, RV_ATTR_SEC_SZ);
-+	pos = phdr->p_offset;
-+	n = kernel_read(f, &buf, phdr->p_filesz, &pos);
-+
-+	if (n < 0)
-+		return -EIO;
-+
-+	p = buf;
-+	p_end = p + n;
-+
-+	/* sanity check format-version */
-+	if (*p++ != 'A')
-+		goto bad_elf;
-+
-+	/*
-+	 * elf attribute section organized as Vendor sub-sections(s)
-+	 *   {sub-section length, vendor name, vendor data}
-+	 * Vendor data organized as sub-subsection(s)
-+	 *   {tag, sub-subsection length, attributes contents}
-+	 * Attribute contents organized as
-+	 *   {tag, value} pair(s).
-+	 */
-+	while ((p_end - p) >= 4) {
-+		int sub_len, vname_len;
-+
-+		sub_len = get_unaligned_le32(p);
-+		if (sub_len <= 4 || sub_len > n)
-+			goto bad_elf;
-+
-+		p += 4;
-+		sub_len -= 4;
-+
-+		/* Vendor name string */
-+		vname_len = strnlen(p, sub_len) + 1;
-+		if (vname_len > sub_len)
-+			goto bad_elf;
-+
-+		/* skip non-mandatory sub-section for now */
-+		if (strncmp(p, RV_ATTR_VENDOR_RISCV, sub_len)) {
-+			p += sub_len;
-+			continue;
-+		}
-+
-+		p += vname_len;
-+		sub_len -= vname_len;
-+
-+		/* Vendor data: sub-subsections(s) */
-+		while (sub_len > 0) {
-+			u32 tag, content_len;
-+			unsigned char *sub_end, *sub_start = p;
-+
-+			if (decode_uleb128_safe(&p, &tag, p_end))
-+				goto bad_elf;
-+
-+			if ((p_end - p) < 4)
-+				goto bad_elf;
-+
-+			content_len = get_unaligned_le32(p);
-+			if (content_len > sub_len)
-+				goto bad_elf;
-+
-+			p += 4;
-+			sub_len -= content_len;
-+			sub_end = sub_start + content_len;
-+
-+			/* For now handle attributes relating to whole file */
-+			if (tag != RV_ATTR_TAG_file) {
-+				p = sub_end;
-+				continue;
-+			}
-+
-+			/* Attribute(s): tag:value pairs */
-+			while (p < sub_end) {
-+				ret = rv_parse_elf_attr_safe(&p, p_end);
-+				if (ret)
-+					goto bad_elf;
-+			}
-+		}
-+	}
-+
-+	return ret;
-+bad_elf:
-+	return -ENOEXEC;
-+}
-+
-+/*
-+ * Hook invoked by generic elf loader to parse riscv specific elf segments.
-+ */
-+int arch_elf_pt_proc(void *_ehdr, void *_phdr, struct file *elf,
-+		     bool is_interp, struct arch_elf_state *state)
-+{
-+	struct elf_phdr *phdr = _phdr;
-+	int ret = 0;
-+
-+	if (phdr->p_type == PT_RISCV_ATTRIBUTES && !is_interp)
-+		ret = rv_parse_elf_attributes(elf, phdr, state);
-+
-+	return ret;
-+}
-+
-+int arch_check_elf(void *_ehdr, bool has_interpreter, void *_interp_ehdr,
-+		   struct arch_elf_state *state)
-+{
-+	return 0;
-+}
--- 
-2.34.1
-
+Sounds like a great idea to me.
+Addresses this issue in a clean way.
