@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55187668456
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF76066845B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjALUwx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 12 Jan 2023 15:52:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
+        id S239946AbjALUxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjALUw3 (ORCPT
+        with ESMTP id S234846AbjALUwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 15:52:29 -0500
+        Thu, 12 Jan 2023 15:52:34 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE296698E;
-        Thu, 12 Jan 2023 12:24:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03305D895;
+        Thu, 12 Jan 2023 12:25:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D20B62177;
-        Thu, 12 Jan 2023 20:24:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52CBBC433D2;
-        Thu, 12 Jan 2023 20:24:09 +0000 (UTC)
-Date:   Thu, 12 Jan 2023 15:24:07 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yunhui Cui <cuiyunhui@bytedance.com>
-Cc:     mhiramat@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, kuniyu@amazon.com,
-        xiyou.wangcong@gmail.com, duanxiongchun@bytedance.com,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, dust.li@linux.alibaba.com
-Subject: Re: [PATCH v6] sock: add tracepoint for send recv length
-Message-ID: <20230112152407.7acad054@gandalf.local.home>
-In-Reply-To: <20230111065930.1494-1-cuiyunhui@bytedance.com>
-References: <20230111065930.1494-1-cuiyunhui@bytedance.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BF5462174;
+        Thu, 12 Jan 2023 20:25:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C079C433F0;
+        Thu, 12 Jan 2023 20:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673555108;
+        bh=9zwIgfryghF/hPAyByTTWjUD8VVtMbRU5rfWoB9mj9g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K8gV+ziX4Q793ObSyocCG05xJsThWXKzS7TRBVtdKpg/OBjlzXUUQSr6oAlgo6f3B
+         xZIbkkRBpDgshI1VPcOjoX0pfF4b7wGjjpdyUE2HntCz9/Zs6FI15m/9VqD5zbulNV
+         n1zujl8AhaXgAF5C5/CgG9jNGffgadIH/B0XanePieaHUHFATgKT5zZhxyrnBUqltA
+         GVfYV4XeH0OY23RrukX0/07SCr6YqCDjt4NN4x8vIoDYFYL5oaXGIMowOImLtuNin9
+         gBoim/cppZw84M6yh7odJkWkTqDfofoPvL9s1PTkGtkgZLouMidrsOlMTn08t+2bzG
+         OsKOT/IAaRswA==
+Date:   Thu, 12 Jan 2023 20:25:03 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 01/13] riscv: fix jal offsets in patched alternatives
+Message-ID: <Y8Bsn5Q0HYMNOt/R@spud>
+References: <20230111171027.2392-1-jszhang@kernel.org>
+ <20230111171027.2392-2-jszhang@kernel.org>
+ <3268358.687JKscXgg@diego>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Ua1i9Pzh5KF+R9ch"
+Content-Disposition: inline
+In-Reply-To: <3268358.687JKscXgg@diego>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 Jan 2023 14:59:30 +0800
-Yunhui Cui <cuiyunhui@bytedance.com> wrote:
 
-> Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
-> Signed-off-by: Xiongchun Duan <duanxiongchun@bytedance.com>
-> ---
->  include/trace/events/sock.h | 45 +++++++++++++++++++++++++++++++++++++
->  net/socket.c                | 33 +++++++++++++++++++++++----
->  2 files changed, 74 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/trace/events/sock.h b/include/trace/events/sock.h
-> index 777ee6cbe933..71492e8276da 100644
-> --- a/include/trace/events/sock.h
-> +++ b/include/trace/events/sock.h
-> @@ -263,6 +263,51 @@ TRACE_EVENT(inet_sk_error_report,
->  		  __entry->error)
->  );
->  
-> +/*
-> + * sock send/recv msg length
-> + */
-> +DECLARE_EVENT_CLASS(sock_msg_length,
-> +
-> +	TP_PROTO(struct sock *sk, int ret, int flags),
-> +
-> +	TP_ARGS(sk, ret, flags),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(void *, sk)
-> +		__field(__u16, family)
-> +		__field(__u16, protocol)
-> +		__field(int, ret)
-> +		__field(int, flags)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->sk = sk;
-> +		__entry->family = sk->sk_family;
-> +		__entry->protocol = sk->sk_protocol;
-> +		__entry->ret = ret;
-> +		__entry->flags = flags;
-> +	),
-> +
-> +	TP_printk("sk address = %p, family = %s protocol = %s, length = %d, error = %d, flags = 0x%x",
-> +		  __entry->sk, show_family_name(__entry->family),
-> +		  show_inet_protocol_name(__entry->protocol),
-> +		  !(__entry->flags & MSG_PEEK) ?
-> +		  (__entry->ret > 0 ? __entry->ret : 0) : 0,
-> +		  __entry->ret < 0 ? __entry->ret : 0,
-> +		  __entry->flags)
-> +);
-> +
-> +DEFINE_EVENT(sock_msg_length, sock_send_length,
-> +	TP_PROTO(struct sock *sk, int ret, int flags),
-> +
-> +	TP_ARGS(sk, ret, flags)
-> +);
-> +
-> +DEFINE_EVENT(sock_msg_length, sock_recv_length,
-> +	TP_PROTO(struct sock *sk, int ret, int flags),
-> +
-> +	TP_ARGS(sk, ret, flags)
-> +);
+--Ua1i9Pzh5KF+R9ch
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-From the tracing POV:
+On Thu, Jan 12, 2023 at 12:31:59AM +0100, Heiko St=FCbner wrote:
+> Am Mittwoch, 11. Januar 2023, 18:10:15 CET schrieb Jisheng Zhang:
+> > Alternatives live in a different section, so offsets used by jal
+> > instruction will point to wrong locations after the patch got applied.
+> >=20
+> > Similar to arm64, adjust the location to consider that offset.
+> >=20
+> > Co-developed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> > Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+>=20
+> looks good, thanks for fixing the issues Andrew and Conor pointed
+> out in the variant in my zbb series. I've now switched over to this one.
+>=20
+> I guess as you said, we really should separate this out into a single pat=
+ch
+> [or if Palmer is fine with that, just pick this one patch to apply until =
+the
+> rest is ready]
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Splitting it out may make it easier to flag for him during the pw sync
+next week? Either way, I'm fine w/ it..
 
--- Steve
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+
+--Ua1i9Pzh5KF+R9ch
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8BsnwAKCRB4tDGHoIJi
+0o5zAP9jGqZSSAdRHCE3N4G2XUAYUpvR8Zxi0U0OiGGa5Sr1eAEAng/g1Dt5Slg6
+suspJyY0z/VoCFEReP2eDtHoy6Qzagw=
+=+jG3
+-----END PGP SIGNATURE-----
+
+--Ua1i9Pzh5KF+R9ch--
