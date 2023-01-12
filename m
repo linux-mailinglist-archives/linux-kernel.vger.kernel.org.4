@@ -2,95 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BFD667ABB
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E42667AB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236730AbjALQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 11:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
+        id S233744AbjALQZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 11:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234044AbjALQZv (ORCPT
+        with ESMTP id S232994AbjALQYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:25:51 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F3B479C1;
-        Thu, 12 Jan 2023 08:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673540551; x=1705076551;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b1y0t5i31C9uBnIOZ8Em+IhwTn+G8oRmBT8YWgv/OBQ=;
-  b=VGnlRUe/j6FpiGPeMUuIWarb0AF44BS9cdum+DL2xX9uWYE73Pe3bXr9
-   YvogKh4yWKVyiWP1Hmb/HPCvLssTYviWyb65rNBK6QnQHLNjGWjS3dLLJ
-   349xd30ApLWBvDAGnfUDCyFCSmSxvFVgOadmvP/kTpq7k4QfCG9WtorlE
-   NZjuPPm9wWYcoVuoVLVuAl2Y9qDan1HbkBtqavc4tW3f1Z4oICiGZwc7e
-   5n4hYnvQ4WJlnCx6njFNDbQB9+X+/LdCxKDL7gYyg8HqOGGB6D6vFEu5A
-   vdFxWskMQIrEn8ZLn6T/T7LS+2J4v0/OIcH6dGN22lb8X3opr77By24vJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="388239573"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="388239573"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:22:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="688381595"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="688381595"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 12 Jan 2023 08:22:27 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pG0LS-0088hY-0Z;
-        Thu, 12 Jan 2023 18:22:26 +0200
-Date:   Thu, 12 Jan 2023 18:22:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v1 1/1] gpiolib: of: Move enum of_gpio_flags to its only
- user
-Message-ID: <Y8AzwdCGr4VFjP5X@smile.fi.intel.com>
-References: <20230112145140.67573-1-andriy.shevchenko@linux.intel.com>
+        Thu, 12 Jan 2023 11:24:33 -0500
+Received: from netgeek.ovh (ks.netgeek.ovh [IPv6:2001:41d0:a:271e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4368518B00;
+        Thu, 12 Jan 2023 08:21:09 -0800 (PST)
+Received: from quaddy.sgn (unknown [IPv6:2a01:cb19:83f8:d500:21d:60ff:fedb:90ab])
+        by ks.netgeek.ovh (Postfix) with ESMTPSA id 9E77C152;
+        Thu, 12 Jan 2023 17:21:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=netgeek.ovh;
+        s=default; t=1673540468;
+        bh=7JnEnSkCbq3mxD56KLZrGRldLIdlGmpduZ9f8M+VY8E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=lMWweUshTT9AjcVX7IJQen/0GjWFm+1C3pS2EG06O58Hx87+Lq1OWIldzyyNtOoV3
+         DXLMa8rBMcYCwZ2anG8QiBR3Qc3JYnvJy5rwMp09zTHDbQGnmgoejD40yR1mJ97nE7
+         CuD3VmS8WvyBnSj1OiZX3Ic5mhOTdkQc6lSL1jy4ryYgpC/6DafPwhSLMddqphbvh1
+         fvTpO1VqTtP8GQM96zCFu0LPfwky2L9VnMLfC/Fdyt8ZpHnlCcD8VU2OP0uOWAXDRZ
+         9vvivreT/i/Jp+fEuThqXFbg3YreY/zaAjtu6XZnjNs/L5sR3lXsCckLhM/SaQywr4
+         qv7jRaM+H47jA==
+Date:   Thu, 12 Jan 2023 17:22:34 +0100
+From:   =?iso-8859-1?Q?Herv=E9?= Boisse <admin@netgeek.ovh>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, admin@netgeek.ovh,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] net/af_packet: fix tx skb network header on
+ SOCK_RAW sockets over VLAN device
+Message-ID: <Y8AzypbpgDOSzhz6@quaddy.sgn>
+References: <20230110191725.22675-1-admin@netgeek.ovh>
+ <20230110191725.22675-2-admin@netgeek.ovh>
+ <fa5895ae62e0f9c1eb8f662295ca920d1da7e88f.camel@redhat.com>
+ <Y8Am5wAxC48N12PE@quaddy.sgn>
+ <47d9b00c664dbaabd8921a47257ffc3b7c5a1325.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230112145140.67573-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <47d9b00c664dbaabd8921a47257ffc3b7c5a1325.camel@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 04:51:40PM +0200, Andy Shevchenko wrote:
-> GPIO library for OF is the only user for enum of_gpio_flags.
-> Move it there.
+On Thu, Jan 12, 2023 at 04:47:38PM +0100, Paolo Abeni wrote:
+> I understand, thanks. Still is not clear why the user-space application
+> would attach to dummy0.832 instead of dummy0.
+> 
+> With your patch the filter will match, but the dhcp packet will reach
+> the wire untagged, so the app will behave exactly as it would do
+> if/when attached to dummy0.
+> 
+> To me it looks like the dhcp client has a bad configuration (wrong
+> interface) and these patches address the issue in the wrong place
+> (inside the kernel).
 
-...
+No, the packet will actually reach the wire as a properly tagged 802.1Q frame.
+For devices that do not support VLAN offloading (such as dummy but also the network card I am using), the kernel adds the tag itself in software before transmitting the packet to the real device. 
 
-> +/*
-> + * This is Linux-specific flags. By default controllers' and Linux' mapping
-> + * match, but GPIO controllers are free to translate their own flags to
-> + * Linux-specific in their .xlate callback. Though, 1:1 mapping is recommended.
-> + */
+You can verify this with a capture using tcpdump/wireshark on dummy0 versus dummy0.832.
+That's why dhclient has to send its packets over dummy0.832 and not dummy0.
 
-Now that I re-read the comment, I think this can be postponed until we get a
-consensus that no new driver is ever should do non 1:1 mapping.
+The same will happen on a real device. I checked on real hardware, with two boxes and their network cards connected through a cable.
+If dhclient is started directly on the first box real device (eth0), the frame is received untagged by the second box, as intended.
+But, if dhclient is started on top of the VLAN device (eth0.832), the second box receives a properly tagged frame.
 
-If that consensus achieved, we may drop this enum altogether and replace it
-with the generic flags..
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Hervé
 
