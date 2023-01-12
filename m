@@ -2,147 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09D36670AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44F86670B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236400AbjALLOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S232322AbjALLRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236977AbjALLNp (ORCPT
+        with ESMTP id S236146AbjALLQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:13:45 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B831111C
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:04:55 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 83A2F3EB52;
-        Thu, 12 Jan 2023 11:04:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673521493; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e7U4mlN6IF/k21gP9LsSqfR9yyrjT6JH4Uv/UCYlR+E=;
-        b=NcYnuvitptmAuez2XBj6nEOXLq9D+CPypAeb3HxFZtXul03DiOfpAFiCpFSw3OWFMAWoqJ
-        Bpgfk1bqPYQb1eBfK9cT+s3HNe8eZ8Rlm1hJEybRDUJxp9lExiv9lIMcUBKJpc6TwnpaQJ
-        3Y1zt2DxwjbfByhG5hCN3ziZBZFZg6U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673521493;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e7U4mlN6IF/k21gP9LsSqfR9yyrjT6JH4Uv/UCYlR+E=;
-        b=iJw2x/cgJd7Laxrc+uU9MXmqgSZavie4T/1g9g3jzcRn+GPwW0oL79NJUzGJGyrLZ4i2JX
-        rDF5+smmKecxrdBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E73313776;
-        Thu, 12 Jan 2023 11:04:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VwNtElXpv2N/MAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 12 Jan 2023 11:04:53 +0000
-Message-ID: <ef422b84-cd33-69c7-9fef-cc8d1d45651c@suse.cz>
-Date:   Thu, 12 Jan 2023 12:04:53 +0100
+        Thu, 12 Jan 2023 06:16:29 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC50413D01;
+        Thu, 12 Jan 2023 03:09:18 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Nt1yb0Y19z4f3mST;
+        Thu, 12 Jan 2023 19:09:11 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDn4R9W6r9jyxjFBQ--.28741S3;
+        Thu, 12 Jan 2023 19:09:12 +0800 (CST)
+Subject: Re: [PATCH] block: bfq fix null pointer dereference of bfqg in
+ bfq_bio_bfqg()
+To:     Artem Chernyshev <artem.chernyshev@red-soft.ru>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org,
+        Anton Fadeev <anton.fadeev@red-soft.ru>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230112094358.451029-1-artem.chernyshev@red-soft.ru>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <c72f2e00-1bd8-213c-585d-d465d6c34a14@huaweicloud.com>
+Date:   Thu, 12 Jan 2023 19:09:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 5/5] Documentation/mm: Update references to
- __m[un]lock_page() to *_folio()
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Hugh Dickins <hughd@google.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Rapoport <rppt@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <cover.1672043615.git.lstoakes@gmail.com>
- <cf3c5615d98f4e690dad46b074933024b8469d37.1672043615.git.lstoakes@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <cf3c5615d98f4e690dad46b074933024b8469d37.1672043615.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230112094358.451029-1-artem.chernyshev@red-soft.ru>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDn4R9W6r9jyxjFBQ--.28741S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxWryfZw47tFyfCr4fuF1kuFg_yoWrJr1UpF
+        47Jr4qkr4xtr1DZa1UA3W7X340qan7AFnrWr12vry3tF1vgw1DJFn5Ar4UJrykKw15uF13
+        Jw1DX348tr1qkaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UWE__UUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/26/22 09:44, Lorenzo Stoakes wrote:
-> We now pass folios to these functions, so update the documentation
-> accordingly.
+Hi,
+
+ÔÚ 2023/01/12 17:43, Artem Chernyshev Ð´µÀ:
+> It is possible for bfqg to be NULL after being initialized as result of
+> blkg_to_bfqg() function.
 > 
-> Additionally, correct the outdated reference to __pagevec_lru_add_fn(), the
-> referenced action occurs in __munlock_folio() directly now.
+> That was achieved on kernel 5.15.78, but should exist in mainline as
+> well
+
+The problem is already fixed in mainline by following patch:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f02be9002c480cd3ec0fcf184ad27cf531bd6ece
+
+Thanks,
+Kuai
 > 
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-With:
-
+> host1 login: [ 460.855794] watchdog: watchdog0: watchdog did not stop!
+> [  898.944512] BUG: kernel NULL pointer dereference, address: 0000000000000094
+> [  899.285776] #PF: supervisor read access in kernel mode
+> [  899.536511] #PF: error_code(0x0000) - not-present page
+> [  899.647305]  connection4:0: detected conn error (1020)
+> [  899.786794] PGD 0 P4D 0
+> [  899.786799] Oops: 0000 [#1] SMP PTI
+> [  899.786802] CPU: 15 PID: 6073 Comm: ID iothread1 Not tainted 5.15.78-1.el7virt.x86_64 #1
+> [  899.786804] Hardware name: HP ProLiant DL360 Gen9/ProLiant DL360 Gen9, BIOS P89 10/21/2019
+> [  899.786806] RIP: 0010:bfq_bio_bfqg+0x26/0x80
+> [  901.325944] Code: 0f 1f 40 00 0f 1f 44 00 00 55 48 89 fd 48 89 f7 53 48 8b 56 48 48 85 d2
+> 74 32 48 63 05 83 7f 35 01 48 83 c0 16 48 8b 5c c2 08 <80> bb 94 00 00 00 00 00
+> [  902.237825] RSP: 0018:ffffae2649437688 EFLAGS: 00010002
+> [  902.493396] RAX: 0000000000000019 RBX: 0000000000000000 RCX: dead000000000122
+> [  902.841529] RDX: ffff8b6012cb3a00 RSI: ffff8b71002bbed0 RDI: ffff8b71002bbed0
+> [  903.189374] RBP: ffff8b601c46e800 R08: ffffae26494377c8 R09: 0000000000000000
+> [  903.532985] R10: 0000000000000001 R11: 0000000000000008 R12: ffff8b6f844c5b30
+> [  903.880809] R13: ffff8b601c46e800 R14: ffffae2649437760 R15: ffff8b601c46e800
+> [  904.220054] FS:  00007fec2fc4a700(0000) GS:ffff8b7f7f640000(0000) kn1GS:00000000000000000
+> [  904.614349] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  904.894717] CR2: 0000000000000094 CR3: 0000000111fd8002 CR4: 00000000003726e0
+> [  905.243702] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  905.592493] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  905.936859] Call Trace:
+> [  906.055955] <TASK>
+> [  906.158109] bfq_bic_update_cgroup+0x2c/0x1f0
+> [  906.371057] bfq_insert_requests+0x2c2/0x1fb0
+> [  906.579207] blk_mq_sched_insert_request+0xc2/0x140
+> [  906.817640] __blk_mq_try_issue_directly+0xe0/0x1f0
+> [  907.055737] blk_mq_request_issue_directly+0x4e/0xa0
+> [  907.298547] dm_mq_queue_rq+0x217/0x3e0
+> [  907.485935] blk_mq_dispatch_rq_list+0x14b/0x860
+> [  907.711973] ? sbitmap_get+0x87/0x1a0
+> [  907.890370] blk_mq_do_dispatch_sched+0x350/0x3b0
+> [  908.074869] NMI watchdog: Watchdog detected hard LOCKUP on cpu 40
+> 
+> Fixes: 075a53b78b81 ("bfq: Make sure bfqg for which we are queueing requests is online")
+> Co-developed-by: Anton Fadeev <anton.fadeev@red-soft.ru>
+> Signed-off-by: Anton Fadeev <anton.fadeev@red-soft.ru>
+> Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
 > ---
->  Documentation/mm/unevictable-lru.rst | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+>   block/bfq-cgroup.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/mm/unevictable-lru.rst b/Documentation/mm/unevictable-lru.rst
-> index 4a0e158aa9ce..153629e0c100 100644
-> --- a/Documentation/mm/unevictable-lru.rst
-> +++ b/Documentation/mm/unevictable-lru.rst
-> @@ -308,22 +308,22 @@ do end up getting faulted into this VM_LOCKED VMA, they will be handled in the
->  fault path - which is also how mlock2()'s MLOCK_ONFAULT areas are handled.
->  
->  For each PTE (or PMD) being faulted into a VMA, the page add rmap function
-> -calls mlock_vma_page(), which calls mlock_page() when the VMA is VM_LOCKED
-> +calls mlock_vma_page(), which calls mlock_folio() when the VMA is VM_LOCKED
->  (unless it is a PTE mapping of a part of a transparent huge page).  Or when
->  it is a newly allocated anonymous page, lru_cache_add_inactive_or_unevictable()
-
-Think it would be more appropriate now:    ^ folio_add_lru_vma()
-
-> -calls mlock_new_page() instead: similar to mlock_page(), but can make better
-> +calls mlock_new_folio() instead: similar to mlock_folio(), but can make better
->  judgments, since this page is held exclusively and known not to be on LRU yet.
->  
-> -mlock_page() sets PageMlocked immediately, then places the page on the CPU's
-
-		     PG_mlocked?
-
-> -mlock pagevec, to batch up the rest of the work to be done under lru_lock by
-> -__mlock_page().  __mlock_page() sets PageUnevictable, initializes mlock_count
-
-					PG_unevictable
-
-ditto below
-
-> +mlock_folio() sets PageMlocked immediately, then places the page on the CPU's
-> +mlock folio batch, to batch up the rest of the work to be done under lru_lock by
-> +__mlock_folio().  __mlock_folio() sets PageUnevictable, initializes mlock_count
->  and moves the page to unevictable state ("the unevictable LRU", but with
->  mlock_count in place of LRU threading).  Or if the page was already PageLRU
->  and PageUnevictable and PageMlocked, it simply increments the mlock_count.
->  
->  But in practice that may not work ideally: the page may not yet be on an LRU, or
->  it may have been temporarily isolated from LRU.  In such cases the mlock_count
-> -field cannot be touched, but will be set to 0 later when __pagevec_lru_add_fn()
-> +field cannot be touched, but will be set to 0 later when __munlock_folio()
->  returns the page to "LRU".  Races prohibit mlock_count from being set to 1 then:
->  rather than risk stranding a page indefinitely as unevictable, always err with
->  mlock_count on the low side, so that when munlocked the page will be rescued to
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index 1b2829e99dad..d4e9428cdbe5 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -616,7 +616,7 @@ struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
+>   			continue;
+>   		}
+>   		bfqg = blkg_to_bfqg(blkg);
+> -		if (bfqg->online) {
+> +		if (bfqg && bfqg->online) {
+>   			bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
+>   			return bfqg;
+>   		}
+> 
 
