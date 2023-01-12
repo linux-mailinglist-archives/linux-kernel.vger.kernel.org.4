@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F48668365
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B13668373
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240858AbjALUHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 15:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S240608AbjALUHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241659AbjALUEf (ORCPT
+        with ESMTP id S241695AbjALUEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 15:04:35 -0500
+        Thu, 12 Jan 2023 15:04:41 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671191C907
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:01:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFFD1D0F0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:01:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673553715; x=1705089715;
+  t=1673553720; x=1705089720;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NSeYAfZ211QEML4KPYcbjU+itn+gXqaZo2yeuqVu2i0=;
-  b=ZqN7VJexBHZfN8YJl9CnAgzxHIDT1nPkmft+uksusGsE96RBnhAMszzl
-   UUyfy1bgHOtnEZBAXlZQ5MwFLtR74exMcayAZldcWtYYYYpnXAC6cS6l3
-   fXIuc2mlbieo4H9pzN98t49ii5XZR8107sk9J2nDXk0m+Ug7DrkAHEu+W
-   xFT3bKSa5Bl9ALtEaqcHcomA5OHz+dChhnY3HE2E+yfxTHrK9bXwYE70W
-   X+A4lIcW08t0ITIrner0WU9DDsbRzQSA9mevhun3mN5kejl834v28zYcQ
-   EvL4ENFlJ/Xb3kCRqkCQ/bTNcECCIHRqe6fbX+stbJeJASaVcv6MOJms7
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="325867103"
+  bh=k3olYJGDuAsTwkx4jY139eZ6Hwoc0t134R0hr6yBmNI=;
+  b=CMU6RVdPWdQ/3ehsOAfEAJNsaooYRZUwVFuvEPfROvecaaiAmOZm2c9v
+   TyX+FQdG1ZbMijiwq0Eaq4SbFzarQ2e+XTCmHBa/pq9oSlkSIPU7g6YhD
+   faYoW7Md6LhQ7hpSt8E30GflrQSWDqTt9Qxc5aHtD4209K4QI7GAiBuXA
+   haja8y/J625z5Q0xn3QugcpjhxLzAVlHsVTAoypTV9/eo7oaiyrS1tNA+
+   dBv17l6RXQJWNBjwlwjm77fwAotw/a0CYHZHZWe2D2lZ78L5ZbT6kUL7S
+   rwJJnjWgNNYz2jNhmvHaMLWbR5JsMg3RddSaCYpHjKV7gDRhKyeYzI66Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="325867109"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="325867103"
+   d="scan'208";a="325867109"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 12:01:29 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="657959928"
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="657959930"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="657959928"
+   d="scan'208";a="657959930"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
   by orsmga002.jf.intel.com with ESMTP; 12 Jan 2023 12:01:29 -0800
 From:   kan.liang@linux.intel.com
@@ -45,9 +45,9 @@ To:     peterz@infradead.org, mingo@redhat.com,
 Cc:     steve.wahl@hpe.com, alexander.antonov@linux.intel.com,
         ak@linux.intel.com, eranian@google.com, namhyung@kernel.org,
         Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH RESEND 2/5] perf/x86/uncore: Fix potential NULL pointer in uncore_get_alias_name
-Date:   Thu, 12 Jan 2023 12:01:02 -0800
-Message-Id: <20230112200105.733466-3-kan.liang@linux.intel.com>
+Subject: [PATCH RESEND 3/5] perf/x86/uncore: Ignore broken units in discovery table
+Date:   Thu, 12 Jan 2023 12:01:03 -0800
+Message-Id: <20230112200105.733466-4-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230112200105.733466-1-kan.liang@linux.intel.com>
 References: <20230112200105.733466-1-kan.liang@linux.intel.com>
@@ -64,53 +64,141 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-The current code assumes that the discovery table provides valid
-box_ids for the normal units. It's not the case anymore since some units
-in the discovery table are broken on some SPR variants.
+Some units in a discovery table may be broken, e.g., UPI of SPR MCC.
+A generic method is required to ignore the broken units.
 
-Factor out uncore_get_box_id(). Check the existence of the type->box_ids
-before using it. If it's not available, use pmu_idx.
+Add uncore_units_ignore in the struct intel_uncore_init_fun, which
+indicates the type ID of broken units. It will be assigned by the
+platform-specific code later when the platform has a broken discovery
+table.
 
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- arch/x86/events/intel/uncore.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ arch/x86/events/intel/uncore.c           |  8 ++++++--
+ arch/x86/events/intel/uncore.h           |  2 ++
+ arch/x86/events/intel/uncore_discovery.c | 26 +++++++++++++++++++++---
+ arch/x86/events/intel/uncore_discovery.h |  2 +-
+ 4 files changed, 32 insertions(+), 6 deletions(-)
 
 diff --git a/arch/x86/events/intel/uncore.c b/arch/x86/events/intel/uncore.c
-index 8caf253be1de..d63be6d1224e 100644
+index d63be6d1224e..751df6460bff 100644
 --- a/arch/x86/events/intel/uncore.c
 +++ b/arch/x86/events/intel/uncore.c
-@@ -857,6 +857,12 @@ static const struct attribute_group uncore_pmu_attr_group = {
- 	.attrs = uncore_pmu_attrs,
+@@ -1695,7 +1695,10 @@ struct intel_uncore_init_fun {
+ 	void	(*cpu_init)(void);
+ 	int	(*pci_init)(void);
+ 	void	(*mmio_init)(void);
++	/* Discovery table is required */
+ 	bool	use_discovery;
++	/* The units in the discovery table should be ignored. */
++	int	*uncore_units_ignore;
  };
  
-+static inline int uncore_get_box_id(struct intel_uncore_type *type,
-+				    struct intel_uncore_pmu *pmu)
+ static const struct intel_uncore_init_fun nhm_uncore_init __initconst = {
+@@ -1873,7 +1876,7 @@ static int __init intel_uncore_init(void)
+ 
+ 	id = x86_match_cpu(intel_uncore_match);
+ 	if (!id) {
+-		if (!uncore_no_discover && intel_uncore_has_discovery_tables())
++		if (!uncore_no_discover && intel_uncore_has_discovery_tables(NULL))
+ 			uncore_init = (struct intel_uncore_init_fun *)&generic_uncore_init;
+ 		else
+ 			return -ENODEV;
+@@ -1881,7 +1884,8 @@ static int __init intel_uncore_init(void)
+ 		uncore_init = (struct intel_uncore_init_fun *)id->driver_data;
+ 		if (uncore_no_discover && uncore_init->use_discovery)
+ 			return -ENODEV;
+-		if (uncore_init->use_discovery && !intel_uncore_has_discovery_tables())
++		if (uncore_init->use_discovery &&
++		    !intel_uncore_has_discovery_tables(uncore_init->uncore_units_ignore))
+ 			return -ENODEV;
+ 	}
+ 
+diff --git a/arch/x86/events/intel/uncore.h b/arch/x86/events/intel/uncore.h
+index 8d493bea9eb6..bbaa57cd868d 100644
+--- a/arch/x86/events/intel/uncore.h
++++ b/arch/x86/events/intel/uncore.h
+@@ -34,6 +34,8 @@
+ 
+ #define UNCORE_EVENT_CONSTRAINT(c, n) EVENT_CONSTRAINT(c, n, 0xff)
+ 
++#define UNCORE_IGNORE_END		-1
++
+ struct pci_extra_dev {
+ 	struct pci_dev *dev[UNCORE_EXTRA_PCI_DEV_MAX];
+ };
+diff --git a/arch/x86/events/intel/uncore_discovery.c b/arch/x86/events/intel/uncore_discovery.c
+index 08af92af2be2..abb51191f5af 100644
+--- a/arch/x86/events/intel/uncore_discovery.c
++++ b/arch/x86/events/intel/uncore_discovery.c
+@@ -190,8 +190,25 @@ uncore_insert_box_info(struct uncore_unit_discovery *unit,
+ 
+ }
+ 
++static bool
++uncore_ignore_unit(struct uncore_unit_discovery *unit, int *ignore)
 +{
-+	return type->box_ids ? type->box_ids[pmu->pmu_idx] : pmu->pmu_idx;
++	int i;
++
++	if (!ignore)
++		return false;
++
++	for (i = 0; ignore[i] != UNCORE_IGNORE_END ; i++) {
++		if (unit->box_type == ignore[i])
++			return true;
++	}
++
++	return false;
 +}
 +
- void uncore_get_alias_name(char *pmu_name, struct intel_uncore_pmu *pmu)
+ static int parse_discovery_table(struct pci_dev *dev, int die,
+-				 u32 bar_offset, bool *parsed)
++				 u32 bar_offset, bool *parsed,
++				 int *ignore)
  {
- 	struct intel_uncore_type *type = pmu->type;
-@@ -865,7 +871,7 @@ void uncore_get_alias_name(char *pmu_name, struct intel_uncore_pmu *pmu)
- 		sprintf(pmu_name, "uncore_type_%u", type->type_id);
- 	else {
- 		sprintf(pmu_name, "uncore_type_%u_%d",
--			type->type_id, type->box_ids[pmu->pmu_idx]);
-+			type->type_id, uncore_get_box_id(type, pmu));
+ 	struct uncore_global_discovery global;
+ 	struct uncore_unit_discovery unit;
+@@ -246,6 +263,9 @@ static int parse_discovery_table(struct pci_dev *dev, int die,
+ 		if (unit.access_type >= UNCORE_ACCESS_MAX)
+ 			continue;
+ 
++		if (uncore_ignore_unit(&unit, ignore))
++			continue;
++
+ 		uncore_insert_box_info(&unit, die, *parsed);
  	}
+ 
+@@ -254,7 +274,7 @@ static int parse_discovery_table(struct pci_dev *dev, int die,
+ 	return 0;
  }
  
-@@ -892,7 +898,7 @@ static void uncore_get_pmu_name(struct intel_uncore_pmu *pmu)
- 		 * Use the box ID from the discovery table if applicable.
- 		 */
- 		sprintf(pmu->name, "uncore_%s_%d", type->name,
--			type->box_ids ? type->box_ids[pmu->pmu_idx] : pmu->pmu_idx);
-+			uncore_get_box_id(type, pmu));
- 	}
- }
+-bool intel_uncore_has_discovery_tables(void)
++bool intel_uncore_has_discovery_tables(int *ignore)
+ {
+ 	u32 device, val, entry_id, bar_offset;
+ 	int die, dvsec = 0, ret = true;
+@@ -290,7 +310,7 @@ bool intel_uncore_has_discovery_tables(void)
+ 			if (die < 0)
+ 				continue;
  
+-			parse_discovery_table(dev, die, bar_offset, &parsed);
++			parse_discovery_table(dev, die, bar_offset, &parsed, ignore);
+ 		}
+ 	}
+ 
+diff --git a/arch/x86/events/intel/uncore_discovery.h b/arch/x86/events/intel/uncore_discovery.h
+index f4439357779a..41637022b5d1 100644
+--- a/arch/x86/events/intel/uncore_discovery.h
++++ b/arch/x86/events/intel/uncore_discovery.h
+@@ -122,7 +122,7 @@ struct intel_uncore_discovery_type {
+ 	unsigned int	*box_offset;	/* Box offset */
+ };
+ 
+-bool intel_uncore_has_discovery_tables(void);
++bool intel_uncore_has_discovery_tables(int *ignore);
+ void intel_uncore_clear_discovery_tables(void);
+ void intel_uncore_generic_uncore_cpu_init(void);
+ int intel_uncore_generic_uncore_pci_init(void);
 -- 
 2.35.1
 
