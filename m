@@ -2,334 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3246669C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 04:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F85B6669CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 04:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235283AbjALDqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 22:46:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
+        id S235948AbjALDr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 22:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235969AbjALDqQ (ORCPT
+        with ESMTP id S235789AbjALDrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 22:46:16 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B1163C1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 19:46:12 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id y25so26566360lfa.9
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 19:46:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y8dOW5pRnm76DXQ7mSIq/E9mwEicC9WVIGYw1/nEyxU=;
-        b=SrSc7Ok98mcZB4uw0ovIUIL4fPuoVdyZf2xGbEyL2IH18eiFkudK4vuHXjsmQKgCru
-         p9lXW/XHlHJill3+Xcuhi3lU87KUyHwx39BRIEMWFPEEzrKcabYbCm2c54u1nJYNLShw
-         meFPxMBikDk0rUFWsPVjVbvc1QF5aIbYh7NMME6Tz986tm/cvL4xMyaxoDt6kjqmvRaU
-         Ld6MHSAC87CYJfjRLC4V3aLAyqPOKbs8cmkUz0Bak6CdKPZ+BjfwBNy45KzhYrCy3c10
-         H3661D3RxFPpdl89OqA06vsNgffRMuAXWYiZqVobv6m6q1P4ei1F+5ri8VE7Pf1jjNZ7
-         FyWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y8dOW5pRnm76DXQ7mSIq/E9mwEicC9WVIGYw1/nEyxU=;
-        b=ArdwT1ykDwUJkftANV5Qo6U3QGwN1M1U7oJpwCHB1TXsuoQNtVA5r3Sh3DWAbAGwr1
-         1B8uviGKMQ7YazuhrdN4EQ/ySkQoiJdIiYaGIp+Y/E0aI+O+qnvRnpSFYHZGczEWBgeL
-         ex2vTBTfYA9wvLC/UiDwUZ6Nxt1mqi9m0WajT4I7ZmfJ3hD0Z7sAcb7KOyrpde3YdHzx
-         XwNnCw6Oka0Uos0+0YFPbKTVNw202owKlVlwxPW1VyHsybbMERTb2UugsdFB/oTmf7SD
-         v9IJffRr1xKUPfSUugbrwjI5+eUphZDZhouqjlEaJZSt51N48DLQ79FrquoAmrdjMTBH
-         pE0w==
-X-Gm-Message-State: AFqh2kqW1YE/XeREu77GtA6Z2gH04Vf920z09WwyUidu0YsYeTeJCEmi
-        7xNVxRG7+gEQp/Aw7VgDcfvzEg==
-X-Google-Smtp-Source: AMrXdXtNqgbo3bWwww9N1TTda93aPV9HOIQW7H7jN1UHMm1J5cw89WqUlfXV4ivVrhaDZqubXTKPWA==
-X-Received: by 2002:a05:6512:3b99:b0:4a4:68b9:608c with SMTP id g25-20020a0565123b9900b004a468b9608cmr25955520lfv.23.1673495170904;
-        Wed, 11 Jan 2023 19:46:10 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id 2-20020ac25f02000000b0048b365176d9sm3052440lfq.286.2023.01.11.19.46.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 19:46:10 -0800 (PST)
-Message-ID: <00cebe7d-ae3d-8772-c206-cd3ce6a275c1@linaro.org>
-Date:   Thu, 12 Jan 2023 05:46:09 +0200
+        Wed, 11 Jan 2023 22:47:55 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BFF40856
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 19:47:53 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VZPGQNn_1673495267;
+Received: from 30.221.131.229(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VZPGQNn_1673495267)
+          by smtp.aliyun-inc.com;
+          Thu, 12 Jan 2023 11:47:48 +0800
+Message-ID: <42d0b5da-73e8-59f2-c20b-ba1d6143da14@linux.alibaba.com>
+Date:   Thu, 12 Jan 2023 11:47:47 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RESEND PATCH 1/2] clk: qcom: clk-rcg2: introduce support for
- multiple conf for same freq
-Content-Language: en-GB
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-References: <20230111194250.15793-1-ansuelsmth@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230111194250.15793-1-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH v2 1/2] fscache: Use wait_on_bit() to wait for the freeing
+ of relinquished volume
+To:     Hou Tao <houtao@huaweicloud.com>, linux-cachefs@redhat.com
+Cc:     David Howells <dhowells@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, houtao1@huawei.com
+References: <20221226103309.953112-1-houtao@huaweicloud.com>
+ <20221226103309.953112-2-houtao@huaweicloud.com>
+Content-Language: en-US
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20221226103309.953112-2-houtao@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 11/01/2023 21:42, Christian Marangi wrote:
-> Some RCG frequency can be reached by multiple configuration.
+
+On 12/26/22 6:33 PM, Hou Tao wrote:
+> From: Hou Tao <houtao1@huawei.com>
 > 
-> We currently declare multiple configuration for the same frequency but
-> that is not supported and always the first configuration will be taken.
+> The freeing of relinquished volume will wake up the pending volume
+> acquisition by using wake_up_bit(), however it is mismatched with
+> wait_var_event() used in fscache_wait_on_volume_collision() and it will
+> never wake up the waiter in the wait-queue because these two functions
+> operate on different wait-queues.
 > 
-> These multiple configuration are needed as based on the current parent
-> configuration, it may be needed to use a different configuration to
-> reach the same frequency.
+> According to the implementation in fscache_wait_on_volume_collision(),
+> if the wake-up of pending acquisition is delayed longer than 20 seconds
+> (e.g., due to the delay of on-demand fd closing), the first
+> wait_var_event_timeout() will timeout and the following wait_var_event()
+> will hang forever as shown below:
 > 
-> To handle this introduce 2 new macro, FM and C.
+>  FS-Cache: Potential volume collision new=00000024 old=00000022
+>  ......
+>  INFO: task mount:1148 blocked for more than 122 seconds.
+>        Not tainted 6.1.0-rc6+ #1
+>  task:mount           state:D stack:0     pid:1148  ppid:1
+>  Call Trace:
+>   <TASK>
+>   __schedule+0x2f6/0xb80
+>   schedule+0x67/0xe0
+>   fscache_wait_on_volume_collision.cold+0x80/0x82
+>   __fscache_acquire_volume+0x40d/0x4e0
+>   erofs_fscache_register_volume+0x51/0xe0 [erofs]
+>   erofs_fscache_register_fs+0x19c/0x240 [erofs]
+>   erofs_fc_fill_super+0x746/0xaf0 [erofs]
+>   vfs_get_super+0x7d/0x100
+>   get_tree_nodev+0x16/0x20
+>   erofs_fc_get_tree+0x20/0x30 [erofs]
+>   vfs_get_tree+0x24/0xb0
+>   path_mount+0x2fa/0xa90
+>   do_mount+0x7c/0xa0
+>   __x64_sys_mount+0x8b/0xe0
+>   do_syscall_64+0x30/0x60
+>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
 > 
-> - FM is used to declare an empty freq_tbl with just the frequency and an
->    array of confs to insert all the config for the provided frequency.
-> 
-> - C is used to declare a fre_conf where src, pre_div, m and n are
->    provided.
-> 
-> The driver is changed to handle this special freq_tbl and select the
-> correct config by calculating the final rate and deciding based on the
-> one that is less different than the requested one.
+> Considering that wake_up_bit() is more selective, so fixing it by using
+							^
+						       fix
+> wait_on_bit() instead of wait_var_event() to wait for the freeing of
+> relinquished volume. In addition because waitqueue_active() is used in
+> wake_up_bit() and clear_bit() doesn't imply any memory barrier, so also
+> adding smp_mb__after_atomic() before wake_up_bit().
 
-I gave this a thought.
-
-First some generic thought about RCG2 risen by your patch. I'll talk 
-about the CEIL functions, but the same applies to FLOOR ones.
-
-The clk_rcg2_determine_rate() / freq_tbl_determine_rate() determines the 
-best supported rate and and selects a best parent. Good. Then CCF will 
-pass the determined target rate, parent index and parent rate either to 
-clk_rcg2_set_rate() or to the clk_rcg2_set_rate_and_parent() depending 
-on whether it determines that the parent should be switched or not. So 
-far so good.
-
-However then the __clk_rcg2_set_rate() will perform the same search 
-again, taking care of FLOOR or CEIL, completely ignoring the fact that 
-rate passed is already known to be the supported rate, so we can just 
-look for it and ignoring the provided parent (or a note from CCF that 
-the parent should remain the same).
-
-This worked correctly in the single-possible-configuration case, however 
-it IMHO becames fragile in the multiple-possible-configuration case. 
-Consider CCF switching the parent rate during the clk_set_rate() call. 
-Then the second lookup might end up selecting _different_ parent/mnd 
-configuration.
-
-Thus said, I'd suggest first changing clk_rcg2_set_rate/and_parent(). 
-Make it look up the exact configuration without the rounding (it is 
-unnecessary anyway). This would require something like 
-qcom_find_freq_exact(). Or just loop over the table in 
-__clk_rcg2_set_rate().
-
-Then for your case make it actually use the provided parent index (or 
-the current parent in the .set_rate() case). This will make sure that we 
-follow CCF decisions instead of making them on our own.
-
-Finally for your usecase to work correcly you need to select correct 
-rate+parent in the .determine_rate callback.
-
-We know that the freq_table is sorted already. Add a loop to 
-_freq_tbl_determine_rate() policy switchcase to check next table entries 
-determing if their parent rate is better than the parent rate of the 
-selected entry.
+... doesn't imply any memory barrier, add ...
 
 > 
-> Tested-by: Robert Marko <robimarko@gmail.com>
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Fixes: 62ab63352350 ("fscache: Implement volume registration")
+> Signed-off-by: Hou Tao <houtao1@huawei.com>
+
+
+Otherwise LGTM :)
+
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
 > ---
->   drivers/clk/qcom/clk-rcg.h  | 14 ++++++-
->   drivers/clk/qcom/clk-rcg2.c | 84 +++++++++++++++++++++++++++++++++----
->   2 files changed, 88 insertions(+), 10 deletions(-)
+>  fs/fscache/volume.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-> index 01581f4d2c39..18f4f7b59f36 100644
-> --- a/drivers/clk/qcom/clk-rcg.h
-> +++ b/drivers/clk/qcom/clk-rcg.h
-> @@ -7,7 +7,17 @@
->   #include <linux/clk-provider.h>
->   #include "clk-regmap.h"
->   
-> -#define F(f, s, h, m, n) { (f), (s), (2 * (h) - 1), (m), (n) }
-> +#define F(f, s, h, m, n) { (f), (s), (2 * (h) - 1), (m), (n), 0, NULL }
-> +
-> +#define FM(_f, _confs) { .freq = (_f), .confs_num = ARRAY_SIZE(_confs), .confs = (_confs) }
-> +#define C(s, h, m, n) { (s), (2 * (h) - 1), (m), (n) }
-> +
-> +struct freq_conf {
-> +	u8 src;
-> +	u8 pre_div;
-> +	u16 m;
-> +	u16 n;
-> +};
->   
->   struct freq_tbl {
->   	unsigned long freq;
-> @@ -15,6 +25,8 @@ struct freq_tbl {
->   	u8 pre_div;
->   	u16 m;
->   	u16 n;
-> +	int confs_num;
-> +	const struct freq_conf *confs;
->   };
->   
->   /**
-> diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-> index 76551534f10d..7d3b59ec2b50 100644
-> --- a/drivers/clk/qcom/clk-rcg2.c
-> +++ b/drivers/clk/qcom/clk-rcg2.c
-> @@ -209,11 +209,60 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
->   	return __clk_rcg2_recalc_rate(hw, parent_rate, cfg);
->   }
->   
-> +static void
-> +clk_rcg2_select_conf(struct clk_hw *hw, struct freq_tbl *f_tbl,
-> +		     const struct freq_tbl *f, unsigned long req_rate)
-> +{
-> +	unsigned long best_rate = 0, parent_rate, rate;
-> +	const struct freq_conf *conf, *best_conf;
-> +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> +	struct clk_hw *p;
-> +	int index, i;
-> +
-> +	/* Search in each provided config the one that is near the wanted rate */
-> +	for (i = 0, conf = f->confs; i < f->confs_num; i++, conf++) {
-> +		index = qcom_find_src_index(hw, rcg->parent_map, conf->src);
-> +		if (index < 0)
-> +			continue;
-> +
-> +		p = clk_hw_get_parent_by_index(hw, index);
-> +		if (!p)
-> +			continue;
-> +
-> +		parent_rate =  clk_hw_get_rate(p);
-> +		rate = calc_rate(parent_rate, conf->n, conf->m, conf->n, conf->pre_div);
-> +
-> +		if (rate == req_rate) {
-> +			best_conf = conf;
-> +			break;
-> +		}
-> +
-> +		if (abs(req_rate - rate) < abs(best_rate - rate)) {
-> +			best_rate = rate;
-> +			best_conf = conf;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Very unlikely.
-> +	 * Force the first conf if we can't find a correct config.
-> +	 */
-> +	if (unlikely(i == f->confs_num))
-> +		best_conf = f->confs;
-> +
-> +	/* Apply the config */
-> +	f_tbl->src = best_conf->src;
-> +	f_tbl->pre_div = best_conf->pre_div;
-> +	f_tbl->m = best_conf->m;
-> +	f_tbl->n = best_conf->n;
-> +}
-> +
->   static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
->   				    struct clk_rate_request *req,
->   				    enum freq_policy policy)
->   {
->   	unsigned long clk_flags, rate = req->rate;
-> +	struct freq_tbl f_tbl;
->   	struct clk_hw *p;
->   	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
->   	int index;
-> @@ -232,7 +281,15 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
->   	if (!f)
->   		return -EINVAL;
->   
-> -	index = qcom_find_src_index(hw, rcg->parent_map, f->src);
-> +	f_tbl = *f;
-> +	/*
-> +	 * A single freq may be reached by multiple configuration.
-> +	 * Try to find the bast one if we have this kind of freq_table.
-> +	 */
-> +	if (f->confs)
-> +		clk_rcg2_select_conf(hw, &f_tbl, f, rate);
-> +
-> +	index = qcom_find_src_index(hw, rcg->parent_map, f_tbl.src);
->   	if (index < 0)
->   		return index;
->   
-> @@ -242,18 +299,18 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
->   		return -EINVAL;
->   
->   	if (clk_flags & CLK_SET_RATE_PARENT) {
-> -		rate = f->freq;
-> -		if (f->pre_div) {
-> +		rate = f_tbl.freq;
-> +		if (f_tbl.pre_div) {
->   			if (!rate)
->   				rate = req->rate;
->   			rate /= 2;
-> -			rate *= f->pre_div + 1;
-> +			rate *= f_tbl.pre_div + 1;
->   		}
->   
-> -		if (f->n) {
-> +		if (f_tbl.n) {
->   			u64 tmp = rate;
-> -			tmp = tmp * f->n;
-> -			do_div(tmp, f->m);
-> +			tmp = tmp * f_tbl.n;
-> +			do_div(tmp, f_tbl.m);
->   			rate = tmp;
->   		}
->   	} else {
-> @@ -261,7 +318,7 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
->   	}
->   	req->best_parent_hw = p;
->   	req->best_parent_rate = rate;
-> -	req->rate = f->freq;
-> +	req->rate = f_tbl.freq;
->   
->   	return 0;
->   }
-> @@ -357,6 +414,7 @@ static int __clk_rcg2_set_rate(struct clk_hw *hw, unsigned long rate,
->   {
->   	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
->   	const struct freq_tbl *f;
-> +	struct freq_tbl f_tbl;
->   
->   	switch (policy) {
->   	case FLOOR:
-> @@ -372,7 +430,15 @@ static int __clk_rcg2_set_rate(struct clk_hw *hw, unsigned long rate,
->   	if (!f)
->   		return -EINVAL;
->   
-> -	return clk_rcg2_configure(rcg, f);
-> +	f_tbl = *f;
-> +	/*
-> +	 * A single freq may be reached by multiple configuration.
-> +	 * Try to find the best one if we have this kind of freq_table.
-> +	 */
-> +	if (f->confs)
-> +		clk_rcg2_select_conf(hw, &f_tbl, f, rate);
-> +
-> +	return clk_rcg2_configure(rcg, &f_tbl);
->   }
->   
->   static int clk_rcg2_set_rate(struct clk_hw *hw, unsigned long rate,
+> diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
+> index ab8ceddf9efa..fc3dd3bc851d 100644
+> --- a/fs/fscache/volume.c
+> +++ b/fs/fscache/volume.c
+> @@ -141,13 +141,14 @@ static bool fscache_is_acquire_pending(struct fscache_volume *volume)
+>  static void fscache_wait_on_volume_collision(struct fscache_volume *candidate,
+>  					     unsigned int collidee_debug_id)
+>  {
+> -	wait_var_event_timeout(&candidate->flags,
+> -			       !fscache_is_acquire_pending(candidate), 20 * HZ);
+> +	wait_on_bit_timeout(&candidate->flags, FSCACHE_VOLUME_ACQUIRE_PENDING,
+> +			    TASK_UNINTERRUPTIBLE, 20 * HZ);
+>  	if (fscache_is_acquire_pending(candidate)) {
+>  		pr_notice("Potential volume collision new=%08x old=%08x",
+>  			  candidate->debug_id, collidee_debug_id);
+>  		fscache_stat(&fscache_n_volumes_collision);
+> -		wait_var_event(&candidate->flags, !fscache_is_acquire_pending(candidate));
+> +		wait_on_bit(&candidate->flags, FSCACHE_VOLUME_ACQUIRE_PENDING,
+> +			    TASK_UNINTERRUPTIBLE);
+>  	}
+>  }
+>  
+> @@ -348,6 +349,11 @@ static void fscache_wake_pending_volume(struct fscache_volume *volume,
+>  		if (fscache_volume_same(cursor, volume)) {
+>  			fscache_see_volume(cursor, fscache_volume_see_hash_wake);
+>  			clear_bit(FSCACHE_VOLUME_ACQUIRE_PENDING, &cursor->flags);
+> +			/*
+> +			 * Paired with barrier in wait_on_bit(). Check
+> +			 * wake_up_bit() and waitqueue_active() for details.
+> +			 */
+> +			smp_mb__after_atomic();
+>  			wake_up_bit(&cursor->flags, FSCACHE_VOLUME_ACQUIRE_PENDING);
+>  			return;
+>  		}
 
 -- 
-With best wishes
-Dmitry
-
+Thanks,
+Jingbo
