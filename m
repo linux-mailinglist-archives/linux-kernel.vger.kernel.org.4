@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44929667DBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB884667D8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240482AbjALSSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:18:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
+        id S240282AbjALSKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:10:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240439AbjALSRx (ORCPT
+        with ESMTP id S240229AbjALSJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:17:53 -0500
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B9D7148A;
-        Thu, 12 Jan 2023 09:47:13 -0800 (PST)
-Received: from SOPL295.local (unknown [IPv6:2a02:8440:d20f:6de0:6125:d027:2017:9d97])
-        (Authenticated sender: robert.jarzmik@free.fr)
-        by smtp4-g21.free.fr (Postfix) with ESMTPSA id 0B0F519F59E;
-        Thu, 12 Jan 2023 18:46:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-        s=smtp-20201208; t=1673545631;
-        bh=KRTPZlKd33p2jA5AfUXMRlfCbedKs4GMu6pgnM4y4Qo=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=LctVqhCykYrI8EvXeqUmUdArGNK/b6sZcJ0gtvgPgfxfckye4plPdcS9NoAVKI7ya
-         +OuDsuuF1zEN2T6xCaKeWWVNYOB0hsY5QWeDseR4wMcwypp6ocReR+eShxR7Tn5nAZ
-         Ufw1bfs5KavS1JtsBALOpAasZvUcCYSVZBr5CRr/gIpWIYd1aDgoywyutwO3O20sH5
-         /0Nwd4W/cm8SSndULierf0N+0aujwJO0K/OH7wn8eJtMgEnMJffLWHTvy94+7kx3Ie
-         RDFaxi9Ee4NeCA6M3Qk5O/EZiFYqWMlnc3k/vIrnGVtjWeFF1dX/rXG9L9x5gqdwv/
-         qwjMqYBvKHKJA==
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-5-arnd@kernel.org> <m2sfglh02h.fsf@free.fr>
- <2d085660-41a2-492c-a343-7df80d510a59@app.fastmail.com>
-User-agent: mu4e 1.8.11; emacs 28.1
-From:   Robert Jarzmik <robert.jarzmik@free.fr>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>
-Subject: Re: [PATCH 04/27] ARM: pxa: drop pxa310/pxa320/pxa93x support
-Date:   Thu, 12 Jan 2023 18:37:32 +0100
-In-reply-to: <2d085660-41a2-492c-a343-7df80d510a59@app.fastmail.com>
-Message-ID: <m2k01rhchf.fsf@free.fr>
+        Thu, 12 Jan 2023 13:09:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3F27464A;
+        Thu, 12 Jan 2023 09:37:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C5906205E;
+        Thu, 12 Jan 2023 17:37:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4817C433D2;
+        Thu, 12 Jan 2023 17:37:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673545067;
+        bh=HXALqRZtlCaFSHe30HCG0ocQ7PVCQxc3yrath6As/Zs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=UClruSFxvw5t/jRHOFW025K2YrjsX8C3k+ZIzIbA3WXuzciIjTz10/ltM8EpTvCBP
+         Zv/JZhlrPJbxXWfGZ4vopTdMs0BdAweliRVHCxYN7rpfn5H2LdFzKWqfrbfTGhwWzC
+         eMUWVyaoyJnOZIlgQl4kNCaO2HLx9kuKxZ4rTBE7Wh0Yn86VjlO+CYp7Kw3fQi8m3c
+         1w+eeOCJldp+EumI4YcQLIoppH/NStjg/0XhXw37mtUenRnAkuAxAoQTPBoyBYZIoJ
+         +y+XNPkF4iobPIlckgjPHwBPNomgxv9cr5luf3mkpzridJZJZpbchh5SA7t0el2Tsy
+         jrz0V9XX+rQ3Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7D0005C0AF8; Thu, 12 Jan 2023 09:37:47 -0800 (PST)
+Date:   Thu, 12 Jan 2023 09:37:47 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: linux-next: manual merge of the rcu tree with the tomoyo tree
+Message-ID: <20230112173747.GO4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230111111439.4c4745d2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111111439.4c4745d2@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 11, 2023 at 11:14:39AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the rcu tree got a conflict in:
+> 
+>   security/tomoyo/Kconfig
+> 
+> between commit:
+> 
+>   80f8be7af03f ("tomoyo: Omit use of bin2c")
+> 
+> from the tomoyo tree and commit:
+> 
+>   ed87f6865857 ("tomoyo: Remove "select SRCU"")
+> 
+> from the rcu tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-"Arnd Bergmann" <arnd@arndb.de> writes:
+I have it noted down, thank you!
 
-> Hi Robert,
-Hi Arnd,
+							Thanx, Paul
 
-> Thanks for pointing this out, I thought that I had caught
-> all the missing dependencies ones after you pointed out
-> the AC97_BUS_NEW that I fixed in patch 14.
-Sorry I've not seen this one in my previous review.
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc security/tomoyo/Kconfig
+> index 772d2ab58fd1,a9796b400312..000000000000
+> --- a/security/tomoyo/Kconfig
+> +++ b/security/tomoyo/Kconfig
+> @@@ -6,7 -6,7 +6,6 @@@ config SECURITY_TOMOY
+>   	select SECURITYFS
+>   	select SECURITY_PATH
+>   	select SECURITY_NETWORK
+> - 	select SRCU
+>  -	select BUILD_BIN2C
+>   	default n
+>   	help
+>   	  This selects TOMOYO Linux, pathname-based access control.
 
-> From what I can tell, commit b5aaaa666a85 ("ARM: pxa: add
-> Kconfig dependencies for ATAGS based boards"), the
-> PXA310/PXA320 DT support became dead code because
-> MACH_PXA3XX_DT only selects CPU_PXA300, so if it worked
-> before that commit, it now needs CONFIG_UNUSED_BOARD_FILES
-> and CONFIG_EXPERT as well as enabling one of the legacy
-> board files with the corresponding chip support.
->
-> If that's all you think is missing, I can add this
-> trivial patch as well and rework the series to not
-> drop code that depends on PXA310/PXA320:
-Yes, that would be great !
 
-> Can you have a look at the other patches to see if there
-> are more removed drivers or platform bits that are currently
-> dead code but are actually required?
-Yes, I've been through your whole serie and that's the
-last thing I have identified. I've read carefully all the
-patches now, and the whole serie looks good to me.
-
-So with this patch and keeping the clocks and cpufreq
-parts for pxa3*0, you can add everywhere my :
-
-Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
-
-Cheers.
-
---
-Robert
