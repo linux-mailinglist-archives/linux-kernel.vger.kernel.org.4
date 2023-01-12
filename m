@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1BD666E0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C759666E0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239787AbjALJ0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
+        id S240104AbjALJ1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239894AbjALJ0Y (ORCPT
+        with ESMTP id S240003AbjALJ0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:26:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487BA1A078;
-        Thu, 12 Jan 2023 01:16:35 -0800 (PST)
+        Thu, 12 Jan 2023 04:26:25 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEDD2F7BE;
+        Thu, 12 Jan 2023 01:16:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D96DE61F83;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 72336CE1DB5;
+        Thu, 12 Jan 2023 09:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D334EC433D2;
         Thu, 12 Jan 2023 09:16:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A86C8C4339C;
-        Thu, 12 Jan 2023 09:16:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673514994;
-        bh=oFc0IwWVLtbYv7DCWrnjSwABzc8JM/Pqrho6QIR7/GE=;
+        s=k20201202; t=1673514998;
+        bh=ZLGBlhqw5hH+SxGqvaz0vux+DdR7ulM6iEJUTeGEBI0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NzaYABpJWpMrVaVC4V4egtA8Eao1yIBWkjD8/cDjJ9WvmGsBeB6KBii81hggxnijA
-         wtbaGG9hdGNUvP8xZ++YifcLHbFS87I7vFyKsO6JYzuTzuDcAmEaNRAGvnhlKlTTza
-         wNfzDwU7SAQ+Uf2H8HHY4JeOvEMcJbUeohmOr5Xyh3inEV8ZqFoL97lKswQm20sMdF
-         /CoQpEYqwe8QMpkMnLvNHhJYwoAsWGom7oajM7Ma4lXjdoAuR0BoQZDugHMGrqBKdJ
-         BeNljZyQjFASbCQ01AEQGp/l0FhTWKW9CjPcYcJpQ25p4W8R1fyTYYoA4peBQv/grx
-         cLnezprw+hStw==
+        b=HyrCYlauX4PXXWG5WJaiDDyQ5apznezA6+yxRixMw+fXqLMA9iCiRDXMGTAO70fiA
+         bz0Mg/CmqB+nGiH3/sPByRAk1piYnULBmzuDGgK1oFD44IJL/TjCwMr4VCBOo8j4CP
+         UDT62N1CTljHSZgf8HbyBAjWE5JwhdziCHvDB8oxa8g9xuQkXvbSwuTLHfQfyvrHrs
+         f3b3Rr7MKmE6O9KwPi9GE4xseySelMz+yRPsMpepqCiT5gG7S9cm7Y1TVV8KLV2Hbf
+         BtmIJZ/lHJ30Lir8ygtARKpluG0sskKiXNHLpwFwqqOCKyTZpdeP7jfpj7TNGGGfAq
+         6qu3FoZFr5R0Q==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Jonathan Corbet <corbet@lwn.net>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -44,9 +44,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Mike Rapoport <rppt@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v3 1/3] docs/core-api: DMA API: add page label to allow external references
-Date:   Thu, 12 Jan 2023 11:16:14 +0200
-Message-Id: <20230112091616.824565-2-rppt@kernel.org>
+Subject: [PATCH v3 2/3] docs/mm: Page Reclaim: add page label to allow external references
+Date:   Thu, 12 Jan 2023 11:16:15 +0200
+Message-Id: <20230112091616.824565-3-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230112091616.824565-1-rppt@kernel.org>
 References: <20230112091616.824565-1-rppt@kernel.org>
@@ -65,19 +65,21 @@ From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
- Documentation/core-api/dma-api.rst | 2 ++
+ Documentation/mm/page_reclaim.rst | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/core-api/dma-api.rst b/Documentation/core-api/dma-api.rst
-index 829f20a193ca..c847a5b0a0d3 100644
---- a/Documentation/core-api/dma-api.rst
-+++ b/Documentation/core-api/dma-api.rst
-@@ -1,3 +1,5 @@
-+.. _dma_api:
+diff --git a/Documentation/mm/page_reclaim.rst b/Documentation/mm/page_reclaim.rst
+index 50a30b7f8ac3..3fccde066436 100644
+--- a/Documentation/mm/page_reclaim.rst
++++ b/Documentation/mm/page_reclaim.rst
+@@ -1,5 +1,7 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
++.. _page_reclaim:
 +
- ============================================
- Dynamic DMA mapping using the generic device
- ============================================
+ ============
+ Page Reclaim
+ ============
 -- 
 2.35.1
 
