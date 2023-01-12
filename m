@@ -2,104 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A54667A94
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56948667A98
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbjALQRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 11:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
+        id S230041AbjALQTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 11:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbjALQQI (ORCPT
+        with ESMTP id S237144AbjALQSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:16:08 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5D3B1F9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 08:13:38 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id jo4so45995438ejb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 08:13:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MzF22PPdIreEIa7ztIOqQnw7vLi6LeZv6ab1mRLDnWc=;
-        b=bqsVUJSaXBPpY6v20ecbgsIOho5U3Sj/Z1S91znjlXB1Jsg3nPX3qyf4IobkkjDEXO
-         P3HynJbeQkXvir18R3ruJ1/i/jnoXhflHApX/P0aTIL1MP5rKG3XqvZub3m5JfIrSFpq
-         mCCHtChSke2M5qtptELzlXxmT13PrRj/8Usjp7CTlVfOvjYTkWsgnPX86dQ3sfkMsiY9
-         ONaMNdDkWdZCPbKHtfoj9X261ciUJJ4UagcJlKqy+8P8LaHhUISKztP5uTCepq8+ecgM
-         bQliMYX/oE7v95JMxSpySHocLg44juUa4n71Nq0/1aXQuMTLJRZmD3NE1ZGrtUKbXzzx
-         q28w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MzF22PPdIreEIa7ztIOqQnw7vLi6LeZv6ab1mRLDnWc=;
-        b=HbGDbp5v2+FVxvsPXvpFy/77A4hYeoPGtnnE85imkexNlnEdUzC8TcPO3jAlmqLuYb
-         GtSuRy4GnwqDYsO1w9vTDMnI/GdqDS0AAyVUqCY1sXxwF7l4utU6QKjN1bx6QOfNRTBj
-         t+ulMlUvDHulMqbz9bzaC2wqhoabIikxYVrM2WpBfdDEtxrb1riSlxKDMZIBMaEEWhDS
-         UTBnJlPGwSvYAgfRE/Hqjc+RuyrQvtyIGk1Ke/Z854IT+YkPzi876iIoCIRjZm8/Hxaq
-         8mYe8h5qm+QyUYms3n2zIj/Dy3jIjlzW6uT4DqwspuJY+BRwXH6yG4sa3neVGvRj6ftc
-         jTWw==
-X-Gm-Message-State: AFqh2kqfSBtJr7IJ5f77ybNH7brLXvna/fsp2duaXThkpHmrqM+6hIaf
-        ipfsqIuiteWy7fk1ud/TZcjDmw==
-X-Google-Smtp-Source: AMrXdXtYZCHpdQvKQqzV4lS/OMAsuYmj6f65+gzDCKvJSN6Zw32OfQ0O0wyHcgs6+c5Yaj9jqIQAcA==
-X-Received: by 2002:a17:907:7f04:b0:7c1:36:9002 with SMTP id qf4-20020a1709077f0400b007c100369002mr83786838ejc.67.1673540017416;
-        Thu, 12 Jan 2023 08:13:37 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id 22-20020a170906311600b0082535e2da13sm7551792ejx.6.2023.01.12.08.13.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 08:13:36 -0800 (PST)
-Message-ID: <894ffc14-41dc-9abc-4b13-a1f74212ae44@linaro.org>
-Date:   Thu, 12 Jan 2023 17:13:34 +0100
+        Thu, 12 Jan 2023 11:18:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724931DF2B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 08:14:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673540087;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ajXg3rrPzpKQc3Qb9p25qpHrk+Gbw3eJrr+7KdkqnQQ=;
+        b=LnlFZiTcID1TNIXY0QVhPXJg3/Wxb/NpsvibsxmKR+xsCj1g8EcXrhCpgrEOEc5AHuJnxu
+        t7rcEAA6TISgAmDz8pLwDDy8CIOnjQuEAuWBrzqHFipK5q26QCjL9/D2ctqzln5G2h6vXY
+        YSSCCISWCG0rVHwQhqp/0gx6gNCXOM4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-Uw44OhPHOwaROxaMbS5wPg-1; Thu, 12 Jan 2023 11:14:38 -0500
+X-MC-Unique: Uw44OhPHOwaROxaMbS5wPg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9613A85A588;
+        Thu, 12 Jan 2023 16:14:37 +0000 (UTC)
+Received: from vschneid.remote.csb (unknown [10.33.36.188])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5895A2166B26;
+        Thu, 12 Jan 2023 16:14:36 +0000 (UTC)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: [PATCH v8 0/5] workqueue: destroy_worker() vs isolated CPUs
+Date:   Thu, 12 Jan 2023 16:14:26 +0000
+Message-Id: <20230112161431.860196-1-vschneid@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] Bluetooth: hci_qca: Fix driver shutdown on closed
- serdev
-Content-Language: en-US
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Zijun Hu <zijuhu@codeaurora.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20221229102829.403917-1-krzysztof.kozlowski@linaro.org>
- <397c61e8-d928-4e07-9616-afb315d356dd@linaro.org>
- <CABBYNZJYTfVfBMBvfxx6D9a4T5gbqZZcb7BP5LBa28fOEKuoFw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABBYNZJYTfVfBMBvfxx6D9a4T5gbqZZcb7BP5LBa28fOEKuoFw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/01/2023 17:07, Luiz Augusto von Dentz wrote:
->>> Fixes: 7e7bbddd029b ("Bluetooth: hci_qca: Fix qca6390 enable failure after warm reboot")
->>> Cc: <stable@vger.kernel.org>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->>> ---
->>
->> Any comments on this? Patchwork tools complain on longer line, but
->> without it checkpatch would complain as well, so I assume you do not
->> expect to fix it?
-> 
-> I did apply it already:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=a18fca670e14f0c09c2ed332cf2c6d77a4ae05f9
-> 
-> Not sure why the bot hasn't responded to you.
+Hi folks,
 
+This version only brings a small change: getting rid of wq_manager_inactive()
+for (somewhat) saner wq_pool_attach_mutex acquisition.
 
-Ah, thank you then. I looked at Patchwork and it was still in state "New".
+range-diff with previous version
+================================
 
-Best regards,
-Krzysztof
+1:  2448692cdc707 = 1:  2448692cdc707 workqueue: Protects wq_unbound_cpumask with wq_pool_attach_mutex
+2:  55d7ac5db1560 = 2:  55d7ac5db1560 workqueue: Factorize unbind/rebind_workers() logic
+3:  d35d1e33d9621 = 3:  d35d1e33d9621 workqueue: Convert the idle_timer to a timer + work_struct
+-:  ------------- > 4:  d596651130433 workqueue: Don't hold any lock while rcuwait'ing for !POOL_MANAGER_ACTIVE
+4:  d1ce4e27cbd20 ! 5:  6b6961c5ded12 workqueue: Unbind kworkers before sending them to exit()
+    @@ kernel/workqueue.c: static int init_worker_pool(struct worker_pool *pool)
+      
+      	ida_init(&pool->worker_ida);
+      	INIT_HLIST_NODE(&pool->hash_node);
+    -@@ kernel/workqueue.c: static bool wq_manager_inactive(struct worker_pool *pool)
+    +@@ kernel/workqueue.c: static void rcu_free_pool(struct rcu_head *rcu)
+      static void put_unbound_pool(struct worker_pool *pool)
+      {
+      	DECLARE_COMPLETION_ONSTACK(detach_completion);
+    @@ kernel/workqueue.c: static bool wq_manager_inactive(struct worker_pool *pool)
+      
+      	if (--pool->refcnt)
+     @@ kernel/workqueue.c: static void put_unbound_pool(struct worker_pool *pool)
+    - 			   TASK_UNINTERRUPTIBLE);
+    - 	pool->flags |= POOL_MANAGER_ACTIVE;
+    - 
+    -+	/*
+    -+	 * We need to hold wq_pool_attach_mutex() while destroying the workers,
+    -+	 * but we can't grab it in rcuwait_wait_event() as it can clobber
+    -+	 * current's task state. We can drop pool->lock here as we've set
+    -+	 * POOL_MANAGER_ACTIVE, no one else can steal our manager position.
+    -+	 */
+    -+	raw_spin_unlock_irq(&pool->lock);
+    -+	mutex_lock(&wq_pool_attach_mutex);
+    -+	raw_spin_lock_irq(&pool->lock);
+    + 		rcuwait_wait_event(&manager_wait,
+    + 				   !(pool->flags & POOL_MANAGER_ACTIVE),
+    + 				   TASK_UNINTERRUPTIBLE);
+     +
+    ++		mutex_lock(&wq_pool_attach_mutex);
+    + 		raw_spin_lock_irq(&pool->lock);
+    + 		if (!(pool->flags & POOL_MANAGER_ACTIVE)) {
+    + 			pool->flags |= POOL_MANAGER_ACTIVE;
+    + 			break;
+    + 		}
+    + 		raw_spin_unlock_irq(&pool->lock);
+    ++		mutex_unlock(&wq_pool_attach_mutex);
+    + 	}
+    + 
+      	while ((worker = first_idle_worker(pool)))
+     -		destroy_worker(worker);
+     +		set_worker_dying(worker, &cull_list);
+
+Revisions
+=========
+
+v7 -> v8
+++++++++
+
+o Nuke wq_manager_inactive() (Tejun)
+
+v6 -> v7
+++++++++
+
+o Rebased onto v6.2-rc3
+
+o Dropped work pending check in worker_enter_idle() (Tejun)
+o Overall comment cleanup (Tejun)
+
+o put_unbound_pool() locking issue (Lai)
+  Unfortunately the mutex cannot be acquired from within wq_manager_inactive()
+  as rcuwait_wait_event() sets the task state to TASK_UNINTERRUPTIBLE before
+  invoking it, so grabbing the mutex could clobber the task state.
+
+  I've gone with dropping the pool->lock and reacquiring the two locks in the
+  right order after we've become the manager, see comments.
+
+o Applied Lai's RB
+
+v5 -> v6
+++++++++
+
+o Rebase onto v6.1-rc7
+o Get rid of worker_pool.idle_cull_list; only do minimal amount of work in the
+  timer callback (Tejun)
+o Dropped the too_many_workers() -> nr_workers_to_cull() change
+
+v4 -> v5
+++++++++
+
+o Rebase onto v6.1-rc6
+
+o Overall renaming from "reaping" to "cull"
+  I somehow convinced myself this was more appropriate
+  
+o Split the dwork into timer callback + work item (Tejun)
+
+  I didn't want to have redudant operations happen in the timer callback and in
+  the work item, so I made the timer callback detect which workers are "ripe"
+  enough and then toss them to a worker for removal.
+
+  This however means we release the pool->lock before getting to actually doing
+  anything to those idle workers, which means they can wake up in the meantime.
+  The new worker_pool.idle_cull_list is there for that reason.
+
+  The alternative was to have the timer callback detect if any worker was ripe
+  enough, kick the work item if so, and have the work item do the same thing
+  again, which I didn't like.
+
+RFCv3 -> v4
++++++++++++
+
+o Rebase onto v6.0
+o Split into more patches for reviewability
+o Take dying workers out of the pool->workers as suggested by Lai
+
+RFCv2 -> RFCv3
+++++++++++++++
+
+o Rebase onto v5.19
+o Add new patch (1/3) around accessing wq_unbound_cpumask
+
+o Prevent WORKER_DIE workers for kfree()'ing themselves before the idle reaper
+  gets to handle them (Tejun)
+
+  Bit of an aside on that: I've been struggling to convince myself this can
+  happen due to spurious wakeups and would like some help here.
+
+  Idle workers are TASK_UNINTERRUPTIBLE, so they can't be woken up by
+  signals. That state is set *under* pool->lock, and all wakeups (before this
+  patch) are also done while holding pool->lock.
+  
+  wake_up_worker() is done under pool->lock AND only wakes a worker on the
+  pool->idle_list. Thus the to-be-woken worker *cannot* have WORKER_DIE, though
+  it could gain it *after* being woken but *before* it runs, e.g.:
+                          
+  LOCK pool->lock
+  wake_up_worker(pool)
+      wake_up_process(p)
+  UNLOCK pool->lock
+                          idle_reaper_fn()
+                            LOCK pool->lock
+                            destroy_worker(worker, list);
+			    UNLOCK pool->lock
+			                            worker_thread()
+						      goto woke_up;
+                                                      LOCK pool->lock
+						      READ worker->flags & WORKER_DIE
+                                                          UNLOCK pool->lock
+                                                          ...
+						          kfree(worker);
+                            reap_worker(worker);
+			        // Uh-oh
+			  
+  ... But IMO that's not a spurious wakeup, that's a concurrency issue. I don't
+  see any spurious/unexpected worker wakeup happening once a worker is off the
+  pool->idle_list.
+  
+
+RFCv1 -> RFCv2
+++++++++++++++
+
+o Change the pool->timer into a delayed_work to have a sleepable context for
+  unbinding kworkers
+
+Cheers,
+Valentin
+
+Lai Jiangshan (1):
+  workqueue: Protects wq_unbound_cpumask with wq_pool_attach_mutex
+
+Valentin Schneider (4):
+  workqueue: Factorize unbind/rebind_workers() logic
+  workqueue: Convert the idle_timer to a timer + work_struct
+  workqueue: Don't hold any lock while rcuwait'ing for
+    !POOL_MANAGER_ACTIVE
+  workqueue: Unbind kworkers before sending them to exit()
+
+ kernel/workqueue.c | 234 ++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 166 insertions(+), 68 deletions(-)
+
+--
+2.31.1
 
