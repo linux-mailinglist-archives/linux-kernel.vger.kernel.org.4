@@ -2,102 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C519A667226
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7728366722B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbjALM0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 07:26:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S232584AbjALM1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 07:27:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjALM0f (ORCPT
+        with ESMTP id S232179AbjALM13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 07:26:35 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062.outbound.protection.outlook.com [40.107.94.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07E7C76D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 04:26:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AqK8k/gL+nj6Ddv2vsN1yGXkvy0Yz9f4a8c32Lf2UE5fov7t5+43y5xhMptw1bMAQw/eNOdNZDHr9DUNQaEhym5OgDzk9FzO6dnbgWnPIXNalooRekuITeBFoIJprvvyc1/Eb1dz9iHHpmulTLPDxeRIr1YBFM370zIi3CJnOT1mZhspKh3lofv7HFGyLJqDw9SmqK0PqIg5DCPCh1VyYIAGjeOyvW4Em28I5MMUYL4Jof7JmYsw5rx0Kq178wjdHeWyZcoe5pM3XTy0nbut+JEKESV+9YoygLZLXkE3oN4gAPpnI1aB+3ldU0JFMZBSYuzBH194Z49CevFOfNacwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M6gd78Deh9KdRvJdSyM7BD14J7CkNqG38AOVNyLfiHg=;
- b=RxUVjFefDrgaVuCLc4di8Mgmu5Fi5wnLhKjl3OPV61cHrQp6PoiMhjbsuQTGo60/fFQ3wzsmhPZpskwykXUmrLk0MPXPznDOZBVS+3Ofh7V/7pHMZhh5NTv/781TnLPh06ia6isubc1U5kIaSYdXQrTdIIjI7VxdAqo3+HZNlTLxPerzhZqHFwl6BV5jTOKq+Nu5lZpYBPRfAM0y1c9z+gSJ9mb/NLpseVGzrVJrbadxIdqJKM2VsiXWCpCZiI6uwL7cl5hxUXQYgXuMJNTVzNVLFRnmMtEz7WWu4pu5DvoioH6uBWI0h9QiBP7dE+IalGrr6Qbq53vUbRIPKhMHww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M6gd78Deh9KdRvJdSyM7BD14J7CkNqG38AOVNyLfiHg=;
- b=G9v4fDz3IXEn01T/iDh0RuTjZ1AEwaz/uNGFNnQhggiJsqMhuV0KZ1FsF+kq07UTv3kBv2K3GN4bYNoHRXwPIZVE8JVcAGmnkkEr6OjTX/a23VSlGoA/CvJ2gVMbQWSuvYa08i+0s9CqV/ZfbT083e9ihgEDcHwvpSJgt7ByGZE=
-Received: from DM5PR07CA0063.namprd07.prod.outlook.com (2603:10b6:4:ad::28) by
- SN7PR12MB6742.namprd12.prod.outlook.com (2603:10b6:806:26e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Thu, 12 Jan
- 2023 12:26:33 +0000
-Received: from DM6NAM11FT110.eop-nam11.prod.protection.outlook.com
- (2603:10b6:4:ad:cafe::9b) by DM5PR07CA0063.outlook.office365.com
- (2603:10b6:4:ad::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13 via Frontend
- Transport; Thu, 12 Jan 2023 12:26:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT110.mail.protection.outlook.com (10.13.173.205) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.13 via Frontend Transport; Thu, 12 Jan 2023 12:26:33 +0000
-Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 12 Jan
- 2023 06:26:31 -0600
-Message-ID: <96e41e6d-bec9-f8cf-22ed-1fa5d9022238@amd.com>
-Date:   Thu, 12 Jan 2023 13:26:28 +0100
+        Thu, 12 Jan 2023 07:27:29 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979C2A46E
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 04:27:27 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id bn26so17948558wrb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 04:27:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q4xQw8oRzEZf6j1JjjiSzT91wT9Ia+zmbBNMEAe4Rho=;
+        b=Y8QkTUOrsDhczrnsucN0ok8RvJU3RKsxPN3Scx93YpjzCZFGuFhR3HVYZXDCTICozq
+         Il/uHl3DSp/1sZV5n3lstFc2DzrvuW4mEMiKk+uTKYvv0qGLn+vJ0LS/zgbe2AGW8o5M
+         GK7ewtehINNfFhwDmlIbpB3m80TpQuCmz2JWjV0EoBE0XR26cq1bkFUr1wmkmTi1DMJ+
+         xdzr5uQ3sFDzy1EivMdC7kGlAlPwQ5aTZc2k1rp0VKPdCc9q5tzTofBklJKgQ1C/AgfV
+         n2+yoYBvKfGcPPNpur32VBAjdr0yqoP9WoNYdv+076bZ0L5BIcgrljFi4BxeBUynKGYZ
+         HTYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q4xQw8oRzEZf6j1JjjiSzT91wT9Ia+zmbBNMEAe4Rho=;
+        b=jDUeL0Ue53p+WyL7uYTTpb+G1HAIo3hjZSYEe/TMbl5tU8qnOuk3EyK/qUKVd8+oqK
+         yE/L2EAkFkOb050I8i+MVo4PBChwITHRvknYsQU1SWuhkXKyWmBhxlyEOEkcuZeKe478
+         ugo+7v91h160ORH47MDuweE/iFzfBw3U9ZPMrkvjBEJU5SFp6gTIjrG/vhCZ2LZpsCbL
+         H/xYbebTqXbKEUBUmG1JR7KS//Kte/A7kGb+Yo9O0O+yeEu7L/syN056ISKB58qFU2aT
+         wJUxWw+zCyiqXOVcLjtR12t+rw9Pybzs5JjOpIH0j91mzhWFVtNxxXsl6djmvRJOxqOK
+         5QlA==
+X-Gm-Message-State: AFqh2krX+4x0cY0AR4gE2TAV2vhq3vhkCy3z+yQyvdzxMxHPX+Wol+6s
+        cvJjz9n65wdG2edvcW/zsJW4kw==
+X-Google-Smtp-Source: AMrXdXs+bSeX89Po94TSwdL81EnOCsC12PGKuloj4OtbBiXcUmLflMf/yuoxXlvGLDh55lylJ0HGfw==
+X-Received: by 2002:a05:6000:1a41:b0:24b:b74d:8012 with SMTP id t1-20020a0560001a4100b0024bb74d8012mr45902907wry.18.1673526446099;
+        Thu, 12 Jan 2023 04:27:26 -0800 (PST)
+Received: from airbuntu.lon.corp.google.com ([104.132.45.104])
+        by smtp.gmail.com with ESMTPSA id f11-20020a05600c4e8b00b003d04e4ed873sm30132354wmq.22.2023.01.12.04.27.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 04:27:25 -0800 (PST)
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Qais Yousef <qyousef@layalina.io>
+Subject: [PATCH v3 0/2] Fixes for uclamp and capacity inversion detection
+Date:   Thu, 12 Jan 2023 12:27:06 +0000
+Message-Id: <20230112122708.330667-1-qyousef@layalina.io>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Reg the next LTS kernel (6.1?)
-Content-Language: en-US
-To:     Kris Chaplin <kris.chaplin@amd.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAPDLWs-Z8pYkwQ13dEgHXqSCjiq4xVnjuAXTy26H3=8NZCpV_g@mail.gmail.com>
- <Yz/ZWBeNZvKenEVM@kroah.com>
- <CAPDLWs9KWKs_-fpAp2=97uBARYqrHSYTPEU6RbqtWjAD8NpqgQ@mail.gmail.com>
- <CAPDLWs9CoWw7NLfrtCfMsRAdCSfBgomVELRhM70QWVca99z65A@mail.gmail.com>
- <Y53BputYK+3djDME@kroah.com> <c6c4787f-f0c6-7285-f782-d36bd86b1e01@amd.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <c6c4787f-f0c6-7285-f782-d36bd86b1e01@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT110:EE_|SN7PR12MB6742:EE_
-X-MS-Office365-Filtering-Correlation-Id: 617256d8-4071-4e3b-06da-08daf4983da3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sEf6X2EGXS2YqZSTCB2g5gX8DAe6LmIWd+RTDGomv/JlaaNwJuO/K7LnjHsbONXUpQKg/HzooOL5pNeuk0Z4B7ey9088Yys+OxQCLMKFRkZi8QlJNEBU7+wVgd6LluPaTsBBsyzc1cN5wYECPiLNuGnyvhAIYhRBLoF+l5fDfktk/I/GIeLpLylFXqBjpOyVWcZKufVXq9lVpweZh7+COwr1NcwmcNSw9vh9VHz7zI1CAj/bmG6yEe03I6VvbOQzmK9s2O6yOKO/9+5btkxQlQ/yxw1pSghbpQDsI3m8RfEnH+dxsgCWvFAM1nZNBGk5l/mZCpeT6Z6U7n5PIB8vu8mFba+TSW2w9Sb9JEQgnNhdKA8991FDCx8zod87VPhzFsJx+zUyXSmEmGjEI9xvaNKMLyiSEvSPH2mwG8AocfU8sf4qE+1w5JECY/Thk3nN7S8dwvqKc25epCzSwzGyGOD0YgjBFYeEQbUE9TPJaul9b5+mNj8Wv0/8hlzqQNPmQrL+Dl++ZsTyJe/u4Uj78nmOj5JXiUOPhHB6B/z8TM54luygQRvFQJVuSGAMrhzT2GwACKfpl4m0dqF4agRpUKLD88SIVkcWjsxmUiPiUlzKQamf1MRnr4R2+GLuJltAiEa8a0P1B8t9L0zpoWS8skppl1Jk3JN1KfkZTS0t9t5N8RXQasRqdtvQPL/72QVwuPOHS+p6tTZc6s6/CCeOPvLwBgIo5oPC/zsZ8zt4CKBa7lm92GYq08bubsVLxi33Uo+bKwUTvVJonFiRfVKQjw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(346002)(396003)(451199015)(40470700004)(36840700001)(46966006)(16526019)(53546011)(186003)(26005)(6666004)(2906002)(82310400005)(478600001)(31686004)(70206006)(336012)(8676002)(16576012)(316002)(2616005)(110136005)(4326008)(83380400001)(41300700001)(47076005)(426003)(36756003)(8936002)(86362001)(44832011)(356005)(81166007)(5660300002)(36860700001)(40480700001)(70586007)(40460700003)(82740400003)(31696002)(43740500002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 12:26:33.1865
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 617256d8-4071-4e3b-06da-08daf4983da3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT110.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6742
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,42 +77,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Patch 1 addresses a smatch warning reported by Dan Carpenter.
 
-On 1/12/23 13:23, Kris Chaplin wrote:
-> Hello Greg,
-> 
->> You tell me please.  How has your testing gone for 6.1 so far?  Does it
->> work properly for you?  Are you and/or your company willing to test out
->> the -rc releases and provide feedback if it works or not for your
->> systems?  Do you have problems with 6.1.y vs. older kernels?  Is there
->> anything missing in it that you feel needs to be addressed with a newer
->> kernel instead?
-> 
-> We have been integrating and testing 6.1 on the Microblaze, ARM32 and
-> ARM64-bit architectures over the past few weeks.  These builds have
-> been successful and we are able to run our regression tests on hardware
-> targeting our FPGA SoC devices.
-> 
-> We're continuing our tests as new updates to the 6.1 kernel series
-> appear.
+Patch 2 fixes a couple of issues reported by Dietmar in capacity inversion
+logic.
 
-As Kris said AMD/Xilinx has already moved internal SOC tree to 6.1 based kernel 
-in expectation that 6.1 will become next LTS.
-And I am not aware about any issue from testing team related to 6.1 kernel 
-version. And we are covering our AMD/Xilinx SOCs based on arm32/arm64 and 
-Microblaze CPUs.
+Patch 3 which was an RFC patch was dropped. The discussion has settled into
+this patch which is now treated separately from this series
 
-It would be good to continue with the same strategy which using the latest 
-kernel at that year which is what I am hearing all the time from others that 6.1 
-was last kernel at that year and it should be LTS.
+	https://lore.kernel.org/lkml/20221228165415.3436-1-vincent.guittot@linaro.org/
 
-I didn't run any stats but normally also more patches are going to this version 
-to be the part of LTS.
 
-We will be upgrading to the latest stable version 6.1.5 quite soon but normally 
-there are no new issues coming from it.
+Changes in v3:
 
-Thanks,
-Michal
+	* Fix commit message in patch 2.
+	* Drop Patch 3
+
+Changes in v2:
+
+	* Patch1: Improve indentation as suggested by Dietmar
+	* Patch2: Make sure to hold rcu_read_lock() as we need it's not
+	  held in all paths.
+
+
+LINK v1:
+	* https://lore.kernel.org/lkml/20221127141742.1644023-1-qyousef@layalina.io/
+
+LINK v2:
+	Sent in-reply-to v1
+
+	* https://lore.kernel.org/lkml/20221208145108.452032-1-qyousef@layalina.io/
+	* https://lore.kernel.org/lkml/20221208145409.453308-1-qyousef@layalina.io/
+
+Qais Yousef (2):
+  sched/uclamp: Fix a uninitialized variable warnings
+  sched/fair: Fixes for capacity inversion detection
+
+ kernel/sched/fair.c | 48 +++++++++++++++++++++++++--------------------
+ 1 file changed, 27 insertions(+), 21 deletions(-)
+
+-- 
+2.25.1
 
