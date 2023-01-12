@@ -2,137 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17A0667389
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E1366738F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjALNun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 08:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
+        id S229510AbjALNvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 08:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjALNul (ORCPT
+        with ESMTP id S232277AbjALNvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 08:50:41 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332F24731B;
-        Thu, 12 Jan 2023 05:50:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673531439; x=1705067439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Nye+I+Clrq9SBmvHly5ZfjOGJz5IMOrCCli65DwBb60=;
-  b=hYIz1FhjDg6vqs8d2troPkzh2bI7tQ0II5c2nGsmpTnjcqXUQSONgFix
-   zCVmIMzt3dUXf88giw4XCsKZbVzOndHFiXMs6puA8R/8e6WNf5Doj7e1G
-   rsDs59WCsVsSp833ie8vdy6xWIf9WtatYp8U7gSjc4Qe4guH7WsP24709
-   Ulyk9PUE4NmyXUpMjGDAyJv+/ZwdatgygX4j2pqtD/kRVTDBQ+gFL1ULT
-   pn4cFtrRH8NvLoiWs+K7d13VbiyRkov27xkWZ5E3rHU0Ye+5yq0rBaOhA
-   3LNaMlDRzsMrsuB4VXGhtm63UUTqOGT7DLQvDCge4+0uiirHpUlI2Y09h
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10587"; a="325730058"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="325730058"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 05:50:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="800213443"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="800213443"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 12 Jan 2023 05:50:07 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Jan 2023 15:50:07 +0200
-Date:   Thu, 12 Jan 2023 15:50:06 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     cy_huang@richtek.com
-Cc:     linux@roeck-us.net, matthias.bgg@gmail.com,
-        gregkh@linuxfoundation.org, gene_chen@richtek.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, stable@vger.kernel.org
-Subject: Re: [PATCH RESEND v2] usb: typec: tcpm: Fix altmode re-registration
- causes sysfs create fail
-Message-ID: <Y8AQDtBq9j3SmIUu@kuha.fi.intel.com>
-References: <1673248790-15794-1-git-send-email-cy_huang@richtek.com>
+        Thu, 12 Jan 2023 08:51:12 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA8E48CE8;
+        Thu, 12 Jan 2023 05:51:11 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30CBUk4S005946;
+        Thu, 12 Jan 2023 13:51:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=GWcgX7wro4WH+QvKYlhCgbkIZhVUk8U7As6tF7aDP14=;
+ b=K8Nl4+BKPuJiYd5HEmS8baG+8x4Je66RwRTiWvMK0nNy03S2g21VQPQpkd4qtYJJmfWs
+ FjpPrBwx+QLH3HimNE7p85JWbPxcRUhn0VMSy0jsAqiJHYVF52YRkBaH7aTTU4yOxm6j
+ f/l/WSGKY18AaCi0C4oBKOY9y5eTAcz7p1wYQzNsJvZ53KaT9VP9xldkVw/WZ8J2aGjB
+ jdbwzSVnouA/EMMLYDhf/lTylP1KcP5WEiMkz7QMYAlPhfJAOSyTkA5qBiwvahZOaxGO
+ tlyAoJVfJYg8kit9IFtK0qyyuPZos89n2HLv1EER+lV1rTKwW9VlSHde513rhmDhL+3W RA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2edurrvs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Jan 2023 13:51:08 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30CDp1ZK009450
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Jan 2023 13:51:01 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 12 Jan 2023 05:51:01 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] arm64: dts: qcom: sc8280xp: Use MMCX for all DP controllers
+Date:   Thu, 12 Jan 2023 05:50:55 -0800
+Message-ID: <20230112135055.3836555-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1673248790-15794-1-git-send-email-cy_huang@richtek.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IC-zvcfGofhwhHGTeEnz9xcAZw2vItMQ
+X-Proofpoint-ORIG-GUID: IC-zvcfGofhwhHGTeEnz9xcAZw2vItMQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-12_08,2023-01-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 mlxscore=0 phishscore=0 clxscore=1011 adultscore=0
+ bulkscore=0 impostorscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301120100
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 03:19:50PM +0800, cy_huang@richtek.com wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> There's the altmode re-registeration issue after data role
-> swap (DR_SWAP).
-> 
-> Comparing to USBPD 2.0, in USBPD 3.0, it loose the limit that only DFP
-> can initiate the VDM command to get partner identity information.
-> 
-> For a USBPD 3.0 UFP device, it may already get the identity information
-> from its port partner before DR_SWAP. If DR_SWAP send or receive at the
-> mean time, 'send_discover' flag will be raised again. It causes discover
-> identify action restart while entering ready state. And after all
-> discover actions are done, the 'tcpm_register_altmodes' will be called.
-> If old altmode is not unregistered, this sysfs create fail can be found.
-> 
-> In 'DR_SWAP_CHANGE_DR' state case, only DFP will unregister altmodes.
-> For UFP, the original altmodes keep registered.
-> 
-> This patch fix the logic that after DR_SWAP, 'tcpm_unregister_altmodes'
-> must be called whatever the current data role is.
-> 
-> Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together)
-> Reported-by: TommyYl Chen <tommyyl.chen@mediatek.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+While MDSS_GDSC is a subdomain of MMCX, Linux does not respect this
+relationship and sometimes invokes sync_state on the rpmhpd (MMCX)
+before the DisplayPort controller has had a chance to probe.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+The result when this happens is that the power is lost to the multimedia
+subsystem between the probe of msm_drv and the DisplayPort controller -
+which results in an irrecoverable state.
 
-> ---
-> Since v2:
-> - Correct the mail sent from Richtek.
-> - Add 'Reviewed-by' tag.
-> 
-> Hi, Greg:
-> 
->   Please check this one. I have strongly requested our MIS to remove the confidential string.
-> 
-> ChiYuan Huang.
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 904c7b4..59b366b 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4594,14 +4594,13 @@ static void run_state_machine(struct tcpm_port *port)
->  		tcpm_set_state(port, ready_state(port), 0);
->  		break;
->  	case DR_SWAP_CHANGE_DR:
-> -		if (port->data_role == TYPEC_HOST) {
-> -			tcpm_unregister_altmodes(port);
-> +		tcpm_unregister_altmodes(port);
-> +		if (port->data_role == TYPEC_HOST)
->  			tcpm_set_roles(port, true, port->pwr_role,
->  				       TYPEC_DEVICE);
-> -		} else {
-> +		else
->  			tcpm_set_roles(port, true, port->pwr_role,
->  				       TYPEC_HOST);
-> -		}
->  		tcpm_ams_finish(port);
->  		tcpm_set_state(port, ready_state(port), 0);
->  		break;
-> -- 
-> 2.7.4
+While this is an implementation problem, this aligns the power domain
+setting of the one DP instance with that of all the others.
 
+Fixes: 57d6ef683a15 ("arm64: dts: qcom: sc8280xp: Define some of the display blocks")
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index 4f4353f84cba..4511fd939c91 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -2533,7 +2533,7 @@ mdss0_dp3: displayport-controller@aea0000 {
+ 				interrupts = <15>;
+ 				phys = <&mdss0_dp3_phy>;
+ 				phy-names = "dp";
+-				power-domains = <&dispcc0 MDSS_GDSC>;
++				power-domains = <&rpmhpd SC8280XP_MMCX>;
+ 
+ 				assigned-clocks = <&dispcc0 DISP_CC_MDSS_DPTX3_LINK_CLK_SRC>,
+ 						  <&dispcc0 DISP_CC_MDSS_DPTX3_PIXEL0_CLK_SRC>;
 -- 
-heikki
+2.37.3
+
