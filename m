@@ -2,118 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184B6666FBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FC8666FC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236560AbjALKeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
+        id S235489AbjALKfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239901AbjALKeI (ORCPT
+        with ESMTP id S236265AbjALKev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:34:08 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E765BDF48
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:28:41 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id vm8so43612116ejc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:28:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yN+RLFgvhbz6KNBj4UOEkh6O3KRKmh1JWLTXowfNOQ4=;
-        b=OGHK98KQTQCVgP5ZLb6uoWrVZz8ZRATpTGiM+GOa8RsP/vCZb2W/EQEp66Mlkp+gqB
-         QNDhS/6bBgw9vsyeH9NAw+v27qnm4efliinHoe6pQ2ceKTcbnAqu1jyURCEweldo6cv2
-         0Zg9csNpUlkSJh9q60VIzoxpgdAE69Wt/R3hRJITojYyhgz6DLwM8TeCnlDgwV7ASlZZ
-         XaAxMT9OcLSA30eRd10vBWc3sCnCOREd3B2TLUJMfNbH5QyR9yUt6truxXqkiFr0mSGZ
-         tGpS0D3wVlLxJdYzg4egxn3mCqPC1XiW4xp2BkHSX5lCX4uFMCHTJs6ZeQ1BJuAZAT6o
-         i8LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yN+RLFgvhbz6KNBj4UOEkh6O3KRKmh1JWLTXowfNOQ4=;
-        b=fYje4O9SwG1eBdFLtMkN7grpcBxtrXUt9pXLUOKtrmSuOswrVHqAPT/DFiw/T9SxfB
-         F02RV5+Pio5LvXaX/schpog9P/gPOEdpeRyWq89ox+1B+OimB+c4I+VIAqWinHYm2vZk
-         K0HlkpA0itdEvc5GwWXGVX+boo9tGzCGYzHNc06QUefQ9QeX9tsTWVxT8+V2R6RZAcx/
-         TXGHnQyk09XskOCB1T6ekXXDlhwX841cZZNm5QIy4+Hn45FY5veblyEP/TVrwM1fWUYC
-         VYkufw2NYt2WUyq/KtZBgmZKKcSXNAcRlX0kC8OWjN6/piQbHyWtfGU3I5TGod+otBOi
-         AxGg==
-X-Gm-Message-State: AFqh2kpl5GMc/RQWLcE+ix8NDNz5/6W7MpRZuzuc5fIoVQ/JBchIhfpB
-        y8nPr5z+T2Sf3LHxUvpQzCIdYQ==
-X-Google-Smtp-Source: AMrXdXsT4YCuaRmd2Qwsk7Y+iEuMALRbwhOUriEVVCZqG2Xv5xsrjQVC9pGKzTU7opANpTCnxxgG9g==
-X-Received: by 2002:a17:907:c28f:b0:83f:5f77:8ff9 with SMTP id tk15-20020a170907c28f00b0083f5f778ff9mr65134074ejc.12.1673519320459;
-        Thu, 12 Jan 2023 02:28:40 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id p14-20020a170906784e00b00849c1e5c00esm7276648ejm.72.2023.01.12.02.28.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 02:28:40 -0800 (PST)
-Date:   Thu, 12 Jan 2023 11:28:39 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 03/11] RISC-V: KVM: Return correct code for hsm stop
- function
-Message-ID: <20230112102839.rsabb2bah5lkkx4e@orel>
-References: <20221215170046.2010255-1-atishp@rivosinc.com>
- <20221215170046.2010255-4-atishp@rivosinc.com>
+        Thu, 12 Jan 2023 05:34:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A19223C
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:28:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673519330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G1PS7mB2JtEkDjLUk4xftZvEMD5IXSfO99hn6l84qLI=;
+        b=Bp6ZlAJAps7yXAYR8ujyRczPMb9pVG8ZWO8LvlUBUYYhi+Wq+m7GOo923ViA0K3g9lte3q
+        YSIcsB82kluE3z9LtyJsmfHO3a28/+zP0izquuenFGPtqSu0XFE5dZnP8qm/zhVWKp8xsr
+        GE20Nx2cSMhJlP2LNMVU+2/8+KrSZro=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-454-gBYO1yzCOQS1GiMIxPZReQ-1; Thu, 12 Jan 2023 05:28:44 -0500
+X-MC-Unique: gBYO1yzCOQS1GiMIxPZReQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6339B101A521;
+        Thu, 12 Jan 2023 10:28:43 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B298AC15BA0;
+        Thu, 12 Jan 2023 10:28:41 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y7+6YVkhZsvdW+Hr@infradead.org>
+References: <Y7+6YVkhZsvdW+Hr@infradead.org> <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk> <167344731521.2425628.5403113335062567245.stgit@warthog.procyon.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 8/9] iov_iter, block: Make bio structs pin pages rather than ref'ing if appropriate
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221215170046.2010255-4-atishp@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <15236.1673519321.1@warthog.procyon.org.uk>
+Date:   Thu, 12 Jan 2023 10:28:41 +0000
+Message-ID: <15237.1673519321@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 09:00:38AM -0800, Atish Patra wrote:
-> According to the SBI specification, the stop function can only
-> return error code SBI_ERR_FAILED. However, currently it returns
-> -EINVAL which will be mapped SBI_ERR_INVALID_PARAM.
+Christoph Hellwig <hch@infradead.org> wrote:
 
-I presume the mapping referred to here is kvm_linux_err_map_sbi().
-If so, then -EPERM isn't correct either. That maps to SBI_ERR_DENIED.
-The only thing that will ensure we get SBI_ERR_FAILURE (-1) is
-anything not handled by the kvm_linux_err_map_sbi switch, as we
-need to use the default.
+> 	if (cleanup_mode & FOLL_GET) {
+> 		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_PINNED));
+> 		bio_set_flag(bio, BIO_PAGE_REFFED);
+> 	}
+> 	if (cleanup_mode & FOLL_PIN) {
+> 		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_REFFED));
+> 		bio_set_flag(bio, BIO_PAGE_PINNED);
+> 	}
 
-Thanks,
-drew
+That won't necessarily work as you might get back cleanup_mode == 0, in which
+case both flags are cleared - and neither warning will trip on the next
+addition.
 
-> 
-> Return the appropriate linux error code.
-> 
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/kvm/vcpu_sbi_hsm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kvm/vcpu_sbi_hsm.c b/arch/riscv/kvm/vcpu_sbi_hsm.c
-> index 2e915ca..0f8d9fe 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_hsm.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_hsm.c
-> @@ -42,7 +42,7 @@ static int kvm_sbi_hsm_vcpu_start(struct kvm_vcpu *vcpu)
->  static int kvm_sbi_hsm_vcpu_stop(struct kvm_vcpu *vcpu)
->  {
->  	if (vcpu->arch.power_off)
-> -		return -EINVAL;
-> +		return -EPERM;
->  
->  	kvm_riscv_vcpu_power_off(vcpu);
->  
-> -- 
-> 2.25.1
-> 
+I could change it so that rather than using a pair of flags, it uses a
+four-state variable (which can be stored in bi_flags): BIO_PAGE_DEFAULT,
+BIO_PAGE_REFFED, BIO_PAGE_PINNED, BIO_PAGE_NO_CLEANUP, say.
+
+Or I could add an extra flag to say that the setting is locked.  Or we could
+just live with the scenario I outlined possibly happening.
+
+David
+
