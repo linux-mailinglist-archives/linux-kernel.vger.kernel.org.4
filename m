@@ -2,193 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90962666E3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC60C666E41
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240132AbjALJ3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
+        id S236790AbjALJaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239942AbjALJ2y (ORCPT
+        with ESMTP id S239833AbjALJ3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:28:54 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF03F019;
-        Thu, 12 Jan 2023 01:23:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673515400; x=1705051400;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=KCmtELpXeP5LskyWbQS213aTgoVkvOKnKp0NJZDzsjE=;
-  b=Zcw8rWabGAEtN+04M46VUCzXJJtwsWRiknfjwOrDmqWQU6P981sSSqSo
-   7XF8N6YvAFa0xYIiVJ2dwspNq8EOPtre2OgRg+2htCzl+DkzfdYhpo8x2
-   6cqPk6/1+X/DE3as5WxsMuigZoFgwEn9Ulg+OKssXbfUFeSDgDRhEHN23
-   Voi37RYdJEo36vkpzCvbOznsO1ZtbHu1N4sQO93Zcs78G0haXJoU3xqzr
-   p+8CeYvHibhfWuqcLhDQGryoGH9SnGum5sP7P8t1ryNLAgQbz0KSc3nsa
-   47QXrXL7RqYqiGedT3oui5g/+vio/wT97Xm2qgUJGkZbbBJzLDbo+9ir8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324889911"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="324889911"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 01:23:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="690053909"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="690053909"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 12 Jan 2023 01:23:14 -0800
-Message-ID: <d9cb0835-9514-c5b6-695d-1027b238078c@linux.intel.com>
-Date:   Thu, 12 Jan 2023 11:24:34 +0200
+        Thu, 12 Jan 2023 04:29:44 -0500
+Received: from outbound-smtp37.blacknight.com (outbound-smtp37.blacknight.com [46.22.139.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0B050E75
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:24:56 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
+        by outbound-smtp37.blacknight.com (Postfix) with ESMTPS id 1277A1FDB
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:24:55 +0000 (GMT)
+Received: (qmail 22350 invoked from network); 12 Jan 2023 09:24:54 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 Jan 2023 09:24:54 -0000
+Date:   Thu, 12 Jan 2023 09:24:52 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 6/7] mm/page_alloc: Give GFP_ATOMIC and non-blocking
+ allocations access to reserves
+Message-ID: <20230112092452.rtvo6tkp4rpmxm7v@techsingularity.net>
+References: <20230109151631.24923-1-mgorman@techsingularity.net>
+ <20230109151631.24923-7-mgorman@techsingularity.net>
+ <Y77cikPSHepZ/GQj@dhcp22.suse.cz>
+ <20230111170552.5b7z5hetc2lcdwmb@techsingularity.net>
+ <Y7/AmgN1Wz73lyVz@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Albert Wang <albertccwang@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-8-quic_wcheng@quicinc.com>
- <7dfe215b-4cc7-f95f-17c3-563c0120151a@linux.intel.com>
- <f7f80320-02bb-a573-dd95-b6d58c260624@quicinc.com>
- <5f54c5a3-caf0-2920-e90f-68124ed2e06c@linux.intel.com>
- <d1334e58-1126-c068-d211-8fd3b7dcbf17@quicinc.com>
- <cefcc5c6-6a91-c737-252a-edf596f77473@linux.intel.com>
- <23a2b82e-4f4f-66e2-2c60-3613ffe7912f@quicinc.com>
- <23037fab-1a9e-66c1-8e90-d94b213c8c7d@quicinc.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC PATCH 07/14] usb: host: xhci: Add XHCI secondary interrupter
- support
-In-Reply-To: <23037fab-1a9e-66c1-8e90-d94b213c8c7d@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <Y7/AmgN1Wz73lyVz@dhcp22.suse.cz>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.1.2023 5.11, Wesley Cheng wrote:
-> Hi Mathias,
+On Thu, Jan 12, 2023 at 09:11:06AM +0100, Michal Hocko wrote:
+> On Wed 11-01-23 17:05:52, Mel Gorman wrote:
+> > On Wed, Jan 11, 2023 at 04:58:02PM +0100, Michal Hocko wrote:
+> > > On Mon 09-01-23 15:16:30, Mel Gorman wrote:
+> > > > Explicit GFP_ATOMIC allocations get flagged ALLOC_HARDER which is a bit
+> > > > vague. In preparation for removing __GFP_ATOMIC, give GFP_ATOMIC and
+> > > > other non-blocking allocation requests equal access to reserve.  Rename
+> > > > ALLOC_HARDER to ALLOC_NON_BLOCK to make it more clear what the flag
+> > > > means.
+> > > 
+> > > GFP_NOWAIT can be also used for opportunistic allocations which can and
+> > > should fail quickly if the memory is tight and more elaborate path
+> > > should be taken (e.g. try higher order allocation first but fall back to
+> > > smaller request if the memory is fragmented). Do we really want to give
+> > > those access to memory reserves as well?
+> > 
+> > Good question. Without __GFP_ATOMIC, GFP_NOWAIT only differs from GFP_ATOMIC
+> > by __GFP_HIGH but that is not enough to distinguish between a caller that
+> > cannot sleep versus one that is speculatively attempting an allocation but
+> > has other options. That changelog is misleading, it's not equal access
+> > as GFP_NOWAIT ends up with 25% of the reserves which is less than what
+> > GFP_ATOMIC gets.
+> > 
+> > Because it becomes impossible to distinguish between non-blocking and
+> > atomic without __GFP_ATOMIC, there is some justification for allowing
+> > access to reserves for GFP_NOWAIT. bio for example attempts an allocation
+> > (clears __GFP_DIRECT_RECLAIM) before falling back to mempool but delays
+> > in IO can also lead to further allocation pressure. mmu gather failing
+> > GFP_WAIT slows the rate memory can be freed. NFS failing GFP_NOWAIT will
+> > have to retry IOs multiple times. The examples were picked at random but
+> > the point is that there are cases where failing GFP_NOWAIT can degrade
+> > the system, particularly delay the cleaning of pages before reclaim.
 > 
-> On 1/10/2023 12:03 PM, Wesley Cheng wrote:
->> Hi Mathias,
->>
->> On 1/10/2023 11:47 AM, Mathias Nyman wrote:
->>> On 9.1.2023 22.24, Wesley Cheng wrote:
->>>> Hi Mathias,
->>>>
->>>> On 1/2/2023 8:38 AM, Mathias Nyman wrote:
->>>>> On 29.12.2022 23.14, Wesley Cheng wrote:
->>>>>> Hi Mathias,
->>>>>>
->>>>>> On 12/28/2022 7:47 AM, Mathias Nyman wrote:
->>>>>>> On 24.12.2022 1.31, Wesley Cheng wrote:
->>>>>>>> Implement the XHCI operations for allocating and requesting for a secondary
->>>>>>>> interrupter.  The secondary interrupter can allow for events for a
->>>>>>>> particular endpoint to be routed to a separate event ring.  The event
->>>>>>>> routing is defined when submitting a transfer descriptor to the USB HW.
->>>>>>>> There is a specific field which denotes which interrupter ring to route the
->>>>>>>> event to when the transfer is completed.
->>>>>>>>
->>>>>>>> An example use case, such as audio packet offloading can utilize a separate
->>>>>>>> event ring, so that these events can be routed to a different processor
->>>>>>>> within the system.  The processor would be able to independently submit
->>>>>>>> transfers and handle its completions without intervention from the main
->>>>>>>> processor.
->>>>>>>>
->>>>>>>
->>>>>>> Adding support for more xHCI interrupters than just the primary one make sense for
->>>>>>> both the offloading and virtualization cases.
->>>>>>>
->>>>>>> xHCI support for several interrupters was probably added to support virtualization,
->>>>>>> to hand over usb devices to virtual machines and give them their own event ring and
->>>>>>> MSI/MSI-X vector.
->>>>>>>
->>>>>>> In this offloading case you probably want to avoid xHC interrupts from this device
->>>>>>> completely, making sure it doesn't wake up the main CPU unnecessarily.
->>>>>>>
->>>>>>> So is the idea here to let xhci driver set up the new interrupter, its event ring,
->>>>>>> and the endpoint transfer rings. Then pass the address of the endpoint transfer rings
->>>>>>> and the new event ring to the separate processor.
->>>>>>>
->>>>>>> This separate processor then both polls the event ring for new events, sets its dequeue
->>>>>>> pointer, clears EHB bit, and queues new TRBs on the transfer ring.
->>>>>>>
->>>>>>> so xhci driver does not handle any events for the audio part, and no audio data URBs
->>>>>>> are sent to usb core?
->>>>>>
->>>>>> Your entire description is correct.  To clarify, the interfaces which are non-audio will still be handled by the main processor. For example, a USB headset can have a HID interface as well for volume control.  The HID interface will still be handled by the main processor, and events routed to the main event ring.
->>>>>>
->>>>>>>
->>>>>>> How about the control part?
->>>>>>> Is the control endpoint for this device still handled normally by usb core/xhci?
->>>>>>>
->>>>>>
->>>>>> Control transfers are always handled on the main processor.  Only audio interface's endpoints.
->>>>>
->>>>> Good to know, that means interrupter should be chosen per endpoint, not per device.
->>>>>
->>>>>>
->>>>>>> For the xhci parts I think we should start start by adding generic support for several
->>>>>>> interrupters, then add parts needed for offloading.
->>>>>>
->>>>> I can split up the patchsets to add interrupters first, then adding the offloading APIs in a separate patch.
->>>>>
->>>>>
->>>>> I started looking at supporting secondary interrupters myself.
->>>>> Let me work on that part a bit first. We have a bit different end goals.
->>>>> I want to handle interrupts from a secondary interrupter, while this audio offload
->>>>> really just wants to mask some interrupts.
->>>>>
->>>>
->>>> I was looking at how we could possibly split up the XHCI secondary interrupter, and offloading parts.  Since the XHCI secondary interrupter is a feature that is defined in the XHCI spec (and we aren't doing anything outside of what is defined), I was thinking of having a separate XHCI driver (ie xhci-sec.c/h) that can be used to define all APIs related to setting up the event ring and ring management. (interrupt support can be added here)  This aligns a bit with what Alan suggested, and removing the APIs in the USB HCD, since this is XHCI specific stuff. ( https://lore.kernel.org/linux-usb/Y6zwZOquZOTZfnvP@rowland.harvard.edu/ )
->>>
->>> Already started working on the interrupter, that part fits well into current driver.
->>>
->>> Code (untested, will be randomly rebased etc) can be found in my feature_interrupters branch:
->>> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git feature_interrupters
->>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
->>
->> Oh perfect, let me take a look.  Thanks for this!
->>
+> Fair points.
 > 
-> I actually tried to see if I could get our audio offloading to work with your current series.  (I understand its still work in progress)  I did have to make some changes to expose the APIs to our class driver, but I wanted to let you know about one of the issues I saw when developing my implementation, because I am seeing the same behavior w/ yours. (and there's a discrepancy w/ what's stated in the XHCI spec :))
+> > A lot of the truly speculative users appear to use GFP_NOWAIT | __GFP_NOWARN
+> > so one compromise would be to avoid using reserves if __GFP_NOWARN is
+> > also specified.
+> > 
+> > Something like this as a separate patch?
 > 
-> So the reason why my initial submission did the event ring allocation and set up before the run/stop bit was set, is that I found that when writing to the ir_set->erst_base in this scenario (for the secondary interrupter), it lead to a SMMU fault from the DWC3 controller.  One thing I noticed, was that the SMMU fault address was the lower 32 bits of the segment table base address allocated.  The XHCI driver utilizes the xhci_write_64() api which first writes the lower 32 bits then the upper 32 bits.  The XHCI spec states that:
-> 
-> Table 5-41: Event Ring Segment Table Base Address Register Bit Definitions (ERSTBA)
-> 
-> "Event Ring Segment Table Base Address Register – RW. Default = ‘0’. This field defines the
-> high order bits of the start address of the Event Ring Segment Table.
-> Writing this register sets the Event Ring State Machine:EREP Advancement to the Start state.
-> Refer to Figure 4-12 for more information.
-> **For Secondary Interrupters: This field may be modified at any time.**"
-> 
-> I'm not sure if this is an issue with the specific controller we're using, so maybe I will wait until you can give this a try on your set up.  However, it doesn't seem to be true that we can write the ERSTBA any time we want to.  My assumption is that once I made the lower 32 bit write, the controller attempted to enable the Event Ring State machine (Figure 4-12), and this led to a SMMU fault, since the upper 64 bits haven't been written.  I also did some bit banging manually as well (using devmem) and any time I write to the secondary ring ERSTBA register it generates a fault. (before any offloading has started)
+> I cannot say I would be happy about adding more side effects to
+> __GFP_NOWARN. You are right that it should be used for those optimistic
+> allocation requests but historically all many of these subtle side effects
+> have kicked back at some point.
 
-Tried on an Intel host and it seems to work fine.
-I created a few secondary interrupters while xHC was running without issues.
-DMA mask is 64 bits.
-Only created the interrupters, no events on those new event rings, and didn't actually
-check that the values written to ERSTBA were 64 bit.
+True.
 
-Does temporarily setting DMA mask to 32 bits while allocating erst help in your case?
+> Wouldn't it make sense to explicitly
+> mark those places which really benefit from reserves instead?
 
-Thanks
-Mathias
+That would be __GFP_HIGH and would require context from every caller on
+whether they need reserves or not and to determine what the consequences
+are if there is a stall. Is there immediate local fallout or wider fallout
+such as a variable delay before pages can be cleaned?
 
+> This is
+> more work but it should pay off long term. Your examples above would use
+> GFP_ATOMIC instead of GFP_NOWAIT.
+> 
+
+Yes, although it would confuse the meaning of GFP_ATOMIC as a result.
+It's described as "%GFP_ATOMIC users can not sleep and need the allocation to
+succeed" and something like the bio callsite does not *need* the allocation
+to succeed. It can fallback to the mempool and performance simply degrades
+temporarily. No doubt there are a few abuses of GFP_ATOMIC just to get
+non-blocking behaviour already.
+
+> The semantic would be easier to explain as well. GFP_ATOMIC - non
+> sleeping allocations which are important so they have access to memory
+> reserves. GFP_NOWAIT - non sleeping allocations.
+> 
+
+People's definition of "important" will vary wildly. The following would
+avoid reserve access for GFP_NOWAIT for now. It would need to be folded
+into this patch and a new changelog
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 7244ab522028..aa20165224cf 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3989,18 +3989,19 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
+ 		 * __GFP_HIGH allows access to 50% of the min reserve as well
+ 		 * as OOM.
+ 		 */
+-		if (alloc_flags & ALLOC_MIN_RESERVE)
++		if (alloc_flags & ALLOC_MIN_RESERVE) {
+ 			min -= min / 2;
+ 
+-		/*
+-		 * Non-blocking allocations can access some of the reserve
+-		 * with more access if also __GFP_HIGH. The reasoning is that
+-		 * a non-blocking caller may incur a more severe penalty
+-		 * if it cannot get memory quickly, particularly if it's
+-		 * also __GFP_HIGH.
+-		 */
+-		if (alloc_flags & ALLOC_NON_BLOCK)
+-			min -= min / 4;
++			/*
++			 * Non-blocking allocations (e.g. GFP_ATOMIC) can
++			 * access more reserves than just __GFP_HIGH. Other
++			 * non-blocking allocations requests such as GFP_NOWAIT
++			 * or (GFP_KERNEL & ~__GFP_DIRECT_RECLAIM) do not get
++			 * access to the min reserve.
++			 */
++			if (alloc_flags & ALLOC_NON_BLOCK)
++				min -= min / 4;
++		}
+ 
+ 		/*
+ 		 * OOM victims can try even harder than the normal reserve
+
+
+
+
+
+-- 
+Mel Gorman
+SUSE Labs
