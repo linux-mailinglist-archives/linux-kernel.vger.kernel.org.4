@@ -2,88 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D18A666F2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D73B666F2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:12:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239673AbjALKMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
+        id S235947AbjALKML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237731AbjALKLJ (ORCPT
+        with ESMTP id S230155AbjALKLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:11:09 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D36C7;
-        Thu, 12 Jan 2023 02:09:41 -0800 (PST)
-Date:   Thu, 12 Jan 2023 11:09:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673518179;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cLAM5jl0W0wl/XlHApINoAqRk2rz+TLJ1Ghtr9ebUfE=;
-        b=vcTGXdwHdoY4677vgiRLmUDxBn9xfcxcs9XzVWEFDZUqQg5YjgEAZnTPAy32VXxdUwDDTM
-        ZWd3Uk/1xTms3FXpQSsdj8S1oJTDVovlO70fx1nF+672kQvXiiFOXhW11Uz5g+XO5iF7Ns
-        u0H10Peg1Rv5Sr/ccv0XeZHOYn4JKfC3fUsfE6iDoKBraGrG3dYnwqE5acdKxsmLmBKMMi
-        mr0VoXuU0fhBviSfOK0yqWLzauGele9lAq6VV9bjLQwOjFVN4n+PaC1wMe3qWshhSAj6U9
-        FCnjkesFWpVDJ2MyhsRQyvzne5qBDHgaK0iufhvrFS+1/q0PT75CHqTdS9CiCg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673518179;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cLAM5jl0W0wl/XlHApINoAqRk2rz+TLJ1Ghtr9ebUfE=;
-        b=VxWKJ/kxxAfgEhvPXtIgIePTtVsaN83zmhMIF+QXuZKqoBUw58ipVRZnmigKzDk3kl2+3o
-        wBVlggp8D/vrAlAw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Michael Everitt <gentoo@veremit.xyz>
-Cc:     Christian Eggers <ceggers@arri.de>, linux-rt-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: linux-6.1-rt ?
-Message-ID: <Y7/cYsEXHpCEGwwa@linutronix.de>
-References: <12136223.O9o76ZdvQC@n95hx1g2>
- <208196df-d0b2-5cf6-29b3-4570a0946e77@veremit.xyz>
+        Thu, 12 Jan 2023 05:11:21 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73884F20
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:09:43 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id t22-20020a5e9916000000b007047e94706aso366279ioj.10
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:09:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kL4dCH663Y91IgXPc1uA9oWX+JA++Dgb92FuGb43z24=;
+        b=r2O6NOMDmCSZT8Dl74iObv5/pqlGpnFwqo+m0TluUPqwqXWPUeQKwq2obWd2IKX43e
+         fsna+RpptvYgWmDDo6k4h+NsKxUs1nZWrnqyePBkfGYSE23nvQHHXk2Qt84zkujXGg6t
+         OrZV/pI1MdbVb0dH/Fp+wFn6gvR2i7/2cOWP0gf26U6weoq1n/5ma9rOaDeREC6Yfhz8
+         tsrCZJsSSB76B9x14rI/PTrKOP6tGoWZMemztGHe1Gj4fqFqR6wUwzde/v9ZUbg/GXxx
+         d/9vChHBRkMnTBbqXDb9G5d2lKo3Xh99lh+tNryFe2e/rD1GlJ/iSzfIsQjTqmwzzESK
+         Bx1Q==
+X-Gm-Message-State: AFqh2kodRg/w0XNE0fXKTfSnSN9n+1wNg8EHVsYMprKo56571lfEwiLQ
+        DYjV+U9n64YCzoTqBriaRU3+2SPd05LloExPIXypldCtjpeY
+X-Google-Smtp-Source: AMrXdXtreEYcVZ19eYluopR11N/j8aA4DoDBJxDwX/BolqT4nB30Bua9C/p6nZhe2J3tg1V4Eu3lzh50i4IZmozi/qBGmeZ8atoF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <208196df-d0b2-5cf6-29b3-4570a0946e77@veremit.xyz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:4101:b0:39e:5302:38c0 with SMTP id
+ ay1-20020a056638410100b0039e530238c0mr2890396jab.128.1673518182762; Thu, 12
+ Jan 2023 02:09:42 -0800 (PST)
+Date:   Thu, 12 Jan 2023 02:09:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cf0f4905f20e504c@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in io_fallback_req_func
+From:   syzbot <syzbot+bc022c162e3b001bf607@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-11 09:44:45 [+0000], Michael Everitt wrote:
-> On 11/01/2023 08:36, Christian Eggers wrote:
-> > linux-6.1 seems to be the next LTS kernel [1]
-> >=20
-> > Are there any plans to release a -rt version of linux-6.1?
-> >=20
-> > regards
-> > Christian
-> >=20
-> > [1] https://lore.kernel.org/lkml/Yz%2FZWBeNZvKenEVM@kroah.com/
-> >=20
-> >=20
->=20
-> You probably want this: https://www.spinics.net/lists/linux-rt-users/msg2=
-6345.html
->=20
-> You may wish to wait for the maintainer to complete their processes!
+Hello,
 
-There is a 6.1-RT but it hasn't been updated for a while. There should
-be a 6.2-RT later today.
-As for the link [1] it has not been confirmed nor denied that v6.1 will
-be a LTS kernel. Once the version 6.1 left its Schr=C3=B6dinger state then
-there will be an update (or not).
+syzbot found the following issue on:
 
-> Regards,
-> veremitz/Michael.
+HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=103269ce480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+dashboard link: https://syzkaller.appspot.com/bug?extid=bc022c162e3b001bf607
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Sebastian
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+bc022c162e3b001bf607@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in io_fallback_req_func+0xc7/0x204 io_uring/io_uring.c:251
+Read of size 8 at addr ffff888070ac2e48 by task kworker/0:0/7
+
+CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: events io_fallback_req_func
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:417
+ kasan_report+0xc0/0xf0 mm/kasan/report.c:517
+ io_fallback_req_func+0xc7/0x204 io_uring/io_uring.c:251
+ process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2440
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+Allocated by task 7766:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook mm/slab.h:769 [inline]
+ kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
+ __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
+ io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+ io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
+ __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 5179:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
+ io_req_caches_free+0x1a9/0x1e6 io_uring/io_uring.c:2737
+ io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2967
+ process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2440
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+The buggy address belongs to the object at ffff888070ac2dc0
+ which belongs to the cache io_kiocb of size 216
+The buggy address is located 136 bytes inside of
+ 216-byte region [ffff888070ac2dc0, ffff888070ac2e98)
+
+The buggy address belongs to the physical page:
+page:ffffea0001c2b080 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x70ac2
+memcg:ffff88802a81d181
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff8881461d1780 dead000000000122 0000000000000000
+raw: 0000000000000000 00000000800c000c 00000001ffffffff ffff88802a81d181
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5547, tgid 5545 (syz-executor.4), ts 182131630120, free_ts 181898498774
+ prep_new_page mm/page_alloc.c:2549 [inline]
+ get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
+ __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x25f/0x350 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
+ kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
+ __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
+ io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+ io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
+ __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1451 [inline]
+ free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
+ free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+ free_unref_page+0x1d/0x490 mm/page_alloc.c:3482
+ qlink_free mm/kasan/quarantine.c:168 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:302
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook mm/slab.h:769 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x175/0x320 mm/slub.c:3476
+ kmem_cache_zalloc include/linux/slab.h:710 [inline]
+ taskstats_tgid_alloc kernel/taskstats.c:583 [inline]
+ taskstats_exit+0x5f3/0xb80 kernel/taskstats.c:622
+ do_exit+0x822/0x2a90 kernel/exit.c:852
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+ get_signal+0x225f/0x24f0 kernel/signal.c:2859
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff888070ac2d00: fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc fc
+ ffff888070ac2d80: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
+>ffff888070ac2e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                              ^
+ ffff888070ac2e80: fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888070ac2f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
