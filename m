@@ -2,166 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2AE668533
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B74966853B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240822AbjALVSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 16:18:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
+        id S240426AbjALVXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 16:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240774AbjALVRx (ORCPT
+        with ESMTP id S240737AbjALVWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 16:17:53 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C52E77AD7;
-        Thu, 12 Jan 2023 12:59:13 -0800 (PST)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4C7E06602D59;
-        Thu, 12 Jan 2023 20:58:33 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673557116;
-        bh=wlus3ItbPJlKKgtyc4iIkSQkGdha2/qmSLhvIsGYOgE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P1bC2BxC39SXJ66hdDZKauBr+s8XAfK/NxeGin7AZJrszz/zAD9M6t29DN6f5DjxT
-         7INqYrfNiR+XRJNdNTHiANz08OLMOrc/xIoEnurfCcaoKydH9CLimMnRZixEz+1XgW
-         xxepSrerWFKxzOXKs7T9bRIw2CYR8BhT3CZVahS5jUYkbFR5+1sVMcsOgh6wmVeran
-         bvT71bJT5Hvan+yE9lRBkQF1GY6kM7I58pc3jA7bMZuibiC+nk/zyHTRCMMDVZEQIX
-         /OVvB9jkdmBbiVfpPAstqDddlNF4DFNazF3kZmias4W/HkcIj+Rs1FQIZzQi5FL00P
-         ArsSx0Cda7ILg==
-Date:   Thu, 12 Jan 2023 15:58:25 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v7, 5/7] media: mediatek: vcodec: Different codec using
- different capture format
-Message-ID: <20230112205825.wb5qcqhh5kwvyi3y@notapiano>
-References: <20220518123004.18286-1-yunfei.dong@mediatek.com>
- <20220518123004.18286-6-yunfei.dong@mediatek.com>
+        Thu, 12 Jan 2023 16:22:32 -0500
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB32C81107;
+        Thu, 12 Jan 2023 13:02:34 -0800 (PST)
+Received: by mail-oo1-f42.google.com with SMTP id d16-20020a4a5210000000b004f23d1aea58so1349462oob.3;
+        Thu, 12 Jan 2023 13:02:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RfY+++CNANdJFoCSPyaMORoeKsaEA9plzaHJ+dY2V7w=;
+        b=oTE+T914VSlIE/RQuTQsEvFpDxRWE2A8e9GN+NauiayDBBjSBvxpubXAf/Y8oDZcUW
+         aZjlPdC5pQZeMYJSSIecuZ+/SNbnBDMCpoMlgjJzmQ0N9AIb//1w+AKZQh+hMh0N+qg+
+         TwFrqYYz0LLaZtC3UvKbbDrS6YvperSSHrVI3+Utca5QyNoaB05uFvxdg/p2ybpVqY1q
+         mqhLC+b9IMWNzak4UNYUTz5rGOYnN/fewh/x7q4Z2hVLjg0gMAfmnSMR61UkVwcyIfPc
+         1HxP0eix6iF+BKLNViSFf8dADpN5hG/LB/YfrJJyjx6k4bwbnoy20fgl4mBFivWkRbjN
+         C8Qg==
+X-Gm-Message-State: AFqh2kq+KlKzYYUPljSqwlTfg6HZrY1L9kzYFCAejLGBEf0tqI9PDtB9
+        ID8Xfxk0OBUj7+0X7kIALxadOwQRCA==
+X-Google-Smtp-Source: AMrXdXsGfWxNDyM3OTM69PkQpKWlf+Q8e8sFq+wBdINdSP4ZSEaFhr/b8wKUQ/02qYgehItNwZvGIw==
+X-Received: by 2002:a4a:e2da:0:b0:49f:8814:e387 with SMTP id l26-20020a4ae2da000000b0049f8814e387mr37093371oot.9.1673557353873;
+        Thu, 12 Jan 2023 13:02:33 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m11-20020a056820034b00b004f219b998eesm3486486ooe.43.2023.01.12.13.02.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 13:02:33 -0800 (PST)
+Received: (nullmailer pid 228721 invoked by uid 1000);
+        Thu, 12 Jan 2023 21:02:31 -0000
+Date:   Thu, 12 Jan 2023 15:02:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 6/9] dt-bindings: interrupt-controller: Add RISC-V
+ advanced PLIC
+Message-ID: <20230112210231.GA214515-robh@kernel.org>
+References: <20230103141409.772298-1-apatel@ventanamicro.com>
+ <20230103141409.772298-7-apatel@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220518123004.18286-6-yunfei.dong@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230103141409.772298-7-apatel@ventanamicro.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 08:30:02PM +0800, Yunfei Dong wrote:
-> Vp8 need to use MM21, but vp9 and h264 need to use HyFbc mode
-> for mt8195. Vp8/vp9/h264 use the same MM21 format for mt8192.
-
-Hi Yunfei,
-
-why do VP9 and H264 need to use HyFbc (is this the same as MT21C?) mode on
-MT8195? The SCP firmware on linux-firmware for MT8195 [1] only has MM21
-available and based on my testing it works just fine. And contrary to what the
-commit message states this logic is also being applied to MT8192, preventing it
-to use MM21 when there are more than one format available.
-
-Thanks,
-Nícolas
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/mediatek/mt8195/scp.img?id=375d4500d315ff20c59911d12d86b477d4979b1d
-
+On Tue, Jan 03, 2023 at 07:44:06PM +0530, Anup Patel wrote:
+> We add DT bindings document for RISC-V advanced platform level
+> interrupt controller (APLIC) defined by the RISC-V advanced
+> interrupt architecture (AIA) specification.
 > 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > ---
->  .../platform/mediatek/vcodec/mtk_vcodec_dec.c | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
+>  .../interrupt-controller/riscv,aplic.yaml     | 159 ++++++++++++++++++
+>  1 file changed, 159 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
 > 
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> index 52e5d36aa912..254649240b34 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> @@ -35,6 +35,44 @@ mtk_vdec_find_format(struct v4l2_format *f,
->  	return NULL;
->  }
->  
-> +static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_ctx *ctx, int format_index)
-> +{
-> +	const struct mtk_vcodec_dec_pdata *dec_pdata = ctx->dev->vdec_pdata;
-> +	const struct mtk_video_fmt *fmt;
-> +	struct mtk_q_data *q_data;
-> +	int num_frame_count = 0, i;
-> +	bool ret = true;
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
+> new file mode 100644
+> index 000000000000..b7f20aad72c2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
+> @@ -0,0 +1,159 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/riscv,aplic.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	for (i = 0; i < *dec_pdata->num_formats; i++) {
-> +		if (dec_pdata->vdec_formats[i].type != MTK_FMT_FRAME)
-> +			continue;
+> +title: RISC-V Advanced Platform Level Interrupt Controller (APLIC)
 > +
-> +		num_frame_count++;
-> +	}
+> +maintainers:
+> +  - Anup Patel <anup@brainfault.org>
 > +
-> +	if (num_frame_count == 1)
-> +		return true;
+> +description:
+> +  The RISC-V advanced interrupt architecture (AIA) defines an advanced
+> +  platform level interrupt controller (APLIC) for handling wired interrupts
+> +  in a RISC-V platform. The RISC-V AIA specification can be found at
+> +  https://github.com/riscv/riscv-aia.
 > +
-> +	fmt = &dec_pdata->vdec_formats[format_index];
-> +	q_data = &ctx->q_data[MTK_Q_DATA_SRC];
-> +	switch (q_data->fmt->fourcc) {
-> +	case V4L2_PIX_FMT_VP8_FRAME:
-> +		if (fmt->fourcc == V4L2_PIX_FMT_MM21)
-> +			ret = true;
-> +		break;
-> +	case V4L2_PIX_FMT_H264_SLICE:
-> +	case V4L2_PIX_FMT_VP9_FRAME:
-> +		if (fmt->fourcc == V4L2_PIX_FMT_MM21)
-> +			ret = false;
-> +		break;
-> +	default:
-> +		ret = true;
-> +		break;
-> +	};
+> +  The RISC-V APLIC is implemented as hierarchical APLIC domains where all
+> +  interrupt sources connect to the root domain which can further delegate
+> +  interrupts to child domains. There is one device tree node for each APLIC
+> +  domain.
 > +
-> +	return ret;
-> +}
+> +allOf:
+> +  - $ref: /schemas/interrupt-controller.yaml#
 > +
->  static struct mtk_q_data *mtk_vdec_get_q_data(struct mtk_vcodec_ctx *ctx,
->  					      enum v4l2_buf_type type)
->  {
-> @@ -566,6 +604,9 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc *f, void *priv,
->  		    dec_pdata->vdec_formats[i].type != MTK_FMT_FRAME)
->  			continue;
->  
-> +		if (!output_queue && !mtk_vdec_get_cap_fmt(ctx, i))
-> +			continue;
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - riscv,qemu-aplic
+
+Make 'qemu' the vendor.
+
+> +      - const: riscv,aplic
 > +
->  		if (j == f->index)
->  			break;
->  		++j;
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +
+> +  interrupts-extended:
+> +    minItems: 1
+> +    maxItems: 16384
+> +    description:
+> +      Given APLIC domain directly injects external interrupts to a set of
+> +      RISC-V HARTS (or CPUs). Each node pointed to should be a riscv,cpu-intc
+> +      node, which has a riscv node (i.e. RISC-V HART) as parent.
+> +
+> +  msi-parent:
+> +    description:
+> +      Given APLIC domain forwards wired interrupts as MSIs to a AIA incoming
+> +      message signaled interrupt controller (IMSIC). This property should be
+> +      considered only when the interrupts-extended property is absent.
+> +
+> +  riscv,num-sources:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1
+> +    maximum: 1023
+> +    description:
+> +      Specifies how many wired interrupts are supported by this APLIC domain.
+
+We don't normally need to how many interrupts, why here?
+
+> +
+> +  riscv,children:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    minItems: 1
+> +    maxItems: 1024
+> +    items:
+> +      maxItems: 1
+> +    description:
+> +      A list of child APLIC domains for the given APLIC domain. Each child
+> +      APLIC domain is assigned child index in increasing order with the
+> +      first child APLIC domain assigned child index 0. The APLIC domain
+> +      child index is used by firmware to delegate interrupts from the
+> +      given APLIC domain to a particular child APLIC domain.
+> +
+> +  riscv,delegate:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    minItems: 1
+> +    maxItems: 1024
+> +    items:
+> +      items:
+> +        - description: child APLIC domain phandle
+> +        - description: first interrupt number (inclusive)
+> +        - description: last interrupt number (inclusive)
+> +    description:
+> +      A interrupt delegation list where each entry is a triple consisting
+> +      of child APLIC domain phandle, first interrupt number, and last
+> +      interrupt number. The firmware will configure interrupt delegation
+> +      registers based on interrupt delegation list.
+
+The node's domain it delegating its interrupts to the child domain or 
+the other way around? The interrupt numbers here are this domain's or 
+the child's?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupt-controller
+> +  - "#interrupt-cells"
+> +  - riscv,num-sources
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    // Example 1 (APLIC domains directly injecting interrupt to HARTs):
+> +
+> +    aplic0: interrupt-controller@c000000 {
+> +      compatible = "riscv,qemu-aplic", "riscv,aplic";
+> +      interrupts-extended = <&cpu1_intc 11>,
+> +                            <&cpu2_intc 11>,
+> +                            <&cpu3_intc 11>,
+> +                            <&cpu4_intc 11>;
+> +      reg = <0xc000000 0x4080>;
+> +      interrupt-controller;
+> +      #interrupt-cells = <2>;
+> +      riscv,num-sources = <63>;
+> +      riscv,children = <&aplic1>, <&aplic2>;
+> +      riscv,delegate = <&aplic1 1 63>;
+> +    };
+> +
+> +    aplic1: interrupt-controller@d000000 {
+> +      compatible = "riscv,qemu-aplic", "riscv,aplic";
+> +      interrupts-extended = <&cpu1_intc 9>,
+> +                            <&cpu2_intc 9>;
+> +      reg = <0xd000000 0x4080>;
+> +      interrupt-controller;
+> +      #interrupt-cells = <2>;
+> +      riscv,num-sources = <63>;
+> +    };
+> +
+> +    aplic2: interrupt-controller@e000000 {
+> +      compatible = "riscv,qemu-aplic", "riscv,aplic";
+> +      interrupts-extended = <&cpu3_intc 9>,
+> +                            <&cpu4_intc 9>;
+> +      reg = <0xe000000 0x4080>;
+> +      interrupt-controller;
+> +      #interrupt-cells = <2>;
+> +      riscv,num-sources = <63>;
+> +    };
+> +
+> +  - |
+> +    // Example 2 (APLIC domains forwarding interrupts as MSIs):
+> +
+> +    aplic3: interrupt-controller@c000000 {
+> +      compatible = "riscv,qemu-aplic", "riscv,aplic";
+> +      msi-parent = <&imsic_mlevel>;
+> +      reg = <0xc000000 0x4000>;
+> +      interrupt-controller;
+> +      #interrupt-cells = <2>;
+> +      riscv,num-sources = <63>;
+> +      riscv,children = <&aplic4>;
+> +      riscv,delegate = <&aplic4 1 63>;
+> +    };
+> +
+> +    aplic4: interrupt-controller@d000000 {
+> +      compatible = "riscv,qemu-aplic", "riscv,aplic";
+> +      msi-parent = <&imsic_slevel>;
+> +      reg = <0xd000000 0x4000>;
+> +      interrupt-controller;
+> +      #interrupt-cells = <2>;
+> +      riscv,num-sources = <63>;
+> +    };
+> +...
 > -- 
-> 2.18.0
-> 
+> 2.34.1
 > 
