@@ -2,126 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B7366777E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B81CE6675C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239863AbjALOoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:44:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
+        id S237057AbjALOY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:24:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239928AbjALOnc (ORCPT
+        with ESMTP id S236541AbjALOX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:43:32 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A694763192;
-        Thu, 12 Jan 2023 06:32:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673533955; x=1705069955;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ib3vyisFDI6K4betGWmHI2M4r3YZdqPwbAKOST8VhdY=;
-  b=G2uGCVNmmQ+D4sR3M84UvgEn6CiT6XDhV1BOn0rrAPteRguX95ncAXhM
-   WebUIzG85+NwBXY6Tt1RmdY8YKeR/dAtAr5V7CeYqAq1ZAe9EBy3Pr0k3
-   c+56dM++sxUxZJ7QcnUEx35QHIoiMq87QpbmZ01su8dVU0BaTOYcH7s9X
-   SZ7wH8WQZxsxsy8cc98Vd8wEnWKwdBF0Vs/OOf4jCVKM7yZnvqG8Gp2W+
-   ju503yEVZw78NciCwgOJxQgtfW3LNZwK5HDqCBU2SBYoEdBWL4UnNvolg
-   KTZPTKRZBjt6Jip63Pbv7uPrufD+33WI9phDVVp8z6wD9e/NtVSR+6Mij
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="388188525"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="388188525"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 06:15:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="765632315"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="765632315"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Jan 2023 06:15:16 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pFyMN-000AAE-1j;
-        Thu, 12 Jan 2023 14:15:15 +0000
-Date:   Thu, 12 Jan 2023 22:14:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     tumic@gpxsee.org, Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lizhi Hou <lizhi.hou@amd.com>,
-        Martin =?utf-8?B?VMWvbWE=?= <martin.tuma@digiteqautomotive.com>
-Subject: Re: [RESEND PATCH v4 1/1] Added Digiteq Automotive MGB4 driver
-Message-ID: <202301122241.aanYtERe-lkp@intel.com>
-References: <20230112130458.2836-2-tumic@gpxsee.org>
+        Thu, 12 Jan 2023 09:23:56 -0500
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561985564C;
+        Thu, 12 Jan 2023 06:16:05 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id u9so45151615ejo.0;
+        Thu, 12 Jan 2023 06:16:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d7s1Hp6L+fR8Xqi7tlyntMmzEagmWp0BgSGtBgmjIU8=;
+        b=u1yS/1zsAwjfebqK6/7413xA2+cSmDK3N7lo4Patim/gRYYN1AtoAJEeFj4A9yzO4L
+         Uaf8gYBfHQaHtDiX658MYPwHIrrqXrDENR1wMakNRpT7c/MfnkR9uJyhKgD2n/PH+sN9
+         SBbgz9ctM/89xxDrEjmKR+ET7QLo6TVAw28V6fPRr/CQUPJ5JotQZeKXlnt2dnNiU+nh
+         MC1Wd0X3zbtHmvOokzDgl7VMVZAwt1ktK6/fHmRGBZGwEBRdr1Nfa39VWPkCNw/bM2tp
+         EdD17cfi6CPrAHRX/Kaf7MW2YRyWlJrXic9snV5wbP7Tvr2ummIYccvf3TQ1Sp0dINHS
+         U69Q==
+X-Gm-Message-State: AFqh2kpWvFsMFvdl3TM/mSVX1VuCDp9txcS5FenjYyUE/WTWtfKPm2st
+        /h0FLVuakX+f6VA2p7+xK5ptllGyfbIGc39UAEE=
+X-Google-Smtp-Source: AMrXdXv7WQAdxWLHtR4nNw8monJdK7YTHBGcxO6VxhJR3UBhs6C3BPe7URv35TpaZ3164GMfgC2gTJQyQHj3wl8s5kw=
+X-Received: by 2002:a17:906:b28f:b0:84d:381c:bdaa with SMTP id
+ q15-20020a170906b28f00b0084d381cbdaamr1924685ejz.79.1673532963646; Thu, 12
+ Jan 2023 06:16:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112130458.2836-2-tumic@gpxsee.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230110211839.19572-1-rick.p.edgecombe@intel.com>
+ <CAJZ5v0jnp3jLdD1wN1NjMfxrt+gYZ+im_quHdgsOrWve0XQaWg@mail.gmail.com> <cd2a9ccec0d88821fb0c7580f7ae934f2de71ddf.camel@intel.com>
+In-Reply-To: <cd2a9ccec0d88821fb0c7580f7ae934f2de71ddf.camel@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Jan 2023 15:15:52 +0100
+Message-ID: <CAJZ5v0hffKjor=kzr71esaw7M2BV5vCTEY7pg67-iWXZ98sQBw@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/hibernate: Use fixmap for saving unmapped pages
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "x86@kernel.org" <x86@kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "Brown, Len" <len.brown@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jan 11, 2023 at 9:46 PM Edgecombe, Rick P
+<rick.p.edgecombe@intel.com> wrote:
+>
+> On Wed, 2023-01-11 at 21:35 +0100, Rafael J. Wysocki wrote:
+> > On Tue, Jan 10, 2023 at 10:19 PM Rick Edgecombe
+> > <rick.p.edgecombe@intel.com> wrote:
+> > >
+> > > Hibernate uses the direct map to read memory it saves to disk.
+> > > Since
+> > > sometimes pages are not accessible on the direct map ("not present"
+> > > on
+> > > x86), it has special case logic to temporarily make a page present.
+> > > On x86
+> > > these direct map addresses can be mapped at various page sizes, but
+> > > the
+> > > logic works ok as long as the not present pages are always mapped
+> > > as
+> > > PAGE_SIZE such that they don't require a split to map the region as
+> > > present. If the address was mapped not present by a larger page
+> > > size, the
+> > > split may fail and hibernate would then try to read an address
+> > > mapped not
+> > > present.
+> > >
+> > > Today on x86 there are no known cases of this (huge not present
+> > > pages on
+> > > the direct map), but it has come up from time to time when
+> > > developing
+> > > things that operate on the direct map. It blocked making
+> > > VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and
+> > > also
+> > > has been a complication for various direct map protection efforts.
+> > >
+> > > This dependency is also pretty hidden and easily missed by people
+> > > poking at
+> > > the direct map. For this reason, there are warnings in place to
+> > > complain
+> > > but not handle this scenario.
+> > >
+> > > One way to make this more robust would be to create some new CPA
+> > > functionality that can know to map and reset the whole huge page in
+> > > the
+> > > case of trying to map a subpage. But for simplicity and smaller
+> > > code, just
+> > > make x86 hibernate have its own fixmap PTE that it can use to point
+> > > to 4k pages when it encounters an unmapped direct map page.
+> > >
+> > > Move do_copy_page() to a header such that it can be used in an arch
+> > > breakout. Rename it hib_copy_page() to be more hibernate specific
+> > > since
+> > > it could appear in other files.
+> > >
+> > > Use __weak for the arch breakout because there is not a suitable
+> > > arch
+> > > specific header to use the #define method.
+> > >
+> > > Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> > > ---
+> > >
+> > > Rebase to v6.2-rc3 (original still applied) and resending per:
+> > >
+> https://lore.kernel.org/lkml/CAJZ5v0i6cxGD+V6G+q-Y_Lp-ov51_zmkZr8ZGpCtqWV-e=BsLg@mail.gmail.com/
+> > >
+> > >  arch/x86/include/asm/fixmap.h |  3 +++
+> > >  arch/x86/power/hibernate.c    | 10 ++++++++++
+> > >  include/linux/suspend.h       | 13 +++++++++++++
+> > >  kernel/power/snapshot.c       | 21 +++++++--------------
+> > >  4 files changed, 33 insertions(+), 14 deletions(-)
+> > >
+> > > diff --git a/arch/x86/include/asm/fixmap.h
+> > > b/arch/x86/include/asm/fixmap.h
+> > > index d0dcefb5cc59..0fceed9a4152 100644
+> > > --- a/arch/x86/include/asm/fixmap.h
+> > > +++ b/arch/x86/include/asm/fixmap.h
+> > > @@ -108,6 +108,9 @@ enum fixed_addresses {
+> > >  #ifdef CONFIG_PARAVIRT_XXL
+> > >         FIX_PARAVIRT_BOOTMAP,
+> > >  #endif
+> > > +#ifdef CONFIG_HIBERNATION
+> > > +       FIX_HIBERNATE,
+> > > +#endif
+> > >
+> > >  #ifdef CONFIG_ACPI_APEI_GHES
+> > >         /* Used for GHES mapping from assorted contexts */
+> > > diff --git a/arch/x86/power/hibernate.c
+> > > b/arch/x86/power/hibernate.c
+> > > index 6f955eb1e163..473b6b5f6b7e 100644
+> > > --- a/arch/x86/power/hibernate.c
+> > > +++ b/arch/x86/power/hibernate.c
+> > > @@ -147,6 +147,16 @@ int arch_hibernation_header_restore(void
+> > > *addr)
+> > >         return 0;
+> > >  }
+> > >
+> > > +void copy_unmapped_page(void *dst, struct page *page)
+> > > +{
+> > > +       WARN_ON(!preempt_count());
+> >
+> > I don't think the above is needed.  The code using this function
+> > cannot be preempted anyway AFAICS.
+>
+> The reason I thought it was useful was because this function is now
+> defined in a header. Someone else might decide to use it. Does it seem
+> more useful?
 
-Thank you for the patch! Perhaps something to improve:
+Well, it is exposed now, but only in order to allow the __weak
+function to be overridden.  I don't think it is logically valid to use
+it anywhere beyond its original call site.
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on linus/master v6.2-rc3 next-20230112]
-[cannot apply to sailus-media-tree/streams]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+To make that clear, I would call it something hibernation-specific,
+like hibernate_copy_unmapped_page() and I would add a kerneldoc
+comment to it to describe its intended use.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/tumic-gpxsee-org/Added-Digiteq-Automotive-MGB4-driver/20230112-191715
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230112130458.2836-2-tumic%40gpxsee.org
-patch subject: [RESEND PATCH v4 1/1] Added Digiteq Automotive MGB4 driver
-reproduce:
-        make versioncheck
+Furthermore, I'm not sure about the new code layout.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Personally, I would prefer hibernate_map_page() and
+hibernate_unmap_page() to be turned into __weak functions and possibly
+overridden by the arch code, which would allow the amount of changes
+to be reduced and do_copy_page() wouldn't need to be moved into the
+header any more.
 
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
-   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
->> ./drivers/media/pci/mgb4/mgb4_core.c: 21 linux/version.h not needed.
->> ./drivers/media/pci/mgb4/mgb4_i2c.c: 11 linux/version.h not needed.
->> ./drivers/media/pci/mgb4/mgb4_trigger.c: 13 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
-   ./drivers/scsi/cxgbi/libcxgbi.h: 27 linux/version.h not needed.
-   ./drivers/scsi/mpi3mr/mpi3mr.h: 32 linux/version.h not needed.
-   ./drivers/scsi/qedi/qedi_dbg.h: 14 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra234-cbb.c: 27 linux/version.h not needed.
-   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
-   ./init/version-timestamp.c: 5 linux/version.h not needed.
-   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
-   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
-   ./tools/lib/bpf/bpf_helpers.h: 289: need linux/version.h
-   ./tools/perf/tests/bpf-script-example.c: 60: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-prologue.c: 47: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
-   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
+> >
+> > > +
+> > > +       set_fixmap(FIX_HIBERNATE, page_to_phys(page));
+> > > +       __flush_tlb_all();
+> >
+> > So do TLBs need to be flushed before copying every single page?
+> > Basically, they are all copied in one loop.
+>
+> It is only one fixmap entry so it needs to be flushed after changing
+> the PTE to point to a different page. But this is only for the case of
+> unmapped pages, the more common mapped pages are copied from the direct
+> map like usual.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+OK
+
+> >
+> > > +       hib_copy_page(dst, (void *)fix_to_virt(FIX_HIBERNATE));
+> > > +       clear_fixmap(FIX_HIBERNATE);
+> > > +}
+> > > +
+> > >  int relocate_restore_code(void)
+> > >  {
+> > >         pgd_t *pgd;
+> > > diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> > > index cfe19a028918..0b19b910526e 100644
+> > > --- a/include/linux/suspend.h
+> > > +++ b/include/linux/suspend.h
+> > > @@ -447,6 +447,19 @@ extern bool hibernation_available(void);
+> > >  asmlinkage int swsusp_save(void);
+> > >  extern struct pbe *restore_pblist;
+> > >  int pfn_is_nosave(unsigned long pfn);
+> > > +void copy_unmapped_page(void *dst, struct page *page);
+> > > +
+> > > +/*
+> > > + * This is needed, because copy_page and memcpy are not usable for
+> > > copying
+> > > + * task structs.
+> > > + */
+> > > +static inline void hib_copy_page(long *dst, long *src)
+> > > +{
+> > > +       int n;
+> > > +
+> > > +       for (n = PAGE_SIZE / sizeof(long); n; n--)
+> > > +               *dst++ = *src++;
+> > > +}
+> > >
+> > >  int hibernate_quiet_exec(int (*func)(void *data), void *data);
+> > >  #else /* CONFIG_HIBERNATION */
+> > > diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> > > index cd8b7b35f1e8..344c071f29d3 100644
+> > > --- a/kernel/power/snapshot.c
+> > > +++ b/kernel/power/snapshot.c
+> > > @@ -1369,16 +1369,11 @@ static unsigned int count_data_pages(void)
+> > >         return n;
+> > >  }
+> > >
+> > > -/*
+> > > - * This is needed, because copy_page and memcpy are not usable for
+> > > copying
+> > > - * task structs.
+> > > - */
+> > > -static inline void do_copy_page(long *dst, long *src)
+> > > +void __weak copy_unmapped_page(void *dst, struct page *page)
+> > >  {
+> > > -       int n;
+> > > -
+> > > -       for (n = PAGE_SIZE / sizeof(long); n; n--)
+> > > -               *dst++ = *src++;
+> > > +       hibernate_map_page(page);
+> > > +       hib_copy_page(dst, page_address(page));
+> > > +       hibernate_unmap_page(page);
+> > >  }
+> > >
+> > >  /**
+> > > @@ -1392,11 +1387,9 @@ static inline void do_copy_page(long *dst,
+> > > long *src)
+> > >  static void safe_copy_page(void *dst, struct page *s_page)
+> > >  {
+> > >         if (kernel_page_present(s_page)) {
+> > > -               do_copy_page(dst, page_address(s_page));
+> > > +               hib_copy_page(dst, page_address(s_page));
+> > >         } else {
+> > > -               hibernate_map_page(s_page);
+> > > -               do_copy_page(dst, page_address(s_page));
+> > > -               hibernate_unmap_page(s_page);
+> > > +               copy_unmapped_page(dst, s_page);
+> > >         }
+> > >  }
+> > >
+> > > @@ -1417,7 +1410,7 @@ static void copy_data_page(unsigned long
+> > > dst_pfn, unsigned long src_pfn)
+> > >         if (PageHighMem(s_page)) {
+> > >                 src = kmap_atomic(s_page);
+> > >                 dst = kmap_atomic(d_page);
+> > > -               do_copy_page(dst, src);
+> > > +               hib_copy_page(dst, src);
+> > >                 kunmap_atomic(dst);
+> > >                 kunmap_atomic(src);
+> > >         } else {
+> > > --
+> > > 2.17.1
+> > >
