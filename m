@@ -2,145 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DE0667117
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B577466711B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235142AbjALLjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:39:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S234846AbjALLku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236775AbjALLii (ORCPT
+        with ESMTP id S233808AbjALLje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:38:38 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2050.outbound.protection.outlook.com [40.107.6.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FB6183B7;
-        Thu, 12 Jan 2023 03:29:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mIoo5CnWG/CsrV2Xdp7Xso+mrEHi9yFzAJMhIUNXHhUBFLDkrWB+TfzWiBs/AzfPUes1C5b2kwJ/plCPCs8faRqw+fG+cdpW9hl1I1cTXBK+Qd/Bhl2q2Ae1pdFw6pFrhPIa999Srv6XbA2VIkrS/VtvhJSQdRmOb/wGlnny4D2uHxCpa1LcptLMTCGaDiQbWYiLkiOFUmyPHq+uj5u+/JBL/Yv10DJiUVT2TwnApGdkykjK6Oe7ZsjvIWRukILraUy8Bj4Y0f1t20vVEAAO4vCAg3tWbwwa3Y+P//+O32RfxECcGLDcMvvszD6Hl2HRh1w1519bBEDn+5ssJXhJMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FcrahsnI1jNzxfUdfsCjjTpdO3BRr7NE6EToWuu1nrA=;
- b=KfOY1pQI8XyJ1v711Kp8JJAaqEnp6GpBxbH00pWrRtBkn+XdfgW7dH1TWKIgKJXFqeLi48g8K6FLk0TNeUIulXJLS03Az3NH24790UaINOcdxFHQiu8xJJX+66XLDJ+rrFHGWGhgMI5GtMEJ8KK+MPkFHGW5VsenbujF6yW+YK4tGBvrfwsHRQ6j5mqPtUP+VK1qvguZAxh9ZOJFqQc6HqXr4Q9bR49vi1kL6Eq4pGN6wzxpo5MtM28ZhMj1xbSlSFzbLCKB6rp+CC5L9UM6Rj802OphSRpTbK4I3BZz+xWjZtQxfTcVVlI7Z6jXCiIwXQTnNOKsadM2Lu4Px7IBPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FcrahsnI1jNzxfUdfsCjjTpdO3BRr7NE6EToWuu1nrA=;
- b=pHU/ZSs053ICDNsF5C/iKg9tc4V2fz079RKDWVPaPVDzfidO+jHMombZlYHDWvYmyYO4vGPEbU+Q3RmB+LHJwj5HY/x0WJUQeJXLsgO2eNoSg0gAwgGoy4d1ODFhojGMC53rIV2LNPj3/zkFhKLI/0tW23pZcn2dQlAZD//kPhU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by PAXPR04MB8829.eurprd04.prod.outlook.com (2603:10a6:102:20c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 12 Jan
- 2023 11:29:27 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 11:29:27 +0000
-Date:   Thu, 12 Jan 2023 13:29:22 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH v2 net-next 00/12] ethtool support for IEEE 802.3 MAC
- Merge layer
-Message-ID: <20230112112922.z2h4swask3pdzxlj@skbuf>
-References: <20230111161706.1465242-1-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111161706.1465242-1-vladimir.oltean@nxp.com>
-X-ClientProxiedBy: BE1P281CA0137.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:7c::7) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+        Thu, 12 Jan 2023 06:39:34 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C1E18694;
+        Thu, 12 Jan 2023 03:30:18 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nt2Qk4P7xz4f3r9D;
+        Thu, 12 Jan 2023 19:30:06 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDX0R89779jfPvFBQ--.32138S3;
+        Thu, 12 Jan 2023 19:30:07 +0800 (CST)
+Subject: Re: [PATCH] block: bfq fix null pointer dereference of bfqg in
+ bfq_bio_bfqg()
+To:     Artem Chernyshev <artem.chernyshev@red-soft.ru>,
+        Yu Kuai <yukuai1@huaweicloud.com>, Jan Kara <jack@suse.cz>
+Cc:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Anton Fadeev <anton.fadeev@red-soft.ru>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230112094358.451029-1-artem.chernyshev@red-soft.ru>
+ <c72f2e00-1bd8-213c-585d-d465d6c34a14@huaweicloud.com>
+ <Y7/uCLzIu7Ir6JtK@localhost.localdomain>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <0e0c195e-5a92-732f-d0b4-2e0d9b33d742@huaweicloud.com>
+Date:   Thu, 12 Jan 2023 19:30:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PAXPR04MB8829:EE_
-X-MS-Office365-Filtering-Correlation-Id: 648e1bd5-c7c6-4ca9-c1f0-08daf49042b8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JUOEUJ1f6FEUPm9hgO4C4DhSZCqDDWydKXcvo99QKSqU/Ho2U4gTzXlRhRPH9ygCbrqmfzUGBJhYb/7PboQdq9XRMUv9eb+XSIjGbtj+itLdHcFcnCQ2xUvaWx+9412BpLxfZudUOEoowCF8Ckua4xN5Rk/vIUmYWwmFKpmpPKY6i0yjRVf8E0XMZSE+3Ovzls7motoD+/bPLOGIefoshRkUMegHP67tpG4SYeMECggPhfrCNPYWNVt80ZSsBCY0C0PlBTiycRQLrApBoDHm2sTyZdl2Osdgb0ViKJOv0n8C9mfCj0UNezb0ImVsP9RXe/vppdEnAkH1lhmAgE8+f9OWAbzb+j6UN4YGW2nXMbTlY1scyrlnwXQ/3B24xg2/m/7jDFb8/i6Vcvoze8znOK+JwIZs1yEDYkHxMKbruvYF0Yn8hGSpzpdu8WSJ8CWjCRgciIBwV6EkbJkWwXO8OxhgaSCpnhIBZ5z0vMw7OxmZFAl1+FOg2NpiBCrwmpYy7aaeHUs7uo1AMgh09c0Ctmj9uFWjsyd3y5v9R+/qgjihcCVyNpPrip2VYuOoMCYLKMjDlEG9GiZ2dt4UjFDDXoRLS8hPgppPoz3J+xkCEUo4pr7fu+EWjL7Qgry7FmSA2X55B7vI4Y9GfMFpfGon97xIG54M89ONhmJCQZVSbKA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(136003)(376002)(346002)(366004)(396003)(39860400002)(451199015)(6506007)(38100700002)(6666004)(478600001)(33716001)(6486002)(966005)(66946007)(66556008)(66476007)(8676002)(6916009)(8936002)(86362001)(41300700001)(4326008)(4744005)(7416002)(44832011)(54906003)(5660300002)(316002)(83380400001)(1076003)(2906002)(186003)(9686003)(6512007)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ctZ1YK1Z0JvU5eKf4E3bKsyRoJ+E1e402uHByFJ3mdeyX6UdegQf4tLn/HrT?=
- =?us-ascii?Q?pQpIc4I0DlQ4fi2tgQF8V++iixC0404D2Pp8GZ1EMAeyuAF+E0Sj33ldCe6J?=
- =?us-ascii?Q?ZyIpoNGg55fA8kjSVc6xFkSP10/XG3q4OdpvCgQ/SM6O7RHszikDpSYE5Yco?=
- =?us-ascii?Q?mNC7Wq+4qvC9pTX9/tzqbfUIKxNlYWWe/zQFu7IlXEG7nfvngr7ustW8FBcc?=
- =?us-ascii?Q?gclFdTi9ZMoGLgOgNBSmjyByHdqtjGlR9tXAxkRlhfa8N4FFIpFQo/0LqVOP?=
- =?us-ascii?Q?1AdJp4rDzK3MwsdVlFotwZpDAZ4u/kjoFoF0nCV6JUxjjPpN4kpm0EwaonIC?=
- =?us-ascii?Q?w1XfbKI9zwdJsfEXiAd9qNNidf+aexoTQAqOVyk19yuxbsyRXfsi3C+Q0eeb?=
- =?us-ascii?Q?rT9idJcE/WsGazDe8FQAMkUv5vUvsTRdI0yIVhkLkqGJcckbT6ad4Qn8vtlj?=
- =?us-ascii?Q?ppUfBrEgjs2eX+I28E6pCPBrKzM1a6xcI3veQro2xLGTRBwWC7Rac1naNBAy?=
- =?us-ascii?Q?2Z3AxyWFyEIPL/dkpvrgqSBPAK4wDqiVp/eiB/H8xbs7Yl9lgPsTroQQhS9U?=
- =?us-ascii?Q?TZEOy89puKYykvS+jauNC1LNeJ6k/ykDRjNjqnWalSzvN4gJQnRFxAeKK+3g?=
- =?us-ascii?Q?+1p2LMMrmrsSLOiKDHqO2YzDRw48r+PrBNtl7SdoBMFBpV1M5fCeCWXGADmx?=
- =?us-ascii?Q?jxghQJFpQNU38ny/hK2yzZZZX0ZPZl1X1vKuGam/QQBTOtbiYPAVFms6zXUx?=
- =?us-ascii?Q?FZuFJLM+dOZ1SHLfSiqMRJ+zZfzo8K4Vd9zq2MPp9kGsXenrDHcKWBBXRnaV?=
- =?us-ascii?Q?v8WtORb5Zo4MYUa9zuSyNP2U1qOLvZvrkyp3JK2S/zNJx3fEfn+Guwq787OG?=
- =?us-ascii?Q?TYQLZELhWSrLttiwOW7C2IXKPfPhIEi05UVyb3EvzoP0bJbQXrLAeuuTK0oJ?=
- =?us-ascii?Q?4OGhGiRtf57uxUb0GHWehxY/aQs3KnOWAXP1u/YX7dX+DkU9JiGXLzI3Yi9l?=
- =?us-ascii?Q?ceCbMKeYcGNncQ5TcTTopyuGx8CXH1sMRQ0FpuGc+ZXmX6TR6Ip2EnzIYBcT?=
- =?us-ascii?Q?W2oJLN5Dwp5NCmUeUQdkYYrGZa8Mm+akCPlXZc8q+RJVYiwr3rJAmcZn1xOT?=
- =?us-ascii?Q?fsKRLX7SM+ZeN17TtAPQwJS3Ky0roByVpAWNVlQEe0x1jzELZvLlJ1+eP9yw?=
- =?us-ascii?Q?Ps0be02+NIVIEFVVaMl0oMQk6oul8ur8S04trBxzl+OtgAi1CqKV5XdKYuf8?=
- =?us-ascii?Q?H30Dm1IffTGT6dfpmLipliISdZ+4pCUnFkCEumL6SImGjhLzz6oXP4pI9DU3?=
- =?us-ascii?Q?vntS29TiGFajOpGWvan1OgHEon2TXzxFnlDyTenwlbmAS2DnqFRABKF5M8PK?=
- =?us-ascii?Q?KUSJFBJjfMtHUbII9MflngpR6SjUlpR+oAHg2nyJR53bjOoaGcYmR2ABWAxy?=
- =?us-ascii?Q?tILQrZLOEjeyTr9T1xThvkefIcQlHDwqijSZNVkmOOtTo+4nT7s2FOrS6QOy?=
- =?us-ascii?Q?S1T9cUQEF7rUb4R3Kwlbq2GWqZ/2BvXOLqLyTNslWeSgxFoAF6UGdF5QEfpW?=
- =?us-ascii?Q?FBodLvsSS0HUS+fcX7r+LuniJldgsuxnX3nsENN4Z0tH2MFc3HTV9wXyCQS+?=
- =?us-ascii?Q?yA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 648e1bd5-c7c6-4ca9-c1f0-08daf49042b8
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 11:29:26.9468
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8XiK991QEf3nKFK129KSsCF0wBWySITNLPirpePJgYLaZwDmxPVmIchPt1hFt2SFi29KtR+xZylv7ZS0oAhpQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8829
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y7/uCLzIu7Ir6JtK@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDX0R89779jfPvFBQ--.32138S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw1fJF4fuF1DGr1rZr1UZFb_yoWrCry3pF
+        47JFsFkw4xtr1DZa1jv3WDJw10grs5AFnrXw129w13tFn0grnrJF1rJr4UWryDtw15Zr17
+        Jwn8X340vr1qkaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 06:16:54PM +0200, Vladimir Oltean wrote:
-> This is a continuation of my work started here:
-> https://patchwork.kernel.org/project/netdevbpf/cover/20220816222920.1952936-1-vladimir.oltean@nxp.com/
-> 
-> I've decided to focus just on the MAC Merge layer for now, which is why
-> I am able to submit this patch set as non-RFC.
+CC Jan.
 
-As it happens, this patch set seems to conflict with the recently merged
-8580e16c28f3 ("net/ethtool: add netlink interface for the PLCA RS").
-It is still possible to apply and test on a set of kernel UAPI headers
-prior to that commit, so I will leave reviewers/testers more time to
-comment, and will not resend kernel + user space patches just for this
-fact.
+在 2023/01/12 19:24, Artem Chernyshev 写道:
+> Hi,
+> On Thu, Jan 12, 2023 at 07:09:10PM +0800, Yu Kuai wrote:
+>> Hi,
+>>
+>> 在 2023/01/12 17:43, Artem Chernyshev 写道:
+>>> It is possible for bfqg to be NULL after being initialized as result of
+>>> blkg_to_bfqg() function.
+>>>
+>>> That was achieved on kernel 5.15.78, but should exist in mainline as
+>>> well
+>>
+>> The problem is already fixed in mainline by following patch:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f02be9002c480cd3ec0fcf184ad27cf531bd6ece
+>>
+>> Thanks,
+>> Kuai
+>>>
+>>> host1 login: [ 460.855794] watchdog: watchdog0: watchdog did not stop!
+>>> [  898.944512] BUG: kernel NULL pointer dereference, address: 0000000000000094
+>>> [  899.285776] #PF: supervisor read access in kernel mode
+>>> [  899.536511] #PF: error_code(0x0000) - not-present page
+>>> [  899.647305]  connection4:0: detected conn error (1020)
+>>> [  899.786794] PGD 0 P4D 0
+>>> [  899.786799] Oops: 0000 [#1] SMP PTI
+>>> [  899.786802] CPU: 15 PID: 6073 Comm: ID iothread1 Not tainted 5.15.78-1.el7virt.x86_64 #1
+>>> [  899.786804] Hardware name: HP ProLiant DL360 Gen9/ProLiant DL360 Gen9, BIOS P89 10/21/2019
+>>> [  899.786806] RIP: 0010:bfq_bio_bfqg+0x26/0x80
+>>> [  901.325944] Code: 0f 1f 40 00 0f 1f 44 00 00 55 48 89 fd 48 89 f7 53 48 8b 56 48 48 85 d2
+>>> 74 32 48 63 05 83 7f 35 01 48 83 c0 16 48 8b 5c c2 08 <80> bb 94 00 00 00 00 00
+>>> [  902.237825] RSP: 0018:ffffae2649437688 EFLAGS: 00010002
+>>> [  902.493396] RAX: 0000000000000019 RBX: 0000000000000000 RCX: dead000000000122
+>>> [  902.841529] RDX: ffff8b6012cb3a00 RSI: ffff8b71002bbed0 RDI: ffff8b71002bbed0
+>>> [  903.189374] RBP: ffff8b601c46e800 R08: ffffae26494377c8 R09: 0000000000000000
+>>> [  903.532985] R10: 0000000000000001 R11: 0000000000000008 R12: ffff8b6f844c5b30
+>>> [  903.880809] R13: ffff8b601c46e800 R14: ffffae2649437760 R15: ffff8b601c46e800
+>>> [  904.220054] FS:  00007fec2fc4a700(0000) GS:ffff8b7f7f640000(0000) kn1GS:00000000000000000
+>>> [  904.614349] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>> [  904.894717] CR2: 0000000000000094 CR3: 0000000111fd8002 CR4: 00000000003726e0
+>>> [  905.243702] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>>> [  905.592493] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>>> [  905.936859] Call Trace:
+>>> [  906.055955] <TASK>
+>>> [  906.158109] bfq_bic_update_cgroup+0x2c/0x1f0
+>>> [  906.371057] bfq_insert_requests+0x2c2/0x1fb0
+>>> [  906.579207] blk_mq_sched_insert_request+0xc2/0x140
+>>> [  906.817640] __blk_mq_try_issue_directly+0xe0/0x1f0
+>>> [  907.055737] blk_mq_request_issue_directly+0x4e/0xa0
+>>> [  907.298547] dm_mq_queue_rq+0x217/0x3e0
+>>> [  907.485935] blk_mq_dispatch_rq_list+0x14b/0x860
+>>> [  907.711973] ? sbitmap_get+0x87/0x1a0
+>>> [  907.890370] blk_mq_do_dispatch_sched+0x350/0x3b0
+>>> [  908.074869] NMI watchdog: Watchdog detected hard LOCKUP on cpu 40
+>>>
+>>> Fixes: 075a53b78b81 ("bfq: Make sure bfqg for which we are queueing requests is online")
+>>> Co-developed-by: Anton Fadeev <anton.fadeev@red-soft.ru>
+>>> Signed-off-by: Anton Fadeev <anton.fadeev@red-soft.ru>
+>>> Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
+>>> ---
+>>>    block/bfq-cgroup.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+>>> index 1b2829e99dad..d4e9428cdbe5 100644
+>>> --- a/block/bfq-cgroup.c
+>>> +++ b/block/bfq-cgroup.c
+>>> @@ -616,7 +616,7 @@ struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
+>>>    			continue;
+>>>    		}
+>>>    		bfqg = blkg_to_bfqg(blkg);
+>>> -		if (bfqg->online) {
+>>> +		if (bfqg && bfqg->online) {
+>>>    			bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
+>>>    			return bfqg;
+>>>    		}
+>>>
+> 
+> Sorry, forgot to mention, what behaviour was the same after we applied this patch. Issue
+> was resolved only when we added NULL checking for bfqg.
+
+So, you mean that blkg is still online, while blkg_to_bfqg() return
+NULL. Can you explan how this is possible? I can't figure out how this
+is possible...
+
+Thanks,
+Kuai
+> 
+> Thanks,
+> Artem
+> 
+> .
+> 
+
