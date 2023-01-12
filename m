@@ -2,58 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268CD666864
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 02:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DC0666874
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 02:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235584AbjALB3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 20:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S231803AbjALBdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 20:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjALB3w (ORCPT
+        with ESMTP id S235728AbjALBde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 20:29:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF78265E8;
-        Wed, 11 Jan 2023 17:29:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5398861F1C;
-        Thu, 12 Jan 2023 01:29:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0441C433EF;
-        Thu, 12 Jan 2023 01:29:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673486990;
-        bh=luOxm3+i/J9Q/Ezer2VdFlolnQ7fylcdvzVjPTHlZW0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Dd4tYj20l/gEgLbXUmWmL3KJlnKalbUwOBfXBBaRgLVcLPsy3gMQbNaIBPQgueGGf
-         Cphs5P4hvjK+8QPo6TmOXOdwEzuZ5QHrLxe6/RjS0xk+Yi7CRPBo0xcd8z57i7QUwX
-         /oGgJYEZWKGJArz/6wopodabV80KTBJ92pRS/5JdtLconKVD6hDaeqNKc+Yw7sf6bV
-         N08smO4BHslniKtjUS4N/ZVBAqgPwXnrqWC7ELusNkLDBZDh2eoRNeZb2NuB0y0b78
-         bsndBU7Z5CLUsL8d/vtROw4Tt1OX/blwDCf3QDi2t8l9b866P+RWENU26oh+GgJ0nP
-         iRHymdtxed2Ew==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3CB6A5C06D0; Wed, 11 Jan 2023 17:29:50 -0800 (PST)
-Date:   Wed, 11 Jan 2023 17:29:50 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        fweisbec@gmail.com, urezki@gmail.com
-Subject: Re: [PATCH v2 rcu/dev 1/2] rcu: Track laziness during boot and
- suspend
-Message-ID: <20230112012950.GE4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230112005223.2329802-1-joel@joelfernandes.org>
+        Wed, 11 Jan 2023 20:33:34 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040F727186
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 17:33:32 -0800 (PST)
+Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nsn4n71JbzqV7f;
+        Thu, 12 Jan 2023 09:28:41 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 12 Jan 2023 09:33:28 +0800
+From:   Peng Zhang <zhangpeng362@huawei.com>
+To:     <almaz.alexandrovich@paragon-software.com>,
+        <kari.argillander@gmail.com>, <akpm@linux-foundation.org>
+CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <sunnanyong@huawei.com>, <wangkefeng.wang@huawei.com>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH -next] fs/ntfs3: Fix potential NULL/IS_ERR bug in ntfs_lookup()
+Date:   Thu, 12 Jan 2023 01:32:48 +0000
+Message-ID: <20230112013248.2464556-1-zhangpeng362@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112005223.2329802-1-joel@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,141 +48,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 12:52:22AM +0000, Joel Fernandes (Google) wrote:
-> During boot and suspend/resume, it is desired to prevent RCU laziness from
-> effecting performance and in some cases failures like with suspend.
-> 
-> Track whether RCU laziness is to be ignored or not, in kernels with
-> CONFIG_RCU_LAZY enabled. We do such tracking for expedited-RCU already, however
-> since Android currently expedites synchronous_rcu() always, we cannot rely on
-> that. The next patch ignores laziness hints based on this tracking.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
-> Paul, could we take this and the next one for 6.2 -rc cycle?
+From: ZhangPeng <zhangpeng362@huawei.com>
 
-Given how late it is in v6.2, I would need you to make it all depend on
-CONFIG_RCU_LAZY, so that it is blindingly and immediately obvious that
-there is no change in behavior for kernels built with CONFIG_RCU_LAZY=n.
+Dan Carpenter reported a Smatch static checker warning:
 
-If you are OK with the v6.3 merge window and backports, what you have
-likely suffices, modulo review and testing.
+fs/ntfs3/namei.c:96 ntfs_lookup()
+error: potential NULL/IS_ERR bug 'inode'
+It will cause null-ptr-deref when dir_search_u() returns NULL if the
+file is not found.
+Fix this by replacing IS_ERR() with IS_ERR_OR_NULL() to add a check for
+NULL.
 
-So, how would you like to proceed?
+Fixes: fb6b59b5a2d6 ("fs/ntfs3: Fix null-ptr-deref on inode->i_op in ntfs_lookup()")
+Reported-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+---
+ fs/ntfs3/namei.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-							Thanx, Paul
+diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+index 3db34d5c03dc..f23c2c26dd08 100644
+--- a/fs/ntfs3/namei.c
++++ b/fs/ntfs3/namei.c
+@@ -93,7 +93,7 @@ static struct dentry *ntfs_lookup(struct inode *dir, struct dentry *dentry,
+ 	 * If the MFT record of ntfs inode is not a base record, inode->i_op can be NULL.
+ 	 * This causes null pointer dereference in d_splice_alias().
+ 	 */
+-	if (!IS_ERR(inode) && inode->i_op == NULL) {
++	if (!IS_ERR_OR_NULL(inode) && inode->i_op == NULL) {
+ 		iput(inode);
+ 		inode = ERR_PTR(-EINVAL);
+ 	}
+-- 
+2.25.1
 
-> I also booted debian Linux and verified the flag is reset correctly after boot
-> completes. Thanks.
-> 
->  kernel/rcu/rcu.h    |  6 ++++++
->  kernel/rcu/tree.c   |  2 ++
->  kernel/rcu/update.c | 40 +++++++++++++++++++++++++++++++++++++++-
->  5 files changed, 55 insertions(+), 1 deletion(-)
->  create mode 100644 cc_list
->  create mode 100644 to_list
-> 
-> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-> index 5c8013f7085f..115616ac3bfa 100644
-> --- a/kernel/rcu/rcu.h
-> +++ b/kernel/rcu/rcu.h
-> @@ -449,14 +449,20 @@ do {									\
->  /* Tiny RCU doesn't expedite, as its purpose in life is instead to be tiny. */
->  static inline bool rcu_gp_is_normal(void) { return true; }
->  static inline bool rcu_gp_is_expedited(void) { return false; }
-> +static inline bool rcu_async_should_hurry(void) { return false; }
->  static inline void rcu_expedite_gp(void) { }
->  static inline void rcu_unexpedite_gp(void) { }
-> +static inline void rcu_async_hurry(void) { }
-> +static inline void rcu_async_relax(void) { }
->  static inline void rcu_request_urgent_qs_task(struct task_struct *t) { }
->  #else /* #ifdef CONFIG_TINY_RCU */
->  bool rcu_gp_is_normal(void);     /* Internal RCU use. */
->  bool rcu_gp_is_expedited(void);  /* Internal RCU use. */
-> +bool rcu_async_should_hurry(void);  /* Internal RCU use. */
->  void rcu_expedite_gp(void);
->  void rcu_unexpedite_gp(void);
-> +void rcu_async_hurry(void);
-> +void rcu_async_relax(void);
->  void rcupdate_announce_bootup_oddness(void);
->  #ifdef CONFIG_TASKS_RCU_GENERIC
->  void show_rcu_tasks_gp_kthreads(void);
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 63545d79da51..78b2e999c904 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -4504,11 +4504,13 @@ static int rcu_pm_notify(struct notifier_block *self,
->  	switch (action) {
->  	case PM_HIBERNATION_PREPARE:
->  	case PM_SUSPEND_PREPARE:
-> +		rcu_async_hurry();
->  		rcu_expedite_gp();
->  		break;
->  	case PM_POST_HIBERNATION:
->  	case PM_POST_SUSPEND:
->  		rcu_unexpedite_gp();
-> +		rcu_async_relax();
->  		break;
->  	default:
->  		break;
-> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-> index 3893022f8ed8..19bf6fa3ee6a 100644
-> --- a/kernel/rcu/update.c
-> +++ b/kernel/rcu/update.c
-> @@ -144,8 +144,45 @@ bool rcu_gp_is_normal(void)
->  }
->  EXPORT_SYMBOL_GPL(rcu_gp_is_normal);
->  
-> -static atomic_t rcu_expedited_nesting = ATOMIC_INIT(1);
-> +static atomic_t rcu_async_hurry_nesting = ATOMIC_INIT(1);
-> +/*
-> + * Should call_rcu() callbacks be processed with urgency or are
-> + * they OK being executed with arbitrary delays?
-> + */
-> +bool rcu_async_should_hurry(void)
-> +{
-> +	return !IS_ENABLED(CONFIG_RCU_LAZY) ||
-> +	       atomic_read(&rcu_async_hurry_nesting);
-> +}
-> +EXPORT_SYMBOL_GPL(rcu_async_should_hurry);
-> +
-> +/**
-> + * rcu_async_hurry - Make future async RCU callbacks not lazy.
-> + *
-> + * After a call to this function, future calls to call_rcu()
-> + * will be processed in a timely fashion.
-> + */
-> +void rcu_async_hurry(void)
-> +{
-> +	if (IS_ENABLED(CONFIG_RCU_LAZY))
-> +		atomic_inc(&rcu_async_hurry_nesting);
-> +}
-> +EXPORT_SYMBOL_GPL(rcu_async_hurry);
->  
-> +/**
-> + * rcu_async_relax - Make future async RCU callbacks lazy.
-> + *
-> + * After a call to this function, future calls to call_rcu()
-> + * will be processed in a lazy fashion.
-> + */
-> +void rcu_async_relax(void)
-> +{
-> +	if (IS_ENABLED(CONFIG_RCU_LAZY))
-> +		atomic_dec(&rcu_async_hurry_nesting);
-> +}
-> +EXPORT_SYMBOL_GPL(rcu_async_relax);
-> +
-> +static atomic_t rcu_expedited_nesting = ATOMIC_INIT(1);
->  /*
->   * Should normal grace-period primitives be expedited?  Intended for
->   * use within RCU.  Note that this function takes the rcu_expedited
-> @@ -195,6 +232,7 @@ static bool rcu_boot_ended __read_mostly;
->  void rcu_end_inkernel_boot(void)
->  {
->  	rcu_unexpedite_gp();
-> +	rcu_async_relax();
->  	if (rcu_normal_after_boot)
->  		WRITE_ONCE(rcu_normal, 1);
->  	rcu_boot_ended = true;
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
