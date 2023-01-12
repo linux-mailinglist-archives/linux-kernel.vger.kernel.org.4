@@ -2,63 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB356667386
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17A0667389
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbjALNtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 08:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        id S232016AbjALNun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 08:50:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbjALNtc (ORCPT
+        with ESMTP id S230315AbjALNul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 08:49:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED9948CC1;
-        Thu, 12 Jan 2023 05:49:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9BD561FBB;
-        Thu, 12 Jan 2023 13:49:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D68FC433EF;
-        Thu, 12 Jan 2023 13:49:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673531371;
-        bh=A7eHIkxPswE2dhvPZdZeM3L8qLICMWeWurMBGm2/+wU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oKxSxjEEx51OoN6G9onWDuyj0+H3cyftoEl5oBM/kYlDQnxgNZZJ41PzR87FyitBg
-         pzmcGoCaLIfUybn0DNvjz8ADG2R/Zi0bKnky2B/xUBsjAQIXoKa16MAT+yOtD+n83W
-         vjwDwne03fz25T4xLw6sMeZVSoRyvt03LEb3eL6E=
-Date:   Thu, 12 Jan 2023 14:49:28 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     kuba@kernel.org, pabeni@redhat.com, slipper.alive@gmail.com,
-        stable-commits@vger.kernel.org
-Subject: Re: Patch "net/ulp: prevent ULP without clone op from entering the
- LISTEN status" has been added to the 5.4-stable tree
-Message-ID: <Y8AP6Lqo9sfX9Bb8@kroah.com>
-References: <16735310493146@kroah.com>
+        Thu, 12 Jan 2023 08:50:41 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332F24731B;
+        Thu, 12 Jan 2023 05:50:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673531439; x=1705067439;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Nye+I+Clrq9SBmvHly5ZfjOGJz5IMOrCCli65DwBb60=;
+  b=hYIz1FhjDg6vqs8d2troPkzh2bI7tQ0II5c2nGsmpTnjcqXUQSONgFix
+   zCVmIMzt3dUXf88giw4XCsKZbVzOndHFiXMs6puA8R/8e6WNf5Doj7e1G
+   rsDs59WCsVsSp833ie8vdy6xWIf9WtatYp8U7gSjc4Qe4guH7WsP24709
+   Ulyk9PUE4NmyXUpMjGDAyJv+/ZwdatgygX4j2pqtD/kRVTDBQ+gFL1ULT
+   pn4cFtrRH8NvLoiWs+K7d13VbiyRkov27xkWZ5E3rHU0Ye+5yq0rBaOhA
+   3LNaMlDRzsMrsuB4VXGhtm63UUTqOGT7DLQvDCge4+0uiirHpUlI2Y09h
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10587"; a="325730058"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="325730058"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 05:50:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="800213443"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="800213443"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 12 Jan 2023 05:50:07 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Jan 2023 15:50:07 +0200
+Date:   Thu, 12 Jan 2023 15:50:06 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     cy_huang@richtek.com
+Cc:     linux@roeck-us.net, matthias.bgg@gmail.com,
+        gregkh@linuxfoundation.org, gene_chen@richtek.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, stable@vger.kernel.org
+Subject: Re: [PATCH RESEND v2] usb: typec: tcpm: Fix altmode re-registration
+ causes sysfs create fail
+Message-ID: <Y8AQDtBq9j3SmIUu@kuha.fi.intel.com>
+References: <1673248790-15794-1-git-send-email-cy_huang@richtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <16735310493146@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1673248790-15794-1-git-send-email-cy_huang@richtek.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 02:44:09PM +0100, gregkh@linuxfoundation.org wrote:
+On Mon, Jan 09, 2023 at 03:19:50PM +0800, cy_huang@richtek.com wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> This is a note to let you know that I've just added the patch titled
+> There's the altmode re-registeration issue after data role
+> swap (DR_SWAP).
 > 
->     net/ulp: prevent ULP without clone op from entering the LISTEN status
+> Comparing to USBPD 2.0, in USBPD 3.0, it loose the limit that only DFP
+> can initiate the VDM command to get partner identity information.
 > 
-> to the 5.4-stable tree which can be found at:
->     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+> For a USBPD 3.0 UFP device, it may already get the identity information
+> from its port partner before DR_SWAP. If DR_SWAP send or receive at the
+> mean time, 'send_discover' flag will be raised again. It causes discover
+> identify action restart while entering ready state. And after all
+> discover actions are done, the 'tcpm_register_altmodes' will be called.
+> If old altmode is not unregistered, this sysfs create fail can be found.
+> 
+> In 'DR_SWAP_CHANGE_DR' state case, only DFP will unregister altmodes.
+> For UFP, the original altmodes keep registered.
+> 
+> This patch fix the logic that after DR_SWAP, 'tcpm_unregister_altmodes'
+> must be called whatever the current data role is.
+> 
+> Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together)
+> Reported-by: TommyYl Chen <tommyyl.chen@mediatek.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 
-Oops, nope, this broke the build for 5.4 and older kernels, now
-dropping.
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> Since v2:
+> - Correct the mail sent from Richtek.
+> - Add 'Reviewed-by' tag.
+> 
+> Hi, Greg:
+> 
+>   Please check this one. I have strongly requested our MIS to remove the confidential string.
+> 
+> ChiYuan Huang.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 904c7b4..59b366b 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4594,14 +4594,13 @@ static void run_state_machine(struct tcpm_port *port)
+>  		tcpm_set_state(port, ready_state(port), 0);
+>  		break;
+>  	case DR_SWAP_CHANGE_DR:
+> -		if (port->data_role == TYPEC_HOST) {
+> -			tcpm_unregister_altmodes(port);
+> +		tcpm_unregister_altmodes(port);
+> +		if (port->data_role == TYPEC_HOST)
+>  			tcpm_set_roles(port, true, port->pwr_role,
+>  				       TYPEC_DEVICE);
+> -		} else {
+> +		else
+>  			tcpm_set_roles(port, true, port->pwr_role,
+>  				       TYPEC_HOST);
+> -		}
+>  		tcpm_ams_finish(port);
+>  		tcpm_set_state(port, ready_state(port), 0);
+>  		break;
+> -- 
+> 2.7.4
+
+-- 
+heikki
