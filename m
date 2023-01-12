@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20AF666909
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 03:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B671166690D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 03:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbjALCqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 21:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
+        id S230270AbjALCsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 21:48:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjALCqc (ORCPT
+        with ESMTP id S232849AbjALCsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 21:46:32 -0500
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0B36430;
-        Wed, 11 Jan 2023 18:46:31 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-14455716674so17609108fac.7;
-        Wed, 11 Jan 2023 18:46:31 -0800 (PST)
+        Wed, 11 Jan 2023 21:48:18 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF28F6550;
+        Wed, 11 Jan 2023 18:48:16 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id s5so11050158qtx.6;
+        Wed, 11 Jan 2023 18:48:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3RYpkCxdikbGwIjWZhsWn9ddRmi7+gdPMayCS87Hq0s=;
-        b=Rqs47a2SG3ieOtY4KHtrrVwDVhAzPKELErx6dil0p1ZVGqC3eVNYPazvmRf+r7ND/g
-         oJ8QVvqbiqWaiba0wA6d74Urnjpv1Xv/HXtbk0+E8XOTt/BCVcRQV0MCZzUQOkNDwi/3
-         6ChZtVcqc5KzL5Z3wXfNQk00gho3sy8nRla9MYi5ZkfR41PNxdPmCBNhJpRraTK5ng96
-         hfeHmkZDorQV85pjNeupJNANQDJNTkkMwiCjsUaq6dbhVBaMaP8uxc2Z0xXWkcqPdB7b
-         4k0E0y3oliO/cMGsexp7E4b7XnbKYMchbGcSH7kjP+miZxw3mRzWaQ+JdBU1dMFkJn+P
-         Tfow==
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dunIhFV/SA7BhxFy5GSpP60/k/c9vYVgtVCy3fTfkpE=;
+        b=Mu+5oiPMmg0EMg+2EL1MpVyJLyK0lHEacRpHo6wYm0d01t2ceMvenfSYHaNny8yani
+         RNMaj2elxDQi9nT4BqS/sKMqPNRSdswrc1znYB9mEgK7SNhdUWCrgX6jBRebqxOfP+i/
+         cot/1/5I7IWOaC2Sv3hrds4qHiAifNaE85LhvjLhveYl1Q6IVNOjKu/9YPub39S7wbcQ
+         PCOi6FyUkfalE7EAtpY7nDDcmxMqaeUq9N5EUQOCJqHR9PMRUy+kVgQe79wdbYRR/3Gm
+         m6b1evBTkyrGIYr7Sin/IERKQ9xMw/v8ETVZjx89GQweUzGR/+GexujcDC4hUUHOMAnf
+         NfXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3RYpkCxdikbGwIjWZhsWn9ddRmi7+gdPMayCS87Hq0s=;
-        b=uijLWegfoYKSS2jeR19tFA04zMvMcn0XV0emBYrPJa7olvdZhD611Ez0WDLG7CrnS9
-         Y6g5OlGgyMQy6HO8ud3XO8a4wnuKIAHk5MdHGBYCG7G+e1bXiluEppjtzK5cVxwu1ZR5
-         ibhvnEA6MBWVFw0pqAUdOrfJpj2JLzhvCmns6N+7zE3HdAhHUOHpABehu4e06KAEH76l
-         QFuBsfb4DSMtZIPZOp6JK8EC0cSxm/5OkK8ie6V7GI9s2c/vprIqq18IWAJQy4zTArKk
-         lw/YinUu8VSLcih7JsQmyziW/iTEA+GZ5wWfiyy4m7g4LaQ0kp+SH00wjTZsDMK4rAGZ
-         lb3g==
-X-Gm-Message-State: AFqh2krccf60R+Cm0IUinvPgFiTRpgJndzxU1S4PZVlMAYl3KAkz4Yj/
-        5EKcCyTYNWlEw0Bz+gzLgPpbQ3/ZnWxabNUKGUE=
-X-Google-Smtp-Source: AMrXdXuDUPZC0qvjqWoYlojdffK4WV9uJaE2Bb3GOU69NVCn22uJjzYZLpG4uxbrRdkM1/tUweEmyf8fw5aj9uypO6I=
-X-Received: by 2002:a05:6870:c8b:b0:150:d562:4a8e with SMTP id
- mn11-20020a0568700c8b00b00150d5624a8emr3275623oab.77.1673491590353; Wed, 11
- Jan 2023 18:46:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20230109123216.4974-1-fengqi706@gmail.com> <CACOZ=ZW5vpaPpFsQ64nSE3kinUhGDBeDey7odvnGeZFEKys32g@mail.gmail.com>
-In-Reply-To: <CACOZ=ZW5vpaPpFsQ64nSE3kinUhGDBeDey7odvnGeZFEKys32g@mail.gmail.com>
-From:   qi feng <fengqi706@gmail.com>
-Date:   Thu, 12 Jan 2023 10:46:20 +0800
-Message-ID: <CACOZ=ZU9mOj5Yr7_MJGjOH4wq2uRfXJt=QLZpD0SUQr9R4Vr=g@mail.gmail.com>
-Subject: Re: [PATCH] HID: add KEY_CAMERA_FOCUS event in HID
-To:     jikos@kernel.org
-Cc:     rydberg@bitmath.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fengqi <fengqi@xiaomi.com>, lixiaojie5@xiaomi.com
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dunIhFV/SA7BhxFy5GSpP60/k/c9vYVgtVCy3fTfkpE=;
+        b=7ifzma6svZzCepuKnr7uht75aV5+DBwnwYQzdsbygkG1QTf0j6zVQtte5E+trFnEOa
+         PHfnyw5v6zYgE0iGpT6yKfoQP9RLwVAkeu4apspUPpw/nHZnu1QtfkTaRfenFG30cQEv
+         THbvP8bJLPm9gVyiZDbcTy6mgz5qI5nQRVwE1M8kk8xcGaDOPJkWPo53IlzlZgwPfAR0
+         lRDZ4TiKl1RwJzoQ2oetrJ4zpmfL8SYk3ajFnRkecUtPJz+rtzE/pmFOMJVat2xB71zQ
+         cSBRAnnFUrERK68IYW/Tiz4WCE81OmXGpdGevu6+TrEvdEPzh2B6RZ4NY4FElOC5i/d3
+         Y+qQ==
+X-Gm-Message-State: AFqh2kpdTmwmZs+L5JN207AssuV2OEdu1Pz3nLCFETJrFGivM+6FHi7u
+        T2Hs1rkhSKFvVWSNk6/mdg==
+X-Google-Smtp-Source: AMrXdXu4VOcXo/yG2W4IiOm1zJMsJuKSJCY4P7eUaVF771F++AKl/a7eK0LwrhpoOgMYKFtUgx8hJg==
+X-Received: by 2002:a05:622a:1b22:b0:3ac:342:c686 with SMTP id bb34-20020a05622a1b2200b003ac0342c686mr22858109qtb.46.1673491695696;
+        Wed, 11 Jan 2023 18:48:15 -0800 (PST)
+Received: from [192.168.75.138] (c-68-32-72-208.hsd1.mi.comcast.net. [68.32.72.208])
+        by smtp.gmail.com with ESMTPSA id bb30-20020a05622a1b1e00b003aba8e9efdasm8437619qtb.4.2023.01.11.18.48.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 18:48:15 -0800 (PST)
+Message-ID: <dc5d464d14d45f7df932c1b53d95c84b4f5bbcc3.camel@gmail.com>
+Subject: Re: [PATCH] NFS: Judge the file access cache's timestamp in rcu path
+From:   Trond Myklebust <trondmy@gmail.com>
+To:     Chengen Du <chengen.du@canonical.com>,
+        trond.myklebust@hammerspace.com
+Cc:     anna@kernel.org, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 11 Jan 2023 21:48:13 -0500
+In-Reply-To: <CAPza5qc03KLCWJ5u=yFZ3wtKBDHBNvSM44xOTt2AGd9PoRs0Ow@mail.gmail.com>
+References: <20221230030432.38908-1-chengen.du@canonical.com>
+         <CAPza5qc03KLCWJ5u=yFZ3wtKBDHBNvSM44xOTt2AGd9PoRs0Ow@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,43 +75,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-please help me review this code
+On Thu, 2023-01-12 at 09:26 +0800, Chengen Du wrote:
+> Hi,
+>=20
+> The patch follows the commit 0eb43812c027 but handles the stale cache
+> in rcu path.
+> The stale cache will remain in the list's tail if no other users
+> operate on that inode.
+> May I ask if this patch has any other concerns or drawbacks that need
+> to be considered?
+>=20
+> Best regards,
+> Chengen Du
 
-thanks a lot
+No complaints. The patch has already been merged into 6.2-rc3.
 
-qi feng <fengqi706@gmail.com> =E4=BA=8E2023=E5=B9=B41=E6=9C=8810=E6=97=A5=
-=E5=91=A8=E4=BA=8C 17:53=E5=86=99=E9=81=93=EF=BC=9A
->
-> loop more
->
->
-> Qi Feng <fengqi706@gmail.com> =E4=BA=8E2023=E5=B9=B41=E6=9C=889=E6=97=A5=
-=E5=91=A8=E4=B8=80 20:32=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > From: fengqi <fengqi@xiaomi.com>
-> >
-> > Our HID device need KEY_CAMERA_FOCUS event to control camera, but this
-> > event is non-existent in current HID driver.
-> > So we add this event in hid-input.c
-> >
-> > Signed-off-by: fengqi <fengqi@xiaomi.com>
+Thanks!
+  Trond
+
+>=20
+> On Fri, Dec 30, 2022 at 11:05 AM Chengen Du
+> <chengen.du@canonical.com> wrote:
+> >=20
+> > If the user's login time is newer than the cache's timestamp,
+> > we expect the cache may be stale and need to clear.
+> > The stale cache will remain in the list's tail if no other
+> > users operate on that inode.
+> > Once the user accesses the inode, the stale cache will be
+> > returned in rcu path.
+> >=20
+> > Signed-off-by: Chengen Du <chengen.du@canonical.com>
 > > ---
-> >  drivers/hid/hid-input.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-> > index 9b59e436df0a..22cca3406b5c 100644
-> > --- a/drivers/hid/hid-input.c
-> > +++ b/drivers/hid/hid-input.c
-> > @@ -1105,6 +1105,7 @@ static void hidinput_configure_usage(struct hid_i=
-nput *hidinput, struct hid_fiel
-> >                 case 0x0e5: map_key_clear(KEY_BASSBOOST);       break;
-> >                 case 0x0e9: map_key_clear(KEY_VOLUMEUP);        break;
-> >                 case 0x0ea: map_key_clear(KEY_VOLUMEDOWN);      break;
-> > +               case 0x0ee: map_key_clear(KEY_CAMERA_FOCUS);    break;
-> >                 case 0x0f5: map_key_clear(KEY_SLOW);            break;
-> >
-> >                 case 0x181: map_key_clear(KEY_BUTTONCONFIG);    break;
+> > =C2=A0fs/nfs/dir.c | 3 +++
+> > =C2=A01 file changed, 3 insertions(+)
+> >=20
+> > diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+> > index ea1ceffa1d3a..d490d64a9ebd 100644
+> > --- a/fs/nfs/dir.c
+> > +++ b/fs/nfs/dir.c
+> > @@ -3023,6 +3023,7 @@ static int nfs_access_get_cached_rcu(struct
+> > inode *inode, const struct cred *cre
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * but do it without lo=
+cking.
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct nfs_inode *nfsi =3D N=
+FS_I(inode);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 login_time =3D nfs_access_log=
+in_time(current, cred);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct nfs_access_entry *cac=
+he;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int err =3D -ECHILD;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct list_head *lh;
+> > @@ -3037,6 +3038,8 @@ static int nfs_access_get_cached_rcu(struct
+> > inode *inode, const struct cred *cre
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 cache =3D NULL;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cache =3D=3D NULL)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 goto out;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if ((s64)(login_time - cache->tim=
+estamp) > 0)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 goto out;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (nfs_check_cache_invalid(=
+inode, NFS_INO_INVALID_ACCESS))
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 goto out;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *mask =3D cache->mask;
 > > --
-> > 2.39.0
-> >
+> > 2.37.2
+> >=20
+
+--=20
+Trond Myklebust
+Linux NFS client maintainer, Hammerspace
+trond.myklebust@hammerspace.com
+
+
