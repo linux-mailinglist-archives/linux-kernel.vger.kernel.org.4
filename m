@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAE5667C36
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E50667C39
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238093AbjALRJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
+        id S239336AbjALRJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 12:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbjALRI2 (ORCPT
+        with ESMTP id S240637AbjALRI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:08:28 -0500
+        Thu, 12 Jan 2023 12:08:57 -0500
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7E7FCC7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 08:46:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2051A832;
+        Thu, 12 Jan 2023 08:47:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673542013; x=1705078013;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=QUm1Czj0YnOOgOfeeDBq5rMXb7QLlxqM+dF40uIvsJk=;
-  b=JIBFw00O14kGU2l2V64U2E5xeTlbgj5VKLcKuni4WoDR10aOqTxtKn/M
-   lXg0oFDEf1ufRFpcymTaPWkRLFwKffeczwtUKVXU5GrBUx4xXtIimo+hI
-   qRjwX0we20bqzzlBjufc2n6RGpdrnf1ve8AGf5/Qqn1LTYVnTummDn5uS
-   QuX3WlFEbpTA/Ojm8n53IYfAMth4fMxX61SxllZ7JGuZEptl2qQ5Fmb2R
-   ZwOG6BrO/GdwRNztn14Vsg4LfAg9Le+YRTcKw0oowHWdvC8SPF+Vm2Obg
-   eEIa9y72LKNYbVFIjJw4EhWTL29anEizHQpzzZ9CjEyCiZo5zDAPBMhHY
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="323815832"
+  t=1673542027; x=1705078027;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uTtpqbs68rShmkDSI1vyCj6yrqANpKz7x55qoU4avXo=;
+  b=WFs5Ls+RbWeVF6TVF1nAFCVawxHrD7OVp9NUdNLQioz6nUVqfbA2abu0
+   JB8nH6uD41QV/WMl3dDmGr12p65TLWWFZitL6K/uKDhOAQgR/nJP1o3zf
+   6znD8QI2zqnJn1XRxRWTpCJWWxa4I06athiayXrxaN54t2W1ypZrrKz3p
+   ZiW1ynZf8/Mzz6v4vJ+wQMyUpdcTyVcd4RQpA26F5JDIdwlqwtxBbBCI/
+   MSsUIboBxiezQZi3sAvDZNETpLoOgP7acbww579tgig1v9x/qk3RPyeT2
+   1Xkxadl81RBGJMU+/BTqZYsjLjffZprHTbo80Q11C9e73cClpORnBAPRV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="323816269"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="323815832"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:42:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="607858038"
+   d="scan'208";a="323816269"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:44:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="986658314"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="607858038"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 12 Jan 2023 08:42:54 -0800
-Received: from [10.252.213.111] (kliang2-mobl1.ccr.corp.intel.com [10.252.213.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 15DAB5808AB;
-        Thu, 12 Jan 2023 08:42:52 -0800 (PST)
-Message-ID: <e7a99c0f-eacc-d27f-e0f6-661350e6d74b@linux.intel.com>
-Date:   Thu, 12 Jan 2023 11:42:51 -0500
+   d="scan'208";a="986658314"
+Received: from ls.sc.intel.com (HELO localhost) ([143.183.96.54])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:44:15 -0800
+From:   isaku.yamahata@intel.com
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: [RFC PATCH v3 00/16] KVM TDX: TDP MMU: large page support
+Date:   Thu, 12 Jan 2023 08:43:52 -0800
+Message-Id: <cover.1673541292.git.isaku.yamahata@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/7] iommu/vt-d: Support size of the register set in DRHD
-To:     Baolu Lu <baolu.lu@linux.intel.com>, joro@8bytes.org,
-        will@kernel.org, dwmw2@infradead.org, robin.murphy@arm.com,
-        robert.moore@intel.com, rafael.j.wysocki@intel.com,
-        lenb@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230111202504.378258-1-kan.liang@linux.intel.com>
- <20230111202504.378258-2-kan.liang@linux.intel.com>
- <367345ad-33cc-2268-63e1-979299d42c2e@linux.intel.com>
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <367345ad-33cc-2268-63e1-979299d42c2e@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,173 +60,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Isaku Yamahata <isaku.yamahata@intel.com>
 
+Changes from v2:
+- implemented page merging path
+- rebased to TDX KVM v11
 
-On 2023-01-12 7:42 a.m., Baolu Lu wrote:
-> On 2023/1/12 4:24, kan.liang@linux.intel.com wrote:
->> From: Kan Liang <kan.liang@linux.intel.com>
->>
->> A new field, which indicates the size of the remapping hardware register
->> set for this remapping unit, is introduced in the DMA-remapping hardware
->> unit definition (DRHD) structure with the VT-d Spec 4.0.
->> With the information, SW doesn't need to 'guess' the size of the
->> register set anymore.
->>
->> Update the struct acpi_dmar_hardware_unit to reflect the field.
->>
->> Store the size of the register set in struct dmar_drhd_unit for each
->> dmar device.
->>
->> The 'size' information is ResvZ for the old BIOS and platforms. Fall
->> back to the old guessing method. There is nothing changed.
->>
->> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
->> ---
->>   drivers/iommu/intel/dmar.c | 25 ++++++++++++++++++-------
->>   include/acpi/actbl1.h      |  2 +-
->>   include/linux/dmar.h       |  1 +
->>   3 files changed, 20 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
->> index b00a0ceb2d13..6a411d964474 100644
->> --- a/drivers/iommu/intel/dmar.c
->> +++ b/drivers/iommu/intel/dmar.c
->> @@ -399,6 +399,13 @@ dmar_find_dmaru(struct acpi_dmar_hardware_unit
->> *drhd)
->>       return NULL;
->>   }
->>   +/* The size of the register set is 2 ^ N 4 KB pages. */
->> +static unsigned long
->> +dmar_get_drhd_reg_size(u8 npages)
-> 
-> No need to divide it into two lines. Or put this line of code directly
-> where it is called?
-> 
->> +{
->> +    return 1UL << (npages + 12);
->> +}
->> +
->>   /*
->>    * dmar_parse_one_drhd - parses exactly one DMA remapping hardware
->> definition
->>    * structure which uniquely represent one DMA remapping hardware unit
->> @@ -427,6 +434,7 @@ static int dmar_parse_one_drhd(struct
->> acpi_dmar_header *header, void *arg)
->>       memcpy(dmaru->hdr, header, header->length);
->>       dmaru->reg_base_addr = drhd->address;
->>       dmaru->segment = drhd->segment;
->> +    dmaru->reg_size = dmar_get_drhd_reg_size(drhd->size);
->>       dmaru->include_all = drhd->flags & 0x1; /* BIT0: INCLUDE_ALL */
->>       dmaru->devices = dmar_alloc_dev_scope((void *)(drhd + 1),
->>                             ((void *)drhd) + drhd->header.length,
->> @@ -880,6 +888,7 @@ dmar_validate_one_drhd(struct acpi_dmar_header
->> *entry, void *arg)
->>       struct acpi_dmar_hardware_unit *drhd;
->>       void __iomem *addr;
->>       u64 cap, ecap;
->> +    unsigned long size;
->>         drhd = (void *)entry;
->>       if (!drhd->address) {
->> @@ -887,10 +896,11 @@ dmar_validate_one_drhd(struct acpi_dmar_header
->> *entry, void *arg)
->>           return -EINVAL;
->>       }
->>   +    size = dmar_get_drhd_reg_size(drhd->size);
->>       if (arg)
->> -        addr = ioremap(drhd->address, VTD_PAGE_SIZE);
->> +        addr = ioremap(drhd->address, size);
->>       else
->> -        addr = early_ioremap(drhd->address, VTD_PAGE_SIZE);
->> +        addr = early_ioremap(drhd->address, size);
->>       if (!addr) {
->>           pr_warn("Can't validate DRHD address: %llx\n", drhd->address);
->>           return -EINVAL;
->> @@ -902,7 +912,7 @@ dmar_validate_one_drhd(struct acpi_dmar_header
->> *entry, void *arg)
->>       if (arg)
->>           iounmap(addr);
->>       else
->> -        early_iounmap(addr, VTD_PAGE_SIZE);
->> +        early_iounmap(addr, size);
->>         if (cap == (uint64_t)-1 && ecap == (uint64_t)-1) {
->>           warn_invalid_dmar(drhd->address, " returns all ones");
-> 
-> The cap and ecap registers are always in the first page. Just map one
-> 4K page is enough. There is no need to change it?
+Changes from v1:
+- implemented page merging path
+- rebased to UPM v10
+- rebased to TDX KVM v10
+- rebased to kvm.git queue + v6.1-rc8
 
-Right, one page should be enough for cap and ecap.
+---
+This patch series is based on "v11 KVM TDX: basic feature support".  It
+implements large page support for TDP MMU by allowing populating of the large
+page and splitting it when necessary.
 
-The perf cap will be checked in the alloc_iommu_pmu() of patch 2. If it
-fails, it should not impact the existing features. No need to change
-here. I will update it in V2.
+Feedback for options to merge sub-pages into a large page are welcome.
 
-After the change, there will be only one place which invokes
-dmar_get_drhd_reg_size(). I will move it to the place as well.
+Remaining TODOs
+===============
+* Make nx recovery thread useTDH.MEM.RANGE.BLOCK instead of zapping EPT entry.
+* Record that the entry is blocked by introducing a bit in spte.  On EPT
+  violation, check if the entry is blocked or not.  If the EPT violation is
+  caused by a blocked Secure-EPT entry, trigger the page merge logic.
 
-> 
->> @@ -956,17 +966,18 @@ static void unmap_iommu(struct intel_iommu *iommu)
->>   /**
->>    * map_iommu: map the iommu's registers
->>    * @iommu: the iommu to map
->> - * @phys_addr: the physical address of the base resgister
->> + * @drhd: DMA remapping hardware definition structure
->>    *
->>    * Memory map the iommu's registers.  Start w/ a single page, and
->>    * possibly expand if that turns out to be insufficent.
->>    */
->> -static int map_iommu(struct intel_iommu *iommu, u64 phys_addr)
->> +static int map_iommu(struct intel_iommu *iommu, struct dmar_drhd_unit
->> *drhd)
->>   {
->> +    u64 phys_addr = drhd->reg_base_addr;
->>       int map_size, err=0;
->>         iommu->reg_phys = phys_addr;
->> -    iommu->reg_size = VTD_PAGE_SIZE;
->> +    iommu->reg_size = drhd->reg_size;
->>         if (!request_mem_region(iommu->reg_phys, iommu->reg_size,
->> iommu->name)) {
->>           pr_err("Can't reserve memory\n");
->> @@ -1050,7 +1061,7 @@ static int alloc_iommu(struct dmar_drhd_unit *drhd)
->>       }
->>       sprintf(iommu->name, "dmar%d", iommu->seq_id);
->>   -    err = map_iommu(iommu, drhd->reg_base_addr);
->> +    err = map_iommu(iommu, drhd);
->>       if (err) {
->>           pr_err("Failed to map %s\n", iommu->name);
->>           goto error_free_seq_id;
->> diff --git a/include/acpi/actbl1.h b/include/acpi/actbl1.h
->> index 4175dce3967c..bdded0ac46eb 100644
->> --- a/include/acpi/actbl1.h
->> +++ b/include/acpi/actbl1.h
->> @@ -802,7 +802,7 @@ struct acpi_dmar_pci_path {
->>   struct acpi_dmar_hardware_unit {
->>       struct acpi_dmar_header header;
->>       u8 flags;
->> -    u8 reserved;
->> +    u8 size;        /* Size of the register set */
->>       u16 segment;
->>       u64 address;        /* Register Base Address */
->>   };
->> diff --git a/include/linux/dmar.h b/include/linux/dmar.h
->> index d81a51978d01..51d498f0a02b 100644
->> --- a/include/linux/dmar.h
->> +++ b/include/linux/dmar.h
->> @@ -46,6 +46,7 @@ struct dmar_drhd_unit {
->>       u8    include_all:1;
->>       u8    gfx_dedicated:1;    /* graphic dedicated    */
->>       struct intel_iommu *iommu;
->> +    unsigned long reg_size;        /* size of register set */
-> 
-> Move it up and pair it with reg_base_addr.
+Splitting large pages when necessary
+====================================
+* It already tracking whether GFN is private or shared.  When it's changed,
+  update lpage_info to prevent a large page.
+* TDX provides page level on Secure EPT violation.  Pass around the page level
+  that the lower level functions needs.
+* Even if the page is the large page in the host, at the EPT level, only some
+  sub-pages are mapped.  In such cases abandon to map large pages and step into
+  the sub-page level, unlike the conventional EPT.
+* When zapping spte and the spte is for a large page, split and zap it unlike
+  the conventional EPT because otherwise the protected page contents will be
+  lost.
 
-Sure.
+Merging small pages into a large page if possible
+=================================================
+On normal EPT violation, check whether pages can be merged into a large page
+after mapping it.
+
+TDX operation
+=============
+The following describes what TDX operations procedures.
+
+* EPT violation trick
+Such track (zapping the EPT entry to trigger EPT violation) doesn't work for
+TDX.  For TDX, it will lose the contents of the protected page to zap a page
+because the protected guest page is un-associated from the guest TD.  Instead,
+TDX provides a different way to trigger EPT violation without losing the page
+contents so that VMM can detect guest TD activity by blocking/unblocking
+Secure-EPT entry.  TDH.MEM.RANGE.BLOCK and TDH.MEM.RANGE.UNBLOCK.  They
+correspond to clearing/setting a present bit in an EPT entry with page contents
+still kept.  By TDH.MEM.RANGE.BLOCK and TLB shoot down, VMM can cause guest TD
+to trigger EPT violation.  After that, VMM can unblock it by
+TDH.MEM.RANGE.UNBLOCK and resume guest TD execution.  The procedure is as
+follows.
+
+  - Block Secure-EPT entry by TDH.MEM.RANGE.BLOCK.
+  - TLB shoot down.
+  - Wait for guest TD to trigger EPT violation.
+  - Unblock Secure-EPT entry by TDH.MEM.RANGE.UNBLOCK to resume the guest TD.
+
+* merging sub-pages into a large page
+The following steps are needed.
+- Ensure that all sub-pages are mapped.
+- TLB shoot down.
+- Merge sub-pages into a large page (TDH.MEM.PAGE.PROMOTE).
+  This requires all sub-pages are mapped.
+- Cache flush Secure EPT page used to map subpages.
 
 Thanks,
-Kan
-> 
->>   };
->>     struct dmar_pci_path {
-> 
-> -- 
-> Best regards,
-> baolu
+
+Isaku Yamahata (4):
+  KVM: x86/tdp_mmu: Allocate private page table for large page split
+  KVM: x86/tdp_mmu: Try to merge pages into a large page
+  KVM: x86/tdp_mmu: TDX: Implement merge pages into a large page
+  KVM: x86/mmu: Make kvm fault handelr aware of large page of private
+    memslot
+
+Xiaoyao Li (12):
+  KVM: TDP_MMU: Go to next level if smaller private mapping exists
+  KVM: TDX: Pass page level to cache flush before TDX SEAMCALL
+  KVM: TDX: Pass KVM page level to tdh_mem_page_add() and
+    tdh_mem_page_aug()
+  KVM: TDX: Pass size to tdx_measure_page()
+  KVM: TDX: Pass size to reclaim_page()
+  KVM: TDX: Update tdx_sept_{set,drop}_private_spte() to support large
+    page
+  KVM: MMU: Introduce level info in PFERR code
+  KVM: TDX: Pin pages via get_page() right before ADD/AUG'ed to TDs
+  KVM: TDX: Pass desired page level in err code for page fault handler
+  KVM: x86/tdp_mmu: Split the large page when zap leaf
+  KVM: x86/tdp_mmu, TDX: Split a large page when 4KB page within it
+    converted to shared
+  KVM: TDX: Allow 2MB large page for TD GUEST
+
+ arch/x86/include/asm/kvm-x86-ops.h |   3 +
+ arch/x86/include/asm/kvm_host.h    |  10 ++
+ arch/x86/kvm/mmu/mmu.c             |  50 ++++--
+ arch/x86/kvm/mmu/mmu_internal.h    |  24 +++
+ arch/x86/kvm/mmu/tdp_iter.c        |  37 +++--
+ arch/x86/kvm/mmu/tdp_iter.h        |   2 +
+ arch/x86/kvm/mmu/tdp_mmu.c         | 252 ++++++++++++++++++++++++++---
+ arch/x86/kvm/vmx/common.h          |   6 +-
+ arch/x86/kvm/vmx/tdx.c             | 226 ++++++++++++++++++++------
+ arch/x86/kvm/vmx/tdx_arch.h        |  21 +++
+ arch/x86/kvm/vmx/tdx_errno.h       |   2 +
+ arch/x86/kvm/vmx/tdx_ops.h         |  50 ++++--
+ arch/x86/kvm/vmx/vmx.c             |   2 +-
+ 13 files changed, 572 insertions(+), 113 deletions(-)
+
+-- 
+2.25.1
+
