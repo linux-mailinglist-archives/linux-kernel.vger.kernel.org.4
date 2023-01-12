@@ -2,201 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160C46686C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 919F96686C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbjALWVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 17:21:08 -0500
+        id S233096AbjALWV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 17:21:57 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240369AbjALWUb (ORCPT
+        with ESMTP id S240218AbjALWVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 17:20:31 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8E552766;
-        Thu, 12 Jan 2023 14:12:18 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3E575492;
-        Thu, 12 Jan 2023 23:12:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673561535;
-        bh=WKb7PjpijPCeADGDSLwNKrwCukiFw3bYyk+iBS8t5PE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ityaP45gJtE3/cfT9to28giYpd17HqKgcBKsVodLjzs/2avOGOUqMf9s5IEyNjal5
-         TH4NDzycyjMPLXqLfE9+0itysOvluh3TmbaKzB1K1PIpm+ht7Q5mVg0wYi+KI1wF72
-         8wcxySlGrVlpi+JM5CD63oNVVX9wMDusyvCdPRlM=
-Date:   Fri, 13 Jan 2023 00:12:14 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hans Verkuil <hans.verkuil@cisco.com>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/8] media: uvcvideo: Check for INACTIVE in
- uvc_ctrl_is_accessible()
-Message-ID: <Y8CFvgmcqHOiE7QY@pendragon.ideasonboard.com>
-References: <20220920-resend-v4l2-compliance-v3-0-598d33a15815@chromium.org>
- <20220920-resend-v4l2-compliance-v3-1-598d33a15815@chromium.org>
+        Thu, 12 Jan 2023 17:21:04 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8873DBE9;
+        Thu, 12 Jan 2023 14:13:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4BF3DCE1FB1;
+        Thu, 12 Jan 2023 22:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B72C433EF;
+        Thu, 12 Jan 2023 22:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673561598;
+        bh=IyvF0BxsMmhma6RD34MZNc77IvFpsK+etkEmiGHVLnY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=kVwVQqMiR9G52IokCOKWkEbQwIS7Asg0wyGtvtYj4f+cxfudAAG6QOohjCOpXVPN8
+         VhQS7Q/zmDboFHdNoRpb5rpH6RLqqOY9CgDqCv1GMdxf2Lfz6cCIbX5IC1tz6hK4Np
+         nSEILuDZ/vU+9BhZE6H0BIwXl8rlxOyUb4L7ThTjhyqz2GRhJPQCVCqVrnXcjVwjOa
+         51sZSJY1J2jEW8R1m0NtrwX/hEFto+XYw0TAvXflfYs2+Uz/hJxTTtvBKS3tfSuSkD
+         xRIihpdYVAAKR2VkTfyfJjAMGUmYdjNug2/IkgDPtKv3iFzH0L2ugiWu3PH1XWzinw
+         1aC0ekzyzLlRA==
+Date:   Thu, 12 Jan 2023 16:13:16 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jiantao Zhang <water.zhangjiantao@huawei.com>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhangjianrong5@huawei.com,
+        suzhuangluan@hisilicon.com, caiyadong@huawei.com,
+        guhengsheng@hisilicon.com, songxiaowei@hisilicon.com
+Subject: Re: [PATCH] PCI: Exit restore process when device is still powerdown
+Message-ID: <20230112221316.GA1797087@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220920-resend-v4l2-compliance-v3-1-598d33a15815@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221222124104.69607-1-water.zhangjiantao@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On Thu, Dec 22, 2022 at 12:41:04PM +0000, Jiantao Zhang wrote:
+> We get this stack when the rp doesn't power up in resume noirq:
 
-On Tue, Jan 03, 2023 at 03:36:19PM +0100, Ricardo Ribalda wrote:
-> From: Hans Verkuil <hverkuil@xs4all.nl>
+s/rp/Root Port/
 
-There's a mismatch between the From and Signed-off-by tag. Which one
-should I modify to match the other ?
+"resume noirq" seems to refer to a function, so please mention the
+exact function name.
 
-> Check for inactive controls in uvc_ctrl_is_accessible().
+>     dump_backtrace.cfi_jt+0x0/0x4
+>     dump_stack_lvl+0xb4/0x10c
+>     show_regs_before_dump_stack+0x1c/0x30
+>     arm64_serror_panic+0x110/0x1a8
+>     do_serror+0x16c/0x1cc
+>     el1_error+0x8c/0x10c
+>     do_raw_spin_unlock+0x74/0xdc
+>     pci_bus_read_config_word+0xdc/0x1dc
+>     pci_restore_msi_state+0x2f4/0x36c
+>     pci_restore_state+0x13f0/0x1444
+>     pci_pm_resume_noirq+0x158/0x318
+>     dpm_run_callback+0x178/0x5e8
+>     device_resume_noirq+0x250/0x264
+>     async_resume_noirq+0x20/0xf8
+>     async_run_entry_fn+0xfc/0x364
+>     process_one_work+0x37c/0x7f4
+>     worker_thread+0x3e8/0x754
+>     kthread+0x168/0x204
+>     ret_from_fork+0x10/0x18
+> The ep device uses msix, the restore process will write bar space
+> in __pci_msix_desc_mask_irq, which will result in accessing the
+> powerdown area when the rp doesn't power on.
+
+s/ep/endpoint/
+s/msix/MSI-X/ to match spec usage
+s/bar/BAR/
+Add "()" after function names, e.g., __pci_msix_desc_mask_irq()
+s/rp/Root Port/
+
+> It makes sense we should do nothing when the device is still powerdown.
 > 
-> Use the new value for the master_id controls if present, otherwise
-> use the existing value to determine if it is OK to set the control.
-> Doing this here avoids attempting to set an inactive control, which
-> will return an error from the USB device, which returns an invalid
-> errorcode.
-> 
-> This fixes:
->   warn: v4l2-test-controls.cpp(483): s_ctrl returned EIO
->   warn: v4l2-test-controls.cpp(483): s_ctrl returned EIO
-> test VIDIOC_G/S_CTRL: OK
->   warn: v4l2-test-controls.cpp(739): s_ext_ctrls returned EIO
->   warn: v4l2-test-controls.cpp(739): s_ext_ctrls returned EIO
->   warn: v4l2-test-controls.cpp(816): s_ext_ctrls returned EIO
-> test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-> 
-> Tested with:
-> v4l2-ctl -c auto_exposure=1
-> OK
-> v4l2-ctl -c exposure_time_absolute=251
-> OK
-> v4l2-ctl -c auto_exposure=3
-> OK
-> v4l2-ctl -c exposure_time_absolute=251
-> VIDIOC_S_EXT_CTRLS: failed: Input/output error
-> exposure_time_absolute: Input/output error
-> ERROR
-> v4l2-ctl -c auto_exposure=3,exposure_time_absolute=251,auto_exposure=1
-> v4l2-ctl -C auto_exposure,exposure_time_absolute  
-> auto_exposure: 1
-> exposure_time_absolute: 251
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-> Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
+> Signed-off-by: Jianrong Zhang <zhangjianrong5@huawei.com>
+> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
 > ---
->  drivers/media/usb/uvc/uvc_ctrl.c | 42 +++++++++++++++++++++++++++++++++++++++-
->  drivers/media/usb/uvc/uvc_v4l2.c |  3 +--
->  drivers/media/usb/uvc/uvcvideo.h |  3 ++-
->  3 files changed, 44 insertions(+), 4 deletions(-)
+>  drivers/pci/pci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index c95a2229f4fa..6165d6b8e855 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -1085,11 +1085,28 @@ static int uvc_query_v4l2_class(struct uvc_video_chain *chain, u32 req_id,
->  	return 0;
->  }
->  
-> +/*
-> + * Check if control @v4l2_id can be accessed by the given control @ioctl
-> + * (VIDIOC_G_EXT_CTRLS, VIDIOC_TRY_EXT_CTRLS or VIDIOC_S_EXT_CTRLS).
-> + *
-> + * For set operations on slave controls, check if the master's value is set to
-> + * manual, either in the others controls set in the same ioctl call, or from
-> + * the master's current value. This catches VIDIOC_S_EXT_CTRLS calls that
-> + * set both the master and slave control, such as for instance setting
-> + * auto_exposure=1, exposure_time_absolute=251.
-> + */
->  int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
-> -			   bool read)
-> +			   const struct v4l2_ext_controls *ctrls,
-> +			   unsigned long ioctl)
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index fba95486caaf..279f6e8c5a00 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -1764,7 +1764,7 @@ static void pci_restore_rebar_state(struct pci_dev *pdev)
+>   */
+>  void pci_restore_state(struct pci_dev *dev)
 >  {
-> +	struct uvc_control_mapping *master_map = NULL;
-> +	struct uvc_control *master_ctrl = NULL;
->  	struct uvc_control_mapping *mapping;
->  	struct uvc_control *ctrl;
-> +	bool read = ioctl == VIDIOC_G_EXT_CTRLS;
-> +	s32 val;
-> +	int ret;
-> +	int i;
->  
->  	if (__uvc_query_v4l2_class(chain, v4l2_id, 0) >= 0)
->  		return -EACCES;
-> @@ -1104,6 +1121,29 @@ int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
->  	if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR) && !read)
->  		return -EACCES;
->  
-> +	if (ioctl != VIDIOC_S_EXT_CTRLS || !mapping->master_id)
-> +		return 0;
-> +
-> +	/*
-> +	 * Iterate backwards in cases where the master control is accessed
-> +	 * multiple times in the same ioctl. We want the last value.
-> +	 */
-> +	for (i = ctrls->count - 1; i >= 0; i--) {
-> +		if (ctrls->controls[i].id == mapping->master_id)
-> +			return ctrls->controls[i].value ==
-> +					mapping->master_manual ? 0 : -EACCES;
-> +	}
-> +
-> +	__uvc_find_control(ctrl->entity, mapping->master_id, &master_map,
-> +			   &master_ctrl, 0);
-> +
-> +	if (!master_ctrl || !(master_ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR))
-> +		return 0;
-> +
-> +	ret = __uvc_ctrl_get(chain, master_ctrl, master_map, &val);
-> +	if (ret >= 0 && val != mapping->master_manual)
-> +		return -EACCES;
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> index f4d4c33b6dfb..3edb54c086b2 100644
-> --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> @@ -1020,8 +1020,7 @@ static int uvc_ctrl_check_access(struct uvc_video_chain *chain,
->  	int ret = 0;
->  
->  	for (i = 0; i < ctrls->count; ++ctrl, ++i) {
-> -		ret = uvc_ctrl_is_accessible(chain, ctrl->id,
-> -					    ioctl == VIDIOC_G_EXT_CTRLS);
-> +		ret = uvc_ctrl_is_accessible(chain, ctrl->id, ctrls, ioctl);
->  		if (ret)
->  			break;
->  	}
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index df93db259312..a151f583cd15 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -761,7 +761,8 @@ static inline int uvc_ctrl_rollback(struct uvc_fh *handle)
->  int uvc_ctrl_get(struct uvc_video_chain *chain, struct v4l2_ext_control *xctrl);
->  int uvc_ctrl_set(struct uvc_fh *handle, struct v4l2_ext_control *xctrl);
->  int uvc_ctrl_is_accessible(struct uvc_video_chain *chain, u32 v4l2_id,
-> -			   bool read);
-> +			   const struct v4l2_ext_controls *ctrls,
-> +			   unsigned long ioctl);
->  
->  int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
->  		      struct uvc_xu_control_query *xqry);
-> 
+> -	if (!dev->state_saved)
+> +	if (!dev->state_saved || dev->current_state == PCI_UNKNOWN)
+>  		return;
 
--- 
-Regards,
+This doesn't seem right to me because it seems like we're covering up
+a problem elsewhere.
 
-Laurent Pinchart
+If we need access to the endpoint to restore state, shouldn't we
+ensure that the endpoint is powered up before we try to access it?
+
+We depend on the state being restored, so if we skip the restore here,
+where *will* it happen?
+
+Bjorn
