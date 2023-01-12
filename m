@@ -2,142 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB70E6673C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C356673C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbjALN5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 08:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S231443AbjALN53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 08:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbjALN5Y (ORCPT
+        with ESMTP id S230519AbjALN5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 08:57:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DE149149;
-        Thu, 12 Jan 2023 05:57:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E6ACB81E69;
-        Thu, 12 Jan 2023 13:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80EB7C433EF;
-        Thu, 12 Jan 2023 13:57:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673531841;
-        bh=RpE3C9hcWr3R39LG47mt9CWEyjptD/q/m5p2Q6P2QAE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eT/4zX8EYf7X4OyWxRE7uhETbuJ46o540NZzn1UG/1EbREKpETk14IP3KYFkkwwia
-         MpoaeHMjTYnYal86CGZcjdr4YkxP0Ii4ubiyYYV7WabRcVLBV4ztAOpGlHfUEBw3wY
-         5dw5Jrw39Ke4CaNKoJC/PbMCXgF7MUpXoTIq1JUM=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 5.15 00/10] 5.15.88-rc1 review
-Date:   Thu, 12 Jan 2023 14:56:37 +0100
-Message-Id: <20230112135326.689857506@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.0
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A7D48CEE
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:57:23 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z11so26974106ede.1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:57:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=lAIJYoaT0aDl15YG3H1eMEMaYgD5WX/ORv2kxg7sdSw=;
+        b=EiNxkia7GsR7QRi+Wd0ov/5Z9F8SvDTbRlXeI6n9fpTjMSpvusaGH4Z4ikneokmx4h
+         9AJ/lD2QQLqk3AESNWWmx+vNX7X/y05xXDryrVyuG/HU71zp+ccBgmFKuDihdgeBVqP/
+         kR62ZcBcE5lSXNtiPJ7LfXnvvPj4EG7NEqZpi1nS6oagEmzgXGl6kUHwLD5ACMjmiTWU
+         BSq4VVG4h5ygcq+GmvRodqbWAqsXrxbAiuUBkolrYF3ws4IEgtuIU5jeeV/GNyWbnnm6
+         de2mLw3xAv2wsf/O+3v+M2SHlwpj9z43Jf3vPzbqQm1lNbwE0Et37+K6goUknfrmXSEl
+         RqBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lAIJYoaT0aDl15YG3H1eMEMaYgD5WX/ORv2kxg7sdSw=;
+        b=nlbq8Do2R8Zg2sIKacWTs0rznv5geoBAqUIO/Z0FYpA4dr/2wpkWKbetD3cvjpQe6Y
+         zDL6uZlPenoJ+WYwQZA6wNlggKZ4HOVgl08zHQrCPHci4J421mnt8sHExFCeG8DYyxy+
+         HnbPNVVXD5tV6+NfXxdTVo7+ZYwt2CnVQvKtPT1aCf8oLMmPQL0Sqj77msRfE0wDdQ0v
+         3wf1wGb+H3lAF1i6twlQpHAJQtKL4h9JHxkP5pSyQv4FH3CZYcczZDX5jdrg6UCyqCVT
+         QbaJuI707t6yGnOf57LA4NkI0b2jZAuBwnZDCS6x+lWBv06qA1dDNDlsX4QjN4ZQOX+a
+         AEXA==
+X-Gm-Message-State: AFqh2ko/dPut43OnEfdi8ypHLlaTRu73gbLzfvidohB0Ovp+P7PxNysx
+        baBjn9rX2T8JC1YAW/N3zOU=
+X-Google-Smtp-Source: AMrXdXuPxZIkHJlRSR9HstBwA4XcVbGgOYYr+EwZ2ZqIgVCpXdqtj0yBeB9GCZNF7/IP3XpkNgaxLQ==
+X-Received: by 2002:a05:6402:685:b0:479:ab7d:1dad with SMTP id f5-20020a056402068500b00479ab7d1dadmr81650699edy.32.1673531841776;
+        Thu, 12 Jan 2023 05:57:21 -0800 (PST)
+Received: from gmail.com ([31.46.242.235])
+        by smtp.gmail.com with ESMTPSA id lb11-20020a170907784b00b007b935641971sm7346874ejc.5.2023.01.12.05.57.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 05:57:21 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Thu, 12 Jan 2023 14:57:17 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [GIT PULL] objtool fix
+Message-ID: <Y8ARvWVv5gXT88Ee@gmail.com>
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.88-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.15.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.15.88-rc1
-X-KernelTest-Deadline: 2023-01-14T13:53+00:00
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.15.88 release.
-There are 10 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+Linus,
 
-Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-Anything received after that time might be too late.
+Please pull the latest core/urgent git tree from:
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.88-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-and the diffstat can be found below.
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core-urgent-2023-01-12
 
-thanks,
+   # HEAD: cad90e5381d840cf2296aaac9b3eff71a30b7c5b objtool: Tolerate STT_NOTYPE symbols at end of section
 
-greg k-h
+- Fix objtool to be more permissive with hand-written assembly
+  that uses non-function symbols in executable sections.
 
--------------
-Pseudo-Shortlog of commits:
+ Thanks,
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.15.88-rc1
+	Ingo
 
-Paolo Abeni <pabeni@redhat.com>
-    net/ulp: prevent ULP without clone op from entering the LISTEN status
-
-Frederick Lawler <fred@cloudflare.com>
-    net: sched: disallow noqueue for qdisc classes
-
-Rasmus Villemoes <linux@rasmusvillemoes.dk>
-    serial: fixup backport of "serial: Deassert Transmit Enable on probe in driver-specific way"
-
-Kyle Huey <me@kylehuey.com>
-    selftests/vm/pkeys: Add a regression test for setting PKRU through ptrace
-
-Kyle Huey <me@kylehuey.com>
-    x86/fpu: Emulate XRSTOR's behavior if the xfeatures PKRU bit is not set
-
-Kyle Huey <me@kylehuey.com>
-    x86/fpu: Allow PKRU to be (once again) written by ptrace.
-
-Kyle Huey <me@kylehuey.com>
-    x86/fpu: Add a pkru argument to copy_uabi_to_xstate()
-
-Kyle Huey <me@kylehuey.com>
-    x86/fpu: Add a pkru argument to copy_uabi_from_kernel_to_xstate().
-
-Kyle Huey <me@kylehuey.com>
-    x86/fpu: Take task_struct* in copy_sigframe_from_user_to_xstate()
-
-Helge Deller <deller@gmx.de>
-    parisc: Align parisc MADV_XXX constants with all other architectures
+------------------>
+Nicholas Piggin (1):
+      objtool: Tolerate STT_NOTYPE symbols at end of section
 
 
--------------
+ tools/objtool/check.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Diffstat:
-
- Makefile                                     |   4 +-
- arch/parisc/include/uapi/asm/mman.h          |  27 +++---
- arch/parisc/kernel/sys_parisc.c              |  27 ++++++
- arch/parisc/kernel/syscalls/syscall.tbl      |   2 +-
- arch/x86/include/asm/fpu/xstate.h            |   4 +-
- arch/x86/kernel/fpu/regset.c                 |   2 +-
- arch/x86/kernel/fpu/signal.c                 |   2 +-
- arch/x86/kernel/fpu/xstate.c                 |  41 ++++++++-
- drivers/tty/serial/fsl_lpuart.c              |   2 +-
- drivers/tty/serial/serial_core.c             |   3 +-
- net/ipv4/inet_connection_sock.c              |  16 +++-
- net/ipv4/tcp_ulp.c                           |   4 +
- net/sched/sch_api.c                          |   5 +
- tools/arch/parisc/include/uapi/asm/mman.h    |  12 +--
- tools/perf/bench/bench.h                     |  12 ---
- tools/testing/selftests/vm/pkey-x86.h        |  12 +++
- tools/testing/selftests/vm/protection_keys.c | 131 ++++++++++++++++++++++++++-
- 17 files changed, 257 insertions(+), 49 deletions(-)
-
-
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 4350be739f4f..4b7c8b33069e 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -427,6 +427,15 @@ static int decode_instructions(struct objtool_file *file)
+ 			if (func->type != STT_NOTYPE && func->type != STT_FUNC)
+ 				continue;
+ 
++			if (func->offset == sec->sh.sh_size) {
++				/* Heuristic: likely an "end" symbol */
++				if (func->type == STT_NOTYPE)
++					continue;
++				WARN("%s(): STT_FUNC at end of section",
++				     func->name);
++				return -1;
++			}
++
+ 			if (func->return_thunk || func->alias != func)
+ 				continue;
+ 
