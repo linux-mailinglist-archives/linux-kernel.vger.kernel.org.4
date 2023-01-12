@@ -2,141 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7505667807
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DBBD66783A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240081AbjALOvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:51:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
+        id S240197AbjALOyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:54:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240034AbjALOvG (ORCPT
+        with ESMTP id S240227AbjALOxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:51:06 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3F213F97;
-        Thu, 12 Jan 2023 06:38:04 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id v10so25877051edi.8;
-        Thu, 12 Jan 2023 06:38:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FFSpdMe78nK3l1YFe11xcZzXqYj/l0qc+jemqR1MPsk=;
-        b=dTeOl3G7m7n9MPYNgkHsjIc534IOorjwhDQCc9RlcK0Ufy5LnpyKd62DmgZH732rbE
-         IRNNqmvudWTGLM+BgzkfBApfjCPHsamnyBeFvn+7ijFCavWXED3g9Ho0NrF1sghCZicm
-         kFBszPdBEHLl0NVbaPoIE2SYNnQsuAbgxjLnKmD1FpPfBHaveQJP2eU+VPMw49Ht8hT9
-         K1H5610vQd9pSgC1GOAVygnR+T23cWmPtIdBMz4rMFZ1BbZ64Cl4c0CNdahDEPRAKLrI
-         uS3mfXCaBqTJeIiFN3blkkXaes4d9CRCG/ZtQV0yHDmeQHVxPviueZJh+B5KKNV966B6
-         UClg==
-X-Gm-Message-State: AFqh2kqQIxJFTtVUoKdYHL9ub02slrJJBiYG9TwEcHgFGfEYgACyebZV
-        0aay5SNpPhM7+/s9xT+ziUmWX0Zu8mFWROgGfbM=
-X-Google-Smtp-Source: AMrXdXuQFrQM/eEp39x0D7y1DHfpG8qNEAyV9wY5kgdvXdnEvxaYKwqMREG0+UFK/nIMLHJp16MUdJpWipAxhNT0xEM=
-X-Received: by 2002:a05:6402:298b:b0:47f:7465:6e76 with SMTP id
- eq11-20020a056402298b00b0047f74656e76mr7256281edb.181.1673534283121; Thu, 12
- Jan 2023 06:38:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
- <20221129233419.4022830-3-srinivas.pandruvada@linux.intel.com>
- <e2af7a4b-99f4-f88e-fbe7-5d3595d6211b@linaro.org> <3e59c5216fad003f079224cd08a7da9b30f6365d.camel@linux.intel.com>
- <de6a5000-260e-bb4a-31c4-a0cfe533fad4@linaro.org> <8d3a9644657c8f0b54dd272fe0a4d640a8a6dfb9.camel@linux.intel.com>
-In-Reply-To: <8d3a9644657c8f0b54dd272fe0a4d640a8a6dfb9.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Jan 2023 15:37:51 +0100
-Message-ID: <CAJZ5v0jwrqcdG=95QmFCBrr0Ng0gqUXbKPUOk0Hz9wMz7A0HKg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] powercap: idle_inject: Add prepare/complete callbacks
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 12 Jan 2023 09:53:38 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8FD52773;
+        Thu, 12 Jan 2023 06:40:22 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 7521932006F5;
+        Thu, 12 Jan 2023 09:40:21 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 12 Jan 2023 09:40:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1673534421; x=1673620821; bh=Fp+f6gwmOY
+        W/VUxOaVKHtgR/0ujSroQTI/JM3utiJL0=; b=UKbmcqYxJeY8aH75bezSbBNof5
+        a53O9MU2/B0W8zRlOZOGyFZGBkhduRMh7AxcToFqvKUy7uMaj72phxLBoBZoJ2Ao
+        6/0kUs4kLy3NCutkKzx92iaxHIgbxfENQJe8hfwxEMQxovORD7vkDNjBohtZ7L0e
+        82qbt3kHtbrmYgKQQgRvLhxcjVbzH7w8HgpYV+NK/clx7L2h7TMPEE3bfcnpEp1y
+        QT4gOrg+hU7IwaPGvUjBLXcif91ipTK/2R58rZdzuVSIRRAibZvBJsUy0XWXkPDZ
+        Fw+ILBTuohIU+R1yuh05+Mxkmy4UHuhyyawvt5bsyJ6/Td6jSAgXc90+BnUg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673534421; x=1673620821; bh=Fp+f6gwmOYW/VUxOaVKHtgR/0ujS
+        roQTI/JM3utiJL0=; b=oKAjWnKmKr3hQeNAXPUXCnWAzVSSc/RNKsfCsP3ASwTd
+        cPZPwd3qN4TpkGk87Ul0Et62Ewc5NQwCG8MYKFJO1w2Kvy/5qNhusf2Hp5Waytbh
+        iHelp4bDSk56geZ31Nsi6VVb9L9325//+PgoXWNEoW7ZrAQUBCUZPXDv6sKTnj3B
+        15Sq69kV/Q9rnc95yeCK9m5yvnFRe1bVovKXoJIFmkMDLljJPqt56f4B1d4VTinb
+        xqJDdFkstl8QMsrKh5R/TCAdg0tv+hb+aH9aRn5knc3AebnA8eLx6YddIj2Wy2tz
+        sW3ZV/Oj0JGd6hlURdlYkCxQvW4/a6G9JVnKiovqcA==
+X-ME-Sender: <xms:0xvAY_htArAYL0d4dDDC5MjOBFp36BZq1ryknZFSHtfaKn589cWeOg>
+    <xme:0xvAY8C-a9jyXPlW6ZVZDMtdMkYnVkp-RfJY0vXTx6UW9whKQxvDHEHrdag6r4b5l
+    BbJACGGNMLYh_V1wHU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdeijecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:0xvAY_EPoUNtH0TS0adH-WZktf4EZ8A5-iAhC2C7rd-pcrb-rUL09w>
+    <xmx:0xvAY8S79XQRHphxwCZpfQpQImg2ix3jq54n9h8h5iWRuk-8DgYTGQ>
+    <xmx:0xvAY8zORuB3i3Lbg8ILYWUmEAJcMDs8dfzTqUKMP5a3NtqQdt8w6Q>
+    <xmx:1RvAY4dVwU9oawG4BlMYS2ttPz5SO6qdSnxg0Ol7XIgkgGrlIiAljA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 95776B60086; Thu, 12 Jan 2023 09:40:19 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <f8dca9d2-6e5e-4584-88b3-f71f62988dab@app.fastmail.com>
+In-Reply-To: <20230109180717.58855-5-casey@schaufler-ca.com>
+References: <20230109180717.58855-1-casey@schaufler-ca.com>
+ <20230109180717.58855-5-casey@schaufler-ca.com>
+Date:   Thu, 12 Jan 2023 15:40:00 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Casey Schaufler" <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, "Paul Moore" <paul@paul-moore.com>,
+        linux-security-module@vger.kernel.org
+Cc:     jmorris@namei.org, "Kees Cook" <keescook@chromium.org>,
+        john.johansen@canonical.com,
+        "Tetsuo Handa" <penguin-kernel@i-love.sakura.ne.jp>,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+Subject: Re: [PATCH v5 4/8] LSM: lsm_get_self_attr syscall for LSM self attributes
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 6:36 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Hi Daniel,
->
-> On Thu, 2022-12-22 at 10:50 +0100, Daniel Lezcano wrote:
-> >
-> > Hi Srinivas,
-> >
-> >
-> > On 21/12/2022 21:58, srinivas pandruvada wrote:
-> > > Hi Daniel,
-> > >
-> > > On Wed, 2022-12-21 at 15:52 +0100, Daniel Lezcano wrote:
-> > > >
-> > > > Hi Srinivas,
-> > > >
-> > > > On 30/11/2022 00:34, Srinivas Pandruvada wrote:
-> > > > > The actual idle percentage can be less than the desired because
-> > > > > of
-> > > > > interrupts. Since the objective for CPU Idle injection is for
-> > > > > thermal
-> > > > > control, there should be some way to compensate for lost idle
-> > > > > percentage.
-> > > > > Some architectures provide interface to get actual idle percent
-> > > > > observed
-> > > > > by the hardware. So, the idle percent can be adjusted using the
-> > > > > hardware
-> > > > > feedback. For example, Intel CPUs provides package idle
-> > > > > counters,
-> > > > > which
-> > > > > is currently used by intel powerclamp driver to adjust idle
-> > > > > time.
-> > > > Can you provide an example in terms of timings?
-> > > >
-> > > > I'm not getting how 'prepare' would do by returning a positive
-> > > > value
-> > > > to
-> > > > skip the play_idle_precise() and what will do 'complete' ?
-> > > >
-> > > intel_powerclamp has a logic where if the current idle percentage
-> > > observed from hardware is more than the desired target inject
-> > > percent,
-> > > it skips calling play_idle().
-> > >
-> > > For example if you want to inject 50% idle and system is naturally
-> > > idle
-> > > for 60%, there is no use of calling play_idle in the idle injection
-> > > framework to induce more idle. In this way a workload can run
-> > > immediately.
-> > >
-> > > So trying to emulate the same logic by using powercap/idle_inject
-> > > framework. So prepare() callback in the intel_powerclamp driver
-> > > calls
-> > > the existing function to check if idle-inject should skip for this
-> > > time
-> > > or not.
-> >
-> > The function 'prepare' has the 'cpu' parameter. How can it compare
-> > with
-> > the desired idle duration as this information is not passed to the
-> > callback ?
-> Good question.
->
-> Calling driver knows what idle_duration he set.
-> In my first version, I passed *idle_duration (with current
-> idle_duration set), so the caller can change this for the current
-> play_idle call if required for one time.
->
-> But in powerclamp case we either skip the whole play_idle or not. It
-> doesn't change idle duration. So didn't add.
->
-> But we can add this back.
+On Mon, Jan 9, 2023, at 19:07, Casey Schaufler wrote:
+> +/**
+> + * struct lsm_ctx - LSM context
+> + * @id: the LSM id number, see LSM_ID_XXX
+> + * @flags: context specifier and LSM specific flags
+> + * @ctx_len: the size of @ctx
+> + * @ctx: the LSM context, a nul terminated string
+> + *
+> + * @ctx in a nul terminated string.
+> + *	(strlen(@ctx) < @ctx_len) is always true.
+> + *	(strlen(@ctx) == @ctx_len + 1) is not guaranteed.
+> + */
+> +struct lsm_ctx {
+> +	__u32		id;
+> +	__u64		flags;
+> +	__kernel_size_t	ctx_len;
+> +	__u8		ctx[];
+> +};
 
-I don't think that it is necessary at this point.
+I think this should be changed to be the same layout on
+all architectures regardless of __u64 alignment and
+sizeof(__kernel_size_t) differences, to avoid the need
+for compat syscalls and explicit clearing of the
+internal padding.
 
-Since powerclamp is the only user and it doesn't need idle_duration, I
-would just not add it ATM.
+Maybe just use __u64 fields for all three integers?
 
-I have a couple of other comments to the patch, but let me send them separately.
+     Arnd
