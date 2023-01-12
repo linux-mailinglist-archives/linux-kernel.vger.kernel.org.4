@@ -2,209 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332F966757E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3BC6675A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236667AbjALOWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:22:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45636 "EHLO
+        id S236273AbjALOXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbjALOVf (ORCPT
+        with ESMTP id S236366AbjALOXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:21:35 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8EC5E668;
-        Thu, 12 Jan 2023 06:12:45 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30C9dqXG021075;
-        Thu, 12 Jan 2023 06:12:33 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pfpt0220; bh=o99ykTzML7zFN4dw9PwlFyBeheG3xAQZAUBYrVKdw+Q=;
- b=QGtfQloFjJ6FiR9nNL3gNjjZdNToltFUiCNX2UaNIHcvCY905Uy9HNqP3aSFcf1gMVX4
- X6nn77aq8Sqn45rp0tmp6+D1T4/ib+Kkajc3u9TzpnhH6hUjZbK5UDVw+PXMHF0L7I2y
- lftzcQgMn8zXx5GcoAi6cIUxgciXumwP1uyH202nkqcS5+4iOMVkE5bV1Oslen4wccoT
- hSHuYWMQs8+prhWwPlLRVlJUdkWI2Gy2BPbul8yFkUsHVMn7dOG9CCQ08XWCEtALGX/V
- ZfLfiqObRUlH3sr+Ffui3w/bLv2KQ3LayZsLrB6U6lFHru+Ydo047enyjFjxvVGq2ACp /g== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3n1k570dqk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 06:12:33 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 12 Jan
- 2023 06:12:31 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Thu, 12 Jan 2023 06:12:31 -0800
-Received: from Dell2s-9 (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id BCE3C3F7051;
-        Thu, 12 Jan 2023 06:12:30 -0800 (PST)
-Date:   Thu, 12 Jan 2023 06:12:30 -0800
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ulf.hansson@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <yamada.masahiro@socionext.com>, <devicetree@vger.kernel.org>,
-        <jannadurai@marvell.com>, <cchavva@marvell.com>
-Subject: Re: [PATCH 2/5] drivers: mmc: sdhci-cadence: enable
- MMC_SDHCI_IO_ACCESSORS
-Message-ID: <20230112141230.GB6335@Dell2s-9>
-References: <20221219142418.27949-1-pmalgujar@marvell.com>
- <20221219142418.27949-3-pmalgujar@marvell.com>
- <35ea0a7a-3d63-26b7-4dc3-69f6ca41909a@intel.com>
+        Thu, 12 Jan 2023 09:23:16 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9CC5A881
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:14:47 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pFyLt-0008E1-HX; Thu, 12 Jan 2023 15:14:45 +0100
+Message-ID: <57e2f165-4d4a-d8bc-47c0-1b0609cd2147@leemhuis.info>
+Date:   Thu, 12 Jan 2023 15:14:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <35ea0a7a-3d63-26b7-4dc3-69f6ca41909a@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-ORIG-GUID: mGrgC6KPVjgpf9ISHeeX3wrUQ79TflSH
-X-Proofpoint-GUID: mGrgC6KPVjgpf9ISHeeX3wrUQ79TflSH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-12_08,2023-01-12_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US, de-DE
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Hans de Goede <hdegoede@redhat.com>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     walter59 <walter.moeller@moeller-it.net>,
+        Adrien <kernel@asdrip.fr>, LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: =?UTF-8?Q?=5bregression=5d_Bug=c2=a0216904_-_backlight_brighness_co?=
+ =?UTF-8?Q?ntrol_with_video_missing_/sys/class/backlight_interface?=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673532887;2bdc721c;
+X-HE-SMSGID: 1pFyLt-0008E1-HX
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian, 
+Hi, this is your Linux kernel regression tracker.
 
-Thank you for the review comments.
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developer don't keep an eye on it, I decided to forward it by
+mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216904 :
 
-On Wed, Jan 11, 2023 at 10:23:43AM +0200, Adrian Hunter wrote:
-> On 19/12/22 16:24, Piyush Malgujar wrote:
-> > From: Jayanthi Annadurai <jannadurai@marvell.com>
-> > 
-> > Add support for CONFIG_MMC_SDHCI_IO_ACCESSORS for controller
-> > specific register read and write APIs.
-> > 
-> > Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
-> > Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-> > ---
-> >  drivers/mmc/host/Kconfig         | 12 ++++++
-> >  drivers/mmc/host/sdhci-cadence.c | 63 ++++++++++++++++++++++++++++++++
-> >  2 files changed, 75 insertions(+)
-> > 
-> > diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-> > index 5e19a961c34d7b5664ab2fd43cfba82dc90913ac..b5b2ae0bb4625bdb9d17acdbb1887c9caa3a1f32 100644
-> > --- a/drivers/mmc/host/Kconfig
-> > +++ b/drivers/mmc/host/Kconfig
-> > @@ -262,6 +262,18 @@ config MMC_SDHCI_CADENCE
-> >  
-> >  	  If unsure, say N.
-> >  
-> > +config MMC_SDHCI_CN10K
-> > +	tristate "SDHCI Cadence support for Marvell CN10K platforms"
-> > +	select MMC_SDHCI_CADENCE
-> > +	select MMC_SDHCI_IO_ACCESSORS
+>  walter59 2023-01-09 11:31:18 UTC
 > 
-> Probably better to just add MMC_SDHCI_IO_ACCESSORS to 
-> config MMC_SDHCI_CADENCE and drop MMC_SDHCI_CN10K
+> backlight brighness control with video missing /sys/class/backlight interface
+> 
+> kernel 6.1 it is ok --- kernel 6.2 not
+> 
+> [reply] [−] Comment 1 The Linux kernel's regression tracker (Thorsten Leemhuis) 2023-01-10 06:24:45 UTC
+> 
+> What kind of machine is this? Could you please attach the output of `lspci -nn`  and `dmidecode`
+> 
+> [reply] [−] Comment 2 Adrien 2023-01-11 21:47:24 UTC
+> 
+> Hi,
+> 
+> Same here. Everything is fine on 6.1.3 and the issue seems to happen starting 6.1.4. 
+> `ls /sys/class/backlight/` returns nothing.
+> I can't adjust the brightness with Fn+F3/F4 (dmesg returns acer_wmi: Unknown function number - 4 - 0).
+> I'll try to do a bisect.
 > 
 
-This reason behind this was to not force SDHCI_IO_ACCESSORS upon cadence users as some may not
-require it owing to how cadence ip is integrated to soc.
+See the ticket for more details.
 
-> > +	help
-> > +	  This selects the SDHCI cadence driver and IO Accessors
-> > +	  for Marvell CN10K platforms
-> > +
-> > +	  If you have Marvell CN10K platform, say Y or M here.
-> > +
-> > +	  If unsure, say N.
-> > +
-> >  config MMC_SDHCI_CNS3XXX
-> >  	tristate "SDHCI support on the Cavium Networks CNS3xxx SoC"
-> >  	depends on ARCH_CNS3XXX || COMPILE_TEST
-> > diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-> > index 5332d19e489be936d6814feba4f0fc046f5e130e..6bf703f15bc5be7e3be4cb1144b78ec3585ec540 100644
-> > --- a/drivers/mmc/host/sdhci-cadence.c
-> > +++ b/drivers/mmc/host/sdhci-cadence.c
-> > @@ -449,6 +449,61 @@ static u32 read_dqs_cmd_delay, clk_wrdqs_delay, clk_wr_delay, read_dqs_delay;
-> >  
-> >  static u32 sdhci_cdns_sd6_get_mode(struct sdhci_host *host, unsigned int timing);
-> >  
-> > +#ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
-> > +static u32 sdhci_cdns_sd6_readl(struct sdhci_host *host, int reg)
-> > +{
-> > +	return readl(host->ioaddr + reg);
-> > +}
-> > +
-> > +static void sdhci_cdns_sd6_writel(struct sdhci_host *host, u32 val, int reg)
-> > +{
-> > +	writel(val, host->ioaddr + reg);
-> > +}
-> > +
-> > +static u16 sdhci_cdns_sd6_readw(struct sdhci_host *host, int reg)
-> > +{
-> > +	u32 val, regoff;
-> > +
-> > +	regoff = reg & ~3;
-> > +
-> > +	val = readl(host->ioaddr + regoff);
-> > +	if ((reg & 0x3) == 0)
-> > +		return (val & 0xFFFF);
-> > +	else
-> > +		return ((val >> 16) & 0xFFFF);
-> > +}
-> > +
-> > +static void sdhci_cdns_sd6_writew(struct sdhci_host *host, u16 val, int reg)
-> > +{
-> > +	writew(val, host->ioaddr + reg);
-> > +}
-> > +
-> > +static u8 sdhci_cdns_sd6_readb(struct sdhci_host *host, int reg)
-> > +{
-> > +	u32 val, regoff;
-> > +
-> > +	regoff = reg & ~3;
-> > +
-> > +	val = readl(host->ioaddr + regoff);
-> > +	switch (reg & 3) {
-> > +	case 0:
-> > +		return (val & 0xFF);
-> > +	case 1:
-> > +		return ((val >> 8) & 0xFF);
-> > +	case 2:
-> > +		return ((val >> 16) & 0xFF);
-> > +	case 3:
-> > +		return ((val >> 24) & 0xFF);
-> > +	}
-> > +	return 0;
-> > +}
-> > +
-> > +static void sdhci_cdns_sd6_writeb(struct sdhci_host *host, u8 val, int reg)
-> > +{
-> > +	writeb(val, host->ioaddr + reg);
-> > +}
-> > +#endif
-> > +
-> >  static int sdhci_cdns_sd6_phy_lock_dll(struct sdhci_cdns_sd6_phy *phy)
-> >  {
-> >  	u32 delay_element = phy->d.delay_element_org;
-> > @@ -1576,6 +1631,14 @@ static const struct sdhci_ops sdhci_cdns_sd4_ops = {
-> >  };
-> >  
-> >  static const struct sdhci_ops sdhci_cdns_sd6_ops = {
-> > +#ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
-> > +	.read_l = sdhci_cdns_sd6_readl,
-> > +	.write_l = sdhci_cdns_sd6_writel,
-> > +	.read_w = sdhci_cdns_sd6_readw,
-> > +	.write_w = sdhci_cdns_sd6_writew,
-> > +	.read_b = sdhci_cdns_sd6_readb,
-> > +	.write_b = sdhci_cdns_sd6_writeb,
-> > +#endif
-> >  	.get_max_clock = sdhci_cdns_get_max_clock,
-> >  	.set_clock = sdhci_cdns_sd6_set_clock,
-> >  	.get_timeout_clock = sdhci_cdns_get_timeout_clock,
-> 
 
-Rest of the comments will be taken care in v2.
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
 
-Thanks,
-Piyush
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: v6.1..v6.2-rc4
+https://bugzilla.kernel.org/show_bug.cgi?id=216904
+#regzbot title: brightness: /sys/class/backlight interface is missing
+(in 6.1.3->6.1.4, too?)
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
