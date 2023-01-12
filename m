@@ -2,159 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04CE666CD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDE5666D1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239905AbjALIrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 03:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S231575AbjALI4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 03:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjALIqO (ORCPT
+        with ESMTP id S239833AbjALIzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 03:46:14 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EE72F7BD;
-        Thu, 12 Jan 2023 00:45:16 -0800 (PST)
-X-UUID: 6b47c2fe925511eda06fc9ecc4dadd91-20230112
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Wxi9Qy3WCX4lZPEMGHKiUq/2jxBrcJqTGD7hJUEmIKM=;
-        b=IOgilVKvgl/W0FWZXFD/9ozXr0u8kRejx3mamiakCo1XMf5xGr+VvQIOnDaXPQobewOxvpgbFlg0EAzeLYHxu+prFGvTWn+kyWgebACw9KOuih99koVzny8FGHFRI39F4c+9Kru4dbhqve1ty02GTO5QWzNJJnWr8oM/27ZtG9Q=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:20405a3e-7f59-4a7b-a7ed-4d36ca9bd6ba,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:543e81c,CLOUDID:dc697354-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0,NGT
-X-UUID: 6b47c2fe925511eda06fc9ecc4dadd91-20230112
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 545303540; Thu, 12 Jan 2023 16:45:08 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 12 Jan 2023 16:45:08 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 12 Jan 2023 16:45:06 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, kyrie wu <kyrie.wu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>, Irui Wang <irui.wang@mediatek.com>
-Subject: [V1,2/2] arm64: dts: mt8195: add jpeg decode device node
-Date:   Thu, 12 Jan 2023 16:45:03 +0800
-Message-ID: <20230112084503.4277-3-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230112084503.4277-1-irui.wang@mediatek.com>
-References: <20230112084503.4277-1-irui.wang@mediatek.com>
+        Thu, 12 Jan 2023 03:55:22 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C56392FD;
+        Thu, 12 Jan 2023 00:54:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673513665; x=1705049665;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sbZLbVJ1FtTUzxWrLWMc69Y2p0n8V6X7/TxYZupX72g=;
+  b=fG7IJCaoqRs8oL5EaezhfA4EboiA/bTrFgK8DUqzwvvfDvAr/HdoNsOh
+   pDAESPi/xQIssXvuVcbK77MefMFKoqDX2h6vRzqqpJaYTuII65hZJfV8v
+   sGSgeq155oIphuT/XeQaI6v8hxzMUUZ/vIW36JBhmN1ogxVkhQPinA75R
+   hm5a8fIFuNJp+eExe6v6zEWfHisBN7wtrQWNiykFMRZh/mWc7p7fSkuoY
+   FTLMKsLns9OQbbBwHK8GJtsPy/yVECWV7cPySzZ+hTPgeqzBv8jzohv+o
+   pLob8cwJzQAxlaAawc45oNKkjcUqJ5cPUsVreBUYm+pec5/DFitzv99Ea
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303349657"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="303349657"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 00:54:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="765526296"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="765526296"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Jan 2023 00:54:22 -0800
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>, Joerg Roedel <jroedel@suse.de>
+Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Vasant Hegde <vasant.hegde@amd.com>,
+        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Matt Fagnani <matt.fagnani@bell.net>
+Subject: [PATCH 1/1] PCI: Add translated request only opt-in for pci_enable_pasid()
+Date:   Thu, 12 Jan 2023 16:46:29 +0800
+Message-Id: <20230112084629.737653-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+The PCIe fabric routes Memory Requests based on the TLP address, ignoring
+the PASID. In order to ensure system integrity, commit 201007ef707a ("PCI:
+Enable PASID only when ACS RR & UF enabled on upstream path") requires
+some ACS features being supported on device's upstream path when enabling
+PCI/PASID.
 
-add mt8195 jpegdec device node
+One alternative is ATS which lets the device resolve the PASID+addr pair
+before a memory request is made into a routeable TLB address through the
+TA. Those resolved addresses are then cached on the device instead of
+in the IOMMU TLB and the device always sets the translated bit for PASID.
+One example of those devices are AMD graphic devices that always have ACS
+or ATS enabled together with PASID.
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-Signed-off-by: irui wang <irui.wang@mediatek.com>
+This adds an extra parameter in the pci_enable_pasid() helper, with which
+the device driver could opt-in the fact that device always sets the
+translated bit for PASID.
+
+It also applies this opt-in for AMD graphic devices. Without this change,
+kernel boots to black screen on a system with below AMD graphic device:
+
+00:01.0 VGA compatible controller: Advanced Micro Devices, Inc.
+        [AMD/ATI] Wani [Radeon R5/R6/R7 Graphics] (rev ca)
+        (prog-if 00 [VGA controller])
+	DeviceName: ATI EG BROADWAY
+	Subsystem: Hewlett-Packard Company Device 8332
+
+Refer to kernel bugzilla through below link for more details.
+
+Fixes: 201007ef707a ("PCI: Enable PASID only when ACS RR & UF enabled on upstream path")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216865
+Reported-by: Matt Fagnani <matt.fagnani@bell.net>
+Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+Suggested-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 60 ++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ include/linux/pci-ats.h                     | 5 +++--
+ drivers/iommu/amd/iommu.c                   | 2 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 +-
+ drivers/iommu/intel/iommu.c                 | 3 ++-
+ drivers/pci/ats.c                           | 7 +++++--
+ 5 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index af49ec352bfe..d5d0aeac57e4 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -2192,6 +2192,66 @@
- 			};
- 		};
+diff --git a/include/linux/pci-ats.h b/include/linux/pci-ats.h
+index df54cd5b15db..78a37821fff4 100644
+--- a/include/linux/pci-ats.h
++++ b/include/linux/pci-ats.h
+@@ -35,12 +35,13 @@ static inline bool pci_pri_supported(struct pci_dev *pdev)
+ #endif /* CONFIG_PCI_PRI */
  
-+		jpgdec-master {
-+			compatible = "mediatek,mt8195-jpgdec";
-+			power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
-+			iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
-+					<&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
-+					<&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
-+					<&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
-+					<&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
-+					<&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
-+			dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			jpgdec@1a040000 {
-+				compatible = "mediatek,mt8195-jpgdec-hw";
-+				reg = <0 0x1a040000 0 0x10000>;/* JPGDEC_C0 */
-+				iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
-+						<&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
-+						<&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
-+						<&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
-+						<&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
-+						<&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
-+				interrupts = <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH 0>;
-+				clocks = <&vencsys CLK_VENC_JPGDEC>;
-+				clock-names = "jpgdec";
-+				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
-+			};
-+
-+			jpgdec@1a050000 {
-+				compatible = "mediatek,mt8195-jpgdec-hw";
-+				reg = <0 0x1a050000 0 0x10000>;/* JPGDEC_C1 */
-+				iommus = <&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA0>,
-+						<&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA0>,
-+						<&iommu_vdo M4U_PORT_L19_JPGDEC_WDMA1>,
-+						<&iommu_vdo M4U_PORT_L19_JPGDEC_BSDMA1>,
-+						<&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
-+						<&iommu_vdo M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
-+				interrupts = <GIC_SPI 344 IRQ_TYPE_LEVEL_HIGH 0>;
-+				clocks = <&vencsys CLK_VENC_JPGDEC_C1>;
-+				clock-names = "jpgdec";
-+				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
-+			};
-+
-+			jpgdec@1b040000 {
-+				compatible = "mediatek,mt8195-jpgdec-hw";
-+				reg = <0 0x1b040000 0 0x10000>;/* JPGDEC_C2 */
-+				iommus = <&iommu_vpp M4U_PORT_L20_JPGDEC_WDMA0>,
-+						<&iommu_vpp M4U_PORT_L20_JPGDEC_BSDMA0>,
-+						<&iommu_vpp M4U_PORT_L20_JPGDEC_WDMA1>,
-+						<&iommu_vpp M4U_PORT_L20_JPGDEC_BSDMA1>,
-+						<&iommu_vpp M4U_PORT_L20_JPGDEC_BUFF_OFFSET1>,
-+						<&iommu_vpp M4U_PORT_L20_JPGDEC_BUFF_OFFSET0>;
-+				interrupts = <GIC_SPI 348 IRQ_TYPE_LEVEL_HIGH 0>;
-+				clocks = <&vencsys_core1 CLK_VENC_CORE1_JPGDEC>;
-+				clock-names = "jpgdec";
-+				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC2>;
-+			};
-+		};
-+
- 		larb20: larb@1b010000 {
- 			compatible = "mediatek,mt8195-smi-larb";
- 			reg = <0 0x1b010000 0 0x1000>;
+ #ifdef CONFIG_PCI_PASID
+-int pci_enable_pasid(struct pci_dev *pdev, int features);
++int pci_enable_pasid(struct pci_dev *pdev, int features, bool transled_only);
+ void pci_disable_pasid(struct pci_dev *pdev);
+ int pci_pasid_features(struct pci_dev *pdev);
+ int pci_max_pasids(struct pci_dev *pdev);
+ #else /* CONFIG_PCI_PASID */
+-static inline int pci_enable_pasid(struct pci_dev *pdev, int features)
++static inline int pci_enable_pasid(struct pci_dev *pdev, int features,
++				   bool transled_only)
+ { return -EINVAL; }
+ static inline void pci_disable_pasid(struct pci_dev *pdev) { }
+ static inline int pci_pasid_features(struct pci_dev *pdev)
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index cbeaab55c0db..a89734b30947 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -1700,7 +1700,7 @@ static int pdev_pri_ats_enable(struct pci_dev *pdev)
+ 	int ret;
+ 
+ 	/* Only allow access to user-accessible pages */
+-	ret = pci_enable_pasid(pdev, 0);
++	ret = pci_enable_pasid(pdev, 0, true);
+ 	if (ret)
+ 		goto out_err;
+ 
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+index ab160198edd6..f5f224f023ba 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+@@ -2350,7 +2350,7 @@ static int arm_smmu_enable_pasid(struct arm_smmu_master *master)
+ 	if (num_pasids <= 0)
+ 		return num_pasids;
+ 
+-	ret = pci_enable_pasid(pdev, features);
++	ret = pci_enable_pasid(pdev, features, false);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to enable PASID\n");
+ 		return ret;
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 317af67b6098..2dd7773ce5c0 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -1424,7 +1424,8 @@ static void iommu_enable_pci_caps(struct device_domain_info *info)
+ 	   undefined. So always enable PASID support on devices which
+ 	   have it, even if we can't yet know if we're ever going to
+ 	   use it. */
+-	if (info->pasid_supported && !pci_enable_pasid(pdev, info->pasid_supported & ~1))
++	if (info->pasid_supported &&
++	    !pci_enable_pasid(pdev, info->pasid_supported & ~1, false))
+ 		info->pasid_enabled = 1;
+ 
+ 	if (info->pri_supported &&
+diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
+index f9cc2e10b676..eb14ca8ec4e6 100644
+--- a/drivers/pci/ats.c
++++ b/drivers/pci/ats.c
+@@ -353,12 +353,14 @@ void pci_pasid_init(struct pci_dev *pdev)
+  * pci_enable_pasid - Enable the PASID capability
+  * @pdev: PCI device structure
+  * @features: Features to enable
++ * @transled_only: True if the device issues MemRd/Wr TLPs with a PASID TLP
++ *                 prefix only when the AT field is set to translated.
+  *
+  * Returns 0 on success, negative value on error. This function checks
+  * whether the features are actually supported by the device and returns
+  * an error if not.
+  */
+-int pci_enable_pasid(struct pci_dev *pdev, int features)
++int pci_enable_pasid(struct pci_dev *pdev, int features, bool transled_only)
+ {
+ 	u16 control, supported;
+ 	int pasid = pdev->pasid_cap;
+@@ -382,7 +384,8 @@ int pci_enable_pasid(struct pci_dev *pdev, int features)
+ 	if (!pasid)
+ 		return -EINVAL;
+ 
+-	if (!pci_acs_path_enabled(pdev, NULL, PCI_ACS_RR | PCI_ACS_UF))
++	if (!transled_only &&
++	    !pci_acs_path_enabled(pdev, NULL, PCI_ACS_RR | PCI_ACS_UF))
+ 		return -EINVAL;
+ 
+ 	pci_read_config_word(pdev, pasid + PCI_PASID_CAP, &supported);
 -- 
-2.18.0
+2.34.1
 
