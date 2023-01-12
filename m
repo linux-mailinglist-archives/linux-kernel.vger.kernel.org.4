@@ -2,100 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497F5666E94
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E226666EA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbjALJqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:46:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S236621AbjALJth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237323AbjALJpP (ORCPT
+        with ESMTP id S239695AbjALJsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:45:15 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AA53DBD9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:42:51 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so11309526wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:42:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GKI1e/olZBE0WNap4KRNex2ej5kGh0U21AghWA1HZZY=;
-        b=mhI4jZF2UWjIt5yn0A46WNh3DSj7ZLdq1/IQEf+JYT6eDplIwKZgWI5uwkJG87y4J0
-         vfIAu4WMX7HCYcvuGNjYWE6d3tfDUtT3MILGfpx2K5jFfLmSZugT6Ruu20QlDMnMWste
-         FVuUU13M6t24rxMkszhFtY7lwZoFZF1ANvD3c5c+dZeQNSZcvGHl18oIx4R0cJvFYa+j
-         TFOKtJtH8hhiA07zERYZXteQByvutOE/Gpv77PTyRCI17UKiBrItEMnb+//02sIjWB75
-         lNRLml8tVdC7aLGJxjCF+aZz2FaBUUPdBW8rlcc85jWT7fHT+YmFO4+NKXxCEkgTJfhE
-         ykIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GKI1e/olZBE0WNap4KRNex2ej5kGh0U21AghWA1HZZY=;
-        b=tyojIbhYQ5Z8xtFrMAj3uLY4NdnMxaKEF1P+2twZ64MmCcQMrGPAXEwEJO7qbT2Hlr
-         5dW2bex+l+AbltV3OscfuQIGbwhrX66jCu6KGCRZG8Pb1EnZ/2Od85pouXRhz3Qif6ee
-         dUmDZMYvyXqszPVDASepqyUa/yW1Ojwzv+5h14op3GRsRjz9PgIg+qCmOhBMujyskTUy
-         TbKz41zKZaeOlmlunFLnf5Xnd9J3sHlOJJJw66ldyYUW8VwKyjtRT/Ha+If4hkenDcAE
-         53mh1GnnaZ4ZKvWh2W3O2Q+9PK6/4ubnZ2TvCoz21cY/rkQUdtptiNl2Q5ITxvDMOT4M
-         X1sw==
-X-Gm-Message-State: AFqh2kptp0WvQZ7UWjK8LPn+7hbQonYhyjxPfLkKaH0YjKMx5bxSmucb
-        7vv2il3Jje67LwHHHlusyQDTfg==
-X-Google-Smtp-Source: AMrXdXvTSEtuIufSTAXNipVi8Ox6she5RGRw851IDFVjB/ccbB+Imd6hG4OKVbX2sQZldpGwb9HcXA==
-X-Received: by 2002:a05:600c:4f02:b0:3d9:f217:6f6b with SMTP id l2-20020a05600c4f0200b003d9f2176f6bmr10421251wmq.33.1673516569772;
-        Thu, 12 Jan 2023 01:42:49 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id l14-20020a05600c4f0e00b003d96c811d6dsm28047649wmq.30.2023.01.12.01.42.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 01:42:49 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 12 Jan 2023 10:42:46 +0100
-Subject: [PATCH v2 2/2] arm64: defconfig: enable Visionox VTDR6130 DSI Panel driver
+        Thu, 12 Jan 2023 04:48:05 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A903050F74;
+        Thu, 12 Jan 2023 01:44:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673516654; x=1705052654;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=3kPZjp6HimM9YSIBTE/oXUSO1orPN/Jj19BPBdqSxnA=;
+  b=l+UTFcoVie11piSJVRB6ILBprJamFId/vQFYo3nCzcJsU5EKzOHfmN89
+   FkmwIck/5/Sy1y/acUZiVCb/9gsqozH2cUX+DvBO/KW1euLKTH1RSAYIO
+   eKEFAbO72xm5DnmtRiXot98JycuThn7QIqjBtehPF75CuULHFzUPzHINE
+   gJEmoA3TQoEE8vEq05C1DYuOd5VphesIzECoK3FOEHiu/M6GbKJkH9cbn
+   7m92Eqkv5Se2pGOOnWjfN98gJ8W+6Xpl8ClrVGak7jA9R+ZublTQOUo1O
+   VSuhZqK+lZexeRhUn+yHvFLMrkKfZDMt5xd5WXYNVe8eUcoAvFsE3l6EF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="307181255"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="307181255"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 01:42:58 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607725662"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="607725662"
+Received: from vbucoci-mobl1.ger.corp.intel.com ([10.252.52.43])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 01:42:55 -0800
+Date:   Thu, 12 Jan 2023 11:42:53 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+cc:     gregkh@linuxfoundation.org, Kees Cook <keescook@chromium.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/11] tty: vt: replace BUG_ON() by WARN_ON_ONCE()
+In-Reply-To: <20230112080136.4929-7-jirislaby@kernel.org>
+Message-ID: <239b3d75-6186-3c3c-91bb-7ec46545f345@linux.intel.com>
+References: <20230112080136.4929-1-jirislaby@kernel.org> <20230112080136.4929-7-jirislaby@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230110-topic-sm8550-upstream-display-defconfig-v2-2-c29b9714c85f@linaro.org>
-References: =?utf-8?q?=3C20230110-topic-sm8550-upstream-display-defconfig-v2?=
- =?utf-8?q?-0-c29b9714c85f=40linaro=2Eorg=3E?=
-In-Reply-To: =?utf-8?q?=3C20230110-topic-sm8550-upstream-display-defconfig-v?=
- =?utf-8?q?2-0-c29b9714c85f=40linaro=2Eorg=3E?=
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.11.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-12161107-1673516577=:1665"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Build the Visionox VTDR6130 DSI Panel driver as module
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+--8323329-12161107-1673516577=:1665
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index c9011e1438c0..7bbf628ab80c 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -765,6 +765,7 @@ CONFIG_DRM_PANEL_MANTIX_MLAF057WE51=m
- CONFIG_DRM_PANEL_RAYDIUM_RM67191=m
- CONFIG_DRM_PANEL_SITRONIX_ST7703=m
- CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA=m
-+CONFIG_DRM_PANEL_VISIONOX_VTDR6130=m
- CONFIG_DRM_LONTIUM_LT8912B=m
- CONFIG_DRM_LONTIUM_LT9611=m
- CONFIG_DRM_LONTIUM_LT9611UXC=m
+On Thu, 12 Jan 2023, Jiri Slaby (SUSE) wrote:
+
+> No need to panic in vc_uniscr_copy_line(), just warn. This should never
+> happen though, as vc_uniscr_check() is supposed to be called before
+> vc_uniscr_copy_line(). And the former checks vc->vc_uni_lines already.
+> 
+> In any case, use _ONCE as vc_uniscr_copy_line() is called repeatedly for
+> each line. So don't flood the logs, just in case.
+> 
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+> ---
+>  drivers/tty/vt/vt.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+> index 119b3eafef59..db72375141b0 100644
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -535,7 +535,8 @@ void vc_uniscr_copy_line(const struct vc_data *vc, void *dest, bool viewed,
+>  	int offset = row * vc->vc_size_row + col * 2;
+>  	unsigned long pos;
+>  
+> -	BUG_ON(!uni_lines);
+> +	if (WARN_ON_ONCE(!uni_lines))
+> +		return;
+>  
+>  	pos = (unsigned long)screenpos(vc, offset, viewed);
+>  	if (pos >= vc->vc_origin && pos < vc->vc_scr_end) {
+> 
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
 -- 
-2.34.1
+ i.
+
+--8323329-12161107-1673516577=:1665--
