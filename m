@@ -2,282 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87A3667EC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59849667ECA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240208AbjALTKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
+        id S240439AbjALTMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240191AbjALTKA (ORCPT
+        with ESMTP id S231891AbjALTLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:10:00 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB801327
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:55:52 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id y5so14487360pfe.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:55:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j+NRbTNiLmeYUADil1PoK0LGG/uPHqXhDMm4lsmIdtM=;
-        b=nDzN9TwaVepTI4JV1CwYJSALuJFKTnskXh0c3eKxM76cQADzIF8k4QJNXr5mQ/x1bo
-         0DpTZUTmHFuBjscdaIQZPyGFza3TIXAllmjPsLWwXZRN1ETM839IwF4cNTCTUh4XSmzc
-         5YE1s//l4fqyuzFY8c5UdSm2xw3wU++yYZc678/Eo77PvzmmUGSUQTMcwNHjqtH9gkv+
-         ZDHKKaG1KEEAYK03xSXWDJ2OeBynn2slTSp/LFyL24HqUraN5+CNfTldF4qvRmCz7NyE
-         49+tAQ+KUBmgYOGSbXDP4ORjeehSewbWgwhfc2Kh299pzbcMtT8V4NItvTPngjNqe3Tn
-         Bc2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j+NRbTNiLmeYUADil1PoK0LGG/uPHqXhDMm4lsmIdtM=;
-        b=nsKymg4zfZFS68QUHbYZP55C4FlCzgtV5Z+ey1VZpiclNtQG+2jm4jPKlm2YhAJ4xW
-         OaSUY7wNCH27G9w6cGue/xd370LMO2zncaMWt7pDv06hAMMHhuCmwmYKBhdxSGim/1/J
-         5JGpsatNv/qSnbvqG5g5QQkPQ82YPnnpDxURbL+ozrPyyadVgKlijs74hMTwTQDro/4W
-         Ts31b/eA0TaschGaswuomQDThhig3R1wCxRrIkegUX3NBc0vjBe1nXpy9Hm6UXA3uMyw
-         3V5ynhVfAdxA7yIU9/UcBmDolVJLWA9ZCHlz4ZuTPEGciu91+We0wwkKFuudFGZAR5i9
-         5wIQ==
-X-Gm-Message-State: AFqh2kqQ5G0QGGF7coBumh1hIKXNJGoVbrgcwthKl7FsRwW/ArTVjsQq
-        hO93+Lh8iEjPUDEj4/+Zi0es+B9u133zxvuNt166OZASM8FUBA==
-X-Google-Smtp-Source: AMrXdXuRsx/dID9s7vPNCdE3ysm0ZN/YTdpjQD8e+0PMDJN5HzzxmR5n62jAhFsDyc16t+/iWo5qN1TaqH8e66p8ZWs=
-X-Received: by 2002:a63:c50:0:b0:494:7a78:4bb0 with SMTP id
- 16-20020a630c50000000b004947a784bb0mr4810678pgm.427.1673549751960; Thu, 12
- Jan 2023 10:55:51 -0800 (PST)
+        Thu, 12 Jan 2023 14:11:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1EF12AA6;
+        Thu, 12 Jan 2023 10:57:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9587B82011;
+        Thu, 12 Jan 2023 18:57:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C303C433D2;
+        Thu, 12 Jan 2023 18:57:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673549852;
+        bh=aCwt87g5DP33eSulv5cE/E4TmVyVlpRjdU5dgxynFYk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=POGB8sK84IJJYFvOZv9ugRGQtOG+NM55cRn2+Q4evFsSYf8Bkt3EYv7abr6nizYpr
+         5Web+iK9kcRs85cQDhf1ryetvDC7iMAtR6G/XtTZeQy6neZ3vhPACC3IyCCjfqAedz
+         jCedBqvylv4pGS6OxCAN7csIp2/XSeDrolcQUO+p4oKTYjsjXk0jvrrhGHUxOKKYVN
+         nR26j7ot/ZjvM2+kZqS4bcFschagOiIy64dsoFuC9EyN16Terc6tDSTo4bhG3C/Yu4
+         wSqUtZR7nyHV3BeIPA5TR1/PmIRuCx+AUFEO8eUbmPwbOM0bhuwoxYmAG0f2lxeNDA
+         Nd4y6/cqLgUrg==
+Date:   Thu, 12 Jan 2023 10:57:31 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, pabeni@redhat.com,
+        slipper.alive@gmail.com, stable-commits@vger.kernel.org
+Subject: Re: Patch "net/ulp: prevent ULP without clone op from entering the
+ LISTEN status" has been added to the 5.4-stable tree
+Message-ID: <20230112105731.0da81d58@kernel.org>
+In-Reply-To: <Y8AP6Lqo9sfX9Bb8@kroah.com>
+References: <16735310493146@kroah.com>
+        <Y8AP6Lqo9sfX9Bb8@kroah.com>
 MIME-Version: 1.0
-References: <20230112023006.1873859-1-masahiroy@kernel.org>
-In-Reply-To: <20230112023006.1873859-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 12 Jan 2023 10:55:45 -0800
-Message-ID: <CAKwvOd=k=veNG=Q-bZxX4iX4q14e2ozO_sHZhdCz1+BwBxq=cQ@mail.gmail.com>
-Subject: Re: [PATCH] scripts: handle BrokenPipeError for python scripts
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 6:30 PM Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
->
-> In the follow-up of commit fb3041d61f68 ("kbuild: fix SIGPIPE error
-> message for AR=3Dgcc-ar and AR=3Dllvm-ar"), Kees Cook pointed out that
-> tools should _not_ catch their own SIGPIPEs [1] [2].
->
-> Based on his feedback, LLVM was fixed [3].
->
-> However, Python's default behavior is to show noisy bracktrace when
-> SIGPIPE is sent. So, scripts written in Python are basically in the
-> same situation as the buggy llvm tools.
->
-> Example:
->
->   $ make -s allnoconfig
->   $ make -s allmodconfig
->   $ scripts/diffconfig .config.old .config | head -n1
->   -ALIX n
->   Traceback (most recent call last):
->     File "/home/masahiro/linux/scripts/diffconfig", line 132, in <module>
->       main()
->     File "/home/masahiro/linux/scripts/diffconfig", line 130, in main
->       print_config("+", config, None, b[config])
->     File "/home/masahiro/linux/scripts/diffconfig", line 64, in print_con=
-fig
->       print("+%s %s" % (config, new_value))
->   BrokenPipeError: [Errno 32] Broken pipe
->
-> Python documentatin [4] notes how to make scripts die immediately and
+On Thu, 12 Jan 2023 14:49:28 +0100 Greg KH wrote:
+> On Thu, Jan 12, 2023 at 02:44:09PM +0100, gregkh@linuxfoundation.org wrote:
+> > 
+> > This is a note to let you know that I've just added the patch titled
+> > 
+> >     net/ulp: prevent ULP without clone op from entering the LISTEN status
+> > 
+> > to the 5.4-stable tree which can be found at:
+> >     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary  
+> 
+> Oops, nope, this broke the build for 5.4 and older kernels, now
+> dropping.
 
-typo: s/documentatin/documentation/
-
-> silently:
->
->   """
->   Piping output of your program to tools like head(1) will cause a
->   SIGPIPE signal to be sent to your process when the receiver of its
->   standard output closes early. This results in an exception like
->   BrokenPipeError: [Errno 32] Broken pipe. To handle this case,
->   wrap your entry point to catch this exception as follows:
->
->     import os
->     import sys
->
->     def main():
->         try:
->             # simulate large output (your code replaces this loop)
->             for x in range(10000):
->                 print("y")
->             # flush output here to force SIGPIPE to be triggered
->             # while inside this try block.
->             sys.stdout.flush()
->         except BrokenPipeError:
->             # Python flushes standard streams on exit; redirect remaining=
- output
->             # to devnull to avoid another BrokenPipeError at shutdown
->             devnull =3D os.open(os.devnull, os.O_WRONLY)
->             os.dup2(devnull, sys.stdout.fileno())
->             sys.exit(1)  # Python exits with error code 1 on EPIPE
->
->     if __name__ =3D=3D '__main__':
->         main()
->
->   Do not set SIGPIPE=E2=80=99s disposition to SIG_DFL in order to avoid
->   BrokenPipeError. Doing that would cause your program to exit
->   unexpectedly whenever any socket connection is interrupted while
->   your program is still writing to it.
->   """
->
-> Currently, tools/perf/scripts/python/intel-pt-events.py seems the
-> only script that fixes the issue that way.
->
-> tools/perf/scripts/python/compaction-times.py uses another approach
-> signal.signal(signal.SIGPIPE, signal.SIG_DFL) but the Python
-> documentation clearly says "Don't do it".
->
-> I cannot fix all Python scripts since there are so many.
-> I fixed some in the scripts/ directory.
-
-That's ok; "Rome wasn't built in a day." This is a good start!
-Thank you for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
->
-> [1]: https://lore.kernel.org/all/202211161056.1B9611A@keescook/
-> [2]: https://github.com/llvm/llvm-project/issues/59037
-> [3]: https://github.com/llvm/llvm-project/commit/4787efa38066adb51e2c0494=
-99d25b3610c0877b
-> [4]: https://docs.python.org/3/library/signal.html#note-on-sigpipe
->
-> Cc: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  scripts/checkkconfigsymbols.py         | 13 ++++++++++++-
->  scripts/clang-tools/run-clang-tools.py | 21 ++++++++++++++-------
->  scripts/diffconfig                     | 16 ++++++++++++++--
->  3 files changed, 40 insertions(+), 10 deletions(-)
->
-> diff --git a/scripts/checkkconfigsymbols.py b/scripts/checkkconfigsymbols=
-.py
-> index 217d21abc86e..36c920e71313 100755
-> --- a/scripts/checkkconfigsymbols.py
-> +++ b/scripts/checkkconfigsymbols.py
-> @@ -115,7 +115,7 @@ def parse_options():
->      return args
->
->
-> -def main():
-> +def print_undefined_symbols():
->      """Main function of this module."""
->      args =3D parse_options()
->
-> @@ -467,5 +467,16 @@ def parse_kconfig_file(kfile):
->      return defined, references
->
->
-> +def main():
-> +    try:
-> +        print_undefined_symbols()
-> +    except BrokenPipeError:
-> +        # Python flushes standard streams on exit; redirect remaining ou=
-tput
-> +        # to devnull to avoid another BrokenPipeError at shutdown
-> +        devnull =3D os.open(os.devnull, os.O_WRONLY)
-> +        os.dup2(devnull, sys.stdout.fileno())
-> +        sys.exit(1)  # Python exits with error code 1 on EPIPE
-> +
-> +
->  if __name__ =3D=3D "__main__":
->      main()
-> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools=
-/run-clang-tools.py
-> index 56f2ec8f0f40..3266708a8658 100755
-> --- a/scripts/clang-tools/run-clang-tools.py
-> +++ b/scripts/clang-tools/run-clang-tools.py
-> @@ -61,14 +61,21 @@ def run_analysis(entry):
->
->
->  def main():
-> -    args =3D parse_arguments()
-> +    try:
-> +        args =3D parse_arguments()
->
-> -    lock =3D multiprocessing.Lock()
-> -    pool =3D multiprocessing.Pool(initializer=3Dinit, initargs=3D(lock, =
-args))
-> -    # Read JSON data into the datastore variable
-> -    with open(args.path, "r") as f:
-> -        datastore =3D json.load(f)
-> -        pool.map(run_analysis, datastore)
-> +        lock =3D multiprocessing.Lock()
-> +        pool =3D multiprocessing.Pool(initializer=3Dinit, initargs=3D(lo=
-ck, args))
-> +        # Read JSON data into the datastore variable
-> +        with open(args.path, "r") as f:
-> +            datastore =3D json.load(f)
-> +            pool.map(run_analysis, datastore)
-> +    except BrokenPipeError:
-> +        # Python flushes standard streams on exit; redirect remaining ou=
-tput
-> +        # to devnull to avoid another BrokenPipeError at shutdown
-> +        devnull =3D os.open(os.devnull, os.O_WRONLY)
-> +        os.dup2(devnull, sys.stdout.fileno())
-> +        sys.exit(1)  # Python exits with error code 1 on EPIPE
->
->
->  if __name__ =3D=3D "__main__":
-> diff --git a/scripts/diffconfig b/scripts/diffconfig
-> index d5da5fa05d1d..43f0f3d273ae 100755
-> --- a/scripts/diffconfig
-> +++ b/scripts/diffconfig
-> @@ -65,7 +65,7 @@ def print_config(op, config, value, new_value):
->          else:
->              print(" %s %s -> %s" % (config, value, new_value))
->
-> -def main():
-> +def show_diff():
->      global merge_style
->
->      # parse command line args
-> @@ -129,4 +129,16 @@ def main():
->      for config in new:
->          print_config("+", config, None, b[config])
->
-> -main()
-> +def main():
-> +    try:
-> +        show_diff()
-> +    except BrokenPipeError:
-> +        # Python flushes standard streams on exit; redirect remaining ou=
-tput
-> +        # to devnull to avoid another BrokenPipeError at shutdown
-> +        devnull =3D os.open(os.devnull, os.O_WRONLY)
-> +        os.dup2(devnull, sys.stdout.fileno())
-> +        sys.exit(1)  # Python exits with error code 1 on EPIPE
-> +
-> +
-> +if __name__ =3D=3D '__main__':
-> +    main()
-> --
-> 2.34.1
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
+There's no clone op, right? If you're willing to futz with it I think
+you just need to remove the "and the ops don't have ->clone" part of
+the conditions. Any presence of ops on older kernels should make us
+bail.
