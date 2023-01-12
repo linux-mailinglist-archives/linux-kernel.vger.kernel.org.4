@@ -2,154 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E61C666E37
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FBF666E38
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239586AbjALJ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
+        id S239640AbjALJ3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239659AbjALJ2t (ORCPT
+        with ESMTP id S239779AbjALJ2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:28:49 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85654D72F
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:21:44 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id ss4so35937512ejb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:21:44 -0800 (PST)
+        Thu, 12 Jan 2023 04:28:50 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E5D646E
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:23:01 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id v127so14045983vsb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:23:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kqb6Iris8XWiiMxft3j9JHa7v06d0Pz4gSRMhwJTQx0=;
-        b=n/F6PNUGVNPoZrDebVKmVpiZJ+hGLnh9tTOom2GkMxmVqhiyluaHAS2mBeZ+cssrXK
-         bLQjy0nWfHpIxez+jYZWgkjA6OiUnTKL9YEYoI+7cP76G0AvRrsmQ6wjpXoccCUStBP4
-         0csRTNp5wI1csOg0vSp1k0usXDWeatgNKt9JkZu3PIUlq14P4jCWeYU5bG9GnOsazUu4
-         QVEtXP5nka4fCPL3IId1dI4rA43UPGnDlpgPPN+StdxX1bn1GEK7MMAof+79Yt3iU1zM
-         jcokevDrio0CVEdvkfLF9M8n9gAW8KKaXiQTLBNrINIAJ4SDfUoH5IwDkpkGi1+jcQP8
-         ee3A==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=efmws3aCVsefaN/g574EcJacERdCtGnCzw1lKaWrtJ8=;
+        b=GdTPUKmKD1zp1f2/sb8ZHPcnrhm/yHA25oG5+eQzBHHL8bHPUfVe7KzzRG6j3j4Wky
+         DjyP0C4PalipMvKfJNnG8T8cpSycdBBHdzfBSDHe6rtwOgE+kyjj7Jxcj2j2g0X41iU0
+         vumZ7UuFLi/kX+7CxZyaadj/72xJOXk3q5i9DYsUYwkM89sPk6CjXGKfNYScuJm1HE0T
+         rfHdnMYj1B6miGD/M3uyRdN3nlag9Xh3qlXPP9lWENfpt/SwEQcs5OuKC6+v2wRF66O+
+         E9eo04TgR3FDFc65zzRuYmJkhC17Hf84a8bypT5Jn9LzMcQ2VINwer8LVwwB25+HOdoJ
+         I2XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kqb6Iris8XWiiMxft3j9JHa7v06d0Pz4gSRMhwJTQx0=;
-        b=gBQIS2ASdfV0iE3xyE3HwL66/POOyyYPk6DHiXXpE47LAN2r2rSxWFczoiKaG4Uix4
-         A2ZdLMgGFOmYhKp7+H7u3HEa/PuQTDhvKRRVsewoyt8dNylEGZvf6Co4Sn6B+Ulb1b0o
-         s8JncHUL40rFxdXdmkUADZswkipl94mImnKuZFqjTIaPptl9BgWg6V9zxC2gXbIBuf+p
-         w8OekWMdsXBZUSuhzf23AxGVtvUyBzQFdQBa9iOgYdLk9aMdy9KX7Y6d2NPnYdPUebyx
-         W+0cc2XAEKwhm8zIPXyqzE3VrpnHNvDauXOU/ZaN8hbWB1YPNoP+MpgOaohNNu4vumzo
-         OXww==
-X-Gm-Message-State: AFqh2kqemQU6DQjJ8+ureawpV7QfXPkllSmjX8iOvgjfFC5iL5JVec1t
-        Hm7oNW+JFywIs36ySENP8Rv2wA==
-X-Google-Smtp-Source: AMrXdXtlLbGsD7vOfKM14h8N4DFizPIig28V7mzUwlWavZAZ0XBiIpC8ynNkF7zMf6Uiq65IATUG/w==
-X-Received: by 2002:a17:906:34db:b0:842:3920:df75 with SMTP id h27-20020a17090634db00b008423920df75mr66807232ejb.33.1673515303467;
-        Thu, 12 Jan 2023 01:21:43 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id y16-20020a1709063a9000b0084ce5d5d21bsm7189751ejd.22.2023.01.12.01.21.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 01:21:43 -0800 (PST)
-Date:   Thu, 12 Jan 2023 10:21:36 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 05/13] riscv: cpufeature: extend
- riscv_cpufeature_patch_func to all ISA extensions
-Message-ID: <20230112092136.f2g43hrhmrqouy4y@orel>
-References: <20230111171027.2392-1-jszhang@kernel.org>
- <20230111171027.2392-6-jszhang@kernel.org>
- <2398293.3Lj2Plt8kZ@diego>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=efmws3aCVsefaN/g574EcJacERdCtGnCzw1lKaWrtJ8=;
+        b=pzulmBAXz3v75Gii3m270IPO66gwBkisaVJW19UHkfn09skOkzpggLqvJlFzbv+URD
+         0AF0HLBE6CVA9D75abTYG+KZ8wfVd3LDC2tVEfKHWnpLKMlJNaMjiLMUq7G3Yk7Q+nNV
+         Z4pVmW31pM7v9Cl2nEdtHlFLXmFYP5Y7ykucUmqJCojlzBYzq+vEqDEQm4xuqt5WrnXA
+         rfOK2jlqWPCr5VVao5/7/YVHcN4xezlvHU7IrUbltmphcJoOqAaRAFzDoAIIWETjN9d7
+         4as5ZvgNZEZMuS/HaBKsc8NzzeTd+/5W885O0WOpOH14e0Jlgq+YOIXXouoq8Ouw0T1d
+         rTVA==
+X-Gm-Message-State: AFqh2kr0glz70X4zs7kEEXBTUcgcxsOtpXQ9KgqAyJVPOhIgF/nerNer
+        a0HXH1ZB2w9N+DdLITjtpMGp2ElJ2+YyWViHySIwIQZ1trG6pg==
+X-Google-Smtp-Source: AMrXdXv216uurPD4Hcsh/hCF9XN+Gp4H4zV+YAa+KQIn/WZ2I1E73IEgzTfF5Euyc+V6l/e8U+yGqGBqwYubsIc/wLw=
+X-Received: by 2002:a67:2204:0:b0:3b5:2762:568b with SMTP id
+ i4-20020a672204000000b003b52762568bmr10338430vsi.62.1673515380482; Thu, 12
+ Jan 2023 01:23:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2398293.3Lj2Plt8kZ@diego>
+References: <20221219102452.2860088-1-sumit.garg@linaro.org>
+In-Reply-To: <20221219102452.2860088-1-sumit.garg@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 12 Jan 2023 14:52:49 +0530
+Message-ID: <CAFA6WYOucB3JdVATbydxYuAb0Q5P7ff_JMb=-BgiF+uip8pdpg@mail.gmail.com>
+Subject: Re: [PATCH v5 0/2] arm64: Fix pending single-step debugging issues
+To:     will@kernel.org, catalin.marinas@arm.com
+Cc:     liwei391@huawei.com, mhiramat@kernel.org, maz@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, daniel.thompson@linaro.org,
+        dianders@chromium.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 12:29:57AM +0100, Heiko Stübner wrote:
-> Hi Jisheng.
-> 
-> Am Mittwoch, 11. Januar 2023, 18:10:19 CET schrieb Jisheng Zhang:
-> > riscv_cpufeature_patch_func() currently only scans a limited set of
-> > cpufeatures, explicitly defined with macros. Extend it to probe for all
-> > ISA extensions.
-> > 
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> > ---
-> >  arch/riscv/include/asm/errata_list.h |  9 ++--
-> >  arch/riscv/kernel/cpufeature.c       | 63 ++++------------------------
-> >  2 files changed, 11 insertions(+), 61 deletions(-)
-> 
-> hmmm ... I do see a somewhat big caveat for this.
-> and would like to take back my Reviewed-by for now
-> 
-> 
-> With this change we would limit the patchable cpufeatures to actual
-> riscv extensions. But cpufeatures can also be soft features like
-> how performant the core handles unaligned accesses.
+Hi Will, Catalin,
 
-I agree that this needs to be addressed and Jisheng also raised this
-yesterday here [*]. It seems we need the concept of cpufeatures, which
-may be extensions or non-extensions.
+On Mon, 19 Dec 2022 at 15:55, Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> This patch-set reworks pending fixes from Wei's series [1] to make
+> single-step debugging via kgdb/kdb on arm64 work as expected. There was
+> a prior discussion on ML [2] regarding if we should keep the interrupts
+> enabled during single-stepping. So patch #1 follows suggestion from Will
+> [3] to not disable interrupts during single stepping but rather skip
+> single stepping within interrupt handler.
+>
+> [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
+> [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
+> [3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
+>
+> Changes in v5:
+> - Incorporated misc. comments from Mark.
+>
 
-[*] https://lore.kernel.org/all/Y77xyNPNqnFQUqAx@xhacker/
+Since patch #1 has already been reviewed/acked by Mark and the
+complete patchset has been tested by Doug, would it be fine for you to
+pick up this patchset? It fixes a real single stepping problem for
+kgdb on arm64.
 
-> 
-> See Palmer's series [0].
-> 
-> 
-> Also this essentially codifies that each ALTERNATIVE can only ever
-> be attached to exactly one extension.
-> 
-> But contrary to vendor-errata, it is very likely that we will need
-> combinations of different extensions for some alternatives in the future.
+-Sumit
 
-One possible approach may be to combine extensions/non-extensions at boot
-time into pseudo-cpufeatures. Then, alternatives can continue attaching to
-a single "feature". (I'm not saying that's a better approach than the
-bitmap, I'm just suggesting it as something else to consider.)
-
-Thanks,
-drew
-
-> 
-> In my optimization quest, I found that it's actually pretty neat to
-> convert the errata-id for cpufeatures to a bitfield [1], because then it's
-> possible to just combine extensions into said bitfield [2]:
-> 
-> 	ALTERNATIVE_2("nop",
-> 		      "j strcmp_zbb_unaligned", 0, CPUFEATURE_ZBB | CPUFEATURE_FAST_UNALIGNED, 0, CONFIG_RISCV_ISA_ZBB,
-> 		      "j variant_zbb", 0, CPUFEATURE_ZBB, CPUFEATURE_FAST_UNALIGNED, CONFIG_RISCV_ISA_ZBB)
-> 
-> [the additional field there models a "not" component]
-> 
-> So I really feel this would limit us quite a bit.
-> 
-> 
-> Heiko
-> 
-> 
-> 
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?h=riscv-hwprobe-v1&id=510c491cb9d87dcbdc91c63558dc704968723240
-> [1] https://github.com/mmind/linux-riscv/commit/f57a896122ee7e666692079320fc35829434cf96
-> [2] https://github.com/mmind/linux-riscv/commit/8cef615dab0c00ad68af2651ee5b93d06be17f27#diff-194cb8a86f9fb9b03683295f21c8f46b456a9f94737f01726ddbcbb9e3aace2cR12
-> 
-> 
+> Changes in v4:
+> - Rebased to the tip of mainline.
+> - Picked up Doug's Tested-by tag.
+>
+> Changes in v3:
+> - Reword commit descriptions as per Daniel's suggestions.
+>
+> Changes in v2:
+> - Replace patch #1 to rather follow Will's suggestion.
+>
+> Sumit Garg (2):
+>   arm64: entry: Skip single stepping into interrupt handlers
+>   arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
+>
+>  arch/arm64/include/asm/debug-monitors.h |  1 +
+>  arch/arm64/kernel/debug-monitors.c      |  5 +++++
+>  arch/arm64/kernel/entry-common.c        | 22 ++++++++++++++++++++--
+>  arch/arm64/kernel/kgdb.c                |  2 ++
+>  4 files changed, 28 insertions(+), 2 deletions(-)
+>
+> --
+> 2.34.1
+>
