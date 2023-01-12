@@ -2,603 +2,555 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 379276670AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27356670AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236361AbjALLNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        id S234284AbjALLOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:14:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjALLLs (ORCPT
+        with ESMTP id S236915AbjALLNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:11:48 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75745551CF;
-        Thu, 12 Jan 2023 03:04:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1673521448; x=1705057448;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YjP0/siWVQMrtZKQx6iTodm5p6OzNcct8u6nlwuE6v0=;
-  b=VLaAMsyhNwNXOcGL8xmaWJzyD53m5tN073tc6yuqy7kr1DUtHDGFEQrM
-   JyAnx+KJ+aLKq/Nl/nJPXNgLb4JeDD/lu0L9VoS5EGqqZGp4NXC3AhOZy
-   n+LzvYugwTM/SzBZ+oORYOs1OxRpB/PknynxIJIRZAZ6W0xNXjEpXLo1p
-   M9M9YCMjLQRiKdjKX+JwhRXsDisWYNWnNCGXJL6d1wwVdYNMpn+XsfKPm
-   ICtio+A3j/Of+0YRouQEiSUp0pofShNIHfyY/NQ+oDt0H2k5swU98h/W8
-   NangX5JChmAdfwKoZKC44G4/LGFjTY0T/r1p/kAsqQ91ggmq1+VFBK6nB
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="195432708"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jan 2023 04:04:07 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 12 Jan 2023 04:03:59 -0700
-Received: from che-lt-i66125lx.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 12 Jan 2023 04:03:52 -0700
-From:   Durai Manickam KR <durai.manickamkr@microchip.com>
-To:     <Hari.PrasathGE@microchip.com>,
-        <balamanikandan.gunasundar@microchip.com>,
-        <manikandan.m@microchip.com>, <varshini.rajendran@microchip.com>,
-        <dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
-        <balakrishnan.s@microchip.com>, <claudiu.beznea@microchip.com>,
-        <cristian.birsan@microchip.com>, <nicolas.ferre@microchip.com>,
-        <krzysztof.kozlowski@linaro.org>, <alexandre.belloni@bootlin.com>,
-        <davem@davemloft.net>, <arnd@arndb.de>, <olof@lixom.net>,
-        <soc@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>,
-        <Horatiu.Vultur@microchip.com>, <robh+dt@kernel.org>,
-        <andrew@lunn.ch>, <michael@walle.cc>, <jerry.ray@microchip.com>
-CC:     Durai Manickam KR <durai.manickamkr@microchip.com>
-Subject: [PATCH v4 8/8] ARM: dts: at91: sam9x60_curiosity: Add device tree for sam9x60 curiosity board
-Date:   Thu, 12 Jan 2023 16:32:08 +0530
-Message-ID: <20230112110208.97946-9-durai.manickamkr@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230112110208.97946-1-durai.manickamkr@microchip.com>
-References: <20230112110208.97946-1-durai.manickamkr@microchip.com>
+        Thu, 12 Jan 2023 06:13:45 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35602564C5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:04:47 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id hw16so31985030ejc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:04:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ODl2BM1W6hV+I9EkNTecmOHzYiFzk9HOa/5VuPRaa3E=;
+        b=MKTTdNviO7RzIIq74npQgoETkF+FSnSkG42yPDhIx6uWRNUSxbXWCRjlAnUGR1vHNX
+         j0Uz5D6xr2uMkBv65TsiDuKStqqKxW5+C2cIJYn9Kf0ym/FoTVFHSQ+4B7+Q/ni9FNe4
+         +QW6UqE9gfJmhhIoJl7BIXLWhf+chMDIXyImEymjsFWlKw64CJw1A5NKFlCO0hjoVPM9
+         VtR3WRXvIt/taWmI0ZOUzrKKAiniKTIpvDvOgzBr7fR9znmQU3I7Z1SSBcE/TWwjfxq0
+         6bKPQd3qINJ1S+mzYhcpXcDFn9JD2no7ZikZWAUpXvM1eN8aA1SL8rKWI/d2IZl92cyP
+         Wosg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ODl2BM1W6hV+I9EkNTecmOHzYiFzk9HOa/5VuPRaa3E=;
+        b=Mdbyhg31NmV0AUFa8536aEy1D9+7udfkq5NJA4vb+fHnvYIEkZs8FI//9Y3BHG6s/j
+         2MU76VazUUKXjIvtX1/7G5kFXS2nzGV3PjE0QiDAb5MI/IJ6pQOkujjSnrsV8Y4C7Lio
+         ZGmwgIMwiQOnSSg4Faml1L2Uu2/KcBcPKBF3SnrkxAF5mse2bfH+OyiixSqeTapsnLJS
+         LVBc+DW3ZG5hwC6jHXljvX/nPpnm/jKnFCU6wyHvfXGF1j3VlTtuxwzyKZKsEC1dE+Da
+         1WaD4ocVzU+TzLTvrzaq15eVftdRGIHZBSPV2gTtXGDRy5G8SUymCE1IOUkdfsWEtujw
+         GDZg==
+X-Gm-Message-State: AFqh2kqmf3ltbz8xCG8xOWjWcZwdceedxCn5yGORvYTC00LPFWQxVQqG
+        BdR+++/LjoX5nnUcXA74yMENeQ==
+X-Google-Smtp-Source: AMrXdXtRS7MPd/v2ivKXFwVS1QzrZAe95ryjyatLuThrSzal8KdN3+2x3m45SWKAmgXLnUiXXcvIHw==
+X-Received: by 2002:a17:906:30d3:b0:7c0:a1f9:c778 with SMTP id b19-20020a17090630d300b007c0a1f9c778mr63297733ejb.13.1673521485658;
+        Thu, 12 Jan 2023 03:04:45 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090618a200b0077a8fa8ba55sm7260088ejf.210.2023.01.12.03.04.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 03:04:45 -0800 (PST)
+Date:   Thu, 12 Jan 2023 12:04:44 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 04/11] RISC-V: KVM: Modify SBI extension handler to
+ return SBI error code
+Message-ID: <20230112110444.jjbmgslr6dspxwbh@orel>
+References: <20221215170046.2010255-1-atishp@rivosinc.com>
+ <20221215170046.2010255-5-atishp@rivosinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221215170046.2010255-5-atishp@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree file for sam9x60 curiosity board.
+On Thu, Dec 15, 2022 at 09:00:39AM -0800, Atish Patra wrote:
+> Currently, the SBI extension handle is expected to return Linux error code.
 
-Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
----
- arch/arm/boot/dts/Makefile                   |   1 +
- arch/arm/boot/dts/at91-sam9x60_curiosity.dts | 499 +++++++++++++++++++
- 2 files changed, 500 insertions(+)
- create mode 100644 arch/arm/boot/dts/at91-sam9x60_curiosity.dts
+handler
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 6aa7dc4db2fc..da20980384c4 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -51,6 +51,7 @@ dtb-$(CONFIG_SOC_AT91SAM9) += \
- 	at91sam9x25ek.dtb \
- 	at91sam9x35ek.dtb
- dtb-$(CONFIG_SOC_SAM9X60) += \
-+	at91-sam9x60_curiosity.dtb \
- 	at91-sam9x60ek.dtb
- dtb-$(CONFIG_SOC_SAM_V7) += \
- 	at91-kizbox2-2.dtb \
-diff --git a/arch/arm/boot/dts/at91-sam9x60_curiosity.dts b/arch/arm/boot/dts/at91-sam9x60_curiosity.dts
-new file mode 100644
-index 000000000000..4be98245326c
---- /dev/null
-+++ b/arch/arm/boot/dts/at91-sam9x60_curiosity.dts
-@@ -0,0 +1,499 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * at91-sam9x60_curiosity.dts - Device Tree file for Microchip SAM9X60 Curiosity board
-+ *
-+ * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
-+ *
-+ * Author: Durai Manickam KR <durai.manickamkr@microchip.com>
-+ */
-+/dts-v1/;
-+#include "sam9x60.dtsi"
-+#include <dt-bindings/input/input.h>
-+
-+/ {
-+	model = "Microchip SAM9X60 Curiosity";
-+	compatible = "microchip,sam9x60-curiosity", "microchip,sam9x60", "atmel,at91sam9";
-+
-+	aliases {
-+		i2c0 = &i2c0;
-+		i2c1 = &i2c6;
-+		serial2 = &uart7;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@20000000 {
-+		reg = <0x20000000 0x8000000>;
-+	};
-+
-+	clocks {
-+		slow_xtal {
-+			clock-frequency = <32768>;
-+		};
-+
-+		main_xtal {
-+			clock-frequency = <24000000>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_key_gpio_default>;
-+
-+		button-user {
-+			label = "PB_USER";
-+			gpios = <&pioA 29 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_PROG1>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_leds>;
-+
-+		led-red {
-+			label = "red";
-+			gpios = <&pioD 17 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-green {
-+			label = "green";
-+			gpios = <&pioD 19 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-blue {
-+			label = "blue";
-+			gpios = <&pioD 21 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+
-+	vdd_1v8: regulator-0 {
-+		compatible = "regulator-fixed";
-+		regulator-always-on;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-name = "VDD_1V8";
-+	};
-+
-+	vdd_1v15: regulator-1 {
-+		compatible = "regulator-fixed";
-+		regulator-always-on;
-+		regulator-max-microvolt = <1150000>;
-+		regulator-min-microvolt = <1150000>;
-+		regulator-name = "VDD_1V15";
-+	};
-+
-+	vdd1_3v3: regulator-2 {
-+		compatible = "regulator-fixed";
-+		regulator-always-on;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-name = "VDD1_3V3";
-+	};
-+};
-+
-+&adc {
-+	vddana-supply = <&vdd1_3v3>;
-+	vref-supply = <&vdd1_3v3>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc_default &pinctrl_adtrg_default>;
-+	status = "okay";
-+};
-+
-+&can0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_can0_rx_tx>;
-+	status = "disabled"; /* Conflict with dbgu. */
-+};
-+
-+&can1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_can1_rx_tx>;
-+	status = "okay";
-+};
-+
-+&dbgu {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_dbgu>;
-+	status = "okay"; /* Conflict with can0. */
-+};
-+
-+&ebi {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_ebi_addr_nand &pinctrl_ebi_data_lsb>;
-+	status = "okay";
-+
-+	nand_controller: nand-controller {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_nand_oe_we &pinctrl_nand_cs &pinctrl_nand_rb>;
-+		status = "okay";
-+
-+		nand@3 {
-+			reg = <0x3 0x0 0x800000>;
-+			rb-gpios = <&pioD 5 GPIO_ACTIVE_HIGH>;
-+			cs-gpios = <&pioD 4 GPIO_ACTIVE_HIGH>;
-+			nand-bus-width = <8>;
-+			nand-ecc-mode = "hw";
-+			nand-ecc-strength = <8>;
-+			nand-ecc-step-size = <512>;
-+			nand-on-flash-bbt;
-+			label = "atmel_nand";
-+
-+			partitions {
-+				compatible = "fixed-partitions";
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				at91bootstrap@0 {
-+					label = "at91bootstrap";
-+					reg = <0x0 0x40000>;
-+				};
-+
-+				uboot@40000 {
-+					label = "u-boot";
-+					reg = <0x40000 0xc0000>;
-+				};
-+
-+				ubootenvred@100000 {
-+					label = "U-Boot Env Redundant";
-+					reg = <0x100000 0x40000>;
-+				};
-+
-+				ubootenv@140000 {
-+					label = "U-Boot Env";
-+					reg = <0x140000 0x40000>;
-+				};
-+
-+				dtb@180000 {
-+					label = "device tree";
-+					reg = <0x180000 0x80000>;
-+				};
-+
-+				kernel@200000 {
-+					label = "kernel";
-+					reg = <0x200000 0x600000>;
-+				};
-+
-+				rootfs@800000 {
-+					label = "rootfs";
-+					reg = <0x800000 0x1f800000>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&flx0 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
-+	status = "okay";
-+
-+	i2c0: i2c@600 {
-+		dmas = <0>, <0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_flx0_default>;
-+		i2c-analog-filter;
-+		i2c-digital-filter;
-+		i2c-digital-filter-width-ns = <35>;
-+		status = "okay";
-+
-+		eeprom@53 {
-+			compatible = "atmel,24c02";
-+			reg = <0x53>;
-+			pagesize = <16>;
-+		};
-+	};
-+};
-+
-+&flx6 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
-+	status = "okay";
-+
-+	i2c6: i2c@600 {
-+		dmas = <0>, <0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_flx6_default>;
-+		i2c-analog-filter;
-+		i2c-digital-filter;
-+		i2c-digital-filter-width-ns = <35>;
-+		status = "disabled";
-+	};
-+};
-+
-+&flx7 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
-+	status = "okay";
-+
-+	uart7: serial@200 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_flx7_default>;
-+		status = "okay";
-+	};
-+};
-+
-+&macb0 {
-+	phy-mode = "rmii";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_macb0_rmii>;
-+	status = "okay";
-+
-+	ethernet-phy@0 {
-+		reg = <0x0>;
-+	};
-+};
-+
-+&pinctrl {
-+	adc {
-+		pinctrl_adc_default: adc-default {
-+			atmel,pins = <AT91_PIOB 14 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_adtrg_default: adtrg-default {
-+			atmel,pins = <AT91_PIOB 18 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>;
-+		};
-+	};
-+
-+	can0 {
-+		pinctrl_can0_rx_tx: can0-rx-tx {
-+			atmel,pins =
-+				<AT91_PIOA 9 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANRX0 */
-+				 AT91_PIOA 10 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANTX0 */
-+				 AT91_PIOC 9 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_DOWN>;	/* Enable CAN Transceivers */
-+		};
-+	};
-+
-+	can1 {
-+		pinctrl_can1_rx_tx: can1-rx-tx {
-+			atmel,pins =
-+				<AT91_PIOA 6 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANRX1 */
-+				 AT91_PIOA 5 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANTX1 */
-+				 AT91_PIOB 17 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_DOWN>;	/* Enable CAN Transceivers */
-+		};
-+	};
-+
-+	dbgu {
-+		pinctrl_dbgu: dbgu-0 {
-+			atmel,pins = <AT91_PIOA 9 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				      AT91_PIOA 10 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	ebi {
-+		pinctrl_ebi_data_lsb: ebi-data-lsb {
-+			atmel,pins =
-+				<AT91_PIOD 6 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 7 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 8 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 9 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 10 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 11 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 12 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 13 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)>;
-+		};
-+
-+		pinctrl_ebi_addr_nand: ebi-addr-nand {
-+			atmel,pins =
-+				<AT91_PIOD 2 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 3 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)>;
-+		};
-+	};
-+
-+	flexcom {
-+		pinctrl_flx0_default: flx0-twi {
-+			atmel,pins =
-+				<AT91_PIOA 0 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				 AT91_PIOA 1 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
-+		};
-+
-+		pinctrl_flx6_default: flx6-twi {
-+			atmel,pins =
-+				<AT91_PIOA 30 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				 AT91_PIOA 31 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
-+		};
-+
-+		pinctrl_flx7_default: flx7-usart {
-+			atmel,pins =
-+				<AT91_PIOC 0 AT91_PERIPH_C AT91_PINCTRL_NONE
-+				 AT91_PIOC 1 AT91_PERIPH_C AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		pinctrl_key_gpio_default: pinctrl-key-gpio {
-+			atmel,pins = <AT91_PIOA 29 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	leds {
-+		pinctrl_gpio_leds: gpio-leds {
-+			atmel,pins = <AT91_PIOD 17 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOD 19 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOD 21 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	macb0 {
-+		pinctrl_macb0_rmii: macb0-rmii-0 {
-+			atmel,pins =
-+				<AT91_PIOB 0 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB0 periph A */
-+				 AT91_PIOB 1 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB1 periph A */
-+				 AT91_PIOB 2 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB2 periph A */
-+				 AT91_PIOB 3 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB3 periph A */
-+				 AT91_PIOB 4 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB4 periph A */
-+				 AT91_PIOB 5 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB5 periph A */
-+				 AT91_PIOB 6 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB6 periph A */
-+				 AT91_PIOB 7 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB7 periph A */
-+				 AT91_PIOB 9 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB9 periph A */
-+				 AT91_PIOB 10 AT91_PERIPH_A AT91_PINCTRL_NONE>;	/* PB10 periph A */
-+		};
-+	};
-+
-+	nand {
-+		pinctrl_nand_oe_we: nand-oe-we-0 {
-+			atmel,pins =
-+				<AT91_PIOD 0 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 1 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)>;
-+		};
-+
-+		pinctrl_nand_rb: nand-rb-0 {
-+			atmel,pins =
-+				<AT91_PIOD 5 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
-+		};
-+
-+		pinctrl_nand_cs: nand-cs-0 {
-+			atmel,pins =
-+				<AT91_PIOD 4 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
-+		};
-+	};
-+
-+	pwm0 {
-+		pinctrl_pwm0_0: pwm0-0 {
-+			atmel,pins = <AT91_PIOB 12 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_pwm0_1: pwm0-1 {
-+			atmel,pins = <AT91_PIOB 13 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_pwm0_2: pwm0-2 {
-+			atmel,pins = <AT91_PIOD 16 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	sdmmc0 {
-+		pinctrl_sdmmc0_default: sdmmc0 {
-+			atmel,pins =
-+				<AT91_PIOA 17 AT91_PERIPH_A (AT91_PINCTRL_DRIVE_STRENGTH_HI)				/* PA17 CK  periph A with pullup */
-+				 AT91_PIOA 16 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA16 CMD periph A with pullup */
-+				 AT91_PIOA 15 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA15 DAT0 periph A */
-+				 AT91_PIOA 18 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA18 DAT1 periph A with pullup */
-+				 AT91_PIOA 19 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA19 DAT2 periph A with pullup */
-+				 AT91_PIOA 20 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)>;	/* PA20 DAT3 periph A with pullup */
-+		};
-+		pinctrl_sdmmc0_cd: sdmmc0-cd {
-+			atmel,pins =
-+				<AT91_PIOA 25 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	sdmmc1 {
-+		pinctrl_sdmmc1_default: sdmmc1 {
-+			atmel,pins =
-+				<AT91_PIOA 13 AT91_PERIPH_B (AT91_PINCTRL_DRIVE_STRENGTH_HI)				/* PA13 CK periph B */
-+				 AT91_PIOA 12 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA12 CMD periph B with pullup */
-+				 AT91_PIOA 11 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA11 DAT0 periph B with pullup */
-+				 AT91_PIOA  2 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA2 DAT1 periph B with pullup */
-+				 AT91_PIOA  3 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA3 DAT2 periph B with pullup */
-+				 AT91_PIOA  4 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)>;	/* PA4 DAT3 periph B with pullup */
-+		};
-+	};
-+
-+	usb0 {
-+		pinctrl_usba_vbus: usba-vbus {
-+			atmel,pins = <AT91_PIOA 27 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	usb1 {
-+		pinctrl_usb_default: usb-default {
-+			atmel,pins = <AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOD 15 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+}; /* pinctrl */
-+
-+&pwm0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm0_0 &pinctrl_pwm0_1 &pinctrl_pwm0_2>;
-+	status = "okay";
-+};
-+
-+&sdmmc0 {
-+	bus-width = <4>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sdmmc0_default &pinctrl_sdmmc0_cd>;
-+	cd-gpios = <&pioA 25 GPIO_ACTIVE_LOW>;
-+	disable-wp;
-+	status = "okay";
-+};
-+
-+&sdmmc1 {
-+	bus-width = <4>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sdmmc1_default>;
-+	status = "disabled";
-+};
-+
-+&shutdown_controller {
-+	debounce-delay-us = <976>;
-+	status = "okay";
-+
-+	input@0 {
-+		reg = <0>;
-+	};
-+};
-+
-+&tcb0 {
-+	timer0: timer@0 {
-+		compatible = "atmel,tcb-timer";
-+		reg = <0>;
-+	};
-+
-+	timer1: timer@1 {
-+		compatible = "atmel,tcb-timer";
-+		reg = <1>;
-+	};
-+};
-+
-+&usb0 {
-+	atmel,vbus-gpio = <&pioA 27 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usba_vbus>;
-+	status = "okay";
-+};
-+
-+&usb1 {
-+	num-ports = <3>;
-+	atmel,vbus-gpio = <0
-+			   &pioD 18 GPIO_ACTIVE_HIGH
-+			   &pioD 15 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb_default>;
-+	status = "okay";
-+};
-+
-+&usb2 {
-+	status = "okay";
-+};
-+
-+&watchdog {
-+	status = "okay";
-+};
--- 
-2.25.1
+> The top SBI layer converts the Linux error code to SBI specific error code
+> that can be returned to guest invoking the SBI calls. This model works
+> as long as SBI error codes have 1-to-1 mappings between them.
 
+as long as SBI and Linux error codes have 1-to-1...
+
+> However, that may not be true always. This patch attempts to disassociate
+> both these error codes by allowing the SBI extension implementation to
+> return SBI specific error codes as well.
+> 
+> The extension will continue to return the Linux error specific code which
+> will indicate any problem *with* the extension emulation while the
+> SBI specific error will indicate the problem *of* the emulation.
+> 
+> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/kvm_vcpu_sbi.h | 10 ++++--
+>  arch/riscv/kvm/vcpu_sbi.c             | 45 ++++++++-------------------
+>  arch/riscv/kvm/vcpu_sbi_base.c        | 38 +++++++++++-----------
+>  arch/riscv/kvm/vcpu_sbi_hsm.c         | 22 +++++++------
+>  arch/riscv/kvm/vcpu_sbi_replace.c     | 44 +++++++++++++-------------
+>  5 files changed, 74 insertions(+), 85 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> index 61dac1b..fee9253 100644
+> --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> @@ -18,6 +18,12 @@ struct kvm_vcpu_sbi_context {
+>  	int return_handled;
+>  };
+>  
+> +struct kvm_vcpu_sbi_ext_data {
+> +	unsigned long out_val;
+> +	unsigned long err_val;
+> +	bool uexit;
+> +};
+> +
+>  struct kvm_vcpu_sbi_extension {
+>  	unsigned long extid_start;
+>  	unsigned long extid_end;
+> @@ -27,8 +33,8 @@ struct kvm_vcpu_sbi_extension {
+>  	 * specific error codes.
+>  	 */
+>  	int (*handler)(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> -		       unsigned long *out_val, struct kvm_cpu_trap *utrap,
+> -		       bool *exit);
+> +		       struct kvm_vcpu_sbi_ext_data *edata,
+> +		       struct kvm_cpu_trap *utrap);
+>  
+>  	/* Extension specific probe function */
+>  	unsigned long (*probe)(struct kvm_vcpu *vcpu, unsigned long extid);
+> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+> index f96991d..50c5472 100644
+> --- a/arch/riscv/kvm/vcpu_sbi.c
+> +++ b/arch/riscv/kvm/vcpu_sbi.c
+> @@ -12,26 +12,6 @@
+>  #include <asm/sbi.h>
+>  #include <asm/kvm_vcpu_sbi.h>
+>  
+> -static int kvm_linux_err_map_sbi(int err)
+> -{
+> -	switch (err) {
+> -	case 0:
+> -		return SBI_SUCCESS;
+> -	case -EPERM:
+> -		return SBI_ERR_DENIED;
+> -	case -EINVAL:
+> -		return SBI_ERR_INVALID_PARAM;
+> -	case -EFAULT:
+> -		return SBI_ERR_INVALID_ADDRESS;
+> -	case -EOPNOTSUPP:
+> -		return SBI_ERR_NOT_SUPPORTED;
+> -	case -EALREADY:
+> -		return SBI_ERR_ALREADY_AVAILABLE;
+> -	default:
+> -		return SBI_ERR_FAILURE;
+> -	};
+> -}
+> -
+>  #ifndef CONFIG_RISCV_SBI_V01
+>  static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01 = {
+>  	.extid_start = -1UL,
+> @@ -125,11 +105,10 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
+>  {
+>  	int ret = 1;
+>  	bool next_sepc = true;
+> -	bool userspace_exit = false;
+>  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+>  	const struct kvm_vcpu_sbi_extension *sbi_ext;
+>  	struct kvm_cpu_trap utrap = { 0 };
+> -	unsigned long out_val = 0;
+> +	struct kvm_vcpu_sbi_ext_data edata_out = { 0 };
+>  	bool ext_is_v01 = false;
+>  
+>  	sbi_ext = kvm_vcpu_sbi_find_ext(cp->a7);
+> @@ -139,7 +118,7 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
+>  		    cp->a7 <= SBI_EXT_0_1_SHUTDOWN)
+>  			ext_is_v01 = true;
+>  #endif
+> -		ret = sbi_ext->handler(vcpu, run, &out_val, &utrap, &userspace_exit);
+> +		ret = sbi_ext->handler(vcpu, run, &edata_out, &utrap);
+>  	} else {
+>  		/* Return error for unsupported SBI calls */
+>  		cp->a0 = SBI_ERR_NOT_SUPPORTED;
+> @@ -156,25 +135,27 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
+>  		goto ecall_done;
+>  	}
+>  
+> +	/* The SBI extension returns Linux error code. Exits the ioctl loop
+
+Need opening /* wing
+
+And for wording, maybe
+
+ When the SBI extension returns a Linux error code, it exist the ioctl
+ loop and forwards the error to userspace.
+
+> +	 * and forwards the error to the userspace.
+> +	 */
+> +	if (ret < 0) {
+> +		next_sepc = false;
+> +		goto ecall_done;
+> +	}
+
+Shouldn't this ret < 0 check go above the "Handle special error cases..."
+block?
+
+> +
+>  	/* Exit ioctl loop or Propagate the error code the guest */
+> -	if (userspace_exit) {
+> +	if (edata_out.uexit) {
+>  		next_sepc = false;
+>  		ret = 0;
+>  	} else {
+> -		/**
+> -		 * SBI extension handler always returns an Linux error code. Convert
+> -		 * it to the SBI specific error code that can be propagated the SBI
+> -		 * caller.
+> -		 */
+> -		ret = kvm_linux_err_map_sbi(ret);
+> -		cp->a0 = ret;
+> +		cp->a0 = edata_out.err_val;
+>  		ret = 1;
+>  	}
+>  ecall_done:
+>  	if (next_sepc)
+>  		cp->sepc += 4;
+>  	if (!ext_is_v01)
+> -		cp->a1 = out_val;
+> +		cp->a1 = edata_out.out_val;
+>  
+>  	return ret;
+>  }
+> diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
+> index 89e2415..487828d 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_base.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_base.c
+> @@ -14,24 +14,23 @@
+>  #include <asm/kvm_vcpu_sbi.h>
+>  
+>  static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> -				    unsigned long *out_val,
+> -				    struct kvm_cpu_trap *trap, bool *exit)
+> +				    struct kvm_vcpu_sbi_ext_data *edata,
+> +				    struct kvm_cpu_trap *trap)
+>  {
+> -	int ret = 0;
+>  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+>  	const struct kvm_vcpu_sbi_extension *sbi_ext;
+>  
+>  	switch (cp->a6) {
+>  	case SBI_EXT_BASE_GET_SPEC_VERSION:
+> -		*out_val = (KVM_SBI_VERSION_MAJOR <<
+> +		edata->out_val = (KVM_SBI_VERSION_MAJOR <<
+>  			    SBI_SPEC_VERSION_MAJOR_SHIFT) |
+>  			    KVM_SBI_VERSION_MINOR;
+>  		break;
+>  	case SBI_EXT_BASE_GET_IMP_ID:
+> -		*out_val = KVM_SBI_IMPID;
+> +		edata->out_val = KVM_SBI_IMPID;
+>  		break;
+>  	case SBI_EXT_BASE_GET_IMP_VERSION:
+> -		*out_val = LINUX_VERSION_CODE;
+> +		edata->out_val = LINUX_VERSION_CODE;
+>  		break;
+>  	case SBI_EXT_BASE_PROBE_EXT:
+>  		if ((cp->a0 >= SBI_EXT_EXPERIMENTAL_START &&
+> @@ -43,33 +42,33 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  			 * forward it to the userspace
+>  			 */
+>  			kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> -			*exit = true;
+> +			edata->uexit = true;
+>  		} else {
+>  			sbi_ext = kvm_vcpu_sbi_find_ext(cp->a0);
+>  			if (sbi_ext) {
+>  				if (sbi_ext->probe)
+> -					*out_val = sbi_ext->probe(vcpu, cp->a0);
+> +					edata->out_val = sbi_ext->probe(vcpu, cp->a0);
+>  				else
+> -					*out_val = 1;
+> +					edata->out_val = 1;
+>  			} else
+> -				*out_val = 0;
+> +				edata->out_val = 0;
+>  		}
+>  		break;
+>  	case SBI_EXT_BASE_GET_MVENDORID:
+> -		*out_val = vcpu->arch.mvendorid;
+> +		edata->out_val = vcpu->arch.mvendorid;
+>  		break;
+>  	case SBI_EXT_BASE_GET_MARCHID:
+> -		*out_val = vcpu->arch.marchid;
+> +		edata->out_val = vcpu->arch.marchid;
+>  		break;
+>  	case SBI_EXT_BASE_GET_MIMPID:
+> -		*out_val = vcpu->arch.mimpid;
+> +		edata->out_val = vcpu->arch.mimpid;
+>  		break;
+>  	default:
+> -		ret = -EOPNOTSUPP;
+> +		edata->err_val = SBI_ERR_NOT_SUPPORTED;
+>  		break;
+>  	}
+>  
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base = {
+> @@ -79,17 +78,16 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base = {
+>  };
+>  
+>  static int kvm_sbi_ext_forward_handler(struct kvm_vcpu *vcpu,
+> -					struct kvm_run *run,
+> -					unsigned long *out_val,
+> -					struct kvm_cpu_trap *utrap,
+> -					bool *exit)
+> +				       struct kvm_run *run,
+> +				       struct kvm_vcpu_sbi_ext_data *edata,
+> +				       struct kvm_cpu_trap *utrap)
+>  {
+>  	/*
+>  	 * Both SBI experimental and vendor extensions are
+>  	 * unconditionally forwarded to userspace.
+>  	 */
+>  	kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> -	*exit = true;
+> +	edata->uexit = true;
+>  	return 0;
+>  }
+>  
+> diff --git a/arch/riscv/kvm/vcpu_sbi_hsm.c b/arch/riscv/kvm/vcpu_sbi_hsm.c
+> index 0f8d9fe..4188f21 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_hsm.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_hsm.c
+> @@ -21,9 +21,9 @@ static int kvm_sbi_hsm_vcpu_start(struct kvm_vcpu *vcpu)
+>  
+>  	target_vcpu = kvm_get_vcpu_by_id(vcpu->kvm, target_vcpuid);
+>  	if (!target_vcpu)
+> -		return -EINVAL;
+> +		return SBI_ERR_INVALID_PARAM;
+>  	if (!target_vcpu->arch.power_off)
+> -		return -EALREADY;
+> +		return SBI_ERR_ALREADY_AVAILABLE;
+>  
+>  	reset_cntx = &target_vcpu->arch.guest_reset_context;
+>  	/* start address */
+> @@ -42,7 +42,7 @@ static int kvm_sbi_hsm_vcpu_start(struct kvm_vcpu *vcpu)
+>  static int kvm_sbi_hsm_vcpu_stop(struct kvm_vcpu *vcpu)
+>  {
+>  	if (vcpu->arch.power_off)
+> -		return -EPERM;
+> +		return SBI_ERR_FAILURE;
+
+-EPERM shouldn't map to SBI_ERR_FAILURE, but this should be addressed in
+the previous patch.
+
+>  
+>  	kvm_riscv_vcpu_power_off(vcpu);
+>  
+> @@ -57,7 +57,7 @@ static int kvm_sbi_hsm_vcpu_get_status(struct kvm_vcpu *vcpu)
+>  
+>  	target_vcpu = kvm_get_vcpu_by_id(vcpu->kvm, target_vcpuid);
+>  	if (!target_vcpu)
+> -		return -EINVAL;
+> +		return SBI_ERR_INVALID_PARAM;
+>  	if (!target_vcpu->arch.power_off)
+>  		return SBI_HSM_STATE_STARTED;
+>  	else if (vcpu->stat.generic.blocking)
+> @@ -66,10 +66,10 @@ static int kvm_sbi_hsm_vcpu_get_status(struct kvm_vcpu *vcpu)
+>  		return SBI_HSM_STATE_STOPPED;
+>  }
+>  
+> +
+
+stray new blank line
+
+>  static int kvm_sbi_ext_hsm_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> -				   unsigned long *out_val,
+> -				   struct kvm_cpu_trap *utrap,
+> -				   bool *exit)
+> +				   struct kvm_vcpu_sbi_ext_data *edata,
+> +				   struct kvm_cpu_trap *utrap)
+>  {
+>  	int ret = 0;
+>  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+> @@ -88,8 +88,8 @@ static int kvm_sbi_ext_hsm_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  	case SBI_EXT_HSM_HART_STATUS:
+>  		ret = kvm_sbi_hsm_vcpu_get_status(vcpu);
+>  		if (ret >= 0) {
+> -			*out_val = ret;
+> -			ret = 0;
+> +			edata->out_val = ret;
+> +			edata->err_val = 0;
+
+We want a 'return 0;' here. Otherwise below we write ret to err_val.
+
+>  		}
+>  		break;
+>  	case SBI_EXT_HSM_HART_SUSPEND:
+> @@ -108,7 +108,9 @@ static int kvm_sbi_ext_hsm_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  		ret = -EOPNOTSUPP;
+
+This ret = -EOPNOTSUPP in the context and two others above it need to be
+converted to SBI errors.
+
+>  	}
+>  
+> -	return ret;
+> +	edata->err_val = ret;
+> +
+> +	return 0;
+>  }
+>  
+>  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm = {
+> diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
+> index 03a0198..d029136 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_replace.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_replace.c
+> @@ -14,15 +14,17 @@
+>  #include <asm/kvm_vcpu_sbi.h>
+>  
+>  static int kvm_sbi_ext_time_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> -				    unsigned long *out_val,
+> -				    struct kvm_cpu_trap *utrap, bool *exit)
+> +				    struct kvm_vcpu_sbi_ext_data *edata,
+> +				    struct kvm_cpu_trap *utrap)
+>  {
+>  	int ret = 0;
+
+ret is only used at the bottom to return 0. We can drop the variable and
+change it to an explicit zero.
+
+>  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+>  	u64 next_cycle;
+>  
+> -	if (cp->a6 != SBI_EXT_TIME_SET_TIMER)
+> -		return -EINVAL;
+> +	if (cp->a6 != SBI_EXT_TIME_SET_TIMER) {
+> +		edata->err_val = SBI_ERR_INVALID_PARAM;
+> +		return 0;
+> +	}
+>  
+>  #if __riscv_xlen == 32
+>  	next_cycle = ((u64)cp->a1 << 32) | (u64)cp->a0;
+> @@ -41,8 +43,8 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_time = {
+>  };
+>  
+>  static int kvm_sbi_ext_ipi_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> -				   unsigned long *out_val,
+> -				   struct kvm_cpu_trap *utrap, bool *exit)
+> +				   struct kvm_vcpu_sbi_ext_data *edata,
+> +				   struct kvm_cpu_trap *utrap)
+>  {
+>  	int ret = 0;
+>  	unsigned long i;
+> @@ -51,8 +53,10 @@ static int kvm_sbi_ext_ipi_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  	unsigned long hmask = cp->a0;
+>  	unsigned long hbase = cp->a1;
+>  
+> -	if (cp->a6 != SBI_EXT_IPI_SEND_IPI)
+> -		return -EINVAL;
+> +	if (cp->a6 != SBI_EXT_IPI_SEND_IPI) {
+> +		edata->err_val = SBI_ERR_INVALID_PARAM;
+> +		return 0;
+> +	}
+>  
+>  	kvm_for_each_vcpu(i, tmp, vcpu->kvm) {
+>  		if (hbase != -1UL) {
+> @@ -76,10 +80,9 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_ipi = {
+>  };
+>  
+>  static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> -				      unsigned long *out_val,
+> -				      struct kvm_cpu_trap *utrap, bool *exit)
+> +				      struct kvm_vcpu_sbi_ext_data *edata,
+> +				      struct kvm_cpu_trap *utrap)
+>  {
+> -	int ret = 0;
+>  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+>  	unsigned long hmask = cp->a0;
+>  	unsigned long hbase = cp->a1;
+> @@ -116,10 +119,10 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
+>  		 */
+>  		break;
+>  	default:
+> -		ret = -EOPNOTSUPP;
+> +		edata->err_val = SBI_ERR_NOT_SUPPORTED;
+>  	}
+>  
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_rfence = {
+> @@ -130,14 +133,13 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_rfence = {
+>  
+>  static int kvm_sbi_ext_srst_handler(struct kvm_vcpu *vcpu,
+>  				    struct kvm_run *run,
+> -				    unsigned long *out_val,
+> -				    struct kvm_cpu_trap *utrap, bool *exit)
+> +				    struct kvm_vcpu_sbi_ext_data *edata,
+> +				    struct kvm_cpu_trap *utrap)
+>  {
+>  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+>  	unsigned long funcid = cp->a6;
+>  	u32 reason = cp->a1;
+>  	u32 type = cp->a0;
+> -	int ret = 0;
+>  
+>  	switch (funcid) {
+>  	case SBI_EXT_SRST_RESET:
+> @@ -146,24 +148,24 @@ static int kvm_sbi_ext_srst_handler(struct kvm_vcpu *vcpu,
+>  			kvm_riscv_vcpu_sbi_system_reset(vcpu, run,
+>  						KVM_SYSTEM_EVENT_SHUTDOWN,
+>  						reason);
+> -			*exit = true;
+> +			edata->uexit = true;
+>  			break;
+>  		case SBI_SRST_RESET_TYPE_COLD_REBOOT:
+>  		case SBI_SRST_RESET_TYPE_WARM_REBOOT:
+>  			kvm_riscv_vcpu_sbi_system_reset(vcpu, run,
+>  						KVM_SYSTEM_EVENT_RESET,
+>  						reason);
+> -			*exit = true;
+> +			edata->uexit = true;
+>  			break;
+>  		default:
+> -			ret = -EOPNOTSUPP;
+> +			edata->err_val = SBI_ERR_NOT_SUPPORTED;
+>  		}
+>  		break;
+>  	default:
+> -		ret = -EOPNOTSUPP;
+> +		edata->err_val = SBI_ERR_NOT_SUPPORTED;
+>  	}
+>  
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_srst = {
+> -- 
+> 2.25.1
+>
+
+Thanks,
+drew
