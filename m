@@ -2,46 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B91A6669CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 04:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC7B6669CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 04:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234465AbjALDtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 22:49:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        id S229612AbjALDsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 22:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236322AbjALDsx (ORCPT
+        with ESMTP id S230329AbjALDst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 22:48:53 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89C4B4BD4D
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 19:48:52 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26E02FEC;
-        Wed, 11 Jan 2023 19:49:34 -0800 (PST)
-Received: from [10.162.41.9] (unknown [10.162.41.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 412C63F67D;
+        Wed, 11 Jan 2023 22:48:49 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D844BD43;
         Wed, 11 Jan 2023 19:48:48 -0800 (PST)
-Message-ID: <f2886dd2-c98c-cbe0-0816-0d7926edd2f0@arm.com>
-Date:   Thu, 12 Jan 2023 09:18:45 +0530
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673495328; x=1705031328;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TKvdNpz9TBZtw78c48PaO8ycADozRlkWSBrClcPP9SQ=;
+  b=a/R2wnaTC4ksCwD0rnFGxzgyDen7os2Kj41Vz0M/GaTPqK4ZnuvR2bH9
+   qrpR84qXaAEqvkgaVJpAnPcaiT9uaMViIFdHYqYq0H90EYfF9aNYgt+9m
+   tana/RidqYM2m+uMvoh4G8v3bR0uL228F8OHZmAt6iRCGEn0Cmc99IJiC
+   bsExOO8lHtjbPmZS9EgkogQ+kBFq5IYoeHrCq7gr/nFxvGo3AWZ6aY1te
+   Jk6Smgy/Qex+UidgvHfpjNZkLkIm+Il5RIjB0uaF+1w6AaJTEusz/WMpp
+   pE7SVClybKFbaAblQGtAHg8GXeNBY4fTsJP5436c1gRMA99zqujV5naNq
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="303301902"
+X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
+   d="scan'208";a="303301902"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 19:48:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="657641426"
+X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
+   d="scan'208";a="657641426"
+Received: from mabir-mobl.amr.corp.intel.com (HELO [10.209.115.16]) ([10.209.115.16])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 19:48:47 -0800
+Message-ID: <de13b6bd-813f-d0bb-3a92-ea1ad3db5d54@linux.intel.com>
+Date:   Wed, 11 Jan 2023 19:48:47 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] coresight: etm4x: Fix accesses to TRCSEQRSTEVR and
- TRCSEQSTR
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH V1] PCI/AER: Configure ECRC only AER is native
 Content-Language: en-US
-To:     Junhao He <hejunhao3@huawei.com>, mathieu.poirier@linaro.org,
-        suzuki.poulose@arm.com, mike.leach@linaro.org, leo.yan@linaro.org
-Cc:     coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
-        shenyang39@huawei.com, prime.zeng@hisilicon.com
-References: <20230110125101.10533-1-hejunhao3@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20230110125101.10533-1-hejunhao3@huawei.com>
+To:     Vidya Sagar <vidyas@nvidia.com>, Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, ruscur@russell.cc, oohall@gmail.com,
+        treding@nvidia.com, jonathanh@nvidia.com, mmaddireddy@nvidia.com,
+        kthota@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vsethi@nvidia.com,
+        linuxppc-dev@lists.ozlabs.org, sagar.tv@gmail.com
+References: <20230111231033.GA1714672@bhelgaas>
+ <880c4d3c-86d2-082c-bb58-8212adc67ff3@linux.intel.com>
+ <4ddef2c9-44b6-4a08-dbeb-428cd0864c55@nvidia.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <4ddef2c9-44b6-4a08-dbeb-428cd0864c55@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -50,64 +70,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/10/23 18:21, Junhao He wrote:
-> The TRCSEQRSTEVR and TRCSEQSTR register is not implemented if the
+On 1/11/23 7:33 PM, Vidya Sagar wrote:
+> I think we still need bios option. For example, consider a system where BIOS needs to keep ECRC enabled for integrity reasons but if kernel doesn't want it for perf reasons, then, kernel can always use 'ecrc=off' option.
 
-s/register is/registers are/
+I agree that "on" and "off" option makes sense. Since the kernel defaults ecrc setting to "bios", why again allow it as a command line option?
 
-> TRCIDR5.NUMSEQSTATE == 0. Skip accessing the register in such cases.
-
-s/register/registers/
-
-> 
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
-> ---
->  .../hwtracing/coresight/coresight-etm4x-core.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> index 80fefaba58ee..c7a65d1524fc 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> @@ -424,8 +424,10 @@ static int etm4_enable_hw(struct etmv4_drvdata *drvdata)
->  		etm4x_relaxed_write32(csa, config->vipcssctlr, TRCVIPCSSCTLR);
->  	for (i = 0; i < drvdata->nrseqstate - 1; i++)
->  		etm4x_relaxed_write32(csa, config->seq_ctrl[i], TRCSEQEVRn(i));
-> -	etm4x_relaxed_write32(csa, config->seq_rst, TRCSEQRSTEVR);
-> -	etm4x_relaxed_write32(csa, config->seq_state, TRCSEQSTR);
-> +	if (drvdata->nrseqstate) {
-> +		etm4x_relaxed_write32(csa, config->seq_rst, TRCSEQRSTEVR);
-> +		etm4x_relaxed_write32(csa, config->seq_state, TRCSEQSTR);
-> +	}
->  	etm4x_relaxed_write32(csa, config->ext_inp, TRCEXTINSELR);
->  	for (i = 0; i < drvdata->nr_cntr; i++) {
->  		etm4x_relaxed_write32(csa, config->cntrldvr[i], TRCCNTRLDVRn(i));
-> @@ -1631,8 +1633,10 @@ static int __etm4_cpu_save(struct etmv4_drvdata *drvdata)
->  	for (i = 0; i < drvdata->nrseqstate - 1; i++)
->  		state->trcseqevr[i] = etm4x_read32(csa, TRCSEQEVRn(i));
->  
-> -	state->trcseqrstevr = etm4x_read32(csa, TRCSEQRSTEVR);
-> -	state->trcseqstr = etm4x_read32(csa, TRCSEQSTR);
-> +	if (drvdata->nrseqstate) {
-> +		state->trcseqrstevr = etm4x_read32(csa, TRCSEQRSTEVR);
-> +		state->trcseqstr = etm4x_read32(csa, TRCSEQSTR);
-> +	}
->  	state->trcextinselr = etm4x_read32(csa, TRCEXTINSELR);
->  
->  	for (i = 0; i < drvdata->nr_cntr; i++) {
-> @@ -1760,8 +1764,10 @@ static void __etm4_cpu_restore(struct etmv4_drvdata *drvdata)
->  	for (i = 0; i < drvdata->nrseqstate - 1; i++)
->  		etm4x_relaxed_write32(csa, state->trcseqevr[i], TRCSEQEVRn(i));
->  
-> -	etm4x_relaxed_write32(csa, state->trcseqrstevr, TRCSEQRSTEVR);
-> -	etm4x_relaxed_write32(csa, state->trcseqstr, TRCSEQSTR);
-> +	if (drvdata->nrseqstate) {
-> +		etm4x_relaxed_write32(csa, state->trcseqrstevr, TRCSEQRSTEVR);
-> +		etm4x_relaxed_write32(csa, state->trcseqstr, TRCSEQSTR);
-> +	}
->  	etm4x_relaxed_write32(csa, state->trcextinselr, TRCEXTINSELR);
->  
->  	for (i = 0; i < drvdata->nr_cntr; i++) {
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
