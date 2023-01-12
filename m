@@ -2,360 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD6866719D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A9066719F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjALMFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 07:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        id S233620AbjALMFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 07:05:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233241AbjALME3 (ORCPT
+        with ESMTP id S233262AbjALMEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 07:04:29 -0500
-Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251D254D8B;
-        Thu, 12 Jan 2023 03:59:07 -0800 (PST)
-Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
- (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Thu, 12 Jan
- 2023 14:59:05 +0300
-Received: from localhost (10.0.253.157) by Ex16-01.fintech.ru (10.0.10.18)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Thu, 12 Jan
- 2023 14:59:05 +0300
-From:   Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-To:     <stable@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-        Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Alexey Khoroshilov" <khoroshilov@ispras.ru>,
-        <lvc-project@linuxtesting.org>,
-        "Lorenzo Bianconi" <lorenzo@kernel.org>
-Subject: [PATCH 5.10 1/1] mt76: move mt76_init_tx_queue in common code
-Date:   Thu, 12 Jan 2023 03:58:50 -0800
-Message-ID: <20230112115850.9208-2-n.zhandarovich@fintech.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230112115850.9208-1-n.zhandarovich@fintech.ru>
-References: <20230112115850.9208-1-n.zhandarovich@fintech.ru>
+        Thu, 12 Jan 2023 07:04:30 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5721EE6D;
+        Thu, 12 Jan 2023 03:59:14 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C66783EF0F;
+        Thu, 12 Jan 2023 11:59:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673524747; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rk8NDzBWXwv58AsxaL9j8+/toDN9Bb61CC4cwhVedfM=;
+        b=qzHWsqiBk4OJrhKbSO650DFI5q4koVVxnqN2ZIEz8G1dreeKiagR3NaIzWHJVB3Bl/fcdI
+        jCL6pFrhSUuL1/2WzQBm8TJ1cYEbe+oW4Vh0T0yjwS7M4ToYHGT30L/V/TH4U6MwdjHfWz
+        Hq/aNYQC8eNjCUx+P362LtfzuP+uQ2c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673524747;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rk8NDzBWXwv58AsxaL9j8+/toDN9Bb61CC4cwhVedfM=;
+        b=GsSUBRvSchziBexgTOABJx/UJVpqdXwdjgN18Qaksi7RKXa9O1ylPBIS91uJCl1uBMcnHa
+        hFOBoUYqBU/lwEBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 11AD213585;
+        Thu, 12 Jan 2023 11:59:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vQdxAwv2v2NxPAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 12 Jan 2023 11:59:07 +0000
+Message-ID: <2b6c77bd-bead-7bfb-bf07-63e9ca837c58@suse.cz>
+Date:   Thu, 12 Jan 2023 12:59:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.253.157]
-X-ClientProxiedBy: Ex16-01.fintech.ru (10.0.10.18) To Ex16-01.fintech.ru
- (10.0.10.18)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCHv8 02/14] mm: Add support for unaccepted memory
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+References: <20221207014933.8435-1-kirill.shutemov@linux.intel.com>
+ <20221207014933.8435-3-kirill.shutemov@linux.intel.com>
+ <f944459f-76a6-60c3-7dae-0918d9ef0c5d@suse.cz>
+ <20221209192616.dg4cbe7mgh3axv5h@box.shutemov.name>
+ <3ab6ea38-5a9b-af4f-3c94-b75dce682bc1@suse.cz>
+ <20221224164639.pb3hrvbxtlodgm5e@box.shutemov.name>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221224164639.pb3hrvbxtlodgm5e@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+On 12/24/22 17:46, Kirill A. Shutemov wrote:
+> On Fri, Dec 09, 2022 at 11:23:50PM +0100, Vlastimil Babka wrote:
+>> On 12/9/22 20:26, Kirill A. Shutemov wrote:
+>> >> >  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+>> >> >  			/*
+>> >> >  			 * Watermark failed for this zone, but see if we can
+>> >> > @@ -4299,6 +4411,9 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
+>> >> >  
+>> >> >  			return page;
+>> >> >  		} else {
+>> >> > +			if (try_to_accept_memory(zone))
+>> >> > +				goto try_this_zone;
+>> >> 
+>> >> On the other hand, here we failed the full rmqueue(), including the
+>> >> potentially fragmenting fallbacks, so I'm worried that before we finally
+>> >> fail all of that and resort to accepting more memory, we already fragmented
+>> >> the already accepted memory, more than necessary.
+>> > 
+>> > I'm not sure I follow. We accept memory in pageblock chunks. Do we want to
+>> > allocate from a free pageblock if we have other memory to tap from? It
+>> > doesn't make sense to me.
+>> 
+>> The fragmentation avoidance based on migratetype does work with pageblock
+>> granularity, so yeah, if you accept a single pageblock worth of memory and
+>> then (through __rmqueue_fallback()) end up serving both movable and
+>> unmovable allocations from it, the whole fragmentation avoidance mechanism
+>> is defeated and you end up with unmovable allocations (e.g. page tables)
+>> scattered over many pageblocks and inability to allocate any huge pages.
+>> 
+>> >> So one way to prevent would be to move the acceptance into rmqueue() to
+>> >> happen before __rmqueue_fallback(), which I originally had in mind and maybe
+>> >> suggested that previously.
+>> > 
+>> > I guess it should be pretty straight forward to fail __rmqueue_fallback()
+>> > if there's non-empty unaccepted_pages list and steer to
+>> > try_to_accept_memory() this way.
+>> 
+>> That could be a way indeed. We do have ALLOC_NOFRAGMENT which could be
+>> possible to employ here.
+>> But maybe the zone_watermark_fast() modification would be simpler yet
+>> sufficient. It makes sense to me that we'd try to keep a high watermark
+>> worth of pre-accepted memory. zone_watermark_fast() would fail at low
+>> watermark, so we could try accepting (high-low) at a time instead of single
+>> pageblock.
+> 
+> Looks like we already have __zone_watermark_unusable_free() that seems
+> match use-case rather closely. We only need switch unaccepted memory to
+> per-zone accounting.
 
-commit b671da33d1c5973f90f098ff66a91953691df582 upstream.
+Could work. I'd still suggest also making try_to_accept_memory() to accept
+up to high watermark, not a single pageblock.
+> The fixup below suppose to do the trick, but I'm not sure how to test
+> fragmentation avoidance properly.
+> 
+> Any suggestions?
 
-Move mt76_init_tx_queue in mac80211.c since it is shared by all
-drivers.
+Haven't done that for years, maybe Mel knows better. But from what I
+remember, I'd compare /proc/pagetypeinfo with and without memory accepting,
+and collect the mm_page_alloc_extfrag tracepoint. If there are more of these
+events happening, it's bad. Ideally with a workload that stresses both
+userspace (movable) allocations and kernel allocations. Again, Mel might
+have suggestions for a mmtest?
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
----
- drivers/net/wireless/mediatek/mt76/mac80211.c | 21 ++++++++
- drivers/net/wireless/mediatek/mt76/mt76.h     |  4 ++
- .../net/wireless/mediatek/mt76/mt7603/dma.c   | 10 +---
- .../net/wireless/mediatek/mt76/mt7615/dma.c   | 50 +++++++------------
- .../net/wireless/mediatek/mt76/mt76x02_mmio.c | 10 +---
- .../net/wireless/mediatek/mt76/mt7915/dma.c   | 48 +++++-------------
- 6 files changed, 58 insertions(+), 85 deletions(-)
-
-diff --git a/drivers/net/wireless/mediatek/mt76/mac80211.c b/drivers/net/wireless/mediatek/mt76/mac80211.c
-index 2bc1ef1cbfea..d48f09a3c539 100644
---- a/drivers/net/wireless/mediatek/mt76/mac80211.c
-+++ b/drivers/net/wireless/mediatek/mt76/mac80211.c
-@@ -1213,3 +1213,24 @@ int mt76_get_antenna(struct ieee80211_hw *hw, u32 *tx_ant, u32 *rx_ant)
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(mt76_get_antenna);
-+
-+int mt76_init_tx_queue(struct mt76_dev *dev, int qid, int idx,
-+		       int n_desc, int ring_base)
-+{
-+	struct mt76_queue *hwq;
-+	int err;
-+
-+	hwq = devm_kzalloc(dev->dev, sizeof(*hwq), GFP_KERNEL);
-+	if (!hwq)
-+		return -ENOMEM;
-+
-+	err = dev->queue_ops->alloc(dev, hwq, idx, n_desc, 0, ring_base);
-+	if (err < 0)
-+		return err;
-+
-+	hwq->qid = qid;
-+	dev->q_tx[qid] = hwq;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(mt76_init_tx_queue);
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76.h b/drivers/net/wireless/mediatek/mt76/mt76.h
-index 34b6d32ea1ec..63549a7806cb 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76.h
-+++ b/drivers/net/wireless/mediatek/mt76/mt76.h
-@@ -134,6 +134,7 @@ struct mt76_queue {
- 
- 	u8 buf_offset;
- 	u8 hw_idx;
-+	u8 qid;
- 
- 	dma_addr_t desc_dma;
- 	struct sk_buff *rx_head;
-@@ -778,6 +779,9 @@ void mt76_seq_puts_array(struct seq_file *file, const char *str,
- int mt76_eeprom_init(struct mt76_dev *dev, int len);
- void mt76_eeprom_override(struct mt76_dev *dev);
- 
-+int mt76_init_tx_queue(struct mt76_dev *dev, int qid, int idx,
-+		       int n_desc, int ring_base);
-+
- static inline struct mt76_phy *
- mt76_dev_phy(struct mt76_dev *dev, bool phy_ext)
- {
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7603/dma.c b/drivers/net/wireless/mediatek/mt76/mt7603/dma.c
-index d60d00f6f6a0..05a5801646d7 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7603/dma.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7603/dma.c
-@@ -7,19 +7,13 @@
- static int
- mt7603_init_tx_queue(struct mt7603_dev *dev, int qid, int idx, int n_desc)
- {
--	struct mt76_queue *hwq;
- 	int err;
- 
--	hwq = devm_kzalloc(dev->mt76.dev, sizeof(*hwq), GFP_KERNEL);
--	if (!hwq)
--		return -ENOMEM;
--
--	err = mt76_queue_alloc(dev, hwq, idx, n_desc, 0, MT_TX_RING_BASE);
-+	err = mt76_init_tx_queue(&dev->mt76, qid, idx, n_desc,
-+				 MT_TX_RING_BASE);
- 	if (err < 0)
- 		return err;
- 
--	dev->mt76.q_tx[qid] = hwq;
--
- 	mt7603_irq_enable(dev, MT_INT_TX_DONE(idx));
- 
- 	return 0;
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/dma.c b/drivers/net/wireless/mediatek/mt76/mt7615/dma.c
-index bf8ae14121db..333254734ac5 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/dma.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/dma.c
-@@ -11,25 +11,6 @@
- #include "../dma.h"
- #include "mac.h"
- 
--static int
--mt7615_init_tx_queue(struct mt7615_dev *dev, int qid, int idx, int n_desc)
--{
--	struct mt76_queue *hwq;
--	int err;
--
--	hwq = devm_kzalloc(dev->mt76.dev, sizeof(*hwq), GFP_KERNEL);
--	if (!hwq)
--		return -ENOMEM;
--
--	err = mt76_queue_alloc(dev, hwq, idx, n_desc, 0, MT_TX_RING_BASE);
--	if (err < 0)
--		return err;
--
--	dev->mt76.q_tx[qid] = hwq;
--
--	return 0;
--}
--
- static int
- mt7622_init_tx_queues_multi(struct mt7615_dev *dev)
- {
-@@ -43,20 +24,22 @@ mt7622_init_tx_queues_multi(struct mt7615_dev *dev)
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(wmm_queue_map); i++) {
--		ret = mt7615_init_tx_queue(dev, i, wmm_queue_map[i],
--					   MT7615_TX_RING_SIZE / 2);
-+		ret = mt76_init_tx_queue(&dev->mt76, i, wmm_queue_map[i],
-+					 MT7615_TX_RING_SIZE / 2,
-+					 MT_TX_RING_BASE);
- 		if (ret)
- 			return ret;
- 	}
- 
--	ret = mt7615_init_tx_queue(dev, MT_TXQ_PSD,
--				   MT7622_TXQ_MGMT, MT7615_TX_MGMT_RING_SIZE);
-+	ret = mt76_init_tx_queue(&dev->mt76, MT_TXQ_PSD, MT7622_TXQ_MGMT,
-+				 MT7615_TX_MGMT_RING_SIZE,
-+				 MT_TX_RING_BASE);
- 	if (ret)
- 		return ret;
- 
--	ret = mt7615_init_tx_queue(dev, MT_TXQ_MCU,
--				   MT7622_TXQ_MCU, MT7615_TX_MCU_RING_SIZE);
--	return ret;
-+	return mt76_init_tx_queue(&dev->mt76, MT_TXQ_MCU, MT7622_TXQ_MCU,
-+				  MT7615_TX_MCU_RING_SIZE,
-+				  MT_TX_RING_BASE);
- }
- 
- static int
-@@ -64,25 +47,26 @@ mt7615_init_tx_queues(struct mt7615_dev *dev)
- {
- 	int ret, i;
- 
--	ret = mt7615_init_tx_queue(dev, MT_TXQ_FWDL,
--				   MT7615_TXQ_FWDL,
--				   MT7615_TX_FWDL_RING_SIZE);
-+	ret = mt76_init_tx_queue(&dev->mt76, MT_TXQ_FWDL, MT7615_TXQ_FWDL,
-+				 MT7615_TX_FWDL_RING_SIZE,
-+				 MT_TX_RING_BASE);
- 	if (ret)
- 		return ret;
- 
- 	if (!is_mt7615(&dev->mt76))
- 		return mt7622_init_tx_queues_multi(dev);
- 
--	ret = mt7615_init_tx_queue(dev, 0, 0, MT7615_TX_RING_SIZE);
-+	ret = mt76_init_tx_queue(&dev->mt76, 0, 0, MT7615_TX_RING_SIZE,
-+				 MT_TX_RING_BASE);
- 	if (ret)
- 		return ret;
- 
- 	for (i = 1; i < MT_TXQ_MCU; i++)
- 		dev->mt76.q_tx[i] = dev->mt76.q_tx[0];
- 
--	ret = mt7615_init_tx_queue(dev, MT_TXQ_MCU, MT7615_TXQ_MCU,
--				   MT7615_TX_MCU_RING_SIZE);
--	return 0;
-+	return mt76_init_tx_queue(&dev->mt76, MT_TXQ_MCU, MT7615_TXQ_MCU,
-+				  MT7615_TX_MCU_RING_SIZE,
-+				  MT_TX_RING_BASE);
- }
- 
- static int mt7615_poll_tx(struct napi_struct *napi, int budget)
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76x02_mmio.c b/drivers/net/wireless/mediatek/mt76/mt76x02_mmio.c
-index 67911c021633..82f65fa1a39d 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76x02_mmio.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt76x02_mmio.c
-@@ -106,19 +106,13 @@ EXPORT_SYMBOL_GPL(mt76x02e_init_beacon_config);
- static int
- mt76x02_init_tx_queue(struct mt76x02_dev *dev, int qid, int idx, int n_desc)
- {
--	struct mt76_queue *hwq;
- 	int err;
- 
--	hwq = devm_kzalloc(dev->mt76.dev, sizeof(*hwq), GFP_KERNEL);
--	if (!hwq)
--		return -ENOMEM;
--
--	err = mt76_queue_alloc(dev, hwq, idx, n_desc, 0, MT_TX_RING_BASE);
-+	err = mt76_init_tx_queue(&dev->mt76, qid, idx, n_desc,
-+				 MT_TX_RING_BASE);
- 	if (err < 0)
- 		return err;
- 
--	dev->mt76.q_tx[qid] = hwq;
--
- 	mt76x02_irq_enable(dev, MT_INT_TX_DONE(idx));
- 
- 	return 0;
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/dma.c b/drivers/net/wireless/mediatek/mt76/mt7915/dma.c
-index 33c42ecef2a4..7c9fe142ed41 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/dma.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/dma.c
-@@ -6,41 +6,16 @@
- #include "mac.h"
- 
- static int
--mt7915_init_tx_queues(struct mt7915_dev *dev, int n_desc)
-+mt7915_init_tx_queues(struct mt7915_dev *dev, int idx, int n_desc)
- {
--	struct mt76_queue *hwq;
--	int err, i;
-+	int i, err;
- 
--	hwq = devm_kzalloc(dev->mt76.dev, sizeof(*hwq), GFP_KERNEL);
--	if (!hwq)
--		return -ENOMEM;
--
--	err = mt76_queue_alloc(dev, hwq, MT7915_TXQ_BAND0, n_desc, 0,
--			       MT_TX_RING_BASE);
-+	err = mt76_init_tx_queue(&dev->mt76, 0, idx, n_desc, MT_TX_RING_BASE);
- 	if (err < 0)
- 		return err;
- 
- 	for (i = 0; i < MT_TXQ_MCU; i++)
--		dev->mt76.q_tx[i] = hwq;
--
--	return 0;
--}
--
--static int
--mt7915_init_mcu_queue(struct mt7915_dev *dev, int qid, int idx, int n_desc)
--{
--	struct mt76_queue *hwq;
--	int err;
--
--	hwq = devm_kzalloc(dev->mt76.dev, sizeof(*hwq), GFP_KERNEL);
--	if (!hwq)
--		return -ENOMEM;
--
--	err = mt76_queue_alloc(dev, hwq, idx, n_desc, 0, MT_TX_RING_BASE);
--	if (err < 0)
--		return err;
--
--	dev->mt76.q_tx[qid] = hwq;
-+		dev->mt76.q_tx[i] = dev->mt76.q_tx[0];
- 
- 	return 0;
- }
-@@ -262,25 +237,26 @@ int mt7915_dma_init(struct mt7915_dev *dev)
- 	mt76_wr(dev, MT_WFDMA1_PRI_DLY_INT_CFG0, 0);
- 
- 	/* init tx queue */
--	ret = mt7915_init_tx_queues(dev, MT7915_TX_RING_SIZE);
-+	ret = mt7915_init_tx_queues(dev, MT7915_TXQ_BAND0,
-+				    MT7915_TX_RING_SIZE);
- 	if (ret)
- 		return ret;
- 
- 	/* command to WM */
--	ret = mt7915_init_mcu_queue(dev, MT_TXQ_MCU, MT7915_TXQ_MCU_WM,
--				    MT7915_TX_MCU_RING_SIZE);
-+	ret = mt76_init_tx_queue(&dev->mt76, MT_TXQ_MCU, MT7915_TXQ_MCU_WM,
-+				 MT7915_TX_MCU_RING_SIZE, MT_TX_RING_BASE);
- 	if (ret)
- 		return ret;
- 
- 	/* command to WA */
--	ret = mt7915_init_mcu_queue(dev, MT_TXQ_MCU_WA, MT7915_TXQ_MCU_WA,
--				    MT7915_TX_MCU_RING_SIZE);
-+	ret = mt76_init_tx_queue(&dev->mt76, MT_TXQ_MCU_WA, MT7915_TXQ_MCU_WA,
-+				 MT7915_TX_MCU_RING_SIZE, MT_TX_RING_BASE);
- 	if (ret)
- 		return ret;
- 
- 	/* firmware download */
--	ret = mt7915_init_mcu_queue(dev, MT_TXQ_FWDL, MT7915_TXQ_FWDL,
--				    MT7915_TX_FWDL_RING_SIZE);
-+	ret = mt76_init_tx_queue(&dev->mt76, MT_TXQ_FWDL, MT7915_TXQ_FWDL,
-+				 MT7915_TX_FWDL_RING_SIZE, MT_TX_RING_BASE);
- 	if (ret)
- 		return ret;
- 
--- 
-2.25.1
+> 
+> diff --git a/drivers/base/node.c b/drivers/base/node.c
+> index ca6f0590be21..1bd2d245edee 100644
+> --- a/drivers/base/node.c
+> +++ b/drivers/base/node.c
+> @@ -483,7 +483,7 @@ static ssize_t node_read_meminfo(struct device *dev,
+>  #endif
+>  #ifdef CONFIG_UNACCEPTED_MEMORY
+>  			     ,
+> -			     nid, K(node_page_state(pgdat, NR_UNACCEPTED))
+> +			     nid, K(sum_zone_node_page_state(nid, NR_UNACCEPTED))
+>  #endif
+>  			    );
+>  	len += hugetlb_report_node_meminfo(buf, len, nid);
+> diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+> index 789b77c7b6df..e9c05b4c457c 100644
+> --- a/fs/proc/meminfo.c
+> +++ b/fs/proc/meminfo.c
+> @@ -157,7 +157,7 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+>  
+>  #ifdef CONFIG_UNACCEPTED_MEMORY
+>  	show_val_kb(m, "Unaccepted:     ",
+> -		    global_node_page_state(NR_UNACCEPTED));
+> +		    global_zone_page_state(NR_UNACCEPTED));
+>  #endif
+>  
+>  	hugetlb_report_meminfo(m);
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index 9c762e8175fc..8b5800cd4424 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -152,6 +152,9 @@ enum zone_stat_item {
+>  	NR_ZSPAGES,		/* allocated in zsmalloc */
+>  #endif
+>  	NR_FREE_CMA_PAGES,
+> +#ifdef CONFIG_UNACCEPTED_MEMORY
+> +	NR_UNACCEPTED,
+> +#endif
+>  	NR_VM_ZONE_STAT_ITEMS };
+>  
+>  enum node_stat_item {
+> @@ -198,9 +201,6 @@ enum node_stat_item {
+>  	NR_FOLL_PIN_ACQUIRED,	/* via: pin_user_page(), gup flag: FOLL_PIN */
+>  	NR_FOLL_PIN_RELEASED,	/* pages returned via unpin_user_page() */
+>  	NR_KERNEL_STACK_KB,	/* measured in KiB */
+> -#ifdef CONFIG_UNACCEPTED_MEMORY
+> -	NR_UNACCEPTED,
+> -#endif
+>  #if IS_ENABLED(CONFIG_SHADOW_CALL_STACK)
+>  	NR_KERNEL_SCS_KB,	/* measured in KiB */
+>  #endif
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index e80e8d398863..404b267332a9 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1779,7 +1779,7 @@ static bool try_to_accept_memory(struct zone *zone)
+>  
+>  	migratetype = get_pfnblock_migratetype(page, page_to_pfn(page));
+>  	__mod_zone_freepage_state(zone, -1 << order, migratetype);
+> -	__mod_node_page_state(page_pgdat(page), NR_UNACCEPTED, -1 << order);
+> +	__mod_zone_page_state(zone, NR_UNACCEPTED, -1 << order);
+>  	spin_unlock_irqrestore(&zone->lock, flags);
+>  
+>  	if (last)
+> @@ -1808,7 +1808,7 @@ static void __free_unaccepted(struct page *page, unsigned int order)
+>  	migratetype = get_pfnblock_migratetype(page, page_to_pfn(page));
+>  	list_add_tail(&page->lru, &zone->unaccepted_pages);
+>  	__mod_zone_freepage_state(zone, 1 << order, migratetype);
+> -	__mod_node_page_state(page_pgdat(page), NR_UNACCEPTED, 1 << order);
+> +	__mod_zone_page_state(zone, NR_UNACCEPTED, 1 << order);
+>  	spin_unlock_irqrestore(&zone->lock, flags);
+>  
+>  	if (first)
+> @@ -4074,6 +4074,9 @@ static inline long __zone_watermark_unusable_free(struct zone *z,
+>  	if (!(alloc_flags & ALLOC_CMA))
+>  		unusable_free += zone_page_state(z, NR_FREE_CMA_PAGES);
+>  #endif
+> +#ifdef CONFIG_UNACCEPTED_MEMORY
+> +	unusable_free += zone_page_state(z, NR_UNACCEPTED);
+> +#endif
+>  
+>  	return unusable_free;
+>  }
 
