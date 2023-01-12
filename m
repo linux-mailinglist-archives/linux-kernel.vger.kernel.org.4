@@ -2,108 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575A066731B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8073866731C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjALNYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 08:24:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
+        id S232841AbjALNZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 08:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjALNYj (ORCPT
+        with ESMTP id S232587AbjALNYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 08:24:39 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E903AAB1;
-        Thu, 12 Jan 2023 05:24:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673529878; x=1705065878;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0+lriPcXh6VMXAhZsuIZVfsY1OyEBUI9UJKk/Tq6maM=;
-  b=DGnNOZtHH+cf/gE/KmylyYYQsztA3dt98TugtI9iux0BiIDliHFUvWaF
-   5zaHWOuydiiESJdjCHr6oxPCzgP+vse+kp4ZHno9lmfGVlhUKU8RmMS6b
-   9hieZasVHDm1boSIEXoYLLZdKICKNbdUEqpdzSoEkGCxV6Gjid4rkGLmt
-   KThiZbq4C0QMqbI3uyA5cjg20pMjXC0sd5b5LPg/D68+l4nbjvnAh2aEG
-   FaH2INZlAHq+2sBmIEN7z5H2CuZN/DUCA29pvqEJ/aBcnY6AUl2DF1W2/
-   wp9wQXUTwrPagylViEYPTF2X8LFRL7hJkrG9apduo03RuUFDYUMEVTWfH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10587"; a="311525713"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="311525713"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 05:24:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10587"; a="800208558"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="800208558"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 12 Jan 2023 05:24:34 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Jan 2023 15:24:33 +0200
-Date:   Thu, 12 Jan 2023 15:24:33 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>
-Subject: Re: [PATCH 3/3] usb: typec: altmodes/displayport: Use proper macro
- for pin assignment check
-Message-ID: <Y8AKEZzbxyYaYjg1@kuha.fi.intel.com>
-References: <20230111020546.3384569-1-pmalani@chromium.org>
- <20230111020546.3384569-3-pmalani@chromium.org>
+        Thu, 12 Jan 2023 08:24:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC27543A39
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:24:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 689B8B81E5A
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:24:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E64C433D2;
+        Thu, 12 Jan 2023 13:24:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673529891;
+        bh=0zSlVdYnPlbeNYKtpgCs0o57tBG0cbE87Ki1QmaP4YM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Waya4oOTGc/ruH/oPImj1IC6j6yg1CShhpqNMoexocftc7u43r/3dnDLXBYzw52p5
+         q/8Sf1poFhpD36FOwMnfSb0I/thmR/cgN5bLo72F9k14o0wY/SLvyjB/n+KgH+1Nhv
+         XbyJb0xONCyr+Ah/iSpkMaTGlceoCXaP/w86xG9aWzlUlfVyIYAnfqh8SVF/EiqlfF
+         oamFvinesWSFSamkc2Hu79ua827T0ZKcABEyx+2i7/IYeLNNDpntxOztWfdfXDxG/Q
+         aBJETlWkC9h++bhC+vvVvEWLLSfPF5+ekBRVbmGad8Z5KsLzBNRoRQzyThMJjbJOkR
+         EeTIiH4GrgRmw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pFxZh-0001fB-IY; Thu, 12 Jan 2023 14:24:58 +0100
+Date:   Thu, 12 Jan 2023 14:24:57 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/2] genirq/irqdomain/msi: Add
+ irq_domain_alloc_irqs_affinity() wrapper
+Message-ID: <Y8AKKVs9vAFR+F6H@hovoldconsulting.com>
+References: <20221213140844.15470-1-johan+linaro@kernel.org>
+ <20221213140844.15470-3-johan+linaro@kernel.org>
+ <87358ggayt.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230111020546.3384569-3-pmalani@chromium.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87358ggayt.ffs@tglx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 02:05:43AM +0000, Prashant Malani wrote:
-> While looking at the DP configuration VDO to determine the peripheral
-> configuration, the spec (Table 8-5: DisplayPort Configurations, VESA
-> DisplayPort Alt Mode Standard v2.0) lists the options as "UFP_U as a DP
-> Source/Sink Device".
+On Wed, Jan 11, 2023 at 07:52:42PM +0100, Thomas Gleixner wrote:
+> On Tue, Dec 13 2022 at 15:08, Johan Hovold wrote:
+> > The full __irq_domain_alloc_irqs() interface was initially only intended
+> > for some legacy (x86) use cases while most callers should use the
+> > irq_domain_alloc_irqs() wrapper.
+> >
+> > Add a matching irq_domain_alloc_irqs_affinity() wrapper that can be used
+> > when an affinity hint needs to be provided and use it for MSI
+> > allocations.
 > 
-> So, use the correct macro while performing this check. Effectively it's
-> the same as the existing code, but the proposed macro describes the
-> state a little better.
-> 
-> No functional changes introduced.
-> 
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> I definitely like the irqchip cleanup, but this one is core code and
+> having the extra wrapper is not really buying us much.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Fair enough. If you don't expect there to be any further users then
+perhaps it's not worth it even if it arguably makes the call site a bit
+more readable (e.g. by dropping the base and realloc arguments).
 
-> ---
->  drivers/usb/typec/altmodes/displayport.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index c0d65c93cefe..746bfbf3d557 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -426,7 +426,7 @@ static const char * const pin_assignments[] = {
->   */
->  static u8 get_current_pin_assignments(struct dp_altmode *dp)
->  {
-> -	if (DP_CONF_CURRENTLY(dp->data.conf) == DP_CONF_DFP_D)
-> +	if (DP_CONF_CURRENTLY(dp->data.conf) == DP_CONF_UFP_U_AS_DFP_D)
->  		return DP_CAP_PIN_ASSIGN_DFP_D(dp->alt->vdo);
->  	else
->  		return DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo);
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-
--- 
-heikki
+Johan
