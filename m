@@ -2,162 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE999667A5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DFD667A61
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjALQKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 11:10:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
+        id S231879AbjALQLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 11:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbjALQKO (ORCPT
+        with ESMTP id S232241AbjALQKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:10:14 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2088.outbound.protection.outlook.com [40.107.100.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D10DC8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 08:01:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RGLJip6d7IWk+y03NfZm72rIg0NLkJ2O0IF/LeElNdu+GaGQEP37S61Rz/msZOGdXGSkBddml2pgyqir03vYzoGk+Fv0TeNlnH/PQeXq0UBmiW9/lMpaWn6c3p56hWmNiqdfsxPxrwNUmPucGMvS++Ixqc3yUlX8Gfv2LdoP8iB35wZJpNl8592BiK4Rxj2x03ZEp4z1WwfNgfeAda6ow1Rir/rWTTUOEuGsMQVrxsm8SDgu13hLG6PuLquuK/8IYopn963idRKZ3FACM5RTotxrpeuquDGv7msVFwLheL2Ze61Vakl1QNGQ90jY2V5Wp/UqXSB0nklf0ZyHDnUtXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ztiSKMgxa+T+eapAdVy6VYzZ/9aghF+4CFkV1QE9l9g=;
- b=L1b0/QCVoSe9AIa48dloepoSF08v6ZWFs8uD+PzAceS1Bo8SeWLTAQ6nbJ8fjo7sX/5un3P7ON+CGDJ0uK/EawD7mw67bWK0hlS4+KrbDrx7pMq6IXGLjxj2bnhBwWh/XfdorTBZS7faoqY+OSo7oTEWFIqhiBmSdqiitTkejNCaR9O3B6Qo2iR68ACr/1d0C8W8Ye6RY4u0JDd4YP/sMYKVzl9RmJvNndM3P9CHPnkDuA5FBY0lZLbJL73JfvNWJ6TT5ZK7FBaO5wxsFvUJwhX5036MmL796Ytt56kkwLCCAjncFsqoq3dB52mWZaqR5YlqLo+OXZsYvqRwoD8Tbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ztiSKMgxa+T+eapAdVy6VYzZ/9aghF+4CFkV1QE9l9g=;
- b=HMIqD0P+4ZQwEinGIJFH/pUhmSPOUFXj4vqTUMGRnmMQiWEWFHcHcjXkFBf+4MjOXGEaSihCCxbGXE1PcFSZVhD6Bu/M2EUdAuz/la3n0bYhUZxer1ETST+Vw4/gIMQXElu1g0JyH/C/8HxySOE5RFmipV+jh0H2bLsW6F/5kPM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
- by PH7PR12MB7425.namprd12.prod.outlook.com (2603:10b6:510:200::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Thu, 12 Jan
- 2023 16:00:52 +0000
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::756d:ff13:d7bd:d590]) by MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::756d:ff13:d7bd:d590%7]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 16:00:52 +0000
-Message-ID: <b93c319e-b1c9-7488-7f0e-d96a6f98ad79@amd.com>
-Date:   Thu, 12 Jan 2023 11:00:50 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm: amd: display: Fix memory leakage
-To:     Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        harry.wentland@amd.com
-Cc:     sunpeng.li@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, Jun.Lei@amd.com, Alvin.Lee2@amd.com,
-        meenakshikumar.somasundaram@amd.com, martin.leung@amd.com,
-        Dillon.Varone@amd.com, wenjing.liu@amd.com, alex.hung@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, yusongping@huawei.com,
-        hukeping@huawei.com, artem.kuzin@huawei.com
-References: <20221130025046.2667372-1-konstantin.meskhidze@huawei.com>
-Content-Language: en-US
-From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-In-Reply-To: <20221130025046.2667372-1-konstantin.meskhidze@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YTBP288CA0033.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:b01:14::46) To MN2PR12MB2941.namprd12.prod.outlook.com
- (2603:10b6:208:a9::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|PH7PR12MB7425:EE_
-X-MS-Office365-Filtering-Correlation-Id: e3e20839-87a7-4297-7837-08daf4b62e2f
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +lMUfdiq5ES6YDbSn/pIu38vb+KbGi49CGwobO2c4qF/j3ZGYSeJF0veBpn+rFtu2hmn5X0goPLJBJke6hh00OuhrkqQHle/rFMpmw6zhQal3r9O7HriA4gMK6SRYgg5Yg+20yD6zfwcG2VcOIOB4yuHMUJDVwJ6flwdZC+NG48ERmpdOgX7MJWbAcuvLK7fT4ODfUJFtWeSxO0Bnhrj1gE55EfeWaCaWXueczGWddCO9Mudsq9W0+9ryG9JJkOJRsGE1neGYb9aSw5JfQHG6Sbu+635n2LHUEzFspMgrS406qglSvZy1eIs6s26Jh8IwXdr+qoSD3vyXVXt83cUgp7W3mAly1ZWQiFRGR3jeiPebbRQvFqQpQPbyu1Z9dABKdkmgfT9sgITPrhgwQhrYakT0YlmX6/OcnlLdY2hFeYgxPmk/fz7gEEH67vPxJxMWIBTCCULJH3Z5G5emo4/ho48eGpn/eAqbWIL9kSEdQeRxuBBaT3hCQTGALFS9xRVKWV1T7e3H6XGe5Puuo8rgf0LuSTy+N5eKsOy5Hom4QvlbCfRzj3VL56DIj2OWXfAW253tJfLpBZvzqgIL8jweF608lCpj1Ubt04HP/um8FJ/LZQB62DKhDe4qm0t6vRkiWxB7cvBomYQobEoIEQCK0ntyAIlAMCGvSa9/T2lUMzsjpMy58NdG6+S+Sp0oKY744MaMywlggoNLuYBb8YV+O/dXrTl9X2pidNRDkao89A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(346002)(136003)(376002)(451199015)(8936002)(5660300002)(41300700001)(38100700002)(36756003)(2906002)(31696002)(4744005)(86362001)(186003)(31686004)(6486002)(478600001)(26005)(6512007)(6506007)(8676002)(4326008)(66946007)(66556008)(316002)(53546011)(66476007)(2616005)(6636002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eXgxV0g5dDdNcER0dXJZcjRmQSt4MVZiTFIweUt1TXp5SXRaeDJlRW9hN1VM?=
- =?utf-8?B?VGlDbXdpWlVaZWpQYUFFWHhvUVJtelhseHJqY3R0UVJzT1lHWWEvaDM0SzB0?=
- =?utf-8?B?ZnBKaWZGVXIxQXNoTytld0VMcEVJYmMwNlRteUhPLy83WW9QTjJCcm1MUk1x?=
- =?utf-8?B?SCtCY2hEUDh2MkNhZVJnQ1R1WUVVVllSRC9KaHpzQXoyVm5aek96Tmh4UWds?=
- =?utf-8?B?WmJaQnRGSngySjNHL1I1S0tQbVp2WEhGdVVHVVM0Y2VXRmtlMGpRS0NPdkw2?=
- =?utf-8?B?eHJoZEJPUUVKaXlTN29OYmlwZ3lOZWtER2tSY01hdDhqV3ljNmxDTkUrN1R2?=
- =?utf-8?B?dnljZk14dmc1ekp3Sm9mZ0NLWEJacThjYTJDbHBBSFl5MkM3NmJtL0YwcHRt?=
- =?utf-8?B?MXRCcnBFNnorNUJTd1NNNVl2dmR2UGRWSk1hb3VZZTFBWWdaS0wrVkc5UUpM?=
- =?utf-8?B?UFkyZkxmdUplMUpSanl0ckVrMW1FcmF1aWZOU0xuRXJHUllKOXlXYzBqaG1E?=
- =?utf-8?B?aTdlc0dERTVqSEp4UENPWEUwQTc1YTc4UEFDUnlYUVpaWU1yVDlYeURKUjVJ?=
- =?utf-8?B?VkVEWVNZVyt6Vy9TZEcwSkpqMTRjSDEvZ3pldVBXQlovSGVuMkcwU3A2dzJk?=
- =?utf-8?B?NWpFclVxamxadWFJT1BGOWhDMEZaMk9jWGkzdXJVejV2OEVSbkdIK2ZTamMr?=
- =?utf-8?B?NFZHK2ZlZFFsMGNPSGlsZldkcysxa2kxdTAyTG9EZ3diVjU1TElCdU1KWEhr?=
- =?utf-8?B?Y3V6WUdPRHFvOUdmR2QvUldaL3I2a2lzL0JpUDFHV2NYVGIzb3BqcTNJQURx?=
- =?utf-8?B?RlhzbngwYWkyWW9YUHIwR0NrUGZOYnVnYWdPK1RXSFBzY0Z0RFMvY2NtTUxk?=
- =?utf-8?B?a0ljNFVCT0d1UC9hMEdRbW16cExwYllXKzVyMStqL3o4bm50YXVzZHVoQVNP?=
- =?utf-8?B?TjlzV0tFTkVRM3g4MFlLMEgwVXpuTDFQb3p0ZGk1YnJJaSt6QzhMSmpwZEVB?=
- =?utf-8?B?M013VjdmWk9OOWVmeksvZGsyMHJrQld6WFpqbGkwK1VDcm01Ym1JOWd0djNn?=
- =?utf-8?B?WWN6aWU4YXozaWN5Q0VmLzhCK0pWK05xT2tVQ3VSRGlybERQTlhqcG8yRUQr?=
- =?utf-8?B?N0NLajUvVHFqazUvSFlocG1tcWdPNmlOOS9jS1dURUozN3RhM0RQdEhWa1p1?=
- =?utf-8?B?L1o2ZVNaWWVYdjZxN09mdi9UOXVmQnYrSUxYT2trYzQ3Y0phc3U1NUtkc1hD?=
- =?utf-8?B?NitKMHM4ZG15Z04ybTF3RFNacmQ4RnIyTzNoVWlRUWhhZytVc3ZGeFVacWZB?=
- =?utf-8?B?empwWkJjQ2tkMDJ6aW9rNHY3aEt5S1ByQjlnS1lhb2t6WUtvSUZkSnF3NTRZ?=
- =?utf-8?B?WmE4c005WStHT3BMckdxd2N1L0trQ08vbm1MSnh5U0M5VnJCMTRRUVJQZm8w?=
- =?utf-8?B?alQ3elo4cEV2WXBRYlR5TXk1eHNmTlh1Z1BGWDBBU1NCbnYyU094MXd2Vm5S?=
- =?utf-8?B?Q2RCY3J6dnhyWVBteTFhNUt2QVdHZi9yU2dvdjBjeTVLOWljYmRTcnBVSTVj?=
- =?utf-8?B?Vkcvdlc5d3duakN3SDluNmVSdytxdVJ0OWlCR1BqTGh3Y3pXbkQxOWtkYTRH?=
- =?utf-8?B?K091QnlzOGh5TTFxbi9OZnB1M09sUEVlWlFFWU16ZUs0WjFvT09FQ3RGZkFn?=
- =?utf-8?B?bklQWmdLdEFLYXNCa1N5a0Z1aFQzcTduVHVhL3ZtOGt5YjRxYUl5dDFNMERP?=
- =?utf-8?B?cjBFTXZYUXZiREx5TjNLaGkzcGxyRStmcGQyMjRWdXYzcDc1N3JyZ2haL0Y3?=
- =?utf-8?B?MG1NQ04xZERFeW43UFhXdnRoMGtrZE5IMDdVRWR6U0ErQkNOcWNmY3pySEN2?=
- =?utf-8?B?TVFpczJ1ZnlrMmx6UUpmVVZsRXo4Z0NQU1F6Z1U1WjVvaXFaalgwb2xraGNV?=
- =?utf-8?B?dVJNTlZKa1dNRFIxYkl6bkhRcDQxZlVIb0g4dDRpRytMVzh3WXZXdThkWlJx?=
- =?utf-8?B?ZUhlNkF0Y0RqNy9xZXJ2bGxtV1BLWnZDNEtGV0RBRm5qbFg2RGorRlFlemZa?=
- =?utf-8?B?dmFNK0swMytZeXROTUVXekIybmpsMUpPaG5WWDd2VnljTFdCVHNjSHB2N0VX?=
- =?utf-8?Q?wmSRrN4S+nCNY80d/zXkTB8/R?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3e20839-87a7-4297-7837-08daf4b62e2f
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 16:00:52.5715
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wMGsj4/+vBwPQeZha5hWFp0qyC7+xMJD7SQNINhov0NsPB761h6wz29FW418MbY/KV6Eb+LkTfZTfL9p7zIzzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7425
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 12 Jan 2023 11:10:36 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E24C4FD7F;
+        Thu, 12 Jan 2023 08:02:05 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 47D9932005C1;
+        Thu, 12 Jan 2023 11:02:04 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 12 Jan 2023 11:02:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1673539323; x=1673625723; bh=pEfXWj7Hu9
+        k28i5iZXZlWlRGQSSC88B7IqFY+vWRaj4=; b=a7U9YhqWwE+6Qdb0hFY5GwRwlY
+        VDsudE3O3WkylT+2O87N0XbgdHchHtOMk62lC+TB1Nm9Zp3C+1mbJ1vauIZH1/J2
+        mx2oNGb/+0rTIDENI9e/SbOaS6FqyTKQXCRtCfIX71w7O6DLjgPTfpSsOGrQm0eL
+        RI33cPw3cWaTfmEgg9mZU7C1RVfXfSelyT/1/V7cDr2IOEEZwfzCscKEtnet+P/t
+        UHsUDM8EwaibW4+33ZDzGxNkHtK/sOYVWrYQWO8htC8ZjfSjnUXmAO1cNklasx/0
+        NmTCtckV5bGaKvUxBXLEpxe5rHz74fmzo2mSDqOarNwg1C1K8R4aAHbIRphg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673539323; x=1673625723; bh=pEfXWj7Hu9k28i5iZXZlWlRGQSSC
+        88B7IqFY+vWRaj4=; b=RiNhHbz3B5Z+87FR6SiDXQ0VQF+omSLU2y0oui814ZRQ
+        1MOW6Ryj4EZXXseMjLwEEIvRRzlXZuj4VnMe822LxVODTBU2yUr8JUpDUtFDZEAF
+        +PxtDxgCEfKtWKpuVmeADW6LmWP3VOrzdcA6p8B/aUoNWwXv995yjWr9MotrNmvC
+        tNKOYnE9MpqJqJVBOZ9u+NYTT+icUH2Mc5Jbgssx6VvtkpJmbS0p0+Mi0d4a7HdN
+        3ziekxEuPMtJiNbm6tPNfRpZFgmCSV+rz0I7Z2AcTezMJjTdi4eU1gxWcG049nBj
+        cawUgFc1VWUlT0zO9h3CeKoE5cE+ozce8yR0MoHOHA==
+X-ME-Sender: <xms:-i7AYwjcH0b8JgIuQkkla8dOAS_ZXu3VtOZ8T3JEh4rTDcRxB61nFQ>
+    <xme:-i7AY5D7lYoQhhRJSA2FbZIhtNDjYmkois15jfO4y4L4priJfqPaZPacPPobpAnRi
+    B1Tacb5G-Xk4dXrSAc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdekfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:-y7AY4HU_4EGMtzvXZArVkKSku1EJ2_ZHcend_YSubnmrs1J_5_21w>
+    <xmx:-y7AYxTNqDzg7AI6GkN0vKDCiBkGNGmLZCYbjz6KG2MIaeY4pRH58w>
+    <xmx:-y7AY9wN0x54F61K--9UBOWVixlkIduCt5vO7Y19Jj2YOnSrStEJRw>
+    <xmx:-y7AYyrPyNGbG3GqJDvGMk4QXJsPCExmfFhVQLKfdpfpdBgdf5yzpg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id EC407B60086; Thu, 12 Jan 2023 11:02:02 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <6bae68eb-866f-4b78-b4db-e3154feec28e@app.fastmail.com>
+In-Reply-To: <E2B35D8A-B8A6-40C1-8AC9-46E6C2CAE656@hpe.com>
+References: <20230103203654.59322-1-nick.hawkins@hpe.com>
+ <20230103203654.59322-4-nick.hawkins@hpe.com>
+ <5ad677f3-2cbc-4ba0-bd48-2f832a72fb28@app.fastmail.com>
+ <E2B35D8A-B8A6-40C1-8AC9-46E6C2CAE656@hpe.com>
+Date:   Thu, 12 Jan 2023 17:00:52 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Jean Delvare" <jdelvare@suse.com>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v4 3/5] ARM: dts: add GXP Support for fans and SPI
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 12, 2023, at 16:40, Hawkins, Nick wrote:
+>> > - ahb@c0000000 {
+>> > + ahb@80000000 {
+>> > compatible = "simple-bus";
+>> > #address-cells = <1>;
+>> > #size-cells = <1>;
+>> > - ranges = <0x0 0xc0000000 0x30000000>;
+>> > + ranges = <0x0 0x80000000 0xf000000>, /* 0x80000000 - 0x8f000000 */
+>> > + <0x40000000 0xc0000000 0x7fffffff>; /* 0xc0000000 - 0xffffffff */
+>
+>
+>> I'm a bit confused by the change in the mappings: are you
+>> sure this all the same ahb bus and not two separate buses?
+>
+> Yes this is the same bus, however we are not including all of
+> it as it maps some host registers that we do not want to access
+> at this time. 
 
+If the two ranges are actually translated separately on the
+bus, you could also decide to enumerate the translations with
+a 64-bit local address and make the upper word an enumeration,
+such as
 
-On 11/29/22 21:50, Konstantin Meskhidze wrote:
-> This commit fixes memory leakage in dc_construct_ctx() function.
-> 
-> Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-> ---
->   drivers/gpu/drm/amd/display/dc/core/dc.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
-> index 997ab031f816..359e28d3567e 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-> @@ -878,6 +878,7 @@ static bool dc_construct_ctx(struct dc *dc,
->   
->   	dc_ctx->perf_trace = dc_perf_trace_create();
->   	if (!dc_ctx->perf_trace) {
-> +		kfree(dc_ctx);
->   		ASSERT_CRITICAL(false);
->   		return false;
->   	}
+ranges = <0x1 0x0 0x80000000 0xf000000>,
+         <0x2 0x0 0xc0000000 0x30000000>;
 
-Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+then you get small numbers again in the 'reg' properties
+that are easier to read and ideally match the bus-local
+numbers from the hardware manual.
 
-And applied to amd-staging-drm-next.
+>> The comment for the second range looks wrong to me, as
+>> you define a 2GB (minus one byte) sized mapping but the
+>> comment only lists a 1GB (including the last byte) mapping.
+>
+>
+>> I would expect that the original 0x30000000 (including the
+>> last byte) was correct here.
+>
+> Yes this was incorrect, I believe it should be:
+>
+> ranges = <0x0 0x80000000 0xf000000>, /* 0x80000000 - 0x8f000000 */
+>                 <0x40000000 0xc0000000 0x3fffffff>; /* 0xc0000000 - 
+> 0xffffffff */
+>
+> I will create a v5 version of this patchset with just this and the
+> defconfig for your review.
 
-Thanks
-Siqueira
+Now it almost matches, except for the final byte, as the
+range actually ends at 0xfffffffe not 0xffffffff if you make
+the size one byte less than 1GB.
+
+Is there a special register in the last byte?
+
+>> > - vic1: interrupt-controller@80f00000 {
+>> > + vic1: interrupt-controller@f00000 { /* 0x80f00000 */
+>
+>
+>> This is not the same address as before. I'm also not sure the
+>> comment is helpful here.
+>
+> My understanding was that the physical address would be the
+> 0x80000000 from the first range plus the 0xf00000 to be
+> 0x80f00000?
+
+I suppose the physical address in the old mapping was actually
+outside of the 0xc0000000-0xefffffff range, so it wasn't
+even accessible. If the addresses are interpreted to wrap around
+at the end of the mapping, that would have made the CPU visible
+address 0xe0f00000 (0xc0000000 + (0x80f00000 % 0x30000000)).
+If it just wrapped around as a 32-bit number, it would be
+0x40f00000 ((0xc0000000 + 0x80f00000)% 0x100000000), but I
+don't see you you'd get to 80f00000.
+
+      Arnd
