@@ -2,93 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC8E6670F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897106670FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbjALLdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
+        id S230377AbjALLeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjALLdJ (ORCPT
+        with ESMTP id S231960AbjALLdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:33:09 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EE84FD4E;
-        Thu, 12 Jan 2023 03:22:41 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Nt2D642xtzRrF2;
-        Thu, 12 Jan 2023 19:20:54 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 12 Jan 2023 19:22:38 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <suzuki.poulose@arm.com>, <mathieu.poirier@linaro.org>,
-        <jonathan.cameron@huawei.com>, <linux-kernel@vger.kernel.org>
-CC:     <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
-        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
-        <linuxarm@huawei.com>, Yicong Yang <yangyicong@hisilicon.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v3 2/2] MAINTAINERS: Update the entries for HiSilicon PTT device driver
-Date:   Thu, 12 Jan 2023 19:22:01 +0800
-Message-ID: <20230112112201.16283-2-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20230112112201.16283-1-yangyicong@huawei.com>
-References: <20230112112201.16283-1-yangyicong@huawei.com>
+        Thu, 12 Jan 2023 06:33:24 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED0A51330
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:23:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673522622; x=1705058622;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9KAbnHL0UiVDA9+ZptE4cD++4OwAL8HyjhzOIXTCDOc=;
+  b=Qxul0kUHvPm8IpYfjTNBGQ6ENKXWkrc7rPOPpu0N3KXYSBCqpjrDOcBR
+   Vb83IG1U2K8Uw4eY17VB86DQxFL+kJaQqq3HGoqugEd+TE3N2SrnBO1bP
+   Ij5r6WRtP72AILOtB7Znpc36o1y7xVTTxgOij1vuVAlm6qhvGPGFp3tnr
+   vbMvpHekIrlrqBB7wi/gC/YLuRy9T4bIQKgjud8rOBwI/33pq0wIJO0MW
+   Yh5p/5fitcpg2f3mgJNmZTrKuzES/nbZ5vGiiD7wqkWkX29Y1yV4h1p7m
+   2lhogMLstDgDM9KF5ZVzIenveV3GoKx6O+bva1fiGHkTz5Li/ZyyF9Uhz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="325704371"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="325704371"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 03:23:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607750221"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="607750221"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 12 Jan 2023 03:23:30 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 59258130; Thu, 12 Jan 2023 13:24:04 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] ASoC: amd: acp-es8336: Drop reference count of ACPI device after use
+Date:   Thu, 12 Jan 2023 13:23:56 +0200
+Message-Id: <20230112112356.67643-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yicong Yang <yangyicong@hisilicon.com>
+Theoretically the device might gone if its reference count drops to 0.
+This might be the case when we try to find the first physical node of
+the ACPI device. We need to keep reference to it until we get a result
+of the above mentioned call. Refactor the code to drop the reference
+count at the correct place.
 
-Add missing entries for the perf userspace part of this driver.
-Also add Jonathan as the maintainer for his expertise on this
-driver and PCIe stuffs.
+While at it, move to acpi_dev_put() as symmetrical call to the
+acpi_dev_get_first_match_dev().
 
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 02527c3f2300 ("ASoC: amd: add Machine driver for Jadeite platform")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 ---
-No Change since v2:
-Link: https://lore.kernel.org/linux-pci/20230110130833.53474-2-yangyicong@huawei.com/
+v2: split from big series (Pierre), added tag (Vijendar)
+ sound/soc/amd/acp-es8336.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Change since v1:
-- Add tag from Jonathan
-Link: https://lore.kernel.org/linux-pci/20221122120209.25682-2-yangyicong@huawei.com/
-
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a36df9ed283d..0cfd358da378 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9375,11 +9375,15 @@ F:	drivers/perf/hisilicon/hns3_pmu.c
+diff --git a/sound/soc/amd/acp-es8336.c b/sound/soc/amd/acp-es8336.c
+index 2fe8df86053a..89499542c803 100644
+--- a/sound/soc/amd/acp-es8336.c
++++ b/sound/soc/amd/acp-es8336.c
+@@ -198,9 +198,11 @@ static int st_es8336_late_probe(struct snd_soc_card *card)
+ 	int ret;
  
- HISILICON PTT DRIVER
- M:	Yicong Yang <yangyicong@hisilicon.com>
-+M:	Jonathan Cameron <jonathan.cameron@huawei.com>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	Documentation/ABI/testing/sysfs-devices-hisi_ptt
- F:	Documentation/trace/hisi-ptt.rst
- F:	drivers/hwtracing/ptt/
-+F:	tools/perf/arch/arm64/util/hisi-ptt.c
-+F:	tools/perf/util/hisi-ptt*
-+F:	tools/perf/util/hisi-ptt-decoder/*
+ 	adev = acpi_dev_get_first_match_dev("ESSX8336", NULL, -1);
+-	if (adev)
+-		put_device(&adev->dev);
++	if (!adev)
++		return -ENODEV;
++
+ 	codec_dev = acpi_get_first_physical_node(adev);
++	acpi_dev_put(adev);
+ 	if (!codec_dev)
+ 		dev_err(card->dev, "can not find codec dev\n");
  
- HISILICON QM DRIVER
- M:	Weili Qian <qianweili@huawei.com>
 -- 
-2.24.0
+2.39.0
 
