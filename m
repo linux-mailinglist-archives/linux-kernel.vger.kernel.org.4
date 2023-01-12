@@ -2,80 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3A7668419
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B66A7668450
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbjALUjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 15:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        id S240280AbjALUwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:52:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbjALUjB (ORCPT
+        with ESMTP id S234943AbjALUvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 15:39:01 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1073D1FA
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:09:28 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id ay40so13983528wmb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:09:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=L+Y11wIGuYqM3WI5W/LJtU3EbjeOxgch9hg5fvLKprA=;
-        b=EHveCHrEQM6di4eSOYUn1btRpD7sMd94Bvi9ViJpKA7vkN9kosVxVrfw8UfaPKaW7p
-         sAWGmoLAGpNUi6o4VBQiTkStcPlu/rQY7MrC44vezeiiwL9zYXiBU9yXSRMccAK39SIF
-         8WRGS7ztDz1uRJ77JocG4wUZC+91enLHst4i8QyGXVT2PzRvsiaaWcjVThWyB6x+H4ZN
-         w2BDNvEf8mgti6WQQkDbxZLG8aG2rQyBDOHaV2rSIyngZ+9fEVfKMk85TLURuQldC2xN
-         itKHuvGps12X8lmw72CziPs7BqcrgOCAuKejJsTAARdi9z7fUZV8n663jsPv7Zl6N92U
-         ZwMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L+Y11wIGuYqM3WI5W/LJtU3EbjeOxgch9hg5fvLKprA=;
-        b=HGCk7VAL0iyur7csw+tHvwUTIOmnRJ6tXjHBFm6JkZs5IN4eXPd9V0FOpuBUBc7WJx
-         yRUbBcsNGl8uH4Ghmu7vbA3/HQmY8GqH7NCXD7u0MozQr3aFbD2lz9XPWQaeYKSTHrUl
-         f5x0yPwU5YZbW07woC0LuaRlqe8nqJtS73WUu/JMbl3kYqCBdq5OElxi2padFGmxc6bt
-         WohhuAkOcsqrhnlkeN8CZyia4gcve/+BCUBc8NUu9sxAn6sDNoZaMBvfjPb2I9/e6IJG
-         vGchgpmySpitStnS3PTo+9sqPqmIr/Su/JN0Wxses73akm4UUj0RvBVtOxqBMfX9ApJw
-         +YHQ==
-X-Gm-Message-State: AFqh2kq9zGrWhCAOPfis1U2N8qx2RVMZbzz+ZyAAekCHSkLPQAj2lhpB
-        0UDvc95XTGg1seUJCLOMsLbqju/SxYpa5zb3o0DaRg==
-X-Google-Smtp-Source: AMrXdXufgQGH2cEs5Qj5NeuGspAW8MOLszNSVJ+/Ep0+vTsrcrJhgZmp1AMKaWLGQUBrPsSiKKaJiEXHH9XRcZ/ywSM=
-X-Received: by 2002:a05:600c:4c22:b0:3cf:f2aa:3dc2 with SMTP id
- d34-20020a05600c4c2200b003cff2aa3dc2mr4165848wmp.175.1673554084644; Thu, 12
- Jan 2023 12:08:04 -0800 (PST)
+        Thu, 12 Jan 2023 15:51:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF3069B29;
+        Thu, 12 Jan 2023 12:23:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F3EFB81E5F;
+        Thu, 12 Jan 2023 20:08:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F103AC433D2;
+        Thu, 12 Jan 2023 20:08:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673554101;
+        bh=eu6oC6p18svRffUOBN2Wg+o/+IqQkvr+YGuw0J4xmfM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sF5xQ/uzmcOJVRxhFlu/jydAsWM7BSEjNKSGB6h4HCE5xUN62UlOR7oB0AkuGpHr7
+         x4YVqxzHVTySi+2OZaOZlBynG79mx5u3FIIEdLH4bWsbYNLgxJNbMyKd/34r7pKKkc
+         o+8xt3x9y4o77EDaIlQbyhts7aoAOTX13Qf0fkwtubVbIhJHTA0Sgu/luw9QzrMpf+
+         OIZ0spVXkhQQyOCgg/sdgd6aSRBVoGsmyTb3zeu5+hGr8TtjUg+RlzGtodQ5k/umV5
+         HDugauVm4LTZszSICHvLcNShCeo9CoP9zUdSx/rAa8F4aMz+VkCICUCKPVWbFPPfR3
+         sLZaG0TXA6/PA==
+Date:   Thu, 12 Jan 2023 14:08:19 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Zeno R.R. Davatz" <zdavatz@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
+        alsa-devel@alsa-project.org
+Subject: Re: [Bug 216859] New: PCI bridge to bus boot hang at enumeration
+Message-ID: <20230112200819.GA1785077@bhelgaas>
 MIME-Version: 1.0
-References: <20230105101844.1893104-1-jthoughton@google.com> <20230105101844.1893104-40-jthoughton@google.com>
-In-Reply-To: <20230105101844.1893104-40-jthoughton@google.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 12 Jan 2023 15:07:53 -0500
-Message-ID: <CADrL8HWLCL1p2x1rgvX1Bc5UEupjMqjud0fKGys-TpKUTCeVcw@mail.gmail.com>
-Subject: Re: [PATCH 39/46] hugetlb: x86: enable high-granularity mapping
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221228120248.GA508080@bhelgaas>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,43 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 5:19 AM James Houghton <jthoughton@google.com> wrote:
->
-> Now that HGM is fully supported for GENERAL_HUGETLB, x86 can enable it.
-> The x86 KVM MMU already properly handles HugeTLB HGM pages (it does a
-> page table walk to determine which size to use in the second-stage page
-> table instead of, for example, checking vma_mmu_pagesize, like arm64
-> does).
->
-> We could also enable HugeTLB HGM for arm (32-bit) at this point, as it
-> also uses GENERAL_HUGETLB and I don't see anything else that is needed
-> for it. However, I haven't tested on arm at all, so I won't enable it.
+[+cc sound folks]
 
-Given that we are using a high bit for VM_HUGETLB_HGM, we can only
-support 64-bit architectures. Userfaultfd minor faults is limited to
-64-bit architectures for the same reason: VM_UFFD_MINOR uses a bit.
+On Wed, Dec 28, 2022 at 06:02:48AM -0600, Bjorn Helgaas wrote:
+> On Wed, Dec 28, 2022 at 08:37:52AM +0000, bugzilla-daemon@kernel.org wrote:
+> > https://bugzilla.kernel.org/show_bug.cgi?id=216859
+> 
+> >            Summary: PCI bridge to bus boot hang at enumeration
+> >     Kernel Version: 6.1-rc1
+> > ...
+> 
+> > With Kernel 6.1-rc1 the enumeration process stopped working for me,
+> > see attachments.
+> > 
+> > The enumeration works fine with Kernel 6.0 and below.
+> > 
+> > Same problem still exists with v6.1. and v6.2.-rc1
+> 
+> Thank you very much for your report, Zeno!
+> 
+> v6.0 works, v6.1-rc1 fails.  Would you mind booting v6.1-rc1 with the
+> "ignore_loglevel initcall_debug" kernel parameters and taking a photo
+> when it hangs?
+> 
+> How did you conclude that the hang is related to a PCI bridge?  I see
+> recent PCI messages in the photo, but it looks like the last message
+> is from NFS, so I'm wondering if I'm missing some context.  The v6.0
+> dmesg shows several other ntfs, fuse, JFS, etc messages before more
+> PCI-related things.  Anyway, the "initcall_debug" might help us narrow
+> it down a bit.
 
->
-> Signed-off-by: James Houghton <jthoughton@google.com>
-> ---
->  arch/x86/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 3604074a878b..3d08cd45549c 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -126,6 +126,7 @@ config X86
->         select ARCH_WANT_GENERAL_HUGETLB
->         select ARCH_WANT_HUGE_PMD_SHARE
->         select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP  if X86_64
-> +       select ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING
+Thanks very much for the bisection (complete log at [1])!
 
-This needs `if X86_64` at the end. Will be corrected for v2.
+The bisection claims the first bad commit is:
 
->         select ARCH_WANT_LD_ORPHAN_WARN
->         select ARCH_WANTS_THP_SWAP              if X86_64
->         select ARCH_HAS_PARANOID_L1D_FLUSH
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+  833477fce7a1 ("Merge tag 'sound-6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound")
+
+with parents:
+
+  7e6739b9336e ("Merge tag 'drm-next-2022-10-05' of git://anongit.freedesktop.org/drm/drm")
+  86a4d29e7554 ("Merge tag 'asoc-v6.1' of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound into for-linus")
+
+Both 7e6739b9336e and 86a4d29e7554 tested "good" during the bisection.
+
+There is a minor conflict when merging 86a4d29e7554 into the upstream,
+but I can't imagine that being resolved incorrectly.
+
+Would you mind turning off CONFIG_SOUND in your .config and testing
+833477fce7a1 again?  I'm a little skeptical that the hang would be
+sound-related, but I guess it's a place to start.
+
+Bjorn
+
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=216859#c35
