@@ -2,174 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CAD66797C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4267D667989
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234424AbjALPiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S240492AbjALPjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbjALPhX (ORCPT
+        with ESMTP id S240549AbjALPik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:37:23 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4623F125
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:27:52 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id j1so960613iob.6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:27:52 -0800 (PST)
+        Thu, 12 Jan 2023 10:38:40 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31F548593
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:29:54 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso15365769wms.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:29:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QQNsmcbJGjSqHvhcGtkc7WNkhYvr6MAYzLtZxzByW0g=;
-        b=Sok8W5STaiwlRrQMF/i3mUtf5g9Lh0azP7ztq7Svc+1fMrWrBZy/yAHxMSYqrQPJ0/
-         BjgOjSWbaiVT2nGQd+k+1P53lSdhMnjXyzb+4VSjjbXyPRdsBGGxC/Qk/8M9CTQQvpDr
-         /mSEX5oU2Up8GDZqHTNz1TSQ7SN6eUnR7TCfZc4QJMBoONXfgVFp1bY0P3+HkPPBlfCs
-         N+fW1V2cUI20alnDje0RHTWs5hssptsw5kj8/mF3uGr1cqG/Gh0a7kUy3qG6SMtrg5Rg
-         O6be7Eba1SHj6tCFp9ygCLj14eQY/xJ0TR22U1jYod3vVbM1fYY6LbYIVZBPvZzMi79w
-         Zv/Q==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/eWDyoKHBFUvFef0M8aMXHWc3vZP4l1W+59M7RIL4k8=;
+        b=2k0Q66TJM6ZdCiCnaz6dci8qLsscm01j1v48pmTDfPWhJAV0a7z7vQ6x6WScy/SlRL
+         rt0+9o1PnxALwFiPgK+my6rkFK2dCkFHzhQgMfnqHklfv0ftTmWXWfrLOtIaaUANOIA9
+         8djxvPZyypGmxHlk1vLEKunkV8QHpeLqWa/UEjPDItso4pNSac67zLmBcRD3tmZ9kupv
+         giZ6JDJNy8dkpKZFeUzgNCtarRj2igfYDGPGmGAUPyCuFOEXnh300yZoH09EZjZGxYMl
+         fpMAjdGbIa2WZVfObkRoZCxqH+1GlCtCoipjuVmbRIJLBr4Q1s4zP7hz5VaQ5LLgr9AR
+         8EWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QQNsmcbJGjSqHvhcGtkc7WNkhYvr6MAYzLtZxzByW0g=;
-        b=VUMvZRzLnt4J0iv6sEArGiZhhRE6kOxZ+5r6dJroWDNwnZ8VUZ5W3eCxSmb67J8c57
-         W/DyfucLXeaK+T6+tM+2Bv/M2qtwhtw8C0ejyOYIv5YSxTtTSMXKLAYpgeUHaHRRAEW0
-         PfBNTC3My+v+kba0s4bIIDuiLiruUy+bYpyFe0yGfbFsJEIrMZJ1sSxYh9bSuhpCk57a
-         KFM1k8YesjQq2RJylwlL+TutqA+u3W36f+xnB54uWip+UReUIqzthraGYLCxriaNkExE
-         ob82cBUmvFa916f7IfMpl8lW3nG05VbLEs+m42Qo6JkNWz/+0+wGBxrE64GZhaipptuw
-         b9eg==
-X-Gm-Message-State: AFqh2kr0KMV7emFDHG8xx4FbOWcCZQ6wb+j9XOYmFyCgPdxAptXIsm1v
-        khNYFSDevkBJDwRLlBzGEkMRHg==
-X-Google-Smtp-Source: AMrXdXvwplDhlmXDTyY/pvKGL+amu134TbFkzuPgPRiDNNd4Tiw+JyGbV8PVXHifjtTbFfQebKeEeg==
-X-Received: by 2002:a6b:7d46:0:b0:6ed:1ad7:56bc with SMTP id d6-20020a6b7d46000000b006ed1ad756bcmr11343678ioq.0.1673537271293;
-        Thu, 12 Jan 2023 07:27:51 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id k5-20020a0566022a4500b006df19c8671fsm6010956iov.27.2023.01.12.07.27.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 07:27:50 -0800 (PST)
-Message-ID: <5601285f-6628-f121-243e-44de7b15c779@kernel.dk>
-Date:   Thu, 12 Jan 2023 08:27:48 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/eWDyoKHBFUvFef0M8aMXHWc3vZP4l1W+59M7RIL4k8=;
+        b=kE/p4dFq1oYSnxBoNUsVxN1/w/KaAkVrZGjJQnr5k/8aNTN+tSDMkbuF4mBRQXK6kK
+         YdBEopljBWb73yYaFBAJ7CiF0174z5qnYKKWz1EkzErvroQdYK03FI27z/t6nL6VPd5y
+         s9wGEYLKKCr+3GaqpwIhaN8p3hGihD0L6qx0MHPp3mLclez05lT7pBxWH4pIOrpbgPNg
+         9c64oh+MsYVARWsCQCXVdBuegn9hy1FvpZqHdLcNZaOrp4sKqvfbHEF99wMsyzI4SHe4
+         JMZSyzB5boaSZ7W1LXIKbmPPMey1ru6of9nEwpNZ5VCrjmVu2yOjqNY07eX2llo+mhHL
+         px4Q==
+X-Gm-Message-State: AFqh2kpGJCi+TCNkHcwSPCzcyTBB8nRdauAKpIZGGPwzjhR1LUdOeFJj
+        4l/5u20liOgthRxd5LbiVSbbPA==
+X-Google-Smtp-Source: AMrXdXsQnB+daHOKSUGnTX+2xpNJiQ/ioCPcrA3tqxJTpITi8JOBE+Lz76UOTLm0SCGSH0pjN5n5GA==
+X-Received: by 2002:a05:600c:1e8c:b0:3d6:2952:679b with SMTP id be12-20020a05600c1e8c00b003d62952679bmr55319960wmb.34.1673537393008;
+        Thu, 12 Jan 2023 07:29:53 -0800 (PST)
+Received: from t480-bl003.civfrance.com (58.188.158.77.rev.sfr.net. [77.158.188.58])
+        by smtp.gmail.com with ESMTPSA id l24-20020a1ced18000000b003d99da8d30asm26395909wmh.46.2023.01.12.07.29.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 07:29:52 -0800 (PST)
+From:   bchihi@baylibre.com
+To:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: [PATCH v10 0/6] Add LVTS thermal architecture
+Date:   Thu, 12 Jan 2023 16:28:49 +0100
+Message-Id: <20230112152855.216072-1-bchihi@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [syzbot] WARNING in io_cqring_event_overflow
-Content-Language: en-US
-To:     syzbot <syzbot+6805087452d72929404e@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000694ccd05f20ef7be@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <000000000000694ccd05f20ef7be@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 3:56?AM, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> WARNING in io_cqring_event_overflow
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 2836 at io_uring/io_uring.c:734 io_cqring_event_overflow+0x1c0/0x230 io_uring/io_uring.c:734
-> Modules linked in:
-> CPU: 1 PID: 2836 Comm: kworker/u4:4 Not tainted 6.2.0-rc3-syzkaller-00011-g0af4af977a59 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> Workqueue: events_unbound io_ring_exit_work
-> pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : io_cqring_event_overflow+0x1c0/0x230 io_uring/io_uring.c:734
-> lr : io_cqring_event_overflow+0x1c0/0x230 io_uring/io_uring.c:734
-> sp : ffff8000164abad0
-> x29: ffff8000164abad0
->  x28: ffff0000c655e578
->  x27: ffff80000d49b000
-> 
-> x26: 0000000000000000
->  x25: 0000000000000000
->  x24: 0000000000000000
-> 
-> x23: 0000000000000000
->  x22: 0000000000000000
->  x21: 0000000000000000
-> 
-> x20: 0000000000000000
->  x19: ffff0000d1727000
->  x18: 00000000000000c0
-> 
-> x17: ffff80000df48158
->  x16: ffff80000dd86118
->  x15: ffff0000c60dce00
-> 
-> x14: 0000000000000110
->  x13: 00000000ffffffff
->  x12: ffff0000c60dce00
-> 
-> x11: ff808000095945e8
->  x10: 0000000000000000
->  x9 : ffff8000095945e8
-> 
-> x8 : ffff0000c60dce00
->  x7 : ffff80000c1090e0
->  x6 : 0000000000000000
-> 
-> x5 : 0000000000000000
->  x4 : 0000000000000000
->  x3 : 0000000000000000
-> 
-> x2 : 0000000000000000
->  x1 : 0000000000000000
->  x0 : 0000000000000000
-> 
-> Call trace:
->  io_cqring_event_overflow+0x1c0/0x230 io_uring/io_uring.c:734
->  io_req_cqe_overflow+0x5c/0x70 io_uring/io_uring.c:773
->  io_fill_cqe_req io_uring/io_uring.h:168 [inline]
->  io_do_iopoll+0x474/0x62c io_uring/rw.c:1065
->  io_iopoll_try_reap_events+0x6c/0x108 io_uring/io_uring.c:1513
->  io_uring_try_cancel_requests+0x13c/0x258 io_uring/io_uring.c:3056
->  io_ring_exit_work+0xec/0x390 io_uring/io_uring.c:2869
->  process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
->  worker_thread+0x340/0x610 kernel/workqueue.c:2436
->  kthread+0x12c/0x158 kernel/kthread.c:376
->  ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-> irq event stamp: 576210
-> hardirqs last  enabled at (576209): [<ffff80000c1238f8>] __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
-> hardirqs last  enabled at (576209): [<ffff80000c1238f8>] _raw_spin_unlock_irq+0x3c/0x70 kernel/locking/spinlock.c:202
-> hardirqs last disabled at (576210): [<ffff80000c110630>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-> softirqs last  enabled at (576168): [<ffff80000bfd4634>] spin_unlock_bh include/linux/spinlock.h:395 [inline]
-> softirqs last  enabled at (576168): [<ffff80000bfd4634>] batadv_nc_purge_paths+0x1d0/0x214 net/batman-adv/network-coding.c:471
-> softirqs last disabled at (576166): [<ffff80000bfd44c4>] spin_lock_bh include/linux/spinlock.h:355 [inline]
-> softirqs last disabled at (576166): [<ffff80000bfd44c4>] batadv_nc_purge_paths+0x60/0x214 net/batman-adv/network-coding.c:442
-> ---[ end trace 0000000000000000 ]---
-> ------------[ cut here ]------------
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-Pavel, don't we want to make this follow the usual lockdep rules?
+The LVTS (Low Voltage Thermal Sensor) driver is capable of monitoring
+multiple hot points. For that, it contains 7 thermal control blocks
+dedicated to specific devices on the die. Each control block can handle
+up to 4 sensors. 
 
+The thermal controller supports several interrupts. One for the cold
+trip point, the hot trip point, the return to the normal trip point,
+and a specific programmable trip point to monitor the temperature
+dynamically.
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 1dd0fc0412c8..5aab3fa3b7c5 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -753,7 +753,7 @@ static bool io_cqring_event_overflow(struct io_ring_ctx *ctx, u64 user_data,
- 	size_t ocq_size = sizeof(struct io_overflow_cqe);
- 	bool is_cqe32 = (ctx->flags & IORING_SETUP_CQE32);
- 
--	lockdep_assert_held(&ctx->completion_lock);
-+	io_lockdep_assert_cq_locked(ctx);
- 
- 	if (is_cqe32)
- 		ocq_size += sizeof(struct io_uring_cqe);
+The temperature measurement can be done in two ways, the immediate mode
+where the temperature read is instantaneous and the filtered mode where
+the controller uses, by configuration, an average of a set of values
+removing the minimum and the maximum.
+
+Finally, it is composed of 2 finite-state machines responsible for
+the state of the temperature (cold, hot, hot 2 normal, hot hot),
+the triggering of the interrupts, and the monitoring of the temperature.
+
+As requested, the thermal driver has been reworked to reduce
+the complexity of the code. At this time, the 4 little CPUs and
+the 4 big CPUs are supported by the thermal driver.They are described
+in a data structure and more devices can be added later.
+The calibration routine has been simplified also.
+
+The series provide the following changes:
+
+ - Move the Mediatek drivers inside a dedicated folder as their number
+   is increasing
+ - Add the DT bindings for the controller
+ - Add the efuse node for the mt8195
+ - The LVTS driver
+ - The thermal zones description in the DT
+
+Changelog:
+  v10:
+     - Rebase on top of "thermal/linux-next"
+     - Rework the LVTS driver
+     - Add the thermal trip temperature and cooling devices
+       for the sensors supported by the driver
+
+  v9:
+     - Rebase on top of 6.0.0-rc1
+     - Fix coding style issues
+     - Fix commit titles and commit messages
+     - Update dt-bindings :
+     - Add "allOf:if:then:"
+     - Use mt8192 as example (instead of mt8195)
+     - Fix dt-binding errors
+     - Fix DTS errors
+
+  v8:
+     - Fix coding style issues
+     - Rebase on top of next-20220803
+     - Add multi-instance support :
+       - Rewrite DT-binding and DTS :
+         - Add DT-binding and DTS for LVTS_v4 (MT8192 and MT8195)
+           - One LVTS node for each HW Domain (AP and MCU)
+         - One SW Instance for each HW Domain
+         - Add a Kconfig sub-menu entry for LVTS and LVTS_v4 SoCs
+     - Replace platform_get_resource by platform_get_mem_or_io to get
+       Base Address
+     - Replace platform_get_resource by platform_get_irq to get
+       Interrupt Number
+     - Add "lvts_" prefix to functions and structs
+
+ v7:
+     - Fix coding style issues
+     - Rewrite dt bindings
+       - was not accurate
+       - Use mt8195 for example (instead of mt8192)
+       - Rename mt6873 to mt8192
+       - Remove clock name
+     - Rebased on top of to series:
+       - patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+       - patchwork.kernel.org/project/linux-pm/list/?series=639386
+
+ v6:
+     - Remove temperature aggregation (it will be added in another
+       series)
+     - Update the way to read the temperature (read one sensor
+       instead of all)
+     - Add support of mt8195
+
+  v5:
+     - Use 'git mv' for the relocated file.
+
+  v4:
+     - Rebase to kernel-v5.13-rc1
+
+  v3:
+     - change the expression in the lvts_temp_to_raw to dev_s64.
+
+  v2:
+     - Rebase to kernel-5.11-rc1.
+     - sort headers
+     - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
+     - disconstruct the api of lvts_read_tc_msr_raw.
+     - add the initial value max_temp = 0 and compare e.q.
+       in the lvts_read_all_tc_temperature.
+     - add the return with an invalid number in the lvts_init.
+
+Balsam CHIHI (6):
+  thermal/drivers/mediatek: Relocate driver to mediatek folder
+  dt-bindings/thermal/mediatek: Add dt-binding document for LVTS thermal
+    controllers
+  arm64/dts/mt8195: Add efuse node to mt8195
+  thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver
+  arm64/dts/mt8195: Add thermal zones and thermal nodes
+  arm64/dts/mt8195: Add temperature mitigation threshold
+
+ .../thermal/mediatek,lvts-thermal.yaml        |  140 ++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  256 ++++
+ drivers/thermal/Kconfig                       |   14 +-
+ drivers/thermal/Makefile                      |    2 +-
+ drivers/thermal/mediatek/Kconfig              |   36 +
+ drivers/thermal/mediatek/Makefile             |    2 +
+ .../auxadc_thermal.c}                         |    2 +-
+ drivers/thermal/mediatek/lvts_thermal.c       | 1244 +++++++++++++++++
+ include/dt-bindings/thermal/mediatek-lvts.h   |   19 +
+ 9 files changed, 1703 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+ create mode 100644 drivers/thermal/mediatek/Kconfig
+ create mode 100644 drivers/thermal/mediatek/Makefile
+ rename drivers/thermal/{mtk_thermal.c => mediatek/auxadc_thermal.c} (99%)
+ create mode 100644 drivers/thermal/mediatek/lvts_thermal.c
+ create mode 100644 include/dt-bindings/thermal/mediatek-lvts.h
 
 -- 
-Jens Axboe
+2.34.1
 
