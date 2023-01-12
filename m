@@ -2,133 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFD7667E6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C4A667E70
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239902AbjALSuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
+        id S234287AbjALSyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:54:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbjALStd (ORCPT
+        with ESMTP id S240585AbjALSxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:49:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F311DBF45
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:21:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673547693;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xvPUTgSTTtddM5dDfnOu8lQSC/kechSSbCUe5L06LTk=;
-        b=eJuNMimlLrTt5arsBUJVKQ1TzpO19rruGjMQJiM91MGkLZ9uMKQgXZg6AIVMcWFdy4iTKQ
-        29uGEsXQ37M5woAC6id5WwPZGxT2kb39wRo7CJXQjs5U530ce/32LbtFp0TJ19OWqCQfUL
-        efIoYtsbkBjftrzxxljaOCU/cnq3ft0=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-479-ifHIU4HTOlqv4xbbt5N2Cg-1; Thu, 12 Jan 2023 13:21:32 -0500
-X-MC-Unique: ifHIU4HTOlqv4xbbt5N2Cg-1
-Received: by mail-ej1-f71.google.com with SMTP id nb4-20020a1709071c8400b0084d4712780bso9584292ejc.18
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:21:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xvPUTgSTTtddM5dDfnOu8lQSC/kechSSbCUe5L06LTk=;
-        b=UuyacKdXNTybZd1aEP24vtm/CxdX4m83oaqPF+RwPF4EhgOeY9CyGUkW0h/dO91jHb
-         qYTE1xZwI4L1IvL9BrdkH5b/5b0q5xVIemh7wuTDWkVhXQb+MOBLr0h4tkSBQM4zpBER
-         +KtfKoxfjkkZcbTKCtrhqIhe1WCYs+dvdYj4TcPeKBmis8cFr07AmZ4ubrOAlzN+s95d
-         ihXJkwfHkJluUi3dxJinlpCTKz/zprUzlwcLZQfpywV/huxmFTy9TnrzuAPZfK7ahuhy
-         xS8f1kC65XLBk0/JKfJIBN1nX6yUpRm1lZ2Em9OOo/cAxT/dieqrEn1GYED1bkv/mgiz
-         P5rg==
-X-Gm-Message-State: AFqh2koOz63kiftWeIT9a6n+ltvteeccjNs+5eduvMZe6/tWNxtL2iSY
-        yTLDPcw2NOKpbm38zmXRvDysjLryUSiKm5FBQvec6achbnwnZxKnqkFItBId2saxh7L8JsVx7zZ
-        zz3uyyqxZDpJL0v5abPWwk4NE
-X-Received: by 2002:a05:6402:2a08:b0:470:4d71:6d43 with SMTP id ey8-20020a0564022a0800b004704d716d43mr70339412edb.25.1673547690997;
-        Thu, 12 Jan 2023 10:21:30 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXth8VNWGy6klRzrsNc5MVA2aExa7fD1TfSHtAya8rJf/uU68HWO0o52vVBJZZ+5hPwrc3M5kQ==
-X-Received: by 2002:a05:6402:2a08:b0:470:4d71:6d43 with SMTP id ey8-20020a0564022a0800b004704d716d43mr70339407edb.25.1673547690866;
-        Thu, 12 Jan 2023 10:21:30 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id w2-20020aa7cb42000000b0046a0096bfdfsm7487578edt.52.2023.01.12.10.21.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 10:21:30 -0800 (PST)
-Message-ID: <32af40f9-8b67-ae75-8b10-88475e90eb9c@redhat.com>
-Date:   Thu, 12 Jan 2023 19:21:29 +0100
+        Thu, 12 Jan 2023 13:53:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB74885C89
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:24:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DB72B81FB3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 18:23:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33347C433D2;
+        Thu, 12 Jan 2023 18:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673547825;
+        bh=3imop1nfFEnzeDa06BtYeQWlSuMolSQ7BMbFpqXcv+g=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=bTRUbuns7Dj7Sr+RfeJbnOAnkV+eqjwJpDpA4wkpyIlHZBAcwdRpm/VjKDtWDFVfJ
+         DaMzyaH+eeC0h0XLkDUPsea51EpuQqlCUCR9RlOC5+xWbZltiHlRbjeMnaY/vE5D78
+         HLVGEYizweadjUhnKJ5BWTIobJ5NWItVA/3vq9glwzffYU3q7lSl4RDhZMnfXjJtXV
+         5sqHKHVniZLtTCgghPQTb7EJrIW2VuEhxLKWfQ7ywD6SMat5KRsIwzQXIPxnsIhnZ9
+         DBgDs7qp12dyWDmSMrxQR+PtwleZG3r52FkRiTunWrDesy4uE9qlJJxAOvUNDa4yFY
+         MjIqDWpPA3Hzw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+In-Reply-To: <20230112112852.67714-1-andriy.shevchenko@linux.intel.com>
+References: <20230112112852.67714-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 0/5] ASoC: Intel: Balance ACPI device refcount
+Message-Id: <167354782291.2217680.16107261306458603255.b4-ty@kernel.org>
+Date:   Thu, 12 Jan 2023 18:23:42 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] platform/x86: asus-nb-wmi: Add alternate mapping for
- KEY_CAMERA
-Content-Language: en-US, nl
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221216-asus-key-v1-1-45da124119a3@weissschuh.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221216-asus-key-v1-1-45da124119a3@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-8b3d1
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/21/22 04:49, Thomas Weißschuh wrote:
-> This keycode is emitted on a Asus VivoBook E410MAB with firmware
-> E410MAB.304.
+On Thu, 12 Jan 2023 13:28:47 +0200, Andy Shevchenko wrote:
+> While looking for the open coded put_device(&adev->dev) cases, where
+> adev stands for ACPI device, I noticed that in a few ASoC Intel driver,
+> among others, the refcount is not balanced properly in some cases.
 > 
-> The physical key has a strikken-through camera printed on it.
+> This series fixes that issue and converts to use acpi_dev_put().
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-
-Thank you for your patch, I've applied this patch to my fixes
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
-
-Note it will show up in my fixes branch once I've pushed my
-local branch there, which might take a while.
-
-I will include this patch in my next fixes pull-req to Linus
-for the current kernel development cycle.
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/platform/x86/asus-nb-wmi.c | 1 +
->  1 file changed, 1 insertion(+)
+> Changelog v2:
+> - split Intel drivers out from others (Pierre)
+> - sent with cover letter (Mark)
 > 
-> diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
-> index c685a705b73d..8ee5d108e9e0 100644
-> --- a/drivers/platform/x86/asus-nb-wmi.c
-> +++ b/drivers/platform/x86/asus-nb-wmi.c
-> @@ -544,6 +544,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
->  	{ KE_KEY, 0x7D, { KEY_BLUETOOTH } }, /* Bluetooth Enable */
->  	{ KE_KEY, 0x7E, { KEY_BLUETOOTH } }, /* Bluetooth Disable */
->  	{ KE_KEY, 0x82, { KEY_CAMERA } },
-> +	{ KE_KEY, 0x85, { KEY_CAMERA } },
->  	{ KE_KEY, 0x86, { KEY_PROG1 } }, /* MyASUS Key */
->  	{ KE_KEY, 0x88, { KEY_RFKILL  } }, /* Radio Toggle Key */
->  	{ KE_KEY, 0x8A, { KEY_PROG1 } }, /* Color enhancement mode */
-> 
-> ---
-> base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
-> change-id: 20221216-asus-key-b3bfb3bc2e77
-> 
-> Best regards,
+> [...]
 
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/5] ASoC: Intel: bytcht_es8316: Drop reference count of ACPI device after use
+      commit: 6b1c0bd6fdefbf3c3d75680c2708f5423ef72e46
+[2/5] ASoC: Intel: bytcr_rt5651: Drop reference count of ACPI device after use
+      commit: 721858823d7cdc8f2a897579b040e935989f6f02
+[3/5] ASoC: Intel: bytcr_rt5640: Drop reference count of ACPI device after use
+      commit: cbf87bcf46e399e9a5288430d940efbad3551c68
+[4/5] ASoC: Intel: bytcr_wm5102: Drop reference count of ACPI device after use
+      commit: c8aa49abdeda2ab587aadb083e670f6aa0236f93
+[5/5] ASoC: Intel: sof_es8336: Drop reference count of ACPI device after use
+      commit: 64e57b2195725c1ae2246a8a2ce224abb60620ac
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
