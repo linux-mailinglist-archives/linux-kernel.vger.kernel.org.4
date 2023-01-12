@@ -2,147 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15722667338
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B05F666733F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbjALNdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 08:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S230155AbjALNfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 08:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbjALNc7 (ORCPT
+        with ESMTP id S231621AbjALNfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 08:32:59 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB6F91901F;
-        Thu, 12 Jan 2023 05:32:54 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxCeoEDMBjHz0BAA--.3675S3;
-        Thu, 12 Jan 2023 21:32:52 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxf+QDDMBjim8YAA--.9397S3;
-        Thu, 12 Jan 2023 21:32:52 +0800 (CST)
-Subject: Re: kernel hangs when kprobe memcpy
-To:     Masami Hiramatsu <mhiramat@kernel.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <d179086d-78d8-d0e3-e113-9072cffa55f4@loongson.cn>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <19666c03-4bf6-7aac-3f1d-cd31ab7de2d5@loongson.cn>
-Date:   Thu, 12 Jan 2023 21:32:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Thu, 12 Jan 2023 08:35:03 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2115.outbound.protection.outlook.com [40.107.117.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91678140D2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 05:35:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KvN1nBL+dp4hTSC5Vnvv/ZRDGBs6TtWZYS5jWo2P2Qod4IqXXmgxNeYY7UAhA7ZA02Sp1tcECglEVyivFDIxzRJv8ACSrAdUYlrbToEOjr/JPV1lDrj3ewWn6o66hZtb1/d5195i0C6nK/FqfTaqsL0KVOPemWgfMrNQVoDdnwum5K1p1VAPczyZw/VQz68RmAlDmTbruu2iiIgAnH7MLzys9nX9Bhq4N6bqRHWG8Nfpgfl04Zmc0tiV3ftNG88OhfAMYOST472HDfClUobO82tUdO2eivpundgMfY6ZtZzvHA6AP8JY2l82Ks0wQoF6BMnr5y+kzeGsv2Wt6rFdUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3N4McwBBwJ0Ldq/+E3XFv5A9Voxj2W4Wxj5SJvVUCxw=;
+ b=ZULkDeR5qOJHTlC6d9hdW/zs1lABqVZ3yLillmerl/zr0lRmeUfcRLQ/CR0ERTv7kt3h3DcJmrxNuQ8Iz2AIOXPkqz5FRngVbS+hUGrBdeoFTs6eqmSkPEjEfduE4b4rf+Q5+W4sYg32zU+s5NrYLXoHKm2pnumHKYjiIIe5PR/kmlBlM55Vx8mY1Y7hbiPeBzbF3PrDn7Ys1qcvYAhc3ZxVpo9H76L9peiPB0fpsun/c1KJqxRfwv0evZHeR4gOm7XzvCBFCZYLFS5VDlxhu7huBfgHegCl07t6zBmkOeWHAXk1qSQT52N8zyv6eiHAPmqcSSqOelwzw4+1Jc8L0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3N4McwBBwJ0Ldq/+E3XFv5A9Voxj2W4Wxj5SJvVUCxw=;
+ b=lYycNaoo460Z1eixrgdlHrlkyZqMsuTyNngOkc7q00ilAUrRgryERMJpz0qTMYRuH4bN3Hxh0SlMraDRu5DV4ElTsvbSF9mX2tJxIvKAbCiKTYIPeyw9w00ScR3XfZqL3oSo0blWDJEJm57bpOBL4giuyBrP/vka7cIdt3GCl49ooEGYBxmDi9Vn+O/rdEAqbS6Psz3NebSXrI8Samx9PL6g1fbJ0EtKjEvKGFKQ/byxCuZJJQ14Q717BTRYui7AReJ128aSSzkXNngGn73aBuVwSJsh3iAbXsbsCKnpSsqmZ4iV+Oji6OwYzcH94wqZeJpOIFgbMFmVmFSGSp4POg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SEZPR06MB5072.apcprd06.prod.outlook.com (2603:1096:101:38::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 12 Jan
+ 2023 13:34:57 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572%5]) with mapi id 15.20.6002.012; Thu, 12 Jan 2023
+ 13:34:57 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH 1/3] f2fs: clarify compress level bit offset
+Date:   Thu, 12 Jan 2023 21:34:43 +0800
+Message-Id: <20230112133443.16713-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0027.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::18) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-In-Reply-To: <d179086d-78d8-d0e3-e113-9072cffa55f4@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Cxf+QDDMBjim8YAA--.9397S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWw1UXF13GFy3uF4rZF13Jwb_yoW5GF4kp3
-        ZIyw45trs5Jw1YgFy7Jw48WFyI9r1kArWUAr1kC345Aa4jqr95JF4Iva1Ut398Wr9F9w1a
-        qF18try7JrW7AaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j
-        6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIY
-        CTnIWIevJa73UjIFyTuYvjxU4s2-UUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEZPR06MB5072:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6bb7626b-d84e-4f6c-50e1-08daf4a1cbba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ck69Y/AaFtOjv3GRmblzQpZZmQpKlmn1ofr947F+WDyfnQYUmQ0DOeavRZAc2AOMtVin5BZmLsGKvYQhV1JRJHoRQNBLHKFs9hyBvdNw5YOhGXYFnj0SkF1rvxR1aeoo+X9V3eeDrQgYkhX6Djm4PZw2kzmghECDrND6z8K7gm2g9lGL4dHTgpsx6JJayF827Ei0YqivXxOnrK+Xm7kSlEzdqf0pAvTJuuPjUd4FtqSg50pxj7/apZOZQJNxOzg/YFnmV2D6DCbtKjB78x1rhevumAviuJhEqPx2qGuJakbNIF2In7NMuwNr5iYX8K+1izjodNZE2yW5Vy7kUHtewkAikLmEt1v6hbvHxzufAzDrDf/3CF0B0vFZzL7gKPo08IJQpYAO8JTfEALa4GuXFuymONFp04aIZ9fHmgp8gxsExq/OGXIg9RV3pN6UQz7To4jvnTBDNrq5KrZxdZG8FO5qhHC6gl+WfeHgUFfwwlDl/htVh6ejmYq271QYKYBAbinZdBDbQ6greNlQZ9kWPHzPBWBHCrrk56SBga9PtuiKTUksZlKHudMIh1MEv6Bi+ZKCqGc/nTRqFdEFzInw1WNKpHpCn+j7yd+p0K4hrVhwQytPnDIdEes/qp01U3dZo833izAj3ySABXujNaNj3PendxV9VUCU8TnApXlz/v6VPLSXXNZlxWFL0W27cH3p+nV7jannCagdshpn+J00CA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(376002)(346002)(39860400002)(451199015)(107886003)(6666004)(478600001)(6506007)(6486002)(86362001)(2616005)(38100700002)(6512007)(186003)(52116002)(38350700002)(36756003)(83380400001)(26005)(1076003)(66946007)(8676002)(8936002)(66476007)(4326008)(66556008)(5660300002)(316002)(41300700001)(4744005)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4gS8VeUaxomS43b7xGK7DKBgm1WYmumFXdaZQ/ynaZ7KpON8ZiVGDMywo53b?=
+ =?us-ascii?Q?E45Cg1aJXrq7vyNWz2yNhI+PyB/8MpfSo3fY1rmJSphdt2cTXqWCme24hQTt?=
+ =?us-ascii?Q?FNzElBnK03svavEw5j5E9onqt9XYYsomOvSyGNcvFZ16UhjPLxFcngtNqVeZ?=
+ =?us-ascii?Q?3og5otQgKiOnPWvetiHRHguZRaSGbU4eEpEZR8HuBM6+KBE1NZE+CNZrTrhN?=
+ =?us-ascii?Q?RgePBcE98GPkpgb2199lNBJ78k7B8PeKBs0JEXBAwrOQMY5BEKDhRQnFbfDP?=
+ =?us-ascii?Q?0Q0IxFUBa5iEYmFwXykS0voBzjA1ygKMzgd6u3I/0NmFK1fNsqstpkJSIffm?=
+ =?us-ascii?Q?BVnJJU/fVr4IKh1NdJvy/Urolw9HQ0smuJNHyGlDagxlGC70+AKjBPmjbvFu?=
+ =?us-ascii?Q?QAuUwUAinmFiDyIMSV3WyrTqmwXdigB7EASNwTrAmhqsfSKG3z+1gBErjxH+?=
+ =?us-ascii?Q?x24aYgd/lqYkop06sJUzyOV4waaAOh6nkJSvQdYPC0cGm0leIA7Xzz321gDV?=
+ =?us-ascii?Q?yFRKjkdeAKKvXUNTWi23X2zmvf91NDnQn2aFqcVmkwEjaDCSDCKaCQvdVi1J?=
+ =?us-ascii?Q?otco3h2R/qmkRUZ/AoXQNuN7pvdRvomLLklc4n0k5GBHBuuxuLQiBRezepRW?=
+ =?us-ascii?Q?my1hRnHJdGX+ovhIwAoDUISYKaCWedMlCQS6Vddn8VAbu78H503zK+2/F+Wd?=
+ =?us-ascii?Q?yAyj7EcfsRMiz9Om45vFuDLBirf7InQ+puMU4FZI3/G9ZoOVZtb+Ik9oC1C0?=
+ =?us-ascii?Q?oobkiYWOwCbIahPy9P6I0+g9jinujMAy0ZIiTZ1HmPWuGQ4zAKDctMMtrVx1?=
+ =?us-ascii?Q?9Ib7kRVfPNhpAaMU/ZO8alN6C9NavPUF1BUYGBlb1YWMYSN20x/ga/sEfu/M?=
+ =?us-ascii?Q?JNQE3bGz11HDjS7KMpxJyR/gCZQAe0OmWD6gmCbjA71jfmNg4uTyIDILI3L8?=
+ =?us-ascii?Q?zHQQZ/dxuX0N50qALCq7R/PsoVRjwM+bQTQxCFm8hXN/LsAwM7b2h4Lma8Oj?=
+ =?us-ascii?Q?KXLQPUzppeJ02XFkEceuyuWPUQ05cewogVM60Xqx/JNB1/AgR4YG8RjNlbTR?=
+ =?us-ascii?Q?MGJdE4oPC642/ZhJBw4DjHHpDaGwRcDvoEpx1xEmeQQ7pGjiwXJUS1vhnV+X?=
+ =?us-ascii?Q?o2COEsxgEJJLK71c+mAZ68PPvlU1c+m13RyY27PMGR4Z0NmQkw/VgROCFmbx?=
+ =?us-ascii?Q?aQ+nJDuYF8Ew2lql51VpuSiP9MjLDQn+x3pLeNQJhZzWuvSc0bRT1mSFJOo4?=
+ =?us-ascii?Q?Hlk8MdRjIz5dX16/foTIP8lD8qQcifWaT8f//YbWw5MlKOtMP64Lg6JPgqTT?=
+ =?us-ascii?Q?FrExFcDghAyRMfuzXsoE5KTPZpchzH8jAPfujgXXJGoN/RnPUNzk5ZlK3l5E?=
+ =?us-ascii?Q?8X7vXD7XhyKjYOE6qFHAGE+a1rJbsT9u63wBbzkAsGt64oN3HENR8/Rc8ItD?=
+ =?us-ascii?Q?eGLmMufuwM/YH8Gj7yx+FFRFuMdFNgHSEiWOTsGQEha5yK+gINRBmLiQo+ZF?=
+ =?us-ascii?Q?I1sTqQ4m1wGN4V1tGi9F7GIxnCWIc7atbd96uGqdjVW0wPilvPaUwJ2Axh9G?=
+ =?us-ascii?Q?jjWxCq4C+N9rF7W9If35MXIX3Ldl6B1W4oIcHurN?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bb7626b-d84e-4f6c-50e1-08daf4a1cbba
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 13:34:57.3587
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zPsJbmsM8YOnS46uJ8CYs58XJnectd30NnljRCUWcuSodbgI5nmmxZAD/slvVec6lFzUOe/lap98/go96r/x5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5072
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+commit 3fde13f817e2 ("f2fs: compress: support compress level") introduce
+compress level, which macro(COMPRESS_LEVEL_OFFSET) is 8, But use wrong
+comment about compress level.
 
+Let's fix it.
 
-On 01/11/2023 07:38 PM, Tiezhu Yang wrote:
-> Hi all,
->
-> (1) I have the following test environment, kernel hangs when kprobe memcpy:
->
-> system: x86_64 fedora 36
-> kernel version: Linux 5.7 (compile and update)
-> test case: modprobe kprobe_example symbol="memcpy"
-> (CONFIG_SAMPLE_KPROBES=m)
->
-> In order to fix build errors, it needs to unset CONFIG_NFP and do the
-> following changes:
-> commit 52a9dab6d892 ("libsubcmd: Fix use-after-free for realloc(..., 0)")
-> commit de979c83574a ("x86/entry: Build thunk_$(BITS) only if
-> CONFIG_PREEMPTION=y")
->
-> (2) Using the latest upstream mainline kernel, no hang problem due to the
-> commit e3a9e681adb7 ("x86/entry: Fixup bad_iret vs noinstr") to prohibit
-> probing memcpy which is put into the .noinstr.text section.
->
->   # modprobe kprobe_example symbol="memcpy"
->   modprobe: ERROR: could not insert 'kprobe_example': Invalid argument
->
-> In my opinion, according to the commit message, the above commit is not
-> intended to fix the memcpy hang problem, the problem was fixed by accident.
->
-> (3) If make handler_pre() and handler_post() as empty functions in the 5.7
-> kernel code, the above hang problem does not exist.
->
-> diff --git a/samples/kprobes/kprobe_example.c
-> b/samples/kprobes/kprobe_example.c
-> index fd346f58ddba..c194171d8a46 100644
-> --- a/samples/kprobes/kprobe_example.c
-> +++ b/samples/kprobes/kprobe_example.c
-> @@ -28,8 +28,6 @@ static struct kprobe kp = {
->  static int __kprobes handler_pre(struct kprobe *p, struct pt_regs *regs)
->  {
->  #ifdef CONFIG_X86
-> -    pr_info("<%s> p->addr = 0x%p, ip = %lx, flags = 0x%lx\n",
-> -        p->symbol_name, p->addr, regs->ip, regs->flags);
->  #endif
->  #ifdef CONFIG_PPC
->      pr_info("<%s> p->addr = 0x%p, nip = 0x%lx, msr = 0x%lx\n",
-> @@ -65,8 +63,6 @@ static void __kprobes handler_post(struct kprobe *p,
-> struct pt_regs *regs,
->                  unsigned long flags)
->  {
->  #ifdef CONFIG_X86
-> -    pr_info("<%s> p->addr = 0x%p, flags = 0x%lx\n",
-> -        p->symbol_name, p->addr, regs->flags);
->  #endif
->  #ifdef CONFIG_PPC
->      pr_info("<%s> p->addr = 0x%p, msr = 0x%lx\n",
->
-> I want to know what is the real reason of the hang problem when kprobe
-> memcpy,
-> I guess it may be kprobe recursion, what do you think? Thank you.
->
-> By the way, kprobe memset has no problem whether or not handler_pre() and
-> handler_post() are empty functions.
->
-> Thanks,
-> Tiezhu
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ include/linux/f2fs_fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I find out the following call trace:
-
-handler_pre()
-   pr_info()
-     printk()
-       _printk()
-         vprintk()
-           vprintk_store()
-             memcpy()
-
-I think it may cause recursive exceptions, so we should
-mark memcpy as non-kprobe-able, right?
-
-Thanks,
-Tiezhu
+diff --git a/include/linux/f2fs_fs.h b/include/linux/f2fs_fs.h
+index ee0d75d9a302..1701f25117ea 100644
+--- a/include/linux/f2fs_fs.h
++++ b/include/linux/f2fs_fs.h
+@@ -315,7 +315,7 @@ struct f2fs_inode {
+ 			__u8 i_log_cluster_size;	/* log of cluster size */
+ 			__le16 i_compress_flag;		/* compress flag */
+ 						/* 0 bit: chksum flag
+-						 * [10,15] bits: compress level
++						 * [8,15] bits: compress level
+ 						 */
+ 			__le32 i_extra_end[0];	/* for attribute size calculation */
+ 		} __packed;
+-- 
+2.25.1
 
