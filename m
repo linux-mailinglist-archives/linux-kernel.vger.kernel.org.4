@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6661D667CE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0954C667CE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232268AbjALRqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
+        id S232627AbjALRqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 12:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237643AbjALRo7 (ORCPT
+        with ESMTP id S232594AbjALRpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:44:59 -0500
+        Thu, 12 Jan 2023 12:45:22 -0500
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7760644378;
-        Thu, 12 Jan 2023 09:03:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F199448CD8;
+        Thu, 12 Jan 2023 09:04:16 -0800 (PST)
 Received: from localhost (unknown [IPv6:2a01:e35:39f2:1220:dc8b:b602:9bcd:3004])
-        by smtp6-g21.free.fr (Postfix) with ESMTPS id 87B7078036C;
-        Thu, 12 Jan 2023 18:03:39 +0100 (CET)
+        by smtp6-g21.free.fr (Postfix) with ESMTPS id 90EBF780357;
+        Thu, 12 Jan 2023 18:03:58 +0100 (CET)
 From:   Yann Droneaud <ydroneaud@opteya.com>
 To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         "Theodore Ts'o" <tytso@mit.edu>
@@ -32,9 +32,9 @@ Cc:     Yann Droneaud <ydroneaud@opteya.com>,
         linux-kernel@vger.kernel.org, Florian Weimer <fweimer@redhat.com>,
         Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
         "Carlos O'Donell" <carlos@redhat.com>
-Subject: [RFC PATCH 2/4] random: introduce generic vDSO getrandom(,, GRND_TIMESTAMP) fast path
-Date:   Thu, 12 Jan 2023 18:02:34 +0100
-Message-Id: <dae48bf59df79657e2ec09cfa4a41bc05f1ce2a2.1673539719.git.ydroneaud@opteya.com>
+Subject: [RFC PATCH 3/4] x86: vdso: Wire up getrandom() vDSO implementation.
+Date:   Thu, 12 Jan 2023 18:02:35 +0100
+Message-Id: <c85e9dabec96577783a9b4053e11a4bb0bceb6c3.1673539719.git.ydroneaud@opteya.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <cover.1673539719.git.ydroneaud@opteya.com>
 References: <cover.1673539719.git.ydroneaud@opteya.com>
@@ -50,159 +50,209 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-Exports base_crng.generation to vDSO and adds getrandom() to the vDSO.
+Hook up the generic vDSO implementation to the x86 vDSO data page.
+Since the existing vDSO infrastructure is heavily based on the
+timekeeping functionality, which works over arrays of bases,
+a new macro is introduced for vvars that are not arrays.
 
-Based on Jason A. Donenfeld <Jason@zx2c4.com> patch [1]
-"[PATCH v14 6/7] random: introduce generic vDSO getrandom() implementation",
-but deal only with GRND_TIMESTAMP in vDSO: generating random stream
-is left to the getrandom() syscall.
+Based on Jason A. Donenfeld patch [1]
+"[PATCH v14 7/7] x86: vdso: Wire up getrandom() vDSO implementation"
+removing the ChaCha20 implementation and opaque state argument
+from vDSO getrandom().
 
-[1] https://lore.kernel.org/all/20230101162910.710293-7-Jason@zx2c4.com/
+[1] https://lore.kernel.org/all/20230101162910.710293-8-Jason@zx2c4.com/
 
 Link: https://lore.kernel.org/all/cover.1673539719.git.ydroneaud@opteya.com/
 Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
 ---
- MAINTAINERS             |  1 +
- drivers/char/random.c   |  6 +++++
- include/vdso/datapage.h |  9 ++++++++
- lib/vdso/Kconfig        |  5 ++++
- lib/vdso/getrandom.c    | 51 +++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 72 insertions(+)
- create mode 100644 lib/vdso/getrandom.c
+ arch/x86/Kconfig                      |  1 +
+ arch/x86/entry/vdso/Makefile          |  3 +-
+ arch/x86/entry/vdso/vdso.lds.S        |  2 ++
+ arch/x86/entry/vdso/vgetrandom.c      | 17 +++++++++++
+ arch/x86/include/asm/vdso/getrandom.h | 42 +++++++++++++++++++++++++++
+ arch/x86/include/asm/vdso/vsyscall.h  |  2 ++
+ arch/x86/include/asm/vvar.h           | 16 ++++++++++
+ 7 files changed, 82 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/entry/vdso/vgetrandom.c
+ create mode 100644 arch/x86/include/asm/vdso/getrandom.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7f86d02cb427..20e1fabcb2e9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17521,6 +17521,7 @@ T:	git https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
- S:	Maintained
- F:	drivers/char/random.c
- F:	drivers/virt/vmgenid.c
-+F:	lib/vdso/getrandom.c
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 3604074a878b..df48387f019f 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -272,6 +272,7 @@ config X86
+ 	select HAVE_UNSTABLE_SCHED_CLOCK
+ 	select HAVE_USER_RETURN_NOTIFIER
+ 	select HAVE_GENERIC_VDSO
++	select VDSO_GETRANDOM
+ 	select HOTPLUG_SMT			if SMP
+ 	select IRQ_FORCED_THREADING
+ 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 838613ac15b8..2565c4702f54 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -27,7 +27,7 @@ VDSO32-$(CONFIG_X86_32)		:= y
+ VDSO32-$(CONFIG_IA32_EMULATION)	:= y
  
- RAPIDIO SUBSYSTEM
- M:	Matt Porter <mporter@kernel.crashing.org>
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 9e2a37e432c0..a60f50c95ab1 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -56,6 +56,9 @@
- #include <linux/sched/isolation.h>
- #include <crypto/chacha.h>
- #include <crypto/blake2s.h>
-+#ifdef CONFIG_VDSO_GETRANDOM
-+#include <vdso/datapage.h>
-+#endif
- #include <asm/archrandom.h>
- #include <asm/processor.h>
- #include <asm/irq.h>
-@@ -271,6 +274,9 @@ static void crng_reseed(struct work_struct *work)
- 	if (next_gen == ULONG_MAX)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
-+#ifdef CONFIG_VDSO_GETRANDOM
-+	smp_store_release(&_vdso_rng_data.generation, next_gen);
-+#endif
- 	if (!static_branch_likely(&crng_is_ready))
- 		crng_init = CRNG_READY;
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
-diff --git a/include/vdso/datapage.h b/include/vdso/datapage.h
-index 73eb622e7663..7ae8e7ffe3ba 100644
---- a/include/vdso/datapage.h
-+++ b/include/vdso/datapage.h
-@@ -109,6 +109,14 @@ struct vdso_data {
- 	struct arch_vdso_data	arch_data;
- };
+ # files to link into the vdso
+-vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o
++vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o vgetrandom.o
+ vobjs32-y := vdso32/note.o vdso32/system_call.o vdso32/sigreturn.o
+ vobjs32-y += vdso32/vclock_gettime.o
+ vobjs-$(CONFIG_X86_SGX)	+= vsgx.o
+@@ -105,6 +105,7 @@ CFLAGS_REMOVE_vclock_gettime.o = -pg
+ CFLAGS_REMOVE_vdso32/vclock_gettime.o = -pg
+ CFLAGS_REMOVE_vgetcpu.o = -pg
+ CFLAGS_REMOVE_vsgx.o = -pg
++CFLAGS_REMOVE_vgetrandom.o = -pg
  
-+/**
-+ * struct vdso_rng_data - vdso RNG state information
-+ * @generation:	counter representing the number of RNG reseeds
-+ */
-+struct vdso_rng_data {
-+	u64			generation;
-+};
-+
- /*
-  * We use the hidden visibility to prevent the compiler from generating a GOT
-  * relocation. Not only is going through a GOT useless (the entry couldn't and
-@@ -120,6 +128,7 @@ struct vdso_data {
-  */
- extern struct vdso_data _vdso_data[CS_BASES] __attribute__((visibility("hidden")));
- extern struct vdso_data _timens_data[CS_BASES] __attribute__((visibility("hidden")));
-+extern struct vdso_rng_data _vdso_rng_data __attribute__((visibility("hidden")));
- 
- /*
-  * The generic vDSO implementation requires that gettimeofday.h
-diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
-index d883ac299508..3b394fa83f65 100644
---- a/lib/vdso/Kconfig
-+++ b/lib/vdso/Kconfig
-@@ -31,3 +31,8 @@ config GENERIC_VDSO_TIME_NS
- 	  VDSO
- 
- endif
-+
-+config VDSO_GETRANDOM
-+	bool
-+	help
-+	  Selected by architectures that support vDSO getrandom().
-diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
+ #
+ # X32 processes use x32 vDSO to access 64bit kernel data.
+diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
+index e8c60ae7a7c8..0bab5f4af6d1 100644
+--- a/arch/x86/entry/vdso/vdso.lds.S
++++ b/arch/x86/entry/vdso/vdso.lds.S
+@@ -30,6 +30,8 @@ VERSION {
+ #ifdef CONFIG_X86_SGX
+ 		__vdso_sgx_enter_enclave;
+ #endif
++		getrandom;
++		__vdso_getrandom;
+ 	local: *;
+ 	};
+ }
+diff --git a/arch/x86/entry/vdso/vgetrandom.c b/arch/x86/entry/vdso/vgetrandom.c
 new file mode 100644
-index 000000000000..827351a87002
+index 000000000000..157a6f7dbc44
 --- /dev/null
-+++ b/lib/vdso/getrandom.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/arch/x86/entry/vdso/vgetrandom.c
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
 + */
++#include <linux/types.h>
 +
-+#include <linux/cache.h>
-+#include <linux/kernel.h>
-+#include <linux/time64.h>
-+#include <vdso/datapage.h>
-+#include <asm/vdso/getrandom.h>
-+#include <asm/vdso/vsyscall.h>
++#include "../../../../lib/vdso/getrandom.c"
++
++ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags);
++
++ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags)
++{
++	return __cvdso_getrandom(buffer, len, flags);
++}
++
++ssize_t getrandom(void *, size_t, unsigned int)
++	__attribute__((weak, alias("__vdso_getrandom")));
+diff --git a/arch/x86/include/asm/vdso/getrandom.h b/arch/x86/include/asm/vdso/getrandom.h
+new file mode 100644
+index 000000000000..14247ddc431a
+--- /dev/null
++++ b/arch/x86/include/asm/vdso/getrandom.h
+@@ -0,0 +1,42 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
++ */
++#ifndef __ASM_VDSO_GETRANDOM_H
++#define __ASM_VDSO_GETRANDOM_H
++
++#ifndef __ASSEMBLY__
++
++#include <asm/unistd.h>
++#include <asm/vvar.h>
 +
 +/**
-+ * __cvdso_getrandom_data - Generic vDSO implementation of getrandom() syscall.
-+ * @rng_info:		Describes state of kernel RNG, memory shared with kernel.
-+ * @buffer:		Input/Output buffer.
-+ * @len:		Size of @buffer in bytes.
-+ * @flags:		Zero or more GRND_* flags.
++ * getrandom_syscall - Invoke the getrandom() syscall.
++ * @buffer:	Input/Output buffer.
++ * @len:	Size of @buffer in bytes.
++ * @flags:	Zero or more GRND_* flags.
++ * Returns the number of random bytes written to @buffer, or a negative value indicating an error.
 + */
-+static __always_inline ssize_t
-+__cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_t len,
-+		       unsigned int flags)
++static __always_inline ssize_t getrandom_syscall(void *buffer, size_t len, unsigned int flags)
 +{
-+	if (flags != GRND_TIMESTAMP)
-+		goto fallback;
++	long ret;
 +
-+	if (unlikely(!buffer))
-+		goto fallback;
++	asm ("syscall" : "=a" (ret) :
++	     "0" (__NR_getrandom), "D" (buffer), "S" (len), "d" (flags) :
++	     "rcx", "r11", "memory");
 +
-+	/* want aligned access */
-+	if (unlikely(!IS_ALIGNED((uintptr_t)buffer, __alignof__(u64))))
-+		goto fallback;
-+
-+	if (unlikely(len != sizeof(u64)))
-+		goto fallback;
-+
-+	if (!get_random_timestamp_update((u64 *)buffer,
-+					 READ_ONCE(rng_info->generation)))
-+		return 0;
-+
-+	return sizeof(u64);
-+
-+fallback:
-+	return getrandom_syscall(buffer, len, flags);
++	return ret;
 +}
 +
-+static __always_inline ssize_t
-+__cvdso_getrandom(void *buffer, size_t len, unsigned int flags)
++#define __vdso_rng_data (VVAR(_vdso_rng_data))
++
++static __always_inline const struct vdso_rng_data *__arch_get_vdso_rng_data(void)
 +{
-+	return __cvdso_getrandom_data(__arch_get_vdso_rng_data(), buffer, len, flags);
++	if (__vdso_data->clock_mode == VDSO_CLOCKMODE_TIMENS)
++		return (void *)&__vdso_rng_data + ((void *)&__timens_vdso_data - (void *)&__vdso_data);
++	return &__vdso_rng_data;
 +}
++
++#endif /* !__ASSEMBLY__ */
++
++#endif /* __ASM_VDSO_GETRANDOM_H */
+diff --git a/arch/x86/include/asm/vdso/vsyscall.h b/arch/x86/include/asm/vdso/vsyscall.h
+index be199a9b2676..71c56586a22f 100644
+--- a/arch/x86/include/asm/vdso/vsyscall.h
++++ b/arch/x86/include/asm/vdso/vsyscall.h
+@@ -11,6 +11,8 @@
+ #include <asm/vvar.h>
+ 
+ DEFINE_VVAR(struct vdso_data, _vdso_data);
++DEFINE_VVAR_SINGLE(struct vdso_rng_data, _vdso_rng_data);
++
+ /*
+  * Update the vDSO data page to keep in sync with kernel timekeeping.
+  */
+diff --git a/arch/x86/include/asm/vvar.h b/arch/x86/include/asm/vvar.h
+index 183e98e49ab9..9d9af37f7cab 100644
+--- a/arch/x86/include/asm/vvar.h
++++ b/arch/x86/include/asm/vvar.h
+@@ -26,6 +26,8 @@
+  */
+ #define DECLARE_VVAR(offset, type, name) \
+ 	EMIT_VVAR(name, offset)
++#define DECLARE_VVAR_SINGLE(offset, type, name) \
++	EMIT_VVAR(name, offset)
+ 
+ #else
+ 
+@@ -37,6 +39,10 @@ extern char __vvar_page;
+ 	extern type timens_ ## name[CS_BASES]				\
+ 	__attribute__((visibility("hidden")));				\
+ 
++#define DECLARE_VVAR_SINGLE(offset, type, name)				\
++	extern type vvar_ ## name					\
++	__attribute__((visibility("hidden")));				\
++
+ #define VVAR(name) (vvar_ ## name)
+ #define TIMENS(name) (timens_ ## name)
+ 
+@@ -44,12 +50,22 @@ extern char __vvar_page;
+ 	type name[CS_BASES]						\
+ 	__attribute__((section(".vvar_" #name), aligned(16))) __visible
+ 
++#define DEFINE_VVAR_SINGLE(type, name)					\
++	type name							\
++	__attribute__((section(".vvar_" #name), aligned(16))) __visible
++
+ #endif
+ 
+ /* DECLARE_VVAR(offset, type, name) */
+ 
+ DECLARE_VVAR(128, struct vdso_data, _vdso_data)
+ 
++#if !defined(_SINGLE_DATA)
++#define _SINGLE_DATA
++DECLARE_VVAR_SINGLE(640, struct vdso_rng_data, _vdso_rng_data)
++#endif
++
+ #undef DECLARE_VVAR
++#undef DECLARE_VVAR_SINGLE
+ 
+ #endif
 -- 
 2.37.2
 
