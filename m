@@ -2,83 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9510C6684A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7996684A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240771AbjALUza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 15:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
+        id S240802AbjALUzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:55:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240505AbjALUxa (ORCPT
+        with ESMTP id S240516AbjALUxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 15:53:30 -0500
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2266062C3;
-        Thu, 12 Jan 2023 12:33:31 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 5E26B6E3;
-        Thu, 12 Jan 2023 20:33:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5E26B6E3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1673555611; bh=isSAsl/11UcncYQsH4oIAI2PgAG9STANENU4NGco10g=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=K3qkWwyUjUdoxU5PYH96xIH81+5GQFA8ZkR80BWFS+qmvdPPptnDhnw+QclImpZl9
-         oLfarofcCbA4tgytHYDN6vAAxJsJoVgzzZi9gUvfcbGmskU0MzicARPUqXwTjOutQM
-         c2fBnW40YQAg0jcYP7ElpI2ea60/c/jlWU1bmoeM0+xnjWSOcZNHSC4NRiRMLSHmTN
-         eIAg4L+50h2Jw15XzmcCkTbJ+vUk2AjaoeDYTNgWuPZODVmL8SsHBsRZIgc63ruwyM
-         dKsb05SvCGXaGhHEIjcAo+YMASWKPDrYmhQWTKbKzOIfq4c7D1taI90DLYjj8Ym9+p
-         HcS57nGDRGn4w==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Federico Vaga <federico.vaga@vaga.pv.it>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] doc: monospace style for inline code in botching ioctl
-In-Reply-To: <20230112195552.qapndatj66nqmu4n@numero-86.vaga.pv.it>
-References: <20230102183649.9626-1-federico.vaga@vaga.pv.it>
- <874jswwuc2.fsf@meer.lwn.net>
- <20230112195552.qapndatj66nqmu4n@numero-86.vaga.pv.it>
-Date:   Thu, 12 Jan 2023 13:33:30 -0700
-Message-ID: <87cz7jtrvp.fsf@meer.lwn.net>
+        Thu, 12 Jan 2023 15:53:31 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8434641D;
+        Thu, 12 Jan 2023 12:35:20 -0800 (PST)
+Received: from localhost.localdomain (unknown [182.253.183.184])
+        by gnuweeb.org (Postfix) with ESMTPSA id 656357E74E;
+        Thu, 12 Jan 2023 20:35:16 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1673555719;
+        bh=BsX+perw1cIaTPd1KVpYjlhIo+yy6SOqhGMLkc38NU0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BpU2+6xOIYvK/qmT6kaaFF664myaakOOEAqHOhZiq6c8wsmPoQ6cdww/DVnz/ydFW
+         pTzNjvHTu4jfv5GdWlxNlsIFcygPGrmFIeco/CuSdBFt9IqjuzT3abkuR1ItjLomv8
+         +EdADiPT4pX96xtYBAp3yaJtrfIgGW0abmqaXrq1lwOcBwe9IQNSsiqxudPFqnBEiY
+         LY1WXk368M7/prJ+FYAuGLplkSiEr2F7rkkcCyHfux520A4b9XeyE+sCwp16NXPm7l
+         5pRDWaEsbr3crKPESAA6nxolR8B52/jJE3xrunnBQj0pPl50KYdKWIxzcGao+JCfMz
+         3vfvSGTzof07A==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Breno Leitao <leitao@debian.org>,
+        Christian Mazakas <christian.mazakas@gmail.com>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        VNLX Kernel Department <kernel@vnlx.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Jiahao XU <Jiahao_XU@outlook.com>,
+        Gabriel Krisman Bertazi <krisman@suse.de>
+Subject: [PATCH liburing v1] man/io_uring_prep_splice.3: Fix description in io_uring_prep_splice() manpage
+Date:   Fri, 13 Jan 2023 03:34:52 +0700
+Message-Id: <20230112203452.317648-1-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Federico Vaga <federico.vaga@vaga.pv.it> writes:
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-> On Wed, Jan 11, 2023 at 03:59:57PM -0700, Jonathan Corbet wrote:
->>Federico Vaga <federico.vaga@vaga.pv.it> writes:
->>
->>> Highlighting inline code improves text readability.
->>>
->>> Signed-off-by: Federico Vaga <federico.vaga@vaga.pv.it>
->>
->>It improves *HTML* text readability; the results for plain text are
->>... less clear.  I think it's better to avoid this kind of extra markup
->>when we can.
->
-> Shouldn't we consider higher priority the HTML text? Perhaps I've a biased
-> opinion. Do you think that plain-text is the favorite way of reading the kernel
-> documentation?
+Commit 55bbe5b71c7d missed a review from Gabriel. It was blindly copied
+from liburing.h comment with just a modification to support manpage
+formatting. Fix that.
 
-The policy all along has been that we need to prioritize the plain-text
-docs.  A lot of people do use them, and it is easy to wreck their
-readability with markup if sufficient attention isn't paid.  HTML output
-is great, and we want it to be as good as it can be, but it can't be at
-the cost of plain-text readability.
+While in there, also fix the liburing.h from which that mistake comes.
 
-> Let me profit from this point and ask. Are there statistics about the usage of
-> https://www.kernel.org/doc/html/latest/?
+Cc: Jiahao XU <Jiahao_XU@outlook.com>
+Suggested-by: Gabriel Krisman Bertazi <krisman@suse.de>
+Link: https://lore.kernel.org/io-uring/87bkn3ekbb.fsf@suse.de
+Fixes: 55bbe5b71c7d ("man/io_uring_prep_splice.3: Explain more about io_uring_prep_splice()")
+Fixes: d871f482d911 ("Add inline doc in the comments for io_uring_prep_splice")
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+ man/io_uring_prep_splice.3 | 12 +++++++-----
+ src/include/liburing.h     | 27 +++++++++++++--------------
+ 2 files changed, 20 insertions(+), 19 deletions(-)
 
-None that I know of.
+diff --git a/man/io_uring_prep_splice.3 b/man/io_uring_prep_splice.3
+index a177bc6..3d6e38f 100644
+--- a/man/io_uring_prep_splice.3
++++ b/man/io_uring_prep_splice.3
+@@ -55,16 +55,18 @@ given as a registered file descriptor offset.
+ If
+ .I fd_in
+ refers to a pipe,
+-.IR off_in
+-must be -1.
++.I off_in
++is ignored and must be set to -1.
+ 
+ If
+ .I fd_in
+ does not refer to a pipe and
+ .I off_in
+-is -1, then bytes are read from
++is -1, then
++.I nbytes
++are read from
+ .I fd_in
+-starting from the file offset and it is adjusted appropriately.
++starting from the file offset, which is incremented by the number of bytes read.
+ 
+ If
+ .I fd_in
+@@ -112,7 +114,7 @@ Note that even if
+ .I fd_in
+ or
+ .I fd_out
+-refers to a pipe, the splice operation can still failed with
++refers to a pipe, the splice operation can still fail with
+ .B EINVAL
+ if one of the fd doesn't explicitly support splice operation, e.g. reading from
+ terminal is unsupported from kernel 5.7 to 5.11.
+diff --git a/src/include/liburing.h b/src/include/liburing.h
+index c7139ef..41a58eb 100644
+--- a/src/include/liburing.h
++++ b/src/include/liburing.h
+@@ -383,26 +383,25 @@ IOURINGINLINE void io_uring_prep_rw(int op, struct io_uring_sqe *sqe, int fd,
+ 	sqe->__pad2[0] = 0;
+ }
+ 
+-/**
+- * @pre Either fd_in or fd_out must be a pipe.
+- * @param off_in If fd_in refers to a pipe, off_in must be (int64_t) -1;
+- *		 If fd_in does not refer to a pipe and off_in is (int64_t) -1,
+- *		 then bytes are read from fd_in starting from the file offset
+- *		 and it is adjusted appropriately;
+- *		 If fd_in does not refer to a pipe and off_in is not
+- *		 (int64_t) -1, then the  starting offset of fd_in will be
+- *		 off_in.
+- * @param off_out The description of off_in also applied to off_out.
+- * @param splice_flags see man splice(2) for description of flags.
++/*
++ * io_uring_prep_splice() - Either @fd_in or @fd_out must be a pipe.
++ *
++ * - If @fd_in refers to a pipe, @off_in is ignored and must be set to -1.
++ *
++ * - If @fd_in does not refer to a pipe and @off_in is -1, then @nbytes are read
++ *   from @fd_in starting from the file offset, which is incremented by the
++ *   number of bytes read.
++ *
++ * - If @fd_in does not refer to a pipe and @off_in is not -1, then the starting
++ *   offset of @fd_in will be @off_in.
+  *
+  * This splice operation can be used to implement sendfile by splicing to an
+  * intermediate pipe first, then splice to the final destination.
+  * In fact, the implementation of sendfile in kernel uses splice internally.
+  *
+  * NOTE that even if fd_in or fd_out refers to a pipe, the splice operation
+- * can still failed with EINVAL if one of the fd doesn't explicitly support
+- * splice operation, e.g. reading from terminal is unsupported from kernel 5.7
+- * to 5.11.
++ * can still fail with EINVAL if one of the fd doesn't explicitly support splice
++ * operation, e.g. reading from terminal is unsupported from kernel 5.7 to 5.11.
+  * Check issue #291 for more information.
+  */
+ IOURINGINLINE void io_uring_prep_splice(struct io_uring_sqe *sqe,
 
-Thanks,
+base-commit: 55bbe5b71c7d39c9ea44e5abb886846010c67baa
+-- 
+Ammar Faizi
 
-jon
