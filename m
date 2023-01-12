@@ -2,369 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31D366867C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67093668686
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240331AbjALWJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 17:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        id S240329AbjALWJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 17:09:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240327AbjALWId (ORCPT
+        with ESMTP id S240457AbjALWIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 17:08:33 -0500
+        Thu, 12 Jan 2023 17:08:37 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459DC1EA;
-        Thu, 12 Jan 2023 13:59:11 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B0C1EEEE
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:59:24 -0800 (PST)
+Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1B7526602D54;
-        Thu, 12 Jan 2023 21:59:08 +0000 (GMT)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB8C26602D54;
+        Thu, 12 Jan 2023 21:59:21 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673560749;
-        bh=QNUS1EWqWeAuCxJFcUKOsOb/alY4Y2PQWCbxkVvG/j0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=jqjC/5PQ+7KFmswb7xkwz4HRRe4F2Z8G39l/wH9SpChntH5GQAaVaGSymGSc/7Jta
-         +qFsTkiYXfg+VMfK5ZPVmOB1EKk/dQyrdL94x22X6cHOv8JM5wGD/GZAx/yod9O7bZ
-         MVJgaq8dBrnP58pFrBN/GCaj/5StwRGd0rKszCoCuDvhq7q7JI/rwvfcCdeoJApYbB
-         RrLVDR1FdjRUkPKUYY4vdQXFMKJ+DyCEy1u3yaq0tLzzRr/q+W+Jpk2dTzCe0ZDnHI
-         ZrgvG8PTC07JIb8qgwWuByL9OnamJVjCjzw1ZD722E8DYwsfeQcWrgV8xkkRqSRbd1
-         ttLrZs/BvAqjg==
-Message-ID: <b0aca760a1c804d68cd95357b8adcafef0e78b25.camel@collabora.com>
-Subject: Re: [PATCH v2 09/12] staging: media: rkvdec: h264: Add callbacks
- for h264
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Alex Bee <knaerzche@gmail.com>,
-        Collabora Kernel-domain <kernel@collabora.com>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Date:   Thu, 12 Jan 2023 16:58:58 -0500
-In-Reply-To: <CAAEAJfDkTX=EwDCs+uN0bFwMb_JhJfkQiwRR9+b-9v3cJnPTsw@mail.gmail.com>
-References: <20230101-patch-series-v2-6-2-rc1-v2-0-fa1897efac14@collabora.com>
-         <20230101-patch-series-v2-6-2-rc1-v2-9-fa1897efac14@collabora.com>
-         <CAAEAJfDkTX=EwDCs+uN0bFwMb_JhJfkQiwRR9+b-9v3cJnPTsw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        s=mail; t=1673560763;
+        bh=YK1k07UOEKOZI0bnN5078Jvch5D6LXwjqNqUDegsZcg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fcaky/cbVc6RBWbKeNXaSzFxz4euXmn0omTsHhOnFoYBCbgfd6fKWIhyfgE4RUVaj
+         3cgTm8yFPFDXFdoTLqzNwh1UUfWE2SmmmxV3wh1v/eV2Wm/ISQ8p7aNJsxLwXX+Su7
+         GaKnlPXi6UarIcSUt0HTLrFzrIJ/iB/dZDkDep0rOXTV7GnwEsKSARFhz4YS4+thbA
+         0eKafuvPL1ZhJn5vlchQzOZVIrcbvaXMPhtqwVKcIpBaXj2kYb2lBneJDzgQgEKw6w
+         uD4aSLuKSG1934Xmin5Gt8q2XEtwRlsFW7g4dRu8QuYLILlHnofnQNG2AmhETaGJOs
+         R/58IeidPVvFA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] arm64: defconfig: Enable missing configs for mt8192-asurada
+Date:   Thu, 12 Jan 2023 16:59:12 -0500
+Message-Id: <20230112215912.2134960-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 12 janvier 2023 =C3=A0 12:21 -0300, Ezequiel Garcia a =C3=A9crit=
-=C2=A0:
-> On Thu, Jan 12, 2023 at 9:56 AM Sebastian Fricke
-> <sebastian.fricke@collabora.com> wrote:
-> >=20
-> > Implement the valid format and sps validation callbacks for H264.
-> > H264 already has a SPS validation function, adjust it to fit the
-> > function the declaration and add error messages.
-> > Additionally, add a function to fetch attributes from the SPS in a huma=
-n
-> > readable format to make the code more self documenting.
-> >=20
-> > Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> > ---
-> >  drivers/staging/media/rkvdec/rkvdec-h264.c | 105 +++++++++++++++++++++=
-+-------
-> >  1 file changed, 80 insertions(+), 25 deletions(-)
-> >=20
-> > diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/stagi=
-ng/media/rkvdec/rkvdec-h264.c
-> > index 4fc167b42cf0..17b215874ddd 100644
-> > --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-> > +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> > @@ -1026,40 +1026,80 @@ static int rkvdec_h264_adjust_fmt(struct rkvdec=
-_ctx *ctx,
-> >         return 0;
-> >  }
-> >=20
-> > -static int rkvdec_h264_validate_sps(struct rkvdec_ctx *ctx,
-> > -                                   const struct v4l2_ctrl_h264_sps *sp=
-s)
-> > +/*
-> > + * Convert some fields from the SPS structure into human readable attr=
-ibutes.
-> > + */
-> > +static int rkvdec_h264_get_sps_attributes(struct rkvdec_ctx *ctx, void=
- *sps,
-> > +                                         struct sps_attributes *attrib=
-utes)
-> > +{
-> > +       struct v4l2_ctrl_h264_sps *h264_sps =3D sps;
-> > +       unsigned int width =3D (h264_sps->pic_width_in_mbs_minus1 + 1) =
-* 16;
-> > +       unsigned int height =3D (h264_sps->pic_height_in_map_units_minu=
-s1 + 1) * 16;
-> > +       /*
-> > +        * When frame_mbs_only_flag is not set, this is field height,
-> > +        * which is half the final height (see (7-18) in the
-> > +        * specification)
-> > +        */
-> > +       if (!(h264_sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
-> > +               height *=3D 2;
-> > +
-> > +       attributes->width =3D width;
-> > +       attributes->height =3D height;
-> > +       attributes->luma_bitdepth =3D h264_sps->bit_depth_luma_minus8 +=
- 8;
-> > +       attributes->chroma_bitdepth =3D h264_sps->bit_depth_chroma_minu=
-s8 + 8;
-> > +       switch (h264_sps->chroma_format_idc) {
-> > +       case 0:
-> > +               attributes->subsampling =3D 400;
-> > +               break;
-> > +       case 1:
-> > +               attributes->subsampling =3D 420;
-> > +               break;
-> > +       case 2:
-> > +               attributes->subsampling =3D 422;
-> > +               break;
-> > +       case 3:
-> > +               attributes->subsampling =3D 444;
-> > +               break;
-> > +       };
-> > +       return 0;
-> > +}
-> > +
-> > +static int rkvdec_h264_validate_sps(struct rkvdec_ctx *ctx, void *sps,
-> > +                                   struct v4l2_pix_format_mplane *pix_=
-mp)
-> >  {
-> > -       unsigned int width, height;
-> > +       struct sps_attributes attributes =3D {0};
-> > +
-> > +       rkvdec_h264_get_sps_attributes(ctx, sps, &attributes);
-> >=20
-> >         /*
-> >          * TODO: The hardware supports 10-bit and 4:2:2 profiles,
-> >          * but it's currently broken in the driver.
-> >          * Reject them for now, until it's fixed.
-> >          */
-> > -       if (sps->chroma_format_idc > 1)
-> > -               /* Only 4:0:0 and 4:2:0 are supported */
-> > +       if (attributes.subsampling > 420) {
-> > +               dev_err(ctx->dev->dev,
-> > +                       "Only 4:0:0 and 4:2:0 subsampling schemes are s=
-upported, got: %d\n",
-> > +                       attributes.subsampling);
-> >                 return -EINVAL;
-> > -       if (sps->bit_depth_luma_minus8 !=3D sps->bit_depth_chroma_minus=
-8)
-> > -               /* Luma and chroma bit depth mismatch */
-> > +       }
-> > +       if (attributes.luma_bitdepth !=3D attributes.chroma_bitdepth) {
-> > +               dev_err(ctx->dev->dev,
-> > +                       "Luma and chroma bit depth mismatch, luma %d, c=
-hroma %d\n",
-> > +                       attributes.luma_bitdepth, attributes.chroma_bit=
-depth);
-> >                 return -EINVAL;
-> > -       if (sps->bit_depth_luma_minus8 !=3D 0)
-> > -               /* Only 8-bit is supported */
-> > +       }
-> > +       if (attributes.luma_bitdepth !=3D 8) {
-> > +               dev_err(ctx->dev->dev, "Only 8-bit H264 formats support=
-ed, SPS %d\n",
-> > +                       attributes.luma_bitdepth);
-> >                 return -EINVAL;
-> > +       }
-> >=20
-> > -       width =3D (sps->pic_width_in_mbs_minus1 + 1) * 16;
-> > -       height =3D (sps->pic_height_in_map_units_minus1 + 1) * 16;
-> > -
-> > -       /*
-> > -        * When frame_mbs_only_flag is not set, this is field height,
-> > -        * which is half the final height (see (7-18) in the
-> > -        * specification)
-> > -        */
-> > -       if (!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
-> > -               height *=3D 2;
-> > -
-> > -       if (width > ctx->coded_fmt.fmt.pix_mp.width ||
-> > -           height > ctx->coded_fmt.fmt.pix_mp.height)
-> > +       if (attributes.width > pix_mp->width || attributes.height > pix=
-_mp->height) {
-> > +               dev_err(ctx->dev->dev,
-> > +                       "Incompatible SPS dimension, SPS %dx%d, Pixel f=
-ormat %dx%d.",
-> > +                       attributes.width, attributes.height, pix_mp->wi=
-dth, pix_mp->height);
-> >                 return -EINVAL;
-> > +       }
-> >=20
-> >         return 0;
-> >  }
-> > @@ -1077,8 +1117,9 @@ static int rkvdec_h264_start(struct rkvdec_ctx *c=
-tx)
-> >         if (!ctrl)
-> >                 return -EINVAL;
-> >=20
-> > -       ret =3D rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
-> > -       if (ret)
-> > +       ret =3D rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps,
-> > +                                      &ctx->coded_fmt.fmt.pix_mp);
->=20
-> Not a problem with this patch, but I wonder why we accepted a validation
-> in the start_streaming step.
+Enable missing configs in the arm64 defconfig to get all devices probing
+on mt8192-asurada based machines.
 
-Its something we've been discussing a lot lately Benjamin / Sebastian an I =
-(in
-person, sorry for that, but sometimes we work better off chats). This is
-something none of the reviewers/authors seems to have actually cared about =
-so
-far. In stateless decoders  we have FMT(OUTPUT) that contains the coded siz=
-e,
-S_CTRL(SOME_HEADERS) which is restricted by the size in FMT(OUTPUT)
-(restrictions depends on the codec, could be =3D=3D, or smaller) but also u=
-sed to
-create and limit what FMT(CAPTURE) can be.
+The devices enabled are: MediaTek Bluetooth USB controller, MediaTek
+PCIe Gen3 MAC controller, MT7921E wireless adapter, Elan I2C Trackpad,
+MediaTek SPI NOR flash controller, Mediatek SPMI Controller, ChromeOS EC
+regulators, MT6315 PMIC, MediaTek Video Codec, MT8192 sound cards,
+ChromeOS EC rpmsg communication, all MT8192 clocks.
 
-One thing that raised, is that the width/height alignment has been careless=
-ly
-applied to OUTPUT and CAPTURE, saved by the fact the real value is in SPS, =
-but
-possibly leading to strange bugs. Notably we notice that some coded sizes
-rejected by S_FMT(OUTOUT) still lead to working streamon and decode :-S.
+Support for DMA Restricted Pool is also necessary for this platform
+because the MT8192 SoC has no IOMMU context for the PCI-Express RC (nor
+attached devices, such as the MT7921E WiFi card).
 
-The other aspect is validation. The initial thinking was that we can valida=
-te
-the SPS (SOME_HEADERS) directly when the control is set. But we found a gap=
-,
-userspace could come back and change the coded size in FMT(OUTPUT) to miss-=
-match
-the header. We can't reject that, since FMT(OUTPUT) should just always work=
-s,
-its the first step according to the doc. The doc does not impose closing th=
-e
-device and restarting from scratch (even though this is what our userspace
-currently though). So in short, if the SPS coded size no longer match the O=
-UTPUT
-reported coded size, we needed to reject streamon, hence the validation the=
-re.
-Of course, there was some more mistakes done, like trying to validate when
-executing a job, but I think all of these got caught at review.
+REGULATOR_CROS_EC is enabled as builtin since it powers the MMC
+controller for the SD card, making it required for booting on some
+setups.
 
-On of the reflection we have, is that to be more "semantically" aligned wit=
-h
-V4L2 control framework, we should instead of this ensure the the SPS is alw=
-ays
-valid. But this is a bit of work for a usecase that no one needs. In short,
-S_FMT(OUTPUT) would always reset the SPS by creating one that is valid and
-maches the coded size (when the bitstream header have that, the reason its
-duplicated is that we wanted to support light coding format which does not =
-carry
-that information in the bitstream). The FMT(CAPTURE) would also be reset to
-something valid according to both.
+By enabling the support for all of this platform's devices on the
+defconfig we make it effortless to test the relevant hardware both by
+developers as well as CI systems like KernelCI.
 
-Then we'd validate the SPS control against the FMT(OUTPUT) when set, and al=
-ways
-reset the FMT(CAPTURE) accordingly. This way, no more validation would be
-required at streamon, since we ensure everything stay valid by discarding p=
-ast
-settings. Such a method needs careful thought, and remember a bit of work, =
-but
-it would help prevent further broken logic, for those who haven't noticed,
-Hantro G2 HEVC decoder will pick NV12_4L4 by default when you pass a 10bit =
-SPS,
-cause no one noticed until today ... But that's not what the spec is expect=
-ing,
-as its not a "native" format for the bitstream. What I like about this prop=
-osal
-is that it would remove any remaining possible side effect from a previous
-session, trully allowing for reuse of codec instance, but again, this is
-theoritical, as long as you can't crash the driver (which the current valid=
-ation
-is about), its not a real bug, most userspace will just set everything all =
-the
-time with these CODEC.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Ok, this is getting long, but I just want to keep in mind this is multiple =
-years
-of accumulated  mistakes (or just delaying known limitation in driver desig=
-ns),
-we should probably not block features completely over getting this right
-immediately, as all it does it makes the actual suffer longer. Though, we s=
-hould
-encourage cross-driver fixes whenever something is improved in one driver.
+---
 
->=20
-> At this point, the driver accepted all the format negotiations in try_fmt=
-.
-> It's difficult for applications to recover from this, as there would
-> be no way to tell what failed,
-> we would be returning EINVAL, which as per the spec is "buffer type is
-> not supported,
-> or no buffers have been allocated (memory mapping) or enqueued (output) y=
-et.".
->=20
-> I think it would really make a lot of sense to fix this now, instead of c=
-ontinue
-> abusing it. And also, I'd like to prevent a possible anti-pattern from
-> spreading.
->=20
-> Thanks!
-> Ezequiel
->=20
-> > +       if (ret < 0)
-> >                 return ret;
-> >=20
-> >         h264_ctx =3D kzalloc(sizeof(*h264_ctx), GFP_KERNEL);
-> > @@ -1175,10 +1216,21 @@ static int rkvdec_h264_run(struct rkvdec_ctx *c=
-tx)
-> >         return 0;
-> >  }
-> >=20
-> > +static u32 rkvdec_h264_valid_fmt(struct rkvdec_ctx *ctx)
-> > +{
-> > +       /*
-> > +        * Only 8 bit 4:0:0 and 4:2:0 formats supported for now.
-> > +        * The SPS is validated at a different function thus we can ass=
-ume that
-> > +        * it is correct.
-> > +        */
-> > +       return V4L2_PIX_FMT_NV12;
-> > +}
-> > +
-> >  static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ct=
-rl *ctrl)
-> >  {
-> >         if (ctrl->id =3D=3D V4L2_CID_STATELESS_H264_SPS)
-> > -               return rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264=
-_sps);
-> > +               return rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264=
-_sps,
-> > +                                               &ctx->coded_fmt.fmt.pix=
-_mp);
-> >=20
-> >         return 0;
-> >  }
-> > @@ -1189,4 +1241,7 @@ const struct rkvdec_coded_fmt_ops rkvdec_h264_fmt=
-_ops =3D {
-> >         .stop =3D rkvdec_h264_stop,
-> >         .run =3D rkvdec_h264_run,
-> >         .try_ctrl =3D rkvdec_h264_try_ctrl,
-> > +       .valid_fmt =3D rkvdec_h264_valid_fmt,
-> > +       .sps_check =3D rkvdec_h264_validate_sps,
-> > +       .get_sps_attributes =3D rkvdec_h264_get_sps_attributes,
-> >  };
-> >=20
-> > --
-> > 2.25.1
+Changes in v2:
+- Reworded paragraph about dma restricted pool in commit message
+
+ arch/arm64/configs/defconfig | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index f3053e7018fe..4e806d8068f6 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -196,6 +196,7 @@ CONFIG_BT_HIDP=m
+ CONFIG_BT_LEDS=y
+ # CONFIG_BT_DEBUGFS is not set
+ CONFIG_BT_HCIBTUSB=m
++CONFIG_BT_HCIBTUSB_MTK=y
+ CONFIG_BT_HCIUART=m
+ CONFIG_BT_HCIUART_LL=y
+ CONFIG_BT_HCIUART_BCM=y
+@@ -231,6 +232,7 @@ CONFIG_PCIE_ALTERA_MSI=y
+ CONFIG_PCI_HOST_THUNDER_PEM=y
+ CONFIG_PCI_HOST_THUNDER_ECAM=y
+ CONFIG_PCIE_ROCKCHIP_HOST=m
++CONFIG_PCIE_MEDIATEK_GEN3=m
+ CONFIG_PCIE_BRCMSTB=m
+ CONFIG_PCI_IMX6=y
+ CONFIG_PCI_LAYERSCAPE=y
+@@ -403,6 +405,7 @@ CONFIG_BRCMFMAC=m
+ CONFIG_MWIFIEX=m
+ CONFIG_MWIFIEX_SDIO=m
+ CONFIG_MWIFIEX_PCIE=m
++CONFIG_MT7921E=m
+ CONFIG_WL18XX=m
+ CONFIG_WLCORE_SDIO=m
+ CONFIG_INPUT_EVDEV=y
+@@ -411,6 +414,7 @@ CONFIG_KEYBOARD_GPIO=y
+ CONFIG_KEYBOARD_SNVS_PWRKEY=m
+ CONFIG_KEYBOARD_IMX_SC_KEY=m
+ CONFIG_KEYBOARD_CROS_EC=y
++CONFIG_MOUSE_ELAN_I2C=m
+ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=m
+ CONFIG_TOUCHSCREEN_GOODIX=m
+@@ -513,6 +517,7 @@ CONFIG_SPI_FSL_DSPI=y
+ CONFIG_SPI_MESON_SPICC=m
+ CONFIG_SPI_MESON_SPIFC=m
+ CONFIG_SPI_MT65XX=y
++CONFIG_SPI_MTK_NOR=m
+ CONFIG_SPI_ORION=y
+ CONFIG_SPI_PL022=y
+ CONFIG_SPI_ROCKCHIP=y
+@@ -528,6 +533,7 @@ CONFIG_SPI_TEGRA210_QUAD=m
+ CONFIG_SPI_TEGRA114=m
+ CONFIG_SPI_SPIDEV=m
+ CONFIG_SPMI=y
++CONFIG_SPMI_MTK_PMIF=m
+ CONFIG_PINCTRL_MAX77620=y
+ CONFIG_PINCTRL_SINGLE=y
+ CONFIG_PINCTRL_OWL=y
+@@ -674,6 +680,7 @@ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+ CONFIG_REGULATOR_AXP20X=y
+ CONFIG_REGULATOR_BD718XX=y
+ CONFIG_REGULATOR_BD9571MWV=y
++CONFIG_REGULATOR_CROS_EC=y
+ CONFIG_REGULATOR_FAN53555=y
+ CONFIG_REGULATOR_GPIO=y
+ CONFIG_REGULATOR_HI6421V530=y
+@@ -681,6 +688,7 @@ CONFIG_REGULATOR_HI655X=y
+ CONFIG_REGULATOR_MAX77620=y
+ CONFIG_REGULATOR_MAX8973=y
+ CONFIG_REGULATOR_MP8859=y
++CONFIG_REGULATOR_MT6315=m
+ CONFIG_REGULATOR_MT6358=y
+ CONFIG_REGULATOR_MT6359=y
+ CONFIG_REGULATOR_MT6360=y
+@@ -714,6 +722,7 @@ CONFIG_V4L_PLATFORM_DRIVERS=y
+ CONFIG_SDR_PLATFORM_DRIVERS=y
+ CONFIG_V4L_MEM2MEM_DRIVERS=y
+ CONFIG_VIDEO_MEDIATEK_JPEG=m
++CONFIG_VIDEO_MEDIATEK_VCODEC=m
+ CONFIG_VIDEO_QCOM_CAMSS=m
+ CONFIG_VIDEO_QCOM_VENUS=m
+ CONFIG_VIDEO_RCAR_ISP=m
+@@ -827,6 +836,8 @@ CONFIG_SND_SOC_IMX_AUDMIX=m
+ CONFIG_SND_SOC_MT8183=m
+ CONFIG_SND_SOC_MT8183_MT6358_TS3A227E_MAX98357A=m
+ CONFIG_SND_SOC_MT8183_DA7219_MAX98357A=m
++CONFIG_SND_SOC_MT8192=m
++CONFIG_SND_SOC_MT8192_MT6359_RT1015_RT5682=m
+ CONFIG_SND_MESON_AXG_SOUND_CARD=m
+ CONFIG_SND_MESON_GX_SOUND_CARD=m
+ CONFIG_SND_SOC_QCOM=m
+@@ -1070,6 +1081,7 @@ CONFIG_VIDEO_MAX96712=m
+ CONFIG_CHROME_PLATFORMS=y
+ CONFIG_CROS_EC=y
+ CONFIG_CROS_EC_I2C=y
++CONFIG_CROS_EC_RPMSG=m
+ CONFIG_CROS_EC_SPI=y
+ CONFIG_CROS_EC_CHARDEV=m
+ CONFIG_COMMON_CLK_RK808=y
+@@ -1092,6 +1104,18 @@ CONFIG_CLK_IMX8QXP=y
+ CONFIG_CLK_IMX8ULP=y
+ CONFIG_CLK_IMX93=y
+ CONFIG_TI_SCI_CLK=y
++CONFIG_COMMON_CLK_MT8192_AUDSYS=y
++CONFIG_COMMON_CLK_MT8192_CAMSYS=y
++CONFIG_COMMON_CLK_MT8192_IMGSYS=y
++CONFIG_COMMON_CLK_MT8192_IMP_IIC_WRAP=y
++CONFIG_COMMON_CLK_MT8192_IPESYS=y
++CONFIG_COMMON_CLK_MT8192_MDPSYS=y
++CONFIG_COMMON_CLK_MT8192_MFGCFG=y
++CONFIG_COMMON_CLK_MT8192_MMSYS=y
++CONFIG_COMMON_CLK_MT8192_MSDC=y
++CONFIG_COMMON_CLK_MT8192_SCP_ADSP=y
++CONFIG_COMMON_CLK_MT8192_VDECSYS=y
++CONFIG_COMMON_CLK_MT8192_VENCSYS=y
+ CONFIG_COMMON_CLK_QCOM=y
+ CONFIG_QCOM_A53PLL=y
+ CONFIG_QCOM_CLK_APCS_MSM8916=y
+@@ -1398,6 +1422,7 @@ CONFIG_CRYPTO_DEV_HISI_SEC2=m
+ CONFIG_CRYPTO_DEV_HISI_ZIP=m
+ CONFIG_CRYPTO_DEV_HISI_HPRE=m
+ CONFIG_CRYPTO_DEV_HISI_TRNG=m
++CONFIG_DMA_RESTRICTED_POOL=y
+ CONFIG_CMA_SIZE_MBYTES=32
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DEBUG_KERNEL=y
+-- 
+2.39.0
 
