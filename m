@@ -2,123 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9AF667874
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F95667876
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240231AbjALPCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
+        id S240101AbjALPCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:02:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239778AbjALPCX (ORCPT
+        with ESMTP id S240253AbjALPC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:02:23 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3D86A0C5;
-        Thu, 12 Jan 2023 06:48:34 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BD0B03F0CB;
-        Thu, 12 Jan 2023 14:48:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673534912; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zsa+fdfwdlDM2GetrLrqpou94nUfON/csukFq2m/izo=;
-        b=kSH/6kvbmwFCrzEEWGGvL2I7yKz/0cDBLQGnVISP472mTr6ExKDickiXG6C6K+KZtX5iuG
-        tOz/EgxbD9EltuY8CoTfas6xed9+rz+XZSvZD5nZq5QFCAPmfEStsRo2imWcxLR4WSq3Bj
-        UUU+eukN0ulxKY0Yv+szQQi4rm476TQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673534912;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zsa+fdfwdlDM2GetrLrqpou94nUfON/csukFq2m/izo=;
-        b=2KNJsOzqPWJTzkRPymaNqNliovVGM6bjPs1WxlGHd0wVD9lIsbdd9Y3kxcnBOE7z9QB0Ne
-        s3obyhpx6c60AwBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 836B913776;
-        Thu, 12 Jan 2023 14:48:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /6ZkH8AdwGOIEQAAMHmgww
-        (envelope-from <hare@suse.de>); Thu, 12 Jan 2023 14:48:32 +0000
-Message-ID: <20d7fde4-dd17-de97-53e8-aa808a325efd@suse.de>
-Date:   Thu, 12 Jan 2023 15:48:32 +0100
+        Thu, 12 Jan 2023 10:02:29 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EABE70;
+        Thu, 12 Jan 2023 06:48:51 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pFyso-0000Xu-Nn; Thu, 12 Jan 2023 15:48:46 +0100
+Message-ID: <9d46a35f-5830-9761-ca2c-eaa640e9cc86@leemhuis.info>
+Date:   Thu, 12 Jan 2023 15:48:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v6 3/9] block: add emulation for copy
-Content-Language: en-US
-From:   Hannes Reinecke <hare@suse.de>
-To:     Nitesh Shetty <nj.shetty@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
+ Thunderbird/102.6.0
+Subject: Re: Regression in Kernel 6.0: System partially freezes with "nvme
+ controller is down"
+Content-Language: en-US, de-DE
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
         Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     anuj20.g@samsung.com, joshi.k@samsung.com, p.raghav@samsung.com,
-        nitheshshetty@gmail.com, gost.dev@samsung.com,
-        Vincent Fu <vincent.fu@samsung.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-References: <20230112115908.23662-1-nj.shetty@samsung.com>
- <CGME20230112120054epcas5p3ec5887c4e1de59f7529dafca1cd6aa65@epcas5p3.samsung.com>
- <20230112115908.23662-4-nj.shetty@samsung.com>
- <bfec42d1-a1bf-3b3a-10dd-8d3db0a6e6a0@suse.de>
-In-Reply-To: <bfec42d1-a1bf-3b3a-10dd-8d3db0a6e6a0@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Sagi Grimberg <sagi@grimberg.me>
+References: <d5d8d106-acce-e20c-827d-1b37de2b2188@posteo.de>
+ <0d3206be-fae8-4bbd-4b6c-a5d1f038356d@posteo.de>
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Cc:     =?UTF-8?Q?Julian_Gro=c3=9f?= <julian.g@posteo.de>,
+        linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <0d3206be-fae8-4bbd-4b6c-a5d1f038356d@posteo.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673534931;ffc87eac;
+X-HE-SMSGID: 1pFyso-0000Xu-Nn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 15:46, Hannes Reinecke wrote:
-> On 1/12/23 12:58, Nitesh Shetty wrote:
->> For the devices which does not support copy, copy emulation is
->> added. Copy-emulation is implemented by reading from source ranges
->> into memory and writing to the corresponding destination asynchronously.
->> For zoned device we maintain a linked list of read submission and try to
->> submit corresponding write in same order.
->> Also emulation is used, if copy offload fails or partially completes.
->>
->> Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
->> Signed-off-by: Vincent Fu <vincent.fu@samsung.com>
->> Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
->> ---
->>   block/blk-lib.c        | 241 ++++++++++++++++++++++++++++++++++++++++-
->>   block/blk-map.c        |   4 +-
->>   include/linux/blkdev.h |   3 +
->>   3 files changed, 245 insertions(+), 3 deletions(-)
->>
-> I'm not sure if I agree with this one.
+[adding the nvme maintainers and the regressions mailing list to the
+list of recipients]
+
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
+
+On 11.01.23 23:11, Julian Groß wrote:
+> Dear Maintainer,
 > 
-> You just submitted a patch for device-mapper to implement copy offload, 
-> which (to all intents and purposes) _is_ an emulation.
+> when running Linux Kernel version 6.0.12, 6.0.10, 6.0-rc7, or 6.1.4, my
+> system seemingly randomly freezes due to the file system being set to
+> read-only due to an issue with my NVMe controller.
+> The issue does *not* appear on Linux Kernel version 5.19.11 or lower.
 > 
-> So why do we need to implement it in the block layer as an emulation?
-> Or, if we have to, why do we need the device-mapper emulation?
-> This emulation will be doing the same thing, no?
+> Through network logging I am able to catch the issue:
+> ```
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.259288] nvme nvme0:
+> controller is down; will reset: CSTS=0xffffffff, PCI_STATUS=0x10
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.259293] nvme nvme0: Does
+> your device have a faulty power saving mode enabled?
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.259293] nvme nvme0: Try
+> "nvme_core.default_ps_max_latency_us=0 pcie_aspm=off" and report a bug
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.331360] nvme 0000:01:00.0:
+> enabling device (0000 -> 0002)
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.331458] nvme nvme0: Removing
+> after probe failure status: -19
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371389] nvme0n1: detected
+> capacity change from 1953525168 to 0
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371389] BTRFS error (device
+> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 1, rd 0, flush 0, corrupt 0, gen 0
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371389] BTRFS error (device
+> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 2, rd 0, flush 0, corrupt 0, gen 0
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371392] BTRFS error (device
+> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 3, rd 0, flush 0, corrupt 0, gen 0
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371394] BTRFS error (device
+> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 5, rd 0, flush 0, corrupt 0, gen 0
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371405] BTRFS error (device
+> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 6, rd 0, flush 0, corrupt 0, gen 0
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371406] BTRFS error (device
+> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 7, rd 0, flush 0, corrupt 0, gen 0
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371411] BTRFS error (device
+> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 8, rd 0, flush 0, corrupt 0, gen 0
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371419] BTRFS error (device
+> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 9, rd 0, flush 0, corrupt 0, gen 0
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371425] BTRFS error (device
+> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 10, rd 0, flush 0, corrupt 0,
+> gen 0
+> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371426] BTRFS error (device
+> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 11, rd 0, flush 0, corrupt 0,
+> gen 0
+> ```
 > 
-Sheesh. One should read the entire patchset.
+> I have tried the suggestion in the log without luck.
+> 
+> Attached is a log that includes two system freezes, as well as a list of
+> PCI(e) devices created by Debian reportbug.
+> The first freeze happens at "Jan  8 04:26:28" and the second freeze
+> happens at "Jan  8 14:50:16".
+> 
+> Currently, I am using git bisect to narrow down the window of possible
+> commits, but since the issue appears seemingly random, it will take many
+> months to identify the offending commit this way.
+> 
+> The original Debian bug report is here:
+> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1028309
 
-Disregard the above comment.
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
 
-Cheers,
+#regzbot ^introduced v5.19..v6.0-rc7
+#regzbot title nvme: system partially freezes with "nvme controller is down"
+#regzbot ignore-activity
 
-Hannes
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
 
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
