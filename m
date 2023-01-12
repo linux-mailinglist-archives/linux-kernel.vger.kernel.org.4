@@ -2,228 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345E06687F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 00:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 964E66687F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 00:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbjALXuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 18:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
+        id S235937AbjALXwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 18:52:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbjALXuR (ORCPT
+        with ESMTP id S232777AbjALXwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 18:50:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FDDA45F;
-        Thu, 12 Jan 2023 15:50:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6A08B82039;
-        Thu, 12 Jan 2023 23:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672B7C433D2;
-        Thu, 12 Jan 2023 23:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673567413;
-        bh=N4m4bXPk4Vvg4JUzPHaMx6XKiDu3zzjCCgl7Rx7jJqI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=soxLYVYVJmOnxATKSgIyibxbYO9gKNhpTnPVSRBc1/Y8o88BewcvkLzq9X0KLQlwc
-         Soi6IWDb6ABGMGT7ghTTb51jJc38e5oAJS3tHECGFor9LDUD6FUtw14RQ2qayCVbme
-         PXcPKfEgr7xicG/BcdFb4AHo59U4YNQaYv+aLrVm7BZ0c0O8F5uyRVpi3eDZtwJBS/
-         bhW1NIVkKrUeDLAUHGA/Ys3vVVmy3FRjwfCpJSVHY8G+j1CExT8oBVq5laomlh4tDR
-         5WwiF5QbxL2ZJ6fUxQDs752Q06U5v/1T4nkl5YzaXR/kVVLzKUhN5Pzb15hLyjDh7i
-         Ja1vUdLUQdBOA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 066C45C09F1; Thu, 12 Jan 2023 15:50:13 -0800 (PST)
-Date:   Thu, 12 Jan 2023 15:50:13 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        fweisbec@gmail.com, urezki@gmail.com
-Subject: Re: [PATCH v2 rcu/dev 1/2] rcu: Track laziness during boot and
- suspend
-Message-ID: <20230112235013.GU4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230112192724.GA3610129@paulmck-ThinkPad-P17-Gen-1>
- <E588EAC4-D8F2-4893-A668-816C0C7104B2@joelfernandes.org>
+        Thu, 12 Jan 2023 18:52:42 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2EC3059323;
+        Thu, 12 Jan 2023 15:52:40 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF891FEC;
+        Thu, 12 Jan 2023 15:53:21 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70A4D3F71A;
+        Thu, 12 Jan 2023 15:52:37 -0800 (PST)
+Date:   Thu, 12 Jan 2023 23:50:49 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-sunxi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Maxime Ripard <mripard@kernel.org>
+Subject: Re: [PATCH v5 2/4] regulator: sun20i: Add Allwinner D1 LDOs driver
+Message-ID: <20230112235049.07560a55@slackpad.lan>
+In-Reply-To: <20221208084127.17443-3-samuel@sholland.org>
+References: <20221208084127.17443-1-samuel@sholland.org>
+        <20221208084127.17443-3-samuel@sholland.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <E588EAC4-D8F2-4893-A668-816C0C7104B2@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 05:25:51PM -0500, Joel Fernandes wrote:
-> 
-> 
-> > On Jan 12, 2023, at 2:27 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > 
-> > ﻿On Thu, Jan 12, 2023 at 12:52:22AM +0000, Joel Fernandes (Google) wrote:
-> >> During boot and suspend/resume, it is desired to prevent RCU laziness from
-> >> effecting performance and in some cases failures like with suspend.
-> >> 
-> >> Track whether RCU laziness is to be ignored or not, in kernels with
-> >> CONFIG_RCU_LAZY enabled. We do such tracking for expedited-RCU already, however
-> >> since Android currently expedites synchronous_rcu() always, we cannot rely on
-> >> that. The next patch ignores laziness hints based on this tracking.
-> >> 
-> >> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> >> ---
-> >> Paul, could we take this and the next one for 6.2 -rc cycle?
-> >> 
-> >> I also booted debian Linux and verified the flag is reset correctly after boot
-> >> completes. Thanks.
-> > 
-> > After going back and forth a bit, I took these two as-is (aside from
-> > the usual commit-log wordsmithing).
-> > 
-> > At some point, the state-change-notification from things like boot,
-> > suspend/resume, sysrq-t, and panic() should probably be refactored.
-> > But I do not believe that we are yet at that point, and there is not
-> > much point in half-refactorings in cases such as this one.
-> > 
-> > I added the Fixes tags, and, if testing goes well, I plan to submit
-> > them into the upcoming merge window.  I have no reason to believe that
-> > anyone is hitting this, it is only a few weeks away anyhow, and a good
-> > chunk of that would be consumed by testing and review.
-> > 
-> > And if someone does hit it, we do have your fixes to send to them, so
-> > thank you for that!
-> > (These won't become visible on -rcu until I complete today's rebase,
-> > in case you were wondering.)
-> 
-> Thanks and this sounds good to me. Meanwhile I pulled into our product kernel so all is good.
+On Thu,  8 Dec 2022 02:41:25 -0600
+Samuel Holland <samuel@sholland.org> wrote:
 
-Very good!  Please let me know how it goes!
+> D1 contains two pairs of LDOs, "analog" LDOs and "system" LDOs. They are
+> similar and can share a driver, but only the system LDOs have a DT
+> binding defined so far.
+> 
+> The system LDOs have a single linear range. The voltage step is not an
+> integer, so a custom .list_voltage is needed to get the rounding right.
+> 
 
-							Thanx, Paul
+I put sun20i_d1_system_ldo_list_voltage() into a userland program, and
+compared the full generated list with the manual: they fully match now.
+The formula looks mind-boggling, but works: well done!
+I have no real experience with the regulator boilerplate, but it looks
+alright, and the register offset and masks also match: 
 
-> Thanks,
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+
+Cheers,
+Andre
+
+> ---
 > 
->  - Joel
+> Changes in v5:
+>  - Correct the voltage calculation for the non-linearity around 1.6 V.
 > 
+> Changes in v4:
+>  - Drop the analog LDOs until the codec binding is ready
 > 
-> > 
-> >                        Thanx, Paul
-> > 
-> >> kernel/rcu/rcu.h    |  6 ++++++
-> >> kernel/rcu/tree.c   |  2 ++
-> >> kernel/rcu/update.c | 40 +++++++++++++++++++++++++++++++++++++++-
-> >> 5 files changed, 55 insertions(+), 1 deletion(-)
-> >> create mode 100644 cc_list
-> >> create mode 100644 to_list
-> >> 
-> >> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-> >> index 5c8013f7085f..115616ac3bfa 100644
-> >> --- a/kernel/rcu/rcu.h
-> >> +++ b/kernel/rcu/rcu.h
-> >> @@ -449,14 +449,20 @@ do {                                    \
-> >> /* Tiny RCU doesn't expedite, as its purpose in life is instead to be tiny. */
-> >> static inline bool rcu_gp_is_normal(void) { return true; }
-> >> static inline bool rcu_gp_is_expedited(void) { return false; }
-> >> +static inline bool rcu_async_should_hurry(void) { return false; }
-> >> static inline void rcu_expedite_gp(void) { }
-> >> static inline void rcu_unexpedite_gp(void) { }
-> >> +static inline void rcu_async_hurry(void) { }
-> >> +static inline void rcu_async_relax(void) { }
-> >> static inline void rcu_request_urgent_qs_task(struct task_struct *t) { }
-> >> #else /* #ifdef CONFIG_TINY_RCU */
-> >> bool rcu_gp_is_normal(void);     /* Internal RCU use. */
-> >> bool rcu_gp_is_expedited(void);  /* Internal RCU use. */
-> >> +bool rcu_async_should_hurry(void);  /* Internal RCU use. */
-> >> void rcu_expedite_gp(void);
-> >> void rcu_unexpedite_gp(void);
-> >> +void rcu_async_hurry(void);
-> >> +void rcu_async_relax(void);
-> >> void rcupdate_announce_bootup_oddness(void);
-> >> #ifdef CONFIG_TASKS_RCU_GENERIC
-> >> void show_rcu_tasks_gp_kthreads(void);
-> >> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> >> index 63545d79da51..78b2e999c904 100644
-> >> --- a/kernel/rcu/tree.c
-> >> +++ b/kernel/rcu/tree.c
-> >> @@ -4504,11 +4504,13 @@ static int rcu_pm_notify(struct notifier_block *self,
-> >>    switch (action) {
-> >>    case PM_HIBERNATION_PREPARE:
-> >>    case PM_SUSPEND_PREPARE:
-> >> +        rcu_async_hurry();
-> >>        rcu_expedite_gp();
-> >>        break;
-> >>    case PM_POST_HIBERNATION:
-> >>    case PM_POST_SUSPEND:
-> >>        rcu_unexpedite_gp();
-> >> +        rcu_async_relax();
-> >>        break;
-> >>    default:
-> >>        break;
-> >> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-> >> index 3893022f8ed8..19bf6fa3ee6a 100644
-> >> --- a/kernel/rcu/update.c
-> >> +++ b/kernel/rcu/update.c
-> >> @@ -144,8 +144,45 @@ bool rcu_gp_is_normal(void)
-> >> }
-> >> EXPORT_SYMBOL_GPL(rcu_gp_is_normal);
-> >> 
-> >> -static atomic_t rcu_expedited_nesting = ATOMIC_INIT(1);
-> >> +static atomic_t rcu_async_hurry_nesting = ATOMIC_INIT(1);
-> >> +/*
-> >> + * Should call_rcu() callbacks be processed with urgency or are
-> >> + * they OK being executed with arbitrary delays?
-> >> + */
-> >> +bool rcu_async_should_hurry(void)
-> >> +{
-> >> +    return !IS_ENABLED(CONFIG_RCU_LAZY) ||
-> >> +           atomic_read(&rcu_async_hurry_nesting);
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(rcu_async_should_hurry);
-> >> +
-> >> +/**
-> >> + * rcu_async_hurry - Make future async RCU callbacks not lazy.
-> >> + *
-> >> + * After a call to this function, future calls to call_rcu()
-> >> + * will be processed in a timely fashion.
-> >> + */
-> >> +void rcu_async_hurry(void)
-> >> +{
-> >> +    if (IS_ENABLED(CONFIG_RCU_LAZY))
-> >> +        atomic_inc(&rcu_async_hurry_nesting);
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(rcu_async_hurry);
-> >> 
-> >> +/**
-> >> + * rcu_async_relax - Make future async RCU callbacks lazy.
-> >> + *
-> >> + * After a call to this function, future calls to call_rcu()
-> >> + * will be processed in a lazy fashion.
-> >> + */
-> >> +void rcu_async_relax(void)
-> >> +{
-> >> +    if (IS_ENABLED(CONFIG_RCU_LAZY))
-> >> +        atomic_dec(&rcu_async_hurry_nesting);
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(rcu_async_relax);
-> >> +
-> >> +static atomic_t rcu_expedited_nesting = ATOMIC_INIT(1);
-> >> /*
-> >>  * Should normal grace-period primitives be expedited?  Intended for
-> >>  * use within RCU.  Note that this function takes the rcu_expedited
-> >> @@ -195,6 +232,7 @@ static bool rcu_boot_ended __read_mostly;
-> >> void rcu_end_inkernel_boot(void)
-> >> {
-> >>    rcu_unexpedite_gp();
-> >> +    rcu_async_relax();
-> >>    if (rcu_normal_after_boot)
-> >>        WRITE_ONCE(rcu_normal, 1);
-> >>    rcu_boot_ended = true;
-> >> -- 
-> >> 2.39.0.314.g84b9a713c41-goog
+> Changes in v3:
+>  - Adjust control flow in sun20i_regulator_get_regmap() for clarity
+> 
+> Changes in v2:
+>  - Use decimal numbers for .n_voltages instead of field widths
+>  - Get the regmap from the parent device instead of a property/phandle
+> 
+>  drivers/regulator/Kconfig            |   8 ++
+>  drivers/regulator/Makefile           |   1 +
+>  drivers/regulator/sun20i-regulator.c | 156 +++++++++++++++++++++++++++
+>  3 files changed, 165 insertions(+)
+>  create mode 100644 drivers/regulator/sun20i-regulator.c
+> 
+> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+> index 070e4403c6c2..8480532114c1 100644
+> --- a/drivers/regulator/Kconfig
+> +++ b/drivers/regulator/Kconfig
+> @@ -1280,6 +1280,14 @@ config REGULATOR_STW481X_VMMC
+>  	  This driver supports the internal VMMC regulator in the STw481x
+>  	  PMIC chips.
+>  
+> +config REGULATOR_SUN20I
+> +	tristate "Allwinner D1 internal LDOs"
+> +	depends on ARCH_SUNXI || COMPILE_TEST
+> +	select MFD_SYSCON
+> +	default ARCH_SUNXI
+> +	help
+> +	  This driver supports the internal LDOs in the Allwinner D1 SoC.
+> +
+>  config REGULATOR_SY7636A
+>  	tristate "Silergy SY7636A voltage regulator"
+>  	depends on MFD_SY7636A
+> diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+> index 5962307e1130..8e9b5a21123d 100644
+> --- a/drivers/regulator/Makefile
+> +++ b/drivers/regulator/Makefile
+> @@ -150,6 +150,7 @@ obj-$(CONFIG_REGULATOR_STM32_VREFBUF) += stm32-vrefbuf.o
+>  obj-$(CONFIG_REGULATOR_STM32_PWR) += stm32-pwr.o
+>  obj-$(CONFIG_REGULATOR_STPMIC1) += stpmic1_regulator.o
+>  obj-$(CONFIG_REGULATOR_STW481X_VMMC) += stw481x-vmmc.o
+> +obj-$(CONFIG_REGULATOR_SUN20I) += sun20i-regulator.o
+>  obj-$(CONFIG_REGULATOR_SY7636A) += sy7636a-regulator.o
+>  obj-$(CONFIG_REGULATOR_SY8106A) += sy8106a-regulator.o
+>  obj-$(CONFIG_REGULATOR_SY8824X) += sy8824x.o
+> diff --git a/drivers/regulator/sun20i-regulator.c b/drivers/regulator/sun20i-regulator.c
+> new file mode 100644
+> index 000000000000..8af6b8037ee0
+> --- /dev/null
+> +++ b/drivers/regulator/sun20i-regulator.c
+> @@ -0,0 +1,156 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +//
+> +// Copyright (c) 2021-2022 Samuel Holland <samuel@sholland.org>
+> +//
+> +
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/driver.h>
+> +
+> +#define SUN20I_SYS_LDO_CTRL_REG		0x150
+> +
+> +struct sun20i_regulator_data {
+> +	const struct regulator_desc	*descs;
+> +	unsigned int			ndescs;
+> +};
+> +
+> +/* regulator_list_voltage_linear() modified for the non-integral uV_step. */
+> +static int sun20i_d1_system_ldo_list_voltage(struct regulator_dev *rdev,
+> +					     unsigned int selector)
+> +{
+> +	const struct regulator_desc *desc = rdev->desc;
+> +	unsigned int fraction, uV;
+> +
+> +	if (selector >= desc->n_voltages)
+> +		return -EINVAL;
+> +
+> +	uV = desc->min_uV + (desc->uV_step * selector);
+> +	fraction = selector + (desc->min_uV % 4);
+> +
+> +	if (uV > 1606667)
+> +		uV += 6667;
+> +	else
+> +		fraction++;
+> +
+> +	/* Produce correctly-rounded absolute voltages. */
+> +	return uV + (fraction / 3);
+> +}
+> +
+> +static const struct regulator_ops sun20i_d1_system_ldo_ops = {
+> +	.list_voltage		= sun20i_d1_system_ldo_list_voltage,
+> +	.map_voltage		= regulator_map_voltage_ascend,
+> +	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
+> +	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
+> +};
+> +
+> +static const struct regulator_desc sun20i_d1_system_ldo_descs[] = {
+> +	{
+> +		.name		= "ldoa",
+> +		.supply_name	= "ldo-in",
+> +		.of_match	= "ldoa",
+> +		.ops		= &sun20i_d1_system_ldo_ops,
+> +		.type		= REGULATOR_VOLTAGE,
+> +		.owner		= THIS_MODULE,
+> +		.n_voltages	= 32,
+> +		.min_uV		= 1593333,
+> +		.uV_step	= 13333, /* repeating */
+> +		.vsel_reg	= SUN20I_SYS_LDO_CTRL_REG,
+> +		.vsel_mask	= GENMASK(7, 0),
+> +	},
+> +	{
+> +		.name		= "ldob",
+> +		.supply_name	= "ldo-in",
+> +		.of_match	= "ldob",
+> +		.ops		= &sun20i_d1_system_ldo_ops,
+> +		.type		= REGULATOR_VOLTAGE,
+> +		.owner		= THIS_MODULE,
+> +		.n_voltages	= 64,
+> +		.min_uV		= 1166666,
+> +		.uV_step	= 13333, /* repeating */
+> +		.vsel_reg	= SUN20I_SYS_LDO_CTRL_REG,
+> +		.vsel_mask	= GENMASK(15, 8),
+> +	},
+> +};
+> +
+> +static const struct sun20i_regulator_data sun20i_d1_system_ldos = {
+> +	.descs	= sun20i_d1_system_ldo_descs,
+> +	.ndescs	= ARRAY_SIZE(sun20i_d1_system_ldo_descs),
+> +};
+> +
+> +static struct regmap *sun20i_regulator_get_regmap(struct device *dev)
+> +{
+> +	struct regmap *regmap;
+> +
+> +	/*
+> +	 * First try the syscon interface. The system control device is not
+> +	 * compatible with "syscon", so fall back to getting the regmap from
+> +	 * its platform device. This is ugly, but required for devicetree
+> +	 * backward compatibility.
+> +	 */
+> +	regmap = syscon_node_to_regmap(dev->parent->of_node);
+> +	if (!IS_ERR(regmap))
+> +		return regmap;
+> +
+> +	regmap = dev_get_regmap(dev->parent, NULL);
+> +	if (regmap)
+> +		return regmap;
+> +
+> +	return ERR_PTR(-EPROBE_DEFER);
+> +}
+> +
+> +static int sun20i_regulator_probe(struct platform_device *pdev)
+> +{
+> +	const struct sun20i_regulator_data *data;
+> +	struct device *dev = &pdev->dev;
+> +	struct regulator_config config;
+> +	struct regmap *regmap;
+> +
+> +	data = of_device_get_match_data(dev);
+> +	if (!data)
+> +		return -EINVAL;
+> +
+> +	regmap = sun20i_regulator_get_regmap(dev);
+> +	if (IS_ERR(regmap))
+> +		return dev_err_probe(dev, PTR_ERR(regmap), "Failed to get regmap\n");
+> +
+> +	config = (struct regulator_config) {
+> +		.dev	= dev,
+> +		.regmap	= regmap,
+> +	};
+> +
+> +	for (unsigned int i = 0; i < data->ndescs; ++i) {
+> +		const struct regulator_desc *desc = &data->descs[i];
+> +		struct regulator_dev *rdev;
+> +
+> +		rdev = devm_regulator_register(dev, desc, &config);
+> +		if (IS_ERR(rdev))
+> +			return PTR_ERR(rdev);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id sun20i_regulator_of_match[] = {
+> +	{
+> +		.compatible = "allwinner,sun20i-d1-system-ldos",
+> +		.data = &sun20i_d1_system_ldos,
+> +	},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, sun20i_regulator_of_match);
+> +
+> +static struct platform_driver sun20i_regulator_driver = {
+> +	.probe	= sun20i_regulator_probe,
+> +	.driver	= {
+> +		.name		= "sun20i-regulator",
+> +		.of_match_table	= sun20i_regulator_of_match,
+> +	},
+> +};
+> +module_platform_driver(sun20i_regulator_driver);
+> +
+> +MODULE_AUTHOR("Samuel Holland <samuel@sholland.org>");
+> +MODULE_DESCRIPTION("Allwinner D1 internal LDO driver");
+> +MODULE_LICENSE("GPL");
+
