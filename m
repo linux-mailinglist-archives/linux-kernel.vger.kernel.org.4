@@ -2,116 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570D0668473
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863E5668478
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240633AbjALUxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 15:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S232283AbjALUxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:53:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbjALUwz (ORCPT
+        with ESMTP id S232842AbjALUwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 15:52:55 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A679DEB1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:26:12 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id c9so14652214pfj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:26:12 -0800 (PST)
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3102FACF;
+        Thu, 12 Jan 2023 12:26:31 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id y18so17022596ljk.11;
+        Thu, 12 Jan 2023 12:26:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=I1a5Jj4LhArw7C+veD1AJXimxs0gBRN9QYGmaPZZepQ=;
-        b=LcnxElzta+l75Ylsdgk5tzeX0fCoTfPkGseZ5j2bomhev4jeAdUsp6vHBChkB8yoly
-         Bf6lkv4WYdJ/5DC1BctbcuHJDw2GAANme9nc1SVk3IavR3GOJIdjf34BMl0Vlg/9S0Yq
-         rkDBtZnGuHshIQm9AXgy7ckOqphAzjf1Z+63xGS9Osh3IYHAQT6qORpwS4srH3mADQ2u
-         DIukaRwB1cIiYyGscj+Z2bLeA29CKYSEtiIWnTTtHoZdXEKPj59GyGWv2mZZ1uviEp45
-         aZjic2wb7Xke4T4BrWd2NQcwcv9XLRSpA0ipWAgzlrZ0HZ39vMU5G/osPKCs7M8JpIKe
-         TuNw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ToTfVSINCq1vTbWWorTxY4lvCe0zPhUxxrJQUXc5LXA=;
+        b=acPEpDRXzH90lhTZpws66xzyETCAdqnXYU4zKZ/GBkFvtb0p8VVCVBTFIERI+zOanq
+         8bZGhNjoBcN/tehvpEGcHTJWqwyi9t/oo50SfJ5K01FeVBYD8tVPPOy8zovBQkXGNNZZ
+         WmrPHKoDkez4++vTlmxQ8jpsQTJ0uJpmQGkj9/t8KKRj/q17Bx9BtOqFXvyJjZZps5Fs
+         JPS/7YKKfEKmlC4c3lp37CcrD3VK7RSyy3GbM/sNzzMnU8tir2Ded9q+tTQa+9nYEObs
+         c/xjbHIL+FU+dQc89FC6JQSxbOUs4Bb5d05bv3yPEMRnuc0QCQEFVJ31LOjQ7Vfb2i1L
+         dr7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=I1a5Jj4LhArw7C+veD1AJXimxs0gBRN9QYGmaPZZepQ=;
-        b=UKgiKJh5/S2Y3bWI4e/INF7gCreoALz9CwLvkn2tVZZbIhha3NU8XKTqLMJOmj8OLM
-         ZIJSoRQAaPRgfr97v9NKqHoPuqpTgVC0IBNw1JNzBhd2F0ReHvF69KZWVo2sOnMxFzv1
-         XRftZv3Xmyornm/B/TpbOw8aWiOxtSLe9A43md/ETPvZAJFRrgvhkchmeZPW//KV5NoZ
-         Fbb9DVBkEcPX/KP8idKNswl7yAfPvSKe6cJ1CU5a6Bm8kJh1PrnfNbXPDX8oNajGKfzK
-         Q6u7FFTEOP5EIJaItrhLoRxxw7rACM49tv7T5GsDt71zTLFsK7JXSQ48+FSQ9ugASPaQ
-         UARA==
-X-Gm-Message-State: AFqh2kqRHci8j6dL5x58jCIBw2phTTZ1vOEeuHHdE1wGE+GTCnSymRtI
-        0/8ui0vsGQo+mapE5RSeuyFLSREYS/c9P4qa67GNUEq/sNvwJoA=
-X-Google-Smtp-Source: AMrXdXtLHfrPEbNBMn076Vm8h0lZ3DMfIQaIwVz1OKoIMpwXxm+yfgf+J4Mwtwe+0AIs9jvRvcUv83kG4AJ/KIY4qsk=
-X-Received: by 2002:a62:158f:0:b0:588:e66e:4f05 with SMTP id
- 137-20020a62158f000000b00588e66e4f05mr1348955pfv.23.1673555171377; Thu, 12
- Jan 2023 12:26:11 -0800 (PST)
+        bh=ToTfVSINCq1vTbWWorTxY4lvCe0zPhUxxrJQUXc5LXA=;
+        b=5RQ7b7PSqSYGAXAEfmlGF0X/ByoVlNAkIIaLr1hSJORV/4rIiv4OXuilYSpckGRuwF
+         jTYoG6QOqK4Qrmm+JAZFVNyCGlnfb9cPNYaitqLzS8REJoioHIfmEzmaYAzChOsZwTjf
+         RskczWaj4uJBy/e9urQlq0D3SzZJx0U5ICKvbwDSZh8j5gom5jG3NyGuxXr8gJgIUKLV
+         5QdDO2Q15Ukt6t/mKBSBSmQtnwJay0EQjYKHjbfzu6QusPjnXSMB9lZkWf5qLcOlxyYE
+         ckOUFfut/sQ83l+x/At0HGTureOlwDVUuvjETznS6AzwPMtEJskjPqLNNU5qnjvICjVr
+         2KFA==
+X-Gm-Message-State: AFqh2kpQjf/qeLuDk8xnRx3MXGF/JOmAs2LKBYjAJvrBaZuj5cu4LbDe
+        6cCwKaFe18xMOmbwOeP3+Ka6texX/OqBLA==
+X-Google-Smtp-Source: AMrXdXut4N+CpUE1lMni2KHSS6cVLYele0wJZLAJwuq4e6x9vskSIev04DYrFG1JwlB57moeHEEQdw==
+X-Received: by 2002:a2e:bf1e:0:b0:27b:65e3:3e93 with SMTP id c30-20020a2ebf1e000000b0027b65e33e93mr25222636ljr.45.1673555190105;
+        Thu, 12 Jan 2023 12:26:30 -0800 (PST)
+Received: from i-vetokaappi.home.lan (dsl-hkibng42-56733b-36.dhcp.inet.fi. [86.115.59.36])
+        by smtp.gmail.com with ESMTPSA id k6-20020a2eb746000000b00281350bb5fbsm2346731ljo.2.2023.01.12.12.26.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 12:26:29 -0800 (PST)
+From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH 0/8] Modem support for MSM8226
+Date:   Thu, 12 Jan 2023 22:26:03 +0200
+Message-Id: <20230112202612.791455-1-matti.lehtimaki@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230109180717.58855-1-casey@schaufler-ca.com>
- <20230109180717.58855-3-casey@schaufler-ca.com> <CAHC9VhTaySsuvkj0U9Jbp405+WoRfhtq+ib5ynO-a9BeM+a5Ew@mail.gmail.com>
- <c1acc2ed-d188-6560-4554-e6e37d47d06d@schaufler-ca.com>
-In-Reply-To: <c1acc2ed-d188-6560-4554-e6e37d47d06d@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 12 Jan 2023 15:26:00 -0500
-Message-ID: <CAHC9VhSZ50nbrFJsxKYstVJMekDK6D4tS=Ddz29EUQe55ZQvKQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/8] LSM: Maintain a table of LSM attribute data
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
-        jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 7:36 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> On 1/11/2023 1:01 PM, Paul Moore wrote:
-> > On Mon, Jan 9, 2023 at 1:07 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> >> As LSMs are registered add their lsm_id pointers to a table.
-> >> This will be used later for attribute reporting.
-> >>
-> >> Determine the number of possible security modules based on
-> >> their respective CONFIG options. This allows the number to be
-> >> known at build time. This allows data structures and tables
-> >> to use the constant.
-> >>
-> >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> >> ---
-> >>  include/linux/security.h |  2 ++
-> >>  security/security.c      | 44 +++++++++++++++++++++++++++++++++-------
-> >>  2 files changed, 39 insertions(+), 7 deletions(-)
+This series adds support for modem remoteproc found on MSM8226.
+It also adds needed device tree nodes and enables modem used for
+location service on matisse-wifi.
 
-...
+Luca Weiss (3):
+  remoteproc: qcom_q6v5_mss: Handle platforms with only single power
+    domain
+  remoteproc: qcom_q6v5_mss: Add modem support on MSM8226
+  ARM: dts: qcom: msm8226: Add modem remoteproc node
 
-> >> diff --git a/security/security.c b/security/security.c
-> >> index 07a8fe7f92bf..a590fa98ddd6 100644
-> >> --- a/security/security.c
-> >> +++ b/security/security.c
-> >> @@ -388,7 +408,7 @@ static void __init ordered_lsm_init(void)
-> >>         for (lsm = ordered_lsms; *lsm; lsm++)
-> >>                 initialize_lsm(*lsm);
-> >>
-> >> -       kfree(ordered_lsms);
-> >> +       init_debug("lsm count            = %d\n", lsm_active_cnt);
-> >>  }
-> > Given 86ef3c735ec8 ("LSM: Better reporting of actual LSMs at boot"),
-> > is this needed?
->
-> None of what comes out from lsm.debug is strictly necessary, and
-> human or script can parse "initializing lsm=", but sometimes the
-> number of LSMs is interesting.
+Matti Lehtimäki (5):
+  dt-bindings: remoteproc: qcom,msm8916-mss-pil: Add MSM8226
+  dt-bindings: mfd: qcom,tcsr: Add compatible for MSM8226
+  ARM: dts: qcom: msm8226: Add node for TCSR halt regs
+  ARM: dts: qcom: msm8226: Add smsm node
+  ARM: dts: qcom: apq8026-samsung-matisse-wifi: Enable modem
 
-I guess what I was questioning is if printing the @lsm_active_cnt
-variable provides any better information that what is already provided
-by commit 86ef3c735ec8?  We currently print the enabled/active LSMs
-with lsm.debug, printing a count seems a bit redundant to me.
+ .../devicetree/bindings/mfd/qcom,tcsr.yaml    |   1 +
+ .../remoteproc/qcom,msm8916-mss-pil.yaml      |  41 +++++-
+ .../dts/qcom-apq8026-samsung-matisse-wifi.dts |  13 +-
+ arch/arm/boot/dts/qcom-msm8226.dtsi           | 127 ++++++++++++++++
+ drivers/remoteproc/qcom_q6v5_mss.c            | 137 ++++++++++++++++++
+ 5 files changed, 313 insertions(+), 6 deletions(-)
 
 -- 
-paul-moore.com
+2.34.1
+
