@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB61D667E3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBD8667E45
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjALSj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:39:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S233122AbjALSkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240117AbjALSjB (ORCPT
+        with ESMTP id S231814AbjALSjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:39:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AA269519;
-        Thu, 12 Jan 2023 10:11:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3ADEB81F02;
-        Thu, 12 Jan 2023 18:11:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D532C433EF;
-        Thu, 12 Jan 2023 18:11:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673547078;
-        bh=e9yPK7TZJvP1zoLJQk/+QeUmK3azBWzZaBFbPTCZohg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ooxc0flHYymtC64vxIBgO57px1OutEmc0gG+ScIIm2Gm0ibgCfNM4TZIniIQVwvRd
-         HFYWodA9eNtwklxbIa35Z80q6587epj1OtdIDUrT2Qzb8NXT45TfhHivKubo7Y40Ko
-         6CmUP9CQ1Kx3K4vT0lgslAWT1OiuDRMTAwmedVe6IQc674QKmbVGUagVgkQZdmWZX/
-         R6dKWNOQPDW6eO5nBFgqQZx+bHaIht/Yz1r94xK2ZyWnWFa4OL0mURRsLzhGlcCXtA
-         9gQjBRo2Q6xUKGraDc2d79ZWErpp6kMk0Zy9fgbMCnPzJLMdBVOitV5C/Hkq7dj6Dw
-         zumkcz+vgp8xA==
-Date:   Thu, 12 Jan 2023 23:41:13 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        andersson@kernel.org, quic_cang@quicinc.com,
-        quic_asutoshd@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-scsi@vger.kernel.org, dmitry.baryshkov@linaro.org,
-        ahalaney@redhat.com, abel.vesa@linaro.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, bvanassche@acm.org
-Subject: Re: [PATCH v5 00/23] ufs: qcom: Add HS-G4 support
-Message-ID: <Y8BNQZ/CFljuxsSL@matsya>
-References: <20221222141001.54849-1-manivannan.sadhasivam@linaro.org>
+        Thu, 12 Jan 2023 13:39:47 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE74B48CEA;
+        Thu, 12 Jan 2023 10:13:51 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id e3so9706315wru.13;
+        Thu, 12 Jan 2023 10:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pc/D2SDaMk1xth/YbuuniufVBsn6v0AG7i8rDiFenu0=;
+        b=Q1+jM9KaS63fRLvFFOxaQ2gYcBDpc0cjCZUgAXRl5RocVwUrMRVfjYSyzxwiKmYcmT
+         B/VI+f6fPyLlphLWb7sYsXJdOzlj9aDfUBmsBcdgMlaz0uDMZsAf4EhY0OO/LxMTucz0
+         /3X4l8bSQzDSISXYbjLxHEmcKEyAjOPlJQb8bkCQfWU2IyD6cj2I1Z2DxJfAWorRTh4I
+         63Ky3ctycPqjEmiqNAUep4BMSLv73cwSiNEmtbEhTquyfS6fg7mrWyH0jZp42evpcCMH
+         nGA7NfjukMyuuhpNSNgljGB7TpaezKz4HOQFqSEZZfHExlnsII+bFaOwG4s7TVyS+5px
+         bA+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pc/D2SDaMk1xth/YbuuniufVBsn6v0AG7i8rDiFenu0=;
+        b=kdZdU71YJBbfWbopT0SPHmKhDq9itYudiSfdr0PKshZt0zgzqPUy4HJtNK57CjHhpQ
+         CMsUvcMs5kdWyi+ZDjI4q9oWozcO6ul/oTTv0JTOEPbvcTyu+AfcYYYbMk72SCfYbWcy
+         bTxp01iHGMp2p0k2DuuJjiYvGc7W6RgWqEaD+2Qlquxv3Y0VT8PST9+p38kJSPkQyxXO
+         hLUIZu2tPd7q1cyGS71L4Rk1I8dFhvbDMJyfcyQ4kuQ59OfRQ1vT5vwcWyjCe2zc4ImO
+         ZA87FjrYi62vJ9LfE0Y620fmGcWhmenqE1RNX/9aN5iFhWxmYcFOWdzZb+HgwsH1hK9O
+         7ebw==
+X-Gm-Message-State: AFqh2kpRjHsMDCu1PRiBpiJF/AhrMxGmX+MEY57kJyuyPhd3qxuJGaQd
+        6xDXftc7QFTRtbZ9XHwt5EY=
+X-Google-Smtp-Source: AMrXdXtA+Ut7IFqfWgetK5U0//ZESyjqP5JbrRTGijJXlk79/0qG8uLpYAjV+AN661+G8iaFPnNtlw==
+X-Received: by 2002:a05:6000:1b05:b0:2b5:dc24:e08e with SMTP id f5-20020a0560001b0500b002b5dc24e08emr17701959wrz.69.1673547230305;
+        Thu, 12 Jan 2023 10:13:50 -0800 (PST)
+Received: from [192.168.8.100] (188.31.114.68.threembb.co.uk. [188.31.114.68])
+        by smtp.gmail.com with ESMTPSA id l6-20020a5d4bc6000000b0027323b19ecesm16917901wrt.16.2023.01.12.10.13.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 10:13:49 -0800 (PST)
+Message-ID: <746dc294-385c-3ebb-6b8e-7e01e9d54df5@gmail.com>
+Date:   Thu, 12 Jan 2023 18:11:59 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222141001.54849-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [syzbot] WARNING in io_cqring_event_overflow
+To:     syzbot <syzbot+6805087452d72929404e@syzkaller.appspotmail.com>,
+        axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000694ccd05f20ef7be@google.com>
+Content-Language: en-US
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <000000000000694ccd05f20ef7be@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-12-22, 19:39, Manivannan Sadhasivam wrote:
+On 1/12/23 10:56, syzbot wrote:
 > Hello,
 > 
-> This series adds HS-G4 support to the Qcom UFS driver and PHY driver.
-> The newer Qcom platforms support configuring the UFS controller and PHY
-> in dual gears (i.e., controller/PHY can be configured to run in two gear
-> speeds). This is accomplished by adding two different PHY init sequences
-> to the PHY driver and the UFS driver requesting the one that's required
-> based on the platform configuration.
-> 
-> Initially the ufs-qcom driver will use the default gear G2 for enumerating
-> the UFS device. Afer enumeration, the max gear supported by both the
-> controller and device would be found out and that will be used thereafter.
-> But for using the max gear after enumeration, the ufs-qcom driver requires
-> the UFS device to be reinitialized. For this purpose, a separate quirk has
-> been introduced in the UFS core along with a callback and those will be used
-> by the ufs-qcom driver.
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> WARNING in io_cqring_event_overflow
 
-The series lgtm. This fails for me to apply though due to other patches
-I have picked up.
-
-Can you please rebase the phy patches and send those 
+#syz test: https://github.com/isilence/linux.git overflow-lock
 
 -- 
-~Vinod
+Pavel Begunkov
