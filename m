@@ -2,108 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33C866792C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED6F667948
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbjALP0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S232135AbjALPah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240344AbjALP0E (ORCPT
+        with ESMTP id S229972AbjALP2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:26:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5DA3D1D5;
-        Thu, 12 Jan 2023 07:18:41 -0800 (PST)
-Date:   Thu, 12 Jan 2023 15:18:38 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673536719;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a26o9qFZ1IQnwNC/53Q+fF2ma7/E4nJliNLMeedpM04=;
-        b=FmZlNCl5soR6vWZ8LP9he5ATsHtWU8TSt6szbotLZ6eND360dBznV/cw10T+X8D7UpkUlK
-        ECr4SrEP5hIHQrRWt0b2qVQNjuJsKk+mYzCe/DPWD3ttQ4xclGZ7OkcEP1Xr7MuFLHco/m
-        qbOgGoVVt701K7r6EJRyDQnn2FglSssuemDFNZt0h2OWrmm9ojKmIuVGgdnrxQH+DH7QCz
-        hvuJ6YQqKLlVTBTkrClVVS5BN5QXLlyZM1cGrmrGgwtbh94LkAR3MC+PStuR/sJ7+t7nQD
-        6mcukE4WfY38488PowfSEtsIPwzn3lFxiI4H+jvGMLwRmLbjC6tALofVE16CTg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673536719;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a26o9qFZ1IQnwNC/53Q+fF2ma7/E4nJliNLMeedpM04=;
-        b=U0cnG0gDc1/v2yW3zrobBlqzU1hBfp1gjUqqoJAtGvuipOtqt1A52uw2fK9FEpQOdjuIj+
-        wlOmi4BZz36cLkBw==
-From:   "tip-bot2 for Mathieu Desnoyers" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] selftests/rseq: Revert "selftests/rseq: Add
- mm_numa_cid to test script"
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <202301040903.2dd1e25b-oliver.sang@intel.com>
-References: <202301040903.2dd1e25b-oliver.sang@intel.com>
+        Thu, 12 Jan 2023 10:28:06 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBA150E54
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:20:05 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id hw16so33722062ejc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:20:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qeGx7+cxIil0fG9CKpThQTNHkXDemVS+Svc4rtN60NE=;
+        b=RSnI19iNiH4LvfsHiH0oHsMRnYKYQnnYj8yyOiSfw0BMTyX+aL9ot7mgcz5ImgcD+Q
+         dnVha/un+y6H6LNAt2e3dSJo2H6ZSYO+NrYHda0tF4bxSNcKnShZiY02YtR4qRjE6vSO
+         RzVZea8I74wIWxJku0CWSJA9hpaganuBp3zwEoLy4k7Lx3ysf1rtlkHjEuLZw+F3ZPuV
+         YT6MJzg39LH2ISN0VzyynZuuzSpqn+rccNZy6hr6eA6A72+ZonWBT8qRHeoQsRoVvIz9
+         uzDksxc1afmAJjpXf10JgRpKMn2Jyf9mgxqZz91ovDSv/iUt1dQ71rmhjFWT6GzxGIyW
+         b7jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qeGx7+cxIil0fG9CKpThQTNHkXDemVS+Svc4rtN60NE=;
+        b=2iJSjy8dlswEwSG8d1YEshjsuxiWdDy/URu/g14BVajZJfruBVqPHxuU6xaPJlgl8v
+         j9lvWKkByHQobEUmcPNhO9zunkWFwXhs1LwcUVkz0FTG5ypepHfAGAcKiIpGHUuDGHu9
+         8/giUluFj/41stB2BLlymjlSWsgFRVXw6D0zcaCPbPU9a+IT33Y2vB/bZbUMbPzpmS/U
+         9ruaLaz3AUC04B/E2doy1qFHbJQPG5qoE4gtFpqwuHbsXSds6buiqYe7z7O7liN0IQ9n
+         OKemAGFphPkKKfR5p+j22/CswvEo3kMhrmIQZYnzjtFCge7mCOPPQqmOaKLw/m29g7KV
+         qYkQ==
+X-Gm-Message-State: AFqh2krSeeLGecQozng3c7HxLP9Kj1eet/db1UVbPTNgmqomLHgAETvz
+        iQfqM42D8HGOwuDg7uJUvaiKeQ==
+X-Google-Smtp-Source: AMrXdXunfAtUO2n9K2zIuudzXhsXWCymJpARhYbcgDoK9J813efwLCbRsshFPugW80P9fxWStQ7obg==
+X-Received: by 2002:a17:907:8b98:b0:840:a6a3:41c7 with SMTP id tb24-20020a1709078b9800b00840a6a341c7mr69455668ejc.50.1673536803960;
+        Thu, 12 Jan 2023 07:20:03 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b2-20020a17090630c200b00780b1979adesm7483266ejb.218.2023.01.12.07.20.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 07:20:03 -0800 (PST)
+Message-ID: <397c61e8-d928-4e07-9616-afb315d356dd@linaro.org>
+Date:   Thu, 12 Jan 2023 16:20:01 +0100
 MIME-Version: 1.0
-Message-ID: <167353671881.4906.17023070386600990258.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] Bluetooth: hci_qca: Fix driver shutdown on closed
+ serdev
+Content-Language: en-US
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Zijun Hu <zijuhu@codeaurora.org>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20221229102829.403917-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221229102829.403917-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+On 29/12/2022 11:28, Krzysztof Kozlowski wrote:
+> The driver shutdown callback (which sends EDL_SOC_RESET to the device
+> over serdev) should not be invoked when HCI device is not open (e.g. if
+> hci_dev_open_sync() failed), because the serdev and its TTY are not open
+> either.  Also skip this step if device is powered off
+> (qca_power_shutdown()).
+> 
+> The shutdown callback causes use-after-free during system reboot with
+> Qualcomm Atheros Bluetooth:
+> 
+>   Unable to handle kernel paging request at virtual address 0072662f67726fd7
+>   ...
+>   CPU: 6 PID: 1 Comm: systemd-shutdow Tainted: G        W          6.1.0-rt5-00325-g8a5f56bcfcca #8
+>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
+>   Call trace:
+>    tty_driver_flush_buffer+0x4/0x30
+>    serdev_device_write_flush+0x24/0x34
+>    qca_serdev_shutdown+0x80/0x130 [hci_uart]
+>    device_shutdown+0x15c/0x260
+>    kernel_restart+0x48/0xac
+> 
+> KASAN report:
+> 
+>   BUG: KASAN: use-after-free in tty_driver_flush_buffer+0x1c/0x50
+>   Read of size 8 at addr ffff16270c2e0018 by task systemd-shutdow/1
+> 
+>   CPU: 7 PID: 1 Comm: systemd-shutdow Not tainted 6.1.0-next-20221220-00014-gb85aaf97fb01-dirty #28
+>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
+>   Call trace:
+>    dump_backtrace.part.0+0xdc/0xf0
+>    show_stack+0x18/0x30
+>    dump_stack_lvl+0x68/0x84
+>    print_report+0x188/0x488
+>    kasan_report+0xa4/0xf0
+>    __asan_load8+0x80/0xac
+>    tty_driver_flush_buffer+0x1c/0x50
+>    ttyport_write_flush+0x34/0x44
+>    serdev_device_write_flush+0x48/0x60
+>    qca_serdev_shutdown+0x124/0x274
+>    device_shutdown+0x1e8/0x350
+>    kernel_restart+0x48/0xb0
+>    __do_sys_reboot+0x244/0x2d0
+>    __arm64_sys_reboot+0x54/0x70
+>    invoke_syscall+0x60/0x190
+>    el0_svc_common.constprop.0+0x7c/0x160
+>    do_el0_svc+0x44/0xf0
+>    el0_svc+0x2c/0x6c
+>    el0t_64_sync_handler+0xbc/0x140
+>    el0t_64_sync+0x190/0x194
+> 
+> Fixes: 7e7bbddd029b ("Bluetooth: hci_qca: Fix qca6390 enable failure after warm reboot")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
 
-Commit-ID:     c91b0bf3e590a2dd0f2af4bb048abc0542eabf2e
-Gitweb:        https://git.kernel.org/tip/c91b0bf3e590a2dd0f2af4bb048abc0542eabf2e
-Author:        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-AuthorDate:    Wed, 04 Jan 2023 11:35:42 -05:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 12 Jan 2023 11:22:22 +01:00
+Any comments on this? Patchwork tools complain on longer line, but
+without it checkpatch would complain as well, so I assume you do not
+expect to fix it?
 
-selftests/rseq: Revert "selftests/rseq: Add mm_numa_cid to test script"
+Best regards,
+Krzysztof
 
-The mm_numa_cid related rseq patches from the series were not picked up
-into the tip tree, so enabling the mm_numa_cid test needs to be
-reverted.
-
-This reverts commit b344b8f2d88dbf095caf97ac57fd3645843fa70f.
-
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/oe-lkp/202301040903.2dd1e25b-oliver.sang@intel.com
----
- tools/testing/selftests/rseq/run_param_test.sh | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/tools/testing/selftests/rseq/run_param_test.sh b/tools/testing/selftests/rseq/run_param_test.sh
-index 603b3b6..8d31426 100755
---- a/tools/testing/selftests/rseq/run_param_test.sh
-+++ b/tools/testing/selftests/rseq/run_param_test.sh
-@@ -47,11 +47,6 @@ function do_tests()
- 		./param_test_mm_cid ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
- 		echo "Running mm_cid compare-twice test ${TEST_NAME[$i]}"
- 		./param_test_mm_cid_compare_twice ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
--
--		echo "Running mm_numa_cid test ${TEST_NAME[$i]}"
--		./param_test_mm_numa_cid ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
--		echo "Running mm_numa_cid compare-twice test ${TEST_NAME[$i]}"
--		./param_test_mm_numa_cid_compare_twice ${TEST_LIST[$i]} -r ${REPS} -t ${NR_THREADS} ${@} ${EXTRA_ARGS} || exit 1
- 		let "i++"
- 	done
- }
