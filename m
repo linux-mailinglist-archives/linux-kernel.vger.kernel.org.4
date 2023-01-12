@@ -2,116 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB48B667144
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5A466714A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236679AbjALLvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S232039AbjALLvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbjALLup (ORCPT
+        with ESMTP id S229903AbjALLvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:50:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDBE5E668
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:39:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673523546;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qp7LxUOhP/zffa2I1gllxS81D7dtXmGujohyvT79haU=;
-        b=T+HBN4cGaXSR/lWONp4yoxTgZuX9iLyyGQBf/7e7MRFaMxTtdDF/G+W6dPWvPRoFRADASL
-        EfflA8jrRjtBKoYzWlv/eDegdUUOsQFXiuNTrea5QVBzuRiTlNB83lQ0EJT2tbwjud1j6K
-        wf/HyVTdoNQSLMkNhwgJ1sld8gxIZhE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-664-WjlWChk3PpeWWXxxWshqZw-1; Thu, 12 Jan 2023 06:39:05 -0500
-X-MC-Unique: WjlWChk3PpeWWXxxWshqZw-1
-Received: by mail-wm1-f70.google.com with SMTP id f20-20020a7bc8d4000000b003d1cda5bd6fso4172282wml.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:39:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qp7LxUOhP/zffa2I1gllxS81D7dtXmGujohyvT79haU=;
-        b=46RSUc8fn4FKYwf87JffGVMRsFNWLb16Fht8Fdt2Es/JuoR0wQ9y/Fg7RSP0j+K1V+
-         FaWVuz8dUyMQ7os+OCM9duFgINPR9Ub+Smt0C8z92HqLu0KG4hfaMy4F9Zh9LpP6KWaW
-         bXwS7wepnjUmGpbGeHIdukzbAnLZcZ0wnVkhhuiEGX1L1fDkrSari16oeaFDYJBrpIAT
-         VN5gKpMr7rrn6WFd1KuimbXooIMoXJr1Xm4brxvaIuqQmsbz8hW1ipWMPZ7AcSlCaKyv
-         ydNF8C5XbXYpeFDrP1Cmehn6Mb7sAc5l4Xo/oEpkjUizpIZpVEHLSYy1p9DGnhMXBzv3
-         rf/g==
-X-Gm-Message-State: AFqh2koQqtQeo+19g4S9SIkc9MIAdfsEkugUYYS2qm5xCQ6VLIJdxHTj
-        szhRwofMwZSMdCdoOplwGtYD/CfakRXLdDYFGsoPHnvb5UecifBBv4iM9WX1JEnfWehTCiTXsX4
-        ou6nt1kkcFux3j3FvSXgrv4LY
-X-Received: by 2002:a05:600c:2844:b0:3da:4e:8dfe with SMTP id r4-20020a05600c284400b003da004e8dfemr5984316wmb.38.1673523544125;
-        Thu, 12 Jan 2023 03:39:04 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs5aW12cvHZEeONEsMIAQmSNDKTa6MrdMvBThl9kh/VmqT3fUCrb1IjlsK8Uei4YamC+1lCrw==
-X-Received: by 2002:a05:600c:2844:b0:3da:4e:8dfe with SMTP id r4-20020a05600c284400b003da004e8dfemr5984299wmb.38.1673523543855;
-        Thu, 12 Jan 2023 03:39:03 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-183.dyn.eolo.it. [146.241.113.183])
-        by smtp.gmail.com with ESMTPSA id s7-20020a1cf207000000b003d98438a43asm20239891wmc.34.2023.01.12.03.39.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 03:39:03 -0800 (PST)
-Message-ID: <4c48269962dafbb641d5b0c38ec5b7bf951f3b4d.camel@redhat.com>
-Subject: Re: [PATCH net-next] r8152: add vendor/device ID pair for Microsoft
- Devkit
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>
-Date:   Thu, 12 Jan 2023 12:39:01 +0100
-In-Reply-To: <20230112105137.7b09e70b@donnerap.cambridge.arm.com>
-References: <20230111133228.190801-1-andre.przywara@arm.com>
-         <20230111213143.71f2ad7e@kernel.org>
-         <20230112105137.7b09e70b@donnerap.cambridge.arm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 12 Jan 2023 06:51:05 -0500
+Received: from gw.red-soft.ru (red-soft.ru [188.246.186.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07926B1A;
+        Thu, 12 Jan 2023 03:40:58 -0800 (PST)
+Received: from [10.81.1.57] (unknown [10.81.1.57])
+        (using TLSv1 with cipher AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by gw.red-soft.ru (Postfix) with ESMTPSA id 582EA3E0EB4;
+        Thu, 12 Jan 2023 14:40:56 +0300 (MSK)
+Message-ID: <b3616662-7181-f968-97e6-248c361edd85@red-soft.ru>
+Date:   Thu, 12 Jan 2023 14:40:56 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] block: bfq fix null pointer dereference of bfqg in
+ bfq_bio_bfqg()
+To:     Yu Kuai <yukuai1@huaweicloud.com>,
+        Artem Chernyshev <artem.chernyshev@red-soft.ru>,
+        Jan Kara <jack@suse.cz>
+Cc:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230112094358.451029-1-artem.chernyshev@red-soft.ru>
+ <c72f2e00-1bd8-213c-585d-d465d6c34a14@huaweicloud.com>
+ <Y7/uCLzIu7Ir6JtK@localhost.localdomain>
+ <0e0c195e-5a92-732f-d0b4-2e0d9b33d742@huaweicloud.com>
+Content-Language: en-US
+From:   Anton Fadeev <anton.fadeev@red-soft.ru>
+In-Reply-To: <0e0c195e-5a92-732f-d0b4-2e0d9b33d742@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 174664 [Jan 12 2023]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: anton.fadeev@red-soft.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;red-soft.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;git.kernel.org:7.1.1, {Track_Chinese_Simplified, text}
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2023/01/12 08:47:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/01/12 05:58:00 #20761738
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-01-12 at 10:51 +0000, Andre Przywara wrote:
-> On Wed, 11 Jan 2023 21:31:43 -0800 Jakub Kicinski <kuba@kernel.org> wrote:
-> > Hm, we have a patch in net-next which reformats the entries:
-> > ec51fbd1b8a2bca2948dede99c14ec63dc57ff6b
-> > 
-> > Would you like this ID to be also added in stable? We could just 
-> > apply it to net, and deal with the conflict locally. But if you 
-> > don't care about older kernels then better if you rebase.
+
+
+12.01.2023 14:30, Yu Kuai пишет:
+> CC Jan.
 > 
-> Stable would be nice, but only to v6.1. I think I don't care
-> about older kernels.
-> So what about if I resend this one here, based on top of the reformat
-> patch, with a:
-> Cc: <stable@vger.kernel.org> # 6.1.x
-> line in there, and then reply to the email that the automatic backport
-> failed, with a tailored patch for v6.1?
-> Alternatively I can send an explicit stable backport email once this one
-> is merged.
+> 在 2023/01/12 19:24, Artem Chernyshev 写道:
+>> Hi,
+>> On Thu, Jan 12, 2023 at 07:09:10PM +0800, Yu Kuai wrote:
+>>> Hi,
+>>>
+>>> 在 2023/01/12 17:43, Artem Chernyshev 写道:
+>>>> It is possible for bfqg to be NULL after being initialized as result of
+>>>> blkg_to_bfqg() function.
+>>>>
+>>>> That was achieved on kernel 5.15.78, but should exist in mainline as
+>>>> well
+>>>
+>>> The problem is already fixed in mainline by following patch:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f02be9002c480cd3ec0fcf184ad27cf531bd6ece
+>>>
+>>> Thanks,
+>>> Kuai
+>>>>
+>>>> host1 login: [ 460.855794] watchdog: watchdog0: watchdog did not stop!
+>>>> [  898.944512] BUG: kernel NULL pointer dereference, address: 
+>>>> 0000000000000094
+>>>> [  899.285776] #PF: supervisor read access in kernel mode
+>>>> [  899.536511] #PF: error_code(0x0000) - not-present page
+>>>> [  899.647305]  connection4:0: detected conn error (1020)
+>>>> [  899.786794] PGD 0 P4D 0
+>>>> [  899.786799] Oops: 0000 [#1] SMP PTI
+>>>> [  899.786802] CPU: 15 PID: 6073 Comm: ID iothread1 Not tainted 
+>>>> 5.15.78-1.el7virt.x86_64 #1
+>>>> [  899.786804] Hardware name: HP ProLiant DL360 Gen9/ProLiant DL360 
+>>>> Gen9, BIOS P89 10/21/2019
+>>>> [  899.786806] RIP: 0010:bfq_bio_bfqg+0x26/0x80
+>>>> [  901.325944] Code: 0f 1f 40 00 0f 1f 44 00 00 55 48 89 fd 48 89 f7 
+>>>> 53 48 8b 56 48 48 85 d2
+>>>> 74 32 48 63 05 83 7f 35 01 48 83 c0 16 48 8b 5c c2 08 <80> bb 94 00 
+>>>> 00 00 00 00
+>>>> [  902.237825] RSP: 0018:ffffae2649437688 EFLAGS: 00010002
+>>>> [  902.493396] RAX: 0000000000000019 RBX: 0000000000000000 RCX: 
+>>>> dead000000000122
+>>>> [  902.841529] RDX: ffff8b6012cb3a00 RSI: ffff8b71002bbed0 RDI: 
+>>>> ffff8b71002bbed0
+>>>> [  903.189374] RBP: ffff8b601c46e800 R08: ffffae26494377c8 R09: 
+>>>> 0000000000000000
+>>>> [  903.532985] R10: 0000000000000001 R11: 0000000000000008 R12: 
+>>>> ffff8b6f844c5b30
+>>>> [  903.880809] R13: ffff8b601c46e800 R14: ffffae2649437760 R15: 
+>>>> ffff8b601c46e800
+>>>> [  904.220054] FS:  00007fec2fc4a700(0000) GS:ffff8b7f7f640000(0000) 
+>>>> kn1GS:00000000000000000
+>>>> [  904.614349] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>> [  904.894717] CR2: 0000000000000094 CR3: 0000000111fd8002 CR4: 
+>>>> 00000000003726e0
+>>>> [  905.243702] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+>>>> 0000000000000000
+>>>> [  905.592493] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 
+>>>> 0000000000000400
+>>>> [  905.936859] Call Trace:
+>>>> [  906.055955] <TASK>
+>>>> [  906.158109] bfq_bic_update_cgroup+0x2c/0x1f0
+>>>> [  906.371057] bfq_insert_requests+0x2c2/0x1fb0
+>>>> [  906.579207] blk_mq_sched_insert_request+0xc2/0x140
+>>>> [  906.817640] __blk_mq_try_issue_directly+0xe0/0x1f0
+>>>> [  907.055737] blk_mq_request_issue_directly+0x4e/0xa0
+>>>> [  907.298547] dm_mq_queue_rq+0x217/0x3e0
+>>>> [  907.485935] blk_mq_dispatch_rq_list+0x14b/0x860
+>>>> [  907.711973] ? sbitmap_get+0x87/0x1a0
+>>>> [  907.890370] blk_mq_do_dispatch_sched+0x350/0x3b0
+>>>> [  908.074869] NMI watchdog: Watchdog detected hard LOCKUP on cpu 40
+>>>>
+>>>> Fixes: 075a53b78b81 ("bfq: Make sure bfqg for which we are queueing 
+>>>> requests is online")
+>>>> Co-developed-by: Anton Fadeev <anton.fadeev@red-soft.ru>
+>>>> Signed-off-by: Anton Fadeev <anton.fadeev@red-soft.ru>
+>>>> Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
+>>>> ---
+>>>>    block/bfq-cgroup.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+>>>> index 1b2829e99dad..d4e9428cdbe5 100644
+>>>> --- a/block/bfq-cgroup.c
+>>>> +++ b/block/bfq-cgroup.c
+>>>> @@ -616,7 +616,7 @@ struct bfq_group *bfq_bio_bfqg(struct bfq_data 
+>>>> *bfqd, struct bio *bio)
+>>>>                continue;
+>>>>            }
+>>>>            bfqg = blkg_to_bfqg(blkg);
+>>>> -        if (bfqg->online) {
+>>>> +        if (bfqg && bfqg->online) {
+>>>>                bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
+>>>>                return bfqg;
+>>>>            }
+>>>>
+>>
+>> Sorry, forgot to mention, what behaviour was the same after we applied 
+>> this patch. Issue
+>> was resolved only when we added NULL checking for bfqg.
+> 
+> So, you mean that blkg is still online, while blkg_to_bfqg() return
+> NULL. Can you explan how this is possible? I can't figure out how this
+> is possible...
+> 
+> Thanks,
+> Kuai
+>>
+>> Thanks,
+>> Artem
+>>
+>> .
+>>
+> 
 
-Note that we can merge this kind of changes via the -net tree. No
-repost will be needed. We can merge it as is on -net and you can follow
-the option 2 from the stable kernel rules doc, with no repost nor
-additional mangling for stable will be needed.
-
-If you are ok with the above let me know.
+I'll try to describe. We have a virtualization cluster based on oVirt 
+4.4 with kernel 5.15.78 with patch you mentioned, there is four nodes in 
+it. Also we have an ISCSI target, that is connected to all nodes. LUNs 
+are connected in mixed mode, such as Storage Domains and direct LUNs to 
+VMs. When all VMs are in UP state, we simply disconnect the ISCSI target 
+from network or shutdown target service,  then we got the described bug.
 
 Thanks,
-
-Paolo
-
+Anton.
