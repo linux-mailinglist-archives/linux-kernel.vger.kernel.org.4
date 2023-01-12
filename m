@@ -2,185 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D88566681B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 01:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15B966681F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 01:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235789AbjALAty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 19:49:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
+        id S235881AbjALAwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 19:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjALAtu (ORCPT
+        with ESMTP id S235581AbjALAwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 19:49:50 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2013C0D0
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:49:48 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id p188so16977672yba.5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:49:48 -0800 (PST)
+        Wed, 11 Jan 2023 19:52:35 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D09F584
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:52:34 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id fd15so5389228qtb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:52:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hDrqeCy2isEAcEZutQc18fIgv9oWhVupwebw91lgye4=;
-        b=qxxyHu+WDybsKdsOve3HdK7LpgzBN/3GZRqgrxvs9Q5W9Kzwd7Dzc9/jYzxkNuDrul
-         kQkTCY47Z2auo0ah8YGi8N0fYkfJOF7YxzNDRGT2TVVKTxh3xTGn5tExmfv9+PHBUfjc
-         yw/X/nMCu8FyYUb99VuG8LjTaud4O30po5zBH3LKaw5V6vBQRwOmH59u3sd47u/bsD8t
-         wqFwxSQZsBtZNU5U8hrEp3462X5hXd5zeVSkG1FDkuO9G+kbmGLsdETBG2DaHv5igzc1
-         rEShl5bXFHof6n5bFLnvY/qrSb9Wg1ns/Lu0eWyU8NcGpi2ojYMe7+hIT1ATndOFXF0A
-         cgSA==
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qng87r2afyBWFugVmr/ToSxitn179pDEw8bgUuU7NSI=;
+        b=gvNbDNcf4RL8zlbzVOgMt/Grt6Xy2W9WrWdryZnQNlhiIQrZvRAvmUKTl360QG43D2
+         UEUwVYJQJn+v2Tm/K46xHvqw48oryZvzwGWvybOMqLhEao9wJCwaFhfLWrQCHCZlGfAF
+         9Xz6Si1vL7gFeawCEE+HufH2JKzJWq55Tqr00=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hDrqeCy2isEAcEZutQc18fIgv9oWhVupwebw91lgye4=;
-        b=tfnRmXX7JGZ8wMXc7xWo/4ost8mu0h55vjVfsDMlcrnH385Dn1w+7dJFee46dtj/Ks
-         NCHWk95eyoRQaFNk/idqaRyXrGO+ZvDIjGPs2C2t0UAruGKX6bGWnGdzuOrSS0tVIQIz
-         PDb+XDw++njD4jfs9vUjhRB20D02Ertb6UdtmEMrr9hQH02SpvOrMnzVGhDSywWN6etd
-         Jniu5IZvmxe513igNIntp7a7Uis+I9c8SRqx406POjdhlngJQwb2anf9xm/CUOlj9a73
-         oT9mTIIrBkYKwLjUhXjfUBo7PT6G/EgD3vWgUH7n2ITj+ThNLjf1SdOhy3YbMaNspU4t
-         8JSA==
-X-Gm-Message-State: AFqh2kpEgfBOGek0LJamnovYYJPyQGE9ovqrRGQapMFn8PYeO8yAHYSU
-        yhoIe2LPojdngPIo8e0iMMhgGBDL9096FGz3fGUikw==
-X-Google-Smtp-Source: AMrXdXu17IFbx26OPrHPKXjmemxAqNaMOD1OWegMg2ItX26DTAFbkKoo8CQ39aLybKhS2ukHUzL7EAGQYL9SN8e9NYA=
-X-Received: by 2002:a25:dd84:0:b0:756:35b9:e2de with SMTP id
- u126-20020a25dd84000000b0075635b9e2demr8569422ybg.117.1673484587884; Wed, 11
- Jan 2023 16:49:47 -0800 (PST)
+        bh=Qng87r2afyBWFugVmr/ToSxitn179pDEw8bgUuU7NSI=;
+        b=1q2yRzmAL+xsgKUbzICn8PyLyKB19L4ZvGdtZTHHHB0PDaYT+euEwiKmkeBrL72B1A
+         Z3vlAhpFvJhNvjTc7u3NswR9miPCNO2IYmGykjNeIekcM3dqNlfZQsdqYAxb1tufKiy6
+         5Ee6tFiiQQg9VwRI8Vl7PUOydJZWqqlpOdWUh/OOdXF5VyT9bcq6vc3TgW83P7kF9uF9
+         yTfSuVYvgwCvYx10pVR18uLF6+5b8hpCeVno9eD87uyzooRd5xPyBNypuBs+ZK7PquIm
+         h59HfFv5bZsyKKZzCNl9yoEyVWOMJ1TPecyN3b47OlUE/kEwEs24oSEzp5PMBiMWqf5F
+         sBLg==
+X-Gm-Message-State: AFqh2koK7ztuaG2O3LWHKaP3lcmQ/3e1YiHM1jpUtACUGitaFkeqCcJm
+        Gm1FxqAIxs+YeHiHfHl0KRC6905H5wqfqGPw
+X-Google-Smtp-Source: AMrXdXtctWPFOVAuHhWZLQkblPnhKGDs+gtqTKp2PO0wcs7YdlqORk8XfeoGeJctxn9asf49S9HzAg==
+X-Received: by 2002:ac8:5710:0:b0:3a9:86dd:3c60 with SMTP id 16-20020ac85710000000b003a986dd3c60mr137977132qtw.47.1673484753191;
+        Wed, 11 Jan 2023 16:52:33 -0800 (PST)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id z9-20020ac87ca9000000b003a7e2aea23esm8307523qtv.86.2023.01.11.16.52.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 16:52:32 -0800 (PST)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>, fweisbec@gmail.com,
+        urezki@gmail.com
+Subject: [PATCH v2 rcu/dev 1/2] rcu: Track laziness during boot and suspend
+Date:   Thu, 12 Jan 2023 00:52:22 +0000
+Message-Id: <20230112005223.2329802-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-References: <20230109213809.418135-1-tjmercier@google.com> <CALvZod4ru7F38tAO-gM9ZFKaEhS0w3KqFbPwhwcTvgJs4xMUow@mail.gmail.com>
- <Y78+rfzXPq5XGs9O@phenom.ffwll.local>
-In-Reply-To: <Y78+rfzXPq5XGs9O@phenom.ffwll.local>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Wed, 11 Jan 2023 16:49:36 -0800
-Message-ID: <CABdmKX0TAv=iRz0s+F6dVVX=xsK00BeUPkRM4bnsfemDAY9U4w@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Track exported dma-buffers with memcg
-To:     Shakeel Butt <shakeelb@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, android-mm@google.com,
-        jstultz@google.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     daniel.vetter@ffwll.ch
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 2:56 PM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Mon, Jan 09, 2023 at 04:18:12PM -0800, Shakeel Butt wrote:
-> > Hi T.J.,
-> >
-> > On Mon, Jan 9, 2023 at 1:38 PM T.J. Mercier <tjmercier@google.com> wrote:
-> > >
-> > > Based on discussions at LPC, this series adds a memory.stat counter for
-> > > exported dmabufs. This counter allows us to continue tracking
-> > > system-wide total exported buffer sizes which there is no longer any
-> > > way to get without DMABUF_SYSFS_STATS, and adds a new capability to
-> > > track per-cgroup exported buffer sizes. The total (root counter) is
-> > > helpful for accounting in-kernel dmabuf use (by comparing with the sum
-> > > of child nodes or with the sum of sizes of mapped buffers or FD
-> > > references in procfs) in addition to helping identify driver memory
-> > > leaks when in-kernel use continually increases over time. With
-> > > per-application cgroups, the per-cgroup counter allows us to quickly
-> > > see how much dma-buf memory an application has caused to be allocated.
-> > > This avoids the need to read through all of procfs which can be a
-> > > lengthy process, and causes the charge to "stick" to the allocating
-> > > process/cgroup as long as the buffer is alive, regardless of how the
-> > > buffer is shared (unless the charge is transferred).
-> > >
-> > > The first patch adds the counter to memcg. The next two patches allow
-> > > the charge for a buffer to be transferred across cgroups which is
-> > > necessary because of the way most dmabufs are allocated from a central
-> > > process on Android. The fourth patch adds a SELinux hook to binder in
-> > > order to control who is allowed to transfer buffer charges.
-> > >
-> > > [1] https://lore.kernel.org/all/20220617085702.4298-1-christian.koenig@amd.com/
-> > >
-> >
-> > I am a bit confused by the term "charge" used in this patch series.
-> > From the patches, it seems like only a memcg stat is added and nothing
-> > is charged to the memcg.
-> >
-> > This leads me to the question: Why add this stat in memcg if the
-> > underlying memory is not charged to the memcg and if we don't really
-> > want to limit the usage?
-> >
-> > I see two ways forward:
-> >
-> > 1. Instead of memcg, use bpf-rstat [1] infra to implement the
-> > per-cgroup stat for dmabuf. (You may need an additional hook for the
-> > stat transfer).
-> >
-> > 2. Charge the actual memory to the memcg. Since the size of dmabuf is
-> > immutable across its lifetime, you will not need to do accounting at
-> > page level and instead use something similar to the network memory
-> > accounting interface/mechanism (or even more simple). However you
-> > would need to handle the reclaim, OOM and charge context and failure
-> > cases. However if you are not looking to limit the usage of dmabuf
-> > then this option is an overkill.
->
-> I think eventually, at least for other "account gpu stuff in cgroups" use
-> case we do want to actually charge the memory.
->
-Yes, I've been looking at this today.
+During boot and suspend/resume, it is desired to prevent RCU laziness from
+effecting performance and in some cases failures like with suspend.
 
-> The problem is a bit that with gpu allocations reclaim is essentially "we
-> pass the error to userspace and they get to sort the mess out". There are
-> some exceptions (some gpu drivers to have shrinkers) would we need to make
-> sure these shrinkers are tied into the cgroup stuff before we could enable
-> charging for them?
->
-I'm also not sure that we can depend on the dmabuf being backed at
-export time 100% of the time? (They are for dmabuf heaps.) If not,
-that'd make calling the existing memcg folio based functions a bit
-difficult.
+Track whether RCU laziness is to be ignored or not, in kernels with
+CONFIG_RCU_LAZY enabled. We do such tracking for expedited-RCU already, however
+since Android currently expedites synchronous_rcu() always, we cannot rely on
+that. The next patch ignores laziness hints based on this tracking.
 
-> Also note that at least from the gpu driver side this is all a huge
-> endeavour, so if we can split up the steps as much as possible (and get
-> something interim useable that doesn't break stuff ofc), that is
-> practically need to make headway here. TJ has been trying out various
-> approaches for quite some time now already :-/
-> -Daniel
->
-> > Please let me know if I misunderstood something.
-> >
-> > [1] https://lore.kernel.org/all/20220824233117.1312810-1-haoluo@google.com/
-> >
-> > thanks,
-> > Shakeel
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+Paul, could we take this and the next one for 6.2 -rc cycle?
+
+I also booted debian Linux and verified the flag is reset correctly after boot
+completes. Thanks.
+
+ kernel/rcu/rcu.h    |  6 ++++++
+ kernel/rcu/tree.c   |  2 ++
+ kernel/rcu/update.c | 40 +++++++++++++++++++++++++++++++++++++++-
+ 5 files changed, 55 insertions(+), 1 deletion(-)
+ create mode 100644 cc_list
+ create mode 100644 to_list
+
+diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+index 5c8013f7085f..115616ac3bfa 100644
+--- a/kernel/rcu/rcu.h
++++ b/kernel/rcu/rcu.h
+@@ -449,14 +449,20 @@ do {									\
+ /* Tiny RCU doesn't expedite, as its purpose in life is instead to be tiny. */
+ static inline bool rcu_gp_is_normal(void) { return true; }
+ static inline bool rcu_gp_is_expedited(void) { return false; }
++static inline bool rcu_async_should_hurry(void) { return false; }
+ static inline void rcu_expedite_gp(void) { }
+ static inline void rcu_unexpedite_gp(void) { }
++static inline void rcu_async_hurry(void) { }
++static inline void rcu_async_relax(void) { }
+ static inline void rcu_request_urgent_qs_task(struct task_struct *t) { }
+ #else /* #ifdef CONFIG_TINY_RCU */
+ bool rcu_gp_is_normal(void);     /* Internal RCU use. */
+ bool rcu_gp_is_expedited(void);  /* Internal RCU use. */
++bool rcu_async_should_hurry(void);  /* Internal RCU use. */
+ void rcu_expedite_gp(void);
+ void rcu_unexpedite_gp(void);
++void rcu_async_hurry(void);
++void rcu_async_relax(void);
+ void rcupdate_announce_bootup_oddness(void);
+ #ifdef CONFIG_TASKS_RCU_GENERIC
+ void show_rcu_tasks_gp_kthreads(void);
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 63545d79da51..78b2e999c904 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4504,11 +4504,13 @@ static int rcu_pm_notify(struct notifier_block *self,
+ 	switch (action) {
+ 	case PM_HIBERNATION_PREPARE:
+ 	case PM_SUSPEND_PREPARE:
++		rcu_async_hurry();
+ 		rcu_expedite_gp();
+ 		break;
+ 	case PM_POST_HIBERNATION:
+ 	case PM_POST_SUSPEND:
+ 		rcu_unexpedite_gp();
++		rcu_async_relax();
+ 		break;
+ 	default:
+ 		break;
+diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+index 3893022f8ed8..19bf6fa3ee6a 100644
+--- a/kernel/rcu/update.c
++++ b/kernel/rcu/update.c
+@@ -144,8 +144,45 @@ bool rcu_gp_is_normal(void)
+ }
+ EXPORT_SYMBOL_GPL(rcu_gp_is_normal);
+ 
+-static atomic_t rcu_expedited_nesting = ATOMIC_INIT(1);
++static atomic_t rcu_async_hurry_nesting = ATOMIC_INIT(1);
++/*
++ * Should call_rcu() callbacks be processed with urgency or are
++ * they OK being executed with arbitrary delays?
++ */
++bool rcu_async_should_hurry(void)
++{
++	return !IS_ENABLED(CONFIG_RCU_LAZY) ||
++	       atomic_read(&rcu_async_hurry_nesting);
++}
++EXPORT_SYMBOL_GPL(rcu_async_should_hurry);
++
++/**
++ * rcu_async_hurry - Make future async RCU callbacks not lazy.
++ *
++ * After a call to this function, future calls to call_rcu()
++ * will be processed in a timely fashion.
++ */
++void rcu_async_hurry(void)
++{
++	if (IS_ENABLED(CONFIG_RCU_LAZY))
++		atomic_inc(&rcu_async_hurry_nesting);
++}
++EXPORT_SYMBOL_GPL(rcu_async_hurry);
+ 
++/**
++ * rcu_async_relax - Make future async RCU callbacks lazy.
++ *
++ * After a call to this function, future calls to call_rcu()
++ * will be processed in a lazy fashion.
++ */
++void rcu_async_relax(void)
++{
++	if (IS_ENABLED(CONFIG_RCU_LAZY))
++		atomic_dec(&rcu_async_hurry_nesting);
++}
++EXPORT_SYMBOL_GPL(rcu_async_relax);
++
++static atomic_t rcu_expedited_nesting = ATOMIC_INIT(1);
+ /*
+  * Should normal grace-period primitives be expedited?  Intended for
+  * use within RCU.  Note that this function takes the rcu_expedited
+@@ -195,6 +232,7 @@ static bool rcu_boot_ended __read_mostly;
+ void rcu_end_inkernel_boot(void)
+ {
+ 	rcu_unexpedite_gp();
++	rcu_async_relax();
+ 	if (rcu_normal_after_boot)
+ 		WRITE_ONCE(rcu_normal, 1);
+ 	rcu_boot_ended = true;
+-- 
+2.39.0.314.g84b9a713c41-goog
