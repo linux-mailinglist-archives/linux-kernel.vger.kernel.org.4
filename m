@@ -2,274 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D833E667026
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF65A666FFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjALKrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:47:24 -0500
+        id S230273AbjALKoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:44:12 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbjALKqP (ORCPT
+        with ESMTP id S231439AbjALKnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:46:15 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96DD5951B;
-        Thu, 12 Jan 2023 02:39:48 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id bn26so17662728wrb.0;
-        Thu, 12 Jan 2023 02:39:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=byw1rrNpJ6Z3f9KPEBNbtWL4cD48bu1uksgV7TXAdVk=;
-        b=QGhU437myqPQmLP7n1v4LO1lP5iyF+NSXfiNuyJy2wRJukxJ1wnVF7iC741P+F2Bb3
-         Bd5dnMwe38NFeNSnhCsyUhac4owZ+Yp5cqYD9hKYUYE2S8wk6CAHkGgrq3RqS6pPMRpo
-         MX0+wBYdQ9dUwNaZgCocNLTkieVIAlzRB3uyKy8wU2s9dVcEYgzY6XzB77im5Y7ExqNH
-         ubN2Zh4Y+pCdWURH9r4pIx+uy1DDEL0RvpQJV5aEA3+z4WGfV8Hm5cb/jk3p3BdJugBG
-         tIAvywGW8bWxeI7YqXEnZ5rogCBpNL/1QxvIuhLNXvl7O9IJYuBl7TQoWr11PaI2/NGi
-         na9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=byw1rrNpJ6Z3f9KPEBNbtWL4cD48bu1uksgV7TXAdVk=;
-        b=0vBwknOTOs/oTDSDdJfDonHgxL4fYPhahBZBbOCLDmlyDXxx9o/R0jjlb5P7kORNmn
-         u7l1ATVHIaOWibKtK3rPBnGAgMljkubXgIgU8rXdAbAE++t0tvhwH2700MIFQDZBxuD5
-         tEDXN8IbKoIVFGS07UJonAlMiheCJ4M3rgartLgWApobPKsOr4vwkJT8xx1pcPajKSGj
-         2B10ObPCIcBAdAJdfjtReE7TjDeJgqRA1HUK/ITNkhNYHPGB5CnboZr3z/9IC3lHIH2+
-         FmzKf7ZqjB/w/dwpej5dHPlTJVOOEXiT61GApSjcUpVUV3YVg1E7XsdHXcFmB+DMrmK4
-         ssRw==
-X-Gm-Message-State: AFqh2krNu5WMCHf41Fm9w9lHN33VMH6EfwYE06S5JUXU0C/ItyyPOaF/
-        h2aFb6VO8T4kT8aysI0sZ+WXqoeZXrY=
-X-Google-Smtp-Source: AMrXdXvZ75oFcwstAfEoXIfEyRfDIDXm4vK9P+rt4cbGykKOr6t6ZEJ/fYKHQkfF+8Pr3aqByrTh2Q==
-X-Received: by 2002:adf:ecc1:0:b0:26e:666:3a08 with SMTP id s1-20020adfecc1000000b0026e06663a08mr48835323wro.69.1673519987462;
-        Thu, 12 Jan 2023 02:39:47 -0800 (PST)
-Received: from ?IPV6:2620:10d:c096:310::21ef? ([2620:10d:c092:600::2:478])
-        by smtp.gmail.com with ESMTPSA id j11-20020adfd20b000000b0024207478de3sm16129134wrh.93.2023.01.12.02.39.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 02:39:47 -0800 (PST)
-Message-ID: <24c14545-53ee-7217-0eab-584516f8dbed@gmail.com>
-Date:   Thu, 12 Jan 2023 10:38:19 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [syzbot] KASAN: use-after-free Read in __io_req_task_work_add
+        Thu, 12 Jan 2023 05:43:01 -0500
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2082.outbound.protection.outlook.com [40.107.14.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC6E51327;
+        Thu, 12 Jan 2023 02:38:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J3zdnMlkjnqLXg3daS9eV/LXLpt4Oz7zXWXaVmqXpR38wWLtf/fm0a+uWjDsjJlfOov2ShJ1yeGkN6ndk13p/bQ7/qX9YRhkpNfcWThovanKL8YAcoK+4U2TtI3l5RsurxqVPb2DhZqOtbnfV3TjQLo3o1oydjDcRKyYDSY741I2LFBUV43ncjKbKEo7q9mUtvrdkLdJsKc/Ixvsaqkob5m/b5wOC1HVaea73tLJaJ7J4Whx+Z2suTG90MtnHRcpF2hgMe/W+Md3omMReahvcvZiiT8B0eyv8+m1G1wYgSRkm/7S5mLROv5RPVqBh6usaCo7dViVvtbVdOO8XAXghA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Lwgvv+q2oxR9b9x4+zYL8B/WHAX3bPUFmPJ8T2jT3fE=;
+ b=LloDQhj+dDJ+4xninG7LQXGeZJ48adeNasKYD4vHIc5siEtTvAYvS/0nTFLELYEyGTrN5QD+V4FZTtNJKJHqWfUA6xLrzFU8bDMn0XFV4/Lig0kXC91AoebTuWCVflT0kB2L+d/xa/W7gkfVC3DyBiz449DWzTBPHj7TbaajiXBZDUPf2UnQ4IEttpTrAXPkHD1tCjGZAfX/Bgu+rzPgS1a9X+woy4PZPx+lKNJasaG6h702D1Wt7PwMPgRDFvdTmJy7m0df87rVslU8UxOKgsnCZmttaJNzD7KHaR0o7bT7VMhtYeJA01r/smnL50K5zG6C+z+EJ1qIZhMk2J1E3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bosch-sensortec.com; dmarc=pass action=none
+ header.from=bosch-sensortec.com; dkim=pass header.d=bosch-sensortec.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bosch-sensortec.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Lwgvv+q2oxR9b9x4+zYL8B/WHAX3bPUFmPJ8T2jT3fE=;
+ b=MlomOiwxZdpUniCEuJWyRKbs/IQZEshNccqEUABhhfIg120Yq8Dck4AIPbZ73pcQFJ4iy29/+W4slrxUDKgXS2ZYOvRwwEHUQUhq/95yLEeAMdC4sl+KpeozyzNxm4zn86KcKV3tH1EJqZ3q1i6YGnLtc+Q1jJYjSoR9koPLE20=
+Received: from DU0PR10MB6608.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:403::14)
+ by AM0PR10MB3602.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:15f::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Thu, 12 Jan
+ 2023 10:38:20 +0000
+Received: from DU0PR10MB6608.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::5e32:5c80:72f9:3605]) by DU0PR10MB6608.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::5e32:5c80:72f9:3605%8]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
+ 10:38:20 +0000
+From:   "Contact Bosch-Sensortec (BST/SA)" 
+        <Bosch-Sensortec.Contact@bosch-sensortec.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>
+CC:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "ak@it-klinger.de" <ak@it-klinger.de>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "nikita.yoush@cogentembedded.com" <nikita.yoush@cogentembedded.com>,
+        "paul@crapouillou.net" <paul@crapouillou.net>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
+Subject: RE: [PATCH v2 3/5] iio: pressure: bmp280: Add support for new sensor
+ BMP580
+Thread-Topic: [PATCH v2 3/5] iio: pressure: bmp280: Add support for new sensor
+ BMP580
+Thread-Index: AQHZI1wa513kGEg2hUaJjuLn/fnwTq6anOog
+Date:   Thu, 12 Jan 2023 10:38:20 +0000
+Message-ID: <DU0PR10MB6608FA4549764C670DB9E214FBFD9@DU0PR10MB6608.EURPRD10.PROD.OUTLOOK.COM>
+References: <cover.1672062380.git.ang.iglesiasg@gmail.com>
+        <c053976f56c3810915ca2ead6c358b5997b782e5.1672062380.git.ang.iglesiasg@gmail.com>
+        <d0e98b2d-1c00-b7cc-d0b3-4477e27cf822@wanadoo.fr>
+        <8c4826ea5698e4e1b2910f5b01e66a41970a8053.camel@gmail.com>
+        <20221230182253.45fcfdf4@jic23-huawei>
+        <0f86cf66a14b4d5900ddee68cd7b49807128b7e9.camel@gmail.com>
+ <20230108123501.3f88c11c@jic23-huawei>
+In-Reply-To: <20230108123501.3f88c11c@jic23-huawei>
+Accept-Language: en-US
 Content-Language: en-US
-To:     syzbot <syzbot+01db4d8aed628ede44b1@syzkaller.appspotmail.com>,
-        axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000044bca05f20e8e16@google.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <000000000000044bca05f20e8e16@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bosch-sensortec.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR10MB6608:EE_|AM0PR10MB3602:EE_
+x-ms-office365-filtering-correlation-id: 75f2caf9-aab6-4119-9788-08daf4891f8e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qxp/k/jeVBdb+TSYga4kbLifUf2rU4xoe5xYsRpgjEBAMlgfNLzwWJALMF5NhBwEAp+IlcbfMmOCrM4iKLLA94d5pyjgMT57pxbP4tww8TtK2Zn39B/SYYo1n1UfDnna/gaUGD0dmSIqm879gejSjyX16NJV3JUP+6nbmhJdGjHHqQXAP1Komq+dpD7euuQWbiPE19e5VKeZXZsdG88c87gVUIRTgZ+PQJ2evbtnJQRbA/xa0Z6Yg8J9DYx4+LRCdcnOdW+Yd8c0ctEEaRbuZp/3UGS/1IHlnmMdbbSKsde24vAmmCFU+pxE5dofBvNW1DLBad4I79i2OtkBCEy9I3g9ZCX+SmRBu3ZUtqXrTr7yb+wq44YoPjDxp65fUU2Uc1G02F4zWf3qQfwM2/mEK/gFQ1C+ICcNkc7p8IMtYiDXGjRGSOGmykR7AgtIMQ8A6FnKXYd6A2mhwWC9xizBiSvPEajixaH+otTp662tmzVYKEjaojd3rBzh17DBjw5dlyYbStrRnoJ5XooB3t3/DrbrXoKA+NUvAi8nOR/55LcQ8i/SmvhTw6JGXAGb4xxaFFhyauBy0a4DNFTHQ+au3mIBW9nIZO45Jrr3qw81jnXefNSR8+j9r+1p9l1cfzXv2Ezdi0zfQxpHNPGPUjm4Yb2dCiW2vc2y2aBqgEyrUukaWIOYuR5wXXHCxlrid3OShlzajpBj0RtSK0PYNN9gzKjNZ2M9yQOKUYeDDL2zsKA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR10MB6608.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(396003)(39860400002)(136003)(451199015)(4001150100001)(2906002)(66574015)(83380400001)(33656002)(478600001)(9686003)(66446008)(66476007)(64756008)(7416002)(55016003)(66556008)(5660300002)(66946007)(52536014)(8936002)(53546011)(122000001)(26005)(186003)(6506007)(7696005)(82960400001)(41300700001)(38100700002)(110136005)(8676002)(54906003)(76116006)(86362001)(15974865002)(38070700005)(966005)(316002)(71200400001)(4326008)(45080400002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Wwt/b7wO4qNasjEPYDxtd0aJBuXa7rhFgZ9iP0zcScGjJ76PL20VoxE8iz?=
+ =?iso-8859-1?Q?imEOkicdu4IMORPqxnezOlLAQtt/k6WhPBOydtE2asVtxjOfVgN2NlDt0w?=
+ =?iso-8859-1?Q?MV9jezPi5G1x6t/p0fNqCVIwQvV+ga0wFE82AfVu5zJTPvE5We6lNy8mUK?=
+ =?iso-8859-1?Q?SU60RKTxdT3/raZ/4H+ic9sd1tqn6rrkCmgRi7K2jKnWsBsZ8qKTvvTDhG?=
+ =?iso-8859-1?Q?XlsnZ7+HvD5q43R2FXwQDNfEA+AljDRtmxVC+whXvLvGjrv15ch0LKpckP?=
+ =?iso-8859-1?Q?QPSPLp3pgqhPquemmm5hhmrAvOHN3rsQi4FG/nmwu++/Si0Z2VFgaXsedr?=
+ =?iso-8859-1?Q?A7wht0uZu+ucmbgFCeIysvs/wIDQfwE5nSIkc90uuCRlPhp1o1VW3dzeYZ?=
+ =?iso-8859-1?Q?dRlIXh8GTSpGgE+uXrvYZuvd4iQzi/nfo8xmvxwhbR+jvbwM4RQ0vxpymz?=
+ =?iso-8859-1?Q?DLOTGRmu50k00AcUU1W3N3g1T1u0e3G8KH/I6JVDQyZ9LNwJYMcwFqQlRO?=
+ =?iso-8859-1?Q?Icfv89q/HiNP3t8tsT/DXHBu1UiBlWzAHEc6Xhn7e8HZDkV5078wsS8uAT?=
+ =?iso-8859-1?Q?+c22oG+hihVZtlyk3BljrgWgUN8cjv7SdPUn8XxqTtBgQ+4nHrroorP/aN?=
+ =?iso-8859-1?Q?5P7GZvZCY+nZCJ+t8D+p1CiH3PRuMJPEtmzQoBIEo+39taw16ZXGYK05bT?=
+ =?iso-8859-1?Q?4xZMjMcta/8gxWcdQZ0i4wrXbjkWf98eAxAzgaTHx38D4++PCTeyHD+7NG?=
+ =?iso-8859-1?Q?s0MrtJtoS7FLJA2gySxhqGAc1OMhg2zAsoESL0jE55myi+SZTRnhbRkRM8?=
+ =?iso-8859-1?Q?Gv2LNz429jgHr3hR+UHWJCF8D9fgDb87tVRY8xn+1eKtSiX6k8xYrDTSdX?=
+ =?iso-8859-1?Q?MG4aD1xQBFAy9gNu0xPeLB+D2TqsombfpiOoo4YOShgWr7AqIIaEmHryCz?=
+ =?iso-8859-1?Q?orRDlUWOZAp7+JxMBdZBzgfNqH9ORV7Enu4FTEtMRQM8Ck5SsS3BpQRd61?=
+ =?iso-8859-1?Q?vJGwuSl0QsBWT4FOb5+YdJiFl14JDIo0eJek96rAOP/k7frewIwkeBav0f?=
+ =?iso-8859-1?Q?gayk5md723qBXJKRg990rMXOXtUv4604SX3YbTW+vdDPvHprT0gYV2URjl?=
+ =?iso-8859-1?Q?ZTCCVrWrxeqn/QClxfHQdf3s5AUZvgas0Q/HyL5F8vDtKxv2EXD1zGw5BK?=
+ =?iso-8859-1?Q?qKsklqrREX73z/lY3e0ZH6AicMgi1uZugKkpKEipvCGnd3liliUYNJcnfD?=
+ =?iso-8859-1?Q?6bUz6nCfGFqlp5kklnXSyZtzwSUCY+fUYqCAL7c3vBSv4Ewyl4yxhjlj+M?=
+ =?iso-8859-1?Q?+w2C5bqTHNeleWLFIJOzbU6mUHnBLvvjXIizFkvy8W37OyePZigMt+x+Ut?=
+ =?iso-8859-1?Q?AqDtIK6tei1y/8iLjkOD2V9lL8Ds06rrxs3rKV6363q4TYuCDkkfmTKivD?=
+ =?iso-8859-1?Q?4LbQVFkNIqcK43emP/AJY6IgVNPObt/mz04cWPxnX/jzkgD1dCM1TzC1AD?=
+ =?iso-8859-1?Q?5Q7rkh3ubUhkMmsXklKWUbqR95VSgHld3h6/KFkdc7RSWIyPyfZUK/E1PN?=
+ =?iso-8859-1?Q?nL16EJBjozsUSGT3lyWbyL9keA7Id18Rd6MgQp/SPF7IE3IQLHvvOLxq+C?=
+ =?iso-8859-1?Q?oNa46WF9dJS5xJ5bxR60tiKApKvd+LXHiD?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: bosch-sensortec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR10MB6608.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75f2caf9-aab6-4119-9788-08daf4891f8e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2023 10:38:20.3169
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0ae51e19-07c8-4e4b-bb6d-648ee58410f4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: knBgsh+fXbl5NZkou51pQJ16E+9sh2aQHsLWrdh5RKlA45dyZ0bsDYCzNuFSAIDZuHfu4u2woI88kMXGDa0JQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB3602
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HTTP_ESCAPED_HOST,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 10:26, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=111a5a86480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=01db4d8aed628ede44b1
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
+Dear Jonathan and Angel,
 
-#syz test: git://git.kernel.dk/linux.git syztest
+Aligned with our product management, we can confirm that the CHIP-IDs are i=
+dentiacal, this is correct.
 
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+01db4d8aed628ede44b1@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: use-after-free in __io_req_task_work_add+0x6b4/0x760 io_uring/io_uring.c:1287
-> Read of size 8 at addr ffff888027236018 by task syz-executor.3/11047
-> 
-> CPU: 0 PID: 11047 Comm: syz-executor.3 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> Call Trace:
->   <TASK>
->   __dump_stack lib/dump_stack.c:88 [inline]
->   dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
->   print_address_description mm/kasan/report.c:306 [inline]
->   print_report+0x15e/0x45d mm/kasan/report.c:417
->   kasan_report+0xc0/0xf0 mm/kasan/report.c:517
->   __io_req_task_work_add+0x6b4/0x760 io_uring/io_uring.c:1287
->   io_req_task_work_add io_uring/io_uring.h:95 [inline]
->   __io_poll_execute io_uring/poll.c:366 [inline]
->   io_poll_execute.constprop.0+0x15b/0x190 io_uring/poll.c:372
->   io_poll_cancel_req io_uring/poll.c:379 [inline]
->   io_poll_remove_all_table+0x26d/0x2bd io_uring/poll.c:741
->   io_poll_remove_all+0x2e/0x4b io_uring/poll.c:759
->   io_ring_ctx_wait_and_kill+0x1a0/0x340 io_uring/io_uring.c:3017
->   io_uring_release+0x46/0x4a io_uring/io_uring.c:3042
->   __fput+0x27c/0xa90 fs/file_table.c:321
->   task_work_run+0x16f/0x270 kernel/task_work.c:179
->   exit_task_work include/linux/task_work.h:38 [inline]
->   do_exit+0xb17/0x2a90 kernel/exit.c:867
->   do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
->   __do_sys_exit_group kernel/exit.c:1023 [inline]
->   __se_sys_exit_group kernel/exit.c:1021 [inline]
->   __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1021
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7fd01608c0c9
-> Code: Unable to access opcode bytes at 0x7fd01608c09f.
-> RSP: 002b:00007ffe4aaf8e78 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> RAX: ffffffffffffffda RBX: 000000000000001e RCX: 00007fd01608c0c9
-> RDX: 00007fd01603df7b RSI: ffffffffffffffb8 RDI: 0000000000000000
-> RBP: 0000000000000000 R08: 0000000023b38e02 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-> R13: 0000000000000000 R14: 0000000000000001 R15: 00007ffe4aaf8f60
->   </TASK>
-> 
-> Allocated by task 11047:
->   kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->   kasan_set_track+0x25/0x30 mm/kasan/common.c:52
->   __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
->   kasan_slab_alloc include/linux/kasan.h:186 [inline]
->   slab_post_alloc_hook mm/slab.h:769 [inline]
->   slab_alloc_node mm/slub.c:3452 [inline]
->   kmem_cache_alloc_node+0x183/0x350 mm/slub.c:3497
->   alloc_task_struct_node kernel/fork.c:171 [inline]
->   dup_task_struct kernel/fork.c:979 [inline]
->   copy_process+0x3aa/0x7740 kernel/fork.c:2103
->   kernel_clone+0xeb/0x9a0 kernel/fork.c:2687
->   __do_sys_clone+0xba/0x100 kernel/fork.c:2828
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> Freed by task 15:
->   kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->   kasan_set_track+0x25/0x30 mm/kasan/common.c:52
->   kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
->   ____kasan_slab_free mm/kasan/common.c:236 [inline]
->   ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
->   kasan_slab_free include/linux/kasan.h:162 [inline]
->   slab_free_hook mm/slub.c:1781 [inline]
->   slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
->   slab_free mm/slub.c:3787 [inline]
->   kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
->   put_task_struct include/linux/sched/task.h:119 [inline]
->   delayed_put_task_struct+0x26e/0x3f0 kernel/exit.c:225
->   rcu_do_batch kernel/rcu/tree.c:2113 [inline]
->   rcu_core+0x821/0x1920 kernel/rcu/tree.c:2373
->   __do_softirq+0x1fb/0xaf6 kernel/softirq.c:571
-> 
-> Last potentially related work creation:
->   kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->   __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:488
->   __call_rcu_common.constprop.0+0x99/0x780 kernel/rcu/tree.c:2622
->   put_task_struct_rcu_user+0x83/0xc0 kernel/exit.c:231
->   context_switch kernel/sched/core.c:5304 [inline]
->   __schedule+0x25d8/0x5a70 kernel/sched/core.c:6619
->   preempt_schedule_common+0x45/0xc0 kernel/sched/core.c:6788
->   preempt_schedule_thunk+0x1a/0x20 arch/x86/entry/thunk_64.S:34
->   __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:160 [inline]
->   _raw_spin_unlock_irq+0x40/0x50 kernel/locking/spinlock.c:202
->   spin_unlock_irq include/linux/spinlock.h:400 [inline]
->   do_group_exit+0x1c5/0x2a0 kernel/exit.c:1009
->   __do_sys_exit_group kernel/exit.c:1023 [inline]
->   __se_sys_exit_group kernel/exit.c:1021 [inline]
->   __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1021
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> Second to last potentially related work creation:
->   kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->   __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:488
->   __call_rcu_common.constprop.0+0x99/0x780 kernel/rcu/tree.c:2622
->   put_task_struct_rcu_user+0x83/0xc0 kernel/exit.c:231
->   release_task+0xcc8/0x1870 kernel/exit.c:281
->   wait_task_zombie kernel/exit.c:1198 [inline]
->   wait_consider_task+0x306d/0x3ce0 kernel/exit.c:1425
->   do_wait_thread kernel/exit.c:1488 [inline]
->   do_wait+0x7cd/0xd90 kernel/exit.c:1605
->   kernel_wait4+0x150/0x260 kernel/exit.c:1768
->   __do_sys_wait4+0x13f/0x150 kernel/exit.c:1796
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> The buggy address belongs to the object at ffff8880272357c0
->   which belongs to the cache task_struct of size 7232
-> The buggy address is located 2136 bytes inside of
->   7232-byte region [ffff8880272357c0, ffff888027237400)
-> 
-> The buggy address belongs to the physical page:
-> page:ffffea00009c8c00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x27230
-> head:ffffea00009c8c00 order:3 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-> memcg:ffff8880219a5c01
-> ksm flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-> raw: 00fff00000010200 ffff8880125ec500 ffffea0000ab3800 dead000000000003
-> raw: 0000000000000000 0000000000040004 00000001ffffffff ffff8880219a5c01
-> page dumped because: kasan: bad access detected
-> page_owner tracks the page as allocated
-> page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 56, tgid 56 (kworker/u4:4), ts 11164250893, free_ts 0
->   prep_new_page mm/page_alloc.c:2549 [inline]
->   get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
->   __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
->   alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
->   alloc_slab_page mm/slub.c:1851 [inline]
->   allocate_slab+0x25f/0x350 mm/slub.c:1998
->   new_slab mm/slub.c:2051 [inline]
->   ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
->   __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
->   __slab_alloc_node mm/slub.c:3345 [inline]
->   slab_alloc_node mm/slub.c:3442 [inline]
->   kmem_cache_alloc_node+0x136/0x350 mm/slub.c:3497
->   alloc_task_struct_node kernel/fork.c:171 [inline]
->   dup_task_struct kernel/fork.c:979 [inline]
->   copy_process+0x3aa/0x7740 kernel/fork.c:2103
->   kernel_clone+0xeb/0x9a0 kernel/fork.c:2687
->   user_mode_thread+0xb1/0xf0 kernel/fork.c:2763
->   call_usermodehelper_exec_work kernel/umh.c:175 [inline]
->   call_usermodehelper_exec_work+0xd0/0x180 kernel/umh.c:161
->   process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
->   worker_thread+0x669/0x1090 kernel/workqueue.c:2440
->   kthread+0x2e8/0x3a0 kernel/kthread.c:376
->   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-> page_owner free stack trace missing
-> 
-> Memory state around the buggy address:
->   ffff888027235f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff888027235f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->> ffff888027236000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                              ^
->   ffff888027236080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff888027236100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ==================================================================
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
--- 
-Pavel Begunkov
+Best regards,
+
+Bosch Sensortec Sales Support
+
+Bosch Sensortec GmbH | Gerhard-Kindler-Stra=DFe 9 | 72770 Reutlingen | GERM=
+ANY | www.bosch-sensortec.com=20
+
+
+Sitz: Kusterdingen, Registergericht: Stuttgart HRB 382674,
+Ust.IdNr. DE 183276693 - Steuer-Nr. 99012/08040
+Gesch=E4ftsf=FChrung: Stefan Finkbeiner, Jens-Knut Fabrowsky
+
+
+
+-----Original Message-----
+From: Jonathan Cameron <jic23@kernel.org>=20
+Sent: Sonntag, 8. Januar 2023 13:35
+To: Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>; ak@it-klinger.de; a=
+ndriy.shevchenko@linux.intel.com; devicetree@vger.kernel.org; krzysztof.koz=
+lowski+dt@linaro.org; lars@metafoo.de; linux-iio@vger.kernel.org; linux-ker=
+nel@vger.kernel.org; nikita.yoush@cogentembedded.com; paul@crapouillou.net;=
+ rafael.j.wysocki@intel.com; robh+dt@kernel.org; ulf.hansson@linaro.org; Co=
+ntact Bosch-Sensortec (BST/SA) <contact@bosch-sensortec.com>
+Subject: Re: [PATCH v2 3/5] iio: pressure: bmp280: Add support for new sens=
+or BMP580
+
+On Sun, 01 Jan 2023 12:16:28 +0100
+Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
+
+> On Fri, 2022-12-30 at 18:22 +0000, Jonathan Cameron wrote:
+> > On Thu, 29 Dec 2022 19:23:16 +0100
+> > Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
+> >  =20
+> > > On Thu, 2022-12-29 at 18:35 +0100, Christophe JAILLET wrote: =20
+> > > > Le 26/12/2022 =E0 15:29, Angel Iglesias a =E9crit=A0:=A0  =20
+> > > > > Adds compatibility with the new sensor generation, the BMP580.
+> > > > >=20
+> > > > > The measurement and initialization codepaths are adapted from=20
+> > > > > the device datasheet and the repository from manufacturer at=20
+> > > > > https://eur03.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F=
+%2Fgithub.com%2Fboschsensortec%2FBMP5-Sensor-API&data=3D05%7C01%7Ccontact%4=
+0bosch-sensortec.com%7C5df3784517c940394e8308daf172e38e%7C0ae51e1907c84e4bb=
+b6d648ee58410f4%7C0%7C0%7C638087774478147184%7CUnknown%7CTWFpbGZsb3d8eyJWIj=
+oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7=
+C&sdata=3DYarsZiHIZ%2FBkNNqK%2FunjfVWGgIwOtvf%2BPXs8ipHQdRQ%3D&reserved=3D0=
+.
+> > > > >=20
+> > > > > Signed-off-by: Angel Iglesias
+> > > > > <ang.iglesiasg-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+> > > > > =A0  =20
+> > > >=20
+> > > > [...]
+> > > > =A0  =20
+> > > > > diff --git a/drivers/iio/pressure/bmp280.h=20
+> > > > > b/drivers/iio/pressure/bmp280.h index=20
+> > > > > efc31bc84708..27d2abc17d01 100644
+> > > > > --- a/drivers/iio/pressure/bmp280.h
+> > > > > +++ b/drivers/iio/pressure/bmp280.h=A0  =20
+> > > >=20
+> > > > [...]
+> > > > =A0  =20
+> > > > > +#define BMP580_CHIP_ID=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A00x50
+> > > > > =A0 #define BMP380_CHIP_ID=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A00x50=A0  =20
+> > > >=20
+> > > > Hi,
+> > > >=20
+> > > > this is maybe correct (I've not been able to find the datasheet to =
+check=20
+> > > > myself), but it looks odd to have the same ID for 2 different chips=
+.=A0  =20
+> > >=20
+> > > Yes, I also couldn't find a datasheet for the BMP580 or a devkit anyw=
+here.
+> > > I'm
+> > > developing this using the BMP581, which seems to be a variant=20
+> > > almost identical.
+> > > Something similar happened with the BMP38x; you could find the=20
+> > > BMP384 and the BMP388, but the BMP380 was unavailable everywhere,=20
+> > > datasheet included. My guess is this is a similar situation. In=20
+> > > any case, the datasheet of the BMP581 is available here:
+> > > https://eur03.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F
+> > > www.bosch-sensortec.com%2Fmedia%2Fboschsensortec%2Fdownloads%2Fdat
+> > > asheets%2Fbst-bmp581-ds004.pdf&data=3D05%7C01%7Ccontact%40bosch-sens
+> > > ortec.com%7C5df3784517c940394e8308daf172e38e%7C0ae51e1907c84e4bbb6
+> > > d648ee58410f4%7C0%7C0%7C638087774478147184%7CUnknown%7CTWFpbGZsb3d
+> > > 8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3
+> > > D%7C3000%7C%7C%7C&sdata=3DdNnnClouPfqXntLuTWGQovRw39ehaLeuzKuN%2FNWI
+> > > 8y0%3D&reserved=3D0
+> > >=20
+> > > Regarding the chip id being the same between generations is weird,=20
+> > > but at least the datasheet and the sensor I have uses 0x50 as the=20
+> > > chip id. After you mentioned this, I checked back on the reference=20
+> > > API repository from Bosch and it has both 0x50 and 0x51 as valid=20
+> > > IDs:
+> > > *
+> > > https://eur03.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F
+> > > github.com%2Fboschsensortec%2FBMP5-Sensor-API%2Fblob%2Fmaster%2Fbm
+> > > p5_defs.h%23L198&data=3D05%7C01%7Ccontact%40bosch-sensortec.com%7C5d
+> > > f3784517c940394e8308daf172e38e%7C0ae51e1907c84e4bbb6d648ee58410f4%
+> > > 7C0%7C0%7C638087774478147184%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wL
+> > > jAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C
+> > > %7C&sdata=3DtZgYdnxpvKIndjtJaaFfcAJbBa4%2FcIgKhb4XH6sAO9A%3D&reserve
+> > > d=3D0
+> > > *=20
+> > > https://eur03.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F
+> > > github.com%2Fboschsensortec%2FBMP5-Sensor-API%2Fblob%2Fmaster%2Fbm
+> > > p5.c%23L1444&data=3D05%7C01%7Ccontact%40bosch-sensortec.com%7C5df378
+> > > 4517c940394e8308daf172e38e%7C0ae51e1907c84e4bbb6d648ee58410f4%7C0%
+> > > 7C0%7C638087774478147184%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwM
+> > > DAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&
+> > > sdata=3DxU9Yh2zXjol0vyF9iltRmkBK3CUlGGdcjrp3AzwvTNU%3D&reserved=3D0
+> > https://eur03.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgi
+> > thub.com%2Fboschsensortec%2FBMP3-Sensor-API%2Fblob%2Fmaster%2Fbmp3_d
+> > efs.h&data=3D05%7C01%7Ccontact%40bosch-sensortec.com%7C5df3784517c9403
+> > 94e8308daf172e38e%7C0ae51e1907c84e4bbb6d648ee58410f4%7C0%7C0%7C63808
+> > 7774478147184%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2
+> > luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DfaQZ4qjLF
+> > jfYN2US64FbZJo%2B5lOuFw52mIY3XqoXDKU%3D&reserved=3D0
+> > I was curious on whether we had a wrong value for bmp380, but nope... S=
+ame ID.
+> >=20
+> > Huh. As per earlier comment - who wants to moan at Bosch as this is=20
+> > crazy situation?
+> >=20
+> > Jonathan
+>=20
+> Well I'm doing this in my free time beacuse I wanted to setup a meteo=20
+> station and got annoyed needing to patch-up userspace code for reading=20
+> pressure and temperature sensors on a very underpowered ARM device=20
+> when there is a kernel subsystem for this kind of things. The rest is his=
+tory on the mailing list.
+> I don't think I have any leverage to have Bosch listening to my=20
+> complaints
+
+Sadly I don't have a good contact in Bosch. So all we can do is +CC the con=
+tact address.
+
+If anyone else has a good channel to point out this silliness please do!
+
+Jonathan
+
+>=20
+> Angel
+>=20
+> >  =20
+> > >=20
+> > > Angel
+> > >  =20
+> > > > CJ
+> > > > =A0  =20
+> > > > > =A0 #define BMP180_CHIP_ID=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A00x55
+> > > > > =A0 #define BMP280_CHIP_ID=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A00x58=A0  =20
+> > > > =A0  =20
+> > >  =20
+> >  =20
+>=20
+
