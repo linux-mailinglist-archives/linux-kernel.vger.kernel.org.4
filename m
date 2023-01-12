@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B2A6667DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 01:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AADE6667E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 01:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236067AbjALAhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 19:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S235936AbjALAhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 19:37:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235845AbjALAhD (ORCPT
+        with ESMTP id S235898AbjALAhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 19:37:03 -0500
+        Wed, 11 Jan 2023 19:37:09 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 655D317E1F
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:36:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3ADF3C707
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:36:57 -0800 (PST)
 Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8AxHusnVr9j2hIBAA--.3376S3;
-        Thu, 12 Jan 2023 08:36:55 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8Cxe+ooVr9j4BIBAA--.3177S3;
+        Thu, 12 Jan 2023 08:36:56 +0800 (CST)
 Received: from localhost.localdomain (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbL4kVr9jLyEYAA--.43573S3;
-        Thu, 12 Jan 2023 08:36:54 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbL4kVr9jLyEYAA--.43573S4;
+        Thu, 12 Jan 2023 08:36:55 +0800 (CST)
 From:   Jinyang He <hejinyang@loongson.cn>
 To:     Huacai Chen <chenhuacai@kernel.org>,
         WANG Xuerui <kernel@xen0n.name>,
@@ -29,19 +29,19 @@ Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH v3 1/5] LoongArch: Get frame info in unwind_start when regs is not supported
-Date:   Thu, 12 Jan 2023 08:36:23 +0800
-Message-Id: <20230112003627.26111-2-hejinyang@loongson.cn>
+Subject: [PATCH v3 2/5] LoongArch: Use correct sp value to get graph addr in unwinder guess
+Date:   Thu, 12 Jan 2023 08:36:24 +0800
+Message-Id: <20230112003627.26111-3-hejinyang@loongson.cn>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230112003627.26111-1-hejinyang@loongson.cn>
 References: <20230112003627.26111-1-hejinyang@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxbL4kVr9jLyEYAA--.43573S3
+X-CM-TRANSID: AQAAf8DxbL4kVr9jLyEYAA--.43573S4
 X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxCr1rKFykXr47urWrCrWktFb_yoW5Zw13p3
-        9xCrs3Wr45uF9Fqr9rtw1kZr95Grn7uw12gF9rJ34rC3W7XFyxuwnYv34DZan0y3yvgw10
-        qFn5KrW5Ka1UJaUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+X-Coremail-Antispam: 1Uk129KBjvJXoW3Gw1fAFWUCF43CF43XFWfuFg_yoWxJr4kpF
+        9xCas3GrWxWryqgrnrXr1jvrn5Crn2kw12gFyDJ34FkFnrXry3Grn0v3yqvF4DJ3y8Wr48
+        XFn5GrW5KanrG3JanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
         qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
         bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
         1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
@@ -52,104 +52,185 @@ X-Coremail-Antispam: 1Uk129KBjvJXoWxCr1rKFykXr47urWrCrWktFb_yoW5Zw13p3
         67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
         AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
         xVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
-        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_
+        Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
         CTnIWIevJa73UjIFyTuYvjxUxhiSDUUUU
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At unwind_start, it is better to try to get its frame info even we not
-support regs rather than get them outside. So that we can simply use
-unwind_{start, next_frame, done} outside.
+The stack frame when function_graph enable like follows,
+
+---------  <- function sp_on_entry
+    |
+    |
+    |
+ FAKE_RA   <- sp_on_entry - sizeof(pt_regs) + PT_R1
+    |
+---------  <- sp_on_entry - sizeof(pt_regs)
+
+So if we want to get the &FAKE_RA we should get sp_on_entry first.
+In unwinder_prologue case, we can get the sp_on_entry as state->sp,
+because we try to calculate each CFA and the ra saved address.
+But in unwinder_guess case, we cannot get it because we do not try
+to calculate the CFA. Although LoongArch have not fixed frame, the
+$ra is saved at CFA - 8 in most cases, we can try guess, too.
+As we store the pc in state, we not need to dereference state->sp, too.
 
 Signed-off-by: Jinyang He <hejinyang@loongson.cn>
 ---
- arch/loongarch/kernel/process.c         | 12 +++---------
- arch/loongarch/kernel/unwind_guess.c    |  6 ++++++
- arch/loongarch/kernel/unwind_prologue.c | 16 +++++++++++++---
- 3 files changed, 22 insertions(+), 12 deletions(-)
+ arch/loongarch/include/asm/ftrace.h     |  2 --
+ arch/loongarch/include/asm/unwind.h     |  9 +++++++++
+ arch/loongarch/kernel/unwind_guess.c    | 12 ++++--------
+ arch/loongarch/kernel/unwind_prologue.c | 22 ++++++----------------
+ 4 files changed, 19 insertions(+), 26 deletions(-)
 
-diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-index 502b8b950057..6ef45174ad35 100644
---- a/arch/loongarch/kernel/process.c
-+++ b/arch/loongarch/kernel/process.c
-@@ -197,20 +197,14 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
+index 90f9d3399b2a..3418d32d4fc7 100644
+--- a/arch/loongarch/include/asm/ftrace.h
++++ b/arch/loongarch/include/asm/ftrace.h
+@@ -10,8 +10,6 @@
+ #define FTRACE_REGS_PLT_IDX	1
+ #define NR_FTRACE_PLTS		2
  
- unsigned long __get_wchan(struct task_struct *task)
- {
--	unsigned long pc;
-+	unsigned long pc = 0;
- 	struct unwind_state state;
+-#define GRAPH_FAKE_OFFSET (sizeof(struct pt_regs) - offsetof(struct pt_regs, regs[1]))
+-
+ #ifdef CONFIG_FUNCTION_TRACER
  
- 	if (!try_get_task_stack(task))
- 		return 0;
+ #define MCOUNT_INSN_SIZE 4		/* sizeof mcount call */
+diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
+index f2b52b9ea93d..6ece48f0ff77 100644
+--- a/arch/loongarch/include/asm/unwind.h
++++ b/arch/loongarch/include/asm/unwind.h
+@@ -7,8 +7,10 @@
+ #ifndef _ASM_UNWIND_H
+ #define _ASM_UNWIND_H
  
--	unwind_start(&state, task, NULL);
--	state.sp = thread_saved_fp(task);
--	get_stack_info(state.sp, state.task, &state.stack_info);
--	state.pc = thread_saved_ra(task);
--#ifdef CONFIG_UNWINDER_PROLOGUE
--	state.type = UNWINDER_PROLOGUE;
--#endif
--	for (; !unwind_done(&state); unwind_next_frame(&state)) {
-+	for (unwind_start(&state, task, NULL); !unwind_done(&state);
-+	     unwind_next_frame(&state)) {
- 		pc = unwind_get_return_address(&state);
- 		if (!pc)
- 			break;
++#include <linux/ftrace.h>
+ #include <linux/sched.h>
+ 
++#include <asm/ptrace.h>
+ #include <asm/stacktrace.h>
+ 
+ enum unwinder_type {
+@@ -40,4 +42,11 @@ static inline bool unwind_error(struct unwind_state *state)
+ 	return state->error;
+ }
+ 
++#define GRAPH_FAKE_OFFSET (sizeof(struct pt_regs) - offsetof(struct pt_regs, regs[1]))
++static inline unsigned long unwind_graph_addr(struct unwind_state *state,
++					unsigned long pc, unsigned long cfa)
++{
++	return ftrace_graph_ret_addr(state->task, &state->graph_idx,
++				     pc, (unsigned long *)(cfa - GRAPH_FAKE_OFFSET));
++}
+ #endif /* _ASM_UNWIND_H */
 diff --git a/arch/loongarch/kernel/unwind_guess.c b/arch/loongarch/kernel/unwind_guess.c
-index e2d2e4f3001f..a1bc7c852000 100644
+index a1bc7c852000..935d24f8c95c 100644
 --- a/arch/loongarch/kernel/unwind_guess.c
 +++ b/arch/loongarch/kernel/unwind_guess.c
-@@ -26,6 +26,12 @@ void unwind_start(struct unwind_state *state, struct task_struct *task,
- 	if (regs) {
- 		state->sp = regs->regs[3];
- 		state->pc = regs->csr_era;
-+	} else if (task == current || task == NULL) {
-+		state->sp = (unsigned long)__builtin_frame_address(0);
-+		state->pc = (unsigned long)__builtin_return_address(0);
-+	} else {
-+		state->sp = thread_saved_fp(task);
-+		state->pc = thread_saved_ra(task);
- 	}
+@@ -11,10 +11,7 @@ unsigned long unwind_get_return_address(struct unwind_state *state)
+ {
+ 	if (unwind_done(state))
+ 		return 0;
+-	else if (state->first)
+-		return state->pc;
+-
+-	return *(unsigned long *)(state->sp);
++	return state->pc;
+ }
+ EXPORT_SYMBOL_GPL(unwind_get_return_address);
+ 
+@@ -36,7 +33,7 @@ void unwind_start(struct unwind_state *state, struct task_struct *task,
  
  	state->task = task;
+ 	state->first = true;
+-
++	state->pc = unwind_graph_addr(state, state->pc, state->sp);
+ 	get_stack_info(state->sp, state->task, &state->stack_info);
+ 
+ 	if (!unwind_done(state) && !__kernel_text_address(state->pc))
+@@ -60,9 +57,8 @@ bool unwind_next_frame(struct unwind_state *state)
+ 		     state->sp < info->end;
+ 		     state->sp += sizeof(unsigned long)) {
+ 			addr = *(unsigned long *)(state->sp);
+-			state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
+-					addr, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
+-			if (__kernel_text_address(addr))
++			state->pc = unwind_graph_addr(state, addr, state->sp + 8);
++			if (__kernel_text_address(state->pc))
+ 				return true;
+ 		}
+ 
 diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
-index 0f8d1451ebb8..b8b830b69a48 100644
+index b8b830b69a48..3fbb9c65d64e 100644
 --- a/arch/loongarch/kernel/unwind_prologue.c
 +++ b/arch/loongarch/kernel/unwind_prologue.c
-@@ -141,12 +141,22 @@ void unwind_start(struct unwind_state *state, struct task_struct *task,
- 		    struct pt_regs *regs)
- {
- 	memset(state, 0, sizeof(*state));
-+	state->type = UNWINDER_PROLOGUE;
+@@ -21,16 +21,9 @@ static inline void unwind_state_fixup(struct unwind_state *state)
  
--	if (regs &&  __kernel_text_address(regs->csr_era)) {
--		state->pc = regs->csr_era;
-+	if (regs) {
- 		state->sp = regs->regs[3];
-+		state->pc = regs->csr_era;
- 		state->ra = regs->regs[1];
--		state->type = UNWINDER_PROLOGUE;
-+		if (!__kernel_text_address(state->pc))
-+			state->type = UNWINDER_GUESS;
-+	} else if (task == current || task == NULL) {
-+		state->sp = (unsigned long)__builtin_frame_address(0);
-+		state->pc = (unsigned long)__builtin_return_address(0);
-+		state->ra = 0;
-+	} else {
-+		state->sp = thread_saved_fp(task);
-+		state->pc = thread_saved_ra(task);
-+		state->ra = 0;
+ unsigned long unwind_get_return_address(struct unwind_state *state)
+ {
+-
+ 	if (unwind_done(state))
+ 		return 0;
+-	else if (state->type)
+-		return state->pc;
+-	else if (state->first)
+-		return state->pc;
+-
+-	return *(unsigned long *)(state->sp);
+-
++	return state->pc;
+ }
+ EXPORT_SYMBOL_GPL(unwind_get_return_address);
+ 
+@@ -43,9 +36,8 @@ static bool unwind_by_guess(struct unwind_state *state)
+ 	     state->sp < info->end;
+ 	     state->sp += sizeof(unsigned long)) {
+ 		addr = *(unsigned long *)(state->sp);
+-		state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
+-				addr, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
+-		if (__kernel_text_address(addr))
++		state->pc = unwind_graph_addr(state, addr, state->sp + 8);
++		if (__kernel_text_address(state->pc))
+ 			return true;
  	}
  
+@@ -161,7 +153,7 @@ void unwind_start(struct unwind_state *state, struct task_struct *task,
+ 
  	state->task = task;
+ 	state->first = true;
+-
++	state->pc = unwind_graph_addr(state, state->pc, state->sp);
+ 	get_stack_info(state->sp, state->task, &state->stack_info);
+ 
+ 	if (!unwind_done(state) && !__kernel_text_address(state->pc))
+@@ -188,8 +180,7 @@ bool unwind_next_frame(struct unwind_state *state)
+ 
+ 		case UNWINDER_PROLOGUE:
+ 			if (unwind_by_prologue(state)) {
+-				state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
+-						state->pc, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
++				state->pc = unwind_graph_addr(state, state->pc, state->sp);
+ 				return true;
+ 			}
+ 
+@@ -204,8 +195,7 @@ bool unwind_next_frame(struct unwind_state *state)
+ 				state->first = true;
+ 				state->ra = regs->regs[1];
+ 				state->sp = regs->regs[3];
+-				state->pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
+-						pc, (unsigned long *)(state->sp - GRAPH_FAKE_OFFSET));
++				state->pc = pc;
+ 				get_stack_info(state->sp, state->task, info);
+ 
+ 				return true;
 -- 
 2.34.3
 
