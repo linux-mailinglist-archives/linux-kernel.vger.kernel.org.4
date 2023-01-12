@@ -2,130 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3A8666F92
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 303F9666F6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236674AbjALK1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        id S232449AbjALKXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjALKZt (ORCPT
+        with ESMTP id S231761AbjALKWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:25:49 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6819392C7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:20:41 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id s26-20020a5e981a000000b007045ace9e1cso4694619ioj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:20:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H4hi1RohH9BsccreIKVvgBIcVAblFjWKdFjZtUvK4oU=;
-        b=h4WdLTYDUDF/8OP+JtfmKcZApmgAGYtCT6lbliH6F8ep+qumr3sjVCyLCVJRQBhN/c
-         131f2ld2XPir2o1ghcmhg4fY2yo4wu2ij6vtMEzBbYFkSHebaitVgmIVaS7OvFW5pm6i
-         oZfom6NFKfUKzuWSsFemSvHmgsdZ+pu8sRC31IreHpJpEtCYTO1OJhOD5sNqyOAC13h1
-         XP5TNvC73W2ib32Ys22lBzMafrGbZANyIAVEa4uJcADaPgBE/e+nOhuS3E96pYNGgEox
-         YxMVD/S3ujYn6+RR73BPnZQKwHcFvEi7Tq1N437hLPqAdaNKlgfK3eCELiGKbGeGs709
-         ydUA==
-X-Gm-Message-State: AFqh2kq5BJf6Lq/v+FYtiuvk2n//e9coQdL7Jj+b5Y/HSisQ4akDG87H
-        SSS31eTnwl+nf6dGcJ3t3GXDa+Vd+RyNA1kzdd6kNX1vB+ae
-X-Google-Smtp-Source: AMrXdXunS+welfar0PF3Q1cTbRJuR0u/n9Vu3yO+PZtoooR9BK02warcPxuX3el3BH9kgKjJLuaGKJWtYjrD/8FaL8A5FjTakv7X
+        Thu, 12 Jan 2023 05:22:40 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C4B58D2B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:17:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V64ZO49BQ5qaAG5dqjqbY0KN1zP3wI1RnXVIZ0ubFMnIibngeVpxVIauKWDQs+82d5rdI9ZWeHhDIWFb12XLTZk1zEJWct45P2J2rxzktD7v9NOGZzGdLOQZ80W6SLTygu30ID+19AC1OrWS/Zx+26ag/JEmUB8cpIHFzIDbLlg3PtefhwIeJDDtBgh/YRKi23I8YrfG3cZvxqkDHTpHlyOPKuyX1Suhg9hzSTGe/CKVZwkyRm+ZXDEY59YgKUMrySR20vFuwok7q02TI3I0LD8Glu1V8tp37DGwsnXfbcVBI0IqPgCPpQ2CVSyQQgUW457MoZtu49Qmt+NXH5h4TA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WxfrOpULrXMzw5Mmzl+M+ueYVwItVb2NdUzarr6DRZc=;
+ b=gZwYmtjofe4j5G804cnuIG7NZatv6l4wujxNio+73sJfWSqqg3zdS2bzKtHZSrrhEch3+tU/OSbEg8nHJq1aPuKLsfpb5tr73diVhDMIfFWL1G5dx1UiWVjaWYwRku9+aaMawPyJfxnkOd7kKVVMLhe/nTye4/Lp0FpTHMDWXrSBC04z8MnQ9enbXDEtj1lFe5Gxlxz9AKV0ucjLxjlnZ7QrG0FzuTUWyKaDVXdfCM+AaluCgzBZiorwC9P8sXNBoK/j/Ia5Io7TW5KewWL3nAHgAVXVQJl/8QL4KE1Me3e8ME5Ph8vlkSkRq1p6Srf+ByAEtVGI1P0b1BtGU/98qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WxfrOpULrXMzw5Mmzl+M+ueYVwItVb2NdUzarr6DRZc=;
+ b=XUlgelq6dkV1XPVwZpKWzX1SFLu0bj6AvgOVYHeDgQWvQPLJGizQlrbuWuIoW1eiTaDI8896xB8CyllnOyNTMNwCZmT0jLB/scd8HxIDNsRZz6mTpaZLBOa226+m6F4sbtUku4Q0YsnsyMtU7rnOd3CFrxKK7De02/qFDn1a+/s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
+ by SA0PR12MB4399.namprd12.prod.outlook.com (2603:10b6:806:98::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Thu, 12 Jan
+ 2023 10:17:50 +0000
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::fc88:7080:445e:6866]) by DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::fc88:7080:445e:6866%5]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
+ 10:17:50 +0000
+Message-ID: <374d0e3f-3575-329e-359c-3f900241d642@amd.com>
+Date:   Thu, 12 Jan 2023 15:51:03 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 16/19] soundwire: amd: handle wake enable interrupt
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        broonie@kernel.org, vkoul@kernel.org, alsa-devel@alsa-project.org
+Cc:     Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
+        arungopal.kondaveeti@amd.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
+ <20230111090222.2016499-17-Vijendar.Mukunda@amd.com>
+ <612c78ea-335e-a196-247c-9e8f3442c3e5@linux.intel.com>
+From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
+In-Reply-To: <612c78ea-335e-a196-247c-9e8f3442c3e5@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0236.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:eb::20) To DM6PR12MB4123.namprd12.prod.outlook.com
+ (2603:10b6:5:21f::23)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8043:0:b0:6e0:bdd:6c9e with SMTP id
- b3-20020a5d8043000000b006e00bdd6c9emr6360591ior.79.1673518841325; Thu, 12 Jan
- 2023 02:20:41 -0800 (PST)
-Date:   Thu, 12 Jan 2023 02:20:41 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000ff09e05f20e783e@google.com>
-Subject: [syzbot] WARNING in __put_task_struct (3)
-From:   syzbot <syzbot+394b8403503a77a4aa45@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, luto@kernel.org,
-        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|SA0PR12MB4399:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4426eb74-bbbe-4026-7855-08daf486428f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2XSF4Y3DMX+vrTPM1xmXOX3bi70mt4MTXoj07J9IAepeHobnTD5Ff3sxut42l1F+2e+uBHW5UPfcssq2QMcJ6LdUTj6QOrj15YLfZAEiXORuJ14YeQUwOJD3+yCQYq5b75Kca0nC7m+spTDckCAxOUtOEE1im7ZDai2uUGP0oPpvanNBk8j1CSZETGFoltdJOuiV20GJDnBx+Mi3bNH1lOVmQVK6r3nfU0Je8VbxhYPHbhQWhU23GkWajr1ZoG+fNIRirqLSrbUj47juQUQ/7QXz8DYhEePgMyDdimAyFKCl733h3sw+jnnTlBt7L6zmjEQhVI5tVF/ToZXuG6shbB4wM48Zsbq+tPJ+R7aXNE2Lqh2GQjnD3PTwndbzwtrwbpV2emB72UPGLX7IVx8SvXBdRGJXNHhq5t7f8g2wuFlNEVkQhCU12NNVRXOtR1HRUEofOC7miLo6vw7ozJkKYfbqgW4EYqoGsvsvTMqLX02H20s5UHdbfiIjz5wANmcSJgLBpnRB4aG4B5UF5x9KQkbSUhdXdyNIOBlqbrpmbsd+rQKmXvdiN+PGe6KwynuSkIBXbrEgAny1IdZjq55irg2WsJEf79O8S65emVXuvb2YP0ba8YiE+rOlIg/FJycEnIY+3cSrKkP4dYYEejX4o8dWJHr3TNPJD0aHDKxUsdN25MHpSZKJaDNE5b7WYvtb+Lapjt42pMUC9s5FMVn4luCKDLliDg/FcX0tFpf2IVc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(366004)(396003)(39860400002)(451199015)(41300700001)(66899015)(4326008)(66556008)(54906003)(66476007)(2616005)(316002)(36756003)(8676002)(66946007)(31696002)(86362001)(38100700002)(5660300002)(8936002)(83380400001)(6506007)(2906002)(53546011)(31686004)(6486002)(6512007)(6666004)(26005)(186003)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N05LL2t6L0xrbzdCemswWnhCcDZ0TVhEajBjMWs3dU0vTHVWSzhkSVloOTJj?=
+ =?utf-8?B?bCtHNWJCaUo5YjB1Vncwak8zRjNtRXJuamJIY0ZxZ1NKRGd2a01uelFxWEt3?=
+ =?utf-8?B?MlBySkROWUJtWWRKYzI1Zlpoajg0RDlEbytpMjNjUVI0N21QeUxrNzZtMzNP?=
+ =?utf-8?B?eTEyVTluNGlLMWJ1dkxsM1lZdERrRWU2aGxtQVFibFlhNmVYYmlRUjl4eVRU?=
+ =?utf-8?B?MVJnTUFZSFFta3ZmcEhoSGUwa21la2F5NTQrUHhTSVFLa3R0RjJEQ3FiQXJR?=
+ =?utf-8?B?Z2xjM3ZJeGU5emQ1Q202NzUzNFEwdC9RTFh6MEJETFgrZXloU3VqbngvdWla?=
+ =?utf-8?B?dngxMkMrUmxoeUVvVll0dTNCSkRXTGxUMUJuRFlLMThMZHFEU3dBdmlONlJG?=
+ =?utf-8?B?bUJuSUZDYm5FblFwOUNqZUJ2eG9RV010Q0tZeVJUOWY1aExqZEZ6VXpNU0ll?=
+ =?utf-8?B?WUVKeTljN2hPZkJBbDlxTUpkNmlRRmdzUnBza0NTTlNoUmJjQy8xaTE4Vnlr?=
+ =?utf-8?B?T0FKK01veFpWMVZ0Nmc3SVBLdHVKanVnOTlOVUhzbnJ0TkN0V2NZRGRNU3Yz?=
+ =?utf-8?B?Qlp2NE5pZVdKRnBGTE5aQkJiSk9wNjJ1bm5UNG9sYzQ5ZU1sWVIwMVgwNmFT?=
+ =?utf-8?B?TnlSUkkzeTZ6VUk1Q1NDQ3RvV1lSTHZiY0VrS0l6MW1rT0RjY2R1UkxzVTlI?=
+ =?utf-8?B?UC96Z1BmWnpoWUpjTWFtNmE1eWV1YWV1SW9Sem0xa25MNFBSWTNhaCtEdWxX?=
+ =?utf-8?B?TFdtMi9HWElMZFlNZWhGOG1MdEpLV0lCakZ4UDYrenRrOENqV2phUnplQnIw?=
+ =?utf-8?B?dUtSaURvYnIxZ2dsTHpTcFlFOHdFN2c5OXN6RWRVWGpXTHJkeWRqRnIrckhB?=
+ =?utf-8?B?MkREK00rWFF3UXNXd3FzN2ZHd0NwcmEyZEtsRC94SW9MVDloeEI5cXdWVGhx?=
+ =?utf-8?B?cm9HcE5KOEZjbTV1dHJvTFE3RTZzZ3JYNXZ2WWZwc2x2UXFaWWc5SkhrbHlk?=
+ =?utf-8?B?a3JBRFdrbkFWS2F2V3U3dklUak9rYTE4SnEzcGFrTHJNbUp3Mmdnc2NSclR0?=
+ =?utf-8?B?YlBnRHpxV2hIem9udjAwZTBQRVFUdkx3dmNQd0orZGNmTk5xMlZVdHlqZXZM?=
+ =?utf-8?B?TXpjTlhZdCtCeVlleGZUVVNLeTF1Qk5ZM2hsS3NUcmJzejBGbkFXa3RNazhk?=
+ =?utf-8?B?Sk9ncUpoYkFacUFWbnBSeElDY1VYeVA0TGM3cU5MTklLUVZFR1l4L05vNDFI?=
+ =?utf-8?B?alVnWDUrWGJuMGFwQmxRQSs5NDdJeDJiWUdhSjIwcklzUXZXRFJUeFkrempD?=
+ =?utf-8?B?SHR2RnpWZkJEV2crWlN5Y09vL0crbVRnd1R6TGdZY1FpUW81cXVJaXNWdXNW?=
+ =?utf-8?B?U1h6cXRvOTZmVTUxQW5kOGp1TXNOVnNFd3AzTFlHQkFPWUpQL0k1Y2xZcCtq?=
+ =?utf-8?B?SXorL3NObDAyQjdzdWtjQXYzdVpYdFNsY3IwaFphbmhIbGVuU0lMUTZtRDE1?=
+ =?utf-8?B?MmxiVTZ1SDlEay9GZzZpY3VxMUJQY3BMcHVYY2x1WVpEOWpIeHlnMGtxRkNw?=
+ =?utf-8?B?bE04OEw3VmJ6TmhiOFF1NVplOWNpY1l1dmhLU2Zkd3IyaEZFNVhzVW1naklG?=
+ =?utf-8?B?d1lmOGoxSUZFaWFWdURyNnhCSUhpUnRnL2laTUVvZk9wdzdNcFdXek53SlJu?=
+ =?utf-8?B?R3ZmWnBrL1JpMUZyNys5Ukk5SG82aTFRd0JHSTVyai91VGd4UjFnb2VybTQw?=
+ =?utf-8?B?QzVyRGdOb2JUamlhL0kzdmxFTXU0ektad25sQ3VPQ1NuQjI2MFdOUEU0OEd1?=
+ =?utf-8?B?TVJjdGlkbk5DMXF3NzhuYlFna2RoR3EwcHlRVCtqZVZnajM5WDNiRzZROFpo?=
+ =?utf-8?B?ekJPVS94bXVjL0NXNWFPMU5kTWpVeVlFUUxPdjZ5T0J3ZFl6MS9taURES0w2?=
+ =?utf-8?B?MXR3YS9RRldSN3BjYUpLNmRpSUdJZUxWOWUrVjFueGYvY1FFU3VITHRGZEl1?=
+ =?utf-8?B?cGFXK0dhMkU1M3JGeEIyTytxTmt1QzhPZjRLcUVQMmdjWnZNM2dqcjVaM1Fp?=
+ =?utf-8?B?M0VXS0Y3N1FibTFJSnZrZ3JHTmd3bGZ1aWRmVWdhUlg4ZG9hejNwS0FXYUpT?=
+ =?utf-8?Q?6F8ECej1PSHzkin413myfkSfy?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4426eb74-bbbe-4026-7855-08daf486428f
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 10:17:50.6934
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3Wte0VGriYzipz+MMyI7qZ7cNKtdDvPTSDxXAfLH7myCoJkuznVAZHbLFgEjCD46g3Jwcddgd2odhfbE4iGLrQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4399
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=106064a6480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=394b8403503a77a4aa45
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+394b8403503a77a4aa45@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 19865 at kernel/fork.c:845 __put_task_struct+0x330/0x3d0 kernel/fork.c:845
-Modules linked in:
-CPU: 0 PID: 19865 Comm: syz-executor.5 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__put_task_struct+0x330/0x3d0 kernel/fork.c:845
-Code: 0e 4c 89 e6 e8 f1 3a 85 00 e9 22 ff ff ff e8 c7 aa 37 00 be 03 00 00 00 4c 89 e7 e8 fa 91 bf 02 e9 0b ff ff ff e8 b0 aa 37 00 <0f> 0b e9 1a fd ff ff e8 a4 aa 37 00 0f 0b e9 62 fd ff ff e8 98 aa
-RSP: 0018:ffffc900075a78e8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff8880365dba80 RSI: ffffffff814a1230 RDI: 0000000000000005
-RBP: ffff8880365dba80 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff8880365dbaa8
-R13: ffff88807f931000 R14: ffff888144b0d150 R15: ffff888144b0d148
-FS:  00007f87872b0700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f5a71bde000 CR3: 000000002b805000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- put_task_struct include/linux/sched/task.h:119 [inline]
- io_wq_exit_workers io_uring/io-wq.c:1266 [inline]
- io_wq_put_and_exit+0xb47/0xd80 io_uring/io-wq.c:1294
- io_uring_clean_tctx+0x117/0x178 io_uring/tctx.c:193
- io_uring_cancel_generic+0x5ae/0x606 io_uring/io_uring.c:3229
- io_uring_files_cancel include/linux/io_uring.h:55 [inline]
- do_exit+0x522/0x2a90 kernel/exit.c:822
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
- get_signal+0x225f/0x24f0 kernel/signal.c:2859
- arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
- exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
- exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f878648c0c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f87872b0218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00007f87865abf88 RCX: 00007f878648c0c9
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f87865abf88
-RBP: 00007f87865abf80 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f87865abf8c
-R13: 00007ffdd18e481f R14: 00007f87872b0300 R15: 0000000000022000
- </TASK>
+On 11/01/23 21:24, Pierre-Louis Bossart wrote:
+>
+> On 1/11/23 03:02, Vijendar Mukunda wrote:
+>> Add wake enable interrupt support for both the soundwire controller
+> SoundWire.
+>
+>> instances.
+>>
+>> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+>> Signed-off-by: Mastan Katragadda <Mastan.Katragadda@amd.com>
+>> ---
+>>  drivers/soundwire/amd_master.c    | 9 +++++++++
+>>  drivers/soundwire/amd_master.h    | 1 +
+>>  include/linux/soundwire/sdw_amd.h | 1 +
+>>  3 files changed, 11 insertions(+)
+>>
+>> diff --git a/drivers/soundwire/amd_master.c b/drivers/soundwire/amd_master.c
+>> index 290c59ab7760..2fd77a673c22 100644
+>> --- a/drivers/soundwire/amd_master.c
+>> +++ b/drivers/soundwire/amd_master.c
+>> @@ -1219,6 +1219,13 @@ static void amd_sdwc_update_slave_status_work(struct work_struct *work)
+>>  	u32 sw_status_change_mask_0to7_reg;
+>>  	u32 sw_status_change_mask_8to11_reg;
+>>  
+>> +	if (ctrl->wake_event) {
+>> +		pm_runtime_resume(ctrl->dev);
+>> +		acp_reg_writel(0x00, ctrl->mmio + ACP_SW_WAKE_EN);
+>> +		ctrl->wake_event = false;
+>> +		return;
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+
+
+
+>> +	}
+> this is surprising.
+>
+> A wake event typically happens when the bus is in clock-stop mode.
+> You cannot deal with wake events while dealing with the peripheral
+> status update, because you can only get that status when the manager is
+> up-and-running. There's a conceptual miss here, no?
+>
+> If the wake comes from the PCI side, then it's the same comment: why
+> would the wake be handled while updating the peripheral status.
+>
+> What am I missing?
+>
+It's a miss. This should be moved out of slave_status_work() even
+though when wake enable irq is received we are just returning
+from API.
+will move wake interrupt handling in to a separate helper function.
