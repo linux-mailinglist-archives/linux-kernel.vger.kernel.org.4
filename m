@@ -2,125 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549E8666F57
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C477D666F5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjALKQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:16:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S235030AbjALKRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:17:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbjALKPD (ORCPT
+        with ESMTP id S239881AbjALKPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:15:03 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C205364CE
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:14:41 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id l3-20020a056e021aa300b00304be32e9e5so13040806ilv.12
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:14:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0nRCtvtkB3zOKRm9xdU+tMBABuOLRRmuR87z8JSiY0k=;
-        b=kG1IcgewW/qc1hzf6E0MEyiaeUhqdFr6DJAL8VE+sHpmL+rsFoquQBucVnPg2sZjRZ
-         xqKLDc2tl6sha7WHOA4v6yrIe1+p68/jwGpDcMrpd6ITK2H2PBXveP+M/71QlE3HSNW6
-         PufSwjsxt86O2oCA25xWmJhkiRxXrv2BVh0TB1knbEgBolMEaomZctz52jIEhu6sOf5I
-         HDXxKAfYXJEJjLpHZXXwDGiz/GRu2wZynuqmUjDeTMDNP2ZA7ob3axc4/sKk0fcz2PcD
-         3P7hIPDbTFkqZMPMntPizpo/NsO85UPD7+/HsijtUfFGwMtcCYeVfK6N6E34oZxEKple
-         Bo0w==
-X-Gm-Message-State: AFqh2koM8cF2nVXn9/8CDZtd20MjLvjFtcI3LAtmNNINQBDDyIWB6vyc
-        7T5lPU4jseO61YZA07sDHinA7Tzl7G/jG5jzrNWSzv6PYY87
-X-Google-Smtp-Source: AMrXdXsbkxEp6TlHV0w2xTfbRpfwr9EjQymfDfdvHYJlzVpgKsNgjxJ3k46bpUYzx4u03sYs0BHdHlO5Bvf779CY2aL3P5dGuRPE
+        Thu, 12 Jan 2023 05:15:38 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDE3D98;
+        Thu, 12 Jan 2023 02:15:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673518537; x=1705054537;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=jFP9aQEfPbjadxD0A6G/7Tdp9/QXKykODGpkmN/88FE=;
+  b=aUitqnpB7bVawKfT2qoBwkJBQ+0BowHXU1IeQMnoCusB3IFtGuh6+0/J
+   WN03GJQmwCddbe7z55j7FEyEri4+QbIWrfJgW06gPOP3mu4NBg0FT5nw/
+   L+LeHljDswL0xcn5htuDa/4ca49mowvO8kW5VzIsQ6o8HzpeVWaxrtrIr
+   MYZ5Wc3Po93v+SNH2YRfKQJsi5Qom9mxWzVibXtLW7Y2O1raFGUn2zUNO
+   cQt9pN8SiYw9lK+3hjs8A0nwsv2Fqe+/W1hhy29+HJn7RMB572DWx3XGK
+   2a64oTnufdywntH0cfhAnBsQO5iiqfHYnP/yLKtU4AbjLNnnToOpxAkBS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="321358245"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="321358245"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:15:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="651075956"
+X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
+   d="scan'208";a="651075956"
+Received: from vbucoci-mobl1.ger.corp.intel.com ([10.252.52.43])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:15:34 -0800
+Date:   Thu, 12 Jan 2023 12:15:32 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+cc:     gregkh@linuxfoundation.org, Kees Cook <keescook@chromium.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/11] tty: vt: separate array juggling to
+ juggle_array()
+In-Reply-To: <20230112080136.4929-9-jirislaby@kernel.org>
+Message-ID: <73d26b6d-6272-37cf-f09e-3e652c5212d0@linux.intel.com>
+References: <20230112080136.4929-1-jirislaby@kernel.org> <20230112080136.4929-9-jirislaby@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c814:0:b0:6ec:dc1e:c18f with SMTP id
- y20-20020a5ec814000000b006ecdc1ec18fmr5404840iol.113.1673518481186; Thu, 12
- Jan 2023 02:14:41 -0800 (PST)
-Date:   Thu, 12 Jan 2023 02:14:41 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000098a61b05f20e62db@google.com>
-Subject: [syzbot] WARNING: ODEBUG bug in __io_put_task
-From:   syzbot <syzbot+1aa0bce76589e2e98756@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 12 Jan 2023, Jiri Slaby (SUSE) wrote:
 
-syzbot found the following issue on:
+> The algorithm used for scrolling is the array juggling. It has
+> complexity O(N) and space complexity O(1). I.e. quite fast w/o
+> requirements for temporary storage.
+> 
+> Move the algorithm to a separate function so it is obvious what it is.
+> It is almost generic (except the array type), so if anyone else wants
+> array rotation, feel free to make it generic and move it to include/.
+> 
+> And rename all the variables from i, j, k, sz, d, and so on to something
+> saner.
+> 
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+> ---
+>  drivers/tty/vt/vt.c | 52 ++++++++++++++++++++++++---------------------
+>  1 file changed, 28 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+> index 74db07b32abe..7cda18b7ee3d 100644
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -398,40 +398,44 @@ static void vc_uniscr_clear_lines(struct vc_data *vc, unsigned int y,
+>  			memset32(vc->vc_uni_lines[y++], ' ', vc->vc_cols);
+>  }
+>  
+> +/* juggling array rotation algorithm (complexity O(N), size complexity O(1)) */
+> +static void juggle_array(u32 **array, unsigned int size, unsigned int nr)
+> +{
+> +	unsigned int gcd_idx;
+> +
+> +	for (gcd_idx = 0; gcd_idx < gcd(nr, size); gcd_idx++) {
+> +		u32 *gcd_idx_val = array[gcd_idx];
+> +		unsigned int dst_idx = gcd_idx;
+> +
+> +		while (1) {
+> +			unsigned int src_idx = (dst_idx + nr) % size;
+> +			if (src_idx == gcd_idx)
+> +				break;
+> +
+> +			array[dst_idx] = array[src_idx];
+> +			dst_idx = src_idx;
+> +		}
+> +
+> +		array[dst_idx] = gcd_idx_val;
+> +	}
+> +}
+> +
+>  static void vc_uniscr_scroll(struct vc_data *vc, unsigned int t, unsigned int b,
+>  			     enum con_scroll dir, unsigned int nr)
+>  {
+>  	u32 **uni_lines = vc->vc_uni_lines;
+> -	unsigned int i, j, k, sz, d, clear;
+> +	unsigned int size = b - t;
+>  
+>  	if (!uni_lines)
+>  		return;
+>  
+> -	sz = b - t;
+> -	clear = b - nr;
+> -	d = nr;
+> -
+>  	if (dir == SM_DOWN) {
+> -		clear = t;
+> -		d = sz - nr;
+> -	}
+> -
+> -	for (i = 0; i < gcd(d, sz); i++) {
+> -		u32 *tmp = uni_lines[t + i];
+> -		j = i;
+> -		while (1) {
+> -			k = j + d;
+> -			if (k >= sz)
+> -				k -= sz;
+> -			if (k == i)
+> -				break;
+> -			uni_lines[t + j] = uni_lines[t + k];
+> -			j = k;
+> -		}
+> -		uni_lines[t + j] = tmp;
+> +		juggle_array(&uni_lines[top], size, size - nr);
 
-HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=14d269ce480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=1aa0bce76589e2e98756
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+top? Should be t I think.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> +		vc_uniscr_clear_lines(vc, t, nr);
+> +	} else {
+> +		juggle_array(&uni_lines[top], size, nr);
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+Ditto.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1aa0bce76589e2e98756@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-ODEBUG: free active (active state 1) object: ffff88801fe06ca8 object type: rcu_head hint: 0x0
-WARNING: CPU: 0 PID: 6765 at lib/debugobjects.c:509 debug_print_object+0x194/0x2c0 lib/debugobjects.c:509
-Modules linked in:
-CPU: 0 PID: 6765 Comm: kworker/0:29 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: events io_fallback_req_func
-RIP: 0010:debug_print_object+0x194/0x2c0 lib/debugobjects.c:509
-Code: df 48 89 fe 48 c1 ee 03 80 3c 16 00 0f 85 c7 00 00 00 48 8b 14 dd c0 dc a6 8a 50 4c 89 ee 48 c7 c7 80 d0 a6 8a e8 00 79 ae 05 <0f> 0b 58 83 05 ce 27 66 0a 01 48 83 c4 20 5b 5d 41 5c 41 5d 41 5e
-RSP: 0018:ffffc900057df950 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: ffff88807d03d7c0 RSI: ffffffff8166972c RDI: fffff52000afbf1c
-RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff8a4dd0a0
-R13: ffffffff8aa6d580 R14: ffff88802a8da408 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055574b30e000 CR3: 000000001ddab000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __debug_check_no_obj_freed lib/debugobjects.c:996 [inline]
- debug_check_no_obj_freed+0x305/0x420 lib/debugobjects.c:1027
- slab_free_hook mm/slub.c:1756 [inline]
- slab_free_freelist_hook+0xeb/0x1c0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
- put_task_struct_many include/linux/sched/task.h:125 [inline]
- __io_put_task+0x155/0x1e0 io_uring/io_uring.c:725
- io_put_task io_uring/io_uring.h:328 [inline]
- __io_req_complete_post+0x7ac/0xcd0 io_uring/io_uring.c:978
- io_req_complete_post+0xf1/0x1a0 io_uring/io_uring.c:992
- io_req_task_complete+0x189/0x260 io_uring/io_uring.c:1623
- io_poll_task_func+0xa95/0x1220 io_uring/poll.c:347
- io_fallback_req_func+0xfd/0x204 io_uring/io_uring.c:252
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+> +		vc_uniscr_clear_lines(vc, b - nr, nr);
+>  	}
+> -
+> -	vc_uniscr_clear_lines(vc, clear, nr);
+>  }
+>  
+>  static void vc_uniscr_copy_area(u32 **dst_lines,
+> 
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+ i.
+
