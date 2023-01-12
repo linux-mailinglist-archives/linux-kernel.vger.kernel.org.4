@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AD3666E45
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53704666E61
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240210AbjALJbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
+        id S240057AbjALJhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240057AbjALJas (ORCPT
+        with ESMTP id S239640AbjALJhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:30:48 -0500
-Received: from outbound-smtp25.blacknight.com (outbound-smtp25.blacknight.com [81.17.249.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49345B1E8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:26:14 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
-        by outbound-smtp25.blacknight.com (Postfix) with ESMTPS id 79609CAE1F
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:26:12 +0000 (GMT)
-Received: (qmail 26969 invoked from network); 12 Jan 2023 09:26:12 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 Jan 2023 09:26:12 -0000
-Date:   Thu, 12 Jan 2023 09:26:10 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NeilBrown <neilb@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/7] mm/page_alloc: Rename ALLOC_HIGH to ALLOC_MIN_RESERVE
-Message-ID: <20230112092610.msowgtidt2a7zo4w@techsingularity.net>
-References: <20230109151631.24923-1-mgorman@techsingularity.net>
- <20230109151631.24923-2-mgorman@techsingularity.net>
- <Y77TWhr9/dPcthiF@dhcp22.suse.cz>
+        Thu, 12 Jan 2023 04:37:00 -0500
+Received: from mx5.didiglobal.com (mx5.didiglobal.com [111.202.70.122])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7D39454D87
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:29:55 -0800 (PST)
+Received: from mail.didiglobal.com (unknown [10.79.65.15])
+        by mx5.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id ACA47B0041C0F;
+        Thu, 12 Jan 2023 17:29:47 +0800 (CST)
+Received: from zwp-5820-Tower (10.79.65.102) by
+ ZJY02-ACTMBX-05.didichuxing.com (10.79.65.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 12 Jan 2023 17:29:47 +0800
+Date:   Thu, 12 Jan 2023 17:29:42 +0800
+X-MD-Sfrom: zhangweiping@didiglobal.com
+X-MD-SrcIP: 10.79.65.15
+From:   Weiping Zhang <zhangweiping@didiglobal.com>
+To:     <pmladek@suse.com>, <akpm@linux-foundation.org>,
+        <peterz@infradead.org>
+CC:     <linux-kernel@vger.kernel.org>, <zwp10758@gmail.com>
+Subject: [RFC PATCH] hung_task: show sysctl_hung_task_warnings
+Message-ID: <Y7/TBtWz5BE55SzD@zwp-5820-Tower>
+Mail-Followup-To: pmladek@suse.com, akpm@linux-foundation.org,
+        peterz@infradead.org, linux-kernel@vger.kernel.org,
+        zwp10758@gmail.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <Y77TWhr9/dPcthiF@dhcp22.suse.cz>
+X-Originating-IP: [10.79.65.102]
+X-ClientProxiedBy: ZJY03-PUBMBX-01.didichuxing.com (10.79.71.12) To
+ ZJY02-ACTMBX-05.didichuxing.com (10.79.65.15)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,33 +48,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 04:18:50PM +0100, Michal Hocko wrote:
-> On Mon 09-01-23 15:16:25, Mel Gorman wrote:
-> > __GFP_HIGH aliases to ALLOC_HIGH but the name does not really hint
-> > what it means. As ALLOC_HIGH is internal to the allocator, rename
-> > it to ALLOC_MIN_RESERVE to document that the min reserves can
-> > be depleted.
-> > 
-> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> > Acked-by: Vlastimil Babka <vbabka@suse.cz>
-> 
-> Naming is hard but ALLOC_HIGH is definitely much more confusing as it
-> can collide with high watermark. ALLOC_MIN_RESERVE says that some
-> reserves are involved. ALl the reserves are below min watermark by
-> defition but I cannot really come up with a better name. I do not think
-> we want to encode the amount of reserves into the name.
-> 
+This patch try to add more debug info to detect lost kernel log or no
+hung task was detected.
 
-It's internal to the page allocator so I didn't sweat about it too much.
-Access to the reserves currently means "allow pages to be allocated
-below the min reserve". Even if that changes in the future, the name can
-change with it.
+The user set 10 to the hung_task_timeout_secs, the kernel log:
 
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> 
+[ 3942.642220] INFO: task mount:19066 blocked for more than 10 seconds.
+[ 3952.876768] INFO: task kworker/u81:0:7 blocked for more than 10 seconds.
+[ 3952.877088] INFO: task scsi_eh_0:506 blocked for more than 10 seconds.
+[ 3952.878212] INFO: task mount:19066 blocked for more than 10 seconds.
+[ 3963.116805] INFO: task kworker/u81:0:7 blocked for more than 10 seconds.
+[ 3963.117137] INFO: task scsi_eh_0:506 blocked for more than 10 seconds.
+[ 3963.118275] INFO: task mount:19066 blocked for more than 10 seconds.
+[ 3973.356837] INFO: task kworker/u81:0:7 blocked for more than 10 seconds.
+[ 3973.357148] INFO: task scsi_eh_0:506 blocked for more than 10 seconds.
+[ 3973.358247] INFO: task mount:19066 blocked for more than 10 seconds.
+[ 3993.836899] INFO: task kworker/u81:0:7 blocked for more than 10 seconds.
+[ 3993.837238] INFO: task scsi_eh_0:506 blocked for more than 10 seconds.
+[ 3993.838356] INFO: task mount:19066 blocked for more than 10 seconds.
 
-Thanks!
+There is no any log at about 3983, it's hard to know if kernel log was
+lost or there is no hung task was detected at that moment. So this patch
+print sysctl_hung_task_warnings to distinguish the above two cases.
 
+Signed-off-by: Weiping Zhang <zhangweiping@didiglobal.com>
+---
+ kernel/hung_task.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+index c71889f3f3fc..ca917931473d 100644
+--- a/kernel/hung_task.c
++++ b/kernel/hung_task.c
+@@ -127,8 +127,11 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
+ 	 * complain:
+ 	 */
+ 	if (sysctl_hung_task_warnings) {
+-		if (sysctl_hung_task_warnings > 0)
++		if (sysctl_hung_task_warnings > 0) {
+ 			sysctl_hung_task_warnings--;
++			pr_err("sysctl_hung_task_warnings: %d\n",
++				sysctl_hung_task_warnings);
++		}
+ 		pr_err("INFO: task %s:%d blocked for more than %ld seconds.\n",
+ 		       t->comm, t->pid, (jiffies - t->last_switch_time) / HZ);
+ 		pr_err("      %s %s %.*s\n",
 -- 
-Mel Gorman
-SUSE Labs
+2.34.1
+
