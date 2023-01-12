@@ -2,87 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138F1667EB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B295F667EB4
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240342AbjALTIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        id S232007AbjALTIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240292AbjALTHW (ORCPT
+        with ESMTP id S238687AbjALTGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:07:22 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF36D13B;
-        Thu, 12 Jan 2023 10:49:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1673549341; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=VVwndzmZa3T9qUUdXmyL13LbeRcCo5aJtQeRb7eBu+6OetmVkzSyFwgModVSbrGppw9715GZvPbcVBY//a3GKP0rFb8M7FXFYw6ZhmG6a0aXrqwtQlAZ6o2fQQad9XwefwqXhkYzcrvDeVobMcewjY0dNVne811j2LoXV9YGDgo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1673549341; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=xj1EqQifssBoeW2Mu0UMZouBhzUVXH9Qqd8rb3GME8I=; 
-        b=HjiaFjlPWYVDLgKpYM4LqTr6gdRXwjI8kdYbj83mbYvEzLluLd8ekB27EXQQXx2rKqz0yWxRttqk6rgO0zL857+7R4HYBxldp82pqPDHc/h0Ddp8EXEeQjIT1SZGEjOWFe9Lavv2WDJfun4fNhKEY5TXVAkYk/RgEtU6OT4A/6k=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673549341;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=xj1EqQifssBoeW2Mu0UMZouBhzUVXH9Qqd8rb3GME8I=;
-        b=MVVnnKfETDgCzyJ71jmAq0v6KG9MyoQ61/n28O/AOxxL50oAeLv599dp3ckuEkks
-        51maUW8rNrzLygfhxYZqnOXoqtZJuZa0ms6JcL0SJHezSd9qrbC3YObzlQa7AbVKyA1
-        DeQrTFmoYmu7mRK2OMYHgeJbOHyWzTqpDwLC7HF8=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1673549337883457.0526498585821; Thu, 12 Jan 2023 10:48:57 -0800 (PST)
-Message-ID: <c5412e5c-97ff-ba79-fd78-895889c129d2@arinc9.com>
-Date:   Thu, 12 Jan 2023 21:48:52 +0300
+        Thu, 12 Jan 2023 14:06:51 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEE265A7;
+        Thu, 12 Jan 2023 10:48:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673549337; x=1705085337;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9ZqpR6hozABIVRF8f5BclL/5aXMMC3qUWYKR8P4jke0=;
+  b=dFyr17eVhAHEMTovZiRdnosj6a7QP34deyTCofi3unlkLICa6IQLA4b3
+   PdgBUT9y42CFa48prP64zhVq2HWqkHRHY6VI/lJWZUMgDradJPfTleNcg
+   ursWJau7oTsI8eIai0tLd+F0AAldtfVcnhpy09CMThTAPsn3VGZaQfwI4
+   pXX2PMy3Vwo/CUyd5SRSBnVSu/arfNdP5CgiVdcLuVzhjgRH8tWOnzDQ0
+   f9zi0HMe4e4jKQzhqFPFABMeGercZy5sCDUH8vZ2lVlkfIEVxLTMnwPjQ
+   wyqz54s/hjxZ3DXziOu6j1CJLIuwsNZhdn4YYCmgmnhSlToRt69w6NhCh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="323853959"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="323853959"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 10:48:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="726429625"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="726429625"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Jan 2023 10:48:55 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 012BA14B; Thu, 12 Jan 2023 20:49:28 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] pinctrl: qcom: lpass-lpi: Remove duplicate assignment of of_gpio_n_cells
+Date:   Thu, 12 Jan 2023 20:49:23 +0200
+Message-Id: <20230112184923.80442-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 3/6] dt-bindings: pinctrl: mt7621: add proper function
- muxing binding
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, erkin.bozoglu@xeront.com
-References: <20221231160849.40544-1-arinc.unal@arinc9.com>
- <20221231160849.40544-4-arinc.unal@arinc9.com>
- <1b5880bb-d0ce-9dde-2fe6-e058f6efb6f1@linaro.org>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <1b5880bb-d0ce-9dde-2fe6-e058f6efb6f1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.01.2023 12:01, Krzysztof Kozlowski wrote:
-> On 31/12/2022 17:08, Arınç ÜNAL wrote:
->> Not every function can be muxed to a group. Add proper binding which
->> documents which function can be muxed to a group or set of groups.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Didn't I already ack it?
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The of_gpio_n_cells default is 2 when ->of_xlate() callback is
+not defined. No need to assign it explicitly in the driver.
 
-I believe you only did for mt7620.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks.
-Arınç
+diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+index 3dc670faa59e..87920257bb73 100644
+--- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
++++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+@@ -430,7 +430,6 @@ int lpi_pinctrl_probe(struct platform_device *pdev)
+ 	pctrl->chip.base = -1;
+ 	pctrl->chip.ngpio = data->npins;
+ 	pctrl->chip.label = dev_name(dev);
+-	pctrl->chip.of_gpio_n_cells = 2;
+ 	pctrl->chip.can_sleep = false;
+ 
+ 	mutex_init(&pctrl->slew_access_lock);
+-- 
+2.39.0
+
