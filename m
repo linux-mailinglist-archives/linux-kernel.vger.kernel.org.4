@@ -2,169 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3013A666A5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC375666A63
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236408AbjALEgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 23:36:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S236232AbjALEhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 23:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236568AbjALEfs (ORCPT
+        with ESMTP id S229911AbjALEhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 23:35:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB911DF00;
-        Wed, 11 Jan 2023 20:35:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8814561EE8;
-        Thu, 12 Jan 2023 04:35:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5FC1C433F0;
-        Thu, 12 Jan 2023 04:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673498145;
-        bh=cEC/8ycHGZmpawhW7zGWVnL8kp2g8DOTp2ORTPKCtng=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Cd32bzC14tymjpdDMJhPRxnKI6ydKagoH+s1enPNPJnzuSYjiCpq0QhUJLuccxS+9
-         1Evh46ERVNJmV3GbLANSkKE0KMi5t05sHqsp+njmTZVZaUCTV7WutILzYBxPcAbS/u
-         psOMqTr+Fl3d3wFfgEviVW3StqTjHP35tvrRxPdv3LOD9l9iwKJklJXpbw/jN/F2cv
-         11w7jd+PUvPlvqiL7aWuifcYBDK6ZxkpBgCmmsKRWbIl37ZM9306iXjPFn4pzG/Fki
-         69tDkbzr6lL25yqvUvLapn+flhLqwRvFVmlL+rA2IfI8a7kN0b/UjvCnycmg+07JNe
-         F+cQHWWlF9gwQ==
-Received: by mail-oi1-f170.google.com with SMTP id r130so14454681oih.2;
-        Wed, 11 Jan 2023 20:35:45 -0800 (PST)
-X-Gm-Message-State: AFqh2kpq15RJWSC+AOxJ7BaOxr7cD2Xyy55f0vjo7ykVAQU06jFb7W2W
-        BacFKA5Pp/FZis/bn6EYN/I5/7HIU3MYbjgoPgk=
-X-Google-Smtp-Source: AMrXdXsv4uFA2ckMcPSKcLyd59iRAkaYtzx3HgzCgDZGW9c0li9O94jf5ZN16WBncqaFzqsZn9xLrJ45AEfChZuqpgQ=
-X-Received: by 2002:a05:6808:1510:b0:364:5d10:7202 with SMTP id
- u16-20020a056808151000b003645d107202mr422189oiw.194.1673498145165; Wed, 11
- Jan 2023 20:35:45 -0800 (PST)
+        Wed, 11 Jan 2023 23:37:42 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1051A385;
+        Wed, 11 Jan 2023 20:37:38 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30C2kWSN020666;
+        Thu, 12 Jan 2023 04:37:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=If8LR1GlSkqswvfQoncDX0k/wCy24ZULfidEBaMASug=;
+ b=PQzzVjYE9lzYu/eEVVa8k8ensKVzmVIz/zKfk0b7a+IXVZi3cLgR+Ac4sOMfJa47Poub
+ qfMDHgiX2tgtJDJUsMYljdH+4KaJvyUZC52HH4HbVhYswCVGmz+2cynZ+3001AocrLKQ
+ 2T5M9VjQjrE7W6Wbn6fRSZd4D7OZswIxdmUboz67XIfXc49T2QubtKUCXAyU9pgl6A2U
+ OrQDDfHBpv/lWFWAjgve1qQJQGoOMaMNY85NGTWMGON6MmcvGSGxG7xymJGIQO0FuGB8
+ F4qLJShgFB9TzQZOxh9hY4GG9grvUdfevFIWzSFdVe8XuziqdXvT2pR7jIFVWQP8YIJd 8g== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n27nr87a9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Jan 2023 04:37:26 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30C2RaYI016171;
+        Thu, 12 Jan 2023 04:37:24 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2107.outbound.protection.outlook.com [104.47.58.107])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n1k4q6ffq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Jan 2023 04:37:24 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d2jr6C3tTPqb0vyp0wMspdxsJLrVg7lf0eLb0lPYZvjnC2pSdX4fehBnpN+zrAe60hsckhqWGXYUfPGrZYApIB9X1i/WdnA3hsmDLyIUDPuoZYbGHS2ecjWB5WkknkkMXC6lVUUSb00XOFwWPyqMkgybQk+rIzsKobBLSXsnlN2m/ZgAc/ODC3kHAe7i63EL6t2yTlY4BT6hMzK1uQM6EDvWis5Da67B2XOJCdG5T6f4vX9X+4djkXasz7WbrxgXzbaU4BjHu3R5nyuGW3cZaw6f/5biyfuMKcWgYoY0RBJgbIgiZsLAAACceksSbYx3kPjH7UjnKr+ldttdxlL0ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=If8LR1GlSkqswvfQoncDX0k/wCy24ZULfidEBaMASug=;
+ b=ffMfviY+C4dNUAexWstUrTPCtsgxkTEEcerSna233eygH3t2EtvFsrNhjGHiyQi30xMYtMFQtDJ/giEPv+r4QZrKsShHZ/CK6yanDSdCupQH57NxZFUtiS71clarJYdYyFG8k8i1SOBJ6ptQr6v5HIvIoXE0q7HENo9dGkukGGKrLkDkf4m/82vcSgD3EIZwcqGzion447zl/4SFupWUCAnfwQ/uNZA4jgdbqssWCmZnaNsS4mQc+1yC64R2mmyWqfotyIATMK25l52xounTG2IzmvRUy6D5ii0Qrs5gf8qRp/+FxdCVTzVVpPa98aE5SLQ9GUhN+lAOyyYrT8zdmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=If8LR1GlSkqswvfQoncDX0k/wCy24ZULfidEBaMASug=;
+ b=vv2X06KPoYSdq1KEffHro7yYc71Mk2JJx3XnF7q0kzEyV12Dzl3Q800N7dLhW6kbc2zCh979idfg9OyBOPItvmDXhVmDdZ3Me7VYIkv4NSPo8i0jb6LS88Ex7Rk80IQqTn5HU5X3QwSVUH3Gjwhm/877alkM3TwV3DYPQ6ccmlE=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by CY8PR10MB7337.namprd10.prod.outlook.com (2603:10b6:930:7b::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Thu, 12 Jan
+ 2023 04:37:22 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c7e9:609f:7151:f4a6]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c7e9:609f:7151:f4a6%8]) with mapi id 15.20.6002.013; Thu, 12 Jan 2023
+ 04:37:22 +0000
+To:     Bean Huo <beanhuo@iokpp.de>
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
+        quic_cang@quicinc.com, quic_xiaosenh@quicinc.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Several compilation warnings fixes for UFS
+ Advanced RPMB
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1y1q8v05k.fsf@ca-mkp.ca.oracle.com>
+References: <20230108224057.354438-1-beanhuo@iokpp.de>
+Date:   Wed, 11 Jan 2023 23:37:19 -0500
+In-Reply-To: <20230108224057.354438-1-beanhuo@iokpp.de> (Bean Huo's message of
+        "Sun, 8 Jan 2023 23:40:54 +0100")
+Content-Type: text/plain
+X-ClientProxiedBy: DS7PR03CA0299.namprd03.prod.outlook.com
+ (2603:10b6:5:3ad::34) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-References: <20230109204520.539080-1-ojeda@kernel.org> <20230109204520.539080-3-ojeda@kernel.org>
- <CAK7LNATVJ5e=DnbJ++03iEMk0bN3-UvODBLkEKcYdSnJZa_tmA@mail.gmail.com>
-In-Reply-To: <CAK7LNATVJ5e=DnbJ++03iEMk0bN3-UvODBLkEKcYdSnJZa_tmA@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 12 Jan 2023 13:35:08 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASDu+i4G88TYYa6feg-bha-_cLv1si_ujuSMbWuyUve0Q@mail.gmail.com>
-Message-ID: <CAK7LNASDu+i4G88TYYa6feg-bha-_cLv1si_ujuSMbWuyUve0Q@mail.gmail.com>
-Subject: Re: [PATCH 3/6] kbuild: rust_is_available: add check for `bindgen` invocation
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Alexandru Radovici <msg4alex@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|CY8PR10MB7337:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7e3e948e-8343-47f5-28ef-08daf456b236
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sV5TDcm5GSbcjVPuuKkvnGiB6iAkWrkQJsha3vz/YbDBTonLME1Lu32VN7goCjThhR6J05qhuZ+uPpZ1n8UHQPr7ar9394G62L4AiFhgVSomuXvN02deIFevh9QgAxmK2436BYySYs6CoMEu9a59k5p1H2NoG0x+lmtwwU6OMAJYWN3WdioSTCfPlzj/767blc4Hjgr/aeQjlsyc4gFwumwYD5leusCIgwLJNU27MdDlCZ0WiBE05hW0d/sFlg2gGQby+24sQg0XW4WhLJjclVWbm4X0N4RVNxBYhyoYINC4i8IuA6Uq6XyFYhZl3wCCsFym7rwts5wFhml6Lp5iPrwO+EdC1EUF1IDlzuawRB0qklWKmbRn/mKzwsuoq7ut3zF3bb07DPpYtMdoS5Ke1xcfIob9+jmxjTiTIcfIA0C7XTNYdpjwcTkvzW3zra50RJlAtmMD+HyT3Cyx7MBRcwCFs7na8g2xsVzEXfh5oa32gjrlah4NRGMq79KYM8NfV7Bdd2b/dkzT1mYG1ZKQpW8q2CoXlrJBIz9V9M8g3DvjQqb/a+IjRcJ2Ju7yhmVC38+KyTdftt/hjgNY4Bj1A6tPR49qo8at8h++jP8AzX2tEPiBuzHlNorw/BzzwjOG2fwE31jKZSaU7ykbwvc2Qw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(136003)(376002)(39860400002)(366004)(451199015)(316002)(38100700002)(6486002)(8676002)(6916009)(66556008)(26005)(66946007)(4326008)(186003)(6512007)(66476007)(36916002)(41300700001)(83380400001)(478600001)(2906002)(8936002)(7416002)(4744005)(5660300002)(6666004)(86362001)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7/I9ddS2UAQ8mEzsh5cM/g8BJEjaxSqVs9UX7Kug6vx/qAxA5qonG6YES5j1?=
+ =?us-ascii?Q?xxryYk99lCOvR8dyMB6a7SwtK8e2UxKPsDs/iRVYnNrAKoohrAFJ4BGzBaMB?=
+ =?us-ascii?Q?58WfarDjx9U0HQk9V4GqGlNDnCj5Y+1cgbtx+Nykk3STAo7IxdH5Z9DLGkqA?=
+ =?us-ascii?Q?lgVXF6ZzVS12GHZz3/VfIyYEvms1zdAjstERlwl6p1dBGEPWjRNUs78bTw6z?=
+ =?us-ascii?Q?FPqV+OY6bj1fvBXwRigeeJxGvOC//ACjYxGBp+Uf7xmXrwcXUYtnnamrFn4q?=
+ =?us-ascii?Q?S1qUFkJBloRVGhv8bCUywHkLfzlDyoPY/YrHPeVijOMJtan0m3Vj67cFhwrs?=
+ =?us-ascii?Q?1nXNJdqhGnf6qkIwoOZvechfJlBuXijhmuoU14COXgenBf5iG0lMVmUknz/V?=
+ =?us-ascii?Q?ej9YpmWiufVYQ+K5sc5D2yLVR6bjTU7STfxE/0Ayxa2D5M0xOrvA5ELMWye9?=
+ =?us-ascii?Q?QwYODtaRWledNnXLv/QWFOQFdxtO4BsNfKPmndyKOjREGXsE2FJHDOc1Ax+e?=
+ =?us-ascii?Q?mQNAGtKiNZq3eHPtkVdK0FkwTTdyuRVICtg2vHRE3A56ot61pdOxj2FCr9ZA?=
+ =?us-ascii?Q?/XsylIN6exGGLQvig2Xcw3+kFYtNZWdCTIWRf7ReXx2u9VDsblLMOEr76Giv?=
+ =?us-ascii?Q?/K1CigeCdUQ95WdGWI5BGSOrgB8iOX71hugE7HbaVK/cVDaFhKWWG4kUzYww?=
+ =?us-ascii?Q?iSq3WoNoS3VKCPxkhwZWWD2AWnLOhZe6jkTjePow4greqOmGwst4sHH6khfg?=
+ =?us-ascii?Q?bSkUbBEaGH11O2pCRuh+/FZqH8SmQiP0cYuC1eUR2I2E/neFFxBZpMH1Kcy9?=
+ =?us-ascii?Q?cuDocrPBjeXLU6ri44LJ01FWkPrHTrs4wUwe5ZCuWMrQsKZn0Inv+vRKL9Au?=
+ =?us-ascii?Q?EYSvtKcl+cP6sJGuyDRLLM995Ap03mhYowFzNFWOSMkKfYNlDrXY3Y/Z8nXp?=
+ =?us-ascii?Q?ZDPa4+Wj4OIitguCsB6Yu7O4ZBdp/iTAU1CRi1BnVky8q4vazbFH5Q2vH+BC?=
+ =?us-ascii?Q?dRadvobeiOVVvCKbgYtXi14NWLH0H6Yk38gF5EP1H77MmBCU0lKDu4gcUhhb?=
+ =?us-ascii?Q?i22AkKiH4ReLVdUk0fZDk2oZF7BTWQhY2/BYUSRCi0jDQvsDS9s8sv+9bCei?=
+ =?us-ascii?Q?rxnaB/+D653ffD6o+am7DqT4647mDo5p/K9rDrSf+yIBCBuY9yuTMK3xpq4b?=
+ =?us-ascii?Q?fRXZUlZRXnUATgyvpTHXO2/AZK8GrP0FjguWHZG9dymqYxfjcZYhA6Z0M9p2?=
+ =?us-ascii?Q?E119TQaRzuT/V/2YHXNz7KwCEGmjaau/Gm63Nk8vQowYKtRviB5WhKw5V88f?=
+ =?us-ascii?Q?EMw07Wu9qnHdi3s71FyEfVXs3TcUXVBrGFKl4J2/T18TIxVpgfN9DrUm0gRA?=
+ =?us-ascii?Q?k5lQ9L6gIuxE27m7+IBqaWNATf2fYeMco8Q7ePWqC+q8RJCe3rOjqhZ8WFhV?=
+ =?us-ascii?Q?NlrXbUKIUbFIk5lckNV6o589xckQD0m99P62vL0Ife4J7pC+BMYV6LgjZLu/?=
+ =?us-ascii?Q?bvZXT4fGz24xQgoTx9RXTSAqwrk4YR+g86pSjhj1c7WqxbzPErpXNSe7WSSg?=
+ =?us-ascii?Q?FPe8SFhN+zKpcAjk4oSyJXr4d7uizQaggjBj/qbdUDnaKVMqdWt1Ck+Jkwf6?=
+ =?us-ascii?Q?SA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?R68s798tOTVXWVqs9va87s7dyqUdK/TBUz0xENLVCTtCtmcGVA0w87mul/FX?=
+ =?us-ascii?Q?RqFpEeBroDkhcOe7DzJ5A2R9MPFtKZt9/D80ED+d9kdSwrJrKDh6Qyr7ywMi?=
+ =?us-ascii?Q?aRBNXkpQ+qKdx4uVwgVXWF/JISzlKrOX2lfUDOzh/fPX0t+dvIm38f6XlEkJ?=
+ =?us-ascii?Q?/EFQJIiBo/9HfxO6IV/TmrrfTUlh/xJFTWyPdt8wCfYCU3rBVj3Ev3p2E1It?=
+ =?us-ascii?Q?EN++7T6G5jGSzkA7K0g/Jti9v8LnWQ/KARPbz9qCWnsGPGjGnjPE0M4s3SCo?=
+ =?us-ascii?Q?63Xej+k2ij5vkjg+l7QtiREoNwWD8H4jH6UV/Ylh71vD4JFT6wz8BGwKvT1h?=
+ =?us-ascii?Q?byfIiEAA8m7GiloMBqDbbYLKCHheCuJM12/a14BVbP4TESnnWQiiNhcVpTA8?=
+ =?us-ascii?Q?DKEHn/hnWu8koeKx+SW6Bo276FGIdNP0MUKaEmFg76DtlQmwg41W2BaO4iIc?=
+ =?us-ascii?Q?4Gew8m1kh6X+wZxq+lng73ed3co5B0Xm3APDUWBImG7XqcmJNwx+9OJD7b0z?=
+ =?us-ascii?Q?LDHrlKC926MTHEcYLqeKxajxg+chTZYem+XNCbKqf/uZ5xVSZskgNuWmRgnm?=
+ =?us-ascii?Q?pqcGDsdFzmK7162f/5zCTaXQv3MFhYgEpLzUgQi/b7D9coBEU2KekvTzqLGA?=
+ =?us-ascii?Q?lZ6D7mlPVbob2ZG6rF5mlyLHSaV6UF2WL3hM1kkegDu9GF4zLKEX1DGn/CRr?=
+ =?us-ascii?Q?DazsMN0zDvcsqDxUA2Fn83V9znAH1OWPoV7vnNvQ3NZvhPv0AIMqeT9MXCIu?=
+ =?us-ascii?Q?POX4bH+p/8VkJZxT6LQDIsw5lLmm8GRbNpiWa/JOCkpn7SpQmxf/Ek1n4JFg?=
+ =?us-ascii?Q?LzKFj1edGHOIbOpsI1yIgx7yl94CEtisp01ig2Qx0Ru7w6PeEBDId80jFKbZ?=
+ =?us-ascii?Q?9+dOYTAsl7MbF8g/LW9Y1YaCD7UgztQyUykwM7g4B1pAL/t9weAdVR5heNOk?=
+ =?us-ascii?Q?qhXUWPee/AZYV+rurSpdbg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e3e948e-8343-47f5-28ef-08daf456b236
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 04:37:22.2323
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dlPJzCUywjsIORZjZV3Xf4sq8TvYiLKgI6YnGTwj0pQaqAI0/F90IBz+NQsU5ykqGbA8iwC+HY+rJFZL0d5ktYMlp293H16eiNAp3jBws4k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB7337
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-12_02,2023-01-11_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ adultscore=0 spamscore=0 mlxscore=0 mlxlogscore=757 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301120029
+X-Proofpoint-GUID: 0NKTwu6YqycX9K3_HJcQEoIvx8wMuF4L
+X-Proofpoint-ORIG-GUID: 0NKTwu6YqycX9K3_HJcQEoIvx8wMuF4L
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 1:33 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Tue, Jan 10, 2023 at 5:45 AM Miguel Ojeda <ojeda@kernel.org> wrote:
-> >
-> > `scripts/rust_is_available.sh` calls `bindgen` with a special
-> > header in order to check whether the `libclang` version in use
-> > is suitable.
-> >
-> > However, the invocation itself may fail if, for instance, `bindgen`
-> > cannot locate `libclang`. This is fine for Kconfig (since the
-> > script will still fail and therefore disable Rust as it should),
-> > but it is pretty confusing for users of the `rustavailable` target
-> > given the error will be unrelated:
-> >
-> >     ./scripts/rust_is_available.sh: 21: arithmetic expression: expecting primary: "100000 *  + 100 *  + "
-> >     make: *** [Makefile:1816: rustavailable] Error 2
-> >
-> > Instead, run the `bindgen` invocation independently in a previous
-> > step, saving its output and return code. If it fails, then show
-> > the user a proper error message. Otherwise, continue as usual
-> > with the saved output.
-> >
-> > Since the previous patch we show a reference to the docs, and
-> > the docs now explain how `bindgen` looks for `libclang`,
-> > thus the error message can leverage the documentation, avoiding
-> > duplication here (and making users aware of the setup guide in
-> > the documentation).
-> >
-> > Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Reported-by: fvalenduc (@fvalenduc)
-> > Reported-by: Alexandru Radovici <msg4alex@gmail.com>
-> > Link: https://lore.kernel.org/rust-for-linux/CAKwvOdm5JT4wbdQQYuW+RT07rCi6whGBM2iUAyg8A1CmLXG6Nw@mail.gmail.com/
-> > Link: https://github.com/Rust-for-Linux/linux/issues/934
-> > Link: https://github.com/Rust-for-Linux/linux/pull/921
-> > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> > ---
-> >  scripts/rust_is_available.sh | 23 ++++++++++++++++++++++-
-> >  1 file changed, 22 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
-> > index c907cf881c2c..cd87729ca3bf 100755
-> > --- a/scripts/rust_is_available.sh
-> > +++ b/scripts/rust_is_available.sh
-> > @@ -108,8 +108,29 @@ if [ "$rust_bindings_generator_cversion" -gt "$rust_bindings_generator_min_cvers
-> >  fi
-> >
-> >  # Check that the `libclang` used by the Rust bindings generator is suitable.
-> > +#
-> > +# In order to do that, first invoke `bindgen` to get the `libclang` version
-> > +# found by `bindgen`. This step may already fail if, for instance, `libclang`
-> > +# is not found, thus inform the user in such a case.
-> > +set +e
-> > +bindgen_libclang_output=$(LC_ALL=C "$BINDGEN" $(dirname $0)/rust_is_available_bindgen_libclang.h 2>&1 >/dev/null)
-> > +bindgen_libclang_code=$?
-> > +set -e
-> > +if [ $bindgen_libclang_code -ne 0 ]; then
-> > +       echo >&2 "***"
-> > +       echo >&2 "*** Running '$BINDGEN' to check the libclang version (used by the Rust"
-> > +       echo >&2 "*** bindings generator) failed with code $bindgen_libclang_code. This may be caused by"
-> > +       echo >&2 "*** a failure to locate libclang. See output and docs below for details:"
-> > +       echo >&2 "***"
-> > +       echo >&2 "$bindgen_libclang_output"
-> > +       echo >&2 "***"
-> > +       exit 1
-> > +fi
-> >
->
->
-> Instead of toggling -e, why don't you write like this?
->
->
-> if ! bindgen_libclang_output=$(LC_ALL=C "$BINDGEN" $(dirname
-> $0)/rust_is_available_bindgen_libclang.h 2>&1); then
->        [snip]
-> fi
->
 
+Bean,
 
-I meant this:
+> These patches are to fix several compilation warnings introduced by my
+> commit: 6ff265fc5ef6 ("scsi: ufs: core: bsg: Add advanced RPMB support
+> in ufs_bsg"), please consider this patch series for the next your
+> merge window.  Apologies for this!!
 
-
-
-if ! bindgen_libclang_output=$(LC_ALL=C "$BINDGEN" $(dirname
-$0)/rust_is_available_bindgen_libclang.h 2>&1 >/dev/null); then
-       [snip]
-fi
-
-
-
-
-(">/dev/null" was lost in the previous email)
-
-
-
+Applied to 6.3/scsi-staging, thanks!
 
 -- 
-Best Regards
-Masahiro Yamada
+Martin K. Petersen	Oracle Linux Engineering
