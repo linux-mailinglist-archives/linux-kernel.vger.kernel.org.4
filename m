@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B006679F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DA56679F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbjALP4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
+        id S239926AbjALP4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:56:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbjALPz6 (ORCPT
+        with ESMTP id S231793AbjALPzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:55:58 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540BD37503
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:46:05 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id d17so18509173wrs.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:46:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n3a+da2Ixkv3+UWjaOBcx9XincgA8EoIsPdzWIEP5Xs=;
-        b=B0tfqo7jE7yLMGnt5k4IEh2fyztJBU3NkVI59EUvtzIcERfsNgeQHWmCULubiMKtE1
-         hOoJnm60UmqeKtlTjbKOTGTaIVcddcMTTWoF6BAZQP5tK4a+NN7hClja3XJ8RyF7/jOy
-         Xp+M8AqvqGdiLHf+vZDKpA3NEUP9r0vhTR2ua1nw7Rdk5bKRT+dowPsW1j8SCfbQT8LL
-         k00MDKY+H0NZKnS8OBcTen8OcPUC0wPkh+z/6lQZ16Xxk0aYRqKQa1jr4zA4pBO8+ykL
-         iT7E2nt5D2eqX8eAaT3puGVRQVsYuR2TfJRmwxiNhTxb1mDwrdtdxqTGQbIBcpHeZj6e
-         Sl0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n3a+da2Ixkv3+UWjaOBcx9XincgA8EoIsPdzWIEP5Xs=;
-        b=LttmLESUCvw35636EBQRXM7Htoww+Z+KHZOTgE1l4mg/MvQbihQ+YAxQz1htCpKklW
-         S04PNJpUDalVdC9hOwoJek8jJeYUw7kyuGXu62zioy0IO+ULlLJo//LEwGZw0JHWnjJ+
-         8v+DHuFvbklfZ7Qr/YDtlW9it1/Cau2Y2sfTNuEnjUKVF43+9O2wWdOzeUwwoK5RMHf8
-         tgklvFNheUlLIlTPr2G9vZmuQCHCp0OcWOInyUQdV/GbEX1GO6nFz31cHxk36geFNqEV
-         +ClB0Gl+RjDXkKUs3yfuq+jbU/NqJrFTLCAHXjvZo+442X5TAvgZeJE3eirFCCn6+IiD
-         bbdQ==
-X-Gm-Message-State: AFqh2kpyhWOg6TRo9e7IFR4VdSlMVuEGErbh2WHi1tb1RqxQ+m2Og3QR
-        3v3XhA5dTu2E5j+eAm/r6umQ7A==
-X-Google-Smtp-Source: AMrXdXvAVKr/5nv/RC9zvUl2zmh1IkA2ZjzZBFcajvmT94k7AqO7muhveMm8oBLXyFRuLTPbR/geJw==
-X-Received: by 2002:a5d:5405:0:b0:284:8a24:59e6 with SMTP id g5-20020a5d5405000000b002848a2459e6mr35819328wrv.3.1673538363871;
-        Thu, 12 Jan 2023 07:46:03 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:d8:37a9:b9c7:ec8a])
-        by smtp.gmail.com with ESMTPSA id f19-20020a1c6a13000000b003d9fb04f658sm8223555wmc.4.2023.01.12.07.46.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 07:46:03 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2] dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
-Date:   Thu, 12 Jan 2023 16:45:54 +0100
-Message-Id: <20230112154554.442808-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
+        Thu, 12 Jan 2023 10:55:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2089032EA4;
+        Thu, 12 Jan 2023 07:46:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0BBEB81EA3;
+        Thu, 12 Jan 2023 15:45:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66A71C433D2;
+        Thu, 12 Jan 2023 15:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673538358;
+        bh=iVDRSaiL1SV1gIg3rI/gRJbp33B+9oKnazXw2LxQG3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SqN/+ilmPSN/TmR0Xp7mxNYQ/NaT5gO61irxzKDo8a5Bnl0vCtAIe8rlXw4JgPiXR
+         7HTSVsX9rp/u88c5rz9pTI1leIEz9HvkPY2Lk0kGAT22m2YsdmbAnpM+pxsDmaezGT
+         ojcdZZfjzAOpgQxeT/UhVdwehMlOiqxDAUF4oUmTi1qJWprZLKU2lQs8kEuul/uLC/
+         2vmWIMK3AJfbbgGCChPemxzwP8nBav+uRffJfdIOjAoOU2DgnjenHIG4K1wFu48vm1
+         4l/ITxKKJI+CWBoz2JEvKraJMNFT1qWiEurzFnQ0jB6vw+grukHGtgtd05mKDxl8FN
+         ZqSfExKogT4tg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pFzmH-0002RG-VL; Thu, 12 Jan 2023 16:46:06 +0100
+Date:   Thu, 12 Jan 2023 16:46:05 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Use MMCX for all DP
+ controllers
+Message-ID: <Y8ArPbvjnBYW3UDi@hovoldconsulting.com>
+References: <20230112135055.3836555-1-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112135055.3836555-1-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Thu, Jan 12, 2023 at 05:50:55AM -0800, Bjorn Andersson wrote:
+> While MDSS_GDSC is a subdomain of MMCX, Linux does not respect this
+> relationship and sometimes invokes sync_state on the rpmhpd (MMCX)
+> before the DisplayPort controller has had a chance to probe.
+> 
+> The result when this happens is that the power is lost to the multimedia
+> subsystem between the probe of msm_drv and the DisplayPort controller -
+> which results in an irrecoverable state.
+> 
+> While this is an implementation problem, this aligns the power domain
+> setting of the one DP instance with that of all the others.
+> 
+> Fixes: 57d6ef683a15 ("arm64: dts: qcom: sc8280xp: Define some of the display blocks")
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 4f4353f84cba..4511fd939c91 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -2533,7 +2533,7 @@ mdss0_dp3: displayport-controller@aea0000 {
+>  				interrupts = <15>;
+>  				phys = <&mdss0_dp3_phy>;
+>  				phy-names = "dp";
+> -				power-domains = <&dispcc0 MDSS_GDSC>;
+> +				power-domains = <&rpmhpd SC8280XP_MMCX>;
+>  
+>  				assigned-clocks = <&dispcc0 DISP_CC_MDSS_DPTX3_LINK_CLK_SRC>,
+>  						  <&dispcc0 DISP_CC_MDSS_DPTX3_PIXEL0_CLK_SRC>;
 
-Document the qcom,smmu-500 SMMU on SA8775P platforms.
+Looks good as a temporary remedy:
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
-- rebase on top of Krzysztof's work and add the compatible to the
-  "clock disallow" list
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 
- Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-index 124253e84c02..ea9205706b7c 100644
---- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-+++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-@@ -36,6 +36,7 @@ properties:
-           - enum:
-               - qcom,qcm2290-smmu-500
-               - qcom,qdu1000-smmu-500
-+              - qcom,sa8775p-smmu-500
-               - qcom,sc7180-smmu-500
-               - qcom,sc7280-smmu-500
-               - qcom,sc8180x-smmu-500
-@@ -326,6 +327,7 @@ allOf:
-               - nvidia,smmu-500
-               - qcom,qcm2290-smmu-500
-               - qcom,qdu1000-smmu-500
-+              - qcom,sa8775p-smmu-500
-               - qcom,sc7180-smmu-500
-               - qcom,sc8180x-smmu-500
-               - qcom,sc8280xp-smmu-500
--- 
-2.37.2
-
+Johan
