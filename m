@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274DB666C7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E51BB666C81
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239741AbjALIfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 03:35:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
+        id S239586AbjALIgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 03:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239736AbjALIeq (ORCPT
+        with ESMTP id S235142AbjALIfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 03:34:46 -0500
+        Thu, 12 Jan 2023 03:35:07 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F5E54E423;
-        Thu, 12 Jan 2023 00:34:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96F5C50054;
+        Thu, 12 Jan 2023 00:34:27 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3A3AFEC;
-        Thu, 12 Jan 2023 00:34:50 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 79974FEC;
+        Thu, 12 Jan 2023 00:35:09 -0800 (PST)
 Received: from [192.168.1.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD8BA3F71A;
-        Thu, 12 Jan 2023 00:34:06 -0800 (PST)
-Message-ID: <2f11d495-0a2d-9cc6-d694-88d12e94d3eb@arm.com>
-Date:   Thu, 12 Jan 2023 09:33:53 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 236043F71A;
+        Thu, 12 Jan 2023 00:34:25 -0800 (PST)
+Message-ID: <74fe4cb1-9306-75a6-8adc-f7bb9191feb4@arm.com>
+Date:   Thu, 12 Jan 2023 09:33:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
 From:   Pierre Gondois <pierre.gondois@arm.com>
-Subject: Re: [PATCH v2 13/23] arm64: dts: Update cache properties for
- microchip
+Subject: Re: [PATCH v2 04/23] arm64: dts: Update cache properties for apm
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+Cc:     Khuong Dinh <khuong@os.amperecomputing.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
+        devicetree@vger.kernel.org
 References: <20221107155825.1644604-1-pierre.gondois@arm.com>
- <20221107155825.1644604-14-pierre.gondois@arm.com>
+ <20221107155825.1644604-5-pierre.gondois@arm.com>
 Content-Language: en-US
-In-Reply-To: <20221107155825.1644604-14-pierre.gondois@arm.com>
+In-Reply-To: <20221107155825.1644604-5-pierre.gondois@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -58,7 +54,7 @@ Just a reminder in case the patch was forgotten,
 Regards,
 Pierre
 
-On 11/7/22 16:57, Pierre Gondois wrote:
+On 11/7/22 16:56, Pierre Gondois wrote:
 > The DeviceTree Specification v0.3 specifies that the cache node
 > 'compatible' and 'cache-level' properties are 'required'. Cf.
 > s3.8 Multi-level and Shared Cache Nodes
@@ -69,16 +65,53 @@ On 11/7/22 16:57, Pierre Gondois wrote:
 > 
 > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 > ---
->   arch/arm64/boot/dts/microchip/sparx5.dtsi | 1 +
->   1 file changed, 1 insertion(+)
+>   arch/arm64/boot/dts/apm/apm-shadowcat.dtsi | 4 ++++
+>   arch/arm64/boot/dts/apm/apm-storm.dtsi     | 4 ++++
+>   2 files changed, 8 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/microchip/sparx5.dtsi b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-> index 2dd5e38820b1..c4bca23b96b9 100644
-> --- a/arch/arm64/boot/dts/microchip/sparx5.dtsi
-> +++ b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-> @@ -52,6 +52,7 @@ cpu1: cpu@1 {
+> diff --git a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+> index a8526f8157ec..68ba865fcd58 100644
+> --- a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+> +++ b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+> @@ -97,15 +97,19 @@ cpu@301 {
 >   		};
->   		L2_0: l2-cache0 {
+>   		xgene_L2_0: l2-cache-0 {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   		xgene_L2_1: l2-cache-1 {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   		xgene_L2_2: l2-cache-2 {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   		xgene_L2_3: l2-cache-3 {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   	};
+>   
+> diff --git a/arch/arm64/boot/dts/apm/apm-storm.dtsi b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+> index f56d687f772d..9ac7417f65eb 100644
+> --- a/arch/arm64/boot/dts/apm/apm-storm.dtsi
+> +++ b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+> @@ -81,15 +81,19 @@ cpu@301 {
+>   		};
+>   		xgene_L2_0: l2-cache-0 {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   		xgene_L2_1: l2-cache-1 {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   		xgene_L2_2: l2-cache-2 {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   		xgene_L2_3: l2-cache-3 {
 >   			compatible = "cache";
 > +			cache-level = <2>;
 >   		};
