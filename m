@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74436670BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 312E56670C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234607AbjALLRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:17:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
+        id S229888AbjALLUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjALLQm (ORCPT
+        with ESMTP id S236904AbjALLT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:16:42 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2EB13FA7;
-        Thu, 12 Jan 2023 03:09:28 -0800 (PST)
-Date:   Thu, 12 Jan 2023 12:09:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673521767;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 12 Jan 2023 06:19:27 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239FB37272
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:11:09 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D3DEE3FC78;
+        Thu, 12 Jan 2023 11:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673521867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=tDCtF1k4ANTCGutHZXIyNVj0A5DsZpaHBXshV6rRwdY=;
-        b=ee7t37a9m4MbSl1YM8AB8lsLv44oXc7o450J1A73ZhciksFKMKtprL3YsPL2tdA9QRzsYx
-        2g2/SSnYwYhqBgDETKOFI4hk6yeaFPyo8LX4AGTxnaXrXmeF48vWEvfClVY3uFSzJ5c7Bt
-        s/fYK0vWKkJgvI77QYrOuVib/5clL0JcAai2U1Gqfs5UscqdWwabPIJVIOs1pXGGLyI+OD
-        itvOQW63Ayzvj2MiyxO3BCxjBjTDVFh7tY7Qw/0YK98WeiMcgCDctftExJsx2fCJOz6EGS
-        WPnsqAmCYgJ/B+hy/rzqgHajoCOb31cbPNfMs6Y5EpHptxjHQXMn1JYrPk84iw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673521767;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        bh=6g3iM5WKSW2maoRg3zlxlslfcwv4ybJMYWSWJ5AL6iU=;
+        b=T942ZZbLsBpMgVl085JhZzdPr+opOHCm1/1+HsG/3YAkSc+iZZ9cyEIR7CTJaXT4NeyfcM
+        11loYTkJshjwQ6/BQBeV9DJ2SUjn8OFBOLE2yA0HAKsT5smb3u09R0KYieQ9LTl424oNme
+        NpuLbkSk79L609+35AJLEGHAj/65JWU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673521867;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=tDCtF1k4ANTCGutHZXIyNVj0A5DsZpaHBXshV6rRwdY=;
-        b=WH/bRg/8GIIjrOFnCYPDlqmZlTOc7fuDxEBo9XyYwsOO/edYoEvSUTBjL8ndZGsyx6ecMj
-        enypQq+NC61jrjBw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] cpuidle: psci: Do not suspend topology CPUs on
- PREEMPT_RT
-Message-ID: <Y7/qZNoXvp/I6h8s@linutronix.de>
-References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
- <20221219151503.385816-4-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221219151503.385816-4-krzysztof.kozlowski@linaro.org>
+        bh=6g3iM5WKSW2maoRg3zlxlslfcwv4ybJMYWSWJ5AL6iU=;
+        b=+3Ck6E8ffwEChYoEmVgppDaOeSIQ4/nlCHC7PMtl3yqjTBZ2zAykB71Rkea02Z3Nc4/Lrk
+        dsZfmVekMDgmUSDw==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id B2C7113958;
+        Thu, 12 Jan 2023 11:11:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id p2bvKsvqv2O/QgAAGKfGzw
+        (envelope-from <tiwai@suse.de>); Thu, 12 Jan 2023 11:11:07 +0000
+Date:   Thu, 12 Jan 2023 12:11:07 +0100
+Message-ID: <87ilhc6m9g.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Luka Guzenko <l.guzenko@web.de>
+Cc:     tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ALSA: hda/realtek: Enable mute/micmute LEDs on HP Spectre x360 13-aw0xxx
+In-Reply-To: <20230110202514.2792-1-l.guzenko@web.de>
+References: <20230110202514.2792-1-l.guzenko@web.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,24 +68,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-19 16:15:01 [+0100], Krzysztof Kozlowski wrote:
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index 57bc3e3ae391..9d971cc4b12b 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -72,7 +72,7 @@ static int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
->  	ct_irq_enter_irqson();
->  	if (s2idle)
->  		dev_pm_genpd_suspend(pd_dev);
-> -	else
-> +	else if (!IS_ENABLED(CONFIG_PREEMPT_RT))
->  		pm_runtime_put_sync_suspend(pd_dev);
+On Tue, 10 Jan 2023 21:25:14 +0100,
+Luka Guzenko wrote:
+> 
+> The HP Spectre x360 13-aw0xxx devices use the ALC285 codec with GPIO 0x04
+> controlling the micmute LED and COEF 0x0b index 8 controlling the mute LED.
+> A quirk was added to make these work as well as a fixup.
+> 
+> Signed-off-by: Luka Guzenko <l.guzenko@web.de>
+> ---
+> V1 -> V2: Inverted the conditional statement in
+> 	  alc285_fixup_hp_gpio_micmute_led as suggested by Takashi Iwai
 
-So based on the commit description you run into a sleeping lock in
-pm_runtime_put_sync_suspend() while the CPU is in an IRQ-off region.
-Why is it okay to skip it on PREEMPT_RT?
+Thanks, applied.
 
->  	ct_irq_exit_irqson();
->  
 
-Sebastian
+Takashi
