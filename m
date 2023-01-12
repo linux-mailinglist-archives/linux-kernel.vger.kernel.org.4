@@ -2,169 +2,623 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72835667844
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A77667849
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240084AbjALO4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:56:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
+        id S240205AbjALO5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:57:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240098AbjALOze (ORCPT
+        with ESMTP id S240208AbjALO4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:55:34 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F9714D21;
-        Thu, 12 Jan 2023 06:42:52 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-15027746720so19027186fac.13;
-        Thu, 12 Jan 2023 06:42:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=yOvEekganhspueWhowVp1UU/Ia1S9xjLH34IGLVX6MA=;
-        b=TXmaLsiijehOw7IRVAmrolOSCc3dm+FAYYIJ5PxZVlMm2uiC7bIFpFczi1T9lxHHlp
-         xZ5xu9CiQI7jzucCB9bhiUKm/cBDEBrmZVwEyLFjtEmnwfQoeur4CYba2T9ar+GBkzdc
-         nzf2V0O4vAXCCZ/R6d/8TYOnnuXU5s8/lr/6VHhLxcsN4UflRQ+hoXQljOuLQrcxbAPw
-         rI6XOzchEDZsvlCIx5Osij9gwg7e8P8UOT9AV8yaJNu0BrWfba0PJ8+Mg32x7csJAs19
-         dBEkYEmkSs6/pBJKQWJH+Rw6CVx0jktUKgNuALPGciGoHoBYfExmudQtO7fO5vxftRY0
-         Hc2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yOvEekganhspueWhowVp1UU/Ia1S9xjLH34IGLVX6MA=;
-        b=uqhj9uq23LZFH8xh83me1rx1hL0x/55EARWiwGNH12YzapvWP2TBOBg+PZoIGaYU6K
-         G0iFfB0Gprmaft6Kq3S1j4rDNp9On9iu189+evXGCnrgn04rO05GSzsnpmWtGsxyFCyJ
-         87Z/Ju+Cr+izrMF8/ee43M9Rapb+nswUjwIxB3eVmVZmhB9omIUMx6wykz7puhE2Lu7c
-         tRX92yhLIo0lRaDrnAY0CTTsmpmRAmrePpDKzxgnzPmnUcYPxv0V/IvnM1eCrac2zQEt
-         5U0vcKjFpRi5CYtQ1yma8aJNNyIE532YCdvvJLQli1219VtvdA16u57l/UCjixtIm8KF
-         B+qA==
-X-Gm-Message-State: AFqh2kqC77GWGKCLhFMTlRP1yI9+tUtqEYXXvmTa5K3PYRRSvGkMwYiD
-        cAnMgNBmPK/VdmdTLK3+vkw=
-X-Google-Smtp-Source: AMrXdXvgTBx3/KXgalLdTo/pOKSzAMJ1Ccv4D4GuGjFShJNhjRqKBCHPVJ3Wbpgj/GogeWuqD/s/yA==
-X-Received: by 2002:a05:6870:2a4b:b0:15e:d113:d145 with SMTP id jd11-20020a0568702a4b00b0015ed113d145mr448679oab.21.1673534572151;
-        Thu, 12 Jan 2023 06:42:52 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9-20020a056870d28900b0014b8347e1e3sm8975429oae.12.2023.01.12.06.42.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 06:42:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <32a7bb3f-29ec-a5d3-c8ac-998f5714ba27@roeck-us.net>
-Date:   Thu, 12 Jan 2023 06:42:49 -0800
+        Thu, 12 Jan 2023 09:56:06 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424933D1E8;
+        Thu, 12 Jan 2023 06:43:12 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 86D913FE62;
+        Thu, 12 Jan 2023 14:43:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673534587; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8NxbmXzAc1vMKo+qjdbG5iAdFKgmbucUYSDusVgdkrA=;
+        b=IuhGif5czWuLpuTQGVhMs7VtVJ8REaz6DRMz78VCDbo2Fd/QX1s4YBe/cMafQCw/yT1twG
+        VPcj3niE7rAGLO7FL5+NehlNnTC+etFSe59zDOatevTGi5LuixXF8BPO4+XuwL3mqOIUDT
+        wKfQUyAN6AbOYQKFdfmRjQ0fLxSXIBg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673534587;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8NxbmXzAc1vMKo+qjdbG5iAdFKgmbucUYSDusVgdkrA=;
+        b=F/ZVf7StwpIpU/C4euiSOo80UtllPUC/V67T3sam9DhsKc3k0ZvYxSSxTvjCkVkitkKQ3F
+        KvdXuyXSmsYHrPAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 58AFC13776;
+        Thu, 12 Jan 2023 14:43:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xrtQFXscwGN9DgAAMHmgww
+        (envelope-from <hare@suse.de>); Thu, 12 Jan 2023 14:43:07 +0000
+Message-ID: <5ee0baea-9c4b-c792-011d-f4bae777257c@suse.de>
+Date:   Thu, 12 Jan 2023 15:43:07 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v11 2/3] usb: typec: tcpci: Add callback for evaluating
- contaminant presence
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v6 2/9] block: Add copy offload support infrastructure
 Content-Language: en-US
-To:     Badhri Jagan Sridharan <badhri@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>
-References: <20221223102122.1038499-1-badhri@google.com>
- <20221223102122.1038499-2-badhri@google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221223102122.1038499-2-badhri@google.com>
+To:     Nitesh Shetty <nj.shetty@samsung.com>,
+        Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     anuj20.g@samsung.com, joshi.k@samsung.com, p.raghav@samsung.com,
+        nitheshshetty@gmail.com, gost.dev@samsung.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
+References: <20230112115908.23662-1-nj.shetty@samsung.com>
+ <CGME20230112120039epcas5p49ccf70d806c530c8228130cc25737b51@epcas5p4.samsung.com>
+ <20230112115908.23662-3-nj.shetty@samsung.com>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20230112115908.23662-3-nj.shetty@samsung.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/23/22 02:21, Badhri Jagan Sridharan wrote:
-> This change adds callback to evaluate presence of contaminant in
-> the TCPCI layer.
+On 1/12/23 12:58, Nitesh Shetty wrote:
+> Introduce blkdev_issue_copy which supports source and destination bdevs,
+> and an array of (source, destination and copy length) tuples.
+> Introduce REQ_COPY copy offload operation flag. Create a read-write
+> bio pair with a token as payload and submitted to the device in order.
+> Read request populates token with source specific information which
+> is then passed with write request.
+> This design is courtesy Mikulas Patocka's token based copy
 > 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
-> Changes since v10:
-> * None
-> Changes since v9:
-> * Check for presence of low level check_contaminant before installing tcpc.check_contaminant.
-> Changes since v7:
-> * None. Skipped versions by mistake.
-> Changes since v6:
-> * Removed is_potential_contaminant callback
-> Changes since v5:
-> * None
-> Changes since v4:
-> * None
-> Changes since v3:
-> * None
-> Changes since v2:
-> * Added tcpci_is_potential_contaminant to offload
-> * disconnect_while_debounce logic
-> ---
->   drivers/usb/typec/tcpm/tcpci.c | 11 +++++++++++
->   include/linux/usb/tcpci.h      |  7 +++++++
->   2 files changed, 18 insertions(+)
+> Larger copy will be divided, based on max_copy_sectors limit.
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index fe781a38dc82..699539e1be06 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -403,6 +403,14 @@ static void tcpci_frs_sourcing_vbus(struct tcpc_dev *dev)
->   		tcpci->data->frs_sourcing_vbus(tcpci, tcpci->data);
+> Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
+> Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+> ---
+>   block/blk-lib.c           | 358 ++++++++++++++++++++++++++++++++++++++
+>   block/blk.h               |   2 +
+>   include/linux/blk_types.h |  44 +++++
+>   include/linux/blkdev.h    |   3 +
+>   include/uapi/linux/fs.h   |  15 ++
+>   5 files changed, 422 insertions(+)
+> 
+> diff --git a/block/blk-lib.c b/block/blk-lib.c
+> index e59c3069e835..2ce3c872ca49 100644
+> --- a/block/blk-lib.c
+> +++ b/block/blk-lib.c
+> @@ -115,6 +115,364 @@ int blkdev_issue_discard(struct block_device *bdev, sector_t sector,
 >   }
+>   EXPORT_SYMBOL(blkdev_issue_discard);
 >   
-> +static void tcpci_check_contaminant(struct tcpc_dev *dev)
+> +/*
+> + * For synchronous copy offload/emulation, wait and process all in-flight BIOs.
+> + * This must only be called once all bios have been issued so that the refcount
+> + * can only decrease. This just waits for all bios to make it through
+> + * bio_copy_*_write_end_io. IO errors are propagated through cio->io_error.
+> + */
+> +static int cio_await_completion(struct cio *cio)
 > +{
-> +	struct tcpci *tcpci = tcpc_to_tcpci(dev);
+> +	int ret = 0;
 > +
-> +	if (tcpci->data->check_contaminant)
-> +		tcpci->data->check_contaminant(tcpci, tcpci->data);
+> +	atomic_dec(&cio->refcount);
+> +
+> +	if (cio->endio)
+> +		return 0;
+> +
+> +	if (atomic_read(&cio->refcount)) {
+> +		__set_current_state(TASK_UNINTERRUPTIBLE);
+> +		blk_io_schedule();
+> +	}
+> +
+Wouldn't it be better to use 'atomic_dec_return()' to avoid a potential 
+race condition between atomic_dec() and atomic_read()?
+
+> +	ret = cio->io_err;
+> +	kfree(cio);
+> +
+> +	return ret;
 > +}
 > +
->   static int tcpci_set_bist_data(struct tcpc_dev *tcpc, bool enable)
->   {
->   	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> @@ -778,6 +786,9 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
->   	tcpci->tcpc.frs_sourcing_vbus = tcpci_frs_sourcing_vbus;
->   	tcpci->tcpc.set_partner_usb_comm_capable = tcpci_set_partner_usb_comm_capable;
->   
-> +	if (tcpci->data->check_contaminant)
-> +		tcpci->tcpc.check_contaminant = tcpci_check_contaminant;
+> +static void blk_copy_offload_write_end_io(struct bio *bio)
+> +{
+> +	struct copy_ctx *ctx = bio->bi_private;
+> +	struct cio *cio = ctx->cio;
+> +	sector_t clen;
+> +	int ri = ctx->range_idx;
 > +
->   	if (tcpci->data->auto_discharge_disconnect) {
->   		tcpci->tcpc.enable_auto_vbus_discharge = tcpci_enable_auto_vbus_discharge;
->   		tcpci->tcpc.set_auto_vbus_discharge_threshold =
-> diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-> index 17657451c762..85e95a3251d3 100644
-> --- a/include/linux/usb/tcpci.h
-> +++ b/include/linux/usb/tcpci.h
-> @@ -188,6 +188,12 @@ struct tcpci;
->    *		Optional; The USB Communications Capable bit indicates if port
->    *		partner is capable of communication over the USB data lines
->    *		(e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
-> + * @check_contaminant:
-> + *		Optional; The callback is invoked when chiplevel drivers indicated
-> + *		that the USB port needs to be checked for contaminant presence.
-> + *		Chip level drivers are expected to check for contaminant and call
-> + *		tcpm_clean_port when the port is clean to put the port back into
-> + *		toggling state.
->    */
->   struct tcpci_data {
->   	struct regmap *regmap;
-> @@ -204,6 +210,7 @@ struct tcpci_data {
->   	void (*frs_sourcing_vbus)(struct tcpci *tcpci, struct tcpci_data *data);
->   	void (*set_partner_usb_comm_capable)(struct tcpci *tcpci, struct tcpci_data *data,
->   					     bool capable);
-> +	void (*check_contaminant)(struct tcpci *tcpci, struct tcpci_data *data);
+> +	if (bio->bi_status) {
+> +		cio->io_err = blk_status_to_errno(bio->bi_status);
+> +		clen = (bio->bi_iter.bi_sector << SECTOR_SHIFT) -
+> +			cio->ranges[ri].dst;
+> +		cio->ranges[ri].comp_len = min_t(sector_t, clen,
+> +				cio->ranges[ri].comp_len);
+> +	}
+> +	__free_page(bio->bi_io_vec[0].bv_page);
+> +	bio_put(bio);
+> +
+> +	if (atomic_dec_and_test(&ctx->refcount))
+> +		kfree(ctx);
+> +	if (atomic_dec_and_test(&cio->refcount)) {
+
+_Two_ atomic_dec() in a row?
+Why?
+
+And if that really is required please add a comment.
+
+> +		if (cio->endio) {
+> +			cio->endio(cio->private, cio->io_err);
+> +			kfree(cio);
+> +		} else
+> +			blk_wake_io_task(cio->waiter);
+> +	}
+> +}
+> +
+> +static void blk_copy_offload_read_end_io(struct bio *read_bio)
+> +{
+> +	struct copy_ctx *ctx = read_bio->bi_private;
+> +	struct cio *cio = ctx->cio;
+> +	sector_t clen;
+> +	int ri = ctx->range_idx;
+> +	unsigned long flags;
+> +
+> +	if (read_bio->bi_status) {
+> +		cio->io_err = blk_status_to_errno(read_bio->bi_status);
+> +		goto err_rw_bio;
+> +	}
+> +
+> +	/* For zoned device, we check if completed bio is first entry in linked
+> +	 * list,
+> +	 * if yes, we start the worker to submit write bios.
+> +	 * if not, then we just update status of bio in ctx,
+> +	 * once the worker gets scheduled, it will submit writes for all
+> +	 * the consecutive REQ_COPY_READ_COMPLETE bios.
+> +	 */
+> +	if (bdev_is_zoned(ctx->write_bio->bi_bdev)) {
+> +		spin_lock_irqsave(&cio->list_lock, flags);
+> +		ctx->status = REQ_COPY_READ_COMPLETE;
+> +		if (ctx == list_first_entry(&cio->list,
+> +					struct copy_ctx, list)) {
+> +			spin_unlock_irqrestore(&cio->list_lock, flags);
+> +			schedule_work(&ctx->dispatch_work);
+> +			goto free_read_bio;
+> +		}
+> +		spin_unlock_irqrestore(&cio->list_lock, flags);
+> +	} else
+> +		schedule_work(&ctx->dispatch_work);
+> +
+> +free_read_bio:
+> +	bio_put(read_bio);
+> +
+> +	return;
+> +
+> +err_rw_bio:
+> +	clen = (read_bio->bi_iter.bi_sector << SECTOR_SHIFT) -
+> +					cio->ranges[ri].src;
+> +	cio->ranges[ri].comp_len = min_t(sector_t, clen,
+> +					cio->ranges[ri].comp_len);
+> +	__free_page(read_bio->bi_io_vec[0].bv_page);
+> +	bio_put(ctx->write_bio);
+> +	bio_put(read_bio);
+> +	if (atomic_dec_and_test(&ctx->refcount))
+> +		kfree(ctx);
+> +	if (atomic_dec_and_test(&cio->refcount)) {
+
+Same here.
+
+> +		if (cio->endio) {
+> +			cio->endio(cio->private, cio->io_err);
+> +			kfree(cio);
+> +		} else
+> +			blk_wake_io_task(cio->waiter);
+> +	}
+> +}
+> +
+> +static void blk_copy_dispatch_work_fn(struct work_struct *work)
+> +{
+> +	struct copy_ctx *ctx = container_of(work, struct copy_ctx,
+> +			dispatch_work);
+> +
+> +	submit_bio(ctx->write_bio);
+> +}
+> +
+> +static void blk_zoned_copy_dispatch_work_fn(struct work_struct *work)
+> +{
+> +	struct copy_ctx *ctx = container_of(work, struct copy_ctx,
+> +			dispatch_work);
+> +	struct cio *cio = ctx->cio;
+> +	unsigned long flags = 0;
+> +
+> +	atomic_inc(&cio->refcount);
+> +	spin_lock_irqsave(&cio->list_lock, flags);
+> +
+> +	while (!list_empty(&cio->list)) {
+> +		ctx = list_first_entry(&cio->list, struct copy_ctx, list);
+> +
+That is ever so odd; it'll block 'cio->list' for the time of processing.
+Wouldn't it be better to move 'cio->list' to a private list, and do away 
+with the list_lock during processing?
+
+> +		if (ctx->status == REQ_COPY_READ_PROGRESS)
+> +			break;
+> +
+> +		atomic_inc(&ctx->refcount);
+> +		ctx->status = REQ_COPY_WRITE_PROGRESS;
+> +		spin_unlock_irqrestore(&cio->list_lock, flags);
+> +		submit_bio(ctx->write_bio);
+> +		spin_lock_irqsave(&cio->list_lock, flags);
+> +
+> +		list_del(&ctx->list);
+> +		if (atomic_dec_and_test(&ctx->refcount))
+> +			kfree(ctx);
+> +	}
+> +
+> +	spin_unlock_irqrestore(&cio->list_lock, flags);
+> +	if (atomic_dec_and_test(&cio->refcount))
+> +		blk_wake_io_task(cio->waiter);
+> +}
+> +
+> +/*
+> + * blk_copy_offload	- Use device's native copy offload feature.
+> + * we perform copy operation by sending 2 bio.
+> + * 1. First we send a read bio with REQ_COPY flag along with a token and source
+> + * and length. Once read bio reaches driver layer, device driver adds all the
+> + * source info to token and does a fake completion.
+> + * 2. Once read opration completes, we issue write with REQ_COPY flag with same
+> + * token. In driver layer, token info is used to form a copy offload command.
+> + *
+> + * For conventional devices we submit write bio independentenly once read
+> + * completes. For zoned devices , reads can complete out of order, so we
+> + * maintain a linked list and submit writes in the order, reads are submitted.
+> + */
+> +static int blk_copy_offload(struct block_device *src_bdev,
+> +		struct block_device *dst_bdev, struct range_entry *ranges,
+> +		int nr, cio_iodone_t end_io, void *private, gfp_t gfp_mask)
+> +{
+> +	struct cio *cio;
+> +	struct copy_ctx *ctx;
+> +	struct bio *read_bio, *write_bio;
+> +	struct page *token;
+> +	sector_t src_blk, copy_len, dst_blk;
+> +	sector_t rem, max_copy_len;
+> +	int ri = 0, ret = 0;
+> +	unsigned long flags;
+> +
+> +	cio = kzalloc(sizeof(struct cio), GFP_KERNEL);
+> +	if (!cio)
+> +		return -ENOMEM;
+> +	cio->ranges = ranges;
+> +	atomic_set(&cio->refcount, 1);
+> +	cio->waiter = current;
+> +	cio->endio = end_io;
+> +	cio->private = private;
+> +	if (bdev_is_zoned(dst_bdev)) {
+> +		INIT_LIST_HEAD(&cio->list);
+> +		spin_lock_init(&cio->list_lock);
+> +	}
+> +
+> +	max_copy_len = min(bdev_max_copy_sectors(src_bdev),
+> +			bdev_max_copy_sectors(dst_bdev)) << SECTOR_SHIFT;
+> +
+> +	for (ri = 0; ri < nr; ri++) {
+> +		cio->ranges[ri].comp_len = ranges[ri].len;
+> +		src_blk = ranges[ri].src;
+> +		dst_blk = ranges[ri].dst;
+> +		for (rem = ranges[ri].len; rem > 0; rem -= copy_len) {
+> +			copy_len = min(rem, max_copy_len);
+> +
+> +			token = alloc_page(gfp_mask);
+> +			if (unlikely(!token)) {
+> +				ret = -ENOMEM;
+> +				goto err_token;
+> +			}
+> +
+> +			ctx = kzalloc(sizeof(struct copy_ctx), gfp_mask);
+> +			if (!ctx) {
+> +				ret = -ENOMEM;
+> +				goto err_ctx;
+> +			}
+> +			read_bio = bio_alloc(src_bdev, 1, REQ_OP_READ | REQ_COPY
+> +					| REQ_SYNC | REQ_NOMERGE, gfp_mask);
+> +			if (!read_bio) {
+> +				ret = -ENOMEM;
+> +				goto err_read_bio;
+> +			}
+> +			write_bio = bio_alloc(dst_bdev, 1, REQ_OP_WRITE
+> +					| REQ_COPY | REQ_SYNC | REQ_NOMERGE,
+> +					gfp_mask);
+> +			if (!write_bio) {
+> +				cio->io_err = -ENOMEM;
+> +				goto err_write_bio;
+> +			}
+> +
+> +			ctx->cio = cio;
+> +			ctx->range_idx = ri;
+> +			ctx->write_bio = write_bio;
+> +			atomic_set(&ctx->refcount, 1);
+> +
+> +			if (bdev_is_zoned(dst_bdev)) {
+> +				INIT_WORK(&ctx->dispatch_work,
+> +					blk_zoned_copy_dispatch_work_fn);
+> +				INIT_LIST_HEAD(&ctx->list);
+> +				spin_lock_irqsave(&cio->list_lock, flags);
+> +				ctx->status = REQ_COPY_READ_PROGRESS;
+> +				list_add_tail(&ctx->list, &cio->list);
+> +				spin_unlock_irqrestore(&cio->list_lock, flags);
+> +			} else
+> +				INIT_WORK(&ctx->dispatch_work,
+> +					blk_copy_dispatch_work_fn);
+> +
+> +			__bio_add_page(read_bio, token, PAGE_SIZE, 0);
+> +			read_bio->bi_iter.bi_size = copy_len;
+> +			read_bio->bi_iter.bi_sector = src_blk >> SECTOR_SHIFT;
+> +			read_bio->bi_end_io = blk_copy_offload_read_end_io;
+> +			read_bio->bi_private = ctx;
+> +
+> +			__bio_add_page(write_bio, token, PAGE_SIZE, 0);
+> +			write_bio->bi_iter.bi_size = copy_len;
+> +			write_bio->bi_end_io = blk_copy_offload_write_end_io;
+> +			write_bio->bi_iter.bi_sector = dst_blk >> SECTOR_SHIFT;
+> +			write_bio->bi_private = ctx;
+> +
+> +			atomic_inc(&cio->refcount);
+> +			submit_bio(read_bio);
+> +			src_blk += copy_len;
+> +			dst_blk += copy_len;
+> +		}
+> +	}
+> +
+> +	/* Wait for completion of all IO's*/
+> +	return cio_await_completion(cio);
+> +
+> +err_write_bio:
+> +	bio_put(read_bio);
+> +err_read_bio:
+> +	kfree(ctx);
+> +err_ctx:
+> +	__free_page(token);
+> +err_token:
+> +	ranges[ri].comp_len = min_t(sector_t,
+> +			ranges[ri].comp_len, (ranges[ri].len - rem));
+> +
+> +	cio->io_err = ret;
+> +	return cio_await_completion(cio);
+> +}
+> +
+> +static inline int blk_copy_sanity_check(struct block_device *src_bdev,
+> +	struct block_device *dst_bdev, struct range_entry *ranges, int nr)
+> +{
+> +	unsigned int align_mask = max(bdev_logical_block_size(dst_bdev),
+> +					bdev_logical_block_size(src_bdev)) - 1;
+> +	sector_t len = 0;
+> +	int i;
+> +
+> +	if (!nr)
+> +		return -EINVAL;
+> +
+> +	if (nr >= MAX_COPY_NR_RANGE)
+> +		return -EINVAL;
+> +
+> +	if (bdev_read_only(dst_bdev))
+> +		return -EPERM;
+> +
+> +	for (i = 0; i < nr; i++) {
+> +		if (!ranges[i].len)
+> +			return -EINVAL;
+> +
+> +		len += ranges[i].len;
+> +		if ((ranges[i].dst & align_mask) ||
+> +				(ranges[i].src & align_mask) ||
+> +				(ranges[i].len & align_mask))
+> +			return -EINVAL;
+> +		ranges[i].comp_len = 0;
+> +	}
+> +
+> +	if (len && len >= MAX_COPY_TOTAL_LENGTH)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static inline bool blk_check_copy_offload(struct request_queue *src_q,
+> +		struct request_queue *dst_q)
+> +{
+> +	return blk_queue_copy(dst_q) && blk_queue_copy(src_q);
+> +}
+> +
+> +/*
+> + * blkdev_issue_copy - queue a copy
+> + * @src_bdev:	source block device
+> + * @dst_bdev:	destination block device
+> + * @ranges:	array of source/dest/len,
+> + *		ranges are expected to be allocated/freed by caller
+> + * @nr:		number of source ranges to copy
+> + * @end_io:	end_io function to be called on completion of copy operation,
+> + *		for synchronous operation this should be NULL
+> + * @private:	end_io function will be called with this private data, should be
+> + *		NULL, if operation is synchronous in nature
+> + * @gfp_mask:   memory allocation flags (for bio_alloc)
+> + *
+> + * Description:
+> + *	Copy source ranges from source block device to destination block
+> + *	device. length of a source range cannot be zero. Max total length of
+> + *	copy is limited to MAX_COPY_TOTAL_LENGTH and also maximum number of
+> + *	entries is limited to MAX_COPY_NR_RANGE
+> + */
+> +int blkdev_issue_copy(struct block_device *src_bdev,
+> +	struct block_device *dst_bdev, struct range_entry *ranges, int nr,
+> +	cio_iodone_t end_io, void *private, gfp_t gfp_mask)
+> +{
+> +	struct request_queue *src_q = bdev_get_queue(src_bdev);
+> +	struct request_queue *dst_q = bdev_get_queue(dst_bdev);
+> +	int ret = -EINVAL;
+> +
+> +	ret = blk_copy_sanity_check(src_bdev, dst_bdev, ranges, nr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (blk_check_copy_offload(src_q, dst_q))
+> +		ret = blk_copy_offload(src_bdev, dst_bdev, ranges, nr,
+> +				end_io, private, gfp_mask);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(blkdev_issue_copy);
+> +
+>   static int __blkdev_issue_write_zeroes(struct block_device *bdev,
+>   		sector_t sector, sector_t nr_sects, gfp_t gfp_mask,
+>   		struct bio **biop, unsigned flags)
+> diff --git a/block/blk.h b/block/blk.h
+> index 4c3b3325219a..6d9924a7d559 100644
+> --- a/block/blk.h
+> +++ b/block/blk.h
+> @@ -304,6 +304,8 @@ static inline bool bio_may_exceed_limits(struct bio *bio,
+>   		break;
+>   	}
+>   
+> +	if (unlikely(op_is_copy(bio->bi_opf)))
+> +		return false;
+>   	/*
+>   	 * All drivers must accept single-segments bios that are <= PAGE_SIZE.
+>   	 * This is a quick and dirty check that relies on the fact that
+> diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+> index 99be590f952f..de1638c87ecf 100644
+> --- a/include/linux/blk_types.h
+> +++ b/include/linux/blk_types.h
+> @@ -422,6 +422,7 @@ enum req_flag_bits {
+>   	 */
+>   	/* for REQ_OP_WRITE_ZEROES: */
+>   	__REQ_NOUNMAP,		/* do not free blocks when zeroing */
+> +	__REQ_COPY,		/* copy request */
+>   
+>   	__REQ_NR_BITS,		/* stops here */
+>   };
+> @@ -451,6 +452,7 @@ enum req_flag_bits {
+>   
+>   #define REQ_DRV		(__force blk_opf_t)(1ULL << __REQ_DRV)
+>   #define REQ_SWAP	(__force blk_opf_t)(1ULL << __REQ_SWAP)
+> +#define REQ_COPY	((__force blk_opf_t)(1ULL << __REQ_COPY))
+>   
+>   #define REQ_FAILFAST_MASK \
+>   	(REQ_FAILFAST_DEV | REQ_FAILFAST_TRANSPORT | REQ_FAILFAST_DRIVER)
+> @@ -477,6 +479,11 @@ static inline bool op_is_write(blk_opf_t op)
+>   	return !!(op & (__force blk_opf_t)1);
+>   }
+>   
+> +static inline bool op_is_copy(blk_opf_t op)
+> +{
+> +	return (op & REQ_COPY);
+> +}
+> +
+>   /*
+>    * Check if the bio or request is one that needs special treatment in the
+>    * flush state machine.
+> @@ -536,4 +543,41 @@ struct blk_rq_stat {
+>   	u64 batch;
 >   };
 >   
->   struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
+> +typedef void (cio_iodone_t)(void *private, int status);
+> +
+> +struct cio {
+> +	struct range_entry *ranges;
+> +	struct task_struct *waiter;     /* waiting task (NULL if none) */
+> +	atomic_t refcount;
+> +	int io_err;
+> +	cio_iodone_t *endio;		/* applicable for async operation */
+> +	void *private;			/* applicable for async operation */
+> +
+> +	/* For zoned device we maintain a linked list of IO submissions.
+> +	 * This is to make sure we maintain the order of submissions.
+> +	 * Otherwise some reads completing out of order, will submit writes not
+> +	 * aligned with zone write pointer.
+> +	 */
+> +	struct list_head list;
+> +	spinlock_t list_lock;
+> +};
+> +
+> +enum copy_io_status {
+> +	REQ_COPY_READ_PROGRESS,
+> +	REQ_COPY_READ_COMPLETE,
+> +	REQ_COPY_WRITE_PROGRESS,
+> +};
+> +
+> +struct copy_ctx {
+> +	struct cio *cio;
+> +	struct work_struct dispatch_work;
+> +	struct bio *write_bio;
+> +	atomic_t refcount;
+> +	int range_idx;			/* used in error/partial completion */
+> +
+> +	/* For zoned device linked list is maintained. Along with state of IO */
+> +	struct list_head list;
+> +	enum copy_io_status status;
+> +};
+> +
+>   #endif /* __LINUX_BLK_TYPES_H */
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index 807ffb5f715d..48e9160b7195 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -1063,6 +1063,9 @@ int __blkdev_issue_discard(struct block_device *bdev, sector_t sector,
+>   		sector_t nr_sects, gfp_t gfp_mask, struct bio **biop);
+>   int blkdev_issue_secure_erase(struct block_device *bdev, sector_t sector,
+>   		sector_t nr_sects, gfp_t gfp);
+> +int blkdev_issue_copy(struct block_device *src_bdev,
+> +		struct block_device *dst_bdev, struct range_entry *ranges,
+> +		int nr, cio_iodone_t end_io, void *private, gfp_t gfp_mask);
+>   
+>   #define BLKDEV_ZERO_NOUNMAP	(1 << 0)  /* do not free blocks */
+>   #define BLKDEV_ZERO_NOFALLBACK	(1 << 1)  /* don't write explicit zeroes */
+> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+> index b3ad173f619c..9248b6d259de 100644
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> @@ -67,6 +67,21 @@ struct fstrim_range {
+>   /* maximum total copy length */
+>   #define MAX_COPY_TOTAL_LENGTH	(1 << 27)
+>   
+> +/* Maximum no of entries supported */
+> +#define MAX_COPY_NR_RANGE	(1 << 12)
+> +
+> +/* range entry for copy offload, all fields should be byte addressed */
+> +struct range_entry {
+> +	__u64 src;		/* source to be copied */
+> +	__u64 dst;		/* destination */
+> +	__u64 len;		/* length in bytes to be copied */
+> +
+> +	/* length of data copy actually completed. This will be filled by
+> +	 * kernel, once copy completes
+> +	 */
+> +	__u64 comp_len;
+> +};
+> +
+>   /* extent-same (dedupe) ioctls; these MUST match the btrfs ioctl definitions */
+>   #define FILE_DEDUPE_RANGE_SAME		0
+>   #define FILE_DEDUPE_RANGE_DIFFERS	1
 
+Cheers,
+
+Hannes
