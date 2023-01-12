@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27356670AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F09D36670AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234284AbjALLOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:14:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S236400AbjALLOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:14:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236915AbjALLNp (ORCPT
+        with ESMTP id S236977AbjALLNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 06:13:45 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35602564C5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:04:47 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id hw16so31985030ejc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ODl2BM1W6hV+I9EkNTecmOHzYiFzk9HOa/5VuPRaa3E=;
-        b=MKTTdNviO7RzIIq74npQgoETkF+FSnSkG42yPDhIx6uWRNUSxbXWCRjlAnUGR1vHNX
-         j0Uz5D6xr2uMkBv65TsiDuKStqqKxW5+C2cIJYn9Kf0ym/FoTVFHSQ+4B7+Q/ni9FNe4
-         +QW6UqE9gfJmhhIoJl7BIXLWhf+chMDIXyImEymjsFWlKw64CJw1A5NKFlCO0hjoVPM9
-         VtR3WRXvIt/taWmI0ZOUzrKKAiniKTIpvDvOgzBr7fR9znmQU3I7Z1SSBcE/TWwjfxq0
-         6bKPQd3qINJ1S+mzYhcpXcDFn9JD2no7ZikZWAUpXvM1eN8aA1SL8rKWI/d2IZl92cyP
-         Wosg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ODl2BM1W6hV+I9EkNTecmOHzYiFzk9HOa/5VuPRaa3E=;
-        b=Mdbyhg31NmV0AUFa8536aEy1D9+7udfkq5NJA4vb+fHnvYIEkZs8FI//9Y3BHG6s/j
-         2MU76VazUUKXjIvtX1/7G5kFXS2nzGV3PjE0QiDAb5MI/IJ6pQOkujjSnrsV8Y4C7Lio
-         ZGmwgIMwiQOnSSg4Faml1L2Uu2/KcBcPKBF3SnrkxAF5mse2bfH+OyiixSqeTapsnLJS
-         LVBc+DW3ZG5hwC6jHXljvX/nPpnm/jKnFCU6wyHvfXGF1j3VlTtuxwzyKZKsEC1dE+Da
-         1WaD4ocVzU+TzLTvrzaq15eVftdRGIHZBSPV2gTtXGDRy5G8SUymCE1IOUkdfsWEtujw
-         GDZg==
-X-Gm-Message-State: AFqh2kqmf3ltbz8xCG8xOWjWcZwdceedxCn5yGORvYTC00LPFWQxVQqG
-        BdR+++/LjoX5nnUcXA74yMENeQ==
-X-Google-Smtp-Source: AMrXdXtRS7MPd/v2ivKXFwVS1QzrZAe95ryjyatLuThrSzal8KdN3+2x3m45SWKAmgXLnUiXXcvIHw==
-X-Received: by 2002:a17:906:30d3:b0:7c0:a1f9:c778 with SMTP id b19-20020a17090630d300b007c0a1f9c778mr63297733ejb.13.1673521485658;
-        Thu, 12 Jan 2023 03:04:45 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090618a200b0077a8fa8ba55sm7260088ejf.210.2023.01.12.03.04.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 03:04:45 -0800 (PST)
-Date:   Thu, 12 Jan 2023 12:04:44 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 04/11] RISC-V: KVM: Modify SBI extension handler to
- return SBI error code
-Message-ID: <20230112110444.jjbmgslr6dspxwbh@orel>
-References: <20221215170046.2010255-1-atishp@rivosinc.com>
- <20221215170046.2010255-5-atishp@rivosinc.com>
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B831111C
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:04:55 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 83A2F3EB52;
+        Thu, 12 Jan 2023 11:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673521493; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e7U4mlN6IF/k21gP9LsSqfR9yyrjT6JH4Uv/UCYlR+E=;
+        b=NcYnuvitptmAuez2XBj6nEOXLq9D+CPypAeb3HxFZtXul03DiOfpAFiCpFSw3OWFMAWoqJ
+        Bpgfk1bqPYQb1eBfK9cT+s3HNe8eZ8Rlm1hJEybRDUJxp9lExiv9lIMcUBKJpc6TwnpaQJ
+        3Y1zt2DxwjbfByhG5hCN3ziZBZFZg6U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673521493;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e7U4mlN6IF/k21gP9LsSqfR9yyrjT6JH4Uv/UCYlR+E=;
+        b=iJw2x/cgJd7Laxrc+uU9MXmqgSZavie4T/1g9g3jzcRn+GPwW0oL79NJUzGJGyrLZ4i2JX
+        rDF5+smmKecxrdBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E73313776;
+        Thu, 12 Jan 2023 11:04:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VwNtElXpv2N/MAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 12 Jan 2023 11:04:53 +0000
+Message-ID: <ef422b84-cd33-69c7-9fef-cc8d1d45651c@suse.cz>
+Date:   Thu, 12 Jan 2023 12:04:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221215170046.2010255-5-atishp@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 5/5] Documentation/mm: Update references to
+ __m[un]lock_page() to *_folio()
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Hugh Dickins <hughd@google.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Rapoport <rppt@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <cover.1672043615.git.lstoakes@gmail.com>
+ <cf3c5615d98f4e690dad46b074933024b8469d37.1672043615.git.lstoakes@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <cf3c5615d98f4e690dad46b074933024b8469d37.1672043615.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,478 +84,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 09:00:39AM -0800, Atish Patra wrote:
-> Currently, the SBI extension handle is expected to return Linux error code.
-
-handler
-
-> The top SBI layer converts the Linux error code to SBI specific error code
-> that can be returned to guest invoking the SBI calls. This model works
-> as long as SBI error codes have 1-to-1 mappings between them.
-
-as long as SBI and Linux error codes have 1-to-1...
-
-> However, that may not be true always. This patch attempts to disassociate
-> both these error codes by allowing the SBI extension implementation to
-> return SBI specific error codes as well.
+On 12/26/22 09:44, Lorenzo Stoakes wrote:
+> We now pass folios to these functions, so update the documentation
+> accordingly.
 > 
-> The extension will continue to return the Linux error specific code which
-> will indicate any problem *with* the extension emulation while the
-> SBI specific error will indicate the problem *of* the emulation.
+> Additionally, correct the outdated reference to __pagevec_lru_add_fn(), the
+> referenced action occurs in __munlock_folio() directly now.
 > 
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+
+With:
+
 > ---
->  arch/riscv/include/asm/kvm_vcpu_sbi.h | 10 ++++--
->  arch/riscv/kvm/vcpu_sbi.c             | 45 ++++++++-------------------
->  arch/riscv/kvm/vcpu_sbi_base.c        | 38 +++++++++++-----------
->  arch/riscv/kvm/vcpu_sbi_hsm.c         | 22 +++++++------
->  arch/riscv/kvm/vcpu_sbi_replace.c     | 44 +++++++++++++-------------
->  5 files changed, 74 insertions(+), 85 deletions(-)
+>  Documentation/mm/unevictable-lru.rst | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> index 61dac1b..fee9253 100644
-> --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> @@ -18,6 +18,12 @@ struct kvm_vcpu_sbi_context {
->  	int return_handled;
->  };
+> diff --git a/Documentation/mm/unevictable-lru.rst b/Documentation/mm/unevictable-lru.rst
+> index 4a0e158aa9ce..153629e0c100 100644
+> --- a/Documentation/mm/unevictable-lru.rst
+> +++ b/Documentation/mm/unevictable-lru.rst
+> @@ -308,22 +308,22 @@ do end up getting faulted into this VM_LOCKED VMA, they will be handled in the
+>  fault path - which is also how mlock2()'s MLOCK_ONFAULT areas are handled.
 >  
-> +struct kvm_vcpu_sbi_ext_data {
-> +	unsigned long out_val;
-> +	unsigned long err_val;
-> +	bool uexit;
-> +};
-> +
->  struct kvm_vcpu_sbi_extension {
->  	unsigned long extid_start;
->  	unsigned long extid_end;
-> @@ -27,8 +33,8 @@ struct kvm_vcpu_sbi_extension {
->  	 * specific error codes.
->  	 */
->  	int (*handler)(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> -		       unsigned long *out_val, struct kvm_cpu_trap *utrap,
-> -		       bool *exit);
-> +		       struct kvm_vcpu_sbi_ext_data *edata,
-> +		       struct kvm_cpu_trap *utrap);
->  
->  	/* Extension specific probe function */
->  	unsigned long (*probe)(struct kvm_vcpu *vcpu, unsigned long extid);
-> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
-> index f96991d..50c5472 100644
-> --- a/arch/riscv/kvm/vcpu_sbi.c
-> +++ b/arch/riscv/kvm/vcpu_sbi.c
-> @@ -12,26 +12,6 @@
->  #include <asm/sbi.h>
->  #include <asm/kvm_vcpu_sbi.h>
->  
-> -static int kvm_linux_err_map_sbi(int err)
-> -{
-> -	switch (err) {
-> -	case 0:
-> -		return SBI_SUCCESS;
-> -	case -EPERM:
-> -		return SBI_ERR_DENIED;
-> -	case -EINVAL:
-> -		return SBI_ERR_INVALID_PARAM;
-> -	case -EFAULT:
-> -		return SBI_ERR_INVALID_ADDRESS;
-> -	case -EOPNOTSUPP:
-> -		return SBI_ERR_NOT_SUPPORTED;
-> -	case -EALREADY:
-> -		return SBI_ERR_ALREADY_AVAILABLE;
-> -	default:
-> -		return SBI_ERR_FAILURE;
-> -	};
-> -}
-> -
->  #ifndef CONFIG_RISCV_SBI_V01
->  static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01 = {
->  	.extid_start = -1UL,
-> @@ -125,11 +105,10 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
->  {
->  	int ret = 1;
->  	bool next_sepc = true;
-> -	bool userspace_exit = false;
->  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
->  	const struct kvm_vcpu_sbi_extension *sbi_ext;
->  	struct kvm_cpu_trap utrap = { 0 };
-> -	unsigned long out_val = 0;
-> +	struct kvm_vcpu_sbi_ext_data edata_out = { 0 };
->  	bool ext_is_v01 = false;
->  
->  	sbi_ext = kvm_vcpu_sbi_find_ext(cp->a7);
-> @@ -139,7 +118,7 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
->  		    cp->a7 <= SBI_EXT_0_1_SHUTDOWN)
->  			ext_is_v01 = true;
->  #endif
-> -		ret = sbi_ext->handler(vcpu, run, &out_val, &utrap, &userspace_exit);
-> +		ret = sbi_ext->handler(vcpu, run, &edata_out, &utrap);
->  	} else {
->  		/* Return error for unsupported SBI calls */
->  		cp->a0 = SBI_ERR_NOT_SUPPORTED;
-> @@ -156,25 +135,27 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
->  		goto ecall_done;
->  	}
->  
-> +	/* The SBI extension returns Linux error code. Exits the ioctl loop
+>  For each PTE (or PMD) being faulted into a VMA, the page add rmap function
+> -calls mlock_vma_page(), which calls mlock_page() when the VMA is VM_LOCKED
+> +calls mlock_vma_page(), which calls mlock_folio() when the VMA is VM_LOCKED
+>  (unless it is a PTE mapping of a part of a transparent huge page).  Or when
+>  it is a newly allocated anonymous page, lru_cache_add_inactive_or_unevictable()
 
-Need opening /* wing
+Think it would be more appropriate now:    ^ folio_add_lru_vma()
 
-And for wording, maybe
+> -calls mlock_new_page() instead: similar to mlock_page(), but can make better
+> +calls mlock_new_folio() instead: similar to mlock_folio(), but can make better
+>  judgments, since this page is held exclusively and known not to be on LRU yet.
+>  
+> -mlock_page() sets PageMlocked immediately, then places the page on the CPU's
 
- When the SBI extension returns a Linux error code, it exist the ioctl
- loop and forwards the error to userspace.
+		     PG_mlocked?
 
-> +	 * and forwards the error to the userspace.
-> +	 */
-> +	if (ret < 0) {
-> +		next_sepc = false;
-> +		goto ecall_done;
-> +	}
+> -mlock pagevec, to batch up the rest of the work to be done under lru_lock by
+> -__mlock_page().  __mlock_page() sets PageUnevictable, initializes mlock_count
 
-Shouldn't this ret < 0 check go above the "Handle special error cases..."
-block?
+					PG_unevictable
 
-> +
->  	/* Exit ioctl loop or Propagate the error code the guest */
-> -	if (userspace_exit) {
-> +	if (edata_out.uexit) {
->  		next_sepc = false;
->  		ret = 0;
->  	} else {
-> -		/**
-> -		 * SBI extension handler always returns an Linux error code. Convert
-> -		 * it to the SBI specific error code that can be propagated the SBI
-> -		 * caller.
-> -		 */
-> -		ret = kvm_linux_err_map_sbi(ret);
-> -		cp->a0 = ret;
-> +		cp->a0 = edata_out.err_val;
->  		ret = 1;
->  	}
->  ecall_done:
->  	if (next_sepc)
->  		cp->sepc += 4;
->  	if (!ext_is_v01)
-> -		cp->a1 = out_val;
-> +		cp->a1 = edata_out.out_val;
->  
->  	return ret;
->  }
-> diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
-> index 89e2415..487828d 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_base.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_base.c
-> @@ -14,24 +14,23 @@
->  #include <asm/kvm_vcpu_sbi.h>
->  
->  static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> -				    unsigned long *out_val,
-> -				    struct kvm_cpu_trap *trap, bool *exit)
-> +				    struct kvm_vcpu_sbi_ext_data *edata,
-> +				    struct kvm_cpu_trap *trap)
->  {
-> -	int ret = 0;
->  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
->  	const struct kvm_vcpu_sbi_extension *sbi_ext;
->  
->  	switch (cp->a6) {
->  	case SBI_EXT_BASE_GET_SPEC_VERSION:
-> -		*out_val = (KVM_SBI_VERSION_MAJOR <<
-> +		edata->out_val = (KVM_SBI_VERSION_MAJOR <<
->  			    SBI_SPEC_VERSION_MAJOR_SHIFT) |
->  			    KVM_SBI_VERSION_MINOR;
->  		break;
->  	case SBI_EXT_BASE_GET_IMP_ID:
-> -		*out_val = KVM_SBI_IMPID;
-> +		edata->out_val = KVM_SBI_IMPID;
->  		break;
->  	case SBI_EXT_BASE_GET_IMP_VERSION:
-> -		*out_val = LINUX_VERSION_CODE;
-> +		edata->out_val = LINUX_VERSION_CODE;
->  		break;
->  	case SBI_EXT_BASE_PROBE_EXT:
->  		if ((cp->a0 >= SBI_EXT_EXPERIMENTAL_START &&
-> @@ -43,33 +42,33 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  			 * forward it to the userspace
->  			 */
->  			kvm_riscv_vcpu_sbi_forward(vcpu, run);
-> -			*exit = true;
-> +			edata->uexit = true;
->  		} else {
->  			sbi_ext = kvm_vcpu_sbi_find_ext(cp->a0);
->  			if (sbi_ext) {
->  				if (sbi_ext->probe)
-> -					*out_val = sbi_ext->probe(vcpu, cp->a0);
-> +					edata->out_val = sbi_ext->probe(vcpu, cp->a0);
->  				else
-> -					*out_val = 1;
-> +					edata->out_val = 1;
->  			} else
-> -				*out_val = 0;
-> +				edata->out_val = 0;
->  		}
->  		break;
->  	case SBI_EXT_BASE_GET_MVENDORID:
-> -		*out_val = vcpu->arch.mvendorid;
-> +		edata->out_val = vcpu->arch.mvendorid;
->  		break;
->  	case SBI_EXT_BASE_GET_MARCHID:
-> -		*out_val = vcpu->arch.marchid;
-> +		edata->out_val = vcpu->arch.marchid;
->  		break;
->  	case SBI_EXT_BASE_GET_MIMPID:
-> -		*out_val = vcpu->arch.mimpid;
-> +		edata->out_val = vcpu->arch.mimpid;
->  		break;
->  	default:
-> -		ret = -EOPNOTSUPP;
-> +		edata->err_val = SBI_ERR_NOT_SUPPORTED;
->  		break;
->  	}
->  
-> -	return ret;
-> +	return 0;
->  }
->  
->  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base = {
-> @@ -79,17 +78,16 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base = {
->  };
->  
->  static int kvm_sbi_ext_forward_handler(struct kvm_vcpu *vcpu,
-> -					struct kvm_run *run,
-> -					unsigned long *out_val,
-> -					struct kvm_cpu_trap *utrap,
-> -					bool *exit)
-> +				       struct kvm_run *run,
-> +				       struct kvm_vcpu_sbi_ext_data *edata,
-> +				       struct kvm_cpu_trap *utrap)
->  {
->  	/*
->  	 * Both SBI experimental and vendor extensions are
->  	 * unconditionally forwarded to userspace.
->  	 */
->  	kvm_riscv_vcpu_sbi_forward(vcpu, run);
-> -	*exit = true;
-> +	edata->uexit = true;
->  	return 0;
->  }
->  
-> diff --git a/arch/riscv/kvm/vcpu_sbi_hsm.c b/arch/riscv/kvm/vcpu_sbi_hsm.c
-> index 0f8d9fe..4188f21 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_hsm.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_hsm.c
-> @@ -21,9 +21,9 @@ static int kvm_sbi_hsm_vcpu_start(struct kvm_vcpu *vcpu)
->  
->  	target_vcpu = kvm_get_vcpu_by_id(vcpu->kvm, target_vcpuid);
->  	if (!target_vcpu)
-> -		return -EINVAL;
-> +		return SBI_ERR_INVALID_PARAM;
->  	if (!target_vcpu->arch.power_off)
-> -		return -EALREADY;
-> +		return SBI_ERR_ALREADY_AVAILABLE;
->  
->  	reset_cntx = &target_vcpu->arch.guest_reset_context;
->  	/* start address */
-> @@ -42,7 +42,7 @@ static int kvm_sbi_hsm_vcpu_start(struct kvm_vcpu *vcpu)
->  static int kvm_sbi_hsm_vcpu_stop(struct kvm_vcpu *vcpu)
->  {
->  	if (vcpu->arch.power_off)
-> -		return -EPERM;
-> +		return SBI_ERR_FAILURE;
+ditto below
 
--EPERM shouldn't map to SBI_ERR_FAILURE, but this should be addressed in
-the previous patch.
+> +mlock_folio() sets PageMlocked immediately, then places the page on the CPU's
+> +mlock folio batch, to batch up the rest of the work to be done under lru_lock by
+> +__mlock_folio().  __mlock_folio() sets PageUnevictable, initializes mlock_count
+>  and moves the page to unevictable state ("the unevictable LRU", but with
+>  mlock_count in place of LRU threading).  Or if the page was already PageLRU
+>  and PageUnevictable and PageMlocked, it simply increments the mlock_count.
+>  
+>  But in practice that may not work ideally: the page may not yet be on an LRU, or
+>  it may have been temporarily isolated from LRU.  In such cases the mlock_count
+> -field cannot be touched, but will be set to 0 later when __pagevec_lru_add_fn()
+> +field cannot be touched, but will be set to 0 later when __munlock_folio()
+>  returns the page to "LRU".  Races prohibit mlock_count from being set to 1 then:
+>  rather than risk stranding a page indefinitely as unevictable, always err with
+>  mlock_count on the low side, so that when munlocked the page will be rescued to
 
->  
->  	kvm_riscv_vcpu_power_off(vcpu);
->  
-> @@ -57,7 +57,7 @@ static int kvm_sbi_hsm_vcpu_get_status(struct kvm_vcpu *vcpu)
->  
->  	target_vcpu = kvm_get_vcpu_by_id(vcpu->kvm, target_vcpuid);
->  	if (!target_vcpu)
-> -		return -EINVAL;
-> +		return SBI_ERR_INVALID_PARAM;
->  	if (!target_vcpu->arch.power_off)
->  		return SBI_HSM_STATE_STARTED;
->  	else if (vcpu->stat.generic.blocking)
-> @@ -66,10 +66,10 @@ static int kvm_sbi_hsm_vcpu_get_status(struct kvm_vcpu *vcpu)
->  		return SBI_HSM_STATE_STOPPED;
->  }
->  
-> +
-
-stray new blank line
-
->  static int kvm_sbi_ext_hsm_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> -				   unsigned long *out_val,
-> -				   struct kvm_cpu_trap *utrap,
-> -				   bool *exit)
-> +				   struct kvm_vcpu_sbi_ext_data *edata,
-> +				   struct kvm_cpu_trap *utrap)
->  {
->  	int ret = 0;
->  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
-> @@ -88,8 +88,8 @@ static int kvm_sbi_ext_hsm_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  	case SBI_EXT_HSM_HART_STATUS:
->  		ret = kvm_sbi_hsm_vcpu_get_status(vcpu);
->  		if (ret >= 0) {
-> -			*out_val = ret;
-> -			ret = 0;
-> +			edata->out_val = ret;
-> +			edata->err_val = 0;
-
-We want a 'return 0;' here. Otherwise below we write ret to err_val.
-
->  		}
->  		break;
->  	case SBI_EXT_HSM_HART_SUSPEND:
-> @@ -108,7 +108,9 @@ static int kvm_sbi_ext_hsm_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  		ret = -EOPNOTSUPP;
-
-This ret = -EOPNOTSUPP in the context and two others above it need to be
-converted to SBI errors.
-
->  	}
->  
-> -	return ret;
-> +	edata->err_val = ret;
-> +
-> +	return 0;
->  }
->  
->  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm = {
-> diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
-> index 03a0198..d029136 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_replace.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_replace.c
-> @@ -14,15 +14,17 @@
->  #include <asm/kvm_vcpu_sbi.h>
->  
->  static int kvm_sbi_ext_time_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> -				    unsigned long *out_val,
-> -				    struct kvm_cpu_trap *utrap, bool *exit)
-> +				    struct kvm_vcpu_sbi_ext_data *edata,
-> +				    struct kvm_cpu_trap *utrap)
->  {
->  	int ret = 0;
-
-ret is only used at the bottom to return 0. We can drop the variable and
-change it to an explicit zero.
-
->  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
->  	u64 next_cycle;
->  
-> -	if (cp->a6 != SBI_EXT_TIME_SET_TIMER)
-> -		return -EINVAL;
-> +	if (cp->a6 != SBI_EXT_TIME_SET_TIMER) {
-> +		edata->err_val = SBI_ERR_INVALID_PARAM;
-> +		return 0;
-> +	}
->  
->  #if __riscv_xlen == 32
->  	next_cycle = ((u64)cp->a1 << 32) | (u64)cp->a0;
-> @@ -41,8 +43,8 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_time = {
->  };
->  
->  static int kvm_sbi_ext_ipi_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> -				   unsigned long *out_val,
-> -				   struct kvm_cpu_trap *utrap, bool *exit)
-> +				   struct kvm_vcpu_sbi_ext_data *edata,
-> +				   struct kvm_cpu_trap *utrap)
->  {
->  	int ret = 0;
->  	unsigned long i;
-> @@ -51,8 +53,10 @@ static int kvm_sbi_ext_ipi_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  	unsigned long hmask = cp->a0;
->  	unsigned long hbase = cp->a1;
->  
-> -	if (cp->a6 != SBI_EXT_IPI_SEND_IPI)
-> -		return -EINVAL;
-> +	if (cp->a6 != SBI_EXT_IPI_SEND_IPI) {
-> +		edata->err_val = SBI_ERR_INVALID_PARAM;
-> +		return 0;
-> +	}
->  
->  	kvm_for_each_vcpu(i, tmp, vcpu->kvm) {
->  		if (hbase != -1UL) {
-> @@ -76,10 +80,9 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_ipi = {
->  };
->  
->  static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> -				      unsigned long *out_val,
-> -				      struct kvm_cpu_trap *utrap, bool *exit)
-> +				      struct kvm_vcpu_sbi_ext_data *edata,
-> +				      struct kvm_cpu_trap *utrap)
->  {
-> -	int ret = 0;
->  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
->  	unsigned long hmask = cp->a0;
->  	unsigned long hbase = cp->a1;
-> @@ -116,10 +119,10 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
->  		 */
->  		break;
->  	default:
-> -		ret = -EOPNOTSUPP;
-> +		edata->err_val = SBI_ERR_NOT_SUPPORTED;
->  	}
->  
-> -	return ret;
-> +	return 0;
->  }
->  
->  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_rfence = {
-> @@ -130,14 +133,13 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_rfence = {
->  
->  static int kvm_sbi_ext_srst_handler(struct kvm_vcpu *vcpu,
->  				    struct kvm_run *run,
-> -				    unsigned long *out_val,
-> -				    struct kvm_cpu_trap *utrap, bool *exit)
-> +				    struct kvm_vcpu_sbi_ext_data *edata,
-> +				    struct kvm_cpu_trap *utrap)
->  {
->  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
->  	unsigned long funcid = cp->a6;
->  	u32 reason = cp->a1;
->  	u32 type = cp->a0;
-> -	int ret = 0;
->  
->  	switch (funcid) {
->  	case SBI_EXT_SRST_RESET:
-> @@ -146,24 +148,24 @@ static int kvm_sbi_ext_srst_handler(struct kvm_vcpu *vcpu,
->  			kvm_riscv_vcpu_sbi_system_reset(vcpu, run,
->  						KVM_SYSTEM_EVENT_SHUTDOWN,
->  						reason);
-> -			*exit = true;
-> +			edata->uexit = true;
->  			break;
->  		case SBI_SRST_RESET_TYPE_COLD_REBOOT:
->  		case SBI_SRST_RESET_TYPE_WARM_REBOOT:
->  			kvm_riscv_vcpu_sbi_system_reset(vcpu, run,
->  						KVM_SYSTEM_EVENT_RESET,
->  						reason);
-> -			*exit = true;
-> +			edata->uexit = true;
->  			break;
->  		default:
-> -			ret = -EOPNOTSUPP;
-> +			edata->err_val = SBI_ERR_NOT_SUPPORTED;
->  		}
->  		break;
->  	default:
-> -		ret = -EOPNOTSUPP;
-> +		edata->err_val = SBI_ERR_NOT_SUPPORTED;
->  	}
->  
-> -	return ret;
-> +	return 0;
->  }
->  
->  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_srst = {
-> -- 
-> 2.25.1
->
-
-Thanks,
-drew
