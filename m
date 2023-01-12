@@ -2,238 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C51F667F93
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC318667F95
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239837AbjALTqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:46:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
+        id S230111AbjALTro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbjALTpY (ORCPT
+        with ESMTP id S239134AbjALTpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:45:24 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9280A21B1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 11:39:37 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id s26-20020a5e981a000000b007045ace9e1cso5705622ioj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 11:39:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eo/N/LBiGFgmNgJk/2vZn4x6VJgF0Ie165FrN6AxRj4=;
-        b=VZgZDzV/NdNzpOPUBi3GIw4osbXdmoMtw48GmzdwiyRc7EYeIgYlmWGQ7tfk3PKf6f
-         T2DyPd+AL3KZORD4aI/7HEC3aGlVxc8TzxoEJfjrsQm8eIp+V2A38/GF2lEfHUQGEoRO
-         AHCeGjIBeNEmpxpScRT/OCoK8gQbcHIWf+9bffxMNOqyuDibY3et1APP8CcohLQiAxkW
-         OpJsMhIEEtKM+6PpZzJ5cVIbPQ2fJBRZYsRRBqB1SJ3P0LkLBCSUZqcE7smeJ6hP8iZN
-         n4tIX0NDUKY8inSeY9+OSWZhLSZGgBQMz94dlayYvBZveI8cVpLzXrw+FdlZh3LLv3Bp
-         vuXg==
-X-Gm-Message-State: AFqh2kpUhOju5rh2kyuApsyLDX6yhPcZmbv+YyqyldbAGXD1bub7B3OZ
-        9Fv31nivFh+vuxu0ut1YI+I3vxy0YUX/Tob1jw9w+sUSnmWv
-X-Google-Smtp-Source: AMrXdXve9XCmqdMojD1kQmgVRDIQEXJIdenBjdyFCbE6JFFt+K1RfVASSS5CojXKxHks4Pf8Bvzt/WjAIuTxI1rtQXbJoV/NYB52
+        Thu, 12 Jan 2023 14:45:44 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76281B0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 11:40:01 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 36543604F9;
+        Thu, 12 Jan 2023 20:39:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673552399; bh=yHILrvi6nZy2kVD6aE2AeGm4dwv77W6buiiH3ea0usM=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=sZ/PgB4nIrachAAuy5MBmLHAI7t7CNnGZ24+AqeHiGfWDhPaHcPb8Ax3x4WYQXvnh
+         +Yp3+FRFXdHhSp/wjIBckJ61zqd33tHAoVrof9nUu4/meUOuoG4NP4lBgzxtBF+pzD
+         2GVPdhwWC9VJwPGa4FmQoUByWKVs1ptWHvObGEU97cn/R1DvegnhfMgFH+YDYAmcxB
+         UIAoP2cc1Is0tnztLj7F6dsK6JAVnM3xVEeMdFRi6uoCOseG9AO4LWxrJEbmsOAnL0
+         sykn66KwExmh6R//4dLDpnZSSedC6fNI/WP4SJmDyKa8I9XhvPuzjTT13SK8oQjr8O
+         AO7SKWayXYmww==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pPJeUxEX4V1B; Thu, 12 Jan 2023 20:39:56 +0100 (CET)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id C2D33604F3;
+        Thu, 12 Jan 2023 20:39:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673552396; bh=yHILrvi6nZy2kVD6aE2AeGm4dwv77W6buiiH3ea0usM=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=syGQjp8mTIOUFpeRpVwiwWtY/PFcoclR64RPf0nfhr0hlS8rMrjauG3PLhdM8NPgt
+         8vwLawldVbRxez34lJlA0KgFVFDm0CL2GhbWcs5spYe2hesRlb01H0N2p3QfiB+ZOn
+         b7tpN9rtEW4bFR/gj/RO+ZwMZAxwraDueWQlvPef7xG8dPFOZxV7GkMkRh4K936Kzi
+         ADAHEz+aGj0ufUpZ7tulyvOg8lLOxb7qoWT4yJZ5uinZiVhlOQb/9ohCGZiyJcINlK
+         EVxhSpX/TGMZTU7UGLXO36sHV8zo34Ahu4LbZMCwtd7+BzEHFKcqHCM3ZpnXZhJ85e
+         C0iyKSG/dnLqw==
+Message-ID: <4c467851-8080-44d3-d017-b0e283896119@alu.unizg.hr>
+Date:   Thu, 12 Jan 2023 20:39:48 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a02:6a2e:0:b0:38c:87aa:4590 with SMTP id
- l46-20020a026a2e000000b0038c87aa4590mr9616951jac.33.1673552376932; Thu, 12
- Jan 2023 11:39:36 -0800 (PST)
-Date:   Thu, 12 Jan 2023 11:39:36 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f0b41905f2164644@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in sock_def_wakeup
-From:   syzbot <syzbot+d0b651ccb99ec9dfb265@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: Re: [BISECTED] BUG: Regression: A Problem with
+ /sys/kernel/debug/kmemleak output: backtrace not printed since 6.2.0-rc1
+To:     linux-kernel@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+References: <5272a819-ef74-65ff-be61-4d2d567337de@alu.unizg.hr>
+Content-Language: en-US, hr
+In-Reply-To: <5272a819-ef74-65ff-be61-4d2d567337de@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 1/4/23 17:08, Mirsad Goran Todorovac wrote:
 
-syzbot found the following issue on:
+> I hate to bring bad news again, but there seems to be a problem with the output of /sys/kernel/debug/kmemleak:
+> 
+> [root@pc-mtodorov ~]# cat /sys/kernel/debug/kmemleak
+> unreferenced object 0xffff951c118568b0 (size 16):
+>    comm "kworker/u12:2", pid 56, jiffies 4294893952 (age 4356.548s)
+>    hex dump (first 16 bytes):
+>      6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
+>    backtrace:
+> [root@pc-mtodorov ~]#
+> 
+> Apparently, backtrace of called functions on the stack is no longer printed with the list of memory leaks.
+> 
+> This appeared on Lenovo desktop 10TX000VCR, with AlmaLinux 8.7 and BIOS version M22KT49A (11/10/2022)
+> and 6.2-rc1 and 6.2-rc2 builds.
+> 
+> This worked on 6.1 with the same CONFIG_KMEMLEAK=y and MGLRU enabled on a vanilla mainstream kernel
+> from Mr. Torvalds' tree. I don't know if this is deliberate feature for some reason or a bug.
+> 
+> Please find attached the config, lshw and kmemleak output.
 
-HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15758fbe480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=d0b651ccb99ec9dfb265
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1663f4a6480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=147293a4480000
+Hi all,
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+The bisection gave this commit as the culprit for the severed stack backtrace print
+in /sys/kernel/debug/kmemleak:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d0b651ccb99ec9dfb265@syzkaller.appspotmail.com
+mtodorov@domac:~/linux/kernel/linux_torvalds$ git bisect good
+56a61617dd2276cbc56a6c868599716386d70041 is the first bad commit
+commit 56a61617dd2276cbc56a6c868599716386d70041
+Author: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Date:   Thu Oct 27 17:50:24 2022 +0800
 
-==================================================================
-BUG: KASAN: use-after-free in __wake_up_common+0x637/0x650 kernel/sched/wait.c:100
-Read of size 8 at addr ffff88802c2fe8f0 by task syz-executor198/5085
+     mm: use stack_depot for recording kmemleak's backtrace
 
-CPU: 1 PID: 5085 Comm: syz-executor198 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xc0/0xf0 mm/kasan/report.c:517
- __wake_up_common+0x637/0x650 kernel/sched/wait.c:100
- __wake_up_common_lock+0xd4/0x140 kernel/sched/wait.c:138
- sock_def_wakeup+0xea/0x2d0 net/core/sock.c:3274
- sctp_cmd_new_state net/sctp/sm_sideeffect.c:922 [inline]
- sctp_cmd_interpreter net/sctp/sm_sideeffect.c:1334 [inline]
- sctp_side_effects net/sctp/sm_sideeffect.c:1199 [inline]
- sctp_do_sm+0x4080/0x5290 net/sctp/sm_sideeffect.c:1170
- sctp_primitive_ABORT+0x9f/0xc0 net/sctp/primitive.c:104
- sctp_close+0x23f/0x940 net/sctp/socket.c:1524
- inet_release+0x132/0x270 net/ipv4/af_inet.c:428
- inet6_release+0x50/0x70 net/ipv6/af_inet6.c:489
- __sock_release+0xcd/0x280 net/socket.c:650
- sock_close+0x1c/0x20 net/socket.c:1365
- __fput+0x27c/0xa90 fs/file_table.c:321
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xb17/0x2a90 kernel/exit.c:867
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
- __do_sys_exit_group kernel/exit.c:1023 [inline]
- __se_sys_exit_group kernel/exit.c:1021 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1021
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ffbdc4ba909
-Code: Unable to access opcode bytes at 0x7ffbdc4ba8df.
-RSP: 002b:00007fffe16dc638 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007ffbdc52e290 RCX: 00007ffbdc4ba909
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 000000000000001c
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffbdc52e290
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
+     Using stack_depot to record kmemleak's backtrace which has been
+     implemented on slub for reducing redundant information.
 
-Allocated by task 5085:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+The complete bisect log is:
 
-Freed by task 33:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
- io_req_caches_free+0x1a9/0x1e6 io_uring/io_uring.c:2737
- io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2967
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+mtodorov@domac:~/linux/kernel/linux_torvalds$ git bisect log
+git bisect start '--' 'mm'
+# good: [830b3c68c1fb1e9176028d02ef86f3cf76aa2476] Linux 6.1
+git bisect good 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+# bad: [1b929c02afd37871d5afb9d498426f83432e71c2] Linux 6.2-rc1
+git bisect bad 1b929c02afd37871d5afb9d498426f83432e71c2
+# good: [8b9ed79c2d587bec5f603d66801478a5af9af842] Merge tag 'x86_asm_for_v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+git bisect good 8b9ed79c2d587bec5f603d66801478a5af9af842
+# good: [e83b39d6bbdb6d25bd6f5c258832774635d29b47] mm: make drop_caches keep reclaiming on all nodes
+git bisect good e83b39d6bbdb6d25bd6f5c258832774635d29b47
+# good: [9997bc017549acd6425e32300eff28424ffeeb6b] zsmalloc: implement writeback mechanism for zsmalloc
+git bisect good 9997bc017549acd6425e32300eff28424ffeeb6b
+# good: [6287b7dae80944bfa37784a8f9d6861a4facaa6e] mm,thp,rmap: fix races between updates of subpages_mapcount
+git bisect good 6287b7dae80944bfa37784a8f9d6861a4facaa6e
+# good: [8fa590bf344816c925810331eea8387627bbeb40] Merge tag 'for-linus' of git://git.kernel.org/pub/scm/virt/kvm/kvm
+git bisect good 8fa590bf344816c925810331eea8387627bbeb40
+# good: [4f292c4de4f6fb83776c0ff22674121eb6ddfa2f] Merge tag 'x86_mm_for_6.2_v2' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+git bisect good 4f292c4de4f6fb83776c0ff22674121eb6ddfa2f
+# bad: [1ea9d333ba475041efe43d9d9bc32e64aea2ea2b] Merge tag 'mm-stable-2022-12-17-2' of 
+git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+git bisect bad 1ea9d333ba475041efe43d9d9bc32e64aea2ea2b
+# bad: [56a61617dd2276cbc56a6c868599716386d70041] mm: use stack_depot for recording kmemleak's backtrace
+git bisect bad 56a61617dd2276cbc56a6c868599716386d70041
+# good: [61b963b52f59524e27692bc1c14bfb2459e32eb3] mm/gup_test: free memory allocated via kvcalloc() using kvfree()
+git bisect good 61b963b52f59524e27692bc1c14bfb2459e32eb3
+# first bad commit: [56a61617dd2276cbc56a6c868599716386d70041] mm: use stack_depot for recording kmemleak's backtrace
+# good: [9102b78b6f6ae6af3557114c265c266b312c1319] maple_tree: update copyright dates for test code
+git bisect good 9102b78b6f6ae6af3557114c265c266b312c1319
+# first bad commit: [56a61617dd2276cbc56a6c868599716386d70041] mm: use stack_depot for recording kmemleak's backtrace
+You have mail in /var/mail/mtodorov
+mtodorov@domac:~/linux/kernel/linux_torvalds$
 
-The buggy address belongs to the object at ffff88802c2fe8c0
- which belongs to the cache io_kiocb of size 216
-The buggy address is located 48 bytes inside of
- 216-byte region [ffff88802c2fe8c0, ffff88802c2fe998)
+The platform is 10TX000VCR (LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB) running AlmaLinux 8.7
+(CentOS clone) and BIOS M22KT49A.
 
-The buggy address belongs to the physical page:
-page:ffffea0000b0bf80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x2c2fe
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff88801c496640 dead000000000122 0000000000000000
-raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 5085, tgid 5085 (syz-executor198), ts 57450140651, free_ts 57437968497
- prep_new_page mm/page_alloc.c:2549 [inline]
- get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
- __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x350 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
- __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
- kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1451 [inline]
- free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page_list+0x176/0xcd0 mm/page_alloc.c:3528
- release_pages+0xcb1/0x1330 mm/swap.c:1072
- tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:97
- tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
- tlb_flush_mmu mm/mmu_gather.c:299 [inline]
- tlb_finish_mmu+0x14b/0x7e0 mm/mmu_gather.c:391
- exit_mmap+0x202/0x7c0 mm/mmap.c:3100
- __mmput+0x128/0x4c0 kernel/fork.c:1212
- mmput+0x60/0x70 kernel/fork.c:1234
- exec_mmap fs/exec.c:1034 [inline]
- begin_new_exec+0x1027/0x2f80 fs/exec.c:1293
- load_elf_binary+0x801/0x4ff0 fs/binfmt_elf.c:1001
- search_binary_handler fs/exec.c:1736 [inline]
- exec_binprm fs/exec.c:1778 [inline]
- bprm_execve fs/exec.c:1853 [inline]
- bprm_execve+0x7fd/0x1ae0 fs/exec.c:1809
- do_execveat_common+0x72c/0x880 fs/exec.c:1960
- do_execve fs/exec.c:2034 [inline]
- __do_sys_execve fs/exec.c:2110 [inline]
- __se_sys_execve fs/exec.c:2105 [inline]
- __x64_sys_execve+0x93/0xc0 fs/exec.c:2105
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+GCC used was:
 
-Memory state around the buggy address:
- ffff88802c2fe780: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88802c2fe800: fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc fc
->ffff88802c2fe880: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
-                                                             ^
- ffff88802c2fe900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88802c2fe980: fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+mtodorov@domac:~/linux/kernel/linux_torvalds$ gcc --version
+gcc (Debian 8.3.0-6) 8.3.0
+Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+mtodorov@domac:~/linux/kernel/linux_torvalds$
 
+Hope this helps.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+I lack the insight to pinpoint the exact fault in the patch.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
