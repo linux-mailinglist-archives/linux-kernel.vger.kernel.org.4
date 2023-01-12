@@ -2,121 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC093667EAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4F2667EB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240286AbjALTHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S240329AbjALTIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237748AbjALTFn (ORCPT
+        with ESMTP id S239769AbjALTHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:05:43 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2A253701;
-        Thu, 12 Jan 2023 10:47:59 -0800 (PST)
+        Thu, 12 Jan 2023 14:07:21 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6587BC96
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:49:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673549280; x=1705085280;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ISG4iMQCmJbQyOjDtFzJuWJ6r9CraDTaJ1v4LxJL5H8=;
-  b=iGCeQcHYfVice9l/n+aJmmTE2VH9ahVOp0iM6nNplxFwzUIUNG6OKZTn
-   k/YKIX9iskFIBlqT3Az+5zI733ZEf0bZJTE8G1GwPBo9MLJqTPIyTiCF+
-   JpZO8pDs/UF3zvdZ+eoKyLdcq50cOWETDBd2uFxc2Ponl3KQF2Gn+YTBk
-   uBoI55mNm5YvE0w9WYkd7u8tSFPmT1dTQ1e3emc3WZVTaKDb/MZpJnph0
-   IoXoM0259jbOHhkUn7LWWdTHnScGLeudJPIZxQTHcW8GXCwsDQa+EsWT+
-   f9+lzj3DikpnbFxj4z132MD+hF5nJgUvjPS7av/G0Xxvwi306Aw+TypDa
+  t=1673549354; x=1705085354;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=10RfZkZb5SV9PwBP5TlGcgRhGBrbMjAk6DG5J/1Q6Iw=;
+  b=duE1bCU0A8omxOVlXyTbKFfFdYnDBvMocJKlJykzn27qRskSmsXFVGtG
+   M3uSII2rhyQ3bS8baDvHa0/iyuaUHZwxXf89olSbWxMF4zPfo2ICRT+gI
+   KwNFCAYODK3VMXHEMGQuv9FjXMqLT5nbFiR06BmYl7cy6/3z19zOHxmJR
+   IX93L8n19Xf6+KhxMZBWi3yH+j6CKlJutKFP1zNJuElwCMpbpg/O//V68
+   FmKLzWmf0Tv13Ox+zLNsoavK0ITGwqQbw0uWHbaVnrCwmpEW/R8UHRXpR
+   rtNl0pY06Sb25/UpEWI6ovcCdPx4/vEw+nh6TYUdghl6S23reV7tLZZaS
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="351021824"
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="303491672"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="351021824"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 10:47:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="800333026"
+   d="scan'208";a="303491672"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 10:48:35 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="746646078"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="800333026"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jan 2023 10:47:56 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 562691A3; Thu, 12 Jan 2023 20:48:30 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Baruch Siach <baruch@tkos.co.il>
-Subject: [PATCH v1 2/2] pinctrl: digicolor: Use proper headers and drop OF dependency
-Date:   Thu, 12 Jan 2023 20:48:23 +0200
-Message-Id: <20230112184823.80349-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230112184823.80349-1-andriy.shevchenko@linux.intel.com>
-References: <20230112184823.80349-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="746646078"
+Received: from mdarpino-mobl.amr.corp.intel.com (HELO [10.209.117.208]) ([10.209.117.208])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 10:48:34 -0800
+Message-ID: <f8352c29-6b9f-2711-ddf4-223a6806f42f@intel.com>
+Date:   Thu, 12 Jan 2023 10:48:33 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 3/7] x86/cpu: Disable kernel LASS when patching kernel
+ alternatives
+Content-Language: en-US
+To:     "Chen, Yian" <yian.chen@intel.com>,
+        Sohil Mehta <sohil.mehta@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ravi Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Paul Lai <paul.c.lai@intel.com>
+References: <20230110055204.3227669-1-yian.chen@intel.com>
+ <20230110055204.3227669-4-yian.chen@intel.com>
+ <693d8332-3b86-3dcf-fc87-5c3a08a752db@intel.com>
+ <ad2da884-c8c8-bc57-e21f-452a08cb10cc@intel.com>
+ <b9e73d06-bd95-7c54-3ff1-f9e43c9967a4@intel.com>
+ <9e0a8b20-cb76-b06d-67fb-f8942df5a2f7@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <9e0a8b20-cb76-b06d-67fb-f8942df5a2f7@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver doesn't depend on the OF to be complied. Hence
-the proper header to use is mod_devicetable.h. Replace of*.h with
-the above mentioned and drop redundant dependency.
+On 1/12/23 10:36, Chen, Yian wrote:
+> On 1/11/2023 4:37 PM, Dave Hansen wrote:
+>> On 1/11/23 16:27, Chen, Yian wrote:
+>>>> It seems we are implicitly relying on the on stac() and clac()
+>>>> calls that are added for SMAP. Have you tried running with SMAP
+>>>> disabled i.e "clearcpuid=smap"?
+>>>>
+>>> Yes, I tested with clearcpuid=smap.
+>> It works by accident, then.
+>>
+>> clearcpuid=smap means that the kernel should be running as if
+>> CPUID.(EAX=07H,ECX=0H):EBX.SMAP[bit 20]==0.  STAC/CLAC should #UD in
+>> that case.
+>>
+> It could be something wrong in my Simics simulation environment.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pinctrl/Kconfig             | 2 +-
- drivers/pinctrl/pinctrl-digicolor.c | 9 +++++----
- 2 files changed, 6 insertions(+), 5 deletions(-)
+Also, Andy Cooper made a very good point: when the kernel enables
+paging, it's running with a low address so that the instruction pointer
+stays valid as paging becomes enabled.
 
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index 476f3cbbdce0..1e44708201ad 100644
---- a/drivers/pinctrl/Kconfig
-+++ b/drivers/pinctrl/Kconfig
-@@ -170,7 +170,7 @@ config PINCTRL_DA9062
- 
- config PINCTRL_DIGICOLOR
- 	bool
--	depends on OF && (ARCH_DIGICOLOR || COMPILE_TEST)
-+	depends on ARCH_DIGICOLOR || COMPILE_TEST
- 	select PINMUX
- 	select GENERIC_PINCONF
- 
-diff --git a/drivers/pinctrl/pinctrl-digicolor.c b/drivers/pinctrl/pinctrl-digicolor.c
-index 05213261b8a4..a0423172bdd6 100644
---- a/drivers/pinctrl/pinctrl-digicolor.c
-+++ b/drivers/pinctrl/pinctrl-digicolor.c
-@@ -11,18 +11,19 @@
-  * - Pin pad configuration (pull up/down, strength)
-  */
- 
-+#include <linux/gpio/driver.h>
- #include <linux/init.h>
--#include <linux/platform_device.h>
--#include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/io.h>
--#include <linux/gpio/driver.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
- #include <linux/spinlock.h>
-+
- #include <linux/pinctrl/machine.h>
- #include <linux/pinctrl/pinconf.h>
- #include <linux/pinctrl/pinconf-generic.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/pinctrl/pinmux.h>
-+
- #include "pinctrl-utils.h"
- 
- #define DRIVER_NAME	"pinctrl-digicolor"
--- 
-2.39.0
-
+But, if LASS were enabled and enforced at that point, you'd get a LASS
+fault and go kablooey.  Can you see what simics does in that case, and
+also make sure we're clearing CR4.LASS when enabling paging?  That would
+obviate the need to do it later in C code too.
