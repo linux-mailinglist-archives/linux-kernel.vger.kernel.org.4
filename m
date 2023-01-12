@@ -2,110 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69EA666DD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4723C666DDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240097AbjALJMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
+        id S239532AbjALJOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239952AbjALJKj (ORCPT
+        with ESMTP id S239659AbjALJLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:10:39 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D895AE48;
-        Thu, 12 Jan 2023 01:06:46 -0800 (PST)
-Date:   Thu, 12 Jan 2023 09:06:44 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673514405;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IL5ZIP9DYWv2XGsGuDCylsAv4oLuc8Ydy6IeN3eeYd4=;
-        b=gMBriOPkAjWzM9xfLa3A64Yd5U4lcLMC6VczYi2ZjqqZYkEBXE3sPgQtkvi/N7O2tH19yP
-        sJJSaHpdLvFutSM33EimXj9jtprToVStt7CTkF23zTrFHxMpLk3dmpJvpDiwjRSqk5YLdg
-        qP3fQsSWCDfF3nohundfiOeP+OS7e+xyng1CBYjRLDkTI90r878h0sw1pKjKbDwhF3xgv7
-        LBFF8xnDN/6HgPljCm7VcWTdMe5RLPL2qPgN8YqCY9DvPsf1soY9aFLkSvDoZzHpgsLt1e
-        E9L5tBSi8JZcGrhy3dqAOWkd3CfK8hdNWyOBhloe/3d/fO1XTwvf4Ns6YYdRPQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673514405;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IL5ZIP9DYWv2XGsGuDCylsAv4oLuc8Ydy6IeN3eeYd4=;
-        b=6Ithw1n9crRy+7vgHkI2hSAbatOvGxTYOQlxN9Qvf71fFnacFl2sJukVIW/ib45gdbUQfP
-        OJwXYT6mmX9m+KDA==
-From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/mm: fix poking_init() for Xen PV guests
-Cc:     Juergen Gross <jgross@suse.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        Thu, 12 Jan 2023 04:11:24 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AD4B7FC
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:07:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=lWWvuOMqhkCrkQtWw3xRYcDQAaz
+        uxzjPQUYCZsAk/uM=; b=lV7BS4+NowWgKAvYXrCIBRLeql7HgAzFYSXSVOTRDBI
+        3nIudy4+C3902axEHVNSLzJ8137JOP2FjECpTe0j1GP+KTcwAk0moxA5Stebcq09
+        CEdVKQT6Ex3PEGp3gYRN3bLwq8dr8rFKY0s21yzs0qQ51cxLvxdb1vb178/gKNQI
+        =
+Received: (qmail 673347 invoked from network); 12 Jan 2023 10:06:59 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Jan 2023 10:06:59 +0100
+X-UD-Smtp-Session: l3s3148p1@ebt8cA3yRLZehh9g
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230109150922.10578-1-jgross@suse.com>
-References: <20230109150922.10578-1-jgross@suse.com>
+Subject: [PATCH] memory: renesas-rpc-if: Remove redundant division of dummy
+Date:   Thu, 12 Jan 2023 10:06:55 +0100
+Message-Id: <20230112090655.43367-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Message-ID: <167351440417.4906.2133498085196807325.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+From: Cong Dang <cong.dang.xn@renesas.com>
 
-Commit-ID:     8a6b240fef388e9c2c40dcb72d142ee781f6432a
-Gitweb:        https://git.kernel.org/tip/8a6b240fef388e9c2c40dcb72d142ee781f6432a
-Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Mon, 09 Jan 2023 16:09:22 +01:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 12 Jan 2023 09:48:02 +01:00
+The dummy cycles value was wrongly calculated if dummy.buswidth > 1,
+which affects QSPI, OSPI, HyperFlash on various SoCs. We're lucky in
+Single SPI case since its dummy.buswidth equals to 1, so the result of
+the division is unchanged
 
-x86/mm: fix poking_init() for Xen PV guests
+This issue can be reproduced using something like the following commands
+A. QSPI mode: Mount device with jffs2 format
+    jffs2: CLEANMARKER node found at 0x00000004, not first node in block (0x00000000)
 
-Commit 3f4c8211d982 ("x86/mm: Use mm_alloc() in poking_init()") broke
-the kernel for running as Xen PV guest.
+B. QSPI mode: Write data to mtd10, where mtd10 is a parition on SPI Flash
+storage, defined properly in a device tree
 
-It seems as if the new address space is never activated before being
-used, resulting in Xen rejecting to accept the new CR3 value (the PGD
-isn't pinned).
+[Correct fragment, read from SPI Flash]
 
-Fix that by adding the now missing call of paravirt_arch_dup_mmap() to
-poking_init(). That call was previously done by dup_mm()->dup_mmap() and
-it is a NOP for all cases but for Xen PV, where it is just doing the
-pinning of the PGD.
+  root@v3x:~# echo "hello" > /dev/mtd10
+  root@v3x:~# hexdump -C -n100 /dev/mtd10
+  00000000  68 65 6c 6c 6f 0a ff ff  ff ff ff ff ff ff ff ff  |hello...........|
+  00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
 
-Fixes: 3f4c8211d982 ("x86/mm: Use mm_alloc() in poking_init()")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20230109150922.10578-1-jgross@suse.com
+[Incorrect read of the same fragment: see the difference at offsets 0-3]
+
+  root@v3x:~# echo "hello" > /dev/mtd10
+  root@v3x:~# hexdump -C -n100 /dev/mtd10
+  00000000  00 00 00 00 68 65 6c 6c  6f 0a ff ff ff ff ff ff  |....hello.......|
+  00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+
+As seen from the result, 4 NULL bytes were inserted before the test data.
+Wrong calculation in rpcif_prepare() led to miss of some dummy cycle. A
+division by bus width is redundant because it had been performed already
+in spi-rpc-if.c::rpcif_spi_mem_prepare()
+
+Fix this by removing the redundant division.
+
+Fixes: ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
+Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- arch/x86/mm/init.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index d398735..5f8ba53 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -804,6 +804,9 @@ void __init poking_init(void)
- 	poking_mm = mm_alloc();
- 	BUG_ON(!poking_mm);
+Sadly, I cannot test this patch myself because I don't have access to
+hardware which uses a buswidth > 1 for the dummy read. However, from
+code review, this patch makes sense. The division by buswidth is done
+twice, once in the SPI driver and once in the RPC core. It should stay
+only in the SPI driver.
+
+ drivers/memory/renesas-rpc-if.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index 09cd4318a83d..c36b407851ff 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -430,8 +430,7 @@ void rpcif_prepare(struct rpcif *rpc, const struct rpcif_op *op, u64 *offs,
  
-+	/* Xen PV guests need the PGD to be pinned. */
-+	paravirt_arch_dup_mmap(NULL, poking_mm);
-+
- 	/*
- 	 * Randomize the poking address, but make sure that the following page
- 	 * will be mapped at the same PMD. We need 2 pages, so find space for 3,
+ 	if (op->dummy.buswidth) {
+ 		rpc->enable |= RPCIF_SMENR_DME;
+-		rpc->dummy = RPCIF_SMDMCR_DMCYC(op->dummy.ncycles /
+-						op->dummy.buswidth);
++		rpc->dummy = RPCIF_SMDMCR_DMCYC(op->dummy.ncycles);
+ 	}
+ 
+ 	if (op->option.buswidth) {
+-- 
+2.30.2
+
