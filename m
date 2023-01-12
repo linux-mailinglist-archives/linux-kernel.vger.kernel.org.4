@@ -2,346 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C2B667992
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA693667994
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240545AbjALPjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        id S240570AbjALPjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:39:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240589AbjALPiv (ORCPT
+        with ESMTP id S240613AbjALPiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:38:51 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7ED850F43
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:29:59 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso15366125wms.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:29:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zX/CQGZwby8Bq/JpQAndBnSTYre5Hfcs3oFccuKqTKw=;
-        b=yNc6PMpxrO8M2h1fKar31wGacq668VpYXsRSM0w0MQyM69WYMb1SanLv5TG5w9Al4/
-         y4pzIKNXR24UVbxUPoKmpQY+6wCOwlb3+6qkKiU17hzAB2+CI21Ob7TySeoFu267GlLl
-         rm2p0l7mRtUrYMhh089rnQko0ilyDhkafEz8cUloWEpHwYdCDZ7W6MlB2MrZPcijwarA
-         rZiOLRpUm9ZHtk8NF8BQdQg5OPxXqykjfSI7VkDLURHhD9p0MEk9CyAJKLwOHH9/a/tU
-         lmoTIXgt9C5tKiSe6rODgy7bT/9C5A1fAEkIMyrsEH89zmg3r2hzpwZbF3+3nnwquJ2/
-         X4AA==
+        Thu, 12 Jan 2023 10:38:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAA722A
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:29:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673537356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZMH7oL1ojLL00OhcJ9kVNoLAkEuf5OtGz8iT68u8uvU=;
+        b=jB+T2k/B1/shth6Mmz/YaxghoQ27AOPEzQhcWV9fcuIrin6+2OR6k37m512qbLslP3a4Fq
+        YsgdG41bgyrQ7hHx6qbeWqZILiKQv0UqZVhgNqeJSyHLDssVQng2eOuFdslx3eecvHtESJ
+        d68VDDCQ7fnFIHM0w05pTz4Z9udhkoM=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-394-6a2wk7-IOEuhY2kbZgNOoA-1; Thu, 12 Jan 2023 10:29:12 -0500
+X-MC-Unique: 6a2wk7-IOEuhY2kbZgNOoA-1
+Received: by mail-qk1-f198.google.com with SMTP id m9-20020a05620a290900b0070596994c7eso13276399qkp.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:29:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zX/CQGZwby8Bq/JpQAndBnSTYre5Hfcs3oFccuKqTKw=;
-        b=4+cpYg8ys0GkYItAEMHVQaK1n3pjVTrzcMqxR+mu4KxC09KCYlpPRiJEft9I9PgRb2
-         7oHmZ7++HRDwdrmIiPiQptaOy3I3Jp5G370ryryxvCeL/vok6SBs7SYzR/i7/ifHCd2G
-         89H5+Y+bLg7+gJccc+tqh/PQQSeVq15/gHQ/ZXQfyIDCheYtLjv9p19CJ9gmIr32LQ0C
-         uilBO2ycVU9gtqkhFqYryd8JCjIGtzXgLWJKbcDpT1Ns+kF+6iHU1T38QsYR4myq9o7L
-         zjsy2GV6vy6Tbcv8PknYqfD/lOyySvwBKObo8Nun9J/Y/V3uyIRBzp6cPKYrUuvv9eFO
-         KS9A==
-X-Gm-Message-State: AFqh2kq/SU2dEYlmN9ystEpRAnBWHsxy4SeNywd48sqYip/8o5BQEcAu
-        r38LC8maJFFoBJ12xmC3vDBm4g==
-X-Google-Smtp-Source: AMrXdXtAfb9mzBghn9Vyao04lelSKGhE8RNvs9VNj/kNNxGDnuIFsLJ3HpOeO5A8QJe7r8jyLiO0kA==
-X-Received: by 2002:a05:600c:3d90:b0:3d9:f798:dcba with SMTP id bi16-20020a05600c3d9000b003d9f798dcbamr8881980wmb.38.1673537398182;
-        Thu, 12 Jan 2023 07:29:58 -0800 (PST)
-Received: from t480-bl003.civfrance.com (58.188.158.77.rev.sfr.net. [77.158.188.58])
-        by smtp.gmail.com with ESMTPSA id l24-20020a1ced18000000b003d99da8d30asm26395909wmh.46.2023.01.12.07.29.57
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZMH7oL1ojLL00OhcJ9kVNoLAkEuf5OtGz8iT68u8uvU=;
+        b=3slMYka8G1sLEciUpswL72dCa1Iifys3ecX3RsP2NsbZBj8Jmkmfj1FoUOsTogvtRv
+         vXGDL4Pnw6M5X0g66D9W3BFypKWUe3c7dVpyHI+VDijpeSoy59Y2268sE6QpbnVGrlQ6
+         nNyS+flphc81k2OJDHSeo7w+1u8dIDb9f7oHYq1SOVv5ueQm8Mv3jDR4T4YkYdawo94+
+         fyJf4zS/M89LSVivOV6tnQOFEEXW5WA8sJkQ5MVKO1OqQ/1cD3gx4Z+r3irOKVUN+hG0
+         YyncWCs5zlHwglUkz+iM4Hc5JZiO9KkXpQIa6+JxUMIlxOgUHOPBJnjMcb4mjiX1M+Wo
+         WWhg==
+X-Gm-Message-State: AFqh2krr0nrAx9qSXG+Sq38//EPBxMMKZXOikb1/A/U1bJyHvrx1qaGR
+        DesUIfUeHh37K+94lplS9xy/aMqxc3spJMv4jp8vtyhmUdCl7rsnpd5DYWZIhhtbOHcYwjoCDfb
+        OqNWObo7ieojACSffb96RddjP
+X-Received: by 2002:a05:622a:2510:b0:3a8:1677:bc39 with SMTP id cm16-20020a05622a251000b003a81677bc39mr69643456qtb.52.1673537351602;
+        Thu, 12 Jan 2023 07:29:11 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu+8O/sWnQ31LlfQAmjSWTP3JKBg/z6LUtFrCFt7Nlxp9dZVZSfnBngoTT8ia8+jKxx3f5ybA==
+X-Received: by 2002:a05:622a:2510:b0:3a8:1677:bc39 with SMTP id cm16-20020a05622a251000b003a81677bc39mr69643426qtb.52.1673537351249;
+        Thu, 12 Jan 2023 07:29:11 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id f9-20020ac80689000000b00343057845f7sm9164029qth.20.2023.01.12.07.29.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 07:29:57 -0800 (PST)
-From:   bchihi@baylibre.com
-To:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Subject: [PATCH v10 6/6] arm64/dts/mt8195: Add temperature mitigation threshold
-Date:   Thu, 12 Jan 2023 16:28:55 +0100
-Message-Id: <20230112152855.216072-7-bchihi@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230112152855.216072-1-bchihi@baylibre.com>
-References: <20230112152855.216072-1-bchihi@baylibre.com>
+        Thu, 12 Jan 2023 07:29:10 -0800 (PST)
+Date:   Thu, 12 Jan 2023 10:29:08 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for
+ walk_hugetlb_range
+Message-ID: <Y8AnROAtMngKntnq@x1n>
+References: <20230105101844.1893104-1-jthoughton@google.com>
+ <20230105101844.1893104-22-jthoughton@google.com>
+ <Y78+/wleTEC3gyqu@x1n>
+ <CADrL8HU-prbfx2xxXCi0RPznp5DB68-NjqqmdM+4aUeUUURhiA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CADrL8HU-prbfx2xxXCi0RPznp5DB68-NjqqmdM+4aUeUUURhiA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Balsam CHIHI <bchihi@baylibre.com>
+On Thu, Jan 12, 2023 at 09:06:48AM -0500, James Houghton wrote:
+> On Wed, Jan 11, 2023 at 5:58 PM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > James,
+> >
+> > On Thu, Jan 05, 2023 at 10:18:19AM +0000, James Houghton wrote:
+> > > @@ -751,9 +761,9 @@ static int smaps_hugetlb_range(pte_t *pte, unsigned long hmask,
+> > >               int mapcount = page_mapcount(page);
+> > >
+> > >               if (mapcount >= 2)
+> > > -                     mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
+> > > +                     mss->shared_hugetlb += hugetlb_pte_size(hpte);
+> > >               else
+> > > -                     mss->private_hugetlb += huge_page_size(hstate_vma(vma));
+> > > +                     mss->private_hugetlb += hugetlb_pte_size(hpte);
+> > >       }
+> > >       return 0;
+> >
+> > One thing interesting I found with hgm right now is mostly everything will
+> > be counted as "shared" here, I think it's because mapcount is accounted
+> > always to the huge page even if mapped in smaller sizes, so page_mapcount()
+> > to a small page should be huge too because the head page mapcount should be
+> > huge.  I'm curious the reasons behind the mapcount decision.
+> >
+> > For example, would that risk overflow with head_compound_mapcount?  One 1G
+> > page mapping all 4K takes 0.25M counts, while the limit should be 2G for
+> > atomic_t.  Looks like it's possible.
+> 
+> The original mapcount approach was "if the hstate-level PTE is
+> present, increment the compound_mapcount by 1" (basically "if any of
+> the hugepage is mapped, increment the compound_mapcount by 1"), but
+> this was painful to implement,
 
-The mt8195 board has several hotspots around the CPUs. Specify the
-targeted temperature threshold when to apply the mitigation and define
-the associated cooling devices.
+Any more info here on why it was painful?  What is the major blocker?
 
-Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 153 ++++++++++++++++++++---
- 1 file changed, 137 insertions(+), 16 deletions(-)
+> so I changed it to what it is now (each new PT mapping increments the
+> compound_mapcount by 1). I think you're right, there is absolutely an
+> overflow risk. :( I'm not sure what the best solution is. I could just go
+> back to the old approach.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 683e5057d68d..0d6642603095 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -14,6 +14,7 @@
- #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
- #include <dt-bindings/power/mt8195-power.h>
- #include <dt-bindings/reset/mt8195-resets.h>
-+#include <dt-bindings/thermal/thermal.h>
- #include <dt-bindings/thermal/mediatek-lvts.h>
- 
- / {
-@@ -2413,107 +2414,227 @@ dp_tx: dp-tx@1c600000 {
- 
- 	thermal_zones: thermal-zones {
- 		cpu0-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT819x_MCU_LITTLE_CPU0>;
- 			trips {
-+				cpu0_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
- 				cpu0_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu0_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu1-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT819x_MCU_LITTLE_CPU1>;
- 			trips {
-+				cpu1_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
- 				cpu1_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu1_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu2-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT819x_MCU_LITTLE_CPU2>;
- 			trips {
-+				cpu2_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
- 				cpu2_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu2_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu3-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT819x_MCU_LITTLE_CPU3>;
- 			trips {
-+				cpu3_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
- 				cpu3_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu3_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu4-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT819x_MCU_BIG_CPU0>;
- 			trips {
-+				cpu4_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
- 				cpu4_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu4_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu5-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT819x_MCU_BIG_CPU1>;
- 			trips {
-+				cpu5_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
- 				cpu5_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu5_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu6-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT819x_MCU_BIG_CPU2>;
- 			trips {
-+				cpu6_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
- 				cpu6_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu6_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu7-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT819x_MCU_BIG_CPU3>;
- 			trips {
-+				cpu7_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
- 				cpu7_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu7_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 	};
- };
+No rush on that; let's discuss it thoroughly before doing anything.  We
+have more context than when it was discussed initially in the calls, so
+maybe a good time to revisit.
+
+> 
+> Regarding when things are accounted in private_hugetlb vs.
+> shared_hugetlb, HGM shouldn't change that, because it only applies to
+> shared mappings (right now anyway). It seems like "private_hugetlb"
+> can include cases where the page is shared but has only one mapping,
+> in which case HGM will change it from "private" to "shared".
+
+The two fields are not defined against VM_SHARED, it seems.  At least not
+with current code base.
+
+Let me quote the code again just to be clear:
+
+		int mapcount = page_mapcount(page);    <------------- [1]
+
+		if (mapcount >= 2)
+			mss->shared_hugetlb += hugetlb_pte_size(hpte);
+		else
+			mss->private_hugetlb += hugetlb_pte_size(hpte);
+
+		smaps_hugetlb_hgm_account(mss, hpte);
+
+So that information (for some reason) is only relevant to how many mapcount
+is there.  If we have one 1G page and only two 4K mapped, with the existing
+logic we should see 8K private_hugetlb while in fact I think it should be
+8K shared_hugetlb due to page_mapcount() taking account of both 4K mappings
+(as they all goes back to the head).
+
+I have no idea whether violating that will be a problem or not, I suppose
+at least it needs justification if it will be violated, or hopefully it can
+be kept as-is.
+
+> 
+> >
+> > Btw, are the small page* pointers still needed in the latest HGM design?
+> > Is there code taking care of disabling of hugetlb vmemmap optimization for
+> > HGM?  Or maybe it's not needed anymore for the current design?
+> 
+> The hugetlb vmemmap optimization can still be used with HGM, so there
+> is no code to disable it. We don't need small page* pointers either,
+> except for when we're dealing with mapping subpages, like in
+> hugetlb_no_page. Everything else can handle the hugetlb page as a
+> folio.
+> 
+> I hope we can keep compatibility with the vmemmap optimization while
+> solving the mapcount overflow risk.
+
+Yeh that'll be perfect if it works.  But afaiu even with your current
+design (ignoring all the issues on either smaps accounting or overflow
+risks), we already referenced the small pages, aren't we?  See:
+
+static inline int page_mapcount(struct page *page)
+{
+	int mapcount = atomic_read(&page->_mapcount) + 1;  <-------- here
+
+	if (likely(!PageCompound(page)))
+		return mapcount;
+	page = compound_head(page);
+	return head_compound_mapcount(page) + mapcount;
+}
+
+Even if we assume small page->_mapcount should always be zero in this case,
+we may need to take special care of hugetlb pages in page_mapcount() to not
+reference it at all.  Or I think it's reading random values and some days
+it can be non-zero.
+
+The other approach is probably using the thp approach.  After Hugh's rework
+on the thp accounting I assumed it would be even cleaner (at least no
+DoubleMap complexity anymore.. even though I can't say I fully digested the
+whole history of that).  It's all about what's the major challenges of
+using the same approach there with thp.  You may have more knowledge on
+that aspect so I'd be willing to know.
+
+Thanks,
+
 -- 
-2.34.1
+Peter Xu
 
