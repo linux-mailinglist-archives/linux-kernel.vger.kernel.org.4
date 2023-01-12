@@ -2,95 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC69F667DA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29B9667DA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240205AbjALSO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:14:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
+        id S240280AbjALSOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238535AbjALSN2 (ORCPT
+        with ESMTP id S240513AbjALSNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:13:28 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBCB6D504
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:42:30 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id q190so9367416iod.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:42:30 -0800 (PST)
+        Thu, 12 Jan 2023 13:13:47 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ED66DBA6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:17 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so15716871wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BvAQiiZmTGdSV6CVcDlCK72GqmZAsS7eBjqDC+1TliM=;
-        b=1kE5uUJGTn+m7E4k6/2BXZo4Or7BVUvHbddS+r8XEWkQJGwIRroTcLjlTCjj1JFD9m
-         JOFBFerlwx+wENJRenYGikJyIHgowaGHbq8Iixd/LMwK7oBu975juAdzAUiCgUQQ5nZT
-         9x9QXnMKgIq+GuzS7zxFZAx7T40+UWdOvUYTA6yxfVpg365+DnMH7mRECMkZSm7HKGHt
-         2fNCp4BrIwIn/9Eo8LtfXXq1W1adSesq3A9bNKv7wAWjf8J8Ut/6t0LpYoidxw3QM7Ap
-         ydhpB6efkmsYgJgBJU6l7n36UhbByYk6k6/VP3jpaEby6pBvZoIDuswKnhOEI/hMVfw9
-         Leow==
+        d=tessares.net; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1UJtseQcGwMVKi/xxv0N3WAnrUksBlvoIFHzshgB/So=;
+        b=GGHisRe9FQZw2Pt87kLichAs0+AZaBGl/bcSl7S1ecHup0b0wTxFzsTeG1mg/vWMHh
+         TVNKPuucTLJ1P4hSpz51ghW5gCmtkNwmyMBE+q+1JBMlJOzdjZik9b+E11x3JBYl5VSv
+         Ql7qqItwPoR0cu9wGvRJBat8sghiGWVt4633bc/j6zF+kgF1LvCX+qtJ8HzQjBrEHwPM
+         diEMirpaTbgks5tF+vZvmcsRRfjs21so6iZHcDf+ErOkwIMIRDp2v/rEmKEYezwdMUQY
+         ztY7PT//kFMZvpK4rrH0FRAZg4hcJ8zBL1KT4PC3e6E60jCHgsl6q6XH59kfJfUAOrJU
+         UGtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BvAQiiZmTGdSV6CVcDlCK72GqmZAsS7eBjqDC+1TliM=;
-        b=nEbJnpjc1nwmhx/rbuZnMQEc0W9EbUoX6Y1qhme6ffoXYH+5cR9FQLu+xVaKK6nv8v
-         ryeaiN8egZEtS9QieRP/ldKavdJnGBwmFe0vz/dQkMCpx2WsNgzpjsa0M4hnMAEvGpEQ
-         GdEOo5MdmFXwyvfZbe4dv5TBRECZ8bj+0VBEz8uhUpAmFApe3oVgobV4GMy4+G8wv91q
-         OcJDjo8c2DzXn/OGnuA9RHAAwjK2k5yEf8raJ0fLn86bOGOPO9fU3IWDLUKojF4oCf2Z
-         Q3XCpxOeW0xH6W50W6RQZX5OZH2p1RNk0L5gpwsRzhJn2n054F9QySHKVAQiYGhn+8dH
-         G2gw==
-X-Gm-Message-State: AFqh2koCN8MQnSPI3xu5zCpj8uPAoNNKTl2raE/NXxXy0a1mWAlDhcWX
-        l1gMhk1/R01Sg0FN7r0+/N5hyQ==
-X-Google-Smtp-Source: AMrXdXvk9xhzcaFoZxxmmknHJy44EbqiSOphFJECV2pokMptWalRXsAA0qmsiyW3lmBDHZEgRkUD3A==
-X-Received: by 2002:a6b:7702:0:b0:6e2:d3f7:3b60 with SMTP id n2-20020a6b7702000000b006e2d3f73b60mr9591641iom.2.1673545349977;
-        Thu, 12 Jan 2023 09:42:29 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id d18-20020a0566022d5200b006cecd92164esm6179854iow.34.2023.01.12.09.42.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 09:42:29 -0800 (PST)
-Message-ID: <0b47feda-b3b2-02e8-36bc-f55a3e27bc35@kernel.dk>
-Date:   Thu, 12 Jan 2023 10:42:28 -0700
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1UJtseQcGwMVKi/xxv0N3WAnrUksBlvoIFHzshgB/So=;
+        b=fLTkYiPhS7sk/UETbbGEKecp7khIncw7zHpp7HItBVhVP+Km+chqNFsNn069xH4QD9
+         BcT4DSx3FcEqDbbn30QdXB7aUP8b6KHaEXFlCwl6gYSWeJQh76kEmnmc8kLzOkpxIPe6
+         J77d4DQeHBVMbPaPTOlP/gV5eTEz+d3ZEhIzPg4+48Vk4qqwAPVbCw3U2B5q4UfYPbn0
+         M7plJ1xPOL1zbHIgSA3JBfAXb4100JFgZ7ikkwMoWVLK6A22KzNiZOjgPsa9rJW44aSG
+         IUYB7/GqSjkJB+m6qS9Iucdq9aU4qyohGYiVc+m9j7LOIRxC3BiH8U5H+NYF4UHaiXh7
+         qJug==
+X-Gm-Message-State: AFqh2kp5vDeRKE5pcD3+Vts4WlxsdXVL+6ncBBtsgyPEkm5Lzv4eJqpf
+        NaVqI5ImXY4oWxqpdufIHJPALg==
+X-Google-Smtp-Source: AMrXdXtvjozpJKYjb5s0L0a0c9u2jlFxSOhfFdL03MZaYX+pL3wP4o55G0gnn2CE119t8WoCSmey2w==
+X-Received: by 2002:a05:600c:34d1:b0:3d7:72e3:f437 with SMTP id d17-20020a05600c34d100b003d772e3f437mr56706371wmq.21.1673545395768;
+        Thu, 12 Jan 2023 09:43:15 -0800 (PST)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id hg9-20020a05600c538900b003cfa622a18asm26448769wmb.3.2023.01.12.09.43.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 09:43:15 -0800 (PST)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH net 0/3] mptcp: userspace pm: create sockets for the right family
+Date:   Thu, 12 Jan 2023 18:42:51 +0100
+Message-Id: <20230112-upstream-net-20230112-netlink-v4-v6-v1-0-6a8363a221d2@tessares.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [syzbot] KASAN: use-after-free Read in io_fallback_req_func
-Content-Language: en-US
-To:     syzbot <syzbot+bc022c162e3b001bf607@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000cf0f4905f20e504c@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <000000000000cf0f4905f20e504c@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJtGwGMC/z2NQQ6CQAxFr0K6tsnMIES8inExA1UatZIpTkwId
+ 7ewcPleft5fQCkzKZyrBTIVVn6LgT9U0I9R7oQ8GENwoXbeB/xMOmeKLxSa8W8NniwPLEcsLaY2
+ dc3J1R2RAyulqIQpR+nHrWXjzU6Zbvzdvy+7u67rD9e3iq2QAAAA
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kishen Maloor <kishen.maloor@intel.com>,
+        Florian Westphal <fw@strlen.de>, Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2305;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=zm0A5mWdQk3xBGQ5u/VEO3txMGrQk2HzQqNZk2n/aw0=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjwEayhLoK9HDeUD022Cd4xPH++QoWrbyoVTXRoFIt
+ v30tzeCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY8BGsgAKCRD2t4JPQmmgc1SpEA
+ CgioDccxnNIFQBbXTXuqbhabB/mTV0Wu4qLPrs4ga5lEmvbJB2jSNTXmEtScC9Pf6t3idr0PviTicf
+ fSunIYxSTg+KX7vnmifmvmFc9fTJoKG44jxCCrfsXkV1qBn184BXjWiEoC+svh3CkWFVD+4obQbG89
+ 6HZEQMdNOV45QP8kqYBhRHGnB1YSvktiivQz1/LbrfWxL8f7tiiuIoCg2gV+NuksfHL2bFrmv2dftr
+ EGjBo+WfQGHV08EMYZhS1Q15buHmZsp6saUBC82xVg+L/IX7uf0RrkF6xdhjsTSWnBdLAsIv9iErgL
+ qQ0fal8pNf0LoUlf4nud5+14msSkFPNAz8ZoYOuUNKZo3tIR4Qkbkhkpt1Ld4/HPIVAgo/R7HHfDij
+ yxf2ShdizmRoXgzrRSP8jGoF8QwcDMA1Rx32PtXF7mtHPPNQ9Ya+UXJbhBq16GTwjNX4VZYKWj1TFF
+ xDijT3R54uwNFUjSYasicZz+q+0YgiQ/YAi/mS/SEM/hpEh39InAxuZMGBNmOtOn6h8i7CbuznI3wq
+ msm8hhQGnwGwagt1Ma66GVTdcNCH/Vkpg8EmAMFnUm+hLrAMSCiLCTSb1tTRcsTg0yhKI34HK99Yx9
+ Q1TVX0hd7JzAFCPFaiabfutjU/VQ/2Cb1ep+6bov1v/0lIMNAW+io0Ka5PSA==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 3:09 AM, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=103269ce480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=bc022c162e3b001bf607
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
+Before these patches, the Userspace Path Manager would allow the
+creation of subflows with wrong families: taking the one of the MPTCP
+socket instead of the provided ones and resulting in the creation of
+subflows with likely not the right source and/or destination IPs. It
+would also allow the creation of subflows between different families or
+not respecting v4/v6-only socket attributes.
 
-#syz test: git://git.kernel.dk/linux.git for-next
+Patch 1 lets the userspace PM select the proper family to avoid creating
+subflows with the wrong source and/or destination addresses because the
+family is not the expected one.
 
+Patch 2 makes sure the userspace PM doesn't allow the userspace to
+create subflows for a family that is not allowed.
+
+Patch 3 validates scenarios with a mix of v4 and v6 subflows for the
+same MPTCP connection.
+
+These patches fix issues introduced in v5.19 when the userspace path
+manager has been introduced.
+
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Kishen Maloor <kishen.maloor@intel.com>
+To: Florian Westphal <fw@strlen.de>
+To: Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: mptcp@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+
+---
+Matthieu Baerts (2):
+      mptcp: netlink: respect v4/v6-only sockets
+      selftests: mptcp: userspace: validate v4-v6 subflows mix
+
+Paolo Abeni (1):
+      mptcp: explicitly specify sock family at subflow creation time
+
+ net/mptcp/pm.c                                    | 25 ++++++++++++
+ net/mptcp/pm_userspace.c                          |  7 ++++
+ net/mptcp/protocol.c                              |  2 +-
+ net/mptcp/protocol.h                              |  6 ++-
+ net/mptcp/subflow.c                               |  9 +++--
+ tools/testing/selftests/net/mptcp/userspace_pm.sh | 47 +++++++++++++++++++++++
+ 6 files changed, 90 insertions(+), 6 deletions(-)
+---
+base-commit: be53771c87f4e322a9835d3faa9cd73a4ecdec5b
+change-id: 20230112-upstream-net-20230112-netlink-v4-v6-b6b958039ee0
+
+Best regards,
 -- 
-Jens Axboe
-
-
+Matthieu Baerts <matthieu.baerts@tessares.net>
