@@ -2,277 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15D1666AEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 06:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3921666AED
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 06:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234628AbjALFqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 00:46:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
+        id S238284AbjALFs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 00:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236580AbjALFp5 (ORCPT
+        with ESMTP id S231268AbjALFsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 00:45:57 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2063.outbound.protection.outlook.com [40.107.94.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9629DBCF;
-        Wed, 11 Jan 2023 21:45:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ciFOaCcaX5/mldmKUUVyIIX2HBEi2w7DQiAArY5pzuqBPain5NXiAPz/1SK+UUpQ7khVkIk0I0EN83a3fhtH4seRKdI9JN3MCHxyhG4U5CmkujjBee7a1atcgGhFraGDcCyal+0AyRSxeTVFezdUWrmod2HcVLtoTeUzLVTOxfG7jTe7Tw/5z3LGCc3sJQJK2c0m3aWnnkrQ88T9PADVtdMEPDZSsUqQ513wU0qVuw6/d42jxmADEybbp0ir/UoCkN0//gSA7FBDvr8mBFCwXJ0zM/wDX3AflMrUegbuCYrBFIDxGJNXwlimjN7zWwoYNLk5NUeSKfcRWlrV0IfY2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=86gOaMn3dd7nVkPGPmyivTr0TWXYSifSXrtBaHOsMd0=;
- b=mpyznxUHph2aApx1nQnkSQC/ozCR7gKiqef+N3n4MmGvWVCKsuZmkOHl/TGPS9BYQFBj5Ru5JNFzVv+S9D6C/n3bF1m53OumMRHtvjJe395dHx08gRToI/n+vTsMBw9B/I+Dp4GEGXT/SpTJHXH8NcbSMn7nDRXnCMgz65XKKhFKnvz0WqCaMrOgjnkWfZnWtHkto321U7ooa/Va8pM1BDOq3+7MQhOxscc/xaXeMALZQca2eb+Ss3i/2N5oM7jChHCpnPuGpeW+M5tXOp+4Kta4m6FEeizLi4hEm9WAH1Jw+9CHpyINiV8hiOVSmhHRfPrzDR0FwryKz3vBceVKCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=86gOaMn3dd7nVkPGPmyivTr0TWXYSifSXrtBaHOsMd0=;
- b=yNN2r7/+lZM5ZMx4B8ayVjtZs/n3atJlyhwCsKxMpo/j3KKgy5qmgH/Tx3bqkFr92N0KFsBh94crCc1SdJeNwlMFKyEHi24CKpiadeSAM7ytuBKQi9jvwQGQy5qlw7yCuMGbISS0uq22KNbBO6vUJ1DTjq0bqUegIg2kn+rAwaI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2843.namprd12.prod.outlook.com (2603:10b6:5:48::24) by
- DS0PR12MB7677.namprd12.prod.outlook.com (2603:10b6:8:136::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5986.18; Thu, 12 Jan 2023 05:45:52 +0000
-Received: from DM6PR12MB2843.namprd12.prod.outlook.com
- ([fe80::2867:7b21:95a4:aaf]) by DM6PR12MB2843.namprd12.prod.outlook.com
- ([fe80::2867:7b21:95a4:aaf%4]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 05:45:52 +0000
-Message-ID: <f18c83ac-dc9a-6173-7ab3-d5e3718a0047@amd.com>
-Date:   Thu, 12 Jan 2023 16:45:34 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH kernel v2 2/3] KVM: SEV: Enable data breakpoints in SEV-ES
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jan Kara <jack@suse.cz>, Ingo Molnar <mingo@redhat.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20221209043804.942352-1-aik@amd.com>
- <20221209043804.942352-3-aik@amd.com> <Y72nyuKT+VJYiEUi@zn.tnic>
-From:   Alexey Kardashevskiy <aik@amd.com>
-In-Reply-To: <Y72nyuKT+VJYiEUi@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SY6PR01CA0030.ausprd01.prod.outlook.com
- (2603:10c6:10:eb::17) To DM6PR12MB2843.namprd12.prod.outlook.com
- (2603:10b6:5:48::24)
+        Thu, 12 Jan 2023 00:48:22 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990753C72E
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 21:48:21 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id p9so8592110iod.13
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 21:48:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/a+viUHyKoIOiTBQ6086rsLxDGIYO3BtYAspryuMqNk=;
+        b=gk4+qTlZN4gMFX7cgf+lpSVOtiAEIanh9C3Y4Ww18A/OAeVDF6v6pFCBk3CNfCoGFD
+         yK6wT+cJihZpYIC90MXnsyVRGo9PbbO+A7oEjODG82dBOv/cYSXf0wrMOiOtoqe6877E
+         gHGz/h9fAQVWm53HGAcb/sXHiUvwoJ8gzOB3c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/a+viUHyKoIOiTBQ6086rsLxDGIYO3BtYAspryuMqNk=;
+        b=Gy95s2jSHfGxXey1Y9vZBm/dE9FU0mmMnAl9GyTSX0d8ET9Om6WhAuZ+B6QXoe/ZGM
+         C9Eu0R1nPTRsWbG2NMSsxDQ/KJ5f9Hu5fzS7QRwFAhPkmdCWDndNOyYrG2zExZKGENf1
+         AX/aFPN8I39x0nM93Hp0w/6nbdGoINTfYRg/jeCVqf0s6LZqn2q73N7hbvMkabSB2PqQ
+         yXPPU1P+XN+nOPMuVn4hbtoEuk5XSpnDTl6dQlaogcUnengH1G44/yeikKNsRH/ElQ96
+         wFLx1lp6Y99oHm5QXDxN3TjsVNT5QEPitc3tPcCSbSXn15H9nmFIZAyCRHeqtktd8SzR
+         WWEw==
+X-Gm-Message-State: AFqh2krKe+nbLwi2Q+98G7lEPRIt8piDCpfdXPDPJdCTPZi6plucOb81
+        h7IZQET76P9u+ZbFLogEoauVw8hXhnfsRvF+y4FAAA==
+X-Google-Smtp-Source: AMrXdXuUtg+0wdigF7toFzRj/94d332GpwX9lawhSFMfofxtk8gddzsqghlV0biljUtdzhfEcQHZ9P4y9dGCaj9J5YI=
+X-Received: by 2002:a5e:c00f:0:b0:6e3:38c6:e35f with SMTP id
+ u15-20020a5ec00f000000b006e338c6e35fmr6707282iol.153.1673502500827; Wed, 11
+ Jan 2023 21:48:20 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2843:EE_|DS0PR12MB7677:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6be752c0-dbab-4c25-8701-08daf46043e6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v2RvEuB343yXHpXkWU2Pp5TMw4t7pPV8iQk/INVNVsbojc0FC3CHTqTbCs171GKbtbjSHa5TTDje6uHecfxqCsvruT/XeUpKpnEW/VaZk8aPZlglC5T7tkuSHEGqNFPVTLzMqX/NPipO9tDtKhK+Djm2ra0r7/uyW0vAwuprEpfgb+TR9njLpUiLMMpT7n4i4XHmQMzRGM8QkGpB3gP3bqgE9ey5YN3+NC9Z8weCwCIfYD9wgZDwY1MfxV9Gc7vpeigjJSYoKYImO6mg11orACEFo0jkuJtbE4T579Wd0M28RyVuOOmGSnRiRlnKhnsjpKD0mY6hsaudmQDvtaSNvGGZ8fDxoGYun/jszGVwSFaMeURLi/nSPk5GI5o7z+3YR4Qv9Hopj0Pk/k6j6UAOxSOyP8LUmH3HpEl9pxYi/rzhvr90HxF/W24dAC19D8nCajfcHwhy4IpctTVKaXfYZLctX2D5p8RehFieivSpCBTpS+ehABF09+adtLrvZiLD5nB30C/2NwdroneAbgcUZVlU5mmn0s1WxGllZAIb7KOfG9TJHcFzFD+lML8Tbl6RSdilC8sTg1M5rifHcehj0UaBQuQaUGZIKqjD1bE9XtlD5s8DLmj7vr5s3pVhWqzEGJNoZioAOKJjflOgDdzccDgYqpKfuvpsIJGqDQlRWo58oeigRSQXBx04eEOgUaAa75ryLw2AcsKaDRWF/FoKhEfhs6hzsq9eXwx9vPbPars=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2843.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(366004)(376002)(396003)(451199015)(31686004)(54906003)(2906002)(6636002)(110136005)(66946007)(5660300002)(6486002)(7416002)(36756003)(31696002)(8936002)(4326008)(316002)(66556008)(8676002)(66476007)(38100700002)(6506007)(53546011)(83380400001)(41300700001)(2616005)(6512007)(186003)(6666004)(26005)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QUw0UHExbTNvVHFjUFh0amgrK0xTOVEvMFdrVFMxTU1pbXJNMDVZVllkUkVJ?=
- =?utf-8?B?VjlaYzlrdVVsVVhkRjZSdW5VZHZSb3lMVmo1dThnYlN2ZHhOdy90VUpGeTI4?=
- =?utf-8?B?OE1VSGZDUnpxKzA5UUI5S2xUbFNmRmZHTHRFQzZQNkNSbWhpTHlTTjhsampQ?=
- =?utf-8?B?OTFYUnV6b21YMC9rSjlVRmZYUDNWeHJlNVMwVVZNZVpjRU9aZEsyVDU3aHlO?=
- =?utf-8?B?amZIaUNkZVBxczkvczF2clRiVUcrQmxsL0tSeTVQSXBma1VQLzhRVUR2K2t3?=
- =?utf-8?B?TEF1VjhtMFFDSy9vZ0ZJMStOODVBNnh0Vi8raHJyYyt3SEo1NVd5R1pqeHdU?=
- =?utf-8?B?TENNQWN1b0FTVE1qbjJzcXV6eXJHS016bExNQ01aUEtKVnhlVEFzT2RKVjVY?=
- =?utf-8?B?ZzhUWkpHc3ZQVHpraG0zWlZuMHJ6cDFoZThlVmoyaytEVXhtTnlpWGFOekIx?=
- =?utf-8?B?N2VvMno1cGJwam9CMjVvSGYyeGhZY0xpaXZzSE53YUxGQjdmTDVtMGYrRWt4?=
- =?utf-8?B?M3JFTGQzeFdiV0M1Vm0yR2J1SlAxMEEzeFBkSUl0RWpUY3d2bi9oSDRhMkZo?=
- =?utf-8?B?bTh2WFlFS1NkUWhwRUc5ajk5WEpuMVRCcUFTelVManc1dWZpN0pzQXI5cEgw?=
- =?utf-8?B?SHBCYzlNeVlNNVMrei81c1ZvL2VWb1NlSXkra2VaZUQwbHRPL2czMnZaYStm?=
- =?utf-8?B?N0g1Wm9nZE82NFZzSVZUUEdhRHJHdHhlcTBaSktoZEpaVTgwZTZDY1pNTldJ?=
- =?utf-8?B?LzBHYmwrWEd0WXl1K1IxUDFEcXl6WFE4b0NpOGlwemV4M1IrL3cxODVaZmdC?=
- =?utf-8?B?VzhLUmxUYjhVYWhnRUM4VHVXWUJlZE1uODZwN3N3UGRmUWhYQ2dRTVhRTjV1?=
- =?utf-8?B?RGcyTHJMRk54Ulk1YTlqejRIcW1yZjBGRnVubnUyblpRWCtkbU9YbTR5MnpO?=
- =?utf-8?B?eC9qdU9meFAySGIxUEZ6OUd4dXBmbWc4MFlZdEdFYjhZVkV2WU1jcmNxL0pV?=
- =?utf-8?B?Y3V0Y1RWVzNZei9yVW9QMG5oOTdPcStqY0dtRkNEK1BXZG4zOG13SCswY1ZT?=
- =?utf-8?B?ZnV2N0syNEwzRUJ4bmVmK2U3V1lKSDE5ayt3VkdVdkt5ZklRSDdDcnpUWndI?=
- =?utf-8?B?ai92UmNsblE4MldGV2VJc1FuS2dkc2JBQlZmN1ZoY0dIM28yVUxkbzlqWVdn?=
- =?utf-8?B?UVkxeHJnOTZhTnluVWovcm1ZUUJQREwwa2ptYy9wUHFhOThvcDM5NDBYY3BE?=
- =?utf-8?B?K2hkcHhvNTliWjIwaWVRZ1VZVXZyK09jaFRoOFVzZXFPWnN5SWxvK3ZaWDhZ?=
- =?utf-8?B?TE9HSTF1YzlzMUpDZHB2KzBlWUl3alZiTDdJOHNNeUp2RmwxYXZhd1ZTZkpL?=
- =?utf-8?B?Z3o3TnV3TW1rcllnYVVvQnp5U2Q1SEhObWdVbk0reVRRelh1a1hpMXE5V1ox?=
- =?utf-8?B?K3l0cGZBQ2dxcDNVL3I3QWVWVFM5UHNSazNnUW1oUDNwM3Q5U1NkcUZaSkxJ?=
- =?utf-8?B?Y1pmR1VEc09SUkY1NXVmK2hlNHNDTDEzTmVJR0c5NlRmR0VvT0tsREFnSVlB?=
- =?utf-8?B?c3RuR1ZxT09uUC9lVE94YnNlUXlYUjBhVXFXdEhtN2s3NTNyLzRjYlQwdzdo?=
- =?utf-8?B?RWcrRDVEK2hrNS9tOTJTZ3Nmc01uZUpOclBWaFlvZzd5VUZyRjFLQktpamNX?=
- =?utf-8?B?RG9MYjNwaVFROTg5dW5jc2c1OXF3K0p4VzgwZk9TTXJWQXhQbHVtTTFZUXlJ?=
- =?utf-8?B?UjlxS3E3OUdZUUFsdGZKWXhTek9MQlBkL1pYbGtTKytZRmo3clh5c0VnaVBw?=
- =?utf-8?B?cThYS20wcGZOaWhkendjSU9wNE45K2h2bDBrdTBUN3JJemhjMUdHNW4xWVpm?=
- =?utf-8?B?WUdESm5MbndNOWhBK2FiVnJIYUR1a1JKR0pHc2ZYZWdRRjZBYVl6RDRtT3ha?=
- =?utf-8?B?cDd3UXc1dnFhRy9pZTYzVFIxS09Rc3FrSmJVOFlONTdQTllGL3BBalBDdUN2?=
- =?utf-8?B?Y21KZmtSVzExdERtU1pCMG1KajhxVllVcDlJWnUxRzd5QytjU1UrRU1ySmt4?=
- =?utf-8?B?RTNreWpJUkNqUW1qMkg0cFNaMlV3Y1I0aUtHSnI5VENpME5tYTk2SEJhdk1X?=
- =?utf-8?Q?cMwbUIBPkv58T47DwLPP+1Gxu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6be752c0-dbab-4c25-8701-08daf46043e6
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2843.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 05:45:52.1440
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4QL4N78p6R5quV73SohidPkTMwnC9PbUqoDz76bD0BE7d6u4aaatnS2slgYOtxqvK9zHvc2TKBNJ4XIqoWXStA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7677
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230112042104.4107253-1-treapking@chromium.org>
+ <20230112042104.4107253-4-treapking@chromium.org> <ccea730e-c5cb-4225-8d1e-97a0a7cb2e34@linaro.org>
+ <CAEXTbpek=5xqo2j0yKkC90+Oy1rXWQLJWu3X6vx6y-SqvxTvnA@mail.gmail.com> <e98a42d5-b97a-5482-1bad-478c234444ce@linaro.org>
+In-Reply-To: <e98a42d5-b97a-5482-1bad-478c234444ce@linaro.org>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Thu, 12 Jan 2023 13:48:09 +0800
+Message-ID: <CAEXTbpfrZCD-53wx2RaboH4rYPF7qm7TrhxyN80k++CZ2UqTKA@mail.gmail.com>
+Subject: Re: [PATCH v10 3/9] drm/display: Add Type-C switch helpers
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, chrome-platform@lists.linux.dev,
+        Xin Ji <xji@analogixsemi.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
+        linux-acpi@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        shaomin Deng <dengshaomin@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 12, 2023 at 1:24 PM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On 12/01/2023 07:19, Pin-yen Lin wrote:
+> > Hi Dmitry,
+> >
+> > Thanks for the review.
+> >
+> > On Thu, Jan 12, 2023 at 12:40 PM Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> >>
+> >> On 12/01/2023 06:20, Pin-yen Lin wrote:
+> >>> Add helpers to register and unregister Type-C "switches" for bridges
+> >>> capable of switching their output between two downstream devices.
+> >>>
+> >>> The helper registers USB Type-C mode switches when the "mode-switch"
+> >>> and the "data-lanes" properties are available in Device Tree.
+> >>>
+> >>> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> >>> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> >>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> >>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> >>>
+> >>> ---
+> >>>
+> >>> Changes in v10:
+> >>> - Collected Reviewed-by and Tested-by tags
+> >>> - Replaced "void *" with "typec_mux_set_fn_t" for mux_set callbacks
+> >>> - Print out the node name when errors on parsing DT
+> >>> - Use dev_dbg instead of dev_warn when no Type-C switch nodes available
+> >>> - Made the return path of drm_dp_register_mode_switch clearer
+> >>>
+> >>> Changes in v8:
+> >>> - Fixed the build issue when CONFIG_TYPEC=m
+> >>> - Fixed some style issues
+> >>>
+> >>> Changes in v7:
+> >>> - Extracted the common codes to a helper function
+> >>> - New in v7
+> >>>
+> >>>    drivers/gpu/drm/display/drm_dp_helper.c | 134 ++++++++++++++++++++++++
+> >>>    include/drm/display/drm_dp_helper.h     |  17 +++
+> >>>    2 files changed, 151 insertions(+)
+> >>>
+> >>> diff --git a/drivers/gpu/drm/display/drm_dp_helper.c b/drivers/gpu/drm/display/drm_dp_helper.c
+> >>> index 16565a0a5da6..a2ec40a621cb 100644
+> >>> --- a/drivers/gpu/drm/display/drm_dp_helper.c
+> >>> +++ b/drivers/gpu/drm/display/drm_dp_helper.c
+> >>> @@ -30,11 +30,13 @@
+> >>>    #include <linux/sched.h>
+> >>>    #include <linux/seq_file.h>
+> >>>    #include <linux/string_helpers.h>
+> >>> +#include <linux/usb/typec_mux.h>
+> >>>    #include <linux/dynamic_debug.h>
+> >>>
+> >>>    #include <drm/display/drm_dp_helper.h>
+> >>>    #include <drm/display/drm_dp_mst_helper.h>
+> >>>    #include <drm/drm_edid.h>
+> >>> +#include <drm/drm_of.h>
+> >>>    #include <drm/drm_print.h>
+> >>>    #include <drm/drm_vblank.h>
+> >>>    #include <drm/drm_panel.h>
+> >>> @@ -3891,3 +3893,135 @@ int drm_panel_dp_aux_backlight(struct drm_panel *panel, struct drm_dp_aux *aux)
+> >>>    EXPORT_SYMBOL(drm_panel_dp_aux_backlight);
+> >>>
+> >>>    #endif
+> >>> +
+> >>> +#if IS_REACHABLE(CONFIG_TYPEC)
+> >>> +static int drm_dp_register_mode_switch(struct device *dev, struct device_node *node,
+> >>> +                                    struct drm_dp_typec_switch_desc *switch_desc,
+> >>> +                                    void *data, typec_mux_set_fn_t mux_set)
+> >>> +{
+> >>> +     struct drm_dp_typec_port_data *port_data;
+> >>> +     struct typec_mux_desc mux_desc = {};
+> >>> +     char name[32];
+> >>> +     u32 dp_lanes[2];
+> >>> +     int ret, num_lanes, port_num = -1;
+> >>> +
+> >>> +     num_lanes = drm_of_get_data_lanes_count(node, 0, 2);
+> >>
+> >> 2 looks incorrect. IIRC DP altmode can support up to 4 lanes.
+> >
+> > This function is implemented for 4-lane DP bridges to switch its
+> > outputs between 2 downstreams. So, I assume that there will only be at
+> > most 2 lanes for each downstream. I don't think a 4-lane downstream
+> > makes sense for mode switches unless we want to support bridges with
+> > more than 4 lanes.
+>
+> Yes. However by using 4 here you'd make the helper generic and cover
+> both your case and the generic case. We don't need this for the msm case
+> (since the mux is handled by the PHY). But if not for the PHY, I'd have
+> used such helper (with max_lanes = 4).
+>
+I wonder if simply using 4 here really makes it more generic here.
+This function assumes the mapping between "data-lanes" and the port
+number (e.g., 0/1 --> port 0) and hard-coded the way to parse the
+property.
 
-
-On 11/1/23 05:00, Borislav Petkov wrote:
-> On Fri, Dec 09, 2022 at 03:38:03PM +1100, Alexey Kardashevskiy wrote:
->> AMD Milan (Fam 19h) introduces support for the swapping, as type 'B',
-> 
-> "type B" means nothing to people who don't have an intimate APM knowledge.
-> 
-> Let's try again, this time with a more accessible formulation:
-> 
-> "The debug registers are handled a bit differently when doing a world switch of a
-> SEV-ES guest: the guest debug registers values are saved and restored as usual
-> and as one would expect.
-
-Well, SEV-ES KVM (ES == Encrypted State) does not save/restore them for 
-the guest (well, as I would expect) as the guest registers are not 
-visible to host to save, they are intercepted and the VM does this GHCB 
-dance with VMGEXIT(SVM_EXIT_WRITE_DR7).
-
-
-> The *host* debug registers are not saved to the host save area so if the
-> host is doing any debug activity, that host should take care to stash its debug
-> registers values into the host save area before running guests.
-> 
-> See Table B-3. Swap Types and the AMD APM volume 2."
-> 
-> And now you can go into detail explaining which regs exactly and so on.
-> 
->> of DR[0-3] and DR[0-3]_ADDR_MASK registers. Software enables this by
->> setting SEV_FEATURES[5] (called "DebugSwap") in the VMSA which makes
->> data breakpoints work in SEV-ES VMs.
->>
->> For type 'B' swaps the hardware saves/restores the VM state on
->> VMEXIT/VMRUN in VMSA, and restores the host state on VMEXIT.
-> 
-> Yeah, close but I'd prefer a more detailed explanation and a reference to the
-> APM so that people can follow and read more info if needed.
-
-
-Well, the only place in APM is that "Table B-3. Swap Types and the AMD 
-APM volume 2", and it is pretty brief, do I miss something? Thanks,
-
-> >> Enable DebugSwap in VMSA but only if CPUID Fn80000021_EAX[0]
->> ("NoNestedDataBp", "Processor ignores nested data breakpoints") is
->> supported by the SOC as otherwise a malicious guest can cause
->> the infinite #DB loop DoS.
->>
->> Save DR[0-3] / DR[0-3]_ADDR_MASK in the host save area before VMRUN
->> as type 'B' swap does not do this part.
->>
->> Eliminate DR7 and #DB intercepts as:
->> - they are not needed when DebugSwap is supported;
->> - #VC for these intercepts is most likely not supported anyway and
->> kills the VM.
->> Keep DR7 intercepted unless DebugSwap enabled to prevent
->> the infinite #DB loop DoS.
->>
->> Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
->> ---
->> Changes:
->> v2:
->> * debug_swap moved from vcpu to module_param
->> * rewrote commit log
->>
->> ---
->>
->> "DR7 access must remain intercepted for an SEV-ES guest" - I could not
->> figure out the exact reasoning why it is there in the first place,
->> IIUC this is to prevent loop of #DBs in the VM.
-> 
-> Let's ask Mr. Lendacky:
-> 
-> 8d4846b9b150 ("KVM: SVM: Prevent debugging under SEV-ES")
-> 
->> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
->> index efaaef2b7ae1..800ea2a778cc 100644
->> --- a/arch/x86/kvm/svm/sev.c
->> +++ b/arch/x86/kvm/svm/sev.c
->> @@ -21,6 +21,7 @@
->>   #include <asm/pkru.h>
->>   #include <asm/trapnr.h>
->>   #include <asm/fpu/xcr.h>
->> +#include <asm/debugreg.h>
->>   
->>   #include "mmu.h"
->>   #include "x86.h"
->> @@ -52,11 +53,21 @@ module_param_named(sev, sev_enabled, bool, 0444);
->>   /* enable/disable SEV-ES support */
->>   static bool sev_es_enabled = true;
->>   module_param_named(sev_es, sev_es_enabled, bool, 0444);
->> +
->> +/* enable/disable SEV-ES DebugSwap support */
->> +static bool sev_es_debug_swap_enabled = true;
->> +module_param_named(debug_swap, sev_es_debug_swap_enabled, bool, 0644);
->>   #else
->>   #define sev_enabled false
->>   #define sev_es_enabled false
->> +#define sev_es_debug_swap false
->>   #endif /* CONFIG_KVM_AMD_SEV */
->>   
->> +bool sev_es_is_debug_swap_enabled(void)
->> +{
->> +	return sev_es_debug_swap_enabled;
->> +}
->> +
->>   static u8 sev_enc_bit;
->>   static DECLARE_RWSEM(sev_deactivate_lock);
->>   static DEFINE_MUTEX(sev_bitmap_lock);
->> @@ -604,6 +615,9 @@ static int sev_es_sync_vmsa(struct vcpu_svm *svm)
->>   	save->xss  = svm->vcpu.arch.ia32_xss;
->>   	save->dr6  = svm->vcpu.arch.dr6;
->>   
->> +	if (sev_es_is_debug_swap_enabled())
->> +		save->sev_features |= SVM_SEV_FEAT_DEBUG_SWAP;
->> +
->>   	pr_debug("Virtual Machine Save Area (VMSA):\n");
->>   	print_hex_dump_debug("", DUMP_PREFIX_NONE, 16, 1, save, sizeof(*save), false);
->>   
->> @@ -2249,6 +2263,9 @@ void __init sev_hardware_setup(void)
->>   out:
->>   	sev_enabled = sev_supported;
->>   	sev_es_enabled = sev_es_supported;
->> +	if (sev_es_debug_swap_enabled)
->> +		sev_es_debug_swap_enabled = sev_es_enabled &&
->> +			boot_cpu_has(X86_FEATURE_NO_NESTED_DATA_BP);
-> 
-> check_for_deprecated_apis: WARNING: arch/x86/kvm/svm/sev.c:2268: Do not use boot_cpu_has() - use cpu_feature_enabled() instead.
-> 
-
--- 
-Alexey
+Is it better to use "reg" instead of "data-lanes" to determine the
+port number? The drivers can still read the DT node to get the
+"data-lanes" property if they want to do some fancy stuffs around
+that.
+> >>
+> >>> +     if (num_lanes <= 0) {
+> >>> +             dev_err(dev, "Error on getting data lanes count from %s: %d\n",
+> >>> +                     node->name, num_lanes);
+> >>> +             return num_lanes;
+> >>> +     }
+> >>> +
+> >>> +     ret = of_property_read_u32_array(node, "data-lanes", dp_lanes, num_lanes);
+> >>> +     if (ret) {
+> >>> +             dev_err(dev, "Failed to read the data-lanes variable from %s: %d\n",
+> >>> +                     node->name, ret);
+> >>> +             return ret;
+> >>> +     }
+> >>> +
+> >>> +     port_num = dp_lanes[0] / 2;
+> >>> +
+> >>> +     port_data = &switch_desc->typec_ports[port_num];
+> >>> +     port_data->data = data;
+> >>> +     mux_desc.fwnode = &node->fwnode;
+> >>> +     mux_desc.drvdata = port_data;
+> >>> +     snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
+> >>> +     mux_desc.name = name;
+> >>> +     mux_desc.set = mux_set;
+> >>> +
+> >>> +     port_data->typec_mux = typec_mux_register(dev, &mux_desc);
+> >>> +     if (IS_ERR(port_data->typec_mux)) {
+> >>> +             ret = PTR_ERR(port_data->typec_mux);
+> >>> +             dev_err(dev, "Mode switch register for port %d failed: %d\n",
+> >>> +                     port_num, ret);
+> >>> +
+> >>> +             return ret;
+> >>> +     }
+> >>> +
+> >>> +     return 0;
+> >>> +}
+> >>> +
+> >>> +/**
+> >>> + * drm_dp_register_typec_switches() - register Type-C switches
+> >>> + * @dev: Device that registers Type-C switches
+> >>> + * @port: Device node for the switch
+> >>> + * @switch_desc: A Type-C switch descriptor
+> >>> + * @data: Private data for the switches
+> >>> + * @mux_set: Callback function for typec_mux_set
+> >>> + *
+> >>> + * This function registers USB Type-C switches for DP bridges that can switch
+> >>> + * the output signal between their output pins.
+> >>> + *
+> >>> + * Currently only mode switches are implemented, and the function assumes the
+> >>> + * given @port device node has endpoints with "mode-switch" property.
+> >>> + * Register the endpoint as port 0 if the "data-lanes" property falls in 0/1,
+> >>> + * and register it as port 1 if "data-lanes" falls in 2/3.
+> >>> + */
+> >>> +int drm_dp_register_typec_switches(struct device *dev, struct device_node *port,
+> >>> +                                struct drm_dp_typec_switch_desc *switch_desc,
+> >>> +                                void *data, typec_mux_set_fn_t mux_set)
+> >>> +{
+> >>> +     struct device_node *sw;
+> >>> +     int ret;
+> >>> +
+> >>> +     for_each_child_of_node(port, sw) {
+> >>> +             if (of_property_read_bool(sw, "mode-switch"))
+> >>> +                     switch_desc->num_typec_switches++;
+> >>> +     }
+> >>> +
+> >>> +     if (!switch_desc->num_typec_switches) {
+> >>> +             dev_dbg(dev, "No Type-C switches node found\n");
+> >>> +             return 0;
+> >>> +     }
+> >>> +
+> >>> +     switch_desc->typec_ports = devm_kcalloc(
+> >>> +             dev, switch_desc->num_typec_switches,
+> >>> +             sizeof(struct drm_dp_typec_port_data), GFP_KERNEL);
+> >>> +
+> >>> +     if (!switch_desc->typec_ports)
+> >>> +             return -ENOMEM;
+> >>> +
+> >>> +     /* Register switches for each connector. */
+> >>> +     for_each_child_of_node(port, sw) {
+> >>> +             if (!of_property_read_bool(sw, "mode-switch"))
+> >>> +                     continue;
+> >>> +             ret = drm_dp_register_mode_switch(dev, sw, switch_desc, data, mux_set);
+> >>> +             if (ret)
+> >>> +                     goto err_unregister_typec_switches;
+> >>> +     }
+> >>> +
+> >>> +     return 0;
+> >>> +
+> >>> +err_unregister_typec_switches:
+> >>> +     of_node_put(sw);
+> >>> +     drm_dp_unregister_typec_switches(switch_desc);
+> >>> +     dev_err(dev, "Failed to register mode switch: %d\n", ret);
+> >>> +     return ret;
+> >>> +}
+> >>> +EXPORT_SYMBOL(drm_dp_register_typec_switches);
+> >>> +
+> >>> +/**
+> >>> + * drm_dp_unregister_typec_switches() - unregister Type-C switches
+> >>> + * @switch_desc: A Type-C switch descriptor
+> >>> + */
+> >>> +void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc *switch_desc)
+> >>> +{
+> >>> +     int i;
+> >>> +
+> >>> +     for (i = 0; i < switch_desc->num_typec_switches; i++)
+> >>> +             typec_mux_unregister(switch_desc->typec_ports[i].typec_mux);
+> >>> +}
+> >>> +EXPORT_SYMBOL(drm_dp_unregister_typec_switches);
+> >>> +#else
+> >>> +void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc *switch_desc)
+> >>> +{
+> >>> +}
+> >>> +EXPORT_SYMBOL(drm_dp_register_typec_switches);
+> >>> +int drm_dp_register_typec_switches(struct device *dev, struct device_node *port,
+> >>> +                                struct drm_dp_typec_switch_desc *switch_desc,
+> >>> +                                void *data, typec_mux_set_fn_t mux_set)
+> >>> +{
+> >>> +     return 0;
+> >>> +}
+> >>> +EXPORT_SYMBOL(drm_dp_unregister_typec_switches);
+> >>> +#endif
+> >>> diff --git a/include/drm/display/drm_dp_helper.h b/include/drm/display/drm_dp_helper.h
+> >>> index ab55453f2d2c..5a3824f13b4e 100644
+> >>> --- a/include/drm/display/drm_dp_helper.h
+> >>> +++ b/include/drm/display/drm_dp_helper.h
+> >>> @@ -25,6 +25,7 @@
+> >>>
+> >>>    #include <linux/delay.h>
+> >>>    #include <linux/i2c.h>
+> >>> +#include <linux/usb/typec_mux.h>
+> >>>
+> >>>    #include <drm/display/drm_dp.h>
+> >>>    #include <drm/drm_connector.h>
+> >>> @@ -763,4 +764,20 @@ bool drm_dp_downstream_rgb_to_ycbcr_conversion(const u8 dpcd[DP_RECEIVER_CAP_SIZ
+> >>>                                               const u8 port_cap[4], u8 color_spc);
+> >>>    int drm_dp_pcon_convert_rgb_to_ycbcr(struct drm_dp_aux *aux, u8 color_spc);
+> >>>
+> >>> +struct drm_dp_typec_port_data {
+> >>> +     struct typec_mux_dev *typec_mux;
+> >>> +     void *data;
+> >>> +     bool dp_connected;
+> >>> +};
+> >>> +
+> >>> +struct drm_dp_typec_switch_desc {
+> >>> +     int num_typec_switches;
+> >>> +     struct drm_dp_typec_port_data *typec_ports;
+> >>> +};
+> >>> +
+> >>> +void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc *switch_desc);
+> >>> +int drm_dp_register_typec_switches(struct device *dev, struct device_node *port,
+> >>> +                                struct drm_dp_typec_switch_desc *switch_desc,
+> >>> +                                void *data, typec_mux_set_fn_t mux_set);
+> >>> +
+> >>>    #endif /* _DRM_DP_HELPER_H_ */
+> >>
+> >> --
+> >> With best wishes
+> >> Dmitry
+> >>
+> >
+> > Best regards,
+> > Pin-yen
+>
+> --
+> With best wishes
+> Dmitry
+>
+Best regards,
+Pin-yen
