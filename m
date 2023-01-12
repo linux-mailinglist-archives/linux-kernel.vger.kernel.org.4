@@ -2,198 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9F3668727
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:44:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F6966872B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240314AbjALWn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 17:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
+        id S234765AbjALWol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 17:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232585AbjALWny (ORCPT
+        with ESMTP id S231540AbjALWog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 17:43:54 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD6D3DBC2;
-        Thu, 12 Jan 2023 14:43:52 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso25199809pjt.0;
-        Thu, 12 Jan 2023 14:43:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fw03+QWOKRs5sCIZHDkI6ng52h14rinsKVdsXX7MOE0=;
-        b=VUSO9U0avN2C9zrYqZycMn20bQgDBqJ0OkwRw+sF7oasMIDt1X3TenHo9zLdsUM83e
-         345NSb+OfxemkLUUomhODLETazsqN0cOwSSXJhxrvN4ASvKOzLhNHg8v6CZ/yRN7Dj0n
-         Tn+SUddbLdJsoHW+sIkTNk5KVugn9+/vjGOET8VldnzFSfj6eEZhe8gVkYXHbnLOxWyE
-         0xlNazV+k0Sw+jfwih6f2RH42JWIEzci2kXCI9lnur4rby2nNQPFuGy68CtD1ca0JywS
-         Gil233o5h4Rx5aCaWsqXhytVPYmdR/eUSQqAiPVg2YzaQaqCDwChE9MdXUa0MBEwa2rx
-         T4gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fw03+QWOKRs5sCIZHDkI6ng52h14rinsKVdsXX7MOE0=;
-        b=Orw1IuHMYx6DRSzDEkF0dyibwHBxHZ4pT1biZ5mT+Et99UdZ97NfbFw6CBiRwHEa2z
-         GratuUGsZBCoAoXUR4LGAVKpqQTXRKvZ/sIpsPS6TJSO3VAOxcTJWs8NuvkXxMUG/NZm
-         x1vR9gvL7nFH9N9ovqAr4RKqiwdHcGVbIf8bBY6yPpxvg5tlOESpw2YHP7owCR8J0D73
-         EL0JFFEobXtNG+d9QxF9nTVvseWoD0tNXQ3XgrZXaI5tNGSj1EOD+Dbho1awv0Gg4pKr
-         ut4eBQHw6iVX8z5XLpQP2gVdzAr9Xaz6nKiRAC7ZUTIW3c74pqyR4+cRk8/KKQFLOlez
-         cy7w==
-X-Gm-Message-State: AFqh2kpTR7m8QDLzWUfweMUOfvxog+IAZbipJBsskS/0jq6iLGqMXxEU
-        1GeFiqVCY8oEqfVjJL4kPA==
-X-Google-Smtp-Source: AMrXdXuJtMthutqaEcYVXnrlFry7Ymu5h+0BS2OgMY12EJIfyL4UV60alEmdc42O5D5KaGQpz2a7OQ==
-X-Received: by 2002:a05:6a21:32a7:b0:ad:f2bf:bc50 with SMTP id yt39-20020a056a2132a700b000adf2bfbc50mr123221975pzb.13.1673563432062;
-        Thu, 12 Jan 2023 14:43:52 -0800 (PST)
-Received: from bytedance.bytedance.net ([208.184.112.130])
-        by smtp.gmail.com with ESMTPSA id i11-20020aa796eb000000b00576df4543d4sm12311265pfq.166.2023.01.12.14.43.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 14:43:51 -0800 (PST)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH v3 RESEND] coredump: Use vmsplice_to_pipe() for pipes in dump_emit_page()
-Date:   Thu, 12 Jan 2023 14:43:48 -0800
-Message-Id: <20230112224348.5384-1-yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221130053734.2811-1-yepeilin.cs@gmail.com>
-References: <20221130053734.2811-1-yepeilin.cs@gmail.com>
+        Thu, 12 Jan 2023 17:44:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1954E3DBC2;
+        Thu, 12 Jan 2023 14:44:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B530DB82033;
+        Thu, 12 Jan 2023 22:44:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C183C433A7;
+        Thu, 12 Jan 2023 22:44:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673563472;
+        bh=RZLYtFJIoNIntNiCGOCc4lXxK6kyJFOWbJdlQl+orIw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Og3eCJpXAW9+ZU38sof7CYWlrMf7Rt6Bcb04DBOHbSKcTeD3ixNxj/ufyh/YOEKFA
+         FZT9K/srjZ+rTDR6Ia7szASNz3c10bv+Ao/MvH/Oi57VWFx555XIIenukiESIzCw7m
+         eqxlTlhfr689fZyep3R5ZqnHlepkB8Je0MT5dy4M5pglGR7u9D8eTNSqvnkTJwwBC/
+         jH3EvLwBkaz9qKG/cF7IMZN7sDtNxEY0ar0nKookA4amAzPsXgfVRISaykLnx3Aw2p
+         HmjR7bNa6AxvCQ7v0RltC3rlUH6USDdzSgNMug+vTNF9LzVx9t5jKkymxw/In/8TZU
+         vGZp+ShjJNadg==
+Received: by mail-ua1-f53.google.com with SMTP id z13so3821702uav.3;
+        Thu, 12 Jan 2023 14:44:32 -0800 (PST)
+X-Gm-Message-State: AFqh2kqEllK9gidQquhp5X/yTx+8t2hhEAS9uMrNAJ9vUlxrg7i5YB8/
+        KrnQR3qh5yWtzzF3yznRIIH8zzOBpwcoFA8/Iw==
+X-Google-Smtp-Source: AMrXdXtZFoVEyDLRv9F7lmdnJWvJEcg8OkSGQmcET+vTNr5A9PdUpV3f5sKnSRP8h0PLVSDCnsxex9XK6NUvoE/hp8Y=
+X-Received: by 2002:ab0:76c1:0:b0:419:145a:dd46 with SMTP id
+ w1-20020ab076c1000000b00419145add46mr8969043uaq.77.1673563471032; Thu, 12 Jan
+ 2023 14:44:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230112042104.4107253-1-treapking@chromium.org>
+In-Reply-To: <20230112042104.4107253-1-treapking@chromium.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 12 Jan 2023 16:44:19 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+KGQH2qTpB6NmmOzid39-oKTzZZJNPF1ybKQu72LbJLw@mail.gmail.com>
+Message-ID: <CAL_Jsq+KGQH2qTpB6NmmOzid39-oKTzZZJNPF1ybKQu72LbJLw@mail.gmail.com>
+Subject: Re: [PATCH v10 0/9] Register Type-C mode-switch in DP bridge endpoints
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, chrome-platform@lists.linux.dev,
+        Xin Ji <xji@analogixsemi.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
+        linux-acpi@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        shaomin Deng <dengshaomin@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+On Wed, Jan 11, 2023 at 10:21 PM Pin-yen Lin <treapking@chromium.org> wrote:
+>
+>
+> This series introduces bindings for anx7625/it6505 to register Type-C
+> mode-switch in their output endpoints, and use data-lanes property to
+> describe the pin connections.
+>
+> The first two patch modifies fwnode_graph_devcon_matches and
+> cros_typec_init_ports to enable the registration of the switches.
+>
+> Patch 4~6 introduce the bindings for anx7625 and the corresponding driver
+> modifications.
+>
+> Patch 7~9 add similar bindings and driver changes for it6505.
+>
+> v9: https://lore.kernel.org/all/20230109084101.265664-1-treapking@chromium.org/
+> v8: https://lore.kernel.org/all/20230107102231.23682-1-treapking@chromium.org/
+> v7: https://lore.kernel.org/all/20230105132457.4125372-1-treapking@chromium.org/
+> v6: https://lore.kernel.org/all/20221124102056.393220-1-treapking@chromium.org/
+> v5: https://lore.kernel.org/linux-usb/20220622173605.1168416-1-pmalani@chromium.org/
+>
+> Changes in v10:
+> - Collected Reviewed-by and Tested-by tags
+> - Replaced "void *" with "typec_mux_set_fn_t" for mux_set callbacks
+> - Print out the node name when errors on parsing DT
+> - Use dev_dbg instead of dev_warn when no Type-C switch nodes available
+> - Made the return path of drm_dp_register_mode_switch clearer
+> - Added a TODO for implementing orientation switch for anx7625
+> - Updated the commit message for the absence of orientation switch
+> - Fixed typo in the commit message
+>
+> Changes in v9:
+> - Collected Reviewed-by tag
+> - Fixed subject prefix again
+> - Changed the naming of the example node for it6505
+>
+> Changes in v8:
+> - Fixed the build issue when CONFIG_TYPEC=m
+> - Fixed some style issues
+> - Fixed the subject prefixes for the bindings patch
+> - Fixed the bindings for data-lanes properties
+>
+> Changes in v7:
+> - Fix the long comment lines
+> - Extracted the common codes to a helper function
+> - Fixed style issues in anx7625 driver
+> - Removed DT property validation in anx7625 driver.
+> - Fixed style issues in it6505 driver
+> - Removed the redundant sleep in it6505 driver
+> - Removed DT property validation in it6505 driver
+> - Rebased to drm-misc-next
+> - Fixed indentations in bindings patches
+> - Added a new patch to fix indentations in Kconfig
 
-Currently, there is a copy for each page when dumping VMAs to pipe
-handlers using dump_emit_page().  For example:
+4 versions in a week! Please slow down your pace. When you send a new
+version, you move to the end of my review queue.
 
-  fs/binfmt_elf.c:elf_core_dump()
-      fs/coredump.c:dump_user_range()
-                     :dump_emit_page()
-        fs/read_write.c:__kernel_write_iter()
-                fs/pipe.c:pipe_write()
-             lib/iov_iter.c:copy_page_from_iter()
+IIRC, these 2 chips are a bit different in what the mode switch or
+muxing looks like. One had a built-in mux and the other doesn't? Do I
+have to go research this again? No, you need to explain all this in
+this series.
 
-Use vmsplice_to_pipe() instead of __kernel_write_iter() to avoid this
-copy for pipe handlers.
-
-Tested by dumping a 32-GByte core into a simple handler that splice()s
-from stdin to disk in a loop, PIPE_DEF_BUFFERS (16) pages at a time.
-
-                              Before           After   Improved by
-  Time to Completion   40.77 seconds   35.49 seconds        12.95%
-  CPU Usage                   92.27%          86.40%         6.36%
-
-Suggested-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
- fs/coredump.c            | 10 +++++++++-
- fs/splice.c              |  4 ++--
- include/linux/coredump.h |  3 +++
- include/linux/splice.h   |  3 +++
- 4 files changed, 17 insertions(+), 3 deletions(-)
-
-diff --git a/fs/coredump.c b/fs/coredump.c
-index f27d734f3102..4078069ede88 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -42,6 +42,7 @@
- #include <linux/timekeeping.h>
- #include <linux/sysctl.h>
- #include <linux/elf.h>
-+#include <linux/splice.h>
- 
- #include <linux/uaccess.h>
- #include <asm/mmu_context.h>
-@@ -586,6 +587,8 @@ void do_coredump(const kernel_siginfo_t *siginfo)
- 			goto fail_unlock;
- 		}
- 
-+		set_bit(COREDUMP_USE_PIPE, &cprm.flags);
-+
- 		if (cprm.limit == 1) {
- 			/* See umh_pipe_setup() which sets RLIMIT_CORE = 1.
- 			 *
-@@ -861,7 +864,12 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
- 		return 0;
- 	pos = file->f_pos;
- 	iov_iter_bvec(&iter, ITER_SOURCE, &bvec, 1, PAGE_SIZE);
--	n = __kernel_write_iter(cprm->file, &iter, &pos);
-+
-+	if (test_bit(COREDUMP_USE_PIPE, &cprm->flags))
-+		n = vmsplice_to_pipe(file, &iter, 0);
-+	else
-+		n = __kernel_write_iter(cprm->file, &iter, &pos);
-+
- 	if (n != PAGE_SIZE)
- 		return 0;
- 	file->f_pos = pos;
-diff --git a/fs/splice.c b/fs/splice.c
-index 5969b7a1d353..c9be20f4115e 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -1234,8 +1234,8 @@ static long vmsplice_to_user(struct file *file, struct iov_iter *iter,
-  * as splice-from-memory, where the regular splice is splice-from-file (or
-  * to file). In both cases the output is a pipe, naturally.
-  */
--static long vmsplice_to_pipe(struct file *file, struct iov_iter *iter,
--			     unsigned int flags)
-+long vmsplice_to_pipe(struct file *file, struct iov_iter *iter,
-+		      unsigned int flags)
- {
- 	struct pipe_inode_info *pipe;
- 	long ret = 0;
-diff --git a/include/linux/coredump.h b/include/linux/coredump.h
-index d3eba4360150..3e34009487bf 100644
---- a/include/linux/coredump.h
-+++ b/include/linux/coredump.h
-@@ -28,8 +28,11 @@ struct coredump_params {
- 	int vma_count;
- 	size_t vma_data_size;
- 	struct core_vma_metadata *vma_meta;
-+	unsigned long flags;
- };
- 
-+#define COREDUMP_USE_PIPE	0
-+
- /*
-  * These are the only things you should do on a core-file: use only these
-  * functions to write out all the necessary info.
-diff --git a/include/linux/splice.h b/include/linux/splice.h
-index a55179fd60fc..38b3560a318b 100644
---- a/include/linux/splice.h
-+++ b/include/linux/splice.h
-@@ -10,6 +10,7 @@
- #define SPLICE_H
- 
- #include <linux/pipe_fs_i.h>
-+#include <linux/uio.h>
- 
- /*
-  * Flags passed in from splice/tee/vmsplice
-@@ -81,6 +82,8 @@ extern ssize_t splice_direct_to_actor(struct file *, struct splice_desc *,
- extern long do_splice(struct file *in, loff_t *off_in,
- 		      struct file *out, loff_t *off_out,
- 		      size_t len, unsigned int flags);
-+extern long vmsplice_to_pipe(struct file *file, struct iov_iter *iter,
-+			     unsigned int flags);
- 
- extern long do_tee(struct file *in, struct file *out, size_t len,
- 		   unsigned int flags);
--- 
-2.20.1
-
+Rob
