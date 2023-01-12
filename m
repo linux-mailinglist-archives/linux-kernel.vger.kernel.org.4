@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D6E667D88
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44929667DBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240347AbjALSKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S240482AbjALSSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240215AbjALSJc (ORCPT
+        with ESMTP id S240439AbjALSRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:09:32 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD62E736E0;
-        Thu, 12 Jan 2023 09:37:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MRcNURrCcMAMUGIQZf3CCD7Lvxpvqs5be68sOS6UP0I=; b=nTd60ieJVIzIkEvkTjgjJ7SfUT
-        mvK7KmAuVFDifAN4HnMX/RLqSDCsnoBzH/YqsfpejieQECVzMKwkx2+zAdLjUfkvRfdeJrCrCu0EK
-        EL5g/3prvqTr8dqp9RJb3nJ9oOw9Zw7Vfbjc1pwg+invynjid40cLu+Ki15XSoeY7Z+DRUj7z3GLf
-        vx9n2ZlzrNrrvkN/DpDX4rxGoH+ureY8Jbf24lDEr6DGd+DrQxJTUHVZsth5M927rApOKtQYayHix
-        QXOf23LPcM7m41OPHo4xDfk81C2rZEWMl5psV9Zydi2cJta/PSzb4nTFd2ZQ5kA58QqHs5krbPwvE
-        xGdNbK7w==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pG1W2-001WGB-1g;
-        Thu, 12 Jan 2023 17:37:26 +0000
-Date:   Thu, 12 Jan 2023 17:37:26 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/9] iov_iter: Use IOCB/IOMAP_WRITE if available
- rather than iterator direction
-Message-ID: <Y8BFVgdGYNQqK3sB@ZenIV>
-References: <Y7+8r1IYQS3sbbVz@infradead.org>
- <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
- <167344727810.2425628.4715663653893036683.stgit@warthog.procyon.org.uk>
- <15330.1673519461@warthog.procyon.org.uk>
- <Y8AUTlRibL+pGDJN@infradead.org>
+        Thu, 12 Jan 2023 13:17:53 -0500
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B9D7148A;
+        Thu, 12 Jan 2023 09:47:13 -0800 (PST)
+Received: from SOPL295.local (unknown [IPv6:2a02:8440:d20f:6de0:6125:d027:2017:9d97])
+        (Authenticated sender: robert.jarzmik@free.fr)
+        by smtp4-g21.free.fr (Postfix) with ESMTPSA id 0B0F519F59E;
+        Thu, 12 Jan 2023 18:46:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1673545631;
+        bh=KRTPZlKd33p2jA5AfUXMRlfCbedKs4GMu6pgnM4y4Qo=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=LctVqhCykYrI8EvXeqUmUdArGNK/b6sZcJ0gtvgPgfxfckye4plPdcS9NoAVKI7ya
+         +OuDsuuF1zEN2T6xCaKeWWVNYOB0hsY5QWeDseR4wMcwypp6ocReR+eShxR7Tn5nAZ
+         Ufw1bfs5KavS1JtsBALOpAasZvUcCYSVZBr5CRr/gIpWIYd1aDgoywyutwO3O20sH5
+         /0Nwd4W/cm8SSndULierf0N+0aujwJO0K/OH7wn8eJtMgEnMJffLWHTvy94+7kx3Ie
+         RDFaxi9Ee4NeCA6M3Qk5O/EZiFYqWMlnc3k/vIrnGVtjWeFF1dX/rXG9L9x5gqdwv/
+         qwjMqYBvKHKJA==
+References: <20230105134622.254560-1-arnd@kernel.org>
+ <20230105134622.254560-5-arnd@kernel.org> <m2sfglh02h.fsf@free.fr>
+ <2d085660-41a2-492c-a343-7df80d510a59@app.fastmail.com>
+User-agent: mu4e 1.8.11; emacs 28.1
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>
+Subject: Re: [PATCH 04/27] ARM: pxa: drop pxa310/pxa320/pxa93x support
+Date:   Thu, 12 Jan 2023 18:37:32 +0100
+In-reply-to: <2d085660-41a2-492c-a343-7df80d510a59@app.fastmail.com>
+Message-ID: <m2k01rhchf.fsf@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8AUTlRibL+pGDJN@infradead.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; format=flowed
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,56 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 06:08:14AM -0800, Christoph Hellwig wrote:
-> On Thu, Jan 12, 2023 at 10:31:01AM +0000, David Howells wrote:
-> > > And use the information in the request for this one (see patch below),
-> > > and then move this patch first in the series, add an explicit direction
-> > > parameter in the gup_flags to the get/pin helper and drop iov_iter_rw
-> > > and the whole confusing source/dest information in the iov_iter entirely,
-> > > which is a really nice big tree wide cleanup that remove redundant
-> > > information.
-> > 
-> > Fine by me, but Al might object as I think he wanted the internal checks.  Al?
-> 
-> I'm happy to have another discussion, but the fact the information in
-> the iov_iter is 98% redundant and various callers got it wrong and
-> away is a pretty good sign that we should drop this information.  It
-> also nicely simplified the API.
 
-I have no problem with getting rid of iov_iter_rw(), but I would really like to
-keep ->data_source.  If nothing else, any place getting direction wrong is
-a trouble waiting to happen - something that is currently dealing only with
-iovec and bvec might be given e.g. a pipe.
+"Arnd Bergmann" <arnd@arndb.de> writes:
 
-Speaking of which, I would really like to get rid of the kludge /dev/sg is
-pulling - right now from-device requests there do the following:
-	* copy the entire destination in (and better hope that nothing is mapped
-write-only, etc.)
-	* form a request + bio, attach the pages with the destination copy to it
-	* submit
-	* copy the damn thing back to destination after the completion.
-The reason for that is (quoted in commit ecb554a846f8)
+> Hi Robert,
+Hi Arnd,
 
-====
-    The semantics of SG_DXFER_TO_FROM_DEV were:
-       - copy user space buffer to kernel (LLD) buffer
-       - do SCSI command which is assumed to be of the DATA_IN
-         (data from device) variety. This would overwrite
-         some or all of the kernel buffer
-       - copy kernel (LLD) buffer back to the user space.
-    
-    The idea was to detect short reads by filling the original
-    user space buffer with some marker bytes ("0xec" it would
-    seem in this report). The "resid" value is a better way
-    of detecting short reads but that was only added this century
-    and requires co-operation from the LLD.
-====
+> Thanks for pointing this out, I thought that I had caught
+> all the missing dependencies ones after you pointed out
+> the AC97_BUS_NEW that I fixed in patch 14.
+Sorry I've not seen this one in my previous review.
 
-IOW, we can't tell how much do we actually want to copy out, unless the SCSI driver
-in question is recent enough.  Note that the above had been written in 2009, so
-it might not be an issue these days.
+> From what I can tell, commit b5aaaa666a85 ("ARM: pxa: add
+> Kconfig dependencies for ATAGS based boards"), the
+> PXA310/PXA320 DT support became dead code because
+> MACH_PXA3XX_DT only selects CPU_PXA300, so if it worked
+> before that commit, it now needs CONFIG_UNUSED_BOARD_FILES
+> and CONFIG_EXPERT as well as enabling one of the legacy
+> board files with the corresponding chip support.
+>
+> If that's all you think is missing, I can add this
+> trivial patch as well and rework the series to not
+> drop code that depends on PXA310/PXA320:
+Yes, that would be great !
 
-Do we still have SCSI drivers that would not set the residual on bypass requests
-completion?  Because I would obviously very much prefer to get rid of that
-copy in-overwrite-copy out thing there - given the accurate information about
-the transfer length it would be easy to do.
+> Can you have a look at the other patches to see if there
+> are more removed drivers or platform bits that are currently
+> dead code but are actually required?
+Yes, I've been through your whole serie and that's the
+last thing I have identified. I've read carefully all the
+patches now, and the whole serie looks good to me.
+
+So with this patch and keeping the clocks and cpufreq
+parts for pxa3*0, you can add everywhere my :
+
+Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+
+Cheers.
+
+--
+Robert
