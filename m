@@ -2,131 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A646683BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF1C668357
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240636AbjALUMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 15:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
+        id S232138AbjALUHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:07:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240882AbjALUBZ (ORCPT
+        with ESMTP id S241657AbjALUEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 15:01:25 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0827E28D;
-        Thu, 12 Jan 2023 12:00:35 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673553633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bSFMK1rIzGzwTL932jNXF415JVKVles1xNGjys4yKU0=;
-        b=jTjUbgU6p2aPf5TA4DXQik+3vZFGH7cZAVb6GOcwrK6WQ1JBxW2/6C2oloFxXdREJDDPCL
-        kkQwQZC2ULLNvxT2ulvf6mx9n97xHK+qQpHP3Km1FKLK82mGmaexaLQvXzcLorARASLgpb
-        hc/zeaHlwCNbjlsBnWqk+xz1Qe/hV7BBLA3XBCFOnU8UXscb+8yaVMc9KhtO7BDT4WdFWj
-        LlfJZObawvKqhOdXtgP9oq2xowAHdmVw25GgwzmAqde3rleDeZ8YIDUMu1UfItBzoBg+nS
-        EJGurVRSxgq9FnUt0OSr+JlcELbRv61SakfsjUuRl8Tpk+xRhkyzlbe4mkkWeA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673553633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bSFMK1rIzGzwTL932jNXF415JVKVles1xNGjys4yKU0=;
-        b=0B1pSFMu/wK0JVav1pjVqrqkngsDSE55g43YcIhaMQfO0NU7pyA/9XMv2C3bvE9TGrGQs2
-        BrowKCLmPgMB8VCw==
-To:     Jinank Jain <jinankjain@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        arnd@arndb.de, peterz@infradead.org, jpoimboe@kernel.org,
-        jinankjain@linux.microsoft.com, seanjc@google.com,
-        kirill.shutemov@linux.intel.com, ak@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
-        mikelley@microsoft.com
-Subject: Re: [PATCH v10 5/5] x86/hyperv: Change interrupt vector for nested
- root partition
-In-Reply-To: <021f748f15870f3e41f417511aa88607627ec327.1672639707.git.jinankjain@linux.microsoft.com>
-References: <cover.1672639707.git.jinankjain@linux.microsoft.com>
- <021f748f15870f3e41f417511aa88607627ec327.1672639707.git.jinankjain@linux.microsoft.com>
-Date:   Thu, 12 Jan 2023 21:00:32 +0100
-Message-ID: <87o7r3ed5r.ffs@tglx>
+        Thu, 12 Jan 2023 15:04:35 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FF519C29
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:01:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673553715; x=1705089715;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CRC1QpMRvg+SgNUKD7+JhmJV8K8WczePzSImvqnWffY=;
+  b=TYwqzNh5Qc+JbAbvYCeqFsW9H613MyoS+lYRHJsyB8hxTlHeF8pPbp1x
+   WjLAHIpvhq9DMJXM1ozLdihakSBpPMuFQ6dIGMshD9EaEVXq9lyI3thWD
+   kWNyiC0BtbbV9lUO4d+Sj1IkUjNREM53KB318FPOiFivhomWxcjXpj68B
+   14/bHo3fdPnHAyGAhQ7Lo/T5dPChb9IPznGR40t6l4RlP4leXJCmcO35i
+   NRV/VcWZX3LSslSVTsjFz4xax7e1FxP6mjMw7Ezc9JsHIhtF9JHDwlP3v
+   yVw0Wpui87IXZ7FGgNsj9QdnKr7FB6Cd61Oul9hW/G6gWklqMz7pK2Ho6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="325867090"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="325867090"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 12:01:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="657959922"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="657959922"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by orsmga002.jf.intel.com with ESMTP; 12 Jan 2023 12:01:29 -0800
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     steve.wahl@hpe.com, alexander.antonov@linux.intel.com,
+        ak@linux.intel.com, eranian@google.com, namhyung@kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH RESEND 0/5] Fix UPI uncore issue on SPR
+Date:   Thu, 12 Jan 2023 12:01:00 -0800
+Message-Id: <20230112200105.733466-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jinank!
+From: Kan Liang <kan.liang@linux.intel.com>
 
-On Mon, Jan 02 2023 at 07:12, Jinank Jain wrote:
-> --- a/arch/x86/include/asm/irq_vectors.h
-> +++ b/arch/x86/include/asm/irq_vectors.h
-> +/*
-> + * FIXME: Change this, once Microsoft Hypervisor changes its assumption
-> + * around VMBus interrupt vector allocation for nested root partition.
-> + * Or provides a better interface to detect this instead of hardcoding.
-> + */
-> +#define HYPERV_INTR_NESTED_VMBUS_VECTOR	0x31
+The discovery table of UPI on SPR MCC is broken. The patch series is
+to mitigate the issue by providing a hardcode pre-defined table.
 
-arch/x86/include/asm/irq_vectors.h line 47:
+The broken discovery table can trigger a kernel warning message, which
+is overkilled. The patch series also refine the error handling code.
 
-/*
- * Vectors 0x30-0x3f are used for ISA interrupts.
- *   round up to the next 16-vector boundary
- */
-#define ISA_IRQ_VECTOR(irq)		(((FIRST_EXTERNAL_VECTOR + 16) & ~15) + irq)
+Kan Liang (5):
+  perf/x86/uncore: Factor out uncore_device_to_die()
+  perf/x86/uncore: Fix potential NULL pointer in uncore_get_alias_name
+  perf/x86/uncore: Ignore broken units in discovery table
+  perf/x86/uncore: Add a quirk for UPI on SPR
+  perf/x86/uncore: Don't WARN_ON_ONCE() for a broken discovery table
 
-So this overlaps with the legacy interrupt vector space.
+ arch/x86/events/intel/uncore.c           |  34 ++++-
+ arch/x86/events/intel/uncore.h           |   4 +
+ arch/x86/events/intel/uncore_discovery.c |  60 ++++++---
+ arch/x86/events/intel/uncore_discovery.h |  14 +-
+ arch/x86/events/intel/uncore_snbep.c     | 158 ++++++++++++++++++-----
+ 5 files changed, 210 insertions(+), 60 deletions(-)
 
-> +#ifdef CONFIG_HYPERV
-> +	/*
-> +	 * This is a hack because we cannot install this interrupt handler
-> +	 * via alloc_intr_gate as it does not allow interrupt vector less
-> +	 * than FIRST_SYSTEM_VECTORS. And hyperv does not want anything other
-> +	 * than 0x31-0x34 as the interrupt vector for vmbus interrupt in case
-> +	 * of nested setup.
-> +	 */
-> +	INTG(HYPERV_INTR_NESTED_VMBUS_VECTOR, asm_sysvec_hyperv_nested_vmbus_intr),
-> +#endif
+-- 
+2.35.1
 
-I agree, that this is a hack, but that puts it mildly: It's a completely
-broken hack.
-
-> +DECLARE_IDTENTRY_SYSVEC(HYPERV_INTR_NESTED_VMBUS_VECTOR, sysvec_hyperv_nested_vmbus_intr);
-
-This generates the low level entry stub for vector 0x31 at compile time,
-which competes with the interrupt stub for external interrupts generated
-by:
-
-      SYM_CODE_START(irq_entries_start)
-
-
-Now the above INTG() hard-codes the IDT entry for vector 0x31 into the
-apic_idts table. That marks it as system vector which in turn prevents
-idt_setup_apic_and_irq_gates() to install the IDT entry for the external
-vector on _ALL_ systems unconditionally.
-
-IOW, you broke world except for systems which do not use the legacy
-interrupt space. Congrats!
-
-That legacy space is hardcoded and that's clearly documented so.
-
-0x31 becomes IRQ1 - usually the i8042 - which makes it pretty much
-guaranteed that this collides and fails. The worst case consequence is a
-fully uncontrolled interrupt storm which is not even detectable.
-
-So this patch is /dev/null material and either the hypervisor side makes
-it possible to use a different vector space or this needs some very
-careful modifications to the legacy ISA vector assignment.
-
-Thanks,
-
-        tglx
