@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0954C667CE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E310A667CE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbjALRqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:46:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
+        id S239336AbjALRqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 12:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbjALRpW (ORCPT
+        with ESMTP id S231349AbjALRp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:45:22 -0500
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F199448CD8;
-        Thu, 12 Jan 2023 09:04:16 -0800 (PST)
+        Thu, 12 Jan 2023 12:45:57 -0500
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7500952749;
+        Thu, 12 Jan 2023 09:04:35 -0800 (PST)
 Received: from localhost (unknown [IPv6:2a01:e35:39f2:1220:dc8b:b602:9bcd:3004])
-        by smtp6-g21.free.fr (Postfix) with ESMTPS id 90EBF780357;
-        Thu, 12 Jan 2023 18:03:58 +0100 (CET)
+        by smtp6-g21.free.fr (Postfix) with ESMTPS id 52CCC78036C;
+        Thu, 12 Jan 2023 18:04:17 +0100 (CET)
 From:   Yann Droneaud <ydroneaud@opteya.com>
 To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         "Theodore Ts'o" <tytso@mit.edu>
@@ -32,227 +32,355 @@ Cc:     Yann Droneaud <ydroneaud@opteya.com>,
         linux-kernel@vger.kernel.org, Florian Weimer <fweimer@redhat.com>,
         Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
         "Carlos O'Donell" <carlos@redhat.com>
-Subject: [RFC PATCH 3/4] x86: vdso: Wire up getrandom() vDSO implementation.
-Date:   Thu, 12 Jan 2023 18:02:35 +0100
-Message-Id: <c85e9dabec96577783a9b4053e11a4bb0bceb6c3.1673539719.git.ydroneaud@opteya.com>
+Subject: [RFC PATCH 4/4] testing: add a getrandom() GRND_TIMESTAMP vDSO demonstration/benchmark
+Date:   Thu, 12 Jan 2023 18:02:36 +0100
+Message-Id: <ee7dec1ec967c38080c44f73246e9b8636b8b624.1673539719.git.ydroneaud@opteya.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <cover.1673539719.git.ydroneaud@opteya.com>
 References: <cover.1673539719.git.ydroneaud@opteya.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-
-Hook up the generic vDSO implementation to the x86 vDSO data page.
-Since the existing vDSO infrastructure is heavily based on the
-timekeeping functionality, which works over arrays of bases,
-a new macro is introduced for vvars that are not arrays.
-
-Based on Jason A. Donenfeld patch [1]
-"[PATCH v14 7/7] x86: vdso: Wire up getrandom() vDSO implementation"
-removing the ChaCha20 implementation and opaque state argument
-from vDSO getrandom().
-
-[1] https://lore.kernel.org/all/20230101162910.710293-8-Jason@zx2c4.com/
-
 Link: https://lore.kernel.org/all/cover.1673539719.git.ydroneaud@opteya.com/
 Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
 ---
- arch/x86/Kconfig                      |  1 +
- arch/x86/entry/vdso/Makefile          |  3 +-
- arch/x86/entry/vdso/vdso.lds.S        |  2 ++
- arch/x86/entry/vdso/vgetrandom.c      | 17 +++++++++++
- arch/x86/include/asm/vdso/getrandom.h | 42 +++++++++++++++++++++++++++
- arch/x86/include/asm/vdso/vsyscall.h  |  2 ++
- arch/x86/include/asm/vvar.h           | 16 ++++++++++
- 7 files changed, 82 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/entry/vdso/vgetrandom.c
- create mode 100644 arch/x86/include/asm/vdso/getrandom.h
+ tools/testing/crypto/getrandom/Makefile       |   4 +
+ .../testing/crypto/getrandom/test-getrandom.c | 307 ++++++++++++++++++
+ 2 files changed, 311 insertions(+)
+ create mode 100644 tools/testing/crypto/getrandom/Makefile
+ create mode 100644 tools/testing/crypto/getrandom/test-getrandom.c
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 3604074a878b..df48387f019f 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -272,6 +272,7 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
-+	select VDSO_GETRANDOM
- 	select HOTPLUG_SMT			if SMP
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 838613ac15b8..2565c4702f54 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -27,7 +27,7 @@ VDSO32-$(CONFIG_X86_32)		:= y
- VDSO32-$(CONFIG_IA32_EMULATION)	:= y
- 
- # files to link into the vdso
--vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o
-+vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o vgetrandom.o
- vobjs32-y := vdso32/note.o vdso32/system_call.o vdso32/sigreturn.o
- vobjs32-y += vdso32/vclock_gettime.o
- vobjs-$(CONFIG_X86_SGX)	+= vsgx.o
-@@ -105,6 +105,7 @@ CFLAGS_REMOVE_vclock_gettime.o = -pg
- CFLAGS_REMOVE_vdso32/vclock_gettime.o = -pg
- CFLAGS_REMOVE_vgetcpu.o = -pg
- CFLAGS_REMOVE_vsgx.o = -pg
-+CFLAGS_REMOVE_vgetrandom.o = -pg
- 
- #
- # X32 processes use x32 vDSO to access 64bit kernel data.
-diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
-index e8c60ae7a7c8..0bab5f4af6d1 100644
---- a/arch/x86/entry/vdso/vdso.lds.S
-+++ b/arch/x86/entry/vdso/vdso.lds.S
-@@ -30,6 +30,8 @@ VERSION {
- #ifdef CONFIG_X86_SGX
- 		__vdso_sgx_enter_enclave;
- #endif
-+		getrandom;
-+		__vdso_getrandom;
- 	local: *;
- 	};
- }
-diff --git a/arch/x86/entry/vdso/vgetrandom.c b/arch/x86/entry/vdso/vgetrandom.c
+diff --git a/tools/testing/crypto/getrandom/Makefile b/tools/testing/crypto/getrandom/Makefile
 new file mode 100644
-index 000000000000..157a6f7dbc44
+index 000000000000..1370b6f1ae94
 --- /dev/null
-+++ b/arch/x86/entry/vdso/vgetrandom.c
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/tools/testing/crypto/getrandom/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0+
++
++test-getrandom: test-getrandom.c
++	$(CC) $(CPPFLAGS) $(CFLAGS) -I ../../../../usr/include/ -O2 -Wall -Wextra -o $@ $^ -ldl
+diff --git a/tools/testing/crypto/getrandom/test-getrandom.c b/tools/testing/crypto/getrandom/test-getrandom.c
+new file mode 100644
+index 000000000000..311eef503f50
+--- /dev/null
++++ b/tools/testing/crypto/getrandom/test-getrandom.c
+@@ -0,0 +1,307 @@
++// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
++ * Copyright (C) 2022 Yann Droneaud. All Rights Reserved.
 + */
-+#include <linux/types.h>
 +
-+#include "../../../../lib/vdso/getrandom.c"
++#include <dlfcn.h>
++#include <errno.h>
++#include <inttypes.h>
++#include <stdarg.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/mman.h>
++#include <sys/syscall.h>
++#include <time.h>
++#include <unistd.h>
 +
-+ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags);
++#include <linux/random.h>
 +
-+ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags)
++static size_t pagesz;
++static size_t discarded;
++
++typedef ssize_t(*getrandom_fn) (void *, size_t, int);
++
++static bool grnd_timestamp;
++static getrandom_fn getrandom_vDSO;
++
++static ssize_t getrandom_syscall(void *buffer, size_t size, int flags)
 +{
-+	return __cvdso_getrandom(buffer, len, flags);
++	return syscall(SYS_getrandom, buffer, size, flags);
 +}
 +
-+ssize_t getrandom(void *, size_t, unsigned int)
-+	__attribute__((weak, alias("__vdso_getrandom")));
-diff --git a/arch/x86/include/asm/vdso/getrandom.h b/arch/x86/include/asm/vdso/getrandom.h
-new file mode 100644
-index 000000000000..14247ddc431a
---- /dev/null
-+++ b/arch/x86/include/asm/vdso/getrandom.h
-@@ -0,0 +1,42 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+#ifndef __ASM_VDSO_GETRANDOM_H
-+#define __ASM_VDSO_GETRANDOM_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <asm/unistd.h>
-+#include <asm/vvar.h>
-+
-+/**
-+ * getrandom_syscall - Invoke the getrandom() syscall.
-+ * @buffer:	Input/Output buffer.
-+ * @len:	Size of @buffer in bytes.
-+ * @flags:	Zero or more GRND_* flags.
-+ * Returns the number of random bytes written to @buffer, or a negative value indicating an error.
-+ */
-+static __always_inline ssize_t getrandom_syscall(void *buffer, size_t len, unsigned int flags)
++static ssize_t timestamp(getrandom_fn _getrandom, uint64_t *grnd_ts,
++			 size_t size)
 +{
-+	long ret;
++	ssize_t ret;
 +
-+	asm ("syscall" : "=a" (ret) :
-+	     "0" (__NR_getrandom), "D" (buffer), "S" (len), "d" (flags) :
-+	     "rcx", "r11", "memory");
++	ret = _getrandom(grnd_ts, size, GRND_TIMESTAMP);
++	if (ret < 0) {
++		fprintf(stderr,
++			"getrandom(,,GRND_TIMESTAMP) failed: %ld (%s)\n", -ret,
++			strerror((int)-ret));
++		return -1;
++	}
 +
 +	return ret;
 +}
 +
-+#define __vdso_rng_data (VVAR(_vdso_rng_data))
-+
-+static __always_inline const struct vdso_rng_data *__arch_get_vdso_rng_data(void)
++static void fetch(getrandom_fn _getrandom, void *buffer, size_t size)
 +{
-+	if (__vdso_data->clock_mode == VDSO_CLOCKMODE_TIMENS)
-+		return (void *)&__vdso_rng_data + ((void *)&__timens_vdso_data - (void *)&__vdso_data);
-+	return &__vdso_rng_data;
++	ssize_t ret;
++
++	ret = _getrandom(buffer, size, 0);
++	if (ret < 0) {
++		fprintf(stderr, "getrandom(,,0) failed: %ld (%s)\n", -ret,
++			strerror((int)-ret));
++		exit(EXIT_FAILURE);
++	}
 +}
 +
-+#endif /* !__ASSEMBLY__ */
++struct rng {
++	uint64_t grnd_ts;
++	size_t availsz;		/* available bytes in buffer */
++	size_t buffersz;	/* buffer size */
++	uint8_t buffer[];
++};
 +
-+#endif /* __ASM_VDSO_GETRANDOM_H */
-diff --git a/arch/x86/include/asm/vdso/vsyscall.h b/arch/x86/include/asm/vdso/vsyscall.h
-index be199a9b2676..71c56586a22f 100644
---- a/arch/x86/include/asm/vdso/vsyscall.h
-+++ b/arch/x86/include/asm/vdso/vsyscall.h
-@@ -11,6 +11,8 @@
- #include <asm/vvar.h>
- 
- DEFINE_VVAR(struct vdso_data, _vdso_data);
-+DEFINE_VVAR_SINGLE(struct vdso_rng_data, _vdso_rng_data);
++static struct rng *rng;
 +
- /*
-  * Update the vDSO data page to keep in sync with kernel timekeeping.
-  */
-diff --git a/arch/x86/include/asm/vvar.h b/arch/x86/include/asm/vvar.h
-index 183e98e49ab9..9d9af37f7cab 100644
---- a/arch/x86/include/asm/vvar.h
-+++ b/arch/x86/include/asm/vvar.h
-@@ -26,6 +26,8 @@
-  */
- #define DECLARE_VVAR(offset, type, name) \
- 	EMIT_VVAR(name, offset)
-+#define DECLARE_VVAR_SINGLE(offset, type, name) \
-+	EMIT_VVAR(name, offset)
- 
- #else
- 
-@@ -37,6 +39,10 @@ extern char __vvar_page;
- 	extern type timens_ ## name[CS_BASES]				\
- 	__attribute__((visibility("hidden")));				\
- 
-+#define DECLARE_VVAR_SINGLE(offset, type, name)				\
-+	extern type vvar_ ## name					\
-+	__attribute__((visibility("hidden")));				\
++static void init_rng(void)
++{
++	int r;
++	ssize_t s;
++	void *p;
 +
- #define VVAR(name) (vvar_ ## name)
- #define TIMENS(name) (timens_ ## name)
- 
-@@ -44,12 +50,22 @@ extern char __vvar_page;
- 	type name[CS_BASES]						\
- 	__attribute__((section(".vvar_" #name), aligned(16))) __visible
- 
-+#define DEFINE_VVAR_SINGLE(type, name)					\
-+	type name							\
-+	__attribute__((section(".vvar_" #name), aligned(16))) __visible
++	r = getpagesize();
++	if (r == -1) {
++		fprintf(stderr, "getpagesize() failed: %d\n", errno);
++		exit(EXIT_FAILURE);
++	}
 +
- #endif
- 
- /* DECLARE_VVAR(offset, type, name) */
- 
- DECLARE_VVAR(128, struct vdso_data, _vdso_data)
- 
-+#if !defined(_SINGLE_DATA)
-+#define _SINGLE_DATA
-+DECLARE_VVAR_SINGLE(640, struct vdso_rng_data, _vdso_rng_data)
-+#endif
++	pagesz = (size_t)r;
 +
- #undef DECLARE_VVAR
-+#undef DECLARE_VVAR_SINGLE
- 
- #endif
++	p = mmap(NULL, pagesz, PROT_READ | PROT_WRITE,
++		 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	if (p == MAP_FAILED) {
++		fprintf(stderr, "mmap() failed: %d\n", errno);
++		exit(EXIT_FAILURE);
++	}
++
++	r = madvise(p, pagesz, MADV_DONTDUMP | MADV_WIPEONFORK);
++	if (r == -1) {
++		fprintf(stderr, "madvise() failed: %d\n", errno);
++		exit(EXIT_FAILURE);
++	}
++
++	r = mlock(p, pagesz);
++	if (r == -1)
++		fprintf(stderr, "mlock() failed: %d\n", errno);
++
++	rng = p;
++
++	s = timestamp(getrandom_syscall, &rng->grnd_ts, sizeof(rng->grnd_ts));
++	if (s == -1)
++		return;
++
++	printf("getrandom() support GRND_TIMESTAMP\n");
++
++	grnd_timestamp = true;
++}
++
++static void init_vdso(void)
++{
++	void *h;
++	void *p;
++
++	h = dlopen("linux-vdso.so.1", RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
++	if (!h) {
++		fprintf(stderr, "failed to open vDSO: %s\n", dlerror());
++		return;
++	}
++
++	p = dlsym(h, "__vdso_getrandom");
++	if (!p) {
++		fprintf(stderr, "getrandom() not found in vDSO: %s\n",
++			dlerror());
++		return;
++	}
++
++	printf("found getrandom() in vDSO at %p\n", p);
++
++	getrandom_vDSO = p;
++}
++
++/*
++ * 1) check timestamp isn't expired
++ * 2) if expired or there's not enough data in buffer
++ *     a) if expired, reset buffer size,
++ *     b) fetch new random stream
++ *     c) check timestamp
++ *     d) if expired, reset buffer size, go to b)
++ *
++ */
++static void ensure(getrandom_fn _getrandom, size_t request)
++{
++	ssize_t r;
++
++	r = timestamp(_getrandom, &rng->grnd_ts, sizeof(rng->grnd_ts));
++	switch (r) {
++	case 0:	/* timestamp didn't change */
++		/* enough available random bytes ? */
++		if (rng->availsz >= request)
++			return;
++
++		/* increase buffer size when drained */
++		if (rng->buffersz < pagesz - sizeof(*rng))
++			rng->buffersz *= 2;
++
++		/* no less than 32 */
++		if (rng->buffersz < 32)
++			rng->buffersz = 32;
++
++		/* no more than a full page minus the rng structure */
++		if (rng->buffersz > pagesz - sizeof(*rng))
++			rng->buffersz = pagesz - sizeof(*rng);
++
++		break;
++
++	case sizeof(rng->grnd_ts):	/* timestamp did change, random bytes must be discarded */
++		rng->buffersz = 32;	/* reset size */
++		break;
++
++	default:
++		fprintf(stderr, "unexpected timestamp size %zd\n", r);
++		exit(EXIT_FAILURE);
++	}
++
++	/* keep fetching if timestamp is updated */
++	for (;;) {
++		if (rng->availsz)
++			discarded += rng->availsz;
++
++		fetch(_getrandom, rng->buffer, rng->buffersz);
++		rng->availsz = rng->buffersz;
++
++		r = timestamp(_getrandom, &rng->grnd_ts, sizeof(rng->grnd_ts));
++
++		switch (r) {
++		case 0:	/* timestamp didn't change between previous check and last fetch */
++			return;
++
++		case sizeof(rng->grnd_ts):	/* timestamp did change, random bytes just fetched must be discarded */
++			rng->buffersz = 32;	/* reset size */
++			continue;	/* retry again */
++
++		default:
++			fprintf(stderr, "unexpected timestamp size %zd\n", r);
++			exit(EXIT_FAILURE);
++		}
++	}
++}
++
++/* arc4random() */
++static void get_direct(getrandom_fn _getrandom)
++{
++	uint32_t v;
++	fetch(_getrandom, &v, sizeof(v));
++}
++
++static void get_pooled(getrandom_fn _getrandom)
++{
++	ensure(_getrandom, sizeof(uint32_t));
++	rng->availsz -= sizeof(uint32_t);
++}
++
++static inline struct timespec timespec_sub(const struct timespec *a,
++					   const struct timespec *b)
++{
++	struct timespec res;
++
++	res.tv_sec = a->tv_sec - b->tv_sec;
++	res.tv_nsec = a->tv_nsec - b->tv_nsec;
++	if (res.tv_nsec < 0) {
++		res.tv_sec--;
++		res.tv_nsec += 1000000000L;
++	}
++
++	return res;
++}
++
++#define SAMPLES 13
++#define VALUES (16 * 1024 * 1024)
++
++static void test_direct(getrandom_fn _getrandom, const char *method)
++{
++	struct timespec start, end, diff;
++
++	for (int i = 0; i < SAMPLES; i++) {
++		clock_gettime(CLOCK_MONOTONIC, &start);
++
++		for (uint32_t j = 0; j < VALUES; j++)
++			get_direct(_getrandom);
++
++		clock_gettime(CLOCK_MONOTONIC, &end);
++
++		diff = timespec_sub(&end, &start);
++
++		printf("== direct %s getrandom(), %u u32, %lu.%09lu s, %.3f M u32/s, %.3f ns/u32\n",
++		       method, VALUES, diff.tv_sec, diff.tv_nsec,
++		       VALUES / (1000000 *
++				 (diff.tv_sec +
++				  (double)diff.tv_nsec / 1000000000UL)),
++		       (double)(diff.tv_sec * 1000000000UL +
++				diff.tv_nsec) / VALUES);
++	}
++}
++
++static void test_pooled(getrandom_fn _getrandom, const char *method)
++{
++	struct timespec start, end, diff;
++
++	for (int i = 0; i < SAMPLES; i++) {
++		discarded = 0;
++
++		clock_gettime(CLOCK_MONOTONIC, &start);
++
++		for (uint32_t j = 0; j < VALUES; j++)
++			get_pooled(_getrandom);
++
++		clock_gettime(CLOCK_MONOTONIC, &end);
++
++		diff = timespec_sub(&end, &start);
++
++		printf("== pooled %s getrandom(), %u u32, %lu.%09lu s, %.3f M u32/s, %.3f ns/u32, (%zu bytes discarded)\n",
++		       method, VALUES, diff.tv_sec, diff.tv_nsec,
++		       VALUES / (1000000 *
++				 (diff.tv_sec +
++				  (double)diff.tv_nsec / 1000000000UL)),
++		       (double)(diff.tv_sec * 1000000000UL +
++				diff.tv_nsec) / VALUES,
++		       discarded);
++	}
++}
++
++int main(void)
++{
++	printf("getrandom(,,GRND_TIMESTAMP) test\n");
++
++	init_rng();
++	init_vdso();
++
++	while (1) {
++		test_direct(getrandom_syscall, "syscall");
++
++		if (getrandom_vDSO)
++			test_direct(getrandom_vDSO, "vDSO");
++
++		if (grnd_timestamp)
++			test_pooled(getrandom_syscall, "syscall");
++
++		if (getrandom_vDSO && grnd_timestamp)
++			test_pooled(getrandom_vDSO, "vDSO");
++	}
++
++	return 0;
++}
 -- 
 2.37.2
 
