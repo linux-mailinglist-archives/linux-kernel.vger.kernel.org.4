@@ -2,140 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4E96678CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7096678DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240298AbjALPO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
+        id S240370AbjALPQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:16:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbjALPO3 (ORCPT
+        with ESMTP id S231993AbjALPPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:14:29 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E820C12AAC;
-        Thu, 12 Jan 2023 07:05:33 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id jo4so45491739ejb.7;
-        Thu, 12 Jan 2023 07:05:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wltNgvmoTEOdzqXrThP0TENXCKomPCLaFAPp9HR3deY=;
-        b=ZgZ5L3Bketfsde0TLMzOY61Fvk+o266XO03TTckE5BOB8DKDeMsOkLLE2J/h9QoWsR
-         yeSTo32aRST1+hrkt2TZLcLCPvV8u0Xj3adH/eVbCu3tcUicfMaPe/M7DmzWzE1zfDOC
-         anFbgi4a52k/Iq89DCof5zYCIxa90PvHpvUgyhXCl4MxPx1/FIrzxfQOoQEKuxK7OjoW
-         7MzbY8TXhqfFLIQhfjxaVrYbfty0dFLY8lDmyg6pO7+32RGNxtHqT+RJg6J8JRR9ZCdt
-         Pi7XVJcfYtQCBC2ic5QICsAuxBIHzVPGzNy4xLRMP7MzkMw9rpP+TXzhooX2U4TTa3ux
-         mW5w==
-X-Gm-Message-State: AFqh2kpPt7iWWrphufPztSTKw72xKNmMSY2haYJ2Q+nwtmRQJvwyUHfe
-        EKMrufUwxNCny0eCa9FdGtIOc9SDK4utQYKPBBU=
-X-Google-Smtp-Source: AMrXdXvKmZ2PCMXVnx7nExgmOtUWzRBMI/6pY7Omz5S3AXQJ76U8+Cuvv1wgfhkdhzXb7XvSkvwJKcy+CYycMkK7wro=
-X-Received: by 2002:a17:907:75ea:b0:7c0:f118:7e4e with SMTP id
- jz10-20020a17090775ea00b007c0f1187e4emr4416278ejc.478.1673535932416; Thu, 12
- Jan 2023 07:05:32 -0800 (PST)
+        Thu, 12 Jan 2023 10:15:17 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC0C1CFF7;
+        Thu, 12 Jan 2023 07:06:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MC/NVyEC+LEfhcig7OxVywPKp5aS+P3s0NbcBgzZCAk=; b=aNCu7F2YwBL/HEzz4B15O41UW+
+        2KiaggPnSe6QcACfAlzDtIKdmMHDnOW27eQ7TS/uDDlMS9Wpo3tYiyEnNRszL1tLu0RUnbxEXKXNe
+        QmIy27GybnFFY3twkx/BwwFILXNhar9gX1gOi6WdxjEYstkKO7ABBVUaFMwcHNk7b+07drk8Wu67S
+        pCVmTEzFeBR/Uba5Uoy6ocPYy6qYUOKzNK8USwFxkE81CxA69KFHcKzesUz2ujT3B9vRw9NBEKUsT
+        zauaLowom3qpGhulX8lgt3voxpq9aAqbPnM3FkXMhybL750pOH33mBo17yiPP8zRyyy3K7cd5y3GQ
+        gFwsecuA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pFzAF-00591M-3r; Thu, 12 Jan 2023 15:06:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5BEFB30084B;
+        Thu, 12 Jan 2023 16:06:33 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1535F2CCCCB1B; Thu, 12 Jan 2023 16:06:33 +0100 (CET)
+Date:   Thu, 12 Jan 2023 16:06:33 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mike Leach <mike.leach@linaro.org>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
+        suzuki.poulose@arm.com, mingo@redhat.com, acme@kernel.org,
+        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
+        quic_jinlmao@quicinc.com
+Subject: Re: [PATCH v6 11/14] kernel: events: Export
+ perf_report_aux_output_id()
+Message-ID: <Y8Ah+djAEpSfIF5s@hirez.programming.kicks-ass.net>
+References: <20221123195010.6859-1-mike.leach@linaro.org>
+ <20221123195010.6859-12-mike.leach@linaro.org>
 MIME-Version: 1.0
-References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com> <20221129233419.4022830-2-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20221129233419.4022830-2-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Jan 2023 16:05:21 +0100
-Message-ID: <CAJZ5v0gxTdHW_Wk2E13M+tK+B5rqOirY4sz6UJVMjhentvEstg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] powercap: idle_inject: Export symbols
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, amitk@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123195010.6859-12-mike.leach@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 12:34 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Export symbols for external interfaces, so that they can be used in
-> other loadable modules.
->
-> Export is done under name space IDLE_INJECT.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Wed, Nov 23, 2022 at 07:50:07PM +0000, Mike Leach wrote:
+> CoreSight trace being updated to use the perf_report_aux_output_id()
+> in a similar way to intel-pt.
+> 
+> This function in needs export visibility to allow it to be called from
+> kernel loadable modules, which CoreSight may configured to be built as.
+> 
+> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+> Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
 > ---
-> v2:
->         No change
->
->  drivers/powercap/idle_inject.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-> index fe86a09e3b67..dfa989182e71 100644
-> --- a/drivers/powercap/idle_inject.c
-> +++ b/drivers/powercap/idle_inject.c
-> @@ -160,6 +160,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
->                 WRITE_ONCE(ii_dev->idle_duration_us, idle_duration_us);
->         }
+>  kernel/events/core.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 4ec3717003d5..ad388552f1d5 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -9231,6 +9231,7 @@ void perf_report_aux_output_id(struct perf_event *event, u64 hw_id)
+>  
+>  	perf_output_end(&handle);
 >  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_set_duration, IDLE_INJECT);
->
->  /**
->   * idle_inject_get_duration - idle and run duration retrieval helper
-> @@ -174,6 +175,7 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
->         *run_duration_us = READ_ONCE(ii_dev->run_duration_us);
->         *idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_get_duration, IDLE_INJECT);
->
->  /**
->   * idle_inject_set_latency - set the maximum latency allowed
-> @@ -185,6 +187,7 @@ void idle_inject_set_latency(struct idle_inject_device *ii_dev,
->  {
->         WRITE_ONCE(ii_dev->latency_us, latency_us);
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_set_latency, IDLE_INJECT);
->
->  /**
->   * idle_inject_start - start idle injections
-> @@ -216,6 +219,7 @@ int idle_inject_start(struct idle_inject_device *ii_dev)
->
->         return 0;
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_start, IDLE_INJECT);
->
->  /**
->   * idle_inject_stop - stops idle injections
-> @@ -262,6 +266,7 @@ void idle_inject_stop(struct idle_inject_device *ii_dev)
->
->         cpu_hotplug_enable();
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_stop, IDLE_INJECT);
->
->  /**
->   * idle_inject_setup - prepare the current task for idle injection
-> @@ -337,6 +342,7 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
->
->         return NULL;
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
->
->  /**
->   * idle_inject_unregister - unregister idle injection control device
-> @@ -357,6 +363,7 @@ void idle_inject_unregister(struct idle_inject_device *ii_dev)
->
->         kfree(ii_dev);
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_unregister, IDLE_INJECT);
->
->  static struct smp_hotplug_thread idle_inject_threads = {
->         .store = &idle_inject_thread.tsk,
-> --
-> 2.31.1
->
+> +EXPORT_SYMBOL_GPL(perf_report_aux_output_id);
+>  
+>  static int
+>  __perf_event_account_interrupt(struct perf_event *event, int throttle)
+> -- 
+> 2.17.1
+> 
