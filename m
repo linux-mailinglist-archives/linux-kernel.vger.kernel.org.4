@@ -2,178 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825F1668550
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56310668561
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240811AbjALV2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 16:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S232172AbjALVai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 16:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbjALV2D (ORCPT
+        with ESMTP id S240208AbjALV2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 16:28:03 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCE78460A;
-        Thu, 12 Jan 2023 13:07:16 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id cf18so41453122ejb.5;
-        Thu, 12 Jan 2023 13:07:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yi96tsdQR6WdP5GsKIXazABTTCV4uwO+W40vPdabGLI=;
-        b=O+QDNRr8kwQzK7WmMnAXpuHQH1PZMeQrj0licS71OUJQMRBomMoDi3AmQzz8Lnc83N
-         x+Mv7aWvrwGVwoHnLCcacSlxKMaR4wHkha+1+INzjhp0Yagto/KlW+sK0iJYCw9sIWIo
-         4njF6TfQlfvMpl++f3aGEHCmjpqXaV9mBE6MR//WlXMhjtbaSzsGTP17+wvXyyU/DG7+
-         QCGC9KHL+BOaCL+deAvdV4ikDEediQNLwppkf3rmONYmC51lp8O+MGtJ+/KD1P1zjGd6
-         u3e02epWZTM06DBUdy1FXtAJ8Yl53l5qXXJZKcSsfs9bQRN3YNzEieKSAP0SDL2iBxBL
-         qP1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yi96tsdQR6WdP5GsKIXazABTTCV4uwO+W40vPdabGLI=;
-        b=i4AgYgeAThuiAB7QJzyNsLP0ziN+rPn8bM7ExkHoeFfhflWUQ9mx+eb2sL6CKfBbZ5
-         lUOHQa4Jf7tSkkUmkHZYit3uXUQYbZQf2zDL+J88xue0J41fR95cfdCKCm91seRuatpz
-         o2HEmbfXPxJyzhPTIQuGLB0+rJzzqVYAWGpLlcoYXCqtYBn3EVl12MGtYQgMhohw69Eq
-         B0YFKRIuWOB1H6fYOKBSqM8FFaP3cToz6oTcT3A2Zz8Un1tgCeVgUjMmdjN+tzhD6Uow
-         y7H+2rPYBwKxsVgTB2eLwppQviSBqkmUZvgufNWmBSfGD7eXPRGZGhmoM5zj4pwkOlUZ
-         SpRw==
-X-Gm-Message-State: AFqh2kpnZ9D9w+MLgP6zEFEGgC9cEdcq+LWFpOOmFcEkr+qbWv8P/mXT
-        b6mtAAsNK5/Q/evUvxuQ3NDBntPev0huTYlatMP4bUpG
-X-Google-Smtp-Source: AMrXdXvHyknXCPOG1Y++mFApOmYsZxlHbhzKNgms8atKRZ1ze2Wk2vlsO6N3Z+qoW+bToALTQsAAtxAemEQIwO9VCyY=
-X-Received: by 2002:a17:907:3103:b0:864:dab4:760f with SMTP id
- wl3-20020a170907310300b00864dab4760fmr279928ejb.633.1673557634775; Thu, 12
- Jan 2023 13:07:14 -0800 (PST)
+        Thu, 12 Jan 2023 16:28:14 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD2F840AB;
+        Thu, 12 Jan 2023 13:07:37 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30CJnH0a030291;
+        Thu, 12 Jan 2023 21:07:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=wHxUVG3llIAbwQXTY3rDFc7+V650XXE/ilqaMMgqOBQ=;
+ b=F0oNkbW1cxUYJqhnEP4os5u6Z5rz2RQEswTe/z2njWx3xwo0v/06mXFITWVG81Fg8pHy
+ 97FvievJKtkEaC30aMgppY6WT5Ilt+k+v9Eey5SjYJR1Gv1v2Z0lbwVI1eR+BBxX3t/0
+ Dj6+Sd8H0jjl473kehGpQ4/vRu/SiqYjS5HkRkTwZR502CqVq2MKPN+WeU++3RrYarhS
+ 96ON4ltyeghko9g8vwArQgEXmvCCnuUto2LS5MJqgGowvbL7dWHPr9V8pWYRyjg4lkgq
+ tw1WejwiMU1Ucorw/BrzJ1OeG/C6SzU5JWyHTOavX4i4E7OOC5zNbN/69aAvNjktyxoY Dg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n1kbqd3rb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Jan 2023 21:07:34 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30CL7Xuv028218
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Jan 2023 21:07:33 GMT
+Received: from hu-molvera-sd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 12 Jan 2023 13:07:33 -0800
+From:   Melody Olvera <quic_molvera@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>
+Subject: [PATCH v6 0/2] Add base device tree files for QDU1000/QRU1000
+Date:   Thu, 12 Jan 2023 13:07:20 -0800
+Message-ID: <20230112210722.6234-1-quic_molvera@quicinc.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20230109094247.1464856-1-imagedong@tencent.com>
- <504cc35a-74a8-751a-5899-186d7a0aff87@meta.com> <CADxym3bRciuyM1nYCrbaAwSMRJQvgV=hJFSLeiu9jysejPaTQQ@mail.gmail.com>
- <6c14e7ad-3b6d-4f88-64b8-8e3968d2b2e6@meta.com> <6455133c-87a2-1a0f-7da4-f8b99f02fc95@oracle.com>
-In-Reply-To: <6455133c-87a2-1a0f-7da4-f8b99f02fc95@oracle.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 12 Jan 2023 13:07:03 -0800
-Message-ID: <CAADnVQJRntdqa4uCHtTrQNAsgGS13DtNV-ue2wTdHQxiuLo_Yg@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: resolve kernel function name optimization for kprobe
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Yonghong Song <yhs@meta.com>,
-        Menglong Dong <menglong8.dong@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: vTPkjoG-0PjLK0ampgovF1djaDB936DS
+X-Proofpoint-ORIG-GUID: vTPkjoG-0PjLK0ampgovF1djaDB936DS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-12_12,2023-01-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=565 spamscore=0 malwarescore=0 adultscore=0
+ mlxscore=0 impostorscore=0 phishscore=0 clxscore=1015 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301120150
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 2:20 AM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> On 12/01/2023 07:23, Yonghong Song wrote:
-> >
-> >
-> > On 1/9/23 7:11 PM, Menglong Dong wrote:
-> >> On Tue, Jan 10, 2023 at 4:29 AM Yonghong Song <yhs@meta.com> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 1/9/23 1:42 AM, menglong8.dong@gmail.com wrote:
-> >>>> From: Menglong Dong <imagedong@tencent.com>
-> >>>>
-> >>>> The function name in kernel may be changed by the compiler. For example,
-> >>>> the function 'ip_rcv_core' can be compiled to 'ip_rcv_core.isra.0'.
-> >>>>
-> >>>> This kind optimization can happen in any kernel function. Therefor, we
-> >>>> should conside this case.
-> >>>>
-> >>>> If we failed to attach kprobe with a '-ENOENT', then we can lookup the
-> >>>> kallsyms and check if there is a similar function end with '.xxx', and
-> >>>> retry.
-> >>>
-> >>> This might produce incorrect result, so this approach won't work
-> >>> for all .isra.0 cases. When a function name is changed from
-> >>> <func> to <func>.isra.<num>, it is possible that compiler may have
-> >>> make some changes to the arguments, e.g., removing one argument,
-> >>> chaning a semantics of argument, etc. if bpf program still
-> >>> uses the original function signature, the bpf program may
-> >>> produce unexpected result.
-> >>
-> >> Oops, I wasn't aware of this part. Can we make this function disabled
-> >> by default and offer an option to users to enable it? Such as:
-> >>
-> >>      bpf_object_adapt_sym(struct bpf_object *obj)
-> >>
-> >> In my case, kernel function rename is common, and I have to
-> >> check all functions and do such adaptation before attaching
-> >> my kprobe programs, which makes me can't use auto-attach.
-> >>
-> >> What's more, I haven't seen the arguments change so far, and
-> >> maybe it's not a common case?
-> >
-> > I don't have statistics, but it happens. In general, if you
-> > want to attach to a function like <foo>, but it has a variant
-> > <foo>.isra.<num>, you probably should check assembly code
-> > to ensure the parameter semantics not changed, and then
-> > you can attach to kprobe function <foo>.isra.<num>, which
-> > I assume current libbpf infrastructure should support it.
-> > After you investigate all these <foo>.isra.<num> functions
-> > and confirm their argument semantics won't change, you
-> > could use kprobe multi to do attachment.
-> >
->
-> I crunched some numbers on this, and discovered out of ~1600
-> .isra/.constprop functions, 76 had a missing argument. The patch series
-> at [1] is a rough attempt to get pahole to spot these, and add
-> BTF entries for each, where the BTF representation reflects
-> reality by skipping optimized-out arguments. So for a function
-> like
->
-> static int ip6_nh_lookup_table(struct net *net, struct fib6_config *cfg,
->                                const struct in6_addr *gw_addr, u32 tbid,
->                                int flags, struct fib6_result *res);
->
-> Examining the BTF representation using pahole from [1], we see
->
-> int ip6_nh_lookup_table.isra.0(struct net *net, struct fib6_config *cfg, struct in6_addr *gw_addr, u32 tbid, int flags);
->
-> Comparing to the definition, we see the last parameter is missing,
-> i.e. the "struct fib6_result *" argument is missing. The calling pattern -
-> where the callers have a struct fib6_result on the stack and pass a pointer -
-> is reflected in late DWARF info which shows the argument is not actually
-> passed as a register, but can be expressed as an offset relative to the current
-> function stack (DW_OP_fbreg).
->
-> This approach howvever introduces the problem that currently the kernel
-> doesn't  allow a "." in a function name. We can fix that, but any BTF encoding
-> that introduced optimized functions containing a  "." would have to be opt-in
-> via a pahole option, so we do not generate invalid vmlinux BTF for kernels
-> without that change.
->
-> An alternative approach would be to simply encode .isra functions
-> in BTF without the .isra suffix (i.e. using "function_name" not
-> "function_name.isra"), only doing the BTF encoding if no arguments were
-> optimized out - i.e. if the function signature matches expectations.
-> The 76 functions with optimized-out parameters could simply be skipped.
-> To me that feels like the simpler approach - it avoids issues
-> with function name BTF encoding, and with that sort of model a
-> loose-matching kallsyms approach - like that described here - could be used
-> for kprobes and fentry/fexit. It also fits with the DWARF representation -
-> the .isra suffixes are not present in DWARF representations of the function,
-> only in the symbol table and kallsyms, so perhaps BTF should follow suit
-> and not add the suffixes. What do you think?
+This series adds the base device tree files and DTS support for the
+Qualcomm QDU1000 and QRU1000 IDP SoCs, including the clocks, tlmm, smmu,
+regulators, mmc, interconnects, cpufreq, and qup. 
 
-Sounds like a great idea to me.
-Addresses this issue in a clean way.
+This patchset requires the dt-bindings changes from [1-3].
+
+The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
+1000 are new SoCs meant for enabling Open RAN solutions. See more at
+https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
+
+[1] https://lore.kernel.org/all/20221216231426.24760-1-quic_molvera@quicinc.com/
+[2] https://lore.kernel.org/all/20230112204446.30236-1-quic_molvera@quicinc.com/
+[3] https://lore.kernel.org/all/20230112203653.23139-1-quic_molvera@quicinc.com/
+
+Changes from v5:
+- Moved XYZ-names fields under XYZ fields
+- Removed irrelevant comments
+- Updated ordering of some fields
+- Removed unneeded fields
+- Revised style on clocks and interrupts
+
+Changes from v4:
+- Added chassis-type
+- Added missing regulator voltages
+- Sorted includes
+- Remaned memory nodes
+- Reorganized nodes to start with compatible/reg
+- Removed unnecessary clocks
+- Switched to deleting nodes by label
+- Moved pin biases and drive strengths to dts files
+
+Changes from v3:
+- added PCIE and USB clocks
+- added missing qdu1000 compats
+
+Changes from v2:
+- Revised device nodes to match updated dt-bindings
+- Revised rpmh-rsc bindings to allow for generic regulator nodes
+- Updated soc ordering
+- Moved clock node to DTS files
+- Updated regulator nodes to be generic
+- Removed some unnecessary whitespace
+
+Melody Olvera (2):
+  arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs
+  arm64: dts: qcom: Add base QDU1000/QRU1000 IDP DTs
+
+ arch/arm64/boot/dts/qcom/Makefile        |    2 +
+ arch/arm64/boot/dts/qcom/qdu1000-idp.dts |  453 ++++++++
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi    | 1333 ++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/qru1000-idp.dts |  453 ++++++++
+ arch/arm64/boot/dts/qcom/qru1000.dtsi    |   26 +
+ 5 files changed, 2267 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/qdu1000.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/qru1000-idp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/qru1000.dtsi
+
+
+base-commit: 0a093b2893c711d82622a9ab27da4f1172821336
+prerequisite-patch-id: d439ef85a730c7b736ed8c63162e24c7ae661b60
+prerequisite-patch-id: c55ff1a38fed5356caa8f40a85ef0b8ebc4d1fa4
+prerequisite-patch-id: 984e8570d2464f4027dc59294c10f47e7ae29a84
+-- 
+2.38.1
+
