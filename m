@@ -2,169 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196CB66797A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05CAD66797C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240383AbjALPhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
+        id S234424AbjALPiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:38:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240480AbjALPg5 (ORCPT
+        with ESMTP id S231146AbjALPhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:36:57 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE213E0D0;
-        Thu, 12 Jan 2023 07:27:37 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id v6so2622439ejg.6;
-        Thu, 12 Jan 2023 07:27:37 -0800 (PST)
+        Thu, 12 Jan 2023 10:37:23 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4623F125
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:27:52 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id j1so960613iob.6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:27:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CrbASCzARhVLuaSBXApRdzfPL5S8978znYbA4CmgqDs=;
-        b=SwwDNfbgtHXKLyI4R2Efj2SeDZlyvIhbvVT0EQPnlEtQNm/73tCz2acCDRM8C6hGkj
-         Wx+WPbNvl2f6CrCSLji1Xivoma14wmMQdgGQlt+uRY/iq68FmsajSKN3qVCS+ZLlqXvQ
-         31M2BnksUUZinJ+JMW931PCfOfdLKRfuBnwyc5nkIQecl2zO393xJCAg+xv2VFtUz5k7
-         llrVH6Vd5DgfMgOgrcHX/LsPoZTL+Wxe/2/PlATTrpYDXM5EGrnCMXzoO8UGPTD6h9gi
-         7NDDmRQikmNpbEaRsRqZRfXF6AnIvG3Dfbo9paMunOCetTHExyxW9suJerCQrG6m0QHM
-         Oydw==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QQNsmcbJGjSqHvhcGtkc7WNkhYvr6MAYzLtZxzByW0g=;
+        b=Sok8W5STaiwlRrQMF/i3mUtf5g9Lh0azP7ztq7Svc+1fMrWrBZy/yAHxMSYqrQPJ0/
+         BjgOjSWbaiVT2nGQd+k+1P53lSdhMnjXyzb+4VSjjbXyPRdsBGGxC/Qk/8M9CTQQvpDr
+         /mSEX5oU2Up8GDZqHTNz1TSQ7SN6eUnR7TCfZc4QJMBoONXfgVFp1bY0P3+HkPPBlfCs
+         N+fW1V2cUI20alnDje0RHTWs5hssptsw5kj8/mF3uGr1cqG/Gh0a7kUy3qG6SMtrg5Rg
+         O6be7Eba1SHj6tCFp9ygCLj14eQY/xJ0TR22U1jYod3vVbM1fYY6LbYIVZBPvZzMi79w
+         Zv/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CrbASCzARhVLuaSBXApRdzfPL5S8978znYbA4CmgqDs=;
-        b=nV92YZvoSBXpmzGgRSYEB2wQNjeQeYwlNybX5tK1GFiyYIYnU+O1k9WqIQjhyiNtIl
-         qK06QZ0KDnZb+XwPdEJu3Q68tOjXur/pPOB38KRh8A6JP2MmopNkuiDnUXM/2QVJNCbN
-         VfozrgoiODSf6tUT13gsJLKtsPCxpWxhhBfOVCxC289kMM9nDmY3Yjv4DtDBE28nKhZq
-         KvTcNAE0QnRqmZY+gLPwTsMDSRGTCDeHVmc8uET1FXu3uO2Cyhm9om9TlC6WDLUveO65
-         /8Brh16PugnU5Cd2waylYiZ5dv8075ceO6hTHRyv253QjfY3C3VvCvTD8Kklosj2S9GQ
-         q9Mw==
-X-Gm-Message-State: AFqh2kqvfynYN/BipPcU5mGCp4m46m+oLwrQqIWSDyvtMT0UeUS/EdCy
-        4kjbKLIi8/Hf1LtspXR/3ug=
-X-Google-Smtp-Source: AMrXdXtiw3aoWtSXJ9xoLcmv+rCXEEgL046vLRJKWB8A9VVqoTKgbwxA2TlBIxvThwtDU7f7qWXpfA==
-X-Received: by 2002:a17:907:7da4:b0:78d:f455:b5dc with SMTP id oz36-20020a1709077da400b0078df455b5dcmr81517523ejc.28.1673537255980;
-        Thu, 12 Jan 2023 07:27:35 -0800 (PST)
-Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906201100b007bff9fb211fsm7445714ejo.57.2023.01.12.07.27.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 07:27:35 -0800 (PST)
-Date:   Thu, 12 Jan 2023 16:27:37 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
-        sbhatta@marvell.com, linux-doc@vger.kernel.org,
-        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
-        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
-Subject: Re: [PATCH net-next 1/1] plca.c: fix obvious mistake in checking
- retval
-Message-ID: <Y8Am6VGQRRgPCuBk@gvm01>
-References: <f6b7050dcfb07714fb3abdb89829a3820e6a555c.1673458121.git.piergiorgio.beruto@gmail.com>
- <CANn89i+Y-j4RSX7UQO+P6sB9WGsA8ZDb+ruqEv-iJKtzEvGstQ@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QQNsmcbJGjSqHvhcGtkc7WNkhYvr6MAYzLtZxzByW0g=;
+        b=VUMvZRzLnt4J0iv6sEArGiZhhRE6kOxZ+5r6dJroWDNwnZ8VUZ5W3eCxSmb67J8c57
+         W/DyfucLXeaK+T6+tM+2Bv/M2qtwhtw8C0ejyOYIv5YSxTtTSMXKLAYpgeUHaHRRAEW0
+         PfBNTC3My+v+kba0s4bIIDuiLiruUy+bYpyFe0yGfbFsJEIrMZJ1sSxYh9bSuhpCk57a
+         KFM1k8YesjQq2RJylwlL+TutqA+u3W36f+xnB54uWip+UReUIqzthraGYLCxriaNkExE
+         ob82cBUmvFa916f7IfMpl8lW3nG05VbLEs+m42Qo6JkNWz/+0+wGBxrE64GZhaipptuw
+         b9eg==
+X-Gm-Message-State: AFqh2kr0KMV7emFDHG8xx4FbOWcCZQ6wb+j9XOYmFyCgPdxAptXIsm1v
+        khNYFSDevkBJDwRLlBzGEkMRHg==
+X-Google-Smtp-Source: AMrXdXvwplDhlmXDTyY/pvKGL+amu134TbFkzuPgPRiDNNd4Tiw+JyGbV8PVXHifjtTbFfQebKeEeg==
+X-Received: by 2002:a6b:7d46:0:b0:6ed:1ad7:56bc with SMTP id d6-20020a6b7d46000000b006ed1ad756bcmr11343678ioq.0.1673537271293;
+        Thu, 12 Jan 2023 07:27:51 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id k5-20020a0566022a4500b006df19c8671fsm6010956iov.27.2023.01.12.07.27.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 07:27:50 -0800 (PST)
+Message-ID: <5601285f-6628-f121-243e-44de7b15c779@kernel.dk>
+Date:   Thu, 12 Jan 2023 08:27:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89i+Y-j4RSX7UQO+P6sB9WGsA8ZDb+ruqEv-iJKtzEvGstQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [syzbot] WARNING in io_cqring_event_overflow
+Content-Language: en-US
+To:     syzbot <syzbot+6805087452d72929404e@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000694ccd05f20ef7be@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <000000000000694ccd05f20ef7be@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 03:45:03PM +0100, Eric Dumazet wrote:
-> On Wed, Jan 11, 2023 at 6:30 PM Piergiorgio Beruto
-> <piergiorgio.beruto@gmail.com> wrote:
-> >
-> > This patch addresses a wrong fix that was done during the review
-> > process. The intention was to substitute "if(ret < 0)" with
-> > "if(ret)". Unfortunately, in this specific file the intended fix did not
-> > meet the code.
-> >
+On 1/12/23 3:56?AM, syzbot wrote:
+> Hello,
 > 
-> Please add a Fixes: tag, even for a patch in net-next
-Ok, will do, thanks!
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> WARNING in io_cqring_event_overflow
 > 
-> Fixes: 8580e16c28f3 ("net/ethtool: add netlink interface for the PLCA RS")
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 2836 at io_uring/io_uring.c:734 io_cqring_event_overflow+0x1c0/0x230 io_uring/io_uring.c:734
+> Modules linked in:
+> CPU: 1 PID: 2836 Comm: kworker/u4:4 Not tainted 6.2.0-rc3-syzkaller-00011-g0af4af977a59 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> Workqueue: events_unbound io_ring_exit_work
+> pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : io_cqring_event_overflow+0x1c0/0x230 io_uring/io_uring.c:734
+> lr : io_cqring_event_overflow+0x1c0/0x230 io_uring/io_uring.c:734
+> sp : ffff8000164abad0
+> x29: ffff8000164abad0
+>  x28: ffff0000c655e578
+>  x27: ffff80000d49b000
 > 
-> > Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-> > ---
-> >  net/ethtool/plca.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/net/ethtool/plca.c b/net/ethtool/plca.c
-> > index d9bb13ffc654..9c7d29186b4e 100644
-> > --- a/net/ethtool/plca.c
-> > +++ b/net/ethtool/plca.c
-> > @@ -61,7 +61,7 @@ static int plca_get_cfg_prepare_data(const struct ethnl_req_info *req_base,
-> >         }
-> >
-> >         ret = ethnl_ops_begin(dev);
-> > -       if (!ret)
-> > +       if (ret)
-> >                 goto out;
-> >
-> >         memset(&data->plca_cfg, 0xff,
-> > @@ -151,7 +151,7 @@ int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
-> >                                          tb[ETHTOOL_A_PLCA_HEADER],
-> >                                          genl_info_net(info), info->extack,
-> >                                          true);
-> > -       if (!ret)
+> x26: 0000000000000000
+>  x25: 0000000000000000
+>  x24: 0000000000000000
 > 
-> Canonical way of testing an error from ethnl_parse_header_dev_get() is:
+> x23: 0000000000000000
+>  x22: 0000000000000000
+>  x21: 0000000000000000
 > 
-> if (ret < 0)
->     return ret;
+> x20: 0000000000000000
+>  x19: ffff0000d1727000
+>  x18: 00000000000000c0
 > 
+> x17: ffff80000df48158
+>  x16: ffff80000dd86118
+>  x15: ffff0000c60dce00
 > 
-> Please double check for the rest of the patch (ethnl_ops_begin() ... )
-Ok, this is what I had originally. I changed that due to another review
-comment. I'll revert this change.
+> x14: 0000000000000110
+>  x13: 00000000ffffffff
+>  x12: ffff0000c60dce00
 > 
+> x11: ff808000095945e8
+>  x10: 0000000000000000
+>  x9 : ffff8000095945e8
 > 
-> > +       if (ret)
-> >                 return ret;
-> >
-> >         dev = req_info.dev;
-> > @@ -171,7 +171,7 @@ int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
-> >         }
-> >
-> >         ret = ethnl_ops_begin(dev);
-> > -       if (!ret)
-> > +       if (ret)
-> >                 goto out_rtnl;
-> >
-> >         memset(&plca_cfg, 0xff, sizeof(plca_cfg));
-> > @@ -189,7 +189,7 @@ int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
-> >                 goto out_ops;
-> >
-> >         ret = ops->set_plca_cfg(dev->phydev, &plca_cfg, info->extack);
-> > -       if (!ret)
-> > +       if (ret)
-> >                 goto out_ops;
-> >
-> >         ethtool_notify(dev, ETHTOOL_MSG_PLCA_NTF, NULL);
-> > @@ -233,7 +233,7 @@ static int plca_get_status_prepare_data(const struct ethnl_req_info *req_base,
-> >         }
-> >
-> >         ret = ethnl_ops_begin(dev);
-> > -       if (!ret)
-> > +       if (ret)
-> >                 goto out;
-> >
-> >         memset(&data->plca_st, 0xff,
-> > --
-> > 2.37.4
-> >
-Thanks!
-Piergiorgio
+> x8 : ffff0000c60dce00
+>  x7 : ffff80000c1090e0
+>  x6 : 0000000000000000
+> 
+> x5 : 0000000000000000
+>  x4 : 0000000000000000
+>  x3 : 0000000000000000
+> 
+> x2 : 0000000000000000
+>  x1 : 0000000000000000
+>  x0 : 0000000000000000
+> 
+> Call trace:
+>  io_cqring_event_overflow+0x1c0/0x230 io_uring/io_uring.c:734
+>  io_req_cqe_overflow+0x5c/0x70 io_uring/io_uring.c:773
+>  io_fill_cqe_req io_uring/io_uring.h:168 [inline]
+>  io_do_iopoll+0x474/0x62c io_uring/rw.c:1065
+>  io_iopoll_try_reap_events+0x6c/0x108 io_uring/io_uring.c:1513
+>  io_uring_try_cancel_requests+0x13c/0x258 io_uring/io_uring.c:3056
+>  io_ring_exit_work+0xec/0x390 io_uring/io_uring.c:2869
+>  process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+>  worker_thread+0x340/0x610 kernel/workqueue.c:2436
+>  kthread+0x12c/0x158 kernel/kthread.c:376
+>  ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+> irq event stamp: 576210
+> hardirqs last  enabled at (576209): [<ffff80000c1238f8>] __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
+> hardirqs last  enabled at (576209): [<ffff80000c1238f8>] _raw_spin_unlock_irq+0x3c/0x70 kernel/locking/spinlock.c:202
+> hardirqs last disabled at (576210): [<ffff80000c110630>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+> softirqs last  enabled at (576168): [<ffff80000bfd4634>] spin_unlock_bh include/linux/spinlock.h:395 [inline]
+> softirqs last  enabled at (576168): [<ffff80000bfd4634>] batadv_nc_purge_paths+0x1d0/0x214 net/batman-adv/network-coding.c:471
+> softirqs last disabled at (576166): [<ffff80000bfd44c4>] spin_lock_bh include/linux/spinlock.h:355 [inline]
+> softirqs last disabled at (576166): [<ffff80000bfd44c4>] batadv_nc_purge_paths+0x60/0x214 net/batman-adv/network-coding.c:442
+> ---[ end trace 0000000000000000 ]---
+> ------------[ cut here ]------------
+
+Pavel, don't we want to make this follow the usual lockdep rules?
+
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 1dd0fc0412c8..5aab3fa3b7c5 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -753,7 +753,7 @@ static bool io_cqring_event_overflow(struct io_ring_ctx *ctx, u64 user_data,
+ 	size_t ocq_size = sizeof(struct io_overflow_cqe);
+ 	bool is_cqe32 = (ctx->flags & IORING_SETUP_CQE32);
+ 
+-	lockdep_assert_held(&ctx->completion_lock);
++	io_lockdep_assert_cq_locked(ctx);
+ 
+ 	if (is_cqe32)
+ 		ocq_size += sizeof(struct io_uring_cqe);
+
+-- 
+Jens Axboe
+
