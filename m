@@ -2,123 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B50666EBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F283C666EA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238350AbjALJys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
+        id S231898AbjALJtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236621AbjALJyJ (ORCPT
+        with ESMTP id S230409AbjALJsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:54:09 -0500
-X-Greylist: delayed 379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 01:50:25 PST
-Received: from gw.red-soft.ru (red-soft.ru [188.246.186.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FDC8E25;
-        Thu, 12 Jan 2023 01:50:25 -0800 (PST)
-Received: from localhost.biz (unknown [10.81.81.211])
-        by gw.red-soft.ru (Postfix) with ESMTPA id 89C1F3E0EB4;
-        Thu, 12 Jan 2023 12:44:03 +0300 (MSK)
-From:   Artem Chernyshev <artem.chernyshev@red-soft.ru>
-To:     Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Artem Chernyshev <artem.chernyshev@red-soft.ru>,
-        Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org,
-        Anton Fadeev <anton.fadeev@red-soft.ru>
-Subject: [PATCH] block: bfq fix null pointer dereference of bfqg in bfq_bio_bfqg()
-Date:   Thu, 12 Jan 2023 12:43:58 +0300
-Message-Id: <20230112094358.451029-1-artem.chernyshev@red-soft.ru>
-X-Mailer: git-send-email 2.30.3
+        Thu, 12 Jan 2023 04:48:05 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2FB315
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:44:10 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id v6so342574ejg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:44:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Oa5slRNBNNIqMVWPb21PTixUg0CS9e53tBflIIJxqM=;
+        b=Z2l1L873yghsz5/eXnO7c1aI5LQBJRwUvPxhDN79sf2LupNS8aeUvpZCALFf8TIbjm
+         2ROZeqvOl0YIyPMOx0YJOfED7Advsc80lP4gUJEuWg3PvP2Q7Xz2px5CH2XQgKUzr+jK
+         OeRQ7K1Q6T/Z+uXhqUrRrcKsLMBq2wbWEiZsU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Oa5slRNBNNIqMVWPb21PTixUg0CS9e53tBflIIJxqM=;
+        b=6JC9VmDRUlXfoZb2X6N/ircJ6N6f9lPjcTmwWdGOfvif8ph+6ysbc4sq6eWQxUjFVc
+         OKs8yCwsQ3brbF2JPW/PohVo/b+HScoJBBKFo5ujp32VI1k6PvlA2494lPDHiGuDRG2y
+         RY5jKVF12rXC68N9B6/OVB0bjNIAg18mv88WBoffL+Ogq61baYr970dhdjreetL/dZZV
+         /KmitltvsnwX5opS7kRyMhiKfWwpqlYt+M80kW/rla4PRg5PrktPTxIJc1j9zXB3G8Uc
+         sNohIx7SHQFXZUcn1eLAc2XzY1wAsZtYlfAEGD8o+PtX5lVo7DhK8bnq1OZ5F/W5uby0
+         JeWQ==
+X-Gm-Message-State: AFqh2kpxYY7n2nzCMsr1g1140KZsRGSvpbSZnxrs1yijUgpFFb7YTVfp
+        wKoMRtY8mXDkTVgdAPoDmSuPpYpXi4UfnpMi
+X-Google-Smtp-Source: AMrXdXtahSlcUV3YLcD8ZfB9I2NIcENT0/1vLmKd1QcVDlZ5lGrzjtBySQG1J+xhOiz2muS5ihmH/Q==
+X-Received: by 2002:a17:906:7fc3:b0:7c1:10b8:e6a4 with SMTP id r3-20020a1709067fc300b007c110b8e6a4mr60890823ejs.19.1673516648682;
+        Thu, 12 Jan 2023 01:44:08 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id ky24-20020a170907779800b007c09a304eb5sm7149300ejc.201.2023.01.12.01.44.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 01:44:07 -0800 (PST)
+Date:   Thu, 12 Jan 2023 10:44:05 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>, Borislav Petkov <bp@suse.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Danilo Krummrich <dakr@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [RESEND PATCH linux-next v2 00/10] drm: Remove some obsolete
+ drivers(tdfx, mga, i810, savage, r128, sis, via)
+Message-ID: <Y7/WZezKsjax7isu@phenom.ffwll.local>
+Mail-Followup-To: Thomas Zimmermann <tzimmermann@suse.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>, Borislav Petkov <bp@suse.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Danilo Krummrich <dakr@redhat.com>, Sam Ravnborg <sam@ravnborg.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20221203102502.3185-1-cai.huoqing@linux.dev>
+ <20221208124207.GA7628@chq-T47>
+ <Y7bFNQ5a+qAcxWj+@phenom.ffwll.local>
+ <d5d44da7-2ca9-d26d-7474-223abb8f6aa3@suse.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 174659 [Jan 12 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: artem.chernyshev@red-soft.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, localhost.biz:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;red-soft.ru:7.1.1;127.0.0.199:7.1.2
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/01/12 08:47:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/01/12 05:58:00 #20761738
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d5d44da7-2ca9-d26d-7474-223abb8f6aa3@suse.de>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible for bfqg to be NULL after being initialized as result of
-blkg_to_bfqg() function.
+On Thu, Jan 05, 2023 at 02:01:50PM +0100, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 05.01.23 um 13:40 schrieb Daniel Vetter:
+> > On Thu, Dec 08, 2022 at 08:42:07PM +0800, Cai Huoqing wrote:
+> > > On 03 12月 22 18:22:51, Cai Huoqing wrote:
+> > > > Commit 399516ab0fee ("MAINTAINERS: Add a bunch of legacy (UMS) DRM drivers")
+> > > > marked these drivers obsolete 7 years ago.
+> > > > And the mesa UMD of these drm drivers already in deprecated list
+> > > > in the link: https://docs.mesa3d.org/systems.html
+> > > > 
+> > > > 3dfx Glide-->driver/gpu/drm/tdfx
+> > > > Matrox-->driver/gpu/drm/mga
+> > > > Intel i810-->driver/gpu/drm/i810
+> > > > S3 Savage-->drivers/gpu/drm/savage
+> > > > ATI Rage 128->drivers/gpu/drm/r128
+> > > > Silicon Integrated Systems->drivers/gpu/drm/sis
+> > > > VIA Unichrome->drivers/gpu/drm/via
+> > > > 
+> > > > v1->v2:
+> > > > 1.Add drm via driver to the patchset.
+> > > > 2.Remove related drm_pciids.
+> > > > 3.Remove related drm uapi header files.
+> > > > 4.split to series avoid large patch email.
+> > > Just ping these patch series.
+> > > The v1 comments here,
+> > > https://lore.kernel.org/lkml/39d8ac1a-d92f-7cdc-14cd-944342f78c1a@suse.de/
+> > 
+> > Are we really sure that all users of these are gone? Also, I'm not really
+> > seeing the benefit of this, we've managed to split out the legacy code
+> > quite well, so carrying around isn't hurting anything afaics?
+> 
+> My first reaction was 'no way'. But then I thought about possible users of
+> this code and I cannot see anyone relying on it. You'd need an ancient
+> userspace Mesa library plus the most recent kernel. And all the rendering is
+> OpenGL 1.x. Are there even Linux programs for that?
+> 
+> So as far as I'm concerned
+> 
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> 
+> DRM's legacy infrastructure could be kept for a few more releases. Just in
+> case one of the drivers makes a comeback.
+> 
+> There is code in nouveau that uses legacy functionality for its ancient
+> userspace. I think we should scrap that as well. (See
+> NOUVEAU_LEGACY_CTX_SUPPORT.)
 
-That was achieved on kernel 5.15.78, but should exist in mainline as
-well
+From the irc discussion:
 
-host1 login: [ 460.855794] watchdog: watchdog0: watchdog did not stop!
-[  898.944512] BUG: kernel NULL pointer dereference, address: 0000000000000094
-[  899.285776] #PF: supervisor read access in kernel mode
-[  899.536511] #PF: error_code(0x0000) - not-present page
-[  899.647305]  connection4:0: detected conn error (1020)
-[  899.786794] PGD 0 P4D 0
-[  899.786799] Oops: 0000 [#1] SMP PTI
-[  899.786802] CPU: 15 PID: 6073 Comm: ID iothread1 Not tainted 5.15.78-1.el7virt.x86_64 #1
-[  899.786804] Hardware name: HP ProLiant DL360 Gen9/ProLiant DL360 Gen9, BIOS P89 10/21/2019
-[  899.786806] RIP: 0010:bfq_bio_bfqg+0x26/0x80
-[  901.325944] Code: 0f 1f 40 00 0f 1f 44 00 00 55 48 89 fd 48 89 f7 53 48 8b 56 48 48 85 d2
-74 32 48 63 05 83 7f 35 01 48 83 c0 16 48 8b 5c c2 08 <80> bb 94 00 00 00 00 00
-[  902.237825] RSP: 0018:ffffae2649437688 EFLAGS: 00010002
-[  902.493396] RAX: 0000000000000019 RBX: 0000000000000000 RCX: dead000000000122
-[  902.841529] RDX: ffff8b6012cb3a00 RSI: ffff8b71002bbed0 RDI: ffff8b71002bbed0
-[  903.189374] RBP: ffff8b601c46e800 R08: ffffae26494377c8 R09: 0000000000000000
-[  903.532985] R10: 0000000000000001 R11: 0000000000000008 R12: ffff8b6f844c5b30
-[  903.880809] R13: ffff8b601c46e800 R14: ffffae2649437760 R15: ffff8b601c46e800
-[  904.220054] FS:  00007fec2fc4a700(0000) GS:ffff8b7f7f640000(0000) kn1GS:00000000000000000
-[  904.614349] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  904.894717] CR2: 0000000000000094 CR3: 0000000111fd8002 CR4: 00000000003726e0
-[  905.243702] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  905.592493] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  905.936859] Call Trace:
-[  906.055955] <TASK>
-[  906.158109] bfq_bic_update_cgroup+0x2c/0x1f0
-[  906.371057] bfq_insert_requests+0x2c2/0x1fb0
-[  906.579207] blk_mq_sched_insert_request+0xc2/0x140
-[  906.817640] __blk_mq_try_issue_directly+0xe0/0x1f0
-[  907.055737] blk_mq_request_issue_directly+0x4e/0xa0
-[  907.298547] dm_mq_queue_rq+0x217/0x3e0
-[  907.485935] blk_mq_dispatch_rq_list+0x14b/0x860
-[  907.711973] ? sbitmap_get+0x87/0x1a0
-[  907.890370] blk_mq_do_dispatch_sched+0x350/0x3b0
-[  908.074869] NMI watchdog: Watchdog detected hard LOCKUP on cpu 40
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Acked-by: Dave Airlie <airlied@redhat.com>
+> 
+> Best regards
+> Thomas
+> 
+> > -Daniel
+> > 
+> > > 
+> > > Thanks,
+> > > Cai
+> > > > 
+> > > > Cai Huoqing (10):
+> > > >    drm: Remove the obsolete driver-i810
+> > > >    drm: Remove the obsolete driver-mga
+> > > >    drm: Remove the obsolete driver-r128
+> > > >    drm: Remove the obsolete driver-savage
+> > > >    drm: Remove the obsolete driver-sis
+> > > >    drm: Remove the obsolete driver-tdfx
+> > > >    drm: Remove the obsolete driver-via
+> > > >    drm: Add comments to Kconfig
+> > > >    drm: Remove some obsolete drm pciids(tdfx, mga, i810, savage, r128,
+> > > >      sis, via)
+> > > >    MAINTAINERS: Remove some obsolete drivers info(tdfx, mga, i810,
+> > > >      savage, r128, sis)
+> > > > 
+> > > >   MAINTAINERS                           |   29 -
+> > > >   drivers/gpu/drm/Kconfig               |   59 +-
+> > > >   drivers/gpu/drm/Makefile              |    7 -
+> > > >   drivers/gpu/drm/i810/Makefile         |    8 -
+> > > >   drivers/gpu/drm/i810/i810_dma.c       | 1266 ---------
+> > > >   drivers/gpu/drm/i810/i810_drv.c       |  101 -
+> > > >   drivers/gpu/drm/i810/i810_drv.h       |  246 --
+> > > >   drivers/gpu/drm/mga/Makefile          |   11 -
+> > > >   drivers/gpu/drm/mga/mga_dma.c         | 1168 --------
+> > > >   drivers/gpu/drm/mga/mga_drv.c         |  104 -
+> > > >   drivers/gpu/drm/mga/mga_drv.h         |  685 -----
+> > > >   drivers/gpu/drm/mga/mga_ioc32.c       |  197 --
+> > > >   drivers/gpu/drm/mga/mga_irq.c         |  169 --
+> > > >   drivers/gpu/drm/mga/mga_state.c       | 1099 --------
+> > > >   drivers/gpu/drm/mga/mga_warp.c        |  167 --
+> > > >   drivers/gpu/drm/r128/Makefile         |   10 -
+> > > >   drivers/gpu/drm/r128/ati_pcigart.c    |  228 --
+> > > >   drivers/gpu/drm/r128/ati_pcigart.h    |   31 -
+> > > >   drivers/gpu/drm/r128/r128_cce.c       |  944 -------
+> > > >   drivers/gpu/drm/r128/r128_drv.c       |  116 -
+> > > >   drivers/gpu/drm/r128/r128_drv.h       |  544 ----
+> > > >   drivers/gpu/drm/r128/r128_ioc32.c     |  199 --
+> > > >   drivers/gpu/drm/r128/r128_irq.c       |  118 -
+> > > >   drivers/gpu/drm/r128/r128_state.c     | 1641 -----------
+> > > >   drivers/gpu/drm/savage/Makefile       |    9 -
+> > > >   drivers/gpu/drm/savage/savage_bci.c   | 1082 --------
+> > > >   drivers/gpu/drm/savage/savage_drv.c   |   91 -
+> > > >   drivers/gpu/drm/savage/savage_drv.h   |  580 ----
+> > > >   drivers/gpu/drm/savage/savage_state.c | 1169 --------
+> > > >   drivers/gpu/drm/sis/Makefile          |   10 -
+> > > >   drivers/gpu/drm/sis/sis_drv.c         |  143 -
+> > > >   drivers/gpu/drm/sis/sis_drv.h         |   80 -
+> > > >   drivers/gpu/drm/sis/sis_mm.c          |  363 ---
+> > > >   drivers/gpu/drm/tdfx/Makefile         |    8 -
+> > > >   drivers/gpu/drm/tdfx/tdfx_drv.c       |   90 -
+> > > >   drivers/gpu/drm/tdfx/tdfx_drv.h       |   47 -
+> > > >   drivers/gpu/drm/via/Makefile          |    8 -
+> > > >   drivers/gpu/drm/via/via_3d_reg.h      | 1771 ------------
+> > > >   drivers/gpu/drm/via/via_dri1.c        | 3630 -------------------------
+> > > >   include/drm/drm_pciids.h              |  112 -
+> > > >   include/uapi/drm/i810_drm.h           |  292 --
+> > > >   include/uapi/drm/mga_drm.h            |  429 ---
+> > > >   include/uapi/drm/r128_drm.h           |  336 ---
+> > > >   include/uapi/drm/savage_drm.h         |  220 --
+> > > >   include/uapi/drm/sis_drm.h            |   77 -
+> > > >   include/uapi/drm/via_drm.h            |  282 --
+> > > >   46 files changed, 1 insertion(+), 19975 deletions(-)
+> > > >   delete mode 100644 drivers/gpu/drm/i810/Makefile
+> > > >   delete mode 100644 drivers/gpu/drm/i810/i810_dma.c
+> > > >   delete mode 100644 drivers/gpu/drm/i810/i810_drv.c
+> > > >   delete mode 100644 drivers/gpu/drm/i810/i810_drv.h
+> > > >   delete mode 100644 drivers/gpu/drm/mga/Makefile
+> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_dma.c
+> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_drv.c
+> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_drv.h
+> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_ioc32.c
+> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_irq.c
+> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_state.c
+> > > >   delete mode 100644 drivers/gpu/drm/mga/mga_warp.c
+> > > >   delete mode 100644 drivers/gpu/drm/r128/Makefile
+> > > >   delete mode 100644 drivers/gpu/drm/r128/ati_pcigart.c
+> > > >   delete mode 100644 drivers/gpu/drm/r128/ati_pcigart.h
+> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_cce.c
+> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_drv.c
+> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_drv.h
+> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_ioc32.c
+> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_irq.c
+> > > >   delete mode 100644 drivers/gpu/drm/r128/r128_state.c
+> > > >   delete mode 100644 drivers/gpu/drm/savage/Makefile
+> > > >   delete mode 100644 drivers/gpu/drm/savage/savage_bci.c
+> > > >   delete mode 100644 drivers/gpu/drm/savage/savage_drv.c
+> > > >   delete mode 100644 drivers/gpu/drm/savage/savage_drv.h
+> > > >   delete mode 100644 drivers/gpu/drm/savage/savage_state.c
+> > > >   delete mode 100644 drivers/gpu/drm/sis/Makefile
+> > > >   delete mode 100644 drivers/gpu/drm/sis/sis_drv.c
+> > > >   delete mode 100644 drivers/gpu/drm/sis/sis_drv.h
+> > > >   delete mode 100644 drivers/gpu/drm/sis/sis_mm.c
+> > > >   delete mode 100644 drivers/gpu/drm/tdfx/Makefile
+> > > >   delete mode 100644 drivers/gpu/drm/tdfx/tdfx_drv.c
+> > > >   delete mode 100644 drivers/gpu/drm/tdfx/tdfx_drv.h
+> > > >   delete mode 100644 drivers/gpu/drm/via/Makefile
+> > > >   delete mode 100644 drivers/gpu/drm/via/via_3d_reg.h
+> > > >   delete mode 100644 drivers/gpu/drm/via/via_dri1.c
+> > > >   delete mode 100644 include/uapi/drm/i810_drm.h
+> > > >   delete mode 100644 include/uapi/drm/mga_drm.h
+> > > >   delete mode 100644 include/uapi/drm/r128_drm.h
+> > > >   delete mode 100644 include/uapi/drm/savage_drm.h
+> > > >   delete mode 100644 include/uapi/drm/sis_drm.h
+> > > >   delete mode 100644 include/uapi/drm/via_drm.h
+> > > > 
+> > > > -- 
+> > > > 2.25.1
+> > > > 
+> > 
+> 
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 Nürnberg, Germany
+> (HRB 36809, AG Nürnberg)
+> Geschäftsführer: Ivo Totev
 
-Fixes: 075a53b78b81 ("bfq: Make sure bfqg for which we are queueing requests is online")
-Co-developed-by: Anton Fadeev <anton.fadeev@red-soft.ru>
-Signed-off-by: Anton Fadeev <anton.fadeev@red-soft.ru>
-Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
----
- block/bfq-cgroup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-index 1b2829e99dad..d4e9428cdbe5 100644
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -616,7 +616,7 @@ struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
- 			continue;
- 		}
- 		bfqg = blkg_to_bfqg(blkg);
--		if (bfqg->online) {
-+		if (bfqg && bfqg->online) {
- 			bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
- 			return bfqg;
- 		}
+
+
 -- 
-2.30.3
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
