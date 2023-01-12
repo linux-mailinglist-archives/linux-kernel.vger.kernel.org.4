@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27002666F4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA09A666F3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjALKQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:16:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S237000AbjALKPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239863AbjALKO7 (ORCPT
+        with ESMTP id S239856AbjALKO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:14:59 -0500
+        Thu, 12 Jan 2023 05:14:58 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2795FE9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:14:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9C82AFF
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:14:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673518461; x=1705054461;
+  t=1673518460; x=1705054460;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=W8YJlqpgpyrIFdBluBlo3KeuiQWVU3Fxn6IGrBsufUk=;
-  b=aay5pgjK9JHyw1h1AD4mCJ8pbGnJw8qCB6CaBsRv6hlPipFZvWTeyfwQ
-   LfH7EjrzXMAGb5SaVxmkpJtuouxWiIq/qb1vd498FhYNNIxDDayoSSkIe
-   sp+FrU54JI/TxNoCEZ5yI+xhtG4W2Vn10bZsoreN9HO5+wxAk0aQs92nA
-   igrR3c1TNuZusKoSjBCQh3oWb5VW21TxTELdkfUia9hoSW6RQmgaveLxl
-   qInfRWethwYyIMaqJ8TYpg157TR2E3cMFxTYvoQf4rcP3xzG6aUuRluRv
-   dyycAbmFrbWZHPj+ATYoQC5cZ/yBFhmFORvdQJWXb1XlfNVoqYXILdbwQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350892153"
+  bh=uEzt+A3j9HcgIhKrHTIUtM43bVQXT7Fp7K0io/erJyk=;
+  b=czBG3TwkJX61TZ9Orgb6OgD/a4vmKG0zSVi1/bCxHE9BaLDgY8/hXq04
+   hk8r6jb3/WiDEJfdVE2rUJydPizRSKOVyQATx/pCMno4KSlLj48GE1P0d
+   U7fgd/3H+LJMchD0W2J6tBt6I0GfC2JT5nk6wsWHi5UH7T6NzayGw76s2
+   XTp92KykZXWLeirRTPJmJdLn628td0+sZ8uXCMdMirB1mYpTRMy+bKV/W
+   fW8BiBUK1k0bCSKRxpCs7N7wp9L4npGGyoq171Ee1tBf/D0OV2zD9krOQ
+   CT96nkDiYRfFzEl2xVnOxW+PXz2aN+iQCq11UYTuWfGef99HtVeWbMb3P
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350892164"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="350892153"
+   d="scan'208";a="350892164"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:18 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="659722888"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="659722889"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="659722888"
+   d="scan'208";a="659722889"
 Received: from glieseu-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.52.1])
   by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:16 -0800
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 872FE109AF2; Thu, 12 Jan 2023 13:14:13 +0300 (+03)
+        id 918C7109AF3; Thu, 12 Jan 2023 13:14:13 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@intel.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -50,9 +50,9 @@ Cc:     Kuppuswamy Sathyanarayanan
         Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
         linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv2 2/7] x86/tdx: Add more registers to struct tdx_hypercall_args
-Date:   Thu, 12 Jan 2023 13:14:02 +0300
-Message-Id: <20230112101407.24327-3-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv2 3/7] x86/tdx: Refactor __tdx_hypercall() to allow pass down more arguments
+Date:   Thu, 12 Jan 2023 13:14:03 +0300
+Message-Id: <20230112101407.24327-4-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.38.2
 In-Reply-To: <20230112101407.24327-1-kirill.shutemov@linux.intel.com>
 References: <20230112101407.24327-1-kirill.shutemov@linux.intel.com>
@@ -68,65 +68,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct tdx_hypercall_args is used to pass down hypercall arguments to
-__tdx_hypercall() assembly routine.
+RDI is the first argument to __tdx_hypercall() that used to pass pointer
+to struct tdx_hypercall_args. RSI is the second argument that contains
+flags, such as TDX_HCALL_HAS_OUTPUT and TDX_HCALL_ISSUE_STI.
 
-Currently __tdx_hypercall() handles up to 6 arguments. In preparation to
-changes in __tdx_hypercall(), expand the structure to 6 more registers
-and generate asm offsets for them.
+RDI and RSI can also be used as arguments to TDVMCALL leafs. Move RDI to
+RAX and RSI to RBP to free up them for the hypercall arguments.
+
+RAX saved on stack during TDCALL as it returns status code in the
+register.
+
+RBP value has to be restored before returning from __tdx_hypercall() as
+it is callee-saved register.
+
+This is preparatory patch. No functional change.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/include/asm/shared/tdx.h | 6 ++++++
- arch/x86/kernel/asm-offsets.c     | 6 ++++++
- 2 files changed, 12 insertions(+)
+ arch/x86/coco/tdx/tdcall.S | 46 +++++++++++++++++++++++---------------
+ 1 file changed, 28 insertions(+), 18 deletions(-)
 
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-index e53f26228fbb..8068faa52de1 100644
---- a/arch/x86/include/asm/shared/tdx.h
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -22,12 +22,18 @@
-  * This is a software only structure and not part of the TDX module/VMM ABI.
-  */
- struct tdx_hypercall_args {
-+	u64 r8;
-+	u64 r9;
- 	u64 r10;
- 	u64 r11;
- 	u64 r12;
- 	u64 r13;
- 	u64 r14;
- 	u64 r15;
-+	u64 rdi;
-+	u64 rsi;
-+	u64 rbx;
-+	u64 rdx;
- };
+diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
+index 74b108e94a0d..a9bb4cbb8197 100644
+--- a/arch/x86/coco/tdx/tdcall.S
++++ b/arch/x86/coco/tdx/tdcall.S
+@@ -124,19 +124,26 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	push %r14
+ 	push %r13
+ 	push %r12
++	push %rbp
++
++	/* Free RDI and RSI to be used as TDVMCALL arguments */
++	movq %rdi, %rax
++	movq %rsi, %rbp
++
++	/* Copy hypercall registers from arg struct: */
++	movq TDX_HYPERCALL_r10(%rax), %r10
++	movq TDX_HYPERCALL_r11(%rax), %r11
++	movq TDX_HYPERCALL_r12(%rax), %r12
++	movq TDX_HYPERCALL_r13(%rax), %r13
++	movq TDX_HYPERCALL_r14(%rax), %r14
++	movq TDX_HYPERCALL_r15(%rax), %r15
++
++	push %rax
  
- /* Used to request services from the VMM */
-diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
-index 82c783da16a8..8650f29387e0 100644
---- a/arch/x86/kernel/asm-offsets.c
-+++ b/arch/x86/kernel/asm-offsets.c
-@@ -75,12 +75,18 @@ static void __used common(void)
- 	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
+ 	/* Mangle function call ABI into TDCALL ABI: */
+ 	/* Set TDCALL leaf ID (TDVMCALL (0)) in RAX */
+ 	xor %eax, %eax
  
- 	BLANK();
-+	OFFSET(TDX_HYPERCALL_r8,  tdx_hypercall_args, r8);
-+	OFFSET(TDX_HYPERCALL_r9,  tdx_hypercall_args, r9);
- 	OFFSET(TDX_HYPERCALL_r10, tdx_hypercall_args, r10);
- 	OFFSET(TDX_HYPERCALL_r11, tdx_hypercall_args, r11);
- 	OFFSET(TDX_HYPERCALL_r12, tdx_hypercall_args, r12);
- 	OFFSET(TDX_HYPERCALL_r13, tdx_hypercall_args, r13);
- 	OFFSET(TDX_HYPERCALL_r14, tdx_hypercall_args, r14);
- 	OFFSET(TDX_HYPERCALL_r15, tdx_hypercall_args, r15);
-+	OFFSET(TDX_HYPERCALL_rdi, tdx_hypercall_args, rdi);
-+	OFFSET(TDX_HYPERCALL_rsi, tdx_hypercall_args, rsi);
-+	OFFSET(TDX_HYPERCALL_rbx, tdx_hypercall_args, rbx);
-+	OFFSET(TDX_HYPERCALL_rdx, tdx_hypercall_args, rdx);
+-	/* Copy hypercall registers from arg struct: */
+-	movq TDX_HYPERCALL_r10(%rdi), %r10
+-	movq TDX_HYPERCALL_r11(%rdi), %r11
+-	movq TDX_HYPERCALL_r12(%rdi), %r12
+-	movq TDX_HYPERCALL_r13(%rdi), %r13
+-	movq TDX_HYPERCALL_r14(%rdi), %r14
+-	movq TDX_HYPERCALL_r15(%rdi), %r15
+-
+ 	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
  
- 	BLANK();
- 	OFFSET(BP_scratch, boot_params, scratch);
+ 	/*
+@@ -148,7 +155,7 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	 * HLT operation indefinitely. Since this is the not the desired
+ 	 * result, conditionally call STI before TDCALL.
+ 	 */
+-	testq $TDX_HCALL_ISSUE_STI, %rsi
++	testq $TDX_HCALL_ISSUE_STI, %rbp
+ 	jz .Lskip_sti
+ 	sti
+ .Lskip_sti:
+@@ -165,20 +172,22 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	testq %rax, %rax
+ 	jne .Lpanic
+ 
+-	/* TDVMCALL leaf return code is in R10 */
+-	movq %r10, %rax
++	pop %rax
+ 
+ 	/* Copy hypercall result registers to arg struct if needed */
+-	testq $TDX_HCALL_HAS_OUTPUT, %rsi
++	testq $TDX_HCALL_HAS_OUTPUT, %rbp
+ 	jz .Lout
+ 
+-	movq %r10, TDX_HYPERCALL_r10(%rdi)
+-	movq %r11, TDX_HYPERCALL_r11(%rdi)
+-	movq %r12, TDX_HYPERCALL_r12(%rdi)
+-	movq %r13, TDX_HYPERCALL_r13(%rdi)
+-	movq %r14, TDX_HYPERCALL_r14(%rdi)
+-	movq %r15, TDX_HYPERCALL_r15(%rdi)
++	movq %r10, TDX_HYPERCALL_r10(%rax)
++	movq %r11, TDX_HYPERCALL_r11(%rax)
++	movq %r12, TDX_HYPERCALL_r12(%rax)
++	movq %r13, TDX_HYPERCALL_r13(%rax)
++	movq %r14, TDX_HYPERCALL_r14(%rax)
++	movq %r15, TDX_HYPERCALL_r15(%rax)
+ .Lout:
++	/* TDVMCALL leaf return code is in R10 */
++	movq %r10, %rax
++
+ 	/*
+ 	 * Zero out registers exposed to the VMM to avoid speculative execution
+ 	 * with VMM-controlled values. This needs to include all registers
+@@ -189,6 +198,7 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	xor %r11d, %r11d
+ 
+ 	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
++	pop %rbp
+ 	pop %r12
+ 	pop %r13
+ 	pop %r14
 -- 
 2.38.2
 
