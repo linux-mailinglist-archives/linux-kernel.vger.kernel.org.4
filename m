@@ -2,278 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0369667BEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4B6667BF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241323AbjALQtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 11:49:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        id S241335AbjALQtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 11:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240749AbjALQmo (ORCPT
+        with ESMTP id S241262AbjALQoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:42:44 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E4A6577;
-        Thu, 12 Jan 2023 08:37:43 -0800 (PST)
+        Thu, 12 Jan 2023 11:44:39 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF69E58834;
+        Thu, 12 Jan 2023 08:38:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673541463; x=1705077463;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TSG4u748WjZJlHl+rwGyBIdChhQBX7AI0cR8Hc3k8hI=;
-  b=AG20ijXzWLeeinsGbt8nu5taLGLT6TVYYwGPkxf4Sh3jG5G+2cyx42Zm
-   IA84F4s9tsUIeADUKqQwTwixLZHnlLDsygEkwvHala5qJm6crJOzYHSqt
-   LrmKQq3rlMlZ0Iigwv33JxhoCft0sPKBBdBakrH7HqRdhiQfFrMM6Ov4Z
-   8lOX1G9VtZDbG2/9nsHNl3tP1M8ToebAr6jligMY7YDEJ/ZU7RghnKbMn
-   0XnNHbdFAi77t+kKDVDQccw1bPfzVbKmPRAiyUMlnHSaT4liQx1Rquxhw
-   7SlsDGk8oUbHE8Z9cpRFyMEAi+Yu0yq5dklwZZ1luzkpSFMoahG+z1Rxy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="350983266"
+  t=1673541505; x=1705077505;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=68OPSiZVY1KVbajcXwUGWj+MRV19nF/DUDmqYU0Aj6I=;
+  b=Zll/R+8E+ITOdeBMGhDfdNMkYX22wjgLCWKYmyt+hOgbYklUU5dSO4VL
+   Kri2Y374BRL6l5iLHu+a1VZzoNILj6nRX6hX2W9nyNGmdn38cRh19ecJg
+   AdU79KTaHgw8XRGAFSixlsWHgjLYvhnOhLtODTxjytBjz+KJvKSVfHlk6
+   YwMNG2ah77SRUOoexV3X6X3xbcL5eTBkj2GIR+uQytYuNYx3778Z09c/r
+   hZgSQCI3NKm6B2aLuOGsKyoOVjmJM44bkrJS8TU6AftDExKwy7Q0Z2XOz
+   Qge3XjP3eV/JPMdQB8Ql2xF800AKfK1ea6020fDC2Dq2TD/iEphwsZhyK
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="304132438"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="350983266"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:37:41 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="986655648"
+   d="scan'208";a="304132438"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:38:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="690193082"
 X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="986655648"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.250.89])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:37:39 -0800
-Date:   Thu, 12 Jan 2023 08:37:38 -0800
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shiju.jose@huawei.com
-Subject: Re: [PATCH v4 2/5] cxl/trace: Add TRACE support for CXL media-error
- records
-Message-ID: <Y8A3Ulo/DnflNVQu@aschofie-mobl2>
-References: <cover.1671135967.git.alison.schofield@intel.com>
- <3417fd29fda6cd60b5a93a8f77dc57ad71693fa8.1671135967.git.alison.schofield@intel.com>
- <20230112111652.00000266@Huawei.com>
+   d="scan'208";a="690193082"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 12 Jan 2023 08:37:58 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E3D71E1; Thu, 12 Jan 2023 18:38:31 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] pinctrl: bcm: bcm2835: Switch to use ->add_pin_ranges()
+Date:   Thu, 12 Jan 2023 18:38:24 +0200
+Message-Id: <20230112163825.72983-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112111652.00000266@Huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 11:16:52AM +0000, Jonathan Cameron wrote:
-> On Thu, 15 Dec 2022 13:17:44 -0800
-> alison.schofield@intel.com wrote:
-> 
-> > From: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > CXL devices may support the retrieval of a device poison list.
-> > Add a new trace event that the CXL subsystem may use to log
-> > the media-error records returned in the poison list.
-> > 
-> > Log each media-error record as a trace event of type 'cxl_poison'.
-> > 
-> > When the poison list is requested by region, include the region name
-> > and uuid in the trace event.
-> > 
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> 
-> Hi Alison,
-> 
-> I'm wondering a bit if it makes sense to log/trace the MORE flag for each
-> record.  That has some unusual semantics.  Like the other flags it's a
-> characteristic of the underlying Get Poison List Output Payload, not a
-> particularly Poison list entry. Unlike overflow and scanning which are
-> reasonably a characteristic of each poison record in a given set read
-> in one command, MORE is not.
-> Imagine the following.
-> 
-> Read first N records, MORE set so we have that flag in all the trace
-> records.
-> Read next M records, MORE not set as list is less than N+M records.
-> 
-> Now userspace tooling has no idea about the mapping to underlying
-> mailbox commands. So it sees this bit set for first N which is fine
-> as there are more records following, but for the next M - 1 it might
-> reasonably expect to see MORE set (as more records are getting traced)
-> but it doesn't see it for any of them.
-> 
-> That seems less than intuitive. 
-> 
-> I'm not sure what to suggest... Seems wrong to 'make up a MORE flag' for
-> those M-1 records.  Does it make sense to expose this flag at all?  In
-> what way is it useful?
-> 
-> Jonathan
+Yeah, while the ->add_pin_ranges() shouldn't be used by DT drivers,
+this one requires it to support quite old firmware descriptions that
+do not have gpio-ranges property.
 
-Thanks Jonathan - 
+The change allows to clean up GPIO library from OF specifics.
+There is no functional change intended.
 
-The FLAGs field today simply reflects the contents of the flags
-field of the payload, which can be MORE, OVERFLOW, SCANNING.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/bcm/pinctrl-bcm2835.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-Understand that 'MORE' seems useless to userspace however, I lean
-towards giving userspace the complete truth, and letting userspace
-ignore what is of no interest.
+diff --git a/drivers/pinctrl/bcm/pinctrl-bcm2835.c b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+index 7857e612a100..fea1d1bcb389 100644
+--- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
++++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+@@ -358,16 +358,18 @@ static int bcm2835_gpio_direction_output(struct gpio_chip *chip,
+ 	return 0;
+ }
+ 
+-static int bcm2835_of_gpio_ranges_fallback(struct gpio_chip *gc,
+-					   struct device_node *np)
++static int bcm2835_add_pin_ranges_fallback(struct gpio_chip *gc)
+ {
++	struct bcm2835_pinctrl *pc = gpiochip_get_data(gc);
++	struct device_node *np = dev_of_node(&gc->gpiodev->dev);
+ 	struct pinctrl_dev *pctldev = of_pinctrl_get(np);
+ 
+-	of_node_put(np);
+-
+ 	if (!pctldev)
+ 		return 0;
+ 
++	if (of_property_read_bool(np, "gpio-ranges"))
++		return 0;
++
+ 	gpiochip_add_pin_range(gc, pinctrl_dev_get_devname(pctldev), 0, 0,
+ 			       gc->ngpio);
+ 
+@@ -388,7 +390,7 @@ static const struct gpio_chip bcm2835_gpio_chip = {
+ 	.base = -1,
+ 	.ngpio = BCM2835_NUM_GPIOS,
+ 	.can_sleep = false,
+-	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
++	.add_pin_ranges = bcm2835_add_pin_ranges_fallback,
+ };
+ 
+ static const struct gpio_chip bcm2711_gpio_chip = {
+@@ -405,7 +407,7 @@ static const struct gpio_chip bcm2711_gpio_chip = {
+ 	.base = -1,
+ 	.ngpio = BCM2711_NUM_GPIOS,
+ 	.can_sleep = false,
+-	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
++	.add_pin_ranges = bcm2835_add_pin_ranges_fallback,
+ };
+ 
+ static void bcm2835_gpio_irq_handle_bank(struct bcm2835_pinctrl *pc,
+-- 
+2.39.0
 
-Perhaps a user wants to explore the boundaries of a devices
-poison handling capacity. ie...use inject and get_poison and
-see when the MORE flag appears. I don't know if it may appear
-before the inject_max is reached.
-
-So - I say keep MORE as is.
-
-This discussion triggers another thought...
-
-ATM, a devices max_mer - Max Media Error Records is not exposed in
-sysfs, and this conversation makes me think it should be. It also,
-comes to mind because I am exposing the inject_poison_limit to sysfs.
-
-Users wanting to explore poison capabilities would be interested in
-max_mer.
-
-I'll add the max_mer to syfs in next rev.
-
-Alison
-
-> 
-> 
-> > ---
-> >  drivers/cxl/core/mbox.c  |  6 ++-
-> >  drivers/cxl/core/trace.h | 83 ++++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 88 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> > index dfe24a2adfdb..c345af8a4afd 100644
-> > --- a/drivers/cxl/core/mbox.c
-> > +++ b/drivers/cxl/core/mbox.c
-> > @@ -10,6 +10,7 @@
-> >  #include <cxl.h>
-> >  
-> >  #include "core.h"
-> > +#include "trace.h"
-> >  
-> >  static bool cxl_raw_allow_all;
-> >  
-> > @@ -899,7 +900,10 @@ int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
-> >  		if (rc)
-> >  			break;
-> >  
-> > -		/* TODO TRACE the media error records */
-> > +		for (int i = 0; i < le16_to_cpu(po->count); i++)
-> > +			trace_cxl_poison(cxlmd, to_pci_dev(cxlds->dev),
-> > +					 cxlr, &po->record[i], po->flags,
-> > +					 po->overflow_t);
-> >  
-> >  		/* Protect against an uncleared _FLAG_MORE */
-> >  		nr_records = nr_records + le16_to_cpu(po->count);
-> > diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
-> > index 20ca2fe2ca8e..c7958311ce5f 100644
-> > --- a/drivers/cxl/core/trace.h
-> > +++ b/drivers/cxl/core/trace.h
-> > @@ -8,6 +8,9 @@
-> >  
-> >  #include <cxl.h>
-> >  #include <linux/tracepoint.h>
-> > +#include <linux/pci.h>
-> > +
-> > +#include <cxlmem.h>
-> >  
-> >  #define CXL_RAS_UC_CACHE_DATA_PARITY	BIT(0)
-> >  #define CXL_RAS_UC_CACHE_ADDR_PARITY	BIT(1)
-> > @@ -103,6 +106,86 @@ TRACE_EVENT(cxl_aer_correctable_error,
-> >  	)
-> >  );
-> >  
-> > +#define __show_poison_source(source)                          \
-> > +	__print_symbolic(source,                              \
-> > +		{ CXL_POISON_SOURCE_UNKNOWN,   "Unknown"  },  \
-> > +		{ CXL_POISON_SOURCE_EXTERNAL,  "External" },  \
-> > +		{ CXL_POISON_SOURCE_INTERNAL,  "Internal" },  \
-> > +		{ CXL_POISON_SOURCE_INJECTED,  "Injected" },  \
-> > +		{ CXL_POISON_SOURCE_VENDOR,    "Vendor"   })
-> > +
-> > +#define show_poison_source(source)			     \
-> > +	(((source > CXL_POISON_SOURCE_INJECTED) &&	     \
-> > +	 (source != CXL_POISON_SOURCE_VENDOR)) ? "Reserved"  \
-> > +	 : __show_poison_source(source))
-> > +
-> > +#define show_poison_flags(flags)                             \
-> > +	__print_flags(flags, "|",                            \
-> > +		{ CXL_POISON_FLAG_MORE,      "More"     },   \
-> > +		{ CXL_POISON_FLAG_OVERFLOW,  "Overflow"  },  \
-> > +		{ CXL_POISON_FLAG_SCANNING,  "Scanning"  })
-> > +
-> > +#define __cxl_poison_addr(record)					\
-> > +	(le64_to_cpu(record->address))
-> > +#define cxl_poison_record_dpa(record)					\
-> > +	(__cxl_poison_addr(record) & CXL_POISON_START_MASK)
-> > +#define cxl_poison_record_source(record)				\
-> > +	(__cxl_poison_addr(record)  & CXL_POISON_SOURCE_MASK)
-> > +#define cxl_poison_record_length(record)				\
-> > +	(le32_to_cpu(record->length) * CXL_POISON_LEN_MULT)
-> > +#define cxl_poison_overflow(flags, time)				\
-> > +	(flags & CXL_POISON_FLAG_OVERFLOW ? le64_to_cpu(time) : 0)
-> > +
-> > +TRACE_EVENT(cxl_poison,
-> > +
-> > +	    TP_PROTO(struct cxl_memdev *memdev, const struct pci_dev *pcidev,
-> > +		     struct cxl_region *region,
-> > +		     const struct cxl_poison_record *record,
-> > +		     u8 flags, __le64 overflow_t),
-> > +
-> > +	    TP_ARGS(memdev, pcidev, region, record, flags, overflow_t),
-> > +
-> > +	    TP_STRUCT__entry(
-> > +		__string(memdev, dev_name(&memdev->dev))
-> > +		__string(pcidev, dev_name(&pcidev->dev))
-> > +		__string(region, region)
-> > +		__field(u64, overflow_t)
-> > +		__field(u64, dpa)
-> > +		__field(u32, length)
-> > +		__array(char, uuid, 16)
-> > +		__field(u8, source)
-> > +		__field(u8, flags)
-> > +	    ),
-> > +
-> > +	    TP_fast_assign(
-> > +		__assign_str(memdev, dev_name(&memdev->dev));
-> > +		__assign_str(pcidev, dev_name(&pcidev->dev));
-> > +		__entry->overflow_t = cxl_poison_overflow(flags, overflow_t);
-> > +		__entry->dpa = cxl_poison_record_dpa(record);
-> > +		__entry->length = cxl_poison_record_length(record);
-> > +		__entry->source = cxl_poison_record_source(record);
-> > +		__entry->flags = flags;
-> > +		if (region) {
-> > +			__assign_str(region, dev_name(&region->dev));
-> > +			memcpy(__entry->uuid, &region->params.uuid, 16);
-> > +		} else {
-> > +			__assign_str(region, "");
-> > +			memset(__entry->uuid, 0, 16);
-> > +		}
-> > +	    ),
-> > +
-> > +	    TP_printk("memdev=%s pcidev=%s region=%s region_uuid=%pU dpa=0x%llx length=0x%x source=%s flags=%s overflow_time=%llu",
-> > +		__get_str(memdev),
-> > +		__get_str(pcidev),
-> > +		__get_str(region),
-> > +		__entry->uuid,
-> > +		__entry->dpa,
-> > +		__entry->length,
-> > +		show_poison_source(__entry->source),
-> > +		show_poison_flags(__entry->flags),
-> > +		__entry->overflow_t)
-> > +);
-> > +
-> >  #endif /* _CXL_EVENTS_H */
-> >  
-> >  #define TRACE_INCLUDE_FILE trace
-> 
