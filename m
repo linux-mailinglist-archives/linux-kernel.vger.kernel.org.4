@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB856667FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 01:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C2E6667FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 01:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236218AbjALAlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 19:41:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
+        id S236625AbjALAlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 19:41:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbjALAkp (ORCPT
+        with ESMTP id S235699AbjALAkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 19:40:45 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71045AE47
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:40:44 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id k204-20020a256fd5000000b007b8b040bc50so16193770ybc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:40:44 -0800 (PST)
+        Wed, 11 Jan 2023 19:40:35 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345D11DDCE;
+        Wed, 11 Jan 2023 16:40:33 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id e205so14112086oif.11;
+        Wed, 11 Jan 2023 16:40:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=h5P/G8QEaO3HyqhOGu82/HAf0R+66PdkPKsQpUDiMlc=;
-        b=eGF1F/lrqMAN39cq8nEU49coorNRUqIbHnBryr2InQnzMzIJqVkcu5LPJEwm9N98WX
-         XfQXM1GX3/oQQD7WLmDXjPWDDCmAGtUKDrKG+13dIczddfM9NyrDPOxdTaJ2OiHTy7Ua
-         VS9swDDP9KM29DD1GKHiBd7AONB27uTqkb5q82XGMSidBRLysjYg3uXSbYpvy2juUbUN
-         sW7A3W4icerCbpWSVO1oWTlwIMOejaGAdCDE9GHEg5DWjLyQY0nxgB3zaJCByzx0uRzR
-         jg9mAkaclTKJ4T4oUsjzayw971NIw0wGEB9BJkz+K2Ru3FAJQvWRAygLhr+2LU0pZjef
-         1gOA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gmm3Kka8nPO6cOZbO1FBl6SeSZ30du4k0AiQMDwpj2I=;
+        b=mL8zKn2DSYyQ/FIcpmI/WpJPMFqMXQ+g32HMxe+smn4iuXjDrcKWmVVfVZw5f4Q7vK
+         5pNahLYCwjg2VkR+QTq4UV+mv/DxYO8Bp3ksfY7rg+erqDNc4G4xLbNdscI+zbo+eniY
+         emW/ZLjvdGH/eSDwQsDVxzp0TZW4sm/J0Ox36maB8nQ6NtWGActmVxXyZLXXTxucKUVo
+         QsHMOOqPAqHoHNeETr7oxx5dVpsYpnpiciUzFuAQuW2qEpuM0dT+rmcQNyG1/VeBTk8x
+         bEIt5oV+M0AO57ZcD2lUD3RTKy1+Djl48CkClClQILCa07zzmViKFiItE53hwebknTsU
+         ZN/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h5P/G8QEaO3HyqhOGu82/HAf0R+66PdkPKsQpUDiMlc=;
-        b=P2zRloM23CkBjbA5m0CnBP+gvRzIKUfvMemfHg+AqFS2v2FYIyVdkjXkMlgD9TVQv5
-         zTGEqLDz9GK0PzcuadNXW7hF479J7XWWQVWfLBY23Gi26gRBtjyL9gQbyLOilE/aByAa
-         JYUpXNWGhmZG2tgv4l9RQBL6yPletimkPOahmEeOSq5uo4huis4b7pM3l5yOjv0ecHwQ
-         P6uAj/vLBeXWVgyfIAfP+AAgJrjyH7p6wz02eF48u9pz5blNYDHDW2DOP4wkPom+pkZ2
-         c6xDTvesNQj4mOx//7+N8HYlZzTkPEsfU0ZMR+uAdErl/pCIZxe+Zm8MAlkB9Vb60ZFM
-         k7Tg==
-X-Gm-Message-State: AFqh2koZCG5si6jix6/IlHEqReYLASglGihqLMmnNA+GJdkbOjJQx6Hl
-        7+AefHJ7wW6mQMf0xe86BT83vwJKJnqU
-X-Google-Smtp-Source: AMrXdXundbCb7228SbcR6pwey2fibfqlj3mfadwLRyLe+3nDs49ZYHwTOvs+jqWJ9NNUcMgbYkf+ezMwkHJt
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:16b7:1d88:e27f:db49])
- (user=irogers job=sendgmr) by 2002:a81:6f42:0:b0:36f:f251:213b with SMTP id
- k63-20020a816f42000000b0036ff251213bmr1500569ywc.228.1673484043746; Wed, 11
- Jan 2023 16:40:43 -0800 (PST)
-Date:   Wed, 11 Jan 2023 16:40:24 -0800
-Message-Id: <20230112004024.1934601-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v1] tools/resolve_btfids: Install subcmd headers
-From:   Ian Rogers <irogers@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Connor OBrien <connoro@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gmm3Kka8nPO6cOZbO1FBl6SeSZ30du4k0AiQMDwpj2I=;
+        b=hO6obn0JUJaLUPNa+gWQsAv9gRY5x+/6HZeus9w2JjPKQAmz5OSuy40qHU2eVIz9BL
+         LS7UG/9IS9wc344wHBvxKGGt/NXw0EffZkQb6uYBdjyJ5OMj856bir1f/VKPq1JpgPFo
+         dfJvhHqtVPffHBzK9fafs4FBPOQ4W4zAPpz0XBKmFAbYVEOhgonSXknwKFNkYK2jnjKy
+         I96y8PbjDYcMeWvq+vBWACB5QQk9eaXFb+91/xIeYPnXO4xtjsuPI/KtFfXMlL1Yrsom
+         RoIpK0/E8dj0JilzQDGODj9f12e+SM2H1EbnDTRcqECTDchPNPzg45YCmS6rfr12S7hS
+         UhDQ==
+X-Gm-Message-State: AFqh2krVX7k1G6m5+QxYBfcv/P4M04ttOwn6/fs77X8sylO/eMuu+dUJ
+        rwjF1Gm0CdMmSNIENYIh0Z0=
+X-Google-Smtp-Source: AMrXdXuMKt/Fz5Rsn3/w68ycL7qBeSDUdCor8hBlrKV49vdgAPCvjbfvkAaK/KAwC+T5i79Mut6k7g==
+X-Received: by 2002:a05:6808:bd0:b0:364:5d10:71fa with SMTP id o16-20020a0568080bd000b003645d1071famr4440565oik.1.1673484032514;
+        Wed, 11 Jan 2023 16:40:32 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 15-20020aca090f000000b003509cc4ad4esm7280627oij.39.2023.01.11.16.40.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 16:40:32 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 11 Jan 2023 16:40:30 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/159] 6.1.5-rc1 review
+Message-ID: <20230112004030.GC1991532@roeck-us.net>
+References: <20230110180018.288460217@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110180018.288460217@linuxfoundation.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,98 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously tools/lib/subcmd was added to the include path, switch to
-installing the headers and then including from that directory. This
-avoids dependencies on headers internal to tools/lib/subcmd. Add the
-missing subcmd directory to the affected #include.
+On Tue, Jan 10, 2023 at 07:02:28PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.5 release.
+> There are 159 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 12 Jan 2023 17:59:42 +0000.
+> Anything received after that time might be too late.
+> 
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/bpf/resolve_btfids/Makefile | 19 ++++++++++++++-----
- tools/bpf/resolve_btfids/main.c   |  2 +-
- 2 files changed, 15 insertions(+), 6 deletions(-)
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 500 pass: 500 fail: 0
 
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 19a3112e271a..de7d29cf43d6 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -35,21 +35,29 @@ SUBCMD_SRC := $(srctree)/tools/lib/subcmd/
- BPFOBJ     := $(OUTPUT)/libbpf/libbpf.a
- LIBBPF_OUT := $(abspath $(dir $(BPFOBJ)))/
- SUBCMDOBJ  := $(OUTPUT)/libsubcmd/libsubcmd.a
-+SUBCMD_OUT := $(abspath $(dir $(SUBCMDOBJ)))/
- 
- LIBBPF_DESTDIR := $(LIBBPF_OUT)
- LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
- 
-+SUBCMD_DESTDIR := $(SUBCMD_OUT)
-+SUBCMD_INCLUDE := $(SUBCMD_DESTDIR)include
-+
- BINARY     := $(OUTPUT)/resolve_btfids
- BINARY_IN  := $(BINARY)-in.o
- 
- all: $(BINARY)
- 
-+prepare: $(SUBCMDOBJ)
-+
- $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
- 	$(call msg,MKDIR,,$@)
- 	$(Q)mkdir -p $(@)
- 
- $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
--	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(abspath $(dir $@))/ $(abspath $@)
-+	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-+		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-+		    $(abspath $@) install_headers
- 
- $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
- 	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-@@ -60,14 +68,14 @@ CFLAGS += -g \
-           -I$(srctree)/tools/include \
-           -I$(srctree)/tools/include/uapi \
-           -I$(LIBBPF_INCLUDE) \
--          -I$(SUBCMD_SRC)
-+          -I$(SUBCMD_INCLUDE)
- 
- LIBS = -lelf -lz
- 
- export srctree OUTPUT CFLAGS Q
- include $(srctree)/tools/build/Makefile.include
- 
--$(BINARY_IN): $(BPFOBJ) fixdep FORCE | $(OUTPUT)
-+$(BINARY_IN): $(BPFOBJ) fixdep FORCE prepare | $(OUTPUT)
- 	$(Q)$(MAKE) $(build)=resolve_btfids
- 
- $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-@@ -79,7 +87,8 @@ clean_objects := $(wildcard $(OUTPUT)/*.o                \
-                             $(OUTPUT)/.*.o.d             \
-                             $(LIBBPF_OUT)                \
-                             $(LIBBPF_DESTDIR)            \
--                            $(OUTPUT)/libsubcmd          \
-+                            $(SUBCMD_OUT)                \
-+                            $(SUBCMD_DESTDIR)            \
-                             $(OUTPUT)/resolve_btfids)
- 
- ifneq ($(clean_objects),)
-@@ -96,4 +105,4 @@ tags:
- 
- FORCE:
- 
--.PHONY: all FORCE clean tags
-+.PHONY: all FORCE clean tags prepare
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index 80cd7843c677..77058174082d 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -75,7 +75,7 @@
- #include <linux/err.h>
- #include <bpf/btf.h>
- #include <bpf/libbpf.h>
--#include <parse-options.h>
-+#include <subcmd/parse-options.h>
- 
- #define BTF_IDS_SECTION	".BTF_ids"
- #define BTF_ID		"__BTF_ID__"
--- 
-2.39.0.314.g84b9a713c41-goog
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
+Guenter
